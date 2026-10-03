@@ -1,209 +1,190 @@
 # bonsAI
 
-**An AI helper for your Steam Deck that runs on hardware you own.**
+**A helper for your Steam Deck that answers questions about your games, using an AI that runs on
+your own Deck or your own PC.**
 
-bonsAI is a plugin for [Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader). It puts an
-AI helper in the Quick Access Menu, the panel the `...` button opens. Ask it about the game you are
-playing, a setting you cannot find, or why something stutters.
+bonsAI lives in the Deck's **Quick Access Menu** — the panel the **`...`** button opens. Press it
+mid-game, ask how to beat a boss or why the game stutters, and keep playing.
 
-![bonsAI on a Steam Deck — the Main tab, with preset chips and the Ask bar](assets/readme-hero.png)
+![bonsAI open beside Deep Rock Galactic: Survivor on a Steam Deck, answering a question about the game](assets/readme/hero.png)
 
 ## Free, open and yours
 
 bonsAI is free and open source. You host it yourself, and it puts your privacy first.
 
-- Your questions go only to your own AI: on your Deck, on your own PC, or wherever you point it.
-- There is no account, no cloud service, and nothing is collected.
-- Every line of code is here to read.
+- **Your questions go only to your own AI** — on your Deck, on your own PC, or wherever you point it.
+- **No account, no cloud service, nothing collected.**
+- **Every line of code is here to read.**
 
 <!-- This list matches the 0.6.0 security review (docs/audit/security-review-0.6.0.md, 2026-09-28).
      Anything new that reaches the internet must be added here. -->
 **What does reach the internet**, so you can check the claim instead of trusting it:
 
-- **Installing Ollama** on the Deck — from ollama.com (the program itself is served from GitHub).
+- **Installing Ollama** (the program that runs the AI) — from ollama.com and GitHub.
 - **Downloading AI models** — from Ollama's own model library.
-- **The recommended-models list**, which refreshes itself from GitHub at most once a week.
-- **The knowledge library** — from Hugging Face, or from GitHub if Hugging Face is unavailable.
-- **Voice input** — the speech engine from GitHub, the tools to build it from Ubuntu's software servers,
-  and the speech model from Hugging Face.
-- **The Steam ban lookup** — Valve's servers, only if you give it your own Steam key.
+- **The recommended-models list** — refreshes itself from GitHub at most once a week.
+- **The knowledge library** — from Hugging Face, or GitHub if Hugging Face is down.
+- **Voice input** — the speech engine from GitHub, the tools to build it from Ubuntu's servers, and
+  the speech model from Hugging Face.
+- **The Steam ban lookup** — Valve's servers, and only if you give it your own Steam key.
 
-Links inside answers open only when you tap them.
-
-Downloads ask first. The **Internet downloads** permission is off until you allow it, and while it is
-off nothing downloads. Before each download starts, bonsAI tells you where it comes from.
-
-## Before you start
-
-- **AI answers can be wrong.** Treat every answer as a suggestion, and check anything that matters.
-- **Running the AI on the Deck slows your games down.** It shares the same chip. A PC on your home
-  network is much faster.
-- **Spoiler hiding does its best** and will sometimes miss.
-- **About the parental lock.** When Steam reports that parental controls are on, bonsAI switches its
-  higher-impact permissions off. Be clear about what that does not do: **it does not filter what the
-  AI says.** It is a guard rail, not a security boundary. It knows only what Steam tells it, and if
-  that signal fails, your permissions stay exactly as you set them. It is not a playtime limiter, a
-  content filter or a game blocker, it has no PIN of its own, and it covers bonsAI only.
+Nothing downloads until you switch on **Internet downloads** on the Permissions tab, and bonsAI
+tells you where each download comes from before it starts. Links inside answers open only when you
+tap them.
 
 ## What it does
 
-### Ask about the game you are playing
+### Ask about the game you're playing
 
-<!-- GIF: asking about the game you are playing -->
+![Asking about the running game: bonsAI thinks, answers, and credits its note](assets/readme/ask-about-your-game.gif)
 
-Ask from the **Main** tab. While a game is running, bonsAI knows which one. Pick how it answers:
-**Speed** for a short answer, **Strategy** for help getting past something, **Expert** for detail.
+*Filmed on a Steam Deck with the AI running on the Deck itself, during a game. The thinking part is sped up; it took about a minute.*
 
-### The knowledge library
+bonsAI knows which game is running, so you can just ask "how do I beat this boss?". Pick how it
+answers: **Speed** for a quick reply, **Strategy** for help getting past something, **Expert** for
+more detail. Suggestion chips above the question box give you a question to start with.
 
-<!-- GIF: an answer with notes from the game's wiki -->
+### Notes from the game's wiki
 
-An optional library of notes from community wikis, downloaded once and then read offline. Answers
-that use a note credit where it came from. Spoilers in the notes are held back until you ask.
+An optional **knowledge library** of notes from community wikis — 38 games so far. You download it
+once, then it works offline. When an answer uses a note, it says where the note came from.
 
-### Spoiler hiding
+### Spoilers stay hidden until you ask
 
-<!-- GIF: a hidden spoiler opened on request -->
+![A spoiler in a Strategy answer, hidden until it is opened](assets/readme/spoiler.gif)
 
-When an answer would give something away, bonsAI covers it. Open it only if you want to know.
+In Strategy answers, anything that would give the story away is covered. Open it only if you want
+to know. This works on a best-effort basis and can miss things.
 
-### Your chats
+### "Where are you at?"
 
-<!-- GIF: naming, saving and summing up a chat -->
+![Picking where you are in the game, then ticking off steps in the checklist (the wait is sped up)](assets/readme/strategy-checklist.gif)
 
-Keep up to eight saved chats. Name them, save them, and have bonsAI sum up a long one.
+Strategy can ask where you are in the game, then gives you a checklist of steps you can tick off.
+It remembers your progress for each game.
 
-### Hear answers, talk instead of typing
+### Ask about a screenshot
 
-<!-- GIF: talking to it and hearing the answer read aloud -->
+![Taking a screenshot and asking bonsAI what is on screen (sped up)](assets/readme/ask-about-a-screenshot.gif)
 
-- **Read aloud:** answers can be read to you, always, only when you asked by voice, or never.
-- **Voice input:** talk instead of typing. The speech is turned into text on the Deck itself, and the
-  recording is deleted as soon as that is done. Needs the microphone permission and a voice model.
+Take a screenshot and ask about what's on screen — a puzzle, a menu, an error message.
 
-### Characters
+### Find a Steam setting by typing
 
-Give written replies a different tone by picking a character. This changes the words only; there are
-no character voices.
+![Typing "brightness" lists the matching Steam settings](assets/readme/find-a-setting.gif)
 
-### Find a setting by typing
+Type a few words, like "brightness", and jump straight to that Steam setting. This works without
+any AI at all.
 
-<!-- GIF: typing to find a Steam setting -->
+### Close the menu, keep playing
 
-Type in the Ask bar to find a Steam or Decky setting and jump straight to it. This needs no AI model.
+![Closing the menu while bonsAI answers, then the reply popup arriving (sped up)](assets/readme/reply-ready.gif)
 
-### The AI models screen
+Close the menu while an answer is being written. A popup tells you when it's ready.
 
-On the **Ollama** tab: choose where the AI runs, download models, and remove the ones you no longer
-want.
+### Saved chats
 
-### Show details
+![Switching between saved chats with the shoulder button](assets/readme/switch-chats.gif)
 
-**Show details** on any reply shows what was sent and which model answered.
+Keep up to eight chats and flip between them with the shoulder buttons. When a chat gets long,
+bonsAI sums up the older part so it isn't forgotten, and you can ask it to sum up at any time.
 
-### The Permissions tab
+![Sum up this chat: bonsAI writes a short card of what it remembers](assets/readme/sum-up-chat.gif)
 
-Everything that reaches outside the chat is off until you allow it here: saving files to the
-Desktop, the Steam ban lookup, the microphone, and internet downloads.
+### Talk instead of typing
+
+Press the mic button and talk. Your speech is turned into text on the Deck itself, and the
+recording is deleted as soon as that's done. bonsAI can also read answers aloud.
+
+### See how it answered
+
+![Opening Show details under an answer](assets/readme/show-details.gif)
+
+**Show details** under any answer shows which model wrote it and which notes it used.
+
+There's more: performance and battery tips with numbers you can set, characters that change the
+tone of replies, and a choice of AI models. The **[user guide](docs/guide.md)** covers everything.
+
+## Before you start
+
+- **AI answers can be wrong.** Treat them as suggestions, and check anything that matters.
+- **Running the AI on the Deck slows your game down**, because they share the same chip. A PC on
+  your home network is much faster.
+- **This is a new release.** A few problems are known — see
+  [known problems](docs/guide.md#known-problems).
 
 ## What you need
 
-- A Steam Deck running **Decky Loader**.
-- **Ollama** — on the Deck, or on a PC on your network. bonsAI can install it on the Deck for you.
-- At least one AI model. bonsAI can download one for you.
+- A Steam Deck with **[Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader)** installed.
+  Decky is a free add-on that lets plugins like bonsAI into the Quick Access Menu.
+- Somewhere to run the AI: the Deck itself, or a PC on your home network. bonsAI installs the
+  program it needs, **Ollama**, on the Deck for you.
+- About 4 GB free on the Deck for the first AI model, if it runs on the Deck.
 
 ## Install
 
-bonsAI is **not** in the Decky plugin store. The store does not accept plugins built on an AI
-language model, so bonsAI is installed from its GitHub release instead.
+bonsAI isn't in Decky's plugin store, because the store doesn't accept plugins built on an AI
+model. You install it from this page instead. It takes a few minutes.
 
-1. Install **[Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader)** on your Steam Deck.
-2. Open **Decky** from the Quick Access Menu → **Settings** → **Developer** → install plugin from URL,
-   and paste this link:
-   `https://github.com/qd313/bonsAI/releases/latest/download/bonsAI.zip`
-<!-- CONFIRM after the first-install check -->
-3. Open **bonsAI → Ollama** and set up where the AI runs:
-   - **On the Deck:** switch on **Run AI on this Deck**, then press **Install Ollama**. Under
-     **Install options…** you can pick a starter model bundle. Allow **Internet downloads** when asked.
-   - **On a PC on your network:** install [Ollama](https://ollama.com/download) on the PC, download a
-     model there, then type the PC's address under **PC address** and press **Test connection**.
-4. Open **Main** and ask something.
+**1. Add bonsAI to Decky**
 
-Stuck on the words? There is a [short glossary](#glossary) below.
+1. Press **`...`**, open **Decky** (the plug icon), then the **gear** for Decky's settings.
+2. Under **General**, switch on **Developer mode**. A **Developer** section appears.
+3. In **Developer**, find **Install Plugin from URL**, paste this link and press **Install**:
 
-**Used 0.4.9 before?** Installing over it keeps your settings and permissions, because Decky keeps
-plugin data. To start fresh, use **Settings → Advanced → Clear all data**
-([more on this](docs/troubleshooting.md#1b-uninstall-vs-clear-all-data-settings)).
+   ```
+   https://github.com/qd313/bonsAI/releases/latest/download/bonsAI.zip
+   ```
+
+4. bonsAI now shows in the Decky list. Open it.
+
+**2. Allow downloads**
+
+Open the **Permissions** tab and switch on **Internet downloads**. Everything is off on a fresh
+install, so nothing downloads without your say-so.
+
+**3. Choose where the AI runs**
+
+<img src="assets/readme/where-ai-runs.png" alt="The Where AI runs section of the Ollama tab" width="300">
+
+Open the **Ollama** tab. Pick one:
+
+- **On the Deck** (works anywhere, slower in games): switch on **Run AI on this Deck**, then press
+  **Install Ollama**. When it asks whether to add the starter model too, say yes. That's about a
+  3 GB download.
+- **On a PC on your home network** (much faster): install [Ollama](https://ollama.com/download) on
+  the PC and download a model there. Then type the PC's address into **PC address** on the Deck —
+  something like `http://192.168.1.20:11434` — and press **Test connection**. The
+  [guide](docs/guide.md#running-the-ai-on-a-pc) shows how to let the PC accept the connection.
+
+**4. Ask something**
+
+Open the **Main** tab, pick a suggestion chip or type a question, and press **ask**.
+
+**Optional:** for notes from game wikis, open **Ollama → Knowledge base (offline)**, switch on
+**Use local knowledge base** and press **Download knowledge base**.
 
 ## Getting help
 
-- [Troubleshooting](docs/troubleshooting.md) covers the network, screenshots, permissions and the menu.
-- Found a bug or have a question? [Open an issue on GitHub](https://github.com/qd313/bonsAI/issues).
+- The **[user guide](docs/guide.md)** explains every tab and setting.
+- **[Troubleshooting](docs/troubleshooting.md)** covers network, screenshot and permission problems.
+- Found a bug or have an idea? [Open an issue on GitHub](https://github.com/qd313/bonsAI/issues).
+  Please say which bonsAI version you have (the small number beside the bonsAI title) and where the AI
+  runs.
 
-## Glossary
+## Help build it
 
-| Word | What it means |
-|---|---|
-| **Ollama** | A free app that runs AI models on your own machine, on port `11434` |
-| **Model** | The thing that actually writes the answers. bonsAI can download one for you |
-| **Decky Loader** | The framework that puts plugins like bonsAI into Steam's menu |
-| **QAM** | Quick Access Menu — the panel the `...` button opens. Decky lives here |
-| **LAN** | Your home network. You need one if Ollama runs on a separate PC |
-| **PC address** | Where bonsAI finds Ollama on a PC, such as `http://192.168.1.20:11434` |
-
-## Where to run Ollama
-
-| Where | When it suits |
-|---|---|
-| **On the Steam Deck** | Works anywhere, no PC needed. Switch on **Run AI on this Deck** on the Ollama tab. It shares the Deck's chip with your game, so both get slower |
-| **On a PC on your network** | Much faster, especially with a graphics card. Type the PC's address under **PC address**, such as `http://192.168.1.20:11434`. The PC has to accept connections from the network — set `OLLAMA_HOST=0.0.0.0` and open port 11434. [Details](docs/troubleshooting.md#2-network--communication-the-bridge) |
-
-bonsAI does not run on the Steam Frame headset. To use it alongside one, run bonsAI on a Steam Deck
-on the same network and point it at the PC that streams your Frame games.
-
-## Model policy tiers
-
-The model policy on the **Ollama** tab decides which of your installed models bonsAI will try.
-
-| Tier | What it allows |
-|---|---|
-| **Tier 1** | Open source only (Apache 2.0 or MIT licences), such as Qwen 3, Gemma 4, Granite and gpt-oss. The default, and the recommended one |
-| **Tier 2** | Also tries open-weight models, whose weights are public but whose licence is the maker's own, such as Llama, Gemma 3 and older, and the Qwen sizes under Qwen's own licence |
-| **Tier 3** | Any installed model, only after you explicitly unlock it |
-
-The default picture model, Qwen 2.5 VL 3B, is a known exception. Qwen's own model card gives the
-3B size the Qwen Research licence (Ollama's page for it lists Apache 2.0). It stays in Tier 1 for
-now so the default keeps working. If the licence matters to you, read the model's own page.
-These labels were checked against each model's page on 2026-09-29. They are a guide, not legal advice.
-
-Each reply can say which model wrote it. The list of models and their licences is in
-[troubleshooting](docs/troubleshooting.md#model-licences-and-the-tiers).
-
-## Building it yourself
-
-Start with the [development guide](docs/development.md) — setup, the build and deploy scripts, and
-how the plugin is put together. If you are working on the code with an AI tool, read
-[AGENTS.md](AGENTS.md) first. There is also a Developer tab for testing, hidden by default.
-
-| Document | Who it is for | What it covers |
-|---|---|---|
-| [troubleshooting.md](docs/troubleshooting.md) | Anyone stuck | Network, screenshots, permissions, the menu, deploy problems |
-| [development.md](docs/development.md) | Contributors | Setup, build and deploy, how it is put together |
-| [AGENTS.md](AGENTS.md) | Contributors and AI tools | How to work in this repo without breaking things |
-| [lessons-learned.md](docs/lessons-learned.md) | Contributors and AI tools | Traps this project has already fallen into |
-| [testing.md](docs/testing.md) | Testers | What is tested automatically, and what needs a real Deck |
-| [roadmap.md](docs/roadmap.md) | Anyone curious | Bugs, planned features, what is waiting to be checked |
-| [CHANGELOG.md](CHANGELOG.md) | Anyone | What changed in each release |
+Want to help, or build it yourself? Start with the [development guide](docs/development.md).
 
 ## Licence
 
 - **The code** is [Apache-2.0](LICENSE). A little of it comes from the Decky plugin template, under
   its own BSD licence; [NOTICE](NOTICE) has the details.
-- **The game notes** and the **downloadable knowledge library** are CC BY-SA 4.0. Many notes are
-  reworded from fan wikis, and each keeps a link to its source and that wiki's licence. See
-  [data/kb/NOTICE.md](data/kb/NOTICE.md) for the list.
-- **Other people's code** that bonsAI uses keeps its own licence. The download carries every one of
-  them in `dist/THIRD-PARTY-LICENSES.txt`.
+- **The game notes** and the **knowledge library** are CC BY-SA 4.0. Many notes are reworded from fan
+  wikis, and each keeps a link to its source and that wiki's licence; see
+  [data/kb/NOTICE.md](data/kb/NOTICE.md).
+- **Other people's code** that bonsAI uses keeps its own licence. The download carries all of them in
+  `dist/THIRD-PARTY-LICENSES.txt`.
 
 ## Buy me a beer
 

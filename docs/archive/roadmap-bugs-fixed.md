@@ -2989,3 +2989,19 @@ _Copied line for line from the roadmap's Bugs entries, with the closing note add
   With the newest question closed and older ones open, the Up walk stopped on the answer's last section with none of it showing (0 percent), and the section above it was 67 percent hidden. The Down walk showed the same section 78 percent visible. Likely brought in by the Up fix `c1efd8e8`. No fix has landed yet.
   Row **P79-UP-MIRRORS-DOWN-NEWEST-CLOSED**. Evidence `docs/test-evidence/plan79-P79-UP-MIRRORS-DOWN-NEWEST-CLOSED.json`.
   **Closed 2026-10-02, passed on the Deck (row P79-UP-MIRRORS-DOWN-NEWEST-CLOSED; fix `17a54809`, build `156baf42`).** The Up landing is placed again after Steam's glide. Three answers: every Up landing wholly in view (bottoms 232, 204 and 236 against the dock at 290). With the newest question closed, the order still passes and the last section sits just above the dock. Evidence `docs/test-evidence/plan79-P79-UP-LANDING-VISIBLE.json`, `docs/test-evidence/plan79-P79-UP-MIRRORS-DOWN-NEWEST-CLOSED-try2.json`.
+
+
+## Closed 2026-10-03 (plan 80, moved from Verify)
+
+_Copied line for line from the roadmap's Verify entries, nothing reworded, with the closing note added at the end of each._
+
+- ★★ `[chips]` **The game's own chip never came back, and the chips turned over too slowly** — **VERIFY, fixed 2026-09-30 (plan 78 helper F, `092517c1`, `5e3e0f7e`). Was OPEN, failed on the Deck 2026-09-26 (plan 70, rows PHASE4-CHIPS-01 and CHIP-ROTATION-01).**
+  One rule now decides which chip comes next in all four styles, and one rule decides how long a chip stays (one chip about 7 seconds a turn, two chips about 10 in each spot). The cause and the rules in full: [roadmap-details.md](roadmap-details.md#the-games-own-chip-never-came-back-and-the-chips-turned-over-too-slowly).
+  The maintainer's calls: D121 items 9 and 10. Deck rows **P78-TIP-CHIP** and **P78-CHIP-PACE**: both passed on the Deck 2026-10-01. Still owed: the maintainer's own look at the pace and their pick from the preview page.
+  **2026-10-01 (plan 78, Deck block 1): both Deck rows passed.** The numbers: [roadmap-details.md](roadmap-details.md#the-games-own-chip-never-came-back-and-the-chips-turned-over-too-slowly).
+  **Closed 2026-10-01 on the Deck, moved here 2026-10-03 (plan 80):** both rows passed (rows P78-TIP-CHIP and P78-CHIP-PACE; evidence `docs/test-evidence/plan78-P78-TIP-CHIP-try2.json`, `docs/test-evidence/plan78-P78-CHIP-PACE-try2.json`). Still owed to the maintainer: their own look at the pace and their pick from the preview page.
+
+- ★ `[reply]` **Quit or switch games while a Strategy answer writes, and the old game's checklist is drawn under it** — **VERIFY, fixed 2026-09-30 (plan 78 helper L, `a92cabe4`). Was OPEN, found 2026-09-30 by reading the code (plan 78 helper G), not seen on the Deck.**
+  The checklist is now drawn only if the answer's game is still the running game. It is still saved under the game it was for, with no ticks borrowed from another game's list.
+  Proven by unit tests only (in `src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts`); there is no Deck row, because it cannot be made to happen reliably. Evidence `docs/test-evidence/plan78-G-after-answer-readthrough.md` (finding 3).
+  **Closed 2026-10-03 (plan 80), on its unit tests, by the maintainer's call recorded under D123 (answers to the review's questions).** No Deck row exists.

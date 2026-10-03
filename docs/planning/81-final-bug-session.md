@@ -370,6 +370,19 @@ New ones go here, with the choice taken in the meantime. Three are open from the
 - **Your checks page** is brought up to date.
 - **The wider quick check** passes before the session calls itself finished.
 
+4. **The reworded hidden-block instructions cover more answers, including some harmless ones.** On this PC with
+   the Deck's model, "which weapon is easiest to start with" in Hades came back covered in 8 of 10 answers (1 of 10
+   before). Keep the rewording (more protection, an extra tap now and then), or prefer fewer covers? *Meanwhile:* kept,
+   still gated by the Deck count.
+5. **The Steam freeze after an answer with a game running.** A player could reach it. One lever the plugin controls:
+   let the Deck's own AI leave memory sooner while a game runs (about a minute after an answer instead of five), at
+   the price of a slower next question. *Meanwhile:* not built; it is measured at the very end of the session.
+6. **A long troubleshooting sentence that also names the game still misses the game's tip** ("deep rock galactic
+   survivor the words on screen look blurry on my deck"). A softer rule would catch it at the cost of more code.
+   *Meanwhile:* not built.
+7. **The chat-row check's "busy" reading.** An older note expects the other chat's Ask button to read ready while
+   the first chat writes; today's check expected busy and passed. Which is right? *Meanwhile:* both recorded.
+
 ## Results
 
 Not started.
@@ -402,6 +415,26 @@ Not started.
   tooltip), K2 (the tall section, with the measurement), C's second round (the PC half). Deck block 2a (owed checks)
   is running. Found: plan 79 never fed real sound to the Deck's microphone; block 2a tries a sentence played through
   the Deck's own speaker.
+
+- **2026-10-03, about 17:45 to 19:00 (tip `5eca4271`):** **Landed, every check green:** the choice-button checklist
+  bug (N1), Up onto a very long paragraph shows its start (K2), the ring after a Quick Access tab switch (Q, second
+  round: it never takes the ring from someone resting on the tab icons), the try order and a PC (C, three rounds, plus
+  a mirror bug it found), the reworded hidden-block instructions (F), the tooltip that covered its word (T), controls
+  under an answer 6 px above the dock instead of 86 (K3), a game's tip found by meaning (G), the doubled hidden-block
+  marks: cause found and fixed, plus a half-cut mark that showed a hidden sentence uncovered (I), and the sliver (K2b).
+  Paperwork sweep 2 committed. **The Deck froze at 17:46** in block 2a: Deep Rock running, the notes library moved
+  aside, the Deck's own AI already loaded; the answer finished at 17:42:58, then Steam's page processes ate memory
+  (665 MB left at 17:56) until the maintainer force-restarted. The library was put back the moment the Deck answered.
+  Filed as a new bug; helper M's audit note rules out a model load and names two memory levers. **Deck blocks 2a and
+  2c** passed: power answers hold numbers, the ring after the settings list closes, the hint's Dismiss, the knowledge
+  base icons, the three chat-row checks that failed on 18 September, no notes for an unknown game, the tactics with no
+  library, a cut choice menu keeps its rest (stand-in AI), the checklist after a reopen (stand-in), Rename on the fresher
+  title, the summary's Game line, moving a model's place, PC models in their own rows. **Found:** consent ("spoilers are
+  okay") still showed a cover for about 3.5 s while a live answer arrived (helper S); PC models of 17 GB and more are
+  not marked "too big" (helper Z); the summary card shows only its top 10 px above the dock (helper L, Opus). Sound
+  from the Deck's speaker reaches its own microphone as silence, so both voice checks stay the maintainer's; the help
+  chip's flag came back by itself after a restart, so that check stays with the first-install check. Deck block 3a (the
+  new build and one check per landed fix) started.
 
 ## For the chat that runs this: helper types and pointers
 

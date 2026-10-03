@@ -37,6 +37,16 @@ import type React from "react";
  */
 export const FOCUS_RING_BTN_CLASS = "bonsai-settings-focus-btn";
 
+/**
+ * For a Button that sits INSIDE a Focusable wrapper (the accent button, Reinstall voice engine, the
+ * voice model rows). Put it next to FOCUS_RING_BTN_CLASS on the button, and FOCUS_RING_WRAP_CLASS on
+ * the wrapper. Steam marks focus on the wrapper or on the button inside it, and the wrapper can clip
+ * a ring drawn outside the button, so both draw the same white ring INSIDE their edge. Measured on
+ * the Deck 2026-10-02 (plan79-P79-RING-WALK-TABS.json): these four showed only a thin grey frame.
+ */
+export const FOCUS_RING_INSET_CLASS = "bonsai-settings-focus-inset";
+export const FOCUS_RING_WRAP_CLASS = "bonsai-settings-focus-wrap";
+
 /** SteamOS glass row button — matches Test connection / Browse models (no tint fill). Pair with FOCUS_RING_BTN_CLASS. */
 export const SETTINGS_GLASS_BTN: React.CSSProperties = {
   minHeight: 36,

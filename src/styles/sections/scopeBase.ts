@@ -200,10 +200,33 @@ export function buildScopebaseSection(): string {
           outline-offset: 2px !important;
           box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45) !important;
         }
-        .bonsai-scope .bonsai-settings-focus-btn-host > .Panel.Focusable.gpfocus,
-        .bonsai-scope .bonsai-settings-focus-btn-host > .Panel.Focusable:focus-visible {
+        /*
+          A Button inside a Focusable wrapper (accent intensity, Reinstall voice engine, the voice
+          model rows) and the Steam Web API key field. Steam put only a thin grey frame on these
+          (Deck 2026-10-02, plan79-P79-RING-WALK-TABS.json) because the ring rule above only knew a
+          bare Button, and a ring drawn outside a button inside a wrapper can be clipped. Steam
+          marks focus on the wrapper OR on the button inside it, so each draws the same white ring
+          inside its own edge; only one of the two ever carries gpfocus, so it is never doubled.
+          The older "no ring on the wrapper" rule below still applies to every other host (the
+          knowledge-base buttons), but skips these wrappers, where the wrapper IS the ring.
+        */
+        .bonsai-scope button.bonsai-settings-focus-btn.bonsai-settings-focus-inset.gpfocus,
+        .bonsai-scope button.bonsai-settings-focus-btn.bonsai-settings-focus-inset:focus-visible,
+        .bonsai-scope .bonsai-settings-focus-wrap.bonsai-settings-focus-wrap.gpfocus {
+          outline: 2px solid rgba(255, 255, 255, 0.88) !important;
+          outline-offset: -2px !important;
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45) !important;
+        }
+        .bonsai-scope .bonsai-settings-focus-btn-host > .Panel.Focusable:not(.bonsai-settings-focus-wrap).gpfocus,
+        .bonsai-scope .bonsai-settings-focus-btn-host > .Panel.Focusable:not(.bonsai-settings-focus-wrap):focus-visible {
           outline: none !important;
           box-shadow: none !important;
+        }
+        /* The key field: the ring goes on the innermost part Steam marks (the input, or its container
+           if that is what Steam marks), never both. Outline only, so the key text does not move. */
+        .bonsai-scope .bonsai-settings-text-field-host .gpfocus:not(:has(.gpfocus)) {
+          outline: 2px solid rgba(255, 255, 255, 0.88) !important;
+          outline-offset: -2px !important;
         }
 
         `;

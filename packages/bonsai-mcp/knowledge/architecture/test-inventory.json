@@ -110,6 +110,7 @@
     "src/components/PullModelsStarterSetChip.test.tsx",
     "src/components/ReplyCopyButton.test.tsx",
     "src/components/SessionContextStrip.test.tsx",
+    "src/components/SettingsDeveloperWrappedRing.test.tsx",
     "src/components/SettingsTab.accentMenuRing.test.tsx",
     "src/components/SettingsTab.clearAllBack.test.tsx",
     "src/components/SettingsTab.clearBoxes.test.tsx",

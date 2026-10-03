@@ -640,14 +640,16 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
               For the <span style={{ color: "#9ce7ff" }}>bonsai:vac-check</span> command. Enable Steam ban lookup in
               Permissions. Stored on this device.
             </div>
-            <TextField
-              label=""
-              value={steamWebApiKey}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const v = e.target.value.slice(0, STEAM_WEB_API_KEY_MAX_LEN);
-                setSteamWebApiKey(v);
-              }}
-            />
+            <div className="bonsai-settings-text-field-host">
+              <TextField
+                label=""
+                value={steamWebApiKey}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const v = e.target.value.slice(0, STEAM_WEB_API_KEY_MAX_LEN);
+                  setSteamWebApiKey(v);
+                }}
+              />
+            </div>
           </div>
         </PanelSectionRow>
       </PanelSection>

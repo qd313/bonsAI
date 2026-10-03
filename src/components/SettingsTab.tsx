@@ -97,7 +97,7 @@ import {
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
-import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
+import { FOCUS_RING_BTN_CLASS, FOCUS_RING_INSET_CLASS, FOCUS_RING_WRAP_CLASS } from "../styles/settingsGlassButton";
 const voiceReplyModeLabel: Record<VoiceReplyMode, string> = {
   off: "Off",
   voice_only: "When I asked by voice",
@@ -516,12 +516,13 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                   </div>
                   <div ref={accentIntensityMenuAnchorRef} style={{ display: "inline-flex", flexShrink: 0, position: "relative" }}>
                     <Focusable
+                      className={FOCUS_RING_WRAP_CLASS}
                       style={{ display: "flex", flexShrink: 0 }}
                       onOKButton={toggleAccentIntensityMenu}
                       {...({ navRef: accentTriggerNavRef } as Record<string, unknown>)}
                     >
                     <Button
-                      className={`bonsai-accent-intensity-trigger ${FOCUS_RING_BTN_CLASS}`}
+                      className={`bonsai-accent-intensity-trigger ${FOCUS_RING_BTN_CLASS} ${FOCUS_RING_INSET_CLASS}`}
                       {...({
                         onOKButton: (evt: { stopPropagation: () => void }) => {
                           evt.stopPropagation();

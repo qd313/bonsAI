@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 712,
-  "edgeCount": 2050,
+  "fileCount": 713,
+  "edgeCount": 2055,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -217,6 +217,7 @@
         "src/components/DeveloperTab.test.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
+        "src/components/SettingsDeveloperWrappedRing.test.tsx",
         "src/features/plugin-shell/tabs/useDeveloperTabPayload.tsx",
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/utils/ollamaTabLocalSurvival.ts"
@@ -1726,6 +1727,15 @@
         "src/utils/buildDetailsPanelElement.tsx"
       ]
     },
+    "src/components/SettingsDeveloperWrappedRing.test.tsx": {
+      "imports": [
+        "src/components/DeveloperTab.tsx",
+        "src/components/SettingsTab.tsx",
+        "src/features/stream-scramble/streamScrambleContext.ts",
+        "src/styles/bonsaiScopeStylesheet.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/SettingsTab.accentMenuRing.test.tsx": {
       "imports": [
         "src/components/SettingsTab.tsx",
@@ -1787,6 +1797,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/SettingsDeveloperWrappedRing.test.tsx",
         "src/components/SettingsTab.accentMenuRing.test.tsx",
         "src/components/SettingsTab.clearAllBack.test.tsx",
         "src/components/SettingsTab.clearBoxes.test.tsx",
@@ -1932,6 +1943,7 @@
         "src/data/bonsaiSettingsSchema.ts",
         "src/features/downloads/downloadNotice.tsx",
         "src/features/downloads/downloadSites.ts",
+        "src/styles/settingsGlassButton.ts",
         "src/utils/deckyCall.ts",
         "src/utils/permissionDeepLink.ts"
       ],
@@ -3640,6 +3652,7 @@
         "src/components/DeveloperTab.tsx",
         "src/components/MainTab.streamScramble.test.tsx",
         "src/components/MainTab.tsx",
+        "src/components/SettingsDeveloperWrappedRing.test.tsx",
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.tsx",
@@ -4989,6 +5002,7 @@
         "src/components/BonsaiPluginShell.tsx",
         "src/components/MainTabUnifiedAskBar.boxRing.test.tsx",
         "src/components/OllamaTab.focusRing.test.tsx",
+        "src/components/SettingsDeveloperWrappedRing.test.tsx",
         "src/components/SettingsTab.focusRing.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
@@ -5330,6 +5344,7 @@
         "src/components/OllamaThinkingEffortRow.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/SettingsTab.tsx",
+        "src/components/VoiceInputSettingsSection.tsx",
         "src/styles/buttonFocusRing.test.ts"
       ]
     },

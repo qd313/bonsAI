@@ -36,10 +36,6 @@ const KNOWN: Record<string, { count: number; why: string }> = {
     count: 1,
     why: "picker tiles; ringed by the `.bonsai-ai-char-grid-col button.gpfocus` ancestor rule (the Playing suggestion row sits outside that grid and carries the ring class)",
   },
-  "components/VoiceInputSettingsSection.tsx": {
-    count: 1,
-    why: "voice model rows: Steam rings the Focusable around the button instead (the wide frame)",
-  },
 };
 
 /** Every class the stylesheet styles in the same compound selector as `.gpfocus`. */

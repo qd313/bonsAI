@@ -29,6 +29,7 @@ import { PermissionDenyAction } from "./PermissionDenyAction";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import { confirmDownload } from "../features/downloads/downloadNotice";
 import { voiceEngineNotices } from "../features/downloads/downloadSites";
+import { FOCUS_RING_BTN_CLASS, FOCUS_RING_INSET_CLASS, FOCUS_RING_WRAP_CLASS } from "../styles/settingsGlassButton";
 
 type VoiceEngineStatus = {
   model_id?: string;
@@ -219,8 +220,9 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
           <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 6, color: "#dce8f4" }}>STT model</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             {VOICE_STT_MODEL_OPTIONS.map((id) => (
-              <Focusable key={id} onOKButton={() => setVoiceSttModel(id)}>
+              <Focusable key={id} className={FOCUS_RING_WRAP_CLASS} onOKButton={() => setVoiceSttModel(id)}>
                 <Button
+                  className={`${FOCUS_RING_BTN_CLASS} ${FOCUS_RING_INSET_CLASS}`}
                   onClick={() => setVoiceSttModel(id)}
                   style={{
                     textAlign: "left",
@@ -280,9 +282,9 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
       </PanelSectionRow>
       <PanelSectionRow>
         <div className="bonsai-settings-focus-btn-host">
-          <Focusable onOKButton={() => void onDownloadModel()}>
+          <Focusable className={FOCUS_RING_WRAP_CLASS} onOKButton={() => void onDownloadModel()}>
             <Button
-              className="bonsai-settings-focus-btn"
+              className={`${FOCUS_RING_BTN_CLASS} ${FOCUS_RING_INSET_CLASS}`}
               onClick={() => void onDownloadModel()}
               disabled={installBusy}
             style={{

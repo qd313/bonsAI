@@ -387,6 +387,8 @@ New ones go here, with the choice taken in the meantime. Three are open from the
 
 ### Where things stand (2026-10-03, about 23:30: the session's end)
 
+The report: https://claude.ai/artifact/PKuXiwmijosaQffExkjG3c · the checks page (version 13): https://claude.ai/artifact/8hhevjkTdcGhq8gzDHZ419
+
 **What the maintainer does next:** the checks only a person can do (updated page, version 13:
 https://claude.ai/artifact/8hhevjkTdcGhq8gzDHZ419): the microphone (two checks), the first install on tonight's final
 build (with the help chip), the parental lock, starting one of the four old games once, three hand checks, two looks,

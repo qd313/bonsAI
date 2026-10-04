@@ -25,7 +25,10 @@ install_pwd_stub()
 
 from backend.services import kb_followup_memory  # noqa: E402
 from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
-from backend.services.ollama_prompts import build_system_prompt  # noqa: E402
+from backend.services.ollama_prompts import (  # noqa: E402
+    build_system_prompt,
+    extract_question_snippet_for_prompt,
+)
 from backend.services.strategy_guide_parse import (  # noqa: E402
     STRATEGY_FOLLOWUP_PREFIX,
     is_strategy_followup_question,
@@ -87,6 +90,15 @@ def _ask(plugin, question: str, **extra):
         )
     )
 
+def _first_turn_done(mock_retrieve):
+    """A plugin whose chat has had one Strategy question answered, so the next one is a follow-up."""
+    mock_retrieve.return_value = _two_card_result()
+    plugin = _PromptBuildingPlugin(_settings())
+    plugin._ollama_result = _ok_result("Break the glowing plates first.")
+    _ask(plugin, "how do i beat the glyphid dreadnought")
+    mock_retrieve.return_value = _two_card_result()
+    return plugin
+
 
 class StrategyChoiceButtonGetsTheFollowupInstructionsTests(unittest.TestCase):
     def setUp(self):
@@ -120,12 +132,7 @@ class StrategyChoiceButtonGetsTheFollowupInstructionsTests(unittest.TestCase):
 
     @patch("backend.services.game_ai_request.retrieve_knowledge_context")
     def test_the_reminder_still_reaches_the_model_behind_the_persons_words(self, mock_retrieve):
-        mock_retrieve.return_value = _two_card_result()
-        plugin = _PromptBuildingPlugin(_settings())
-        plugin._ollama_result = _ok_result("Break the glowing plates first.")
-
-        _ask(plugin, "how do i beat the glyphid dreadnought")
-        mock_retrieve.return_value = _two_card_result()
+        plugin = _first_turn_done(mock_retrieve)
         _ask(plugin, f"{STRATEGY_FOLLOWUP_PREFIX} I'm at: the second phase\nEarlier I asked: x")
 
         sent = plugin.ask_ollama_args[-1][0]
@@ -143,17 +150,40 @@ class StrategyChoiceButtonGetsTheFollowupInstructionsTests(unittest.TestCase):
     @patch("backend.services.game_ai_request.retrieve_knowledge_context")
     def test_a_typed_followup_still_gets_its_reminder_in_front(self, mock_retrieve):
         """Only the marker question is re-ordered; an ordinary bare follow-up is as before."""
-        mock_retrieve.return_value = _two_card_result()
-        plugin = _PromptBuildingPlugin(_settings())
-        plugin._ollama_result = _ok_result("Break the glowing plates first.")
-
-        _ask(plugin, "how do i beat the glyphid dreadnought")
-        mock_retrieve.return_value = _two_card_result()
+        plugin = _first_turn_done(mock_retrieve)
         _ask(plugin, "what about its second phase")
 
         sent = plugin.ask_ollama_args[-1][0]
         self.assertTrue(sent.lstrip().startswith("FOLLOW-UP CONTEXT"))
         self.assertTrue(sent.rstrip().endswith("what about its second phase"))
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    def test_a_typed_followup_names_the_persons_words_as_the_status_line_topic(self, mock_retrieve):
+        """Plan 81 N2: the reminder in front must not become the example status line's topic."""
+        plugin = _first_turn_done(mock_retrieve)
+        _ask(plugin, "what about its second phase")
+
+        sent = plugin.ask_ollama_args[-1][0]
+        prompt = plugin.system_prompts[-1]
+        # Same set-up as the test above: the reminder is in the question the model receives...
+        self.assertTrue(sent.lstrip().startswith("FOLLOW-UP CONTEXT"))
+        self.assertIn("how do i beat the glyphid dreadnought", sent)
+        # ...but the example status line in the system prompt quotes the person's own words.
+        self.assertIn('about "what about its second phase"', prompt)
+        self.assertNotIn('about "FOLLOW-UP', prompt)
+        example = prompt.split("Example: ", 1)[1].splitlines()[0]
+        self.assertNotIn("FOLLOW-UP", example)
+
+    def test_the_status_line_topic_skips_the_reminder_wherever_it_sits(self):
+        block = kb_followup_memory.build_previous_turn_context_block(
+            "how do i beat it. really? yes", 'It has "plates". They glow. This new question carries on from that.'
+        )
+        typed = "what about its second phase"
+        self.assertEqual(extract_question_snippet_for_prompt(f"{block}" + chr(10) + typed), typed)
+        self.assertEqual(extract_question_snippet_for_prompt(typed + chr(10) + block), typed)
+        self.assertEqual(extract_question_snippet_for_prompt(typed), typed)
+        # A question that only is the reminder (nothing typed) gives no topic at all.
+        self.assertEqual(extract_question_snippet_for_prompt(block), "")
 
 
 if __name__ == "__main__":

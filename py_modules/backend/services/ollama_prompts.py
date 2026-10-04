@@ -151,9 +151,28 @@ GENERAL_PURPOSE_ASSISTANT_CLAUSE = (
     "run shell commands or code, browse the web, perform real-time search, or read files beyond what appears in this system message.\n\n"
 )
 
+# The previous-turn reminder kb_followup_memory.build_previous_turn_context_block writes, from its
+# fixed opening to its fixed closing sentence (greedy, so a quoted answer that happens to hold the
+# closing words cannot leave a tail behind). Duplicated as words rather than imported because that
+# module takes no dependency on this one; the real-request test in
+# tests/test_game_ai_request_strategy_followup_prompt.py builds the block with the real function,
+# so a reworded template fails it instead of drifting quietly.
+_FOLLOWUP_REMINDER_RE = re.compile(
+    r"FOLLOW-UP CONTEXT \(a system reminder, not something the user typed\):.*This new question carries on from that\.",
+    re.DOTALL,
+)
+
+
 def extract_question_snippet_for_prompt(question: str, max_len: int = 56) -> str:
-    """Short user-topic snippet for status-line instructions (avoid circular import with stream tags)."""
-    raw = re.sub(r"\s+", " ", (question or "").strip())
+    """Short user-topic snippet for status-line instructions (avoid circular import with stream tags).
+
+    Built from the person's own words only: the "FOLLOW-UP CONTEXT" reminder that
+    ``game_ai_request.py`` adds to a follow-up (in front of a typed one, behind a choice button's)
+    is cut out first, or the example status line would quote the reminder's opening words as the
+    question's topic and the model could copy that shape into the line the person reads
+    (plan 81 N2, found 2026-10-03).
+    """
+    raw = re.sub(r"\s+", " ", _FOLLOWUP_REMINDER_RE.sub(" ", question or "").strip())
     if not raw:
         return ""
     for sep in (". ", "? ", "! ", "; ", " — ", " - "):

@@ -1,7 +1,38 @@
-
 # bonsAI Development Guide
 
 This guide is for contributors building and deploying bonsAI from source. **Primary target:** one Steam Deck runs everything — the git repo, Ollama, Decky, and bonsAI on the same machine. A separate PC on the LAN still works; see [Other-machine LAN workflow](#other-machine-lan-workflow).
+
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [What you'll have when done](#what-youll-have-when-done)
+- [Prerequisites (Steam Deck, Desktop Mode)](#prerequisites-steam-deck-desktop-mode)
+- [Clone the repo](#clone-the-repo)
+- [Agent / IDE MCP setup](#agent--ide-mcp-setup)
+- [One-time developer setup](#one-time-developer-setup)
+- [Install Ollama on the Deck](#install-ollama-on-the-deck)
+- [Build and deploy (same Deck)](#build-and-deploy-same-deck)
+  - [Maintainer dev loop](#maintainer-dev-loop)
+  - [Headless Decky harness (Vitest)](#headless-decky-harness-vitest)
+- [Test bonsAI after deploy (two tracks)](#test-bonsai-after-deploy-two-tracks)
+  - [Track A — Fast loop (recommended; stay in Desktop Mode)](#track-a--fast-loop-recommended-stay-in-desktop-mode)
+  - [Track B — Full validation (Gaming Mode)](#track-b--full-validation-gaming-mode)
+  - [Troubleshooting (both tracks)](#troubleshooting-both-tracks)
+- [First Ask](#first-ask)
+- [Architecture at a glance](#architecture-at-a-glance)
+  - [Frontend (`src/`)](#frontend-src)
+  - [Backend (`main.py` + `py_modules/backend/services/`)](#backend-mainpy--py_modulesbackendservices)
+  - [Deep-dive pointers (preserved for agents and contributors)](#deep-dive-pointers-preserved-for-agents-and-contributors)
+- [Toolchain](#toolchain)
+- [Other-machine LAN workflow](#other-machine-lan-workflow)
+- [Release (plugin zip)](#release-plugin-zip)
+- [Change-risk hotspots](#change-risk-hotspots)
+  - [Line counts (approximate, 2026-07-05)](#line-counts-approximate-2026-07-05)
+  - [Prioritized hotspots (edit order vs risk)](#prioritized-hotspots-edit-order-vs-risk)
+  - [Ordered refactor queue (after Settings is calm)](#ordered-refactor-queue-after-settings-is-calm)
+- [Documentation maintenance (releases)](#documentation-maintenance-releases)
+- [Docs and references](#docs-and-references)
+<!-- /toc -->
 
 ## What you'll have when done
 

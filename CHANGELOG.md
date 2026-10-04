@@ -193,7 +193,7 @@ there is no tracking. Five small holes were closed before the release
 - **Up and Down under an answer now visit every row in order**, both ways, instead of skipping whole rows. Passed on the Deck.
 - **Down always leaves Show details' chip ladder**, and the lit chip stays in view. Passed on the Deck.
 - **The "What went wrong?" chips scroll into view by themselves** instead of hiding behind the dock. Passed on the Deck.
-- **The chat summary card scrolls into view by itself.** A very tall card can still leave a sliver behind the dock.
+- **The chat summary card scrolls into view by itself.** After Sum up its top and title show without a press; the rest of the card is one Down away. Passed on the Deck.
 
 **Look**
 - **Save chat is now an icon in the chat tab**, on older chats too, and the "+" for a new chat has a clearer icon. Passed on the Deck.

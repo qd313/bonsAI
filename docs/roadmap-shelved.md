@@ -59,10 +59,6 @@ Long notes for knowledge-base items are in [roadmap-kb-details.md](roadmap-kb-de
 
 Sorted by star, then tag, then title. The last item is a tool note, kept at the end.
 
-- ★ `[chips]` `[layout]` `[watching]` **The chip row is replaced by the answer's own Show details line when that line sits at the dock edge** — seen once,
-  2026-10-03, block 3b (plan 81). It may be the designed behaviour of the details slot. Evidence `docs/test-evidence/plan81-P79-LONG-CHIPS-game.json`.
-  Unshelves when: a new sighting.
-
 - ★ `[focus]` `[watching]` **A Down press left a long answer section 22% visible behind the tab bar, and a Down in the chip
   ladder left it 67% visible behind the Ask bar's icon** — each seen once, 2026-09-30, not reproduced on purpose.
   Evidence `docs/test-evidence/plan77-QA-FREE-PLAY-01.json`.
@@ -92,11 +88,6 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
 - ★ `[focus]` `[watching]` **Three more one-off focus sightings from free play, 2026-09-26** — the accent-level one is
   fixed and passed on the Deck (row P76-ACCENT-RING). The other two did not reproduce (`plan76-S3A.json` for the folded turn).
   What the two were is in [Detail](roadmap-details.md#flow-2b-bugs).
-  Unshelves when: a new sighting.
-
-- ★ `[focus]` `[watching]` **With a game running, the dock's top measured the same as with none** — seen once, 2026-10-01
-  (plan 78, block 3b): 290 both ways, where the test setup had assumed about 262 with a game. Evidence
-  `docs/test-evidence/plan78-QA-FREE-PLAY-01-GAME-try3.json`.
   Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **With details open, Down from "N earlier" jumps straight to the notes block** — seen once,
@@ -136,12 +127,6 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
 - ★★ `[chat]` `[focus]` `[watching]` **A chat opened with RB while a game runs is drawn as history, and Down dies on its question line** —
   seen once, 2026-09-26. Closing and reopening the panel fixes it. Not reproduced since; named in the 0.6.0 release notes.
   Evidence `docs/test-evidence/plan72-A7-GAME-ii.json`.
-  Unshelves when: a new sighting.
-
-- ★★ `[chat]` `[watching]` **A chat that is still writing does not look busy from another chat** — found 2026-09-18, seen
-  three times, then not reproduced in two clean sessions, then **passed 2026-10-03** (plan 81, build `afd2f444`: 05a busy half, 06a, 06b).
-  Open question: the other chat's Ask button read greyed while the first was writing (that check counted it as busy); which reading is right is open, no decision recorded. Evidence `docs/test-evidence/plan81-CHAT-SLOTS-V3-05a-busyhalf.json`, `-06a.json`, `-06b.json`.
-  [Detail](roadmap-details.md#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat).
   Unshelves when: a new sighting.
 
 - ★★ `[focus]` `[watching]` **Walking Down while an answer is still arriving loses the ring** — seen once, 2026-09-27

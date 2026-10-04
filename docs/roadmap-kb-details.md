@@ -228,7 +228,7 @@ The "no tip for this" line was retired by the maintainer 2026-09-27 (`db4b3b4a`)
 
 ## Wrong-subject notes
 
-Asking about something the notes do not cover can still attach a note about the wrong subject: a Black Mesa horse-taming question, a Portal 2 house question, a Hades boss that does not exist. Fixing the attachment itself, rather than labelling it, is wave-four note-writing work.
+**The Black Mesa horse-taming case is fixed:** since `2abaa0ae` it shows the "No close match" line, passed on the Deck 2026-10-03 (`docs/test-evidence/plan81-P81-KB-NOTES-FIRST.json`). **Two cases are not fixed and were not tried again on 2026-10-03:** a Portal 2 house-buying question and a Hades boss that does not exist. Asking about something the notes do not cover can still attach a note about the wrong subject. Fixing the attachment itself, rather than labelling it, is wave-four note-writing work.
 
 **Found again 2026-09-18:** a Hades "boss at the end of the first area" question
   attached "Temple of Styx" first and the reply answered about Theseus and Asterius instead of Megaera, steered

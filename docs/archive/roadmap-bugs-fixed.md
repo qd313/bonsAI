@@ -3124,3 +3124,25 @@ _Copied line for line from the roadmap's Verify and Bugs entries (and, for the k
   (Speed on purpose). Held-back measurements are identical before and after. Limits and numbers in the long notes. Deck
   check owed: row **P81-TIP-BY-MEANING**. Test `tests/test_kb_game_tip_meaning.py`. [Detail](../roadmap-kb-details.md#flow-l7-findings)
   **Closed 2026-10-03, passed on the Deck (plan 81, Deck block 3b, build `9e68bce1`, Deep Rock Galactic: Survivor running; row P81-TIP-BY-MEANING).** "the words on screen look blurry" (Deck's AI unloaded first, 8510 MB free): the notes block read "Display (+1 more) - From the shared Deck tips"; opened, it held two notes both titled "Display", the Render Scale tip first. "how do i beat the dreadnought" (model loaded, 3172 MB free): the notes block read "Glyphid Dreadnought - From bonsAI's own note", with no "(+1 more)" and no shared-tips note. The plugin log held no matching line. Evidence `docs/test-evidence/plan81-P81-TIP-BY-MEANING.json`.
+
+## Closed 2026-10-03 (plan 81 paperwork 5, moved from the watch list)
+
+_Copied word for word from the watch list in roadmap-shelved.md, with the closing note added at the end of each._
+
+- ★★ `[chat]` `[watching]` **A chat that is still writing does not look busy from another chat** — found 2026-09-18, seen
+  three times, then not reproduced in two clean sessions, then **passed 2026-10-03** (plan 81, build `afd2f444`: 05a busy half, 06a, 06b).
+  Open question: the other chat's Ask button read greyed while the first was writing (that check counted it as busy); which reading is right is open, no decision recorded. Evidence `docs/test-evidence/plan81-CHAT-SLOTS-V3-05a-busyhalf.json`, `-06a.json`, `-06b.json`.
+  [Detail](../roadmap-details.md#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat).
+  Unshelves when: a new sighting.
+  **Closed 2026-10-03 (plan 81 paperwork 5):** passed on the Deck (CHAT-SLOTS-V3-05a busy half, 06a, 06b; build `afd2f444`), so it is off the watch list. The open question stays on the Named chat slots line in Done: which reading of the other chat's Ask button is right, ready or busy (no decision recorded). Evidence `docs/test-evidence/plan81-CHAT-SLOTS-V3-05a-busyhalf.json`, `plan81-CHAT-SLOTS-V3-06a.json`, `plan81-CHAT-SLOTS-V3-06b.json`.
+
+- ★ `[focus]` `[watching]` **With a game running, the dock's top measured the same as with none** — seen once, 2026-10-01
+  (plan 78, block 3b): 290 both ways, where the test setup had assumed about 262 with a game. Evidence
+  `docs/test-evidence/plan78-QA-FREE-PLAY-01-GAME-try3.json`.
+  Unshelves when: a new sighting.
+  **Closed 2026-10-03 (plan 81 paperwork 5):** the dock's top is not the same with and without a game. On 2026-10-03 it read 330.2 with a game running and 290.2 without one (`docs/test-evidence/plan81-P81-LIFT-6PX-game.json`, `plan81-P81-M-K2K3-GAME.json`; no game: `plan81-P81-M-K2K3-NOGAME.json`).
+
+- ★ `[chips]` `[layout]` `[watching]` **The chip row is replaced by the answer's own Show details line when that line sits at the dock edge** — seen once,
+  2026-10-03, block 3b (plan 81). It may be the designed behaviour of the details slot. Evidence `docs/test-evidence/plan81-P79-LONG-CHIPS-game.json`.
+  Unshelves when: a new sighting.
+  **Removed from the watch list 2026-10-03 (plan 81 paperwork 5):** this is the designed behaviour of the details slot. It is now one clause on the roadmap's Verify entry "While reading an answer, the Show details line takes the suggestion chip's place".

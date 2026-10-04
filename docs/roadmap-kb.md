@@ -49,6 +49,9 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   word. The held fix (a meaning search) attached wrong tips, six measured. The tips were rewritten and a "none of these
   fit" floor now exists, but the held fix has not been re-measured with it. Overlaps the entry of the same subject in
   Next. [Detail](roadmap-kb-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips)
+- ★★ `[KB]` **Questions with no real answer in the notes can still get notes about the wrong subject (Portal 2 house buying, a Hades boss that does not exist)** — **OPEN, found 2026-09-07, seen again 2026-09-26; not retried on 2026-10-03.**
+  The Black Mesa horse question is fixed: it shows the "No close match" line since `2abaa0ae` (passed on the Deck 2026-10-03, `docs/test-evidence/plan81-P81-KB-NOTES-FIRST.json`). A Portal 2 house-buying question and a Hades boss that does not exist can still bring up notes about something else, and the reply follows them. Catching these in general still costs twenty or more right answers elsewhere.
+  [Detail](roadmap-kb-details.md#wrong-subject-notes)
 - ★★ `[KB]` **Unrelated questions can still get a game card stapled on** — **ACCEPTED 2026-08-27.** With a game running,
   "thank you very much" still attached a card on the Deck on 2026-08-23. Raising the word floor costs real matches and the
   model mostly ignores a card that does not fit. Later floors (2026-09) may have cured some phrases; no Deck re-run since.
@@ -64,11 +67,11 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY, landed
   2026-09-15, unit-tested.** A game known only by name now opens its box, and naming the boss up front keeps the answer in
   plain text. Passed on the Deck: name-first (STRAT-SPOIL-FIRST-01, 2026-09-18), knowledge base off (DRG-01b, 2026-09-23) and library absent (DRG-01c, 2026-10-03; the AI wrote no hidden block, so a cover was not tested directly).
-  **Still owed:** STRAT-SPOIL-NAME-01 could not run four times, last 2026-10-02: none of its games is on Recent Games.
+  **Still owed:** STRAT-SPOIL-NAME-01 could not run four times, last 2026-10-02: none of its games is on Recent Games. It needs the maintainer to start one of the four games once by hand so it shows there (no prepared setup can do that); it is on the checks page.
   Evidence `docs/test-evidence/plan79-STRAT-SPOIL-NAME-01.json`. [Detail](roadmap-kb-details.md#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions)
 - ★★ `[KB]` **The note's own words under the reply** — **VERIFY, fixed and re-run 2026-09-19 and 2026-09-26.** Most
   rows passed on the Deck and are closed: 01, 02, 03, 05, 06 and TEN-GAMES-01; 04's "no block" half passed 2026-10-03
-  (`docs/test-evidence/plan81-NOTES-BLOCK-04.json`). **Still owed:** 04's honesty-line half, NOTES-BLOCK-07 (needs a person
+  (`docs/test-evidence/plan81-NOTES-BLOCK-04.json`). **Still owed:** 04's covered-game-running half (2026-10-03: the Black Mesa horse question showed the "No close match" line with no notes listed, `docs/test-evidence/plan81-P81-KB-NOTES-FIRST.json`, but with no game running), NOTES-BLOCK-07 (needs a person
   listening to confirm the block is never read aloud) and NOTES-BLOCK-LADDER (no block has had a chip ladder to test;
   retiring that half is the maintainer's call). Rows in [testing-manual.md](testing-manual.md).
 

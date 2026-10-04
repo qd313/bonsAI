@@ -590,6 +590,8 @@ and turned ready the moment X finished. The row as written expects Y's Ask to re
 what was seen is the opposite. Which reading is actually correct behaviour is for the maintainer to
 decide. Evidence `docs/test-evidence/plan70-F4-BUSY-DOT.json` (+ screenshots).
 
+**2026-10-03 (plan 81, build `afd2f444`): passed.** 05a's busy half, 06a and 06b all passed on the Deck (the neighbour chat's Ask button greyed, the writing chat's dot a hollow cyan ring with a spark, solid green when it finished while away), so the sighting is off the watch list. Which reading of the Ask button is right (ready or busy) is still open, no decision recorded. Evidence `docs/test-evidence/plan81-CHAT-SLOTS-V3-05a-busyhalf.json`, `plan81-CHAT-SLOTS-V3-06a.json`, `plan81-CHAT-SLOTS-V3-06b.json`.
+
 ## The open tab strip redrawn: six equal cells, one icon family, only the current tab named
 
 - ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab named** —
@@ -806,6 +808,8 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep t
   **2026-09-30 (plan 78 helper G):** the read-through was done and its real findings are fixed: findings 1 to 3 (plan 78 helper L) and 4 and 5 (helper M) are under Verify, each with its unit tests; finding 6 is still only possible. Evidence `docs/test-evidence/plan78-G-after-answer-readthrough.md`. The other half, removing the unused live-line trimming code, still waits for after the release.
 
   **2026-10-03 (plan 81, `45c73585`):** the first half is done. The old live-line trimming code (`liveReasoningText`), which nothing called any more, is removed; nothing a player sees changes. Owed: the end-of-session smoke test (Show reasoning still shows during and after an answer). The roadmap entry now holds only the second half (finding 6, only possible).
+
+  **2026-10-03 (plan 81 paperwork 5):** the first half passed its smoke test on the Deck (Show reasoning shows up to 88 characters of steps while writing and opens to 1348 characters afterwards, build `5eca4271`; `docs/test-evidence/plan81-D-SMOKE-REASONING.json`) and is a line in Done. Of findings 1 to 5: finding 3 is in Done, finding 2 closed earlier, findings 1, 4 and 5 are in Verify.
 
 ## The walk check calls a stop hidden when a corner icon merely overlaps its box
 

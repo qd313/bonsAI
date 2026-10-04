@@ -56,6 +56,8 @@ Ground rules, all of them non-negotiable:
    docs-only change, check that every file or row you linked to actually exists. **Every sweep, code or
    docs, ends with `python scripts/verify.py --quick`**: it is the only check that sees a document past
    its size limit, and on 2026-09-30 the testing document crossed its limit unnoticed for a whole night.
+   If you added, renamed or removed a heading in a major document, run `python scripts/docs_toc.py`
+   first: it rewrites that document's contents list, and the quick check fails until you do.
    If a gate is red before you changed anything, stop and report.
 6. **Commit only when the brief says to.** Stage files by name, never `git add -A`. Commit messages say
    what changed and why in plain language, describing what a person using the plugin would notice before

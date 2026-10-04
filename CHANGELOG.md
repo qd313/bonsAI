@@ -2,6 +2,73 @@
 
 All notable changes to this project are documented in this file.
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [\[Unreleased\]](#unreleased)
+  - [Plan 79 (2026-10-02)](#plan-79-2026-10-02)
+  - [Plan 78 (2026-09-30)](#plan-78-2026-09-30)
+  - [Plan 77 (2026-09-29)](#plan-77-2026-09-29)
+  - [Plan 76 (2026-09-28)](#plan-76-2026-09-28)
+  - [Plan 75 (2026-09-28)](#plan-75-2026-09-28)
+  - [Plan 74, the second release wave (2026-09-28)](#plan-74-the-second-release-wave-2026-09-28)
+  - [The 0.6.0 security review (2026-09-28)](#the-060-security-review-2026-09-28)
+  - [Plan 72, the release bug session (2026-09-27)](#plan-72-the-release-bug-session-2026-09-27)
+  - [Fixed](#fixed)
+  - [Added](#added)
+  - [Changed](#changed)
+  - [Removed](#removed)
+  - [Fixed](#fixed-1)
+- [\[0.5.0\] - 2026-07-15](#050---2026-07-15)
+  - [Added](#added-1)
+  - [Changed](#changed-1)
+- [\[0.4.9\] - 2026-07-08](#049---2026-07-08)
+  - [Fixed](#fixed-2)
+  - [Changed](#changed-2)
+- [\[0.4.8\] - 2026-07-07](#048---2026-07-07)
+  - [Added](#added-2)
+  - [Fixed](#fixed-3)
+  - [Changed](#changed-3)
+- [\[0.4.7\] - 2026-07-07](#047---2026-07-07)
+  - [Added](#added-3)
+  - [Fixed](#fixed-4)
+  - [Changed](#changed-4)
+- [\[0.4.6\] - 2026-07-06](#046---2026-07-06)
+  - [Fixed](#fixed-5)
+  - [Changed](#changed-5)
+- [\[0.4.5\] - 2026-07-06](#045---2026-07-06)
+  - [Added](#added-4)
+  - [Changed](#changed-6)
+  - [Fixed](#fixed-6)
+- [\[0.4.4\] - 2026-06-27](#044---2026-06-27)
+  - [Added](#added-5)
+  - [Changed](#changed-7)
+  - [Fixed](#fixed-7)
+- [\[0.4.3\] - 2026-06-26](#043---2026-06-26)
+  - [Added](#added-6)
+  - [Changed](#changed-8)
+- [\[0.4.2\] - 2026-06-21](#042---2026-06-21)
+  - [Added](#added-7)
+  - [Changed](#changed-9)
+- [\[0.4.1\] - 2026-06-15](#041---2026-06-15)
+  - [Added](#added-8)
+  - [Changed](#changed-10)
+- [\[0.4.0\] - 2026-06-14](#040---2026-06-14)
+  - [Added](#added-9)
+  - [Changed](#changed-11)
+  - [Fixed](#fixed-8)
+- [\[0.3.0\] - 2026-04-30](#030---2026-04-30)
+  - [Changed](#changed-12)
+- [\[0.2.1\] - 2026-04-28](#021---2026-04-28)
+  - [Changed](#changed-13)
+  - [Docs](#docs)
+- [\[Unreleased\] - 2026-04-19](#unreleased---2026-04-19)
+  - [Added](#added-10)
+  - [Changed](#changed-14)
+  - [Fixed](#fixed-9)
+  - [Docs](#docs-1)
+<!-- /toc -->
+
 ## [Unreleased]
 
 ### Plan 79 (2026-10-02)
@@ -1005,7 +1072,6 @@ there is no tracking. Five small holes were closed before the release
 - **Speed mode still spent about a second on the meaning search it was supposed to skip:** the check that keeps Speed mode to a keyword-only search never looked at which mode you were in, so two of three Speed questions still paid for the slower meaning search whenever the keyword search found anything at all. Speed now runs the keyword search only, in both the troubleshooting and the strategy/expert paths; Strategy and Expert are unchanged. Confirmed on the Deck 2026-09-06 with Deep Rock Galactic: Survivor running: all three questions asked in Speed spent no time on the meaning search. `knowledge_base_service.py`; two new tests. On-Deck **KB-RECALL-01**, Speed half.
 
 ## [0.5.0] - 2026-07-15
-
 ### Added
 - **Token streaming — live markdown (experimental):** Developer **Token streaming** toggle now renders progressive markdown in one live bubble (R2 closed/tail split), spoiler-safe incomplete fences, code-fence wait chip (2s pulse/spinner), ~3× fence reveal burst, T3 settle→terminal handoff. Stop keeps partial reply.
 
@@ -1061,6 +1127,7 @@ there is no tracking. Five small holes were closed before the release
 
 ### Changed
 - **Docs:** README uninstall note; `DATA-CLEAR-01` regression row in `docs/testing.md`.
+
 ## [0.4.5] - 2026-07-06
 
 ### Added

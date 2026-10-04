@@ -137,6 +137,19 @@ forked here.
 
 ---
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+  - [QA-EVIDENCE-GAP-01 — twelve checks whose evidence was never saved](#qa-evidence-gap-01--twelve-checks-whose-evidence-was-never-saved)
+  - [Evidence retention](#evidence-retention)
+  - [Preview-suite evidence invalidated 2026-08-08](#preview-suite-evidence-invalidated-2026-08-08)
+- [Quick start](#quick-start)
+- [PR contract (summary)](#pr-contract-summary)
+- [Shipped feature coverage (slim)](#shipped-feature-coverage-slim)
+- [Verify (from roadmap)](#verify-from-roadmap)
+- [New focusable controls](#new-focusable-controls)
+<!-- /toc -->
+
 ## Quick start
 
 **Every change set (automated):** see [testing-automated.md](testing-automated.md) § Gates.

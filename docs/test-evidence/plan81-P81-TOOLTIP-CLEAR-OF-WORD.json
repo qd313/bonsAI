@@ -1,0 +1,34 @@
+{
+  "row": "P81-TOOLTIP-CLEAR-OF-WORD",
+  "build_commit": "9e68bce1",
+  "deck_time_local": "2026-10-03 20:15-20:27 EDT",
+  "screen": "Deck's own screen, page window 854x454. With the game: pane top 128, dock top 330.2.",
+  "setup": "Game Deep Rock Galactic: Survivor running, test chat, Strategy mode. Three answers with underlined words, walked Down from 'Show reasoning', one press at a time. After every press at an underlined word, one read about 1 s later of: the word's box (class bonsai-drg-glossary-term), the tooltip's box (class bonsai-drg-glossary-tooltip), their overlap in px, and whether the tooltip lies inside the window (top >= pane top 128, bottom <= dock top 330.2, within 0..854 across). No watcher.",
+  "pressed": "Answers: (A) 'In Deep Rock Galactic: Survivor, explain in a single unbroken block of text ... which overclocks suit the Zhukov best ...' (B) 'What do overclocks actually do in Deep Rock Galactic: Survivor, in two short paragraphs?' (reworded a little; the exact runbook text had been asked in block 1) (C) 'How should I spend upgrades and overclocks early in a Deep Rock Galactic: Survivor run?' (runbook wording).",
+  "seen": {
+    "answer_A_7_words": [
+      "1 overclocks word 255.5-270.5, tooltip 200.5-248.6 (above), overlap 0 px, inside",
+      "2 overclocks word 315.5-330.5, tooltip 260.5-308.6 (above), overlap 0, inside",
+      "3 overclock word 270.8-285.8, tooltip 215.8-263.9, overlap 0, inside",
+      "4 overclock word 315.8-330.8, tooltip 260.8-308.9, overlap 0, inside",
+      "5 Overclock word 270.8-285.8, tooltip 215.8-263.9, overlap 0, inside",
+      "6 overclock word 270.8-285.8, tooltip 215.8-263.9, overlap 0, inside",
+      "7 kite word 315.8-330.8, tooltip 276.8-309.5, overlap 0, inside"
+    ],
+    "answer_B_4_words": [
+      "1 overclocks word 244.2-259.2, tooltip 189.2-237.3, overlap 0, inside (read on the way down)",
+      "2 overclocks word 309.2-324.2, tooltip 254.2-302.3, overlap 0, inside",
+      "3 overclock word 309.2-324.2, tooltip 254.2-302.3, overlap 0, inside",
+      "4 overclock word 309.5-324.5, tooltip 254.5-302.7, overlap 0, inside"
+    ],
+    "answer_C_3_words": [
+      "1 overclocks word 255.2-270.2, tooltip 200.2-248.3, overlap 0, inside",
+      "2 kiting word 270.2-285.2, tooltip 231.2-263.9, overlap 0, inside",
+      "3 Overclocks word 244.2-259.2, tooltip 189.2-237.3, overlap 0, inside"
+    ],
+    "totals": "14 underlined-word stops in 3 answers. Overlap between word and tooltip: 0 px at all 14. Tooltip inside the window above the dock (top 189.2 or lower, bottom 309.5 or higher up, i.e. at most 20.7 px above the dock top): yes at all 14. In every stop the tooltip was drawn above the word with a gap of 6 to 7 px (the words near the dock bottom, e.g. top 315.8 to 309.5, also got the tooltip above)."
+  },
+  "expected": "0 px overlap at every word stop; the tooltip inside the window above the dock.",
+  "verdict": "PASS - 14 of 14 underlined-word stops had 0 px overlap, and the tooltip lay inside the window, below the pane top and above the dock, at every one. (Block 1 measured 3 of 14 covering their word on build afd2f444.)",
+  "side_effect": "none beyond the questions' turns in the test chat."
+}

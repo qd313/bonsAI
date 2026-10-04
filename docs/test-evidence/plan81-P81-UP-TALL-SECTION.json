@@ -1,0 +1,27 @@
+{
+  "row": "P81-UP-TALL-SECTION (with Deep Rock Galactic: Survivor running)",
+  "build_commit": "9e68bce1",
+  "deck_time_local": "2026-10-03 20:11-20:23 EDT",
+  "screen": "Deck's own screen, page window 854x454, dpr 1.5; with the game: pane top 128, dock top 330.2, room between them 202.2 px",
+  "setup": "Game Deep Rock Galactic: Survivor running (launched 20:10, window in front, QAM chord opened the panel, Context line: 'Context: active game Deep Rock Galactic: Survivor'). Test chat 6f3cc055, Strategy mode. Memory rule applied before every question (see memory_log). No page watcher; single reads after each press.",
+  "pressed": "Try 1 question (send script VERIFIED, ring read as Ask, A): 'Without headings or lists, write one long paragraph of at least 200 words on the best overclocks for the Zhukov in Deep Rock Galactic: Survivor, then two short choices.' Try 2 (reworded): 'In Deep Rock Galactic: Survivor, explain in a single unbroken block of text with no line breaks, at least 220 words, which overclocks suit the Zhukov best, and finish with two short choices.' Then, because neither try gave a tall section, the walk was done on the answer to the next row's question, which did give one: 'What do overclocks actually do in Deep Rock Galactic: Survivor, in two short paragraphs?' (reworded a little from the runbook's text because the exact text had been asked in block 1 and could come from the answer cache). On that answer: UP to 'Show reasoning', DOWN (section 1), DOWN (first underlined word), UP, each followed by a read.",
+  "seen": {
+    "try_1": "7 sections of 90, 45, 90, 120, 105, 90 and 75 px. Tallest 120 px, room 201.9 px. Not the case.",
+    "try_2": "9 sections of 90, 45, 120, 120, 90, 120, 60, 105, 60 px, tallest 120 px, 7 underlined words, two choices. Not the case.",
+    "tall_case_answer": "The answer to 'What do overclocks actually do ...' came as ONE section of 351 px (taller than the 202.2 px of room), 4 underlined words (overclocks, overclocks, overclock, overclock), two choices.",
+    "down_walk": [
+      "Show reasoning 244.0-259.0 (scrollTop 45)",
+      "section 1 (351 px): top 128.5, bottom 479.5, scrollTop 191.3; 201.6 px of it between pane top and dock; top is 0.5 px below the pane top 128",
+      "first underlined word 'overclocks': 244.2-259.2, scrollTop 90.7 (the panel scrolled back up to show the word; the section's top then sat at 229.2); its tooltip 189.2-237.3, overlap 0 px"
+    ],
+    "up_walk": "UP from the first underlined word landed on section 1: top 128.5 (0.5 px below the pane top 128), bottom 479.5, scrollTop 191.3, 201.6 px showing between pane top and dock. Identical to the Down landing. The tooltip closed.",
+    "every_word_once_no_loop": "Walking Down again from section 1: first word (244.2-259.2), second word (309.2-324.2, scrollTop 100.7), third (309.2-324.2, scrollTop 196.7), fourth (309.5-324.5, scrollTop 301.3): 4 words, 4 stops, each landed once in order, no loop, no repeat.",
+    "memory_log": "free -m available: 8253 MB before the first question (model not loaded); minimum 2372 MB seen in the 5 s log through all game answers (never under 1500). Before the 'What do overclocks actually do' question the Deck's AI was unloaded again (curl keep_alive 0) because available had dropped to 2377 MB with it loaded (rule: under 3000 loaded, so unload and need 8000+): after unloading 8400 MB. The first 5 s memory logger died when its ssh session ended (no samples between 20:09:44 and 20:13:30); a second logger running inside a background ssh from this PC (scratch file mem-b3b-live.log) covers 20:13 on."
+  },
+  "expected": "If section 1 is taller than the room: Up lands with the section's top at the pane top (within 4 px), at least as much showing as Down; every word once; no loop.",
+  "verdict": [
+    "UNCLEAR (the runbook's own question, two tries): neither try 1 nor try 2 made a section taller than the room (tallest 120 px of 202 px).",
+    "PASS (on the tall answer that came from the next question): Up from the first underlined word lands on the 351 px section with its top 0.5 px under the pane top (limit 4 px) and 201.6 px showing, the same as on the Down walk; the four words were each landed once, no loop."
+  ],
+  "side_effect": "Four questions were added to the test chat (it stays at 200 turns, oldest dropped). The Deck's AI was unloaded by hand twice during the block (curl keep_alive 0), on purpose, for the memory rule."
+}

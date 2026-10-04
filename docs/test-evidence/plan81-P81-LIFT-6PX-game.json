@@ -1,0 +1,19 @@
+{
+  "row": "P81-LIFT-6PX (with the game)",
+  "build_commit": "9e68bce1",
+  "deck_time_local": "2026-10-03 20:15-20:19 EDT",
+  "screen": "Deck's own screen, page window 854x454. With the game: pane top 128, dock top 330.2.",
+  "setup": "Game running, test chat, Strategy mode. The answer is the 'try 2' answer of P81-UP-TALL-SECTION ('In Deep Rock Galactic: Survivor, explain in a single unbroken block of text...', 9 sections, two choices). Walk: UP from Ask to 'Show reasoning', then DOWN one press at a time, one read after each press (box, scrollTop, dock top).",
+  "pressed": "DOWN x21 from 'Show reasoning' to the notes block, one read each.",
+  "seen": {
+    "choice_A": "A. Maximize raw killing power (DPS focus): 275.8-323.8 (48 px tall, two lines), scrollTop 980, bottom 6.4 px above the dock top 330.2",
+    "choice_B": "B. Maximize smooth, fast movement (Frame rate focus): 275.8-323.8, scrollTop 1036, bottom 6.4 px above the dock",
+    "helpful": "Mark reply helpful: 296.0-324.0, scrollTop 1121.3, bottom 6.2 px above the dock",
+    "show_details": "Show details: 309.3-324.0, scrollTop 1152, 6.2 px above the dock",
+    "notes_block": "Steam_frame ... From the shared Deck tips: 277.3-324.3, scrollTop 1214.7, 5.8 px above the dock",
+    "none_past_dock_or_under_header": "All 21 stops had bottoms at or above the dock top, except some section and underlined-word boxes that end 0.3 to 0.6 px past the dock top (330.5 / 330.8 vs 330.2): sections 1, 3, 4, 6, 8 and words 2, 4, 7 (the boxes' own padding; not choices, not Helpful). No stop's top was under the header (tops 210.8 or lower)."
+  },
+  "expected": "Going Down, the choices and Helpful end 4 to 16 px above the dock.",
+  "verdict": "PASS - choice A and B end 6.4 px above the dock, Helpful ends 6.2 px above the dock (band 4 to 16).",
+  "side_effect": "none beyond the question's turn in the test chat."
+}

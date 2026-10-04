@@ -252,7 +252,7 @@ closeness without the game's name, and that score landed at 0.6508 against the 0
 edge, close enough that ordinary differences between the PC's and the Deck's own embedding numbers can
 flip it. A measured cut-off is not retuned for one question; no code change made.
 
-**Fixed for this case 2026-10-03 (plan 81, `2abaa0ae`), the cut-off untouched:** the "No close match" line now also shows when the word search ranked none of the attached notes and not one word of the question appears in any attached note's title or text, so the meaning score alone supported them. On this PC over 287 test questions with a recorded right note, each asked with the game running and with its name typed (574 asks), the rule changes the line on none of them; the one ask it changes is the horse question. Deck check owed: row P81-KB-NOTES-FIRST.
+**Fixed for this case 2026-10-03 (plan 81, `2abaa0ae`), the cut-off untouched:** the "No close match" line now also shows when the word search ranked none of the attached notes and not one word of the question appears in any attached note's title or text, so the meaning score alone supported them. On this PC over 287 test questions with a recorded right note, each asked with the game running and with its name typed (574 asks), the rule changes the line on none of them; the one ask it changes is the horse question. Passed on the Deck 2026-10-03 (plan 81, build `9e68bce1`, row P81-KB-NOTES-FIRST): the horse question showed the line and listed no note. Evidence `docs/test-evidence/plan81-P81-KB-NOTES-FIRST.json`.
 
 ## Hidden spoiler box stays shut on games with no Steam ID and on name-first questions
 
@@ -403,7 +403,7 @@ ahead.
 
 **Fixed 2026-10-03 (plan 81, `619842fd`), a different way, with nothing ranked lower:** the word search now leaves the game's name (and its aliases) out of the words it looks for, because it is already limited to the one game and the name only favoured notes with it in their title. Asking "black mesa how do i get across the electrified water" with nothing running now lists the water note first. A question that asks how to start keeps the name. Measured on this PC over the fixture questions, each asked with the game's name typed: the right note first went from 108 to 159 of 287, the right note in the first three from 201 to 209, none lost. On the held-back split the shipped search's first place went from 68.6 to 74.2 percent and its first three from 87.7 to 88.1; the tuning split is unchanged.
 
-**The answer test over the 13 questions whose notes changed (plan 81):** facts kept went from 102 to 105 of 195, so there is no drop overall. Two GTA V questions are lower, 22 to 8 of 30, because the facts the test expects sit in the generic note and its wording check misses a correct paraphrase of the new note; the other 11 questions are higher, 80 to 97 of 165. (The commit message for `619842fd` gives an earlier run of the same test, 70 to 61 of 117 facts kept on the 13 questions; the two runs differ in size.) Deck check owed: row P81-KB-NOTES-FIRST.
+**The answer test over the 13 questions whose notes changed (plan 81):** facts kept went from 102 to 105 of 195, so there is no drop overall. Two GTA V questions are lower, 22 to 8 of 30, because the facts the test expects sit in the generic note and its wording check misses a correct paraphrase of the new note; the other 11 questions are higher, 80 to 97 of 165. (The commit message for `619842fd` gives an earlier run of the same test, 70 to 61 of 117 facts kept on the 13 questions; the two runs differ in size.) Passed on the Deck 2026-10-03 (plan 81, build `9e68bce1`, row P81-KB-NOTES-FIRST): the water question listed only its water note, so it came first. Evidence `docs/test-evidence/plan81-P81-KB-NOTES-FIRST.json`.
 
 ## KB transparency matches what the model got
 
@@ -426,7 +426,7 @@ the panel drew the chat in full and cleared it. Evidence `docs/test-evidence/pla
 Rock Galactic: Survivor attached no tip — its keyword score was 2.0 against the 4.0 cut-off — while "the
 text ... looks blurry" scores 6.9 and finds it. A question that avoids the tip's own words misses it; a
 rescue by meaning search was measured and left for a later lane. Evidence `docs/test-evidence/plan70-R4-try5.json`.
-**Fixed 2026-10-03 (plan 81, `e78f0d6e`, `6f758ff0`), Deck check owed (row P81-TIP-BY-MEANING).** In Strategy and Expert mode a game's
+**Fixed 2026-10-03 (plan 81, `e78f0d6e`, `6f758ff0`), passed on the Deck 2026-10-03 (build `9e68bce1`, row P81-TIP-BY-MEANING; `docs/test-evidence/plan81-P81-TIP-BY-MEANING.json`).** In Strategy and Expert mode a game's
 tip is now also found by meaning: "the words on screen look blurry" attaches Render Scale. The boss question is unchanged, and Speed
 mode is unchanged on purpose. Held-back measurements are identical before and after: no right answer lost, no new wrong one.
 Limits: the long Deck sentence that also names the game ("deep rock galactic survivor the words on screen look blurry on my deck,

@@ -1,0 +1,35 @@
+{
+  "row": "P81-M-L-SUMUP (re-check, try 3; summary card against the dock, no press before each reading)",
+  "build_commit": "9e68bce1",
+  "deck_time_local": "2026-10-03 19:57-20:02 EDT",
+  "screen": "Deck's own screen, Quick Access page 854x454 css px, no game. Pane top y=88, dock top y=290.2 (202 px of room).",
+  "setup": "Test chat 6f3cc055 (200 turns) backed up to ~/p81-backup/6f3cc055.before-sumup2.json (cmp identical; index.json copied to ~/p81-backup/index.json.before-sumup2). label_by_hand false. summary key set to null over SSH, plugin reloaded (no game), opened on the 3rd try. Show details (ring read as 'Show details', A), Down onto the 'This answer / Session' row (read), Right (Session), Down onto the button (read: 'Sum up this chat', aria-disabled false, box 240.1-272.8, scrollTop 547.3). A 100 ms page logger (records every change of the ring's element, its box, the panel scroll and the dock top) was installed, and it took its own readings of the card 0.5 s, 2 s and 10 s after the card text first appeared. Then A on the button, and NO press until after the 10 s reading and the screenshot.",
+  "pressed": "A on 'Sum up this chat'. Then nothing for 49 s (card appeared at t=0; readings at 0.5, 2, 10 s; screenshot at about 20 s; the next press came at 21.7 s). Then in order: DOWN, DOWN, RIGHT, LEFT, UP, UP, each followed by a read of the logger. A was never pressed on Rename or Keep.",
+  "seen": {
+    "summary_time": "Button text counted 'Summing up' for about 30 s and then switched to 'Sum up again' (the plugin log was not used).",
+    "no_press_readings": {
+      "note": "NO PRESS CAME BEFORE ANY OF THESE THREE READINGS. The only action before them was the A that started the sum-up, 30 s earlier.",
+      "0.5 s": "ring on 'Sum up again' (class bonsai-sumup-btn--off), box 96.1-128.8, 8 px below the pane top 88, on screen. Panel scrollTop 691.3. Card (bonsai-sumup-card--offered) box 171.6-501.3 (height 329.7). Card title line 180.2-194.7. Card top is 118.6 px above the dock top 290.2 (card top is between the pane top 88 and the dock). document.hasFocus true.",
+      "2 s": "identical: ring on 'Sum up again' 96.1-128.8, scrollTop 691.3, card 171.6-501.3, dock 290.2",
+      "10 s": "identical: ring on 'Sum up again' 96.1-128.8, scrollTop 691.3, card 171.6-501.3, dock 290.2",
+      "what_holds_the_ring": "the (now greyed) 'Sum up again' button, the same one that had the ring during the summing up. The logger recorded no change of ring, box or scroll between the card appearing and the first press."
+    },
+    "screenshot": "plan81-P81-M-L-SUMUP-try3.png (about 20 s after the card appeared, no press yet): the Sum up again button with the ring at the top of the panel, the line 'This chat is already summed up...', and the card with its title 'What the AI remembers', '61 turns - just now' and the first two bullets, cut off by the dock after about 2.5 lines. Rename/Keep are below the dock (not visible).",
+    "walk_after_that": [
+      "DOWN -> the card itself, box 88.2-417.9 (329.7 tall, taller than the 202 px of room; its top at the pane top), scrollTop 774.7",
+      "DOWN -> 'Rename: Rename this chat to ...' button, box 256.0-282.7 (7.5 px above the dock top), scrollTop 970.7",
+      "RIGHT -> 'Keep: leave the title as it is', box 256.0-282.7, scrollTop 970.7",
+      "LEFT -> back on Rename, 256.0-282.7",
+      "UP -> the card again, box -45.8 to 283.9 (its top 134 px above the pane top, its bottom 6.3 px above the dock), scrollTop 908.7",
+      "UP -> 'Sum up again', box 204.1-236.8, scrollTop 583.3"
+    ],
+    "stops_twice": "Each press moved the ring to a new place. The card and Rename are each landed on twice, once going Down and once coming back (Left from Keep, Up from Rename), which is the expected reverse. Nothing was landed on twice in a row and the ring never looped."
+  },
+  "expected": "The card's top is between the pane top and the dock, its title line and at least 60 px of it above the dock, the ring on 'Sum up again' which is on screen. Then Down (card), Down (Rename), Right (Keep), Left, Up, Up: no stop twice.",
+  "verdict": [
+    "PASS (card at rest, no press): card top 171.6 is between the pane top (88) and the dock top (290.2); 118.6 px of the card is above the dock, its title line is at 180.2-194.7; the ring is on 'Sum up again' at 96.1-128.8, on screen. Same at 0.5 s, 2 s and 10 s.",
+    "PASS (walk): Down card, Down Rename, Right Keep, Left Rename, Up card, Up 'Sum up again'; each press landed on a new place and nothing looped. Note: the card's top edge sits 134 px above the pane top when reached with Up from Rename (its bottom is what shows)."
+  ],
+  "side_effect": "A real summary was written into the test chat file by the plugin (61 turns covered). I restored the chat file from the backup taken just before (cmp identical to ~/p81-backup/6f3cc055.before-sumup2.json), index.json is unchanged (diff identical, title still 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'), then reloaded the plugin (no game). The restored file holds the summary the plugin wrote on its own during the Black Mesa horse question (step 4), not a null summary. The chat did not get renamed (no A on Rename or Keep).",
+  "prepared_answer": false
+}

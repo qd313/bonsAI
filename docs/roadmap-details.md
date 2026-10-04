@@ -198,23 +198,6 @@ Terse ships without them.
 
 ---
 
-## The chat summary card appears behind the dock until Down is pressed
-
-Older dated notes moved here from the roadmap entry on 2026-10-01 (docs sweep 14, plan 78), to bring the roadmap under its size limit. Nothing was removed.
-
-  **2026-09-27 (plan 72, `a9fe54bb`):** the card now scrolls into view by itself, but a tall card on a long chat still leaves its last 10 pixels behind the dock, `docs/test-evidence/plan72-F-SUMUP.json`. The maintainer's call is pending.
-  **2026-09-27 (plan 72, `c603925d`):** moving the ring onto the card after Sum up FAILED on the Deck,
-  `docs/test-evidence/plan72-F6-SUMUP.json`.
-
-Found 2026-09-25 during plan 68's Deck pass, rows SUMUP-02 and SUMUP-03. After the *Sum up this chat* button
-finishes, the card that shows what the AI kept sits just behind the dock at the bottom of the screen. Opened straight
-from the note under a summarised answer (SUMUP-02), only the top of the card showed above the dock. Either way,
-a person does not see the card appear on its own — they have to press Down to bring it into view.
-**Still true on the second Deck pass, 2026-09-26:** opened from the note again, the card still sat mostly behind
-the dock. Deck check owed once a fix lands.
-
----
-
 ## Some saved answers have a hidden block's markers written twice, cause found
 
 Found 2026-09-25 during plan 68's Deck pass. A saved answer had its hidden spoiler block's opening marker
@@ -235,6 +218,13 @@ Test `tests/test_soft_continue_spoiler_join.py`.
 
 **Found by the helper, not fixed:** a half mark at the very end of an answer shows as an empty code block; a half mark before ordinary prose turns
 that prose into a code block (no hidden text leaks); a stopped answer cut inside a hidden block is saved ending on a bare opening mark.
+
+**Two of the three fixed 2026-10-03 (plan 81, `6c708a78`, `e891bdc4`), Deck checks owed (rows P81-HALF-MARK-AT-END, tests only because it is hard to make happen; P81-STOP-IN-HIDDEN-BLOCK).**
+A half-typed mark at the very end of a finished answer is now cut off. A stopped answer cut inside a hidden block is now saved without the bare opening
+mark: an open block with nothing in it is dropped, and one with words in it is closed, so the words stay covered or are dropped, never shown.
+Tests `tests/test_soft_continue_spoiler_join.py`, `tests/test_stopped_answer_cut_in_hidden_block.py`.
+**Left on purpose:** a half mark before ordinary prose (a continued piece that starts with a bare code mark) cannot be told apart from a real code block
+safely, so it is not touched.
 
 ---
 

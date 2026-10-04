@@ -59,6 +59,10 @@ Long notes for knowledge-base items are in [roadmap-kb-details.md](roadmap-kb-de
 
 Sorted by star, then tag, then title. The last item is a tool note, kept at the end.
 
+- ★ `[chips]` `[layout]` `[watching]` **The chip row is replaced by the answer's own Show details line when that line sits at the dock edge** — seen once,
+  2026-10-03, block 3b (plan 81). It may be the designed behaviour of the details slot. Evidence `docs/test-evidence/plan81-P79-LONG-CHIPS-game.json`.
+  Unshelves when: a new sighting.
+
 - ★ `[focus]` `[watching]` **A Down press left a long answer section 22% visible behind the tab bar, and a Down in the chip
   ladder left it 67% visible behind the Ask bar's icon** — each seen once, 2026-09-30, not reproduced on purpose.
   Evidence `docs/test-evidence/plan77-QA-FREE-PLAY-01.json`.
@@ -97,6 +101,10 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
 
 - ★ `[focus]` `[watching]` **With details open, Down from "N earlier" jumps straight to the notes block** — seen once,
   2026-09-26. Not reproduced: it visited every stop in order. Evidence `docs/test-evidence/plan76-P76-M-NEARLIER-DETAILS.json`.
+  Unshelves when: a new sighting.
+
+- ★ `[KB]` `[watching]` **A note titled "Steam_frame (From the shared Deck tips)" came with a Zhukov overclocks question and looks off-topic** — seen once,
+  2026-10-03, block 3b (plan 81). Evidence `docs/test-evidence/plan81-P81-LIFT-6PX-game.json`.
   Unshelves when: a new sighting.
 
 - ★ `[KB]` `[watching]` **With a game running, the meaning search once read about a second** — seen once, 1,070 ms on

@@ -1,0 +1,29 @@
+{
+  "row": "P79-LONG-CHIPS (with Deep Rock Galactic: Survivor running)",
+  "build_commit": "9e68bce1",
+  "deck_time_local": "2026-10-03 20:31-20:40 EDT",
+  "screen": "Deck's own screen, page window 854x454; game Deep Rock Galactic: Survivor running (Context line names it)",
+  "setup": "Mode switched from Strategy to Speed with the plugin's own control (ring read as 'Inference mode: Strategy. Open to change', A, menu ring on 'speed', A; saved ask_mode read 'speed'). Deck's AI unloaded first (memory rule: it had been 2887 MB available with the model loaded; after unloading 8935 MB). Question: 'Any quick tip for a new Deep Rock Galactic: Survivor player?' (send script VERIFIED, ring read as Ask, A). The Speed answer had no choice buttons. The chip row did not show at first because the answer's own 'Show details' line sat at the dock edge and the slot holds that line then (by design, see DetailsSlot.tsx); I pressed UP twice to the real 'Show details' line and A on it (details opened); the chip row then showed 2 chips (opacity 1). The ring was left on the 'Hide details' line, not on a chip. Hands-off for 200 s: one read of the chips about every 572 ms (deck_waitFor at 500 ms; each read takes about 70 ms; the reads were stored in the page and analysed afterwards; 349 reads; no installed timer).",
+  "pressed": "No press during the 200 s. Afterwards (see ring_on_chip): DOWN to put the ring on a chip.",
+  "seen": {
+    "first_half_chip_row_hidden_with_choices": "NOT TESTED separately in this run. What I saw: after the Speed answer (no choices) the chip row was also hidden (face 'line', opacity 0) until I opened the details, so the hiding I saw is explained by the Show details slot rule, not by choice buttons. I did not capture a Strategy answer with choices next to a visible chip row.",
+    "long_chip_timing": {
+      "method": "A long chip is one whose label goes through data-scroll-phase waiting, scrolling, end. 'Words stop' = the read where the phase first shows end. 'Starts to leave' = the first read where that chip's words element has been replaced (the label is a garbled decode text or a new chip). I did not find the slot's own opacity changing at all (reads of the slot's opacity stayed 1 the whole 200 s), so the 'opacity starts to fall' part could not be read; the replacement of the words is what I used.",
+      "gaps_measured": 44,
+      "values": "1122 to 1767 ms for 42 of the 44; the two others 3408 ms and 4566 ms. Values bunch at about 1140 ms (11 chips: 1122 to 1195) and about 1700 ms (31 chips: 1653 to 1767). One read takes about 572 ms, so each gap is only known to within one read: the 1140 ms group means a true gap between about 0.6 and 1.7 s, the 1700 ms group between about 1.1 and 2.3 s. The two groups are what a single steady gap of about 1.2 to 1.7 s would look like.",
+      "inside_1.2_to_1.9": "31 of 44 read inside 1.2 to 1.9 s; 11 read just under (1.12 to 1.20 s); 2 read over (3.4 s and 4.6 s).",
+      "the_two_long_ones": "In both, the other chip slot changed at almost the same time and the row replaced that one first: 'How do I beat Dreadnought...' (slot 0) had its words stop at 59.5 s and the other slot swapped at 60.6 s, slot 0 itself left at 62.9 s. 'Any Steam Input issues for...' (slot 1): words stopped at 177.3 s, slot 0 swapped at 179.0 s, slot 1 left at 181.9 s. So a chip that wants to leave at the same moment as the other waits a turn.",
+      "per_chip_list": "kept in the scratch folder (reads were processed in the page; table in this block's notes file notes-b3b.md)."
+    },
+    "short_chip": "'How do I use Nitra?' (phase fits): its words box x73.2 w109.7 and the chip's text room x73.2 w109.7: centred in the room to 0 px. The whole chip is x48 w147 and the room starts 25 px in from its left edge (and ends 12 px from its right edge), so measured against the whole chip the words sit 6.5 px right of centre.",
+    "ring_on_chip": "Ring put on a chip with DOWN from the Show details line: chip box x48 y331 w147. 14 reads over 15.8 s: the same element, the same box, 1 distinct state. But the slot was showing the Show details face at that moment (the chip row hidden), so the chip's words could not be read and 'never changes' is shown only for the ring's element and box, not for the words."
+  },
+  "expected": "Chip row hidden while the newest answer has choice buttons; chips show with a Speed answer. Each long chip starts to leave 1.2 to 1.9 s after its words stop. The ring on a chip for 15 s: it never changes. A short chip: words centred within 2 px. Mode back to Strategy.",
+  "verdict": [
+    "UNCLEAR (timing): 31 of 44 gaps read 1.2 to 1.9 s, 11 read 1.12 to 1.20 s, 2 read 3.4 and 4.6 s. With one read every 0.57 s a gap cannot be told apart from 1.2 s at the low end, and the two long ones are explained by the other slot swapping first. The slot's opacity could not be read to fall.",
+    "UNCLEAR (ring on a chip for 15 s): the ring element and box did not change in 14 reads over 15.8 s, but the chip's words were hidden at that moment so 'never changes' is not shown for the words.",
+    "PASS (short chip centred): 0 px in the text room (6.5 px off the whole chip's centre).",
+    "COULD NOT RUN (chip row hidden while choices show): not separately tested."
+  ],
+  "side_effect": "ask_mode was changed from strategy to speed and put back to strategy at 20:39 (saved key read 'strategy'). The Show details panel was opened and closed several times. One question added to the test chat. The Deck's AI was unloaded by hand once more."
+}

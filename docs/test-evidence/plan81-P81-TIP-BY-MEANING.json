@@ -1,0 +1,16 @@
+{
+  "row": "P81-TIP-BY-MEANING",
+  "build_commit": "9e68bce1",
+  "deck_time_local": "2026-10-03 20:26-20:31 EDT",
+  "screen": "Deck's own screen, page window 854x454; game Deep Rock Galactic: Survivor running",
+  "setup": "Game running, test chat, Strategy mode. Deck's AI unloaded just before the first question (available 8510 MB, no model loaded); second question asked with the model loaded and 3172 MB available (rule: at least 3000). Notes read from the answer's notes block (ring read, A to open, A to close).",
+  "pressed": "'the words on screen look blurry' (send script, VERIFIED, ring read as Ask, A); then walked UP to the notes block (label read) and A to open it; then 'how do i beat the dreadnought'.",
+  "seen": {
+    "blurry": "Notes block: 'Display (+1 more) - From the shared Deck tips'. Opened: two notes, both titled 'Display': the first reads 'Researched, unconfirmed: the Render Scale slider also blurs menu/HUD text -- no separate UI-scale option. Below ~90% text gets hard to read; raise Render Scale rather than blame the screen.' and the second 'Lower the in-game resolution if the picture looks blurry on the built-in screen.' The Render Scale tip is attached, first in the list.",
+    "log": "The plugin log held no matching line (journalctl filter 'tip'); the activity log is off on this Deck.",
+    "dreadnought": "Notes block: 'Glyphid Dreadnought - From bonsAI's own note', no '(+1 more)', no 'shared Deck tips' note. The Dreadnought note is attached and no tip."
+  },
+  "expected": "'the words on screen look blurry' attaches the Render Scale tip; 'how do i beat the dreadnought' attaches the Dreadnought note and no tip.",
+  "verdict": "PASS - the blurry question got the Render Scale tip (first of two 'Display' notes); the Dreadnought question got only the Glyphid Dreadnought note, no tip.",
+  "side_effect": "Two turns added to the test chat."
+}

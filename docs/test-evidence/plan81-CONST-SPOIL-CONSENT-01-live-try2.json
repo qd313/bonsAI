@@ -1,0 +1,31 @@
+{
+  "row": "CONST-SPOIL-CONSENT-01 (live half, second try)",
+  "build_commit": "9e68bce1",
+  "deck_time_local": "2026-10-03 20:02-20:05 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "prepared_answer": true,
+  "prepared_answer_note": "Both answers came from the test stand-in (scenario spoiler-live) and start with '[PREPARED TEST ANSWER]'. They are not the AI's own words. The stand-in log shows 'PREPARED [spoiler-live ...]' for both asks.",
+  "setup": "Stand-in started on this PC (port 11500), scenario spoiler-live, checked from the Deck over SSH (curl to 192.168.86.27:11500/api/version answered 0.35.1). On the Ollama tab: 'Run AI on this Deck' switched OFF (ring read on that switch first; old state ON, saved key ollama_local_on_deck true), PC address field old text '192.168.86.27:11434', new text '192.168.86.27:11500' written with the send script's page-write path (A never pressed on the field); Test connection (ring read as 'Test connection to Ollama', A): 'Connected - Ollama v0.35.1 - 31 models'. Strategy mode, masking on (strategy_spoiler_masking_enabled true). Test chat 6f3cc055 open (title read). A page watcher polled the chat text every 250 ms (counts of 'Spoiler hidden until complete' chips, 'tap to show' covers, spoiler-class elements, whether the story fact text is present).",
+  "pressed": "Consent question first: send script (VERIFIED) 'Give me a plan for the next area in Hollow Knight, spoilers are okay.'; walked DOWN to Ask (ring read: ask); A as its own press. Then the control: 'Give me a plan for the next area in Hollow Knight.' with DOWN from the question box (ring read: ask), A.",
+  "seen": {
+    "consent_answer": {
+      "watcher": "115 reads over 28.9 s while the question was asked and the answer came in. The new question appeared in the chat at watcher time 18.3 s; the first prepared words at 21.0 s; the story fact ('Story fact (prepared test text): the Hollow Knight was sealed inside the Black Egg Temple...') was in the text from 22.75 s, as plain text, and stayed plain; the answer was complete at 25.8 s (7.0 s of streaming, per the stand-in log).",
+      "chips": "0 reads with a 'Spoiler hidden until complete' chip, in the whole run (0 of 115, and 0 of the 149 reads taken up to 12 s after the answer finished).",
+      "covers": "0 'tap to show' covers at every read from the moment the new question was on screen (18.3 s) to the end and 12 s after. Before 18.3 s the watcher saw 1 cover in 72 reads: that was the PREVIOUS answer (the Black Mesa horse answer, still showing) and not part of this one.",
+      "spoiler_class_elements": "0 from 18.3 s on",
+      "after_the_answer": "Read about 12 s after it finished: story fact plain, 0 covers, 0 chips. I did not wait a full 30 s before asking the next question (the next question came about 20 s after), and I did not fold and reopen the turn.",
+      "saved_turn": "The saved assistant turn: spoiler_consent true, exactly 1 bonsai-spoiler fence in its text (read from the chat file)."
+    },
+    "control_answer": {
+      "question": "Give me a plan for the next area in Hollow Knight. (no consent)",
+      "seen": "The block IS covered: a 'chip' ('Spoiler hidden until complete') showed in 9 reads while it streamed, then one 'Spoiler - tap to show / Hidden until you reveal (Strategy Guide)' cover stayed at every later read. The story fact text is not on screen. The saved turn: spoiler_consent false, 1 fence."
+    },
+    "other": "The chat summed itself up on its own before the control answer ('The chat summed itself up before this answer'). The stand-in passed that call through to the PC's real Ollama (log: 'chat-summary call -> pass')."
+  },
+  "expected": "Consent question: 0 'Spoiler hidden until complete' chips and 0 covers at every read, the story fact plain from the first read that holds it. Control (no consent): the block IS covered.",
+  "verdict": [
+    "PASS (consent question): 0 chips and 0 covers at every read of the new answer (reads every 250 ms from the question appearing to the end), the story fact plain from the first read that held it (22.75 s). Saved turn: consent true, 1 fence.",
+    "PASS (control): without the consent words the block is covered (cover at every read after it appeared; the fact is not readable)."
+  ],
+  "side_effect": "The test chat gained 4 more turns (2 questions, both answered by the stand-in) and was summed up automatically once more. The Deck is still pointed at the stand-in (Run AI on this Deck off, PC address 192.168.86.27:11500) until step 7 puts it right. The stand-in scenario was set back to off."
+}

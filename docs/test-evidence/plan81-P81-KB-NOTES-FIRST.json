@@ -1,0 +1,23 @@
+{
+  "row": "P81-KB-NOTES-FIRST",
+  "build_commit": "9e68bce1",
+  "deck_time_local": "2026-10-03 19:55-20:03 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Test chat 6f3cc055, Strategy mode, no game ('Context: no active game detected'), knowledge base on, Deck's own AI. Questions sent with the send script (VERIFIED), DOWN (ring read as Ask), A.",
+  "pressed": "Two questions, one after the other.",
+  "seen": {
+    "question_1": "black mesa how do i get across the electrified water",
+    "notes_attached_1": "One note, listed under the answer after 'Show details': 'Crossing the electrified waste pools' (From bonsAI's own note). No '(+1 more)' marker, so it is the only note and therefore the FIRST note. I read the list straight from the answer's text; I did not press A on 'Show details'.",
+    "plugin_log": "The plugin log (journalctl, filters 'kb' and 'black') held no matching line; the activity log is off on this Deck, so there is no kb line to quote.",
+    "question_2": "in black mesa how do I tame a horse",
+    "notes_attached_2": "None listed under the answer.",
+    "no_close_match_line": "Shown under the answer: '- No close match in my notes, this answer leans on the model's own knowledge.' (answer took 48 s)",
+    "also_on_screen": "That answer also had one spoiler cover, and the line 'The chat summed itself up before this answer. Press to read what it kept.' (the test chat was summed up on its own; see side_effect)."
+  },
+  "expected": "The electrified-water note is the FIRST note attached; for the horse question the 'No close match' line shows under the answer.",
+  "verdict": [
+    "PASS (electrified water): the one note attached is 'Crossing the electrified waste pools', so it is first.",
+    "PASS (horse): the 'No close match' line shows and no note is attached."
+  ],
+  "side_effect": "The test chat gained 2 turns. During the second answer the chat summed itself up on its own (the turn count passed the sum-up limit), so the test chat now holds a new summary written by the plugin. Step 5 backs up the chat file after this point and restores it from that backup, so the restored file keeps this summary. No other chat touched."
+}

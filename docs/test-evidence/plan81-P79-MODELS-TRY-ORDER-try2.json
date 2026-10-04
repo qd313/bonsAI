@@ -1,0 +1,27 @@
+{
+  "row": "P79-MODELS-TRY-ORDER, 'Skipped: too big' half (try 2)",
+  "build_commit": "9e68bce1",
+  "deck_time_local": "2026-10-03 20:05-20:10 EDT",
+  "screen": "Deck's own screen, page window 854x454; the AI models box is drawn in the Steam main window (target 'Steam Big Picture Mode'), read there",
+  "setup": "Stand-in stopped and its scenario off (step 6 done). Deck pointed at the PC's real AI: Ollama tab, 'Run AI on this Deck' was OFF already, PC address field written with the page-write path from '192.168.86.27:11500' to '192.168.86.27:11434'; Test connection (ring read, A): 'Connected - Ollama v0.35.1 - 31 models'. Then the ring walked to 'AI models' (label read) and A; the box opened (Filters: 2 on, 'Open source only, Essentials only'; 'Try order for: Text'). model_allow_high_vram_fallbacks read from settings.json: false.",
+  "pressed": "A on 'AI models'. Box read from the page. A on 'Advanced >' (ring read as 'Advanced >'), DOWN to 'Allow non-FOSS ... (Tier 3)', DOWN to 'Allow high-VRAM models in routing' (label read, aria-checked false), A (aria-checked true). UP, UP to '< Browse & pull' (label read), A: the list again, read. A on 'Advanced >', DOWN, DOWN to 'Allow high-VRAM models in routing' (label read), A (aria-checked false). UP, UP, A on '< Browse & pull': the list, read. Then B (not Done). No A on any model row, any arrow or any remove control.",
+  "seen": {
+    "switch_off_list": {
+      "skipped_too_big_labels": 3,
+      "rows": "qwen3.6:27b: 16 GB, place 11, 'Skipped: too big'. gemma4:26b: 17 GB, place 14, 'Skipped: too big'. gemma-cursor:latest: 17 GB, place 12, 'Skipped: too big'.",
+      "other_pc_rows_no_label": "bge-m3:latest 1.1 GB (10), gemma3:latest 3.1 GB (23), gemma4:12b-it-qat 6.7 GB (6), gemma4:e2b-it-qat 4.0 GB (1), gemma4:e4b-it-qat 5.7 GB (5), gemma4:latest 8.9 GB (15), granite4.2:3b 2.1 GB (9), granite4.2:8b 5.0 GB (8), llama3:latest 4.3 GB (22), llava:7b 4.4 GB (21), llava:latest 4.4 GB (20), qwen-cursor:latest 8.4 GB (13), qwen2.5-coder:14b 8.4 GB (19), qwen2.5:14b 8.4 GB (17), qwen2.5:3b 1.8 GB (18), qwen3.5:2b 2.6 GB (7), qwen3.5:4b 3.2 GB (2), qwen3.5:9b 6.1 GB (4): none shows a label (3 labels in all, counted)."
+    },
+    "switch_on": "With 'Allow high-VRAM models in routing' on (inside the box): 0 'Skipped: too big' labels in the list (counted from the box text).",
+    "switch_flipped_back": "Switch off again (aria-checked false): the 3 labels were back (counted 3).",
+    "closing": "B closed the box (box text gone). Done was not pressed. settings.json still reads model_allow_high_vram_fallbacks false, and its set of keys equals the block-0 backup's set of keys.",
+    "deck_put_back": "Ollama tab: 'Run AI on this Deck' back ON (ring read as that switch, A; page then reads 'Ollama runs on this Deck at 127.0.0.1:11434', PC address field hidden, saved ollama_local_on_deck true). PC address field text was left at '192.168.86.27:11434', the text it had before this block. Test connection (ring read, A): 'Connected - Ollama v0.34.1 - 2 models' (the Deck's own).",
+    "screenshot": "plan81-P79-MODELS-TRY-ORDER-try2.png shows the box at the end (top of the list, after the flip back). The rows with labels sit further down the list and are not in the picture; the numbers come from the box text."
+  },
+  "expected": "qwen3.6:27b, gemma4:26b and gemma-cursor:latest show 'Skipped: too big' and a size of about 16 to 17 GB while the switch is off; smaller PC models show no label. Flip the switch in the box: the labels go; flip it back; close with B, nothing saved. Deck back to its own AI, Test connection passes.",
+  "verdict": [
+    "PASS (labels): the three named models show 'Skipped: too big' with 16, 17 and 17 GB while the switch is off, and no other PC model shows a label.",
+    "PASS (switch): on removes all 3 labels, off brings all 3 back.",
+    "PASS (nothing saved, Deck back): B closed the box, the saved key is unchanged (false); Deck back on its own AI and Test connection reads connected (v0.34.1, 2 models)."
+  ],
+  "side_effect": "None left behind. During the walk, a first 'Down' press into the Advanced view reported retried:true; the ring landed on the Tier 3 switch as expected and no switch was flipped by it (Tier 3 switch read aria-checked false at that moment and was never pressed)."
+}

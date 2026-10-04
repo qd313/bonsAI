@@ -1,0 +1,40 @@
+{
+  "row": "P81-SPOILER-WORDING-COUNT",
+  "build_commit": "9e68bce1",
+  "deck_time_local": "2026-10-03 19:41-19:54 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Test chat 6f3cc055 (title read each time: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). Strategy mode (ask_mode strategy, tag on the question box read 'Strategy'). strategy_spoiler_masking_enabled true, strategy_spoiler_auto_reveal_after_consent false. Run AI on this Deck on (the Deck's own gemma4:e2b-it-qat). No game running. No stand-in: real answers. Each question sent with the send script (VERIFIED, field read back whole), then DOWN from the question box (ring read: Ask button), then A, then waited until the new turn showed 'Was this helpful?'. Counting rule: a cover is a 'Spoiler - tap to show / Hidden until you reveal (Strategy Guide)' block in the newest answer's text. No question was a word-for-word repeat. Three runbook questions contain an apostrophe and cannot be sent through the send script; they were reworded without one (marked 'reworded').",
+  "pressed": "per question: send script, DOWN (read: Ask), A (as its own step), wait for the answer, read the transcript text",
+  "seen": {
+    "story_questions": [
+      {"n": 1, "q": "In Hades, I beat the final boss but the game just keeps going, is that the ending?", "covers": 0, "first80": "Listen up, you've done the heavy lifting, but the game ain't done with ya. That final boss i"},
+      {"n": 2, "q": "Hades: is beating the final boss the real ending? The game keeps going.", "covers": 0, "first80": "Listen up, you wanna know if beating that final boss is the end? Nah, mate, you're missing"},
+      {"n": 3, "q": "I finished the last boss in Hades and it continues, was that the end of the story?", "covers": 0, "first80": "Listen up, you wanna know if that final boss fight is the whole shebang? Nah, ma"},
+      {"n": 4, "q": "In Red Dead Redemption 2, what happens to Arthur at the end of the story?", "covers": 0, "first80": "Listen up, mate. Now, I ain't gonna give you the whole shebang, but you gotta un"},
+      {"n": 5, "q": "Red Dead Redemption 2: how does the story of Arthur end? (reworded, the runbook had an apostrophe)", "covers": 1, "first80": "Listen up, you wanna know how Arthur wraps up his story in Red Dead Redemption 2"},
+      {"n": 6, "q": "What is the fate of Arthur Morgan at the end of Red Dead Redemption 2? (reworded, apostrophe)", "covers": 1, "first80": "Listen up, you wanna know where Arthur ends up in this big Western story, eh? Lo"},
+      {"n": 7, "q": "How do I beat the boss at the top of the Soul Sanctum in the City of Tears in Hollow Knight?", "covers": 2, "first80": "Spoiler - tap to show Hidden until you reveal (Strategy Guide). This ain't no qu"},
+      {"n": 8, "q": "Hollow Knight: tips for the boss at the top of the Soul Sanctum?", "covers": 2, "first80": "Right, listen up. Spoiler - tap to show Hidden until you reveal (Strategy Guide)"},
+      {"n": 9, "q": "What is the strategy for the top boss of the Soul Sanctum in Hollow Knight? (reworded, apostrophe)", "covers": 2, "first80": "Right, listen up. Spoiler - tap to show Hidden until you reveal (Strategy Guide)"},
+      {"n": 10, "q": "In Hades, the whip-wielding fury with fast dashes in Tartarus keeps punishing me, how do I punish her recovery windows instead?", "covers": 0, "first80": "Listen up, you wanna stop getting hammered by that whip and start hitting her wh"},
+      {"n": 11, "q": "Hades: how do I beat the whip fury in Tartarus who dashes a lot?", "covers": 0, "first80": "Right, listen up. You wanna stop getting hammered by that whip and start hitting"},
+      {"n": 12, "q": "In Hades, what are the openings to hit the first fury boss with the whip?", "covers": 0, "first80": "Right, listen up. You wanna know the openings against that whip fury? You ain't "}
+    ],
+    "story_answers_with_at_least_one_cover": "5 of 12 (questions 5, 6, 7, 8, 9). By group: Hades final boss 0 of 3, Red Dead 2 of 3, Hollow Knight Soul Sanctum 3 of 3, Hades fury 0 of 3.",
+    "harmless_questions": [
+      {"q": "In Hades, which weapon is easiest to start with?", "covers": 0, "first80": "Right, listen up, you wanna know which weapon to grab when you first start playi"},
+      {"q": "Hades: what is the best beginner weapon?", "covers": 0, "first80": "Right, listen up, you wanna know which weapon to grab when you first start playi"},
+      {"q": "Which Hades weapon should a new player pick first?", "covers": 0, "first80": "Right, listen up! You wanna know which weapon to grab when you first start playi"}
+    ],
+    "harmless_covers": "0 of 3 answers carry a cover",
+    "labels_as_text": "None. In all 15 answers the text held no 'bonsai-spoiler', no three backticks and no '<bonsai' (checked on the full transcript text after each answer).",
+    "answer_times_s": "33 to 66 s, so none came from the answer cache",
+    "note_on_the_chat": "All 15 questions were asked in the test chat, whose earlier turns are about Hollow Knight and Hades. The stand-in was not used."
+  },
+  "expected": "At least 9 of the 12 story answers carry a cover (PC measured 77% before the change, 93% after), and no answer shows a label as text.",
+  "verdict": [
+    "FAIL (cover count): 5 of 12 story answers carried a cover (42%), expected at least 9 of 12. Every Hades answer and the first Red Dead answer had no cover; the Hollow Knight answers all had two.",
+    "PASS (no label as text): 0 of 15 answers showed 'bonsai-spoiler', backticks or '<bonsai'."
+  ],
+  "side_effect": "15 new turns in the test chat 6f3cc055 (intended). Three questions were reworded to drop an apostrophe. No other chat touched."
+}

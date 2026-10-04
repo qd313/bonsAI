@@ -1,0 +1,17 @@
+{
+  "row": "P81-BLOCK3B-BUILD (part 0)",
+  "build_commit": "9e68bce1 (checkout tip; deployed to the Deck 19:37 Deck time)",
+  "deck_time_local": "2026-10-03 19:36-19:40 EDT",
+  "screen": "Deck's own screen: Quick Access page window 854x454, devicePixelRatio 1.5; dock top 290.2",
+  "setup": "No game running (no AppId= process, RunningApps empty). Before the deploy: free -m available 4152 MB, Deck's AI gemma4:e2b-it-qat and nomic-embed-text loaded.",
+  "pressed": "deck_deploy; deck_holdAwake ttl 480; deck_openPlugin twice (first try: chord sent, no pane; second try: opened). Checkout had no uncommitted code changes (git status shows only untracked evidence files).",
+  "seen": {
+    "deploy": "loader ready true, active, waited 363 ms",
+    "build_match": "deck_checkReady declares nothing to check ('nothing was declared'), so I compared files: md5 of dist/index.js on the Deck = e93ff25aebbae361afe238f6e041b2d9 = md5 of the checkout's dist/index.js; main.py md5 15922467a95b2932167273f23769964c on both. Match.",
+    "keep_awake": "held true, expiresAt 2026-10-04T07:37:24.124Z (480 min), replaced the earlier lock",
+    "open_plugin": "first call failed (no pane), second call opened (ring placed on Decky list, .bonsai-scope present)",
+    "test_chat": "Main tab shows title 'How do I beat the boss in the Soul Sanctum in Hollow Knight?', 99 earlier turns folded"
+  },
+  "expected": "Deck on tip 9e68bce1 or later, build matches, plugin opens within 3 tries, keep-awake 480, test chat open",
+  "verdict": "PASS - build files identical to the checkout tip 9e68bce1, plugin opened on the 2nd try, keep-awake 480 min held, test chat title read."
+}

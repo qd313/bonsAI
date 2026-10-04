@@ -1,0 +1,29 @@
+{
+  "row": "P81-B3B-GAME-MEMORY (the new memory routine for the game checks, steps 8, 9 and 15)",
+  "build_commit": "9e68bce1",
+  "deck_time_local": "2026-10-03 20:08-20:41 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Deck: 14800 MB total. Deep Rock Galactic: Survivor (appid 2321470) launched with deck_launchGame from the start of the Recent Games row (first try stopped at 'find-tile' because the ring was on nothing after Home; one LEFT press placed it on the first tile, the second call launched it: 4 presses, appid in RunningApps after 81 ms).",
+  "pressed": "Step 8: curl keep_alive 0 for gemma4:e2b-it-qat, 5 s wait, /api/ps and free -m read; launch; 30 s with the window in front (screenshot of the title screen 'press any key'); QAM chord; Main tab; Context line read.",
+  "seen": {
+    "before_launch_after_unload": "20:08: /api/ps listed only nomic-embed-text (the 488 MB embedding model); free -m available 11193 MB.",
+    "game_up": "20:10:30 (24 s after launch): DRG Survivor.exe RSS about 1.0 GB, available 8690 MB; 20:11:18: available 8245 MB, Context line 'Context: active game Deep Rock Galactic: Survivor'.",
+    "answers_asked_with_the_game": [
+      "Q1 'Without headings or lists...' : model not loaded, 8253 MB available (needs 8000). After the answer 20:13:45: model loaded, 3118 MB.",
+      "Q2 'In Deep Rock Galactic: Survivor, explain in a single unbroken block...': model loaded, 3086 MB (needs 3000). Lowest in the 5 s log through it: 2380 MB.",
+      "Before Q3 the model was loaded and 2377 MB: under the 3000 loaded rule. I unloaded the model (curl keep_alive 0, waited 6 s): 8400 MB, model not loaded, so the 8000 rule held, and asked. The same unload-then-ask was done before the 'blurry' question (8510 MB) and before the Speed question (8935 MB).",
+      "Q3 'What do overclocks actually do...' 8397 MB not loaded; Q4 'How should I spend upgrades...' 3134 MB loaded; Q5 'the words on screen look blurry' 8499 MB not loaded; Q6 'how do i beat the dreadnought' 3172 MB loaded; Q7 'Any quick tip...' (Speed) 8929 MB not loaded."
+    ],
+    "lowest_available": "2372 MB in the 5 s log (20:14 to 20:40, 317 samples; file mem-b3b-final.log in the scratch folder). Never under 1500 MB. The log covers 20:13:59 on only: the first logger (started inside the Deck over ssh) died when its ssh call ended, so there are no samples from 20:11:56 to 20:13:59, which includes the first answer.",
+    "stopping_rules": "No stop condition was hit: no freeze, no permission prompt, memory never under 1500 MB, no sign of another driver.",
+    "exit": "deck_exitGame: Steam button, Right, 7 Down to 'Exit game', A, Confirm: appid left RunningApps after 157 ms. Over ssh at 20:41: no DRG Survivor.exe or AppId=2321470 process (only the kernel oom_reaper thread matched my grep). free -m available 5844 MB with the Deck's AI loaded (it was loaded again by the last question).",
+    "tool_notes": "deck_waitFor at 5 s was used to wait for answers (not an installed watcher). The 200 s chip check used a read every ~570 ms from outside; the readings were kept in the page (no timer) and read back afterwards."
+  },
+  "expected": "Unload the Deck's AI before the game; ask only with 8000+ MB available if no model is loaded and 3000+ MB if it is; sample free -m and ps every 5 s during and for 3 minutes after each answer; stop under 1500 MB; no polling watcher; process gone after exit.",
+  "verdict": [
+    "PASS (routine followed): every game question was asked within the rule; lowest recorded 2372 MB; no stop.",
+    "PASS (game gone): process gone, 5844 MB available.",
+    "UNCLEAR (sampling gap): no 5 s samples for 20:11:56 to 20:13:59, so the first answer's dip is unknown (its end point was 3118 MB)."
+  ],
+  "side_effect": "I unloaded the Deck's AI by hand 5 times (curl keep_alive 0): before the game, and before the questions that needed it. The AI is loaded again now (the last question). The first 5 s logger on the Deck (a shell script started over ssh) was left as /home/deck/p81-mem.sh and /home/deck/p81-mem-b3b.log; /tmp/p81-stop was created to end the second logger."
+}

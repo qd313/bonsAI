@@ -1,0 +1,17 @@
+{
+  "row": "P81-OPEN-RING-LOOK",
+  "build_commit": "9e68bce1",
+  "deck_time_local": "2026-10-03 19:38-19:40 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Plugin open on Main tab, test chat. A page-side logger on the Quick Access page polled every 40 ms and wrote a line each time one of these changed: bonsai-scope width, the element with the gamepad ring (class, text, box), document.hasFocus, visibility. Times below are the logger's own, so 300 ms and 2 s are measured from the first moment the panel was drawn (scope width 300), not from my press.",
+  "pressed": "Three times: deck_pressChord GUIDE+A (close; logger shows width -1, hidden, no focus), wait, deck_pressChord GUIDE+A (open). No D-pad press anywhere in between. Cycle 1 (first open): logged 19:38:17 area (t=1791070697341); cycle 2 t=1791070708689; cycle 3 t=1791070719727.",
+  "seen": {
+    "cycle_1": "At open (first log line, same instant as scope width 300): ring on the bonsAI tab bar, 'Main tab' (DIV bonsai-tab-bar), box x48 y64 w300 h20, page has focus, visible. Next logged change: the close, 5.5 s later at the soonest read. So at 300 ms and at 2 s: same element, same box.",
+    "cycle_2": "Same landing, same box. Held until I closed it, 6.0 s after open (no log line in between). So same at 300 ms and 2 s.",
+    "cycle_3": "Same landing, same box. No change in the log through 2.87 s after open (read at 2.87 s). So same at 300 ms and 2 s.",
+    "ring_after_open": "bonsAI tab bar 'Main tab' in all 3 of 3 cycles, never the question box; the ring did not move between 300 ms and 2 s in any cycle (no intermediate log line).",
+    "screenshot": "plan81-P81-OPEN-RING-LOOK.png taken in cycle 3 at about 3 s after open (perf overlay of the Deck is on in the top left). The tab bar's highlight is hard to see on a screenshot at this size; the log carries the fact."
+  },
+  "expected": "No pass line: this is the 'before' reading on this build for a fix that is being built.",
+  "verdict": "MEASURED (no pass/fail line): after a fresh close and open the ring is on the bonsAI tab bar ('Main tab') from the first moment, 3 of 3 times, unchanged at 300 ms and at 2 s."
+}

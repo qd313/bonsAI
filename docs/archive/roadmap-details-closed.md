@@ -1179,3 +1179,20 @@ with `[hidden]` blocks inside it once a spoiler cover is owed. Not tested as its
 while watching the waiting-line fix. Evidence `docs/test-evidence/plan70-L4-WAITING-LINE-01.json`.
 
 **Closed 2026-09-27 (plan 72).** Moved here word for word from roadmap-details.md.
+
+## The chat summary card appears behind the dock until Down is pressed
+
+Older dated notes moved here from the roadmap entry on 2026-10-01 (docs sweep 14, plan 78), to bring the roadmap under its size limit. Nothing was removed.
+
+  **2026-09-27 (plan 72, `a9fe54bb`):** the card now scrolls into view by itself, but a tall card on a long chat still leaves its last 10 pixels behind the dock, `docs/test-evidence/plan72-F-SUMUP.json`. The maintainer's call is pending.
+  **2026-09-27 (plan 72, `c603925d`):** moving the ring onto the card after Sum up FAILED on the Deck,
+  `docs/test-evidence/plan72-F6-SUMUP.json`.
+
+Found 2026-09-25 during plan 68's Deck pass, rows SUMUP-02 and SUMUP-03. After the *Sum up this chat* button
+finishes, the card that shows what the AI kept sits just behind the dock at the bottom of the screen. Opened straight
+from the note under a summarised answer (SUMUP-02), only the top of the card showed above the dock. Either way,
+a person does not see the card appear on its own — they have to press Down to bring it into view.
+**Still true on the second Deck pass, 2026-09-26:** opened from the note again, the card still sat mostly behind
+the dock. Deck check owed once a fix lands.
+
+**Closed 2026-10-03 (plan 81, Deck block 3b, build `9e68bce1`).** Moved here word for word from roadmap-details.md. With no press, the card's top sat 118.6 px above the dock with its title showing; the walk Down, Down, Right, Left, Up, Up landed on a new place each time (row P81-M-L-SUMUP, `docs/test-evidence/plan81-P81-M-L-SUMUP-try3.json`). The ring still stays on the greyed button until Down, which was accepted for 0.6.0.

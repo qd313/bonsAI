@@ -8,6 +8,55 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 [archive/roadmap-details-closed.md](archive/roadmap-details-closed.md) and, since 2026-10-03, to the trimmed archives
 [archive/roadmap-trimmed-2026-10-roadmap-details.md](archive/roadmap-trimmed-2026-10-roadmap-details.md) and its sister files.
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [The panel stops half way down and the Ask button is out of reach](#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach)
+- [Terse mode (Speed answers in three lines)](#terse-mode-speed-answers-in-three-lines)
+- [The chat summary card appears behind the dock until Down is pressed](#the-chat-summary-card-appears-behind-the-dock-until-down-is-pressed)
+- [Some saved answers have a hidden block's markers written twice, cause unknown](#some-saved-answers-have-a-hidden-blocks-markers-written-twice-cause-unknown)
+- [Make the preset chips look more like chips](#make-the-preset-chips-look-more-like-chips)
+- [Shipped, QA owed — why each was built this way](#shipped-qa-owed--why-each-was-built-this-way)
+- [Small and cosmetic, as filed](#small-and-cosmetic-as-filed)
+- [Ask / reply items with short entries, as filed](#ask--reply-items-with-short-entries-as-filed)
+- [Deck health snapshot, Local reply TTS, On-Deck model benchmark](#deck-health-snapshot-local-reply-tts-on-deck-model-benchmark)
+- [First-run ghost New chat label](#first-run-ghost-new-chat-label)
+- [Replace the bonsAI tab icon](#replace-the-bonsai-tab-icon)
+- [Adjustable text size in Settings](#adjustable-text-size-in-settings)
+- [Focus / Deck UI items with short entries, as filed](#focus--deck-ui-items-with-short-entries-as-filed)
+- [Permissions / safety items, as filed](#permissions--safety-items-as-filed)
+- [Platform / upstream items, as filed](#platform--upstream-items-as-filed)
+- [Controller macro test rig and live view](#controller-macro-test-rig-and-live-view)
+- [The five-star and six-star platform items, as filed](#the-five-star-and-six-star-platform-items-as-filed)
+- [A tap outside the AI models screen started the queued downloads and left the D-pad stuck in the Ollama tab](#a-tap-outside-the-ai-models-screen-started-the-queued-downloads-and-left-the-d-pad-stuck-in-the-ollama-tab)
+- [Headline first: every answer opens with one line that stands alone](#headline-first-every-answer-opens-with-one-line-that-stands-alone)
+- [Give the reclaimed height to the transcript](#give-the-reclaimed-height-to-the-transcript)
+- [The floating panel inside SteamVR](#the-floating-panel-inside-steamvr)
+- [One decision for three items: the SteamVR panel, leaving Decky, and reopening llama.cpp](#one-decision-for-three-items-the-steamvr-panel-leaving-decky-and-reopening-llamacpp)
+- [Named chat slots](#named-chat-slots)
+- [A chat that is still writing does not look busy from another chat](#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat)
+- [The open tab strip redrawn: six equal cells, one icon family, only the current tab named](#the-open-tab-strip-redrawn-six-equal-cells-one-icon-family-only-the-current-tab-named)
+- [Summing up offers a fresher title](#summing-up-offers-a-fresher-title)
+- [Saved Deck-walk replay across builds](#saved-deck-walk-replay-across-builds)
+- [Cost to a running game, second sighting](#cost-to-a-running-game-second-sighting)
+- [Flow 2b bugs](#flow-2b-bugs)
+- [Flow L6 findings](#flow-l6-findings)
+- [Overnight run's first real run](#overnight-runs-first-real-run)
+- [Flow L10 findings](#flow-l10-findings)
+- [What bonsAI costs a running game](#what-bonsai-costs-a-running-game)
+- [A Strategy checklist that arrives while the panel is closed never shows, and after any reopen a refine chip sends its follow-up in Speed mode](#a-strategy-checklist-that-arrives-while-the-panel-is-closed-never-shows-and-after-any-reopen-a-refine-chip-sends-its-follow-up-in-speed-mode)
+- [A faded ghost of the tab bar is left drawn over the chip row after touching the screen](#a-faded-ghost-of-the-tab-bar-is-left-drawn-over-the-chip-row-after-touching-the-screen)
+- [The chat summary reads oddly in places](#the-chat-summary-reads-oddly-in-places)
+- [When the length limit cuts a choice menu, the next part of the answer is lost](#when-the-length-limit-cuts-a-choice-menu-the-next-part-of-the-answer-is-lost)
+- [After the quick start is opened and closed, the help chip stayed and the suggestion chips never took the row](#after-the-quick-start-is-opened-and-closed-the-help-chip-stayed-and-the-suggestion-chips-never-took-the-row)
+- [A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind](#a-press-that-never-opens-its-box-parental-lock-on-can-leave-a-stale-return-the-ring-here-note-behind)
+- [After the release: two clean-ups behind the scenes](#after-the-release-two-clean-ups-behind-the-scenes)
+- [The walk check calls a stop hidden when a corner icon merely overlaps its box](#the-walk-check-calls-a-stop-hidden-when-a-corner-icon-merely-overlaps-its-box)
+- [With Voice replies on "When I asked by voice", a spoken question's answer may not read itself aloud](#with-voice-replies-on-when-i-asked-by-voice-a-spoken-questions-answer-may-not-read-itself-aloud)
+- [Roadmap clean-up task: trim this file (done 2026-09-15)](#roadmap-clean-up-task-trim-this-file-done-2026-09-15)
+- [After picking a setting from the search list above the question box, Down cannot get past the answer](#after-picking-a-setting-from-the-search-list-above-the-question-box-down-cannot-get-past-the-answer)
+<!-- /toc -->
+
 ## The panel stops half way down and the Ask button is out of reach
 
 Long version of the roadmap entry. Moved here 2026-09-15; the roadmap keeps the symptom, what clears it and why the

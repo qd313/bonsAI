@@ -19,6 +19,18 @@ with no story behind it gets argued away the first time it is inconvenient.
 
 ---
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [1. Working in a checkout other people are also using](#1-working-in-a-checkout-other-people-are-also-using)
+- [2. Proving a change is really a change](#2-proving-a-change-is-really-a-change)
+- [3. Checking work on the Steam Deck](#3-checking-work-on-the-steam-deck)
+- [4. Briefing helpers](#4-briefing-helpers)
+- [5. Design and screen work](#5-design-and-screen-work)
+- [6. Tooling traps on this machine](#6-tooling-traps-on-this-machine)
+- [7. Documents](#7-documents)
+<!-- /toc -->
+
 ## 1. Working in a checkout other people are also using
 
 **The checkout is shared.** Several chats and several people may have this same folder open at

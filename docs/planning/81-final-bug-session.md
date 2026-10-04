@@ -1,6 +1,6 @@
 # Plan 81 — the final bug session: both lists as close to zero as they honestly get
 
-**Status: RUNNING since 2026-10-03 about 16:15. Progress is in the Log at the end.**
+**Status: FINISHED 2026-10-03 about 23:30. The results, the code summary and the developer guide are in "Results"; the run is in the Log.**
 
 Asked for by the maintainer: one last bug-fixing session before 0.6.0. Get the Bugs list and the Verify list as close
 to zero as possible, with helpers working side by side and the Deck never sitting idle. A bug is not called fixed
@@ -385,7 +385,165 @@ New ones go here, with the choice taken in the meantime. Three are open from the
 
 ## Results
 
-Not started.
+### Where things stand (2026-10-03, about 23:30: the session's end)
+
+**What the maintainer does next:** the checks only a person can do (updated page, version 13:
+https://claude.ai/artifact/8hhevjkTdcGhq8gzDHZ419): the microphone (two checks), the first install on tonight's final
+build (with the help chip), the parental lock, starting one of the four old games once, three hand checks, two looks,
+and six calls. About an hour and a half at the Deck. Then the release.
+
+**Code:** 39 fixes in 42 code commits landed on `experimental` (final code tip `88fd0c8f`), every one with the type
+check, about 3,470 screen tests, about 2,480 Python tests, the build, the focus check and the quick check green at
+landing. One fix in the Deck tools project (`cde1c0e`, committed there, not pushed). Nothing was pushed. **The Deck**
+ran nine blocks; it ends on the final build with settings and chats byte-identical to the block-0 backup, the test
+model removed, the notes library identical, no game, the keep-awake released.
+
+**Bugs lists: 27 at the start, 12 at the end.** Left: four knowledge-base entries the maintainer accepted earlier;
+"Up from the answer bubble" (the maintainer's hand check, D123); the tab-bar ghost after a touch (the maintainer's
+finger; a pretend touch showed none); the sentence that shows before its cover (not picked; question 1); the two
+reload-under-a-game entries (a player has no route to a reload; two developer reloads did not freeze; question 3);
+tonight's freeze after an answer (seen once, not reproduced in two runs; question 5); Portal 2 and a made-up Hades boss
+still getting wrong-subject notes (narrowed tonight: the horse question is fixed); and finding 6 of the after-answer
+read-through (only possible).
+
+**Verify: 25 at the start, 25 at the end, almost all different entries.** About 30 closed tonight with Deck proof;
+about 20 new ones came in as tonight's fixes landed, most of them already proven and closed the same night. What is
+left waits mostly on the maintainer (microphone two, PIN two, the first install, the right stick, looks five, the trap
+in daily use, the cut-menu hand check), or is marked **tests only** because the Deck cannot make its case (the sliver,
+a silent PC, a Deck with no AI installed, the typed follow-up's topic, a stopped answer inside a hidden block, the
+half mark at the end), or waits on the tools project's server restart (the walk check that reads words).
+
+**Proven on the Deck tonight (the main ones):** B on the Clear-all box stays on Settings; the same white ring on every
+control the Deck shows; the ring on the question box after a fresh open and after a Quick Access tab switch; controls
+under an answer 6 px above the dock; Up onto a long section shows its start; no tooltip on its own word (0 of 14); a
+choice button gets its checklist; the summary card in view after Sum up; consent applies from the first word (prepared
+answer); "Skipped: too big" on a PC's big models; a model removed on the Deck keeps its place when the PC has it; the
+PC clean-up; a game's tip found by meaning; the right note first for Black Mesa's water question and "No close match"
+for the horse question; the reworded spoiler instructions kept (4 of 9 covered against 2 of 9 on the old wording); a
+long chip leaves about 1.5 s after its words stop (most gaps measured 1.2 to 1.9 s); the Main tab walk with and without
+a game; plus owed checks from earlier sessions: power answers hold numbers, the settings list's ring, the hint's
+Dismiss, the knowledge-base icons, three chat-row checks that failed on 18 September, tactics with no library, a cut
+choice menu (prepared), the checklist after a reopen (prepared), Rename, the summary's Game line, moving a model's
+place.
+
+### What went wrong, and how it was handled
+
+- **The Deck froze at 17:46** (Deep Rock running, the notes library moved aside for a check, the AI loaded). The
+  maintainer restarted it by hand; the library was put back the moment the Deck answered. The AI's own log showed it
+  idle after the answer; Steam's page processes took the memory. Two later runs in the same state did not freeze.
+- **Memory with a game is tight.** With Deep Rock and the Deck's AI loaded only about 2 to 3 GB stay free; block 3a
+  could run no game check. From block 3b the Deck helper unloaded the AI before each game.
+- **A count searched for the wrong dash** and made covers look missing; a direct look showed every cover drawn.
+- **"Recorded sound" never reached the microphone** (the speaker's sound arrives as silence); the voice checks stay
+  the maintainer's. The help chip's "seen" flag came back by itself after a restart; that check stays with the first
+  install.
+- **Second and third rounds:** the ring after a tab switch (must not take the ring from the tab icons), the try order
+  (the box's own refresh undid the removal fix), the rings (fourteen more buttons), the freeze note (the AI was not the
+  cause), the fresh-open ring (older than tonight), the Main tab walk (a hidden chip stop found by the final walk).
+- **Landings under load:** two screen test files time out at 20 s while many helpers test at once; the lander retried
+  once. One landing stopped on a Windows file lock and was finished by hand. One batch tripped the "files over 400
+  lines" guard by one line; the helper moved a piece out.
+- **Roadmap placement:** the maintainer asked for every entry to be in its right section; two audits found about 20
+  misplaced or stale entries (one wrongly closed) and the bookkeeper fixed them.
+
+### The code summary
+
+All on `experimental`; each item is one helper's change, with what it does and how.
+
+**Focus and layout (the D-pad).**
+- `src/components/SettingsTab.tsx`: the "Clear all data…" button now calls the shell's "remember this tab" step before
+  its box opens, as "Clear cache…" always did; without it every way of closing the box went back to Main.
+- `src/styles/settingsGlassButton.ts`, `src/styles/sections/scopeBase.ts`, and `SettingsTab.tsx`,
+  `VoiceInputSettingsSection.tsx`, `DeveloperTab.tsx`, `SettingsTabUiScaleSection.tsx`, `OllamaSavedHostsRows.tsx`,
+  `OllamaWhereAiRunsSection.tsx`, `PermissionsTab.tsx`, `PermissionDenyAction.tsx`, `AboutTab.tsx`: two new ring classes
+  (an inset ring for a button inside a Steam wrapper, and a host class for Steam's ButtonItem rows, which take no class
+  of their own); the rule rings the innermost element Steam marks, so the ring never doubles. A guard test now fails
+  when a button on those tabs has no ring.
+- `src/hooks/useAskBarInitialRingClaim.ts`, new `src/hooks/askBarRingWatch.ts`: a short watch window opens on a fresh
+  open, on the page turning visible, or on the pane reappearing after a Quick Access tab switch; it moves the ring to
+  the question box only when Steam parked it on the tab bar or Decky's header in the first moments, never after the
+  person moved it, and never from the tab icon column.
+- `src/hooks/useDockClearanceOnFocus.ts`: the lift's scroll margin leaves out Steam's own 80 px bottom padding, so
+  controls under an answer land 6 px above the dock instead of 86.
+- `src/utils/answerBubbleBandGeometry.ts`, `answerBubbleWordsUp.ts`: Up from the first underlined word of a section
+  taller than the screen brings the section's top to the pane top (as Down leaves it); Up from below onto such a
+  section brings its end down to the dock (no sliver).
+- `src/components/DrgGlossaryTermChip.tsx`, new `src/utils/drgGlossaryTooltipPlacement.ts`: the word's tooltip is placed
+  from the word's current box, again after every scroll and at 100, 300 and 900 ms, above the word if it fits, else
+  below, never on it, reading the dock's top from the page.
+- `src/utils/chatTranscriptNavHelpers.ts`, `MainTabChatTranscript.tsx`: Down from an answer's last control (and from the
+  ban-lookup row) claims the press and goes to whatever the slot above the question box shows; Steam's own step had
+  landed on the hidden chip.
+- `src/features/preset-carousel/` (new `presetChipStay.ts`, `presetChipButton.tsx`, `presetDecodeChipButton.tsx` moved
+  out, `changeSpacing.ts`, `presetPace.ts`) and `MainTabPresetAnimatedChips.tsx`: each long chip reports its real scroll
+  time line to the row; the row replaces it one 1.5 s pause after the words stop; two long chips may change 0.35 s apart.
+
+**Spoilers and the answer stream.**
+- `py_modules/backend/services/game_ai_request.py`: a choice button's follow-up keeps its "[Strategy follow-up]" marker
+  first (the remembered-subject reminder goes behind it), so the AI gets the checklist instructions.
+- `ollama_prompts.py`: the status-line example's topic skips the reminder block; the hidden-block label is named in the
+  shape the reader accepts (with `strategy_spoiler_policy.py`).
+- New `soft_continue_spoiler_join.py`, with `ollama_chat_stream.py`, `ollama_service.py` and `main.py`: when a length cut
+  falls inside a hidden block, the AI's repeated opening mark is dropped at the join; a half-typed mark is finished
+  instead of opening a plain code block (which had shown a hidden sentence uncovered); a finished or stopped answer ends
+  without a bare or half mark, and its words stay covered.
+- `main.py`, `background_request_state.py`, `ollama_ask_service.py`, `useBonsaiAskOrchestration.ts`,
+  `MainTabChatTranscript.tsx`, `src/types/bonsaiUi.ts`: the turn's spoiler consent is published into the live status
+  before the first word, so a live answer asked with "spoilers are okay" never shows a cover; covers stay on until it is
+  known.
+
+**The AI models box and the try order.**
+- New `ollama_pc_models.py` and `ollama_try_order_prune.py`, with `ollama_local_setup_rpc.py`, `ollama_routing.py`,
+  `main.py` (`test_ollama_connection`, `delete_ollama_model(tag, pc_ip)`, `fetch_ollama_catalog_metadata(tags, pc_ip)`),
+  `usePullModelDeleteConfirm.tsx`, `usePullModelCatalogRefresh.ts`, `usePullModelSubmitSelected.tsx`: every trim of the
+  saved try order asks the known PCs (saved hosts and the address the screen last saved) and keeps the names they hold;
+  when a known PC is silent nothing is dropped; a PC's fresh listing trims names gone everywhere; a Deck with no AI
+  installed is trimmed against the PCs alone.
+- `useTryOrderPlaces.ts`: a place change keeps the saved names the answering machine does not show.
+- `ollama_health_probe.py`, `ollama_connection_test.py`, `PullModelsTryOrder.tsx`: PC model sizes reach the box, so the
+  15 GB rule marks big PC models "Skipped: too big".
+
+**The knowledge base.**
+- New `knowledge_base_game_tip.py` (the game-tip search moved out of `knowledge_base_service.py`): if no tip clears the
+  word cut-off, the question's meaning is compared with the game's own tips (cut-off 0.64), sharing the one question
+  embedding with the notes search; Speed mode unchanged.
+- `knowledge_base_search.py`: the game's own name and aliases are left out of the word search (it is already limited to
+  that game), except for "how do I start" questions. `kb_not_in_notes_notice.py`: "No close match" also shows when no
+  word of the question is in the attached notes.
+
+**Test tooling and the tools project.** `src/test-harness/deckAnswerWalk.ts` models Steam's 116 px top margin, the game
+screen's pane and dock, and Steam's default Down step. The Deck tools project (`decky-plugin-studio`, commit `cde1c0e`,
+not pushed): the walk check judges a control with words by its text lines, so the two corner-icon false alarms should
+stop once its tool server restarts. Removed: `liveReasoningText` (dead code).
+
+**What surprised us, and how it was handled.** The doubled spoiler marks came from the length-cut join, not the AI
+alone (found by replaying real streams). "B leaves Settings" was one missing call. The freeze was not the AI loading
+(its own log showed it idle). The summary card was already in view (an earlier reading had been taken after a press).
+The spoiler "count" failure was a dash in a text search. A Deck check of the try order failed because the box's own
+refresh undid the removal fix a moment later.
+
+**What the maintainer could have done to make it easier.** Put one of the four N64/GameCube titles on Recent Games for
+the named-game spoiler check; a short microphone session for the two voice checks; a first install for the help chip;
+and a Deck restart before the session (memory was the limit on every game check).
+
+### A short developer guide to how this plan went into the code
+
+- **The ring.** bonsAI moves Steam's highlight only through Steam's own hand-over (the registry), never by a page search
+  or a plain focus(). Tonight added three rules: claim the press yourself when Steam's own step could land on something
+  hidden (Steam reads no CSS); when the panel opens or comes back, put the ring on the question box only in the first
+  moments and only if Steam parked it there; every bonsAI button wears the same white ring, enforced by a test.
+- **Landings near the dock.** Steam keeps 116 px clear at the top of its scroll area and 80 px at the bottom. Any
+  placement that asks Steam to scroll must subtract what Steam already adds; the walk tests now model both.
+- **Spoilers in a stream.** A hidden block can be cut by the length limit, continued, stopped or consented to. The join
+  keeps one opening mark, a half mark is finished, the end of an answer is tidied, and the turn's consent travels with
+  the live status so the screen never guesses.
+- **The try order is one list for every machine.** Any clean-up asks every machine the plugin knows about before it
+  drops a name, and does nothing when one of them cannot answer.
+- **The notes search.** Words first, meaning as the fall-back for a game's own tips; the game's own name no longer
+  counts as a matching word.
+- **Testing rare cases.** A stand-in AI on the PC (scratch only) gives the plugin prepared answers so rare cases happen
+  on demand; every such Deck result says "prepared answer".
+
 
 ## Log
 
@@ -453,6 +611,19 @@ Not started.
   spoiler mark but the AI itself left one block unclosed (still covered on screen). No game check could run: with the
   game and the loaded AI only about 2 GB was free. Paperwork sweep 3 committed. Deck block 3b (the second build, the
   remaining checks, then the game with the AI unloaded first) is running.
+
+- **2026-10-03, about 20:20 to 23:30, the end (code tip `88fd0c8f`):** **Landed:** the fresh-open ring (Q, third
+  round), the white ring on fourteen more buttons and the About links (B), the try order keeping a PC model's place
+  after a removal and when a PC is silent (C), the typed follow-up's topic line (N2), a stopped or cut answer ending
+  cleanly (N3), and Down never landing on a hidden chip (W, found by the last Main tab walk). **Deck blocks 4a to 7:**
+  a direct look showed every spoiler cover drawn (an earlier count had searched for the wrong dash); the side-by-side
+  count kept the reworded instructions (4 of 9 covered against 2 of 9); the fresh-open ring, the ring on every tab, the
+  PC place, the Main tab walk with and without a game, the water fix's guard question, and two smoke tests passed;
+  block 6 found no freeze in two runs and no route for a player to a reload under a game. The Deck was put back
+  byte-identical to the block-0 backup and handed back on the final build, the keep-awake released. **Paperwork:**
+  sweeps 4 to 8, two full audits of the roadmap (the maintainer asked that every entry sit in its right section), the
+  user guide's known problems matched to the release notes. The checks page is at version 13 and the report is
+  published.
 
 ## For the chat that runs this: helper types and pointers
 

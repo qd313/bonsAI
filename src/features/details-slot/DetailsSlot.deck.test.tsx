@@ -87,7 +87,8 @@ const SLOT_FACE: Box = [DOCK_TOP, DOCK_TOP + 30];
 const ASK_BAR: Box = [DOCK_TOP + 32, PANE_BOTTOM];
 
 let pane: HTMLDivElement;
-let rule: "top" | "padded" = "top";
+/** "nearest" is the Deck's own landing in plan81-QA-FREE-PLAY-01-NOGAME.json: scrolled just enough, the line 2 px above the dock. */
+let rule: "top" | "padded" | "nearest" = "top";
 
 function rect(top: number, bottom: number): DOMRect {
   return { top, bottom, left: 0, right: 300, width: 300, height: bottom - top, x: 0, y: top, toJSON: () => ({}) } as DOMRect;
@@ -135,6 +136,10 @@ function steamGlide(el: Element | null) {
   if (bottom - top > READ_H) return;
   const inside = top >= PANE_TOP && bottom <= DOCK_TOP;
   if (inside) return;
+  if (rule === "nearest" && bottom > DOCK_TOP) {
+    setScroll(pane.scrollTop + bottom - (DOCK_TOP - 2));
+    return;
+  }
   const target = rule === "padded" && bottom - top < 100 ? PANE_TOP + 116 : PANE_TOP;
   setScroll(pane.scrollTop + top - target);
 }
@@ -256,6 +261,24 @@ function ringVisible(): boolean {
   return top >= PANE_TOP - 1 && bottom <= DOCK_TOP + 4;
 }
 
+/**
+ * When on, a Down press that no handler claims goes to Steam's own default step, as on the Deck: the
+ * next focusable after the ring in the page's order. Steam reads no CSS, so a face that is
+ * `visibility: hidden` is still a stop (plan81-QA-FREE-PLAY-01-NOGAME.json: the ring sat on a hidden chip).
+ */
+let steamDefaultStep = false;
+function steamDefaultDown() {
+  const from = ring();
+  if (!from) return;
+  const edge = from.getBoundingClientRect().bottom;
+  const below = Array.from(pane.querySelectorAll<HTMLElement>("[tabindex], button:not([disabled])"))
+    .map((el, order) => ({ el, order, top: el.getBoundingClientRect().top }))
+    .filter(({ el, top }) => el !== from && !from.contains(el) && top >= edge - 0.5)
+    .sort((a, b) => a.top - b.top || a.order - b.order);
+  const next = below[0]?.el;
+  if (next) act(() => next.focus());
+}
+
 /** One press, as Steam delivers it: the ring's own handler first, then each container's. */
 function press(key: keyof Handlers): boolean {
   let el = ring() as NavEl | null;
@@ -270,6 +293,7 @@ function press(key: keyof Handlers): boolean {
       el = el.parentElement as NavEl | null;
     }
   });
+  if (!claimed && key === "onMoveDown" && steamDefaultStep) steamDefaultDown();
   steamGlide(ring());
   settle();
   return claimed;
@@ -286,6 +310,7 @@ beforeEach(() => {
   resetDetailsSlotStore();
   hoisted.transfers = [];
   rule = "top";
+  steamDefaultStep = false;
   const style = document.createElement("style");
   style.textContent = buildBonsaiScopeStylesheet();
   document.head.appendChild(style);
@@ -494,4 +519,125 @@ describe("the fade", () => {
     }
     expect(reduced).toMatch(/transition: none/);
   });
+});
+
+/*
+ * The walk Down to the question box and back (plan 81, plan81-QA-FREE-PLAY-01-NOGAME.json). Whatever the
+ * slot shows is the one stop between the answer's last control and the question box, both ways. On the
+ * Deck Down landed on a chip that was hidden (the ring drawn on screen stayed on the answer's Show details,
+ * a dead press) and never on the line the slot was showing, while Up from the box stopped on that line.
+ */
+/** Hidden to a person: the element or something around it is `visibility: hidden` or fully transparent. */
+function seenByPerson(el: Element | null): boolean {
+  for (let node: Element | null = el; node && node !== document.body; node = node.parentElement) {
+    const style = getComputedStyle(node);
+    if (style.visibility === "hidden" || style.opacity === "0") return false;
+  }
+  return Boolean(el);
+}
+/** Press `key` up to `limit` times; every stop's name, with whether a person could see the ring there. */
+function walk(key: "onMoveDown" | "onMoveUp", limit = 8) {
+  const stops = [nameOf(ring())];
+  const hidden: string[] = [];
+  for (let i = 0; i < limit; i += 1) {
+    const before = ring();
+    press(key);
+    if (ring() === before) break;
+    stops.push(nameOf(ring()));
+    if (!seenByPerson(ring())) hidden.push(nameOf(ring()));
+    if (key === "onMoveDown" && nameOf(ring()) === "question box") break;
+  }
+  return { stops, hidden };
+}
+function ringOnRealLine() {
+  act(() => realLine().focus());
+}
+
+describe("Down and Up between the answer's last control and the question box (the slot is one stop)", () => {
+  beforeEach(() => {
+    steamDefaultStep = true;
+  });
+
+  it.each(["top", "padded"] as const)(
+    "slot showing the Show details line: Down from the answer's Show details lands on that line, then the box; Up is the same stops reversed, none hidden or repeated (%s glide)",
+    (r) => {
+      rule = r;
+      renderChat();
+      scrollChatTo(470); // the real line is on screen by 1 px: the slot keeps the line (no blink at the edge)
+      expect(slotHolds()).toBe("line: Show details ↓");
+      ringOnRealLine();
+      const down = walk("onMoveDown");
+      expect(down.stops).toEqual(["real line", "slot line", "question box"]);
+      expect(down.hidden).toEqual([]);
+      const up = walk("onMoveUp");
+      expect(up.stops.slice(0, 3)).toEqual([...down.stops].reverse());
+      expect(up.hidden).toEqual([]);
+      expect(new Set(up.stops).size).toBe(up.stops.length);
+    },
+  );
+
+  it("slot showing the chips: the chip is the one stop between the answer's Show details and the box, both ways", () => {
+    renderChat();
+    scrollChatTo(560);
+    expect(slotHolds()).toBe("chip");
+    ringOnRealLine();
+    const down = walk("onMoveDown");
+    expect(down.stops).toEqual(["real line", "chip", "question box"]);
+    expect(down.hidden).toEqual([]);
+    /* Up from the box lands on the chip; the chip's own Up is presetRowFocusNav.upFromChips.test.tsx's. */
+    const up = walk("onMoveUp", 1);
+    expect(up.stops).toEqual(["question box", "chip"]);
+  });
+
+  it("the slot swapping while the ring waits on the answer's Show details still gives a visible stop on the next Down", () => {
+    renderChat();
+    scrollChatTo(300);
+    ringOnRealLine();
+    scrollChatTo(560); // the chip is back
+    expect(slotHolds()).toBe("chip");
+    press("onMoveDown");
+    expect(nameOf(ring())).toBe("chip");
+    expect(seenByPerson(ring())).toBe(true);
+  });
+});
+
+describe("the whole walk Down from the answer to the Ask button and back, with Steam's scroll", () => {
+  beforeEach(() => {
+    steamDefaultStep = true;
+  });
+
+  it.each(["top", "padded", "nearest"] as const)(
+    "every stop is one a person can see, none repeats, the slot is the one stop before the box, and Up is Down reversed (%s glide)",
+    (r) => {
+      rule = r;
+      renderChat();
+      scrollChatTo(100);
+      act(() => pane.querySelector<HTMLElement>(".bonsai-answer-stop")!.focus());
+      steamGlide(ring());
+      settle();
+      const names: string[] = [nameOf(ring())];
+      const slotWhenOnRealLine: string[] = [];
+      for (let i = 0; i < 14; i += 1) {
+        const before = ring();
+        press("onMoveDown");
+        if (ring() === before) continue; // a press that only scrolled a section being read is not a stop
+        expect(seenByPerson(ring()), `${nameOf(ring())} is seen`).toBe(true);
+        expect(ringVisible(), `${nameOf(ring())} is on screen (${screenBox(ring()!)})`).toBe(true);
+        names.push(nameOf(ring()));
+        if (nameOf(ring()) === "real line") slotWhenOnRealLine.push(slotHolds());
+        if (nameOf(ring()) === "question box") break;
+      }
+      expect(names[names.length - 1]).toBe("question box");
+      expect(new Set(names).size).toBe(names.length);
+      const slot = slotWhenOnRealLine[0]!.startsWith("line") ? "slot line" : "chip";
+      expect(names.slice(-3)).toEqual(["real line", slot, "question box"]);
+      if (r === "nearest") expect(slot).toBe("slot line"); // the Deck's own case
+      // Up from the box: the same stops back to the real line.
+      // (a chip's own Up is presetRowFocusNav.upFromChips.test.tsx's: the harness's Button carries no handlers)
+      const up = walk("onMoveUp", slot === "chip" ? 1 : 2);
+      expect(up.stops).toEqual(["question box", slot, "real line"].slice(0, up.stops.length === 2 ? 2 : 3));
+      expect(up.stops.length).toBe(slot === "chip" ? 2 : 3);
+      expect(up.hidden).toEqual([]);
+    },
+  );
 });

@@ -14,6 +14,7 @@ import { renderHook } from "@testing-library/react";
 import { troubleshootHintRowNavHandlers, vacDenyRowMoveUp } from "./chatTranscriptNavHelpers";
 import { registerNavFocus, resetNavFocusRegistry } from "./navFocusRegistry";
 import { usePresetRowNav } from "../features/preset-carousel/presetRowFocusNav";
+import { resetDetailsSlotStore, setSlotShowsLine } from "../features/details-slot/detailsSlotStore";
 
 function fakeNavHolder() {
   return { current: { TakeFocus: vi.fn(() => true) } };
@@ -30,10 +31,12 @@ function mountHintButtons() {
 
 beforeEach(() => {
   resetNavFocusRegistry();
+  resetDetailsSlotStore();
 });
 afterEach(() => {
   document.body.innerHTML = "";
   resetNavFocusRegistry();
+  resetDetailsSlotStore();
 });
 
 describe("the troubleshooting hint row's Left and Right", () => {
@@ -70,6 +73,21 @@ describe("the troubleshooting hint row's Left and Right", () => {
     const handlers = troubleshootHintRowNavHandlers(mountHintButtons().els);
     expect((handlers.onMoveDown as () => boolean)()).toBe(true);
     expect(deny.current.TakeFocus).toHaveBeenCalledWith(true);
+  });
+
+  it("Down with no ban-lookup row goes to the slot above the question box, the line while it holds the line", () => {
+    const line = fakeNavHolder();
+    const chips = fakeNavHolder();
+    registerNavFocus("details-slot-line", line);
+    registerNavFocus("preset-carousel", chips);
+    setSlotShowsLine(true);
+    const handlers = troubleshootHintRowNavHandlers(mountHintButtons().els);
+    expect((handlers.onMoveDown as () => boolean)()).toBe(true);
+    expect(line.current.TakeFocus).toHaveBeenCalledWith(true);
+    expect(chips.current.TakeFocus).not.toHaveBeenCalled();
+    setSlotShowsLine(false);
+    expect((handlers.onMoveDown as () => boolean)()).toBe(true);
+    expect(chips.current.TakeFocus).toHaveBeenCalledWith(true);
   });
 
   it("Down with nothing registered below leaves the move to Steam", () => {

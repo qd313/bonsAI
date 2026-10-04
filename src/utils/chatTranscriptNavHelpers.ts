@@ -47,7 +47,8 @@ export function focusChatPermissionHintRow(): boolean {
 /**
  * Down from the reply utility row (Retry / Show details / Copy): this turn's own chip ladder or
  * collapsed hint first (closest, inside the turn's own Focusable), then whichever permission-hint
- * row is mounted just below the transcript, then the session context strip.
+ * row is mounted just below the transcript, then the session context strip, then the slot above the
+ * question box (the chips, or the Show details line standing in for them).
  *
  * Replaces a plain call to `focusDownFromReplyUtilityRow`, which only tried the ladder and hint
  * before falling to the strip — silently skipping the permission-hint rows because they are not
@@ -60,7 +61,14 @@ export function focusDownFromReplyUtilityRowOrPermHint(liveSlot: HTMLElement | n
   if (focusContextChipLadder(liveSlot)) return true;
   if (focusContextHint(liveSlot)) return true;
   if (focusChatPermissionHintRow()) return true;
-  return focusSessionContextStrip();
+  if (focusSessionContextStrip()) return true;
+  /*
+   * Then the slot above the question box, whichever face it shows: the Show details line standing in
+   * for the chips, or the chips. Left unclaimed this fell to Steam's own step, which reads no CSS and
+   * so chose the hidden chip while the line held the slot -- an invisible stop, with the ring drawn on
+   * screen staying on Show details, and never the line itself (plan81-QA-FREE-PLAY-01-NOGAME.json).
+   */
+  return takeChipSlotFocus();
 }
 
 /**
@@ -222,8 +230,10 @@ export function firstArchivedHeaderMoveUp(turnIndex: number): (() => boolean) | 
  * the two buttons with a plain focus() -- two siblings in this one container. Both ends hold still:
  * Steam's own "past the edge" is the Quick Access rail.
  *
- * Down goes to the ban-lookup row when it sits below; otherwise Steam carries on down. The old Down
- * aimed at the session context strip, which plan 62 removed. Up is unchanged.
+ * Down goes to the ban-lookup row when it sits below, else to the slot above the question box (the
+ * chips, or the Show details line standing in for them: left to Steam, the press chose a hidden chip,
+ * plan81-QA-FREE-PLAY-01-NOGAME.json). The old Down aimed at the session context strip, which plan 62
+ * removed. Up is unchanged.
  */
 export function troubleshootHintRowNavHandlers(buttons: {
   current: (HTMLElement | null)[];
@@ -243,7 +253,7 @@ export function troubleshootHintRowNavHandlers(buttons: {
     onMoveRight: () => step(0, 1),
     onMoveLeft: () => step(1, 0),
     onMoveUp: focusUpPastLiveKbNotesBlock,
-    onMoveDown: () => takeNavFocus("chat-perm-hint-deny"),
+    onMoveDown: () => takeNavFocus("chat-perm-hint-deny") || takeChipSlotFocus(),
   };
 }
 

@@ -176,6 +176,11 @@
       "role": "Load/save/merge settings.json"
     },
     {
+      "path": "src/features/details-slot/DetailsSlot.deck.test.tsx",
+      "lines": 644,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",
       "lines": 639,
       "role": ""
@@ -193,11 +198,6 @@
     {
       "path": "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
       "lines": 613,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/strategy_spoiler_policy.py",
-      "lines": 609,
       "role": ""
     }
   ]

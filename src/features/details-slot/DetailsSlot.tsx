@@ -15,8 +15,12 @@
  *    detailsSlotStore's `slotShouldShowLine()`.
  * 2. Both faces are always drawn, stacked in one grid cell, so the dock never changes height and the
  *    chips keep their own fade cycle underneath. The face going away fades out over the tab bar's
- *    120 ms and is then hidden (visibility), which also takes it out of Steam's reach; with reduced
- *    motion the swap is instant (styles/sections/detailsSlot.ts).
+ *    120 ms and is then hidden (visibility). That hides it from a person but NOT from Steam: Steam's
+ *    own step reads no CSS, and on the Deck (plan81-QA-FREE-PLAY-01-NOGAME.json) Down from the answer's
+ *    Show details landed on the hidden chip. So every Down that enters the slot is claimed
+ *    and handed in through Steam's transfer (detailsSlotStore's slot helpers), never left to Steam's own
+ *    step. With reduced motion the swap
+ *    is instant (styles/sections/detailsSlot.ts).
  * 3. The line is its own Focusable with a registered stop ("details-slot-line"). A runs the real
  *    line's handler (detailsSlotStore's `pressDetailsSlotLine()`); Up leaves the way Up from a chip
  *    does (`chipRowExitUp()`); Down goes to the question box; Left and Right are claimed so Steam

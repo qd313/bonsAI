@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 730,
-  "edgeCount": 2120,
+  "edgeCount": 2121,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2920,7 +2920,8 @@
         "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/chatTranscriptNavHelpers.ts",
-        "src/utils/handRingOnWhenGone.test.ts"
+        "src/utils/handRingOnWhenGone.test.ts",
+        "src/utils/permHintRowNav.test.ts"
       ]
     },
     "src/features/downloads/downloadNotice.test.tsx": {
@@ -7505,6 +7506,7 @@
     },
     "src/utils/permHintRowNav.test.ts": {
       "imports": [
+        "src/features/details-slot/detailsSlotStore.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/navFocusRegistry.ts"

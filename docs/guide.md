@@ -22,6 +22,26 @@ The shoulder buttons switch tabs, as they do elsewhere in Steam. **B** steps bac
 - [Known problems](#known-problems)
 - [Words used here](#words-used-here)
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [The tabs](#the-tabs)
+- [Asking questions](#asking-questions)
+- [The knowledge library](#the-knowledge-library)
+- [Spoilers](#spoilers)
+- [Saved chats](#saved-chats)
+- [Voice input and read aloud](#voice-input-and-read-aloud)
+- [Characters](#characters)
+- [Where the AI runs](#where-the-ai-runs)
+- [Running the AI on a PC](#running-the-ai-on-a-pc)
+- [AI models and licences](#ai-models-and-licences)
+- [Permissions](#permissions)
+- [The parental lock](#the-parental-lock)
+- [Starting fresh](#starting-fresh)
+- [Known problems](#known-problems)
+- [Words used here](#words-used-here)
+<!-- /toc -->
+
 ## The tabs
 
 | Tab | What's on it |

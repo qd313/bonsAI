@@ -1072,6 +1072,7 @@ there is no tracking. Five small holes were closed before the release
 - **Speed mode still spent about a second on the meaning search it was supposed to skip:** the check that keeps Speed mode to a keyword-only search never looked at which mode you were in, so two of three Speed questions still paid for the slower meaning search whenever the keyword search found anything at all. Speed now runs the keyword search only, in both the troubleshooting and the strategy/expert paths; Strategy and Expert are unchanged. Confirmed on the Deck 2026-09-06 with Deep Rock Galactic: Survivor running: all three questions asked in Speed spent no time on the meaning search. `knowledge_base_service.py`; two new tests. On-Deck **KB-RECALL-01**, Speed half.
 
 ## [0.5.0] - 2026-07-15
+
 ### Added
 - **Token streaming — live markdown (experimental):** Developer **Token streaming** toggle now renders progressive markdown in one live bubble (R2 closed/tail split), spoiler-safe incomplete fences, code-fence wait chip (2s pulse/spinner), ~3× fence reveal burst, T3 settle→terminal handoff. Stop keeps partial reply.
 
@@ -1127,7 +1128,6 @@ there is no tracking. Five small holes were closed before the release
 
 ### Changed
 - **Docs:** README uninstall note; `DATA-CLEAR-01` regression row in `docs/testing.md`.
-
 ## [0.4.5] - 2026-07-06
 
 ### Added
@@ -1302,7 +1302,7 @@ there is no tracking. Five small holes were closed before the release
 - Marked **Search Surface Glass Pass** complete in `docs/roadmap.md` (Completed + Implemented Baseline); noted glass tokens and layout in `docs/development.md`.
 - Marked **Built on Ollama Link (About Tab)** complete in `docs/roadmap.md` (Completed + Implemented Baseline).
 - Marked **Steam Input Jump Phase 1** complete in `docs/roadmap.md` and noted Phase 2+ (search + full catalog) as deferred; aligned `docs/archive/research/steam-input-research.md` and `docs/testing.md` status language.
-- Expanded `docs/archive/research/steam-input-research.md` with CEF debugging steps, History API console snippet, verified-route log template, and Steam client update smoke-test discipline.
+- Expanded `docs/archive/research/steam-input-research.md` with CEF debugging steps, History API console snippet, verified-route log template, and Steam client update shoke-test discipline.
 - Expanded troubleshooting guidance in `docs/troubleshooting.md`.
 - Updated prompt testing notes in `docs/testing.md`.
 - Refined project rules and planning notes in `.cursorrules`.

@@ -2,6 +2,39 @@
 
 Maintainer architecture for the **on-Deck offline strategy + compat knowledge base**. User setup: [troubleshooting.md](troubleshooting.md) § Knowledge base. QA: [testing.md](testing.md) **KB-*** rows. **Phase 2 hybrid** shipped 2026-07-28; **Phase 3** shipped 2026-07-29; **Phase 4–5** discovery locked 2026-07-30; **Phase 6** shipped 2026-08-14 (first public push live on HF + GitHub; on-Deck QA still open); **Phase 8** light discovery 2026-07-30; **Phase 7** tight discovery locked 2026-07-30 (see [roadmap.md](roadmap.md) Planned).
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [Overview](#overview)
+- [Retrieval flow](#retrieval-flow)
+- [Runtime components](#runtime-components)
+- [Maintainer build pipeline](#maintainer-build-pipeline)
+- [Corpus layout on Deck](#corpus-layout-on-deck)
+- [Title resolution ladder](#title-resolution-ladder)
+- [Trust tiers + `bonsai-cite`](#trust-tiers--bonsai-cite)
+- [Source attribution (2026-08-09)](#source-attribution-2026-08-09)
+- [Phasing](#phasing)
+  - [Phase 2 — locked decisions (2026-07-27)](#phase-2--locked-decisions-2026-07-27)
+  - [Phase 3 — locked decisions (2026-07-28)](#phase-3--locked-decisions-2026-07-28)
+  - [Phase 4 — locked decisions (2026-07-30)](#phase-4--locked-decisions-2026-07-30)
+  - [Phase 5 — locked decisions (2026-07-30)](#phase-5--locked-decisions-2026-07-30)
+  - [Phase 6 — locked decisions (light, 2026-07-30)](#phase-6--locked-decisions-light-2026-07-30)
+  - [Phase 7 — locked decisions (tight, 2026-07-30; intent retrieval extended 2026-07-31)](#phase-7--locked-decisions-tight-2026-07-30-intent-retrieval-extended-2026-07-31)
+  - [Phase 8 — locked intent (2026-07-30)](#phase-8--locked-intent-2026-07-30)
+  - [Transparency retrieval labels](#transparency-retrieval-labels)
+- [Compat routing — which Asks reach the tip sheet (D16, 2026-08-06)](#compat-routing--which-asks-reach-the-tip-sheet-d16-2026-08-06)
+- [Retrieval quality remediation (PR1, 2026-08-05)](#retrieval-quality-remediation-pr1-2026-08-05)
+  - [What changed](#what-changed)
+  - [Corpus rebuild is mandatory](#corpus-rebuild-is-mandatory)
+  - [Constants (locked PR2, 2026-08-09)](#constants-locked-pr2-2026-08-09)
+  - [One deviation from the plan's formula](#one-deviation-from-the-plans-formula)
+  - [Related (not Phase 2–8 code by default)](#related-not-phase-28-code-by-default)
+- [Vector recall pass (2026-08-18)](#vector-recall-pass-2026-08-18)
+  - [Why the route gate carries the precision, not the floor](#why-the-route-gate-carries-the-precision-not-the-floor)
+- [Time budget for a game question (2026-09-07)](#time-budget-for-a-game-question-2026-09-07)
+- [Related docs](#related-docs)
+<!-- /toc -->
+
 ## Overview
 
 v1 grounds Strategy and troubleshooting Asks by **pre-retrieval prompt-splice** into `early_context_suffix` (not model-facing tools). The corpus is **maintainer-built**, **manifest-driven**, and **downloaded on demand** (Hugging Face primary, GitHub Releases mirror). Retrieval is **FTS5 + rule-based query expansion**, fused with an optional **vector recall pass** over the resolved game's sections (`nomic-embed-text`, when vectors and the embed model are both available). Two lists, RRF-fused — see [§ Vector recall pass](#vector-recall-pass-2026-08-18).

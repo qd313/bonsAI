@@ -13,6 +13,20 @@ sorted from one star to six.
 - **Checks only the maintainer can do:** [Twelve Checks Only You Can Do](https://claude.ai/code/artifact/3e5ec678-b219-439d-b952-139d75ff2db4).
   Anything a session finds that needs their eyes or fingers is added there, not left in a chat.
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [House rules for this file](#house-rules-for-this-file)
+- [Bugs](#bugs)
+- [Features](#features)
+- [Verify](#verify)
+  - [Bugs that need verification](#bugs-that-need-verification)
+  - [Features that need verification](#features-that-need-verification)
+- [Knowledge base and RAG](#knowledge-base-and-rag)
+- [Shelved](#shelved)
+- [Done for v0.6.0](#done-for-v060)
+<!-- /toc -->
+
 ## House rules for this file
 
 1. **An entry is at most five lines**, in plain language, saying what a user would notice. Longer notes go to

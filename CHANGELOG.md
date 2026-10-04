@@ -757,8 +757,8 @@ there is no tracking. Five small holes were closed before the release
   screen's letter-by-letter reveal assumed an answer's text only ever grows at the end, but the safety net
   sometimes rewrites text it already sent to wrap a name in a cover once it arrives — which used to eat
   the cover's own opening marker and show the name, and sometimes a raw code-block marker, in plain sight
-  for several seconds. The reveal now notices when that happens and catches up correctly, so a cover
-  shows as a finished cover from the moment it appears. `useSmoothStreamReveal.ts`. On-Deck check owed.
+  for several seconds. The reveal now notices when that happens and catches up correctly, so a cover shows
+  as a finished cover from the moment it appears. `useSmoothStreamReveal.ts`. On-Deck check owed.
 - **The "From the notes" block under an answer no longer names a protected boss before its cover opens:**
   when an answer used a boss's own note without ever naming the boss, the block below it printed the
   note's title in plain text regardless. It now reads "Boss note (spoiler)" until opened on purpose, the
@@ -1302,7 +1302,7 @@ there is no tracking. Five small holes were closed before the release
 - Marked **Search Surface Glass Pass** complete in `docs/roadmap.md` (Completed + Implemented Baseline); noted glass tokens and layout in `docs/development.md`.
 - Marked **Built on Ollama Link (About Tab)** complete in `docs/roadmap.md` (Completed + Implemented Baseline).
 - Marked **Steam Input Jump Phase 1** complete in `docs/roadmap.md` and noted Phase 2+ (search + full catalog) as deferred; aligned `docs/archive/research/steam-input-research.md` and `docs/testing.md` status language.
-- Expanded `docs/archive/research/steam-input-research.md` with CEF debugging steps, History API console snippet, verified-route log template, and Steam input update smoke-test discipline.
+- Expanded `docs/archive/research/steam-input-research.md` with CEF debugging steps, History API console snippet, verified-route log template, and Steam client update smoke-test discipline.
 - Expanded troubleshooting guidance in `docs/troubleshooting.md`.
 - Updated prompt testing notes in `docs/testing.md`.
 - Refined project rules and planning notes in `.cursorrules`.

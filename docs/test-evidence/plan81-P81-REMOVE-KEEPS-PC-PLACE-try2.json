@@ -1,0 +1,21 @@
+{
+ "row": "P81-REMOVE-KEEPS-PC-PLACE",
+ "build_commit": "7e963807",
+ "deck_time_local": "2026-10-03 21:09-21:13 EDT",
+ "screen": "Deck's own screen, page window 854x454. The AI models box and its confirmation are drawn by the Steam main window target.",
+ "setup": "Order before this row (text_model_routing_order, 16 names, qwen2.5:3b not in it): gemma4:e2b-it-qat, qwen3.5:4b, lfm2.5:8b, qwen3.5:9b, gemma4:e4b-it-qat, gemma4:12b-it-qat, qwen3.5:2b, granite4.2:8b, granite4.2:3b, bge-m3:latest, qwen3.6:27b, gemma-cursor:latest, qwen-cursor:latest, gemma4:26b, gemma4:latest, gemma3:4b (kept in scratch file b4a-order-before-row7.txt). qwen2.5:3b pulled onto the Deck with the curl pull from the runbook (54 s, status success). Deck tags then: qwen2.5:3b, nomic-embed-text:latest, gemma4:e2b-it-qat. Ollama tab: Run AI on this Deck switched off (focus read: 'Run AI on this Deck', A), PC address field held 192.168.86.27:11434 (read, not typed), Test connection (focus read, A): 'Connected . Ollama v0.35.1 . 31 models'; the PC's /api/tags (curl from the Deck) lists qwen2.5:3b. Run AI on this Deck switched back on (focus read, A); Test connection again: 'Connected . Ollama v0.34.1 . 3 models'.",
+ "pressed": "AI models box, one press at a time with focus read each: A on 'AI models' (read), Down x7 reading each (Advanced, Refresh model catalog, Filters, Try order for text questions, gemma4:e2b-it-qat is used for Ask, Select qwen3.5:4b to pull, Select qwen2.5vl:3b to pull), Down to 'Use qwen2.5:3b for Ask', Right to 'Move qwen2.5:3b up' (read), A. Saved order read. Then Right, Right to 'Remove from Deck' on the qwen2.5:3b row (read; the row text read 'qwen2.5:3b ... 1.8 GB ... 1'), A. Confirmation opened on 'Not now'; Right ('Remove model', read), A. After the removal the ring sat on the nomic-embed-text row (not pressed); B closed the box (ring on 'AI models'), A reopened it, B closed it.",
+ "seen": {
+  "order_after_move_up": "['qwen2.5:3b', 'gemma4:e2b-it-qat', 'qwen3.5:4b', 'lfm2.5:8b', ...] - 16 names; the last name of the old list (gemma3:4b) dropped off the end. vision order unchanged ['gemma4:e2b-it-qat'].",
+  "deck_tags_after_removal": "['nomic-embed-text:latest', 'gemma4:e2b-it-qat'] - qwen2.5:3b gone from the Deck.",
+  "saved_text_order_after_removal": "STILL begins 'qwen2.5:3b', 'gemma4:e2b-it-qat', 'qwen3.5:4b', ... (16 names, identical to the order after the move).",
+  "after_close_and_reopen": "Box header read 'Installed 2 . 4.3 GB'; no qwen2.5:3b row in the box. Settings file read again after closing: order still starts with qwen2.5:3b, 16 names.",
+  "pc_has_it": "PC /api/tags lists qwen2.5:3b (31 models)."
+ },
+ "expected": "qwen2.5:3b is gone from the Deck's /api/tags and the saved text order STILL names it.",
+ "verdict": [
+  "PASS (half 1): qwen2.5:3b is gone from the Deck's /api/tags.",
+  "PASS (half 2): the saved text order still names qwen2.5:3b (first place) after the removal and after closing and reopening the box."
+ ],
+ "side_effect": "qwen2.5:3b was pulled and removed again (net: Deck tags back to nomic-embed-text:latest and gemma4:e2b-it-qat). The saved text order was changed twice: it was already the long 16-name list when this row began (changed in block 3a, per the block 3b handover), and my move-up put qwen2.5:3b first; per the runbook it is left as it is now for the session to restore. Old value is in the setup field. Run AI on this Deck is back on (it was on at the start)."
+}

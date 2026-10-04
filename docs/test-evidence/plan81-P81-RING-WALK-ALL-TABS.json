@@ -1,0 +1,26 @@
+{
+ "row": "P81-RING-WALK-ALL-TABS",
+ "build_commit": "7e963807",
+ "deck_time_local": "2026-10-03 21:00-21:09 EDT",
+ "screen": "Deck's own screen, page window 854x454",
+ "setup": "Developer tab shown in the tab strip. A page-side logger noted every new ring holder after it held 200 ms: tag, label, computed outline of the ring holder, count of elements under the plugin root with a visible outline, box. Walk used direction presses only (Down; Right across rows that hold several buttons); A was never pressed. The AI models button and the Clear buttons were only walked past. Steam Web API key field: outline only, no screenshot (its box was off screen, y 841 to 1112, at every capture), value never read.",
+ "pressed": "RB to move between tabs; per tab Up to the top, Down down the list, Right along each button row.",
+ "seen": {
+  "outline_expected": "about 2px solid rgba(255, 255, 255, 0.88), on one element only",
+  "ollama_tab": "16 stops. Buttons: Update AI engine and installed models, Browse and pull Ollama models, Test connection to Ollama, Update knowledge base, Remove, Set thinking Off/Brief/Balanced/Deep, AI models (last stop) all solid 2px rgba(255, 255, 255, 0.88), 1 outlined element each. Toggles (4) and two small wrapper stops (42x28, 42x29): outline none. Saved-host buttons: none shown.",
+  "settings_tab": "Apply UI scale (64,271 268x36) 2px, 1 element. Screenshot quality Save memory/Balanced/Best detail (85x44) 2px, 1. Voice model rows tiny.en and base.en (268x35) 2px but 2 outlined elements on the same box (the row wrapper at 0.88 and an inner Decky element at rgba(255, 255, 255, 0.6)). Reinstall voice engine (146x38) 2px, 2 elements. Voice replies Off/When asked by voice/Always (85x36) 2px, 1. Ali G picker (268x38) 2px, 1. Accent intensity dropdown 'Strong' (63x26) 2px, 2 elements. Clear cache... (130x38) 2px, 1. Clear all data... (202,376 130x38) 2px, 1. Toggles (4): outline none. Reset to automatic: not shown.",
+  "permissions_tab": "5 toggles only, outline none on each (Decky draws the row highlight and a toggle ring instead, see the png). No Back button and no Open-in-Settings button on this tab.",
+  "developer_tab": "Install seed knowledge base (268x40) 2px, 1. Jump to Steam Input (running game) (268x60) 2px, 1 (ring only; needs a game: block 4b). A Main/B Resume/C 5 min, Off/Default/Verbose (85x36), Preset animation fade/carousel/static/decode (63x32), Settle/Chip pace/Fixed tail (85x32), 300/400/500/600/800 (49x32), Same as text/Dimmer/bonsAI green/Streaming cyan (63x32): all 2px rgba(255, 255, 255, 0.88), 1 element each. Toggles (7): outline none. Steam Web API key field (64,366 268x40): 2px rgba(255, 255, 255, 0.88), 1 element. Clear (N) and Clear frozen test chips were NOT shown (the tab reads 'None pinned').",
+  "about_tab": "GitHub, Built on Ollama!, Bugs & Feature Requests (268x41), Support my Steam Sale habit (268x41): 2px rgba(255, 255, 255, 0.88), 1 element each. Reply language dropdown 'Follow system' (268x40): computed outline none, 0 outlined elements; it draws a white fill when focused (screenshot).",
+  "screenshots": "plan81-P81-RING-WALK-ALL-TABS-developer-decode.png (Developer, ring on 'decode', not clipped at the right edge), -about-links.png (About, ring on the white Support button: the white button fill hides the white ring, cannot tell by eye), -about-language.png (About, white-filled dropdown), -permissions-toggle.png (Permissions toggle ring)."
+ },
+ "expected": "Each focused button shows about 2px solid rgba(255, 255, 255, 0.88) on one element only.",
+ "verdict": [
+  "PASS (buttons, 2px ring present): every button reached (about 70 stops over five tabs, including Apply UI scale, Install seed knowledge base, the four About links, Clear cache, Clear all data and the Steam key field) shows solid 2px rgba(255, 255, 255, 0.88).",
+  "UNCLEAR (one element only): on Settings the voice model rows, Reinstall voice engine and the Accent intensity dropdown carry two outlined elements on the same box (0.88 and 0.6 white). A person sees one ring; the count is 2, not 1.",
+  "UNCLEAR (no outline on some stops): toggles on every tab, the Reply language dropdown and two small wrapper stops have computed outline none. Toggles and the dropdown draw their own Decky highlight; nothing was seen missing by eye on the screenshots.",
+  "COULD NOT RUN (parts of the runbook list): Reset to automatic, Clear (N), Clear frozen test chips, saved-host buttons, Back on Permissions and any Open-in-Settings button were not shown on the Deck tonight. Jump to Steam Input needs a game (block 4b).",
+  "UNCLEAR (screenshot check for clipping): the Developer row was not clipped; on About the white Support button hides the white ring so clipping cannot be judged by eye."
+ ],
+ "side_effect": "none. No A was pressed in this row. The Verbose Ask logging toggle on the Developer tab was on when first seen; not changed by me."
+}

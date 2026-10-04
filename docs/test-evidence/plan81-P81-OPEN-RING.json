@@ -1,0 +1,23 @@
+{
+ "row": "P81-OPEN-RING",
+ "build_commit": "7e963807 (dist/index.js md5 619577887a311a7610b2be6d30c5ce9b, equal to the checkout's)",
+ "deck_time_local": "2026-10-03 about 21:04 EDT",
+ "screen": "Deck's own screen, page window 854x454",
+ "setup": "Main tab, test chat 6f3cc055, no game. A 50 ms page-side logger (kept in the Quick Access page) noted the moment the bonsAI panel first appeared and read the ring at 300 ms and 2000 ms after it.",
+ "pressed": "Three times: Guide+A chord (close, panel gone read back), Guide+A chord (open). No D-pad press between. Then UP x11 from the question box to the tab bar one press at a time (Show details, Mark reply helpful, two choices, Show reasoning line, the question row, '99 earlier', then 'Main tab'), wait 3 s. Then UP (Decky back arrow at 64,20), LEFT (Decky icon, 0,387), UP (another Quick Access tab, content id 6), wait 3 s, DOWN (Decky icon again, 0,387, panel visible), wait 2 s, RIGHT.",
+ "seen": {
+  "open_cycle_1": {"300ms": "question box (input, top 324, 275x44), outline solid 2px rgba(255, 255, 255, 0.88)", "2000ms": "same element, same outline, same box", "note": "for the first 107 to 144 ms after the panel appeared the ring was on the tab bar ('Main tab'), then it moved to the question box on its own"},
+  "open_cycle_2": {"300ms": "question box, same outline and box", "2000ms": "same", "note": "ring on the tab bar for the first 70 to 107 ms, then the question box"},
+  "open_cycle_3": {"300ms": "question box, same outline and box", "2000ms": "same", "note": "ring on the tab bar for the first 89 to 125 ms, then the question box"},
+  "up_to_tab_bar": "11 presses from the question box reach the tab bar ('Main tab', box 48,64 300x20). Not one press. After 3 s still on the tab bar (y 64, aria-label Main tab). Its computed outline is none (the tab bar draws its own highlight).",
+  "tab_switch_and_back": "Decky icon at (0,387) after DOWN, panel visible, 2 s rest; RIGHT landed on the question box (input, top 323.5, 44 high), outline rgba(255, 255, 255, 0.88) solid 2px."
+ },
+ "expected": "Ring drawn on the question box after each fresh open (300 ms and 2 s); Up to the tab bar stays there 3 s; a tab switch and back ends on the question box after Right.",
+ "verdict": [
+  "PASS (fresh open x3): the ring was on the question box, drawn, at 300 ms and 2 s in all three cycles.",
+  "PASS (stays on the tab bar): after the walk Up, the ring stayed on the tab bar for 3 s.",
+  "PASS (tab switch and back): Right ended on the question box, drawn.",
+  "UNCLEAR (wording of the runbook): the tab bar needed 11 Up presses from the question box, not one 'right after an open'; the 3 s hold was measured after the walk."
+ ],
+ "side_effect": "none"
+}

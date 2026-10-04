@@ -1,0 +1,20 @@
+{
+ "row": "P81-STOP-IN-HIDDEN-BLOCK",
+ "build_commit": "7e963807",
+ "deck_time_local": "2026-10-03 21:14-21:19 EDT",
+ "screen": "Deck's own screen, page window 854x454",
+ "setup": "Test chat 6f3cc055 (title read), Strategy mode. A page-side logger (100 ms) noted the chip text, the ring holder and the 'Was this helpful?' line.",
+ "pressed": "Try 1: send script 'Walk me through the whole story of Hollow Knight, including the endings, in detail.' (VERIFIED), walk to Ask (read), A, waited for the 'Spoiler hidden until complete' chip. Try 2 (different words): 'Tell me the full plot of Hollow Knight in detail and explain every one of its endings.', DOWN to Ask (read), A, waited for the chip, then read focus, DOWN to 'Stop generation' (read), A.",
+ "seen": {
+  "try_1": "The chip showed at about 40 s and the answer finished at once; the ring went back to the question box before I could reach Stop. No Stop pressed. The finished answer holds one cover (saved turn: one hidden block, 134 characters).",
+  "try_2": "Logger: chip on at 54.05 s, off at 56.11 s (the chip lasted 2.1 s), ring on 'Stop generation' at 58.3 s, the answer finished and the helpful line appeared before my A landed (ring on 'Voice input' at 60.1 s). The chip is only about two seconds long on the Deck, shorter than one tool round trip, so a Stop while it shows could not be pressed.",
+  "saved_turns": "Last 200 characters of both saved turns end in plain words ('...So, where you wanna start this journey?' and '...That's the only way you'll get the full picture.'); both are complete answers, not stopped ones.",
+  "stopped_answer": "No answer was stopped inside the hidden block, so the stopped-answer read from the saved file was not possible."
+ },
+ "expected": "Stop while the chip shows; after a chat switch the saved turn ends in plain words, no empty code box, no stray fence text.",
+ "verdict": [
+  "UNCLEAR: the chip lasted 2.1 s in try 2 and the answer finished before Stop could be pressed; try 1 was the same. Two differently worded tries made, no third. Nothing was stopped, so the pass line (plain-word ending after a Stop) was not tested.",
+  "PASS (side observation): the two finished Hollow Knight answers show the cover drawn and end in plain words."
+ ],
+ "side_effect": "Try 2: my A at the moment the answer finished landed on the 'Voice input' button and started a voice recording; the log shows 'Stop voice input' from 63.5 s to 69.3 s (about 6 s). I then pressed A on 'Stop voice input' (focus read). The question box stayed empty, so nothing was transcribed. Two new turns in the test chat."
+}

@@ -219,7 +219,7 @@ Test `tests/test_soft_continue_spoiler_join.py`.
 **Found by the helper, not fixed:** a half mark at the very end of an answer shows as an empty code block; a half mark before ordinary prose turns
 that prose into a code block (no hidden text leaks); a stopped answer cut inside a hidden block is saved ending on a bare opening mark.
 
-**Two of the three fixed 2026-10-03 (plan 81, `6c708a78`, `e891bdc4`), Deck checks owed (rows P81-HALF-MARK-AT-END, tests only because it is hard to make happen; P81-STOP-IN-HIDDEN-BLOCK).**
+**Two of the three fixed 2026-10-03 (plan 81, `6c708a78`, `e891bdc4`), Both rest on tests (rows P81-HALF-MARK-AT-END, because it is hard to make happen; P81-STOP-IN-HIDDEN-BLOCK, because the Deck could not be made to stop an answer inside the block: the chip lasts about 2 s).**
 A half-typed mark at the very end of a finished answer is now cut off. A stopped answer cut inside a hidden block is now saved without the bare opening
 mark: an open block with nothing in it is dropped, and one with words in it is closed, so the words stay covered or are dropped, never shown.
 Tests `tests/test_soft_continue_spoiler_join.py`, `tests/test_stopped_answer_cut_in_hidden_block.py`.

@@ -115,6 +115,11 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   seen once, 2026-10-01 (plan 78, Deck block 3a). Evidence `docs/test-evidence/plan78-P78-ORDER-PRUNE-try2.json`.
   Unshelves when: a new sighting.
 
+- ★ `[ollama]` `[watching]` **The saved text try order stops at 16 names** — seen once, 2026-10-03 (plan 81, block 4a): moving a model up in the
+  AI models box dropped the 16th name (gemma3:4b) off the end of the saved list. Whether the cap is meant is open; no decision recorded.
+  Evidence `docs/test-evidence/plan81-P81-REMOVE-KEEPS-PC-PLACE-try2.json`.
+  Unshelves when: a new sighting.
+
 - ★ `[reply]` `[watching]` **Strategy choice labels stayed English with the reply language set to Japanese** — seen on both
   Strategy tries, 2026-10-01 (plan 78, block 3a); the Speed reply was Japanese. Evidence `docs/test-evidence/plan78-LANG-03.json`.
   Unshelves when: a new sighting.

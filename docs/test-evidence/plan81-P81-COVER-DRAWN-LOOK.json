@@ -1,0 +1,19 @@
+{
+ "row": "P81-COVER-DRAWN-LOOK",
+ "build_commit": "7e963807",
+ "deck_time_local": "2026-10-03 21:17-21:20 EDT",
+ "screen": "Deck's own screen, page window 854x454",
+ "setup": "Test chat 6f3cc055. Opened the 99 earlier pill, then the 'Today' group, then each history row (A on the row header, focus read) and walked Down to the cover with direction presses. Cover component found in src/components/MainTabBonsaiAiMarkdownChunk.tsx: a button inside a Focusable with text 'Spoiler — tap to show' (em dash) and 'Hidden until you reveal (Strategy Guide).'; the ring holder gets class bonsai-spoiler-reveal-target; the revealed state is class bonsai-spoiler-expanded.",
+ "pressed": "Down along the Today rows, A on each of three row headers, Down x3 to 5 until the ring sat on the cover.",
+ "seen": {
+  "rdr2_how_does_the_story_of_arthur_finish": "COVER DRAWN. One button with text 'Spoiler — tap to show / Hidden until you reveal (Strategy Guide).' (class bonsai-spoiler-reveal-target when focused), box y 214-248 with the ring on it, above the dock top (290). bonsai-spoiler-expanded count 0. The hidden sentence is not in the answer's text; no fence or 'bonsai-spoiler' text in the displayed answer. Screenshot plan81-P81-COVER-DRAWN-LOOK-rdr2-finish.png",
+  "rdr2_what_is_the_ending_for_arthur": "COVER DRAWN. Same: cover box y 214-248, ring on it, expanded 0, 'ending is a big deal' not in the displayed text, no fence text. Screenshot plan81-P81-COVER-DRAWN-LOOK-rdr2-ending.png",
+  "hollow_knight_walk_me_through_the_whole_story": "COVER DRAWN. Same: cover box y 214-248, ring on it, 1 cover, expanded 0, 'main path involves navigating' not in the displayed text, no fence text. Screenshot plan81-P81-COVER-DRAWN-LOOK-hk-walk.png",
+  "also": "The newest Hollow Knight answer (Tell me the full plot...) also showed a cover (1 button). Cause of the wrong count: my first on-screen count searched for 'Spoiler - tap to show' with a hyphen; the screen draws an em dash, so it matched nothing. The saved chat file is the source of the corrected counts in plan81-P81-SPOILER-WORDING-AB.json."
+ },
+ "expected": "Each of the three saved answers shows a drawn cover, not the hidden sentence as plain text.",
+ "verdict": [
+  "PASS: all three saved answers draw the cover; none shows the hidden sentence as plain text."
+ ],
+ "side_effect": "Opened 'Today' group and expanded three history rows (view state only)."
+}

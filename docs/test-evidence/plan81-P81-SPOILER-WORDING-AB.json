@@ -1,0 +1,142 @@
+{
+ "row": "P81-SPOILER-WORDING-AB",
+ "build_commit": "Build A = comparison build from worktree p81frev (head d8671410, old hidden-block wording, installed file grep count 1), deployed 20:45 Deck time. Build B = shared checkout tip 7e963807, deployed 20:54 (dist/index.js, main.py and ollama_prompts.py md5 equal the checkout's; grep count 0).",
+ "deck_time_local": "2026-10-03 20:45-21:00 EDT",
+ "screen": "Deck's own screen, page window 854x454",
+ "setup": "Test chat 6f3cc055 (title read before every question: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). Strategy mode (tag read). Covers on (default). No game. Each question sent with the send script (VERIFIED, field read back whole), DOWN to the Ask button (focus read: ask), A as its own step, waited for 'Was this helpful?'. Cover = a 'Spoiler - tap to show' block (drawn with an em dash) in the answer; counted finally from the saved chat file. No choice buttons pressed. build.sh in p81frev needed --skip-install plus npm_config_verify_deps_before_run=false because its node_modules is a junction to the shared checkout and pnpm refuses it.",
+ "pressed": "per question: send script, DOWN, read focus (ask), A, wait. Plugin open failed once after each deploy, then opened on the second try.",
+ "seen": {
+  "build_A_old_wording": {
+   "covers_per_answer": "0,1,0,0,0,0,1,0,0",
+   "answers_with_cover": "2 of 9 (Hades ending 1/3 [answer 2], Hades fury 0/3, Red Dead 1/3 [answer 7])",
+   "answers": [
+    [
+     "In Hades, after the last boss the run just continues. Was that really the ending?",
+     0,
+     "Listen up, mate. You wanna know if beating the game once means you're done? Nah, m",
+     "34 s"
+    ],
+    [
+     "Hades question: does beating the final boss end the story, or is there more?",
+     1,
+     "Right then, listen up! You wanna know if beating the final boss means you're done? ",
+     "43 s"
+    ],
+    [
+     "I defeated the final boss of Hades once and the game goes on. Is the story over?",
+     0,
+     "Right then, listen up. You wanna know if beating the final boss means the story's d",
+     "40 s"
+    ],
+    [
+     "In Hades, the fury with the whip who dashes in Tartarus keeps beating me. How do I punish her openings?",
+     0,
+     "Right then, you wanna know how to deal with that whip-dash business in Tartarus, e",
+     "42 s"
+    ],
+    [
+     "Hades: tips for the dashing whip fury at the end of Tartarus?",
+     0,
+     "Right then, listen up! You wanna know how to handle that whip-dash business in Tar",
+     "41 s"
+    ],
+    [
+     "In Hades, how do I beat the first fury boss who uses a whip and dashes?",
+     0,
+     "Right then, listen up! You wanna know how to handle that whip-dash business in Tar",
+     "46 s"
+    ],
+    [
+     "In Red Dead Redemption 2, how does the story end for Arthur?",
+     1,
+     "Alright, listen up, mate. Now, I ain't gonna give ya the whole bloody script, that'd b",
+     "37 s"
+    ],
+    [
+     "Red Dead Redemption 2: what happens to Arthur Morgan in the final chapter?",
+     0,
+     "Right then, you wanna know what happens to Arthur Morgan in the final chapter? Lis",
+     "50 s"
+    ],
+    [
+     "How does Arthur Morgan end up at the end of Red Dead Redemption 2?",
+     0,
+     "Right then, you wanna know how Arthur Morgan ends up at the end of Red Dead Redem",
+     "41 s"
+    ]
+   ]
+  },
+  "build_B_final": {
+   "covers_per_answer": "1,0,0,0,0,0,1,1,0",
+   "answers_with_cover": "4 of 9 (Hades ending 1/3 [answer 1], Hades fury 0/3, Red Dead 2/3 [answers 7 and 8])",
+   "answers": [
+    [
+     "Hades: I killed the final boss and the game keeps going. Is that the true ending?",
+     1,
+     "Alright, listen up, mate. You've done the hard part, you've smashed that final boss, b",
+     "36 s"
+    ],
+    [
+     "In Hades, is the final boss fight the end of the story or not?",
+     0,
+     "Right then, listen up! You wanna know if smashing that final boss means the whole ",
+     "38 s"
+    ],
+    [
+     "Beat the last boss in Hades, but the run carries on. Did I reach the ending?",
+     0,
+     "Right then, listen up! You wanna know if smashing that final boss means the whole ",
+     "39 s"
+    ],
+    [
+     "In Hades, how do I counter the whip-wielding fury who dashes around in Tartarus?",
+     0,
+     "Right then, you wanna know how to handle that whip-dash business in Tartarus, eh? ",
+     "41 s"
+    ],
+    [
+     "Hades: the dashing fury with the whip at the end of Tartarus keeps killing me. Any advice?",
+     0,
+     "Right then, you're still stuck on that whip dash, eh? Listen up, mate. You can't j",
+     "46 s"
+    ],
+    [
+     "How do I beat the whip fury boss in Tartarus in Hades?",
+     0,
+     "Right then, you wanna know how to handle that whip-dash business in Tartarus, eh? ",
+     "41 s"
+    ],
+    [
+     "Red Dead Redemption 2: how does the story of Arthur finish? (reworded: runbook had Arthur's, apostrophe)",
+     1,
+     "Alright, listen up, you wanna know how Arthur Morgan wraps up his story in that du",
+     "40 s"
+    ],
+    [
+     "In Red Dead Redemption 2, what is the ending for Arthur? (reworded: runbook had Arthur's)",
+     1,
+     "Listen up, mate, you wanna know how Arthur Morgan wraps up his story in that dusty",
+     "55 s"
+    ],
+    [
+     "What happens to Arthur at the very end of Red Dead Redemption 2?",
+     0,
+     "Right then, you wanna know how Arthur Morgan wraps up his story in that dusty old ",
+     "42 s"
+    ]
+   ]
+  },
+  "side_by_side": "Old wording (build A) 2 of 9 answers with a cover. Final wording (build B) 4 of 9. Hades fury questions: 0 of 3 on both. Hades ending: 1 of 3 on both. Red Dead: 1 of 3 on A, 2 of 3 on B. Block 3b on build 9e68bce1 had 5 of 12 (Hades 0 of 6). The Hollow Knight story question in this block (row P81-STOP-IN-HIDDEN-BLOCK, try 1) also carried a cover.",
+  "labels_as_text": "None. In all 18 answers the text held no 'bonsai-spoiler', no three backticks and no '<bonsai'.",
+  "answer_times_s": "34 to 55 s, so none came from the answer cache. Each answer opened with 'Show reasoning' of 18 to 24 s.",
+  "correction": "My first on-screen read counted covers by the hyphen text 'Spoiler - tap to show', but the screen draws an em dash, so it showed 0 of 18. The counts above come from the saved chat file (turns of chat 6f3cc055): an answer with a cover holds one fenced hidden block (one 'bonsai-spoiler' fence, 134 to 298 characters of hidden words inside). Per-answer first-80 text and times were read from the screen and are right."
+ },
+ "expected": "Two counts side by side; the session reads the pass line, not the driver.",
+ "verdict": [
+  "MEASURED (old wording, build A): 2 of 9 story answers carried a cover.",
+  "MEASURED (final wording, build B): 4 of 9 story answers carried a cover. Not worse than the old wording; the Hades fury answers had none on either build.",
+  "PASS (no label as text): 0 of 18 answers showed 'bonsai-spoiler', backticks or '<bonsai' in the displayed text (checked on screen after each answer)."
+ ],
+ "side_effect": "18 new turns in the test chat 6f3cc055 (intended), 9 asked on the comparison build. Two questions reworded to drop an apostrophe. The Deck ran the never-landed comparison build for the first half; it now runs 7e963807.",
+ "labels_as_text": "None on screen. The saved turns hold the raw fence (as designed); the displayed text of the 18 answers had no 'bonsai-spoiler', three backticks or '<bonsai'."
+}

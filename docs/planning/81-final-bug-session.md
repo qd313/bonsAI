@@ -436,6 +436,24 @@ Not started.
   chip's flag came back by itself after a restart, so that check stays with the first-install check. Deck block 3a (the
   new build and one check per landed fix) started.
 
+- **2026-10-03, about 19:00 to 20:20 (tip `6c708a78`):** **Landed, every check green:** the "too big" label for PC
+  models (Z: the size was dropped on the way to the box), consent applying from the first word of a live answer (S:
+  the screen only learned it when the answer finished), the knowledge-base notes order (H: typing the game's name no
+  longer puts its generic notes first; "No close match" shows for the horse question; held back until six more answer
+  runs per changed question showed no drop overall, 102 → 105 of 195 facts kept, the two GTA V questions lower because
+  the test's expected facts sit in the other note), the PC clean-up for a Deck with no AI installed (C), a fresh open
+  putting the ring on the question box (Q), the white ring on fourteen more buttons and the About links with a guard
+  (B), the try order keeping a PC model's place after a removal (C: the box's own refresh undid it) and when a known
+  PC is off, the AI's status-line topic for a typed follow-up (N2), and a stopped or cut answer ending cleanly without
+  a bare spoiler mark (N3). Helper L found the summary card already in view after Sum up (the low reading was taken
+  after a press); a re-check is on the Deck. Helper M's freeze note: the AI was already loaded and idle, the memory
+  went to Steam's own page processes. **Deck block 3a** (build `5eca4271`) passed B on the Clear-all box, the five
+  rings, the lift 6 px above the dock, the choice button's checklist, the PC clean-up, the tab switch on its normal
+  route and the Show reasoning smoke test; the removal on the Deck failed (fixed since); the joins no longer double a
+  spoiler mark but the AI itself left one block unclosed (still covered on screen). No game check could run: with the
+  game and the loaded AI only about 2 GB was free. Paperwork sweep 3 committed. Deck block 3b (the second build, the
+  remaining checks, then the game with the AI unloaded first) is running.
+
 ## For the chat that runs this: helper types and pointers
 
 Kept out of the sections above, which are written for the maintainer.

@@ -11,6 +11,67 @@ This file tracks resolved issues, hardware-specific overrides, and architectural
 
 ---
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [1. Core Hardware & Performance](#1-core-hardware--performance)
+  - [ISSUE: AI Responses are Slow (CPU Inference)](#issue-ai-responses-are-slow-cpu-inference)
+- [1a. Permissions tab (blocked actions)](#1a-permissions-tab-blocked-actions)
+  - [Permissions greyed out (Kids master lock)](#permissions-greyed-out-kids-master-lock)
+  - [Knowledge base (offline strategy cards)](#knowledge-base-offline-strategy-cards)
+  - [Voice input (speech-to-text)](#voice-input-speech-to-text)
+  - [Deck essentials models (Tier 1 / Tier 2)](#deck-essentials-models-tier-1--tier-2)
+  - [Model licences and the tiers](#model-licences-and-the-tiers)
+  - [Model try order (text + vision)](#model-try-order-text--vision)
+  - [Ollama HTTP 404 with Gemma / open-weight models (Tier 2)](#ollama-http-404-with-gemma--open-weight-models-tier-2)
+  - [AI voice & personality (character tone)](#ai-voice--personality-character-tone)
+- [1b. Uninstall vs “Clear all data” (Settings)](#1b-uninstall-vs-clear-all-data-settings)
+- [Input sanitizer (Ask lane)](#input-sanitizer-ask-lane)
+  - [“Sanitizer blocked my prompt”](#sanitizer-blocked-my-prompt)
+  - [“I disabled sanitization by mistake”](#i-disabled-sanitization-by-mistake)
+- [Verbose Ask logging (Desktop notes)](#verbose-ask-logging-desktop-notes)
+- [1b. AI character (roleplay tone)](#1b-ai-character-roleplay-tone)
+- [1c. Latency warning vs backend timeout (Settings)](#1c-latency-warning-vs-backend-timeout-settings)
+- [1d. Reply style (Caveman / Balanced / Detailed)](#1d-reply-style-caveman--balanced--detailed)
+- [1e. Reply language (About tab)](#1e-reply-language-about-tab)
+- [1b. Desktop logs (`bonsAI_logs`)](#1b-desktop-logs-bonsai_logs)
+  - [Folder rename (existing users)](#folder-rename-existing-users)
+  - [Saving from Game Mode](#saving-from-game-mode)
+  - [ISSUE: Save failed or permission error](#issue-save-failed-or-permission-error)
+- [2. Network & Communication (The Bridge)](#2-network--communication-the-bridge)
+  - [ERROR: `TypeError: Failed to fetch`](#error-typeerror-failed-to-fetch)
+  - [ERROR: `Connection Refused` or `Timeout`](#error-connection-refused-or-timeout)
+  - [Find Ollama on LAN (mDNS — optional)](#find-ollama-on-lan-mdns--optional)
+  - [On-device Ollama (localhost — **Test** vs cold boot)](#on-device-ollama-localhost--test-vs-cold-boot)
+  - [Proton logs on troubleshooting Asks](#proton-logs-on-troubleshooting-asks)
+- [2.5 Screenshot Vision Setup (V1)](#25-screenshot-vision-setup-v1)
+  - [Required model capability](#required-model-capability)
+  - [Configure screenshot attachment quality](#configure-screenshot-attachment-quality)
+  - [Screenshot sources in V1](#screenshot-sources-in-v1)
+  - [Common failures and fixes](#common-failures-and-fixes)
+- [3. Build & Deploy (`scripts/build.ps1` / `scripts/setup-dev.ps1`)](#3-build--deploy-scriptsbuildps1--scriptssetup-devps1)
+  - [ERROR: `sudo: a password is required` or build hangs at "Overwriting system files"](#error-sudo-a-password-is-required-or-build-hangs-at-overwriting-system-files)
+- [3b. UI scale / QAM layout](#3b-ui-scale--qam-layout)
+  - [Automatic mode (default)](#automatic-mode-default)
+  - [Manual override](#manual-override)
+  - [Steam global UI Scale](#steam-global-ui-scale)
+  - [Horizontal spill or clipped ask bar](#horizontal-spill-or-clipped-ask-bar)
+- [4. QAM / QAMP Reflection Strategy](#4-qam--qamp-reflection-strategy)
+  - [What is guaranteed today (safe default)](#what-is-guaranteed-today-safe-default)
+  - [Known architectural constraint](#known-architectural-constraint)
+  - [Experimental path (disabled by default)](#experimental-path-disabled-by-default)
+  - [Validation checklist for every QAMP-related change](#validation-checklist-for-every-qamp-related-change)
+- [5. bonsai shortcut setup](#5-bonsai-shortcut-setup)
+  - [Pro tip: global quick-launch (Steam Input macro)](#pro-tip-global-quick-launch-steam-input-macro)
+- [Token streaming — live markdown (experimental, Developer tab)](#token-streaming--live-markdown-experimental-developer-tab)
+- [Steam Input jump (Phase 1, Developer tab)](#steam-input-jump-phase-1-developer-tab)
+- [Search intent packs (offline JSON)](#search-intent-packs-offline-json)
+  - [What they do (backend still present)](#what-they-do-backend-still-present)
+  - [Pack JSON shape (schema_version 1)](#pack-json-shape-schema_version-1)
+- [Decky Plugin Studio (dev tooling)](#decky-plugin-studio-dev-tooling)
+- [GitHub Actions: `validate-mcp` fails on push](#github-actions-validate-mcp-fails-on-push)
+<!-- /toc -->
+
 ## 1. Core Hardware & Performance
 
 ### ISSUE: AI Responses are Slow (CPU Inference)
@@ -662,7 +723,7 @@ While an Ask is pending, the Main tab can show **progressive markdown** in one l
 **Behavior (v1):**
 
 - **Strategy spoilers:** Incomplete `bonsai-spoiler` fences show a **masked placeholder** only — spoiler body never appears until the fence closes.
-- **Code fences:** Open `` ``` `` blocks show a **pulse + spinner** (2s period) until the closing fence arrives; body then reveals faster than normal prose (~3× smooth reveal).
+- **Code fences:** Open ``` `` ``` blocks show a **pulse + spinner** (2s period) until the closing fence arrives; body then reveals faster than normal prose (~3× smooth reveal).
 - **Stop:** Partial text is **kept** on screen (including wait chip if a fence was still open).
 - **Done:** Reply snaps to full text in the stream bubble, then switches to the normal chunked terminal layout (handoff policy may change in a future release).
 

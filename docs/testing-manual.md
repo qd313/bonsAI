@@ -351,7 +351,8 @@ Re-run 2026-09-03 after plan 30: Settings Up lands on the bar; full sweep every 
       **PRESET-ONE-LINE-03** (passed there). Not itself a fail. Evidence
       `docs/test-evidence/plan70-DOC-SWEEP-01.json`.
 - [x] About → GitHub link: **Up** focuses reply-language dropdown. **PASS (Deck) 2026-09-26:** Up from
-      GitHub landed on the reply-language dropdown ("Follow system"), visible; Up again reached the About tab strip. Evidence `docs/test-evidence/plan70-DOC-SWEEP-01.json`.
+      GitHub landed on the reply-language dropdown ("Follow system"), visible; Up again reached the
+      About tab strip. Evidence `docs/test-evidence/plan70-DOC-SWEEP-01.json`.
 - [x] Settings/Ollama: **Up** at panel top returns to active tab strip. **PASS (Deck) 2026-09-26:** on
       both the Ollama tab ("Run AI on this Deck") and the Settings tab ("Adjust UI automatically"), Up
       returned to that tab's own strip. Saved walk `checks/plan70-DOC-SWEEP-01-settings-top-up.json`.

@@ -236,6 +236,14 @@ Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 7), to bring 
 
   **Deck 2026-10-03 (build `5eca4271`), PARTIAL:** at the two joins of one long answer no opening mark was doubled and no half mark appeared; but the AI itself left one hidden block unclosed and opened another later in the same piece (the evidence file's verdict line reads FAIL for that); on screen both were covers, no fence text. The AI's own doubling is the part the chat memory already guards. Evidence `docs/test-evidence/plan81-P81-CONTINUE-ONE-MARK.json`.
 
+Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
+
+**Deck 2026-10-03 (build `5eca4271`), PARTIAL:** no opening mark doubled at the two joins and no half mark; the AI itself left one hidden block unclosed, which the chat memory already guards. Evidence `docs/test-evidence/plan81-P81-CONTINUE-ONE-MARK.json`. Full note: [roadmap-details.md](roadmap-details.md#some-saved-answers-have-a-hidden-blocks-markers-written-twice-cause-found).
+
+**Also fixed 2026-10-03 (plan 81, `e891bdc4`, `6c708a78`), from the "found, not fixed" list:** a stopped answer cut inside a hidden block is saved without the bare opening mark (its words stay covered or are dropped, never shown), and a half-typed mark at the very end of a finished answer is dropped. Left on purpose: a continued piece that starts with a bare code mark cannot be told apart from a real code block safely. Rows **P81-STOP-IN-HIDDEN-BLOCK** (tests only: could not be made on the Deck; tried twice 2026-10-03, build `7e963807`, the chip "Spoiler hidden until complete" lasted about 2 s and the answer finished before Stop could be pressed) and **P81-HALF-MARK-AT-END** (tests only: hard to make happen).
+
+Deck check owed: row **P81-CONTINUE-ONE-MARK**. Tests: `tests/test_soft_continue_spoiler_join.py`, `tests/test_stopped_answer_cut_in_hidden_block.py`. [Detail, and what was found but not fixed](roadmap-details.md#some-saved-answers-have-a-hidden-blocks-markers-written-twice-cause-found).
+
 ## Make the preset chips look more like chips
 
 Shipped 2026-09-17 under plan 60 (D110). Each chip now looks raised: a thin light line along its top edge and a soft
@@ -763,6 +771,12 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep
 
   The back end's status now says which mode the question was asked in, and a reopened panel reads it from there instead of assuming Speed; with no mode known, the mode and the attachments are left unset, never made up. A second cause is fixed in the same commit: a saved checklist that began loading when the panel opened could finish after the new checklist was drawn and wipe it. Limit: after a reopen a refine chip still does not re-send the original screenshot (nothing saved holds it).
 
+Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
+
+**Deck row P78-REOPEN-CHECKLIST, 2026-10-01, partly passed:** the follow-up's mode passed; the checklist half could not be produced in four tries. Full note: [roadmap-details.md](roadmap-details.md#a-strategy-checklist-that-arrives-while-the-panel-is-closed-never-shows-and-after-any-reopen-a-refine-chip-sends-its-follow-up-in-speed-mode).
+
+**2026-10-03 (plan 81, build `afd2f444`), passed on a PREPARED answer from a stand-in AI:** the reopened panel drew the checklist and the refine follow-up went out in Strategy mode. The checklist is stored in its own session file, not in the turn's text (the row's wording assumed the turn). The four failed tries likely came from the choice-button bug, fixed in `83bec1ad` and now passed on the Deck (Done); one more try with the real AI is still owed. Evidence `docs/test-evidence/plan81-P78-REOPEN-CHECKLIST.json`.
+
 ## A faded ghost of the tab bar is left drawn over the chip row after touching the screen
 
 Older dated notes moved here from the roadmap entry on 2026-10-01 (docs sweep 14, plan 78), to bring the roadmap under its size limit. Nothing was removed.
@@ -788,6 +802,12 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep
   On a test build with the limit at 300 tokens, the menu block opened right at the wall; the next piece's 1,018 letters never reached the screen or the saved chat, and no menu showed. Rare at the normal limit. Evidence `docs/test-evidence/plan77-SOFT-PREDICT-04.json`.
   A choice menu cut by the length wall that the continuation does not finish is now dropped cleanly; the rest of the answer is kept, shown and saved. Limit: the piece after a dropped fence shows when it ends, not live. The check is the same low-limit run as SOFT-PREDICT-04: the final letters roughly equal the sum of the pieces, the same in the saved chat, no fence text or JSON on screen, and a "dropped a choice fence" log line. Deck check owed: row **P77-CUT-MENU-TEXT**.
   Older note (2026-09-30, UNCLEAR, the same result as below): [roadmap-details.md](roadmap-details.md#when-the-length-limit-cuts-a-choice-menu-the-next-part-of-the-answer-is-lost).
+
+Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
+
+On a test build with the limit at 300 tokens, the piece after a menu cut by the length wall never reached the screen or the saved chat. Rare at the normal limit. Evidence `docs/test-evidence/plan77-SOFT-PREDICT-04.json`.
+
+A cut menu that the continuation does not finish is now dropped cleanly and the rest of the answer is kept, shown and saved. Deck check owed: row **P77-CUT-MENU-TEXT**; tried twice (2026-09-30, 2026-10-01), unclear both times because the model never reached a menu before the wall. Unit tests are the proof so far.
 
 ## After the quick start is opened and closed, the help chip stayed and the suggestion chips never took the row
 
@@ -872,3 +892,31 @@ Older dated notes moved here from the roadmap entry on 2026-10-03 (plan 81 paper
   **2026-10-03 (plan 81, Deck block 4b, build `7e963807`), memory with the game:** with the Deck's AI unloaded before the game started (and the small search model too, to get over the 8,000 MB line), 8.3 GB were free with the game up. One question asked then took the lowest free memory to 1,623 MB (about 1.8 GB while the AI stayed loaded), above the 1,500 MB stop line; block 3b's lowest was 2,372 MB. One more question in the same state would not have been safe, so only one was asked. Evidence `docs/test-evidence/plan81-P81-B4B-GAME-MEMORY.json`.
 
   **2026-10-03 (plan 81, Deck block 6, build `7e963807`): the two runs.** The AI was already loaded and warm, so the runbook's first short question was skipped. Run A (no page watcher): 2,529 MB free before the question, lowest 2,312 MB, 2,419 MB at 12 minutes; the answer finished about two minutes in; every read of Steam's page answered in 55 to 270 ms and the game was exited cleanly afterwards. Run B (a watcher reading the panel every 200 ms): 2,319 MB free before the question, lowest 2,089 MB; Steam's page process rose to 972 MB around the answer and fell back to 667 MB, and swap use rose from 140 to 214 MB and stayed there; every read answered in 55 to 280 ms. The game stayed flat (about 1.2 GB) and the AI's server flat (about 0.3 to 0.4 GB) in both. The Quick Access panel closed itself about four minutes after the answer in both runs, after which the page was throttled, so the watcher ran at full speed for only about 5.5 of the 12 minutes. A watcher kept at full speed for the whole time, and the original starting point of about 2.0 GB free, were not tried. Evidence `docs/test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`; the hunt is in the [audit note](audit/plan81-freeze-after-answer.md).
+
+Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
+
+**2026-10-03 (plan 81, Deck block 6, build `7e963807`): not reproduced in two runs.** The same low-memory state as the freeze (about 2.3 to 2.5 GB free, the AI loaded, Deep Rock running), once with nothing else on the page and once with a page watcher reading every 200 ms: Steam answered every read for 12 minutes, no freeze. Only Steam's own page process grew (556 to 705 MB, peak 972 MB); the game and the AI stayed flat. The original freeze started from about 2.0 GB free, which these runs did not reach, and the watcher ran at full speed for only about 5.5 of the 12 minutes. Evidence `docs/test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`.
+
+## Long suggestion chips: pause at the end, centred text
+
+Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
+
+**Deck 2026-10-03 (plan 81, build `9e68bce1`, Deep Rock running, 200 s): mostly passed, with two long gaps when both chips were due at once.** 31 of 44 long chips began to leave 1.2 to 1.9 s after their words stopped; 11 read 1.12 to 1.20 s (the reads were about 0.57 s apart, so these cannot be told from 1.2 s); 2 read 3.4 and 4.6 s. A short chip's words were centred to 0 px in its text room. Row **P79-LONG-CHIPS** stays owed for the fade's opacity (never seen to change) and for a chip under the ring never changing (its words were hidden at that moment). Evidence `docs/test-evidence/plan81-P79-LONG-CHIPS-game.json`.
+
+Before the change (Deck 2026-10-02, build `678aaa3d`, Hades running): the words scrolled to their end and stood still, but the chip left 3.2 to 10.2 s later. Evidence `docs/test-evidence/plan79-P79-LONG-CHIP-PAUSE.json`. The soft blue fill passed and is in Done.
+
+## Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted
+
+Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
+
+In block 3d a reload during a game's start was also followed by the game's window never coming to the front (twice: Deep Rock Galactic: Survivor, Half-Life 2). Related: the entry above about the Home screen in front of a game.
+
+**2026-10-03 (plan 81, Deck block 6, build `7e963807`):** a developer reload with a game running did not freeze Steam in either try, so the 2026-10-01 freeze was not reproduced. With plenty of memory the Decky tab was missing for about 1 min 40 s until Quick Access was closed and reopened; with the AI loaded and 2.4 to 3.4 GB free the plugin was back in about 45 s. The maintainer's call on marking it accepted is open (plan 81, question 3). Evidence `docs/test-evidence/plan81-P81-RELOAD-LOOK.json`.
+
+## While reading an answer, the Show details line takes the suggestion chip's place above the question box
+
+Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
+
+**Deck 2026-10-02 (build `c98f749e`):** the slot's wording, the chip's return, B closing details with the ring staying, and Up from the slot or a chip pass. **Still owed:** reaching the slot's line from the question box and pressing A on it (needs a right-stick scroll, the maintainer's hand check, checks page, Friday check 4), and the closed line landing 8 px inside the top.
+
+Row **P79-SHOW-DETAILS-SLOT**. Evidence `docs/test-evidence/plan79-P79-DETAILS-SLOT.json`.

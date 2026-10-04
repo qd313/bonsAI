@@ -273,15 +273,14 @@ data...** first. [More on this](troubleshooting.md#1b-uninstall-vs-clear-all-dat
 
 - Rarely, the D-pad may stop moving in the panel. Closing and reopening the Quick Access Menu should
   clear it; restarting the Deck always does.
-- Rarely, a chat opened with **R1** while a game runs is missing the buttons under its newest answer.
-  Closing and reopening the Quick Access Menu fixes it.
-- After **Sum up this chat**, a long summary can run past the bottom of the panel. Press Down to bring
-  it into view.
-- With a game running, the panel can get a bit choppy while a very long answer arrives.
-- Answers come from a small AI model. They can be wrong, can repeat wording from an earlier answer,
-  and questions that aren't about a game can pick up game notes.
-- The highlight around the selected control looks slightly different from Steam's own, and is faint
-  on a few Settings controls.
+- Rarely, a chat opened with **R1** while a game runs is missing the buttons under its newest answer,
+  and Down stops on the question. Closing and reopening the Quick Access Menu fixes it.
+- With a game running, the panel can update more slowly while an answer arrives, and very long
+  answers can dip further.
+- Answers come from a small AI model on your Deck or PC. They can be wrong, can repeat wording from an
+  earlier answer, and questions that aren't about a game can pick up game notes.
+- Once, with a game running and the AI on the Deck itself, Steam's screen stopped responding a few
+  minutes after an answer; restarting the Deck cleared it.
 
 Found something else? [Open an issue on GitHub](https://github.com/qd313/bonsAI/issues).
 

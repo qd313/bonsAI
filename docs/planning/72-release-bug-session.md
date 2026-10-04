@@ -614,7 +614,7 @@ land.
 
 ---
 
-## 8. Known issues for the 0.6.0 release notes (final, 2026-09-27)
+## 8. Known issues for the 0.6.0 release notes (final, 2026-09-27; updated 2026-10-03)
 
 In plain words, ready to paste under "Known issues" (plan 71, Stage D). The maintainer accepted these leans
 on 2026-09-27. Each line matches an open roadmap entry; take a line out if its bug is fixed and proven
@@ -624,19 +624,20 @@ before the release.
   restarting the Deck always does.
 - Rarely, a chat opened with the right shoulder button while a game runs is missing the buttons under its
   newest answer, and Down stops on the question. Closing and reopening the Quick Access menu fixes it.
-- With a game running, the panel updates about 30 times a second while an answer arrives, and can dip lower
-  late in very long answers.
+- With a game running, the panel can update more slowly while an answer arrives, and very long answers can dip
+  further.
 - Answers come from a small AI model on your Deck or PC. They can be wrong, can reuse wording from an earlier
   answer, and questions unrelated to a game can pick up game notes.
-- Rarely, with a game running and the AI on the Deck itself, Steam's screen may stop responding a few minutes after an
-  answer; restarting the Deck clears it. Running the AI on a PC, or closing the game first, avoids the tight memory
-  behind it.
+- Once, with a game running and the AI on the Deck itself, Steam's screen stopped responding a few minutes after an
+  answer; restarting the Deck cleared it.
 
 _2026-10-03 (plan 81): the line about a long summary running past the bottom of the panel came off this list. After "Sum up this chat" the summary card's top and title now show without a press, and the rest is one Down away (Deck, evidence `plan81-P81-M-L-SUMUP-try3.json`)._
 
 _2026-10-03 (plan 81): the line about the highlight ring looking different from Steam's own came off this list. Every control the Deck shows now has the same white ring, Jump to Steam Input with a game running included (Deck, evidence `plan81-P81-RING-WALK-ALL-TABS.json` and `plan81-P81-RING-WALK-ALL-TABS-game.json`)._
 
-_2026-10-03 (plan 81): a line about Steam's screen stopping after an answer went on this list (the last line above). It was seen once on the Deck and not reproduced in two later runs (evidence `plan81-DRG-01c.json`, `plan81-P81-FREEZE-AFTER-ANSWER.json`); the roadmap entry stays open._
+_2026-10-03 (plan 81): a line about Steam's screen stopping after an answer went on this list (the last line above). It was seen once on the Deck and not reproduced in two later runs (evidence `plan81-DRG-01c.json`, `plan81-P81-FREEZE-AFTER-ANSWER.json`); the roadmap entry stays open. The line makes no promise about a cause._
+
+_2026-10-03 (plan 81): the frame-rate line no longer gives a number. The old figure, about 30 a second, is out of date: plan 79 measured about 69 with a game on a menu (evidence `plan79-SCR-10-MISSION.json`)._
 
 _2026-10-02 (plan 79): the D-pad line stays. Two more fixes landed for ways into it, and it was not seen in eleven tries
 on the Deck, but its own case cannot be made to happen on purpose, so it is not proven gone. The ring line grew a few

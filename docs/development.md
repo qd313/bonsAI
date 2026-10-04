@@ -1,3 +1,4 @@
+
 # bonsAI Development Guide
 
 This guide is for contributors building and deploying bonsAI from source. **Primary target:** one Steam Deck runs everything — the git repo, Ollama, Decky, and bonsAI on the same machine. A separate PC on the LAN still works; see [Other-machine LAN workflow](#other-machine-lan-workflow).

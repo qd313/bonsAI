@@ -4,6 +4,36 @@
 
 One entry per app file, grouped by folder: its Title, then the opening of its Purpose. Headers are written at whatever length the file needs, so an entry ending in […] has more in the file itself — open it rather than assuming this is all it says. A file with no entry under Purpose is missing a header line; see `scripts/check_headers.py`, which fails the build on one.
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [py_modules/backend](#py_modulesbackend)
+- [py_modules/backend/services](#py_modulesbackendservices)
+- [src](#src)
+- [src/components](#srccomponents)
+- [src/components/deck](#srccomponentsdeck)
+- [src/context](#srccontext)
+- [src/data](#srcdata)
+- [src/features/chat-slots](#srcfeatureschat-slots)
+- [src/features/chat-sum-up](#srcfeatureschat-sum-up)
+- [src/features/details-slot](#srcfeaturesdetails-slot)
+- [src/features/downloads](#srcfeaturesdownloads)
+- [src/features/model-routing](#srcfeaturesmodel-routing)
+- [src/features/plugin-shell](#srcfeaturesplugin-shell)
+- [src/features/plugin-shell/tabs](#srcfeaturesplugin-shelltabs)
+- [src/features/preset-carousel](#srcfeaturespreset-carousel)
+- [src/features/stream-scramble](#srcfeaturesstream-scramble)
+- [src/features/unified-input](#srcfeaturesunified-input)
+- [src/features/voice](#srcfeaturesvoice)
+- [src/hooks](#srchooks)
+- [src/i18n](#srci18n)
+- [src/preview](#srcpreview)
+- [src/styles](#srcstyles)
+- [src/styles/sections](#srcstylessections)
+- [src/types](#srctypes)
+- [src/utils](#srcutils)
+<!-- /toc -->
+
 ## .
 
 - **main.py** (main.py) — *The plugin's front door*: This is the file Decky loads when the plugin starts, and the only back-end file the screen is able to talk to directly. […]

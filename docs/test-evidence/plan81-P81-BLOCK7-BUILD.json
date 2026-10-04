@@ -1,0 +1,17 @@
+{
+ "row": "P81-BLOCK7-BUILD",
+ "build_commit": "88fd0c8f (checkout tip, deployed 22:43 Deck time)",
+ "deck_time_local": "2026-10-03 22:43-23:00 EDT",
+ "screen": "Deck's own screen: Quick Access page window 854x454. Pane top 88, dock top 290.",
+ "setup": "No game (no AppId= process, RunningApps empty). 2845 MB available before deploy.",
+ "pressed": "deck_holdAwake 480; deck_deploy; deck_openPlugin twice (first call: no pane; second: opened).",
+ "seen": {
+  "keep_awake": "held true, expiresAt 2026-10-04T10:42:50.521Z (480 min)",
+  "deploy": "loader ready true, active, waited 301 ms",
+  "md5": "dist/index.js 3a5c6d4153cdb66a39628a59a00c6639 on both the checkout and the Deck; main.py ce66f03edef44c1446136ecfa88b42c3 on both",
+  "open_plugin": "first call no pane, second call opened, .bonsai-scope present",
+  "test_chat": "title read 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (active slot title), 84 earlier"
+ },
+ "expected": "Tip deployed, installed files identical to the checkout, plugin opens, test chat showing",
+ "verdict": "PASS - installed dist and main.py match the checkout at 88fd0c8f; plugin opened on the 2nd call; test chat open."
+}

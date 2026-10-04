@@ -1,0 +1,21 @@
+{
+ "row": "P81-BLOCK7-PUT-BACK",
+ "build_commit": "88fd0c8f (on the Deck)",
+ "deck_time_local": "2026-10-03 22:47-22:58 EDT",
+ "screen": "Deck's own screen: window 854x454",
+ "setup": "No game. Test chat 6f3cc055 had two new turns from this block (Hornet, False Knight): 86 earlier.",
+ "pressed": "ssh cp of ~/p81-backup/settings-bonsAI/chat_slots/6f3cc055-....json and index.json over the live ones; python key-by-key compare of settings.json; deck_reloadPlugin (no game); deck_openPlugin; LB to Main.",
+ "seen": {
+  "cmp": "test chat file and index.json: cmp identical to the backup (CMP_OK)",
+  "settings": "settings.json cmp identical to the backup; 0 differing keys; I changed no setting this block",
+  "dev_frozen_test_chips": "[] (empty)",
+  "chat_slots_folder": "9 files live, 9 in backup",
+  "api_tags": "nomic-embed-text:latest, gemma4:e2b-it-qat only",
+  "game": "no AppId= process",
+  "after_reload": "plugin open on Main, active chat title 'How do I beat the boss in the Soul Sanctum in Hollow Knight?', '84 earlier', Context: no active game detected, ring on the question box (do not press A there)",
+  "memory": "5763 MB available at 22:50"
+ },
+ "expected": "Chat files and settings back to the backup, 0 differing keys, reload with no game, plugin open on Main with the test chat, models list as expected, chips empty, no game.",
+ "verdict": "PASS - everything matches the backup; plugin open on Main showing the test chat.",
+ "side_effect": "After the reload, Quick Access had closed and my first LB press went to Steam's own screen (no tab change; nothing visibly changed). deck_openPlugin then needed two calls (the usual first failure)."
+}

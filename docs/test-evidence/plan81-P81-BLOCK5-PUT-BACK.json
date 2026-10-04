@@ -1,0 +1,28 @@
+{
+ "row": "P81-BLOCK5-PUT-BACK (settings, chats, models, library, chips)",
+ "build_commit": "7e963807",
+ "deck_time_local": "2026-10-03 21:46-21:47 EDT",
+ "screen": "Deck's own screen, page window 854x454",
+ "setup": "No game running. Compared ~/homebrew/settings/bonsAI against the block 0 backup ~/p81-backup/settings-bonsAI.",
+ "pressed": "SSH: key-by-key compare; one-key edit of settings.json; plugin reload; cp of two chat files; cmp; plugin reload; plugin reopened (first try failed, second ok), LB on the tab bar to Main.",
+ "seen": {
+  "settings_before": "Differing keys: only text_model_routing_order (16 names starting qwen2.5:3b; the backup holds ['gemma4:e2b-it-qat']). No other key differed.",
+  "settings_edit": "Wrote only text_model_routing_order back to the backup's value (python one-liner over SSH; Claude Code did not refuse it), then reloaded the plugin at once with no game running.",
+  "settings_after": "0 differing keys, and settings.json is byte-identical to the backup (cmp), also after the reload.",
+  "chats_before": "Two files differed: chat_slots/6f3cc055-... (the test chat: new turns from tonight) and chat_slots/index.json. The other 8 files (including the 'wheatley fight' and parrying chats) were identical.",
+  "chats_after": "Copied the backup over both files, cmp identical, reloaded the plugin (no game). All 9 chat files and settings.json now cmp identical to the backup.",
+  "chat_row": "Plugin shows the test chat as the current chat ('How do I beat the boss in the Soul Sanctum in Hollow Knight?', earlier counter '84 earlier', the number block 0 recorded); neighbours: the parrying chat and 'wheatley fight'. Block 0's handover says the test chat stayed the open chat.",
+  "models": "/api/tags lists exactly nomic-embed-text:latest and gemma4:e2b-it-qat; qwen2.5:3b is gone.",
+  "library": "~/.bonsai/rag/corpus.db 2998272 bytes, cmp identical to ~/p81-backup/library/corpus.db.",
+  "chips": "dev_frozen_test_chips is empty ([]).",
+  "state": "No game process. Plugin open on the Main tab, Strategy mode, Context: no active game detected. Gemma loaded in Ollama. Keep-awake still held (expires 2026-10-04T09:20:52Z)."
+ },
+ "expected": "Only text_model_routing_order differs and is restored; changed chat files copied back; models, library and chips as listed; plugin open on Main, no game.",
+ "verdict": [
+  "PASS (settings): one key differed, restored, 0 differing keys afterwards.",
+  "PASS (chats): the two differing files copied back and identical; test chat is the open chat.",
+  "PASS (models and library): the two models and the identical library file.",
+  "PASS (chips and state): chips empty, no game, plugin open on Main."
+ ],
+ "side_effect": "Putting the test chat back from the block 0 backup removed the test turns from blocks 1 to 5 from that chat on the Deck (the evidence files hold them). The settings file was rewritten with indent 2 by my one-line edit and the plugin rewrote it again on reload; it ended byte-identical to the backup."
+}

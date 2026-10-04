@@ -1,0 +1,56 @@
+{
+  "row": "P81-FREEZE-AFTER-ANSWER",
+  "build_commit": "7e963807 (on the Deck, not redeployed)",
+  "deck_time_local": "2026-10-03 21:48 to 22:21 EDT",
+  "screen": "Deck's own screen: Quick Access page 854x454 with no game, 854x534 with the game up",
+  "setup": "Gemma (gemma4:e2b-it-qat) and nomic embed already loaded in Ollama before the game (keep-alive setting 240m, so they stayed loaded all the time). The runbook's first short no-game question was SKIPPED because the AI was already loaded and warm; asking it would only have added a turn to the test chat. Game: Deep Rock Galactic: Survivor, launched with the rig, window in front about 100 s before Quick Access was reopened. Test chat 6f3cc055 open, Strategy mode. Logging: a loop on this PC every 5 s over SSH (free -m, uptime, ps top 12 by RSS, ollama api/ps): runA 170 samples, runB 169 samples, 0 failed or timed-out SSH calls. Run A had no page watcher and no other script on the Quick Access page except single reads (one read each 2 minutes). Run B had a page watcher: setInterval 200 ms reading the panel's innerText, installed 22:07:24, removed 22:20:59.",
+  "pressed": "Run A: launchGame, openPlugin, send-ask script (VERIFIED, whole text read back), walkTo Ask (12 DOWN presses, focus read: ask button, visible 100 percent), A once at 21:50:40. Run B: same with a different question at 22:07:47 (A on ask after walkTo, 18 DOWN presses). Exit game after each run with the rig.",
+  "seen": {
+    "run_A": {
+      "question": "Which weapon upgrades help most against the Glyphid Dreadnought in Deep Rock Galactic: Survivor?",
+      "available_memory_before_question_MB": 2529,
+      "available_memory_lowest_MB_while_game_up": 2312,
+      "available_memory_at_12_min_MB": 2419,
+      "answer": "finished about 21:52:10 (reasoning 38 s); an answer appeared in the chat, 3 paragraphs plus an A/B question",
+      "steam_screen_responsive": "YES for the whole 12 minutes plus: every single read answered in 55 to 270 ms, no read timed out, the rig exited the game afterwards by pad presses",
+      "froze": false,
+      "process_growth": {
+        "game_RSS_MB": "1232 at 21:49 to 1236 at 22:04 (flat, +4)",
+        "ollama_llama_server_pid_44949_RSS_MB": "316 before, 359 after the question, flat afterwards",
+        "steamwebhelper_zygote_pid_48784_RSS_MB": "556 to 705 (+149) over the run, drifting up and down (547 at 21:49, 597 after answer, 631 at 22:03); this process is the one that holds the pages (command line: steamwebhelper --type=zygote --no-sandbox ... --user-data-dir=htmlcache, cannot tell from the command line which window it is)",
+        "other_steamwebhelper_pids": "48689 361 to 367 flat; 48717 176 to 187 flat"
+      },
+      "page_reads_every_2_min": "nodes 453 (answer shown) then 112 (panel closed itself, screensaver target present from about 21:56) then 104; JS heap 121.4 MB, 123.4, 124.9, 120.6, 122.1, 124.2 MB: flat, no climb",
+      "notes": "The Quick Access panel closed on its own about 4 minutes after the answer (Screensaver page appeared, panel node count fell to 112). Hands were off the Deck. Nothing else changed."
+    },
+    "run_B": {
+      "question": "How do I deal with Glyphid swarms early in a Deep Rock Galactic: Survivor run?",
+      "available_memory_before_question_MB": 2319,
+      "available_memory_lowest_MB_while_game_up": "2089 (also the lowest of both runs, during or just after the answer, about 22:09)",
+      "available_memory_at_12_min_MB": 2379,
+      "answer": "finished about 22:08:45 (reasoning 34 s)",
+      "steam_screen_responsive": "YES the whole time, every read answered in 55 to 280 ms, game exited cleanly",
+      "froze": false,
+      "watcher": {
+        "samples": 1675,
+        "samples_while_panel_on_screen": "about 1640 in the first 5 min (200 ms, as set); after the panel closed at about 22:13 the page was throttled and only 34 more samples ran in 8 minutes",
+        "slowest_single_sample_ms": 54.8,
+        "caveat": "so the watcher ran at full speed only for about 5.5 minutes, 1 minute before the answer and 4 after. It did not run at speed for the 12 minutes."
+      },
+      "process_growth": {
+        "game_RSS_MB": "1207 to 1224 (flat)",
+        "ollama_llama_server_pid_44949_RSS_MB": "359 to 391 then 387 (flat)",
+        "steamwebhelper_zygote_pid_48784_RSS_MB": "595 at 22:07 to a peak of 972 during/just after the answer (22:09), back to 667 at 22:12, 652 at 22:14, 683 at 22:18, 704 at 22:21. Swap used rose 140 to 214 MB and stayed there.",
+        "other_steamwebhelper_pids": "48689 369 to 370 flat; 48717 185 to 187 flat"
+      },
+      "page_reads": "JS heap 128.6 MB, 141.8 MB at answer, 129.9, 131.7, 133.1, 129.6, 130.7, 128.5 MB: flat. Nodes 456, 451, 112, 112, 104."
+    }
+  },
+  "expected": "Helper M's measurement: with the AI warm and about 2 to 3 GB free, ask one question with a game up, hands off for 12 minutes, and see whether Steam freezes and which process grows. Run B only if A did not freeze, with the 200 ms watcher.",
+  "verdict": [
+    "MEASURED, NO FREEZE in run A (no watcher): memory flat at about 2.3 to 2.5 GB available, Steam's screen answered for 12 minutes.",
+    "MEASURED, NO FREEZE in run B (with the 200 ms watcher): the same, lowest 2089 MB available. The watcher did not freeze it, but it only ran at full speed for about 5.5 minutes because the panel closed itself and the page was throttled.",
+    "UNCLEAR what the original 2026-10-03 freeze needed. Neither run reproduced it. The one process that moved was the Steam page process 48784 (+150 MB in A, up to +377 MB during B's answer, then falling back). The game, Ollama and the other web helpers were flat. A watcher that stays at full speed for the whole 12 minutes (e.g. keep the panel open with input) was not tested."
+  ],
+  "side_effect": "Two questions were added to the test chat 6f3cc055 (85 and 86 earlier now). The chat will be put back from the block 0 backup at the end of the block. Two extra Strategy background-answer sessions ran; the game was exited after each. The first short no-game question of the runbook was skipped (AI already warm)."
+}

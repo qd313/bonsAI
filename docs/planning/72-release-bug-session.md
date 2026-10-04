@@ -624,14 +624,19 @@ before the release.
   restarting the Deck always does.
 - Rarely, a chat opened with the right shoulder button while a game runs is missing the buttons under its
   newest answer, and Down stops on the question. Closing and reopening the Quick Access menu fixes it.
-- After "Sum up this chat", a long summary can run past the bottom of the panel. Press Down to bring it into
-  view.
 - With a game running, the panel updates about 30 times a second while an answer arrives, and can dip lower
   late in very long answers.
 - Answers come from a small AI model on your Deck or PC. They can be wrong, can reuse wording from an earlier
   answer, and questions unrelated to a game can pick up game notes.
-- bonsAI's highlight ring looks slightly different from Steam's own on some controls, and is faint on a few
-  Settings controls (the accent button, "Reinstall voice engine").
+- Rarely, with a game running and the AI on the Deck itself, Steam's screen may stop responding a few minutes after an
+  answer; restarting the Deck clears it. Running the AI on a PC, or closing the game first, avoids the tight memory
+  behind it.
+
+_2026-10-03 (plan 81): the line about a long summary running past the bottom of the panel came off this list. After "Sum up this chat" the summary card's top and title now show without a press, and the rest is one Down away (Deck, evidence `plan81-P81-M-L-SUMUP-try3.json`)._
+
+_2026-10-03 (plan 81): the line about the highlight ring looking different from Steam's own came off this list. Every control the Deck shows now has the same white ring, Jump to Steam Input with a game running included (Deck, evidence `plan81-P81-RING-WALK-ALL-TABS.json` and `plan81-P81-RING-WALK-ALL-TABS-game.json`)._
+
+_2026-10-03 (plan 81): a line about Steam's screen stopping after an answer went on this list (the last line above). It was seen once on the Deck and not reproduced in two later runs (evidence `plan81-DRG-01c.json`, `plan81-P81-FREEZE-AFTER-ANSWER.json`); the roadmap entry stays open._
 
 _2026-10-02 (plan 79): the D-pad line stays. Two more fixes landed for ways into it, and it was not seen in eleven tries
 on the Deck, but its own case cannot be made to happen on purpose, so it is not proven gone. The ring line grew a few

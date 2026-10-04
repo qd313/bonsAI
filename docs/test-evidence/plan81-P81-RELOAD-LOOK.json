@@ -1,0 +1,42 @@
+{
+  "row": "P81-RELOAD-LOOK",
+  "build_commit": "7e963807 (on the Deck, not redeployed)",
+  "deck_time_local": "2026-10-03 22:22 to 22:42 EDT",
+  "screen": "Deck's own screen: Quick Access page 854x454 (it read 854x534 with the game up in the first part, 854x454 right after each reload)",
+  "setup": "Part 2 of block 6. Before the game: the AI models (gemma and nomic) were unloaded with keep_alive 0 over the Ollama API (11,474 MB available). Deep Rock Galactic: Survivor launched by the rig, up about 5 minutes when step 4 started (title screen 'Press any key'). Logging loop on this PC every 5 s the whole time: 0 failed SSH calls.",
+  "pressed": "Step 4: openPlugin, then on the plugin's page UP to the back arrow, A (shows Decky's plugin list), moved to the gear button in the list's header, A. Seen twice. B to leave. Step 5: deck_reloadPlugin (the rig's loader restart) with the game running and AI unloaded. Step 6: AI loaded again (gemma with the 16,384 room and the nomic embed, by Ollama API calls, no question asked) then deck_reloadPlugin a second time. Then game exit by hand-walked main menu and a Confirm.",
+  "seen": {
+    "step_4_player_route": {
+      "what_decky_offers_a_player": "Decky's plugin list inside Quick Access has the plugin rows and two header buttons (store, settings gear). It has NO reload or update control for a plugin. The settings gear opens Decky's settings page in the main Steam window (route /routes/decky/settings). With the game running that page rendered EMPTY both times (only the status bar and the A / B hints, the page had 99 nodes, no focusable element, the screenshot did not change for 30 s, game fell to 2 FPS while it was up). B returned to the game cleanly both times. I could not read a reload control on it.",
+      "answer_to_the_question": "A player in this setup has no route they can see to reload bonsAI with a game running: the list offers none and Decky's settings page showed nothing while the game ran. (With no game running that page may show more; not tested, outside the runbook.) The only way to reload found was the rig's loader restart.",
+      "nothing_froze": true,
+      "memory_available_MB": "about 8,800 to 8,900 during step 4 (AI unloaded)"
+    },
+    "step_5_rig_reload_AI_unloaded_game_running": {
+      "reload_time": "22:27:00",
+      "game_window_in_front_after": "YES. Screenshot 5 seconds later shows the game's title screen, the game process still running (1 AppId process), 46 FPS",
+      "quick_access_page_back": "NOT within a minute as a usable plugin. The Quick Access page itself was up at once (reads answered), but the Decky tab (tab 999) was missing for about 1 minute 40 s: two openPlugin tries both ended 'could not reach the Decky pane in 10 rail presses'. Decky's journal says the Decky frontend loaded at 22:27:12. The tab came back after I closed Quick Access (chord) and the next read at 22:28:42 listed tab 999. openPlugin then opened the panel (2 minutes after the reload). Same as the known 'first open fails' quirk.",
+      "context_line_after_reopen": "Context: active game Deep Rock Galactic: Survivor",
+      "memory_available_MB": "9,384 just after reload, 8,742 to 8,861 over the next 2 minutes (over the 6,000 MB the runbook asked)",
+      "froze": false
+    },
+    "step_6_rig_reload_AI_loaded_game_running": {
+      "state_before": "available 2,716 MB (gemma 2,247 MB and nomic 571 MB loaded), game up about 8 minutes",
+      "reload_time": "22:29:33",
+      "game_window_in_front_after": "YES. Screenshot at 22:29:42 shows the title screen, Quick Access fading out; game process still running",
+      "quick_access_page_back": "Yes, within about 45 seconds with the Decky tab already present (page read at 22:30:16 listed tab 999). Panel opened by openPlugin at 22:30:29, first try. Context line named the game.",
+      "memory_available_MB": "3,414 at 13 s, 2,432 at 40 s, lowest 2,405 at 22:30:35, 2,474 at 22:32. Never below the 2,000 MB line.",
+      "steamwebhelper_zygote_pid_RSS_MB": "659 at 22:30, 658 peak in the window; it ran at 99.8 percent processor for about 30 s right after the reload (Steam rebuilding its pages) and then settled",
+      "froze": false
+    },
+    "exit": "The rig's exit tool failed twice (the main menu opened on 'Home', not on the game's entry). I pressed B, then walked by hand with focus read at each step: UP (read: Deep Rock Galactic: Survivor), RIGHT, DOWN until the ring read 'Exit game' (7 presses), A (read: Confirm), A. Game process gone (0 AppId processes), 5,585 MB available at 22:33."
+  },
+  "expected": "Runbook: say whether a player can reach the reload under a running game; measure for each reload whether the game's window comes back in front, the Quick Access page comes back within a minute, and how much memory is free. Step 6 only if both earlier ones were clean.",
+  "verdict": [
+    "PASS (measurement) step 4: no player route to a reload was found; Decky offers none in its list and its settings page was blank with a game running. UNCLEAR whether that page shows a reload with no game.",
+    "PASS (measurement) step 5: no freeze, game window stayed in front, 8.7 to 9.4 GB free. UNCLEAR on 'page back within a minute': the page answered at once but the plugin's tab took about 1 minute 40 s and needed a close and reopen of Quick Access.",
+    "PASS (measurement) step 6: no freeze with the AI loaded and about 2.4 to 3.4 GB free; game window stayed in front, page and plugin back within about 45 seconds.",
+    "Overall: the reload under a running game did not freeze Steam in any of the three tries. The 2026-10-01 freezes were not reproduced."
+  ],
+  "side_effect": "Settings were not edited. The test chat was changed by the two part 1 questions and was copied back from the block 0 backup at the end (the chat file and index.json compare identical to the backup, and settings.json is identical; the only difference in the whole settings folder is two lines added to bonsai_feedback.jsonl from earlier tonight, timestamps about 18:24 EDT, hours before this block). I loaded the AI by Ollama API calls (no chat turn) before step 6 and left gemma and nomic loaded with keep_alive 240m, as it was at the start of the block. One stray main-menu press: the first failed exit try opened Steam's main menu on Home; closed with B."
+}

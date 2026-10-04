@@ -232,6 +232,10 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep t
 
   **2026-09-30 (plan 77 block 3, row SUMUP-12):** the Deck check of the guards PASSED: a saved answer with its markers doubled loaded as one closed cover, and the hidden word appeared nowhere in the log's memory line, the new answer or the rest of the chat file (no summary existed to check). The original cause is still unproven, so this stays PARTIAL. Evidence `docs/test-evidence/plan77-SUMUP-12.json`.
 
+Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 7), to bring the entry to five lines. Nothing was removed.
+
+  **Deck 2026-10-03 (build `5eca4271`), PARTIAL:** at the two joins of one long answer no opening mark was doubled and no half mark appeared; but the AI itself left one hidden block unclosed and opened another later in the same piece (the evidence file's verdict line reads FAIL for that); on screen both were covers, no fence text. The AI's own doubling is the part the chat memory already guards. Evidence `docs/test-evidence/plan81-P81-CONTINUE-ONE-MARK.json`.
+
 ## Make the preset chips look more like chips
 
 Shipped 2026-09-17 under plan 60 (D110). Each chip now looks raised: a thin light line along its top edge and a soft
@@ -856,3 +860,15 @@ Original entries moved from Features on 2026-10-02 when their builds went to Ver
   question box"**, below. **Needs a plan and animated mockups before anything is built**, since the swap
   between the chip and the line happens as the person scrolls — drawn at the Deck's real size, from the
   real screen, showing the swap in motion.
+
+## Steam's screen froze after an answer with a game running and the Deck's own AI
+
+Older dated notes moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 7), to keep the entry to five lines. Nothing was removed.
+
+  **2026-10-03, hunt written up: [audit note](audit/plan81-freeze-after-answer.md).** The Deck's own AI log shows the model was already loaded when the question was asked and sat idle after the answer, so a cold load does not explain it (a cold load costs about 5.8 GB). The note's best guess, about 60 percent sure, is that the memory went to Steam's own page processes after the answer; which program grew is not known. The same steps after a restart, with 9 GB free, did not freeze (`docs/test-evidence/plan81-DRG-01c-try2.json`). The freeze is measured again at the very end of the session.
+
+  **2026-10-03, memory measured again (plan 81, Deck block 3b, build `9e68bce1`):** with the Deck's AI unloaded before the game started, 8.2 to 8.7 GB were free with the game up; with the AI loaded and the game running, 2.4 to 3.2 GB (lowest 2372 MB in the 5-second log, never under 1500 MB); no freeze in that block. The log has a gap of about two minutes around the first answer. Evidence `docs/test-evidence/plan81-P81-B3B-GAME-MEMORY.json`.
+
+  **2026-10-03 (plan 81, Deck block 4b, build `7e963807`), memory with the game:** with the Deck's AI unloaded before the game started (and the small search model too, to get over the 8,000 MB line), 8.3 GB were free with the game up. One question asked then took the lowest free memory to 1,623 MB (about 1.8 GB while the AI stayed loaded), above the 1,500 MB stop line; block 3b's lowest was 2,372 MB. One more question in the same state would not have been safe, so only one was asked. Evidence `docs/test-evidence/plan81-P81-B4B-GAME-MEMORY.json`.
+
+  **2026-10-03 (plan 81, Deck block 6, build `7e963807`): the two runs.** The AI was already loaded and warm, so the runbook's first short question was skipped. Run A (no page watcher): 2,529 MB free before the question, lowest 2,312 MB, 2,419 MB at 12 minutes; the answer finished about two minutes in; every read of Steam's page answered in 55 to 270 ms and the game was exited cleanly afterwards. Run B (a watcher reading the panel every 200 ms): 2,319 MB free before the question, lowest 2,089 MB; Steam's page process rose to 972 MB around the answer and fell back to 667 MB, and swap use rose from 140 to 214 MB and stayed there; every read answered in 55 to 280 ms. The game stayed flat (about 1.2 GB) and the AI's server flat (about 0.3 to 0.4 GB) in both. The Quick Access panel closed itself about four minutes after the answer in both runs, after which the page was throttled, so the watcher ran at full speed for only about 5.5 of the 12 minutes. A watcher kept at full speed for the whole time, and the original starting point of about 2.0 GB free, were not tried. Evidence `docs/test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`; the hunt is in the [audit note](audit/plan81-freeze-after-answer.md).

@@ -85,6 +85,9 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   since did not reproduce it. Evidence `docs/test-evidence/plan76-S2.json`. [Detail](roadmap-details.md#flow-2b-bugs).
   Unshelves when: a new sighting.
 
+- ★ `[focus]` `[watching]` **LB and RB do nothing while the ring is on Decky's back arrow** — seen once, 2026-10-03 (plan 81, Deck block 6). No evidence file.
+  Unshelves when: a new sighting.
+
 - ★ `[focus]` `[watching]` **Three more one-off focus sightings from free play, 2026-09-26** — the accent-level one is
   fixed and passed on the Deck (row P76-ACCENT-RING). The other two did not reproduce (`plan76-S3A.json` for the folded turn).
   What the two were is in [Detail](roadmap-details.md#flow-2b-bugs).
@@ -149,6 +152,14 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   fix, which passed 6 of 6 (row P76-TRAP-FIX, done 2026-09-29). A long play test with a game was clean, 24 of 24
   (`docs/test-evidence/plan77-P77-TRAP-LONG.json`). Not proven the same fault; named in the 0.6.0 release notes.
   [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
+  Unshelves when: a new sighting.
+
+- ★ `[platform]` `[watching]` **Decky's own settings page shows empty while a game is running** — seen twice, 2026-10-03 (plan 81, Deck block 6): only the status bar and the button hints, no control to focus, and B returned to the game. Not bonsAI's page.
+  Evidence `docs/test-evidence/plan81-P81-RELOAD-LOOK.json`.
+  Unshelves when: a new sighting.
+
+- ★ `[platform]` `[watching]` **The Quick Access panel closes itself about four minutes after an answer with a game running** — seen in both runs of 2026-10-03 (plan 81, Deck block 6), with no hands on the Deck; the screensaver page appeared.
+  Evidence `docs/test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`.
   Unshelves when: a new sighting.
 
 - ★ `[platform]` `[watching]` **After a deploy, opening the plugin with the rig's own call failed three times before it

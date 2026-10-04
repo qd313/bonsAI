@@ -1,0 +1,18 @@
+{
+ "row": "P81-RING-WALK-ALL-TABS (game-only row: Developer tab, 'Jump to Steam Input (running game)')",
+ "build_commit": "7e963807",
+ "deck_time_local": "2026-10-03 21:34 EDT",
+ "screen": "Deck's own screen, page window 854x534 with the game running",
+ "setup": "Deep Rock Galactic: Survivor running (Context line names it). Plugin open, RB x4 from Main to the Developer tab (tab strip reads DEVELOPER). Steam Web API key field: its box was at 2118-2158 px, far off screen; not screenshotted, value not read.",
+ "pressed": "RB x4, then Down x4 (deck_walkTo, direction only): Install seed knowledge base, Hybrid retrieval, On-screen debug HUD, Warm the Ask model at boot, Jump to Steam Input (running game). A was never pressed.",
+ "seen": {
+  "button_box": "x 64, y 344, 268 x 60 (visible 100%)",
+  "computed_outline_on_button": "solid 2px rgba(255, 255, 255, 0.88), outline-offset -2px",
+  "computed_outline_on_row_wrappers": "three parents up: none 0px (no outline)",
+  "elements_with_a_visible_outline_under_the_plugin_root": "1 (the button only)",
+  "picture": "The focused button is drawn filled white with dark text; see plan81-P81-RING-WALK-ALL-TABS-game-only-jump.png"
+ },
+ "expected": "The 2px white ring (rgba 255,255,255,0.88) on one element.",
+ "verdict": "PASS - 2px solid rgba(255, 255, 255, 0.88) on the one button, no outline on its row, one outlined element in the whole panel.",
+ "side_effect": "none"
+}

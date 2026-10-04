@@ -1,0 +1,19 @@
+{
+ "row": "P81-SMOKE-FINAL",
+ "build_commit": "7e963807",
+ "deck_time_local": "2026-10-03 21:36-21:46 EDT",
+ "screen": "Deck's own screen, page window 854x454. No game running.",
+ "setup": "Test chat 6f3cc055 (current chat confirmed from the chat row's own current slot, not its neighbours; '99 earlier' on its screen). Gemma loaded, 4.1 GB available. Memory fine, no game.",
+ "pressed": "RB to step through the tabs; Strategy question and Speed question each sent with the send script (VERIFIED, whole text read back), walk to Ask, focus read as 'ask', A; Show reasoning A twice; Show details A then B; mode control A, then A on 'speed' (focus read as speed), later A on 'strategy' to put it back; Ollama tab walk to 'AI models' (focus read as exactly 'AI models'), A, B.",
+ "seen": {
+  "tabs": "Main, Ollama, Settings, Perms, Developer, About each opened and showed its own content (tab bar active cell read after each press: main, ollama (scroll height 1530), settings (2112), perms (762), dev, about). No error text and no thrown error; plugin log filter ERROR: no lines.",
+  "strategy_question": "'Which early charm helps most in Hollow Knight, in two short lines?' answered in 29.0 s, 1 note (Charms and notches), 2 choice buttons, no cover. Show reasoning opened ('Hide reasoning - 17 s', aria-expanded true, reasoning text 1.8 kB) and folded again.",
+  "speed_question": "Mode switched to Speed with the plugin's own mode control (it was Strategy). 'Quick tip for beating the False Knight in Hollow Knight?' answered in about 39 s (log 21:41:42 to 21:42:21), 1 note (False Knight), with a Show reasoning line (23 s). The answer had the clickable choices row (5 buttons counted in the answer slot including action buttons). Mode put back to Strategy (control reads 'Inference mode: Strategy'). The log line shows domain=strategy for the Speed question; I did not check why.",
+  "show_details": "A on 'Show details' made the label read 'Hide details' (details open); B closed it, focus back on 'Show details'. (The first time, in the KB-notes check, the details showed as a box with the note title.)",
+  "chat_row_RB_LB": "Done by accident first, then on purpose: RB/LB on the chat row switch chats. Moving from the test chat: RB x3 reached the 4th chat ('how should i spend my first hour in a new open world game'), LB x2 reached the parrying chat, a third LB came back to the test chat; read the current slot after each. Switching worked both ways.",
+  "ai_models_box": "A on 'AI models' opened the box (a full-screen box with Done, Cancel, Advanced, filters, the model rows; ring on 'Advanced'); B closed it and the ring returned to the 'AI models' button on the Ollama tab. Nothing was saved (B, not Done). No model row was pressed."
+ },
+ "expected": "Each tab opens; one Speed and one Strategy question answer in the test chat; Show reasoning opens; Show details opens and closes with B; the chat row switches chats with RB/LB and back; the AI models box opens and closes with B. Nothing throws.",
+ "verdict": "PASS - every step worked and nothing threw. Two things the owner may want to look at, not failures: (1) after a plugin reload the Quick Access panel reopens on the tab it was left on (Ollama), not Main; (2) RB with the ring on the chat row switches chats instead of tabs, which I did not expect.",
+ "side_effect": "Stray presses: after the Developer tab I pressed RB five times in a row; the first two stepped About then Main, the next three landed on the chat row and switched the open chat three times (to the 4th chat). No question was asked in any other chat (the next question was only sent after I read the current chat and moved back to the test chat). Both questions of this check, and the earlier two blocks of game questions, were asked in the test chat only. The two test turns are removed again when the test chat file was put back from the block 0 backup (see P81-BLOCK5-PUT-BACK)."
+}

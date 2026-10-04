@@ -1,0 +1,53 @@
+{
+ "row": "QA-FREE-PLAY-01 (no game, second try, after the slot-line fix)",
+ "build_commit": "88fd0c8f (checkout tip, deployed 22:43 Deck time)",
+ "deck_time_local": "2026-10-03 22:43-23:00 EDT",
+ "screen": "Deck's own screen: Quick Access page window 854x454. Pane top 88, dock top 290.",
+ "setup": "Test chat 6f3cc055 (title read first). Strategy mode. First question 'How do I beat Hornet in Greenpath in Hollow Knight?' answered with NO choice buttons (chips visible, 1 notes block), so it did not make the state. Second try, different wording asking for two choices: 'Without any headings or lists, explain briefly how to beat the False Knight in Hollow Knight, then end with two short follow-up choices.' The answer had a reasoning fold, one tall section (321 px, taller than the 202 px between pane top 88 and dock top 290), choice A, choice B, Helpful row, answer Show details, a notes block 'False Knight - From the Hollow Knight wiki'. Both questions sent with the send script (VERIFIED, whole text read back), ring walked to Ask, read as 'ask', then A. The Down walk began from the bonsAI header with the answer scrolled to the top (scrollTop 0): the answer's own Show details sat at 886 (out of sight), the chip row was hidden (opacity 0, visibility hidden) and the dock line 'Show details' (291-321) was visible - the state the runbook describes.",
+ "pressed": "Page-side ring logger (100 ms poll, a state logged once it held 350 ms: ring element, box, opacity of the element times its ancestors, any ancestor visibility hidden, pane scrollTop, dock top, chip row and dock line computed style, answer Show details top). One press at a time: Down x16 from the bonsAI header to Ask, then Up x16 back to the header. Then deck_saveCheck plan81-free-play-nogame-try2 (deck_sweep Down, no return trip; checks/plan81-free-play-nogame-try2.json).",
+ "seen": {
+  "down_stops (name: box top-bottom, scrollTop)": [
+   "Main tab 64-84",
+   "chat row 88-136",
+   "86 earlier 146-168 (pill drawn at opacity 0.55, visible)",
+   "question row 189-232 (89 percent, behind Retry: known false alarm)",
+   "Show reasoning 249-263",
+   "tall section, three positions: 89-410 (scroll 191), 9-330 (271), -31-290 (311); 2nd and 3rd are scroll-only presses",
+   "choice A 236-284 (445)",
+   "choice B 236-284 (501)",
+   "Mark reply helpful 256-284 (587)",
+   "answer Show details 269-284 (617)",
+   "notes block 237-284 (680)",
+   "chip 291-321, opacity 1, visible (680)",
+   "question box 324-368 (680)",
+   "ask 400-436 (682)"
+  ],
+  "up_stops": [
+   "question box 323-367",
+   "chip 291-321",
+   "notes block 235-282",
+   "answer Show details 204-219",
+   "Mark reply helpful 204-232",
+   "choice B 204-252",
+   "choice A 204-252",
+   "tall section three positions -31-290, 49-370, 89-410 (two scroll-only)",
+   "Show reasoning 204-219",
+   "question row 189-232",
+   "86 earlier 146-168",
+   "chat row 88-136",
+   "Main tab 64-84",
+   "bonsAI header 20-48"
+  ],
+  "hidden_landings": "0. 32 logged landings in both directions, none with opacity under 0.5 and none under an ancestor with visibility hidden.",
+  "counts": "Down 16 stops; Up 16 stops; no stop twice; no dead press except scroll-only presses in the tall section (2 Down, 2 Up). The saved sweep: 15 controls, 22 presses, 0 cycles.",
+  "saved_check_visibility": "2 partial: question row 89 percent (Retry icon, known false alarm) and tall section 67 percent (321 px section in a 202 px room, scroll-only).",
+  "slot_line": "The dock's 'Show details' line was drawn from the header down to the answer's own Show details (scrollTop 0 to 617) and again on the Up walk from choice B to the header, but the ring never landed on it. Down from the answer's Show details went to the notes block, whose scroll (680) put the answer's own Show details at 206 and swapped the slot to chips, so the next stop was a visible chip. Up reversed it exactly: box, chip, notes block, Show details. The dock line was not a landing in either direction on this answer."
+ },
+ "expected": "No landing on a hidden element; the slot's Show details line a stop both ways; Up is Down reversed; no stop twice; no dead press.",
+ "verdict_halves": [
+  "PASS - no landing on a hidden element in either direction; the old bug (Down onto an invisible first chip) did not occur",
+  "PASS - Up is Down reversed, no stop twice, no dead press except scroll-only presses in the tall section",
+  "UNCLEAR - 'the slot's Show details line is a stop both ways' could not be tested: this answer has a notes block, so the next stop after the answer's Show details is the notes block, which scrolls and swaps the slot to chips first. An answer with no notes block would test it; I did not ask a third question (two-tries rule)."
+ ],
+ "verdict": "UNCLEAR - the hidden-chip bug is gone and Up is Down reversed, but the slot-line-as-a-stop half could not be produced with an answer that has a notes block. Owner decides."
+}

@@ -1,0 +1,40 @@
+{
+ "row": "QA-FREE-PLAY-01 (no game)",
+ "build_commit": "7e963807",
+ "deck_time_local": "2026-10-03 21:21-21:26 EDT",
+ "screen": "Deck's own screen, page window 854x454. Pane top 88, dock top 290.2 (bonsai-main-tab-dock).",
+ "setup": "Test chat 6f3cc055 open (title 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). Strategy mode. No game. The history groups 'Today' and 'Thu 1 Oct' were left open by block 4a (a first Up walk through 81 stops, 71 of them history rows, was taken from the open list and is not scored); I closed 'Today' with A (focus read as 'Today' first), so the walk below starts from the default folded list. The newest answer was the old 'Walk me through the whole story of Hollow Knight...' answer: 1 spoiler cover, tall section 1, last section, 2 choices (A, B), Helpful, Show details.",
+ "pressed": "deck_sweep Up from the list to the bonsAI header (11 presses, all 6 stops visible). Then the saved Down leg (deck_saveCheck plan81-free-play-nogame, checks/plan81-free-play-nogame.json): Down from the bonsAI header to Ask (25 presses, stall limit 6) and Up back to the header (25 presses). Then by hand: Down x13 from the header (one press at a time with read-back), 4 more Down onto the dock, Up from the box, then Up/Left/Right on Helpful, Not really, choice B, the question row.",
+ "seen": {
+  "down_leg_stops (name: top-bottom, scrollTop, visible %)": [
+   "bonsAI header back arrow: 20-48, -, 100",
+   "Main tab: 64-84, -, 100",
+   "chat row (unnamed): 88-136, 0, 100",
+   "99 earlier: 146-168, 0, 100",
+   "Thu 1 Oct day row: 184-206, 0, 100",
+   "Today day row: 222-244, 0, 100",
+   "question row 'just ... Soul Master'/Walk me through: 256-285, 9, 78 (behind Retry; known false alarm)",
+   "Show reasoning: 270-285, 41, 100",
+   "tall section 1: 88-424, 253, 67 (section taller than the room, 336 px; scroll-only presses at 253 -> 389 -> 481 land before the next stop)",
+   "spoiler cover: 204-259, 481, 100",
+   "last section: 186-291, 563, 89 (behind Copy icon; known false alarm)",
+   "choice A: 252-284, 665, 100",
+   "choice B: 236-284, 721, 100",
+   "Mark reply helpful: 256-284, 806, 100",
+   "Show details (answer): 273-288, 833, 100",
+   "hidden chip (first chip, 'How do I start a new named chat?' in the sweep, 'Recommended TDP for this game?' by hand): 291-321, 833, 0 percent, visibility hidden, opacity 0 on its parent, outline none",
+   "question box 'Describe the level...': 323-367, 833, 100",
+   "ask: 400-436, 833, 100"
+  ],
+  "up_leg_stops": [
+   "question box 323-367", "dock line 'Show details' 291-321 (visible, the dock's own line, ring drawn on it, see png)", "Show details (answer) 273-288", "Helpful 229-257", "choice B 204-252", "choice A 204-236", "last section 186-291 (89%)", "spoiler cover 204-259", "tall section 88..290 (67%)", "Show reasoning 204-219", "question row 204-233 (78%)", "Today 204-226", "Thu 1 Oct 184-206", "99 earlier 146-168", "chat row 88-136", "Main tab 64-84", "bonsAI header 20-48"
+  ],
+  "counts": "Down 17 stops in 25 presses, Up 17 stops in 25 presses, 0 cycles, 0 dead presses except scroll-only presses in the tall section (2 going Down, 2 going Up) and none anywhere else.",
+  "not_reversed": "Down visits a hidden chip between 'Show details' (answer) and the box. Up does not visit it; Up instead visits the dock's own visible 'Show details' line (291-321), which Down never lands on. Same in the sweep and by hand (hand run: Down from answer Show details -> hidden chip 'Recommended TDP for this game?' (Steam focus, visibility hidden, outline none; the ring drawn on screen stayed on the answer's 'Show details', see png), Down -> box, Up -> dock 'Show details' line with the ring drawn on it). The chip row is in its 'away' state (details-slot__chips--away, opacity 0, visibility hidden) because the newest answer has choice buttons.",
+  "left_right": "Helpful: Right -> Not really, Left -> Helpful. Choice B: Left went to the Quick Access tab column (#quickaccess_tab_999, the left edge, expected), Right came back to B. Question row (Show reasoning): Left -> tab column, Right -> back. No dead press. Chips could not be tried left/right because the chip row is hidden while the newest answer has choices (see P79-LONG-CHIPS)."
+ },
+ "expected": "Every stop the ring lands on is visible (words between pane top and dock), no stop twice in one direction, Up is Down reversed, no dead press except scroll-only presses in a long section.",
+ "verdict": "FAIL - two things. (1) Down lands on a hidden control: the first chip in the chip row, which is invisible (0 percent, visibility hidden) while the newest answer has choices; the ring on screen stays on 'Show details' for that press, so it looks like a dead press. (2) Up is not Down reversed: Up stops on the dock's own 'Show details' line, which Down skips. Everything else passed: every other stop visible apart from the three known cases (question row behind Retry 78 percent, last section behind Copy 89 percent, the tall section judged by its entering edge), no stop twice, no cycle, no other dead press.",
+ "screenshots": ["plan81-QA-FREE-PLAY-01-NOGAME-hiddenchip.png (ring drawn on the answer's Show details while Steam focus is on the hidden chip)", "plan81-QA-FREE-PLAY-01-NOGAME-upfrombox.png (Up from the box: ring on the dock's Show details line)"],
+ "side_effect": "I pressed A on the 'Today' day row to fold the history list that block 4a had left open (it was open, not default). It changes only the list's open/closed view. Two Down presses were sent back to back once (Down, Down) while walking, harmless. Saved walk written by the rig to checks/plan81-free-play-nogame.json in the checkout and rig runs file runs/p81-b4b-lr.json; screenshots by the rig in the checkout's screenshots folder."
+}

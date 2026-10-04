@@ -1,0 +1,17 @@
+{
+ "row": "P81-KB-NOTES-FIRST (guard question: just got hollow knight, where do I even start)",
+ "build_commit": "7e963807",
+ "deck_time_local": "2026-10-03 21:26-21:27 EDT",
+ "screen": "Deck's own screen, page window 854x454",
+ "setup": "Test chat 6f3cc055 (title read before the question: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). Strategy mode, no game (Context: no active game detected).",
+ "pressed": "Send script (VERIFIED, whole text read back: 'just got hollow knight, where do I even start'), walked Down to Ask (focus read as 'ask'), A on Ask. After the answer: Up to the answer's 'Show details' (focus read), A, read, B.",
+ "seen": {
+  "plugin_log_kb_line": "kb: question chose domain=strategy route=text:hollow knight method=hybrid attached=3 [Hollow Knight - Starting out in Hollow Knight; Hollow Knight - False Knight; Hollow Knight - Watcher Knights] dropped_for_room=0",
+  "notes_in_order": ["1. Hollow Knight - Starting out in Hollow Knight", "2. Hollow Knight - False Knight", "3. Hollow Knight - Watcher Knights"],
+  "show_details_panel": "Notes block under the answer reads 'Starting out in Hollow Knight - From the Hollow Knight wiki' first; the details box shows 'Hollow Knight - Starting out in Hollow Knight' as its note title.",
+  "answer": "Finished in 47.2 s; starts 'Alright, listen up, you just got the game, eh?...'; 0 spoiler covers; no 'No close match' line."
+ },
+ "expected": "The first note attached is Hollow Knight's general 'starting out' note.",
+ "verdict": "PASS - the first of three attached notes is 'Starting out in Hollow Knight' (log line and the notes block agree).",
+ "side_effect": "The test chat gained one turn (this question and answer). The newest answer in the chat is now this one, not the old spoiler-cover answer."
+}

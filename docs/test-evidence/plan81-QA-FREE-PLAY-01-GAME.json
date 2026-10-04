@@ -1,0 +1,22 @@
+{
+ "row": "QA-FREE-PLAY-01 (with Deep Rock Galactic: Survivor)",
+ "build_commit": "7e963807",
+ "deck_time_local": "2026-10-03 21:28-21:34 EDT",
+ "screen": "Deck's own screen, but the page window read 854x534 with the game up (it reads 854x454 with no game). With the game: pane top 128, dock top 330.2.",
+ "setup": "Memory routine: Deck AI unloaded (gemma4 and the small nomic-embed model; nomic was unloaded too because available memory read 7736 MB, under the 8000 rule, and 8320 MB after unloading it). Game launched with deck_launchGame (first call stopped at find-tile with the ring on nothing after Home, the second call launched it in 4 presses; appid in RunningApps after 79 ms), window in front 90 s, QAM reopened with deck_openPlugin, Context line read: 'Context: active game Deep Rock Galactic: Survivor'. Test chat 6f3cc055, Strategy mode. One Strategy question asked (sent by the send script, VERIFIED, focus read as 'ask', A): 'What is a good first loadout for a new Deep Rock Galactic: Survivor run, in two short paragraphs?' (no apostrophe). The answer finished in 76.6 s: two paragraphs, an underlined word 'kiting' twice, two choices (A. Starting the very first mission, B. Trying to get better at mining and upgrading...), Helpful, Show details, notes block (Nitra (+1 more)), no spoiler cover.",
+ "pressed": "deck_saveCheck plan81-free-play-game (checks/plan81-free-play-game.json): Up from the question box to the bonsAI header (21 presses, 15 stops), then Down back to Ask (23 presses, 16 stops). Direction presses only.",
+ "seen": {
+  "down_leg_stops (name: top-bottom, scrollTop, visible %)": [
+   "Main tab 104-124", "chat row 128-176", "99 earlier 186-208", "question row 229-272, 89% (behind Retry, known false alarm)", "Show reasoning 289-304", "tall paragraph section 129-417 (288 px tall, room is 202 px), 67% by its entering edge, scroll-only presses 191 -> 106", "underlined word 'kiting' 244-259 (reads 244-259 on the way down at scroll 106)", "underlined word 'kiting' 309-324", "choice A 292-324", "choice B 276-324", "Mark reply helpful 296-324", "Show details 309-324", "notes block (Nitra (+1 more)) 277-324", "chip 'Why is my game crashing?' 331-361 (inside the dock, 100% visible)", "question box 364-408", "ask 440-476"
+  ],
+  "up_leg_stops": [
+   "chip 331-361", "notes block 259-306", "Show details 244-259", "Helpful 244-272", "choice B 244-292", "choice A 244-276", "kiting 259-274", "kiting 244-259", "tall section 129-417 (67%)", "Show reasoning 244-259", "question row 229-272 (89%)", "99 earlier 186-208", "chat row 128-176", "Main tab 104-124", "bonsAI header 60-88"
+  ],
+  "counts": "Down 16 stops, Up 15 stops (the Up leg began on the question box, which the ring held after the answer), 0 cycles, 0 dead presses except scroll-only presses inside the tall section, no stop twice in either leg (16 and 15 distinct controls), Up is Down reversed by name and order.",
+  "visibility": "Everything 100% visible except: the question row at 89% (behind Retry icon, known false alarm) and the tall section at 67% (taller than the room, judged by its entering edge). No stop under the dock, none under the header.",
+  "memory": "Available memory: 8326 MB before the question (model not loaded, rule 8000). Lowest during/after the answer: 1623 MB at 21:33:17 (logger every 5 s, file b4b-q1-mem.txt in the scratch folder); above the 1500 stop line but only by 123 MB. Gemma was loaded again by the question (about 1800 MB available while it stayed loaded), so no second question was asked."
+ },
+ "expected": "Same walk as the no-game step on the newest answer: every stop visible (words between pane top and dock), no stop twice in one direction, Up is Down reversed, no dead press except scroll-only presses inside a long section.",
+ "verdict": "PASS - every stop visible apart from the two known cases, no stop twice, Up is Down reversed, no dead press. Note for the owner: the hidden-chip stop and the missing dock line seen in the no-game run did not occur here (the chip row was visible and one chip was a stop both ways).",
+ "side_effect": "The test chat gained one turn (the Deep Rock Galactic loadout question and its answer). Both Ollama models were unloaded by hand with keep_alive 0 (the small nomic embed model as well as gemma); gemma loaded again with the question and nomic reloads when needed."
+}

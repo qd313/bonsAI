@@ -1,0 +1,21 @@
+{
+ "row": "P81-B4B-GAME-MEMORY (memory routine for the block 4b game steps 2 to 5)",
+ "build_commit": "7e963807",
+ "deck_time_local": "2026-10-03 21:28-21:36 EDT",
+ "screen": "Deck's own screen; page window 854x454 with no game, 854x534 with the game",
+ "setup": "Step 2: gemma4:e2b-it-qat unloaded (curl keep_alive 0, 5 s wait): /api/ps listed only nomic-embed-text, available 11084 MB. Launched Deep Rock Galactic: Survivor with deck_launchGame (first call stopped at find-tile, ring on nothing after Home; second call launched it, 4 presses, appid in RunningApps after 79 ms). Samples every 5 s: available 10600 MB at +5 s, 8012 MB at 21:29:25, about 7770 MB from 21:29:30 on (game up, title screen 'press any key', window in front for over 90 s at the screenshot 21:30:20). Plugin reopened (deck_openPlugin, it was already open). Context line: 'Context: active game Deep Rock Galactic: Survivor'.",
+ "pressed": "Before the question: available read 7736 MB with no model loaded except the small embed model, under the 8000 rule. I unloaded the embed model (curl /api/embed keep_alive 0; /api/ps empty), 8320 MB available, then asked one question (read 8326 MB just before A). 5 s samples from before A to 3 min after the answer (b4b-q1-mem.txt in the scratch folder). Exit with deck_exitGame.",
+ "seen": {
+  "question": "'What is a good first loadout for a new Deep Rock Galactic: Survivor run, in two short paragraphs?' answered in 76.6 s",
+  "lowest_available": "1623 MB at 21:33:17 (about 1800 MB while gemma stayed loaded); stop line 1500 MB was not reached; the margin was 123 MB",
+  "after_exit": "21:36 game process gone (0 matching processes, appid left RunningApps after 150 ms); available 4261 MB 8 s after, gemma still loaded"
+ },
+ "expected": "Unload the AI before the game; ask only with 8000+ MB available when no model is loaded (3000+ if loaded); sample every 5 s during and 3 minutes after the answer; stop under 1500 MB; process gone after exit.",
+ "verdict": [
+  "PASS (routine followed, one deviation): the question was asked at 8326 MB available with no model loaded. The deviation: 7736 MB was under 8000, so I also unloaded the small embed model to get over the line; the runbook only names the Deck's AI.",
+  "PASS (no stop): lowest 1623 MB, above 1500 MB.",
+  "PASS (game gone): process gone after the exit.",
+  "NOTE for the owner: with this much of Steam in memory, one question with the game up takes the Deck to about 1.6 GB available. Block 3b saw a lowest of 2372 MB. One more question in the same state would not have been safe, so only one was asked."
+ ],
+ "side_effect": "Unloaded gemma and the nomic embed model by hand (keep_alive 0). gemma is loaded again (last question). The Deck's free memory is back above 4 GB."
+}

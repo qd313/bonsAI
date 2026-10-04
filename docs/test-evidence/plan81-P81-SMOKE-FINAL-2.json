@@ -1,0 +1,17 @@
+{
+ "row": "P81-SMOKE-FINAL-2",
+ "build_commit": "88fd0c8f (checkout tip, deployed 22:43 Deck time)",
+ "deck_time_local": "2026-10-03 22:43-23:00 EDT",
+ "screen": "Deck's own screen: Quick Access page window 854x454. Pane top 88, dock top 290.",
+ "setup": "No game. Test chat 6f3cc055. Strategy mode.",
+ "pressed": "RB through the tabs reading the heading after each; Strategy question (in QA-FREE-PLAY-01, send script VERIFIED, ring read 'ask', A); walk Up to 'Show details' (focus read exactly 'Show details'), A, read, B; RB to the Ollama tab, walk Down to 'AI models' (focus read exactly 'AI models'), A, read, B.",
+ "seen": {
+  "tabs": "Main, Ollama (WHERE AI RUNS), Settings (UI SCALE), Permissions, Developer (KNOWLEDGE BASE DEV QA), About (ABOUT BONSAI), then wrapped back to Main. Each showed its own heading.",
+  "strategy_question": "False Knight question answered in about 40 s with 2 choices, a notes block and a Show reasoning line (20 s). The Hornet question answered too (21 s reasoning).",
+  "show_details": "A: ring read 'Hide details'; B: 'Hide details' gone, ring back on 'Show details'.",
+  "ai_models_box": "A opened the full-screen box (ring on 'Advanced', box at 656,128); B closed it; ring back on 'AI models' in the Ollama tab. No model row pressed, nothing saved.",
+  "errors": "plugin log filter ERROR: no lines; nothing threw."
+ },
+ "expected": "Each tab opens; one Strategy question answers; Show details opens and closes with B; AI models box opens and closes with B.",
+ "verdict": "PASS - all four parts worked, nothing threw."
+}

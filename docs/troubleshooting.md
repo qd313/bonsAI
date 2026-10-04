@@ -723,7 +723,7 @@ While an Ask is pending, the Main tab can show **progressive markdown** in one l
 **Behavior (v1):**
 
 - **Strategy spoilers:** Incomplete `bonsai-spoiler` fences show a **masked placeholder** only — spoiler body never appears until the fence closes.
-- **Code fences:** Open ``` `` ``` blocks show a **pulse + spinner** (2s period) until the closing fence arrives; body then reveals faster than normal prose (~3× smooth reveal).
+- **Code fences:** Open `` ``` `` blocks show a **pulse + spinner** (2s period) until the closing fence arrives; body then reveals faster than normal prose (~3× smooth reveal).
 - **Stop:** Partial text is **kept** on screen (including wait chip if a fence was still open).
 - **Done:** Reply snaps to full text in the stream bubble, then switches to the normal chunked terminal layout (handoff policy may change in a future release).
 

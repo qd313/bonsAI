@@ -222,6 +222,5 @@
     "start_2026_09_09": 6,
     "direction": "lower_is_better",
     "measured_by": "grep over docs/ (excluding docs/archive/ and anything named changelog) for .cursorrules, cursor/*, or Cursor as a proper noun"
-  },
-  "live_docs_mentioning_cursor_placeholder_removed": null
+  }
 }

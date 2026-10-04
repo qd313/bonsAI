@@ -2,6 +2,33 @@
 
 > The long notes for the entries in [roadmap-kb.md](roadmap-kb.md). They moved here from [roadmap-details.md](roadmap-details.md) on 2026-10-03 (plan 80). A note stays here while an entry links to it or the work is open. Closed notes go, word for word, to [the trimmed archive](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md). Long notes for other parts of the roadmap stay in [roadmap-details.md](roadmap-details.md).
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [Ordinary phrases attach game cards](#ordinary-phrases-attach-game-cards)
+- [The shipping retrieval arm loses to the vector half alone on rows nobody tuned against](#the-shipping-retrieval-arm-loses-to-the-vector-half-alone-on-rows-nobody-tuned-against)
+- [A troubleshooting question that only describes the symptom reaches no tips](#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips)
+- [Unrelated questions still get game cards stapled on (2026-09-02 wording)](#unrelated-questions-still-get-game-cards-stapled-on-2026-09-02-wording)
+- [User-adjustable spoiler fencing (absorbed into the tiered setting)](#user-adjustable-spoiler-fencing-absorbed-into-the-tiered-setting)
+- [Spoiler coverage should be a setting with tiers](#spoiler-coverage-should-be-a-setting-with-tiers)
+- [Eval fixture cannot see a recall failure](#eval-fixture-cannot-see-a-recall-failure)
+- [KB visual maps](#kb-visual-maps)
+- [KB online / versus strategy content, and RAG Phase 5](#kb-online--versus-strategy-content-and-rag-phase-5)
+- [RAG Phase 4: extended retrieval](#rag-phase-4-extended-retrieval)
+- [RAG Phase 7, Community tip contribution, RAG Phase 8](#rag-phase-7-community-tip-contribution-rag-phase-8)
+- [A troubleshooting question mostly never reaches the tips](#a-troubleshooting-question-mostly-never-reaches-the-tips)
+- [Wrong-subject notes](#wrong-subject-notes)
+- [Hidden spoiler box stays shut on games with no Steam ID and on name-first questions](#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions)
+- [RAG Phase 8: catalog corpus](#rag-phase-8-catalog-corpus)
+- [Measure how well the AI reads a screenshot](#measure-how-well-the-ai-reads-a-screenshot)
+- [Blind questions done](#blind-questions-done)
+- [Speed mode tip gap](#speed-mode-tip-gap)
+- [Three new games and their notes](#three-new-games-and-their-notes)
+- [Black Mesa's electrified-water question](#black-mesas-electrified-water-question)
+- [KB transparency matches what the model got](#kb-transparency-matches-what-the-model-got)
+- [Flow L7 findings](#flow-l7-findings)
+<!-- /toc -->
+
 ## Ordinary phrases attach game cards
 
   - **Implemented 2026-08-23:** `VECTOR_RECALL_FLOOR` raised `py_modules/backend/services/knowledge_base_service.py:148` from 0.50 to 0.515, against a fresh local repro (real `nomic-embed-text` via a local Ollama, real seed cards for the six phrases and the seven `V2-PARA-*` strategy rows in `kb_eval_v2.json` — script not committed). The two ranges overlap (noise up to 0.5308, a genuine paraphrase hit as low as 0.4302), so no single floor separates them cleanly; 0.515 was chosen to sit just above "one sentence"'s noise score (0.5034) and just below the lowest genuine score this change must not break (Mind Flayer / `V2-PARA-S04`, 0.5169).

@@ -151,6 +151,7 @@ import {
   earlierPillNav,
   firstArchivedHeaderMoveUp,
   troubleshootHintRowNavHandlers,
+  vacDenyRowMoveDown,
   vacDenyRowMoveUp,
   dismissHintKeepingRing,
 } from "../utils/chatTranscriptNavHelpers";
@@ -191,7 +192,6 @@ import {
   focusDeckOwner,
   focusReplyShowDetails,
   focusReplyUtilityRow,
-  focusSessionContextStrip,
   queryLiveTurnSlot,
   registerStrategyBranchPickerNav,
   ringIsOnFirstStrategyBranch,
@@ -1712,7 +1712,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
       {...({
         navRef: vacDenyRowNavRef,
         onMoveUp: vacDenyRowMoveUp,
-        onMoveDown: () => focusSessionContextStrip(),
+        onMoveDown: vacDenyRowMoveDown,
       } as Record<string, unknown>)}
     >
       <div className="bonsai-full-bleed-row" style={fullBleedRowStyle}>

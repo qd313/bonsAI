@@ -11,7 +11,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { renderHook } from "@testing-library/react";
 
-import { troubleshootHintRowNavHandlers, vacDenyRowMoveUp } from "./chatTranscriptNavHelpers";
+import { troubleshootHintRowNavHandlers, vacDenyRowMoveDown, vacDenyRowMoveUp } from "./chatTranscriptNavHelpers";
 import { registerNavFocus, resetNavFocusRegistry } from "./navFocusRegistry";
 import { usePresetRowNav } from "../features/preset-carousel/presetRowFocusNav";
 import { resetDetailsSlotStore, setSlotShowsLine } from "../features/details-slot/detailsSlotStore";
@@ -93,6 +93,26 @@ describe("the troubleshooting hint row's Left and Right", () => {
   it("Down with nothing registered below leaves the move to Steam", () => {
     const handlers = troubleshootHintRowNavHandlers(mountHintButtons().els);
     expect((handlers.onMoveDown as () => boolean)()).toBe(false);
+  });
+});
+
+describe("Down from the ban-lookup row", () => {
+  it("takes the slot above the question box (the line while it holds the line, else the chips)", () => {
+    const line = fakeNavHolder();
+    const chips = fakeNavHolder();
+    registerNavFocus("details-slot-line", line);
+    registerNavFocus("preset-carousel", chips);
+    setSlotShowsLine(true);
+    expect(vacDenyRowMoveDown()).toBe(true);
+    expect(line.current.TakeFocus).toHaveBeenCalledWith(true);
+    expect(chips.current.TakeFocus).not.toHaveBeenCalled();
+    setSlotShowsLine(false);
+    expect(vacDenyRowMoveDown()).toBe(true);
+    expect(chips.current.TakeFocus).toHaveBeenCalledWith(true);
+  });
+
+  it("with nothing registered below leaves the move to Steam", () => {
+    expect(vacDenyRowMoveDown()).toBe(false);
   });
 });
 

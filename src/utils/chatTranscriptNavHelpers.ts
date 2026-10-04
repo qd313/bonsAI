@@ -258,6 +258,15 @@ export function troubleshootHintRowNavHandlers(buttons: {
 }
 
 /**
+ * Down from the ban-lookup row: the last row under a blocked reply, so what follows is the slot above
+ * the question box (the chips, or the Show details line standing in for them). Left to Steam the press
+ * chose the hidden chip while the line held the slot (plan81-QA-FREE-PLAY-01-NOGAME.json).
+ */
+export function vacDenyRowMoveDown(): boolean {
+  return focusSessionContextStrip() || takeChipSlotFocus();
+}
+
+/**
  * Up from the ban-lookup row: the troubleshooting hint sits right above it when both show, and
  * walking Up used to skip it (plan70-PERMS-CLEAN-05-06.json).
  */

@@ -45,7 +45,8 @@ export function buildDetailsSlotSection(): string {
           pointer-events: auto;
           transition: opacity ${fade}ms ease-out;
         }
-        /* The face going away: fades out, then hidden, which also takes it out of Steam's reach. */
+        /* The face going away: fades out, then hidden from a person. Not from Steam, which reads no CSS:
+           every Down into the slot is claimed in code (DetailsSlot.tsx). */
         .bonsai-scope .bonsai-details-slot__chips--away,
         .bonsai-scope .bonsai-details-slot__line:not(.bonsai-details-slot__line--shown) {
           opacity: 0;

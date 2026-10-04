@@ -15,7 +15,8 @@ How it works:
    timeout, an empty store) proves nothing and changes nothing.
 2. Models being downloaded right now keep their place.
 3. Work out which saved names are missing from the Deck; only then ask the saved PCs (and the PC
-   address the screen sends along), and keep any name one of them still has (the saved order is one list for whichever computer answers).
+   address the screen sends along). Keep any name one of them still has, and drop nothing at all
+   while any of them gave no answer (the saved order is one list for whichever computer answers).
 4. Save just the two order keys and log what was dropped. Never raises.
 """
 
@@ -25,7 +26,7 @@ from typing import Any, Callable
 
 from backend.ollama_routing import prune_routing_orders_to_installed
 from backend.services.local_ollama_setup_service import DEFAULT_BASE
-from backend.services.ollama_pc_models import tags_on_saved_pcs
+from backend.services.ollama_pc_models import ask_known_pcs
 
 logger = logging.getLogger("bonsai")
 
@@ -60,9 +61,16 @@ async def prune_saved_orders_to_installed(
         order_patch, pruned = prune_routing_orders_to_installed(current, installed, downloading)
         if order_patch:
             # Only now ask the saved PCs: a name one of them still has is not this Deck's to drop.
-            order_patch, pruned = prune_routing_orders_to_installed(
-                current, [*installed, *await tags_on_saved_pcs(current, [str(pc_ip or "")])], downloading
-            )
+            pc_names, pc_silent = await ask_known_pcs(current, [str(pc_ip or "")])
+            if pc_silent:
+                # A known PC gave no answer: it might hold a name the Deck lacks, so drop nothing.
+                await plugin._maybe_app_log(
+                    "local_setup.routing_prune_skipped",
+                    "saved try order left alone: a known PC did not answer",
+                    fields={"would_prune": ",".join(pruned), "pc_unreachable": True},
+                )
+                return
+            order_patch, pruned = prune_routing_orders_to_installed(current, [*installed, *pc_names], downloading)
         if not order_patch:
             return
         await plugin.save_settings(order_patch)

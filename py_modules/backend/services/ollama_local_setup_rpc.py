@@ -21,7 +21,7 @@ How it works:
 2. A pull runs in one background task with one lock; progress is read back through
    get_local_ollama_setup_status, and a finished pull merges its tags into the saved try orders.
 3. Removing a model runs `ollama rm`, then takes the name out of both saved try orders unless a
-   saved PC still has the same model (`ollama_pc_models.tags_on_saved_pcs`).
+   saved PC still has the same model (`ollama_pc_models.ask_known_pcs`); a known PC that does not answer keeps it.
 4. Reading the Deck's installed models (fetch_ollama_catalog_metadata) also drops saved try-order
    names that neither the Deck nor a saved PC holds any more. Both this and the removal are also
    handed the PC address the screen holds (`pc_ip`), because the box runs one right after the other.
@@ -65,7 +65,7 @@ from backend.ollama_routing import (
 from backend.services.pull_model_catalog_service import (
     fetch_pull_model_catalog as fetch_pull_model_catalog_service,
 )
-from backend.services.ollama_pc_models import tags_on_saved_pcs
+from backend.services.ollama_pc_models import ask_known_pcs
 from backend.services.ollama_try_order_prune import prune_saved_orders_to_installed
 from backend.services import ollama_pull_resume_service as pull_resume
 from backend.services.ollama_embed_service import forget_embed_availability_after_pull
@@ -429,7 +429,9 @@ async def delete_ollama_model(self, tag: str = "", pc_ip: str = ""):
     current = await self.load_settings()
     cleaned = remove_tag_from_routing_orders(current, t)
     if cleaned != current:  # the name is in an order: ask the saved PCs before it goes
-        cleaned = remove_tag_from_routing_orders(current, t, await tags_on_saved_pcs(current, [str(pc_ip or "")]))
+        pc_names, pc_silent = await ask_known_pcs(current, [str(pc_ip or "")])
+        # A known PC that did not answer might hold the name: nothing proves otherwise, so it stays.
+        cleaned = current if pc_silent else remove_tag_from_routing_orders(current, t, pc_names)
         kept = cleaned == current
         await self._maybe_app_log(
             "local_setup.routing_remove",
@@ -438,6 +440,7 @@ async def delete_ollama_model(self, tag: str = "", pc_ip: str = ""):
                 "kept_for_pc": t if kept else "",
                 "dropped": "" if kept else t,
                 "pc_address_sent": bool(str(pc_ip or "").strip()),
+                "pc_unreachable": pc_silent,
             },
         )
     order_patch = {

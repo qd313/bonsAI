@@ -20,10 +20,10 @@ hand the address in, or the later call undoes what the earlier one kept.
 How it works:
 1. `saved_pc_hosts()` takes the saved hosts and leaves out any that point at this Deck itself
    or use https (the plugin speaks plain http only).
-2. `tags_on_saved_pcs()` asks each one for `/api/tags` at the same time, each with a short
-   time limit, and returns every model name any of them answered with. A PC that does not
-   answer adds nothing: an unreachable PC proves nothing about what it has, so its names are
-   not protected.
+2. `ask_known_pcs()` asks each one for `/api/tags` at the same time, each with a short
+   time limit, and returns every model name any of them answered with, plus whether any of
+   them gave no answer. An unreachable PC proves nothing about what it has, so the Deck-side
+   clean-ups (the removal and the models-list look) drop nothing while any known PC is silent.
 
 3. `prune_after_connection_test()` is what main.py's test_ollama_connection calls with each answer;
    `prune_orders_after_pc_listing()` is the clean-up for a model taken off a PC (the plugin cannot
@@ -87,13 +87,24 @@ async def _tags_of(base: str) -> list[str]:
         return []
 
 
-async def tags_on_saved_pcs(settings: dict[str, Any], extra: Iterable[str] = ()) -> set[str]:
-    """Every model name any saved PC answered with (empty when none answered)."""
+async def ask_known_pcs(settings: dict[str, Any], extra: Iterable[str] = ()) -> tuple[set[str], bool]:
+    """Every model name the known PCs answered with, and whether any known PC gave no answer.
+
+    A PC that is off, too slow, or lists nothing reads the same here (an empty answer), and its list
+    is then unknown: the second value is True and the caller must not drop a name only that PC might
+    hold. With no known PC at all it is (empty set, False).
+    """
     bases = saved_pc_hosts(settings, extra)
     if not bases:
-        return set()
+        return set(), False
     answers = await asyncio.gather(*(_tags_of(b) for b in bases))
-    return {t.strip() for tags in answers for t in tags if t and t.strip()}
+    names = {t.strip() for tags in answers for t in tags if t and t.strip()}
+    return names, any(not tags for tags in answers)
+
+
+async def tags_on_saved_pcs(settings: dict[str, Any], extra: Iterable[str] = ()) -> set[str]:
+    """Every model name any saved PC answered with (empty when none answered)."""
+    return (await ask_known_pcs(settings, extra))[0]
 
 
 

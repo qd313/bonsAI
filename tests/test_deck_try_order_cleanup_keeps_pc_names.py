@@ -125,13 +125,16 @@ class DeckCleanupKeepsPcNamesTests(PluginSettingsFileMixin, unittest.IsolatedAsy
         self.assertEqual(saved["text_model_routing_order"], ["gemma4:e2b-it-qat"])
         self.assertEqual(saved["vision_model_routing_order"], ["gemma4:e2b-it-qat"])
 
-    async def test_a_pc_that_does_not_answer_protects_nothing(self) -> None:
-        # list_installed_ollama_tags answers [] for a PC that is off: an empty answer proves nothing.
+    async def test_a_known_pc_that_does_not_answer_keeps_the_name_it_may_have(self) -> None:
+        # list_installed_ollama_tags answers [] for a PC that is off: its list is unknown, so a name
+        # that only it might hold cannot be ruled out, and the removal leaves both orders alone.
         self._write_settings(self._settings())
 
         await self._remove_on_deck("qwen2.5:1.5b")
 
-        self.assertEqual(self._read_settings()["text_model_routing_order"], ["gemma4:e2b-it-qat"])
+        saved = self._read_settings()
+        self.assertEqual(saved["text_model_routing_order"], ["qwen2.5:1.5b", "gemma4:e2b-it-qat"])
+        self.assertEqual(saved["vision_model_routing_order"], ["gemma4:e2b-it-qat", "qwen2.5:1.5b"])
 
     async def test_with_no_saved_pc_the_removal_behaves_as_before_and_asks_nobody(self) -> None:
         self._write_settings(self._settings(named_ollama_hosts=[]))
@@ -194,6 +197,25 @@ class DeckCleanupKeepsPcNamesTests(PluginSettingsFileMixin, unittest.IsolatedAsy
         self.assertEqual(saved["text_model_routing_order"], ["gemma4:e2b-it-qat"])
         self.assertEqual(saved["vision_model_routing_order"], ["gemma4:e2b-it-qat"])
 
+    async def test_a_look_while_a_known_pc_is_silent_keeps_the_name_only_it_may_have(self) -> None:
+        # The typed PC is off (or slow): nothing proves it lacks the name, so the look drops nothing.
+        self._write_settings(self._settings(named_ollama_hosts=[]))
+
+        await self._look(["gemma4:e2b-it-qat"], "192.168.1.30:11434")
+
+        saved = self._read_settings()
+        self.assertEqual(saved["text_model_routing_order"], ["qwen2.5:1.5b", "gemma4:e2b-it-qat"])
+        self.assertEqual(saved["vision_model_routing_order"], ["gemma4:e2b-it-qat", "qwen2.5:1.5b"])
+
+    async def test_a_look_while_one_of_two_known_pcs_is_silent_drops_nothing(self) -> None:
+        hosts = [{"label": "A", "host": "192.168.1.20"}]
+        self._write_settings(self._settings(named_ollama_hosts=hosts))
+        self.pc_models[PC_BASE] = ["something-else:1b"]  # answers, lacks the name; the typed one is silent
+
+        await self._look(["gemma4:e2b-it-qat"], "192.168.1.30:11434")
+
+        self.assertEqual(self._read_settings()["text_model_routing_order"], ["qwen2.5:1.5b", "gemma4:e2b-it-qat"])
+
     async def test_a_look_with_the_typed_address_keeps_a_name_the_deck_lacks(self) -> None:
         self._write_settings(self._settings(named_ollama_hosts=[]))
         self.pc_models[OTHER_PC_BASE] = ["qwen2.5:1.5b"]
@@ -210,9 +232,8 @@ class DeckCleanupKeepsPcNamesTests(PluginSettingsFileMixin, unittest.IsolatedAsy
 
         self.assertEqual(self._read_settings()["text_model_routing_order"], ["gemma4:e2b-it-qat"])
 
-    async def test_the_removal_logs_what_it_kept_and_what_it_dropped(self) -> None:
-        self._write_settings(self._settings(named_ollama_hosts=[]))
-        self.pc_models[OTHER_PC_BASE] = ["qwen2.5:1.5b"]
+    async def _removal_log(self, *tags: str) -> list[dict]:
+        """The fields of each `local_setup.routing_remove` line written while removing `tags` (typed PC sent)."""
         logged: list[dict] = []
 
         async def spy(event: str, message: str, fields: dict | None = None, **_kw: object) -> None:
@@ -220,15 +241,27 @@ class DeckCleanupKeepsPcNamesTests(PluginSettingsFileMixin, unittest.IsolatedAsy
                 logged.append(dict(fields or {}))
 
         with patch.object(self.plugin, "_maybe_app_log", side_effect=spy):
-            await self._remove_on_deck("qwen2.5:1.5b", "192.168.1.30:11434")
-            await self._remove_on_deck("gemma4:e2b-it-qat", "192.168.1.30:11434")
+            for tag in tags:
+                await self._remove_on_deck(tag, "192.168.1.30:11434")
+        return logged
+
+    async def test_the_removal_logs_what_it_kept_and_what_it_dropped(self) -> None:
+        self._write_settings(self._settings(named_ollama_hosts=[]))
+        self.pc_models[OTHER_PC_BASE] = ["qwen2.5:1.5b"]
 
         self.assertEqual(
-            logged,
+            await self._removal_log("qwen2.5:1.5b", "gemma4:e2b-it-qat"),
             [
-                {"kept_for_pc": "qwen2.5:1.5b", "dropped": "", "pc_address_sent": True},
-                {"kept_for_pc": "", "dropped": "gemma4:e2b-it-qat", "pc_address_sent": True},
+                {"kept_for_pc": "qwen2.5:1.5b", "dropped": "", "pc_address_sent": True, "pc_unreachable": False},
+                {"kept_for_pc": "", "dropped": "gemma4:e2b-it-qat", "pc_address_sent": True, "pc_unreachable": False},
             ],
+        )
+
+    async def test_the_removal_log_says_when_a_known_pc_did_not_answer(self) -> None:
+        self._write_settings(self._settings(named_ollama_hosts=[]))
+
+        self.assertEqual(
+            await self._removal_log("qwen2.5:1.5b"), [{"kept_for_pc": "qwen2.5:1.5b", "dropped": "", "pc_address_sent": True, "pc_unreachable": True}]
         )
 
     # --- The look at the models list (a model removed outside the plugin) ---

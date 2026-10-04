@@ -53,11 +53,13 @@ class SavedAnswerAfterACutInsideAHiddenBlockTests(unittest.TestCase):
         self.settings_dir = tempfile.mkdtemp(prefix="p81i-")
         self.addCleanup(shutil.rmtree, self.settings_dir, True)
 
-    def _saved_answer(self, first: str, second: str) -> tuple[str, list[str]]:
+    def _saved_answer(self, first: str, second: str, *later: str, last_done_reason: str = "stop") -> tuple[str, list[str]]:
         """Ask through the real answer call, cover it, save it, read the saved text back."""
+        pieces = [first, second, *later]
+        streams = [_stream(p, "length") for p in pieces[:-1]] + [_stream(pieces[-1], last_done_reason)]
         flushes: list[str] = []
         with patch("backend.services.ollama_service.urllib.request.urlopen") as urlopen:
-            urlopen.side_effect = [_stream(first, "length"), _stream(second, "stop")]
+            urlopen.side_effect = streams
             out = post_ollama_chat(
                 "http://127.0.0.1:11434/api/chat", "gemma4:e2b-it-qat",
                 [{"role": "user", "content": "a long chapter guide please"}],
@@ -66,7 +68,7 @@ class SavedAnswerAfterACutInsideAHiddenBlockTests(unittest.TestCase):
                 on_delta=lambda text, done, *_a, **_k: flushes.append(text),
             )
         self.assertTrue(out.get("success"))
-        self.assertEqual(out.get("soft_continue_count"), 1)
+        self.assertEqual(out.get("soft_continue_count"), len(pieces) - 1)
         response = cover_named_spoilers(out["response"], NAMES)
         slot_id = chat_slot_service.create_slot(self.settings_dir, first_question="guide")["id"]
         chat_slot_service.append_turn(self.settings_dir, slot_id, role="assistant", text=response)
@@ -141,6 +143,34 @@ class SavedAnswerAfterACutInsideAHiddenBlockTests(unittest.TestCase):
         self.assertTrue(flushes)
         for text in flushes:
             self.assertLessEqual(text.count(OPEN), 1, text)
+
+    def test_a_half_typed_mark_cut_off_at_the_very_end_of_the_answer_is_not_saved(self) -> None:
+        # The last allowed piece ends while the marker is being typed. It used to be saved as
+        # "```bons" and drawn as an empty code box (plan 81 helper N3, 2026-10-03).
+        saved, _ = self._saved_answer(
+            f"{INTRO}Keep your ammo for the later rooms.\n\n",
+            "Then watch the doors, and use the traps.\n\n",
+            f"Last tip: do not rush.\n\n{F}bons",
+            last_done_reason="length",
+        )
+        self.assertNotIn(F, saved, saved)
+        self.assertNotIn("bons", saved, saved)
+        self.assertTrue(saved.rstrip().endswith("do not rush."), saved)
+
+    def test_a_half_typed_mark_glued_to_the_last_word_is_not_saved(self) -> None:
+        saved, _ = self._saved_answer(
+            f"{INTRO}Keep your ammo for the later rooms.\n\n",
+            "Then watch the doors, and use the traps.\n\n",
+            f"Last tip: do not rush{F}bonsai-sp",
+            last_done_reason="length",
+        )
+        self.assertNotIn(F, saved, saved)
+        self.assertTrue(saved.rstrip().endswith("do not rush"), saved)
+
+    def test_a_whole_block_at_the_very_end_is_left_alone(self) -> None:
+        saved, _ = self._saved_answer(f"{INTRO}Plain.", f"\n\n{OPEN}\nHidden tip.\n{F}")
+        self.assertEqual(saved.count(OPEN), 1, saved)
+        self.assertEqual(saved.count(F), 2, saved)
 
     def test_a_new_block_after_a_closed_one_is_left_alone(self) -> None:
         saved, _ = self._saved_answer(

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 116,
-  "edgeCount": 315,
+  "edgeCount": 316,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -209,6 +209,10 @@
       "count": 3
     },
     {
+      "path": "py_modules/backend/services/soft_continue_spoiler_join.py",
+      "count": 3
+    },
+    {
       "path": "py_modules/backend/services/spoiler_title_profiles.py",
       "count": 3
     },
@@ -290,10 +294,6 @@
     },
     {
       "path": "py_modules/backend/services/shortcut_setup_commands.py",
-      "count": 2
-    },
-    {
-      "path": "py_modules/backend/services/soft_continue_spoiler_join.py",
       "count": 2
     },
     {
@@ -1338,6 +1338,7 @@
         "py_modules/backend/services/ollama_prompts.py",
         "py_modules/backend/services/ollama_stop_service.py",
         "py_modules/backend/services/ollama_window_fit.py",
+        "py_modules/backend/services/soft_continue_spoiler_join.py",
         "py_modules/backend/services/strategy_guide_parse.py",
         "py_modules/backend/services/token_accounting_service.py"
       ],
@@ -1546,7 +1547,8 @@
       ],
       "importedBy": [
         "main.py",
-        "py_modules/backend/services/ollama_chat_stream.py"
+        "py_modules/backend/services/ollama_chat_stream.py",
+        "py_modules/backend/services/ollama_service.py"
       ]
     },
     "py_modules/backend/services/spoiler_empty_label_marks.py": {

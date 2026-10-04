@@ -109,6 +109,7 @@ from urllib.parse import urlparse
 from backend.ollama_urls import normalize_ollama_base
 
 from backend.services.bonsai_stream_tags import extract_bonsai_status
+from backend.services.soft_continue_spoiler_join import end_cut_answer_cleanly
 from backend.services.ollama_chat_stream import (
     OLLAMA_CHAT_READ_CHUNK,
     OLLAMA_DELTA_PARSE_INTERVAL_S,
@@ -503,6 +504,8 @@ def post_ollama_chat(
                 text[max(0, start - 40) : start + 400],
             )
             text = hide_incomplete_strategy_checklist_fence(text)
+    # The last allowed piece can end mid-marker ("```bons"), which the screen draws as an empty code box.
+    text = end_cut_answer_cleanly(text)
     text = format_ai_response(
         text,
         normalized_attachments,

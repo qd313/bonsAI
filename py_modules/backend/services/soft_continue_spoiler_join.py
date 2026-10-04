@@ -106,6 +106,9 @@ def end_cut_answer_cleanly(text: str) -> str:
     """
     if not text or "```" not in text:
         return text
+    half = _HALF_TYPED_OPENER_TAIL_RE.search(text)
+    if half and _SPOILER_OPENER.startswith(half.group(1).lower()) and half.group(1).lower() != _SPOILER_OPENER:
+        text = text[: half.start()].rstrip()
     if not _ends_inside_hidden_block(text):
         return text
     # Read the way the covers read it: an opener glued to a word counts as on its own line.

@@ -20,6 +20,43 @@ Historical full checklist (pre–2026-07-30 split): [archive/testing-full-pre-20
 
 ---
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [Tags](#tags)
+- [Test title pool](#test-title-pool)
+- [Standing row: the free-play sweep](#standing-row-the-free-play-sweep)
+- [Focus graph (mandatory before shipping new controls)](#focus-graph-mandatory-before-shipping-new-controls)
+- [Cross-cutting smokes](#cross-cutting-smokes)
+- [Tier 0 — Quick wins (S0)](#tier-0--quick-wins-s0)
+  - [SMOKE-A — Golden path (P0)](#smoke-a--golden-path-p0)
+  - [SMOKE-C — Permission gate (P0)](#smoke-c--permission-gate-p0)
+  - [PERM-JUMP-01 — Permission jump D-pad (P0)](#perm-jump-01--permission-jump-d-pad-p0)
+  - [ONBUTTONDOWN-AUDIT-01 — onButtonDown whitelist + direction handlers (P1)](#onbuttondown-audit-01--onbuttondown-whitelist--direction-handlers-p1)
+  - [DOC-SWEEP-01 — global document realm fixes (P1)](#doc-sweep-01--global-document-realm-fixes-p1)
+  - [PRESET-STREAM-ANIM-01 — decode preset chip animation (P1)](#preset-stream-anim-01--decode-preset-chip-animation-p1)
+  - [SMOKE-F — Deterministic commands (P2)](#smoke-f--deterministic-commands-p2)
+- [Tier 1 — Core shipped (S1)](#tier-1--core-shipped-s1)
+  - [SMOKE-B — TDP apply 8W (retired)](#smoke-b--tdp-apply-8w-retired)
+  - [SMOKE-E — Strategy one-shot (P1)](#smoke-e--strategy-one-shot-p1)
+  - [SMOKE-H — Background Ask reopen (P1)](#smoke-h--background-ask-reopen-p1)
+  - [Tier 1 extras](#tier-1-extras)
+- [Tier 2 — Opt-in (run when touching related code or before RC)](#tier-2--opt-in-run-when-touching-related-code-or-before-rc)
+  - [VAC / `bonsai:vac-check`](#vac--bonsaivac-check)
+  - [Open regression IDs (bugs / recent ships)](#open-regression-ids-bugs--recent-ships)
+  - [CHAT-SLOTS-V2 — Named chat slots (P0)](#chat-slots-v2--named-chat-slots-p0)
+  - [CHAT-SLOTS-V3 — Named chat slots redesign (P0)](#chat-slots-v3--named-chat-slots-redesign-p0)
+  - [CHIP-BUTTON — Suggestion chips as real buttons (plan 60)](#chip-button--suggestion-chips-as-real-buttons-plan-60)
+  - [TAB-BAR — Collapsing tab bar (P0)](#tab-bar--collapsing-tab-bar-p0)
+  - [TAB-STRIP-2A — The open tab strip redesign (plan 59)](#tab-strip-2a--the-open-tab-strip-redesign-plan-59)
+  - [NOTES-BLOCK — The "From the notes" block (plan 58 phase 1)](#notes-block--the-from-the-notes-block-plan-58-phase-1)
+- [Tier 3 — Heavy manual](#tier-3--heavy-manual)
+- [Tier 4 — Release gate](#tier-4--release-gate)
+- [QAMP verification (Phase 1)](#qamp-verification-phase-1)
+- [Progress tracker](#progress-tracker)
+- [Prompt-testing (qualitative)](#prompt-testing-qualitative)
+<!-- /toc -->
+
 ## Tags
 
 | Tag | Meaning |
@@ -314,8 +351,7 @@ Re-run 2026-09-03 after plan 30: Settings Up lands on the bar; full sweep every 
       **PRESET-ONE-LINE-03** (passed there). Not itself a fail. Evidence
       `docs/test-evidence/plan70-DOC-SWEEP-01.json`.
 - [x] About → GitHub link: **Up** focuses reply-language dropdown. **PASS (Deck) 2026-09-26:** Up from
-      GitHub landed on the reply-language dropdown ("Follow system"), visible; Up again reached the
-      About tab strip. Evidence `docs/test-evidence/plan70-DOC-SWEEP-01.json`.
+      GitHub landed on the reply-language dropdown ("Follow system"), visible; Up again reached the About tab strip. Evidence `docs/test-evidence/plan70-DOC-SWEEP-01.json`.
 - [x] Settings/Ollama: **Up** at panel top returns to active tab strip. **PASS (Deck) 2026-09-26:** on
       both the Ollama tab ("Run AI on this Deck") and the Settings tab ("Adjust UI automatically"), Up
       returned to that tab's own strip. Saved walk `checks/plan70-DOC-SWEEP-01-settings-top-up.json`.

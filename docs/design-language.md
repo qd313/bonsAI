@@ -13,6 +13,22 @@ measured on device.
 
 ---
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [The space we are designing for](#the-space-we-are-designing-for)
+- [Rule 1 — Use every pixel of the column. A gutter is a bug until proven otherwise.](#rule-1--use-every-pixel-of-the-column-a-gutter-is-a-bug-until-proven-otherwise)
+  - [The example this rule exists for](#the-example-this-rule-exists-for)
+- [Rule 2 — Bleed the container, pad the content.](#rule-2--bleed-the-container-pad-the-content)
+- [Rule 3 — Every row in a column shares one left edge and one right edge.](#rule-3--every-row-in-a-column-shares-one-left-edge-and-one-right-edge)
+- [Rule 4 — Width comes from CSS. Never from a measurement.](#rule-4--width-comes-from-css-never-from-a-measurement)
+- [Rule 5 — Never target Steam or Decky by class name.](#rule-5--never-target-steam-or-decky-by-class-name)
+- [Rule 6 — Measure on device before changing layout.](#rule-6--measure-on-device-before-changing-layout)
+- [Rule 7 — Vertical space is scarcer than it looks; spend it on content.](#rule-7--vertical-space-is-scarcer-than-it-looks-spend-it-on-content)
+- [Rule 8 — A control that cannot be reached does not exist.](#rule-8--a-control-that-cannot-be-reached-does-not-exist)
+- [Applying these to a new surface](#applying-these-to-a-new-surface)
+<!-- /toc -->
+
 ## The space we are designing for
 
 Measured on device 2026-08-16 with

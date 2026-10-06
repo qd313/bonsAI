@@ -3,6 +3,19 @@
 House style for every file under `src/`, plus `main.py` and `py_modules/`. Parts of this are
 checked by `scripts/check_headers.py`, which fails the build. See also [glossary.md](glossary.md).
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [Who you are writing for](#who-you-are-writing-for)
+- [The shape](#the-shape)
+- [What is checked, and what is not](#what-is-checked-and-what-is-not)
+- [Notes on functions](#notes-on-functions)
+- [Generated files](#generated-files)
+- [Files that do not need a full header](#files-that-do-not-need-a-full-header)
+- [Structure changes](#structure-changes)
+- [The Ask path, in order](#the-ask-path-in-order)
+<!-- /toc -->
+
 ## Who you are writing for
 
 **Somebody who has never seen this code.** Not a colleague who already knows the system. That is

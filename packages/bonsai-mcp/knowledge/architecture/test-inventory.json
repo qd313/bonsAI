@@ -386,6 +386,7 @@
     "tests/test_desktop_note_service.py",
     "tests/test_destructive_advice_guard.py",
     "tests/test_destructive_advice_wiring.py",
+    "tests/test_docs_toc.py",
     "tests/test_download_sites_match_backend.py",
     "tests/test_embed_availability_after_pull.py",
     "tests/test_empty_label_spoiler_mark.py",

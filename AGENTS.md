@@ -7,6 +7,28 @@ everything else. Every other tool should read this file and nothing else to get 
 Alongside this, read [docs/lessons-learned.md](docs/lessons-learned.md) — the traps this project has
 already fallen into. This file says how things work; that one says what has gone wrong.
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [Writing to the maintainer](#writing-to-the-maintainer)
+- [What bonsAI is](#what-bonsai-is)
+- [Where things live](#where-things-live)
+- [How the two sides talk](#how-the-two-sides-talk)
+- [Settings](#settings)
+- [The Steam Deck focus graph](#the-steam-deck-focus-graph)
+  - [Adding a new control](#adding-a-new-control)
+  - [The "From the notes" block — a worked example](#the-from-the-notes-block--a-worked-example)
+  - [A check backs three of these up](#a-check-backs-three-of-these-up)
+  - [When a focus bug lands](#when-a-focus-bug-lands)
+- [Commands](#commands)
+  - [Long sessions: keep this PC awake](#long-sessions-keep-this-pc-awake)
+- [Testing on the Deck](#testing-on-the-deck)
+- [Before marking work done](#before-marking-work-done)
+- [Conventions](#conventions)
+- [Which model does which work](#which-model-does-which-work)
+- [The two tool servers](#the-two-tool-servers)
+<!-- /toc -->
+
 ## Writing to the maintainer
 
 **Everything written to the maintainer is in simple, plain language.** Chat replies, questions,
@@ -282,6 +304,10 @@ A documents-only change needs no matching code change. The reverse is not true.
   every commit. Change the generator instead. Three other files are rewritten on every commit too,
   so a comment typed into one vanishes; they are listed in
   [docs/code-clarity.md](docs/code-clarity.md).
+- **The contents list at the top of each major document is written by a script.** After adding,
+  renaming or removing a heading in one of them, run `python scripts/docs_toc.py`; never edit the
+  list by hand. `verify.py --quick` fails while a list is out of date. The documents it covers are
+  listed at the top of that script.
 - **`import-graph.json` answers "who imports this?"** — the full both-ways list for every file on
   the screen side, plus cycles and orphans. Check it before moving anything; it is more reliable
   than a text search, which misses imports written at a different relative depth. `hotspots.json` is

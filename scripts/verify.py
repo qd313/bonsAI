@@ -33,7 +33,9 @@ How it works:
        there; the ratchet check; the growth-limit check, which fails on any app file over 800
        lines of code that has grown past its recorded size (or past 800 lines with no recorded
        size at all); the closed-rows check, which fails when the change closes a Deck test row
-       in one document but leaves it open in testing.md or testing-manual.md.
+       in one document but leaves it open in testing.md or testing-manual.md; the contents-list
+       check, which fails when a major document's linked contents list no longer matches its
+       headings (`python scripts/docs_toc.py` refreshes them).
     3. Full mode runs all of the above, then the whole JS test suite, the whole Python suite
        again (matching the documented `npm run test:py`), the production build, and the
        architecture-snapshot check.
@@ -353,6 +355,10 @@ def run(mode: str) -> tuple[list[StepResult], float]:
     # lists. Only rows this change closes for the first time are checked. See
     # scripts/closed_rows_check.py.
     steps.append(step_optional_script("scripts/closed_rows_check.py", ["--json"], "closed_rows"))
+    # Each major document opens with a linked contents list built from its headings. A renamed
+    # heading leaves a dead link there, so the list must be refreshed in the same change. See
+    # scripts/docs_toc.py.
+    steps.append(step_optional_script("scripts/docs_toc.py", ["--check", "--json"], "docs_toc"))
 
     if mode == "full":
         steps.append(step_npm("test", "npm_test", kind="tests"))

@@ -7,6 +7,21 @@ bonsAI uses **two complementary MCP servers**:
 | **bonsai** | In-repo [`packages/bonsai-mcp/`](../packages/bonsai-mcp/) | Policies, workflows, personas, architecture index, doc search |
 | **decky-plugin-studio** | [Decky Plugin Studio](https://github.com/qd313/decky-plugin-studio) extension | Build, deploy, preview, tunnel, screenshots |
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [Decky Plugin Studio (source of truth)](#decky-plugin-studio-source-of-truth)
+  - [DPS findings log (bonsAI)](#dps-findings-log-bonsai)
+- [Prerequisites](#prerequisites)
+- [Root `mcp.json`](#root-mcpjson)
+- [Claude Desktop](#claude-desktop)
+- [Generic MCP clients](#generic-mcp-clients)
+- [Key tools](#key-tools)
+- [Key prompts](#key-prompts)
+- [Knowledge without MCP](#knowledge-without-mcp)
+  - [Prevent stale CI failures locally](#prevent-stale-ci-failures-locally)
+<!-- /toc -->
+
 ## Decky Plugin Studio (source of truth)
 
 [Decky Plugin Studio](https://github.com/qd313/decky-plugin-studio) (DPS) is a **separate project**. That repo is the source of truth for the extension, MCP `deck.*` / `preview.*` / `plugin.*` tools, capture/record helpers, and Init Pack templates. bonsAI only **consumes** the published VSIX (see [upstream consumer sync](https://github.com/qd313/decky-plugin-studio/blob/main/docs/MCP_CONSUMER_SYNC.md)).

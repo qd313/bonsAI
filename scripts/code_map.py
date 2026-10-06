@@ -18,6 +18,8 @@ the map stays usable: headers are deliberately written at whatever length the
 file needs, and pasting all of them onto one page produced something nobody
 would read. If the map ever feels too thin, raise the two numbers above it —
 do not shorten a single header to fit this page.
+The contents list near the top is written by `docs_toc.apply_toc()` on every
+run, so a rebuild never wipes it.
 """
 
 from __future__ import annotations
@@ -26,6 +28,9 @@ import os
 import re
 import sys
 import warnings
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from docs_toc import apply_toc  # noqa: E402
 
 # See scripts/check_headers.py: a couple of existing docstrings use a literal
 # backslash-underscore for markdown escaping, which trips a parser warning
@@ -234,7 +239,7 @@ def render(files: list) -> str:
 
 def main(argv) -> int:
     files = collect_app_files()
-    text = render(files)
+    text = apply_toc(render(files))
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
     with open(OUT_PATH, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(text)

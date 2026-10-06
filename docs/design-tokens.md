@@ -14,6 +14,26 @@ adding a surface; read this one while building it.
 
 ---
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [How styling works here](#how-styling-works-here)
+- [Palette](#palette)
+  - [Named constants](#named-constants)
+  - [Character accent scope variables (chips)](#character-accent-scope-variables-chips)
+  - [Ask-mode accents](#ask-mode-accents)
+  - [Text and neutrals](#text-and-neutrals)
+- [Surfaces](#surfaces)
+  - [AI reply bubble](#ai-reply-bubble)
+  - [User bubble](#user-bubble)
+- [The inline popover idiom](#the-inline-popover-idiom)
+- [Focus rings](#focus-rings)
+- [Type scale](#type-scale)
+- [UI scale](#ui-scale)
+- [Layout constants](#layout-constants)
+- [Known drift](#known-drift)
+<!-- /toc -->
+
 ## How styling works here
 
 **There are no `.css` files in `src/`.** The entire stylesheet is a JavaScript template

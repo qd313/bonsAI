@@ -8,6 +8,30 @@ mid-game, ask how to beat a boss or why the game stutters, and keep playing.
 
 ![bonsAI open beside Deep Rock Galactic: Survivor on a Steam Deck, answering a question about the game](assets/readme/hero.png)
 
+<!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
+**Contents**
+
+- [Free, open and yours](#free-open-and-yours)
+- [What it does](#what-it-does)
+  - [Ask about the game you're playing](#ask-about-the-game-youre-playing)
+  - [Notes from the game's wiki](#notes-from-the-games-wiki)
+  - [Spoilers stay hidden until you ask](#spoilers-stay-hidden-until-you-ask)
+  - ["Where are you at?"](#where-are-you-at)
+  - [Ask about a screenshot](#ask-about-a-screenshot)
+  - [Find a Steam setting by typing](#find-a-steam-setting-by-typing)
+  - [Close the menu, keep playing](#close-the-menu-keep-playing)
+  - [Saved chats](#saved-chats)
+  - [Talk instead of typing](#talk-instead-of-typing)
+  - [See how it answered](#see-how-it-answered)
+- [Before you start](#before-you-start)
+- [What you need](#what-you-need)
+- [Install](#install)
+- [Getting help](#getting-help)
+- [Help build it](#help-build-it)
+- [Licence](#licence)
+- [Buy me a beer](#buy-me-a-beer)
+<!-- /toc -->
+
 ## Free, open and yours
 
 bonsAI is free and open source. You host it yourself, and it puts your privacy first.

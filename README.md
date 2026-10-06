@@ -34,9 +34,9 @@ mid-game, ask how to beat a boss or why the game stutters, and keep playing.
 
 ## Free, open and yours
 
-bonsAI is free and open source. You host it yourself, and it puts your privacy first.
+bonsAI is free and open source. You start it up yourself on your hardware, no data centers and no paid API. 
 
-- **Your questions go only to your own AI** — on your Deck, on your own PC, or wherever you point it.
+- **Your questions stay on your hardware** — on your Deck, on your own PC, or wherever you point it.
 - **No account, no cloud service, nothing collected.**
 - **Every line of code is here to read.**
 
@@ -46,11 +46,11 @@ bonsAI is free and open source. You host it yourself, and it puts your privacy f
 
 - **Installing Ollama** (the program that runs the AI) — from ollama.com and GitHub.
 - **Downloading AI models** — from Ollama's own model library.
-- **The recommended-models list** — refreshes itself from GitHub at most once a week.
+- ~~**The recommended-models list** — refreshes itself from GitHub at most once a week.~~
 - **The knowledge library** — from Hugging Face, or GitHub if Hugging Face is down.
 - **Voice input** — the speech engine from GitHub, the tools to build it from Ubuntu's servers, and
   the speech model from Hugging Face.
-- **The Steam ban lookup** — Valve's servers, and only if you give it your own Steam key.
+- ~~**The Steam ban lookup** — Valve's servers, and only if you give it your own Steam key.~~
 
 Nothing downloads until you switch on **Internet downloads** on the Permissions tab, and bonsAI
 tells you where each download comes from before it starts. Links inside answers open only when you
@@ -62,11 +62,10 @@ tap them.
 
 ![Asking about the running game: bonsAI thinks, answers, and credits its note](assets/readme/ask-about-your-game.gif)
 
-*Filmed on a Steam Deck with the AI running on the Deck itself, during a game. The thinking part is sped up; it took about a minute.*
+*Filmed on a Steam Deck with the AI running on the Deck itself, during a game. ~~The thinking part is sped up; it took about a minute.~~*
 
-bonsAI knows which game is running, so you can just ask "how do I beat this boss?". Pick how it
-answers: **Speed** for a quick reply, **Strategy** for help getting past something, **Expert** for
-more detail. Suggestion chips above the question box give you a question to start with.
+bonsAI knows which game is running, ask "how do I beat this boss?". Pick different modes: **Speed** for a quick reply, **Strategy** for stategy-guide like game coaching, **Expert** for
+max effort and detail. ~~Suggestion chips above the question box give you a question to start with.~~
 
 ### Notes from the game's wiki
 
@@ -77,7 +76,7 @@ once, then it works offline. When an answer uses a note, it says where the note 
 
 ![A spoiler in a Strategy answer, hidden until it is opened](assets/readme/spoiler.gif)
 
-In Strategy answers, anything that would give the story away is covered. Open it only if you want
+In Strategy mode, anything that is detected as a spoiler is covered. Tap to uncover if you want
 to know. This works on a best-effort basis and can miss things.
 
 ### "Where are you at?"
@@ -85,7 +84,7 @@ to know. This works on a best-effort basis and can miss things.
 ![Picking where you are in the game, then ticking off steps in the checklist (the wait is sped up)](assets/readme/strategy-checklist.gif)
 
 Strategy can ask where you are in the game, then gives you a checklist of steps you can tick off.
-It remembers your progress for each game.
+It remembers your progress for each game. (Stored locally?)
 
 ### Ask about a screenshot
 
@@ -98,7 +97,7 @@ Take a screenshot and ask about what's on screen — a puzzle, a menu, an error 
 ![Typing "brightness" lists the matching Steam settings](assets/readme/find-a-setting.gif)
 
 Type a few words, like "brightness", and jump straight to that Steam setting. This works without
-any AI at all.
+any AI model at all.
 
 ### Close the menu, keep playing
 
@@ -111,14 +110,14 @@ Close the menu while an answer is being written. A popup tells you when it's rea
 ![Switching between saved chats with the shoulder button](assets/readme/switch-chats.gif)
 
 Keep up to eight chats and flip between them with the shoulder buttons. When a chat gets long,
-bonsAI sums up the older part so it isn't forgotten, and you can ask it to sum up at any time.
+bonsAI summarizes the older part so it isn't forgotten, and you can ask it to sum up at any time.
 
 ![Sum up this chat: bonsAI writes a short card of what it remembers](assets/readme/sum-up-chat.gif)
 
 ### Talk instead of typing
 
 Press the mic button and talk. Your speech is turned into text on the Deck itself, and the
-recording is deleted as soon as that's done. bonsAI can also read answers aloud.
+recording is deleted as soon as that's done. bonsAI can also read answers aloud (beta).
 
 ### See how it answered
 
@@ -126,7 +125,7 @@ recording is deleted as soon as that's done. bonsAI can also read answers aloud.
 
 **Show details** under any answer shows which model wrote it and which notes it used.
 
-There's more: performance and battery tips with numbers you can set, characters that change the
+There's more: performance and battery tips with numbers you can set (???), characters that change the
 tone of replies, and a choice of AI models. The **[user guide](docs/guide.md)** covers everything.
 
 ## Before you start

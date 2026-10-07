@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 730,
-  "edgeCount": 2121,
+  "fileCount": 731,
+  "edgeCount": 2123,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2639,6 +2639,14 @@
         "src/index.tsx"
       ]
     },
+    "src/features/chat-slots/ChatSlotDeleteModal.tsx": {
+      "imports": [
+        "src/styles/settingsGlassButton.ts"
+      ],
+      "importedBy": [
+        "src/features/chat-slots/ChatSlotRow.tsx"
+      ]
+    },
     "src/features/chat-slots/ChatSlotRenameModal.test.tsx": {
       "imports": [
         "src/features/chat-slots/ChatSlotRenameModal.tsx",
@@ -2703,6 +2711,7 @@
     "src/features/chat-slots/ChatSlotRow.tsx": {
       "imports": [
         "src/components/icons.tsx",
+        "src/features/chat-slots/ChatSlotDeleteModal.tsx",
         "src/features/chat-slots/chatSlotRowIcons.tsx",
         "src/features/chat-slots/useChatSlotBumpers.ts",
         "src/features/chat-slots/useChatSlotRenameModal.tsx",
@@ -5524,6 +5533,7 @@
         "src/components/SettingsTab.tsx",
         "src/components/SettingsTabUiScaleSection.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
+        "src/features/chat-slots/ChatSlotDeleteModal.tsx",
         "src/styles/buttonFocusRing.test.ts"
       ]
     },

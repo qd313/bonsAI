@@ -276,6 +276,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 
 ## src/features/chat-slots
 
+- **ChatSlotDeleteModal.tsx** (src/features/chat-slots/ChatSlotDeleteModal.tsx) — *The "Delete chat slot?" box*: The box the chat row's bin opens. It has exactly two buttons, Cancel and Delete, and Steam puts the ring on Cancel when it opens, so an A pressed by habit keeps the chat. […]
 - **ChatSlotRenameModal.tsx** (src/features/chat-slots/ChatSlotRenameModal.tsx) — *Renaming a saved chat*: The small popup that appears when a person renames one of their saved chats. It is a text box with the current name already filled in, plus Save and Cancel buttons, built with the same popup shell every other bonsAI popup uses.
 - **ChatSlotRow.tsx** (src/features/chat-slots/ChatSlotRow.tsx) — *Chat slot row*: The row that always sits at the top of the main tab, above the preset chips. It is a small carousel of your saved chats: press LB/RB (or step the D-pad through it) to flip between them, press A on the middle to rename the current chat, move onto its bin to delete it, or onto the…
 - **chatSlotRowIcons.tsx** (src/features/chat-slots/chatSlotRowIcons.tsx) — *Chat row icons*: The floppy disk (Save) and the pencil (New chat) the chat row draws.

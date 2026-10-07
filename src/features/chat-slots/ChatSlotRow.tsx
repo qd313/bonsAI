@@ -46,9 +46,10 @@
  *   cannot be discovered by looking.
  */
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ConfirmModal, Focusable, showModal } from "@decky/ui";
+import { Focusable, showModal } from "@decky/ui";
 
 import { TrashBinSlotsIcon } from "../../components/icons";
+import { ChatSlotDeleteModal } from "./ChatSlotDeleteModal";
 import { DiskIcon, PencilIcon } from "./chatSlotRowIcons";
 import type { ChatSlotSummary } from "../../utils/chatSlotsApi";
 import { takeOpenQuestionText } from "../../utils/buildTurnHeaderElement";
@@ -240,28 +241,19 @@ export function ChatSlotRow({
       if (rowFocusElRef.current) {
         registerModalReturnFocusOwner("chat-slot-rename", rowFocusElRef.current);
       }
+      /*
+        Two buttons, Cancel first: Steam puts the ring on the first button of a box, so an A pressed
+        by habit keeps the chat, and B keeps it too (maintainer's call, 2026-10-06; it was three
+        buttons since plan 79). See ChatSlotDeleteModal.
+      */
       const handle = showModal(
-        <ConfirmModal
-          strTitle="Delete chat slot?"
-          strDescription={`Delete "${label}" and its transcript? This cannot be undone.`}
-          bDestructiveWarning
-          /*
-            Steam opens a confirm box with the ring on OK, so OK is the choice that deletes nothing
-            and Delete sits on the middle button -- the same shape as the Remove knowledge base box,
-            proven on the Deck. Opening on "Delete" let an A pressed by habit delete the chat
-            (plan 79, 2026-10-02). Cancel and B also keep it.
-          */
-          strOKButtonText="Keep chat"
-          strMiddleButtonText="Delete"
-          strCancelButtonText="Cancel"
-          onOK={() => {
+        <ChatSlotDeleteModal
+          label={label}
+          onKeep={() => {
             onCompleteNestedDeckyModalClose?.(() => handle.Close());
           }}
-          onMiddleButton={() => {
+          onDelete={() => {
             void onDeleteSlot(slotId);
-            onCompleteNestedDeckyModalClose?.(() => handle.Close());
-          }}
-          onCancel={() => {
             onCompleteNestedDeckyModalClose?.(() => handle.Close());
           }}
         />,

@@ -57,6 +57,7 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { ChatSlotRow } from "./ChatSlotRow";
+import { clearChatRowReturnToSave } from "./chatSlotRowReturn";
 import { ChatSlotDeleteModal } from "./ChatSlotDeleteModal";
 
 function summary(id: string, label: string): ChatSlotSummary {
@@ -113,6 +114,7 @@ function ringOn(container: HTMLElement): string {
 }
 
 beforeEach(() => {
+  clearChatRowReturnToSave();
   rowProps = {};
   shown = [];
 });
@@ -202,6 +204,45 @@ describe("the chat row's ring never rests on the name", () => {
     leaveRow();
     enterRow();
     expect(ringOn(container)).toBe("save");
+  });
+
+  it("the ring is on Save after the save window closes, even though closing it rebuilds the row", () => {
+    // Deck 2026-10-07 (build 880687e4): closing the window rebuilds the tab, so the row is a NEW copy
+    // with no memory of its own; the ring came back on Delete.
+    const first = render(row());
+    enterRow();
+    move("Left");
+    pressA();
+    first.unmount();
+    navFocusRegistry.resetNavFocusRegistry();
+    const second = render(row());
+    enterRow();
+    expect(ringOn(second.container)).toBe("save");
+  });
+
+  it("the memory is used once: the next ordinary arrival lands on Delete again", () => {
+    const first = render(row());
+    enterRow();
+    move("Left");
+    pressA();
+    first.unmount();
+    const second = render(row());
+    enterRow();
+    leaveRow();
+    enterRow();
+    expect(ringOn(second.container)).toBe("delete");
+  });
+
+  it("a window that never gave the ring back does not send a later Down from the tab bar to Save", () => {
+    const { container } = render(row());
+    enterRow();
+    move("Left");
+    pressA();
+    move("Right");
+    (rowProps.onMoveUp as () => unknown)();
+    leaveRow();
+    enterRow();
+    expect(ringOn(container)).toBe("delete");
   });
 
   it("at the new-chat spot Left is claimed and Right is left to Steam, with no ring on a bin", () => {

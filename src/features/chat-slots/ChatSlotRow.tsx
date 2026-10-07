@@ -67,6 +67,11 @@ import {
 } from "../plugin-shell/modalReturnFocusRegistry";
 import { SteamMarqueeText } from "../preset-carousel/presetChipButton";
 import { prefersReducedMotion } from "../preset-carousel/presetChipShared";
+import {
+  clearChatRowReturnToSave,
+  markChatRowReturnToSave,
+  takeChatRowReturnToSave,
+} from "./chatSlotRowReturn";
 import { useChatSlotBumpers } from "./useChatSlotBumpers";
 import { useChatSlotRenameModal } from "./useChatSlotRenameModal";
 
@@ -179,8 +184,6 @@ export function ChatSlotRow({
   const [carouselIndex, setCarouselIndex] = useState(() => slotIndexFromId(activeSlotId));
   const [focused, setFocused] = useState(false);
   const [focusStop, setFocusStop] = useState<RowFocusStop>("delete");
-  /* Set when A opens the save window, so the ring Steam hands back when it closes stays on Save. */
-  const keepStopOnReturnRef = useRef(false);
   const navRef = useRef<NavRefHolder["current"]>(null);
   const rowFocusElRef = useRef<HTMLElement | null>(null);
 
@@ -360,14 +363,14 @@ export function ChatSlotRow({
           // Steam's spatial navigation descends into what is directly below: the transcript when
           // it has content and the preset row when it does not.
           onMoveDown: () => {
-            keepStopOnReturnRef.current = false;
+            clearChatRowReturnToSave();
             return takeEarlierLine() || (firstTurnId ? takeOpenQuestionText(firstTurnId) : false);
           },
           // Up goes to the collapsing tab bar (plan 30 W4). Steam's own answer for "above the
           // row" is its hidden tab button — a stop nobody can see (runs/TAB-BAR-W1b-*.json) —
           // so the hop is explicit. False when the bar is not registered, and Steam decides.
           onMoveUp: () => {
-            keepStopOnReturnRef.current = false;
+            clearChatRowReturnToSave();
             return takeNavFocus("tab-bar");
           },
         } as Record<string, unknown>)}
@@ -376,8 +379,9 @@ export function ChatSlotRow({
           setFocused(true);
           /* The ring always comes onto the row on the bin (from the tab bar's Down, from the first
              question's Up, after a chat flip) except when the save window hands it back to Save. */
-          if (keepStopOnReturnRef.current) keepStopOnReturnRef.current = false;
-          else setFocusStop("delete");
+          /* Kept outside the row: the save window's close rebuilds this tab, so a new copy of the row
+             takes the ring back and must still know. */
+          setFocusStop(takeChatRowReturnToSave() ? "save" : "delete");
         }}
         onBlur={() => setFocused(false)}
         onButtonDown={(evt) => {
@@ -393,7 +397,7 @@ export function ChatSlotRow({
           }
           if (stop === "save" && onSaveChat) {
             rememberModalReturnFocus("desktop-note-save");
-            keepStopOnReturnRef.current = true;
+            markChatRowReturnToSave();
             onSaveChat();
             return true;
           }

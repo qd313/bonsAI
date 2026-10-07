@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 736,
-  "edgeCount": 2137,
+  "fileCount": 737,
+  "edgeCount": 2139,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2713,6 +2713,7 @@
       "imports": [
         "src/features/chat-slots/ChatSlotDeleteModal.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
+        "src/features/chat-slots/chatSlotRowReturn.ts",
         "src/test-harness/fakeDeckyUi.tsx",
         "src/utils/chatSlotsApi.ts",
         "src/utils/navFocusRegistry.ts"
@@ -2750,6 +2751,7 @@
         "src/components/icons.tsx",
         "src/features/chat-slots/ChatSlotDeleteModal.tsx",
         "src/features/chat-slots/chatSlotRowIcons.tsx",
+        "src/features/chat-slots/chatSlotRowReturn.ts",
         "src/features/chat-slots/useChatSlotBumpers.ts",
         "src/features/chat-slots/useChatSlotRenameModal.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
@@ -2775,6 +2777,13 @@
     "src/features/chat-slots/chatSlotRowIcons.tsx": {
       "imports": [],
       "importedBy": [
+        "src/features/chat-slots/ChatSlotRow.tsx"
+      ]
+    },
+    "src/features/chat-slots/chatSlotRowReturn.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/features/chat-slots/ChatSlotRow.noNameStop.test.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx"
       ]
     },

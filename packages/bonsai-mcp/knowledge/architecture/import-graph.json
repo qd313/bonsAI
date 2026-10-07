@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 734,
-  "edgeCount": 2132,
+  "fileCount": 735,
+  "edgeCount": 2134,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1157,6 +1157,7 @@
         "src/features/unified-input/constants.ts",
         "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarMenuToggles.ts",
+        "src/hooks/useAskBarPressHandlers.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useAskBarSettingsCardVisibility.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
@@ -4045,6 +4046,14 @@
     "src/hooks/useAskBarMenuToggles.ts": {
       "imports": [
         "src/components/MainTabAttachMenuPopover.tsx"
+      ],
+      "importedBy": [
+        "src/components/MainTabUnifiedAskBar.tsx"
+      ]
+    },
+    "src/hooks/useAskBarPressHandlers.ts": {
+      "imports": [
+        "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
         "src/components/MainTabUnifiedAskBar.tsx"
@@ -7476,6 +7485,7 @@
         "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts",
         "src/hooks/useAskBarInitialRingClaim.test.ts",
         "src/hooks/useAskBarInitialRingClaim.ts",
+        "src/hooks/useAskBarPressHandlers.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useLiveTurnHeaderRingRestore.ts",
         "src/hooks/useMainTabAskBarFocus.test.ts",

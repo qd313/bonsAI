@@ -1,5 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { useState, type Dispatch, type SetStateAction } from "react";
+import { toaster } from "@decky/api";
 import { describe, expect, it, vi } from "vitest";
 
 import { useVoiceAskInput } from "./useVoiceAskInput";
@@ -228,5 +229,28 @@ describe("useVoiceAskInput when the box is emptied while the mic is still listen
       await new Promise((r) => setTimeout(r, 300));
     });
     expect(result.current.voiceRecording).toBe(true);
+  });
+});
+
+describe("useVoiceAskInput while an answer is arriving", () => {
+  it("answers a mic press with a short toast and starts no recording", async () => {
+    vi.mocked(toaster.toast).mockClear();
+    setRpcHandler("start_voice_transcription", () => ({ accepted: true }));
+    const { result } = renderHook(() =>
+      useVoiceAskInput({ setUnifiedInput: () => {}, unifiedInput: "", microphoneAccess: true, isAsking: true, uiT }),
+    );
+    await act(async () => {
+      result.current.onMicInput();
+      await Promise.resolve();
+    });
+    expect(toaster.toast).toHaveBeenCalledTimes(1);
+    expect(toaster.toast).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: "Mic is waiting",
+        body: "The microphone is off until the answer finishes.",
+      }),
+    );
+    expect(result.current.voiceRecording).toBe(false);
+    expect(getRpcCallLog().some((c) => c.method === "start_voice_transcription")).toBe(false);
   });
 });

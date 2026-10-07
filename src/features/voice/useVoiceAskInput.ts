@@ -35,7 +35,7 @@ export type UseVoiceAskInputArgs = {
   unifiedInput: string;
   /** Recording is refused, and any in-flight session torn down, without this. */
   microphoneAccess: boolean;
-  /** The mic is inert while an Ask is running. */
+  /** The mic does not start while an Ask is running; a press only shows a short toast. */
   isAsking: boolean;
   /** Localised copy for the transcription-failure toast. */
   uiT: (key: UiStringKey, vars?: UiStringVars) => string;
@@ -75,8 +75,8 @@ export type UseVoiceAskInputArgs = {
  *    fixes it.
  * 8. `dismissMicPermissionDeny()` lets the message be dismissed by hand
  *    as well.
- * 9. `onMicInput()` is the button's own tap handler: does nothing while
- *    a question is being asked; stops an already-running recording;
+ * 9. `onMicInput()` is the button's own tap handler: shows a short "Mic is
+ *    waiting" toast while a question is being asked; stops an already-running recording;
  *    shows the permission message and stops there if access is not
  *    granted; otherwise starts recording and shows an error toast if
  *    starting fails.
@@ -183,7 +183,14 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
   }, []);
 
   const onMicInput = useCallback(() => {
-    if (a.isAsking) return;
+    if (a.isAsking) {
+      toaster.toast({
+        title: "Mic is waiting",
+        body: "The microphone is off until the answer finishes.",
+        duration: 3500,
+      });
+      return;
+    }
     if (voiceRecording) {
       setVoiceRecording(false);
       void stopVoiceTranscription();

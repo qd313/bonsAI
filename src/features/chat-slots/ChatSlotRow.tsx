@@ -102,7 +102,9 @@ export type ChatSlotRowProps = {
   firstTurnId?: string | null;
 };
 
-type RowFocusStop = "save" | "title" | "delete";
+/* The name is not a stop (the maintainer's call, 2026-10-06): it has nothing to do, so Left and Right
+   step between the two drawn buttons only. */
+type RowFocusStop = "save" | "delete";
 
 const MAX_DOTS = 8;
 
@@ -128,10 +130,11 @@ const MAX_DOTS = 8;
  *    neighbours, for the ghost previews to either side.
  * 3. On LB/RB (handled by useChatSlotBumpers), move carouselIndex and, unless
  *    it landed on the new-chat spot, call onSelectSlot. D-pad Left/Right walk
- *    the row's three stops: save icon, name, bin.
- * 4. Pressing A: on the new-chat spot, calls onCreateSlot; otherwise opens
- *    the rename modal (useChatSlotRenameModal), or, on the bin stop, the delete
- *    confirmation, or, on the save stop, the save-to-Desktop window.
+ *    the row's two stops: save icon and bin. The name is never a stop; the ring
+ *    lands on the bin whenever it comes onto the row.
+ * 4. Pressing A: on the new-chat spot, calls onCreateSlot; on the bin stop, opens
+ *    the delete confirmation, and on the save stop, the save-to-Desktop window.
+ *    No stop reaches the rename modal (useChatSlotRenameModal) any more.
  * 5. A layout effect measures whether the title text is wider than its box
  *    and, only while focused, swaps it for Steam's Marquee with the chips'
  *    own scroll settings, so a long name scrolls exactly like a long chip.
@@ -175,7 +178,9 @@ export function ChatSlotRow({
 
   const [carouselIndex, setCarouselIndex] = useState(() => slotIndexFromId(activeSlotId));
   const [focused, setFocused] = useState(false);
-  const [focusStop, setFocusStop] = useState<RowFocusStop>("title");
+  const [focusStop, setFocusStop] = useState<RowFocusStop>("delete");
+  /* Set when A opens the save window, so the ring Steam hands back when it closes stays on Save. */
+  const keepStopOnReturnRef = useRef(false);
   const navRef = useRef<NavRefHolder["current"]>(null);
   const rowFocusElRef = useRef<HTMLElement | null>(null);
 
@@ -201,8 +206,8 @@ export function ChatSlotRow({
      answer, the same rule that drew the old Save chat button under the last answer. */
   const showSave = !isCreatePosition && canSaveChat && onSaveChat !== undefined;
   /* The save stop with no icon to stand on (the chat has nothing to save yet, or LB/RB moved to a
-     chat without an answer) is the name; so the ring can never sit on an invisible stop. */
-  const stop: RowFocusStop = focusStop === "save" && !showSave ? "title" : focusStop;
+     chat without an answer) is the bin; so the ring can never sit on an invisible stop. */
+  const stop: RowFocusStop = focusStop === "save" && !showSave ? "delete" : focusStop;
 
   useEffect(() => {
     onCreatePositionChange?.(isCreatePosition);
@@ -332,22 +337,16 @@ export function ChatSlotRow({
           */
           focusable: true,
           onMoveLeft: () => {
-            if (stop === "delete") {
-              setFocusStop("title");
-            } else if (stop === "title" && showSave) {
-              setFocusStop("save");
-            }
-            /* Claimed even when nothing moves (the save icon itself, a name with no icon, the
+            /* Bin to Save in one press, never stopping on the name. */
+            if (stop === "delete" && showSave) setFocusStop("save");
+            /* Claimed even when nothing moves (the save icon itself, a bin with no save icon, the
                new-chat spot): nothing in bonsAI lies to the row's left, and Steam's own answer
                was to leave the plugin for its side menu (plan 72 must-fix list). */
             return true;
           },
           onMoveRight: () => {
-            if (stop === "save") {
-              setFocusStop("title");
-              return true;
-            }
-            if (stop === "title" && !isCreatePosition) {
+            /* Save to bin in one press. From the bin (and at the new-chat spot) Right is Steam's. */
+            if (stop === "save" && !isCreatePosition) {
               setFocusStop("delete");
               return true;
             }
@@ -360,14 +359,26 @@ export function ChatSlotRow({
           // never jumps past it (or a day line) into a question. Anything else returns false and
           // Steam's spatial navigation descends into what is directly below: the transcript when
           // it has content and the preset row when it does not.
-          onMoveDown: () => takeEarlierLine() || (firstTurnId ? takeOpenQuestionText(firstTurnId) : false),
+          onMoveDown: () => {
+            keepStopOnReturnRef.current = false;
+            return takeEarlierLine() || (firstTurnId ? takeOpenQuestionText(firstTurnId) : false);
+          },
           // Up goes to the collapsing tab bar (plan 30 W4). Steam's own answer for "above the
           // row" is its hidden tab button — a stop nobody can see (runs/TAB-BAR-W1b-*.json) —
           // so the hop is explicit. False when the bar is not registered, and Steam decides.
-          onMoveUp: () => takeNavFocus("tab-bar"),
+          onMoveUp: () => {
+            keepStopOnReturnRef.current = false;
+            return takeNavFocus("tab-bar");
+          },
         } as Record<string, unknown>)}
         className="bonsai-chat-slot-row-focus"
-        onFocus={() => setFocused(true)}
+        onFocus={() => {
+          setFocused(true);
+          /* The ring always comes onto the row on the bin (from the tab bar's Down, from the first
+             question's Up, after a chat flip) except when the save window hands it back to Save. */
+          if (keepStopOnReturnRef.current) keepStopOnReturnRef.current = false;
+          else setFocusStop("delete");
+        }}
         onBlur={() => setFocused(false)}
         onButtonDown={(evt) => {
           if (handleBumperButtonDown(evt)) return true;
@@ -382,6 +393,7 @@ export function ChatSlotRow({
           }
           if (stop === "save" && onSaveChat) {
             rememberModalReturnFocus("desktop-note-save");
+            keepStopOnReturnRef.current = true;
             onSaveChat();
             return true;
           }
@@ -389,6 +401,8 @@ export function ChatSlotRow({
             openDeleteConfirm(activeSlot.id, activeSlot.label);
             return true;
           }
+          /* Nothing reaches here since the name stopped being a stop (2026-10-06): rename is kept wired
+             in case the maintainer gives it another route. */
           if (activeSlot) {
             openRenameModal(activeSlot.id, activeSlot.label, rowFocusElRef.current);
             return true;
@@ -454,7 +468,7 @@ export function ChatSlotRow({
               ) : (
                 <span
                   ref={titleWindowRef}
-                  className={`bonsai-chat-slot-title${stop === "title" ? " bonsai-chat-slot-title--active-stop" : ""}${titleScrolls ? " bonsai-chat-slot-title--overflowing" : ""}`}
+                  className={`bonsai-chat-slot-title${titleScrolls ? " bonsai-chat-slot-title--overflowing" : ""}`}
                 >
                   {titleScrolls ? (
                     <SteamMarqueeText

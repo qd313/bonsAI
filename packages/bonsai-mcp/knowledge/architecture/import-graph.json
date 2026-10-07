@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 731,
-  "edgeCount": 2123,
+  "fileCount": 732,
+  "edgeCount": 2127,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2682,6 +2682,15 @@
       ],
       "importedBy": []
     },
+    "src/features/chat-slots/ChatSlotRow.noNameStop.test.tsx": {
+      "imports": [
+        "src/features/chat-slots/ChatSlotRow.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/chatSlotsApi.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx": {
       "imports": [
         "src/features/chat-slots/ChatSlotRow.tsx",
@@ -2728,6 +2737,7 @@
         "src/components/MainTab.tsx",
         "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",
         "src/features/chat-slots/ChatSlotRow.deleteBox.test.tsx",
+        "src/features/chat-slots/ChatSlotRow.noNameStop.test.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
@@ -5740,6 +5750,7 @@
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
         "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",
         "src/features/chat-slots/ChatSlotRow.deleteBox.test.tsx",
+        "src/features/chat-slots/ChatSlotRow.noNameStop.test.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
@@ -6751,6 +6762,7 @@
       "importedBy": [
         "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",
         "src/features/chat-slots/ChatSlotRow.deleteBox.test.tsx",
+        "src/features/chat-slots/ChatSlotRow.noNameStop.test.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
         "src/features/chat-slots/ChatSlotRow.test.tsx",
@@ -7425,6 +7437,7 @@
         "src/components/buildEarlierList.tsx",
         "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",
         "src/features/chat-slots/ChatSlotRow.deleteBox.test.tsx",
+        "src/features/chat-slots/ChatSlotRow.noNameStop.test.tsx",
         "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",

@@ -140,33 +140,30 @@ describe("Save and Delete show only while the ring is on the chat's row", () => 
     expect(shown(container.querySelector(".bonsai-chat-slot-save"))).toBe(true);
     expect(shown(container.querySelector(".bonsai-chat-slot-delete"))).toBe(true);
     move("Right");
-    move("Right");
     expect(stop(container)).toBe("delete");
     expect(shown(container.querySelector(".bonsai-chat-slot-save"))).toBe(true);
     expect(shown(container.querySelector(".bonsai-chat-slot-delete"))).toBe(true);
   });
 
-  it("walks tab -> Save -> tab -> Delete -> tab, each stop once, and A works on each", () => {
+  it("walks Delete -> Save -> Delete, each stop once, never the name, and A works on each", () => {
     const onSaveChat = vi.fn();
     const onBeforeNestedDeckyModal = vi.fn();
     const { container } = render(row({ onSaveChat, onBeforeNestedDeckyModal }));
     ringOnRow(true);
     const visited: string[] = [stop(container)];
-    const presses: Array<"Left" | "Right"> = ["Left", "Right", "Right", "Left"];
+    const presses: Array<"Left" | "Right"> = ["Left", "Right"];
     for (const dir of presses) {
       expect(move(dir)).toBe(true);
       visited.push(stop(container));
     }
-    expect(visited).toEqual(["title", "save", "title", "delete", "title"]);
-    expect(visited.filter((s) => s === "save")).toHaveLength(1);
-    expect(visited.filter((s) => s === "delete")).toHaveLength(1);
-    // Bounded: four presses and the walk is over; none of the other directions was needed.
-    expect(presses.length).toBeLessThanOrEqual(4);
+    expect(visited).toEqual(["delete", "save", "delete"]);
+    expect(visited).not.toContain("title");
+    // Bounded: two presses and the walk is over; none of the other directions was needed.
+    expect(presses.length).toBeLessThanOrEqual(2);
 
     move("Left");
     expect(pressA()).toBe(true);
     expect(onSaveChat).toHaveBeenCalledTimes(1);
-    move("Right");
     move("Right");
     expect(pressA()).toBe(true);
     expect(onBeforeNestedDeckyModal).toHaveBeenCalledTimes(1);

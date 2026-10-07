@@ -147,6 +147,7 @@
     "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
     "src/features/chat-slots/ChatSlotRow.buttonsOnRing.test.tsx",
     "src/features/chat-slots/ChatSlotRow.deleteBox.test.tsx",
+    "src/features/chat-slots/ChatSlotRow.noNameStop.test.tsx",
     "src/features/chat-slots/ChatSlotRow.saveAndNew.test.tsx",
     "src/features/chat-slots/ChatSlotRow.scroll.test.tsx",
     "src/features/chat-slots/ChatSlotRow.test.tsx",

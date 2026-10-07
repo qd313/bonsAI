@@ -100,23 +100,15 @@ describe("the save icon", () => {
     expect(save!.compareDocumentPosition(title) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
-  it("Left from the name lands on it; Left again stays on it; Right goes back to the name", () => {
+  it("Left from the bin lands on it; Left again stays on it; Right goes straight to the bin (never the name)", () => {
     const { container } = render(row());
-    expect(activeStop(container)).toBe("title");
-    expect(move("Left")).toBe(true);
-    expect(activeStop(container)).toBe("save");
-    expect(move("Left")).toBe(true);
-    expect(activeStop(container)).toBe("save");
-    expect(move("Right")).toBe(true);
-    expect(activeStop(container)).toBe("title");
-  });
-
-  it("Right from the name still lands on the ×, and Left from the × comes back to the name", () => {
-    const { container } = render(row());
-    expect(move("Right")).toBe(true);
     expect(activeStop(container)).toBe("delete");
     expect(move("Left")).toBe(true);
-    expect(activeStop(container)).toBe("title");
+    expect(activeStop(container)).toBe("save");
+    expect(move("Left")).toBe(true);
+    expect(activeStop(container)).toBe("save");
+    expect(move("Right")).toBe(true);
+    expect(activeStop(container)).toBe("delete");
   });
 
   it("A on it opens the save window, and not the rename window", () => {
@@ -138,11 +130,11 @@ describe("the save icon", () => {
     expect(move("Down")).toBe(false);
   });
 
-  it("is not drawn while the chat has nothing to save, and Left from the name then stays put", () => {
+  it("is not drawn while the chat has nothing to save, and Left from the bin then stays put", () => {
     const { container } = render(row({ canSaveChat: false }));
     expect(container.querySelector(".bonsai-chat-slot-save")).toBeNull();
     expect(move("Left")).toBe(true);
-    expect(activeStop(container)).toBe("title");
+    expect(activeStop(container)).toBe("delete");
   });
 
   it("turns up in the same chat as soon as its first answer is there", () => {

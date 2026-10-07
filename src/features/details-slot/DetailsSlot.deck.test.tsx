@@ -631,7 +631,10 @@ describe("the whole walk Down from the answer to the Ask button and back, with S
       expect(new Set(names).size).toBe(names.length);
       const slot = slotWhenOnRealLine[0]!.startsWith("line") ? "slot line" : "chip";
       expect(names.slice(-3)).toEqual(["real line", slot, "question box"]);
-      if (r === "nearest") expect(slot).toBe("slot line"); // the Deck's own case
+      /* The Deck's own landing (the line 2 px above the dock) used to keep the slot's copy up beside the answer's
+         own line: both on screen (plan82-M6-TWO-DETAILS-LINES.json). With the ring on the real line, wholly in
+         the reading area, that line is the drawn one and the slot holds the chips. */
+      if (r === "nearest") expect(slot).toBe("chip");
       // Up from the box: the same stops back to the real line.
       // (a chip's own Up is presetRowFocusNav.upFromChips.test.tsx's: the harness's Button carries no handlers)
       const up = walk("onMoveUp", slot === "chip" ? 1 : 2);
@@ -640,4 +643,113 @@ describe("the whole walk Down from the answer to the Ask button and back, with S
       expect(up.hidden).toEqual([]);
     },
   );
+});
+
+/*
+ * Never both Show details lines at once (roadmap: "both Show details lines on screen at once"; the Deck,
+ * plan82-M6-TWO-DETAILS-LINES.json). Pressing Down through the newest answer, at press 10 the ring sat on
+ * the answer's own line (579 to 594, wholly inside the pane) while the slot still drew its copy at 601 to
+ * 631: the line was 6 px above the dock, inside the 8 px the slot holds on to so it does not blink.
+ * The rules, checked on what a person sees:
+ *   - at most one of the two lines is drawn (opacity above 0, not hidden) and on screen at any scroll;
+ *   - with the ring on the answer's own line, that line is the drawn one and the slot holds the chips.
+ * The Deck's numbers are scaled to this harness (dock top 290): press 9 is the line 6 px under the dock top,
+ * press 10 the line wholly inside, 6 px above it, press 11 the line 70 px higher.
+ */
+/** Drawn to a person: not hidden, not transparent (the element or anything around it). */
+function drawn(el: Element | null): boolean {
+  return seenByPerson(el);
+}
+function onScreen(el: Element): boolean {
+  const [top, bottom] = screenBox(el);
+  return bottom > PANE_TOP && top < DOCK_TOP;
+}
+/** Both lines drawn and each at least partly in the reading area (the slot's is always in the dock). */
+function bothLinesSeen(): boolean {
+  return drawn(slotLine()) && drawn(realLine()) && onScreen(realLine());
+}
+/** Scroll so the real line's top sits at screen y `top`. */
+function scrollLineTo(top: number) {
+  scrollChatTo(LINE[0] - top);
+}
+const REAL_LINE_H = LINE[1] - LINE[0];
+
+describe("the answer's own line and the slot's copy are never both seen", () => {
+  it.each([
+    ["press 8: the real line is behind the dock", DOCK_TOP + 40],
+    ["press 9: the real line is partly under the slot", DOCK_TOP - 4],
+    ["press 10: the real line is wholly inside the pane, 6 px above the dock", DOCK_TOP - 6 - REAL_LINE_H],
+    ["press 11: the real line is 70 px higher", DOCK_TOP - 6 - REAL_LINE_H - 70],
+  ])("%s", (_name, lineTop) => {
+    renderChat();
+    scrollLineTo(lineTop);
+    expect(bothLinesSeen()).toBe(false);
+  });
+
+  it("scrolling the chat a pixel at a time, down then up, never draws both", () => {
+    renderChat();
+    const both: number[] = [];
+    for (let y = 380; y <= 520; y += 1) {
+      scrollChatTo(y);
+      if (bothLinesSeen()) both.push(y);
+    }
+    for (let y = 520; y >= 380; y -= 1) {
+      scrollChatTo(y);
+      if (bothLinesSeen()) both.push(y);
+    }
+    expect(both).toEqual([]);
+  });
+
+  it("while the slot holds the line, the real line keeps its place in the layout (faded, not removed)", () => {
+    renderChat();
+    scrollLineTo(DOCK_TOP + 40);
+    expect(slotHolds()).toBe("line: Show details ↓");
+    expect(realLine().isConnected).toBe(true);
+    expect(getComputedStyle(realLine()).display).not.toBe("none");
+    expect(getComputedStyle(realLine()).opacity).toBe("0");
+    scrollLineTo(DOCK_TOP - 100);
+    expect(slotHolds()).toBe("chip");
+    expect(getComputedStyle(realLine()).opacity).not.toBe("0");
+  });
+
+  it("the real line fades over the same 120 ms as the slot, and instantly with reduced motion", () => {
+    const css = buildDetailsSlotSection();
+    expect(css).toMatch(/\.bonsai-chat-details-divider\[data-slot-holds-line\][^{]*\{[^}]*opacity: 0 !important/);
+    expect(css).toMatch(/\.bonsai-chat-details-divider\s*\{[^}]*transition: opacity 120ms ease-out/);
+    const reduced = css.slice(css.indexOf("@media (prefers-reduced-motion: reduce)"));
+    expect(reduced).toContain(".bonsai-chat-details-divider");
+  });
+});
+
+describe("the ring on the answer's own line makes that line the drawn one", () => {
+  it("press 10: ring on the real line, wholly inside the pane 6 px above the dock, slot shows the chips", () => {
+    renderChat();
+    scrollLineTo(DOCK_TOP + 40); // the slot holds the line, the real line behind the dock
+    expect(slotHolds()).toBe("line: Show details ↓");
+    scrollLineTo(DOCK_TOP - 6 - REAL_LINE_H);
+    ringOnRealLine();
+    settle();
+    expect(slotHolds()).toBe("chip");
+    expect(drawn(realLine())).toBe(true);
+    expect(bothLinesSeen()).toBe(false);
+  });
+
+  it("Down through the answer one press at a time: at every press at most one line is drawn, and on the real line it is that one", () => {
+    steamDefaultStep = true;
+    renderChat();
+    scrollChatTo(100);
+    act(() => pane.querySelector<HTMLElement>(".bonsai-answer-stop")!.focus());
+    steamGlide(ring());
+    settle();
+    for (let i = 0; i < 14; i += 1) {
+      const before = ring();
+      press("onMoveDown");
+      expect(bothLinesSeen(), `after press ${i + 1} on ${nameOf(ring())}`).toBe(false);
+      if (nameOf(ring()) === "real line") {
+        expect(drawn(realLine()), "ring on the real line: it is drawn").toBe(true);
+        expect(slotHolds()).toBe("chip");
+      }
+      if (nameOf(ring()) === "question box" || ring() === before) break;
+    }
+  });
 });

@@ -25,7 +25,12 @@
  *    line's handler (detailsSlotStore's `pressDetailsSlotLine()`); Up leaves the way Up from a chip
  *    does (`chipRowExitUp()`); Down goes to the question box; Left and Right are claimed so Steam
  *    does not walk out of the plugin to the Quick Access rail, as the chips do at their ends.
- * 4. A swap while the ring is in the slot keeps the ring in the slot: it is handed, through Steam's
+ * 4. Never both lines at once: while the slot holds the line, the answer's own line carries
+ *    `data-slot-holds-line` and is faded out (120 ms, instant with reduced motion; it keeps its space).
+ *    With the ring on the answer's own line the slot's 8 px of holding on is off, so that line, once
+ *    wholly inside the reading area, is the drawn one and the slot shows the chips (the Deck,
+ *    plan82-M6-TWO-DETAILS-LINES.json: both drawn at once with the ring on the real line).
+ * 5. A swap while the ring is in the slot keeps the ring in the slot: it is handed, through Steam's
  *    own transfer, to whichever face replaces the one it was on.
  *
  * Does not: Open the details itself (the real line's own handler does, in the chat under that
@@ -50,6 +55,21 @@ const DETAILS_SLOT_TICK_MS = 300;
 
 type SlotFace = { showLine: boolean; open: boolean };
 
+/**
+ * The attribute the answer's own line carries while the slot holds its copy: the stylesheet fades it
+ * out (detailsSlot.ts), so a person never sees both. A plain attribute, not a class, because the reply
+ * builder owns the line's className and rewrites it on every render.
+ */
+const HELD_ATTR = "data-slot-holds-line";
+
+/** Mark (or clear) the answer's own line, and clear a line that is no longer the live one. */
+function markRealLine(held: HTMLElement | null, mark: boolean): HTMLElement | null {
+  const live = mark ? (currentDetailsLine()?.el ?? null) : null;
+  if (held && held !== live) held.removeAttribute(HELD_ATTR);
+  if (live && live.getAttribute(HELD_ATTR) !== "1") live.setAttribute(HELD_ATTR, "1");
+  return live;
+}
+
 /** One measurement: what the slot should hold, given where the chat is scrolled right now. */
 function measureFace(host: HTMLElement | null, showingNow: boolean): SlotFace {
   const line = currentDetailsLine();
@@ -57,6 +77,10 @@ function measureFace(host: HTMLElement | null, showingNow: boolean): SlotFace {
   if (!line || line.disabled || !line.toggle || !pane) return { showLine: false, open: false };
   const turn = (line.el.closest(".bonsai-chat-turn-slot") as HTMLElement | null) ?? line.el;
   const lineBox = line.el.getBoundingClientRect();
+  /* The ring on the answer's own line: that line is the one drawn, so the slot gives way as soon as
+     the line is wholly inside the area. No 8 px of holding on, which is what drew both at once. */
+  const ring = uiGamepadFocusElement();
+  const ringOnLine = Boolean(ring && line.el.contains(ring));
   const turnBox = turn.getBoundingClientRect();
   const showLine = slotShouldShowLine(
     {
@@ -67,7 +91,7 @@ function measureFace(host: HTMLElement | null, showingNow: boolean): SlotFace {
       lineTop: lineBox.top,
       lineBottom: lineBox.bottom,
     },
-    showingNow,
+    showingNow && !ringOnLine,
   );
   return { showLine, open: line.open };
 }
@@ -75,6 +99,7 @@ function measureFace(host: HTMLElement | null, showingNow: boolean): SlotFace {
 function useDetailsSlotFace(hostRef: React.RefObject<HTMLElement | null>): SlotFace {
   const [face, setFace] = useState<SlotFace>({ showLine: false, open: false });
   const showingRef = useRef(false);
+  const heldRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
     let frame = 0;
     const measure = () => {
@@ -82,6 +107,7 @@ function useDetailsSlotFace(hostRef: React.RefObject<HTMLElement | null>): SlotF
       const next = measureFace(hostRef.current, showingRef.current);
       showingRef.current = next.showLine;
       setSlotShowsLine(next.showLine);
+      heldRef.current = markRealLine(heldRef.current, next.showLine);
       setFace((prev) => (prev.showLine === next.showLine && prev.open === next.open ? prev : next));
     };
     const soon = () => {
@@ -89,11 +115,15 @@ function useDetailsSlotFace(hostRef: React.RefObject<HTMLElement | null>): SlotF
     };
     const doc = hostRef.current?.ownerDocument ?? document;
     doc.addEventListener("scroll", soon, { capture: true, passive: true });
+    /* The ring landing on the answer's own line changes the rule, so re-measure when focus moves. */
+    doc.addEventListener("focusin", soon, true);
     const unsubscribe = subscribeDetailsLine(soon);
     const tick = window.setInterval(measure, DETAILS_SLOT_TICK_MS);
     measure();
     return () => {
       doc.removeEventListener("scroll", soon, { capture: true });
+      doc.removeEventListener("focusin", soon, true);
+      markRealLine(heldRef.current, false);
       unsubscribe();
       window.clearInterval(tick);
       if (frame) cancelAnimationFrame(frame);

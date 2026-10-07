@@ -141,6 +141,11 @@
       "role": ""
     },
     {
+      "path": "src/features/details-slot/DetailsSlot.deck.test.tsx",
+      "lines": 756,
+      "role": ""
+    },
+    {
       "path": "src/components/SettingsTab.tsx",
       "lines": 716,
       "role": ""
@@ -174,11 +179,6 @@
       "path": "py_modules/backend/services/settings_service.py",
       "lines": 665,
       "role": "Load/save/merge settings.json"
-    },
-    {
-      "path": "src/features/details-slot/DetailsSlot.deck.test.tsx",
-      "lines": 644,
-      "role": ""
     },
     {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",

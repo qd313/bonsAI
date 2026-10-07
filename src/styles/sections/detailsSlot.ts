@@ -54,6 +54,15 @@ export function buildDetailsSlotSection(): string {
           pointer-events: none;
           transition: opacity ${fade}ms ease-out, visibility 0s linear ${fade}ms;
         }
+        /* The answer's own line while the slot holds its copy: faded over the same 120 ms, but it keeps its
+           space so nothing jumps, and it stays a stop (Steam reads no CSS; the ring is only ever put on it
+           once the slot has given way, DetailsSlot.tsx). */
+        .bonsai-scope .bonsai-chat-details-divider {
+          transition: opacity ${fade}ms ease-out;
+        }
+        .bonsai-scope .bonsai-chat-details-divider[data-slot-holds-line] {
+          opacity: 0 !important;
+        }
         /* The real line's look (section-6.ts), centred in the chip's own height. */
         .bonsai-scope .bonsai-details-slot__line {
           display: flex !important;
@@ -101,7 +110,8 @@ export function buildDetailsSlotSection(): string {
           .bonsai-scope .bonsai-details-slot__chips,
           .bonsai-scope .bonsai-details-slot__chips--away,
           .bonsai-scope .bonsai-details-slot__line--shown,
-          .bonsai-scope .bonsai-details-slot__line:not(.bonsai-details-slot__line--shown) {
+          .bonsai-scope .bonsai-details-slot__line:not(.bonsai-details-slot__line--shown),
+          .bonsai-scope .bonsai-chat-details-divider {
             transition: none;
           }
         }

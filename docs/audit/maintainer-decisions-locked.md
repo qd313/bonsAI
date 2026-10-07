@@ -2124,3 +2124,22 @@ own section, "Your calls for this session", has the same list.
 
 **At Go, 2026-10-03:** the session runs in the desktop app on Opus 5.5 at extra-high effort (one step above call 9's
 "high"; it matches the house table for landing D-pad work). Nothing is pushed.
+
+### D125 — LOCKED 2026-10-06 (raised 2026-10-06) — Plan 82, the bug list and the Verify list cleaned up overnight: the five calls
+
+Made by the maintainer on 2026-10-06, late evening, in two lines of chat before going to bed, while
+[plan 82](../planning/82-bug-and-verify-cleanup.md) was started. The plan's own section, "The maintainer's calls",
+has the same list.
+
+1. **Scope: the Bugs list and the Verify list, both.** Everything a session or the rig can do is in. What only the
+   maintainer can do (a real voice, a PIN, a finger, the right stick, their own eye) stays theirs; they will chip
+   away at it when they have time.
+2. **The Deck is the session's for the night.** Nobody else drives it.
+3. **Helpers in parallel,** as many as the work has lanes for, within the standing cap of ten.
+4. **Model:** the session runs on Fable 5.1 at high effort, above the house rule for a three-star bug session (Opus
+   extra-high). Said once at the start; the maintainer did not switch it.
+5. **The rig's safety stop,** found set from the evening before, was re-armed by the maintainer at about 00:20 on
+   2026-10-07 so the session could press buttons.
+
+**At Go, 2026-10-07 00:30:** nothing is pushed; the earlier calls D123 and D124 stand (the cut choice menu waits
+for a hand check; nothing moves to Done on its tests alone).

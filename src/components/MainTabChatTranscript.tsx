@@ -121,11 +121,7 @@ import bonsaiLogo from "../assets/icons/bonsai-logo.svg";
 import {
   BONSAI_CHAT_AI_MAX_WIDTH_CSS,
 } from "../features/unified-input/constants";
-import {
-  buildLiveReasoningSteps,
-  buildReasoningFoldRow,
-  buildReasoningOpenBlock,
-} from "../utils/buildReasoningFoldElement";
+import { buildLiveReasoningSteps, buildReasoningFold } from "../utils/buildReasoningFoldElement";
 import { getUiDocument, uiGamepadFocusElement } from "../utils/uiDocument";
 import {
   buildKbNotesBlockElement,
@@ -613,31 +609,26 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    */
   const renderReasoningFold = (turnKey: string, reasoning: TurnReasoning | null | undefined) => {
     if (!reasoning || !reasoning.text.trim()) return null;
-    const open = reasoningOpenFor === turnKey;
-    return (
-      <>
-        {buildReasoningFoldRow({
-          turnId: turnKey,
-          open,
-          seconds: reasoning.seconds,
-          onToggle: () => setReasoningOpenFor((prev) => (prev === turnKey ? null : turnKey)),
-          /*
-           * Up: the question's own text first -- the stop Down visits between the question and
-           * this line (plan 72 A-4: Up went straight past it, plan72-A4-UP-FAMILY-a.json) -- then
-           * the question's row when this turn has no text stop. Never Retry (plan 79): Left from the
-           * text is the one way onto it. All inside this turn's own column, so a plain focus is the
-           * right move here (AGENTS.md, "The Steam Deck focus graph").
-           */
-          onMoveUp: () => {
-            if (focusOpenQuestionText(turnKey)) return true;
-            return focusDeckOwner(turnHeaderElRefs.current[turnKey] ?? null);
-          },
-          /* Down: into the answer, the same call the question's own Down used to make. */
-          onMoveDown: () => focusFirstAnswerChunk(turnKey),
-        })}
-        {open ? buildReasoningOpenBlock(turnKey, reasoning.text) : null}
-      </>
-    );
+    return buildReasoningFold({
+      turnId: turnKey,
+      open: reasoningOpenFor === turnKey,
+      seconds: reasoning.seconds,
+      text: reasoning.text,
+      onToggle: () => setReasoningOpenFor((prev) => (prev === turnKey ? null : turnKey)),
+      /*
+       * Up: the question's own text first -- the stop Down visits between the question and
+       * this line (plan 72 A-4: Up went straight past it, plan72-A4-UP-FAMILY-a.json) -- then
+       * the question's row when this turn has no text stop. Never Retry (plan 79): Left from the
+       * text is the one way onto it. All inside this turn's own column, so a plain focus is the
+       * right move here (AGENTS.md, "The Steam Deck focus graph").
+       */
+      onMoveUp: () => {
+        if (focusOpenQuestionText(turnKey)) return true;
+        return focusDeckOwner(turnHeaderElRefs.current[turnKey] ?? null);
+      },
+      /* Down: into the answer, the same call the question's own Down used to make. */
+      onMoveDown: () => focusFirstAnswerChunk(turnKey),
+    });
   };
   /*
    * The response alone is not enough to justify a live turn.

@@ -146,6 +146,27 @@ export function buildReasoningOpenBlock(turnId: string, text: string): React.Rea
   );
 }
 
+export type BuildReasoningFoldArgs = BuildReasoningFoldRowArgs & {
+  /** The whole thinking the computer side kept, drawn in the block while it is open. */
+  text: string;
+};
+
+/**
+ * Feature: the line and, while it is open, the block under it, as the transcript draws them.
+ * In: the row's arguments plus the thinking. Out: one fragment, the line first.
+ *
+ * The line keeps its place as the fragment's first child whether the block is open or not, so
+ * opening the block never remounts the element holding the ring.
+ */
+export function buildReasoningFold({ text, ...row }: BuildReasoningFoldArgs): React.ReactElement {
+  return (
+    <>
+      {buildReasoningFoldRow(row)}
+      {row.open ? buildReasoningOpenBlock(row.turnId, text) : null}
+    </>
+  );
+}
+
 /**
  * Feature: the live thinking block's lines, while the model works (the maintainer's option B,
  * 2026-09-27).

@@ -41,13 +41,13 @@ to tonight. The maintainer's calls are in the decisions file as D125.
 | | Bug, as a player sees it | Stars | Measured first? | Helper |
 |---|---|---|---|---|
 | A | The "Delete chat slot?" box has three buttons; it should have Delete and Cancel, opening on Cancel | ★ | No: the maintainer's screenshot is the measurement | Sonnet high (p82a), landed `771d66dc` |
-| B | Left and Right on the chat title bar stop on the chat's name; Up from the first question and Down from the tab bar should land on Delete | ★★ | The Deck records the stops (M4), the fix starts at once from the maintainer's rule | Sonnet high (p82b) |
+| B | Left and Right on the chat title bar stop on the chat's name; Up from the first question and Down from the tab bar should land on Delete | ★★ | The Deck records the stops (M4), the fix starts at once from the maintainer's rule | Sonnet high (p82b), landed `1baf53bc` |
 | C | Down from the question box lands on Ask and skips the mode button under the box | ★★ | The Deck records the landing and the row's boxes (M2); the fix starts at once | Sonnet high (p82d) |
-| D | Up from the bottom of the About tab does nothing | ★★ | Yes (M1): what holds the ring after Up, and the shape of the rows above | after M1 |
+| D | Up from the bottom of the About tab does nothing | ★★ | Yes (M1): what holds the ring after Up, and the shape of the rows above | after M1: not reproduced by the rig (M1), stays open, question 5 |
 | E | The ring on a slider is too wide and stays at the right end when the knob moves | ★★ | Yes (M3): the ring's box against the knob's, before and after a press | after M3 |
 | F | Both Show details lines on screen at once | ★★ | Yes (M6): the slot's state against the real line's box on every press | after M6 |
 | G | The open reasoning block scrolls past in one press; it should move a screen at a time like the answer | ★★★ | Yes (M5): the scroll per press on the block and on the answer | after M5; Opus extra-high if the first round fails on the Deck |
-| H | The microphone button does nothing | ★★★ | Yes (M7): a press with the log open, the engine and the microphone checked over SSH | decided by M7 |
+| H | The microphone button does nothing | ★★★ | Yes (M7): a press with the log open, the engine and the microphone checked over SSH | decided by M7: not reproduced by the rig (M7); helper p82h adds a toast and log lines |
 
 **The other seven: not tonight's to fix**
 
@@ -93,6 +93,8 @@ Standing rules as in plan 81. One driver at a time, a fresh one per block, evide
    same two-button change? *Meanwhile:* unchanged.
 3. The three older calls still open from plan 81: the sentence before its cover (question 1), and the two
    reload-under-a-game entries (question 3). *Meanwhile:* open.
+4. **Renaming a chat by hand:** A on the chat's name used to open the rename box, and the name is no longer a stop (your call of 2026-10-06), so the only rename left is the one Sum up offers. Do you want a new route (for example a Rename choice inside the Save window)? *Meanwhile:* none.
+5. **Up at the bottom of the About tab:** the rig could not make it fail (3 of 3 from the D-pad route). How did you reach the bottom: D-pad only, or a right-stick or touch scroll first? *Meanwhile:* the entry stays open.
 
 ## Log
 
@@ -101,3 +103,4 @@ Standing rules as in plan 81. One driver at a time, a fresh one per block, evide
   Four copies cut (p82a to p82d). Helpers p82a (delete box), p82b (title bar) and p82d (box Down) started at 00:33.
   Deck driver on blocks 0 and 1 started at 00:38. The timed 20-minute check is on. Keep-awake held until 08:24.
 - **2026-10-07, about 01:05:** landed p82a (the delete box). Paperwork sweep 1 committed.
+- **2026-10-07, about 01:10 to 01:40:** Deck blocks 0 and 1 done (the Deck is on an external monitor, 855 x 766): five of seven bugs reproduced with numbers; Up at the bottom of About and the microphone did not. Landed p82b (the title bar). Helpers p82e (slider ring), p82f (two details lines), p82g (reasoning block, Opus) and p82h (microphone feedback and log) started at 01:20. Deck block 2 (owed Verify checks) running. Paperwork sweep 2 committed.

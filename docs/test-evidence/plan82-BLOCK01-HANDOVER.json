@@ -1,0 +1,24 @@
+{
+  "row": "BLOCK01-HANDOVER",
+  "build_commit": "repo tip 60b8c57f; Deck dist/index.js md5 3a5c6d4153cdb66a39628a59a00c6639 (same as the PC's dist/index.js); plugin v0.5.0; no deploy, no reload tonight",
+  "deck_time_local": "2026-10-07 about 00:39 EDT (Deck clock)",
+  "screen": "QAM page innerWidth 855 x innerHeight 766 dpr 1.28 (not a 854x454/534 Deck-panel size; screenshots are 1920x1080 gamescope captures)",
+  "keep_awake": "The lease found at start ran only 10 minutes (expiresAt 04:34 UTC = 00:34 EDT), not 480. I renewed once (rule 13): now expires 2026-10-07T12:29:22Z (08:29 EDT).",
+  "backup": "On the Deck: /home/deck/p82-backup/ (settings.json, chat_slots/, chat_threads/), copied 00:29 EDT before any change. Also /tmp/p82-mic-test.raw (0 bytes) left by my parec test.",
+  "test_chat": "How do I beat the boss in the Soul Sanctum in Hollow Knight? (slot 6f3cc055, 170 turns on disk, '84 earlier' folded). It is now the open chat. The chat open at the start was 'how should i spend my first hour in a new open world game'.",
+  "measurements_run": {
+    "BLOCK0-SETUP": "PASS",
+    "M7-MIC-PRESS": "PASS (press reaches back end: label changed, recording class, pw-record + whisper-server started)",
+    "M2-BOX-DOWN": "PASS (as predicted)",
+    "M4-TITLE-BAR": "PASS (as predicted)",
+    "M6-TWO-DETAILS-LINES": "PASS (double line at press 10, screenshot taken)",
+    "M5-REASONING-SCROLL": "PASS (one Down jumped 554.7 px past the whole reasoning block)",
+    "M1-ABOUT-UP": "FAIL (could not reproduce: Up from Support moved to Bugs & Feature Requests, then Built on Ollama!)",
+    "M3-SLIDER-RING": "UNCLEAR (numbers say the ring follows the dot; the screenshot shows the ring frame left of the dot)"
+  },
+  "unclear_and_why": "M3: rect numbers and screenshot disagree. M1: bug did not show; maybe depends on how Support is reached. Parental lock was not read (no known Steam read) and no banner was seen.",
+  "settings_changed_and_restored": "Unload delay 15m -> 30m -> 45m -> 15m (ollama_keep_alive '15m' confirmed in settings.json); Reply style Balanced -> Detailed -> Balanced (reply_verbosity 'balanced' confirmed). Nothing else changed. No settings.json edit over SSH.",
+  "where_left": "Plugin open (Quick Access open), Main tab, test chat open, reasoning block closed, ring on the 'Show reasoning · 18 s' line (scrollTop about 31). No game running. No question asked, nothing sent to the test chat.",
+  "surprises": "(1) First deck_openPlugin failed once with no deploy tonight. (2) LB/RB from the question box switch the plugin's top tabs; on the chat row LB/RB switch chats. (3) After a tab switch the ring read can show a stale control from the previous tab for one read. (4) Quick Access window reads 855x766, not a Deck-panel size. (5) I printed the full settings.json (contains the Steam web API key) into my own console once; the key is in no evidence file. (6) The mic press started whisper-server and pw-record, both gone after the stop press. (7) deck_readPluginLog (journal) shows no entries and the plugin's own log file did not grow during any press.",
+  "side_effects_summary": "Stray LB then RB press at start (Main -> Settings -> Main, nothing changed). Two UP presses sent back to back in M1 and two LEFT presses back to back in M3 (no A involved)."
+}

@@ -1,0 +1,30 @@
+{
+  "row": "M6-TWO-DETAILS-LINES",
+  "build_commit": "repo tip 60b8c57f; Deck dist/index.js md5 3a5c6d4153cdb66a39628a59a00c6639",
+  "deck_time_local": "2026-10-07 about 00:34 EDT",
+  "screen": "QAM page innerWidth 855 x innerHeight 766 dpr 1.28; screenshot is a 1920x1080 gamescope capture",
+  "setup": "Main tab, test chat. The only turn on screen is the newest one ('what is a good first upgrade in Hollow Knight', has 'Show reasoning · 18 s' and a real 'Show details ↓' line). Pane = first element with class _TabContentsScroll: rect top 88 bottom 765 (height 677), scrollHeight 834. Slot line = .bonsai-details-slot__line (rect top 601 bottom 631, 30 tall, the whole time). Real line = .bonsai-chat-details-divider in that turn that is not .bonsai-chat-reasoning-fold. Starting scrollTop 0: the answer's top (question row at y 187) is on screen and the real line (668-682) is below the slot line, i.e. behind the dock area, off the person's view. Ring started on the chat row. Rows below are listed per Down press (press count counted from the chat row).",
+  "pressed": "DOWN x12 from the chat row, one at a time, reading after each; stopped when the ring left the turn.",
+  "seen": {
+    "columns": "press | ring on (accessible name) | ring rect [top,bottom] | scrollTop | slot line [top,bottom], --shown?, visibility/opacity | chips face [top,bottom], --away? | real line [top,bottom], visibility/opacity/display",
+    "rows": [
+      "1 | '84 earlier' pill | [146,169] | 0 | [601,631] shown=true visible/1 | [601,631] away=true | [668,682] visible/1/flex",
+      "2 | question 'what is a good first upgrade in Hollow K' | [190,218] | 0 | [601,631] shown=true visible/1 | [601,631] away=true | [668,682] visible/1/flex",
+      "3 | 'Show reasoning · 18 s' | [235,250] | 0 | same | same | [668,682]",
+      "4 | answer first section 'Right then, listen up...' | [267,357] | 0 | same | same | [668,682]",
+      "5 | answer second section 'It's the first step...' | [357,446] | 0 | same | same | [668,682]",
+      "6 | 'The chat summed itself up before this answer' | [469,501] | 0 | same | same | [668,682]",
+      "7 | 'Read aloud' | [540,572] | 0 | same | same | [668,682]",
+      "8 | 'Wrong game or topic' | [570,594] | 32.8 | same | same | [635,650] (still below the slot top 601: hidden behind dock)",
+      "9 | 'Spoiled it' | [570,594] | 61.7 | same | same | [606,621] (overlaps slot line 601-631, partly covered)",
+      "10 | 'Show details' (the real line) | [579,594] | 88.3 | [601,631] shown=true visible/1 | [601,631] away=true | [579,594] visible/1/flex  <-- both lines on screen at once",
+      "11 | 'Nail upgrades and Pale Ore' notes block (bonsai-kb-notes-block) | [547,594] | 151.6 | [601,631] shown=false hidden/0 | [601,631] away=false | [516,531] visible/1/flex",
+      "12 | 'What's the efficiency sweet spot for thi...' (the chip row, outside the turn) | [601,631] | 151.6 | shown=false | away=false | ring left the turn"
+    ],
+    "both_visible_rows": "Row 10 (real line [579,594] wholly inside the pane and above the slot top 601, while the slot line is shown and visible) is the one clean both-visible row. Row 9 is a partial overlap (real 606-621 against slot 601-631). Screenshot: plan82-M6-TWO-DETAILS-LINES.png taken at row 10; it shows two 'Show details ↓' lines, the real one with the ring at about y 801 and the dock one at y 839 (image px).",
+    "slot_hides_when": "the slot line stops being shown (--shown off, visibility hidden, opacity 0) and the chips face comes back (away off) on press 11, one stop after the real line"
+  },
+  "expected": "Both Show details lines on screen at once at some row while the slot line is shown.",
+  "verdict": "PASS (the double line is reproduced: at press 10 the answer's own 'Show details' sits at 579-594 and the dock's slot line at 601-631 is shown; for presses 8-9 the real line was behind or under the slot line, for press 11 on the slot line was hidden)",
+  "side_effect": "none"
+}

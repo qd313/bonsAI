@@ -1,0 +1,33 @@
+{
+  "row": "M1-ABOUT-UP",
+  "build_commit": "repo tip 60b8c57f; Deck dist/index.js md5 3a5c6d4153cdb66a39628a59a00c6639",
+  "deck_time_local": "2026-10-07 about 00:40-00:44 EDT",
+  "screen": "QAM page innerWidth 855 x innerHeight 766 dpr 1.28",
+  "setup": "Reached About with RB x5 from Main (tab name read: ABOUT). Right after the tab switch the ring read still showed a stale control from the Settings tab ('Follow system'); the first Down then landed on GitHub, so a stop above GitHub (if there is one) was not seen.",
+  "pressed": "DOWN x4 from the tab switch, one press then one read each; then UP, UP (two presses sent back to back WITHOUT a read between them, my mistake, see side_effect); then redone properly: DOWN, DOWN to Support, UP (read), UP (read); DOWN x2 more; DOWN from Support (read). Left by LB x4 (About->Dev->Perms->Settings->Ollama), no B.",
+  "seen": {
+    "stop_list_going_down_[name | rect top,left,bottom,right]": [
+      "GitHub | 333,64,375,332 (pane scrollTop 199.2)",
+      "Built on Ollama! | 395,64,436,332",
+      "Bugs & Feature Requests | 456,64,498,332",
+      "Support my Steam Sale habit | 650,64,691,332 (last control)"
+    ],
+    "rects_at_support_button": {
+      "support_button": {"top":650,"left":64,"bottom":691,"right":332,"width":268,"height":42},
+      "qr_img[alt*=PayPal]": {"top":508,"left":132,"bottom":640,"right":264,"width":132,"height":132},
+      "bugs_button": {"top":456,"left":64,"bottom":498,"right":332,"width":268,"height":42},
+      "scroll_pane_._TabContentsScroll": {"top":88,"left":48,"bottom":765,"right":348,"width":300,"height":677},
+      "pane_scrollTop_scrollHeight_clientHeight": [199.2, 877, 677]
+    },
+    "up_from_support_first_try": "UP -> 'Bugs & Feature Requests' (rect top 456). The ring did NOT stay on the Support button.",
+    "up_second": "UP -> 'Built on Ollama!' (rect top 395)",
+    "up_the_back_to_back_pair": "UP, UP sent together from Support ended on 'Built on Ollama!', consistent with the one-at-a-time result",
+    "down_from_support": "stays on 'Support my Steam Sale habit' (pressed twice, no move); this is the end of the tab",
+    "ring_ancestors_of_support_button": "BUTTON.DialogButton.gpfocus.gpfocuswithin > DIV (settings item) > ... > DIV.bonsai-settings-item-ring-host (no focus class) > DIV._3LM_ZckJp5yJYrL1OI_WqW > DIV._3gY0aBuNR8_NPTpXIYfkby > DIV.bonsai-tab-panel-shell--tight > DIV.bonsai-tab-body-root.Panel.Focusable.gpfocuswithin > DIV._TabContentsScroll.Panel.Focusable.gpfocuswithin > DIV.Panel.Focusable.gpfocuswithin > ... > DIV._3IBLc81yyL08OJ7rfKtF00. None of the ancestors carries a tabindex. Only the button has gpfocus.",
+    "qr_row_ancestors": "img's parent DIV._3LM_ZckJp5yJYrL1OI_WqW, then DIV._3gY0aBuNR8_NPTpXIYfkby, then DIV.bonsai-tab-panel-shell--tight: no tabindex, no gpfocuswithin, no gpfocus (the QR row is not focusable)",
+    "route_out": "no B pressed; used LB x4 to move to the Ollama tab"
+  },
+  "expected": "The bug: Up from the last button (Support) keeps the ring on Support both times.",
+  "verdict": "FAIL (the bug did not show on this build on this run: both Ups moved the ring, Support -> Bugs & Feature Requests -> Built on Ollama!, three separate times). The runbook's route was tried once, then repeated once more with proper reads. It may depend on arriving at Support a different way (e.g. through the QR picture area, or after a scroll), which I did not try. Reported as 'could not reproduce', for the owner to decide.",
+  "side_effect": "One pair of Up presses was sent without a read between them (rule 9 is about A, no A was pressed). After tab switching the ring read showed a stale control for one read. Dev tab was passed through by RB/LB presses only; no screenshot of it was taken."
+}

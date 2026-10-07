@@ -1,0 +1,18 @@
+{
+  "row": "M5-REASONING-SCROLL",
+  "build_commit": "repo tip 60b8c57f; Deck dist/index.js md5 3a5c6d4153cdb66a39628a59a00c6639",
+  "deck_time_local": "2026-10-07 about 00:35-00:37 EDT",
+  "screen": "QAM page innerWidth 855 x innerHeight 766 dpr 1.28",
+  "setup": "Main tab, test chat. One reasoning line exists in the visible turns: .bonsai-chat-reasoning-fold 'Show reasoning · 18 s' on the newest turn ('what is a good first upgrade in Hollow Knight'); older turns are folded behind '84 earlier' and were not inspected. No question was asked. Pane = ._TabContentsScroll, rect top 88 bottom 765 (677 tall). The dock (chips row / question box) begins at about y 601 (the 'Show details' slot line is at 601-631).",
+  "pressed": "A on the reasoning line (ring confirmed first: aria-label 'Show reasoning · 18 s'); DOWN; UP; DOWN; DOWN; UP; UP; A (close). 400 ms wait after each move.",
+  "seen": {
+    "after_A_open": {"block_rect": {"top":227,"bottom":1045,"height":818}, "block_text_chars": 2040, "scrollTop": 31.25, "scrollHeight": 1660, "ring_on": "Hide reasoning · 18 s, rect top 204 h 15"},
+    "after_DOWN_from_line": {"scrollTop": 585.94, "scroll_delta_px": 554.7, "ring_left_reasoning_line_in_one_press": true, "ring_on": "answer first section 'Right then, listen up...' (bonsai-ai-response-chunk--in-bubble), rect top 511 bottom 601", "block_rect": {"top":-328,"bottom":490}, "note": "the whole 818 px reasoning block went by in ONE press; the person never stopped on any of its text. Screenshot plan82-M5-REASONING-SCROLL-after-down.png shows the end of the reasoning text above and the answer's first lines at the dock."},
+    "after_UP": {"scrollTop": 31.25, "scroll_delta_px": -554.7, "ring_on": "Hide reasoning · 18 s (back on the line)", "block_rect": {"top":227,"bottom":1045}},
+    "answer_compare": "From the reasoning line, DOWN to the answer's first section (scrollTop 585.9, read), then DOWN again to its second section ('It's the first step...'): scrollTop 982.8, i.e. about +396.9 px for that one press (first-section value taken from the earlier read; I did not read between those two presses). With the reasoning block closed (see M6) the same answer sections moved 0 px per press (scrollTop stayed 0 from the question row to 'Read aloud').",
+    "close": "UP, UP back to the line (scrollTop 31.25), A: block gone (.bonsai-chat-reasoning-block absent), line reads 'Show reasoning · 18 s' again, scrollTop 31.25"
+  },
+  "expected": "The open reasoning block does not scroll in steps: one press jumps the pane by about the whole block instead of a step.",
+  "verdict": "PASS (confirmed: one Down press from the open reasoning line moved the pane 554.7 px, almost the whole 818 px block, and left the line at once; the next answer press moved about 397 px; the reasoning text itself cannot be read by stepping down)",
+  "side_effect": "none. I opened and closed the reasoning block once; Deck left with it closed."
+}

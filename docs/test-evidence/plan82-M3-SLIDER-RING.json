@@ -1,0 +1,26 @@
+{
+  "row": "M3-SLIDER-RING",
+  "build_commit": "repo tip 60b8c57f; Deck dist/index.js md5 3a5c6d4153cdb66a39628a59a00c6639",
+  "deck_time_local": "2026-10-07 00:36-00:38 EDT",
+  "screen": "QAM page innerWidth 855 x innerHeight 766 dpr 1.28",
+  "setup": "Ollama tab. Both sliders live on this tab: .bonsai-ollama-keepalive-slider ('Unload delay', label text 'Unload delay: 15m') and .bonsai-reply-verbosity-slider ('Reply style: Balanced'). The matched selector for the ring: the ring element is a div with class 'Panel Focusable gpfocus gpfocuswithin' (no bonsai class of its own) sitting inside the slider; it is a sibling of the 21.1 px visible dot's wrapper. Elements (css px, left,width): ring 42 wide x 28.1 tall; visible dot 21.1 x 21.1; track 246.5 wide x 6 tall starting at left 74.8; a 42 x 40 box around the dot (dot wrapper) is the ring's parent-level sibling. The ring's computed outline is 'rgb(150,150,150) none 0px', box-shadow none, width 41.99 px (so Steam's native ring is not drawn by outline or shadow; the white frame seen in screenshots is something else).",
+  "pressed": "Unload delay: walked Down 10 presses from the Ollama tab top (ring landed on the slider: 'Unload delay: 15m'), RIGHT, wait 300 ms, read + screenshot, RIGHT, read, LEFT, LEFT (those two without a read between), read. Reply style: walked Up 3 presses, RIGHT, read, LEFT, read.",
+  "seen": {
+    "unload_delay": {
+      "start_15m": {"ring_left":197.5,"ring_w":42,"dot_left":208.0,"dot_w":21.1,"track_left":74.8,"track_w":246.5},
+      "after_right_1_(30m)_300ms": {"ring_left":218.1,"ring_w":42,"dot_left":228.5,"dot_w":21.1,"fill_w":164.3,"label":"Unload delay: 30m","ring_outline":"none","ring_box_shadow":"none","ring_width_px":41.99},
+      "after_right_2_(45m)": {"ring_left":238.6,"ring_w":42,"dot_left":249.0,"label":"Unload delay: 45m"},
+      "after_left_x2_back": {"ring_left":197.5,"dot_left":208.0,"label":"Unload delay: 15m"}
+    },
+    "reply_style": {
+      "start_Balanced": {"ring_left":177.0,"ring_w":42,"dot_left":187.4},
+      "after_right_(Detailed)": {"ring_left":300.2,"ring_w":42,"dot_left":310.7,"label":"Reply style: Detailed"},
+      "after_left_(Balanced)": {"ring_left":177.0,"dot_left":187.4,"label":"Reply style: Balanced"}
+    },
+    "screenshot_vs_numbers": "By the page's rectangle numbers the ring moves WITH the dot (ring is 42 wide, dot 21.1 wide; ring centre equals dot centre on every reading; ring is 20.9 px wider than the dot). But in the screenshot taken after the first Right (and again a few seconds later) the white ring frame sits to the LEFT of the dot: its left edge is about 44 image px left of the dot's left edge and its right edge about 10 image px inside the dot's right edge (frame spans x 1723-1784, dot spans about 1767-1794, 1920 px wide image). That matches the ring being painted where the dot was one step earlier. The numbers and the picture disagree; the picture is what a person sees. Files: plan82-M3-SLIDER-RING-after-right.png and plan82-M3-SLIDER-RING-after-right-settled.png.",
+    "values_put_back": "Unload delay back to 15m (label and settings file: ollama_keep_alive '15m'); Reply style back to Balanced (reply_verbosity 'balanced' in the file)."
+  },
+  "expected": "After a Right press the ring's rect stays at the track's right end while the dot's rect has moved; ring width wider than the dot by more than a few px.",
+  "verdict": "UNCLEAR for the rectangle half (ring rect did NOT stay behind: it moved with the dot, left 197.5 -> 218.1 -> 238.6; not the predicted 'stays at the right end'). PASS for the width half (ring is 42 px wide against a 21.1 px dot, 20.9 px wider). UNCLEAR overall on 'ring drawn off the dot': the screenshot shows the frame sitting left of the dot while the numbers say centred, so the owner should look at the two pictures.",
+  "side_effect": "I changed the Unload delay twice (15m -> 30m -> 45m) and the Reply style once (Balanced -> Detailed), and put both back to the original values; the plugin saved each change to settings.json as it went and the file reads the original values now. Two Left presses were sent together at the end of the Unload test."
+}

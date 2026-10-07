@@ -1,0 +1,35 @@
+{
+  "row": "M7-MIC-PRESS",
+  "build_commit": "repo tip 60b8c57f; Deck dist/index.js md5 3a5c6d4153cdb66a39628a59a00c6639",
+  "deck_time_local": "2026-10-07 00:30-00:33 EDT",
+  "screen": "QAM page innerWidth 855 x innerHeight 766 dpr 1.28 (screenshot is 1920x1080 gamescope capture)",
+  "setup": "Main tab, test chat open, ring walked to the microphone button by Right, Right from the question box (box -> mode button -> mic). Read focus before A: BUTTON aria-label 'Voice input', class 'bonsai-askbar-target bonsai-unified-input-corner-right cXzBZxhPBl7fZs9LODEnc Focusable gpfocus', rect top 682 left 322 w 20 h 20. Question box empty before and after.",
+  "pre_ssh_readings": {
+    "log_line_count_2026-10-06_18.53.42.log": 2,
+    "log_dir_newest": "2026-10-06 18.53.42.log (151 bytes, Oct 6 18:53)",
+    "voice_bin": "whisper-cli, whisper-server, libwhisper/libggml present; voice_models has ggml-tiny.en.bin (77,704,715 bytes)",
+    "whisper_cli_help_run_by_hand": "error while loading shared libraries: libwhisper.so.1: cannot open shared object file (my bare run had no library path set; the plugin starts whisper-server, which ran fine)",
+    "parec_3s_test": "timeout exit 124, /tmp/p82-mic-test.raw is 0 bytes (expected ~96000). Over a bare SSH session parec captured nothing; the plugin itself uses pw-record and that did start (see below)"
+  },
+  "pressed": "A on the microphone button (first press), wait 1.5 s, readings; wait 5 s; A again (focus read first, still 'Stop voice input'); readings.",
+  "seen": {
+    "after_first_A_1.5s": {
+      "aria_label": "Stop voice input",
+      "class_has_bonsai-voice-recording-active": true,
+      "question_box_text": "",
+      "toast_text_found_in_page": "none",
+      "plugin_log_via_deck_readPluginLog": "no entries (journal source), the plugin file log is unchanged: still 2 lines",
+      "screenshot": "plan82-M7-MIC-PRESS-after-a.png (mic button shows a ring and recording mark)"
+    },
+    "ssh_ps_after_first_A": "whisper-server (pid 16571, port 18765, started 00:31, -m ggml-tiny.en.bin) and pw-record (pid 16582, target alsa_loopback_device.alsa_input.pci-0000_04_00.5-platform-nau8821...) both running",
+    "after_second_A": {
+      "aria_label": "Voice input",
+      "class_has_recording_active": false,
+      "question_box_text": "",
+      "ps": "no whisper or pw-record processes left"
+    }
+  },
+  "expected": "If the press works: label becomes 'Stop voice input', class bonsai-voice-recording-active, a capture process runs.",
+  "verdict": "PASS (the press reaches the back end: three of the five readings changed - the label became 'Stop voice input', the recording class appeared, and a capture process (pw-record) plus the whisper server started. No toast and no log line appeared. Nothing was said into the mic, so the second press produced no words in the box.). Note for the owner: this is the opposite of 'the microphone button does nothing' on this build on this Deck.",
+  "side_effect": "Two real microphone presses were made: one start, one stop. The Deck's voice server started and stopped. /tmp/p82-mic-test.raw (0 bytes) left on the Deck from my parec test. The plugin file log did not record either press."
+}

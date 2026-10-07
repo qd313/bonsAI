@@ -76,6 +76,7 @@ All notable changes to this project are documented in this file.
 ### Plan 82 (2026-10-07)
 
 - **The "Delete chat slot?" box has two buttons, Cancel and Delete, and opens on Cancel,** so a habitual A cannot delete a chat. Owes its Deck check.
+- **Left and Right on the chat row now jump straight between the Save icon and the Delete icon,** and the ring never rests on the chat's name; it comes onto the row on Delete, from the tab bar's Down and from the first question's Up. A on the name used to open the rename box, so renaming by hand is gone for now; the Rename that Sum up offers still works. Owes its Deck check.
 
 ### Plan 81 (2026-10-03)
 

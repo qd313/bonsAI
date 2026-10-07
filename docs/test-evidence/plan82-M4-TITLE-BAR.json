@@ -1,0 +1,22 @@
+{
+  "row": "M4-TITLE-BAR",
+  "build_commit": "repo tip 60b8c57f; Deck dist/index.js md5 3a5c6d4153cdb66a39628a59a00c6639",
+  "deck_time_local": "2026-10-07 about 00:38 EDT",
+  "screen": "QAM page innerWidth 855 x innerHeight 766 dpr 1.28",
+  "setup": "Main tab, test chat. The first question is folded behind the '84 earlier' pill (bonsai-chat-earlier-pill-row), so I did not walk to a first question bubble: I walked Up from the question box to the '84 earlier' pill (13 presses) and pressed Up once more to reach the chat row.",
+  "pressed": "UP (from '84 earlier' pill) ; LEFT ; LEFT ; RIGHT ; RIGHT ; RIGHT ; (extra) LEFT ; UP ; DOWN from the tab bar. Ring owner on every stop is div.bonsai-chat-slot-row-focus; the child that is drawn as the active stop is the one carrying the class '--active-stop'.",
+  "seen": {
+    "landing_from_below": "ring on bonsai-chat-slot-row-focus, active stop = bonsai-chat-slot-save (Save icon, class bonsai-chat-slot-save--active-stop), no aria-label",
+    "left_1": "stays on Save (bonsai-chat-slot-save--active-stop)",
+    "left_2": "stays on Save",
+    "right_1": "name (bonsai-chat-slot-title--active-stop; the name text, class also has --overflowing)",
+    "right_2": "Delete icon (bonsai-chat-slot-delete--active-stop)",
+    "right_3": "stays on Delete",
+    "extra_left_from_delete": "lands on the name (bonsai-chat-slot-title--active-stop)",
+    "up_from_row": "ring on div.bonsai-tab-bar (aria-label 'Main tab')",
+    "down_from_tab_bar": "ring on bonsai-chat-slot-row-focus with the NAME as active stop (bonsai-chat-slot-title--active-stop)"
+  },
+  "expected": "Bug as described: Right from Save lands on the name; Left from Delete lands on the name.",
+  "verdict": "PASS (both described behaviours are present: Right from Save goes to the name, and Left from Delete goes to the name; the ring never skips the name). Extra facts: arriving from below puts the ring on Save, arriving from the tab bar puts it on the name; the ends do not wrap.",
+  "side_effect": "none (no A pressed on the chat row)"
+}

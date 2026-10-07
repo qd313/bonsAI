@@ -1,0 +1,25 @@
+{
+  "row": "M2-BOX-DOWN",
+  "build_commit": "repo tip 60b8c57f; Deck dist/index.js md5 3a5c6d4153cdb66a39628a59a00c6639",
+  "deck_time_local": "2026-10-07 about 00:35 EDT",
+  "screen": "QAM page innerWidth 855 x innerHeight 766 dpr 1.28",
+  "setup": "Main tab, test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' open, ring on the question box (INPUT, class DialogInput, rect top 634 left 73 w 274 h 44), box text empty. Ring reached the box by walking Down from the chat row; A never pressed on the box.",
+  "pressed": "DOWN from box; UP from Ask; RIGHT from box; DOWN from mode button; UP from Ask.",
+  "seen": {
+    "rects_px": {
+      "question_box_input.DialogInput": {"top":634,"left":73,"bottom":678,"right":347,"width":274,"height":44},
+      "paperclip[aria-label=Attach screenshot to Ask]": {"top":682,"left":54,"bottom":702,"right":74,"width":20,"height":20},
+      "mode_button.bonsai-ask-mode-trigger": {"top":682,"left":262,"bottom":702,"right":317,"width":55,"height":20},
+      "microphone[aria-label=Voice input]": {"top":682,"left":322,"bottom":702,"right":342,"width":20,"height":20},
+      "ask_button.bonsai-ask-primary": {"top":711,"left":49,"bottom":747,"right":347,"width":298,"height":36}
+    },
+    "box_down": "ring went to Ask (BUTTON bonsai-ask-primary, text 'ask', rect top 711 left 49 w 298 h 36)",
+    "ask_up": "ring went back to the question box (INPUT, rect top 634 left 73), not to a small-icon row",
+    "box_right": "ring went to the mode button (aria-label 'Inference mode: Strategy. Open to change.', rect top 682 left 262)",
+    "mode_down": "ring went to Ask (rect top 711 left 49)",
+    "mode_up_via_ask": "pressing Up from Ask (after arriving from the mode button) landed on the question box, not the mode button"
+  },
+  "expected": "Down from the box lands on Ask; Up returns; the mode button is entered with Left/Right from the box; Down from the mode button; Up.",
+  "verdict": "PASS (measurement matches what the runbook predicted: Down from the question box skips the icon row and lands on Ask, the icon row is only reachable sideways from the box; Up from Ask returns to the box even when you came from the mode button)",
+  "side_effect": "none. Earlier in the setup the walk passed through the chip row; no A pressed."
+}

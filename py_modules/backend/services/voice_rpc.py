@@ -127,16 +127,28 @@ async def get_voice_install_status(self):
     return dict(self._voice_install_state)
 
 
+def _log_start_refused(model_id: str, error: str) -> None:
+    """One plain line in the plugin log: a microphone press reached the back end and was refused."""
+    logger.info("voice: recording start refused (%s), model %s", error, model_id)
+
+
 async def start_voice_transcription(self, PLUGIN_ROOT: str):
-    """Start PipeWire/Pulse capture and local whisper interim transcription."""
+    """Start PipeWire/Pulse capture and local whisper interim transcription.
+
+    Every outcome writes one plain line through the ordinary logger (the activity log is off by
+    default), so the plugin log file shows whether a microphone press arrived.
+    """
     ok_gate, gate_out = await _require_microphone_access(self)
     if not ok_gate:
+        settings = await self.load_settings()
+        _log_start_refused(sanitize_voice_stt_model(settings.get("voice_stt_model")), "permission_denied")
         return gate_out or {"accepted": False, "reason": "permission_denied"}
 
     settings = await self.load_settings()
     model_id = sanitize_voice_stt_model(settings.get("voice_stt_model"))
     ready = engine_readiness(PLUGIN_ROOT, decky.DECKY_PLUGIN_SETTINGS_DIR, model_id)
     if not ready.get("binary_ready"):
+        _log_start_refused(model_id, "engine_missing")
         return {
             "accepted": False,
             "error": "engine_missing",
@@ -146,6 +158,7 @@ async def start_voice_transcription(self, PLUGIN_ROOT: str):
             ),
         }
     if not ready.get("model_ready"):
+        _log_start_refused(model_id, "model_missing")
         return {
             "accepted": False,
             "error": "model_missing",
@@ -156,6 +169,7 @@ async def start_voice_transcription(self, PLUGIN_ROOT: str):
         if self._voice_session is not None:
             st = self._voice_session.status()
             if st.get("recording"):
+                logger.info("voice: recording start accepted, one was already running, model %s", model_id)
                 return {"accepted": True, "status": st}
             old = self._voice_session
             self._voice_session = None
@@ -177,7 +191,10 @@ async def start_voice_transcription(self, PLUGIN_ROOT: str):
         else:
             self._voice_session = None
 
-    if out.get("accepted"):
+    if not out.get("accepted"):
+        _log_start_refused(model_id, str(out.get("error") or out.get("reason") or "not_accepted")[:200])
+    else:
+        logger.info("voice: recording started, model %s", model_id)
         await self._persist_input_transparency(build_voice_transcribe_snapshot(model_id=model_id))
         await self._maybe_app_log(
             "voice.start",
@@ -193,6 +210,7 @@ async def stop_voice_transcription(self):
         session = self._voice_session
         self._voice_session = None
     if session is None:
+        logger.info("voice: stop pressed, no recording was running")
         return {
             "stopped": True,
             "status": "idle",
@@ -200,6 +218,10 @@ async def stop_voice_transcription(self):
             "partial_transcript": "",
         }
     out = await asyncio.to_thread(session.stop)
+    logger.info(
+        "voice: recording stopped, transcript %d characters",
+        len(str(out.get("finalized_transcript") or "")),
+    )
     await self._maybe_app_log(
         "voice.stop",
         "voice transcription stopped",

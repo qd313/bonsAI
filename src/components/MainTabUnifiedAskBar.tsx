@@ -399,6 +399,8 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             } as Record<string, unknown>)
           : {})}
         {...unifiedInputDeckNavHandlers}
+        /* Down lands on the mode button under the box; the next Down reaches Ask (maintainer, 2026-10-06). */
+        {...({ onMoveDown: () => focusAskModeButton() } as Record<string, unknown>)}
         {...(showSettingsCard ? { onMoveUp: () => focusSettingsCardLastRow() } : {})}
         {...({ navRef: unifiedInputNavRef } as Record<string, unknown>)}
         style={{
@@ -624,6 +626,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
         <Focusable
           className="bonsai-unified-input-actions-row"
           flow-children="horizontal"
+          {...({ onMoveDown: () => !askModeMenuOpen && !attachMenuOpen && focusAskPrimary() } as Record<string, unknown>)}
           style={{
             display: "flex",
             flexDirection: "row",
@@ -1209,6 +1212,8 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
         className="bonsai-ask-row"
         flow-children="horizontal"
         {...askRowDeckNavHandlers}
+        /* Up is Down reversed: Ask goes back to the mode button, not past it to the box. */
+        {...({ onMoveUp: () => focusAskModeButton() || focusUnifiedTextField() } as Record<string, unknown>)}
         style={{
           position: "relative",
           display: "flex",

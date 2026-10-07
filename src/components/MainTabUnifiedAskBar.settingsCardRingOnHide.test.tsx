@@ -79,7 +79,22 @@ vi.mock("@decky/ui", async () => {
       />
     );
   });
-  return { ...stubs, TextField, Button };
+  /* A Focusable is a container Steam bubbles an unhandled move up to (a Decky Button forwards none). */
+  const Focusable = React.forwardRef<HTMLDivElement, Record<string, unknown>>(function SteamFocusable(props, ref) {
+    const own = React.useRef<HTMLElement | null>(null);
+    useSteamNode(props, own);
+    return (
+      <stubs.Focusable
+        {...props}
+        ref={(el: HTMLDivElement | null) => {
+          own.current = el;
+          if (typeof ref === "function") ref(el);
+          else if (ref) ref.current = el;
+        }}
+      />
+    );
+  });
+  return { ...stubs, TextField, Button, Focusable };
 });
 
 import { MainTabUnifiedAskBar, type MainTabUnifiedAskBarProps } from "./MainTabUnifiedAskBar";
@@ -138,12 +153,17 @@ function questionBox(): HTMLElement {
 }
 
 /**
- * One D-pad press as Steam delivers it: the ringed control's own move handler. A plain focus()
+ * One D-pad press as Steam delivers it: the ringed control's own move handler, else the nearest
+ * container's (Steam bubbles an unhandled move up through its Focusables). A plain focus()
  * between siblings moves the page's focus, and Steam's ring follows it.
  */
 function pressDown(): void {
-  const at = ring();
-  const onMoveDown = at ? (hoisted.props.get(at)?.onMoveDown as (() => unknown) | undefined) : undefined;
+  let at: Element | null = ring();
+  let onMoveDown: (() => unknown) | undefined;
+  while (at && !onMoveDown) {
+    onMoveDown = hoisted.props.get(at)?.onMoveDown as (() => unknown) | undefined;
+    at = at.parentElement;
+  }
   act(() => {
     onMoveDown?.();
   });
@@ -184,7 +204,8 @@ describe("the Steam settings list goes away while the ring is on one of its rows
     expect(ring()).toBe(questionBox());
 
     // A bounded walk Down from there: every press moves to a stop not seen before, until the
-    // end of the bar, and the first press is never a dead one.
+    // end of the bar, and the first press is never a dead one. The box's Down lands on the mode
+    // button under it (maintainer 2026-10-06); only the next Down reaches Ask.
     const seen = [ring()];
     for (let press = 0; press < 6; press++) {
       pressDown();
@@ -193,7 +214,8 @@ describe("the Steam settings list goes away while the ring is on one of its rows
       seen.push(ring());
     }
     expect(seen.length).toBeGreaterThan(1);
-    expect(seen[1]?.classList.contains("bonsai-ask-primary")).toBe(true);
+    expect(seen[1]?.classList.contains("bonsai-ask-mode-trigger")).toBe(true);
+    expect(seen[2]?.classList.contains("bonsai-ask-primary")).toBe(true);
   });
 
   it("a new word with new matches: the row under the ring is gone, the ring goes to the box", () => {

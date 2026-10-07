@@ -1,17 +1,18 @@
 /**
- * Title: Up from Ask always lands on the question box
+ * Title: Up from Ask always lands on the mode button
  *
  * Purpose: Pin plan 74 lane 3, bug 4 (roadmap: "Up from Ask lands on the mic one time and on the
  * paperclip another"). Ask set no Up of its own, so Steam's own step carried the ring into the row
  * of icons along the box's bottom edge, which it re-enters on whichever icon was used last (the mic
  * one time, the paperclip another; docs/test-evidence/plan64-ASKBAR-DOWN-TO-STOP-01.json: "Up from
- * Ask goes to Voice input (the last-used place in the row)"). Down from the box goes straight to
- * Ask, so Up from Ask now goes straight back to the box, through Steam's own transfer.
+ * Ask goes to Voice input (the last-used place in the row)"). Plan 74 sent it straight back to the
+ * box. Since plan 82 Down from the box stops on the mode button first (maintainer 2026-10-06), so
+ * Up from Ask goes back through the same stop: the mode button, then the box.
  *
  * The handler sits on the Ask row's own Focusable: a Decky Button does not forward move props on
  * the device, so a handler on the button itself would never run there.
  *
- * Does not: prove the transfer lands on the device; that is the Deck row's job.
+ * Does not: prove the ring lands on the device; that is the Deck row's job.
  */
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -87,29 +88,37 @@ afterEach(() => {
   navFocusRegistry.resetNavFocusRegistry();
 });
 
-describe("Up from Ask", () => {
-  it("hands the ring to the question box through Steam's own transfer", () => {
-    const spy = vi.spyOn(navFocusRegistry, "takeNavFocus").mockReturnValue(true);
-    render(<MainTabUnifiedAskBar {...buildProps()} />);
+function mount(overrides: Partial<MainTabUnifiedAskBarProps> = {}) {
+  const view = render(<MainTabUnifiedAskBar {...buildProps(overrides)} />, {
+    container: document.body.appendChild(document.createElement("div")),
+  });
+  const modeButton = view.container.querySelector("button.bonsai-ask-mode-trigger") as HTMLElement;
+  expect(modeButton).toBeTruthy();
+  return { ...view, modeButton };
+}
+
+describe("Up from Ask (plan 82: Up is Down reversed, so it lands on the mode button, not past it)", () => {
+  it("puts the ring on the mode button under the box", () => {
+    const { modeButton } = mount();
 
     const onMoveUp = askRowProps()?.onMoveUp as () => boolean;
     expect(onMoveUp).toBeTypeOf("function");
     expect(onMoveUp()).toBe(true);
-    expect(spy).toHaveBeenCalledWith("unified-input");
+    expect(document.activeElement).toBe(modeButton);
   });
 
-  it("goes to the box the same way from Clear, the other stop in Ask's row", () => {
-    const spy = vi.spyOn(navFocusRegistry, "takeNavFocus").mockReturnValue(true);
-    render(<MainTabUnifiedAskBar {...buildProps({ showSearchClearButton: true })} />);
+  it("does the same from Clear, the other stop in Ask's row", () => {
+    const { modeButton } = mount({ showSearchClearButton: true });
 
     expect((askRowProps()?.onMoveUp as () => boolean)()).toBe(true);
-    expect(spy).toHaveBeenCalledWith("unified-input");
+    expect(document.activeElement).toBe(modeButton);
   });
 
-  it("leaves the press to Steam when the box is not registered yet", () => {
-    vi.spyOn(navFocusRegistry, "takeNavFocus").mockReturnValue(false);
-    render(<MainTabUnifiedAskBar {...buildProps()} />);
+  it("does not skip the mode button and take the ring straight to the question box", () => {
+    const spy = vi.spyOn(navFocusRegistry, "takeNavFocus").mockReturnValue(true);
+    mount();
 
-    expect((askRowProps()?.onMoveUp as () => boolean)()).toBe(false);
+    (askRowProps()?.onMoveUp as () => boolean)();
+    expect(spy).not.toHaveBeenCalledWith("unified-input");
   });
 });

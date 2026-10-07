@@ -400,6 +400,44 @@ backup path, what the earlier driver learned), not to the same one.
 
 **Never reload the plugin on the Deck while a game is starting or running.** Twice (Deep Rock Galactic: Survivor and Half-Life 2, plan 78 block 3d and 3e) a reload during a game's start was followed by the game's window never coming to the front. Once (Black Mesa, plan 78 block 3e) a reload with the game running left Steam's interface gone until the maintainer restarted the Deck. The rule: reload first, then launch; with a game up, close and reopen Quick Access instead.
 
+**A parent's opacity never shows on a child's computed opacity.** The fade-style chips were read as
+"never fading" twice (2026-10-03, 2026-10-07): the rig sampled the chip button and its children every 100 ms and
+saw 1.00 through 32 word changes, while the wrapper box around the button was fading as designed. Before filing a
+"never changes" finding from a computed style, read the element that carries the style, or walk the ancestors too.
+The fade now sits on the button itself so the check can read it (plan 82, `8d1523d4`). Evidence
+`docs/test-evidence/plan82-P79-LONG-CHIPS-NOGAME.json`, then `plan82-P82-FADE-ON-BUTTON.json`.
+
+**Steam's own focus ring is placed when an element takes focus and is not re-measured when that element
+moves.** A slider knob stepped with the D-pad left Steam's grey frame one step behind it, and the page's own
+rectangles said the ring element had moved with the knob: the numbers and the picture disagreed, and the picture is
+what a person sees. For anything that moves while focused, switch Steam's ring off on it (`noFocusRing`) and draw
+the plugin's own ring on the moving element (plan 82, `f6c96e43`). Evidence
+`docs/test-evidence/plan82-M3-SLIDER-RING.json` and its screenshots, then `plan82-P82-SLIDER-RING-ON-KNOB.json`.
+
+**A "come back here" flag kept inside a component does not survive a Decky popup.** Closing the popup rebuilds
+the tab (the lesson above), so the chat row's "return the ring to Save" memory was gone by the time the ring came
+back, and it landed on Delete on the Deck while every unit test passed, because no test rebuilt the row. Keep such a
+flag outside the component (a small module-level file, taken once) and write the test so it unmounts and remounts
+between the open and the return (plan 82, `7d0a7be5`). Evidence `docs/test-evidence/plan82-P82-CHAT-ROW-NO-NAME-STOP.json`
+and `-try2.json`.
+
+**A press inside the dock-lift's late window can throw a tall stop to its end.** The lift that clears a focused
+control from the dock runs again up to 0.9 s after the ring lands. A second D-pad press inside that window on a
+block taller than the screen let the late pass jump the pane to the block's end (modelled: 1,012 px on a 2,000 px
+block). Walk rows leave more than a second between presses, and anything that steps through its own height is
+skipped by the lift (plan 82, `1323f7a3`).
+
+**The rig's safety stop can be set from the editor, and only a person can re-arm it.** The session found it set
+from the evening before (`deck_status`: automation STOPPED, "stopped from the command in the editor") and could
+read the Deck over SSH but press nothing. Check `deck_status` first thing, and if the maintainer is about to leave,
+ask for the re-arm before anything else (2026-10-07, plan 82).
+
+**After a deploy the plugin folder on the Deck is owned by root.** A plain `sed` over SSH that worked on
+2026-10-03 was refused on 2026-10-07, so the check that lowers the answer limit could not run; the deploy tool
+itself copes (it stages with scp and moves with one sudo). Do not write `sudo` into a driver's runbook: the
+session's own safety check refuses such a brief outright, and the right fix is the maintainer's `setup-dev`, said
+plainly and early.
+
 ---
 
 ## 4. Briefing helpers

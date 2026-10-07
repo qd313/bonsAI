@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 **Contents**
 
 - [\[Unreleased\]](#unreleased)
+  - [Plan 82 (2026-10-07)](#plan-82-2026-10-07)
   - [Plan 81 (2026-10-03)](#plan-81-2026-10-03)
   - [Plan 79 (2026-10-02)](#plan-79-2026-10-02)
   - [Plan 78 (2026-09-30)](#plan-78-2026-09-30)
@@ -71,6 +72,10 @@ All notable changes to this project are documented in this file.
 <!-- /toc -->
 
 ## [Unreleased]
+
+### Plan 82 (2026-10-07)
+
+- **The "Delete chat slot?" box has two buttons, Cancel and Delete, and opens on Cancel,** so a habitual A cannot delete a chat. Owes its Deck check.
 
 ### Plan 81 (2026-10-03)
 

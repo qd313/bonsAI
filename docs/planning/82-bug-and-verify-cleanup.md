@@ -40,7 +40,7 @@ to tonight. The maintainer's calls are in the decisions file as D125.
 
 | | Bug, as a player sees it | Stars | Measured first? | Helper |
 |---|---|---|---|---|
-| A | The "Delete chat slot?" box has three buttons; it should have Delete and Cancel, opening on Cancel | ★ | No: the maintainer's screenshot is the measurement | Sonnet high (p82a) |
+| A | The "Delete chat slot?" box has three buttons; it should have Delete and Cancel, opening on Cancel | ★ | No: the maintainer's screenshot is the measurement | Sonnet high (p82a), landed `771d66dc` |
 | B | Left and Right on the chat title bar stop on the chat's name; Up from the first question and Down from the tab bar should land on Delete | ★★ | The Deck records the stops (M4), the fix starts at once from the maintainer's rule | Sonnet high (p82b) |
 | C | Down from the question box lands on Ask and skips the mode button under the box | ★★ | The Deck records the landing and the row's boxes (M2); the fix starts at once | Sonnet high (p82d) |
 | D | Up from the bottom of the About tab does nothing | ★★ | Yes (M1): what holds the ring after Up, and the shape of the rows above | after M1 |
@@ -100,3 +100,4 @@ Standing rules as in plan 81. One driver at a time, a fresh one per block, evide
   (by the maintainer, the evening before); asked, re-armed at 00:20. Baseline quick check green at tip `60b8c57f`.
   Four copies cut (p82a to p82d). Helpers p82a (delete box), p82b (title bar) and p82d (box Down) started at 00:33.
   Deck driver on blocks 0 and 1 started at 00:38. The timed 20-minute check is on. Keep-awake held until 08:24.
+- **2026-10-07, about 01:05:** landed p82a (the delete box). Paperwork sweep 1 committed.

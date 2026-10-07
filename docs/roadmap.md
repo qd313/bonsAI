@@ -57,9 +57,6 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
 
 ## Bugs
 
-- ★ `[chat]` `[ui]` **The "Delete chat slot?" box has three buttons and opens on the wrong one** — **OPEN, found by the maintainer 2026-10-06 on the Deck.**
-  The box offers Keep chat, Delete and Cancel, with the ring on Keep chat. The maintainer's call: two buttons only, Delete and Cancel, with the ring on Cancel. (The three-button shape was chosen on 2026-10-02 so a habitual A could not delete a chat; Cancel as the opening choice keeps that safety.)
-  Evidence `docs/test-evidence/maintainer-2026-10-06-delete-chat-box.png`.
 - ★ `[reply]` **While an answer arrives, the start of a sentence that ends up behind a spoiler cover can be read for about a second** — **OPEN, seen 2026-10-01 on the Deck (plan 78, Deck block 3a), a note. Not built for 0.6.0 ([D124](audit/maintainer-decisions-locked.md#d124--locked-2026-10-03-raised-2026-10-03--plan-81-the-final-bug-session-before-060-the-ten-calls) call 8); stays open; accepting it is a call (plan 81 question 1).**
   The words shown held no protected name; the name arrived after the words were hidden. Not known whether it was always so. Evidence `docs/test-evidence/plan78-P78-BORROWED-RUNNING-GAME.json`.
 - ★ `[platform]` **After the release: two clean-ups behind the scenes** — **PARTIAL, from plan 72; the first of the two is done (see Done), one finding is left.**
@@ -248,6 +245,10 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 [Done](#done-for-v060), the full entry into the matching archive file, drop it from here.
 
 ### Bugs that need verification
+- ★ `[chat]` `[ui]` **The "Delete chat slot?" box has three buttons and opens on the wrong one** — **VERIFY, fixed 2026-10-07 (plan 82, `771d66dc`). Found by the maintainer 2026-10-06 on the Deck.**
+  The box now shows two buttons, Cancel and Delete, with the ring on Cancel. B, or A on Cancel, leaves the chat alone; only A on Delete removes it, so a habitual A cannot delete a chat. Before, it offered Keep chat, Delete and Cancel, with the ring on Keep chat. Evidence `docs/test-evidence/maintainer-2026-10-06-delete-chat-box.png`.
+  Owed on the Deck: row **P82-DELETE-BOX-TWO-BUTTONS** in [testing.md](testing.md). Test: `src/features/chat-slots/ChatSlotRow.deleteBox.test.tsx`.
+  The "Remove knowledge base" box keeps its three-button shape until the maintainer says otherwise (plan 82, question 2).
 - ★ `[focus]` **A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind** —
   **VERIFY, fixed for all buttons 2026-09-29 (plan 77, tip `7c8ac206`).**
   A press that opens no box no longer leaves a note that throws the ring back later. Earlier fixed (`6ef8cedf`) for the library's Update and "Pull nomic-embed-text" buttons; now also "Update AI & models" and the Tier 1 and Tier 2 install buttons.

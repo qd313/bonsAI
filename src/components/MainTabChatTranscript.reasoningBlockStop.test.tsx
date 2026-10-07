@@ -21,23 +21,29 @@ import { resetUiDocument } from "../utils/uiDocument";
 type NavHandlers = Partial<Record<"onMoveUp" | "onMoveDown" | "onCancelButton", (e?: unknown) => unknown>>;
 type NavEl = HTMLElement & { __nav?: NavHandlers };
 
-/* Keeps the move and B handlers on the element, and fills navRef the way Steam's TakeFocus lands. */
+/*
+ * Keeps the move and B handlers on the element, and fills navRef the way Steam's TakeFocus lands. Only a
+ * Focusable Steam makes a stop gets Decky's tabindex="0" and can take focus: one marked `focusable`, or
+ * with an `onActivate` or an A handler. A container with neither and no stop inside is skipped, as the
+ * Deck showed for the open reasoning block (plan82-P82-REASONING-BLOCK-PAGES.json).
+ */
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../test-harness/fakeDeckyUi");
   const Base = stubs.Focusable;
   const NavFocusable = React.forwardRef<HTMLDivElement, Record<string, unknown>>(function NavFocusable(props, ref) {
     const { onMoveUp, onMoveDown, onCancelButton, navRef, ...rest } = props as Record<string, unknown> &
       NavHandlers & { navRef?: { current: unknown } };
+    const stop = Boolean(props.focusable || props.onActivate || props.onOKButton);
     const setRef = (el: HTMLDivElement | null) => {
       if (el) {
-        if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
+        if (stop && !el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
         (el as NavEl).__nav = { onMoveUp, onMoveDown, onCancelButton };
         if (navRef) {
           navRef.current = {
             TakeFocus: () => {
-              const first = el.querySelector<HTMLElement>("[tabindex]");
-              (first ?? el).focus();
-              return true;
+              const first = el.querySelector<HTMLElement>("[tabindex]") ?? (stop ? el : null);
+              first?.focus();
+              return Boolean(first);
             },
           };
         }
@@ -89,6 +95,13 @@ const press = (el: NavEl, handler: keyof NavHandlers, e?: unknown) => {
 describe("the open reasoning block on the transcript's D-pad path (plan 82)", () => {
   beforeEach(() => resetUiDocument());
   afterEach(() => cleanup());
+
+  it("draws the open block as a stop Steam can own (`focusable`), not a container Steam skips", () => {
+    const { container } = render(<MainTabChatTranscript {...props()} />);
+    fireEvent.click(line(container));
+    expect(block(container)!.hasAttribute("focusable")).toBe(true);
+    expect(block(container)!.getAttribute("tabindex")).toBe("0");
+  });
 
   it("Down from the open line lands on the block, and Down from the block goes into the answer", () => {
     const { container } = render(<MainTabChatTranscript {...props()} />);

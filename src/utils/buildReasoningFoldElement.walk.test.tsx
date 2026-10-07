@@ -34,8 +34,13 @@ type NavEl = HTMLElement & { __nav?: NavHandlers };
 
 /*
  * The stock stub drops every Steam prop. This one keeps the move and B handlers on the element, so a press
- * runs the handler Steam would run, fills `navRef` with a TakeFocus that focuses the element, and gives the
- * element the tabindex="0" Decky stamps on every node Steam navigates (AGENTS.md, the focus graph).
+ * runs the handler Steam would run, and models which Focusables Steam makes stops. Steam treats a Focusable
+ * as a container unless something marks it as a stop, and skips a container with no stops inside: the chat
+ * row (ChatSlotRow.tsx, `focusable: true`, measured 2026-08-30) and the open reasoning block (plan 82,
+ * plan82-P82-REASONING-BLOCK-PAGES.json: Down from the line went straight to the answer, Up from the
+ * answer straight to the line) both hit it. What is known to mark a stop: `focusable`, an `onActivate`
+ * (the answer's sections), the line's own A handler. Only a stop gets the tabindex="0" Decky stamps, so
+ * only a stop can take focus here, and `navRef`'s TakeFocus lands only on a stop.
  */
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../test-harness/fakeDeckyUi");
@@ -43,11 +48,12 @@ vi.mock("@decky/ui", async () => {
   const NavFocusable = React.forwardRef<HTMLDivElement, Record<string, unknown>>(function NavFocusable(props, ref) {
     const { onMoveUp, onMoveDown, onCancelButton, navRef, ...rest } = props as Record<string, unknown> &
       NavHandlers & { navRef?: { current: unknown } };
+    const stop = Boolean(props.focusable || props.onActivate || props.onOKButton);
     const setRef = (el: HTMLDivElement | null) => {
       if (el) {
-        if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
+        if (stop && !el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
         (el as NavEl).__nav = { onMoveUp, onMoveDown, onCancelButton };
-        if (navRef) navRef.current = { TakeFocus: () => (el.focus(), true) };
+        if (navRef) navRef.current = { TakeFocus: () => (stop ? (el.focus(), true) : false) };
       }
       if (typeof ref === "function") ref(el);
       else if (ref) ref.current = el;
@@ -107,7 +113,8 @@ function mountFold(fold: Fold, rule: SteamScrollRule | undefined, steamTopMargin
   a.land(line);
   a.pane.scrollTop = fold.start;
 
-  const isStop = (el: HTMLElement | null) => el?.getAttribute("data-decky-ui") === "Focusable";
+  /* A stop Steam can own: Decky stamped its tabindex (see the mock above). */
+  const isStop = (el: HTMLElement | null) => el?.getAttribute("tabindex") === "0";
   const label = (el: Element | null): string => {
     if (el === line) return "line";
     if (el === block) return "block";

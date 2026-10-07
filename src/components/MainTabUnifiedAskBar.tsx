@@ -196,6 +196,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     onCancelAsk,
     onMicInput,
     voiceRecording = false,
+    voiceStarting = false,
     selectedAttachment,
     setSelectedAttachment,
     clearUnifiedInput,
@@ -817,40 +818,12 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                   <AskStopIcon size={20} />
                 </span>
               </Button>
-            ) : voiceRecording ? (
-              <Button
-                className="bonsai-askbar-target bonsai-unified-input-corner-right bonsai-voice-recording-active"
-                {...({
-                  onMoveLeft: () => focusAskModeButton(),
-                  onOKButton: (evt: { stopPropagation: () => void }) => {
-                    evt.stopPropagation();
-                    onMicInput();
-                  },
-                } as Record<string, unknown>)}
-                onClick={onMicInput}
-                aria-label="Stop voice input"
-                style={{
-                  minWidth: 20,
-                  width: 20,
-                  minHeight: 20,
-                  padding: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderRadius: 0,
-                  border: "none",
-                  background: "transparent",
-                  color: "#f87171",
-                  flexShrink: 0,
-                }}
-              >
-                <span className="bonsai-unified-input-icon">
-                  <AskStopIcon size={16} />
-                </span>
-              </Button>
             ) : (
               <Button
-                className="bonsai-askbar-target bonsai-unified-input-corner-right"
+                className={
+                  "bonsai-askbar-target bonsai-unified-input-corner-right" +
+                  (voiceStarting ? " bonsai-voice-starting" : voiceRecording ? " bonsai-voice-recording-active" : "")
+                }
                 {...({
                   onMoveLeft: () => focusAskModeButton(),
                   onOKButton: (evt: { stopPropagation: () => void }) => {
@@ -859,7 +832,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                   },
                 } as Record<string, unknown>)}
                 onClick={onMicInput}
-                aria-label="Voice input"
+                aria-label={voiceStarting ? "Starting voice input" : voiceRecording ? "Stop voice input" : "Voice input"}
                 style={{
                   minWidth: 20,
                   width: 20,
@@ -871,12 +844,13 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                   borderRadius: 0,
                   border: "none",
                   background: "transparent",
-                  color: "#dbe6f3",
+                  // Amber while the voice server is still starting, red while recording, plain at rest.
+                  color: voiceStarting ? "#fbbf24" : voiceRecording ? "#f87171" : "#dbe6f3",
                   flexShrink: 0,
                 }}
               >
                 <span className="bonsai-unified-input-icon">
-                  <AskMicIcon size={16} />
+                  {voiceStarting || voiceRecording ? <AskStopIcon size={16} /> : <AskMicIcon size={16} />}
                 </span>
               </Button>
             )}

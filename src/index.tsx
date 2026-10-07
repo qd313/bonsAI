@@ -781,6 +781,7 @@ const Content: React.FC = () => {
 
   const {
     voiceRecording,
+    voiceStarting,
     onMicInput,
     micPermissionDenied,
     dismissMicPermissionDeny,
@@ -913,6 +914,7 @@ const Content: React.FC = () => {
     onCancelAsk,
     onMicInput,
     voiceRecording,
+    voiceStarting,
     selectedAttachment,
     setSelectedAttachment,
     clearUnifiedInput,

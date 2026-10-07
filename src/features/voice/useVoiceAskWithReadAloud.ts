@@ -42,6 +42,7 @@ export type UseVoiceAskWithReadAloudArgs = {
 
 export type VoiceAskWithReadAloud = {
   voiceRecording: boolean;
+  voiceStarting: boolean;
   onMicInput: () => void;
   micPermissionDenied: boolean;
   dismissMicPermissionDeny: () => void;
@@ -73,6 +74,7 @@ export function useVoiceAskWithReadAloud({
 }: UseVoiceAskWithReadAloudArgs): VoiceAskWithReadAloud {
   const {
     voiceRecording,
+    voiceStarting,
     onMicInput,
     endDictation,
     micPermissionDenied,
@@ -131,6 +133,7 @@ export function useVoiceAskWithReadAloud({
 
   return {
     voiceRecording,
+    voiceStarting,
     onMicInput,
     micPermissionDenied,
     dismissMicPermissionDeny,

@@ -188,6 +188,7 @@ export function useMainTabPayload({
     onCancelAsk,
     onMicInput,
     voiceRecording,
+    voiceStarting,
     selectedAttachment,
     setSelectedAttachment,
     clearUnifiedInput,
@@ -303,6 +304,7 @@ export function useMainTabPayload({
         onCancelAsk={onCancelAsk}
         onMicInput={onMicInput}
         voiceRecording={voiceRecording}
+        voiceStarting={voiceStarting}
         selectedAttachment={selectedAttachment}
         setSelectedAttachment={setSelectedAttachment}
         clearUnifiedInput={clearUnifiedInput}
@@ -446,6 +448,7 @@ export function useMainTabPayload({
       liveReplyChipUsed,
       liveReplyChipError,
       voiceRecording,
+      voiceStarting,
       onMicInput,
       onOpenScreenshotBrowser,
       onTakeScreenshot,

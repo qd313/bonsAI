@@ -76,7 +76,9 @@ export type UseVoiceAskInputArgs = {
  * 8. `dismissMicPermissionDeny()` lets the message be dismissed by hand
  *    as well.
  * 9. `onMicInput()` is the button's own tap handler: shows a short "Mic is
- *    waiting" toast while a question is being asked; stops an already-running recording;
+ *    waiting" toast while a question is being asked; ignores a press while the
+ *    start call from an earlier press is still pending (`voiceStarting`, which the
+ *    Ask bar draws as an amber button); stops an already-running recording;
  *    shows the permission message and stops there if access is not
  *    granted; otherwise starts recording and shows an error toast if
  *    starting fails.
@@ -84,6 +86,8 @@ export type UseVoiceAskInputArgs = {
  */
 export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
   const [voiceRecording, setVoiceRecording] = useState(false);
+  /** A press has gone to the back end and its start call has not returned yet (the voice server is starting, the model loading). */
+  const [voiceStarting, setVoiceStarting] = useState(false);
   const [micPermissionDenied, setMicPermissionDenied] = useState(false);
   /**
    * "The field's text came from the mic" (D99 call 3, the middle Voice replies position). Set the
@@ -191,6 +195,8 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
       });
       return;
     }
+    // The first press is still waiting on the back end; a second one must not send a second start.
+    if (voiceStarting) return;
     if (voiceRecording) {
       setVoiceRecording(false);
       void stopVoiceTranscription();
@@ -206,9 +212,14 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
       return;
     }
     setMicPermissionDenied(false);
+    setVoiceStarting(true);
     void startVoiceTranscription(a.unifiedInput)
-      .then(() => setVoiceRecording(true))
+      .then(() => {
+        setVoiceStarting(false);
+        setVoiceRecording(true);
+      })
       .catch((e: unknown) => {
+        setVoiceStarting(false);
         setVoiceRecording(false);
         toaster.toast({
           title: "Voice input unavailable",
@@ -219,6 +230,7 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
   }, [
     a.isAsking,
     voiceRecording,
+    voiceStarting,
     a.microphoneAccess,
     startVoiceTranscription,
     stopVoiceTranscription,
@@ -227,6 +239,7 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
 
   return {
     voiceRecording,
+    voiceStarting,
     onMicInput,
     /** Ends a recording that is still listening without touching the box (Ask pressed, X pressed). */
     endDictation,

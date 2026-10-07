@@ -22,12 +22,12 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1317,
+      "lines": 1319,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
       "path": "src/components/MainTabUnifiedAskBar.tsx",
-      "lines": 1313,
+      "lines": 1287,
       "role": ""
     },
     {

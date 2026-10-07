@@ -47,6 +47,7 @@ export type MainTabUnifiedAskBarProps = {
   onCancelAsk: () => void;
   onMicInput: () => void;
   voiceRecording?: boolean;
+  voiceStarting?: boolean;
   selectedAttachment: AskAttachment | null;
   setSelectedAttachment: React.Dispatch<React.SetStateAction<AskAttachment | null>>;
   clearUnifiedInput: () => void;

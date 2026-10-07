@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 738,
-  "edgeCount": 2143,
+  "fileCount": 741,
+  "edgeCount": 2155,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -709,6 +709,14 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabChatTranscript.reasoningBlockStop.test.tsx": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabChatTranscript.reasoningFold.test.tsx": {
       "imports": [
         "src/components/MainTabChatTranscript.tsx",
@@ -884,6 +892,7 @@
         "src/components/MainTabChatTranscript.questionFade.test.tsx",
         "src/components/MainTabChatTranscript.ratingRowWalk.test.tsx",
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
+        "src/components/MainTabChatTranscript.reasoningBlockStop.test.tsx",
         "src/components/MainTabChatTranscript.reasoningFold.test.tsx",
         "src/components/MainTabChatTranscript.reasoningLiveBlock.test.tsx",
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
@@ -5647,7 +5656,8 @@
         "src/utils/answerBubbleNavigation.tallUpFromWord.test.ts",
         "src/utils/answerBubbleNavigation.upLandingClear.test.ts",
         "src/utils/answerBubbleNavigation.walkThrough.test.ts",
-        "src/utils/answerBubbleNavigation.wordMirror.test.ts"
+        "src/utils/answerBubbleNavigation.wordMirror.test.ts",
+        "src/utils/buildReasoningFoldElement.walk.test.tsx"
       ]
     },
     "src/test-harness/fakeDeckyRpc.test.ts": {
@@ -5762,6 +5772,7 @@
         "src/components/MainTabChatTranscript.questionFade.test.tsx",
         "src/components/MainTabChatTranscript.ratingRowWalk.test.tsx",
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
+        "src/components/MainTabChatTranscript.reasoningBlockStop.test.tsx",
         "src/components/MainTabChatTranscript.reasoningFold.test.tsx",
         "src/components/MainTabChatTranscript.reasoningLiveBlock.test.tsx",
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
@@ -5830,6 +5841,7 @@
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/index.helpChip.test.tsx",
         "src/test-harness/setup.ts",
+        "src/utils/buildReasoningFoldElement.walk.test.tsx",
         "src/utils/buildReplyActionsElement.ratingKeepsRing.test.tsx",
         "src/utils/buildReplyActionsElement.revealChips.test.tsx",
         "src/utils/buildReplyActionsElement.test.tsx",
@@ -6046,7 +6058,8 @@
       "importedBy": [
         "src/utils/answerBubbleCoverUp.ts",
         "src/utils/answerBubbleNavigation.ts",
-        "src/utils/answerBubbleWordsUp.ts"
+        "src/utils/answerBubbleWordsUp.ts",
+        "src/utils/reasoningBlockReading.ts"
       ]
     },
     "src/utils/answerBubbleCoverUp.ts": {
@@ -6240,6 +6253,7 @@
         "src/utils/answerBubbleNavigation.coverUp.test.ts",
         "src/utils/answerBubbleNavigation.test.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
+        "src/utils/buildReasoningFoldElement.walk.test.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/buildTurnHeaderElement.test.tsx",
         "src/utils/buildTurnHeaderElement.tsx"
@@ -6663,6 +6677,7 @@
     "src/utils/buildReasoningFoldElement.tsx": {
       "imports": [
         "src/utils/focusNavigation.ts",
+        "src/utils/reasoningBlockReading.ts",
         "src/utils/reasoningDisplay.ts",
         "src/utils/replyStopRegistry.ts",
         "src/utils/uiDocument.ts"
@@ -6670,8 +6685,18 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.reasoningFold.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
-        "src/utils/buildReasoningFoldElement.test.tsx"
+        "src/utils/buildReasoningFoldElement.test.tsx",
+        "src/utils/buildReasoningFoldElement.walk.test.tsx"
       ]
+    },
+    "src/utils/buildReasoningFoldElement.walk.test.tsx": {
+      "imports": [
+        "src/test-harness/deckAnswerWalk.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/answerBubbleNavigation.ts",
+        "src/utils/buildReasoningFoldElement.tsx"
+      ],
+      "importedBy": []
     },
     "src/utils/buildReplyActionsElement.ratingKeepsRing.test.tsx": {
       "imports": [
@@ -6786,6 +6811,7 @@
         "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/chatPanelScroll.test.ts",
+        "src/utils/reasoningBlockReading.ts",
         "src/utils/revealOpenedDetails.test.tsx",
         "src/utils/settingsPanelScroll.ts"
       ]
@@ -7536,7 +7562,8 @@
         "src/utils/navFocusRegistry.windowFocus.test.ts",
         "src/utils/permHintRowNav.test.ts",
         "src/utils/permissionJumpRegistry.test.ts",
-        "src/utils/permissionJumpRegistry.ts"
+        "src/utils/permissionJumpRegistry.ts",
+        "src/utils/reasoningBlockReading.ts"
       ]
     },
     "src/utils/navFocusRegistry.windowFocus.test.ts": {
@@ -7725,6 +7752,17 @@
       "imports": [],
       "importedBy": [
         "src/utils/buildTurnHeaderElement.tsx"
+      ]
+    },
+    "src/utils/reasoningBlockReading.ts": {
+      "imports": [
+        "src/utils/answerBubbleBandGeometry.ts",
+        "src/utils/chatPanelScroll.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/utils/buildReasoningFoldElement.tsx"
       ]
     },
     "src/utils/reasoningDisplay.liveSlice.test.ts": {
@@ -8167,6 +8205,7 @@
         "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
         "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
         "src/components/MainTabChatTranscript.ratingRowWalk.test.tsx",
+        "src/components/MainTabChatTranscript.reasoningBlockStop.test.tsx",
         "src/components/MainTabChatTranscript.retryNotAStop.test.tsx",
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
@@ -8236,6 +8275,7 @@
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/navFocusRegistry.windowFocus.test.ts",
+        "src/utils/reasoningBlockReading.ts",
         "src/utils/replyStopRegistry.ts",
         "src/utils/settingsPanelScroll.ts",
         "src/utils/spoilerFenceRegistry.ts",

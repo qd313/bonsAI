@@ -266,9 +266,14 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
     settle();
     return handled;
   };
+  /*
+   * `place` and `settle` are for a stop the test draws itself outside the answer (the reasoning line and its
+   * open block, above the bubble): `place` makes its box follow the scroll like every box here, and `settle`
+   * runs Steam's glide and the plugin's lift after a press handled by that stop's own handlers.
+   */
   return {
     pane, bubble, stops, cover, word, hideLine, control, top, bottom, down, up, land, enterFromAbove, enterFromBelow,
-    dockTop: dockTopY, paneTop: paneTopY,
+    place, settle, dockTop: dockTopY, paneTop: paneTopY,
   };
 }
 

@@ -91,19 +91,25 @@
  *        | Down
  *     Show reasoning · 41 s          <- the new stop, id "show-reasoning"
  *        | Down
+ *     the open reasoning block       <- a stop while open (plan 82)
+ *        | Down
  *     the answer bubble's first stop
  *
  *   Down: the header's own Down tries the reasoning row first and enters the
  *     answer only when there is no row (buildTurnHeaderElement.tsx). The row's
- *     own Down enters the answer, the same call the header used to make.
+ *     own Down enters the answer, the same call the header used to make; with
+ *     the block open it lands on the block first, which Down and Up read a
+ *     screen at a time before leaving it (buildReasoningFoldElement.tsx).
  *   Up: the row's Up hands the ring to Retry, and to the question header's own
  *     row when this turn offers no Retry. Up out of the answer needs nothing
  *     new — the answer's Up yields to Steam at its first section, and the row
- *     is the nearest thing above it, so the walk up visits the same stops as
- *     the walk down (REPLY-STOPS-MIRROR).
+ *     (or the open block, which hands on to the row) is the nearest thing above
+ *     it, so the walk up visits the same stops as the walk down
+ *     (REPLY-STOPS-MIRROR).
  *   A: opens the block of reasoning below the row, or closes it, and flips the
  *     row's own label between Show and Hide.
- *   B, only while the block is open: closes it and leaves the ring on the row.
+ *   B, only while the block is open: closes it and leaves the ring on the row,
+ *     pressed on the row or on the block.
  *     Attached as onCancelButton and only while open — measured on device
  *     2026-08-28 (DrgGlossaryTermChip.tsx): onButtonDown receives B but
  *     returning true does not stop Steam backing the ring out of the panel,

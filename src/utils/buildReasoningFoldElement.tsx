@@ -4,7 +4,7 @@
  * Purpose: On a turn where the model thought before it answered, a line sits between the question
  * and the answer reading *Show reasoning · 41 s*. A press opens the whole thinking as a quiet
  * block above the answer and the line reads *Hide reasoning · 41 s*; another press closes it. This
- * file draws both, and wires the line into the controller's path down the turn.
+ * file draws both, and wires them into the controller's path down the turn.
  *
  * Used for: MainTabChatTranscript, on the live turn and on whichever older turn is open.
  *
@@ -13,6 +13,18 @@
  *
  * Does not: decide whether a turn has any thinking to show, hold the open-or-closed state, or read
  * anything from the computer side. The transcript owns all three.
+ *
+ * How it works: `buildReasoningFold()` draws the line, and the block under it while it is open.
+ *
+ *     Hide reasoning · 18 s        Down: onto the block (closed: into the answer); Up: the question
+ *     ┌ the open block ─────┐      a stop of its own: Down and Up read it a screen at a time, then
+ *     │ 1. Analyze ...      │      leave it (Down: into the answer, Up: back on the line); B closes
+ *     └─────────────────────┘      it from here too, the ring back on the line
+ *     the answer                   Up from its first section: Steam's own move, onto the block
+ *
+ * The two hand the ring to each other through `reasoningFoldHandles()`, filled by their refs; the
+ * scrolling and the landing placement are in reasoningBlockReading.ts. The plan 82 bug this answers:
+ * the block used to be plain text, so one Down from the line jumped the whole block into the answer.
  *
  * Gotchas:
  *   - The line is drawn exactly like the Show details line below the answer, and shares its
@@ -24,7 +36,8 @@
  *     `onCancelButton` plus `preventDefault` genuinely consumes the press. The same measurement
  *     found that merely having the handler attached eats B even when it does nothing, which is why
  *     it is attached conditionally: with the block closed, B must still back out of the panel.
- *   - The move handlers go on this row's own `Focusable`, never on a child. A Decky button does
+ *     The block exists only while open, so it always has one.
+ *   - The move handlers go on each row's own `Focusable`, never on a child. A Decky button does
  *     not forward them (buildReplyActionsElement.tsx has the measurement), and `pressHandler`
  *     answers only Up and Down so an A press still reaches `onOKButton` rather than being eaten.
  */
@@ -34,7 +47,31 @@ import { Focusable } from "@decky/ui";
 import { reasoningFoldLabel, tidyReasoningText, type LiveStepLine } from "./reasoningDisplay";
 import { registerReplyStop } from "./replyStopRegistry";
 import { elementHasGamepadFocus } from "./uiDocument";
-import { isDeckDirectionDownEvent, isDeckDirectionUpEvent } from "./focusNavigation";
+import {
+  isDeckDirectionDownEvent,
+  isDeckDirectionUpEvent,
+  isDownDeckButtonEvent,
+  isUpDeckButtonEvent,
+} from "./focusNavigation";
+import {
+  enterReasoningBlock,
+  placeReasoningBlockOnLanding,
+  showLineInBand,
+  stepReasoningBlock,
+  type ReasoningNavHolder,
+} from "./reasoningBlockReading";
+
+/** The line's and the open block's elements and the block's Steam node, filled by their refs on mount. */
+export type ReasoningFoldHandles = {
+  line: { current: HTMLElement | null };
+  block: { current: HTMLElement | null };
+  blockNav: ReasoningNavHolder;
+};
+
+/** A fresh set per render, like every holder here: these are plain functions called during render. */
+function reasoningFoldHandles(): ReasoningFoldHandles {
+  return { line: { current: null }, block: { current: null }, blockNav: { current: null } };
+}
 
 export type BuildReasoningFoldRowArgs = {
   /** The turn this row belongs to: "live", or an older turn's own id. */
@@ -47,8 +84,10 @@ export type BuildReasoningFoldRowArgs = {
   onToggle: () => void;
   /** Up: to Retry, or to the question's own row when this turn offers no Retry. */
   onMoveUp: () => boolean;
-  /** Down: into the answer. */
+  /** Down: into the answer (from the open block's end, when the block is open). */
   onMoveDown: () => boolean;
+  /** Shared with the open block, so Down from the line lands on it. Without them Down goes to `onMoveDown`. */
+  handles?: ReasoningFoldHandles;
 };
 
 /**
@@ -66,13 +105,17 @@ export function buildReasoningFoldRow({
   onToggle,
   onMoveUp,
   onMoveDown,
+  handles,
 }: BuildReasoningFoldRowArgs): React.ReactElement {
   const label = reasoningFoldLabel(open, seconds);
   /*
    * A fresh holder each render, the way the reply row below the answer does it: this is a plain
    * function called during render, so there are no hooks to keep one in.
    */
-  const rowEl: { current: HTMLElement | null } = { current: null };
+  const rowEl: { current: HTMLElement | null } = handles?.line ?? { current: null };
+  /* With the block open, Down reads it first (plan 82); the block's own Down goes on into the answer. */
+  const moveDown = () =>
+    (open && handles ? enterReasoningBlock(handles.block.current, handles.blockNav) : false) || onMoveDown();
 
   const pressHandler = (evt: unknown): boolean => {
     const isDown = isDeckDirectionDownEvent(evt);
@@ -86,7 +129,7 @@ export function buildReasoningFoldRow({
      * MICRO-04).
      */
     if (el && !elementHasGamepadFocus(el)) return false;
-    return isDown ? onMoveDown() : onMoveUp();
+    return isDown ? moveDown() : onMoveUp();
   };
 
   return (
@@ -108,7 +151,7 @@ export function buildReasoningFoldRow({
       aria-label={label}
       {...({
         onMoveUp: () => onMoveUp(),
-        onMoveDown: () => onMoveDown(),
+        onMoveDown: () => moveDown(),
         onButtonDown: pressHandler,
         ...(open
           ? {
@@ -127,22 +170,75 @@ export function buildReasoningFoldRow({
   );
 }
 
+export type ReasoningOpenBlockNav = {
+  /** Shared with the line: the line is where Up and B hand the ring back to. */
+  handles: ReasoningFoldHandles;
+  /** Down once the block's end is on screen: into the answer, the line's own Down when closed. */
+  onMoveDown: () => boolean;
+  /** B: close the block (the ring is put back on the line first). */
+  onToggle: () => void;
+};
+
 /**
- * Feature: the opened block of reasoning.
- * In: the whole thinking the computer side kept. Out: it, as written, above the answer.
+ * Feature: the opened block of reasoning, a stop the D-pad reads a screen at a time.
+ * In: the whole thinking the computer side kept, and how it joins the line and the answer.
+ * Out: it, as written, above the answer.
  *
  * Line breaks are kept as the model wrote them and nothing inside is masked — the maintainer's
  * call: the closed line is the fence, not the words inside. Only the marks the model writes for
  * itself go: its "Thinking Process:" heading, stars and backticks (a quoted tag showed as
  * `<bonsai-status>` with its backticks in 3 of 6 Deck tries, plan70-THINKING-SPOILER-01-try2.json).
- * Not a controller stop: the ring stays on the line above, so a press of B closes the block from
- * where you already are.
+ *
+ * The ring sits on the block while it is read (plan 82): the panel moves at most one screen a press
+ * and the reasoning stays under the ring. It used to be plain text with the ring left on the line,
+ * and the next Down went straight into the answer, 555 px in one press on the Deck. Left and Right
+ * hold still, as on an answer section (Left otherwise left the panel for Steam's own rail). B closes
+ * it from here as from the line. Without `nav` (a test drawing the block alone) nothing hands on.
  */
-export function buildReasoningOpenBlock(turnId: string, text: string): React.ReactElement {
+export function buildReasoningOpenBlock(
+  turnId: string,
+  text: string,
+  nav?: ReasoningOpenBlockNav,
+): React.ReactElement {
+  const blockEl: { current: HTMLElement | null } = nav?.handles.block ?? { current: null };
+  const line = () => nav?.handles.line.current ?? null;
+  const moveDown = () => stepReasoningBlock(blockEl.current, "down") || (nav ? nav.onMoveDown() : false);
+  const moveUp = () => stepReasoningBlock(blockEl.current, "up") || showLineInBand(line());
   return (
-    <div key={`reasoning-block-${turnId}`} className="bonsai-chat-reasoning-block">
+    <Focusable
+      key={`reasoning-block-${turnId}`}
+      className="bonsai-chat-reasoning-block"
+      ref={(el: HTMLElement | null) => {
+        blockEl.current = el;
+      }}
+      onFocus={() => {
+        if (blockEl.current) placeReasoningBlockOnLanding(blockEl.current);
+      }}
+      {...({
+        navRef: nav?.handles.blockNav,
+        onMoveDown: () => moveDown(),
+        onMoveUp: () => moveUp(),
+        onMoveLeft: () => true,
+        onMoveRight: () => true,
+        /* String-shaped presses only (tests, a desktop keyboard), so one press never fires both. */
+        onButtonDown: (button: unknown) => {
+          if (isDownDeckButtonEvent(button)) return moveDown();
+          if (isUpDeckButtonEvent(button)) return moveUp();
+          return false;
+        },
+        ...(nav
+          ? {
+              onCancelButton: (e: unknown) => {
+                showLineInBand(line());
+                nav.onToggle();
+                (e as { preventDefault?: () => void })?.preventDefault?.();
+              },
+            }
+          : {}),
+      } as Record<string, unknown>)}
+    >
       {tidyReasoningText(text)}
-    </div>
+    </Focusable>
   );
 }
 
@@ -159,10 +255,13 @@ export type BuildReasoningFoldArgs = BuildReasoningFoldRowArgs & {
  * opening the block never remounts the element holding the ring.
  */
 export function buildReasoningFold({ text, ...row }: BuildReasoningFoldArgs): React.ReactElement {
+  const handles = row.handles ?? reasoningFoldHandles();
   return (
     <>
-      {buildReasoningFoldRow(row)}
-      {row.open ? buildReasoningOpenBlock(row.turnId, text) : null}
+      {buildReasoningFoldRow({ ...row, handles })}
+      {row.open
+        ? buildReasoningOpenBlock(row.turnId, text, { handles, onMoveDown: row.onMoveDown, onToggle: row.onToggle })
+        : null}
     </>
   );
 }

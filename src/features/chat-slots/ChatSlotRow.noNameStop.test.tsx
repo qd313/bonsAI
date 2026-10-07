@@ -57,6 +57,7 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { ChatSlotRow } from "./ChatSlotRow";
+import { ChatSlotDeleteModal } from "./ChatSlotDeleteModal";
 
 function summary(id: string, label: string): ChatSlotSummary {
   return { id, label, created_at: 0, updated_at: 0 };
@@ -186,7 +187,7 @@ describe("the chat row's ring never rests on the name", () => {
     pressA();
     expect(onBeforeNestedDeckyModal).toHaveBeenCalledTimes(1);
     expect(shown).toHaveLength(1);
-    expect((shown[0]!.props as Record<string, unknown>).strTitle).toBe("Delete chat slot?");
+    expect(shown[0]!.type).toBe(ChatSlotDeleteModal);
     expect(onSaveChat).not.toHaveBeenCalled();
     move("Left");
     pressA();

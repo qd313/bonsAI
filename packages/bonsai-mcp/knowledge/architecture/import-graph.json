@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 732,
-  "edgeCount": 2127,
+  "edgeCount": 2128,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2644,6 +2644,7 @@
         "src/styles/settingsGlassButton.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/ChatSlotRow.noNameStop.test.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx"
       ]
     },
@@ -2684,6 +2685,7 @@
     },
     "src/features/chat-slots/ChatSlotRow.noNameStop.test.tsx": {
       "imports": [
+        "src/features/chat-slots/ChatSlotDeleteModal.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
         "src/test-harness/fakeDeckyUi.tsx",
         "src/utils/chatSlotsApi.ts",

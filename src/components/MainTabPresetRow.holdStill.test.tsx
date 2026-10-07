@@ -41,13 +41,13 @@ function row(mode: Mode, isAsking: boolean) {
   );
 }
 
-/** Everything that moves on screen: the words, each slot's opacity, and the carousel's window. */
+/** Everything that moves on screen: the words, each chip button's opacity, and the carousel's window. */
 function frame(container: HTMLElement): string {
   const slots = Array.from(container.querySelectorAll<HTMLElement>(".bonsai-preset-carousel-slot"));
   const track = container.querySelector<HTMLElement>(".bonsai-preset-carousel-track");
   return JSON.stringify({
     text: container.textContent,
-    opacity: slots.map((s) => s.style.opacity),
+    opacity: slots.map((s) => s.querySelector<HTMLElement>("button")?.style.opacity),
     window: track?.style.getPropertyValue("--bonsai-preset-window-start") ?? null,
   });
 }

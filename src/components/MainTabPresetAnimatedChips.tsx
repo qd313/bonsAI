@@ -365,6 +365,9 @@ function MainTabPresetSidewaysCarousel(
   );
 }
 
+/** In the fade style, how long new words wait at opacity 0 before they start to fade in. */
+const PRESET_SWAP_BEAT_MS = 60;
+
 /** How often a fade-mode chip holding the ring checks whether it may fade out yet. */
 const PRESET_RING_HOLD_RECHECK_MS = 500;
 
@@ -554,7 +557,9 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
               }),
             );
           }, pace.fadeInMs);
-        }, firstDelay);
+          // New words sit at opacity 0 for at least a beat before they fade in, so the browser
+          // paints them at 0 and the fade-in starts from there (never words swapping at full opacity).
+        }, Math.max(firstDelay, PRESET_SWAP_BEAT_MS));
       };
       loop(first[slotIndex]!, slotStaggerMs(slotIndex));
     };
@@ -581,10 +586,6 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
             key={`preset-slot-${i}`}
             className="bonsai-preset-carousel-slot"
             data-bonsai-preset-visible={presetInteractive ? "true" : "false"}
-            style={{
-              opacity: slotOpacity,
-              transition: `opacity ${slotFade[i]?.transitionMs ?? pace.fadeInMs}ms ease-in-out`,
-            }}
           >
             {/* No key of its own: one button per slot, only its words change -- decode mode's
                 shape. Keyed by its text, a swap destroyed the button holding the ring and nothing
@@ -595,6 +596,8 @@ function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps)
               onPreferAskMode={onPreferAskMode}
               scroll={!reducedMotion}
               focusable={presetInteractive}
+              // The fade is on the button itself (not the box around it): see presetChipButton.tsx.
+              fade={{ opacity: slotOpacity, transitionMs: slotFade[i]?.transitionMs ?? pace.fadeInMs }}
               buttonRef={nav.setButtonRef[i]}
               navHandlers={nav.handlersFor(i, slots.length)}
               blockedEdge={nav.isBlockedEdge(i)}

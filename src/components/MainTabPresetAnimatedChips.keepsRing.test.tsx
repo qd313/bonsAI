@@ -29,7 +29,8 @@ function renderOneChip(animationMode: "fade" | "static") {
   );
   const chip = () => view.container.querySelector<HTMLButtonElement>("button.bonsai-preset-glass")!;
   const chipText = () => chip()?.textContent;
-  const slot = () => view.container.querySelector<HTMLElement>(".bonsai-preset-carousel-slot")!;
+  // The fade sits on the chip button itself (read by a rig as the chip's opacity).
+  const slot = () => view.container.querySelector<HTMLElement>(".bonsai-preset-carousel-slot button")!;
   return { ...view, outside, chip, chipText, slot };
 }
 

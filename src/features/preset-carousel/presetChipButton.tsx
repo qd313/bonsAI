@@ -29,6 +29,7 @@ import {
   presetScrollPlan,
 } from "./presetRowLayout";
 import type { ChipScrollListener } from "./presetChipStay";
+import type { SlotFade } from "./presetChipShared";
 import { joinPresetWithRunningGame } from "../../utils/joinPresetWithRunningGame";
 
 /**
@@ -268,6 +269,12 @@ export function PresetChipButton(props: {
   onPreferAskMode?: (mode: AskModeId) => void;
   scroll: boolean;
   dimmed?: boolean;
+  /**
+   * Fade and static styles: the button's own opacity and how long it takes to get there. The fade
+   * sits on the button, not on a box around it, so a reader of the button sees it fall before the
+   * words change (plan82-P79-LONG-CHIPS-NOGAME.json read the button and saw 1.00 throughout).
+   */
+  fade?: SlotFade;
   focusable?: boolean;
   buttonRef?: (el: HTMLElement | null) => void;
   navHandlers?: Record<string, unknown>;
@@ -282,6 +289,7 @@ export function PresetChipButton(props: {
     onPreferAskMode,
     scroll,
     dimmed,
+    fade,
     focusable = true,
     buttonRef,
     navHandlers,
@@ -305,9 +313,9 @@ export function PresetChipButton(props: {
         minHeight: PRESET_CHIP_HEIGHT_PX,
         fontSize: 12,
         color: dimmed ? "#8fa3b8" : "#c4d3e2",
-        opacity: dimmed ? 0.55 : 1,
+        opacity: fade ? fade.opacity : dimmed ? 0.55 : 1,
         transform: dimmed ? "scale(0.96)" : "scale(1)",
-        transition: "opacity 420ms ease, transform 420ms ease, color 420ms ease",
+        transition: `opacity ${fade ? `${fade.transitionMs}ms ease-in-out` : "420ms ease"}, transform 420ms ease, color 420ms ease`,
       }}
     >
       <PresetChipLabel p={p} scroll={scroll} onScrollPlan={onScrollPlan} />

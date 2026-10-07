@@ -73,7 +73,7 @@ function playRow(style: Style, single: boolean, forMs: number): number[] {
       const run = slot.querySelector<HTMLElement>(".bonsai-preset-chip-text-run");
       const text = run?.textContent ?? null;
       const was = seen[i]!;
-      const opacity = slot.style.opacity;
+      const opacity = slot.querySelector<HTMLElement>("button")?.style.opacity ?? "0";
       const fadeStarted = style === "fade" && was.opacity === "1" && opacity === "0";
       const replaced = style !== "fade" && was.text !== null && text !== was.text;
       if (was.endedAt !== null && (fadeStarted || replaced)) gaps.push(t - was.endedAt);
@@ -190,7 +190,7 @@ describe("a long chip leaves one pause after its words stop", () => {
         presetSingleChip
       />,
     );
-    const opacity = () => view.container.querySelector<HTMLElement>(".bonsai-preset-carousel-slot")!.style.opacity;
+    const opacity = () => view.container.querySelector<HTMLElement>(".bonsai-preset-carousel-slot button")!.style.opacity;
     // Fade-in starts after the first spot's stagger and takes 1 s; the hold follows; then the fade-out.
     const fadeOutAt = slotStaggerMs(0) + 1000 + presetHoldMs("Short one", 1);
     act(() => vi.advanceTimersByTime(fadeOutAt - 100));

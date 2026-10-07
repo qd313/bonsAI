@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 733,
-  "edgeCount": 2129,
+  "fileCount": 734,
+  "edgeCount": 2132,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -928,6 +928,13 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabPresetAnimatedChips.fadeButton.test.tsx": {
+      "imports": [
+        "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/data/presets.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabPresetAnimatedChips.keepsRing.test.tsx": {
       "imports": [
         "src/components/MainTabPresetAnimatedChips.tsx",
@@ -972,6 +979,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/MainTabPresetAnimatedChips.fadeButton.test.tsx",
         "src/components/MainTabPresetAnimatedChips.keepsRing.test.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetRow.tsx",
@@ -2410,6 +2418,7 @@
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
+        "src/components/MainTabPresetAnimatedChips.fadeButton.test.tsx",
         "src/components/MainTabPresetAnimatedChips.keepsRing.test.tsx",
         "src/components/MainTabPresetAnimatedChips.simulation.test.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
@@ -3538,6 +3547,7 @@
       "imports": [
         "src/data/askMode.ts",
         "src/data/presets.ts",
+        "src/features/preset-carousel/presetChipShared.ts",
         "src/features/preset-carousel/presetChipStay.ts",
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/utils/joinPresetWithRunningGame.ts"
@@ -3570,6 +3580,7 @@
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
+        "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetChipStay.row.test.tsx",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.tsx"

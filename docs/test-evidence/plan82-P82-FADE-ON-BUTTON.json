@@ -1,0 +1,16 @@
+{
+ "row":"P82-FADE-ON-BUTTON",
+ "build_commit":"code tip e34b0d57; Deck dist/index.js md5 2226c4fb33f76c7ee98d29db8ca8b2bd",
+ "deck_time_local":"2026-10-07 about 01:45 EDT",
+ "screen":"external monitor; QAM page innerWidth 855 x innerHeight 766",
+ "setup":"Developer tab: ring on 'Preset animation: fade' (read first), A. Old values: preset_chip_animation 'decode', preset_chip_fade_animation_enabled false. After A: preset_chip_animation 'fade', preset_chip_fade_animation_enabled true. Main tab, test chat, ring on the question box (walked in, never A on the box).",
+ "pressed":"A on 'Preset animation: fade'. Then one readPage that sampled every 100 ms for 60 s (596 samples).",
+ "seen":{
+  "selector":".bonsai-details-slot__chips .bonsai-preset-carousel-slot > button (the two chip buttons, class bonsai-preset-glass), computed opacity and trimmed text",
+  "word_changes":"14 word changes over 60 s (slot 1: 6, slot 2: 8). At every one the button's computed opacity was 0.00 at the moment the words changed, and the minimum in the 500 ms before was 0.00. Examples: 5.17 s 'Describe what you see in this screenshot' -> 'How do I start a new named chat?' at opacity 0; 12.82 s 'How do I start a new named chat?' -> 'What do the model policy tiers mean?' at 0; 16.04 s 'Why can't bonsAI reach my PC Ollama host?' -> 'Why is my Deck running hot?' at 0. Each fade: out over about 1.3 s to 0, new words, back in over about 1.0 s to 1.00. No word swap while opacity read 1.00.",
+  "full_list_of_changes_ms":"slot0: 5468,16040,22278,34754,41996,51656; slot1: 5167,12822,21473,31034,36866,45818,53668,59923"
+ },
+ "expected":"at every word change the button's opacity read below 1.00 at least once in the 500 ms before; words never swapped while it read 1.00.",
+ "verdict":"PASS (14 of 14 changes preceded by a fade to 0.00; none at 1.00).",
+ "side_effect":"Pressing A on 'fade' also turned preset_chip_fade_animation_enabled from false to true. Setting restored in the next step of the block (see handover)."
+}

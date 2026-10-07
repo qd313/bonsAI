@@ -1,0 +1,30 @@
+{
+ "row":"P82-ONE-DETAILS-LINE",
+ "build_commit":"code tip e34b0d57; Deck dist/index.js md5 2226c4fb33f76c7ee98d29db8ca8b2bd",
+ "deck_time_local":"2026-10-07 about 01:33 EDT",
+ "screen":"external monitor; QAM page innerWidth 855 x innerHeight 766; pane (first _TabContentsScroll) top 88 bottom 765",
+ "setup":"Main tab, test chat. Newest answer = this block's 'What is a quick way to earn Geo early on?' (has Show reasoning and a real 'Show details' line; the answer is a two-option menu). Ring started on the plugin header, then DOWN one press at a time, 13 presses, reading after each. Slot line = .bonsai-details-slot__line, chips face = .bonsai-details-slot__chips, real line = .bonsai-chat-details-divider that is not the reasoning fold.",
+ "pressed":"DOWN x13 (header -> tab bar -> chat row -> ... -> chip row below the turn)",
+ "seen":{
+  "columns":"press | ring on | scrollTop | slot [top,bottom] --shown, visibility/opacity | chips --away | real line [top,bottom] visibility/opacity, data-slot-holds-line",
+  "rows":[
+   "1 | tab bar 'Main tab' | 0 | 601-631 shown, visible/1 | away=true | 650-665 visible/0 holds=true",
+   "2 | chat row | 0 | same | true | 654-669 visible/0 holds=true",
+   "3 | '88 earlier' | 0 | same | true | 650-665 visible/0 holds=true",
+   "4 | question | 0 | same | true | 650-665 visible/0 holds=true",
+   "5 | Show reasoning | 0 | same | true | 650-665 visible/0 holds=true",
+   "6 | answer section 1 | 0 | same | true | 650-665 visible/0 holds=true",
+   "7 | answer section 2 | 0 | same | true | 650-665 visible/0 holds=true",
+   "8 | 'A. Starting out in Dirtmouth' | 0 | same | true | 650-665 visible/0 holds=true",
+   "9 | 'B. Exploring the Crossroads' | 0 | same | true | 650-665 visible/0 holds=true",
+   "10 | 'Mark reply helpful' | 40.6 | 601-631 shown, visible/1 | away=true | 610-625 visible/0 holds=true (real line overlapping the slot range but invisible)",
+   "11 | 'Show details' (REAL LINE) | 71.1 | 601-631 NOT shown, hidden/0 | away=false | 579-594 visible/1 holds=false",
+   "12 | notes block 'Charms and notches' | 134.4 | NOT shown, hidden/0 | away=false | 516-531 visible/1 holds=false",
+   "13 | chip 'What should I do if Ask times out?' (left the turn) | 134.4 | hidden/0 | away=false | 516-531 visible/1"
+  ],
+  "screenshot":"plan82-P82-ONE-DETAILS-LINE-ring-on-real.png (press 11): one 'Show details' line with the ring, chips visible under it; no second line."
+ },
+ "expected":"At most one of the two lines has opacity above 0 at every press; when the ring lands on the real line it reads opacity 1 and the slot shows the chips (--shown absent, chips not --away); same one press later.",
+ "verdict":"PASS. At every press exactly one line was visible (presses 1-10 slot only, real line opacity 0; presses 11-13 real line only, slot hidden/0). Compare M6 press 10, where both showed (real 579-594 opacity 1 while slot shown opacity 1): now at the equivalent press 11 the slot is hidden and the chips are back.",
+ "side_effect":"none"
+}

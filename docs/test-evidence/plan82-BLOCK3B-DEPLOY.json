@@ -1,0 +1,11 @@
+{
+ "row":"BLOCK3B-DEPLOY",
+ "build_commit":"code tip e34b0d57; Deck dist/index.js md5 2226c4fb33f76c7ee98d29db8ca8b2bd = this PC's dist/index.js",
+ "deck_time_local":"2026-10-07 01:29 EDT",
+ "screen":"external monitor; QAM page innerWidth 855 x innerHeight 766",
+ "setup":"checkReady: runningAppId null, awake true, noForeignCdpTunnel true. deck_deploy: loader ready true, active, waitedMs 283.",
+ "pressed":"deck_openPlugin x3",
+ "seen":"open failed twice (1st: CEF debugger ECONNRESET; 2nd: QAM chord sent, no pane appeared), third try opened, .bonsai-scope present. Test chat open (title row 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'), Main tab, 8 dots.",
+ "expected":"deploy ok, md5 equal, plugin opens within three tries",
+ "verdict":"PASS deploy and md5; PASS open (third try, as expected after a deploy)"
+}

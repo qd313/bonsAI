@@ -1,0 +1,23 @@
+{
+ "row":"P82-SLIDER-RING-ON-KNOB",
+ "build_commit":"code tip e34b0d57; Deck dist/index.js md5 2226c4fb33f76c7ee98d29db8ca8b2bd",
+ "deck_time_local":"2026-10-07 about 01:34 EDT",
+ "screen":"external monitor; QAM page innerWidth 855 x innerHeight 766, devicePixelRatio 1.28",
+ "setup":"Ollama tab (RB from Main). Walked DOWN to 'Unload delay: 15m' (11 presses). Old values noted: ollama_keep_alive 15m, reply_verbosity balanced.",
+ "pressed":"Unload delay: RIGHT, screenshot, LEFT. Then walked UP to 'Reply style: Balanced' (3 presses): RIGHT, screenshot, LEFT.",
+ "seen":{
+  "unload_delay_before":"Focusable (gpfocus, class 'Panel Focusable', no label of its own) rect x202.5 y656.7 w32 h28.1; computed outline of the Focusable: none 0px (rgb 150,150,150), no box-shadow. Child dot (the only child, 999px radius) rect 208,663.7 21.1x21.1, computed outline rgba(255,255,255,0.88) solid 1.5625px. No element with a focus-ring class or role in the document (search returned none).",
+  "unload_delay_after_right":"label 30m; Focusable x223.1 (moved +20.6) w32; dot x228.5 (moved +20.5) 21.1x21.1; dot outline unchanged.",
+  "unload_delay_after_left":"label back to 15m, Focusable x202.5, dot x208.",
+  "reply_style":"before: Balanced. After RIGHT: Detailed (right end of track), Focusable x305.2 w32 h27.1, dot x310.7, dot outline the same, Focusable outline none. After LEFT: Balanced.",
+  "screenshots":"plan82-P82-SLIDER-RING-ON-KNOB-after-right.png (Unload delay 30m) and -reply-style.png (Detailed): one white ring around the knob in each. The rounded frame around each slider panel is there on both sliders, focused or not, so it is the panel's own static border, not a focus frame; no grey frame sits behind the knob or at the track's right end.",
+  "settings_file_after":"ollama_keep_alive 15m, reply_verbosity balanced (read over SSH after the Left presses)"
+ },
+ "expected":"exactly one ring around the knob, no grey frame behind it or at the track's right end; ring is the dot's own outline reading a 2 px solid white; dot rect moves with the press; Focusable box 32 px wide.",
+ "verdict":[
+  "PASS one ring only, around the knob, no Steam grey frame, on both sliders (screenshots).",
+  "PASS dot moved with the press (+20.5 px) and the Focusable is 32 px wide on both sliders.",
+  "UNCLEAR the dot's computed outline reads 'rgba(255, 255, 255, 0.88) solid 1.5625px', not '2 px solid white'. 1.5625 x 1.28 (dpr) = 2.0, so it is probably 2 CSS px under the panel's scale, and alpha 0.88 is not fully opaque white. Owner to decide if that matches the row."
+ ],
+ "side_effect":"The Right presses changed the two settings (Unload delay 15m -> 30m, Reply style Balanced -> Detailed) as the runbook says; both put back with Left and confirmed by reading the settings file. The plugin may have written the 30m value to the Deck for a few seconds."
+}

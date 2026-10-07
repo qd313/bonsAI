@@ -1,0 +1,34 @@
+{
+ "row":"BLOCK3B-HANDOVER",
+ "build_commit":"code tip e34b0d57 (branch tip same); Deck dist/index.js md5 2226c4fb33f76c7ee98d29db8ca8b2bd, equals this PC's; plugin v0.5.0",
+ "deck_time_local":"2026-10-07 about 01:41 EDT (Deck clock)",
+ "screen":"external monitor; QAM page 855 x 766",
+ "keep_awake":"Held by block 0/1 until 2026-10-07T12:29:22Z (08:29 EDT). Not renewed by me.",
+ "checks":{
+  "BLOCK3B-DEPLOY":"PASS deploy + md5; open took three tries (two failures, as usual after a deploy)",
+  "P82-BOX-DOWN-MODE-BUTTON":"PASS (idle, menu and during-answer halves). Stop button's aria-label is 'Stop generation', not 'Stop'",
+  "P82-ONE-DETAILS-LINE":"PASS (one line at every press)",
+  "P82-SLIDER-RING-ON-KNOB":"PASS one ring, dot moves, Focusable 32 wide; UNCLEAR the outline reads rgba(255,255,255,.88) 1.5625px not '2 px solid white' (1.5625 x dpr 1.28 = 2)",
+  "P82-CHAT-ROW-NO-NAME-STOP-try2":"PASS (ring back on Save after the save window closes)",
+  "P82-FADE-ON-BUTTON":"PASS (14 of 14 word changes at opacity 0)",
+  "P82-MIC-LOG":"PASS log and labels; UNCLEAR the 'Starting voice input' label was not caught",
+  "P82-REASONING-BLOCK-PAGES":"SKIPPED on the owner's instruction (its commit is not on the branch yet); no file written"
+ },
+ "settings_changed":[
+  "ollama_keep_alive 15m -> 30m -> 15m (slider Right then Left); confirmed 15m over SSH",
+  "reply_verbosity balanced -> detailed -> balanced; confirmed balanced",
+  "preset_chip_animation decode -> fade -> decode, AND preset_chip_fade_animation_enabled false -> true -> false (the second key moves with the first); confirmed decode / false over SSH"
+ ],
+ "settings_backup":"~/p82-backup/ on the Deck (made by block 0/1); settings file itself not edited by me, only through the plugin's own controls.",
+ "test_chat":"How do I beat the boss in the Soul Sanctum in Hollow Knight? (6f3cc055), open, Main tab. Now 88 earlier entries (one new question this block: 'What is a quick way to earn Geo early on?', with an answer that is a two-option menu). 8 chat dots; live chat_slots still 8 files.",
+ "turn_count":"1 test question asked this block.",
+ "where_ring":"Plugin OPEN on Main tab, test chat, ring on the question box (not pressed). Box empty. No game running.",
+ "surprises":[
+  "After A on Ask the ring lands on the question box (not Ask); Up from there goes to a chip (67% visible at that moment).",
+  "Right from the question box lands on the mode button (not a stop for the check).",
+  "Plugin log line 19 at 01:35:42 'voice: stop pressed, no recording was running' with no mic press from me then.",
+  "The rig refused one B press with a lease error naming pid 32368 on desktop; deck_status a moment later said the lease was mine; B worked on retry. Possibly worth a look: another session name in a lease error.",
+  "walkTo output is huge each call; deck_runSequence is lighter for known paths.",
+  "The mic button is not reached by DOWN from the tab bar; it sits right of the mode button (same slot as Stop generation)."
+ ]
+}

@@ -1,0 +1,20 @@
+{
+ "row":"P82-CHAT-ROW-NO-NAME-STOP-try2",
+ "build_commit":"code tip e34b0d57; Deck dist/index.js md5 2226c4fb33f76c7ee98d29db8ca8b2bd",
+ "deck_time_local":"2026-10-07 about 01:35 EDT",
+ "screen":"external monitor; QAM page innerWidth 855 x innerHeight 766",
+ "setup":"Test chat, Main tab (came from the Ollama tab with LB). Row entered from the tab bar with DOWN rather than from below (as in M4); Save icon shows (chat has answers).",
+ "pressed":"DOWN (row), LEFT, A, B (the first B was refused by the rig, see side_effect; repeated once and worked), RIGHT, UP, DOWN",
+ "seen":{
+  "enter":"row .bonsai-chat-slot-row-focus has the ring; active stop = .bonsai-chat-slot-delete--active-stop (Delete)",
+  "left":"active stop = .bonsai-chat-slot-save--active-stop (Save)",
+  "A":"window 'Save to Desktop note - This appends to a file on your Steam Deck Desktop...' opened in the 'Steam Big Picture Mode' target. Nothing typed.",
+  "B":"window gone (that target back to the Home screen); ring on the row, active stop = .bonsai-chat-slot-save--active-stop; the Delete icon has no active-stop class.",
+  "right":"active stop = Delete",
+  "up":"ring on the tab bar ('Main tab')",
+  "down":"row, active stop = Delete"
+ },
+ "expected":"After the save window closes the ring is back on the row with Save; Right: Delete; Up: tab bar; Down: row on Delete.",
+ "verdict":"PASS Save-return half: after B the ring was on the row with Save carrying the active-stop class (block 3a had it on Delete). PASS the rest: Right Delete, Up tab bar, Down row on Delete.",
+ "side_effect":"The first B press was refused by the rig with a lease error ('being driven by another session: pid 32368 on desktop'); deck_status a moment later showed the lease as mine, and the same B worked on one retry. Nothing reached the Deck from the refused press. No text saved; the save window was closed with B."
+}

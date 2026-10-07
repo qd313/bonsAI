@@ -1,0 +1,22 @@
+{
+ "row":"P82-MIC-LOG",
+ "build_commit":"code tip e34b0d57 (includes 7e712dc6 'Voice: the plugin log now shows each microphone start and stop'); Deck dist/index.js md5 2226c4fb33f76c7ee98d29db8ca8b2bd",
+ "deck_time_local":"2026-10-07 01:40 EDT (Deck clock)",
+ "screen":"external monitor; QAM page innerWidth 855 x innerHeight 766",
+ "setup":"Main tab, test chat. Ring on the microphone button (aria-label 'Voice input', class bonsai-unified-input-corner-right, reached from the mode button with RIGHT; walking DOWN from the tab bar does not stop on it). Question box empty.",
+ "pressed":"A on 'Voice input' (focus read first), wait about 8 s, A again on 'Stop voice input' (focus read first).",
+ "seen":{
+  "first_A":"Page poll started right after the press returned and read the label as 'Stop voice input' at t=0, with no change over the next 2.5 s. The brief 'Starting voice input' label was not caught.",
+  "log_after_first_A":"line 20: [2026-10-07 01:40:30,001][INFO]: voice: recording started, model tiny.en",
+  "second_A":"label back to 'Voice input'; question box value '' (empty, nothing spoken).",
+  "log_after_second_A":"line 21: [2026-10-07 01:40:52,099][INFO]: voice: recording stopped, transcript 0 characters",
+  "other_voice_log_line":"line 19: [2026-10-07 01:35:42,913][INFO]: voice: stop pressed, no recording was running. This was logged at 01:35:42, about when I was on the chat row/Save window; I pressed nothing on the mic button then. It may come from an earlier press or the plugin itself; reported as a surprise."
+ },
+ "expected":"After A: label 'Starting voice input' first, then 'Stop voice input'; log line saying a recording started with model tiny.en. After A again: label 'Voice input'; log says it stopped; box stays empty.",
+ "verdict":[
+  "PASS log: 'recording started, model tiny.en' and later 'recording stopped, transcript 0 characters' both appear.",
+  "PASS labels 'Stop voice input' then 'Voice input'; box empty.",
+  "UNCLEAR the 'Starting voice input' label: not seen. My first read came after the press had already returned and showed 'Stop voice input'. It may have shown for under half a second or not at all; a faster read (or a recording) would settle it."
+ ],
+ "side_effect":"none"
+}

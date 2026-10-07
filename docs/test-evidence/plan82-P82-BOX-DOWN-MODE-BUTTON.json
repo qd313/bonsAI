@@ -1,0 +1,16 @@
+{
+ "row":"P82-BOX-DOWN-MODE-BUTTON",
+ "build_commit":"code tip e34b0d57; Deck dist/index.js md5 2226c4fb33f76c7ee98d29db8ca8b2bd",
+ "deck_time_local":"2026-10-07 about 01:40 EDT",
+ "screen":"external monitor; QAM page innerWidth 855 x innerHeight 766",
+ "setup":"Main tab, test chat (slot row 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'), Strategy mode, box empty. Ring placed on the question box by one DOWN (never A on the box).",
+ "pressed":"Idle: DOWN, DOWN, UP, UP. Then DOWN to mode button, A, DOWN, B. Then send script 'What is a quick way to earn Geo early on?' (VERIFIED), DOWN to Ask, A. During the answer: UP, DOWN, RIGHT (first try, off by one, see side_effect), then RIGHT, then LEFT, UP, DOWN, RIGHT.",
+ "seen":{
+  "idle":"box -> DOWN: button 'Inference mode: Strategy. Open to change.' (.bonsai-ask-mode-trigger, rect 262,682 55x20, visible 100%); DOWN: 'ask' (visible 100%); UP: mode button; UP: box.",
+  "menu":"A on mode button: menu opened with ring on 'speed' (first item). DOWN: ring on 'strategy' (inside menu). B: menu closed, ring back on the mode button, mode still Strategy.",
+  "during_answer":"After A on Ask the ring went to the question box by itself (not Ask). My UP then landed on a chip 'What do the model policy tiers mean?' (67% visible, not part of this check). DOWN: box. RIGHT from the BOX landed on the mode button (not a problem, noted). From the mode button RIGHT: 'Stop generation' (.bonsai-unified-input-corner-right, visible 100%). Second clean pass while the answer was still arriving: LEFT: mode, UP: box, DOWN: mode button (match), RIGHT: Stop generation (match). Answer finished about 12 s after the poll started; ring moved to 'Voice input' when Stop vanished."
+ },
+ "expected":"Down from box = mode button; Down = Ask; Up = mode; Up = box; A on mode button opens menu, Down goes into the menu, B closes back to mode button; during an answer Down from box = mode button, Right = Stop button.",
+ "verdict":"PASS idle half (box->mode->Ask->mode->box). PASS menu half (opens, ring in menu, B returns to mode button). PASS during-answer half (box->Down mode button, Right Stop; seen twice). The Stop button's aria-label is 'Stop generation', not 'Stop' as the runbook wrote; element is the right one.",
+ "side_effect":"One test question asked in the test chat ('What is a quick way to earn Geo early on?'), as planned. During the answer my first Up landed on a chip because the ring was already on the box after A on Ask; it only moved the ring, nothing pressed with A."
+}

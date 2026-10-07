@@ -1,0 +1,21 @@
+{
+ "row":"BLOCK5-HANDOVER",
+ "build_commit":"code tip 6b5d5f49 deployed; Deck dist/index.js md5 5d5b7aabaae59b7eeba44fa33c8cf3a2 equals this PC's; plugin v0.5.0",
+ "deck_time_local":"2026-10-07 about 02:25 EDT",
+ "screen":"external monitor; QAM 855 x 766",
+ "keep_awake":"Taken at block 5 start (120 min, expiresAt 2026-10-07T08:08:20Z) and RELEASED at the end (deck_restorePowerSettings ok, wasHeld true). The Deck can sleep now.",
+ "checks":{
+  "BLOCK5-DEPLOY":"PASS (open took three tries)",
+  "P82-REASONING-BLOCK-PAGES-try2":"PASS: first Down lands on the block, largest move 336 px, stops line-block-block-answer and back, B on the block closes it and puts the ring on the line. Block 849 px, taller than the pane, so its box cannot sit inside the pane; on the first Up its last 84 px sat behind the dock. Ring on the block is a thin faint line down the pane edges.",
+  "BLOCK5-END":"PASS"
+ },
+ "settings_changed":"none. Live settings.json identical to ~/p82-backup/settings.json.",
+ "settings_backup":"~/p82-backup/ on the Deck",
+ "test_chat":"How do I beat the boss in the Soul Sanctum in Hollow Knight? (6f3cc055), '90 earlier'; newest turn 'Which charm should a new player get first?'",
+ "where_ring":"Plugin OPEN on Main tab, test chat, ring on the question box, box empty. No game running.",
+ "surprises":[
+  "deck_openPlugin failed twice before opening on the third try. The second failure was a blind QAM chord that did nothing while Steam Home had the ring on the Deep Rock Galactic tile (no A pressed).",
+  "deck_walkTo and deck_openPlugin return very large outputs (about 10k tokens each); deck_readPage with a short expression is far cheaper for per-press reads.",
+  "The ring returns to the question box by itself after an answer finishes."
+ ]
+}

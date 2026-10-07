@@ -1,6 +1,6 @@
 # Plan 82 — the bug list and the Verify list, cleaned up overnight
 
-**Status: RUNNING, started 2026-10-07 about 00:10. The log at the end says where things stand.**
+**Status: FINISHED 2026-10-07 about 02:45. The results and the report are in "Results"; the run is in the Log.**
 
 Asked for by the maintainer on 2026-10-06, late evening: "Tackle the bug list and the verify list, use subagents in
 parallel. The ones that are mine will stay mine, I'll chip away at it when I have time. Deck is yours." They are
@@ -13,7 +13,7 @@ to tonight. The maintainer's calls are in the decisions file as D125.
 
 - **Bugs: 15 on the list tonight.** Eight are new, found by the maintainer by hand on the Deck on 2026-10-06, and
   they are the night's work: seven D-pad and ring problems and the microphone button that does nothing. The
-  microphone decides the release, so it is looked at first.
+  microphone decides the release, so it is looked at first. A ninth, the fade chips, was found by the rig during the night and turned out not to be a bug as filed.
 - **Verify: 24 entries.** About ten can only be closed by the maintainer (a real voice, a PIN, a finger, a right
   stick, their own eye): those stay theirs. Six are "tests only" and can never get a Deck check; by the maintainer's
   earlier call (D124, call 2) nothing moves to Done on its tests alone, so they stay, and the question of moving
@@ -46,7 +46,7 @@ to tonight. The maintainer's calls are in the decisions file as D125.
 | D | Up from the bottom of the About tab does nothing | ★★ | Yes (M1): what holds the ring after Up, and the shape of the rows above | after M1: not reproduced by the rig (M1), stays open, question 5 |
 | E | The ring on a slider is too wide and stays at the right end when the knob moves | ★★ | Yes (M3): the ring's box against the knob's, before and after a press | after M3, landed `f6c96e43`; passed on the Deck, block 3b (about 01:30 to 01:45) |
 | F | Both Show details lines on screen at once | ★★ | Yes (M6): the slot's state against the real line's box on every press | after M6, landed `8bfe1802`; passed on the Deck, block 3b (about 01:30 to 01:45) |
-| G | The open reasoning block scrolls past in one press; it should move a screen at a time like the answer | ★★★ | Yes (M5): the scroll per press on the block and on the answer | after M5; landed (three commits, Opus); skipped in block 3b (its commits were not on the branch yet), then **FAILED on the Deck in block 4 (build `efd4258b`): the block is not a ring stop**; a second round (p82g2, Opus) was started and has not landed; back on the roadmap's Bugs list |
+| G | The open reasoning block scrolls past in one press; it should move a screen at a time like the answer | ★★★ | Yes (M5): the scroll per press on the block and on the answer | after M5; landed (three commits, Opus); skipped in block 3b (its commits were not on the branch yet), then **FAILED on the Deck in block 4 (build `efd4258b`): the block is not a ring stop**; second round `ce8ace71` (p82g2, Opus), landed `6b5d5f49`, passed on the Deck (block 5) |
 | H | The microphone button does nothing | ★★★ | Yes (M7): a press with the log open, the engine and the microphone checked over SSH | decided by M7: not reproduced by the rig (M7); helper p82h adds a toast and log lines; landed `3575d15f` (three commits); log half passed on the Deck in block 3b; the Starting label passed in block 4 (build `efd4258b`, about 22 ms after the press); the spoken-sentence check stays the maintainer's |
 | I | The fade style's chips swap their words without fading (found tonight, Deck block 2) | ★★ | Measured (block 2): opacity 1.00 through 32 changes | Sonnet high (p82i): found to be a measurement of the wrong element; the fade moved onto the button, landed `8d1523d4`; passed on the Deck, block 3b (about 01:30 to 01:45) |
 
@@ -102,33 +102,35 @@ Standing rules as in plan 81. One driver at a time, a fresh one per block, evide
 ## Follow-ups (nothing a player sees)
 
 - The question box's old Down handler in `src/hooks/useMainTabAskBarFocus.ts` is now dead code, with tests that describe nothing (left over from p82d, landed `a6e00806`). Remove it in a later clean-up.
-- A plugin style for the ring on the open reasoning block, if the Deck shows Steam's own default ring is hard to see (from p82g, landed `8e15cca2`).
+- The ring on the open reasoning block is Steam's own faint edge line, a thin line down the pane's left and right edges (the maintainer's look; a plugin ring style if wanted; from p82g, landed `8e15cca2`).
+- A reasoning block taller than the pane leaves its last 84 px behind the dock on the first Up (not a stop twice, not a jump; worth a look if anyone reads very long reasoning).
 - The plugin log line "voice: stop pressed, no recording was running" appeared at 01:35:42 on 2026-10-07 with nobody pressing the microphone (`docs/test-evidence/plan82-BLOCK3B-HANDOVER.json`): a stop call reaches the back end from somewhere when no recording runs. Harmless, worth a look.
 
 ## Results
 
 All times are the Deck's own clock. Written 2026-10-07 from the roadmap, the testing rows and the evidence files.
 
-### Where things stand (2026-10-07, about 02:05)
+### Where things stand (2026-10-07, about 02:45)
 
-Of the eight new bugs found by hand on 2026-10-06, **six are fixed and proven on the Deck**, one is fixed in code but failed its Deck check, and one did not reproduce.
+Of the eight new bugs found by hand on 2026-10-06, **seven are fixed and proven on the Deck** and one did not reproduce.
 
-- **Proven on the Deck:** the delete box (build `880687e4`); the chat row's title bar (the three rules on `880687e4`, the Save-return on `e34b0d57`); Down from the question box (`e34b0d57`); the slider ring (`e34b0d57`); one Show details line at a time (`e34b0d57`); the microphone's reaction (the log on `e34b0d57`, the amber "Starting voice input" label on `efd4258b`). The spoken-sentence check on the microphone stays the maintainer's.
-- **Fixed in code, failed on the Deck:** the open reasoning block (build `efd4258b`). The block is not a ring stop on the device, so one Down still goes to the answer. A second round (p82g2, Opus) was started and has not landed.
+- **Proven on the Deck:** the delete box (build `880687e4`); the chat row's title bar (the three rules on `880687e4`, the Save-return on `e34b0d57`); Down from the question box (`e34b0d57`); the slider ring (`e34b0d57`); one Show details line at a time (`e34b0d57`); the microphone's reaction (the log on `e34b0d57`, the amber "Starting voice input" label on `efd4258b`); and the open reasoning block (build `6b5d5f49`, second round, block 5: the first Down lands on the block, the stops are line, block, block, the answer's first section and back, the largest move is 336 px against the 513 px limit, and B on the block closes it with the ring on the line; the first round, `efd4258b`, had failed because the block was not a stop). The spoken-sentence check on the microphone stays the maintainer's. Two things on the reasoning block are noted, not failures: a block taller than the pane leaves its last 84 px behind the dock on the first Up, and the ring on it is Steam's own faint edge line.
 - **Not reproduced:** Up at the bottom of the About tab (3 of 3 from the D-pad route). The entry stays open; question 5 asks how the maintainer reached it.
 - **The fade-style chips:** not a bug as filed (the rig had measured the wrong element). The fade now sits on the chip button, can be read, and passed on the Deck (`e34b0d57`).
 
 ### Verify, before and after
 
-Verify held 24 entries at the start and holds 22 now. Done gained nine lines tonight: the walk check that reads words and the reopened checklist with the real AI (both closed by the rig in block 2); the delete box (3a); the chat row, Down from the question box, the slider ring, one Show details line and the fade chips (3b); the microphone button (4). The reasoning block went into Verify and back out to Bugs. Everything the maintainer owns stays theirs: the real microphone twice, the PIN twice, the first install, the finger, the right stick, five looks, the trap in daily use and the cut-menu hand check. The six "tests only" rows also stay (question 1).
+Verify held 24 entries at the start and holds 21 now (the roadmap audit also took out the focus-ring entry, which had passed on the Deck on 2026-10-03 and was still listed). Done gained ten lines dated tonight: the walk check that reads words and the reopened checklist with the real AI (both closed by the rig in block 2); the delete box (3a); the chat row, Down from the question box, the slider ring, one Show details line and the fade chips (3b); the microphone button (4); the open reasoning block (5, second round). The reasoning block went into Verify, back out to Bugs after its first Deck check failed, and into Done after the second round. The focus-ring entry also went to Done, dated 2026-10-03, the day it passed. Everything the maintainer owns stays theirs: the real microphone twice, the PIN twice, the first install, the finger, the right stick, five looks, the trap in daily use and the cut-menu hand check. The six "tests only" rows also stay (question 1).
 
 ### Code
 
-15 code commits landed on experimental tonight (`git log --oneline 60b8c57f..HEAD`, leaving out the paperwork sweeps, the lessons commit and the plan's own first commit). Each landing was meant to run the five gates and the quick check (the session's landing rule); nothing was pushed.
+16 code commits landed on experimental tonight (`git log --oneline 60b8c57f..HEAD`, leaving out the paperwork sweeps, the lessons commit and the plan's own first commit). Each landing was meant to run the five gates and the quick check (the session's landing rule); nothing was pushed.
 
 ### The Deck
 
-Blocks run: 0 and 1 (setup, backups and the measurements), 2 (the owed Verify checks), 3a, 3b and 4. Builds deployed for the fix checks: `880687e4`, `e34b0d57` and `efd4258b`; blocks 0 to 2 ran on `60b8c57f`, before any fix. **The Deck at the end:** the smoke question was answered (about 2 minutes; the answer begins "Right then, listen up, you wanna know what Geo is for early on?"); the live settings file is identical to the block 0 backup; every chat file matches the backup except the test chat (tonight's extra turns), the chat index and the throwaway chat deleted in block 3a; the test chips read `[]`; no game is running; the plugin is open on the Main tab with the test chat and the ring on the question box; the keep-awake is released (the tool reported released true). Evidence `docs/test-evidence/plan82-BLOCK4-END.json`, `plan82-BLOCK4-HANDOVER.json`.
+Blocks run: 0 and 1 (setup, backups and the measurements), 2 (the owed Verify checks), 3a, 3b, 4 and 5. Builds deployed for the fix checks: `880687e4`, `e34b0d57`, `efd4258b` and `6b5d5f49`; blocks 0 to 2 ran on `60b8c57f`, before any fix. Block 5 (about 02:08 to 02:25, build `6b5d5f49`, the Deck's copy of the built plugin matched this PC's) opened the plugin on the third try, passed the reasoning block's second check and ran the smoke test. **The Deck at the end:** the smoke question "Which charm should a new player get first?" was answered in about 1.5 minutes (the AI had to load again); the live settings file is identical to the backup; the test chips read `[]`; no game is running; the plugin is open on the Main tab with the test chat ("90 earlier", one extra turn from the smoke test) and the ring on the empty question box; the keep-awake is released (ok true, wasHeld true, released true). Evidence `docs/test-evidence/plan82-BLOCK5-DEPLOY.json`, `plan82-BLOCK5-END.json`, `plan82-BLOCK5-HANDOVER.json`; block 4's put-back (with the chat-file comparison): `plan82-BLOCK4-END.json`, `plan82-BLOCK4-HANDOVER.json`.
+
+**The report:** https://claude.ai/code/artifact/42a05607-7dba-4332-95aa-c07775250497 and **the checks page** (new group at the top): https://claude.ai/code/artifact/3e5ec678-b219-439d-b952-139d75ff2db4.
 
 ### Questions for the maintainer
 
@@ -136,7 +138,7 @@ The list is above, 1 to 7.
 
 ### Follow-ups
 
-The list is above (the old Down handler left over from p82d, a ring style for the open reasoning block, the stray voice stop line in the plugin log).
+The list is above (the old Down handler left over from p82d, the ring on the open reasoning block, the last 84 px of a tall reasoning block behind the dock, the stray voice stop line in the plugin log).
 
 ### Lessons
 
@@ -160,3 +162,7 @@ All times are the Deck's own clock (the same as this PC's), taken from the evide
   was skipped (its commits were not on the branch yet), and the "Starting" label is retried in block 4. Deck block 4 (the last build, the reasoning block, the Main tab walks, the Deck put
   back) started 01:45. Paperwork sweep 5 committed.
 - **2026-10-07, about 01:43 to 02:05:** Deck block 4 (build `efd4258b`): the microphone's "Starting" label passed (22 ms after the press); the reasoning block FAILED (not a stop on the device; second round p82g2 on Opus); both Main tab walks passed on order with four partly visible landings (question 7); the Deck put back, settings identical to the backup, keep-awake released. Paperwork sweep 6 committed.
+- **2026-10-07, about 02:10 to 02:45, the end:** landed the reasoning block's second round
+  (`6b5d5f49`); Deck block 5 (build `6b5d5f49`): the reasoning block passed (the first Down lands on the block;
+  largest move 336 px; B closes it); smoke test passed; the Deck put back, keep-awake released. The roadmap audited;
+  four entries corrected (the clean-ups entry, the focus-ring entry moved to Done, the chips and tab strip entries named their owed rows). Paperwork sweep 7 committed. The report and the checks page published.

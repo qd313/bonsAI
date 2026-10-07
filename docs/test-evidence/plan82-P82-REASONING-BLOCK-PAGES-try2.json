@@ -1,0 +1,31 @@
+{
+ "row":"P82-REASONING-BLOCK-PAGES-try2",
+ "build_commit":"6b5d5f49 (Deck md5 5d5b7aab...)",
+ "deck_time_local":"2026-10-07 about 02:09-02:12 EDT",
+ "screen":"external monitor; QAM page 855 x 766; pane y88-765 (677 high); dock top about y601",
+ "setup":"Test chat open, Main tab. The block 4 turn ('quick way to earn Geo') was not the newest, so I used the newest turn with a reasoning line: 'What does Geo buy early on?', 'Show reasoning · 21 s'. Block is 849 px tall (taller than block 4's 756, taller than the 677 px pane). Ring walked to the line with deck_walkTo (6 Up from the box), line y204, scrollTop 16.4.",
+ "block_element":"after A: one .bonsai-chat-reasoning-block, tag DIV, class 'bonsai-chat-reasoning-block Panel Focusable', tabindex=0, no role, no aria-label, attributes are only class and tabindex. It is a Steam nav node: it carries gpfocus when the ring is on it (read from the page; I did not separately call deck_readFocus for the node list).",
+ "pressed":"A, Down, Down, Down, Up, Up, Up, Down, B. Reads between every press, well over a second apart.",
+ "seen":{
+  "A":"block opened; block y227-1076 (h849); scrollTop 16.4",
+  "down1":"RING ON THE BLOCK (class bonsai-chat-reasoning-block ... gpfocus). Block top y88 (just under the header at 88), bottom 937. scrollTop 155.5 (delta +139). Block taller than pane so the element box runs below the pane edge; its top part is in view.",
+  "down2":"still the block. Block y-248 to 601 (end exactly at the dock top 601). scrollTop 491.4 (delta +336)",
+  "down3":"answer's first section ('Right then, listen up, you wanna know wh...', class bonsai-answer-stop), y400-601, inside pane. scrollTop 713.3 (delta +222)",
+  "up1":"the block. y-164 to 685 (end 84 px below the dock top, i.e. its last lines sit behind the dock). scrollTop 407.0 (delta -306)",
+  "up2":"the block, top y88 under the header. scrollTop 155.5 (delta -252)",
+  "up3":"the 'Hide reasoning · 21 s' line, y204-219, on screen. scrollTop 16.4 (delta -139)",
+  "down_again":"ring on the block, scrollTop 155.5",
+  "B":"block gone (0 blocks in the page), ring on 'Show reasoning · 21 s' line y204-219, scrollTop 16.4",
+  "max_single_press_scroll_px":336,
+  "ring_visibility":"the ring on the block is a thin line down the pane's left and right edges (screenshot): present but faint. Not judged against a threshold.",
+  "screenshot":"plan82-P82-REASONING-BLOCK-PAGES-try2-on-block.png"
+ },
+ "expected":"first Down lands on the block; no press moves the pane over 513 px; ring element inside the pane after every press; stops line -> block (-> block) -> answer and back; B on the block closes it with the ring on the line",
+ "verdict_first_down_on_block":"PASS the first Down landed on the block (the thing that failed last time)",
+ "verdict_max_scroll":"PASS largest move 336 px, limit 513",
+ "verdict_stops":"PASS line -> block -> block -> answer, and back answer -> block -> block -> line",
+ "verdict_ring_inside_pane":"PASS with a note: the answer, the line and the block's top were inside the pane. On the block stops the element box is taller than the pane (849 vs 677), so its box cannot fit; the part in view is the part the ring sits on. On the first Up the block's last 84 px were behind the dock.",
+ "verdict_B":"PASS B on the block closed it and put the ring on the line, on screen",
+ "verdict_overall":"PASS",
+ "side_effect":"none. Block closed at the end, ring on the line."
+}

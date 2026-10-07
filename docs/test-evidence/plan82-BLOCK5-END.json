@@ -1,0 +1,19 @@
+{
+ "row":"BLOCK5-END",
+ "build_commit":"6b5d5f49 (Deck dist md5 5d5b7aabaae59b7eeba44fa33c8cf3a2)",
+ "deck_time_local":"2026-10-07 about 02:15-02:25 EDT",
+ "screen":"external monitor; QAM 855 x 766",
+ "setup":"No game. Test chat (title 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'), Main tab.",
+ "pressed":"send script ('Which charm should a new player get first?'), walkTo ask (8 Down), A on ask after reading the ring on ask (ready), then walkTo box (0 presses, ring was already on the box).",
+ "seen":{
+  "smoke":"script printed VERIFIED and the field held the whole text; answer finished in about 1.5 minutes (model had to load); newest turn now has 'Show reasoning · 19 s', an answer starting 'Right then, listen up, see, you wanna know about those charms for a newbie?' and a menu 'Where are you at in Hollow Knight?' with A and B options; Ask back to ready; chat count '90 earlier'",
+  "settings_diff":"json.tool diff of ~/p82-backup/settings.json against the live file: no difference (exit 0)",
+  "test_chips":"dev_frozen_test_chips is []",
+  "game":"no SteamLaunch process",
+  "final_state":"plugin open, Main tab, test chat, ring on the question box (y634, box empty)",
+  "keep_awake_release":"deck_restorePowerSettings: ok true, wasHeld true, released true, unit dps-hold-awake, 'wake lock released; this Deck sleeps normally again'; evidence field null"
+ },
+ "expected":"smoke answer works; settings equal backup; chips empty; no game; plugin open Main tab, ring on box; keep-awake released",
+ "verdict":"PASS smoke test; PASS settings unchanged; PASS test chips empty; PASS no game; PASS final state; PASS keep-awake released",
+ "side_effect":"One extra turn in the test chat (expected). The Deck's AI was loaded again by the question."
+}

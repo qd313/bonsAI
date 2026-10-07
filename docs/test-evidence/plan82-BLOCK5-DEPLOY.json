@@ -1,0 +1,11 @@
+{
+ "row":"BLOCK5-DEPLOY",
+ "build_commit":"6b5d5f49 (Deck dist/index.js md5 5d5b7aabaae59b7eeba44fa33c8cf3a2 equals this PC's)",
+ "deck_time_local":"2026-10-07 02:08-02:14 EDT",
+ "screen":"external monitor; QAM page 855 x 766 (innerWidth/innerHeight read); pane rect y88 h677, scrollHeight 715",
+ "setup":"No game (RunningApps empty; no game process). Keep-awake taken 120 min, expiresAt 2026-10-07T08:08:20.746Z. deck_deploy loader ready after 291 ms.",
+ "pressed":"deck_openPlugin three times (2 failed, 3rd opened). The 2nd try's blind QAM chord did nothing; Steam Home Recent Games row ring was on the Deep Rock Galactic tile; no A was pressed there.",
+ "seen":{"md5_deck":"5d5b7aabaae59b7eeba44fa33c8cf3a2","md5_pc":"5d5b7aabaae59b7eeba44fa33c8cf3a2","open_tries":3,"final":"plugin open, Main tab, ring on the question box (y634), Context line 'no active game detected', newest turn 'What does Geo buy early on?' with 'Show reasoning · 21 s' at y221"},
+ "expected":"deploy ok, md5 match, plugin opens within three tries, Main tab, test chat",
+ "verdict":"PASS deploy and md5; open took three tries (first failure expected, second one is worth a note)"
+}

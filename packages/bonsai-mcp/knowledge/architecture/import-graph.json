@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 741,
-  "edgeCount": 2155,
+  "edgeCount": 2156,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4323,7 +4323,8 @@
     },
     "src/hooks/useDockClearanceOnFocus.test.ts": {
       "imports": [
-        "src/hooks/useDockClearanceOnFocus.ts"
+        "src/hooks/useDockClearanceOnFocus.ts",
+        "src/utils/reasoningBlockReading.ts"
       ],
       "importedBy": []
     },
@@ -7762,6 +7763,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/hooks/useDockClearanceOnFocus.test.ts",
         "src/utils/buildReasoningFoldElement.tsx"
       ]
     },

@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { act, cleanup, renderHook } from "@testing-library/react";
 
 import { liftAboveDock, liftForFocus, useDockClearanceOnFocus } from "./useDockClearanceOnFocus";
+import { stepReasoningBlock } from "../utils/reasoningBlockReading";
 
 /*
  * jsdom has no layout, so the three rects the lift reads are stubbed: a 0–616 scroll pane, a dock
@@ -396,5 +397,47 @@ describe("liftForFocus", () => {
       t.cover.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
     });
     expect(t.cover.scrollIntoView).toHaveBeenCalled();
+  });
+
+  /*
+   * Plan 82: the open Show reasoning block is read by its own D-pad steps (reasoningBlockReading.ts), a
+   * screen a press. The lift's late passes, up to 900 ms after the ring lands on the block, saw a block
+   * whose top had gone above the pane and asked for its end: a second Down pressed inside that window on a
+   * 2,000 px block jumped the pane about 1,300 px, everything between unread.
+   */
+  it("a second Down inside the 900 ms window does not jump a 2,000 px reasoning block to its end", () => {
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      cb(0);
+      return 0;
+    });
+    vi.useFakeTimers();
+    const t = makePane();
+    let scrollTop = 0;
+    Object.defineProperty(t.scroll, "scrollTop", { configurable: true, get: () => scrollTop, set: (n: number) => (scrollTop = n) });
+    Object.defineProperty(t.scroll, "scrollHeight", { configurable: true, get: () => 3000 });
+    Object.defineProperty(t.scroll, "clientHeight", { configurable: true, get: () => 616 });
+    const block = t.focusEl(0, 0);
+    block.className = "bonsai-chat-reasoning-block Panel Focusable";
+    block.getBoundingClientRect = () => rect(0 - scrollTop, 2000 - scrollTop);
+    /* Steam's end-align, as the Deck measured it: the end lands its 80 px of padding and the margin above the pane's bottom. */
+    block.scrollIntoView = vi.fn(() => {
+      scrollTop = 2000 + (parseFloat(block.style.scrollMarginBottom) || 0) - (616 - 80);
+    });
+    renderHook(() => useDockClearanceOnFocus({ current: t.scroll }));
+
+    act(() => {
+      block.dispatchEvent(new FocusEvent("focusin", { bubbles: true })); // landed: its top on the pane's top
+      vi.advanceTimersByTime(400);
+    });
+    act(() => {
+      expect(stepReasoningBlock(block, "down")).toBe(true); // the second Down: one screen of it
+    });
+    const afterDown = scrollTop;
+    expect(afterDown).toBeLessThanOrEqual(370);
+    act(() => {
+      vi.advanceTimersByTime(600); // past the last pass, at 900 ms
+    });
+    expect(block.scrollIntoView).not.toHaveBeenCalled();
+    expect(scrollTop).toBe(afterDown);
   });
 });

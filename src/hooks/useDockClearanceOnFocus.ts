@@ -11,7 +11,8 @@
  *           owns the evidence for why scrollIntoView is tried FIRST (Steam's scroller erased direct
  *           writes while tokens streamed). The direct write is the fallback here, for when
  *           scrollIntoView leaves the element covered — see liftAboveDock. Does not lift an answer's
- *           own sections: the D-pad walk places those itself — see liftForFocus.
+ *           own sections, nor the open reasoning block: the D-pad walk places those itself — see
+ *           liftForFocus.
  */
 import { useEffect, type RefObject } from "react";
 import { findTabContentsScroll, panelScrollMax } from "../utils/chatPanelScroll";
@@ -123,6 +124,9 @@ export function liftAboveDock(el: HTMLElement): boolean {
 /** The class every section of an answer carries (buildAnswerBubbleElement.tsx's STOP_CLASS), and nothing else. */
 const ANSWER_SECTION_CLASS = "bonsai-answer-stop";
 
+/** The open Show reasoning block (buildReasoningFoldElement.tsx), a stop read by its own D-pad steps. */
+const REASONING_BLOCK_CLASS = "bonsai-chat-reasoning-block";
+
 /**
  * What the hook does for one element focus has landed on, on each of its passes: the lift, except for a
  * section of an answer. The D-pad walk places every section it lands on itself (answerBubbleNavigation.ts:
@@ -134,11 +138,15 @@ const ANSWER_SECTION_CLASS = "bonsai-answer-stop";
  * going Down from an underlined word, it skipped the section's middle (plan 78 helper D, round four). Covers,
  * underlined words, an opened cover's "tap to hide" line and everything outside the answer are lifted as
  * before: some of those landings are placed by nothing else, and none is tall enough to lose its top.
+ * The open reasoning block is left alone for the same reason (plan 82): it places itself when the ring
+ * lands on it and is then read a screen per press by scrolling, and a pass still pending from the landing
+ * (up to 900 ms) asked a block already read past its top for its end, so a quick second Down on a 2,000 px
+ * block jumped about 1,300 px of it unread (reasoningBlockReading.ts).
  * Read off the element's own class, not a page search: nothing here chooses where the ring goes.
  * Exported so the answer-walk test setup (src/test-harness/deckAnswerWalk.ts) runs the Deck's decision.
  */
 export function liftForFocus(el: HTMLElement): boolean {
-  if (el.classList.contains(ANSWER_SECTION_CLASS)) return false;
+  if (el.classList.contains(ANSWER_SECTION_CLASS) || el.classList.contains(REASONING_BLOCK_CLASS)) return false;
   return liftAboveDock(el);
 }
 

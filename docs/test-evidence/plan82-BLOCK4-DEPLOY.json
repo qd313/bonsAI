@@ -1,0 +1,11 @@
+{
+ "row":"BLOCK4-DEPLOY",
+ "build_commit":"efd4258b; dist/index.js md5 a5f7f5d67e434c71e95865cf42b147e1 on this PC and on the Deck (equal)",
+ "deck_time_local":"2026-10-07 about 01:44 EDT",
+ "screen":"external monitor; QAM page 855 x 766, dpr 1.28",
+ "setup":"no game running (RunningApps empty); keep-awake retaken with ttlMinutes 480, expiresAt 2026-10-07T13:43:16Z; deck_deploy ok, loader ready",
+ "pressed":"deck_openPlugin x3 (rootSelector .bonsai-scope)",
+ "seen":"try 1 failed (CDP ECONNRESET); try 2 failed (QAM chord sent, no pane); try 3 opened, 8 presses, panel confirmed. Main tab, test chat (newest question 'How do I beat the boss in the Soul Sanctum in Hollow Knight?', '88 earlier'), 'Show reasoning · 19 s' line present, Context: no active game detected",
+ "expected":"deploy ok, md5 equal, plugin opens within three tries",
+ "verdict":"PASS deploy and md5 match; PASS plugin opened on third try (two failures, as usual after a deploy)"
+}

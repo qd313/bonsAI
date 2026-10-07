@@ -46,8 +46,8 @@ to tonight. The maintainer's calls are in the decisions file as D125.
 | D | Up from the bottom of the About tab does nothing | ★★ | Yes (M1): what holds the ring after Up, and the shape of the rows above | after M1: not reproduced by the rig (M1), stays open, question 5 |
 | E | The ring on a slider is too wide and stays at the right end when the knob moves | ★★ | Yes (M3): the ring's box against the knob's, before and after a press | after M3, landed `f6c96e43`; passed on the Deck, block 3b (about 01:30 to 01:45) |
 | F | Both Show details lines on screen at once | ★★ | Yes (M6): the slot's state against the real line's box on every press | after M6, landed `8bfe1802`; passed on the Deck, block 3b (about 01:30 to 01:45) |
-| G | The open reasoning block scrolls past in one press; it should move a screen at a time like the answer | ★★★ | Yes (M5): the scroll per press on the block and on the answer | after M5; landed (three commits, Opus); owed on the Deck, skipped in block 3b because its commits were not on the branch yet, planned for block 4 |
-| H | The microphone button does nothing | ★★★ | Yes (M7): a press with the log open, the engine and the microphone checked over SSH | decided by M7: not reproduced by the rig (M7); helper p82h adds a toast and log lines; landed `3575d15f` (three commits); log half passed on the Deck, the Starting label retried in block 4 |
+| G | The open reasoning block scrolls past in one press; it should move a screen at a time like the answer | ★★★ | Yes (M5): the scroll per press on the block and on the answer | after M5; landed (three commits, Opus); skipped in block 3b (its commits were not on the branch yet), then **FAILED on the Deck in block 4 (build `efd4258b`): the block is not a ring stop**; a second round (p82g2, Opus) was started and has not landed; back on the roadmap's Bugs list |
+| H | The microphone button does nothing | ★★★ | Yes (M7): a press with the log open, the engine and the microphone checked over SSH | decided by M7: not reproduced by the rig (M7); helper p82h adds a toast and log lines; landed `3575d15f` (three commits); log half passed on the Deck in block 3b; the Starting label passed in block 4 (build `efd4258b`, about 22 ms after the press); the spoken-sentence check stays the maintainer's |
 | I | The fade style's chips swap their words without fading (found tonight, Deck block 2) | ★★ | Measured (block 2): opacity 1.00 through 32 changes | Sonnet high (p82i): found to be a measurement of the wrong element; the fade moved onto the button, landed `8d1523d4`; passed on the Deck, block 3b (about 01:30 to 01:45) |
 
 **The other seven: not tonight's to fix**
@@ -97,12 +97,50 @@ Standing rules as in plan 81. One driver at a time, a fresh one per block, evide
 4. **Renaming a chat by hand:** A on the chat's name used to open the rename box, and the name is no longer a stop (your call of 2026-10-06), so the only rename left is the one Sum up offers. Do you want a new route (for example a Rename choice inside the Save window)? *Meanwhile:* none.
 5. **Up at the bottom of the About tab:** the rig could not make it fail (3 of 3 from the D-pad route). How did you reach the bottom: D-pad only, or a right-stick or touch scroll first? *Meanwhile:* the entry stays open.
 6. **Run setup-dev on the Deck** (five seconds): the plugin folder is owned by root since the last deploy, so the continued-answer check could not lower the limit, and a deploy may be refused the same way. *Meanwhile:* the check stays owed; the deploy is tried as is.
+7. **A chip at the edge of the sliding strip** reads one third visible: the strip cuts its words. Is that the design, or a clipped label to fix? *Meanwhile:* on the watch list.
 
 ## Follow-ups (nothing a player sees)
 
 - The question box's old Down handler in `src/hooks/useMainTabAskBarFocus.ts` is now dead code, with tests that describe nothing (left over from p82d, landed `a6e00806`). Remove it in a later clean-up.
 - A plugin style for the ring on the open reasoning block, if the Deck shows Steam's own default ring is hard to see (from p82g, landed `8e15cca2`).
 - The plugin log line "voice: stop pressed, no recording was running" appeared at 01:35:42 on 2026-10-07 with nobody pressing the microphone (`docs/test-evidence/plan82-BLOCK3B-HANDOVER.json`): a stop call reaches the back end from somewhere when no recording runs. Harmless, worth a look.
+
+## Results
+
+All times are the Deck's own clock. Written 2026-10-07 from the roadmap, the testing rows and the evidence files.
+
+### Where things stand (2026-10-07, about 02:05)
+
+Of the eight new bugs found by hand on 2026-10-06, **six are fixed and proven on the Deck**, one is fixed in code but failed its Deck check, and one did not reproduce.
+
+- **Proven on the Deck:** the delete box (build `880687e4`); the chat row's title bar (the three rules on `880687e4`, the Save-return on `e34b0d57`); Down from the question box (`e34b0d57`); the slider ring (`e34b0d57`); one Show details line at a time (`e34b0d57`); the microphone's reaction (the log on `e34b0d57`, the amber "Starting voice input" label on `efd4258b`). The spoken-sentence check on the microphone stays the maintainer's.
+- **Fixed in code, failed on the Deck:** the open reasoning block (build `efd4258b`). The block is not a ring stop on the device, so one Down still goes to the answer. A second round (p82g2, Opus) was started and has not landed.
+- **Not reproduced:** Up at the bottom of the About tab (3 of 3 from the D-pad route). The entry stays open; question 5 asks how the maintainer reached it.
+- **The fade-style chips:** not a bug as filed (the rig had measured the wrong element). The fade now sits on the chip button, can be read, and passed on the Deck (`e34b0d57`).
+
+### Verify, before and after
+
+Verify held 24 entries at the start and holds 22 now. Done gained nine lines tonight: the walk check that reads words and the reopened checklist with the real AI (both closed by the rig in block 2); the delete box (3a); the chat row, Down from the question box, the slider ring, one Show details line and the fade chips (3b); the microphone button (4). The reasoning block went into Verify and back out to Bugs. Everything the maintainer owns stays theirs: the real microphone twice, the PIN twice, the first install, the finger, the right stick, five looks, the trap in daily use and the cut-menu hand check. The six "tests only" rows also stay (question 1).
+
+### Code
+
+15 code commits landed on experimental tonight (`git log --oneline 60b8c57f..HEAD`, leaving out the paperwork sweeps, the lessons commit and the plan's own first commit). Each landing was meant to run the five gates and the quick check (the session's landing rule); nothing was pushed.
+
+### The Deck
+
+Blocks run: 0 and 1 (setup, backups and the measurements), 2 (the owed Verify checks), 3a, 3b and 4. Builds deployed for the fix checks: `880687e4`, `e34b0d57` and `efd4258b`; blocks 0 to 2 ran on `60b8c57f`, before any fix. **The Deck at the end:** the smoke question was answered (about 2 minutes; the answer begins "Right then, listen up, you wanna know what Geo is for early on?"); the live settings file is identical to the block 0 backup; every chat file matches the backup except the test chat (tonight's extra turns), the chat index and the throwaway chat deleted in block 3a; the test chips read `[]`; no game is running; the plugin is open on the Main tab with the test chat and the ring on the question box; the keep-awake is released (the tool reported released true). Evidence `docs/test-evidence/plan82-BLOCK4-END.json`, `plan82-BLOCK4-HANDOVER.json`.
+
+### Questions for the maintainer
+
+The list is above, 1 to 7.
+
+### Follow-ups
+
+The list is above (the old Down handler left over from p82d, a ring style for the open reasoning block, the stray voice stop line in the plugin log).
+
+### Lessons
+
+Six lessons from tonight were added to [the lessons file](../lessons-learned.md), section 3 ("Checking work on the Steam Deck"): a parent's opacity, Steam's ring on a moving knob, a flag lost to the popup rebuild, the dock-lift window, the rig's safety stop and the root-owned plugin folder (commit `f46bf748`).
 
 ## Log
 
@@ -121,3 +159,4 @@ All times are the Deck's own clock (the same as this PC's), taken from the evide
   one Show details line, the slider ring, the Save-return, the fade on the chip, the microphone log); the reasoning block
   was skipped (its commits were not on the branch yet), and the "Starting" label is retried in block 4. Deck block 4 (the last build, the reasoning block, the Main tab walks, the Deck put
   back) started 01:45. Paperwork sweep 5 committed.
+- **2026-10-07, about 01:43 to 02:05:** Deck block 4 (build `efd4258b`): the microphone's "Starting" label passed (22 ms after the press); the reasoning block FAILED (not a stop on the device; second round p82g2 on Opus); both Main tab walks passed on order with four partly visible landings (question 7); the Deck put back, settings identical to the backup, keep-awake released. Paperwork sweep 6 committed.

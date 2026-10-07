@@ -1,0 +1,20 @@
+{
+ "row":"P82-MAIN-WALK-GAME",
+ "build_commit":"efd4258b",
+ "deck_time_local":"2026-10-07 about 01:54 EDT",
+ "screen":"external monitor; QAM page 855 x 845 with the game running (766 high without); Context line: 'Context: active game Deep Rock Galactic: Survivor'",
+ "setup":"AI unloaded first (ollama /api/ps empty): free 7146 MB / available 11969 MB after the unload. deck_launchGame ok (appid 2321470, in RunningApps after 63 ms). Waited about 2 minutes for the window; free 1255 MB, available 8836 MB. deck_openPlugin sent the QAM chord; panel open, no reload. Ring on chat row, UP once to Main tab (read), then deck_runSequence plan82-P82-MAIN-WALK-GAME, 30 Down then 30 Up, requireVisible false, no expect. Raw output beside this file as plan82-P82-MAIN-WALK-GAME-run.json. Nothing asked.",
+ "pressed":"30 x DOWN, 30 x UP",
+ "seen":{
+  "down_stops":"same list as the no-game walk: chat row (67% visible), 88 earlier, question, Show reasoning, answer section 1, answer section 2, Mark reply helpful, Show details, Charms and notches source line, then the chip 'Tip' (33% visible, covered by another Focusable), question box, mode button, ask (stalled on ask)",
+  "up_stops":"mirror: mode, box, chip 'Tip' (33%, covered by the chip's own label spans), source line, Show details, Mark reply helpful, answers, Show reasoning, question, 88 earlier, chat row (67%), Main tab, header back arrow (stalled)",
+  "repeats":"none apart from the two end stops",
+  "not_fully_visible":"4 landings: chat row x2 (67%), chip 'Tip' x2 (33%); same shape as the no-game walk",
+  "tool_summary":"60/60 steps passed; 4 stops focused but not fully visible"
+ },
+ "expected":"as the no-game walk",
+ "verdict_order_and_coverage":"PASS all expected stops in order, Up mirrors Down, no repeated stop",
+ "verdict_inside_pane":"PASS every landing's box is inside the pane",
+ "verdict_fully_visible":"UNCLEAR chat row 67% and the Tip chip 33% (covered), same as without a game; owner to decide",
+ "side_effect":"none"
+}

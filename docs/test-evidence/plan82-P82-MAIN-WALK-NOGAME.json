@@ -1,0 +1,25 @@
+{
+ "row":"P82-MAIN-WALK-NOGAME",
+ "build_commit":"efd4258b",
+ "deck_time_local":"2026-10-07 about 01:48 EDT",
+ "screen":"external monitor; QAM 855 x 766; pane y88 h677; test chat open, no game, Context: no active game detected",
+ "setup":"Ring walked Up to 'Main tab' first. deck_runSequence runName plan82-P82-MAIN-WALK-NOGAME, requireVisible false, 30 Down then 30 Up, no expect. Raw tool output file copied beside this one as plan82-P82-MAIN-WALK-NOGAME-run.json.",
+ "pressed":"30 x DOWN, 30 x UP",
+ "seen":{
+  "down_stops_in_order":["Main tab (start)","chat row (unnamed, 67% visible, clipped)","88 earlier","question 'What is a quick way to earn Geo early on?'","Show reasoning · 19 s","answer section 1","answer section 2","Mark reply helpful (rating row)","Show details","Charms and notches source line (details slot)","chip 'Why can't bonsAI reach my PC Ollama host?' (67% visible)","question box","Inference mode (mode button)","ask (then stalled on ask for the remaining 17 Down presses, no move)"],
+  "up_stops_in_order":["mode button","question box","chip 'I'm stuck - what should I try next?' (33% visible, covered)","source line","Show details","Mark reply helpful","answer section 2","answer section 1","Show reasoning","question","88 earlier","chat row (67% visible)","Main tab","then the plugin header back-arrow button (outside the Main tab) and no move for the last 16 Up presses"],
+  "repeats":"no stop visited twice in one direction apart from the two end stops where the ring stopped moving (Ask on Down, header back arrow on Up). The tool reports a 'cycle' only because Up returns to Main tab, which is the start.",
+  "not_fully_visible":[
+   "step 1 Down and step 42 Up: chat row, 67% visible, clipped by div.oIVg-eNHeYCNPq0blN3Dk",
+   "step 10 Down: a chip, 67% visible",
+   "step 33 Up: a chip, 33% visible, covered by div.bonsai-preset-carousel-slot button.bonsai-preset-glass (measured again separately: the chip box is y601-631, x48-195, inside the pane; the screenshot shows the chip text cut at both ends because the chip row is a sliding carousel)"
+  ],
+  "all_landings_inside_pane":true,
+  "tool_summary":"60/60 steps passed; 4 stops focused but not fully visible"
+ },
+ "expected":"no stop twice in one direction; every landing inside the pane; Down covers tab bar, chat row, first question or pill, reasoning line, answer sections, rating row, details line or slot, mode button, Ask; Up mirrors",
+ "verdict_order_and_coverage":"PASS all expected stops present in order and Up mirrors Down; no repeated stop",
+ "verdict_inside_pane":"PASS every landing's box is inside the pane",
+ "verdict_fully_visible":"UNCLEAR four landings (chat row twice, two chip landings) read 67% or 33% visible; the chip row is a carousel that cuts chip text at its edges and the chat row sits under a clip; the owner decides whether that counts. Not a new fact: block 3b noted a 67% chip landing too",
+ "side_effect":"The extra 11-press Down run to re-measure the chip (not saved to a file) left the ring on a chip; no content changed."
+}

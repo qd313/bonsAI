@@ -58,6 +58,7 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [Long suggestion chips: pause at the end, centred text](#long-suggestion-chips-pause-at-the-end-centred-text)
 - [Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted](#reloading-the-plugin-while-a-heavy-game-is-running-can-leave-steams-interface-gone-until-the-deck-is-restarted)
 - [While reading an answer, the Show details line takes the suggestion chip's place above the question box](#while-reading-an-answer-the-show-details-line-takes-the-suggestion-chips-place-above-the-question-box)
+- [The open reasoning block does not scroll in steps like the answer; one Down jumps past the whole of it](#the-open-reasoning-block-does-not-scroll-in-steps-like-the-answer-one-down-jumps-past-the-whole-of-it)
 <!-- /toc -->
 
 ## The panel stops half way down and the Ask button is out of reach
@@ -978,3 +979,13 @@ Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep t
 **Deck 2026-10-02 (build `c98f749e`):** the slot's wording, the chip's return, B closing details with the ring staying, and Up from the slot or a chip pass. **Still owed:** reaching the slot's line from the question box and pressing A on it (needs a right-stick scroll, the maintainer's hand check, checks page, Friday check 4), and the closed line landing 8 px inside the top.
 
 Row **P79-SHOW-DETAILS-SLOT**. Evidence `docs/test-evidence/plan79-P79-DETAILS-SLOT.json`.
+
+## The open reasoning block does not scroll in steps like the answer; one Down jumps past the whole of it
+
+Moved here from the roadmap entry on 2026-10-07 (plan 82 paperwork 6), when the entry went back to Bugs after its Deck check failed. Nothing was removed. The Deck check named in the old text below FAILED on 2026-10-07 (build `efd4258b`); the roadmap entry has the result.
+
+What the fix was built to do (it was in Verify as "fixed 2026-10-07, `8e15cca2`, Opus helper"): With Show reasoning open, Down now pages through the reasoning about a screen at a time with the ring on the block, instead of jumping straight to the answer; once the block's end is on screen the next Down goes into the answer; Up does the same in reverse and lands on the line; B on the block closes it with the ring back on the line; a short block is one stop each way. The first commit (`28e23f90`) only draws the line and the block from one builder (no change a player sees); the third (`1323f7a3`) stops a quick second press inside the dock lift's 0.9 s window from throwing a long block to its end.
+
+Before the fix (Deck 2026-10-07, plan 82, Deck block 1): Before the fix (Deck 2026-10-07, plan 82, Deck block 1): the open block is 818 px tall and one Down from the line moved the pane 555 px, almost the whole block. Evidence `docs/test-evidence/plan82-M5-REASONING-SCROLL.json` and `.png`; the maintainer's recording `docs/test-evidence/maintainer-2026-10-06-reasoning-scroll-recording.png`. **Unproven on the Deck:** the ring on the block is Steam's own default ring (no plugin style yet); if it is hard to see, a style rule is owed.
+
+Owed on the Deck: row **P82-REASONING-BLOCK-PAGES** in [testing.md](testing.md); skipped in Deck block 3b because its commits were not on the branch yet (`docs/test-evidence/plan82-BLOCK3B-HANDOVER.json`). Tests: `src/utils/buildReasoningFoldElement.walk.test.tsx` (37 of 39 cases fail without the fix), `src/components/MainTabChatTranscript.reasoningBlockStop.test.tsx`.

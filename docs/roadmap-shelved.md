@@ -137,6 +137,9 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Evidence `docs/test-evidence/plan72-A7-GAME-ii.json`.
   Unshelves when: a new sighting.
 
+- ★★ `[chips]` `[ui]` `[watching]` **A chip at the edge of the sliding strip reads one third visible to the walk check** — seen on the Deck 2026-10-07 (plan 82, Deck block 4, build `efd4258b`), with and without a game. The strip cuts the chip's words at its edges, so a person sees a clipped chip. Whether that is the design (a strip that slides) or a clipped label is the maintainer's call (plan 82, question 7). Evidence `docs/test-evidence/plan82-P82-MAIN-WALK-NOGAME.json`, `docs/test-evidence/plan82-P82-MAIN-WALK-GAME.json`, `docs/test-evidence/plan82-P82-MAIN-WALK-NOGAME-chip.png`.
+  Unshelves when: the maintainer calls it a clipped label, or a new sighting of a chip cut mid-word.
+
 - ★★ `[focus]` `[watching]` **Walking Down while an answer is still arriving loses the ring** — seen once, 2026-09-27
   (it stuck on the first half-visible answer part, then nothing had focus). Not reproduced in three tries. Evidence
   `docs/test-evidence/plan72-A5-DOWN-WHILE-ARRIVING.json`, `docs/test-evidence/plan76-S9.json`.

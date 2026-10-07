@@ -1,0 +1,22 @@
+{
+ "row":"P82-MIC-STARTING-STATE",
+ "build_commit":"efd4258b",
+ "deck_time_local":"2026-10-07 01:46 EDT",
+ "screen":"external monitor; QAM 855 x 766",
+ "setup":"MutationObserver on .bonsai-unified-input-corner-right (aria-label, class, subtree, childList) armed first, writing window.__p82micLog. Ring walked Down to Ask, Up to the mode button, Right to 'Voice input' (focus read before A).",
+ "pressed":"A on 'Voice input'; waited 6 s; read log; read focus ('Stop voice input'); A again; read log.",
+ "seen":{
+  "log_after_first_press":[
+   "Voice input (initial)",
+   "'Starting voice input' class bonsai-voice-starting at t=...999419",
+   "'Stop voice input' class bonsai-voice-recording-active at t=...999723 (304 ms after Starting)"
+  ],
+  "log_after_second_press":"'Voice input' (no extra class) at t=...017905",
+  "timing":"Press times come from the rig's ack clock: A was acked 4695 ms after the Right press whose ring-arrival entry was at t=...994702, so A landed near t=...999397; the Starting entry was about 22 ms after it. Second A landed near t=...017905 and the label returned within a few ms. (My click/keydown marker listeners caught nothing: a gamepad A does not fire them, so these are estimates.)",
+  "plugin_log_over_ssh":"01:46:39 voice: recording started, model tiny.en; 01:46:57 voice: recording stopped, transcript 0 characters",
+  "box":"empty before and after"
+ },
+ "expected":"labels Voice input -> Starting voice input -> Stop voice input after first press (Starting within 300 ms of press), back to Voice input after second; plugin log has started and stopped lines; box stays empty",
+ "verdict":"PASS label sequence Voice input -> Starting voice input -> Stop voice input -> Voice input; PASS Starting entry within 300 ms of the press (about 22 ms by the rig clock estimate); PASS plugin log started/stopped lines; PASS box empty",
+ "side_effect":"Mic recorded for about 18 s with nothing spoken (transcript 0 characters). Watcher and marker listeners removed afterwards."
+}

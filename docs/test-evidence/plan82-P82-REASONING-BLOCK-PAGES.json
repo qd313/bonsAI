@@ -1,0 +1,29 @@
+{
+ "row":"P82-REASONING-BLOCK-PAGES",
+ "build_commit":"efd4258b (Deck md5 a5f7f5d6...)",
+ "deck_time_local":"2026-10-07 about 01:45-01:55 EDT",
+ "screen":"external monitor; QAM page 855 x 766; pane rect y88 h677 (bottom 765); dock top about y601",
+ "setup":"Test chat open on Main tab. Newest turn 'What is a quick way to earn Geo early on?' has 'Show reasoning · 19 s'. Block (.bonsai-chat-reasoning-block) is 756 px tall (w 290). Ring walked to the line (7 Up presses from the box), line at y221, scrollTop 0. A opened the block (block y244, bottom 1000, scrollHeight 1445, scrollTop 0).",
+ "pressed":"A, then Down, Down, Down, Up, Up, Up, Down, Down, B; then a second round: A, Down and Down 347 ms apart. More than one second between presses except the quick pair.",
+ "seen":{
+  "down1":"ring on the answer's first section ('Right then, listen up, mate!...' rect y511-601, inside pane); scrollTop 0 -> 509.4 (delta +509); block y-266 bottom 491. The block was NOT a ring stop. Ring ring on the answer chunk is a thin yellow-gold outline (see screenshot).",
+  "down2":"answer's second section ('Once you've managed...' y343-415); scrollTop 767.2 (delta +258)",
+  "down3":"'Mark reply helpful' button (y471-499); scrollTop 767.2 (delta 0)",
+  "up1":"answer second section, scrollTop 767.2 (0)",
+  "up2":"answer first section (y254-343), scrollTop 767.2 (0)",
+  "up3":"'Hide reasoning · 19 s' line (y204), scrollTop 16.4 (delta -751)",
+  "down_down":"Down: answer first section, scrollTop 509.4 (+493 from 16.4); Down: answer second section, scrollTop 767.2",
+  "B":"B pressed with ring on the answer's second section: ring went to the 'Main tab' (tab bar); block stayed open (block still in page); scrollTop stayed 767.2",
+  "quick_second_press":"after A (block open), Down + Down 347 ms apart: ring on answer second section, scrollTop 767.2, same stops as the slow route, no jump past the answer",
+  "max_single_press_scroll_px":751,
+  "ring_inside_pane_after_every_press":true
+ },
+ "expected":"stops line -> block -> block -> answer and back; no press moves pane more than 513 px; ring element inside pane after every press; B closes block with ring on the line",
+ "verdict_stops":"FAIL the block is never a ring stop: Down from the line goes straight to the answer's first section, so the stops are line -> answer -> answer, not line -> block -> block -> answer",
+ "verdict_max_scroll":"FAIL Up from the answer's first section to the line moved the pane -751 px (limit 513). The Down moves were 509 and 258 (within limit)",
+ "verdict_ring_inside_pane":"PASS every landing was inside the pane (also Mark reply helpful)",
+ "verdict_B":"FAIL B did not close the block: with the ring on the answer it jumped the ring to the Main tab and left the block open. B with the ring on the line was not tried (the runbook B step assumed a ring on the block)",
+ "verdict_quick_second_press":"PASS same landings as the slow route, no jump to the block's end",
+ "verdict_overall":"FAIL",
+ "side_effect":"B pressed with the ring on an answer section moved the ring to the Main tab bar; I walked it back down to the 'Hide reasoning' line with deck_walkTo (4 Down presses) and closed the block with A (ring on the line). A second open/close with A on the line also done for the quick-press round. No setting or chat content changed. Block closed at the end."
+}

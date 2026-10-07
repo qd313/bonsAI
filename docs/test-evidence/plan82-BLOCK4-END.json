@@ -1,0 +1,19 @@
+{
+ "row":"BLOCK4-END",
+ "build_commit":"efd4258b (Deck dist md5 a5f7f5d67e434c71e95865cf42b147e1)",
+ "deck_time_local":"2026-10-07 about 02:00 EDT",
+ "screen":"external monitor; QAM 855 x 766",
+ "setup":"no game running (process check: 0 SteamLaunch processes for 2321470 after exit); plugin open on Main tab, test chat",
+ "pressed":"send script ('What does Geo buy early on?' - wording changed from the runbook's 'What does Geo buy early on?' only by dropping 'a'; none, text exactly as written above), walkTo ask, A on ask",
+ "seen":{
+  "smoke":"script printed VERIFIED, field held the whole text; A on ask; ring was on ask (read) before A; answer done within about 2 minutes; Ask button back to ready (no Disabled class); chat now '89 earlier', newest turn 'What does Geo buy early on?' with 'Show reasoning · 21 s' and a two-option menu 'Where are you at in Hollow Knight?'. Answer first 100 characters: 'Right then, listen up, you wanna know what Geo is for early on? Forget just swinging that nail aroun'",
+  "settings_diff":"diff of ~/p82-backup/settings.json against the live file (both through json.tool): no difference at all (exit 0)",
+  "chats":"md5 of each file in the block 0 backup vs live: chat_slots 351b2838, 4baaccbc, 66df6be3, a8fb9f67, d052dacc, d2aa6252 same; chat_threads 0f3b7142, 67c84639, fa671a39 and chat_threads/index.json same. Differences, all expected: test chat 6f3cc055 (extra turns, md5 7086590b -> f9e8d70b); chat_slots/index.json (524d1424 -> 1b674c7e) and the missing 92a45014 file, which is the throwaway chat deleted in block 3a and still deleted",
+  "test_chips":"dev_frozen_test_chips reads []",
+  "final_state":"plugin open, Main tab, test chat, ring on the question box (box empty), no game",
+  "keep_awake_release":"deck_restorePowerSettings: ok true, wasHeld true, released true, unit dps-hold-awake, 'wake lock released; this Deck sleeps normally again'; the tool's evidence field was null"
+ },
+ "expected":"as runbook step 5",
+ "verdict":"PASS smoke test (answer bubble with text, Ask ready); PASS settings unchanged; PASS chats as expected; PASS test chips empty; PASS final state; PASS keep-awake released",
+ "side_effect":"One extra turn in the test chat (expected). The AI was unloaded before the game half and loaded again by the smoke question."
+}

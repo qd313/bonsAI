@@ -1,0 +1,27 @@
+{
+  "row": "BLOCK2-HANDOVER",
+  "build_commit": "repo tip aa1dcbc6; Deck dist/index.js md5 3a5c6d4153cdb66a39628a59a00c6639 (unchanged); plugin v0.5.0; no deploy; one plugin reload at about 00:54 EDT (V4)",
+  "deck_time_local": "2026-10-07 about 00:55 EDT",
+  "screen": "external monitor; QAM page innerWidth 855 x innerHeight 766",
+  "keep_awake": "Held by block 0/1 until 2026-10-07T12:29:22Z (08:29 EDT). I did not take or renew it.",
+  "checks": {
+    "P81-WALK-READS-WORDS": "PASS for the question row and the answer sections (all visible, text sample); UNCLEAR for one chip stop read partial 33% covered by div.Panel.Focusable",
+    "P79-LONG-CHIPS-NOGAME": "FAIL half 1 (opacity never under 1.00 in 120 s, 32 swaps, fade on); UNCLEAR half 2 (ring chip steady 30 s, but the other chip held still too)",
+    "P78-REOPEN-CHECKLIST-REAL": "PASS both parts (try 1 produced choice buttons; checklist drawn after reopen; refine went out in Strategy mode)",
+    "P81-CONTINUE-ONE-MARK": "COULD NOT RUN (plugin folder root-owned; sed edit refused; file unchanged)"
+  },
+  "settings_changed_and_restored": "preset_chip_animation decode -> fade -> decode, preset_chip_fade_animation_enabled false -> true -> false (both read back from settings.json at 00:49 EDT). ollama_ask_budgets.py never changed (still 1600). No SSH edit of settings.json. Backup of the budgets file at ~/p82-backup/ollama_ask_budgets.py.orig; block 0/1's settings backup still at ~/p82-backup/.",
+  "test_chat": "How do I beat the boss in the Soul Sanctum in Hollow Knight? (slot 6f3cc055). Turns on disk: 170 before, 176 after (V3 added the question, the choice follow-up and the Too long refine, each with its reply).",
+  "where_left": "Plugin CLOSED (reload shut Quick Access). Deck on Steam Home, ring on the 'Deep Rock Galactic: Survivor' tile. Main tab and the test chat are what the panel will show when opened. No game running. The last answer in the test chat is the 'Too long' refine.",
+  "not_run": "P81-MOVE-KEEPS-OTHER-NAMES: the Deck's saved order holds only gemma4:e2b-it-qat, which the PC has too, so the case cannot be made. Tests only.",
+  "surprises": [
+    "The Developer tab's chip control is called 'Preset suggestions' with buttons fade / carousel / static / decode, not decode / fade / plain / sliding.",
+    "The chip row holds completely still while the ring is on a chip (both chips, 30 s). In half 1 each chip changed every 7 to 10 s.",
+    "The fade style set the row's fade class but chip opacity never dropped; the setting may only take hold after a reload (not tried).",
+    "Two chip stops read 'partly covered by div.Panel.Focusable' (33% and 67%) in the walk tool; elementFromPoint at the chip centres found the chips themselves. Could be a real cover layer or the tool.",
+    "The plugin folder on the Deck is root-owned, so the Strategy limit cannot be edited by the deck login.",
+    "deck_readPluginLog still returns 'No entries'; the plugin's own log is ~/homebrew/logs/bonsAI/2026-10-06 18.53.42.log and does grow.",
+    "Pressing A on a choice button starts a second ask at once (log 00:50:44), then the GUIDE+A chord closed the panel; the reopened panel drew the checklist.",
+    "Two tool calls that I sent together ran in parallel (three RB presses; sed + reload). Nothing harmful came of it, but I should send presses one at a time."
+  ]
+}

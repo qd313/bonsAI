@@ -1,0 +1,20 @@
+{
+  "row": "P79-LONG-CHIPS-NOGAME",
+  "build_commit": "Deck dist/index.js md5 3a5c6d4153cdb66a39628a59a00c6639; plugin v0.5.0; no deploy, no reload",
+  "deck_time_local": "2026-10-07 about 00:43-00:49 EDT (Deck clock)",
+  "screen": "external monitor; QAM page innerWidth 855 x innerHeight 766",
+  "setup": "Developer tab > Animations > 'Preset suggestions' row (buttons fade / carousel / static / decode; this is the control for key preset_chip_animation). Old value decode (also preset_chip_fade_animation_enabled false, preset_single_chip false). Walked to 'Preset animation: fade' (read by label), pressed A: settings.json then read preset_chip_animation fade, preset_chip_fade_animation_enabled true. Main tab host row got class bonsai-preset-row-host--fade-anim. Test chat open, ring on the question box (not a chip). The chip row (.bonsai-details-slot__chips, two chips at y601, 147x30, inside .bonsai-main-tab-dock) was showing without any walking.",
+  "pressed": "Half 1: none (read only, 120 s). Half 2: UP from the question box landed on the left chip 'Why is my Deck running hot?' (rect 48,601 147x30, inside .bonsai-details-slot__chips), then read-only 30 s. Put back: DOWN, RB x4 to the Developer tab, RIGHT x3 to 'Preset animation: decode', A.",
+  "seen": {
+    "half1_fade": "1200 samples at 100 ms over 120 s. The chip button and its 3 descendants (4 elements) read opacity 1.00 at every sample. 32 word changes in total (two chips, each replaced every 7 to 10 s; first at 0.1 s, last at 116.0 s) and every one of them swapped the words with opacity still 1.00. Lowest opacity seen anywhere: 1.00. Chip button inline style at the end: opacity 1; transition opacity 420ms, transform 420ms, color 420ms; long chips had data-scroll-phase scrolling (marquee, translateX -56px over 2800 ms and -103px over 5150 ms). The row had the fade class, so the setting did reach the page.",
+    "half2_ring": "Ring chip 'Why is my Deck running hot?' kept the same words and the same box (48,601,147,30) for the whole 30 s (62 reads at 0.5 s only reported the first one). The other chip ALSO did not change: it stayed 'When should I use Expert mode instead of Speed?' (201,601,147,30) for all 30 s, although in half 1 each chip changed every 7 to 10 s. So the whole row holds still while the ring is on a chip.",
+    "other_note": "The walk tool read the ring chip as PARTIAL 67% covered by div.Panel.Focusable (again a chip behind some Panel layer, like the 33% in P81-WALK-READS-WORDS step 10); elementFromPoint at the chip centres earlier returned the chips' own text."
+  },
+  "expected": "Half 1: every long chip's opacity falls under 1 at least once 1.2 to 1.9 s after its words stop scrolling, before the words are replaced. Half 2: the chip under the ring keeps words and box for 30 s while the other chip changes at least once.",
+  "verdict": [
+    "FAIL half 1 (the fade): with the fade style on, no chip's opacity ever fell below 1.00 in 120 s and 32 word changes. A reload of the plugin might make the page take up the setting, but the runbook did not allow a reload here, so I did not try it.",
+    "UNCLEAR half 2 (the ring): the chip under the ring kept its words and box for 30 s as expected, but the other chip held still too, so the 'other chip changes at least once' part could not be shown. The row looks to hold while the ring is in it."
+  ],
+  "put_back": "preset_chip_animation back to 'decode', preset_chip_fade_animation_enabled false, preset_single_chip false, confirmed by grep of ~/homebrew/settings/bonsAI/settings.json at 00:49 EDT. Done through the Developer tab buttons, no SSH edit.",
+  "side_effect": "Three RB presses went out in parallel by mistake before I read the tab (all just moved tabs; nothing changed). The 1200-sample readPage ran with the ring on the question box, no A pressed there."
+}

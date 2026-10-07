@@ -1,0 +1,13 @@
+{
+  "row": "P81-CONTINUE-ONE-MARK",
+  "build_commit": "Deck dist/index.js md5 3a5c6d4153cdb66a39628a59a00c6639; plugin v0.5.0",
+  "deck_time_local": "2026-10-07 about 00:53-00:54 EDT (Deck clock)",
+  "screen": "external monitor; QAM page innerWidth 855 x innerHeight 766 (no screen measurement was reached)",
+  "setup": "Backup made: ~/p82-backup/ollama_ask_budgets.py.orig (5665 bytes, copied before any edit). grep found line 28 '\"strategy\": 1600' in ~/homebrew/plugins/bonsAI/py_modules/backend/services/ollama_ask_budgets.py. strategy_spoiler_masking_enabled is true in settings.json.",
+  "pressed": "Ran the runbook's sed command over SSH. It failed: 'sed: couldn't open temporary file .../services/sedzVZENV: Permission denied'. The services folder and the file are owned by root (drwxr-xr-x root root; -rwxr-xr-x root root, dated Oct 3 22:43) and the deck user cannot write there. I did not try sudo or any other route to write it. A plugin reload also ran (my parallel call; no game was running, nothing was lost).",
+  "seen": "After the failed edit the file still reads '\"strategy\": 1600' (grep at 00:54). No question was asked for this check, so no turns were added by it.",
+  "expected": "Limit lowered to 340, two long Strategy answers that continue, saved-turn marks counted.",
+  "verdict": "COULD NOT RUN: the Strategy length limit could not be lowered because the plugin's folder on the Deck is root-owned and the deck login cannot write to it. The owner can lower it from the PC side (the 'run setup-dev' fix) or tell me another way to lower the limit.",
+  "put_back": "Nothing to put back: the file was never changed (still 1600, same size as the backup). The only side effect is one plugin reload.",
+  "side_effect": "One plugin reload at about 00:54 EDT. It closed Quick Access, which left the Deck on Steam Home with the ring on the 'Deep Rock Galactic: Survivor' tile. No game was started."
+}

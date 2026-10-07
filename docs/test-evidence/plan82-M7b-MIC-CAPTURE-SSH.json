@@ -1,0 +1,18 @@
+{
+  "row": "M7b (plan 82): does the Deck's microphone path return samples at all, read over SSH with no press",
+  "build_commit": "60b8c57f on the Deck (same md5 as the repo build; plugin.json v0.5.0)",
+  "deck_time_local": "2026-10-07 00:40 EDT",
+  "screen": "external monitor (Quick Access page 855 x 766); not relevant to this read",
+  "setup": "No press. Over SSH as deck: pactl get-default-source, pactl list sources short, wpctl status, then a 4 s pw-record at 16 kHz mono s16 to /tmp/p82-pw.wav, then the wav read back with Python's wave module. Nothing on the Deck changed except that temporary file (left in /tmp).",
+  "pressed": "none",
+  "seen": {
+    "default_source": "alsa_loopback_device.alsa_input.pci-0000_04_00.5-platform-nau8821-max.HiFi__Internal_Mic__source (the internal microphone, through a loopback), state SUSPENDED until a recorder opens it",
+    "wpctl_sources": "62. Audio Coprocessor Internal Microphone [vol: 0.49]; the loopback source 58 is the default",
+    "pw_record": "timeout 4 pw-record --rate 16000 --channels 1 --format s16 /tmp/p82-pw.wav: exit 124 (the timeout, as intended), file 117,408 bytes",
+    "wav": "58,682 frames (about 3.67 s at 16 kHz); peak amplitude 236 of 32,767; 2,557 samples non-zero, the rest exactly zero",
+    "earlier_parec_try_by_the_driver": "a 3 s parec --raw to /tmp/p82-mic-test.raw wrote 0 bytes (plan82-M7-MIC-PRESS.json); pw-record, which the plugin itself uses, does return frames"
+  },
+  "expected": "A recorder opens the internal microphone and returns frames; a quiet room gives near-silence, not an empty file.",
+  "verdict": "PASS: the plugin's own recorder (pw-record) opens the microphone and returns frames. The samples were near silence (peak 236 of 32,767, mostly exact zeros) in a quiet room at 00:40 with nobody speaking, so this does NOT show that speech is heard; it shows the capture path is open. Whether spoken words reach the box is the maintainer's microphone check, which stays on their page.",
+  "side_effect": "/tmp/p82-pw.wav (117 KB) left on the Deck; /tmp is cleared at boot."
+}

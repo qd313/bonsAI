@@ -1,0 +1,19 @@
+{
+  "row": "P78-REOPEN-CHECKLIST-REAL",
+  "build_commit": "Deck dist/index.js md5 3a5c6d4153cdb66a39628a59a00c6639; plugin v0.5.0; real AI gemma4:e2b-it-qat on the Deck (127.0.0.1:11434)",
+  "deck_time_local": "2026-10-07 00:49-00:54 EDT (Deck clock)",
+  "screen": "external monitor; QAM page innerWidth 855 x innerHeight 766",
+  "setup": "Main tab, test chat open (read from .bonsai-chat-slot-title--active-stop: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). Mode button 'Inference mode: Strategy'; send script printed 'Ask mode : Strategy'. No game running ('Context: no active game detected').",
+  "pressed": "Try 1 only (it produced choice buttons, so no try 2). Send script text 'I keep dying to the boss at the end of the first area, what should I focus on?' (VERIFIED, field held the whole text). DOWN to ask (read: 'ask', chat name read first), A at about 00:49:50. Reply 1 finished in 26.6 s (log 00:50:25) with choice buttons 'A. Starting out in Dirtmouth' and 'B. Facing the Mantis Lords'. walkTo UP landed on 'A. Starting out in Dirtmouth' (read as the focused button), A (log: second ask started 00:50:44), then deck_pressChord GUIDE+A in the very next call (within about a second; the panel was shut afterwards: deck_openPlugin reported 'the menu is shut' and then opened it). Waited for the log: 'run_game_ai_request: completed in 49.9s' at 00:51:34 with 'checklist_marker=True checklist_parsed=True'. deck_openPlugin at about 00:51:40. Then walked to 'Mark reply helpful' (read), RIGHT, read 'Mark reply not helpful', A; DOWN, DOWN, RIGHT, read 'Too long', A; walked to 'ask' (read 'ask'), read the box, A.",
+  "seen": {
+    "reopened_panel": ".bonsai-strategy-checklist-panel is drawn under the answer (rect x52 y915 w290 h526 in the scrolled page). Its text: 'Managing Focus in the First Boss Fight / Progress is saved for this game until you reset session cache or start a new Strategy thread. / Hold Focus to heal the mask when your soul meter drops / Tap Focus to cast spells when you have them / Pause and assess the fight before attacking aggressively / Prioritize defense over just swinging your nail / Use Focus strategically to survive heavy damage / Manage your soul meter so you don't run out of healing options'. The answer also showed 'I'm at: Starting out in Dirtmouth', Show reasoning 21 s, and the 'If you want to cheat' list.",
+    "refine": "'Too long' put 'Give a shorter answer - key points only, minimal preamble. Original question: [Strategy follow-up] I'm at: Starting out in Dirtmouth. Earlier I asked: I keep dying ...' into the box. Ask pressed. Log 00:52:47: start_background_game_ai, 'ask_strategy: branch fence requested in prompt=True (mode=strategy, app_id=)', completed in 37.5 s at 00:53:24.",
+    "log_note": "deck_readPluginLog still returns 'No entries'; I read the plugin's own log at ~/homebrew/logs/bonsAI/2026-10-06 18.53.42.log over SSH. The log has no key named ask_mode; the 'mode=strategy' text is in the branch-fence line."
+  },
+  "expected": "After the reopen a checklist is drawn under the answer; then Not really, Too long, Ask goes out in Strategy mode (log line with mode=strategy).",
+  "verdict": [
+    "PASS: the reopened panel draws the checklist under the answer with the real AI's title and six items.",
+    "PASS: the Not really, Too long, Ask refine went out in Strategy mode (log mode=strategy at 00:52:47)."
+  ],
+  "side_effect": "Three test turns were added to the test chat (the question, the choice reply 'A. Starting out in Dirtmouth' which is a Strategy follow-up turn, and the Too long refine). walkTo overshot once (went UP to the top of the panel, to the bonsAI logo button, and back down) before I found the Helpful row; no A was pressed on the way."
+}

@@ -1,0 +1,36 @@
+{
+  "row": "P81-WALK-READS-WORDS",
+  "build_commit": "Deck dist/index.js md5 3a5c6d4153cdb66a39628a59a00c6639 (same as block 0/1); repo tip aa1dcbc6; plugin v0.5.0; no deploy",
+  "deck_time_local": "2026-10-07 about 00:42-00:50 EDT (Deck clock)",
+  "screen": "external monitor; QAM page innerWidth 855 x innerHeight 766",
+  "setup": "Main tab, test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' open (read from .bonsai-chat-slot-title). Chat shows one turn after '84 earlier'. Ring was on the 'Show reasoning' line; pressed UP once, ring read on the question row 'what is a good first upgrade in Hollow Knight' (rect y190 h29, visible 100%, sample text).",
+  "pressed": "deck_runSequence runName plan82-P81-WALK-READS-WORDS, requireVisible false, 14 x DOWN. Tool's own file: C:/Users/still/Documents/BonsAI/runs/plan82-P81-WALK-READS-WORDS.json. Afterwards one deck_walkTo UP (4 presses) to look at the chip row (no A pressed anywhere).",
+  "seen": {
+    "start_question_row": "visible 100% (3/3 points, sample text) with the Retry corner icon present (icon rect x82 y170 20x20 over the row's box)",
+    "steps": [
+      "1 Show reasoning 18 s: visible 100%",
+      "2 unnamed div (answer section): visible 100% (18/18 points, sample text)",
+      "3 unnamed div (answer section): visible 100% (18/18, text)",
+      "4 chat-summary note: visible 100%",
+      "5 Read aloud button: visible 100% (box)",
+      "6 Wrong game or topic: visible 100%",
+      "7 Spoiled it: visible 100%",
+      "8 Show details: visible 100%",
+      "9 Nail upgrades and Pale Ore source row: visible 100%",
+      "10 button 'Where do your game tips come from?' (a suggestion chip): PARTIAL 33% (1 of 3 points visible, 2 covered by div.Panel.Focusable)",
+      "11 question box input: visible 100% (box)",
+      "12 ask button: visible 100%",
+      "13 DOWN no move, ask: visible 100%",
+      "14 DOWN no move, ask: visible 100%"
+    ],
+    "tool_summary": "14/14 steps passed, 1 stop focused but not visible (step 10)",
+    "step10_followup": "Chip rows rotate their words, so by the time I read again the chips were 'What's the efficiency sweet spot...' and 'How can I optimize for battery life?', at y601 h30 inside .bonsai-main-tab-dock (y600.6 to 764.9). elementFromPoint at each chip centre returned the chip's own text run (same element), so both chips were uncovered at that moment. I could not reproduce the 33% reading; the chip was mid-change when the walk landed on it.",
+    "tool_uses_text_boxes": "The question row and the answer sections read 'visible' with sample 'text', which is the new text-line-box judgment; no read of the question row said hidden, so the server has the fix. I did not need the manual Range read."
+  },
+  "expected": "Question row (next to Retry) and last answer section (next to Copy) report visible; no stop a person can see is reported hidden.",
+  "verdict": [
+    "PASS: question row and the answer sections all read visible (100%, sample text), the old corner-icon false alarm did not appear.",
+    "UNCLEAR: step 10 chip 'Where do your game tips come from?' read partial 33%, covered by a div.Panel.Focusable. A re-read of the chip row found both chips uncovered, so this may be a chip caught mid-animation or a real cover by the dock layer. The owner decides."
+  ],
+  "side_effect": "none (only UP and DOWN presses; ring left on Show details)"
+}

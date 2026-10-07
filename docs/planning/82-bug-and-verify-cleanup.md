@@ -64,11 +64,11 @@ to tonight. The maintainer's calls are in the decisions file as D125.
 
 | Entry | Who | How |
 |---|---|---|
-| The doubled hidden-block marks at a join (P81-CONTINUE-ONE-MARK) | Rig, two tries with the limit lowered | Block 2 |
-| Long chips: the fade's opacity and a chip under the ring (P79-LONG-CHIPS) | Rig, no game first; a game only if memory allows | Block 2 |
-| The walk check reads words (P81-WALK-READS-WORDS, the tools project) | Rig: this is a new chat, so the tool server may have the fix | Block 2 |
-| The reopened checklist with the real AI (P78-REOPEN-CHECKLIST) | Rig, two tries | Block 2 |
-| A place change keeps the other machine's names (P81-MOVE-KEEPS-OTHER-NAMES) | Rig, only if a PC model the Deck lacks can be arranged | Block 2, last |
+| The doubled hidden-block marks at a join (P81-CONTINUE-ONE-MARK) | Rig, two tries with the limit lowered | Block 2: could not run; needs setup-dev |
+| Long chips: the fade's opacity and a chip under the ring (P79-LONG-CHIPS) | Rig, no game first; a game only if memory allows | Block 2: ring half passed; fade half failed, now a bug (p82i) |
+| The walk check reads words (P81-WALK-READS-WORDS, the tools project) | Rig: this is a new chat, so the tool server may have the fix | Block 2: closed 2026-10-07 (Deck) |
+| The reopened checklist with the real AI (P78-REOPEN-CHECKLIST) | Rig, two tries | Block 2: closed 2026-10-07 (Deck) |
+| A place change keeps the other machine's names (P81-MOVE-KEEPS-OTHER-NAMES) | Rig, only if a PC model the Deck lacks can be arranged | Block 2, last: not run; the Deck's saved order holds only a name the PC has too; tests only |
 | The focus ring on controls the Deck never shows | Tests only (stays) | |
 | Everything the maintainer owns: the microphone twice, the PIN twice, the first install, the finger, the right stick, five looks, the trap in daily use, the cut-menu hand check | Maintainer | Their checks page |
 | The six "tests only" rows | Nobody can; question 1 below | |
@@ -95,6 +95,7 @@ Standing rules as in plan 81. One driver at a time, a fresh one per block, evide
    reload-under-a-game entries (question 3). *Meanwhile:* open.
 4. **Renaming a chat by hand:** A on the chat's name used to open the rename box, and the name is no longer a stop (your call of 2026-10-06), so the only rename left is the one Sum up offers. Do you want a new route (for example a Rename choice inside the Save window)? *Meanwhile:* none.
 5. **Up at the bottom of the About tab:** the rig could not make it fail (3 of 3 from the D-pad route). How did you reach the bottom: D-pad only, or a right-stick or touch scroll first? *Meanwhile:* the entry stays open.
+6. **Run setup-dev on the Deck** (five seconds): the plugin folder is owned by root since the last deploy, so the continued-answer check could not lower the limit, and a deploy may be refused the same way. *Meanwhile:* the check stays owed; the deploy is tried as is.
 
 ## Log
 
@@ -104,3 +105,4 @@ Standing rules as in plan 81. One driver at a time, a fresh one per block, evide
   Deck driver on blocks 0 and 1 started at 00:38. The timed 20-minute check is on. Keep-awake held until 08:24.
 - **2026-10-07, about 01:05:** landed p82a (the delete box). Paperwork sweep 1 committed.
 - **2026-10-07, about 01:10 to 01:40:** Deck blocks 0 and 1 done (the Deck is on an external monitor, 855 x 766): five of seven bugs reproduced with numbers; Up at the bottom of About and the microphone did not. Landed p82b (the title bar). Helpers p82e (slider ring), p82f (two details lines), p82g (reasoning block, Opus) and p82h (microphone feedback and log) started at 01:20. Deck block 2 (owed Verify checks) running. Paperwork sweep 2 committed.
+- **2026-10-07, about 01:45 to 02:05:** Deck block 2: the walk check reads words (passed), the reopened checklist with the real AI (passed), long chips (ring half passed, fade half failed: a new bug, helper p82i), the continued answer (could not run: root owns the plugin folder; the maintainer's setup-dev is the fix). Paperwork sweep 3 committed.

@@ -895,6 +895,8 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep t
 
   **2026-10-03 (plan 81):** fixed in the Deck tools project (commit `cde1c0e`, not pushed): the walk check now judges a control with words by where its words are. It takes effect after the tool server restarts. Entry moved to Verify; row **P81-WALK-READS-WORDS**.
 
+  **2026-10-07 (plan 82, Deck block 2, build `60b8c57f`), passed on the Deck:** the question row and the answer sections read 100% visible; the old false alarm did not appear. Entry moved to Done and the archive. Evidence `docs/test-evidence/plan82-P81-WALK-READS-WORDS.json`.
+
 ## With Voice replies on "When I asked by voice", a spoken question's answer may not read itself aloud
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.

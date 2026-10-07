@@ -1,0 +1,18 @@
+{
+ "row":"P82-DELETE-BOX-TWO-BUTTONS",
+ "build_commit":"code tip 880687e4; Deck dist/index.js md5 7e40984e97d414e94d835088325e7f37 (matches PC)",
+ "deck_time_local":"2026-10-07 01:03-01:08 EDT",
+ "screen":"external monitor; Quick Access page innerWidth 855 x innerHeight 766",
+ "setup":"Backed up chat_slots to ~/p82-backup/before-delete-check/ (9 entries incl index.json). Chat deleted: 'what is the safest way to approach a group of enemies at once' (1 turn on screen, the first-choice throwaway). Reached with RB x4 from Soul Sanctum on the chat row, reading the title after each press. Not the test chat, not wheatley fight, not parrying.",
+ "pressed":"UP to chat row (from the 87 earlier pill); RB x4; A (opened box, ring was on row with Delete as the active-stop icon, class bonsai-chat-slot-delete--active-stop); B; A; A on Cancel; A; DOWN; A on Delete.",
+ "seen":{
+  "step1_row_ring":"Ring sits on the whole row (div.bonsai-chat-slot-row-focus, rect 48,88,300x49). Save and Delete icons are aria-hidden spans inside it; Delete (274,104,22x22) carries the class bonsai-chat-slot-delete--active-stop. No separate Right press was needed; focus never read as an icon element itself. Row ring visibility read 67% 'partial', clipped by div.oIVg-eNHeYCNPq0blN3Dk (row box, not a decisive finding).",
+  "step2_box":"Box 'Delete chat slot?' is a Steam modal (target Steam Big Picture Mode, #ModalDialogOverlay_Modal_0). Text: Delete \"what is the safest way to approach a group of enemies at once\" and its transcript? This cannot be undone. Buttons in DOM order: Cancel, Delete (exactly two). deck_readFocus: ring on Cancel (rect 464,420,573x36). Screenshot plan82-P82-DELETE-BOX-TWO-BUTTONS-open.png shows Cancel ringed above Delete.",
+  "step3_B":"Box gone (no modal in Steam target). Chat title unchanged, dot 6 of 9 still active. Ring on div.bonsai-chat-slot-row-focus (the chat row).",
+  "step4_cancel":"A on row reopened box with ring on Cancel (read). A on Cancel: box gone, title unchanged, dots 000001000, ring on the chat row.",
+  "step5_delete":"A reopened box, DOWN: ring on Delete (rect 464,464,573x36, text 'Delete'). A: box gone, chat gone; row shows the new-chat spot (title empty, 8 dots, first dot active), ring on the row. chat_slots entries: 9 before (incl index.json) -> 8 after (92a45014-ea93-496a-80da-15896b199b46.json is the one removed)."
+ },
+ "expected":"exactly two buttons Cancel then Delete, ring on Cancel; B closes with chat kept and ring back on row; A on Cancel same; A on Delete removes chat and closes box",
+ "verdict":"PASS: all five points matched. Note for owner: the row's own ring is on the whole row, not on a separate Delete element, so 'Right to its Delete icon' was not needed.",
+ "deleted_chat":"what is the safest way to approach a group of enemies at once (slot 92a45014-ea93-496a-80da-15896b199b46). Not restored. Backup copy at ~/p82-backup/before-delete-check/chat_slots/."
+}

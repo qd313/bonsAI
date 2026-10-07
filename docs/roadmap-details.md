@@ -959,6 +959,10 @@ Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep t
 
 Before the change (Deck 2026-10-02, build `678aaa3d`, Hades running): the words scrolled to their end and stood still, but the chip left 3.2 to 10.2 s later. Evidence `docs/test-evidence/plan79-P79-LONG-CHIP-PAUSE.json`. The soft blue fill passed and is in Done.
 
+Moved here from the roadmap entry on 2026-10-07 (plan 82 paperwork 4), when the note was rewritten after the lane found the fade reading was of the wrong element. Nothing was removed.
+
+**Deck 2026-10-07 (plan 82, Deck block 2, no game): the ring half passed; the fade half FAILED.** With the fade style set, over 120 s and 32 word changes the chips' opacity never went below 1.00, so a person sees the words swap with no fade (now its own entry in Bugs). With the ring on a chip for 30 s, that chip kept its words and box; the other chip also held still the whole time, so the row as a whole holds while the ring is on a chip (a finding, not judged). Row **P79-LONG-CHIPS**, evidence `docs/test-evidence/plan82-P79-LONG-CHIPS-NOGAME.json`.
+
 ## Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted
 
 Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.

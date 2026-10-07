@@ -1,0 +1,18 @@
+{
+ "row":"P82-CHAT-ROW-NO-NAME-STOP",
+ "build_commit":"code tip 880687e4; Deck dist/index.js md5 7e40984e97d414e94d835088325e7f37",
+ "deck_time_local":"2026-10-07 01:05-01:08 EDT",
+ "screen":"external monitor; Quick Access page innerWidth 855 x innerHeight 766",
+ "setup":"Test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (slot 6f3cc055) opened with RB from the new-chat spot. Route: DOWN from the row to the '87 earlier' pill, then UP from the pill. The row's ring is the whole row (div.bonsai-chat-slot-row-focus); the Save/Title/Delete stops are read from the class bonsai-chat-slot-*--active-stop on the aria-hidden icon spans.",
+ "pressed":"DOWN (to pill), UP, LEFT, LEFT, RIGHT, RIGHT, UP, DOWN, LEFT, A, B; then (retry of step 5) LEFT, A, B.",
+ "seen":{
+  "1_up_from_pill":"Ring on the chat row; active stop = Delete (save '-', title '-', delete ACTIVE).",
+  "2_left":"Left: Save active. Left again: Save stays active (no move to name).",
+  "3_right":"Right: Delete active in ONE press, title never active. Right again: stayed on the row on Delete (ring unchanged, tab still main); it did not leave the row.",
+  "4_tabbar":"UP from the row: ring on the tab bar (aria 'Main tab'). DOWN: back on the chat row with Delete active.",
+  "5_save_window":"Left to Save (read: Save active), A: Steam modal opened, title 'Save to Desktop note', ring in text input 'Note name (saved as name.md)' (no keyboard was opened; nothing typed). B: modal closed (0 modals). Ring read back on the chat row but with DELETE active, not Save. Retried once (LEFT: Save active, A: modal, B): same result, Delete active."
+ },
+ "expected":"Up: Delete; Left: Save, Left again stays; Right: Delete in one press never the name; Down from tab bar: Delete; A on Save opens save window; B closes it and ring is back on Save",
+ "verdict_part1_stops":"PASS: Delete on entry from above and from the tab bar; Left reaches Save and stops; Right reaches Delete in one press; the name was never a stop. Second Right stayed on Delete (did not leave the row; not a failure per runbook).",
+ "verdict_part2_after_save_window":"FAIL: after B closes the save window the ring is back on the chat row but on Delete, not Save (reproduced twice)."
+}

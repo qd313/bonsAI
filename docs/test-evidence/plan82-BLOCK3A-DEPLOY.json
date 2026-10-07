@@ -1,0 +1,11 @@
+{
+ "row":"BLOCK3A-DEPLOY",
+ "build_commit":"code tip 880687e4 (branch tip 1b34381d); dist/index.js md5 7e40984e97d414e94d835088325e7f37 on both PC and Deck",
+ "deck_time_local":"2026-10-07 about 01:01-01:05 EDT",
+ "screen":"external monitor (to be confirmed by page read below)",
+ "setup":"deck_checkReady: runningAppId null, awake true, noForeignCdpTunnel true. deck_deploy.",
+ "pressed":"deck_openPlugin three times (the tool presses D-pad/A itself)",
+ "seen":"deploy ok, loader ready true, loader active, waitedMs 464, polls 1. Open try 1 failed (CEF unreachable, expected). Try 2 failed: QAM chord sent, no pane appeared (second failure). Try 3 opened: panel confirmed by .bonsai-scope. md5 match.",
+ "expected":"first open fails once; second open works; md5 matches",
+ "verdict":"PASS for deploy and build match. UNCLEAR on the open: it failed twice before the third try worked (runbook says a second failure is worth reporting)."
+}

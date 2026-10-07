@@ -40,14 +40,15 @@ to tonight. The maintainer's calls are in the decisions file as D125.
 
 | | Bug, as a player sees it | Stars | Measured first? | Helper |
 |---|---|---|---|---|
-| A | The "Delete chat slot?" box has three buttons; it should have Delete and Cancel, opening on Cancel | ★ | No: the maintainer's screenshot is the measurement | Sonnet high (p82a), landed `771d66dc` |
-| B | Left and Right on the chat title bar stop on the chat's name; Up from the first question and Down from the tab bar should land on Delete | ★★ | The Deck records the stops (M4), the fix starts at once from the maintainer's rule | Sonnet high (p82b), landed `1baf53bc` |
-| C | Down from the question box lands on Ask and skips the mode button under the box | ★★ | The Deck records the landing and the row's boxes (M2); the fix starts at once | Sonnet high (p82d) |
+| A | The "Delete chat slot?" box has three buttons; it should have Delete and Cancel, opening on Cancel | ★ | No: the maintainer's screenshot is the measurement | Sonnet high (p82a), landed `771d66dc`; passed on the Deck 2026-10-07 (block 3a) |
+| B | Left and Right on the chat title bar stop on the chat's name; Up from the first question and Down from the tab bar should land on Delete | ★★ | The Deck records the stops (M4), the fix starts at once from the maintainer's rule | Sonnet high (p82b), landed `1baf53bc`; Deck block 3a: the three rules passed, the Save-return half failed; round 2 `7d0a7be5` |
+| C | Down from the question box lands on Ask and skips the mode button under the box | ★★ | The Deck records the landing and the row's boxes (M2); the fix starts at once | Sonnet high (p82d), landed `a6e00806` |
 | D | Up from the bottom of the About tab does nothing | ★★ | Yes (M1): what holds the ring after Up, and the shape of the rows above | after M1: not reproduced by the rig (M1), stays open, question 5 |
-| E | The ring on a slider is too wide and stays at the right end when the knob moves | ★★ | Yes (M3): the ring's box against the knob's, before and after a press | after M3 |
-| F | Both Show details lines on screen at once | ★★ | Yes (M6): the slot's state against the real line's box on every press | after M6 |
+| E | The ring on a slider is too wide and stays at the right end when the knob moves | ★★ | Yes (M3): the ring's box against the knob's, before and after a press | after M3, landed `f6c96e43` |
+| F | Both Show details lines on screen at once | ★★ | Yes (M6): the slot's state against the real line's box on every press | after M6, landed `8bfe1802` |
 | G | The open reasoning block scrolls past in one press; it should move a screen at a time like the answer | ★★★ | Yes (M5): the scroll per press on the block and on the answer | after M5; Opus extra-high if the first round fails on the Deck |
-| H | The microphone button does nothing | ★★★ | Yes (M7): a press with the log open, the engine and the microphone checked over SSH | decided by M7: not reproduced by the rig (M7); helper p82h adds a toast and log lines |
+| H | The microphone button does nothing | ★★★ | Yes (M7): a press with the log open, the engine and the microphone checked over SSH | decided by M7: not reproduced by the rig (M7); helper p82h adds a toast and log lines; landed `3575d15f` (three commits) |
+| I | The fade style's chips swap their words without fading (found tonight, Deck block 2) | ★★ | Measured (block 2): opacity 1.00 through 32 changes | Sonnet high (p82i): found to be a measurement of the wrong element; the fade moved onto the button, landed `8d1523d4` |
 
 **The other seven: not tonight's to fix**
 
@@ -65,7 +66,7 @@ to tonight. The maintainer's calls are in the decisions file as D125.
 | Entry | Who | How |
 |---|---|---|
 | The doubled hidden-block marks at a join (P81-CONTINUE-ONE-MARK) | Rig, two tries with the limit lowered | Block 2: could not run; needs setup-dev |
-| Long chips: the fade's opacity and a chip under the ring (P79-LONG-CHIPS) | Rig, no game first; a game only if memory allows | Block 2: ring half passed; fade half failed, now a bug (p82i) |
+| Long chips: the fade's opacity and a chip under the ring (P79-LONG-CHIPS) | Rig, no game first; a game only if memory allows | Block 2: ring half UNCLEAR (the chip under the ring held still; so did the other); the fade reading was of the wrong element, the fade moved onto the button (p82i), row P82-FADE-ON-BUTTON |
 | The walk check reads words (P81-WALK-READS-WORDS, the tools project) | Rig: this is a new chat, so the tool server may have the fix | Block 2: closed 2026-10-07 (Deck) |
 | The reopened checklist with the real AI (P78-REOPEN-CHECKLIST) | Rig, two tries | Block 2: closed 2026-10-07 (Deck) |
 | A place change keeps the other machine's names (P81-MOVE-KEEPS-OTHER-NAMES) | Rig, only if a PC model the Deck lacks can be arranged | Block 2, last: not run; the Deck's saved order holds only a name the PC has too; tests only |
@@ -97,12 +98,17 @@ Standing rules as in plan 81. One driver at a time, a fresh one per block, evide
 5. **Up at the bottom of the About tab:** the rig could not make it fail (3 of 3 from the D-pad route). How did you reach the bottom: D-pad only, or a right-stick or touch scroll first? *Meanwhile:* the entry stays open.
 6. **Run setup-dev on the Deck** (five seconds): the plugin folder is owned by root since the last deploy, so the continued-answer check could not lower the limit, and a deploy may be refused the same way. *Meanwhile:* the check stays owed; the deploy is tried as is.
 
+## Follow-ups (nothing a player sees)
+
+- The question box's old Down handler in `src/hooks/useMainTabAskBarFocus.ts` is now dead code, with tests that describe nothing (left over from p82d, landed `a6e00806`). Remove it in a later clean-up.
+
 ## Log
 
 - **2026-10-07, 00:10 to 00:40:** read the lists, the runbook and the lessons. The rig's safety stop was found set
   (by the maintainer, the evening before); asked, re-armed at 00:20. Baseline quick check green at tip `60b8c57f`.
   Four copies cut (p82a to p82d). Helpers p82a (delete box), p82b (title bar) and p82d (box Down) started at 00:33.
   Deck driver on blocks 0 and 1 started at 00:38. The timed 20-minute check is on. Keep-awake held until 08:24.
-- **2026-10-07, about 01:05:** landed p82a (the delete box). Paperwork sweep 1 committed.
-- **2026-10-07, about 01:10 to 01:40:** Deck blocks 0 and 1 done (the Deck is on an external monitor, 855 x 766): five of seven bugs reproduced with numbers; Up at the bottom of About and the microphone did not. Landed p82b (the title bar). Helpers p82e (slider ring), p82f (two details lines), p82g (reasoning block, Opus) and p82h (microphone feedback and log) started at 01:20. Deck block 2 (owed Verify checks) running. Paperwork sweep 2 committed.
-- **2026-10-07, about 01:45 to 02:05:** Deck block 2: the walk check reads words (passed), the reopened checklist with the real AI (passed), long chips (ring half passed, fade half failed: a new bug, helper p82i), the continued answer (could not run: root owns the plugin folder; the maintainer's setup-dev is the fix). Paperwork sweep 3 committed.
+- **2026-10-07, about 00:50:** landed p82a (the delete box). Paperwork sweep 1 committed.
+- **2026-10-07, about 00:55 to 01:00:** Deck blocks 0 and 1 done (the Deck is on an external monitor, 855 x 766): five of seven bugs reproduced with numbers; Up at the bottom of About and the microphone did not. Landed p82b (the title bar). Helpers p82e (slider ring), p82f (two details lines), p82g (reasoning block, Opus) and p82h (microphone feedback and log) started at 01:20. Deck block 2 (owed Verify checks) running. Paperwork sweep 2 committed.
+- **2026-10-07, about 01:00 to 01:05:** Deck block 2: the walk check reads words (passed), the reopened checklist with the real AI (passed), long chips (ring half unclear, fade half failed; later found to be a reading of the wrong element, helper p82i), the continued answer (could not run: root owns the plugin folder; the maintainer's setup-dev is the fix). Paperwork sweep 3 committed.
+- **2026-10-07, about 01:10:** landed p82e (the slider ring), p82f (one Show details line at a time), p82i (the chips' fade on the chip button itself), p82d (Down from the question box stops on the mode button), p82b2 (the chat row's second round) and p82h (the microphone button). Deck block 3a (build `880687e4`): the delete box passed in full; the chat row passed the three rules, the Save-return half failed (the tab rebuild after a popup), and the second round landed as `7d0a7be5`. The deploy took three tries to open the plugin. Paperwork sweep 4 committed.

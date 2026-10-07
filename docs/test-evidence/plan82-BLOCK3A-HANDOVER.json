@@ -1,0 +1,14 @@
+{
+ "row":"BLOCK3A-HANDOVER",
+ "build_commit":"code tip 880687e4 (repo branch tip 1b34381d); Deck dist/index.js md5 7e40984e97d414e94d835088325e7f37 (deployed 01:01 EDT; matches PC); plugin v0.5.0",
+ "deck_time_local":"2026-10-07 about 01:10 EDT",
+ "screen":"external monitor; QAM page 855 x 766",
+ "keep_awake":"Held by block 0/1 until 2026-10-07T12:29:22Z (08:29 EDT). Not renewed by me.",
+ "checks":{"BLOCK3A-DEPLOY":"PASS deploy and md5; UNCLEAR on open (failed twice, third try worked)","P82-DELETE-BOX-TWO-BUTTONS":"PASS","P82-CHAT-ROW-NO-NAME-STOP":"PASS stops; FAIL ring returns to Delete, not Save, after the save window closes"},
+ "deleted_chat":"what is the safest way to approach a group of enemies at once (slot 92a45014-ea93-496a-80da-15896b199b46). Not restored. Backup: ~/p82-backup/before-delete-check/chat_slots (9 entries incl index.json). Live chat_slots now 8 entries (7 chats + index.json).",
+ "chat_slots_count":"8 files now; 9 before the delete",
+ "settings_changed":"none",
+ "test_chat":"How do I beat the boss in the Soul Sanctum in Hollow Knight? (6f3cc055), open, Main tab. 8 dots now (new-chat spot first).",
+ "where_ring":"Plugin OPEN on Main tab, test chat, ring on the question box (not pressed). No game running. No test question asked this block.",
+ "quirks":["The chat row is one focus target; Save/Title/Delete stops are class --active-stop on aria-hidden spans.","Delete box and Save window are Steam modals in the 'Steam Big Picture Mode' target, not QuickAccess.","Opening failed twice after deploy.","Row ring visibility reads 67% partial, clipped by div.oIVg-eNHeYCNPq0blN3Dk (likely the known row box artifact).","Screenshot copy: docs/test-evidence/plan82-P82-DELETE-BOX-TWO-BUTTONS-open.png; original in screenshots/ folder."]
+}

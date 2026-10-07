@@ -109,6 +109,21 @@ export type DeckFocusSliderThumbProps = {
   wrapRef: React.MutableRefObject<HTMLDivElement | null>;
 };
 
+/** Width of the box around the knob; the knob is about 22 px, so this is the touch target. */
+const THUMB_BOX_W = 32;
+
+/**
+ * The white ring while the thumb has focus, drawn by the knob itself. Steam's own ring is switched
+ * off on the thumb (`noFocusRing`) because Steam places it once, when the thumb takes focus, and does
+ * not re-measure when the knob steps: on the Deck (2026-10-07, plan82-M3-SLIDER-RING) the frame sat
+ * one step behind the knob, and it was drawn around the whole 42 px box. An outline on the dot cannot
+ * lag or be wider than the dot. Same white as the plugin's other controls' ring.
+ */
+const THUMB_FOCUS_RING: React.CSSProperties = {
+  outline: "2px solid rgba(255, 255, 255, 0.88)",
+  outlineOffset: 1,
+};
+
 /** One focusable thumb on a Deck slider track (single- or dual-thumb layouts). */
 export function DeckFocusSliderThumb(props: DeckFocusSliderThumbProps) {
   const {
@@ -174,9 +189,9 @@ export function DeckFocusSliderThumb(props: DeckFocusSliderThumbProps) {
       {...hostProps}
       style={{
         position: "absolute",
-        left: `calc(${pct}% - 21px)`,
+        left: `calc(${pct}% - ${THUMB_BOX_W / 2}px)`,
         top: 0,
-        width: 42,
+        width: THUMB_BOX_W,
         height: 40,
         zIndex: 2,
         ...hostProps?.style,
@@ -184,6 +199,7 @@ export function DeckFocusSliderThumb(props: DeckFocusSliderThumbProps) {
     >
       <Focusable
         flow-children="vertical"
+        noFocusRing
         {...thumbNav}
         onActivate={onActivate}
         onFocus={onFocus}
@@ -208,6 +224,7 @@ export function DeckFocusSliderThumb(props: DeckFocusSliderThumbProps) {
             flexShrink: 0,
             touchAction: "none",
             ...dotStyle,
+            ...(focused ? THUMB_FOCUS_RING : null),
           }}
         />
       </Focusable>

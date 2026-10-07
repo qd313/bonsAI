@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 732,
-  "edgeCount": 2128,
+  "fileCount": 733,
+  "edgeCount": 2129,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2029,6 +2029,12 @@
         "src/components/MainTabChatTranscript.tsx"
       ]
     },
+    "src/components/deck/DeckFocusSlider.ring.test.tsx": {
+      "imports": [
+        "src/components/deck/DeckFocusSlider.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/deck/DeckFocusSlider.test.ts": {
       "imports": [
         "src/components/deck/DeckFocusSlider.tsx"
@@ -2042,6 +2048,7 @@
         "src/components/SettingsTabConnectionTimeoutSlider.tsx",
         "src/components/SettingsTabOllamaKeepAliveSlider.tsx",
         "src/components/SettingsTabUiScaleSlider.tsx",
+        "src/components/deck/DeckFocusSlider.ring.test.tsx",
         "src/components/deck/DeckFocusSlider.test.ts"
       ]
     },

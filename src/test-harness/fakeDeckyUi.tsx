@@ -34,7 +34,8 @@ const STEAM_NAV_PROPS = new Set([
 function withoutSteamNavProps(props: StubProps): StubProps {
   const out: StubProps = {};
   for (const [key, value] of Object.entries(props)) {
-    if (!STEAM_NAV_PROPS.has(key)) out[key] = value;
+    if (key === "noFocusRing") out["data-no-focus-ring"] = String(Boolean(value));
+    else if (!STEAM_NAV_PROPS.has(key)) out[key] = value;
   }
   return out;
 }

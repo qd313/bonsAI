@@ -91,13 +91,17 @@ import io
 import logging
 import mimetypes
 import os
-import pwd
 import re
 import shutil
 import subprocess
 import tempfile
 import time
 from typing import Optional
+
+try:
+    import pwd  # Unix only; absent on a Windows stand-in Deck
+except ImportError:  # pragma: no cover
+    pwd = None
 
 SUPPORTED_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp"}
 MAX_ATTACHMENT_FILE_BYTES = 40 * 1024 * 1024
@@ -661,7 +665,7 @@ def _discover_x11_sessions(target_user: str = "deck") -> list[tuple[str, str]]:
     sessions: list[tuple[str, str]] = []
     seen: set[str] = set()
     try:
-        uid = pwd.getpwnam(target_user).pw_uid
+        uid = pwd.getpwnam(target_user).pw_uid if pwd is not None else 1000
     except KeyError:
         uid = 1000
 

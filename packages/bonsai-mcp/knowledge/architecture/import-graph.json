@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 744,
-  "edgeCount": 2168,
+  "fileCount": 745,
+  "edgeCount": 2171,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -139,6 +139,14 @@
         "src/components/MainTabUnifiedAskBar.tsx"
       ]
     },
+    "src/components/ContextChipLadder.allChips.test.tsx": {
+      "imports": [
+        "src/components/ContextChipLadder.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/inputTransparency.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/ContextChipLadder.reveal.test.tsx": {
       "imports": [
         "src/components/ContextChipLadder.tsx",
@@ -176,6 +184,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/ContextChipLadder.allChips.test.tsx",
         "src/components/ContextChipLadder.reveal.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
         "src/components/SessionContextStrip.tsx",
@@ -5772,6 +5781,7 @@
     "src/test-harness/fakeDeckyUi.tsx": {
       "imports": [],
       "importedBy": [
+        "src/components/ContextChipLadder.allChips.test.tsx",
         "src/components/ContextChipLadder.reveal.test.tsx",
         "src/components/ContextChipLadder.ringWalk.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
@@ -7284,6 +7294,7 @@
         "src/data/modelPolicy.ts"
       ],
       "importedBy": [
+        "src/components/ContextChipLadder.allChips.test.tsx",
         "src/components/ContextChipLadder.reveal.test.tsx",
         "src/components/ContextChipLadder.ringWalk.test.tsx",
         "src/components/ContextChipLadder.test.tsx",

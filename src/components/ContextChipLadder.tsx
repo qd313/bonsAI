@@ -31,7 +31,7 @@
  * hand-drawn cue in a different colour from the ring, on purpose: an earlier
  * version glowed it in the ring's colour, which was unreadable next to it.
  */
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import type { FocusEvent } from "react";
 import { Focusable } from "@decky/ui";
 import type {
@@ -49,12 +49,10 @@ import {
   chipBodyTitle,
   chipDevJson,
   chipsFromSnapshot,
-  CONTEXT_CHIP_SHOW_ALL_MAX,
   CREDITS_SHOWN,
   creditCardLabel,
   type CreditsView,
   SPOILER_HIDDEN_CREDITS_TEXT,
-  windowRange,
 } from "../utils/contextChipsFromSnapshot";
 import { isOkDeckButtonEvent } from "../utils/focusNavigation";
 import { revealBelowKeepingAsItSettles } from "../utils/chatPanelScroll";
@@ -140,15 +138,15 @@ export type ContextChipLadderProps = {
  *    and stop.
  * 2. While collapsed, render just the "Context used · tap for details"
  *    link; tapping it or pressing A expands the ladder.
- * 3. Once expanded, work out which chips are actually visible: everyone,
- *    if there are few enough (CONTEXT_CHIP_SHOW_ALL_MAX), otherwise a
- *    window around the active one from windowRange().
+ * 3. Once expanded, every chip is drawn, at full strength and one size,
+ *    however many there are: a row that adds, drops or resizes a chip as you
+ *    step re-wraps and shifts the whole answer above it (2026-10-08).
  * 4. Left/Right and Up/Down all move the same active chip. Moving right or
  *    down off the last chip, or left/up off the first, falls through to
  *    onMoveDownFromLadder/onMoveUpFromLadder so the D-pad can leave the
  *    ladder entirely.
- * 5. Draw the chip row, dimming chips further from the active one, then
- *    hand the active chip to ChipExpandedBody() to draw its details below.
+ * 5. Draw the chip row, the open chip marked by its fill and border only,
+ *    then hand the active chip to ChipExpandedBody() to draw its details below.
  */
 export function ContextChipLadder({
   snapshot,
@@ -168,20 +166,11 @@ export function ContextChipLadder({
   /* Each drawn chip's own element, by its index in `chips`; the open chip's index as last drawn. */
   const chipEls = useRef(new Map<number, HTMLElement>());
   const openIndexRef = useRef(0);
-  /* A step onto a chip the window had not drawn yet: ring it once the step has drawn it. */
-  const pendingRing = useRef<number | null>(null);
 
   const ringOnChip = (idx: number): boolean => {
     const el = chipEls.current.get(idx);
     return el ? focusRowElement(el) : false;
   };
-
-  useLayoutEffect(() => {
-    const idx = pendingRing.current;
-    if (idx === null) return;
-    pendingRing.current = null;
-    ringOnChip(idx);
-  });
 
   const setExpandedBoth = useCallback(
     (v: boolean) => {
@@ -202,10 +191,6 @@ export function ContextChipLadder({
   const safeIndex = Math.min(activeIndex, chips.length - 1);
   openIndexRef.current = safeIndex;
   const active = chips[safeIndex];
-  const showAllChips = chips.length <= CONTEXT_CHIP_SHOW_ALL_MAX;
-  const { start, end } = showAllChips
-    ? { start: 0, end: chips.length - 1 }
-    : windowRange(safeIndex, chips.length);
 
   if (!expanded) {
     return (
@@ -264,7 +249,7 @@ export function ContextChipLadder({
   const last = chips.length - 1;
   const stepTo = (idx: number): boolean => {
     setActiveIndex(idx);
-    if (!ringOnChip(idx)) pendingRing.current = idx;
+    ringOnChip(idx);
     revealWhileRinged();
     return true;
   };
@@ -341,10 +326,7 @@ export function ContextChipLadder({
         }}
       >
         {chips.map((chip, idx) => {
-          if (idx < start || idx > end) return null;
           const isActive = idx === safeIndex;
-          const truncated = !isActive && !showAllChips;
-          const far = truncated && Math.abs(idx - safeIndex) >= 2;
           return (
             <Focusable
               key={chip.id}
@@ -365,8 +347,9 @@ export function ContextChipLadder({
                 width: "fit-content",
                 maxWidth: "100%",
                 flex: "0 0 auto",
-                fontSize: isActive ? 11 : 10,
-                fontWeight: isActive ? 600 : 400,
+                /* The same size and weight on every chip: a bigger open chip changed widths and re-wrapped the rows. */
+                fontSize: 10,
+                fontWeight: 400,
                 padding: "4px 10px",
                 borderRadius: 999,
                 border: `1px solid ${isActive ? ACTIVE_CHIP_BORDER : CHIP_BORDER}`,
@@ -375,7 +358,6 @@ export function ContextChipLadder({
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
-                opacity: truncated ? (far ? 0.38 : 0.55) : 1,
               }}
             >
               {chip.label}

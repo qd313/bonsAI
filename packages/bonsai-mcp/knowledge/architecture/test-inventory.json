@@ -4,6 +4,7 @@
     "src/components/BonsaiPluginShell.test.tsx",
     "src/components/CharacterPickerModal.test.tsx",
     "src/components/CharacterRoleplayEmoticon.test.tsx",
+    "src/components/ContextChipLadder.allChips.test.tsx",
     "src/components/ContextChipLadder.reveal.test.tsx",
     "src/components/ContextChipLadder.ringWalk.test.tsx",
     "src/components/ContextChipLadder.test.tsx",

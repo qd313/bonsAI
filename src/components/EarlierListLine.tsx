@@ -1,7 +1,8 @@
 /**
  * Title: One line of the "N earlier" list
- * Purpose: Draw the "N earlier" line itself and the day lines under it ("Today · 12"). Each is one
- * D-pad stop: A opens or closes it, and B closes it while it is open.
+ * Purpose: Draw the "N earlier" line itself, the day lines under it ("Today · 12"), and the "Show N more"
+ * line at the end of an open day. Each is one D-pad stop: A opens or closes it (on "Show N more": brings
+ * in the next questions), and B closes it while it is open ("Show N more" never claims B).
  * Used for: MainTabChatTranscript.tsx, in front of the older questions of a long chat.
  * Solves: Opening "N earlier" used to bring back every older question as its own row. The day lines
  * keep that to a handful of stops, and each opens on its own (earlierTurnsByDay.ts says which).
@@ -19,20 +20,24 @@ import { registerEarlierLineEl } from "../utils/chatTranscriptNavHelpers";
 export type EarlierListLineProps = {
   /** The words on the line: "12 earlier", or "Yesterday · 30". */
   text: string;
-  /** "day" lines sit under the "N earlier" line and read a little brighter. */
-  kind: "earlier" | "day";
-  open: boolean;
-  /** A: open it if closed, close it if open. */
+  /**
+   * "day" lines sit under the "N earlier" line and read a little brighter. "more" is the "Show N more"
+   * line at the end of an open day: it only acts on A, has nothing to open or close, and leaves B to Steam.
+   */
+  kind: "earlier" | "day" | "more";
+  /** Whether the line is open (never for "more", which has no open state). */
+  open?: boolean;
+  /** A: open it if closed, close it if open (for "more": show the next questions). */
   onToggle: () => void;
   /** B, only while open. */
-  onClose: () => void;
+  onClose?: () => void;
   /** The Left / Down / Up handlers from chatTranscriptNavHelpers.ts. */
   nav: Record<string, unknown>;
 };
 
 export function EarlierListLine(props: EarlierListLineProps) {
-  const { text, kind, open, onToggle, onClose, nav } = props;
-  const closeWithB = open
+  const { text, kind, open = false, onToggle, onClose, nav } = props;
+  const closeWithB = open && onClose
     ? {
         onCancelButton: (e: unknown) => {
           onClose();
@@ -50,15 +55,17 @@ export function EarlierListLine(props: EarlierListLineProps) {
   return (
     <Focusable
       ref={noteMounted}
-      className={`bonsai-chat-earlier-pill-row${kind === "day" ? " bonsai-chat-earlier-day-row" : ""}`}
-      aria-expanded={open}
+      className={`bonsai-chat-earlier-pill-row${kind === "earlier" ? "" : " bonsai-chat-earlier-day-row"}${
+        kind === "more" ? " bonsai-chat-earlier-more-row" : ""
+      }`}
+      aria-expanded={kind === "more" ? undefined : open}
       onActivate={onToggle}
       {...nav}
       {...(closeWithB as Record<string, unknown>)}
     >
       <span className="bonsai-chat-earlier-pill">{text}</span>
       <span className="bonsai-chat-earlier-rule" />
-      {kind === "day" || open ? <span className="bonsai-chat-earlier-chev">{open ? "▾" : "▸"}</span> : null}
+      {kind === "day" || (kind === "earlier" && open) ? <span className="bonsai-chat-earlier-chev">{open ? "▾" : "▸"}</span> : null}
     </Focusable>
   );
 }

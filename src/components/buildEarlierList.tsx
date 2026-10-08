@@ -14,8 +14,13 @@
 import type { ReactElement } from "react";
 import type { NavRefHolder } from "../utils/navFocusRegistry";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
-import { dayLineText, layoutEarlierByDay, type EarlierDay } from "../utils/earlierTurnsByDay";
-import { dayLineNav, earlierLineNavHandlers, earlierPillNavHandlers } from "../utils/chatTranscriptNavHelpers";
+import { dayLineText, layoutEarlierByDay, moreLineText, type EarlierDay, type EarlierMore } from "../utils/earlierTurnsByDay";
+import {
+  dayLineNav,
+  earlierLineNavHandlers,
+  earlierPillNavHandlers,
+  moreLineNav,
+} from "../utils/chatTranscriptNavHelpers";
 import { EarlierListLine } from "./EarlierListLine";
 
 export type BuildEarlierListArgs = {
@@ -28,6 +33,10 @@ export type BuildEarlierListArgs = {
   setEarlierExpanded: (expanded: boolean) => void;
   openDays: ReadonlySet<string>;
   toggleDay: (dayKey: string) => void;
+  /** How many times "Show N more" has been pressed on each open day (none: six questions each). */
+  morePresses?: ReadonlyMap<string, number>;
+  /** "Show N more" pressed: show the day's next questions, ring to the first of them. */
+  showMoreOfDay?: (dayKey: string, firstNewId: string) => void;
   expandedTurnKey: string | null;
   onTurnActivate?: (key: string | "live") => void;
 };
@@ -45,8 +54,10 @@ export type EarlierList = {
   navAbove: (turnId: string) => NavRefHolder | null;
   /** The same for the live turn: the last day line drawn after the last row, if any. */
   navAboveLive: () => NavRefHolder | null;
-  /** Whether a day line is the next stop below the row for `nextTurn` (undefined: below the last row). */
-  dayLineFollows: (nextTurn: AskThreadCollapsedTurn | undefined) => boolean;
+  /** The "Show N more" line to draw right under the row for `turnId`, if that row ends an open day with more. */
+  moreLinesAfter: (turnId: string) => ReactElement[] | null;
+  /** Whether a line (a day line, or this row's own "Show N more") is the next stop below the row for `turn`, whose next row is `nextTurn` (undefined: below the last row). */
+  lineFollows: (turn: AskThreadCollapsedTurn, nextTurn: AskThreadCollapsedTurn | undefined) => boolean;
 };
 
 /**
@@ -57,7 +68,10 @@ export type EarlierList = {
 export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
   const { turns, earlierCount, showLiveTurn, earlierExpanded, setEarlierExpanded, openDays, toggleDay } = a;
   const hasLine = earlierCount >= 2;
-  const layout = hasLine && earlierExpanded ? layoutEarlierByDay({ turns, earlierCount, openDays }) : null;
+  const layout =
+    hasLine && earlierExpanded
+      ? layoutEarlierByDay({ turns, earlierCount, openDays, morePresses: a.morePresses })
+      : null;
   const turnsToRender = layout ? layout.shown : hasLine ? turns.slice(earlierCount) : turns;
   const afterEarlier = showLiveTurn ? "live" : null;
 
@@ -90,6 +104,26 @@ export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
   const run = (days: EarlierDay[], turnId: string | null) =>
     days.length ? days.map((day, i) => dayLine(day, i === days.length - 1 ? turnId : null)) : null;
 
+  /* The "Show N more" line under an open day's last shown question. Down from it goes where Down
+     from that question would have gone: the day line below it, or else the next question. */
+  const moreLine = (more: EarlierMore, nextTurnId: string | null) => (
+    <EarlierListLine
+      key={`earlier-more-${more.day.key}`}
+      kind="more"
+      text={moreLineText(more.add)}
+      onToggle={() => a.showMoreOfDay?.(more.day.key, more.firstNewId)}
+      nav={earlierPillNavHandlers(nextTurnId, moreLineNav(more.day.key))}
+    />
+  );
+  const moreAfter = (turnId: string) => layout?.moreAfter.get(turnId);
+  const rowAfter = (turnId: string) => turnsToRender[turnsToRender.findIndex((t) => t.id === turnId) + 1];
+  /* The nav node of the "Show N more" line drawn right over the row for `turnId`, if there is one. */
+  const moreNavAbove = (turnId: string): NavRefHolder | null => {
+    const at = turnsToRender.findIndex((t) => t.id === turnId);
+    const more = at > 0 ? moreAfter(turnsToRender[at - 1]!.id) : undefined;
+    return more ? moreLineNav(more.day.key) : null;
+  };
+
   const closeAll = () => {
     reopenNewestIfHidden(turns.slice(0, earlierCount));
     setEarlierExpanded(false);
@@ -110,15 +144,26 @@ export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
     turnsToRender,
     dayLinesBefore: (turnId) => (layout ? run(layout.daysBefore.get(turnId) ?? [], turnId) : null),
     trailingDayLines: layout ? run(layout.trailingDays, afterEarlier) : null,
+    moreLinesAfter: (turnId) => {
+      const more = moreAfter(turnId);
+      if (!more) return null;
+      const next = rowAfter(turnId);
+      const dayLineBelow = next ? (layout?.daysBefore.get(next.id)?.length ?? 0) > 0 : (layout?.trailingDays.length ?? 0) > 0;
+      return [moreLine(more, dayLineBelow ? null : next?.id ?? afterEarlier)];
+    },
     navAbove: (turnId) => {
       const days = layout?.daysBefore.get(turnId);
-      return days?.length ? dayLineNav(days[days.length - 1]!.key) : null;
+      return days?.length ? dayLineNav(days[days.length - 1]!.key) : moreNavAbove(turnId);
     },
     navAboveLive: () => {
       const days = layout?.trailingDays;
-      return days?.length ? dayLineNav(days[days.length - 1]!.key) : null;
+      if (days?.length) return dayLineNav(days[days.length - 1]!.key);
+      const last = turnsToRender[turnsToRender.length - 1];
+      const more = last ? moreAfter(last.id) : undefined;
+      return more ? moreLineNav(more.day.key) : null;
     },
-    dayLineFollows: (nextTurn) =>
-      nextTurn ? (layout?.daysBefore.get(nextTurn.id)?.length ?? 0) > 0 : (layout?.trailingDays.length ?? 0) > 0,
+    lineFollows: (turn, nextTurn) =>
+      moreAfter(turn.id) !== undefined ||
+      (nextTurn ? (layout?.daysBefore.get(nextTurn.id)?.length ?? 0) > 0 : (layout?.trailingDays.length ?? 0) > 0),
   };
 }

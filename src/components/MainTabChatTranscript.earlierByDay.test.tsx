@@ -47,6 +47,9 @@ vi.mock("@decky/ui", async () => {
             navRef.current = {
               TakeFocus: () => {
                 const first = el.querySelector<HTMLElement>("button:not([disabled]), [tabindex]");
+                /* Decky stamps tabindex="0" on a node it navigates; a row mounted a moment ago has not
+                   had it yet when Steam's transfer reaches it. */
+                if (!first && !el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
                 (first ?? el).focus();
                 return true;
               },
@@ -793,4 +796,228 @@ describe("Up from the chip with the newest question closed and an older one open
       expect(up).toEqual([...down].reverse());
     },
   );
+});
+
+/*
+ * Open them a few at a time (roadmap, Bugs: "A day line in the 'N earlier' list opens all of that day's
+ * questions at once"). A day line shows the day's first six questions; a "Show N more" line at the end of
+ * the group adds the next six under them and puts the ring on the first new question; closing the day or
+ * the whole list starts it over at six. Rendered through the real transcript, D-pad by D-pad.
+ */
+describe("a day opens six questions at a time (Show N more)", () => {
+  beforeEach(() => {
+    resetUiDocument();
+    resetNavFocusRegistry();
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(NOW);
+  });
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+  });
+
+  /** `n` questions on Monday 28 Sep, one a minute from 08:00. */
+  const monday = (n: number) =>
+    Array.from({ length: n }, (_, i) =>
+      turn(`m${i + 1}`, `monday question ${i + 1}`, new Date(2026, 8, 28, 8, i).getTime() / 1000),
+    );
+  /** Monday's `n`, then Yesterday's three, then the newest question (today). */
+  const chat = (n: number) => [...monday(n), ...TURNS.slice(5, 8), TURNS[11]!];
+  const dayText = (n: number) => `Mon 28 Sep · ${n}`;
+  const mondayRows = (from: number, to: number) =>
+    Array.from({ length: to - from + 1 }, (_, i) => `monday question ${from + i}`);
+  const NEWEST = "what is a good first upgrade in Hollow Knight";
+
+  function openDay(n: number, open: string | null = "n1", turns = chat(n)) {
+    const out = renderChat({}, turns, open);
+    openEarlier(out.container, out.stamp);
+    activate(lineEl(out.container, dayText(n)));
+    out.stamp();
+    return out;
+  }
+  const showLine = (container: HTMLElement) => lines(container).find((text) => text.startsWith("Show ")) ?? null;
+  const showLineEl = (container: HTMLElement) =>
+    Array.from(container.querySelectorAll<HTMLElement>(LINE)).find((el) => el.textContent?.startsWith("Show "))!;
+  const pressShowMore = (container: HTMLElement, stamp: () => void) => {
+    const line = showLineEl(container);
+    focusOn(line);
+    activate(line);
+    stamp();
+  };
+
+  it.each([
+    [1, 1, null],
+    [6, 6, null],
+    [7, 6, "Show 1 more"],
+    [13, 6, "Show 6 more"],
+    [100, 6, "Show 6 more"],
+  ] as const)("a day of %i opens to %i rows with the line %j", (n, rows, line) => {
+    const { container } = openDay(n);
+    expect(rowTexts(container)).toEqual(mondayRows(1, rows));
+    expect(showLine(container)).toBe(line);
+    /* The day line's own text still counts every question of the day. */
+    expect(lines(container)).toContain(dayText(n));
+  });
+
+  it("A on the line adds the next questions under the ones shown, the ring lands on the first new one, and the line goes when nothing is left", () => {
+    const { container, stamp } = openDay(13);
+    expect(rowTexts(container)).toHaveLength(6);
+
+    pressShowMore(container, stamp);
+    expect(rowTexts(container)).toEqual(mondayRows(1, 12));
+    expect(showLine(container)).toBe("Show 1 more");
+    expect(nameOf(document.activeElement)).toBe("row:monday question 7");
+
+    pressShowMore(container, stamp);
+    expect(rowTexts(container)).toEqual(mondayRows(1, 13));
+    expect(showLine(container)).toBeNull();
+    expect(nameOf(document.activeElement)).toBe("row:monday question 13");
+    /* Still in the order they were asked, under the day line and before the next day's. */
+    const order = Array.from(container.querySelectorAll(`${LINE}, ${ROW}`)).map((el) =>
+      el.matches(LINE) ? `line:${el.querySelector(".bonsai-chat-earlier-pill")?.textContent}` : "row",
+    );
+    expect(order).toEqual(["line:16 earlier", `line:${dayText(13)}`, ...Array(13).fill("row"), "line:Yesterday · 3"]);
+  });
+
+  it("the new line leaves B to Steam, as a question row does, and is not an open-or-closed line", () => {
+    const { container } = openDay(13);
+    const line = lineEl(container, "Show 6 more") as NavEl;
+    expect(line.__nav?.onCancelButton).toBeUndefined();
+    expect(line.getAttribute("aria-expanded")).toBeNull();
+    expect(line.querySelector(".bonsai-chat-earlier-chev")).toBeNull();
+    expect(line.__nav?.onActivate).toBeTypeOf("function");
+  });
+
+  it("closing the day with A or with B starts it over at six when it opens again", () => {
+    const { container, stamp } = openDay(13);
+    pressShowMore(container, stamp);
+    expect(rowTexts(container)).toHaveLength(12);
+
+    activate(lineEl(container, dayText(13)));
+    stamp();
+    expect(rowTexts(container)).toEqual([]);
+    expect(showLine(container)).toBeNull();
+    activate(lineEl(container, dayText(13)));
+    stamp();
+    expect(rowTexts(container)).toEqual(mondayRows(1, 6));
+    expect(showLine(container)).toBe("Show 6 more");
+
+    pressShowMore(container, stamp);
+    act(() => {
+      (lineEl(container, dayText(13)) as NavEl).__nav?.onCancelButton?.({ preventDefault: () => {} });
+    });
+    stamp();
+    expect(rowTexts(container)).toEqual([]);
+    activate(lineEl(container, dayText(13)));
+    stamp();
+    expect(rowTexts(container)).toEqual(mondayRows(1, 6));
+  });
+
+  it("closing 'N earlier' starts every day over at six, and a hundred questions come six at a time", () => {
+    const { container, stamp } = openDay(100);
+    pressShowMore(container, stamp);
+    pressShowMore(container, stamp);
+    pressShowMore(container, stamp);
+    expect(rowTexts(container)).toHaveLength(24);
+    expect(showLine(container)).toBe("Show 6 more");
+
+    activate(lineEl(container, "103 earlier"));
+    stamp();
+    expect(lines(container)).toEqual(["103 earlier"]);
+    activate(lineEl(container, "103 earlier"));
+    stamp();
+    activate(lineEl(container, dayText(100)));
+    stamp();
+    expect(rowTexts(container)).toEqual(mondayRows(1, 6));
+    expect(showLine(container)).toBe("Show 6 more");
+  });
+
+  it("closing a day while the open question sits in a part brought in by Show N more opens the newest answer again", () => {
+    const onTurnActivate = vi.fn();
+    const out = renderChat({ onTurnActivate }, chat(13), "m9");
+    openEarlier(out.container, out.stamp);
+    activate(lineEl(out.container, dayText(13)));
+    out.stamp();
+    /* The newest question is closed here, so its row counts too. */
+    expect(rowTexts(out.container)).toHaveLength(7);
+    pressShowMore(out.container, out.stamp);
+    expect(rowTexts(out.container)).toHaveLength(13);
+    activate(lineEl(out.container, dayText(13)));
+    expect(onTurnActivate).toHaveBeenCalledWith("n1");
+  });
+
+  it("Down from the day line walks its six questions, the new line, then the next day line; Up walks it back", () => {
+    const { container } = openDay(13, null);
+    focusOn(lineEl(container, dayText(13)));
+    const down = walk(container, "Down");
+    expect(down.slice(0, 11)).toEqual([
+      `line:${dayText(13)}`,
+      ...mondayRows(1, 6).map((q) => `row:${q}`),
+      "line:Show 6 more",
+      "line:Yesterday · 3",
+      `row:${NEWEST}`,
+    ].slice(0, 11));
+    expect(down).not.toContain("RETRY");
+    expect(new Set(down).size).toBe(down.length);
+    const up = walk(container, "Up");
+    expect(up).toEqual([...[...down].reverse(), "line:16 earlier"]);
+  });
+
+  it("Down from the new line goes to the question under it, not its Retry, and Up from there comes back to the line", () => {
+    const { container } = openDay(7, "n1", [...monday(7), TURNS[11]!]);
+    focusOn(lineEl(container, "Show 1 more"));
+    expect(press(container, "Down")).toBe(true);
+    expect(nameOf(document.activeElement)).toBe(`question:${NEWEST}`);
+    expect(isRetry(document.activeElement)).toBe(false);
+    expect(press(container, "Up")).toBe(true);
+    expect(nameOf(document.activeElement)).toBe("line:Show 1 more");
+  });
+
+  it("Down from the last shown question reaches the new line, and Up from the line reaches that question", () => {
+    const { container } = openDay(13, null);
+    const rows = container.querySelectorAll<HTMLElement>(`.bonsai-chat-turn-slot ${ROW}`);
+    focusOn(rows[5]!);
+    expect(press(container, "Down")).toBe(true);
+    expect(nameOf(document.activeElement)).toBe("line:Show 6 more");
+    expect(press(container, "Up")).toBe(true);
+    expect(nameOf(document.activeElement)).toBe("row:monday question 6");
+  });
+
+  it.each(["top", "padded", "center"] as ScrollRule[])(
+    "under the %s scroll rule the group, with a press of Show N more between, walks Down and Up with no stop twice and every landing on screen",
+    (rule) => {
+      const { container, stamp } = openDay(13, null);
+      pressShowMore(container, stamp);
+      const model = steamScroll(container, rule);
+      focusOn(lineEl(container, dayText(13)));
+      model.after();
+      const seenVisible: boolean[] = [];
+      const after = () => {
+        model.after();
+        seenVisible.push(model.visible(document.activeElement!));
+      };
+      const down = walk(container, "Down", after, 60);
+      /* Day line, twelve rows, Show 1 more, Yesterday's line, the newest question. */
+      expect(down.indexOf("line:Show 1 more")).toBe(13);
+      expect(down.slice(13)).toEqual(["line:Show 1 more", "line:Yesterday · 3", `row:${NEWEST}`]);
+      expect(new Set(down).size).toBe(down.length);
+      const up = walk(container, "Up", after, 60);
+      expect(up).toEqual([...[...down].reverse(), "line:16 earlier"]);
+      expect(new Set(up).size).toBe(up.length);
+      expect(seenVisible.every(Boolean)).toBe(true);
+    },
+  );
+
+  it("a day of six or fewer walks exactly as it did before the new line existed", () => {
+    const { container } = openDay(6, null);
+    focusOn(lineEl(container, dayText(6)));
+    const down = walk(container, "Down");
+    expect(down.slice(0, 9)).toEqual([
+      `line:${dayText(6)}`,
+      ...mondayRows(1, 6).map((q) => `row:${q}`),
+      "line:Yesterday · 3",
+      `row:${NEWEST}`,
+    ]);
+    expect(down.some((name) => name.startsWith("line:Show"))).toBe(false);
+  });
 });

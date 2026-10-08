@@ -6,7 +6,8 @@
  * Solves: Opening "N earlier" used to bring back every older question as its own row (42 or 88 in
  * one chat), filling the screen and pushing the newest answer far below.
  * Does not: Draw anything or move the ring -- the transcript does both. It only says which day each
- * question belongs to, which questions are on screen, and which day lines sit in front of them.
+ * question belongs to, which questions are on screen (an open day shows six, and six more per press of
+ * its "Show N more" line), and which day lines and "Show N more" lines sit among them.
  * Caution: The day is the Deck's own local day. A question with no saved date goes under a line named
  * "Earlier" (the date is carried from the saved chat, see chatSlotTurns.ts); a question minted this
  * session before its chat reloaded has no saved date yet but carries its time in its id.
@@ -24,6 +25,20 @@ export type EarlierDay = {
   firstIndex: number;
 };
 
+/** How many of an open day's questions show at first, and how many each "Show N more" press adds. */
+const DAY_PAGE_SIZE = 6;
+
+/** The "Show N more" line at the end of an open day that still has questions to show. */
+export type EarlierMore = {
+  day: EarlierDay;
+  /** How many questions the next press adds: a full page, or fewer if fewer are left. */
+  add: number;
+  /** The first question that press brings in, where the ring lands. */
+  firstNewId: string;
+  /** The last question shown now, which the line is drawn right under. */
+  lastShownId: string;
+};
+
 export type EarlierLayout = {
   /** Every day line, oldest day first, so the newest day is the one nearest the newest turn. */
   days: EarlierDay[];
@@ -33,6 +48,8 @@ export type EarlierLayout = {
   daysBefore: Map<string, EarlierDay[]>;
   /** Day lines with no shown question after them: drawn after the last shown question. */
   trailingDays: EarlierDay[];
+  /** The "Show N more" line of each open day that has more, by the id of the question it sits under. */
+  moreAfter: Map<string, EarlierMore>;
 };
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -65,6 +82,16 @@ export function dayLineText(day: EarlierDay): string {
   return `${day.label} · ${day.turns.length}`;
 }
 
+/** The words on a "Show N more" line. */
+export function moreLineText(add: number): string {
+  return `Show ${add} more`;
+}
+
+/** How many of a day's questions show once "Show N more" has been pressed `presses` times. */
+function shownCountForDay(total: number, presses: number): number {
+  return Math.min(total, DAY_PAGE_SIZE * (1 + Math.max(0, presses)));
+}
+
 /** Group the older questions by local day, oldest day first. */
 export function groupEarlierTurnsByDay(
   turns: AskThreadCollapsedTurn[],
@@ -95,13 +122,27 @@ export function layoutEarlierByDay(args: {
   turns: AskThreadCollapsedTurn[];
   earlierCount: number;
   openDays: ReadonlySet<string>;
+  /** How many times "Show N more" has been pressed, by day key; a day not listed has had none. */
+  morePresses?: ReadonlyMap<string, number>;
   now?: Date;
 }): EarlierLayout {
-  const { turns, earlierCount, openDays, now } = args;
+  const { turns, earlierCount, openDays, morePresses, now } = args;
   const days = groupEarlierTurnsByDay(turns.slice(0, earlierCount), now);
   const openIds = new Set<string>();
+  const moreAfter = new Map<string, EarlierMore>();
   days.forEach((day) => {
-    if (openDays.has(day.key)) day.turns.forEach((t) => openIds.add(t.id));
+    if (!openDays.has(day.key)) return;
+    const count = shownCountForDay(day.turns.length, morePresses?.get(day.key) ?? 0);
+    day.turns.slice(0, count).forEach((t) => openIds.add(t.id));
+    if (count < day.turns.length) {
+      const lastShownId = day.turns[count - 1]!.id;
+      moreAfter.set(lastShownId, {
+        day,
+        add: Math.min(DAY_PAGE_SIZE, day.turns.length - count),
+        firstNewId: day.turns[count]!.id,
+        lastShownId,
+      });
+    }
   });
   const shownIndexes: number[] = [];
   turns.forEach((turn, index) => {
@@ -118,5 +159,5 @@ export function layoutEarlierByDay(args: {
     const id = turns[anchor]!.id;
     daysBefore.set(id, [...(daysBefore.get(id) ?? []), day]);
   });
-  return { days, shown: shownIndexes.map((i) => turns[i]!), daysBefore, trailingDays };
+  return { days, shown: shownIndexes.map((i) => turns[i]!), daysBefore, trailingDays, moreAfter };
 }

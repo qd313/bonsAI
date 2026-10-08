@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1765,
+      "lines": 1767,
       "role": ""
     },
     {
@@ -58,6 +58,11 @@
     {
       "path": "py_modules/backend/services/local_ollama_setup_service.py",
       "lines": 1050,
+      "role": ""
+    },
+    {
+      "path": "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
+      "lines": 1024,
       "role": ""
     },
     {
@@ -128,11 +133,6 @@
     {
       "path": "src/styles/sections/section-6.ts",
       "lines": 835,
-      "role": ""
-    },
-    {
-      "path": "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
-      "lines": 797,
       "role": ""
     },
     {

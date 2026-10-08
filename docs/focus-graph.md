@@ -101,3 +101,45 @@ closes it and returns to the Filters button); the newest answer's Show details g
 Session (Left/Right switch tabs, Up leaves to Hide details, Down enters the open tab, B closes the whole
 panel); Read aloud is now a small speaker on the Helpful/Not row, reached by Left/Right once the thumbs
 are greyed out. None of the three has a device check yet — see [docs/testing.md](testing.md).
+
+### The "Show N more" line at the end of an open day (plan 83)
+
+An open day line shows its first six questions, and a day with more than six ends in one more stop,
+"Show 6 more" (or "Show 1 more", or whatever the next press will add, never more than six). A on it
+shows the next questions under the ones already shown and puts the ring on the first of them. When
+nothing is left, the line is gone. Closing the day, or closing "N earlier", starts the day over at six.
+Code: `layoutEarlierByDay` (`earlierTurnsByDay.ts`), `buildEarlierList.tsx`, `EarlierListLine.tsx`
+(`kind="more"`), `useEarlierTurnsPill.ts`.
+
+```
+day line "Mon 28 Sep · 13"
+   | Down                              ^ Up
+question 1 ... question 6              (each: Down to the next, Up to the one above)
+   | Down                              ^ Up
+"Show 6 more"            <- new stop, one per open day that has more
+   | Down                              ^ Up
+whatever Down from question 6 reached before: the next day line, or the next question
+```
+
+- **Down from the last shown question** is Steam's own move onto the next line, exactly as it already
+  was for a day line that follows a question (`lineFollows` in `buildEarlierList.tsx` leaves the
+  question's `onMoveDownPast` unset, so nothing claims it).
+- **Down from the new line** goes where Down from that question went before: Steam's own move when a
+  day line comes next, else a transfer onto the next question's text (`takeOpenQuestionText`), so it
+  never stops on that question's Retry. Same shape as the "N earlier" line and the day lines
+  (`earlierPillNavHandlers`).
+- **Up from the new line** is Steam's own move onto the question above it.
+- **Up from the stop below** reaches the new line. A question drawn right under it hands the ring to
+  the line's own nav node (`moreLineNav`, through `questionMoveUpOut`); a day line below it is a
+  plain sibling and keeps Steam's own Up.
+- **Left** holds still, like every line in this list (`earlierPillLeftNavHandlers`).
+- **A** is `onActivate` alone. The press adds the questions and asks `useEarlierTurnsPill` to put the
+  ring on the first new one once they are drawn: Steam's own transfer onto that row's nav node
+  (`takeHolderFocus`), because the line and the rows are different containers. On the
+  last page the line unmounts in that same commit, and the transfer then puts the ring on the new row.
+- **B is not claimed.** The line has no open state to close, and a question row of the same day does not
+  claim B either, so B behaves the same on all of them: Steam's own back. (A handler's mere presence
+  eats B, see `EarlierListLine.tsx`.) B on the day line still closes the day, which is the way to put
+  it back to six.
+- **Not backed by a device row yet.** The bookkeeper owns `docs/testing.md`; the D-pad walk it needs is
+  in the lane report.

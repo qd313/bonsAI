@@ -106,6 +106,14 @@ export function dayLineNav(dayKey: string): NavRefHolder {
   return holder;
 }
 
+/**
+ * The Steam nav node of a day's "Show N more" line (kept apart from the day line's own, so the
+ * question drawn under it can send Up to exactly this line).
+ */
+export function moreLineNav(dayKey: string): NavRefHolder {
+  return dayLineNav(`more:${dayKey}`);
+}
+
 /** The "N earlier" line's element while it is on screen, so a press from outside can tell it is there. */
 let earlierLineEl: HTMLElement | null = null;
 export function registerEarlierLineEl(el: HTMLElement | null, prev?: HTMLElement | null): void {
@@ -151,7 +159,7 @@ export function earlierPillNavHandlers(
 }
 
 /** Steam's transfer onto a nav node held in a ref, with the same window check `takeNavFocus` makes. */
-function takeHolderFocus(holder: NavRefHolder): boolean {
+export function takeHolderFocus(holder: NavRefHolder): boolean {
   const node = holder.current;
   if (!node || typeof node.TakeFocus !== "function") return false;
   refocusPanelWindowIfLost();

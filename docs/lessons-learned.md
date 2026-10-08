@@ -261,6 +261,12 @@ that counts how often something happens — a spoiler cover missing, a wrong not
 either vary the wording between tries or clear the cache first, or the count is really just one
 result read back several times. Evidence `docs/test-evidence/plan63-SPOILER-UNNAMED-BOSS.json`.
 
+**Read what the AI actually wrote, not only the screen, before building a fix on it.** On 2026-10-08 a driver saw a
+menu's JSON in a code box and reported "bare JSON with no fence"; a fix for that case was built and landed. The
+saved answer on the Deck showed the real cause in one line: the fence was spelled with an underscore. The second
+fix took twelve minutes. Have the driver copy the saved answer's last few hundred characters from the chat file
+into the evidence whenever a check is about what the AI wrote.
+
 **"Blocked" deserves one more look before it is written down.** Two checks recorded as impossible on
 this project were not: sending an exact question without the pinned chips (a script already in the
 repo did it), and comparing the screen against the log for which notes were used (the log just needed

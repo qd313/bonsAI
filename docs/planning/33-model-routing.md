@@ -320,6 +320,7 @@ else stays. Log each run below: the fix, the score or Deck result, the cost, and
 | Date | Fix | Result | Cost | Sonnet stepped in? |
 |---|---|---|---|---|
 | 2026-10-08 | Plan 83 J1, the leftover settings-card row number | 24 of 25 blind; passed on the Deck | $0.32 | No |
+| 2026-10-08 | Overnight: the Terse menu's fence spelled with an underscore (`21f62344`) | Clean first time, no nudges; passed on the Deck (10 of 10 menus) | $0.24, 12 min | No |
 
 ## 5. Where Haiku fits
 

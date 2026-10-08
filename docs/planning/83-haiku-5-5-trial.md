@@ -348,3 +348,27 @@ A trial like this has four moving parts, and they live in the session's scratch 
 
 Winners landed with `scripts/land_lane.sh` in the plan's order, with every check run after each. The Deck checks
 were written as step lists and run by the Deck helper; its evidence files are in `docs/test-evidence/plan83-*`.
+
+## 13. The overnight Deck session (2026-10-08, 04:10 to 06:40)
+
+The maintainer gave the Deck for the night and asked for the roadmap's waiting checks to be run. A read-only helper
+sorted the 25 waiting entries: 5 the rig could run, 17 that need the maintainer (a finger, the mic, ears, a PIN, a
+call), 5 that cannot run here. Five Deck blocks ran; the bookkeeper wrote every result into the roadmap and testing
+documents.
+
+- **Passed:** closing "Show details" at the top of a scrolled answer; the Show details line's walk in and out; long
+  suggestion chips with a game running (timing, fade, holding still under the ring).
+- **Unclear, still owed:** the walk's two directions differ where the slot swaps between the Show details line and
+  chips; the "continued" mark inside a hidden block (the case never arose); short-chip centring; the notes block
+  with a game running.
+- **Terse mode's ten-question test ran three times** with Deep Rock Galactic: Survivor. Length held in 10, 9 and 7
+  of 10 answers (26 of 30). The menu of choices first showed on only 4 of 10, because the Deck's model spelled the
+  menu's fence with an underscore. Fixed overnight by the new Haiku high helper (`21f62344`, 24 cents); the last run
+  showed the menu on 10 of 10.
+- **One wrong turn, owned:** the first run's driver read the code box as "a menu with no fence", and a Sonnet high
+  fix was built on that reading (`2ccf4075`) before anyone checked the saved answer. That case was never actually
+  seen. The code is tested and only acts with Terse on; **the maintainer's call:** keep it or take it out.
+- **New findings on the roadmap:** a continued answer's saved text repeats paragraphs; "No close match in my notes"
+  shown while notes were attached; Terse repeats an earlier answer's menu; the slot swap above.
+- **The maintainer's call on Terse length:** the test asks for 8 of 10 in one run; one run passed (10), one passed (9),
+  one did not (7).

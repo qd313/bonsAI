@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 116,
-  "edgeCount": 317,
+  "fileCount": 117,
+  "edgeCount": 319,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -53,11 +53,11 @@
       "count": 12
     },
     {
-      "path": "py_modules/backend/ollama_urls.py",
-      "count": 9
+      "path": "py_modules/backend/services/strategy_guide_parse.py",
+      "count": 10
     },
     {
-      "path": "py_modules/backend/services/strategy_guide_parse.py",
+      "path": "py_modules/backend/ollama_urls.py",
       "count": 9
     },
     {
@@ -474,6 +474,10 @@
     },
     {
       "path": "py_modules/backend/services/strategy_entity_extraction.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/terse_bare_menu.py",
       "count": 1
     },
     {
@@ -1340,6 +1344,7 @@
         "py_modules/backend/services/ollama_window_fit.py",
         "py_modules/backend/services/soft_continue_spoiler_join.py",
         "py_modules/backend/services/strategy_guide_parse.py",
+        "py_modules/backend/services/terse_bare_menu.py",
         "py_modules/backend/services/token_accounting_service.py"
       ],
       "importedBy": [
@@ -1630,7 +1635,8 @@
         "py_modules/backend/services/reply_style_blocks.py",
         "py_modules/backend/services/spoiler_title_profiles.py",
         "py_modules/backend/services/strategy_entity_extraction.py",
-        "py_modules/backend/services/strategy_spoiler_policy.py"
+        "py_modules/backend/services/strategy_spoiler_policy.py",
+        "py_modules/backend/services/terse_bare_menu.py"
       ]
     },
     "py_modules/backend/services/strategy_spoiler_policy.py": {
@@ -1652,6 +1658,14 @@
         "main.py",
         "py_modules/backend/services/clipboard_service.py",
         "py_modules/backend/services/game_ai_request.py"
+      ]
+    },
+    "py_modules/backend/services/terse_bare_menu.py": {
+      "imports": [
+        "py_modules/backend/services/strategy_guide_parse.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/ollama_service.py"
       ]
     },
     "py_modules/backend/services/token_accounting_service.py": {

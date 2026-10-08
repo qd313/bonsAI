@@ -163,6 +163,7 @@ from backend.services.strategy_guide_parse import (
     hide_incomplete_strategy_branch_fence,
     hide_incomplete_strategy_checklist_fence,
 )
+from backend.services.terse_bare_menu import hide_bare_branch_menu, split_trailing_bare_branch_menu
 from backend.services.token_accounting_service import (
     choose_window_tokens,
     estimate_tokens_from_chars,
@@ -282,7 +283,11 @@ def post_ollama_chat(
 
     def _visible_from_raw(raw: str) -> tuple[Optional[str], str]:
         thinking, visible = extract_bonsai_status(raw)
-        return thinking, hide_incomplete_strategy_branch_fence(visible or "")
+        shown = hide_incomplete_strategy_branch_fence(visible or "")
+        if terse_branch_menu and mode != "strategy":
+            # Terse Speed: the small model sometimes writes the menu as bare JSON, no fence.
+            shown = hide_bare_branch_menu(shown)
+        return thinking, shown
 
     def _clear_continue_cue() -> None:
         if not on_delta:
@@ -469,6 +474,17 @@ def post_ollama_chat(
         checklist_marker = "bonsai-strategy-checklist" in strategy_source
 
         visible, strategy_guide_branches = extract_strategy_guide_branches(strategy_source)
+        if strategy_guide_branches is None and terse_branch_menu and mode != "strategy" and not branch_marker:
+            # Terse Speed only: a menu written as bare JSON with no fence (Deck 2026-10-08, three of
+            # ten answers showed it as text). Read it like a fenced one and take it out of the text.
+            bare_text, bare_branches = split_trailing_bare_branch_menu(strategy_source)
+            if bare_text != strategy_source:
+                logger.info(
+                    "ask_ollama: terse bare-JSON menu taken out of the reply parsed=%s",
+                    bare_branches is not None,
+                )
+                visible = bare_text or "Choose where you are stuck below."
+                strategy_guide_branches = bare_branches
         text = visible
         # Only a Strategy reply carries a checklist. A terse Speed reply is read for its menu alone,
         # so a checklist fence there is left exactly as it was (shown or not as before).

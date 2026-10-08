@@ -285,14 +285,14 @@ class TheMenuInASpeedReplyReachesTheScreen(unittest.TestCase):
         "```"
     )
 
-    def _post(self, mode, **kwargs):
-        stream = ndjson_response(
-            [
-                json.dumps({"message": {"role": "assistant", "content": self.REPLY}}),
-                json.dumps({"message": {"role": "assistant", "content": ""}, "done": True, "done_reason": "stop"}),
-            ]
-        )
-        with patch("backend.services.ollama_service.urllib.request.urlopen", return_value=stream):
+    def _post(self, mode, *, reply=None, piece=None, **kwargs):
+        """Run one streamed reply through the real call; every text the screen was handed lands in self.seen."""
+        reply = self.REPLY if reply is None else reply
+        pieces = [reply[i : i + piece] for i in range(0, len(reply), piece)] if piece else [reply]
+        lines = [json.dumps({"message": {"role": "assistant", "content": p}}) for p in pieces]
+        lines.append(json.dumps({"message": {"role": "assistant", "content": ""}, "done": True, "done_reason": "stop"}))
+        self.seen = []
+        with patch("backend.services.ollama_service.urllib.request.urlopen", return_value=ndjson_response(lines)):
             return post_ollama_chat(
                 "http://127.0.0.1:11434/api/chat",
                 "gemma4:e2b-it-qat",
@@ -306,6 +306,7 @@ class TheMenuInASpeedReplyReachesTheScreen(unittest.TestCase):
                 mode,
                 "5m",
                 cancel_requested=lambda: False,
+                on_delta=lambda text, done, thinking=None: self.seen.append(text),
                 think_effort="off",
                 **kwargs,
             )
@@ -329,6 +330,81 @@ class TheMenuInASpeedReplyReachesTheScreen(unittest.TestCase):
         self.assertEqual(plain["strategy_guide_branches"], flagged["strategy_guide_branches"])
         self.assertEqual(plain["response"], flagged["response"])
         self.assertIsNotNone(plain["strategy_guide_branches"])
+
+    # Question 8 of the Deck run on 2026-10-08 (Terse on, Speed), word for word: the answer, then
+    # the menu as bare JSON with no fence.
+    ANSWER_8 = (
+        "Pick one weapon to carry the run, see? Then spend the rest of your cash on making sure you "
+        "don't get instantly wiped out. That's the main way to keep your run going, mate."
+    )
+    MENU_8 = (
+        '{"question":"Which weapon should I focus on first?","options":[{"id":"a","label":"Details on '
+        'primary weapon choices"},{"id":"b","label":"Tips for survivability upgrades"}]}'
+    )
+    REPLY_8 = ANSWER_8 + "\n\n" + MENU_8
+
+    def _bare(self, reply, mode="speed", **kwargs):
+        """Stream `reply` in 17-letter pieces, as Ollama does."""
+        return self._post(mode, reply=reply, piece=17, **kwargs)
+
+    def test_a_bare_json_menu_gives_the_screen_two_choices_and_no_json_text(self):
+        out = self._bare(self.REPLY_8, terse_branch_menu=True)
+        branches = out["strategy_guide_branches"]
+        self.assertEqual(branches["question"], "Which weapon should I focus on first?")
+        self.assertEqual(
+            [(o["id"], o["label"]) for o in branches["options"]],
+            [("a", "Details on primary weapon choices"), ("b", "Tips for survivability upgrades")],
+        )
+        self.assertNotIn('{"question"', out["response"])
+        self.assertNotIn('"options"', out["response"])
+        self.assertEqual(out["response"].strip(), self.ANSWER_8)
+
+    def test_the_live_text_never_shows_any_of_the_bare_menu(self):
+        self._bare(self.REPLY_8, terse_branch_menu=True)
+        self.assertTrue(self.seen)
+        for text in self.seen:
+            self.assertNotIn("{", text)
+
+    def test_a_bare_menu_that_cannot_be_read_or_has_one_option_is_still_kept_off_the_screen(self):
+        for tail in (
+            '{"question":"Which weapon?","options":[{"id":"a","label":"One"},{"id":"b"',
+            '{"question":"Which?","options":[{"id":"a","label":"Only one"}]}',
+        ):
+            with self.subTest(tail=tail):
+                out = self._bare(self.ANSWER_8 + "\n\n" + tail, terse_branch_menu=True)
+                self.assertIsNone(out["strategy_guide_branches"])
+                self.assertNotIn("{", out["response"])
+                self.assertIn("Pick one weapon", out["response"])
+
+    def test_a_malformed_fence_is_kept_off_the_screen_too(self):
+        # Question 6 of the Deck run: a fence was written, with two ids in one option.
+        reply = (
+            self.ANSWER_8
+            + '\n```bonsai-strategy-branches\n{"question":"Which?","options":[{"id":"a","id":"b","label":"X"}'
+            + "\n```"
+        )
+        out = self._bare(reply, terse_branch_menu=True)
+        self.assertNotIn("bonsai-strategy-branches", out["response"])
+        self.assertNotIn('"options"', out["response"])
+
+    def test_with_terse_off_the_same_reply_is_left_exactly_as_it_is(self):
+        out = self._bare(self.REPLY_8)
+        self.assertIsNone(out["strategy_guide_branches"])
+        self.assertIn(self.MENU_8, out["response"])
+        self.assertIn(self.MENU_8, self.seen[-1])
+
+    def test_json_in_a_code_block_in_the_middle_of_an_answer_is_not_touched(self):
+        reply = 'Sample config:\n```json\n{"fps_limit": 40}\n```\nPaste that in and restart.'
+        out = self._bare(reply, terse_branch_menu=True)
+        self.assertIsNone(out["strategy_guide_branches"])
+        self.assertIn('{"fps_limit": 40}', out["response"])
+        self.assertIn("Paste that in", out["response"])
+
+    def test_strategy_mode_is_unchanged_by_a_bare_menu_with_the_flag_on(self):
+        plain = self._bare(self.REPLY_8, mode="strategy")
+        flagged = self._bare(self.REPLY_8, mode="strategy", terse_branch_menu=True)
+        self.assertEqual(plain["response"], flagged["response"])
+        self.assertEqual(plain["strategy_guide_branches"], flagged["strategy_guide_branches"])
 
 
 if __name__ == "__main__":

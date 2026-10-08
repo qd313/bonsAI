@@ -14,6 +14,7 @@ import {
   type BonsaiSessionSurvivalSnapshot,
 } from "./bonsaiSessionSurvival";
 import { DEFAULT_CAPABILITIES, DEFAULT_DESKTOP_APP_LOG_LEVEL, DEFAULT_MODEL_POLICY_TIER } from "../data/bonsaiSettingsSchema";
+import { buildInitialSessionSnapshot } from "../features/plugin-shell/initialSessionSnapshot";
 function minimalSnapshot(overrides: Partial<BonsaiSessionSurvivalSnapshot> = {}): BonsaiSessionSurvivalSnapshot {
   return {
     currentTab: "settings",
@@ -160,6 +161,10 @@ describe("bonsaiSessionSurvival", () => {
     expect(consumed?.navigationMessage).toBe("Opened: foo");
     finalizeSessionRestoreAfterRemount();
     expect(peekBonsaiSessionPendingRestore()).toBeNull();
+  });
+
+  it("a fresh session snapshot carries no settings-card row number", () => {
+    expect(Object.keys(buildInitialSessionSnapshot())).not.toContain("selectedIndex");
   });
 
   it("clear wipes pending restore", () => {

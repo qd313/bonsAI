@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 741,
-  "edgeCount": 2156,
+  "edgeCount": 2157,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3113,7 +3113,8 @@
       ],
       "importedBy": [
         "src/index.helpChip.test.tsx",
-        "src/index.tsx"
+        "src/index.tsx",
+        "src/utils/bonsaiSessionSurvival.test.ts"
       ]
     },
     "src/features/plugin-shell/jsdom.d.ts": {
@@ -6537,6 +6538,7 @@
     "src/utils/bonsaiSessionSurvival.test.ts": {
       "imports": [
         "src/data/bonsaiSettingsSchema.ts",
+        "src/features/plugin-shell/initialSessionSnapshot.ts",
         "src/utils/bonsaiSessionSurvival.ts"
       ],
       "importedBy": []

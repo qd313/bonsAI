@@ -30,6 +30,11 @@
  * class, and hands it straight on to the open chip. The open chip's fill is a
  * hand-drawn cue in a different colour from the ring, on purpose: an earlier
  * version glowed it in the ring's colour, which was unreadable next to it.
+ * Every chip is always drawn, at one size, none faded, and a step scrolls
+ * nothing: the row stays where it is while the panel under it changes height
+ * (useChipLadderReveal.ts; the whole answer jumped on every press before
+ * 2026-10-08). Down off the last chip first scrolls the end of a tall panel
+ * into view, then leaves.
  */
 import { useCallback, useRef, useState } from "react";
 import type { FocusEvent } from "react";
@@ -56,6 +61,7 @@ import {
 } from "../utils/contextChipsFromSnapshot";
 import { isOkDeckButtonEvent } from "../utils/focusNavigation";
 import { useChipLadderReveal } from "../hooks/useChipLadderReveal";
+import { scrollRestOfBodyIntoView } from "../utils/chatPanelScroll";
 import { elementHasFocus } from "../utils/uiDocument";
 import { focusRowElement } from "../utils/focusPerTurnRow";
 import { DECK_HIGHLIGHT_CYAN } from "../features/unified-input/constants";
@@ -142,9 +148,10 @@ export type ContextChipLadderProps = {
  *    however many there are: a row that adds, drops or resizes a chip as you
  *    step re-wraps and shifts the whole answer above it (2026-10-08).
  * 4. Left/Right and Up/Down all move the same active chip. Moving right or
- *    down off the last chip, or left/up off the first, falls through to
- *    onMoveDownFromLadder/onMoveUpFromLadder so the D-pad can leave the
- *    ladder entirely.
+ *    down off the last chip (after scrolling the rest of a tall panel into
+ *    view, if some of it is behind the dock), or left/up off the first,
+ *    falls through to onMoveDownFromLadder/onMoveUpFromLadder so the D-pad
+ *    can leave the ladder entirely.
  * 5. Draw the chip row, the open chip marked by its fill and border only,
  *    then hand the active chip to ChipExpandedBody() to draw its details below.
  */
@@ -164,7 +171,8 @@ export function ContextChipLadder({
   const [activeIndex, setActiveIndex] = useState(0);
   const ladderElRef = useRef<HTMLElement | null>(null);
   const rowElRef = useRef<HTMLElement | null>(null);
-  const { duringStep, onFocusInside } = useChipLadderReveal(ladderElRef, rowElRef);
+  const bodyElRef = useRef<HTMLElement | null>(null);
+  const { duringStep, keepInView, onFocusInside } = useChipLadderReveal(ladderElRef, rowElRef);
   /* Each drawn chip's own element, by its index in `chips`; the open chip's index as last drawn. */
   const chipEls = useRef(new Map<number, HTMLElement>());
   const openIndexRef = useRef(0);
@@ -247,9 +255,22 @@ export function ContextChipLadder({
       setActiveIndex(idx);
       ringOnChip(idx);
     });
+    keepInView(chipEls.current.get(idx));
     return true;
   };
-  const leaveDown = () => Boolean(onMoveDownFromLadder?.());
+  /*
+   * Down (or Right) off the last chip. A panel taller than the room under the row has its end behind
+   * the dock while the row stays put (the maintainer, 2026-10-08: "it gets to the end and then the
+   * focus moves to the text box ... but the answer also scrolls still"). So the first press scrolls
+   * the rest of the panel into view and keeps the ring on the chip; the next press leaves. Not a new
+   * stop: the ring does not move. When the panel already fits, or the pane has no scroll left, the
+   * press leaves at once.
+   */
+  const leaveDown = () => {
+    const body = bodyElRef.current;
+    if (body && scrollRestOfBodyIntoView(body)) return true;
+    return Boolean(onMoveDownFromLadder?.());
+  };
   const chipMoves = (idx: number) => ({
     onMoveLeft: () => (idx > 0 ? stepTo(idx - 1) : false),
     onMoveRight: () => (idx < last ? stepTo(idx + 1) : leaveDown()),
@@ -368,6 +389,9 @@ export function ContextChipLadder({
         chip={active}
         devDiagnostics={active.id === "developer" ? devDiagnostics : null}
         creditsView={creditsView}
+        bodyRef={(el) => {
+          bodyElRef.current = el;
+        }}
       />
     </Focusable>
   );
@@ -403,10 +427,13 @@ function ChipExpandedBody({
   chip,
   devDiagnostics,
   creditsView = CREDITS_SHOWN,
+  bodyRef,
 }: {
   chip: ContextChip;
   devDiagnostics?: AskDiagnosticsSnapshot | null;
   creditsView?: CreditsView;
+  /** Hands the panel's own element back, so the ladder can scroll the end of a tall one into view. */
+  bodyRef?: (el: HTMLDivElement | null) => void;
 }) {
   const creditsHidden = creditsView.hidden;
   const bullets = chipBodyBullets(chip);
@@ -415,6 +442,7 @@ function ChipExpandedBody({
   const devJson = chipDevJson(chip);
   return (
     <div
+      ref={bodyRef}
       style={{
         width: "100%",
         boxSizing: "border-box",

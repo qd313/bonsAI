@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 747,
-  "edgeCount": 2177,
+  "edgeCount": 2178,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -186,6 +186,7 @@
       "imports": [
         "src/features/unified-input/constants.ts",
         "src/hooks/useChipLadderReveal.ts",
+        "src/utils/chatPanelScroll.ts",
         "src/utils/contextChipsFromSnapshot.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/focusPerTurnRow.ts",
@@ -6862,6 +6863,7 @@
     "src/utils/chatPanelScroll.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/ContextChipLadder.tsx",
         "src/components/DrgGlossaryTermChip.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-sum-up/SessionTitleOffer.tsx",

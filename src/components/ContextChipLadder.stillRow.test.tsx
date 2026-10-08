@@ -73,7 +73,9 @@ function chip(label: string, i: number): ContextChip {
   };
 }
 
-const SNAPSHOT = { context_chips: LABELS.map(chip) } as unknown as TransparencySnapshot;
+function snapshotOf(labels: string[]): TransparencySnapshot {
+  return { context_chips: labels.map(chip) } as unknown as TransparencySnapshot;
+}
 
 type Scene = {
   pane: HTMLElement;
@@ -90,11 +92,18 @@ function screenY(pane: HTMLElement, docY: number): number {
   return PANE_TOP + docY - pane.scrollTop;
 }
 
-function mountScene(ladderScreenTop = LADDER_SCREEN_TOP): Scene {
+type SceneOptions = {
+  ladderScreenTop?: number;
+  labels?: string[];
+  /** The pane's total scroll height; the default leaves far more room than any test scrolls. */
+  scrollHeight?: number;
+};
+
+function mountScene({ ladderScreenTop = LADDER_SCREEN_TOP, labels = LABELS, scrollHeight = 4000 }: SceneOptions = {}): Scene {
   const LADDER_DOC_TOP = ladderScreenTop - PANE_TOP + START_SCROLL;
   const pane = document.createElement("div");
   pane.className = "_TabContentsScroll";
-  Object.defineProperty(pane, "scrollHeight", { value: 4000, configurable: true });
+  Object.defineProperty(pane, "scrollHeight", { value: scrollHeight, configurable: true });
   Object.defineProperty(pane, "clientHeight", { value: PANE_BOTTOM - PANE_TOP, configurable: true });
   pane.scrollTop = START_SCROLL;
   pane.getBoundingClientRect = () => ({ top: PANE_TOP, bottom: PANE_BOTTOM }) as DOMRect;
@@ -107,7 +116,7 @@ function mountScene(ladderScreenTop = LADDER_SCREEN_TOP): Scene {
   const host = document.createElement("div");
   pane.appendChild(host);
   const onLeave = vi.fn(() => true);
-  const { container } = render(<ContextChipLadder snapshot={SNAPSHOT} onMoveDownFromLadder={onLeave} />, {
+  const { container } = render(<ContextChipLadder snapshot={snapshotOf(labels)} onMoveDownFromLadder={onLeave} />, {
     container: host,
   });
   const ladder = container.querySelector(".bonsai-chip-ladder") as HTMLElement;
@@ -237,7 +246,7 @@ describe("the chip row holds still while the panel under it changes height", () 
   });
 
   it("scrolls once on arrival to leave room under the row for a panel, then holds still", () => {
-    const scene = mountScene(430);
+    const scene = mountScene({ ladderScreenTop: 430 });
     expect(rowTop(scene)).toBe(452);
     ringArrives(scene);
     const arrived = rowTop(scene);
@@ -250,5 +259,68 @@ describe("the chip row holds still while the panel under it changes height", () 
       settle();
       expect(rowTop(scene)).toBe(arrived);
     }
+  });
+});
+
+/** Down presses until the open chip is the last one. */
+function walkToLastChip(scene: Scene): void {
+  for (let i = 0; i < scene.chips.length - 1; i += 1) pressDown();
+  settle();
+}
+
+describe("a panel taller than the room can be read to its end before Down leaves the answer", () => {
+  it("scrolls the end of the last chip's panel above the dock on the first Down, and leaves on the second", () => {
+    const scene = mountScene();
+    ringArrives(scene);
+    walkToLastChip(scene);
+    expect(openLabel(scene.ladder)).toBe("Developer details");
+    const body = scene.ladder.lastElementChild as HTMLElement;
+    expect(body.getBoundingClientRect().bottom).toBeGreaterThan(DOCK_TOP);
+
+    expect(pressDown()).toBe(true);
+    settle();
+    expect(scene.onLeave).not.toHaveBeenCalled();
+    expect(body.getBoundingClientRect().bottom).toBeLessThanOrEqual(DOCK_TOP);
+
+    pressDown();
+    expect(scene.onLeave).toHaveBeenCalledTimes(1);
+  });
+
+  it("leaves at once when the last chip's panel already fits", () => {
+    const scene = mountScene({ labels: ["Reply style", "Thinking"] });
+    ringArrives(scene);
+    pressDown();
+    settle();
+    expect(openLabel(scene.ladder)).toBe("Thinking");
+
+    pressDown();
+    expect(scene.onLeave).toHaveBeenCalledTimes(1);
+  });
+
+  it("leaves at once when the pane has no scroll left to give", () => {
+    const scene = mountScene({ scrollHeight: START_SCROLL + (PANE_BOTTOM - PANE_TOP) });
+    ringArrives(scene);
+    walkToLastChip(scene);
+
+    pressDown();
+    expect(scene.onLeave).toHaveBeenCalledTimes(1);
+  });
+
+  it("brings the chip row back into view when Up steps off the end after reading it", () => {
+    const scene = mountScene();
+    ringArrives(scene);
+    walkToLastChip(scene);
+    pressDown();
+    settle();
+    expect(scene.chips[0]!.getBoundingClientRect().top).toBeLessThan(PANE_TOP);
+
+    act(() => {
+      (openChipProps().onMoveUp as () => boolean)();
+    });
+    settle();
+
+    expect(openLabel(scene.ladder)).toBe("Spoiler risk");
+    expect(scene.chips[0]!.getBoundingClientRect().top).toBeGreaterThanOrEqual(PANE_TOP);
+    expect(scene.chips[0]!.getBoundingClientRect().bottom).toBeLessThanOrEqual(DOCK_TOP);
   });
 });

@@ -11,10 +11,12 @@
  *         once, to clear the ladder and to leave room under the row for a typical panel (so most
  *         panels are readable without further scrolling), and any press in the chips cancels the
  *         passes still queued from that arrival.
- * Does not: Scroll for a step, or move the ring. Never scrolls once the ring has left the chips.
+ * Does not: Scroll to clear a step's panel from the dock, or move the ring. Never scrolls once the
+ *           ring has left the chips. The only scroll after a step is bringing the chip holding the
+ *           ring back into view, when the person had scrolled it off the top reading a long panel.
  */
 import { useCallback, useRef, type FocusEvent, type RefObject } from "react";
-import { revealBelowKeepingAsItSettles } from "../utils/chatPanelScroll";
+import { bringIntoReadableBand, revealBelowKeepingAsItSettles } from "../utils/chatPanelScroll";
 import { elementHasGamepadFocus } from "../utils/uiDocument";
 
 /**
@@ -24,6 +26,21 @@ import { elementHasGamepadFocus } from "../utils/uiDocument";
  */
 const PANEL_ROOM_PX = 200;
 
+/**
+ * The ladder's scrolling rules, as three handles.
+ *
+ * In: the ladder's own element and its chip row's element (both refs kept by the ladder).
+ * Out: `duringStep` (wrap the ladder moving the ring itself), `keepInView` (call after a step with
+ * the chip now holding the ring) and `onFocusInside` (the ladder's focus handler).
+ *
+ * What can go wrong: nothing throws; every scroll is a pass that measures first and does nothing
+ * when the ring has left the ladder or a newer press has come.
+ *
+ * 1. A focus coming in from outside the ladder is the ring's arrival: scroll once to clear the
+ *    ladder from the dock and leave room under the row, on the settle schedule.
+ * 2. A step bumps the generation so those queued passes do nothing, and scrolls nothing itself.
+ * 3. After a step, a chip that is out of view is brought into view; one already on screen is not.
+ */
 export function useChipLadderReveal(
   ladderElRef: RefObject<HTMLElement | null>,
   rowElRef: RefObject<HTMLElement | null>,
@@ -57,6 +74,26 @@ export function useChipLadderReveal(
     }
   }, []);
 
+  /**
+   * After a step: if the chip now holding the ring is out of view (the person had scrolled down to
+   * the end of a long panel, which carried the row off the top), scroll just enough to show it. A
+   * chip already on screen is never touched, so a plain step does not move the answer.
+   */
+  const keepInView = useCallback(
+    (chip: HTMLElement | null | undefined) => {
+      if (!chip) return;
+      const generation = generationRef.current;
+      const pass = () => {
+        const ladder = ladderElRef.current;
+        if (generation !== generationRef.current || !chip.isConnected) return;
+        if (ladder && elementHasGamepadFocus(ladder)) bringIntoReadableBand(chip);
+      };
+      pass();
+      requestAnimationFrame(pass);
+    },
+    [ladderElRef],
+  );
+
   /** Call on every focus event inside the ladder: reveals only when the ring came in from outside. */
   const onFocusInside = useCallback(
     (e: FocusEvent<HTMLElement>) => {
@@ -68,5 +105,5 @@ export function useChipLadderReveal(
     [revealOnArrival],
   );
 
-  return { duringStep, onFocusInside };
+  return { duringStep, keepInView, onFocusInside };
 }

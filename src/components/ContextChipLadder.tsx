@@ -55,8 +55,8 @@ import {
   SPOILER_HIDDEN_CREDITS_TEXT,
 } from "../utils/contextChipsFromSnapshot";
 import { isOkDeckButtonEvent } from "../utils/focusNavigation";
-import { revealBelowKeepingAsItSettles } from "../utils/chatPanelScroll";
-import { elementHasFocus, elementHasGamepadFocus } from "../utils/uiDocument";
+import { useChipLadderReveal } from "../hooks/useChipLadderReveal";
+import { elementHasFocus } from "../utils/uiDocument";
 import { focusRowElement } from "../utils/focusPerTurnRow";
 import { DECK_HIGHLIGHT_CYAN } from "../features/unified-input/constants";
 
@@ -163,6 +163,8 @@ export function ContextChipLadder({
   const [expanded, setExpanded] = useState(!collapsedHint);
   const [activeIndex, setActiveIndex] = useState(0);
   const ladderElRef = useRef<HTMLElement | null>(null);
+  const rowElRef = useRef<HTMLElement | null>(null);
+  const { duringStep, onFocusInside } = useChipLadderReveal(ladderElRef, rowElRef);
   /* Each drawn chip's own element, by its index in `chips`; the open chip's index as last drawn. */
   const chipEls = useRef(new Map<number, HTMLElement>());
   const openIndexRef = useRef(0);
@@ -228,22 +230,6 @@ export function ContextChipLadder({
   }
 
   /*
-   * Keep the ladder holding the ring clear of the dock, its own top (the chip row) kept on screen.
-   * A step changes the details drawn under the chips, so the ladder grows or shrinks with no new
-   * focus event for the dock lift to answer: measured on the Deck, the ringed ladder read 33% to
-   * 67% visible at several steps (plan64-DETAILS-LADDER-01-try2.json) and sat 67 px under the
-   * question box on its last chip (plan72-Z-FREEPLAY.json finding 1). Scrolls only, on the settle
-   * schedule, after the new chip has drawn; never moves the ring.
-   */
-  const revealWhileRinged = () => {
-    const el = ladderElRef.current;
-    /* Every pass asks again: a pass still pending when the ring leaves must not scroll the answer. */
-    if (el && elementHasGamepadFocus(el)) {
-      revealBelowKeepingAsItSettles(el, () => el, undefined, { stillWanted: () => elementHasGamepadFocus(el) });
-    }
-  };
-
-  /*
    * Every chip carries its own moves, because Steam calls them on the element holding the ring.
    * A step is a plain focus() onto the next chip: the chips are siblings inside this one
    * container, the case AGENTS.md ("The Steam Deck focus graph") says a plain focus() carries the
@@ -251,9 +237,16 @@ export function ContextChipLadder({
    */
   const last = chips.length - 1;
   const stepTo = (idx: number): boolean => {
-    setActiveIndex(idx);
-    ringOnChip(idx);
-    revealWhileRinged();
+    /*
+     * A step changes the panel drawn under the row and nothing else: the row stays exactly where it
+     * is on screen (maintainer's recording, 2026-10-08: the whole answer jumped on every press when
+     * a step also scrolled to clear the new panel from the dock). Only the ring's arrival scrolls;
+     * see useChipLadderReveal.
+     */
+    duringStep(() => {
+      setActiveIndex(idx);
+      ringOnChip(idx);
+    });
     return true;
   };
   const leaveDown = () => Boolean(onMoveDownFromLadder?.());
@@ -268,7 +261,7 @@ export function ContextChipLadder({
    * The root itself is focused by name or class from outside (the tabs row, Up from the chips
    * below, the reply's own Down chain). Hand that on to the open chip once the focus event has
    * finished, so Steam has seen the root's focus before the chip's and the chip's is the last
-   * word. A chip's own focus bubbles here too; it only needs the reveal.
+   * word. A chip's own focus bubbles here too; it counts as an arrival only if it came from outside.
    */
   const onLadderFocus = (e: FocusEvent<HTMLElement>) => {
     const root = e.currentTarget;
@@ -278,7 +271,7 @@ export function ContextChipLadder({
         if (elementHasFocus(root) && !onAChip) ringOnChip(openIndexRef.current);
       });
     }
-    revealWhileRinged();
+    onFocusInside(e);
   };
 
   /*
@@ -318,6 +311,9 @@ export function ContextChipLadder({
         Chip {safeIndex + 1} of {chips.length}
       </div>
       <div
+        ref={(el) => {
+          rowElRef.current = el;
+        }}
         style={{
           display: "flex",
           flexDirection: "row",

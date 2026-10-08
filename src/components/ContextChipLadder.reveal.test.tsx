@@ -7,8 +7,11 @@
  * Used for: ContextChipLadder.tsx, using chatPanelScroll.ts's revealBelowKeeping.
  * Solves: Stepping between its chips changes what the ladder shows (the open chip's details
  *         grow or shrink underneath) with no focus event on the ladder for the dock lift to
- *         answer (since plan 79 the ring moves chip to chip, inside it). The ladder now scrolls itself clear when it takes the ring and after every
- *         step, keeping its own top (the chip row) on screen. Scrolling only; it never moves the ring.
+ *         answer (since plan 79 the ring moves chip to chip, inside it). The ladder scrolls itself
+ *         clear when it takes the ring, keeping its own top (the chip row) on screen. It does NOT
+ *         scroll again for a step (2026-10-08: scrolling for every step moved the whole answer on
+ *         every press; ContextChipLadder.stillRow.test.tsx holds the row still). Scrolling only;
+ *         it never moves the ring.
  * Does not: Prove it on the Deck. jsdom has no layout, so every box reads its place from the pane's
  *           scrollTop, the way the real screen would move it.
  */
@@ -105,15 +108,13 @@ afterEach(() => {
 });
 
 describe("the chip ladder holding the ring stays above the dock", () => {
-  it("a step down the chips scrolls the ladder clear of the dock (the measured 284-652 against 586)", () => {
+  it("the ring arriving scrolls the ladder clear of the dock (the measured 284-652 against 586)", () => {
     const pane = deckPane();
     const ladder = mountLadder(pane);
     place(ladder, pane, 284, 652);
     ringOn(ladder);
 
-    act(() => {
-      (ladderProps().onMoveDown as () => boolean)();
-    });
+    fireEvent.focus(ladder);
     act(() => {
       vi.runAllTimers();
     });
@@ -129,9 +130,7 @@ describe("the chip ladder holding the ring stays above the dock", () => {
     place(ladder, pane, 300, 1000);
     ringOn(ladder);
 
-    act(() => {
-      (ladderProps().onMoveDown as () => boolean)();
-    });
+    fireEvent.focus(ladder);
     act(() => {
       vi.runAllTimers();
     });
@@ -140,18 +139,20 @@ describe("the chip ladder holding the ring stays above the dock", () => {
     expect(ladder.getBoundingClientRect().top).toBeLessThan(PANE_TOP + 20);
   });
 
-  it("taking the ring scrolls it clear too", () => {
+  it("a step between the chips leaves the pane where it is, even with the ladder behind the dock", () => {
     const pane = deckPane();
     const ladder = mountLadder(pane);
-    place(ladder, pane, 400, 640);
+    place(ladder, pane, 284, 652);
     ringOn(ladder);
 
-    fireEvent.focus(ladder);
+    act(() => {
+      (ladderProps().onMoveDown as () => boolean)();
+    });
     act(() => {
       vi.runAllTimers();
     });
 
-    expect(ladder.getBoundingClientRect().bottom).toBeLessThanOrEqual(DOCK_TOP);
+    expect(pane.scrollTop).toBe(START_SCROLL);
   });
 
   it("leaves the view alone while the ring is somewhere else", () => {

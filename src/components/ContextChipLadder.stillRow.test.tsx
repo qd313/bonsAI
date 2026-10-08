@@ -46,8 +46,8 @@ const PANE_TOP = 88;
 const PANE_BOTTOM = 766;
 const DOCK_TOP = 586;
 const START_SCROLL = 1200;
-/* Document-space y of the ladder's top: 260 on screen at START_SCROLL. */
-const LADDER_DOC_TOP = 260 - PANE_TOP + START_SCROLL;
+/* Where the ladder's top sits on screen at START_SCROLL, unless a test says otherwise. */
+const LADDER_SCREEN_TOP = 260;
 const CAPTION_H = 16;
 const ROW_H = 60;
 const GAP = 8;
@@ -90,7 +90,8 @@ function screenY(pane: HTMLElement, docY: number): number {
   return PANE_TOP + docY - pane.scrollTop;
 }
 
-function mountScene(): Scene {
+function mountScene(ladderScreenTop = LADDER_SCREEN_TOP): Scene {
+  const LADDER_DOC_TOP = ladderScreenTop - PANE_TOP + START_SCROLL;
   const pane = document.createElement("div");
   pane.className = "_TabContentsScroll";
   Object.defineProperty(pane, "scrollHeight", { value: 4000, configurable: true });
@@ -120,6 +121,7 @@ function mountScene(): Scene {
   ladder.getBoundingClientRect = () =>
     box(LADDER_DOC_TOP, bodyDocTop - LADDER_DOC_TOP + bodyHeight())();
   for (const c of chips) c.getBoundingClientRect = box(rowDocTop, 24);
+  chips[0]!.parentElement!.getBoundingClientRect = box(rowDocTop, ROW_H);
   const body = ladder.lastElementChild as HTMLElement;
   body.getBoundingClientRect = () => box(bodyDocTop, bodyHeight())();
   return { pane, ladder, chips, onLeave };
@@ -141,7 +143,7 @@ function ringArrives(scene: Scene): void {
   });
 }
 
-/** One Down press on the chip holding the ring, then everything that was queued settles. */
+/** One Down press on the chip holding the ring. */
 function pressDown(): boolean {
   let claimed = false;
   act(() => {
@@ -181,5 +183,72 @@ describe("the answer stops scrolling once the ring has left the chips", () => {
     });
 
     expect(scene.pane.scrollTop).toBe(scrollWhenItLeft);
+  });
+});
+
+/** The top edge of the chip row, which is also where every chip sits. */
+function rowTop(scene: Scene): number {
+  return scene.chips[0]!.getBoundingClientRect().top;
+}
+
+function settle(): void {
+  act(() => {
+    vi.runAllTimers();
+  });
+}
+
+describe("the chip row holds still while the panel under it changes height", () => {
+  it("keeps the row's top edge in the same place through a walk down every chip and back up", () => {
+    const scene = mountScene();
+    ringArrives(scene);
+    const start = rowTop(scene);
+    const seen: Array<[string, number]> = [[openLabel(scene.ladder), start]];
+
+    for (let i = 0; i < LABELS.length - 1; i += 1) {
+      pressDown();
+      settle();
+      seen.push([openLabel(scene.ladder), rowTop(scene)]);
+    }
+    for (let i = 0; i < LABELS.length - 1; i += 1) {
+      act(() => {
+        (openChipProps().onMoveUp as () => boolean)();
+      });
+      settle();
+      seen.push([openLabel(scene.ladder), rowTop(scene)]);
+    }
+
+    expect(seen.map(([label]) => label)).toEqual([...LABELS, ...LABELS.slice(0, -1).reverse()]);
+    expect(seen.map(([, top]) => top)).toEqual(seen.map(() => start));
+  });
+
+  it("does not move the row when a press comes before the arrival's own passes have run", () => {
+    const scene = mountScene();
+    scene.chips[0]!.setAttribute("tabindex", "-1");
+    act(() => {
+      scene.chips[0]!.focus();
+    });
+    const start = rowTop(scene);
+    pressDown();
+    pressDown();
+    settle();
+
+    expect(openLabel(scene.ladder)).toBe("Game context");
+    expect(rowTop(scene)).toBe(start);
+  });
+
+  it("scrolls once on arrival to leave room under the row for a panel, then holds still", () => {
+    const scene = mountScene(430);
+    expect(rowTop(scene)).toBe(452);
+    ringArrives(scene);
+    const arrived = rowTop(scene);
+
+    /* A short panel fitted without any scroll; the row still gives up the room a typical one needs. */
+    expect(arrived).toBeLessThan(452);
+    expect(arrived + ROW_H + 150).toBeLessThanOrEqual(DOCK_TOP);
+    for (let i = 0; i < LABELS.length - 1; i += 1) {
+      pressDown();
+      settle();
+      expect(rowTop(scene)).toBe(arrived);
+    }
   });
 });

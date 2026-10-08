@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 746,
-  "edgeCount": 2175,
+  "fileCount": 747,
+  "edgeCount": 2177,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -185,7 +185,7 @@
     "src/components/ContextChipLadder.tsx": {
       "imports": [
         "src/features/unified-input/constants.ts",
-        "src/utils/chatPanelScroll.ts",
+        "src/hooks/useChipLadderReveal.ts",
         "src/utils/contextChipsFromSnapshot.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/focusPerTurnRow.ts",
@@ -4348,6 +4348,15 @@
         "src/index.tsx"
       ]
     },
+    "src/hooks/useChipLadderReveal.ts": {
+      "imports": [
+        "src/utils/chatPanelScroll.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/components/ContextChipLadder.tsx"
+      ]
+    },
     "src/hooks/useDisclaimerAndLocalRuntimeGates.saveFirst.test.tsx": {
       "imports": [
         "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
@@ -6853,12 +6862,12 @@
     "src/utils/chatPanelScroll.ts": {
       "imports": [],
       "importedBy": [
-        "src/components/ContextChipLadder.tsx",
         "src/components/DrgGlossaryTermChip.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-sum-up/SessionTitleOffer.tsx",
         "src/features/details-slot/DetailsSlot.tsx",
         "src/features/details-slot/detailsSlotStore.ts",
+        "src/hooks/useChipLadderReveal.ts",
         "src/hooks/useDockClearanceOnFocus.ts",
         "src/hooks/useKbNotesFold.ts",
         "src/hooks/useStreamScrollPin.ts",
@@ -8302,6 +8311,7 @@
         "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarSettingsCardRows.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useChipLadderReveal.ts",
         "src/hooks/useHandRingOnGone.ts",
         "src/hooks/useLiveTurnHeaderRingRestore.ts",
         "src/hooks/useMainTabAskBarFocus.test.ts",

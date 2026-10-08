@@ -149,14 +149,20 @@ export function scrollElementTopToPaneTop(el: HTMLElement, padPx = 4): boolean {
  * the pane. Plain scrollTop arithmetic, for the scroll-padding reason on scrollElementTopToPaneTop.
  * Plan 70 flow 4.2 (docs/test-evidence/plan70-F4-SHOW-DETAILS.json): Show details opened its panel
  * with the tab row at y 617 behind the dock (top 600) and no scroll, so nothing seemed to happen.
- * Returns true when it moved the pane.
+ * `roomBelowPx` asks for that much clear room under `el` too (a row of chips that is about to have
+ * a panel of unknown height drawn under it). Returns true when it moved the pane.
  */
-export function revealBelowKeeping(el: HTMLElement, keep: HTMLElement | null, padPx = 8): boolean {
+export function revealBelowKeeping(
+  el: HTMLElement,
+  keep: HTMLElement | null,
+  padPx = 8,
+  roomBelowPx = 0
+): boolean {
   const pane = findScrollablePanel(el);
   if (!pane) return false;
   const rect = el.getBoundingClientRect();
   const paneTop = pane.getBoundingClientRect().top;
-  let delta = rect.bottom + padPx - readableBottomOf(pane);
+  let delta = rect.bottom + roomBelowPx + padPx - readableBottomOf(pane);
   delta = Math.min(delta, rect.top - paneTop - padPx);
   if (keep && keep !== el && pane.contains(keep)) {
     delta = Math.min(delta, keep.getBoundingClientRect().top - paneTop - padPx);
@@ -169,6 +175,8 @@ export function revealBelowKeeping(el: HTMLElement, keep: HTMLElement | null, pa
 
 /** Extras for revealBelowKeepingAsItSettles. */
 export type SettleRevealOptions = {
+  /** Room to keep clear under `el`, on top of `el` itself (see revealBelowKeeping). */
+  roomBelowPx?: number;
   /**
    * Asked before every pass: false drops that pass. A caller whose ring has since moved on must not
    * have a pass still pending from its last press scroll the pane a second later: measured on the
@@ -194,7 +202,7 @@ export function revealBelowKeepingAsItSettles(
   const pass = () => {
     if (!el.isConnected) return;
     if (options.stillWanted && !options.stillWanted()) return;
-    revealBelowKeeping(el, keep());
+    revealBelowKeeping(el, keep(), 8, options.roomBelowPx ?? 0);
   };
   requestAnimationFrame(pass);
   delaysMs.forEach((delayMs) => window.setTimeout(pass, delayMs));

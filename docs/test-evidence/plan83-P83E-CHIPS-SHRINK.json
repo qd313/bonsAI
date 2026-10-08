@@ -1,0 +1,56 @@
+{
+  "build_commit": "1fc1551c (per runbook; not re-read on the Deck)",
+  "deck_time_local": "2026-10-08 about 19:24-19:27 EDT (Deck clock 7:23-7:26 PM)",
+  "screen": "Page window 855x766, device pixel ratio 1.28; screenshots are 1920x1080 (looks like the monitor, not the built-in 1280x800 panel). Panel width 300 css px. Plugin Main tab, chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?', answer to 'How do I set up voice input on the Deck?', This answer tab.",
+  "setup": "Keep-awake taken 120 min (expiresAt 2026-10-09T01:23:15Z). Plugin opened (first try ok). Walked Up to the answer's Show details, A, opened. Down to tab strip, Down to chip 1. No setting changed. No question asked.",
+  "row": "P83E-CHIPS-SHRINK",
+  "pressed": "From chip 7 with the pane at its end (scrollTop 402.3, row top 193.5), Up x6 to chip 1, read after each",
+  "seen": {
+    "start": {
+      "chip": 7,
+      "row_top": 193.5,
+      "scrollTop": 402.3,
+      "chip_y": [
+        315,
+        339
+      ],
+      "row_off_top": false
+    },
+    "stops": [
+      {
+        "chip": 6,
+        "row_top": 391.9,
+        "scrollTop": 203.9
+      },
+      {
+        "chip": 5,
+        "row_top": 391.9,
+        "scrollTop": 203.9
+      },
+      {
+        "chip": 4,
+        "row_top": 391.9,
+        "scrollTop": 203.9
+      },
+      {
+        "chip": 3,
+        "row_top": 391.9,
+        "scrollTop": 203.9
+      },
+      {
+        "chip": 2,
+        "row_top": 391.9,
+        "scrollTop": 203.9
+      },
+      {
+        "chip": 1,
+        "row_top": 391.9,
+        "scrollTop": 203.9
+      }
+    ],
+    "jump": "first Up (chip 7 to chip 6): row top 193.5 -> 391.9 (198.4 px), pane scrollTop 402.3 -> 203.9, scrollHeight 1080 -> 882; the ringed chip was on screen before and after (y 315-339, then 483-507)",
+    "note": "The row was not off the top at the start (193.5), the runbook expected it might be; the chip was fully visible. Screenshot of the start state saved."
+  },
+  "expected": "row top stays put between stops once the ringed chip is back on screen",
+  "verdict": "FAIL - the shrink risk is real: the first Up pulled the pane back 198.4 px and the whole row moved down 198.4 px, with the ringed chip on screen both times. After that, 5 more stops held still at 391.9."
+}

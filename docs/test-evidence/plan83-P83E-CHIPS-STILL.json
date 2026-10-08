@@ -1,0 +1,137 @@
+{
+  "build_commit": "1fc1551c (per runbook; not re-read on the Deck)",
+  "deck_time_local": "2026-10-08 about 19:24-19:27 EDT (Deck clock 7:23-7:26 PM)",
+  "screen": "Page window 855x766, device pixel ratio 1.28; screenshots are 1920x1080 (looks like the monitor, not the built-in 1280x800 panel). Panel width 300 css px. Plugin Main tab, chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?', answer to 'How do I set up voice input on the Deck?', This answer tab.",
+  "setup": "Keep-awake taken 120 min (expiresAt 2026-10-09T01:23:15Z). Plugin opened (first try ok). Walked Up to the answer's Show details, A, opened. Down to tab strip, Down to chip 1. No setting changed. No question asked.",
+  "row": "P83E-CHIPS-STILL",
+  "pressed": "Down x1 each from chip 1 to chip 7, then Up x1 each back to chip 1; read after each press (pane read at about 0.1-0.3 s after press, plus a second read on chip 2 that matched; press-to-read gap is not a full 1 s)",
+  "seen": {
+    "stops": [
+      {
+        "stop": "1 first",
+        "chip": 1,
+        "label": "Keyword + meaning",
+        "row_top_y": 261.5,
+        "wrapped_rows": 5,
+        "pane_scrollTop_over_scrollHeight": "scrollTop 334.4/1060",
+        "details_box_bottom_vs_ask_top_634_1": "box bottom 649.1 vs ask 634.1: hidden by 15"
+      },
+      {
+        "stop": "2 down",
+        "chip": 2,
+        "label": "KB: 14 sections",
+        "row_top_y": 391.9,
+        "wrapped_rows": 5,
+        "pane_scrollTop_over_scrollHeight": "203.9/882",
+        "details_box_bottom_vs_ask_top_634_1": "601.3 visible"
+      },
+      {
+        "stop": "3 down",
+        "chip": 3,
+        "label": "Reply style: balanced",
+        "row_top_y": 391.9,
+        "wrapped_rows": 5,
+        "pane_scrollTop_over_scrollHeight": "203.9/882",
+        "details_box_bottom_vs_ask_top_634_1": "601.3 visible"
+      },
+      {
+        "stop": "4 down",
+        "chip": 4,
+        "label": "Thinking",
+        "row_top_y": 391.9,
+        "wrapped_rows": 5,
+        "pane_scrollTop_over_scrollHeight": "203.9/913",
+        "details_box_bottom_vs_ask_top_634_1": "633.2 visible (0.9 px)"
+      },
+      {
+        "stop": "5 down",
+        "chip": 5,
+        "label": "Spoiler risk: med",
+        "row_top_y": 391.9,
+        "wrapped_rows": 5,
+        "pane_scrollTop_over_scrollHeight": "203.9/961",
+        "details_box_bottom_vs_ask_top_634_1": "681.0 hidden by 47"
+      },
+      {
+        "stop": "6 down",
+        "chip": 6,
+        "label": "Routed gemma4:e2b-it-qat",
+        "row_top_y": 391.9,
+        "wrapped_rows": 5,
+        "pane_scrollTop_over_scrollHeight": "203.9/882",
+        "details_box_bottom_vs_ask_top_634_1": "601.3 visible"
+      },
+      {
+        "stop": "7 down",
+        "chip": 7,
+        "label": "Developer details",
+        "row_top_y": 391.9,
+        "wrapped_rows": 5,
+        "pane_scrollTop_over_scrollHeight": "203.9/1080",
+        "details_box_bottom_vs_ask_top_634_1": "799.7 hidden by 165.6"
+      },
+      {
+        "stop": "6 up",
+        "chip": 6,
+        "label": "Routed",
+        "row_top_y": 391.9,
+        "wrapped_rows": 5,
+        "pane_scrollTop_over_scrollHeight": "203.9/882",
+        "details_box_bottom_vs_ask_top_634_1": "601.3"
+      },
+      {
+        "stop": "5 up",
+        "chip": 5,
+        "label": "Spoiler",
+        "row_top_y": 391.9,
+        "wrapped_rows": 5,
+        "pane_scrollTop_over_scrollHeight": "203.9/961",
+        "details_box_bottom_vs_ask_top_634_1": "681.0"
+      },
+      {
+        "stop": "4 up",
+        "chip": 4,
+        "label": "Thinking",
+        "row_top_y": 391.9,
+        "wrapped_rows": 5,
+        "pane_scrollTop_over_scrollHeight": "203.9/913",
+        "details_box_bottom_vs_ask_top_634_1": "633.2"
+      },
+      {
+        "stop": "3 up",
+        "chip": 3,
+        "label": "Reply style",
+        "row_top_y": 391.9,
+        "wrapped_rows": 5,
+        "pane_scrollTop_over_scrollHeight": "203.9/882",
+        "details_box_bottom_vs_ask_top_634_1": "601.3"
+      },
+      {
+        "stop": "2 up",
+        "chip": 2,
+        "label": "KB",
+        "row_top_y": 391.9,
+        "wrapped_rows": 5,
+        "pane_scrollTop_over_scrollHeight": "203.9/882",
+        "details_box_bottom_vs_ask_top_634_1": "601.3"
+      },
+      {
+        "stop": "1 up",
+        "chip": 1,
+        "label": "Keyword + meaning",
+        "row_top_y": 391.9,
+        "wrapped_rows": 5,
+        "pane_scrollTop_over_scrollHeight": "203.9/1060",
+        "details_box_bottom_vs_ask_top_634_1": "779.6 hidden by 145.5"
+      }
+    ],
+    "first_stop_row_top": 261.5,
+    "all_other_stops_row_top": 391.9,
+    "largest_difference_px": 130.4,
+    "wrapped_rows_changed": false,
+    "interpretation": "The row held perfectly still at 391.9 for 12 stops, including the return to chip 1. But the very first stop was 261.5, so the first Down (chip 1 to chip 2) moved the row by 130.4 px (pane scrollTop 334.4 to 203.9 as the pane shrank from 1060 to 882 tall). On the way back, chip 1 read 391.9, so it is the state on entering from the tab strip that differs, not chip 1 itself."
+  },
+  "expected": "row top within 1 px of its first-stop value at every stop; wrapped rows never change",
+  "verdict_a": "PASS - wrapped chip rows stayed at 5 at every stop",
+  "verdict_b": "FAIL - by the letter: first stop 261.5, then 391.9 at 12 stops (130.4 px apart). Once past the first press the row is still to within 0 px. Owner to decide whether the entry position counts."
+}

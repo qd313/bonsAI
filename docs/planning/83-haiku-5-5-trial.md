@@ -372,3 +372,12 @@ documents.
   shown while notes were attached; Terse repeats an earlier answer's menu; the slot swap above.
 - **The maintainer's call on Terse length:** the test asks for 8 of 10 in one run; one run passed (10), one passed (9),
   one did not (7).
+
+## 14. Evening 2026-10-08: the Show details chip row
+
+The maintainer filmed the Deck walking the seven chips under Show details. They saw a quick redraw on each Down, only three or four chips drawn, and the answer still scrolling after the ring had left the chips.
+Five fixes held: all chips always drawn at one size (`b5f7f7f7`); no scrolling once the ring has left (`2f72b53c`); the chip row and answer stay still while stepping (`a0b62a95`); a box taller than the screen scrolls its end into view on the first Down (`1fc1551c`); a blank space under a shorter box keeps the answer from being pulled down (`657ef2cb`).
+One did not help: a second look two frames after a step (`83a2efa7`) changed nothing in the one case still left.
+Deck results: all chips drawn, row still at 13 of 13 stops, the end-of-box scroll, and no scroll after leaving all passed. Going back up from Developer details failed on the first build (198 px jump) and now slips 10.1 px once at the second chip.
+Open: that 10 px slip (a roadmap bug; next step is to log what the sizing reads at that step), and the last lines of some boxes sitting behind the question box while the row is held still (a call for the maintainer).
+Evidence: `docs/test-evidence/plan83-P83E-CHIPS-*`; rows P83E-CHIPS-ALL, -STILL, -END, -SHRINK, -LEAVE in the testing document.

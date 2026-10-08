@@ -1,0 +1,107 @@
+{
+  "build_commit": "83a2efa7 (per runbook; not re-read on the Deck)",
+  "deck_time_local": "2026-10-08 about 19:56-20:10 EDT",
+  "screen": "Page window 855x766, device pixel ratio 1.28 (same as blocks 8-9).",
+  "setup": "Keep-awake 120 min (expiresAt 2026-10-09T01:52:57Z), released at end. Plugin opened first try. Same chat/answer, This answer tab. No setting changed, no question asked.",
+  "row": "P83E-CHIPS-STILL-RECHECK2",
+  "pressed": "closed and reopened Show details to get the same entry (scroll 334.4 of 1060); Down to chip 1 and chip 7, Up back to chip 1; 1 s wait before each read. One extra Up past chip 1 landed on the tab strip (side_effect: none, row stayed 261.5).",
+  "side_effect": "One extra Up at the end moved the ring from chip 1 to the This answer / Session tab strip. Changed nothing else.",
+  "seen": {
+    "stops": [
+      {
+        "chip": 1,
+        "row_top": 261.5,
+        "scrollTop": 334.4,
+        "scrollHeight": 1060,
+        "hold": 0
+      },
+      {
+        "chip": 2,
+        "row_top": 261.5,
+        "scrollTop": 334.4,
+        "scrollHeight": 1012,
+        "hold": 130
+      },
+      {
+        "chip": 3,
+        "row_top": 261.5,
+        "scrollTop": 334.4,
+        "scrollHeight": 1012,
+        "hold": 130
+      },
+      {
+        "chip": 4,
+        "row_top": 261.5,
+        "scrollTop": 334.4,
+        "scrollHeight": 1012,
+        "hold": 99
+      },
+      {
+        "chip": 5,
+        "row_top": 261.5,
+        "scrollTop": 334.4,
+        "scrollHeight": 1012,
+        "hold": 51
+      },
+      {
+        "chip": 6,
+        "row_top": 261.5,
+        "scrollTop": 334.4,
+        "scrollHeight": 1012,
+        "hold": 130
+      },
+      {
+        "chip": 7,
+        "row_top": 261.5,
+        "scrollTop": 334.4,
+        "scrollHeight": 1080,
+        "hold": 0
+      },
+      {
+        "chip": 6,
+        "row_top": 261.5,
+        "scrollTop": 334.4,
+        "scrollHeight": 1012,
+        "hold": 130
+      },
+      {
+        "chip": 5,
+        "row_top": 261.5,
+        "scrollTop": 334.4,
+        "scrollHeight": 1012,
+        "hold": 51
+      },
+      {
+        "chip": 4,
+        "row_top": 261.5,
+        "scrollTop": 334.4,
+        "scrollHeight": 1012,
+        "hold": 99
+      },
+      {
+        "chip": 3,
+        "row_top": 261.5,
+        "scrollTop": 334.4,
+        "scrollHeight": 1012,
+        "hold": 130
+      },
+      {
+        "chip": 2,
+        "row_top": 261.5,
+        "scrollTop": 334.4,
+        "scrollHeight": 1012,
+        "hold": 130
+      },
+      {
+        "chip": 1,
+        "row_top": 261.5,
+        "scrollTop": 334.4,
+        "scrollHeight": 1060,
+        "hold": 0
+      }
+    ],
+    "max_row_difference_px": 0.0
+  },
+  "expected": "row top within 1 px at all stops",
+  "verdict": "PASS - row top 261.5 at all 13 stops, scroll 334.4 throughout (largest difference 0.0 px)."
+}

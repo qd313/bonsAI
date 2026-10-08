@@ -1,0 +1,18 @@
+{
+  "build_commit": "1fc1551c (per runbook; not re-read on the Deck)",
+  "deck_time_local": "2026-10-08 about 19:24-19:27 EDT (Deck clock 7:23-7:26 PM)",
+  "screen": "Page window 855x766, device pixel ratio 1.28; screenshots are 1920x1080 (looks like the monitor, not the built-in 1280x800 panel). Panel width 300 css px. Plugin Main tab, chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?', answer to 'How do I set up voice input on the Deck?', This answer tab.",
+  "setup": "Keep-awake taken 120 min (expiresAt 2026-10-09T01:23:15Z). Plugin opened (first try ok). Walked Up to the answer's Show details, A, opened. Down to tab strip, Down to chip 1. No setting changed. No question asked.",
+  "row": "P83E-CHIPS-ALL",
+  "pressed": "Down x2 from Hide details to chip 1 (tab strip, then chip 1); screenshots first, middle (chip 6), last (chip 7)",
+  "seen": {
+    "caption": "Chip N of 7 at all stops",
+    "chips_drawn": 7,
+    "opacity_all_stops": "1 (every chip, every one of 13 stops)",
+    "font_size_all_stops": "10px",
+    "wrapped_chip_rows": 5,
+    "note": "Developer details chip present; 7 = M"
+  },
+  "expected": "every one of M chips drawn, opacity 1, same font size, at every stop",
+  "verdict": "PASS - 7 of 7 chips drawn, opacity 1, font 10px at all 13 stops of the walk"
+}

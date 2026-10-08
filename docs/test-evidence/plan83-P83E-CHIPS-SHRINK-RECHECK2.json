@@ -1,0 +1,150 @@
+{
+  "build_commit": "83a2efa7 (per runbook; not re-read on the Deck)",
+  "deck_time_local": "2026-10-08 about 19:56-20:10 EDT",
+  "screen": "Page window 855x766, device pixel ratio 1.28 (same as blocks 8-9).",
+  "setup": "Keep-awake 120 min (expiresAt 2026-10-09T01:52:57Z), released at end. Plugin opened first try. Same chat/answer, This answer tab. No setting changed, no question asked.",
+  "row": "P83E-CHIPS-SHRINK-RECHECK2",
+  "pressed": "Show details A; Down to tab strip; Down x7 to chip 7; Down once more (end into view); Up x6 to chip 1; 1 s wait before each read; an every-frame recorder ran in the page throughout",
+  "seen": {
+    "end_into_view": {
+      "scrollTop": 402.3,
+      "row_top": 193.5,
+      "scrollHeight": 1080,
+      "hold": 0,
+      "box_bottom": 601.3
+    },
+    "stops": [
+      {
+        "chip": 6,
+        "row_top": 193.5,
+        "scrollTop": 402.3,
+        "scrollHeight": 1080,
+        "hold": 198
+      },
+      {
+        "chip": 5,
+        "row_top": 193.5,
+        "scrollTop": 402.3,
+        "scrollHeight": 1080,
+        "hold": 119
+      },
+      {
+        "chip": 4,
+        "row_top": 193.5,
+        "scrollTop": 402.3,
+        "scrollHeight": 1080,
+        "hold": 167
+      },
+      {
+        "chip": 3,
+        "row_top": 193.5,
+        "scrollTop": 402.3,
+        "scrollHeight": 1080,
+        "hold": 198
+      },
+      {
+        "chip": 2,
+        "row_top": 203.6,
+        "scrollTop": 392.2,
+        "scrollHeight": 1070,
+        "hold": 188
+      },
+      {
+        "chip": 1,
+        "row_top": 203.6,
+        "scrollTop": 392.2,
+        "scrollHeight": 1070,
+        "hold": 10
+      }
+    ],
+    "max_row_difference_px": 10.1,
+    "frame_sampler_chip2_press": {
+      "t0": "first frame where the active chip became KB: 14 sections",
+      "frames_ms_scrollTop_scrollHeight_rowTop_hold": [
+        [
+          -32,
+          402.3,
+          1080,
+          193.5,
+          198
+        ],
+        [
+          0,
+          392.2,
+          1070,
+          203.6,
+          188
+        ],
+        [
+          5,
+          392.2,
+          1070,
+          203.6,
+          188
+        ],
+        [
+          18,
+          392.2,
+          1070,
+          203.6,
+          188
+        ],
+        "... every frame (about 16.7 ms apart) to +585 ms identical: 392.2, 1070, 203.6, 188"
+      ],
+      "all_changes_in_whole_walk": [
+        [
+          "chip 7 at -12247 ms",
+          402.3,
+          1080,
+          193.5,
+          0
+        ],
+        [
+          "chip 6",
+          402.3,
+          1080,
+          193.5,
+          198
+        ],
+        [
+          "chip 5",
+          402.3,
+          1080,
+          193.5,
+          119
+        ],
+        [
+          "chip 4",
+          402.3,
+          1080,
+          193.5,
+          167
+        ],
+        [
+          "chip 3",
+          402.3,
+          1080,
+          193.5,
+          198
+        ],
+        [
+          "chip 2 at 0 ms",
+          392.2,
+          1070,
+          203.6,
+          188
+        ],
+        [
+          "chip 1 at +2875 ms",
+          392.2,
+          1070,
+          203.6,
+          10
+        ]
+      ],
+      "interpretation": "No flicker and no late settle: the change happens in the very first frame, in the same frame as the ring moving to chip 2 (hold 198 to 188, scrollHeight 1080 to 1070, scrollTop 402.3 to 392.2, row 193.5 to 203.6), then nothing moves for the next 585 ms. The extra frame checks found nothing to correct; the hold simply came out 10 px short at chip 2 (box is the same height as at chip 3, whose hold was 198)."
+    }
+  },
+  "expected": "row top within 1 px at every stop, chip 2 and chip 1 included",
+  "verdict": "FAIL - same as block 9: row 193.5 at chips 7 to 3, then 203.6 at chips 2 and 1 (10.1 px). The new two-frame re-check did not change it."
+}

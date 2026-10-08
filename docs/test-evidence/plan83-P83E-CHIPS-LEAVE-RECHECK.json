@@ -1,0 +1,38 @@
+{
+  "build_commit": "657ef2cb (per runbook; deployed 19:38 per index.js mtime; a text search for the hash in the deployed files finds nothing, as expected)",
+  "deck_time_local": "2026-10-08 about 19:31-19:41 EDT (Deck clock 7:31-7:41 PM)",
+  "screen": "Page window 855x766, device pixel ratio 1.28; screenshots 1920x1080 (monitor-like). Panel 300 css px wide.",
+  "setup": "Keep-awake 120 min taken (expiresAt 2026-10-09T01:39:03Z) and released at end. Plugin opened on 2nd try (first failed as expected). Same chat and answer as block 8. Show details opened, tab strip, then chip 1 with pane at scrollTop 334.4 of 1060, as in block 8. Press-to-read gap 1.0 s. No setting changed, no question asked.",
+  "row": "P83E-CHIPS-LEAVE-RECHECK",
+  "pressed": "back on chip 7 end in view (scrollTop 402.3, hold 0), Down, Down to question box; then Up x10 to Hide details line, A",
+  "seen": {
+    "down1": "dock suggestion chip",
+    "down2": "question box (INPUT 'Describe the level, boss, or puzzle...')",
+    "scroll_at_0_0p5_1_2_s": [
+      402.3,
+      402.3,
+      402.3,
+      402.3
+    ],
+    "close_info_only": {
+      "before": {
+        "pane_scrollTop": 303.9,
+        "scrollHeight": 1070,
+        "answer_slot_top": -121,
+        "slot_h": 811,
+        "ring": "Hide details"
+      },
+      "after": {
+        "pane_scrollTop": 0,
+        "scrollHeight": 677,
+        "answer_slot_top": 182.9,
+        "slot_h": 342,
+        "stable_at_0_0p5_1_2_s": true,
+        "ring": "Show details line"
+      },
+      "note": "The details panel closed in one step; the page shrank to fit (no pane scroll left) and the whole answer slid down 303.9 px into view. It stayed put for 2 s. Blank space of about 80 px sits under the Show details line in the screenshot."
+    }
+  },
+  "expected": "scroll does not change at 0, 0.5, 1, 2 s on the question box",
+  "verdict": "PASS - scroll 402.3 at all four times. Close behaviour is information only (see close_info_only)."
+}

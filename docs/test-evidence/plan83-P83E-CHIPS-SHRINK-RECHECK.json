@@ -1,0 +1,71 @@
+{
+  "build_commit": "657ef2cb (per runbook; deployed 19:38 per index.js mtime; a text search for the hash in the deployed files finds nothing, as expected)",
+  "deck_time_local": "2026-10-08 about 19:31-19:41 EDT (Deck clock 7:31-7:41 PM)",
+  "screen": "Page window 855x766, device pixel ratio 1.28; screenshots 1920x1080 (monitor-like). Panel 300 css px wide.",
+  "setup": "Keep-awake 120 min taken (expiresAt 2026-10-09T01:39:03Z) and released at end. Plugin opened on 2nd try (first failed as expected). Same chat and answer as block 8. Show details opened, tab strip, then chip 1 with pane at scrollTop 334.4 of 1060, as in block 8. Press-to-read gap 1.0 s. No setting changed, no question asked.",
+  "row": "P83E-CHIPS-SHRINK-RECHECK",
+  "pressed": "from chip 7 Down once (end into view), then Up x6 to chip 1, 1 s wait before each read",
+  "seen": {
+    "end_into_view": {
+      "scrollTop": 402.3,
+      "row_top": 193.5,
+      "box_bottom": 601.3,
+      "ask_top": 634.1
+    },
+    "stops": [
+      {
+        "chip": 7,
+        "row_top": 193.5,
+        "pane_scrollTop": 402.3,
+        "scrollHeight": 1080,
+        "hold_px": 0
+      },
+      {
+        "chip": 6,
+        "row_top": 193.5,
+        "pane_scrollTop": 402.3,
+        "scrollHeight": 1080,
+        "hold_px": 198
+      },
+      {
+        "chip": 5,
+        "row_top": 193.5,
+        "pane_scrollTop": 402.3,
+        "scrollHeight": 1080,
+        "hold_px": 119
+      },
+      {
+        "chip": 4,
+        "row_top": 193.5,
+        "pane_scrollTop": 402.3,
+        "scrollHeight": 1080,
+        "hold_px": 167
+      },
+      {
+        "chip": 3,
+        "row_top": 193.5,
+        "pane_scrollTop": 402.3,
+        "scrollHeight": 1080,
+        "hold_px": 198
+      },
+      {
+        "chip": 2,
+        "row_top": 203.6,
+        "pane_scrollTop": 392.2,
+        "scrollHeight": 1070,
+        "hold_px": 188
+      },
+      {
+        "chip": 1,
+        "row_top": 203.6,
+        "pane_scrollTop": 392.2,
+        "scrollHeight": 1070,
+        "hold_px": 10
+      }
+    ],
+    "max_row_difference_px": 10.1,
+    "note": "Block 8 jumped 198.4 px at the first Up; now the first Up (chip 7 to 6) holds, and chips 5, 4, 3 hold. At chip 2 the row moved 10.1 px (193.5 to 203.6; scrollTop 402.3 to 392.2, scrollHeight 1080 to 1070); chip 1 stayed at 203.6. Hold block was 188 px at chip 2 and 10 at chip 1 (needed about 198 at chip 2), so it came up 10 px short and the pane pulled back 10 px."
+  },
+  "expected": "row top does not change between any two stops",
+  "verdict": "FAIL - by the letter: 5 stops at 193.5, then 203.6 at chips 2 and 1, a 10.1 px shift at the chip 3 to chip 2 step. Down from 198.4 px in block 8, but not zero."
+}

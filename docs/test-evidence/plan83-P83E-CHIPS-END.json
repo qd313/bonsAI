@@ -1,0 +1,53 @@
+{
+  "build_commit": "1fc1551c (per runbook; not re-read on the Deck)",
+  "deck_time_local": "2026-10-08 about 19:24-19:27 EDT (Deck clock 7:23-7:26 PM)",
+  "screen": "Page window 855x766, device pixel ratio 1.28; screenshots are 1920x1080 (looks like the monitor, not the built-in 1280x800 panel). Panel width 300 css px. Plugin Main tab, chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?', answer to 'How do I set up voice input on the Deck?', This answer tab.",
+  "setup": "Keep-awake taken 120 min (expiresAt 2026-10-09T01:23:15Z). Plugin opened (first try ok). Walked Up to the answer's Show details, A, opened. Down to tab strip, Down to chip 1. No setting changed. No question asked.",
+  "row": "P83E-CHIPS-END",
+  "pressed": "Down x6 chip 1 to chip 7; Down (step 2); Down (step 3); Down (to question box); Up; Up (step 5)",
+  "seen": {
+    "step1": {
+      "chip": 7,
+      "box_bottom": 799.7,
+      "ask_top": 634.1,
+      "hidden_px": 165.6,
+      "pane_scrollTop": 203.9,
+      "scrollHeight": 1080
+    },
+    "step2": {
+      "ring": "still on Developer details (Chip 7 of 7)",
+      "pane_scrollTop": "203.9 -> 402.3 (max 403)",
+      "box_bottom": 601.3,
+      "ask_top": 634.1,
+      "row_top": 193.5,
+      "row_off_top": false,
+      "chip_y": [
+        315,
+        339
+      ]
+    },
+    "step3": {
+      "ring": "left the chips to a dock chip in the suggestion row (text 'What are the best FSR settings?', y 601-631, rotating text), not the Hide details line",
+      "scrollTop": 402.3
+    },
+    "step4": {
+      "ring": "question box (INPUT, 'Describe the level, boss, or puzzle...')",
+      "scroll_at_0_0p5_1_2_s": [
+        402.3,
+        402.3,
+        402.3,
+        402.3
+      ]
+    },
+    "step5": {
+      "up1": "dock chip (y 601-631)",
+      "up2": "Developer details chip, y 315-339, on screen, pane still 402.3, row top 193.5"
+    }
+  },
+  "expected": "step2 ring stays, box end above question box; step3 ring leaves; step4 no scroll change; step5 note",
+  "verdict_a": "PASS - step 2: ring stayed on chip 7, pane scrolled 198.4 px, box bottom 601.3 above the question box (634.1)",
+  "verdict_b": "PASS - step 3: next Down left the chips (to the dock suggestion chip)",
+  "verdict_c": "PASS - step 4: scroll 402.3 at 0, 0.5, 1 and 2 s, no change",
+  "verdict_d": "PASS - step 5: Up landed on Developer details, on screen",
+  "verdict": "PASS"
+}

@@ -144,6 +144,7 @@ const SETTINGS_FIELD_BACKEND_KEY: Record<keyof BonsaiSettingsSnapshotInput, keyo
   askMode: "ask_mode",
   ollamaKeepAlive: "ollama_keep_alive",
   replyVerbosity: "reply_verbosity",
+  terseMode: "terse_mode",
   askThinkEffort: "ask_think_effort",
   replyLanguage: "reply_language",
   showDeveloperTab: "show_developer_tab",

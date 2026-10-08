@@ -469,6 +469,9 @@ _SIMPLE_FIELDS: dict[str, Any] = {
     "input_sanitizer_user_disabled": _bool_default_false,
     "latency_timeouts_custom_enabled": _bool_default_false,
     "reply_verbosity": sanitize_reply_verbosity,
+    # Terse mode: Speed-mode answers capped at three lines, with a branch menu on every reply.
+    # Off unless the person turns it on; an unrecognised value must not shorten anyone's answers.
+    "terse_mode": _bool_default_false,
     "ask_think_effort": _enum(_VALID_ASK_THINK_EFFORTS, DEFAULT_ASK_THINK_EFFORT, strip=True),
     "ollama_keep_alive": _ollama_keep_alive_field,
     # ``None`` means "never saved", which is off -- same result as any other non-``True``.

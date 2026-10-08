@@ -137,6 +137,7 @@ describe("settings contracts", () => {
     expect(settings.model_allow_high_vram_fallbacks).toBe(false);
     expect(settings.ollama_local_on_deck).toBe(false);
     expect(settings.ollama_local_autostart).toBe(false);
+    expect(settings.terse_mode).toBe(false);
   });
 
   it("normalizes model_allow_high_vram_fallbacks: only explicit true enables", () => {
@@ -153,6 +154,15 @@ describe("settings contracts", () => {
     expect(normalizeSettings({ ollama_local_on_deck: false }).ollama_local_on_deck).toBe(false);
     expect(normalizeSettings({}).ollama_local_on_deck).toBe(false);
     expect(normalizeSettings({ ollama_local_on_deck: "yes" as unknown as boolean }).ollama_local_on_deck).toBe(false);
+  });
+
+  it("normalizes terse_mode: missing key defaults off; only an explicit true enables", () => {
+    expect(normalizeSettings({}).terse_mode).toBe(false);
+    expect(normalizeSettings({ terse_mode: false }).terse_mode).toBe(false);
+    expect(normalizeSettings({ terse_mode: true }).terse_mode).toBe(true);
+    for (const garbled of ["yes", "true", 1, null, [], {}]) {
+      expect(normalizeSettings({ terse_mode: garbled as unknown as boolean }).terse_mode).toBe(false);
+    }
   });
 
   it("normalizes ollama_local_autostart: missing key defaults off; explicit true enables", () => {
@@ -319,6 +329,7 @@ describe("settings contracts", () => {
       askMode: "expert",
       ollamaKeepAlive: "30s",
       replyVerbosity: "detailed",
+      terseMode: true,
       askThinkEffort: "high",
       replyLanguage: "japanese",
       showDeveloperTab: true,
@@ -355,6 +366,7 @@ describe("settings contracts", () => {
     expect(p.ask_mode).toBe("expert");
     expect(p.ollama_keep_alive).toBe("30s");
     expect(p.reply_verbosity).toBe("detailed");
+    expect(p.terse_mode).toBe(true);
     expect(p.reply_language).toBe("japanese");
     expect(p.model_allow_high_vram_fallbacks).toBe(true);
     expect(p.ollama_local_on_deck).toBe(true);
@@ -388,6 +400,7 @@ describe("settings contracts", () => {
       askMode: DEFAULT_ASK_MODE,
       ollamaKeepAlive: DEFAULT_OLLAMA_KEEP_ALIVE,
       replyVerbosity: DEFAULT_REPLY_VERBOSITY,
+      terseMode: false,
       askThinkEffort: "off" as const,
       replyLanguage: REPLY_LANGUAGE_FOLLOW_SYSTEM,
       showDeveloperTab: false,
@@ -537,6 +550,7 @@ describe("settings contracts", () => {
       askMode: normalized.ask_mode,
       ollamaKeepAlive: normalized.ollama_keep_alive,
       replyVerbosity: normalized.reply_verbosity,
+      terseMode: normalized.terse_mode,
       askThinkEffort: normalized.ask_think_effort,
       replyLanguage: normalized.reply_language,
       showDeveloperTab: normalized.show_developer_tab,

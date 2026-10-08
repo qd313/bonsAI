@@ -499,6 +499,15 @@ class SettingsServiceTests(unittest.TestCase):
         garbled = sanitize_settings(data={"ollama_local_autostart": "yes"}, **base_kwargs)
         self.assertFalse(garbled["ollama_local_autostart"])
 
+    def test_sanitize_terse_mode_default_off_explicit_true_enables(self):
+        """Terse mode (Speed answers in three lines) is off unless a literal true was saved."""
+        self.assertIs(_sanitize_with_defaults({})["terse_mode"], False)
+        self.assertIs(_sanitize_with_defaults({"terse_mode": False})["terse_mode"], False)
+        self.assertIs(_sanitize_with_defaults({"terse_mode": True})["terse_mode"], True)
+        for garbled_value in ("yes", "true", 1, None, [], {}):
+            garbled = _sanitize_with_defaults({"terse_mode": garbled_value})
+            self.assertIs(garbled["terse_mode"], False, repr(garbled_value))
+
     def test_load_settings_grandfathers_capabilities_when_block_missing(self):
         """Legacy settings files without a capabilities object get known scopes enabled except Steam Web API."""
         logger = _Logger()

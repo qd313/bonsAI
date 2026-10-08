@@ -63,6 +63,7 @@ function minimalSurvivalSnapshot(
       askMode: "speed",
       ollamaKeepAlive: "5m",
       replyVerbosity: "balanced",
+      terseMode: false,
       askThinkEffort: "off",
       replyLanguage: "follow_system",
       showDeveloperTab: false,

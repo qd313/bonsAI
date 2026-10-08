@@ -88,6 +88,7 @@ const NON_DEFAULT: Record<string, unknown> = {
   stream_scramble_settle_ms: 900,
   stream_scramble_style: "tail",
   tab_resume_mode: "always_main",
+  terse_mode: true,
   text_model_routing_order: ["gemma4:e2b-it-qat", "qwen2.5:7b"],
   ui_scale_auto_enabled: false,
   ui_scale_manual_profile: "couch",

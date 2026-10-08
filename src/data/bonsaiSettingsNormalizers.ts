@@ -482,6 +482,8 @@ const SIMPLE_FIELDS = {
     trim: true,
   }),
   reply_verbosity: normalizeReplyVerbosity,
+  // Off unless the person turns it on; an unrecognised value must not shorten anyone's answers.
+  terse_mode: boolDefaultFalse,
   // Trimmed before matching, case-sensitive, and an unknown value falls back to `off` —
   // an unrecognised effort must not silently turn thinking on.
   ask_think_effort: enumOf<AskThinkEffortId>(

@@ -441,6 +441,38 @@
     }
   },
   {
+    "name": "an old settings file predating terse mode loads it off and leaves everything else untouched",
+    "input": {
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    },
+    "expected": {
+      "terse_mode": false,
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    }
+  },
+  {
+    "name": "terse mode needs an explicit true, a truthy string does not shorten anyone's answers",
+    "input": {
+      "terse_mode": "yes"
+    },
+    "expected": {
+      "terse_mode": false
+    }
+  },
+  {
+    "name": "terse mode saved on stays on",
+    "input": {
+      "terse_mode": true
+    },
+    "expected": {
+      "terse_mode": true
+    }
+  },
+  {
     "name": "an unknown voice reply mode falls back to off, never to reading on its own",
     "input": {
       "voice_reply_mode": "whenever"

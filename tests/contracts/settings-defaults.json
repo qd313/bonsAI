@@ -50,6 +50,7 @@
   "stream_scramble_settle_ms": 400,
   "stream_scramble_style": "settle",
   "tab_resume_mode": "resume",
+  "terse_mode": false,
   "text_model_routing_order": [],
   "ui_scale_auto_enabled": true,
   "ui_scale_manual_profile": "handheld",

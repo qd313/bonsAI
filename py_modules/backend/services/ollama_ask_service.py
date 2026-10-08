@@ -84,7 +84,6 @@ from backend.services.ollama_ask_extras import (
 from backend.services.ollama_service import post_ollama_chat
 from backend.services.response_verify import build_live_spoiler_cover
 from backend.services.settings_service import sanitize_ollama_keep_alive, sanitize_reply_verbosity
-from backend.services.reply_style_blocks import terse_mode_applies
 from backend.services.reply_language_service import resolve_effective_reply_language
 from backend.ollama_routing import (
     is_ollama_model_missing_error,
@@ -168,8 +167,10 @@ async def run_ask_ollama(
     reply_verbosity = sanitize_reply_verbosity(settings.get("reply_verbosity"))
     reply_language = resolve_effective_reply_language(settings.get("reply_language"))
     # Terse mode (Speed answers in three lines): on only for a Speed question, and only for a real
-    # saved true. Decided once here and handed to the prompt, the character reminder and the reply reader.
-    terse_speed = terse_mode_applies(settings.get("terse_mode"), ask_mode)
+    # saved true (the rule reply_style_blocks.terse_mode_applies states; written inline here to keep
+    # this file under the 400-line check). Decided once and handed to the prompt, the character
+    # reminder and the reply reader.
+    terse_speed = ask_mode == "speed" and settings.get("terse_mode") is True
     apreset = str(settings.get("screenshot_attachment_preset") or "low")
     if apreset not in ("low", "mid", "max"):
         apreset = "low"
@@ -448,6 +449,9 @@ async def run_ask_ollama(
                         on_http_response_done=_on_http_response_done,
                         on_delta=on_delta_cb,
                         think_effort=str(settings.get("ask_think_effort") or "off"),
+                        # Terse mode asks for a branch menu on a Speed reply, so the reply reader must
+                        # read it out (it only did for Strategy). False for everything else.
+                        terse_branch_menu=terse_speed,
                         # Let the plugin decide how much room the model gets, instead of taking
                         # the server's default -- 4,096 on the Deck, against a model that can hold
                         # 131,072. Decided once per model per session inside post_ollama_chat.

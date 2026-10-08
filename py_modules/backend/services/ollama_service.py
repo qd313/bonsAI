@@ -220,8 +220,14 @@ def post_ollama_chat(
     *,
     think_effort: str = "off",
     choose_window: bool = False,
+    terse_branch_menu: bool = False,
 ) -> dict:
     """Execute an Ollama chat attempt with soft continue on ``done_reason=length``.
+
+    ``terse_branch_menu``: Terse mode is on for a Speed question, whose reply ends with the
+    branch-menu fence. Only the menu is read out of such a reply (as Strategy's is); a Speed
+    reply never carries a checklist, and a Strategy reply is read exactly as before whatever
+    this says.
 
     Soft continue: up to ``max_continues`` re-issues when the model hits the visible
     ``num_predict`` wall. An ephemeral ``Continuing…`` cue is published on the stream
@@ -432,7 +438,7 @@ def post_ollama_chat(
     text = visible_raw.strip() or "No response text."
     strategy_guide_branches = None
     strategy_checklist = None
-    if mode == "strategy":
+    if mode == "strategy" or terse_branch_menu:
         """
         Parse the branch fence from the text that still HAS one.
 
@@ -464,8 +470,12 @@ def post_ollama_chat(
 
         visible, strategy_guide_branches = extract_strategy_guide_branches(strategy_source)
         text = visible
-        visible, strategy_checklist = extract_strategy_checklist(text)
-        text = visible
+        # Only a Strategy reply carries a checklist. A terse Speed reply is read for its menu alone,
+        # so a checklist fence there is left exactly as it was (shown or not as before).
+        checklist_in_play = mode == "strategy"
+        if checklist_in_play:
+            visible, strategy_checklist = extract_strategy_checklist(text)
+            text = visible
 
         # Three failures wear the same face in the UI -- "no branch buttons
         # anywhere in the transcript" -- and nothing here used to tell them
@@ -494,7 +504,7 @@ def post_ollama_chat(
             # shown to the user as raw JSON. Hide it for display only -- the diagnosis above has
             # already been logged from the text that still had it.
             text = hide_incomplete_strategy_branch_fence(text)
-        if checklist_marker and strategy_checklist is None:
+        if checklist_in_play and checklist_marker and strategy_checklist is None:
             # Same shape as the branch case above, and it had no twin until 2026-08-28. A rejected
             # checklist fence stayed in the visible answer, so the user read raw JSON -- and it was
             # also its own D-pad stop that did nothing on A. Log first, then hide for display.

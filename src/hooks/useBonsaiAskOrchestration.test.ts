@@ -2218,3 +2218,62 @@ describe("strategyGuideBranches stays with the slot that asked (CHAT-SLOTS-V3-05
     vi.useRealTimers();
   });
 });
+
+/*
+ * Terse mode (Speed answers in three lines): the reply ends with the branch menu, and the screen
+ * must show it for a Speed question exactly as it does for a Strategy one. Nothing on this side
+ * gates the menu on the mode; this pins that so a later "Strategy only" check cannot slip in.
+ */
+describe("a branch menu on a Speed answer reaches the screen (Terse mode)", () => {
+  it("keeps the menu from a finished Speed answer", async () => {
+    vi.useFakeTimers();
+    const activeSlotIdRef = { current: "slot-a" as string | null };
+    setRpcHandler("start_background_game_ai", () => ({
+      accepted: true,
+      status: "pending",
+      request_id: 601,
+    }));
+    setRpcHandler("get_background_game_ai_status", () => ({
+      ...idleBackgroundStatusFixture(),
+      question: "how do i beat the dreadnought",
+      request_id: 601,
+      chat_slot_id: "slot-a",
+      ask_mode: "speed",
+      status: "completed",
+      success: true,
+      response: "Dodge left, hit the glowing back.",
+      strategy_guide_branches: {
+        question: "What next?",
+        options: [
+          { id: "a", label: "Weak points" },
+          { id: "b", label: "Best gear" },
+        ],
+      },
+    }));
+
+    const { result } = renderHook(() =>
+      useBonsaiAskOrchestration(makeArgs({ askMode: "speed", activeSlotIdRef })),
+    );
+
+    let pending: Promise<void> | undefined;
+    act(() => {
+      pending = result.current.onAskOllama("how do i beat the dreadnought");
+    });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(100);
+    });
+    await act(async () => {
+      await pending;
+    });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5000);
+    });
+
+    expect(result.current.strategyGuideBranches?.options.map((o) => o.label)).toEqual([
+      "Weak points",
+      "Best gear",
+    ]);
+
+    vi.useRealTimers();
+  });
+});

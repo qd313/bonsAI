@@ -163,3 +163,32 @@ describe("strategy panels follow the newest answer, live or archived", () => {
     expect(container.querySelectorAll(".bonsai-strategy-checklist-panel")).toHaveLength(1);
   });
 });
+
+/*
+ * Terse mode (Speed answers in three lines) ends every Speed reply with the same branch menu a
+ * Strategy reply gets. The picker is drawn from the menu itself, not from the ask mode, so a Speed
+ * transcript with a menu shows it, and one without a menu shows none.
+ */
+describe("the branch picker on a Speed answer (Terse mode)", () => {
+  const baseOverrides = {
+    askMode: "speed" as const,
+    strategyChecklist: null,
+    askThreadCollapsed: [ARCHIVED_TURN],
+    expandedTurnKey: ARCHIVED_TURN.id,
+    lastExchange: {
+      question: ARCHIVED_TURN.question,
+      answer: ARCHIVED_TURN.answer,
+    } as MainTabChatTranscriptProps["lastExchange"],
+  };
+
+  it("draws the picker when a Speed answer came with a menu", () => {
+    const { container } = renderTranscript(baseOverrides);
+    expect(container.querySelectorAll(".bonsai-strategy-branch-picker")).toHaveLength(1);
+    expect(container.querySelectorAll(".bonsai-strategy-branch-btn")).toHaveLength(2);
+  });
+
+  it("draws no picker when a Speed answer came without one", () => {
+    const { container } = renderTranscript({ ...baseOverrides, strategyGuideBranches: null });
+    expect(container.querySelectorAll(".bonsai-strategy-branch-picker")).toHaveLength(0);
+  });
+});

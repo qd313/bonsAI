@@ -1,4 +1,4 @@
-"""Terse mode (Speed answers in three lines): what the AI is told.
+"""Terse mode (Speed answers in three lines): what the AI is told, and where the menu is read.
 
 What a person sees: with Terse mode on, a Speed answer is a few short lines that end with a menu of
 choices to dig deeper. These tests pin the instructions that ask for that, that Strategy and Expert
@@ -6,11 +6,12 @@ and every Terse-off Ask are word for word what they were, and that the menu in a
 actually read out of the answer (it used to be read in Strategy mode only).
 """
 
+import json
 import sys
 import tempfile
 import types
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 
@@ -26,6 +27,8 @@ from backend.services.reply_style_blocks import (  # noqa: E402
     build_reply_verbosity_block,
     terse_mode_applies,
 )
+from backend.services.ollama_service import post_ollama_chat  # noqa: E402
+from fake_ollama_stream import ndjson_response  # noqa: E402
 from main import Plugin  # noqa: E402
 
 BRANCH_FENCE = "```bonsai-strategy-branches"
@@ -246,6 +249,70 @@ class TheRealAskPath(unittest.IsolatedAsyncioTestCase):
         await self._ask("what does proton do", settings={})
         for sent in self.sent_system_prompts:
             self.assertNotIn("TERSE REPLY MODE", sent)
+
+    async def test_the_ask_tells_the_model_call_to_read_the_menu_only_when_terse_applies(self):
+        await self._ask("what does proton do", settings={"terse_mode": True})
+        self.assertIs(self.post_kwargs.get("terse_branch_menu"), True)
+        await self._ask("what does proton do", settings={"terse_mode": False})
+        self.assertIs(self.post_kwargs.get("terse_branch_menu"), False)
+        await self._ask("what does proton do", settings={"terse_mode": True}, ask_mode="expert")
+        self.assertIs(self.post_kwargs.get("terse_branch_menu"), False)
+
+
+class TheMenuInASpeedReplyReachesTheScreen(unittest.TestCase):
+    """The branch menu used to be read out of a Strategy reply only; a Speed reply showed it as raw text."""
+
+    REPLY = (
+        "Dodge left, then hit the glowing back.\n"
+        "```bonsai-strategy-branches\n"
+        '{"question":"What next?","options":[{"id":"a","label":"Weak points"},{"id":"b","label":"Best gear"}]}\n'
+        "```"
+    )
+
+    def _post(self, mode, **kwargs):
+        stream = ndjson_response(
+            [
+                json.dumps({"message": {"role": "assistant", "content": self.REPLY}}),
+                json.dumps({"message": {"role": "assistant", "content": ""}, "done": True, "done_reason": "stop"}),
+            ]
+        )
+        with patch("backend.services.ollama_service.urllib.request.urlopen", return_value=stream):
+            return post_ollama_chat(
+                "http://127.0.0.1:11434/api/chat",
+                "gemma4:e2b-it-qat",
+                [{"role": "user", "content": "q"}],
+                60,
+                [],
+                [],
+                [],
+                [],
+                MagicMock(),
+                mode,
+                "5m",
+                cancel_requested=lambda: False,
+                think_effort="off",
+                **kwargs,
+            )
+
+    def test_a_terse_speed_reply_gives_the_screen_its_menu_and_hides_the_raw_block(self):
+        out = self._post("speed", terse_branch_menu=True)
+        branches = out["strategy_guide_branches"]
+        self.assertEqual([o["label"] for o in branches["options"]], ["Weak points", "Best gear"])
+        self.assertNotIn("bonsai-strategy-branches", out["response"])
+        self.assertNotIn('"options"', out["response"])
+        self.assertIn("Dodge left", out["response"])
+        self.assertIsNone(out["strategy_checklist"])
+
+    def test_a_plain_speed_reply_is_left_exactly_as_before(self):
+        out = self._post("speed")
+        self.assertIsNone(out["strategy_guide_branches"])
+
+    def test_the_flag_does_nothing_to_a_strategy_reply(self):
+        plain = self._post("strategy")
+        flagged = self._post("strategy", terse_branch_menu=True)
+        self.assertEqual(plain["strategy_guide_branches"], flagged["strategy_guide_branches"])
+        self.assertEqual(plain["response"], flagged["response"])
+        self.assertIsNotNone(plain["strategy_guide_branches"])
 
 
 if __name__ == "__main__":

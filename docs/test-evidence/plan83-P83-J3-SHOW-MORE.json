@@ -1,0 +1,36 @@
+{
+  "row": "P83-J3-SHOW-MORE",
+  "build_commit": "eddd7138",
+  "deck_time_local": "Thu 2026-10-08 01:41-01:45 EDT",
+  "screen": "page window 855 x 766 (screen reports 1500 x 843); dock top at y=601",
+  "setup": "Test chat open (title 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'), Main tab, ring on box, all rows closed. Walked Up from the box: 7 presses to '90 earlier'. No questions asked.",
+  "pressed": "A on '90 earlier'; Down + A on Wed 30 Sep; Down x6 (q1-q6) + Down to 'Show 6 more'; A; Down x5 + Down; A; Down x6 to Thu line; Up x19 back to Wed line (saved check); B, A on Wed line; Down x9 to Yesterday line, A, B; Up x3 to q6; B; walked back to 'Show 6 more'; B; Down to Wed line, B; Up to '90 earlier', B.",
+  "seen": {
+    "step1_day_lines": ["Wed 30 Sep · 18", "Thu 1 Oct · 67", "Yesterday · 5"],
+    "step2": "6 question rows (q1-q6, text as listed), then 'Show 6 more', then Thu line. Day line still '· 18'. Ring stayed on the day line.",
+    "step3": "Down x6 landed q1..q6 in order; 7th Down landed 'Show 6 more' (box 438-460, dock 601, visible). Rig marked q1, q2, q6 'partial 83%' because the long question text is cut with an ellipsis at the pane edge; row boxes themselves were 52-342 x, 221-428 y, fully inside the pane (48-348) and above the dock.",
+    "step4": "After A: 12 question rows (q1-q12), 'Show 6 more' after q12, ring on 'Hollow Knight Soul Sanctum boss tips' (q7), box y 436-464, above dock 601.",
+    "step5": "Down x5 (q8-q12; some partial 83% for the same long-text reason) then Down onto the line (visible). After A: 18 rows, no Show line, ring on 'spoilers are okay, how should I beat the boss in the Soul S…' (q13), box y 569-597, dock 601 (4 px above the dock).",
+    "step6_down": "q14, q15, q16, q17, q18, then Thu 1 Oct · 67 day line. Landed on the next day line as expected.",
+    "step6_up": "19 Up presses: q18, q17, q16, q15, q14, q13, q12, q11, q10, q9, q8, q7, q6, q5, q4, q3, q2, q1, then 'Wed 30 Sep · 18'. Every stop once, in reverse, none skipped, none twice. 19 of 19 passed. Saved: checks/P83-J3-SHOW-MORE.json",
+    "step7": "B on Wed line closed the day (3 rows left below it), ring stayed on the line. A again: 6 rows + 'Show 6 more' (not 18).",
+    "step8": "Yesterday · 5: A opened 5 question rows (I keep dying to the boss..., I'm at: Starting out in Dirtmouth, Give a shorter answer..., What is a quick way to earn Geo early on?, What does Geo buy early on?), no Show line. B closed it.",
+    "step9": "B on q6: panel stayed open, day stayed open (10 rows, same list), ring moved to the 'Main tab' tab strip at the top. B on 'Show 6 more': identical result, panel open, day still open, ring on the tab strip bar.",
+    "step10": "B on Wed line closed it; Up to '90 earlier'; B closed it. Chat left as found (no day lines, box empty)."
+  },
+  "expected": "As written in the runbook J3 steps 1-10.",
+  "verdict": [
+    "step 1: PASS - three day lines with the expected text.",
+    "step 2: PASS - exactly six rows then 'Show 6 more', day line still '· 18', ring on the day line.",
+    "step 3: PASS - q1-q6 in order, then the line, all within the pane above the dock. The rig's 83% partial reading is a cut-off long question (ellipsis), not a hidden control.",
+    "step 4: PASS - twelve rows, line after q12 reading 'Show 6 more', ring on q7, visible.",
+    "step 5: PASS - 18 rows, line gone, ring on q13, visible (4 px above the dock top).",
+    "step 6: PASS - lands on 'Thu 1 Oct · 67' after q18; Up walk hit every stop once in reverse, none skipped.",
+    "step 7: PASS - closing and reopening gives six rows plus 'Show 6 more'.",
+    "step 8: PASS - five rows, no Show line.",
+    "step 9: PASS - B on 'Show 6 more' does the same as B on a question row (ring to the tab strip, panel and day stay open). Note for the owner: B on a question row does not close the day, it sends the ring to the Main tab strip.",
+    "step 10: PASS - day and 'N earlier' closed, chat as found."
+  ],
+  "side_effect": "None on the Deck. The 19-press Up walk output was too big for the tool, so deck_saveCheck result was read from checks/P83-J3-SHOW-MORE.json. Rig tools wrote runs/, checks/ and screenshots/ files in the repo.",
+  "saved_check": "checks/P83-J3-SHOW-MORE.json"
+}

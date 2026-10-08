@@ -1,0 +1,41 @@
+{
+  "row": "P83-J1-SETTINGS-CARD",
+  "build_commit": "eddd7138",
+  "deck_time_local": "Thu 2026-10-08 01:38-01:41 EDT",
+  "screen": "page window 855 x 766 (screen reports 1500 x 843); read via innerWidth/innerHeight in the plugin page",
+  "setup": "Test chat open (title row: How do I beat the boss in the Soul Sanctum in Hollow Knight?). Typed 'en' with deck_send_ask.py (VERIFIED). Card 'Steam settings · 63 more' with 8 rows. Box showed an empty-looking label 'enen' in the rig's focus text only; box value read back as 'en'.",
+  "pressed": "Up x3 (bottom row, then one up each), Down x1; Up to third row from bottom; read focus; A alone; B; plugin reopened (box had been emptied by the reopen, 'en' sent again); Up to bottom row; B; box read 'en'; then cleared.",
+  "seen": {
+    "rows_before": [
+      "Steam Client Update Channel",
+      "Enable Developer Mode",
+      "Show Switch to Desktop option when not logged in",
+      "Enable Application Crash Report Collection",
+      "Enable Kernel Crash Report Collection",
+      "Enable GPU Crash Report Collection",
+      "Enable System Info Collection",
+      "Enable Driver Crash Report Collection"
+    ],
+    "row_background_before": "all 8 rows rgba(255,255,255,0.02)",
+    "up1": "ring on bottom row 'Enable Driver Crash Report Collection', 100% visible, y=565-ish",
+    "up2": "Enable System Info Collection, 100% visible",
+    "up3": "Enable GPU Crash Report Collection, 100% visible",
+    "down1": "Enable System Info Collection, 100% visible",
+    "up_to_third_from_bottom": "Enable GPU Crash Report Collection (y=533)",
+    "a_pressed_on": "Enable GPU Crash Report Collection",
+    "a_result": "Steam settings opened on the System page. Page top showing; ring on 'Select preferred language' (first control). The GPU crash toggle exists on that page but sat at y=1165, below the 845 high screen, so it was not scrolled into view or focused. Screenshot: screenshots/DeckCapture_20261008_013919_auto.png",
+    "row_background_after": "all 8 rows rgba(255,255,255,0.02), including the GPU row that A was pressed on",
+    "b_on_row": "card closed, ring on the box, box value 'en'",
+    "walk_visibility": "6 of 6 steps visible, 0 not visible"
+  },
+  "expected": "Up/Down one row at a time from bottom row; A opens Steam settings at the chosen setting; no non-focused row has a different background on return; B closes card with ring on box and box keeps 'en'.",
+  "verdict": [
+    "PASS - Up/Down move one row at a time from the bottom row, each fully visible.",
+    "PASS - no row has a different background on return (all 0.02 white; the pressed row is not lighter).",
+    "PASS - B on a card row closes the card, ring on the box, box still 'en'.",
+    "UNCLEAR - A opened Steam's System settings page but at its top, ring on the first control, not at the chosen setting (GPU crash row was below the visible area). Runbook says 'opens at that setting'; the owner should say whether landing on the right page is enough."
+  ],
+  "side_effect": "deck_runSequence wrote run reports into the repo: runs/plan83-j1-walk.json, and deck_saveCheck wrote checks/P83-J1-SETTINGS-CARD.json and a screenshot into screenshots/. Reopening the plugin after Steam settings emptied the box (the 'en' was gone), so it was typed again. No question was asked.",
+  "saved_check": "checks/P83-J1-SETTINGS-CARD.json",
+  "owner_call": "2026-10-08, the session owner (plan 83): the UNCLEAR half (A opens the right Steam settings page but does not scroll to the setting) is behaviour this fix did not touch: the jump code is unchanged apart from no longer passing the row number (commit 0456117b, src/hooks/useSteamSettingsSearch.ts). The check for this fix passes on its other halves; the jump becomes its own roadmap entry."
+}

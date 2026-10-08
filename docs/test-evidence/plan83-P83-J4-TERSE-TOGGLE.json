@@ -1,0 +1,43 @@
+{
+  "row": "P83-J4-TERSE-TOGGLE",
+  "build_commit": "0d3af3de (grep TERSE REPLY MODE on Deck printed 1)",
+  "deck_time_local": "Thu 2026-10-08 02:28-02:31 EDT",
+  "screen": "page window 855 x 766 (Quick Access page); screenshot is 1920x1080 on the Deck's own screen",
+  "setup": "Settings file had no terse_mode key. Plugin was not open; deck_openPlugin opened it first time. RB x2 to the Ollama tab (first RB only placed the ring on a chip on Main). Walked Down from the tab top: 7 presses to Reply style slider (Balanced).",
+  "pressed": "Step 1 reads only. Step 2: Down, Down, Up, Up (one run, each landing read, no Left/Right). Then Down, read focus (Terse mode, visible), A alone; read; screenshot; A alone again; read. Then B once (did nothing visible, panel stayed open), Guide+A chord to close Quick Access, deck_openPlugin to reopen, read switch, LB to Main tab.",
+  "seen": {
+    "step1": {
+      "order_top_to_bottom": "Reply style slider (heading y=885, page coords) then Terse mode (y=1049) then help line (y=1073, 128 tall) then Thinking (y=1211)",
+      "switch_state": "aria-checked false (off); settings file had no terse_mode key",
+      "help_text": "Speed mode only. Keeps each answer to three short lines and ends it with a menu of choices to dig deeper. It shortens what you see, not how hard the AI thinks, and the Reply style slider is ignored while it is on. Strategy and Expert answers are not changed.",
+      "help_text_cut_off": "no: scrollHeight 128 = clientHeight 128, width 214; all 8 lines visible in the screenshot",
+      "window": "855 x 766"
+    },
+    "step2": {
+      "slider_down": "Terse mode switch, visible 100%",
+      "switch_down": "Set thinking to Off button (Thinking row), visible 100%",
+      "thinking_up": "Terse mode switch, visible 100%",
+      "switch_up": "Reply style slider (Balanced, unchanged), visible 100%",
+      "stops_focused_but_not_visible": 0,
+      "saved_check": "checks/P83-J4-TERSE-TOGGLE.json"
+    },
+    "step3_4": {
+      "focus_before_A": "Terse mode switch (label Terse mode, rect 290,416 38x22, visible 100%)",
+      "after_first_A": "aria-checked true, screenshot shows switch blue and on; file after 2 s: \"terse_mode\": true",
+      "focus_before_second_A": "still the Terse mode switch",
+      "after_second_A": "aria-checked false; file after 2 s: \"terse_mode\": false"
+    },
+    "step5": {
+      "after_close_and_reopen": "Ollama tab still showing, Terse mode aria-checked false; file still false"
+    }
+  },
+  "screenshot": "screenshots/DeckCapture_20261008_022916_auto.png (switch on, step 3)",
+  "expected": "Order slider, switch, Thinking; switch off by default with exact help text; D-pad route slider<->switch<->Thinking; A toggles on then off with file true then false; off after reopen.",
+  "verdict": [
+    "PASS step 1: order, off state, exact full help text, window size recorded",
+    "PASS step 2: all four presses landed where predicted and were fully visible",
+    "PASS step 3+4: on then off, file read true then false after 2 s each",
+    "PASS step 5 with a note: switch read off after close and reopen. The reopen returned straight to the Ollama tab, so it may have kept the page rather than rebuilding it; the file also read false, so the saved value is off either way"
+  ],
+  "side_effect": "A stray first RB press only moved the ring onto a suggestion chip on Main (no press of A). One B press at the Ollama tab changed nothing visible. The new terse_mode key now exists in the settings file as false. Rig tools wrote checks/ and screenshots/ files in the repo root."
+}

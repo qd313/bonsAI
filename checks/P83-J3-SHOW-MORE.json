@@ -1,0 +1,682 @@
+{
+  "formatVersion": 2,
+  "name": "P83-J3-SHOW-MORE",
+  "tool": "deck_runSequence",
+  "savedAt": "2026-10-08T05:43:19.456Z",
+  "buildHash": "sha256:d5da3f68b7127375d4d4a762ca639f0a3546b95a2c28476165101400da1fdc77",
+  "buildHashInputs": [
+    "assets/logo.png",
+    "assets/named-chat-slot-idea.png",
+    "assets/qrcode.png",
+    "assets/readme-hero.png",
+    "assets/readme/ai-models.png",
+    "assets/readme/ask-about-a-screenshot.gif",
+    "assets/readme/ask-about-your-game.gif",
+    "assets/readme/attach-menu.png",
+    "assets/readme/find-a-setting.gif",
+    "assets/readme/hero.png",
+    "assets/readme/knowledge-library.png",
+    "assets/readme/permissions-2.png",
+    "assets/readme/permissions.png",
+    "assets/readme/reply-ready.gif",
+    "assets/readme/show-details.gif",
+    "assets/readme/spoiler.gif",
+    "assets/readme/strategy-checklist.gif",
+    "assets/readme/sum-up-chat.gif",
+    "assets/readme/switch-chats.gif",
+    "assets/readme/where-ai-runs.png",
+    "bin/README.md",
+    "dist/THIRD-PARTY-LICENSES.txt",
+    "dist/assets/bonsai-logo-2615d0ec.svg",
+    "dist/assets/qrcode-05e4d5b7.png",
+    "dist/index.js",
+    "dist/index.js.map",
+    "main.py",
+    "package.json",
+    "plugin.json",
+    "py_modules/backend/__init__.py",
+    "py_modules/backend/constants.py",
+    "py_modules/backend/ollama_connectivity.py",
+    "py_modules/backend/ollama_reply_limits.py",
+    "py_modules/backend/ollama_routing.py",
+    "py_modules/backend/ollama_urls.py",
+    "py_modules/backend/scripts/read_host_clipboard.sh",
+    "py_modules/backend/scripts/write_host_clipboard.sh",
+    "py_modules/backend/services/__init__.py",
+    "py_modules/backend/services/ai_character_service.py",
+    "py_modules/backend/services/ask_command_text.py",
+    "py_modules/backend/services/ask_local_commands.py",
+    "py_modules/backend/services/ask_payload.py",
+    "py_modules/backend/services/ask_topic_instructions.py",
+    "py_modules/backend/services/async_background_job.py",
+    "py_modules/backend/services/async_task_lifecycle.py",
+    "py_modules/backend/services/background_request_state.py",
+    "py_modules/backend/services/bonsai_stream_tags.py",
+    "py_modules/backend/services/branch_menu_example_guard.py",
+    "py_modules/backend/services/capabilities.py",
+    "py_modules/backend/services/chat_memory_service.py",
+    "py_modules/backend/services/chat_memory_step.py",
+    "py_modules/backend/services/chat_slot_rpc.py",
+    "py_modules/backend/services/chat_slot_service.py",
+    "py_modules/backend/services/chat_sum_up_job.py",
+    "py_modules/backend/services/chat_summary_plan.py",
+    "py_modules/backend/services/chat_summary_service.py",
+    "py_modules/backend/services/chat_summary_tidy.py",
+    "py_modules/backend/services/chat_summary_title.py",
+    "py_modules/backend/services/chat_turn_recorder.py",
+    "py_modules/backend/services/clipboard_service.py",
+    "py_modules/backend/services/compat_topic_router.py",
+    "py_modules/backend/services/desktop_note_service.py",
+    "py_modules/backend/services/destructive_advice_guard.py",
+    "py_modules/backend/services/feedback_service.py",
+    "py_modules/backend/services/game_ai_request.py",
+    "py_modules/backend/services/input_sanitizer_service.py",
+    "py_modules/backend/services/intent_pack_rpc.py",
+    "py_modules/backend/services/intent_pack_service.py",
+    "py_modules/backend/services/kb_attached_notes.py",
+    "py_modules/backend/services/kb_followup_memory.py",
+    "py_modules/backend/services/kb_not_in_notes_notice.py",
+    "py_modules/backend/services/kb_notes_footers.py",
+    "py_modules/backend/services/kb_other_game_named.py",
+    "py_modules/backend/services/knowledge_base_cards.py",
+    "py_modules/backend/services/knowledge_base_chips.py",
+    "py_modules/backend/services/knowledge_base_game_match.py",
+    "py_modules/backend/services/knowledge_base_game_tip.py",
+    "py_modules/backend/services/knowledge_base_schema.py",
+    "py_modules/backend/services/knowledge_base_search.py",
+    "py_modules/backend/services/knowledge_base_service.py",
+    "py_modules/backend/services/local_ollama_setup_service.py",
+    "py_modules/backend/services/local_ollama_teardown_service.py",
+    "py_modules/backend/services/media_desktop_rpc.py",
+    "py_modules/backend/services/model_policy.py",
+    "py_modules/backend/services/network_service.py",
+    "py_modules/backend/services/ollama_ask_budgets.py",
+    "py_modules/backend/services/ollama_ask_extras.py",
+    "py_modules/backend/services/ollama_ask_service.py",
+    "py_modules/backend/services/ollama_catalog_service.py",
+    "py_modules/backend/services/ollama_chat_stream.py",
+    "py_modules/backend/services/ollama_connection_test.py",
+    "py_modules/backend/services/ollama_embed_service.py",
+    "py_modules/backend/services/ollama_health_probe.py",
+    "py_modules/backend/services/ollama_local_autostart_service.py",
+    "py_modules/backend/services/ollama_local_setup_rpc.py",
+    "py_modules/backend/services/ollama_mdns_discovery_service.py",
+    "py_modules/backend/services/ollama_pc_models.py",
+    "py_modules/backend/services/ollama_preload_service.py",
+    "py_modules/backend/services/ollama_prompts.py",
+    "py_modules/backend/services/ollama_pull_resume_service.py",
+    "py_modules/backend/services/ollama_service.py",
+    "py_modules/backend/services/ollama_stop_service.py",
+    "py_modules/backend/services/ollama_stream_failures.py",
+    "py_modules/backend/services/ollama_try_order_prune.py",
+    "py_modules/backend/services/ollama_window_fit.py",
+    "py_modules/backend/services/plugin_data_reset.py",
+    "py_modules/backend/services/prompt_budget_service.py",
+    "py_modules/backend/services/proton_troubleshooting_logs.py",
+    "py_modules/backend/services/pull_model_catalog_service.py",
+    "py_modules/backend/services/rag_corpus_download_service.py",
+    "py_modules/backend/services/rag_corpus_local_install.py",
+    "py_modules/backend/services/rag_corpus_rpc.py",
+    "py_modules/backend/services/rag_corpus_status.py",
+    "py_modules/backend/services/reply_followup_blocks.py",
+    "py_modules/backend/services/reply_language_service.py",
+    "py_modules/backend/services/reply_style_blocks.py",
+    "py_modules/backend/services/response_verify.py",
+    "py_modules/backend/services/screenshot_media.py",
+    "py_modules/backend/services/settings_service.py",
+    "py_modules/backend/services/shortcut_setup_commands.py",
+    "py_modules/backend/services/soft_continue_spoiler_join.py",
+    "py_modules/backend/services/spoiler_empty_label_marks.py",
+    "py_modules/backend/services/spoiler_risk_service.py",
+    "py_modules/backend/services/spoiler_title_profiles.py",
+    "py_modules/backend/services/spy_confession_service.py",
+    "py_modules/backend/services/steam_vac_service.py",
+    "py_modules/backend/services/strategy_checklist_rpc.py",
+    "py_modules/backend/services/strategy_checklist_session_service.py",
+    "py_modules/backend/services/strategy_entity_extraction.py",
+    "py_modules/backend/services/strategy_guide_parse.py",
+    "py_modules/backend/services/strategy_spoiler_policy.py",
+    "py_modules/backend/services/tdp_service.py",
+    "py_modules/backend/services/token_accounting_service.py",
+    "py_modules/backend/services/transparency_service.py",
+    "py_modules/backend/services/vac_check_commands.py",
+    "py_modules/backend/services/voice_audio_capture_service.py",
+    "py_modules/backend/services/voice_engine_build_service.py",
+    "py_modules/backend/services/voice_model_download_service.py",
+    "py_modules/backend/services/voice_read_aloud_service.py",
+    "py_modules/backend/services/voice_rpc.py",
+    "py_modules/backend/services/voice_transcript_decode_service.py",
+    "py_modules/backend/services/voice_transcription_service.py",
+    "py_modules/backend/services/voice_whisper_daemon.py",
+    "py_modules/backend/services/voice_whisper_runtime.py",
+    "py_modules/backend/tdp_intent.py",
+    "py_modules/backend/tls_ca_fallback.py"
+  ],
+  "runOptions": {
+    "steps": [
+      {
+        "press": "UP",
+        "label": "u1"
+      },
+      {
+        "press": "UP",
+        "label": "u2"
+      },
+      {
+        "press": "UP",
+        "label": "u3"
+      },
+      {
+        "press": "UP",
+        "label": "u4"
+      },
+      {
+        "press": "UP",
+        "label": "u5"
+      },
+      {
+        "press": "UP",
+        "label": "u6"
+      },
+      {
+        "press": "UP",
+        "label": "u7"
+      },
+      {
+        "press": "UP",
+        "label": "u8"
+      },
+      {
+        "press": "UP",
+        "label": "u9"
+      },
+      {
+        "press": "UP",
+        "label": "u10"
+      },
+      {
+        "press": "UP",
+        "label": "u11"
+      },
+      {
+        "press": "UP",
+        "label": "u12"
+      },
+      {
+        "press": "UP",
+        "label": "u13"
+      },
+      {
+        "press": "UP",
+        "label": "u14"
+      },
+      {
+        "press": "UP",
+        "label": "u15"
+      },
+      {
+        "press": "UP",
+        "label": "u16"
+      },
+      {
+        "press": "UP",
+        "label": "u17"
+      },
+      {
+        "press": "UP",
+        "label": "u18"
+      },
+      {
+        "press": "UP",
+        "label": "u19"
+      }
+    ],
+    "stopOnFailure": true,
+    "mustReachText": [],
+    "requireVisible": false,
+    "acquireFocus": false
+  },
+  "expected": {
+    "ok": true,
+    "ranSteps": 19,
+    "totalSteps": 19,
+    "passed": 19,
+    "failed": 0,
+    "visited": [
+      "<DIV> \"Thu 1 Oct · 67▸\"",
+      "<DIV> \"How do I beat the boss in the Soul Sanctum in Hollow Knight?\"",
+      "<DIV> \"how do I beat the Mantis Lords in Hollow Knight\"",
+      "<DIV> \"how do I beat the False Knight in Hollow Knight\"",
+      "<DIV> \"how do I beat Hornet in Hollow Knight\"",
+      "<DIV> \"spoilers are okay, what happens after I beat the Soul Maste…\"",
+      "<DIV> \"spoilers are okay, how should I beat the boss in the Soul S…\"",
+      "<DIV> \"give me a full guide to every boss area in hollow knight wi…\"",
+      "<DIV> \"give me a complete walkthrough of every chapter of half lif…\"",
+      "<DIV> \"what is a good way to warm up before a long gaming session\"",
+      "<DIV> \"how do I dodge enemy projectiles\"",
+      "<DIV> \"how do I get past the Soul Sanctum fight in Hollow Knight\"",
+      "<DIV> \"Hollow Knight Soul Sanctum boss tips\"",
+      "<DIV> \"explain every class in deep rock survivor in detail\"",
+      "<DIV> \"what does fsr do on the steam deck\"",
+      "<DIV> \"how do i beat megaera in hades\"",
+      "<DIV> \"Any tips for the Soul Sanctum boss fight in Hollow Knight?\"",
+      "<DIV> \"Wed 30 Sep · 18▾\""
+    ],
+    "cycle": null,
+    "neverReached": [],
+    "stopsFocusedButNotVisible": 10,
+    "notVisibleStops": [
+      "step 1: <DIV> \"How do I beat the boss in the Soul Sanctum in Hollow Knight?\" only PARTIALLY visible (83%), clipped by div.oIVg-eNHeYCNPq0blN3Dk",
+      "step 5: <DIV> \"spoilers are okay, what happens after I beat the Soul Maste…\" only PARTIALLY visible (83%), clipped by div.oIVg-eNHeYCNPq0blN3Dk",
+      "step 6: <DIV> \"spoilers are okay, how should I beat the boss in the Soul S…\" only PARTIALLY visible (83%), clipped by div.oIVg-eNHeYCNPq0blN3Dk",
+      "step 7: <DIV> \"give me a full guide to every boss area in hollow knight wi…\" only PARTIALLY visible (83%), clipped by div.oIVg-eNHeYCNPq0blN3Dk",
+      "step 8: <DIV> \"give me a complete walkthrough of every chapter of half lif…\" only PARTIALLY visible (83%), clipped by div.oIVg-eNHeYCNPq0blN3Dk",
+      "step 9: <DIV> \"what is a good way to warm up before a long gaming session\" only PARTIALLY visible (83%), clipped by div.oIVg-eNHeYCNPq0blN3Dk",
+      "step 11: <DIV> \"how do I get past the Soul Sanctum fight in Hollow Knight\" only PARTIALLY visible (83%), clipped by div.oIVg-eNHeYCNPq0blN3Dk",
+      "step 13: <DIV> \"How do I beat the boss in the Soul Sanctum in Hollow Knight?\" only PARTIALLY visible (83%), clipped by div.oIVg-eNHeYCNPq0blN3Dk",
+      "step 17: <DIV> \"Any tips for the Soul Sanctum boss fight in Hollow Knight?\" only PARTIALLY visible (83%), clipped by div.oIVg-eNHeYCNPq0blN3Dk",
+      "step 18: <DIV> \"How do I beat the boss in the Soul Sanctum in Hollow Knight?\" only PARTIALLY visible (83%), clipped by div.oIVg-eNHeYCNPq0blN3Dk"
+    ],
+    "steps": [
+      {
+        "index": 1,
+        "label": "u1",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Thu 1 Oct · 67▸\"",
+        "to": "<DIV> \"How do I beat the boss in the Soul Sanctum in Hollow Knight?\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(20) > div.Panel.Focusable:nth-child(1)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": null,
+          "clippedBy": "div.oIVg-eNHeYCNPq0blN3Dk"
+        }
+      },
+      {
+        "index": 2,
+        "label": "u2",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"How do I beat the boss in the Soul Sanctum in Hollow Knight?\"",
+        "to": "<DIV> \"how do I beat the Mantis Lords in Hollow Knight\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(19) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 3,
+        "label": "u3",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"how do I beat the Mantis Lords in Hollow Knight\"",
+        "to": "<DIV> \"how do I beat the False Knight in Hollow Knight\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(18) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 4,
+        "label": "u4",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"how do I beat the False Knight in Hollow Knight\"",
+        "to": "<DIV> \"how do I beat Hornet in Hollow Knight\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(17) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 5,
+        "label": "u5",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"how do I beat Hornet in Hollow Knight\"",
+        "to": "<DIV> \"spoilers are okay, what happens after I beat the Soul Maste…\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(16) > div.Panel.Focusable:nth-child(1)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": null,
+          "clippedBy": "div.oIVg-eNHeYCNPq0blN3Dk"
+        }
+      },
+      {
+        "index": 6,
+        "label": "u6",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"spoilers are okay, what happens after I beat the Soul Maste…\"",
+        "to": "<DIV> \"spoilers are okay, how should I beat the boss in the Soul S…\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(15) > div.Panel.Focusable:nth-child(1)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": null,
+          "clippedBy": "div.oIVg-eNHeYCNPq0blN3Dk"
+        }
+      },
+      {
+        "index": 7,
+        "label": "u7",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"spoilers are okay, how should I beat the boss in the Soul S…\"",
+        "to": "<DIV> \"give me a full guide to every boss area in hollow knight wi…\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(14) > div.Panel.Focusable:nth-child(1)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": null,
+          "clippedBy": "div.oIVg-eNHeYCNPq0blN3Dk"
+        }
+      },
+      {
+        "index": 8,
+        "label": "u8",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"give me a full guide to every boss area in hollow knight wi…\"",
+        "to": "<DIV> \"give me a complete walkthrough of every chapter of half lif…\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(13) > div.Panel.Focusable:nth-child(1)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": null,
+          "clippedBy": "div.oIVg-eNHeYCNPq0blN3Dk"
+        }
+      },
+      {
+        "index": 9,
+        "label": "u9",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"give me a complete walkthrough of every chapter of half lif…\"",
+        "to": "<DIV> \"what is a good way to warm up before a long gaming session\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(12) > div.Panel.Focusable:nth-child(1)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": null,
+          "clippedBy": "div.oIVg-eNHeYCNPq0blN3Dk"
+        }
+      },
+      {
+        "index": 10,
+        "label": "u10",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"what is a good way to warm up before a long gaming session\"",
+        "to": "<DIV> \"how do I dodge enemy projectiles\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(11) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 11,
+        "label": "u11",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"how do I dodge enemy projectiles\"",
+        "to": "<DIV> \"how do I get past the Soul Sanctum fight in Hollow Knight\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(10) > div.Panel.Focusable:nth-child(1)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": null,
+          "clippedBy": "div.oIVg-eNHeYCNPq0blN3Dk"
+        }
+      },
+      {
+        "index": 12,
+        "label": "u12",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"how do I get past the Soul Sanctum fight in Hollow Knight\"",
+        "to": "<DIV> \"Hollow Knight Soul Sanctum boss tips\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(9) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 13,
+        "label": "u13",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Hollow Knight Soul Sanctum boss tips\"",
+        "to": "<DIV> \"How do I beat the boss in the Soul Sanctum in Hollow Knight?\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(8) > div.Panel.Focusable:nth-child(1)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": null,
+          "clippedBy": "div.oIVg-eNHeYCNPq0blN3Dk"
+        }
+      },
+      {
+        "index": 14,
+        "label": "u14",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"How do I beat the boss in the Soul Sanctum in Hollow Knight?\"",
+        "to": "<DIV> \"explain every class in deep rock survivor in detail\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(7) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 15,
+        "label": "u15",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"explain every class in deep rock survivor in detail\"",
+        "to": "<DIV> \"what does fsr do on the steam deck\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 16,
+        "label": "u16",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"what does fsr do on the steam deck\"",
+        "to": "<DIV> \"how do i beat megaera in hades\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(5) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 17,
+        "label": "u17",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"how do i beat megaera in hades\"",
+        "to": "<DIV> \"Any tips for the Soul Sanctum boss fight in Hollow Knight?\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(1)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": null,
+          "clippedBy": "div.oIVg-eNHeYCNPq0blN3Dk"
+        }
+      },
+      {
+        "index": 18,
+        "label": "u18",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Any tips for the Soul Sanctum boss fight in Hollow Knight?\"",
+        "to": "<DIV> \"How do I beat the boss in the Soul Sanctum in Hollow Knight?\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(3) > div.Panel.Focusable:nth-child(1)",
+        "visible": false,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": null,
+          "clippedBy": "div.oIVg-eNHeYCNPq0blN3Dk"
+        }
+      },
+      {
+        "index": 19,
+        "label": "u19",
+        "press": [
+          "UP"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"How do I beat the boss in the Soul Sanctum in Hollow Knight?\"",
+        "to": "<DIV> \"Wed 30 Sep · 18▾\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      }
+    ]
+  }
+}

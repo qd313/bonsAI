@@ -184,9 +184,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     setIsUnifiedInputFocused,
     isUnifiedInputFocused,
     setUnifiedInput,
-    setSelectedIndex,
     filteredSettings,
-    selectedIndex,
     onSettingClick,
     isAsking,
     ollamaIp,
@@ -422,11 +420,10 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
           /* Collapse newline-only “empty” values so the caret stays on the first line (native textarea + placeholder). */
           if (next.trim() === "" && /\n/.test(next)) next = "";
           setUnifiedInput(next);
-          setSelectedIndex(-1);
         }}
         onKeyDown={(ev: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
           /*
-           * ArrowUp/ArrowDown used to slide a `selectedIndex` marker through the settings list from
+           * ArrowUp/ArrowDown used to slide a row marker through the settings list from
            * a distance, and Enter used to jump straight to whichever row it landed on -- a shape a
            * real D-pad press never produces (the focus law: Steam invokes a Focusable's own move
            * handlers directly, never a DOM keydown, and never delivers a direction press through
@@ -911,7 +908,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     </div>
     {settingsCardShownSettings.map((s, i) => {
       const isQam = isQamSetting(s);
-      const isSelected = i === selectedIndex;
       const isLastRow = i === settingsCardShownSettings.length - 1;
       const parts = s.split(">").map((part) => part.trim()).filter(Boolean);
       const title = parts[parts.length - 1] ?? s;
@@ -945,10 +941,10 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             },
             // A jumps to the setting exactly as the click does today -- see the Ask bar's other
             // buttons (e.g. the Ask-mode menu rows) for the same onActivate/onOKButton pairing.
-            onActivate: () => onSettingClick(s, i),
+            onActivate: () => onSettingClick(s),
             onOKButton: (evt: { stopPropagation: () => void }) => {
               evt.stopPropagation();
-              onSettingClick(s, i);
+              onSettingClick(s);
             },
             // B closes the card for the rest of this search and keeps what was typed; the ring
             // goes back to the box, the same place Down from this row sends it.
@@ -961,20 +957,14 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             // focusSettingsCardLastRow's own comment for why it has to be this one row.
             ...(isLastRow ? { navRef: settingsCardLastRowNavRef } : {}),
           } as Record<string, unknown>)}
-          onClick={() => onSettingClick(s, i)}
+          onClick={() => onSettingClick(s)}
           style={{
             width: "100%",
             minHeight: SETTINGS_CARD_ROW_HEIGHT_PX,
             padding: "2px 6px",
             borderRadius: 4,
             border: `1px solid ${isQam ? "rgba(243, 197, 91, 0.3)" : "rgba(255,255,255,0.1)"}`,
-            background: isSelected
-              ? isQam
-                ? "rgba(243, 197, 91, 0.22)"
-                : "rgba(255,255,255,0.14)"
-              : isQam
-                ? "rgba(243, 197, 91, 0.08)"
-                : "rgba(255,255,255,0.02)",
+            background: isQam ? "rgba(243, 197, 91, 0.08)" : "rgba(255,255,255,0.02)",
           }}
         >
           <div
@@ -987,11 +977,11 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
               textAlign: "center",
             }}
           >
-            <div style={{ fontSize: 10, fontWeight: 700, color: isSelected ? "white" : isQam ? "#f2cf84" : "#d4dbe2", lineHeight: "1.15" }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: isQam ? "#f2cf84" : "#d4dbe2", lineHeight: "1.15" }}>
               {compactLine}
             </div>
             {compactSubline && (
-              <div style={{ fontSize: 9, color: isSelected ? "#dfe8ef" : "#9fafbc", lineHeight: "1.1", marginTop: 1 }}>
+              <div style={{ fontSize: 9, color: "#9fafbc", lineHeight: "1.1", marginTop: 1 }}>
                 {compactSubline}
               </div>
             )}

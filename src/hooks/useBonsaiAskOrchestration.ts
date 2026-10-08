@@ -928,7 +928,6 @@ export function useBonsaiAskOrchestration(
       setIsAsking(false);
     }
     a.setUnifiedInput("");
-    a.setSelectedIndex(-1);
     a.setNavigationMessage("");
     setOllamaResponse("");
     setAskStopped(false);

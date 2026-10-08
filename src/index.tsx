@@ -250,7 +250,6 @@ const Content: React.FC = () => {
     if (snap?.unifiedInput != null) return snap.unifiedInput;
     return loadSavedSearchQuery();
   });
-  const [selectedIndex, setSelectedIndex] = useState(() => peekBonsaiSessionPendingRestore()?.selectedIndex ?? -1);
   const [isUnifiedInputFocused, setIsUnifiedInputFocused] = useState(false);
   const [navigationMessage, setNavigationMessage] = useState(
     () => peekBonsaiSessionPendingRestore()?.navigationMessage ?? ""
@@ -450,7 +449,6 @@ const Content: React.FC = () => {
   const { filteredSettings, onSettingClick } = useSteamSettingsSearch({
     unifiedInput,
     intentPackIndex: intentPacks.index,
-    setSelectedIndex,
     setNavigationMessage,
   });
 
@@ -536,7 +534,6 @@ const Content: React.FC = () => {
     syncSettingsFromDisk,
     unifiedInputFieldLayerRef,
     unifiedInputHostRef,
-    setSelectedIndex,
     setNavigationMessage,
     saveIp: persistOllamaIpIfRoutingToLan,
     persistSearchQuery,
@@ -607,7 +604,6 @@ const Content: React.FC = () => {
     chatSlots,
     setCurrentTab,
     setUnifiedInput,
-    setSelectedIndex,
     setNavigationMessage,
     restoreScreenshotBrowserSnapshot,
     restorePluginHelpDismissed,
@@ -678,7 +674,6 @@ const Content: React.FC = () => {
   sessionSnapshotRef.current = () => ({
     currentTab,
     unifiedInput,
-    selectedIndex,
     navigationMessage,
     selectedAttachment,
     isScreenshotBrowserOpen,
@@ -764,7 +759,6 @@ const Content: React.FC = () => {
     uiT,
     setUnifiedInput,
     clearAskCameFromMicRef,
-    setSelectedIndex,
     setNavigationMessage,
     setSelectedAttachment,
     setLastConnectionStatus,
@@ -902,9 +896,7 @@ const Content: React.FC = () => {
     usesNativeMultilineField,
     setIsUnifiedInputFocused,
     isUnifiedInputFocused,
-    setSelectedIndex,
     filteredSettings,
-    selectedIndex,
     onSettingClick,
     isAsking,
     ollamaIp: effectiveOllamaPcIp,

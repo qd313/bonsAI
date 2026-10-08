@@ -9,7 +9,7 @@
  *          ring sits in the card hands it back to the box.
  * Used for: the settings-results card's row map in MainTabUnifiedAskBar.tsx and the box's own
  *          onMoveUp override next to it.
- * Solves: before this, the box swallowed Up/Down itself and slid a `selectedIndex` marker through
+ * Solves: before this, the box swallowed Up/Down itself and slid a row marker through
  *         the list from a distance -- a shape a real D-pad press on the device never produces (the
  *         focus law: Steam calls a Focusable's own move handlers directly, never a DOM keydown).
  *         Asserting through fireEvent keydown would have passed for that dead code and proven
@@ -75,9 +75,7 @@ function buildProps(overrides: Partial<MainTabUnifiedAskBarProps> = {}): MainTab
     setIsUnifiedInputFocused: vi.fn(),
     isUnifiedInputFocused: false,
     setUnifiedInput: vi.fn(),
-    setSelectedIndex: vi.fn(),
     filteredSettings: [],
-    selectedIndex: -1,
     onSettingClick: vi.fn(),
     isAsking: false,
     ollamaIp: "192.168.1.50",
@@ -248,7 +246,7 @@ describe("Down from the row nearest the box returns the ring to the box", () => 
 });
 
 describe("A jumps to the setting exactly as a click does", () => {
-  it("onActivate calls onSettingClick with the row's own setting and index", () => {
+  it("onActivate calls onSettingClick with the row's own setting", () => {
     const onSettingClick = vi.fn();
     const settings = fakeSettings(3);
     const { restoreRects } = renderWithRoom(buildProps({ filteredSettings: settings, onSettingClick }));
@@ -256,7 +254,7 @@ describe("A jumps to the setting exactly as a click does", () => {
 
     (rows[1].onActivate as () => void)();
 
-    expect(onSettingClick).toHaveBeenCalledWith(settings[1], 1);
+    expect(onSettingClick).toHaveBeenCalledWith(settings[1]);
     restoreRects();
   });
 
@@ -269,7 +267,7 @@ describe("A jumps to the setting exactly as a click does", () => {
 
     (rows[2].onOKButton as (evt: { stopPropagation: () => void }) => void)({ stopPropagation });
 
-    expect(onSettingClick).toHaveBeenCalledWith(settings[2], 2);
+    expect(onSettingClick).toHaveBeenCalledWith(settings[2]);
     expect(stopPropagation).toHaveBeenCalledTimes(1);
     restoreRects();
   });

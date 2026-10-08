@@ -30,7 +30,6 @@ export function buildInitialSessionSnapshot(): BonsaiSessionSurvivalSnapshot {
   return {
     currentTab: "main",
     unifiedInput: "",
-    selectedIndex: -1,
     navigationMessage: "",
     selectedAttachment: null,
     isScreenshotBrowserOpen: false,

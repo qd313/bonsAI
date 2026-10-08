@@ -58,7 +58,6 @@ import { createTabLocalSurvival } from "./createTabLocalSurvival";
 export type BonsaiSessionSurvivalSnapshot = {
   currentTab: string;
   unifiedInput: string;
-  selectedIndex: number;
   navigationMessage: string;
   selectedAttachment: AskAttachment | null;
   isScreenshotBrowserOpen: boolean;

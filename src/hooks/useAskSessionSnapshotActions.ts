@@ -191,7 +191,7 @@ export function useAskSessionSnapshotActions(
    *  - pendingArchiveTurnRef / pendingThreadQuestionDisplayRef: the turn a foreign in-flight
    *    request is still assembling for the chat you left has to survive so it archives correctly
    *    once that answer completes.
-   *  - the ask bar itself (unifiedInput, selectedIndex, selectedAttachment): switching chats is
+   *  - the ask bar itself (unifiedInput, selectedAttachment): switching chats is
    *    not the same gesture as clearing the question box.
    */
   const resetLiveAskPresentation = useCallback(() => {

@@ -152,7 +152,6 @@ function renderMainTab(turns: AskThreadCollapsedTurn[], open: string) {
     onChatSlotDelete: async () => true,
     suggestedPrompts: [],
     filteredSettings: [],
-    selectedIndex: 0,
     recentScreenshots: [],
   } as unknown as MainTabProps;
   const out = render(<MainTab {...props} />);

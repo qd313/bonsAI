@@ -32,7 +32,6 @@ function minimalSurvivalSnapshot(
   return {
     currentTab: "main",
     unifiedInput: "",
-    selectedIndex: -1,
     navigationMessage: "",
     selectedAttachment: null,
     isScreenshotBrowserOpen: false,
@@ -134,7 +133,6 @@ function makeArgs(overrides: Partial<UseBonsaiAskOrchestrationArgs> = {}): UseBo
     syncSettingsFromDisk: vi.fn(async () => undefined),
     unifiedInputFieldLayerRef: { current: null },
     unifiedInputHostRef: { current: null },
-    setSelectedIndex: vi.fn(),
     setNavigationMessage: vi.fn(),
     saveIp: vi.fn(),
     persistSearchQuery: vi.fn(),

@@ -83,10 +83,8 @@ export type MainTabProps = {
   usesNativeMultilineField: boolean;
   setIsUnifiedInputFocused: (v: boolean) => void;
   isUnifiedInputFocused: boolean;
-  setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
   filteredSettings: string[];
-  selectedIndex: number;
-  onSettingClick: (settingPath: string, index?: number) => void;
+  onSettingClick: (settingPath: string) => void;
   isAsking: boolean;
   ollamaIp: string;
   onAskOllama: (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => void | Promise<void>;

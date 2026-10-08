@@ -39,9 +39,7 @@ function buildProps(overrides: Partial<MainTabUnifiedAskBarProps> = {}): MainTab
     setIsUnifiedInputFocused: vi.fn(),
     isUnifiedInputFocused: false,
     setUnifiedInput: vi.fn(),
-    setSelectedIndex: vi.fn(),
     filteredSettings: [],
-    selectedIndex: -1,
     onSettingClick: vi.fn(),
     isAsking: false,
     ollamaIp: "192.168.1.50",
@@ -234,6 +232,32 @@ describe("the settings-results card hides itself for a long typed question", () 
       { boxTop: 1100, tabBarBottom: 100 },
     );
     expect(container.querySelector(".bonsai-settings-results-card")).toBeNull();
+    restoreRects();
+  });
+});
+
+describe("the settings-results card paints no row as selected", () => {
+  beforeEach(() => resetNavFocusRegistry());
+  afterEach(() => {
+    document.body.innerHTML = "";
+    resetNavFocusRegistry();
+  });
+
+  it("paints every row the same, even when a stored row number is still passed in", () => {
+    /*
+     * The stored row number that used to paint one row is gone. Passing one in anyway (an old
+     * caller, a stale snapshot) must not paint a row: all rows keep the plain background.
+     */
+    const legacyRowNumber = { selectedIndex: 1 } as unknown as Partial<MainTabUnifiedAskBarProps>;
+    const { container, restoreRects } = renderWithRoom(
+      buildProps({ filteredSettings: fakeSettings(3), ...legacyRowNumber }),
+      { boxTop: 1100, tabBarBottom: 100 },
+    );
+    const rows = Array.from(
+      container.querySelectorAll(".bonsai-settings-results-card-row"),
+    ) as HTMLElement[];
+    expect(rows.length).toBe(3);
+    expect(new Set(rows.map((row) => row.style.background)).size).toBe(1);
     restoreRects();
   });
 });

@@ -20,7 +20,6 @@ type SteamUrlApi = {
 export type UseSteamSettingsSearchOptions = {
   unifiedInput: string;
   intentPackIndex: IntentPackSearchIndex;
-  setSelectedIndex: Dispatch<SetStateAction<number>>;
   setNavigationMessage: Dispatch<SetStateAction<string>>;
 };
 
@@ -114,7 +113,6 @@ export function shouldHideSettingsResultsCard(input: string): boolean {
 export function useSteamSettingsSearch({
   unifiedInput,
   intentPackIndex,
-  setSelectedIndex,
   setNavigationMessage,
 }: UseSteamSettingsSearchOptions) {
   const filteredSettings = useMemo(() => {
@@ -122,8 +120,7 @@ export function useSteamSettingsSearch({
   }, [unifiedInput, intentPackIndex]);
 
   const onSettingClick = useCallback(
-    (settingPath: string, index?: number) => {
-      if (index !== undefined) setSelectedIndex(index);
+    (settingPath: string) => {
       try {
         if (isQamSetting(settingPath)) {
           const qamTab = getQamTab(settingPath);
@@ -144,7 +141,7 @@ export function useSteamSettingsSearch({
         setNavigationMessage(`Navigation failed: ${message}`);
       }
     },
-    [setSelectedIndex, setNavigationMessage],
+    [setNavigationMessage],
   );
 
   return { filteredSettings, onSettingClick };

@@ -48,7 +48,6 @@ export type UseSessionRestoreAfterRemountArgs = {
   chatSlots: Pick<ChatSlots, "selectSlot">;
   setCurrentTab: PluginShell["setCurrentTab"];
   setUnifiedInput: (value: string) => void;
-  setSelectedIndex: (value: number) => void;
   setNavigationMessage: (value: string) => void;
   restoreScreenshotBrowserSnapshot: ScreenshotBrowser["restoreScreenshotBrowserSnapshot"];
   restorePluginHelpDismissed: PluginHelpModal["restorePluginHelpDismissed"];
@@ -72,7 +71,6 @@ export function useSessionRestoreAfterRemount({
   chatSlots,
   setCurrentTab,
   setUnifiedInput,
-  setSelectedIndex,
   setNavigationMessage,
   restoreScreenshotBrowserSnapshot,
   restorePluginHelpDismissed,
@@ -113,7 +111,6 @@ export function useSessionRestoreAfterRemount({
       setCurrentTab(survived.currentTab);
     }
     setUnifiedInput(survived.unifiedInput);
-    setSelectedIndex(survived.selectedIndex);
     setNavigationMessage(survived.navigationMessage);
     restoreScreenshotBrowserSnapshot({
       selectedAttachment: survived.selectedAttachment,

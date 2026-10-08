@@ -35,7 +35,6 @@ export type UseBonsaiAskOrchestrationArgs = {
   syncSettingsFromDisk: () => Promise<unknown>;
   unifiedInputFieldLayerRef: RefObject<HTMLDivElement | null>;
   unifiedInputHostRef: RefObject<HTMLDivElement | null>;
-  setSelectedIndex: Dispatch<SetStateAction<number>>;
   setNavigationMessage: Dispatch<SetStateAction<string>>;
   saveIp: (ip: string) => void;
   persistSearchQuery: (unifiedInputText: string) => void;

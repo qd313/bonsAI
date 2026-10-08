@@ -7,7 +7,7 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 2222,
+      "lines": 2220,
       "role": ""
     },
     {
@@ -17,17 +17,17 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1564,
+      "lines": 1563,
       "role": ""
     },
     {
       "path": "src/index.tsx",
-      "lines": 1319,
+      "lines": 1311,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
       "path": "src/components/MainTabUnifiedAskBar.tsx",
-      "lines": 1287,
+      "lines": 1277,
       "role": ""
     },
     {

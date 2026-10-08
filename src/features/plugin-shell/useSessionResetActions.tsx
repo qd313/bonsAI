@@ -58,7 +58,6 @@ export type UseSessionResetActionsArgs = {
   uiT: ReplyLanguage["t"];
   setUnifiedInput: (value: string) => void;
   clearAskCameFromMicRef: React.MutableRefObject<() => void>;
-  setSelectedIndex: (value: number) => void;
   setNavigationMessage: (value: string) => void;
   setSelectedAttachment: ScreenshotBrowser["setSelectedAttachment"];
   setLastConnectionStatus: OllamaConnectionState["setLastConnectionStatus"];
@@ -93,7 +92,6 @@ export function useSessionResetActions({
   uiT,
   setUnifiedInput,
   clearAskCameFromMicRef,
-  setSelectedIndex,
   setNavigationMessage,
   setSelectedAttachment,
   setLastConnectionStatus,
@@ -181,7 +179,6 @@ export function useSessionResetActions({
     persistSearchQuery("");
     setUnifiedInput("");
     clearAskCameFromMicRef.current();
-    setSelectedIndex(-1);
     setNavigationMessage("");
     setSelectedAttachment(null);
     void reseedSuggestedPrompts("random", undefined, true);

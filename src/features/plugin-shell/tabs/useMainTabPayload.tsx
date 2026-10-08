@@ -176,9 +176,7 @@ export function useMainTabPayload({
     usesNativeMultilineField,
     setIsUnifiedInputFocused,
     isUnifiedInputFocused,
-    setSelectedIndex,
     filteredSettings,
-    selectedIndex,
     onSettingClick,
     isAsking,
     ollamaIp,
@@ -292,9 +290,7 @@ export function useMainTabPayload({
         usesNativeMultilineField={usesNativeMultilineField}
         setIsUnifiedInputFocused={setIsUnifiedInputFocused}
         isUnifiedInputFocused={isUnifiedInputFocused}
-        setSelectedIndex={setSelectedIndex}
         filteredSettings={filteredSettings}
-        selectedIndex={selectedIndex}
         onSettingClick={onSettingClick}
         isAsking={isAsking}
         ollamaIp={ollamaIp}
@@ -397,7 +393,6 @@ export function useMainTabPayload({
       usesNativeMultilineField,
       isUnifiedInputFocused,
       filteredSettings,
-      selectedIndex,
       isAsking,
       ollamaIp,
       selectedAttachment,

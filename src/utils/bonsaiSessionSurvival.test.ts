@@ -18,7 +18,6 @@ function minimalSnapshot(overrides: Partial<BonsaiSessionSurvivalSnapshot> = {})
   return {
     currentTab: "settings",
     unifiedInput: "hello",
-    selectedIndex: 2,
     navigationMessage: "Opened: foo",
     selectedAttachment: null,
     isScreenshotBrowserOpen: false,
@@ -149,6 +148,18 @@ describe("bonsaiSessionSurvival", () => {
     const consumed = consumeBonsaiSessionAfterRemount();
     expect(consumed?.settingsSnapshot.modelPolicyTier).toBe("open_weight");
     expect(takeRestoredSettingsSnapshot()?.modelPolicyTier).toBe("open_weight");
+  });
+
+  it("a snapshot that still carries the old selectedIndex field restores without error", () => {
+    /* Shape of a snapshot captured before the stored row number was removed. */
+    const legacy = { ...minimalSnapshot(), selectedIndex: 3 } as unknown as BonsaiSessionSurvivalSnapshot;
+    captureBonsaiSessionForModal(legacy);
+    const consumed = consumeBonsaiSessionAfterRemount();
+    expect(consumed?.unifiedInput).toBe("hello");
+    expect(consumed?.currentTab).toBe("settings");
+    expect(consumed?.navigationMessage).toBe("Opened: foo");
+    finalizeSessionRestoreAfterRemount();
+    expect(peekBonsaiSessionPendingRestore()).toBeNull();
   });
 
   it("clear wipes pending restore", () => {

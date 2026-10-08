@@ -90,6 +90,7 @@
     "src/components/OllamaModelsHubModal.test.tsx",
     "src/components/OllamaTab.focusRing.test.tsx",
     "src/components/OllamaTab.modalReturnFocus.test.tsx",
+    "src/components/OllamaTab.terseMode.test.tsx",
     "src/components/OllamaThinkingEffortRow.test.tsx",
     "src/components/OllamaWhereAiRunsSection.constants.test.tsx",
     "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",

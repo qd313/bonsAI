@@ -91,9 +91,26 @@ export type OllamaTabProps = {
 
   replyVerbosity: ReplyVerbosityId;
   setReplyVerbosity: (v: ReplyVerbosityId) => void;
+  /** Terse mode: Speed answers capped at three lines. Sits right under the reply-style slider. */
+  terseMode: boolean;
+  setTerseMode: (v: boolean) => void;
   askThinkEffort: AskThinkEffortId;
   setAskThinkEffort: (v: AskThinkEffortId) => void;
 };
+
+/**
+ * Give focus to the first matching stop inside one row's own container. The query is scoped to the
+ * element handed in (a ref the row registered), never the page: under Decky the global document is
+ * the wrong one. Returns false, leaving focus alone, when the row is not on screen or has no stop,
+ * so the caller can let Steam's own move carry on.
+ */
+function focusFirstStopIn(host: HTMLElement | null, selector: string): boolean {
+  if (!host) return false;
+  const target = host.querySelector<HTMLElement>(selector);
+  if (!target) return false;
+  target.focus();
+  return true;
+}
 
 /**
  * The whole tab: renders each Ollama-related section in order and wires
@@ -157,6 +174,8 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
   ragCorpusVersion,
   replyVerbosity,
   setReplyVerbosity,
+  terseMode,
+  setTerseMode,
   askThinkEffort,
   setAskThinkEffort,
 }) => {
@@ -168,6 +187,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
   const kbCancelBtnRef = useRef<HTMLButtonElement>(null);
   const connectionTestBtnRef = useRef<HTMLButtonElement>(null);
   const replyVerbosityThumbHostRef = useRef<HTMLDivElement>(null);
+  const terseToggleHostRef = useRef<HTMLDivElement>(null);
   const thinkingEffortHostRef = useRef<HTMLDivElement | null>(null);
 
   const { requestThinkingEffortChange } = useThinkingNoticeGate(askThinkEffort, setAskThinkEffort, {
@@ -188,51 +208,33 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
   }, []);
 
   const focusOllamaKeepAliveThumb = useCallback((): boolean => {
-    const host = ollamaKeepAliveThumbHostRef.current;
-    if (!host) return false;
-    const target = host.querySelector<HTMLElement>("[tabindex], button");
-    if (!target) return false;
-    target.focus();
-    return true;
+    return focusFirstStopIn(ollamaKeepAliveThumbHostRef.current, "[tabindex], button");
   }, []);
 
   const focusLatencyWarningThumb = useCallback((): boolean => {
-    const host = latencyWarningThumbHostRef.current;
-    if (!host) return false;
-    const target = host.querySelector<HTMLElement>("[tabindex], button");
-    if (!target) return false;
-    target.focus();
-    return true;
+    return focusFirstStopIn(latencyWarningThumbHostRef.current, "[tabindex], button");
   }, []);
 
   const focusKbToggle = useCallback((): boolean => {
-    const host = kbToggleHostRef.current;
-    if (!host) return false;
-    const target = host.querySelector<HTMLElement>("[tabindex], button, input");
-    if (!target) return false;
-    target.focus();
-    return true;
+    return focusFirstStopIn(kbToggleHostRef.current, "[tabindex], button, input");
   }, []);
 
 
   const focusReplyVerbosityThumb = useCallback((): boolean => {
-    const host = replyVerbosityThumbHostRef.current;
-    if (!host) return false;
-    const target = host.querySelector<HTMLElement>("[tabindex], button");
-    if (!target) return false;
-    target.focus();
-    return true;
+    return focusFirstStopIn(replyVerbosityThumbHostRef.current, "[tabindex], button");
   }, []);
 
   // Element-scoped query on the row's own ref — never a global document.querySelector,
   // which under Decky searches a 14-element shell rather than the plugin's DOM.
   const focusThinkingEffortRow = useCallback((): boolean => {
-    const host = thinkingEffortHostRef.current;
-    if (!host) return false;
-    const target = host.querySelector<HTMLElement>("button:not([disabled])");
-    if (!target) return false;
-    target.focus();
-    return true;
+    return focusFirstStopIn(thinkingEffortHostRef.current, "button:not([disabled])");
+  }, []);
+
+  // Same shape as focusKbToggle: an element-scoped query on the row's own ref. The slider above and
+  // the Thinking row below both hand focus here, so the toggle is a stop on the Down/Up walk
+  // rather than a row the explicit slider-to-Thinking hop would jump over.
+  const focusTerseToggle = useCallback((): boolean => {
+    return focusFirstStopIn(terseToggleHostRef.current, "[tabindex], button, input");
   }, []);
 
   const focusKbUpFromReplyVerbosity = useCallback((): boolean => {
@@ -314,7 +316,21 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
               onChange={setReplyVerbosity}
               thumbHostRef={replyVerbosityThumbHostRef}
               onMoveUp={focusKbUpFromReplyVerbosity}
-              onMoveDown={focusThinkingEffortRow}
+              onMoveDown={focusTerseToggle}
+            />
+          </div>
+        </PanelSectionRow>
+        <PanelSectionRow>
+          <div ref={terseToggleHostRef} className="bonsai-settings-bleed" style={{ width: "100%" }}>
+            <ToggleField
+              label="Terse mode"
+              description="Speed mode only. Keeps each answer to three short lines and ends it with a menu of choices to dig deeper. It shortens what you see, not how hard the AI thinks, and the Reply style slider is ignored while it is on. Strategy and Expert answers are not changed."
+              checked={terseMode}
+              onChange={(checked) => setTerseMode(checked)}
+              {...({
+                onMoveUp: () => focusReplyVerbosityThumb(),
+                onMoveDown: () => focusThinkingEffortRow(),
+              } as unknown as Record<string, unknown>)}
             />
           </div>
         </PanelSectionRow>
@@ -324,7 +340,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
               value={askThinkEffort}
               onChange={requestThinkingEffortChange}
               hostRef={setThinkingEffortHost}
-              onMoveUp={focusReplyVerbosityThumb}
+              onMoveUp={focusTerseToggle}
               onMoveDown={focusLatencyWarningThumb}
             />
           </div>

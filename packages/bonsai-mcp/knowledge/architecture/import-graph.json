@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 743,
-  "edgeCount": 2166,
+  "fileCount": 744,
+  "edgeCount": 2168,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1310,6 +1310,13 @@
       ],
       "importedBy": []
     },
+    "src/components/OllamaTab.terseMode.test.tsx": {
+      "imports": [
+        "src/components/OllamaTab.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/OllamaTab.tsx": {
       "imports": [
         "src/components/DeveloperTab.tsx",
@@ -1330,6 +1337,7 @@
       "importedBy": [
         "src/components/OllamaTab.focusRing.test.tsx",
         "src/components/OllamaTab.modalReturnFocus.test.tsx",
+        "src/components/OllamaTab.terseMode.test.tsx",
         "src/features/plugin-shell/tabs/useOllamaTabPayload.tsx"
       ]
     },
@@ -5827,6 +5835,7 @@
         "src/components/OllamaModelsHubModal.cancelRestores.test.tsx",
         "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
+        "src/components/OllamaTab.terseMode.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
         "src/components/OllamaWhereAiRunsSection.walk.test.tsx",
         "src/components/PermissionDenyAction.test.tsx",

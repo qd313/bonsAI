@@ -59,6 +59,8 @@ function buildProps(overrides: Partial<OllamaTabProps> = {}): OllamaTabProps {
     ragCorpusVersion: "",
     replyVerbosity: "balanced",
     setReplyVerbosity: () => {},
+    terseMode: false,
+    setTerseMode: () => {},
     askThinkEffort: "off",
     setAskThinkEffort: () => {},
     ...overrides,

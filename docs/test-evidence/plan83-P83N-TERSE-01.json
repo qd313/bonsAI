@@ -1,0 +1,195 @@
+{
+  "row": "P83N-TERSE-01",
+  "build_commit": "0d3af3de (code identical to de124df8; grep TERSE REPLY MODE printed 1)",
+  "deck_time_local": "2026-10-08 04:32 to 04:53 EDT",
+  "screen": "Capture 1920x1080 with the game on the left and the panel on the right; the panel page window reads 855x845 (QuickAccess). Game: Deep Rock Galactic: Survivor, at its title screen (Press any key to continue), Context line named it. Ask mode Speed, Terse mode ON, Reply style Balanced (slider untouched).",
+  "setup": "Keep-awake taken 04:32 (ttl 480, expiresAt 2026-10-08T16:32:31Z). Gemma AI unloaded (keep_alive 0, only the embedding model left in memory). Game launched from Recent Games, 35 s wait, plugin already open. Terse mode switch on (A on it, terse_mode true read over SSH). Ask mode Speed (ask_mode speed read over SSH). Test chat: How do I beat the boss in the Soul Sanctum in Hollow Knight? Each question typed with deck_send_ask.py (VERIFIED each time), ring walked to Ask, A pressed on Ask only. No choice button pressed.",
+  "pressed": "Ten questions once each, in the runbook order. Seconds = Ask press to Stop gone, measured from the page clock, accurate to about 1.5 s. The first one includes loading the AI back into memory.",
+  "seen": {
+    "answers": [
+      {
+        "q": 1,
+        "question": "how do i beat the dreadnought",
+        "seconds": 86,
+        "seconds_note": "first question after unloading the AI, includes model load; press time estimated from clock",
+        "text": "Listen up, you gotta kite 'em between the waves and keep your eye on those weak armor plates when they open up. Save that overclock or nuke for when you gotta break through the armor.",
+        "lines": 2,
+        "menu": true,
+        "menu_buttons": 2,
+        "menu_text": "How to kite effectively? A. Kiting between waves / B. Focusing weak armor plates",
+        "kb_note": true,
+        "kb_note_text": "Glyphid Dreadnought, From bonsAI's own note",
+        "reasoning_header": "Show reasoning 45 s"
+      },
+      {
+        "q": 2,
+        "question": "what is the max tdp on a steam deck",
+        "seconds": 38,
+        "text": "The max TDP on the Steam Deck is 15W.",
+        "lines": 1,
+        "menu": true,
+        "menu_buttons": 2,
+        "menu_text": "What is the difference between TDP and power draw on a Steam Deck? A. TDP is the hardware limit, power draw is what you're actually using / B. TDP is fixed, power draw changes based on game load",
+        "kb_note": false,
+        "tdp_panel": false
+      },
+      {
+        "q": 3,
+        "question": "my game stutters when i turn",
+        "seconds": 79,
+        "text": "Listen up, if that game is stuttering when you turn, you gotta chill out with the settings. Try dropping the resolution or turn on FSR before you mess with anything else.",
+        "lines": 2,
+        "menu": true,
+        "menu_buttons": 2,
+        "menu_text": "Should I try lowering my in-game resolution? A. Yes, try lowering resolution / B. No, I'll try FSR first",
+        "kb_note": false,
+        "reasoning_header": "Show reasoning 42 s"
+      },
+      {
+        "q": 4,
+        "question": "should i cap fps at 30 or 40",
+        "seconds": 105,
+        "text": "Listen up, mate. If your Deck is struggling to keep up with the action, capping at 30 FPS is safer for smooth sailing, like a steady cruise. If you got a decent setup and want that smoother 40 FPS experience, go for it, but watch out for those big frame drops.",
+        "lines": 3,
+        "menu": false,
+        "menu_buttons": 0,
+        "kb_note": false,
+        "reasoning_header": "Show reasoning 60 s"
+      },
+      {
+        "q": 5,
+        "question": "what does proton do",
+        "seconds": 75,
+        "text": "It’s like a secret camera for when things go sideways during startup. It logs everything to a file so you can see what's actually happening.",
+        "lines": 2,
+        "menu": true,
+        "menu_buttons": 2,
+        "menu_text": "What kind of logs can I check? A. View the launch trace log file / B. Understand how it helps with compatibility",
+        "kb_note": false,
+        "reasoning_header": "Show reasoning 38 s",
+        "note": "content is wrong (Proton is not a logging tool); count only"
+      },
+      {
+        "q": 6,
+        "question": "how do i deal with exploders",
+        "seconds": 93,
+        "text": "Listen up, mate, you gotta keep your distance from those big orange blokes. The skinny is, they're fragile, and one of 'em popping early will chain the blast and clear the rest of the pack. So keep your weapons firing, but make sure the blast hits the swarm, not you.",
+        "lines": 3,
+        "menu": false,
+        "menu_buttons": 0,
+        "kb_note": true,
+        "kb_note_text": "Exploder, From bonsAI's own note",
+        "reasoning_header": "Show reasoning 50 s"
+      },
+      {
+        "q": 7,
+        "question": "is 8 watts enough for this game",
+        "seconds": 78,
+        "text": "Listen up, mate. Eight watts is dead safe for a 3D game like DRG: Survivor. You ain't gonna be pushing that hardware too hard, see?",
+        "lines": 3,
+        "menu": false,
+        "menu_buttons": 0,
+        "kb_note": false,
+        "reasoning_header": "Show reasoning 36 s"
+      },
+      {
+        "q": 8,
+        "question": "what should i upgrade first",
+        "seconds": 85,
+        "text": "Pick one weapon to carry the run, see? Then spend the rest of your cash on making sure you don't get instantly wiped out. That's the main way to keep your run going, mate.",
+        "lines": 3,
+        "menu": false,
+        "menu_buttons": 0,
+        "menu_raw_json_on_screen": true,
+        "raw_json": "{\"question\":\"Which weapon should I focus on first?\",\"options\":[{\"id\":\"a\",\"label\":\"Details on primary weapon choices\"},{\"id\":\"b\",\"label\":\"Tips for survivability upgrades\"}]}",
+        "kb_note": true,
+        "kb_note_text": "Upgrades and overclocks, From bonsAI's own note",
+        "reasoning_header": "Show reasoning 43 s",
+        "screenshot_src": "C:/Users/still/Documents/BonsAI/screenshots/DeckCapture_20261008_044843_auto.png"
+      },
+      {
+        "q": 9,
+        "question": "why did my save not carry over",
+        "seconds": 89,
+        "text": "Listen up, mate, if your save ain't sticking, it's usually because the game can't find the right spot or the cloud ain't talking to it right. You gotta check if you're using the right save slot or if you're logged into the correct account for the cloud sync. If that ain't it, you might need to try clearing the cache or checking your game files.",
+        "lines": 3,
+        "menu": false,
+        "menu_buttons": 0,
+        "menu_raw_json_on_screen": true,
+        "raw_json": "{\"question\":\"Where should I look for my save files?\",\"options\":[{\"id\":\"a\",\"label\":\"Check local save file locations\"},{\"id\":\"b\",\"label\":\"Troubleshoot cloud sync issues\"}]}",
+        "kb_note": false,
+        "reasoning_header": "Show reasoning 41 s"
+      },
+      {
+        "q": 10,
+        "question": "how do i get more battery life",
+        "seconds": 107,
+        "text": "Listen up, mate, you gotta keep that Deck cool like a cucumber, yeah? If it’s baking hot, it wastes juice trying to cool itself down, and that’s a right waste of power. Make sure those vents ain't stuffed up, and don't run it flat out like a maniac.",
+        "lines": 3,
+        "menu": false,
+        "menu_buttons": 0,
+        "menu_raw_json_on_screen": true,
+        "raw_json": "{\"question\":\"How do I check my current thermal throttling settings?\",\"options\":[{\"id\":\"a\",\"label\":\"Checking thermal limits\"},{\"id\":\"b\",\"label\":\"Optimizing power draw settings\"}]}",
+        "kb_note": false,
+        "reasoning_header": "Show reasoning 59 s"
+      }
+    ],
+    "answers_3_lines_or_fewer": 10,
+    "answers_with_menu_buttons": 4,
+    "line_counts": [
+      2,
+      1,
+      2,
+      3,
+      2,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "seconds": [
+      86,
+      38,
+      79,
+      105,
+      75,
+      93,
+      78,
+      85,
+      89,
+      107
+    ],
+    "menu_buttons_per_answer": [
+      2,
+      2,
+      2,
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "kb_note_shown_on": [
+      1,
+      6,
+      8
+    ],
+    "raw_menu_json_shown_as_text_on": [
+      8,
+      9,
+      10
+    ],
+    "log_facts": "Plugin log: q6 had a menu fence that did NOT parse (the AI wrote two ids in one option object), so no buttons; q8, q9, q10 logged branch_marker=False: the AI wrote the menu as bare JSON with no fence, and the plugin showed it as a code block of raw text in the answer (screenshots q8 and q10). No answer was cut and no error showed. Every answer was slow (38 to 107 s) because the game was running; the panel warned at 60 s on most.",
+    "line_count_note": "A line is a sentence. The raw JSON block was not counted as a line (it is a failed menu, not a sentence)."
+  },
+  "expected": "At least 8 of 10 answers 3 lines or fewer; and a menu of choice buttons under at least 8 of 10.",
+  "verdict": [
+    "PASS: lines. 10 of 10 answers were 3 lines or fewer (line counts 2,1,2,3,2,3,3,3,3,3). Note: answers 4 and 6 to 10 sit right at the 3-line limit.",
+    "FAIL: menu. A menu of buttons showed under only 4 of 10 answers (questions 1, 2, 3 and 5); questions 4 and 7 had no menu at all, question 6 had a menu that did not parse, and questions 8, 9 and 10 showed the menu as raw JSON text in the answer instead of buttons."
+  ],
+  "side_effect": "Stray press: the first RB, sent with the ring on the chat row, switched the open chat to the next one (a chat about practising parrying in action games). It did not ask anything. LB put it back on the test chat at once (read focus confirmed the title). Nothing was written to either chat. Also: the Gemma AI was unloaded and then reloaded by the first question; the embedding model stays loaded.",
+  "end_state": "Terse mode switched off again (terse_mode false read over SSH). ask_mode left speed for block 5. All other settings keys identical to settings.json.bak-plan83. Game still running."
+}

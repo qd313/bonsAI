@@ -1,0 +1,27 @@
+{
+  "row": "NOTES-BLOCK-04",
+  "build_commit": "0d3af3de (code same as de124df8)",
+  "deck_time_local": "2026-10-08 05:10 to 05:19 EDT",
+  "screen": "Deck's own panel; page window 855 x 845. Game running: Deep Rock Galactic: Survivor at its title screen, Context line 'active game Deep Rock Galactic: Survivor'.",
+  "setup": "Ask mode set to Strategy with the mode button (read focus on the button, A, DOWN once, read focus 'strategy', A); settings file read ask_mode strategy, strategy_spoiler_masking_enabled true, use_local_knowledge_base true. Test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'. Plugin not reloaded. AI had been unloaded before try 1 (first question reloaded it).",
+  "pressed": "Send script (VERIFIED, whole question), DOWN to the ask button, read focus, A. Twice (two tries).",
+  "seen": {
+    "try_1": {
+      "question": "in deep rock galactic survivor how do I tame a horse",
+      "seconds_to_finish": "about 122 (page timer 120 s from press plus 3 s)",
+      "log_line_05_10_20": "ask_ollama: budget ... rules+cards=2188 (attached 1042 chars)",
+      "screen": "Answer says it has no info on horses, then a choice menu (A/B). Under it the line 'No close match in my notes, this answer leans on the model's own knowledge.' showed. No notes block on the page (0 elements with the notes-block class). 'Show details' not opened.",
+      "note": "The log says 1042 chars were attached, yet the honesty line showed. The two disagree on face; the runbook's pass case needs 0 chars attached, so this reply is not that case."
+    },
+    "try_2": {
+      "question": "Which hat does the dwarf wear on the title screen in Deep Rock Galactic Survivor and what is it called",
+      "seconds_to_finish": "about 178 (answer took 181.4 s per the answer's own timing line)",
+      "log_line_05_13_39": "ask_ollama: budget ... rules+cards=2308 (attached 1242 chars)",
+      "screen": "Answer says it does not know the hat's name, then a choice menu. No honesty line, no notes block shown (Show details not opened). The chat summed itself up before this answer (notice 'The chat summed itself up before this answer')."
+    }
+  },
+  "expected": "A reply with 0 chars attached shows no notes block and shows the honesty line, never both; fail if block and line together, a block under a 0-char reply, or no line on a 0-char reply.",
+  "verdict": "UNCLEAR: both tries attached notes (1042 and 1242 chars), so no reply with 0 chars attached was produced; the third try was not spent (the runbook gives two).",
+  "side_effect": "Chat summed itself up during try 2 (expected, noted by the runbook). Mode left on Strategy (it was strategy at the start of the night).",
+  "finding": "Try 1 attached 1042 chars of notes yet displayed 'No close match in my notes' and no notes block. Worth a look by the owner: either the honesty line is shown when attached text is only rules/cards, or the line ignores the attached count."
+}

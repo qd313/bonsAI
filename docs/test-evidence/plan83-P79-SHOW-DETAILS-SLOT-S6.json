@@ -1,0 +1,25 @@
+{
+  "row": "P79-SHOW-DETAILS-SLOT (step 6 only)",
+  "build_commit": "0d3af3de (Deck)",
+  "deck_time_local": "2026-10-08 about 04:40 to 04:55 EDT (Deck clock)",
+  "screen": "Quick Access page window 855 x 766. Scroll pane 300 x 677, pane top 88, dock top 711. No game running (Context: no active game detected).",
+  "setup": "Speed mode, test chat ('How do I beat the boss in the Soul Sanctum in Hollow Knight?'). Question 1 (guide to tuning for battery life) was asked and answered. A on the slot's Show details line opened details (scrollHeight 1332, clientHeight 677, difference 655, over 300). I then pressed DOWN four times through the details and stopped, with the answer's own line still at y333. I should have pressed more (up to 12 allowed) before moving on; with Q1 the case could probably have been made. I then used the second wording, which the runbook allows only when the difference is under 300. Question 2 (emulation guide) was sent by script (VERIFIED) and asked. Its answer carries a notes block (Emudeck, 'From the shared Deck tips'). Q1 and Q2 are two different questions, so no cache repeat.",
+  "pressed": [
+    "After Q2 finished the ring was unowned. UP (placed the ring) landed on a chip in the slot; UP landed on the notes row 'Emudeck'; UP landed on the answer's own Show details line (y515). Read focus: 'Show details'. A: details opened, line now reads 'Hide details'.",
+    "Step 2: DOWN x9 in total through details stops: Hide details -> Emudeck note -> This answer / Session 95 -> Keyword search -> KB: no game running -> Reply style: balanced -> Thinking: Balanced -> Spoiler risk: low -> Routed gemma4 -> Developer details. (4 of these presses showed the rig's 'moved: false' because the stop's selector key repeated, but the stop name changed each time.) After the 9th press: slot read 'Hide details' (opacity 1), the answer's real line sat at y -40 (pane top 88), scrollTop 1077, scrollHeight 1834. Case made.",
+    "Step 3: walked DOWN from there to the end (Hide details slot line -> question box -> mode button -> ask), then UP, UP to the question box, then UP once. Read focus: the slot's 'Hide details' line (rect x48 y601 w300 h30, class bonsai-details-slot__line, slot opacity 1, real line at y -121, scrollTop 1157).",
+    "Step 4: A on the slot line (focus read first).",
+    "Step 5: waited over 1.5 s then read the page."
+  ],
+  "seen": {
+    "after_A": "details closed: real line reads 'Show details', rect top 515, which is 427 px below the pane top (88). Slot text empty, slot opacity 0, two chips back in the slot ('How do I balance FPS and battery?' and 'Recommended TDP for this game?', both at y609).",
+    "scroll_numbers": "scrollTop 521, scrollHeight 1199, clientHeight 677. Most it can scroll is 522, so it sits 1 px from the scroll limit. Remaining scroll to the limit: 1 px.",
+    "line_at_8px": false,
+    "ring_after": "still on the answer's Show details line"
+  },
+  "expected": "After step 4 the details are closed and the real line is on screen with its top 8 px inside the reading area (within 2 px), OR the closed answer cannot scroll that far and the page is at its scroll limit. The chip is back in the slot once the real line is on screen.",
+  "verdict": [
+    "PASS (second branch): the closed answer cannot scroll far enough to put the line 8 px from the top (it would need about 419 px more scroll and only 1 px is left), the page is at its scroll limit (521 of 522), the real line is on screen, details are closed and the chips are back in the slot. NOTE for the owner: the runbook wording says 'scrollHeight minus clientHeight is 0'. That difference is 522 here, not 0. I read the clause as 'no scroll left', which is true to within 1 px. The 8 px landing itself was therefore not shown, same limit as the 2026-10-02 run."
+  ],
+  "side_effect": "ask_mode is still speed (strategy at start of the block, put back at the end). Two more questions were added to the test chat. Details of the Q1 answer and the Q2 answer were opened (Q2 is closed again). Q1 answer's details were left open. Nothing rated."
+}

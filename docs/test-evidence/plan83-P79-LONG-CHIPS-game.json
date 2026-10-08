@@ -1,0 +1,26 @@
+{
+  "row": "P79-LONG-CHIPS",
+  "build_commit": "0d3af3de (code same as de124df8)",
+  "deck_time_local": "2026-10-08 04:55 to 05:09 EDT",
+  "screen": "Deck's own panel; page window 855 x 845 (Quick Access pane 300 wide, chips 147 wide each). Game running: Deep Rock Galactic: Survivor at its title screen, Context line read 'active game Deep Rock Galactic: Survivor'.",
+  "setup": "Speed mode, test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'. preset_chip_animation read 'decode' (not 'fade'): set to fade from Developer tab > Preset suggestions (ring on 'Preset animation: fade', A), confirmed 'fade' over SSH. MUST BE PUT BACK to 'decode' at the end of the block. Question typed with the send script (VERIFIED), Ask pressed with ring on the Ask button. Answer took about 74 s. Memory available was 2443 MB, under 3000, so the Deck's AI was unloaded (keep_alive 0) before the watch; available then 8842 MB. Plugin not reloaded.",
+  "pressed": "Developer tab walk, A on fade, back to Main tab, question sent, A on ask. Then 200 s hands off (page read every ~60 ms by a read-only observer, 200 s). Screensaver came on after the watch; one L3 click woke it (moved nothing); focus was then unowned, so 2 stray UP presses did nothing visible and a DOWN placed the ring on the chat row. Then DOWN x8 to Show details, notes block, chip Nitra; RIGHT to the long chip 'How do I beat Dreadnought Twins?'; 30 s hold (read every 500 ms); DOWN to the question box.",
+  "seen": {
+    "answer": "Any quick tip for a new Deep Rock Galactic Survivor player? Two short paragraphs, no choice buttons, a 'From bonsAI's own note' block (Gold) under it. The dock slot already showed two chips (no 'Show details' in the slot), so no extra UP/A was needed. Second wording not used.",
+    "read_period": "about 60 ms per read (a 60 ms timer; events logged only on change of words, phase or opacity under 1)",
+    "long_chip_gaps_seconds": "42 long chips measured from the first read with phase 'end' to the first read where the button opacity was under 1 (fade start). Min 1.516, max 1.660, median about 1.58. 42 of 42 inside 1.2 to 1.9 s. 0 outside. Individual values: 1.584 1.516 1.577 1.578 1.576 1.577 1.577 1.577 1.62 1.518 1.595 1.533 1.593 1.621 1.517 1.652 1.576 1.594 1.588 1.58 1.516 1.577 1.596 1.594 1.594 1.535 1.595 1.577 1.517 1.66 1.575 1.585 1.577 1.58 1.517 1.577 1.575 1.566 1.58 1.605 1.546 1.598 1.537",
+    "fade": "On every one of those 42 changes, the old chip's opacity read under 1 (0.99 or just under) before the new words appeared, and every new chip started at opacity 0 and rose to 1 within about 1 s ('waiting' phase 1 s at 0 then 1). Words are replaced about 1.4 s after fade start.",
+    "short_chip_centring": "Only one short ('fits') chip showed in 200 s plus extra waits: 'How do I use Nitra?', which carries the tip dot. Text left 25.2 px from button edge, right 12.2 px: the words alone are 6.5 px right of the button centre. Label box is centred (0.0 px). The tip dot (7 px) plus gap (13 px incl. dot) sits left of the words: measured on a badge chip elsewhere, dot starts 13 px before the words, so dot+words together span 12.2 to 134.9 px, centre 73.55 vs button centre 73.5 (about 0.05 px off). No short chip without a dot was seen, so 'words centred within 2 px' was not shown for a no-dot chip.",
+    "ring_hold_30s": "Ring on the long chip 'How do I beat Dreadnought Twins?' (rect x 201.0 y 641.3 w 147.0 h 30.0), 61 reads over 30.5 s: words unchanged, phase stayed 'end', opacity 1, text offset -58.2 px throughout, 0 changes. The other chip ('How do I use Nitra?', a short chip) also did not change in the 30 s (0 events), so 'the other chip changes' cannot be shown (finding, not a fail).",
+    "end_state": "ring on the question box after one DOWN from the chip (DialogInput class)."
+  },
+  "expected": "(a) 90 percent or more of long-chip gaps 1.2 to 1.9 s; (b) opacity falls under 1 on every long chip change in fade style; (c) short chip words centred within 2 px; (d) ring chip keeps words and rect for 30 s.",
+  "verdict": "UNCLEAR overall: (a), (b), (d) pass; (c) could not be shown cleanly.",
+  "verdict_a": "PASS: 42 of 42 gaps inside 1.2 to 1.9 s (range 1.516 to 1.660 s).",
+  "verdict_b": "PASS: opacity fell under 1 on all 42 long-chip changes, with a game running.",
+  "verdict_c": "UNCLEAR: only a chip with a tip dot was short; its words alone are 6.5 px off centre, dot plus words are centred within about 0.1 px (from measurements, not a direct read of the dot). No no-dot short chip came up.",
+  "verdict_d": "PASS: ring chip words and rect unchanged for 30.5 s (61 reads, 0 changes).",
+  "finding": "Other chip also held for the 30 s (it was a short chip). Frame-rate or game-load effect not measured here. preset_chip_animation read 'decode' when the check began, not the 'fade' the runbook calls the default.",
+  "side_effect": "Set preset_chip_animation from decode to fade (restore to decode at end of block). Unloaded the Deck's AI (reloads on the next question). Screensaver woke with L3. Two UP presses sent while focus was unowned did nothing visible; the DOWN after placed the ring on the chat row.",
+  "screenshot": "plan83-P79-LONG-CHIPS-game.png (taken after the answer, game in front of the panel)"
+}

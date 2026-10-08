@@ -970,6 +970,10 @@ Moved here from the roadmap entry on 2026-10-07 (plan 82 paperwork 4), when the 
 
 **Deck 2026-10-07 (plan 82, Deck block 2, no game): the ring half passed; the fade half FAILED.** With the fade style set, over 120 s and 32 word changes the chips' opacity never went below 1.00, so a person sees the words swap with no fade (now its own entry in Bugs). With the ring on a chip for 30 s, that chip kept its words and box; the other chip also held still the whole time, so the row as a whole holds while the ring is on a chip (a finding, not judged). Row **P79-LONG-CHIPS**, evidence `docs/test-evidence/plan82-P79-LONG-CHIPS-NOGAME.json`.
 
+Moved here from the roadmap entry on 2026-10-08 (plan 83 docs sweep), to keep the entry to five lines. Nothing was removed.
+
+**Deck 2026-10-07 (plan 82, Deck block 2, no game): the fade reading was of the wrong element, and the ring half is UNCLEAR.** The 1.00 readings were of the chip button while the fade sat on a wrapper box around it, so they showed nothing about the fade (the fade now sits on the button; its row **P82-FADE-ON-BUTTON** passed on the Deck 2026-10-07, build `e34b0d57`, and the entry "The fade style's chips swap their words without fading" is in Done). With the ring on a chip for 30 s that chip kept its words and box, and the other chip held still too, so "the other chip changes" could not be shown; the row holding while the ring is on a chip is by design. Row **P79-LONG-CHIPS**, evidence `docs/test-evidence/plan82-P79-LONG-CHIPS-NOGAME.json`.
+
 ## Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted
 
 Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.

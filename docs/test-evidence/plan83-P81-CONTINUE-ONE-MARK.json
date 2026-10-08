@@ -1,0 +1,32 @@
+{
+  "row": "P81-CONTINUE-ONE-MARK",
+  "build_commit": "0d3af3de (Deck), with one temporary edit: strategy answer limit lowered from 1600 to 340 (line 28 of ollama_ask_budgets.py), put back afterwards",
+  "deck_time_local": "2026-10-08 04:22 to 04:32 EDT (Deck clock)",
+  "screen": "Quick Access page window 855 x 766. No game running (Context: no active game detected).",
+  "setup": "Write test passed: services folder and ollama_ask_budgets.py both owned by deck (DIR_WRITABLE and FILE_WRITABLE printed). Settings read: strategy_spoiler_masking_enabled true, use_local_knowledge_base true. Backup copy at /home/deck/p83-backup/ollama_ask_budgets.py.orig. Line 28 read 'strategy: 1600', changed to 340, grep showed 340. Plugin reloaded; first openPlugin failed (expected), second opened it. Test chat open, ask_mode changed Speed -> Strategy with the mode button (ask_mode read 'strategy' over SSH). The plugin log confirmed the limit in force: 'answer=340'.",
+  "pressed": [
+    "Try 1 (sent by script, VERIFIED): 'Give me a guide to every boss area in Hollow Knight, three paragraphs each, and hide the story twists.' Ring on ask (read first), A.",
+    "Try 2 (sent by script, VERIFIED): 'Explain the whole story of Hades act by act, three paragraphs each, and hide every plot twist.' Ring on ask (read first), A.",
+    "Try 3 was NOT asked: the two-try limit for checks that depend on what the AI writes applies."
+  ],
+  "seen": {
+    "try1": {
+      "log": "2 'soft continue' lines (continue_index 1 at 805 visible chars, continue_index 2 at 2338 visible chars). No 'dropped a choice fence' line. Notes attached: 3 (Hollow Knight).",
+      "saved_turn": "4067 characters in 4 pieces. Opening marks: 0. Closing marks: 0. Half marks: 0. So no hidden block in the saved text at all.",
+      "screen": "0 covers, no backtick, no 'bonsai-spoiler' text on the page. The answer ended with a choice menu under it (a question 'Where are you at in Hollow Knight?' with options A and B).",
+      "oddity": "The pieces overlap: piece 3 repeats a long stretch of piece 2 word for word, and piece 4 repeats it again, so the saved text holds the same paragraphs twice. This is the AI restating text at each continue, not a hidden-block mark."
+    },
+    "try2": {
+      "log": "1 'soft continue' line (continue_index 1 at 1322 visible chars). No 'dropped a choice fence' line. Notes attached: 3 (Hades).",
+      "saved_turn": "2338 characters in 2 pieces. Opening marks 0, closing marks 0, half marks 0. The join repeats one sentence ('And finally, Act Three...') once, the sentence is cut at the end of piece 1 and restarted at piece 2.",
+      "screen": "0 covers, no backtick, no 'bonsai-spoiler' text."
+    },
+    "piggyback_choice_fence": "No 'dropped a choice fence' line in either try. Try 1's answer did show a choice menu; no text was lost after it that I could see."
+  },
+  "expected": "At least one try shows a 'soft continue' line AND the saved turn for that try holds a hidden block, with opening marks minus closing marks 0 or 1, no half mark, and on screen every hidden part a cover with no fence text.",
+  "verdict": [
+    "UNCLEAR: both tries produced the 'soft continue' (3 joins in all) but the AI wrote no hidden block in either answer (0 opening marks, 0 closing marks). So the join inside a hidden block, which this row is about, was never made. What I could check held: no half mark, no fence text on screen, no covers. A third wording was not tried (two-try limit)."
+  ],
+  "put_back": "ollama_ask_budgets.py copied back from the backup; grep for 'strategy: 1600' printed 1; cmp against the backup printed IDENTICAL. Plugin reloaded once more. ask_mode left at strategy, which is what it was at the start of the block. After the reload settings.json reads ask_mode strategy, terse_mode false.",
+  "side_effect": "Two long answers were added to the test chat (the chat has now far more than 8 turns on top of the earlier ones; no new chat was started). The chat's saved text now includes the doubled paragraphs from try 1."
+}

@@ -1,0 +1,33 @@
+{
+  "row": "QA-FREE-PLAY-01 (no-game half, slot half)",
+  "build_commit": "0d3af3de (Deck; TERSE REPLY MODE grep printed 1)",
+  "deck_time_local": "2026-10-08 04:12 to 04:35 EDT (Deck clock)",
+  "screen": "Quick Access page window 855 x 766 (innerWidth x innerHeight read from the QAM page). Scroll pane 300 wide x 677 tall, pane top 88, dock top 711.",
+  "setup": "Context line: no active game detected. Test chat open (row reads 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'). ask_mode set to Speed with the mode button (read focus before each A; ask_mode read 'speed' over SSH). Question 1 'Why is my Deck running hot?' (sent by script, VERIFIED): the answer finished with two chips in the slot ('What settings should I use?', 'Where do your game tips come from?'); the slot's Show details line had opacity 0. Case NOT made, so question 2 'How do I make my Deck battery last longer?' (VERIFIED) was asked. After it finished the slot read 'Show details' (opacity 1, rect y601 h30) and the answer's own Show details line sat at y584 with opacity 0, scrollTop 115 (scrollHeight 792, clientHeight 677). Case made.",
+  "pressed": [
+    "Ring was unowned after the answer. UP once: landed on the slot Show details line. DOWN: landed on the question box. UP from the question box (the real step 2): landed on the slot Show details line.",
+    "Step 3: DOWN from the slot line -> question box (100 percent visible). UP -> slot Show details line again.",
+    "Step 4 UP leg, one press at a time: slot Show details -> answer's own Show details line (y584) -> Mark reply helpful -> TDP settings panel (unnamed) -> Show reasoning 21 s -> question row 'How do I make my Deck battery last longer?' -> '92 earlier' -> chat row (test chat title) -> Main tab -> bonsAI header button. Three more UP presses at the header button did not move (top end, expected).",
+    "Step 5 DOWN leg: header button -> Main tab -> chat row -> 92 earlier -> question row -> Show reasoning -> TDP panel -> Mark reply helpful -> answer's own Show details line -> chip 'How do I fix stuttering?' -> question box -> mode button -> ask.",
+    "Later UP from the question box landed on a chip ('Help me troubleshoot a Proton issue', box y601 h30 x48 w147, inside pane and above dock, probe hit itself). UP -> answer's own Show details line (y584). A -> details opened (button reads 'Hide details', scrollTop 320, sh 998). B -> details closed, ring still on the same line (now reads 'Show details', rect y584, scrollTop 115)."
+  ],
+  "seen": {
+    "step2_land_on_slot_line": {"name": "Show details (slot line)", "rect": [48, 601, 300, 30], "visible_percent": 100, "dock_top": 711, "probe_hits_control": true, "opacity": 1},
+    "step3": "Down from slot line -> question box, 100 percent visible; Up -> slot line again.",
+    "up_leg_stops": 10,
+    "down_leg_stops": 12,
+    "dead_presses_in_legs": 0,
+    "stops_visited_twice_in_a_leg": 0,
+    "slot_flip": "While the legs ran the slot changed from the Show details line (opacity 1, answer's line opacity 0) to chips (slot line opacity 0, answer's line opacity 1). So the Up leg went slot line -> answer's line, but the Down leg went answer's line -> chip. All other stops matched by name in exact reverse order.",
+    "chat_row_stop": "Rig reported 67 percent visible; measured box is y88 h49 with pane top 88, all child boxes inside the pane. Looks like a false alarm from the sampling points, not a hidden control.",
+    "chip_stop": "Rig reported 67 percent visible; the chip box is y601 h30 inside the pane and above dock top 711; the label scrolls inside the chip. Not hidden."
+  },
+  "expected": "(a) Up from the question box lands on whatever the slot shows, visible over 90 percent, probe hits the control; (b) walk Down and walk Up visit the same stops by name, none twice, no dead press; (c) Down from the slot's line lands on a visible stop and Up returns to the slot line.",
+  "verdict": [
+    "PASS (a): Up from the question box landed on the slot Show details line, 100 percent visible, probe hit itself.",
+    "PASS (c): Down from the slot line landed on the question box (visible), Up came back to the slot line.",
+    "UNCLEAR (b): every stop matched in reverse order by name except the one stop under the answer. The slot swapped from the Show details line to chips between the two legs, so the Up leg stopped on the slot line and the Down leg stopped on a chip. No dead press, no stop twice. Whether the swap is by design (slot shows the line only while the answer's own line is hidden) is for the owner; I did not see what triggered the swap.",
+    "PASS step 6: ring on a Show details line, A opened details (Hide details), B closed them and the ring stayed on the same line."
+  ],
+  "side_effect": "ask_mode changed strategy -> speed (put back at the end of the block). Two questions were added to the test chat (that is the test). Neither answer was rated."
+}

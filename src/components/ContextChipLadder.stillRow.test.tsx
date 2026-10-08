@@ -103,7 +103,7 @@ type SceneOptions = {
    * (on the next read after the content shrank). Measured 2026-10-08: scroll heights 1060, 882,
    * 1080 for the first, second and last chip, a client height of 678.
    */
-  deckPane?: { base: number; bodies: Record<string, number> };
+  deckPane?: { base: number; bodies: Record<string, number>; extra?: { px: number } };
   startScroll?: number;
 };
 
@@ -123,7 +123,7 @@ function mountScene({
     let top = startScroll;
     const openPanel = () => deckPane.bodies[pane.querySelector(".bonsai-chip-ladder-chip--active")?.textContent ?? ""] ?? 0;
     const held = () => parseFloat((pane.querySelector(".bonsai-chip-ladder-hold") as HTMLElement | null)?.style.height || "0");
-    const total = () => deckPane.base + openPanel() + held();
+    const total = () => deckPane.base + openPanel() + held() + (deckPane.extra?.px ?? 0);
     const max = () => Math.max(0, total() - clientHeight);
     Object.defineProperty(pane, "scrollHeight", {
       configurable: true,
@@ -503,5 +503,43 @@ describe("a step to a shorter panel does not pull the pane back under its scroll
     });
 
     expect(scene.pane.scrollTop).toBe(scroll);
+  });
+});
+
+describe("content that settles a frame after a step does not pull the pane back", () => {
+  it("Up to the second chip, whose box reads 10 px too tall at the first measure, still holds the row (the Deck's 10.1 px)", () => {
+    const extra = { px: 0 };
+    const scene = mountScene({
+      labels: DECK_LABELS,
+      deckPane: { ...DECK_PANE, extra },
+      startScroll: 334.4,
+      ladderScreenTop: 239.5,
+    });
+    ringArrives(scene);
+    walkToLastChip(scene);
+    pressDown();
+    settle();
+    const row = rowTop(scene);
+    const scroll = scene.pane.scrollTop;
+    expect(scroll).toBeGreaterThan(SECOND_CHIP_MAX_SCROLL);
+    const up = () => {
+      act(() => {
+        (openChipProps().onMoveUp as () => boolean)();
+      });
+      settle();
+    };
+    for (let i = 0; i < 4; i += 1) up();
+    expect(openLabel(scene.ladder)).toBe("Reply style: balanced");
+    expect([rowTop(scene), scene.pane.scrollTop]).toEqual([row, scroll]);
+
+    /* The next step's box measures 10 px taller than it ends up: that frame's own callbacks shrink it. */
+    extra.px = 10;
+    requestAnimationFrame(() => {
+      extra.px = 0;
+    });
+    up();
+
+    expect(openLabel(scene.ladder)).toBe("KB: 14 sections");
+    expect([rowTop(scene), scene.pane.scrollTop]).toEqual([row, scroll]);
   });
 });

@@ -52,7 +52,8 @@ const PANEL_ROOM_PX = 200;
  *    the browser clamps the scroll and the whole row moves (the Deck, 2026-10-08, build 1fc1551c:
  *    130 px entering the chips near the pane's end, 198 px going Up after reading Developer
  *    details). So after each step an empty block after the panel is sized, before the screen is
- *    drawn, to exactly the missing height, and the scroll is put back. It is 0 high when the pane
+ *    drawn, to exactly the missing height, and the scroll is put back. Two frames later it looks
+ *    again, because a box can settle a few px after the first measure (build 657ef2cb: 10 px). It is 0 high when the pane
  *    is not near its end, is re-sized (so it shrinks or goes) at every later step, and goes with
  *    the ladder when it collapses or unmounts. It is NOT released when the ring leaves: that would
  *    only move the same jump to the leave press.
@@ -123,18 +124,50 @@ export function useChipLadderReveal(
     wantedScrollRef.current = pane ? pane.scrollTop : null;
   }, [ladderElRef]);
 
-  /* After the render a step caused, before the screen is drawn: size the held block and put the scroll back. */
+  /**
+   * Size the held block so the pane can keep scroll position `wanted`, and put the scroll back.
+   * `fixOnly` (the later passes): act only if the pane has in fact been pulled back below `wanted`.
+   */
+  const sizeHold = useCallback(
+    (wanted: number, fixOnly: boolean) => {
+      const hold = holdElRef.current;
+      const ladder = ladderElRef.current;
+      const pane = ladder ? findScrollablePanel(ladder) : null;
+      if (!hold || !pane) return;
+      if (fixOnly && pane.scrollTop >= wanted - 0.5) return;
+      const held = parseFloat(hold.style.height) || 0;
+      /* The pane's height without the held block. Reading it is also what clamps a scroll that is too far. */
+      const natural = pane.scrollHeight - held;
+      const missing = wanted + pane.clientHeight - natural;
+      hold.style.height = missing > 0 ? `${Math.ceil(missing)}px` : "0px";
+      if (Math.abs(pane.scrollTop - wanted) > 0.5) pane.scrollTop = wanted;
+    },
+    [ladderElRef],
+  );
+
+  /*
+   * After the render a step caused, before the screen is drawn: size the held block and put the
+   * scroll back. Then look again on the next two frames: on the Deck (2026-10-08, build 657ef2cb)
+   * the box of the second chip measured about 10 px taller here than it ended up a frame later, the
+   * block came out 10 px short and the pane was pulled back 10.1 px. Whatever settles within two
+   * frames is caught before it is seen; the passes stop if a newer step comes or the ring leaves,
+   * and they only act when the pane has really been pulled back, so they never fight a scroll.
+   */
   useLayoutEffect(() => {
     const wanted = wantedScrollRef.current;
     wantedScrollRef.current = null;
-    const hold = holdElRef.current;
-    const ladder = ladderElRef.current;
-    const pane = ladder ? findScrollablePanel(ladder) : null;
-    if (wanted === null || !hold || !pane) return;
-    hold.style.height = "0px";
-    const missing = wanted + pane.clientHeight - pane.scrollHeight;
-    if (missing > 0) hold.style.height = `${Math.ceil(missing)}px`;
-    if (Math.abs(pane.scrollTop - wanted) > 0.5) pane.scrollTop = wanted;
+    if (wanted === null) return;
+    sizeHold(wanted, false);
+    const generation = generationRef.current;
+    let frames = 2;
+    const again = () => {
+      const ladder = ladderElRef.current;
+      if (generation !== generationRef.current || !ladder || !elementHasGamepadFocus(ladder)) return;
+      sizeHold(wanted, true);
+      frames -= 1;
+      if (frames > 0) requestAnimationFrame(again);
+    };
+    requestAnimationFrame(again);
   });
 
   const holdRef = useCallback((el: HTMLElement | null) => {

@@ -128,7 +128,8 @@ import type {
   AskThreadCollapsedTurn,
   AskThreadExpandedTurnKey,
 } from "../types/bonsaiUi";
-import { hasResponseAutosaved, markResponseAutosaved } from "../utils/desktopChatAutosave";
+import { hasResponseAutosaved } from "../utils/desktopChatAutosave";
+import { saveReplyToDesktopNote } from "./saveReplyToDesktopNote";
 import { questionBypassesOllamaPcIpRequirement } from "../utils/localOnlyAskCommands";
 import { normalizePresetCarouselInject } from "../utils/presetCarouselInject";
 import type { KbAttachedNote, TransparencySnapshot } from "../utils/inputTransparency";
@@ -407,16 +408,36 @@ export function useBonsaiAskOrchestration(
     done: !isAsking && !isStreamSettling,
   });
 
-  const desktopAutoSavePrefsRef = useRef({
+  /*
+   * `waiting` is a finished reply painted while the two switches are still at their first-render
+   * defaults (the panel reopened and the reply was already done). Whether to save it is not known
+   * yet, so it waits here and is settled the moment the settings arrive (plan 78, finding 6). It
+   * lives in this ref, not a ref of its own, so the Ask hook's recorded hook order stays as it was.
+   */
+  const desktopAutoSavePrefsRef = useRef<{
+    autoSave: boolean;
+    fsWrite: boolean;
+    settingsLoaded: boolean | undefined;
+    waiting: { rid: number; answer: string; question: string } | null;
+  }>({
     autoSave: a.desktopDebugNoteAutoSave,
     fsWrite: a.filesystemWrite,
+    settingsLoaded: a.settingsLoaded,
+    waiting: null,
   });
   useEffect(() => {
+    const { waiting } = desktopAutoSavePrefsRef.current;
+    const settled = a.settingsLoaded !== false;
     desktopAutoSavePrefsRef.current = {
       autoSave: a.desktopDebugNoteAutoSave,
       fsWrite: a.filesystemWrite,
+      settingsLoaded: a.settingsLoaded,
+      waiting: settled ? null : waiting,
     };
-  }, [a.desktopDebugNoteAutoSave, a.filesystemWrite]);
+    if (waiting && settled && a.desktopDebugNoteAutoSave && a.filesystemWrite) {
+      saveReplyToDesktopNote(waiting.rid, waiting.answer, waiting.question);
+    }
+  }, [a.desktopDebugNoteAutoSave, a.filesystemWrite, a.settingsLoaded]);
 
   useEffect(() => {
     if (!lastExchange?.question?.trim()) return;
@@ -808,18 +829,15 @@ export function useBonsaiAskOrchestration(
               scheduleStrategyChecklistSessionSave(merged);
             }
 
-            const { autoSave, fsWrite } = desktopAutoSavePrefsRef.current;
+            const { autoSave, fsWrite, settingsLoaded } = desktopAutoSavePrefsRef.current;
             const rid = status.request_id;
-            if (autoSave && fsWrite && rid != null && typeof rid === "number" && !hasResponseAutosaved(rid)) {
-              void callDeckyWithTimeout<[AppendDesktopChatEventPayload], AppendDesktopNoteResult>(
-                "append_desktop_chat_event",
-                [{ event: "response", response_text: answer, question: q }],
-                DECKY_RPC_TIMEOUT_MS,
-              )
-                .then((result) => {
-                  if (result.success) markResponseAutosaved(rid);
-                })
-                .catch(() => {});
+            if (rid != null && typeof rid === "number" && !hasResponseAutosaved(rid)) {
+              if (settingsLoaded === false) {
+                // The two switches are still the first render's defaults: decide when they load.
+                desktopAutoSavePrefsRef.current.waiting = { rid, answer, question: q };
+              } else if (autoSave && fsWrite) {
+                saveReplyToDesktopNote(rid, answer, q);
+              }
             }
           } else {
             setLastExchange(null);

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 741,
-  "edgeCount": 2157,
+  "fileCount": 743,
+  "edgeCount": 2164,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4029,6 +4029,16 @@
         "src/hooks/useLocalOllamaSetupFlow.tsx"
       ]
     },
+    "src/hooks/saveReplyToDesktopNote.ts": {
+      "imports": [
+        "src/types/backgroundAsk.ts",
+        "src/utils/deckyCall.ts",
+        "src/utils/desktopChatAutosave.ts"
+      ],
+      "importedBy": [
+        "src/hooks/useBonsaiAskOrchestration.ts"
+      ]
+    },
     "src/hooks/setupAndPullBoxWording.test.tsx": {
       "imports": [
         "src/data/modelPolicy.ts",
@@ -4176,6 +4186,14 @@
       ],
       "importedBy": []
     },
+    "src/hooks/useBonsaiAskOrchestration.desktopNote.test.ts": {
+      "imports": [
+        "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/rpcFixtures.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useBonsaiAskOrchestration.test.ts": {
       "imports": [
         "src/data/bonsaiSettingsSchema.ts",
@@ -4195,6 +4213,7 @@
         "src/data/presets.ts",
         "src/data/replyMicroActions.ts",
         "src/data/strategyGuideFollowup.ts",
+        "src/hooks/saveReplyToDesktopNote.ts",
         "src/hooks/useAskMountRestore.ts",
         "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBackgroundGameAi.ts",
@@ -4236,6 +4255,7 @@
         "src/features/plugin-shell/useUnifiedInputBehaviors.ts",
         "src/features/voice/useVoiceAskWithReadAloud.ts",
         "src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts",
+        "src/hooks/useBonsaiAskOrchestration.desktopNote.test.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/index.tsx",
         "src/preview/useDeckyPreviewTestHookRegistration.ts"
@@ -5720,6 +5740,7 @@
         "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts",
+        "src/hooks/useBonsaiAskOrchestration.desktopNote.test.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx",
         "src/hooks/usePluginSettings.readBack.test.ts",
@@ -5883,6 +5904,7 @@
         "src/features/voice/voiceStartingFeedback.test.tsx",
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts",
+        "src/hooks/useBonsaiAskOrchestration.desktopNote.test.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/usePluginSettings.test.ts",
         "src/hooks/usePullModelOpenBookkeeping.test.tsx",
@@ -5941,6 +5963,7 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/features/chat-sum-up/useChatSumUpJob.ts",
         "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
+        "src/hooks/saveReplyToDesktopNote.ts",
         "src/hooks/useAskMountRestore.ts",
         "src/hooks/useAskSessionSnapshotActions.restoreSavedChat.test.ts",
         "src/hooks/useAskSessionSnapshotActions.ts",
@@ -7011,6 +7034,7 @@
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/features/voice/useVoiceAskInput.ts",
         "src/hooks/localOllamaStarterSet.tsx",
+        "src/hooks/saveReplyToDesktopNote.ts",
         "src/hooks/useAskMountRestore.ts",
         "src/hooks/useBackgroundGameAi.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
@@ -7049,6 +7073,7 @@
     "src/utils/desktopChatAutosave.ts": {
       "imports": [],
       "importedBy": [
+        "src/hooks/saveReplyToDesktopNote.ts",
         "src/hooks/useBonsaiAskOrchestration.ts"
       ]
     },

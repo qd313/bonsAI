@@ -152,6 +152,22 @@ class TerseSpeedPrompt(unittest.TestCase):
         self.assertIn("TERSE REPLY MODE", p)
         self.assertIn("immediately above", p.split("TERSE REPLY MODE", 1)[1])
 
+    def test_a_knowledge_base_strategy_question_is_not_told_to_drop_the_menu(self):
+        # A Speed question with a strategy card attached ("the dreadnought", "exploders") also
+        # gets the spoiler rules, whose closing line used to ban the menu outright: two clashing
+        # orders on exactly the questions the ten-question test asks (plan 83, the judge's finding).
+        p = _prompt(terse_mode=True, strategy_domain_guidance=True)
+        self.assertIn("STRATEGY SPOILER CONSTITUTION", p)
+        self.assertNotIn("do not emit ```bonsai-strategy-branches```", p)
+        self.assertIn("do not emit a ```bonsai-strategy-checklist``` fence", p)
+        self.assertIn("End EVERY reply", p)
+
+    def test_without_terse_a_knowledge_base_speed_question_still_bans_both_fences(self):
+        p = _prompt(strategy_domain_guidance=True)
+        self.assertIn(
+            "do not emit ```bonsai-strategy-branches``` or ```bonsai-strategy-checklist``` fences", p
+        )
+
 
 class EverythingElseIsExactlyAsBefore(unittest.TestCase):
     def test_terse_off_is_identical_to_not_passing_it_in_every_mode(self):

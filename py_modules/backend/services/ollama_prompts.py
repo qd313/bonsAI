@@ -595,6 +595,7 @@ def build_system_prompt(
                 app_id=app_id,
                 app_name=app_name,
                 title_profile=strategy_title_profile,
+                terse_branch_menu=terse_mode_applies(terse_mode, ask_mode),
             )
         return _assemble(
             dynamic_block + general_block + drg_glossary_block,

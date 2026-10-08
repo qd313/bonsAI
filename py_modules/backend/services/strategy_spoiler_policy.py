@@ -307,8 +307,15 @@ def _strategy_spoiler_constitution_compact_block(
     app_id: str = "",
     app_name: str = "",
     title_profile: str = "",
+    terse_branch_menu: bool = False,
 ) -> str:
-    """Short constitution inject for Speed/Expert turns with strategy KB cards attached."""
+    """Short constitution inject for Speed/Expert turns with strategy KB cards attached.
+
+    ``terse_branch_menu``: Terse mode is on for this Speed turn, so the reply must end with the
+    branch menu (reply_style_blocks.build_terse_reply_block). The closing line then bans only the
+    checklist; banning the menu too gave the model two orders that clash on exactly the
+    knowledge-base questions Terse mode's ten-question test asks (plan 83, the judge's finding).
+    """
     policy = _strategy_spoiler_policy_block(
         consent,
         followup=False,
@@ -319,12 +326,18 @@ def _strategy_spoiler_constitution_compact_block(
         title_profile=title_profile,
         include_strategy_ui_fences=False,
     )
-    return (
-        "\n\nSTRATEGY SPOILER CONSTITUTION (knowledge-base coaching):\n"
-        f"{policy}"
-        "This is not a Strategy Guide branch turn — do not emit ```bonsai-strategy-branches``` "
-        "or ```bonsai-strategy-checklist``` fences.\n"
-    )
+    if terse_branch_menu:
+        closing = (
+            "This is not a Strategy Guide turn — do not emit a ```bonsai-strategy-checklist``` fence. "
+            "The branch menu the reply-length rules ask for still ends the reply, below any "
+            "```bonsai-spoiler``` block.\n"
+        )
+    else:
+        closing = (
+            "This is not a Strategy Guide branch turn — do not emit ```bonsai-strategy-branches``` "
+            "or ```bonsai-strategy-checklist``` fences.\n"
+        )
+    return "\n\nSTRATEGY SPOILER CONSTITUTION (knowledge-base coaching):\n" f"{policy}" + closing
 
 
 def spoiler_cover_required(

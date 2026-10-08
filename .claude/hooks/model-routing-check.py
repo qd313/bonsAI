@@ -39,7 +39,7 @@ TABLE = (
     "Since 2026-09-28 (the maintainer's call after the plan 75 blind trial of Sonnet 5.5): every helper runs on Sonnet 5.5 -- high for features, knowledge-base work and fixes that need a judgment; medium for mechanical fixes, the bookkeeper and the deck-driver. Opus stays for whoever plans, orchestrates and lands. "
     "5-6 stars: Fable 5.1 max plans (decisions and lane briefs only), Sonnet 5.5 high helpers implement, Opus xhigh lands. "
     "3-4 stars: Opus xhigh plans and lands, Sonnet 5.5 high helpers implement when the cause is known. "
-    "1-2 stars: a Sonnet 5.5 high helper (bugfix-lane, feature-lane) when the work needs a judgment, Sonnet 5.5 medium (bugfix-lane-sonnet-medium) when the fix is mechanical (known cause, one obvious way: wording, numbers, moving or linking text); Opus xhigh reviews only if it touches focus or settings plumbing. "
+    "1-2 stars: a Sonnet 5.5 high helper (bugfix-lane, feature-lane) when the work needs a judgment, Sonnet 5.5 medium (bugfix-lane-sonnet-medium) when the fix is mechanical (known cause, one obvious way: wording, numbers, moving or linking text), and on trial since 2026-10-08 (plan 83) Haiku 5.5 high (bugfix-lane-haiku-high) for a mechanical one-star fix, each run logged in plan 33 section 4d; Opus xhigh reviews only if it touches focus or settings plumbing. "
     "Mechanical or judgment is decided by whether the fix needs a decision, not by stars; when unsure, judgment (Sonnet high). "
     "Focus, layout, ui tags: Opus xhigh after a device measurement; never a lane without the measurement. "
     "Pixel polish: a measurement or a human, not a model tier. "

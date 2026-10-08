@@ -263,10 +263,10 @@ for the same job.
    after-landing paperwork. The winning version of each job lands on `experimental`.
 2. **2026-10-08, during the run:** start the feature batch, then the trim batch, while the bug batch was still
    running (20 helpers at once, over the usual ten). Saved time; made the time numbers noisy.
-3. *Open:* whether to try Haiku high for mechanical one-star fixes (§ 8, suggested routing). Nothing else changes.
-4. *Open, from the trim:* the roadmap's house rules say a finished entry stays in Done as one line; after the
-   trim, Done holds only a pointer to the archive plus the new 2026-10-08 lines. Keep it that way, or bring back
-   one line per entry?
+3. **2026-10-08: yes.** Haiku high takes mechanical one-star fixes, as a trial, with each run logged in plan 33
+   § 4d. Nothing else changes. Written into AGENTS.md, the routing reminder, plan 33 and a new helper file.
+4. **2026-10-08: keep it as it is.** The roadmap's Done section stays a short pointer to the archive plus the
+   newest closed lines; older closed entries live only in the archive.
 
 ## 10. Next, if Haiku earns a place: the heavy reading jobs
 

@@ -62,7 +62,7 @@ means: write the code and tests. "Land" means: review each diff, cherry-pick, ke
 |---|---|---|---|---|
 | ★★★★★ and ★★★★★★ feature | Fable 5.1 max, decisions and briefs only, not a 9,000-word document | Sonnet 5.5 high lanes | Opus xhigh | Opus xhigh or the orchestrator |
 | ★★★ and ★★★★ feature or bug | Opus xhigh | Sonnet 5.5 high lanes when the cause is known; Opus xhigh itself when it is not | Opus xhigh | same |
-| ★ and ★★ feature or bug | none, or Opus xhigh in the same session | Sonnet 5.5 high; Sonnet 5.5 medium when the fix is mechanical | Opus xhigh if it touches focus or settings plumbing, else none | same |
+| ★ and ★★ feature or bug | none, or Opus xhigh in the same session | Sonnet 5.5 high; Sonnet 5.5 medium when the fix is mechanical; Haiku 5.5 high for a mechanical ★ fix, on trial since 2026-10-08 (§ 4d) | Opus xhigh if it touches focus or settings plumbing, else none | same |
 | Focus and layout (`[focus]`, `[layout]`, `[ui]`) | Opus xhigh, **after** a device measurement | Opus xhigh with the measurement in hand; Sonnet only for a fix whose cause the measurement already named | Opus xhigh | required; no fix is done until the row passes |
 | Pixel polish (dots, rings, fonts) | do not use Fable; the tools cannot see pixels | Opus xhigh with a measurement, else a human | | human eyes |
 | Backend and retrieval (`[KB]`, `[ollama]`) | Opus xhigh | Sonnet 5.5 high | Opus xhigh | the eval harness, not the Deck |
@@ -313,7 +313,13 @@ medium 101. Haiku high won the mechanical bug (24 of 25, a quarter of Sonnet's c
 two-star feature, but fell short on the timing bug, the three-star feature and both bookkeeping jobs, where every
 Haiku run either missed by more than two points or lost sentences while saying it had not. Haiku 5.5's price
 rises five times on any request over 100,000 tokens, so on the long jobs it cost a third to a half of Sonnet, and
-once, on the timing bug, more than Sonnet. One run per setting per job. Suggested, not adopted: see plan 83 § 9.
+once, on the timing bug, more than Sonnet. One run per setting per job. **Adopted 2026-10-08, the maintainer's
+call, as a trial:** a mechanical one-star fix goes to Haiku 5.5 high (`bugfix-lane-haiku-high`); everything
+else stays. Log each run below: the fix, the score or Deck result, the cost, and whether Sonnet had to step in.
+
+| Date | Fix | Result | Cost | Sonnet stepped in? |
+|---|---|---|---|---|
+| 2026-10-08 | Plan 83 J1, the leftover settings-card row number | 24 of 25 blind; passed on the Deck | $0.32 | No |
 
 ## 5. Where Haiku fits
 

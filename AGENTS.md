@@ -337,12 +337,14 @@ tier until someone measured on the device — the measurement fixed them, not a 
 
 **Every helper runs on Sonnet 5.5 since 2026-09-28** (the maintainer's call after a blind trial, plan
 75): high for features, knowledge-base work and fixes that need a judgment; medium for mechanical work.
+**One exception, on trial since 2026-10-08** (plan 83): a mechanical one-star fix goes to Haiku 5.5 high
+(`bugfix-lane-haiku-high`), which won that job blind at a quarter of Sonnet's cost.
 
 | Work | Plan | Implement | Land and review |
 |---|---|---|---|
 | Five and six stars | Fable 5.1 max: decisions and briefs, not a long document | Sonnet high helpers | Opus extra-high |
 | Three and four stars | Opus extra-high | Sonnet high helpers when the cause is known; Opus extra-high itself when it is not | Opus extra-high |
-| One and two stars | none, or Opus in the same session | Sonnet high helper; **Sonnet medium** when the fix is mechanical (see below) | Opus only if it touches focus or settings plumbing |
+| One and two stars | none, or Opus in the same session | Sonnet high helper; **Sonnet medium** when the fix is mechanical (see below); **Haiku high** for a mechanical one-star fix, on trial | Opus only if it touches focus or settings plumbing |
 | Focus, layout, screen work | Opus extra-high, **after** a device measurement | Opus with the measurement in hand | Opus; the device row is the gate |
 | Pixel polish | a measurement or a person — the tools cannot see pixels | Opus extra-high | human eyes |
 | Knowledge base and back end | Opus extra-high | Sonnet high helpers | Opus; the answer-quality harness, not the device |
@@ -360,6 +362,9 @@ Rules that go with it:
   there is one obvious way (wording, a number, moving or linking text); high when there is a real choice
   (timing, spoilers, saved chats, settings), even on a one-star bug. When unsure, high. Long jobs:
   medium if every step is the same checkable kind. Each helper run adds a row to plan 33 § 4b.
+- **Haiku high on trial:** mechanical one-star fixes only. Log each run and any miss in plan 33 § 4d; a
+  miss that needed Sonnet to finish counts against it. Not for judgment fixes, features or bookkeeping:
+  plan 83 found it falls short there.
 - **Helper lanes:** at most ten for feature or bug work (the maintainer's call 2026-09-29, was seven; fifteen for plan 79 only, D122),
   at most three for a refactor, because refactor lanes overlap on files. Each brief carries the check on what its copy is based on, which
   files it owns, one change per commit, and the gates to run. **Lanes hand back code, tests and a

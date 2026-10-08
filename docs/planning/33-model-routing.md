@@ -309,6 +309,9 @@ plans, orchestrates and lands. The table in § 2 is updated; keep adding a row p
 Haiku 4.5 has been used once here: a six-turn documentation lookup on 09-04, for under a dollar. There is
 no evidence either way about it doing more, which is why § 4a is a trial with a log and a drop rule.
 
+**2026-10-08:** Haiku 5.5 gets a full trial on real bugs, features and bookkeeping, judged blind against Sonnet:
+[plan 83](83-haiku-5-5-trial.md). The "not a fit" list below is what that trial tests.
+
 Where it is a safe fit, because the answer can be checked by the caller:
 
 - Read-only lookups that return `file:line` or a list: who imports a symbol, which testing rows name a

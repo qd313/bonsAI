@@ -26,7 +26,8 @@ How it works:
 
 Branch picker, through `extract_strategy_guide_branches()`:
  1. `_extract_fence()` looks first for the exact fence the model is asked
-    for, opened with the text `bonsai-strategy-branches`.
+    for, opened with the text `bonsai-strategy-branches` (an underscore in
+    place of either hyphen is read the same way).
  2. If that is not there, `_extract_jsonish_branch_fence()` tries a plain
     `json`-tagged fence instead -- something models reach for more often than
     the exact name asked for.
@@ -82,17 +83,29 @@ from urllib.parse import unquote
 # Must match the prefix composed by the Deck plugin when the user picks a branch.
 STRATEGY_FOLLOWUP_PREFIX = "[Strategy follow-up]"
 
-_FENCE_OPEN = "```bonsai-strategy-branches"
-_FENCE_OPEN_RE = re.compile(r"```\s*bonsai-strategy-branches\b[^\n]*\n?", re.IGNORECASE)
+# The menu's name is the two words joined by a hyphen or an underscore, in any case. The small model
+# on the Deck writes the underscore in many answers (2026-10-08), and the buttons must still show.
+# Every check that finds the menu fence uses this one spelling.
+_BRANCH_FENCE_NAME = r"bonsai[-_]strategy[-_]branches"
+_BRANCH_FENCE_NAME_RE = re.compile(_BRANCH_FENCE_NAME, re.IGNORECASE)
+# The opener with no end-of-word test: "...branchesX" still opens the menu, as it always did.
+_FENCE_OPEN_PREFIX_RE = re.compile(r"```\s*" + _BRANCH_FENCE_NAME, re.IGNORECASE)
+_FENCE_OPEN_RE = re.compile(r"```\s*" + _BRANCH_FENCE_NAME + r"\b[^\n]*\n?", re.IGNORECASE)
 _CHECKLIST_FENCE_OPEN = "```bonsai-strategy-checklist"
 # Models often emit ```json for the branch payload instead of the canonical fence name.
 _JSON_FENCE_OPEN_RE = re.compile(r"```(?:json|JSON)?\s*\n", re.MULTILINE)
 # Some models emit this tag with parenthesized JSON (often URL-encoded) instead of a markdown fence.
-_BRACKET_TAG_RE = re.compile(r"\[bonsai-strategy-branches\]\s*\(", re.IGNORECASE)
+_BRACKET_TAG_RE = re.compile(r"\[" + _BRANCH_FENCE_NAME + r"\]\s*\(", re.IGNORECASE)
 _MAX_OPTIONS = 8
 _MIN_OPTIONS = 2
 _MAX_CHECKLIST_ITEMS = 12
 _MIN_CHECKLIST_ITEMS = 2
+
+
+def find_branch_fence_name(text: str) -> int:
+    """Where the menu's name first appears in text, in either spelling (hyphen or underscore), or -1."""
+    m = _BRANCH_FENCE_NAME_RE.search(text or "")
+    return m.start() if m else -1
 
 
 def hide_incomplete_strategy_branch_fence(text: str) -> str:
@@ -370,14 +383,14 @@ def _extract_fence(raw_text: str) -> tuple[str, dict[str, Any] | None]:
     if m:
         head = text[: m.start()]
         tail_from_fence = text[m.end() :]
-    elif _FENCE_OPEN in text:
-        idx = text.find(_FENCE_OPEN)
-        head = text[:idx]
-        tail_from_fence = text[idx + len(_FENCE_OPEN) :].lstrip()
+    else:
+        m = _FENCE_OPEN_PREFIX_RE.search(text)
+        if not m:
+            return text, None
+        head = text[: m.start()]
+        tail_from_fence = text[m.end() :].lstrip()
         if tail_from_fence.startswith("\n"):
             tail_from_fence = tail_from_fence[1:]
-    else:
-        return text, None
 
     close_idx = tail_from_fence.find("```")
     if close_idx >= 0:

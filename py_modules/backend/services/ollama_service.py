@@ -160,6 +160,7 @@ from backend.services.strategy_guide_parse import (
     extract_strategy_guide_branches,
     extract_strategy_checklist,
     drop_unclosed_strategy_fence,
+    find_branch_fence_name,
     hide_incomplete_strategy_branch_fence,
     hide_incomplete_strategy_checklist_fence,
 )
@@ -470,7 +471,7 @@ def post_ollama_chat(
         # Did the model even try? Checked before extraction, because extraction
         # removes the fence on success and leaves it in place on failure -- so
         # afterwards the two look identical from the outside.
-        branch_marker = "bonsai-strategy-branches" in strategy_source
+        branch_marker = find_branch_fence_name(strategy_source) >= 0
         checklist_marker = "bonsai-strategy-checklist" in strategy_source
 
         visible, strategy_guide_branches = extract_strategy_guide_branches(strategy_source)
@@ -511,7 +512,7 @@ def post_ollama_chat(
             # The model emitted a fence and the parser rejected it. That is a
             # parser or prompt-contract problem, not a model one, and it is the
             # only case where the raw text is worth keeping.
-            start = text.find("bonsai-strategy-branches")
+            start = find_branch_fence_name(text)
             logger.warning(
                 "ask_ollama: strategy branch fence present but did NOT parse; snippet=%r",
                 text[max(0, start - 40) : start + 400],

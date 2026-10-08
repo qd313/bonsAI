@@ -406,6 +406,62 @@ class TheMenuInASpeedReplyReachesTheScreen(unittest.TestCase):
         self.assertEqual(plain["response"], flagged["response"])
         self.assertEqual(plain["strategy_guide_branches"], flagged["strategy_guide_branches"])
 
+    # Question 1 of the Deck run on 2026-10-08 (Terse on, Speed), word for word: the answer, then the
+    # menu in a fence whose name has an underscore where the plugin expects a hyphen. The small model
+    # wrote it that way in nine answers of ten, and the person saw the JSON in a code box.
+    ANSWER_1 = (
+        "Listen up, you gotta kite 'em between the waves and keep your eye on those weak armor plates "
+        "when they open up. Save that overclock or nuke for when you gotta break through the armor."
+    )
+    MENU_1 = (
+        '{"question":"Which weapon should I focus on first?","options":[{"id":"a","label":"Details on '
+        'primary weapon choices"},{"id":"b","label":"Tips for survivability upgrades"}]}'
+    )
+    REPLY_1 = ANSWER_1 + "\n\n```bonsai-strategy_branches\n" + MENU_1 + "\n```"
+    MENU_1_LABELS = [("a", "Details on primary weapon choices"), ("b", "Tips for survivability upgrades")]
+
+    def _assert_no_raw_menu_on_screen(self, out, seen):
+        self.assertNotIn('{"question"', out["response"])
+        self.assertNotIn("bonsai-strategy", out["response"])
+        for text in seen:
+            self.assertNotIn('{"question"', text)
+            self.assertNotIn("bonsai-strategy", text)
+
+    def _assert_the_two_buttons_and_no_raw_menu(self, out):
+        branches = out["strategy_guide_branches"]
+        self.assertIsNotNone(branches)
+        self.assertEqual([(o["id"], o["label"]) for o in branches["options"]], self.MENU_1_LABELS)
+        self._assert_no_raw_menu_on_screen(out, self.seen)
+
+    def test_an_underscore_fence_in_a_speed_reply_gives_two_buttons_and_no_json(self):
+        for piece in (3, 17):
+            with self.subTest(piece=piece):
+                out = self._post("speed", reply=self.REPLY_1, piece=piece, terse_branch_menu=True)
+                branches = out["strategy_guide_branches"]
+                self.assertIsNotNone(branches)
+                self.assertEqual(branches["question"], "Which weapon should I focus on first?")
+                self.assertEqual([(o["id"], o["label"]) for o in branches["options"]], self.MENU_1_LABELS)
+                self.assertEqual(out["response"].strip(), self.ANSWER_1)
+                self._assert_no_raw_menu_on_screen(out, self.seen)
+
+    def test_an_underscore_fence_in_a_strategy_reply_still_gives_its_menu(self):
+        out = self._post("strategy", reply=self.REPLY_1, piece=17)
+        self._assert_the_two_buttons_and_no_raw_menu(out)
+
+    def test_every_spelling_of_the_menu_fence_gives_the_same_two_buttons(self):
+        # Hyphen is the one the plugin asks for; the other three are the drift the small model writes.
+        for name in (
+            "bonsai-strategy-branches",
+            "bonsai_strategy_branches",
+            "bonsai-strategy_branches",
+            "bonsai_strategy-branches",
+            "BONSAI-STRATEGY_BRANCHES",
+        ):
+            with self.subTest(name=name):
+                reply = self.ANSWER_1 + "\n\n```" + name + "\n" + self.MENU_1 + "\n```"
+                out = self._post("speed", reply=reply, piece=17, terse_branch_menu=True)
+                self._assert_the_two_buttons_and_no_raw_menu(out)
+
 
 if __name__ == "__main__":
     unittest.main()

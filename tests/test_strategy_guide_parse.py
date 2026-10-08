@@ -316,5 +316,33 @@ class BranchEllipsisPlaceholderTests(unittest.TestCase):
         self.assertIsNone(branches)
 
 
+class BranchFenceSpellingTests(unittest.TestCase):
+    """The menu fence is read whether the small model writes a hyphen or an underscore between the words."""
+
+    MENU = '{"question":"Where?","options":[{"id":"a","label":"Start"},{"id":"b","label":"End"}]}'
+
+    def test_an_underscore_fence_is_read_as_a_menu(self):
+        raw = "Intro line.\n\n```bonsai-strategy_branches\n" + self.MENU + "\n```"
+        visible, payload = extract_strategy_guide_branches(raw)
+        self.assertIsNotNone(payload)
+        self.assertEqual([o["label"] for o in payload["options"]], ["Start", "End"])
+        self.assertEqual(visible, "Intro line.")
+
+    def test_every_spelling_of_the_fence_name_is_read(self):
+        for name in ("bonsai-strategy-branches", "bonsai_strategy_branches", "bonsai_strategy-branches"):
+            with self.subTest(name=name):
+                raw = "Intro.\n```" + name + "\n" + self.MENU + "\n```"
+                _visible, payload = extract_strategy_guide_branches(raw)
+                self.assertIsNotNone(payload)
+
+    def test_a_half_written_underscore_fence_is_hidden_while_it_streams(self):
+        raw = 'Intro line.\n\n```bonsai-strategy_branches\n{"question":"Wh'
+        self.assertEqual(hide_incomplete_strategy_branch_fence(raw), "Intro line.")
+
+    def test_a_half_written_underscore_fence_is_dropped_before_a_soft_continue(self):
+        raw = 'Intro line.\n\n```bonsai-strategy_branches\n{"question":"Wh'
+        self.assertEqual(drop_unclosed_strategy_fence(raw), "Intro line.")
+
+
 if __name__ == "__main__":
     unittest.main()

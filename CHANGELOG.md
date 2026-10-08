@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 **Contents**
 
 - [\[Unreleased\]](#unreleased)
+  - [Plan 83 (2026-10-08)](#plan-83-2026-10-08)
   - [Plan 82 (2026-10-07)](#plan-82-2026-10-07)
   - [Plan 81 (2026-10-03)](#plan-81-2026-10-03)
   - [Plan 79 (2026-10-02)](#plan-79-2026-10-02)
@@ -72,6 +73,13 @@ All notable changes to this project are documented in this file.
 <!-- /toc -->
 
 ## [Unreleased]
+
+### Plan 83 (2026-10-08)
+
+- **A row picked in the Steam settings card no longer stays painted in a lighter tone;** walking the card with the D-pad works as before. Passed on the Deck 2026-10-08. Known: A on a row opens the right Steam settings page but not at that setting; that is open.
+- **In a developer build with the desktop debug note autosave on, an answer that finished while the panel was shut is now written to the note once the panel reopens.** It used to be skipped. Nothing changes in a normal build.
+- **A on a day line in the "N earlier" list now shows that day's first six questions and a "Show N more" line;** each A on it adds the next six and puts the ring on the first new question, and closing the day starts it over at six. Passed on the Deck 2026-10-08.
+- **New "Terse mode" switch on the Ollama tab under the Reply style slider, off by default.** With it on, a Speed answer is asked to keep to three lines and end with a menu of choices, first answers and follow-ups alike; Strategy, Expert and Speed with it off are unchanged. The switch passed on the Deck 2026-10-08; how well the AI keeps to three lines is not yet tested.
 
 ### Plan 82 (2026-10-07)
 

@@ -162,7 +162,11 @@ at all (its own entry now). Evidence `docs/test-evidence/plan70-CHIP-TRAP-readin
 
 ## Terse mode (Speed answers in three lines)
 
-Discovery ran with the maintainer on 2026-08-29. **Nothing is built.** This is the settled shape,
+**Update 2026-10-08 (plan 83):** the switch and the three-line wording are built (`9f007be6`, `d25df219`, `87a4dd78`, `2e8aa942`, `e082e7a8`). The switch passed on the Deck (row P83-J4-TERSE-TOGGLE). The ten-question test below, the stacked buttons and two follow-up faults are still owed; they are listed in the roadmap entry. Below is the shape as settled on 2026-08-29.
+
+**Earlier roadmap entry (2026-08-29), moved here 2026-10-08 when the entry was rewritten:** A toggle beside the reply-style slider, off by default, capping a Speed answer at three lines. It overrides the slider and the character; destructive warnings and the depth phrases escape it. The real work is widening the branch picker ([D40](audit/maintainer-decisions-archive.md#d40--locked-2026-08-29--terse-modes-branch-menu-appears-on-every-reply-and-never-stops-the-branch-fence-is-mandatory-once-and-banned-on-follow-ups-which-rule-wins)). The future test TERSE-01 must pass at 8 of 10 questions; it has not been run.
+
+Discovery ran with the maintainer on 2026-08-29. **Nothing is built** (the 2026-08-29 state, kept as written; see the update above). This is the settled shape,
 written down so the build does not have to re-ask any of it.
 
 **What it is.** A toggle on the Ollama tab beside the reply-style slider, off out of the box, that
@@ -887,6 +891,8 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep t
   **2026-10-03 (plan 81, `45c73585`):** the first half is done. The old live-line trimming code (`liveReasoningText`), which nothing called any more, is removed; nothing a player sees changes. Owed: the end-of-session smoke test (Show reasoning still shows during and after an answer). The roadmap entry now holds only the second half (finding 6, only possible).
 
   **2026-10-03 (plan 81 paperwork 5):** the first half passed its smoke test on the Deck (Show reasoning shows up to 88 characters of steps while writing and opens to 1348 characters afterwards, build `5eca4271`; `docs/test-evidence/plan81-D-SMOKE-REASONING.json`) and is a line in Done. Of findings 1 to 5: finding 3 is in Done, finding 2 closed earlier, findings 1, 4 and 5 are in Verify.
+
+  **2026-10-08 (plan 83, `c99bd6f6`):** finding 6 is fixed: an answer that finished while the panel was shut is now written to the desktop note once the panel reopens (developer builds only). Proven by its test `src/hooks/useBonsaiAskOrchestration.desktopNote.test.ts`; no Deck check exists. Entry moved to Done and the archive.
 
 ## The walk check calls a stop hidden when a corner icon merely overlaps its box
 

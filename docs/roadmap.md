@@ -59,13 +59,11 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
 
 - ★ `[reply]` **While an answer arrives, the start of a sentence that ends up behind a spoiler cover can be read for about a second** — **OPEN, seen 2026-10-01 on the Deck (plan 78, Deck block 3a), a note. Not built for 0.6.0 ([D124](audit/maintainer-decisions-locked.md#d124--locked-2026-10-03-raised-2026-10-03--plan-81-the-final-bug-session-before-060-the-ten-calls) call 8); stays open; accepting it is a call (plan 81 question 1).**
   The words shown held no protected name; the name arrived after the words were hidden. Not known whether it was always so. Evidence `docs/test-evidence/plan78-P78-BORROWED-RUNNING-GAME.json`.
-- ★ `[platform]` **After the release: two clean-ups behind the scenes** — **PARTIAL, from plan 72; the first of the two is done (see Done), one finding is left.**
-  What is left: finding 6 of the read-through of the step that runs after an answer, which is only possible and shows in developer builds only (a reply that landed while the panel was shut may not be autosaved). No fix needed for the Deck.
-  Findings 1 to 5 are fixed: findings 1 and 3 are in Done, 2 closed earlier, and 4 and 5 are in Verify, under the entry about Voice replies on "When I asked by voice".
-  Full note: [roadmap-details.md](roadmap-details.md#after-the-release-two-clean-ups-behind-the-scenes).
 - ★ `[platform]` **A plugin reload while a game is running can put Steam's Home screen in front of the game** — **OPEN, found 2026-09-28 (plan 75). Developer-only: a player has no route to it (2026-10-03).**
   Seen three times. Once the game came back through the Steam menu (`docs/test-evidence/plan38-M1-deck.json`). Once it never showed a window (`docs/test-evidence/t75-feature-F1-REAL-POPUP.json`). Once, on 2026-09-29, one A on Resume brought it back (`docs/test-evidence/plan77-P77-TRAP-LONG.json`).
   **2026-10-03 (plan 81, Deck block 6, build `7e963807`):** two developer reloads with Deep Rock Galactic: Survivor running did not bring Steam's Home screen in front: the game's window stayed in front both times. Decky's plugin list has no reload control, and its settings page showed empty with a game running, so a player has no route to a reload. The maintainer's call on marking it accepted is open (plan 81, question 3). Evidence `docs/test-evidence/plan81-P81-RELOAD-LOOK.json`.
+- ★ `[ui]` **Picking a setting from the settings card opens the right Steam settings page but does not scroll to that setting** — **OPEN, found 2026-10-08 on the Deck (plan 83).**
+  A on "Enable GPU Crash Report Collection" opened Steam's System page at the top, with the toggle about 320 px below the screen edge. Not known whether Steam's link can scroll to a setting at all. Evidence `docs/test-evidence/plan83-P83-J1-SETTINGS-CARD.json`.
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** — **OPEN, failed by hand 2026-09-23 (build `a224fb6`).**
   After Show details → Session, both tab bars stayed drawn at once. The D-pad half did not reproduce (2026-09-28, 2026-09-29); the touch half needs a finger and is on the maintainer's checks page (plan 77).
   Row **TAB-BAR-GHOST-01** in [testing-manual.md](testing-manual.md). Older notes: [details](roadmap-details.md#a-faded-ghost-of-the-tab-bar-is-left-drawn-over-the-chip-row-after-touching-the-screen).
@@ -98,11 +96,6 @@ replace it with a specific issue when one exists.
 - ★ `[platform]` **Two small build-setup tidy-ups left, deferred on purpose in 2026-08** — **PARTIAL, carried over 2026-09-24 from plan 24 when it was archived.**
   Nothing a person would notice. **Done 2026-10-02 (plan 79):** the version file is written only when it really changes (`b4e838a2`, `49fc8894`), and the old `pnpm.peerDependencyRules` block is gone from `package.json` (`f3541fd`).
   **Still open, for the first session after 0.6.0:** name the package manager's version in `package.json`, and move `packages/bonsai-mcp` off npm. Both need a GitHub run to prove, which a session cannot make (plan 79, question 13). [Plan § 5](archive/24-track-a-ci-baseline.md).
-- ★ `[ui]` **A leftover piece of state from the deleted settings-card keyboard marker** — **OPEN, found 2026-09-16 while landing the settings card's real D-pad wiring.**
-  The old fake on-screen marker is gone, but a stored row number is still kept and passed through several files. Today it only paints the row you last clicked in the settings card.
-  Nothing a person clearly notices. Removing it touches more than three files (the main file, the ask bar and its types, three hooks).
-- ★★ `[chat]` **A day line in the "N earlier" list opens all of that day's questions at once; open them a few at a time** — **OPEN, the maintainer's call 2026-10-06.**
-  A on a day line shows every question of that day, a hundred if there were a hundred. Wanted: about five to seven at a time, with a way to get the next few. No screenshot.
 - ★★ `[chat]` **A quiet cue that a cut question can be opened** — **OPEN, filed 2026-09-05 by the maintainer.** When the ring lands on a question cut short, nothing says the rest is there.
   Chosen from four drawn options: the text fades at the right-hand edge only while the ring is on it, nothing for a finger.
   The same fade already exists for cut-off answers. One check owed first: the question bubble turns its own outline off, so look on the Deck at what focus shows.
@@ -153,9 +146,9 @@ replace it with a specific issue when one exists.
 - ★★★ `[reply]` **The Spy opens as somebody else** — **OPEN, split off 2026-09-15 ([D105](audit/maintainer-decisions-locked.md#d105--locked-2026-09-15--the-fourth-feature-session-two-features-drawn-instead-of-built-the-spys-reveal-the-lighter-clear-and-the-wipe)).**
   On a random chance his first message introduces him as a different character from the list and he keeps it up. A character has no first message today, so this needs a greeting feature first.
   Decide before building: how often, whether the picker still shows Spy, and how the reveal reads.
-- ★★★ `[reply]` **Terse mode: Speed answers in three lines** — **OPEN, planned 2026-08-29, nothing built.**
-  A toggle beside the reply-style slider, off by default, capping a Speed answer at three lines. It overrides the slider and the character; destructive warnings and the depth phrases escape it.
-  The real work is widening the branch picker ([D40](audit/maintainer-decisions-archive.md#d40--locked-2026-08-29--terse-modes-branch-menu-appears-on-every-reply-and-never-stops-the-branch-fence-is-mandatory-once-and-banned-on-follow-ups-which-rule-wins)). The future test TERSE-01 must pass at 8 of 10 questions; it has not been run. [Detail](roadmap-details.md#terse-mode-speed-answers-in-three-lines).
+- ★★★ `[reply]` **Terse mode: Speed answers in three lines** — **PARTIAL, the switch is built and passed on the Deck 2026-10-08 (plan 83, row P83-J4-TERSE-TOGGLE, evidence `docs/test-evidence/plan83-P83-J4-TERSE-TOGGLE.json`); the answers are not tested.**
+  Built: a "Terse mode" switch on the Ollama tab under the Reply style slider, off by default. With it on, a Speed answer is asked to keep to three lines and end with a menu of choices, first answers and follow-ups alike; Strategy, Expert and Speed with it off are as before. Only the switch was checked on the Deck; nothing was asked of the AI. [Detail](roadmap-details.md#terse-mode-speed-answers-in-three-lines).
+  **Still owed:** (a) the ten-question answer test TERSE-01 with a real model (not run); (b) the stacked full-width buttons (screen work, needs a Deck measurement first); (c) a menu press sends a follow-up saying "I'm at: <label>" and asking for an "If you want to cheat" section, which the terse wording has to talk the AI out of; (d) in the endless terse loop each menu press stores the whole previous composed question as "Earlier I asked", so the question grows with every press (the question is stored in `src/hooks/useBonsaiAskOrchestration.ts`, about line 776, and quoted back in `src/hooks/useStrategyBranchActions.ts`, about line 113).
 - ★★★ `[ui]` **Adjustable text size in Settings** — **PARTIAL, hidden for 0.6.0.**
   A UI scale section exists (Handheld or Couch size, Apply button) and returns with the Developer tab on (`CHANGELOG.md`, hidden-for-0.6.0 note; commit `12227980`).
   Still open: whether two steps are enough for reading at a distance, what must not scale (icons, the 300px column), and whether to show it again. [Detail](roadmap-details.md#adjustable-text-size-in-settings).
@@ -334,6 +327,12 @@ Parked work and watched sightings: [roadmap-shelved.md](roadmap-shelved.md).
 Everything closed since v0.5.0 (2026-07-15), one line each. Full record: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
 
 The Closed blocks from 2026-10-02 to 2026-10-07 (plans 79 to 82) were moved to [the archive](archive/roadmap-done-v0.5.0.md#done-for-v060) on 2026-10-07 to keep this file under its size limit, newest first, copied line for line. Every entry in them is closed, so none stays here.
+
+**Closed 2026-10-08 (plan 83):**
+
+- ★ `[ui]` **A leftover piece of state from the deleted settings-card keyboard marker** — **DONE 2026-10-08, passed on the Deck (row P83-J1-SETTINGS-CARD; fixes `0456117b`, `787068ef`).** A row you pick in the settings card no longer stays painted lighter; the D-pad walk and B are unchanged. Evidence `docs/test-evidence/plan83-P83-J1-SETTINGS-CARD.json`. The jump to the setting is a new entry in Bugs.
+- ★ `[platform]` **After the release: two clean-ups behind the scenes** — **DONE 2026-10-08, proven by its test only (fix `c99bd6f6`; no Deck check, it shows in developer builds only).** An answer that finished while the panel was shut is now written to the desktop note once the panel reopens. Test `src/hooks/useBonsaiAskOrchestration.desktopNote.test.ts`.
+- ★★ `[chat]` **A day line in the "N earlier" list opens all of that day's questions at once; open them a few at a time** — **DONE 2026-10-08, passed on the Deck (row P83-J3-SHOW-MORE; fix `eddd7138`).** A on a day line shows six questions and a "Show N more" line; each A adds the next six; closing the day starts over. Evidence `docs/test-evidence/plan83-P83-J3-SHOW-MORE.json`.
 
 **Plan 70 (2026-09-26 to 2026-09-27): 41 items closed** — the knowledge-base wave four and the Deck test wave,
 flows L1 to L7 and the helpers' landings. Each one, word for word, with its evidence: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md); the long notes in

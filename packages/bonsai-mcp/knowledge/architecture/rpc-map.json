@@ -268,52 +268,52 @@
     {
       "name": "ask_ollama",
       "domain": "ollama",
-      "line": 2179
+      "line": 2181
     },
     {
       "name": "get_voice_engine_status",
       "domain": "voice",
-      "line": 2290
+      "line": 2292
     },
     {
       "name": "install_voice_engine",
       "domain": "voice",
-      "line": 2294
+      "line": 2296
     },
     {
       "name": "get_voice_install_status",
       "domain": "voice",
-      "line": 2298
+      "line": 2300
     },
     {
       "name": "start_voice_transcription",
       "domain": "voice",
-      "line": 2302
+      "line": 2304
     },
     {
       "name": "stop_voice_transcription",
       "domain": "voice",
-      "line": 2306
+      "line": 2308
     },
     {
       "name": "get_voice_transcription_status",
       "domain": "voice",
-      "line": 2310
+      "line": 2312
     },
     {
       "name": "start_voice_read_aloud",
       "domain": "voice",
-      "line": 2314
+      "line": 2316
     },
     {
       "name": "stop_voice_read_aloud",
       "domain": "voice",
-      "line": 2318
+      "line": 2320
     },
     {
       "name": "get_voice_read_aloud_status",
       "domain": "voice",
-      "line": 2322
+      "line": 2324
     }
   ]
 }

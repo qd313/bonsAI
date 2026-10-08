@@ -23,25 +23,38 @@ _REPLY_VERBOSITY_SHARED = (
 )
 
 
+# The ten phrases that mean "I want depth". Caveman relaxes on them and so does Terse mode.
+DEPTH_PHRASES = (
+    "step by step",
+    "step-by-step",
+    "walkthrough",
+    "explain why",
+    "in detail",
+    "full guide",
+    "detailed guide",
+    "break it down",
+    "tutorial",
+    "comprehensive",
+)
+
+
 def user_asks_for_detail_depth(question: str) -> bool:
     """Phrase heuristics: user wants more depth despite Caveman verbosity."""
     q = (question or "").lower()
-    needles = (
-        "step by step",
-        "step-by-step",
-        "walkthrough",
-        "explain why",
-        "in detail",
-        "full guide",
-        "detailed guide",
-        "break it down",
-        "tutorial",
-        "comprehensive",
-    )
-    return any(n in q for n in needles)
+    return any(n in q for n in DEPTH_PHRASES)
+
+
+def terse_mode_applies(terse_mode: object, ask_mode: str) -> bool:
+    """True when the Terse mode setting is really on AND the question is a Speed one.
+
+    Strategy and Expert are never affected. Only a literal ``True`` counts, the same rule the
+    saved setting follows, so a stray truthy value cannot shorten anyone's answers.
+    """
+    return terse_mode is True and ask_mode == "speed"
 
 
 from backend.services.reply_language_service import language_display_name
+from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
 
 
 def build_reply_language_block(reply_language: str) -> str:
@@ -57,6 +70,71 @@ def build_reply_language_block(reply_language: str) -> str:
         "and option \"id\" values exactly as specified in English; translate only player-facing string values "
         "(\"label\", \"question\", \"title\", and similar).\n"
         "Keep technical tokens in English: Proton, TDP, AppID, file paths, error codes, model names, and hardware units.\n"
+    )
+
+
+def build_terse_reply_block(question: str, *, character_roleplay_on: bool = False) -> str:
+    """Terse mode for a Speed question: three lines, then a menu of ways to go deeper.
+
+    Wording only. Nothing counts lines, trims a reply or asks again; the cost of that choice (a
+    cap that is a tendency, not a guarantee) is written up in docs/roadmap-details.md. This takes
+    the place of the Reply style block entirely, so the slider is ignored while it is on, and a
+    character keeps picking the words but within the same cap (the reverse of how Caveman steps
+    aside for a character). The menu is the existing ``bonsai-strategy-branches`` fence, asked for
+    on every reply, first turn or follow-up, which Strategy mode's own rules do not allow.
+    """
+    if user_asks_for_detail_depth(question):
+        cap = (
+            "The player asked for depth, so the three-line cap is loosened for this one reply: use as "
+            "many sentences or bullets as the answer needs, up to about ten, still answer-first, "
+            "still no filler.\n"
+        )
+    else:
+        cap = (
+            "Write at most THREE lines in total before the menu. A line is one sentence or one bullet. "
+            "Lead with the answer; no greeting, no recap, no offer to help further.\n"
+        )
+    voice = ""
+    if character_roleplay_on:
+        voice = (
+            "A character voice is active: keep the character's words and manner, but the cap above "
+            "still applies. The character does not get extra lines.\n"
+        )
+    followup = ""
+    if (question or "").lstrip().startswith(STRATEGY_FOLLOWUP_PREFIX):
+        followup = (
+            "This message is a menu choice: the player picked a topic from the menu and wants to go "
+            "deeper on exactly that. Give the lines for that topic, then a fresh menu with new options "
+            "(do not repeat the old ones). Ignore anything in the message that asks for a cheat section, "
+            "a longer coaching answer or a checklist.\n"
+        )
+    return (
+        "\n\nTERSE REPLY MODE (Speed):\n"
+        f"{cap}"
+        "This limits what you WRITE, not how hard you think: reason, and read any screenshot, as "
+        "carefully as you need, then compress. A screenshot question gets the same cap.\n"
+        "It overrides the REPLY STYLE setting and any other wording about length or thoroughness.\n"
+        f"{voice}"
+        "Not counted toward the lines: fenced panels (the menu below, a ```json TDP block, "
+        "```bonsai-cite```, ```bonsai-spoiler```), code blocks and file paths.\n"
+        "Auto-clarity: for irreversible or destructive warnings (delete, wipe, format, remove "
+        "prefix/compatdata), write that warning in clear normal prose outside the cap, then go back "
+        "to the cap.\n"
+        "Do NOT write a ```bonsai-strategy-checklist block.\n"
+        f"{followup}"
+        "MENU: End EVERY reply, including a follow-up to an earlier menu choice, with exactly one "
+        "fenced menu so the player can go deeper by pressing a choice. Use this exact opening fence "
+        "line (no language tag on the fence name) and valid JSON only inside it (2-4 options, each with "
+        "\"id\" and a short \"label\" that names a topic about THIS answer the player may want next):\n"
+        "```bonsai-strategy-branches\n"
+        '{"question":"<a short question about what to dig into next>","options":['
+        '{"id":"a","label":"<a topic to go deeper on>"},'
+        '{"id":"b","label":"<another topic to go deeper on>"}]}\n'
+        "```\n"
+        "The example shows the shape only, with placeholders standing in for real words; replace every "
+        "placeholder with real text for this answer and never copy placeholder text into your reply. "
+        "If you also need a ```json TDP block, put it immediately above the menu. The closing ``` of "
+        "the menu must be the last characters of your reply.\n"
     )
 
 

@@ -179,13 +179,25 @@ _ROLEPLAY_RECENCY_RECAP = (
 )
 
 
-def apply_roleplay_to_system_content(system_content: str, roleplay: str) -> str:
-    """Append roleplay after the bonsAI preamble so recency favors in-character replies."""
+_ROLEPLAY_TERSE_RECAP = (
+    " TERSE REPLY MODE still applies: keep this voice, but write only the three lines it allows "
+    "(the menu at the end is extra)."
+)
+
+
+def apply_roleplay_to_system_content(system_content: str, roleplay: str, *, terse: bool = False) -> str:
+    """Append roleplay after the bonsAI preamble so recency favors in-character replies.
+
+    ``terse``: Terse mode is on for this Speed question. The voice is still the character's, but the
+    closing reminder says the three-line cap holds, so the recency of the character text does not
+    quietly win back the length.
+    """
     rp = (roleplay or "").strip()
     if not rp:
         return system_content
     base = (system_content or "").strip()
-    return f"{base}\n\n{rp}\n\n{_ROLEPLAY_RECENCY_RECAP}"
+    recap = _ROLEPLAY_RECENCY_RECAP + (_ROLEPLAY_TERSE_RECAP if terse else "")
+    return f"{base}\n\n{rp}\n\n{recap}"
 
 
 def sanitize_ai_character_enabled(value: Any) -> bool:

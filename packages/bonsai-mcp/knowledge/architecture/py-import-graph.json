@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 116,
-  "edgeCount": 316,
+  "edgeCount": 318,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -57,6 +57,10 @@
       "count": 9
     },
     {
+      "path": "py_modules/backend/services/strategy_guide_parse.py",
+      "count": 9
+    },
+    {
       "path": "py_modules/backend/constants.py",
       "count": 8
     },
@@ -70,10 +74,6 @@
     },
     {
       "path": "py_modules/backend/services/capabilities.py",
-      "count": 8
-    },
-    {
-      "path": "py_modules/backend/services/strategy_guide_parse.py",
       "count": 8
     },
     {
@@ -205,6 +205,10 @@
       "count": 3
     },
     {
+      "path": "py_modules/backend/services/reply_style_blocks.py",
+      "count": 3
+    },
+    {
       "path": "py_modules/backend/services/response_verify.py",
       "count": 3
     },
@@ -286,10 +290,6 @@
     },
     {
       "path": "py_modules/backend/services/proton_troubleshooting_logs.py",
-      "count": 2
-    },
-    {
-      "path": "py_modules/backend/services/reply_style_blocks.py",
       "count": 2
     },
     {
@@ -1180,6 +1180,7 @@
         "py_modules/backend/services/ollama_ask_extras.py",
         "py_modules/backend/services/ollama_service.py",
         "py_modules/backend/services/reply_language_service.py",
+        "py_modules/backend/services/reply_style_blocks.py",
         "py_modules/backend/services/response_verify.py",
         "py_modules/backend/services/screenshot_media.py",
         "py_modules/backend/services/settings_service.py"
@@ -1485,10 +1486,12 @@
     },
     "py_modules/backend/services/reply_style_blocks.py": {
       "imports": [
-        "py_modules/backend/services/reply_language_service.py"
+        "py_modules/backend/services/reply_language_service.py",
+        "py_modules/backend/services/strategy_guide_parse.py"
       ],
       "importedBy": [
         "py_modules/backend/services/chat_summary_service.py",
+        "py_modules/backend/services/ollama_ask_service.py",
         "py_modules/backend/services/ollama_prompts.py"
       ]
     },
@@ -1626,6 +1629,7 @@
         "py_modules/backend/services/ollama_chat_stream.py",
         "py_modules/backend/services/ollama_prompts.py",
         "py_modules/backend/services/ollama_service.py",
+        "py_modules/backend/services/reply_style_blocks.py",
         "py_modules/backend/services/spoiler_title_profiles.py",
         "py_modules/backend/services/strategy_entity_extraction.py",
         "py_modules/backend/services/strategy_spoiler_policy.py"

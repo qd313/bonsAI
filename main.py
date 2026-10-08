@@ -2145,6 +2145,7 @@ class Plugin:
         strategy_checklist_state: Optional[dict] = None,
         reply_verbosity: str = "balanced",
         reply_language: str = "english",
+        terse_mode: bool = False,
     ) -> str:
         """Build the system prompt using plugin-local metadata lookups and attachment context."""
         proton = (proton_log_attachment or "").strip()
@@ -2168,6 +2169,7 @@ class Plugin:
             strategy_checklist_state=strategy_checklist_state,
             reply_verbosity=reply_verbosity,
             reply_language=reply_language,
+            terse_mode=terse_mode,
         )
         return append_deck_tdp_sysfs_grounding(
             base,

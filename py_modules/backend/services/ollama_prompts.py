@@ -130,6 +130,8 @@ from backend.services.reply_style_blocks import (
     user_asks_for_detail_depth,
     build_reply_language_block,
     build_reply_verbosity_block,
+    build_terse_reply_block,
+    terse_mode_applies,
 )
 from backend.services.reply_followup_blocks import (
     sanitize_reply_followup,
@@ -358,6 +360,7 @@ def build_system_prompt(
     reply_verbosity: str = "balanced",
     reply_language: str = "english",
     knowledge_block_placement: str = "early",
+    terse_mode: bool = False,
 ) -> str:
     """Build the system message used for Ollama requests from game and attachment context.
 
@@ -377,6 +380,11 @@ def build_system_prompt(
     constant's comment for why the wording and position are fixed, and for the partial-fix numbers
     (D98). A no-op when blank, or when ``early_context_suffix`` never attached a knowledge-base
     block at all.
+
+    ``terse_mode``: the person's Terse mode setting. It only does anything for a Speed question
+    (``ask_mode == "speed"``): the Reply style block is replaced by the three-line rule and the
+    branch-menu requirement (reply_style_blocks.build_terse_reply_block). Strategy and Expert
+    prompts are word for word what they are with it off.
     """
     attachment_app_ids = sorted(
         {
@@ -567,12 +575,17 @@ def build_system_prompt(
             tail = hardware_tdp_appendix
         else:
             tail = hardware_tdp_appendix
-        verbosity_block = build_reply_verbosity_block(
-            reply_verbosity,
-            question=question,
-            ask_mode=ask_mode,
-            character_roleplay_on=character_roleplay_on,
-        )
+        if terse_mode_applies(terse_mode, ask_mode):
+            verbosity_block = build_terse_reply_block(
+                question, character_roleplay_on=character_roleplay_on
+            )
+        else:
+            verbosity_block = build_reply_verbosity_block(
+                reply_verbosity,
+                question=question,
+                ask_mode=ask_mode,
+                character_roleplay_on=character_roleplay_on,
+            )
         language_block = build_reply_language_block(reply_language)
         if strategy_domain and ask_mode != "strategy":
             middle += _strategy_spoiler_constitution_compact_block(

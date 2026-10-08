@@ -84,6 +84,7 @@ from backend.services.ollama_ask_extras import (
 from backend.services.ollama_service import post_ollama_chat
 from backend.services.response_verify import build_live_spoiler_cover
 from backend.services.settings_service import sanitize_ollama_keep_alive, sanitize_reply_verbosity
+from backend.services.reply_style_blocks import terse_mode_applies
 from backend.services.reply_language_service import resolve_effective_reply_language
 from backend.ollama_routing import (
     is_ollama_model_missing_error,
@@ -166,6 +167,9 @@ async def run_ask_ollama(
     keep_alive = sanitize_ollama_keep_alive(settings.get("ollama_keep_alive"))
     reply_verbosity = sanitize_reply_verbosity(settings.get("reply_verbosity"))
     reply_language = resolve_effective_reply_language(settings.get("reply_language"))
+    # Terse mode (Speed answers in three lines): on only for a Speed question, and only for a real
+    # saved true. Decided once here and handed to the prompt, the character reminder and the reply reader.
+    terse_speed = terse_mode_applies(settings.get("terse_mode"), ask_mode)
     apreset = str(settings.get("screenshot_attachment_preset") or "low")
     if apreset not in ("low", "mid", "max"):
         apreset = "low"
@@ -196,6 +200,7 @@ async def run_ask_ollama(
         strategy_checklist_state=strategy_checklist_state,
         reply_verbosity=reply_verbosity,
         reply_language=reply_language,
+        terse_mode=terse_speed,
     )
     if ask_mode == "strategy":
         # Closes the last gap in the branch-picker chain. With this plus the
@@ -224,7 +229,7 @@ async def run_ask_ollama(
                 roleplay = roleplay + pyro_manager_carousel_tip_addon(tip)
             preset_carousel_inject = {"text": tip}
     if roleplay:
-        system_content = apply_roleplay_to_system_content(system_content, roleplay)
+        system_content = apply_roleplay_to_system_content(system_content, roleplay, terse=terse_speed)
 
     # D112 #7, the spoiler safety net -- the live half (belt and braces alongside the finished-
     # reply cover in game_ai_request.py). The whole policy lookup lives behind this call now.

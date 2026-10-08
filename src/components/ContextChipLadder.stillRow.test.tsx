@@ -97,15 +97,55 @@ type SceneOptions = {
   labels?: string[];
   /** The pane's total scroll height; the default leaves far more room than any test scrolls. */
   scrollHeight?: number;
+  /**
+   * The Deck's pane: its scroll height is the open panel's height plus the held block after it
+   * plus `base`, and its scrollTop is clamped to what that allows, the way the browser clamps it
+   * (on the next read after the content shrank). Measured 2026-10-08: scroll heights 1060, 882,
+   * 1080 for the first, second and last chip, a client height of 678.
+   */
+  deckPane?: { base: number; bodies: Record<string, number> };
+  startScroll?: number;
 };
 
-function mountScene({ ladderScreenTop = LADDER_SCREEN_TOP, labels = LABELS, scrollHeight = 4000 }: SceneOptions = {}): Scene {
-  const LADDER_DOC_TOP = ladderScreenTop - PANE_TOP + START_SCROLL;
+function mountScene({
+  ladderScreenTop = LADDER_SCREEN_TOP,
+  labels = LABELS,
+  scrollHeight = 4000,
+  deckPane,
+  startScroll = START_SCROLL,
+}: SceneOptions = {}): Scene {
+  const LADDER_DOC_TOP = ladderScreenTop - PANE_TOP + startScroll;
   const pane = document.createElement("div");
   pane.className = "_TabContentsScroll";
-  Object.defineProperty(pane, "scrollHeight", { value: scrollHeight, configurable: true });
-  Object.defineProperty(pane, "clientHeight", { value: PANE_BOTTOM - PANE_TOP, configurable: true });
-  pane.scrollTop = START_SCROLL;
+  const clientHeight = PANE_BOTTOM - PANE_TOP;
+  Object.defineProperty(pane, "clientHeight", { value: clientHeight, configurable: true });
+  if (deckPane) {
+    let top = startScroll;
+    const openPanel = () => deckPane.bodies[pane.querySelector(".bonsai-chip-ladder-chip--active")?.textContent ?? ""] ?? 0;
+    const held = () => parseFloat((pane.querySelector(".bonsai-chip-ladder-hold") as HTMLElement | null)?.style.height || "0");
+    const total = () => deckPane.base + openPanel() + held();
+    const max = () => Math.max(0, total() - clientHeight);
+    Object.defineProperty(pane, "scrollHeight", {
+      configurable: true,
+      get() {
+        top = Math.min(top, max());
+        return total();
+      },
+    });
+    Object.defineProperty(pane, "scrollTop", {
+      configurable: true,
+      get() {
+        top = Math.min(top, max());
+        return top;
+      },
+      set(value: number) {
+        top = Math.max(0, Math.min(value, max()));
+      },
+    });
+  } else {
+    Object.defineProperty(pane, "scrollHeight", { value: scrollHeight, configurable: true });
+    pane.scrollTop = startScroll;
+  }
   pane.getBoundingClientRect = () => ({ top: PANE_TOP, bottom: PANE_BOTTOM }) as DOMRect;
   const dock = document.createElement("div");
   dock.className = "bonsai-main-tab-dock";
@@ -124,14 +164,14 @@ function mountScene({ ladderScreenTop = LADDER_SCREEN_TOP, labels = LABELS, scro
 
   const rowDocTop = LADDER_DOC_TOP + CAPTION_H + 6;
   const bodyDocTop = rowDocTop + ROW_H + GAP;
-  const bodyHeight = () => BODY_H[openLabel(ladder)] ?? 0;
+  const bodyHeight = () => (deckPane?.bodies ?? BODY_H)[openLabel(ladder)] ?? 0;
   const box = (docTop: number, height: number) => () =>
     ({ top: screenY(pane, docTop), bottom: screenY(pane, docTop) + height, height }) as DOMRect;
   ladder.getBoundingClientRect = () =>
     box(LADDER_DOC_TOP, bodyDocTop - LADDER_DOC_TOP + bodyHeight())();
   for (const c of chips) c.getBoundingClientRect = box(rowDocTop, 24);
   chips[0]!.parentElement!.getBoundingClientRect = box(rowDocTop, ROW_H);
-  const body = ladder.lastElementChild as HTMLElement;
+  const body = ladder.querySelector(".bonsai-chip-ladder-hold")!.previousElementSibling as HTMLElement;
   body.getBoundingClientRect = () => box(bodyDocTop, bodyHeight())();
   return { pane, ladder, chips, onLeave };
 }
@@ -274,7 +314,7 @@ describe("a panel taller than the room can be read to its end before Down leaves
     ringArrives(scene);
     walkToLastChip(scene);
     expect(openLabel(scene.ladder)).toBe("Developer details");
-    const body = scene.ladder.lastElementChild as HTMLElement;
+    const body = scene.ladder.querySelector(".bonsai-chip-ladder-hold")!.previousElementSibling as HTMLElement;
     expect(body.getBoundingClientRect().bottom).toBeGreaterThan(DOCK_TOP);
 
     expect(pressDown()).toBe(true);
@@ -322,5 +362,146 @@ describe("a panel taller than the room can be read to its end before Down leaves
     expect(openLabel(scene.ladder)).toBe("Spoiler risk");
     expect(scene.chips[0]!.getBoundingClientRect().top).toBeGreaterThanOrEqual(PANE_TOP);
     expect(scene.chips[0]!.getBoundingClientRect().bottom).toBeLessThanOrEqual(DOCK_TOP);
+  });
+});
+
+/* The seven chips of the Deck recording, with panel heights that give its measured scroll heights. */
+const DECK_LABELS = [
+  "Keyword + meaning",
+  "KB: 14 sections",
+  "Reply style: balanced",
+  "Thinking",
+  "Spoiler risk: med",
+  "Routed model",
+  "Developer details",
+];
+const DECK_PANE = {
+  base: 760,
+  bodies: {
+    "Keyword + meaning": 300,
+    "KB: 14 sections": 122,
+    "Reply style: balanced": 122,
+    "Thinking": 153,
+    "Spoiler risk: med": 201,
+    "Routed model": 122,
+    "Developer details": 320,
+  },
+};
+/* Scrolled this far, the second chip's panel (scroll height 882) cannot keep the position: 882 - 678. */
+const SECOND_CHIP_MAX_SCROLL = 204;
+
+function deckScene(startScroll: number) {
+  return mountScene({
+    labels: DECK_LABELS,
+    deckPane: DECK_PANE,
+    startScroll,
+    ladderScreenTop: 239.5,
+  });
+}
+
+function heldHeight(scene: Scene): number {
+  return parseFloat((scene.ladder.querySelector(".bonsai-chip-ladder-hold") as HTMLElement).style.height || "0");
+}
+
+describe("a step to a shorter panel does not pull the pane back under its scroll", () => {
+  it("entering the chips near the pane's end, the first step to a shorter panel leaves the row and the scroll alone", () => {
+    const scene = deckScene(334.4);
+    ringArrives(scene);
+    const row = rowTop(scene);
+    const scroll = scene.pane.scrollTop;
+    expect(scroll).toBeGreaterThan(SECOND_CHIP_MAX_SCROLL);
+
+    pressDown();
+    settle();
+
+    expect(openLabel(scene.ladder)).toBe("KB: 14 sections");
+    expect(scene.pane.scrollTop).toBe(scroll);
+    expect(rowTop(scene)).toBe(row);
+  });
+
+  it("after reading Developer details to its end, Up to a shorter panel leaves the row and the scroll alone", () => {
+    const scene = deckScene(334.4);
+    ringArrives(scene);
+    walkToLastChip(scene);
+    pressDown();
+    settle();
+    expect(scene.onLeave).not.toHaveBeenCalled();
+    const row = rowTop(scene);
+    const scroll = scene.pane.scrollTop;
+    expect(scroll).toBeGreaterThan(SECOND_CHIP_MAX_SCROLL);
+
+    act(() => {
+      (openChipProps().onMoveUp as () => boolean)();
+    });
+    settle();
+
+    expect(openLabel(scene.ladder)).toBe("Routed model");
+    expect(scene.pane.scrollTop).toBe(scroll);
+    expect(rowTop(scene)).toBe(row);
+  });
+
+  it("keeps the row still through a whole walk down and back up from the pane's end", () => {
+    const scene = deckScene(334.4);
+    ringArrives(scene);
+    const row = rowTop(scene);
+    const scroll = scene.pane.scrollTop;
+    for (let i = 0; i < DECK_LABELS.length - 1; i += 1) {
+      pressDown();
+      settle();
+      expect([rowTop(scene), scene.pane.scrollTop]).toEqual([row, scroll]);
+    }
+    for (let i = 0; i < DECK_LABELS.length - 1; i += 1) {
+      act(() => {
+        (openChipProps().onMoveUp as () => boolean)();
+      });
+      settle();
+      expect([rowTop(scene), scene.pane.scrollTop]).toEqual([row, scroll]);
+    }
+  });
+
+  it("leaves no gap when the pane is not near its end", () => {
+    const scene = deckScene(0);
+    ringArrives(scene);
+    for (let i = 0; i < DECK_LABELS.length - 1; i += 1) {
+      pressDown();
+      settle();
+      expect(heldHeight(scene)).toBe(0);
+    }
+  });
+
+  it("gives the held height back at the next step once the person has scrolled up", () => {
+    const scene = deckScene(334.4);
+    ringArrives(scene);
+    pressDown();
+    settle();
+    expect(heldHeight(scene)).toBeGreaterThan(0);
+
+    /* Back within what the shorter panel allows, with the row still on screen. */
+    scene.pane.scrollTop = SECOND_CHIP_MAX_SCROLL - 4;
+    pressDown();
+    settle();
+
+    expect(heldHeight(scene)).toBe(0);
+    expect(scene.pane.scrollTop).toBe(SECOND_CHIP_MAX_SCROLL - 4);
+  });
+
+  it("still does not scroll in the second after the ring leaves, with the held height in place", () => {
+    const scene = deckScene(334.4);
+    ringArrives(scene);
+    pressDown();
+    settle();
+    expect(heldHeight(scene)).toBeGreaterThan(0);
+
+    const box = document.createElement("textarea");
+    document.body.appendChild(box);
+    act(() => {
+      box.focus();
+    });
+    const scroll = scene.pane.scrollTop;
+    act(() => {
+      vi.advanceTimersByTime(2000);
+    });
+
+    expect(scene.pane.scrollTop).toBe(scroll);
   });
 });

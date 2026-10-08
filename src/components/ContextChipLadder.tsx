@@ -172,7 +172,11 @@ export function ContextChipLadder({
   const ladderElRef = useRef<HTMLElement | null>(null);
   const rowElRef = useRef<HTMLElement | null>(null);
   const bodyElRef = useRef<HTMLElement | null>(null);
-  const { duringStep, keepInView, onFocusInside } = useChipLadderReveal(ladderElRef, rowElRef);
+  const { duringStep, keepInView, holdPosition, holdRef, onFocusInside } = useChipLadderReveal(
+    ladderElRef,
+    rowElRef,
+    bodyElRef,
+  );
   /* Each drawn chip's own element, by its index in `chips`; the open chip's index as last drawn. */
   const chipEls = useRef(new Map<number, HTMLElement>());
   const openIndexRef = useRef(0);
@@ -256,6 +260,7 @@ export function ContextChipLadder({
       ringOnChip(idx);
     });
     keepInView(chipEls.current.get(idx));
+    holdPosition();
     return true;
   };
   /*
@@ -393,6 +398,8 @@ export function ContextChipLadder({
           bodyElRef.current = el;
         }}
       />
+      {/* Empty, 0 high until a step to a shorter panel would shorten the pane under its scroll (useChipLadderReveal). */}
+      <div aria-hidden="true" className="bonsai-chip-ladder-hold" ref={holdRef} style={{ height: 0 }} />
     </Focusable>
   );
 }

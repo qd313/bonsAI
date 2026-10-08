@@ -65,6 +65,12 @@ function place(el: Element, pane: HTMLElement, top: number, bottom: number): voi
   };
 }
 
+/* Place the ladder and the open chip's panel (the part the arrival scroll clears from the dock). */
+function placeLadder(ladder: HTMLElement, pane: HTMLElement, top: number, bottom: number): void {
+  place(ladder, pane, top, bottom);
+  place(ladder.querySelector(".bonsai-chip-ladder-hold")!.previousElementSibling!, pane, top, bottom);
+}
+
 function ringOn(el: Element): void {
   document.querySelectorAll(".gpfocus").forEach((e) => e.classList.remove("gpfocus"));
   el.classList.add("gpfocus");
@@ -111,7 +117,7 @@ describe("the chip ladder holding the ring stays above the dock", () => {
   it("the ring arriving scrolls the ladder clear of the dock (the measured 284-652 against 586)", () => {
     const pane = deckPane();
     const ladder = mountLadder(pane);
-    place(ladder, pane, 284, 652);
+    placeLadder(ladder, pane, 284, 652);
     ringOn(ladder);
 
     fireEvent.focus(ladder);
@@ -127,7 +133,7 @@ describe("the chip ladder holding the ring stays above the dock", () => {
   it("a ladder taller than the room above the dock keeps its chip row on screen", () => {
     const pane = deckPane();
     const ladder = mountLadder(pane);
-    place(ladder, pane, 300, 1000);
+    placeLadder(ladder, pane, 300, 1000);
     ringOn(ladder);
 
     fireEvent.focus(ladder);
@@ -142,7 +148,7 @@ describe("the chip ladder holding the ring stays above the dock", () => {
   it("a step between the chips leaves the pane where it is, even with the ladder behind the dock", () => {
     const pane = deckPane();
     const ladder = mountLadder(pane);
-    place(ladder, pane, 284, 652);
+    placeLadder(ladder, pane, 284, 652);
     ringOn(ladder);
 
     act(() => {

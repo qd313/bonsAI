@@ -304,6 +304,17 @@ helper moves to Sonnet 5.5 -- high wherever an Opus medium helper ran (features,
 judgment), medium for mechanical fixes and moves, the bookkeeper and the Deck helper. Opus stays for whoever
 plans, orchestrates and lands. The table in § 2 is updated; keep adding a row per helper run.
 
+### 4d. The Haiku 5.5 trial (2026-10-08, the maintainer's idea)
+
+Four settings (Sonnet 5.5 medium and high, Haiku 5.5 medium and high) did the same six jobs, judged blind by Opus
+5.5 extra-high: two bugs, two features, a roadmap trim and the paperwork after landing. Full tables in
+[plan 83](83-haiku-5-5-trial.md) § 8. In short, of 150: Sonnet high 122, Sonnet medium 114, Haiku high 104, Haiku
+medium 101. Haiku high won the mechanical bug (24 of 25, a quarter of Sonnet's cost) and came close on the clear
+two-star feature, but fell short on the timing bug, the three-star feature and both bookkeeping jobs, where every
+Haiku run either missed by more than two points or lost sentences while saying it had not. Haiku 5.5's price
+rises five times on any request over 100,000 tokens, so on the long jobs it cost a third to a half of Sonnet, and
+once, on the timing bug, more than Sonnet. One run per setting per job. Suggested, not adopted: see plan 83 § 9.
+
 ## 5. Where Haiku fits
 
 Haiku 4.5 has been used once here: a six-turn documentation lookup on 09-04, for under a dollar. There is

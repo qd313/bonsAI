@@ -160,24 +160,113 @@ earn its cost. For Haiku, made concrete:
 
 ## 7. Owed after the trial (not this session)
 
-- **Deck checks:** J1 (the settings card behaves as before), J3 (the new line on the Deck's own screen, the
-  D-pad walk over it), J4 (the toggle on the Ollama tab and its help line).
+- **Deck checks: done 2026-10-08.** The session ran on the maintainer's PC, not in the cloud, and the
+  maintainer gave it the Deck. All three passed: the settings card (P83-J1-SETTINGS-CARD), the "Show N more"
+  line (P83-J3-SHOW-MORE), the Terse switch (P83-J4-TERSE-TOGGLE). Evidence under `docs/test-evidence/plan83-*`.
 - **J4's answer test:** ten Speed questions with Terse on, at least eight within three lines, run against real
-  Ollama.
-- **J4's stacked buttons:** Opus, after a Deck measurement.
+  Ollama. Still owed.
+- **J4's stacked buttons:** Opus, after a Deck measurement. Still owed. So are two things the trial found: a
+  menu press asks for an "If you want to cheat" section, and each press nests the previous question inside the
+  next one (both on the Terse roadmap entry).
 
 ## 8. Results
 
-*Filled in when the trial runs.* For each job: a table of setting, score, must fix, should fix, cost, minutes,
-steps. Then totals per setting. Then the suggested routing next to today's, with the reason for each line.
-Plain language first, numbers second.
+Ran 2026-10-07 23:00 to 2026-10-08 03:15, on the maintainer's PC with the Deck. Every winner landed on
+`experimental` with every check green; the Deck checks for three of them passed.
+
+### In plain words
+
+- **Sonnet high is still the best all-round helper.** It won four of the six jobs and was never far off in the
+  code jobs. It was the only setting that did the timing bug cleanly, which matches plan 75.
+- **Haiku high is good at a mechanical fix, and much cheaper.** It won the first bug outright (24 of 25, the
+  top score of the whole trial) for 32 cents, against $1.09 to $1.46 for Sonnet. On the clear two-star feature it
+  came third, two points behind the winner, for less than half Sonnet high's cost.
+- **Haiku is not ready for judgment work or bookkeeping.** On the timing bug both Haiku runs broke a back-end
+  test, and Haiku high's report quoted a test result from before its change. On the three-star feature Haiku high
+  left out the on-screen switch. On the paperwork both Haiku runs lost sentences while moving entries and said
+  they had copied them whole: an automatic fail under § 4.
+- **Haiku is careful in an unhelpful way.** Haiku high stopped twice when tests failed before it changed
+  anything (the overloaded PC's fault), and once refused to carry on after being told it could. Haiku medium
+  twice finished the work and then did not commit. Each needed a nudge. Sonnet runs needed one nudge in total.
+- **Haiku is not always cheap.** Past 100,000 tokens in one request its price goes up five times. On the long
+  jobs it cost a third to a half of Sonnet. On the timing bug Haiku medium took 308 steps and cost more than
+  either Sonnet run.
+- **Bookkeeping surprised in the other direction too:** Sonnet high scored worst on the paperwork (9 of 25,
+  an automatic fail: it filed the new bug under the wrong heading while its report said otherwise, and rewrote
+  rows it was not asked to touch). Sonnet medium, today's bookkeeper, won it.
+
+### Scores, out of 25 (judged blind by Opus 5.5 extra-high; ✗ = automatic fail)
+
+| Job | Sonnet medium | Sonnet high | Haiku medium | Haiku high | Landed |
+|---|---|---|---|---|---|
+| J1 leftover row number (★, mechanical) | 20 | 22 | 20 | **24** | Haiku high, plus Haiku medium's test |
+| J2 autosave timing (★, judgment) | 15 | **23** | 17 | 15 | Sonnet high |
+| J3 "Show N more" (★★ feature) | 23 | **24** | 16 | 22 | Sonnet high |
+| J4 Terse mode (★★★ feature) | 18 | **22** | 15 | 11 | Sonnet high, plus one fix by the session (below) |
+| J5 roadmap trim (bookkeeping) | 20 | **22** | 19 | 18 | Sonnet high |
+| J6 paperwork (bookkeeping) | **18** | 9 ✗ | 14 ✗ | 14 ✗ | Sonnet medium, plus the judge's fixes |
+| **Total of 150** | **114** | **122** | **101** | **104** | |
+
+Must-fix items the judges found: J1 Haiku medium left the click handler's type still allowing the row number.
+J2 Sonnet medium and Haiku high both broke the Ask hook's step-order test. J4: all four versions gave the AI two
+clashing orders on a knowledge-base strategy question (the spoiler wording banned the menu the terse wording
+required); the session fixed it in the winner (`e082e7a8`) with a test that fails without it, and a one-off
+fingerprint showed Terse off, Strategy and Expert unchanged word for word. J5 Haiku high's roadmap pointer named
+the wrong archive. J6: the winner repeated a wrong code location from the brief (the brief's mistake) and
+dropped three entries' original status lines; both folded into the landing.
+
+### Cost, time and effort per setting (all six jobs)
+
+List prices of 2026-10-08: Sonnet 5.5 $2 / $10 per million tokens in / out, cache reads $0.20; Haiku 5.5 $0.10 /
+$0.50, rising to $0.50 / $2.50 for any request over 100,000 tokens. Read from each helper's own log.
+
+| Setting | Score | Cost | Minutes | Steps | Tokens read |
+|---|---|---|---|---|---|
+| Sonnet medium | 114 | $13.23 | 265 | 328 | 45 million |
+| Sonnet high | 122 | $15.91 | 298 | 347 | 51 million |
+| Haiku medium | 101 | $6.80 | 290 | 664 | 109 million |
+| Haiku high | 104 | $5.50 | 277 | 474 | 86 million |
+
+Per job, cost in dollars (S-M / S-H / H-M / H-H): J1 1.09 / 1.46 / 0.17 / 0.32; J2 1.13 / 1.66 / 2.86 / 0.38;
+J3 2.19 / 2.93 / 0.77 / 1.20; J4 6.76 / 7.71 / 2.40 / 2.77; J5 0.88 / 0.80 / 0.23 / 0.48; J6 1.18 / 1.35 / 0.37 /
+0.35. The judges cost $23.22 and the two Deck blocks $3.13 (Opus and Sonnet); the one running the session about
+$20. The whole trial: about $88.
+
+**Time is the weakest number.** The maintainer asked to start the feature and trim batches early, so up to 20
+helpers shared the PC at once and every test run slowed down. All four runs of a job still started together, so
+times compare fairly within a job, not across jobs. Haiku does more, shorter steps: about twice as many as Sonnet
+for the same job.
+
+### Things to know about this run
+
+- One run per setting per job. Every "yes" below is a suggestion to try in a real session with the misses logged.
+- The load made baseline tests time out. All 20 helpers got the same note about which failures were known, mid-run.
+- The brief had two mistakes, the same for every run: J6 said two entries were under Bugs when they were under
+  Features, and gave a wrong line for the growing-question problem. The judge did not mark anyone down for them.
+- Haiku 5.5 accepted both medium and high effort, confirmed in its logs.
+
+### Suggested routing, next to today's
+
+| Work | Today | Suggested | Why |
+|---|---|---|---|
+| Mechanical fixes (known cause, one obvious way) | Sonnet medium | **Haiku high, on trial** | J1: best score, a quarter of the cost. One run; log every miss |
+| Fixes that need a judgment | Sonnet high | Sonnet high | J2: only Sonnet high was clean |
+| Features, one or two stars, clear spec | Sonnet high | Sonnet high (Haiku high a fair second) | J3: Haiku high 22 against 24 |
+| Features, three stars and up | Sonnet high | Sonnet high | J4: Haiku 11 and 15 |
+| The bookkeeper | Sonnet medium | **Sonnet medium, unchanged** | J5 and J6: Haiku missed the § 5 bar on both; Sonnet high failed J6 |
+| The Deck driver | Sonnet medium | Sonnet medium | Not tested here; the two Deck blocks ran clean on it |
 
 ## 9. The maintainer's calls
 
 1. **2026-10-08: the jobs.** The AI models box Filters feature is dropped (screen work, cannot be judged
    without the Deck). The two bugs are J1 and J2. The bookkeeping jobs are the roadmap trim and the
    after-landing paperwork. The winning version of each job lands on `experimental`.
-2. *Open:* the routing change, once § 8 is filled in.
+2. **2026-10-08, during the run:** start the feature batch, then the trim batch, while the bug batch was still
+   running (20 helpers at once, over the usual ten). Saved time; made the time numbers noisy.
+3. *Open:* whether to try Haiku high for mechanical one-star fixes (§ 8, suggested routing). Nothing else changes.
+4. *Open, from the trim:* the roadmap's house rules say a finished entry stays in Done as one line; after the
+   trim, Done holds only a pointer to the archive plus the new 2026-10-08 lines. Keep it that way, or bring back
+   one line per entry?
 
 ## 10. Next, if Haiku earns a place: the heavy reading jobs
 
@@ -193,3 +282,69 @@ These cost the most and have answers that can be checked. They are candidates fo
 - **Cutting down re-reading.** One Sonnet helper re-read about seven million tokens over 67 steps for one
   two-star bug. A short Haiku summary of the files, handed over at the start, might cut that. A test to find
   out, not a promise.
+
+## 11. Session summary (2026-10-08)
+
+### What was built, and where
+
+- **J1, the leftover row number** (`0456117b`, `787068ef`). The `selectedIndex` state is gone from `src/index.tsx`
+  and everything it was threaded through: `MainTab.tsx`, `MainTabUnifiedAskBar.tsx` and its types, the Main tab
+  payload hook, the session reset and restore hooks, `useSteamSettingsSearch.ts` (the click now passes only the
+  setting), `useBonsaiAskOrchestration.ts`, `askOrchestrationArgs.ts`, and the saved session snapshot
+  (`bonsaiSessionSurvival.ts`, `initialSessionSnapshot.ts`). An old snapshot that still carries the field restores
+  fine; it is simply ignored.
+- **J2, the late desktop-note autosave** (`c99bd6f6`). In `useBonsaiAskOrchestration.ts`, a finished reply that is
+  painted before settings load is held in the same ref as the two autosave switches and saved once when settings
+  arrive with both on; the save call itself moved to `src/hooks/saveReplyToDesktopNote.ts` to keep the hook under
+  its growth limit. Tests in `useBonsaiAskOrchestration.desktopNote.test.ts`.
+- **J3, "Show N more"** (`eddd7138`). `earlierTurnsByDay.ts` decides how many of an open day's questions show;
+  `useEarlierTurnsPill.ts` keeps the per-day count and resets it on close; `buildEarlierList.tsx` and
+  `EarlierListLine.tsx` draw the new line; `chatTranscriptNavHelpers.ts` wires its Down and Up and hands the ring
+  to the first new question; `MainTabChatTranscript.tsx` changed by a few lines. Route in `docs/focus-graph.md`.
+- **J4, Terse mode** (`9f007be6`, `d25df219`, `87a4dd78`, `2e8aa942`, `e082e7a8`). The `terse_mode` / `terseMode`
+  setting through both languages' settings tables, contracts and read-back test; the switch in `OllamaTab.tsx`,
+  wired into the slider-to-Thinking D-pad chain by hand; the three-line wording in `reply_style_blocks.py`, chosen
+  in `ollama_prompts.py`, with the character reminder in `ai_character_service.py`; `ollama_service.py` now reads
+  the branch menu out of a Speed reply when Terse is on; `strategy_spoiler_policy.py` stops banning that menu on a
+  knowledge-base question under Terse. Tests in `tests/test_terse_mode_prompt.py`, `OllamaTab.terseMode.test.tsx`.
+- **J5 and J6:** `docs/roadmap.md` 89.5 KB to 59.9 KB (finished entries to `docs/archive/roadmap-done-v0.5.0.md`),
+  then the paperwork for all of the above.
+
+### What popped up, and what was done about it
+
+- **Twenty helpers on one PC timed out the tests.** Tests that pass alone failed at the start of almost every
+  run. Every helper got the same note listing the known failures. Next time: keep to ten, or tell helpers to run
+  only their own tests while working, from the start.
+- **Two landings clashed.** J2's new test still passed the row number J1 had removed; a one-line fix, folded in.
+- **The Terse brief was wrong about focus.** AGENTS.md says a plain toggle in an existing section needs no wiring;
+  in the Ollama tab the slider and the Thinking row name each other directly, so it did. Three of four helpers
+  noticed and wired it.
+- **The judge caught a bug in every Terse version** (the menu ban on knowledge-base questions), and a second one
+  nobody had seen (each menu press nests the previous question). The first is fixed; the second is on the roadmap.
+- **The settings card jump never scrolled to the setting.** Not new, found by the Deck check; filed as its own bug.
+- **Another chat committed to `experimental` mid-session** (`c775692b`, a Windows stand-in fix). Left alone.
+
+### What the maintainer could do differently next time
+
+- Say up front whether the session runs on the PC or in the cloud: the plan assumed the cloud, so the Deck checks
+  were written as owed and had to be re-planned.
+- Pick the batch size before the start. Running all batches at once saved about an hour but made the time
+  comparison weak.
+- Wake the Deck before stepping away; it slept once and held up the Deck checks.
+
+## 12. In simple terms: how this plan was carried out
+
+A trial like this has four moving parts, and they live in the session's scratch folder, not in the repo:
+
+1. **Copies.** Each helper got its own copy of the repo, made with `scripts/worktree.py create` from a branch
+   pointing at the commit before the plan. A hidden list said which copy got which setting.
+2. **Briefs.** One brief per job, word for word the same for all four runs; only the copy's path changed. Each
+   brief was written into the copy itself, and the helper was told to read it.
+3. **Blind judges.** For each job, a script gathered the brief and each helper's final report, removed model
+   names, and labelled them A to D in shuffled order. An Opus helper read the code, ran the checks itself, and
+   wrote a scorecard before it saw the reports.
+4. **Usage.** A script read each helper's own log, kept the largest usage figure per reply, and priced every
+   reply on its own (Haiku's price depends on the size of each request).
+
+Winners landed with `scripts/land_lane.sh` in the plan's order, with every check run after each. The Deck checks
+were written as step lists and run by the Deck helper; its evidence files are in `docs/test-evidence/plan83-*`.

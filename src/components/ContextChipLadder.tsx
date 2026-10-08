@@ -237,7 +237,10 @@ export function ContextChipLadder({
    */
   const revealWhileRinged = () => {
     const el = ladderElRef.current;
-    if (el && elementHasGamepadFocus(el)) revealBelowKeepingAsItSettles(el, () => el);
+    /* Every pass asks again: a pass still pending when the ring leaves must not scroll the answer. */
+    if (el && elementHasGamepadFocus(el)) {
+      revealBelowKeepingAsItSettles(el, () => el, undefined, { stillWanted: () => elementHasGamepadFocus(el) });
+    }
   };
 
   /*

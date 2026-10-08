@@ -7,6 +7,7 @@
     "src/components/ContextChipLadder.allChips.test.tsx",
     "src/components/ContextChipLadder.reveal.test.tsx",
     "src/components/ContextChipLadder.ringWalk.test.tsx",
+    "src/components/ContextChipLadder.stillRow.test.tsx",
     "src/components/ContextChipLadder.test.tsx",
     "src/components/DeveloperTab.test.tsx",
     "src/components/DrgGlossaryTermChip.placement.test.tsx",

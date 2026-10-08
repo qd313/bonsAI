@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 745,
-  "edgeCount": 2171,
+  "fileCount": 746,
+  "edgeCount": 2175,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -165,6 +165,15 @@
       ],
       "importedBy": []
     },
+    "src/components/ContextChipLadder.stillRow.test.tsx": {
+      "imports": [
+        "src/components/ContextChipLadder.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/inputTransparency.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/ContextChipLadder.test.tsx": {
       "imports": [
         "src/components/ContextChipLadder.tsx",
@@ -186,6 +195,7 @@
       "importedBy": [
         "src/components/ContextChipLadder.allChips.test.tsx",
         "src/components/ContextChipLadder.reveal.test.tsx",
+        "src/components/ContextChipLadder.stillRow.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/utils/buildDetailsPanelElement.tsx"
@@ -5784,6 +5794,7 @@
         "src/components/ContextChipLadder.allChips.test.tsx",
         "src/components/ContextChipLadder.reveal.test.tsx",
         "src/components/ContextChipLadder.ringWalk.test.tsx",
+        "src/components/ContextChipLadder.stillRow.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
         "src/components/DrgGlossaryTermChip.placement.test.tsx",
         "src/components/DrgGlossaryTermChip.test.tsx",
@@ -7297,6 +7308,7 @@
         "src/components/ContextChipLadder.allChips.test.tsx",
         "src/components/ContextChipLadder.reveal.test.tsx",
         "src/components/ContextChipLadder.ringWalk.test.tsx",
+        "src/components/ContextChipLadder.stillRow.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
         "src/components/ContextChipLadder.tsx",
         "src/components/MainTab.chatRowDownEarlier.test.tsx",
@@ -8250,6 +8262,7 @@
         "src/components/BonsaiPluginShell.test.tsx",
         "src/components/BonsaiPluginShell.tsx",
         "src/components/ContextChipLadder.reveal.test.tsx",
+        "src/components/ContextChipLadder.stillRow.test.tsx",
         "src/components/ContextChipLadder.tsx",
         "src/components/DrgGlossaryTermChip.tsx",
         "src/components/KnowledgeBaseSection.tsx",

@@ -167,6 +167,17 @@ export function revealBelowKeeping(el: HTMLElement, keep: HTMLElement | null, pa
   return pane.scrollTop !== before;
 }
 
+/** Extras for revealBelowKeepingAsItSettles. */
+export type SettleRevealOptions = {
+  /**
+   * Asked before every pass: false drops that pass. A caller whose ring has since moved on must not
+   * have a pass still pending from its last press scroll the pane a second later: measured on the
+   * Deck 2026-10-08, the answer kept scrolling about a second after the ring left the Show details
+   * chips for the question box.
+   */
+  stillWanted?: () => boolean;
+};
+
 /**
  * revealBelowKeeping, re-run as things settle: a frame after the call, then on the same
  * 150/300/900 ms schedule useDockClearanceOnFocus's lift uses (SETTLE_PASS_DELAYS_MS there, the
@@ -177,10 +188,13 @@ export function revealBelowKeeping(el: HTMLElement, keep: HTMLElement | null, pa
 export function revealBelowKeepingAsItSettles(
   el: HTMLElement,
   keep: () => HTMLElement | null,
-  delaysMs: readonly number[] = [150, 300, 900]
+  delaysMs: readonly number[] = [150, 300, 900],
+  options: SettleRevealOptions = {}
 ): void {
   const pass = () => {
-    if (el.isConnected) revealBelowKeeping(el, keep());
+    if (!el.isConnected) return;
+    if (options.stillWanted && !options.stillWanted()) return;
+    revealBelowKeeping(el, keep());
   };
   requestAnimationFrame(pass);
   delaysMs.forEach((delayMs) => window.setTimeout(pass, delayMs));

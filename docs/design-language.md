@@ -44,6 +44,25 @@ Measured on device 2026-08-16 with
 **300 px.** That is the entire horizontal budget. It is the number every rule below is arguing
 about.
 
+**The Deck's own screen (added 2026-10-09, plan 84).** The table above is the 1080p TV. The Deck's
+screen is smaller, and it is the screen the layout is designed for first. Measured on the Deck itself
+in the plan 84 Deck runs (2026-10-08 and 2026-10-09; evidence in
+[plan84-STEP6-DECK.json](test-evidence/plan84-STEP6-DECK.json) and
+[plan84-STEPS2-3-DECK.json](test-evidence/plan84-STEPS2-3-DECK.json)): the screen is 1280 × 800
+pixels, and the Quick Access page is 854 × 454 points, at **1.5 screen pixels per point**.
+
+| Surface | Points | Notes |
+|---|---|---|
+| Quick Access page | 854 × 454 | Same 454 the roadmap measured on 2026-09-16 |
+| bonsAI's column | **300 × 454** | Runs from x 48 to x 348, centre at x 198. The 454 reaches the bottom of the screen |
+| Header, chat tab | **52** | The tab strip 20 at the very top, Decky's back arrow and the chat's name 28, then a 4-point gap |
+| Header, every other tab | **24** | The tab strip 20 and the 4-point gap. No back arrow, no name |
+| Ask area | **107** | Chips row 32, a 2-point gap, then the question box with its strip (73, by subtraction) |
+| The answer (chat tab) | **295** | From y 52 to y 347 (where the ask area starts). It was 204 before plan 84 |
+
+The TV's own numbers have not been re-measured since plan 84. Treat them as the old layout: the
+LB/RB tab strip they mention (about 85 points) no longer exists.
+
 > `design-tokens.md` has long said the column is "roughly 400 × 800". That is **not** what this
 > configuration measures. Treat 300 × 752 as the number for a docked/streamed 1080p Deck and
 > re-measure before trusting either figure on handheld — the one-liner is at the bottom of Rule 6.
@@ -211,13 +230,23 @@ survives review. "Looks better" does not, and cost three rounds here.
 
 ## Rule 7 — Vertical space is scarcer than it looks; spend it on content.
 
-The column is 752px tall but the scrolling body is **667px** — the LB/RB tab strip takes ~85px
-before any content renders, and the Ask input plus Ask button take ~107px more whenever the Main tab
-is open. Roughly a quarter of the column is chrome before a single answer token appears.
+On the Deck's own screen the whole column is only **454 points** tall, and the header and the ask
+area take a good part of it before any answer appears (measured on the Deck 2026-10-09, plan 84 step 6):
+
+| Part | Points | What is in it |
+|---|---|---|
+| Header, chat tab | 52 | tab strip 20 + back arrow and chat name 28 + a 4-point gap |
+| Header, other tabs | 24 | tab strip 20 + a 4-point gap |
+| Ask area | 107 | chips 32, 2-point gap, question box with its strip 73 |
+| The answer | 295 | what is left on the chat tab (204 before plan 84) |
+
+That is a little over a third of the column in chrome (159 of 454) on the chat tab. The 2026-08-16
+TV figures this rule was first written from (a 667px body, about 85px of tab strip, about 107px of
+Ask input and Ask button) described the old layout and the TV, and are kept only as history.
 
 So: **no new persistent chrome rows without removing one.** Status, context and transparency
 information belongs in progressive disclosure (*Show details*, the chip ladder) rather than a
-permanent band. This is why the context line is one italic row and not a panel.
+permanent band. This is why the game is a small tag inside the question box's strip and not a row of its own: plan 84 removed the old context line and the big Ask button, 55 points, to give them to the answer.
 
 Unlike width, the user *can* scroll for more height — which is exactly why it is tempting to spend
 it and why the limit has to be deliberate.

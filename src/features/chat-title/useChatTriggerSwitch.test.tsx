@@ -108,6 +108,17 @@ describe("LT and RT on the Main tab", () => {
     expect(nameRow(title)).toBe("Hades build · chat 1 of 5");
   });
 
+  it("leaves the new-chat spot as soon as the open chat changes (a chat made or picked elsewhere)", async () => {
+    setChatTitleTab("main");
+    const title = render(<ChatTitleView />);
+    const main = render(<MainTabHarness calls={calls} startOn="a" />);
+    await press(LT);
+    expect(nameRow(title.container)).toBe("New chat · not saved yet");
+    /* The first question from the spot makes a chat and opens it (useChatSlots' createSlot). */
+    main.rerender(<MainTabHarness calls={calls} startOn="a" overrides={{ activeChatSlotId: "b" }} />);
+    expect(nameRow(title.container)).toBe("Boss help · chat 2 of 5");
+  });
+
   it("RT on the oldest chat does nothing", async () => {
     const { title } = mount("e");
     await press(RT);

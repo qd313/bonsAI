@@ -6,10 +6,10 @@
  * the plugin's own close path so the tab comes back and the ring returns to whatever control registered
  * itself to receive it.
  *
- * Used for: the chats menu's Delete chat (ChatsMenu.tsx), and the saved-chats row's bin until that row
- * goes (plan 84 step 5).
+ * Used for: the chats menu's Delete chat (ChatsMenu.tsx).
  *
- * Solves: One copy of the open-and-close wiring for both callers, taken out of ChatSlotRow.tsx as it was.
+ * Solves: The open-and-close wiring the old saved-chats row had, taken out of it unchanged when its jobs
+ * moved to the chats menu (plan 84 step 5).
  *
  * Does not: Delete anything until Delete is pressed. Does not move the ring itself; the box-return
  * registry (modalReturnFocusRegistry.ts) does, under the "chat-slot-rename" id the row always used.

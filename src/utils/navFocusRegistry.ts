@@ -5,7 +5,7 @@
  * from one control to the next, and Steam itself, not the plugin, decides which element that
  * highlight sits on. Most of the screen is one connected area, so the highlight moves normally
  * with the D-pad. A few places on the Main tab — the strip that shows what game is running, the
- * row of chat slots, and the permission-hint rows shown under the transcript — sit in their own
+ * tab bar above the chat, and the permission-hint rows shown under the transcript — sit in their own
  * separate areas, and moving the highlight into one of those from the reply row needs a
  * different trick than an ordinary D-pad move. This file is that trick: each of those areas
  * registers itself here while it is on screen, and this file's `takeNavFocus()` is the one
@@ -58,7 +58,7 @@
 
 import { uiWindowMissingFocus } from "./uiDocument";
 
-export type NavFocusId = "session-context-strip" | "chat-slot-row" | "preset-carousel" | "unified-input"
+export type NavFocusId = "session-context-strip" | "preset-carousel" | "unified-input"
   | "tab-bar"
   /** The settings-results card's own row nearest the question box (plan 45 step 3 / plan 56 lane
    *  E2) — Up from the box takes Steam's ring here; see MainTabUnifiedAskBar.tsx. */

@@ -58,6 +58,7 @@ import type { ChatSumUpState } from "../chat-sum-up/chatSumUpModel";
 import { ChatSlotDeleteModal } from "../chat-slots/ChatSlotDeleteModal";
 import { ChatSlotRenameModal } from "../chat-slots/ChatSlotRenameModal";
 import { clearModalReturnFocus, peekModalReturnFocus } from "../plugin-shell/modalReturnFocusRegistry";
+import { desktopNoteExchangeFor } from "../plugin-shell/useDesktopNoteSaveModal";
 
 let calls: MainTabCalls;
 
@@ -301,6 +302,20 @@ describe("every action does what the saved-chats row did", () => {
     await pressA(action(main, "save"));
     expect(onOpenDesktopNoteSave).toHaveBeenCalledTimes(1);
     expect(peekModalReturnFocus()).toBe("desktop-note-save");
+  });
+
+  it("Save works on an older chat whose answers are all from earlier sessions (plan 72 job E)", async () => {
+    const onOpenDesktopNoteSave = vi.fn();
+    const older = [
+      { id: "t1", question: "How do I get the Stygian Blade's aspects?", answer: "Unlock them with Titan Blood." },
+      { id: "t2", question: "Which aspect is best against Theseus?", answer: "Aspect of Nemesis." },
+    ];
+    const canSave = desktopNoteExchangeFor(null, older) !== null;
+    const { title, main } = mount({ canSaveDesktopNote: canSave, onOpenDesktopNoteSave });
+    await openMenu(title);
+    expect(action(main, "save").classList.contains("bonsai-chats-menu__action--off")).toBe(false);
+    await pressA(action(main, "save"));
+    expect(onOpenDesktopNoteSave).toHaveBeenCalledTimes(1);
   });
 
   it("Save is greyed and does nothing while the chat has no answer to save", async () => {

@@ -5,12 +5,13 @@
  * this session; an older saved chat (the Deck's "Hades" chat, every answer from earlier sessions)
  * showed none, so Left from its name went nowhere. What there is to save is now this session's
  * answer, else the newest loaded turn that has an answer -- the same one question and answer a
- * fresh chat saves.
+ * fresh chat saves. (The row went in plan 84 step 5; the chats menu's Save to Desktop note follows
+ * the same rule, pinned in src/features/chat-title/ChatsMenu.test.tsx.)
  *
  * Does not: Write a file. The save call is recorded, and the popup's own confirm is called directly.
  */
 import React from "react";
-import { act, render, renderHook } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { AskThreadCollapsedTurn } from "../../types/bonsaiUi";
@@ -18,22 +19,12 @@ import type { AskThreadCollapsedTurn } from "../../types/bonsaiUi";
 const hoisted = vi.hoisted(() => ({
   modals: [] as React.ReactElement[],
   calls: [] as Array<{ method: string; args: unknown[] }>,
-  rowProps: {} as Record<string, unknown>,
 }));
 
 vi.mock("@decky/ui", async () => {
   const fake = await import("../../test-harness/fakeDeckyUi");
-  const Focusable = React.forwardRef<HTMLDivElement, Record<string, unknown>>(function RecordingFocusable(props, ref) {
-    if (props.className === "bonsai-chat-slot-row-focus") hoisted.rowProps = props;
-    return (
-      <div ref={ref} className={props.className as string}>
-        {props.children as React.ReactNode}
-      </div>
-    );
-  });
   return {
     ...fake,
-    Focusable,
     showModal: (el: React.ReactElement) => {
       hoisted.modals.push(el);
       return { Close: () => undefined };
@@ -50,7 +41,6 @@ vi.mock("../../utils/deckyCall", () => ({
 }));
 
 import { desktopNoteExchangeFor, useDesktopNoteSaveModal } from "./useDesktopNoteSaveModal";
-import { ChatSlotRow } from "../chat-slots/ChatSlotRow";
 
 /* An older chat as loaded from its file: oldest first, newest last, nothing asked this session. */
 const HADES: AskThreadCollapsedTurn[] = [
@@ -123,37 +113,5 @@ describe("the save window for an older chat", () => {
   it("does not open for an empty chat", () => {
     openSaveFor(null, []);
     expect(hoisted.modals.length).toBe(0);
-  });
-});
-
-describe("the chat row on an older chat", () => {
-  function row(turns: AskThreadCollapsedTurn[]) {
-    return (
-      <ChatSlotRow
-        summaries={[{ id: "hades", label: "Hades", created_at: 0, updated_at: 0 }]}
-        activeSlotId="hades"
-        onCreateSlot={async () => undefined}
-        onSelectSlot={async () => undefined}
-        onRenameSlot={async () => true}
-        onDeleteSlot={async () => true}
-        onSaveChat={() => undefined}
-        canSaveChat={desktopNoteExchangeFor(null, turns) !== null}
-      />
-    );
-  }
-
-  it("shows the save icon when the chat's answers are all from earlier sessions", () => {
-    const { container } = render(row(HADES));
-    expect(container.querySelector(".bonsai-chat-slot-save")).not.toBeNull();
-    // Left from the name reaches it, instead of doing nothing.
-    act(() => {
-      expect((hoisted.rowProps.onMoveLeft as () => boolean)()).toBe(true);
-    });
-    expect(container.querySelector(".bonsai-chat-slot-save--active-stop")).not.toBeNull();
-  });
-
-  it("shows no save icon on an empty chat", () => {
-    const { container } = render(row([]));
-    expect(container.querySelector(".bonsai-chat-slot-save")).toBeNull();
   });
 });

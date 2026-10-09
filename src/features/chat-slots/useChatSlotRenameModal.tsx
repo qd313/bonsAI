@@ -1,11 +1,11 @@
 /**
  * Title: Rename-a-chat popup
  *
- * Purpose: Opens the small popup a person types a new name into when they
- * tap a saved chat's title, and remembers which button opened it so focus
- * can jump back there once it closes.
+ * Purpose: Opens the small popup a person types a new name into, and
+ * remembers where the ring goes once it closes.
  *
- * Used for: Tapping a chat's title in the saved-chats row.
+ * Used for: Rename chat in the chats menu (plan 84 step 5); the ring goes
+ * back to the chat's name in Decky's bar.
  *
  * Solves: Nothing else here — this hook only opens the popup and wires up
  * its Cancel and Confirm buttons.

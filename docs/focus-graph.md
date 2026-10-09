@@ -333,6 +333,10 @@ bonsAI's tab bar
   old chat), the ring goes to the question box (`takeNavFocus("unified-input")`); on the name, the chips or the
   box it stays.
 
+**The saved-chats row is gone.** It sat at the top of the chat with its own stops (Save, the name, Delete) and its own
+LB/RB; every job it had is the chats menu's now, every route that led to it leads to the tab bar or the chat's first
+stop instead (below), and its nav id ("chat-slot-row") is no longer in the registry's list.
+
 **Down from the tab bar on Main enters the chat itself** (`takeFirstChatStop.ts`, called by index.tsx's
 `tabBarExitDown` through the Main tab's action in the store). The saved-chats row used to be the first stop under the
 tab bar; it is gone, so Down lands on the chat's own first stop, by Steam's transfer, in this order: the "N earlier"

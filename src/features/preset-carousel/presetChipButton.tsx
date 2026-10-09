@@ -18,51 +18,17 @@
  * folder.
  */
 import React, { useLayoutEffect, useRef, useState } from "react";
-import { Button, Marquee, type MarqueeProps } from "@decky/ui";
+import { Button } from "@decky/ui";
 import type { AskModeId } from "../../data/askMode";
 import type { PresetPrompt } from "../../data/presets";
 import {
   PRESET_CHIP_HEIGHT_PX,
-  PRESET_MARQUEE_DELAY_S,
   PRESET_MARQUEE_FADE_LENGTH,
-  PRESET_MARQUEE_SPEED,
   presetScrollPlan,
 } from "./presetRowLayout";
 import type { ChipScrollListener } from "./presetChipStay";
 import type { SlotFade } from "./presetChipShared";
 import { joinPresetWithRunningGame } from "../../utils/joinPresetWithRunningGame";
-
-/**
- * Steam's own scrolling label, with the plugin's one set of scroll settings (presetRowLayout.ts).
- * Shared by the suggestion chips and the chat row's chat name, so the two always scroll at the same
- * speed with the same pause before they start and at the end. Draws `fallback` instead when Decky
- * could not find the Marquee in Steam's bundle.
- */
-export function SteamMarqueeText({
-  text,
-  className,
-  fallback,
-}: {
-  text: string;
-  className: string;
-  fallback: React.ReactNode;
-}) {
-  const MarqueeComponent: React.FC<MarqueeProps> | undefined = Marquee;
-  if (!MarqueeComponent) return <>{fallback}</>;
-  return (
-    <MarqueeComponent
-      key={text}
-      play
-      speed={PRESET_MARQUEE_SPEED}
-      delay={PRESET_MARQUEE_DELAY_S}
-      fadeLength={PRESET_MARQUEE_FADE_LENGTH}
-      resetOnPause
-      className={className}
-    >
-      {text}
-    </MarqueeComponent>
-  );
-}
 
 type ScrollPhase = "waiting" | "scrolling" | "end";
 

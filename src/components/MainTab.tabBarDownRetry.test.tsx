@@ -145,7 +145,6 @@ function renderMainTab(turns: AskThreadCollapsedTurn[], open: string) {
 /** The controls the ring can sit on: the stops Steam walks, not the containers around them. */
 const STOP_SELECTOR = [
   "button:not([disabled])",
-  ".bonsai-chat-slot-row-focus",
   ".bonsai-chat-earlier-pill-row",
   ".bonsai-chat-turn-row-header:not(.bonsai-chat-turn-row-header--with-retry)",
   ".bonsai-chat-turn-row-body",
@@ -161,7 +160,6 @@ function nameOf(el: Element | null): string {
   if (!el) return "nothing";
   const h = el as HTMLElement;
   if (isRetry(h)) return "RETRY";
-  if (h.classList.contains("bonsai-chat-slot-row-focus")) return "chat-row";
   if (h.classList.contains("bonsai-chat-earlier-pill-row")) return "pill";
   if (h.classList.contains("bonsai-chat-turn-row-body")) return `question:${h.textContent}`;
   if (h.classList.contains("bonsai-chat-turn-row-header")) return `header:${h.textContent}`;

@@ -101,7 +101,7 @@ describe("takeNavFocus and the panel's own window focus (plan 76)", () => {
     registerNavFocus("unified-input", { current: null });
 
     expect(takeNavFocus("unified-input")).toBe(false);
-    expect(takeNavFocus("chat-slot-row")).toBe(false);
+    expect(takeNavFocus("settings-results-card")).toBe(false);
 
     expect(win.focus).not.toHaveBeenCalled();
   });

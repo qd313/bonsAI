@@ -3,10 +3,12 @@
  *
  * Purpose: This is the Main tab a person sees when they open bonsAI: the chat
  * history above, and a dock below it holding the suggestion chips and the
- * question box. This file only arranges those pieces — the row of chat tabs
- * across the top, the transcript, the suggestion row, the Ask bar, the
- * screenshot picker when it is open, and a couple of status lines. It does
- * not ask a question or produce an answer itself.
+ * question box. This file only arranges those pieces — the transcript, the
+ * suggestion row, the Ask bar, the chats menu when it is open, the screenshot
+ * picker when it is open, and a couple of status lines. It does not ask a
+ * question or produce an answer itself. The chat's name and LT/RT live in
+ * Decky's title bar since plan 84 step 5; this file tells them which chat is
+ * open (useChatTitlePublisher) and hands them the chat moves.
  *
  * Used for: index.tsx's Main tab panel, fed by the large bundle of state and
  * callbacks the Ask logic builds elsewhere.
@@ -19,7 +21,7 @@
  * path between controls — see MainTabUnifiedAskBar and MainTabChatTranscript
  * for those.
  */
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PanelSection, PanelSectionRow, Button } from "@decky/ui";
 import type { PresetPrompt } from "../data/presets";
 import type {
@@ -44,7 +46,6 @@ import { MainTabChatTranscript } from "./MainTabChatTranscript";
 import { PermissionDenyAction } from "./PermissionDenyAction";
 import { useMainTabColumnFill } from "../hooks/useMainTabColumnFill";
 import { useDockClearanceOnFocus } from "../hooks/useDockClearanceOnFocus";
-import { ChatSlotRow } from "../features/chat-slots/ChatSlotRow";
 import { useChatTitlePublisher } from "../features/chat-title/useChatTitlePublisher";
 import { useChatSwitchActions } from "../features/chat-title/useChatSwitchActions";
 import { useChatTriggerSwitch } from "../features/chat-title/useChatTriggerSwitch";
@@ -186,8 +187,8 @@ export type MainTabProps = {
  * In: MainTabProps — essentially every piece of state and callback the Main
  * tab's pieces need: the chat history, the focus refs, the current question
  * text, whether an Ask is running, the screenshot browser's state, and so on.
- * Out: the assembled screen — an optional row of chat tabs, the transcript,
- * then a dock holding the suggestion row and the Ask bar, and, depending on
+ * Out: the assembled screen — the transcript, then a dock holding the chats
+ * menu while it is open, the suggestion row and the Ask bar, and, depending on
  * what the props say, a mic-permission notice, the screenshot browser and a
  * plain navigation message. The game in context is a tag in the Ask bar's own
  * strip since plan 84, not a footnote under it.
@@ -197,14 +198,17 @@ export type MainTabProps = {
  * breaking the rest of the screen.
  *
  * 1. Set up what this file itself needs to track: which function currently
- *    focuses the question box, whether the chat-tab row is sitting at its
- *    "+" (new chat) position, and the ref used to stretch the dock down to
- *    the bottom of the screen.
+ *    focuses the question box, whether the new-chat spot is showing (LT from
+ *    the newest chat reaches it, as LB did on the old saved-chats row), and
+ *    the ref used to stretch the dock down to the bottom of the screen; then
+ *    publish the open chat and its moves for the name in Decky's bar, and
+ *    listen for LT and RT.
  * 2. Wrap the real onAskOllama in one that creates a new chat slot first when
  *    asking from the "+" position, so the answer plays out on the new tab
  *    instead of landing behind the tab the person started on — see the
  *    comment on this wrapper for the bug it fixes.
- * 3. Draw the row of chat tabs, when all four chat-slot callbacks are given.
+ * 3. (The saved-chats row that sat here went in plan 84 step 5: its jobs are
+ *    the chats menu's, opened from the chat's name in Decky's bar.)
  * 4. Draw the chat transcript, wrapped in `StreamScrambleContext.Provider` so the
  *    answer bubble inside it can read the scramble setting without it being threaded
  *    through as a prop — both the transcript and the Ask hook that feeds it are already
@@ -259,7 +263,11 @@ export function mainTabColumnClassName(gameRunning: boolean, isAsking: boolean):
 export function MainTab(props: MainTabProps) {
   const presetCarouselHostRef = useRef<HTMLDivElement | null>(null);
   const [focusUnifiedTextField, setFocusUnifiedTextField] = useState(() => () => false);
-  const [slotRowAtCreate, setSlotRowAtCreate] = useState(false);
+  /* The new-chat spot: a view of an empty chat, before the first question makes it a saved one. */
+  const [atNewChatSpot, setAtNewChatSpot] = useState(false);
+  /* Any change of the open chat (a chat made from the spot, picked in the menu, a delete) leaves the
+     spot; the old row did this by following the open chat with its own carousel. */
+  useEffect(() => setAtNewChatSpot(false), [props.activeChatSlotId]);
   /* Bottom-pins the preset/Ask dock: the column stretches to the scroll viewport's bottom edge
      (measured — the offset crosses hashed Steam wrappers) and the dock carries margin-top: auto. */
   const columnRef = useRef<HTMLDivElement | null>(null);
@@ -276,15 +284,15 @@ export function MainTab(props: MainTabProps) {
   const chatActions = useChatSwitchActions({
     summaries: props.chatSlotSummaries,
     activeSlotId: props.activeChatSlotId,
-    atCreate: slotRowAtCreate,
-    setAtCreate: setSlotRowAtCreate,
+    atCreate: atNewChatSpot,
+    setAtCreate: setAtNewChatSpot,
     onSelectSlot: props.onChatSlotSelect,
     /* Down from the tab bar on this tab (index.tsx): the chat's first stop, or the question box. */
     takeFirstStop: () =>
       takeFirstChatStop({
         firstTurnId: props.askThreadCollapsed?.[0]?.id ?? "live",
         openTurnId: props.expandedTurnKey,
-        chatEmpty: slotRowAtCreate || (transcriptEmpty && !props.isAsking),
+        chatEmpty: atNewChatSpot || (transcriptEmpty && !props.isAsking),
       }),
   });
   useChatTriggerSwitch();
@@ -292,7 +300,7 @@ export function MainTab(props: MainTabProps) {
     {
       summaries: props.chatSlotSummaries,
       activeSlotId: props.activeChatSlotId,
-      atCreate: slotRowAtCreate,
+      atCreate: atNewChatSpot,
       generatingSlotId: props.generatingSlotId,
       unreadSlotIds: props.unreadSlotIds,
       answerInFlight: props.isAsking,
@@ -308,9 +316,9 @@ export function MainTab(props: MainTabProps) {
   useDockClearanceOnFocus(columnRef);
 
   /*
-   * Asking at the [+] position creates the chat FIRST, so the panel lands on the new slot and the
-   * whole answer plays out where the user is looking: thinking blurbs, then the stream, then the
-   * chips. Without this, [+] was only a view — cycling there leaves the active slot alone by
+   * Asking at the new-chat spot (the old row's [+] position) creates the chat FIRST, so the panel
+   * lands on the new slot and the whole answer plays out where the user is looking: thinking blurbs,
+   * then the stream, then the chips. Without this, [+] was only a view — cycling there leaves the active slot alone by
    * design — so an Ask submitted from it went into whichever slot the user came from, behind an
    * empty-state screen that hides that slot's transcript. Measured on device 2026-08-31: the
    * answer "never showed up" until the user LB'd back and found it in the old chat.
@@ -318,12 +326,12 @@ export function MainTab(props: MainTabProps) {
   const { onAskOllama: submitAsk, onChatSlotCreate } = props;
   const onAskOllama = useCallback(
     async (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => {
-      if (slotRowAtCreate && onChatSlotCreate) {
+      if (atNewChatSpot && onChatSlotCreate) {
         await onChatSlotCreate();
       }
       return submitAsk(overrideQuestion, opts);
     },
-    [slotRowAtCreate, onChatSlotCreate, submitAsk],
+    [atNewChatSpot, onChatSlotCreate, submitAsk],
   );
 
   const gameRunning = gameIsRunning(props.ollamaContext);
@@ -340,36 +348,15 @@ export function MainTab(props: MainTabProps) {
     <>
       <PanelSection>
         <div ref={columnRef} className={mainTabColumnClassName(gameRunning, props.isAsking)}>
-        {props.onChatSlotCreate && props.onChatSlotSelect && props.onChatSlotRename && props.onChatSlotDelete ? (
-          <PanelSectionRow>
-            <ChatSlotRow
-              summaries={props.chatSlotSummaries ?? []}
-              activeSlotId={props.activeChatSlotId ?? null}
-              onCreateSlot={props.onChatSlotCreate}
-              onSelectSlot={props.onChatSlotSelect}
-              onRenameSlot={props.onChatSlotRename}
-              onDeleteSlot={props.onChatSlotDelete}
-              onBeforeNestedDeckyModal={props.onBeforeNestedDeckyModal}
-              onCompleteNestedDeckyModalClose={props.onCompleteNestedDeckyModalClose}
-              onCreatePositionChange={setSlotRowAtCreate}
-              generatingSlotId={props.generatingSlotId}
-              unreadSlotIds={props.unreadSlotIds}
-              onSaveChat={props.onOpenDesktopNoteSave}
-              canSaveChat={props.canSaveDesktopNote}
-              saveChatEnabled={props.desktopNoteSaveEnabled ?? true}
-              firstTurnId={props.askThreadCollapsed?.[0]?.id ?? "live"}
-            />
-          </PanelSectionRow>
-        ) : null}
         <StreamScrambleContext.Provider value={streamScrambleContextValue}>
-          <MainTabChatTranscript {...props} showEmptySlotPreview={slotRowAtCreate} chatSumUp={chatSumUp} />
+          <MainTabChatTranscript {...props} showEmptySlotPreview={atNewChatSpot} chatSumUp={chatSumUp} />
         </StreamScrambleContext.Provider>
         <div className={mainTabDockClassName(props.isStreamingPreview, props.streamDisplayText)}>
         {chatsMenuOpen && titleChat ? (
           <ChatsMenu
             chat={titleChat}
             activeSlotId={props.activeChatSlotId ?? null}
-            setAtCreate={setSlotRowAtCreate}
+            setAtCreate={setAtNewChatSpot}
             onSelectSlot={props.onChatSlotSelect}
             onCreateSlot={props.onChatSlotCreate}
             onRenameSlot={props.onChatSlotRename}

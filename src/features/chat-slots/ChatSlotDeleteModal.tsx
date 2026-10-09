@@ -1,11 +1,12 @@
 /**
  * Title: The "Delete chat slot?" box
  *
- * Purpose: The box the chat row's bin opens. It has exactly two buttons, Cancel and Delete, and
+ * Purpose: The box the chats menu's Delete chat opens (the old chat row's bin opened it until plan 84
+ * step 5). It has exactly two buttons, Cancel and Delete, and
  * Steam puts the ring on Cancel when it opens, so an A pressed by habit keeps the chat. B keeps
  * the chat too. Only A on Delete removes it.
  *
- * Used for: Opened by ChatSlotRow's openDeleteConfirm through showModal.
+ * Used for: Opened by useChatSlotDeleteConfirm.tsx through showModal, for the chats menu.
  *
  * Solves: Steam opens a ConfirmModal with the ring on its OK button and always draws a Cancel
  * button next to it, so the old box needed three buttons ("Keep chat", Delete, Cancel) to keep the

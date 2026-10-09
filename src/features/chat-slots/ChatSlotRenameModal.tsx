@@ -6,7 +6,7 @@
  * plus Save and Cancel buttons, built with the same popup shell every
  * other bonsAI popup uses.
  *
- * Used for: Opened from a chat's own row, when renaming it is requested.
+ * Used for: Opened from the chats menu's Rename chat (useChatSlotRenameModal.tsx).
  *
  * Solves: A consistent-looking way to type a new name, without every place
  * that renames something building its own text-entry popup from scratch.

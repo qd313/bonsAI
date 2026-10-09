@@ -28,7 +28,7 @@ describe("nav focus registry", () => {
   });
 
   it("reports false for a target that was never registered", () => {
-    expect(takeNavFocus("chat-slot-row")).toBe(false);
+    expect(takeNavFocus("settings-results-card")).toBe(false);
   });
 
   /*
@@ -69,12 +69,12 @@ describe("nav focus registry", () => {
 
   it("forgets a target on unmount", () => {
     const row = steamNavRef(() => true);
-    registerNavFocus("chat-slot-row", row);
-    expect(takeNavFocus("chat-slot-row")).toBe(true);
+    registerNavFocus("tab-bar", row);
+    expect(takeNavFocus("tab-bar")).toBe(true);
 
     // The unmount cleanup names the holder it registered, so it can only drop its own entry.
-    unregisterNavFocus("chat-slot-row", row);
+    unregisterNavFocus("tab-bar", row);
 
-    expect(takeNavFocus("chat-slot-row")).toBe(false);
+    expect(takeNavFocus("tab-bar")).toBe(false);
   });
 });

@@ -1,40 +1,27 @@
 /**
  * Title: The Delete chat box has two buttons and opens on Cancel
  *
- * Purpose: Steam opens a box with the ring on its first button. The chat row's Delete box once had
+ * Purpose: Steam opens a box with the ring on its first button. The old chat row's Delete box once had
  * "Delete" there, so an A pressed by habit deleted the chat (plan 79); it then had three buttons
  * ("Keep chat", Delete, Cancel) to keep that first A harmless. The maintainer's call on 2026-10-06
  * is two buttons only: Cancel first, where the ring opens, and Delete second. B keeps the chat.
- * The check is made on what the row really hands to Steam: the box is drawn here, its buttons are
- * read off the page in the order Steam would walk them, and each one is pressed.
+ * The chats menu's Delete chat opens the same box (plan 84 step 5); these cases moved here from the
+ * old row's own test when the row went. The box is drawn as Steam is handed it, its buttons read off
+ * the page in the order Steam would walk them, and each one pressed.
  *
  * Does not: open a real Steam box, so where the ring lands on the Deck is the device row's job.
  */
 import React from "react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { act, fireEvent, render } from "@testing-library/react";
-
-import type { ChatSlotSummary } from "../../utils/chatSlotsApi";
-import * as navFocusRegistry from "../../utils/navFocusRegistry";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { fireEvent, render, renderHook } from "@testing-library/react";
 
 type Handlers = Record<string, unknown>;
-let rowProps: Handlers = {};
 let shown: React.ReactElement[] = [];
 let modalRootCancel: (() => void) | undefined;
 const close = vi.fn();
 
 vi.mock("@decky/ui", async () => {
   const fake = await import("../../test-harness/fakeDeckyUi");
-  const Focusable = React.forwardRef<HTMLDivElement, Handlers & { children?: React.ReactNode }>(
-    function RecordingFocusable(props, ref) {
-      if (props.className === "bonsai-chat-slot-row-focus") rowProps = props;
-      return (
-        <div ref={ref} className={props.className as string}>
-          {props.children as React.ReactNode}
-        </div>
-      );
-    },
-  );
   const ModalRoot = React.forwardRef<HTMLDivElement, Handlers & { children?: React.ReactNode }>(
     function CapturingModalRoot(props, ref) {
       modalRootCancel = props.onCancel as (() => void) | undefined;
@@ -43,7 +30,6 @@ vi.mock("@decky/ui", async () => {
   );
   return {
     ...fake,
-    Focusable,
     ModalRoot,
     showModal: (el: React.ReactElement) => {
       shown.push(el);
@@ -52,36 +38,22 @@ vi.mock("@decky/ui", async () => {
   };
 });
 
-import { ChatSlotRow } from "./ChatSlotRow";
-
-const SUMMARIES: ChatSlotSummary[] = [
-  { id: "a", label: "Alpha", created_at: 0, updated_at: 0 },
-  { id: "b", label: "Beta", created_at: 0, updated_at: 0 },
-];
+import { useChatSlotDeleteConfirm } from "./useChatSlotDeleteConfirm";
+import { peekModalReturnFocus, clearModalReturnFocus } from "../plugin-shell/modalReturnFocusRegistry";
 
 beforeEach(() => {
-  rowProps = {};
   shown = [];
   modalRootCancel = undefined;
   close.mockClear();
+  clearModalReturnFocus();
 });
-afterEach(() => navFocusRegistry.resetNavFocusRegistry());
 
-/** Open the box from the row, then draw it the way Steam would and hand back its buttons. */
+/** Open the box for chat "b", named "Beta", then draw it the way Steam would and hand back its buttons. */
 function openDeleteBox(onDeleteSlot: (id: string) => Promise<boolean>) {
-  render(
-    <ChatSlotRow
-      summaries={SUMMARIES}
-      activeSlotId="b"
-      onCreateSlot={async () => undefined}
-      onSelectSlot={async () => undefined}
-      onRenameSlot={async () => true}
-      onDeleteSlot={onDeleteSlot}
-      onCompleteNestedDeckyModalClose={(fn) => fn()}
-    />,
+  const { result } = renderHook(() =>
+    useChatSlotDeleteConfirm({ onDeleteSlot, onCompleteNestedDeckyModalClose: (fn) => fn() }),
   );
-  act(() => void (rowProps.onMoveRight as () => unknown)());
-  act(() => void (rowProps.onButtonDown as (evt: unknown) => unknown)("a"));
+  result.current("b", "Beta", document.createElement("div"));
   expect(shown).toHaveLength(1);
   const box = render(shown[0]!);
   const buttons = Array.from(box.container.querySelectorAll("button"));
@@ -124,5 +96,10 @@ describe("the Delete chat box", () => {
     const { box } = openDeleteBox(vi.fn(async () => true));
     expect(box.container.textContent).toContain("Delete chat slot?");
     expect(box.container.textContent).toContain('Delete "Beta" and its transcript?');
+  });
+
+  it("asks for the ring back when it closes, under the id the row always used", () => {
+    openDeleteBox(vi.fn(async () => true));
+    expect(peekModalReturnFocus()).toBe("chat-slot-rename");
   });
 });

@@ -61,10 +61,10 @@ describe("navFocusRegistry — a departing component must not unregister the liv
   it("still drops the registration when the component that owns it unmounts alone", () => {
     const only = mountedHolder();
 
-    registerNavFocus("chat-slot-row", only);
-    unregisterNavFocus("chat-slot-row", only);
+    registerNavFocus("tab-bar", only);
+    unregisterNavFocus("tab-bar", only);
 
-    expect(takeNavFocus("chat-slot-row")).toBe(false);
+    expect(takeNavFocus("tab-bar")).toBe(false);
     expect(only.takeFocusCalls).toBe(0);
   });
 

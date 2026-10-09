@@ -52,10 +52,10 @@ export const PRESET_CHIP_BLOCKED_EDGE_FLASH_MS = 320;
 /*
  * Scroll settings. "Slow and calm" per the maintainer (2026-09-01). The units are Steam's Marquee and
  * undocumented (measured on device: about one pixel a second per unit); calibrated on device (row
- * PRESET-ONE-LINE-04) and only ever changed here. The chat row's long chat name scrolls with these same
- * settings (ChatSlotRow.tsx, through SteamMarqueeText), and the suggestion chips' own scroller
- * (PresetChipScrollText) reads the same speed and start wait, so a chip label and a chat name move alike. Speed lowered 20%, 25 to
- * 20, by the maintainer's call in plan 72 (2026-09-27); the pause before the start is unchanged.
+ * PRESET-ONE-LINE-04) and only ever changed here. The suggestion chips' own scroller
+ * (PresetChipScrollText) and the chat's name in Decky's bar (ChatNameWords.tsx, plan 84 step 5) both
+ * read them through `presetScrollPlan`, so a chip label and a chat name move alike. Speed lowered 20%,
+ * 25 to 20, by the maintainer's call in plan 72 (2026-09-27); the pause before the start is unchanged.
  */
 export const PRESET_MARQUEE_SPEED = 20;
 export const PRESET_MARQUEE_DELAY_S = 1.5;

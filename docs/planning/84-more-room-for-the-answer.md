@@ -346,5 +346,27 @@ Each step's rows, run on the Deck's own screen first, then once on the TV. Names
   unplugged, as its notes ask). Checked on the Deck: with the Quick Access Menu open, the rig's L2 arrived as the left
   trigger and its R2 as the right trigger, once each, and the ring did not move: the same as the hand presses. So the
   LT and RT checks in § 6 can run unattended.
-- **2026-10-08, steps 2 and 3 started** as two helpers in parallel: the ask area (Opus extra-high) and Read aloud in the
-  answer's corner (Sonnet high, with Copy's pattern named).
+- **2026-10-08, steps 2 and 3 built, landed and checked on the Deck's own screen the same night**
+  ([evidence](../test-evidence/plan84-STEPS2-3-DECK.json)). Two helpers in parallel: the ask area (Opus extra-high,
+  three commits) and Read aloud in the answer's corner (Sonnet high, Copy's pattern named; three commits, two of them
+  fixes the review and the Deck found).
+  - **What a player sees now:** no big ASK button and no "Context: ..." line. The box's strip reads paperclip, a game
+    tag ("No game" when none runs), mode, mic (Stop during an answer), the X while the box has words, and a small Ask.
+    Read aloud is a small speaker in the answer's lower-left corner, Copy in the lower-right, and its row is gone.
+  - **Measured:** the ask area is 107 points (was 162); the answer gets **259 points (was 204)**. Every strip stop and
+    both corner icons are fully visible with the ring on them. P84-ASK-01, P84-ASK-02 and P84-READ-01 pass.
+  - **Calls the helpers made (written in [focus-graph.md](../focus-graph.md)):** Down from the box lands on Ask (Stop
+    during an answer), so Down then A sends; the game tag is not a stop (pressing it does nothing); Up from any strip
+    stop returns to the box; the X that empties the box moved into the strip, just left of Ask, because the drawing
+    had nowhere for it; Stop keeps today's look. Read aloud is a new stop of its own, and Down from a summed-up
+    note now reaches the "What went wrong?" choices, which the old speaker used to lead to.
+  - **One fix from the Deck:** the first build let the speaker's box reach 3 points into the answer's last line, and
+    the ring covered that line's first letter. The answer's bottom band is now 25 points (Copy alone keeps 8), so
+    the box sits 4 points and its ring 2 points below the last line. Net, an answer with the speaker is 23 points
+    shorter than with the old row (the row was 40; the band adds 17).
+  - **Owed by step 8:** the design documents still name the old Ask row and its 36-point size; seven saved Deck walks
+    expect the old routes (F4-LADDER-EXIT, P77-TRAP-LONG-ASKWALK, plan70-STRATEGY-PLACEHOLDER-01, plan74-P74-ASK-UP,
+    t75-5-Q4-ASK-UP, plan81-free-play-nogame, plan64-TALL-SECTION-01) and need re-recording; the Ask-row width probe
+    script looks for the gone row; four comments still call the game tag "the footnote".
+  - **For the maintainer to judge by eye:** the speaker's size and weight against Copy, and whether Down from an
+    **empty** box should still land on Ask.

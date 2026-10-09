@@ -322,6 +322,16 @@ else stays. Log each run below: the fix, the score or Deck result, the cost, and
 | 2026-10-08 | Plan 83 J1, the leftover settings-card row number | 24 of 25 blind; passed on the Deck | $0.32 | No |
 | 2026-10-08 | Overnight: the Terse menu's fence spelled with an underscore (`21f62344`) | Clean first time, no nudges; passed on the Deck (10 of 10 menus) | $0.24, 12 min | No |
 
+### 4e. Screen-work helpers, plan 84 (2026-10-08)
+
+Two layout-and-focus helpers ran side by side, briefed from a measured drawing ([plan 84](84-more-room-for-the-answer.md)
+§ 10). Not a trial; logged so the record shows how screen work went.
+
+| Step | Model and effort | Commits | Checks green first time? | Review or Deck fixes | Deck first time? | Helper tokens | Minutes |
+|---|---|---|---|---|---|---|---|
+| 2, the ask area folds | Opus 5.5 extra-high | 3 | Yes | None | **Yes**: ask, stop, the strip walk and the height all passed | about 548,000 | 41 |
+| 3, Read aloud into the corner | Sonnet 5.5 high | 2, then 1 | Yes | Review: a dead stop name left in the note's Down path (outside its files; it flagged it). Deck: the corner's box reached 3 points into the last line | Walks and start/stop yes; the corner's spacing no, fixed in one more round | about 408,000 | 25 + 6 + 5 |
+
 ## 5. Where Haiku fits
 
 Haiku 4.5 has been used once here: a six-turn documentation lookup on 09-04, for under a dollar. There is

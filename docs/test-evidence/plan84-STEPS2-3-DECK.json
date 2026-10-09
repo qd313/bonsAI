@@ -1,0 +1,39 @@
+{
+  "plan": "84 - more room for the answer, steps 2 (the ask area folds) and 3 (Read aloud into the answer's lower-left corner)",
+  "deck_time_local": "2026-10-08 about 21:42-21:58 EDT",
+  "screen": "The Deck's own screen: gamescope 1280x800, Quick Access page 854x454 CSS at device pixel ratio 1.5; bonsAI's column 300 wide.",
+  "builds": [
+    "c8d16182 (steps 2 and 3 landed), dist/index.js sha256 53948c67... - walks, ask, stop, read aloud",
+    "c3d62a2c (plus the corner band fix b5a686f4), dist/index.js sha256 b2442f8a... - the corner re-measured; left installed on the Deck"
+  ],
+  "setup": "Settings and chats backed up to ~/qa-backups/settings-p84-steps23-20261008 first. One test question was asked and stopped; the two chat files it changed were put back from the backup and the plugin restarted; a final diff against the backup showed no difference. Keep-awake held for the block and released at the end. No game running. Presses through the controller rig; run files under runs/plan84-*.json.",
+  "rows": {
+    "P84-HEIGHT-01_step2_part": {
+      "result": "PASS (step 2 share)",
+      "seen": "The ask area (chips row plus the box with its strip) measures 107 points, 347 to 454; it was 162. The answer area, from the top of the tab's content (88) to the ask area's top (347), measures 259 points; it was 204. +55. The helper predicted 261; the 2 points are the chips row's own height on the Deck (32, not 30).",
+      "means": "Steps 2 and 3 are in; the plan's 297 needs steps 4 to 6."
+    },
+    "P84-ASK-02": {
+      "result": "PASS",
+      "run": "runs/plan84-P84-ASK-02-idle-walk.json",
+      "seen": "Empty box, idle: Down from the box -> Ask; Left -> Voice input -> mode -> paperclip; a fourth Left holds on the paperclip; Right -> mode -> Voice input -> Ask; a fourth Right holds on Ask; Up from Ask -> the box. 10 of 10 steps, every stop 100% visible. Strip rects: paperclip 54-74, game tag 'No game' 81-140, mode 199-254, mic 259-279, Ask 287-342 (panel edge 348), all with bottoms at or above 447 (panel bottom 454). With words in the box the X appears just left of Ask and the strip still fits (screenshot DeckCapture_20261008_214702_auto.png). The 'Context: ...' line is gone."
+    },
+    "P84-ASK-01": {
+      "result": "PASS",
+      "runs": ["runs/plan84-P84-ASK-01-ask-and-stop.json", "runs/plan84-P84-ASK-01-stop.json"],
+      "seen": "A question typed into the box with deck_send_ask.py; Down from the box -> Ask; A sent it and the ring went back to the box, which emptied. During the answer Ask carried its resting class at opacity 0.38 and the mic's place read 'Stop generation'. Down from the box -> Stop; A stopped the answer ('Request cancelled.'), the ring returned to the box, Ask woke up and the mic came back."
+    },
+    "P84-READ-01": {
+      "result": "PASS after one fix",
+      "runs": ["runs/plan84-P84-READ-01-reach.json", "runs/plan84-P84-READ-01-corner-walk.json", "runs/plan84-P84-READ-01-press.json", "runs/plan84-P84-READ-01-stop-2.json", "runs/plan84-P84-READ-01-band-recheck.json"],
+      "seen_walk": "From the answer's section Right -> Read aloud (lower-left), Right -> Copy, Left -> Read aloud, Left -> the answer, Right -> Read aloud, Down -> Helpful. Every stop 100% visible. The old Read aloud row under the answer is gone.",
+      "seen_press": "A on the speaker: its label became 'Stop', the speaking class went on, colour rgb(248,113,113). A on it again while it read: back to 'Read aloud'. (A first try at the stop press came after the short answer had finished reading by itself, so it started a second reading; the retry was made while it read.)",
+      "first_build_defect": "On c8d16182 the speaker's box reached 3 points into the answer's last line (line bottom 324.3, box top 321.3) and the ring on it covered the line's first letter (screenshot DeckCapture_20261008_214513_auto.png). The bottom band was 20 points, but the box needed 20 plus a 4-point inset.",
+      "after_fix": "On c3d62a2c (band 25, inset 2, ring 2 px hugging the box): last line bottom 316.96, the box's top 320.96 (4 points clear), the ring's top 318.96 (2 points clear), the box 2 points above the bubble's bottom (screenshot DeckCapture_20261008_215710_auto.png)."
+    }
+  },
+  "noticed_not_caused_here": [
+    "Up from the box skips a turn that was stopped before any words arrived ('Request cancelled.' has no stop of its own): box -> chip -> tab bar -> Decky's back arrow. Same as before these changes.",
+    "A suggestion chip read 67% visible at the panel's left edge while its words scroll; the chips were not touched."
+  ]
+}

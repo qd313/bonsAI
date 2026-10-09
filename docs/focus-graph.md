@@ -284,3 +284,41 @@ LB  [tabs LB reaches]  [icon] NAME  [tabs RB reaches]  RB      <- one stop: the 
   of it can be left over the chip row (TAB-BAR-GHOST-01).
 - **Not backed by a device row yet.** The bookkeeper owns `docs/testing.md`; rows P84-TABS-01, P84-TABS-02 and
   the LB/RB half of P84-HINTS-01 (plan 84 § 6) are in the lane report.
+
+### The chat's name and the chats menu (plan 84 step 5)
+
+Plan 84 step 5 moves the chat's name into Decky's title bar, beside Decky's back arrow (drawing frame "Z",
+round eight's pick X1, `docs/planning/assets/84-vertical-room.html`). Decky draws that spot (the plugin's
+`titleView`) outside bonsAI's own box, in a React tree of its own, so the name reads the open chat from a
+small shared store (`chatTitleStore.ts`) and moves Steam's ring in and out of bonsAI's box only by Steam's own
+transfer (a nav node's `TakeFocus`), never a plain `focus()`. Code: `src/features/chat-title/`.
+
+**The name (one stop, in Decky's title bar, the same container as Decky's back arrow).** Until step 6 moves the
+tab bar up, the tab bar is still the first thing in bonsAI's box under Decky's bar.
+
+```
+[Decky's back arrow]  <- Left (Steam's own)    [ the chat's name ]    Right: holds still
+                                                       | Down: the tab bar (Steam's transfer, "tab-bar")
+                                                       ^ Up from the tab bar: Steam's own, as before
+                                                         (it reaches Decky's back arrow; Right then the name)
+bonsAI's tab bar
+```
+
+- **Left** is Steam's own move onto Decky's back arrow: the arrow and the name are siblings in Decky's one title
+  Focusable, so Steam walks between them itself (measured 2026-10-08: Right from the arrow reached a stop drawn
+  in the title spot). Nothing claims it.
+- **Right** holds still (claimed, nothing moves). The empty space on the right only balances the arrow; nothing
+  of bonsAI lies there.
+- **Down** goes to the tab bar right below, by Steam's transfer onto its registered nav node
+  (`takeNavFocus("tab-bar")`). Steam's own Down from Decky's bar reached the tab bar too (2026-10-08), but the
+  route is written down rather than left to Steam's guess. Step 6 moves the tab bar above the name, and Down
+  then becomes the chat's first stop.
+- **Up** is Steam's own. Nothing lies above the name yet (Up from Decky's bar moved nothing on 2026-10-08);
+  step 6 puts the tab strip there and claims it.
+- **The ring on the name** is the view's own white ring (`noFocusRing` turns Steam's off), drawn on Steam's
+  `gpfocus` marker. LT and RT under the name light up only while the ring is on the name; a name too long for
+  its room slides once to show the rest and comes back (`ChatNameWords.tsx`), still for anyone who asked for less
+  motion.
+- **The name is a stop, not a container:** its children are plain text, so it carries `focusable: true`, the
+  same flag the old saved-chats row needed (measured 2026-08-30).
+- **Not backed by a device row yet.** Rows P84-NAME-01 and P84-NAME-03 (plan 84 § 6) are in the lane report.

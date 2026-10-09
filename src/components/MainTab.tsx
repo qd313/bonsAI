@@ -45,6 +45,7 @@ import { PermissionDenyAction } from "./PermissionDenyAction";
 import { useMainTabColumnFill } from "../hooks/useMainTabColumnFill";
 import { useDockClearanceOnFocus } from "../hooks/useDockClearanceOnFocus";
 import { ChatSlotRow } from "../features/chat-slots/ChatSlotRow";
+import { NO_CHAT_TITLE_ACTIONS, useChatTitlePublisher } from "../features/chat-title/useChatTitlePublisher";
 import type { ChatListRow } from "../features/chat-sum-up/chatSumUpModel";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import {
@@ -264,6 +265,19 @@ export function MainTab(props: MainTabProps) {
    */
   const chatSumUp = props.chatSlotSummaries?.find((row) => row.id === props.activeChatSlotId)?.sumUp ?? null;
   const sumUpOnly = Boolean(chatSumUp?.summingUp) && !props.isAsking;
+  /* The chat's name in Decky's bar reads the open chat from here (plan 84 step 5). */
+  useChatTitlePublisher(
+    {
+      summaries: props.chatSlotSummaries,
+      activeSlotId: props.activeChatSlotId,
+      atCreate: slotRowAtCreate,
+      generatingSlotId: props.generatingSlotId,
+      unreadSlotIds: props.unreadSlotIds,
+      answerInFlight: props.isAsking,
+      transcriptEmpty: (props.askThreadCollapsed?.length ?? 0) === 0 && !props.askThreadDisplayQuestion?.trim(),
+    },
+    NO_CHAT_TITLE_ACTIONS,
+  );
   useMainTabColumnFill(columnRef);
   /* Focus landing behind the bottom dock gets lifted above it — see the hook's header. */
   useDockClearanceOnFocus(columnRef);

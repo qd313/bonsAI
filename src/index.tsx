@@ -86,7 +86,8 @@
  * 5. Assemble deckyTabs, the list Steam's own Tabs component draws from, and
  *    render the tab strip above it.
  * 6. definePlugin(), at the very end, is the actual handoff to Decky: the
- *    plugin's name, its title and icon, and content: <Root />.
+ *    plugin's name, its title (ChatTitleView: the chat's name on the Main
+ *    tab, plan 84) and icon, and content: <Root />.
  *
  * Gotchas:
  * - The order these hooks are declared in matters. Several are declared
@@ -104,7 +105,6 @@ import React, { useCallback, useState, useMemo, useEffect, useLayoutEffect, useR
 import { definePlugin, toaster, useQuickAccessVisible } from "@decky/api";
 import { Tabs } from "@decky/ui";
 
-import { PLUGIN_VERSION } from "./pluginVersion";
 import { buildInitialSessionSnapshot } from "./features/plugin-shell/initialSessionSnapshot";
 import { DEFAULT_LATENCY_WARNING_SECONDS, type BonsaiSettings } from "./data/bonsaiSettingsSchema";
 import { setFrozenTestChips } from "./data/presets";
@@ -121,10 +121,6 @@ import { consumePendingFocusMainTab, useReplySurfaceVisibility } from "./utils/b
 import {
   BonsaiSvgIcon,
 } from "./components/icons";
-import {
-  ASK_LABEL_COLOR_50,
-  BONSAI_FOREST_GREEN,
-} from "./features/unified-input/constants";
 import { useUnifiedInputSurface } from "./features/unified-input/useUnifiedInputSurface";
 import { PluginErrorBoundary } from "./features/plugin-shell/PluginErrorBoundary";
 import { DECKY_TAB_TITLES, type BonsaiTabId } from "./features/plugin-shell/tabTitles";
@@ -174,6 +170,8 @@ import { useBonsaiScopeStyle } from "./features/plugin-shell/useBonsaiScopeStyle
 import { useExternalNavigationActions } from "./features/plugin-shell/useExternalNavigationActions";
 import { useAppLogPrefsAndCapturedErrors } from "./features/plugin-shell/useAppLogPrefsAndCapturedErrors";
 import { useTabAndModeGuardEffects } from "./features/plugin-shell/useTabAndModeGuardEffects";
+import { ChatTitleView } from "./features/chat-title/ChatTitleView";
+import { setChatTitleLitColor, setChatTitleTab } from "./features/chat-title/chatTitleStore";
 
 /*
  * In: nothing — no props. Every value Content needs, it reads from settings,
@@ -626,6 +624,11 @@ const Content: React.FC = () => {
     aiCharacterCustomText,
     uiScaleScopeStyle: uiScale.scopeStyle,
   });
+  /* The chat's name in Decky's bar is drawn outside this box (plan 84 step 5): it learns the tab and
+     the character's lit colour (the tab bar's own) through its store, not through props. */
+  const tabLitColor = (bonsaiScopeStyle as Record<string, unknown>)["--bonsai-ui-tab-lit"];
+  useEffect(() => setChatTitleTab(currentTab), [currentTab]);
+  useEffect(() => setChatTitleLitColor(typeof tabLitColor === "string" ? tabLitColor : null), [tabLitColor]);
 
   useTabAndModeGuardEffects({
     settingsLoaded,
@@ -1270,39 +1273,8 @@ const Root: React.FC = () => (
 export default definePlugin(() => {
   return {
     name: "bonsAI",
-    titleView: (
-      <span
-        title={`bonsAI v${PLUGIN_VERSION}`}
-        style={{
-          fontVariant: "small-caps",
-          fontWeight: 600,
-          letterSpacing: "0.06em",
-          color: "rgba(236, 240, 245, 0.96)",
-          WebkitTextStroke: `1.25px ${BONSAI_FOREST_GREEN}`,
-          paintOrder: "stroke fill",
-        }}
-      >
-        bonsAI
-        <sub
-          style={{
-            fontVariant: "normal",
-            fontSize: "0.46em",
-            fontWeight: 600,
-            letterSpacing: "0.04em",
-            color: ASK_LABEL_COLOR_50,
-            marginLeft: "0.38em",
-            lineHeight: 1,
-            verticalAlign: "baseline",
-            position: "relative",
-            bottom: "-0.2em",
-            WebkitTextStroke: "0 transparent",
-            paintOrder: "normal",
-          }}
-        >
-          v{PLUGIN_VERSION}
-        </sub>
-      </span>
-    ),
+    /* The chat's name on the Main tab, the bonsAI wordmark elsewhere (plan 84 step 5). */
+    titleView: <ChatTitleView />,
     content: <Root />,
     icon: (
       <span style={{ display: "inline-flex", transform: "translateX(-5px)" }}>

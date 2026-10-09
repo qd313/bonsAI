@@ -299,7 +299,13 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 
 ## src/features/chat-title
 
+- **ChatNameWords.tsx** (src/features/chat-title/ChatNameWords.tsx) — *The chat's name, sliding once to show the rest*: The words of the chat's name in Decky's bar. A name that fits is drawn as it is. A name too long for its room is cut short with "…" at rest; while Steam's ring is on the name it slides along once to show the rest, waits a moment at the end, slides back, and stays still again…
+- **ChatTitleView.tsx** (src/features/chat-title/ChatTitleView.tsx) — *The chat's name in Decky's title bar*: What bonsAI draws in its one spot in Decky's title bar, to the right of Decky's back arrow (plan 84 step 5, the drawing's frame "Z", round eight's pick X1). […]
+- **chatNameNav.ts** (src/features/chat-title/chatNameNav.ts) — *Handing Steam's ring to the chat's name in Decky's bar*: The chat's name sits in Decky's title bar, outside bonsAI's own box, so moving Steam's ring onto it from inside bonsAI (closing the chats menu, a box closing) crosses from one container into another. […]
 - **chatTitleStore.ts** (src/features/chat-title/chatTitleStore.ts) — *What the chat's name in Decky's bar knows about the open chat*: A small shared memory, kept outside React, that lets the chat's name in Decky's title bar read and change the open chat. […]
+- **chatTitleStyles.ts** (src/features/chat-title/chatTitleStyles.ts) — *How the chat's name in Decky's bar looks*: The stylesheet for the plugin's spot in Decky's title bar: the chat's name with its menu arrow, the small line under it ("LT chat 2 of 5 RT"), the empty space that balances Decky's back arrow, the white ring while Steam's ring is on the name, and the plain "bonsAI" wordmark the…
+- **nameRowBalance.ts** (src/features/chat-title/nameRowBalance.ts) — *Keeping the chat's name on the panel's centre line*: Decky's title bar puts its back arrow on the left and then this plugin's view. For the chat's name to sit on the panel's centre line, the empty space after the name, on the right, must be as wide as everything to the left of the view that the right side does not already mirror…
+- **useChatTitlePublisher.ts** (src/features/chat-title/useChatTitlePublisher.ts) — *The Main tab telling Decky's bar which chat is open*: Works out, from what the Main tab already holds, what the chat's name in Decky's bar shows (the open chat's name, "chat 2 of 5" or "not saved yet", the unread and still-writing marks of every chat, whether an answer is being written) and writes it into chatTitleStore.ts while…
 
 ## src/features/details-slot
 

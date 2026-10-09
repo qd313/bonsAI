@@ -7,12 +7,12 @@
  * by the Main tab. Instead the Main tab writes here what the name row needs (the open chat's name,
  * its place among the saved chats, whether it is a new chat not saved yet, the unread and
  * still-writing marks, whether an answer is being written, and the actions: previous chat, next
- * chat, the ring onto the chat's first stop), the plugin root writes which tab is showing, and the
- * name row reads all of it. Whether the chats menu is open lives here too, because both sides need
- * it: the name opens it, the Main tab draws it.
+ * chat, the ring onto the chat's first stop), the plugin root writes which tab is showing and the
+ * character's lit accent colour, and the name row reads all of it. Whether the chats menu is open
+ * lives here too, because both sides need it: the name opens it, the Main tab draws it.
  *
  * Used for: the chat's name in Decky's bar (it reads), the Main tab (it writes the chat) and the
- * plugin root (it writes the tab), plan 84 step 5.
+ * plugin root (it writes the tab and the lit colour), plan 84 step 5.
  *
  * Solves: Either side can mount first, and either can go away on its own. A name row that mounts
  * before the Main tab shows the plain wordmark until the chat arrives; a Main tab that goes away
@@ -76,6 +76,8 @@ export type ChatTitleActions = {
 export type ChatTitleState = {
   /** Which bonsAI tab is showing ("main", "settings", ...), or null before the plugin root says. */
   tab: string | null;
+  /** The character's lit accent colour (the tab bar's `--bonsai-ui-tab-lit`), or null for the default. */
+  litColor: string | null;
   /** The open chat, while the Main tab is drawn; null otherwise. */
   chat: ChatTitleChat | null;
   /** The Main tab's actions, while it is drawn; null otherwise. */
@@ -86,6 +88,7 @@ export type ChatTitleState = {
 
 const INITIAL: ChatTitleState = {
   tab: null,
+  litColor: null,
   chat: null,
   actions: null,
   menuOpen: false,
@@ -146,6 +149,12 @@ function sameChat(a: ChatTitleChat | null, b: ChatTitleChat | null): boolean {
 export function setChatTitleTab(tab: string | null): void {
   if (tab === state.tab) return;
   set({ ...state, tab, menuOpen: tab === "main" ? state.menuOpen : false });
+}
+
+/** The plugin root: the character's lit accent colour, so the menu arrow matches the tab bar. */
+export function setChatTitleLitColor(litColor: string | null): void {
+  if (litColor === state.litColor) return;
+  set({ ...state, litColor });
 }
 
 /**

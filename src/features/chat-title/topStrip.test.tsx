@@ -397,6 +397,19 @@ describe("the D-pad at the top, Main tab", () => {
   });
 });
 
+describe("touch on the strip", () => {
+  it("a tap on RB opens the next tab, on LB the one before, on a side icon that tab", () => {
+    mount();
+    act(() => q(".bonsai-tab-bar--strip .bonsai-tab-bar__shoulder--r")!.click());
+    expect(tabShowing()).toBe("ollama");
+    act(() => q(".bonsai-tab-bar--strip .bonsai-tab-bar__shoulder--l")!.click());
+    expect(tabShowing()).toBe("main");
+    act(() => q('.bonsai-tab-bar--strip .bonsai-tab-bar__peek[data-bonsai-tab="settings"]')!.click());
+    expect(tabShowing()).toBe("settings");
+    expect(arrow()!.style.display).toBe("none");
+  });
+});
+
 describe("the D-pad at the top, other tabs", () => {
   it("strip Down: the tab's first control; Up from the top of the tab: the strip", () => {
     mount({ startTab: "settings" });

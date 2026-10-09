@@ -56,6 +56,25 @@ export function neighbourTab(tabIds: readonly string[], currentTab: string, step
 }
 
 /**
+ * Which tabs the bar shows beside the current one (plan 84's T3): every other tab exactly once, the
+ * ones LB would reach on the left and the ones RB would reach on the right, wrapping round, the
+ * nearest next to the name. With N tabs the left gets floor((N-1)/2) and the right the rest, so at
+ * six tabs RB's side has one more. `left` reads outward-in (farthest first, as drawn); `right` reads
+ * nearest first. A current tab that is not mounted gets no sides, so a stale id claims nothing.
+ */
+export function tabBarSides<T extends string>(tabIds: readonly T[], currentTab: string): { left: T[]; right: T[] } {
+  const n = tabIds.length;
+  const index = (tabIds as readonly string[]).indexOf(currentTab);
+  if (index < 0) return { left: [], right: [] };
+  const leftCount = Math.floor((n - 1) / 2);
+  const left: T[] = [];
+  for (let k = leftCount; k >= 1; k--) left.push(tabIds[(index - k + n) % n]);
+  const right: T[] = [];
+  for (let k = 1; k <= n - 1 - leftCount; k++) right.push(tabIds[(index + k) % n]);
+  return { left, right };
+}
+
+/**
  * Returning `true` claims the press; `false` lets Steam's own navigation decide.
  *
  * Left and Right always claim: sideways there is nothing of ours to reach, and Steam's answer for

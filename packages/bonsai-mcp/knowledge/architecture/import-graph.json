@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 753,
-  "edgeCount": 2199,
+  "fileCount": 754,
+  "edgeCount": 2205,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3136,11 +3136,21 @@
         "src/index.tsx"
       ]
     },
-    "src/features/plugin-shell/TabIndicatorBar.test.tsx": {
+    "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx": {
       "imports": [
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/tabTitles.tsx",
         "src/styles/bonsaiScopeStylesheet.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/plugin-shell/TabIndicatorBar.test.tsx": {
+      "imports": [
+        "src/features/plugin-shell/TabIndicatorBar.tsx",
+        "src/features/plugin-shell/tabBarNav.ts",
+        "src/features/plugin-shell/tabTitles.tsx",
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
     },
@@ -3150,9 +3160,11 @@
         "src/features/plugin-shell/tabBarNav.ts",
         "src/features/plugin-shell/tabTitles.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
+        "src/features/unified-input/constants.ts",
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/index.tsx"
       ]
@@ -3268,6 +3280,7 @@
         "src/utils/focusNavigation.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/tabBarNav.test.ts"
       ]
@@ -3285,6 +3298,7 @@
       ],
       "importedBy": [
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
+        "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/tabTitles.test.tsx",
@@ -3964,6 +3978,7 @@
         "src/components/SettingsTab.tsx",
         "src/components/SettingsTabAccentIntensityMenuPopover.tsx",
         "src/data/characterUiAccent.ts",
+        "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/tabTitles.tsx",
         "src/features/unified-input/useUnifiedInputSurface.ts",
         "src/hooks/useTabStripBodyOffset.ts",
@@ -5360,6 +5375,7 @@
         "src/components/SettingsDeveloperWrappedRing.test.tsx",
         "src/components/SettingsTab.focusRing.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
+        "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/styles/buttonFocusRing.test.ts",
         "src/styles/presetChipHighlightFill.test.ts",
@@ -5943,6 +5959,7 @@
         "src/features/chat-sum-up/SessionTitleOffer.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/downloads/downloadNotice.test.tsx",
+        "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",

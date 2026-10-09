@@ -241,3 +241,46 @@ that empties the box (only while the box has words), the small ASK. The game tag
   there is no room under it.
 - **Not backed by a device row yet.** The bookkeeper owns `docs/testing.md`; rows P84-ASK-01 and P84-ASK-02
   (plan 84 § 6) are in the lane report.
+
+### The tab bar, T3 (plan 84 step 4)
+
+Plan 84 step 4 redraws the tab bar as design "T3" and deletes the drop-down strip of tab icons that used to
+open under it (drawing frame "Z", `docs/planning/assets/84-vertical-room.html`). Code: `TabIndicatorBar.tsx`,
+`tabBarNav.ts`, `useHiddenTabHeaderTrap.ts`; styles in `src/styles/sections/tabIndicatorBar.ts`.
+
+```
+LB  [tabs LB reaches]  [icon] NAME  [tabs RB reaches]  RB      <- one stop: the whole bar
+   Left / LB: previous tab (wraps)        Right / RB: next tab (wraps)
+   | Down: the current tab's first stop    ^ Up: left to Steam (Decky's back button today)
+```
+
+- **One stop.** The whole bar is one Steam focus stop (`focusable: true` on its Focusable). LB, RB and the side
+  icons are plain spans for touch, with no tabindex and no Focusable of their own, so the ring never sits on
+  one of them and Left and Right never get stuck inside the bar.
+- **Left and LB** open the previous tab, wrapping from the first to the last; **Right and RB** open the next,
+  wrapping back. Left and Right are always claimed (past the bar Steam would hand the ring to its own Quick
+  Access rail). LB and RB are read in `onButtonDown` through the `focusNavigation.ts` helpers. The ring stays
+  on the bar after a switch. Unchanged from before this step.
+- **Down** hands the ring to the current tab's first stop by Steam's own transfer (`exitDown`, which is
+  `takeNavFocus` onto the chat-slot row on Main and onto the tab body's root elsewhere). It claims the press
+  only when the ring moved; otherwise Steam's own step runs and the hidden-header trap catches a landing on
+  Steam's hidden tab buttons. Unchanged.
+- **Up** is not claimed: Steam takes the ring upward, to Decky's back button today. Step 6 moves the bar into
+  Decky's title bar and sets the routes between the bar, the back arrow and the chat's name by hand.
+- **A** does nothing (no `onActivate`); **B** is Steam's own.
+- **Into the bar, unchanged:** Up from the top of a tab body (`TabBodyFocusRoot`), Up from the chat-slot row,
+  B from a tab body (`onCancelFromTabHeader`), the return after a popup closes (`modalReturnFocusRegistry`,
+  "tab-bar"), and the trap that catches the ring on Steam's hidden tab buttons. Every one is
+  `takeNavFocus("tab-bar")`.
+- **What shows the ring:** Steam's own `gpfocus` / `gpfocuswithin` marker on the bar. The whole bar then wears
+  the white inset ring and a faint fill, and LB and RB go from dim (0.32) to full strength. Plain browser focus
+  shows nothing: plan 78 measured the bar holding browser focus with no Steam ring anywhere.
+- **Touch:** a tap on LB opens the previous tab, on RB the next, on a side icon that tab; a tap on the name does
+  nothing. Targets: LB and RB 31 by 20 points; each side icon 18 by 20, narrowing towards the icon's own 11
+  only for the longest names at six tabs.
+- **Gone with the strip:** its open and closed states, its fade, the timer that forced the fade shut, the
+  tap-to-open and the tap-outside listener. What the bar draws depends only on which tabs exist and which is
+  current, never on the ring or a tap, and the bar clips everything inside it to its own 20 points, so nothing
+  of it can be left over the chip row (TAB-BAR-GHOST-01).
+- **Not backed by a device row yet.** The bookkeeper owns `docs/testing.md`; rows P84-TABS-01, P84-TABS-02 and
+  the LB/RB half of P84-HINTS-01 (plan 84 § 6) are in the lane report.

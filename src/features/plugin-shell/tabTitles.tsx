@@ -3,8 +3,8 @@
  *
  * Purpose: Builds the small icon-only element Decky shows for each of
  * bonsAI's tabs, plus every other piece of wording those tabs need: the
- * name read out for accessibility and the short word shown on the tab
- * bar.
+ * name read out for accessibility, and the short word and the small
+ * icon shown on the tab bar.
  *
  * Used for: index.tsx, once per tab, when the tabs are put together.
  *
@@ -18,6 +18,7 @@ import React from "react";
 
 import {
   AboutTabTitleIcon,
+  BonsaiLogoIcon,
   BonsaiTreeTabIcon,
   BugIcon,
   GearIcon,
@@ -25,6 +26,7 @@ import {
   OllamaTabIcon,
 } from "../../components/icons";
 import {
+  TAB_BAR_BUG_ICON_SCALE,
   TAB_TITLE_DEBUG_TAB_ICON_PX,
   TAB_TITLE_ICON_PX,
   TAB_TITLE_MAIN_TAB_ICON_PX,
@@ -77,6 +79,29 @@ export const BONSAI_TAB_SHORT_NAMES: Readonly<Record<BonsaiTabId, string>> = {
   developer: "Developer",
   about: "About",
 };
+
+/**
+ * A tab's icon on the tab bar, at `size` (12 for the current tab, 11 for the others; plan 84's T3).
+ * The same drawings the drop-down strip used (plan 59 § 3, § 5): Main is the plugin's own logo, not
+ * the outline tree Steam's hidden header still carries, and the bug, whose artwork carries inner
+ * padding, is drawn larger so its footprint matches the rest.
+ */
+export function bonsaiTabBarIcon(id: BonsaiTabId, size: number): React.ReactElement {
+  switch (id) {
+    case "main":
+      return <BonsaiLogoIcon size={size} />;
+    case "ollama":
+      return <OllamaTabIcon size={size} />;
+    case "settings":
+      return <GearIcon size={size} />;
+    case "permissions":
+      return <LockIcon size={size} />;
+    case "developer":
+      return <BugIcon size={Math.round(size * TAB_BAR_BUG_ICON_SCALE)} />;
+    case "about":
+      return <AboutTabTitleIcon size={size} />;
+  }
+}
 
 export function bonsaiTabIconTitle(classSuffix: BonsaiTabId, children: React.ReactNode): React.ReactElement {
   return (

@@ -132,15 +132,44 @@ export const TAB_BAR_STRIP_BG_HEX = "#141c24";
  * keeps this height.
  */
 export const TAB_BAR_HEIGHT_PX = 20;
-export const TAB_BAR_DASH_W_PX = 14;
-export const TAB_BAR_DASH_H_PX = 3;
-/** The active dash is this much taller than the others. */
-export const TAB_BAR_DASH_ACTIVE_EXTRA_H_PX = 2;
-export const TAB_BAR_DASH_GAP_PX = 4;
-/** The active tab's name beside the dashes — the size the chat-slot bumper pills already use. */
+/*
+ * Plan 84 step 4 — the tab bar as T3 (drawing docs/planning/assets/84-vertical-room.html,
+ * `balancedBar("T3", ...)` with "edge16", frame "Z"): LB | the tabs before | the current tab's icon
+ * and name | the tabs after | RB, on one 20-point row. CSS px before `--bonsai-ui-scale`.
+ */
+/** The bar's left and right padding: LB and RB sit this far in from each edge, as Decky's back button does. */
+export const TAB_BAR_EDGE_PAD_PX = 16;
+/** The gap between the bar's five columns (the drawing's `.d-tabbar.bal` gap). */
+export const TAB_BAR_COLUMN_GAP_PX = 6;
+/** The current tab's name — the size the chat-slot bumper pills already use. */
 export const TAB_BAR_NAME_PX = 11;
 /** The LB / RB marks at the ends of the bar. */
 export const TAB_BAR_SHOULDER_MARK_PX = 9;
+/**
+ * LB and RB each get a box this wide, the same for both, so the two side columns come out equal and
+ * the name sits on the bar's centre whatever the two letters measure in Steam's font. "LB" measured
+ * 13.1 and "RB" 14.3 wide in the drawing; 16 leaves room for a wider font.
+ */
+export const TAB_BAR_SHOULDER_W_PX = 16;
+/**
+ * How far a finger's target for LB and RB reaches past the mark into the bar's edge padding (and 3
+ * into the column gap), without moving anything: 16 + 12 + 3 = 31 wide, the bar's full 20 tall.
+ */
+export const TAB_BAR_SHOULDER_REACH_PX = 12;
+/** LB and RB while the ring is not on the bar (the drawing's `.deck.dimkeys` rule). */
+export const TAB_BAR_SHOULDER_DIM_OPACITY = 0.32;
+/** The current tab's icon, left of its name. */
+export const TAB_BAR_CURRENT_ICON_PX = 12;
+/** Between the current tab's icon and its name. */
+export const TAB_BAR_CURRENT_ICON_GAP_PX = 4;
+/** The middle column's own left and right padding (the drawing's `.bal-t3 .mid`). */
+export const TAB_BAR_CURRENT_PAD_X_PX = 6;
+/** The other tabs' small dimmed icons on each side. */
+export const TAB_BAR_SIDE_ICON_PX = 11;
+/** Between two side icons, while there is room; it gives way before an icon would run into LB or RB. */
+export const TAB_BAR_SIDE_ICON_GAP_PX = 7;
+/** The bug's artwork carries inner padding; drawn this much larger it matches the others (plan 59's 26 in 22). */
+export const TAB_BAR_BUG_ICON_SCALE = 26 / 22;
 /**
  * The fade on Show details' swap with the chip in the chip's slot (detailsSlot.ts). Born as plan 59's
  * tab-switch fade on the drop-down strip, which is gone; the tab bar itself fades nothing now.

@@ -7,9 +7,10 @@
  */
 import { describe, expect, it, vi } from "vitest";
 
-import { buildTabBarNavHandlers, neighbourTab } from "./tabBarNav";
+import { buildTabBarNavHandlers, neighbourTab, tabBarSides } from "./tabBarNav";
 
 const SIX = ["main", "ollama", "settings", "permissions", "developer", "about"] as const;
+const FIVE = SIX.filter((id) => id !== "developer");
 
 /** The shape `deckButtonId` reads: a GamepadEvent with `detail.button`. A = 1, B = 2, LB = 5, RB = 6. */
 const press = (button: number) => ({ detail: { button } });
@@ -84,5 +85,51 @@ describe("buildTabBarNavHandlers", () => {
 
   it("Up never claims, so Steam takes the ring to Decky's Back button as it did from the strip", () => {
     expect(make().h.onMoveUp()).toBe(false);
+  });
+});
+
+describe("tabBarSides (plan 84 step 4, T3)", () => {
+  /** The tabs LB reaches, nearest first, by pressing it again and again. */
+  const lbOrder = (ids: readonly string[], current: string) => {
+    const out: string[] = [];
+    let at = current;
+    for (let i = 1; i < ids.length; i++) {
+      at = neighbourTab(ids, at, -1)!;
+      out.push(at);
+    }
+    return out;
+  };
+
+  it.each([
+    ["five", FIVE],
+    ["six", SIX],
+  ] as const)("at %s tabs, every current tab shows each other tab exactly once, LB's on the left and RB's on the right", (_n, ids) => {
+    for (const current of ids) {
+      const { left, right } = tabBarSides(ids, current);
+      const n = ids.length;
+      expect(left).toHaveLength(Math.floor((n - 1) / 2));
+      expect(right).toHaveLength(n - 1 - Math.floor((n - 1) / 2));
+      // Each other tab once, the current tab never.
+      expect([...left, ...right].sort()).toEqual(ids.filter((id) => id !== current).sort());
+      // Left, read from the name outward, is what LB reaches press by press; right is what RB reaches.
+      expect([...left].reverse()).toEqual(lbOrder(ids, current).slice(0, left.length));
+      const rbReach: string[] = [];
+      let at: string = current;
+      for (let i = 0; i < right.length; i++) {
+        at = neighbourTab(ids, at, 1)!;
+        rbReach.push(at);
+      }
+      expect(right).toEqual(rbReach);
+    }
+  });
+
+  it("wraps at both ends, as the drawing does: Main at six tabs has Developer and About on its left", () => {
+    expect(tabBarSides(SIX, "main")).toEqual({ left: ["developer", "about"], right: ["ollama", "settings", "permissions"] });
+    expect(tabBarSides(FIVE, "about")).toEqual({ left: ["settings", "permissions"], right: ["main", "ollama"] });
+  });
+
+  it("shows no sides for a tab that is not mounted, so a stale id claims nothing", () => {
+    expect(tabBarSides(FIVE, "developer")).toEqual({ left: [], right: [] });
+    expect(tabBarSides([], "main")).toEqual({ left: [], right: [] });
   });
 });

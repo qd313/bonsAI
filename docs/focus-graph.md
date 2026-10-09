@@ -325,6 +325,10 @@ bonsAI's tab bar
   motion.
 - **The name is a stop, not a container:** its children are plain text, so it carries `focusable: true`, the
   same flag the old saved-chats row needed (measured 2026-08-30).
+- **The ring watch after a reopen counts the name as bonsAI's** (`askBarRingWatch.ts`): in its short windows it
+  takes a ring on Decky's own back arrow to the question box, but a ring on anything in bonsAI's title view is a
+  plugin control the person can be on, so the window ends and the ring stays. A ring on the tab bar keeps the
+  tab bar's own rule (taken only in the window's first seconds) wherever the bar is drawn.
 - **LT and RT switch chats from anywhere on the Main tab** (`useChatTriggerSwitch.ts`), in the old saved-chats
   row's order: the list newest first, the new-chat spot before the newest, no wrap at either end. They do not move
   the ring. One listener on the panel's own document (through `uiDocument.ts`) hears both, because the Deck

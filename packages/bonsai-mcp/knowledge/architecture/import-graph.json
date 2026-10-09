@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 770,
-  "edgeCount": 2271,
+  "fileCount": 771,
+  "edgeCount": 2275,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3437,6 +3437,7 @@
         "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.test.ts",
+        "src/hooks/askBarRingWatch.titleView.test.ts",
         "src/hooks/askBarRingWatch.ts",
         "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts",
         "src/hooks/useBonsaiPluginShell.ts",
@@ -4293,6 +4294,15 @@
       ],
       "importedBy": []
     },
+    "src/hooks/askBarRingWatch.titleView.test.ts": {
+      "imports": [
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/hooks/askBarRingWatch.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/askBarRingWatch.ts": {
       "imports": [
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
@@ -4300,6 +4310,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/hooks/askBarRingWatch.titleView.test.ts",
         "src/hooks/useAskBarInitialRingClaim.ts"
       ]
     },
@@ -7927,6 +7938,7 @@
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
+        "src/hooks/askBarRingWatch.titleView.test.ts",
         "src/hooks/askBarRingWatch.ts",
         "src/hooks/useAskBarInitialRingClaim.freshOpen.test.ts",
         "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts",
@@ -8623,6 +8635,7 @@
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
+        "src/hooks/askBarRingWatch.titleView.test.ts",
         "src/hooks/askBarRingWatch.ts",
         "src/hooks/useAskBarInitialRingClaim.freshOpen.test.ts",
         "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts",

@@ -21,6 +21,8 @@
  *     -> take it
  *   - any other plugin control                -> the window ends, nothing is touched
  *   - the tab icon column, or anywhere outside the pane -> leave it, the person may be choosing a tab
+ * "The plugin" is bonsAI's own box and bonsAI's own title view in Decky's bar (plan 84: the chat's
+ * name, and the tab bar once it moves up there). Only Decky's own parts of that bar count as Decky's.
  * The window also ends after a take (once the ring is seen on a plugin control, or after a few
  * takes), when a box (modal) is open, when the page turns hidden, and when its time is up. After it
  * ends nothing is done until the caller starts the next one, so a person who walks Up to the back
@@ -67,7 +69,10 @@ export function createRingWatch(doc: Document, scope: HTMLElement): RingWatch {
     const holder = uiGamepadFocusElement();
     let take = !holder || holder === doc.body; // nothing owns it
     if (!take && holder) {
-      if (scope.contains(holder)) {
+      // Asking whose control this is, not looking for something to focus.
+      // focus-patterns-allow: telling bonsAI's own title view in Decky's bar from Decky's own parts.
+      const inTitleView = holder.closest(".bonsai-chat-title") !== null;
+      if (inTitleView || scope.contains(holder)) {
         // Asking whose control this is, not looking for something to focus.
         // focus-patterns-allow: telling the tab bar from other plugin controls by ownership.
         const onTabBar = holder.closest(".bonsai-tab-bar") !== null;

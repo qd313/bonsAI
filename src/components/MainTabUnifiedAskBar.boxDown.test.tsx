@@ -1,18 +1,19 @@
 /**
- * Title: Down from the question box lands on the mode button, the next Down on Ask
+ * Title: Down from the question box lands on the small Ask button in the strip under it
  *
- * Purpose: Pin the maintainer's call of 2026-10-06 (docs/test-evidence/
- * maintainer-2026-10-06-question-box-down.png). Down from the question box used to jump straight to
- * the big Ask button and skip the row under the box (paperclip, Strategy / Speed mode button,
- * microphone). Now the box's Down goes to the mode button; Down from the row goes to Ask.
+ * Purpose: Pin plan 84 step 2's route (docs/focus-graph.md, "The ask box's strip"). The maintainer's
+ * rule of 2026-10-06 (docs/test-evidence/maintainer-2026-10-06-question-box-down.png) was that Down
+ * from the question box lands on the row under it and skips nothing; it then went to the mode button,
+ * because the big Ask button sat below that row. Since plan 84 the small Ask button is in that row, so
+ * Down lands on it (Down then A sends), on Stop while an answer is arriving, and Up from the strip
+ * comes back to the box by Steam's transfer.
  *
- * The test presses the handlers Steam really invokes on the device (the box's own onMoveDown, and
- * the row's, because a Decky Button does not forward move props) and then reads which button holds
- * the ring, so it fails without the fix at the level the Deck check looks at: "the ring is on the
- * mode button after one Down, on Ask after two".
+ * The test presses the handlers Steam really invokes on the device (the box's own onMoveDown, and the
+ * strip group's onMoveUp, because a Decky Button does not forward Up or Down) and then reads which
+ * button holds the ring, so it fails without the change at the level the Deck check looks at.
  *
- * Does not: prove the ring moves on the device; that is the Deck row's job. The mode button's Up
- * (to the question box) is left to Steam's own step and is not tested here.
+ * Does not: prove the ring moves on the device; that is the Deck row's job (P84-ASK-02). The whole
+ * walk through the strip, on the real Main tab, is MainTab.askStrip.deck.test.tsx.
  */
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -106,6 +107,12 @@ function mount(overrides: Partial<MainTabUnifiedAskBarProps> = {}) {
   return { ...view, modeButton, askButton };
 }
 
+/** The strip's right-hand group (mode, mic or Stop, the X, Ask): it carries Up for all of them. */
+function lastRightGroupProps(): Record<string, unknown> {
+  const groups = hoisted.focusableProps.filter((p) => p.className === "bonsai-unified-input-actions-right");
+  return groups[groups.length - 1];
+}
+
 beforeEach(() => {
   hoisted.focusableProps.length = 0;
   hoisted.boxDown.length = 0;
@@ -117,48 +124,45 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-describe("Down from the question box (maintainer 2026-10-06: it skipped the row under the box)", () => {
-  it("puts the ring on the mode button, and the next Down puts it on Ask", () => {
-    const { modeButton, askButton } = mount();
-
+describe("Down from the question box (plan 84: the small Ask sits in the strip right under it)", () => {
+  it("puts the ring on the small Ask, and Up from the strip takes it back to the box by Steam's transfer", () => {
+    const { askButton, modeButton } = mount();
+    // buildProps hands in an empty askBarHostRef; the bar fills it with the small Ask button itself.
     expect(pressDown(lastBoxProps())).toBe(true);
-    expect(document.activeElement).toBe(modeButton);
-    expect(document.activeElement).not.toBe(askButton);
-
-    expect(pressDown(lastRowProps())).toBe(true);
     expect(document.activeElement).toBe(askButton);
+    expect(document.activeElement).not.toBe(modeButton);
 
-    // Up is Down reversed: from Ask back to the mode button.
-    const askRows = hoisted.focusableProps.filter((p) => p.className === "bonsai-ask-row");
-    expect((askRows[askRows.length - 1].onMoveUp as () => unknown)()).toBe(true);
-    expect(document.activeElement).toBe(modeButton);
+    const take = vi.spyOn(navFocusRegistry, "takeNavFocus").mockReturnValue(true);
+    expect((lastRightGroupProps().onMoveUp as () => unknown)()).toBe(true);
+    expect(take).toHaveBeenCalledWith("unified-input");
   });
 
-  it("still lands on the mode button while an answer is arriving (Ask is greyed, Stop sits beside it)", () => {
-    const { modeButton, container } = mount({ isAsking: true });
+  it("lands on Stop while an answer is arriving (Ask rests, and never takes the ring)", () => {
+    const { askButton, container } = mount({ isAsking: true });
+    const stop = container.querySelector('button[aria-label="Stop generation"]') as HTMLElement;
+    expect(stop).toBeTruthy();
 
     expect(pressDown(lastBoxProps())).toBe(true);
-    expect(document.activeElement).toBe(modeButton);
-    expect(container.querySelector('button[aria-label="Stop generation"]')).toBeTruthy();
+    expect(document.activeElement).toBe(stop);
+    expect(document.activeElement).not.toBe(askButton);
   });
 
-  it("does not hand Down from the row to the greyed Ask button while an answer is arriving", () => {
-    const { modeButton } = mount({ isAsking: true });
-    modeButton.focus();
-
-    expect(pressDown(lastRowProps())).toBe(false);
-    expect(document.activeElement).toBe(modeButton);
+  it("leaves Down from the strip to Steam: no part of the strip claims it", () => {
+    mount();
+    expect(lastRowProps().onMoveDown).toBeUndefined();
+    expect(lastRightGroupProps().onMoveDown).toBeUndefined();
   });
 
-  it("leaves Down from the row to Steam while the mode menu is open, so the press can go into the menu", () => {
-    const { modeButton, askButton } = mount();
+  it("leaves Up from the strip to Steam while the mode menu is open, so the press can go into the menu", () => {
+    const take = vi.spyOn(navFocusRegistry, "takeNavFocus").mockReturnValue(true);
+    const { modeButton } = mount();
     act(() => {
       fireEvent.click(modeButton);
     });
     expect(modeButton.getAttribute("aria-expanded")).toBe("true");
-    modeButton.focus();
+    take.mockClear();
 
-    expect(pressDown(lastRowProps())).toBe(false);
-    expect(document.activeElement).not.toBe(askButton);
+    expect((lastRightGroupProps().onMoveUp as () => unknown)()).toBe(false);
+    expect(take).not.toHaveBeenCalledWith("unified-input");
   });
 });

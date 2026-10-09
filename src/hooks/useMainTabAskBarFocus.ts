@@ -15,15 +15,15 @@
  *       │                  │
  *       │ Down             │ Down
  *       ▼                  ▼
- *     paperclip        Ask (primary) button
- *       ▲
- *       │ Left
+ *     paperclip        the small Ask button at the right end of the box's own
+ *       ▲              strip (plan 84), or Stop in the mic's place while an
+ *       │ Left         answer is being written
  *       │
  *     question box
  *
- * (The mic button also has a jump function here, but it is not one of the
- * edges this file wires up itself — it is handed back for another file to
- * connect where it needs it.)
+ * (The mic button's jump function also serves the strip's own Left and Right,
+ * which MainTabUnifiedAskBar.tsx wires; the whole strip is written down in
+ * docs/focus-graph.md, "The ask box's strip (plan 84)".)
  *
  * Used for: MainTab's D-pad wiring, and cross-row navigation elsewhere in the
  * chat screen.
@@ -43,7 +43,8 @@ import { elementHasGamepadFocus } from "../utils/uiDocument";
 export type MainTabAskBarFocusRefs = {
   unifiedInputFieldLayerRef: React.Ref<HTMLDivElement>;
   attachActionHostRef: React.Ref<HTMLDivElement>;
-  askBarHostRef: React.Ref<HTMLDivElement>;
+  /** The small Ask button itself since plan 84 (it was the big Ask row's host); see focusAskPrimary. */
+  askBarHostRef: React.Ref<HTMLElement>;
   presetCarouselHostRef: React.RefObject<HTMLDivElement | null>;
 };
 
@@ -68,7 +69,8 @@ export type MainTabAskBarFocusRefs = {
  * 4. focusFirstPresetChip() — up into the suggestion row above the Ask bar:
  *    the still-open help chip if there is one, otherwise the first suggestion
  *    chip, with the same take-Steam's-transfer-first approach as step 1.
- * 5. focusAskPrimary() — the Ask button itself.
+ * 5. focusAskPrimary() — the small Ask button itself, through its own element
+ *    (askBarHostRef holds the button since plan 84), never while it rests.
  * 6. focusMicOrStop() — the mic / stop button in the input's other corner.
  * 7. focusAskModeButton() — the button that opens the Ask-mode picker.
  * 8. Bundle the question box's four directions and the avatar's two
@@ -175,16 +177,21 @@ export function useMainTabAskBarFocus(
     return elementHasGamepadFocus(btn);
   }, [refs.presetCarouselHostRef]);
 
+  /*
+   * The small Ask button in the box's own strip (plan 84). askBarHostRef is filled by the button itself
+   * now, not a row around it, so this focuses that element directly instead of searching under a host.
+   * A plain focus(): from the box this is the same hop the mode button took and the Deck showed working
+   * (P82-BOX-DOWN-MODE-BUTTON), and inside the strip the stops are siblings of one row.
+   */
   const focusAskPrimary = useCallback((): boolean => {
-    // Greyed while a question is in flight -- see the isAskInFlight doc comment above.
+    // Resting while a question is in flight -- see the isAskInFlight doc comment above.
     if (isAskInFlight) return false;
-    const host =
+    const btn =
       refs.askBarHostRef &&
       typeof refs.askBarHostRef === "object" &&
       "current" in refs.askBarHostRef
-        ? (refs.askBarHostRef as React.RefObject<HTMLDivElement | null>).current
+        ? (refs.askBarHostRef as React.RefObject<HTMLElement | null>).current
         : null;
-    const btn = host?.querySelector<HTMLElement>("button.bonsai-ask-primary");
     if (!btn) return false;
     btn.focus();
     return true;
@@ -223,6 +230,11 @@ export function useMainTabAskBarFocus(
         onMoveLeft: () => focusAttachPaperclip(),
         onMoveDown: () => {
           /*
+           * The box's Down since plan 84: the small Ask button sits in the strip right under the box,
+           * so landing on it skips nothing (the maintainer's 2026-10-06 rule that sent Down to the
+           * mode button was about the big Ask button below the strip; docs/focus-graph.md, "The ask
+           * box's strip"). Down then A sends what was typed.
+           *
            * The Ask button is greyed out while a question is in flight, so Down must not land the
            * ring on it. This used to swallow the press instead, which meant Down did nothing at
            * all for the whole time an answer took to arrive.
@@ -256,19 +268,6 @@ export function useMainTabAskBarFocus(
     ],
   );
 
-  /**
-   * The Ask row's own Up (plan 74 lane 3): back to the question box, the mirror of the box's own
-   * Down onto Ask above. Left to Steam, Up from Ask entered the icon row along the box's bottom
-   * edge on whichever icon was used last -- the mic one time, the paperclip another
-   * (docs/test-evidence/plan64-ASKBAR-DOWN-TO-STOP-01.json). Steam's own transfer, since the box is
-   * a different container; wired on the row, not the Ask button, because a Decky Button does not
-   * forward move props on the device.
-   */
-  const askRowDeckNavHandlers = useMemo(
-    () => ({ onMoveUp: () => focusUnifiedTextField() }) as Record<string, unknown>,
-    [focusUnifiedTextField],
-  );
-
   const avatarDeckNavHandlers = useMemo(
     () =>
       ({
@@ -288,6 +287,5 @@ export function useMainTabAskBarFocus(
     focusAskModeButton,
     unifiedInputDeckNavHandlers,
     avatarDeckNavHandlers,
-    askRowDeckNavHandlers,
   };
 }

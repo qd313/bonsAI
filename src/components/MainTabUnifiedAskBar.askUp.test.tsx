@@ -1,18 +1,18 @@
 /**
- * Title: Up from Ask always lands on the mode button
+ * Title: Up from Ask always lands on the question box
  *
  * Purpose: Pin plan 74 lane 3, bug 4 (roadmap: "Up from Ask lands on the mic one time and on the
- * paperclip another"). Ask set no Up of its own, so Steam's own step carried the ring into the row
- * of icons along the box's bottom edge, which it re-enters on whichever icon was used last (the mic
- * one time, the paperclip another; docs/test-evidence/plan64-ASKBAR-DOWN-TO-STOP-01.json: "Up from
- * Ask goes to Voice input (the last-used place in the row)"). Plan 74 sent it straight back to the
- * box. Since plan 82 Down from the box stops on the mode button first (maintainer 2026-10-06), so
- * Up from Ask goes back through the same stop: the mode button, then the box.
+ * paperclip another") in its plan 84 shape. Ask set no Up of its own, so Steam's own step carried the
+ * ring into the row of icons along the box's bottom edge, re-entering it on whichever icon was used
+ * last (docs/test-evidence/plan64-ASKBAR-DOWN-TO-STOP-01.json). Since plan 84 step 2 Ask is itself in
+ * that row, the small button at its right end, and Down from the box lands on it; so Up from Ask, and
+ * from every other stop of the strip's right-hand group, is Down reversed: the question box, by
+ * Steam's own transfer (docs/focus-graph.md, "The ask box's strip").
  *
- * The handler sits on the Ask row's own Focusable: a Decky Button does not forward move props on
- * the device, so a handler on the button itself would never run there.
+ * The handler sits on the strip's right-hand group (a Focusable): a Decky Button does not forward Up
+ * or Down on the device, so a handler on the button itself would never run there.
  *
- * Does not: prove the ring lands on the device; that is the Deck row's job.
+ * Does not: prove the ring lands on the device; that is the Deck row's job (P84-ASK-02).
  */
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -72,9 +72,10 @@ function buildProps(overrides: Partial<MainTabUnifiedAskBarProps> = {}): MainTab
   };
 }
 
-function askRowProps(): Record<string, unknown> | undefined {
-  const rows = hoisted.focusableProps.filter((p) => p.className === "bonsai-ask-row");
-  return rows[rows.length - 1];
+/** The strip's right-hand group: mode, mic or Stop, the X and Ask. */
+function rightGroupProps(): Record<string, unknown> | undefined {
+  const groups = hoisted.focusableProps.filter((p) => p.className === "bonsai-unified-input-actions-right");
+  return groups[groups.length - 1];
 }
 
 beforeEach(() => {
@@ -95,28 +96,31 @@ function mount(overrides: Partial<MainTabUnifiedAskBarProps> = {}) {
   return { ...view, modeButton };
 }
 
-describe("Up from Ask (plan 82: Up is Down reversed, so it lands on the mode button, not past it)", () => {
-  it("puts the ring on the mode button under the box", () => {
-    const { modeButton } = mount();
-
-    const onMoveUp = askRowProps()?.onMoveUp as () => boolean;
-    expect(onMoveUp).toBeTypeOf("function");
-    expect(onMoveUp()).toBe(true);
-    expect(document.activeElement).toBe(modeButton);
-  });
-
-  it("does the same from Clear, the other stop in Ask's row", () => {
-    const { modeButton } = mount({ showSearchClearButton: true });
-
-    expect((askRowProps()?.onMoveUp as () => boolean)()).toBe(true);
-    expect(document.activeElement).toBe(modeButton);
-  });
-
-  it("does not skip the mode button and take the ring straight to the question box", () => {
-    const spy = vi.spyOn(navFocusRegistry, "takeNavFocus").mockReturnValue(true);
+describe("Up from Ask (plan 84: Ask is in the box's own strip, so Up is the box)", () => {
+  it("takes the ring to the question box by Steam's transfer", () => {
+    const take = vi.spyOn(navFocusRegistry, "takeNavFocus").mockReturnValue(true);
     mount();
 
-    (askRowProps()?.onMoveUp as () => boolean)();
-    expect(spy).not.toHaveBeenCalledWith("unified-input");
+    const onMoveUp = rightGroupProps()?.onMoveUp as () => boolean;
+    expect(onMoveUp).toBeTypeOf("function");
+    expect(onMoveUp()).toBe(true);
+    expect(take).toHaveBeenCalledWith("unified-input");
+  });
+
+  it("does the same from the X, which sits beside Ask while the box has words", () => {
+    const take = vi.spyOn(navFocusRegistry, "takeNavFocus").mockReturnValue(true);
+    const { container } = mount({ showSearchClearButton: true });
+    expect(container.querySelector('button[aria-label="Clear"]')).toBeTruthy();
+
+    expect((rightGroupProps()?.onMoveUp as () => boolean)()).toBe(true);
+    expect(take).toHaveBeenCalledWith("unified-input");
+  });
+
+  it("never drops the ring on the mode button on the way, the stop the old Ask row went back through", () => {
+    vi.spyOn(navFocusRegistry, "takeNavFocus").mockReturnValue(true);
+    const { modeButton } = mount();
+
+    (rightGroupProps()?.onMoveUp as () => boolean)();
+    expect(document.activeElement).not.toBe(modeButton);
   });
 });

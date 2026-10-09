@@ -191,13 +191,14 @@ function buildAskBarHost(): { host: HTMLDivElement; askButton: HTMLButtonElement
   return { host, askButton };
 }
 
-function renderAskBarHandlers(host: HTMLDivElement, isAskInFlight: boolean) {
+/* Since plan 84 askBarHostRef holds the small Ask button itself, not a row around it. */
+function renderAskBarHandlers(askButton: HTMLButtonElement, isAskInFlight: boolean) {
   return renderHook(() =>
     useMainTabAskBarFocus(
       {
         unifiedInputFieldLayerRef: { current: null },
         attachActionHostRef: { current: null },
-        askBarHostRef: { current: host },
+        askBarHostRef: { current: askButton },
         presetCarouselHostRef: { current: null },
       },
       false,
@@ -235,7 +236,7 @@ function buildAskBarHostWithStop(): {
 }
 
 function renderAskBarHandlersWithStop(
-  host: HTMLDivElement,
+  askButton: HTMLButtonElement,
   attachHost: HTMLDivElement,
   isAskInFlight: boolean,
 ) {
@@ -244,7 +245,7 @@ function renderAskBarHandlersWithStop(
       {
         unifiedInputFieldLayerRef: { current: null },
         attachActionHostRef: { current: attachHost },
-        askBarHostRef: { current: host },
+        askBarHostRef: { current: askButton },
         presetCarouselHostRef: { current: null },
       },
       false,
@@ -266,8 +267,8 @@ describe("Down from the question box while a question is in flight reaches Stop"
   });
 
   it("lands the ring on Stop rather than doing nothing", () => {
-    const { host, attachHost, askButton, stopButton } = buildAskBarHostWithStop();
-    const { result } = renderAskBarHandlersWithStop(host, attachHost, true);
+    const { attachHost, askButton, stopButton } = buildAskBarHostWithStop();
+    const { result } = renderAskBarHandlersWithStop(askButton, attachHost, true);
 
     const onMoveDown = result.current.unifiedInputDeckNavHandlers.onMoveDown as () => boolean;
     const handled = onMoveDown();
@@ -278,8 +279,8 @@ describe("Down from the question box while a question is in flight reaches Stop"
   });
 
   it("still holds the ring still when there is no Stop button to reach either", () => {
-    const { host, askButton } = buildAskBarHost();
-    const { result } = renderAskBarHandlers(host, true);
+    const { askButton } = buildAskBarHost();
+    const { result } = renderAskBarHandlers(askButton, true);
 
     const onMoveDown = result.current.unifiedInputDeckNavHandlers.onMoveDown as () => boolean;
 
@@ -290,8 +291,8 @@ describe("Down from the question box while a question is in flight reaches Stop"
   });
 
   it("goes to the Ask button, not Stop, once the answer has landed", () => {
-    const { host, attachHost, askButton, stopButton } = buildAskBarHostWithStop();
-    const { result } = renderAskBarHandlersWithStop(host, attachHost, false);
+    const { attachHost, askButton, stopButton } = buildAskBarHostWithStop();
+    const { result } = renderAskBarHandlersWithStop(askButton, attachHost, false);
 
     const onMoveDown = result.current.unifiedInputDeckNavHandlers.onMoveDown as () => boolean;
 
@@ -314,8 +315,8 @@ describe("Down from the question box while the Ask button is greyed", () => {
   });
 
   it("does not land the ring on the greyed Ask button while a question is in flight", () => {
-    const { host, askButton } = buildAskBarHost();
-    const { result } = renderAskBarHandlers(host, true);
+    const { askButton } = buildAskBarHost();
+    const { result } = renderAskBarHandlers(askButton, true);
 
     const onMoveDown = result.current.unifiedInputDeckNavHandlers.onMoveDown as () => boolean;
     const handled = onMoveDown();
@@ -327,16 +328,16 @@ describe("Down from the question box while the Ask button is greyed", () => {
   });
 
   it("a greyed Ask button never takes the ring from focusAskPrimary directly", () => {
-    const { host, askButton } = buildAskBarHost();
-    const { result } = renderAskBarHandlers(host, true);
+    const { askButton } = buildAskBarHost();
+    const { result } = renderAskBarHandlers(askButton, true);
 
     expect(result.current.focusAskPrimary()).toBe(false);
     expect(document.activeElement).not.toBe(askButton);
   });
 
   it("still lands Down on the Ask button while idle", () => {
-    const { host, askButton } = buildAskBarHost();
-    const { result } = renderAskBarHandlers(host, false);
+    const { askButton } = buildAskBarHost();
+    const { result } = renderAskBarHandlers(askButton, false);
 
     const onMoveDown = result.current.unifiedInputDeckNavHandlers.onMoveDown as () => boolean;
     const handled = onMoveDown();

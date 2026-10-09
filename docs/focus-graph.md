@@ -173,3 +173,71 @@ whatever Down from question 6 reached before: the next day line, or the next que
   it back to six.
 - **Not backed by a device row yet.** The bookkeeper owns `docs/testing.md`; the D-pad walk it needs is
   in the lane report.
+
+### The ask box's strip (plan 84)
+
+Plan 84 step 2 folds two rows of the ask area into the question box's bottom strip: the big ASK button
+becomes a small ASK button at the strip's right end, and the italic "Context: …" line becomes a small game
+tag beside the paperclip (drawing frames "D" and "Z", `docs/planning/assets/84-vertical-room.html`). Code:
+`MainTabUnifiedAskBar.tsx`, `AskStripSendButtons.tsx`, `AskStripGameTag.tsx`, `useMainTabAskBarFocus.ts`.
+
+```
+suggestion chips
+   | Down (unchanged)                          ^ Up (unchanged)
+question box
+   | Down: small ASK (Stop while an answer is being written)
+   ^ Up: from mode, mic or Stop, X and ASK; the paperclip keeps its own Up
+[paperclip] (game tag) ........ [mode] [mic or Stop] [X, only with words] [ASK]
+   Left and Right walk the row; Left holds still on the paperclip, Right on the last live stop
+```
+
+Stops, left to right: the paperclip, the mode button, the mic (Stop while an answer is being written), the X
+that empties the box (only while the box has words), the small ASK. The game tag is a label, not a stop.
+
+- **Order and ends.** Right walks paperclip, mode, mic or Stop, X, ASK, and holds still on ASK. Left walks
+  back and holds still on the paperclip, as before (past it Steam would hand the ring to its own Quick Access
+  rail, LEFT-HOLDS-STILL-01). While an answer is being written ASK rests, so the walk ends on Stop, or on the
+  X when the box has words: Right there holds still rather than land on a button that does nothing. The
+  paperclip rests during an answer too, as it did before this step, so then the walk's left end is the mode
+  button.
+- **The game tag is not a stop.** It only reads. A on it would do nothing, and a stop that does nothing reads
+  as a dead press.
+- **The X sits just left of ASK, only while the box has words,** as it sat beside the big ASK. ASK keeps the
+  right end either way, so a thumb and the D-pad find it in the same place with or without words.
+- **Down from the box lands on ASK,** or on Stop while an answer is being written (ASK rests then). The
+  maintainer's rule of 2026-10-06 was that Down from the box lands on the row under it and skips nothing; the
+  strip is now that row and ASK is in it, so nothing is skipped and Left walks the rest. A person who has
+  typed or spoken a question and presses Down most likely wants to send it: Down then A sends, one press
+  fewer than before (Down, Down, A). With an empty box ASK still takes the ring; A there sends nothing and
+  the ring stays on ASK, and Left reaches the mic, the mode button and the paperclip.
+- **Up from the mode button, the mic or Stop, the X and ASK goes to the question box,** by Steam's own
+  transfer (`takeNavFocus("unified-input")`), the mirror of Down. Up from the paperclip is unchanged: the
+  character picture when it shows, else Steam's own step onto the box.
+- **Down from the strip is left to Steam.** Nothing sits below it in the dock except an attached screenshot's
+  row, when there is one, which Steam's own step reaches; with nothing there the ring stays. Not claimed,
+  because a container's last stop that claims Down dead-ends there (focus-graph-patterns, the Filters panel's
+  Close filters). An open mode or attach menu keeps its own Down into the menu.
+- **Up from the chips is unchanged:** the chips' own exit Up, onto the stop just above the dock
+  (`chipRowExitUp`). Down from the chips still lands on the question box. This step moves nothing above the
+  box.
+- **The strip is its own row, not part of the box's group.** It already was its own Steam focus row
+  (`bonsai-unified-input-actions-row`) drawn inside the box's card, and it stays one. Left and Right in the
+  box belong to the box (Left: paperclip, Right: mode button, both unchanged); Left and Right in the strip
+  walk its buttons. Every hop between the box and the strip is written down on both sides.
+- **Where each move is wired.** Left and Right sit on each button, the way the paperclip's and the mode
+  button's already did and the Deck showed working (LEFT-HOLDS-STILL-01, P82-BOX-DOWN-MODE-BUTTON). Up sits
+  on the strip's right-hand group (`bonsai-unified-input-actions-right`), because a Decky Button does not
+  forward Up or Down. Down from the box is the box's own handler (`unifiedInputDeckNavHandlers` in
+  `useMainTabAskBarFocus.ts`). Hops between the strip's buttons are a plain `focus()` inside one row, through
+  each button's own ref, never a class lookup; the hop into the box is Steam's transfer.
+- **What ASK does is unchanged.** A or a tap asks (`useAskBarPressHandlers.ts`), and the ring then goes to the
+  question box; with an empty box it stays on ASK. While an answer is being written ASK is dimmed and cannot
+  be pressed, and Stop in the mic's place stops the answer and hands the ring to the box. The ring watch after
+  a tab switch (`useAskBarInitialRingClaim.ts`, `askBarRingWatch.ts`) hands the ring to the question box,
+  never to ASK, so it needed no change; it still runs with the bar.
+- **The Steam settings matches stay where they have been since plan 45:** a card drawn over the chat just
+  above the box, which never depended on the big ASK. Up from the box enters its last row, Down from that row
+  returns to the box, B closes it. Not moved under the box: the box is now the last thing on the panel, and
+  there is no room under it.
+- **Not backed by a device row yet.** The bookkeeper owns `docs/testing.md`; rows P84-ASK-01 and P84-ASK-02
+  (plan 84 § 6) are in the lane report.

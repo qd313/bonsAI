@@ -75,15 +75,13 @@ export const ASK_LABEL_COLOR = "#a8b4c4";
 export const ASK_LABEL_COLOR_50 = "rgba(168, 180, 196, 0.5)";
 /** Ask label when the prompt has text and Ask is idle — readable “ready” state without Steam accent yellow. */
 export const ASK_LABEL_READY_COLOR = "#d0dbe8";
-/** Duration (ms) for Ask bar idle → ready visual crossfade (glass overlay + label). */
+/** Duration (ms) for the small Ask button's idle → ready → resting changes (colour, fill, opacity). */
 export const ASK_READY_STATE_TRANSITION_MS = 150;
 /*
- * ASK_BAR_LAYOUT_SHIFT_RIGHT_PX and ASK_BAR_ROW_WIDTH_EXTRA_PX were removed 2026-08-15. They tuned
- * a measured px width for the Ask row; that row is plain `width: 100%` now and matches the unified
- * input host by construction, so there is nothing left to nudge. See section-4.ts.
+ * ASK_BAR_LAYOUT_SHIFT_RIGHT_PX and ASK_BAR_ROW_WIDTH_EXTRA_PX were removed 2026-08-15, and
+ * ASK_BAR_PRIMARY_MIN_HEIGHT_PX (the big Ask row's 36px height) on 2026-10-08, when plan 84 folded
+ * that row into the question box's strip as a small Ask button (AskStripSendButtons.tsx).
  */
-/** Min height (px) for the main-tab Ask glass row and primary `DialogButton` (touch target). */
-export const ASK_BAR_PRIMARY_MIN_HEIGHT_PX = 36;
 /** Minimum characters in the unified field before settings search returns matches (avoids noisy single-letter results). */
 export const SETTINGS_SEARCH_MIN_QUERY_LENGTH = 2;
 

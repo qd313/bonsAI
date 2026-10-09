@@ -26,11 +26,6 @@
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
-      "path": "src/components/MainTabUnifiedAskBar.tsx",
-      "lines": 1283,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/knowledge_base_service.py",
       "lines": 1257,
       "role": ""
@@ -48,6 +43,11 @@
     {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
       "lines": 1209,
+      "role": ""
+    },
+    {
+      "path": "src/components/MainTabUnifiedAskBar.tsx",
+      "lines": 1200,
       "role": ""
     },
     {
@@ -112,7 +112,7 @@
     },
     {
       "path": "src/styles/sections/gamepadAndPullModels.ts",
-      "lines": 845,
+      "lines": 843,
       "role": ""
     },
     {

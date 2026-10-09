@@ -123,8 +123,6 @@ export function buildGamepadFocusRingStylesheet(): string {
         .bonsai-scope .bonsai-ai-char-grid-col button:focus-visible,
         .bonsai-scope button.bonsai-chat-secondary-btn.gpfocus,
         .bonsai-scope button.bonsai-chat-secondary-btn:focus-visible,
-        .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary.gpfocus,
-        .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary:focus-visible,
         .bonsai-scope .bonsai-askbar-target.gpfocus,
         .bonsai-scope .bonsai-askbar-target:focus-visible,
         .bonsai-scope .bonsai-attachment-preview-target.gpfocus,

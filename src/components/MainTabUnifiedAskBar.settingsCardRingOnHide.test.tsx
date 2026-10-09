@@ -202,8 +202,9 @@ describe("the Steam settings list goes away while the ring is on one of its rows
     expect(ring()).toBe(questionBox());
 
     // A bounded walk Down from there: every press moves to a stop not seen before, until the
-    // end of the bar, and the first press is never a dead one. The box's Down lands on the mode
-    // button under it (maintainer 2026-10-06); only the next Down reaches Ask.
+    // end of the bar, and the first press is never a dead one. Since plan 84 the box's Down lands
+    // on the small Ask in the strip right under it, and the strip leaves Down to Steam (nothing
+    // sits below it here), so the walk ends there.
     const seen = [ring()];
     for (let press = 0; press < 6; press++) {
       pressDown();
@@ -211,9 +212,8 @@ describe("the Steam settings list goes away while the ring is on one of its rows
       expect(seen).not.toContain(ring());
       seen.push(ring());
     }
-    expect(seen.length).toBeGreaterThan(1);
-    expect(seen[1]?.classList.contains("bonsai-ask-mode-trigger")).toBe(true);
-    expect(seen[2]?.classList.contains("bonsai-ask-primary")).toBe(true);
+    expect(seen.length).toBe(2);
+    expect(seen[1]?.classList.contains("bonsai-ask-primary")).toBe(true);
   });
 
   it("a new word with new matches: the row under the ring is gone, the ring goes to the box", () => {

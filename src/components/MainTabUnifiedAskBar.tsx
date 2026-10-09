@@ -2,38 +2,37 @@
  * Title: The Ask bar
  *
  * Purpose: The box a person types their question into, and every button
- * around it: the paperclip that attaches a screenshot, the tag naming the
- * game bonsAI thinks is running (AskStripGameTag.tsx, a label, not a button),
- * the button that picks which AI mode to ask in, the microphone (which turns
- * into a Stop button while a recording or an answer is running), and the big
- * Ask button itself.
+ * along its bottom strip: the paperclip that attaches a screenshot, the tag
+ * naming the game bonsAI thinks is running (AskStripGameTag.tsx, a label, not
+ * a button), the button that picks which AI mode to ask in, the microphone
+ * (which turns into a Stop button while a recording or an answer is running),
+ * the X that empties the box (only while it has words) and the small Ask
+ * button at the strip's right end (both AskStripSendButtons.tsx). Since plan
+ * 84 step 2 the strip holds what used to be two rows under the box: the big
+ * Ask button and the "Context: ..." line.
  * This file also draws the two small menus those buttons open, and the
  * preview strip that shows an attached screenshot with a way to remove it.
  *
- *     ┌─ input host ────────────────────────────────────┐
- *     │ [avatar]  the question box (multi-line)         │
- *     │           ......................................│
- *     │  [paperclip] (game)         [mode ▾] [mic/stop] │  <- bottom strip
- *     └───────────────────────────────────────────────────┘
+ *     (matching settings, only while what was typed
+ *      also matches one of the plugin's own settings; drawn over the chat)
+ *
+ *     ┌─ input host ─────────────────────────────────────────┐
+ *     │ [avatar]  the question box (multi-line)              │
+ *     │           ...........................................│
+ *     │ [clip] (game) ...... [mode ▾] [mic/stop] [x] [Ask →] │  <- bottom strip
+ *     └──────────────────────────────────────────────────────┘
  *        (the attach menu opens under the paperclip;
- *         the mode menu opens under [mode ▾])
+ *         the mode menu opens under [mode ▾]; [x] only with words)
  *
  *     (attached screenshot, only while one is attached)
  *     [ thumbnail + name ......................... ] [ x ]
  *
- *     ┌─ ask row ───────────────────────────────────────┐
- *     │                       ask                [clear]│  <- clear only while
- *     └───────────────────────────────────────────────────┘     a setting search
- *                                                                 is showing
- *     (matching settings, only while what was typed
- *      also matches one of the plugin's own settings)
- *
  * The same question box doubles as a search box for the plugin's own
- * settings: typing something that matches a setting's name shows a list of
- * matches below the Ask button, and Up, Down and Enter move through that
- * list instead of the box's own text. That search feature is unrelated to
- * asking the AI anything — it rides along on the same box because the box
- * was already there.
+ * settings: typing something that matches a setting's name shows a card of
+ * matches just above the box, drawn over the chat, whose rows the D-pad walks
+ * (Up from the box enters the row nearest it). That search feature is
+ * unrelated to asking the AI anything — it rides along on the same box because
+ * the box was already there.
  *
  * Used for: MainTab, as the Ask bar sitting in the dock at the bottom of the
  * screen.
@@ -66,10 +65,11 @@
  *    Enter either submits the question, or, while the settings-search
  *    results are showing, activates whichever result is highlighted.
  * 6. Render everything top to bottom, matching the drawing above: the input
- *    host, the two popovers anchored to their buttons, a status row for a
- *    screenshot capture or a media error, the attached-screenshot preview
- *    when there is one, the Ask row with its Ask and Clear buttons, and
- *    finally the settings-search results list.
+ *    host with its strip, the two popovers anchored to their buttons, the
+ *    settings-search card above the box, a status row for a screenshot
+ *    capture or a media error, and the attached-screenshot preview when there
+ *    is one. Every D-pad route in the strip is written down in
+ *    docs/focus-graph.md, "The ask box's strip (plan 84)".
  *
  * Gotchas:
  * - Every focus hand-off that crosses from one button or menu into another
@@ -92,7 +92,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { PanelSectionRow, TextField, Button, Focusable } from "@decky/ui";
 import {
-  ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
   UNIFIED_INPUT_ICON_STRIP_PX,
   UNIFIED_TEXT_BODY_MAX_PX,
   UNIFIED_TEXT_FONT_PX,
@@ -120,6 +119,7 @@ import {
 } from "./icons";
 import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
 import { AskStripGameTag } from "./AskStripGameTag";
+import { AskStripSendButtons, focusOwnRef } from "./AskStripSendButtons";
 import {
   ASK_MODE_ACCENT,
   ASK_MODE_ACCENT_BREATHE_HIGH,
@@ -253,7 +253,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     focusAskModeButton,
     unifiedInputDeckNavHandlers,
     avatarDeckNavHandlers,
-    askRowDeckNavHandlers,
   } = useMainTabAskBarFocus(
     {
       unifiedInputFieldLayerRef,
@@ -273,6 +272,18 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
   const { handleAskPress, handleStopPress } = useAskBarPressHandlers({
     isAsking, unifiedInput, onAskOllama, onCancelAsk, focusAskPrimary,
   });
+
+  /*
+   * The strip's right end (plan 84, AskStripSendButtons.tsx). The X's own element, so Right from the mic
+   * or Stop can step onto it; past it Right goes to ASK, and holds still once neither can take the ring.
+   */
+  const clearButtonRef = useRef<HTMLDivElement | null>(null);
+  const rightFromMicOrStop = () => focusOwnRef(clearButtonRef) || focusAskPrimary() || true;
+  /* The X vanishes once the box is empty, so the ring goes to the box (Deck 2026-10-02: nothing owned it). */
+  const onClearPress = () => {
+    clearUnifiedInput();
+    takeNavFocus("unified-input");
+  };
 
   /*
    * The text field's own Steam nav node, so a hop from another container (a preset chip's Down,
@@ -346,7 +357,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
    * Tap outside the card behaves as B (plan 45 section 4's "Tap outside" row / plan 56 lane E2
    * step 6): closes the card for the rest of this search and keeps what was typed. A document-
    * level listener, not a handler local to one part of the bar, because the card floats above
-   * the whole tab -- a tap on the Ask row below it, or on the chat behind it, both count as
+   * the whole tab -- a tap on the box's strip below it, or on the chat behind it, both count as
    * "outside" just as much as a tap on some other tab entirely. A finger has no D-pad ring to
    * hand back anywhere, so unlike B this only closes the card; it never calls
    * focusUnifiedTextField(). Capture phase so this only ever decides whether to close the card
@@ -401,9 +412,9 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
               placeholder: "Describe the level, boss, or puzzle you're stuck on.",
             } as Record<string, unknown>)
           : {})}
+        /* Down lands on the small Ask button in the strip under the box, or Stop while an answer is being
+           written (plan 84, useMainTabAskBarFocus.ts; docs/focus-graph.md, "The ask box's strip"). */
         {...unifiedInputDeckNavHandlers}
-        /* Down lands on the mode button under the box; the next Down reaches Ask (maintainer, 2026-10-06). */
-        {...({ onMoveDown: () => focusAskModeButton() } as Record<string, unknown>)}
         {...(showSettingsCard ? { onMoveUp: () => focusSettingsCardLastRow() } : {})}
         {...({ navRef: unifiedInputNavRef } as Record<string, unknown>)}
         style={{
@@ -625,10 +636,13 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
           boxSizing: "border-box",
         }}
       >
+        {/*
+          The strip: its own Steam row inside the box's card. Down from it is left to Steam (nothing sits
+          under the box but an attached screenshot's row); claiming it would dead-end the press there.
+        */}
         <Focusable
           className="bonsai-unified-input-actions-row"
           flow-children="horizontal"
-          {...({ onMoveDown: () => !askModeMenuOpen && !attachMenuOpen && focusAskPrimary() } as Record<string, unknown>)}
           style={{
             display: "flex",
             flexDirection: "row",
@@ -730,9 +744,17 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
           </Button>
           {/* The game tag (plan 84): what the "Context: …" line under the ask area used to say. A label, not a stop. */}
           <AskStripGameTag context={ollamaContext} />
+          {/*
+            Up from the mode button, the mic or Stop, the X and Ask: back to the box by Steam's transfer,
+            the mirror of the box's Down. On this group, not the buttons: a Decky Button does not forward Up.
+            While a menu is open Up is left to Steam, as Down from the strip used to be.
+          */}
           <Focusable
             className="bonsai-unified-input-actions-right"
             flow-children="horizontal"
+            {...({
+              onMoveUp: () => !askModeMenuOpen && !attachMenuOpen && focusUnifiedTextField(),
+            } as Record<string, unknown>)}
             style={{
               display: "flex",
               flexDirection: "row",
@@ -796,6 +818,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                 className="bonsai-askbar-target bonsai-unified-input-corner-right"
                 {...({
                   onMoveLeft: () => focusAskModeButton(),
+                  onMoveRight: rightFromMicOrStop,
                   onOKButton: (evt: { stopPropagation: () => void }) => {
                     evt.stopPropagation();
                     handleStopPress();
@@ -829,6 +852,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                 }
                 {...({
                   onMoveLeft: () => focusAskModeButton(),
+                  onMoveRight: rightFromMicOrStop,
                   onOKButton: (evt: { stopPropagation: () => void }) => {
                     evt.stopPropagation();
                     onMicInput();
@@ -857,6 +881,18 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                 </span>
               </Button>
             )}
+            {/* The X (only with words) and the small Ask at the strip's right end (plan 84). */}
+            <AskStripSendButtons
+              isAsking={isAsking}
+              askLooksReady={askLooksReady}
+              showClear={showSearchClearButton}
+              onAskPress={handleAskPress}
+              onClearPress={onClearPress}
+              askRef={askBarHostRef}
+              clearRef={clearButtonRef}
+              focusMicOrStop={focusMicOrStop}
+              focusAskPrimary={focusAskPrimary}
+            />
           </Focusable>
         </Focusable>
       </div>
@@ -1158,125 +1194,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     </div>
   </PanelSectionRow>
 )}
-<PanelSectionRow>
-  <div
-    className="bonsai-full-bleed-row bonsai-ask-bleed-wrap"
-    style={{ ...fullBleedRowStyle }}
-  >
-    <div
-      ref={askBarHostRef}
-      className={`bonsai-askbar-merged bonsai-glass-panel bonsai-askbar-row-host${askLooksReady ? " bonsai-askbar-merged--ready" : ""}`}
-      style={{
-        position: "relative",
-        /* Plain 100%: this row and the unified input host are sibling PanelSectionRow children of
-           one column, so they match by construction. Was a measured px var — see section-4.ts. */
-        width: "100%",
-        minWidth: 0,
-        minHeight: ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
-        borderRadius: 8,
-        overflow: "hidden",
-        boxSizing: "border-box",
-      }}
-    >
-      <Focusable
-        className="bonsai-ask-row"
-        flow-children="horizontal"
-        {...askRowDeckNavHandlers}
-        /* Up is Down reversed: Ask goes back to the mode button, not past it to the box. */
-        {...({ onMoveUp: () => focusAskModeButton() || focusUnifiedTextField() } as Record<string, unknown>)}
-        style={{
-          position: "relative",
-          display: "flex",
-          flexDirection: "row",
-          width: "100%",
-          minHeight: ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
-          alignItems: "stretch",
-        }}
-      >
-        <Button
-          className={`bonsai-askbar-target bonsai-ask-primary${askLooksReady ? " bonsai-ask-primary--ready" : ""}`}
-          {...({
-            /*
-             * Roadmap: "Left from the Ask button, and from the paperclip, hands the highlight to
-             * Steam's Quick Access rail" (measured 2026-09-15 evening,
-             * docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json steps 2 and 3).
-             * The Ask button is the leftmost stop in its own row, so nothing ever claimed Left --
-             * Steam's own "past the edge" nav ran and handed the ring out of the plugin entirely.
-             * Same fix as the paperclip's own Left above and the collapsed-history pill's
-             * (earlierPillLeftNavHandlers, MainTabChatTranscript.tsx): claim the move on
-             * onMoveLeft itself, with the onButtonDown twin only for the string-shaped presses
-             * tests and desktop keyboards deliver (focusNavigation.ts).
-             */
-            onMoveLeft: () => true,
-            onButtonDown: (button: unknown) => (isDeckDirectionLeftEvent(button) ? true : false),
-            onOKButton: (evt: { stopPropagation: () => void }) => {
-              if (isAsking) return;
-              evt.stopPropagation();
-              handleAskPress();
-            },
-          } as Record<string, unknown>)}
-          onClick={handleAskPress}
-          disabled={isAsking}
-          style={{
-            position: "relative",
-            width: "100%",
-            minHeight: ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
-            boxSizing: "border-box",
-            paddingRight: showSearchClearButton ? 42 : 0,
-            borderRadius: 0,
-            border: "none",
-          }}
-        >
-          <span style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-            <span className="bonsai-ask-primary-label" style={{ fontWeight: 600, fontVariant: "small-caps", letterSpacing: "0.55px", fontSize: 15, lineHeight: 1 }}>
-              ask
-            </span>
-          </span>
-        </Button>
-        {showSearchClearButton && (
-          <div
-            className="bonsai-askbar-clear-slot"
-            style={{
-              position: "absolute",
-              right: 0,
-              top: 0,
-              bottom: 0,
-              width: 42,
-              zIndex: 2,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              pointerEvents: "auto",
-            }}
-          >
-            <Button
-              /* The X vanishes once the box is empty, so the ring goes to the box (Deck 2026-10-02: nothing owned it). */
-              onClick={() => { clearUnifiedInput(); takeNavFocus("unified-input"); }}
-              className={FOCUS_RING_BTN_CLASS} aria-label="Clear"
-              style={{
-                width: "100%",
-                height: "100%",
-                minHeight: ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
-                padding: 0,
-                display: "flex",
-                alignItems: "center", justifyContent: "center",
-                border: "none",
-                background: askLooksReady ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.075)",
-                color: "#c8d4e0",
-                boxShadow: "inset 1px 0 0 rgba(255,255,255,0.1)",
-                transition: "background-color 120ms ease",
-              }}
-            >
-              <span className="bonsai-askbar-corner-icon">
-                <ClearIcon size={22} />
-              </span>
-            </Button>
-          </div>
-        )}
-      </Focusable>
-    </div>
-  </div>
-</PanelSectionRow>
     </>
   );
 }

@@ -1,14 +1,15 @@
 /**
- * Title: Left on the Ask button and the paperclip holds still
+ * Title: The strip's ends hold still: Left on the paperclip, Right on the small Ask
  * Purpose: Pin the roadmap fix for "Left from the Ask button, and from the paperclip, hands the
  *          highlight to Steam's Quick Access rail" (measured 2026-09-15 evening,
  *          docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json steps 2 and 3 and
  *          plan55-trap-run5-empty-chat-session-row-hades-running.json steps 3 and 4). Both
- *          buttons are the leftmost stop in their own row and had no sibling further left, so
+ *          buttons were the leftmost stop in their own row and had no sibling further left, so
  *          nothing ever claimed Left -- Steam's own "past the edge" nav ran and threw the ring
- *          out of the plugin entirely.
- * Used for: the Ask button's and the paperclip's onMoveLeft / onButtonDown props in
- *          MainTabUnifiedAskBar.tsx.
+ *          out of the plugin entirely. Since plan 84 step 2 the small Ask is the RIGHT end of the
+ *          question box's strip, so the same rule holds Right on it, and its Left walks the strip.
+ * Used for: the paperclip's onMoveLeft / onButtonDown props in MainTabUnifiedAskBar.tsx, and the
+ *          small Ask's onMoveLeft / onMoveRight in AskStripSendButtons.tsx.
  * Solves: same shape, same fix as the collapsed-history pill's Left
  *         (earlierPillLeftNavHandlers, MainTabChatTranscript.tsx) -- claim the move on
  *         onMoveLeft itself, the handler Steam actually invokes on device, with the
@@ -104,22 +105,27 @@ afterEach(() => {
   resetNavFocusRegistry();
 });
 
-describe("Left on the Ask button", () => {
-  it("claims the move on onMoveLeft and holds still", () => {
+/*
+ * Plan 84 step 2 moved Ask into the question box's strip, at its right end: Ask is no longer the
+ * leftmost stop of a row of its own, so its Left walks the strip (to the mic, or the X while the box
+ * has words), and it is Right on Ask that must hold still now (docs/focus-graph.md, "The ask box's
+ * strip"). The paperclip is still the strip's left end and keeps its own Left below.
+ */
+describe("the small Ask at the strip's right end", () => {
+  it("claims Right on onMoveRight and holds still", () => {
     render(<MainTabUnifiedAskBar {...buildProps()} />);
     const ask = buttonProps("bonsai-ask-primary");
     expect(ask).toBeTruthy();
-    const onMoveLeft = ask?.onMoveLeft as () => boolean;
-    expect(onMoveLeft).toBeTruthy();
-    expect(onMoveLeft()).toBe(true);
+    const onMoveRight = ask?.onMoveRight as () => boolean;
+    expect(onMoveRight).toBeTruthy();
+    expect(onMoveRight()).toBe(true);
   });
 
-  it("also claims a Left-shaped onButtonDown, for the string-shaped presses tests and desktop keyboards deliver", () => {
-    render(<MainTabUnifiedAskBar {...buildProps()} />);
+  it("walks Left to the mic beside it, not out of the plugin", () => {
+    const { container } = render(<MainTabUnifiedAskBar {...buildProps()} />);
     const ask = buttonProps("bonsai-ask-primary");
-    const onButtonDown = ask?.onButtonDown as (button: unknown) => boolean;
-    expect(onButtonDown(gamepadEvent(DIR_LEFT))).toBe(true);
-    expect(onButtonDown(gamepadEvent(DIR_RIGHT))).toBe(false);
+    expect((ask?.onMoveLeft as () => boolean)()).toBe(true);
+    expect(document.activeElement).toBe(container.querySelector('button[aria-label="Voice input"]'));
   });
 });
 

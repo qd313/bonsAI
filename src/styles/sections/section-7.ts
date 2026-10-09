@@ -38,8 +38,7 @@ export function buildSection7Section(): string {
         .bonsai-scope .bonsai-unified-input-host .Panel.Focusable > div,
         .bonsai-scope .bonsai-askbar-target,
         .bonsai-scope .bonsai-askbar-target > div,
-        .bonsai-scope .bonsai-askbar-target > span,
-        .bonsai-scope .bonsai-askbar-merged .DialogButton {
+        .bonsai-scope .bonsai-askbar-target > span {
           background: transparent !important;
           background-color: transparent !important;
           background-image: none !important;

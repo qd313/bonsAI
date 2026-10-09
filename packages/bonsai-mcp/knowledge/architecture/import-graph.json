@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 752,
-  "edgeCount": 2197,
+  "fileCount": 753,
+  "edgeCount": 2200,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -47,6 +47,14 @@
     "src/components/AskStripGameTag.tsx": {
       "imports": [
         "src/types/bonsaiUi.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabUnifiedAskBar.tsx"
+      ]
+    },
+    "src/components/AskStripSendButtons.tsx": {
+      "imports": [
+        "src/components/icons.tsx"
       ],
       "importedBy": [
         "src/components/MainTabUnifiedAskBar.tsx"
@@ -437,6 +445,7 @@
     "src/components/MainTab.askStrip.deck.test.tsx": {
       "imports": [
         "src/components/MainTab.tsx",
+        "src/styles/bonsaiScopeStylesheet.ts",
         "src/test-harness/fakeDeckyUi.tsx",
         "src/types/bonsaiUi.ts",
         "src/utils/navFocusRegistry.ts",
@@ -1205,6 +1214,7 @@
     "src/components/MainTabUnifiedAskBar.tsx": {
       "imports": [
         "src/components/AskStripGameTag.tsx",
+        "src/components/AskStripSendButtons.tsx",
         "src/components/CharacterRoleplayEmoticon.tsx",
         "src/components/MainTabAskModeMenuPopover.tsx",
         "src/components/MainTabAttachMenuPopover.tsx",
@@ -2139,6 +2149,7 @@
         "src/components/bonsaiLogoPath.ts"
       ],
       "importedBy": [
+        "src/components/AskStripSendButtons.tsx",
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabScreenshotBrowser.tsx",
@@ -5342,6 +5353,7 @@
       "importedBy": [
         "src/components/BonsaiModalScope.tsx",
         "src/components/BonsaiPluginShell.tsx",
+        "src/components/MainTab.askStrip.deck.test.tsx",
         "src/components/MainTabUnifiedAskBar.boxRing.test.tsx",
         "src/components/OllamaTab.focusRing.test.tsx",
         "src/components/SettingsDeveloperLeftoverRing.test.tsx",

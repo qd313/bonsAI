@@ -2,15 +2,17 @@
  * Title: The Ask box and the row of suggestion chips under it
  *
  * Purpose: Styles two things that both need to span edge to edge, with no
- * side gutter: the Ask bar (the typing box and its Ask button), and the
- * sideways-scrolling row of suggested-prompt chips above it. It also
- * draws each chip itself — its size, its text, and the small sliding
- * animation that reveals the next batch of suggestions.
+ * side gutter: the Ask bar (the typing box, whose own bottom strip holds the
+ * small Ask button since plan 84), and the sideways-scrolling row of
+ * suggested-prompt chips above it. It also draws each chip itself — its
+ * size, its text, and the small sliding animation that reveals the next
+ * batch of suggestions.
  *
  *     ┌────────────────────────────────────────┐
  *     │  [chip]  [chip]        <- suggestions   │
  *     ├────────────────────────────────────────┤
- *     │  Ask something...            [ Ask ]    │  <- the Ask bar
+ *     │  Ask something...                       │  <- the Ask bar
+ *     │  [📎] (game)      [mode] [mic] [Ask →]  │
  *     └────────────────────────────────────────┘
  *
  * Used for: Folded into the plugin's one combined stylesheet by
@@ -25,8 +27,8 @@
  * and the Ask bar; the spacing under the chip row (one row gap shared with
  * the gap under the question box, plan 72); each chip's own size and
  * label; the carousel's sliding track; the chip's focus bar and its
- * out-of-chips flash; the settings-results card; and last the Ask bar's
- * own width rules.
+ * out-of-chips flash; and last the settings-results card. (The big Ask
+ * row's own width rules went with the row, plan 84.)
  *
  * What changed on 2026-09-17 (plan 60), and why, since three rules below
  * only make sense together:
@@ -104,8 +106,7 @@ export function buildSection4Section(): string {
           Row width tracks the tab scroll area; side inset lives on TabContentsScroll (BONSAI_PLUGIN_SIDE_PAD_PX).
           Do not use negative margins here — they cancel the scroll inset and hug the QAM edge.
         */
-        .bonsai-scope .bonsai-full-bleed-row,
-        .bonsai-scope .bonsai-ask-bleed-wrap.bonsai-full-bleed-row {
+        .bonsai-scope .bonsai-full-bleed-row {
           width: 100% !important;
           max-width: 100% !important;
           min-width: 0 !important;
@@ -386,49 +387,6 @@ export function buildSection4Section(): string {
         }
         .bonsai-scope .bonsai-settings-results-card-row + .bonsai-settings-results-card-row {
           margin-top: ${SETTINGS_CARD_ROW_GAP_PX}px;
-        }
-
-        /*
-          The Ask row is a sibling PanelSectionRow of the unified input host in the same column, so
-          100% on both makes them the same width by construction.
-
-          It used to be a measured pixel snapshot instead (--bonsai-askbar-outer-width, set from
-          host width in useUnifiedInputSurface, plus a --bonsai-ask-margin-left correction). That
-          made the Ask row the only row that could not follow the panel: a sample taken mid-carousel,
-          at first paint, or before a padding change settled froze it narrower than its neighbours,
-          which is the "Ask bar no longer spans QAM width" bug. Both vars are gone — do not
-          reintroduce a px width here.
-        */
-        .bonsai-scope .bonsai-ask-bleed-wrap.bonsai-full-bleed-row {
-          width: 100% !important;
-          max-width: 100% !important;
-          min-width: 0 !important;
-          margin-left: 0 !important;
-          margin-right: 0 !important;
-        }
-
-        /* H1 fix: never set a px min-width here — it inflates tab min-content and spills the QAM
-           horizontally. max-width stays none so a % parent cannot clip the glass. */
-        .bonsai-scope .bonsai-askbar-row-host,
-        .bonsai-scope .bonsai-ask-bleed-wrap .bonsai-askbar-merged {
-          width: 100% !important;
-          min-width: 0 !important;
-          max-width: none !important;
-          margin-left: 0 !important;
-          margin-right: 0 !important;
-        }
-
-        .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary.DialogButton,
-        .bonsai-scope .bonsai-ask-bleed-wrap .Panel.Focusable {
-          width: 100% !important;
-          max-width: none !important;
-          min-width: 0 !important;
-        }
-
-        .bonsai-scope .bonsai-ask-bleed-wrap,
-        .bonsai-scope .bonsai-ask-bleed-wrap .bonsai-askbar-merged {
-          flex: 1 1 auto !important;
-          align-self: stretch !important;
         }
 
         `;

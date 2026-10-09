@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 778,
-  "edgeCount": 2329,
+  "edgeCount": 2331,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3162,7 +3162,9 @@
     "src/features/chat-title/deckyHeaderShape.ts": {
       "imports": [
         "src/features/chat-title/deckyHeaderLayout.ts",
-        "src/features/chat-title/deckyTitleParts.ts"
+        "src/features/chat-title/deckyTitleParts.ts",
+        "src/utils/bonsaiDebugIngest.ts",
+        "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
         "src/features/chat-title/ChatTitleView.tsx",
@@ -6989,6 +6991,7 @@
       "imports": [],
       "importedBy": [
         "src/components/BonsaiDebugOverlay.tsx",
+        "src/features/chat-title/deckyHeaderShape.ts",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
         "src/hooks/useBonsaiPluginShell.ts",
@@ -8069,6 +8072,7 @@
         "src/features/chat-title/ChatTitleView.tsx",
         "src/features/chat-title/ChatsMenu.tsx",
         "src/features/chat-title/chatNameNav.ts",
+        "src/features/chat-title/deckyHeaderShape.ts",
         "src/features/chat-title/takeFirstChatStop.ts",
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/topStripHeightLock.test.tsx",

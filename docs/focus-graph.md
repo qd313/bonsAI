@@ -453,7 +453,11 @@ Stops: the tab bar (one stop, step 4's) and the chat's name (step 5's). Decky's 
   stop right above the chat; Up from the top of a tab body (`TabBodyFocusRoot`), B in a tab body
   (`onCancelFromTabHeader`) and the hidden-header trap go to the bar, which is in the strip now.
 - **Never on a hidden control.** Off Main, the name is not drawn at all, and the arrow is hidden: the bar claims
-  Left, Right and Up, so no move of ours leads onto the arrow.
+  Left, Right and Up, so no move of ours leads onto the arrow. Steam can still put the ring there itself (plan 84
+  test C: Right from Steam's column of tab icons landed on the invisible arrow every time), so **while the arrow
+  is hidden, a landing on it is caught** and handed to the tab bar (`deckyHeaderShape.ts`, a watch on the arrow's
+  ring marker, like the hidden-header trap), including a ring already on it as it hides (a tab chosen by touch).
+  On Main the arrow is visible, Decky's own, and left alone: a person who walks Left onto it stays there.
 - **The ring watch after a reopen** counts the bar and the name as bonsAI's (see step 5's section): a ring on the
   bar in the window's first seconds goes to the question box; on the name, it stays.
 - **Not backed by a device row yet.** Rows P84-HEIGHT-01, P84-OTHER-01, P84-BACK-01, P84-QAM-01 and P84-RING-01

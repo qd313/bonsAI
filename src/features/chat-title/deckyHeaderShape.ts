@@ -16,7 +16,7 @@
  * (useQamPanelHeightGuard.ts, which measures to Decky's page while it is moved), the body offset, the stop
  * above the chat.
  *
- * Solves: Three rules from the Deck tests (plan 84 § 4):
+ * Solves: Four rules from the Deck tests (plan 84 § 4):
  *   - Steam's shared 14-point padding belongs to every Quick Access page, and bonsAI stays loaded when the
  *     menu switches page: zeroing it moved Steam's own Performance page up 14 (test B, v1). Only Decky's
  *     own page is moved; Steam's container is never written to.
@@ -25,11 +25,18 @@
  *     layout, with the bar in bonsAI's box, never a half-moved one.
  *   - Everything is undone exactly: each inline value written is the one saved before, put back when
  *     bonsAI's view goes away (bonsAI closes, or another plugin replaces it).
+ *   - A hidden back arrow stays in Steam's D-pad path: on the Deck the ring landed on the invisible arrow
+ *     every time it came in from Steam's column of tab icons (test C). bonsAI's own moves never lead there
+ *     (the tab bar claims Left, Right and Up), and while the arrow is hidden a landing on it is caught and
+ *     handed to the tab bar, the way the hidden-header trap catches Steam's hidden tab buttons.
  *
  * Does not: Draw the bar or the name (the title view does), route the D-pad (the bar and the name do), or
  * size bonsAI's own box (the height lock's job).
  */
 import { useSyncExternalStore } from "react";
+
+import { bonsaiDebugLog } from "../../utils/bonsaiDebugIngest";
+import { takeNavFocus } from "../../utils/navFocusRegistry";
 
 import { deckyHeaderParts, type DeckyHeaderParts } from "./deckyTitleParts";
 import {
@@ -55,7 +62,13 @@ type Saved = {
   bare: HTMLElement[];
 };
 
-type Applied = { parts: DeckyHeaderParts; saved: Saved; arrowHidden: boolean };
+type Applied = {
+  parts: DeckyHeaderParts;
+  saved: Saved;
+  arrowHidden: boolean;
+  /** Watches the hidden arrow for Steam's ring marker while it is hidden. */
+  arrowTrap: MutationObserver | null;
+};
 
 let applied: Applied | null = null;
 const listeners = new Set<() => void>();
@@ -151,12 +164,13 @@ function apply(parts: DeckyHeaderParts): void {
   page.style.height = height;
   page.style.minHeight = height;
   page.style.maxHeight = height;
-  applied = { parts, saved, arrowHidden: false };
+  applied = { parts, saved, arrowHidden: false, arrowTrap: null };
 }
 
 function undo(): void {
   if (!applied) return;
   const { parts, saved } = applied;
+  applied.arrowTrap?.disconnect();
   applied = null;
   parts.title.style.paddingTop = saved.titlePaddingTop;
   parts.title.style.position = saved.titlePosition;
@@ -170,13 +184,34 @@ function undo(): void {
   for (const el of saved.bare) if (el.getAttribute("style") === "") el.removeAttribute("style");
 }
 
-/** Off the Main tab, Decky's back arrow is hidden; on it, it is as Decky drew it. True when that changed. */
+/** The hidden arrow holds Steam's ring: hand it to the tab bar. */
+function catchRingOnHiddenArrow(arrow: HTMLElement): void {
+  if (!arrow.classList.contains("gpfocus")) return;
+  const bounced = takeNavFocus("tab-bar");
+  bonsaiDebugLog("tabBar:arrowTrap", "ring on Decky's hidden back arrow", "H3", { bounced });
+}
+
+/**
+ * Off the Main tab, Decky's back arrow is hidden and watched (a landing on it goes to the tab bar); on it,
+ * it is as Decky drew it and left alone. True when that changed.
+ */
 function shapeForTab(tab: string | null): boolean {
-  if (!applied?.parts.arrow) return false;
+  const arrow = applied?.parts.arrow;
+  if (!applied || !arrow) return false;
   const hide = tab !== null && tab !== "main";
   if (hide === applied.arrowHidden) return false;
   applied.arrowHidden = hide;
-  applied.parts.arrow.style.display = hide ? "none" : applied.saved.arrowDisplay;
+  arrow.style.display = hide ? "none" : applied.saved.arrowDisplay;
+  applied.arrowTrap?.disconnect();
+  applied.arrowTrap = null;
+  if (hide) {
+    /* A ring already on it as it hides (a tab chosen by touch) leaves no change for the watcher to see. */
+    catchRingOnHiddenArrow(arrow);
+    if (typeof MutationObserver !== "undefined") {
+      applied.arrowTrap = new MutationObserver(() => catchRingOnHiddenArrow(arrow));
+      applied.arrowTrap.observe(arrow, { attributes: true, attributeFilter: ["class"] });
+    }
+  }
   return true;
 }
 
@@ -215,6 +250,7 @@ export function releaseDeckyHeaderShape(): void {
 
 /** Test-only reset: forgets without writing anything. */
 export function resetDeckyHeaderShape(): void {
+  applied?.arrowTrap?.disconnect();
   applied = null;
   listeners.clear();
 }

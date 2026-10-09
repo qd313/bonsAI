@@ -400,6 +400,65 @@ describe("the D-pad at the top, other tabs", () => {
   });
 });
 
+describe("the hidden back arrow never keeps the ring (plan 84 test C)", () => {
+  /** Lets the page's change watchers run. */
+  const settle = async () => {
+    await act(async () => {
+      await Promise.resolve();
+    });
+  };
+
+  it("off Main, Steam's own landing on the hidden arrow (Right from its icon column) is taken to the strip", async () => {
+    mount({ startTab: "ollama" });
+    expect(arrow()!.style.display).toBe("none");
+    act(() => putSteamRingOn(arrow()));
+    await settle();
+    expect(ring()).toBe("the tab bar");
+  });
+
+  it("every time, not only the first", async () => {
+    mount({ startTab: "ollama" });
+    for (let i = 0; i < 3; i += 1) {
+      act(() => putSteamRingOn(q(".first-control")));
+      await settle();
+      act(() => putSteamRingOn(arrow()));
+      await settle();
+      expect(ring()).toBe("the tab bar");
+    }
+  });
+
+  it("a ring already on the arrow when it is hidden (a tab chosen by touch) goes to the strip", async () => {
+    mount();
+    act(() => putSteamRingOn(arrow()));
+    act(() => getChatTitleState().tabBar!.selectTab("settings"));
+    await settle();
+    expect(arrow()!.style.display).toBe("none");
+    expect(ring()).toBe("the tab bar");
+  });
+
+  it("on Main the arrow is Decky's to hold: a person who walks Left onto it is left there, after a round trip too", async () => {
+    mount();
+    act(() => putSteamRingOn(arrow()));
+    await settle();
+    expect(ring()).toBe("Decky's back arrow");
+    act(() => getChatTitleState().tabBar!.selectTab("ollama"));
+    act(() => getChatTitleState().tabBar!.selectTab("main"));
+    await settle();
+    act(() => putSteamRingOn(name()));
+    act(() => putSteamRingOn(arrow()));
+    await settle();
+    expect(ring()).toBe("Decky's back arrow");
+  });
+
+  it("once bonsAI has closed, nothing watches Decky's arrow", async () => {
+    const view = mount({ startTab: "ollama" });
+    view.rerender(<BonsaiInDecky open={false} />);
+    act(() => putSteamRingOn(arrow()));
+    await settle();
+    expect(steamRingHolder()).toBe(arrow());
+  });
+});
+
 describe("a bounded walk at the top of the Main tab", () => {
   /**
    * Steam's glide after every landing: a stop not wholly on the screen is brought into view. Decky's bar is

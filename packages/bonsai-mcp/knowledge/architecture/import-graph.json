@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 767,
-  "edgeCount": 2257,
+  "fileCount": 770,
+  "edgeCount": 2271,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2754,7 +2754,8 @@
       ],
       "importedBy": [
         "src/features/chat-slots/useChatSlotDeleteConfirm.tsx",
-        "src/features/chat-title/ChatsMenu.test.tsx"
+        "src/features/chat-title/ChatsMenu.test.tsx",
+        "src/features/chat-title/chatsMenuBoxReturn.test.tsx"
       ]
     },
     "src/features/chat-slots/ChatSlotRenameModal.test.tsx": {
@@ -2771,7 +2772,8 @@
       "importedBy": [
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
         "src/features/chat-slots/useChatSlotRenameModal.tsx",
-        "src/features/chat-title/ChatsMenu.test.tsx"
+        "src/features/chat-title/ChatsMenu.test.tsx",
+        "src/features/chat-title/chatsMenuBoxReturn.test.tsx"
       ]
     },
     "src/features/chat-slots/useChatSlotDeleteConfirm.test.tsx": {
@@ -2966,12 +2968,14 @@
         "src/features/chat-title/chatNameNav.ts",
         "src/features/chat-title/chatTitleStore.ts",
         "src/features/chat-title/chatTitleStyles.ts",
+        "src/features/chat-title/deckyTitleParts.ts",
         "src/features/chat-title/nameRowBalance.ts",
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/ChatsMenu.test.tsx",
+        "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/useChatTitlePublisher.test.tsx",
         "src/features/chat-title/useChatTriggerSwitch.test.tsx",
         "src/index.tsx"
@@ -3016,6 +3020,7 @@
     },
     "src/features/chat-title/chatNameNav.ts": {
       "imports": [
+        "src/features/chat-title/deckyTitleParts.ts",
         "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
@@ -3024,7 +3029,8 @@
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/ChatTitleView.tsx",
         "src/features/chat-title/ChatsMenu.test.tsx",
-        "src/features/chat-title/ChatsMenu.tsx"
+        "src/features/chat-title/ChatsMenu.tsx",
+        "src/features/chat-title/chatsMenuBoxReturn.test.tsx"
       ]
     },
     "src/features/chat-title/chatTitleStore.test.tsx": {
@@ -3044,6 +3050,7 @@
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/ChatsMenu.tsx",
         "src/features/chat-title/chatTitleStore.test.tsx",
+        "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/useChatSwitchActions.ts",
         "src/features/chat-title/useChatTitlePublisher.test.tsx",
         "src/features/chat-title/useChatTitlePublisher.ts",
@@ -3069,10 +3076,28 @@
       ],
       "importedBy": [
         "src/features/chat-title/ChatsMenu.test.tsx",
+        "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/noSavedChatsRow.test.tsx",
         "src/features/chat-title/useChatTitlePublisher.test.tsx",
         "src/features/chat-title/useChatTriggerSwitch.test.tsx"
       ]
+    },
+    "src/features/chat-title/chatsMenuBoxReturn.test.tsx": {
+      "imports": [
+        "src/features/chat-slots/ChatSlotDeleteModal.tsx",
+        "src/features/chat-slots/ChatSlotRenameModal.tsx",
+        "src/features/chat-title/ChatTitleView.tsx",
+        "src/features/chat-title/chatNameNav.ts",
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/features/chat-title/chatTitleTestFixtures.tsx",
+        "src/features/chat-title/deckyTitleParts.ts",
+        "src/features/plugin-shell/initialSessionSnapshot.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/hooks/useBonsaiPluginShell.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx"
+      ],
+      "importedBy": []
     },
     "src/features/chat-title/chatsMenuIcons.tsx": {
       "imports": [
@@ -3097,6 +3122,14 @@
       ],
       "importedBy": [
         "src/features/chat-title/ChatsMenu.tsx"
+      ]
+    },
+    "src/features/chat-title/deckyTitleParts.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/features/chat-title/ChatTitleView.tsx",
+        "src/features/chat-title/chatNameNav.ts",
+        "src/features/chat-title/chatsMenuBoxReturn.test.tsx"
       ]
     },
     "src/features/chat-title/nameRowBalance.ts": {
@@ -3358,6 +3391,7 @@
         "src/utils/bonsaiSessionSurvival.ts"
       ],
       "importedBy": [
+        "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/index.helpChip.test.tsx",
         "src/index.tsx",
         "src/utils/bonsaiSessionSurvival.test.ts"
@@ -3398,6 +3432,7 @@
         "src/features/chat-slots/useChatSlotRenameModal.tsx",
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/ChatsMenu.tsx",
+        "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/useChatTriggerSwitch.test.tsx",
         "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
@@ -4536,6 +4571,7 @@
       ],
       "importedBy": [
         "src/components/SettingsTab.clearAllBack.test.tsx",
+        "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
         "src/features/plugin-shell/useTabAndModeGuardEffects.ts",
         "src/hooks/useBonsaiPluginShell.test.ts",
@@ -6133,6 +6169,7 @@
         "src/features/chat-sum-up/SessionTitleOffer.test.tsx",
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/ChatsMenu.test.tsx",
+        "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/noSavedChatsRow.test.tsx",
         "src/features/chat-title/useChatTitlePublisher.test.tsx",
         "src/features/chat-title/useChatTriggerSwitch.test.tsx",
@@ -6207,6 +6244,12 @@
         "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
+    },
+    "src/test-harness/steamRing.tsx": {
+      "imports": [],
+      "importedBy": [
+        "src/features/chat-title/chatsMenuBoxReturn.test.tsx"
+      ]
     },
     "src/types.d.ts": {
       "imports": [],

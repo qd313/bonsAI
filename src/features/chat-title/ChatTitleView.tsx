@@ -45,6 +45,7 @@ import { ChatNameWords } from "./ChatNameWords";
 import { registerChatNameNav, rememberChatNameElement, unregisterChatNameNav } from "./chatNameNav";
 import { CHAT_TITLE_CSS } from "./chatTitleStyles";
 import { getChatTitleState, setChatsMenuOpen, useChatTitleState, type ChatTitleChat } from "./chatTitleStore";
+import { rememberChatTitleRoot } from "./deckyTitleParts";
 import { useNameRowBalance } from "./nameRowBalance";
 
 /** The small line under the name: "chat 2 of 5", or "not saved yet" for a new chat. */
@@ -158,7 +159,14 @@ export function ChatTitleView(): React.ReactElement {
   if (chat && s.menuOpen) classes.push("bonsai-chat-title--menu-open");
   const style = s.litColor ? ({ "--bonsai-chat-title-lit": s.litColor } as React.CSSProperties) : undefined;
   return (
-    <div ref={rootRef} className={classes.join(" ")} style={style}>
+    <div
+      ref={(el: HTMLDivElement | null) => {
+        rootRef.current = el;
+        rememberChatTitleRoot(el);
+      }}
+      className={classes.join(" ")}
+      style={style}
+    >
       <style>{CHAT_TITLE_CSS}</style>
       {chat ? <ChatNameRow chat={chat} balance={balance} menuOpen={s.menuOpen} /> : <Wordmark />}
     </div>

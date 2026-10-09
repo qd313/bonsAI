@@ -388,7 +388,11 @@ Your chats
 - **A box opened from the menu** (rename, delete, save) gets the ring after the ring has gone back to the name, and
   names the name as the place to give it back to (the box-return registry, ids "chat-slot-rename" and
   "desktop-note-save", the ids the row used). The name is in Decky's bar, outside the tab that a box's close
-  rebuilds, so it is still there when the box closes.
+  rebuilds, so it is still there when the box closes. **The return is Steam's transfer onto the name**
+  (`returnRingToChatName`, registered with the owner), never the registry's plain `focus()`: measured on the Deck
+  2026-10-08, Rename chat then B left the ring on Decky's back arrow, where one A closes bonsAI. For about a second
+  after the return, a landing on the back arrow is taken back to the name (Steam places the ring itself as a box
+  closes, and chose the arrow); after that, a person who walks Left onto the arrow is left there.
 - **LT and RT are refused while the menu is open.** Leaving the Main tab closes it.
 - **Not backed by a device row yet.** Rows P84-NAME-01, P84-NAME-02, P84-NAME-03, P84-MENU-01 and the LT/RT half of
   P84-HINTS-01 (plan 84 § 6) are in the lane report.

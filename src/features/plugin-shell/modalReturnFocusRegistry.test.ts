@@ -213,4 +213,44 @@ describe("modal return-focus registry", () => {
     expect(clearAllFocus).toHaveBeenCalled();
     expect(cacheFocus).not.toHaveBeenCalled();
   });
+
+  it("an owner outside the plugin's box gets Steam's transfer, never a plain focus() (plan 84 step 5)", () => {
+    const name = mountButton();
+    const focus = vi.spyOn(name, "focus");
+    const transfer = vi.fn(() => {
+      name.classList.add("gpfocus");
+      return true;
+    });
+    registerModalReturnFocusOwner("chat-slot-rename", name, transfer);
+    rememberModalReturnFocus("chat-slot-rename");
+
+    expect(restoreModalReturnFocus()).toBe(true);
+    expect(transfer).toHaveBeenCalledTimes(1);
+    expect(focus).not.toHaveBeenCalled();
+  });
+
+  it("a transfer Steam does not follow reports false, so the retry tries again", () => {
+    const arrow = mountButton();
+    arrow.classList.add("gpfocus"); // Steam left the ring on Decky's back arrow
+    const name = mountButton();
+    registerModalReturnFocusOwner("chat-slot-rename", name, () => true);
+    rememberModalReturnFocus("chat-slot-rename");
+
+    expect(restoreModalReturnFocus()).toBe(false);
+  });
+
+  it("re-registering without a transfer drops the old one", () => {
+    const first = mountButton();
+    const transfer = vi.fn(() => true);
+    registerModalReturnFocusOwner("chat-slot-rename", first, transfer);
+    const second = mountButton();
+    const focus = vi.spyOn(second, "focus");
+    registerModalReturnFocusOwner("chat-slot-rename", second);
+    rememberModalReturnFocus("chat-slot-rename");
+
+    restoreModalReturnFocus();
+
+    expect(transfer).not.toHaveBeenCalled();
+    expect(focus).toHaveBeenCalled();
+  });
 });

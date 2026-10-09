@@ -20,6 +20,7 @@ import { ChatSlotRenameModal } from "./ChatSlotRenameModal";
 import {
   rememberModalReturnFocus,
   registerModalReturnFocusOwner,
+  type ModalReturnTransfer,
 } from "../plugin-shell/modalReturnFocusRegistry";
 
 export type UseChatSlotRenameModalArgs = {
@@ -32,7 +33,9 @@ export type UseChatSlotRenameModalArgs = {
  * In: two optional callbacks for a popup opened from inside another popup,
  * and the function that actually saves the new name.
  * Out: one function, `openRenameModal()`, that a chat row calls with the
- * chat's id, its current name, and the button to return focus to.
+ * chat's id, its current name, the button to return focus to, and, when
+ * that button sits outside the plugin's own box (the chat's name in
+ * Decky's bar), Steam's transfer onto it.
  * Can go wrong: if the caller does not pass a return-focus element,
  * nothing focuses back anywhere when the popup closes.
  */
@@ -42,10 +45,15 @@ export function useChatSlotRenameModal({
   onRename,
 }: UseChatSlotRenameModalArgs) {
   const openRenameModal = useCallback(
-    (slotId: string, currentLabel: string, returnFocusEl: HTMLElement | null) => {
+    (
+      slotId: string,
+      currentLabel: string,
+      returnFocusEl: HTMLElement | null,
+      returnTransfer?: ModalReturnTransfer,
+    ) => {
       onBeforeNestedDeckyModal?.();
       rememberModalReturnFocus("chat-slot-rename");
-      if (returnFocusEl) registerModalReturnFocusOwner("chat-slot-rename", returnFocusEl);
+      if (returnFocusEl) registerModalReturnFocusOwner("chat-slot-rename", returnFocusEl, returnTransfer);
 
       const handle = showModal(
         <ChatSlotRenameModal

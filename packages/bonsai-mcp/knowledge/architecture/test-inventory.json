@@ -162,6 +162,7 @@
     "src/features/chat-title/ChatTitleView.test.tsx",
     "src/features/chat-title/ChatsMenu.test.tsx",
     "src/features/chat-title/chatTitleStore.test.tsx",
+    "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
     "src/features/chat-title/noSavedChatsRow.test.tsx",
     "src/features/chat-title/useChatTitlePublisher.test.tsx",
     "src/features/chat-title/useChatTriggerSwitch.test.tsx",

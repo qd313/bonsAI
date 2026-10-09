@@ -21,6 +21,7 @@ import { ChatSlotDeleteModal } from "./ChatSlotDeleteModal";
 import {
   rememberModalReturnFocus,
   registerModalReturnFocusOwner,
+  type ModalReturnTransfer,
 } from "../plugin-shell/modalReturnFocusRegistry";
 
 export type UseChatSlotDeleteConfirmArgs = {
@@ -30,8 +31,9 @@ export type UseChatSlotDeleteConfirmArgs = {
 };
 
 /**
- * In: the two box callbacks and the delete call. Out: `openDeleteConfirm(slotId, label, returnFocusEl)`,
- * which opens the box for that chat; `returnFocusEl` is where the ring goes when the box closes.
+ * In: the two box callbacks and the delete call. Out: `openDeleteConfirm(slotId, label, returnFocusEl,
+ * returnTransfer)`, which opens the box for that chat; `returnFocusEl` is where the ring goes when the box
+ * closes, and `returnTransfer` is Steam's transfer onto it when it sits outside the plugin's own box.
  */
 export function useChatSlotDeleteConfirm({
   onBeforeNestedDeckyModal,
@@ -39,10 +41,10 @@ export function useChatSlotDeleteConfirm({
   onDeleteSlot,
 }: UseChatSlotDeleteConfirmArgs) {
   return useCallback(
-    (slotId: string, label: string, returnFocusEl: HTMLElement | null) => {
+    (slotId: string, label: string, returnFocusEl: HTMLElement | null, returnTransfer?: ModalReturnTransfer) => {
       onBeforeNestedDeckyModal?.();
       rememberModalReturnFocus("chat-slot-rename");
-      if (returnFocusEl) registerModalReturnFocusOwner("chat-slot-rename", returnFocusEl);
+      if (returnFocusEl) registerModalReturnFocusOwner("chat-slot-rename", returnFocusEl, returnTransfer);
       /*
         Two buttons, Cancel first: Steam puts the ring on the first button of a box, so an A pressed
         by habit keeps the chat, and B keeps it too (maintainer's call, 2026-10-06; it was three

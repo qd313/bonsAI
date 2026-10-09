@@ -80,19 +80,34 @@ export type ModalReturnFocusId =
    *  row's four buttons can be the one that opened the popup. */
   | "ollama-thinking-effort";
 
+/**
+ * Steam's own transfer onto a return target that sits in another Steam container, where a plain
+ * `focus()` does not move the ring: the chat's name in Decky's title bar (plan 84 step 5). Returns
+ * whether Steam took it; whether the ring really landed is still read off the element.
+ */
+export type ModalReturnTransfer = () => boolean;
+
 const owners = new Map<ModalReturnFocusId, HTMLElement>();
+const transfers = new Map<ModalReturnFocusId, ModalReturnTransfer>();
 let pendingReturn: ModalReturnFocusId | null = null;
 
 /**
- * In: an id naming which button this is, and the button's own element (or
- * null, which is how a ref callback reports "this unmounted").
+ * In: an id naming which button this is, the button's own element (or
+ * null, which is how a ref callback reports "this unmounted"), and, for a
+ * button outside the plugin's own box, Steam's transfer onto it.
  * Out: nothing — it just remembers or forgets the button.
  * Can go wrong: nothing — a button registering itself twice just replaces
- * the earlier entry.
+ * the earlier entry, transfer included.
  */
-export function registerModalReturnFocusOwner(id: ModalReturnFocusId, el: HTMLElement | null): void {
+export function registerModalReturnFocusOwner(
+  id: ModalReturnFocusId,
+  el: HTMLElement | null,
+  transfer?: ModalReturnTransfer,
+): void {
   if (el) owners.set(id, el);
   else owners.delete(id);
+  if (el && transfer) transfers.set(id, transfer);
+  else transfers.delete(id);
 }
 
 /**
@@ -212,10 +227,20 @@ export function restoreModalReturnFocusWithRetry(
  * here, the sanctioned fix is a `navRef` + `TakeFocus(true)` per
  * [navFocusRegistry.ts](../../utils/navFocusRegistry.ts) — but that needs each opener to expose a
  * nav node, so it is a bigger change and wants its own measurement first.
+ *
+ * That measurement came on 2026-10-08 for the chat's name in Decky's title bar (plan 84 step 5): the
+ * plain `focus()` left Steam's ring on Decky's back arrow. An owner registered with a transfer gets
+ * that transfer instead, and never the plain `focus()`.
  */
 function focusOwnerById(id: ModalReturnFocusId): boolean {
   const el = owners.get(id);
   if (!el) return false;
+
+  const transfer = transfers.get(id);
+  if (transfer) {
+    transfer();
+    return elementHasGamepadFocus(el);
+  }
 
   // Same target ladder as replyStopRegistry: Decky's focusable Panel wrapper first, then the
   // native button, then the registered element itself.
@@ -246,5 +271,6 @@ function focusOwnerById(id: ModalReturnFocusId): boolean {
  */
 export function resetModalReturnFocusRegistry(): void {
   owners.clear();
+  transfers.clear();
   pendingReturn = null;
 }

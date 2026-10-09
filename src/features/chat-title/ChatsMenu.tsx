@@ -28,7 +28,8 @@
  *     themselves are chatsMenuModel.ts's.
  *   - Out: Up from the first chat, B anywhere, or any action: Steam's transfer back onto the name
  *     (chatNameNav.ts), then the menu closes. An action that opens a box (rename, delete, save) hands
- *     the ring to the name first, and the box gives it back there when it closes.
+ *     the ring to the name first, and the box gives it back there when it closes, by Steam's transfer
+ *     too (`returnRingToChatName`; a plain focus() left it on Decky's back arrow on the Deck).
  */
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
@@ -44,7 +45,7 @@ import {
   rememberModalReturnFocus,
   registerModalReturnFocusOwner,
 } from "../plugin-shell/modalReturnFocusRegistry";
-import { chatNameElement, takeChatNameFocus } from "./chatNameNav";
+import { chatNameElement, returnRingToChatName, takeChatNameFocus } from "./chatNameNav";
 import { CHATS_MENU_ACTIONS, chatsMenuMove, chatWhenLabel, type ChatsMenuAction, type MenuDirection } from "./chatsMenuModel";
 import { ChatsMenuIcon } from "./chatsMenuIcons";
 import { CHATS_MENU_CSS } from "./chatsMenuStyles";
@@ -167,12 +168,12 @@ export function ChatsMenu(props: ChatsMenuProps): React.ReactElement {
       props.setAtCreate(false);
       void props.onCreateSlot?.();
     } else if (id === "rename") {
-      openRenameModal(slotId, openLabel ?? "", chatNameElement());
+      openRenameModal(slotId, openLabel ?? "", chatNameElement(), returnRingToChatName);
     } else if (id === "delete") {
-      openDeleteConfirm(slotId, openLabel ?? "", chatNameElement());
+      openDeleteConfirm(slotId, openLabel ?? "", chatNameElement(), returnRingToChatName);
     } else if (id === "save") {
       rememberModalReturnFocus("desktop-note-save");
-      registerModalReturnFocusOwner("desktop-note-save", chatNameElement());
+      registerModalReturnFocusOwner("desktop-note-save", chatNameElement(), returnRingToChatName);
       props.onSaveChat?.();
     } else if (id === "sumup") {
       props.sumUp?.startSumUp();

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 774,
-  "edgeCount": 2286,
+  "fileCount": 775,
+  "edgeCount": 2293,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -455,26 +455,6 @@
       ],
       "importedBy": []
     },
-    "src/components/MainTab.chatRowDownEarlier.test.tsx": {
-      "imports": [
-        "src/components/MainTab.tsx",
-        "src/test-harness/fakeDeckyUi.tsx",
-        "src/types/bonsaiUi.ts",
-        "src/utils/inputTransparency.ts",
-        "src/utils/uiDocument.ts"
-      ],
-      "importedBy": []
-    },
-    "src/components/MainTab.chatRowDownRetry.test.tsx": {
-      "imports": [
-        "src/components/MainTab.tsx",
-        "src/test-harness/fakeDeckyUi.tsx",
-        "src/types/bonsaiUi.ts",
-        "src/utils/inputTransparency.ts",
-        "src/utils/uiDocument.ts"
-      ],
-      "importedBy": []
-    },
     "src/components/MainTab.dockClass.test.ts": {
       "imports": [
         "src/components/MainTab.tsx"
@@ -494,6 +474,29 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTab.tabBarDownEarlier.test.tsx": {
+      "imports": [
+        "src/components/MainTab.tsx",
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/types/bonsaiUi.ts",
+        "src/utils/inputTransparency.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/MainTab.tabBarDownRetry.test.tsx": {
+      "imports": [
+        "src/components/MainTab.tsx",
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/types/bonsaiUi.ts",
+        "src/utils/inputTransparency.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTab.tsx": {
       "imports": [
         "src/components/MainTabChatTranscript.tsx",
@@ -509,6 +512,7 @@
         "src/features/chat-sum-up/chatSumUpModel.ts",
         "src/features/chat-title/ChatsMenu.tsx",
         "src/features/chat-title/chatTitleStore.ts",
+        "src/features/chat-title/takeFirstChatStop.ts",
         "src/features/chat-title/useChatSwitchActions.ts",
         "src/features/chat-title/useChatTitlePublisher.ts",
         "src/features/chat-title/useChatTriggerSwitch.ts",
@@ -523,11 +527,11 @@
       ],
       "importedBy": [
         "src/components/MainTab.askStrip.deck.test.tsx",
-        "src/components/MainTab.chatRowDownEarlier.test.tsx",
-        "src/components/MainTab.chatRowDownRetry.test.tsx",
         "src/components/MainTab.dockClass.test.ts",
         "src/components/MainTab.gameLighter.test.ts",
         "src/components/MainTab.streamScramble.test.tsx",
+        "src/components/MainTab.tabBarDownEarlier.test.tsx",
+        "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/chatTitleTestFixtures.tsx",
         "src/features/chat-title/useChatTitlePublisher.test.tsx",
@@ -3132,6 +3136,8 @@
     "src/features/chat-title/chatTitleStore.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/MainTab.tabBarDownEarlier.test.tsx",
+        "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/components/MainTab.tsx",
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/ChatTitleView.tsx",
@@ -3198,6 +3204,16 @@
       "importedBy": [
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/ChatTitleView.tsx"
+      ]
+    },
+    "src/features/chat-title/takeFirstChatStop.ts": {
+      "imports": [
+        "src/utils/buildTurnHeaderElement.tsx",
+        "src/utils/chatTranscriptNavHelpers.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTab.tsx"
       ]
     },
     "src/features/chat-title/useChatSwitchActions.ts": {
@@ -6138,8 +6154,8 @@
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
         "src/components/MainTab.askStrip.deck.test.tsx",
-        "src/components/MainTab.chatRowDownEarlier.test.tsx",
-        "src/components/MainTab.chatRowDownRetry.test.tsx",
+        "src/components/MainTab.tabBarDownEarlier.test.tsx",
+        "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/components/MainTabAskModeMenuPopover.test.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
         "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx",
@@ -6367,8 +6383,8 @@
       "importedBy": [
         "src/components/AskStripGameTag.tsx",
         "src/components/MainTab.askStrip.deck.test.tsx",
-        "src/components/MainTab.chatRowDownEarlier.test.tsx",
-        "src/components/MainTab.chatRowDownRetry.test.tsx",
+        "src/components/MainTab.tabBarDownEarlier.test.tsx",
+        "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/components/MainTab.tsx",
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
         "src/components/MainTabChatTranscript.cutSpoilerCover.test.tsx",
@@ -7202,6 +7218,7 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
+        "src/features/chat-title/takeFirstChatStop.ts",
         "src/utils/buildTurnHeaderElement.test.tsx",
         "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/questionBubbleFit.test.tsx"
@@ -7304,6 +7321,7 @@
         "src/features/chat-slots/ChatSlotRow.tsx",
         "src/features/chat-title/ChatsMenu.tsx",
         "src/features/chat-title/chatNameNav.ts",
+        "src/features/chat-title/takeFirstChatStop.ts",
         "src/hooks/useEarlierTurnsPill.ts",
         "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/handRingOnWhenGone.test.ts",
@@ -7680,8 +7698,8 @@
         "src/components/ContextChipLadder.stillRow.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
         "src/components/ContextChipLadder.tsx",
-        "src/components/MainTab.chatRowDownEarlier.test.tsx",
-        "src/components/MainTab.chatRowDownRetry.test.tsx",
+        "src/components/MainTab.tabBarDownEarlier.test.tsx",
+        "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/components/MainTab.tsx",
         "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",
@@ -7933,6 +7951,7 @@
       "importedBy": [
         "src/components/ContextChipLadder.ringWalk.test.tsx",
         "src/components/MainTab.askStrip.deck.test.tsx",
+        "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
         "src/components/MainTabChatTranscript.firstArchivedHeaderMoveUp.test.ts",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
@@ -7967,6 +7986,7 @@
         "src/features/chat-title/ChatTitleView.tsx",
         "src/features/chat-title/ChatsMenu.tsx",
         "src/features/chat-title/chatNameNav.ts",
+        "src/features/chat-title/takeFirstChatStop.ts",
         "src/features/chat-title/useChatTriggerSwitch.test.tsx",
         "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
@@ -8644,8 +8664,8 @@
         "src/components/DrgGlossaryTermChip.tsx",
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/MainTab.askStrip.deck.test.tsx",
-        "src/components/MainTab.chatRowDownEarlier.test.tsx",
-        "src/components/MainTab.chatRowDownRetry.test.tsx",
+        "src/components/MainTab.tabBarDownEarlier.test.tsx",
+        "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
         "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
         "src/components/MainTabChatTranscript.ratingRowWalk.test.tsx",

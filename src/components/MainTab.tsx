@@ -48,6 +48,7 @@ import { ChatSlotRow } from "../features/chat-slots/ChatSlotRow";
 import { useChatTitlePublisher } from "../features/chat-title/useChatTitlePublisher";
 import { useChatSwitchActions } from "../features/chat-title/useChatSwitchActions";
 import { useChatTriggerSwitch } from "../features/chat-title/useChatTriggerSwitch";
+import { takeFirstChatStop } from "../features/chat-title/takeFirstChatStop";
 import { ChatsMenu } from "../features/chat-title/ChatsMenu";
 import { useChatTitleValue } from "../features/chat-title/chatTitleStore";
 import type { ChatListRow } from "../features/chat-sum-up/chatSumUpModel";
@@ -271,12 +272,20 @@ export function MainTab(props: MainTabProps) {
   const sumUpOnly = Boolean(chatSumUp?.summingUp) && !props.isAsking;
   /* The chat's name in Decky's bar reads the open chat from here, and LT and RT step through the
      chats in the old row's order from anywhere on this tab (plan 84 step 5). */
+  const transcriptEmpty = (props.askThreadCollapsed?.length ?? 0) === 0 && !props.askThreadDisplayQuestion?.trim();
   const chatActions = useChatSwitchActions({
     summaries: props.chatSlotSummaries,
     activeSlotId: props.activeChatSlotId,
     atCreate: slotRowAtCreate,
     setAtCreate: setSlotRowAtCreate,
     onSelectSlot: props.onChatSlotSelect,
+    /* Down from the tab bar on this tab (index.tsx): the chat's first stop, or the question box. */
+    takeFirstStop: () =>
+      takeFirstChatStop({
+        firstTurnId: props.askThreadCollapsed?.[0]?.id ?? "live",
+        openTurnId: props.expandedTurnKey,
+        chatEmpty: slotRowAtCreate || (transcriptEmpty && !props.isAsking),
+      }),
   });
   useChatTriggerSwitch();
   useChatTitlePublisher(
@@ -287,7 +296,7 @@ export function MainTab(props: MainTabProps) {
       generatingSlotId: props.generatingSlotId,
       unreadSlotIds: props.unreadSlotIds,
       answerInFlight: props.isAsking,
-      transcriptEmpty: (props.askThreadCollapsed?.length ?? 0) === 0 && !props.askThreadDisplayQuestion?.trim(),
+      transcriptEmpty,
     },
     chatActions,
   );

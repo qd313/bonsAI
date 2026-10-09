@@ -171,7 +171,7 @@ import { useExternalNavigationActions } from "./features/plugin-shell/useExterna
 import { useAppLogPrefsAndCapturedErrors } from "./features/plugin-shell/useAppLogPrefsAndCapturedErrors";
 import { useTabAndModeGuardEffects } from "./features/plugin-shell/useTabAndModeGuardEffects";
 import { ChatTitleView } from "./features/chat-title/ChatTitleView";
-import { setChatTitleLitColor, setChatTitleTab } from "./features/chat-title/chatTitleStore";
+import { setChatTitleLitColor, setChatTitleTab, takeChatFirstStop } from "./features/chat-title/chatTitleStore";
 
 /*
  * In: nothing — no props. Every value Content needs, it reads from settings,
@@ -1139,8 +1139,8 @@ const Content: React.FC = () => {
           ),
         },
         // Every body but Main sits in a TabBodyFocusRoot so the collapsing tab bar can hand the
-        // ring down into it and the body can hand it back up (plan 30 W4). Main's chat-slot row
-        // is already a registered stop and does both itself.
+        // ring down into it and the body can hand it back up (plan 30 W4). Main hands the ring to
+        // the chat's own first stop (tabBarExitDown below), and the top of the chat hands it back.
         {
           id: "ollama",
           title: DECKY_TAB_TITLES.ollama,
@@ -1194,12 +1194,14 @@ const Content: React.FC = () => {
   /** The bar's dash count follows the mounted tabs — five without Developer, six with. */
   const tabBarIds = useMemo(() => deckyTabs.map((row) => row.id as BonsaiTabId), [deckyTabs]);
   /**
-   * Down from the collapsing tab bar (plan 30 W4). Main's first stop is the chat-slot row, already a
-   * registered nav target; every other body is wrapped in a TabBodyFocusRoot. False when the target
-   * is not registered, and the bar lets Steam decide (the hidden-header trap covers that landing).
+   * Down from the collapsing tab bar (plan 30 W4). On Main, the chat's first stop, or the question box
+   * when the chat is empty (plan 84 step 5: the saved-chats row that used to sit there is gone; the Main
+   * tab's own action, through the chat title store). Every other body is wrapped in a TabBodyFocusRoot.
+   * False when the target is not registered, and the bar lets Steam decide (the hidden-header trap
+   * covers that landing).
    */
   const tabBarExitDown = useCallback(
-    () => takeNavFocus(currentTab === "main" ? "chat-slot-row" : tabBodyNavFocusId(currentTab as BonsaiTabId)),
+    () => (currentTab === "main" ? takeChatFirstStop() : takeNavFocus(tabBodyNavFocusId(currentTab as BonsaiTabId))),
     [currentTab],
   );
   /**

@@ -182,6 +182,14 @@ export function setChatsMenuOpen(open: boolean): void {
   set({ ...state, menuOpen: next });
 }
 
+/**
+ * Down from what sits above the chat: Steam's ring onto the chat's first stop, through the Main tab's own
+ * action. False when the Main tab is not drawn (the caller then leaves the press to Steam).
+ */
+export function takeChatFirstStop(): boolean {
+  return state.actions?.takeFirstStop() ?? false;
+}
+
 /** The whole state, redrawing whenever any of it changes. For the name row. */
 export function useChatTitleState(): ChatTitleState {
   return useSyncExternalStore(subscribeChatTitle, getChatTitleState, getChatTitleState);

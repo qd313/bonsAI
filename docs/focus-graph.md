@@ -333,6 +333,16 @@ bonsAI's tab bar
   old chat), the ring goes to the question box (`takeNavFocus("unified-input")`); on the name, the chips or the
   box it stays.
 
+**Down from the tab bar on Main enters the chat itself** (`takeFirstChatStop.ts`, called by index.tsx's
+`tabBarExitDown` through the Main tab's action in the store). The saved-chats row used to be the first stop under the
+tab bar; it is gone, so Down lands on the chat's own first stop, by Steam's transfer, in this order: the "N earlier"
+line when it is drawn; the first question's text (never its Retry); the open question's text when the first question
+is a closed older row (older rows have no stop of their own to take by name, so Down lands one row lower and Up
+reaches the row above); the newest question's row while it is closed; the question box. An empty chat, or the
+new-chat spot, goes straight to the question box. Never left to Steam: Steam's own Down from the tab bar lands on
+its hidden tab buttons, and the hidden-header trap throws the ring back, so the press would do nothing. Step 6 calls
+the same action from the name's Down once the tab bar sits above the name.
+
 **The chats menu (drawn in bonsAI's own box, over the answer, its foot on the dock's top edge).** `ChatsMenu.tsx`,
 moves in `chatsMenuModel.ts`. Every stop is a sibling in one container, so a move inside it is a plain `focus()`.
 

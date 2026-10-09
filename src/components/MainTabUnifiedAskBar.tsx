@@ -2,16 +2,18 @@
  * Title: The Ask bar
  *
  * Purpose: The box a person types their question into, and every button
- * around it: the paperclip that attaches a screenshot, the button that picks
- * which AI mode to ask in, the microphone (which turns into a Stop button
- * while a recording or an answer is running), and the big Ask button itself.
+ * around it: the paperclip that attaches a screenshot, the tag naming the
+ * game bonsAI thinks is running (AskStripGameTag.tsx, a label, not a button),
+ * the button that picks which AI mode to ask in, the microphone (which turns
+ * into a Stop button while a recording or an answer is running), and the big
+ * Ask button itself.
  * This file also draws the two small menus those buttons open, and the
  * preview strip that shows an attached screenshot with a way to remove it.
  *
  *     ┌─ input host ────────────────────────────────────┐
  *     │ [avatar]  the question box (multi-line)         │
  *     │           ......................................│
- *     │  [paperclip]                [mode ▾] [mic/stop] │  <- bottom strip
+ *     │  [paperclip] (game)         [mode ▾] [mic/stop] │  <- bottom strip
  *     └───────────────────────────────────────────────────┘
  *        (the attach menu opens under the paperclip;
  *         the mode menu opens under [mode ▾])
@@ -117,6 +119,7 @@ import {
   ImageAttachmentIcon,
 } from "./icons";
 import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
+import { AskStripGameTag } from "./AskStripGameTag";
 import {
   ASK_MODE_ACCENT,
   ASK_MODE_ACCENT_BREATHE_HIGH,
@@ -212,6 +215,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     isQamSetting,
     onFocusHandlersReady,
     onNavigateToPermissions,
+    ollamaContext,
   } = props;
 
   const askModeMenuAnchorRef = useRef<HTMLDivElement | null>(null);
@@ -631,7 +635,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             flexWrap: "nowrap",
             width: "100%",
             height: "100%",
-            alignItems: "flex-end",
+            alignItems: "center",
             justifyContent: "flex-start",
             margin: 0,
             padding: 0,
@@ -724,6 +728,8 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
               )}
             </span>
           </Button>
+          {/* The game tag (plan 84): what the "Context: …" line under the ask area used to say. A label, not a stop. */}
+          <AskStripGameTag context={ollamaContext} />
           <Focusable
             className="bonsai-unified-input-actions-right"
             flow-children="horizontal"
@@ -731,7 +737,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
               display: "flex",
               flexDirection: "row",
               flexWrap: "nowrap",
-              alignItems: "flex-end",
+              alignItems: "center",
               justifyContent: "flex-end",
               gap: 5,
               flexShrink: 0,

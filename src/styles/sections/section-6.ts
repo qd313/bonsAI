@@ -464,9 +464,6 @@ ${buildReplyRatingChoicesSection()}
           animation: bonsai-thinking-spin 0.9s linear infinite !important;
           transform-origin: center center !important;
         }
-        .bonsai-scope .bonsai-context-footnote {
-          margin-top: 4px !important;
-        }
         .bonsai-scope .bonsai-chat-feedback-row__label {
           font-size: 11px !important;
           color: #9fb7d5 !important;
@@ -480,7 +477,7 @@ ${buildReplyRatingChoicesSection()}
           Main tab bottom dock. The column stretches to the scroll viewport's bottom edge
           (min-height measured by useMainTabColumnFill — the offset to the viewport crosses
           hashed Steam wrappers, so it cannot be a CSS constant) and the dock's margin-top: auto
-          pins presets + Ask bar + context line to the bottom. With a long transcript the column
+          pins presets + Ask bar to the bottom. With a long transcript the column
           outgrows the min-height and the dock scrolls in flow, exactly as before.
         */
         .bonsai-scope .bonsai-main-tab-column {

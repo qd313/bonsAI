@@ -182,8 +182,9 @@ export type MainTabProps = {
  * text, whether an Ask is running, the screenshot browser's state, and so on.
  * Out: the assembled screen — an optional row of chat tabs, the transcript,
  * then a dock holding the suggestion row and the Ask bar, and, depending on
- * what the props say, a mic-permission notice, the screenshot browser, a
- * plain navigation message, and a footnote naming the game in context.
+ * what the props say, a mic-permission notice, the screenshot browser and a
+ * plain navigation message. The game in context is a tag in the Ask bar's own
+ * strip since plan 84, not a footnote under it.
  * What can go wrong: almost nothing is computed here — one wrapped callback
  * aside, this file only arranges props into JSX. A missing optional prop
  * (say, no onChatSlotCreate) just hides the piece that needed it rather than
@@ -206,8 +207,8 @@ export type MainTabProps = {
  *    mainTabDockClassName): the suggestion row, the Ask bar (which hands its own
  *    focus-jump functions back up through onFocusHandlersReady), a
  *    mic-permission notice if the microphone was refused, the screenshot
- *    browser if it is open, a plain navigation message, and a footnote
- *    naming the game bonsAI thinks it is talking about.
+ *    browser if it is open, and a plain navigation message. The game bonsAI
+ *    thinks it is talking about is the Ask bar's game tag (AskStripGameTag.tsx).
  */
 
 /**
@@ -397,25 +398,7 @@ export function MainTab(props: MainTabProps) {
             <div style={{ color: "#81c784", fontSize: 13 }}>{props.navigationMessage}</div>
           </PanelSectionRow>
         )}
-        {props.ollamaContext && (
-          <PanelSectionRow>
-            <div
-              className="bonsai-context-footnote"
-              style={{
-                fontSize: 10,
-                color: "#8fa8c4",
-                lineHeight: 1.35,
-                fontStyle: "italic",
-              }}
-            >
-              {props.ollamaContext.app_context === "active" && props.ollamaContext.app_id
-                ? `Context: active game ${
-                    props.ollamaContext.app_name?.trim() || `AppID ${props.ollamaContext.app_id}`
-                  }`
-                : "Context: no active game detected"}
-            </div>
-          </PanelSectionRow>
-        )}
+        {/* The "Context: …" line that sat here is the game tag in the question box's strip now (plan 84). */}
         </div>
         </div>
       </PanelSection>

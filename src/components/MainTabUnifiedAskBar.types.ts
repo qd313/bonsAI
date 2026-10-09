@@ -17,7 +17,7 @@
  */
 import React from "react";
 
-import type { AskAttachment } from "../types/bonsaiUi";
+import type { AskAttachment, OllamaContextUi } from "../types/bonsaiUi";
 import type { AskModeId } from "../data/askMode";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 
@@ -63,6 +63,8 @@ export type MainTabUnifiedAskBarProps = {
   isQamSetting: (settingPath: string) => boolean;
   onFocusHandlersReady?: (handlers: { focusUnifiedTextField: () => boolean }) => void;
   onNavigateToPermissions?: (capability: BonsaiCapabilityKey) => void;
+  /** The running game, for the game tag in the box's strip (AskStripGameTag.tsx, plan 84). */
+  ollamaContext?: OllamaContextUi;
 };
 
 export function screenshotMediaErrorCapability(message: string): BonsaiCapabilityKey {

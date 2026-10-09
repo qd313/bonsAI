@@ -217,19 +217,20 @@ export function buildSection8Section(): string {
          * Must include .bonsai-unified-input-host — the section-8 column reset on
          * .bonsai-unified-input-host .Panel.Focusable:not(.bonsai-ask-mode-menu-list):not(.bonsai-attach-menu-list) has higher
          * specificity than .bonsai-unified-input-bottom-actions alone and was stacking paperclip /
-         * mode / mic vertically (see DeckCapture_20260611_201557). */
+         * mode / mic vertically (see DeckCapture_20260611_201557). Items sit on the row's centre line,
+         * as the plan 84 drawing's strip does, so the game tag's words line up with the icons. */
         .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions > .Panel.Focusable,
         .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions > .Panel.Focusable.bonsai-unified-input-actions-row {
           width: 100% !important; min-height: 100% !important;
           flex-direction: row !important; justify-content: flex-start !important;
-          align-items: flex-end !important; flex-wrap: nowrap !important;
+          align-items: center !important; flex-wrap: nowrap !important;
         }
         .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-unified-input-actions-left.Panel.Focusable {
           width: auto !important;
           min-width: 0 !important;
           flex: 0 0 auto !important;
           flex-direction: row !important;
-          align-items: flex-end !important;
+          align-items: center !important;
           justify-content: flex-start !important;
         }
         .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-unified-input-actions-right.Panel.Focusable {
@@ -238,7 +239,7 @@ export function buildSection8Section(): string {
           flex: 0 0 auto !important;
           margin-left: auto !important;
           flex-direction: row !important;
-          align-items: flex-end !important;
+          align-items: center !important;
           justify-content: flex-end !important;
         }
 

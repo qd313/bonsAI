@@ -1,0 +1,42 @@
+{
+  "plan": "84 - more room for the answer, step 6 (the tab bar moves into Steam's 14-point strip; Decky's bar shaped per tab) and two step-5 follow-ups (the ring after a box opened from the chats menu closes; the ask bar's ring watch counts bonsAI's title view)",
+  "deck_time_local": "2026-10-09 02:12-02:35 EDT",
+  "screen": "The Deck's own screen: 1280x800, Quick Access page 854x454 CSS at device pixel ratio 1.5; bonsAI's column x 48-348.",
+  "build": "75d14ac3 (all of steps 2-7), left installed on the Deck.",
+  "setup": "Settings and chats backed up first (~/qa-backups/settings-p84-steps4567-20261008); diffed at the end: no difference. Keep-awake held. No game running. Run files under runs/plan84-*.json (local, not tracked).",
+  "rows": {
+    "P84-HEIGHT-01": {
+      "result": "PASS",
+      "seen": "Main tab: the tab bar (strip) at y 0-20, the topmost element at its middle and its top edge; Decky's back arrow and the chat's name at 20-48; bonsAI's box and the chat's scrolling area 52-454 (reaches the screen's bottom); the ask area's top at 347. The answer area is 295 points (347 - 52): it was 204 before plan 84, 259 after steps 2-3. The plan's 297 assumed a 30-point chips row; it measures 32 on the Deck. Decky's page carries top -14px and height 454px while bonsAI is open; Steam's shared container keeps its 14px padding with no inline style.",
+      "screenshot": "screenshots/DeckCapture_20261009_021202_auto.png"
+    },
+    "P84-OTHER-01": {
+      "result": "PASS",
+      "seen": "Ollama tab: Decky's bar is 20 tall (just the strip), the back arrow display none (0 x 0), no name row, bonsAI's box and the tab's scrolling area 24-454."
+    },
+    "P84-RING-01": {
+      "result": "PASS with one note",
+      "seen": [
+        "Main: Up from the box walks the chat to its first line, then the chat's name, then the tab bar; Up on the bar holds; Down from the bar -> the name; Down from the name -> the chat's first line ('99 earlier'); Up -> the name; Left from the name -> Decky's back arrow; Right from the arrow -> the name (the reading the helper could not prove); LB on the name switched to About and put the ring on the bar; Right on the bar switched back to Main with the ring staying on the bar.",
+        "Ollama tab, reopened with the ring on the strip: it came back on the strip, not the hidden arrow. In and out of the menu's icon column three times: Right always landed in the tab ('Run AI on this Deck'), never on the hidden arrow.",
+        "The step-5 bug is fixed: chats menu -> Rename chat -> the rename box -> B: the ring is on the chat's name.",
+        "The visibility check reads the chat's name as 83% visible while the ring is on it (one sample point falls on the sliding words); screenshots show it whole."
+      ],
+      "note": "Closing and reopening the menu with the ring on the chat's name: the ring came back on the question box. That is the long-standing open rule (the ring starts on the question box unless something already owns it), not a regression; the helper had expected the name to keep it.",
+      "runs": ["runs/plan84-P84-RING-01-header.json", "runs/plan84-P84-RING-01-rail-in.json", "runs/plan84-P84-RING-01-box-return-2.json"]
+    },
+    "P84-BACK-01": {
+      "result": "PASS",
+      "seen": "From the Ollama tab body: B put the ring on the tab bar, a second B left bonsAI for Decky's list. Afterwards Decky's page was back at y 14 with no inline top, height or position; Decky's bar padding 6 16 0 with only Decky's own inline style (display, padding-right, sticky); Steam's container padding 14 with no inline style.",
+      "runs": ["runs/plan84-P84-BACK-01.json"]
+    },
+    "P84-QAM-01": {
+      "result": "PASS",
+      "seen": "With bonsAI open (and still loaded), the menu switched to Steam's Performance page: its pane at y 48 and its first line ('Full') at 84, the same as with bonsAI closed; Steam's container 14px with no inline style.",
+      "runs": ["runs/plan84-P84-QAM-01-to-performance.json"]
+    }
+  },
+  "noticed": [
+    "Right after a reopen, switching to the Main tab with LB put the ring on the question box rather than the tab bar: the same open rule's short window. Not new."
+  ]
+}

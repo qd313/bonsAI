@@ -390,3 +390,19 @@ Each step's rows, run on the Deck's own screen first, then once on the TV. Names
     a 10-point gap after its arrow); L2/R2 listen on the panel's own page, so they work wherever the ring is; they do
     not wrap at the ends; the menu's greyed actions stay as stops that do nothing; Down from the tab bar enters the
     chat at its first line, never on Retry. Step 6 then moves the tab bar up.
+- **2026-10-09, step 6 built, landed and checked on the Deck's own screen**
+  ([evidence](../test-evidence/plan84-STEP6-DECK.json)). One helper (Opus extra-high, eleven commits), the first two
+  fixing step 5's bug (a box closed from the chats menu now gives the ring back to the chat's name) and a ring watch
+  that treated the name as outside the plugin.
+  - **What a player sees now:** the tab bar sits in the empty strip at the very top of the menu; the back arrow and the
+    chat's name sit under it; the chat starts right below. On the other tabs there is no arrow and no name: the tab's
+    content starts under the tab bar.
+  - **Measured: the answer has 295 points** (it had 204 before plan 84). The plan's 297 assumed a 30-point chips row;
+    it is 32 on the Deck. Steam's own pages are untouched while bonsAI is open and after it closes, and leaving bonsAI
+    puts Decky's bar and page back exactly. The ring never landed on the hidden back arrow.
+  - **One expectation not met, by design:** reopening the menu with the ring on the chat's name puts the ring on the
+    question box, the long-standing open rule.
+  - **Calls the helper made:** all or nothing (if Decky's page is not the shape the Deck test found, nothing of
+    Decky's is touched and the tab bar stays in bonsAI's box); Up on the tab bar does nothing; LB and RB on the name
+    switch tabs and move the ring to the bar; the strip does not grow with the size setting; Decky's page gets its 14
+    points back as a fixed height.

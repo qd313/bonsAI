@@ -31,6 +31,11 @@ adding a surface; read this one while building it.
 - [Type scale](#type-scale)
 - [UI scale](#ui-scale)
 - [Layout constants](#layout-constants)
+  - [The tab bar](#the-tab-bar)
+  - [The chat's name row](#the-chats-name-row)
+  - [The chats menu](#the-chats-menu)
+  - [The question box's strip](#the-question-boxs-strip)
+  - [The answer's corner icons](#the-answers-corner-icons)
 - [Known drift](#known-drift)
 <!-- /toc -->
 
@@ -64,13 +69,12 @@ Declared as TypeScript constants in
 |---|---|---|
 | `ASK_LABEL_COLOR` | `#a8b4c4` | Ask bar labels, menu row text |
 | `ASK_LABEL_COLOR_50` | `rgba(168,180,196,0.5)` | Placeholder / dimmed label, same chroma |
-| `ASK_LABEL_READY_COLOR` | `#d0dbe8` | Ask label once the prompt has text |
+| `ASK_LABEL_READY_COLOR` | `#d0dbe8` | The small Ask button's word once the prompt has text |
 | `BONSAI_FOREST_GREEN` | `#2e8753` | `[beta]` tags, latency labels, About warning |
 | `DECK_MENU_PANEL_BG` | `rgb(28,36,44)` | Inline popover surface |
 | `DECK_MENU_ROW_SELECTED_BG` | `rgb(40,50,62)` | Selected popover row |
 | `DECK_HIGHLIGHT_CYAN` | `#9ce7ff` | Sliders, links, active controls, section labels |
-| `#f16a5a` | `#f16a5a` | Chat-slot delete stop, glyph colour when it is the active D-pad stop ([section-6.ts](../src/styles/sections/section-6.ts) `.bonsai-chat-slot-delete--active-stop`) |
-| `#e04a3a` family | `rgba(224,74,58,0.8)` border, `rgba(224,74,58,0.25)` glow | Border and glow around that same stop |
+| `#f16a5a` | `#f16a5a` | Delete chat in the chats menu ([chatsMenuStyles.ts](../src/features/chat-title/chatsMenuStyles.ts) `__action--danger`), and the Copy icon's error state ([answerBubble.ts](../src/styles/sections/answerBubble.ts)) |
 | `#f28b7d` | `#f28b7d` | **Reserved, no consumer** — mock 5c's hover shade for the delete control; 5c's custom modal footer was dropped by board 8d |
 
 ### Character accent scope variables (chips)
@@ -100,9 +104,8 @@ Three modes, each driving six CSS variables on the input host
 > the destructive-control colour (`.bonsai-pullmodels-delete-btn` uses
 > `rgba(248,113,113,0.45)` border on `rgba(48,24,26,0.65)`). Red on this surface means
 > "Expert mode" as often as it means "delete". Don't assume it reads as danger.
-> The chat-slot delete stop is a deliberate exception: it uses the `#f16a5a` /
-> `rgba(224,74,58,…)` family, a distinct red from the Expert accent, so a destructive stop
-> inside the slot row cannot be mistaken for an ask-mode cue.
+> Delete chat in the chats menu is a deliberate exception: it uses `#f16a5a`, a distinct red
+> from the Expert accent, so a destructive action in the menu cannot be mistaken for an ask-mode cue.
 
 ### Text and neutrals
 
@@ -224,7 +227,9 @@ Two standing prohibitions, both recorded as reverts in the source:
 | Context | Size | Line height |
 |---|---|---|
 | Settings section stack | 14 | 1.4 |
-| Ask primary label | 15, weight 600, small-caps, `letter-spacing: 0.55px` | 1 |
+| Small Ask button word | 12, weight 800, small-caps, `letter-spacing: 0.04em` | 1 |
+| Chat's name in Decky's bar | 13, weight 800 (its small line under it: 8) | 16 (line: 10) |
+| Tab bar: the current tab's name | 11, weight 800, `letter-spacing: 0.1em`, capitals | 1 |
 | Menu rows (`DECK_MENU_FONT_PX`) | 13 | 1.5 |
 | Ask input text (`UNIFIED_TEXT_FONT_PX`) | 12 | 1.2 |
 | Transcript | 12 | 1.4 |
@@ -268,23 +273,12 @@ All from [unified-input/constants.ts](../src/features/unified-input/constants.ts
 | Constant | Value | Meaning |
 |---|---|---|
 | `UNIFIED_INPUT_HEIGHT_MAX_PX` | 200 | Whole glass card cap |
-| `UNIFIED_INPUT_ICON_STRIP_PX` | 24 | Attach / mode / mic strip inside the host |
+| `UNIFIED_INPUT_ICON_STRIP_PX` | 29 | The box's bottom strip (24 + 5 of ring room underneath, `UNIFIED_INPUT_CORNER_RING_ROOM_PX`): paperclip, game tag, mode, mic or Stop, the X, the small Ask |
 | `UNIFIED_TEXT_BODY_MIN_PX` | 42 | Empty text body floor |
-| `ASK_BAR_PRIMARY_MIN_HEIGHT_PX` | 36 | Ask row and primary button touch target |
 | `BONSAI_PLUGIN_SIDE_PAD_PX` | 0 | Tab body horizontal inset (was 4 until 2026-08-15; rows read as short of the QAM edges on device) |
-| `TAB_TITLE_ICON_PX` / `..._TAB_CELL_PX` | 26 / 32 | LB/RB strip icon and its cell |
-| `TAB_STRIP_BODY_GAP_PX` | 4 | Gap under the LB/RB strip |
-| `TAB_BAR_REST_HEIGHT_PX` / `TAB_BAR_OPEN_HEIGHT_PX` | 20 / 66 | The collapsing tab bar (plan 30): thin at rest. The open strip was raised from 54 to 66 by the maintainer on 2026-09-17 (plan 59), the middle of three heights drawn over a Deck photo, to cover the chat row's dots without covering the whole chat row |
-| `TAB_BAR_DASH_W_PX` / `TAB_BAR_DASH_H_PX` / `TAB_BAR_DASH_ACTIVE_EXTRA_H_PX` / `TAB_BAR_DASH_GAP_PX` | 14 / 3 / 2 / 4 | One dash per mounted tab; the active dash is taller |
-| `TAB_BAR_NAME_PX` / `TAB_BAR_SHOULDER_MARK_PX` | 11 / 9 | Active name at rest; the LB/RB marks' own text, inside the pill (plan 59) |
-| `TAB_BAR_CELL_HEIGHT_PX` / `TAB_BAR_CELL_ICON_PX` / `TAB_BAR_CELL_BUG_ICON_PX` | 44 / 22 / 26 | Plan 59: each open-strip cell's height, and the one icon size every cell draws at — the bug's own artwork needs 26 to read the same size as the rest at 22 |
-| `TAB_BAR_CELL_NAME_PX` / `TAB_BAR_CELL_RADIUS_PX` | 9.5 / 8 | Plan 59: the lit cell's name under its icon (small capitals as drawn; plain capitals at the same size is the fallback if small capitals read too small on the Deck) and the lit cell's rounded corners |
-| `TAB_BAR_STRIP_PAD_Y_PX` / `TAB_BAR_STRIP_PAD_X_PX` / `TAB_BAR_CELL_GAP_PX` | 5 / 6 / 2 | Plan 59: the open strip's own top/bottom and left/right padding, and the gap between cells |
-| `TAB_BAR_SLOT_W_PX` | 20 | Plan 59: the fixed width of the LB/RB slots, so the cells never move when the marks hide |
-| `TAB_BAR_PILL_PAD_Y_PX` / `TAB_BAR_PILL_PAD_X_PX` | 3 / 4 | Plan 59: the LB/RB pill's own padding, reusing the chat row's pill values |
-| `TAB_BAR_SWITCH_FADE_MS` | 120 | Plan 59: the tab-switch fade, on the lit cell's fill and the name's opacity and colour |
-| `TAB_BAR_STRIP_BG_HEX` | `#141c24` | Plan 59: the open strip's solid bar colour. The lit accent variable below is computed to read against this exact value |
-| `--bonsai-ui-tab-lit` (CSS var, computed in `characterUiAccent.ts`, `liftForBar()`) | computed | Plan 59: the strip's lit icon and name colour, and the rest bar's lit dash and name too, so the two never drift apart. The character's main colour lifted toward white only as far as needed to read at **6:1** contrast against the bar (`TAB_BAR_LIT_MIN_CONTRAST`); a colour already at 6:1 is left alone. Astarion's grey is hand-picked (`#c3d0d1`) instead of the rule's own answer, by the maintainer's choice from a side-by-side mockup on 2026-09-17 — every other character still follows the rule |
+| `TAB_TITLE_ICON_PX` / `TAB_TITLE_MAIN_TAB_ICON_PX` | 26 / 36 | The size each tab's icon is made at ([tabTitles.tsx](../src/features/plugin-shell/tabTitles.tsx)); the tab bar draws them smaller (see "The tab bar" below) |
+| `TAB_STRIP_BODY_GAP_PX` | 4 | Gap under the tab bar (and under Decky's name row on the chat tab) |
+| `DOCK_ROW_GAP_PX` | 2 | The one gap in the ask area: chips to question box |
 | `BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX` | 12 | Ask bar → transcript |
 | `BONSAI_CHAT_AI_BUBBLE_MAX_FRAC` | 0.92 | AI bubble width as a fraction of the column |
 
@@ -294,10 +288,81 @@ only `showModal()` content escapes the column.
 > **Disputed by measurement, 2026-08-16.** On a Deck output at 1080p (`devicePixelRatio` 1.28, UI
 > scale profile `desktop`), [scripts/probe_deck_ask_row_width.py](../scripts/probe_deck_ask_row_width.py)
 > reports `.bonsai-scope` at **300 × 752** and the `_TabContentsScroll` body at **300 × 667** — not
-> 400 × 800. Which figure holds on handheld is **UNKNOWN**; nobody has re-measured undocked. The
+> 400 × 800. **Settled for the Deck's own screen, 2026-10-09 (plan 84): the column is 300 × 454 points** (1.5 screen pixels per point; see design-language.md), so 300 wide holds on handheld too; the 400 figure was never right. The
 > difference is not cosmetic: designing against 400 when the column is 300 makes every layout 25%
 > too optimistic. Re-measure before trusting either number, and see
 > [design-language.md](design-language.md) § *The space we are designing for*.
+
+### The tab bar
+
+Plan 84 step 4 ("T3"); step 6 put it in the strip at the very top of the menu. One row, 20 points tall in every state, five columns: LB, the tabs before, the current tab (icon and name), the tabs after, RB. Nothing opens from it and nothing is drawn outside it. Constants in `unified-input/constants.ts`, drawn by [tabIndicatorBar.ts](../src/styles/sections/tabIndicatorBar.ts).
+
+| Constant | Value | Meaning |
+|---|---|---|
+| `TAB_BAR_HEIGHT_PX` | 20 | The bar's height (Steam's 14-point strip plus 6 of Decky's own padding) |
+| `TAB_BAR_EDGE_PAD_PX` | 16 | LB and RB sit this far in from each edge, lined up with Decky's back arrow below |
+| `TAB_BAR_COLUMN_GAP_PX` | 6 | Between the five columns |
+| `TAB_BAR_NAME_PX` | 11 | The current tab's name (weight 800, `letter-spacing: 0.1em`, capitals). Its words, not icon plus words, are centred |
+| `TAB_BAR_CURRENT_ICON_PX` / `..._ICON_GAP_PX` / `..._PAD_X_PX` | 12 / 4 / 6 | The current tab's icon (it hangs off the left of the name), the gap to the name, the middle column's own side padding |
+| `TAB_BAR_SIDE_ICON_PX` / `..._SIDE_ICON_GAP_PX` | 11 / 7 | The other tabs' small dimmed icons (`rgba(168,182,198,0.55)`); the gap gives way before an icon would touch LB or RB |
+| `TAB_BAR_SHOULDER_MARK_PX` / `..._SHOULDER_W_PX` / `..._SHOULDER_REACH_PX` | 9 / 16 / 12 | LB and RB: the marks' text size, the same fixed box for both so the name stays on the centre, and how far a finger's target reaches past the mark into the edge padding |
+| `TAB_BAR_SHOULDER_DIM_OPACITY` | 0.32 | LB and RB while the ring is elsewhere; full strength (`#eef3f8`) only while the ring is on the bar |
+| `TAB_BAR_BUG_ICON_SCALE` | 26 / 22 | The Developer tab's bug artwork is drawn this much larger so it matches the others |
+| `TAB_BAR_STRIP_BG_HEX` | `#141c24` | Only a contrast reference now: `--bonsai-ui-tab-lit` is checked against it. The solid strip it was the colour of is gone; whether the real background is darker has not been measured |
+| `TAB_BAR_SWITCH_FADE_MS` | 120 | Used only by the Show details swap with the chip (`detailsSlot.ts`); the tab bar fades nothing |
+| `--bonsai-ui-tab-lit` (CSS var, computed in `characterUiAccent.ts`, `liftForBar()`) | computed | The current tab's icon and name colour, and the lit left edge of the open chat in the chats menu. The character's main colour lifted toward white only as far as needed to read at **6:1** contrast against `TAB_BAR_STRIP_BG_HEX` (`TAB_BAR_LIT_MIN_CONTRAST`); a colour already at 6:1 is left alone. Astarion's grey is hand-picked (`#c3d0d1`), by the maintainer's choice from a side-by-side mockup on 2026-09-17 |
+
+The ring on the bar: the whole bar wears an inset `2px rgba(255,255,255,0.85)` ring and a `rgba(255,255,255,0.06)` fill, keyed on Steam's `gpfocus` / `gpfocuswithin` only; plain browser focus draws nothing.
+
+### The chat's name row
+
+Plan 84 step 5. It sits in Decky's title bar beside the back arrow, outside bonsAI's box, so it has its own stylesheet under `.bonsai-chat-title` ([chatTitleStyles.ts](../src/features/chat-title/chatTitleStyles.ts)). Unlike the rest of this file, **it does not follow the UI-size setting** (bonsAI's scale variable is set on bonsAI's box, which this view is outside of; Decky's own bar does not scale either).
+
+| What | Value | Notes |
+|---|---|---|
+| Decky's row | 28 tall, back arrow 40 wide (`DECKY_BACK_ARROW_W_PX`) | Measured on the Deck 2026-10-08. An empty space the arrow's width on the right keeps the words centred; it is measured from Decky's bar at run time, not fixed at 40 (Decky leaves a 10-point gap after its arrow) |
+| The name | 13, weight 800, `#e8eef5`, one line, cut with "..." | The words are centred, not the group: an empty 10-point space before the name balances the 10-point menu arrow after it, 3 points apart. The words box measured 156.4 points wide on the Deck (the plan asked for 139), its centre 0.19 points off the panel's |
+| A name that does not fit | Slides once to show the rest while the ring is on it | Stays still for anyone who asked for less motion |
+| The small line | 8, `rgba(168,182,198,0.72)`: "LT chat 2 of 7 RT" | LT and RT are 7-point keycaps (1px border `rgba(168,182,198,0.4)`, radius 3) at `KEY_DIM_OPACITY` 0.32, full strength only while the ring is on the name |
+| The menu arrow | 10 | Turns over while the menu is open |
+| The ring on the name | `0 0 0 2px rgba(255,255,255,0.85)` and a `rgba(255,255,255,0.06)` fill | Radius 4 |
+| Other tabs | The plain wordmark "bonsAI" | No version (it is on the About tab), no name row |
+
+### The chats menu
+
+Plan 84 step 5. It drops over the answer from the chat's name, its foot on the ask area's top edge ([chatsMenuStyles.ts](../src/features/chat-title/chatsMenuStyles.ts)). It sits inside bonsAI's box, so it does follow the UI-size setting. It replaced the saved-chats row.
+
+| What | Value |
+|---|---|
+| Surface | Fully opaque `rgb(18,26,34)`, padding 6, at most 260 tall (then it scrolls), 1px `rgba(255,255,255,0.06)` bottom edge |
+| Heading "Your chats" | 10, weight 800, `letter-spacing: 0.08em`, capitals, `#9ce7ff` |
+| A chat's row | 27 tall, text 12, `rgba(255,255,255,0.04)` fill, radius 4. The open chat has a 3-point left edge in `--bonsai-ui-tab-lit`, a `0.08` fill and weight 800. Its time stamp is 10, `#8fa8c4`, at the right |
+| Dots | 6-point circles: solid `#52d88a` = a reply is waiting; a 1.5-point `#9ce7ff` ring = still writing |
+| The actions | A two-column grid with 4-point gaps, each 27 tall, text 11, 13-point line icons. Delete chat is `#f16a5a`. Greyed actions are 45% opacity and stay stops that do nothing |
+| The ring | The inset ring (see "Focus rings") |
+
+### The question box's strip
+
+Plan 84 step 2. Left to right: paperclip, game tag, mode, mic (Stop while an answer is being written), the X (only while the box has words), the small Ask. The strip is `UNIFIED_INPUT_ICON_STRIP_PX` (29) tall. Styles in [section-8.ts](../src/styles/sections/section-8.ts); the two parts that are not icons are [AskStripGameTag.tsx](../src/components/AskStripGameTag.tsx) and [AskStripSendButtons.tsx](../src/components/AskStripSendButtons.tsx).
+
+| What | Value |
+|---|---|
+| Game tag | A 13-point game-pad icon and the game's name ("No game" when none runs): 10 italic, `#8fa8c4`, margin `0 6px 0 7px`; the name shrinks to "..." when the strip is full. Not a stop: pressing it does nothing |
+| The X | A 20-point button with a 16-point icon, `#dbe6f3`, 50% opacity (92% with the ring). Just left of Ask, only with words in the box |
+| The small Ask | 22 tall, `0 8px` padding, 1px `rgba(255,255,255,0.18)` edge, radius 4, fill `rgba(255,255,255,0.10)`, the word 12 weight 800 in small capitals in `ASK_LABEL_COLOR`, an 11-point send arrow. A finger's target reaches 4 points up and left and 5 right and down past the drawn pill |
+| Small Ask, words in the box | Word `ASK_LABEL_READY_COLOR`, fill `rgba(255,255,255,0.14)` |
+| Small Ask, resting (an answer is being written) | 38% opacity and disabled |
+
+### The answer's corner icons
+
+Plan 84 step 3. Read aloud in the lower-left, Copy in the lower-right, both in the bottom band of the answer's bubble ([answerBubbleCorners.ts](../src/styles/sections/answerBubbleCorners.ts) and [answerBubble.ts](../src/styles/sections/answerBubble.ts)).
+
+| What | Value |
+|---|---|
+| Each icon | A 20 by 20 box with no border or fill, `#d4dde6` at 50% opacity, 95% with the ring. Read aloud turns `#f87171` while it speaks; Copy turns `#9ce7ff` when copied and `#f16a5a` on an error |
+| The ring on a corner icon | `2px rgba(255,255,255,0.9)`, offset 0, hugging the box |
+| The bottom band | **25 points** of padding under the last line when Read aloud is there (Copy alone keeps 8). Bottom up: the box sits 2 above the bubble's edge, 20 tall, the ring 2, 2 of clearance. Measured on the Deck 2026-10-08: the last line's bottom is 4 points clear of the box and 2 of the ring |
+| Left inset | The speaker's strip is padded 7 from the bubble's left edge |
 
 ---
 

@@ -237,20 +237,30 @@ describe("room under the suggestion chips (section 4 CSS)", () => {
   const FADE_ROW = /\.bonsai-scope \.bonsai-preset-row-host--fade-anim\s*\{([^}]*)\}/;
   const BOX = /\.bonsai-scope \.bonsai-unified-input-host\.bonsai-full-bleed-row\s*\{([^}]*)\}/;
 
-  it("puts the chip as far above the question box as the box sits above the Ask bar, at every UI size", () => {
+  it("puts the chip one row gap above the question box, at every UI size", () => {
     for (const uiScale of [1, 1.18, 1.5]) {
-      const boxToAsk = px(declared(BOX, "margin-bottom"), uiScale);
       const chipToBox = px(declared(ROW, "padding-bottom"), uiScale) + px(declared(ROW, "margin-bottom"), uiScale);
-      expect(chipToBox).toBeCloseTo(boxToAsk, 6);
-      expect(boxToAsk).toBeCloseTo(DOCK_ROW_GAP_PX * uiScale, 6);
+      expect(chipToBox).toBeCloseTo(DOCK_ROW_GAP_PX * uiScale, 6);
     }
   });
 
   it("does the same in fade mode, the default, which has its own rule", () => {
     for (const uiScale of [1, 1.18]) {
-      const boxToAsk = px(declared(BOX, "margin-bottom"), uiScale);
       const chipToBox = px(declared(ROW, "padding-bottom"), uiScale) + px(declared(FADE_ROW, "margin-bottom"), uiScale);
-      expect(chipToBox).toBeCloseTo(boxToAsk, 6);
+      expect(chipToBox).toBeCloseTo(DOCK_ROW_GAP_PX * uiScale, 6);
+    }
+  });
+
+  /*
+   * Plan 84 step 2: the gap under the question box was the second of the dock's two row gaps, the one
+   * between the box and the big Ask bar. The Ask bar is a small button inside the box's own strip now,
+   * so the box is the dock's last row and a gap under it would only be 2 empty points at the panel's
+   * bottom edge, taken from the answer. The plan's 57 points for the answer are the Ask row's 37, the
+   * context line's 18 and this gap's 2.
+   */
+  it("leaves no gap under the question box, the dock's last row since plan 84, at every UI size", () => {
+    for (const uiScale of [1, 1.18, 1.5]) {
+      expect(px(declared(BOX, "margin-bottom"), uiScale)).toBe(0);
     }
   });
 

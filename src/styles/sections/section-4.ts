@@ -23,9 +23,9 @@
  * section-8.ts.
  *
  * How it works: one function returns the CSS text, roughly top to bottom
- * of the dock: the edge-to-edge resets for the chip row, the question box
- * and the Ask bar; the spacing under the chip row (one row gap shared with
- * the gap under the question box, plan 72); each chip's own size and
+ * of the dock: the edge-to-edge resets for the chip row and the question
+ * box; the spacing under the chip row (the dock's one row gap, plan 72; the
+ * box has none under it since plan 84, it is the last row); each chip's own size and
  * label; the carousel's sliding track; the chip's focus bar and its
  * out-of-chips flash; and last the settings-results card. (The big Ask
  * row's own width rules went with the row, plan 84.)
@@ -128,8 +128,10 @@ export function buildSection4Section(): string {
           padding-right: 0 !important;
         }
 
+        /* The dock's last row since plan 84 (the big Ask row under it is now a button in its strip):
+           no gap under it, so those points go to the answer instead of the panel's bottom edge. */
         .bonsai-scope .bonsai-unified-input-host.bonsai-full-bleed-row {
-          margin-bottom: ${uiScalePx(DOCK_ROW_GAP_PX)} !important;
+          margin-bottom: 0 !important;
         }
 
         /*

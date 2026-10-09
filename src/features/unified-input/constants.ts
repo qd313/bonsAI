@@ -23,9 +23,9 @@ export const UNIFIED_INPUT_CORNER_RING_ROOM_PX = 5;
  */
 export const UNIFIED_INPUT_ICON_STRIP_PX = 24 + UNIFIED_INPUT_CORNER_RING_ROOM_PX;
 /**
- * The one gap between the dock's stacked rows: the suggestion chips to the question box, and the
- * question box to the Ask bar. Both read this, so the two gaps always match (plan 72, the
- * maintainer's polish list: the chip sat 8px above the box while the box sat 2px above Ask).
+ * The one gap between the dock's stacked rows: the suggestion chips to the question box (plan 72, the
+ * maintainer's polish list: the chip sat 8px above the box while the box sat 2px above Ask). The second
+ * gap, the box to the big Ask bar, went with that bar in plan 84: the box is the dock's last row now.
  * Scaled with the UI size where it is used.
  */
 export const DOCK_ROW_GAP_PX = 2;

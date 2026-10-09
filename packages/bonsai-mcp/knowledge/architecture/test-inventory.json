@@ -250,7 +250,6 @@
     "src/styles/sections/gamepadAndPullModels.test.ts",
     "src/styles/sections/presetChipLabel.test.ts",
     "src/styles/sections/replyRatingChoices.test.ts",
-    "src/styles/sections/savedChatSlotDots.test.ts",
     "src/styles/sections/section-4.test.ts",
     "src/styles/sections/section-5.test.ts",
     "src/styles/sections/section-6.test.ts",

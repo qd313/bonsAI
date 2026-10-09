@@ -28,9 +28,8 @@
  * blocks) now lives in answerMarkdownFormatting.ts, the question bubble
  * (with its Retry icon) lives in questionBubble.ts, the answer bubble
  * (streaming look, Copy icon, D-pad stops) lives in answerBubble.ts,
- * and the saved-chats row (its shape, title and ghosts in
- * savedChatSlotsRow.ts, its small dots in savedChatSlotDots.ts) lives
- * in those two, all called from here. The rating choices under an answer
+ * all called from here. (The saved-chats row's styles were deleted in
+ * plan 84: chats are now picked from the menu under the chat's name.) The rating choices under an answer
  * (Helpful, Not really and the five reasons) are in replyRatingChoices.ts
  * (plan 79), also called from here.
  *
@@ -59,8 +58,6 @@ import { uiScalePx } from "./uiScalePx";
 import { buildAnswerMarkdownFormattingSection } from "./answerMarkdownFormatting";
 import { buildQuestionBubbleSection } from "./questionBubble";
 import { buildAnswerBubbleSection } from "./answerBubble";
-import { buildSavedChatSlotsRowSection } from "./savedChatSlotsRow";
-import { buildSavedChatSlotDotsSection } from "./savedChatSlotDots";
 import { buildReplyRatingChoicesSection } from "./replyRatingChoices";
 
 /**
@@ -625,7 +622,6 @@ ${buildReplyRatingChoicesSection()}
           color: rgba(143, 168, 196, 0.5);
         }
 
-${buildSavedChatSlotsRowSection()}${buildSavedChatSlotDotsSection()}
         /*
          * Plan 62 3c: the "This answer / Session · N" tabs at the top of the newest answer's own
          * Show details panel. One real D-pad stop (the row itself), same as the chip ladder just

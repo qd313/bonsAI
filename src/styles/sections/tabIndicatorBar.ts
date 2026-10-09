@@ -18,9 +18,7 @@
  * outside bonsAI's box, so the box's stylesheet does not reach it.
  *
  * Does not: Hide Steam's own original tab header — that is section-1.ts.
- * Does not hide the bar's own marks while the chat-slot row has the ring
- * either — that is savedChatSlotsRow.ts. Draws nothing outside the bar's
- * own 20 points and fades nothing: the drop-down strip that used to float
+ * Draws nothing outside the bar's own 20 points and fades nothing: the drop-down strip that used to float
  * over the chip row, and its fade, were deleted in plan 84 step 4.
  */
 import {
@@ -41,7 +39,7 @@ import {
 } from "../../features/unified-input/constants";
 import { uiScalePx } from "./uiScalePx";
 
-/** The slot-row pill colour (section-6.ts), reused so the marks read as the same family of hint. */
+/** The dim colour of the LB and RB marks, the same grey-blue family as the other hint pills. */
 const MARK_COLOR = "rgba(168, 182, 198, 0.62)";
 /** LB and RB at full strength, while the ring is on the bar (the drawing's `.deck.dimkeys.ring-tabs`). */
 const MARK_LIT_COLOR = "#eef3f8";

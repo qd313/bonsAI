@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 779,
-  "edgeCount": 2334,
+  "fileCount": 775,
+  "edgeCount": 2325,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -5895,41 +5895,6 @@
         "src/styles/sections/section-6.ts"
       ]
     },
-    "src/styles/sections/savedChatSlotDots.test.ts": {
-      "imports": [
-        "src/styles/sections/savedChatSlotDots.ts",
-        "src/styles/sections/savedChatSlotsRow.ts",
-        "src/styles/sections/uiScalePx.ts"
-      ],
-      "importedBy": []
-    },
-    "src/styles/sections/savedChatSlotDots.ts": {
-      "imports": [
-        "src/styles/sections/uiScalePx.ts"
-      ],
-      "importedBy": [
-        "src/styles/sections/savedChatSlotDots.test.ts",
-        "src/styles/sections/section-6.ts"
-      ]
-    },
-    "src/styles/sections/savedChatSlotsGhosts.ts": {
-      "imports": [
-        "src/styles/sections/uiScalePx.ts"
-      ],
-      "importedBy": [
-        "src/styles/sections/savedChatSlotsRow.ts"
-      ]
-    },
-    "src/styles/sections/savedChatSlotsRow.ts": {
-      "imports": [
-        "src/styles/sections/savedChatSlotsGhosts.ts",
-        "src/styles/sections/uiScalePx.ts"
-      ],
-      "importedBy": [
-        "src/styles/sections/savedChatSlotDots.test.ts",
-        "src/styles/sections/section-6.ts"
-      ]
-    },
     "src/styles/sections/scopeBase.ts": {
       "imports": [
         "src/features/unified-input/constants.ts",
@@ -6017,8 +5982,6 @@
         "src/styles/sections/answerMarkdownFormatting.ts",
         "src/styles/sections/questionBubble.ts",
         "src/styles/sections/replyRatingChoices.ts",
-        "src/styles/sections/savedChatSlotDots.ts",
-        "src/styles/sections/savedChatSlotsRow.ts",
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [
@@ -6070,10 +6033,6 @@
         "src/styles/sections/detailsSlot.ts",
         "src/styles/sections/questionBubble.ts",
         "src/styles/sections/replyRatingChoices.ts",
-        "src/styles/sections/savedChatSlotDots.test.ts",
-        "src/styles/sections/savedChatSlotDots.ts",
-        "src/styles/sections/savedChatSlotsGhosts.ts",
-        "src/styles/sections/savedChatSlotsRow.ts",
         "src/styles/sections/scopeBase.ts",
         "src/styles/sections/section-3.ts",
         "src/styles/sections/section-4.ts",

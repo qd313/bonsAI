@@ -317,16 +317,6 @@ describe("the rule that hides Steam's tab header", () => {
     expect(reserveRule).toBeDefined();
     expect(reserveRule?.[1]).toMatch(/--bonsai-tab-strip-reserve:\s*calc\(4px \* var\(--bonsai-ui-scale, 1\)\)/);
   });
-
-  it("hides the bar's LB/RB marks while the chat-slot row holds the ring, without moving anything", () => {
-    const marksRule = rules.find(
-      ([selector]) =>
-        selector.includes(".bonsai-tab-bar__shoulder") && selector.includes(":has(.bonsai-chat-slot-row--focused)"),
-    );
-    expect(marksRule).toBeDefined();
-    expect(marksRule?.[1]).toMatch(/visibility:\s*hidden/);
-    expect(marksRule?.[1]).not.toMatch(/display:\s*none/);
-  });
 });
 
 /*

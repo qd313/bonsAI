@@ -164,6 +164,7 @@
     "src/features/chat-title/chatTitleStore.test.tsx",
     "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
     "src/features/chat-title/noSavedChatsRow.test.tsx",
+    "src/features/chat-title/topStrip.test.tsx",
     "src/features/chat-title/useChatTitlePublisher.test.tsx",
     "src/features/chat-title/useChatTriggerSwitch.test.tsx",
     "src/features/details-slot/DetailsSlot.deck.test.tsx",

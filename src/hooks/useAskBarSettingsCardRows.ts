@@ -152,8 +152,10 @@ export function useAskBarSettingsCardRows({
    * elements rather than any assumed pixel count, minus a 6px clearance kept under the tab bar.
    * Re-measured whenever the result count or the box's own height (it grows as text wraps) could
    * have changed how much of that room is left. Falls back to showing everything the cap allows
-   * when the tab bar cannot be found (an unmounted card, or a test with no `.bonsai-scope`
-   * wrapper) rather than hiding the card outright.
+   * when bonsAI's box cannot be found (an unmounted card, or a test with no `.bonsai-scope`
+   * wrapper) rather than hiding the card outright. With the tab bar in Steam's strip above Decky's
+   * bar (plan 84 step 6) the room's top is bonsAI's box's own top edge, where the bar's bottom
+   * edge used to be: the card never reaches over Decky's bar.
    */
   useLayoutEffect(() => {
     const boxEl =
@@ -163,13 +165,15 @@ export function useAskBarSettingsCardRows({
     if (!boxEl) return;
     const scope = boxEl.closest(".bonsai-scope");
     const tabBar = scope?.querySelector<HTMLElement>(".bonsai-tab-bar") ?? null;
-    if (!tabBar) {
+    const scopeRect = scope?.getBoundingClientRect();
+    /* No box, or a box with nothing laid out yet: no room can be measured. */
+    if (!scope || (!tabBar && !(scopeRect!.height > 0))) {
       setSettingsCardRowsShown(filteredSettings.length);
       return;
     }
     const boxTop = boxEl.getBoundingClientRect().top;
-    const tabBarBottom = tabBar.getBoundingClientRect().bottom;
-    const availableHeightPx = boxTop - tabBarBottom - SETTINGS_CARD_TAB_BAR_GAP_PX;
+    const roomTop = tabBar ? tabBar.getBoundingClientRect().bottom : scopeRect!.top;
+    const availableHeightPx = boxTop - roomTop - SETTINGS_CARD_TAB_BAR_GAP_PX;
     setSettingsCardRowsShown(
       settingsCardRowsThatFit(availableHeightPx, filteredSettings.length).shown,
     );

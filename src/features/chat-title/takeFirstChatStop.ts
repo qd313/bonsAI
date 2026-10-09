@@ -1,8 +1,9 @@
 /**
  * Title: The ring onto the chat's first stop, from above the chat
  *
- * Purpose: Where Down goes when it enters the chat from above it: today from the tab bar on the Main tab
- * (index.tsx, `tabBarExitDown`), and after plan 84 step 6 from the chat's name. The saved-chats row used
+ * Purpose: Where Down goes when it enters the chat from above it: from the chat's name in Decky's bar since
+ * plan 84 step 6 put the tab bar above it (ChatTitleView.tsx), and from the tab bar on the Main tab when the bar
+ * is still in bonsAI's box (useTopStripTabBar.ts, `tabBarExitDownFor`). The saved-chats row used
  * to sit between the two and owned this move; with the row gone (plan 84 step 5) the move lands on the
  * first stop of the chat itself, or on the question box when the chat is empty.
  *

@@ -287,7 +287,8 @@ export function MainTab(props: MainTabProps) {
     atCreate: atNewChatSpot,
     setAtCreate: setAtNewChatSpot,
     onSelectSlot: props.onChatSlotSelect,
-    /* Down from the tab bar on this tab (index.tsx): the chat's first stop, or the question box. */
+    /* Down from above the chat (the chat's name in Decky's bar; the tab bar when it is in bonsAI's box): the
+       chat's first stop, or the question box. */
     takeFirstStop: () =>
       takeFirstChatStop({
         firstTurnId: props.askThreadCollapsed?.[0]?.id ?? "live",

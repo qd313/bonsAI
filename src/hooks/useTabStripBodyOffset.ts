@@ -2,11 +2,15 @@
  * Title: Tab strip body offset hook
  * Purpose: Measure Decky tab strip height and reserve space so tab content is not painted into LB/RB titles.
  * Used for: index.tsx — `.bonsai-scope` layout on gamescope/Bazzite.
- * Solves: Crushed or overlapping tab body when TabContentsScroll bleeds into the strip row.
+ * Solves: Crushed or overlapping tab body when TabContentsScroll bleeds into the strip row. With bonsAI's
+ *         own tab bar in its box, the gap under it is 4 points; with the bar in Steam's strip at the top of
+ *         the panel (plan 84 step 6), Decky's own gap above bonsAI's box is that 4, and the body starts at
+ *         the box's top (no reserve).
  * Does not: Pin QAM host height — see useQamPanelHeightGuard.
  */
 import { useLayoutEffect } from "react";
 import { TAB_STRIP_BODY_GAP_PX } from "../features/unified-input/constants";
+import { subscribeDeckyHeader, topStripActive } from "../features/chat-title/deckyHeaderShape";
 import { syncTabBodyViewportHeight } from "../utils/tabBodyViewport";
 
 const CRUSHED_SCOPE_MAX_PX = 160;
@@ -32,6 +36,13 @@ export function useTabStripBodyOffset(scopeRef: React.RefObject<HTMLDivElement |
 
       if (!tabsRoot || !tabContents || leaves.length === 0 || scopeH < CRUSHED_SCOPE_MAX_PX) {
         return false;
+      }
+
+      // Plan 84 step 6: the bar is in Steam's strip, above Decky's bar; Decky's 4-point gap is the gap.
+      if (topStripActive()) {
+        tabsRoot.style.setProperty("--bonsai-tab-strip-reserve", "0px");
+        syncTabBodyViewportHeight(scope);
+        return true;
       }
 
       // Plan 30: with our own tab bar mounted, Steam's header is display:none and there is nothing
@@ -100,8 +111,11 @@ export function useTabStripBodyOffset(scopeRef: React.RefObject<HTMLDivElement |
     };
     scope.addEventListener("pointerenter", onPointer);
     scope.addEventListener("pointermove", onPointer, { passive: true });
+    /* Decky's bar changed shape (the bar moved into the strip or back, or a tab's shape): again, now. */
+    const stopHeader = subscribeDeckyHeader(() => apply(SETTLE_MAX_ATTEMPTS));
 
     return () => {
+      stopHeader();
       cancelAnimationFrame(raf);
       cancelAnimationFrame(settleRaf);
       scope.removeEventListener("pointerenter", onPointer);

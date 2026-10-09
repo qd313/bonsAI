@@ -21,6 +21,7 @@ import { elementHasGamepadFocus } from "./uiDocument";
 import { focusUpPastLiveKbNotesBlock } from "./buildKbNotesBlockElement";
 import { pressThenHandRingOn } from "./handRingOnWhenGone";
 import { takeChipSlotFocus } from "../features/details-slot/detailsSlotStore";
+import { topStripActive } from "../features/chat-title/deckyHeaderShape";
 
 /**
  * Hand the ring to whichever permission-hint row is mounted below the transcript — the
@@ -172,12 +173,14 @@ export function takeHolderFocus(holder: NavRefHolder): boolean {
 
 /**
  * Steam's ring onto the stop right above the chat: Up from the chat's first stop, and Up from the
- * suggestion chips on an empty chat. That was the saved-chats row until plan 84 step 5 removed it;
- * it is the tab bar now, the next thing up, by its registered nav node. Plan 84 step 6 moves the tab
- * bar above the chat's name in Decky's bar, and this then becomes the name. False when nothing is
- * registered, and the caller leaves the press to Steam.
+ * suggestion chips on an empty chat. That was the saved-chats row until plan 84 step 5 removed it,
+ * then the tab bar. Since plan 84 step 6 moved the tab bar into Steam's strip above Decky's bar, it is
+ * the chat's name in Decky's bar; when Decky's bar could not be reshaped, the tab bar is still in
+ * bonsAI's box right above the chat, and it is the tab bar. Both by their registered nav nodes. False
+ * when nothing is registered, and the caller leaves the press to Steam.
  */
 export function takeAboveTheChat(): boolean {
+  if (topStripActive() && takeNavFocus("chat-name")) return true;
   return takeNavFocus("tab-bar");
 }
 

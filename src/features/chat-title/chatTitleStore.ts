@@ -7,9 +7,11 @@
  * by the Main tab. Instead the Main tab writes here what the name row needs (the open chat's name,
  * its place among the saved chats, whether it is a new chat not saved yet, the unread and
  * still-writing marks, whether an answer is being written, and the actions: previous chat, next
- * chat, the ring onto the chat's first stop), the plugin root writes which tab is showing and the
- * character's lit accent colour, and the name row reads all of it. Whether the chats menu is open
- * lives here too, because both sides need it: the name opens it, the Main tab draws it.
+ * chat, the ring onto the chat's first stop), the plugin root writes which tab is showing, the
+ * character's lit accent colour and what the tab bar needs (plan 84 step 6 draws the bar in Decky's
+ * bar too: the tabs, the switch, and Down into a tab), and the name row reads all of it. Whether the
+ * chats menu is open lives here too, because both sides need it: the name opens it, the Main tab
+ * draws it.
  *
  * Used for: the chat's name in Decky's bar (it reads), the Main tab (it writes the chat) and the
  * plugin root (it writes the tab and the lit colour), plan 84 step 5.
@@ -32,6 +34,8 @@
  *   Main tab redraws on every streamed word; the name row must not.
  */
 import { useSyncExternalStore } from "react";
+
+import type { BonsaiTabId } from "../plugin-shell/tabTitles";
 
 /** One saved chat, as the chats menu lists it. */
 export type ChatTitleChatRow = {
@@ -73,6 +77,16 @@ export type ChatTitleActions = {
   takeFirstStop: () => boolean;
 };
 
+/** What the tab bar needs, from the plugin root, to be drawn in Decky's bar (plan 84 step 6). */
+export type ChatTitleTabBar = {
+  /** The mounted tabs in the bar's order. */
+  tabIds: readonly BonsaiTabId[];
+  /** The plugin shell's tab switch. */
+  selectTab: (id: string) => void;
+  /** Down from the bar: the ring onto the showing tab's first stop; true when it moved. */
+  exitDown: () => boolean;
+};
+
 export type ChatTitleState = {
   /** Which bonsAI tab is showing ("main", "settings", ...), or null before the plugin root says. */
   tab: string | null;
@@ -84,6 +98,8 @@ export type ChatTitleState = {
   actions: ChatTitleActions | null;
   /** The chats menu is open over the answer. */
   menuOpen: boolean;
+  /** The tab bar's data, while the plugin root is drawn; null otherwise. */
+  tabBar: ChatTitleTabBar | null;
 };
 
 const INITIAL: ChatTitleState = {
@@ -92,10 +108,12 @@ const INITIAL: ChatTitleState = {
   chat: null,
   actions: null,
   menuOpen: false,
+  tabBar: null,
 };
 
 let state: ChatTitleState = INITIAL;
 let owner: object | null = null;
+let tabBarOwner: object | null = null;
 const listeners = new Set<() => void>();
 
 function set(next: ChatTitleState): void {
@@ -175,6 +193,25 @@ export function clearChatTitle(who: object): void {
   set({ ...state, chat: null, actions: null, menuOpen: false });
 }
 
+/**
+ * The plugin root: what the tab bar needs. `who` names the root copy writing, with the same rule as
+ * `publishChatTitle`. A publish that changes nothing makes no new state.
+ */
+export function publishTabBar(who: object, bar: ChatTitleTabBar): void {
+  const sameOwner = tabBarOwner === who;
+  tabBarOwner = who;
+  const was = state.tabBar;
+  if (sameOwner && was && was.tabIds === bar.tabIds && was.selectTab === bar.selectTab && was.exitDown === bar.exitDown) return;
+  set({ ...state, tabBar: bar });
+}
+
+/** The plugin root going away: forget the tab bar's data, if it is still the copy that wrote it. */
+export function clearTabBar(who: object): void {
+  if (tabBarOwner !== who) return;
+  tabBarOwner = null;
+  set({ ...state, tabBar: null });
+}
+
 /** Open or close the chats menu. Opens only on the Main tab, with a chat to show. */
 export function setChatsMenuOpen(open: boolean): void {
   const next = open && state.tab === "main" && state.chat !== null;
@@ -205,5 +242,6 @@ export function useChatTitleValue<T>(pick: (s: ChatTitleState) => T): T {
 export function resetChatTitleStore(): void {
   state = INITIAL;
   owner = null;
+  tabBarOwner = null;
   listeners.clear();
 }

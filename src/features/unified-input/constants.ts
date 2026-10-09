@@ -128,8 +128,8 @@ export const TAB_BAR_STRIP_BG_HEX = "#141c24";
 /**
  * The tab bar's height: 20 in every state (plan 30; docs/archive/30-collapsing-tab-bar.md § 4.8).
  * CSS px before `--bonsai-ui-scale`; every use goes through `uiScalePx()`. Steam's own strip cost
- * 80.66px (measured 2026-09-02). Plan 84 step 6 moves the bar into the strip at the very top and
- * keeps this height.
+ * 80.66px (measured 2026-09-02). Plan 84 step 6 moved the bar into Steam's strip at the very top, which
+ * keeps this height: Steam's 14 points plus Decky's own 6 (deckyHeaderLayout.ts).
  */
 export const TAB_BAR_HEIGHT_PX = 20;
 /*

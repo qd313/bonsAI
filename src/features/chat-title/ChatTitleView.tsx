@@ -1,52 +1,65 @@
 /**
- * Title: The chat's name in Decky's title bar
+ * Title: bonsAI's own part of Decky's title bar: the chat's name, and the tab bar above it
  *
  * Purpose: What bonsAI draws in its one spot in Decky's title bar, to the right of Decky's back
- * arrow (plan 84 step 5, the drawing's frame "Z", round eight's pick X1). On the Main tab: the open
- * chat's name, centred on the panel's centre line, with a small menu arrow after it, and under it a
- * small line "LT chat 2 of 5 RT" ("not saved yet" for a new chat nothing has been asked in), with an
- * empty space on the right as wide as the back arrow and its gap, so the two sides balance. On the
- * other tabs, for now, the plain "bonsAI" wordmark, without the version that used to sit beside it
- * (plan 84 step 7 shows the version in the About tab; step 6 will hide this row on the other tabs).
+ * arrow (plan 84 steps 5 and 6, the drawing's frame "Z", round eight's pick X1). On the Main tab: the
+ * open chat's name, centred on the panel's centre line, with a small menu arrow after it, and under it
+ * a small line "LT chat 2 of 5 RT" ("not saved yet" for a new chat nothing has been asked in), with an
+ * empty space on the right as wide as the back arrow and its gap, so the two sides balance. Above it,
+ * in the 20 points that were Steam's empty strip and the top of Decky's padding, bonsAI's tab bar
+ * (TitleTabStrip.tsx), once Decky's bar has been reshaped for it (deckyHeaderShape.ts, which this view
+ * applies on mount, follows to the tab showing, and undoes on unmount). Off the Main tab the name row
+ * is not drawn and Decky's back arrow is hidden, so Decky's bar is the strip alone. When Decky's bar is
+ * not the shape step 6 expects, nothing of Decky's is changed: the bar stays in bonsAI's own box as
+ * before, and the other tabs show the plain "bonsAI" wordmark here.
  *
  * The name is a stop for Steam's ring. While the ring is on it, LT and RT light up (they are dimmed
  * the rest of the time), a white ring is drawn round the name, and a name too long for its room
  * slides once to show the rest (ChatNameWords.tsx).
  *
  * Used for: `definePlugin`'s `titleView` in index.tsx. Decky draws it outside bonsAI's own box, in a
- * React tree of its own, so everything it shows comes from chatTitleStore.ts and every rule it is
- * drawn with comes from its own `<style>` (chatTitleStyles.ts).
+ * part of the page bonsAI's providers do not reach, so everything it shows comes from chatTitleStore.ts
+ * and every rule it is drawn with comes from its own `<style>` (chatTitleStyles.ts, TitleTabStrip.tsx).
  *
- * Solves: The saved-chats row at the top of the chat took 54 points of the answer's height; the
- * chat's name moves into Decky's bar, which was already there and held only the plugin's name.
+ * Solves: The saved-chats row at the top of the chat took 54 points of the answer's height and the tab
+ * bar 24 more; the chat's name moves into Decky's bar, and the tab bar into the strip above it.
  *
  * Does not: Switch chats or draw the chats menu: switching is the Main tab's, reached through the store,
  * and the menu is drawn in bonsAI's own box (ChatsMenu.tsx); A or a tap on the name only says "open"
  * or "close" through the store. Does not scale with bonsAI's UI-size setting (see chatTitleStyles.ts).
  *
- * Focus (docs/focus-graph.md, "The chat's name and the chats menu (plan 84 step 5)"):
+ * Focus (docs/focus-graph.md, "The chat's name and the chats menu (plan 84 step 5)" and "The tab bar in
+ * Steam's strip (plan 84 step 6)"), with the bar in the strip:
+ *   Up    -> the tab bar, by Steam's transfer; an open chats menu closes as the ring goes
+ *   Down  -> the chat's first stop (the Main tab's own action); an open chats menu closes
  *   Left  -> Steam's own move, onto Decky's back arrow beside it (the same bar, one container)
  *   Right -> holds still: nothing of bonsAI lies to the right of the name
- *   Down  -> the tab bar, by Steam's transfer (`takeNavFocus("tab-bar")`): it is right below; an open
- *            chats menu closes as the ring goes
- *   Up    -> Steam's own: nothing lies above yet (step 6 puts the tab strip there)
+ *   LB/RB -> the previous or next tab; the ring goes to the tab bar first (the name is not drawn there)
  *   A, tap -> opens the chats menu, which takes the ring onto the open chat; again closes it
  *   B     -> with the menu open, closes it; otherwise Decky's own (back to its plugin list)
- *
- * Leave room for step 6: the root is one element that can hold a second child above the name row
- * (the tab strip), the tab showing is read from the store, and nothing here depends on how tall
- * Decky's bar is.
+ * With the bar in bonsAI's box (Decky's bar not as expected): Up is Steam's own and Down goes to the
+ * tab bar, right below, as in step 5.
  */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
 
+import { isBumperLeftDeckEvent, isBumperRightDeckEvent } from "../../utils/focusNavigation";
 import { takeNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
+import { neighbourTab } from "../plugin-shell/tabBarNav";
 import { ChatNameWords } from "./ChatNameWords";
 import { registerChatNameNav, rememberChatNameElement, unregisterChatNameNav } from "./chatNameNav";
 import { CHAT_TITLE_CSS } from "./chatTitleStyles";
-import { getChatTitleState, setChatsMenuOpen, useChatTitleState, type ChatTitleChat } from "./chatTitleStore";
+import {
+  getChatTitleState,
+  setChatsMenuOpen,
+  takeChatFirstStop,
+  useChatTitleState,
+  type ChatTitleChat,
+} from "./chatTitleStore";
+import { releaseDeckyHeaderShape, syncDeckyHeaderShape, useTopStripActive } from "./deckyHeaderShape";
 import { rememberChatTitleRoot } from "./deckyTitleParts";
 import { useNameRowBalance } from "./nameRowBalance";
+import { TITLE_TAB_STRIP_CSS, TitleTabStrip } from "./TitleTabStrip";
 
 /** The small line under the name: "chat 2 of 5", or "not saved yet" for a new chat. */
 export function chatCountLine(chat: Pick<ChatTitleChat, "unsaved" | "place" | "count">): string {
@@ -68,12 +81,40 @@ function toggleChatsMenu(): void {
 }
 
 /**
+ * LB or RB on the name: the tab before or after, wrapping, as on the tab bar. The ring goes to the tab bar
+ * first: the other tabs draw no name, so the ring would otherwise be left on a control that is gone.
+ * False (left to Steam) for any other button, or before the plugin root has handed the tab bar over.
+ */
+function switchTabFromName(evt: unknown): boolean {
+  const step = isBumperLeftDeckEvent(evt) ? -1 : isBumperRightDeckEvent(evt) ? 1 : 0;
+  const { tab, tabBar } = getChatTitleState();
+  if (step === 0 || !tabBar || tab === null) return false;
+  const next = neighbourTab(tabBar.tabIds, tab, step);
+  if (next === null || next === tab) return true;
+  setChatsMenuOpen(false);
+  takeNavFocus("tab-bar");
+  tabBar.selectTab(next);
+  return true;
+}
+
+/**
  * In: the open chat as the store has it, the measured empty space for the right, and whether the menu
  * is open. Out: the name row, its one stop wired as the file header lists. Can go wrong: Steam fills the
  * nav node a moment after mounting, so a transfer onto the name just after it appears may report false;
  * callers retry or fall back.
  */
-function ChatNameRow({ chat, balance, menuOpen }: { chat: ChatTitleChat; balance: number; menuOpen: boolean }) {
+function ChatNameRow({
+  chat,
+  balance,
+  menuOpen,
+  strip,
+}: {
+  chat: ChatTitleChat;
+  balance: number;
+  menuOpen: boolean;
+  /** The tab bar is in the strip above the name (plan 84 step 6), not in bonsAI's box below it. */
+  strip: boolean;
+}) {
   /* Kept here, not on the root, so it starts over whenever the row is drawn again. */
   const [ringOn, setRingOn] = useState(false);
   const navRef = useRef<NavRefHolder["current"]>(null);
@@ -105,11 +146,21 @@ function ChatNameRow({ chat, balance, menuOpen }: { chat: ChatTitleChat; balance
           noFocusRing: true,
           onMoveRight: () => true,
           /* An open menu the ring had left (a tap that opened it, then the ring came back here) closes
-             as the ring goes down, so it never stays open behind the ring. */
+             as the ring goes, so it never stays open behind the ring. With the bar in the strip, Down
+             enters the chat itself and Up is the bar; otherwise the bar is right below and Up is Steam's. */
           onMoveDown: () => {
             setChatsMenuOpen(false);
-            return takeNavFocus("tab-bar");
+            return strip ? takeChatFirstStop() : takeNavFocus("tab-bar");
           },
+          ...(strip
+            ? {
+                onMoveUp: () => {
+                  setChatsMenuOpen(false);
+                  return takeNavFocus("tab-bar");
+                },
+              }
+            : {}),
+          onButtonDown: switchTabFromName,
           /* B with the menu open closes it and keeps the ring here. Claimed only then: otherwise B is
              Decky's, and goes back to its plugin list. */
           ...(menuOpen
@@ -147,17 +198,30 @@ function Wordmark() {
 
 /**
  * In: nothing; everything comes from the store. Out: the name row on the Main tab once the Main tab
- * has said which chat is open, else the wordmark.
+ * has said which chat is open; with the bar in the strip, the bar too, and nothing else off the Main
+ * tab; with the bar in bonsAI's box, the wordmark off the Main tab.
+ *
+ * The name row comes before the bar in the page: the bar is placed at the top by the stylesheet, and
+ * Steam walks Decky's bar in page order, so Right from Decky's back arrow reaches the name, not the bar
+ * (the Deck, 2026-10-08: with the bar first, Right from the arrow went to the bar).
  */
 export function ChatTitleView(): React.ReactElement {
   const s = useChatTitleState();
+  const strip = useTopStripActive();
   const rootRef = useRef<HTMLDivElement | null>(null);
   const chat = s.tab === "main" ? s.chat : null;
   const balance = useNameRowBalance(rootRef, chat !== null);
+
+  /* Decky's bar follows the tab showing; Decky's own parts are put back when this view goes away. */
+  useLayoutEffect(() => syncDeckyHeaderShape(s.tab), [s.tab]);
+  useLayoutEffect(() => () => releaseDeckyHeaderShape(), []);
+
   const classes = ["bonsai-chat-title"];
   if (chat) classes.push("bonsai-chat-title--main");
   if (chat && s.menuOpen) classes.push("bonsai-chat-title--menu-open");
+  if (strip) classes.push("bonsai-chat-title--strip");
   const style = s.litColor ? ({ "--bonsai-chat-title-lit": s.litColor } as React.CSSProperties) : undefined;
+  const wordmark = !chat && !(strip && s.tab !== null && s.tab !== "main");
   return (
     <div
       ref={(el: HTMLDivElement | null) => {
@@ -167,8 +231,10 @@ export function ChatTitleView(): React.ReactElement {
       className={classes.join(" ")}
       style={style}
     >
-      <style>{CHAT_TITLE_CSS}</style>
-      {chat ? <ChatNameRow chat={chat} balance={balance} menuOpen={s.menuOpen} /> : <Wordmark />}
+      <style>{strip ? CHAT_TITLE_CSS + TITLE_TAB_STRIP_CSS : CHAT_TITLE_CSS}</style>
+      {chat ? <ChatNameRow chat={chat} balance={balance} menuOpen={s.menuOpen} strip={strip} /> : null}
+      {wordmark ? <Wordmark /> : null}
+      {strip && s.tabBar ? <TitleTabStrip tab={s.tab} bar={s.tabBar} /> : null}
     </div>
   );
 }

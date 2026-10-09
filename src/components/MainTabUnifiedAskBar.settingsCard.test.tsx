@@ -182,6 +182,35 @@ describe("the settings-results card never shows more rows than fit", () => {
     restoreRects();
   });
 
+  it("with the tab bar up in Steam's strip (plan 84 step 6), measures the room from bonsAI's box's own top", () => {
+    /* No bar in bonsAI's box: Decky's bar is above the box, and the card must not reach over it. The box's
+       top on the Deck's own screen is 52; six rows' worth of room down to the question box. */
+    const sixRowHeight = settingsCardHeightForRows(6);
+    const scopeTop = 52;
+    const boxTop = scopeTop + sixRowHeight + 6;
+    const scope = document.createElement("div");
+    scope.className = "bonsai-scope";
+    const mount = document.createElement("div");
+    scope.appendChild(mount);
+    document.body.appendChild(scope);
+    const originalGBCR = Element.prototype.getBoundingClientRect;
+    const rect = (top: number, height: number) =>
+      ({ top, bottom: top + height, left: 0, right: 300, width: 300, height, x: 0, y: top, toJSON: () => ({}) }) as DOMRect;
+    Element.prototype.getBoundingClientRect = function (this: HTMLElement) {
+      if (this.classList.contains("bonsai-scope")) return rect(scopeTop, 454 - scopeTop);
+      if (this.classList.contains("bonsai-unified-input-host")) return rect(boxTop, 60);
+      return originalGBCR.call(this);
+    };
+    try {
+      const { container } = render(<MainTabUnifiedAskBar {...buildProps({ filteredSettings: fakeSettings(20) })} />, {
+        container: mount,
+      });
+      expect(container.querySelectorAll(".bonsai-settings-results-card-row").length).toBe(6);
+    } finally {
+      Element.prototype.getBoundingClientRect = originalGBCR;
+    }
+  });
+
   it("shows every result with no 'more' count once everything fits", () => {
     const { container, restoreRects } = renderWithRoom(
       buildProps({ filteredSettings: fakeSettings(3) }),

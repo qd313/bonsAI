@@ -9,10 +9,11 @@
  * the D-pad's ring is on the bar; then the whole bar wears the ring and
  * the marks light up. Nothing drops down from it.
  *
- * Used for: The plugin's main screen, drawn above the tab body, while
- * Steam's own original tab row is hidden. Plan 84 step 6 moves it up into
- * Decky's title bar; it draws only from its props, so it does not care
- * which container holds it.
+ * Used for: The plugin's main screen, while Steam's own original tab row
+ * is hidden: drawn by bonsAI's title view in Steam's strip at the very
+ * top (plan 84 step 6, TitleTabStrip.tsx), or above the tab body in
+ * bonsAI's own box when Decky's bar could not be reshaped for it. It
+ * draws only from its props, so it does not care which holds it.
  *
  * Solves: Steam's own tab strip took up a lot of vertical room and never
  * showed a tab's name, only its icon. This bar is 20 points tall, always

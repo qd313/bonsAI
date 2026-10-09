@@ -126,7 +126,7 @@ import { PluginErrorBoundary } from "./features/plugin-shell/PluginErrorBoundary
 import { DECKY_TAB_TITLES, type BonsaiTabId } from "./features/plugin-shell/tabTitles";
 import { TabIndicatorBar } from "./features/plugin-shell/TabIndicatorBar";
 import { HiddenTabHeaderTrap } from "./features/plugin-shell/useHiddenTabHeaderTrap";
-import { TabBodyFocusRoot, tabBodyNavFocusId } from "./features/plugin-shell/TabBodyFocusRoot";
+import { TabBodyFocusRoot } from "./features/plugin-shell/TabBodyFocusRoot";
 import { takeNavFocus } from "./utils/navFocusRegistry";
 import { loadSavedSearchQuery, persistSearchQuery } from "./features/plugin-shell/pluginStorage";
 import { useOllamaConnectionState } from "./features/plugin-shell/useOllamaConnectionState";
@@ -172,7 +172,8 @@ import { useExternalNavigationActions } from "./features/plugin-shell/useExterna
 import { useAppLogPrefsAndCapturedErrors } from "./features/plugin-shell/useAppLogPrefsAndCapturedErrors";
 import { useTabAndModeGuardEffects } from "./features/plugin-shell/useTabAndModeGuardEffects";
 import { ChatTitleView } from "./features/chat-title/ChatTitleView";
-import { setChatTitleLitColor, setChatTitleTab, takeChatFirstStop } from "./features/chat-title/chatTitleStore";
+import { setChatTitleLitColor } from "./features/chat-title/chatTitleStore";
+import { tabBarExitDownFor, useTopStripTabBar } from "./features/chat-title/useTopStripTabBar";
 
 /*
  * In: nothing — no props. Every value Content needs, it reads from settings,
@@ -625,10 +626,10 @@ const Content: React.FC = () => {
     aiCharacterCustomText,
     uiScaleScopeStyle: uiScale.scopeStyle,
   });
-  /* The chat's name in Decky's bar is drawn outside this box (plan 84 step 5): it learns the tab and
-     the character's lit colour (the tab bar's own) through its store, not through props. */
+  /* The chat's name in Decky's bar is drawn outside this box (plan 84 step 5): it learns the
+     character's lit colour (the tab bar's own) through its store, not through props; the tab showing
+     goes the same way, with the tab bar's data (useTopStripTabBar, below). */
   const tabLitColor = (bonsaiScopeStyle as Record<string, unknown>)["--bonsai-ui-tab-lit"];
-  useEffect(() => setChatTitleTab(currentTab), [currentTab]);
   useEffect(() => setChatTitleLitColor(typeof tabLitColor === "string" ? tabLitColor : null), [tabLitColor]);
 
   useTabAndModeGuardEffects({
@@ -1201,10 +1202,19 @@ const Content: React.FC = () => {
    * False when the target is not registered, and the bar lets Steam decide (the hidden-header trap
    * covers that landing).
    */
-  const tabBarExitDown = useCallback(
-    () => (currentTab === "main" ? takeChatFirstStop() : takeNavFocus(tabBodyNavFocusId(currentTab as BonsaiTabId))),
-    [currentTab],
-  );
+  const tabBarExitDown = useCallback(() => tabBarExitDownFor(currentTab), [currentTab]);
+  /**
+   * The tab bar in Steam's strip at the top of the panel, drawn by the title view in Decky's bar (plan 84
+   * step 6): true once Decky's bar has been reshaped for it. Until then, and whenever Decky's bar is not
+   * the shape that needs, the bar is drawn here in bonsAI's box as before.
+   */
+  const barInStrip = useTopStripTabBar({
+    tab: currentTab,
+    tabIds: tabBarIds,
+    selectTab,
+    exitDown: tabBarExitDown,
+    generation: uiScale.generation,
+  });
   /**
    * B inside a tab body. Steam's `Tabs` would focus its own header — hidden now, so that is the
    * ghost stop — unless `cancelSkipTabHeader` is set, in which case the press reaches this handler on
@@ -1242,12 +1252,14 @@ const Content: React.FC = () => {
           puts it on top; Steam's own header inside the root is hidden by section-1.ts.
         */}
         <React.Fragment key={`bonsai-tabs-gen-${uiScale.generation}`}>
-          <TabIndicatorBar
-            tabIds={tabBarIds}
-            currentTab={currentTab}
-            selectTab={selectTab}
-            exitDown={tabBarExitDown}
-          />
+          {barInStrip ? null : (
+            <TabIndicatorBar
+              tabIds={tabBarIds}
+              currentTab={currentTab}
+              selectTab={selectTab}
+              exitDown={tabBarExitDown}
+            />
+          )}
           <HiddenTabHeaderTrap />
           <div className="bonsai-decky-tabs-root" data-bonsai-active-tab={currentTab}>
             <Tabs

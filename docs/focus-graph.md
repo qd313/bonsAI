@@ -265,8 +265,10 @@ LB  [tabs LB reaches]  [icon] NAME  [tabs RB reaches]  RB      <- one stop: the 
   `takeNavFocus` onto the chat-slot row on Main and onto the tab body's root elsewhere). It claims the press
   only when the ring moved; otherwise Steam's own step runs and the hidden-header trap catches a landing on
   Steam's hidden tab buttons. Unchanged.
-- **Up** is not claimed: Steam takes the ring upward, to Decky's back button today. Step 6 moves the bar into
-  Decky's title bar and sets the routes between the bar, the back arrow and the chat's name by hand.
+- **Up** is not claimed: Steam takes the ring upward, to Decky's back button. **Since step 6** the bar sits at the
+  very top, in Steam's strip, and Up holds there (claimed, nothing moves); Down on Main goes to the chat's name
+  first. See "The tab bar in Steam's strip" below; this paragraph still holds whenever Decky's bar is not the
+  shape step 6 expects and the bar stays in bonsAI's box.
 - **A** does nothing (no `onActivate`); **B** is Steam's own.
 - **Into the bar, unchanged:** Up from the top of a tab body (`TabBodyFocusRoot`), Up from the chat-slot row,
   B from a tab body (`onCancelFromTabHeader`), the return after a popup closes (`modalReturnFocusRegistry`,
@@ -312,10 +314,10 @@ bonsAI's tab bar
 - **Down** goes to the tab bar right below, by Steam's transfer onto its registered nav node
   (`takeNavFocus("tab-bar")`). Steam's own Down from Decky's bar reached the tab bar too (2026-10-08), but the
   route is written down rather than left to Steam's guess. An open chats menu closes as the ring goes, so it is
-  never left open behind the ring. Step 6 moves the tab bar above the name, and Down then becomes the chat's
-  first stop.
+  never left open behind the ring. **Since step 6** (the bar above the name, in Steam's strip) Down is the chat's
+  first stop; this route stays for the fallback, with the bar in bonsAI's box.
 - **Up** is Steam's own. Nothing lies above the name yet (Up from Decky's bar moved nothing on 2026-10-08);
-  step 6 puts the tab strip there and claims it.
+  **since step 6** the tab bar lies above it, and Up is claimed onto the bar.
 - **A** (`onOKButton`) or a tap (`onClick`) opens the chats menu; the same again closes it. No `onActivate`, which
   Steam also fires for A and would toggle twice. **B** on the name closes the menu while it is open (claimed only
   then, with `onCancelButton`); with the menu shut, B is Decky's own and goes back to its plugin list.
@@ -352,7 +354,8 @@ new-chat spot, goes straight to the question box. Never left to Steam: Steam's o
 its hidden tab buttons, and the hidden-header trap throws the ring back, so the press would do nothing. Step 6 calls
 the same action from the name's Down once the tab bar sits above the name.
 
-**Up from the top of the chat goes to the tab bar** (`takeAboveTheChat` in `chatTranscriptNavHelpers.ts`), the mirror
+**Up from the top of the chat goes to the tab bar** (since step 6: to the chat's name, the stop now right above the
+chat) (`takeAboveTheChat` in `chatTranscriptNavHelpers.ts`), the mirror
 of Down: Up from the "N earlier" line, from the first question's text with nothing drawn over its row, and from the
 first archived question's row, and Up from the suggestion chips on an empty chat (`chipRowExitUp`). All of these
 named the saved-chats row before; they share one function now, so step 6, which puts the chat's name between the
@@ -400,3 +403,58 @@ Your chats
 - **LT and RT are refused while the menu is open.** Leaving the Main tab closes it.
 - **Not backed by a device row yet.** Rows P84-NAME-01, P84-NAME-02, P84-NAME-03, P84-MENU-01 and the LT/RT half of
   P84-HINTS-01 (plan 84 § 6) are in the lane report.
+
+### The tab bar in Steam's strip, and Decky's bar per tab (plan 84 step 6)
+
+Plan 84 step 6 moves the tab bar out of bonsAI's box, up into the 14-point strip Steam leaves empty at the top
+of every Quick Access page plus the top 6 points of Decky's title padding (drawing frame "Z"). While bonsAI is
+open, Decky's own page is moved up 14 (Steam's shared padding is never touched: plan 84 test B), Decky's title
+padding grows from 6 to 20 and the bar is drawn in it by bonsAI's title view, Decky's 16-point gap shrinks to 4,
+and the page gets the 14 points back at its bottom. Off the Main tab, Decky's back arrow is hidden and no name is
+drawn, so Decky's bar is the strip alone. Everything is put back when bonsAI closes, and nothing is changed when
+Decky's bar is not the shape this expects (the bar then stays in bonsAI's box, with the routes of steps 4 and 5).
+Code: `deckyHeaderShape.ts`, `deckyHeaderLayout.ts`, `deckyTitleParts.ts`, `TitleTabStrip.tsx`,
+`ChatTitleView.tsx`, `useTopStripTabBar.ts`.
+
+```
+Main tab                                            other tabs
+y 0-20   [LB .. icon NAME .. RB]   the tab bar      y 0-20   [LB .. icon NAME .. RB]   the tab bar
+            | Down        ^ Up                                  | Down        ^ Up (the body's own exit)
+y 20-48  [<-]  [ the chat's name ]                  y 24-    the tab's body (TabBodyFocusRoot)
+            | Down        ^ Up (takeAboveTheChat)
+y 52-    the chat: its first stop
+```
+
+Stops: the tab bar (one stop, step 4's) and the chat's name (step 5's). Decky's back arrow is Decky's own control.
+
+- **The tab bar.** Left and LB open the previous tab, Right and RB the next, wrapping, always claimed (past the
+  bar Steam would walk out to its own column of tab icons), and the ring stays on the bar. **Up holds** (claimed,
+  nothing moves: nothing lies above, and Steam's own Up found nothing there on 2026-10-08). **Down on Main goes to
+  the chat's name** by Steam's transfer (the "chat-name" nav node), or, when the name is not drawn yet, to the
+  chat's first stop; on the other tabs Down goes to the tab body's root as before. A does nothing; B is Steam's
+  own, and Decky's plugin box takes it back to Decky's list.
+- **The chat's name.** **Up goes to the tab bar** and **Down to the chat's first stop** (`takeChatFirstStop`: the
+  "N earlier" line, the first question's text, or the question box), both by Steam's transfer; either closes an
+  open chats menu as the ring goes. Left is Steam's own onto Decky's back arrow, Right holds, as in step 5.
+  **LB and RB switch tabs from the name too**, and the ring goes to the tab bar first, because the other tabs draw
+  no name (left alone, the ring would sit on a control that is gone).
+- **Decky's back arrow** (Main only) takes no handler of ours. Steam walks Decky's bar in page order, so the name
+  is drawn before the bar in the page (the bar is placed at the top by the stylesheet), so that **Right from the
+  arrow reaches the name**: on 2026-10-08 Right from the arrow reached the stop drawn next after it in the page
+  (the test bar, then). That Steam walks this bar in page order is read from that one measurement, not proven:
+  P84-RING-01 checks it.
+  **Up from the arrow cannot be routed to the bar by hand**: the arrow is Decky's own button, its moves are not
+  ours to set, and a direction read in a button-down handler is dead on the device. Steam's own Up from the arrow
+  moved nothing on 2026-10-08; the bar is reached from the arrow by Right then Up. Down from the arrow is Steam's
+  own and was not measured with the bar gone from bonsAI's box (a landing on Steam's hidden tab buttons is thrown
+  to the bar by the hidden-header trap).
+- **Into the top, unchanged in kind:** Up from the top of the chat (`takeAboveTheChat`: the "N earlier" line, the
+  first question's text, the first archived row, the chips on an empty chat) goes to the chat's name now, the
+  stop right above the chat; Up from the top of a tab body (`TabBodyFocusRoot`), B in a tab body
+  (`onCancelFromTabHeader`) and the hidden-header trap go to the bar, which is in the strip now.
+- **Never on a hidden control.** Off Main, the name is not drawn at all, and the arrow is hidden: the bar claims
+  Left, Right and Up, so no move of ours leads onto the arrow.
+- **The ring watch after a reopen** counts the bar and the name as bonsAI's (see step 5's section): a ring on the
+  bar in the window's first seconds goes to the question box; on the name, it stays.
+- **Not backed by a device row yet.** Rows P84-HEIGHT-01, P84-OTHER-01, P84-BACK-01, P84-QAM-01 and P84-RING-01
+  (plan 84 § 6) are in the lane report.

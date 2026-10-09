@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 767,
-  "edgeCount": 2258,
+  "edgeCount": 2257,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2967,7 +2967,6 @@
         "src/features/chat-title/chatTitleStore.ts",
         "src/features/chat-title/chatTitleStyles.ts",
         "src/features/chat-title/nameRowBalance.ts",
-        "src/pluginVersion.ts",
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
@@ -5486,7 +5485,6 @@
       "importedBy": [
         "src/components/AboutTab.test.tsx",
         "src/components/AboutTab.tsx",
-        "src/features/chat-title/ChatTitleView.tsx",
         "src/index.test.tsx"
       ]
     },

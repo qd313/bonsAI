@@ -22,7 +22,7 @@
  * pick X1 (`.d-cpill`, `.d-cname`, `.nm2`, `.sub2`, `.d-key`, `.d-mirror`, `.deck.dimkeys`, `.ring-chat`).
  */
 
-import { ASK_LABEL_COLOR_50, BONSAI_FOREST_GREEN } from "../unified-input/constants";
+import { BONSAI_FOREST_GREEN } from "../unified-input/constants";
 
 /** Decky's own back arrow, measured on the Deck 2026-10-08: the empty space on the right mirrors it. */
 export const DECKY_BACK_ARROW_W_PX = 40;
@@ -62,20 +62,6 @@ ${ROOT} .bonsai-chat-title__wordmark {
   -webkit-text-stroke: 1.25px ${BONSAI_FOREST_GREEN};
   paint-order: stroke fill;
   white-space: nowrap;
-}
-${ROOT} .bonsai-chat-title__wordmark sub {
-  font-variant: normal;
-  font-size: 0.46em;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: ${ASK_LABEL_COLOR_50};
-  margin-left: 0.38em;
-  line-height: 1;
-  vertical-align: baseline;
-  position: relative;
-  bottom: -0.2em;
-  -webkit-text-stroke: 0 transparent;
-  paint-order: normal;
 }
 ${ROOT} .bonsai-chat-title__row {
   display: flex;

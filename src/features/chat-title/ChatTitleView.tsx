@@ -6,7 +6,8 @@
  * chat's name, centred on the panel's centre line, with a small menu arrow after it, and under it a
  * small line "LT chat 2 of 5 RT" ("not saved yet" for a new chat nothing has been asked in), with an
  * empty space on the right as wide as the back arrow and its gap, so the two sides balance. On the
- * other tabs, for now, the plain "bonsAI" wordmark (step 6 will hide this row there).
+ * other tabs, for now, the plain "bonsAI" wordmark, without the version that used to sit beside it
+ * (plan 84 step 7 shows the version in the About tab; step 6 will hide this row on the other tabs).
  *
  * The name is a stop for Steam's ring. While the ring is on it, LT and RT light up (they are dimmed
  * the rest of the time), a white ring is drawn round the name, and a name too long for its room
@@ -38,7 +39,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
 
-import { PLUGIN_VERSION } from "../../pluginVersion";
 import { takeNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
 import { ChatNameWords } from "./ChatNameWords";
 import { registerChatNameNav, rememberChatNameElement, unregisterChatNameNav } from "./chatNameNav";
@@ -133,14 +133,9 @@ function ChatNameRow({ chat, balance, menuOpen }: { chat: ChatTitleChat; balance
   );
 }
 
-/** The plain wordmark the other tabs show, as the title bar has shown it since 0.1. */
+/** The plain wordmark the other tabs show. No version beside it since plan 84: that is the About tab's. */
 function Wordmark() {
-  return (
-    <span className="bonsai-chat-title__wordmark" title={`bonsAI v${PLUGIN_VERSION}`}>
-      bonsAI
-      <sub>v{PLUGIN_VERSION}</sub>
-    </span>
-  );
+  return <span className="bonsai-chat-title__wordmark">bonsAI</span>;
 }
 
 /**

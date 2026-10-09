@@ -64,10 +64,12 @@ describe("plugin root", () => {
       expect(() => plugin.onDismount?.()).not.toThrow();
     });
 
-    it("shows the build version in the title", async () => {
+    it("shows the bonsAI wordmark in the title, without the version (plan 84: the version moves to About)", async () => {
       const plugin = await sharedPlugin();
-      render(plugin.titleView as ReactElement);
-      expect(screen.getByText(`v${PLUGIN_VERSION}`)).toBeTruthy();
+      const { container } = render(plugin.titleView as ReactElement);
+      expect(container.textContent).toContain("bonsAI");
+      expect(container.textContent).not.toContain(PLUGIN_VERSION);
+      expect(container.innerHTML).not.toContain(PLUGIN_VERSION);
     });
   });
 

@@ -260,6 +260,7 @@
     "src/utils/answerBubbleNavigation.lastSectionCover.test.ts",
     "src/utils/answerBubbleNavigation.lastStep.test.ts",
     "src/utils/answerBubbleNavigation.mirrorWalk.test.ts",
+    "src/utils/answerBubbleNavigation.readAloudCorner.test.tsx",
     "src/utils/answerBubbleNavigation.readingWalk.test.ts",
     "src/utils/answerBubbleNavigation.ringFollowsScroll.test.ts",
     "src/utils/answerBubbleNavigation.ringOnBubble.test.ts",

@@ -205,6 +205,11 @@ function answerStops(container: HTMLElement): HTMLElement[] {
   return Array.from(container.querySelectorAll<HTMLElement>(".bonsai-answer-stop"));
 }
 
+/** True when no Read aloud speaker sits inside the reply-actions block (it is in the answer's corner). */
+function screen_noReadAloudRow(container: HTMLElement): boolean {
+  return !container.querySelector(".bonsai-chat-reply-actions [aria-label='Read aloud']");
+}
+
 function focusOn(el: HTMLElement): void {
   act(() => el.focus());
   expect(document.activeElement).toBe(el);
@@ -244,11 +249,15 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
     expect(document.activeElement).toBe(fold);
   });
 
-  it("Read aloud goes Up onto the last choice button, not into the answer", () => {
+  /* Plan 84 step 3: Read aloud sits in the answer's lower-left corner, ABOVE the choices, so Up from
+     it goes back into the answer, like Copy's Up. It used to be in the row under the choices, and Up
+     from there went to the last choice button. */
+  it("Read aloud, in the answer's corner, goes Up into the answer's last section, not onto a choice", () => {
     const { container } = renderTurn();
     focusOn(byLabel(container, "Read aloud"));
     expect(press("onMoveUp")).toBe(true);
-    expect(document.activeElement?.textContent).toBe(`B. ${BRANCHES.options[1]!.label}`);
+    const stops = answerStops(container);
+    expect(document.activeElement).toBe(stops[stops.length - 1]);
   });
 
   it("Up from the last choice is Steam's own step to the first; the first goes Up into the answer's last section", () => {
@@ -308,11 +317,14 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
     expect(document.activeElement).toBe(byLabel(container, "Mark reply helpful"));
   });
 
-  it("with no reason chips, Show details still goes Up onto Read aloud", () => {
+  /* The speaker is not in the row under the answer any more, so with no thumbs row to land on, Up
+     from Show details goes on past it to the choices above (here, the last choice button). */
+  it("with no reason chips and no thumbs row, Show details goes Up onto the last choice", () => {
     const { container } = renderTurn({ liveReplyFeedbackRating: "up" });
     focusOn(byLabel(container, "Show details"));
     expect(press("onMoveUp")).toBe(true);
-    expect(document.activeElement).toBe(byLabel(container, "Read aloud"));
+    expect(document.activeElement?.textContent).toBe(`B. ${BRANCHES.options[1]!.label}`);
+    expect(screen_noReadAloudRow(container)).toBe(true);
   });
 
   /*

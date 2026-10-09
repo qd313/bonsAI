@@ -2,8 +2,9 @@
  * Title: Read aloud button end-to-end render tests
  * Purpose: Pin that the Read aloud speaker under a finished answer actually starts and stops the
  *   background reader with the answer's readable text, and that a new Ask stops it. The control
- *   used to be a full-width line; it is a bare glyph at the end of the Helpful / Not really row
- *   now (plan 62 section 3b), so its state is read off its aria-label rather than visible text.
+ *   used to be a full-width line, then a glyph at the end of the Helpful / Not really row (plan 62
+ *   section 3b); it sits in the answer bubble's lower-left corner now (plan 84 step 3). Its state is
+ *   read off its aria-label rather than visible text.
  * Used for: plan 42 step 3a — useReadAloud.ts's own tests cover the hook in isolation; this proves
  *   MainTabChatTranscript wires it to a real turn's text and question.
  * Does not: Prove D-pad focus geometry — that is the device rows' job.
@@ -52,10 +53,10 @@ function renderReply(overrides: Partial<MainTabChatTranscriptProps> = {}) {
   return render(<MainTabChatTranscript {...props} />);
 }
 
-/** The speaker glyph at the end of the Helpful / Not really row; its state lives in aria-label. */
+/** The speaker glyph in the answer bubble's lower-left corner; its state lives in aria-label. */
 function findReadAloudButton(container: HTMLElement): HTMLElement {
-  const button = container.querySelector(".bonsai-chat-read-aloud-btn");
-  if (!button) throw new Error("Read aloud button not found");
+  const button = container.querySelector(".bonsai-reply-read-aloud-corner-slot .bonsai-chat-read-aloud-btn");
+  if (!button) throw new Error("Read aloud button not found in the answer's corner");
   return button as HTMLElement;
 }
 
@@ -113,6 +114,39 @@ describe("MainTabChatTranscript Read aloud", () => {
     });
     expect(readAloudLabel(container)).toBe("Read aloud");
     vi.useRealTimers();
+  });
+
+  /* Plan 84 step 3, "A on it starts and, pressed again, stops reading": the press that reads is the
+     press that stops, from the corner, on the same answer. */
+  it("a second press on the same speaker stops the reading it started", async () => {
+    setRpcHandler("get_voice_read_aloud_status", () => ({
+      state: "speaking",
+      sentence_index: 0,
+      sentence_count: 3,
+      error: null,
+      started_at: 0,
+    }));
+    const { container } = renderReply();
+    await act(async () => {
+      fireEvent.click(findReadAloudButton(container));
+      await Promise.resolve();
+    });
+    expect(readAloudLabel(container)).toBe("Stop");
+    expect(getRpcCallLog().some((c) => c.method === "stop_voice_read_aloud")).toBe(false);
+
+    await act(async () => {
+      fireEvent.click(findReadAloudButton(container));
+      await Promise.resolve();
+    });
+    expect(getRpcCallLog().some((c) => c.method === "stop_voice_read_aloud")).toBe(true);
+  });
+
+  it("draws the speaker after the answer's bubble and not inside the row of actions under it", () => {
+    const { container } = renderReply();
+    const slot = container.querySelector(".bonsai-reply-read-aloud-corner-slot")!;
+    const bubble = container.querySelector(".bonsai-chat-ai-bubble")!;
+    expect(bubble.compareDocumentPosition(slot) & 4).toBeTruthy();
+    expect(container.querySelector(".bonsai-chat-reply-actions .bonsai-chat-read-aloud-btn")).toBeNull();
   });
 
   it("stops the reader when a new Ask starts", async () => {
@@ -262,5 +296,25 @@ describe("a reading that started on its own, once the answer is drawn as history
     });
 
     expect(readAloudLabel(container)).toBe("Read aloud");
+  });
+});
+
+describe("an older reply whose only action was the speaker", () => {
+  afterEach(() => {
+    cleanup();
+  });
+
+  it("has the speaker in its corner and no empty row of actions under it", () => {
+    const turns = [turn("t0", "An older answer about the first fight."), turn("t1", ANSWER)];
+    // t0 is drawn open but is not the newest, so it has no thumbs and (here) no details line.
+    const { container } = renderArchivedTurns(turns, "t0");
+    expect(container.querySelector(".bonsai-reply-read-aloud-corner-slot .bonsai-chat-read-aloud-btn")).not.toBeNull();
+    expect(container.querySelector(".bonsai-chat-reply-actions")).toBeNull();
+  });
+
+  it("keeps the speaker off the back end's stop placeholder", () => {
+    const turns = [turn("t0", "Request cancelled."), turn("t1", ANSWER)];
+    const { container } = renderArchivedTurns(turns, "t0");
+    expect(container.querySelector(".bonsai-reply-read-aloud-corner-slot")).toBeNull();
   });
 });

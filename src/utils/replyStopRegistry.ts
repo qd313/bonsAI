@@ -49,6 +49,16 @@ export type ReplyStopId =
   | "show-reasoning"
   | "copy"
   | "summary-note"
+  /** The Read aloud speaker in the answer bubble's lower-left corner (plan 84 step 3). */
+  | "read-aloud-corner"
+  /** The first "What went wrong?" choice, the landing for a Down that leaves the answer's corner. */
+  | "reason-chips"
+  /**
+   * The old Read aloud line under the answer. Nothing registers it any more (plan 84 step 3 moved the
+   * speaker into the corner, under "read-aloud-corner"); the name stays only because the summed-up
+   * note's Down chain (buildChatSummaryNoteElement.tsx) still asks for it, and an unregistered stop is
+   * simply skipped.
+   */
   | "read-aloud";
 
 /**
@@ -57,7 +67,10 @@ export type ReplyStopId =
  * These no longer sit in one grid. After D76 and D77 the button row is gone: `retry` is an icon on
  * the question bubble above the answer, `copy` an icon in the answer bubble's bottom-right corner,
  * `helpful` and `not-really` the two buttons under it, and `show-details` the line below them.
- * `read-aloud` is a line of the same shape as `show-details`, sitting just above it (plan 42 step 3).
+ * `read-aloud-corner` is the Read aloud speaker in the answer bubble's lower-left corner, beside
+ * `copy` (plan 84 step 3); it used to be a line above `show-details` (plan 42 step 3), then a glyph at
+ * the end of the thumbs row (plan 62), and that old name `read-aloud` is no longer registered by anything.
+ * `reason-chips` is the first "What went wrong?" choice, which only exists once a reply is rated down.
  * The order below is the order a person walks them, which is what the "which stop has focus?"
  * lookups want; it is not a claim about layout.
  *
@@ -73,11 +86,12 @@ export type ReplyStopId =
 export const REPLY_STOP_ORDER: readonly ReplyStopId[] = [
   "retry",
   "show-reasoning",
+  "read-aloud-corner",
   "copy",
   "summary-note",
   "helpful",
   "not-really",
-  "read-aloud",
+  "reason-chips",
   "show-details",
 ];
 

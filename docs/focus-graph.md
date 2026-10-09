@@ -99,8 +99,37 @@ _Moved here from AGENTS.md on 2026-09-27, word for word, for the same reason._
 screen's Filters button opens a panel of tickable rows (Down or B inside it, or Up from its first row,
 closes it and returns to the Filters button); the newest answer's Show details gained a second tab,
 Session (Left/Right switch tabs, Up leaves to Hide details, Down enters the open tab, B closes the whole
-panel); Read aloud is now a small speaker on the Helpful/Not row, reached by Left/Right once the thumbs
-are greyed out. None of the three has a device check yet — see [docs/testing.md](testing.md).
+panel); Read aloud was a small speaker on the Helpful/Not row (since plan 84 it is in the answer's lower-left
+corner, see below). None of the three has a device check yet — see [docs/testing.md](testing.md).
+
+**Plan 84 step 3 — the Read aloud speaker moves to the answer's lower-left corner (route as built):** it is
+its own stop, a sibling of the answer bubble drawn into the bubble's corner by the stylesheet, exactly as
+Copy is in the lower-right (`bonsai-reply-read-aloud-corner-slot`, built in `buildAnswerCornerSlots.tsx` for `buildAnswerBubbleElement.tsx`).
+It is registered under the reply-stop name `read-aloud-corner`; the old name `read-aloud`, which meant
+the speaker in the reply-actions row, is no longer registered by anything, so the Down chains that still
+name it simply skip it. The slot and the Copy slot are each their own navigation container.
+
+```
+answer sections 0..n-1            (Up/Down walk them, unchanged)
+   last section:  Right -> Read aloud   (Copy when the answer has no speaker)
+      Read aloud:  Right -> Copy        Left -> last section   Up -> last section
+      Copy:        Left  -> Read aloud  Up   -> last section   (Left -> last section when there is no speaker)
+   Down from Read aloud OR Copy -> the summed-up note, else Helpful, else Show details
+                                   (the same chain Down from Copy used before; the speaker is no longer in it)
+```
+
+- **Left to right on the bubble's bottom edge: answer, Read aloud, Copy.** Every move between them is Steam's
+  own transfer onto the target slot's nav node (`TakeFocus`) followed by the registry focus, never a bare
+  `focus()` across containers.
+- **Down from either corner** goes where Down from Copy always went. The speaker is no longer a stop below
+  the answer, so it is not tried in that chain (`focusDownFromLiveAnswerBubble`, `downOutOfCopy`, the bubble's
+  own Down).
+- **The reply-actions row** under the answer keeps Helpful / Not really and Show details only. A reply whose
+  only action was the speaker no longer has the row at all. After Helpful (both thumbs swap for "Saved on this
+  Deck") the ring goes down to Show details, where it used to go to the speaker.
+- **A** on the speaker starts reading; the button then says Stop and A stops it. Same label and states as before.
+- **Scroll:** the slot is an ordinary step in the turn's flow, so Steam scrolls it into view the way it does Copy
+  (P84-READ-01 checks the ring is fully visible on an answer longer than the screen).
 
 ### The "Show N more" line at the end of an open day (plan 83)
 

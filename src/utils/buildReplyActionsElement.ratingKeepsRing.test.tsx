@@ -3,10 +3,11 @@
  * Purpose: Pin the fix for plan 70 flow 4.1 (docs/test-evidence/plan70-F4-THUMBS-UP.json, 3 of 3):
  *          pressing Helpful swaps both thumbs for the words "Saved on this Deck", the button the
  *          ring was on no longer exists, and nothing holds the ring. The next Down or Left found the
- *          speaker; B went to the tab bar.
+ *          speaker; B went to the tab bar. (Plan 84 step 3: the speaker has moved to the answer's
+ *          corner, so the ring now goes down to Show details instead.)
  * Used for: buildReplyActionsElement.tsx's thumbs.
  * Does not: Prove the fix on the Deck. The check this owes: A on Helpful, then read focus without
- *           pressing anything; the ring is on the speaker at the right of the row, in view.
+ *           pressing anything; the ring is on the Show details line under the row, in view.
  */
 import { useState } from "react";
 import { act, fireEvent, render, screen } from "@testing-library/react";
@@ -17,7 +18,7 @@ import { resetUiDocument } from "./uiDocument";
 
 vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
 
-function Row(props: { withSpeaker?: boolean }) {
+function Row() {
   const [rating, setRating] = useState<"up" | "down" | null>(null);
   return buildReplyActionsElement({
     replyKey: "live",
@@ -25,7 +26,7 @@ function Row(props: { withSpeaker?: boolean }) {
     onRate: setRating,
     showFeedback: true,
     transparencyOpen: false,
-    onReadAloudToggle: props.withSpeaker === false ? undefined : () => {},
+    onToggleTransparency: () => {},
   });
 }
 
@@ -38,7 +39,7 @@ describe("rating a reply keeps the ring on its row", () => {
     vi.useRealTimers();
   });
 
-  it("Helpful: the ring moves to the speaker once the thumbs are replaced", () => {
+  it("Helpful: the ring moves to the Show details line once the thumbs are replaced", () => {
     render(<Row />);
     const helpful = screen.getByLabelText("Mark reply helpful");
     act(() => helpful.focus());
@@ -50,7 +51,8 @@ describe("rating a reply keeps the ring on its row", () => {
 
     expect(screen.getByText("Saved on this Deck")).toBeTruthy();
     expect(helpful.isConnected).toBe(false);
-    expect(document.activeElement).toBe(screen.getByLabelText("Read aloud"));
+    expect(document.activeElement).toBe(screen.getByLabelText("Show details"));
+    expect(screen.queryByLabelText("Read aloud")).toBeNull();
   });
 
   it("Not really: the greyed button is still there, so the ring is left where it is", () => {
@@ -63,7 +65,7 @@ describe("rating a reply keeps the ring on its row", () => {
       vi.runAllTimers();
     });
 
-    expect(document.activeElement).not.toBe(screen.getByLabelText("Read aloud"));
+    expect(document.activeElement).not.toBe(screen.getByLabelText("Show details"));
     expect(notReally.isConnected).toBe(true);
   });
 

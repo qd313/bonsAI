@@ -497,7 +497,6 @@ describe("buildReplyActionsElement Up skips the greyed thumbs pair", () => {
     resetUiDocument();
     registerAnswerBubbleEl("live", null);
     registerReplyStop("helpful", null);
-    registerReplyStop("read-aloud", null);
     setReplyStopUnavailable("helpful", false);
     document.body.innerHTML = "";
   });
@@ -519,7 +518,6 @@ describe("buildReplyActionsElement Up skips the greyed thumbs pair", () => {
       onRate: () => {},
       showFeedback: true,
       ratingUnavailable: true, // greys Helpful / Not really, same as a stopped reply
-      onReadAloudToggle: () => {},
     });
 
     const row = findByClassName(el, "bonsai-chat-reply-actions-row");
@@ -539,7 +537,8 @@ describe("buildReplyActionsElement Up skips the greyed thumbs pair", () => {
 describe("buildReplyActionsElement Up from Show details reaches the row above it", () => {
   afterEach(() => {
     registerReplyStop("helpful", null);
-    registerReplyStop("read-aloud", null);
+    resetAnswerStopRegistry();
+    registerAnswerBubbleEl("live", null);
   });
 
   it("lands on Helpful when the thumbs are live", () => {
@@ -557,20 +556,23 @@ describe("buildReplyActionsElement Up from Show details reaches the row above it
     expect(document.activeElement).toBe(screen.getByLabelText("Mark reply helpful"));
   });
 
-  it("lands on the speaker when there is no thumbs row at all (an older turn with feedback hidden)", () => {
+  /* Plan 84 step 3: the speaker is in the answer's corner now, so with no thumbs row Up from the
+     line goes on to the answer's last section. */
+  it("lands on the answer's last section when there is no thumbs row at all (an older turn)", () => {
+    const stops = registerBubbleWithStops(2);
     const el = buildReplyActionsElement({
       replyKey: "live",
       rating: null,
       onRate: () => {},
       showFeedback: false,
       onToggleTransparency: () => {},
-      onReadAloudToggle: () => {},
     });
     render(el!);
+    expect(screen.queryByLabelText("Read aloud")).toBeNull();
     const line = findByClassName(el, "bonsai-chat-details-divider");
     const onMoveUp = (line!.props as Record<string, unknown>).onMoveUp as () => boolean;
     expect(onMoveUp()).toBe(true);
-    expect(document.activeElement).toBe(screen.getByLabelText("Read aloud"));
+    expect(document.activeElement).toBe(stops[stops.length - 1]);
   });
 });
 
@@ -624,26 +626,8 @@ describe("buildReplyActionsElement Left/Right in the thumbs row", () => {
     expect((props.onMoveRight as () => boolean)()).toBe(false);
   });
 
-  /*
-   * Plan 62 section 3b, the case its own brief flagged as most likely to break: once the Read
-   * aloud speaker shares this row, swallowing Left/Right unconditionally on a greyed reply would
-   * make the speaker unreachable by the D-pad — there would be no way to hop off a greyed Not
-   * really onto it. With a speaker in the row there is somewhere live to go, so the guard steps
-   * aside and leaves the press to Steam's own sibling movement.
-   */
-  it("does not swallow Left and Right when the speaker shares the row, even with the thumbs greyed", () => {
-    const el = buildReplyActionsElement({
-      replyKey: "live",
-      rating: null,
-      onRate: () => {},
-      showFeedback: true,
-      ratingUnavailable: true,
-      onReadAloudToggle: () => {},
-    });
-    const props = thumbsRowOf(el);
-    expect((props.onMoveLeft as () => boolean)()).toBe(false);
-    expect((props.onMoveRight as () => boolean)()).toBe(false);
-  });
+  /* Plan 84 step 3: the speaker no longer shares this row, so a greyed pair has nowhere live to go
+     sideways and the row holds the press (the original rule above). */
 });
 
 /*
@@ -723,12 +707,11 @@ describe("buildReplyActionsElement Show details line", () => {
 });
 
 /*
- * Read aloud is a bare speaker glyph at the right-hand end of the Helpful / Not really row now
- * (plan 62 section 3b) — the full-width line of the same shape as Show details it used to be is
- * gone. Only renders when the caller supplies onReadAloudToggle — a turn with nothing to read gets
- * none of it, same as before.
+ * Plan 84 step 3: Read aloud has left this row. It sits in the answer's lower-left corner now
+ * (buildAnswerBubbleElement.tsx), so nothing here draws a speaker, and a reply whose only action
+ * was the speaker has no actions row at all -- the height that row took is the room step 3 frees.
  */
-describe("buildReplyActionsElement Read aloud speaker", () => {
+describe("buildReplyActionsElement no longer draws Read aloud", () => {
   const build = (over: Record<string, unknown> = {}) =>
     buildReplyActionsElement({
       replyKey: "live",
@@ -738,77 +721,36 @@ describe("buildReplyActionsElement Read aloud speaker", () => {
       ...over,
     });
 
-  afterEach(() => {
-    registerReplyStop("read-aloud", null);
-  });
-
-  const findSpeaker = (el: React.ReactElement | null) =>
-    findByClassName(el, "bonsai-chat-read-aloud-btn");
-
-  it("renders nothing when the caller has no toggle to offer", () => {
-    expect(findSpeaker(build())).toBeNull();
-    // The line it replaced is gone too — no divider-shaped stand-in left behind.
-    expect(findByClassName(build(), "bonsai-chat-details-divider")).toBeNull();
-  });
-
-  it("renders the speaker even with no thumbs row (an older turn with feedback hidden)", () => {
-    const el = build({ onReadAloudToggle: () => {} });
-    expect(findSpeaker(el)).not.toBeNull();
-  });
-
-  it("carries the given label as its aria-label, with no visible text line", () => {
-    const idle = findSpeaker(build({ onReadAloudToggle: () => {}, readAloudLabel: "Read aloud" }));
-    expect(idle).not.toBeNull();
-    expect((idle!.props as Record<string, unknown>)["aria-label"]).toBe("Read aloud");
-    expect(String((idle!.props as Record<string, unknown>).className)).not.toContain(
-      "bonsai-chat-read-aloud-btn--speaking"
-    );
-  });
-
-  it("swaps to the stop glyph and the speaking style once the caller says this answer is reading", () => {
-    const speaking = findSpeaker(build({ onReadAloudToggle: () => {}, readAloudLabel: "Stop" }));
-    expect(speaking).not.toBeNull();
-    expect((speaking!.props as Record<string, unknown>)["aria-label"]).toBe("Stop");
-    expect(String((speaking!.props as Record<string, unknown>).className)).toContain(
-      "bonsai-chat-read-aloud-btn--speaking"
-    );
-  });
-
-  it("presses the toggle once", () => {
-    const onReadAloudToggle = vi.fn();
-    const speaker = findSpeaker(build({ onReadAloudToggle }));
-    const press = (speaker!.props as Record<string, unknown>).onClick as () => void;
-    press();
-    expect(onReadAloudToggle).toHaveBeenCalledTimes(1);
-  });
-
-  it("sits after Helpful and Not really, in that order, when the thumbs render too", () => {
-    const el = build({ showFeedback: true, onReadAloudToggle: () => {} });
+  it("draws no speaker beside the thumbs", () => {
+    const el = build({ showFeedback: true });
+    expect(findByClassName(el, "bonsai-chat-read-aloud-btn")).toBeNull();
     const row = findByClassName(el, "bonsai-chat-reply-actions-row");
-    expect(row).not.toBeNull();
-    // Helpful and Not really render inside a Fragment (a sibling of the speaker, not a wrapper
-    // around it) — walk it by hand rather than React.Children.toArray, which does not flatten a
-    // Fragment child into the elements it holds.
     const labels = elementsWithAriaLabel((row!.props as { children?: React.ReactNode }).children).map(
       (c) => c.props["aria-label"]
     );
-    expect(labels).toEqual(["Mark reply helpful", "Mark reply not helpful", "Read aloud"]);
+    expect(labels).toEqual(["Mark reply helpful", "Mark reply not helpful"]);
   });
 
-  it("registers under the same D-pad stop name the line used to (\"read-aloud\")", () => {
-    const el = build({ onReadAloudToggle: () => {} });
-    render(el!);
-    expect(getReplyStop("read-aloud")).not.toBeNull();
-    expect(getReplyStop("read-aloud")).toBe(screen.getByLabelText("Read aloud"));
+  it("draws nothing at all for a reply that has no thumbs, no details line and no chips", () => {
+    expect(build()).toBeNull();
+  });
+
+  it("keeps the thumbs row (without a speaker) where the thumbs are still there", () => {
+    const el = build({ showFeedback: true });
+    expect(el).not.toBeNull();
+    expect(findByClassName(el, "bonsai-chat-reply-actions-row")).not.toBeNull();
+  });
+
+  it("registers nothing under the old read-aloud stop name", () => {
+    render(build({ showFeedback: true, onToggleTransparency: () => {} })!);
+    expect(getReplyStop("read-aloud")).toBeNull();
   });
 });
 
 /*
- * Roadmap "After Stop or Helpful, Read aloud sits alone above a blank gap" (plan 72 free play,
- * docs/test-evidence/plan72-Z-FREEPLAY.json finding 10, screenshots/plan72/Z-after-helpful.png):
- * Helpful swaps the thumbs for "Saved on this Deck", which was drawn as a line of its own ABOVE the
- * thumbs row -- leaving the speaker alone at the right of an otherwise empty row under it. The words
- * now take the thumbs' place in that row, so the row still reads as one row.
+ * After Helpful, the thumbs swap for "Saved on this Deck". It used to share the speaker's row (plan 72
+ * free play, finding 10); with the speaker in the answer's corner (plan 84 step 3) it keeps a line of
+ * its own, which is the shape it always had when there was no speaker.
  */
 describe("buildReplyActionsElement after Helpful", () => {
   const rated = (over: Record<string, unknown> = {}) =>
@@ -819,39 +761,16 @@ describe("buildReplyActionsElement after Helpful", () => {
         onRate: () => {},
         showFeedback: true,
         onToggleTransparency: () => {},
-        onReadAloudToggle: () => {},
         ...over,
       })!,
     );
 
-  afterEach(() => {
-    registerReplyStop("read-aloud", null);
-  });
-
-  it("puts \"Saved on this Deck\" in the speaker's own row, to its left", () => {
+  it("shows \"Saved on this Deck\" on a line of its own, with no row and no button around it", () => {
     const { container } = rated();
     const saved = screen.getByText("Saved on this Deck");
-    const speaker = screen.getByLabelText("Read aloud");
-    const row = saved.closest(".bonsai-chat-reply-actions-row");
-    expect(row).not.toBeNull();
-    expect(row!.contains(speaker)).toBe(true);
-    expect(saved.compareDocumentPosition(speaker) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    // Nothing is left on a line of its own above the row: the block opens with the row itself.
-    const block = container.querySelector(".bonsai-chat-reply-actions")!;
-    expect(block.firstElementChild).toBe(row);
-  });
-
-  it("is still not a D-pad stop: the row's only button is the speaker", () => {
-    rated();
-    const row = screen.getByText("Saved on this Deck").closest(".bonsai-chat-reply-actions-row")!;
-    expect(Array.from(row.querySelectorAll("button")).map((b) => b.getAttribute("aria-label"))).toEqual([
-      "Read aloud",
-    ]);
-  });
-
-  it("keeps its own line when there is no speaker to share a row with", () => {
-    rated({ onReadAloudToggle: undefined });
-    const saved = screen.getByText("Saved on this Deck");
     expect(saved.closest(".bonsai-chat-reply-actions-row")).toBeNull();
+    expect(screen.queryByLabelText("Read aloud")).toBeNull();
+    const block = container.querySelector(".bonsai-chat-reply-actions")!;
+    expect(block.firstElementChild).toBe(saved);
   });
 });

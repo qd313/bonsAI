@@ -337,39 +337,10 @@ ${buildReplyRatingChoicesSection()}
           max-width: none !important;
         }
         /*
-         * Read aloud, at the right-hand end of the Helpful / Not really row (plan 62 section 3b) —
-         * the full-width "Read aloud" line that used to sit here is gone. Styled the way the Ask
-         * bar's own microphone is (MainTabUnifiedAskBar.tsx): no border, no fill, no radius, a bare
-         * glyph. 45% strength at rest rather than the mic's 15% — the maintainer's call, because
-         * this glyph shares a row with two visible buttons and still needs to read as findable.
-         * The auto left margin pushes it to the row's right edge whether or not Helpful / Not
-         * really are present next to it (an older turn can offer Read aloud with no thumbs at all).
+         * Read aloud used to be styled here, at the right-hand end of the Helpful / Not really row
+         * (plan 62 section 3b). It is in the answer's lower-left corner now (plan 84 step 3), and its
+         * look lives next to Copy's in answerBubble.ts.
          */
-        .bonsai-scope button.bonsai-chat-secondary-btn.bonsai-chat-read-aloud-btn {
-          margin-left: auto !important;
-          flex: 0 0 auto !important;
-          min-width: ${uiScalePx(30)} !important;
-          width: ${uiScalePx(30)} !important;
-          min-height: ${uiScalePx(32)} !important;
-          padding: 0 !important;
-          border: none !important;
-          background: none !important;
-          box-shadow: none !important;
-          border-radius: 0 !important;
-          opacity: 0.45 !important;
-        }
-        /* Full strength the moment the D-pad ring lands on it — same white ring as Show details. */
-        .bonsai-scope button.bonsai-chat-secondary-btn.bonsai-chat-read-aloud-btn.gpfocus,
-        .bonsai-scope button.bonsai-chat-secondary-btn.bonsai-chat-read-aloud-btn:focus-visible {
-          opacity: 1 !important;
-          outline: 2px solid rgba(255, 255, 255, 0.9) !important;
-          outline-offset: 2px !important;
-          border-radius: 4px !important;
-        }
-        /* Speaking: red, the same shade the Ask bar's mic turns while recording. */
-        .bonsai-scope button.bonsai-chat-secondary-btn.bonsai-chat-read-aloud-btn--speaking {
-          color: #f87171 !important;
-        }
         /*
          * Show details, as a line across the reply rather than a button in the row (D76).
          *
@@ -505,14 +476,6 @@ ${buildReplyRatingChoicesSection()}
           color: #8fa6bd !important;
           font-style: italic !important;
         }
-        /* After Helpful, "Saved on this Deck" sits in the speaker's row where the thumbs were
-           (buildReplyActionsElement.tsx). The row lines its items up along the top and the
-           speaker's glyph is centred in its own box, so the words are centred too, to read level
-           with it. */
-        .bonsai-scope .bonsai-chat-reply-actions-row > .bonsai-chat-feedback-row__label {
-          align-self: center !important;
-        }
-
         /*
           Main tab bottom dock. The column stretches to the scroll viewport's bottom edge
           (min-height measured by useMainTabColumnFill — the offset to the viewport crosses

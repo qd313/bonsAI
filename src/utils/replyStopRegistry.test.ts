@@ -37,13 +37,19 @@ describe("reply stop registry", () => {
    * down meets it after Retry and before the answer's own Copy. The order is what every "which
    * stop has focus?" lookup scans, so the position matters, not just the presence.
    */
-  it("walks Retry, then Show reasoning, then Copy", () => {
+  it("walks Retry, then Show reasoning, then Read aloud and Copy along the answer's bottom edge", () => {
     expect(REPLY_STOP_ORDER.indexOf("show-reasoning")).toBe(
       REPLY_STOP_ORDER.indexOf("retry") + 1,
     );
-    expect(REPLY_STOP_ORDER.indexOf("copy")).toBe(
+    /* Plan 84 step 3: left to right on the bubble's bottom edge, Read aloud then Copy. */
+    expect(REPLY_STOP_ORDER.indexOf("read-aloud-corner")).toBe(
       REPLY_STOP_ORDER.indexOf("show-reasoning") + 1,
     );
+    expect(REPLY_STOP_ORDER.indexOf("copy")).toBe(
+      REPLY_STOP_ORDER.indexOf("read-aloud-corner") + 1,
+    );
+    /* The old row's name is gone from the walk. */
+    expect(REPLY_STOP_ORDER).not.toContain("read-aloud");
   });
 
   it("focuses the registered button itself, not the row around it", () => {

@@ -7,7 +7,8 @@
  * finish" chip, each answer section's own D-pad outline, the spoiler
  * reveal box, and the Copy icon tucked into the bubble's bottom-right
  * corner (drawn as a sibling of the bubble, not nested inside it, so the
- * D-pad cannot bounce between the icon and the last line of text).
+ * D-pad cannot bounce between the icon and the last line of text). Read
+ * aloud's mirror-image corner on the left comes from answerBubbleCorners.ts.
  *
  * Used for: Folded into section-6.ts's buildSection6Section(), directly
  * after the question bubble it sits across from in the transcript.
@@ -18,6 +19,7 @@
  */
 import { uiScalePx } from "./uiScalePx";
 import { ANSWER_LINE_HEIGHT } from "./answerMarkdownFormatting";
+import { buildReadAloudCornerCss } from "./answerBubbleCorners";
 
 /**
  * In: nothing -- every value here is a fixed string or read from a CSS
@@ -181,6 +183,7 @@ export function buildAnswerBubbleSection(): string {
           color: #f16a5a !important;
           opacity: 0.95 !important;
         }
+        ${buildReadAloudCornerCss()}
         .bonsai-scope .bonsai-chat-ai-bubble .bonsai-ai-response-stack--in-bubble,
         .bonsai-scope .bonsai-chat-ai-bubble .bonsai-ai-response-chunk--in-bubble {
           background: transparent !important;
@@ -339,7 +342,11 @@ export function buildAnswerBubbleSection(): string {
         }
         /* The Copy corner waits for the last letters to settle (plan 69, up to 0.6 s after the
            end): the slot exists only while any are unsettled. Hidden rather than removed, so the
-           D-pad's stops and the page's layout stay exactly as they are when it appears. */
+           D-pad's stops and the page's layout stay exactly as they are when it appears. The Read
+           aloud corner beside it waits too (plan 84 step 3), and Copy is then the bubble's second
+           neighbour, which is why it has a selector of its own. */
+        .bonsai-scope .bonsai-chat-ai-bubble:has(.bonsai-stream-scramble) + .bonsai-reply-read-aloud-corner-slot,
+        .bonsai-scope .bonsai-chat-ai-bubble:has(.bonsai-stream-scramble) + .bonsai-reply-read-aloud-corner-slot + .bonsai-reply-copy-corner-slot,
         .bonsai-scope .bonsai-chat-ai-bubble:has(.bonsai-stream-scramble) + .bonsai-reply-copy-corner-slot {
           visibility: hidden !important;
         }

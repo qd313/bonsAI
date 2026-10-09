@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1767,
+      "lines": 1777,
       "role": ""
     },
     {
@@ -41,6 +41,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
+      "lines": 1210,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/game_ai_request.py",
       "lines": 1209,
       "role": ""
@@ -63,11 +68,6 @@
     {
       "path": "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
       "lines": 1024,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 1007,
       "role": ""
     },
     {
@@ -106,16 +106,6 @@
       "role": ""
     },
     {
-      "path": "src/utils/buildReplyActionsElement.test.tsx",
-      "lines": 858,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 856,
-      "role": ""
-    },
-    {
       "path": "src/components/CharacterPickerModal.tsx",
       "lines": 855,
       "role": ""
@@ -131,8 +121,18 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 804,
+      "role": ""
+    },
+    {
       "path": "src/styles/sections/section-6.ts",
-      "lines": 835,
+      "lines": 798,
+      "role": ""
+    },
+    {
+      "path": "src/utils/buildReplyActionsElement.test.tsx",
+      "lines": 777,
       "role": ""
     },
     {
@@ -166,11 +166,6 @@
       "role": ""
     },
     {
-      "path": "src/utils/buildAnswerBubbleElement.tsx",
-      "lines": 676,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/settings_service.py",
       "lines": 668,
       "role": "Load/save/merge settings.json"
@@ -178,6 +173,11 @@
     {
       "path": "src/components/DeveloperTab.tsx",
       "lines": 666,
+      "role": ""
+    },
+    {
+      "path": "src/utils/buildAnswerBubbleElement.tsx",
+      "lines": 652,
       "role": ""
     },
     {

@@ -23,10 +23,11 @@
  *     │  section 1                    <- a stop      │
  *     │  section 2                    <- a stop      │
  *     │  ...                                         │
- *     │  last section                     [ copy ]   │
+ *     │  last section                                │
+ *     │  [ read aloud ]                    [ copy ]  │
  *     └──────────────────────────────────────────────┘
- *            │ down                         ▲ right, from the last section
- *            ▼                              │
+ *            │ down                  ▲ right, from the last section
+ *            ▼                       │   (answer, Read aloud, Copy)
  *       the thumbs row, which is somebody else's file
  *
  * 1. `stripAssistantDisplayTags()` removes the marks meant for the program
@@ -52,6 +53,10 @@
  *   like anything else; the stylesheet then pulls it up into the bottom-right
  *   corner, and a spacer keeps the last line of text clear of it. Anyone reading
  *   the picture above and expecting to find it nested inside will not.
+ * - The Read aloud speaker is the same thing mirrored (plan 84 step 3): a sibling
+ *   after the bubble and before Copy, drawn into the bottom-LEFT corner, with the
+ *   bubble marked `--with-read-aloud` so the stylesheet keeps the answer clear of
+ *   it. The D-pad walks the bottom edge left to right: answer, Read aloud, Copy.
  * - Never move focus by hand here. Calling focus() straight from a section moves
  *   the browser's idea of what is focused while Steam's own idea stays behind, and
  *   the two disagreeing is the exact shape of bug this repo has lost three fixes
@@ -62,7 +67,7 @@ import { Focusable } from "@decky/ui";
 import { ScrambledAnswerText } from "../features/stream-scramble/ScrambledAnswerText";
 import type { DrgGlossaryTerm } from "../data/drgGlossaryTerms";
 import { StreamFenceWaitChip } from "../components/StreamFenceWaitChip";
-import { ReplyCopyButton } from "../components/ReplyCopyButton";
+import { buildAnswerCorners } from "./buildAnswerCornerSlots";
 import {
   getRegisteredAnswerBubble,
   registerAnswerBubbleEl,
@@ -70,7 +75,6 @@ import {
   resolveFocusedAnswerBubble,
 } from "./answerBubbleElRegistry";
 import {
-  focusLastAnswerChunk,
   handleAnswerBubbleMoveDown,
   handleAnswerBubbleMoveUp,
   handleUpFromSpoilerCover,
@@ -127,6 +131,14 @@ export type BuildAnswerBubbleElementArgs = {
    * would copy changes under the press.
    */
   getAnswerCopyText?: () => string;
+  /**
+   * When set, the bubble's bottom-left corner gains a small speaker (plan 84 step 3): Read aloud,
+   * which used to sit in the reply-actions row under the answer. `readAloudLabel` is its aria-label
+   * and decides which glyph it draws -- "Read aloud" or "Stop" -- the caller picks by tracking which
+   * answer is currently speaking. Like Copy, only on a finished answer.
+   */
+  onReadAloudToggle?: () => void;
+  readAloudLabel?: string;
 };
 
 const noopChunkRef = { current: 0 };
@@ -361,6 +373,8 @@ export function buildAnswerBubbleElement(
     protectedNames = null,
     onDrgGlossaryExplainFurther,
     getAnswerCopyText,
+    onReadAloudToggle,
+    readAloudLabel = "Read aloud",
   } = args;
   const spoilerUnwrapEligible =
     spoilerConsentEffective ||
@@ -406,7 +420,7 @@ export function buildAnswerBubbleElement(
      * geometry guess is neither guaranteed nor testable off device. `focusDownFromLiveAnswerBubble`
      * is already shipped and tested for exactly this hand-off (liveTurnFocusGraph.ts) — but its own
      * next fallback after branches/checklist/thumbs tries this turn's Retry / Copy corner icons
-     * before Read aloud or Show details below them, which is backwards for a Down press: Retry sits
+     * before Show details below them, which is backwards for a Down press: Retry sits
      * above the answer, in the turn's own header. Measured on the Deck 2026-09-16
      * (plan56-BUG-restored-turn-down-loop.json): on a turn with no live thumbs row — a chat restored
      * from its saved slot, with no exchange this session, so the thumbs never mount — Down from the
@@ -426,7 +440,7 @@ export function buildAnswerBubbleElement(
     if (
       !hasStrategyChrome &&
       (focusRegisteredReplyStop("helpful") ||
-        focusRegisteredReplyStop("read-aloud") ||
+        focusRegisteredReplyStop("reason-chips") ||
         focusRegisteredReplyStop("show-details"))
     ) {
       return true;
@@ -463,43 +477,18 @@ export function buildAnswerBubbleElement(
   const stopNav = stopNavProps(moveDown, moveUp);
 
   /*
-   * Copy in the bubble's bottom-right corner (D77), reached by Right from the last section.
-   *
-   * It is its own navigation container, like the reply row below, so a bare focus() from a section
-   * would move activeElement while Steam's ring stayed on the section — the failure this repo has
-   * lost three fixes to. TakeFocus first, then the registry focus reports whether it landed.
+   * The corner icons -- Read aloud lower-left (plan 84 step 3), Copy lower-right (D77) -- and where
+   * the D-pad goes between them and the answer. Built in buildAnswerCornerSlots.tsx; the bubble only
+   * needs to know which show (to mark itself for the stylesheet) and where Right from its last
+   * section goes.
    */
-  const copyNavRef: { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null } = {
-    current: null,
-  };
-  const showCornerCopy = Boolean(getAnswerCopyText) && !streaming;
-  const rightIntoCopy = () => {
-    if (!showCornerCopy) return false;
-    try {
-      copyNavRef.current?.TakeFocus?.(true);
-    } catch {
-      /* fall through — the registry focus below reports whether it landed */
-    }
-    return focusRegisteredReplyStop("copy");
-  };
-  const leftOutOfCopy = () => focusLastAnswerChunk(answerKey);
-  /*
-   * Down out of the icon is named, not left to Steam's geometry. The icon now DRAWS inside the
-   * bubble's corner (still a sibling in the DOM), overlapping the last section's box by a few
-   * pixels — and an overlap is exactly what made Steam treat two boxes as each below the other in
-   * runs/reply-block-copy-trap.json. Naming the next stop removes the guess.
-   */
-  /*
-   * Down out of the Copy corner: the summed-up note when this answer has one (plan 68), then the
-   * thumbs when they render, else the Read aloud line, else Show details. Read aloud was missing here when it shipped, so on an answer with no thumbs (a
-   * restored one) the D-pad went from Copy straight to Show details and the new line could not be
-   * reached from above at all — measured on the Deck 2026-09-12, first walk after the deploy.
-   */
-  const downOutOfCopy = () =>
-    focusRegisteredReplyStop("summary-note") ||
-    focusRegisteredReplyStop("helpful") ||
-    focusRegisteredReplyStop("read-aloud") ||
-    focusRegisteredReplyStop("show-details");
+  const { showCornerCopy, showCornerReadAloud, rightIntoCorner, slots } = buildAnswerCorners({
+    answerKey,
+    streaming,
+    getAnswerCopyText,
+    onReadAloudToggle,
+    readAloudLabel,
+  });
 
   /*
    * Steam's nav node for this bubble, so the reply-actions row below can hand the ring in (Up onto
@@ -540,6 +529,9 @@ export function buildAnswerBubbleElement(
       }${fenceWaitActive ? " bonsai-chat-ai-bubble--fence-wait" : ""}${
         /* Lets the stylesheet keep the answer's last line clear of the corner icon. */
         showCornerCopy ? " bonsai-chat-ai-bubble--with-copy" : ""
+      }${
+        /* And the same for the speaker in the lower-left corner (plan 84 step 3). */
+        showCornerReadAloud ? " bonsai-chat-ai-bubble--with-read-aloud" : ""
       }`}
       {...navHandlers}
       {...({ navRef: bubbleNavRef } as Record<string, unknown>)}
@@ -585,16 +577,16 @@ export function buildAnswerBubbleElement(
                   {...stopAttrs(
                     stopNav,
                     i,
-                    /* Only the last section offers Right into the corner icon: it is pinned to the
-                       bottom of the bubble, so anywhere else the ring would jump past text. */
-                    showCornerCopy && i === displayChunks.length - 1
+                    /* Only the last section offers Right into the corner icons: they are pinned to
+                       the bottom of the bubble, so anywhere else the ring would jump past text. */
+                    (showCornerCopy || showCornerReadAloud) && i === displayChunks.length - 1
                       ? {
                           /* onMoveLeft is left unset here on purpose — it falls through to
                              stopNav's own "hold still", which is exactly right for the last
                              section too (there is nothing to its left). */
-                          onMoveRight: () => rightIntoCopy(),
+                          onMoveRight: () => rightIntoCorner(),
                           onButtonDown: (button: unknown) => {
-                            if (isDeckDirectionRightEvent(button)) return rightIntoCopy();
+                            if (isDeckDirectionRightEvent(button)) return rightIntoCorner();
                             if (isDeckDirectionLeftEvent(button)) return true;
                             if (isDownDeckButtonEvent(button)) return moveDown();
                             if (isUpDeckButtonEvent(button)) return moveUp();
@@ -646,30 +638,14 @@ export function buildAnswerBubbleElement(
    * as well, which is the route a person is told about. Where it DRAWS is a separate matter: the
    * stylesheet pulls it up into the bubble's bottom-right corner (the maintainer asked for it
    * inside the bubble, 2026-09-06), and a spacer on the answer's last line keeps the text clear
-   * of it — the --with-copy rules in section-6.
+   * of it — the --with-copy rules in answerBubble.ts. Read aloud follows the same plan on the left
+   * (plan 84 step 3): a sibling between the bubble and Copy, so the tree order is the left-to-right
+   * order of the stops, and the --with-read-aloud rules keep the text clear of it.
    */
   return (
     <>
       {bubble}
-      {showCornerCopy ? (
-        <Focusable
-          key={`answer-copy-${answerKey}`}
-          className="bonsai-reply-copy-corner-slot"
-          {...({
-            navRef: copyNavRef,
-            onMoveLeft: () => leftOutOfCopy(),
-            onMoveUp: () => leftOutOfCopy(),
-            onMoveDown: () => downOutOfCopy(),
-            onButtonDown: (button: unknown) => {
-              if (isDeckDirectionLeftEvent(button)) return leftOutOfCopy();
-              if (isDownDeckButtonEvent(button)) return downOutOfCopy();
-              return false;
-            },
-          } as Record<string, unknown>)}
-        >
-          <ReplyCopyButton corner getCopyText={getAnswerCopyText!} />
-        </Focusable>
-      ) : null}
+      {slots}
     </>
   );
 }

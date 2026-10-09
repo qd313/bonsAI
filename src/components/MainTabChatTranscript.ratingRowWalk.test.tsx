@@ -191,6 +191,7 @@ const STOP_LABELS = [
   "Mark reply helpful",
   "Mark reply not helpful",
   "Read aloud",
+  "Copy reply text",
   "Bad info",
   "Wrong game or topic",
   "Spoiled it",
@@ -206,7 +207,7 @@ function where(): string {
   return STOP_LABELS.includes(label) ? label : `(somewhere else: ${label || active.className})`;
 }
 
-describe("Up and Down between the rating choices and the speaker (plan 79)", () => {
+describe("Up and Down between the rating choices, the thumbs and the corner icons (plan 79, plan 84 step 3)", () => {
   beforeEach(() => resetUiDocument());
   afterEach(() => cleanup());
 
@@ -234,7 +235,7 @@ describe("Up and Down between the rating choices and the speaker (plan 79)", () 
     expect(where()).toBe("Wrong game or topic");
   });
 
-  it("Down from each thumb and from the speaker lands on the choice under it", () => {
+  it("Down from each thumb lands on the choice under it", () => {
     const { container } = renderTurn();
     focusOn(byLabel(container, "Mark reply helpful"));
     expect(press("onMoveDown")).toBe(true);
@@ -243,28 +244,30 @@ describe("Up and Down between the rating choices and the speaker (plan 79)", () 
     focusOn(byLabel(container, "Mark reply not helpful"));
     expect(press("onMoveDown")).toBe(true);
     expect(where()).toBe("Wrong game or topic");
-
-    focusOn(byLabel(container, "Read aloud"));
-    expect(press("onMoveDown")).toBe(true);
-    expect(where()).toBe("Wrong game or topic");
   });
 
-  it("Down from the speaker does not depend on which choice was left last", () => {
+  /*
+   * Plan 84 step 3: the speaker is in the answer's corner now, so a Down from it (or from Copy) has to
+   * land on the rows under the answer. With the reply rated down the thumbs are greyed and skipped, and
+   * the first choice is the next stop -- stepping over the whole block to Show details would leave the
+   * choices unreachable from above.
+   */
+  it("Down from either corner icon lands on the first choice, whichever choice was left last", () => {
     const { container } = renderTurn();
     for (const lastLeft of ["Bad info", "Wrong game or topic", "Spoiled it", "Too short"]) {
-      focusOn(byLabel(container, lastLeft));
-      focusOn(byLabel(container, "Read aloud"));
-      expect(press("onMoveDown")).toBe(true);
-      expect(where()).toBe("Wrong game or topic");
+      for (const icon of ["Read aloud", "Copy reply text"]) {
+        focusOn(byLabel(container, lastLeft));
+        focusOn(byLabel(container, icon));
+        expect(press("onMoveDown")).toBe(true);
+        expect(where()).toBe("Bad info");
+      }
     }
   });
 
-  it("Right from Not really lands on the speaker and Left comes back; Left from Not really is Helpful", () => {
+  it("Right from Not really goes nowhere (no speaker beside it any more) and Left is Helpful", () => {
     const { container } = renderTurn();
     focusOn(byLabel(container, "Mark reply not helpful"));
     pressSideways("onMoveRight");
-    expect(where()).toBe("Read aloud");
-    pressSideways("onMoveLeft");
     expect(where()).toBe("Mark reply not helpful");
     pressSideways("onMoveLeft");
     expect(where()).toBe("Mark reply helpful");
@@ -303,21 +306,19 @@ describe("Up and Down between the rating choices and the speaker (plan 79)", () 
     expect(new Set(down).size).toBe(down.length);
   });
 
-  it("walks the speaker's side: Not really, the speaker, Down to Wrong game or topic, Up to Not really", () => {
+  it("walks the corner: the speaker, Copy, Down to Bad info, Up to Helpful -- no stop twice", () => {
     const { container } = renderTurn();
     const seen: string[] = [];
-    focusOn(byLabel(container, "Mark reply helpful"));
+    focusOn(byLabel(container, "Read aloud"));
     seen.push(where());
-    pressSideways("onMoveRight");
-    seen.push(where());
-    pressSideways("onMoveRight");
+    expect(press("onMoveRight")).toBe(true);
     seen.push(where());
     expect(press("onMoveDown")).toBe(true);
     seen.push(where());
-    expect(seen).toEqual(["Mark reply helpful", "Mark reply not helpful", "Read aloud", "Wrong game or topic"]);
-    expect(new Set(seen).size).toBe(seen.length);
     expect(press("onMoveUp")).toBe(true);
-    expect(where()).toBe("Mark reply not helpful");
+    seen.push(where());
+    expect(seen).toEqual(["Read aloud", "Copy reply text", "Bad info", "Mark reply helpful"]);
+    expect(new Set(seen).size).toBe(seen.length);
   });
 
   it("with the choices not showing, the routes are today's: Down from Helpful goes to Show details", () => {

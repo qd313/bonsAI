@@ -15,9 +15,9 @@
  *     ── older question ──
  *     ...
  *     ── newest / live question ──
- *        the answer
+ *        the answer (Read aloud in its lower-left corner, Copy in the lower-right)
  *        (a Strategy Guide branch picker or checklist, if one applies)
- *        Helpful / Not really, chips, Read aloud, Show details
+ *        Helpful / Not really, chips, Show details
  *          (opened: This answer | Session · N tabs, then that tab's own
  *           content — the chip ladder, or the session row list and Clear —
  *           plan 62 3c. Only the newest answer ever carries the Session tab.)
@@ -435,8 +435,11 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    * itself now — see useReadAloudAutoStop.ts.
    */
   const readAloud = useReadAloudAutoStop(isAsking);
-  /** Read aloud props for one turn's reply-actions row: same shape at every call site. */
+  /** Read aloud props for one turn's answer bubble (its lower-left corner): same shape at every call site. */
   const readAloudRowProps = (key: string, body: string, facts: TurnSpoilerFacts) => {
+    /* Nothing readable, or the back end's own stop placeholder ("Request cancelled."): no speaker, so
+       it cannot read that status aloud (plan72-Z-FREEPLAY.json finding 9). Same test as Retry's. */
+    if (!body.trim() || isStopNoticeResponse(body)) return {};
     /*
      * A reading that started on its own (Voice replies set to Always or By voice) is keyed "live"
      * by the hook, because the hook cannot know which block will draw the newest answer. Measured
@@ -852,7 +855,15 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     [onAskOllama]
   );
 
-  const renderAnswerBubble = (body: string, streaming: boolean, answerKey: string, facts: TurnSpoilerFacts) =>
+  const renderAnswerBubble = (
+    body: string,
+    streaming: boolean,
+    answerKey: string,
+    facts: TurnSpoilerFacts,
+    /* The text Read aloud would read, which puts the speaker in the bubble's lower-left corner
+       (plan 84 step 3); left out where the answer cannot be read yet. */
+    readAloudBody?: string
+  ) =>
     buildAnswerBubbleElement({
       body,
       streaming,
@@ -880,6 +891,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
           ? () =>
               buildAnswerCopyText({ body, spoilerMaskingEnabled: strategySpoilerMaskingEnabled, ...facts })
           : undefined,
+      ...(readAloudBody === undefined ? {} : readAloudRowProps(answerKey, readAloudBody, facts)),
     });
 
   /*
@@ -894,7 +906,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    */
   const renderStrategyBranchPicker = (placementKey: string) => {
     if (!strategyBranchesReady || !strategyGuideBranches || !onStrategyBranchPick) return null;
-    /* Steam's nav node for the buttons, so Up from Read aloud can hand the ring in (plan 72 A-4). */
+    /* Steam's nav node for the buttons, so Up from the row below can hand the ring in (plan 72 A-4). */
     const pickerNav: { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null } = { current: null };
     registerStrategyBranchPickerNav(pickerNav);
     /*
@@ -1229,7 +1241,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 ) : null}
                 {buildChatSummaryWarningElement(turn.chatSummary)}
                 {renderReasoningFold(turn.id, turn.reasoning)}
-                {renderAnswerBubble(turn.answer, false, turn.id, archivedSpoilerFacts(turn, turnIndex))}
+                {renderAnswerBubble(turn.answer, false, turn.id, archivedSpoilerFacts(turn, turnIndex), turn.answer)}
                 {buildChatSummaryNoteElement({
                   turnKey: turn.id,
                   chatSummary: turn.chatSummary,
@@ -1271,12 +1283,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   const transparencyAvailableHere = transparencyUiAvailable(
                     archivedTransparencyFor(turn, turnIndex)
                   );
-                  /* Not on the back end's own stop placeholder ("Request cancelled."): nothing
-                     readable was kept, so the speaker would sit alone above an empty row and read
-                     that status aloud (plan72-Z-FREEPLAY.json finding 9). Same test as Retry's. */
-                  const readAloudAvailableHere =
-                    Boolean(turn.answer?.trim()) && !isStopNoticeResponse(turn.answer);
-                  if (!showFeedbackHere && !transparencyAvailableHere && !readAloudAvailableHere) {
+                  /* Read aloud is not part of this row any more: it is in the answer bubble's lower-left
+                     corner (plan 84 step 3), so a turn with nothing else to offer has no row at all. */
+                  if (!showFeedbackHere && !transparencyAvailableHere) {
                     return null;
                   }
                   const downPastUtilityRow = () =>
@@ -1302,9 +1311,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     chipError: showFeedbackHere ? liveReplyChipError : null,
                     onChip: showFeedbackHere ? onReplyMicroAction : undefined,
                     askInFlight: isAsking,
-                    ...(readAloudAvailableHere
-                      ? readAloudRowProps(turn.id, turn.answer, archivedSpoilerFacts(turn, turnIndex))
-                      : {}),
                     /* Down must reach this turn's own ladder, then the "From the notes" block when
                        one is attached, then the details panel's own tabs row when the panel is open,
                        then whatever came after this row before any of them existed. */
@@ -1483,7 +1489,14 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               ? renderReasoningFold("live", liveTurnReasoning)
               : null}
             {expandedTurnKey === "live" && showLiveResponse
-              ? renderAnswerBubble(liveResponseBody, isStreamingPreview, "live", liveSpoilerFacts)
+              ? renderAnswerBubble(
+                  liveResponseBody,
+                  isStreamingPreview,
+                  "live",
+                  liveSpoilerFacts,
+                  /* Read aloud reads the finished exchange's answer, so it waits for the ask to end. */
+                  isAsking ? undefined : lastExchange?.answer
+                )
               : null}
             {expandedTurnKey === "live" ? renderStrategyBranchPicker("live") : null}
             {expandedTurnKey === "live" ? renderStrategyChecklist("live") : null}
@@ -1505,9 +1518,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   chipError: liveReplyChipError,
                   onChip: onReplyMicroAction,
                   askInFlight: isAsking,
-                  ...(lastExchange?.answer?.trim()
-                    ? readAloudRowProps("live", lastExchange.answer, liveSpoilerFacts)
-                    : {}),
                   onMoveDownFromUtility: () =>
                     focusKbNotesBlock("live") ||
                     focusDetailsTabsRow("live") ||

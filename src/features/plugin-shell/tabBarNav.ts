@@ -1,14 +1,14 @@
 /**
  * Title: The tab bar's own D-pad and shoulder-button handling
  *
- * Purpose: The tab bar, when collapsed to its thin strip, handles its own
- * Left/Right and shoulder-button (LB/RB) presses to switch tabs, wrapping
- * around at the first and last tab either way. Down hands the highlight
- * ring off to whatever the current tab shows first; Up is deliberately let
- * through rather than handled, so Steam sends it to Decky's own Back
- * button, the same as it did before the bar collapsed.
+ * Purpose: The tab bar handles its own Left/Right and shoulder-button
+ * (LB/RB) presses to switch tabs, wrapping around at the first and last
+ * tab either way. Down hands the highlight ring off to whatever the
+ * current tab shows first; Up is deliberately let through rather than
+ * handled, so Steam takes the ring upward (to Decky's own Back button
+ * today), the same as it did from Steam's own tab strip.
  *
- * Used for: The collapsing tab bar (plan 30, week 4).
+ * Used for: The plugin's own tab bar (plan 30, week 4; plan 84 step 4).
  *
  * Solves: Two things found by testing on a real Deck. First, the shoulder
  * buttons wrap around at the ends (see runs/TAB-BAR-W3-shoulder-wrap.json:

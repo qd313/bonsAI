@@ -117,23 +117,21 @@ export const BONSAI_CHAT_AI_MAX_WIDTH_CSS = `min(${Math.round(BONSAI_CHAT_AI_BUB
 export const TAB_TITLE_MAIN_TAB_ICON_PX = 36;
 /** Debug tab — same outer cell as other tabs so LB/RB strip outlines match. */
 export const TAB_TITLE_DEBUG_TAB_ICON_PX = 36;
-/** the open strip's solid bar, plan 59 board 2a; the lifted accent is computed against it */
+/**
+ * The colour the lit tab name is checked against for contrast (characterUiAccent.ts lifts each
+ * character's colour until it reads at 6:1 on it). It was the solid bar of the drop-down tab strip
+ * (plan 59 board 2a). The strip is gone since plan 84 step 4 and the bar sits on the panel's own
+ * dark background; whether that background is darker than this has not been measured on the Deck,
+ * so this stays the reference until it is.
+ */
 export const TAB_BAR_STRIP_BG_HEX = "#141c24";
 /**
- * Plan 30 — the collapsing tab bar (docs/archive/30-collapsing-tab-bar.md § 4.8). CSS px before
- * `--bonsai-ui-scale`; every use goes through `uiScalePx()`. The two heights are the point of the
- * plan: Steam's strip cost 80.66px (measured 2026-09-02), the bar at rest costs 20.
+ * The tab bar's height: 20 in every state (plan 30; docs/archive/30-collapsing-tab-bar.md § 4.8).
+ * CSS px before `--bonsai-ui-scale`; every use goes through `uiScalePx()`. Steam's own strip cost
+ * 80.66px (measured 2026-09-02). Plan 84 step 6 moves the bar into the strip at the very top and
+ * keeps this height.
  */
-export const TAB_BAR_REST_HEIGHT_PX = 20;
-/**
- * The floating strip while the ring is on the bar. Floats over the panel; the wrapper stays 20px.
- * Raised from 54 to 66 by the maintainer on 2026-09-17, from a mockup of three heights drawn over
- * the 14 September Deck photo: on that photo the chat row's dots sit 6 to 10px below a 54px strip
- * and the row's bottom line about 15px below, so 66 covers the dots with 2px to spare and still
- * leaves the row's own bottom line showing under the strip. The Deck evening (plan 59 row 2A-07)
- * may move it by a pixel or two either way.
- */
-export const TAB_BAR_OPEN_HEIGHT_PX = 66;
+export const TAB_BAR_HEIGHT_PX = 20;
 export const TAB_BAR_DASH_W_PX = 14;
 export const TAB_BAR_DASH_H_PX = 3;
 /** The active dash is this much taller than the others. */
@@ -143,36 +141,10 @@ export const TAB_BAR_DASH_GAP_PX = 4;
 export const TAB_BAR_NAME_PX = 11;
 /** The LB / RB marks at the ends of the bar. */
 export const TAB_BAR_SHOULDER_MARK_PX = 9;
-/** The gap between the open strip's cells (plan 59 § 3 item 1). */
-export const TAB_BAR_CELL_GAP_PX = 2;
-
 /**
- * Plan 59 — the open tab strip redesign (docs/archive/59-tab-strip-redesign-build.md § 3, § 5):
- * six equal-width cells, one matching icon each, only the lit cell's name shown under it.
+ * The fade on Show details' swap with the chip in the chip's slot (detailsSlot.ts). Born as plan 59's
+ * tab-switch fade on the drop-down strip, which is gone; the tab bar itself fades nothing now.
  */
-/** Plan 59: each cell's fixed height in the open strip. */
-export const TAB_BAR_CELL_HEIGHT_PX = 44;
-/** Plan 59: every icon in the strip is drawn at this size. */
-export const TAB_BAR_CELL_ICON_PX = 22;
-/** Plan 59: the bug's artwork carries inner padding; drawn at 26 in the 22px box it matches the others. */
-export const TAB_BAR_CELL_BUG_ICON_PX = 26;
-/** Plan 59: the icon's distance from the cell's top edge. */
-export const TAB_BAR_CELL_ICON_TOP_PX = 6;
-/** Plan 59: the lit cell's name, shown under its icon. */
-export const TAB_BAR_CELL_NAME_PX = 9.5;
-/** Plan 59: the lit cell's rounded corners. */
-export const TAB_BAR_CELL_RADIUS_PX = 8;
-/** Plan 59: the strip's own top/bottom padding. */
-export const TAB_BAR_STRIP_PAD_Y_PX = 5;
-/** Plan 59: the strip's own left/right padding. */
-export const TAB_BAR_STRIP_PAD_X_PX = 6;
-/** Plan 59: the fixed LB/RB slot width, so the cells never shift when the marks hide. */
-export const TAB_BAR_SLOT_W_PX = 20;
-/** Plan 59: the LB/RB pill's top/bottom padding. */
-export const TAB_BAR_PILL_PAD_Y_PX = 3;
-/** Plan 59: the LB/RB pill's left/right padding. */
-export const TAB_BAR_PILL_PAD_X_PX = 4;
-/** Plan 59: the tab-switch fade — the cell's fill and the name's opacity/colour. */
 export const TAB_BAR_SWITCH_FADE_MS = 120;
 
 /** Deck inline menu popovers (ask mode, attach, accent intensity). */

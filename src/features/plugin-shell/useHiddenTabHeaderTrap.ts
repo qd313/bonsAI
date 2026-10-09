@@ -3,10 +3,10 @@
  *
  * Purpose: When Steam's own highlight ring lands on one of the tab bar's
  * hidden header buttons — buttons that still exist on the page but are not
- * shown — this hands the ring straight to the collapsed tab bar instead,
+ * shown — this hands the ring straight to the plugin's own tab bar instead,
  * so the invisible button is never where the ring comes to rest.
  *
- * Used for: The collapsing tab bar (plan 30, week 4).
+ * Used for: The plugin's own tab bar (plan 30, week 4; kept by plan 84 step 4).
  *
  * Solves: Steam's own tab-header component keeps its buttons reachable by
  * the ring even while they are hidden from view — measured on the Deck on
@@ -79,8 +79,9 @@ import { getUiDocument } from "../../utils/uiDocument";
  * Stands in for `instanceof Element`, which is false for a node from a different realm than this
  * module's own (see the header comment above). Checks the exact shape this file reads — an element
  * node with `classList` and `querySelector` — rather than a constructor identity that a cross-realm
- * node can never satisfy. Exported because `TabIndicatorBar.tsx`'s own `pointerdown` listener reads
- * `evt.target` from the same UI document and had the identical `instanceof Node` bug.
+ * node can never satisfy. Exported so its own test can hand it a node from a genuinely separate
+ * document; the tab bar's old tap-outside listener, which had the identical `instanceof Node` bug,
+ * went with the drop-down strip in plan 84 step 4.
  */
 export function isElementLike(value: unknown): value is Element {
   if (!value || typeof value !== "object") return false;

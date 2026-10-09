@@ -14,10 +14,8 @@ import {
   ALL_BONSAI_TAB_IDS,
   BONSAI_TAB_ACCESSIBLE_NAMES,
   BONSAI_TAB_SHORT_NAMES,
-  BONSAI_TAB_STRIP_LABELS,
   DECKY_TAB_TITLES,
   bonsaiTabIconTitle,
-  bonsaiTabStripLabel,
 } from "./tabTitles";
 
 describe("decky tab titles", () => {
@@ -43,28 +41,10 @@ describe("decky tab titles", () => {
   });
 });
 
-describe("collapsed tab bar names (plan 30)", () => {
-  it("gives every tab a short name and a strip label, including ones not always mounted", () => {
+describe("tab bar names (plan 30)", () => {
+  it("gives every tab a short name, including ones not always mounted", () => {
     for (const id of ALL_BONSAI_TAB_IDS) {
       expect(BONSAI_TAB_SHORT_NAMES[id]?.trim()).toBeTruthy();
-      expect(BONSAI_TAB_STRIP_LABELS[id]?.trim()).toBeTruthy();
     }
-  });
-
-  it("says the rest-bar name in lowercase under the icon, for the four tabs with room to spell it out", () => {
-    for (const id of ["main", "ollama", "settings", "about"] as const) {
-      expect(BONSAI_TAB_STRIP_LABELS[id]).toBe(BONSAI_TAB_SHORT_NAMES[id].toLowerCase());
-    }
-  });
-
-  it("stands on 'perms' and 'dev' for Permissions and Developer, always (D109 item 2)", () => {
-    expect(BONSAI_TAB_STRIP_LABELS.permissions).toBe("perms");
-    expect(BONSAI_TAB_STRIP_LABELS.developer).toBe("dev");
-  });
-
-  it("returns the strip word for a tab from one argument, with no five/six switch", () => {
-    expect(bonsaiTabStripLabel("permissions")).toBe("perms");
-    expect(bonsaiTabStripLabel("developer")).toBe("dev");
-    expect(bonsaiTabStripLabel("main")).toBe("main");
   });
 });

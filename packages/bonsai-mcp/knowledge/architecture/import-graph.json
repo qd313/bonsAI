@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 753,
-  "edgeCount": 2202,
+  "edgeCount": 2199,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3140,9 +3140,7 @@
       "imports": [
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/tabTitles.tsx",
-        "src/features/unified-input/constants.ts",
-        "src/styles/bonsaiScopeStylesheet.ts",
-        "src/utils/uiDocument.ts"
+        "src/styles/bonsaiScopeStylesheet.ts"
       ],
       "importedBy": []
     },
@@ -3152,8 +3150,7 @@
         "src/features/plugin-shell/tabBarNav.ts",
         "src/features/plugin-shell/tabTitles.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
-        "src/utils/navFocusRegistry.ts",
-        "src/utils/uiDocument.ts"
+        "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
@@ -3967,7 +3964,6 @@
         "src/components/SettingsTab.tsx",
         "src/components/SettingsTabAccentIntensityMenuPopover.tsx",
         "src/data/characterUiAccent.ts",
-        "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/features/plugin-shell/tabTitles.tsx",
         "src/features/unified-input/useUnifiedInputSurface.ts",
         "src/hooks/useTabStripBodyOffset.ts",
@@ -8382,8 +8378,6 @@
         "src/features/chat-sum-up/sumUpDirectionHandlers.ts",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/details-slot/DetailsSlot.tsx",
-        "src/features/plugin-shell/TabIndicatorBar.test.tsx",
-        "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",

@@ -1,6 +1,6 @@
 /**
  * Title: Tab bar D-pad and bumper handlers
- * Purpose: Pin what each press on the collapsing tab bar does before any of it reaches a Focusable.
+ * Purpose: Pin what each press on the tab bar does before any of it reaches a Focusable.
  * Used for: plan 30 W4.
  * Solves: The handler table in the plan (§ 4.3) is the contract; this is the cheap half of it.
  * Does not: Prove Steam delivers the presses — that is on-device (TAB-BAR-03, -04).

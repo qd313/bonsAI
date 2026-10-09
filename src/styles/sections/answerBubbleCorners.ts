@@ -35,10 +35,23 @@ export function buildReadAloudCornerCss(): string {
          *
          * Two things differ from Copy because the speaker comes FIRST. Its own bottom margin (12, which
          * puts the reply block back where it sat before the icons existed) is dropped when Copy follows,
-         * and Copy's pull-up shrinks from -38 to -26: Copy's top has to land where the speaker's top
-         * did (4 above the bubble's bottom, minus the icon), and it now starts from the speaker's
-         * bottom plus the turn slot's 6px gap instead of from the bubble's. -38 = -(8 + 6 + 20 + 4),
-         * and with 20 + 4 already spent by the speaker, -26 = -(20 + 6).
+         * and Copy's pull-up shrinks to -26: Copy's top has to land where the speaker's top did, and it
+         * now starts from the speaker's bottom plus the turn slot's 6px gap instead of from the
+         * bubble's. -26 = -(20 + 6): the icon's height and the gap, whatever the inset.
+         *
+         * The numbers, bottom up (the Deck measured the first cut on 2026-10-08: a 20 band with the
+         * icon 4 up left the 20 tall box 3 points INTO the last line, and the focus ring covered the
+         * line's first letter):
+         *   inset      2    the icon box sits this far above the bubble's bottom edge (Copy alone: 4)
+         *   icon box  20    the same box Copy has
+         *   ring       2    the outline's reach on the side facing the text: 2px outline, 0 offset
+         *   clearance  2    left between the ring and the last line's bottom
+         *   ------------
+         *   26  must fit between the last line's bottom and the bubble's bottom edge,
+         *   of which the bubble's own border is 1, so the inner bottom padding is 25.
+         * The ring reaches 2 below the box too, so an inset of 2 puts its outer edge flush with the
+         * bubble's bottom and no lower. The slot's pull-up is -(8 bubble margin + 6 gap + 20 + 2)
+         * = -36, and its bottom margin 8 + 2 = 10 puts the reply block back where it sat.
          */
         .bonsai-scope .bonsai-reply-read-aloud-corner-slot {
           display: flex !important;
@@ -47,8 +60,8 @@ export function buildReadAloudCornerCss(): string {
           width: min(92%, 100%) !important;
           max-width: min(92%, 100%) !important;
           align-self: flex-start !important;
-          margin-top: ${uiScalePx(-38)} !important;
-          margin-bottom: ${uiScalePx(12)} !important;
+          margin-top: ${uiScalePx(-36)} !important;
+          margin-bottom: ${uiScalePx(10)} !important;
           padding-left: ${uiScalePx(7)} !important;
           box-sizing: border-box !important;
           position: relative !important;
@@ -61,6 +74,7 @@ export function buildReadAloudCornerCss(): string {
         }
         .bonsai-scope .bonsai-reply-copy-corner-slot.bonsai-reply-copy-corner-slot--after-read-aloud {
           margin-top: ${uiScalePx(-26)} !important;
+          margin-bottom: ${uiScalePx(10)} !important;
         }
         .bonsai-scope .bonsai-reply-read-aloud-corner-slot > button.bonsai-reply-read-aloud-corner {
           pointer-events: auto !important;
@@ -72,12 +86,12 @@ export function buildReadAloudCornerCss(): string {
          * right end of that line. The speaker is at the START of the last line, and a float cannot be
          * made to land there: the paragraph's one :after is already Copy's, and a :before floats to the
          * start of the FIRST line. So the bubble gains a bottom band as tall as the icon strip
-         * instead (20 under the text where it was 8): the icons sit in it, below every line, and
-         * neither corner needs a spacer. Copy's own spacer and its extra room under a trailing code box
+         * instead (25 under the text where it was 8; the arithmetic is above): the icons sit in it,
+         * below every line, and neither corner needs a spacer. Copy's own spacer and its extra room under a trailing code box
          * stand down while the band is there, or the band would be paid for twice.
          */
         .bonsai-scope .bonsai-chat-ai-bubble--with-read-aloud .bonsai-chat-ai-bubble-inner {
-          padding-bottom: ${uiScalePx(20)} !important;
+          padding-bottom: ${uiScalePx(25)} !important;
         }
         .bonsai-scope .bonsai-chat-ai-bubble--with-copy.bonsai-chat-ai-bubble--with-read-aloud .bonsai-answer-stop:last-child > .bonsai-md-p:last-child::after,
         .bonsai-scope .bonsai-chat-ai-bubble--with-copy.bonsai-chat-ai-bubble--with-read-aloud .bonsai-answer-stop:last-child > .bonsai-md-fenced-pre:last-child::after,
@@ -111,7 +125,7 @@ export function buildReadAloudCornerCss(): string {
           color: #d4dde6 !important;
           opacity: 0.5 !important;
         }
-        /* Full strength the moment the D-pad ring lands on it, with the same white ring Show details has. */
+        /* Full strength the moment the D-pad ring lands on it, with the same white ring Show details has (hugging the box, so the band can hold it). */
         .bonsai-scope .bonsai-reply-read-aloud-corner-slot:focus-within button.bonsai-reply-read-aloud-corner,
         .bonsai-scope button.bonsai-reply-read-aloud-corner.gpfocus,
         .bonsai-scope button.bonsai-reply-read-aloud-corner:focus-visible {
@@ -120,7 +134,13 @@ export function buildReadAloudCornerCss(): string {
         .bonsai-scope button.bonsai-chat-secondary-btn.bonsai-reply-read-aloud-corner.gpfocus,
         .bonsai-scope button.bonsai-chat-secondary-btn.bonsai-reply-read-aloud-corner:focus-visible {
           outline: 2px solid rgba(255, 255, 255, 0.9) !important;
-          outline-offset: 2px !important;
+          outline-offset: 0px !important;
+        }
+        /* Copy's ring in the shared band is the same size, so the band's arithmetic holds for it too. */
+        .bonsai-scope .bonsai-reply-copy-corner-slot--after-read-aloud button.bonsai-reply-copy-corner.gpfocus,
+        .bonsai-scope .bonsai-reply-copy-corner-slot--after-read-aloud button.bonsai-reply-copy-corner:focus-visible {
+          outline: 2px solid rgba(255, 255, 255, 0.9) !important;
+          outline-offset: 0px !important;
         }
         /* Speaking: red, the same shade the Ask bar's mic turns while recording. */
         .bonsai-scope button.bonsai-chat-secondary-btn.bonsai-reply-read-aloud-corner.bonsai-chat-read-aloud-btn--speaking {

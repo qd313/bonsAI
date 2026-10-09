@@ -110,8 +110,9 @@ describe("Read aloud in the answer's lower-left corner -- stylesheet (plan 84 st
     expect(copy).toMatch(/justify-content:\s*flex-end/);
     expect(read).toContain(`padding-left: ${uiScalePx(7)} !important`);
     expect(copy).toContain(`padding-right: ${uiScalePx(7)} !important`);
-    /* Same pull-up and the same width as Copy, so the two icons share one strip. */
-    expect(read).toContain(`margin-top: ${uiScalePx(-38)} !important`);
+    /* Pulled up like Copy's (-38 alone), 2 less because the icon sits 2 from the bubble's bottom, not 4;
+       the same width as Copy, so the two icons share one strip. */
+    expect(read).toContain(`margin-top: ${uiScalePx(-36)} !important`);
     expect(read).toContain("width: min(92%, 100%) !important");
     /* Only the icon takes a tap, not the strip across the last line. */
     expect(read).toMatch(/pointer-events:\s*none/);
@@ -166,10 +167,70 @@ describe("Read aloud in the answer's lower-left corner -- stylesheet (plan 84 st
    * reserves its START, so a bubble with the speaker gets a bottom band and Copy's spacer stands down
    * (paying for both would cost a line twice).
    */
-  it("gives a bubble with the speaker a bottom band as tall as the icon strip", () => {
+  it("gives a bubble with the speaker a bottom band of 25 (see the arithmetic below)", () => {
     expect(ruleBody(css, ".bonsai-scope .bonsai-chat-ai-bubble--with-read-aloud .bonsai-chat-ai-bubble-inner")).toContain(
-      `padding-bottom: ${uiScalePx(20)} !important`
+      `padding-bottom: ${uiScalePx(25)} !important`
     );
+  });
+
+  /*
+   * The band is arithmetic, not a feel (Deck, plan 84 step 3, 2026-10-08): with a 20 point band the
+   * speaker's 20 point box sat 3 points INTO the last line, and its ring (2 point outline) covered the
+   * line's first letter. Measured: line bottom 324.3, box 321.3 to 341.3, bubble bottom 345.3. The
+   * band has to hold the whole stack under the last line's bottom, bottom up:
+   *     bubble border + band  >=  inset + icon box + ring reach + clearance
+   * where the inset is how far the box sits above the bubble's bottom edge, and the ring reach is the
+   * outline's width plus its offset, on the side that faces the text. Everything is read back out of
+   * the generated CSS, so changing one number without the others fails here.
+   */
+  describe("the bottom band holds the icon, its inset and its ring (P84-READ-01 follow-up)", () => {
+    const BORDER = 1;
+    const CLEARANCE = 2;
+    /* A scaled length ("calc(20px * var(--bonsai-ui-scale, 1))") or a plain one, as a number. */
+    const px = (declaration: string, prop: string): number => {
+      const m = declaration.match(new RegExp("(?:^|[\\s;])" + prop + ":\\s*(?:calc\\()?(-?[\\d.]+)px"));
+      expect(m, `no ${prop} in ${declaration.trim().slice(0, 80)}`).toBeTruthy();
+      return Number(m![1]);
+    };
+    const band = () =>
+      px(ruleBody(css, ".bonsai-scope .bonsai-chat-ai-bubble--with-read-aloud .bonsai-chat-ai-bubble-inner"), "padding-bottom");
+    const box = () =>
+      px(ruleBody(css, ".bonsai-scope button.bonsai-chat-secondary-btn.bonsai-reply-read-aloud-corner.DialogButton"), "height");
+    /* The slot is pulled up by -(bubble margin 8 + turn gap 6 + box + inset), see answerBubbleCorners.ts. */
+    const inset = () =>
+      -px(ruleBody(css, ".bonsai-scope .bonsai-reply-read-aloud-corner-slot"), "margin-top") - 8 - 6 - box();
+    const ring = (selector: string) => {
+      const body = ruleBody(css, selector);
+      return px(body, "outline") + px(body, "outline-offset");
+    };
+    const speakerRing = () =>
+      ring(".bonsai-scope button.bonsai-chat-secondary-btn.bonsai-reply-read-aloud-corner:focus-visible");
+    const copyRing = () =>
+      ring(".bonsai-scope .bonsai-reply-copy-corner-slot--after-read-aloud button.bonsai-reply-copy-corner:focus-visible");
+
+    it("band + border >= box + inset + ring + clearance, for the speaker", () => {
+      expect(BORDER + band()).toBeGreaterThanOrEqual(box() + inset() + speakerRing() + CLEARANCE);
+    });
+
+    it("and for Copy when it shares the band", () => {
+      expect(BORDER + band()).toBeGreaterThanOrEqual(box() + inset() + copyRing() + CLEARANCE);
+    });
+
+    it("keeps the ring inside the bubble: the inset is at least the ring's reach below the box", () => {
+      expect(inset()).toBeGreaterThanOrEqual(speakerRing());
+    });
+
+    it("puts the reply block back where it sat: bottom margin = bubble margin 8 + inset", () => {
+      expect(
+        px(ruleBody(css, ".bonsai-scope .bonsai-reply-read-aloud-corner-slot"), "margin-bottom")
+      ).toBe(8 + inset());
+      expect(
+        px(
+          ruleBody(css, ".bonsai-scope .bonsai-reply-copy-corner-slot.bonsai-reply-copy-corner-slot--after-read-aloud"),
+          "margin-bottom"
+        )
+      ).toBe(8 + inset());
+    });
   });
 
   it("stands Copy's end-of-line spacer and its code-box room down while the band is there", () => {

@@ -23,6 +23,7 @@ import { buildChipNavHandlers } from "./presetRowNav";
 import { PRESET_CHIP_BLOCKED_EDGE_FLASH_MS } from "./presetRowLayout";
 import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
 import { focusBottomOfNewestReply } from "../../utils/liveTurnFocusGraph";
+import { takeAboveTheChat } from "../../utils/chatTranscriptNavHelpers";
 import { elementHasGamepadFocus } from "../../utils/uiDocument";
 
 /**
@@ -158,8 +159,9 @@ export function usePresetRowNav(
         focusChip,
         exitDown: () => exitDown?.() === true,
         // The lowest stop of the newest reply is what sits above the dock whenever a reply is on
-        // screen; with no reply at all (an empty chat), fall back to the always-mounted chat slot
-        // row (ChatSlotRow.tsx) rather than let Steam's own navigation take over. D58 #2, measured
+        // screen; with no reply at all (an empty chat), fall back to the stop above the chat
+        // (`takeAboveTheChat`: the chat slot row until plan 84 step 5 removed it, the tab bar since)
+        // rather than let Steam's own navigation take over. D58 #2, measured
         // 2026-09-03: leaving that unclaimed made Steam's own multi-step fallback walk one chip
         // to the left per Up press -- four wasted presses before a fifth finally reached the slot
         // row (runs/PRESET-ROW-up-from-chips-probe.json). Trying both here, in order, claims the
@@ -215,6 +217,6 @@ export function chipRowExitUp(): boolean {
     takeNavFocus("chat-perm-hint-troubleshoot") ||
     takeNavFocus("newest-closed-question") ||
     focusBottomOfNewestReply() ||
-    takeNavFocus("chat-slot-row")
+    takeAboveTheChat()
   );
 }

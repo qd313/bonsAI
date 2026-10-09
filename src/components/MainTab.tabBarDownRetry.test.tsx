@@ -264,6 +264,20 @@ describe("Down from the tab bar lands on the first question, not on Retry (plan 
     expect(down[1]).toBe(`question:${QUESTION}`);
   });
 
+  it("Up from the question goes back up to the tab bar, the stop above the chat", () => {
+    const { container } = renderMainTab([turn("t1", QUESTION)], "t1");
+    /* The tab bar sits outside the Main tab; a stand-in carries its registered nav node. */
+    const bar = document.createElement("div");
+    bar.setAttribute("tabindex", "0");
+    document.body.appendChild(bar);
+    registerNavFocus("tab-bar", { current: { TakeFocus: () => (bar.focus(), true) } });
+    expect(tabBarDown()).toBe(true);
+    expect(nameOf(document.activeElement)).toBe(`question:${QUESTION}`);
+    expect(press(container, "Up")).toBe(true);
+    expect(document.activeElement).toBe(bar);
+    bar.remove();
+  });
+
   it("Left from the question reaches Retry and Right comes back", () => {
     const { container } = renderMainTab([turn("t1", QUESTION)], "t1");
     tabBarDown();

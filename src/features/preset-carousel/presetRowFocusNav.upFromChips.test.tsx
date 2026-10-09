@@ -4,7 +4,8 @@
  * Purpose: Plan 72 moved Save chat to Desktop out from under the last answer and into the chat
  * row as a save icon. The chips' Up used to try that row first; it must now go straight to what sat
  * above it -- the permission rows when they show, else the newest answer's own controls, else the
- * chat row -- and never aim at the removed stop.
+ * stop above the chat (the chat row until plan 84 step 5 removed it; the tab bar since) -- and never
+ * aim at the removed stop.
  *
  * Does not: Press anything on the Deck. The names the chips may hand the ring to are a closed
  * list (NavFocusId); the old "save-chat-desktop" is no longer on it, so a leftover call to it
@@ -48,10 +49,10 @@ describe("Up from a suggestion chip", () => {
     expect(hint.current.TakeFocus).toHaveBeenCalledWith(true);
   });
 
-  it("with no permission row and no answer, lands on the chat row", () => {
+  it("with no permission row and no answer, lands on the tab bar above the chat (the saved-chats row is gone)", () => {
     const spy = vi.spyOn(navFocusRegistry, "takeNavFocus");
     const slotRow = holder();
-    navFocusRegistry.registerNavFocus("chat-slot-row", slotRow);
+    navFocusRegistry.registerNavFocus("tab-bar", slotRow);
     expect(upFromChip()).toBe(true);
     expect(slotRow.current.TakeFocus).toHaveBeenCalledWith(true);
     expect(spy.mock.calls.map((c) => c[0])).not.toContain("save-chat-desktop");

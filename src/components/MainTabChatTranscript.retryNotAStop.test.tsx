@@ -290,17 +290,17 @@ describe("Retry is reached by Left from the question and nothing else (plan 79)"
     expect(nameOf(document.activeElement)).toBe("pill");
   });
 
-  it("with no pill and no older turn, Up from the question goes to the chat slot row, not to Retry", () => {
+  it("with no pill and no older turn, Up from the question goes to the tab bar above the chat, not to Retry", () => {
     const slotRow = document.createElement("div");
     slotRow.setAttribute("tabindex", "0");
     document.body.appendChild(slotRow);
     const holder = { current: { TakeFocus: () => (slotRow.focus(), true) } };
-    registerNavFocus("chat-slot-row", holder);
+    registerNavFocus("tab-bar", holder);
     const { container } = renderChat({}, [TURNS[3]!], "t4");
     focusOn(container.querySelector<HTMLElement>(".bonsai-chat-turn-row-body")!);
     expect(press(container, "Up")).toBe(true);
     expect(document.activeElement).toBe(slotRow);
-    unregisterNavFocus("chat-slot-row", holder);
+    unregisterNavFocus("tab-bar", holder);
     slotRow.remove();
   });
 

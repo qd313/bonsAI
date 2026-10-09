@@ -343,6 +343,12 @@ new-chat spot, goes straight to the question box. Never left to Steam: Steam's o
 its hidden tab buttons, and the hidden-header trap throws the ring back, so the press would do nothing. Step 6 calls
 the same action from the name's Down once the tab bar sits above the name.
 
+**Up from the top of the chat goes to the tab bar** (`takeAboveTheChat` in `chatTranscriptNavHelpers.ts`), the mirror
+of Down: Up from the "N earlier" line, from the first question's text with nothing drawn over its row, and from the
+first archived question's row, and Up from the suggestion chips on an empty chat (`chipRowExitUp`). All of these
+named the saved-chats row before; they share one function now, so step 6, which puts the chat's name between the
+tab bar and the chat, changes one line.
+
 **The chats menu (drawn in bonsAI's own box, over the answer, its foot on the dock's top edge).** `ChatsMenu.tsx`,
 moves in `chatsMenuModel.ts`. Every stop is a sibling in one container, so a move inside it is a plain `focus()`.
 

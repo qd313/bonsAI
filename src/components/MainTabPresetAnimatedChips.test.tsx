@@ -671,7 +671,7 @@ describe("usePresetRowNav exitUp (D58 #2: Up leaves the row at once)", () => {
     return handlers.onMoveUp as () => boolean;
   }
 
-  it("leaves the move to Steam when neither the strip nor the chat slot row is registered", () => {
+  it("leaves the move to Steam when neither the strip nor the stop above the chat is registered", () => {
     expect(upHandler()()).toBe(false);
   });
 
@@ -702,27 +702,27 @@ describe("usePresetRowNav exitUp (D58 #2: Up leaves the row at once)", () => {
     return notes;
   }
 
-  it("lands inside the reply on screen, not on the chat slot row above it", () => {
+  it("lands inside the reply on screen, not on the tab bar above the chat", () => {
     const notes = mountReplyWithNotesBlock();
     const slotRow = vi.fn(() => true);
-    registerNavFocus("chat-slot-row", { current: { TakeFocus: slotRow } });
+    registerNavFocus("tab-bar", { current: { TakeFocus: slotRow } });
 
     expect(upHandler()()).toBe(true);
     expect(document.activeElement).toBe(notes);
     expect(slotRow).not.toHaveBeenCalled();
   });
 
-  it("falls back to the always-mounted chat slot row when there is no reply (an empty chat)", () => {
-    registerNavFocus("chat-slot-row", { current: { TakeFocus: () => true } });
+  it("falls back to the tab bar above the chat when there is no reply (an empty chat; the saved-chats row is gone)", () => {
+    registerNavFocus("tab-bar", { current: { TakeFocus: () => true } });
     expect(upHandler()()).toBe(true);
   });
 
-  it("falls through to the chat slot row when a reply is on screen but offers no stop", () => {
+  it("falls through to the tab bar above the chat when a reply is on screen but offers no stop", () => {
     const slot = document.createElement("div");
     slot.className = "bonsai-chat-turn-slot";
     document.body.appendChild(slot);
     const slotRow = vi.fn(() => true);
-    registerNavFocus("chat-slot-row", { current: { TakeFocus: slotRow } });
+    registerNavFocus("tab-bar", { current: { TakeFocus: slotRow } });
 
     expect(upHandler()()).toBe(true);
     expect(slotRow).toHaveBeenCalledTimes(1);

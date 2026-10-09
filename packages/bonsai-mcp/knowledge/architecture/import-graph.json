@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 775,
-  "edgeCount": 2293,
+  "edgeCount": 2294,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4034,6 +4034,7 @@
       "imports": [
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/features/preset-carousel/presetRowNav.ts",
+        "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
@@ -7322,6 +7323,7 @@
         "src/features/chat-title/ChatsMenu.tsx",
         "src/features/chat-title/chatNameNav.ts",
         "src/features/chat-title/takeFirstChatStop.ts",
+        "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/hooks/useEarlierTurnsPill.ts",
         "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/handRingOnWhenGone.test.ts",

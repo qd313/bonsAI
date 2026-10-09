@@ -448,9 +448,9 @@ describe("the D-pad over the opened list (plan 79)", () => {
     expect(nameOf(document.activeElement)).toBe("row:yesterday question 3");
   });
 
-  it("Up from the first question of an opened day is its day line, not the chat slot row", () => {
+  it("Up from the first question of an opened day is its day line, not the tab bar above the chat", () => {
     const slotRow = { current: { TakeFocus: vi.fn(() => true) } };
-    registerNavFocus("chat-slot-row", slotRow);
+    registerNavFocus("tab-bar", slotRow);
     const { container, stamp } = renderChat();
     openEarlier(container, stamp);
     activate(lineEl(container, "Mon 28 Sep · 5"));
@@ -461,9 +461,9 @@ describe("the D-pad over the opened list (plan 79)", () => {
     expect(slotRow.current.TakeFocus).not.toHaveBeenCalled();
   });
 
-  it("Up from the 'N earlier' line takes the chat slot row, opened or closed", () => {
+  it("Up from the 'N earlier' line takes the tab bar above the chat (the saved-chats row is gone), opened or closed", () => {
     const slotRow = { current: { TakeFocus: vi.fn(() => true) } };
-    registerNavFocus("chat-slot-row", slotRow);
+    registerNavFocus("tab-bar", slotRow);
     const { container, stamp } = renderChat();
     focusOn(container.querySelector<HTMLElement>(LINE)!);
     expect(press(container, "Up")).toBe(true);
@@ -620,9 +620,9 @@ describe("Up from the open question's text goes to whatever is drawn right over 
     expect(isRetry(document.activeElement)).toBe(false);
   });
 
-  it("lands on the 'N earlier' line when it is closed, and on the chat slot row when no line is drawn", () => {
+  it("lands on the 'N earlier' line when it is closed, and on the tab bar above the chat when no line is drawn", () => {
     const slotRow = { current: { TakeFocus: vi.fn(() => true) } };
-    registerNavFocus("chat-slot-row", slotRow);
+    registerNavFocus("tab-bar", slotRow);
     const closed = renderChat();
     focusOn(questionText(closed.container));
     expect(press(closed.container, "Up")).toBe(true);

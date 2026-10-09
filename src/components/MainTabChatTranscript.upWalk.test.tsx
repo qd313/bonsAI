@@ -230,17 +230,17 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
     expect(document.activeElement).toBe(body);
 
     /* Plan 79: Retry is reached by Left from the text only. Up claims the press and hands it to what is
-       above the row (here the chat slot row, a different container); with nothing there to take it, the
+       above the row (here the tab bar above the chat, a different container); with nothing there to take it, the
        press is unclaimed and Steam would pick Retry, so it must be claimed with the row registered. */
     const slotRow = document.createElement("div");
     slotRow.setAttribute("tabindex", "0");
     document.body.appendChild(slotRow);
     const holder = { current: { TakeFocus: () => (slotRow.focus(), true) } };
-    registerNavFocus("chat-slot-row", holder);
+    registerNavFocus("tab-bar", holder);
     focusOn(body!);
     expect(press("onMoveUp")).toBe(true);
     expect(document.activeElement).toBe(slotRow);
-    unregisterNavFocus("chat-slot-row", holder);
+    unregisterNavFocus("tab-bar", holder);
     slotRow.remove();
 
     /* Down is unchanged: from the text it still goes to the Show reasoning line. */

@@ -171,20 +171,31 @@ export function takeHolderFocus(holder: NavRefHolder): boolean {
 }
 
 /**
+ * Steam's ring onto the stop right above the chat: Up from the chat's first stop, and Up from the
+ * suggestion chips on an empty chat. That was the saved-chats row until plan 84 step 5 removed it;
+ * it is the tab bar now, the next thing up, by its registered nav node. Plan 84 step 6 moves the tab
+ * bar above the chat's name in Decky's bar, and this then becomes the name. False when nothing is
+ * registered, and the caller leaves the press to Steam.
+ */
+export function takeAboveTheChat(): boolean {
+  return takeNavFocus("tab-bar");
+}
+
+/**
  * Where Up goes from the open question's text, past its row (plan 79). `above` is the nav node of
  * whatever is drawn right over the question's row: the previous turn's closed header or the "N
- * earlier" pill. With nothing over it, the chat slot row, the same target the first header's own Up
- * has. Never Retry: an Up left to Steam picks Retry, the nearest stop in the row (Deck,
+ * earlier" pill. With nothing over it, the stop above the chat (`takeAboveTheChat`), the same target
+ * the first header's own Up has. Never Retry: an Up left to Steam picks Retry, the nearest stop in the row (Deck,
  * plan79-P79-M8-EARLIER-RETRY-AFTER.json). The transfer is Steam's own, since the target is a
  * different container.
  */
 export function questionMoveUpOut(above: NavRefHolder | null | undefined): () => boolean {
-  return () => (above ? takeHolderFocus(above) : takeNavFocus("chat-slot-row"));
+  return () => (above ? takeHolderFocus(above) : takeAboveTheChat());
 }
 
 /**
- * The "N earlier" line's moves, which are `earlierPillNavHandlers` plus Up to the chat slot row
- * (plan 79). The line is always the first stop in the transcript once there are earlier turns.
+ * The "N earlier" line's moves, which are `earlierPillNavHandlers` plus Up to the stop above the
+ * chat (plan 79; the saved-chats row until plan 84 step 5, the tab bar since). The line is always the first stop in the transcript once there are earlier turns.
  * Opened or closed, nothing above it is a sibling for Steam to climb to, which is the shape that
  * ran 18 Up presses to the tab bar without the slot row ever taking the ring
  * (`firstArchivedHeaderMoveUp` below, measured 2026-09-04): so the line claims Up the same way the
@@ -193,7 +204,7 @@ export function questionMoveUpOut(above: NavRefHolder | null | undefined): () =>
  */
 export function earlierLineNavHandlers(nextTurnId: string | null | undefined): Record<string, unknown> {
   const base = earlierPillNavHandlers(nextTurnId);
-  const up = () => takeNavFocus("chat-slot-row");
+  const up = () => takeAboveTheChat();
   return {
     ...base,
     onMoveUp: up,
@@ -222,10 +233,11 @@ export function closedQuestionMoveDown(nextTurnId: string | null | undefined): (
  * first VISIBLE header's `turnIndex` is `archivedRenderOffset` instead, so this stays undefined
  * for it and Up keeps its ordinary default there (onto the pill row, its real sibling above).
  * Every other header also gets undefined, so Up on those still lands on the header above them —
- * same shape as the preset chips' `exitUp` (MainTabPresetAnimatedChips.tsx).
+ * same shape as the preset chips' `exitUp` (MainTabPresetAnimatedChips.tsx). The target was the chat
+ * slot row; since plan 84 step 5 removed it, it is the stop above the chat (`takeAboveTheChat`).
  */
 export function firstArchivedHeaderMoveUp(turnIndex: number): (() => boolean) | undefined {
-  return turnIndex === 0 ? () => takeNavFocus("chat-slot-row") : undefined;
+  return turnIndex === 0 ? () => takeAboveTheChat() : undefined;
 }
 
 /**

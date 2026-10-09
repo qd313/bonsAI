@@ -2143,3 +2143,42 @@ has the same list.
 
 **At Go, 2026-10-07 00:30:** nothing is pushed; the earlier calls D123 and D124 stand (the cut choice menu waits
 for a hand check; nothing moves to Done on its tests alone).
+
+### D126 — LOCKED 2026-10-08 (raised 2026-10-08) — Plan 84, more room for the answer: the calls from seven mockup rounds
+
+Made by the maintainer on 2026-10-08, evening, one round at a time against a drawing at the Deck's true size
+(https://claude.ai/artifact/EoRoxs11bVjfyBZ28tkM5P, copy in
+[planning/assets/84-vertical-room.html](../planning/assets/84-vertical-room.html)). It started from a screenshot with
+Decky's title bar boxed in red: "is there any way we can hide this part?". The build plan is
+[plan 84](../planning/84-more-room-for-the-answer.md); its § 3 has the same list.
+
+1. **Design for the Deck's own screen first** (300 by 454), then check the TV.
+2. **The tab bar moves up into the empty strip above it**: Steam's 14-point top margin plus the 6 points at the top of
+   Decky's bar, 20 points in all, the tab bar's own height. LB and RB keep switching tabs.
+3. **The tab bar is drawn balanced (option T3):** the current tab's icon and name in the middle, the other tabs as small
+   dimmed icons on each side (the ones LB reaches on the left, the ones RB reaches on the right, wrapping round), LB and
+   RB at the two ends, lined up with the edges of Decky's bar.
+4. **The drop-down strip of tab icons goes.** The maintainer asked to consider removing it and putting the icon next to
+   the name; T3 does that.
+5. **The chat's name goes in Decky's bar, beside the back arrow,** centred on the same line as the tab's name. Empty space
+   on the right balances the arrow (option U3). No shading behind it. Make it long enough for long chat names.
+6. **LT and RT switch chats** if the Deck passes the triggers to bonsAI; their marks sit at the ends of the chat's name.
+7. **LB, RB, LT and RT dim** unless the ring is on their row.
+8. **An arrow on the chat's name opens the chats menu** (no separate icon): the list of chats, New chat, Rename chat, Sum
+   up this chat, Save to Desktop note, Delete chat. The saved-chats row at the top of the chat goes away.
+9. **On the other tabs, the row with the back arrow and the chat's name is hidden completely.**
+10. **The ask area folds (option D):** the big ASK button becomes a small ASK button in the box's bottom strip; the
+    "Context: …" line becomes a small game tag in that strip.
+11. **Read aloud moves into the answer's lower-left corner,** opposite Copy. Its own row goes.
+12. **Reading mode (option G) is worth a test to find out,** separately, after the build.
+13. **The Deck tests wait** until the maintainer says the Deck is free.
+14. **Added later the same evening, after the plan was written (round eight): more room for the chat's name.** LT and RT
+    move to the small line under the name ("LT · chat 2 of 5 · RT"), one each side of the centre, so the name's own line
+    holds only the name and its menu arrow (option X1): about 20 characters instead of 12. The right corner stays empty.
+15. **A name that still does not fit scrolls** once to show the rest while the ring is on it, like long suggestion chips.
+
+**Turned down along the way:** hiding Decky's bar on the chat tab (C), one gear instead of six tabs (F), the chat on top
+with tabs under it (K, L), a chat row of its own under the tabs (M), the chat's name floating over the answer, beside Read
+aloud, in the chips row or in the ask box (N, O, P, Q), the other three tab bars (T1, T2, T4), a New chat button or a
+count box balancing the arrow (U1, U2), the other Read aloud places (W1 to W4), and, for the chat's name, the menu
+arrow as a corner button (X2) and slimmer corner buttons (X3).

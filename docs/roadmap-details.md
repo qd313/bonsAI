@@ -554,6 +554,12 @@ Only one note from this heading is still open. The rest is in [archive/roadmap-t
   [archive/30-collapsing-tab-bar.md](archive/30-collapsing-tab-bar.md) § 8 ·
   [plan 56 block 0](archive/56-feature-session-four.md#block-0--hygiene-and-three-measurements-the-session-alone-about-forty-minutes).
 
+**The design call, 2026-10-08 ([D126](audit/maintainer-decisions-locked.md), [plan 84](planning/84-more-room-for-the-answer.md)).**
+Re-measured that day: Steam's empty strip 14, Decky's title bar 34, Decky's gap 16, the tab bar 24, the ask area 162, the
+answer 204 (the saved-chats row now scrolls away with the chat). The maintainer picked, over seven mockup rounds, the tab
+bar in the empty strip, the chat's name in Decky's title bar, the ask area folded into the box, and Read aloud in the
+answer's corner: 297 points for the answer. Every option drawn is in [the drawing](planning/assets/84-vertical-room.html).
+
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
 ## The floating panel inside SteamVR

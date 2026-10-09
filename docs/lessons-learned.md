@@ -546,6 +546,14 @@ other. Found 2026-09-20 in the AI models list: 48 per cent of screen height came
 a 1080p monitor and about 300 pixels on the Deck's own screen — the maintainer's own count and an
 earlier drawing were both right, they were just looking at two different screens.
 
+**Keep the page's own styles out of a drawing.** A mockup page that draws the Deck inside cards also
+styles those cards, and one ordinary rule for the card's paragraphs reached the answer text inside every
+drawing: it was drawn at about 15 points instead of the Deck's 12. The heights were right, so nothing
+looked broken, but every "words you can see" count was low for seven rounds of decisions (today read 50,
+really about 62). Found 2026-10-08 (plan 84) only because one drawing outside a card disagreed with the
+same drawing inside one. Give the drawing a style boundary of its own, and check one drawn row of text
+against the real screenshot before trusting a count.
+
 ---
 
 ## 6. Tooling traps on this machine

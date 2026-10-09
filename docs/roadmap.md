@@ -135,9 +135,6 @@ replace it with a specific issue when one exists.
 - ★★ `[voice]` **Voice follow-ups** — **OPEN, filed 2026-09-08; Read answers aloud shipped 2026-09-12.**
   For a few seconds after a spoken answer ends, the mic listens for four words: again, go on, stop, next. A short rising tone when it opens, a short falling tone when it closes. One setting, off by default.
   Hangs off the middle position of the Voice replies setting ([D99](audit/maintainer-decisions-locked.md#d99--locked-2026-09-12--after-the-frame-bench-two-not-yet-reading-aloud-goes-with-a-three-way-setting-and-a-clear-button-in-the-session-context-strip)). [Plan](planning/49-steam-frame-features.md) · [Second look § 3](planning/52-frame-features-second-look.md#3-voice-follow-ups-a-sound-a-short-listen-a-few-words).
-- ★★★ `[layout]` **Give the reclaimed height to the transcript** — **OPEN, measured 2026-09-16, no single cause, not built in plan 56.**
-  On the Deck's own screen the panel is 454 pixels tall, and fixed rows take 311 before any chat starts, so about three lines of chat show.
-  More room means shrinking or hiding one of those rows. A design call for the maintainer; no decision recorded. [Detail](roadmap-details.md#give-the-reclaimed-height-to-the-transcript).
 - ★★★ `[ollama]` **Dynamic keep-alive / smart unload** — **OPEN, research spike.** Hold models loaded, or unload when a game takes
   focus on the Deck APU? The spike decides go or no-go; no production unload before it. Pairs with "What bonsAI costs a running game".
   [Detail](roadmap-details.md#ask--reply-items-with-short-entries-as-filed).
@@ -177,6 +174,9 @@ replace it with a specific issue when one exists.
 - ★★★★ `[ask]` **A spoiler-chance rating for the chat's own summary** — **OPEN, not started ([D118](audit/maintainer-decisions-locked.md#d118--locked-2026-09-24-raised-2026-09-24--plan-68-the-chat-sums-itself-up-the-calls-from-discovery) call 14).**
   The chat now sums itself up on its own (done, see the archive entry below); rating how likely that summary swept up a spoiler is a later plan of its own.
   [Detail](archive/roadmap-completed.md#the-chat-sums-itself-up-instead-of-being-cleared-closed-2026-09-26).
+- ★★★★ `[layout]` `[tabs]` **Give the reclaimed height to the transcript** — **OPEN, planned 2026-10-08 ([plan 84](planning/84-more-room-for-the-answer.md), calls in [D126](audit/maintainer-decisions-locked.md#d126--locked-2026-10-08-raised-2026-10-08--plan-84-more-room-for-the-answer-the-calls-from-seven-mockup-rounds)). Step 1 is three Deck tests, waiting for the maintainer to free the Deck.**
+  On the Deck's own screen the answer gets 204 of the panel's 454 points. Picked over seven mockup rounds: the tab bar moves into the empty strip at the top, the chat's name goes in Decky's title bar, the ASK button and the context line fold into the question box, and Read aloud moves into the answer's corner.
+  The answer then gets 297 points, about twice the words of a long answer on screen. [Drawing](https://claude.ai/artifact/EoRoxs11bVjfyBZ28tkM5P) · [Detail](roadmap-details.md#give-the-reclaimed-height-to-the-transcript).
 - ★★★★ `[ollama]` **LAN custom model pull** — **OPEN, blocked on a choice among four ways to pull a model onto another computer on your network. No decision recorded.**
   The picker for typing a custom model name on the Deck itself already shipped. This is the same for a remote Ollama host. The four ways are written out in [the long notes](roadmap-details.md#ask--reply-items-with-short-entries-as-filed).
 - ★★★★ `[perms]` **Web permission** — **OPEN, discovery written, nothing built.**

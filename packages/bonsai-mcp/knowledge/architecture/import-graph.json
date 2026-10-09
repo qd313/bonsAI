@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 778,
-  "edgeCount": 2331,
+  "fileCount": 779,
+  "edgeCount": 2334,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -5584,6 +5584,14 @@
       ],
       "importedBy": []
     },
+    "src/index.topStrip.test.tsx": {
+      "imports": [
+        "src/index.tsx",
+        "src/test-harness/deckyQuickAccessLayout.tsx",
+        "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
     "src/index.tsx": {
       "imports": [
         "src/components/BonsaiDebugOverlay.tsx",
@@ -5654,7 +5662,8 @@
         "src/features/voice/voiceClearAfterStop.test.tsx",
         "src/features/voice/voiceStartingFeedback.test.tsx",
         "src/index.helpChip.test.tsx",
-        "src/index.test.tsx"
+        "src/index.test.tsx",
+        "src/index.topStrip.test.tsx"
       ]
     },
     "src/pluginVersion.ts": {
@@ -6147,7 +6156,8 @@
       "imports": [],
       "importedBy": [
         "src/features/chat-title/topStrip.test.tsx",
-        "src/features/chat-title/topStripHeightLock.test.tsx"
+        "src/features/chat-title/topStripHeightLock.test.tsx",
+        "src/index.topStrip.test.tsx"
       ]
     },
     "src/test-harness/fakeDeckyRpc.test.ts": {
@@ -6220,6 +6230,7 @@
         "src/hooks/useReplyFeedbackChips.test.ts",
         "src/index.helpChip.test.tsx",
         "src/index.test.tsx",
+        "src/index.topStrip.test.tsx",
         "src/test-harness/fakeDeckyRpc.test.ts",
         "src/test-harness/setup.ts",
         "src/utils/bonsaiAskCompletionWatch.test.ts",

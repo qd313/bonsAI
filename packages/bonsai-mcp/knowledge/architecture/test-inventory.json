@@ -240,6 +240,7 @@
     "src/hooks/useTitleOverflow.test.ts",
     "src/index.helpChip.test.tsx",
     "src/index.test.tsx",
+    "src/index.topStrip.test.tsx",
     "src/preview/replyLayoutReport.test.ts",
     "src/styles/buttonFocusRing.test.ts",
     "src/styles/presetChipFocusRing.test.ts",

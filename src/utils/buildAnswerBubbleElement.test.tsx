@@ -1070,11 +1070,10 @@ describe("Read aloud in the answer bubble's lower-left corner (plan 84 step 3)",
     expect(onToggle).toHaveBeenCalledTimes(2);
   });
 
-  it("registers under its own reply-stop name, not the old row's read-aloud", () => {
+  it("registers under its own reply-stop name, read-aloud-corner", () => {
     const { container } = render(build());
     const button = container.querySelector(".bonsai-reply-read-aloud-corner");
     expect(getReplyStop("read-aloud-corner")).toBe(button);
-    expect(getReplyStop("read-aloud")).toBeNull();
   });
 
   it("Right from the last section reaches Read aloud first, and Copy only when there is no speaker", () => {
@@ -1147,13 +1146,13 @@ describe("Read aloud in the answer bubble's lower-left corner (plan 84 step 3)",
     }
   });
 
-  it("the speaker is no longer a stop below the answer: Down skips a stale read-aloud registration", () => {
+  it("the speaker is no longer a stop below the answer: Down never lands on it", () => {
     const stale = document.createElement("div");
     stale.tabIndex = 0;
     const details = document.createElement("div");
     details.tabIndex = 0;
     document.body.append(stale, details);
-    registerReplyStop("read-aloud", stale);
+    registerReplyStop("read-aloud-corner", stale);
     registerReplyStop("show-details", details);
     try {
       const el = build();
@@ -1161,7 +1160,7 @@ describe("Read aloud in the answer bubble's lower-left corner (plan 84 step 3)",
       expect(slotProps(el, "bonsai-reply-copy-corner-slot").onMoveDown!()).toBe(true);
       expect(document.activeElement).toBe(details);
     } finally {
-      registerReplyStop("read-aloud", null);
+      registerReplyStop("read-aloud-corner", null);
       registerReplyStop("show-details", null);
       stale.remove();
       details.remove();

@@ -741,9 +741,9 @@ describe("buildReplyActionsElement no longer draws Read aloud", () => {
     expect(findByClassName(el, "bonsai-chat-reply-actions-row")).not.toBeNull();
   });
 
-  it("registers nothing under the old read-aloud stop name", () => {
+  it("registers no speaker stop", () => {
     render(build({ showFeedback: true, onToggleTransparency: () => {} })!);
-    expect(getReplyStop("read-aloud")).toBeNull();
+    expect(getReplyStop("read-aloud-corner")).toBeNull();
   });
 });
 

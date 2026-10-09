@@ -78,7 +78,7 @@ function downFromNote(turnKey: string): boolean {
   return (
     focusStrategyChromeFromAbove(queryTurnSlot(turnKey)) ||
     focusRegisteredReplyStop("helpful") ||
-    focusRegisteredReplyStop("read-aloud") ||
+    focusRegisteredReplyStop("reason-chips") ||
     focusRegisteredReplyStop("show-details")
   );
 }

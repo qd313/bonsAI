@@ -52,14 +52,7 @@ export type ReplyStopId =
   /** The Read aloud speaker in the answer bubble's lower-left corner (plan 84 step 3). */
   | "read-aloud-corner"
   /** The first "What went wrong?" choice, the landing for a Down that leaves the answer's corner. */
-  | "reason-chips"
-  /**
-   * The old Read aloud line under the answer. Nothing registers it any more (plan 84 step 3 moved the
-   * speaker into the corner, under "read-aloud-corner"); the name stays only because the summed-up
-   * note's Down chain (buildChatSummaryNoteElement.tsx) still asks for it, and an unregistered stop is
-   * simply skipped.
-   */
-  | "read-aloud";
+  | "reason-chips";
 
 /**
  * Reading order down the reply, top to bottom.
@@ -69,7 +62,7 @@ export type ReplyStopId =
  * `helpful` and `not-really` the two buttons under it, and `show-details` the line below them.
  * `read-aloud-corner` is the Read aloud speaker in the answer bubble's lower-left corner, beside
  * `copy` (plan 84 step 3); it used to be a line above `show-details` (plan 42 step 3), then a glyph at
- * the end of the thumbs row (plan 62), and that old name `read-aloud` is no longer registered by anything.
+ * the end of the thumbs row (plan 62), under the name `read-aloud`, which no longer exists.
  * `reason-chips` is the first "What went wrong?" choice, which only exists once a reply is rated down.
  * The order below is the order a person walks them, which is what the "which stop has focus?"
  * lookups want; it is not a claim about layout.

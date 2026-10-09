@@ -41,12 +41,12 @@
       "role": ""
     },
     {
-      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 1210,
+      "path": "py_modules/backend/services/game_ai_request.py",
+      "lines": 1209,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/game_ai_request.py",
+      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
       "lines": 1209,
       "role": ""
     },

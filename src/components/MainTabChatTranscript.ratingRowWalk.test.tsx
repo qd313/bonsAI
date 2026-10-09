@@ -321,6 +321,22 @@ describe("Up and Down between the rating choices, the thumbs and the corner icon
     expect(new Set(seen).size).toBe(seen.length);
   });
 
+  /*
+   * Plan 84 step 3 follow-up: a newest answer with a summed-up note, rated "Not really". Down from the
+   * note used to reach the speaker in the thumbs row; with the speaker in the corner it has to land on
+   * the first choice, not step over the whole block to Show details.
+   */
+  it("Down from the summed-up note lands on the first choice, not Show details", () => {
+    const { container } = renderTurn({
+      askThreadCollapsed: [{ ...TURN, chatSummary: "written" }],
+    });
+    const note = container.querySelector<HTMLElement>(".bonsai-chat-summary-note");
+    expect(note).not.toBeNull();
+    focusOn(note!);
+    expect(press("onMoveDown")).toBe(true);
+    expect(where()).toBe("Bad info");
+  });
+
   it("with the choices not showing, the routes are today's: Down from Helpful goes to Show details", () => {
     const { container } = renderTurn({ liveReplyFeedbackRating: null });
     focusOn(byLabel(container, "Mark reply helpful"));

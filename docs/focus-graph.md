@@ -106,8 +106,9 @@ corner, see below). None of the three has a device check yet — see [docs/testi
 its own stop, a sibling of the answer bubble drawn into the bubble's corner by the stylesheet, exactly as
 Copy is in the lower-right (`bonsai-reply-read-aloud-corner-slot`, built in `buildAnswerCornerSlots.tsx` for `buildAnswerBubbleElement.tsx`).
 It is registered under the reply-stop name `read-aloud-corner`; the old name `read-aloud`, which meant
-the speaker in the reply-actions row, is no longer registered by anything, so the Down chains that still
-name it simply skip it. The slot and the Copy slot are each their own navigation container.
+the speaker in the reply-actions row, is gone. The slot and the Copy slot are each their own navigation
+container. The first "What went wrong?" choice is a named stop too (`reason-chips`), so Down from the
+corner icons and Down from the summed-up note both land on it once a reply is rated down.
 
 ```
 answer sections 0..n-1            (Up/Down walk them, unchanged)

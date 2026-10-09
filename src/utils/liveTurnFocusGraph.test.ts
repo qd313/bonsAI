@@ -347,7 +347,7 @@ describe("liveTurnFocusGraph", () => {
    * step 3 moved the speaker into the answer's lower-left corner, above, so it is no longer a stop
    * on the way down: the chain ends thumbs -> Retry/Copy -> Show details.
    */
-  it("focusDownFromLiveAnswerBubble no longer stops at a Read aloud line, even a stale registration", () => {
+  it("focusDownFromLiveAnswerBubble no longer stops at a Read aloud line, even with the corner speaker mounted", () => {
     resetReplyStops();
     mountLiveTurn(`
       <div class="bonsai-chat-turn-slot">
@@ -361,7 +361,7 @@ describe("liveTurnFocusGraph", () => {
     const showDetails = document.createElement("button");
     showDetails.id = "stop-show-details";
     document.body.appendChild(showDetails);
-    registerReplyStop("read-aloud", readAloud);
+    registerReplyStop("read-aloud-corner", readAloud);
     registerReplyStop("show-details", showDetails);
     const slot = queryLiveTurnSlot(document.body);
     expect(focusDownFromLiveAnswerBubble(slot)).toBe(true);

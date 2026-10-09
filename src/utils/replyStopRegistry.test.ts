@@ -48,8 +48,6 @@ describe("reply stop registry", () => {
     expect(REPLY_STOP_ORDER.indexOf("copy")).toBe(
       REPLY_STOP_ORDER.indexOf("read-aloud-corner") + 1,
     );
-    /* The old row's name is gone from the walk. */
-    expect(REPLY_STOP_ORDER).not.toContain("read-aloud");
   });
 
   it("focuses the registered button itself, not the row around it", () => {

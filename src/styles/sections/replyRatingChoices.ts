@@ -28,11 +28,12 @@ import { uiScalePx } from "./uiScalePx";
 export function buildReplyRatingChoicesSection(): string {
   return `        /*
          * Helpful, Not really and the five reasons: soft fill, soft outline, small medium-weight
-         * words. The :not() keeps the speaker's own bare-glyph rules (section-6.ts) untouched, and
-         * the class count outranks the shared button rule whatever order the rules arrive in.
+         * words. The class count outranks the shared button rule whatever order the rules arrive in.
+         * (The Read aloud speaker used to be left out of this block with a :not(); it sits in the
+         * answer's corner now, never inside .bonsai-chat-reply-actions.)
          */
-        .bonsai-scope .bonsai-chat-reply-actions button.bonsai-chat-secondary-btn:not(.bonsai-chat-read-aloud-btn),
-        .bonsai-scope .bonsai-chat-reply-actions button.bonsai-chat-secondary-btn.DialogButton:not(.bonsai-chat-read-aloud-btn) {
+        .bonsai-scope .bonsai-chat-reply-actions button.bonsai-chat-secondary-btn,
+        .bonsai-scope .bonsai-chat-reply-actions button.bonsai-chat-secondary-btn.DialogButton {
           min-height: 28px !important;
           padding: 4px 10px !important;
           border-radius: 6px !important;
@@ -47,8 +48,8 @@ export function buildReplyRatingChoicesSection(): string {
           color: #b4c6dc !important;
         }
         /* The resting highlight goes; a button holding the ring keeps the ring's own shadow. */
-        .bonsai-scope .bonsai-chat-reply-actions button.bonsai-chat-secondary-btn:not(.bonsai-chat-read-aloud-btn):not(.gpfocus):not(:focus-visible),
-        .bonsai-scope .bonsai-chat-reply-actions button.bonsai-chat-secondary-btn.DialogButton:not(.bonsai-chat-read-aloud-btn):not(.gpfocus):not(:focus-visible) {
+        .bonsai-scope .bonsai-chat-reply-actions button.bonsai-chat-secondary-btn:not(.gpfocus):not(:focus-visible),
+        .bonsai-scope .bonsai-chat-reply-actions button.bonsai-chat-secondary-btn.DialogButton:not(.gpfocus):not(:focus-visible) {
           box-shadow: none !important;
         }
         /* The "What went wrong?" reasons run tighter still: 24 tall, 5 apart (plan 72 option E, then plan 79). */

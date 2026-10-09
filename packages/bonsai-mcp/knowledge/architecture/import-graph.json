@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 754,
-  "edgeCount": 2205,
+  "fileCount": 756,
+  "edgeCount": 2206,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3006,6 +3006,18 @@
       "importedBy": [
         "src/features/chat-sum-up/useChatSumUpJob.test.ts",
         "src/hooks/useChatSlots.ts"
+      ]
+    },
+    "src/features/chat-title/chatTitleStore.test.tsx": {
+      "imports": [
+        "src/features/chat-title/chatTitleStore.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/chat-title/chatTitleStore.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/features/chat-title/chatTitleStore.test.tsx"
       ]
     },
     "src/features/details-slot/DetailsSlot.deck.test.tsx": {

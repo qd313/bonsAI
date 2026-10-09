@@ -16,6 +16,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - [src/data](#srcdata)
 - [src/features/chat-slots](#srcfeatureschat-slots)
 - [src/features/chat-sum-up](#srcfeatureschat-sum-up)
+- [src/features/chat-title](#srcfeatureschat-title)
 - [src/features/details-slot](#srcfeaturesdetails-slot)
 - [src/features/downloads](#srcfeaturesdownloads)
 - [src/features/model-routing](#srcfeaturesmodel-routing)
@@ -295,6 +296,10 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - **chatSumUpModel.ts** (src/features/chat-sum-up/chatSumUpModel.ts) — *What the Session tab says about a chat's summary*: The pure half of plan 68's screen: given a chat's saved summary, its turns, and whether the back end says there is anything to sum up, work out every word the Session tab shows — the button's label, the line saying why it is greyed out, the summary card's header, its lines and…
 - **sumUpDirectionHandlers.ts** (src/features/chat-sum-up/sumUpDirectionHandlers.ts) — *Up and Down handlers for the Session tab's Sum up stops*: The one set of Up/Down handlers every stop in the Sum up section shares: the button, the summary card and the title offer's two buttons.
 - **useChatSumUpJob.ts** (src/features/chat-sum-up/useChatSumUpJob.ts) — *The Sum up this chat button's job*: Starts the back end's summary of the open chat when the Session tab's button is pressed, follows it with the same status the Ask uses, and says when it is done, so the button can show "Summing up · 12 s" and the card can appear under it (plan 68 step 5).
+
+## src/features/chat-title
+
+- **chatTitleStore.ts** (src/features/chat-title/chatTitleStore.ts) — *What the chat's name in Decky's bar knows about the open chat*: A small shared memory, kept outside React, that lets the chat's name in Decky's title bar read and change the open chat. […]
 
 ## src/features/details-slot
 

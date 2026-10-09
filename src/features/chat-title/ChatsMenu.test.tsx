@@ -183,6 +183,16 @@ describe("opening and closing the menu", () => {
     expect(menu(main)).toBeNull();
   });
 
+  it("Down from the name closes a menu the ring had left, so it is never left open behind the ring", async () => {
+    const { title, main } = mount();
+    await openMenu(title);
+    act(() => nameEl(title).focus());
+    act(() => {
+      nameEl(title).__nav!.onMoveDown!();
+    });
+    expect(menu(main)).toBeNull();
+  });
+
   it("Up from the first chat leaves for the name", async () => {
     const { title, main } = mount({}, "a");
     await openMenu(title);

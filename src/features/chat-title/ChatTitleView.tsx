@@ -27,7 +27,8 @@
  * Focus (docs/focus-graph.md, "The chat's name and the chats menu (plan 84 step 5)"):
  *   Left  -> Steam's own move, onto Decky's back arrow beside it (the same bar, one container)
  *   Right -> holds still: nothing of bonsAI lies to the right of the name
- *   Down  -> the tab bar, by Steam's transfer (`takeNavFocus("tab-bar")`): it is right below
+ *   Down  -> the tab bar, by Steam's transfer (`takeNavFocus("tab-bar")`): it is right below; an open
+ *            chats menu closes as the ring goes
  *   Up    -> Steam's own: nothing lies above yet (step 6 puts the tab strip there)
  *   A, tap -> opens the chats menu, which takes the ring onto the open chat; again closes it
  *   B     -> with the menu open, closes it; otherwise Decky's own (back to its plugin list)
@@ -102,7 +103,12 @@ function ChatNameRow({ chat, balance, menuOpen }: { chat: ChatTitleChat; balance
           /* The view draws its own white ring (chatTitleStyles.ts); Steam's would sit on top of it. */
           noFocusRing: true,
           onMoveRight: () => true,
-          onMoveDown: () => takeNavFocus("tab-bar"),
+          /* An open menu the ring had left (a tap that opened it, then the ring came back here) closes
+             as the ring goes down, so it never stays open behind the ring. */
+          onMoveDown: () => {
+            setChatsMenuOpen(false);
+            return takeNavFocus("tab-bar");
+          },
           /* B with the menu open closes it and keeps the ring here. Claimed only then: otherwise B is
              Decky's, and goes back to its plugin list. */
           ...(menuOpen

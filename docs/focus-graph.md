@@ -311,8 +311,9 @@ bonsAI's tab bar
   of bonsAI lies there.
 - **Down** goes to the tab bar right below, by Steam's transfer onto its registered nav node
   (`takeNavFocus("tab-bar")`). Steam's own Down from Decky's bar reached the tab bar too (2026-10-08), but the
-  route is written down rather than left to Steam's guess. Step 6 moves the tab bar above the name, and Down
-  then becomes the chat's first stop.
+  route is written down rather than left to Steam's guess. An open chats menu closes as the ring goes, so it is
+  never left open behind the ring. Step 6 moves the tab bar above the name, and Down then becomes the chat's
+  first stop.
 - **Up** is Steam's own. Nothing lies above the name yet (Up from Decky's bar moved nothing on 2026-10-08);
   step 6 puts the tab strip there and claims it.
 - **A** (`onOKButton`) or a tap (`onClick`) opens the chats menu; the same again closes it. No `onActivate`, which

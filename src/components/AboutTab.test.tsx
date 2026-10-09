@@ -18,6 +18,7 @@ import { toaster } from "@decky/api";
 import { describe, expect, it } from "vitest";
 
 import { AboutTab } from "./AboutTab";
+import { PLUGIN_VERSION } from "../pluginVersion";
 
 function renderAbout() {
   return render(
@@ -85,5 +86,13 @@ describe("About tab: the support button is sized like the other link buttons", (
     expect(toaster.toast).toHaveBeenCalledWith(
       expect.objectContaining({ body: "https://paypal.me/quentind313" }),
     );
+  });
+});
+
+describe("About tab: shows the plugin version", () => {
+  it("has a plain Version line equal to PLUGIN_VERSION, not a button", () => {
+    renderAbout();
+    const line = screen.getByText(`Version ${PLUGIN_VERSION}`);
+    expect(line.closest("button")).toBeNull();
   });
 });

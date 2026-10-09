@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 753,
-  "edgeCount": 2200,
+  "edgeCount": 2202,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -26,7 +26,8 @@
     },
     "src/components/AboutTab.test.tsx": {
       "imports": [
-        "src/components/AboutTab.tsx"
+        "src/components/AboutTab.tsx",
+        "src/pluginVersion.ts"
       ],
       "importedBy": []
     },
@@ -36,6 +37,7 @@
         "src/data/replyLanguage.ts",
         "src/features/unified-input/constants.ts",
         "src/i18n/keys.ts",
+        "src/pluginVersion.ts",
         "src/styles/settingsGlassButton.ts"
       ],
       "importedBy": [
@@ -5290,6 +5292,8 @@
     "src/pluginVersion.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/AboutTab.test.tsx",
+        "src/components/AboutTab.tsx",
         "src/index.test.tsx",
         "src/index.tsx"
       ]

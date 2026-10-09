@@ -24,6 +24,7 @@ import supportPaypalQr from "../assets/qrcode.png";
 import { AboutReplyLanguageSection } from "./AboutReplyLanguageSection";
 import type { ReplyLanguageId } from "../data/replyLanguage";
 import type { UiStringKey } from "../i18n/keys";
+import { PLUGIN_VERSION } from "../pluginVersion";
 import { FOCUS_RING_ITEM_HOST_CLASS } from "../styles/settingsGlassButton";
 
 const PAYPAL_SUPPORT_URL = "https://paypal.me/quentind313";
@@ -77,6 +78,9 @@ export const AboutTab: React.FC<Props> = ({
   return (
     <>
       <PanelSection title="About bonsAI">
+        <PanelSectionRow>
+          <div style={{ fontSize: 12, color: "#c8c8c8", lineHeight: "1.2" }}>Version {PLUGIN_VERSION}</div>
+        </PanelSectionRow>
         <PanelSectionRow>
           <div style={{ fontSize: 12, color: "#c8c8c8", lineHeight: "1.2" }}>
             Backend Ollama Node for Steam (A.I.) - An AI assistant embedded in the

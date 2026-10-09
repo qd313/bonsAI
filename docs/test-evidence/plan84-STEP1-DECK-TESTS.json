@@ -1,0 +1,30 @@
+{
+  "plan": "84 - more room for the answer, step 1 (three Deck tests)",
+  "deck_time_local": "2026-10-08 about 21:35-22:10 EDT",
+  "build": "Two temporary test builds of the checkout at 59cd7072 with a throwaway probe file (never committed); the Deck was put back on the exact earlier bundle afterwards (dist/index.js sha256 bfddd014..., verified on the Deck).",
+  "screen": "External 1080p monitor (eDP-1 disabled, DP-1 enabled): Quick Access page 855x766 CSS, device pixel ratio 1.28. Mechanics only; heights in points are the same layout on the Deck's own screen.",
+  "setup": "Settings backed up to ~/qa-backups/settings-p84-20261008 first and diffed afterwards (no difference). Keep-awake 120 min, released at the end. No game running. No question asked, no setting changed.",
+  "probe": "bonsAI's title spot in Decky's bar drew a stand-in tab strip (Focusable, absolutely positioned at the top of Decky's bar, 20 tall) and a stand-in chat name beside the back arrow. On mount: Decky's title padding-top 6 -> 20, Decky's 16-point gap -> 4, and either (v1) Steam's shared 14-point container padding -> 0 or (v2) Decky's own page (#quickaccess_content_999) moved up 14. Off the Main tab the back arrow and the name were hidden with display:none. Everything restored on unmount. Every gamepad button seen was logged, at the document (vgp_onbuttondown, capture) and on the strip and name Focusables.",
+  "tests": {
+    "A_triggers": {
+      "result": "PASS",
+      "pressed": "Maintainer pressed L2 once, then R2 once, by hand (the rig has no trigger buttons), with the ring on the stand-in strip.",
+      "seen": "doc button 7 then strip button 7; doc button 8 then strip button 8. Maintainer: nothing visible happened; the ring stayed on the strip; the menu stayed on Decky's page (999).",
+      "means": "L2/R2 reach bonsAI as TRIGGER_LEFT (7) and TRIGGER_RIGHT (8), both on the focused Focusable and at the document, so a document-level handler works wherever the ring is. Steam's menu does nothing of its own with them."
+    },
+    "B_top_strip": {
+      "result": "PASS with v2; v1 LEAKED",
+      "seen_layout": "Stand-in strip at y 0-20, width 300, topmost element at its centre and top edge (not clipped). Back arrow and name at y 20-48. bonsAI's own box at y 52.",
+      "seen_dpad": "Walking Up from the question box reached bonsAI's tab bar, then Decky's back arrow, then Up moved nothing (Steam does not find the strip by itself). Right from the back arrow landed on the strip (fully visible); Left returned to the arrow; Down from the arrow or the strip went to bonsAI's tab bar.",
+      "v1_leak": "With Steam's shared 14-point padding zeroed and bonsAI left open while the menu was switched to Steam's Performance page, Performance's pane sat at y 34 and its first line at 70; with bonsAI closed (baseline) they were 48 and 84. bonsAI stays loaded when the menu switches page, so the shared padding change leaked 14 points into Steam's own pages.",
+      "v2_no_leak": "With only Decky's own page moved up 14 (shared padding untouched, 14px), the strip was still at y 0-20 and fully visible, and Steam's Performance page sat at 48 / first line 84 with bonsAI still loaded: identical to baseline.",
+      "means": "Build step 6 must move Decky's own page, never Steam's shared padding. The strip and the name need explicit D-pad routing."
+    },
+    "C_reshape_per_tab": {
+      "result": "PASS, with two findings",
+      "seen": "On the Ollama tab Decky's bar shrank to 20 (strip only), back arrow and name display:none, bonsAI's box started at y 24. One B from bonsAI's tab bar on that tab closed bonsAI to Decky's list. After closing (both versions) Decky's title was back at padding 6 16 0 with no inline style, Steam's padding 14 with no inline style, and (v2) Decky's page back at y 14 with no inline top.",
+      "finding_height_lock": "bonsAI's height lock did not notice the header changing: on the Ollama tab the panel ended 28 points short of the bottom (v1), and with v2 Decky's page ends 14 short. Step 6 must re-measure the lock whenever the header changes and add the 14 back.",
+      "finding_hidden_arrow": "A back arrow hidden with display:none stays in Steam's D-pad path. bonsAI reopened on the Ollama tab (resume), and both Left from the strip and Right from the menu's icon column put the ring on the invisible arrow (0% visible), every time. Step 6 must keep the ring off it (explicit routing plus a catch, like the existing hidden tab-header trap)."
+    }
+  }
+}

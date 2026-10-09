@@ -3,8 +3,9 @@
 Written 2026-10-08 by the planning session, straight after seven rounds of mockups with the maintainer the same
 evening. This is the build plan for the roadmap entry **Give the reclaimed height to the transcript** (`[layout]`),
 which had been waiting since 2026-09-16 for a design call. The calls are recorded as
-[D126](../audit/maintainer-decisions-locked.md); § 3 below has the same list. **Nothing is built yet. Step 1 is three
-Deck tests, and they wait until the maintainer says the Deck is free.**
+[D126](../audit/maintainer-decisions-locked.md); § 3 below has the same list. **Step 1, the three Deck tests, ran on
+2026-10-08 and all three passed (results in § 4). One of them changed how step 6 must work. Steps 2 to 9 are not built
+yet.**
 
 **The drawing:** https://claude.ai/artifact/EoRoxs11bVjfyBZ28tkM5P — every option from all seven rounds, drawn at the
 Deck's true size, each drawing measuring itself. The first section shows only what was picked. A copy is kept in the
@@ -134,11 +135,37 @@ Recorded in full as [D126](../audit/maintainer-decisions-locked.md). In short:
 
 ---
 
-## 4. What is not known yet, and the Deck tests that find out (step 1)
+## 4. The Deck tests (step 1) — ran 2026-10-08, all passed
 
-Three things in the design depend on how Steam and Decky behave, and only the Deck can say. Each test is short, changes
-nothing permanent, and puts the Deck back as it was. **Run them before any brief is written for steps 4 to 6**, because
-two of them can change the design.
+Three things in the design depended on how Steam and Decky behave, and only the Deck could say. **They ran on
+2026-10-08** with two throwaway test builds (never committed) that did to Decky's bar and Steam's strip what the real
+build will, then put everything back; the Deck was returned to its exact earlier build afterwards. Evidence:
+[plan84-STEP1-DECK-TESTS.json](../test-evidence/plan84-STEP1-DECK-TESTS.json). Screen: the 1080p monitor (mechanics
+only; the layout in points is the same on the Deck's own screen).
+
+**Results, in short:**
+
+- **Test A, the triggers: PASS.** The maintainer pressed L2 and R2 by hand (the controller rig has no trigger buttons).
+  bonsAI received both, as the left and right triggers, both on the control the ring was on and through a listener on
+  the whole panel, so they work wherever the ring is. Nothing on screen reacted: Steam's menu does not use them. **LT
+  and RT get built as drawn.**
+- **Test B, the top strip: PASS, after one change of method.** A strip drawn from bonsAI's spot in Decky's bar sat at
+  the very top (0 to 20 points), fully visible, with the back arrow and name at 20 to 48 and bonsAI's own box from 52.
+  **But zeroing Steam's 14-point margin leaked:** bonsAI stays loaded when the menu switches page, and Steam's own
+  Performance page moved up 14 points while bonsAI was open in the background. **The fix, also tested: leave Steam's
+  margin alone and move only Decky's own menu page up 14.** The strip still sat at the very top, and Steam's
+  Performance page stayed exactly where it normally is. The D-pad reaches the strip (Right from the back arrow) but
+  Steam does not find it from below by itself, so the strip and the name need their D-pad routes set by hand.
+- **Test C, the per-tab shape: PASS, with two findings.** On another tab, Decky's bar shrank to the strip alone and
+  bonsAI's content started at 24 points. One B left bonsAI even with the back arrow hidden, and leaving put Decky's bar,
+  Decky's page and Steam's margin back exactly. The findings, both now build requirements in step 6:
+  1. **A hidden back arrow is still in Steam's D-pad path.** bonsAI reopened on the Ollama tab, and the ring landed on
+     the invisible arrow every time it came in from the left. The real build must route around it and catch a landing
+     on it, the way bonsAI already catches Steam's hidden tab buttons.
+  2. **bonsAI's height lock does not notice the header changing shape,** and moving Decky's page up leaves 14 points
+     empty at the bottom. The lock must re-measure whenever the header changes and give those 14 points back.
+
+What each test was designed to find, kept for the record:
 
 **Test A — do L2 and R2 reach bonsAI?** With the ring inside bonsAI, press L2 and R2 and log every button the plugin
 sees. Also check that Steam's menu does nothing of its own with them (scrolling, switching menu tabs).
@@ -165,8 +192,8 @@ exactly; and that the ring never lands on a hidden back arrow.
 **Also measure in step 1:** the 16-point gap under Decky's bar. bonsAI should be able to slide its own box up over it
 without touching Decky. Confirm the panel-height pinning still lines up afterwards.
 
-**Who runs it:** the session that plans and lands, on Opus extra-high, driving the Deck itself or through the
-`deck-driver` helper from rows it writes first. Only one driver at a time: ask the maintainer for the Deck first.
+**Who ran it:** the planning session, on Opus, driving the Deck itself with the maintainer's go and the maintainer's
+hands for the two trigger presses.
 
 ---
 
@@ -211,10 +238,12 @@ did (switching, rename, delete, save to Desktop, new chat, the unread and still-
 Sum up this chat as a second way in to the Session tab's button. LT and RT per test A.
 
 **Step 6 — the tab bar moves up, and the per-tab shape (★★★★, Opus extra-high).**
-Move the tab bar into Decky's bar and up into the strip, the way test B found works; reshape Decky's bar per tab, the way
-test C found works; slide bonsAI's box up over Decky's 16-point gap; and update the height pinning for the new layout.
-Every change made to Decky's or Steam's own parts is undone when bonsAI closes, and when the menu switches to another of
-its tabs.
+Move the tab bar into Decky's bar and up into the strip; reshape Decky's bar per tab; slide bonsAI's box up over Decky's
+16-point gap. **How, from test B: never touch Steam's shared 14-point margin; move only Decky's own menu page up 14, and
+add 14 to the top of Decky's bar.** Three requirements from the tests: set the D-pad routes between the strip, the back
+arrow, the name and the tab body by hand (Steam does not find the strip from below); keep the ring off a hidden back
+arrow and catch it if it lands there anyway; and re-measure the height lock whenever the header changes, giving back the
+14 points the page move leaves at the bottom. Every change to Decky's parts is undone when bonsAI closes.
 
 **Step 7 — the version number moves to the About tab (★, Sonnet medium).** Mechanical.
 
@@ -275,8 +304,8 @@ Each step's rows, run on the Deck's own screen first, then once on the TV. Names
 
 - **A Decky or Steam update changes their layout.** Every reach outside bonsAI's box must check what it finds before
   changing it, and do nothing if it is not what it expects. The fallback is today's layout, never a broken one.
-- **Steam's strip belongs to every menu tab.** If bonsAI's change leaks into Steam's own tabs, that is the worst
-  failure in this plan; P84-QAM-01 is the gate.
+- **Steam's strip belongs to every menu tab.** The first test build leaked into Steam's own pages exactly this way.
+  The tested fix moves only Decky's own page, so nothing of Steam's is touched; P84-QAM-01 stays the gate.
 - **The name row lives outside bonsAI's box.** Its styles and its state both need building (step 5). A half-built
   version shows an unstyled name or a stale chat.
 - **Focus.** The ring path changes in four places (the strip, the corner, the tab bar, the name row). The house rule
@@ -307,4 +336,7 @@ Each step's rows, run on the Deck's own screen first, then once on the TV. Names
 
 ## 10. Progress log
 
-*Empty. Nothing built.*
+- **2026-10-08, step 1 done.** All three Deck tests passed (§ 4). Test B changed the method for step 6: move Decky's
+  own page, never Steam's shared margin. Two new step 6 requirements: route around the hidden back arrow, and
+  re-measure the height lock when the header changes. The Deck was returned to its earlier build (same file hash), the
+  settings matched their backup, and the wake lock was released. Nothing built yet.

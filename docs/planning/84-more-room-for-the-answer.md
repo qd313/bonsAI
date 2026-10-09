@@ -145,7 +145,8 @@ only; the layout in points is the same on the Deck's own screen).
 
 **Results, in short:**
 
-- **Test A, the triggers: PASS.** The maintainer pressed L2 and R2 by hand (the controller rig has no trigger buttons).
+- **Test A, the triggers: PASS.** The maintainer pressed L2 and R2 by hand (the controller rig had no trigger buttons
+  then; it has since the same night, see the progress log).
   bonsAI received both, as the left and right triggers, both on the control the ring was on and through a listener on
   the whole panel, so they work wherever the ring is. Nothing on screen reacted: Steam's menu does not use them. **LT
   and RT get built as drawn.**
@@ -274,7 +275,7 @@ Each step's rows, run on the Deck's own screen first, then once on the TV. Names
 | P84-TABS-01 | 4 | The tab bar shows T3 on every tab; LB and RB wrap at both ends; no strip ever drops down |
 | P84-TABS-02 | 4 | The ghost-strip case (TAB-BAR-GHOST-01) cannot happen: there is no strip to leave behind |
 | P84-NAME-01 | 5 | The chat's name and the tab's name are within 1 point of the panel's centre (measured, not by eye) |
-| P84-NAME-02 | 5 | LT and RT switch chats (or Left and Right on the name, if test A failed); A on the name opens the menu |
+| P84-NAME-02 | 5 | LT and RT switch chats (or Left and Right on the name, if test A failed); A on the name opens the menu. The rig presses LT and RT itself |
 | P84-NAME-03 | 5 | A long name shows about 20 characters, then scrolls once while the ring is on it and is still otherwise |
 | P84-MENU-01 | 5 | Every action in the chats menu does what the saved-chats row did, unread and still-writing dots included |
 | P84-HINTS-01 | 4, 5 | LB and RB light only with the ring on the tab bar; LT and RT only with the ring on the name |
@@ -340,3 +341,10 @@ Each step's rows, run on the Deck's own screen first, then once on the TV. Names
   own page, never Steam's shared margin. Two new step 6 requirements: route around the hidden back arrow, and
   re-measure the height lock when the header changes. The Deck was returned to its earlier build (same file hash), the
   settings matched their backup, and the wake lock was released. Nothing built yet.
+- **2026-10-08, later: the controller rig can press L2 and R2.** The board had no triggers, so test A needed the
+  maintainer's hands. The board now sends them (the studio's commit 971556b; the board was flashed with its Deck cable
+  unplugged, as its notes ask). Checked on the Deck: with the Quick Access Menu open, the rig's L2 arrived as the left
+  trigger and its R2 as the right trigger, once each, and the ring did not move: the same as the hand presses. So the
+  LT and RT checks in § 6 can run unattended.
+- **2026-10-08, steps 2 and 3 started** as two helpers in parallel: the ask area (Opus extra-high) and Read aloud in the
+  answer's corner (Sonnet high, with Copy's pattern named).

@@ -1,6 +1,6 @@
 {
   "note": "Known focus-pattern violations, per file per rule. The check fails only when a count goes UP. Regenerate with: node scripts/check-focus-patterns.mjs --update",
-  "total": 76,
+  "total": 70,
   "counts": {
     "src/components/CharacterPickerModal.tsx": {
       "page-search": 2
@@ -12,7 +12,7 @@
       "ring-question": 1
     },
     "src/components/OllamaTab.tsx": {
-      "page-search": 5
+      "page-search": 1
     },
     "src/components/OllamaWhereAiRunsSection.tsx": {
       "page-search": 1
@@ -32,9 +32,6 @@
     "src/components/SettingsTabUiScaleSection.tsx": {
       "page-search": 1
     },
-    "src/features/plugin-shell/TabIndicatorBar.tsx": {
-      "tabindex-removal": 1
-    },
     "src/features/plugin-shell/modalReturnFocusRegistry.ts": {
       "page-search": 2
     },
@@ -42,7 +39,7 @@
       "page-search": 1
     },
     "src/hooks/useMainTabAskBarFocus.ts": {
-      "page-search": 9
+      "page-search": 8
     },
     "src/utils/answerBubbleElRegistry.ts": {
       "page-search": 1

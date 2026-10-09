@@ -209,7 +209,7 @@ export function buildQuestionBubbleSection(): string {
          * The last-line fade only belongs on a question that is actually cut short by the
          * five-line cap above. CSS alone cannot tell a short question from a cut one, so
          * MainTabChatTranscript.tsx measures the title's real height against that cap (the same
-         * shape of check ChatSlotRow.tsx runs for its own title overflow) and adds this modifier
+         * shape of check the deleted saved-chats row ran for its own title overflow) and adds this modifier
          * class only when the text truly overflows. Roadmap: "A short question fades out at its
          * right edge as if there were more to read" — before this it fired on every open
          * question, one-liners included, because the mask below used to run unconditionally.

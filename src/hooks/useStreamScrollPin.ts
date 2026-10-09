@@ -59,7 +59,7 @@ const RING_SELECTOR = ".gpfocus";
 
 /**
  * The element holding the gamepad ring when it sits on something that scrolls with the chat — the
- * transcript, or the chat slot row above it — rather than on the dock. Null otherwise.
+ * transcript, or whatever scrolls above it — rather than on the dock. Null otherwise.
  *
  * Following the tail then scrolls the very control the person is on out of sight, and the D-pad's
  * own scrolls rarely take a pin, because a step near the end leaves the tail inside the slack.
@@ -67,8 +67,8 @@ const RING_SELECTOR = ".gpfocus";
  * walk during a streaming answer were focused but off screen. The ring and not
  * `document.activeElement`, because the two disagree on the Deck and the ring is what a person sees.
  *
- * The chat slot row counts too: it scrolls away with the transcript. On the Deck 2026-09-23 (plan
- * 64) a ring on the chat row was carried off the top of the pane, from 14 to -183px, while the
+ * Anything above the transcript counts too: it scrolls away with it. On the Deck 2026-09-23 (plan
+ * 64) a ring on the saved-chats row (since deleted) was carried off the top of the pane, from 14 to -183px, while the
  * answer below it grew. Only the dock is excluded: it is pinned to the bottom, so a ring on Ask or
  * Stop stays visible and still lets the follow run.
  */

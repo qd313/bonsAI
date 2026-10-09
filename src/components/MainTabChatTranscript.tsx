@@ -60,8 +60,8 @@
  *    detected, a troubleshooting-shaped question with game-reading
  *    permission off, a VAC-check permission denial), then the slow-answer
  *    and applied-tuning banners.
- * 6. (Save chat to Desktop is no longer here: since plan 72 it is the save
- *    icon at the left end of the chat row, ChatSlotRow.tsx.)
+ * 6. (Save chat to Desktop is no longer here: it is an action in the chats
+ *    menu opened from the chat's name in Decky's title bar, ChatsMenu.tsx.)
  *    (The separate "Session context (N turns)" box that used to sit here is
  *    gone — plan 62 3c folded its row list, chips and Clear into the newest
  *    answer's own Show details panel as a second tab; see
@@ -244,7 +244,7 @@ export type MainTabChatTranscriptProps = {
   ollamaResponse: string;
   elapsedSeconds: number | null;
   lastApplied: AppliedResult | null;
-  /* Read by MainTab for the chat row's save icon (ChatSlotRow.tsx); the transcript itself no
+  /* Read by MainTab for the chats menu's Save to Desktop action (ChatsMenu.tsx); the transcript itself no
      longer draws a save button (plan 72). Kept here because MainTab hands its props on whole. */
   canSaveDesktopNote: boolean;
   onOpenDesktopNoteSave: () => void;
@@ -1177,7 +1177,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 ? undefined
                 : closedQuestionMoveDown(nextTurn?.id ?? (showLiveTurn ? "live" : null)),
               /* What is drawn right over this row, for the question text's Up (plan 79): a day
-                 line, else the turn above, else the "N earlier" line, else the chat slot row. */
+                 line, else the turn above, else the "N earlier" line, else the tab bar above the chat. */
               onMoveUpOut: questionMoveUpOut(
                 earlier.navAbove(turn.id) ??
                   (renderIndex > 0

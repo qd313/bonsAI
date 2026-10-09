@@ -68,7 +68,7 @@ export function PermissionDenyAction({
          * pass-through container rather than a Focusable leaf, so Down/Up jump straight past it —
          * measured 2026-09-03 (runs/PERM-JUMP-01-a-find-open-permissions.json): Down from Retry or
          * Copy landed on the session context strip and Right from Copy did not move at all. Same
-         * shape as the chat-slot row's 2026-08-30 bug (ChatSlotRow.tsx).
+         * shape as the 2026-08-30 bug of the saved-chats row (deleted in plan 84), which needed the same flag.
          *
          * No ref forwarded from here on purpose. A caller that needs to hand Steam's ring to this
          * button from another container (the chat transcript's reply-row Down/Up chain, for one)

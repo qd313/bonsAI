@@ -1,8 +1,8 @@
 /**
  * Title: Tab body focus root
- * Purpose: One `Focusable` around a tab's content that the collapsing tab bar can hand the ring to
+ * Purpose: One `Focusable` around a tab's content that the tab bar can hand the ring to
  *          (Down from the bar) and that hands it back (Up from the tab's first control).
- * Used for: index.tsx, around every tab body except Main, whose chat-slot row is already a
+ * Used for: index.tsx, around every tab body except Main, whose first chat stop is already a
  *           registered stop (plan 30 W4, decision D55).
  * Solves: Steam's own way in and out of a tab body passes through its hidden tab button — a stop a
  *         person cannot see (runs/TAB-BAR-W1b-*.json, -W1c-*.json). Registering the body under

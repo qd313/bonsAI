@@ -8,7 +8,7 @@
  * conversation: the question and answer bubbles, the row of saved chats
  * above them, and the Ask bar pinned to the bottom of the screen.
  *
- *     ┌─ tab strip / saved-chats row ────────────┐
+ *     ┌─ tab strip ──────────────────────────────┐
  *     ├───────────────────────────────────────────┤
  *     │            you: a question          [bubble, right-aligned]
  *     │  [bubble] the AI's answer, in sections     │
@@ -21,7 +21,7 @@
  * Used for: Folded into the plugin's one combined stylesheet by
  * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
  *
- * Does not: Style the tab strip above the saved-chats row (section-1.ts)
+ * Does not: Style the tab strip above the chat (section-1.ts)
  * or the plugin's own tab bar (tabIndicatorBar.ts).
  *
  * Split note (plan 65): answer text formatting (paragraphs, lists, code

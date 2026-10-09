@@ -11,7 +11,7 @@ import {
   toneAccentForChipTags,
 } from "./characterUiAccent";
 
-// The open strip's bar colour (TAB_BAR_STRIP_BG_HEX in unified-input/constants.ts), copied here so
+// The tab bar's colour (TAB_BAR_STRIP_BG_HEX in unified-input/constants.ts), copied here so
 // the contrast check is independent of the production formula it is verifying.
 const STRIP_BG = "#141c24";
 const MIN_CONTRAST = 6;
@@ -147,7 +147,7 @@ describe("characterUiAccent", () => {
     });
   });
 
-  describe("liftForBar (the open strip's lit colour)", () => {
+  describe("liftForBar (the tab bar's lit colour)", () => {
     it("the contrast floor is 6:1, one number the Deck evening can move", () => {
       expect(TAB_BAR_LIT_MIN_CONTRAST).toBe(6);
     });

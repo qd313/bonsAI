@@ -66,7 +66,7 @@
  *    so the screen files can stay simple.
  *
  * This file's own argument type lives beside its return type, in
- * ../types/askOrchestrationArgs.ts and ../types/askOrchestration.ts. The Ask-bar footnote's
+ * ../types/askOrchestrationArgs.ts and ../types/askOrchestration.ts. The Ask box's game tag's
  * own running-game poll is useOllamaGameContextSync, and the Show-details refresh is
  * useInputTransparencyRefresh. The mount-time restore effect itself (point 4 below) is
  * useAskMountRestore, and the Strategy Guide branch-pick and checklist-toggle callbacks are

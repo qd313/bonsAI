@@ -94,7 +94,7 @@ export type BuildTurnHeaderElementArgs = {
   onMoveDownPast?: () => boolean;
   /**
    * Where Up goes from the open question's text (plan 79): whatever is above the question's row --
-   * the previous turn's header, the "N earlier" pill or the chat slot row -- never Retry. Left
+   * the previous turn's header, the "N earlier" pill or the tab bar -- never Retry. Left
    * unclaimed, Steam's own Up picks Retry, the nearest stop in the row (measured on the Deck,
    * plan79-P79-M8-EARLIER-RETRY-AFTER.json, twice). The caller owns the target, since it is a
    * different container and only the transcript knows what sits above; it returns whether the ring

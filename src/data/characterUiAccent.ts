@@ -111,8 +111,8 @@ function contrastRatio(hexA: string, hexB: string): number {
 }
 
 /**
- * The lowest contrast the lifted accent must reach against the open strip's bar
- * (`TAB_BAR_STRIP_BG_HEX`), so the lit name and icon read on the dark strip. The designer's own lit
+ * The lowest contrast the lifted accent must reach against the tab bar
+ * (`TAB_BAR_STRIP_BG_HEX`), so the lit name and icon read on the dark bar. The designer's own lit
  * colours are green #52d88a (9.5:1), gold #f1c40f (10.4:1), pink #f36cb6 (6.2:1, lifted from Fuu's
  * #e91e8c at 4.1:1) and grey #c3d0d1 (10.9:1, lifted from Astarion's #95a5a6, which was already
  * 6.7:1). No single threshold reproduces all four: at 4.5:1 pink barely moves (#eb3598) and grey

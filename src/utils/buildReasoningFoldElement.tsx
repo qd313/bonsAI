@@ -220,7 +220,7 @@ export function buildReasoningOpenBlock(
          * skips a container with no stops inside; the block holds only text and has no A handler. On the
          * Deck (build efd4258b, plan82-P82-REASONING-BLOCK-PAGES.json) it was skipped both ways: Down from
          * the line went straight to the answer, Up from the answer straight to the line, 751 px in one
-         * press. The chat row hit the same trap and has the same flag (ChatSlotRow.tsx).
+         * press. The deleted saved-chats row hit the same trap and had the same flag.
          */
         focusable: true,
         navRef: nav?.handles.blockNav,

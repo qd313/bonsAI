@@ -5,8 +5,8 @@
  * five-line cap (roadmap: "A short question fades out at its right edge as if there were more to
  * read"). CSS alone cannot tell a short question from a cut one, so the title span's own ref
  * (passed to buildTurnHeaderElement, one instance per open turn) measures scrollHeight against the
- * clientHeight the max-height cap enforces -- the same shape of check ChatSlotRow.tsx uses for its
- * own title overflow. Keyed by turn id ("live" for the live turn) so switching which turn is open
+ * clientHeight the max-height cap enforces -- the same shape of check the deleted saved-chats row
+ * used for its own title overflow. Keyed by turn id ("live" for the live turn) so switching which turn is open
  * never reads a stale measurement left by the one before it.
  *
  * Used for: MainTabChatTranscript.tsx, called from the spot this block used to occupy there.

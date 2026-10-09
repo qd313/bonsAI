@@ -129,8 +129,8 @@ export function TabIndicatorBar({
     <Focusable
       /*
         The return-focus registry is handed this element itself, not a wrapper: `focusOwnerById`
-        walks up to the nearest `.Panel.Focusable`, and this is the bar's own (the trap ChatSlotRow
-        documents at its ref).
+        walks up to the nearest `.Panel.Focusable`, and this is the bar's own (the hidden-header trap the
+        deleted saved-chats row met).
       */
       ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("tab-bar", el)}
       className={className ? `bonsai-tab-bar ${className}` : "bonsai-tab-bar"}
@@ -140,8 +140,8 @@ export function TabIndicatorBar({
         navRef,
         /*
           Steam treats a Focusable with no focusable children as a container and skips it; the
-          bar's children are plain spans, so this marks it as a stop (ChatSlotRow.tsx, measured
-          2026-08-30).
+          bar's children are plain spans, so this marks it as a stop (the deleted saved-chats row
+          met this, measured 2026-08-30).
         */
         focusable: true,
         onMoveLeft: handlers.onMoveLeft,
@@ -153,9 +153,7 @@ export function TabIndicatorBar({
     >
       {/*
         The marks are the one on-screen reminder that the shoulder buttons switch tabs. They dim
-        unless the ring is on the bar (tabIndicatorBar.ts), and hide (visibility, never display, so
-        nothing shifts) while the chat-slot row holds the ring, because there the bumpers cycle
-        slots instead — savedChatSlotsRow.ts.
+        unless the ring is on the bar (tabIndicatorBar.ts).
       */}
       <span
         className="bonsai-tab-bar__shoulder bonsai-tab-bar__shoulder--l"

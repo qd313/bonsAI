@@ -2,7 +2,7 @@
  * Title: The plugin's own logo, as one SVG path
  * Purpose: Holds the production logo's outline as a single string, split out of icons.tsx so that
  * file stays readable next to its much smaller icons.
- * Used for: BonsaiLogoIcon in icons.tsx (the strip's Main cell, plan 59).
+ * Used for: BonsaiLogoIcon in icons.tsx (the tab bar's Main tab).
  * Solves: icons.bonsaiGeometry.test.tsx reads src/assets/icons/bonsai-logo.svg from disk and checks
  * this string matches its `d` attribute exactly, so the inline copy cannot drift from the asset.
  * Does not: Draw anything itself -- this is data, not a component.

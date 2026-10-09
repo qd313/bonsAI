@@ -105,7 +105,7 @@ export const BonsaiTreeTabIcon: React.FC<{ size?: number }> = ({ size = 14 }) =>
 
 /**
  * The plugin's own logo as an inline icon, so it takes the colour around it (the roadmap's
- * two-star tab-icon entry, closed by D109 item 1). The open strip's Main cell uses this. The
+ * two-star tab-icon entry, closed by D109 item 1). The tab bar's Main tab uses this. The
  * Steam-level tab title (`DECKY_TAB_TITLES.main`, `BonsaiTreeTabIcon`) is still its own separate
  * stroke-only drawing (plan 59 § 3) — that one sits in Steam's own header, outside the plugin.
  * Decky's own plugin-list icon (`BonsaiSvgIcon`, below) used to be a third drawing too, until the
@@ -343,7 +343,7 @@ export const ImageAttachmentIcon: React.FC<{ size?: number }> = ({ size = 14 }) 
  * The icon Decky shows for bonsAI in its own plugin list (definePlugin's `icon:` prop, index.tsx).
  * Used to draw a smaller, separate canopy+pot outline of its own; roadmap: "The Decky plugin icon
  * does not match the tab bar's bonsai icon" (reported 2026-09-19). Now the same path, viewBox and
- * fill rule as `BonsaiLogoIcon` above (the open strip's Main cell) so the two read as one drawing.
+ * fill rule as `BonsaiLogoIcon` above (the tab bar's Main tab) so the two read as one drawing.
  */
 export const BonsaiSvgIcon: React.FC<{ size?: number }> = ({ size = 24 }) => {
   return (

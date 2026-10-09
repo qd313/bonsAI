@@ -1,14 +1,14 @@
 /**
- * Title: Ask-bar footnote game sync
- * Purpose: Keep the Ask-bar footnote's game context (the "Context: <game>" line) in step
+ * Title: Ask box game tag sync
+ * Purpose: Keep the Ask box's game tag (the running game's name, in the box's strip) in step
  *          with whichever game Steam reports running, on its own timer.
  * Used for: The Ask hook calls this and gets back the one function it also calls directly
  *           elsewhere — before and after an Ask, and whenever a saved snapshot is restored.
- * Solves: The footnote used to only learn about a game change through the Strategy
+ * Solves: The game tag used to only learn about a game change through the Strategy
  *         checklist's own poll (a different feature) or an Ask's status poll landing.
  *         Measured on the Deck: it stayed wrong for minutes in both directions — naming a
  *         game after it was exited, and never naming one that had just launched — while the
- *         panel stayed open the whole time. This hook gives the footnote its own timer.
+ *         panel stayed open the whole time. This hook gives the game tag its own timer.
  * Does not: Decide what to show when nothing is running, or read the survived snapshot —
  *           both stay the caller's job (see askOrchestrationRestore.ts for the mount case).
  * Caution: Lifted out of useBonsaiAskOrchestration on 2026-09-24. It must stay at exactly
@@ -21,10 +21,10 @@ import { Router } from "@decky/ui";
 import type { OllamaContextUi } from "../types/bonsaiUi";
 
 /**
- * How often the Ask-bar footnote re-checks which game Steam reports as running while this hook
- * stays mounted. Before this poll existed, the footnote only picked up a game change through
+ * How often the Ask box's game tag re-checks which game Steam reports as running while this hook
+ * stays mounted. Before this poll existed, the game tag only picked up a game change through
  * `trackedRunningAppId` (owned by the Strategy checklist, a different feature) or by restarting
- * the plugin outright — on the Deck the line was measured staying wrong for minutes, in both
+ * the plugin outright — on the Deck the tag was measured staying wrong for minutes, in both
  * directions, while the panel never closed (roadmap: "The panel only learns which game is
  * running when it starts, and never again"). A few seconds, not faster: this is cheap but it
  * does not need to be instant.
@@ -82,8 +82,8 @@ export function useOllamaGameContextSync(a: UseOllamaGameContextSyncArgs): () =>
   isAskingForGameContextPollRef.current = isAsking;
 
   /*
-   * The footnote's own poll, on its own timer rather than borrowed from `trackedRunningAppId`
-   * (the Strategy checklist's poll, a different feature). Measured on the Deck: the footnote
+   * The game tag's own poll, on its own timer rather than borrowed from `trackedRunningAppId`
+   * (the Strategy checklist's poll, a different feature). Measured on the Deck: the game tag
    * stayed wrong for minutes in both directions — naming Hades after it was exited, and never
    * naming Deep Rock Galactic: Survivor after it launched — while the panel stayed open the
    * whole time, so waiting on another feature's timer was not enough on its own. Runs the whole

@@ -259,7 +259,7 @@ export function mainTabColumnClassName(gameRunning: boolean, isAsking: boolean):
   return steady ? "bonsai-main-tab-column bonsai-main-tab-column--game-steady" : "bonsai-main-tab-column";
 }
 
-/** The Main tab itself — assembles the chat-slot row, transcript and dock. See the file header above for the full flow. */
+/** The Main tab itself — assembles the transcript and dock (the chats menu lives in Decky's title bar). See the file header above for the full flow. */
 export function MainTab(props: MainTabProps) {
   const presetCarouselHostRef = useRef<HTMLDivElement | null>(null);
   const [focusUnifiedTextField, setFocusUnifiedTextField] = useState(() => () => false);

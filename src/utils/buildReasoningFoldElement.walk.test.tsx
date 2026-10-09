@@ -35,8 +35,8 @@ type NavEl = HTMLElement & { __nav?: NavHandlers };
 /*
  * The stock stub drops every Steam prop. This one keeps the move and B handlers on the element, so a press
  * runs the handler Steam would run, and models which Focusables Steam makes stops. Steam treats a Focusable
- * as a container unless something marks it as a stop, and skips a container with no stops inside: the chat
- * row (ChatSlotRow.tsx, `focusable: true`, measured 2026-08-30) and the open reasoning block (plan 82,
+ * as a container unless something marks it as a stop, and skips a container with no stops inside: the old
+ * saved-chats row (deleted in plan 84; it had `focusable: true`, measured 2026-08-30) and the open reasoning block (plan 82,
  * plan82-P82-REASONING-BLOCK-PAGES.json: Down from the line went straight to the answer, Up from the
  * answer straight to the line) both hit it. What is known to mark a stop: `focusable`, an `onActivate`
  * (the answer's sections), the line's own A handler. Only a stop gets the tabindex="0" Decky stamps, so

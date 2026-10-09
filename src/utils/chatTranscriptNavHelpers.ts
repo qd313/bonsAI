@@ -123,8 +123,8 @@ export function registerEarlierLineEl(el: HTMLElement | null, prev?: HTMLElement
 }
 
 /**
- * Hand the ring to the "N earlier" line, when it is drawn (Down from the chat slot row, plan 79).
- * The line is the first stop under the slot row whenever it shows, opened or closed, so the press
+ * Hand the ring to the "N earlier" line, when it is drawn (Down from the tab bar, plan 79).
+ * The line is the first stop under the tab bar whenever it shows, opened or closed, so the press
  * must land there and never on a question or day line below it. False when there is no line, which
  * leaves the first question's text as the target (fewer than two earlier questions).
  */

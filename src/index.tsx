@@ -1140,7 +1140,7 @@ const Content: React.FC = () => {
             </div>
           ),
         },
-        // Every body but Main sits in a TabBodyFocusRoot so the collapsing tab bar can hand the
+        // Every body but Main sits in a TabBodyFocusRoot so the tab bar can hand the
         // ring down into it and the body can hand it back up (plan 30 W4). Main hands the ring to
         // the chat's own first stop (tabBarExitDown below), and the top of the chat hands it back.
         {
@@ -1196,7 +1196,7 @@ const Content: React.FC = () => {
   /** The bar's dash count follows the mounted tabs — five without Developer, six with. */
   const tabBarIds = useMemo(() => deckyTabs.map((row) => row.id as BonsaiTabId), [deckyTabs]);
   /**
-   * Down from the collapsing tab bar (plan 30 W4). On Main, the chat's first stop, or the question box
+   * Down from the tab bar (plan 30 W4). On Main, the chat's first stop, or the question box
    * when the chat is empty (plan 84 step 5: the saved-chats row that used to sit there is gone; the Main
    * tab's own action, through the chat title store). Every other body is wrapped in a TabBodyFocusRoot.
    * False when the target is not registered, and the bar lets Steam decide (the hidden-header trap
@@ -1247,7 +1247,7 @@ const Content: React.FC = () => {
           referentially identical, so the strip itself does not re-render.
         */}
         {/*
-          The collapsing tab bar (plan 30) and the tabs root share one keyed fragment so a UI-scale
+          The tab bar (plan 30) and the tabs root share one keyed fragment so a UI-scale
           Apply remounts both together, and the bar comes before the root so the scope's flex column
           puts it on top; Steam's own header inside the root is hidden by section-1.ts.
         */}

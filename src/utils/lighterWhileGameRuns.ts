@@ -68,7 +68,7 @@ export type LighterParts = {
 
 const PART_NAMES = ["pace", "scramble", "steady"] as const;
 
-/** Whether the context names a running game, the way the "Context:" footnote decides it. */
+/** Whether the context names a running game, the way the box's game tag decides it. */
 export function gameIsRunning(ctx: OllamaContextUi | null | undefined): boolean {
   return Boolean(ctx && ctx.app_context === "active" && ctx.app_id);
 }

@@ -101,7 +101,7 @@ export function useAskSessionSnapshotActions(
     /*
      * Not a blind `setOllamaContext(snap.ollamaContext)`. The snapshot was captured while a
      * modal was open (or the panel was closed) and can name a game that has since been closed —
-     * the exact way the Ask-bar footnote kept naming a game after it was exited. Re-derived from
+     * the exact way the Ask box's game tag kept naming a game after it was exited. Re-derived from
      * the running game right now (the same source `syncOllamaContextFromRunningApp` reads),
      * rather than trusting whatever the snapshot says, so a game that closed while the panel was
      * away is not resurrected on the way back.

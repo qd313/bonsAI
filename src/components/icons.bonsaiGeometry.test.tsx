@@ -7,8 +7,8 @@
  * BonsaiSvgIcon (Decky's own plugin-list icon) used to draw the small trunk/pot outline below,
  * the same one BonsaiTreeTabIcon (the Steam-level tab title) still uses. Roadmap: "The Decky
  * plugin icon does not match the tab bar's bonsai icon" (reported 2026-09-19) — the fix makes
- * BonsaiSvgIcon render the production logo asset instead, the same one the open tab strip's Main
- * cell (BonsaiLogoIcon) already draws, so picking bonsAI in Decky's list and opening its tab strip
+ * BonsaiSvgIcon render the production logo asset instead, the same one the tab bar's Main
+ * tab (BonsaiLogoIcon) already draws, so picking bonsAI in Decky's list and opening its tab bar
  * now show the same drawing.
  */
 import fs from "fs";

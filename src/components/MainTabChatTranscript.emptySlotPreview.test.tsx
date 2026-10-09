@@ -83,7 +83,7 @@ describe("the [+] create-position screen", () => {
   });
 
   /* The transcript is the witness that the gate is [+]-only. Save chat used to be one too; since
-     plan 72 it is the chat row's save icon (ChatSlotRow.tsx), so no chat draws the old button under
+     plan 72 it is an action in the chats menu (ChatsMenu.tsx), so no chat draws the old button under
      its last answer any more, even one with an answer to save. */
   it("keeps an ordinary slot's transcript, with no Save chat button under it", () => {
     const { container } = renderTranscript({ canSaveDesktopNote: true });

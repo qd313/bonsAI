@@ -45,7 +45,7 @@ export function EarlierListLine(props: EarlierListLineProps) {
         },
       }
     : {};
-  /* The "N earlier" line says it is on screen, so Down from the chat slot row can land on it. */
+  /* The "N earlier" line says it is on screen, so Down from the tab bar can land on it. */
   const mounted = useRef<HTMLElement | null>(null);
   const noteMounted = (el: HTMLElement | null) => {
     if (kind !== "earlier") return;

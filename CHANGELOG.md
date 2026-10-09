@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 **Contents**
 
 - [\[Unreleased\]](#unreleased)
+  - [Plan 84 (2026-10-09)](#plan-84-2026-10-09)
   - [Plan 83 (2026-10-08)](#plan-83-2026-10-08)
   - [Plan 82 (2026-10-07)](#plan-82-2026-10-07)
   - [Plan 81 (2026-10-03)](#plan-81-2026-10-03)
@@ -73,6 +74,16 @@ All notable changes to this project are documented in this file.
 <!-- /toc -->
 
 ## [Unreleased]
+
+### Plan 84 (2026-10-09)
+
+- **The tab bar now sits in the empty strip at the very top of the menu.** It shows the current tab's icon and name in the middle and the other tabs as small icons either side, with LB and RB marks at the two ends. Nothing drops down from it any more: the open tab strip is gone. LB and RB light up only while the ring is on the bar. Passed on the Deck's own screen 2026-10-08/09. Known: the touch check (tap the bar with a game running) is still owed.
+- **The chat's name sits beside Decky's back arrow with "LT chat 2 of 7 RT" under it, and the saved-chats row at the top of the chat is gone.** L2 and R2 switch chats from anywhere on the chat tab (they stop at the ends instead of wrapping). A on the name, or a tap, opens "Your chats": every chat, then New chat, Rename chat, Sum up again, Save to Desktop note and Delete chat. A name too long to fit slides along while the ring is on it. Opening, walking, switching chats and closing the menu passed on the Deck's own screen 2026-10-09; what each action does from the menu, and a long name with reduced motion on, have not been tried on the Deck yet.
+- **The big Ask button and the "Context: ..." line are gone.** A small Ask button and a game tag ("No game", or the game's name) sit in the question box's bottom strip beside the paperclip, the mode button and the mic; the X that empties the box sits just left of Ask. Down from the box lands on Ask (on Stop while an answer is being written), so Down then A sends. While an answer is arriving the mic turns into Stop and Ask rests. Passed on the Deck's own screen 2026-10-08.
+- **Read aloud is a small speaker in the answer's lower-left corner, opposite Copy,** and its own row under the answer is gone. Right from the speaker reaches Copy. Passed on the Deck's own screen 2026-10-08. The first build let the speaker's box reach 3 points into the answer's last line and cover its first letter; fixed the same night.
+- **On the other tabs there is no back arrow and no chat name,** and the tab's content starts right under the tab bar. B still goes back to Decky's list. The version number moved to the About tab. Passed on the Deck's own screen 2026-10-09 (measured on the Ollama tab). Steam's own pages keep their top margin while bonsAI is open and after it closes, and leaving bonsAI puts Decky's bar back exactly as it was.
+- **The answer has 295 points of height on the Deck's own screen, instead of 204.** Measured on the Deck 2026-10-09. Known: nothing has run on the TV yet.
+- **Closing the box opened by Rename in the chats menu now puts the ring back on the chat's name,** not on Decky's back arrow (one A there would have closed bonsAI). Found on the Deck 2026-10-09 in this plan's first build and fixed the same night; passed on the Deck 2026-10-09 for Rename. Delete and Save to Desktop use the same return and were not tried.
 
 ### Plan 83 (2026-10-08)
 

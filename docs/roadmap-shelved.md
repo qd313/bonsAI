@@ -86,6 +86,7 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **LB and RB do nothing while the ring is on Decky's back arrow** — seen once, 2026-10-03 (plan 81, Deck block 6). No evidence file.
+  **2026-10-09 (plan 84 step 6):** the chat's name now shares Decky's row with the arrow. On the Deck's own screen LB on the chat's name switched tabs (it went to About and put the ring on the tab bar). The arrow itself was not re-checked, so this stays on the watch list. Evidence `docs/test-evidence/plan84-STEP6-DECK.json` (row P84-RING-01).
   Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **Three more one-off focus sightings from free play, 2026-09-26** — the accent-level one is

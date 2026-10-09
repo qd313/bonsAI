@@ -1748,3 +1748,13 @@ _Copied line for line from the roadmap's Verify entry, nothing reworded, with th
   Nothing else on this entry's own list is owed. One point was judged from the screenshot only: that the spark sits outside the ghost's fade. The bug behind the failures has been on the watch list since 2026-09-29 (it did not reproduce in two clean sessions); it did not show on 2026-10-03 either.
   [Detail](#moved-from-the-roadmap-2026-09-02) · [More](../roadmap-details.md#named-chat-slots).
   **Closed 2026-10-03 (plan 81 paperwork 5):** every row on the entry's own list has passed on the Deck: 05b, 06c and 15d earlier, and 05a's busy half, 06a and 06b on 2026-10-03 (build `afd2f444`). The testing row is closed in testing.md (moved to archive/testing-closed-2026.md) and the watch-list sighting was closed the same day. One question stays open and is on the roadmap's Done line: which reading of the other chat's Ask button is right, ready or busy (no decision recorded). Evidence `docs/test-evidence/plan81-CHAT-SLOTS-V3-05a-busyhalf.json`, `plan81-CHAT-SLOTS-V3-06a.json` (+ .png), `plan81-CHAT-SLOTS-V3-06b.json`.
+
+## Closed 2026-10-09 (plan 84, moved from Verify)
+
+_Copied line for line from the roadmap's Verify entry, nothing reworded, with the closing note added at the end._
+
+- ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab
+  named** — **VERIFY, landed 2026-09-17.** Six equal cells with one icon each, only the current tab named.
+  **Deck run 2026-09-18:** rows 01, 02, 04, 05 and 06 pass; **TAB-STRIP-2A-03** waits on the maintainer's own look. Row 07 (the chat row's dots under the strip) was settled by the maintainer's 2026-09-26 call, "keep the dots, make them line up exactly"; fixed in `e3e849bd` and closed 2026-09-27, the Deck's own screen included (`docs/test-evidence/plan72-F5-DOTS-rowlit-deckscreen.json`). No pick is owed.
+  The free-play sweep's streaming half closed 2026-09-23. [Detail](../roadmap-details.md#the-open-tab-strip-redrawn-six-equal-cells-one-icon-family-only-the-current-tab-named) · [Tab icon](../roadmap-details.md#replace-the-bonsai-tab-icon).
+  **Closed 2026-10-09 (plan 84, docs sweep):** replaced by plan 84 step 4. The open tab strip no longer exists, so there is nothing left to look at: row TAB-STRIP-2A-03 (the maintainer's look) and row TAB-STRIP-2A-07 (the dots; already settled and fixed 2026-09-27) are replaced in testing-manual.md, and rows 01, 02, 04, 05 and 06 had passed on the Deck 2026-09-18. The new bar is checked in rows P84-TABS-01 (passed) and P84-TABS-02 (the touch check, owed). Evidence `docs/test-evidence/plan84-STEPS4-5-7-DECK.json`.

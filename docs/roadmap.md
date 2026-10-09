@@ -76,6 +76,7 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
   After Show details → Session, both tab bars stayed drawn at once. The D-pad half did not reproduce (2026-09-28, 2026-09-29); the touch half needs a finger and is on the maintainer's checks page (plan 77).
   Row **TAB-BAR-GHOST-01** in [testing-manual.md](testing-manual.md). Older notes: [details](roadmap-details.md#a-faded-ghost-of-the-tab-bar-is-left-drawn-over-the-chip-row-after-touching-the-screen).
   **2026-10-03 (plan 81):** one pretend touch through the debug link on the Session tab: no ghost, one tab bar drawn throughout. The touch was on the tab already showing, so a touch on a different tab is not proven. Stays the maintainer's finger check. Evidence `docs/test-evidence/plan81-P81-LOOK-TAB-GHOST.json`.
+  **2026-10-09 (plan 84 step 4):** the drop-down strip is gone from the code, so there is nothing left to be drawn over the chip row, and the helper's tests show the new bar cannot be left behind after any mix of focus, blur and taps. The rig cannot touch the screen, so this stays OPEN until a person's touch check with a game running passes (row **P84-TABS-02**, owed). Evidence `docs/test-evidence/plan84-STEPS4-5-7-DECK.json`.
 - ★★ `[focus]` **Up from the answer bubble, with Steam's ring on the whole answer, scrolls the whole answer instead of moving the ring** — **OPEN, found 2026-10-02 while fixing the trap (plan 79); not a trap, since the press does something.**
   Not fixed. A test comment calls it by design (Up leaves the bubble after scrolling it back). The maintainer will check it by hand later. Seen in the test setup's walk, not on the Deck. No evidence file.
 - ★★ `[focus]` **Up from the bottom of the About tab cannot get back to the top** — **OPEN, found by the maintainer 2026-10-06 on the Deck.**
@@ -101,6 +102,9 @@ replace it with a specific issue when one exists.
 - ★ `[ask]` **Intent packs later review** — **OPEN.** The quiet search aliases still ship. The maintainer decides whether to delete them, leave them quiet, or revive them under Developer ([D79](audit/maintainer-decisions-archive.md#d79--locked-2026-09-06-raised-the-same-day--the-steam-settings-shortcuts-move-above-the-question-box)).
   The bundled Deck basics list ships switched on and is the only reason a whole sentence matches a setting: *can you help me with performance* returns three results (2026-09-06).
   Not in scope: bringing back Proton journal inject without a redesign. [Detail](archive/45-settings-shortcut-card.md#5-two-things-about-the-search-that-are-not-obvious).
+- ★ `[chat]` **Should New chat warn when there are already eight chats?** — **OPEN, a question for the maintainer, raised 2026-10-09 (plan 84, step 5). No decision recorded.**
+  Eight chats are kept. Today a ninth chat quietly deletes the oldest one without a word. Plan 84 did not change this; it came up while the chats menu was rebuilt.
+  A warning before the oldest chat goes would stop a chat vanishing by surprise. [Plan 84 § 10](planning/84-more-room-for-the-answer.md).
 - ★ `[platform]` **Two small build-setup tidy-ups left, deferred on purpose in 2026-08** — **PARTIAL, carried over 2026-09-24 from plan 24 when it was archived.**
   Nothing a person would notice. **Done 2026-10-02 (plan 79):** the version file is written only when it really changes (`b4e838a2`, `49fc8894`), and the old `pnpm.peerDependencyRules` block is gone from `package.json` (`f3541fd`).
   **Still open, for the first session after 0.6.0:** name the package manager's version in `package.json`, and move `packages/bonsai-mcp` off npm. Both need a GitHub run to prove, which a session cannot make (plan 79, question 13). [Plan § 5](archive/24-track-a-ci-baseline.md).
@@ -174,9 +178,10 @@ replace it with a specific issue when one exists.
 - ★★★★ `[ask]` **A spoiler-chance rating for the chat's own summary** — **OPEN, not started ([D118](audit/maintainer-decisions-locked.md#d118--locked-2026-09-24-raised-2026-09-24--plan-68-the-chat-sums-itself-up-the-calls-from-discovery) call 14).**
   The chat now sums itself up on its own (done, see the archive entry below); rating how likely that summary swept up a spoiler is a later plan of its own.
   [Detail](archive/roadmap-completed.md#the-chat-sums-itself-up-instead-of-being-cleared-closed-2026-09-26).
-- ★★★★ `[layout]` `[tabs]` **Give the reclaimed height to the transcript** — **OPEN, planned 2026-10-08 ([plan 84](planning/84-more-room-for-the-answer.md), calls in [D126](audit/maintainer-decisions-locked.md#d126--locked-2026-10-08-raised-2026-10-08--plan-84-more-room-for-the-answer-the-calls-from-seven-mockup-rounds)). Step 1, three Deck tests, passed the same night ([evidence](test-evidence/plan84-STEP1-DECK-TESTS.json)). Steps 2 and 3 (the ask area folds, Read aloud into the answer's corner) built and passed on the Deck's own screen that night too: the answer has 259 points now ([evidence](test-evidence/plan84-STEPS2-3-DECK.json)). Steps 4, 5 and 7 (the new tab bar, the chat's name with L2/R2 and the chats menu, the version in About) built and passed on the Deck the same night, with one bug sent on to step 6 ([evidence](test-evidence/plan84-STEPS4-5-7-DECK.json)); steps 6, 8 and 9 are not done.**
-  On the Deck's own screen the answer gets 204 of the panel's 454 points. Picked over seven mockup rounds: the tab bar moves into the empty strip at the top, the chat's name goes in Decky's title bar, the ASK button and the context line fold into the question box, and Read aloud moves into the answer's corner.
-  The answer then gets 297 points, about twice the words of a long answer on screen. [Drawing](https://claude.ai/artifact/EoRoxs11bVjfyBZ28tkM5P) · [Detail](roadmap-details.md#give-the-reclaimed-height-to-the-transcript).
+- ★★★★ `[layout]` `[tabs]` **Give the reclaimed height to the transcript** — **PARTIAL, steps 2 to 7 built and checked on the Deck's own screen 2026-10-09 ([plan 84](planning/84-more-room-for-the-answer.md), calls in [D126](audit/maintainer-decisions-locked.md#d126--locked-2026-10-08-raised-2026-10-08--plan-84-more-room-for-the-answer-the-calls-from-seven-mockup-rounds)).**
+  On the Deck's own screen the answer now has 295 points of height instead of 204 (the plan said 297; the chips row is 32 points, not 30). The tab bar sits in the empty strip at the top, the chat's name sits beside Decky's back arrow, the ask area folds into the question box, and Read aloud moved into the answer's corner. Evidence: [step 1](test-evidence/plan84-STEP1-DECK-TESTS.json) · [steps 2 and 3](test-evidence/plan84-STEPS2-3-DECK.json) · [steps 4, 5 and 7](test-evidence/plan84-STEPS4-5-7-DECK.json) · [step 6](test-evidence/plan84-STEP6-DECK.json).
+  Still owed: the touch check of the tab bar (row **P84-TABS-02**), the chats menu's actions and a reduced-motion look at a long chat name on the Deck, the run of every row on the TV, and step 9 (reading mode, a test to find out, its own short plan). Rows: [testing-manual.md](testing-manual.md#plan-84--more-room-for-the-answer-plan-84).
+  [Drawing](https://claude.ai/artifact/EoRoxs11bVjfyBZ28tkM5P) · [Detail](roadmap-details.md#give-the-reclaimed-height-to-the-transcript).
 - ★★★★ `[ollama]` **LAN custom model pull** — **OPEN, blocked on a choice among four ways to pull a model onto another computer on your network. No decision recorded.**
   The picker for typing a custom model name on the Deck itself already shipped. This is the same for a remote Ollama host. The four ways are written out in [the long notes](roadmap-details.md#ask--reply-items-with-short-entries-as-filed).
 - ★★★★ `[perms]` **Web permission** — **OPEN, discovery written, nothing built.**
@@ -280,6 +285,9 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 
 ### Features that need verification
 
+- ★ `[QA]` **Re-record the saved Deck walks that expect the layout from before plan 84** — **VERIFY, owed since plan 84 (steps 2 to 6, 2026-10-08/09).**
+  Eight saved walks go through the old tab bar, the old Ask row or the saved-chats row: `F-UP-WALK`, `F4-LADDER-EXIT`, `P77-TRAP-LONG-ASKWALK`, `plan70-STRATEGY-PLACEHOLDER-01`, `plan74-P74-ASK-UP`, `t75-5-Q4-ASK-UP`, `plan81-free-play-nogame` and `plan64-TALL-SECTION-01` (all in `checks/`). Each needs a fresh recording on the new layout.
+  Four further walks tested only the deleted saved-chats row; the plan is to delete them, not re-record them. [Plan 84 § 10](planning/84-more-room-for-the-answer.md).
 - ★★ `[chips]` **Long suggestion chips: pause at the end, centred text** — **VERIFY, built 2026-10-02 (plan 79, `2fa5a5a4`, `70a47e4b`) and changed 2026-10-03 (plan 81, `0b46df34`, `fc1f1d51`), asked for by the maintainer.**
   **The maintainer's call 7 ([D124](audit/maintainer-decisions-locked.md#d124--locked-2026-10-03-raised-2026-10-03--plan-81-the-final-bug-session-before-060-the-ten-calls)):** a long chip now tells its row when its own scroll ends, and the row replaces it one pause (1.5 s) later, instead of 3 to 10 s later on the row's own beat. In the fade style (the default) the chip starts fading at that moment; in the plain and decode styles the words swap then. Two long chips can now change about 0.35 s apart (was 2.5 s). The sliding style keeps its own beat. A chip under the ring still never changes.
   **Deck 2026-10-03 (plan 81, build `9e68bce1`, Deep Rock running, 200 s): mostly passed, with two long gaps when both chips were due at once.** 31 of 44 long chips began to leave 1.2 to 1.9 s after their words stopped; 2 read 3.4 and 4.6 s. A short chip's words were centred to 0 px. Row **P79-LONG-CHIPS** stays owed for the fade's opacity (never seen to change) and for a chip under the ring never changing. Evidence `docs/test-evidence/plan81-P79-LONG-CHIPS-game.json`.
@@ -309,10 +317,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★★★ `[perms]` **Kids master lock** — **VERIFY.** Shipped 2026-08-09.
   When Steam says parental controls are locked, bonsAI turns the high-impact permissions off and greys their switches. Passed on the Deck 2026-09-17: with no lock set, no banner and all four switches on and reachable (**KIDS-REGRESS-01**, `docs/test-evidence/plan57-QA-KIDS-REGRESS-01.json`).
   Still owed, needs a locked account: **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-LOCK-02** (child account), and the live Steam check.
-- ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab
-  named** — **VERIFY, landed 2026-09-17.** Six equal cells with one icon each, only the current tab named.
-  **Deck run 2026-09-18:** rows 01, 02, 04, 05 and 06 pass; **TAB-STRIP-2A-03** waits on the maintainer's own look. Row 07 (the chat row's dots under the strip) was settled by the maintainer's 2026-09-26 call, "keep the dots, make them line up exactly"; fixed in `e3e849bd` and closed 2026-09-27, the Deck's own screen included (`docs/test-evidence/plan72-F5-DOTS-rowlit-deckscreen.json`). No pick is owed.
-  The free-play sweep's streaming half closed 2026-09-23. [Detail](roadmap-details.md#the-open-tab-strip-redrawn-six-equal-cells-one-icon-family-only-the-current-tab-named) · [Tab icon](roadmap-details.md#replace-the-bonsai-tab-icon).
 
 ---
 
@@ -336,6 +340,10 @@ Parked work and watched sightings: [roadmap-shelved.md](roadmap-shelved.md).
 Everything closed since v0.5.0 (2026-07-15), one line each. Full record: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
 
 The Closed blocks from 2026-10-02 to 2026-10-07 (plans 79 to 82) were moved to [the archive](archive/roadmap-done-v0.5.0.md#done-for-v060) on 2026-10-07 to keep this file under its size limit, newest first, copied line for line. Every entry in them is closed, so none stays here.
+
+**Closed 2026-10-09 (plan 84):**
+
+- ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab named** — **DONE 2026-10-09, replaced by plan 84 step 4: the open tab strip no longer exists.** Its rows 01, 02, 04, 05 and 06 passed on the Deck 2026-09-18; row 03 (the maintainer's look) and row 07 (the dots, already settled 2026-09-27) are replaced with it, so no look is owed. The new bar is checked in rows P84-TABS-01 (passed) and P84-TABS-02 (touch check owed). Evidence `docs/test-evidence/plan84-STEPS4-5-7-DECK.json`. Full entry: [archive/roadmap-completed.md](archive/roadmap-completed.md#closed-2026-10-09-plan-84-moved-from-verify).
 
 **Closed 2026-10-08 (plan 83):**
 

@@ -560,6 +560,14 @@ answer 204 (the saved-chats row now scrolls away with the chat). The maintainer 
 bar in the empty strip, the chat's name in Decky's title bar, the ask area folded into the box, and Read aloud in the
 answer's corner: 297 points for the answer. Every option drawn is in [the drawing](planning/assets/84-vertical-room.html).
 
+**Status wording moved here from the roadmap entry on 2026-10-09 (docs sweep after plan 84), to keep the entry at five lines. Nothing was removed.** The entry read, word for word, until then:
+
+- ★★★★ `[layout]` `[tabs]` **Give the reclaimed height to the transcript** — **OPEN, planned 2026-10-08 ([plan 84](planning/84-more-room-for-the-answer.md), calls in [D126](audit/maintainer-decisions-locked.md#d126--locked-2026-10-08-raised-2026-10-08--plan-84-more-room-for-the-answer-the-calls-from-seven-mockup-rounds)). Step 1, three Deck tests, passed the same night ([evidence](test-evidence/plan84-STEP1-DECK-TESTS.json)). Steps 2 and 3 (the ask area folds, Read aloud into the answer's corner) built and passed on the Deck's own screen that night too: the answer has 259 points now ([evidence](test-evidence/plan84-STEPS2-3-DECK.json)). Steps 4, 5 and 7 (the new tab bar, the chat's name with L2/R2 and the chats menu, the version in About) built and passed on the Deck the same night, with one bug sent on to step 6 ([evidence](test-evidence/plan84-STEPS4-5-7-DECK.json)); steps 6, 8 and 9 are not done.**
+  On the Deck's own screen the answer gets 204 of the panel's 454 points. Picked over seven mockup rounds: the tab bar moves into the empty strip at the top, the chat's name goes in Decky's title bar, the ASK button and the context line fold into the question box, and Read aloud moves into the answer's corner.
+  The answer then gets 297 points, about twice the words of a long answer on screen. [Drawing](https://claude.ai/artifact/EoRoxs11bVjfyBZ28tkM5P) · [Detail](roadmap-details.md#give-the-reclaimed-height-to-the-transcript).
+
+**Where the build stood on 2026-10-09 ([plan 84](planning/84-more-room-for-the-answer.md) § 10).** Steps 2 and 3 (2026-10-08): the ask area measured 107 points (was 162) and the answer 259 ([evidence](test-evidence/plan84-STEPS2-3-DECK.json)). Steps 4, 5 and 7 (2026-10-08/09): the new tab bar, the chat's name with L2 and R2 and the chats menu, the version on the About tab ([evidence](test-evidence/plan84-STEPS4-5-7-DECK.json)). Step 6 (2026-10-09): the tab bar moved into the strip at the top, the other tabs lost their back arrow and name, and the answer measured 295 points ([evidence](test-evidence/plan84-STEP6-DECK.json)). The maintainer's question from the name helper, a Features entry of its own: should New chat warn when there are already eight chats.
+
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
 ## The floating panel inside SteamVR
@@ -677,6 +685,7 @@ decide. Evidence `docs/test-evidence/plan70-F4-BUSY-DOT.json` (+ screenshots).
   included (evidence `docs/test-evidence/plan72-F5-DOTS-rowlit-deckscreen.json`, written up in
   [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md)). No pick is owed.
   [Plan](archive/59-tab-strip-redesign-build.md).
+  **2026-10-09: replaced by [plan 84](planning/84-more-room-for-the-answer.md) step 4.** The open tab strip no longer exists, so this entry moved to Done; row 03's look and row 07 are replaced and nothing is owed. Evidence `docs/test-evidence/plan84-STEPS4-5-7-DECK.json`.
 
 ## Summing up offers a fresher title
 

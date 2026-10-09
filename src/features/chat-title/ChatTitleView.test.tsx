@@ -47,9 +47,12 @@ vi.mock("../../utils/navFocusRegistry", async (orig) => {
   const real = await orig<typeof import("../../utils/navFocusRegistry")>();
   return {
     ...real,
-    takeNavFocus: (id: string) => {
-      if (id === "tab-bar") hoisted.tabBarTakes += 1;
-      return id === "tab-bar";
+    /* The tab bar is not drawn here: a take onto it is counted and reported as landed. Every other id
+       (the name's own, "chat-name") is the real transfer. */
+    takeNavFocus: (id: Parameters<typeof real.takeNavFocus>[0]) => {
+      if (id !== "tab-bar") return real.takeNavFocus(id);
+      hoisted.tabBarTakes += 1;
+      return true;
     },
   };
 });

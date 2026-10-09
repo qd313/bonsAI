@@ -4,15 +4,14 @@
  * Purpose: The chat's name sits in Decky's title bar, outside bonsAI's own box, so moving Steam's ring
  * onto it from inside bonsAI (closing the chats menu, a box closing) crosses from one container into
  * another. That needs Steam's own transfer onto the name's nav node, never a plain `focus()`
- * (AGENTS.md, "The Steam Deck focus graph"). The name registers its nav node here while it is drawn,
- * and `takeChatNameFocus` is the one way in.
+ * (AGENTS.md, "The Steam Deck focus graph"). The name registers its nav node through here while it is
+ * drawn (under the shared registry's "chat-name" id), and `takeChatNameFocus` is the one way in.
  *
  * Used for: ChatTitleView.tsx (registers), ChatsMenu.tsx (returns the ring to the name, and names it
  * as the place a box opened from the menu gives the ring back to).
  *
- * Solves: A local holder rather than a new id in navFocusRegistry.ts, whose list of ids belongs to
- * another file; the transfer itself is the same call (`takeHolderFocus`, the same window check
- * `takeNavFocus` makes). And the box return (`returnRingToChatName`): measured on the Deck 2026-10-08,
+ * Solves: The name's nav node lives in the shared registry (navFocusRegistry.ts), so the chat's own
+ * helpers can hand the ring to it by id without importing this file. And the box return (`returnRingToChatName`): measured on the Deck 2026-10-08,
  * Rename chat then B in the rename box left the ring on Decky's back arrow beside the name, where one A
  * closes bonsAI. The box return used a plain `focus()` onto the name, which does not move Steam's ring;
  * it is Steam's transfer now, and for a short while after it a landing on the arrow is taken back.
@@ -20,8 +19,7 @@
  * Does not: Decide when the ring goes to the name; callers do. Does not watch the arrow outside the
  * short window after a box return, so a person who walks Left onto it on purpose is left there.
  */
-import { takeHolderFocus } from "../../utils/chatTranscriptNavHelpers";
-import type { NavRefHolder } from "../../utils/navFocusRegistry";
+import { registerNavFocus, takeNavFocus, unregisterNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
 import { elementHasGamepadFocus } from "../../utils/uiDocument";
 import { deckyBackArrow } from "./deckyTitleParts";
 
@@ -31,18 +29,17 @@ const ARROW_CATCH_CHECKS = 12;
 /** A take that does not stick may be repeated this often in one window. */
 const ARROW_CATCH_MAX_TAKES = 3;
 
-let nameNav: NavRefHolder | null = null;
 let nameEl: HTMLElement | null = null;
 let arrowCatch: ReturnType<typeof setTimeout> | null = null;
 
-/** The name row mounting: its nav node holder and its element. */
+/** The name row mounting: its nav node holder. */
 export function registerChatNameNav(holder: NavRefHolder): void {
-  nameNav = holder;
+  registerNavFocus("chat-name", holder);
 }
 
 /** The name row going away; only clears what this same holder registered. */
 export function unregisterChatNameNav(holder: NavRefHolder): void {
-  if (nameNav === holder) nameNav = null;
+  unregisterNavFocus("chat-name", holder);
 }
 
 /** The name's element, from its ref callback (null on unmount). */
@@ -52,7 +49,7 @@ export function rememberChatNameElement(el: HTMLElement | null): void {
 
 /** Steam's ring onto the chat's name. False when the name is not drawn or Steam declined. */
 export function takeChatNameFocus(): boolean {
-  return nameNav ? takeHolderFocus(nameNav) : false;
+  return takeNavFocus("chat-name");
 }
 
 /** Whether Steam's ring sits on the name right now. */
@@ -97,7 +94,6 @@ export function returnRingToChatName(): boolean {
 
 /** Test-only reset. */
 export function resetChatNameNav(): void {
-  nameNav = null;
   nameEl = null;
   if (arrowCatch) clearTimeout(arrowCatch);
   arrowCatch = null;

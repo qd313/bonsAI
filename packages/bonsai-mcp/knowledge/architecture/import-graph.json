@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 771,
-  "edgeCount": 2275,
+  "edgeCount": 2274,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3021,7 +3021,6 @@
     "src/features/chat-title/chatNameNav.ts": {
       "imports": [
         "src/features/chat-title/deckyTitleParts.ts",
-        "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -7266,7 +7265,6 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/components/buildEarlierList.tsx",
         "src/features/chat-title/ChatsMenu.tsx",
-        "src/features/chat-title/chatNameNav.ts",
         "src/features/chat-title/takeFirstChatStop.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/hooks/useEarlierTurnsPill.ts",

@@ -84,6 +84,9 @@ export type NavFocusId = "session-context-strip" | "preset-carousel" | "unified-
   /** The newest question's row while it is closed (plan 79): the chips' Up lands here, the stop right
    *  above them, registered by useLiveTurnHeaderRingRestore.ts. */
   | "newest-closed-question"
+  /** The chat's name in Decky's title bar (plan 84 step 5, ChatTitleView.tsx): outside bonsAI's box, so
+   *  every way onto it is a transfer. Registered by chatNameNav.ts. */
+  | "chat-name"
   /** One per tab body except Main (TabBodyFocusRoot): the collapsing bar's Down hands the ring here. */
   | `tab-body:${string}`;
 

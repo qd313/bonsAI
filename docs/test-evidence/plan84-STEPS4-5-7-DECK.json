@@ -1,0 +1,56 @@
+{
+  "plan": "84 - more room for the answer, steps 4 (tab bar T3, no drop-down strip), 5 (the chat's name in Decky's bar, LT/RT, the chats menu, the saved-chats row gone) and 7 (the version in the About tab)",
+  "deck_time_local": "2026-10-08 23:52 to 2026-10-09 00:40 EDT",
+  "screen": "The Deck's own screen: 1280x800, Quick Access page 854x454 CSS at device pixel ratio 1.5; bonsAI's column 300 wide (x 48-348, centre 198).",
+  "builds": [
+    "b88bfc00 (steps 2, 3, 4, 7) - the tab bar and the About line",
+    "8c233343 (plus step 5) - the name row, LT/RT, the chats menu; left installed on the Deck"
+  ],
+  "setup": "Settings and chats backed up to ~/qa-backups/settings-p84-steps4567-20261008 first. Keep-awake held. No game running. Presses through the controller rig; LT and RT through pad.py (the press tools in this session predate the triggers). Run files under runs/plan84-*.json (local, not tracked).",
+  "rows": {
+    "P84-TABS-01": {
+      "result": "PASS",
+      "seen": "The bar is 300 x 20 at y 64-84 under Decky's bar. Five parts in order: LB, two side icons, the current icon and name, three side icons (six tabs with Developer on), RB. LB's letters start 16 points from the bar's left edge and RB's end 16 from its right. The name's centre, measured from its text, is 0.54-0.55 points right of the bar's centre on every tab (Main, Ollama, Settings, Permissions, Developer, About). Narrowest gap between neighbouring glyphs: 5.1 points on five tabs, 3.2 on Permissions (the longest name; side icons squeeze, RB still 10.9 clear). RB walked all six tabs and wrapped About -> Main; LB from Main -> About; Right and Left wrap the same way. Down from the bar went into the tab. No part of the bar is drawn below its bottom edge.",
+      "runs": ["runs/plan84-P84-TABS-01-reach.json", "runs/plan84-P84-TABS-01-wrap.json", "runs/plan84-P84-TABS-01-down.json"],
+      "screenshot": "screenshots/DeckCapture_20261008_235420_auto.png"
+    },
+    "P84-TABS-02": {
+      "result": "OWED (needs a finger on the screen)",
+      "seen": "The rig cannot touch the screen. The drop-down strip no longer exists in the code, and the helper's tests prove nothing of the bar can be left drawn over the chip row after any sequence of focus, blur and taps. The maintainer's touch check (with a game running) is still owed before the ghost-strip bug is closed."
+    },
+    "P84-HINTS-01": {
+      "result": "PASS",
+      "seen": "Ring elsewhere: LB and RB at opacity 0.32, LT and RT at 0.32. Ring on the tab bar: LB/RB 1 in near-white rgb(238,243,248), the bar's white inset ring and faint fill. Ring on the chat's name: LT/RT 1, LB/RB back to 0.32, the name's white ring."
+    },
+    "P84-NAME-01": {
+      "result": "PASS",
+      "seen": "The name's words box is 156.4 points wide (more than the 139 the plan asked for) and its centre is 0.19 points left of the panel's centre (197.81 against 198). The tab name above it is centred to 0.0. Under the name: 'LT chat 1 of 7 RT'.",
+      "screenshot": "screenshots/DeckCapture_20261009_003226_auto.png"
+    },
+    "P84-NAME-02": {
+      "result": "PASS",
+      "seen": "With the ring on the question box: the rig's RT (one Rz pull) switched 'chat 1 of 7' to 'chat 2 of 7' (the Hollow Knight chat) and the ring stayed on the box; LT twice reached the new-chat spot ('New chat', 'not saved yet'); RT went back. Up from the tab bar -> Decky's back arrow (Steam's own move, as designed until step 6), Right -> the name; A on the name opened the menu with the ring on the open chat.",
+      "runs": ["runs/plan84-P84-NAME-02-reach.json"]
+    },
+    "P84-NAME-03": {
+      "result": "PASS (by eye from one frame)",
+      "seen": "A long name is cut with '...' at rest; with the ring on it, it slides (the screenshot caught it mid-slide showing '...to practice parrying in a...'). Reduced motion not tried on the Deck.",
+      "screenshot": "screenshots/DeckCapture_20261009_003304_auto.png"
+    },
+    "P84-MENU-01": {
+      "result": "PASS except one defect",
+      "seen": "A on the name opens 'Your chats' over the answer: top 88.7 (under the tab bar), bottom 347.7 against the dock's top at 347, the question box in view. All 7 chats with when-stamps, then New chat, Rename chat, Sum up again, Save to Desktop note, Delete chat (red). The D-pad reaches all 12 stops with nothing visited twice (Down through the chats, the action grid by Down/Right/Left). 'Partly visible' readings on long chat names are their '...' cut, not hidden rows. B closed it with the ring on the name. A on the second chat switched to it, closed the menu and put the ring on the name ('chat 2 of 7').",
+      "defect": "Rename chat -> the rename box -> B: the box closed and the ring landed on Decky's BACK ARROW, not on the chat's name (one A there would close bonsAI). Sent to step 6's helper as its first fix; the same return path serves Delete and Save to Desktop.",
+      "runs": ["runs/plan84-P84-MENU-01-open.json", "runs/plan84-P84-MENU-01-walk.json", "runs/plan84-P84-MENU-01-close-and-pick.json", "runs/plan84-P84-MENU-01-rename-cancel.json", "runs/plan84-P84-MENU-01-rename-back.json"],
+      "screenshot": "screenshots/DeckCapture_20261009_003322_auto.png"
+    },
+    "step7_about_version": {
+      "result": "PASS",
+      "seen": "The About tab's first line under its heading reads 'Version 0.5.0'. Other tabs' title spot shows the plain 'bonsAI' wordmark with no version."
+    }
+  },
+  "not_run_here": [
+    "The actions' own effects from the menu (New chat, delete with confirm, save to Desktop, sum up) - the tests cover the calls; the Deck run only opened and backed out of Rename.",
+    "P84-TABS-02 touch check (needs a person)."
+  ]
+}

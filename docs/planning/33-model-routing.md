@@ -331,6 +331,9 @@ Two layout-and-focus helpers ran side by side, briefed from a measured drawing (
 |---|---|---|---|---|---|---|---|
 | 2, the ask area folds | Opus 5.5 extra-high | 3 | Yes | None | **Yes**: ask, stop, the strip walk and the height all passed | about 548,000 | 41 |
 | 3, Read aloud into the corner | Sonnet 5.5 high | 2, then 1 | Yes | Review: a dead stop name left in the note's Down path (outside its files; it flagged it). Deck: the corner's box reached 3 points into the last line | Walks and start/stop yes; the corner's spacing no, fixed in one more round | about 408,000 | 25 + 6 + 5 |
+| 4, the tab bar as T3 | Opus 5.5 extra-high | 2 | Yes | None | **Yes**: centring, wrap, dimming all passed; the touch check needs a person | about 426,000 | 38 |
+| 5, the chat's name, LT/RT, the chats menu | Opus 5.5 extra-high | 10 | Yes | None from review; one from the Deck: a box closed from the menu left the ring on Decky's back arrow (sent to step 6) | Everything else yes, including LT/RT through the rig | about 700,000 | 84 |
+| 7, the version in About | Sonnet 5.5 medium | 1 | Yes | None | **Yes** | about 73,000 | 7 |
 
 ## 5. Where Haiku fits
 

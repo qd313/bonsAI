@@ -370,3 +370,23 @@ Each step's rows, run on the Deck's own screen first, then once on the TV. Names
     script looks for the gone row; four comments still call the game tag "the footnote".
   - **For the maintainer to judge by eye:** the speaker's size and weight against Copy, and whether Down from an
     **empty** box should still land on Ask.
+- **2026-10-08/09, steps 4, 5 and 7 built, landed and checked on the Deck's own screen**
+  ([evidence](../test-evidence/plan84-STEPS4-5-7-DECK.json)). Three helpers side by side: the tab bar (Opus
+  extra-high, two commits), the chat's name and menu (Opus extra-high, ten commits), the version line (Sonnet medium,
+  one commit).
+  - **What a player sees now:** the tab bar shows the tab's icon and name in the middle and the other tabs as small
+    icons either side; nothing drops down from it any more. The chat's name sits beside Decky's back arrow with "LT
+    chat 2 of 7 RT" under it; L2 and R2 switch chats from anywhere on the chat tab; A on the name opens "Your chats"
+    with every chat and New chat, Rename, Sum up, Save to Desktop and Delete. The saved-chats row is gone. Other tabs
+    show a plain "bonsAI"; the version is on the About tab.
+  - **Measured:** both names centred within about half a point; LB and RB 16 points in; L2/R2 and LB/RB light only
+    with the ring on their row. Every row in § 6 for these steps passes, with two exceptions below.
+  - **One bug found on the Deck:** closing a box opened from the chats menu (Rename, and by the same path Delete and
+    Save) left the ring on Decky's back arrow. Step 6's helper fixes it first.
+  - **Owed:** the touch check for the tab bar (a person must tap it with a game running) before the ghost-strip bug
+    is closed. The maintainer's question from the name helper: should New chat warn when there are already eight
+    chats (the ninth still deletes the oldest without a word, as before)?
+  - **Calls the helpers made:** the name's balancing space is measured from Decky's bar, not fixed at 40 (Decky leaves
+    a 10-point gap after its arrow); L2/R2 listen on the panel's own page, so they work wherever the ring is; they do
+    not wrap at the ends; the menu's greyed actions stay as stops that do nothing; Down from the tab bar enters the
+    chat at its first line, never on Retry. Step 6 then moves the tab bar up.

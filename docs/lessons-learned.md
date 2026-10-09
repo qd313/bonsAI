@@ -554,6 +554,13 @@ really about 62). Found 2026-10-08 (plan 84) only because one drawing outside a 
 same drawing inside one. Give the drawing a style boundary of its own, and check one drawn row of text
 against the real screenshot before trusting a count.
 
+**Anything drawn into another element's space needs its arithmetic as a test.** Plan 84 moved Read aloud into
+the answer's corner with a 20-point band under the text, and every test passed; on the Deck the speaker's box
+reached 3 points into the last line and its ring covered a letter, because the box was 20 tall and sat 4 points
+up (2026-10-08). The fix stated the rule as arithmetic (band at least box + inset + ring + clearance) and the
+test read every number back out of the stylesheet. jsdom has no layout, so the arithmetic is the closest a test
+gets; the Deck measures the rest.
+
 ---
 
 ## 6. Tooling traps on this machine

@@ -23,20 +23,35 @@
         "The visibility check reads the chat's name as 83% visible while the ring is on it (one sample point falls on the sliding words); screenshots show it whole."
       ],
       "note": "Closing and reopening the menu with the ring on the chat's name: the ring came back on the question box. That is the long-standing open rule (the ring starts on the question box unless something already owns it), not a regression; the helper had expected the name to keep it.",
-      "runs": ["runs/plan84-P84-RING-01-header.json", "runs/plan84-P84-RING-01-rail-in.json", "runs/plan84-P84-RING-01-box-return-2.json"]
+      "runs": [
+        "runs/plan84-P84-RING-01-header.json",
+        "runs/plan84-P84-RING-01-rail-in.json",
+        "runs/plan84-P84-RING-01-box-return-2.json"
+      ]
     },
     "P84-BACK-01": {
       "result": "PASS",
       "seen": "From the Ollama tab body: B put the ring on the tab bar, a second B left bonsAI for Decky's list. Afterwards Decky's page was back at y 14 with no inline top, height or position; Decky's bar padding 6 16 0 with only Decky's own inline style (display, padding-right, sticky); Steam's container padding 14 with no inline style.",
-      "runs": ["runs/plan84-P84-BACK-01.json"]
+      "runs": [
+        "runs/plan84-P84-BACK-01.json"
+      ]
     },
     "P84-QAM-01": {
       "result": "PASS",
       "seen": "With bonsAI open (and still loaded), the menu switched to Steam's Performance page: its pane at y 48 and its first line ('Full') at 84, the same as with bonsAI closed; Steam's container 14px with no inline style.",
-      "runs": ["runs/plan84-P84-QAM-01-to-performance.json"]
+      "runs": [
+        "runs/plan84-P84-QAM-01-to-performance.json"
+      ]
     }
   },
   "noticed": [
     "Right after a reopen, switching to the Main tab with LB put the ring on the question box rather than the tab bar: the same open rule's short window. Not new."
-  ]
+  ],
+  "final_build_recheck": {
+    "build": "bd8a0c78 (plan 84 complete, with the step 8 clean-up), deployed 2026-10-09 02:40 EDT and left installed.",
+    "why": "Several rows (P84-TABS-01, P84-NAME-01, P84-HINTS-01) were measured on 8c233343, before step 6 moved the tab bar up; re-read on the final build.",
+    "seen": "Tab bar 300 x 20 at y 0-20; the tab name's centre 0.55 points right of the bar's centre; LB 16 and RB 16 points in; the chat's name words box 158 wide, its centre 0.02 points from the panel's centre; LT/RT and LB/RB at 0.32 with the ring on the box; the answer area 295; the Read aloud corner present; no saved-chats row and no drop-down strip in the page.",
+    "screenshot": "screenshots/DeckCapture_20261009_024103_auto.png",
+    "after": "The maintainer's first chat re-opened (it had been switched during the checks), the menu closed, settings and chats identical to the backup, keep-awake released."
+  }
 }

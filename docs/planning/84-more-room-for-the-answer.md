@@ -408,3 +408,11 @@ Each step's rows, run on the Deck's own screen first, then once on the TV. Names
     Decky's is touched and the tab bar stays in bonsAI's box); Up on the tab bar does nothing; LB and RB on the name
     switch tabs and move the ring to the bar; the strip does not grow with the size setting; Decky's page gets its 14
     points back as a fixed height.
+- **2026-10-09, step 8 done.** The design documents carry the handheld's numbers and the new parts; the code the
+  saved-chats row and the drop-down strip left behind is gone (styles, comments, four saved Deck walks that tested
+  only the row); the testing rows, roadmap entries and changelog are written. A last check on the final build
+  re-measured the rows first taken before step 6 (both names centred within about half a point, the answer 295)
+  ([evidence](../test-evidence/plan84-STEP6-DECK.json)). **Still owed:** the tab bar's touch check (a person,
+  with a game running), one run of the rows on the TV, P84-NAME-03's reduced-motion half, the menu actions' own
+  effects on the Deck, eight saved Deck walks to re-record (a roadmap Verify entry), and the maintainer's calls
+  for [plan 85](85-reading-mode-test.md).

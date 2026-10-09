@@ -220,7 +220,11 @@ export function ChatTitleView(): React.ReactElement {
   if (chat) classes.push("bonsai-chat-title--main");
   if (chat && s.menuOpen) classes.push("bonsai-chat-title--menu-open");
   if (strip) classes.push("bonsai-chat-title--strip");
-  const style = s.litColor ? ({ "--bonsai-chat-title-lit": s.litColor } as React.CSSProperties) : undefined;
+  /* The character's lit colour, for the menu arrow and for the tab bar in the strip, which reads the same
+     variable bonsAI's box sets for it there (tabIndicatorBar.ts). */
+  const style = s.litColor
+    ? ({ "--bonsai-chat-title-lit": s.litColor, "--bonsai-ui-tab-lit": s.litColor } as React.CSSProperties)
+    : undefined;
   const wordmark = !chat && !(strip && s.tab !== null && s.tab !== "main");
   return (
     <div

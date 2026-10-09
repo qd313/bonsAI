@@ -26,7 +26,7 @@ vi.mock("@decky/ui", async () => {
 
 import { Focusable } from "@decky/ui";
 import { ChatTitleView } from "./ChatTitleView";
-import { getChatTitleState, resetChatTitleStore, setChatsMenuOpen } from "./chatTitleStore";
+import { getChatTitleState, resetChatTitleStore, setChatsMenuOpen, setChatTitleLitColor } from "./chatTitleStore";
 import { resetChatNameNav } from "./chatNameNav";
 import { resetDeckyTitleParts } from "./deckyTitleParts";
 import { resetDeckyHeaderShape, topStripActive } from "./deckyHeaderShape";
@@ -235,6 +235,15 @@ describe("where things land on the Deck's own screen", () => {
     expect(box(name())).toEqual([20, 48]);
     expect(bodyTop()).toBe(52);
     expect(ring()).toBe("the tab bar");
+  });
+
+  it("the bar in the strip wears the character's colour, as it did in bonsAI's box (unchanged in look)", () => {
+    mount();
+    act(() => setChatTitleLitColor("rgb(255, 136, 0)"));
+    /* The bar's current tab is drawn in var(--bonsai-ui-tab-lit); bonsAI's box sets it for the bar there, and
+       the title view, the bar's ancestor in Decky's bar, must set it here. */
+    const holder = strip()!.closest<HTMLElement>(".bonsai-chat-title")!;
+    expect(holder.style.getPropertyValue("--bonsai-ui-tab-lit")).toBe("rgb(255, 136, 0)");
   });
 
   it("a pinned Quick Tab's bar, with no back arrow, gets the strip too", () => {

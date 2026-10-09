@@ -61,6 +61,37 @@ When two horizontal rows must preserve **columns** under D-pad (Helpful↔Retry,
 
 Canonical: `src/utils/buildReplyActionsElement.tsx`, `src/utils/replyStopRegistry.ts`. On-Deck QA: **MICRO-05**.
 
+## Pattern E — Stops outside bonsAI's own container (plan 84)
+
+Since plan 84, two of the stops a person walks through are not in bonsAI's box at all: the **tab bar** (in the
+strip at the very top of the menu) and the **chat's name** (in Decky's title bar, beside Decky's back arrow).
+Decky draws both in a React tree of its own. Details, every route and the Deck measurements:
+[docs/focus-graph.md](../../../../docs/focus-graph.md), the sections "The tab bar, T3", "The chat's name and the
+chats menu", "The tab bar in Steam's strip, and Decky's bar per tab" and "The ask box's strip".
+
+**Rules that follow from it:**
+
+1. **Every move between the strip or the name and bonsAI's content goes through the nav registry's take
+   functions** (a registered node's `TakeFocus`), never a plain `focus()`: Steam moves the ring across
+   containers only by its own transfer. The name reads and changes the open chat through a small shared store
+   (`chatTitleStore.ts`), because it cannot reach the main screen's state.
+2. **Steam does not find the strip from below by itself** (plan 84 test B), so its Up, Down and Left/Right routes
+   are set by hand. Up on the bar holds; Down on the chat tab goes to the name, on other tabs to the tab body;
+   Up and Down on the name go to the bar and to the chat's first stop.
+3. **A hidden back arrow is still in Steam's D-pad path** (plan 84 test C). On other tabs the arrow is hidden and
+   the name is not drawn; no move of ours leads onto the arrow, and a landing on it anyway is caught and handed to
+   the tab bar, the way Steam's hidden tab buttons already are.
+4. **A box opened from the chats menu** (Rename, Delete, Save to Desktop) **returns the ring to the chat's name**
+   when it closes, not to Decky's back arrow: one A on the arrow would close bonsAI.
+5. **The ask box's strip and the answer's corners are ordinary siblings inside bonsAI's box:** the strip is one
+   row (paperclip, mode, mic or Stop, X, small ASK; the game tag is a label, not a stop) whose hops between
+   neighbours are in-row `focus()` calls, and whose Up and Down are explicit; Read aloud (lower-left) and Copy
+   (lower-right) are each their own navigation container, so Right and Left between them and the answer use the
+   registry's take, never a bare `focus()`.
+
+**Test it:** a D-pad walk with Steam's scroll-into-view modelled (`src/test-harness/deckAnswerWalk.ts`) and no stop
+visited twice. On the Deck: P84-RING-01 (the ring never lands on a hidden control).
+
 ## Anti-patterns (caused multi-prompt regressions)
 
 | Mistake | Symptom |

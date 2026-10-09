@@ -315,6 +315,9 @@ bonsAI's tab bar
   then becomes the chat's first stop.
 - **Up** is Steam's own. Nothing lies above the name yet (Up from Decky's bar moved nothing on 2026-10-08);
   step 6 puts the tab strip there and claims it.
+- **A** (`onOKButton`) or a tap (`onClick`) opens the chats menu; the same again closes it. No `onActivate`, which
+  Steam also fires for A and would toggle twice. **B** on the name closes the menu while it is open (claimed only
+  then, with `onCancelButton`); with the menu shut, B is Decky's own and goes back to its plugin list.
 - **The ring on the name** is the view's own white ring (`noFocusRing` turns Steam's off), drawn on Steam's
   `gpfocus` marker. LT and RT under the name light up only while the ring is on the name; a name too long for
   its room slides once to show the rest and comes back (`ChatNameWords.tsx`), still for anyone who asked for less
@@ -329,4 +332,42 @@ bonsAI's tab bar
   and on every other tab. When the switch takes away the control the ring was on (an answer, a question of the
   old chat), the ring goes to the question box (`takeNavFocus("unified-input")`); on the name, the chips or the
   box it stays.
-- **Not backed by a device row yet.** Rows P84-NAME-01 and P84-NAME-03 (plan 84 § 6) are in the lane report.
+
+**The chats menu (drawn in bonsAI's own box, over the answer, its foot on the dock's top edge).** `ChatsMenu.tsx`,
+moves in `chatsMenuModel.ts`. Every stop is a sibling in one container, so a move inside it is a plain `focus()`.
+
+```
+the chat's name (Decky's bar)
+   | A or tap: Steam's transfer onto the open chat's row          ^ Up from the first chat, B anywhere,
+   v                                                              | or A on anything: back onto the name
+Your chats
+  chat 1  .. chat n        Up/Down walk the list; Left/Right hold still
+   | Down from the last chat
+[ New chat         ] [ Rename chat          ]     Left/Right cross a row and hold at its ends
+[ Sum up this chat ] [ Save to Desktop note ]     Up/Down keep the column (else the left one)
+[ Delete chat      ]                              Down holds here; Up from the top row: the last chat
+```
+
+- **In.** A or a tap on the name opens the menu, and the menu hands Steam's ring onto the open chat's row by
+  Steam's own transfer (each stop has its own nav node), retried for up to 0.6 s because Steam fills a new node a
+  moment after it mounts. At the new-chat spot it enters on the newest chat; with no chats at all, on New chat.
+- **Out, always onto the name.** Up from the first chat, B on any stop (`onCancelButton` with `preventDefault`,
+  the only way Steam does not also back out of the panel), and every action: Steam's transfer onto the name's nav
+  node (`takeChatNameFocus`), then the menu closes. The ring is moved before the menu unmounts, so it is never left
+  on a control that is gone. Nothing else leaves: no press from the menu can reach the answer behind it, the dock
+  or Steam's own rail.
+- **A on a chat** opens it (the Main tab's `onChatSlotSelect`); on the open chat it only closes the menu.
+- **The actions do what the saved-chats row did.** New chat is the row's create (`onChatSlotCreate`). Rename chat
+  opens the rename box and Delete chat the two-button delete box (Cancel first). Save to Desktop note opens the save
+  window. Sum up this chat starts the Session tab's own Sum up job, a second way in to that button: the Session tab
+  keeps its button. A greyed action is still a stop and A on it does nothing: Rename, Delete and Save at the
+  new-chat spot, Save while the chat has no answer, Sum up whenever the Session tab's button is greyed. Save without
+  the file permission is greyed but still opens its window, which asks for the permission, as the row's dimmed save
+  icon did.
+- **A box opened from the menu** (rename, delete, save) gets the ring after the ring has gone back to the name, and
+  names the name as the place to give it back to (the box-return registry, ids "chat-slot-rename" and
+  "desktop-note-save", the ids the row used). The name is in Decky's bar, outside the tab that a box's close
+  rebuilds, so it is still there when the box closes.
+- **LT and RT are refused while the menu is open.** Leaving the Main tab closes it.
+- **Not backed by a device row yet.** Rows P84-NAME-01, P84-NAME-02, P84-NAME-03, P84-MENU-01 and the LT/RT half of
+  P84-HINTS-01 (plan 84 § 6) are in the lane report.

@@ -19,14 +19,17 @@
  * Solves: The saved-chats row at the top of the chat took 54 points of the answer's height; the
  * chat's name moves into Decky's bar, which was already there and held only the plugin's name.
  *
- * Does not: Switch chats or open the chats menu itself: those are the Main tab's actions, reached
- * through the store. Does not scale with bonsAI's UI-size setting (see chatTitleStyles.ts).
+ * Does not: Switch chats or draw the chats menu: switching is the Main tab's, reached through the store,
+ * and the menu is drawn in bonsAI's own box (ChatsMenu.tsx); A or a tap on the name only says "open"
+ * or "close" through the store. Does not scale with bonsAI's UI-size setting (see chatTitleStyles.ts).
  *
  * Focus (docs/focus-graph.md, "The chat's name and the chats menu (plan 84 step 5)"):
  *   Left  -> Steam's own move, onto Decky's back arrow beside it (the same bar, one container)
  *   Right -> holds still: nothing of bonsAI lies to the right of the name
  *   Down  -> the tab bar, by Steam's transfer (`takeNavFocus("tab-bar")`): it is right below
  *   Up    -> Steam's own: nothing lies above yet (step 6 puts the tab strip there)
+ *   A, tap -> opens the chats menu, which takes the ring onto the open chat; again closes it
+ *   B     -> with the menu open, closes it; otherwise Decky's own (back to its plugin list)
  *
  * Leave room for step 6: the root is one element that can hold a second child above the name row
  * (the tab strip), the tab showing is read from the store, and nothing here depends on how tall
@@ -40,7 +43,7 @@ import { takeNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
 import { ChatNameWords } from "./ChatNameWords";
 import { registerChatNameNav, rememberChatNameElement, unregisterChatNameNav } from "./chatNameNav";
 import { CHAT_TITLE_CSS } from "./chatTitleStyles";
-import { useChatTitleState, type ChatTitleChat } from "./chatTitleStore";
+import { getChatTitleState, setChatsMenuOpen, useChatTitleState, type ChatTitleChat } from "./chatTitleStore";
 import { useNameRowBalance } from "./nameRowBalance";
 
 /** The small line under the name: "chat 2 of 5", or "not saved yet" for a new chat. */
@@ -57,7 +60,18 @@ function CaretIcon() {
   );
 }
 
-function ChatNameRow({ chat, balance }: { chat: ChatTitleChat; balance: number }) {
+/** A or a tap on the name: open the chats menu, or close it when it is open (the ring is on the name then). */
+function toggleChatsMenu(): void {
+  setChatsMenuOpen(!getChatTitleState().menuOpen);
+}
+
+/**
+ * In: the open chat as the store has it, the measured empty space for the right, and whether the menu
+ * is open. Out: the name row, its one stop wired as the file header lists. Can go wrong: Steam fills the
+ * nav node a moment after mounting, so a transfer onto the name just after it appears may report false;
+ * callers retry or fall back.
+ */
+function ChatNameRow({ chat, balance, menuOpen }: { chat: ChatTitleChat; balance: number; menuOpen: boolean }) {
   /* Kept here, not on the root, so it starts over whenever the row is drawn again. */
   const [ringOn, setRingOn] = useState(false);
   const navRef = useRef<NavRefHolder["current"]>(null);
@@ -72,9 +86,14 @@ function ChatNameRow({ chat, balance }: { chat: ChatTitleChat; balance: number }
       <Focusable
         className="bonsai-chat-title__name"
         ref={(el: HTMLElement | null) => rememberChatNameElement(el)}
-        aria-label={`${chat.name}, ${count}`}
+        aria-label={`${chat.name}, ${count}. Opens your chats`}
+        aria-expanded={menuOpen}
         onFocus={() => setRingOn(true)}
         onBlur={() => setRingOn(false)}
+        /* A on the name, or a tap (onOKButton for A, onClick for a finger; never onActivate as well,
+           which Steam fires for A too and would toggle twice: docs/focus-graph.md, "From the notes"). */
+        onOKButton={toggleChatsMenu}
+        onClick={toggleChatsMenu}
         {...({
           navRef,
           /* Its children are plain text, so without this Steam treats it as an empty container and
@@ -84,6 +103,16 @@ function ChatNameRow({ chat, balance }: { chat: ChatTitleChat; balance: number }
           noFocusRing: true,
           onMoveRight: () => true,
           onMoveDown: () => takeNavFocus("tab-bar"),
+          /* B with the menu open closes it and keeps the ring here. Claimed only then: otherwise B is
+             Decky's, and goes back to its plugin list. */
+          ...(menuOpen
+            ? {
+                onCancelButton: (e: unknown) => {
+                  setChatsMenuOpen(false);
+                  (e as { preventDefault?: () => void })?.preventDefault?.();
+                },
+              }
+            : {}),
         } as Record<string, unknown>)}
       >
         <span className="bonsai-chat-title__line">
@@ -130,7 +159,7 @@ export function ChatTitleView(): React.ReactElement {
   return (
     <div ref={rootRef} className={classes.join(" ")} style={style}>
       <style>{CHAT_TITLE_CSS}</style>
-      {chat ? <ChatNameRow chat={chat} balance={balance} /> : <Wordmark />}
+      {chat ? <ChatNameRow chat={chat} balance={balance} menuOpen={s.menuOpen} /> : <Wordmark />}
     </div>
   );
 }

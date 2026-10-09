@@ -46,10 +46,10 @@
  *   cannot be discovered by looking.
  */
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Focusable, showModal } from "@decky/ui";
+import { Focusable } from "@decky/ui";
 
 import { TrashBinSlotsIcon } from "../../components/icons";
-import { ChatSlotDeleteModal } from "./ChatSlotDeleteModal";
+import { useChatSlotDeleteConfirm } from "./useChatSlotDeleteConfirm";
 import { DiskIcon, PencilIcon } from "./chatSlotRowIcons";
 import type { ChatSlotSummary } from "../../utils/chatSlotsApi";
 import { takeOpenQuestionText } from "../../utils/buildTurnHeaderElement";
@@ -242,33 +242,11 @@ export function ChatSlotRow({
     onRename: onRenameSlot,
   });
 
-  const openDeleteConfirm = useCallback(
-    (slotId: string, label: string) => {
-      onBeforeNestedDeckyModal?.();
-      rememberModalReturnFocus("chat-slot-rename");
-      if (rowFocusElRef.current) {
-        registerModalReturnFocusOwner("chat-slot-rename", rowFocusElRef.current);
-      }
-      /*
-        Two buttons, Cancel first: Steam puts the ring on the first button of a box, so an A pressed
-        by habit keeps the chat, and B keeps it too (maintainer's call, 2026-10-06; it was three
-        buttons since plan 79). See ChatSlotDeleteModal.
-      */
-      const handle = showModal(
-        <ChatSlotDeleteModal
-          label={label}
-          onKeep={() => {
-            onCompleteNestedDeckyModalClose?.(() => handle.Close());
-          }}
-          onDelete={() => {
-            void onDeleteSlot(slotId);
-            onCompleteNestedDeckyModalClose?.(() => handle.Close());
-          }}
-        />,
-      );
-    },
-    [onBeforeNestedDeckyModal, onCompleteNestedDeckyModalClose, onDeleteSlot],
-  );
+  const openDeleteConfirm = useChatSlotDeleteConfirm({
+    onBeforeNestedDeckyModal,
+    onCompleteNestedDeckyModalClose,
+    onDeleteSlot,
+  });
 
   /* Pending wins over unread: a slot cannot be both, but a stale unread entry must not
      outrank the ring the user is watching fill. */
@@ -402,7 +380,7 @@ export function ChatSlotRow({
             return true;
           }
           if (stop === "delete" && activeSlot) {
-            openDeleteConfirm(activeSlot.id, activeSlot.label);
+            openDeleteConfirm(activeSlot.id, activeSlot.label, rowFocusElRef.current);
             return true;
           }
           /* Nothing reaches here since the name stopped being a stop (2026-10-06): rename is kept wired

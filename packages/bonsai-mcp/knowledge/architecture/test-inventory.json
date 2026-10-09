@@ -165,6 +165,7 @@
     "src/features/chat-sum-up/chatSumUpModel.test.ts",
     "src/features/chat-sum-up/useChatSumUpJob.test.ts",
     "src/features/chat-title/ChatTitleView.test.tsx",
+    "src/features/chat-title/ChatsMenu.test.tsx",
     "src/features/chat-title/chatTitleStore.test.tsx",
     "src/features/chat-title/useChatTitlePublisher.test.tsx",
     "src/features/chat-title/useChatTriggerSwitch.test.tsx",

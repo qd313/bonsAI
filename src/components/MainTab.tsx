@@ -48,6 +48,8 @@ import { ChatSlotRow } from "../features/chat-slots/ChatSlotRow";
 import { useChatTitlePublisher } from "../features/chat-title/useChatTitlePublisher";
 import { useChatSwitchActions } from "../features/chat-title/useChatSwitchActions";
 import { useChatTriggerSwitch } from "../features/chat-title/useChatTriggerSwitch";
+import { ChatsMenu } from "../features/chat-title/ChatsMenu";
+import { useChatTitleValue } from "../features/chat-title/chatTitleStore";
 import type { ChatListRow } from "../features/chat-sum-up/chatSumUpModel";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import {
@@ -289,6 +291,9 @@ export function MainTab(props: MainTabProps) {
     },
     chatActions,
   );
+  /* The chats menu, opened from the name in Decky's bar, drops over the answer from the dock's top edge. */
+  const chatsMenuOpen = useChatTitleValue((s) => s.menuOpen);
+  const titleChat = useChatTitleValue((s) => s.chat);
   useMainTabColumnFill(columnRef);
   /* Focus landing behind the bottom dock gets lifted above it — see the hook's header. */
   useDockClearanceOnFocus(columnRef);
@@ -351,6 +356,24 @@ export function MainTab(props: MainTabProps) {
           <MainTabChatTranscript {...props} showEmptySlotPreview={slotRowAtCreate} chatSumUp={chatSumUp} />
         </StreamScrambleContext.Provider>
         <div className={mainTabDockClassName(props.isStreamingPreview, props.streamDisplayText)}>
+        {chatsMenuOpen && titleChat ? (
+          <ChatsMenu
+            chat={titleChat}
+            activeSlotId={props.activeChatSlotId ?? null}
+            setAtCreate={setSlotRowAtCreate}
+            onSelectSlot={props.onChatSlotSelect}
+            onCreateSlot={props.onChatSlotCreate}
+            onRenameSlot={props.onChatSlotRename}
+            onDeleteSlot={props.onChatSlotDelete}
+            onBeforeNestedDeckyModal={props.onBeforeNestedDeckyModal}
+            onCompleteNestedDeckyModalClose={props.onCompleteNestedDeckyModalClose}
+            canSaveChat={props.canSaveDesktopNote}
+            saveChatEnabled={props.desktopNoteSaveEnabled ?? true}
+            onSaveChat={props.onOpenDesktopNoteSave}
+            sumUp={chatSumUp}
+            answerInFlight={props.isAsking}
+          />
+        ) : null}
         <PanelSectionRow>
           <MainTabPresetRow
             suggestedPrompts={props.suggestedPrompts}

@@ -7,7 +7,8 @@
  * (AGENTS.md, "The Steam Deck focus graph"). The name registers its nav node here while it is drawn,
  * and `takeChatNameFocus` is the one way in.
  *
- * Used for: ChatTitleView.tsx (registers), ChatsMenu.tsx (returns the ring to the name).
+ * Used for: ChatTitleView.tsx (registers), ChatsMenu.tsx (returns the ring to the name, and names it
+ * as the place a box opened from the menu gives the ring back to).
  *
  * Solves: A local holder rather than a new id in navFocusRegistry.ts, whose list of ids belongs to
  * another file; the transfer itself is the same call (`takeHolderFocus`, the same window check
@@ -45,6 +46,11 @@ export function takeChatNameFocus(): boolean {
 /** Whether Steam's ring sits on the name right now. */
 export function chatNameHasRing(): boolean {
   return elementHasGamepadFocus(nameEl);
+}
+
+/** The name's element, for a box opened from the chats menu to give the ring back to (modalReturnFocusRegistry.ts). */
+export function chatNameElement(): HTMLElement | null {
+  return nameEl;
 }
 
 /** Test-only reset. */

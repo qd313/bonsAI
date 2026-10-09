@@ -438,11 +438,10 @@ Stops: the tab bar (one stop, step 4's) and the chat's name (step 5's). Decky's 
   open chats menu as the ring goes. Left is Steam's own onto Decky's back arrow, Right holds, as in step 5.
   **LB and RB switch tabs from the name too**, and the ring goes to the tab bar first, because the other tabs draw
   no name (left alone, the ring would sit on a control that is gone).
-- **Decky's back arrow** (Main only) takes no handler of ours. Steam walks Decky's bar in page order, so the name
-  is drawn before the bar in the page (the bar is placed at the top by the stylesheet), so that **Right from the
-  arrow reaches the name**: on 2026-10-08 Right from the arrow reached the stop drawn next after it in the page
-  (the test bar, then). That Steam walks this bar in page order is read from that one measurement, not proven:
-  P84-RING-01 checks it.
+- **Decky's back arrow** (Main only) takes no handler of ours. The name is drawn before the bar in the page (the
+  bar is placed at the top by the stylesheet) so that **Right from the arrow reaches the name**, if Steam walks
+  Decky's bar in page order: on 2026-10-08 Right from the arrow reached the stop drawn next after it in the page
+  (the test bar, then). That reading rests on that one measurement, not on Steam's code: P84-RING-01 checks it.
   **Up from the arrow cannot be routed to the bar by hand**: the arrow is Decky's own button, its moves are not
   ours to set, and a direction read in a button-down handler is dead on the device. Steam's own Up from the arrow
   moved nothing on 2026-10-08; the bar is reached from the arrow by Right then Up. Down from the arrow is Steam's

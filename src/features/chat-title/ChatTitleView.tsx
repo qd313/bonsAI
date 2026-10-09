@@ -98,7 +98,7 @@ function ChatNameRow({ chat, balance, menuOpen }: { chat: ChatTitleChat; balance
         {...({
           navRef,
           /* Its children are plain text, so without this Steam treats it as an empty container and
-             skips it (ChatSlotRow.tsx measured that on 2026-08-30). */
+             skips it (the old saved-chats row measured that on 2026-08-30). */
           focusable: true,
           /* The view draws its own white ring (chatTitleStyles.ts); Steam's would sit on top of it. */
           noFocusRing: true,

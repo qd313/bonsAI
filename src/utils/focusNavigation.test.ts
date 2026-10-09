@@ -8,6 +8,8 @@ import {
   isDeckDirectionUpEvent,
   isDownDeckButtonEvent,
   isOkDeckButtonEvent,
+  isTriggerLeftDeckEvent,
+  isTriggerRightDeckEvent,
   isUpDeckButtonEvent,
 } from "./focusNavigation";
 import { rememberUiDocument, resetUiDocument } from "./uiDocument";
@@ -122,5 +124,33 @@ describe("getFocusableWithin", () => {
 
     expect(getFocusableWithin(".bonsai-attachment-remove-target")).toBe(btn);
     expect(document.querySelector(".bonsai-attachment-remove-target")).toBeNull();
+  });
+});
+
+/*
+ * Plan 84 step 5, test A (2026-10-08): L2 and R2 reach the plugin as buttons 7 (TRIGGER_LEFT) and 8
+ * (TRIGGER_RIGHT), on the focused control's button-down and as `vgp_onbuttondown` at the panel's
+ * document. Both shapes carry the number in `detail.button`.
+ */
+describe("the trigger predicates", () => {
+  it("know LT as button 7 and RT as button 8, as an event or a bare number", () => {
+    expect(isTriggerLeftDeckEvent(gamepadEvent(7))).toBe(true);
+    expect(isTriggerRightDeckEvent(gamepadEvent(8))).toBe(true);
+    expect(isTriggerLeftDeckEvent(7)).toBe(true);
+    expect(isTriggerRightDeckEvent(8)).toBe(true);
+  });
+
+  it("say no to every other button, the bumpers (5, 6) included", () => {
+    for (const button of [OK, CANCEL, 3, 4, 5, 6, DIR_UP, DIR_DOWN, DIR_LEFT, DIR_RIGHT]) {
+      expect(isTriggerLeftDeckEvent(gamepadEvent(button))).toBe(false);
+      expect(isTriggerRightDeckEvent(gamepadEvent(button))).toBe(false);
+    }
+    expect(isTriggerLeftDeckEvent(gamepadEvent(8))).toBe(false);
+    expect(isTriggerRightDeckEvent(gamepadEvent(7))).toBe(false);
+  });
+
+  it("never match a key string: a trigger is never a keyboard key", () => {
+    expect(isTriggerLeftDeckEvent("7")).toBe(false);
+    expect(isTriggerRightDeckEvent("GamepadRightTrigger")).toBe(false);
   });
 });

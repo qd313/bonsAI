@@ -167,6 +167,7 @@
     "src/features/chat-title/ChatTitleView.test.tsx",
     "src/features/chat-title/chatTitleStore.test.tsx",
     "src/features/chat-title/useChatTitlePublisher.test.tsx",
+    "src/features/chat-title/useChatTriggerSwitch.test.tsx",
     "src/features/details-slot/DetailsSlot.deck.test.tsx",
     "src/features/downloads/downloadNotice.test.tsx",
     "src/features/model-routing/useTryOrderPlaces.test.tsx",

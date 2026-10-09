@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 764,
-  "edgeCount": 2237,
+  "fileCount": 768,
+  "edgeCount": 2256,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -507,7 +507,9 @@
         "src/data/replyMicroActions.ts",
         "src/features/chat-slots/ChatSlotRow.tsx",
         "src/features/chat-sum-up/chatSumUpModel.ts",
+        "src/features/chat-title/useChatSwitchActions.ts",
         "src/features/chat-title/useChatTitlePublisher.ts",
+        "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/stream-scramble/streamScrambleContext.ts",
         "src/hooks/useDockClearanceOnFocus.ts",
         "src/hooks/useMainTabColumnFill.ts",
@@ -524,6 +526,7 @@
         "src/components/MainTab.dockClass.test.ts",
         "src/components/MainTab.gameLighter.test.ts",
         "src/components/MainTab.streamScramble.test.tsx",
+        "src/features/chat-title/chatTitleTestFixtures.tsx",
         "src/features/chat-title/useChatTitlePublisher.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/plugin-shell/tabs/useMainTabPayload.tsx"
@@ -2976,7 +2979,8 @@
         "src/features/chat-sum-up/SessionTitleOffer.tsx",
         "src/features/chat-sum-up/chatSumUpModel.test.ts",
         "src/features/chat-sum-up/useChatSumUpJob.ts",
-        "src/features/chat-title/useChatTitlePublisher.test.tsx",
+        "src/features/chat-title/chatTitleTestFixtures.tsx",
+        "src/features/chat-title/useChatSwitchActions.ts",
         "src/features/chat-title/useChatTitlePublisher.ts",
         "src/hooks/useChatSlots.ts",
         "src/utils/buildDetailsPanelElement.tsx"
@@ -3047,6 +3051,7 @@
       "importedBy": [
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/useChatTitlePublisher.test.tsx",
+        "src/features/chat-title/useChatTriggerSwitch.test.tsx",
         "src/index.tsx"
       ]
     },
@@ -3073,8 +3078,11 @@
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/ChatTitleView.tsx",
         "src/features/chat-title/chatTitleStore.test.tsx",
+        "src/features/chat-title/useChatSwitchActions.ts",
         "src/features/chat-title/useChatTitlePublisher.test.tsx",
         "src/features/chat-title/useChatTitlePublisher.ts",
+        "src/features/chat-title/useChatTriggerSwitch.test.tsx",
+        "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/index.tsx"
       ]
     },
@@ -3088,6 +3096,16 @@
         "src/features/chat-title/nameRowBalance.ts"
       ]
     },
+    "src/features/chat-title/chatTitleTestFixtures.tsx": {
+      "imports": [
+        "src/components/MainTab.tsx",
+        "src/features/chat-sum-up/chatSumUpModel.ts"
+      ],
+      "importedBy": [
+        "src/features/chat-title/useChatTitlePublisher.test.tsx",
+        "src/features/chat-title/useChatTriggerSwitch.test.tsx"
+      ]
+    },
     "src/features/chat-title/nameRowBalance.ts": {
       "imports": [
         "src/features/chat-title/chatTitleStyles.ts"
@@ -3097,12 +3115,23 @@
         "src/features/chat-title/ChatTitleView.tsx"
       ]
     },
+    "src/features/chat-title/useChatSwitchActions.ts": {
+      "imports": [
+        "src/features/chat-sum-up/chatSumUpModel.ts",
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/features/chat-title/useChatTitlePublisher.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTab.tsx",
+        "src/features/chat-title/useChatTriggerSwitch.test.tsx"
+      ]
+    },
     "src/features/chat-title/useChatTitlePublisher.test.tsx": {
       "imports": [
         "src/components/MainTab.tsx",
-        "src/features/chat-sum-up/chatSumUpModel.ts",
         "src/features/chat-title/ChatTitleView.tsx",
         "src/features/chat-title/chatTitleStore.ts",
+        "src/features/chat-title/chatTitleTestFixtures.tsx",
         "src/features/chat-title/useChatTitlePublisher.ts",
         "src/test-harness/fakeDeckyUi.tsx"
       ],
@@ -3115,7 +3144,32 @@
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
+        "src/features/chat-title/useChatSwitchActions.ts",
         "src/features/chat-title/useChatTitlePublisher.test.tsx"
+      ]
+    },
+    "src/features/chat-title/useChatTriggerSwitch.test.tsx": {
+      "imports": [
+        "src/features/chat-title/ChatTitleView.tsx",
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/features/chat-title/chatTitleTestFixtures.tsx",
+        "src/features/chat-title/useChatSwitchActions.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/chat-title/useChatTriggerSwitch.ts": {
+      "imports": [
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/utils/focusNavigation.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTab.tsx"
       ]
     },
     "src/features/details-slot/DetailsSlot.deck.test.tsx": {
@@ -3331,6 +3385,8 @@
         "src/components/SettingsTab.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",
         "src/features/chat-slots/useChatSlotRenameModal.tsx",
+        "src/features/chat-title/useChatTriggerSwitch.test.tsx",
+        "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.test.ts",
         "src/hooks/askBarRingWatch.ts",
@@ -6072,6 +6128,7 @@
         "src/features/chat-sum-up/SessionTitleOffer.test.tsx",
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/useChatTitlePublisher.test.tsx",
+        "src/features/chat-title/useChatTriggerSwitch.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/downloads/downloadNotice.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
@@ -7444,6 +7501,7 @@
         "src/features/chat-sum-up/SessionTitleOffer.tsx",
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/features/chat-sum-up/sumUpDirectionHandlers.ts",
+        "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/plugin-shell/tabBarNav.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildAnswerCornerSlots.tsx",
@@ -7816,6 +7874,8 @@
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/ChatTitleView.tsx",
         "src/features/chat-title/chatNameNav.ts",
+        "src/features/chat-title/useChatTriggerSwitch.test.tsx",
+        "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/details-slot/DetailsSlot.tsx",
         "src/features/details-slot/detailsSlotStore.ts",
@@ -8513,6 +8573,7 @@
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/features/chat-sum-up/sumUpDirectionHandlers.ts",
         "src/features/chat-title/chatNameNav.ts",
+        "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/details-slot/DetailsSlot.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",

@@ -66,9 +66,9 @@ export type ChatTitleChat = {
 /** What the name row and the plugin root can ask the Main tab to do. */
 export type ChatTitleActions = {
   /** LT: the chat before this one in the old row's order (towards the newest, then the new-chat spot). */
-  previous: () => void;
+  previous: () => void | Promise<void>;
   /** RT: the chat after this one (towards the oldest). */
-  next: () => void;
+  next: () => void | Promise<void>;
   /** Steam's ring onto the chat's first stop, or the question box when the chat is empty. */
   takeFirstStop: () => boolean;
 };

@@ -321,4 +321,12 @@ bonsAI's tab bar
   motion.
 - **The name is a stop, not a container:** its children are plain text, so it carries `focusable: true`, the
   same flag the old saved-chats row needed (measured 2026-08-30).
+- **LT and RT switch chats from anywhere on the Main tab** (`useChatTriggerSwitch.ts`), in the old saved-chats
+  row's order: the list newest first, the new-chat spot before the newest, no wrap at either end. They do not move
+  the ring. One listener on the panel's own document (through `uiDocument.ts`) hears both, because the Deck
+  delivers L2 and R2 there as buttons 7 and 8 wherever the ring is (plan 84 test A), the name included; no
+  control claims them. Refused while the chats menu is open, while a box that asked for the ring back is open,
+  and on every other tab. When the switch takes away the control the ring was on (an answer, a question of the
+  old chat), the ring goes to the question box (`takeNavFocus("unified-input")`); on the name, the chips or the
+  box it stays.
 - **Not backed by a device row yet.** Rows P84-NAME-01 and P84-NAME-03 (plan 84 § 6) are in the lane report.

@@ -4,7 +4,7 @@
  * Purpose: A Steam Deck press can arrive at this plugin's code in more than one shape, depending on
  * which part of the screen it lands on — sometimes as a keyboard-style key name, sometimes as a
  * Steam-specific numeric button code. This file is a set of small yes/no checks that answer "was that
- * Right / Left / Up / Down / OK / Cancel / a bumper", regardless of which shape the press arrived in.
+ * Right / Left / Up / Down / OK / Cancel / a bumper / a trigger", regardless of which shape the press arrived in.
  * Every place in the plugin that reacts to the D-pad, the sticks, or the A/B buttons asks one of these
  * checks rather than comparing key names or button codes for itself. A small unrelated helper at the
  * bottom of the file, `getFocusableWithin`, finds the first control inside a given area that could
@@ -129,6 +129,10 @@ const DECK_BUTTON_DIR_LEFT = 11;
 const DECK_BUTTON_DIR_RIGHT = 12;
 const DECK_BUTTON_BUMPER_LEFT = 5;
 const DECK_BUTTON_BUMPER_RIGHT = 6;
+/* L2 and R2 (`GamepadButton.TRIGGER_LEFT` / `TRIGGER_RIGHT`). Measured on the Deck 2026-10-08 (plan 84
+   test A): both reach the plugin, on the focused control and at the panel's document. */
+const DECK_BUTTON_TRIGGER_LEFT = 7;
+const DECK_BUTTON_TRIGGER_RIGHT = 8;
 
 /** The numeric button id, from whichever shape the caller was handed. */
 function deckButtonId(button: unknown): number | null {
@@ -168,6 +172,16 @@ export function isBumperLeftDeckEvent(button: unknown): boolean {
 export function isBumperRightDeckEvent(button: unknown): boolean {
   const id = deckButtonId(button);
   return id === DECK_BUTTON_BUMPER_RIGHT;
+}
+
+/** True only for LT (L2): previous chat on the Main tab (plan 84 step 5). */
+export function isTriggerLeftDeckEvent(button: unknown): boolean {
+  return deckButtonId(button) === DECK_BUTTON_TRIGGER_LEFT;
+}
+
+/** True only for RT (R2): next chat on the Main tab (plan 84 step 5). */
+export function isTriggerRightDeckEvent(button: unknown): boolean {
+  return deckButtonId(button) === DECK_BUTTON_TRIGGER_RIGHT;
 }
 
 /*

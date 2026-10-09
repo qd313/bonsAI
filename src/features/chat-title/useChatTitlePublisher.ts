@@ -39,15 +39,22 @@ export type ChatTitleSource = {
   transcriptEmpty: boolean;
 };
 
-/** Until LT/RT and the menu are wired: the name row reads the chat and asks nothing of it. */
-export const NO_CHAT_TITLE_ACTIONS: ChatTitleActions = {
-  previous: () => {},
-  next: () => {},
-  takeFirstStop: () => false,
-};
-
 /** The name a chat nobody has named yet carries, on both sides (chat_slot_service.py, useChatSlots.ts). */
 const NEW_CHAT_LABEL = "New chat";
+
+/**
+ * Where the open chat sits in the old row's order: 0 for the new-chat spot (or no chat open), 1 to n
+ * for the saved chats newest first; null while the open chat is not in the list yet.
+ */
+export function chatPlace(
+  summaries: readonly { id: string }[],
+  activeSlotId: string | null | undefined,
+  atCreate: boolean,
+): number | null {
+  if (atCreate || !activeSlotId) return 0;
+  const index = summaries.findIndex((row) => row.id === activeSlotId);
+  return index < 0 ? null : index + 1;
+}
 
 /**
  * In: the Main tab's chat facts. Out: what the name row shows, or null while the open chat is not in
@@ -56,11 +63,9 @@ const NEW_CHAT_LABEL = "New chat";
  */
 export function buildChatTitleChat(src: ChatTitleSource): ChatTitleChat | null {
   const summaries = src.summaries ?? [];
-  const activeId = src.activeSlotId ?? null;
-  const index = activeId ? summaries.findIndex((row) => row.id === activeId) : -1;
-  if (!src.atCreate && activeId && index < 0) return null;
-  const place = src.atCreate || index < 0 ? 0 : index + 1;
-  const active = place > 0 ? summaries[index]! : null;
+  const place = chatPlace(summaries, src.activeSlotId, src.atCreate);
+  if (place === null) return null;
+  const active = place > 0 ? summaries[place - 1]! : null;
   /* A chat nobody has asked anything in and nobody has named: it is swept when left
      (useChatSlots.ts, `sweepIfNeverUsed`), so to a person it is not saved yet. */
   const unsaved = place === 0 || (src.transcriptEmpty && active?.label === NEW_CHAT_LABEL);

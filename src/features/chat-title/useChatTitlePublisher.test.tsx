@@ -13,16 +13,11 @@ import { cleanup, render } from "@testing-library/react";
 
 vi.mock("@decky/ui", async () => import("../../test-harness/fakeDeckyUi"));
 
-import { MainTab, type MainTabProps } from "../../components/MainTab";
-import type { ChatListRow } from "../chat-sum-up/chatSumUpModel";
+import { MainTab } from "../../components/MainTab";
 import { ChatTitleView } from "./ChatTitleView";
+import { baseMainTabProps, chatRow as row, FIVE_CHATS as FIVE } from "./chatTitleTestFixtures";
 import { getChatTitleState, resetChatTitleStore, setChatTitleTab } from "./chatTitleStore";
 import { buildChatTitleChat, type ChatTitleSource } from "./useChatTitlePublisher";
-
-function row(id: string, label: string, updated_at = 0): ChatListRow {
-  return { id, label, created_at: 0, updated_at };
-}
-const FIVE = [row("a", "Hades build"), row("b", "Boss help"), row("c", "Battery life"), row("d", "Ollama on PC"), row("e", "Second boss")];
 
 function source(over: Partial<ChatTitleSource> = {}): ChatTitleSource {
   return {
@@ -90,40 +85,10 @@ describe("what the name row says", () => {
 });
 
 describe("the real Main tab and the real title view, in two separate trees", () => {
-  function mainTabProps(): MainTabProps {
-    return {
-      fullBleedRowStyle: {},
-      isAsking: false,
-      selectedAttachment: null,
-      ollamaContext: {},
-      unifiedInput: "",
-      showSlowWarning: false,
-      latencyWarningSeconds: 30,
-      ollamaResponse: "",
-      elapsedSeconds: null,
-      lastApplied: null,
-      canSaveDesktopNote: false,
-      onOpenDesktopNoteSave: () => {},
-      askMode: "strategy",
-      askThreadCollapsed: [],
-      askThreadDisplayQuestion: "",
-      onAskOllama: async () => {},
-      chatSlotSummaries: FIVE,
-      activeChatSlotId: "c",
-      onChatSlotCreate: async () => undefined,
-      onChatSlotSelect: async () => undefined,
-      onChatSlotRename: async () => true,
-      onChatSlotDelete: async () => true,
-      suggestedPrompts: [],
-      filteredSettings: [],
-      recentScreenshots: [],
-    } as unknown as MainTabProps;
-  }
-
   it("Decky's bar shows the open chat's name and 'chat 3 of 5' while the Main tab is drawn", () => {
     setChatTitleTab("main");
     const title = render(<ChatTitleView />);
-    const main = render(<MainTab {...mainTabProps()} />);
+    const main = render(<MainTab {...baseMainTabProps()} activeChatSlotId="c" />);
     expect(title.container.querySelector(".bonsai-chat-title__words")?.textContent).toBe("Battery life");
     expect(title.container.querySelector(".bonsai-chat-title__count")?.textContent).toBe("chat 3 of 5");
     main.unmount();

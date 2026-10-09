@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 777,
-  "edgeCount": 2314,
+  "fileCount": 778,
+  "edgeCount": 2329,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2981,6 +2981,7 @@
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
+        "src/features/chat-title/topStripHeightLock.test.tsx",
         "src/features/chat-title/useChatTitlePublisher.test.tsx",
         "src/features/chat-title/useChatTriggerSwitch.test.tsx",
         "src/index.tsx"
@@ -3047,7 +3048,8 @@
         "src/features/chat-title/ChatsMenu.tsx",
         "src/features/chat-title/TitleTabStrip.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
-        "src/features/chat-title/topStrip.test.tsx"
+        "src/features/chat-title/topStrip.test.tsx",
+        "src/features/chat-title/topStripHeightLock.test.tsx"
       ]
     },
     "src/features/chat-title/chatTitleStore.test.tsx": {
@@ -3072,6 +3074,7 @@
         "src/features/chat-title/chatTitleStore.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
+        "src/features/chat-title/topStripHeightLock.test.tsx",
         "src/features/chat-title/useChatSwitchActions.ts",
         "src/features/chat-title/useChatTitlePublisher.test.tsx",
         "src/features/chat-title/useChatTitlePublisher.ts",
@@ -3164,7 +3167,9 @@
       "importedBy": [
         "src/features/chat-title/ChatTitleView.tsx",
         "src/features/chat-title/topStrip.test.tsx",
+        "src/features/chat-title/topStripHeightLock.test.tsx",
         "src/features/chat-title/useTopStripTabBar.ts",
+        "src/hooks/useQamPanelHeightGuard.ts",
         "src/hooks/useTabStripBodyOffset.ts",
         "src/utils/chatTranscriptNavHelpers.ts"
       ]
@@ -3176,7 +3181,8 @@
         "src/features/chat-title/chatNameNav.ts",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/deckyHeaderShape.ts",
-        "src/features/chat-title/topStrip.test.tsx"
+        "src/features/chat-title/topStrip.test.tsx",
+        "src/features/chat-title/topStripHeightLock.test.tsx"
       ]
     },
     "src/features/chat-title/nameRowBalance.ts": {
@@ -3224,6 +3230,25 @@
         "src/test-harness/fakeDeckyUi.tsx",
         "src/test-harness/steamRing.tsx",
         "src/utils/chatTranscriptNavHelpers.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/chat-title/topStripHeightLock.test.tsx": {
+      "imports": [
+        "src/features/chat-title/ChatTitleView.tsx",
+        "src/features/chat-title/chatNameNav.ts",
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/features/chat-title/deckyHeaderShape.ts",
+        "src/features/chat-title/deckyTitleParts.ts",
+        "src/features/chat-title/useTopStripTabBar.ts",
+        "src/features/plugin-shell/TabIndicatorBar.tsx",
+        "src/features/plugin-shell/tabTitles.tsx",
+        "src/hooks/useQamPanelHeightGuard.ts",
+        "src/test-harness/deckyQuickAccessLayout.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx",
         "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -3296,6 +3321,7 @@
       ],
       "importedBy": [
         "src/features/chat-title/topStrip.test.tsx",
+        "src/features/chat-title/topStripHeightLock.test.tsx",
         "src/index.tsx"
       ]
     },
@@ -3459,6 +3485,7 @@
       "importedBy": [
         "src/features/chat-title/TitleTabStrip.tsx",
         "src/features/chat-title/topStrip.test.tsx",
+        "src/features/chat-title/topStripHeightLock.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/index.tsx"
@@ -3603,6 +3630,7 @@
       "importedBy": [
         "src/features/chat-title/chatTitleStore.ts",
         "src/features/chat-title/topStrip.test.tsx",
+        "src/features/chat-title/topStripHeightLock.test.tsx",
         "src/features/chat-title/useTopStripTabBar.ts",
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
         "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx",
@@ -5193,9 +5221,11 @@
     },
     "src/hooks/useQamPanelHeightGuard.ts": {
       "imports": [
+        "src/features/chat-title/deckyHeaderShape.ts",
         "src/utils/tabBodyViewport.ts"
       ],
       "importedBy": [
+        "src/features/chat-title/topStripHeightLock.test.tsx",
         "src/hooks/useQamPanelHeightGuard.test.ts",
         "src/hooks/useQamPanelSideBleed.ts",
         "src/index.tsx"
@@ -6114,7 +6144,8 @@
     "src/test-harness/deckyQuickAccessLayout.tsx": {
       "imports": [],
       "importedBy": [
-        "src/features/chat-title/topStrip.test.tsx"
+        "src/features/chat-title/topStrip.test.tsx",
+        "src/features/chat-title/topStripHeightLock.test.tsx"
       ]
     },
     "src/test-harness/fakeDeckyRpc.test.ts": {
@@ -6289,6 +6320,7 @@
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/noSavedChatsRow.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
+        "src/features/chat-title/topStripHeightLock.test.tsx",
         "src/features/chat-title/useChatTitlePublisher.test.tsx",
         "src/features/chat-title/useChatTriggerSwitch.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
@@ -6367,7 +6399,8 @@
       "imports": [],
       "importedBy": [
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
-        "src/features/chat-title/topStrip.test.tsx"
+        "src/features/chat-title/topStrip.test.tsx",
+        "src/features/chat-title/topStripHeightLock.test.tsx"
       ]
     },
     "src/types.d.ts": {
@@ -8038,6 +8071,7 @@
         "src/features/chat-title/chatNameNav.ts",
         "src/features/chat-title/takeFirstChatStop.ts",
         "src/features/chat-title/topStrip.test.tsx",
+        "src/features/chat-title/topStripHeightLock.test.tsx",
         "src/features/chat-title/useChatTriggerSwitch.test.tsx",
         "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/chat-title/useTopStripTabBar.ts",
@@ -8741,6 +8775,7 @@
         "src/features/chat-title/ChatsMenu.tsx",
         "src/features/chat-title/chatNameNav.ts",
         "src/features/chat-title/topStrip.test.tsx",
+        "src/features/chat-title/topStripHeightLock.test.tsx",
         "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/details-slot/DetailsSlot.tsx",

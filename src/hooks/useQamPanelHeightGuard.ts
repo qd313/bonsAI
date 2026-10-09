@@ -4,10 +4,15 @@
  * Used for: index.tsx `.bonsai-scope` alongside useTabStripBodyOffset.
  * Solves: Shrinking or jumping QAM content area when pointer enters the plugin panel. Also keeps
  *         the ResizeObserver pointed at the live TabContentsScroll, which Steam replaces on every
- *         tab switch.
+ *         tab switch. And plan 84 step 6: while Decky's bar is reshaped for the tab bar in Steam's
+ *         strip, the header changes height with the tab (and when it is applied or undone), so the
+ *         lock re-measures on every such change, against Decky's own page, whose bottom is the
+ *         screen's (deckyHeaderShape.ts gives it back the 14 points it moved up). Measured on the Deck
+ *         2026-10-08 without this: the panel ended 14 points short, and did not notice a tab switch.
  * Does not: Measure tab strip reserve — see useTabStripBodyOffset and tabBodyViewport.
  */
 import { useLayoutEffect, useRef } from "react";
+import { deckyPageWhileReshaped, subscribeDeckyHeader } from "../features/chat-title/deckyHeaderShape";
 import { syncTabBodyViewportHeight } from "../utils/tabBodyViewport";
 
 const QAM_HOST_MIN_PX = 320;
@@ -128,9 +133,12 @@ export function useQamPanelHeightGuard(scopeRef: React.RefObject<HTMLDivElement 
 
     const applyLock = () => {
       const scopeH = scope.getBoundingClientRect().height;
-      const host = findQamTabHost(scope);
+      /* Decky's page while it is moved up for the tab bar in Steam's strip: found by structure, never
+         guessed, and its bottom is the screen's. */
+      const reshapedPage = deckyPageWhileReshaped();
+      const host = reshapedPage ?? findQamTabHost(scope);
       const hostH = host?.clientHeight ?? 0;
-      const hostIsTab = host ? isTabPaneHost(host) : false;
+      const hostIsTab = reshapedPage ? true : host ? isTabPaneHost(host) : false;
 
       if (hostH >= QAM_HOST_MIN_PX && hostH <= QAM_HOST_MAX_PX && hostIsTab) {
         lockedHeightRef.current = hostH;
@@ -149,7 +157,10 @@ export function useQamPanelHeightGuard(scopeRef: React.RefObject<HTMLDivElement 
       const needsLock = crushed || sagged;
       const layoutStable = scopeH >= CRUSHED_SCOPE_MAX_PX;
 
-      if (lockPx >= QAM_HOST_MIN_PX && (needsLock || layoutStable)) {
+      /* No host found, nothing pinned: the chain runs from the scope up to the host, and with no host it
+         would run up to the page's root, through Steam's own containers (plan 84 step 6 found this when
+         the reshape was undone as bonsAI closed and the lock measured once more). */
+      if (host && lockPx >= QAM_HOST_MIN_PX && (needsLock || layoutStable)) {
         fittedHeightRef.current = pinScopeChain(scope, host, lockPx);
       }
       syncTabBodyViewportHeight(scope);
@@ -230,8 +241,15 @@ export function useQamPanelHeightGuard(scopeRef: React.RefObject<HTMLDivElement 
     };
     scope.addEventListener("pointerenter", onPointer);
     scope.addEventListener("pointermove", onPointer, { passive: true });
+    /* Decky's bar changed shape (plan 84 step 6): measure again now, and once more after it settles. */
+    const stopHeader = subscribeDeckyHeader(() => {
+      applyLock();
+      resyncTabContents();
+      scheduleSettle();
+    });
 
     return () => {
+      stopHeader();
       cancelAnimationFrame(raf);
       cancelAnimationFrame(settleRaf);
       ro.disconnect();

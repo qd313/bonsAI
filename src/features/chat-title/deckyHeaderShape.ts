@@ -3,15 +3,18 @@
  *
  * Purpose: Plan 84 step 6. While bonsAI is open, this moves Decky's own Quick Access page up into the
  * 14-point strip Steam leaves empty at the top, grows Decky's title padding by the same 14 so the chat's
- * name stays exactly where it was, and shrinks Decky's 16-point gap under its bar to bonsAI's 4. bonsAI's
+ * name stays exactly where it was, shrinks Decky's 16-point gap under its bar to bonsAI's 4, and gives the
+ * page the 14 points back at its bottom (its height grows by 14), so the panel still reaches the bottom of
+ * the screen (plan 84 test C measured it 14 short without this). bonsAI's
  * title view then draws the tab bar in that padding, at the very top (TitleTabStrip.tsx). Off the Main
  * tab, Decky's back arrow is hidden as well, and the title view draws no name, so Decky's bar is the strip
  * alone. The numbers are deckyHeaderLayout.ts's.
  *
  * Used for: ChatTitleView.tsx (applies on mount, follows the tab, undoes on unmount), useTopStripTabBar.ts
  * (bonsAI's box mounting is a second chance to apply), and anything that must know whether the bar is in
- * the strip (`topStripActive`) or hear the header change shape (`subscribeDeckyHeader`): the body offset,
- * the stop above the chat.
+ * the strip (`topStripActive`) or hear the header change shape (`subscribeDeckyHeader`): the height lock
+ * (useQamPanelHeightGuard.ts, which measures to Decky's page while it is moved), the body offset, the stop
+ * above the chat.
  *
  * Solves: Three rules from the Deck tests (plan 84 § 4):
  *   - Steam's shared 14-point padding belongs to every Quick Access page, and bonsAI stays loaded when the
@@ -44,6 +47,9 @@ type Saved = {
   gapPaddingTop: string;
   pagePosition: string;
   pageTop: string;
+  pageHeight: string;
+  pageMinHeight: string;
+  pageMaxHeight: string;
   arrowDisplay: string;
   /** The parts that had no inline style at all: they are left with none, not with an empty one. */
   bare: HTMLElement[];
@@ -74,6 +80,14 @@ export function topStripActive(): boolean {
 /** For a React reader: redraws when the bar moves into the strip or back. */
 export function useTopStripActive(): boolean {
   return useSyncExternalStore(subscribeDeckyHeader, topStripActive, topStripActive);
+}
+
+/**
+ * Decky's own page while it is moved up and given its 14 back: its bottom is the bottom of the screen, so
+ * the height lock measures to it. Null while nothing is reshaped.
+ */
+export function deckyPageWhileReshaped(): HTMLElement | null {
+  return applied?.parts.page ?? null;
 }
 
 /** Tell the listeners the header may have changed size (a UI-size Apply rebuilt bonsAI's tabs). */
@@ -114,10 +128,14 @@ function apply(parts: DeckyHeaderParts): void {
     gapPaddingTop: gap.style.paddingTop,
     pagePosition: page.style.position,
     pageTop: page.style.top,
+    pageHeight: page.style.height,
+    pageMinHeight: page.style.minHeight,
+    pageMaxHeight: page.style.maxHeight,
     arrowDisplay: arrow?.style.display ?? "",
     bare: [title, gap, page, arrow].filter((el): el is HTMLElement => !!el && !el.hasAttribute("style")),
   };
   /* Read before anything is written. */
+  const pageHeight = Math.round(page.getBoundingClientRect().height);
   const titleStatic = positionOf(win, title) === "static";
   const pageStatic = positionOf(win, page) === "static";
 
@@ -128,6 +146,11 @@ function apply(parts: DeckyHeaderParts): void {
   if (pageStatic) page.style.position = "relative";
   /* Up by the whole of Steam's strip: Decky's own page only (deckyHeaderLayout.ts). */
   page.style.top = px(-STEAM_STRIP_PX);
+  /* The 14 points the move leaves empty at the bottom, given back: pinned, so a flex parent cannot shrink it. */
+  const height = px(pageHeight + STEAM_STRIP_PX);
+  page.style.height = height;
+  page.style.minHeight = height;
+  page.style.maxHeight = height;
   applied = { parts, saved, arrowHidden: false };
 }
 
@@ -140,6 +163,9 @@ function undo(): void {
   parts.gap.style.paddingTop = saved.gapPaddingTop;
   parts.page.style.position = saved.pagePosition;
   parts.page.style.top = saved.pageTop;
+  parts.page.style.height = saved.pageHeight;
+  parts.page.style.minHeight = saved.pageMinHeight;
+  parts.page.style.maxHeight = saved.pageMaxHeight;
   if (parts.arrow) parts.arrow.style.display = saved.arrowDisplay;
   for (const el of saved.bare) if (el.getAttribute("style") === "") el.removeAttribute("style");
 }

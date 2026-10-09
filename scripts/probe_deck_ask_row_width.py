@@ -155,8 +155,9 @@ HELPERS_JS = r"""
     var textRow = document.querySelector('.bonsai-unified-input-text-row');
     var textBox = document.querySelector('.bonsai-unified-input-text-box');
     var field = unifiedHost ? unifiedHost.querySelector('textarea, input') : null;
-    var askBleedWrap = document.querySelector('.bonsai-ask-bleed-wrap');
-    var askbarMerged = document.querySelector('.bonsai-askbar-merged');
+    // The big Ask row (.bonsai-ask-bleed-wrap / .bonsai-askbar-merged) was deleted in plan 84; the
+    // Ask button now is the small one in the question box's strip.
+    var askPrimary = document.querySelector('.bonsai-ask-primary');
 
     var vars = {};
     if (scope) {
@@ -180,9 +181,8 @@ HELPERS_JS = r"""
       textRow: describeNode(textRow),
       textBox: describeNode(textBox),
       field: describeNode(field),
-      askBleedWrap: describeNode(askBleedWrap),
-      askBleedWrapAncestors: ancestorChain(askBleedWrap, 3),
-      askbarMerged: describeNode(askbarMerged),
+      askPrimary: describeNode(askPrimary),
+      askPrimaryAncestors: ancestorChain(askPrimary, 3),
       vars: vars,
       transformedAncestors: anyAncestorTransformed(unifiedHost, scope),
       outerChain: outerChain(scope),
@@ -217,7 +217,7 @@ WATCH_ARM_JS = (
     // Drop the ancestor chains and offsetParent labels from the change-detection key: they are
     // useful in the report but noisy frame to frame (Decky churns focus classes constantly).
     return JSON.stringify({
-      uh: s.unifiedHost, ab: s.askBleedWrap, am: s.askbarMerged, f: s.field, v: s.vars, av: s.avatarOn,
+      uh: s.unifiedHost, ab: s.askPrimary, f: s.field, v: s.vars, av: s.avatarOn,
     });
   };
 
@@ -411,7 +411,7 @@ def verdicts(s):
 
     reference = s.get("tabScroll") or s.get("scope") or s.get("qamScope")
     uh = s.get("unifiedHost")
-    ab = s.get("askBleedWrap") or s.get("askbarMerged")
+    ab = s.get("askPrimary")
 
     # V0 — the "too much whitespace at the QAM edges" question, answered by name.
     chain = s.get("outerChain") or []
@@ -462,17 +462,18 @@ def verdicts(s):
         out.append(("V2", None, "--bonsai-askbar-outer-width or host missing"))
 
     # V3
-    margin_var = vars_.get("askMarginLeft", "")
     if uh and ab:
-        left_miss = round(ab["rect"]["x"] - uh["rect"]["x"], 2)
-        nonzero_var = margin_var not in ("", "0px")
+        # Plan 84: the Ask button is the small one in the box's strip, so the old "left edges line
+        # up" test no longer means anything. It must sit inside the host, not poke out of its sides.
+        left_out = round(uh["rect"]["x"] - ab["rect"]["x"], 2)
+        right_out = round(ab["rect"]["right"] - uh["rect"]["right"], 2)
         out.append((
-            "V3", nonzero_var or abs(left_miss) > TOL_PX,
-            "--bonsai-ask-margin-left=%r; Ask row left edge vs host left edge miss=%spx"
-            % (margin_var, left_miss),
+            "V3", left_out > TOL_PX or right_out > TOL_PX,
+            "small Ask (.bonsai-ask-primary) outside the host: left=%spx right=%spx (>%.1fpx = pokes out)"
+            % (left_out, right_out, TOL_PX),
         ))
     else:
-        out.append(("V3", None, "Ask bleed wrap / askbar-merged or host missing"))
+        out.append(("V3", None, "small Ask (.bonsai-ask-primary) or host missing"))
 
     # V4 — avatar-off only
     field = s.get("field")
@@ -549,9 +550,8 @@ def report_sample(s):
     print_node("field", s.get("field"))
 
     print("\n-- Ask bar --")
-    print_node("askBleedWrap", s.get("askBleedWrap"))
-    print_chain("ancestors", s.get("askBleedWrapAncestors"))
-    print_node("askbarMerged", s.get("askbarMerged"))
+    print_node("askPrimary", s.get("askPrimary"))
+    print_chain("ancestors", s.get("askPrimaryAncestors"))
 
     print("\n-- CSS vars (read off .bonsai-scope) --")
     for k, v in sorted(s.get("vars", {}).items()):

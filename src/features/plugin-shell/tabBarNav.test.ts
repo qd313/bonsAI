@@ -86,6 +86,15 @@ describe("buildTabBarNavHandlers", () => {
   it("Up never claims, so Steam takes the ring to Decky's Back button as it did from the strip", () => {
     expect(make().h.onMoveUp()).toBe(false);
   });
+
+  it("with upHolds (the bar at the very top, plan 84 step 6) Up claims and switches nothing", () => {
+    const selectTab = vi.fn();
+    const exitDown = vi.fn(() => true);
+    const h = buildTabBarNavHandlers({ tabIds: FIVE, currentTab: "settings", selectTab, exitDown, upHolds: true });
+    expect(h.onMoveUp()).toBe(true);
+    expect(selectTab).not.toHaveBeenCalled();
+    expect(exitDown).not.toHaveBeenCalled();
+  });
 });
 
 describe("tabBarSides (plan 84 step 4, T3)", () => {

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 771,
-  "edgeCount": 2274,
+  "edgeCount": 2275,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3356,6 +3356,7 @@
         "src/features/plugin-shell/tabBarNav.ts",
         "src/features/plugin-shell/tabTitles.tsx",
         "src/styles/bonsaiScopeStylesheet.ts",
+        "src/styles/sections/tabIndicatorBar.ts",
         "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
@@ -3365,7 +3366,6 @@
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/plugin-shell/tabBarNav.ts",
         "src/features/plugin-shell/tabTitles.tsx",
-        "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/unified-input/constants.ts",
         "src/utils/navFocusRegistry.ts"
       ],
@@ -3667,8 +3667,8 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
-        "src/features/plugin-shell/TabIndicatorBar.tsx",
-        "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx"
+        "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
+        "src/index.tsx"
       ]
     },
     "src/features/plugin-shell/useOllamaConnectionState.ts": {
@@ -5486,6 +5486,7 @@
         "src/features/plugin-shell/useDesktopNoteSaveModal.tsx",
         "src/features/plugin-shell/useDeveloperToolActions.ts",
         "src/features/plugin-shell/useExternalNavigationActions.ts",
+        "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/features/plugin-shell/usePluginHelpModal.tsx",
@@ -5914,6 +5915,7 @@
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/styles/bonsaiScopeStylesheet.ts"
       ]
     },

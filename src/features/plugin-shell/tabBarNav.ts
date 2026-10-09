@@ -41,6 +41,11 @@ export type BuildTabBarNavHandlersArgs = {
   selectTab: (id: string) => void;
   /** Hand the ring to the current tab's first stop; true when it moved. */
   exitDown: () => boolean;
+  /**
+   * Up holds still (claimed, nothing moves) instead of being left to Steam: for the bar at the very top
+   * of the panel (plan 84 step 6), where nothing lies above it. Off by default.
+   */
+  upHolds?: boolean;
 };
 
 /**
@@ -80,12 +85,13 @@ export function tabBarSides<T extends string>(tabIds: readonly T[], currentTab: 
  * Left and Right always claim: sideways there is nothing of ours to reach, and Steam's answer for
  * "left of the plugin" is the Quick Access rail, which walks the user out by accident (the same
  * lesson presetRowNav.ts records). Up returns false on purpose so Steam takes the ring to Decky's
- * Back button, as it did from the strip. Down claims only when the handover moved the ring; when
+ * Back button, as it did from the strip; with `upHolds` (the bar at the very top) it claims and
+ * nothing moves. Down claims only when the handover moved the ring; when
  * it did not, Steam's spatial navigation runs and the hidden-header trap catches a landing on the
  * ghost.
  */
 export function buildTabBarNavHandlers(args: BuildTabBarNavHandlersArgs): TabBarNavHandlers {
-  const { tabIds, currentTab, selectTab, exitDown } = args;
+  const { tabIds, currentTab, selectTab, exitDown, upHolds = false } = args;
   const step = (dir: -1 | 1): boolean => {
     const next = neighbourTab(tabIds, currentTab, dir);
     if (next !== null && next !== currentTab) selectTab(next);
@@ -94,7 +100,7 @@ export function buildTabBarNavHandlers(args: BuildTabBarNavHandlersArgs): TabBar
   return {
     onMoveLeft: () => step(-1),
     onMoveRight: () => step(1),
-    onMoveUp: () => false,
+    onMoveUp: () => upHolds,
     onMoveDown: () => exitDown(),
     onButtonDown: (evt) => {
       if (isBumperLeftDeckEvent(evt)) return step(-1);

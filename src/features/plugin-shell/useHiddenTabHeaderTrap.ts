@@ -6,7 +6,11 @@
  * shown — this hands the ring straight to the plugin's own tab bar instead,
  * so the invisible button is never where the ring comes to rest.
  *
- * Used for: The plugin's own tab bar (plan 30, week 4; kept by plan 84 step 4).
+ * Used for: The plugin's own tab bar (plan 30, week 4; kept by plan 84 step 4). Drawn as
+ * `HiddenTabHeaderTrap` next to the tabs root it watches (index.tsx), not inside the bar: plan 84
+ * step 6 can draw the bar in Decky's title bar, outside bonsAI's box, and the trap must still come
+ * and go with the tabs root (a UI-size Apply rebuilds that root, and an observer on the old one
+ * would watch nothing).
  *
  * Solves: Steam's own tab-header component keeps its buttons reachable by
  * the ring even while they are hidden from view — measured on the Deck on
@@ -155,4 +159,13 @@ export function useHiddenTabHeaderTrap(onBounce?: (bounced: boolean) => void): v
     });
     return () => observer.disconnect();
   }, [onBounce]);
+}
+
+/**
+ * The trap as a component that draws nothing, for index.tsx to place beside the tabs root, inside the
+ * same keyed group, so it is rebuilt whenever the root is.
+ */
+export function HiddenTabHeaderTrap(): null {
+  useHiddenTabHeaderTrap();
+  return null;
 }

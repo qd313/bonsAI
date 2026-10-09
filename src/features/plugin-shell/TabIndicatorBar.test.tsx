@@ -25,6 +25,7 @@ import { TabIndicatorBar } from "./TabIndicatorBar";
 import { neighbourTab } from "./tabBarNav";
 import { ALL_BONSAI_TAB_IDS, BONSAI_TAB_SHORT_NAMES, type BonsaiTabId } from "./tabTitles";
 import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
+import { buildTabBarRules } from "../../styles/sections/tabIndicatorBar";
 
 const hoisted = vi.hoisted(() => ({
   focusableProps: [] as Array<Record<string, unknown>>,
@@ -298,6 +299,17 @@ describe("the rule that hides Steam's tab header", () => {
     expect(heightRule?.[1]).toMatch(/height:\s*calc\(20px \* var\(--bonsai-ui-scale, 1\)\)\s*!important/);
     const reset = rules.find(([selector, decls]) => selector === ".bonsai-scope .Panel.Focusable" && /height:\s*auto\s*!important/.test(decls));
     expect(reset).toBeDefined();
+  });
+
+  it("builds the same bar rules for bonsAI's title view in Decky's bar, under that view's own root (plan 84 step 6)", () => {
+    const inScope = rulesOf(buildTabBarRules(".bonsai-scope"));
+    const inTitle = rulesOf(buildTabBarRules(".bonsai-chat-title"));
+    expect(inTitle.length).toBeGreaterThan(10);
+    expect(inTitle.every(([selector]) => selector.split(",").every((one) => one.trim().startsWith(".bonsai-chat-title ")))).toBe(true);
+    expect(inTitle.map(([selector, decls]) => [selector.split(".bonsai-chat-title").join(".bonsai-scope"), decls])).toEqual(inScope);
+    /* Every bar rule of bonsAI's own stylesheet is one of them. */
+    const scopeSheet = rulesOf(buildBonsaiScopeStylesheet());
+    for (const rule of inScope) expect(scopeSheet).toContainEqual(rule);
   });
 
   it("declares the 4px reserve in the stylesheet so a tabs-root remount cannot lose it", () => {

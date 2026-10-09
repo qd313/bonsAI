@@ -20,7 +20,8 @@
  * Steam's hidden strip still has its own buttons sitting invisibly in the
  * D-pad's path, so this bar also takes over: left and right, or the
  * shoulder buttons, switch tabs; pressing down hands focus into the tab
- * body; pressing up is left to Steam; and anything that would have landed
+ * body; pressing up is left to Steam (or holds still, at the very top of
+ * the panel); and anything that would have landed
  * on one of Steam's hidden buttons is caught and bounced back here
  * instead. On touch, a tap on LB or RB steps one tab and a tap on a side
  * icon opens that tab.
@@ -39,7 +40,6 @@ import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../../u
 import { registerModalReturnFocusOwner } from "./modalReturnFocusRegistry";
 import { buildTabBarNavHandlers, neighbourTab, tabBarSides } from "./tabBarNav";
 import { BONSAI_TAB_SHORT_NAMES, bonsaiTabBarIcon, type BonsaiTabId } from "./tabTitles";
-import { useHiddenTabHeaderTrap } from "./useHiddenTabHeaderTrap";
 
 export type TabIndicatorBarProps = {
   /** The mounted tabs in strip order — five without Developer, six with. */
@@ -50,6 +50,10 @@ export type TabIndicatorBarProps = {
   selectTab: (id: string) => void;
   /** Hand the ring to the current tab's first stop; true when it moved. */
   exitDown: () => boolean;
+  /** Up holds still instead of being left to Steam (the bar at the very top, plan 84 step 6). */
+  upHolds?: boolean;
+  /** An extra class on the bar (where it is drawn: `bonsai-tab-bar--strip` in Decky's bar). */
+  className?: string;
 };
 
 /**
@@ -67,9 +71,9 @@ export type TabIndicatorBarProps = {
  * 2. Registers this bar with two shared registries: one so other code can
  *    hand it focus by name, and one so it gets focus back after a popup
  *    closes.
- * 3. Sets up the trap that catches a D-pad move landing on one of
- *    Steam's own hidden tab buttons and bounces it back to this bar
- *    instead — see useHiddenTabHeaderTrap for that half of the fix.
+ * 3. (The trap that catches a D-pad move landing on one of Steam's own
+ *    hidden tab buttons and bounces it back to this bar is drawn beside
+ *    the tabs root, not here: see useHiddenTabHeaderTrap.)
  * 4. Builds the left/right/up/down and button handlers that do the
  *    switching, from a shared helper.
  * 5. Draws the five columns: LB, the left side's icons, the current tab's
@@ -77,7 +81,14 @@ export type TabIndicatorBarProps = {
  *    is a tap target. What it draws depends only on its props, never on
  *    the ring or a tap, so there is nothing that could be left half drawn.
  */
-export function TabIndicatorBar({ tabIds, currentTab, selectTab, exitDown }: TabIndicatorBarProps): React.ReactElement {
+export function TabIndicatorBar({
+  tabIds,
+  currentTab,
+  selectTab,
+  exitDown,
+  upHolds,
+  className,
+}: TabIndicatorBarProps): React.ReactElement {
   const current = tabIds.find((id) => id === currentTab);
   const name = current ? BONSAI_TAB_SHORT_NAMES[current] : "";
   const { left, right } = tabBarSides(tabIds, currentTab);
@@ -88,9 +99,7 @@ export function TabIndicatorBar({ tabIds, currentTab, selectTab, exitDown }: Tab
     return () => unregisterNavFocus("tab-bar", navRef);
   }, []);
 
-  useHiddenTabHeaderTrap();
-
-  const handlers = buildTabBarNavHandlers({ tabIds, currentTab, selectTab, exitDown });
+  const handlers = buildTabBarNavHandlers({ tabIds, currentTab, selectTab, exitDown, upHolds });
 
   /** A tap that opens `id`; a tap on the tab already showing does nothing. */
   const open = (id: string | null) => {
@@ -123,7 +132,7 @@ export function TabIndicatorBar({ tabIds, currentTab, selectTab, exitDown }: Tab
         documents at its ref).
       */
       ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("tab-bar", el)}
-      className="bonsai-tab-bar"
+      className={className ? `bonsai-tab-bar ${className}` : "bonsai-tab-bar"}
       aria-label={name ? `${name} tab` : "Tabs"}
       data-bonsai-tab-bar-tab={current ?? ""}
       {...({

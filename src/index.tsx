@@ -125,6 +125,7 @@ import { useUnifiedInputSurface } from "./features/unified-input/useUnifiedInput
 import { PluginErrorBoundary } from "./features/plugin-shell/PluginErrorBoundary";
 import { DECKY_TAB_TITLES, type BonsaiTabId } from "./features/plugin-shell/tabTitles";
 import { TabIndicatorBar } from "./features/plugin-shell/TabIndicatorBar";
+import { HiddenTabHeaderTrap } from "./features/plugin-shell/useHiddenTabHeaderTrap";
 import { TabBodyFocusRoot, tabBodyNavFocusId } from "./features/plugin-shell/TabBodyFocusRoot";
 import { takeNavFocus } from "./utils/navFocusRegistry";
 import { loadSavedSearchQuery, persistSearchQuery } from "./features/plugin-shell/pluginStorage";
@@ -1247,6 +1248,7 @@ const Content: React.FC = () => {
             selectTab={selectTab}
             exitDown={tabBarExitDown}
           />
+          <HiddenTabHeaderTrap />
           <div className="bonsai-decky-tabs-root" data-bonsai-active-tab={currentTab}>
             <Tabs
               activeTab={currentTab}

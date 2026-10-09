@@ -4,8 +4,8 @@ Written 2026-10-08 by the planning session, straight after seven rounds of mocku
 evening. This is the build plan for the roadmap entry **Give the reclaimed height to the transcript** (`[layout]`),
 which had been waiting since 2026-09-16 for a design call. The calls are recorded as
 [D126](../audit/maintainer-decisions-locked.md); § 3 below has the same list. **Step 1, the three Deck tests, ran on
-2026-10-08 and all three passed (results in § 4). One of them changed how step 6 must work. Steps 2 to 9 are not built
-yet.**
+2026-10-08 and all three passed (results in § 4). One of them changed how step 6 must work. Steps 2 to 8 were built
+and checked on the Deck 2026-10-08/09 (§ 10); step 9 became [plan 85](85-reading-mode-test.md).**
 
 **The drawing:** https://claude.ai/artifact/EoRoxs11bVjfyBZ28tkM5P — every option from all seven rounds, drawn at the
 Deck's true size, each drawing measuring itself. The first section shows only what was picked. A copy is kept in the
@@ -16,7 +16,8 @@ Read first: [CLAUDE.md](../../CLAUDE.md); [AGENTS.md](../../AGENTS.md), the focu
 "Which model does which work"; [docs/lessons-learned.md](../lessons-learned.md); [design-language.md](../design-language.md),
 rules 5 to 8; D126; and [plan 66](66-quick-tab-own-menu-icon.md) § 4, because a pinned Quick Tab draws the same title bar.
 
-**One sentence:** on the Deck's own screen the answer gets 297 points of height instead of 204 (about 121 words of a long
+**One sentence:** on the Deck's own screen the answer gets 297 points of height instead of 204 (built and measured:
+295, because the chips row is 32 points on the Deck, not the drawing's 30) (about 121 words of a long
 answer on screen instead of about 62), by moving the tab bar up into an empty strip, putting the chat's name in Decky's
 title bar, folding two rows of the ask area into the question box, and moving Read aloud into the answer's corner.
 
@@ -73,7 +74,7 @@ Today, then after, on the Deck's own screen. The numbers come from the drawing, 
 
 | | Today | After |
 |---|---|---|
-| Height for the answer | 204 points | 297 points (+93, +46%) |
+| Height for the answer | 204 points | 297 points (+93, +46%); measured after the build: 295 |
 | Words of a long answer on screen | about 62 | about 121 |
 | Rows above the chat | 3 (Steam's strip, Decky's bar, tab bar) | 2, both doing a job |
 | Rows below the answer | 4 (chips, box, ASK, context line) | 2 (chips, box) |
@@ -254,7 +255,8 @@ the tab bar, the name row, the strip's new controls. [focus-graph-patterns](../.
 the new ring path. New rows in [testing-manual.md](../testing-manual.md) (§ 6 below). The roadmap entries in § 7.
 
 **Step 9 — reading mode: a test to find out (separate, after the build).** Option G in the drawing. Its own short plan
-once the build is in; it needs the hide-and-restore pieces from step 6 anyway.
+once the build is in; it needs the hide-and-restore pieces from step 6 anyway. Written 2026-10-09 as
+[plan 85](85-reading-mode-test.md), waiting on the maintainer's calls.
 
 **Order of landing:** 2 and 3 (any order), then 4, then 5, then 6, then 7 and 8. Each lands with its own Deck block,
 because each moves controls.

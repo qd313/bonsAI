@@ -284,8 +284,9 @@ LB  [tabs LB reaches]  [icon] NAME  [tabs RB reaches]  RB      <- one stop: the 
   tap-to-open and the tap-outside listener. What the bar draws depends only on which tabs exist and which is
   current, never on the ring or a tap, and the bar clips everything inside it to its own 20 points, so nothing
   of it can be left over the chip row (TAB-BAR-GHOST-01).
-- **Not backed by a device row yet.** The bookkeeper owns `docs/testing.md`; rows P84-TABS-01, P84-TABS-02 and
-  the LB/RB half of P84-HINTS-01 (plan 84 § 6) are in the lane report.
+- **Device rows:** P84-TABS-01 and the LB/RB half of P84-HINTS-01 passed on the Deck's own screen 2026-10-08
+  ([evidence](test-evidence/plan84-STEPS4-5-7-DECK.json)); P84-TABS-02, the touch check, is owed (needs a person).
+  Rows in [testing-manual.md](testing-manual.md), section PLAN-84.
 
 ### The chat's name and the chats menu (plan 84 step 5)
 

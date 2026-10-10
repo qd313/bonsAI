@@ -212,6 +212,10 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
       return;
     }
     setMicPermissionDenied(false);
+    /* A new recording has written nothing yet. Words left over from the last one would make the
+       "box was emptied, so dictation is over" rule above fire the moment this recording begins (box
+       emptied by hand or script after a dictation: the first press stopped itself 94 ms later). */
+    setLastVoiceText("");
     setVoiceStarting(true);
     void startVoiceTranscription(a.unifiedInput)
       .then(() => {

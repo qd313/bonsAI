@@ -213,3 +213,53 @@ describe("Ask while the microphone is still listening ends dictation", () => {
     expect(button(container, "Voice input")).not.toBeNull();
   }, SLOW);
 });
+
+describe("the first mic press after the box was emptied by hand or by script", () => {
+  beforeEach(() => {
+    resetFakeDeckyRpc();
+    asked.question = "";
+    window.localStorage.clear();
+    fakeMicrophone();
+  });
+
+  it("keeps recording and brings the new words in (it used to stop itself at once, 2026-10-10)", async () => {
+    const { container } = await mountPlugin();
+    // First dictation, ended with Stop: the box holds the words the mic wrote.
+    await press(container, "Voice input");
+    await waitFor(() => expect(boxText(container)).toBe(SPOKEN));
+    await press(container, "Stop voice input");
+    const stopsBefore = getRpcCallLog().filter((c) => c.method === "stop_voice_transcription").length;
+
+    // The box is emptied the way the Deck script does it: through the field's own change handler.
+    const field = container.querySelector('[data-decky-ui="TextField"]') as HTMLElement;
+    const fiberKey = Object.keys(field).find((k) => k.startsWith("__reactProps"))!;
+    const props = (field as unknown as Record<string, { onChange: (e: unknown) => void }>)[fiberKey];
+    await act(async () => {
+      props.onChange({ target: { value: "" } });
+    });
+    await waitFor(() => expect(boxText(container)).toBe(""));
+
+    // The very next press on the mic. On the Deck nothing has been heard yet for the first moments
+    // of a recording, so the first status reads empty (the fake above hears the words at once).
+    // The answer also takes a moment to come back (a round trip to the back end), so the box is
+    // still empty when the button flips to "recording".
+    setRpcHandler("get_voice_transcription_status", async () => {
+      await new Promise((r) => setTimeout(r, 60));
+      return { status: "recording", recording: true, streaming: true, partial_transcript: "", finalized_transcript: "" };
+    });
+    await press(container, "Voice input");
+    await settle(100);
+    setRpcHandler("get_voice_transcription_status", () => ({
+      status: "recording",
+      recording: true,
+      streaming: true,
+      partial_transcript: "",
+      finalized_transcript: SPOKEN,
+    }));
+    await settle(400);
+    // Still recording: the button offers Stop, no stop went to the back end, and the words arrived.
+    expect(button(container, "Stop voice input")).not.toBeNull();
+    expect(getRpcCallLog().filter((c) => c.method === "stop_voice_transcription").length).toBe(stopsBefore);
+    expect(boxText(container)).toBe(SPOKEN);
+  }, SLOW);
+});

@@ -102,6 +102,7 @@ import {
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { FOCUS_RING_BTN_CLASS, FOCUS_RING_INSET_CLASS, FOCUS_RING_WRAP_CLASS } from "../styles/settingsGlassButton";
+import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
 const voiceReplyModeLabel: Record<VoiceReplyMode, string> = {
   off: "Off",
   voice_only: "When I asked by voice",
@@ -255,14 +256,14 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
     if (!host) return false;
     const target = host.querySelector<HTMLElement>("button:not([disabled])");
     if (!target) return false;
-    target.focus();
+    focusInTabBody(target);
     return true;
   }, []);
 
   const focusUiScaleApplyButton = useCallback((): boolean => {
     const btn = uiScaleApplyButtonRef.current;
     if (!btn || btn.disabled) return false;
-    btn.focus();
+    focusInTabBody(btn);
     return true;
   }, []);
 
@@ -299,7 +300,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
     } catch {
       /* the check below decides */
     }
-    if (!elementHasGamepadFocus(btn.parentElement ?? btn)) btn.focus();
+    if (!elementHasGamepadFocus(btn.parentElement ?? btn)) focusInTabBody(btn);
     return true;
   }, []);
 

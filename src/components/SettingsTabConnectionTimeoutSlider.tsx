@@ -39,6 +39,7 @@ import {
   pickNearestThumbIndex,
   valueToPct,
 } from "../utils/deckSliderMath";
+import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
 
 export type SettingsTabConnectionTimeoutSliderProps = {
   warningSec: number;
@@ -82,7 +83,7 @@ export function SettingsTabConnectionTimeoutSlider(props: SettingsTabConnectionT
   const focusThumb = useCallback((thumb: ThumbKind) => {
     const host = thumb === "warning" ? warningWrapRef.current : timeoutWrapRef.current;
     const target = host?.querySelector("[tabindex],button") as HTMLElement | null;
-    target?.focus();
+    if (target) focusInTabBody(target);
   }, []);
 
   const applyWarning = useCallback(

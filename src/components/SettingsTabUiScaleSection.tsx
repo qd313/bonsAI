@@ -33,6 +33,7 @@ import {
 } from "../data/uiScaleProfile";
 import { SettingsTabUiScaleSlider } from "./SettingsTabUiScaleSlider";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
+import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
 
 export type SettingsTabUiScaleSectionProps = {
   uiScaleAutoEnabled: boolean;
@@ -48,7 +49,7 @@ export type SettingsTabUiScaleSectionProps = {
 function focusInHost(host: HTMLElement | null): boolean {
   const target = host?.querySelector<HTMLElement>("[tabindex], button:not([disabled])");
   if (!target) return false;
-  target.focus();
+  focusInTabBody(target);
   return true;
 }
 
@@ -145,14 +146,14 @@ export const SettingsTabUiScaleSection: React.FC<SettingsTabUiScaleSectionProps>
   const focusResetButton = useCallback((): boolean => {
     const btn = resetButtonRef.current;
     if (!btn || btn.disabled) return false;
-    btn.focus();
+    focusInTabBody(btn);
     return true;
   }, []);
 
   const focusApplyButton = useCallback((): boolean => {
     const btn = applyButtonLocalRef.current;
     if (!btn || btn.disabled) return false;
-    btn.focus();
+    focusInTabBody(btn);
     return true;
   }, []);
 

@@ -52,7 +52,7 @@
     },
     {
       "path": "src/components/KnowledgeBaseSection.tsx",
-      "lines": 1108,
+      "lines": 1109,
       "role": ""
     },
     {
@@ -92,7 +92,7 @@
     },
     {
       "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 916,
+      "lines": 917,
       "role": ""
     },
     {
@@ -152,7 +152,7 @@
     },
     {
       "path": "src/components/SettingsTab.tsx",
-      "lines": 713,
+      "lines": 714,
       "role": ""
     },
     {

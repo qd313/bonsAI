@@ -10,8 +10,10 @@
  *           tap or the mouse (Steam's own scroll handles those). Does not animate: Steam looks at the control
  *           the moment focus lands, and a glide would show it still outside the band and make it scroll too.
  *
- * How it works: one `focusin` listener in the capture phase on the tab body, so it runs before Steam's own
- * scroll (which comes after the focus event, and glides). It reads the boxes of the focused control and of the
+ * How it works: two entry points, both ending in the same plan. A `focusin` listener in the capture phase on
+ * the tab body, so it runs before Steam's own scroll (which comes after the focus event, and glides); and
+ * `focusInTabBody(el)`, which the tabs call instead of `el.focus()` for the controls they focus by hand,
+ * because the browser scrolls for those BEFORE the focus event. It reads the boxes of the focused control and of the
  * other controls under the body (the elements Steam navigates: `.Focusable` or `tabindex="0"` with none of
  * the same inside), asks `planTabBodyScroll` for the pane's place, and writes `scrollTop` once. The band the
  * plan keeps the control in is the pane's own `scroll-padding` (Steam's 116 px at the top and 80 at the
@@ -75,18 +77,32 @@ function stopsUnder(el: Element, out: HTMLElement[] = []): HTMLElement[] {
 }
 
 /**
- * The box Steam scrolls into view for a stop. For a toggle that is not the switch itself but its whole row
- * (label, switch and the description under them): measured 2026-10-09, toggles come to rest with the
- * switch 65 to 120 px above the band's bottom edge and about 10 px below its top edge, which is where a
- * row, not a 22 px switch, would stop. So the box is that of the nearest `.Focusable` ancestor when it holds
- * this stop and no other; a button, whose nearest `.Focusable` ancestor holds the whole tab, is its own box.
+ * How far a stop's box may reach beyond the control itself, above and below. A toggle's row reaches about
+ * 10 px above the switch and up to about 100 below it (measured 2026-10-09: toggles come to rest 65 to
+ * 120 px above the band's bottom edge, and 10 px below its top edge). A section that holds one control
+ * can reach much further (its heading and description), and keeping all of it in the band would move the
+ * pane for text nobody is on. A limit, not a measurement of any one section.
+ */
+const BOX_ABOVE_MAX_PX = 12;
+const BOX_BELOW_MAX_PX = 110;
+
+/**
+ * The box the plan keeps in the band for a stop: the control, grown to the row Steam scrolls into view when the
+ * nearest `.Focusable` ancestor holds this stop and no other, by no more than the limits above. A button, whose
+ * nearest `.Focusable` ancestor holds the whole tab, is its own box.
  */
 function stopBox(stop: HTMLElement, root: HTMLElement, pane: HTMLElement, stops: HTMLElement[]): PlanBox {
+  const own = contentBox(stop, pane);
   let up = stop.parentElement;
   while (up && up !== root && up !== pane && !up.classList.contains("Focusable")) up = up.parentElement;
-  if (!up || up === root || up === pane) return contentBox(stop, pane);
+  if (!up || up === root || up === pane) return own;
   const holder = up;
-  return stops.filter((s) => holder.contains(s)).length === 1 ? contentBox(holder, pane) : contentBox(stop, pane);
+  if (stops.filter((s) => holder.contains(s)).length !== 1) return own;
+  const row = contentBox(holder, pane);
+  return {
+    top: Math.min(own.top, Math.max(row.top, own.top - BOX_ABOVE_MAX_PX)),
+    bottom: Math.max(own.bottom, Math.min(row.bottom, own.bottom + BOX_BELOW_MAX_PX)),
+  };
 }
 
 /**
@@ -133,24 +149,73 @@ function scrollPlaceFor(
   };
 }
 
+/** What one tab body remembers between landings. */
+interface BodyState {
+  root: HTMLElement;
+  /** Where the ring was before, in the pane's coordinates: says which way it is travelling. */
+  lastTop: number | null;
+  lastPointerAt: number;
+  /** The element `focusInTabBody` has just planned for, so its focus event does not plan a second step. */
+  planned: HTMLElement | null;
+}
+
+const bodies = new Set<BodyState>();
+
+/** Plan and write the pane's place for focus landing on `target`; false when nothing was planned. */
+function placeFor(body: BodyState, target: HTMLElement): boolean {
+  if (performance.now() - body.lastPointerAt < POINTER_QUIET_MS) return false;
+  const place = scrollPlaceFor(body.root, target, body.lastTop);
+  if (!place) return false;
+  body.lastTop = place.top;
+  const pane = findTabContentsScroll(body.root);
+  if (pane && Math.abs(place.scrollTop - pane.scrollTop) >= 1) pane.scrollTop = place.scrollTop;
+  return true;
+}
+
+/**
+ * `el.focus()` for a control of a tab body, for the tabs' own hops between controls: plan the pane's place
+ * first, then focus without the browser's own scroll. The Ollama and Settings tabs hop with plain `focus()`
+ * calls (the Reply style slider's Up and Down, the knowledge base toggle, the first and last controls), and the
+ * browser scrolls for such a call BEFORE it fires the focus event: a control wholly outside the band is put in
+ * the middle of the pane, and only then does the focus listener run. That was the 310 to 372 px Up jump left
+ * on Ollama, Settings and Developer after the first version (plan 87, second Deck walk), which a focus
+ * listener alone cannot stop. An element outside any tab body, or one the plan leaves alone (no range to
+ * scroll, a tap just before), is focused with a plain `focus()`. It is a call the tabs make, not a change to
+ * `HTMLElement.prototype.focus`: that belongs to Steam's whole page.
+ */
+export function focusInTabBody(el: HTMLElement): void {
+  for (const body of bodies) {
+    if (body.root === el || !body.root.contains(el) || !placeFor(body, el)) continue;
+    /* Its focus event fires inside this call and finds the flag; one that does not fire (already focused) must not leave it set. */
+    body.planned = el;
+    try {
+      el.focus({ preventScroll: true });
+    } finally {
+      body.planned = null;
+    }
+    return;
+  }
+  el.focus();
+}
+
 export function useTabBodyFocusScroll(rootRef: RefObject<HTMLElement | null>): void {
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    let lastTop: number | null = null;
-    let lastPointerAt = -Infinity;
+    const body: BodyState = { root, lastTop: null, lastPointerAt: -Infinity, planned: null };
+    bodies.add(body);
+
     const onPointer = () => {
-      lastPointerAt = performance.now();
+      body.lastPointerAt = performance.now();
     };
     const onFocusIn = (event: FocusEvent) => {
       const target = event.target as HTMLElement | null;
       if (!target || target === root || !root.contains(target)) return;
-      if (performance.now() - lastPointerAt < POINTER_QUIET_MS) return;
-      const place = scrollPlaceFor(root, target, lastTop);
-      if (!place) return;
-      lastTop = place.top;
-      const scroller = findTabContentsScroll(root);
-      if (scroller && Math.abs(place.scrollTop - scroller.scrollTop) >= 1) scroller.scrollTop = place.scrollTop;
+      if (body.planned === target) {
+        body.planned = null;
+        return;
+      }
+      placeFor(body, target);
     };
 
     root.addEventListener("focusin", onFocusIn, true);
@@ -158,6 +223,7 @@ export function useTabBodyFocusScroll(rootRef: RefObject<HTMLElement | null>): v
     return () => {
       root.removeEventListener("focusin", onFocusIn, true);
       root.removeEventListener("pointerdown", onPointer, true);
+      bodies.delete(body);
     };
   }, [rootRef]);
 }

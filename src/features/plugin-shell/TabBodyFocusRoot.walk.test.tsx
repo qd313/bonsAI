@@ -11,7 +11,9 @@
  * Does not: Animate, or know what Steam does with a press nobody claims; the Deck rows measure that.
  */
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { cleanup } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
+import { TabBodyFocusRoot } from "./TabBodyFocusRoot";
+import { focusInTabBody } from "./useTabBodyFocusScroll";
 
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../../test-harness/fakeDeckyUi");
@@ -63,6 +65,28 @@ describe("walking a plain tab Down and back Up", () => {
     }
   }
 
+  it("reproduces the Deck's Up jumps when the tab's own helpers focus with a plain focus(), which the browser scrolls for before its focus event", () => {
+    /* The model's version of plan87-P87-B10-TAB-SCROLL.json: Ollama 367, Settings 326, Developer 251 px going Up. */
+    for (const tab of ["ollama", "settings", "developer"] as const) {
+      const w = walkTab({ tab, viewport: MONITOR_PANE_PX, steam: "nearest", focusVia: "plain" });
+      expect(w.largestUp, tab).toBeGreaterThan(MONITOR_PANE_PX / 3);
+    }
+  });
+
+  it("holds when the tab's own helpers focus the control through focusInTabBody (the Deck's second walk: 310 to 372 px Up before)", () => {
+    for (const tab of TABS) {
+      for (const steam of RULES) {
+        for (const steamTarget of ["leaf", "row"] as const) {
+          const w = walkTab({ tab, viewport: MONITOR_PANE_PX, steam, steamTarget, focusVia: "helper" });
+          expect(w.largestUp, `${tab} / ${steam} / ${steamTarget} up`).toBeLessThan(MONITOR_PANE_PX / 3);
+          expect(w.largestDown, `${tab} / ${steam} / ${steamTarget} down`).toBeLessThan(MONITOR_PANE_PX / 3);
+          expect(w.notVisible, `${tab} / ${steam} / ${steamTarget}`).toEqual([]);
+          expect(w.repeated).toBe(0);
+        }
+      }
+    }
+  });
+
   it("on the Deck's own, shorter screen no press moves the pane more than 0.65 of its height", () => {
     /*
      * A third is not reachable there: with Steam's 116 and 80 px margins the band is about 200 px, and Developer
@@ -73,7 +97,7 @@ describe("walking a plain tab Down and back Up", () => {
     for (const tab of TABS) {
       for (const steam of RULES) {
         for (const steamTarget of ["leaf", "row"] as const) {
-          const w = walkTab({ tab, viewport: OWN_SCREEN_PANE_PX, steam, steamTarget });
+          const w = walkTab({ tab, viewport: OWN_SCREEN_PANE_PX, steam, steamTarget, focusVia: steamTarget === "row" ? "helper" : "steam" });
           expect(Math.max(w.largestDown, w.largestUp), `${tab} / ${steam} / ${steamTarget}`).toBeLessThan(OWN_SCREEN_PANE_PX * 0.65);
           expect(w.notVisible, `${tab} / ${steam} / ${steamTarget}`).toEqual([]);
         }
@@ -102,6 +126,27 @@ describe("the first control of each tab", () => {
       const w = walkTab({ tab, viewport: MONITOR_PANE_PX, steam: "centerIfHidden" });
       expect(w.scrollTop(), tab).toBe(0);
     }
+  });
+});
+
+describe("the page's focus()", () => {
+  it("is the browser's own while tab bodies are mounted: nothing patches HTMLElement.prototype", () => {
+    const original = HTMLElement.prototype.focus;
+    const first = render(<TabBodyFocusRoot id="settings">{null}</TabBodyFocusRoot>);
+    const second = render(<TabBodyFocusRoot id="ollama">{null}</TabBodyFocusRoot>);
+    expect(HTMLElement.prototype.focus).toBe(original);
+    first.unmount();
+    second.unmount();
+    expect(HTMLElement.prototype.focus).toBe(original);
+  });
+
+  it("focusInTabBody on an element outside any tab body is a plain focus()", () => {
+    const button = document.createElement("button");
+    document.body.appendChild(button);
+    const spy = vi.spyOn(button, "focus");
+    focusInTabBody(button);
+    expect(spy).toHaveBeenCalledWith();
+    button.remove();
   });
 });
 

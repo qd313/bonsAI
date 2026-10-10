@@ -93,6 +93,7 @@ import {
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
+import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
 
 type RagStorageOption = {
   id?: string;
@@ -344,8 +345,8 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   const toggleHost = toggleHostRef ?? toggleHostRefLocal;
 
   const focusPrimaryBtn = useCallback(() => {
-    downloadBtnRefProp?.current?.focus();
-    primaryBtnRefLocal.current?.focus();
+    if (downloadBtnRefProp?.current) focusInTabBody(downloadBtnRefProp.current);
+    if (primaryBtnRefLocal.current) focusInTabBody(primaryBtnRefLocal.current);
     return true;
   }, [downloadBtnRefProp]);
 
@@ -353,22 +354,22 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     const host = toggleHost.current;
     const target = host?.querySelector<HTMLElement>("[tabindex], button, input");
     if (!target) return false;
-    target.focus();
+    focusInTabBody(target);
     return true;
   }, [toggleHost]);
 
   const focusRemoveBtn = useCallback((): boolean => {
-    removeBtnRef.current?.focus();
+    if (removeBtnRef.current) focusInTabBody(removeBtnRef.current);
     return Boolean(removeBtnRef.current);
   }, []);
 
   const focusCancelBtn = useCallback((): boolean => {
-    cancelBtnRef.current?.focus();
+    if (cancelBtnRef.current) focusInTabBody(cancelBtnRef.current);
     return Boolean(cancelBtnRef.current);
   }, []);
 
   const focusNomicBtn = useCallback((): boolean => {
-    nomicBtnRef.current?.focus();
+    if (nomicBtnRef.current) focusInTabBody(nomicBtnRef.current);
     return Boolean(nomicBtnRef.current);
   }, []);
 

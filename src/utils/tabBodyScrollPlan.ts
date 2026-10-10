@@ -17,8 +17,8 @@
  * How it works: for each control that must be visible, the scroll positions where it is inside the band form
  * an interval. A path through the intervals of the control just reached and the ones ahead of it is chosen
  * with the smallest largest-step, found by bisection on that step; the first step of that path, taken from
- * where the pane is now, is the answer. The first control of the tab always puts the pane at the top, and the
- * last one at the bottom, as Steam does, so the top of the tab is never left under the fade.
+ * where the pane is now, is the answer. The first control of the tab always puts the pane at the top, and
+ * the last one at the bottom, as Steam does, so the top of the tab is never left under the fade.
  */
 
 /** A control's box in the scroll pane's own coordinates (0 is the top of the content). */
@@ -28,7 +28,7 @@ export interface PlanBox {
 }
 
 export interface TabScrollPlanInput {
-  /** The control focus just landed on. */
+  /** The control focus just landed on, with the row around it that Steam scrolls into view. */
   current: PlanBox;
   /** The controls further along in the direction of travel, nearest first. */
   ahead: PlanBox[];

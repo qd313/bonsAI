@@ -123,6 +123,7 @@ import {
   LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
 } from "./OllamaWhereAiRunsSection.constants";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
+import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
 
 export type { OllamaWhereAiRunsSectionProps } from "./OllamaWhereAiRunsSection.types";
 
@@ -208,7 +209,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     const host = ollamaLocalToggleNavRef.current;
     const target = host?.querySelector<HTMLElement>("[tabindex], button, input");
     if (!target) return false;
-    target.focus();
+    focusInTabBody(target);
     return true;
   }, []);
 
@@ -217,7 +218,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     // focus-patterns-allow: element-scoped query on this component's own wrapper ref, same sanctioned pattern as focusLocalToggle two blocks above.
     const target = host?.querySelector<HTMLElement>("[tabindex], button, input");
     if (!target) return false;
-    target.focus();
+    focusInTabBody(target);
     return true;
   }, []);
 
@@ -229,7 +230,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   const focusChainBtn = useCallback((ref: { current: HTMLButtonElement | null }): boolean => {
     const el = ref.current;
     if (!el || el.disabled) return false;
-    el.focus();
+    focusInTabBody(el);
     return true;
   }, []);
 
@@ -240,7 +241,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   const focusConnectionTestBtn = useCallback((): boolean => {
     const el = connectionTestBtnRef?.current;
     if (!el || el.disabled) return false;
-    el.focus();
+    focusInTabBody(el);
     return true;
   }, [connectionTestBtnRef]);
 

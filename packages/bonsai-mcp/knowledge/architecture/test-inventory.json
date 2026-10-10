@@ -195,6 +195,7 @@
     "src/features/plugin-shell/TabIndicatorBar.test.tsx",
     "src/features/plugin-shell/modalReturnFocusRegistry.test.ts",
     "src/features/plugin-shell/tabBarNav.test.ts",
+    "src/features/plugin-shell/tabBodyFocusCalls.test.ts",
     "src/features/plugin-shell/tabTitles.test.tsx",
     "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
     "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",

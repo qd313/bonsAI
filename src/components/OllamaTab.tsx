@@ -48,6 +48,7 @@ import {
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { useThinkingNoticeGate } from "../hooks/useThinkingNoticeGate";
+import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
 
 export type OllamaTabProps = {
   ollamaIp: string;
@@ -108,7 +109,7 @@ function focusFirstStopIn(host: HTMLElement | null, selector: string): boolean {
   if (!host) return false;
   const target = host.querySelector<HTMLElement>(selector);
   if (!target) return false;
-  target.focus();
+  focusInTabBody(target);
   return true;
 }
 
@@ -241,22 +242,22 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
     // Cancel is checked first because it only exists while a download runs, and during
     // one both of the buttons below it are disabled — focusing either would be a no-op.
     if (kbCancelBtnRef.current) {
-      kbCancelBtnRef.current.focus();
+      focusInTabBody(kbCancelBtnRef.current);
       return true;
     }
     if (kbDownloadBtnRef.current) {
-      kbDownloadBtnRef.current.focus();
+      focusInTabBody(kbDownloadBtnRef.current);
       return true;
     }
     if (kbRemoveBtnRef.current) {
-      kbRemoveBtnRef.current.focus();
+      focusInTabBody(kbRemoveBtnRef.current);
       return true;
     }
     return focusKbToggle();
   }, [focusKbToggle]);
 
   const focusConnectionTestBtn = useCallback((): boolean => {
-    connectionTestBtnRef.current?.focus();
+    if (connectionTestBtnRef.current) focusInTabBody(connectionTestBtnRef.current);
     return Boolean(connectionTestBtnRef.current);
   }, []);
 

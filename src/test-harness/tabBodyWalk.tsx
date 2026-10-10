@@ -18,6 +18,7 @@ import React from "react";
 import { act, render } from "@testing-library/react";
 
 import { TabBodyFocusRoot } from "../features/plugin-shell/TabBodyFocusRoot";
+import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
 import { TAB_GEOMETRY } from "./tabBodyDeckGeometry";
 
 export type TabName = keyof typeof TAB_GEOMETRY;
@@ -52,6 +53,14 @@ interface TabWalkOptions {
    * the whole row around it with its description ("row", as the Deck's toggles came to rest in plan87-M4).
    */
   steamTarget?: "leaf" | "row";
+  /**
+   * How the ring reaches the control: "steam" (Steam's own move, the default), "plain" (the tab's own helper calls
+   * `el.focus()`, as Ollama's and Settings' Up and Down hops did) or "helper" (the same hops through
+   * `focusInTabBody`, as they do now). A plain `focus()` scrolls the browser's way BEFORE its focus event, a control
+   * wholly outside the padded band being put in the middle of the pane, which is where the Deck's M4 centred landings
+   * (Terse mode, Use local knowledge base) and the 367 px Up jump came from.
+   */
+  focusVia?: "steam" | "plain" | "helper";
 }
 
 interface Landing {
@@ -60,6 +69,8 @@ interface Landing {
   direction: "down" | "up";
   /** How far the pane moved at this press, plugin and Steam together. */
   moved: number;
+  /** Where the pane stands once the plugin and Steam are done. */
+  scrollAfter: number;
   /** The control's top and bottom on the screen once the pane has settled. */
   top: number;
   bottom: number;
@@ -106,6 +117,18 @@ export function walkTab(opts: TabWalkOptions): TabWalk {
   );
   const Root = ({ children }: { children: React.ReactNode }) =>
     opts.withRoot === false ? <div>{children}</div> : <TabBodyFocusRoot id={opts.tab}>{children}</TabBodyFocusRoot>;
+  /*
+   * The browser's own focus(), as far as the walk needs: scroll the element in (unless told not to), then its
+   * focus event. Installed before the root mounts so the root's hook wraps this, as it wraps the real one.
+   */
+  const realFocus = HTMLElement.prototype.focus;
+  let nativeScroll: (el: HTMLElement) => void = () => {};
+  if (opts.focusVia === "plain" || opts.focusVia === "helper") {
+    HTMLElement.prototype.focus = function focus(this: HTMLElement, options?: FocusOptions) {
+      if (!options?.preventScroll) nativeScroll(this);
+      this.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+    };
+  }
   const view = render(
     <div className="Tabs_TabContentsScroll" data-pane="">
       <Root>{body}</Root>
@@ -160,6 +183,15 @@ export function walkTab(opts: TabWalkOptions): TabWalk {
     }
   };
 
+  nativeScroll = (el) => {
+    const bandTop = PANE_TOP + STEAM_PAD_TOP;
+    const bandBottom = PANE_TOP + opts.viewport - STEAM_PAD_BOTTOM;
+    const r = el.getBoundingClientRect();
+    if (r.top >= bandTop - 0.5 && r.bottom <= bandBottom + 0.5) return;
+    if (r.bottom > bandTop && r.top < bandBottom) pane.scrollTop += r.top < bandTop ? r.top - bandTop : r.bottom - bandBottom;
+    else pane.scrollTop += r.top + r.height / 2 - (PANE_TOP + opts.viewport / 2);
+  };
+
   const landings: Landing[] = [];
   const headingTop = () => heading.getBoundingClientRect().top - PANE_TOP;
   const headingAtFirst: number[] = [];
@@ -167,17 +199,21 @@ export function walkTab(opts: TabWalkOptions): TabWalk {
     const el = stops[i]!;
     const before = scrollTop;
     act(() => {
-      el.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+      if (opts.focusVia === "plain") el.focus();
+      else if (opts.focusVia === "helper") focusInTabBody(el);
+      else el.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
     });
     steamScrolls(steamElement(i));
     const r = el.getBoundingClientRect();
-    landings.push({ press: landings.length, stop: i, direction, moved: Math.abs(scrollTop - before), top: r.top, bottom: r.bottom });
+    landings.push({ press: landings.length, stop: i, direction, moved: Math.abs(scrollTop - before), scrollAfter: scrollTop, top: r.top, bottom: r.bottom });
     if (i === 0) headingAtFirst.push(headingTop());
     return scrollTop;
   };
 
   for (let i = 0; i < stops.length; i++) land(i, "down");
   for (let i = stops.length - 1; i >= 0; i--) land(i, "up");
+
+  HTMLElement.prototype.focus = realFocus;
 
   const down = landings.filter((l) => l.direction === "down");
   const up = landings.filter((l) => l.direction === "up");

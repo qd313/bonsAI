@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 828,
-  "edgeCount": 2521,
+  "fileCount": 829,
+  "edgeCount": 2530,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -435,6 +435,7 @@
         "src/features/downloads/downloadNotice.tsx",
         "src/features/downloads/downloadSites.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/hooks/useHandRingOnGone.ts",
         "src/styles/settingsGlassButton.ts",
         "src/utils/deckyCall.ts",
@@ -1480,6 +1481,7 @@
         "src/data/modelPolicy.ts",
         "src/data/replyVerbosity.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/hooks/useThinkingNoticeGate.tsx",
         "src/styles/settingsGlassButton.ts"
       ],
@@ -1590,6 +1592,7 @@
         "src/data/bonsaiSettingsSchema.ts",
         "src/features/plugin-shell/developerTabSignal.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/useOllamaLocalAutostart.ts",
@@ -2054,6 +2057,7 @@
         "src/data/characterCatalog.ts",
         "src/data/uiScaleProfile.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/features/unified-input/constants.ts",
         "src/styles/settingsGlassButton.ts",
         "src/utils/permissionDeepLink.ts",
@@ -2108,6 +2112,7 @@
         "src/components/deck/DeckFocusSlider.tsx",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/utils/deckSliderMath.ts"
       ],
       "importedBy": [
@@ -2167,6 +2172,7 @@
       "imports": [
         "src/components/SettingsTabUiScaleSlider.tsx",
         "src/data/uiScaleProfile.ts",
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/styles/settingsGlassButton.ts"
       ],
       "importedBy": [
@@ -3896,12 +3902,15 @@
       "importedBy": [
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/useTopStripTabBar.ts",
+        "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
         "src/index.tsx",
         "src/test-harness/tabBodyWalk.tsx"
       ]
     },
     "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx": {
       "imports": [
+        "src/features/plugin-shell/TabBodyFocusRoot.tsx",
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/test-harness/fakeDeckyUi.tsx",
         "src/test-harness/steamRing.tsx",
         "src/test-harness/tabBodyDeckGeometry.ts",
@@ -4087,6 +4096,10 @@
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/tabBarNav.test.ts"
       ]
+    },
+    "src/features/plugin-shell/tabBodyFocusCalls.test.ts": {
+      "imports": [],
+      "importedBy": []
     },
     "src/features/plugin-shell/tabTitles.test.tsx": {
       "imports": [
@@ -4372,7 +4385,15 @@
         "src/utils/tabBodyScrollPlan.ts"
       ],
       "importedBy": [
-        "src/features/plugin-shell/TabBodyFocusRoot.tsx"
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/components/OllamaTab.tsx",
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/components/SettingsTab.tsx",
+        "src/components/SettingsTabConnectionTimeoutSlider.tsx",
+        "src/components/SettingsTabUiScaleSection.tsx",
+        "src/features/plugin-shell/TabBodyFocusRoot.tsx",
+        "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
+        "src/test-harness/tabBodyWalk.tsx"
       ]
     },
     "src/features/plugin-shell/useUnifiedInputBehaviors.ts": {
@@ -6984,6 +7005,7 @@
     "src/test-harness/tabBodyWalk.tsx": {
       "imports": [
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/test-harness/tabBodyDeckGeometry.ts"
       ],
       "importedBy": [

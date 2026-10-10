@@ -36,6 +36,7 @@ function buildProps(overrides: Partial<SettingsTabProps> = {}): SettingsTabProps
     setUnifiedInputPersistenceMode: () => {},
     voiceReplyMode: "off",
     setVoiceReplyMode: () => {},
+    chatTextSizeSetting: { value: "normal", set: () => {} },
     aiCharacterEnabled: false,
     setAiCharacterEnabled: () => {},
     aiCharacterRandom: false,

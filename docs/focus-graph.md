@@ -76,6 +76,32 @@ the session context strip)
   D-pad walk this section's own rule asks for — recorded here, not skipped silently, because the
   bookkeeper owns those files, not this lane.
 
+### The Text size row (plan 87, F6)
+
+A Settings row of three buttons, Small / Normal / Large (`SettingsTabChatTextSizeRow.tsx`), drawn under
+Screenshot quality and above Remember what I typed. It is built the way Screenshot quality and Voice replies
+are: one `Focusable` with `flow-children="horizontal"` holding three plain buttons.
+
+```
+Screenshot quality (Small / Balanced / Best detail)
+   | Down                                ^ Up
+Text size:   [Small]  [Normal]  [Large]      Left / Right move along the three
+   | Down                                ^ Up
+Remember what I typed (toggle)
+```
+
+- **Stops:** exactly three, the three buttons. The container and the paragraph above it are not stops.
+- **Moves:** none are written by hand. The row and its buttons carry no `onMoveUp` / `onMoveDown` /
+  `onMoveLeft` / `onMoveRight`, so Steam's own spatial walk decides every press: Left and Right stay inside the
+  row, Up and Down go to the neighbouring rows. That is why no press can be swallowed, and why nothing here is a
+  plain `focus()` across containers. The one hand-written Settings link (the UI scale Apply button to the
+  Screenshot quality row, Developer tab on) is untouched, because this row sits below Screenshot quality.
+- **A** (`onClick`) saves the choice. The saved one is drawn with the lighter fill and `aria-pressed`; the
+  words in the chat change at once, nothing reloads, and the ring stays on the button that was pressed.
+- **Test:** `SettingsTab.textSizeWalk.test.tsx` lists the tab's stops with the row in it (Developer tab off and
+  on): none twice, the three in order between Screenshot quality and Remember what I typed, no move handler on
+  the row. jsdom has no spatial walk, so the Deck walk (Down through the whole tab, then Up) is the real check.
+
 ### Where the ring starts when the plugin opens
 
 _Moved here from AGENTS.md on 2026-09-27, word for word, to keep that file under its size limit._

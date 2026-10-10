@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 784,
-  "edgeCount": 2356,
+  "fileCount": 787,
+  "edgeCount": 2364,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1945,9 +1945,19 @@
       ],
       "importedBy": []
     },
+    "src/components/SettingsTab.textSizeWalk.test.tsx": {
+      "imports": [
+        "src/components/SettingsTab.tsx",
+        "src/components/ringTestProps.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/SettingsTab.tsx": {
       "imports": [
         "src/components/SettingsTabAccentIntensityMenuPopover.tsx",
+        "src/components/SettingsTabChatTextSizeRow.tsx",
         "src/components/SettingsTabUiScaleSection.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
         "src/data/aiCharacterAccentIntensity.ts",
@@ -1969,6 +1979,7 @@
         "src/components/SettingsTab.clearBoxes.test.tsx",
         "src/components/SettingsTab.focusRing.test.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
+        "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/components/SettingsTabPresetSingleChip.test.tsx",
         "src/components/SettingsTabRememberTypedSwitch.test.tsx",
         "src/components/SettingsTabUiScaleHidden.test.tsx",
@@ -1984,6 +1995,22 @@
       ],
       "importedBy": [
         "src/components/SettingsTab.tsx"
+      ]
+    },
+    "src/components/SettingsTabChatTextSizeRow.test.tsx": {
+      "imports": [
+        "src/components/SettingsTabChatTextSizeRow.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/components/SettingsTabChatTextSizeRow.tsx": {
+      "imports": [
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/styles/settingsGlassButton.ts"
+      ],
+      "importedBy": [
+        "src/components/SettingsTab.tsx",
+        "src/components/SettingsTabChatTextSizeRow.test.tsx"
       ]
     },
     "src/components/SettingsTabConnectionTimeoutSlider.tsx": {
@@ -2203,7 +2230,8 @@
       ],
       "importedBy": [
         "src/components/SettingsDeveloperLeftoverRing.test.tsx",
-        "src/components/SettingsDeveloperWrappedRing.test.tsx"
+        "src/components/SettingsDeveloperWrappedRing.test.tsx",
+        "src/components/SettingsTab.textSizeWalk.test.tsx"
       ]
     },
     "src/context/UiScaleContext.tsx": {
@@ -2323,6 +2351,7 @@
         "src/components/PermissionsTab.test.tsx",
         "src/components/PermissionsTab.tsx",
         "src/components/SettingsTab.tsx",
+        "src/components/SettingsTabChatTextSizeRow.tsx",
         "src/components/SettingsTabConnectionTimeoutSlider.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
         "src/data/bonsaiSettingsNormalizers.ts",
@@ -6142,6 +6171,7 @@
         "src/components/PermissionDenyAction.tsx",
         "src/components/PermissionsTab.tsx",
         "src/components/SettingsTab.tsx",
+        "src/components/SettingsTabChatTextSizeRow.tsx",
         "src/components/SettingsTabUiScaleSection.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
         "src/features/chat-slots/ChatSlotDeleteModal.tsx",
@@ -6368,6 +6398,7 @@
         "src/components/SettingsTab.accentMenuRing.test.tsx",
         "src/components/SettingsTab.clearAllBack.test.tsx",
         "src/components/SettingsTab.clearBoxes.test.tsx",
+        "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
         "src/features/chat-slots/useChatSlotDeleteConfirm.test.tsx",
@@ -6458,6 +6489,7 @@
     "src/test-harness/steamRing.tsx": {
       "imports": [],
       "importedBy": [
+        "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/topStripHeightLock.test.tsx"

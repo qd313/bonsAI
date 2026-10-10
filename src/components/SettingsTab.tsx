@@ -24,6 +24,9 @@
  *     │                           SettingsTabUiScaleSection  │
  *     │ Screenshot quality     <- Save memory / Balanced /   │
  *     │                           Best detail                │
+ *     │ Text size              <- Small / Normal / Large,     │
+ *     │                           its own file, see          │
+ *     │                           SettingsTabChatTextSizeRow │
  *     │ Remember what I typed  <- one on/off switch          │
  *     │ Story spoilers         <- hide-until-tap toggle       │
  *     │ Suggestion chips       <- one chip vs two toggle      │
@@ -91,6 +94,7 @@ import {
 import { VoiceInputSettingsSection } from "./VoiceInputSettingsSection";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import { SettingsTabUiScaleSection } from "./SettingsTabUiScaleSection";
+import { SettingsTabChatTextSizeRow, type ChatTextSizeSetting } from "./SettingsTabChatTextSizeRow";
 import type { UiScaleProfileId } from "../data/uiScaleProfile";
 import type { VoiceSttModelId } from "../data/bonsaiSettingsSchema";
 import {
@@ -137,6 +141,9 @@ export type SettingsTabProps = {
   /** When a finished answer is read aloud on its own, without a Read aloud press (D99 call 3). */
   voiceReplyMode: VoiceReplyMode;
   setVoiceReplyMode: (v: VoiceReplyMode) => void;
+
+  /** How big the words in the chat are: small, normal or large (plan 87 call 3). */
+  chatTextSizeSetting: ChatTextSizeSetting;
 
   aiCharacterEnabled: boolean;
   setAiCharacterEnabled: (v: boolean) => void;
@@ -204,6 +211,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   setUnifiedInputPersistenceMode,
   voiceReplyMode,
   setVoiceReplyMode,
+  chatTextSizeSetting,
   aiCharacterEnabled,
   setAiCharacterEnabled,
   aiCharacterRandom,
@@ -370,6 +378,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           </div>
         </PanelSectionRow>
       </PanelSection>
+      <SettingsTabChatTextSizeRow setting={chatTextSizeSetting} />
       <PanelSection title="Remember what I typed">
         <PanelSectionRow>
           <ToggleField

@@ -286,6 +286,8 @@ const Content: React.FC = () => {
     unifiedInputPersistenceMode,
     voiceReplyMode,
     setVoiceReplyMode,
+    chatTextSize,
+    setChatTextSize,
     screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
@@ -997,6 +999,12 @@ const Content: React.FC = () => {
   });
 
 
+  // One prop for the Settings tab, not a value and a setter: the hand-down to the tabs is counted.
+  const chatTextSizeSetting = useMemo(
+    () => ({ value: chatTextSize, set: setChatTextSize }),
+    [chatTextSize, setChatTextSize],
+  );
+
   const settingsTab = useSettingsTabPayload({
     screenshotAttachmentPreset,
     setScreenshotAttachmentPreset,
@@ -1004,6 +1012,7 @@ const Content: React.FC = () => {
     setUnifiedInputPersistenceMode,
     voiceReplyMode,
     setVoiceReplyMode,
+    chatTextSizeSetting,
     aiCharacterEnabled,
     setAiCharacterEnabled,
     aiCharacterRandom,

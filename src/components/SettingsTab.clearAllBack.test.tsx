@@ -44,6 +44,7 @@ function buildProps(shell: ReturnType<typeof useBonsaiPluginShell>, clearAll: ()
     setUnifiedInputPersistenceMode: () => {},
     voiceReplyMode: "off",
     setVoiceReplyMode: () => {},
+    chatTextSizeSetting: { value: "normal", set: () => {} },
     aiCharacterEnabled: false,
     setAiCharacterEnabled: () => {},
     aiCharacterRandom: false,

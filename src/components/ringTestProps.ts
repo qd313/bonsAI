@@ -20,6 +20,7 @@ export function settingsProps(): SettingsTabProps {
     setUnifiedInputPersistenceMode: () => {},
     voiceReplyMode: "off",
     setVoiceReplyMode: () => {},
+    chatTextSizeSetting: { value: "normal", set: () => {} },
     aiCharacterEnabled: true,
     setAiCharacterEnabled: () => {},
     aiCharacterRandom: false,

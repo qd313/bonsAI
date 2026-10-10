@@ -35,6 +35,7 @@ export function useSettingsTabPayload({
   setUnifiedInputPersistenceMode,
   voiceReplyMode,
   setVoiceReplyMode,
+  chatTextSizeSetting,
   aiCharacterEnabled,
   setAiCharacterEnabled,
   aiCharacterRandom,
@@ -73,6 +74,7 @@ export function useSettingsTabPayload({
         setUnifiedInputPersistenceMode={setUnifiedInputPersistenceMode}
         voiceReplyMode={voiceReplyMode}
         setVoiceReplyMode={setVoiceReplyMode}
+        chatTextSizeSetting={chatTextSizeSetting}
         aiCharacterEnabled={aiCharacterEnabled}
         setAiCharacterEnabled={setAiCharacterEnabled}
         aiCharacterRandom={aiCharacterRandom}
@@ -105,6 +107,7 @@ export function useSettingsTabPayload({
       screenshotAttachmentPreset,
       unifiedInputPersistenceMode,
       voiceReplyMode,
+      chatTextSizeSetting,
       aiCharacterEnabled,
       aiCharacterRandom,
       aiCharacterPresetId,

@@ -116,6 +116,8 @@ function flashSaved(failed) {
   savedTimer = setTimeout(renderSaveState, 2400);
 }
 function renderSaveState() {
+  const warn = $("#local-warn");
+  if (warn) warn.hidden = Store.mode !== "local";
   const el = $("#save-state");
   if (!el) return;
   el.dataset.state = Store.mode;

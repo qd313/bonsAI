@@ -73,6 +73,9 @@ button, input, textarea, select { font: inherit; color: inherit; }
 #save-state { font-size: 13px; color: var(--ink-3); padding: 6px 10px; border-radius: 8px; border: 1px dashed var(--card-line); max-width: 46ch; }
 #save-state[data-state="cloud"], #save-state[data-state="ok"] { color: var(--leaf); border-style: solid; border-color: color-mix(in srgb, var(--leaf) 40%, transparent); }
 #save-state[data-state="bad"] { color: var(--no); }
+#local-warn { margin: 14px 0 0; padding: 12px 14px; border-radius: 10px; border: 2px solid var(--no); background: color-mix(in srgb, var(--no) 16%, var(--board)); color: var(--ink); font-size: 15px; }
+#local-warn b { color: #ffd2d2; display: block; font-size: 17px; margin-bottom: 2px; }
+#local-warn a { color: var(--focus); overflow-wrap: anywhere; }
 
 .keys { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 14px 0 0; padding: 0; list-style: none; color: var(--ink-2); font-size: 13.5px; }
 .keys kbd { font-family: var(--font-mono); font-size: 12px; background: var(--card); border: 1px solid var(--card-line); border-bottom-width: 2px; border-radius: 5px; padding: 1px 6px; color: var(--ink); }

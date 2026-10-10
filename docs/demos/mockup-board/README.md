@@ -46,6 +46,8 @@ readout, web permission, the SteamOS share path and the SteamOS hint card.
 
 ## How the review works
 
+**Open the page in a web browser signed in to claude.ai, not in the panel inside the Claude app.** Inside the app's panel the page cannot reach its saved picks, so Like, Not this and comments stay in that window only and are lost when the page reloads (found 2026-10-10: tab 8 and tab 1 round 2 picks were lost this way). The page now shows a red warning when this happens. The session doing the work should give the maintainer the link, not open the page in the app's panel for them.
+
 1. The maintainer opens one tab, starting with the easiest, and plays with each option.
 2. They press Like or Not this, and leave comments on the page or in chat.
 3. Claude reads the picks, changes the mock-up and updates the page. This repeats for a few rounds.

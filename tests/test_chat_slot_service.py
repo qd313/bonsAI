@@ -5,6 +5,7 @@ import unittest
 
 from backend.services.chat_slot_service import (
     MAX_CHAT_SLOTS,
+    ChatLimitReached,
     append_turn,
     create_slot,
     delete_slot,
@@ -469,11 +470,13 @@ class ChatSlotServiceTests(unittest.TestCase):
         assert reloaded is not None
         self.assertEqual(reloaded["origin_app_name"], "")
 
-    def test_prune_at_cap(self):
-        for i in range(MAX_CHAT_SLOTS + 2):
+    def test_nothing_is_pruned_at_the_cap(self):
+        # Plan 87 F2: the cap used to delete the oldest chat; it refuses now (test_chat_slot_limit.py).
+        for i in range(MAX_CHAT_SLOTS):
             create_slot(self.settings_dir, label=f"slot-{i}")
-        summaries = list_slot_summaries(self.settings_dir)
-        self.assertLessEqual(len(summaries), MAX_CHAT_SLOTS)
+        with self.assertRaises(ChatLimitReached):
+            create_slot(self.settings_dir, label="one too many")
+        self.assertEqual(len(list_slot_summaries(self.settings_dir)), MAX_CHAT_SLOTS)
 
     def test_delete_slot(self):
         slot = create_slot(self.settings_dir, label="delete-me")

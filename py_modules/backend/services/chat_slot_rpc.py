@@ -24,6 +24,8 @@ import asyncio
 from typing import Any
 
 from backend.services.chat_slot_service import (
+    MAX_CHAT_SLOTS,
+    ChatLimitReached,
     create_slot as chat_create_slot,
     decline_title_offer as chat_decline_title_offer,
     delete_slot as chat_delete_slot,
@@ -80,7 +82,8 @@ async def get_chat_slot(self, slot_id: str = ""):
 
 
 async def create_chat_slot(self, payload: Any = None):
-    """Create a new empty chat slot."""
+    """Create a new empty chat slot. At the limit nothing is made and nothing is deleted: the answer
+    is ``{"ok": False, "error": "chat_limit", "limit": 10}``, and the screen's picker takes it from there."""
     body = payload if isinstance(payload, dict) else {}
     settings_dir = self._chat_slots_settings_dir()
     origin_app_id = str(body.get("origin_app_id") or body.get("originAppId") or "").strip()
@@ -99,7 +102,10 @@ async def create_chat_slot(self, payload: Any = None):
         )
 
     async with self._chat_slots_store_lock:
-        slot = await asyncio.to_thread(_run)
+        try:
+            slot = await asyncio.to_thread(_run)
+        except ChatLimitReached:
+            return {"ok": False, "error": "chat_limit", "limit": MAX_CHAT_SLOTS}
     return {"ok": True, "slot": _payload_with_can_sum_up(slot)}
 
 

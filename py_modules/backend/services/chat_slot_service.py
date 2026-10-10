@@ -12,7 +12,7 @@ Used for: the handful of things the screen can ask the back end to do with a
 chat -- start a new one, switch to one, rename it, delete it -- and the code
 that records each question and answer as it happens, through `append_turn()`.
 
-Solves: Keeping a bounded, disk-backed set of chats -- eight at most, two
+Solves: Keeping a bounded, disk-backed set of chats -- ten at most, two
 hundred questions-and-answers at most in each -- written so a crash mid-save
 cannot corrupt a chat, and an index kept in step with the chats it lists.
 
@@ -24,7 +24,7 @@ How it works:
  1. Each chat is its own JSON file, named by its id and found through
     `slot_path()`. A small index file (`index_path()`) lists every chat's id,
     title and last-updated time, so the switcher can show a list without
-    opening eight files.
+    opening ten files.
  2. `create_slot()` makes a new chat: it works out a title with
     `heuristic_slot_label()` if none was given, writes the chat file with
     `save_slot()`, then adds it to the index with `_upsert_index_row()`.
@@ -38,8 +38,10 @@ How it works:
  5. Both `save_slot()` and `save_index()` write to a temporary file first and
     only swap it into place once the write has finished, so a crash or power
     loss mid-write cannot leave a half-written chat behind.
- 6. When a ninth chat would be created, `_prune_oldest_slot()` deletes the
-    least-recently-updated one first, keeping the count at eight.
+ 6. At ten chats, `create_slot()` refuses with `ChatLimitReached` and changes
+    nothing on disk (plan 87 F2). It used to delete the oldest chat without a
+    word. A chat is now removed only by `delete_slot()`, which the screen calls
+    after the person picked that chat and pressed Delete in the confirm box.
 
 Gotchas:
  - A chat's title comes from the question asked, not the game it was asked
@@ -63,7 +65,7 @@ from backend.services.chat_summary_title import MAX_SUGGESTED_TITLE_CHARS
 from backend.services.ollama_service import REASONING_CUT_NOTE, REASONING_TEXT_CAP_CHARS
 
 SCHEMA_VERSION = 1
-MAX_CHAT_SLOTS = 8
+MAX_CHAT_SLOTS = 10
 MAX_TURNS_PER_SLOT = 200
 MAX_TURN_TEXT_LEN = 120_000
 MAX_LABEL_LEN = 120
@@ -573,23 +575,9 @@ def _upsert_index_row(index: dict[str, Any], slot: dict[str, Any]) -> dict[str, 
     return {"version": SCHEMA_VERSION, "slots": rows[:MAX_CHAT_SLOTS]}
 
 
-def _prune_oldest_slot(settings_dir: str, index: dict[str, Any], logger: Any = None) -> dict[str, Any]:
-    rows = list(index.get("slots") or [])
-    if len(rows) < MAX_CHAT_SLOTS:
-        return index
-    rows.sort(key=lambda r: int(r.get("updated_at") or 0))
-    while len(rows) >= MAX_CHAT_SLOTS:
-        oldest = rows.pop(0)
-        sid = str(oldest.get("id", "") or "")
-        if sid:
-            try:
-                os.remove(slot_path(settings_dir, sid))
-            except FileNotFoundError:
-                pass
-            except OSError as exc:
-                if logger is not None:
-                    logger.warning("prune_chat_slot: could not remove %s: %s", sid, exc)
-    return {"version": SCHEMA_VERSION, "slots": rows}
+class ChatLimitReached(Exception):
+    """Ten chats are saved already. Raised instead of making room: only the person, by picking a
+    chat and pressing Delete, may remove one."""
 
 
 def create_slot(
@@ -603,7 +591,8 @@ def create_slot(
     logger: Any = None,
 ) -> dict[str, Any]:
     index = load_index(settings_dir, logger)
-    index = _prune_oldest_slot(settings_dir, index, logger)
+    if len(list(index.get("slots") or [])) >= MAX_CHAT_SLOTS:
+        raise ChatLimitReached(f"{MAX_CHAT_SLOTS} chats are saved already")
     now = int(time.time())
     sid = str(slot_id or "").strip() or str(uuid.uuid4())
     resolved_label = (label or "").strip() or heuristic_slot_label(first_question, app_name)
@@ -635,19 +624,27 @@ def ensure_slot(
     first_question: str = "",
     app_name: str = "",
     logger: Any = None,
-) -> dict[str, Any]:
+) -> dict[str, Any] | None:
+    """The chat with this id, made if it does not exist. ``None`` when it does not exist and ten
+    chats are saved already: nothing is made and nothing is deleted. The screen makes the chat
+    before it asks (and only through its picker at ten), so this is a safety net, not a path."""
     sid = _sanitize_slot_id(slot_id)
     existing = load_slot(settings_dir, sid, logger)
     if existing is not None:
         return existing
-    return create_slot(
-        settings_dir,
-        slot_id=sid,
-        origin_app_id=origin_app_id,
-        first_question=first_question,
-        app_name=app_name,
-        logger=logger,
-    )
+    try:
+        return create_slot(
+            settings_dir,
+            slot_id=sid,
+            origin_app_id=origin_app_id,
+            first_question=first_question,
+            app_name=app_name,
+            logger=logger,
+        )
+    except ChatLimitReached:
+        if logger is not None:
+            logger.warning("ensure_slot: %s chats are saved; not making a chat for %s", MAX_CHAT_SLOTS, sid)
+        return None
 
 
 def list_slot_summaries(settings_dir: str, logger: Any = None) -> list[dict[str, Any]]:

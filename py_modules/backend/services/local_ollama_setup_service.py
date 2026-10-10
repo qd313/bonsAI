@@ -57,6 +57,10 @@ How it works:
    as they arrive. If a pull fails, `_format_ollama_pull_failure()` cleans up the raw output —
    Ollama's progress display redraws the same line over and over with a spinner, which is noise
    for a person reading it — and puts the one useful sentence first.
+   After an Update replaced the program file, the Ollama that is already running is still the OLD
+   one until it is restarted, so the "restart" stage (`restart_server_onto_new_binary()`, in
+   ollama_server_restart.py) stops it and starts it again, and the run ends by writing the
+   version now answering and one plain result sentence into the status for the tab to show.
 5. Cancelling is checked constantly throughout every stage, and anything that goes wrong, or gets
    cancelled, is caught by one wrapping try/except and turned into a plain status a person can
    read on the tab, rather than an unhandled error.
@@ -88,6 +92,12 @@ from backend.ollama_routing import (
 )
 from backend.ollama_reply_limits import read_json_capped
 from backend.ollama_urls import normalize_ollama_base
+from backend.services.ollama_server_restart import (
+    ServeControl,
+    record_result,
+    restart_server_onto_new_binary,
+    try_restart_ollama_user_service,
+)
 
 OLLAMA_OFFICIAL_INSTALL_SH = "https://ollama.com/install.sh"
 DEFAULT_BASE = normalize_ollama_base("127.0.0.1:11434")[2]
@@ -213,6 +223,7 @@ def ensure_ollama_server_listening_before_pull(
     *,
     max_listen_probe_iterations: int = 90,
     force_fresh_serve: bool = False,
+    extra_env: Optional[dict[str, str]] = None,
 ) -> bool:
     """
     ``ollama pull`` requires the HTTP API. User-prefix tarball installs do not register systemd;
@@ -235,7 +246,7 @@ def ensure_ollama_server_listening_before_pull(
         time.sleep(0.5)
 
     shell_log("[bonsAI] No Ollama server on localhost:11434 — starting ``ollama serve`` (needed for pulls) …")
-    env = _env_for_ollama_cli(ollama_bin)
+    env = {**_env_for_ollama_cli(ollama_bin), **(extra_env or {})}
     try:
         _OLLAMA_SERVE_PROC = subprocess.Popen(
             [ollama_bin, "serve"],
@@ -267,6 +278,22 @@ def ensure_ollama_server_listening_before_pull(
     shell_log("[bonsAI] Ollama server did not become ready in time. Try ``ollama serve`` from Konsole.")
     terminate_setup_started_ollama_serve()
     return False
+
+
+def _serve_control(shell_log: Callable[[str], None], ollama_bin: str) -> ServeControl:
+    """What ollama_server_restart.py needs from this file to replace a running server."""
+    return ServeControl(
+        start=lambda env: ensure_ollama_server_listening_before_pull(
+            shell_log, ollama_bin, lambda: False, extra_env=env
+        ),
+        stop_own=terminate_setup_started_ollama_serve,
+        own_pid=lambda: (
+            _OLLAMA_SERVE_PROC.pid
+            if _OLLAMA_SERVE_STARTED_BY_SETUP and _OLLAMA_SERVE_PROC is not None and _OLLAMA_SERVE_PROC.poll() is None
+            else None
+        ),
+        cli_env=_env_for_ollama_cli(ollama_bin),
+    )
 
 
 def _ollama_state_home_dir() -> Path:
@@ -672,30 +699,6 @@ def run_official_linux_install(shell_log: Callable[[str], None]) -> tuple[bool, 
         return False, str(exc)
 
 
-def try_restart_ollama_user_service(shell_log: Callable[[str], None]) -> None:
-    """Best-effort systemd user unit start for common SteamOS / Linux layouts."""
-    for args in (
-        ["systemctl", "--user", "try-restart", "ollama"],
-        ["systemctl", "--user", "start", "ollama"],
-    ):
-        shell_log(f"[bonsAI] Trying: {' '.join(args)}")
-        try:
-            r = subprocess.run(
-                args,
-                capture_output=True,
-                text=True,
-                timeout=30,
-                check=False,
-                env=_env_for_host_system_tools(),
-            )
-            if r.stdout.strip():
-                shell_log(r.stdout.strip())
-            if r.stderr.strip():
-                shell_log(r.stderr.strip())
-        except Exception as exc:
-            shell_log(str(exc))
-
-
 """Braille spinner frames Ollama draws while it works. Ordinary characters, so the ANSI strip
 leaves them; a failure after ten redraws otherwise repeats one word ten times."""
 _SPINNER_FRAME_RE = re.compile(r"[⠀-⣿]+")
@@ -923,7 +926,16 @@ async def run_local_setup(
                 cancelled=cancelled,
                 force_reinstall=is_update_installed,
             )
+        installed_now = state.get("stage") == "install"
         await emit_stage(state.get("stage", "install"))
+
+        # The new program file does nothing until the server that is already running is replaced
+        # (Deck 2026-10-09: file 0.40.2, server still 0.34.1 after three days).
+        restart_info: dict[str, Any] = {}
+        if installed_now and probe_ollama_http_ok(DEFAULT_BASE):
+            state["stage"] = "restart"
+            await emit_stage("restart")
+            restart_info = await asyncio.to_thread(lambda: restart_server_onto_new_binary(log, ollama_bin, _serve_control(log, ollama_bin)))
 
         state["stage"] = "service"
         await emit_stage("service")
@@ -959,6 +971,7 @@ async def run_local_setup(
                 state["phase"] = "done"
                 state["done"] = True
                 state["current_tag"] = ""
+                record_result(state, prof, [], restart_info, ollama_bin, _env_for_ollama_cli(ollama_bin))
                 log("[bonsAI] Local Ollama update finished (binary refresh only).")
                 await emit_stage("complete")
                 return
@@ -982,6 +995,7 @@ async def run_local_setup(
         state["phase"] = "done"
         state["done"] = True
         state["current_tag"] = ""
+        record_result(state, prof, tags, restart_info, ollama_bin, _env_for_ollama_cli(ollama_bin))
         log("[bonsAI] Local Ollama setup finished.")
         await emit_stage("complete")
 
@@ -1043,6 +1057,9 @@ def new_local_ollama_setup_state() -> dict[str, Any]:
         "current_tag": "",
         "log_tail": [],
         "error": "",
+        "result_line": "",
+        "ollama_version": "",
+        "needs_device_restart": False,
         "done": True,
         "accepted": False,
         "cancel_requested": False,

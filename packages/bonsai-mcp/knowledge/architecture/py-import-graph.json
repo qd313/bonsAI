@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 118,
-  "edgeCount": 322,
+  "fileCount": 119,
+  "edgeCount": 324,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -57,15 +57,15 @@
       "count": 10
     },
     {
+      "path": "py_modules/backend/ollama_reply_limits.py",
+      "count": 9
+    },
+    {
       "path": "py_modules/backend/ollama_urls.py",
       "count": 9
     },
     {
       "path": "py_modules/backend/constants.py",
-      "count": 8
-    },
-    {
-      "path": "py_modules/backend/ollama_reply_limits.py",
       "count": 8
     },
     {
@@ -429,6 +429,10 @@
       "count": 1
     },
     {
+      "path": "py_modules/backend/services/ollama_server_restart.py",
+      "count": 1
+    },
+    {
       "path": "py_modules/backend/services/ollama_stream_failures.py",
       "count": 1
     },
@@ -607,6 +611,7 @@
         "py_modules/backend/services/ollama_embed_service.py",
         "py_modules/backend/services/ollama_health_probe.py",
         "py_modules/backend/services/ollama_preload_service.py",
+        "py_modules/backend/services/ollama_server_restart.py",
         "py_modules/backend/services/ollama_stop_service.py",
         "py_modules/backend/services/response_verify.py",
         "py_modules/backend/services/token_accounting_service.py"
@@ -1102,7 +1107,8 @@
         "py_modules/backend/ollama_reply_limits.py",
         "py_modules/backend/ollama_routing.py",
         "py_modules/backend/ollama_urls.py",
-        "py_modules/backend/services/ollama_catalog_service.py"
+        "py_modules/backend/services/ollama_catalog_service.py",
+        "py_modules/backend/services/ollama_server_restart.py"
       ],
       "importedBy": [
         "main.py",
@@ -1333,6 +1339,14 @@
       "importedBy": [
         "main.py",
         "py_modules/backend/services/ollama_local_setup_rpc.py"
+      ]
+    },
+    "py_modules/backend/services/ollama_server_restart.py": {
+      "imports": [
+        "py_modules/backend/ollama_reply_limits.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/local_ollama_setup_service.py"
       ]
     },
     "py_modules/backend/services/ollama_service.py": {

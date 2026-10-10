@@ -495,6 +495,7 @@
     "tests/test_ollama_reply_limits.py",
     "tests/test_ollama_service.py",
     "tests/test_ollama_stop_keeps_model_loaded.py",
+    "tests/test_ollama_update_restart.py",
     "tests/test_plugin_data_reset.py",
     "tests/test_plugin_zip_corpus_guard.py",
     "tests/test_power_question_instructions.py",

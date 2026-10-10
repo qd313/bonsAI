@@ -520,6 +520,40 @@ run: missing "how it works" headers, two files past their growth limits, four mo
 testing.md past its size ceiling. A clean-up round was needed before anyone could push. Put the quick check in the
 landing script, and in every helper's gate list.
 
+**How a night this size went (plan 87, 2026-10-09/10, the maintainer asked for this to be written down).** One
+session on Opus ran about 40 helpers over the night (23 code changes landed, five of them second or third rounds), at most 9 editing at once, beside one Deck driver and one
+stand-in driver, plus a bookkeeper six times; it wrote no code itself. What the PC bore: with nine helpers each
+running only its own tests, the quick check took 213 s at the worst moment (23 s idle) and two test files timed out
+once under load; landings were never slowed past about four minutes. Twice a landing's commit hook could not write a
+generated file (`test-inventory.json`) because Windows held it for a moment: continuing the pick again worked both
+times, and running `land_lane.sh` with the branch tip as its base runs only the gates afterwards.
+- **Haiku helpers paid for themselves on mechanical fixes:** four Haiku-high lanes (the small-caps label, the
+  publish script flag, a doubled heading, a held Left on the notes card) each landed first time with no Sonnet
+  step-in. The one Haiku reader (Explore type) could not write a file and put its list in its report instead; it
+  matched the plan's paraphrased check names by content and caught one that was wrong ("two-chip" was "one-chip").
+- **The stand-in earned its keep in one place:** it is the only machine that can be wiped, and the wipe found a real
+  fresh-install bug the Deck could never have shown (the help chip unreachable by the D-pad), then proved the fix and
+  closed the quick-start check there. Elsewhere it cost more than it saved: presses land about 10 s late, the
+  screenshot tool does not work on Windows, and a 30-press sweep took ten minutes.
+- **Budget reads:** at go 18 % of the five-hour window and 27 % of the week; 26 % / 28 % at 23:45; 8 % / 32 % after the
+  reset at 00:20; 25 % / 34 % at 01:07; 49 % / 37 % at 02:35; 67 % / 39 % at 04:12, with the last Deck block done. The 60 % weekly line was never near.
+- **What would change the runbook:**
+  - A helper wrote one file into the shared checkout instead of its copy, which stopped a landing. The rules file now
+    says "only absolute paths inside your copy" in so many words; repeat it in every brief.
+  - The bookkeeper works in a copy of its own and is landed like a helper, so it never fights the landing script's
+    clean-tree check. The bookkeeper agent type was not loaded in this session: a general helper with the bookkeeper
+    file as its instructions did the same job.
+  - Give every game block the line "unload the Deck's AI first": a game plus the loaded model left 1,971 MB, and
+    unloading it freed 6.7 GB (plan 81 knew this; the first runbook tonight did not say it).
+  - The send-question script writes into the first text box on the panel: on the Ollama tab that is the PC address.
+    Main tab only.
+  - A fix that replaced `focus()` on the page's element prototype was refused at review: that page is Steam's shared
+    Quick Access page. The same fix through one shared helper the tabs call passed review and the Deck.
+  - Two layout lanes failed on the Deck twice each and went up one model step with the numbers in hand, as the
+    routing table says; the measurement each time came from a page-side logger read 1.8 s after each press, because
+    the sweep's immediate reads catch Steam's glide half way.
+  - Phone notifications were switched off in the app, so none reached the maintainer; check that before a night run.
+
 ---
 
 ## 5. Design and screen work

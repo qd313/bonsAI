@@ -169,6 +169,15 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Evidence `docs/test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`.
   Unshelves when: a new sighting.
 
+- ★ `[focus]` `[watching]` **The first suggestion chip reads 33 to 67 percent visible to the probe while its words churn** — seen once, 2026-10-10 (plan 87 Deck block 6b). Evidence `docs/test-evidence/plan87-P87-SMOKE-FINAL.json`.
+  Unshelves when: a new sighting.
+
+- ★ `[focus]` `[watching]` **In the AI models window, B did not close it; only Done did** — seen once, 2026-10-10 (plan 87 Deck block 6b). Evidence `docs/test-evidence/plan87-P87-DECK-RESTORED.json`.
+  Unshelves when: a new sighting.
+
+- ★ `[focus]` `[watching]` **A fresh answer shows two "Show details" stops, the answer's own and the slot's** — seen once, 2026-10-10 (plan 87 Deck block 6b). Evidence `docs/test-evidence/plan87-P87-SAVED-WALKS.json`.
+  Unshelves when: a new sighting.
+
 - ★ `[platform]` `[watching]` **After a deploy, opening the plugin with the rig's own call failed three times before it
   worked** — seen once, 2026-10-01 (plan 78, block 3b). A tool note, also in [mcp-setup.md](mcp-setup.md).
   Evidence `docs/test-evidence/plan78-P78-TALL-SECTION-LOOP-AFTER.json`.

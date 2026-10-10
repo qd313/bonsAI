@@ -640,6 +640,13 @@ Code: `ContextChipLadder.tsx` (the moves), `chipLadderGrid.ts` (`packChipRows`, 
     tab; measured, never focused), as far as the open box's end stays readable. Then Left, Up and the toggle
     itself move nothing. That move only ever goes down: a later look never scrolls back up after Steam's glide
     (a box end left hidden shows on the first Down).
+  - **The ring coming in from outside is placed too.** Down from the toggle and Up from the Hide details line
+    focus the ladder's root, which hands the ring to the open chip. Steam stamps its ring a tick after that focus
+    event, so the arrival used to read the ring as still outside and do nothing: the first chip's box, entered
+    from the toggle, stayed 25.8 px behind the dock, and Developer details, entered from below, kept its end
+    hidden while the next Down left (the memory "Down already showed this box's end" was never reset). Now the
+    first look at an arrival places the chip without asking, and the later looks still stand down once the ring
+    has left. So from below: Steam's glide, then the first Down shows the box's end, the next Down leaves.
 - **The held block** (`bonsai-chip-ladder-hold`, unchanged): a step to a shorter box near the pane's end would let
   the browser clamp the scroll and jump the whole row; an empty block after the box keeps the pane's height for
   that step. Its two later checks stand down once the placement has scrolled for the step, so they never undo it.

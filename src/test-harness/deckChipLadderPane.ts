@@ -74,9 +74,23 @@ export interface ChipLadderPaneOptions {
    * Steam's glide as the chip walks measured it (plan87-P87-F3-CHIPS-GRID.json and -try2.json, 2026-10-10): a
    * small stop that takes focus with its top above Steam's line (the pane's top plus 116) is glided until its top
    * is on the line, even when its bottom is on or below the line (chip 2 at 144.1 to 168.5 moved 23.5; the toggle
-   * at 110.3 moved 57.8; a row 0.8 px over the line moved 0.8). Any other stop follows `rule`.
+   * at 110.3 moved 57.8; a row 0.8 px over the line moved 0.8). Any other stop follows `rule`. Whether a stop is
+   * over the line is read when it takes focus, in both timings: twice the Deck left Developer details where the
+   * plugin's own lift put it after it took focus, its top 24.4 px over the line (row 22.2 in both runs).
    */
   glideTopAboveLine?: boolean;
+  /**
+   * Steam's ring marker: the `gpfocus` class follows a DOM focus one tick later, not during the focus event
+   * (measured on the device, 2026-08-04: spoilerFenceRegistry.ts's `focusSpoilerFence`). Off: no marker, and the
+   * plugin's ring checks fall back to the DOM's focus, which moves at once.
+   */
+  ringMarker?: boolean;
+}
+
+/** Put Steam's ring marker on `el` now (where the ring starts, before a walk). */
+export function ringOn(el: Element): void {
+  el.ownerDocument.querySelectorAll(".gpfocus").forEach((e) => e.classList.remove("gpfocus"));
+  el.classList.add("gpfocus");
 }
 
 export type ScreenBox = { top: number; bottom: number; left: number; right: number };
@@ -205,12 +219,16 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
     }
   };
 
-  /* Steam's glide to a stop that took focus: the measured top-line rule first when it is on, else `rule`. */
-  const glide = (el: HTMLElement) => {
+  /* Is this stop over Steam's line, for the measured top-line rule (a small stop whose top is above it)? */
+  const line = paneTop + STEAM_LINE_PX;
+  const overLine = (el: HTMLElement) => {
     const r = el.getBoundingClientRect();
-    const line = paneTop + STEAM_LINE_PX;
-    if (o.glideTopAboveLine && r.bottom - r.top < 100 && r.top < line - ON_THE_LINE_PX) {
-      pane.scrollTop = Math.max(0, pane.scrollTop + r.top - line);
+    return Boolean(o.glideTopAboveLine) && r.bottom - r.top < 100 && r.top < line - ON_THE_LINE_PX;
+  };
+  /* Steam's glide to a stop that took focus: its top onto the line when it was over it at focus, else `rule`. */
+  const glide = (el: HTMLElement, wasOverLine: boolean) => {
+    if (wasOverLine) {
+      pane.scrollTop = Math.max(0, pane.scrollTop + el.getBoundingClientRect().top - line);
       return;
     }
     steamGlide(el, pane, o.rule, { paneTop, dockTop, steamTopMargin: o.steamTopMargin });
@@ -219,6 +237,7 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
 
   /* Steam's glide to the stop that took focus, then the plugin's lift, once the press is over. */
   let landed: HTMLElement | null = null;
+  let landedOverLine = false;
   let decided: number | null = null;
   const onFocusIn = (event: FocusEvent) => {
     if (!pane.isConnected) {
@@ -226,12 +245,14 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
       return;
     }
     const target = event.target as HTMLElement;
+    if (o.ringMarker) window.setTimeout(() => ringOn(target), 0);
     if (!pane.contains(target)) return;
     landed = target;
+    landedOverLine = overLine(target);
     decided = null;
     if (o.glideDecidedOnFocus && glides(landed)) {
       const before = pane.scrollTop;
-      glide(landed);
+      glide(landed, landedOverLine);
       if (pane.scrollTop !== before) decided = pane.scrollTop;
       pane.scrollTop = before;
     }
@@ -241,7 +262,7 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
     const el = landed;
     landed = null;
     if (!glides(el)) return;
-    if (!o.glideDecidedOnFocus) glide(el);
+    if (!o.glideDecidedOnFocus) glide(el, landedOverLine);
     else if (decided !== null) pane.scrollTop = decided;
     if (o.dockLift ?? true) liftForFocus(el);
   };

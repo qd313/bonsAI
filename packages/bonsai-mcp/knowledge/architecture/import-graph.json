@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 831,
-  "edgeCount": 2537,
+  "edgeCount": 2538,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -180,6 +180,7 @@
         "src/components/ContextChipLadder.tsx",
         "src/test-harness/deckChipLadderPane.ts",
         "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/focusPerTurnRow.ts",
         "src/utils/inputTransparency.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -8362,6 +8363,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/ContextChipLadder.deckTry2.test.tsx",
         "src/components/ContextChipLadder.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",

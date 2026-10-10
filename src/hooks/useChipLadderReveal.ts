@@ -39,7 +39,8 @@ const SETTLE_PASS_DELAYS_MS = [150, 300, 900];
  * ladder or a newer press has come.
  *
  * 1. A focus coming in from outside the ladder is the ring's arrival: place the open chip and its box
- *    (chipLadderPlacement.ts) now and on the settle schedule.
+ *    (chipLadderPlacement.ts) now and on the settle schedule. The first look does not ask where Steam's ring
+ *    is (Steam stamps it a tick after the focus event); the later looks do.
  * 2. A step bumps the generation, so passes still queued from an earlier press do nothing.
  * 3. After the render a step caused, before the screen is drawn: size the held block (4), then place the
  *    new chip and its box, then look again on the next two frames and on the settle schedule.
@@ -75,10 +76,14 @@ export function useChipLadderReveal(
     return Boolean(ladder && elementHasGamepadFocus(ladder));
   }, [ladderElRef]);
 
-  /** One placement pass, for this generation only. */
+  /**
+   * One placement pass, for this generation only, while the ring is in the ladder. `arriving`: the first look at
+   * an arrival, run inside the focus event itself, before Steam has stamped its ring on the chip (see
+   * revealOnArrival); the focus coming in is the evidence there, and every later pass asks the ring again.
+   */
   const place = useCallback(
-    (generation: number, firstPass = false) => {
-      if (generation !== generationRef.current || !ringInLadder()) return;
+    (generation: number, firstPass = false, arriving = false) => {
+      if (generation !== generationRef.current || !(arriving || ringInLadder())) return;
       const ladder = ladderElRef.current;
       if (placeOpenChip(openChipRef.current(), bodyElRef.current, holdElRef.current, firstPass, ladder)) placedRef.current = true;
     },
@@ -87,20 +92,28 @@ export function useChipLadderReveal(
 
   /** Place now, on the next frame, and on the settle schedule. */
   const placeAsItSettles = useCallback(
-    (generation: number) => {
-      place(generation, true);
+    (generation: number, arriving = false) => {
+      place(generation, true, arriving);
       requestAnimationFrame(() => place(generation));
       SETTLE_PASS_DELAYS_MS.forEach((ms) => window.setTimeout(() => place(generation), ms));
     },
     [place],
   );
 
+  /*
+   * The ring coming in from outside the chips (Down from the "This answer | Session" toggle, Up from the Hide details
+   * line in the dock). This must not ask where Steam's ring is: Steam stamps its ring on the new element a tick
+   * AFTER the focus event (measured 2026-08-04, spoilerFenceRegistry.ts's focusSpoilerFence), so inside the event
+   * the ring still reads as outside. It used to ask, and returned. On the Deck (2026-10-10, plan87-P87-F3-CHIPS-
+   * GRID-try2.json) the first chip's box, entered from the toggle, stayed 25.8 px behind the dock; and Developer
+   * details, entered from below, kept its end hidden while the next Down left, because the arrival's new generation
+   * never began and Down still remembered showing that box's end before the ring went out.
+   */
   const revealOnArrival = useCallback(() => {
-    if (!ringInLadder()) return;
     generationRef.current += 1;
     placedRef.current = false;
-    placeAsItSettles(generationRef.current);
-  }, [placeAsItSettles, ringInLadder]);
+    placeAsItSettles(generationRef.current, true);
+  }, [placeAsItSettles]);
 
   /** Run a step (the ladder moving the ring itself): it cancels queued passes and is no arrival. */
   const duringStep = useCallback(<T>(step: () => T): T => {

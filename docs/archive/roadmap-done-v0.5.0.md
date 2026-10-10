@@ -71,6 +71,17 @@ _Plan 87's Deck blocks 4 and 5 closes (six entries, the 2026-10-10 block below) 
 
 _Plan 87's Deck blocks 6a and 6c closes (seven entries, the 2026-10-10 block below) keep their full entries here, copied line for line apart from a closing note, when they moved out of [roadmap.md](../roadmap.md)'s Verify list on 2026-10-10._
 
+_The maintainer's checks-page answers (one entry, the 2026-10-10 block below) keep the full Bugs entry here, copied line for line apart from a closing note, when it moved out of [roadmap.md](../roadmap.md)'s Bugs list on 2026-10-10._
+
+### Closed 2026-10-10 (the maintainer's checks-page answers after plan 87)
+
+- ★★ `[focus]` **Up from the bottom of the About tab cannot get back to the top** — **OPEN, found by the maintainer 2026-10-06 on the Deck.**
+  With the ring on the last control of the About tab, "Support my Steam Sale habit" under the QR picture, Up does nothing, so the top of the tab is out of reach by D-pad. Evidence `docs/test-evidence/maintainer-2026-10-06-about-tab-bottom.png`.
+  Earlier notes (2026-10-07 plan 82: not reproduced with the rig, three of three; 2026-10-09 plan 87: Up went to "Bugs & Feature Requests" three of three, but the Deck was on its monitor) are in [the long notes](../roadmap-details.md#up-from-the-bottom-of-the-about-tab-cannot-get-back-to-the-top).
+  **2026-10-10 (plan 87 B10, `0e652638`):** in the other-tabs check the About pane never scrolled going Up; it now follows the ring, which may also fix this entry. Row **P87-B10-TAB-SCROLL** passed for About on the monitor in block 6c (largest move 47.6 down, 174.2 up; `docs/test-evidence/plan87-P87-B10-TAB-SCROLL-try3.json`); still unproven on the Deck's own screen.
+  **2026-10-10 (plan 87 Deck block 4, build `8608954d`, the Deck on its monitor): passed 3 of 3.** Up always left "Support my Steam Sale habit" and reached the tab bar with the version line in view. The Deck's own screen, where the maintainer saw it, is still not checked, and no fix was built for it, so the entry stays in Bugs (house rule 3). Evidence `docs/test-evidence/plan87-P87-ABOUT-UP.json`.
+  **Closed 2026-10-10 (the maintainer's checks-page answers after plan 87), passed on the Deck's own screen:** see the Done line in [roadmap.md](../roadmap.md#done-for-v060). The maintainer: "works as expected". It had passed 3 of 3 on the monitor (`docs/test-evidence/plan87-P87-ABOUT-UP.json`); the plan 87 tab-scroll fix `0e652638` most likely fixed it. Evidence for the pass: the maintainer on the Deck's own screen, 2026-10-10, checks page.
+
 ### Closed 2026-10-10 (plan 87, Deck blocks 6a and 6c)
 
 - ★★★ `[layout]` `[focus]` **Pack the Show details chips into a denser grid, walked in four directions** — **VERIFY (failed in Deck block 4; second round landed), built 2026-10-10 (plan 87 F3, `07a612cd`, `d8b8cc27`, `9ce76991`, `9b9d21b2`). Was OPEN, filed by the maintainer 2026-10-09.**

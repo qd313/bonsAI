@@ -511,3 +511,21 @@ change the runbook.
   GitHub latest-release setting, publishing, the microphone with a real voice, three looks on the Deck's own screen
   (all checks tonight ran on the monitor), and the calls in the report. Nothing pushed; 29 helper copies (`p87*`) wait
   for the maintainer's word.
+- **2026-10-10 afternoon: the maintainer's answers** (checks page, about 16:34 to 16:55 UTC). Each decision is in the
+  roadmap; here is the list.
+  - **GitHub:** marked done on the checks page, but at 13:00 the same day `gh release list` still showed
+    `knowledge-base-v1` as Latest, so the install link still fails (the Bugs entry stays open). **Publish:** pushed.
+  - **Microphone, real voice:** base.en much better, tiny.en still bad (new Features entry: base.en as the default).
+  - **Looks on the Deck's own screen:** About Up passed (now in Done); the first heading passed; the D-pad walk of Settings
+    and Developer failed, better but not right (new Bugs entries: the page moving at every press then jumping at the end, and
+    Left or Right on Text size scrolling the page).
+  - **Looks:** all four passed (the tab order, the + and delete icons, Text size, the denser chips grid). Text size should
+    reach all the text (new Bugs entry, acceptable for now).
+  - **Calls:** ten chats (asked again: the question was unclear); Update Ollama with downloads off should show both the
+    failed line and the box (new Features entry); "Main" shown elsewhere (not a big deal, left as is); the delete box (new
+    Features entry: title and one row of buttons); Steam settings pages (fine as they are, so the scroll-to-setting entry moved
+    to Shelved; the Internet link opens System, a new Bugs entry; every page to be checked, a new Verify entry); the denser
+    chips (take less room, mockups first, a new Features entry); the tall-section walk (Read aloud need not be part of it); the
+    rating stops (explained again: Retry, "Spoiled it", "Bad info" and Read aloud are not stops by design); notifications (fine
+    as off).
+  - **Helper copies:** all 30 deleted, each clean and fully landed; the branches are kept.

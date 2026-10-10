@@ -17,6 +17,9 @@ Long notes for knowledge-base items are in [roadmap-kb-details.md](roadmap-kb-de
   [Decision D93](audit/maintainer-decisions-locked.md#d93--locked-2026-09-11--the-deck-is-the-gate-the-preview-is-shelved-device-checks-are-queued) · [Plan 51](archive/51-refactor-round-two.md).
   Unshelves when: the preview loads the plugin on the maintainer's machine.
 
+- ★ `[ui]` **Picking a setting from the settings card opens the right Steam settings page but does not scroll to that setting** — **shelved 2026-10-10, a limit of Steam the maintainer accepted.** A on "Enable GPU Crash Report Collection" opened Steam's System page at the top, with the toggle about 320 px below the screen edge (found 2026-10-08 on the Deck, plan 83; evidence `docs/test-evidence/plan83-P83-J1-SETTINGS-CARD.json`). Steam's link and route calls take only a page name; the Decky libraries and the web show no way to open at, or scroll to, one setting, and a read-only probe of Steam's own page found no settings route or deep-link reader (plan 87 B6, 2026-10-09; evidence `docs/test-evidence/plan87-B6-SETTINGS-PROBE.json`); nothing was built (the maintainer's call 9, plan 87). The maintainer's call 2026-10-10 (checks page): fine as long as it opens the right page. The wrong-page bug (A on "Enable Wi-Fi" opens System, not Internet) is separate and stays in the roadmap's Bugs.
+  Unshelves when: Steam offers a way to open a settings page at one setting.
+
 - ★★ `[ui]` **Glance view: the answer alone, in big text** — **shelved 2026-09-12.** From the popup, the menu would show
   only the answer, large, with the chips, question box and tab bar out of the way. Open, read, close in a couple of
   seconds; B returns to the full panel. The maintainer shelved it: too much UI change, not ready.

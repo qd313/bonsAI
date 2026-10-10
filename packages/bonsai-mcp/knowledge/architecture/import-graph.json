@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 809,
-  "edgeCount": 2448,
+  "fileCount": 813,
+  "edgeCount": 2456,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3759,6 +3759,7 @@
     "src/features/plugin-shell/TabBodyFocusRoot.tsx": {
       "imports": [
         "src/features/plugin-shell/tabTitles.tsx",
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
@@ -3767,6 +3768,15 @@
         "src/index.tsx",
         "src/test-harness/tabBodyWalk.tsx"
       ]
+    },
+    "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx": {
+      "imports": [
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx",
+        "src/test-harness/tabBodyDeckGeometry.ts",
+        "src/test-harness/tabBodyWalk.tsx"
+      ],
+      "importedBy": []
     },
     "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx": {
       "imports": [
@@ -4207,6 +4217,15 @@
       ],
       "importedBy": [
         "src/index.tsx"
+      ]
+    },
+    "src/features/plugin-shell/useTabBodyFocusScroll.ts": {
+      "imports": [
+        "src/utils/chatPanelScroll.ts",
+        "src/utils/tabBodyScrollPlan.ts"
+      ],
+      "importedBy": [
+        "src/features/plugin-shell/TabBodyFocusRoot.tsx"
       ]
     },
     "src/features/plugin-shell/useUnifiedInputBehaviors.ts": {
@@ -6669,6 +6688,7 @@
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/downloads/downloadNotice.test.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
+        "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
@@ -6753,13 +6773,15 @@
         "src/features/chat-title/nameRowIcons.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/topStripHeightLock.test.tsx",
-        "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx"
+        "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
+        "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx"
       ]
     },
     "src/test-harness/tabBodyDeckGeometry.ts": {
       "imports": [],
       "importedBy": [
         "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
+        "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
         "src/test-harness/tabBodyWalk.tsx"
       ]
     },
@@ -6769,7 +6791,8 @@
         "src/test-harness/tabBodyDeckGeometry.ts"
       ],
       "importedBy": [
-        "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx"
+        "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
+        "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx"
       ]
     },
     "src/types.d.ts": {
@@ -7707,6 +7730,7 @@
         "src/features/chat-title/ChatsMenu.tsx",
         "src/features/details-slot/DetailsSlot.tsx",
         "src/features/details-slot/detailsSlotStore.ts",
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/hooks/useChipLadderReveal.ts",
         "src/hooks/useDockClearanceOnFocus.ts",
         "src/hooks/useKbNotesFold.ts",
@@ -9067,6 +9091,19 @@
       "importedBy": [
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/utils/stripSoftContinueCue.test.ts"
+      ]
+    },
+    "src/utils/tabBodyScrollPlan.test.ts": {
+      "imports": [
+        "src/utils/tabBodyScrollPlan.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/tabBodyScrollPlan.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
+        "src/utils/tabBodyScrollPlan.test.ts"
       ]
     },
     "src/utils/tabBodyViewport.test.ts": {

@@ -35,6 +35,11 @@ const STEAM_PAD_TOP = 116;
 const STEAM_PAD_BOTTOM = 80;
 /** The heading's place at the top of every tab (plan87-M4-OTHER-TABS.json: top 24.8 with the pane at 24). */
 const HEADING: [top: number, height: number] = [0.8, 19.5];
+/** A toggle's switch is 22 px high in every tab (plan87-M4-OTHER-TABS.json). */
+const TOGGLE_HEIGHT = 22;
+/** A toggle's row: its top 10 px above the switch's, its description running up to this far below the switch's top. */
+const ROW_ABOVE_PX = 10;
+const ROW_BELOW_PX = 92;
 
 interface TabWalkOptions {
   tab: TabName;
@@ -42,6 +47,11 @@ interface TabWalkOptions {
   steam: SteamFocusScroll;
   /** Mount the plugin's root (default), or a bare wrapper: the tab as it is without the fix. */
   withRoot?: boolean;
+  /**
+   * What Steam scrolls into view when the ring lands: the control itself ("leaf", the default) or, for a toggle,
+   * the whole row around it with its description ("row", as the Deck's toggles came to rest in plan87-M4).
+   */
+  steamTarget?: "leaf" | "row";
 }
 
 interface Landing {
@@ -81,9 +91,17 @@ export function walkTab(opts: TabWalkOptions): TabWalk {
   const body = (
     <>
       <div data-heading="" />
-      {geometry.stops.map(([, , name], i) => (
-        <button key={i} className="Focusable" data-stop={i} aria-label={name} />
-      ))}
+      {geometry.stops.map(([, height, name], i) => {
+        const leaf = <button key={i} className="Focusable" data-stop={i} aria-label={name} />;
+        /* A toggle sits in a row of its own, a Focusable holding only it. */
+        return opts.steamTarget === "row" && height === TOGGLE_HEIGHT ? (
+          <div key={i} className="Panel Focusable" data-row={i}>
+            {leaf}
+          </div>
+        ) : (
+          leaf
+        );
+      })}
     </>
   );
   const Root = ({ children }: { children: React.ReactNode }) =>
@@ -117,6 +135,16 @@ export function walkTab(opts: TabWalkOptions): TabWalk {
   };
   place(heading, HEADING[0], HEADING[1]);
   stops.forEach((el, i) => place(el, geometry.stops[i]![0], geometry.stops[i]![1]));
+  /** What Steam is looking at for stop `i`: the stop, or its row (which stops short of the next stop). */
+  const steamElement = (i: number): HTMLElement => {
+    const row = pane.querySelector<HTMLElement>(`[data-row="${i}"]`);
+    if (!row) return stops[i]!;
+    const [top] = geometry.stops[i]!;
+    const nextTop = geometry.stops[i + 1]?.[0] ?? Infinity;
+    place(row, top - ROW_ABOVE_PX, Math.min(ROW_BELOW_PX, nextTop - 6 - top) + ROW_ABOVE_PX);
+    return row;
+  };
+  stops.forEach((_, i) => steamElement(i));
 
   /** Steam's own scroll-into-view for the control the ring just landed on. */
   const steamScrolls = (el: HTMLElement) => {
@@ -141,7 +169,7 @@ export function walkTab(opts: TabWalkOptions): TabWalk {
     act(() => {
       el.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
     });
-    steamScrolls(el);
+    steamScrolls(steamElement(i));
     const r = el.getBoundingClientRect();
     landings.push({ press: landings.length, stop: i, direction, moved: Math.abs(scrollTop - before), top: r.top, bottom: r.bottom });
     if (i === 0) headingAtFirst.push(headingTop());

@@ -386,7 +386,7 @@ Your chats
   on a control that is gone. Nothing else leaves: no press from the menu can reach the answer behind it, the dock
   or Steam's own rail.
 - **A on a chat** opens it (the Main tab's `onChatSlotSelect`); on the open chat it only closes the menu.
-- **The actions do what the saved-chats row did.** New chat is the row's create (`onChatSlotCreate`). Rename chat
+- **The actions do what the saved-chats row did.** New chat is the row's create (`onChatSlotCreate`); at ten chats it opens the picker described after this section. Rename chat
   opens the rename box and Delete chat the two-button delete box (Cancel first). Save to Desktop note opens the save
   window. Sum up this chat starts the Session tab's own Sum up job, a second way in to that button: the Session tab
   keeps its button. A greyed action is still a stop and A on it does nothing: Rename, Delete and Save at the
@@ -404,6 +404,56 @@ Your chats
 - **LT and RT are refused while the menu is open.** Leaving the Main tab closes it.
 - **Not backed by a device row yet.** Rows P84-NAME-01, P84-NAME-02, P84-NAME-03, P84-MENU-01 and the LT/RT half of
   P84-HINTS-01 (plan 84 § 6) are in the lane report.
+
+### New chat at ten chats: the picker (plan 87 F2)
+
+The plugin keeps ten chats. With fewer than ten, New chat in the chats menu makes a chat at once, as before. At
+ten, it opens **a picker in a box of its own** (`ChatSlotPickerModal.tsx`, opened through `showModal` the way the
+rename and delete boxes are), and nothing is made or deleted yet. Code: `src/features/chat-slots/useStartNewChat.tsx`
+(the one function every "start a new chat" goes through; the + beside the chat's name, plan 87 F5, calls it too),
+`ChatSlotPickerModal.tsx`, `useChatSlotDeleteConfirm.tsx`. The back end refuses a create at ten (`chat_limit`), so
+no path can delete a chat to make room.
+
+```
+the chats menu: A on New chat (the ring goes back to the name first, as for every action)
+   v
+You have 10 chats                      <- the picker box (ModalRoot)
+  [ chat 1 (newest)          now ]     Steam walks the rows itself: Up/Down between siblings
+  [ chat 2                   2 h ]     the ring opens on the first row, the newest chat
+  ...
+  [ chat 10                  Sep 30 ]
+  [ Cancel ]                           last row
+   | A on a chat: the Delete chat? box opens over the picker
+   v
+Delete chat slot?                      <- the usual box (ModalRoot), two buttons
+  [ Cancel ]   <- the ring opens here (first in the box)
+  [ Delete ]
+```
+
+- **Stops.** The picker: the ten chats (newest first, the names the chats menu shows, and when each last changed),
+  then Cancel. The box: Cancel, then Delete. Every stop is a sibling in its box, so Steam's own Up and Down walk
+  them; the picker has **no move handlers of its own**, and Left and Right are Steam's. The rows sit in a list that
+  scrolls (tall as 46% of the screen) and Steam scrolls the focused row into view.
+- **A** (`onOKButton` on the row's `Focusable`) or a tap (`onClick`) acts once. A on a chat opens the Delete box for
+  that chat and **deletes nothing**. A on Cancel (picker or box) keeps everything.
+- **B anywhere** (the `ModalRoot`'s `onCancel`) keeps all ten chats and changes nothing: from the picker it closes the
+  picker; from the box it closes the box **and the picker under it**, so one B from the box lands back on the name,
+  not in the picker.
+- **Delete** (the only press that removes a chat) deletes the picked chat, and only if that worked makes the new chat
+  (it becomes the open one, on top), then closes the box and the picker. If the delete does not go through, no
+  chat is made. The session is saved once more after the new chat is made, because closing a box rebuilds the plugin
+  from the save made when it opened.
+- **Where the ring lands.** After Delete, after Cancel and after B alike: **on the chat's name in Decky's bar**, by
+  Steam's transfer (`returnRingToChatName`), through the box-return registry under the id "chat-slot-rename" that
+  the rename and delete boxes use. The memory of where to return lives in that module, outside every component,
+  because closing a Decky box rebuilds the tab behind it. The menu closed before the picker opened, so it is not
+  there to return to. After Delete the name shows the new chat ("New chat").
+- **LT and RT at ten chats** do not step onto the new-chat spot (an empty chat that a first question would make
+  into a saved one): a question asked there would need a new chat, and at ten that has to go through this picker.
+  They still walk the ten chats.
+- **Not backed by a device row yet.** The Deck check: with ten chats, New chat shows the picker; B cancels and ten
+  remain; a pick then A on Cancel keeps ten; a pick then Delete leaves ten with a fresh chat on top, the picked
+  chat's file gone and no other chat file changed.
 
 ### The tab bar in Steam's strip, and Decky's bar per tab (plan 84 step 6)
 

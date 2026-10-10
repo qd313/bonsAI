@@ -20,6 +20,7 @@
  */
 import { useRef } from "react";
 
+import { MAX_CHAT_SLOTS } from "../chat-slots/chatSlotLimit";
 import type { ChatListRow } from "../chat-sum-up/chatSumUpModel";
 import type { ChatTitleActions } from "./chatTitleStore";
 import { chatPlace } from "./useChatTitlePublisher";
@@ -50,7 +51,9 @@ export function chatSwitchStep(position: number, count: number, step: -1 | 1): n
  *
  * 1. Work out where the open chat is (`chatPlace`); a chat not in the list yet counts as the
  *    new-chat spot, so RT still reaches the newest chat.
- * 2. Step one way (`chatSwitchStep`); at an end, nothing happens.
+ * 2. Step one way (`chatSwitchStep`); at an end, nothing happens. At ten chats the new-chat spot is not
+ *    an end of the walk at all: a question asked there would need a new chat, and at ten that has to
+ *    go through the picker (useStartNewChat.tsx), never through a silent create.
  * 3. Onto the new-chat spot: only show it. Onto a saved chat: leave the spot and select the chat,
  *    unless it is the one already underneath, which needs no reload.
  */
@@ -65,6 +68,7 @@ export function useChatSwitchActions(source: ChatSwitchSource): ChatTitleActions
       const from = chatPlace(list, s.activeSlotId, s.atCreate) ?? 0;
       const to = chatSwitchStep(from, list.length, step);
       if (to === null) return;
+      if (to === 0 && list.length >= MAX_CHAT_SLOTS) return;
       if (to === 0) {
         s.setAtCreate(true);
         return;

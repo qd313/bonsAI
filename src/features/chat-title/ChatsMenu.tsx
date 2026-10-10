@@ -27,7 +27,8 @@
  *   - Inside: every stop is a sibling in one container, so a move is a plain focus(); the moves
  *     themselves are chatsMenuModel.ts's.
  *   - Out: Up from the first chat, B anywhere, or any action: Steam's transfer back onto the name
- *     (chatNameNav.ts), then the menu closes. An action that opens a box (rename, delete, save) hands
+ *     (chatNameNav.ts), then the menu closes. An action that opens a box (rename, delete, save, and New
+ *     chat at ten chats, which opens the picker) hands
  *     the ring to the name first, and the box gives it back there when it closes, by Steam's transfer
  *     too (`returnRingToChatName`; a plain focus() left it on Decky's back arrow on the Deck).
  */
@@ -39,6 +40,7 @@ import { takeHolderFocus } from "../../utils/chatTranscriptNavHelpers";
 import type { NavRefHolder } from "../../utils/navFocusRegistry";
 import { elementHasGamepadFocus } from "../../utils/uiDocument";
 import { useChatSlotDeleteConfirm } from "../chat-slots/useChatSlotDeleteConfirm";
+import { useStartNewChat } from "../chat-slots/useStartNewChat";
 import { useChatSlotRenameModal } from "../chat-slots/useChatSlotRenameModal";
 import { sumUpButtonView, type ChatSumUpState } from "../chat-sum-up/chatSumUpModel";
 import {
@@ -148,6 +150,16 @@ export function ChatsMenu(props: ChatsMenuProps): React.ReactElement {
     onDeleteSlot: props.onDeleteSlot ?? (async () => false),
   });
 
+  /* New chat: at once below ten chats; at ten the picker asks which chat to drop (useStartNewChat.tsx). */
+  const startNewChat = useStartNewChat({
+    chats,
+    createSlot: async () => props.onCreateSlot?.(),
+    deleteSlot: props.onDeleteSlot ?? (async () => false),
+    setAtCreate: props.setAtCreate,
+    onBeforeNestedDeckyModal: props.onBeforeNestedDeckyModal,
+    onCompleteNestedDeckyModalClose: props.onCompleteNestedDeckyModalClose,
+  });
+
   const sumUpView = sumUpButtonView({ state: props.sumUp, answerInFlight: props.answerInFlight });
   const openLabel = atCreate ? null : chat.name;
   /** Greyed: still a stop, A does nothing. Save without the permission is greyed but still opens its window. */
@@ -165,8 +177,7 @@ export function ChatsMenu(props: ChatsMenuProps): React.ReactElement {
     const slotId = activeSlotId!;
     leaveToName();
     if (id === "new") {
-      props.setAtCreate(false);
-      void props.onCreateSlot?.();
+      startNewChat(chatNameElement(), returnRingToChatName);
     } else if (id === "rename") {
       openRenameModal(slotId, openLabel ?? "", chatNameElement(), returnRingToChatName);
     } else if (id === "delete") {

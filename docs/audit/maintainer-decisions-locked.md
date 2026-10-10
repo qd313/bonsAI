@@ -2182,3 +2182,45 @@ with tabs under it (K, L), a chat row of its own under the tabs (M), the chat's 
 aloud, in the chips row or in the ask box (N, O, P, Q), the other three tab bars (T1, T2, T4), a New chat button or a
 count box balancing the arrow (U1, U2), the other Read aloud places (W1 to W4), and, for the chat's name, the menu
 arrow as a corner button (X2) and slimmer corner buttons (X3).
+
+### D127 — LOCKED 2026-10-09 (raised 2026-10-09) — Plan 87, six features, every bug the rig can reach, and the checks on two machines: the seventeen calls
+
+Made by the maintainer on 2026-10-09, late evening, answering a numbered list in chat before going to bed, while
+[plan 87](../planning/87-features-bugs-and-two-test-machines.md) was written. The plan's own § 2 has the same list
+with the three defaults the planning session took where an answer left room.
+
+1. **Scope:** every bug a session or the rig can act on, the one open knowledge-base bug included, the six features
+   (the Main tab named "bonsAI" in small caps; no more silent loss of the oldest chat; the Show details chips in a
+   denser grid walked in four directions; the tab bar in a fixed order; the + and delete icons at the ends of the
+   chat's name row; adjustable text size in Settings), and every check the rig can close on its own.
+2. **The three "mock-ups first" items are built tonight from the plan's reading,** one commit each, with alternatives
+   drawn for the morning. The tab bar keeps today's look but never wraps its drawing, so Main is always at the far
+   left and About at the far right; **LB on Main still jumps to About.** The + and delete icons are quick actions at
+   the two ends of the chat's name row, and the chats menu keeps both actions. The chips grid packs the seven chips
+   by measured width with Left and Right inside a row and Up and Down between rows. The Ollama Update and Install
+   both run in place with a progress line and no popup.
+3. **Text size:** a new, simpler Settings row (small, normal, large) that scales only the words in the chat, built
+   apart from the UI scale section that plan 86 removes.
+4. **"bonsAI" in small caps** is the Main tab's name in the tab bar at the top, that label only.
+5. **New chat at the limit:** the limit rises from eight to ten, and at ten the person picks which chat to drop
+   (the maintainer's picks iii and iv; the pick goes through the usual Delete chat? box, the plan's default).
+6. **The chip boxes' last lines behind the question box:** the details must stay readable, with a smooth scroll,
+   even if the row moves a little.
+7. **Left open:** the two reload-under-a-game entries and the sentence readable for a second before its cover.
+8. **Up at the bottom of the About tab** was reached by D-pad only.
+9. **The settings card jump:** the lane reports what Steam allows; no change if a link cannot scroll to a setting.
+10. **This PC is the second test machine** (the stand-in `this-pc`): Steam here set to offline mode and Big Picture
+    opened by the maintainer at about 23:05.
+11. **A pretend microphone** may be tried for at most 90 minutes; the mic bugs may still end up the maintainer's to
+    verify.
+12. **Budget line:** no new helpers past 60 percent of the weekly limit, or 75 percent of the five-hour window.
+13. **Notifications:** one after every landing batch, one when truly blocked, one for the morning report.
+14. **Prepared setups allowed:** a small model pulled onto this PC's Ollama for one check; "Clear all plugin data"
+    only on the stand-in, never the Deck.
+15. **The mock-up board session** is stopped by the maintainer before this one starts.
+16. **The session runs in a new Opus 5.5 extra-high session.** The planning was done on Fable 5.1, above the house
+    rule for a one-to-three-star session; said once at the start, the maintainer kept it.
+17. **No cloud helpers tonight.** Everything runs on this PC.
+
+**At Go:** nothing is pushed; the maintainer publishes. The earlier calls stand: nothing moves to Done on its tests
+alone (D124 call 2), and the cut choice menu waits for a hand check (D123).

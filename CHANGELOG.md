@@ -94,7 +94,7 @@ All notable changes to this project are documented in this file.
 - **A + and a delete icon sit at the two ends of the chat's name row,** reachable with Left and Right from the name. Passed on the Deck 2026-10-10 (row P87-F5-NAME-ROW).
 - **The slot above the question box meets the same stop going Down as it did going Up.** Owes its Deck check (row P87-B1-SLOT-SAME-STOPS).
 - **On a new empty chat the D-pad can reach the "How to use bonsAI" chip** above the question box. Passed on the Deck 2026-10-10 (row P87-EMPTY-CHAT-CHIPS).
-- **A quiet speaker's question no longer stops growing after three or four seconds,** and base.en works (it only looked dead because it was slower). Passed on the Deck 2026-10-10 (row P87-VOICE-QUIET-SENTENCE).
+- **A quiet speaker's question no longer stops growing after three or four seconds,** and base.en works (it only looked dead because it was slower). Passed on the Deck 2026-10-10 with a recorded sentence (row P87-VOICE-QUIET-SENTENCE); with a real voice on tiny.en it still stops early, so the bug is open again.
 - **Pressing the mic while a speech model is still downloading is turned away** with "The speech model is still downloading. Try again when it finishes." Passed on the Deck 2026-10-10 (row P87-VOICE-DOWNLOAD-REFUSED).
 - **Developer-only: a file in the settings folder points the mic button at another audio source** (for a pretend microphone). No Deck check of its own.
 - **The first heading of a tab is no longer left half faded under the tab bar.** Passed on the Deck 2026-10-10 (row P87-B9-HEADING).

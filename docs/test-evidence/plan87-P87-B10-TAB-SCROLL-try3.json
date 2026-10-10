@@ -1,0 +1,66 @@
+{
+ "row": "P87-B10-TAB-SCROLL (round two, try3)",
+ "build_commit": "26f22530 (deck_deploy at the start of block 6c)",
+ "deck_time_local": "2026-10-10 03:30-03:36",
+ "screen": "MONITOR live (page 855 x 766). Scroller on every tab = _TabContentsScroll, clientHeight 741, so a third is 247 px.",
+ "setup": "Test chat open on Main, chips closed. Moves: RB to Ollama, RB to Settings (done first, as the runbook says), then LB back to Ollama, RB x2 to Permissions, RB to Developer, RB to About. On each tab: Down one press at a time to the last control (plus one dead press), then Up one press at a time back to the bar. Every number is read 1.5 s after the press by a page-side reader (a 100 ms logger also ran; it was cleared at the end). Only direction presses, LB and RB were sent. No A on any tab. Note: after RB onto Settings the ring landed on the first control ('Adjust UI automatically', scrollTop 0), not on the tab bar; on Ollama, Permissions, Developer and About it was on the tab bar.",
+ "pressed": ["RB x2", "Settings: DOWN x15 (last one dead), UP x15", "LB", "Ollama: DOWN x14 (last one dead), UP x13", "RB x2", "Permissions: DOWN x6 (last one dead), UP x6", "RB", "Developer: DOWN x19 (last one dead), UP x19", "RB", "About: DOWN x6 (last one dead), UP x6", "LB x5 back to Main"],
+ "seen": {
+  "settings": {
+   "scrollHeight": 2133,
+   "scrollTop_per_stop_down": "0 (Adjust UI automatically), 0, 66.4, 193, 321.1, 451.6, 584.4, 720.3 (tiny.en), 819.5, 920.3, 1060.2, 1203.1, 1347.7, 1392.2 (Clear cache, max 1392)",
+   "largest_move_down_px": 144.6,
+   "scrollTop_per_stop_up": "1379.7, 1363.3, 1254.7, 1144.5, 1032.0, 918.0 (tiny.en), 801.6, 683.6, 557.0, 414.8, 265.6, 114.8, 0, 0 (bar)",
+   "moves_up_px": [-12.5, -16.4, -108.6, -110.2, -112.5, -114.0, -116.4, -118.0, -126.6, -142.2, -149.2, -150.8, -114.8],
+   "largest_move_up_px": 150.8,
+   "named_press": "The press from the tiny.en voice row up to the toggle above it (Show one chip instead of two) is now 116.4 px (918.0 to 801.6). In try 2 it was 325.8. The 266 press (Set screenshot quality up to Apply UI scale) is 150.8.",
+   "dead_presses": "one after Clear cache (box 686.9 to 724.9, scrollTop unchanged), none anywhere else; no stop twice",
+   "extra": "Down order differs slightly from try 2 in the voice rows: tiny.en 720.3 (try 2 759.4), base.en 819.5, Reinstall voice engine 920.3. Stops are all inside the pane (lowest bottom 724.9)."
+  },
+  "ollama": {
+   "scrollHeight": 1718,
+   "scrollTop_per_stop_down": "0 (Run AI on this Deck), 7.8, 43, 96.1, 159.4, 225, 311.7, 400, 490.6, 612.5, 746.9, 864.1, 977.3 (AI models, box bottom 700.5)",
+   "largest_move_down_px": 134.4,
+   "scrollTop_per_stop_up": "965.6, 949.2, 864.8, 778.1, 689.8, 568.0, 444.5, 318.8, 219.5, 118.0, 7.8, 0, 0 (bar)",
+   "largest_move_up_px": 125.7,
+   "named_press": "Reply style to Update knowledge base: 121.8 px (689.8 to 568.0); it was 367.1 px in block 4 and 121.8 in try 2.",
+   "dead_presses": "one after AI models (no scroll change), none elsewhere; no stop twice"
+  },
+  "permissions": {
+   "scrollHeight": 786,
+   "scrollTop_per_stop_down": "0, 7.8, 18, 30.5, 44.5 (Internet downloads, last, box bottom 609.6)",
+   "largest_move_down_px": 14.0,
+   "scrollTop_per_stop_up": "44.5, 44.5, 44.5, 44.5, 0, 0 (bar)",
+   "largest_move_up_px": 44.5,
+   "dead_presses": "one after the last control; none twice"
+  },
+  "developer": {
+   "scrollHeight": 2820,
+   "scrollTop_per_stop_down": "0, 92.2, 189.1, 288.3, 389.8, 493.0, 598.4, 750.0, 914.1, 1079.7, 1247.7, 1418.0, 1590.6, 1698.4, 1792.2, 1846.1, 1960.9, 2079.7 (Steam Web API key text box, bottom 700.6)",
+   "largest_move_down_px": 172.6,
+   "scrollTop_per_stop_up": "2079.7 (Same as text), 2079.7 (300), 2028.9, 1969.5, 1827.3, 1676.6, 1560.9, 1436.7, 1325.0, 1108.6, 889.8, 735.9, 579.7, 421.9, 261.7, 92.2, 0, 0 (bar)",
+   "largest_move_up_px": 218.8,
+   "largest_up_steps": "218.8 (ResizeObserver row, 1108.6 to 889.8) and 216.4 (A - Main row, 1325.0 to 1108.6). Same as try 2; block 4 had 250.7.",
+   "dead_presses": "one after the last control (a text box); none twice. No A was pressed on the text box."
+  },
+  "about": {
+   "scrollHeight": 915,
+   "scrollTop_per_stop_down": "0 (Follow system), 39.8, 82, 126.6, 174.2 (Support my Steam Sale habit, bottom 690.7)",
+   "largest_move_down_px": 47.6,
+   "scrollTop_per_stop_up": "174.2, 174.2, 174.2, 0, 0 (bar)",
+   "largest_move_up_px": 174.2,
+   "dead_presses": "one after the last control (focus and scrollTop unchanged); none twice"
+  },
+  "visible_stops": "Every settled stop box on every tab lies inside the pane (top 24 to 765); lowest bottom seen 724.9 (Settings, Clear cache). scrollTop was 0 at the first control on all five tabs."
+ },
+ "expected": "On every tab no press moves the pane 247 px or more in either direction; no dead press (apart from the one after the last control), no stop twice, every stop inside the pane, scrollTop 0 at the first control.",
+ "verdict": [
+  "settings: PASS - largest Down 144.6 px, largest Up 150.8 px; the tiny.en press that was 325.8 px in try 2 is now 116.4 px.",
+  "ollama: PASS - largest Down 134.4 px, largest Up 125.7 px.",
+  "permissions: PASS - largest 14.0 px down, 44.5 px up.",
+  "developer: PASS - largest Down 172.6 px, largest Up 218.8 px.",
+  "about: PASS - largest 47.6 px down, 174.2 px up.",
+  "overall B10 round two: PASS on all five tabs."
+ ],
+ "side_effect": "none (direction presses, LB and RB only; no A). The ring was left on the bonsAI tab bar at the end."
+}

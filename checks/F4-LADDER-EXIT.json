@@ -2,15 +2,31 @@
   "formatVersion": 2,
   "name": "F4-LADDER-EXIT",
   "tool": "deck_runSequence",
-  "savedAt": "2026-09-27T20:51:36.352Z",
-  "buildHash": "sha256:ee22f939e767b1acdb4b7ad154c9cf728c2b2711df53344647c5848b0c6176db",
+  "savedAt": "2026-10-10T07:58:33.004Z",
+  "buildHash": "sha256:7b0cc28ffcce898f2d43478efb40819a55e8817596a872d460ce9575e4eef386",
   "buildHashInputs": [
     "assets/logo.png",
     "assets/named-chat-slot-idea.png",
     "assets/qrcode.png",
     "assets/readme-hero.png",
+    "assets/readme/ai-models.png",
+    "assets/readme/ask-about-a-screenshot.gif",
+    "assets/readme/ask-about-your-game.gif",
+    "assets/readme/attach-menu.png",
+    "assets/readme/find-a-setting.gif",
+    "assets/readme/hero.png",
+    "assets/readme/knowledge-library.png",
+    "assets/readme/permissions-2.png",
+    "assets/readme/permissions.png",
+    "assets/readme/reply-ready.gif",
+    "assets/readme/show-details.gif",
+    "assets/readme/spoiler.gif",
+    "assets/readme/strategy-checklist.gif",
+    "assets/readme/sum-up-chat.gif",
+    "assets/readme/switch-chats.gif",
+    "assets/readme/where-ai-runs.png",
     "bin/README.md",
-    "defaults/defaults.txt",
+    "dist/THIRD-PARTY-LICENSES.txt",
     "dist/assets/bonsai-logo-2615d0ec.svg",
     "dist/assets/qrcode-05e4d5b7.png",
     "dist/index.js",
@@ -21,6 +37,7 @@
     "py_modules/backend/__init__.py",
     "py_modules/backend/constants.py",
     "py_modules/backend/ollama_connectivity.py",
+    "py_modules/backend/ollama_reply_limits.py",
     "py_modules/backend/ollama_routing.py",
     "py_modules/backend/ollama_urls.py",
     "py_modules/backend/scripts/read_host_clipboard.sh",
@@ -35,13 +52,17 @@
     "py_modules/backend/services/async_task_lifecycle.py",
     "py_modules/backend/services/background_request_state.py",
     "py_modules/backend/services/bonsai_stream_tags.py",
+    "py_modules/backend/services/branch_menu_example_guard.py",
     "py_modules/backend/services/capabilities.py",
     "py_modules/backend/services/chat_memory_service.py",
     "py_modules/backend/services/chat_memory_step.py",
     "py_modules/backend/services/chat_slot_rpc.py",
     "py_modules/backend/services/chat_slot_service.py",
     "py_modules/backend/services/chat_sum_up_job.py",
+    "py_modules/backend/services/chat_summary_plan.py",
     "py_modules/backend/services/chat_summary_service.py",
+    "py_modules/backend/services/chat_summary_tidy.py",
+    "py_modules/backend/services/chat_summary_title.py",
     "py_modules/backend/services/chat_turn_recorder.py",
     "py_modules/backend/services/clipboard_service.py",
     "py_modules/backend/services/compat_topic_router.py",
@@ -55,14 +76,18 @@
     "py_modules/backend/services/kb_attached_notes.py",
     "py_modules/backend/services/kb_followup_memory.py",
     "py_modules/backend/services/kb_not_in_notes_notice.py",
+    "py_modules/backend/services/kb_notes_footers.py",
+    "py_modules/backend/services/kb_other_game_named.py",
     "py_modules/backend/services/knowledge_base_cards.py",
     "py_modules/backend/services/knowledge_base_chips.py",
     "py_modules/backend/services/knowledge_base_game_match.py",
+    "py_modules/backend/services/knowledge_base_game_tip.py",
     "py_modules/backend/services/knowledge_base_schema.py",
     "py_modules/backend/services/knowledge_base_search.py",
     "py_modules/backend/services/knowledge_base_service.py",
     "py_modules/backend/services/local_ollama_setup_service.py",
     "py_modules/backend/services/local_ollama_teardown_service.py",
+    "py_modules/backend/services/local_setup_progress_text.py",
     "py_modules/backend/services/media_desktop_rpc.py",
     "py_modules/backend/services/model_policy.py",
     "py_modules/backend/services/network_service.py",
@@ -77,10 +102,15 @@
     "py_modules/backend/services/ollama_local_autostart_service.py",
     "py_modules/backend/services/ollama_local_setup_rpc.py",
     "py_modules/backend/services/ollama_mdns_discovery_service.py",
+    "py_modules/backend/services/ollama_pc_models.py",
     "py_modules/backend/services/ollama_preload_service.py",
     "py_modules/backend/services/ollama_prompts.py",
+    "py_modules/backend/services/ollama_pull_resume_service.py",
+    "py_modules/backend/services/ollama_server_restart.py",
     "py_modules/backend/services/ollama_service.py",
     "py_modules/backend/services/ollama_stop_service.py",
+    "py_modules/backend/services/ollama_stream_failures.py",
+    "py_modules/backend/services/ollama_try_order_prune.py",
     "py_modules/backend/services/ollama_window_fit.py",
     "py_modules/backend/services/plugin_data_reset.py",
     "py_modules/backend/services/prompt_budget_service.py",
@@ -97,6 +127,9 @@
     "py_modules/backend/services/screenshot_media.py",
     "py_modules/backend/services/settings_service.py",
     "py_modules/backend/services/shortcut_setup_commands.py",
+    "py_modules/backend/services/soft_continue_repeat_trim.py",
+    "py_modules/backend/services/soft_continue_spoiler_join.py",
+    "py_modules/backend/services/spoiler_empty_label_marks.py",
     "py_modules/backend/services/spoiler_risk_service.py",
     "py_modules/backend/services/spoiler_title_profiles.py",
     "py_modules/backend/services/spy_confession_service.py",
@@ -107,11 +140,13 @@
     "py_modules/backend/services/strategy_guide_parse.py",
     "py_modules/backend/services/strategy_spoiler_policy.py",
     "py_modules/backend/services/tdp_service.py",
+    "py_modules/backend/services/terse_bare_menu.py",
     "py_modules/backend/services/token_accounting_service.py",
     "py_modules/backend/services/transparency_service.py",
     "py_modules/backend/services/vac_check_commands.py",
     "py_modules/backend/services/voice_audio_capture_service.py",
     "py_modules/backend/services/voice_engine_build_service.py",
+    "py_modules/backend/services/voice_level_gate.py",
     "py_modules/backend/services/voice_model_download_service.py",
     "py_modules/backend/services/voice_read_aloud_service.py",
     "py_modules/backend/services/voice_rpc.py",
@@ -130,284 +165,307 @@
         "expect": ".bonsai-sumup-btn"
       },
       {
-        "press": "DOWN",
-        "label": "row1"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row2"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row3"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row4"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row5"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row6"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row7"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row8"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row9"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row10"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row11"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row12"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row13"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row14"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row15"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row16"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row17"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row18"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row19"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row20"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row21"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row22"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row23"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row24"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row25"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row26"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row27"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row28"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row29"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row30"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row31"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row32"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row33"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row34"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row35"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row36"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row37"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row38"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row39"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row40"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row41"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row42"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row43"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row44"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row45"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row46"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row47"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row48"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row49"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row50"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row51"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row52"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row53"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row54"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row55"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row56"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row57"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row58"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row59"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row60"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row61"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row62"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row63"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row64"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row65"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row66"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row67"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row68"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row69"
+        "press": "DOWN"
       },
       {
-        "press": "DOWN",
-        "label": "row70"
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
+      },
+      {
+        "press": "DOWN"
       },
       {
         "press": "DOWN",
@@ -417,48 +475,42 @@
       {
         "press": "DOWN",
         "label": "ladder chip 1",
-        "expect": ".bonsai-chip-ladder",
+        "expect": ".bonsai-chip-ladder-chip",
         "requireVisible": true
       },
       {
         "press": "DOWN",
         "label": "ladder chip 2",
-        "expect": ".bonsai-chip-ladder",
+        "expect": ".bonsai-chip-ladder-chip",
         "requireVisible": true
       },
       {
         "press": "DOWN",
         "label": "ladder chip 3",
-        "expect": ".bonsai-chip-ladder",
+        "expect": ".bonsai-chip-ladder-chip",
         "requireVisible": true
       },
       {
         "press": "DOWN",
         "label": "ladder chip 4",
-        "expect": ".bonsai-chip-ladder",
+        "expect": ".bonsai-chip-ladder-chip",
         "requireVisible": true
       },
       {
         "press": "DOWN",
         "label": "ladder chip 5",
-        "expect": ".bonsai-chip-ladder",
+        "expect": ".bonsai-chip-ladder-chip",
         "requireVisible": true
       },
       {
         "press": "DOWN",
-        "label": "ladder chip 6",
-        "expect": ".bonsai-chip-ladder",
+        "label": "exit to Hide details",
         "requireVisible": true
       },
       {
         "press": "DOWN",
-        "label": "exit to suggestion chip",
-        "expect": ".bonsai-preset-glass",
-        "requireVisible": true
-      },
-      {
-        "press": "DOWN",
-        "label": "question box"
+        "label": "question box",
+        "expect": "input.DialogInput"
       },
       {
         "press": "DOWN",
@@ -473,77 +525,97 @@
   },
   "expected": {
     "ok": true,
-    "ranSteps": 81,
-    "totalSteps": 81,
-    "passed": 81,
+    "ranSteps": 111,
+    "totalSteps": 111,
+    "passed": 111,
     "failed": 0,
     "visited": [
-      "<DIV> \"This answerSession · 71\"",
-      "<DIV> \"Sum up this chat\"",
-      "<DIV> \"wheatley fight\"",
-      "<DIV> \"what does the pickaxe do\"",
-      "<DIV> \"what is waiting at the end of the game\"",
-      "<DIV> \"how do i beat the antlion guard\"",
-      "<DIV> \"how do i tame a horse in half life 2\"",
-      "<DIV> \"How do I beat Megaera?\"",
-      "<DIV> \"what about her second phase\"",
-      "<DIV> \"how do i beat the bone hydra in hades\"",
-      "<DIV> \"black mesa how do i get across the electrified w\"",
-      "<DIV> \"how do i beat the gonarch in black mesa\"",
-      "<DIV> \"what does the gravity gun do in half-life 2\"",
-      "<DIV> \"what should i know about the boss past the cryst\"",
-      "<DIV> \"in hades, what should i know about the boss guar\"",
-      "<DIV> \"black mesa how do i get past the electrified wat\"",
-      "<DIV> \"in hollow knight how do i beat the broken vessel\"",
-      "<DIV> \"walk me through every step needed to clear this\"",
-      "<DIV> \"what should i focus on first when starting a bra\"",
-      "<DIV> \"explain the complete weapon upgrade priority ord\"",
-      "<DIV> \"why does my controller stop responding sometimes\"",
-      "<DIV> \"what settings should i check if a game keeps cra\"",
-      "<DIV> \"how do i free up storage space when my sd card i\"",
-      "<DIV> \"why is the frame rate unstable when i turn on th\"",
-      "<DIV> \"what should i do if my save file did not sync to\"",
-      "<DIV> \"my game keeps crashing whenever i open the setti\"",
-      "<DIV> \"what is the fastest way to level up early withou\"",
-      "<DIV> \"what is the best strategy for the first boss fig\"",
-      "<DIV> \"How do I beat the Bone Hydra in Hades?\"",
-      "<DIV> \"What should I know about the boss past the cryst\"",
-      "<DIV> \"what year did half-life 2 come out\"",
-      "<DIV> \"half life 2 keeps crashing with a long error in\"",
-      "<DIV> \"how do i beat megara in hades\"",
-      "<DIV> \"what weapon works best against her\"",
-      "<DIV> \"what should i spend my first upgrade points on i\"",
+      "<DIV> \"This answerSession · 100\"",
+      "<DIV> \"Sum up again\"",
+      "<DIV> \"What the AI remembers\"",
+      "<DIV> \"Rename: Rename this chat to “Hollow Knight boss strategy”?\"",
+      "<DIV> \"Hades the three sisters in the second area are w\"",
+      "<DIV> \"what else can I try\"",
+      "<DIV> \"In Hades the three sisters at the end of the sec\"",
+      "<DIV> \"is there anything else worth trying\"",
+      "<DIV> \"walk me through handling the Soul Sanctum boss i\"",
+      "<DIV> \"what should I focus on in my next few runs of th\"",
+      "<DIV> \"I'm at: Just starting out and learning the ropes\"",
+      "<DIV> \"help me plan my upgrades in this game\"",
+      "<DIV> \"I'm at: Focusing on a specific weapon to carry t\"",
+      "<DIV> \"Give a shorter answer—key points only, minimal p\"",
+      "<DIV> \"what is the best way to fight the boss of the So\"",
+      "<DIV> \"any more Hollow Knight tips for the Mantis Lords\"",
+      "<DIV> \"how do I dodge enemy projectiles in this game\"",
+      "<DIV> \"how should I plan my economy in an early game of\"",
+      "<DIV> \"how do I make my battery last longer when playin\"",
+      "<DIV> \"what should I do first in a new open world game\"",
+      "<DIV> \"how do I get better at boss fights in action gam\"",
+      "<DIV> \"In one long paragraph, describe how to get throu\"",
+      "<DIV> \"In two short paragraphs and then one single clos\"",
+      "<DIV> \"In one long paragraph, explain what an overclock\"",
+      "<DIV> \"how do I beat the first Tower boss in Palworld\"",
+      "<DIV> \"tell me about Zoe and Grizzbolt in the first Pal\"",
+      "<DIV> \"how do I beat Alduin in Skyrim and what is his s\"",
+      "<DIV> \"who is Alduin in Skyrim and how do I defeat him\"",
+      "<DIV> \"spoilers are okay, how do I beat the Soul Master\"",
+      "<DIV> \"spoilers are okay, walk me through the Soul Mast\"",
       "<DIV> \"give me a complete walkthrough of every chapter\"",
-      "<DIV> \"what is on my screen right now\"",
-      "<DIV> \"give me ten detailed tips for surviving the firs\"",
-      "<DIV> \"give me ten detailed tips for staying alive duri\"",
-      "<DIV> \"what are three quick ways to earn money early in\"",
-      "<DIV> \"what is the best way to deal with a swarm of ant\"",
-      "<DIV> \"what is the best strategy for surviving ravenhol\"",
-      "<DIV> \"my game keeps stuttering and then crashing after\"",
-      "<DIV> \"explain step by step how to clear a large group\"",
-      "<DIV> \"what is the most efficient route through the san\"",
-      "<DIV> \"and what about that\"",
-      "<DIV> \"hollow knight how do i beat the teleporting sorc\"",
-      "<DIV> \"what is the safest way to take down the big armo\"",
-      "<DIV> \"what are three good ways to explore a big map wi\"",
-      "<DIV> \"give me ten detailed tips for managing food and\"",
-      "<DIV> \"give me ten detailed tips for rationing food and\"",
-      "<DIV> \"how do i get through ravenholm in half life 2 wh\"",
-      "<DIV> \"give me a detailed walkthrough of the first thre\"",
-      "<DIV> \"give me ten detailed tips for keeping warm and f\"",
-      "<DIV> \"how should i handle ravenholm in half life 2 whe\"",
-      "<DIV> \"bonsai:vac-check 76561197983599210\"",
-      "<DIV> \"bonsai:vac-check https://steamcommunity.com/prof\"",
-      "<DIV> \"bonsai:vac-check https://steamcommunity.com/id/g\"",
-      "<DIV> \"what does the shotgun do in half life 2\"",
-      "<DIV> \"what is the crowbar good for in half life 2\"",
-      "<DIV> \"what is the pulse rifle best used for in half li\"",
-      "<DIV> \"how useful is the magnum revolver in half life 2\"",
-      "<DIV> (unnamed - the only text around it is a container's, not a label)",
-      "<BUTTON> \"Any known issues running this on Deck?\"",
-      "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.\"",
-      "<BUTTON> \"ask\""
+      "<DIV> \"give me a complete guide to every boss area in H\"",
+      "<DIV> \"write me a full chapter by chapter guide to the\"",
+      "<DIV> \"write a full guide to each boss area in hollow k\"",
+      "<DIV> \"in two short paragraphs and then one single clos\"",
+      "<DIV> \"what is a good charm early in Hollow Knight\"",
+      "<DIV> \"what should I know before the last fight in the\"",
+      "<DIV> \"how do I get stronger before facing the final bo\"",
+      "<DIV> \"In one long paragraph, explain how the Mirror of\"",
+      "<DIV> \"what is a good first upgrade in Hollow Knight\"",
+      "<DIV> \"I keep dying to the boss at the end of the first\"",
+      "<DIV> \"I'm at: Starting out in Dirtmouth\"",
+      "<DIV> \"What is a quick way to earn Geo early on?\"",
+      "<DIV> \"What does Geo buy early on?\"",
+      "<DIV> \"Which charm should a new player get first?\"",
+      "<DIV> \"Why is my Deck running hot?\"",
+      "<DIV> \"How do I make my Deck battery last longer?\"",
+      "<DIV> \"Give me a detailed guide to tuning my Deck for b\"",
+      "<DIV> \"Explain how to set up a Deck for emulation, step\"",
+      "<DIV> \"Give me a guide to every boss area in Hollow Kni\"",
+      "<DIV> \"Explain the whole story of Hades act by act, thr\"",
+      "<DIV> \"how do i beat the dreadnought\"",
+      "<DIV> \"what is the max tdp on a steam deck\"",
+      "<DIV> \"my game stutters when i turn\"",
+      "<DIV> \"should i cap fps at 30 or 40\"",
+      "<DIV> \"what does proton do\"",
+      "<DIV> \"how do i deal with exploders\"",
+      "<DIV> \"is 8 watts enough for this game\"",
+      "<DIV> \"what should i upgrade first\"",
+      "<DIV> \"why did my save not carry over\"",
+      "<DIV> \"how do i get more battery life\"",
+      "<DIV> \"Any quick tip for a new Deep Rock Galactic Survi\"",
+      "<DIV> \"in deep rock galactic survivor how do I tame a h\"",
+      "<DIV> \"Which hat does the dwarf wear on the title scree\"",
+      "<DIV> \"How do I beat the big boss here? Give me a plan.\"",
+      "<DIV> \"Give me a step by step plan for the big boss.\"",
+      "<DIV> \"Give me a plan for the next area in Hollow Knigh\"",
+      "<DIV> \"Walk me through a safe plan to defeat the large\"",
+      "<DIV> \"Give me a full plan for the big boss fight pleas\"",
+      "<DIV> \"Lay out a step by step plan for that boss.\"",
+      "<DIV> \"Say hello in three words, after the update\"",
+      "<DIV> \"What TDP setting should I use for Hollow Knight\"",
+      "<DIV> \"Which Driller upgrades are worth taking early in\"",
+      "<DIV> \"Give me three quick tips for surviving the next\"",
+      "<DIV> \"How should I handle the big bosses in Deep Rock\"",
+      "<DIV> \"What power limit in watts should I set for Hollo\"",
+      "<DIV> \"What is the best way to fight the Dreadnought Tw\"",
+      "<DIV> \"Which power limit in watts should I pick for Hol\"",
+      "<DIV> \"Keyword + meaning\"",
+      "<DIV> \"Read current TDP\"",
+      "<DIV> \"Thinking: Balanced · 16 s · ~445 tokens\"",
+      "<DIV> \"Spoiler risk: high\"",
+      "<DIV> \"Developer details\"",
+      "<DIV> \"Hide details\"",
+      "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.No gameStrategyAsk\"",
+      "<BUTTON> \"Ask\""
     ],
     "cycle": null,
     "neverReached": [],
@@ -561,9 +633,9 @@
         "pass": true,
         "moved": true,
         "matched": true,
-        "from": "<DIV> \"This answerSession · 71\"",
-        "to": "<DIV> \"Sum up this chat\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1)",
+        "from": "<DIV> \"This answerSession · 100\"",
+        "to": "<DIV> \"Sum up again\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -573,7 +645,7 @@
       },
       {
         "index": 2,
-        "label": "row1",
+        "label": "step 2",
         "press": [
           "DOWN"
         ],
@@ -582,9 +654,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"Sum up this chat\"",
-        "to": "<DIV> \"wheatley fight\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2)",
+        "from": "<DIV> \"Sum up again\"",
+        "to": "<DIV> \"What the AI remembers\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -594,7 +666,7 @@
       },
       {
         "index": 3,
-        "label": "row2",
+        "label": "step 3",
         "press": [
           "DOWN"
         ],
@@ -603,9 +675,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"wheatley fight\"",
-        "to": "<DIV> \"what does the pickaxe do\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3)",
+        "from": "<DIV> \"What the AI remembers\"",
+        "to": "<DIV> \"Rename: Rename this chat to “Hollow Knight boss strategy”?\"",
+        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div:nth-child(4) > div.Panel.Focusable:nth-child(3)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -615,7 +687,7 @@
       },
       {
         "index": 4,
-        "label": "row3",
+        "label": "step 4",
         "press": [
           "DOWN"
         ],
@@ -624,9 +696,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what does the pickaxe do\"",
-        "to": "<DIV> \"what does the pickaxe do\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4)",
+        "from": "<DIV> \"Rename: Rename this chat to “Hollow Knight boss strategy”?\"",
+        "to": "<DIV> \"Hades the three sisters in the second area are w\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(5)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -636,7 +708,7 @@
       },
       {
         "index": 5,
-        "label": "row4",
+        "label": "step 5",
         "press": [
           "DOWN"
         ],
@@ -645,9 +717,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what does the pickaxe do\"",
-        "to": "<DIV> \"what is waiting at the end of the game\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(5)",
+        "from": "<DIV> \"Hades the three sisters in the second area are w\"",
+        "to": "<DIV> \"what else can I try\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(6)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -657,7 +729,7 @@
       },
       {
         "index": 6,
-        "label": "row5",
+        "label": "step 6",
         "press": [
           "DOWN"
         ],
@@ -666,9 +738,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what is waiting at the end of the game\"",
-        "to": "<DIV> \"how do i beat the antlion guard\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(6)",
+        "from": "<DIV> \"what else can I try\"",
+        "to": "<DIV> \"In Hades the three sisters at the end of the sec\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(7)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -678,7 +750,7 @@
       },
       {
         "index": 7,
-        "label": "row6",
+        "label": "step 7",
         "press": [
           "DOWN"
         ],
@@ -687,9 +759,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"how do i beat the antlion guard\"",
-        "to": "<DIV> \"how do i tame a horse in half life 2\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(7)",
+        "from": "<DIV> \"In Hades the three sisters at the end of the sec\"",
+        "to": "<DIV> \"is there anything else worth trying\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(8)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -699,7 +771,7 @@
       },
       {
         "index": 8,
-        "label": "row7",
+        "label": "step 8",
         "press": [
           "DOWN"
         ],
@@ -708,9 +780,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"how do i tame a horse in half life 2\"",
-        "to": "<DIV> \"How do I beat Megaera?\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(8)",
+        "from": "<DIV> \"is there anything else worth trying\"",
+        "to": "<DIV> \"walk me through handling the Soul Sanctum boss i\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(9)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -720,7 +792,7 @@
       },
       {
         "index": 9,
-        "label": "row8",
+        "label": "step 9",
         "press": [
           "DOWN"
         ],
@@ -729,9 +801,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"How do I beat Megaera?\"",
-        "to": "<DIV> \"what about her second phase\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(9)",
+        "from": "<DIV> \"walk me through handling the Soul Sanctum boss i\"",
+        "to": "<DIV> \"what should I focus on in my next few runs of th\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(10)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -741,7 +813,7 @@
       },
       {
         "index": 10,
-        "label": "row9",
+        "label": "step 10",
         "press": [
           "DOWN"
         ],
@@ -750,9 +822,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what about her second phase\"",
-        "to": "<DIV> \"how do i beat the bone hydra in hades\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(10)",
+        "from": "<DIV> \"what should I focus on in my next few runs of th\"",
+        "to": "<DIV> \"I'm at: Just starting out and learning the ropes\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(11)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -762,7 +834,7 @@
       },
       {
         "index": 11,
-        "label": "row10",
+        "label": "step 11",
         "press": [
           "DOWN"
         ],
@@ -771,9 +843,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"how do i beat the bone hydra in hades\"",
-        "to": "<DIV> \"black mesa how do i get across the electrified w\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(11)",
+        "from": "<DIV> \"I'm at: Just starting out and learning the ropes\"",
+        "to": "<DIV> \"help me plan my upgrades in this game\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(12)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -783,7 +855,7 @@
       },
       {
         "index": 12,
-        "label": "row11",
+        "label": "step 12",
         "press": [
           "DOWN"
         ],
@@ -792,9 +864,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"black mesa how do i get across the electrified w\"",
-        "to": "<DIV> \"how do i beat the gonarch in black mesa\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(12)",
+        "from": "<DIV> \"help me plan my upgrades in this game\"",
+        "to": "<DIV> \"I'm at: Focusing on a specific weapon to carry t\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(13)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -804,7 +876,7 @@
       },
       {
         "index": 13,
-        "label": "row12",
+        "label": "step 13",
         "press": [
           "DOWN"
         ],
@@ -813,9 +885,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"how do i beat the gonarch in black mesa\"",
-        "to": "<DIV> \"what does the gravity gun do in half-life 2\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(13)",
+        "from": "<DIV> \"I'm at: Focusing on a specific weapon to carry t\"",
+        "to": "<DIV> \"Give a shorter answer—key points only, minimal p\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(14)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -825,7 +897,7 @@
       },
       {
         "index": 14,
-        "label": "row13",
+        "label": "step 14",
         "press": [
           "DOWN"
         ],
@@ -834,9 +906,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what does the gravity gun do in half-life 2\"",
-        "to": "<DIV> \"what should i know about the boss past the cryst\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(14)",
+        "from": "<DIV> \"Give a shorter answer—key points only, minimal p\"",
+        "to": "<DIV> \"what is the best way to fight the boss of the So\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(15)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -846,7 +918,7 @@
       },
       {
         "index": 15,
-        "label": "row14",
+        "label": "step 15",
         "press": [
           "DOWN"
         ],
@@ -855,9 +927,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what should i know about the boss past the cryst\"",
-        "to": "<DIV> \"what should i know about the boss past the cryst\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(15)",
+        "from": "<DIV> \"what is the best way to fight the boss of the So\"",
+        "to": "<DIV> \"any more Hollow Knight tips for the Mantis Lords\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(16)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -867,7 +939,7 @@
       },
       {
         "index": 16,
-        "label": "row15",
+        "label": "step 16",
         "press": [
           "DOWN"
         ],
@@ -876,9 +948,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what should i know about the boss past the cryst\"",
-        "to": "<DIV> \"in hades, what should i know about the boss guar\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(16)",
+        "from": "<DIV> \"any more Hollow Knight tips for the Mantis Lords\"",
+        "to": "<DIV> \"how do I dodge enemy projectiles in this game\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(17)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -888,7 +960,7 @@
       },
       {
         "index": 17,
-        "label": "row16",
+        "label": "step 17",
         "press": [
           "DOWN"
         ],
@@ -897,9 +969,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"in hades, what should i know about the boss guar\"",
-        "to": "<DIV> \"how do i beat the gonarch in black mesa\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(17)",
+        "from": "<DIV> \"how do I dodge enemy projectiles in this game\"",
+        "to": "<DIV> \"what else can I try\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(18)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -909,7 +981,7 @@
       },
       {
         "index": 18,
-        "label": "row17",
+        "label": "step 18",
         "press": [
           "DOWN"
         ],
@@ -918,9 +990,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"how do i beat the gonarch in black mesa\"",
-        "to": "<DIV> \"black mesa how do i get past the electrified wat\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(18)",
+        "from": "<DIV> \"what else can I try\"",
+        "to": "<DIV> \"how should I plan my economy in an early game of\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(19)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -930,7 +1002,7 @@
       },
       {
         "index": 19,
-        "label": "row18",
+        "label": "step 19",
         "press": [
           "DOWN"
         ],
@@ -939,9 +1011,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"black mesa how do i get past the electrified wat\"",
-        "to": "<DIV> \"in hollow knight how do i beat the broken vessel\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(19)",
+        "from": "<DIV> \"how should I plan my economy in an early game of\"",
+        "to": "<DIV> \"how do I make my battery last longer when playin\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(20)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -951,7 +1023,7 @@
       },
       {
         "index": 20,
-        "label": "row19",
+        "label": "step 20",
         "press": [
           "DOWN"
         ],
@@ -960,9 +1032,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"in hollow knight how do i beat the broken vessel\"",
-        "to": "<DIV> \"walk me through every step needed to clear this\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(20)",
+        "from": "<DIV> \"how do I make my battery last longer when playin\"",
+        "to": "<DIV> \"what should I do first in a new open world game\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(21)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -972,7 +1044,7 @@
       },
       {
         "index": 21,
-        "label": "row20",
+        "label": "step 21",
         "press": [
           "DOWN"
         ],
@@ -981,9 +1053,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"walk me through every step needed to clear this\"",
-        "to": "<DIV> \"what should i focus on first when starting a bra\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(21)",
+        "from": "<DIV> \"what should I do first in a new open world game\"",
+        "to": "<DIV> \"how do I get better at boss fights in action gam\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(22)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -993,7 +1065,7 @@
       },
       {
         "index": 22,
-        "label": "row21",
+        "label": "step 22",
         "press": [
           "DOWN"
         ],
@@ -1002,9 +1074,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what should i focus on first when starting a bra\"",
-        "to": "<DIV> \"explain the complete weapon upgrade priority ord\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(22)",
+        "from": "<DIV> \"how do I get better at boss fights in action gam\"",
+        "to": "<DIV> \"In one long paragraph, describe how to get throu\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(23)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1014,7 +1086,7 @@
       },
       {
         "index": 23,
-        "label": "row22",
+        "label": "step 23",
         "press": [
           "DOWN"
         ],
@@ -1023,9 +1095,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"explain the complete weapon upgrade priority ord\"",
-        "to": "<DIV> \"why does my controller stop responding sometimes\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(23)",
+        "from": "<DIV> \"In one long paragraph, describe how to get throu\"",
+        "to": "<DIV> \"In two short paragraphs and then one single clos\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(24)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1035,7 +1107,7 @@
       },
       {
         "index": 24,
-        "label": "row23",
+        "label": "step 24",
         "press": [
           "DOWN"
         ],
@@ -1044,9 +1116,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"why does my controller stop responding sometimes\"",
-        "to": "<DIV> \"what settings should i check if a game keeps cra\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(24)",
+        "from": "<DIV> \"In two short paragraphs and then one single clos\"",
+        "to": "<DIV> \"In one long paragraph, describe how to get throu\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(25)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1056,7 +1128,7 @@
       },
       {
         "index": 25,
-        "label": "row24",
+        "label": "step 25",
         "press": [
           "DOWN"
         ],
@@ -1065,9 +1137,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what settings should i check if a game keeps cra\"",
-        "to": "<DIV> \"how do i free up storage space when my sd card i\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(25)",
+        "from": "<DIV> \"In one long paragraph, describe how to get throu\"",
+        "to": "<DIV> \"In one long paragraph, explain what an overclock\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(26)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1077,7 +1149,7 @@
       },
       {
         "index": 26,
-        "label": "row25",
+        "label": "step 26",
         "press": [
           "DOWN"
         ],
@@ -1086,9 +1158,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"how do i free up storage space when my sd card i\"",
-        "to": "<DIV> \"why is the frame rate unstable when i turn on th\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(26)",
+        "from": "<DIV> \"In one long paragraph, explain what an overclock\"",
+        "to": "<DIV> \"how do I beat the first Tower boss in Palworld\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(27)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1098,7 +1170,7 @@
       },
       {
         "index": 27,
-        "label": "row26",
+        "label": "step 27",
         "press": [
           "DOWN"
         ],
@@ -1107,9 +1179,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"why is the frame rate unstable when i turn on th\"",
-        "to": "<DIV> \"what should i do if my save file did not sync to\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(27)",
+        "from": "<DIV> \"how do I beat the first Tower boss in Palworld\"",
+        "to": "<DIV> \"tell me about Zoe and Grizzbolt in the first Pal\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(28)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1119,7 +1191,7 @@
       },
       {
         "index": 28,
-        "label": "row27",
+        "label": "step 28",
         "press": [
           "DOWN"
         ],
@@ -1128,9 +1200,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what should i do if my save file did not sync to\"",
-        "to": "<DIV> \"my game keeps crashing whenever i open the setti\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(28)",
+        "from": "<DIV> \"tell me about Zoe and Grizzbolt in the first Pal\"",
+        "to": "<DIV> \"how do I beat Alduin in Skyrim and what is his s\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(29)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1140,7 +1212,7 @@
       },
       {
         "index": 29,
-        "label": "row28",
+        "label": "step 29",
         "press": [
           "DOWN"
         ],
@@ -1149,9 +1221,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"my game keeps crashing whenever i open the setti\"",
-        "to": "<DIV> \"what is the fastest way to level up early withou\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(29)",
+        "from": "<DIV> \"how do I beat Alduin in Skyrim and what is his s\"",
+        "to": "<DIV> \"who is Alduin in Skyrim and how do I defeat him\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(30)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1161,7 +1233,7 @@
       },
       {
         "index": 30,
-        "label": "row29",
+        "label": "step 30",
         "press": [
           "DOWN"
         ],
@@ -1170,9 +1242,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what is the fastest way to level up early withou\"",
-        "to": "<DIV> \"what is the best strategy for the first boss fig\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(30)",
+        "from": "<DIV> \"who is Alduin in Skyrim and how do I defeat him\"",
+        "to": "<DIV> \"spoilers are okay, how do I beat the Soul Master\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(31)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1182,7 +1254,7 @@
       },
       {
         "index": 31,
-        "label": "row30",
+        "label": "step 31",
         "press": [
           "DOWN"
         ],
@@ -1191,9 +1263,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what is the best strategy for the first boss fig\"",
-        "to": "<DIV> \"How do I beat the Bone Hydra in Hades?\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(31)",
+        "from": "<DIV> \"spoilers are okay, how do I beat the Soul Master\"",
+        "to": "<DIV> \"spoilers are okay, walk me through the Soul Mast\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(32)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1203,7 +1275,7 @@
       },
       {
         "index": 32,
-        "label": "row31",
+        "label": "step 32",
         "press": [
           "DOWN"
         ],
@@ -1212,9 +1284,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"How do I beat the Bone Hydra in Hades?\"",
-        "to": "<DIV> \"What should I know about the boss past the cryst\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(32)",
+        "from": "<DIV> \"spoilers are okay, walk me through the Soul Mast\"",
+        "to": "<DIV> \"give me a complete walkthrough of every chapter\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(33)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1224,196 +1296,7 @@
       },
       {
         "index": 33,
-        "label": "row32",
-        "press": [
-          "DOWN"
-        ],
-        "expect": null,
-        "ok": true,
-        "pass": true,
-        "moved": true,
-        "matched": null,
-        "from": "<DIV> \"What should I know about the boss past the cryst\"",
-        "to": "<DIV> \"what year did half-life 2 come out\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(33)",
-        "visible": true,
-        "visibility": {
-          "verdict": "visible",
-          "coveredBy": null,
-          "clippedBy": null
-        }
-      },
-      {
-        "index": 34,
-        "label": "row33",
-        "press": [
-          "DOWN"
-        ],
-        "expect": null,
-        "ok": true,
-        "pass": true,
-        "moved": true,
-        "matched": null,
-        "from": "<DIV> \"what year did half-life 2 come out\"",
-        "to": "<DIV> \"in hollow knight how do i beat the broken vessel\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(34)",
-        "visible": true,
-        "visibility": {
-          "verdict": "visible",
-          "coveredBy": null,
-          "clippedBy": null
-        }
-      },
-      {
-        "index": 35,
-        "label": "row34",
-        "press": [
-          "DOWN"
-        ],
-        "expect": null,
-        "ok": true,
-        "pass": true,
-        "moved": true,
-        "matched": null,
-        "from": "<DIV> \"in hollow knight how do i beat the broken vessel\"",
-        "to": "<DIV> \"half life 2 keeps crashing with a long error in\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(35)",
-        "visible": true,
-        "visibility": {
-          "verdict": "visible",
-          "coveredBy": null,
-          "clippedBy": null
-        }
-      },
-      {
-        "index": 36,
-        "label": "row35",
-        "press": [
-          "DOWN"
-        ],
-        "expect": null,
-        "ok": true,
-        "pass": true,
-        "moved": true,
-        "matched": null,
-        "from": "<DIV> \"half life 2 keeps crashing with a long error in\"",
-        "to": "<DIV> \"black mesa how do i get across the electrified w\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(36)",
-        "visible": true,
-        "visibility": {
-          "verdict": "visible",
-          "coveredBy": null,
-          "clippedBy": null
-        }
-      },
-      {
-        "index": 37,
-        "label": "row36",
-        "press": [
-          "DOWN"
-        ],
-        "expect": null,
-        "ok": true,
-        "pass": true,
-        "moved": true,
-        "matched": null,
-        "from": "<DIV> \"black mesa how do i get across the electrified w\"",
-        "to": "<DIV> \"how do i beat megara in hades\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(37)",
-        "visible": true,
-        "visibility": {
-          "verdict": "visible",
-          "coveredBy": null,
-          "clippedBy": null
-        }
-      },
-      {
-        "index": 38,
-        "label": "row37",
-        "press": [
-          "DOWN"
-        ],
-        "expect": null,
-        "ok": true,
-        "pass": true,
-        "moved": true,
-        "matched": null,
-        "from": "<DIV> \"how do i beat megara in hades\"",
-        "to": "<DIV> \"what about her second phase\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(38)",
-        "visible": true,
-        "visibility": {
-          "verdict": "visible",
-          "coveredBy": null,
-          "clippedBy": null
-        }
-      },
-      {
-        "index": 39,
-        "label": "row38",
-        "press": [
-          "DOWN"
-        ],
-        "expect": null,
-        "ok": true,
-        "pass": true,
-        "moved": true,
-        "matched": null,
-        "from": "<DIV> \"what about her second phase\"",
-        "to": "<DIV> \"what weapon works best against her\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(39)",
-        "visible": true,
-        "visibility": {
-          "verdict": "visible",
-          "coveredBy": null,
-          "clippedBy": null
-        }
-      },
-      {
-        "index": 40,
-        "label": "row39",
-        "press": [
-          "DOWN"
-        ],
-        "expect": null,
-        "ok": true,
-        "pass": true,
-        "moved": true,
-        "matched": null,
-        "from": "<DIV> \"what weapon works best against her\"",
-        "to": "<DIV> \"what should i spend my first upgrade points on i\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(40)",
-        "visible": true,
-        "visibility": {
-          "verdict": "visible",
-          "coveredBy": null,
-          "clippedBy": null
-        }
-      },
-      {
-        "index": 41,
-        "label": "row40",
-        "press": [
-          "DOWN"
-        ],
-        "expect": null,
-        "ok": true,
-        "pass": true,
-        "moved": true,
-        "matched": null,
-        "from": "<DIV> \"what should i spend my first upgrade points on i\"",
-        "to": "<DIV> \"give me a complete walkthrough of every chapter\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(41)",
-        "visible": true,
-        "visibility": {
-          "verdict": "visible",
-          "coveredBy": null,
-          "clippedBy": null
-        }
-      },
-      {
-        "index": 42,
-        "label": "row41",
+        "label": "step 33",
         "press": [
           "DOWN"
         ],
@@ -1423,8 +1306,197 @@
         "moved": true,
         "matched": null,
         "from": "<DIV> \"give me a complete walkthrough of every chapter\"",
-        "to": "<DIV> \"what is on my screen right now\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(42)",
+        "to": "<DIV> \"give me a complete guide to every boss area in H\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(34)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 34,
+        "label": "step 34",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"give me a complete guide to every boss area in H\"",
+        "to": "<DIV> \"write me a full chapter by chapter guide to the\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(35)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 35,
+        "label": "step 35",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"write me a full chapter by chapter guide to the\"",
+        "to": "<DIV> \"write a full guide to each boss area in hollow k\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(36)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 36,
+        "label": "step 36",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"write a full guide to each boss area in hollow k\"",
+        "to": "<DIV> \"In one long paragraph, describe how to get throu\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(37)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 37,
+        "label": "step 37",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"In one long paragraph, describe how to get throu\"",
+        "to": "<DIV> \"what is the best way to fight the boss of the So\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(38)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 38,
+        "label": "step 38",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"what is the best way to fight the boss of the So\"",
+        "to": "<DIV> \"in two short paragraphs and then one single clos\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(39)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 39,
+        "label": "step 39",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"in two short paragraphs and then one single clos\"",
+        "to": "<DIV> \"in two short paragraphs and then one single clos\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(40)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 40,
+        "label": "step 40",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"in two short paragraphs and then one single clos\"",
+        "to": "<DIV> \"what is a good charm early in Hollow Knight\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(41)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 41,
+        "label": "step 41",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"what is a good charm early in Hollow Knight\"",
+        "to": "<DIV> \"what should I know before the last fight in the\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(42)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 42,
+        "label": "step 42",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"what should I know before the last fight in the\"",
+        "to": "<DIV> \"how do I get stronger before facing the final bo\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(43)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1434,7 +1506,7 @@
       },
       {
         "index": 43,
-        "label": "row42",
+        "label": "step 43",
         "press": [
           "DOWN"
         ],
@@ -1443,9 +1515,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what is on my screen right now\"",
-        "to": "<DIV> \"give me ten detailed tips for surviving the firs\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(43)",
+        "from": "<DIV> \"how do I get stronger before facing the final bo\"",
+        "to": "<DIV> \"In one long paragraph, explain how the Mirror of\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(44)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1455,7 +1527,7 @@
       },
       {
         "index": 44,
-        "label": "row43",
+        "label": "step 44",
         "press": [
           "DOWN"
         ],
@@ -1464,9 +1536,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"give me ten detailed tips for surviving the firs\"",
-        "to": "<DIV> \"give me ten detailed tips for staying alive duri\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(44)",
+        "from": "<DIV> \"In one long paragraph, explain how the Mirror of\"",
+        "to": "<DIV> \"what is a good first upgrade in Hollow Knight\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(45)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1476,7 +1548,7 @@
       },
       {
         "index": 45,
-        "label": "row44",
+        "label": "step 45",
         "press": [
           "DOWN"
         ],
@@ -1485,9 +1557,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"give me ten detailed tips for staying alive duri\"",
-        "to": "<DIV> \"what are three quick ways to earn money early in\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(45)",
+        "from": "<DIV> \"what is a good first upgrade in Hollow Knight\"",
+        "to": "<DIV> \"I keep dying to the boss at the end of the first\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(46)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1497,7 +1569,7 @@
       },
       {
         "index": 46,
-        "label": "row45",
+        "label": "step 46",
         "press": [
           "DOWN"
         ],
@@ -1506,9 +1578,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what are three quick ways to earn money early in\"",
-        "to": "<DIV> \"what is the best way to deal with a swarm of ant\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(46)",
+        "from": "<DIV> \"I keep dying to the boss at the end of the first\"",
+        "to": "<DIV> \"I'm at: Starting out in Dirtmouth\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(47)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1518,7 +1590,7 @@
       },
       {
         "index": 47,
-        "label": "row46",
+        "label": "step 47",
         "press": [
           "DOWN"
         ],
@@ -1527,9 +1599,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what is the best way to deal with a swarm of ant\"",
-        "to": "<DIV> \"what is the best strategy for surviving ravenhol\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(47)",
+        "from": "<DIV> \"I'm at: Starting out in Dirtmouth\"",
+        "to": "<DIV> \"Give a shorter answer—key points only, minimal p\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(48)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1539,7 +1611,7 @@
       },
       {
         "index": 48,
-        "label": "row47",
+        "label": "step 48",
         "press": [
           "DOWN"
         ],
@@ -1548,9 +1620,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what is the best strategy for surviving ravenhol\"",
-        "to": "<DIV> \"my game keeps stuttering and then crashing after\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(48)",
+        "from": "<DIV> \"Give a shorter answer—key points only, minimal p\"",
+        "to": "<DIV> \"What is a quick way to earn Geo early on?\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(49)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1560,7 +1632,7 @@
       },
       {
         "index": 49,
-        "label": "row48",
+        "label": "step 49",
         "press": [
           "DOWN"
         ],
@@ -1569,9 +1641,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"my game keeps stuttering and then crashing after\"",
-        "to": "<DIV> \"explain step by step how to clear a large group\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(49)",
+        "from": "<DIV> \"What is a quick way to earn Geo early on?\"",
+        "to": "<DIV> \"What does Geo buy early on?\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(50)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1581,7 +1653,7 @@
       },
       {
         "index": 50,
-        "label": "row49",
+        "label": "step 50",
         "press": [
           "DOWN"
         ],
@@ -1590,9 +1662,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"explain step by step how to clear a large group\"",
-        "to": "<DIV> \"what is the most efficient route through the san\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(50)",
+        "from": "<DIV> \"What does Geo buy early on?\"",
+        "to": "<DIV> \"Which charm should a new player get first?\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(51)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1602,7 +1674,7 @@
       },
       {
         "index": 51,
-        "label": "row50",
+        "label": "step 51",
         "press": [
           "DOWN"
         ],
@@ -1611,9 +1683,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what is the most efficient route through the san\"",
-        "to": "<DIV> \"and what about that\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(51)",
+        "from": "<DIV> \"Which charm should a new player get first?\"",
+        "to": "<DIV> \"Why is my Deck running hot?\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(52)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1623,7 +1695,7 @@
       },
       {
         "index": 52,
-        "label": "row51",
+        "label": "step 52",
         "press": [
           "DOWN"
         ],
@@ -1632,9 +1704,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"and what about that\"",
-        "to": "<DIV> \"hollow knight how do i beat the teleporting sorc\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(52)",
+        "from": "<DIV> \"Why is my Deck running hot?\"",
+        "to": "<DIV> \"How do I make my Deck battery last longer?\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(53)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1644,7 +1716,7 @@
       },
       {
         "index": 53,
-        "label": "row52",
+        "label": "step 53",
         "press": [
           "DOWN"
         ],
@@ -1653,9 +1725,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"hollow knight how do i beat the teleporting sorc\"",
-        "to": "<DIV> \"black mesa how do i get across the electrified w\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(53)",
+        "from": "<DIV> \"How do I make my Deck battery last longer?\"",
+        "to": "<DIV> \"Give me a detailed guide to tuning my Deck for b\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(54)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1665,7 +1737,7 @@
       },
       {
         "index": 54,
-        "label": "row53",
+        "label": "step 54",
         "press": [
           "DOWN"
         ],
@@ -1674,9 +1746,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"black mesa how do i get across the electrified w\"",
-        "to": "<DIV> \"how do i beat megara in hades\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(54)",
+        "from": "<DIV> \"Give me a detailed guide to tuning my Deck for b\"",
+        "to": "<DIV> \"Explain how to set up a Deck for emulation, step\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(55)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1686,7 +1758,7 @@
       },
       {
         "index": 55,
-        "label": "row54",
+        "label": "step 55",
         "press": [
           "DOWN"
         ],
@@ -1695,9 +1767,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"how do i beat megara in hades\"",
-        "to": "<DIV> \"what about her second phase\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(55)",
+        "from": "<DIV> \"Explain how to set up a Deck for emulation, step\"",
+        "to": "<DIV> \"Give me a guide to every boss area in Hollow Kni\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(56)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1707,7 +1779,7 @@
       },
       {
         "index": 56,
-        "label": "row55",
+        "label": "step 56",
         "press": [
           "DOWN"
         ],
@@ -1716,9 +1788,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what about her second phase\"",
-        "to": "<DIV> \"what is the safest way to take down the big armo\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(56)",
+        "from": "<DIV> \"Give me a guide to every boss area in Hollow Kni\"",
+        "to": "<DIV> \"Explain the whole story of Hades act by act, thr\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(57)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1728,7 +1800,7 @@
       },
       {
         "index": 57,
-        "label": "row56",
+        "label": "step 57",
         "press": [
           "DOWN"
         ],
@@ -1737,9 +1809,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what is the safest way to take down the big armo\"",
-        "to": "<DIV> \"what is on my screen right now\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(57)",
+        "from": "<DIV> \"Explain the whole story of Hades act by act, thr\"",
+        "to": "<DIV> \"how do i beat the dreadnought\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(58)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1749,7 +1821,7 @@
       },
       {
         "index": 58,
-        "label": "row57",
+        "label": "step 58",
         "press": [
           "DOWN"
         ],
@@ -1758,9 +1830,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what is on my screen right now\"",
-        "to": "<DIV> \"what are three good ways to explore a big map wi\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(58)",
+        "from": "<DIV> \"how do i beat the dreadnought\"",
+        "to": "<DIV> \"what is the max tdp on a steam deck\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(59)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1770,7 +1842,7 @@
       },
       {
         "index": 59,
-        "label": "row58",
+        "label": "step 59",
         "press": [
           "DOWN"
         ],
@@ -1779,9 +1851,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what are three good ways to explore a big map wi\"",
-        "to": "<DIV> \"give me ten detailed tips for managing food and\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(59)",
+        "from": "<DIV> \"what is the max tdp on a steam deck\"",
+        "to": "<DIV> \"my game stutters when i turn\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(60)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1791,7 +1863,7 @@
       },
       {
         "index": 60,
-        "label": "row59",
+        "label": "step 60",
         "press": [
           "DOWN"
         ],
@@ -1800,9 +1872,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"give me ten detailed tips for managing food and\"",
-        "to": "<DIV> \"give me ten detailed tips for rationing food and\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(60)",
+        "from": "<DIV> \"my game stutters when i turn\"",
+        "to": "<DIV> \"should i cap fps at 30 or 40\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(61)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1812,7 +1884,7 @@
       },
       {
         "index": 61,
-        "label": "row60",
+        "label": "step 61",
         "press": [
           "DOWN"
         ],
@@ -1821,9 +1893,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"give me ten detailed tips for rationing food and\"",
-        "to": "<DIV> \"how do i get through ravenholm in half life 2 wh\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(61)",
+        "from": "<DIV> \"should i cap fps at 30 or 40\"",
+        "to": "<DIV> \"what does proton do\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(62)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1833,7 +1905,7 @@
       },
       {
         "index": 62,
-        "label": "row61",
+        "label": "step 62",
         "press": [
           "DOWN"
         ],
@@ -1842,9 +1914,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"how do i get through ravenholm in half life 2 wh\"",
-        "to": "<DIV> \"give me a detailed walkthrough of the first thre\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(62)",
+        "from": "<DIV> \"what does proton do\"",
+        "to": "<DIV> \"how do i deal with exploders\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(63)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1854,7 +1926,7 @@
       },
       {
         "index": 63,
-        "label": "row62",
+        "label": "step 63",
         "press": [
           "DOWN"
         ],
@@ -1863,9 +1935,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"give me a detailed walkthrough of the first thre\"",
-        "to": "<DIV> \"give me ten detailed tips for keeping warm and f\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(63)",
+        "from": "<DIV> \"how do i deal with exploders\"",
+        "to": "<DIV> \"is 8 watts enough for this game\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(64)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1875,7 +1947,7 @@
       },
       {
         "index": 64,
-        "label": "row63",
+        "label": "step 64",
         "press": [
           "DOWN"
         ],
@@ -1884,9 +1956,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"give me ten detailed tips for keeping warm and f\"",
-        "to": "<DIV> \"how should i handle ravenholm in half life 2 whe\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(64)",
+        "from": "<DIV> \"is 8 watts enough for this game\"",
+        "to": "<DIV> \"what should i upgrade first\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(65)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1896,7 +1968,7 @@
       },
       {
         "index": 65,
-        "label": "row64",
+        "label": "step 65",
         "press": [
           "DOWN"
         ],
@@ -1905,9 +1977,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"how should i handle ravenholm in half life 2 whe\"",
-        "to": "<DIV> \"bonsai:vac-check 76561197983599210\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(65)",
+        "from": "<DIV> \"what should i upgrade first\"",
+        "to": "<DIV> \"why did my save not carry over\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(66)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1917,7 +1989,7 @@
       },
       {
         "index": 66,
-        "label": "row65",
+        "label": "step 66",
         "press": [
           "DOWN"
         ],
@@ -1926,9 +1998,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"bonsai:vac-check 76561197983599210\"",
-        "to": "<DIV> \"bonsai:vac-check https://steamcommunity.com/prof\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(66)",
+        "from": "<DIV> \"why did my save not carry over\"",
+        "to": "<DIV> \"how do i get more battery life\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(67)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1938,7 +2010,7 @@
       },
       {
         "index": 67,
-        "label": "row66",
+        "label": "step 67",
         "press": [
           "DOWN"
         ],
@@ -1947,9 +2019,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"bonsai:vac-check https://steamcommunity.com/prof\"",
-        "to": "<DIV> \"bonsai:vac-check https://steamcommunity.com/id/g\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(67)",
+        "from": "<DIV> \"how do i get more battery life\"",
+        "to": "<DIV> \"Any quick tip for a new Deep Rock Galactic Survi\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(68)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1959,7 +2031,7 @@
       },
       {
         "index": 68,
-        "label": "row67",
+        "label": "step 68",
         "press": [
           "DOWN"
         ],
@@ -1968,9 +2040,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"bonsai:vac-check https://steamcommunity.com/id/g\"",
-        "to": "<DIV> \"bonsai:vac-check 76561197983599210\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(68)",
+        "from": "<DIV> \"Any quick tip for a new Deep Rock Galactic Survi\"",
+        "to": "<DIV> \"in deep rock galactic survivor how do I tame a h\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(69)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -1980,7 +2052,7 @@
       },
       {
         "index": 69,
-        "label": "row68",
+        "label": "step 69",
         "press": [
           "DOWN"
         ],
@@ -1989,9 +2061,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"bonsai:vac-check 76561197983599210\"",
-        "to": "<DIV> \"what does the shotgun do in half life 2\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(69)",
+        "from": "<DIV> \"in deep rock galactic survivor how do I tame a h\"",
+        "to": "<DIV> \"Which hat does the dwarf wear on the title scree\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(70)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -2001,7 +2073,7 @@
       },
       {
         "index": 70,
-        "label": "row69",
+        "label": "step 70",
         "press": [
           "DOWN"
         ],
@@ -2010,9 +2082,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what does the shotgun do in half life 2\"",
-        "to": "<DIV> \"what is the crowbar good for in half life 2\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(70)",
+        "from": "<DIV> \"Which hat does the dwarf wear on the title scree\"",
+        "to": "<DIV> \"how do i beat the dreadnought\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(71)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -2022,7 +2094,7 @@
       },
       {
         "index": 71,
-        "label": "row70",
+        "label": "step 71",
         "press": [
           "DOWN"
         ],
@@ -2031,9 +2103,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<DIV> \"what is the crowbar good for in half life 2\"",
-        "to": "<DIV> \"what is the pulse rifle best used for in half li\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(71)",
+        "from": "<DIV> \"how do i beat the dreadnought\"",
+        "to": "<DIV> \"what is the max tdp on a steam deck\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(72)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -2043,18 +2115,18 @@
       },
       {
         "index": 72,
-        "label": "last row",
+        "label": "step 72",
         "press": [
           "DOWN"
         ],
-        "expect": ".bonsai-details-session-row",
+        "expect": null,
         "ok": true,
         "pass": true,
         "moved": true,
-        "matched": true,
-        "from": "<DIV> \"what is the pulse rifle best used for in half li\"",
-        "to": "<DIV> \"how useful is the magnum revolver in half life 2\"",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(72)",
+        "matched": null,
+        "from": "<DIV> \"what is the max tdp on a steam deck\"",
+        "to": "<DIV> \"my game stutters when i turn\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(73)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -2064,18 +2136,18 @@
       },
       {
         "index": 73,
-        "label": "ladder chip 1",
+        "label": "step 73",
         "press": [
           "DOWN"
         ],
-        "expect": ".bonsai-chip-ladder",
+        "expect": null,
         "ok": true,
         "pass": true,
         "moved": true,
-        "matched": true,
-        "from": "<DIV> \"how useful is the magnum revolver in half life 2\"",
-        "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(73)",
+        "matched": null,
+        "from": "<DIV> \"my game stutters when i turn\"",
+        "to": "<DIV> \"should i cap fps at 30 or 40\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(74)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -2085,18 +2157,18 @@
       },
       {
         "index": 74,
-        "label": "ladder chip 2",
+        "label": "step 74",
         "press": [
           "DOWN"
         ],
-        "expect": ".bonsai-chip-ladder",
+        "expect": null,
         "ok": true,
         "pass": true,
-        "moved": false,
-        "matched": true,
-        "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
-        "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(73)",
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"should i cap fps at 30 or 40\"",
+        "to": "<DIV> \"what does proton do\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(75)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -2106,18 +2178,18 @@
       },
       {
         "index": 75,
-        "label": "ladder chip 3",
+        "label": "step 75",
         "press": [
           "DOWN"
         ],
-        "expect": ".bonsai-chip-ladder",
+        "expect": null,
         "ok": true,
         "pass": true,
-        "moved": false,
-        "matched": true,
-        "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
-        "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(73)",
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"what does proton do\"",
+        "to": "<DIV> \"how do i deal with exploders\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(76)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -2127,18 +2199,18 @@
       },
       {
         "index": 76,
-        "label": "ladder chip 4",
+        "label": "step 76",
         "press": [
           "DOWN"
         ],
-        "expect": ".bonsai-chip-ladder",
+        "expect": null,
         "ok": true,
         "pass": true,
-        "moved": false,
-        "matched": true,
-        "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
-        "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(73)",
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"how do i deal with exploders\"",
+        "to": "<DIV> \"is 8 watts enough for this game\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(77)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -2148,18 +2220,18 @@
       },
       {
         "index": 77,
-        "label": "ladder chip 5",
+        "label": "step 77",
         "press": [
           "DOWN"
         ],
-        "expect": ".bonsai-chip-ladder",
+        "expect": null,
         "ok": true,
         "pass": true,
-        "moved": false,
-        "matched": true,
-        "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
-        "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(73)",
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"is 8 watts enough for this game\"",
+        "to": "<DIV> \"what should i upgrade first\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(78)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -2169,18 +2241,18 @@
       },
       {
         "index": 78,
-        "label": "ladder chip 6",
+        "label": "step 78",
         "press": [
           "DOWN"
         ],
-        "expect": ".bonsai-chip-ladder",
+        "expect": null,
         "ok": true,
         "pass": true,
-        "moved": false,
-        "matched": true,
-        "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
-        "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
-        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(6) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(73)",
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"what should i upgrade first\"",
+        "to": "<DIV> \"why did my save not carry over\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(79)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -2190,18 +2262,18 @@
       },
       {
         "index": 79,
-        "label": "exit to suggestion chip",
+        "label": "step 79",
         "press": [
           "DOWN"
         ],
-        "expect": ".bonsai-preset-glass",
+        "expect": null,
         "ok": true,
         "pass": true,
         "moved": true,
-        "matched": true,
-        "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
-        "to": "<BUTTON> \"Any known issues running this on Deck?\"",
-        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
+        "matched": null,
+        "from": "<DIV> \"why did my save not carry over\"",
+        "to": "<DIV> \"how do i get more battery life\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(80)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -2211,7 +2283,7 @@
       },
       {
         "index": 80,
-        "label": "question box",
+        "label": "step 80",
         "press": [
           "DOWN"
         ],
@@ -2220,9 +2292,9 @@
         "pass": true,
         "moved": true,
         "matched": null,
-        "from": "<BUTTON> \"Any known issues running this on Deck?\"",
-        "to": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.\"",
-        "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
+        "from": "<DIV> \"how do i get more battery life\"",
+        "to": "<DIV> \"how do i beat the dreadnought\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(81)",
         "visible": true,
         "visibility": {
           "verdict": "visible",
@@ -2232,6 +2304,636 @@
       },
       {
         "index": 81,
+        "label": "step 81",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"how do i beat the dreadnought\"",
+        "to": "<DIV> \"what is the max tdp on a steam deck\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(82)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 82,
+        "label": "step 82",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"what is the max tdp on a steam deck\"",
+        "to": "<DIV> \"my game stutters when i turn\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(83)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 83,
+        "label": "step 83",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"my game stutters when i turn\"",
+        "to": "<DIV> \"should i cap fps at 30 or 40\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(84)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 84,
+        "label": "step 84",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"should i cap fps at 30 or 40\"",
+        "to": "<DIV> \"what does proton do\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(85)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 85,
+        "label": "step 85",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"what does proton do\"",
+        "to": "<DIV> \"how do i deal with exploders\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(86)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 86,
+        "label": "step 86",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"how do i deal with exploders\"",
+        "to": "<DIV> \"is 8 watts enough for this game\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(87)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 87,
+        "label": "step 87",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"is 8 watts enough for this game\"",
+        "to": "<DIV> \"what should i upgrade first\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(88)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 88,
+        "label": "step 88",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"what should i upgrade first\"",
+        "to": "<DIV> \"why did my save not carry over\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(89)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 89,
+        "label": "step 89",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"why did my save not carry over\"",
+        "to": "<DIV> \"how do i get more battery life\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(90)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 90,
+        "label": "step 90",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"how do i get more battery life\"",
+        "to": "<DIV> \"How do I beat the big boss here? Give me a plan.\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(91)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 91,
+        "label": "step 91",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"How do I beat the big boss here? Give me a plan.\"",
+        "to": "<DIV> \"Give me a step by step plan for the big boss.\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(92)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 92,
+        "label": "step 92",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Give me a step by step plan for the big boss.\"",
+        "to": "<DIV> \"Give me a plan for the next area in Hollow Knigh\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(93)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 93,
+        "label": "step 93",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Give me a plan for the next area in Hollow Knigh\"",
+        "to": "<DIV> \"Walk me through a safe plan to defeat the large\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(94)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 94,
+        "label": "step 94",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Walk me through a safe plan to defeat the large\"",
+        "to": "<DIV> \"Give me a full plan for the big boss fight pleas\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(95)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 95,
+        "label": "step 95",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Give me a full plan for the big boss fight pleas\"",
+        "to": "<DIV> \"Lay out a step by step plan for that boss.\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(96)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 96,
+        "label": "step 96",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Lay out a step by step plan for that boss.\"",
+        "to": "<DIV> \"Say hello in three words, after the update\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(97)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 97,
+        "label": "step 97",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Say hello in three words, after the update\"",
+        "to": "<DIV> \"What TDP setting should I use for Hollow Knight\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(98)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 98,
+        "label": "step 98",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"What TDP setting should I use for Hollow Knight\"",
+        "to": "<DIV> \"Which Driller upgrades are worth taking early in\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(99)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 99,
+        "label": "step 99",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Which Driller upgrades are worth taking early in\"",
+        "to": "<DIV> \"Give me three quick tips for surviving the next\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(100)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 100,
+        "label": "step 100",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Give me three quick tips for surviving the next\"",
+        "to": "<DIV> \"How should I handle the big bosses in Deep Rock\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(101)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 101,
+        "label": "step 101",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"How should I handle the big bosses in Deep Rock\"",
+        "to": "<DIV> \"What power limit in watts should I set for Hollo\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(102)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 102,
+        "label": "step 102",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"What power limit in watts should I set for Hollo\"",
+        "to": "<DIV> \"What is the best way to fight the Dreadnought Tw\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(103)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 103,
+        "label": "last row",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-details-session-row",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"What is the best way to fight the Dreadnought Tw\"",
+        "to": "<DIV> \"Which power limit in watts should I pick for Hol\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(104)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 104,
+        "label": "ladder chip 1",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-chip-ladder-chip",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"Which power limit in watts should I pick for Hol\"",
+        "to": "<DIV> \"Keyword + meaning\"",
+        "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(105) > div:nth-child(2) > div.Panel.Focusable:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 105,
+        "label": "ladder chip 2",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-chip-ladder-chip",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"Keyword + meaning\"",
+        "to": "<DIV> \"Read current TDP\"",
+        "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(105) > div:nth-child(2) > div.Panel.Focusable:nth-child(3)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 106,
+        "label": "ladder chip 3",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-chip-ladder-chip",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"Read current TDP\"",
+        "to": "<DIV> \"Thinking: Balanced · 16 s · ~445 tokens\"",
+        "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(105) > div:nth-child(2) > div.Panel.Focusable:nth-child(5)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 107,
+        "label": "ladder chip 4",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-chip-ladder-chip",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"Thinking: Balanced · 16 s · ~445 tokens\"",
+        "to": "<DIV> \"Spoiler risk: high\"",
+        "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(105) > div:nth-child(2) > div.Panel.Focusable:nth-child(6)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 108,
+        "label": "ladder chip 5",
+        "press": [
+          "DOWN"
+        ],
+        "expect": ".bonsai-chip-ladder-chip",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"Spoiler risk: high\"",
+        "to": "<DIV> \"Developer details\"",
+        "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(8) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(105) > div:nth-child(2) > div.Panel.Focusable:nth-child(8)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 109,
+        "label": "exit to Hide details",
+        "press": [
+          "DOWN"
+        ],
+        "expect": null,
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": null,
+        "from": "<DIV> \"Developer details\"",
+        "to": "<DIV> \"Hide details\"",
+        "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 110,
+        "label": "question box",
+        "press": [
+          "DOWN"
+        ],
+        "expect": "input.DialogInput",
+        "ok": true,
+        "pass": true,
+        "moved": true,
+        "matched": true,
+        "from": "<DIV> \"Hide details\"",
+        "to": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.No gameStrategyAsk\"",
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
+        "visible": true,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        }
+      },
+      {
+        "index": 111,
         "label": "ask",
         "press": [
           "DOWN"
@@ -2241,9 +2943,9 @@
         "pass": true,
         "moved": true,
         "matched": true,
-        "from": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.\"",
-        "to": "<BUTTON> \"ask\"",
-        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+        "from": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.No gameStrategyAsk\"",
+        "to": "<BUTTON> \"Ask\"",
+        "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(3) > button.Focusable:nth-child(3)",
         "visible": true,
         "visibility": {
           "verdict": "visible",

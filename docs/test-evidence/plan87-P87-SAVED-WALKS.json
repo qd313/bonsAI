@@ -1,0 +1,37 @@
+{
+  "row": "P87-SAVED-WALKS",
+  "build_commit": "26f22530 (on the Deck; checkout tip 5db31880 is docs-only after it: no code commits newer)",
+  "deck_time_local": "2026-10-10 03:41 to 04:01 EDT",
+  "screen": "MONITOR live: page window 855 x 766",
+  "setup": "Plugin open on Main tab, test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7), chips closed, 99 earlier group folded, last answer 'Where are you at in Hollow Knight?' (two short sections, 105 and 45 px tall). voice_reply_mode is 'off'. Keep-awake retaken ttl 480, expiresAt 2026-10-10T15:38:04Z. No question was asked in this check. One A press: on 'Show details' (opened details for F4-LADDER-EXIT), later A on 'Hide details' (closed again). No A on the question box.",
+  "pressed": "Each walk replayed once with deck_replayChecks (the replay does not set up its own start, so the ring was walked to each walk's start first); on a layout change the new route was walked one press at a time reading focus (deck_runSequence with focus read after every press) and then saved with deck_saveCheck under the same name.",
+  "seen": {
+    "new_layout_facts": "Order of stops top to bottom today: tab bar, chat name row (83 percent visible, clipped), 'N earlier' pill, question text, Show reasoning, answer sections, choice A, choice B, Mark reply helpful, Show details, suggestion chip, question box, Ask. Retry same prompt is no longer its own stop. Spoiled it / Bad info / Read aloud are not stops (Read aloud hidden: voice_reply_mode is off). Ask row: paperclip is LEFT of the box, mode / mic / Ask are on one row (RIGHT from the box = mode, RIGHT = mic, RIGHT = Ask); DOWN from the box = Ask; UP from Ask or paperclip = box; DOWN on the paperclip does not move. Details (Session view): pill, Sum up again, What the AI remembers, Rename/Keep suggestion, 100 session rows, then a 5-chip ladder (class bonsai-chip-ladder-chip), Hide details, box, Ask.",
+    "walks": {
+      "F-UP-WALK": "replayed: FAIL (start state: replay began on the tab bar, step 1 did not move). Walk by hand: route changed (Spoiled it, Bad info, Read aloud, Retry stops gone; chat row is now the name row). Re-recorded: 10 of 10 steps pass, 2 report-only partial stops (first suggestion chip 33 percent visible when entered, name row 83 percent).",
+      "F4-LADDER-EXIT": "replayed not run in full (81-step walk expects 71 rows; chat has 100). Re-recorded: 111 of 111 steps pass, 0 stops not visible. Changes: new stop 'What the AI remembers' and a Rename/Keep row inside the Session list, 5 ladder chips (was 6) with new class bonsai-chip-ladder-chip, exit goes to 'Hide details' (was suggestion chip) then box then Ask.",
+      "P77-TRAP-LONG-ASKWALK": "replayed: FAIL (layout: 87 differences, all in stop names and order; 16 presses all moved but the walk now reaches Ask in 13). Re-recorded: 13 of 13 pass, last step Ask visible; 2 report-only partial stops (name row 83 percent, chip 67 percent).",
+      "plan70-STRATEGY-PLACEHOLDER-01": "replayed: FAIL (layout: paperclip/avatar route changed; the AI-character avatar stop does not exist any more: no .bonsai-ai-character-avatar element in the page). Re-recorded: 4 of 4 pass (box to Ask, Ask to box, box to paperclip, paperclip up to box), 0 not visible.",
+      "plan74-P74-ASK-UP": "replayed: FAIL (layout: mic and Ask are now on one row, DOWN from mic does not move; paperclip DOWN does not move). Re-recorded: 10 of 10 pass, 0 not visible.",
+      "t75-5-Q4-ASK-UP": "replayed not separately (same route as P74 with different selectors). Re-recorded to the same new route: 10 of 10 pass, 0 not visible.",
+      "plan81-free-play-nogame": "replayed: FAIL (layout: stops recorded 27 vs saved 35, presses 38 vs 50, not-visible stops 4 vs 7). Re-recorded as a sweep: 27 stops, 14 controls, 38 presses, 0 cycles, 4 report-only partial stops (name row 83 percent twice, 'Describe what you see in this screenshot' chip 67 percent, 'What TDP should I use for menus and idle?' chip 33 percent covered by the chip carousel).",
+      "plan64-TALL-SECTION-01": "replayed from the Show reasoning stop: FAIL, NOT re-recorded. Not a layout change: the walk needs a section taller than the screen and a Read aloud button. Today's last answer has sections 105 and 45 px tall and Read aloud is hidden because voice_reply_mode is 'off'. Replay got 2 of 12 steps (reasoning to section, then section to choice A: the answer is short). The saved file still describes the pre-plan-84 layout."
+    }
+  },
+  "expected": "Each of the eight walks replayed PASS, or re-recorded when only the layout changed, or recorded as a finding when it fails for another reason.",
+  "verdict_F-UP-WALK": "PASS (re-recorded: layout changed, route walked one press at a time, 10 of 10)",
+  "verdict_F4-LADDER-EXIT": "PASS (re-recorded: layout changed, 111 of 111)",
+  "verdict_P77-TRAP-LONG-ASKWALK": "PASS (re-recorded: layout changed, 13 of 13)",
+  "verdict_plan70-STRATEGY-PLACEHOLDER-01": "PASS (re-recorded: avatar stop gone, 4 of 4)",
+  "verdict_plan74-P74-ASK-UP": "PASS (re-recorded: Ask row changed, 10 of 10)",
+  "verdict_t75-5-Q4-ASK-UP": "PASS (re-recorded: Ask row changed, 10 of 10)",
+  "verdict_plan81-free-play-nogame": "PASS (re-recorded sweep: layout changed, 27 stops, 0 cycles)",
+  "verdict_plan64-TALL-SECTION-01": "UNCLEAR (not re-recorded: needs a tall section and Read aloud; neither present; owner to decide whether to turn voice replies on and ask a long question, or retire the walk)",
+  "verdict": "UNCLEAR. Seven of eight walks re-recorded and saved; plan64-TALL-SECTION-01 could not be run on the current state.",
+  "side_effect": "Files changed in C:/Users/still/Documents/BonsAI/checks/: F-UP-WALK.json, F4-LADDER-EXIT.json, P77-TRAP-LONG-ASKWALK.json, plan70-STRATEGY-PLACEHOLDER-01.json, plan74-P74-ASK-UP.json, t75-5-Q4-ASK-UP.json, plan81-free-play-nogame.json (all via deck_saveCheck, old versions replaced). Several failed saveCheck attempts for F4-LADDER-EXIT wrote nothing. Details panel opened and closed once (A on Show details, A on Hide details). Nothing else changed on the Deck.",
+  "new_findings": [
+    "First suggestion chip is only partly visible when the ring lands on it from the question box or from Show details: 33 to 67 percent (covered by the dock / clipped by the chip carousel), varies with the churning chip text.",
+    "Chat name row reads 83 percent visible when focused (clipped by the title strip) in every walk.",
+    "Retry same prompt, Spoiled it, Bad info are no longer D-pad stops in a finished answer; Read aloud is absent because voice_reply_mode is off. Owner to confirm that is intended."
+  ]
+}

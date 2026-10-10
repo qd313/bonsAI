@@ -1,0 +1,20 @@
+{
+  "row": "P87-SMOKE-FINAL",
+  "build_commit": "26f22530 (on the Deck)",
+  "deck_time_local": "2026-10-10 04:03 to 04:12 EDT",
+  "screen": "MONITOR live: page window 855 x 766",
+  "setup": "Main tab, test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7, name read before the question), Strategy mode, No game, the Deck's own AI (routed gemma4:e2b-it-qat), chips closed. Question put in with scripts/deck_send_ask.py (VERIFIED, field held the whole text).",
+  "pressed": "Walked DOWN 13 presses from the tab bar to Ask (read focus: aria-label Ask, visible), then A on Ask. After the answer: UP twice (box, Show details), A on Show details (verified aria-label), DOWN x10 through the details chips to the box and Ask, UP walk to Hide details, A on Hide details, UP to the tab bar, then RB x6 (reading the tab after each) and LB x1, RB x1.",
+  "seen": {
+    "question": "Give me two quick tips for a boss fight, smoke test",
+    "answer": "arrived and finished about 44 s after the press (waitFor satisfied at 43.8 s, 22 polls); reasoning fold 'Show reasoning 21 s'; two sections ('Identify the primary attack pattern:' and 'Manage your positioning:'), two choices (A, B), Mark reply helpful present; Ask button back to ready, no stop button; ring unowned after the answer (readFocus empty) as known",
+    "show_details": "A on Show details opened it (Hide details shown twice, This answer / Session 100 pill, 7 chip elements). DOWN walk: Hide details, pill, Keyword + meaning, Reply style: balanced, Thinking: Balanced 21 s ~593 tokens, Routed gemma4:e2b-it-qat, suggestion chip, question box, Ask; 10 of 10 presses behaved, 1 report-only partial stop (suggestion chip 33 percent visible, covered by the chip carousel). Closing with A on Hide details worked (Show details back).",
+    "dpad_reaches_box": "yes: DOWN from the last detail chip row went suggestion chip -> question box -> Ask, and UP from a finished answer with an unowned ring landed on the question box first",
+    "tabs_RB": ["Main (start)", "Ollama", "Settings", "Permissions", "Developer", "About", "Main (wrap)"],
+    "tabs_LB": "LB from Main went to About; RB back to Main",
+    "tab_count": 6
+  },
+  "expected": "Answer arrives and finishes; Show details opens and its chips walk; D-pad reaches the question box again; RB through every tab and back, every tab opens.",
+  "verdict": "PASS",
+  "side_effect": "One extra question in the test chat (as the runbook asks): chat now has 'Give me two quick tips for a boss fight, smoke test' as newest turn (its group count is 101 entries). Nothing else changed."
+}

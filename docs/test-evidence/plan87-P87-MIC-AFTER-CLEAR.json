@@ -1,0 +1,21 @@
+{
+ "row": "P87-MIC-AFTER-CLEAR (block 6a check 3 = runbook-block6 check 2b)",
+ "build_commit": "95139093",
+ "deck_time_local": "2026-10-10 02:32-02:34",
+ "screen": "MONITOR live (page 855 x 766)",
+ "setup": "Pretend microphone as in block 3b: defaults noted (Default Sink alsa_output...Speaker__sink, Default Source alsa_loopback_device...Internal_Mic__source); null sink p87mic loaded (module 536870916), defaults unchanged; voice_capture_target file written with p87mic.monitor; voice model tiny.en. Main tab, test chat 'How do I beat the boss in the Soul Sanctum...' (chat 1 of 7). Ring walked Down to Ask then Left to 'Voice input'; box empty. Sentence played with paplay --device=p87mic --volume=65536 /tmp/pretend_sentence_quiet.wav, started within about 1 to 2 s of each A.",
+ "pressed": ["A on Voice input (first run), play sentence, A on Stop voice input after the sentence ended", "box cleared with deck_send_ask.py --clear (VERIFIED, field empty, ring still on Voice input)", "A once on Voice input, play sentence, A on Stop (try 1 after clear)", "clear again, A once, play, A on Stop (repeat)"],
+ "seen": {
+  "step1_first_run_no_clear": "Button read 'Stop voice input' while the sentence played; box held 167 characters: 'How do I beat the final boss in this game and which weapon should I upgrade first because my health keeps running out before I can reach the second phase of the fight.' Log: recording started 02:32:53.854, recording stopped 02:33:14.964 (21.1 s, by my A), transcript 167 characters.",
+  "step3_after_clear_try1": "Page-side label logger (50 ms): 'Voice input' to 'Starting voice input' (250 ms later) to 'Stop voice input' (300 ms after that); it stayed on 'Stop voice input' for the whole sentence (16 s read, box 167 characters, not 94 ms). Log: recording started 02:33:28.105, recording stopped 02:33:47.044 (18.9 s, by my A), transcript 167 characters. The box held the same words as step 1.",
+  "step3_repeat_after_clear": "Same again: 'Stop voice input' held for the whole sentence; box 168 characters: 'How do I beat the final boss in this game, and which weapon should I upgrade first because my health keeps running out before I can reach the second phase of the fight.' (one comma more). Log: recording started 02:33:57.153, recording stopped 02:34:15.862 (18.7 s, by my A), transcript 168 characters.",
+  "cleanup": "voice_capture_target removed (ls count 0); module 536870916 unloaded; Default Sink and Default Source unchanged from the start; box cleared with the script after the last run. /tmp/pretend_sentence_*.wav left on the Deck (block 6b removes them)."
+ },
+ "expected": "Button reads 'Stop voice input' the whole time, log has 'recording started' and no stop until Stop is pressed (not 94 ms later), box fills with the sentence (about 167 characters). Repeat once.",
+ "verdict": [
+  "step 1 (first run, box not cleared): PASS - box held the sentence, 167 characters.",
+  "step 3 (first A after the box was cleared): PASS - did not stop by itself, button held 'Stop voice input', recording ran 18.9 s until my A, box 167 characters.",
+  "step 3 repeat: PASS - same, box 168 characters (a comma differs from the first run), recording ran 18.7 s until my A."
+ ],
+ "side_effect": "none beyond the set-up and clean-up listed"
+}

@@ -1,0 +1,32 @@
+{
+  "row": "P87-DECK-RESTORED",
+  "build_commit": "26f22530 (on the Deck)",
+  "deck_time_local": "2026-10-10 04:14 to 04:30 EDT",
+  "screen": "MONITOR live: page window 855 x 766 (AI models window 1500 wide in the Big Picture target)",
+  "setup": "After check 2. Plugin open on Main tab. No game running (ps shows none). Memory available 5,561 MB.",
+  "pressed": "Compared settings with the night backup (read only). Tried the plugin's own screen for the try order: Ollama tab, AI models (A on the AI models button, focus read), walked with directions only to 'Reset the try order to automatic' (aria-label verified) and pressed A once, then Done. Then one SSH python edit of the single key, then deck_reloadPlugin at once. Then deck_openPlugin, LB to Main. Then deck_restorePowerSettings.",
+  "seen": {
+    "diff_before": {"chat_text_size": [null, "normal"], "text_model_routing_order": [["gemma4:e2b-it-qat"], "16 names starting gemma4:e2b-it-qat, qwen3.5:4b, lfm2.5:8b ... gemma3:4b"]},
+    "screen_route": "The AI models screen has only Text/Pictures tabs, move up/down per installed model, and 'Reset order' (reset to automatic). Reset order left the 16-name list unchanged (it is the automatic list), so the screen cannot make the one-name list. Remove from Deck was never focused or pressed. Cancel/B did not close the window (B left focus on Reset order); Done closed it with no other change.",
+    "ssh_edit": "Claude Code did not refuse the SSH edit. Only text_model_routing_order was written, to [\"gemma4:e2b-it-qat\"]. The file is rewritten with 2-space indent by python (the plugin's own writer may format it differently). vision_model_routing_order untouched.",
+    "diff_after": {"chat_text_size": [null, "normal"]},
+    "voice_stt_model": "tiny.en",
+    "chat_text_size": "normal",
+    "ollama_local_on_deck": true,
+    "dev_frozen_test_chips": [],
+    "voice_capture_target_file": "none in the settings folder",
+    "p87mic_sink": "none (pactl sinks: Speaker, Headphones only)",
+    "voice_models_dir": "ggml-base.en.bin 147,964,211 bytes (Oct 9 19:42), ggml-tiny.en.bin 77,704,715 bytes (Jul 7): same sizes as the block 3 handover expected",
+    "chats": "7 chat files (index excluded)",
+    "pretend_wavs": "3 files found (pretend_sentence_loud, _pause_quiet, _quiet) and removed; count now 0",
+    "keep_awake": "released with deck_restorePowerSettings (wasHeld true, released true); inhibitor list no longer needed",
+    "final_state": "Plugin open on the Main (bonsAI) tab, test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7), question box empty (value ''), details closed, no game running"
+  },
+  "expected": "Settings equal the backup except new keys (chat_text_size normal); try order back to the one-name list; voice model tiny.en; text size normal; Run AI on this Deck on; no capture-target file; no p87mic sink; voice model files as at start; no pinned test chips; 7 chats; no pretend wavs; keep-awake released; plugin open on Main, test chat, box empty.",
+  "verdict_settings": "PASS (only chat_text_size differs from the backup, as expected; text_model_routing_order put back by one SSH edit after the plugin's screen could not do it)",
+  "verdict_other_items": "PASS (tiny.en, normal, Run AI on this Deck on, no capture file, no sink, model files present with expected sizes, no pinned chips, 7 chats, 0 pretend wavs)",
+  "verdict_keep_awake": "PASS (released)",
+  "verdict_final_state": "PASS (Main tab, test chat, box empty)",
+  "verdict": "PASS",
+  "side_effect": "Pressed A on 'Reset order' in the AI models window: no change to the file (list was already the automatic list). Used B once in that window: it did not close it. The test chat now holds one more question ('Give me two quick tips for a boss fight, smoke test') from check 2. The earlier voice_reply_mode value 'off' equals the backup, so Read aloud stays hidden."
+}

@@ -1,0 +1,12 @@
+{
+ "row": "P87-NOTES-CARD-LEFT",
+ "build_commit": "95139093 (commit 95139093 'Left and Right on the \"From the notes\" block no longer take the D-pad ring out of the plugin' is the build's own tip)",
+ "deck_time_local": "2026-10-10 02:38-02:42",
+ "screen": "MONITOR live (page 855 x 766)",
+ "setup": "Main tab, test chat. The old Dreadnought answers sit behind '99 earlier', so one question was asked in the test chat: 'What is the best way to fight the Dreadnought Twins in Deep Rock Galactic Survivor' (send script VERIFIED; walked Right to Ask, read focus 'Ask', then A). The answer finished in about 27 s and shows ONE notes card: 'Dreadnought Twins  > From bonsAI's own note' (a lone card; block 5b's answer had '(+1 more)'). No game running. Ring walked Up from the question box (via the suggestion chip) to the notes block in 2 presses; read focus: bonsai-kb-notes-block, box [52,603,267,47], fully visible.",
+ "pressed": ["LEFT (once)", "RIGHT (once)"],
+ "seen": "After LEFT: gpfocus still the notes block (label \"Dreadnought Twins - From bonsAI's own note, show\", same box [52,603,267,47]), still inside the plugin's pane, document has focus. After RIGHT: same, ring still on the notes block, in the plugin, document has focus. Ring never moved to Steam's side tab list.",
+ "expected": "The ring stays on the notes block both times; it must never go into Steam's side tab list.",
+ "verdict": "PASS - Left and Right on the lone notes card both left the ring on the notes block, inside the plugin.",
+ "side_effect": "One extra question and answer in the test chat (now about 102 entries). The notes card is left collapsed (no A pressed on it)."
+}

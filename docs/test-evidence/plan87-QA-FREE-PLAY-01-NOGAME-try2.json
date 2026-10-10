@@ -1,0 +1,18 @@
+{
+ "row": "QA-FREE-PLAY-01 (no game, final build, try2)",
+ "build_commit": "95139093",
+ "deck_time_local": "2026-10-10 02:36-02:37",
+ "screen": "MONITOR live (page 855 x 766). Pane 24 to 765 (clientHeight 741).",
+ "setup": "Main tab, test chat, no game running (confirmed over SSH after step 1), answer on screen = the newest Dreadnought Twins answer with one notes card; chips closed. Ring put on the chat's name row first (walkTo Up, 10 presses). deck_sweep DOWN, returnTrip, budget 120, lanes 1 (RB to the Ollama tab). The raw sweep report is plan87-QA-FREE-PLAY-01-NOGAME-try2-sweep-raw.json (copy of runs/plan87-QA-FREE-PLAY-01-NOGAME-try2.json). Only direction presses and RB.",
+ "pressed": "62 presses in 4 legs: Main DOWN 15 (13 stops), Main UP 16 (14 stops), RB, Ollama DOWN 15 (13 stops), Ollama UP 15 (13 stops).",
+ "seen": {
+  "totals": "stopsRecorded 55, stopsVisited 30, unlabeledStops 3 (answer paragraph blocks, boxes 245 wide), cycles 0, stopsFocusedButNotVisible 2 (both the chat name row, see below).",
+  "main_down_leg": "name row, 99 earlier, 3 unlabeled answer blocks, Show reasoning, A. Early..., B. Later..., Mark reply helpful, Show details (answer divider, y636), the Dreadnought Twins notes card (y604), Show details (the dock line, y658 h30, a different control from the divider), the question box, Ask. Each once. Scroll 0 to 77 px. Leg ended after 2 stall presses at Ask.",
+  "main_up_leg": "the same stops in reverse, each once, back to the name row and the bonsAI tab bar; ended after 2 stall presses at the bar.",
+  "ollama_lane": "Down 12 controls then 'AI models' last; Up retraces them back to the tab bar. Every stop visible 100%. scrollTop 0 at the first control, 977 at the last.",
+  "name_row_partial": "The chat name row (box [140,20,166,28]) reads partly visible: 75% at the start (clipped by a Focusable box, covered by one) and 83% on the Up leg. Screenshot plan87-QA-FREE-PLAY-01-NOGAME-try2-name-row.png: the ring box is fully on screen (y 75 to 114 on the 1920 screen), the name shows 'I beat the boss in the' with the dropdown chevron and 'chat 1 of 7' under it. The start of the long name scrolls out at the left, which is how the name row looks for this long name. Known not-failure."
+ },
+ "expected": "Every stop visible to a person, no dead press, no stop twice.",
+ "verdict": "PASS - every stop is visible to a person; the only two 'partly visible' reads are the chat name row (known not-failure, screenshot shows the whole ring on screen); no dead press inside a leg (stall presses only at each end); no stop twice (the two 'Show details' stops are two different controls at y636 and y658); no cycles.",
+ "side_effect": "none (direction presses and RB only). The sweep tool wrote runs/plan87-QA-FREE-PLAY-01-NOGAME-try2.json into the checkout (tool output)."
+}

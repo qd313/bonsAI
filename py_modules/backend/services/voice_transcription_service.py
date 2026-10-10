@@ -127,6 +127,7 @@ from backend.services.voice_model_download_service import (
     _append_log_tail,
     _download_model_file,
     download_voice_model,
+    model_file_complete,
     new_voice_install_state,
     sanitize_voice_stt_model,
     voice_model_path,
@@ -303,7 +304,7 @@ def install_whisper_cli(
 def engine_readiness(plugin_root: str, settings_dir: str, model_id: str) -> dict[str, Any]:
     model_id = sanitize_voice_stt_model(model_id)
     model_path = voice_model_path(plugin_root, settings_dir, model_id)
-    model_ready = os.path.isfile(model_path) and os.path.getsize(model_path) > 1024
+    model_ready = model_file_complete(plugin_root, settings_dir, model_id)
     whisper_bin = _voice_binary_ready_for_inference(
         plugin_root,
         settings_dir,

@@ -33,6 +33,7 @@ from backend.services.async_background_job import (
 )
 from backend.services.capabilities import capability_enabled, downloads_off_refusal
 from backend.services.transparency_service import build_voice_transcribe_snapshot
+from backend.services.voice_model_download_service import install_in_progress_refusal
 from backend.services.voice_transcription_service import (
     VoiceTranscriptionSession,
     download_voice_model,
@@ -147,6 +148,18 @@ async def start_voice_transcription(self, PLUGIN_ROOT: str):
     settings = await self.load_settings()
     model_id = sanitize_voice_stt_model(settings.get("voice_stt_model"))
     ready = engine_readiness(PLUGIN_ROOT, decky.DECKY_PLUGIN_SETTINGS_DIR, model_id)
+    # A model (or the engine) that is still being installed is "not ready yet", not "not installed".
+    busy = install_in_progress_refusal(
+        PLUGIN_ROOT,
+        decky.DECKY_PLUGIN_SETTINGS_DIR,
+        model_id,
+        self._voice_install_state,
+        bool(ready.get("model_ready")),
+        bool(ready.get("binary_ready")),
+    )
+    if busy is not None:
+        _log_start_refused(model_id, str(busy["error"]))
+        return busy
     if not ready.get("binary_ready"):
         _log_start_refused(model_id, "engine_missing")
         return {

@@ -572,6 +572,7 @@
     "tests/test_voice_read_aloud_service.py",
     "tests/test_voice_rpc_logs.py",
     "tests/test_voice_session_status.py",
+    "tests/test_voice_start_refused_while_downloading.py",
     "tests/test_voice_transcription_service.py",
     "tests/test_voice_whisper_daemon.py"
   ]

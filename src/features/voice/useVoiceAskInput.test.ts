@@ -254,3 +254,28 @@ describe("useVoiceAskInput while an answer is arriving", () => {
     expect(getRpcCallLog().some((c) => c.method === "start_voice_transcription")).toBe(false);
   });
 });
+
+describe("useVoiceAskInput when the speech model is still downloading", () => {
+  it("shows the back end's plain refusal line and records nothing", async () => {
+    vi.mocked(toaster.toast).mockClear();
+    const line = "The speech model is still downloading. Try again when it finishes.";
+    setRpcHandler("start_voice_transcription", () => ({
+      accepted: false,
+      error: "model_downloading",
+      reason: line,
+    }));
+    const { result } = renderHook(() =>
+      useVoiceAskInput({ setUnifiedInput: () => {}, unifiedInput: "", microphoneAccess: true, isAsking: false, uiT }),
+    );
+    await act(async () => {
+      result.current.onMicInput();
+      await new Promise((r) => setTimeout(r, 30));
+    });
+    expect(toaster.toast).toHaveBeenCalledWith(
+      expect.objectContaining({ title: "Voice input unavailable", body: line }),
+    );
+    expect(result.current.voiceRecording).toBe(false);
+    expect(result.current.voiceStarting).toBe(false);
+    expect(getRpcCallLog().some((c) => c.method === "get_voice_transcription_status")).toBe(false);
+  });
+});

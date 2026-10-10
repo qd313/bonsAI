@@ -118,7 +118,7 @@ class DownloadCheckTests(unittest.TestCase):
     def test_an_already_installed_model_is_not_hashed_again(self):
         os.makedirs(os.path.dirname(self.dest), exist_ok=True)
         with open(self.dest, "wb") as fh:
-            fh.write(b"Y" * 4096)
+            fh.write(b"Y" * len(self.good))  # the pinned size, but not the pinned bytes
         with patch.object(svc, "_download_model_file") as fake:
             state = svc.new_voice_install_state()
             svc.download_voice_model(self.tmp.name, self.tmp.name, "tiny.en", state, threading.Event())

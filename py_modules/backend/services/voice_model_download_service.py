@@ -33,6 +33,7 @@ import os
 import shutil
 import subprocess
 import threading
+import time
 import urllib.request
 from typing import Any, Callable, Optional
 
@@ -93,6 +94,64 @@ def voice_models_dir(plugin_root: str, settings_dir: str) -> str:
 def voice_model_path(plugin_root: str, settings_dir: str, model_id: str) -> str:
     spec = VOICE_STT_MODEL_SPECS.get(model_id, VOICE_STT_MODEL_SPECS[DEFAULT_VOICE_STT_MODEL])
     return os.path.join(voice_models_dir(plugin_root, settings_dir), spec["filename"])
+
+
+def model_file_complete(plugin_root: str, settings_dir: str, model_id: str) -> bool:
+    """True when the model file is on disk at exactly its pinned size.
+
+    A file that is there but the wrong size is a download that stopped part way (or something
+    else wrote to the name); it must not be offered to the speech engine.
+    """
+    model_id = sanitize_voice_stt_model(model_id)
+    path = voice_model_path(plugin_root, settings_dir, model_id)
+    if not os.path.isfile(path):
+        return False
+    expected = int(VOICE_STT_MODEL_SPECS[model_id].get("bytes") or 0)
+    size = os.path.getsize(path)
+    return size == expected if expected else size > 1024
+
+
+# A partial file that was written to in the last half minute is a download in progress; an older
+# one is left over from a download that was killed, and must not block recording for ever.
+PARTIAL_FILE_FRESH_SECONDS = 30.0
+MODEL_DOWNLOADING_LINE = "The speech model is still downloading. Try again when it finishes."
+ENGINE_INSTALLING_LINE = "The voice engine is still being set up. Try again when it finishes."
+
+
+def _partial_download_is_growing(plugin_root: str, settings_dir: str, model_id: str) -> bool:
+    part = voice_model_path(plugin_root, settings_dir, model_id) + ".part"
+    try:
+        return time.time() - os.path.getmtime(part) < PARTIAL_FILE_FRESH_SECONDS
+    except OSError:
+        return False
+
+
+def install_in_progress_refusal(
+    plugin_root: str,
+    settings_dir: str,
+    model_id: str,
+    install_state: dict[str, Any],
+    model_ready: bool,
+    binary_ready: bool,
+) -> Optional[dict[str, Any]]:
+    """The refusal to hand a mic press while the engine or this model is still being installed.
+
+    None when recording may go ahead. Only an install that has not finished the piece this press
+    needs counts: a download of the other model, or an engine build when everything needed is
+    already in place, does not block it.
+    """
+    model_id = sanitize_voice_stt_model(model_id)
+    running = install_state.get("phase") == "running" and not install_state.get("done")
+    stage = str(install_state.get("stage") or "")
+    if not model_ready:
+        mine = running and sanitize_voice_stt_model(install_state.get("model_id")) == model_id
+        if mine or _partial_download_is_growing(plugin_root, settings_dir, model_id):
+            if mine and stage.startswith("binary"):
+                return {"accepted": False, "error": "engine_installing", "reason": ENGINE_INSTALLING_LINE}
+            return {"accepted": False, "error": "model_downloading", "reason": MODEL_DOWNLOADING_LINE}
+    if not binary_ready and running and stage.startswith("binary"):
+        return {"accepted": False, "error": "engine_installing", "reason": ENGINE_INSTALLING_LINE}
+    return None
 
 
 def _append_log_tail(state: dict[str, Any], line: str, max_lines: int = 80) -> None:
@@ -222,11 +281,13 @@ def download_voice_model(
         if on_stage:
             on_stage(name, {"model_id": model_id, **fields})
 
-    if os.path.isfile(dest_path) and os.path.getsize(dest_path) > 1024:
+    if model_file_complete(plugin_root, settings_dir, model_id):
         state.update({"phase": "done", "done": True, "error": "", "progress_pct": 100, "model_id": model_id})
         stage("model_ready")
         return
 
+    # A file at the final name that is not the pinned size is a stopped download: replace it.
+    _remove_quietly(dest_path)
     state.update({"phase": "running", "done": False, "error": "", "model_id": model_id, "progress_pct": 0})
     stage("download_start", url=spec["url"])
 

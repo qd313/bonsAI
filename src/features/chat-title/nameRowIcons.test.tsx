@@ -338,6 +338,8 @@ describe("the ring after the Delete chat? box opened from the delete icon closes
     const c = title.container;
     const box = await openBox(c);
     act(() => (box.props as { onDelete: () => void }).onDelete());
+    /* The box stays up until the delete is done, then closes: Steam lands the ring as it goes. */
+    await act(async () => {});
     putSteamRingOn(arrowOf(c));
     await advance(1500);
     expect(calls.deleted).toEqual(["b"]);

@@ -13,7 +13,8 @@
  * moved to the chats menu (plan 84 step 5).
  *
  * Does not: Delete anything until Delete is pressed. Never makes a chat unless a caller asked for one
- * through `replaceWith`, and then only after the delete succeeded. Does not move the ring itself; the box-return
+ * through `replaceWith`, and then only after the delete succeeded. Never closes the box before the delete
+ * (and that new chat) is done. Does not move the ring itself; the box-return
  * registry (modalReturnFocusRegistry.ts) does, under the "chat-slot-rename" id the row always used.
  */
 import { useCallback } from "react";
@@ -77,22 +78,23 @@ export function useChatSlotDeleteConfirm({
           label={label}
           onKeep={finish}
           onDelete={() => {
-            const replaceWith = options?.replaceWith;
-            if (!replaceWith) {
-              void onDeleteSlot(slotId);
-              finish();
-              return;
-            }
+            /*
+              The box stays up until the delete is done (and the new chat made, when the picker asked
+              for one). Closing it first rebuilt the plugin while the delete was still on its way: the
+              rebuilt screen asked for the chat being deleted, and came back on a chat that was gone
+              (no name row, its words on screen, the ring on the tab bar). Done first, the open chat
+              is already the next one when the box closes (useChatSlots' deleteSlot, which also
+              corrects the session note the rebuild reads).
+            */
             void (async () => {
               try {
                 if (await onDeleteSlot(slotId)) {
                   /*
-                    Closing a box rebuilds the plugin from the session note taken when the box opened.
-                    Making the new chat the open one (useChatSlots' setActiveSlot) corrects that note
-                    (bonsaiSessionSurvival.ts, patchPendingSessionActiveSlot), so the rebuild comes back
-                    on the new chat, with no wait for the screen to draw it.
+                    New chat at ten chats: making the new chat the open one corrects the same note
+                    (bonsaiSessionSurvival.ts, patchPendingSessionActiveSlot), so the rebuild comes
+                    back on it, with no wait for the screen to draw it.
                   */
-                  await replaceWith();
+                  await options?.replaceWith?.();
                 }
               } finally {
                 finish();

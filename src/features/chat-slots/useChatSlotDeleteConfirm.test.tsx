@@ -13,7 +13,7 @@
  */
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, render, renderHook } from "@testing-library/react";
+import { act, fireEvent, render, renderHook, waitFor } from "@testing-library/react";
 
 type Handlers = Record<string, unknown>;
 let shown: React.ReactElement[] = [];
@@ -83,12 +83,23 @@ describe("the Delete chat box", () => {
     expect(close).toHaveBeenCalledTimes(1);
   });
 
-  it("Delete deletes the right chat once and closes the box", () => {
+  it("Delete deletes the right chat once and closes the box", async () => {
     const onDeleteSlot = vi.fn(async () => true);
     const { buttons } = openDeleteBox(onDeleteSlot);
     fireEvent.click(buttons[1]!);
     expect(onDeleteSlot).toHaveBeenCalledTimes(1);
     expect(onDeleteSlot).toHaveBeenCalledWith("b");
+    await waitFor(() => expect(close).toHaveBeenCalledTimes(1));
+  });
+
+  it("the box stays open until the delete is done, so the screen rebuilt behind it finds the chat gone", async () => {
+    let finishDelete: (ok: boolean) => void = () => undefined;
+    const onDeleteSlot = vi.fn(() => new Promise<boolean>((resolve) => (finishDelete = resolve)));
+    const { buttons } = openDeleteBox(onDeleteSlot);
+    fireEvent.click(buttons[1]!);
+    await Promise.resolve();
+    expect(close).not.toHaveBeenCalled();
+    await act(async () => finishDelete(true));
     expect(close).toHaveBeenCalledTimes(1);
   });
 

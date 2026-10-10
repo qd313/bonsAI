@@ -24,6 +24,13 @@ describe("VoiceInputSettingsSection engine action", () => {
     resetFakeDeckyRpc();
   });
 
+  it("on screen, base.en reads as the recommended model and tiny.en as the lighter one, in that order", () => {
+    renderSection();
+    const base = screen.getByText("base.en (more accurate, recommended)");
+    const tiny = screen.getByText("tiny.en (faster, less accurate)");
+    expect(tiny.compareDocumentPosition(base) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
   it("shows Reinstall when binary and model are ready", async () => {
     setRpcHandler("get_voice_engine_status", () => ({
       model_id: "tiny.en",

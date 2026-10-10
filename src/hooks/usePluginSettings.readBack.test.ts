@@ -97,7 +97,7 @@ const NON_DEFAULT: Record<string, unknown> = {
   use_local_knowledge_base: true,
   vision_model_routing_order: ["llava:7b"],
   voice_reply_mode: "always",
-  voice_stt_model: "base.en",
+  voice_stt_model: "tiny.en",
 };
 
 const camel = (wireKey: string) => wireKey.replace(/_([a-z0-9])/g, (_m, c: string) => c.toUpperCase());

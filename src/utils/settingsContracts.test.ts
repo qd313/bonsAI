@@ -102,6 +102,11 @@ describe("settings contracts", () => {
     expect(pair.latency_warning_seconds).toBeLessThan(pair.request_timeout_seconds);
   });
 
+  it("a fresh settings load with no saved speech model chooses base.en", () => {
+    expect(normalizeSettings({}).voice_stt_model).toBe("base.en");
+    expect(normalizeSettings({ voice_stt_model: "tiny.en" }).voice_stt_model).toBe("tiny.en");
+  });
+
   it("normalizes full settings payload with defaults", () => {
     const settings = normalizeSettings({
       latency_warning_seconds: "21",
@@ -120,7 +125,7 @@ describe("settings contracts", () => {
     expect(settings.capabilities.filesystem_write).toBe(false);
     expect(settings.capabilities.steam_web_api).toBe(false);
     expect(settings.capabilities.microphone_access).toBe(false);
-    expect(settings.voice_stt_model).toBe("tiny.en");
+    expect(settings.voice_stt_model).toBe("base.en");
     expect(settings.steam_web_api_key).toBe("");
     expect(settings.ai_character_enabled).toBe(false);
     expect(settings.ai_character_random).toBe(true);

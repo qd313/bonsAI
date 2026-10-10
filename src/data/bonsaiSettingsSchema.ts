@@ -205,7 +205,7 @@ export type BonsaiSettings = {
   /** Labeled ``host:port`` presets for quick Connection switching (max 4). */
   named_ollama_hosts: NamedOllamaHost[];
   dev_frozen_test_chips: string[];
-  /** Local whisper.cpp model for voice Ask (tiny.en default for Deck real-time). */
+  /** Local whisper.cpp model for voice Ask (base.en default: it keeps up on the Deck and repeats fewer words than tiny.en). */
   voice_stt_model: VoiceSttModelId;
   /** When true, UI scale profile is chosen automatically from QAM viewport + display heuristics. */
   ui_scale_auto_enabled: boolean;
@@ -348,7 +348,7 @@ export const DEFAULT_CAPABILITIES: BonsaiCapabilities = {
   internet_downloads: false,
 };
 
-export const DEFAULT_VOICE_STT_MODEL: VoiceSttModelId = "tiny.en";
+export const DEFAULT_VOICE_STT_MODEL: VoiceSttModelId = "base.en";
 export const VOICE_STT_MODEL_OPTIONS: VoiceSttModelId[] = ["tiny.en", "base.en"];
 
 export const DEFAULT_AI_CHARACTER_PRESET_ID = "";

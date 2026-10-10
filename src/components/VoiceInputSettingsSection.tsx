@@ -46,8 +46,8 @@ type VoiceEngineStatus = {
 };
 
 const MODEL_LABELS: Record<VoiceSttModelId, string> = {
-  "tiny.en": "tiny.en (fastest — recommended on Deck)",
-  "base.en": "base.en (more accurate, slower)",
+  "tiny.en": "tiny.en (faster, less accurate)",
+  "base.en": "base.en (more accurate, recommended)",
 };
 
 type Props = {

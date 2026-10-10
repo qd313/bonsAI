@@ -213,7 +213,7 @@ component ("SD card", "controller layout", "remote play") rather than only the s
 **Fix:**
 
 1. **Permissions** tab → enable **Voice input (microphone)**.
-2. **Settings → Voice input** → choose **tiny.en** (fastest on Deck) or **base.en** → **Install voice engine** (pulls whisper-cli via podman on SteamOS, then downloads the GGUF model).
+2. **Settings → Voice input** → keep **base.en** (the default, more accurate) or pick **tiny.en** (lighter, less accurate) → **Install voice engine** (pulls whisper-cli via podman on SteamOS, then downloads the GGUF model).
 3. If install fails, ensure **podman** is available (`which podman`) or place **`bin/whisper-cli`** in the plugin manually. See [`bin/README.md`](../bin/README.md).
 
 **Symptom:** Install fails with `libwhisper.so.1` / `podman cp` “no such file or directory” under `/app/build/src/…`.
@@ -234,7 +234,7 @@ component ("SD card", "controller layout", "remote play") rather than only the s
 
 **Symptom:** Interim text is slow or stalls.
 
-**Fix:** Use **tiny.en**; **base.en** needs more CPU on the Deck APU. Close heavy games while transcribing. Audio is processed in RAM only — nothing is uploaded or saved to disk.
+**Fix:** Close heavy games while transcribing. If it is still too slow, switch to **tiny.en**, which is lighter on the Deck but less accurate (it can repeat words). Audio is processed in RAM only — nothing is uploaded or saved to disk.
 
 **Latency (2026-07-07):** Tier 1 tuning shortens decode interval/window, speeds UI poll, and uses 4 whisper threads (more CPU while mic is active).
 
@@ -242,7 +242,7 @@ component ("SD card", "controller layout", "remote play") rather than only the s
 
 **Symptom:** Interim text still slow after update.
 
-**Fix:** Confirm `~/homebrew/settings/bonsAI/voice_bin/whisper-server` exists (reinstall voice engine). Use **tiny.en**; close heavy games while transcribing.
+**Fix:** Confirm `~/homebrew/settings/bonsAI/voice_bin/whisper-server` exists (reinstall voice engine). Close heavy games while transcribing; if it is still slow, switch to the lighter **tiny.en**.
 
 **Symptom:** Orphan `whisper-server` after crash (rare).
 

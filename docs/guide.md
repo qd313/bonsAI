@@ -158,8 +158,8 @@ itself up on its own, so older parts aren't forgotten.
 **Voice input** — talk instead of typing.
 
 1. Switch on **Voice input (microphone)** and **Internet downloads** on the Permissions tab.
-2. On **Settings → Voice input**, pick a speech model — **tiny.en** is quicker, **base.en** is more
-   accurate — then press **Install voice engine**. It builds the speech engine on the Deck, which
+2. On **Settings → Voice input**, pick a speech model — **base.en** (the default) is more accurate; **tiny.en** is
+   lighter and quicker but makes more mistakes — then press **Install voice engine**. It builds the speech engine on the Deck, which
    takes a few minutes.
 3. Press the mic button on the question box and speak.
 

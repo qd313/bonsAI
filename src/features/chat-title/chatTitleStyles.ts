@@ -47,7 +47,9 @@ const ROOT = ".bonsai-chat-title";
 
 export const CHAT_TITLE_CSS = `
 ${ROOT} {
-  flex: 1 1 auto;
+  /* Basis 0, not auto: a long name's wide natural size must not count in Decky's flex row, or it squeezes
+     Decky's back arrow (40 points with a short name, 32 with a long one: plan 87 B7). */
+  flex: 1 1 0%;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -177,8 +179,10 @@ ${ROOT} .bonsai-chat-title__row--ring .bonsai-chat-title__key {
   color: #eef3f8;
   border-color: rgba(238, 243, 248, 0.8);
 }
+/* The empty space that centres a short name gives way first, so a long name spills into it (plan 87 B7). */
 ${ROOT} .bonsai-chat-title__mirror {
-  flex: none;
+  flex: 0 1000 auto;
+  min-width: 0;
   width: ${DECKY_BACK_ARROW_W_PX}px;
   height: ${DECKY_TITLE_ROW_H_PX}px;
 }

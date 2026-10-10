@@ -24,7 +24,9 @@
  *    line is scrolled to 8 px below the top of the reading area, again at 150, 300 and 900 ms
  *    because Steam undoes scroll writes (useDockClearanceOnFocus's lift needed the same).
  * 4. `takeChipSlotFocus()` is "the slot, whichever face it shows": the line's registered stop when
- *    the slot shows the line, else the chip row's.
+ *    the slot shows the line, else the chip row's. One more case: a walk that began on the slot's
+ *    line keeps meeting that line (DetailsSlot.tsx, point 5), so Down from the answer's own line,
+ *    which the ring has just scrolled on screen (the slot drew the chips for it), still lands on it.
  *
  * Does not: Watch the scroll itself (DetailsSlot.tsx does) or draw anything.
  */
@@ -44,6 +46,8 @@ export type DetailsLineEntry = {
 
 let entry: DetailsLineEntry | null = null;
 let slotShowsLine = false;
+let walkHoldsLine = false;
+let lineForcedOnRing = false;
 const listeners = new Set<() => void>();
 
 /**
@@ -72,9 +76,36 @@ export function setSlotShowsLine(showing: boolean): void {
   slotShowsLine = showing;
 }
 
-/** Steam's own transfer to the slot's line, only while the slot shows it. */
+/**
+ * DetailsSlot.tsx reports whether the walk through this answer began on the slot's line, so the slot
+ * stands in as the line for the whole stay in the answer (see the file header, point 5).
+ */
+export function setWalkHoldsLine(holds: boolean): void {
+  walkHoldsLine = holds;
+}
+
+/** True from a Down that was carried to the slot's line by the walk's memory, until the ring leaves it. */
+export function lineIsForcedOnRing(): boolean {
+  return lineForcedOnRing;
+}
+
+export function clearLineForcedOnRing(): void {
+  lineForcedOnRing = false;
+}
+
+/**
+ * Steam's own transfer to the slot's line: while the slot shows it, or, with the ring on its way down
+ * from the answer through a walk that met the line there on the way up, even when the answer's own line
+ * (on screen now, because the ring was on it) has made the slot draw the chips. The slot then draws the
+ * line again as the ring lands (DetailsSlot.tsx), so Down meets the stop Up met.
+ */
 export function takeDetailsSlotLineFocus(): boolean {
-  return slotShowsLine && takeNavFocus("details-slot-line");
+  if (slotShowsLine) return takeNavFocus("details-slot-line");
+  if (!walkHoldsLine) return false;
+  lineForcedOnRing = true;
+  if (takeNavFocus("details-slot-line")) return true;
+  lineForcedOnRing = false;
+  return false;
 }
 
 /** The slot, whichever face it shows: the line while it holds the line, else the chip row. */
@@ -97,14 +128,18 @@ export type DetailsSlotGeometry = {
   lineBottom: number;
 };
 
+/** The answer (its header to its line, or to the bottom of its open panel) overlaps the reading area. */
+export function isReadingThisAnswer(g: DetailsSlotGeometry): boolean {
+  return g.turnBottom > g.bandTop + 1 && g.turnTop < g.bandBottom - 1;
+}
+
 /**
  * The drawing's rule (details-line-swap.html, `computeOwner`). `showingNow` adds the 8 px the real
  * line must come inside the area before the chip returns; a pixel of slack keeps a line pinned at
  * exactly 8 px (A on the slot) from reading as 7.99.
  */
 export function slotShouldShowLine(g: DetailsSlotGeometry, showingNow: boolean): boolean {
-  const readingThisAnswer = g.turnBottom > g.bandTop + 1 && g.turnTop < g.bandBottom - 1;
-  if (!readingThisAnswer) return false;
+  if (!isReadingThisAnswer(g)) return false;
   const margin = showingNow ? DETAILS_LINE_TOP_PAD_PX - 1 : 0;
   return g.lineBottom > g.bandBottom - margin || g.lineTop < g.bandTop + margin;
 }
@@ -140,5 +175,7 @@ export function pressDetailsSlotLine(): boolean {
 export function resetDetailsSlotStore(): void {
   entry = null;
   slotShowsLine = false;
+  walkHoldsLine = false;
+  lineForcedOnRing = false;
   listeners.clear();
 }

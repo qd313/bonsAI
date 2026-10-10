@@ -151,6 +151,10 @@ function settle(ms = 1000) {
   });
 }
 function scrollChatTo(y: number) {
+  /* A finger or a stick scrolls long after the ring last moved, not in Steam's glide after a landing. */
+  act(() => {
+    vi.advanceTimersByTime(1300);
+  });
   setScroll(y);
   act(() => {
     pane.dispatchEvent(new Event("scroll"));
@@ -629,17 +633,15 @@ describe("the whole walk Down from the answer to the Ask button and back, with S
       }
       expect(names[names.length - 1]).toBe("question box");
       expect(new Set(names).size).toBe(names.length);
-      const slot = slotWhenOnRealLine[0]!.startsWith("line") ? "slot line" : "chip";
-      expect(names.slice(-3)).toEqual(["real line", slot, "question box"]);
-      /* The Deck's own landing (the line 2 px above the dock) used to keep the slot's copy up beside the answer's
-         own line: both on screen (plan82-M6-TWO-DETAILS-LINES.json). With the ring on the real line, wholly in
-         the reading area, that line is the drawn one and the slot holds the chips. */
-      if (r === "nearest") expect(slot).toBe("chip");
+      /* A walk that came in with the line out of sight meets the slot's line on the way out, as the walk Up
+         met it on the way in (plan83-QA-FREE-PLAY-01.json), though with the ring on the real line, wholly in
+         the reading area, that line is the drawn one and the slot holds the chips for that one stop
+         (plan82-M6-TWO-DETAILS-LINES.json: never both). */
+      expect(slotWhenOnRealLine[0]).toBe("chip");
+      expect(names.slice(-3)).toEqual(["real line", "slot line", "question box"]);
       // Up from the box: the same stops back to the real line.
-      // (a chip's own Up is presetRowFocusNav.upFromChips.test.tsx's: the harness's Button carries no handlers)
-      const up = walk("onMoveUp", slot === "chip" ? 1 : 2);
-      expect(up.stops).toEqual(["question box", slot, "real line"].slice(0, up.stops.length === 2 ? 2 : 3));
-      expect(up.stops.length).toBe(slot === "chip" ? 2 : 3);
+      const up = walk("onMoveUp", 2);
+      expect(up.stops).toEqual(["question box", "slot line", "real line"]);
       expect(up.hidden).toEqual([]);
     },
   );
@@ -751,5 +753,96 @@ describe("the ring on the answer's own line makes that line the drawn one", () =
       }
       if (nameOf(ring()) === "question box" || ring() === before) break;
     }
+  });
+});
+
+/*
+ * The same stops both ways (roadmap: "The slot under the newest answer swaps between the Show details line
+ * and chips between an Up walk and a Down walk"; the Deck, plan83-QA-FREE-PLAY-01.json). On a long answer
+ * Up from the box stopped on the slot's line and then on the answer's own line; Steam brought that line on
+ * screen, the slot gave way to the chips (a44b79b7: the line on screen is the drawn one), and the Down
+ * walk, a few minutes later, stopped on a chip in the slot's place. The slot's face is now remembered for
+ * the whole stay in the answer, so Down meets the stop Up met.
+ */
+type Passing = { stop: string; slot: string; linesDrawn: number };
+/** Press `key` until the ring stops moving, noting each stop and what the slot shows with the ring on it. */
+function walkWithSlot(key: "onMoveDown" | "onMoveUp", until: string): Passing[] {
+  const here = (): Passing => ({
+    stop: nameOf(ring()),
+    slot: slotHolds(),
+    linesDrawn: [slotLine(), realLine()].filter((el) => drawn(el)).length,
+  });
+  const passings: Passing[] = [here()];
+  for (let i = 0; i < 14; i += 1) {
+    const before = ring();
+    press(key);
+    if (ring() === before) continue;
+    expect(ringVisible(), `${nameOf(ring())} is on screen`).toBe(true);
+    expect(seenByPerson(ring()), `${nameOf(ring())} is drawn`).toBe(true);
+    passings.push(here());
+    if (nameOf(ring()) === until) break;
+  }
+  return passings;
+}
+const stopsOf = (p: Passing[]) => p.map((x) => x.stop);
+
+describe("a long answer: the walk Up from the question box and the walk Down back visit the same stops", () => {
+  beforeEach(() => {
+    steamDefaultStep = true;
+  });
+
+  it.each(["top", "padded", "nearest"] as const)(
+    "Up to the top of the answer and Down again, twice: the Down stops are the Up stops reversed, with the slot showing the same face at each (%s glide)",
+    (r) => {
+      rule = r;
+      renderChat();
+      scrollChatTo(300); // the real line is far below the dock: the slot holds the line
+      expect(slotHolds()).toBe("line: Show details ↓");
+      focusQuestionBox();
+      for (let round = 1; round <= 2; round += 1) {
+        const up = walkWithSlot("onMoveUp", "section 1");
+        expect(stopsOf(up).slice(0, 3), `round ${round} up`).toEqual(["question box", "slot line", "real line"]);
+        expect(new Set(stopsOf(up)).size).toBe(up.length);
+        const down = walkWithSlot("onMoveDown", "question box");
+        expect(stopsOf(down), `round ${round} down`).toEqual(stopsOf(up).slice().reverse());
+        /* The same face at each passing: what the slot shows with the ring on the slot's stop, and on the real line. */
+        const faceAt = (list: Passing[], stop: string) => list.find((x) => x.stop === stop)?.slot;
+        expect(faceAt(down, "slot line")).toBe(faceAt(up, "slot line"));
+        expect(faceAt(down, "real line")).toBe(faceAt(up, "real line"));
+        expect(faceAt(down, "slot line")).toBe("line: Show details ↓");
+        /* One Show details line at a time, whichever stop the ring is on. */
+        expect([...up, ...down].map((x) => x.linesDrawn)).toEqual(Array(up.length + down.length).fill(1));
+      }
+    },
+  );
+
+  it.each(["top", "padded"] as const)(
+    "the ring left the answer and comes back in from above: Down still ends on the slot's line, then the box (%s glide)",
+    (r) => {
+      rule = r;
+      renderChat();
+      scrollChatTo(52);
+      expect(slotHolds()).toBe("line: Show details ↓");
+      focusQuestionBox(); // outside the answer: nothing is remembered
+      act(() => pane.querySelector<HTMLElement>(".bonsai-answer-stop")!.focus());
+      steamGlide(ring());
+      settle();
+      const down = walkWithSlot("onMoveDown", "question box");
+      expect(stopsOf(down).slice(-3)).toEqual(["real line", "slot line", "question box"]);
+      expect(new Set(stopsOf(down)).size).toBe(down.length);
+    },
+  );
+
+  it("a short answer, whose own line is on screen when the ring is on the box, gives the chip both ways", () => {
+    renderChat();
+    scrollChatTo(560);
+    expect(slotHolds()).toBe("chip");
+    focusQuestionBox();
+    /* A chip's own Up is presetRowFocusNav.upFromChips.test.tsx's: the harness's Button carries no handlers. */
+    const up = walkWithSlot("onMoveUp", "section 1");
+    expect(stopsOf(up)).toEqual(["question box", "chip"]);
+    ringOnRealLine();
+    const down = walkWithSlot("onMoveDown", "question box");
+    expect(stopsOf(down)).toEqual(["real line", "chip", "question box"]);
   });
 });

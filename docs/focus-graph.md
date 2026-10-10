@@ -246,6 +246,14 @@ that empties the box (only while the box has words), the small ASK. The game tag
 - **Up from the chips is unchanged:** the chips' own exit Up, onto the stop just above the dock
   (`chipRowExitUp`). Down from the chips still lands on the question box. This step moves nothing above the
   box.
+- **The slot above the box is one stop, and the same stop both ways** (`DetailsSlot.tsx`, point 6 of its
+  header). While an answer is read with its own Show details line out of sight, the slot holds that line in
+  the chips' place. The walk remembers which face it met (the line or the chips) for as long as the ring is in
+  the newest answer or in the dock. Up from the box lands on the slot's line, Up again on the answer's own line
+  (Steam scrolls it on screen, so the slot draws the chips for that one stop), and Down from the answer's own
+  line lands on the slot's line again, not on a chip, then on the box. Up from the box after that walk meets
+  the line again too. The memory is dropped when the ring leaves the answer and the dock, when another answer
+  takes over, or when the chat is scrolled by finger long after the ring last moved.
 - **The strip is its own row, not part of the box's group.** It already was its own Steam focus row
   (`bonsai-unified-input-actions-row`) drawn inside the box's card, and it stays one. Left and Right in the
   box belong to the box (Left: paperclip, Right: mode button, both unchanged); Left and Right in the strip

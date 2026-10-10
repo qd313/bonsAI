@@ -32,6 +32,16 @@
  *    plan82-M6-TWO-DETAILS-LINES.json: both drawn at once with the ring on the real line).
  * 5. A swap while the ring is in the slot keeps the ring in the slot: it is handed, through Steam's
  *    own transfer, to whichever face replaces the one it was on.
+ * 6. Up and Down meet the same stops (plan83-QA-FREE-PLAY-01.json). Up from the box stops on the
+ *    slot's line, then on the answer's own line; Steam scrolls that line on screen, point 4 makes the
+ *    slot draw the chips for it, and Down from the line used to land on a chip: another stop than the
+ *    one Up met (and the next Up from the box, with the line now on screen, met a chip too). So the
+ *    hook remembers, for a stay in the answer (the ring in the answer's turn or in the dock), which
+ *    face the ring last stood on, or met on the way in. While that memory says line, a Down from the
+ *    answer to the slot, and an Up from the box, go to the slot's line even if the slot draws the
+ *    chips for the moment, and the slot draws the line again as the ring lands on it (the real line
+ *    fades, so only one is ever seen). The memory is dropped once the ring leaves the answer and the
+ *    dock, when another answer takes over, or when the answer is out of the reading area.
  *
  * Does not: Open the details itself (the real line's own handler does, in the chat under that
  * line), and B is left to Steam on the slot, as it is on a chip.
@@ -43,15 +53,23 @@ import { findScrollablePanel, readableBottomOf } from "../../utils/chatPanelScro
 import { registerNavFocus, takeNavFocus, unregisterNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
 import { uiGamepadFocusElement } from "../../utils/uiDocument";
 import {
+  clearLineForcedOnRing,
   currentDetailsLine,
+  isReadingThisAnswer,
+  lineIsForcedOnRing,
   pressDetailsSlotLine,
   setSlotShowsLine,
+  setWalkHoldsLine,
   slotShouldShowLine,
   subscribeDetailsLine,
+  type DetailsSlotGeometry,
 } from "./detailsSlotStore";
 
 /** How often the slot re-measures with no scroll: an answer finishing or a panel opening moves boxes too. */
 const DETAILS_SLOT_TICK_MS = 300;
+
+/** Steam brings a stop on screen, and the plugin's pins settle, within this long of the ring landing. */
+const RING_GLIDE_MS = 1200;
 
 type SlotFace = { showLine: boolean; open: boolean };
 
@@ -70,11 +88,33 @@ function markRealLine(held: HTMLElement | null, mark: boolean): HTMLElement | nu
   return live;
 }
 
+/** What one measurement saw besides the face: the inputs to the walk's memory (point 6). */
+type Measured = SlotFace & {
+  /** There is a live, pressable real line to stand in for. */
+  available: boolean;
+  /** The answer overlaps the reading area. */
+  reading: boolean;
+  /** What the slot would hold with the ring not on the real line: the face the ring met on the way in. */
+  entryLine: boolean;
+  /** The ring is in the answer's own turn or in the dock (the slot, the question box and its buttons). */
+  inArea: boolean;
+  onSlotLine: boolean;
+  /** The ring is on one of the chips in the slot. */
+  onChip: boolean;
+  /** Which real line this was measured against: a new answer starts a new memory. */
+  lineEl: HTMLElement | null;
+};
+
+const NOTHING: Measured = {
+  showLine: false, open: false, available: false, reading: false, entryLine: false, inArea: false,
+  onSlotLine: false, onChip: false, lineEl: null,
+};
+
 /** One measurement: what the slot should hold, given where the chat is scrolled right now. */
-function measureFace(host: HTMLElement | null, showingNow: boolean): SlotFace {
+function measureFace(host: HTMLElement | null, showingNow: boolean): Measured {
   const line = currentDetailsLine();
   const pane = findScrollablePanel(host);
-  if (!line || line.disabled || !line.toggle || !pane) return { showLine: false, open: false };
+  if (!line || line.disabled || !line.toggle || !pane) return NOTHING;
   const turn = (line.el.closest(".bonsai-chat-turn-slot") as HTMLElement | null) ?? line.el;
   const lineBox = line.el.getBoundingClientRect();
   /* The ring on the answer's own line: that line is the one drawn, so the slot gives way as soon as
@@ -82,29 +122,59 @@ function measureFace(host: HTMLElement | null, showingNow: boolean): SlotFace {
   const ring = uiGamepadFocusElement();
   const ringOnLine = Boolean(ring && line.el.contains(ring));
   const turnBox = turn.getBoundingClientRect();
-  const showLine = slotShouldShowLine(
-    {
-      bandTop: pane.getBoundingClientRect().top,
-      bandBottom: readableBottomOf(pane),
-      turnTop: turnBox.top,
-      turnBottom: line.open ? turnBox.bottom : lineBox.bottom,
-      lineTop: lineBox.top,
-      lineBottom: lineBox.bottom,
-    },
-    showingNow && !ringOnLine,
-  );
-  return { showLine, open: line.open };
+  const geometry: DetailsSlotGeometry = {
+    bandTop: pane.getBoundingClientRect().top,
+    bandBottom: readableBottomOf(pane),
+    turnTop: turnBox.top,
+    turnBottom: line.open ? turnBox.bottom : lineBox.bottom,
+    lineTop: lineBox.top,
+    lineBottom: lineBox.bottom,
+  };
+  return {
+    showLine: slotShouldShowLine(geometry, showingNow && !ringOnLine),
+    open: line.open,
+    available: true,
+    reading: isReadingThisAnswer(geometry),
+    entryLine: slotShouldShowLine(geometry, showingNow),
+    inArea: Boolean(ring && (turn.contains(ring) || ring.closest(".bonsai-main-tab-dock"))),
+    onSlotLine: Boolean(ring?.closest(".bonsai-details-slot__line")),
+    onChip: Boolean(ring && host?.contains(ring) && !ring.closest(".bonsai-details-slot__line")),
+    lineEl: line.el,
+  };
 }
 
+/**
+ * The walk's memory (point 6): null while the ring is away from this answer and the dock, or the answer is
+ * out of the reading area; else the last face the ring stood on in this stay (the line: true, a chip: false),
+ * and on the way in the face it met.
+ */
+function nextWalkMemory(before: boolean | null, seen: Measured): boolean | null {
+  if (!seen.inArea || !seen.reading) return null;
+  if (seen.onSlotLine) return true;
+  if (seen.onChip) return false;
+  return before ?? seen.entryLine;
+}
+
+/** The face the slot holds, re-measured on scroll, focus, the real line's changes and a slow tick. */
 function useDetailsSlotFace(hostRef: React.RefObject<HTMLElement | null>): SlotFace {
   const [face, setFace] = useState<SlotFace>({ showLine: false, open: false });
   const showingRef = useRef(false);
   const heldRef = useRef<HTMLElement | null>(null);
+  /** Point 6: did the slot stand in as the line when the ring came into this answer? null: the ring is elsewhere. */
+  const walkLineRef = useRef<boolean | null>(null);
+  const walkEl = useRef<HTMLElement | null>(null);
   useEffect(() => {
     let frame = 0;
     const measure = () => {
       frame = 0;
-      const next = measureFace(hostRef.current, showingRef.current);
+      const seen = measureFace(hostRef.current, showingRef.current);
+      walkLineRef.current = nextWalkMemory(seen.lineEl === walkEl.current ? walkLineRef.current : null, seen);
+      walkEl.current = seen.lineEl;
+      if (!seen.onSlotLine) clearLineForcedOnRing();
+      setWalkHoldsLine(seen.available && walkLineRef.current === true);
+      /* The ring just carried to the line by the memory: the slot draws the line it is on. */
+      const forced = seen.available && seen.reading && seen.onSlotLine && lineIsForcedOnRing();
+      const next: SlotFace = { showLine: seen.showLine || forced, open: seen.open };
       showingRef.current = next.showLine;
       setSlotShowsLine(next.showLine);
       heldRef.current = markRealLine(heldRef.current, next.showLine);
@@ -113,17 +183,30 @@ function useDetailsSlotFace(hostRef: React.RefObject<HTMLElement | null>): SlotF
     const soon = () => {
       if (!frame) frame = requestAnimationFrame(measure);
     };
+    let lastRingMoveAt = 0;
+    const onFocusIn = () => {
+      lastRingMoveAt = Date.now();
+      soon();
+    };
+    /* A scroll long after the ring last moved is a finger or a stick, not Steam bringing the ring's stop on
+       screen: what the walk remembered no longer describes this view, so the next measure decides afresh. */
+    const onScroll = () => {
+      if (Date.now() - lastRingMoveAt > RING_GLIDE_MS) walkLineRef.current = null;
+      soon();
+    };
     const doc = hostRef.current?.ownerDocument ?? document;
-    doc.addEventListener("scroll", soon, { capture: true, passive: true });
+    doc.addEventListener("scroll", onScroll, { capture: true, passive: true });
     /* The ring landing on the answer's own line changes the rule, so re-measure when focus moves. */
-    doc.addEventListener("focusin", soon, true);
+    doc.addEventListener("focusin", onFocusIn, true);
     const unsubscribe = subscribeDetailsLine(soon);
     const tick = window.setInterval(measure, DETAILS_SLOT_TICK_MS);
     measure();
     return () => {
-      doc.removeEventListener("scroll", soon, { capture: true });
-      doc.removeEventListener("focusin", soon, true);
+      doc.removeEventListener("scroll", onScroll, { capture: true });
+      doc.removeEventListener("focusin", onFocusIn, true);
       markRealLine(heldRef.current, false);
+      setWalkHoldsLine(false);
+      clearLineForcedOnRing();
       unsubscribe();
       window.clearInterval(tick);
       if (frame) cancelAnimationFrame(frame);

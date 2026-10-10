@@ -87,6 +87,19 @@ All notable changes to this project are documented in this file.
 - **The UI scale section now says "UI scale" once** instead of twice.
 - **The tab bar now draws all six tabs in one fixed order,** Main always first and About always last, with the tabs before the current one on its left and the tabs after it on its right. No icon box is narrower than 18 px any more. Owes its Deck check (row P87-F4-TAB-ORDER).
 - **A long answer that carries on after the length limit inside a hidden block now keeps one opening mark: passed on the Deck 2026-10-10** with a scripted hidden block opened again across a join (one opening mark, no half mark, one tap-to-show cover on screen). A cut in the middle of the mark itself rests on tests only.
+- **Update AI & models now restarts the running Ollama,** so the new version is the one answering (the Deck had kept answering as 0.34.1 after an update). If it cannot restart it, the line says to restart the Deck. Owes its Deck check (row P87-OLLAMA-UPDATE).
+- **Update AI & models and Install Ollama run right on the Ollama tab with no popup:** the button reads "Updating...", a line under it shows the stage and the download percentage, and it ends on a done or failed line. Owes its Deck check (row P87-OLLAMA-UPDATE).
+- **A first question at ten chats with no open chat is no longer lost:** it goes into the newest chat with a notice, and the answer is saved. The README, guide and lessons now say ten chats. Owes its Deck check (row P87-F2B-NO-OPEN-CHAT).
+- **Decky's back arrow keeps one size, and a long chat name spills to the right** up to the delete icon. Owes its Deck check (row P87-B7-BACK-ARROW).
+- **A + and a delete icon sit at the two ends of the chat's name row,** reachable with Left and Right from the name. Owes its Deck check (row P87-F5-NAME-ROW).
+- **The slot above the question box meets the same stop going Down as it did going Up.** Owes its Deck check (row P87-B1-SLOT-SAME-STOPS).
+- **On a new empty chat the D-pad can reach the "How to use bonsAI" chip** above the question box. Owes its Deck check (row P87-EMPTY-CHAT-CHIPS).
+- **A quiet speaker's question no longer stops growing after three or four seconds,** and base.en works (it only looked dead because it was slower). Owes its Deck check (row P87-VOICE-QUIET-SENTENCE).
+- **Pressing the mic while a speech model is still downloading is turned away** with "The speech model is still downloading. Try again when it finishes." Owes its Deck check (row P87-VOICE-DOWNLOAD-REFUSED).
+- **Developer-only: a file in the settings folder points the mic button at another audio source** (for a pretend microphone). No Deck check of its own.
+- **The first heading of a tab is no longer left half faded under the tab bar.** Owes its Deck check (row P87-B9-HEADING).
+- **Walking the other tabs with the D-pad no longer scrolls them a page at a time.** Owes its Deck check (row P87-B10-TAB-SCROLL).
+- **The Show details chips are packed into a grid walked in four directions,** and an open chip's details stay readable by one smooth scroll. Owes its Deck check (row P87-F3-CHIPS-GRID).
 
 ### Plan 84 (2026-10-09)
 

@@ -891,6 +891,12 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep
 
   Real, and there for weeks (the capture-then-mark order came in with `e7728fa9` on 3 August; the snapshot's help flag goes back to May); it only became plain once one chip fills the whole row. Cause: opening the quick start first saves a note of the session that still says "help not seen", and when the popup closes Decky builds a fresh panel that trusts that note over the stored flag. Fix: right after the note is taken, the popup marks the note itself as seen (`src/features/plugin-shell/usePluginHelpModal.tsx`, `src/utils/bonsaiSessionSurvival.ts`); "Clear all plugin data" still brings the chip back. Tests: `src/index.helpChip.test.tsx`, 4 tests, 2 fail without the fix.
 
+Moved here from the roadmap entry on 2026-10-10 (docs sweep, plan 87 batch 2), to keep the entry to five lines. Nothing was removed.
+
+  **2026-10-01, UNCLEAR:** not run on the Deck; owed on a fresh install or "Clear all plugin data". Deck row **P78-HELP-CHIP-DISMISS**; evidence `docs/test-evidence/plan78-P78-HELP-CHIP-DISMISS.json`, finding `docs/test-evidence/plan78-PRESET-ONE-LINE-02.json`.
+  **2026-10-03 (plan 81, build `afd2f444`), COULD NOT RUN again:** the stored flag came back to "1" by itself after Steam's web helper was restarted, so no help chip showed. It stays with the maintainer's first-install check (`docs/test-evidence/plan81-P78-HELP-CHIP-DISMISS.json`).
+  **2026-10-09 (plan 87 stand-in S1, this PC, not the Deck), UNCLEAR:** after "Clear all plugin data" the Main tab showed exactly one chip, "How to use bonsAI", and a "bonsAI - Beta Notice" box took the ring first (Got it closed it); but the D-pad could not reach the help chip at all on the stand-in (Up from the question box went to the tab bar), so the quick-start half could not run. The unreachable chip is being looked at in a separate fix (it may be Windows-only). Evidence `docs/test-evidence/plan87-S-S1-HELP-CHIP.json` (setup `plan87-S-S0-SETUP.json` passed). Still owed.
+
 ## A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.

@@ -75,7 +75,7 @@ save evidence, and report. The checkout path, the scratch folder and the runbook
 11. **Chats:** test questions go only in the test chat your task names. Read the open chat's name before
     every question; if it is not the test chat, switch to it first. If the task names no test chat, or it
     is not there, stop and report: never ask a test question in one of the maintainer's own chats (about
-    14 landed in one on 2026-09-29). Starting a new chat throws away the oldest of the eight saved chats,
+    14 landed in one on 2026-09-29). The plugin keeps ten saved chats; at ten, New chat asks which one to delete first,
     so start one only when the runbook says to.
 12. **"Blocked" needs one real try first.** Before writing that something cannot be done, try it once, and
     say exactly what stopped it.

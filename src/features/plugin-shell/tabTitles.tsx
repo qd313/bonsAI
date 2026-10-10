@@ -72,7 +72,8 @@ export const BONSAI_TAB_ACCESSIBLE_NAMES: Readonly<Record<BonsaiTabId, string>> 
  * today; the UI catalog holds toasts only.
  */
 export const BONSAI_TAB_SHORT_NAMES: Readonly<Record<BonsaiTabId, string>> = {
-  main: "Main",
+  // Drawn in small caps on the bar (tabIndicatorBar.ts), not upper-cased like the other names (plan 87 F1).
+  main: "bonsAI",
   ollama: "Ollama",
   settings: "Settings",
   permissions: "Permissions",

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 775,
-  "edgeCount": 2325,
+  "fileCount": 776,
+  "edgeCount": 2328,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3465,6 +3465,14 @@
       ],
       "importedBy": []
     },
+    "src/features/plugin-shell/TabIndicatorBar.mainLabel.test.tsx": {
+      "imports": [
+        "src/features/plugin-shell/TabIndicatorBar.tsx",
+        "src/features/plugin-shell/tabTitles.tsx",
+        "src/styles/bonsaiScopeStylesheet.ts"
+      ],
+      "importedBy": []
+    },
     "src/features/plugin-shell/TabIndicatorBar.test.tsx": {
       "imports": [
         "src/features/plugin-shell/TabIndicatorBar.tsx",
@@ -3489,6 +3497,7 @@
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/topStripHeightLock.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx",
+        "src/features/plugin-shell/TabIndicatorBar.mainLabel.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/index.tsx"
       ]
@@ -3636,6 +3645,7 @@
         "src/features/chat-title/useTopStripTabBar.ts",
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
         "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx",
+        "src/features/plugin-shell/TabIndicatorBar.mainLabel.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/tabTitles.test.tsx",
@@ -5741,6 +5751,7 @@
         "src/components/SettingsTab.focusRing.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx",
+        "src/features/plugin-shell/TabIndicatorBar.mainLabel.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/styles/buttonFocusRing.test.ts",
         "src/styles/presetChipHighlightFill.test.ts",

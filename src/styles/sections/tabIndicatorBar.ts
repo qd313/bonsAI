@@ -242,6 +242,13 @@ export function buildTabBarRules(root: string): string {
           white-space: nowrap;
           color: ${ACCENT};
         }
+        /* The Main tab's name is "bonsAI", drawn in small caps (plan 87 F1): the rule above upper-cases
+           every name, so this one turns that off for Main alone and asks for small caps, which draws the
+           lowercase letters small and "AI" at full size. It sits after the rule above so it wins there. */
+        ${root} .bonsai-tab-bar[data-bonsai-tab-bar-tab="main"] .bonsai-tab-bar__name {
+          text-transform: none;
+          font-variant-caps: small-caps;
+        }
         /* Plain browser focus draws nothing (design-tokens.md: no catch-all ring rule — this one is
            scoped to the bar); a fake ring is worse than none (plan 78 measured the bar holding
            browser focus with no Steam ring anywhere). */

@@ -65,6 +65,8 @@ type MountOptions = {
   scrollTop?: number;
   /** The screen: the monitor run's numbers unless given (pane 88 to 766, dock 658.4). */
   screen?: { paneBottom: number; dockTop: number; ladderDocTop: number };
+  /** Added to the open box while set: a box that measures taller at first than it settles at. */
+  boxExtra?: { px: number };
 };
 
 function mount(options: MountOptions = {}) {
@@ -75,6 +77,7 @@ function mount(options: MountOptions = {}) {
     scrollTop: options.scrollTop ?? 50,
     chipWidths: Object.fromEntries(DECK_CHIPS.map(([l, w]) => [l, w])),
     boxHeights: Object.fromEntries(DECK_CHIPS.map(([l, , b]) => [l, b])),
+    boxExtra: options.boxExtra,
     rule: options.rule,
     steamTopMargin: options.steamTopMargin,
   });
@@ -384,6 +387,46 @@ describe.each(WALK_RULES.map((rule) => [rule ?? "no glide", rule] as const))(
       const up = walk(m, "Up", 20);
       expect(up.problems).toEqual([]);
       expect(up.stops).toEqual([...[...DOWN_FROM_FIRST].reverse(), "toggle"]);
+    });
+  },
+);
+
+describe.each(WALK_RULES.map((rule) => [rule ?? "no glide", rule] as const))(
+  "going back after Developer details, the row does not slip (roadmap: 10 px once, at the second chip), Steam's glide %s",
+  (_name, rule) => {
+    /*
+     * The Deck, 2026-10-08 (builds 657ef2cb and 83a2efa7): after reading Developer details to its end, the
+     * walk back held the row still until the second chip, where it moved 10.1 px down once: that chip's box
+     * measured about 10 px taller at the first look than a frame later, the held block came out 10 px short,
+     * and the pane, at its end, was pulled back. Not reproduced on 2026-10-09 in a settled Left walk; kept
+     * as a guard. Here the second chip's box reads 10 px taller until the frame after it opens.
+     */
+    it("walking Left and walking Up back from Developer details, the row stays put at every chip", () => {
+      for (const dir of ["Left", "Up"] as const) {
+        const extra = { px: 0 };
+        const m = mount({ rule, steamTopMargin: true, boxExtra: extra });
+        arriveOn(m.scene, m.ladder, LABELS[0]!);
+        for (let i = 0; i < 7; i += 1) press(m.scene, "Right");
+        expect(document.activeElement?.textContent).toBe(LABELS[7]);
+        expect(m.scene.pane.scrollTop).toBe(m.scene.pane.scrollHeight - m.scene.pane.clientHeight);
+        const row = m.scene.rowTop();
+        const seen: number[] = [];
+        while (m.ladder.contains(document.activeElement)) {
+          const next = dir === "Left" ? LABELS[LABELS.indexOf(document.activeElement!.textContent!) - 1] : undefined;
+          if (next === LABELS[1]) {
+            extra.px = 10;
+            requestAnimationFrame(() => {
+              extra.px = 0;
+            });
+          }
+          press(m.scene, dir);
+          if (!m.ladder.contains(document.activeElement)) break;
+          seen.push(m.scene.rowTop() - row);
+          expect(m.scene.detailsBox().bottom).toBeLessThanOrEqual(m.scene.dockTop);
+        }
+        expect(seen.every((d) => Math.abs(d) < 0.5)).toBe(true);
+        expect(seen.length).toBe(dir === "Left" ? 7 : 4);
+      }
     });
   },
 );

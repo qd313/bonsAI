@@ -473,6 +473,31 @@
     }
   },
   {
+    "name": "an unknown chat text size falls back to normal, never to a size nobody picked",
+    "input": {
+      "chat_text_size": "huge"
+    },
+    "expected": {
+      "chat_text_size": "normal"
+    }
+  },
+  {
+    "name": "a chat text size is trimmed before matching",
+    "input": {
+      "chat_text_size": " large "
+    },
+    "expected": {
+      "chat_text_size": "large"
+    }
+  },
+  {
+    "name": "an old settings file with no chat text size reads as normal",
+    "input": {},
+    "expected": {
+      "chat_text_size": "normal"
+    }
+  },
+  {
     "name": "an unknown voice reply mode falls back to off, never to reading on its own",
     "input": {
       "voice_reply_mode": "whenever"

@@ -127,6 +127,7 @@ const SETTINGS_FIELD_BACKEND_KEY: Record<keyof BonsaiSettingsSnapshotInput, keyo
   latencyTimeoutsCustomEnabled: "latency_timeouts_custom_enabled",
   unifiedInputPersistenceMode: "unified_input_persistence_mode",
   voiceReplyMode: "voice_reply_mode",
+  chatTextSize: "chat_text_size",
   screenshotAttachmentPreset: "screenshot_attachment_preset",
   desktopDebugNoteAutoSave: "desktop_debug_note_auto_save",
   desktopAskVerboseLogging: "desktop_ask_verbose_logging",

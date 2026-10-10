@@ -7,7 +7,7 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 2280,
+      "lines": 2281,
       "role": ""
     },
     {
@@ -167,7 +167,7 @@
     },
     {
       "path": "py_modules/backend/services/settings_service.py",
-      "lines": 668,
+      "lines": 671,
       "role": "Load/save/merge settings.json"
     },
     {

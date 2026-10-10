@@ -14,6 +14,7 @@
     "steam_logs_read": false,
     "steam_web_api": false
   },
+  "chat_text_size": "normal",
   "desktop_app_log_level": "off",
   "desktop_ask_verbose_logging": false,
   "desktop_debug_note_auto_save": false,

@@ -138,6 +138,7 @@ describe("settings contracts", () => {
     expect(settings.ollama_local_on_deck).toBe(false);
     expect(settings.ollama_local_autostart).toBe(false);
     expect(settings.terse_mode).toBe(false);
+    expect(settings.chat_text_size).toBe("normal");
   });
 
   it("normalizes model_allow_high_vram_fallbacks: only explicit true enables", () => {
@@ -162,6 +163,16 @@ describe("settings contracts", () => {
     expect(normalizeSettings({ terse_mode: true }).terse_mode).toBe(true);
     for (const garbled of ["yes", "true", 1, null, [], {}]) {
       expect(normalizeSettings({ terse_mode: garbled as unknown as boolean }).terse_mode).toBe(false);
+    }
+  });
+
+  it("normalizes chat_text_size: missing key reads as normal; only small, normal, large are kept", () => {
+    expect(normalizeSettings({}).chat_text_size).toBe("normal");
+    expect(normalizeSettings({ chat_text_size: "small" }).chat_text_size).toBe("small");
+    expect(normalizeSettings({ chat_text_size: "large" }).chat_text_size).toBe("large");
+    expect(normalizeSettings({ chat_text_size: " large " }).chat_text_size).toBe("large");
+    for (const garbled of ["huge", "LARGE", "", 2, null, [], {}]) {
+      expect(normalizeSettings({ chat_text_size: garbled as unknown as "small" }).chat_text_size).toBe("normal");
     }
   });
 
@@ -330,6 +341,7 @@ describe("settings contracts", () => {
       ollamaKeepAlive: "30s",
       replyVerbosity: "detailed",
       terseMode: true,
+      chatTextSize: "large",
       askThinkEffort: "high",
       replyLanguage: "japanese",
       showDeveloperTab: true,
@@ -367,6 +379,7 @@ describe("settings contracts", () => {
     expect(p.ollama_keep_alive).toBe("30s");
     expect(p.reply_verbosity).toBe("detailed");
     expect(p.terse_mode).toBe(true);
+    expect(p.chat_text_size).toBe("large");
     expect(p.reply_language).toBe("japanese");
     expect(p.model_allow_high_vram_fallbacks).toBe(true);
     expect(p.ollama_local_on_deck).toBe(true);
@@ -401,6 +414,7 @@ describe("settings contracts", () => {
       ollamaKeepAlive: DEFAULT_OLLAMA_KEEP_ALIVE,
       replyVerbosity: DEFAULT_REPLY_VERBOSITY,
       terseMode: false,
+      chatTextSize: "normal" as const,
       askThinkEffort: "off" as const,
       replyLanguage: REPLY_LANGUAGE_FOLLOW_SYSTEM,
       showDeveloperTab: false,
@@ -551,6 +565,7 @@ describe("settings contracts", () => {
       ollamaKeepAlive: normalized.ollama_keep_alive,
       replyVerbosity: normalized.reply_verbosity,
       terseMode: normalized.terse_mode,
+      chatTextSize: normalized.chat_text_size,
       askThinkEffort: normalized.ask_think_effort,
       replyLanguage: normalized.reply_language,
       showDeveloperTab: normalized.show_developer_tab,

@@ -44,6 +44,7 @@ const NON_DEFAULT: Record<string, unknown> = {
   ai_character_random: false,
   ask_mode: "expert",
   ask_think_effort: "high",
+  chat_text_size: "large",
   capabilities: {
     filesystem_write: true,
     internet_downloads: true,

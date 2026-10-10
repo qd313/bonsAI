@@ -495,6 +495,9 @@ _SIMPLE_FIELDS: dict[str, Any] = {
     # Voice. Off unless the person turns it on -- an unrecognised value must not start reading
     # answers out loud on its own (D99 call 3).
     "voice_reply_mode": _enum(frozenset({"off", "voice_only", "always"}), "off", strip=True),
+    # How big the chat's own words are drawn. Normal unless the person picks another; an old
+    # settings file with no value, or an unrecognised one, reads as Normal.
+    "chat_text_size": _enum(frozenset({"small", "normal", "large"}), "normal", strip=True),
     # Credentials.
     "steam_web_api_key": _bounded_str(STEAM_WEB_API_KEY_MAX_LEN),
     # Developer-tab switch: a streaming answer's newest text scrambles for a moment before

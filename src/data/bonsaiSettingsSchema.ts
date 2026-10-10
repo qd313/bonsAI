@@ -64,6 +64,12 @@ export type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" 
  * question that produced it came in through the mic, or every time. Off is the shipped default.
  */
 export type VoiceReplyMode = "off" | "voice_only" | "always";
+/**
+ * How big the words in the chat are drawn (plan 87, F6): the questions, the answers and the Show
+ * details text. Small and Large step either side of Normal; the tab bar, the chat's name, the chips
+ * and Settings never change with it.
+ */
+export type ChatTextSize = "small" | "normal" | "large";
 export type DesktopAppLogLevel = "off" | "default" | "verbose";
 /**
  * Which tab a reopen lands on. One stop per option in roadmap **D15**, so the three can be
@@ -110,6 +116,8 @@ export type BonsaiSettings = {
   unified_input_persistence_mode: UnifiedInputPersistenceMode;
   /** When a finished answer is read aloud on its own, without a Read aloud press (D99 call 3). */
   voice_reply_mode: VoiceReplyMode;
+  /** How big the chat's own words are drawn: small, normal (the default) or large. */
+  chat_text_size: ChatTextSize;
   /** Vision attachment downscale and JPEG quality preset. */
   screenshot_attachment_preset: ScreenshotAttachmentPreset;
   /** When true, append Ask and AI response lines to daily chat files under Desktop/bonsAI_logs (requires filesystem_write). */
@@ -231,6 +239,7 @@ export type BonsaiSettingsSnapshotInput = {
   latencyTimeoutsCustomEnabled: boolean;
   unifiedInputPersistenceMode: UnifiedInputPersistenceMode;
   voiceReplyMode: VoiceReplyMode;
+  chatTextSize: ChatTextSize;
   screenshotAttachmentPreset: ScreenshotAttachmentPreset;
   desktopDebugNoteAutoSave: boolean;
   desktopAskVerboseLogging: boolean;
@@ -302,6 +311,8 @@ export const REQUEST_TIMEOUT_STEP_SECONDS = 10;
 export const DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE: UnifiedInputPersistenceMode = "no_persist";
 export const DEFAULT_VOICE_REPLY_MODE: VoiceReplyMode = "off";
 export const VOICE_REPLY_MODE_OPTIONS: VoiceReplyMode[] = ["off", "voice_only", "always"];
+export const DEFAULT_CHAT_TEXT_SIZE: ChatTextSize = "normal";
+export const CHAT_TEXT_SIZE_OPTIONS: ChatTextSize[] = ["small", "normal", "large"];
 export const SCREENSHOT_ATTACHMENT_PRESET_OPTIONS: ScreenshotAttachmentPreset[] = ["low", "mid", "max"];
 export const DEFAULT_SCREENSHOT_ATTACHMENT_PRESET: ScreenshotAttachmentPreset = "low";
 /** D15 option B, the locked decision — a fresh install resumes the tab you left. */

@@ -46,6 +46,7 @@ function minimalSurvivalSnapshot(
       latencyTimeoutsCustomEnabled: false,
       unifiedInputPersistenceMode: "persist_all",
       voiceReplyMode: "off",
+      chatTextSize: "normal",
       screenshotAttachmentPreset: "mid",
       desktopDebugNoteAutoSave: false,
       desktopAskVerboseLogging: false,

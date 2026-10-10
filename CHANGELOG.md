@@ -106,6 +106,7 @@ All notable changes to this project are documented in this file.
 - **Deleting the open chat now leaves the next chat open, with its name row and the ring on the name,** whether you delete it with the name row's delete icon, the chats menu, or the "which chat to drop" box at ten chats. Before, the screen could stay on the deleted chat or lose its title strip with a dead D-pad. Passed on the Deck 2026-10-10 (row P87-DELETE-OPEN-CHAT).
 - **The first mic press after the question box was emptied now keeps recording.** The mic had remembered the words its last dictation wrote, so emptying the box by any route (by hand, the X, Ask) made it think dictation was over and stopped the next recording after a tenth of a second. A new recording now forgets the old words when it starts. Passed on the Deck 2026-10-10 (row P87-MIC-AFTER-CLEAR).
 - **Left and Right on the "From the notes" block no longer take the D-pad ring out of the plugin** into Steam's own side tab list; they are held there. Passed on the Deck 2026-10-10 (row P87-NOTES-CARD-LEFT).
+- **base.en is now the speech model a new install starts with** (an install with no saved choice), and the two rows in Settings → Voice input now read "tiny.en (faster, less accurate)" and "base.en (more accurate, recommended)". A choice already saved is kept, so most existing installs stay on tiny.en until their owner picks base.en. The guide and troubleshooting pages recommend base.en and keep tiny.en as the lighter fallback for a heavy game. Owes its Deck check (row VOICE-BASE-DEFAULT-01).
 
 ### Plan 84 (2026-10-09)
 

@@ -435,6 +435,7 @@
     "tests/test_intent_pack_service.py",
     "tests/test_intent_pack_store_lock.py",
     "tests/test_internet_downloads_permission.py",
+    "tests/test_kb_attach_log_line.py",
     "tests/test_kb_choice_log_line.py",
     "tests/test_kb_followup_memory.py",
     "tests/test_kb_game_tip_meaning.py",

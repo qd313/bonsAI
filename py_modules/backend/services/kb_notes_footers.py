@@ -19,13 +19,18 @@ from __future__ import annotations
 
 from typing import Any
 
+import decky
+
 from backend.services.kb_not_in_notes_notice import (
     append_no_close_match_notice,
     append_not_in_notes_notice,
+    kb_attach_log_line,
     should_show_no_close_match_notice_for_turn,
     should_show_not_in_notes_notice,
     tip_sheet_turn_came_back_empty,
 )
+
+logger = decky.logger
 
 
 def append_kb_notes_footers(
@@ -75,5 +80,8 @@ def append_kb_notes_footers(
         question_for_kb_search=question_for_kb_search,
         kb_attached_notes=kb_attached_notes,
     )
+    logger.info(kb_attach_log_line(
+        kb_transparency, kb_attached_notes,
+        not_in_notes_shown=show_not_in_notes, no_close_match_shown=show_no_close_match))
     response_text = append_not_in_notes_notice(response_text, show_not_in_notes)
     return append_no_close_match_notice(response_text, show_no_close_match)

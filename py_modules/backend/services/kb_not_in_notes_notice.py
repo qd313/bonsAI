@@ -493,3 +493,40 @@ def append_no_close_match_notice(response_text: str, should_show: bool) -> str:
     if not should_show:
         return response_text
     return (response_text or "").rstrip() + _NO_CLOSE_MATCH_NOTICE
+
+
+def kb_attach_log_line(
+    kb_transparency: dict,
+    kb_attached_notes: list,
+    *,
+    not_in_notes_shown: bool,
+    no_close_match_shown: bool,
+) -> str:
+    """One plain log line saying which notes reached the model and which footer, if any, was added.
+
+    Written so the plugin log and the answer on screen tell the same story. The budget line
+    ``ask_ollama: budget ... (attached N chars)`` counts the notes text (plus any Proton log), not
+    the rules or cards, so "attached" there means real notes. The footers are a separate verdict:
+    "No close match" is added to a reply whose attached notes were a weak match, so a log that
+    says notes were attached and an answer that ends "No close match" do not contradict each
+    other (the 2026-10-08 Deck report). Whether the answer then used a note is decided on the
+    screen, and a used note takes that line off the shown answer (kbCloseMatchLineAgrees.ts).
+    """
+    if kb_transparency.get("kb_attached"):
+        names = [str(n.get("name") or "") for n in kb_attached_notes if isinstance(n, dict)]
+        count = len(names) or len(kb_transparency.get("kb_sources") or [])
+        noun = "note" if count == 1 else "notes"
+        listed = f" ({'; '.join(n for n in names if n)})" if any(names) else ""
+        attached = f"{count} {noun} attached{listed}; they are the 'attached chars' in the budget line above"
+    elif (kb_transparency.get("kb_notes") or "").strip() == _BUDGET_DROPPED_NOTE:
+        attached = "no notes attached: a note was found but cut for room"
+    else:
+        reason = str(kb_transparency.get("kb_unavailable_reason") or "").strip()
+        attached = "no notes attached" + (f" ({reason})" if reason else "")
+    if no_close_match_shown:
+        footer = "'No close match' line added to the reply (the attached notes were a weak match)"
+    elif not_in_notes_shown:
+        footer = "'Not in my notes' line added to the reply (nothing matched)"
+    else:
+        footer = "no footer line added"
+    return f"ask_ollama: notes for this answer: {attached}; {footer}"

@@ -18,7 +18,7 @@
 import { useCallback, useLayoutEffect, useRef, type FocusEvent, type RefObject } from "react";
 import { findScrollablePanel } from "../utils/chatPanelScroll";
 import { elementHasGamepadFocus } from "../utils/uiDocument";
-import { placeOpenChip } from "./chipLadderPlacement";
+import { placeOpenChip, revealBoxEnd } from "./chipLadderPlacement";
 
 /**
  * When the placement looks again after a step or an arrival: the schedule the plugin's lift off the dock
@@ -28,12 +28,12 @@ import { placeOpenChip } from "./chipLadderPlacement";
 const SETTLE_PASS_DELAYS_MS = [150, 300, 900];
 
 /**
- * The ladder's scrolling rules, as four handles.
+ * The ladder's scrolling rules, as five handles.
  *
  * In: the ladder's own element, the open chip's details box, and a function naming the chip that is open.
  * Out: `duringStep` (wrap the ladder moving the ring itself), `holdPosition` (call last in a step),
- * `holdRef` (the ref of the empty block the ladder draws after its box) and `onFocusInside` (the ladder's
- * focus handler).
+ * `holdRef` (the ref of the empty block the ladder draws after its box), `onFocusInside` (the ladder's
+ * focus handler) and `showRestOfBox` (Down on a box whose end is hidden).
  *
  * What can go wrong: nothing throws; every pass measures first and does nothing when the ring has left the
  * ladder or a newer press has come.
@@ -77,9 +77,9 @@ export function useChipLadderReveal(
 
   /** One placement pass, for this generation only. */
   const place = useCallback(
-    (generation: number) => {
+    (generation: number, firstPass = false) => {
       if (generation !== generationRef.current || !ringInLadder()) return;
-      if (placeOpenChip(openChipRef.current(), bodyElRef.current)) placedRef.current = true;
+      if (placeOpenChip(openChipRef.current(), bodyElRef.current, holdElRef.current, firstPass)) placedRef.current = true;
     },
     [bodyElRef, ringInLadder],
   );
@@ -87,7 +87,7 @@ export function useChipLadderReveal(
   /** Place now, on the next frame, and on the settle schedule. */
   const placeAsItSettles = useCallback(
     (generation: number) => {
-      place(generation);
+      place(generation, true);
       requestAnimationFrame(() => place(generation));
       SETTLE_PASS_DELAYS_MS.forEach((ms) => window.setTimeout(() => place(generation), ms));
     },
@@ -174,5 +174,27 @@ export function useChipLadderReveal(
     [revealOnArrival],
   );
 
-  return { duringStep, holdPosition, holdRef, onFocusInside };
+  /*
+   * The generation in which Down last showed the rest of a box. A second Down with no step in between always
+   * moves on: on the Deck (2026-10-10) a Down that asked for a scroll the pane could not give kept the ring on
+   * Developer details for ever.
+   */
+  const shownRestInRef = useRef(-1);
+
+  /**
+   * Down on a chip whose box's end is behind the dock: show that end (chipLadderPlacement.ts's revealBoxEnd) and
+   * keep the ring. True when it did; false when there was nothing to show or this chip's rest was already shown,
+   * so the press moves on. Placement passes still queued from the chip's arrival are cancelled, so none pulls the
+   * row back down under the reader.
+   */
+  const showRestOfBox = useCallback((): boolean => {
+    if (shownRestInRef.current === generationRef.current) return false;
+    if (!revealBoxEnd(bodyElRef.current, holdElRef.current)) return false;
+    generationRef.current += 1;
+    shownRestInRef.current = generationRef.current;
+    placedRef.current = true;
+    return true;
+  }, [bodyElRef]);
+
+  return { duringStep, holdPosition, holdRef, onFocusInside, showRestOfBox };
 }

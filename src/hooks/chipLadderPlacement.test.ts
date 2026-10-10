@@ -27,9 +27,25 @@ describe("placementDelta", () => {
     expect(placementDelta({ ...SCREEN, ...chipAt(300), boxBottom: 1000 })).toBeCloseTo(300 - 179.6, 5);
   });
 
-  it("brings a chip that is off the top back to Steam's line, then shows as much of its box as that allows", () => {
-    expect(placementDelta({ ...SCREEN, ...chipAt(20), boxBottom: 200 })).toBeCloseTo(20 - 204, 5);
-    expect(placementDelta({ ...SCREEN, ...chipAt(20), boxBottom: 900 })).toBeCloseTo(20 - 179.6, 5);
+  it("brings a chip that is off the top back until its bottom meets Steam's line, where Steam leaves it alone", () => {
+    expect(placementDelta({ ...SCREEN, ...chipAt(20), boxBottom: 200 })).toBeCloseTo(20 + 24.4 - 204, 5);
+    expect(placementDelta({ ...SCREEN, ...chipAt(20), boxBottom: 900 })).toBeCloseTo(20 + 24.4 - 204, 5);
+  });
+
+  /*
+   * The Deck, 2026-10-10: after Developer details' end was shown, the grid sat high, its rows inside Steam's
+   * 116 px margin, and Steam pulled each row the ring landed on down to its line: 73.4, 29.7, 31.2, 28.9 px.
+   */
+  it("pulls the whole grid down in one move when the chip is inside Steam's margin, its top row onto the line", () => {
+    // Row 1 ends at 27.9, the ring's chip (row 4) at 94.7 to 119.1, its 55 px box well clear of the dock.
+    expect(placementDelta({ ...SCREEN, ...chipAt(94.7), boxBottom: 212.8, firstRowBottom: 27.9 })).toBeCloseTo(27.9 - 204, 5);
+  });
+
+  it("pulls the grid down only as far as the open box's end stays above the dock, and the chip at least onto the line", () => {
+    // Moving the grid all the way would push this 400 px box's end behind the dock: stop where it ends 6 px above.
+    expect(placementDelta({ ...SCREEN, ...chipAt(94.7), boxBottom: 560, firstRowBottom: 27.9 })).toBeCloseTo(560 - 652.4, 5);
+    // A box that cannot stay readable: the chip still comes onto the line (Steam would put it there anyway).
+    expect(placementDelta({ ...SCREEN, ...chipAt(94.7), boxBottom: 700, firstRowBottom: 27.9 })).toBeCloseTo(119.1 - 204, 5);
   });
 
   it("lifts a chip behind the dock to just above it", () => {

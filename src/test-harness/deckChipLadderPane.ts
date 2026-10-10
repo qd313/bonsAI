@@ -47,6 +47,18 @@ export interface ChipLadderPaneOptions {
   dockLift?: boolean;
   /** Added to the open box's height while set: a box that measures taller than it settles at. */
   boxExtra?: { px: number };
+  /**
+   * The browser's rounding: scrollHeight is a whole number (rounded up here) while the scroll itself stops at the
+   * exact end, so the farthest scroll the page reports can be up to 1 px past the farthest it can reach (the Deck,
+   * 2026-10-10: max 603 reported, 602.3 reached).
+   */
+  roundScrollHeight?: boolean;
+  /**
+   * Steam decides its glide the moment a chip takes focus (from where the chip is then) and its glide lands after
+   * the plugin's own first scroll, overriding it: the worst order the Deck could use. Off: the glide is decided
+   * and applied once the press is over, after the plugin's first scroll.
+   */
+  glideDecidedOnFocus?: boolean;
 }
 
 export type ScreenBox = { top: number; bottom: number; left: number; right: number };
@@ -108,7 +120,7 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
     configurable: true,
     get: () => {
       top = Math.min(top, max());
-      return layout().end + below;
+      return o.roundScrollHeight ? Math.ceil(layout().end + below) : layout().end + below;
     },
   });
   Object.defineProperty(pane, "scrollTop", {
@@ -168,14 +180,23 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
 
   /* Steam's glide to the stop that took focus, then the plugin's lift, once the press is over. */
   let landed: HTMLElement | null = null;
+  let decided: number | null = null;
   pane.addEventListener("focusin", (event) => {
     landed = event.target as HTMLElement;
+    decided = null;
+    if (o.glideDecidedOnFocus && ladder?.contains(landed)) {
+      const before = pane.scrollTop;
+      steamGlide(landed, pane, o.rule, { paneTop, dockTop, steamTopMargin: o.steamTopMargin });
+      if (pane.scrollTop !== before) decided = pane.scrollTop;
+      pane.scrollTop = before;
+    }
   });
   const settle = () => {
     const el = landed;
     landed = null;
     if (!el || !ladder?.contains(el)) return;
-    steamGlide(el, pane, o.rule, { paneTop, dockTop, steamTopMargin: o.steamTopMargin });
+    if (!o.glideDecidedOnFocus) steamGlide(el, pane, o.rule, { paneTop, dockTop, steamTopMargin: o.steamTopMargin });
+    else if (decided !== null) pane.scrollTop = decided;
     if (o.dockLift ?? true) liftForFocus(el);
   };
 

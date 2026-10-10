@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 829,
-  "edgeCount": 2530,
+  "edgeCount": 2529,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -226,7 +226,6 @@
         "src/components/ChipExpandedBody.tsx",
         "src/components/chipLadderGrid.ts",
         "src/features/unified-input/constants.ts",
-        "src/hooks/chipLadderPlacement.ts",
         "src/hooks/useChipGridOrder.ts",
         "src/hooks/useChipLadderReveal.ts",
         "src/utils/contextChipsFromSnapshot.ts",
@@ -4963,7 +4962,6 @@
         "src/utils/chatPanelScroll.ts"
       ],
       "importedBy": [
-        "src/components/ContextChipLadder.tsx",
         "src/hooks/chipLadderPlacement.test.ts",
         "src/hooks/useChipLadderReveal.ts"
       ]

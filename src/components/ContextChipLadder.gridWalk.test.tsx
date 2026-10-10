@@ -64,7 +64,11 @@ type MountOptions = {
   steamTopMargin?: boolean;
   scrollTop?: number;
   /** The screen: the monitor run's numbers unless given (pane 88 to 766, dock 658.4). */
-  screen?: { paneBottom: number; dockTop: number; ladderDocTop: number };
+  screen?: { paneBottom: number; dockTop: number; ladderDocTop: number; paneTop?: number; below?: number };
+  /** Each chip's box height, in chip order, in place of the first Deck run's. */
+  boxes?: number[];
+  roundScrollHeight?: boolean;
+  glideDecidedOnFocus?: boolean;
   /** Added to the open box while set: a box that measures taller at first than it settles at. */
   boxExtra?: { px: number };
 };
@@ -73,10 +77,14 @@ function mount(options: MountOptions = {}) {
   const scene = deckChipLadderPane({
     ladderDocTop: options.screen?.ladderDocTop ?? 389.5,
     paneBottom: options.screen?.paneBottom,
+    paneTop: options.screen?.paneTop,
+    below: options.screen?.below,
+    roundScrollHeight: options.roundScrollHeight,
+    glideDecidedOnFocus: options.glideDecidedOnFocus,
     dockTop: options.screen?.dockTop,
     scrollTop: options.scrollTop ?? 50,
     chipWidths: Object.fromEntries(DECK_CHIPS.map(([l, w]) => [l, w])),
-    boxHeights: Object.fromEntries(DECK_CHIPS.map(([l, , b]) => [l, b])),
+    boxHeights: Object.fromEntries(DECK_CHIPS.map(([l, , b], i) => [l, options.boxes?.[i] ?? b])),
     boxExtra: options.boxExtra,
     rule: options.rule,
     steamTopMargin: options.steamTopMargin,
@@ -408,7 +416,8 @@ describe.each(WALK_RULES.map((rule) => [rule ?? "no glide", rule] as const))(
         arriveOn(m.scene, m.ladder, LABELS[0]!);
         for (let i = 0; i < 7; i += 1) press(m.scene, "Right");
         expect(document.activeElement?.textContent).toBe(LABELS[7]);
-        expect(m.scene.pane.scrollTop).toBe(m.scene.pane.scrollHeight - m.scene.pane.clientHeight);
+        /* At the pane's end, give or take the 1 or 2 px of room the ladder adds there to clear the dock. */
+        expect(m.scene.pane.scrollTop).toBeGreaterThan(m.scene.pane.scrollHeight - m.scene.pane.clientHeight - 2.5);
         const row = m.scene.rowTop();
         const seen: number[] = [];
         while (m.ladder.contains(document.activeElement)) {
@@ -430,3 +439,87 @@ describe.each(WALK_RULES.map((rule) => [rule ?? "no glide", rule] as const))(
     });
   },
 );
+
+/*
+ * The Deck's second run (plan87-P87-F3-CHIPS-GRID.json, 2026-10-10, monitor): an 8-chip answer whose Developer
+ * details box was 500.8 px tall. The pane runs from 52.2 (Steam's own line 116 below, at 168.2) to 766; the
+ * suggestion row sat at 658.4 and the dock's own top, the Hide details line, about 20 px higher (the screenshot).
+ * The ladder was the last thing above the dock, with only 108.7 px of content after it, so the pane ran out of
+ * scroll before a box at its end could clear the dock. scrollHeight is a whole number, the scroll is not.
+ * What the Deck saw: Developer details' end 18.6 px behind on arrival; one more press scrolled 18.7 px and the
+ * next did nothing, for ever (Down never left); walking Left back, the row jumped 73.4, 29.7, 31.2 and 28.9 px,
+ * Steam pulling each row it landed on out of its 116 px top margin.
+ */
+const TDP_BOXES = [192.6, 55.4, 55.4, 55.4, 87.3, 119.2, 55.4, 500.8];
+const tdpScreen = (dockTop: number) => ({ paneTop: 52.2, paneBottom: 766, dockTop, ladderDocTop: 532.8, below: 108.7 });
+
+describe.each(
+  [638, 658.4].flatMap((dock) =>
+    WALK_RULES.flatMap((rule) =>
+      [false, true].map((onFocus) => [dock, rule ?? "no glide", onFocus ? "decided on focus" : "after the press", rule, onFocus] as const),
+    ),
+  ),
+)("a 500 px Developer details box at the pane's end (dock at %s, Steam's glide %s with its top margin, %s)", (dock, _name, _when, rule, onFocus) => {
+  const mountTdp = () =>
+    mount({
+      rule,
+      steamTopMargin: true,
+      scrollTop: 294.5,
+      screen: tdpScreen(dock),
+      boxes: TDP_BOXES,
+      roundScrollHeight: true,
+      glideDecidedOnFocus: onFocus,
+    });
+
+  it("Right to Developer details: its end shows on arrival or on the first Down, the ring staying; the next Down leaves", () => {
+    const m = mountTdp();
+    arriveOn(m.scene, m.ladder, LABELS[0]!);
+    for (let i = 0; i < 7; i += 1) {
+      expect(m.scene.detailsBox().bottom, `${LABELS[i]}`).toBeLessThanOrEqual(m.scene.dockTop);
+      press(m.scene, "Right");
+    }
+    expect(document.activeElement?.textContent).toBe(LABELS[7]);
+    if (m.scene.detailsBox().bottom > m.scene.dockTop) {
+      expect(press(m.scene, "Down")).toBe(true);
+      expect(document.activeElement?.textContent).toBe(LABELS[7]);
+      expect(m.scene.detailsBox().bottom).toBeLessThanOrEqual(m.scene.dockTop);
+    }
+    press(m.scene, "Down");
+    expect(m.onDown).toHaveBeenCalledTimes(1);
+    expect(document.activeElement).toBe(m.below);
+  });
+
+  it("Down from the first chip crosses the rows and leaves, with no dead press and no stop twice", () => {
+    const m = mountTdp();
+    arriveOn(m.scene, m.ladder, LABELS[0]!);
+    const down = walk(m, "Down", 12);
+    expect(down.problems).toEqual([]);
+    expect(down.stops).toEqual([...DOWN_FROM_FIRST, "suggestion chip"]);
+  });
+
+  /*
+   * Not under "center": that rule re-centres every chip that takes focus, so no design could hold the row
+   * there, and the Deck's walks never showed it for chips (the row held through chips 1 to 7 both nights).
+   */
+  for (const dir of rule === "center" ? [] : (["Left", "Up"] as const)) {
+    it(`${dir} back from Developer details, read to its end: at most one move leaving it, then the row holds`, () => {
+      const m = mountTdp();
+      arriveOn(m.scene, m.ladder, LABELS[0]!);
+      for (let i = 0; i < 7; i += 1) press(m.scene, "Right");
+      if (m.scene.detailsBox().bottom > m.scene.dockTop) press(m.scene, "Down");
+      expect(document.activeElement?.textContent).toBe(LABELS[7]);
+      const moves: number[] = [];
+      let row = m.scene.rowTop();
+      while (true) {
+        press(m.scene, dir);
+        if (!m.ladder.contains(document.activeElement)) break;
+        moves.push(Math.round((m.scene.rowTop() - row) * 10) / 10);
+        row = m.scene.rowTop();
+        expect(m.scene.detailsBox().bottom).toBeLessThanOrEqual(m.scene.dockTop);
+        expect(oneWay()).toBe(true);
+      }
+      expect(moves.length).toBe(dir === "Left" ? 7 : 4);
+      expect(moves.slice(1).every((d) => Math.abs(d) < 2), moves.join(", ")).toBe(true);
+    });
+  }
+});

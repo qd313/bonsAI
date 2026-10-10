@@ -59,7 +59,6 @@ import { isOkDeckButtonEvent } from "../utils/focusNavigation";
 import { useChipLadderReveal } from "../hooks/useChipLadderReveal";
 import { useChipGridOrder } from "../hooks/useChipGridOrder";
 import { CHIP_GAP_PX, gridMove, rowsFromBoxes, type GridDirection } from "./chipLadderGrid";
-import { revealBoxEnd } from "../hooks/chipLadderPlacement";
 import { elementHasFocus } from "../utils/uiDocument";
 import { focusRowElement } from "../utils/focusPerTurnRow";
 import { DECK_HIGHLIGHT_CYAN } from "../features/unified-input/constants";
@@ -174,7 +173,7 @@ export function ContextChipLadder({
   /* Each drawn chip's own element, by its index in `chips`; the open chip's index as last drawn. */
   const chipEls = useRef(new Map<number, HTMLElement>());
   const openIndexRef = useRef(0);
-  const { duringStep, holdPosition, holdRef, onFocusInside } = useChipLadderReveal(ladderElRef, bodyElRef, () =>
+  const { duringStep, holdPosition, holdRef, onFocusInside, showRestOfBox } = useChipLadderReveal(ladderElRef, bodyElRef, () =>
     chipEls.current.get(openIndexRef.current),
   );
   /* The chips in the order they are drawn, packed into rows that fit (plan 87 F3). */
@@ -264,11 +263,12 @@ export function ContextChipLadder({
    * A box too tall to show with its chip keeps its end behind the dock (the maintainer, 2026-10-08:
    * "it gets to the end and then the focus moves to the text box"). So Down on any chip whose box's
    * end is hidden first scrolls that end into view, smoothly, and keeps the ring on the chip; the next
-   * Down moves on. Not a new stop: the ring does not move. Right off the last chip does the same
-   * before it leaves. When the end is already readable, or the pane has no scroll left, the press
-   * moves on at once.
+   * Down moves on, always (useChipLadderReveal's showRestOfBox remembers it showed the rest; on the
+   * Deck, 2026-10-10, a Down that asked for a scroll the pane could not give stayed put for ever). Not
+   * a new stop: the ring does not move. Right off the last chip does the same before it leaves. When
+   * the end is already readable, the press moves on at once.
    */
-  const leaveDown = () => revealBoxEnd(bodyElRef.current) || Boolean(onMoveDownFromLadder?.());
+  const leaveDown = () => showRestOfBox() || Boolean(onMoveDownFromLadder?.());
   /*
    * Where a press goes is read off the chips' boxes as drawn at that moment (chipLadderGrid.ts):
    * the rows are wherever the browser put them, so the walk always matches the screen.
@@ -278,7 +278,7 @@ export function ContextChipLadder({
     return r ? { left: r.left, right: r.right, top: r.top, bottom: r.bottom } : { left: 0, right: 0, top: 0, bottom: 0 };
   };
   const press = (idx: number, dir: GridDirection): boolean => {
-    if (dir === "down" && revealBoxEnd(bodyElRef.current)) return true;
+    if (dir === "down" && showRestOfBox()) return true;
     const move = gridMove(rowsFromBoxes(drawnOrder, boxOf), boxOf, idx, dir);
     if ("to" in move) return stepTo(move.to);
     return move.leave === "up" ? Boolean(onMoveUpFromLadder?.()) : leaveDown();

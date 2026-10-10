@@ -612,6 +612,18 @@ Code: `ContextChipLadder.tsx` (the moves), `chipLadderGrid.ts` (`packChipRows`, 
   placement (a frame later, then 150, 300 and 900 ms, the lift's own schedule) measures and stops. A box too tall
   to show with its chip (Developer details on the Deck's own screen) shows its end on the **first Down**, which
   keeps the ring on the chip; the next Down moves on. Nothing scrolls once the ring has left the chips.
+- **Round two (plan 87, after the Deck run of 2026-10-10 with a 500 px Developer details box):**
+  - **The second Down always moves on.** A Down that showed the rest of a box is remembered; another Down with no
+    step in between leaves the grid (or crosses to the next row), whatever the box measures. Before this, a Down
+    that asked for a scroll the pane could not give kept the ring on Developer details for ever.
+  - **Room to clear the dock.** The ladder is often the last thing above the dock, with less content after it than
+    the dock is tall, so a box at the pane's end could never come out from behind it. The held block now also
+    grows by the shortfall before such a scroll.
+  - **Leaving a tall box, one move.** When the chip the ring lands on, or the grid's top row, sits inside Steam's
+    116 px top margin (after the rest of a tall box was shown), the grid comes down in one smooth move until its
+    top row meets Steam's line, as far as the open box's end allows. Steam pulled each row down by itself before
+    (73.4, 29.7, 31.2, 28.9 px on four steps of a Left walk). The first look after a landing goes only where
+    Steam's own glide puts that chip, so the two never pull different ways.
 - **The held block** (`bonsai-chip-ladder-hold`, unchanged): a step to a shorter box near the pane's end would let
   the browser clamp the scroll and jump the whole row; an empty block after the box keeps the pane's height for
   that step. Its two later checks stand down once the placement has scrolled for the step, so they never undo it.

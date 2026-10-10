@@ -57,8 +57,9 @@ describe("SettingsTab UI scale section", () => {
     const { container } = render(<SettingsTab {...buildProps({ showDeveloperTab: false })} />);
     expect(container.querySelector(UI_SCALE_TOGGLE)).toBeNull();
     expect(container.textContent).not.toContain("UI scale");
-    // The row below it is still there.
-    expect(container.textContent).toContain("Screenshot quality");
+    // The row below it is still there (its choice buttons, not the section title, which the test
+    // harness does not draw).
+    expect(container.querySelector('[aria-label^="Set screenshot quality to"]')).toBeTruthy();
   });
 
   it("is drawn when the Developer tab is on", () => {

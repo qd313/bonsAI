@@ -137,6 +137,7 @@
     "src/components/SettingsTabChatTextSizeRow.test.tsx",
     "src/components/SettingsTabPresetSingleChip.test.tsx",
     "src/components/SettingsTabRememberTypedSwitch.test.tsx",
+    "src/components/SettingsTabScreenshotHeading.test.tsx",
     "src/components/SettingsTabUiScaleHeading.test.tsx",
     "src/components/SettingsTabUiScaleHidden.test.tsx",
     "src/components/SettingsTabUiScaleSection.test.ts",

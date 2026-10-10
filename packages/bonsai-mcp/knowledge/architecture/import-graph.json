@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 821,
-  "edgeCount": 2474,
+  "fileCount": 822,
+  "edgeCount": 2478,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2058,6 +2058,7 @@
         "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/components/SettingsTabPresetSingleChip.test.tsx",
         "src/components/SettingsTabRememberTypedSwitch.test.tsx",
+        "src/components/SettingsTabScreenshotHeading.test.tsx",
         "src/components/SettingsTabUiScaleHidden.test.tsx",
         "src/components/ringTestProps.ts",
         "src/features/plugin-shell/tabs/useSettingsTabPayload.tsx"
@@ -2119,6 +2120,15 @@
     "src/components/SettingsTabRememberTypedSwitch.test.tsx": {
       "imports": [
         "src/components/SettingsTab.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/components/SettingsTabScreenshotHeading.test.tsx": {
+      "imports": [
+        "src/components/SettingsTab.tsx",
+        "src/components/ringTestProps.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx"
       ],
       "importedBy": []
     },
@@ -2328,7 +2338,8 @@
       "importedBy": [
         "src/components/SettingsDeveloperLeftoverRing.test.tsx",
         "src/components/SettingsDeveloperWrappedRing.test.tsx",
-        "src/components/SettingsTab.textSizeWalk.test.tsx"
+        "src/components/SettingsTab.textSizeWalk.test.tsx",
+        "src/components/SettingsTabScreenshotHeading.test.tsx"
       ]
     },
     "src/context/UiScaleContext.tsx": {
@@ -6744,6 +6755,7 @@
         "src/components/SettingsTab.clearAllBack.test.tsx",
         "src/components/SettingsTab.clearBoxes.test.tsx",
         "src/components/SettingsTab.textSizeWalk.test.tsx",
+        "src/components/SettingsTabScreenshotHeading.test.tsx",
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
         "src/features/chat-slots/useChatSlotDeleteConfirm.test.tsx",
@@ -6845,6 +6857,7 @@
       "imports": [],
       "importedBy": [
         "src/components/SettingsTab.textSizeWalk.test.tsx",
+        "src/components/SettingsTabScreenshotHeading.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/nameRowIcons.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",

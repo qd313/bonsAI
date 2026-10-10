@@ -146,13 +146,13 @@
       "role": ""
     },
     {
-      "path": "src/components/SettingsTab.tsx",
-      "lines": 725,
+      "path": "py_modules/backend/services/voice_transcription_service.py",
+      "lines": 717,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/voice_transcription_service.py",
-      "lines": 717,
+      "path": "src/components/SettingsTab.tsx",
+      "lines": 713,
       "role": ""
     },
     {

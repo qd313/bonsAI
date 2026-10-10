@@ -327,18 +327,6 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             className="bonsai-prose-host bonsai-settings-bleed"
             style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}
           >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: 8,
-                marginBottom: 4,
-              }}
-            >
-              <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13 }}>Screenshot quality</div>
-            </div>
             <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
               For vision questions — lower quality uses less memory.
             </div>

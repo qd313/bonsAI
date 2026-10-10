@@ -1,0 +1,18 @@
+{
+  "row": "VOICE-BASE-DEFAULT-01 part 1 (VOICE-LABELS)",
+  "build_commit": "532761e2 (checkout tip, deployed to the Deck this block; Deck file shows DEFAULT_VOICE_STT_MODEL = \"base.en\")",
+  "deck_time_local": "2026-10-10 17:20 EDT",
+  "screen": "MONITOR live (page window 855 x 766)",
+  "setup": "deck_deploy, plugin opened on the second try (first failure expected). Test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7). Settings tab, walked down one press at a time to the STT model rows. Settings file voice_stt_model = base.en.",
+  "pressed": "RIGHT x2 on the tab bar to Settings, DOWN x8 to the tiny.en row. No A pressed.",
+  "seen": {
+    "row_1_text": "tiny.en (faster, less accurate)",
+    "row_2_text": "base.en (more accurate, recommended)",
+    "order": "tiny.en first, base.en second",
+    "chosen_row": "base.en (blue filled border and fill, style border rgba(156,231,255,0.55), background rgba(56,189,248,0.12)); tiny.en row has the plain grey border",
+    "status_lines_under_rows": "Engine: whisper-cli ready; Model: base.en ready",
+    "screenshot": "C:/Users/still/Documents/BonsAI/screenshots/DeckCapture_20261010_172016_auto.png (copy beside this file as v1010-VOICE-LABELS.png)"
+  },
+  "expected": "Rows read 'tiny.en (faster, less accurate)' then 'base.en (more accurate, recommended)', base.en chosen.",
+  "verdict": "PASS"
+}

@@ -1,0 +1,25 @@
+{
+  "row": "VOICE-BASE-GAME try 2 (base.en, Deep Rock Galactic: Survivor in live play)",
+  "build_commit": "532761e2 (deployed); speech model base.en",
+  "deck_time_local": "2026-10-10 17:36 EDT",
+  "screen": "MONITOR live (page window 855 x 766)",
+  "setup": "Second dictation, because the first one (v1010-VOICE-BASE-GAME.json) ran while the run sat on a 'LEVEL UP' choice screen. Here I closed that screen (A, then the game came back to live shooting, 60 FPS, screenshot DeckCapture_20261010_173607_auto.png, enemies and three turrets moving), opened Quick Access with deck_openPlugin, cleared the box with the script, DOWN x1 then LEFT x1 to Voice input, read focus = Voice input, then A as its own step and played pretend_sentence10.wav. Plugin never reloaded while the game ran.",
+  "pressed": "deck_openPlugin (chord), DOWN, LEFT, A (start), A (stop after the text had stopped changing).",
+  "seen": {
+    "paplay": "started 1791668174.85, returned 1791668190.10 (15.25 s)",
+    "A_pressed": "page clock 1791668173.55 ('Starting voice input'), 'Stop voice input' 0.31 s later",
+    "text_changes": 4,
+    "change_times_s_after_paplay_start": [4.36, 7.42, 10.67, 13.80],
+    "last_change_before_paplay_returned_s": 1.45,
+    "final_text": "How do I be? the final boss in this game, and which weapon should be made. I upgrade first, because my health keeps before I can reach the second phase of the fight.",
+    "final_length": 165,
+    "words_wrong_or_missing": "'beat' came out 'be?', 'should I upgrade' came out 'should be made. I upgrade', 'running out' is missing. The ending 'the second phase of the fight.' did arrive.",
+    "fps_during_dictation": "Screenshot DeckCapture_20261010_173621_auto.png taken about 6 s into the dictation: GAMESCAPE 35 FPS (frame time 28.6 ms), CPU 98 percent, while the run had gone back onto a level-up screen. Before: 60 FPS (17:36:07). After the dictation ended: 60 FPS (17:36:49, same level-up screen). So the speech engine pulled the game from 60 to 35 FPS while it ran, a drop of 25 FPS, and the mic text was poor.",
+    "recording_ended": "my Stop at 17:36:48 (log: recording started 17:36:13, stopped, transcript 165 characters)",
+    "memory": "7,958 MB available"
+  },
+  "expected": "Every word arrives and the last words land within 3 s of paplay returning.",
+  "verdict": "FAIL: the last words landed 1.45 s before paplay returned (inside 3 s), but the text was not whole and words were wrong ('be?' for 'beat', 'should I' garbled, 'running out' missing).",
+  "verdict_frame_rate": "REPORT: 60 FPS before, 35 FPS during, 60 FPS after (one sample each).",
+  "side_effect": "Same as v1010-VOICE-BASE-GAME.json. The question box was cleared afterwards with the script."
+}

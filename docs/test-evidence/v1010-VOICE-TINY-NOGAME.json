@@ -1,0 +1,62 @@
+{
+  "row": "VOICE-TINY-NOGAME (tiny.en, no game, pretend microphone v1010mic)",
+  "build_commit": "532761e2 (deployed)",
+  "deck_time_local": "2026-10-10 17:26 to 17:29 EDT",
+  "screen": "MONITOR live (page window 855 x 766)",
+  "setup": "Same as v1010-VOICE-BASE-NOGAME. Switched to tiny.en in Settings (walked to the tiny.en row, read focus, A as its own step); settings file read back = tiny.en. Same page sampler (100 ms, change-only), same recorded sentences, same pretend mic (null sink v1010mic). Log lines say 'model tiny.en'. Test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?'. Ask never pressed; A never pressed on the question box.",
+  "pressed": "Settings: RIGHT x2 to Settings tab, DOWN walk to the tiny.en row (8 presses), A. Back on Main: UP/LEFT x2 on the tab bar, DOWN walks to Ask, one LEFT to Voice input, focus read = Voice input, then A. Stop = A on 'Stop voice input' (focus read first). Box cleared with --clear after steps 2 (not before step 3, see below), 3 and 4. After step 2 the box was cleared before step 3.",
+  "seen": {
+    "step1_sentence10": {
+      "paplay": "started 1791667579.60, returned 1791667594.83 (15.2 s)",
+      "text_changes": 12,
+      "typical_gap_between_changes_s": "0.6 to 1.8 (about every 0.7 s on average)",
+      "last_change_before_paplay_returned_s": 4.16,
+      "final_text": "How do I beat the final boss in this game and which weapon should I upgrade first? Because my health keeps running out before I can reach the second phase of the fight.",
+      "final_length": 168,
+      "note_on_text": "Every word arrived and it ends '...the second phase of the fight.' Passing wrong guesses ('final ball?', 'before I get') were corrected by later updates. A question mark after 'first' was added by the model.",
+      "recording_ended": "Did not end by itself; ended by my Stop at about 17:26:47 (log: transcript 168 characters, started 17:26:18)."
+    },
+    "step2_stop_then_mic_bug_report": {
+      "gap_between_Stop_and_next_A": "about 3 s (A on Stop at 607.36, A on Voice input at 610.12 page clock)",
+      "button_after_A": "'Voice input' -> 'Starting voice input' (0.26 s) -> 'Stop voice input', stayed so until my Stop",
+      "new_recording_started_in_log": "yes, 17:26:50,333 voice: recording started, model tiny.en",
+      "words_added": "yes, and badly repeated. paplay 611.76 to 621.01. Text kept the first sentence and then grew to: ' Test test 1, 2, 3. test test one two three four test test one two three four test test test one two three four on 2-3-4. for.' (8 changes, last 1.35 s before paplay returned).",
+      "full_box_after": "How do I beat the final boss in this game and which weapon should I upgrade first? Because my health keeps running out before I can reach the second phase of the fight. Test test 1, 2, 3. test test one two three four test test one two three four test test test one two three four on 2-3-4. for.",
+      "box_length": "168 -> 294 (126 added; log: transcript 125 characters)",
+      "recording_ended": "my Stop at about 17:27:10",
+      "report": "Stop-then-mic WORKS on tiny.en (button, new recording, words added). The words it added are heavily repeated: the spoken 'test test 1 2 3 4' twice came out as about four repeats."
+    },
+    "step3_testtest_empty_box": {
+      "paplay": "started 1791667640.65, returned 1791667649.90",
+      "text_changes": 7 ,
+      "path_of_text": "'Test test 1, 2, 3, 4.' -> '... Test test 1234.' -> shrank to '... Test test 1.' -> ... Test test 1, 2, 3, 4. Test test 1, 2, 3, 4.' -> '... test test 1234.' -> final",
+      "final_text": "Test test 1, 2, 3, 4. Test test 1, 2, 3, 4. test test 1234. 1 2 3 4.",
+      "final_length": 68,
+      "repeat": "YES. The spoken phrase (twice) came out as the phrase about 3 times plus an extra '1 2 3 4.' (log: transcript 68 characters). The text also got shorter once during dictation (37 to 34 characters).",
+      "last_change_before_paplay_returned_s": 2.14,
+      "recording_ended": "my Stop at about 17:27:41"
+    },
+    "step4_long20": {
+      "paplay": "started 1791667670.76, returned 1791667691.97 (21.2 s)",
+      "text_changes": 20,
+      "final_text": "I keep dying to the boss with the big hammer in the second area and I never have enough healing items when I get there. Should I go back and farm the early levels First, Or is there a better weapon I can pick up on the way that makes the fight easier.",
+      "final_length": 251,
+      "text_stopped_growing_early": "No. It grew to the end (last change 3.6 s before paplay returned, in the silent tail). Odd capital letters ('First', 'Or') and '.' for '?'.",
+      "recording_ended": "my Stop at about 17:28:23 (log transcript 251 characters)"
+    },
+    "compare_with_base_en": {
+      "sentence10": "both whole. tiny changed the text 12 times (about every 0.7 s), base 7 times (about every 1.6 s).",
+      "stop_then_mic": "works on both",
+      "testtest": "base: 'Test test 1 2 3 4 24.' (no repeat, second half lost). tiny: phrase repeated about 3 times.",
+      "long20": "both whole"
+    },
+    "switched_back": "Settings walked to base.en (9 presses), focus read = base.en row, A. Settings file read back = base.en at 17:28:51."
+  },
+  "expected": "Reports only: whole or cut short (when), repeats (exact text), Stop-then-mic behaviour; compared with base.en.",
+  "verdict_step1": "REPORT: whole, nothing cut short.",
+  "verdict_step2": "REPORT: Stop-then-mic works; new words are repeated heavily.",
+  "verdict_step3": "REPORT: repeat seen. Exact text above.",
+  "verdict_step4": "REPORT: whole, nothing cut short.",
+  "verdict": "REPORT ONLY (no pass/fail set by the runbook). Repeat of spoken words seen on tiny.en in steps 2 and 3; none on base.en.",
+  "side_effect": "None. The model was switched to tiny.en and back to base.en (both confirmed in the settings file)."
+}

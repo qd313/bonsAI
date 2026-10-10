@@ -472,3 +472,26 @@ change the runbook.
 - **01:24, Deck block 4 started** (the chips grid, the tabs' scroll and heading, About Up, the ring after a tab change,
   the after-delete fixes). Third docs sweep running. Phone notifications are switched off in the app, so none were
   sent; this log is the record.
+- **01:30, landed:** the mic fix (after dictating, stopping and clearing the box, the next press stopped itself: the
+  mic remembered the old words). Third docs sweep landed (nine entries to Done).
+- **Deck block 4 (01:24 to 01:50, build `8608954d`):** PASS: deleting the open chat, Delete from the ten-chat picker,
+  every tab's first heading clear of the bar, About's Up (3 of 3, on the monitor), LB from Main (3 of 3); the "ring on
+  no control after a tab change" sighting did not reproduce (14 of 14). FAIL: the chips grid (a 500 px Developer
+  details box ended behind the dock; the row moved 30 to 73 px walking back; one dead Down) and the tabs' scroll going
+  up (Ollama 367, Settings 326). Both went back for a second round in fresh copies, with the numbers.
+- **Deck blocks 5 and 5b (01:55 to 02:10):** block 5 stopped on the memory rule (1,988 MB with the game and the Deck's
+  AI loaded); 5b unloaded the AI first (6.7 GB freed). The notes line with a game running passed (2 asks of 3); the
+  free-play walk with the game passed on Ollama and was unclear on Main (one rotating chip); the frame rate read 59 a
+  second but the game was paused, so a live-fight number is still owed. Found: Left on a lone notes card escaped into
+  Steam's side tabs (fixed at 02:17: Left and Right held).
+- **Second rounds (landed 02:06 and 02:09):** the tabs' scroll through one shared helper the tabs call (a first
+  version that replaced `focus()` on Steam's shared page was refused at review); the chips grid's tall-box and
+  walk-back rules. Fourth docs sweep and the night's evidence files committed.
+- **Deck block 6a (02:17 to 02:40, build `95139093`):** PASS: the game closed through its own menu; the mic keeps
+  listening after the box is cleared; Left and Right stay on a lone notes card; free play with no game. Still failing:
+  one Settings press (326 px) and the chips grid's walk back (23.5 and 57.8 px) and two entry cases. Both had now
+  failed on the Deck twice, so each went up one model step: the Settings press to Opus medium (cause: the ring lands
+  on a wrapper box the planner skipped; landed 02:46), the chips grid to Opus extra-high (cause: Steam pulls a chip
+  whose top crosses its line, and marks its ring a moment after the focus event; landed 03:20).
+- **03:21, Deck block 6c started** (the final build: the chips grid and the tabs' scroll, third tries). Block 6b (the
+  saved walks, a smoke test, putting the Deck back) follows.

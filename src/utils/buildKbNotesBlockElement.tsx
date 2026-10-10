@@ -300,6 +300,9 @@ export function buildKbNotesBlockElement(args: {
       {...({
         onMoveUp: () => onMoveUp(),
         onMoveDown: () => onMoveDown(),
+        /* Left and Right are held (plan 87): with no handler Steam's own Left carries the ring out of the plugin. */
+        onMoveLeft: () => true,
+        onMoveRight: () => true,
         onButtonDown: (evt: unknown) => {
           const el = kbNotesBlockEls.get(turnKey);
           if (el && !elementHasGamepadFocus(el)) return false;

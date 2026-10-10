@@ -49,6 +49,10 @@ the session context strip)
 - **Not fixed, and out of scope for this control specifically:** walking Up from the question box
   skips every reply row, the block included — a pre-existing gap wider than this one control,
   filed separately by the same Deck row rather than folded into this fix.
+- **Left and Right are held** (plan 87, QA-FREE-PLAY-01 with no game running): the block's own
+  Focusable returns true on both, so a press of Left on the "Performance" card does not carry the
+  ring out of the plugin into Steam's side tab list. Nothing sits to either side of the block. The
+  note cards inside an open block are plain text, not stops, so they hold nothing extra.
 - **A** (`onOKButton`) or a tap (`onClick`) toggles the body open or closed. No `onActivate` —
   Steam fires it for A too, and wiring both would toggle twice on one press, the same trap the
   Show details line's own comment documents.

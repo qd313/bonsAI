@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 787,
-  "edgeCount": 2364,
+  "fileCount": 793,
+  "edgeCount": 2381,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -879,6 +879,20 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabChatTranscript.textSize.test.tsx": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/data/chatTextSize.ts",
+        "src/features/chat-title/chatTitleStyles.ts",
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/settledFontSize.ts",
+        "src/types/backgroundAsk.ts",
+        "src/utils/inputTransparency.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabChatTranscript.troubleshootHintDismiss.test.tsx": {
       "imports": [
         "src/components/MainTabChatTranscript.tsx",
@@ -976,6 +990,7 @@
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
+        "src/components/MainTabChatTranscript.textSize.test.tsx",
         "src/components/MainTabChatTranscript.troubleshootHintDismiss.test.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
@@ -2342,6 +2357,7 @@
       ],
       "importedBy": [
         "src/components/DeveloperTab.tsx",
+        "src/components/MainTabChatTranscript.textSize.test.tsx",
         "src/components/OllamaSavedHostsRows.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
@@ -2356,6 +2372,7 @@
         "src/components/VoiceInputSettingsSection.tsx",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/characterUiAccent.ts",
+        "src/data/chatTextSize.ts",
         "src/features/downloads/downloadNotice.test.tsx",
         "src/features/downloads/downloadNotice.tsx",
         "src/features/model-routing/useTryOrderPlaces.test.tsx",
@@ -2442,6 +2459,22 @@
         "src/data/characterUiAccent.test.ts",
         "src/features/plugin-shell/useBonsaiScopeStyle.ts",
         "src/styles/sections/section-4.test.ts"
+      ]
+    },
+    "src/data/chatTextSize.test.ts": {
+      "imports": [
+        "src/data/chatTextSize.ts"
+      ],
+      "importedBy": []
+    },
+    "src/data/chatTextSize.ts": {
+      "imports": [
+        "src/data/bonsaiSettingsSchema.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.textSize.test.tsx",
+        "src/data/chatTextSize.test.ts",
+        "src/index.tsx"
       ]
     },
     "src/data/deckEssentialsTags.ts": {
@@ -3165,6 +3198,7 @@
         "src/features/unified-input/constants.ts"
       ],
       "importedBy": [
+        "src/components/MainTabChatTranscript.textSize.test.tsx",
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/ChatTitleView.tsx",
         "src/features/chat-title/nameRowBalance.ts"
@@ -5712,6 +5746,7 @@
         "src/components/icons.tsx",
         "src/context/UiScaleContext.tsx",
         "src/data/bonsaiSettingsSchema.ts",
+        "src/data/chatTextSize.ts",
         "src/data/presets.ts",
         "src/data/uiScaleProfile.ts",
         "src/features/chat-title/ChatTitleView.tsx",
@@ -5847,6 +5882,7 @@
         "src/components/BonsaiModalScope.tsx",
         "src/components/BonsaiPluginShell.tsx",
         "src/components/MainTab.askStrip.deck.test.tsx",
+        "src/components/MainTabChatTranscript.textSize.test.tsx",
         "src/components/MainTabUnifiedAskBar.boxRing.test.tsx",
         "src/components/OllamaTab.focusRing.test.tsx",
         "src/components/SettingsDeveloperLeftoverRing.test.tsx",
@@ -5896,6 +5932,7 @@
       "imports": [
         "src/styles/sections/answerBubbleCorners.ts",
         "src/styles/sections/answerMarkdownFormatting.ts",
+        "src/styles/sections/chatTextPx.ts",
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [
@@ -5914,10 +5951,20 @@
       ]
     },
     "src/styles/sections/answerMarkdownFormatting.ts": {
-      "imports": [],
+      "imports": [
+        "src/styles/sections/chatTextPx.ts"
+      ],
       "importedBy": [
         "src/styles/sections/answerBubble.test.ts",
         "src/styles/sections/answerBubble.ts",
+        "src/styles/sections/section-6.ts"
+      ]
+    },
+    "src/styles/sections/chatDetailsText.ts": {
+      "imports": [
+        "src/styles/sections/chatTextPx.ts"
+      ],
+      "importedBy": [
         "src/styles/sections/section-6.ts"
       ]
     },
@@ -5925,6 +5972,15 @@
       "imports": [],
       "importedBy": [
         "src/styles/sections/gamepadAndPullModels.ts"
+      ]
+    },
+    "src/styles/sections/chatTextPx.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/styles/sections/answerBubble.ts",
+        "src/styles/sections/answerMarkdownFormatting.ts",
+        "src/styles/sections/chatDetailsText.ts",
+        "src/styles/sections/questionBubble.ts"
       ]
     },
     "src/styles/sections/detailsSlot.ts": {
@@ -5988,6 +6044,7 @@
     },
     "src/styles/sections/questionBubble.ts": {
       "imports": [
+        "src/styles/sections/chatTextPx.ts",
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [
@@ -6094,6 +6151,7 @@
         "src/features/unified-input/constants.ts",
         "src/styles/sections/answerBubble.ts",
         "src/styles/sections/answerMarkdownFormatting.ts",
+        "src/styles/sections/chatDetailsText.ts",
         "src/styles/sections/questionBubble.ts",
         "src/styles/sections/replyRatingChoices.ts",
         "src/styles/sections/uiScalePx.ts"
@@ -6364,6 +6422,7 @@
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
+        "src/components/MainTabChatTranscript.textSize.test.tsx",
         "src/components/MainTabChatTranscript.troubleshootHintDismiss.test.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
@@ -6479,6 +6538,12 @@
         "src/test-harness/fakeDeckyRpc.ts"
       ]
     },
+    "src/test-harness/settledFontSize.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.textSize.test.tsx"
+      ]
+    },
     "src/test-harness/setup.ts": {
       "imports": [
         "src/test-harness/fakeDeckyRpc.ts",
@@ -6534,6 +6599,7 @@
         "src/components/MainTab.tsx",
         "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",
+        "src/components/MainTabChatTranscript.textSize.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/features/chat-sum-up/useChatSumUpJob.ts",
         "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
@@ -7895,6 +7961,7 @@
         "src/components/MainTabChatTranscript.retryNotAStop.test.tsx",
         "src/components/MainTabChatTranscript.sessionLadderExit.test.tsx",
         "src/components/MainTabChatTranscript.spoilerCredits.test.tsx",
+        "src/components/MainTabChatTranscript.textSize.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
         "src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx",

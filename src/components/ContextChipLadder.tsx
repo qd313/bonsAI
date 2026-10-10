@@ -450,6 +450,7 @@ function ChipExpandedBody({
   return (
     <div
       ref={bodyRef}
+      className="bonsai-chip-body"
       style={{
         width: "100%",
         boxSizing: "border-box",

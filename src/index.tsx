@@ -168,6 +168,7 @@ import { useSessionResetActions } from "./features/plugin-shell/useSessionResetA
 import { useSessionRestoreAfterRemount } from "./features/plugin-shell/useSessionRestoreAfterRemount";
 import { useChatSlotActivityState } from "./features/plugin-shell/useChatSlotActivityState";
 import { useBonsaiScopeStyle } from "./features/plugin-shell/useBonsaiScopeStyle";
+import { withChatTextScale } from "./data/chatTextSize";
 import { useExternalNavigationActions } from "./features/plugin-shell/useExternalNavigationActions";
 import { useAppLogPrefsAndCapturedErrors } from "./features/plugin-shell/useAppLogPrefsAndCapturedErrors";
 import { useTabAndModeGuardEffects } from "./features/plugin-shell/useTabAndModeGuardEffects";
@@ -621,13 +622,18 @@ const Content: React.FC = () => {
     [latencyTimeoutsCustomEnabled, latencyWarningSeconds]
   );
 
-  const bonsaiScopeStyle = useBonsaiScopeStyle({
+  const bonsaiScopeStyleBase = useBonsaiScopeStyle({
     aiCharacterEnabled,
     aiCharacterRandom,
     aiCharacterPresetId,
     aiCharacterCustomText,
     uiScaleScopeStyle: uiScale.scopeStyle,
   });
+  // The Text size step, in its own variable on the root (not the UI scale): only the chat's words read it.
+  const bonsaiScopeStyle = useMemo(
+    () => withChatTextScale(bonsaiScopeStyleBase, chatTextSize),
+    [bonsaiScopeStyleBase, chatTextSize],
+  );
   /* The chat's name in Decky's bar is drawn outside this box (plan 84 step 5): it learns the
      character's lit colour (the tab bar's own) through its store, not through props; the tab showing
      goes the same way, with the tab bar's data (useTopStripTabBar, below). */

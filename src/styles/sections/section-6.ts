@@ -58,6 +58,7 @@ import { uiScalePx } from "./uiScalePx";
 import { buildAnswerMarkdownFormattingSection } from "./answerMarkdownFormatting";
 import { buildQuestionBubbleSection } from "./questionBubble";
 import { buildAnswerBubbleSection } from "./answerBubble";
+import { buildChatDetailsTextSection } from "./chatDetailsText";
 import { buildReplyRatingChoicesSection } from "./replyRatingChoices";
 
 /**
@@ -240,6 +241,7 @@ ${buildAnswerMarkdownFormattingSection()}
         }
 ${buildQuestionBubbleSection()}
 ${buildAnswerBubbleSection()}
+${buildChatDetailsTextSection()}
         .bonsai-scope button.bonsai-chat-next-message {
           display: block !important;
           width: fit-content !important;

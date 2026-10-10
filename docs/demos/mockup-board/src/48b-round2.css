@@ -70,4 +70,13 @@
 .m5-stop.covered .m5-st b, .m5-stop.covered .m5-st small { color: #8a8a74; }
 .m5-thumb { display: block; width: 90px; margin: 0 6px 0 0; border-radius: 4px; overflow: hidden; line-height: 0; flex: none; }
 .m5-thumb svg { width: 100%; height: auto; }
+/* ---------- tab 6, round 2 ---------- */
+.k2-answer.d2-err { background: linear-gradient(180deg, rgba(120,40,40,.28), rgba(60,20,24,.65)); border-color: rgba(241,106,90,.5); color: #f2d9d7; padding-bottom: 10px; }
+.d2-err .plain-head { font-weight: 700; color: #ffe2dd; }
+.d2-btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.fixbtn.quiet { background: none; border-color: rgba(255,255,255,.2); color: var(--q-ink-2); }
+.d2-in { padding: 0 10px 8px; display: flex; flex-direction: column; gap: 6px; }
+.d2-steps-note { font-size: 9.5px; color: var(--q-ink-3); line-height: 1.35; }
+.d2-jump { position: absolute; inset: 0; z-index: 10; background: var(--q-bg); display: flex; flex-direction: column; }
+.d2-jump-in { padding: 2px 8px 10px; display: flex; flex-direction: column; gap: 6px; }
 </style>

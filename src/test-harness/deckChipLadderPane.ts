@@ -15,6 +15,10 @@
  *
  * Numbers by default are the monitor run of 2026-10-09 (docs/test-evidence/plan87-M3-CHIPS.json): page 766
  * tall, the dock's suggestion row at 658.4, the ladder's content 108.9 px above the pane's end.
+ *
+ * Whatever is drawn directly before the ladder (the test's "This answer | Session" toggle) is laid out where
+ * the Deck drew the toggle: 28 px tall, its bottom 8.5 px above the ladder's top (plan87-P87-F3-CHIPS-GRID.json:
+ * the toggle at 168 to 196 with the grid's top row at 225.3), and Steam glides it like a chip.
  */
 import { liftForFocus } from "../hooks/useDockClearanceOnFocus";
 import { steamGlide, steamScrollIntoView, type SteamScrollRule } from "./deckAnswerWalk";
@@ -24,6 +28,13 @@ const CAPTION_PX = 20.8;
 /** The gap between chips across and down, and between the grid and the details box. */
 const CHIP_GAP = 6;
 const GRID_TO_BOX = 8;
+/** The toggle above the ladder: its height, and the gap from its bottom to the ladder's top. */
+const TOGGLE_PX = 28;
+const TOGGLE_GAP_PX = 8.5;
+/** Steam's own scroll area keeps this much clear at its top (docs/lessons-learned.md § 3). */
+const STEAM_LINE_PX = 116;
+/** The Deck's scroll moves in whole device pixels (0.78 page px at 1.28): a top this close to the line is on it. */
+const ON_THE_LINE_PX = 0.5;
 
 export interface ChipLadderPaneOptions {
   paneTop?: number;
@@ -59,6 +70,13 @@ export interface ChipLadderPaneOptions {
    * and applied once the press is over, after the plugin's first scroll.
    */
   glideDecidedOnFocus?: boolean;
+  /**
+   * Steam's glide as the chip walks measured it (plan87-P87-F3-CHIPS-GRID.json and -try2.json, 2026-10-10): a
+   * small stop that takes focus with its top above Steam's line (the pane's top plus 116) is glided until its top
+   * is on the line, even when its bottom is on or below the line (chip 2 at 144.1 to 168.5 moved 23.5; the toggle
+   * at 110.3 moved 57.8; a row 0.8 px over the line moved 0.8). Any other stop follows `rule`.
+   */
+  glideTopAboveLine?: boolean;
 }
 
 export type ScreenBox = { top: number; bottom: number; left: number; right: number };
@@ -145,6 +163,9 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
   pane.getBoundingClientRect = () => rect(paneTop, paneBottom);
   dock.getBoundingClientRect = () => rect(dockTop, paneBottom);
 
+  /* The stop drawn directly before the ladder, laid out as the Deck's toggle (see the header). */
+  let toggle: HTMLElement | null = null;
+
   /** Put the Deck's layout on the rendered ladder's parts (call again after anything re-renders them). */
   const install = (root: HTMLElement) => {
     ladder = root;
@@ -152,6 +173,12 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
       const l = layout();
       return rect(screen(o.ladderDocTop), screen(l.end));
     };
+    toggle = root.previousElementSibling as HTMLElement | null;
+    if (toggle) {
+      const top = o.ladderDocTop - TOGGLE_GAP_PX - TOGGLE_PX;
+      toggle.getBoundingClientRect = () => rect(screen(top), screen(top + TOGGLE_PX));
+      toggle.scrollIntoView = steamScrollIntoView(pane, toggle, paneBottom);
+    }
     const grid = part(".bonsai-chip-ladder-grid");
     if (grid) {
       grid.getBoundingClientRect = () => {
@@ -178,24 +205,43 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
     }
   };
 
+  /* Steam's glide to a stop that took focus: the measured top-line rule first when it is on, else `rule`. */
+  const glide = (el: HTMLElement) => {
+    const r = el.getBoundingClientRect();
+    const line = paneTop + STEAM_LINE_PX;
+    if (o.glideTopAboveLine && r.bottom - r.top < 100 && r.top < line - ON_THE_LINE_PX) {
+      pane.scrollTop = Math.max(0, pane.scrollTop + r.top - line);
+      return;
+    }
+    steamGlide(el, pane, o.rule, { paneTop, dockTop, steamTopMargin: o.steamTopMargin });
+  };
+  const glides = (el: HTMLElement | null): el is HTMLElement => Boolean(el && (ladder?.contains(el) || el === toggle));
+
   /* Steam's glide to the stop that took focus, then the plugin's lift, once the press is over. */
   let landed: HTMLElement | null = null;
   let decided: number | null = null;
-  pane.addEventListener("focusin", (event) => {
-    landed = event.target as HTMLElement;
+  const onFocusIn = (event: FocusEvent) => {
+    if (!pane.isConnected) {
+      document.removeEventListener("focusin", onFocusIn);
+      return;
+    }
+    const target = event.target as HTMLElement;
+    if (!pane.contains(target)) return;
+    landed = target;
     decided = null;
-    if (o.glideDecidedOnFocus && ladder?.contains(landed)) {
+    if (o.glideDecidedOnFocus && glides(landed)) {
       const before = pane.scrollTop;
-      steamGlide(landed, pane, o.rule, { paneTop, dockTop, steamTopMargin: o.steamTopMargin });
+      glide(landed);
       if (pane.scrollTop !== before) decided = pane.scrollTop;
       pane.scrollTop = before;
     }
-  });
+  };
+  document.addEventListener("focusin", onFocusIn);
   const settle = () => {
     const el = landed;
     landed = null;
-    if (!el || !ladder?.contains(el)) return;
-    if (!o.glideDecidedOnFocus) steamGlide(el, pane, o.rule, { paneTop, dockTop, steamTopMargin: o.steamTopMargin });
+    if (!glides(el)) return;
+    if (!o.glideDecidedOnFocus) glide(el);
     else if (decided !== null) pane.scrollTop = decided;
     if (o.dockLift ?? true) liftForFocus(el);
   };
@@ -219,6 +265,10 @@ export function deckChipLadderPane(o: ChipLadderPaneOptions) {
     detailsBox: () => box(part(".bonsai-chip-body")),
     /** The top edge of the grid's first row. */
     rowTop: () => box(part(".bonsai-chip-ladder-grid")).top,
+    /** Where the stop drawn before the ladder (the toggle) is on screen. */
+    toggleBox: () => box(toggle),
+    /** Steam's line: the pane's top plus the 116 px it keeps clear. */
+    steamLine: paneTop + STEAM_LINE_PX,
     /** How many rows the chips wrapped into. */
     rowCount: () => new Set([...layout().at.values()].map((p) => p.row)).size,
   };

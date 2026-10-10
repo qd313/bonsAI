@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 830,
-  "edgeCount": 2532,
+  "fileCount": 831,
+  "edgeCount": 2537,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -175,6 +175,16 @@
       ],
       "importedBy": []
     },
+    "src/components/ContextChipLadder.deckTry2.test.tsx": {
+      "imports": [
+        "src/components/ContextChipLadder.tsx",
+        "src/test-harness/deckChipLadderPane.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/inputTransparency.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/ContextChipLadder.gridWalk.test.tsx": {
       "imports": [
         "src/components/ContextChipLadder.tsx",
@@ -236,6 +246,7 @@
       ],
       "importedBy": [
         "src/components/ContextChipLadder.allChips.test.tsx",
+        "src/components/ContextChipLadder.deckTry2.test.tsx",
         "src/components/ContextChipLadder.gridWalk.test.tsx",
         "src/components/ContextChipLadder.reveal.test.tsx",
         "src/components/ContextChipLadder.stillRow.test.tsx",
@@ -6706,6 +6717,7 @@
         "src/test-harness/deckAnswerWalk.ts"
       ],
       "importedBy": [
+        "src/components/ContextChipLadder.deckTry2.test.tsx",
         "src/components/ContextChipLadder.gridWalk.test.tsx"
       ]
     },
@@ -6800,6 +6812,7 @@
       "imports": [],
       "importedBy": [
         "src/components/ContextChipLadder.allChips.test.tsx",
+        "src/components/ContextChipLadder.deckTry2.test.tsx",
         "src/components/ContextChipLadder.gridWalk.test.tsx",
         "src/components/ContextChipLadder.reveal.test.tsx",
         "src/components/ContextChipLadder.ringWalk.test.tsx",
@@ -8413,6 +8426,7 @@
       "importedBy": [
         "src/components/ChipExpandedBody.tsx",
         "src/components/ContextChipLadder.allChips.test.tsx",
+        "src/components/ContextChipLadder.deckTry2.test.tsx",
         "src/components/ContextChipLadder.gridWalk.test.tsx",
         "src/components/ContextChipLadder.reveal.test.tsx",
         "src/components/ContextChipLadder.ringWalk.test.tsx",
@@ -9425,6 +9439,7 @@
       "importedBy": [
         "src/components/BonsaiPluginShell.test.tsx",
         "src/components/BonsaiPluginShell.tsx",
+        "src/components/ContextChipLadder.deckTry2.test.tsx",
         "src/components/ContextChipLadder.gridWalk.test.tsx",
         "src/components/ContextChipLadder.reveal.test.tsx",
         "src/components/ContextChipLadder.stillRow.test.tsx",

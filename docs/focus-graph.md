@@ -631,6 +631,15 @@ Code: `ContextChipLadder.tsx` (the moves), `chipLadderGrid.ts` (`packChipRows`, 
   - **Left off the first chip is held when nothing above takes it** (claimed, the ring stays), as Left at the
     first chip was before the grid: a Left nobody claims is Steam's own, and on the Deck it carried the ring out
     of the plugin into Steam's side tabs. Up from the top row keeps its old fall-through.
+- **Round three (plan 87, after the Deck run of 2026-10-10 02:20, build 95139093,
+  `plan87-P87-F3-CHIPS-GRID-try2.json`):**
+  - **Steam glides any stop whose top is over its line**, not only one lying wholly inside the 116 px: the
+    second chip, at 144.1 to 168.5 with the line near 168, moved 23.5; the toggle above the grid moved 57.8.
+  - **Leaving a tall box, one move takes everything the walk back can reach under the line**: the grid's top
+    row and the stop drawn just above the grid (the "This answer | Session" toggle; a session row in the Session
+    tab; measured, never focused), as far as the open box's end stays readable. Then Left, Up and the toggle
+    itself move nothing. That move only ever goes down: a later look never scrolls back up after Steam's glide
+    (a box end left hidden shows on the first Down).
 - **The held block** (`bonsai-chip-ladder-hold`, unchanged): a step to a shorter box near the pane's end would let
   the browser clamp the scroll and jump the whole row; an empty block after the box keeps the pane's height for
   that step. Its two later checks stand down once the placement has scrolled for the step, so they never undo it.

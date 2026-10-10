@@ -261,10 +261,11 @@ describe("the chip row moves only to keep the open chip's details readable (plan
    * Spoiler risk (50) end above the dock where they open: nothing moves. Game context (300) would end at
    * 650: the row rises 70 px, just enough to end it 6 px above the dock. Developer details (450) cannot
    * show its end with its chip on screen: the row rises only until the chip meets Steam's 116 px line
-   * (y 204, so the chip's top at 180), and Down shows the rest. Back up, every box is readable where it
-   * opens and nothing moves.
+   * (y 204, so the chip's top at 180), and Down shows the rest. Back up, the first step brings the row down
+   * once, 24 px, to where Steam's own glide puts a chip whose top is over its line (the Deck, 2026-10-10: a
+   * chip at 144.1 to 168.5 moved 23.5); after that every box is readable where it opens and nothing moves.
    */
-  it("moves the row only for a box whose end would be behind the dock, by just enough, and not at all on the way back", () => {
+  it("moves the row only for a box whose end would be behind the dock, by just enough, and once on the way back", () => {
     const scene = mountScene();
     ringArrives(scene);
     const seen: Array<[string, number]> = [[openLabel(scene.ladder), rowTop(scene)]];
@@ -284,7 +285,7 @@ describe("the chip row moves only to keep the open chip's details readable (plan
     }
 
     expect(seen.map(([label]) => label)).toEqual([...LABELS, ...LABELS.slice(0, -1).reverse()]);
-    expect(seen.map(([, top]) => top)).toEqual([282, 282, 212, 212, 180, 180, 180, 180, 180]);
+    expect(seen.map(([, top]) => top)).toEqual([282, 282, 212, 212, 180, 204, 204, 204, 204]);
   });
 
   it("does not move the row when a press comes before the arrival's own passes have run", () => {
@@ -405,6 +406,20 @@ const DECK_PANE = {
 };
 /* Scrolled this far, the second chip's panel (scroll height 882) cannot keep the position: 882 - 678. */
 const SECOND_CHIP_MAX_SCROLL = 204;
+/*
+ * Steam's line, 116 px under the pane's top. A chip lifted to show Developer details' end can sit with its top
+ * over it (its bottom on or under it); Steam glides the next chip that takes focus there down until its top is on
+ * the line (the Deck, 2026-10-10, plan87-P87-F3-CHIPS-GRID-try2.json), so that one move on the first step back is
+ * Steam's, and the held block's job is that nothing else moves.
+ */
+const STEAM_LINE = PANE_TOP + 116;
+
+/** The first step back moves the row at most onto Steam's line; the pane's scroll moves by exactly that. */
+function expectAtMostSteamsGlide(scene: Scene, row: number, scroll: number): void {
+  const glide = Math.max(0, STEAM_LINE - row);
+  expect(rowTop(scene)).toBe(row + glide);
+  expect(scene.pane.scrollTop).toBeCloseTo(scroll - glide, 5);
+}
 
 function deckScene(startScroll: number) {
   return mountScene({
@@ -435,7 +450,7 @@ describe("a step to a shorter panel does not pull the pane back under its scroll
     expect(rowTop(scene)).toBe(row);
   });
 
-  it("after Developer details, Up to a shorter box leaves the row and the scroll alone", () => {
+  it("after Developer details, Up to a shorter box leaves the row and the scroll alone, but for Steam's own glide", () => {
     const scene = deckScene(334.4);
     ringArrives(scene);
     walkToLastChip(scene);
@@ -451,8 +466,7 @@ describe("a step to a shorter panel does not pull the pane back under its scroll
     settle();
 
     expect(openLabel(scene.ladder)).toBe("Routed model");
-    expect(scene.pane.scrollTop).toBe(scroll);
-    expect(rowTop(scene)).toBe(row);
+    expectAtMostSteamsGlide(scene, row, scroll);
   });
 
   it("from the pane's end: every box readable at every step, the row moving only to show one, and still on the way back", () => {
@@ -471,13 +485,18 @@ describe("a step to a shorter panel does not pull the pane back under its scroll
         expect(boxBottom(scene)).toBeGreaterThanOrEqual(DOCK_TOP - 6.5);
       }
     }
-    const row = rowTop(scene);
-    const scroll = scene.pane.scrollTop;
+    let row = rowTop(scene);
+    let scroll = scene.pane.scrollTop;
     for (let i = 0; i < DECK_LABELS.length - 1; i += 1) {
       act(() => {
         (openChipProps().onMoveUp as () => boolean)();
       });
       settle();
+      if (i === 0) {
+        expectAtMostSteamsGlide(scene, row, scroll);
+        row = rowTop(scene);
+        scroll = scene.pane.scrollTop;
+      }
       expect([rowTop(scene), scene.pane.scrollTop]).toEqual([row, scroll]);
       expect(boxBottom(scene)).toBeLessThanOrEqual(DOCK_TOP);
     }
@@ -543,8 +562,8 @@ describe("content that settles a frame after a step does not pull the pane back"
     walkToLastChip(scene);
     pressDown();
     settle();
-    const row = rowTop(scene);
-    const scroll = scene.pane.scrollTop;
+    let row = rowTop(scene);
+    let scroll = scene.pane.scrollTop;
     expect(scroll).toBeGreaterThan(SECOND_CHIP_MAX_SCROLL);
     const up = () => {
       act(() => {
@@ -552,7 +571,12 @@ describe("content that settles a frame after a step does not pull the pane back"
       });
       settle();
     };
-    for (let i = 0; i < 4; i += 1) up();
+    up();
+    expectAtMostSteamsGlide(scene, row, scroll);
+    row = rowTop(scene);
+    scroll = scene.pane.scrollTop;
+    expect(scroll).toBeGreaterThan(SECOND_CHIP_MAX_SCROLL);
+    for (let i = 0; i < 3; i += 1) up();
     expect(openLabel(scene.ladder)).toBe("Reply style: balanced");
     expect([rowTop(scene), scene.pane.scrollTop]).toEqual([row, scroll]);
 

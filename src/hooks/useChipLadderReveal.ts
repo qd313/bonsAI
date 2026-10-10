@@ -79,9 +79,10 @@ export function useChipLadderReveal(
   const place = useCallback(
     (generation: number, firstPass = false) => {
       if (generation !== generationRef.current || !ringInLadder()) return;
-      if (placeOpenChip(openChipRef.current(), bodyElRef.current, holdElRef.current, firstPass)) placedRef.current = true;
+      const ladder = ladderElRef.current;
+      if (placeOpenChip(openChipRef.current(), bodyElRef.current, holdElRef.current, firstPass, ladder)) placedRef.current = true;
     },
-    [bodyElRef, ringInLadder],
+    [bodyElRef, ladderElRef, ringInLadder],
   );
 
   /** Place now, on the next frame, and on the settle schedule. */

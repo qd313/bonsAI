@@ -13,14 +13,15 @@
  * Does not: Move the ring, or scroll for anything already readable: a step whose box already ends above the
  *           dock leaves the row exactly where it is.
  *
- * Why it never fights Steam or the lift: all three agree on where the chip may be. Steam glides a focused
- * element that is off screen, or (as measured on the Deck for small stops) one lying wholly inside the 116 px
- * it keeps clear at the pane's top, down to that line. The plugin's lift moves a focused element whose bottom
- * is behind the dock. This scroll keeps the chip below Steam's line (its bottom on or under it) and above the
- * dock. A chip inside the margin (the Deck, 2026-10-10: after the rest of a tall box was shown, Steam pulled
- * each row the ring landed on down by itself, 30 to 73 px a step) goes, on the first look, exactly where Steam's
- * glide puts it, and on the later looks the whole grid follows to the line in the same direction, once. So after
- * it neither of the others finds anything to do, and every later pass of this one measures and stops.
+ * Why it never fights Steam or the lift: all three agree on where the chip may be. Steam glides a stop that takes
+ * focus with its top above the line it keeps 116 px below the pane's top down until its top is on that line: off
+ * screen, wholly inside that margin, or only partly (the Deck, 2026-10-10: chip 2 at 144.1 to 168.5 moved 23.5,
+ * the toggle above the grid 57.8, and a row 0.8 px over the line 0.8; plan87-P87-F3-CHIPS-GRID-try2.json). The
+ * plugin's lift moves a focused element whose bottom is behind the dock. This scroll keeps the chip above the dock
+ * and lifts it no higher than its bottom on Steam's line. A chip that lands over the line goes, on the first look,
+ * exactly where Steam's glide puts it, and on the later looks everything a walk back up can reach (the grid's top
+ * row and the stop drawn above the grid) follows down onto the line, once, and never back up. So after it neither
+ * of the others finds anything to do, and every later pass of this one measures and stops.
  */
 import { findScrollablePanel, panelScrollMax, readableBottomOf } from "../utils/chatPanelScroll";
 
@@ -32,6 +33,12 @@ const DOCK_CLEARANCE_PX = 6;
 const HIDDEN_SLACK_PX = 0.5;
 /** A scroll this small is no scroll: the browser's whole-number scroll height can promise up to 1 px it cannot give. */
 const NO_MOVE_PX = 1;
+/** A top this close to Steam's line is on it: the Deck scrolls in whole device pixels, 0.78 page px at 1.28. */
+const ON_THE_LINE_PX = 0.5;
+/** Bringing stops down to Steam's line, aim this far below it, so a whole-pixel scroll cannot leave one over it. */
+const BELOW_THE_LINE_PX = 1;
+/** The stop drawn just above the grid counts only when it is a small one, as Steam's glide treats it. */
+const SMALL_STOP_PX = 100;
 
 /** What the placement reads off the screen, all in screen y. */
 export type PlacementGeometry = {
@@ -40,12 +47,14 @@ export type PlacementGeometry = {
   boxBottom: number;
   paneTop: number;
   readableBottom: number;
-  /** The bottom of the grid's top row (the chip's own bottom when that is not known). */
-  firstRowBottom?: number;
+  /** The top of the grid's top row (the chip's own top when that is not known). */
+  firstRowTop?: number;
+  /** The top of the small stop drawn just above the ladder (the "This answer | Session" toggle), when there is one. */
+  aboveTop?: number;
   /**
-   * The first look after the ring lands, which may run before Steam's own glide: a chip inside Steam's margin
-   * goes only where that glide puts it (its top on the line), so the two cannot pull different ways; the later
-   * looks bring the rest of the grid down.
+   * The first look after the ring lands, which may run before Steam's own glide: a chip over Steam's line goes
+   * only where that glide puts it (its top on the line), so the two cannot pull different ways; the later looks
+   * bring the rest down.
    */
   firstPass?: boolean;
 };
@@ -53,17 +62,19 @@ export type PlacementGeometry = {
 /**
  * How far to scroll (positive: the content moves up) so the chip and its box's end are readable.
  *
- * 1. The chip holding the ring comes first.
- *    - Off the top, or inside the 116 px Steam keeps clear at the pane's top: Steam's own glide pulls such a
- *      chip down to its line the moment it takes focus, and then the next row up, and the next (the Deck,
- *      2026-10-10: 73.4, 29.7, 31.2 and 28.9 px walking Left back from a tall box). So bring the whole grid
- *      down in one move, its top row's bottom onto Steam's line, as far as the open box's end allows; at
- *      the least this chip's bottom onto the line, where Steam leaves it alone.
- *    - Behind the dock: lift it just clear.
- * 2. Then the box's end: if it is behind the dock, scroll it up to just above the dock, but no further than
- *    the chip can go without entering Steam's top margin. A box too tall for that keeps the chip on screen
- *    and shows its end on the next Down instead.
- * 3. Anything already readable: 0.
+ * 1. The first look at a chip that landed with its top over Steam's line (off the top, or inside the 116 px it
+ *    keeps clear): go exactly where Steam's own glide takes it, its top on the line.
+ * 2. The later looks, when any stop a walk back up can land on (this chip, the grid's top row, the stop drawn
+ *    just above the grid) has its top over the line: Steam would glide each of them as the ring reached it (the
+ *    Deck, 2026-10-10: 73.4, 29.7, 31.2 and 28.9 px walking Left back from a tall box; then, with the grid brought
+ *    down only to its top row's bottom, 23.5 at the second chip and 57.8 at the toggle). So bring them all down
+ *    in one move, until the highest one's top is on the line, as far as the open box's end stays readable, and at
+ *    the least a chip lying wholly over the line until its bottom meets it. Never up: a box end left hidden shows
+ *    on the first Down, and a pass that scrolled up after Steam's glide came down would be a bounce.
+ * 3. A chip behind the dock: lift it just clear.
+ * 4. Then the box's end: if it is behind the dock, scroll it up to just above the dock, but no further than
+ *    the chip's bottom meeting Steam's line. A box too tall for that shows its end on the next Down instead.
+ * 5. Anything already readable: 0.
  */
 export function placementDelta(g: PlacementGeometry): number {
   const h = g.chipBottom - g.chipTop;
@@ -71,16 +82,19 @@ export function placementDelta(g: PlacementGeometry): number {
   const steamLine = g.paneTop + STEAM_TOP_MARGIN_PX;
   /* A band so short that Steam's line is behind the dock leaves only the pane's own top to keep to. */
   const lineFits = steamLine - h <= lowestChipTop;
-  let delta = 0;
-  const chipInMargin = g.chipTop < g.paneTop || g.chipBottom < steamLine - 1;
-  const gridInMargin = (g.firstRowBottom ?? g.chipBottom) < steamLine - 1;
-  if (lineFits && g.firstPass && chipInMargin) return Math.max(g.chipTop - steamLine, g.chipTop - lowestChipTop);
-  if (lineFits && (chipInMargin || (gridInMargin && !g.firstPass))) {
-    const chipOnLine = g.chipBottom - steamLine;
-    const gridOnLine = Math.min(chipOnLine, (g.firstRowBottom ?? g.chipBottom) - steamLine);
+  const highestStop = Math.min(g.chipTop, g.firstRowTop ?? g.chipTop, g.aboveTop ?? g.chipTop);
+  const chipOverLine = g.chipTop < g.paneTop || g.chipTop < steamLine - ON_THE_LINE_PX;
+  const anyOverLine = highestStop < steamLine - ON_THE_LINE_PX;
+  if (lineFits && g.firstPass && chipOverLine) return Math.max(g.chipTop - steamLine, g.chipTop - lowestChipTop);
+  if (lineFits && !g.firstPass && anyOverLine) {
+    const allOnLine = highestStop - steamLine - BELOW_THE_LINE_PX;
     const boxStaysReadable = g.boxBottom - (g.readableBottom - DOCK_CLEARANCE_PX);
-    delta = Math.max(Math.min(chipOnLine, Math.max(gridOnLine, boxStaysReadable)), g.chipTop - lowestChipTop);
-  } else if (g.chipTop < g.paneTop) delta = g.chipTop - g.paneTop;
+    let down = Math.min(0, Math.max(allOnLine, boxStaysReadable));
+    if (g.chipBottom < steamLine - 1) down = Math.min(down, g.chipBottom - steamLine);
+    return Math.max(down, g.chipTop - lowestChipTop);
+  }
+  let delta = 0;
+  if (g.chipTop < g.paneTop) delta = g.chipTop - g.paneTop;
   else if (g.chipTop > lowestChipTop) delta = g.chipTop - lowestChipTop;
   const boxEnd = g.boxBottom - delta;
   if (boxEnd > g.readableBottom + HIDDEN_SLACK_PX) {
@@ -117,8 +131,16 @@ function scrollPaneSmoothlyBy(pane: HTMLElement, delta: number, hold?: HTMLEleme
   return true;
 }
 
+/** The top of `el` when it is a small stop that is drawn; else nothing. */
+function smallStopTop(el: Element | null | undefined): number | undefined {
+  const r = el?.getBoundingClientRect();
+  return r && r.bottom - r.top > 0 && r.bottom - r.top < SMALL_STOP_PX ? r.top : undefined;
+}
+
 /**
- * Place the open chip and its box (placementDelta), measuring them now. Does nothing when either has no box
+ * Place the open chip and its box (placementDelta), measuring them now. `ladder` is the chips' own root: the stop
+ * drawn just before it (the "This answer | Session" toggle; a session row in the Session tab) is where Up and
+ * Left from the top row go, so it is measured too, never focused. Does nothing when the chip or its box has no box
  * yet (not drawn) or there is no pane. True when it scrolled.
  */
 export function placeOpenChip(
@@ -126,6 +148,7 @@ export function placeOpenChip(
   box: HTMLElement | null | undefined,
   hold?: HTMLElement | null,
   firstPass = false,
+  ladder?: HTMLElement | null,
 ): boolean {
   if (!chip || !box) return false;
   const pane = findScrollablePanel(chip);
@@ -139,7 +162,8 @@ export function placeOpenChip(
     boxBottom: box.getBoundingClientRect().bottom,
     paneTop: pane.getBoundingClientRect().top,
     readableBottom: readableBottomOf(pane),
-    firstRowBottom: grid && grid.bottom - grid.top > 0 ? grid.top + (c.bottom - c.top) : undefined,
+    firstRowTop: grid && grid.bottom - grid.top > 0 ? grid.top : undefined,
+    aboveTop: smallStopTop(ladder?.previousElementSibling),
     firstPass,
   });
   return delta !== 0 && scrollPaneSmoothlyBy(pane, delta, hold);

@@ -410,4 +410,15 @@ change the runbook.
 
 ## 14. Progress log
 
-Empty until "go".
+- **2026-10-09 23:30, go.** Run on Opus 5.5 in a new session. Both machines free, the rig armed, the mock-up
+  session idle. Usage at start: five-hour window 18 percent, week 27 percent. Quick check green at `b08dbcf6`.
+- **23:40, batch 1 started: nine helpers**, each in its own copy cut at `b08dbcf6`: F1 and B4 (Haiku high); F2,
+  F6 (feature helpers, Sonnet high); B13+B14, B5, B6, K1, the voice lane (Sonnet high). Deck settings and chats
+  backed up to `~/p87-backup`. Found while reading the Deck: the Ollama server is started by the user unit
+  `bonsai-ollama-autostart.service`, and no unit called `ollama` exists, which looks like why the update never
+  restarts it; passed to the B13 helper.
+- **23:50, B6 finished with no change:** Steam's settings link and route calls take a page name only; the
+  libraries and the web show no way to open at, or scroll to, one setting. Per call 9, nothing built; a read-only
+  Deck probe of Steam's own page runs in block 1 to make sure.
+- **23:55, Deck blocks 0 and 1 started** (setup, deploy the tip, measurements M1 to M8). The stand-in AI is being
+  extended with three join scenarios; a reader is compiling block 2's owed checks.

@@ -8,6 +8,8 @@
  *         person cannot see (runs/TAB-BAR-W1b-*.json, -W1c-*.json). Registering the body under
  *         `navFocusRegistry` lets both hops skip it: `TakeFocus` on a container focuses within it,
  *         the same call Steam's `Tabs` makes on its own content container.
+ *         It also keeps a few lines of clear space above the first heading, so it is not left under the
+ *         pane's top fade (plan 87, B9).
  * Does not: Style anything or claim any press but Up at the top; every other move stays with the
  *           controls inside.
  */
@@ -16,6 +18,15 @@ import { Focusable } from "@decky/ui";
 
 import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
 import type { BonsaiTabId } from "./tabTitles";
+
+/**
+ * Clear space above the first thing in a tab, in px. The top of the pane fades over about 20 px (read off
+ * screenshots/DeckCapture_20261009_194005_game.png: the letters of the Settings tab's "UI scale" heading go
+ * from a fifth to full brightness across their own height), and the first heading sat inside the fade at
+ * scroll 0, where no scrolling can take it out. A spacer rather than padding: the plugin's stylesheet pins
+ * the pane's children to `padding-top: 0 !important`.
+ */
+const TAB_BODY_TOP_INSET_PX = 24;
 
 export type TabBodyFocusRootProps = {
   id: BonsaiTabId;
@@ -49,6 +60,11 @@ export function TabBodyFocusRoot({ id, children }: TabBodyFocusRootProps): React
         onMoveUp: () => takeNavFocus("tab-bar"),
       } as Record<string, unknown>)}
     >
+      <div
+        aria-hidden="true"
+        data-bonsai-tab-body-inset=""
+        style={{ height: `${TAB_BODY_TOP_INSET_PX}px`, flex: "0 0 auto" }}
+      />
       {children}
     </Focusable>
   );

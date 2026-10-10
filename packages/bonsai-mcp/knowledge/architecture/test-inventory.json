@@ -183,6 +183,7 @@
     "src/features/details-slot/DetailsSlot.deck.test.tsx",
     "src/features/downloads/downloadNotice.test.tsx",
     "src/features/model-routing/useTryOrderPlaces.test.tsx",
+    "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
     "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx",
     "src/features/plugin-shell/TabIndicatorBar.mainLabel.test.tsx",
     "src/features/plugin-shell/TabIndicatorBar.test.tsx",

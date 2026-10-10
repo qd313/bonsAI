@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 806,
-  "edgeCount": 2442,
+  "fileCount": 809,
+  "edgeCount": 2448,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3747,6 +3747,15 @@
         "src/index.tsx"
       ]
     },
+    "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx": {
+      "imports": [
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx",
+        "src/test-harness/tabBodyDeckGeometry.ts",
+        "src/test-harness/tabBodyWalk.tsx"
+      ],
+      "importedBy": []
+    },
     "src/features/plugin-shell/TabBodyFocusRoot.tsx": {
       "imports": [
         "src/features/plugin-shell/tabTitles.tsx",
@@ -3755,7 +3764,8 @@
       "importedBy": [
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/useTopStripTabBar.ts",
-        "src/index.tsx"
+        "src/index.tsx",
+        "src/test-harness/tabBodyWalk.tsx"
       ]
     },
     "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx": {
@@ -6658,6 +6668,7 @@
         "src/features/chat-title/useChatTriggerSwitch.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/downloads/downloadNotice.test.tsx",
+        "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
@@ -6741,7 +6752,24 @@
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/nameRowIcons.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
-        "src/features/chat-title/topStripHeightLock.test.tsx"
+        "src/features/chat-title/topStripHeightLock.test.tsx",
+        "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx"
+      ]
+    },
+    "src/test-harness/tabBodyDeckGeometry.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
+        "src/test-harness/tabBodyWalk.tsx"
+      ]
+    },
+    "src/test-harness/tabBodyWalk.tsx": {
+      "imports": [
+        "src/features/plugin-shell/TabBodyFocusRoot.tsx",
+        "src/test-harness/tabBodyDeckGeometry.ts"
+      ],
+      "importedBy": [
+        "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx"
       ]
     },
     "src/types.d.ts": {

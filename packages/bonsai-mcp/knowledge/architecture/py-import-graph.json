@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 117,
-  "edgeCount": 319,
+  "fileCount": 118,
+  "edgeCount": 322,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -109,6 +109,10 @@
       "count": 5
     },
     {
+      "path": "py_modules/backend/services/strategy_spoiler_policy.py",
+      "count": 5
+    },
+    {
       "path": "py_modules/backend/services/voice_whisper_runtime.py",
       "count": 5
     },
@@ -137,11 +141,11 @@
       "count": 4
     },
     {
-      "path": "py_modules/backend/services/screenshot_media.py",
+      "path": "py_modules/backend/services/response_verify.py",
       "count": 4
     },
     {
-      "path": "py_modules/backend/services/strategy_spoiler_policy.py",
+      "path": "py_modules/backend/services/screenshot_media.py",
       "count": 4
     },
     {
@@ -202,10 +206,6 @@
     },
     {
       "path": "py_modules/backend/services/ollama_window_fit.py",
-      "count": 3
-    },
-    {
-      "path": "py_modules/backend/services/response_verify.py",
       "count": 3
     },
     {
@@ -462,6 +462,10 @@
     },
     {
       "path": "py_modules/backend/services/reply_followup_blocks.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/soft_continue_repeat_trim.py",
       "count": 1
     },
     {
@@ -1209,7 +1213,7 @@
         "py_modules/backend/services/bonsai_stream_tags.py",
         "py_modules/backend/services/ollama_stream_failures.py",
         "py_modules/backend/services/ollama_window_fit.py",
-        "py_modules/backend/services/soft_continue_spoiler_join.py",
+        "py_modules/backend/services/soft_continue_repeat_trim.py",
         "py_modules/backend/services/strategy_guide_parse.py",
         "py_modules/backend/services/token_accounting_service.py"
       ],
@@ -1507,6 +1511,7 @@
       "importedBy": [
         "py_modules/backend/services/game_ai_request.py",
         "py_modules/backend/services/ollama_ask_service.py",
+        "py_modules/backend/services/soft_continue_repeat_trim.py",
         "py_modules/backend/services/soft_continue_spoiler_join.py"
       ]
     },
@@ -1546,6 +1551,16 @@
         "py_modules/backend/services/ask_local_commands.py"
       ]
     },
+    "py_modules/backend/services/soft_continue_repeat_trim.py": {
+      "imports": [
+        "py_modules/backend/services/response_verify.py",
+        "py_modules/backend/services/soft_continue_spoiler_join.py",
+        "py_modules/backend/services/strategy_spoiler_policy.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/ollama_chat_stream.py"
+      ]
+    },
     "py_modules/backend/services/soft_continue_spoiler_join.py": {
       "imports": [
         "py_modules/backend/services/response_verify.py",
@@ -1553,8 +1568,8 @@
       ],
       "importedBy": [
         "main.py",
-        "py_modules/backend/services/ollama_chat_stream.py",
-        "py_modules/backend/services/ollama_service.py"
+        "py_modules/backend/services/ollama_service.py",
+        "py_modules/backend/services/soft_continue_repeat_trim.py"
       ]
     },
     "py_modules/backend/services/spoiler_empty_label_marks.py": {
@@ -1649,6 +1664,7 @@
         "py_modules/backend/services/game_ai_request.py",
         "py_modules/backend/services/ollama_prompts.py",
         "py_modules/backend/services/response_verify.py",
+        "py_modules/backend/services/soft_continue_repeat_trim.py",
         "py_modules/backend/services/soft_continue_spoiler_join.py"
       ]
     },

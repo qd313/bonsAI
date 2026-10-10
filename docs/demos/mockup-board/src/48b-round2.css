@@ -24,4 +24,22 @@
 .m2-pills { display: flex; flex-wrap: wrap; gap: 8px; }
 .m2-pill { height: 34px; padding: 0 16px; border-radius: 17px; background: #161d26; border: 1px solid rgba(255,255,255,.18); color: var(--q-ink); font-size: 13px; }
 .m2-skip { background: none; border: 0; color: var(--q-ink-2); font-size: 11px; padding: 4px 0; }
+/* ---------- tab 3, round 2 ---------- */
+.k2-writing { align-self: center; font-size: 10px; font-weight: 700; color: #9fb0c2; }
+.k2-answer.writing { box-shadow: 0 0 0 1px rgba(156,231,255,.35), 0 0 12px rgba(56,189,248,.25); }
+.k2-sec p { margin: 0; } .k2-sec p + p { margin-top: 6px; }
+.k2-sec + .k2-sec { margin-top: 6px; }
+.qam .k2-sec.ring, .qam .k2-answer > p.ring { outline-offset: 3px; border-radius: 4px; }
+.k2-answer.settling .k2-sec { animation: settle 360ms ease; }
+.k2-rows { display: flex; flex-direction: column; gap: 6px; margin: 0 6px; }
+.k2-rows.fade { opacity: 0; transform: translateY(4px); transition: opacity 260ms ease, transform 260ms ease; }
+.k2-rows.fade.in { opacity: 1; transform: none; }
+.k2-thumbs { display: flex; gap: 8px; }
+.k2-thumbs button { display: inline-flex; gap: 5px; align-items: center; height: 28px; padding: 0 9px; background: transparent; border: 1px solid rgba(255,255,255,.12); border-radius: 6px; color: #b4c6dc; font-size: 11px; }
+.k2-thumbs button svg { width: 12px; height: 12px; }
+.k2-detailsline { display: flex; align-items: center; gap: 6px; color: var(--q-ink-2); font-size: 10px; font-weight: 600; padding: 3px 0; background: none; border: 0; width: 100%; }
+.k2-detailsline::before, .k2-detailsline::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,.09); }
+.qam .k2-detailsline[data-stop].ring { color: #fff; box-shadow: none; }
+.k2-ask.resting { opacity: 0.38; }
+@media (prefers-reduced-motion: reduce) { .k2-rows.fade { transition: none; } .k2-answer.settling .k2-sec { animation: none; } }
 </style>

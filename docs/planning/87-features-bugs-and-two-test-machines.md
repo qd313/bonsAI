@@ -1,7 +1,8 @@
 # Plan 87 — Six features, every bug the rig can reach, and the checks run on two machines at once
 
-**Status: WRITTEN 2026-10-09, about 23:15. Waiting for "go" in a fresh Opus 5.5 extra-high session.** Nothing is
-built. The maintainer is asleep while this runs and will look in from a phone.
+**Status: FINISHED 2026-10-10, 04:20.** All six features built and passed on the Deck; every bug the session or the
+rig could act on fixed (the two layout fixes on their third try); the Deck put back. Read § 14's last entry and the
+night report (https://claude.ai/artifact/ScVBd4MBGp4eCU72qYuvcX). Nothing pushed.
 
 Asked for by the maintainer on 2026-10-09, late evening: six features, "all of the bugs, or as many as you can fit",
 and "as many of the checks as you can close on your own", with many helpers side by side, the Deck free for the
@@ -495,3 +496,18 @@ change the runbook.
   whose top crosses its line, and marks its ring a moment after the focus event; landed 03:20).
 - **03:21, Deck block 6c started** (the final build: the chips grid and the tabs' scroll, third tries). Block 6b (the
   saved walks, a smoke test, putting the Deck back) follows.
+- **Deck block 6c (03:21 to 03:38, build `26f22530`): both PASS.** The chips grid on every part (the first chip's box
+  ends above the dock from the toggle; walking back the row moves once, about 230 px, then 0.0; no dead press) and the
+  tabs' scroll on all five tabs (the old 326 px Settings press now 116; nothing over a third of the pane).
+- **Deck block 6b (03:40 to 04:05):** the smoke test passed; 7 of the 8 saved walks re-recorded on the new layout (the
+  eighth needs an answer taller than the screen and Read aloud on: the maintainer's call); the Deck put back (settings
+  equal the night's backup but for the new Text size key, the AI try order restored, seven chats, the pretend
+  microphone gone, keep-awake released). The Deck now runs Ollama 0.40.2.
+- **Finish, 04:20.** Landed in all: 23 helper changes (43 code commits; five were second or third rounds) and six docs
+  sweeps; the full gates green at every landing; quick check green at the end. Every Deck evidence file and the seven
+  re-recorded walks are committed. Roadmap audited: nothing left in Bugs, Features or Verify that reads done (9 in
+  Bugs, 25 in Verify). The lessons block for § 13 is in docs/lessons-learned.md § 4. The night report and the
+  maintainer's checks page (a new "Saturday 10 October" group) are published. What only the maintainer can do: the
+  GitHub latest-release setting, publishing, the microphone with a real voice, three looks on the Deck's own screen
+  (all checks tonight ran on the monitor), and the calls in the report. Nothing pushed; 29 helper copies (`p87*`) wait
+  for the maintainer's word.

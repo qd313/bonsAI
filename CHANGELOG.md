@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 **Contents**
 
 - [\[Unreleased\]](#unreleased)
+  - [Plan 87 (2026-10-10)](#plan-87-2026-10-10)
   - [Plan 84 (2026-10-09)](#plan-84-2026-10-09)
   - [Plan 83 (2026-10-08)](#plan-83-2026-10-08)
   - [Plan 82 (2026-10-07)](#plan-82-2026-10-07)
@@ -74,6 +75,18 @@ All notable changes to this project are documented in this file.
 <!-- /toc -->
 
 ## [Unreleased]
+
+### Plan 87 (2026-10-10)
+
+- **The Main tab's bar now says "bonsAI" in small capitals** where it said "MAIN", and the spoken name of Main's icon on the other tabs is "bonsAI". "Main" is left as it was in the Permissions tab's "Back to Main" banner, the "Switched to Main." toast and a few help lines. Owes its Deck check (row P87-F1-SMALL-CAPS).
+- **An answer built on one of the game notes no longer also says "No close match in my notes".** The screen takes the line off such an answer (copy text and Read aloud too; the saved chat keeps the full text), and the plugin log now names which notes were attached and which footer line was added. Owes its Deck check (row P87-K1-LINE-AND-BLOCK).
+- **The knowledge library's release is never marked as the latest on GitHub,** so it cannot take the plugin release's place behind the README's install link again. The maintainer still has to mark the plugin's own release as the latest on GitHub once. No Deck check.
+- **The plugin now keeps ten chats instead of eight, and at ten, New chat asks which chat to drop** instead of quietly deleting the oldest one: a "You have 10 chats" list, then the usual Delete box with the ring on Cancel. Cancel or B keeps all ten. LT and RT stop at the newest chat at ten. Owes its Deck check (row P87-F2-PICK-AT-TEN).
+- **A continued answer no longer says the same paragraphs twice.** Word-for-word repeats at the start of the new piece are dropped before they are shown, so the saved answer holds them once; a reworded repeat is not caught. Owes its Deck check (row P87-B5-JOIN-REPEAT).
+- **Settings has a "Text size" row (Small, Normal, Large) that changes only the words in the chat:** questions, answers, the opened Show details text and the Session tab's rows. The tab bar, the chat's name, the chips and Settings keep their sizes. Owes its Deck check (row P87-F6-TEXT-SIZE).
+- **The UI scale section now says "UI scale" once** instead of twice.
+- **The tab bar now draws all six tabs in one fixed order,** Main always first and About always last, with the tabs before the current one on its left and the tabs after it on its right. No icon box is narrower than 18 px any more. Owes its Deck check (row P87-F4-TAB-ORDER).
+- **A long answer that carries on after the length limit inside a hidden block now keeps one opening mark: passed on the Deck 2026-10-10** with a scripted hidden block opened again across a join (one opening mark, no half mark, one tap-to-show cover on screen). A cut in the middle of the mark itself rests on tests only.
 
 ### Plan 84 (2026-10-09)
 

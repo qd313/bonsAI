@@ -63,6 +63,17 @@ _Plan 73's hand check 1 (2026-10-02), plan 78's Deck blocks 3f and 3d (2026-10-0
 
 _Plan 79's Deck block 2a closes (the 2026-10-02 morning, build `d810328b`, below) were moved out of [roadmap.md](../roadmap.md) on 2026-10-02, during plan 79's fourth docs sweep, copied line for line, nothing reworded, to keep that document under its size limit._
 
+_Plan 87's one close (the 2026-10-10 block below) keeps its full Verify entry here, copied line for line apart from a closing note, when it moved out of [roadmap.md](../roadmap.md)'s Verify list on 2026-10-10._
+
+### Closed 2026-10-10 (plan 87, Deck block 2)
+
+- ★★★ `[reply]` **Some saved answers have a hidden block's markers written twice, cause found** — **VERIFY, cause found and fixed 2026-10-03 (plan 81, `ec329983`, `9be94867`, `8fba3a4f`). Was PARTIAL, found 2026-09-25 (plan 68).**
+  When a long answer hits its length limit inside a hidden block, the AI opens the block again when it carries on, and the plugin glued both opening marks together (on this PC with the Deck's model, 7 of 23 continued answers before; none from that cause after). Also fixed: when the limit cut the mark itself in half, the hidden sentence showed in plain view with no cover. The AI's own doubling inside one piece remains, handled by the guard from `6843f8e1` (passed on the Deck 2026-09-30, `docs/test-evidence/plan77-SUMUP-12.json`).
+  **The Deck row P81-CONTINUE-ONE-MARK did not pass (`docs/test-evidence/plan81-P81-CONTINUE-ONE-MARK.json`: FAIL — the joins were clean, but the AI itself left one hidden block unclosed and opened another; both still covered on screen); it stays owed.** **2026-10-08 (plan 83 overnight, build `0d3af3de`): UNCLEAR, still owed.** Two tries forced three joins, but the AI wrote no hidden block in either answer, so the case under test never arose; no half mark, no fence text and no covers were seen. The saved text did repeat paragraphs across the joins (filed in Bugs). Evidence `docs/test-evidence/plan83-P81-CONTINUE-ONE-MARK.json`. Tests: `tests/test_soft_continue_spoiler_join.py`, `tests/test_stopped_answer_cut_in_hidden_block.py`.
+  **Also fixed 2026-10-03 (plan 81, `e891bdc4`, `6c708a78`):** a stopped answer cut inside a hidden block is saved without the bare opening mark, and a half-typed mark at the very end of a finished answer is dropped. Both are tests only (rows **P81-STOP-IN-HIDDEN-BLOCK**, **P81-HALF-MARK-AT-END**). A prepared answer could not make these cases: Stop needs an answer slower than the hidden block; the half mark needs the length limit to fall inside the mark.
+  Older notes, and what was found but not fixed: [roadmap-details.md](../roadmap-details.md#some-saved-answers-have-a-hidden-blocks-markers-written-twice-cause-found).
+  **Closed 2026-10-10 (plan 87 block 2), passed on the Deck:** see the Done line in [roadmap.md](../roadmap.md#done-for-v060). Evidence `docs/test-evidence/plan87-P81-CONTINUE-ONE-MARK.json`.
+
 **Closed 2026-10-02 (plan 79, Deck block 2a, build `d810328b`):**
 
 - ★★ `[focus]` **Up and Down between the rating choices and the speaker button go to the wrong place** — **DONE 2026-10-02, passed on the Deck (row P79-M7-RATING-ROW; fix `749ff9dc`).** Up from "Bad info" lands on Helpful, Up from "Wrong game or topic" on "Not really", Down from the speaker on "Wrong game or topic" in 5 of 5 tries; the full walk has no dead press (one edge: Right from the last choice). Evidence `docs/test-evidence/plan79-P79-M7-RATING-ROW-AFTER.json`.

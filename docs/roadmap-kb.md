@@ -39,8 +39,6 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 
 ## Bugs
 
-- ★ `[KB]` **An answer showed "No close match in my notes" while the plugin log says notes were attached** — **OPEN, found 2026-10-08 on the Deck (plan 83 overnight, build `0d3af3de`, Deep Rock Galactic: Survivor running, Strategy mode).**
-  A question about taming a horse showed that line and no notes block, yet the log said 1042 characters had been attached. Not known whether what was attached was only rules and cards, or whether the line ignores the attached count. Evidence `docs/test-evidence/plan83-NOTES-BLOCK-04-game.json`, try 1.
 - ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **ACCEPTED, 2026-09-28.** The
   maintainer chose this on 2026-09-05 to save about a second per Speed question
   ([D62](audit/maintainer-decisions-archive.md#d62--locked-2026-09-05-raised-2026-09-05--the-second-bug-fixing-session-four-calls-before-go)
@@ -66,6 +64,10 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 
 ## Deck check owed
 
+- ★ `[KB]` **An answer showed "No close match in my notes" while the plugin log says notes were attached** — **VERIFY, fixed 2026-10-10 (plan 87 K1, `4deec915` screen, `0ce3bbd0` log line). Was OPEN, found 2026-10-08 on the Deck (plan 83 overnight, build `0d3af3de`).**
+  The log's "attached N chars" is the real notes text, so notes were attached on 2026-10-08. The "No close match" line is added when the attached notes were a weak match, and the notes block lists only notes the answer repeated. On the horse question the answer used none, so the line was true and no block showed. A real contradiction was found in saved chats (the line and the block under the same answer, when the answer did use a note): fixed, the screen now takes the line off an answer that used a note (copy text and Read aloud too; the saved chat keeps the full text). The plugin log now names which notes were attached and which footer line was added.
+  Tests: `src/components/MainTabChatTranscript.closeMatchLine.test.tsx` (7, three fail without the fix), `src/utils/kbCloseMatchLineAgrees.test.ts` (5), `tests/test_kb_attach_log_line.py` (5). Original find: `docs/test-evidence/plan83-NOTES-BLOCK-04-game.json`, try 1.
+  Deck check owed: the covered-game-running half of **NOTES-BLOCK-04**, plus new row **P87-K1-LINE-AND-BLOCK**.
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY, landed
   2026-09-15, unit-tested.** A game known only by name now opens its box, and naming the boss up front keeps the answer in
   plain text. Passed on the Deck: name-first (STRAT-SPOIL-FIRST-01, 2026-09-18), knowledge base off (DRG-01b, 2026-09-23) and library absent (DRG-01c, 2026-10-03; the AI wrote no hidden block, so a cover was not tested directly).
@@ -75,7 +77,7 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   rows passed on the Deck and are closed: 01, 02, 03, 05, 06 and TEN-GAMES-01; 04's "no block" half passed 2026-10-03
   (`docs/test-evidence/plan81-NOTES-BLOCK-04.json`). **Still owed:** 04's covered-game-running half (2026-10-03: the Black Mesa horse question showed the "No close match" line with no notes listed, `docs/test-evidence/plan81-P81-KB-NOTES-FIRST.json`, but with no game running; 2026-10-08, game running: UNCLEAR, both tries attached notes (1042 and 1242 characters), so a reply with nothing attached never came up, `docs/test-evidence/plan83-NOTES-BLOCK-04-game.json`), NOTES-BLOCK-07 (needs a person
   listening to confirm the block is never read aloud) and NOTES-BLOCK-LADDER (no block has had a chip ladder to test;
-  retiring that half is the maintainer's call). Rows in [testing-manual.md](testing-manual.md).
+  retiring that half is the maintainer's call). Rows in [testing-manual.md](testing-manual.md). **2026-10-10 (plan 87 K1):** a fix for the "No close match" line appearing beside a notes block landed; 04's covered-game-running half and new row P87-K1-LINE-AND-BLOCK stay owed on the Deck.
 
 ## Next
 

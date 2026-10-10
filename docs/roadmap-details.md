@@ -299,7 +299,7 @@ Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep t
 
 **Also fixed 2026-10-03 (plan 81, `e891bdc4`, `6c708a78`), from the "found, not fixed" list:** a stopped answer cut inside a hidden block is saved without the bare opening mark (its words stay covered or are dropped, never shown), and a half-typed mark at the very end of a finished answer is dropped. Left on purpose: a continued piece that starts with a bare code mark cannot be told apart from a real code block safely. Rows **P81-STOP-IN-HIDDEN-BLOCK** (tests only: could not be made on the Deck; tried twice 2026-10-03, build `7e963807`, the chip "Spoiler hidden until complete" lasted about 2 s and the answer finished before Stop could be pressed) and **P81-HALF-MARK-AT-END** (tests only: hard to make happen).
 
-Deck check owed: row **P81-CONTINUE-ONE-MARK**. Tests: `tests/test_soft_continue_spoiler_join.py`, `tests/test_stopped_answer_cut_in_hidden_block.py`. [Detail, and what was found but not fixed](roadmap-details.md#some-saved-answers-have-a-hidden-blocks-markers-written-twice-cause-found).
+**Closed 2026-10-10 (plan 87 block 2): row P81-CONTINUE-ONE-MARK passed on the Deck, evidence `docs/test-evidence/plan87-P81-CONTINUE-ONE-MARK.json`.** Earlier: Deck check owed, row **P81-CONTINUE-ONE-MARK**. Tests: `tests/test_soft_continue_spoiler_join.py`, `tests/test_stopped_answer_cut_in_hidden_block.py`. [Detail, and what was found but not fixed](roadmap-details.md#some-saved-answers-have-a-hidden-blocks-markers-written-twice-cause-found).
 
 ## Make the preset chips look more like chips
 

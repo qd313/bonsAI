@@ -422,3 +422,30 @@ change the runbook.
   Deck probe of Steam's own page runs in block 1 to make sure.
 - **23:55, Deck blocks 0 and 1 started** (setup, deploy the tip, measurements M1 to M8). The stand-in AI is being
   extended with three join scenarios; a reader is compiling block 2's owed checks.
+- **Deck block 1 (23:42 to 23:59), all on the plugged-in monitor, not the Deck's own screen:** the back arrow is
+  40 px with a short chat name and 32 to 33.5 with a long one (M1); the tab bar is a five-icon carousel that
+  squeezes icons to 15.2 px on Permissions (M2); 8 chips, not 7, in 5 rows, and Spoiler risk's box ended 46 px
+  behind the question box on a Right walk (M3); D-pad steps move Ollama, Settings and Developer by up to half the
+  pane, and going Up the pane holds still then jumps (M4); the slot swap, the 10 px slip, the About tab's Up and the
+  half-faded heading did not reproduce on the monitor; base.en recorded silence without errors (M7); Steam's
+  settings page has no deep link to one setting (B6 probe).
+- **Deck block 2 (00:03 to 00:20):** the stand-in AI's three joins recorded the repeat before the fix; the hidden
+  block marks row **passed** (one mark, one cover); a long answer's walk showed no swap; the place-move row stays
+  unclear (the Deck's own models box has no place buttons); the bottom row's Right walk is fine. The driver once
+  typed a question into the Ollama tab's address box with the send-question script (put back): that script writes
+  the first text box on the panel, so it is for the Main tab only.
+- **Stand-in S0 and S1:** this PC's Steam deploys and walks; after Clear all plugin data the help chip could not be
+  reached by the D-pad at all. That turned out to be a real bug for every fresh install (fixed, below).
+- **Landed, 23:49 to 00:40, every landing through the full gates:** F1 "bonsAI" in small caps; K1 the "No close
+  match" line no longer sits beside a notes block the answer used; B4 the library release is never the latest; F2
+  ten chats and a picker at ten; B5 a continued answer's repeated paragraphs are trimmed; F6 Text size (and the
+  doubled UI scale heading); F4 the tab bar in a fixed order; B13+B14 Update AI & models restarts the server and
+  runs in place; F2b a question at ten chats with no open chat is kept; F5+B7 the + and delete icons and a
+  fixed-size back arrow; B1 the slot's same stops both ways, and the empty chat's help chip reachable; the voice
+  fixes (the mic cut off quiet speakers after 3 to 4 seconds: a loudness rule; base.en works; the mic refuses while
+  a model downloads). First docs sweep landed. One landing stopped because a helper wrote into the shared folder by
+  mistake; its text was saved and moved to its own copy.
+- **The pretend microphone works:** a recorded sentence played into a null audio sink on the Deck reached the
+  plugin's own speech engine; old code kept only the first words, the fix the whole sentence.
+- **00:40, Deck block 3 started** (deploy, then the tab bar, name row, ten chats, Text size, slot, empty chat).
+  Waiting to land: B9+B10 (the other tabs' scroll) and F3 (the chips grid).

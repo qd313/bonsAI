@@ -115,7 +115,7 @@ function scrollPlaceFor(
   lastTop: number | null,
 ): { scrollTop: number; top: number } | null {
   const pane = findTabContentsScroll(root);
-  if (!pane || pane === target || holdsStop(target)) return null;
+  if (!pane || pane === target) return null;
   const viewport = pane.clientHeight;
   const maxScroll = panelScrollMax(pane);
   if (viewport <= 0 || maxScroll <= 0) return null;
@@ -125,8 +125,15 @@ function scrollPlaceFor(
   const padBottom = px(style.scrollPaddingBottom, STEAM_PAD_BOTTOM_PX) + EDGE_SLACK_PX;
 
   const stops = stopsUnder(root);
-  /* The stop the ring is on: the target itself, or the stop around it (a text field inside its wrapper). */
-  const here = stops.find((s) => s === target || s.contains(target)) ?? target;
+  /*
+   * The stop the ring is on: the target itself, the stop around it (a text field inside its wrapper), or the one
+   * stop inside it. Steam puts the ring on the Focusable wrapper around a button (the voice model rows, Reinstall
+   * voice engine): skipping those left Settings' 326 px Up press untouched by two rounds (plan 87, B10 round
+   * three). A target holding several stops is a section or the body, not a control: left alone.
+   */
+  const inside = holdsStop(target) ? stops.filter((s) => target.contains(s)) : [];
+  if (holdsStop(target) && inside.length !== 1) return null;
+  const here = inside[0] ?? stops.find((s) => s === target || s.contains(target)) ?? target;
   const current = stopBox(here, root, pane, stops);
   const others = stops.filter((s) => s !== here).map((s) => stopBox(s, root, pane, stops));
   const above = others.filter((b) => b.top < current.top - 1).sort((a, b) => b.top - a.top);

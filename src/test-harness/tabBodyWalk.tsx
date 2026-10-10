@@ -5,6 +5,8 @@
  *          (tabBodyDeckGeometry.ts), inside a pane that scrolls (`_TabContentsScroll`), and walks it Down to the
  *          last control and back Up the way the rig does: one landing per press, then Steam's own
  *          scroll-into-view runs, as it does on the Deck a moment after the ring lands.
+ *          A stop marked "wrap" in the geometry is a button inside a Focusable wrapper, and the ring lands on the
+ *          wrapper, as the Deck's voice model rows and Reinstall voice engine do.
  * Used for: TabBodyFocusRoot.walk.test.tsx.
  * Does not: Know Steam's one real rule. The Deck's moves (a control wholly outside Steam's padded band put in
  *           the middle of the pane, one partly outside moved to the nearest edge) are modelled three ways
@@ -102,8 +104,17 @@ export function walkTab(opts: TabWalkOptions): TabWalk {
   const body = (
     <>
       <div data-heading="" />
-      {geometry.stops.map(([, height, name], i) => {
-        const leaf = <button key={i} className="Focusable" data-stop={i} aria-label={name} />;
+      {geometry.stops.map(([, height, name, shape], i) => {
+        const button = <button key={i} className="Focusable" data-stop={i} aria-label={name} />;
+        /* A wrapped button: Steam puts the ring on the Focusable around it, as on the Deck's voice rows. */
+        const leaf =
+          shape === "wrap" ? (
+            <div key={i} className="Panel Focusable" data-wrap={i}>
+              {button}
+            </div>
+          ) : (
+            button
+          );
         /* A toggle sits in a row of its own, a Focusable holding only it. */
         return opts.steamTarget === "row" && height === TOGGLE_HEIGHT ? (
           <div key={i} className="Panel Focusable" data-row={i}>
@@ -158,10 +169,13 @@ export function walkTab(opts: TabWalkOptions): TabWalk {
   };
   place(heading, HEADING[0], HEADING[1]);
   stops.forEach((el, i) => place(el, geometry.stops[i]![0], geometry.stops[i]![1]));
-  /** What Steam is looking at for stop `i`: the stop, or its row (which stops short of the next stop). */
+  /** The element the ring lands on for stop `i`: its wrapper when it has one, else the stop. */
+  const ringOn = (i: number): HTMLElement => pane.querySelector<HTMLElement>(`[data-wrap="${i}"]`) ?? stops[i]!;
+  stops.forEach((_, i) => place(ringOn(i), geometry.stops[i]![0], geometry.stops[i]![1]));
+  /** What Steam is looking at for stop `i`: the element the ring is on, or its row (which stops short of the next stop). */
   const steamElement = (i: number): HTMLElement => {
     const row = pane.querySelector<HTMLElement>(`[data-row="${i}"]`);
-    if (!row) return stops[i]!;
+    if (!row) return ringOn(i);
     const [top] = geometry.stops[i]!;
     const nextTop = geometry.stops[i + 1]?.[0] ?? Infinity;
     place(row, top - ROW_ABOVE_PX, Math.min(ROW_BELOW_PX, nextTop - 6 - top) + ROW_ABOVE_PX);
@@ -196,7 +210,7 @@ export function walkTab(opts: TabWalkOptions): TabWalk {
   const headingTop = () => heading.getBoundingClientRect().top - PANE_TOP;
   const headingAtFirst: number[] = [];
   const land = (i: number, direction: "down" | "up"): number => {
-    const el = stops[i]!;
+    const el = ringOn(i);
     const before = scrollTop;
     act(() => {
       if (opts.focusVia === "plain") el.focus();

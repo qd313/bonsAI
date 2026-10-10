@@ -5,12 +5,17 @@
  * Used for: TabBodyFocusRoot.walk.test.tsx.
  * Solves: A walk test over invented spacing passes on any plan; these gaps (up to 405 px between two
  *         stops on Developer, 306 on Settings) are the ones that made Steam jump half a screen.
- * Does not: Describe the controls' look. Each stop is [top, height, name]; `top` is in the tab body's own
+ * Does not: Describe the controls' look. Each stop is [top, height, name, shape?]; `top` is in the tab body's own
  *           coordinates (0 is the top of the body), `contentHeight` is the pane's whole scroll height at the
  *           time (the heading sat at 0.8, 19.5 high). Source: docs/test-evidence/plan87-M4-OTHER-TABS.json and
  *           runs/plan87-M4-{ollama,settings,permissions,developer,about}.json (rect.y + scrollTop - 24).
  */
-type TabStopData = [top: number, height: number, name: string];
+/**
+ * "wrap": the ring lands on a Focusable wrapper around a button, not on the button (the voice model rows and
+ * Reinstall voice engine; their selectors end in `div.Panel.Focusable` in runs/plan87-M4-settings.json).
+ */
+export type StopShape = "wrap";
+type TabStopData = [top: number, height: number, name: string, shape?: StopShape];
 interface TabGeometry {
   contentHeight: number;
   stops: TabStopData[];
@@ -44,9 +49,9 @@ export const TAB_GEOMETRY: Record<"ollama" | "settings" | "permissions" | "devel
       [541, 22, "Remember what I typed"],
       [733, 22, "Hide spoilers until I tap"],
       [887, 22, "Show one chip instead of two"],
-      [1193, 35, "tiny.en (fastest, recommended on Deck)"],
-      [1233, 35, "base.en (more accurate, slower)"],
-      [1338, 38, "Reinstall voice engine"],
+      [1193, 35, "tiny.en (fastest, recommended on Deck)", "wrap"],
+      [1233, 35, "base.en (more accurate, slower)", "wrap"],
+      [1338, 38, "Reinstall voice engine", "wrap"],
       [1496, 36, "Off: Answers are read only when yo"],
       [1620, 22, "AI voice & personality"],
       [1774, 22, "Show Developer tab"],

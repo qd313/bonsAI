@@ -65,6 +65,25 @@ describe("walking a plain tab Down and back Up", () => {
     }
   }
 
+  it("Settings, Up from the tiny.en voice row to the toggle above it: the ring is on the row's wrapper, and the press moves the pane under a third", () => {
+    /*
+     * The one press both earlier rounds left alone: 325.8 px on the Deck (plan87-P87-B10-TAB-SCROLL-try2.json).
+     * Steam puts the ring on the Focusable around the voice rows' buttons, and the plan used to skip any focused
+     * element with a control inside, so nothing was planned from Reinstall voice engine up to tiny.en.
+     */
+    const names = TAB_GEOMETRY.settings.stops.map(([, , name]) => name);
+    const tiny = names.findIndex((n) => n.startsWith("tiny.en"));
+    for (const steam of RULES) {
+      for (const steamTarget of ["leaf", "row"] as const) {
+        const w = walkTab({ tab: "settings", viewport: MONITOR_PANE_PX, steam, steamTarget, focusVia: "steam" });
+        const press = w.landings.find((l) => l.direction === "up" && l.stop === tiny - 1)!;
+        expect(press.moved, `${steam} / ${steamTarget}`).toBeLessThan(MONITOR_PANE_PX / 3);
+        expect(w.largestUp, `${steam} / ${steamTarget}`).toBeLessThan(MONITOR_PANE_PX / 3);
+        w.unmount();
+      }
+    }
+  });
+
   it("reproduces the Deck's Up jumps when the tab's own helpers focus with a plain focus(), which the browser scrolls for before its focus event", () => {
     /* The model's version of plan87-P87-B10-TAB-SCROLL.json: Ollama 367, Settings 326, Developer 251 px going Up. */
     for (const tab of ["ollama", "settings", "developer"] as const) {

@@ -72,3 +72,14 @@
 .s-sheet-h { display: flex; align-items: center; gap: 6px; padding: 10px 10px 8px; font-size: 13px; font-weight: 700; color: var(--q-ink); }
 .s-sheet-in { padding: 0 0 8px; }
 </style>
+<style>
+/* ---------- tab 1, round 2 ---------- */
+.e2-tag { flex: none; margin-left: 4px; font-size: 8.5px; font-weight: 600; color: var(--q-ink-3); border: 1px solid rgba(255,255,255,.12); border-radius: 3px; padding: 0 4px; white-space: nowrap; }
+.e2-label { font-size: 9px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--q-ink-2); padding: 4px 10px 0; text-align: right; }
+.k2-eline.e2-game .k2-epill { color: var(--q-ink); border-color: rgba(156,231,255,.25); }
+.e2-chips { display: flex; flex-wrap: wrap; gap: 4px; padding: 2px 6px 4px; justify-content: flex-end; }
+.e2-chip { height: 22px; padding: 0 7px; border-radius: 11px; border: 1px solid rgba(255,255,255,.14); background: none; color: var(--q-ink-2); font-size: 10px; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.e2-chip small { font-size: 8.5px; color: var(--q-ink-3); }
+.e2-chip.on { background: var(--q-cyan-fill); border-color: var(--q-blue); color: #fff; }
+.e2-flip { font-size: 10px; color: var(--q-cyan); letter-spacing: 2px; }
+</style>

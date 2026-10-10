@@ -30,16 +30,16 @@ out when pushing. Since then:
 
 | Tab | Roadmap item | Stars | Status |
 |---|---|---|---|
-| 1 | "N earlier" list: a day opens a few questions at a time | ★★ | Already built 2026-10-08 (found after drafting) |
+| 1 | "N earlier" list: a day opens a few questions at a time | ★★ | Six at a time built 2026-10-08. Round 2 drawn 2026-10-10 (new layout): how games fit inside the list |
 | 2 | AI models box: a clearer Filters button, and Done that cannot leave the box by mistake | ★★ | Round 1 drafted |
 | 3 | A finished answer keeps its layout | ★★ | Round 1 drafted |
 | 4 | More room for the chat, plus text size (one tab for both) | ★★★ | Room half already built 2026-10-09; text size still open |
 | 5 | Maps and boss outlines in answers (knowledge-base roadmap) | ★★★ | Round 1 drafted |
 | 6 | Connection doctor ("Fix this") | ★★★★ | Round 1 drafted |
 | 7 | Your own notes that Ask reads | ★★★★ | Round 1 drafted |
-| 8 | Search in bonsAI: find an earlier question by a word in it | ★★ | Round 1 drawn 2026-10-09, in the new layout (the first tab that is). Built on option 4 of the older search mock-up (https://claude.ai/artifact/CjiVzMEe8UipPda2kS2q18). The maintainer sees it as a bigger feature for a later release (about 0.7.0) |
+| 8 | Search in bonsAI: find an earlier question by a word in it | ★★ | Round 1 drawn 2026-10-09 in the new layout; liked A, C, D and Wild 2 (told in chat, recorded on the page). Built on option 4 of the older search mock-up (https://claude.ai/artifact/CjiVzMEe8UipPda2kS2q18). A bigger feature for a later release (about 0.7.0) |
 
-**Next step:** the maintainer reviews tab 8 (Search, drawn 2026-10-09). Then back to tabs 1 to 3 and 5 to 7 to narrow them, as the maintainer asked. Tab 4 is skipped for now: the maintainer called it out of date; redraw it in the new layout before showing it again. Picks so far: tab 1 A, B and Wild 2; tab 2 B and Wild 2; tab 3 A and B (B "cleaner"); tab 5 C, Wild 1 and Wild 2 liked, A, B and D not ("too basic"; wants more maps, more body parts or a realistic view; Wild 1 needs a scoring test where Opus or Fable grade what the Deck's models circle and help teach them; Wild 2 is "like spoiler covering"); tab 6 B, C and Wild 1 liked, Wild 2 not (Wild 1 reopens the locked "one press per change" rule: confirm before building it); tab 7 C liked, A and B not, Wild 1 "maybe".
+**Next step:** the maintainer reviews round 2 of tab 1 (games inside the list, published 2026-10-10). Then narrow tabs 2, 3 and 5 to 8 the same way: round 2 options on top in the new layout, round 1 kept below with its picks (see `41b-earlier-r2.js`). Tab 4 is skipped for now: the maintainer called it out of date; redraw it in the new layout before showing it again. Picks so far: tab 1 A, B and Wild 2; tab 2 B and Wild 2; tab 3 A and B (B "cleaner"); tab 5 C, Wild 1 and Wild 2 liked, A, B and D not ("too basic"; wants more maps, more body parts or a realistic view; Wild 1 needs a scoring test where Opus or Fable grade what the Deck's models circle and help teach them; Wild 2 is "like spoiler covering"); tab 6 B, C and Wild 1 liked, Wild 2 not (Wild 1 reopens the locked "one press per change" rule: confirm before building it); tab 7 C liked, A and B not, Wild 1 "maybe".
 
 Left for a later session on purpose: terse mode, the Spy's reveal, search density, the model speed
 readout, web permission, the SteamOS share path and the SteamOS hint card.
@@ -81,7 +81,7 @@ each session updates it.
 - **Check before publishing:** `node --check` on the script part, and one load in the headless
   browser for console errors.
 - **What each part holds:** `20-kit.js` and `15-kit.css` draw the Deck's panel in the old layout. `21-kit2.js` and `16-kit2.css` draw it in the new layout (plan 84: tab bar 20, the chat's name 28, gap 4, chat 295, chips 32, gap 2, question box 73); tab 8 uses it, and round 2 of the other tabs should move onto it. `30-core.js` holds
-  saving, the D-pad (arrow keys, Enter = A, Escape = B, Y) and the tabs. `41-` to `47-` and `49-search.js` are one file
+  saving, the D-pad (arrow keys, Enter = A, Escape = B, Y) and the tabs. `41-` to `47-` and `49-search.js` are one file (`41b-earlier-r2.js` is tab 1's round 2, added on top of round 1)
   per tab. `48-tabs.css` holds each tab's own styles; `49-search.css` holds tab 8's. `90-boot.js` builds the page.
 - **Where the sizes and colours came from (the old layout):** the panel is 300 by 454: Steam's
   header 64, tab bar 20 + 4, chat row about 44 + 12 gap, dock about 165, so the chat gets about 145.

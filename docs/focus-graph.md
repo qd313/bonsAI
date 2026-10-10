@@ -260,6 +260,13 @@ that empties the box (only while the box has words), the small ASK. The game tag
   the pad where it was and Up went on to the tab bar (stand-in, plan87-S-S1-HELP-CHIP.json). Down from it is the
   question box, Up is the chips' exit Up (`chipRowExitUp`), Left and Right are held. Down from the chat's name on
   an empty chat still goes straight to the question box and skips the chip, as it does for the suggestion chips.
+- **The AI's own suggestion chip is a stop of its own, in its own container** (`InjectChipRoot` in `MainTabPresetRow.tsx`,
+  handle in `injectChipNav.ts`). It shows only after an answer from the Pyro persona and sits below the suggestion
+  chips, nearest the question box. Up from the box lands on it first by Steam's transfer (`takeInjectChipFocus`,
+  tried before the help chip and the chips in `focusFirstPresetChip`); Up from it goes to the Show details line or the
+  chips (`takeChipSlotFocus`), else the chips' exit Up (`chipRowExitUp`); Down from it is the question box; Left and
+  Right are held. Down from the help chip, the suggestion chips and the Show details line lands on it before the box
+  (`leaveRowDown` in `MainTabPresetRow.tsx`). Before this the ring went past it both ways and it could only be tapped.
 - **The strip is its own row, not part of the box's group.** It already was its own Steam focus row
   (`bonsai-unified-input-actions-row`) drawn inside the box's card, and it stays one. Left and Right in the
   box belong to the box (Left: paperclip, Right: mode button, both unchanged); Left and Right in the strip

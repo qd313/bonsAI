@@ -38,6 +38,7 @@ import React, { useCallback, useMemo } from "react";
 
 import { takeNavFocus } from "../utils/navFocusRegistry";
 import { takeDetailsSlotLineFocus } from "../features/details-slot/detailsSlotStore";
+import { takeInjectChipFocus } from "../components/injectChipNav";
 import { elementHasGamepadFocus } from "../utils/uiDocument";
 
 export type MainTabAskBarFocusRefs = {
@@ -156,6 +157,8 @@ export function useMainTabAskBarFocus(
    * `modalReturnFocusRegistry` needed, and for the same reason.
    */
   const focusFirstPresetChip = useCallback((): boolean => {
+    /* The AI's own suggestion chip, when it shows, sits nearest the box: it is the first stop up. */
+    if (takeInjectChipFocus()) return true;
     const host = refs.presetCarouselHostRef.current;
     const help = host?.querySelector<HTMLElement>("button.bonsai-preset-help-chip");
     if (help) {

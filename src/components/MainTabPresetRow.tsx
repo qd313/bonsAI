@@ -18,7 +18,7 @@
  * Does not: Own the chips' own animation timing — see MainTabPresetAnimatedChips().
  * The suggestion text itself comes from the presets data file, not from here.
  */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Focusable } from "@decky/ui";
 import type { PresetPrompt } from "../data/presets";
 import type { AskModeId } from "../data/askMode";
@@ -27,6 +27,8 @@ import { DetailsSlot } from "../features/details-slot/DetailsSlot";
 import { PRESET_CHIP_HEIGHT_PX } from "../features/preset-carousel/presetRowLayout";
 import { chipRowExitUp } from "../features/preset-carousel/presetRowFocusNav";
 import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../utils/navFocusRegistry";
+import { takeChipSlotFocus } from "../features/details-slot/detailsSlotStore";
+import { registerInjectChipNav, takeInjectChipFocus, unregisterInjectChipNav } from "./injectChipNav";
 import { joinPresetWithRunningGame } from "../utils/joinPresetWithRunningGame";
 import {
   registerModalReturnFocusOwner,
@@ -51,6 +53,34 @@ function HelpChipRoot(props: { focusUnifiedTextField: () => boolean; children: R
       {...({
         navRef,
         onMoveUp: () => chipRowExitUp(),
+        onMoveDown: () => props.focusUnifiedTextField() === true,
+        onMoveLeft: () => true,
+        onMoveRight: () => true,
+      } as Record<string, unknown>)}
+    >
+      {props.children}
+    </Focusable>
+  );
+}
+
+/**
+ * The AI's own suggestion chip's container, the help chip's twin (see `HelpChipRoot`). It sits below the
+ * suggestion chips, nearest the question box, so Up from the box lands here first and Down from the
+ * chips lands here before the box. Up goes on to the chips (or the Show details line holding their
+ * place), Down to the question box, Left and Right are held. Without its own container Steam's ring
+ * went past the chip both ways and it could only be tapped.
+ */
+function InjectChipRoot(props: { focusUnifiedTextField: () => boolean; children: React.ReactNode }) {
+  const navRef = useRef<NavRefHolder["current"]>(null);
+  useEffect(() => {
+    registerInjectChipNav(navRef);
+    return () => unregisterInjectChipNav(navRef);
+  }, []);
+  return (
+    <Focusable
+      {...({
+        navRef,
+        onMoveUp: () => takeChipSlotFocus() || chipRowExitUp(),
         onMoveDown: () => props.focusUnifiedTextField() === true,
         onMoveLeft: () => true,
         onMoveRight: () => true,
@@ -127,6 +157,16 @@ export function MainTabPresetRow({
       hadInjectChipRef.current = false;
     }
   }, [isAsking, presetCarouselInject]);
+  const injectChipShown = Boolean(presetCarouselInject?.text?.trim());
+  /*
+   * Down out of the row above the inject chip: onto the chip when it shows, else the question box. The
+   * help chip, the suggestion chips and the Show details line all use it, so the chip is a stop on the
+   * way down as it is on the way up.
+   */
+  const leaveRowDown = useCallback((): boolean => {
+    if (injectChipShown && takeInjectChipFocus()) return true;
+    return focusUnifiedTextField();
+  }, [injectChipShown, focusUnifiedTextField]);
   const showInjectPlaceholder =
     isAsking && hadInjectChipRef.current && !presetCarouselInject?.text?.trim();
 
@@ -166,7 +206,7 @@ export function MainTabPresetRow({
          * looks for this chip before the carousel), and the chips' rotation timers do not run
          * while the help chip is up.
          */
-        <HelpChipRoot focusUnifiedTextField={focusUnifiedTextField}>
+        <HelpChipRoot focusUnifiedTextField={leaveRowDown}>
           <Button
             className="bonsai-preset-glass bonsai-preset-help-chip"
             ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("plugin-help", el)}
@@ -186,14 +226,14 @@ export function MainTabPresetRow({
         </HelpChipRoot>
       ) : (
         /* While an answer's own Show details line is out of sight, it takes the chips' place. */
-        <DetailsSlot focusUnifiedTextField={focusUnifiedTextField}>
+        <DetailsSlot focusUnifiedTextField={leaveRowDown}>
           <MainTabPresetAnimatedChips
             seeds={suggestedPrompts}
             setUnifiedInput={setUnifiedInput}
             fadeAnimationEnabled={presetChipAnimation === "fade"}
             animationMode={presetChipAnimation}
             onPreferAskMode={onPresetPreferAskMode}
-            onCarouselExitDown={focusUnifiedTextField}
+            onCarouselExitDown={leaveRowDown}
             useLocalKnowledgeBase={useLocalKnowledgeBase}
             askRestartToken={askRestartToken}
             holdStill={isAsking}
@@ -202,22 +242,24 @@ export function MainTabPresetRow({
         </DetailsSlot>
       )}
       {presetCarouselInject?.text?.trim() ? (
-        <Button
-          className="bonsai-preset-glass bonsai-pyro-inject-chip"
-          focusable
-          onClick={() => {
-            setUnifiedInput(joinPresetWithRunningGame(presetCarouselInject.text.trim()));
-          }}
-          style={{
-            width: "100%",
-            minHeight: PRESET_CHIP_HEIGHT_PX,
-            fontSize: 12,
-            color: "#c4d3e2",
-          }}
-          aria-label="Agent suggestion"
-        >
-          {presetCarouselInject.text.trim()}
-        </Button>
+        <InjectChipRoot focusUnifiedTextField={focusUnifiedTextField}>
+          <Button
+            className="bonsai-preset-glass bonsai-pyro-inject-chip"
+            focusable
+            onClick={() => {
+              setUnifiedInput(joinPresetWithRunningGame(presetCarouselInject.text.trim()));
+            }}
+            style={{
+              width: "100%",
+              minHeight: PRESET_CHIP_HEIGHT_PX,
+              fontSize: 12,
+              color: "#c4d3e2",
+            }}
+            aria-label="Agent suggestion"
+          >
+            {presetCarouselInject.text.trim()}
+          </Button>
+        </InjectChipRoot>
       ) : showInjectPlaceholder ? (
         <div
           aria-hidden

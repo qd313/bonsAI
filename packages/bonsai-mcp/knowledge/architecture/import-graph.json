@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 822,
-  "edgeCount": 2478,
+  "fileCount": 824,
+  "edgeCount": 2486,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -557,6 +557,7 @@
         "src/components/MainTab.tabBarDownEarlier.test.tsx",
         "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/components/MainTabEmptyChatHelpChip.test.tsx",
+        "src/components/MainTabInjectChipFocus.test.tsx",
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/chatTitleTestFixtures.tsx",
         "src/features/chat-title/nameRowIcons.test.tsx",
@@ -1061,6 +1062,15 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabInjectChipFocus.test.tsx": {
+      "imports": [
+        "src/components/MainTab.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabPresetAnimatedChips.fadeButton.test.tsx": {
       "imports": [
         "src/components/MainTabPresetAnimatedChips.tsx",
@@ -1157,9 +1167,11 @@
     "src/components/MainTabPresetRow.tsx": {
       "imports": [
         "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/components/injectChipNav.ts",
         "src/data/askMode.ts",
         "src/data/presets.ts",
         "src/features/details-slot/DetailsSlot.tsx",
+        "src/features/details-slot/detailsSlotStore.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/preset-carousel/presetRowLayout.ts",
@@ -2321,6 +2333,15 @@
         "src/utils/buildAnswerCornerSlots.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/buildTurnHeaderElement.tsx"
+      ]
+    },
+    "src/components/injectChipNav.ts": {
+      "imports": [
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabPresetRow.tsx",
+        "src/hooks/useMainTabAskBarFocus.ts"
       ]
     },
     "src/components/pullModelsListClearance.ts": {
@@ -3711,6 +3732,7 @@
         "src/utils/replyStopRegistry.ts"
       ],
       "importedBy": [
+        "src/components/MainTabPresetRow.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/details-slot/DetailsSlot.tsx",
         "src/hooks/useMainTabAskBarFocus.ts",
@@ -5348,6 +5370,7 @@
     },
     "src/hooks/useMainTabAskBarFocus.ts": {
       "imports": [
+        "src/components/injectChipNav.ts",
         "src/features/details-slot/detailsSlotStore.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
@@ -6735,6 +6758,7 @@
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
         "src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx",
         "src/components/MainTabEmptyChatHelpChip.test.tsx",
+        "src/components/MainTabInjectChipFocus.test.tsx",
         "src/components/MainTabUnifiedAskBar.askUp.test.tsx",
         "src/components/MainTabUnifiedAskBar.boxDown.test.tsx",
         "src/components/MainTabUnifiedAskBar.boxRing.test.tsx",
@@ -8572,6 +8596,7 @@
         "src/components/MainTabChatTranscript.sessionLadderExit.test.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
         "src/components/MainTabEmptyChatHelpChip.test.tsx",
+        "src/components/MainTabInjectChipFocus.test.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetRow.tsx",
         "src/components/MainTabUnifiedAskBar.askUp.test.tsx",
@@ -8589,6 +8614,7 @@
         "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx",
         "src/components/PermissionsTab.tsx",
         "src/components/buildEarlierList.tsx",
+        "src/components/injectChipNav.ts",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-title/ChatRowIcons.tsx",
@@ -9307,6 +9333,7 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
         "src/components/MainTabEmptyChatHelpChip.test.tsx",
+        "src/components/MainTabInjectChipFocus.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/SessionContextStrip.tsx",

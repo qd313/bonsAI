@@ -138,9 +138,10 @@ Spoiler hiding does its best and will sometimes miss.
 
 ## Saved chats
 
-The row at the top of **Main** holds up to eight chats. They're kept for you automatically; when you
-start a ninth, the one you used longest ago is removed. Move along the row to switch chats, or use
-the shoulder buttons while the row is selected.
+The row at the top of **Main** holds up to ten chats. They're kept for you automatically. At ten,
+**New chat** asks which chat to delete, and nothing is deleted until you confirm in the **Delete chat**
+box. Cancel, or B, keeps all ten. Move along the row to switch chats, or use the shoulder buttons
+while the row is selected.
 
 - The **pencil** starts a new chat.
 - Chats name themselves after your first question. You can rename one.

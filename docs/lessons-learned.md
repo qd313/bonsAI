@@ -217,7 +217,7 @@ for an exclusive window, or work over a direct connection instead.
 
 **Quirks that look like failures and are not.** Opening the plugin fails the first time after a
 deploy, then works. The check that the build on the device matches the build here can never pass,
-by design. Starting a new chat destroys the oldest of the eight saved ones. The screensaver freezes
+by design. At ten saved chats, New chat asks which chat to delete (nothing goes without the Delete chat box), so a test chat on a full Deck means giving one up. The screensaver freezes
 panel animations, so a frozen panel may just be a dark screen. The activity log is switched off, so
 read the model server's own system log instead. Voice input can be tested without a microphone
 attached.

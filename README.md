@@ -109,7 +109,8 @@ Close the menu while an answer is being written. A popup tells you when it's rea
 
 ![Switching between saved chats with the shoulder button](assets/readme/switch-chats.gif)
 
-Keep up to eight chats and flip between them with the shoulder buttons. When a chat gets long,
+Keep up to ten chats and flip between them with the shoulder buttons. At ten, **New chat** asks which
+chat to delete first, and nothing is deleted without the **Delete chat** box. When a chat gets long,
 bonsAI summarizes the older part so it isn't forgotten, and you can ask it to sum up at any time.
 
 ![Sum up this chat: bonsAI writes a short card of what it remembers](assets/readme/sum-up-chat.gif)

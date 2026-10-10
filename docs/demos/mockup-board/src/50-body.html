@@ -1,0 +1,29 @@
+<div class="wrap">
+  <header class="masthead">
+    <div>
+      <h1><span class="sprout">bonsAI</span> mock-ups · round 1</h1>
+      <p>Seven roadmap items, a few ways to do each, plus one or two wild ideas. Play with each panel like a Deck, then press <b>Like</b> or <b>Not this</b> and leave comments. Claude reads them before the next round.</p>
+    </div>
+    <div class="tools">
+      <div class="zoom" role="group" aria-label="Panel size">
+        <span>Panel size</span>
+        <button type="button" data-z="1" aria-pressed="true">1×</button>
+        <button type="button" data-z="1.5" aria-pressed="false">1.5×</button>
+        <button type="button" data-z="2" aria-pressed="false">2×</button>
+      </div>
+      <div id="save-state" data-state="starting" role="status" aria-live="polite">Connecting…</div>
+    </div>
+    <ul class="keys" aria-label="How to drive a panel">
+      <li>Click a panel to drive it</li>
+      <li><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> D-pad</li>
+      <li><kbd>Enter</kbd> A</li>
+      <li><kbd>Esc</kbd> B</li>
+      <li><kbd>Y</kbd> Y</li>
+      <li>1× is the Deck's real size in its own pixels</li>
+    </ul>
+  </header>
+  <nav class="tabbar" aria-label="Mock-ups">
+    <div role="tablist" id="tablist"></div>
+  </nav>
+  <main id="panels"></main>
+</div>

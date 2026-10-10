@@ -1,0 +1,21 @@
+{
+  "row": "P87-FIGHT-FRAME-RATE",
+  "build_commit": "8608954d (on the Deck, not redeployed)",
+  "deck_time_local": "2026-10-10 02:03 to 02:05 EDT",
+  "screen": "Deck panel live in Quick Access over the game; page window 855 x 845",
+  "setup": "This measures the panel's own drawing while a game runs. The answer came from the PC's AI (http://192.168.86.27:11434, model gemma4:e2b-it-qat), NOT the Deck's own AI, because the Deck's own AI plus the game left too little memory earlier tonight. Run AI on this Deck was turned off, PC address 192.168.86.27:11434, Test connection read 'Connected, Ollama v0.40.2, 31 models'. Deck's own AI unloaded beforehand (available memory 1971 -> 8648 MB). Game: Deep Rock Galactic: Survivor, Elimination, Sector 01, Crystalline Caverns, Engineer, Hazard 1 (12 presses of A from the title screen, one 1.5 s hold of D-pad Left; the D-pad does not steer the character, so the character stood mostly still and fired on its own). Test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7) open on Main.",
+  "pressed": "Question sent with the send-question script (VERIFIED, full text). Walk to Ask (13 presses, read focus: Ask, 100% visible), A, then the 60 s frame count started right away.",
+  "seen": {
+    "frames": 3565,
+    "seconds": 60.004,
+    "fps": 59.4,
+    "answer_streamed_during_count": "Yes, for the first 11 s only: plugin log shows the request at 02:04:06.7 and 'stream done' at 02:04:17.4 (718 tokens, 706 visible characters), so about 11 of the 60 counted seconds had streaming text; the other 49 s the panel was idle. The answer finished: three numbered tips plus two choice buttons and the notes block (Praetorian; Glyphid Dreadnought; Red Sugar).",
+    "memory_free_m_before_count": "available 7860 MB",
+    "memory_free_m_after_count": "available 7855 MB",
+    "game_state": "In a mission (Elimination Sector 01). The screenshot taken just after the count shows the Level Up pick screen, so the game was paused or at a menu for part of the count; the game's own meter read 60 fps with the panel open. Screenshot DeckCapture_20261010_020507_game.png. Later screenshots (02:08) show the same Level Up screen still waiting for a pick, so the game was most likely stopped on its level-up pick screen for the whole count, not live fighting. The game's own overlay read 60 fps.",
+    "reference": "earlier nights with the Deck's own AI: 30 to 36 fps"
+  },
+  "expected": "A measured number in a real fight; earlier nights read 30 to 36 fps.",
+  "verdict": "UNCLEAR: measured 59.4 frames per second (3565 frames in 60 s) with the game in a mission, but the game was most likely sitting on its level-up pick screen (paused) for the count, so it is not a live fight; the answer streamed for only about 11 s of the 60; the AI was on the PC. A live-fight number is still owed. (As a plain measure of the panel with the game open: PASS, 59.4 fps.)",
+  "side_effect": "Each screenshot capture on the Deck also made Steam take a Steam screenshot (a 'Screenshot Taken / uploaded, Privacy State: Private' notice showed during the first captures). These are private screenshots of the game in the Deck's Steam screenshot library. Ollama toggles: Run AI on this Deck was turned off and then back on (now on, Deck's own AI, 2 models). A test question and its answer were added to the test chat."
+}

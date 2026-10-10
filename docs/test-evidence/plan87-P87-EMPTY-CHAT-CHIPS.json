@@ -1,0 +1,24 @@
+{
+  "row": "P87-EMPTY-CHAT-CHIPS (check 3 step 1, and check 8 an empty chat's first chip can be reached)",
+  "machine": "deck",
+  "build_commit": "d96ed0bf",
+  "deck_time_local": "2026-10-10, between 00:44 and 01:02 EDT by the Deck clock (check 1 began 00:38; per-check times were not logged; the Deck clock read 12:44 AM at the first screenshot and 12:56 AM at check 3 step 8)",
+  "screen": "MONITOR live: innerWidth 855, innerHeight 766.",
+  "setup": "From the test chat, ring walked to the + icon (Left x2 from the delete icon, focus read: 'New chat'), A once. A new empty chat opened: name 'New chat', counter 'not saved yet', 0 turns. One Down press from the + landed on the question box (INPUT [48.8,691.2,298.4,44]). The chip row sits at y 658.4 (two chips, each 147 x 30, at x 48 and x 201). The chips' wording changes between reads.",
+  "pressed": ["A on + (focus read first)", "DOWN", "UP", "UP", "DOWN", "UP", "DOWN", "UP", "DOWN"],
+  "seen": {
+    "up_1_from_box": "Ring on a chip: 'What does Kids master lock do?' BUTTON [48,658.4,147,30], the first chip of the row.",
+    "up_2": "Ring on the chat name: 'New chat, not saved yet. Opens your chats' [140,20,116.1,28]. (Past the chip row, as the one chip row is the top of the body.)",
+    "down_from_name": "Ring on the question box INPUT [48.8,691.2,298.4,44] (it does not stop on a chip).",
+    "bounded_walk_from_box": "Up: chip 'How can I optimize for battery life?' [48,658.4,147,30]. Down: question box. Up: chip 'How do I use strategy mode?' [48,658.4,147,30]. Down: question box.",
+    "visit_order": "box, chip, box, chip, box (two rounds), every stop first chip position x 48, y 658.4, w 147, h 30",
+    "first_chip_note": "The ring lands on the chip at x 48 in all three Up-from-box presses, so it is the first (left) chip of the row, whatever its current wording."
+  },
+  "expected": "Up from the empty chat's question box lands on a chip in the row above the box; Down returns to the box; a bounded walk Up, Down, Up, Down visits box, chip, box, chip, box.",
+  "verdict": [
+    "PASS (check 3 step 1, empty-chat chips row): Up from the box lands on the first chip of the row (x 48, y 658.4), not on the name or the tab bar.",
+    "PASS (check 8): Down from the chip returns to the question box; the bounded walk Up, Down, Up, Down visited box, chip, box, chip, box.",
+    "UNCLEAR (a note, not a failure): the second Up from the first chip goes to the chat name, not along to the second chip (a chip is reached only from the box by Up); and Down from the name goes straight to the box, skipping the chips."
+  ],
+  "side_effect": "A new empty chat 'New chat' now exists on screen (not saved yet; it is swept away when left). Nothing asked."
+}

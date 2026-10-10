@@ -1,0 +1,19 @@
+{
+  "row": "M8-ABOUT-UP",
+  "machine": "deck",
+  "build_commit": "tip deployed 23:42 EDT (see plan87-B0-SETUP.json)",
+  "deck_time_local": "2026-10-09 about 23:53-23:55 EDT",
+  "screen": "MONITOR live (innerWidth 855, innerHeight 766, dpr 1.28). The maintainer saw this on the Deck's own screen; tonight's run is NOT on that screen, so a no-repeat here does not clear the Deck's own screen.",
+  "setup": "About tab, ring on the tab bar. D-pad only, via deck_runSequence (one press per step, focus read after each step). No A pressed.",
+  "pressed": ["DOWN x5 from the bar (try 1)", "UP x5 back to the bar", "DOWN x5 (try 2)", "UP x5 back", "DOWN x5 (try 3)", "UP once from Support after each of the three walks"],
+  "seen": {
+    "down_walk_each_time": "About tab > Follow system > GitHub > Built on Ollama! > Bugs & Feature Requests > Support my Steam Sale habit (5 presses, all five landings visible)",
+    "try1": "Up from Support moved to 'Bugs & Feature Requests'",
+    "try2": "Up from Support moved to 'Bugs & Feature Requests'",
+    "try3": "Up from Support moved to 'Bugs & Feature Requests'",
+    "Support_box_when_focused": "[64,649,268,42], scrollTop 150 (from the M4 sweep)"
+  },
+  "expected": "Measurement row: confirm or not that Up from Support goes somewhere odd.",
+  "verdict": "PASS: Up from Support moved to Bugs & Feature Requests (try 1). PASS: Up from Support moved to Bugs & Feature Requests (try 2). PASS: Up from Support moved to Bugs & Feature Requests (try 3). UNCLEAR: the maintainer's odd Up result did not appear on the monitor; the Deck's own screen was not live so it is untested there.",
+  "side_effect": "none"
+}

@@ -1,0 +1,27 @@
+{
+  "row": "P87-F5-NAME-ROW",
+  "machine": "deck",
+  "build_commit": "d96ed0bf",
+  "deck_time_local": "2026-10-10, between 00:44 and 01:02 EDT by the Deck clock (check 1 began 00:38; per-check times were not logged; the Deck clock read 12:44 AM at the first screenshot and 12:56 AM at check 3 step 8)",
+  "screen": "MONITOR live: innerWidth 855, innerHeight 766.",
+  "setup": "Test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7), Main tab. Ring walked Up from the question box to the chat name with deck_walkTo (9 presses: question box, Show details, Boss note, Mark reply helpful, Retry same prompt, 99 earlier, name).",
+  "pressed": ["LEFT", "B", "RIGHT", "B", "RIGHT", "A (on Delete chat icon, focus read first)", "A (on Cancel, focus read first)"],
+  "seen": {
+    "left_from_name": "Ring on label 'New chat' (the + icon) box [114,20,24,28], inside the panel (x 48 to 348).",
+    "B_from_plus": "Ring back on the chat name (aria 'How do I beat the boss ... chat 1 of 7. Opens your chats', box [140,20,166.1,28]). The Quick Access panel stayed open.",
+    "right_from_name": "Ring on label 'Delete chat' box [308,20,24,28].",
+    "B_from_delete": "Ring back on the chat name.",
+    "A_on_delete": "A box opened in the Steam Big Picture Mode window (not in the Quick Access page). Its text: 'Delete chat slot?' 'Delete \"How do I beat the boss in the Soul Sanctum in Hollow Knight?\" and its transcript? This cannot be undone.' with buttons Cancel and Delete. Ring on Cancel.",
+    "A_on_cancel": "Box gone (0 dialogs in that window). Chat unchanged: 'chat 1 of 7', same name; 8 json files in chat_slots (7 chats plus index). Ring on 'Delete chat' icon.",
+    "title_wording": "The box title reads 'Delete chat slot?', not 'Delete chat' as the runbook wrote; the icon's own label is 'Delete chat'."
+  },
+  "expected": "Left reaches +; Right reaches the delete icon; B returns from each; the Delete chat box opens with the ring on Cancel; Cancel keeps the chat and returns the ring to the delete icon.",
+  "verdict": [
+    "PASS: Left from the name reaches the + icon (visible, box inside the panel).",
+    "PASS: Right from the name reaches the delete icon (box [308,20,24,28]).",
+    "PASS: B returns the ring to the name from the + and from the delete icon (two separate presses).",
+    "PASS: A on the delete icon opens a delete box with the ring on Cancel (title text is 'Delete chat slot?').",
+    "PASS: A on Cancel closes the box, the chat is still there (7 chats, 8 files) and the ring is on the delete icon."
+  ],
+  "side_effect": "none"
+}

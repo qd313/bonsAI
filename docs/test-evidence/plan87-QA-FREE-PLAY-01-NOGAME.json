@@ -1,0 +1,26 @@
+{
+ "row": "QA-FREE-PLAY-01 (no game)",
+ "build_commit": "8608954d (deployed in block 4, not redeployed)",
+ "deck_time_local": "2026-10-10 about 01:47 to 01:52 EDT",
+ "screen": "monitor live: page 855 x 766",
+ "setup": "Plugin already open on Main tab, test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7), one answer on screen with 8 chips earlier, Show details closed. No game running. Free memory 5669 MB available.",
+ "pressed": "deck_sweep DOWN, returnTrip true, lanes 1 (RB), budget 120, runName plan87-QA-FREE-PLAY-01-NOGAME (runs/ file). Then LB, walked back to the chip row, took a screenshot (screenshots/DeckCapture_20261010_014844_auto.png). Then opened Show details on the newest answer and ran a 26-press sequence (runs/plan87-QA-FREE-PLAY-01-NOGAME-chipgrid.json).",
+ "seen": {
+  "sweep_totals": {"stopsRecorded": 51, "stopsVisited": 28, "presses": 58, "legs": 4, "cycles": 0, "unlabeledStops": 1, "stopsFocusedButNotVisible": 4},
+  "legs": "Main down 13 presses 11 stops; Main up 14 presses 12 stops; Ollama down 15 presses 13 stops; Ollama up 15 presses 13 stops. All four ended by the ring stopping at the end, none by a loop.",
+  "main_order_down": "name row, 99 earlier, question, Show reasoning, answer paragraph (unnamed stop), answer last para, Mark reply helpful, Show details, Performance card, suggestion chip, question box, Ask",
+  "not_fully_visible": [
+   "stop 0 and stop 22: the chat name row, 87 percent and 83 percent visible, clipped by a panel (name row rect y 20 to 48, top of pane)",
+   "stop 9: suggestion chip 'How do I get past this part?', rect y 658 to 688, 67 percent of sample points visible, covered by a panel",
+   "stop 13: suggestion chip 'Recommended controller layout?', same rect, 33 percent visible, covered by a panel"
+  ],
+  "chip_followup": "Re-read the chip by hand (chip 'How can I optimize for battery life?', rect x 48 to 195, y 658 to 688). elementFromPoint at 5 points in the box hit the chip itself (5 of 5). The text run is 196 px wide (x -10 to 186) inside a 147 px chip, so the label is cut at the left in the screenshot ('ptimize for battery life?'). The question box starts at y 691, so the chip is not under the box. The chips are a rotating carousel; the label changed between reads (4 different chips seen).",
+  "chip_grid_walk": "The newest answer's Show details opened one card only ('Performance, From the shared Deck tips'), not a grid of chips. Down from Hide details reached the card. Right x9 on the card: no move (9 dead presses, one card only). Left once: left the plugin into the Steam side tab list (plugin tab). I then pressed Left 8 more (dead), Down 3 (dead), Up 4 (walked the Steam tab icons Help, Soundtracks, Performance, Quick Settings). No A was pressed. I walked back Down 4 and Right 1 and the ring returned to the Performance card. Details closed again with A on Hide details.",
+  "second_lane": "Ollama tab, all 13 controls visible 100 percent both ways, no cycle."
+ },
+ "expected": "Every stop visible, no dead press, no stop twice.",
+ "verdict_sweep_main": "UNCLEAR: 4 of 51 stops partial. Two are the chat name row at 87 and 83 percent (clipped at the top edge of the pane, 2 of 15 sample points). Two are the suggestion chip at 67 and 33 percent by the text sample points, but a box probe showed the chip fully hit, and the label scrolls under the left edge. Owner to decide whether the chip label cut at the left is a bug or the known chip text effect.",
+ "verdict_sweep_ollama_lane": "PASS: 13 of 13 stops visible, 0 cycles, nothing visited twice",
+ "verdict_chip_grid_walk": "COULD NOT RUN: the newest answer's details held one card, not a grid, so there was no grid to walk (Right is dead on a single card, as expected for one card)",
+ "side_effect": "I walked off the plugin into the Steam side tab list by pressing Left from the single details card, then Up through four side tabs and back. No A pressed, nothing activated. The ring is back inside the plugin. Show details was opened then closed again."
+}

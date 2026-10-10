@@ -1,0 +1,52 @@
+{
+  "row": "P87-F3-CHIPS-GRID",
+  "build_commit": "8608954d (deployed at the start of block 4)",
+  "deck_time_local": "2026-10-10 01:20-01:30 EDT",
+  "screen": "MONITOR live: innerWidth 855, innerHeight 766, dpr 1.28. Page px, 0.1 precision. Dock top (suggestion chips row) 658.4, question box top 691.2.",
+  "setup": "Test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7). The newest answer ('Say hello...') has only 7 chips (no Read current TDP), so one question was asked in the test chat to get an 8-chip answer: 'What TDP setting should I use for Hollow Knight to save battery?' (sent with the send-question script, VERIFIED, Ask pressed after reading focus was on Ask). Its answer has 8 chips: Keyword + meaning; KB: 14 sections; Read current TDP; Reply style: balanced; Thinking: Balanced 19 s ~536 tokens; Spoiler risk: med; Routed gemma4:e2b-it-qat; Developer details. Grid rows: [1,2] [3,4] [5] [6,7] [8]. Show details opened with A (read first). Down reached a 'Performance' tips block, Down again the 'This answer | Session 100' toggle, Down chip 1. Every number below was read 1.5 s or more after the press.",
+  "pressed": ["RIGHT x7 (chip 1 to 8)", "RIGHT x1 more at chip 8", "LEFT x7 (chip 8 to 1)", "LEFT x1 at chip 1", "DOWN x1 to chip 1", "DOWN x4 (chip 1 to 8)", "DOWN x2 more at chip 8", "UP x5 (chip 8 to toggle)", "DOWN, RIGHT (to chip 2)", "DOWN x4 (chip 2 to 8)", "DOWN x1 more", "B (closed)"],
+  "seen": {
+    "step1_right_walk": {
+      "per_chip (ring chip, box top, box bottom, box height, row top, scrollTop)": [
+        "1 Keyword + meaning: ring on 1, active 1, box 465.2-657.8 (192.6 tall, read straight after the A/Down, not 1.5 s later), row top 311.3, scrollTop 294.5 of max 295",
+        "2 KB: 14 sections: box 465.2-520.6, row 311.3, scrollTop 294.5",
+        "3 Read current TDP: box 465.2-520.6, row 311.3, scrollTop 294.5",
+        "4 Reply style: box 465.2-520.6, row 311.3, scrollTop 294.5",
+        "5 Thinking: box 465.2-552.5 (87.3 tall), row 311.3, scrollTop 294.5",
+        "6 Spoiler risk: box 465.2-584.4 (119.2 tall), row 311.3, scrollTop 294.5. Fully above the dock (658.4). Screenshot plan87-P87-F3-CHIPS-GRID-spoiler-open.png shows the whole box.",
+        "7 Routed: box 465.2-520.6, row 311.3, scrollTop 294.5",
+        "8 Developer details: box 176.1-677.0 (500.8 tall), row 22.2, scrollTop 583.6 of max 603 after settling (2.5 s later unchanged). Box bottom is 18.6 px BELOW the dock top 658.4: the last 18.6 px of the box sit behind the dock/Hide details line. Screenshot shows the diagnostics list cut mid-line at 'gemma4:26b'."
+      ],
+      "eighth_right_at_chip_8": "Ring stayed on chip 8 (no leave). The pane scrolled 18.7 px more: scrollTop 602.3, row top 3.5, box bottom 658.3 (at the dock top, no longer under it). So one extra press was needed to bring the box end above the dock.",
+      "chips_visited_once_each": true,
+      "rise_only_up_and_smooth": "Row top and scroll did not move for chips 1-7 (0.0 px). Chip 8 raised it once, by about 289 px (311.3 to 22.2), then 18.7 px on the extra press."
+    },
+    "step2_left_walk": {
+      "row_top_by_step (px, change from the step before)": [
+        "8 to 7: row 3.5 -> 76.9 (+73.4), scrollTop 602.3 -> 528.9",
+        "7 to 6: 76.9 (0.0)",
+        "6 to 5: 76.9 -> 106.6 (+29.7), scrollTop 499.2",
+        "5 to 4: 106.6 -> 137.8 (+31.2), scrollTop 468.0",
+        "4 to 3: 137.8 -> 138.6 (+0.8), scrollTop 467.2",
+        "3 to 2: 138.6 -> 167.5 (+28.9), scrollTop 438.3",
+        "2 to 1: 167.5 (0.0)"
+      ],
+      "left_at_chip_1": "Ring went to the 'This answer | Session 100' toggle [52,168,290,28]; the pane also moved again (row top 167.5 -> 225.3, scrollTop 380.5)."
+    },
+    "step3_down_walk": "From chip 1: Down x4 visited Read current TDP (3), Thinking (5), Spoiler risk (6), Developer details (8) in that order, one stop each, row top 225.3 and scrollTop 380.5 until chip 8, where it went to 22.2 / 583.6. The 5th Down did NOT leave the ladder: ring stayed on Developer details, pane scrolled 18.7 px (scrollTop 602.3, row top 3.5). A 6th Down also stayed (dead press, nothing moved). Never reached the suggestion chip in 2 presses past chip 8 (block 1 saw Down leave after 1 press).",
+    "step3_up_walk": "From Developer details Up x5: Spoiler risk (6, row 76.1, scrollTop 529.7), Thinking (5, row 106.6), Read current TDP (3, row 137.8), Keyword + meaning (1, row 167.5), 'This answer | Session 100' toggle (row 225.3). Exactly retraced, no dead press.",
+    "step4_down_from_chip2": "Chip 2 KB: 14 sections -> Reply style (4) -> Thinking (5) -> Spoiler risk (6) -> Developer details (8); 4 presses, one stop each, all visible.",
+    "screenshots": ["plan87-P87-F3-CHIPS-GRID-spoiler-open.png", "plan87-P87-F3-CHIPS-GRID-developer-open.png (after the extra Down: box end at the dock, list text inside still cut at gemma4:26b)"],
+    "why_numbers_differ_from_block_1": "This answer's Developer box is 500.8 px tall (block 1's was 253.9), because the Ask diagnostics JSON in it is long. Chip row plus box (about 155 + 501 = 656) is more than the 606 px pane, so they cannot both fit."
+  },
+  "expected": "Chips 1 to 8 once each; every box bottom at or above the dock top; row only moves up, smoothly, and only when a box would otherwise end behind the dock; Left x7 changes row top by under 1 px per step; Left at chip 1 to the toggle; Down x4 order KB-TDP-Thinking-Spoiler-Developer and 5th Down leaves; Up x5 retraces; from chip 2 Down order KB-Reply-Thinking-Spoiler-Developer.",
+  "verdict": [
+    "step 1 (Right walk): FAIL - chips 1-8 each once and chips 1-7 fully above the dock, but chip 8 Developer details box ends 18.6 px behind the dock on arrival (it took one extra Right press to get it to the dock line). The extra Right stayed on chip 8 (did not leave the ladder).",
+    "step 2 (Left walk): FAIL - the row top moved 73.4, 29.7, 31.2, 28.9 px on four steps (limit under 1 px). Left at chip 1 reached the toggle: PASS.",
+    "step 3 (Down x4 and Up x5): UNCLEAR - the Down order and the Up retrace match exactly, but the 5th Down did not leave the ladder (and a 6th did nothing), so no 'where it leaves' to record; block 1 left in 1 press. The long 500 px Developer box may explain it, the owner decides.",
+    "step 4 (Down from chip 2): PASS - KB, Reply style, Thinking, Spoiler risk, Developer details.",
+    "step 5 (screenshots): PASS - taken with Spoiler risk open (box fully visible) and Developer details open (end of box at the dock, but list text inside is cut).",
+    "overall: FAIL (steps 1 and 2)"
+  ],
+  "side_effect": "One extra test question was asked in the test chat (the TDP question above) to produce an 8-chip answer. The test chat now has 100 turns shown and one more answer pair. No other chat touched."
+}

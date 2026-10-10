@@ -1,0 +1,21 @@
+{
+  "row": "P81-MOVE-KEEPS-OTHER-NAMES",
+  "build_commit": "Deck build = dist written 23:42 on 10-09; checkout HEAD b9147b42",
+  "deck_time_local": "2026-10-10 00:15-00:18",
+  "screen": "MONITOR live: page 855 x 766, dpr 1.28 (the AI models box is a separate popup, 1920x1080 capture)",
+  "setup": "Deck pointed at the stand-in (scenario off = passes through to the PC's real AI, 31 models). Saved order before: ['gemma4:e2b-it-qat'] (1 name).",
+  "pressed": "Ollama tab, walk to AI models, A. Then Down one press at a time with a focus read after each: Advanced, Refresh catalog, Filters, Try order Text, gemma4 star row, qwen3.5:4b, qwen2.5vl:3b, nomic-embed, bge-m3 up-arrow, gemma-cursor up-arrow. A once on 'Move gemma-cursor:latest up' (try number 12 became 11). B to close. Then Run AI on this Deck ON, PC address back to 192.168.86.27:11434, Test connection (connected, v0.34.1, 2 models), stand-in stopped. Reopened AI models (Deck box).",
+  "seen": {
+    "step2_pc_box": "lists 31 PC models under 'ON THE PC' with up/down arrows in the TRY column; saved order after one move = 16 names: gemma4:e2b-it-qat, qwen3.5:4b, lfm2.5:8b, qwen3.5:9b, gemma4:e4b-it-qat, gemma4:12b-it-qat, qwen3.5:2b, granite4.2:8b, granite4.2:3b, bge-m3:latest, gemma-cursor:latest, qwen3.6:27b, qwen-cursor:latest, gemma4:26b, gemma4:latest, gemma3:4b (includes qwen3.5:2b, which the Deck does not have)",
+    "step3_back_on_deck": "Run AI on this Deck ON; Test connection: Connected - Ollama v0.34.1 - 2 models; stand-in stopped (ports 11500 refuse, scenario.txt = off)",
+    "step4_deck_box": "AI models box on the Deck lists only the 2 Deck models. It has NO up/down place buttons at all (the box text says 'These places are for the PC the AI runs on'); the only controls are Advanced, Refresh, Filters, Type a name, Install starter set, Text/Pictures, Reset order, Remove (X) x2, the pull boxes, Done, Cancel. Remove and Reset order were not pressed (Reset order would wipe the order).",
+    "saved_order_after_step4": "unchanged: still the same 16 names; every other settings key equals the start-of-night backup"
+  },
+  "expected": "PC-only names (qwen3.5:2b) still in the saved order after a place change made while the Deck is on its own AI",
+  "verdict_lines": [
+    "PASS: step 2 (place change on the PC box saved the PC's names: 1 name -> 16 names).",
+    "COULD NOT RUN: step 4 (a place change while pointed at the Deck's own AI). The Deck's box shows no place button to press. I did not go through Advanced or Reset order. The names are still all there, but no move was made, so this does not show the rule."
+  ],
+  "verdict": "UNCLEAR: half PASS (step 2), half COULD NOT RUN (step 4: no place button exists in the Deck-only box). Owner decides.",
+  "side_effect": "Saved try order left at the 16 names listed (before: just gemma4:e2b-it-qat); one move gemma-cursor:latest 12->11 was made. Not restored by hand (runbook step 5; settings are restored at the end of the night). Backup of start-of-night settings: ~/p87-backup/settings.json on the Deck."
+}

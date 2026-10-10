@@ -1,0 +1,21 @@
+{
+  "row": "S1-HELP-CHIP",
+  "machine": "this-pc",
+  "stand_in": true,
+  "build_commit": "b9147b42",
+  "deck_time_local": "2026-10-10 about 00:05-00:08 EDT (this PC's clock)",
+  "screen": "this PC's Steam Big Picture, Quick Access page 855x679",
+  "setup": "Before the wipe the Main tab already showed one chip, 'How to use bonsAI' (the plugin had been opened once after deploy; the beta box had been accepted earlier on this PC).",
+  "pressed": ["RB x2 to Settings tab", "DOWN x15 (walk) to 'Clear cache...'", "RIGHT to 'Clear all data...' (focus read)", "A", "box 'Clear all plugin data?' opened, ring on 'Keep my data'", "RIGHT (focus read: 'Clear all data' button)", "A", "waited about 30 s", "first-run box 'bonsAI - Beta Notice' with ring on 'Got it'", "A on 'Got it'", "LB x2 to Main tab", "DOWN/UP/LEFT/RIGHT attempts to reach the chip (see seen)"],
+  "seen": {
+    "after_wipe": "The plugin remounted by itself, still on the Settings tab, ring on the tab bar. A first-run box 'bonsAI - Beta Notice' came up (text: beta, answers can be wrong, Ollama on another PC is faster, report bugs on GitHub, 'By continuing, you acknowledge this is experimental software.'). It took the ring on its 'Got it' button. A on 'Got it' closed it and the ring went back to the Settings tab bar.",
+    "main_tab_after_wipe": "Chat 'New chat, not saved yet'. Chip row holds exactly 1 chip: 'How to use bonsAI' (chip box 300x30 at y=572 in a 679-high page, opacity 1, visible, top element at its centre is the chip itself, not disabled). Browser storage had 4 bonsai keys (disclaimer-accepted=1, last-tab=main, last-tab-at, tab-resume-mode=resume) and no 'plugin-help-dismissed' key.",
+    "can_the_ring_reach_the_chip": "No. DOWN from the tab bar -> chat name -> question box (chip skipped). UP from the question box -> tab bar (chip and chat name skipped). LEFT from the box -> 'Attach screenshot to Ask'; RIGHT from the box -> 'Inference mode' pill. UP from there -> question box. Eleven or so presses over three tries, never landed on the chip. A sweep earlier (before the wipe) also never landed on it.",
+    "quick_start_opened": false,
+    "chip_row_after": "not reached; row still 1 chip 'How to use bonsAI'"
+  },
+  "expected": "after opening and closing the quick start from the help chip, the help chip is gone and the ordinary suggestion chips take its row",
+  "verdict": "UNCLEAR - the wipe and the fresh state worked (1 help chip, as expected), but the controller ring could not be put on the help chip, so the quick start was never opened and closed. Not a pass, not a fail of the fix itself.",
+  "verdict_open_close_half": "COULD NOT RUN - no route to the chip by D-pad on this stand-in; on the real Deck the Verify entry says the chip was reachable, so this may be a Windows spatial-navigation difference or a real bug. The owner decides.",
+  "side_effect": "Settings and cache wiped on this PC by design (call 14). The extra DOWN/UP/LEFT/RIGHT presses only moved the ring. A left-over 'bonsai' settings backup exists in backup/ beside the runbook, not restored."
+}

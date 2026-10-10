@@ -1,0 +1,41 @@
+{
+  "row": "P87-F4-TAB-ORDER (also P87-F1-SMALL-CAPS)",
+  "machine": "deck",
+  "build_commit": "d96ed0bf (checkout tip, deployed at the start of block 3, 2026-10-10 about 00:35 EDT)",
+  "deck_time_local": "2026-10-10 00:38-00:43 EDT",
+  "screen": "MONITOR live: innerWidth 855, innerHeight 766. Boxes are [x, y, w, h] page px.",
+  "setup": "Fresh deploy, plugin opened on the second try (the first try failed with a debugger connection reset, the second sent the Quick Access chord and no pane appeared, the third opened it). Main tab, test chat (chat 1 of 7), ring on the question box at start. Keep-awake retaken 00:40 UTC-4, expires 2026-10-10T12:40:56Z.",
+  "pressed": ["RB x6 from Main (Main>Ollama>Settings>Permissions>Developer>About>Main), reading the bar after each", "LB from Main, three tries"],
+  "seen": {
+    "bar": "Bar box [48,0,300,20] on every tab. .bonsai-tab-bar__tabs box [86,0,224,20], scrollWidth 224 = clientWidth 224, scrollLeft 0 on every tab, bar scrollWidth 300 = clientWidth 300: nothing scrolls, nothing wraps (all icons y 0, h 20). LB hint [52,0,31,20], RB hint [313,0,31,20] on every tab.",
+    "layout": "The tabs container always lists all six tabs in the fixed order bonsAI, Ollama, Settings, Permissions, Developer, About, with the current one drawn as a wider box with its name. Icons left of the current one are exactly the tabs before it, icons right of it exactly the tabs after it.",
+    "bonsAI": "CUR bonsAI [86,0,73.8,20]; then Ollama [171.8], Settings [201.9], Permissions [231.9], Developer [262], About [292], each 18 wide.",
+    "Ollama": "bonsAI icon [86,0,18,20]; CUR Ollama [114.1,0,83.3,20]; Settings [207.6], Permissions [235.7], Developer [263.9], About [292], each 18 wide.",
+    "Settings": "bonsAI [86], Ollama [112.5]; CUR Settings [139,0,91.4,20]; Permissions [239], Developer [265.5], About [292], each 18 wide.",
+    "Permissions": "bonsAI [86], Ollama [107.6], Settings [129.2]; CUR Permissions [150.9,0,115.9,20]; Developer [270.4], About [292], each 18 wide.",
+    "Developer": "bonsAI [86], Ollama [109.9], Settings [133.9], Permissions [157.8]; CUR Developer [181.7,0,104.3,20]; About [292], each 18 wide.",
+    "About": "bonsAI [86], Ollama [116.1], Settings [146.2], Permissions [176.2], Developer [206.3]; CUR About [236.4,0,73.6,20]; each 18 wide.",
+    "smallest_icon_width": "17.993 px on every tab (rendered 18 less 0.007 rounding). Every other icon box is 18.",
+    "RB_from_About": "Lands on Main (CUR bonsAI [86,0,73.8,20], identical to the first Main read).",
+    "LB_from_Main": "FIRST TWO LB presses (80 ms hold) from Main did nothing: the bar stayed on Main on reads 0.1 s and 4 s later. THIRD press (200 ms hold, verify on) landed on About (CUR About [236.4,0,73.6,20], ring on 'Follow system') but only by the time of the next read (the waitFor timed out at 3 s while its last value already read About). RB x3 and LB from non-Main tabs worked at 80 ms every time.",
+    "main_icon_aria_label_on_other_tabs": "bonsAI (e.g. on Ollama the first peek has aria-label 'bonsAI')",
+    "ring": "After every tab change the ring leaves the bar. After the last RB (About to Main) nothing owned the ring at all (deck_readFocus found no gpfocus), document.activeElement BODY, hasFocus true. A saved walk could not be made for that reason (deck_saveCheck refused: nothing owned focus after the first RB)."
+  },
+  "small_caps": {
+    "row": "P87-F1-SMALL-CAPS",
+    "name_span": ".bonsai-tab-bar__name",
+    "text": "bonsAI",
+    "font_variant_caps": "small-caps",
+    "text_transform": "none",
+    "aria_label_of_main_icon_on_another_tab": "bonsAI"
+  },
+  "expected": "Main first after LB, About last before RB; left icons = tabs before in order; right icons = tabs after in order; every icon box at least 18 px; RB from About lands on Main; LB from Main lands on About; nothing scrolls or wraps. Main name text 'bonsAI', font-variant-caps small-caps, text-transform none; other tab's Main icon named 'bonsAI'.",
+  "verdict": [
+    "PASS: order and positions on all six tabs (bonsAI first, About last, left/right icons exactly the tabs before/after in order, nothing scrolls or wraps, hints identical).",
+    "PASS: icon widths. Every icon box 18 wide except a rounding 17.993 on each tab (0.007 under; counted as 18).",
+    "PASS: RB from About lands on Main.",
+    "UNCLEAR: LB from Main lands on About, but only on the third try (two 80 ms presses did nothing, the third with a 200 ms hold worked). Cannot tell press loss on the rig from a real wrap bug; nothing else in the block lost a press this way.",
+    "PASS (row P87-F1-SMALL-CAPS): name text 'bonsAI', font-variant-caps small-caps, text-transform none; the Main icon on another tab is named 'bonsAI'."
+  ],
+  "side_effect": "Left Main tab with nothing owning the ring (a Down press will place it). Nothing pressed with A."
+}

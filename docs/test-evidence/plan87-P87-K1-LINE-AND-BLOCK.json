@@ -1,0 +1,22 @@
+{
+ "row": "P87-K1-LINE-AND-BLOCK (notes line and block with a game running)",
+ "build_commit": "8608954d",
+ "deck_time_local": "2026-10-10 01:50 to 01:58 EDT",
+ "screen": "monitor; page 855 x 845 with the game running (766 high with no game)",
+ "setup": "Deep Rock Galactic: Survivor launched from the Recent Games row (first tile). First A on Play: the game started to launch, then Steam showed the app page again with no game process (nothing ran, 50 s later). Second A on Play: game started, title screen 'Press any key to continue' in front, process up 41 s after the press. Quick Access reopened over the game with the chord (not reloaded). Context line read 'Deep Rock Galactic: Survivor', mode Strategy, test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7). Free memory: 5596 MB before launch, 2533 MB after the game was up, 2498 MB when the plugin was open.",
+ "pressed": "send-question script (VERIFIED, full text read back), walked Down 10 to Ask, read focus (Ask, ready), A. One question only.",
+ "seen": {
+  "question_1": "Which Driller upgrades are worth taking early in Deep Rock Galactic Survivor?",
+  "answer_took": "86.4 s (log 'completed in 86.4s'), 664 tokens out, with a 44 s thinking part",
+  "notes_block_shown": "yes: gold block 'From bonsAI's own note' under the answer, one collapsed card 'Upgrades and overclocks'. The log says 3 notes attached (Upgrades and overclocks; Classes; Nitra).",
+  "no_close_match_line_shown": "no. Not in the screen text. grep of the log for 'No close match': 0 lines.",
+  "log_line": "present: 'notes for this answer: 3 notes attached (Upgrades and overclocks; Classes; Nitra); ... no footer line added' at 01:56:15",
+  "answer_end": "Focus on picking one weapon to carry the run, and then prioritize the upgrades that make you tougher. Which early strategy suits your playstyle? A. Focus entirely on one weapon for maximum synergy B. Balance upgrades between a primary weapon and basic survivability C. Prioritize immediate defensive upgrades over weapon specialization",
+  "free_memory_after_answer_mb": [1988, 2014],
+  "memory_note": "available memory read 1988 MB once at 01:56 and 2014 MB a minute later (largest user: the game, 1.25 GB; the AI server 288 MB). The task rule says stop and report under 2,000 MB, so I stopped after the first question."
+ },
+ "expected": "Across three asks, the 'No close match' line and the notes block are never under the same answer, and the log carries 'notes for this answer' every time.",
+ "verdict": "UNCLEAR: only 1 of 3 asks was run. For that one ask the notes block showed, the no-close-match line did not, and the log line is there (consistent with a pass). Asks 2 and 3 were not run because available memory fell to 1988 MB.",
+ "verdict_asks_2_and_3": "COULD NOT RUN: stopped at the memory limit (1988 MB read, under 2,000)",
+ "side_effect": "A first A on Play started a launch that left no running game (see setup). Nothing else changed. A chat answer was added to the test chat (one question and answer)."
+}

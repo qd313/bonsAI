@@ -1,0 +1,5 @@
+{"row":"S2-NAME-ROW","machine":"this-pc","stand_in":true,"build_commit":"9b9d21b2","deck_time_local":"2026-10-10 01:05 (this PC)","screen":"Steam Big Picture on this PC; window 855x679",
+"setup":"Main tab, empty 'New chat, not saved yet'. Reached by UP, UP from the question box (first UP landed on the 'How to use bonsAI' chip).","pressed":"UP,UP; LEFT; B; RIGHT; B. No A on either icon.",
+"seen":{"UP2":"chat name (140,20 116x28)","LEFT":"New chat (+) icon (114,20 24x28)","B_after_LEFT":"back on chat name","RIGHT":"Delete chat icon (308,20 24x28)","B_after_RIGHT":"back on chat name","back_arrow":"none exists in the Main-tab title row (children: + icon, name, mirror spacer 50 wide, delete icon); width not readable here","plugin_stayed_open_after_B":true},
+"expected":"Left on +, B back on name, Right on delete, B back on name",
+"verdict":["PASS: Left lands on + icon","PASS: B returns to name","PASS: Right lands on delete icon","PASS: B returns to name","COULD NOT RUN: back arrow width (no back arrow on the Main tab)"]}

@@ -1,0 +1,63 @@
+{
+  "row": "P87-B5-JOIN-REPEAT",
+  "build_commit": "d96ed0bf (block 3 deploy; no deploy this block)",
+  "deck_time_local": "2026-10-10 01:10 to 01:17 EDT",
+  "screen": "MONITOR live (page innerWidth 855, innerHeight 766)",
+  "setup": "Stand-in AI (prepared answers, every one starts '[PREPARED TEST ANSWER] This text was made up for a test. The AI did not write it.') started on the PC, port 11500, scenario join-repeat then join-clean. Deck: 'Run AI on this Deck' turned OFF (was ON); the PC address box already held 192.168.86.27:11500 when I got to it; Test connection pressed (stand-in log 01:11:22 shows the version and model-list calls). Ask mode Strategy. Test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7, at the 200-turn cap). Each question put in with the send-question script (VERIFIED), then Down to Ask, focus read as 'Ask', A as its own press. Wordings differ from block 2.",
+  "pressed": [
+    "RB to Ollama tab, Down, A on 'Run AI on this Deck' (read as that control first), Test connection (reached with Right from the address box, never A on the box until the restore)",
+    "Main tab, script question 1, Right x2 to Ask (Voice input, Clear, Ask read in turn), A",
+    "stand-in switched to join-clean, script question 2, Down to Ask (read), A",
+    "restore: Ollama tab, A on the address box (on-screen keyboard), X x3, typed 4 3 4, B to close; Test connection A; toggle 'Run AI on this Deck' back on with A (focus read first)"
+  ],
+  "seen": {
+    "join-repeat": {
+      "question": "Give me a full plan for the big boss fight please.",
+      "log": [
+        "01:11:53 stream done done_reason=length raw_len=908 visible_len=908",
+        "soft continue scheduled continue_index=1 visible_chars_before=908",
+        "01:11:57 stream done done_reason=stop raw_len=215 visible_len=1123",
+        "ask_ollama: OK response_len=1123 soft_continues=1"
+      ],
+      "count_turn": {
+        "Paragraph one": 1,
+        "Paragraph two": 1,
+        "Paragraph three": 1,
+        "Paragraph four": 1,
+        "letters": 1123,
+        "matches_before_fix_shape": false,
+        "matches_after_fix_shape": true
+      },
+      "saved_answer": "Each of the four paragraphs once, Paragraph four last and ending 'End of the prepared answer.'; the repeated Paragraph three is gone. The saved answer has a blank line before Paragraph four (that is the 1123-letter case in the README).",
+      "screen": "Screenshot plan87-P87-B5-JOIN-REPEAT-screen.png shows Paragraph one to four once each, Paragraph three then a gap, Paragraph four.",
+      "pause_at_the_join": "I sampled the answer text every 0.5 s. The text grew to 1078 characters at 8.0 s, 'Continuing' showed at 8.0 and 8.5 s, then the text sat flat at 1065 characters from 9.0 s to 10.0 s and grew again from 10.5 s (1089, 1167, 1299). So there was a visible stop of about 1.5 s after 'Continuing' went away before the continued piece's words appeared. The stand-in itself waits 1 s before piece 2, so about 0.5 s of that is the plugin's hold-back; I cannot separate them better with a 0.5 s sample. The text also dropped 13 characters (1078 to 1065) when 'Continuing' went away (that is the 'Continuing' label leaving)."
+    },
+    "join-clean": {
+      "question": "Lay out a step by step plan for that boss.",
+      "log": [
+        "01:14:42 soft continue scheduled visible_chars_before=908",
+        "01:14:46 stream done done_reason=stop raw_len=213 visible_len=1121",
+        "ask_ollama: OK response_len=1121 soft_continues=1"
+      ],
+      "count_turn": {
+        "Paragraph one": 1,
+        "Paragraph two": 1,
+        "Paragraph three": 1,
+        "Paragraph four": 1,
+        "letters": 1121,
+        "matches_before_fix_shape": true,
+        "matches_after_fix_shape": true
+      },
+      "saved_answer": "four glued straight on to three ('...in the middle of one.Paragraph four: ...') as in the README; Paragraph four present and whole.",
+      "pause_at_the_join": "The sampled text grew without any flat stretch longer than 1.0 s (1101 at 6.0 s and 6.5 s, 1105 at 7.5 s)."
+    },
+    "restore": "Run AI on this Deck back ON (settings file ollama_local_on_deck true), address box typed back to 192.168.86.27:11434 (read back), Test connection against the PC at that address said 'Connected \u00b7 Ollama v0.40.2 \u00b7 31 models', and after the toggle the tab shows 'Connected \u00b7 Ollama v0.34.1 \u00b7 2 models' (127.0.0.1:11434). Stand-in: scenario off, stopped (curl to 11500 fails, scenario.txt = off)."
+  },
+  "expected": "join-repeat holds Paragraph three once (1121 to 1123 letters); join-clean unchanged (1121 letters, Paragraph four present); note whether the continued piece paused.",
+  "verdict": [
+    "PASS join-repeat: Paragraph three once, 1123 letters, after-fix shape.",
+    "PASS join-clean: 1121 letters, each paragraph once, Paragraph four present.",
+    "PASS restore: Deck back on its own AI, address 192.168.86.27:11434, tests connect."
+  ],
+  "side_effect": "A cat | python pipe over ssh hung once (backgrounded, stopped, no effect on the Deck); I read the chat file to my scratch folder instead. Two chat answers added to the test chat (the 200-turn chat stays at its cap)."
+}

@@ -1,0 +1,12 @@
+{
+  "row": "P87-GAME-EXIT (block 5b check 4, close the game)",
+  "build_commit": "8608954d (on the Deck, not redeployed)",
+  "deck_time_local": "2026-10-10 02:08 EDT",
+  "screen": "Game full screen (Level Up pick screen), Quick Access closed with the chord",
+  "setup": "Deep Rock Galactic: Survivor (appid 2321470) running in a mission, waiting on its Level Up pick screen. Quick Access closed first.",
+  "pressed": "deck_exitGame twice (each sends one GUIDE press), then one GUIDE press held 400 ms by hand, a screenshot after each.",
+  "seen": "Steam's main menu never opened: the ring stayed on nothing and the game's Level Up screen stayed in front each time (screenshots DeckCapture_20261010_020834_game.png, _020845_, _020851_). Nothing else was pressed. Game process still present.",
+  "expected": "Game exits and its process is gone.",
+  "verdict": "COULD NOT RUN: Steam's main menu does not open from the game with the Steam button on this Deck tonight (same as the earlier driver's note). I did not quit through the game's own menus.",
+  "side_effect": "Three Steam-button presses landed with no visible effect. The game is still running."
+}

@@ -1,0 +1,22 @@
+{
+  "row": "P87-B1-SLOT-SAME-STOPS",
+  "machine": "deck",
+  "build_commit": "d96ed0bf",
+  "deck_time_local": "2026-10-10, between 00:44 and 01:02 EDT by the Deck clock (check 1 began 00:38; per-check times were not logged; the Deck clock read 12:44 AM at the first screenshot and 12:56 AM at check 3 step 8)",
+  "screen": "MONITOR live: innerWidth 855, innerHeight 766.",
+  "setup": "Main tab, test chat (chat 1 of 7), newest answer is the long 'Walk me through a safe plan to defeat the large enemy.' answer. The Deck's panel scroll (the tab body's scrollTop) was 146.9 of 860 (clientHeight 713).",
+  "pressed": ["DOWN (placed the ring at the top, on the question 'Walk me through...')", "DOWN x6 down the transcript", "DOWN to the question box", "UP, DOWN (the runbook's 'Up once and Down once' re-read)", "UP x5 then DOWN x5 as an extra measurement"],
+  "seen": {
+    "precondition_read_1": "Ring on the question box [48.8,691.2,298.4,44]; dock top y 691.2. The newest answer's own inline 'Show details' line (class bonsai-chat-details-divider-label) box [145,571.7,80.8,14.8], opacity 1, visible: 119 px ABOVE the dock top, i.e. ON screen. The slot (bonsai-details-slot, box [48,658.4,300,30]) showed its chips (opacity 1) and its own 'Show details' line was hidden (opacity 0).",
+    "precondition_read_2": "After Up once and Down once the same: own line [145,571.7,80.8,14.8] opacity 1; slot line [157.6,666,80.8,14.8] opacity 0.",
+    "extra_up_walk_from_box": "Up 1 'Show details' (slot line, box [48,658.4,300,30], slot line opacity 1, chips opacity 0 and the answer's own line opacity 0); Up 2 'Boss note (spoiler) - From the Hollow Knight wiki'; Up 3 'Show details' (the answer's own line); Up 4 'Mark reply helpful'; Up 5 the answer text (unnamed block).",
+    "extra_down_walk": "Down 1 'Mark reply helpful'; Down 2 'Show details' (own); Down 3 'Boss note (spoiler)'; Down 4 'Show details' (slot); Down 5 the question box. All 10 presses moved, every stop visible, 0 dead presses, no stop twice in one direction.",
+    "note": "The same 'Show details' wording is a stop twice (the answer's own line, and the slot's line after the Boss note)."
+  },
+  "expected": "A newest answer whose own Show details line is behind the dock when the ring is on the question box. If it is on screen, press Up once and Down once; if still on screen, COULD NOT RUN with the numbers. Else: both rounds' Down stops are the Up stops reversed, no dead press, no stop twice, one Show details line visible at every stop, first Up from the box is the slot's Show details line.",
+  "verdict": [
+    "COULD NOT RUN: the precondition was not met. The newest answer's own Show details line sat at y 571.7, 119 px above the dock top (691.2), on screen, before and after the Up/Down re-read. The long answer from block 2 is the newest, but the tab body was scrolled to 146.9 px, so its own line shows.",
+    "Extra measurement (not a verdict, precondition not met): the first Up from the box landed on the slot's Show details line as the runbook expected, and the Down stops (Mark reply helpful, own Show details, Boss note, slot Show details, box) are exactly the Up stops reversed. In the first Up the slot line (opacity 1) and the own line (opacity 0) were never both visible."
+  ],
+  "side_effect": "none"
+}

@@ -1,0 +1,19 @@
+{
+  "row": "P87-K1-LINE-AND-BLOCK (try 2, game running, ask 2 of 3 from block 5 plus this one)",
+  "build_commit": "8608954d (on the Deck, not redeployed)",
+  "deck_time_local": "2026-10-10 02:05:43 to 02:07:26 EDT",
+  "screen": "Deck panel live in Quick Access over the game; page window 855 x 845",
+  "setup": "Deep Rock Galactic: Survivor in a mission. Run AI on this Deck back on (Deck's own AI, 127.0.0.1:11434, gemma4:e2b-it-qat). Available memory before the ask 7,860 MB (more than the 3,500 MB the runbook asks for). Test chat, Main tab, Strategy mode, knowledge base on.",
+  "pressed": "Send-question script (VERIFIED), walk to Ask (1 press, read focus: Ask, 100% visible), A. Only one ask made.",
+  "question": "How should I handle the big bosses in Deep Rock Galactic Survivor?",
+  "seen": {
+    "answer": "Finished after 103.9 s on the Deck's own AI (777 tokens, 921 visible characters). Ends with a follow-up question and two choice buttons (A. Fighting a large, armored boss / B. Dealing with a swarm of enemies).",
+    "notes_block_on_screen": "Yes: a gold block 'Dreadnought Twins (+1 more)' with 'From bonsAI's own note' under it.",
+    "no_close_match_line_on_screen": "No: the words 'No close match' are not anywhere in the panel text.",
+    "log_line": "02:07:26 'ask_ollama: notes for this answer: 3 notes attached (Dreadnought Twins; Glyphid Dreadnought; Mactera); ... 'No close match' line added to the reply (the attached notes were a weak match)'. The new log line is present.",
+    "memory": "Available memory fell while the model loaded and answered: 2,125 MB, then 1,977 MB and a low of 1,789 MB at 02:07:23, then recovered to 7,747 MB when the answer finished (02:07:29). That is under the 2,000 MB stop line for about 20 seconds. I did not press anything in that time and unloaded the model with keep_alive 0 at 02:06:24 (the request in flight still finished)."
+  },
+  "expected": "The 'No close match' line and the notes block are never on screen under the same answer; the log carries the 'notes for this answer' line.",
+  "verdict": "PASS: the notes block and the 'No close match' line were not on screen together, and the log line was present. UNCLEAR on one point for the owner: the log says a 'No close match' line was added to this reply, but the line is not visible on screen. Either the screen hides it when the notes block shows (which is the fix working) or the log text is wrong; I did not tell them apart.",
+  "side_effect": "Memory fell to 1,789 MB with the game running, below the 2,000 MB stop line, for about 20 s while the Deck's own AI loaded and answered. No Steam freeze seen. One question and answer added to the test chat."
+}

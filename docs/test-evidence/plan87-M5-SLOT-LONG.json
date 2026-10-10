@@ -1,0 +1,52 @@
+{
+  "row": "M5-SLOT-LONG",
+  "build_commit": "Deck build = dist written 23:42 on 10-09; checkout HEAD b9147b42",
+  "deck_time_local": "2026-10-10 about 00:14-00:20",
+  "screen": "MONITOR live: page 855 x 766, dpr 1.28",
+  "setup": "Test chat (shown as chat 1 of 7), Main tab, ring on the question box [49,691,298,44], nothing open. Newest answer = prepared join-clean answer (a 4th question, 'Walk me through a safe plan to defeat the large enemy.', asked because the runbook's assumed long answer was not the newest: the newest was the short hidden-reopen one). The answer is two text pieces plus a 'Boss note (spoiler)' notes block (wiki) the plugin attached; it is taller than the pane. Slot = .bonsai-details-slot [48,658,300,30] with two stacked layers (chips / Show details line). Each step read about 1 s after the press with a page read (slot layers by opacity, answer's own Show details box).",
+  "pressed": "Walk A up 8 Up, walk A down 8 Down, walk B up 7 Up, walk B down 7 Down, one press then one read each. No A.",
+  "seen": {
+    "walkA_up": [
+      "1 slot chip 'How do I turn on Thinking mode?' [48,658,147,30] (chips layer opacity 1)",
+      "2 Boss note (spoiler) [52,602,267,47]",
+      "3 answer's Show details [52,572,267,15], on screen",
+      "4 Mark reply helpful [52,532,81,28]",
+      "5 answer piece 2 'Paragraph three' [63,411,245,195]; pane now scrolled to top: slot layer flips to the Show details line (line opacity 1, chips 0); answer's own Show details now at y 719 = off the visible area",
+      "6 answer piece 1 [63,159,245,252]",
+      "7 'Retry same prompt' icon [158,121,20,20]"
+    ],
+    "walkA_down": [
+      "1 question row [162,109,169,29]",
+      "2 answer piece 1",
+      "3 answer piece 2",
+      "4 Mark reply helpful [52,623,81,28] (read mid-scroll, scrollTop 55)",
+      "5 answer's Show details [52,636,267,15] (slot back to chips, scrollTop 82)",
+      "6 Boss note [52,604,267,47]",
+      "7 slot chip 'Help me troubleshoot a Proton issue' [48,658,147,30]",
+      "8 question box"
+    ],
+    "walkB_up": [
+      "1 slot chip 'What settings should I use?'",
+      "2 Boss note",
+      "3 answer's Show details [52,572]",
+      "4 Mark reply helpful [52,532]",
+      "5 answer piece 2 (slot layer = Show details line, answer's own line at y 719 off screen)",
+      "6 answer piece 1",
+      "7 question row body [162,109,169,29]"
+    ],
+    "walkB_down": [
+      "1 answer piece 1",
+      "2 answer piece 2",
+      "3 Mark reply helpful [52,623] (scrollTop 55)",
+      "4 answer's Show details [52,636] (slot = chips)",
+      "5 Boss note",
+      "6 slot chip 'Which Ollama model fits my Deck setup?'",
+      "7 question box"
+    ],
+    "slot_layer_rule": "The slot shows chips (opacity 1) at scrollTop >= about 82 and the Show details line (opacity 1, chips 0) only when the pane is scrolled to the top (scrollTop 0), i.e. when the answer's own Show details line is below the visible area (y 719). At those stops the ring was on the answer text, never on the slot line.",
+    "slot_line_ever_a_stop": false
+  },
+  "expected": "Confirm or not: an Up walk stopped on the slot's Show details line where a Down walk stopped on a chip in the same place",
+  "verdict": "PASS: measured. The swap did NOT appear: in 4 walks no stop was on the slot's own Show details line. Every Up walk stopped on a chip first, then on the answer's own Show details line. Side finding: when the pane is scrolled to the top the slot shows only the Show details line, and no press reaches it (it is not a stop).",
+  "side_effect": "One extra test question asked (join-clean scenario) in the test chat to get a long newest answer; the box was left empty."
+}

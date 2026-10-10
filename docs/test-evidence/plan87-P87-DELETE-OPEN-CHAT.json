@@ -1,0 +1,20 @@
+{
+  "row": "P87-DELETE-OPEN-CHAT",
+  "build_commit": "8608954d (deployed at the start of block 4; it contains 'Deleting the open chat leaves the next chat open, with its name row and the ring on the name')",
+  "deck_time_local": "2026-10-10 01:40-01:43 EDT",
+  "screen": "MONITOR live: innerWidth 855, innerHeight 766.",
+  "setup": "Started with the maintainer's seven chats open on the test chat ('How do I beat the boss in the Soul Sanctum in Hollow Knight?', chat 1 of 7). Ring walked Up to the tab bar, Down to the name row, Left to the + icon (read 'New chat'), A. The open chat read 'New chat, not saved yet'. The send-question script put 'Say hello in three words, delete test one' in (VERIFIED, field held the whole text). Down x2 reached Ask (read 'Ask'), A. The AI answered in about 15 s and the counter read 'chat 1 of 8' with the name 'Say hello in three words, delete test one'. New chat file 71e31b1b-1656-49e8-bb6f-22907122dfb3 appeared on the Deck.",
+  "pressed": ["UP x11 (to the tab bar)", "DOWN (to the name row)", "RIGHT (read 'Delete chat' at [308,20,24,28])", "A (read first)", "DOWN (Cancel to Delete, focus read in the Big Picture window: 'Delete')", "A (read first)", "DOWN x10 (name row to the question box, one stop each)"],
+  "seen": {
+    "delete_box": "Big Picture window 'Delete chat slot?' with the text: Delete \"Say hello in three words, delete test one\" and its transcript? This cannot be undone. Buttons stacked: Cancel [464,412], Delete [464,456]. Ring started on Cancel; Down moved it to Delete.",
+    "after_delete": "Name row drawn with an existing chat: 'How do I beat the boss in the Soul Sanctum in Hollow Knight?, chat 1 of 7' (the title strip is present, not blank). The deleted chat's text is gone (page text no longer contains 'delete test one'). The ring was on the name row (label 'How do I beat the boss ... chat 1 of 7. Opens your chats', box [140,20,166,28]). The transcript showed the test chat's last answer (TDP question).",
+    "down_from_name": "Down walked name row, '99 earlier', question line, 'Show reasoning', answer text, 'Mark reply helpful', 'Show details', 'Performance' tips block, a suggestion chip, then the question box: 10 presses, one stop each, no dead press, no stuck ring.",
+    "files": "The deleted chat's file is gone; chat_slots again holds 7 chat files plus index. md5 of the six other chat files equal to before block 4 (see md5 list in the scratch folder, md5-before-block4.txt vs md5-after-del1.txt). The test chat file 6f3cc055 and index.json differ from before block 4 only because block 4 asked the TDP question in the test chat (check 1)."
+  },
+  "expected": "The name row is drawn with an existing chat, the deleted chat's text is gone, the ring is on the chat's name, and Down reaches the question box; the maintainer's seven chat files unchanged.",
+  "verdict": [
+    "PASS - name row drawn with an existing chat (chat 1 of 7), deleted text gone, ring on the name, Down reaches the question box in 10 presses (the first Down goes to '99 earlier', not straight to the box).",
+    "PASS - the six other chat files are unchanged; the seventh (the test chat) changed only by the TDP question from check 1."
+  ],
+  "side_effect": "One extra chat was created and deleted (mine). The earlier failure with 'no title strip, ring stuck on the tab bar' (block 3) did NOT happen."
+}

@@ -1,0 +1,21 @@
+{
+  "build_commit": "d96ed0bf (block 3 deploy; step 0: voice_level_gate count 2 in the Deck's voice_transcription_service.py; the three voice commits c40de52a, d73f9f5a, e84f644c are in the checkout history)",
+  "screen": "MONITOR live (page innerWidth 855, innerHeight 766)",
+  "row": "P87-VOICE-DOWNLOAD-REFUSED",
+  "deck_time_local": "2026-10-10 01:09 to 01:11 EDT",
+  "setup": "voice_models before: ggml-base.en.bin 147964211 bytes, ggml-tiny.en.bin 77704715. Voice model base.en. Moved ggml-base.en.bin to ggml-base.en.bin.p87aside, touched ggml-base.en.bin.part (01:09:34, touched again right before the press). Main tab, test chat, box empty, focus on 'Voice input'.",
+  "pressed": [
+    "A on 'Voice input' (focus read as 'Voice input' just before)"
+  ],
+  "seen": {
+    "screen": "A toast over the question box: title 'Voice input unavailable', line 'The speech model is still downloading. Try agai...' (cut off by the panel edge in the screenshot, so the last words are not confirmed). Screenshot DeckCapture_20261010_010936_auto.png (copied as plan87-P87-VOICE-DOWNLOAD-REFUSED-toast.png). Question box empty; button still 'Voice input'.",
+    "log": "01:09:34,818 voice: recording start refused (model_downloading), model base.en",
+    "restore": "part file removed, aside moved back: ggml-base.en.bin 147964211 bytes, tiny 77704715.",
+    "after": "Voice model set back to tiny.en from the Settings tab (walked Down once too far to 'Clear cache...', never pressed A there; then Up to tiny.en, A). Settings file reads tiny.en. voice_capture_target removed; module 536870916 unloaded; p87mic sink count 0; defaults same as at start."
+  },
+  "expected": "Toast 'The speech model is still downloading. Try again when it finishes.'; nothing recorded; log line 'voice: recording start refused (model_downloading), model base.en'.",
+  "verdict": [
+    "PASS refused with a toast naming the download, nothing recorded, log line exact. The tail of the toast sentence ('Try again when it finishes.') was clipped in the screenshot, so I confirmed only 'The speech model is still downloading. Try agai'.",
+    "PASS restore: model file back at 147964211 bytes, tiny.en back, pretend microphone gone, defaults unchanged."
+  ]
+}

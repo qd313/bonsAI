@@ -1,0 +1,19 @@
+{
+  "row": "P87-F2-PICK-AT-TEN-try2",
+  "build_commit": "8608954d (deployed at the start of block 4; it contains 'At ten chats, Delete in the which chat to drop box now leaves the new empty chat open')",
+  "deck_time_local": "2026-10-10 about 01:50-02:05 EDT",
+  "screen": "MONITOR live: innerWidth 855, innerHeight 766.",
+  "setup": "Started with the maintainer's seven chats. Made three chats of mine, each from the + icon ('New chat, not saved yet' open each time), question put in with the send-question script (VERIFIED each time), Ask pressed with focus read as 'Ask': 'Say hello in three words, pick test one', '... pick test two', '... pick test three'. Counter 'chat 1 of 8', '1 of 9', '1 of 10'. 10 chat files on the Deck (ssh ls, index excluded).",
+  "pressed": ["UP x11 to the tab bar, DOWN, LEFT (read 'New chat'), A on the + at ten", "picker 'You have 10 chats': ring on 'pick test three, now'; DOWN x2 (read 'pick test one, 1 min'); A", "box 'Delete chat slot?' naming 'pick test one', ring on Cancel; DOWN (read 'Delete'); A", "cleanup: RT (to 'pick test three', chat 1 of 9), RIGHT (read 'Delete chat'), A, DOWN (box named 'pick test three', read 'Delete'), A; then the same for 'pick test two' (chat 1 of 8)"],
+  "seen": {
+    "picker": "Big Picture window titled 'You have 10 chats' listing the chats newest first; first row 'pick test three, now'.",
+    "after_delete_of_pick_test_one": "Quick Access showed the open chat 'New chat, not saved yet' (name row box [140,20,116,28]), the transcript empty (the page text read 'Ask anything - this slot keeps its own history.' and the two starter chips), the ring ON the chat's name row (label 'New chat, not saved yet. Opens your chats'). Chat files after: 10 (the new empty chat on top of the index, turn count 0, plus 9 old ones; the 'pick test one' file gone).",
+    "cleanup": "RT from the empty New chat went to 'pick test three, chat 1 of 9' (the empty chat file was swept away). Each delete by the icon left the next chat open with the name row and the ring on the name ('pick test two, chat 1 of 8', then the test chat 'chat 1 of 7'). Final: 7 chat files plus index. md5 of the six chat files that are not the test chat equal to before block 4; the test chat file 6f3cc055 and index.json changed only because of the TDP question asked in check 1 (md5-before-block4.txt vs md5-end-block4.txt in the scratch folder)."
+  },
+  "expected": "The fresh empty new chat is open on screen (empty transcript) with the ring on its name after Delete in the picker; then my test chats are deleted again so seven remain, md5s unchanged.",
+  "verdict": [
+    "PASS - after Delete from the picker at ten, the fresh empty 'New chat, not saved yet' was open with an empty transcript and the ring on its name.",
+    "PASS - cleanup left seven chats; the maintainer's six other chat files unchanged."
+  ],
+  "side_effect": "Three test chats of mine were created and deleted; the empty chat created by the picker was swept away by switching with RT."
+}

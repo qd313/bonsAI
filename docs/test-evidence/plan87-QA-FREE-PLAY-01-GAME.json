@@ -1,0 +1,18 @@
+{
+  "row": "QA-FREE-PLAY-01 (game running)",
+  "build_commit": "8608954d (on the Deck, not redeployed)",
+  "deck_time_local": "2026-10-10 02:00 EDT",
+  "screen": "Deck panel as live in Quick Access over the game; page window 855 x 845 (screenshot 1920x1080 with Quick Access at right)",
+  "setup": "Deep Rock Galactic: Survivor running at title screen (reaper process pid 146164 present). Before the check the Deck's AI model was unloaded with keep_alive 0: available memory 1971 MB -> 8648 MB. Main tab, test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7). No question asked.",
+  "pressed": "deck_sweep DOWN, returnTrip, budget 120 (20 presses) on Main; RB to Ollama tab (verified); deck_sweep DOWN, returnTrip, budget 120 (30 presses); LB back to Main; one walk DOWN to look for the chip (18 presses, no chip found because suggestion chips had rotated).",
+  "seen": {
+    "main_tab": "17 stops recorded, 16 distinct, 0 cycles, 20 presses, 2 stops flagged partial. Sweep started with ring on the question box, so the down leg only reached Ask (1 stop) and the up leg walked all 15 controls up to the bonsAI tab. 2 stops partial: (a) chip 'Any Steam Input issues for this game?' 67% visible (2 of 3 sample points, 1 offscreen, rect y698-728); (b) chat name row 83% visible (10 of 12 points visible, 2 clipped by the tab-strip panel), rect y60-88. Screenshot DeckCapture_20261010_020006_auto.png (taken with ring on tab bar): chat name reads 'How do I beat the b...' with the words clear, ellipsis from the name's own width.",
+    "ollama_tab": "27 stops recorded, 15 distinct, 0 unlabeled, 0 cycles, 30 presses, 0 not visible; every stop 100% visible.",
+    "memory_after": "see handover; available stayed above 8,000 MB through the check"
+  },
+  "expected": "Every stop visible to a person, no dead press, no stop twice. Known not-failures: long chip label cut while it scrolls; chat name row partly above pane top in the probe if the words are readable.",
+  "verdict_main_tab": "UNCLEAR: no dead press and no stop twice; the chat name row is a known not-failure (words readable in the screenshot). The chip 'Any Steam Input issues for this game?' read 67% visible and I could not view it by eye: suggestion chips rotated before I could stop on it again, so I cannot confirm the cut is the long-chip scroll rather than a real clip.",
+  "verdict_ollama_tab": "PASS: 15 distinct stops, all 100% visible, no dead press, no stop twice.",
+  "sweep_files": ["runs/plan87-QA-FREE-PLAY-01-GAME.json", "runs/plan87-QA-FREE-PLAY-01-GAME-ollama-tab.json"],
+  "side_effect": "none"
+}

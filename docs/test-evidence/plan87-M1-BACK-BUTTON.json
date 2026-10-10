@@ -1,0 +1,22 @@
+{
+  "row": "M1-BACK-BUTTON",
+  "machine": "deck",
+  "build_commit": "tip deployed 23:42 EDT (see plan87-B0-SETUP.json)",
+  "deck_time_local": "2026-10-09 23:43-23:46 EDT",
+  "screen": "MONITOR live: innerWidth 855, innerHeight 766, dpr 1.28, screen 1500x843. All boxes are page px (x, y, w, h), 0.1 precision. Panel box x48 y52 w300 h714.",
+  "setup": "Main tab, ring on question box (untouched). Chats switched with RT/LT (RT goes to the next chat and does NOT wrap past chat 7; LT goes back). Order seen: 1 parrying, 2 test chat, 3 wheatley fight, 4 how should i spend my first hour..., 5 is it better to explore..., 6 how do i unlock the next area..., 7 how do i beat the boss at the end of the first area. The three runbook chats were read, then I returned to the test chat (chat 2 of 7).",
+  "pressed": ["RT x7 total (forward through chats, two extra RT at chat 7 did nothing)", "LT x5 (back to chat 2)"],
+  "seen": {
+    "top_row": "The top row (parent of the back button and the chat title) is x48 y0 w300 h48 on every chat. It holds only two children: the back button and the chat title block. The back button has no aria-label or text.",
+    "wheatley_fight (14 letters)": {"back_button": [64,20,40,28], "arrow_icon_svg": [76,26,16,16], "name_element": [114,20,168,28], "words_text_box": [152.4,20.7,91.2,16], "words_scrollWidth": 91, "words_clientWidth": 91, "name_scroll_vs_client": "168 vs 168", "title_block": [114,20,218,28], "row": [48,0,300,48]},
+    "how do i beat the boss at the end of the first area (51 letters)": {"back_button": [64,20,33.5,28], "arrow_icon_svg": [76,26,16,16], "name_element": [107.5,20,181.5,28], "words_text_box": [120.5,20.7,155.6,16], "words_scrollWidth": 309, "words_clientWidth": 156, "name_scroll_vs_client": "182 vs 182", "title_block": [107.5,20,224.5,28], "row": [48,0,300,48], "note": "Text is cut with an ellipsis: screenshot shows 'how do i beat the boss ...'."},
+    "test chat, How do I beat the boss in the Soul Sanctum in Hollow Knight? (60 letters)": {"back_button": [64,20,32,28], "arrow_icon_svg": [76,26,16,16], "name_element": [106,20,184.1,28], "words_text_box": [118.9,20.7,158.1,16], "words_scrollWidth": 386, "words_clientWidth": 158, "name_scroll_vs_client": "184 vs 184", "title_block": [106,20,226,28], "row": [48,0,300,48], "note": "Cut with ellipsis in screenshot: 'How do I beat the boss ...'."},
+    "extra_reads_other_chats": {"how should i spend my first hour in a new open world game (57)": {"back_button": [64,20,32.2,28], "name_element": [106.2,20,183.8,28], "words_scrollWidth": 371, "words_clientWidth": 158}, "how do i unlock the next area after finishing the tutorial (58)": {"back_button": [64,20,32.6,28], "name_element": [106.6,20,182.4,28], "words_scrollWidth": 351, "words_clientWidth": 156}},
+    "measured_oddity": "The back button's width is not fixed: 40 on the 14-letter name, 32 to 33.5 on the long names. Its left edge stays at x64 and the icon stays at x76 w16, so on a short name the arrow sits 12 px inside a 40 wide button and the button's right edge moves from x96 to x104. The long-name button width also crept with each chat (32.0, 32.2, 32.6, 33.5) while the name element shrank by the same amount (184.1, 183.8, 182.4, 181.5), so button+name stays about 216 (208 for the short name).",
+    "ellipsis": "Names of 51, 57, 58 and 60 letters are cut at about 156-158 px of room (scrollWidth 309-386). The 14-letter name fits."
+  },
+  "screenshots": ["plan87-M1-BACK-BUTTON-wheatley.png", "plan87-M1-BACK-BUTTON-firstarea.png", "plan87-M1-BACK-BUTTON-testchat.png"],
+  "expected": "Measurement row, no pass/fail expectation.",
+  "verdict": "PASS: measured all three chats and returned to the test chat. (Measurement only.)",
+  "side_effect": "Chat selection changed several times with RT/LT; ended back on the test chat. No questions asked, nothing renamed."
+}

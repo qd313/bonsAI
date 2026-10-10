@@ -1,0 +1,12 @@
+{
+ "row": "P87-GAME-EXIT (block 6a step 1)",
+ "build_commit": "95139093 (checkout; Deck build not yet redeployed at this step, was 8608954d)",
+ "deck_time_local": "2026-10-10 about 02:18",
+ "screen": "game (Deep Rock Galactic: Survivor, Level Up pick screen) ; not measured for size",
+ "setup": "Game running 24:43 min. keep-awake retaken ttl 480, expiresAt 2026-10-10T14:17:33Z. Available memory 7,777 MB before.",
+ "pressed": "deck_exitGame once (GUIDE did not open the Steam menu; ring on nothing). Then the game's own menu: START, UP, RIGHT, RIGHT (highlight on the power icon, read from screenshot), A -> 'Abort mission? / Quit game' dialog with Abort Mission highlighted, RIGHT (Quit Game highlighted, read), A. 7 presses on the game's menu plus the 1 GUIDE.",
+ "seen": "After 15 s no DRG/survivor process left over SSH. free -m: 14800 total, 3750 used, 11050 available.",
+ "expected": "Game closed, no process left.",
+ "verdict": "PASS: the game's own menu worked (Start, power icon, Quit Game). No process left; 11,050 MB available.",
+ "side_effect": "deck_exitGame pressed GUIDE once with the game in front (nothing opened). Screenshots made private Steam screenshots (5). Level Up pick was not made."
+}

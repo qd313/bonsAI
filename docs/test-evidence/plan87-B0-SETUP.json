@@ -1,0 +1,18 @@
+{
+  "row": "B0-SETUP",
+  "machine": "deck",
+  "build_commit": "Deploy built the shared checkout at about 23:42 on 2026-10-09 (dist/index.js on the Deck written 23:42:24). The checkout's HEAD moved while I worked: 4dbac4b1 at deploy time per my first check, later 6933fcd4 (Main tab name reads bonsAI in small caps). The runbook said b08dbcf6. The deploy tool itself prints no commit hash; it says loader ready true, waited 298 ms.",
+  "deck_time_local": "2026-10-09 23:42-23:43 EDT",
+  "screen": "MONITOR is live, not the Deck's own panel. Quick Access page innerWidth 855, innerHeight 766, devicePixelRatio 1.28, screen 1500 x 843 (= 1920 x 1080 / 1.28). drm status: eDP-1 connected, DP-1 connected; all modes lists show 1920x1080. Panel (.bonsai-scope) box x48 y52 w300 h714.",
+  "setup": "deck_status: automation armed, no lease, bridge COM7 open. deck_holdAwake ttl 480 -> expiresAt 2026-10-10T11:41:21Z. deck_deploy ok (copied dist, main.py, plugin.json, package.json, assets, py_modules, bin; loader active). deck_openPlugin: first try failed (QAM chord, no pane) as expected, second try opened it, ring landed on the question box (no A pressed). Opened chat was 'what is a good way to practice parrying in action games' (chat 1 of 7); pressed RT once -> 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 2 of 7) = the test chat.",
+  "pressed": ["RT (once, chat switch)", "deck_openPlugin presses (chord, rail, A on plugin row)"],
+  "seen": {
+    "memory_free_m": {"total": 14800, "used": 3012, "free": 2190, "available": 11788, "swap_used": 96},
+    "game_running": "no (only the oom_reaper kernel thread matched the ps search)",
+    "ring_at_open_on": "question box (input), not pressed",
+    "test_chat_open": "yes, chat 2 of 7, Main tab"
+  },
+  "expected": "Plugin open in the test chat on Main, keep-awake held, tip deployed, screen identified.",
+  "verdict": "PASS: setup done. UNCLEAR: build hash cannot be named from the deploy result (checkout HEAD moved from the runbook's b08dbcf6).",
+  "side_effect": "Chat selection changed from chat 1 (parrying) to the test chat by RT; no questions asked."
+}

@@ -1,0 +1,28 @@
+{
+  "row": "P87-B7-BACK-ARROW",
+  "machine": "deck",
+  "build_commit": "d96ed0bf",
+  "deck_time_local": "2026-10-10, between 00:44 and 01:02 EDT by the Deck clock (check 1 began 00:38; per-check times were not logged; the Deck clock read 12:44 AM at the first screenshot and 12:56 AM at check 3 step 8)",
+  "screen": "MONITOR live: innerWidth 855, innerHeight 766. Boxes are [x, y, w, h] page px.",
+  "setup": "Main tab, test chat (chat 1 of 7). Ring was on the question box (a shoulder or trigger press only registered once a control held the ring; with nothing ringed, an RT press did nothing). Chats switched with RT / LT, read after each.",
+  "pressed": ["RT x2 (to chat 2, chat 3 wheatley fight)", "RT x4 (to chat 7)", "LT x6 (back to chat 1, the test chat)"],
+  "seen": {
+    "row": "Top row box [48,0,300,48] on all chats; children: the back button and the chat title block [114,20,218,28]; the tab bar is a separate strip above at y 0-20.",
+    "wheatley fight (14 letters, chat 3 of 7)": {"back_button": [64,20,40,28], "plus": [114,20,24,28], "name": [140,20,117.2,28], "words_text_box": [153,20.7,91.2,16], "words_scroll_vs_client": "91 vs 91 (fits)", "delete": [308,20,24,28]},
+    "how do i beat the boss at the end of the first area (51 letters, chat 7 of 7)": {"back_button": [64,20,40,28], "plus": [114,20,24,28], "name": [140,20,166.1,28], "words_text_box": [153,20.7,140.1,16], "words_scroll_vs_client": "309 vs 140 (cut with an ellipsis)", "delete": [308,20,24,28]},
+    "test chat (60 letters, chat 1 of 7)": {"back_button": [64,20,40,28], "plus": [114,20,24,28], "name": [140,20,166.1,28], "words_text_box": [153,20.7,140.1,16], "words_scroll_vs_client": "386 vs 140 (cut with an ellipsis)", "delete": [308,20,24,28]},
+    "also_read": "chat 2 'what is a good way to practice parrying in action games' (55 letters): back [64,20,40,28], name [140,20,166.1,28], words [153,20.7,140.1,16].",
+    "back_button_width_all_three": "40, 40, 40 (block 1 had 40 / 33.5 / 32)",
+    "text_box_vs_plus_and_delete": "Text box starts at x 153, the + icon ends at x 138, the name element starts at 140 (a 10 px spacer sits in front of the words). Text box ends at x 293.1; the ellipsis caret is x 296-306; the delete icon starts at x 308.",
+    "compare_block_1": "Block 1 long-name box was [106,20,184.1,28] (ends x 290.1) with text box [118.9,20.7,158.1,16] ending x 277. Now the name box ends x 306.1 (16 px further right) and the text box ends x 293.1 (16 px further right) but is 140 wide (18 px less text room than the old 158) because the + icon now sits on the same row.",
+    "visibility_note": "deck_walkTo read the ring on the name as PARTIAL, 83 % visible, clipped by a Panel (sample: text, 2 of 12 points clipped). Not investigated further.",
+    "screenshot": "C:/Users/still/Documents/BonsAI/screenshots/DeckCapture_20261010_004444_auto.png (test chat: back arrow, +, name with caret, delete icon all drawn)"
+  },
+  "expected": "Back arrow same width (within 0.5 px) on all three names; the long names' text box starts right after the + and ends before the delete icon, further right than block 1's (old name box ended about x 290, text room 156 to 158 px).",
+  "verdict": [
+    "PASS: back arrow width 40.0 on the 14, 51 and 60 letter names (spread 0.0 px, limit 0.5).",
+    "PASS: the long names' text starts right after the + (x 153 against + end 138) and ends at x 293.1, before the delete icon at 308; the name box ends 16 px further right than block 1 (306.1 against 290.1).",
+    "UNCLEAR (a note for the owner, not a failed expectation): the text room is 140 px, not the 156 to 158 of block 1, because the + now takes room in the row. The runbook only asked for 'further right', which is met."
+  ],
+  "side_effect": "Chat selection changed with RT/LT and ended back on the test chat (chat 1 of 7). Nothing asked, nothing deleted."
+}

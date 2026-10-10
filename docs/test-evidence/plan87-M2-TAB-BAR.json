@@ -1,0 +1,27 @@
+{
+  "row": "M2-TAB-BAR",
+  "machine": "deck",
+  "build_commit": "tip deployed 23:42 EDT (see plan87-B0-SETUP.json)",
+  "deck_time_local": "2026-10-09 23:46-23:49 EDT",
+  "screen": "MONITOR live: innerWidth 855, innerHeight 766, dpr 1.28. Boxes are page px [x, y, w, h].",
+  "setup": "Test chat, Main tab, ring on question box. LB/RB switch tabs from anywhere in the panel (no need to walk to the bar).",
+  "pressed": ["RB x6 (Main > Ollama > Settings > Permissions > Developer > About > Main)", "LB x1 (Main > About)", "RB x1 (About > Main, to leave it on Main)"],
+  "seen": {
+    "bar_box_every_tab": [48, 0, 300, 20],
+    "shoulder_hints": "LB box [52,0,31,20] text 'LB' and RB box [313,0,31,20] text 'RB', drawn on every tab, identical on all six. They are dim (opacity 0.32) unless the ring is on the bar.",
+    "layout": "The bar is a carousel that always shows five icons, two before the current tab and three after in order Main, Ollama, Settings, Permissions, Developer, About (wrapping). The current tab's icon (12 x 12) and its name sit in the middle. Tab-bar icon order left to right on each tab is listed below.",
+    "Main": {"label": "Main", "label_box": [180.4,4.5,35.2,11], "current_box": [158.4,0,63.2,20], "current_icon": [164.4,4,12,12], "icons_left_to_right": ["Developer [119.9,0,18,20] icon [122.4,3.5,13,13]", "About [137.9,0,18,20] icon [141.4,4.5,11,11]", "(current Main)", "Ollama [240.1,0,18,20] icon [243.6,4.5,11,11]", "Settings [258.1,0,18,20] icon [261.6,4.5,11,11]", "Permissions [276.1,0,18,20] icon [279.6,4.5,11,11]"], "ring_after_press": "question box [48.8,691.2,298.4,44] at start"},
+    "Ollama": {"label": "Ollama", "label_box": [170.3,4.5,55.3,11], "current_box": [148.4,0,83.3,20], "current_icon": [154.4,4,12,12], "icons_left_to_right": ["About [109.9,0,18,20]", "Main [127.9,0,18,20]", "(current Ollama)", "Settings [250.1,0,18,20]", "Permissions [268.1,0,18,20]", "Developer [286.1,0,18,20] icon 13x13"], "ring_after_press": "a control box [290,64,38,22] (a toggle on the page)"},
+    "Settings": {"label": "Settings", "label_box": [166.3,4.5,63.4,11], "current_box": [144.3,0,91.4,20], "current_icon": [150.3,4,12,12], "icons_left_to_right": ["Main [105.8,0,18,20]", "Ollama [123.8,0,18,20]", "(current Settings)", "Permissions [254.2,0,18,20]", "Developer [272.2,0,18,20]", "About [290.2,0,18,20]"], "ring_after_press": "toggle box [290,161.4,38,22]"},
+    "Permissions": {"label": "Permissions", "label_box": [154,4.5,87.9,11], "current_box": [132.1,0,115.9,20], "current_icon": [138,4,12,12], "icons_left_to_right": ["Ollama [93.6,0,18,20]", "Settings [111.6,0,18,20]", "(current Permissions)", "Developer [264.5,0,15.2,20]", "About [279.7,0,15.2,20]", "Main [294.8,0,15.2,20]"], "ring_after_press": "toggle on row 'Read game & screenshot context' [290,172.3,38,22]", "note": "The three right-hand icon boxes shrink from 18 to 15.2 wide here."},
+    "Developer": {"label": "Developer", "label_box": [159.8,4.5,76.4,11], "current_box": [137.8,0,104.3,20], "current_icon": [143.8,4,12,12], "icons_left_to_right": ["Settings [99.3,0,18,20]", "Permissions [117.3,0,18,20]", "(current Developer)", "About [259.8,0,16.7,20]", "Main [276.5,0,16.7,20]", "Ollama [293.3,0,16.7,20]"], "ring_after_press": "button 'Install seed knowledge base' [64,168.3,268,40]", "note": "Right-hand icon boxes shrink to 16.7 wide."},
+    "About": {"label": "About", "label_box": [175.2,4.5,45.6,11], "current_box": [153.2,0,73.6,20], "current_icon": [159.2,4,12,12], "icons_left_to_right": ["Permissions [114.7,0,18,20]", "Developer [132.7,0,18,20]", "(current About)", "Main [245.3,0,18,20]", "Ollama [263.3,0,18,20]", "Settings [281.3,0,18,20]"], "ring_after_press": "button 'Follow system' [64,378.8,268,40]. NOTE: this is not the first control of the About tab."},
+    "wrap_right": "RB from About lands on Main (label 'Main', bar identical to the first Main read). Ring then on chip button \"What's ahead (without spoilers)?\" [48,658.4,147,30], not on the question box where it started.",
+    "wrap_left": "LB from Main lands on About (label 'About', same bar as before, ring on 'Follow system' [64,378.8,268,40]).",
+    "main_label_text": "DOM text 'Main' (drawn uppercase 'MAIN' with a small plant-pot logo icon in the screenshot). The checkout's later commit 6933fcd4 renames this to bonsAI; the build on the Deck still says Main.",
+    "ring_on_bar": "Never: after every LB/RB the ring went to a control on the new tab body, the bar was not ringed (hints stay dim)."
+  },
+  "expected": "Measurement row.",
+  "verdict": "PASS: measured all six tabs and both wraps (measurement only). UNCLEAR: on every tab change the ring jumps off the bar into the page body, and on About lands mid-page on 'Follow system' (y 378.8), which the owner may want to look at against M4 and M8.",
+  "side_effect": "Left Main tab, ring on a suggestion chip instead of the question box. Nothing pressed with A."
+}

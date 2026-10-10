@@ -1,0 +1,24 @@
+{
+  "row": "P87-F2B-NO-OPEN-CHAT",
+  "machine": "deck",
+  "build_commit": "d96ed0bf",
+  "deck_time_local": "2026-10-10, between 00:44 and 01:02 EDT by the Deck clock (check 1 began 00:38; per-check times were not logged; the Deck clock read 12:44 AM at the first screenshot and 12:56 AM at check 3 step 8)",
+  "screen": "MONITOR live: innerWidth 855, innerHeight 766.",
+  "setup": "Ten chats. Settings tab, ring walked to 'Clear cache...' (focus read: 'Clear cache...'), A. A box 'Clear session cache?' opened with buttons Keep cache (ring), Clear, Cancel; Right moved the ring to 'Clear' (read), A. The box is the confirm for the cache, not 'Clear all data'. LB x2 back to Main.",
+  "pressed": ["A on Clear cache...", "RIGHT", "A on Clear", "LB x2", "send-question script 'Say hello in three words, test four' (VERIFIED)", "DOWN, RIGHT x4 to Ask (read 'Ask')", "A on Ask"],
+  "seen": {
+    "after_clear": "Main tab showed 'New chat', counter 'not saved yet', transcript empty (only the chips and the question box). Files still 10.",
+    "after_ask": "Chat title read 'Say hello in three words, test three, chat 1 of 10'. The question 'Say hello in three words, test four' sits under test three's earlier turns; the Deck's own AI answered in 15 s and the answer STAYED on screen after it finished (text read 20 s and 60 s later, and in a screenshot).",
+    "files": "10 json files; only the 'test three' file (a6823d99) contains 'test four'; the other nine chat files did not change.",
+    "chats_menu": "Opened later: it lists ten rows, 'test three' first.",
+    "notice": "Not seen. The code (useChatSlots.ts, line 392) raises a Steam toast 'Ten chats are saved' / 'You have 10 chats, so this question went into your newest chat. Nothing was deleted.' for 5 seconds. My first read of the panel was 3 to 4 s after A and looked only in the Quick Access page; the toasts window read empty at about 50 s. I did not take a screenshot inside the 5 s."
+  },
+  "expected": "A notice 'You have 10 chats, so this question went into your newest chat. Nothing was deleted.'; the answer finishes and stays on screen; the chats menu still lists ten; the newest chat holds the new question; 10 files.",
+  "verdict": [
+    "PASS: the question went into the newest chat ('test three' now holds 'test four'), 10 files, no chat deleted.",
+    "PASS: the answer finished (15 s) and stayed on screen.",
+    "PASS: the chats menu still lists ten.",
+    "UNCLEAR: the notice. Its text is in the code as a 5 second Steam toast but I did not catch it on screen; the next driver should take a screenshot within 2 s of pressing Ask."
+  ],
+  "side_effect": "A 'Clear cache' (session cache only) was done on purpose per runbook. The question 'test four' now lives in my 'test three' chat, which was deleted afterwards."
+}

@@ -1,0 +1,21 @@
+{
+  "row": "S0-SETUP",
+  "machine": "this-pc",
+  "stand_in": true,
+  "build_commit": "b9147b42",
+  "deck_time_local": "2026-10-10 about 00:00-00:08 EDT (this PC's clock)",
+  "screen": "this PC's Steam Big Picture, Quick Access page 855x679 (not the Deck's screen)",
+  "setup": "deck_status: virtual pad reachable (vigem, 127.0.0.1:7690), not stopped, no lease. deck_checkReady awake+machineKind standin: pass. deck_holdAwake refused (local machine, does not sleep). deck_deploy mode local: loader ready after 4.7 s, 3 polls. deck_openPlugin opened first try (no expected failure).",
+  "pressed": "deck_openPlugin; deck_sweep DOWN returnTrip budget 40; RB x5 then LB x5 from the tab bar.",
+  "seen": {
+    "chat_name": "New chat, not saved yet",
+    "tab_bar_shows": true,
+    "tabs_in_RB_order": ["bonsAI", "Ollama", "Settings", "Permissions", "About", "back to bonsAI (wraps)"],
+    "sweep": {"stopsRecorded": 4, "stopsVisited": 3, "stopsFocusedButNotVisible": 0, "cycles": 0, "presses": 7, "dead_presses": 0, "stops": ["question box", "Ask", "question box", "bonsAI tab"]},
+    "note_sweep": "The sweep never landed on the 'How to use bonsAI' chip (see S1). Its own run file was written to C:/Users/still/Documents/BonsAI/runs/plan87-S-S0-SWEEP.json (repo root runs/ folder, by the tool).",
+    "note_screenshot": "deck_captureScreenshot is not available on this Windows stand-in, so no screenshot was taken."
+  },
+  "expected": "rig reachable, deploy ok, plugin opens, walk visible at every stop",
+  "verdict": "PASS - stand-in only, never a Deck pass: pad reachable, deploy and open worked, every stop visible (0 not visible, 0 cycles).",
+  "verdict_screenshot": "COULD NOT RUN - screenshot tool does not work on Windows"
+}

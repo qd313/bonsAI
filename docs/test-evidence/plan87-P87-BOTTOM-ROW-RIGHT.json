@@ -1,0 +1,27 @@
+{
+  "row": "P87-BOTTOM-ROW-RIGHT",
+  "build_commit": "Deck build = checkout dist written 23:42 on 10-09 (no hash; checkout HEAD now b9147b42)",
+  "deck_time_local": "2026-10-10T00:06 (Deck clock)",
+  "screen": "MONITOR live: page 855 x 766, dpr 1.28, screen 1500 x 843",
+  "setup": "Main tab, test chat, question box empty (value ''), ring put on the box by Up from Ask. Note: before this row 'Run AI on this Deck' had already been switched OFF by row 1 step 2 (see P87-JOIN notes); no question asked in this row.",
+  "pressed": "Up (from Ask) -> box; Down; Left x4; Right x5. No A.",
+  "seen": {
+    "down_from_box": "Ask (x287 y736 w55) - Down from the box lands on ASK, not on the paperclip",
+    "left_walk": [
+      "Voice input (x259)",
+      "Mode button 'Inference mode: Strategy' (x199)",
+      "Attach screenshot (paperclip, x54)",
+      "Left again: stayed on paperclip (stop)"
+    ],
+    "right_walk": [
+      "Mode button (x199)",
+      "Voice input (x259)",
+      "Ask (x287)",
+      "Right again: stayed on Ask (stop)"
+    ],
+    "x_button": "not present (box empty)"
+  },
+  "expected": "Right visits paperclip, mode, mic, ASK in that order with the box empty, holds on ASK",
+  "verdict": "PASS: from the paperclip, Right visited mode, Voice input, Ask in that order and held on Ask (block 1's 'skips Voice input' did not reproduce). Side finding: Down from the question box goes straight to Ask, not the paperclip.",
+  "side_effect": "none for this row"
+}

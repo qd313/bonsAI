@@ -1,0 +1,24 @@
+{
+  "build_commit": "Deck build = dist written 23:42 on 10-09 (before tonight's fixes); checkout HEAD now b9147b42",
+  "deck_time_local": "2026-10-10 00:08-00:13",
+  "screen": "MONITOR live: page 855 x 766, dpr 1.28 (not the Deck's own 1280x800)",
+  "side_effect": "Mid-row I ran the send-question script while the Ollama tab was open: it wrote the question text into the PC address box (it takes the first text field). I wrote the correct address 192.168.86.27:11500 back with the same script, pressed Test connection (connected through the stand-in, log 00:08:22) and found nothing else changed. The address was typed originally with the on-screen keyboard (X=backspace) since no script may write that field.",
+  "row": "P81-CONTINUE-ONE-MARK",
+  "setup": "join-hidden-reopen run only (see plan87-P87-JOIN-BASELINE.json); prepared answer from the stand-in, Hollow Knight named, covers on, Strategy.",
+  "pressed": "send script, Down, read focus Ask, A (once)",
+  "seen": {
+    "opening_marks": 1,
+    "half_marks": 0,
+    "triple_backtick_sets": 2,
+    "hidden_lines_each_once": true,
+    "screen_cover_count": 1,
+    "screen_backticks": 0,
+    "screen_bonsai_spoiler_text": 0,
+    "screen_hidden_lines_visible": 0,
+    "letters": 933,
+    "screenshot": "plan87-P81-CONTINUE-ONE-MARK-join-hidden-reopen.png",
+    "saved_answer_last_600": "```bonsai-spoiler\nHidden line one ... Hidden line two ... Hidden line three (prepared test text): the lamps can be relit from the far side, which is the only way to put it back to sleep.\n```\n\nParagraph three: Outside the hidden part, the plan is simple: light the lamps in order, keep to the walls, and do not rush the last room. End of the prepared answer."
+  },
+  "expected": "one opening mark, no half mark, hidden lines only behind a cover on screen",
+  "verdict": "PASS: one opening mark (not two), no half mark, three hidden lines once each, one tap-to-show cover on screen with no backticks or 'bonsai-spoiler' text. Caveat: stand-in cut is clean after a full stop; a mid-mark cut was not produced."
+}

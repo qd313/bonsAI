@@ -1,0 +1,27 @@
+{
+  "row": "P78-HELP-CHIP-DISMISS (S1 try2, open-and-close half)",
+  "machine": "this-pc",
+  "stand_in": true,
+  "build_commit": "9b9d21b2",
+  "deck_time_local": "2026-10-10 about 01:06-01:12 (this PC)",
+  "screen": "Steam Big Picture on this PC; Quick Access page 855x679; panel content 300 wide, x 48",
+  "setup": "Fresh install state kept from S1/S2: Main tab, one chip 'How to use bonsAI', ring on that chip (x48 y572 w300 h30, 100 percent visible). No settings changed.",
+  "pressed": ["A on help chip", "B on quick start dialog", "B (closes Quick Access)", "deck_openPlugin (reopen)"],
+  "seen": {
+    "before": "row = 1 chip: 'How to use bonsAI'; ring on it",
+    "after_A": "dialog 'Using bonsAI' opened in the main Steam window, ring on 'Got it' (second button: Cancel)",
+    "after_B": "dialog closed; ring landed on the tab bar (aria 'bonsAI tab', y0 h20), not on a chip",
+    "row_after_close": ["Where do your game tips come from?", "What does Kids master lock do?", "Show details"],
+    "help_chip_count_after_close": 0,
+    "after_reopen_row": ["Why is my game crashing?", "How can I reduce input lag?", "Show details"],
+    "help_chip_count_after_reopen": 0,
+    "reopen_ring": "question box (input, y604 h44), 100 percent visible; A not pressed on it"
+  },
+  "expected": "After opening and closing the quick start, the help chip is gone and ordinary suggestion chips take its row; still true after closing and reopening the plugin.",
+  "verdict": [
+    "PASS (stand-in only, not a Deck pass): right after closing the quick start the help chip was gone (0 of 3 row items) and 2 ordinary suggestion chips were in the row.",
+    "PASS (stand-in only, not a Deck pass): after closing Quick Access with B and reopening, the help chip was still gone (0) and 2 suggestion chips were in the row (different wording from before the reopen)."
+  ],
+  "notes": "Ring landed on the tab bar after closing the dialog, which is a place the runbook did not predict; recorded, not judged. Plugin left open on Main.",
+  "side_effect": "none"
+}

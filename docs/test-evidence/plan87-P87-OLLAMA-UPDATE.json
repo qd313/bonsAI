@@ -1,0 +1,26 @@
+{
+  "row": "P87-OLLAMA-UPDATE",
+  "build_commit": "d96ed0bf (block 3 deploy; no deploy this block)",
+  "deck_time_local": "2026-10-10 01:16:40 to 01:20 EDT",
+  "screen": "MONITOR live (page innerWidth 855, innerHeight 766)",
+  "setup": "Deck on its own AI (Run AI on this Deck on). Before: server pid 1669 started Tue Oct 6 18:53:38 2026, /api/version 0.34.1, client ~/.local/bin/ollama 0.40.2 (client warned the server is older). Ollama tab; walked Down from the 'Run AI on this Deck' toggle one press at a time reading focus: 'Start the AI with the Deck', then the button 'Update AI engine and installed models' (text 'Update AI & models'). A pressed once as its own step.",
+  "pressed": [
+    "DOWN",
+    "DOWN (focus read after each)",
+    "A on 'Update AI & models'"
+  ],
+  "seen": {
+    "popup": "None. Screenshot taken right after A (plan87-P87-OLLAMA-UPDATE-updating.png): no popup, the button reads 'Updating...', a Cancel button appeared, and the line under it reads 'Installing Ollama...' with a note 'Setup is running. The line above changes as it goes'. The tab kept showing 'Connected - Ollama v0.34.1 - 2 models' for the moment.",
+    "line_every_5_s": "0 s: 'Updating...' + 'Installing Ollama...'. The next change my 5-second reads caught was at 25 s: button back to 'Update AI & models' and the line 'Updated to Ollama 0.40.2 and restarted it. 2 models refreshed.' I did not see any other wording between (the finish came at some point before the 25 s read, not later than 25 s).",
+    "after": "ps: new server pid 140880, started Sat Oct 10 01:17:17 2026, parent pid 1521 = /usr/lib/systemd/systemd --user. /api/version 0.40.2. Client 0.40.2 with no warning. Tab shows 'Connected - Ollama v0.40.2 - 2 models'. Free memory 11601 MB available.",
+    "ask_after": "Question 'Say hello in three words, after the update' in the test chat (focus read as Ask first). The AI reasoned for about 18 s (the reasoning lines ran from the start), the answer 'Hello. I am operational.' was on screen and the helpful buttons showed 37.3 s after the press (answer words not separated from reasoning in my 0.4 s samples; the answer came in the last few seconds). This was the first question after the AI server restarted, so the model had to load first."
+  },
+  "expected": "No popup; button 'Updating...' and the line moves; ends on a done line naming 0.40.2; tab and /api/version say 0.40.2; server start time new.",
+  "verdict": [
+    "PASS no popup: the update ran straight away from one A.",
+    "PASS the button read 'Updating...' and the line under it changed (Installing Ollama... then 'Updated to Ollama 0.40.2 and restarted it. 2 models refreshed.'). Only two wordings were caught by 5-second reads.",
+    "PASS restart half: server start time new (01:17:17 vs Oct 6), /api/version 0.40.2, tab shows 0.40.2, started by systemd --user as before-restart design; no 'restart the Deck' line.",
+    "PASS AI still answers: 'Hello. I am operational.' about 37 s after Ask on the first question after the restart (slow because of the model load and 18 s of reasoning)."
+  ],
+  "side_effect": "Restarted the Deck's own AI server (as the row does). The test chat gained one more question and answer."
+}

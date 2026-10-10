@@ -1,0 +1,19 @@
+{
+  "row": "P87-ABOUT-UP",
+  "build_commit": "8608954d (deployed at the start of block 4)",
+  "deck_time_local": "2026-10-10 01:36-01:41 EDT",
+  "screen": "MONITOR (the Deck's own screen is NOT the live one tonight). innerWidth 855, innerHeight 766. Scroller [48,24,300,741], scrollHeight 915, max scroll 174.",
+  "setup": "About tab, D-pad only. Down from the tab bar to 'Support my Steam Sale habit' (5 presses), then Up to the tab bar. Trial 1 was read with the page logger (settle 1.8 s per press). Trials 2 and 3 were run with deck_runSequence (DOWN x5, UP x5 twice). One extra run began with only 4 Downs and so started Up from 'Bugs & Feature Requests', not from Support; it is not counted. Version line 'Version 0.5.0' is at y78 with the About heading at y48.",
+  "pressed": ["DOWN x5, UP x5 (trial 1)", "DOWN x4, UP x5 (stray run, not counted)", "DOWN x5, UP x5 (trial 2)", "DOWN x5, UP x5 (trial 3)", "no A pressed"],
+  "seen": {
+    "up_path": "Support my Steam Sale habit -> Bugs & Feature Requests -> Built on Ollama! -> GitHub -> Follow system -> About tab (the bar), same in all 3 trials. Every Up moved the ring (no dead press).",
+    "trial_1_scrollTop_per_stop_up": "174.2 (Bugs), 174.2 (Built on Ollama), 174.2 (GitHub), 0 (Follow system), 0 (About tab bar)",
+    "top_of_tab": "At the bar scrollTop 0: 'About bonsAI' at y48 and 'Version 0.5.0' at y78, both inside the pane (top 24).",
+    "every_stop_visible": "All 6 stops reported visible 100 percent in the sequence runs."
+  },
+  "expected": "Up always moves the ring off Support my Steam Sale habit, and walking Up reaches the top of the tab (version line in view) and the tab bar. If the Deck's own screen is live, say so in capitals.",
+  "verdict": [
+    "PASS - 3 of 3 trials: Up moved off Support every time and reached the tab bar with the version line in view. Screen was the MONITOR, so this is NOT the Deck-own-screen case the maintainer saw; that case is still untested."
+  ],
+  "side_effect": "deck_saveCheck wrote checks/plan87-P87-ABOUT-UP.json inside the checkout (untracked tool output)."
+}

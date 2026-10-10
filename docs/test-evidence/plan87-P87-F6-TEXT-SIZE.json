@@ -1,0 +1,27 @@
+{
+  "row": "P87-F6-TEXT-SIZE",
+  "machine": "deck",
+  "build_commit": "d96ed0bf",
+  "deck_time_local": "2026-10-10, between 00:44 and 01:02 EDT by the Deck clock (check 1 began 00:38; per-check times were not logged; the Deck clock read 12:44 AM at the first screenshot and 12:56 AM at check 3 step 8)",
+  "screen": "MONITOR live: innerWidth 855, innerHeight 766.",
+  "setup": "Test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7) open on Main for every measure. Newest answer paragraphs are class bonsai-md-p; newest question text class bonsai-chat-turn-row-title; the bar name bonsai-tab-bar__name; the chat name bonsai-chat-title__words; chip text bonsai-preset-chip-text-run.",
+  "pressed": ["deck_sweep DOWN then UP on Settings (32 presses)", "RIGHT x2 on the text size row (read after each)", "A on Large (focus read first)", "LB x2 / RB x2 between tabs", "A on Small (focus read first)", "A on Large again", "B x2 (closes Quick Access), deck_openPlugin", "A on Normal (focus read first)"],
+  "seen": {
+    "step_1_walk": "Sweep (runs/plan87-P87-F6-SETTINGS-WALK.json in the checkout, an untracked tool output) from the tab bar: Adjust UI automatically, Apply UI scale, Set screenshot quality to Save memory, Set text size to Small, Remember what I typed, Hide spoilers until I tap, Show one chip instead of two, tiny.en, base.en, Reinstall voice engine, Voice replies (Off), AI voice & personality, Show Developer tab, Clear cache... (14 stops) then the same list reversed (14) back to the tab bar. 29 stops recorded, 0 not visible, 0 cycles, 0 unlabeled. The row sits right under Screenshot quality; Up/Down gives ONE stop for the whole text size row (the Small button), as for screenshot quality and voice replies; Left/Right inside the row then reaches Normal [155,591,85,36] and Large [247,591,85,36] (Small is [64,591,85,36]), one stop each, no dead press, read after each.",
+    "step_2_normal": "answer paragraphs 12px (4 of 4), question 11px, tab bar name 11px, chat name 13px, chip 12px.",
+    "step_3_large": "answer 13.8px (4 of 4), question 12.65px, tab name 11px, chat name 13px, chip 12px. settings.json chat_text_size 'large'.",
+    "step_3_small": "answer 10.8px (4 of 4), question 9.9px, tab name 11px, chat name 13px, chip 12px. settings.json 'small'.",
+    "step_4_persist": "Set Large again (file 'large'), B then B again closed Quick Access (the first B moved the ring up to the tab bar), deck_openPlugin reopened on the Settings tab: Large button aria-pressed true, file still 'large'. Reopening landed on Settings, not Main.",
+    "step_5_back": "A on Normal: file 'normal'; Main measures answer 12px, question 11px, others unchanged.",
+    "old_value": "normal (read from the measurements before any change; the file was not read before the change). Put back to normal."
+  },
+  "expected": "Text size row Small/Normal/Large under Screenshot quality, each a stop once, no dead press, every stop visible; Normal answer 12 / question 11; Large 13.8 / 12.65; Small 10.8 / 9.9; tab bar name, chat name, chip unchanged; Large survives a reopen; back to Normal.",
+  "verdict": [
+    "PASS (step 1): the row is where expected, each button is a stop once reachable (Small by Down, Normal and Large by Right), 0 stops hidden, 0 dead presses.",
+    "PASS (step 2): Normal measures 12 / 11.",
+    "PASS (step 3): Large 13.8 / 12.65, Small 10.8 / 9.9, tab name 11, chat name 13, chip 12 unchanged in all three.",
+    "PASS (step 4): Large still on after closing and reopening Quick Access; file says large.",
+    "PASS (step 5): back to Normal, file says normal."
+  ],
+  "side_effect": "Two RB presses sent about 1.4 s apart gave only one tab change once (a lost press) and put the ring on 'AI models' on the Ollama tab; I did not press A there. Setting changed and put back: chat_text_size normal -> large -> small -> large -> normal."
+}

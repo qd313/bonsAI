@@ -1,0 +1,71 @@
+{
+  "row": "B6-SETTINGS-PROBE",
+  "machine": "deck",
+  "build_commit": "tip deployed 23:42 EDT (see plan87-B0-SETUP.json)",
+  "deck_time_local": "2026-10-09 about 23:59 EDT",
+  "screen": "Not screen-dependent (read-only probe of Steam's main page, target SharedJSContext).",
+  "setup": "Ran the contents of scratch/deck/b6-settings-probe.js with deck_readPage, target SharedJSContext. Read only; Steam's settings page was not opened. The probe pushes an empty chunk to get the webpack module table; nothing was changed.",
+  "pressed": [],
+  "seen": {
+    "href": "https://steamloopback.host/routes/library/home",
+    "search": "",
+    "hash": "",
+    "history_state_key": "cq6q0q",
+    "history_state_note": "holds the plugin's per-tab scroll memory: ScrollingTab{main,ollama,settings,permissions,developer,about}ScrollTop_HistoryValue = 0, 0, 607.03125, 12.5, 17.96875, 150; ScrollLeft all 0; HomeTabsActive_HistoryValue false; FocusNavHistoryID State_39l6fg",
+    "SteamClient.Settings keys matching open|nav|goto|show|page": [
+      "OpenWindowsMicSettings"
+    ],
+    "SteamClient.URL keys": [
+      "GetSteamURLList",
+      "RegisterForSteamURLChanges",
+      "GetWebSessionID",
+      "RegisterForRunSteamURL",
+      "ExecuteSteamURL"
+    ],
+    "SteamClient.UI keys matching setting|open|nav": [],
+    "webpack_module_hits": [
+      {
+        "id": "37730",
+        "kind": "reads-query-near-settings",
+        "len": 678747
+      },
+      {
+        "id": "92819",
+        "kind": "reads-query-near-settings",
+        "len": 134590
+      }
+    ],
+    "no_settings_route_strings": "no module contained a quoted '/settings/...' route string",
+    "returned_json_abridged": {
+      "href": "https://steamloopback.host/routes/library/home",
+      "search": "",
+      "hash": "",
+      "settingsKeys": [
+        "OpenWindowsMicSettings"
+      ],
+      "urlKeys": [
+        "GetSteamURLList",
+        "RegisterForSteamURLChanges",
+        "GetWebSessionID",
+        "RegisterForRunSteamURL",
+        "ExecuteSteamURL"
+      ],
+      "uiKeys": [],
+      "hits": [
+        {
+          "id": "37730",
+          "kind": "reads-query-near-settings",
+          "len": 678747
+        },
+        {
+          "id": "92819",
+          "kind": "reads-query-near-settings",
+          "len": 134590
+        }
+      ]
+    }
+  },
+  "expected": "Read-only probe; save the returned JSON.",
+  "verdict": "PASS: probe ran and the result is saved. Finding: no deep-link function into Steam's settings page was found. The only Settings key that matches is OpenWindowsMicSettings, the URL keys only list and run Steam URLs, and no module holds a '/settings/...' route string.",
+  "side_effect": "none"
+}

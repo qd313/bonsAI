@@ -1,0 +1,34 @@
+{
+  "row": "P87-TAB-CHANGE-RING",
+  "build_commit": "8608954d (deployed at the start of block 4)",
+  "deck_time_local": "2026-10-10 about 01:45-01:50 EDT",
+  "screen": "MONITOR live: innerWidth 855, innerHeight 766.",
+  "setup": "Test chat open on Main. The ring was put on the question box with deck_walkTo (Down from the tab bar, 9 presses; no A pressed on the box). Each tab-change press was a normal 80 ms press; the ring (.gpfocus label and box) and the current tab (first line of the panel text) were read about 0.4 s and about 1.4 s after the press (the press-to-read gap has about 0.3 s of tool delay, so read these as 'roughly 0.5 s' and 'roughly 1.5 s').",
+  "pressed": ["RB x7: Main > Ollama > Settings > Permissions > Developer > About > Main > Ollama", "LB x1 from Ollama (to Main)", "LB x3 from Main, each followed by RB (About > Main)"],
+  "seen": {
+    "rows (tab before > tab after: ring at 0.5 s | ring at 1.5 s)": [
+      "RB: Main > Ollama: first toggle [290,88,38,22] | same",
+      "RB: Ollama > Settings: first toggle [290,163,38,22] | same",
+      "RB: Settings > Permissions: first toggle [290,196,38,22] | same",
+      "RB: Permissions > Developer: 'Install seed knowledge base' [64,192,268,40] | same",
+      "RB: Developer > About: 'Follow system' [64,403,268,40] | same",
+      "RB: About > Main: question box [49,691,298,44] | same",
+      "RB: Main > Ollama: first toggle [290,88,38,22] | same",
+      "LB: Ollama > Main: question box [49,691,298,44] | same",
+      "LB from Main (trial 1): Main > About: 'Follow system' [64,403,268,40] | same",
+      "RB: About > Main: question box | same",
+      "LB from Main (trial 2): Main > About: 'Follow system' | same",
+      "RB: About > Main: question box | same",
+      "LB from Main (trial 3): Main > About: 'Follow system' | same",
+      "RB: About > Main: question box | same"
+    ],
+    "one_odd_case": "Earlier, during the tab-scroll walk (not part of the 14 above), the ring had been left on the tab bar at the end of the About walk. RB from there went to Main with the ring staying on the tab bar ('bonsAI tab' box [48,0,300,20]), and after that the ring stayed on the bar until Down. So when the ring starts on the bar, a tab change keeps it on the bar; when it starts on a control it lands on a control.",
+    "no_press_dropped": "No LB or RB press was ignored. None of the three LB presses from Main needed to be held longer than 80 ms."
+  },
+  "expected": "Measurement for a possible bug (block 3 saw the ring often on no control after a tab change, and two LB presses from Main doing nothing). No PASS needed.",
+  "verdict": [
+    "LB from Main reaches About: 3 of 3 (normal 80 ms presses).",
+    "ring on a control after a tab change: 14 of 14 when the ring started on a control; 1 of 1 stayed on the tab bar when it started on the bar. Block 3's 'ring nowhere' was NOT reproduced tonight.",
+    "UNCLEAR as a bug: not reproduced here with a ring that started on a control. Block 3's case may have been the half-second right after a deploy or reload."
+  ]
+}

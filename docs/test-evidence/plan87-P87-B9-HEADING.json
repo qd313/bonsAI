@@ -1,0 +1,29 @@
+{
+  "row": "P87-B9-HEADING",
+  "build_commit": "8608954d (deployed at the start of block 4)",
+  "deck_time_local": "2026-10-10 01:31-01:37 EDT",
+  "screen": "MONITOR live: innerWidth 855, innerHeight 766, dpr 1.28. Scroller [48,24,300,741] on every tab.",
+  "setup": "Same walks as plan87-P87-B10-TAB-SCROLL.json. On each tab the first control came at scrollTop 0 on the way down, and the walk back up ended at scrollTop 0 on the same control, so the heading did not move between the two.",
+  "pressed": ["see plan87-P87-B10-TAB-SCROLL.json", "one deck_captureScreenshot with the ring on Settings' first control"],
+  "seen": {
+    "first_heading_per_tab (top px, bottom px, opacity, gap below scroller top 24)": {
+      "Ollama": "'Where AI runs' 48 to 70, opacity 1, gap 24",
+      "Settings": "'UI scale' 48 to 70, opacity 1, gap 24",
+      "Permissions": "'Permissions' 48 to 70, opacity 1, gap 24",
+      "Developer": "'Knowledge base (dev QA)' 48 to 70, opacity 1, gap 24",
+      "About": "'About bonsAI' 48 to 70, opacity 1, gap 24 (version line at 78)"
+    },
+    "scrollTop_at_first_control": "0 on all five tabs, both coming down and going back up (Ollama first control toggle scrollTop 0; Settings 'Adjust UI automatically' 0; Permissions 0; Developer 'Install seed knowledge base' 0; About 'Follow system' 0).",
+    "scroll_padding": "scroll-padding-top 116px, scroll-padding-bottom 80px",
+    "screenshot": "plan87-P87-B9-HEADING-settings-first-control.png: ring on 'Adjust UI automatically', 'UI SCALE' heading and its text fully drawn, not faded."
+  },
+  "expected": "At the first control of each tab (scrollTop 0 down and up) the first heading's top is at least 20 px below the scroller's top and its text is fully visible.",
+  "verdict": [
+    "ollama: PASS - heading top 24 px below the scroller top, opacity 1",
+    "settings: PASS - 24 px, opacity 1, screenshot shows UI scale not faded",
+    "permissions: PASS - 24 px, opacity 1",
+    "developer: PASS - 24 px, opacity 1",
+    "about: PASS - 24 px, opacity 1",
+    "overall B9: PASS"
+  ]
+}

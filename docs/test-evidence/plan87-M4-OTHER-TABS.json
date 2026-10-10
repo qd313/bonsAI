@@ -1,0 +1,27 @@
+{
+  "row": "M4-OTHER-TABS",
+  "machine": "deck",
+  "build_commit": "tip deployed 23:42 EDT (see plan87-B0-SETUP.json)",
+  "deck_time_local": "2026-10-09 about 23:50-23:53 EDT",
+  "screen": "MONITOR live: innerWidth 855, innerHeight 766, dpr 1.28. Boxes are page px [x,y,w,h]. Tab bar box [48,0,300,20] (bottom = 20). Scroller on every tab = the _TabContentsScroll element, box [48,24,300,741], clientHeight 741.",
+  "setup": "Test chat open, started on Ollama (RB), then RB to each tab. Walked with deck_sweep (DOWN, returnTrip, runName plan87-M4-<tab>); full per-stop rows are in C:/Users/still/Documents/BonsAI/runs/plan87-M4-{ollama,settings,permissions,developer,about}.json. Developer sweep used budget 100 (not 60) so both legs could finish. Ring was on the bar at the start of every sweep (Ollama needed one Up first).",
+  "pressed": ["RB to switch tab (5 times)", "UP once (Ollama only)", "sweeps: DOWN until stall then UP until stall; only direction presses, no A"],
+  "seen": {
+    "caveat": "scrollTop values come from the sweep tool's read right after each press; the pane scrolls smoothly (about 1.5 s was needed to settle in M3), so a single step's move may include a part still on its way. Totals per leg are reliable, single step sizes are approximate.",
+    "heading_vs_bar": "On all five tabs the first heading sits fully below the bar at scrollTop 0: bar bottom y=20; Ollama 'Where AI runs' y24.8-44.3; Settings 'UI scale' y24.8-44.3; Permissions 'Permissions' y24.8-44.3; Developer 'Knowledge base (dev QA)' y24.8-44.3; About 'About bonsAI' y24.8-44.3. Gap to bar 4.8 px; none partly or wholly hidden.",
+    "first_control_of_each_tab": {"Ollama": "'Run AI on this Deck' toggle [290,64,38,22], scroll 0", "Settings": "'Adjust UI automatically' toggle [290,161,38,22], scroll 0 (the 'UI scale' heading and its Handheld line are above it and cannot take the ring)", "Permissions": "'Read game & screenshot context' toggle [290,172,38,22]", "Developer": "'Install seed knowledge base' button [64,168,268,40]", "About": "'Follow system' button [64,379,268,40], not the top of the page; version line 'Version 0.5.0' and the backend text are above it"},
+    "per_tab": {
+      "Ollama": {"scroll_height": 1694, "stops_down": 13, "presses_to_end_down": 13, "last_control": "'AI models' button [64,665,268,36] at scrollTop 953", "largest_move_per_press_down_px": 329, "as_share_of_741": "44.4%", "largest_move_up_px": 380, "share_up": "51.3%", "step_sizes_down": [0,0,0,0,0,6,82,185,329,0,75,161,115], "ring_did_not_move_presses": "only the 2 stall presses at each end", "stops_visited_twice": "none (only the tab bar at both ends)", "focused_not_visible": 0},
+      "Settings": {"scroll_height": 1981, "stops_down": 13, "last_control": "'Clear cache...' [64,686,130,38] at scrollTop 1241", "largest_move_down_px": 221, "share_down": "29.8%", "largest_move_up_px": 316, "share_up": "42.6%", "step_sizes_down": [0,0,0,138,221,207,41,108,155,153,171,47], "note": "Voice model rows 'tiny.en (fastest - recommended on Deck)' and 'base.en (more accurate, slower)' are radio rows on this tab (y650 each at scroll 566 and 607).", "ring_did_not_move_presses": "only stall presses at ends", "stops_visited_twice": "none", "focused_not_visible": 0},
+      "Permissions": {"scroll_height": 762, "stops_down": 5, "last_control": "'Internet downloads' toggle [290,588,38,22] at scrollTop 20", "largest_move_down_px": 20, "share_down": "2.7%", "largest_move_up_px": 7, "share_up": "0.9%", "note": "The page is only 21 px taller than the scroller.", "ring_did_not_move_presses": "only stall presses", "stops_visited_twice": "none", "focused_not_visible": 0},
+      "Developer": {"scroll_height": 2592, "stops_down": 16, "last_control": "an unnamed text input [64,661,268,40] at scrollTop 1851 (label empty, tag INPUT)", "largest_move_down_px": 272, "share_down": "36.7%", "largest_move_up_px": 393, "share_up": "53.0%", "step_sizes_down": [0,0,102,136,239,196,128,112,175,272,108,94,54,54,181], "ring_did_not_move_presses": "only stall presses", "stops_visited_twice": "none", "focused_not_visible": 0, "note": "One unlabeled stop (the text input)."},
+      "About": {"scroll_height": 891, "stops_down": 5, "last_control": "'Support my Steam Sale habit' [64,649,268,42] at scrollTop 150", "largest_move_down_px": 133, "share_down": "17.9%", "largest_move_up_px": 0, "note": "Going Up the pane did not scroll at all (scrollTop stayed 150 from Support to Follow system).", "ring_did_not_move_presses": "only stall presses", "stops_visited_twice": "none", "focused_not_visible": 0}
+    },
+    "up_leg_pattern": "On the Up leg the scroller often stays put for the first several presses and then jumps back in one big move (Ollama 380 px, Settings 316, Developer 393, 53% of the viewport), with the focused control at y 140-150 near the top after the jump.",
+    "sweep_totals": "Every stop on every tab visible (stopsFocusedButNotVisible 0 on all five), no cycles."
+  },
+  "expected": "Measurement row.",
+  "verdict": "PASS: measured on all five tabs (measurement only). Nothing hidden under the bar; largest single scroll move per press was 329 px down (Ollama, 44% of the scroller) and 393 px up (Developer, 53%)."
+  ,
+  "side_effect": "None: only direction presses and RB."
+}

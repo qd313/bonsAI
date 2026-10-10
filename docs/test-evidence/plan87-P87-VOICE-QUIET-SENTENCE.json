@@ -1,0 +1,65 @@
+{
+  "build_commit": "d96ed0bf (block 3 deploy; step 0: voice_level_gate count 2 in the Deck's voice_transcription_service.py; the three voice commits c40de52a, d73f9f5a, e84f644c are in the checkout history)",
+  "screen": "MONITOR live (page innerWidth 855, innerHeight 766)",
+  "row": "P87-VOICE-QUIET-SENTENCE",
+  "deck_time_local": "2026-10-10 01:05 to 01:10 EDT",
+  "setup": "Defaults before: sink alsa_output...HiFi__Speaker__sink, source alsa_loopback_device...Internal_Mic__source. Loaded null sink p87mic (module 536870916); defaults unchanged after. Wrote p87mic.monitor into ~/homebrew/settings/bonsAI/voice_capture_target (allowed). Voice model tiny.en. Main tab, test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7), question box empty. Sentence files present in /tmp (606158 and 676398 bytes).",
+  "pressed": [
+    "walkTo UP 'Voice input' overshot (6 presses, never A) then walkTo DOWN overshot to Ask (never A); LEFT once to 'Voice input' (read aria-label), A as own press; paplay --volume=65536 pretend_sentence_quiet.wav started in the next command",
+    "A on 'Stop voice input' (read focus first)",
+    "send-question script --clear (VERIFIED)",
+    "pause sentence: A on 'Voice input' (try 1), paplay; then try 2 the same, then A on Stop",
+    "RB x2 to Settings, walkTo DOWN base.en, read focus, A once; LB x2 to Main",
+    "base.en: A on Voice input (try 1), A (try 2) with paplay quiet sentence, A on Stop, --clear",
+    "Switch back to tiny.en happened after check 2 (see that row); the settings file reads tiny.en"
+  ],
+  "seen": {
+    "quiet_tiny_en": {
+      "log": [
+        "01:05:34,924 voice: recording started, model tiny.en",
+        "01:06:01,075 voice: recording stopped, transcript 167 characters"
+      ],
+      "box_text": "How do I beat the final boss in this game and which weapon should I upgrade first because my health keeps running out before I can reach the second phase of the fight.",
+      "note": "Read while still listening (about 25 s after start): all words present, first word not clipped. Box text is 167 characters. Screenshot DeckCapture_20261010_010612_auto.png (copied as plan87-P87-VOICE-QUIET-SENTENCE-box.png)."
+    },
+    "pause_tiny_en_try1": {
+      "log": [
+        "01:06:53,737 voice: recording started, model tiny.en",
+        "01:06:53,831 voice: recording stopped, transcript 0 characters"
+      ],
+      "note": "The first press after a --clear script: recording stopped by itself 94 ms after it started, box stayed empty, the button showed 'Voice input' again. The sentence was played after this, into nothing."
+    },
+    "pause_tiny_en_try2": {
+      "log": [
+        "01:07:25,902 voice: recording started, model tiny.en",
+        "01:07:52,021 voice: recording stopped, transcript 168 characters"
+      ],
+      "box_text": "How do I beat the final boss in this game and which weapon should I upgrade first. Because my health keeps running out before I can reach the second phase of the fight.",
+      "note": "Words after the 1.5 s pause all arrived (a full stop was added at the pause)."
+    },
+    "quiet_base_en_try1": {
+      "log": [
+        "01:08:22,890 voice: recording started, model base.en",
+        "01:08:22,983 voice: recording stopped, transcript 0 characters"
+      ],
+      "note": "Same early stop (93 ms), again the first press after a --clear script."
+    },
+    "quiet_base_en_try2": {
+      "log": [
+        "01:08:47,344 voice: recording started, model base.en",
+        "01:09:10,233 voice: recording stopped, transcript 168 characters"
+      ],
+      "box_text": "How do I beat the final boss in this game, and which weapon should I upgrade first because my health keeps running out before I can reach the second phase of the fight."
+    },
+    "capture_backend_line": "grep for capture_backend, pipewire or 'developer target' in the plugin log found nothing: capture_backend is a status field, not a log line. Not read from the page. The pretend microphone clearly worked (the sentences arrived), so the target file was used."
+  },
+  "expected": "Box ends with '...the second phase of the fight.' with every word present; the pause sentence's words after the pause arrive; the same on base.en.",
+  "verdict": [
+    "PASS quiet sentence on tiny.en: all words present, ends with 'second phase of the fight.' (167 characters).",
+    "PASS pause sentence on tiny.en (second try): words after the pause arrived.",
+    "PASS quiet sentence on base.en (second try): all words present, ends with 'second phase of the fight.'.",
+    "UNCLEAR early stop: on both tiny.en and base.en the first mic press after clearing the box with the send-question script started a recording that ended 93 to 94 ms later with transcript 0 characters (two times in two). The mic was usable on the next press every time. Cause not found; the owner decides. Possibly an effect of the script's text write, not of real use.",
+    "UNCLEAR capture_backend text: expected line not in the log (it is a status field)."
+  ],
+  "side_effect": "Changed voice_stt_model tiny.en > base.en > tiny.en (restored, confirmed). Created voice_capture_target and p87mic sink: both removed in check 2 step 5. Two stray empty recordings (the 94 ms ones). Deviation from the runbook: I did not switch back to tiny.en between check 1 and check 2 (check 2 needs base.en); I switched back once, at the end of check 2."
+}

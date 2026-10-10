@@ -1,0 +1,34 @@
+{
+ "row": "P87-F3-CHIPS-GRID (round two, try2)",
+ "build_commit": "95139093 (deck_deploy at start of block 6a, build copied 02:18)",
+ "deck_time_local": "2026-10-10 02:20-02:32",
+ "screen": "MONITOR live (page 855 x 766). Dock top (.bonsai-main-tab-dock) 657.6 page px. Question box top 691.2.",
+ "setup": "Test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7). The old TDP answer is folded behind '99 earlier', so a new question was asked in the test chat with the send-question script (VERIFIED, Ask pressed after reading focus was on Ask): 'What power limit in watts should I set for Hollow Knight to get longer battery life'. Answer has 8 chips: Keyword + meaning, KB: 14 sections, Read current TDP, Reply style: balanced, Thinking: Balanced 19 s ~514 tokens, Spoiler risk: high, Routed gemma4:e2b-it-qat, Developer details. Grid rows [1,2][3,4][5][6,7][8]. Show details opened with A (read first). Walked Up/Down to chip 1 (from Hide details: Down, Down, Down). Numbers from a page-side logger (100 ms), settled values after at least 1.5 s.",
+ "pressed": ["A on Show details", "UP, DOWN, DOWN, DOWN (to chip 1)", "RIGHT x7 (chip 1 to 8)", "DOWN x1 at chip 8 (scroll only)", "DOWN x1 (leave)", "UP (back to chip 8)", "DOWN (probe)", "UP, LEFT, RIGHT, DOWN (to get chip 8 with its end shown again)", "LEFT x7, LEFT at chip 1", "DOWN (chip 1), DOWN x4 (step 5), DOWN, DOWN", "UP, LEFT, RIGHT, DOWN again, UP x5"],
+ "seen": {
+  "step1_right_walk": {
+   "chips_visited_once_each": "yes, 1 to 8 in order, each once",
+   "row_top_chips_2_to_7": "295.7 on every one (0.0 px change)",
+   "box_bottom_vs_dock_657.6": "chip 1: 683.4 on first entry (25.8 px BELOW the dock; the 'Local knowledge base' box with 3 source cards, scrollTop 387.5 of max 413, text cut at 'Embed: 29.16 ms' in screenshot plan87-P87-F3-CHIPS-GRID-try2-chip1-first-entry.png); chip 1 later (reached from the toggle, scrollTop 457.8) ended at 613 and in the Left walk at 555.2. Chips 2,3,4: 505.0; chip 5: 536.9; chip 6: 584.7; chip 7: 505.0 - all above the dock."
+  },
+  "step1_chip8_arrival": "Right from chip 7 to chip 8: row top 295.7 to 22.2 (one smooth move of 273.5 px), scrollTop 387.5 to 660.9 (max 680), box 176.2-677.0 = 19.4 px below the dock on arrival.",
+  "step2_chip8_end": {
+   "down_after_arrival": "ring stayed on chip 8; pane scrolled 25 px: scrollTop 685.9 (max 688), box bottom 652.0 = 5.6 px above the dock. Row top -2.8.",
+   "closing_line_readable": "NO. The Ask diagnostics list is its own scroll box (pre 212 px high showing 964 px of text, scrollTop 0). The screenshot (plan87-P87-F3-CHIPS-GRID-try2-developer-end-shown.png) shows the list cut at \"gemma4:26b\"; its closing lines ] } are not on screen. The box's outer end is above the dock.",
+   "next_down": "left the chips at once, no dead press, ring on the 'Hide details' line (not the suggestion chip or the question box named in the runbook)."
+  },
+  "step2_extra_finding": "Coming back to Developer details from the Hide details line with Up gives scrollTop 637.5, row 45.7, box bottom 700.4 (42.8 px behind the dock). A Down from there did not scroll to show the end: it left to Hide details (scrollTop 640.6, box bottom 697.3). The end-shown state was only reachable again by going Left to chip 7, Right to chip 8, Down.",
+  "step3_left_walk": "From chip 8 with end shown (box bottom 652.0): row top change per step: chip 7 +146.9 px (row 144.1, scrollTop 539.1); chip 6 0.0; chip 5 0.0; chip 4 0.0; chip 3 0.0; chip 2 +23.5 (row 167.6, scrollTop 515.6); chip 1 0.0. So TWO steps moved the row by more than 2 px (146.9 and 23.5). Every box ended above the dock (chip 7 353.5, 6 433.2, 5 385.4, 4 353.5, 3 353.5, 2 376.9, 1 555.2). Left at chip 1 went to the 'This answer | Session 100' toggle (row 167.6 to 225.4, +57.8 px, scrollTop 457.8).",
+  "step4_up_walk": "From Developer details (end shown) Up x5: Spoiler risk (6) row +146.9, Thinking (5) 0.0, Read current TDP (3) 0.0, Keyword + meaning (1) +23.5, toggle (0) +57.8. Four Ups reach chip 1, the fifth reaches the toggle. Three moves over 2 px (146.9, 23.5, 57.8).",
+  "step5_down_walk": "Toggle, Down: Keyword + meaning (row 225.4, scrollTop 457.8, box bottom 613). Down x4: Read current TDP (3) row 225.4, Thinking (5) 225.4, Spoiler risk (6) 226.1, Developer details (8) row 22.2 scrollTop 660.9 (box bottom 677, 19.4 px below the dock). Next Down: ring stays on Developer details, scrolls only (scrollTop 685.9, box bottom 652). Next Down: leaves to the Hide details line. No dead press."
+ },
+ "expected": "Step 1: Right x7 visits chips 1-8 once each, boxes of chips 1-7 end at or above the dock, row still for chips 2-7. Step 2: Developer details box end above the dock at once or after one Down with the ring on chip 8, end readable, next Down leaves the chips. Step 3: Left x7 at most one step moves the row more than 2 px, every box above the dock, Left at chip 1 to the toggle. Step 4: Up from Developer details at most one move then the toggle. Step 5: Down x4 order TDP, Thinking, Spoiler, Developer; at most one scroll-only Down; the next leaves; no dead press.",
+ "verdict": [
+  "step 1 (Right walk): FAIL - chips 1 to 8 once each and the row stays still for chips 2 to 7, but chip 1's box, on the first entry from the toggle, ended 25.8 px below the dock (683.4 vs 657.6). On a later visit to chip 1 it ended at 613 (above the dock). Chips 2 to 7 end above the dock.",
+  "step 2 (Developer details end): UNCLEAR - the box's end is above the dock after one extra Down with the ring still on chip 8 (652.0 vs 657.6) and the next Down leaves with no dead press; but the Ask diagnostics list inside the box is its own scroll box, so its closing lines are not readable (cut at gemma4:26b); and the Down left to the Hide details line, not to the suggestion chip or question box. The owner decides if 'end readable' means the outer box or the inner list.",
+  "step 3 (Left x7): FAIL - two steps moved the row by more than 2 px (146.9 px at chip 7, 23.5 px at chip 2); the other five were 0.0. Every box ended above the dock. Left at chip 1 reached the toggle (which moved the row another 57.8 px).",
+  "step 4 (Up from Developer details): FAIL - Up x5 reached the toggle with three moves over 2 px (146.9, 23.5, 57.8).",
+  "step 5 (Down walk): PASS - order TDP, Thinking, Spoiler risk, Developer details; one scroll-only Down (25 px); the next Down left; no dead press."
+ ],
+ "side_effect": "One new question and answer was added to the test chat (it also triggered the chat's summary-so-far step; 'The chat summed itself up' note shows on the answer). The test chat now holds 101 entries. Chips left open (Hide details/Show details state) at the end of this check; closed in the next check. deck_exitGame earlier pressed GUIDE once."
+}

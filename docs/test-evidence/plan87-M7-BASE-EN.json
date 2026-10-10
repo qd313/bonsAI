@@ -1,0 +1,21 @@
+{
+  "row": "M7-BASE-EN",
+  "machine": "deck",
+  "build_commit": "tip deployed 23:42 EDT (see plan87-B0-SETUP.json)",
+  "deck_time_local": "2026-10-09 23:58:01 to 23:59:28 EDT",
+  "screen": "MONITOR live (innerWidth 855, innerHeight 766, dpr 1.28).",
+  "setup": "Step 1 over SSH: voice_models folder holds ggml-base.en.bin 147964211 bytes (dated Oct 9 19:42) and ggml-tiny.en.bin 77704715 bytes (Jul 7); settings key voice_stt_model was 'tiny.en'. Step 2 used the plugin's own Settings tab (no file edit): walked Down to the 'base.en (more accurate, slower)' radio row [64,650,268,35], read focus, then A as its own press. Settings file then read 'base.en' (23:58:19). No restart or reload was needed.",
+  "pressed": ["RB x2 to Settings", "walkTo DOWN base.en (7 presses), then A once on 'base.en (more accurate, slower)'", "LB x2 to Main", "DOWN once, walkTo RIGHT (reached Ask, never pressed A there), walkTo LEFT to 'Voice input' [259,737,20,20]", "A on 'Voice input' (listening started, aria-label became 'Stop voice input')", "A again on 'Stop voice input'", "RB x2 to Settings, UP once to tiny.en [64,610,268,35], A to restore"],
+  "seen": {
+    "deck_time_when_started": "23:58:40 (log line time)",
+    "screen_after_start": "Mic button showed 'Stop voice input' for the whole wait. The question box stayed empty (placeholder text only). Screenshot DeckCapture_20261009_235849_auto.png (also copied next to this file as plan87-M7-BASE-EN-listening.png) shows the mic button ringed, no words, no error line.",
+    "listening_length": "I did not stop at 4 s: a screenshot and a read delayed the second A, so the listening lasted 15.2 s (23:58:40.7 to 23:58:55.8).",
+    "screen_after_stop": "Button back to 'Voice input'; question box value stayed empty for 8 s of reads; no status or error text found on screen.",
+    "plugin_log_lines": ["[2026-10-09 23:58:40,665][INFO]: voice: recording started, model base.en", "[2026-10-09 23:58:55,848][INFO]: voice: recording stopped, transcript 0 characters"],
+    "log_note": "No lines about loading the model, decoding or any error in that minute (the file 2026-10-09 23.42.40.log had only those two voice lines). The Deck had a CPU spike (screenshot HUD: CPU 66%, 80 C, 3499 MHz) around the start. A sound source 'p87mic.monitor' (16000 Hz, 1 ch, SUSPENDED) exists; the helper's pretend microphone was not playing anything I could see.",
+    "restore": "Settings file read back 'tiny.en' at 23:59:28."
+  },
+  "expected": "base.en model present at 147964211 bytes; switching to it and listening to silence shows what happens.",
+  "verdict": "PASS: file present at 147964211 bytes and the setting was 'tiny.en' before. PASS: model switched to base.en from the Settings screen and the log says recording started with model base.en. UNCLEAR: silence gave 'transcript 0 characters' with no error and no load or decode lines in the log; the question box stayed empty. Whether base.en can actually decode speech was not tested (silence only).",
+  "side_effect": "Changed voice_stt_model tiny.en > base.en > tiny.en (restored, confirmed). One A press on Voice input started and stopped a recording of silence."
+}

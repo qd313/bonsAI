@@ -624,6 +624,9 @@ Code: `ContextChipLadder.tsx` (the moves), `chipLadderGrid.ts` (`packChipRows`, 
     top row meets Steam's line, as far as the open box's end allows. Steam pulled each row down by itself before
     (73.4, 29.7, 31.2, 28.9 px on four steps of a Left walk). The first look after a landing goes only where
     Steam's own glide puts that chip, so the two never pull different ways.
+  - **Left off the first chip is held when nothing above takes it** (claimed, the ring stays), as Left at the
+    first chip was before the grid: a Left nobody claims is Steam's own, and on the Deck it carried the ring out
+    of the plugin into Steam's side tabs. Up from the top row keeps its old fall-through.
 - **The held block** (`bonsai-chip-ladder-hold`, unchanged): a step to a shorter box near the pane's end would let
   the browser clamp the scroll and jump the whole row; an empty block after the box keeps the pane's height for
   that step. Its two later checks stand down once the placement has scrolled for the step, so they never undo it.

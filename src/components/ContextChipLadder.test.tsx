@@ -200,3 +200,29 @@ describe("B collapses the ladder", () => {
     expect(seen).toEqual([false]);
   });
 });
+
+/*
+ * The Deck, 2026-10-10 (plan87-QA-FREE-PLAY-01-NOGAME.json): Left from a lone card in Show details took the ring
+ * out of the plugin into Steam's own side tabs, Left being a press nothing claimed. Since the grid, Left at the
+ * first chip goes where Up from it goes; with nothing there to take it, it must still be claimed and do nothing,
+ * as Left at the first chip always did, or Steam's own Left carries the ring out of the plugin.
+ */
+describe("Left at the first chip with nowhere to go", () => {
+  it("is held on a one-chip ladder with no stop above (claimed, the ring stays)", () => {
+    const { container } = render(<ContextChipLadder snapshot={snapshotWith([chip()])} />);
+    const only = container.querySelector<HTMLElement>(".bonsai-chip-ladder-chip")!;
+    only.setAttribute("tabindex", "-1");
+    only.focus();
+
+    expect((latestLadderProps()!.onMoveLeft as () => boolean)()).toBe(true);
+    expect(document.activeElement).toBe(only);
+  });
+
+  it("is held when the stop above declines the press", () => {
+    const up = vi.fn(() => false);
+    render(<ContextChipLadder snapshot={snapshotWith([chip()])} onMoveUpFromLadder={up} />);
+
+    expect((latestLadderProps()!.onMoveLeft as () => boolean)()).toBe(true);
+    expect(up).toHaveBeenCalledTimes(1);
+  });
+});

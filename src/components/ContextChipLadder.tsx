@@ -281,7 +281,13 @@ export function ContextChipLadder({
     if (dir === "down" && showRestOfBox()) return true;
     const move = gridMove(rowsFromBoxes(drawnOrder, boxOf), boxOf, idx, dir);
     if ("to" in move) return stepTo(move.to);
-    return move.leave === "up" ? Boolean(onMoveUpFromLadder?.()) : leaveDown();
+    if (move.leave === "down") return leaveDown();
+    /*
+     * Left off the first chip with nothing above to take it is held, as it was before the grid: a press
+     * nothing claims is Steam's own, and Steam's own Left carried the ring out of the plugin into its
+     * side tabs on the Deck (2026-10-10, plan87-QA-FREE-PLAY-01-NOGAME.json). Up keeps its old fall-through.
+     */
+    return Boolean(onMoveUpFromLadder?.()) || dir === "left";
   };
   const chipMoves = (idx: number) => ({
     onMoveLeft: () => press(idx, "left"),

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 793,
-  "edgeCount": 2381,
+  "fileCount": 794,
+  "edgeCount": 2382,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2061,6 +2061,12 @@
       ],
       "importedBy": []
     },
+    "src/components/SettingsTabUiScaleHeading.test.tsx": {
+      "imports": [
+        "src/components/SettingsTabUiScaleSection.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/SettingsTabUiScaleHidden.test.tsx": {
       "imports": [
         "src/components/SettingsTab.tsx"
@@ -2081,6 +2087,7 @@
       ],
       "importedBy": [
         "src/components/SettingsTab.tsx",
+        "src/components/SettingsTabUiScaleHeading.test.tsx",
         "src/components/SettingsTabUiScaleSection.test.ts"
       ]
     },

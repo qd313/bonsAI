@@ -211,7 +211,6 @@ export const SettingsTabUiScaleSection: React.FC<SettingsTabUiScaleSectionProps>
     <PanelSection title="UI scale">
       <PanelSectionRow>
         <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-          <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>UI scale</div>
           <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
             Two real sizes: Handheld for the Deck's own screen, Couch for TV distance. Active:{" "}
             <span style={{ color: "#9ce7ff", fontWeight: 600 }}>

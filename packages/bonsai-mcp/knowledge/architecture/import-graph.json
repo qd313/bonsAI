@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 796,
-  "edgeCount": 2388,
+  "fileCount": 797,
+  "edgeCount": 2391,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2896,7 +2896,8 @@
       "importedBy": [
         "src/features/chat-slots/ChatSlotPickerModal.tsx",
         "src/features/chat-slots/useStartNewChat.tsx",
-        "src/features/chat-title/useChatSwitchActions.ts"
+        "src/features/chat-title/useChatSwitchActions.ts",
+        "src/hooks/useChatSlots.ts"
       ]
     },
     "src/features/chat-slots/useChatSlotDeleteConfirm.test.tsx": {
@@ -4898,6 +4899,13 @@
         "src/features/plugin-shell/useAppLogPrefsAndCapturedErrors.ts"
       ]
     },
+    "src/hooks/useChatSlots.limit.test.ts": {
+      "imports": [
+        "src/hooks/useChatSlots.ts",
+        "src/utils/chatSlotsApi.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useChatSlots.test.ts": {
       "imports": [
         "src/hooks/useChatSlots.ts",
@@ -4907,6 +4915,7 @@
     },
     "src/hooks/useChatSlots.ts": {
       "imports": [
+        "src/features/chat-slots/chatSlotLimit.ts",
         "src/features/chat-sum-up/chatSumUpModel.ts",
         "src/features/chat-sum-up/useChatSumUpJob.ts",
         "src/features/plugin-shell/pluginStorage.ts",
@@ -4918,6 +4927,7 @@
       "importedBy": [
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
+        "src/hooks/useChatSlots.limit.test.ts",
         "src/hooks/useChatSlots.test.ts",
         "src/index.tsx"
       ]
@@ -7575,6 +7585,7 @@
         "src/features/chat-sum-up/chatSumUpModel.test.ts",
         "src/features/chat-sum-up/chatSumUpModel.ts",
         "src/features/chat-sum-up/useChatSumUpJob.ts",
+        "src/hooks/useChatSlots.limit.test.ts",
         "src/hooks/useChatSlots.test.ts",
         "src/hooks/useChatSlots.ts",
         "src/utils/chatSlotTurns.ts",

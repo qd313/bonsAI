@@ -20,6 +20,7 @@
  */
 import { useCallback, useMemo, useRef, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
 import { Router } from "@decky/ui";
+import { toaster } from "@decky/api";
 
 import type { LastExchangeSnapshot } from "../types/backgroundAsk";
 import type { AskThreadCollapsedTurn, AskThreadExpandedTurnKey } from "../types/bonsaiUi";
@@ -41,6 +42,7 @@ import {
   type ChatListRow,
 } from "../features/chat-sum-up/chatSumUpModel";
 import { useChatSumUpJob } from "../features/chat-sum-up/useChatSumUpJob";
+import { MAX_CHAT_SLOTS } from "../features/chat-slots/chatSlotLimit";
 import { saveActiveChatSlotId } from "../features/plugin-shell/pluginStorage";
 
 type OpenChatMemory = {
@@ -111,7 +113,9 @@ export type UseChatSlotsArgs = {
  *    chat is now first in the list.
  * 10. `ensureActiveSlotForAsk()` is for typing a question with no chat
  *     open yet — it creates one first, seeded with that question, so
- *     there is always a chat for the answer to land in.
+ *     there is always a chat for the answer to land in. At ten chats the
+ *     back end refuses to make another, so the question goes into the
+ *     newest chat instead, with a short notice; nothing is deleted.
  * 11. The hook hands all of the above back together at the end, so the
  *     screen has one bundle: the chat list, which one is open, and every
  *     action that can change either.
@@ -372,7 +376,26 @@ export function useChatSlots({
         appName: running?.display_name ?? "",
         firstQuestion: question,
       });
-      if (!slot) return null;
+      if (!slot) {
+        /*
+         * No new chat is not always a failure: at ten chats the back end refuses (plan 87 F2), and a
+         * question sent with no chat is answered on screen but never saved, so the answer vanished
+         * when the screen reloaded from no chat. Deleting a chat to make room is never ours to do
+         * here (only the Delete chat box does that), and asking the person first needs the Ask path
+         * to stop before it sends, which this hook cannot do. So the question goes into the newest
+         * chat, and the person is told. Any other refusal keeps the old behaviour: ask unsaved.
+         */
+        const rows = await refreshSummaries();
+        const newest = rows[0];
+        if (!newest || rows.length < MAX_CHAT_SLOTS) return null;
+        setActiveSlot(newest.id);
+        toaster.toast({
+          title: "Ten chats are saved",
+          body: "You have 10 chats, so this question went into your newest chat. Nothing was deleted.",
+          duration: 5000,
+        });
+        return newest.id;
+      }
       await refreshSummaries();
       setActiveSlot(slot.id);
       return slot.id;

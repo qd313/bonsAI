@@ -254,6 +254,12 @@ that empties the box (only while the box has words), the small ASK. The game tag
   line lands on the slot's line again, not on a chip, then on the box. Up from the box after that walk meets
   the line again too. The memory is dropped when the ring leaves the answer and the dock, when another answer
   takes over, or when the chat is scrolled by finger long after the ring last moved.
+- **The help chip is a stop of its own, in its own container** (`HelpChipRoot` in `MainTabPresetRow.tsx`). While it
+  owns the row (a new chat before the quick start is read), Up from the question box lands on it by Steam's
+  transfer (`takeNavFocus("preset-carousel")`, the same id the suggestion chips register); a plain `focus()` left
+  the pad where it was and Up went on to the tab bar (stand-in, plan87-S-S1-HELP-CHIP.json). Down from it is the
+  question box, Up is the chips' exit Up (`chipRowExitUp`), Left and Right are held. Down from the chat's name on
+  an empty chat still goes straight to the question box and skips the chip, as it does for the suggestion chips.
 - **The strip is its own row, not part of the box's group.** It already was its own Steam focus row
   (`bonsai-unified-input-actions-row`) drawn inside the box's card, and it stays one. Left and Right in the
   box belong to the box (Left: paperclip, Right: mode button, both unchanged); Left and Right in the strip

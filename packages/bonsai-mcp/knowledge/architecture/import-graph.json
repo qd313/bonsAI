@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 805,
-  "edgeCount": 2436,
+  "fileCount": 806,
+  "edgeCount": 2442,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -532,6 +532,7 @@
         "src/components/MainTab.streamScramble.test.tsx",
         "src/components/MainTab.tabBarDownEarlier.test.tsx",
         "src/components/MainTab.tabBarDownRetry.test.tsx",
+        "src/components/MainTabEmptyChatHelpChip.test.tsx",
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/chatTitleTestFixtures.tsx",
         "src/features/chat-title/nameRowIcons.test.tsx",
@@ -1027,6 +1028,15 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabEmptyChatHelpChip.test.tsx": {
+      "imports": [
+        "src/components/MainTab.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabPresetAnimatedChips.fadeButton.test.tsx": {
       "imports": [
         "src/components/MainTabPresetAnimatedChips.tsx",
@@ -1127,8 +1137,10 @@
         "src/data/presets.ts",
         "src/features/details-slot/DetailsSlot.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/preset-carousel/presetRowLayout.ts",
-        "src/utils/joinPresetWithRunningGame.ts"
+        "src/utils/joinPresetWithRunningGame.ts",
+        "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
@@ -4411,6 +4423,7 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/components/MainTabPresetRow.tsx",
         "src/features/details-slot/DetailsSlot.tsx",
         "src/features/preset-carousel/presetDecodeSlots.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
@@ -6593,6 +6606,7 @@
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
         "src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx",
+        "src/components/MainTabEmptyChatHelpChip.test.tsx",
         "src/components/MainTabUnifiedAskBar.askUp.test.tsx",
         "src/components/MainTabUnifiedAskBar.boxDown.test.tsx",
         "src/components/MainTabUnifiedAskBar.boxRing.test.tsx",
@@ -8400,7 +8414,9 @@
         "src/components/MainTabChatTranscript.retryNotAStop.test.tsx",
         "src/components/MainTabChatTranscript.sessionLadderExit.test.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
+        "src/components/MainTabEmptyChatHelpChip.test.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
+        "src/components/MainTabPresetRow.tsx",
         "src/components/MainTabUnifiedAskBar.askUp.test.tsx",
         "src/components/MainTabUnifiedAskBar.boxDown.test.tsx",
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
@@ -9119,6 +9135,7 @@
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
+        "src/components/MainTabEmptyChatHelpChip.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/SessionContextStrip.tsx",

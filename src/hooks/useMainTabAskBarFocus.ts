@@ -159,6 +159,8 @@ export function useMainTabAskBarFocus(
     const host = refs.presetCarouselHostRef.current;
     const help = host?.querySelector<HTMLElement>("button.bonsai-preset-help-chip");
     if (help) {
+      /* The help chip is in its own container (MainTabPresetRow.tsx): Steam's transfer first, as for the chips. */
+      if (takeNavFocus("preset-carousel")) return true;
       help.focus();
       return elementHasGamepadFocus(help);
     }

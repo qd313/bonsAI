@@ -19,17 +19,47 @@
  * The suggestion text itself comes from the presets data file, not from here.
  */
 import React, { useEffect, useRef, useState } from "react";
-import { Button } from "@decky/ui";
+import { Button, Focusable } from "@decky/ui";
 import type { PresetPrompt } from "../data/presets";
 import type { AskModeId } from "../data/askMode";
 import { MainTabPresetAnimatedChips } from "./MainTabPresetAnimatedChips";
 import { DetailsSlot } from "../features/details-slot/DetailsSlot";
 import { PRESET_CHIP_HEIGHT_PX } from "../features/preset-carousel/presetRowLayout";
+import { chipRowExitUp } from "../features/preset-carousel/presetRowFocusNav";
+import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../utils/navFocusRegistry";
 import { joinPresetWithRunningGame } from "../utils/joinPresetWithRunningGame";
 import {
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
+
+/**
+ * The help chip's own focus container. The chip sits alone in the row, so it needs the same two things the
+ * suggestion chips' container gives them: a nav node registered as "preset-carousel", so the ring is carried
+ * to it by Steam's transfer (a plain focus() moves the DOM's focus only; the stand-in's D-pad went past the
+ * chip to the tab bar, plan87-S-S1-HELP-CHIP.json), and the row's moves: Up to the stop above the chat,
+ * Down to the question box, Left and Right held so the ring does not leave the plugin.
+ */
+function HelpChipRoot(props: { focusUnifiedTextField: () => boolean; children: React.ReactNode }) {
+  const navRef = useRef<NavRefHolder["current"]>(null);
+  useEffect(() => {
+    registerNavFocus("preset-carousel", navRef);
+    return () => unregisterNavFocus("preset-carousel", navRef);
+  }, []);
+  return (
+    <Focusable
+      {...({
+        navRef,
+        onMoveUp: () => chipRowExitUp(),
+        onMoveDown: () => props.focusUnifiedTextField() === true,
+        onMoveLeft: () => true,
+        onMoveRight: () => true,
+      } as Record<string, unknown>)}
+    >
+      {props.children}
+    </Focusable>
+  );
+}
 
 export type MainTabPresetRowProps = {
   suggestedPrompts: PresetPrompt[];
@@ -136,25 +166,24 @@ export function MainTabPresetRow({
          * looks for this chip before the carousel), and the chips' rotation timers do not run
          * while the help chip is up.
          */
-        <Button
-          className="bonsai-preset-glass bonsai-preset-help-chip"
-          ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("plugin-help", el)}
-          {...({
-            onMoveDown: () => focusUnifiedTextField(),
-          } as Record<string, unknown>)}
-          onClick={() => {
-            rememberModalReturnFocus("plugin-help");
-            onOpenPluginHelp();
-          }}
-          style={{
-            width: "100%",
-            minHeight: PRESET_CHIP_HEIGHT_PX,
-            fontSize: 12,
-          }}
-          aria-label="How to use bonsAI — open quick start"
-        >
-          How to use bonsAI
-        </Button>
+        <HelpChipRoot focusUnifiedTextField={focusUnifiedTextField}>
+          <Button
+            className="bonsai-preset-glass bonsai-preset-help-chip"
+            ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("plugin-help", el)}
+            onClick={() => {
+              rememberModalReturnFocus("plugin-help");
+              onOpenPluginHelp();
+            }}
+            style={{
+              width: "100%",
+              minHeight: PRESET_CHIP_HEIGHT_PX,
+              fontSize: 12,
+            }}
+            aria-label="How to use bonsAI — open quick start"
+          >
+            How to use bonsAI
+          </Button>
+        </HelpChipRoot>
       ) : (
         /* While an answer's own Show details line is out of sight, it takes the chips' place. */
         <DetailsSlot focusUnifiedTextField={focusUnifiedTextField}>

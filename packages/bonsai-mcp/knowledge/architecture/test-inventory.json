@@ -69,6 +69,7 @@
     "src/components/MainTabChatTranscript.turnTitle.test.tsx",
     "src/components/MainTabChatTranscript.upWalk.test.tsx",
     "src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx",
+    "src/components/MainTabEmptyChatHelpChip.test.tsx",
     "src/components/MainTabPresetAnimatedChips.fadeButton.test.tsx",
     "src/components/MainTabPresetAnimatedChips.keepsRing.test.tsx",
     "src/components/MainTabPresetAnimatedChips.simulation.test.tsx",

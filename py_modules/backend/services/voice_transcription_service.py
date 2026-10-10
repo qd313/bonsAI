@@ -483,7 +483,7 @@ class VoiceTranscriptionSession:
         self._use_daemon = engine.acquire("mic", model_path, self.plugin_root, self.settings_dir)
 
         try:
-            cmd, backend, capture_env = _resolve_capture_command()
+            cmd, backend, capture_env = _resolve_capture_command(self.settings_dir)
             self._capture_backend = backend
             self._capture_proc = subprocess.Popen(
                 cmd,

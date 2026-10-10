@@ -29,6 +29,7 @@ from __future__ import annotations
 
 import math
 import os
+import re
 import shutil
 import struct
 import subprocess
@@ -162,9 +163,30 @@ def _resolve_pipewire_mic_target(env: Optional[dict[str, str]] = None) -> str:
         return ""
 
 
-def _resolve_capture_command() -> tuple[list[str], str, dict[str, str]]:
+# Developer-only: a file with this name in the plugin's settings folder, holding the name of an
+# audio source, makes the mic button record from that source instead of the Deck's own microphone.
+# It exists so a recorded sentence can be played into a null sink and heard by the real plugin
+# (see tests/test_voice_capture_target_override.py). Absent by default, so nobody has it.
+CAPTURE_TARGET_FILE = "voice_capture_target"
+_CAPTURE_TARGET_NAME = re.compile(r"[A-Za-z0-9_.:@+\-]{1,200}")
+
+
+def developer_capture_target(settings_dir: str) -> str:
+    """The audio source named in the settings folder's override file, or "" when there is none."""
+    if not settings_dir:
+        return ""
+    try:
+        with open(os.path.join(settings_dir, CAPTURE_TARGET_FILE), encoding="utf-8") as fh:
+            name = (fh.readline() or "").strip()
+    except OSError:
+        return ""
+    return name if _CAPTURE_TARGET_NAME.fullmatch(name) else ""
+
+
+def _resolve_capture_command(settings_dir: str = "") -> tuple[list[str], str, dict[str, str]]:
     capture_env = env_for_audio_capture()
-    mic_target = _resolve_pipewire_mic_target(capture_env)
+    override = developer_capture_target(settings_dir)
+    mic_target = override or _resolve_pipewire_mic_target(capture_env)
     if shutil.which("pw-record"):
         cmd = [
             "pw-record",
@@ -177,9 +199,14 @@ def _resolve_capture_command() -> tuple[list[str], str, dict[str, str]]:
             "--raw",
             "-",
         ]
+        if override.endswith(".monitor"):
+            # pw-record reads a sink's monitor by naming the sink and asking for its output;
+            # naming "<sink>.monitor" as a target records silence (tested on the Deck 2026-10-10).
+            cmd[1:1] = ["--target", override[: -len(".monitor")], "-P", "{ stream.capture.sink=true }"]
+            return cmd, f"pipewire (developer target {override})", capture_env
         if mic_target:
             cmd[1:1] = ["--target", mic_target]
-        return cmd, "pipewire", capture_env
+        return cmd, f"pipewire (developer target {override})" if override else "pipewire", capture_env
     for cmd, backend in (
         (
             ["parecord", f"--rate={SAMPLE_RATE}", "--channels=1", "--format=s16le", "--raw"]

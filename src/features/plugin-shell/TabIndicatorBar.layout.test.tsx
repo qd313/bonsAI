@@ -1,19 +1,22 @@
 /**
  * Title: Where the tab bar's parts sit on the Deck's 300-point bar
  * Purpose: Lay the real bar out at the Deck's width from the real scope stylesheet and pin what a
- *          person sees there (plan 84 step 4, design "T3"): the five columns in order, the current
- *          tab's name centred within 1 point of the bar's centre for every tab at five and six tabs,
- *          LB and RB 16 points in from each edge, no icon running into LB, RB or the name even with
- *          the longest name at six tabs, and tap targets big enough to hit.
- * Used for: plan 84 rows P84-TABS-01 and the name-centre half of the step 4 brief.
- * Solves: jsdom draws nothing, so a test that only reads classes would pass while the name sat off
- *         centre. This one reads every length the stylesheet gives the bar's parts, through jsdom's
+ *          person sees there (plan 87 F4, on plan 84's design "T3"): LB, then every tab in the
+ *          strip's own order, then RB; the tabs spread from LB to RB so Main is the first thing after
+ *          LB and About the last before RB on every tab; LB and RB 16 points in from each edge; no
+ *          icon box narrower than 18 points on any tab (the old bar shrank three of them to 15.2 on
+ *          Permissions and 16.7 on Developer, measured on the Deck 2026-10-09); nothing running into
+ *          anything even with the longest name at six tabs; and tap targets big enough to hit.
+ * Used for: plan 87 F4 (the tab bar's fixed order), and plan 84's P84-TABS-01.
+ * Solves: jsdom draws nothing, so a test that only reads classes would pass while an icon was
+ *         crushed. This one reads every length the stylesheet gives the bar's parts, through jsdom's
  *         own cascade, and places them with the two layout rules the bar uses: a grid of
- *         auto | minmax(0, 1fr) | auto | minmax(0, 1fr) | auto, and a flex row with shrinking.
+ *         auto | minmax(0, 1fr) | auto, and a flex row that spreads its items from end to end
+ *         (space-between) and shrinks none of them.
  * Does not: Know Steam's font. Text is measured with a table of bold capital widths, scaled by a
- *           range of factors to stand in for Motiva Sans, which is not on this PC. The centring holds
- *           for any width; the "nothing runs into anything" checks use the widest factor. The Deck
- *           check measures the same things on the device with the probe.
+ *           range of factors to stand in for Motiva Sans, which is not on this PC. The "nothing runs
+ *           into anything" checks use the widest factor. The Deck check measures the same things on
+ *           the device with the probe.
  */
 import { render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -58,70 +61,33 @@ function len(value: string, fontPx = 0): number {
   throw new Error(`a length the layout below cannot read: "${v}"`);
 }
 
-/** A `flex: 0 <shrink> <basis>` shorthand, the only form the bar uses, as a basis and a minimum. */
-function flexItem(flex: string, minWidth: number): Item {
+/** A `flex: 0 <shrink> <basis>` shorthand, the only form the bar uses, as a shrink and a width. */
+function flexItem(flex: string): { shrink: number; basis: number } {
   const m = /^0 ([01]) (.+)$/.exec(flex.trim());
   if (!m) throw new Error(`a flex value the layout below cannot read: "${flex}"`);
-  const basis = len(m[2]);
-  return { basis, min: m[1] === "0" ? basis : minWidth };
-}
-
-/** The declarations of one rule, by exact selector (jsdom has no computed style for ::before). */
-function ruleDecls(selector: string): string {
-  const css = buildBonsaiScopeStylesheet().replace(/\/\*[\s\S]*?\*\//g, "");
-  const re = /([^{}]+)\{([^{}]*)\}/g;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(css)) !== null) {
-    if (m[1].trim() === selector) return m[2];
-  }
-  throw new Error(`no rule for ${selector}`);
-}
-
-type Item = { basis: number; min: number };
-/** A flex row's item sizes in `room`: every item shrinks by its basis until it reaches its minimum. */
-function shrink(items: Item[], room: number): number[] {
-  const sizes = items.map((i) => i.basis);
-  const frozen = items.map(() => false);
-  for (let pass = 0; pass < items.length + 1; pass++) {
-    const over = sizes.reduce((a, b) => a + b, 0) - room;
-    if (over <= 0) break;
-    const live = items.map((_, k) => k).filter((k) => !frozen[k]);
-    const weight = live.reduce((a, k) => a + items[k].basis, 0);
-    if (weight === 0) break;
-    let clamped = false;
-    for (const k of live) {
-      const next = sizes[k] - (over * items[k].basis) / weight;
-      if (next <= items[k].min) {
-        sizes[k] = items[k].min;
-        frozen[k] = true;
-        clamped = true;
-      } else {
-        sizes[k] = next;
-      }
-    }
-    if (!clamped) break;
-  }
-  return sizes;
+  return { shrink: Number(m[1]), basis: len(m[2]) };
 }
 
 type Span = { left: number; right: number };
 type Laid = {
-  columns: Span[];
   lbText: Span;
   rbText: Span;
   lbTarget: Span;
   rbTarget: Span;
-  currentIcon: Span | null;
+  /** The tabs' column: from just after LB to just before RB. */
+  tabsColumn: Span;
+  /** Each item in the row, left to right: the tab it shows, its box, and its drawn icon. */
+  items: Array<{ id: string; current: boolean; box: Span; icon: Span; shrink: number }>;
+  /** Room left over in the tabs' column once every item is placed (negative: it does not fit). */
+  spare: number;
   name: Span;
-  leftIcons: Span[];
-  rightIcons: Span[];
-  peekTargets: Span[];
 };
 
 /**
  * The bar laid out at the Deck's width, from the computed styles of the real stylesheet.
- * Grid: the three `auto` columns take their items' widths (margins included, negative ones too),
- * and the two `minmax(0, 1fr)` columns share what is left equally.
+ * Grid: the two `auto` columns take their items' widths (margins included, negative ones too) and the
+ * `minmax(0, 1fr)` column takes what is left. Flex: `justify-content: space-between` shares the spare
+ * room equally between the items, and an item with a shrink of 0 keeps its width however little room.
  */
 function layOut(root: HTMLElement, factor: number): Laid {
   const cs = (el: Element) => getComputedStyle(el as HTMLElement);
@@ -129,7 +95,7 @@ function layOut(root: HTMLElement, factor: number): Laid {
   const pl = len(bar.paddingLeft);
   const pr = len(bar.paddingRight);
   const gap = len(bar.columnGap);
-  const [lbEl, leftEl, curEl, rightEl, rbEl] = Array.from(root.children);
+  const [lbEl, tabsEl, rbEl] = Array.from(root.children);
 
   const mark = (el: Element) => {
     const s = cs(el);
@@ -150,84 +116,70 @@ function layOut(root: HTMLElement, factor: number): Laid {
   const lbCol = lb.w + lb.pl + lb.pr + lb.ml + lb.mr;
   const rbCol = rb.w + rb.pl + rb.pr + rb.ml + rb.mr;
 
-  const cur = cs(curEl);
-  const iconEl = curEl.querySelector(".bonsai-tab-bar__current-icon");
-  const iconW = iconEl ? len(cs(iconEl).width) : 0;
-  const iconMr = iconEl ? len(cs(iconEl).marginRight) : 0;
-  const nameEl = curEl.querySelector(".bonsai-tab-bar__name") as HTMLElement;
-  const ns = cs(nameEl);
-  const nfs = len(ns.fontSize);
-  const nameW = len(ns.paddingLeft, nfs) + textWidth(nameEl.textContent ?? "", nfs, len(ns.letterSpacing, nfs), factor);
-  const curPl = len(cur.paddingLeft);
-  const curMl = len(cur.marginLeft);
-  const midCol = curPl + iconW + iconMr + nameW + len(cur.paddingRight) + curMl;
-
   const inner = DECK_BAR_W - pl - pr;
-  const side = Math.max(0, (inner - lbCol - midCol - rbCol - 4 * gap) / 2);
+  const tabsW = inner - lbCol - rbCol - 2 * gap;
   const x1 = pl;
   const x2 = x1 + lbCol + gap;
-  const x3 = x2 + side + gap;
-  const x4 = x3 + midCol + gap;
-  const x5 = x4 + side + gap;
-  const columns = [
-    { left: x1, right: x1 + lbCol },
-    { left: x2, right: x2 + side },
-    { left: x3, right: x3 + midCol },
-    { left: x4, right: x4 + side },
-    { left: x5, right: x5 + rbCol },
-  ];
+  const x3 = x2 + tabsW + gap;
 
   const lbBorder = x1 + lb.ml;
   const lbTextLeft = lbBorder + lb.pl; // justify-content: flex-start
-  const rbBorder = x5 + rb.ml;
+  const rbBorder = x3 + rb.ml;
   const rbTextRight = rbBorder + rb.pl + rb.w; // justify-content: flex-end
 
-  const curContent = x3 + curMl + curPl;
-  const nameLeft = curContent + iconW + iconMr;
+  /** Each item's own width: a tab's fixed basis, or the current tab's paddings, icon, gap and name. */
+  const sized = Array.from(tabsEl.children).map((el) => {
+    if (el.classList.contains("bonsai-tab-bar__current")) {
+      const c = cs(el);
+      const iconEl = el.querySelector(".bonsai-tab-bar__current-icon");
+      const iconW = iconEl ? len(cs(iconEl).width) : 0;
+      const iconMr = iconEl ? len(cs(iconEl).marginRight) : 0;
+      const nameEl = el.querySelector(".bonsai-tab-bar__name") as HTMLElement;
+      const ns = cs(nameEl);
+      const nfs = len(ns.fontSize);
+      const nameW = len(ns.paddingLeft, nfs) + textWidth(nameEl.textContent ?? "", nfs, len(ns.letterSpacing, nfs), factor);
+      const padL = len(c.paddingLeft);
+      const w = padL + iconW + iconMr + nameW + len(c.paddingRight);
+      expect(c.flex.replace(/\s+/g, " ").trim(), "the current tab never shrinks").toMatch(/^(none|0 0 auto)$/);
+      return { el, w, shrink: 0, iconLeft: padL, iconW, nameLeft: padL + iconW + iconMr, nameW, current: true };
+    }
+    const f = flexItem(cs(el).flex);
+    expect(len(cs(el).minWidth), "a tab's minimum is its own width").toBe(f.basis);
+    const drawn = Number(el.querySelector("svg")?.getAttribute("width") ?? 0);
+    return { el, w: f.basis, shrink: f.shrink, iconLeft: (f.basis - drawn) / 2, iconW: drawn, nameLeft: 0, nameW: 0, current: false };
+  });
+  const total = sized.reduce((a, i) => a + i.w, 0);
+  const spare = tabsW - total;
+  const between = sized.length > 1 ? Math.max(0, spare) / (sized.length - 1) : 0; // justify-content: space-between
 
-  /** One side's icons: each tap target's span, and the icon drawn centred in it. */
-  const peeks = (sideEl: Element) => Array.from(sideEl.querySelectorAll(".bonsai-tab-bar__peek"));
-  const peekItem = (el: Element): Item => flexItem(cs(el).flex, len(cs(el).minWidth));
-  const drawnIcon = (el: Element) => Number(el.querySelector("svg")?.getAttribute("width") ?? 0);
-  const place = (els: Element[], sizes: number[], start: number) => {
-    const targets: Span[] = [];
-    const icons: Span[] = [];
-    let x = start;
-    els.forEach((el, k) => {
-      targets.push({ left: x, right: x + sizes[k] });
-      const c = x + sizes[k] / 2;
-      icons.push({ left: c - drawnIcon(el) / 2, right: c + drawnIcon(el) / 2 });
-      x += sizes[k];
-    });
-    return { targets, icons };
-  };
-
-  const leftPeeks = peeks(leftEl);
-  const leftRoom = side - len(cs(leftEl).paddingRight);
-  const leftSizes = shrink(leftPeeks.map(peekItem), leftRoom);
-  const leftStart = x2 + leftRoom - leftSizes.reduce((a, b) => a + b, 0); // justify-content: flex-end
-  const L = place(leftPeeks, leftSizes, leftStart);
-
-  const spacer = flexItem(/flex:\s*([^;]+);/.exec(ruleDecls(".bonsai-scope .bonsai-tab-bar__side--r::before"))![1], 0);
-  const rightPeeks = peeks(rightEl);
-  const rightSizes = shrink([spacer, ...rightPeeks.map(peekItem)], side);
-  const R = place(rightPeeks, rightSizes.slice(1), x4 + rightSizes[0]); // justify-content: flex-start
+  let x = x2;
+  let name: Span = { left: 0, right: 0 };
+  const items = sized.map((i) => {
+    const box = { left: x, right: x + i.w };
+    if (i.current) name = { left: x + i.nameLeft, right: x + i.nameLeft + i.nameW };
+    x += i.w + between;
+    return {
+      id: i.el.getAttribute("data-bonsai-tab") ?? "current",
+      current: i.current,
+      box,
+      icon: { left: box.left + i.iconLeft, right: box.left + i.iconLeft + i.iconW },
+      shrink: i.shrink,
+    };
+  });
 
   return {
-    columns,
     lbText: { left: lbTextLeft, right: lbTextLeft + lb.text },
     rbText: { left: rbTextRight - rb.text, right: rbTextRight },
     lbTarget: { left: lbBorder, right: lbBorder + lb.pl + lb.w + lb.pr },
     rbTarget: { left: rbBorder, right: rbBorder + rb.pl + rb.w + rb.pr },
-    currentIcon: iconEl ? { left: curContent, right: curContent + iconW } : null,
-    name: { left: nameLeft, right: nameLeft + nameW },
-    leftIcons: L.icons,
-    rightIcons: R.icons,
-    peekTargets: [...L.targets, ...R.targets],
+    tabsColumn: { left: x2, right: x2 + tabsW },
+    items,
+    spare,
+    name,
   };
 }
 
-describe("the tab bar laid out at the Deck's 300 points (plan 84 step 4, T3)", () => {
+describe("the tab bar laid out at the Deck's 300 points (plan 87 F4, on plan 84's T3)", () => {
   let style: HTMLStyleElement;
   let scope: HTMLDivElement;
 
@@ -246,7 +198,10 @@ describe("the tab bar laid out at the Deck's 300 points (plan 84 step 4, T3)", (
   });
 
   /** Every tab list and current tab the Deck can show, laid out at `factor`. */
-  function everyBar(factor: number, check: (laid: Laid, label: string) => void) {
+  function everyBar(
+    factor: number,
+    check: (laid: Laid, label: string, ids: readonly BonsaiTabId[], current: BonsaiTabId) => void,
+  ) {
     for (const ids of [FIVE, SIX]) {
       for (const current of ids) {
         const host = scope.appendChild(document.createElement("div"));
@@ -254,82 +209,94 @@ describe("the tab bar laid out at the Deck's 300 points (plan 84 step 4, T3)", (
           <TabIndicatorBar tabIds={ids} currentTab={current} selectTab={vi.fn()} exitDown={() => true} />,
           { container: host },
         );
-        check(layOut(container.querySelector(".bonsai-tab-bar") as HTMLElement, factor), `${current} of ${ids.length}`);
+        check(layOut(container.querySelector(".bonsai-tab-bar") as HTMLElement, factor), `${current} of ${ids.length}`, ids, current);
         unmount();
       }
     }
   }
 
-  it("centres the current tab's name within 1 point of the bar's centre, for every tab at five and six tabs", () => {
+  it("puts LB, the tabs and RB left to right, LB and RB 16 points in from each edge", () => {
+    everyBar(1, (laid, label) => {
+      expect(laid.lbText.left, label).toBeCloseTo(16, 5);
+      expect(laid.rbText.right, label).toBeCloseTo(DECK_BAR_W - 16, 5);
+      expect(laid.tabsColumn.left, label).toBeGreaterThan(laid.lbTarget.right - 3);
+      expect(laid.tabsColumn.right, label).toBeLessThan(laid.rbTarget.left + 3);
+    });
+  });
+
+  it("draws the tabs in the strip's own order, the first flush after LB and the last flush before RB, on every tab", () => {
     for (const factor of FONT_FACTORS) {
-      everyBar(factor, (laid, label) => {
-        const off = Math.abs((laid.name.left + laid.name.right) / 2 - DECK_BAR_W / 2);
-        expect(off, `${label} at font factor ${factor}`).toBeLessThanOrEqual(1);
-        // Exact by construction (equal LB and RB boxes, equal sides, equal paddings round the name),
-        // so anything over a hair means one of those pairs came apart, even while still under 1.
-        expect(off, `${label} at font factor ${factor}: a pair came apart`).toBeLessThan(0.05);
+      everyBar(factor, (laid, label, ids, current) => {
+        expect(
+          laid.items.map((i) => (i.current ? current : i.id)),
+          `${label}: order drawn`,
+        ).toEqual([...ids]);
+        expect(laid.items[0].box.left, `${label}: Main flush after LB`).toBeCloseTo(laid.tabsColumn.left, 5);
+        expect(laid.items[laid.items.length - 1].box.right, `${label}: About flush before RB`).toBeCloseTo(
+          laid.tabsColumn.right,
+          5,
+        );
+        for (let k = 1; k < laid.items.length; k++) {
+          expect(laid.items[k].box.left, `${label}: item ${k} after item ${k - 1}`).toBeGreaterThanOrEqual(
+            laid.items[k - 1].box.right - 1e-9,
+          );
+        }
       });
     }
   });
 
-  it("puts the five columns left to right inside the bar, with LB and RB 16 points in from each edge", () => {
-    everyBar(1, (laid, label) => {
-      for (let k = 1; k < laid.columns.length; k++) {
-        expect(laid.columns[k].left, label).toBeGreaterThan(laid.columns[k - 1].right);
+  it("gives every icon a box at least 18 points wide on all six tabs, Permissions and Developer included, in the widest font", () => {
+    let seen = 0;
+    everyBar(WIDEST, (laid, label, ids, current) => {
+      const widths = laid.items.filter((i) => !i.current);
+      for (const item of widths) {
+        expect(item.box.right - item.box.left, `${label}: ${item.id}`).toBeGreaterThanOrEqual(18 - 1e-9);
+        expect(item.shrink, `${label}: ${item.id} may not shrink`).toBe(0);
       }
-      expect(laid.columns[0].left).toBeGreaterThanOrEqual(0);
-      expect(laid.columns[4].right).toBeLessThanOrEqual(DECK_BAR_W);
-      expect(laid.lbText.left).toBeCloseTo(16, 5);
-      expect(laid.rbText.right).toBeCloseTo(DECK_BAR_W - 16, 5);
+      // The two tabs where the old bar shrank the boxes, counted so a failure to reach them reads plainly.
+      if (ids === SIX && (current === "permissions" || current === "developer")) seen += 1;
     });
+    expect(seen).toBe(2);
   });
 
-  it("keeps every icon clear of LB, RB and the current tab, even with the longest name at six tabs in a wide font", () => {
+  it("fits: even with the longest name at six tabs in a wide font, the row is no wider than the room between LB and RB, with a gap between neighbours", () => {
     everyBar(WIDEST, (laid, label) => {
-      const left = laid.leftIcons;
-      const right = laid.rightIcons;
-      if (left.length > 0) {
-        expect(left[0].left - laid.lbText.right, `${label}: LB to the first icon`).toBeGreaterThanOrEqual(2);
-        expect(laid.currentIcon!.left - left[left.length - 1].right, `${label}: last left icon to the current icon`).toBeGreaterThanOrEqual(2);
+      expect(laid.spare, `${label}: spare room`).toBeGreaterThanOrEqual(0);
+      const drawn = laid.items.map((i) => i.icon);
+      for (let k = 1; k < drawn.length; k++) {
+        expect(drawn[k].left - drawn[k - 1].right, `${label}: icons ${k - 1} and ${k}`).toBeGreaterThanOrEqual(2);
       }
-      for (let k = 1; k < left.length; k++) expect(left[k].left, label).toBeGreaterThan(left[k - 1].right);
-      expect(right[0].left - laid.name.right, `${label}: the name to the first right icon`).toBeGreaterThanOrEqual(2);
-      for (let k = 1; k < right.length; k++) expect(right[k].left, label).toBeGreaterThan(right[k - 1].right);
-      expect(laid.rbText.left - right[right.length - 1].right, `${label}: the last icon to RB`).toBeGreaterThanOrEqual(2);
+      expect(drawn[0].left - laid.lbText.right, `${label}: LB to the first icon`).toBeGreaterThanOrEqual(2);
+      expect(laid.rbText.left - drawn[drawn.length - 1].right, `${label}: the last icon to RB`).toBeGreaterThanOrEqual(2);
     });
   });
 
-  it("draws the drawing's spacing where there is room: icons 7 apart, 12 from the current icon, 28 after the name", () => {
-    everyBar(1, (laid, label) => {
-      if (label !== "main of 5") return;
-      const { leftIcons: l, rightIcons: r } = laid;
-      expect(l[1].left - l[0].right).toBeCloseTo(7, 5);
-      expect(r[1].left - r[0].right).toBeCloseTo(7, 5);
-      expect(laid.currentIcon!.left - l[l.length - 1].right).toBeCloseTo(12, 5);
-      expect(r[0].left - laid.name.right).toBeCloseTo(28, 5);
+  it("keeps the current tab's name inside its own box, after its icon, inside the bar", () => {
+    everyBar(WIDEST, (laid, label) => {
+      const cur = laid.items.find((i) => i.current)!;
+      expect(laid.name.left, label).toBeGreaterThanOrEqual(cur.icon.right);
+      expect(laid.name.right, label).toBeLessThanOrEqual(cur.box.right);
+      expect(laid.name.right, label).toBeLessThanOrEqual(DECK_BAR_W);
     });
   });
 
-  it("gives every tap target room to hit: LB and RB about 31 points wide, side icons at least the icon, none overlapping", () => {
+  it("gives every tap target room to hit: LB and RB about 31 points wide, side icons at least 18, none overlapping", () => {
     everyBar(WIDEST, (laid, label) => {
       for (const t of [laid.lbTarget, laid.rbTarget]) {
         expect(t.right - t.left, label).toBeGreaterThanOrEqual(28);
         expect(t.left).toBeGreaterThanOrEqual(0);
         expect(t.right).toBeLessThanOrEqual(DECK_BAR_W);
       }
-      const all = [laid.lbTarget, ...laid.peekTargets, laid.rbTarget].sort((a, b) => a.left - b.left);
-      for (const t of laid.peekTargets) expect(t.right - t.left, label).toBeGreaterThanOrEqual(11);
+      const all = [laid.lbTarget, ...laid.items.map((i) => i.box), laid.rbTarget].sort((a, b) => a.left - b.left);
       for (let k = 1; k < all.length; k++) expect(all[k].left, label).toBeGreaterThanOrEqual(all[k - 1].right - 1e-9);
     });
-    // Every target is the bar's full height: the grid and the sides stretch their items.
+    // Every target is the bar's full height: the grid and the row of tabs stretch their items.
     const { container } = render(
       <TabIndicatorBar tabIds={SIX} currentTab="main" selectTab={vi.fn()} exitDown={() => true} />,
       { container: scope.appendChild(document.createElement("div")) },
     );
     const root = container.querySelector(".bonsai-tab-bar") as HTMLElement;
     expect(getComputedStyle(root).alignItems).toBe("stretch");
-    for (const side of Array.from(root.querySelectorAll(".bonsai-tab-bar__side"))) {
-      expect(getComputedStyle(side as HTMLElement).alignItems).toBe("stretch");
-    }
+    expect(getComputedStyle(container.querySelector(".bonsai-tab-bar__tabs") as HTMLElement).alignItems).toBe("stretch");
   });
 });

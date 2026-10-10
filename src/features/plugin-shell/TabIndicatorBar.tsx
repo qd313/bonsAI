@@ -2,10 +2,13 @@
  * Title: The plugin's own tab bar
  *
  * Purpose: Draws the thin bar that replaced Steam's own tab strip at the
- * top of the plugin, as plan 84's design "T3": the current tab's icon and
- * name in the middle, every other tab as a small dimmed icon beside it
- * (the ones LB would reach on the left, the ones RB would reach on the
- * right), and LB and RB marks at the two ends. LB and RB are dim until
+ * top of the plugin, as plan 84's design "T3" in plan 87 F4's fixed order:
+ * every tab, always in the strip's own order, Main at the far left and
+ * About at the far right and nothing wrapping round. The current tab is
+ * drawn as its icon and name at its own place in the row, every other tab
+ * as a small dimmed icon (the tabs before it on its left, the tabs after
+ * it on its right), and LB and RB marks sit at the two ends. LB and RB
+ * still wrap round (LB on Main goes to About); only the drawing stays put. LB and RB are dim until
  * the D-pad's ring is on the bar; then the whole bar wears the ring and
  * the marks light up. Nothing drops down from it.
  *
@@ -68,7 +71,7 @@ export type TabIndicatorBarProps = {
  * never leave. It is a stop at all only because of `focusable: true`.
  *
  * 1. Works out which tab is current, its name, and which tabs go on each
- *    side (tabBarSides, the same wrap order LB and RB step through).
+ *    side (tabBarSides: the ones before it and the ones after it).
  * 2. Registers this bar with two shared registries: one so other code can
  *    hand it focus by name, and one so it gets focus back after a popup
  *    closes.
@@ -77,8 +80,8 @@ export type TabIndicatorBarProps = {
  *    the tabs root, not here: see useHiddenTabHeaderTrap.)
  * 4. Builds the left/right/up/down and button handlers that do the
  *    switching, from a shared helper.
- * 5. Draws the five columns: LB, the left side's icons, the current tab's
- *    icon and name, the right side's icons, RB. Each mark and side icon
+ * 5. Draws three columns: LB, the tabs (the left side's icons, the current
+ *    tab's icon and name, the right side's icons), RB. Each mark and side icon
  *    is a tap target. What it draws depends only on its props, never on
  *    the ring or a tap, so there is nothing that could be left half drawn.
  */
@@ -107,21 +110,17 @@ export function TabIndicatorBar({
     if (id !== null && id !== currentTab) selectTab(id);
   };
 
-  /** One side's icons, each its own tap target. */
-  const side = (ids: BonsaiTabId[], which: "l" | "r") => (
-    <span className={`bonsai-tab-bar__side bonsai-tab-bar__side--${which}`}>
-      {ids.map((id) => (
-        <span
-          key={id}
-          className="bonsai-tab-bar__peek"
-          data-bonsai-tab={id}
-          role="button"
-          aria-label={BONSAI_TAB_SHORT_NAMES[id]}
-          onClick={() => open(id)}
-        >
-          {bonsaiTabBarIcon(id, TAB_BAR_SIDE_ICON_PX)}
-        </span>
-      ))}
+  /** One other tab's icon, its own tap target. */
+  const peek = (id: BonsaiTabId) => (
+    <span
+      key={id}
+      className="bonsai-tab-bar__peek"
+      data-bonsai-tab={id}
+      role="button"
+      aria-label={BONSAI_TAB_SHORT_NAMES[id]}
+      onClick={() => open(id)}
+    >
+      {bonsaiTabBarIcon(id, TAB_BAR_SIDE_ICON_PX)}
     </span>
   );
 
@@ -163,16 +162,18 @@ export function TabIndicatorBar({
       >
         LB
       </span>
-      {side(left, "l")}
-      <span className="bonsai-tab-bar__current">
-        {current ? (
-          <span className="bonsai-tab-bar__current-icon" aria-hidden="true">
-            {bonsaiTabBarIcon(current, TAB_BAR_CURRENT_ICON_PX)}
-          </span>
-        ) : null}
-        <span className="bonsai-tab-bar__name">{name}</span>
+      <span className="bonsai-tab-bar__tabs">
+        {left.map(peek)}
+        <span className="bonsai-tab-bar__current">
+          {current ? (
+            <span className="bonsai-tab-bar__current-icon" aria-hidden="true">
+              {bonsaiTabBarIcon(current, TAB_BAR_CURRENT_ICON_PX)}
+            </span>
+          ) : null}
+          <span className="bonsai-tab-bar__name">{name}</span>
+        </span>
+        {right.map(peek)}
       </span>
-      {side(right, "r")}
       <span
         className="bonsai-tab-bar__shoulder bonsai-tab-bar__shoulder--r"
         role="button"

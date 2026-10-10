@@ -2,13 +2,16 @@
  * Title: The plugin's own tab bar, at the very top of the screen
  *
  * Purpose: Styles the thin bar that replaced Steam's own tab strip, as
- * plan 84's design "T3": one 20-point row of five columns, the current
- * tab's icon and name in the middle with its words on the bar's centre,
- * the other tabs as small dimmed icons either side, and LB and RB marks
- * 16 points in from each edge, dim until the ring is on the bar. While
- * the D-pad's ring is on it, the whole bar wears a white inset ring.
+ * plan 84's design "T3" with plan 87 F4's fixed order: one 20-point row of
+ * three columns, LB, the tabs and RB. The tabs are all drawn, always in the
+ * strip's own order (Main far left, About far right, never wrapping round):
+ * the current tab's icon and name sit at its own place in the row and every
+ * other tab is a small dimmed icon, 18 points wide at the least. LB and RB
+ * marks sit 16 points in from each edge, dim until the ring is on the bar.
+ * While the D-pad's ring is on it, the whole bar wears a white inset ring.
  *
- *     LB  [i] [i]  [I] SETTINGS   [i] [i] [i]  RB
+ *     LB  [Main]  [i]  [i]  [i]  [i]  [i]  RB        (on Main, the name beside its icon)
+ *     LB  [i]  [i]  [SETTINGS]  [i]  [i]  [i]  RB    (on Settings)
  *
  * Used for: Folded into the plugin's one combined stylesheet by
  * bonsaiScopeStylesheet.ts, alongside the other numbered section files
@@ -58,27 +61,27 @@ const ACCENT = "var(--bonsai-ui-tab-lit, #52d88a)";
  * Out: a block of CSS text.
  * Can go wrong: this function itself cannot fail, but its height rule
  * leans on an exact specificity fight with section-3.ts (noted inline),
- * and the name only stays on the bar's centre while the numbers below
- * stay paired: LB and RB the same width, the middle's two paddings equal,
- * and the middle pulled left by exactly the icon and its gap.
+ * and the row only fits while the other tabs' icons stay 18 wide and the
+ * longest name stays under what the Deck's 300 points leave for it
+ * (about 130 wide at the very most; 116 measured on Permissions).
  *
  * 1. Locks the bar's height to one fixed size, so the two hooks that
  *    measure "how much room does the tab area need" never see it change.
  * 2. Sets the small gap under the bar as a plain CSS value too, not only
  *    the one a hook writes inline — needed because changing the UI scale
  *    rebuilds the tab area and can leave the inline value stale.
- * 3. Lays the bar out as a five-column grid: LB, the left side, the
- *    current tab, the right side, RB. The two sides share what is left
- *    equally, so the middle column sits on the bar's centre. The bar clips
- *    anything inside it to its own box, so no part of it can ever be
- *    drawn over the row below.
+ * 3. Lays the bar out as a three-column grid: LB, the tabs, RB. The tabs
+ *    column takes what is left and spreads its items from one end to the
+ *    other, so the first tab is flush after LB and the last flush before
+ *    RB. The bar clips anything inside it to its own box, so no part of it
+ *    can ever be drawn over the row below.
  * 4. Styles LB and RB: one fixed width each, dim, with a tap target that
  *    reaches into the bar's edge padding without moving anything.
- * 5. Styles the sides: each icon its own tap target, the right side's
- *    first icon held clear of the name by a gap that gives way before an
- *    icon would run into RB.
- * 6. Styles the middle: the current tab's icon hangs off the left of its
- *    name, so the words, not the icon and words together, are centred.
+ * 5. Styles the other tabs' icons: each its own tap target, a fixed width
+ *    that never shrinks, so six tabs on the Deck's 300 points never crush
+ *    an icon (plan 87 F4; the old bar shrank them to 15 on Permissions).
+ * 6. Styles the current tab: its icon then its name, as one item at the
+ *    tab's own place in the row; its width follows the name.
  * 7. Draws the ring on the whole bar, and lights LB and RB, while Steam's
  *    own ring marker is on it, and only then; plain browser focus alone
  *    draws nothing.
@@ -107,8 +110,6 @@ ${buildTabBarRules(".bonsai-scope")}`;
  * Out: the bar's own rules, numbered as in the list above (1 and 3 to 7).
  */
 export function buildTabBarRules(root: string): string {
-  const hang = TAB_BAR_CURRENT_ICON_PX + TAB_BAR_CURRENT_ICON_GAP_PX;
-  const halfSideGap = TAB_BAR_SIDE_ICON_GAP_PX / 2;
   const halfColumnGap = TAB_BAR_COLUMN_GAP_PX / 2;
   return `
         /* The bar's height in its own (0,4,0) !important rule: section-3.ts sets every
@@ -119,9 +120,9 @@ export function buildTabBarRules(root: string): string {
           min-height: ${uiScalePx(TAB_BAR_HEIGHT_PX)} !important;
           max-height: ${uiScalePx(TAB_BAR_HEIGHT_PX)} !important;
         }
-        /* Five columns (the drawing's .d-tabbar.bal-t3 with .edge16): the two sides are
-           minmax(0, 1fr), so they always come out equal and the middle column sits on the bar's
-           centre. Items stretch to the full 20 points so every tap target is the bar's height.
+        /* Three columns (plan 87 F4): LB, the tabs (minmax(0, 1fr), so it takes whatever LB and RB
+           leave) and RB, with the bar's 16-point edge padding (the drawing's .edge16). Items stretch
+           to the full 20 points so every tap target is the bar's height.
            overflow: hidden is the guarantee behind TAB-BAR-GHOST-01 staying fixed: whatever is ever
            put inside the bar, none of it can be painted over the chip row below. */
         ${root} .bonsai-tab-bar {
@@ -136,7 +137,7 @@ export function buildTabBarRules(root: string): string {
           padding-left: ${uiScalePx(TAB_BAR_EDGE_PAD_PX)};
           padding-right: ${uiScalePx(TAB_BAR_EDGE_PAD_PX)};
           display: grid;
-          grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr) auto;
+          grid-template-columns: auto minmax(0, 1fr) auto;
           align-items: stretch;
           column-gap: ${uiScalePx(TAB_BAR_COLUMN_GAP_PX)};
           overflow: hidden;
@@ -173,51 +174,38 @@ export function buildTabBarRules(root: string): string {
           padding-left: ${uiScalePx(halfColumnGap)};
           margin-left: ${uiScalePx(-halfColumnGap)};
         }
-        /* The sides. Each icon sits in its own tap target, an icon wide plus half the gap either side,
-           so neighbouring targets meet with no dead space; the targets give up that gap (down to the
-           icon itself) before an icon would run into LB or RB, which the drawing's fixed gap did with
-           the longest name at six tabs. The left side keeps clear room for the current tab's icon
-           that hangs into it (see the middle below); the right side's matching room, between the
-           name and its first icon, is a spacer that gives way first. */
-        ${root} .bonsai-tab-bar__side {
+        /* The tabs, in the strip's own order, spread from one end to the other (plan 87 F4): the first
+           one flush after LB, the last flush before RB, the spare room shared out between them. Nothing
+           wraps and nothing shrinks: with the longest name at six tabs the row is still narrower than
+           the room between LB and RB (measured on the Deck, 2026-10-09), and if it ever were not, the
+           bar's overflow: hidden clips the end rather than crushing an icon. */
+        ${root} .bonsai-tab-bar__tabs {
           display: flex;
+          flex-wrap: nowrap;
           align-items: stretch;
+          justify-content: space-between;
           min-width: 0;
         }
-        ${root} .bonsai-tab-bar__side--l {
-          justify-content: flex-end;
-          padding-right: ${uiScalePx(hang - halfSideGap)};
-        }
-        ${root} .bonsai-tab-bar__side--r {
-          justify-content: flex-start;
-        }
-        ${root} .bonsai-tab-bar__side--r::before {
-          content: "";
-          flex: 0 1 ${uiScalePx(hang - halfSideGap)};
-          min-width: 0;
-        }
+        /* Each other tab: its icon in its own tap target, an icon plus a gap wide, never narrower. */
         ${root} .bonsai-tab-bar__peek {
-          flex: 0 1 ${uiScalePx(TAB_BAR_SIDE_ICON_PX + TAB_BAR_SIDE_ICON_GAP_PX)};
-          min-width: ${uiScalePx(TAB_BAR_SIDE_ICON_PX)};
+          flex: 0 0 ${uiScalePx(TAB_BAR_SIDE_ICON_PX + TAB_BAR_SIDE_ICON_GAP_PX)};
+          min-width: ${uiScalePx(TAB_BAR_SIDE_ICON_PX + TAB_BAR_SIDE_ICON_GAP_PX)};
           display: flex;
           align-items: center;
           justify-content: center;
           color: ${SIDE_ICON_COLOR};
           cursor: pointer;
         }
-        /* The middle: the current tab's icon then its name. Centre the words, not the group (the
-           drawing does it with a 12px .mid::after spacer): the column is pulled left by exactly the
-           icon and its gap, so the icon hangs into the left side's clear room and the column itself
-           holds only the name between two equal paddings. The name carries 0.1em of padding on its
-           left to match the letter-spacing every letter, the last included, carries on its right,
-           so the name's own box is centred on its letters. */
+        /* The current tab: its icon then its name, as one item at its own place in the row. The
+           name carries 0.1em of padding on its left to match the letter-spacing every letter, the
+           last included, carries on its right, so the name's own box is centred on its letters. */
         ${root} .bonsai-tab-bar__current {
+          flex: none;
           display: flex;
           align-items: center;
           min-width: 0;
           padding-left: ${uiScalePx(TAB_BAR_CURRENT_PAD_X_PX)};
           padding-right: ${uiScalePx(TAB_BAR_CURRENT_PAD_X_PX)};
-          margin-left: ${uiScalePx(-hang)};
           white-space: nowrap;
           color: ${ACCENT};
         }

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 794,
-  "edgeCount": 2382,
+  "edgeCount": 2381,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3618,7 +3618,6 @@
     "src/features/plugin-shell/TabIndicatorBar.test.tsx": {
       "imports": [
         "src/features/plugin-shell/TabIndicatorBar.tsx",
-        "src/features/plugin-shell/tabBarNav.ts",
         "src/features/plugin-shell/tabTitles.tsx",
         "src/styles/bonsaiScopeStylesheet.ts",
         "src/styles/sections/tabIndicatorBar.ts",
@@ -3766,7 +3765,6 @@
       ],
       "importedBy": [
         "src/features/chat-title/ChatTitleView.tsx",
-        "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/tabBarNav.test.ts"
       ]

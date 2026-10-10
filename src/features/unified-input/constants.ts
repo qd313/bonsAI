@@ -164,9 +164,13 @@ export const TAB_BAR_CURRENT_ICON_PX = 12;
 export const TAB_BAR_CURRENT_ICON_GAP_PX = 4;
 /** The middle column's own left and right padding (the drawing's `.bal-t3 .mid`). */
 export const TAB_BAR_CURRENT_PAD_X_PX = 6;
-/** The other tabs' small dimmed icons on each side. */
+/** The other tabs' small dimmed icons. */
 export const TAB_BAR_SIDE_ICON_PX = 11;
-/** Between two side icons, while there is room; it gives way before an icon would run into LB or RB. */
+/**
+ * Added to the icon to make a side tab's tap target 18 wide (plan 87 F4). That width is fixed: the
+ * bar spreads the tabs from LB to RB and never shrinks one (the old bar shrank them to 15 on the
+ * Permissions tab).
+ */
 export const TAB_BAR_SIDE_ICON_GAP_PX = 7;
 /** The bug's artwork carries inner padding; drawn this much larger it matches the others (plan 59's 26 in 22). */
 export const TAB_BAR_BUG_ICON_SCALE = 26 / 22;

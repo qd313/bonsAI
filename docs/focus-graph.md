@@ -275,10 +275,17 @@ open under it (drawing frame "Z", `docs/planning/assets/84-vertical-room.html`).
 `tabBarNav.ts`, `useHiddenTabHeaderTrap.ts`; styles in `src/styles/sections/tabIndicatorBar.ts`.
 
 ```
-LB  [tabs LB reaches]  [icon] NAME  [tabs RB reaches]  RB      <- one stop: the whole bar
+LB  [Main] [icon] [icon] [icon] [icon] [About]  RB   <- one stop: the whole bar
+     (every tab, always in the strip's order; the current one is drawn as its icon and NAME)
    Left / LB: previous tab (wraps)        Right / RB: next tab (wraps)
    | Down: the current tab's first stop    ^ Up: left to Steam (Decky's back button today)
 ```
+
+**Since plan 87 F4 the drawing is a fixed order and no move changed.** The bar draws every tab left to right in
+the strip's own order, Main at the far left and About at the far right, the tabs before the current one on its
+left and the tabs after it on its right, never wrapping round; only the drawing stays put. Left, Right, LB and RB
+still wrap (LB on Main goes to About, RB on About to Main), so the stops and the moves below are exactly as they
+were.
 
 - **One stop.** The whole bar is one Steam focus stop (`focusable: true` on its Focusable). LB, RB and the side
   icons are plain spans for touch, with no tabindex and no Focusable of their own, so the ring never sits on
@@ -304,8 +311,8 @@ LB  [tabs LB reaches]  [icon] NAME  [tabs RB reaches]  RB      <- one stop: the 
   the white inset ring and a faint fill, and LB and RB go from dim (0.32) to full strength. Plain browser focus
   shows nothing: plan 78 measured the bar holding browser focus with no Steam ring anywhere.
 - **Touch:** a tap on LB opens the previous tab, on RB the next, on a side icon that tab; a tap on the name does
-  nothing. Targets: LB and RB 31 by 20 points; each side icon 18 by 20, narrowing towards the icon's own 11
-  only for the longest names at six tabs.
+  nothing. Targets: LB and RB 31 by 20 points; each side icon 18 by 20, always (plan 87 F4: they no longer
+  narrow, the longest name at six tabs still fits).
 - **Gone with the strip:** its open and closed states, its fade, the timer that forced the fade shut, the
   tap-to-open and the tap-outside listener. What the bar draws depends only on which tabs exist and which is
   current, never on the ring or a tap, and the bar clips everything inside it to its own 20 points, so nothing

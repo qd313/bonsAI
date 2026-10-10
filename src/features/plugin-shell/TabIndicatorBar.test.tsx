@@ -22,7 +22,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import React from "react";
 
 import { TabIndicatorBar } from "./TabIndicatorBar";
-import { neighbourTab } from "./tabBarNav";
 import { ALL_BONSAI_TAB_IDS, BONSAI_TAB_SHORT_NAMES, type BonsaiTabId } from "./tabTitles";
 import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
 import { buildTabBarRules } from "../../styles/sections/tabIndicatorBar";
@@ -111,28 +110,34 @@ function withScopeStylesheet() {
   return () => scope.appendChild(document.createElement("div"));
 }
 
-const sideIds = (container: HTMLElement, side: "l" | "r") =>
-  Array.from(container.querySelectorAll(`.bonsai-tab-bar__side--${side} .bonsai-tab-bar__peek`)).map((el) =>
-    el.getAttribute("data-bonsai-tab"),
+/** The tabs the bar draws, left to right, as [tab id, whether it is the current tab]. */
+const drawnOrder = (container: HTMLElement): Array<[string, boolean]> =>
+  Array.from(container.querySelectorAll<HTMLElement>(".bonsai-tab-bar__tabs > *")).map((el) =>
+    el.classList.contains("bonsai-tab-bar__current")
+      ? [(container.querySelector(".bonsai-tab-bar") as HTMLElement).getAttribute("data-bonsai-tab-bar-tab") ?? "", true]
+      : [el.getAttribute("data-bonsai-tab") ?? "", false],
   );
 
 describe("the tab bar as T3 (plan 84 step 4)", () => {
   const host = withScopeStylesheet();
 
-  it("is one row of five columns in order: LB, the tabs before, the current tab, the tabs after, RB", () => {
+  it("is one row of three columns in order: LB, the tabs in their fixed order, RB", () => {
     const { container } = render(bar({ currentTab: "settings" }), { container: host() });
     const root = container.querySelector(".bonsai-tab-bar") as HTMLElement;
     const columns = Array.from(root.children).map((el) => el.className);
     expect(columns).toEqual([
       "bonsai-tab-bar__shoulder bonsai-tab-bar__shoulder--l",
-      "bonsai-tab-bar__side bonsai-tab-bar__side--l",
-      "bonsai-tab-bar__current",
-      "bonsai-tab-bar__side bonsai-tab-bar__side--r",
+      "bonsai-tab-bar__tabs",
       "bonsai-tab-bar__shoulder bonsai-tab-bar__shoulder--r",
     ]);
     const cs = getComputedStyle(root);
     expect(cs.display).toBe("grid");
-    expect(cs.gridTemplateColumns).toBe("auto minmax(0, 1fr) auto minmax(0, 1fr) auto");
+    expect(cs.gridTemplateColumns).toBe("auto minmax(0, 1fr) auto");
+    // The tabs spread from LB's side to RB's, so the first one is flush after LB and the last flush before RB.
+    const tabs = getComputedStyle(container.querySelector(".bonsai-tab-bar__tabs") as HTMLElement);
+    expect(tabs.display).toBe("flex");
+    expect(tabs.justifyContent).toBe("space-between");
+    expect(tabs.flexWrap).not.toBe("wrap");
   });
 
   it("names the current tab in the middle, after its icon, and follows currentTab", () => {
@@ -150,22 +155,34 @@ describe("the tab bar as T3 (plan 84 step 4)", () => {
   it.each([
     ["five", FIVE],
     ["six", SIX],
-  ] as const)("at %s tabs, every current tab shows each other tab exactly once as an icon, LB's on the left and RB's on the right", (_n, ids) => {
-    for (const current of ids) {
+  ] as const)("at %s tabs, every current tab draws all the tabs left to right in the strip's own order, the current one at its own place (plan 87 F4)", (_n, ids) => {
+    for (const [index, current] of ids.entries()) {
       const { container, unmount } = render(bar({ tabIds: ids, currentTab: current }), { container: host() });
-      const left = sideIds(container, "l");
-      const right = sideIds(container, "r");
-      expect(left).toHaveLength(Math.floor((ids.length - 1) / 2));
-      expect([...left, ...right].sort()).toEqual(ids.filter((id) => id !== current).sort());
-      // Nearest to the name is the tab one press of LB (left) or RB (right) away.
-      expect(left[left.length - 1]).toBe(neighbourTab(ids, current, -1));
-      expect(right[0]).toBe(neighbourTab(ids, current, 1));
+      const drawn = drawnOrder(container);
+      // The icons left of the current one are exactly the tabs before it, the icons right of it the tabs after it.
+      expect(
+        drawn.map(([id]) => id),
+        `${current}: the order drawn`,
+      ).toEqual([...ids]);
+      expect(drawn.findIndex(([, isCurrent]) => isCurrent), `${current}: where the current tab sits`).toBe(index);
+      expect(drawn.filter(([, isCurrent]) => isCurrent)).toHaveLength(1);
+      // Main is the first thing after LB and About the last before RB, whichever tab is showing.
+      expect(drawn[0][0]).toBe("main");
+      expect(drawn[drawn.length - 1][0]).toBe("about");
       for (const peek of Array.from(container.querySelectorAll(".bonsai-tab-bar__peek"))) {
         expect(peek.querySelector("svg")).not.toBeNull();
         expect(peek.getAttribute("aria-label")).toBe(BONSAI_TAB_SHORT_NAMES[peek.getAttribute("data-bonsai-tab") as BonsaiTabId]);
       }
       unmount();
     }
+  });
+
+  it("does not wrap round: on Main nothing is drawn before it, on About nothing after it", () => {
+    const main = render(bar({ currentTab: "main" }), { container: host() });
+    expect(main.container.querySelector(".bonsai-tab-bar__tabs")!.firstElementChild!.className).toBe("bonsai-tab-bar__current");
+    main.unmount();
+    const about = render(bar({ currentTab: "about" }), { container: host() });
+    expect(about.container.querySelector(".bonsai-tab-bar__tabs")!.lastElementChild!.className).toBe("bonsai-tab-bar__current");
   });
 
   it("lights nothing and names nothing for a tab that is not mounted, so a stale id never claims a tab", () => {

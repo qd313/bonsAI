@@ -55,6 +55,19 @@ describe("placementDelta", () => {
     expect(placementDelta({ ...SCREEN, ...chipAt(94.7), boxBottom: 212.8, firstRowTop: 3.5, aboveTop: -53.8 })).toBeCloseTo(-53.8 - 205, 5);
   });
 
+  it("never moves for the toggle alone: a box lifted on the way in may leave it over the line while the walk goes on", () => {
+    // A first box lifted on the way in: the grid's top row at 190 (just over the line at 204, not wholly), the ring
+    // on the next row down, and the toggle 57.3 above the top row, at 132.7.
+    expect(placementDelta({ ...SCREEN, ...chipAt(220.4), boxBottom: 430, firstRowTop: 190, aboveTop: 132.7 })).toBe(0);
+  });
+
+  it("brings the toggle down with the top row after a landing that went where Steam's glide goes", () => {
+    // The ring landed on a top-row chip over the line; the first look put it on the line; the toggle is still over.
+    const landed = { ...SCREEN, ...chipAt(204), boxBottom: 400, firstRowTop: 204, aboveTop: 146.7 };
+    expect(placementDelta(landed)).toBe(0);
+    expect(placementDelta({ ...landed, leaving: true })).toBeCloseTo(146.7 - 205, 5);
+  });
+
   it("pulls the grid down only as far as the open box's end stays above the dock, and the chip at least onto the line", () => {
     // Moving the grid all the way would push this 400 px box's end behind the dock: stop where it ends 6 px above.
     expect(placementDelta({ ...SCREEN, ...chipAt(94.7), boxBottom: 560, firstRowTop: 3.5 })).toBeCloseTo(560 - 652.4, 5);

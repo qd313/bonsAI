@@ -65,6 +65,8 @@ export function useChipLadderReveal(
   const generationRef = useRef(0);
   /* Set once the placement has scrolled for the current generation: the held block's fixes stand down. */
   const placedRef = useRef(false);
+  /* The generation whose first look went down to where Steam's glide goes; its later looks bring the rest down. */
+  const leavingRef = useRef(-1);
   /* The empty block after the box (see 4 above), and the scroll position the last step started from. */
   const holdElRef = useRef<HTMLElement | null>(null);
   const wantedScrollRef = useRef<number | null>(null);
@@ -84,8 +86,15 @@ export function useChipLadderReveal(
   const place = useCallback(
     (generation: number, firstPass = false, arriving = false) => {
       if (generation !== generationRef.current || !(arriving || ringInLadder())) return;
-      const ladder = ladderElRef.current;
-      if (placeOpenChip(openChipRef.current(), bodyElRef.current, holdElRef.current, firstPass, ladder)) placedRef.current = true;
+      const moved = placeOpenChip(openChipRef.current(), bodyElRef.current, {
+        hold: holdElRef.current,
+        ladder: ladderElRef.current,
+        firstPass,
+        leaving: leavingRef.current === generation,
+      });
+      if (moved !== 0) placedRef.current = true;
+      /* A first look that went down went where Steam's glide goes: the ring left a tall box (chipLadderPlacement 2). */
+      if (firstPass && moved < 0) leavingRef.current = generation;
     },
     [bodyElRef, ladderElRef, ringInLadder],
   );

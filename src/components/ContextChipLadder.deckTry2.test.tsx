@@ -81,12 +81,12 @@ type Mounted = {
 };
 
 /** The toggle, then the ladder, as the newest answer draws them; a stop below standing in for the Hide details line. */
-function mount(glideDecidedOnFocus: boolean, ringMarker = false): Mounted {
+function mount(glideDecidedOnFocus: boolean, ringMarker = false, firstBox?: number): Mounted {
   const scene = deckChipLadderPane({
     ...SCREEN,
     scrollTop: START_SCROLL,
     chipWidths: Object.fromEntries(CHIPS.map(([l, w]) => [l, w])),
-    boxHeights: Object.fromEntries(CHIPS.map(([l, , b]) => [l, b])),
+    boxHeights: Object.fromEntries(CHIPS.map(([l, , b], i) => [l, i === 0 && firstBox ? firstBox : b])),
     rule: "padded",
     steamTopMargin: true,
     glideTopAboveLine: true,
@@ -307,6 +307,30 @@ describe.each([
     expect(stops).toEqual([LABELS[0], LABELS[2], LABELS[4], LABELS[5], LABELS[7], "Hide details"]);
     expect(scrollOnly).toBe(1);
   });
+
+  /*
+   * The toggle is brought under Steam's line only when the ring lands on a chip over it (leaving a tall box), never
+   * just because it is over the line. A first box of 320 px (a knowledge-base box with more sources) is lifted 118 px
+   * on the way in, which puts the toggle 48 px over the line; the Right walk and the Down walk must still hold the
+   * row, as the run's step 1 asks ("the row still for chips 2 to 7").
+   */
+  for (const dir of ["Right", "Down"] as const) {
+    it(`a tall first box lifted on the way in: the ${dir} walk still holds the row, toggle over the line or not`, async () => {
+      const m = mount(onFocus, true, 320);
+      m.toggle.focus();
+      ringOn(m.toggle);
+      await pressFromOutside(m, "Down");
+      expect(m.scene.detailsBox().bottom).toBeLessThanOrEqual(m.scene.dockTop);
+      expect(m.scene.toggleBox().top).toBeLessThan(m.scene.steamLine);
+      const row = m.scene.rowTop();
+      const stops = dir === "Right" ? [1, 2, 3, 4, 5, 6] : [2, 4, 5];
+      for (const stop of stops) {
+        press(m, dir);
+        expect(document.activeElement?.textContent).toBe(LABELS[stop]);
+        expect(m.scene.rowTop(), `the row at ${LABELS[stop]}`).toBe(row);
+      }
+    });
+  }
 
   /*
    * (c) The Deck: Developer details read to its end, Down to the Hide details line, then Up back onto it: Steam's

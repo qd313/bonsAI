@@ -639,7 +639,9 @@ Code: `ContextChipLadder.tsx` (the moves), `chipLadderGrid.ts` (`packChipRows`, 
     row and the stop drawn just above the grid (the "This answer | Session" toggle; a session row in the Session
     tab; measured, never focused), as far as the open box's end stays readable. Then Left, Up and the toggle
     itself move nothing. That move only ever goes down: a later look never scrolls back up after Steam's glide
-    (a box end left hidden shows on the first Down).
+    (a box end left hidden shows on the first Down). It starts only when the ring lands on a chip over the line,
+    or the chip or top row lies wholly over it; the toggle over the line on its own (left there by a tall first
+    box lifted on the way in) never moves the row while the walk goes on.
   - **The ring coming in from outside is placed too.** Down from the toggle and Up from the Hide details line
     focus the ladder's root, which hands the ring to the open chip. Steam stamps its ring a tick after that focus
     event, so the arrival used to read the ring as still outside and do nothing: the first chip's box, entered

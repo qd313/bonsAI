@@ -57,6 +57,8 @@ export type PlacementGeometry = {
    * bring the rest down.
    */
   firstPass?: boolean;
+  /** A later look at a landing whose first look went where Steam's glide goes (the ring left a tall box). */
+  leaving?: boolean;
 };
 
 /**
@@ -64,13 +66,15 @@ export type PlacementGeometry = {
  *
  * 1. The first look at a chip that landed with its top over Steam's line (off the top, or inside the 116 px it
  *    keeps clear): go exactly where Steam's own glide takes it, its top on the line.
- * 2. The later looks, when any stop a walk back up can land on (this chip, the grid's top row, the stop drawn
- *    just above the grid) has its top over the line: Steam would glide each of them as the ring reached it (the
- *    Deck, 2026-10-10: 73.4, 29.7, 31.2 and 28.9 px walking Left back from a tall box; then, with the grid brought
- *    down only to its top row's bottom, 23.5 at the second chip and 57.8 at the toggle). So bring them all down
- *    in one move, until the highest one's top is on the line, as far as the open box's end stays readable, and at
- *    the least a chip lying wholly over the line until its bottom meets it. Never up: a box end left hidden shows
- *    on the first Down, and a pass that scrolled up after Steam's glide came down would be a bounce.
+ * 2. The later looks at such a landing, or whenever this chip or the grid's top row lies wholly over the line:
+ *    Steam would glide every stop a walk back up can land on (the grid's top row, the stop drawn just above the
+ *    grid) as the ring reached it (the Deck, 2026-10-10: 73.4, 29.7, 31.2 and 28.9 px walking Left back from a
+ *    tall box; then, with the grid brought down only to its top row's bottom, 23.5 at the second chip and 57.8 at
+ *    the toggle). So bring them all down in one move, until the highest one's top is on the line, as far as the
+ *    open box's end stays readable, and at the least a chip lying wholly over the line until its bottom meets
+ *    it. Never up: a box end left hidden shows on the first Down, and a pass that scrolled up after Steam's glide
+ *    came down would be a bounce. The stop above the grid alone never starts this: a box lifted on the way in may
+ *    leave the toggle over the line, and the walk on must hold the row.
  * 3. A chip behind the dock: lift it just clear.
  * 4. Then the box's end: if it is behind the dock, scroll it up to just above the dock, but no further than
  *    the chip's bottom meeting Steam's line. A box too tall for that shows its end on the next Down instead.
@@ -82,11 +86,13 @@ export function placementDelta(g: PlacementGeometry): number {
   const steamLine = g.paneTop + STEAM_TOP_MARGIN_PX;
   /* A band so short that Steam's line is behind the dock leaves only the pane's own top to keep to. */
   const lineFits = steamLine - h <= lowestChipTop;
-  const highestStop = Math.min(g.chipTop, g.firstRowTop ?? g.chipTop, g.aboveTop ?? g.chipTop);
+  const firstRowTop = g.firstRowTop ?? g.chipTop;
+  const highestStop = Math.min(g.chipTop, firstRowTop, g.aboveTop ?? firstRowTop);
   const chipOverLine = g.chipTop < g.paneTop || g.chipTop < steamLine - ON_THE_LINE_PX;
-  const anyOverLine = highestStop < steamLine - ON_THE_LINE_PX;
+  const whollyOver = (top: number) => top < g.paneTop || top + h < steamLine - 1;
+  const comingDown = g.leaving || whollyOver(g.chipTop) || whollyOver(firstRowTop);
   if (lineFits && g.firstPass && chipOverLine) return Math.max(g.chipTop - steamLine, g.chipTop - lowestChipTop);
-  if (lineFits && !g.firstPass && anyOverLine) {
+  if (lineFits && !g.firstPass && comingDown && highestStop < steamLine - ON_THE_LINE_PX) {
     const allOnLine = highestStop - steamLine - BELOW_THE_LINE_PX;
     const boxStaysReadable = g.boxBottom - (g.readableBottom - DOCK_CLEARANCE_PX);
     let down = Math.min(0, Math.max(allOnLine, boxStaysReadable));
@@ -137,24 +143,33 @@ function smallStopTop(el: Element | null | undefined): number | undefined {
   return r && r.bottom - r.top > 0 && r.bottom - r.top < SMALL_STOP_PX ? r.top : undefined;
 }
 
+/** What one placement pass is told besides the chip and its box. */
+type PlacementPass = {
+  /** The empty block after the details box, grown when a scroll needs room past the pane's end. */
+  hold?: HTMLElement | null;
+  /**
+   * The chips' own root: the stop drawn just before it (the "This answer | Session" toggle; a session row in the
+   * Session tab) is where Up and Left from the top row go, so it is measured too, never focused.
+   */
+  ladder?: HTMLElement | null;
+  firstPass?: boolean;
+  leaving?: boolean;
+};
+
 /**
- * Place the open chip and its box (placementDelta), measuring them now. `ladder` is the chips' own root: the stop
- * drawn just before it (the "This answer | Session" toggle; a session row in the Session tab) is where Up and
- * Left from the top row go, so it is measured too, never focused. Does nothing when the chip or its box has no box
- * yet (not drawn) or there is no pane. True when it scrolled.
+ * Place the open chip and its box (placementDelta), measuring them now. Does nothing when the chip or its box has
+ * no box yet (not drawn) or there is no pane. Returns how far it asked the pane to scroll (0: it did not).
  */
 export function placeOpenChip(
   chip: HTMLElement | null | undefined,
   box: HTMLElement | null | undefined,
-  hold?: HTMLElement | null,
-  firstPass = false,
-  ladder?: HTMLElement | null,
-): boolean {
-  if (!chip || !box) return false;
+  pass: PlacementPass = {},
+): number {
+  if (!chip || !box) return 0;
   const pane = findScrollablePanel(chip);
-  if (!pane) return false;
+  if (!pane) return 0;
   const c = chip.getBoundingClientRect();
-  if (!(c.bottom - c.top > 0)) return false;
+  if (!(c.bottom - c.top > 0)) return 0;
   const grid = chip.parentElement?.getBoundingClientRect();
   const delta = placementDelta({
     chipTop: c.top,
@@ -163,10 +178,11 @@ export function placeOpenChip(
     paneTop: pane.getBoundingClientRect().top,
     readableBottom: readableBottomOf(pane),
     firstRowTop: grid && grid.bottom - grid.top > 0 ? grid.top : undefined,
-    aboveTop: smallStopTop(ladder?.previousElementSibling),
-    firstPass,
+    aboveTop: smallStopTop(pass.ladder?.previousElementSibling),
+    firstPass: pass.firstPass,
+    leaving: pass.leaving,
   });
-  return delta !== 0 && scrollPaneSmoothlyBy(pane, delta, hold);
+  return delta !== 0 && scrollPaneSmoothlyBy(pane, delta, pass.hold) ? delta : 0;
 }
 
 /**

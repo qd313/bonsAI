@@ -86,6 +86,53 @@ export interface DeckAnswerOptions {
 export type Box = [top: number, bottom: number];
 
 /**
+ * The pane's scrollIntoView, which jsdom lacks; only the plugin's lift off the dock calls it (block "end").
+ * It does what the Deck measured on 2026-10-01: the end lands Steam's 80 px of scroll padding above the
+ * pane's bottom, with the lift's own scroll-margin above that (see `deckAnswer` for the history). With
+ * `liftScrollsToEnd` false the panel stays still, as the Deck measured inside the answer on 2026-09-06.
+ */
+export function steamScrollIntoView(pane: HTMLElement, el: HTMLElement, paneBottom: number, liftScrollsToEnd = true) {
+  return (arg?: boolean | ScrollIntoViewOptions) => {
+    if (!liftScrollsToEnd || typeof arg !== "object" || arg.block !== "end") return;
+    const target = paneBottom - STEAM_SCROLL_PADDING_BOTTOM - (parseFloat(el.style.scrollMarginBottom) || 0);
+    pane.scrollTop = Math.max(0, pane.scrollTop + el.getBoundingClientRect().bottom - target);
+  };
+}
+
+/**
+ * Steam's glide to a stop that just took focus, applied once the press that moved the ring is over, under
+ * one of the three rules (`SteamScrollRule`, below; none: no glide). `steamTopMargin` switches on what the
+ * Deck measured under "padded" (see `DeckAnswerOptions`).
+ */
+export function steamGlide(
+  el: HTMLElement,
+  pane: HTMLElement,
+  rule: SteamScrollRule | undefined,
+  at: { paneTop: number; dockTop: number; steamTopMargin?: boolean },
+): void {
+  if (!rule) return;
+  const { paneTop: paneTopY, dockTop: dockTopY } = at;
+  const r = el.getBoundingClientRect();
+  const height = r.bottom - r.top;
+  const small = height < 100;
+  const measured = at.steamTopMargin ?? false;
+  const inside = r.top >= paneTopY && r.bottom <= dockTopY + (measured ? STEAM_BOTTOM_SLACK_PX : 0);
+  // The top margin: a small stop lying wholly above the 116 px line is moved down to it even though it is on
+  // screen (the Deck: a cover at y 104 ended at 204, and one at 147 to 202 ended at 204). One that straddles
+  // the line is left alone (the Deck kept covers at 167 to 222 and 182 to 237).
+  const marginLine = paneTopY + STEAM_SCROLL_PADDING_TOP;
+  const inTopMargin = measured && r.bottom < marginLine - STEAM_TOP_SLACK_PX;
+  // A stop taller than the band got no glide on the Deck (plan77-BLOCK2-GAME.json: a 348 px box in a
+  // 206 px band stayed exactly where the walk left it), so none is modelled for one.
+  if (height > dockTopY - paneTopY) return;
+  let target: number | null = null;
+  if (rule === "center" && small) target = paneTopY + (dockTopY - paneTopY - height) / 2;
+  else if (rule === "padded" && small && (!inside || inTopMargin)) target = marginLine;
+  else if (!inside) target = paneTopY;
+  if (target !== null) pane.scrollTop = Math.max(0, pane.scrollTop + r.top - target);
+}
+
+/**
  * An answer inside a scroll pane, in the Deck's numbers. A box is given as [top, bottom] in the
  * answer's own coordinates (its screen y when the panel is scrolled to 0), and follows the scroll.
  */
@@ -119,11 +166,7 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
    * The margin is read off the element, so the model follows whatever the lift asks. `liftScrollsToEnd: false` leaves the panel still instead, as the Deck
    * measured inside the answer on 2026-09-06 (useDockClearanceOnFocus.ts); every walk passes under both.
    */
-  const scrollIntoViewOf = (el: HTMLElement) => (arg?: boolean | ScrollIntoViewOptions) => {
-    if (!(options.liftScrollsToEnd ?? true) || typeof arg !== "object" || arg.block !== "end") return;
-    const target = paneBottomY - STEAM_SCROLL_PADDING_BOTTOM - (parseFloat(el.style.scrollMarginBottom) || 0);
-    pane.scrollTop = Math.max(0, pane.scrollTop + el.getBoundingClientRect().bottom - target);
-  };
+  const scrollIntoViewOf = (el: HTMLElement) => steamScrollIntoView(pane, el, paneBottomY, options.liftScrollsToEnd ?? true);
   const place = (el: HTMLElement, [top, bottom]: Box) => {
     el.getBoundingClientRect = () => rect(top - pane.scrollTop, bottom - pane.scrollTop);
     el.scrollIntoView = scrollIntoViewOf(el);
@@ -204,31 +247,11 @@ export function deckAnswer(sections: Box[], scrollTop = 0, steamScroll?: SteamSc
   pane.addEventListener("focusin", (event) => {
     landed = event.target as HTMLElement;
   });
-  const glide = (el: HTMLElement) => {
-    const r = el.getBoundingClientRect();
-    const height = r.bottom - r.top;
-    const small = height < 100;
-    const measured = options.steamTopMargin ?? false;
-    const inside = r.top >= paneTopY && r.bottom <= dockTopY + (measured ? STEAM_BOTTOM_SLACK_PX : 0);
-    // The top margin: a small stop lying wholly above the 116 px line is moved down to it even though it is on
-    // screen (the Deck: a cover at y 104 ended at 204, and one at 147 to 202 ended at 204). One that straddles
-    // the line is left alone (the Deck kept covers at 167 to 222 and 182 to 237).
-    const marginLine = paneTopY + STEAM_SCROLL_PADDING_TOP;
-    const inTopMargin = measured && r.bottom < marginLine - STEAM_TOP_SLACK_PX;
-    // A stop taller than the band got no glide on the Deck (plan77-BLOCK2-GAME.json: a 348 px box in a
-    // 206 px band stayed exactly where the walk left it), so none is modelled for one.
-    if (height > dockTopY - paneTopY) return;
-    let target: number | null = null;
-    if (steamScroll === "center" && small) target = paneTopY + (dockTopY - paneTopY - height) / 2;
-    else if (steamScroll === "padded" && small && (!inside || inTopMargin)) target = marginLine;
-    else if (!inside) target = paneTopY;
-    if (target !== null) pane.scrollTop = Math.max(0, pane.scrollTop + r.top - target);
-  };
   const settle = () => {
     const el = landed;
     landed = null;
     if (!el || el === bubble) return;
-    if (steamScroll) glide(el);
+    steamGlide(el, pane, steamScroll, { paneTop: paneTopY, dockTop: dockTopY, steamTopMargin: options.steamTopMargin });
     // The plugin's own lift, whose last pass (900 ms) comes after Steam's glide (150 ms).
     if (options.dockLift ?? true) liftForFocus(el);
   };

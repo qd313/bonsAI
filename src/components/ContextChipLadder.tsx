@@ -35,6 +35,13 @@
  * (useChipLadderReveal.ts; the whole answer jumped on every press before
  * 2026-10-08). Down off the last chip first scrolls the end of a tall panel
  * into view, then leaves.
+ *
+ * The chips are a grid (plan 87 F3): packed into rows that fit the column
+ * (useChipGridOrder.ts), Left and Right step through them in drawn order, Up
+ * and Down move to the nearest chip in the row above or below
+ * (chipLadderGrid.ts). Each chip's place is a CSS `order`, never a moved
+ * element, so a re-pack cannot take Steam's ring off the chip holding it.
+ * docs/focus-graph.md, "The Show details chips grid", lists every move.
  */
 import { useCallback, useRef, useState } from "react";
 import type { FocusEvent } from "react";
@@ -48,6 +55,8 @@ import { chipsFromSnapshot, CREDITS_SHOWN, type CreditsView } from "../utils/con
 import { ChipExpandedBody } from "./ChipExpandedBody";
 import { isOkDeckButtonEvent } from "../utils/focusNavigation";
 import { useChipLadderReveal } from "../hooks/useChipLadderReveal";
+import { useChipGridOrder } from "../hooks/useChipGridOrder";
+import { CHIP_GAP_PX, gridMove, rowsFromBoxes, type GridDirection } from "./chipLadderGrid";
 import { scrollRestOfBodyIntoView } from "../utils/chatPanelScroll";
 import { elementHasFocus } from "../utils/uiDocument";
 import { focusRowElement } from "../utils/focusPerTurnRow";
@@ -134,12 +143,13 @@ export type ContextChipLadderProps = {
  * 3. Once expanded, every chip is drawn, at full strength and one size,
  *    however many there are: a row that adds, drops or resizes a chip as you
  *    step re-wraps and shifts the whole answer above it (2026-10-08).
- * 4. Left/Right and Up/Down all move the same active chip. Moving right or
- *    down off the last chip (after scrolling the rest of a tall panel into
- *    view, if some of it is behind the dock), or left/up off the first,
- *    falls through to onMoveDownFromLadder/onMoveUpFromLadder so the D-pad
- *    can leave the ladder entirely.
- * 5. Draw the chip row, the open chip marked by its fill and border only,
+ * 4. Left/Right step through the chips in drawn order; Up/Down move to the
+ *    nearest chip in the row above or below (chipLadderGrid.ts). Right off
+ *    the last chip or Down off the bottom row (after scrolling the rest of a
+ *    tall panel into view, if some of it is behind the dock), and Left off
+ *    the first chip or Up off the top row, fall through to
+ *    onMoveDownFromLadder/onMoveUpFromLadder so the D-pad can leave the ladder.
+ * 5. Draw the chips in packed order, the open chip marked by its fill and border only,
  *    then hand the active chip to ChipExpandedBody() to draw its details below.
  */
 export function ContextChipLadder({
@@ -167,6 +177,8 @@ export function ContextChipLadder({
   /* Each drawn chip's own element, by its index in `chips`; the open chip's index as last drawn. */
   const chipEls = useRef(new Map<number, HTMLElement>());
   const openIndexRef = useRef(0);
+  /* The chips in the order they are drawn, packed into rows that fit (plan 87 F3). */
+  const drawnOrder = useChipGridOrder(rowElRef, chipEls, chips.length);
 
   const ringOnChip = (idx: number): boolean => {
     const el = chipEls.current.get(idx);
@@ -230,11 +242,10 @@ export function ContextChipLadder({
 
   /*
    * Every chip carries its own moves, because Steam calls them on the element holding the ring.
-   * A step is a plain focus() onto the next chip: the chips are siblings inside this one
+   * A step is a plain focus() onto another chip: the chips are siblings inside this one
    * container, the case AGENTS.md ("The Steam Deck focus graph") says a plain focus() carries the
-   * ring. Off either end the press goes to the caller, as it always did.
+   * ring. Out of the grid the press goes to the caller, as it always did.
    */
-  const last = chips.length - 1;
   const stepTo = (idx: number): boolean => {
     /*
      * A step changes the panel drawn under the row and nothing else: the row stays exactly where it
@@ -263,11 +274,24 @@ export function ContextChipLadder({
     if (body && scrollRestOfBodyIntoView(body)) return true;
     return Boolean(onMoveDownFromLadder?.());
   };
+  /*
+   * Where a press goes is read off the chips' boxes as drawn at that moment (chipLadderGrid.ts):
+   * the rows are wherever the browser put them, so the walk always matches the screen.
+   */
+  const boxOf = (i: number) => {
+    const r = chipEls.current.get(i)?.getBoundingClientRect();
+    return r ? { left: r.left, right: r.right, top: r.top, bottom: r.bottom } : { left: 0, right: 0, top: 0, bottom: 0 };
+  };
+  const press = (idx: number, dir: GridDirection): boolean => {
+    const move = gridMove(rowsFromBoxes(drawnOrder, boxOf), boxOf, idx, dir);
+    if ("to" in move) return stepTo(move.to);
+    return move.leave === "up" ? Boolean(onMoveUpFromLadder?.()) : leaveDown();
+  };
   const chipMoves = (idx: number) => ({
-    onMoveLeft: () => (idx > 0 ? stepTo(idx - 1) : false),
-    onMoveRight: () => (idx < last ? stepTo(idx + 1) : leaveDown()),
-    onMoveUp: () => (idx > 0 ? stepTo(idx - 1) : Boolean(onMoveUpFromLadder?.())),
-    onMoveDown: () => (idx < last ? stepTo(idx + 1) : leaveDown()),
+    onMoveLeft: () => press(idx, "left"),
+    onMoveRight: () => press(idx, "right"),
+    onMoveUp: () => press(idx, "up"),
+    onMoveDown: () => press(idx, "down"),
   });
 
   /*
@@ -321,9 +345,10 @@ export function ContextChipLadder({
           marginBottom: 6,
         }}
       >
-        Chip {safeIndex + 1} of {chips.length}
+        Chip {drawnOrder.indexOf(safeIndex) + 1} of {chips.length}
       </div>
       <div
+        className="bonsai-chip-ladder-grid"
         ref={(el) => {
           rowElRef.current = el;
         }}
@@ -331,7 +356,7 @@ export function ContextChipLadder({
           display: "flex",
           flexDirection: "row",
           flexWrap: "wrap",
-          gap: 6,
+          gap: CHIP_GAP_PX,
           marginBottom: 8,
           width: "100%",
           alignItems: "flex-start",
@@ -355,6 +380,7 @@ export function ContextChipLadder({
               }
               style={{
                 display: "inline-block",
+                order: drawnOrder.indexOf(idx),
                 boxSizing: "border-box",
                 width: "fit-content",
                 maxWidth: "100%",

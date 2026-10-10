@@ -556,6 +556,49 @@ another React tree), `chatRowMoves.ts` (Up, Down and LB/RB, shared with the name
   with the ring on Cancel, and Cancel keeps the chat and puts the ring back on the delete icon; B from each icon
   returns the ring to the name; the back arrow's box is the same width with a 14-letter and a 60-letter name.
 
+### The Show details chips grid (plan 87 F3)
+
+The chips under an answer's Show details ("This answer" tab, and the same ladder under an older turn and in the
+Session tab) are a grid. They are packed into rows that fit the column: in reading order, unless letting a
+narrow chip move up into the room left at the end of an earlier row saves a whole row. Each chip's place is a
+CSS `order`, so no chip element is ever moved or rebuilt and the one holding the ring keeps it. The eight chips
+the Deck showed on 2026-10-09 make five rows either way (no three of them fit side by side in 300 px):
+
+```
+toggle  "This answer | Session"                 (Up from the top row, Left from the first chip)
+  [Knowledge base]  [KB: 13 sections]          row 1
+  [Read current TDP]  [Reply style: balanced]  row 2
+  [Thinking: Balanced · 65 s · ~626 tokens]    row 3
+  [Spoiler risk: low]  [Routed gemma4:e2b-…]   row 4
+  [Developer details]                          row 5
+  ┌ the open chip's details, under the whole grid ┐
+  └───────────────────────────────────────────────┘
+whatever Down past the ladder reached before    (Down from the bottom row, Right from the last chip)
+```
+
+Code: `ContextChipLadder.tsx` (the moves), `chipLadderGrid.ts` (`packChipRows`, `rowsFromBoxes`, `gridMove`),
+`useChipGridOrder.ts` (measures and packs after every draw).
+
+- **Stops.** One per chip, as since plan 79; the chip holding the ring is the open one, and its details are drawn
+  under the grid. The caption "Chip N of M" counts in drawn order.
+- **Left and Right** step through the chips in drawn order, row after row: Right at a row's last chip goes to the
+  next row's first chip, Left at a row's first chip to the previous row's last chip. Walking Left or Right reaches
+  every chip and no press does nothing.
+- **Up and Down** move to the row above or below, onto its chip nearest in x (by the chips' centres; a tie goes to
+  the left one). The rows are read off the chips' boxes at the moment of the press, never from the packing, so the
+  walk always matches what is drawn. Down from row 1's left chip on the eight chips above: Knowledge base, Read
+  current TDP, Thinking, Spoiler risk, Developer details.
+- **Leaving.** Up from the top row and Left from the first chip go where Up from the first chip always went
+  (`onMoveUpFromLadder`: the This answer | Session toggle; on an older turn, Show details' own line; in the
+  Session tab, the session row above). Down from the bottom row and Right from the last chip go where Down from
+  the last chip always went (`onMoveDownFromLadder`), after first scrolling the rest of a tall details box into
+  view if its end is behind the dock (that press keeps the ring on the chip).
+- **Every move inside the grid** is a plain `focus()` between sibling chips in the one ladder container, the case
+  AGENTS.md allows; leaving goes through the caller's own transfer, unchanged.
+- **B** closes the ladder (`onCancelButton` on each chip), unchanged. **A** does nothing on a chip, unchanged.
+- **No layout** (a test page): each chip is a row of its own, so Down steps one chip at a time, as before the grid.
+- **Not backed by a device row yet.** The Deck check is in the plan 87 lane report.
+
 ### The tab bar in Steam's strip, and Decky's bar per tab (plan 84 step 6)
 
 Plan 84 step 6 moves the tab bar out of bonsAI's box, up into the 14-point strip Steam leaves empty at the top

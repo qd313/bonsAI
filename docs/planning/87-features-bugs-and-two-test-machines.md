@@ -449,3 +449,26 @@ change the runbook.
   plugin's own speech engine; old code kept only the first words, the fix the whole sentence.
 - **00:40, Deck block 3 started** (deploy, then the tab bar, name row, ten chats, Text size, slot, empty chat).
   Waiting to land: B9+B10 (the other tabs' scroll) and F3 (the chips grid).
+- **00:44 to 01:22, landed:** B9+B10 (24 px above each tab's first heading; the tab moves itself a little before
+  Steam's own scroll, so a step is a few lines); F3 (the chips grid walked in four directions, details lifted into
+  view; one clash with the Text size change resolved by taking the grid's side, which already carried it); the
+  doubled "Screenshot quality" heading; a forgotten chat pointer after a restart; the AI's own orange suggestion chip
+  reachable by the D-pad; the two after-delete fixes (below). Second docs sweep landed. Two landings needed a retry
+  of one step because Windows briefly locked a generated file.
+- **Deck block 3 (00:41 to 01:04, build `d96ed0bf`, monitor):** PASS: the tab bar order, "bonsAI" in small caps, the
+  back arrow 40 px on every name, the + and delete icons, the empty chat's chip, the ten-chat picker (open, B, Cancel,
+  + at ten), a question at ten chats with no open chat, Text size (12 / 13.8 / 10.8 px, nothing else changes, survives
+  a reopen). FAIL: after Delete in the picker the old chat stayed on screen. New bug: deleting the open chat with the
+  delete icon left the panel blank with a dead D-pad until Quick Access was reopened. Both fixed by 01:22 (the screen
+  is rebuilt around a Decky box from a note that still named the old chat). UNCLEAR: LB from Main (the ring was on no
+  control after a tab change); the slot check could not make its case.
+- **Stand-in S2 and the help chip retry:** the tab order, the icons and the Text size row walk on this PC too; after
+  the fix, the help chip is reachable, and opening and closing the quick start makes it give way to the suggestion
+  chips, even after a reopen (a stand-in pass, not a Deck pass).
+- **Deck block 3b (01:05 to 01:20):** PASS: the pretend microphone's quiet ten-second sentence came through whole on
+  tiny.en and base.en, and with a pause; the mic refuses while a model downloads; the repeated paragraph is gone from a
+  continued answer; Update AI & models updated the Deck's AI from 0.34.1 to 0.40.2 with no popup and restarted it.
+  New: the first mic press right after the box is cleared stopped by itself after 94 ms (2 of 2); a helper is on it.
+- **01:24, Deck block 4 started** (the chips grid, the tabs' scroll and heading, About Up, the ring after a tab change,
+  the after-delete fixes). Third docs sweep running. Phone notifications are switched off in the app, so none were
+  sent; this log is the record.

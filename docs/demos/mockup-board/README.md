@@ -39,7 +39,7 @@ out when pushing. Since then:
 | 7 | Your own notes that Ask reads | ★★★★ | Round 1 drafted |
 | 8 | Search in bonsAI: find an earlier question by a word in it | ★★ | Added to the list 2026-10-09 at the maintainer's ask; not drawn yet. Start from option 4 of the older search mock-up (https://claude.ai/artifact/CjiVzMEe8UipPda2kS2q18). The maintainer sees it as a bigger feature for a later release (about 0.7.0) |
 
-**Next step:** tab 5 (maps in answers), started 2026-10-09. Tabs 1 to 3 come back at the end to narrow. Tab 4 is skipped for now: the maintainer called it out of date; redraw it in the new layout before showing it again. Picks so far: tab 1 A, B and Wild 2; tab 2 B and Wild 2; tab 3 A and B (B "cleaner").
+**Next step:** tab 6 (Connection doctor), started 2026-10-09. Tabs 1 to 3 and 5 come back at the end to narrow. Tab 4 is skipped for now: the maintainer called it out of date; redraw it in the new layout before showing it again. Picks so far: tab 1 A, B and Wild 2; tab 2 B and Wild 2; tab 3 A and B (B "cleaner"); tab 5 C, Wild 1 and Wild 2 liked, A, B and D not ("too basic"; wants more maps, more body parts or a realistic view; Wild 1 needs a scoring test where Opus or Fable grade what the Deck's models circle and help teach them; Wild 2 is "like spoiler covering").
 
 Left for a later session on purpose: terse mode, the Spy's reveal, search density, the model speed
 readout, web permission, the SteamOS share path and the SteamOS hint card.

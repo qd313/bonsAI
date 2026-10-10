@@ -129,6 +129,7 @@ import {
 } from "../features/unified-input/constants";
 import { buildLiveReasoningSteps, buildReasoningFold } from "../utils/buildReasoningFoldElement";
 import { getUiDocument, uiGamepadFocusElement } from "../utils/uiDocument";
+import { answerWithoutContradictedCloseMatchLine as closeMatchAgrees } from "../utils/kbCloseMatchLineAgrees";
 import {
   buildKbNotesBlockElement,
   kbAttachedNotesFrom,
@@ -185,7 +186,7 @@ import type {
   StrategyChecklistState,
 } from "../types/bonsaiUi";
 import { ThinkingSpinnerIcon } from "./icons";
-import type { TransparencySnapshot } from "../utils/inputTransparency";
+import type { KbAttachedNote, TransparencySnapshot } from "../utils/inputTransparency";
 import { useStreamScrollPin } from "../hooks/useStreamScrollPin";
 import type { AskModeId } from "../data/askMode";
 import type { LastExchangeSnapshot, LiveThinkingSnapshot } from "../types/backgroundAsk";
@@ -862,10 +863,11 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     facts: TurnSpoilerFacts,
     /* The text Read aloud would read, which puts the speaker in the bubble's lower-left corner
        (plan 84 step 3); left out where the answer cannot be read yet. */
-    readAloudBody?: string
-  ) =>
+    readAloudBody?: string,
+    /* The turn's attached notes: the "No close match" line comes off an answer that used one. */
+    notes: KbAttachedNote[] = []) =>
     buildAnswerBubbleElement({
-      body,
+      body: streaming ? body : closeMatchAgrees(body, facts.askQuestion, notes),
       streaming,
       spoilerMaskingEnabled: strategySpoilerMaskingEnabled,
       spoilerDefaultExpanded:
@@ -889,9 +891,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       getAnswerCopyText:
         !streaming && body.trim() && !isStopNoticeResponse(body)
           ? () =>
-              buildAnswerCopyText({ body, spoilerMaskingEnabled: strategySpoilerMaskingEnabled, ...facts })
+              buildAnswerCopyText({ body: closeMatchAgrees(body, facts.askQuestion, notes), spoilerMaskingEnabled: strategySpoilerMaskingEnabled, ...facts })
           : undefined,
-      ...(readAloudBody === undefined ? {} : readAloudRowProps(answerKey, readAloudBody, facts)),
+      ...(readAloudBody === undefined ? {} : readAloudRowProps(answerKey, closeMatchAgrees(readAloudBody, facts.askQuestion, notes), facts)),
     });
 
   /*
@@ -1241,7 +1243,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 ) : null}
                 {buildChatSummaryWarningElement(turn.chatSummary)}
                 {renderReasoningFold(turn.id, turn.reasoning)}
-                {renderAnswerBubble(turn.answer, false, turn.id, archivedSpoilerFacts(turn, turnIndex), turn.answer)}
+                {renderAnswerBubble(turn.answer, false, turn.id, archivedSpoilerFacts(turn, turnIndex), turn.answer, kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex)))}
                 {buildChatSummaryNoteElement({
                   turnKey: turn.id,
                   chatSummary: turn.chatSummary,
@@ -1495,7 +1497,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   "live",
                   liveSpoilerFacts,
                   /* Read aloud reads the finished exchange's answer, so it waits for the ask to end. */
-                  isAsking ? undefined : lastExchange?.answer
+                  isAsking ? undefined : lastExchange?.answer, liveKbNotes
                 )
               : null}
             {expandedTurnKey === "live" ? renderStrategyBranchPicker("live") : null}

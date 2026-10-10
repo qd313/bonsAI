@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 776,
-  "edgeCount": 2328,
+  "fileCount": 779,
+  "edgeCount": 2337,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -601,6 +601,15 @@
         "src/utils/oneLineSpoilerBlock.test.tsx"
       ]
     },
+    "src/components/MainTabChatTranscript.closeMatchLine.test.tsx": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/types/bonsaiUi.ts",
+        "src/utils/inputTransparency.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx": {
       "imports": [
         "src/components/MainTabChatTranscript.tsx",
@@ -924,6 +933,7 @@
         "src/utils/contextChipsFromSnapshot.ts",
         "src/utils/drgGlossaryAsk.ts",
         "src/utils/inputTransparency.ts",
+        "src/utils/kbCloseMatchLineAgrees.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/permissionDeepLink.ts",
         "src/utils/replyStopRegistry.ts",
@@ -935,6 +945,7 @@
       "importedBy": [
         "src/components/ContextChipLadder.ringWalk.test.tsx",
         "src/components/MainTab.tsx",
+        "src/components/MainTabChatTranscript.closeMatchLine.test.tsx",
         "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
         "src/components/MainTabChatTranscript.cutSpoilerCover.test.tsx",
@@ -6230,6 +6241,7 @@
         "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/components/MainTabAskModeMenuPopover.test.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
+        "src/components/MainTabChatTranscript.closeMatchLine.test.tsx",
         "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
         "src/components/MainTabChatTranscript.cutSpoilerCover.test.tsx",
@@ -6465,6 +6477,7 @@
         "src/components/MainTab.tabBarDownEarlier.test.tsx",
         "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/components/MainTab.tsx",
+        "src/components/MainTabChatTranscript.closeMatchLine.test.tsx",
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
         "src/components/MainTabChatTranscript.cutSpoilerCover.test.tsx",
         "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
@@ -7773,6 +7786,7 @@
         "src/components/MainTab.tabBarDownEarlier.test.tsx",
         "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/components/MainTab.tsx",
+        "src/components/MainTabChatTranscript.closeMatchLine.test.tsx",
         "src/components/MainTabChatTranscript.detailsTabs.test.tsx",
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",
         "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
@@ -7804,6 +7818,8 @@
         "src/utils/chatSlotsApi.ts",
         "src/utils/contextChipsFromSnapshot.test.ts",
         "src/utils/contextChipsFromSnapshot.ts",
+        "src/utils/kbCloseMatchLineAgrees.test.ts",
+        "src/utils/kbCloseMatchLineAgrees.ts",
         "src/utils/kbNoteUsedByAnswer.test.ts",
         "src/utils/kbNoteUsedByAnswer.ts",
         "src/utils/unwrapAskedEntitySpoilerFences.ts"
@@ -7840,6 +7856,23 @@
         "src/utils/joinPresetWithRunningGame.test.ts"
       ]
     },
+    "src/utils/kbCloseMatchLineAgrees.test.ts": {
+      "imports": [
+        "src/utils/inputTransparency.ts",
+        "src/utils/kbCloseMatchLineAgrees.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/kbCloseMatchLineAgrees.ts": {
+      "imports": [
+        "src/utils/inputTransparency.ts",
+        "src/utils/kbNoteUsedByAnswer.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/utils/kbCloseMatchLineAgrees.test.ts"
+      ]
+    },
     "src/utils/kbDownloadMarker.ts": {
       "imports": [],
       "importedBy": [
@@ -7861,6 +7894,7 @@
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
         "src/components/MainTabChatTranscript.spoilerCredits.test.tsx",
         "src/utils/buildKbNotesBlockElement.tsx",
+        "src/utils/kbCloseMatchLineAgrees.ts",
         "src/utils/kbNoteUsedByAnswer.test.ts"
       ]
     },

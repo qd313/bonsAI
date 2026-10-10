@@ -123,21 +123,26 @@ describe("Where AI runs on a Deck", () => {
     expect(up).toEqual([TEST, BROWSE, UPDATE, BOOT, RUN]);
   });
 
-  it("while a setup runs, Install, Browse and Test are disabled and Cancel stands in: no press lands nowhere", async () => {
+  it("while a setup runs, Update stays a stop, Browse and Test are disabled and Cancel is reached: no press lands nowhere", async () => {
     setRpcHandler("get_local_ollama_setup_status", () => ({ phase: "running", stage: "install", log_tail: [] }));
     const { exitDown } = draw();
     const CANCEL = "Cancel local Ollama setup";
     await screen.findByLabelText(CANCEL);
     await act(async () => void (document.querySelector(`[aria-label="${BOOT}"]`) as HTMLElement).focus());
 
-    // Down from the Start-at-boot switch skips the disabled Install button and lands on Cancel.
+    // The Update button is never disabled, so the ring is never left on a dead button after the press.
     press(BOOT, "onMoveDown");
+    expect(here()).toBe(UPDATE);
+    // Browse is disabled while a setup runs, so Down from Update lands on Cancel.
+    press(UPDATE, "onMoveDown");
     expect(here()).toBe(CANCEL);
     // Test connection is disabled too, so Down from Cancel hands on to the next section.
     press(CANCEL, "onMoveDown");
     expect(exitDown).toHaveBeenCalledTimes(1);
-    // Up from Cancel goes back to the switch.
+    // Up from Cancel goes back to Update, and from there to the switch.
     press(CANCEL, "onMoveUp");
+    expect(here()).toBe(UPDATE);
+    press(UPDATE, "onMoveUp");
     expect(here()).toBe(BOOT);
   });
 });

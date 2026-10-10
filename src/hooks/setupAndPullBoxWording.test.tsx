@@ -5,7 +5,7 @@
  * box) used to call the default model "FOSS" (Qwen's card gives its 3B size the Qwen Research
  * licence); the "Enable Tier 2 before pulling?" box said Tier 1 keeps to "FOSS-friendly tags".
  * Plan 79 removed the Tier 1 / Tier 2 install buttons, so their two boxes and the first-run
- * notice's mention of them are gone; the update box and the notice point at Browse models.
+ * notice's mention of them are gone. Plan 87 removed the update box too: Update runs in place.
  */
 import { act, render, renderHook } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
@@ -42,7 +42,6 @@ vi.mock("../utils/deckyCall", () => ({
 }));
 vi.mock("@decky/api", () => ({ toaster: { toast: () => {} } }));
 
-import { useLocalOllamaSetupFlow } from "./useLocalOllamaSetupFlow";
 import { usePullModelSubmitSelected } from "./usePullModelSubmitSelected";
 import { localRuntimeBetaNoticeDescription } from "./useDisclaimerAndLocalRuntimeGates";
 import { MODEL_POLICY_SETTINGS_INTRO } from "../data/modelPolicy";
@@ -54,39 +53,11 @@ beforeEach(() => {
   resetFakeDeckyRpc();
 });
 
-function openSetupBox(profile: "update_installed"): string {
-  const { result } = renderHook(() =>
-    useLocalOllamaSetupFlow({
-      ollamaLocalOnDeck: false,
-      localSetupStatus: null,
-      setLocalSetupStatus: () => {},
-      localSetupBusy: false,
-      setupAutoTestRanRef: { current: false },
-      lastCompletedSetupProfileRef: { current: "" },
-      onBeforeDeckyModal: () => {},
-      onCompleteDeckyModalClose: (close) => close(),
-      onTestConnectionRef: { current: async () => {} },
-    })
-  );
-  act(() => result.current.openLocalSetupConfirm(profile, "ollama-local-setup"));
-  const { container } = render(<div>{hoisted.opts?.body as ReactNode}</div>);
-  return container.textContent ?? "";
-}
-
 describe("wording of the install and pull boxes", () => {
   it("the starter models box does not call the default model FOSS", () => {
     const { container } = render(<div>{starterSetBoxBody(true)}</div>);
     expect(container.textContent).toContain("one small model");
     expect(container.textContent).not.toMatch(/FOSS/);
-  });
-
-  it("the update box points at Browse models, not at the removed Install options buttons", async () => {
-    const text = openSetupBox("update_installed");
-    await act(async () => {});
-    expect(text).toContain("Browse models");
-    expect(text).not.toContain("Install Gemma 4");
-    expect(text).not.toContain("Install Tier 1");
-    expect(text).not.toContain("Tier 2 multimodal");
   });
 
   it("the Enable Tier 2 pull box explains Tier 1 in plain words", async () => {

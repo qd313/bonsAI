@@ -92,6 +92,7 @@ from backend.ollama_routing import (
 )
 from backend.ollama_reply_limits import read_json_capped
 from backend.ollama_urls import normalize_ollama_base
+from backend.services.local_setup_progress_text import progress_text_from_line
 from backend.services.ollama_server_restart import (
     ServeControl,
     record_result,
@@ -863,6 +864,8 @@ async def run_local_setup(
 
     def log(msg: str) -> None:
         _append_log(list(state.setdefault("log_tail", [])), msg)
+        if progress := progress_text_from_line(msg):
+            state["progress_text"] = progress
         if on_verbose_line is not None:
             try:
                 on_verbose_line(msg)
@@ -985,6 +988,7 @@ async def run_local_setup(
                 raise RuntimeError("Cancelled.")
             state["pull_step"] = i + 1
             state["current_tag"] = tag
+            state["progress_text"] = ""
             ok, err = await asyncio.to_thread(lambda t=tag: run_ollama_pull(ollama_bin, t, log, cancelled))
             if cancelled():
                 raise RuntimeError("Cancelled.")
@@ -1058,6 +1062,7 @@ def new_local_ollama_setup_state() -> dict[str, Any]:
         "log_tail": [],
         "error": "",
         "result_line": "",
+        "progress_text": "",
         "ollama_version": "",
         "needs_device_restart": False,
         "done": True,

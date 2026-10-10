@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 794,
-  "edgeCount": 2381,
+  "fileCount": 796,
+  "edgeCount": 2388,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1386,6 +1386,14 @@
         "src/components/SettingsDeveloperLeftoverRing.test.tsx"
       ]
     },
+    "src/components/OllamaSetupStatusLine.tsx": {
+      "imports": [
+        "src/components/OllamaWhereAiRunsSection.types.ts"
+      ],
+      "importedBy": [
+        "src/components/OllamaWhereAiRunsSection.tsx"
+      ]
+    },
     "src/components/OllamaTab.focusRing.test.tsx": {
       "imports": [
         "src/components/OllamaTab.tsx",
@@ -1473,6 +1481,17 @@
       ],
       "importedBy": []
     },
+    "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx": {
+      "imports": [
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/features/downloads/downloadNotice.tsx",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/features/plugin-shell/settingsLoadedSignal.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx": {
       "imports": [
         "src/components/OllamaWhereAiRunsSection.tsx",
@@ -1514,6 +1533,7 @@
     "src/components/OllamaWhereAiRunsSection.tsx": {
       "imports": [
         "src/components/OllamaSavedHostsRows.tsx",
+        "src/components/OllamaSetupStatusLine.tsx",
         "src/components/OllamaWhereAiRunsSection.constants.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
         "src/data/bonsaiSettingsSchema.ts",
@@ -1533,6 +1553,7 @@
         "src/components/OllamaFindLanHidden.test.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
@@ -1546,8 +1567,10 @@
         "src/data/bonsaiSettingsSchema.ts"
       ],
       "importedBy": [
+        "src/components/OllamaSetupStatusLine.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/hooks/localOllamaStarterSet.tsx",
+        "src/hooks/useLocalOllamaSetupFlow.inPlace.test.tsx",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/useOllamaLocalAutostart.ts"
@@ -3529,6 +3552,7 @@
       ],
       "importedBy": [
         "src/components/KnowledgeBaseSection.tsx",
+        "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
         "src/components/PullModelsStarterSetChip.test.tsx",
@@ -3550,7 +3574,6 @@
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
         "src/hooks/localOllamaStarterSet.tsx",
-        "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx"
       ]
@@ -3687,6 +3710,7 @@
         "src/components/OllamaModelsHubModal.tsx",
         "src/components/OllamaTab.modalReturnFocus.test.tsx",
         "src/components/OllamaTab.tsx",
+        "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
@@ -3744,6 +3768,7 @@
       "importedBy": [
         "src/components/OllamaFindLanHidden.test.tsx",
         "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
@@ -4621,7 +4646,6 @@
         "src/data/pullModelCatalog.ts",
         "src/hooks/localOllamaStarterSet.tsx",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
-        "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/fakeDeckyUi.tsx"
@@ -5023,8 +5047,9 @@
         "src/components/MainTabChatTranscript.tsx"
       ]
     },
-    "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx": {
+    "src/hooks/useLocalOllamaSetupFlow.inPlace.test.tsx": {
       "imports": [
+        "src/components/OllamaWhereAiRunsSection.types.ts",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/fakeDeckyUi.tsx"
@@ -5036,7 +5061,6 @@
         "src/components/OllamaWhereAiRunsSection.constants.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
         "src/features/downloads/downloadNotice.tsx",
-        "src/features/downloads/downloadSites.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/hooks/localOllamaStarterSet.tsx",
         "src/utils/deckyCall.ts",
@@ -5045,8 +5069,7 @@
       ],
       "importedBy": [
         "src/components/OllamaWhereAiRunsSection.tsx",
-        "src/hooks/setupAndPullBoxWording.test.tsx",
-        "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx"
+        "src/hooks/useLocalOllamaSetupFlow.inPlace.test.tsx"
       ]
     },
     "src/hooks/useMainTabAskBarFocus.test.ts": {
@@ -6330,6 +6353,7 @@
         "src/components/MainTabPresetRow.test.tsx",
         "src/components/OllamaFindLanHidden.test.tsx",
         "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
@@ -6358,7 +6382,7 @@
         "src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts",
         "src/hooks/useBonsaiAskOrchestration.desktopNote.test.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
-        "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx",
+        "src/hooks/useLocalOllamaSetupFlow.inPlace.test.tsx",
         "src/hooks/usePluginSettings.readBack.test.ts",
         "src/hooks/usePluginSettings.test.ts",
         "src/hooks/usePullModelOpenBookkeeping.test.tsx",
@@ -6448,6 +6472,7 @@
         "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
         "src/components/OllamaTab.terseMode.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
         "src/components/OllamaWhereAiRunsSection.walk.test.tsx",
         "src/components/PermissionDenyAction.test.tsx",
@@ -6488,7 +6513,7 @@
         "src/features/voice/voiceStartingFeedback.test.tsx",
         "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.saveFirst.test.tsx",
-        "src/hooks/useLocalOllamaSetupFlow.downloadNotice.test.tsx",
+        "src/hooks/useLocalOllamaSetupFlow.inPlace.test.tsx",
         "src/hooks/useReplyFeedbackChips.remount.test.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/index.helpChip.test.tsx",

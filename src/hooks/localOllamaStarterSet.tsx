@@ -57,10 +57,25 @@ export function starterSetBoxBody(engineAlreadyAsked: boolean) {
 }
 
 /**
- * Starts the setup run for a profile (Ollama's engine if missing, then the profile's models) and
- * tells the person it began. `onStatus` hears the run's first status line when the screen keeps one.
+ * Starts the setup run for a profile (Ollama's engine if missing, then the profile's models).
+ * `onStatus` hears the run's first status line when the screen keeps one. A screen that shows the run
+ * in place passes `onRefused` too: a refusal reason then goes to it (and onto the tab as a failed
+ * line) instead of a toast, and the "started" toast is left out because the tab already shows the run.
  */
-export function startLocalOllamaSetup(profile: string, onStatus?: (s: LocalOllamaSetupStatus) => void): void {
+export function startLocalOllamaSetup(
+  profile: string,
+  onStatus?: (s: LocalOllamaSetupStatus) => void,
+  onRefused?: (reason: string) => void
+): void {
+  const refuse = (reason: string, toastTitle: string) => {
+    if (!onRefused) {
+      toaster.toast({ title: toastTitle, body: reason, duration: 6000 });
+      return;
+    }
+    onRefused(reason);
+    onStatus?.({ phase: "failed", stage: "", profile, error: reason, done: true });
+  };
+  if (onRefused) onStatus?.({ phase: "running", stage: "check", profile, done: false });
   void callDeckyWithTimeout<[{ profile: string }], { accepted?: boolean; reason?: string }>(
     "start_local_ollama_setup",
     [{ profile }],
@@ -68,20 +83,22 @@ export function startLocalOllamaSetup(profile: string, onStatus?: (s: LocalOllam
   )
     .then((out) => {
       if (!out?.accepted) {
-        toaster.toast({ title: "Setup not started", body: out?.reason ?? "Unknown error.", duration: 6000 });
+        refuse(out?.reason ?? "Unknown error.", "Setup not started");
         return;
       }
-      toaster.toast({
-        title: "Local Ollama setup started",
-        body: "Pulls continue in the background (Ollama). You may close bonsAI; avoid sleep, reboot, Wi‑Fi off, or power loss until pulls finish.",
-        duration: 6000,
-      });
+      if (!onRefused) {
+        toaster.toast({
+          title: "Local Ollama setup started",
+          body: "Pulls continue in the background (Ollama). You may close bonsAI; avoid sleep, reboot, Wi‑Fi off, or power loss until pulls finish.",
+          duration: 6000,
+        });
+      }
       void callDeckyWithTimeout<[], LocalOllamaSetupStatus>("get_local_ollama_setup_status", [], DECKY_RPC_TIMEOUT_MS)
         .then((st) => onStatus?.(st))
         .catch(() => {});
     })
     .catch((e: unknown) => {
-      toaster.toast({ title: "Setup RPC failed", body: formatDeckyRpcError(e), duration: 6000 });
+      refuse(formatDeckyRpcError(e), "Setup RPC failed");
     });
 }
 

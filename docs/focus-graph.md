@@ -545,3 +545,35 @@ Stops: the tab bar (one stop, step 4's) and the chat's name (step 5's). Decky's 
   bar in the window's first seconds goes to the question box; on the name, it stays.
 - **Not backed by a device row yet.** Rows P84-HEIGHT-01, P84-OTHER-01, P84-BACK-01, P84-QAM-01 and P84-RING-01
   (plan 84 § 6) are in the lane report.
+
+### The Ollama tab's setup buttons (plan 87, B13 + B14)
+
+Update AI & models (Install Ollama on a Deck with no engine) runs in place on the tab: no box. The block is
+`OllamaWhereAiRunsSection.tsx`; its chain is hand-wired with `focus()` between sibling rows of one panel.
+
+```
+Run AI on this Deck (switch)
+   | Down                                  ^ Up
+Start the AI with the Deck (switch)
+   | Down                                  ^ Up
+Update AI & models   (never disabled; reads "Updating..." while a run goes)
+   | Down  -> Browse models, else Cancel   ^ Up -> Start the AI with the Deck
+Browse models...     (disabled while a run goes)
+   | Down  -> Test connection              ^ Up -> Update AI & models
+Cancel               (drawn only while a run goes)
+   | Down  -> Test connection, else on     ^ Up -> Update AI & models, else Start the AI with the Deck
+```
+
+- **The Update button is never disabled.** Before, the press opened a download box and the button was disabled while
+  the run went on; a disabled button refuses a plain `focus()`, and the ring would have been left on it. Now the
+  ring stays where it is after the press. A press on Update while a run goes does nothing.
+- **Down from Update** goes to Browse models; while a run goes Browse is disabled, so it goes to Cancel (before, it
+  returned `false` and the press landed nowhere). **Up from Cancel** goes to Update, then to the switch above.
+- **The line under the buttons is not a stop.** It is plain text (the stage, the newest download progress, then the
+  result or the reason it failed). It has no `tabIndex`, takes no ring and is read from the back end's setup status,
+  so a rebuilt tab still shows it.
+- **The one box left** is the starter-models question on a Deck with no models (the ring opens on "Not now", and the
+  shell hands the ring back to the Update button when it closes, as `ollama-local-setup` in
+  `modalReturnFocusRegistry.ts`). It is a question with a choice, not a progress notice.
+- Pinned by `OllamaWhereAiRunsSection.walk.test.tsx` (the walk, with a run going) and
+  `OllamaWhereAiRunsSection.inPlaceSetup.test.tsx` (no box, the lines). Device row: the plan 87 Ollama block.

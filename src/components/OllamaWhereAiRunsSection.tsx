@@ -103,6 +103,7 @@ import {
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { OllamaSavedHostsRows } from "./OllamaSavedHostsRows";
+import { OllamaSetupStatusLine } from "./OllamaSetupStatusLine";
 import { useOllamaLocalAutostart } from "../hooks/useOllamaLocalAutostart";
 import { useMdnsOllamaDiscovery } from "../hooks/useMdnsOllamaDiscovery";
 import { useDeveloperTabShown } from "../features/plugin-shell/developerTabSignal";
@@ -394,7 +395,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     onCompleteDeckyModalClose,
   });
 
-  const { formatLocalSetupStageLine, cancelLocalSetup, openLocalSetupConfirm } = useLocalOllamaSetupFlow({
+  const { formatLocalSetupStageLine, cancelLocalSetup, runLocalSetupInPlace } = useLocalOllamaSetupFlow({
     ollamaLocalOnDeck,
     localSetupStatus,
     setLocalSetupStatus,
@@ -526,17 +527,17 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                     registerModalReturnFocusOwner("ollama-local-setup", el as HTMLElement | null);
                   }}
                   className="bonsai-settings-focus-btn"
-                  disabled={localSetupBusy}
                   onClick={() => {
-                    // Known to be empty (engine not up, or up with no models): the box then offers the starter models.
+                    // Runs in place (nothing while a run is going: the button stays a stop so the ring is never on a dead one).
+                    // Known to be empty (engine not up, or up with no models): a box then asks about the starter models.
                     const noModels = connectionStatus != null && !(connectionStatus.models?.length ?? 0);
-                    openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED, "ollama-local-setup", {
+                    runLocalSetupInPlace(LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED, "ollama-local-setup", {
                       offerStarterModels: noModels,
                     });
                   }}
                   {...({
                     onMoveUp: () => focusAutostartToggle(),
-                    onMoveDown: () => focusBrowseModelsBtn(),
+                    onMoveDown: () => focusBrowseModelsBtn() || focusCancelSetupBtn(),
                   } as unknown as Record<string, unknown>)}
                   style={{
                     flex: "1 1 100%",
@@ -558,7 +559,13 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                       : "Install Ollama on this Deck"
                   }
                 >
-                  {ollamaEngineReady ? "Update AI & models" : "Install Ollama"}
+                  {localSetupBusy
+                    ? ollamaEngineReady
+                      ? "Updating…"
+                      : "Installing…"
+                    : ollamaEngineReady
+                      ? "Update AI & models"
+                      : "Install Ollama"}
                 </Button>
               </Focusable>
               {!ollamaEngineReady || localSetupBusy ? (
@@ -624,7 +631,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                     }}
                     onClick={() => void cancelLocalSetup()}
                     {...({
-                      onMoveUp: () => focusAutostartToggle(),
+                      onMoveUp: () => focusInstallUpdateBtn() || focusAutostartToggle(),
                       onMoveDown: () => moveDownToTestOrOn(),
                     } as unknown as Record<string, unknown>)}
                     style={{
@@ -644,72 +651,11 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                   </Button>
                 </Focusable>
               ) : null}
-              {(localSetupStatus?.phase === "running" ||
-                (localSetupStatus?.log_tail?.length ?? 0) > 0 ||
-                localSetupStatus?.phase === "failed" ||
-                localSetupStatus?.phase === "cancelled") &&
-              localSetupStatus ? (
-                <>
-                  {localSetupStatus.phase === "running" ? (
-                    <div
-                      className="bonsai-settings-bleed"
-                      style={{
-                        fontSize: 11,
-                        color: "#9ce7ff",
-                        lineHeight: 1.4,
-                      }}
-                      aria-live="polite"
-                    >
-                      {formatLocalSetupStageLine(localSetupStatus)}
-                    </div>
-                  ) : null}
-                  {(localSetupStatus.phase === "failed" || localSetupStatus.phase === "cancelled") &&
-                  localSetupStatus.error ? (
-                    <div
-                      className="bonsai-prose bonsai-settings-bleed"
-                      style={{ fontSize: 11, color: "tomato", lineHeight: 1.35, whiteSpace: "pre-wrap" }}
-                      aria-live="polite"
-                    >
-                      {localSetupStatus.error}
-                    </div>
-                  ) : null}
-                  {(localSetupStatus.log_tail?.length ?? 0) > 0 ? (
-                    <pre
-                      className="bonsai-settings-bleed"
-                      style={{
-                        margin: 0,
-                        width: "100%",
-                        boxSizing: "border-box",
-                        maxHeight: 200,
-                        overflowY: "auto",
-                        fontFamily: "Consolas, 'Liberation Mono', monospace",
-                        fontSize: 10,
-                        lineHeight: 1.35,
-                        color: "#aab8ca",
-                        background: "rgba(8,14,22,0.85)",
-                        border: "1px solid rgba(72,98,124,0.35)",
-                        borderRadius: 4,
-                        padding: "8px 10px",
-                        whiteSpace: "pre-wrap",
-                        wordBreak: "break-word",
-                      }}
-                      tabIndex={0}
-                      aria-label="Local Ollama setup log"
-                    >
-                      {(localSetupStatus.log_tail ?? []).join("\n")}
-                    </pre>
-                  ) : localSetupBusy ? (
-                    <div className="bonsai-prose" style={{ fontSize: 10, color: "#6b7c90", userSelect: "none" }}>
-                      Setup is running. Log lines fill in as the installer or <code>ollama pull</code> prints output (first
-                      line can take a moment after you confirm).
-                    </div>
-                  ) : null}
-                </>
-              ) : (
-                <div className="bonsai-prose" style={{ fontSize: 10, color: "#6b7c90", userSelect: "none" }}>
-                  Install the official daemon, restart the service if needed, then pull models. Prefer stable Wi‑Fi.
-                </div>
-              )}
+              <OllamaSetupStatusLine
+                status={localSetupStatus}
+                stageLine={formatLocalSetupStageLine(localSetupStatus)}
+                busy={localSetupBusy}
+              />
             </Focusable>
           </PanelSectionRow>
         ) : null}

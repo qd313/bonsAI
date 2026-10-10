@@ -2,12 +2,12 @@
  * Title: The local-on-Deck install and update flow
  *
  * Purpose: Everything that runs when a person installs Ollama on the Deck
- * itself or updates it: the download box behind "Install Ollama" / "Update AI
- * & models" (and, on a Deck with no models, the follow-up box that offers the
- * starter models), the Cancel button's RPC, the status-line wording while a
- * setup runs, the poll that reads setup progress every 1.5 seconds, and
- * the effect that runs a connection test automatically once a setup
- * finishes cleanly.
+ * itself or updates it: the press behind "Install Ollama" / "Update AI &
+ * models", which runs in place on the tab with no box (only on a Deck with no
+ * models, one box asks the real question, whether to also install the starter
+ * models), the Cancel button's RPC, the status-line wording while a setup
+ * runs, the poll that reads setup progress every 1.5 seconds, and the effect
+ * that runs a connection test automatically once a setup finishes cleanly.
  *
  * Used for: OllamaWhereAiRunsSection, only while "Run AI on this Deck" is
  * on — this is the entire "Local Ollama setup" block of that panel.
@@ -31,7 +31,7 @@
  * autostart hook call — both stayed exactly where they were, so this hook
  * is called between them, in the same slot in the hook call order.
  */
-import { useCallback, useEffect, type MutableRefObject, type RefObject } from "react";
+import { useCallback, useEffect, useRef, type MutableRefObject, type RefObject } from "react";
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../utils/deckyCall";
 import { notifyPullModelCatalogRefresh } from "../utils/pullModelCatalogRefresh";
@@ -39,25 +39,14 @@ import type { LocalOllamaSetupStatus } from "../components/OllamaWhereAiRunsSect
 import {
   LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
   LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
-  OLLAMA_MODELS_DISK_HINT,
-  LOCAL_SETUP_NETWORK_AND_POWER_HINT,
 } from "../components/OllamaWhereAiRunsSection.constants";
 import { startLocalOllamaSetup, starterSetBoxBody, starterSetNotices } from "./localOllamaStarterSet";
 import { rememberReturnWhileBoxOpens } from "../utils/rememberReturnWhileBoxOpens";
 import type { ModalReturnFocusId } from "../features/plugin-shell/modalReturnFocusRegistry";
-import { confirmDownload, type DownloadNotice } from "../features/downloads/downloadNotice";
-import { OLLAMA_REGISTRY_SITE, OLLAMA_SITE } from "../features/downloads/downloadSites";
-
-/** Where the update/install run connects: Ollama itself from ollama.com, the models from the registry. */
-function localSetupDownloadNotices(): DownloadNotice[] {
-  return [
-    { site: OLLAMA_SITE, what: "the latest Ollama", size: null },
-    { site: OLLAMA_REGISTRY_SITE, what: "fresh copies of every model already installed", size: null },
-  ];
-}
+import { confirmDownload } from "../features/downloads/downloadNotice";
 
 /**
- * The confirm dialogs (each is the download notice itself), the Cancel RPC, the status-line wording, the setup poll, and the
+ * The starter-models question, the in-place run, the Cancel RPC, the status-line wording, the setup poll, and the
  * auto-test-after-done effect. Every hook below must keep its position — React matches hooks by
  * the order they run in.
  */
@@ -87,11 +76,13 @@ export function useLocalOllamaSetupFlow({
     const stage = st.stage ?? "";
     if (stage === "pull" && (st.total_pull_steps ?? 0) > 0) {
       const cur = st.current_tag ? ` — ${st.current_tag}` : "";
-      return `Pull ${st.pull_step ?? 0}/${st.total_pull_steps}${cur}`;
+      const progress = st.progress_text ? ` · ${st.progress_text}` : "";
+      return `Pull ${st.pull_step ?? 0}/${st.total_pull_steps}${cur}${progress}`;
     }
     const map: Record<string, string> = {
       check: "Checking…",
       install: "Installing Ollama…",
+      restart: "Restarting Ollama so the new version is the one running…",
       service: "Starting Ollama service…",
       pull: "Pulling models…",
       complete: "Finishing…",
@@ -107,46 +98,25 @@ export function useLocalOllamaSetupFlow({
     }
   }, []);
 
-  const openLocalSetupConfirm = useCallback(
+  /*
+   * Update AI & models and the first-time Install run right here on the tab: no download box. The
+   * line under the button shows the run (OllamaSetupStatusLine.tsx), read from the back end's status.
+   * A refused start (downloads off, kids lock, a run already going) leaves the back end's status idle,
+   * so the reason is kept here and shown as a failed line until a run starts; the poll would
+   * otherwise wipe it 1.5 seconds later.
+   */
+  const refusalRef = useRef("");
+
+  const runLocalSetupInPlace = useCallback(
     (
       profile: typeof LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
       returnId: ModalReturnFocusId,
       opts?: { offerStarterModels?: boolean }
     ) => {
       if (localSetupBusy) return;
-      const body = (
-        <div
-          className="bonsai-prose"
-          style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}
-        >
-          <div style={{ marginBottom: 8 }}>
-            Re-runs the official Ollama installer, then re-pulls each model already installed on this Deck so
-            newer weights are fetched when upstream changed.
-          </div>
-          <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
-          {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
-          <div style={{ marginTop: 8 }}>
-            If nothing is installed yet, the update finishes after the binary refresh — use Browse models to pull a
-            model first.
-          </div>
-        </div>
-      );
-      // This box is the download notice itself (plan72-F-DL): the sites and sizes, the permission
-      // question while downloads are off, and the ring on "Not now" -- never on "Start update".
-      // The note "the ring returns to returnId" is left armed only if a box really opened (kids lock
-      // or a seen site answer at once, and the note is taken back).
-      void rememberReturnWhileBoxOpens(returnId, () =>
-        confirmDownload(localSetupDownloadNotices(), {
-          always: true,
-          title: "Update Ollama and models?",
-          body,
-          actionLabel: "Start update",
-        })
-      ).then(async (go) => {
-        if (!go) return;
-        // A Deck with no models: the same box flow then offers the starter models, with the ring on
-        // "Not now". Declining (or B) installs the engine only, as before; Install Ollama is already
-        // agreed to by now, so this box only asks about the models.
+      void (async () => {
+        // A Deck with no models: one box asks whether to also install the starter models, with the
+        // ring on "Not now". Declining (or B) installs the engine only, as before.
         let chosen: string = profile;
         if (opts?.offerStarterModels) {
           const wantsStarter = await rememberReturnWhileBoxOpens(returnId, () =>
@@ -159,10 +129,13 @@ export function useLocalOllamaSetupFlow({
           );
           if (wantsStarter) chosen = LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS;
         }
+        refusalRef.current = "";
         setupAutoTestRanRef.current = false;
         lastCompletedSetupProfileRef.current = chosen;
-        startLocalOllamaSetup(chosen, setLocalSetupStatus);
-      });
+        startLocalOllamaSetup(chosen, setLocalSetupStatus, (reason) => {
+          refusalRef.current = reason;
+        });
+      })();
     },
     [localSetupBusy]
   );
@@ -180,7 +153,14 @@ export function useLocalOllamaSetupFlow({
         [],
         DECKY_RPC_TIMEOUT_MS
       )
-        .then(setLocalSetupStatus)
+        .then((st) => {
+          if (st.phase !== "idle") refusalRef.current = "";
+          setLocalSetupStatus(
+            st.phase === "idle" && refusalRef.current
+              ? { ...st, phase: "failed", error: refusalRef.current, done: true }
+              : st
+          );
+        })
         .catch(() => {});
     };
     poll();
@@ -218,5 +198,5 @@ export function useLocalOllamaSetupFlow({
     }
   }, [ollamaLocalOnDeck, localSetupStatus]);
 
-  return { formatLocalSetupStageLine, cancelLocalSetup, openLocalSetupConfirm };
+  return { formatLocalSetupStageLine, cancelLocalSetup, runLocalSetupInPlace };
 }

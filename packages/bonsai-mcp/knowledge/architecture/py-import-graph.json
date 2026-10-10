@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 119,
-  "edgeCount": 324,
+  "fileCount": 120,
+  "edgeCount": 325,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -23,6 +23,7 @@
     "py_modules/backend/services/kb_followup_memory.py",
     "py_modules/backend/services/kb_not_in_notes_notice.py",
     "py_modules/backend/services/knowledge_base_schema.py",
+    "py_modules/backend/services/local_setup_progress_text.py",
     "py_modules/backend/services/model_policy.py",
     "py_modules/backend/services/network_service.py",
     "py_modules/backend/services/ollama_ask_budgets.py",
@@ -390,6 +391,10 @@
     },
     {
       "path": "py_modules/backend/services/local_ollama_teardown_service.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/local_setup_progress_text.py",
       "count": 1
     },
     {
@@ -1107,6 +1112,7 @@
         "py_modules/backend/ollama_reply_limits.py",
         "py_modules/backend/ollama_routing.py",
         "py_modules/backend/ollama_urls.py",
+        "py_modules/backend/services/local_setup_progress_text.py",
         "py_modules/backend/services/ollama_catalog_service.py",
         "py_modules/backend/services/ollama_server_restart.py"
       ],
@@ -1135,6 +1141,12 @@
       ],
       "importedBy": [
         "main.py"
+      ]
+    },
+    "py_modules/backend/services/local_setup_progress_text.py": {
+      "imports": [],
+      "importedBy": [
+        "py_modules/backend/services/local_ollama_setup_service.py"
       ]
     },
     "py_modules/backend/services/media_desktop_rpc.py": {

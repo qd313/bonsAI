@@ -335,7 +335,11 @@ def update_result_line(profile: str, tags: list[str], restart: dict[str, Any], *
     if profile != "update_installed":
         head = f"Ollama {shown} is ready." if shown else "Setup finished."
         return f"{head} Downloaded {len(tags)} model{plural}." if tags else head
-    models = f" {len(tags)} model{plural} refreshed." if tags else ""
+    models = (
+        f" {len(tags)} model{plural} refreshed."
+        if tags
+        else " No models are installed yet; use Browse models to download one."
+    )
     how = restart.get("how")
     if server_v and binary_v and server_v != binary_v:
         return f"Updated to {binary_v}; restart the Deck to use it (Ollama {server_v} is still running)." + models
@@ -360,6 +364,7 @@ def record_result(
     whether the Deck still needs a restart, and the one plain sentence to show."""
     server_v = fetch_server_version()
     binary_v = read_binary_version(ollama_bin, cli_env)
+    state["progress_text"] = ""
     state["ollama_version"] = server_v or binary_v
     state["needs_device_restart"] = bool(restart_info) and bool(server_v and binary_v and server_v != binary_v)
     state["result_line"] = update_result_line(profile, tags, restart_info, server_v=server_v, binary_v=binary_v)

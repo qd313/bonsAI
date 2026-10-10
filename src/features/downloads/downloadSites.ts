@@ -14,9 +14,9 @@
 import type { DownloadNotice } from "./downloadNotice";
 
 /** local_ollama_setup_service.py: OLLAMA_OFFICIAL_INSTALL_SH and the ollama.com/download tarballs. */
-export const OLLAMA_SITE = "https://ollama.com";
+const OLLAMA_SITE = "https://ollama.com";
 /** ollama_catalog_service.py: REGISTRY_HOST -- where `ollama pull` and the size lookups go. */
-export const OLLAMA_REGISTRY_SITE = "https://registry.ollama.ai";
+const OLLAMA_REGISTRY_SITE = "https://registry.ollama.ai";
 /** voice_engine_build_service.py: WHISPER_CPP_IMAGE. */
 const VOICE_ENGINE_IMAGE_SITE = "https://ghcr.io";
 /** voice_model_download_service.py: VOICE_STT_MODEL_SPECS urls; knowledge_base_schema.py: DEFAULT_MANIFEST_HF_URL. */

@@ -62,7 +62,7 @@
     },
     {
       "path": "py_modules/backend/services/local_ollama_setup_service.py",
-      "lines": 1067,
+      "lines": 1072,
       "role": ""
     },
     {
@@ -81,11 +81,6 @@
       "role": ""
     },
     {
-      "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 970,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/transparency_service.py",
       "lines": 969,
       "role": ""
@@ -93,6 +88,11 @@
     {
       "path": "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
       "lines": 946,
+      "role": ""
+    },
+    {
+      "path": "src/components/OllamaWhereAiRunsSection.tsx",
+      "lines": 916,
       "role": ""
     },
     {

@@ -1,13 +1,14 @@
 /**
  * Title: A first "Install Ollama" on a Deck with no models offers the starter models
  *
- * Purpose: Pin plan 79 (D122 call 5). With the Ollama tab's "Install options..." button gone, the
- * box flow behind "Install Ollama" is how a new player gets the starter models in one run. The real
- * section is drawn, "Install Ollama" is pressed, and the boxes are read as a person would see them:
- * after the Install Ollama box, a second box names the starter model and its size and opens with the
- * ring on "Not now". Choosing the models runs one setup (profile tier1_essentials: the engine, then
- * the models); declining runs the engine-only setup (update_installed) as before. With models already
- * installed no starter offer appears at all.
+ * Purpose: Pin plan 79 (D122 call 5), as changed by plan 87 (call 2: Install and Update run in place,
+ * no download box). With the Ollama tab's "Install options..." button gone, "Install Ollama" is how a
+ * new player gets the starter models in one run. The real section is drawn, "Install Ollama" is
+ * pressed, and the box is read as a person would see it: the one real question, which names the starter
+ * model and its size and opens with the ring on "Not now". Choosing the models runs one setup (profile
+ * tier1_essentials: the engine, then the models); declining runs the engine-only setup
+ * (update_installed) as before. With models already installed no box opens at all: the update runs in
+ * place.
  *
  * Does not: prove the ring on the device (jsdom has no Steam ring); that is the Deck row's job.
  */
@@ -82,16 +83,12 @@ beforeEach(() => {
 });
 
 describe("Install Ollama with no models installed", () => {
-  it("asks about the starter models after the Install Ollama box, opening on Not now, naming the size", async () => {
+  it("asks about the starter models, opening on Not now, naming the size", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: false, error: "unreachable" }));
     drawOnDeck();
     await pressInstall("Install Ollama");
     expect(hoisted.modals).toHaveLength(1);
-    (hoisted.modals[0].props.onMiddleButton as () => void)();
-    await settle();
-
-    expect(hoisted.modals).toHaveLength(2);
-    const box = hoisted.modals[1];
+    const box = hoisted.modals[0];
     expect(box.props.strTitle).toBe("Also install the starter models?");
     expect(box.props.strOKButtonText).toBe("Not now");
     expect(box.props.strMiddleButtonText).toBe("Install Ollama and the starter models");
@@ -108,8 +105,6 @@ describe("Install Ollama with no models installed", () => {
     await pressInstall("Install Ollama");
     (hoisted.modals[0].props.onMiddleButton as () => void)();
     await settle();
-    (hoisted.modals[1].props.onMiddleButton as () => void)();
-    await settle();
     expect(setupProfiles()).toEqual(["tier1_essentials"]);
   });
 
@@ -117,40 +112,25 @@ describe("Install Ollama with no models installed", () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: false, error: "unreachable" }));
     drawOnDeck();
     await pressInstall("Install Ollama");
-    (hoisted.modals[0].props.onMiddleButton as () => void)();
-    await settle();
-    (hoisted.modals[1].props.onOK as () => void)();
-    await settle();
-    expect(setupProfiles()).toEqual(["update_installed"]);
-  });
-
-  it("backing out of the Install Ollama box itself starts nothing and asks nothing more", async () => {
-    setRpcHandler("test_ollama_connection", () => ({ reachable: false, error: "unreachable" }));
-    drawOnDeck();
-    await pressInstall("Install Ollama");
     (hoisted.modals[0].props.onOK as () => void)();
     await settle();
-    expect(hoisted.modals).toHaveLength(1);
-    expect(setupProfiles()).toEqual([]);
+    expect(setupProfiles()).toEqual(["update_installed"]);
   });
 
   it("an engine that is up with no models offers them too", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.12.0", models: [] }));
     drawOnDeck();
     await pressInstall("Update AI & models");
-    (hoisted.modals[0].props.onMiddleButton as () => void)();
-    await settle();
-    expect(hoisted.modals).toHaveLength(2);
+    expect(hoisted.modals).toHaveLength(1);
+    expect(hoisted.modals[0].props.strTitle).toBe("Also install the starter models?");
   });
 
-  it("with models already installed there is no starter offer, only the update box", async () => {
+  it("with models already installed there is no box at all, the update just runs", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.12.0", models: ["qwen2.5vl:3b"] }));
     drawOnDeck();
     await screen.findByText("Installed: 1");
     await pressInstall("Update AI & models");
-    (hoisted.modals[0].props.onMiddleButton as () => void)();
-    await settle();
-    expect(hoisted.modals).toHaveLength(1);
+    expect(hoisted.modals).toHaveLength(0);
     expect(setupProfiles()).toEqual(["update_installed"]);
   });
 });

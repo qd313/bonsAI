@@ -152,6 +152,17 @@ class VersionReadingTests(unittest.TestCase):
         self.assertEqual(restart.parse_binary_version("ollama version is 0.40.2"), "0.40.2")
 
 
+class ResultLineTests(unittest.TestCase):
+    def test_an_update_with_no_models_points_at_browse_models(self):
+        line = restart.update_result_line("update_installed", [], {"how": "unit"}, server_v="0.40.2", binary_v="0.40.2")
+        self.assertIn("Updated to Ollama 0.40.2 and restarted it.", line)
+        self.assertIn("Browse models", line)
+
+    def test_a_first_install_says_what_is_ready(self):
+        line = restart.update_result_line("tier1_essentials", ["a:1"], {}, server_v="0.40.2", binary_v="0.40.2")
+        self.assertEqual(line, "Ollama 0.40.2 is ready. Downloaded 1 model.")
+
+
 class UnitSettingsTests(unittest.TestCase):
     def test_the_unit_files_own_environment_is_what_a_direct_start_uses(self):
         import tempfile

@@ -43,6 +43,13 @@ export type LocalOllamaSetupStatus = {
   log_tail?: string[];
   error?: string;
   done?: boolean;
+  /** The newest download progress as plain words ("Downloading 6e4c: 43% 1.3 GB/3.2 GB"), while a pull runs. */
+  progress_text?: string;
+  /** The one sentence a finished run ends with, version included ("Updated to Ollama 0.40.2 and restarted it."). */
+  result_line?: string;
+  ollama_version?: string;
+  /** True when a newer program is installed but the running server could not be replaced. */
+  needs_device_restart?: boolean;
 };
 
 /** Mirrors `get_ollama_local_autostart_status` (main.py) — the Deck startup entry's real state. */

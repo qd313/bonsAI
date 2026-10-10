@@ -248,10 +248,13 @@ def push_to_github(build_dir: Path, manifest: dict[str, Any]) -> None:
         == 0
     )
     if not exists:
+        # --latest=false: GitHub's "latest release" is the one the plugin's README install
+        # link points at. The library must never take that spot, or new installs break.
         _run(
             [
                 "gh", "release", "create", CORPUS_GITHUB_RELEASE_TAG,
                 "--repo", CORPUS_GITHUB_REPO,
+                "--latest=false",
                 "--title", f"Knowledge base {CORPUS_GITHUB_RELEASE_TAG}",
                 "--notes", "bonsAI offline knowledge base corpus. See ATTRIBUTIONS.md on the "
                 "Hugging Face dataset page for licensing. Assets here are replaced in place "

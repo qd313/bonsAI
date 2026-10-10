@@ -495,6 +495,7 @@
     "tests/test_prompt_budget_service.py",
     "tests/test_proton_troubleshooting_logs.py",
     "tests/test_publish_corpus_embedding_guarantee.py",
+    "tests/test_publish_corpus_release_latest.py",
     "tests/test_pull_model_catalog_merge.py",
     "tests/test_pull_model_catalog_parity.py",
     "tests/test_pulled_model_joins_try_order.py",

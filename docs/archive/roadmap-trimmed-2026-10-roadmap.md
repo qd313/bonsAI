@@ -144,7 +144,7 @@ starts work outside this.
 - ★ `[platform]` **After the release: two clean-ups behind the scenes** — **OPEN, from plan 72.** The step that runs
   after an answer may hold other stale copies (it broke the chips, and once the Strategy checklist): read it through.
   The old live-line trimming code is now unused except by its tests and the Show reasoning tidy: remove it.
-  **2026-09-30 (plan 78 helper G):** the read-through is done; its real findings are fixed (Verify). Full note: [roadmap-details.md](roadmap-details.md#after-the-release-two-clean-ups-behind-the-scenes).
+  **2026-09-30 (plan 78 helper G):** the read-through is done; its real findings are fixed (Verify). Full note: [roadmap-details-closed.md](roadmap-details-closed.md#after-the-release-two-clean-ups-behind-the-scenes).
 
 ### A plugin reload while a game is running can put Steam's Home screen in front of the game
 

@@ -1196,3 +1196,15 @@ a person does not see the card appear on its own — they have to press Down to 
 the dock. Deck check owed once a fix lands.
 
 **Closed 2026-10-03 (plan 81, Deck block 3b, build `9e68bce1`).** Moved here word for word from roadmap-details.md. With no press, the card's top sat 118.6 px above the dock with its title showing; the walk Down, Down, Right, Left, Up, Up landed on a new place each time (row P81-M-L-SUMUP, `docs/test-evidence/plan81-P81-M-L-SUMUP-try3.json`). The ring still stays on the greyed button until Down, which was accepted for 0.6.0.
+
+## After the release: two clean-ups behind the scenes
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  **2026-09-30 (plan 78 helper G):** the read-through was done and its real findings are fixed: findings 1 to 3 (plan 78 helper L) and 4 and 5 (helper M) are under Verify, each with its unit tests; finding 6 is still only possible. Evidence `docs/test-evidence/plan78-G-after-answer-readthrough.md`. The other half, removing the unused live-line trimming code, still waits for after the release.
+
+  **2026-10-03 (plan 81, `45c73585`):** the first half is done. The old live-line trimming code (`liveReasoningText`), which nothing called any more, is removed; nothing a player sees changes. Owed: the end-of-session smoke test (Show reasoning still shows during and after an answer). The roadmap entry now holds only the second half (finding 6, only possible).
+
+  **2026-10-03 (plan 81 paperwork 5):** the first half passed its smoke test on the Deck (Show reasoning shows up to 88 characters of steps while writing and opens to 1348 characters afterwards, build `5eca4271`; `docs/test-evidence/plan81-D-SMOKE-REASONING.json`) and is a line in Done. Of findings 1 to 5: finding 3 is in Done, finding 2 closed earlier, findings 1, 4 and 5 are in Verify.
+
+  **2026-10-08 (plan 83, `c99bd6f6`):** finding 6 is fixed: an answer that finished while the panel was shut is now written to the desktop note once the panel reopens (developer builds only). Proven by its test `src/hooks/useBonsaiAskOrchestration.desktopNote.test.ts`; no Deck check exists. Entry moved to Done and the archive.

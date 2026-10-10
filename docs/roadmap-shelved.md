@@ -133,6 +133,9 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   the maintainer's call: no decision recorded. The two wrong answers did not reproduce.
   Unshelves when: a new sighting.
 
+- ★ `[tabs]` `[watching]` **After a tab change the ring is often on no control, so LB, RB, LT and RT do nothing until a D-pad press** — seen once, 2026-10-10 (plan 87 Deck block 3, build `d96ed0bf`): two RB presses 1.4 s apart gave one tab change. Not reproduced in block 4 (`8608954d`): the ring was on a control after 14 of 14 tab changes, read at 0.5 s and 1.5 s. Evidence `docs/test-evidence/plan87-P87-F4-TAB-ORDER.json`, `plan87-P87-TAB-CHANGE-RING.json`.
+  Unshelves when: a new sighting.
+
 - ★★ `[chat]` `[focus]` `[watching]` **A chat opened with RB while a game runs is drawn as history, and Down dies on its question line** —
   seen once, 2026-09-26. Closing and reopening the panel fixes it. Not reproduced since; named in the 0.6.0 release notes.
   Evidence `docs/test-evidence/plan72-A7-GAME-ii.json`.

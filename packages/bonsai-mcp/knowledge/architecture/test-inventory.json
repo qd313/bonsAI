@@ -566,6 +566,7 @@
     "tests/test_transparency_service.py",
     "tests/test_update_rag_corpus_reports.py",
     "tests/test_verify_decky_plugin_zip.py",
+    "tests/test_voice_capture_target_override.py",
     "tests/test_voice_model_download_pinned.py",
     "tests/test_voice_overlap_merge.py",
     "tests/test_voice_quiet_speaker.py",

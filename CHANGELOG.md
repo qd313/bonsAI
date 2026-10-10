@@ -78,28 +78,32 @@ All notable changes to this project are documented in this file.
 
 ### Plan 87 (2026-10-10)
 
-- **The Main tab's bar now says "bonsAI" in small capitals** where it said "MAIN", and the spoken name of Main's icon on the other tabs is "bonsAI". "Main" is left as it was in the Permissions tab's "Back to Main" banner, the "Switched to Main." toast and a few help lines. Owes its Deck check (row P87-F1-SMALL-CAPS).
+- **The Main tab's bar now says "bonsAI" in small capitals** where it said "MAIN", and the spoken name of Main's icon on the other tabs is "bonsAI". "Main" is left as it was in the Permissions tab's "Back to Main" banner, the "Switched to Main." toast and a few help lines. Passed on the Deck 2026-10-10 (row P87-F1-SMALL-CAPS).
 - **An answer built on one of the game notes no longer also says "No close match in my notes".** The screen takes the line off such an answer (copy text and Read aloud too; the saved chat keeps the full text), and the plugin log now names which notes were attached and which footer line was added. Owes its Deck check (row P87-K1-LINE-AND-BLOCK).
 - **The knowledge library's release is never marked as the latest on GitHub,** so it cannot take the plugin release's place behind the README's install link again. The maintainer still has to mark the plugin's own release as the latest on GitHub once. No Deck check.
 - **The plugin now keeps ten chats instead of eight, and at ten, New chat asks which chat to drop** instead of quietly deleting the oldest one: a "You have 10 chats" list, then the usual Delete box with the ring on Cancel. Cancel or B keeps all ten. LT and RT stop at the newest chat at ten. Owes its Deck check (row P87-F2-PICK-AT-TEN).
-- **A continued answer no longer says the same paragraphs twice.** Word-for-word repeats at the start of the new piece are dropped before they are shown, so the saved answer holds them once; a reworded repeat is not caught. Owes its Deck check (row P87-B5-JOIN-REPEAT).
-- **Settings has a "Text size" row (Small, Normal, Large) that changes only the words in the chat:** questions, answers, the opened Show details text and the Session tab's rows. The tab bar, the chat's name, the chips and Settings keep their sizes. Owes its Deck check (row P87-F6-TEXT-SIZE).
+- **A continued answer no longer says the same paragraphs twice.** Word-for-word repeats at the start of the new piece are dropped before they are shown, so the saved answer holds them once; a reworded repeat is not caught. Passed on the Deck 2026-10-10 (row P87-B5-JOIN-REPEAT).
+- **Settings has a "Text size" row (Small, Normal, Large) that changes only the words in the chat:** questions, answers, the opened Show details text and the Session tab's rows. The tab bar, the chat's name, the chips and Settings keep their sizes. Passed on the Deck 2026-10-10 (row P87-F6-TEXT-SIZE).
 - **The UI scale section now says "UI scale" once** instead of twice.
 - **The tab bar now draws all six tabs in one fixed order,** Main always first and About always last, with the tabs before the current one on its left and the tabs after it on its right. No icon box is narrower than 18 px any more. Owes its Deck check (row P87-F4-TAB-ORDER).
 - **A long answer that carries on after the length limit inside a hidden block now keeps one opening mark: passed on the Deck 2026-10-10** with a scripted hidden block opened again across a join (one opening mark, no half mark, one tap-to-show cover on screen). A cut in the middle of the mark itself rests on tests only.
-- **Update AI & models now restarts the running Ollama,** so the new version is the one answering (the Deck had kept answering as 0.34.1 after an update). If it cannot restart it, the line says to restart the Deck. Owes its Deck check (row P87-OLLAMA-UPDATE).
-- **Update AI & models and Install Ollama run right on the Ollama tab with no popup:** the button reads "Updating...", a line under it shows the stage and the download percentage, and it ends on a done or failed line. Owes its Deck check (row P87-OLLAMA-UPDATE).
+- **Update AI & models now restarts the running Ollama,** so the new version is the one answering (the Deck had kept answering as 0.34.1 after an update). If it cannot restart it, the line says to restart the Deck. Passed on the Deck 2026-10-10 (row P87-OLLAMA-UPDATE).
+- **Update AI & models and Install Ollama run right on the Ollama tab with no popup:** the button reads "Updating...", a line under it shows the stage and the download percentage, and it ends on a done or failed line. Passed on the Deck 2026-10-10 (row P87-OLLAMA-UPDATE).
 - **A first question at ten chats with no open chat is no longer lost:** it goes into the newest chat with a notice, and the answer is saved. The README, guide and lessons now say ten chats. Owes its Deck check (row P87-F2B-NO-OPEN-CHAT).
-- **Decky's back arrow keeps one size, and a long chat name spills to the right** up to the delete icon. Owes its Deck check (row P87-B7-BACK-ARROW).
+- **Decky's back arrow keeps one size, and a long chat name spills to the right** up to the delete icon. Passed on the Deck 2026-10-10 (row P87-B7-BACK-ARROW).
 - **A + and a delete icon sit at the two ends of the chat's name row,** reachable with Left and Right from the name. Owes its Deck check (row P87-F5-NAME-ROW).
 - **The slot above the question box meets the same stop going Down as it did going Up.** Owes its Deck check (row P87-B1-SLOT-SAME-STOPS).
-- **On a new empty chat the D-pad can reach the "How to use bonsAI" chip** above the question box. Owes its Deck check (row P87-EMPTY-CHAT-CHIPS).
-- **A quiet speaker's question no longer stops growing after three or four seconds,** and base.en works (it only looked dead because it was slower). Owes its Deck check (row P87-VOICE-QUIET-SENTENCE).
-- **Pressing the mic while a speech model is still downloading is turned away** with "The speech model is still downloading. Try again when it finishes." Owes its Deck check (row P87-VOICE-DOWNLOAD-REFUSED).
+- **On a new empty chat the D-pad can reach the "How to use bonsAI" chip** above the question box. Passed on the Deck 2026-10-10 (row P87-EMPTY-CHAT-CHIPS).
+- **A quiet speaker's question no longer stops growing after three or four seconds,** and base.en works (it only looked dead because it was slower). Passed on the Deck 2026-10-10 (row P87-VOICE-QUIET-SENTENCE).
+- **Pressing the mic while a speech model is still downloading is turned away** with "The speech model is still downloading. Try again when it finishes." Passed on the Deck 2026-10-10 (row P87-VOICE-DOWNLOAD-REFUSED).
 - **Developer-only: a file in the settings folder points the mic button at another audio source** (for a pretend microphone). No Deck check of its own.
 - **The first heading of a tab is no longer left half faded under the tab bar.** Owes its Deck check (row P87-B9-HEADING).
 - **Walking the other tabs with the D-pad no longer scrolls them a page at a time.** Owes its Deck check (row P87-B10-TAB-SCROLL).
 - **The Show details chips are packed into a grid walked in four directions,** and an open chip's details stay readable by one smooth scroll. Owes its Deck check (row P87-F3-CHIPS-GRID).
+- **The Settings tab no longer says "Screenshot quality" twice:** the repeated line is gone and the section title stays. No Deck check of its own.
+- **After a restart, a remembered chat that no longer exists is forgotten,** so the next question starts a chat of its own instead of being filed under a missing one. A hand check, rare.
+- **The AI's own suggestion chip (the orange one after a Pyro answer) can be reached with the D-pad:** Up from the question box lands on it and Down from the chips returns to it. Owes its Deck check (row P87-INJECT-CHIP).
+- **Deleting the open chat now leaves the next chat open, with its name row and the ring on the name,** whether you delete it with the name row's delete icon, the chats menu, or the "which chat to drop" box at ten chats. Before, the screen could stay on the deleted chat or lose its title strip with a dead D-pad. Owes its Deck check (row P87-DELETE-OPEN-CHAT).
 
 ### Plan 84 (2026-10-09)
 

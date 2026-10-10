@@ -1,0 +1,74 @@
+<style>
+/* ---------- tab 8: search ---------- */
+.s-find { display: flex; flex-direction: column; gap: 5px; padding: 0 6px; }
+.s-box { display: flex; align-items: center; gap: 6px; min-height: 30px; padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); color: var(--q-ink); font-size: 12px; text-align: left; width: 100%; }
+.s-mag { width: 13px; height: 13px; flex: none; color: var(--q-cyan); display: inline-flex; }
+.s-mag svg { width: 13px; height: 13px; display: block; }
+.s-ph { color: rgba(168,180,196,.6); font-style: italic; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.s-ph b { color: var(--q-ink); font-style: normal; }
+.s-words { display: flex; gap: 5px; }
+.s-word { flex: 1 1 0; min-width: 0; height: 24px; padding: 0 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #dce8f4; font-size: 10.5px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; overflow: hidden; }
+.s-word small { font-size: 8.5px; color: var(--q-ink-3); }
+.s-word.on { background: var(--q-cyan-fill); border-color: var(--q-blue); color: #fff; }
+.qam .s-word[data-stop].ring, .qam .s-game[data-stop].ring { outline-offset: 1px; }
+.s-results { display: flex; flex-direction: column; gap: 4px; padding-top: 2px; }
+.s-hint { font-size: 10px; line-height: 1.35; color: var(--q-ink-3); padding: 2px; }
+.s-count { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 10px; color: var(--q-muted); padding: 0 2px; }
+.s-clear { background: none; border: 1px solid rgba(255,255,255,.14); border-radius: 4px; color: var(--q-ink-2); font-size: 9.5px; padding: 1px 7px; }
+.s-group { display: flex; align-items: center; gap: 5px; font-size: 9.5px; font-weight: 700; letter-spacing: 0.04em; color: var(--q-ink-2); padding: 4px 2px 0; text-transform: uppercase; }
+.s-group small { margin-left: auto; font-weight: 600; color: var(--q-ink-3); }
+.s-gi { width: 11px; height: 11px; display: inline-flex; flex: none; }
+.s-gi svg { width: 11px; height: 11px; display: block; }
+.s-hit { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; width: 100%; text-align: left; padding: 5px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,.08); background: linear-gradient(180deg, rgba(22,34,48,.78), rgba(14,22,34,.82)); color: #dfe6ee; font-size: 11px; font-weight: 600; line-height: 1.3; }
+.s-hit small { font-size: 9px; font-weight: 500; color: var(--q-ink-3); }
+.s-hit mark, .s-ht mark { background: transparent; color: var(--q-cyan); font-weight: 800; }
+.s-back { align-self: flex-start; margin: 0 6px 6px; background: none; border: 1px solid rgba(255,255,255,.14); border-radius: 4px; color: var(--q-ink-2); font-size: 10px; font-weight: 600; padding: 3px 8px; }
+.s-ctx { font-size: 9.5px; color: var(--q-ink-3); text-align: center; margin: 0 0 6px; }
+.k2-q.s-found { border-color: var(--q-cyan); box-shadow: 0 0 0 1px rgba(156,231,255,.35), 0 0 12px rgba(156,231,255,.25); animation: s-glow 1.6s ease-out 1; }
+@keyframes s-glow { from { box-shadow: 0 0 0 3px rgba(156,231,255,.7), 0 0 18px rgba(156,231,255,.5); } }
+@media (prefers-reduced-motion: reduce) { .k2-q.s-found { animation: none; } }
+
+/* "N earlier" with day lines, and the find line inside it (option B) */
+.s-days { display: flex; flex-direction: column; gap: 4px; margin: 4px 0 8px; }
+.s-daylist { display: flex; flex-direction: column; gap: 4px; }
+.s-rows { display: flex; flex-direction: column; gap: 4px; padding: 2px 0 4px; }
+.s-old { display: flex; flex-direction: column; gap: 4px; }
+.s-old .k2-q.old { max-width: 260px; }
+.s-inline { border: 1px solid rgba(255,255,255,.08); border-radius: 6px; margin: 0 6px 2px; padding: 6px 0; background: rgba(255,255,255,.02); }
+
+/* the chats menu (options Today and A) */
+.s-menu { position: absolute; left: 4px; right: 4px; top: 52px; bottom: 107px; z-index: 9; background: #1a222d; border: 1px solid rgba(255,255,255,.10); border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,.6); display: flex; }
+.s-menu-in { padding: 6px 6px 8px; display: flex; flex-direction: column; gap: 3px; width: 100%; }
+.s-menu h4 { margin: 0 2px 3px; font-size: 12px; color: var(--q-ink); }
+.s-crow { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; padding: 5px 8px; border: 1px solid transparent; border-radius: 4px; background: rgba(255,255,255,.03); color: var(--q-body); font-size: 11px; text-align: left; }
+.s-crow small { font-size: 9px; color: var(--q-ink-3); white-space: nowrap; }
+.s-crow.on { border-left: 3px solid var(--q-gold); }
+.s-findrow { display: flex; align-items: center; gap: 6px; width: 100%; padding: 6px 8px; border-radius: 4px; border: 1px solid rgba(156,231,255,.35); background: rgba(56,189,248,.08); color: var(--q-ink); font-size: 11px; font-weight: 700; text-align: left; margin-bottom: 3px; }
+.s-findrow small { margin-left: auto; font-size: 9px; font-weight: 500; color: var(--q-ink-3); }
+.s-mback { align-self: flex-start; background: none; border: 0; color: var(--q-ink-2); font-size: 10px; padding: 2px 2px 4px; }
+.s-menu .s-find { padding: 0; }
+.s-cacts { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 4px; }
+.s-cact { display: inline-flex; align-items: center; gap: 5px; padding: 5px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); color: var(--q-ink-2); font-size: 10px; text-align: left; white-space: nowrap; overflow: hidden; }
+.s-cact.danger { color: #f2a59b; }
+.s-mhint { font-size: 9px; color: var(--q-ink-3); margin: 4px 2px 0 !important; }
+
+/* "You asked this before" (option C) and the voice card (Wild 1) */
+.s-asked { display: flex; flex-direction: column; gap: 3px; padding: 5px 6px; border-radius: 6px; border: 1px solid rgba(156,231,255,.30); background: rgba(14,22,32,.95); }
+.s-asked-h { display: flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; color: var(--q-cyan); }
+.s-asked-h small { margin-left: auto; font-weight: 500; color: var(--q-ink-3); font-size: 8.5px; }
+.s-voicecard { display: flex; flex-direction: column; gap: 4px; margin: 0 29px 0 5px; padding: 7px 8px; border-radius: 10px; border: 1px solid rgba(156,231,255,.30); background: rgba(14,22,32,.7); }
+
+/* the Search tab (option D) */
+.s-tabpage { padding: 0 0 8px; }
+.s-tabtitle { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--q-ink-2); padding: 4px 8px 6px; }
+.s-games { display: flex; gap: 4px; padding: 0 6px 6px; }
+.s-game { flex: 0 1 auto; min-width: 0; height: 22px; padding: 0 7px; border-radius: 11px; border: 1px solid rgba(255,255,255,.14); background: none; color: var(--q-ink-2); font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.s-game.on { background: rgba(250,204,21,.12); border-color: rgba(250,204,21,.5); color: var(--q-gold); }
+
+/* Y searches everything (Wild 2) */
+.s-yhint { display: inline-flex; align-items: center; gap: 6px; margin: 0 6px 8px; padding: 3px 9px 3px 4px; border-radius: 999px; border: 1px solid rgba(255,255,255,.12); background: rgba(18,26,34,.5); color: var(--q-ink-2); font-size: 10px; font-weight: 600; width: fit-content; }
+.s-yhint b { display: inline-flex; width: 15px; height: 15px; border-radius: 50%; align-items: center; justify-content: center; background: #c99a06; color: #fff; font-size: 9px; }
+.s-sheet { position: absolute; inset: 0; z-index: 10; background: #121a23; display: flex; flex-direction: column; padding-bottom: 22px; }
+.s-sheet-h { display: flex; align-items: center; gap: 6px; padding: 10px 10px 8px; font-size: 13px; font-weight: 700; color: var(--q-ink); }
+.s-sheet-in { padding: 0 0 8px; }
+</style>

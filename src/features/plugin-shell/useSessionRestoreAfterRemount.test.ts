@@ -29,6 +29,7 @@ vi.mock("../../utils/bonsaiSessionSurvival", () => ({
   consumeBonsaiSessionAfterRemount: vi.fn(() => null),
   finalizeSessionRestoreAfterRemount: vi.fn(),
   shouldIgnoreRestoredSettingsSnapshot: vi.fn(() => false),
+  patchPendingSessionActiveSlot: vi.fn(),
 }));
 vi.mock("../../utils/bonsaiReplySurface", () => ({ consumePendingFocusMainTab: vi.fn(() => false) }));
 vi.mock("../../utils/bonsaiDebugIngest", () => ({ bonsaiDebugLog: vi.fn() }));

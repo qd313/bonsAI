@@ -143,6 +143,36 @@ export function patchPendingSessionSurvival(
   survival.captureDirect({ ...pending, ...patch });
 }
 
+/**
+ * The open chat changed while a popup is open (Delete chat made the next chat the open one; New chat at
+ * ten chats made a fresh one): the note taken as the popup opened still names the chat as it was, and the
+ * screen that comes back would come back on it. Writes the chat that is open now into the note, with the
+ * thread and the live answer blanked the way a chat switch blanks them, so a screen restored from the note
+ * shows no words of the chat that was left (the chat itself is loaded from disk once the screen is back).
+ * Does nothing when no popup is open (no note waiting) or the chat did not change. Module memory only, so it
+ * works even when the screen that opened the popup has already been thrown away.
+ */
+export function patchPendingSessionActiveSlot(slotId: string | null): void {
+  const pending = survival.peekPending();
+  if (!pending || pending.activeSlotId === slotId) return;
+  survival.captureDirect({
+    ...pending,
+    activeSlotId: slotId,
+    askThreadCollapsed: [],
+    askThreadDisplayQuestion: "",
+    expandedTurnKey: "live",
+    ollamaResponse: "",
+    lastExchange: null,
+    lastApplied: null,
+    thinkingSummary: null,
+    liveReasoning: null,
+    elapsedSeconds: null,
+    lastTransparency: null,
+    strategyGuideBranches: null,
+    strategyChecklist: null,
+  });
+}
+
 export function consumeBonsaiSessionAfterRemount(): BonsaiSessionSurvivalSnapshot | null {
   const snap = survival.consumePending();
   if (!snap) return null;

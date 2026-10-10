@@ -26,9 +26,6 @@ import {
   type ModalReturnTransfer,
 } from "../plugin-shell/modalReturnFocusRegistry";
 
-/** How long Delete waits, after the new chat is made, for the screen to draw it before the session is saved again. */
-const SETTLE_MS = 80;
-
 /** What the picker adds to the plain box. */
 export type DeleteConfirmOptions = {
   /** Run once, only after the chat was deleted: makes the new chat. The box stays open until it is done. */
@@ -89,14 +86,13 @@ export function useChatSlotDeleteConfirm({
             void (async () => {
               try {
                 if (await onDeleteSlot(slotId)) {
-                  await replaceWith();
                   /*
-                    Closing a box rebuilds the plugin from the session saved when the box opened, and
-                    that save still names the chat as it was before the new one was made. Saving again
-                    once the screen has drawn the new chat makes the rebuild come back on it.
+                    Closing a box rebuilds the plugin from the session note taken when the box opened.
+                    Making the new chat the open one (useChatSlots' setActiveSlot) corrects that note
+                    (bonsaiSessionSurvival.ts, patchPendingSessionActiveSlot), so the rebuild comes back
+                    on the new chat, with no wait for the screen to draw it.
                   */
-                  await new Promise((resolve) => window.setTimeout(resolve, SETTLE_MS));
-                  onBeforeNestedDeckyModal?.();
+                  await replaceWith();
                 }
               } finally {
                 finish();

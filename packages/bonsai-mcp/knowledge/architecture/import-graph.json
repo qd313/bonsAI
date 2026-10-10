@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 824,
-  "edgeCount": 2486,
+  "fileCount": 828,
+  "edgeCount": 2521,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -558,6 +558,7 @@
         "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/components/MainTabEmptyChatHelpChip.test.tsx",
         "src/components/MainTabInjectChipFocus.test.tsx",
+        "src/features/chat-slots/afterBoxHarness.tsx",
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/chatTitleTestFixtures.tsx",
         "src/features/chat-title/nameRowIcons.test.tsx",
@@ -2940,6 +2941,7 @@
         "src/styles/settingsGlassButton.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/chat-slots/useChatSlotDeleteConfirm.tsx",
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
@@ -2954,6 +2956,7 @@
         "src/styles/settingsGlassButton.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/chat-slots/useStartNewChat.tsx",
         "src/features/chat-title/chatsMenuNewChatAtTen.test.tsx",
         "src/features/chat-title/nameRowIcons.test.tsx"
@@ -2977,6 +2980,47 @@
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx"
       ]
     },
+    "src/features/chat-slots/afterBoxHarness.tsx": {
+      "imports": [
+        "src/components/MainTab.tsx",
+        "src/features/chat-title/ChatTitleView.tsx",
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/features/chat-title/chatTitleTestFixtures.tsx",
+        "src/features/plugin-shell/initialSessionSnapshot.ts",
+        "src/features/plugin-shell/useChatSlotActivityState.ts",
+        "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
+        "src/hooks/useBonsaiPluginShell.ts",
+        "src/hooks/useChatSlots.ts",
+        "src/test-harness/steamRing.tsx",
+        "src/types/bonsaiUi.ts",
+        "src/utils/bonsaiSessionSurvival.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx"
+      ]
+    },
+    "src/features/chat-slots/afterDeleteRebuild.test.tsx": {
+      "imports": [
+        "src/features/chat-slots/ChatSlotDeleteModal.tsx",
+        "src/features/chat-slots/ChatSlotPickerModal.tsx",
+        "src/features/chat-slots/afterBoxHarness.tsx",
+        "src/features/chat-slots/fakeChatSlotsStore.ts",
+        "src/features/chat-title/chatNameNav.ts",
+        "src/features/chat-title/chatRowActions.ts",
+        "src/features/chat-title/chatRowIconNav.ts",
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/features/chat-title/deckyTitleParts.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/features/plugin-shell/pluginStorage.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx",
+        "src/utils/bonsaiSessionSurvival.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/settingsPayload.ts"
+      ],
+      "importedBy": []
+    },
     "src/features/chat-slots/chatSlotLimit.ts": {
       "imports": [],
       "importedBy": [
@@ -2984,6 +3028,14 @@
         "src/features/chat-slots/useStartNewChat.tsx",
         "src/features/chat-title/useChatSwitchActions.ts",
         "src/hooks/useChatSlots.ts"
+      ]
+    },
+    "src/features/chat-slots/fakeChatSlotsStore.ts": {
+      "imports": [
+        "src/utils/chatSlotsApi.ts"
+      ],
+      "importedBy": [
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx"
       ]
     },
     "src/features/chat-slots/useChatSlotDeleteConfirm.test.tsx": {
@@ -3215,6 +3267,7 @@
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/afterBoxHarness.tsx",
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
@@ -3284,6 +3337,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/chat-title/ChatRowIcons.tsx",
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/ChatTitleView.tsx",
@@ -3303,6 +3357,7 @@
     "src/features/chat-title/chatRowActions.ts": {
       "imports": [],
       "importedBy": [
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/chat-title/ChatRowIcons.tsx",
         "src/features/chat-title/nameRowIcons.test.tsx",
         "src/features/chat-title/useChatRowActions.ts"
@@ -3314,6 +3369,7 @@
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/chat-title/ChatRowIcons.tsx",
         "src/features/chat-title/ChatTitleView.tsx",
         "src/features/chat-title/nameRowIcons.test.tsx",
@@ -3346,6 +3402,8 @@
         "src/components/MainTab.tabBarDownEarlier.test.tsx",
         "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/components/MainTab.tsx",
+        "src/features/chat-slots/afterBoxHarness.tsx",
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/ChatTitleView.tsx",
         "src/features/chat-title/ChatsMenu.test.tsx",
@@ -3388,6 +3446,7 @@
         "src/features/chat-sum-up/chatSumUpModel.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/afterBoxHarness.tsx",
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/chatsMenuNewChatAtTen.test.tsx",
@@ -3485,6 +3544,7 @@
     "src/features/chat-title/deckyTitleParts.ts": {
       "imports": [],
       "importedBy": [
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/chat-title/ChatTitleView.tsx",
         "src/features/chat-title/chatNameNav.ts",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
@@ -3908,6 +3968,7 @@
         "src/utils/bonsaiSessionSurvival.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/afterBoxHarness.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/nameRowIcons.test.tsx",
         "src/index.helpChip.test.tsx",
@@ -3946,6 +4007,7 @@
         "src/components/SettingsTab.clearAllBack.test.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
         "src/components/SettingsTab.tsx",
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/chat-slots/useChatSlotDeleteConfirm.test.tsx",
         "src/features/chat-slots/useChatSlotDeleteConfirm.tsx",
         "src/features/chat-slots/useChatSlotRenameModal.tsx",
@@ -3976,6 +4038,7 @@
         "src/data/storageKeys.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/plugin-shell/tabs/useOllamaTabPayload.tsx",
         "src/features/plugin-shell/useChatSlotActivityState.ts",
         "src/features/plugin-shell/useOllamaConnectionState.ts",
@@ -4139,6 +4202,7 @@
         "src/utils/bonsaiSessionSurvival.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/afterBoxHarness.tsx",
         "src/index.tsx"
       ]
     },
@@ -4288,6 +4352,7 @@
         "src/utils/settingsPayload.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/afterBoxHarness.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.test.ts",
         "src/index.tsx"
       ]
@@ -5149,6 +5214,7 @@
       ],
       "importedBy": [
         "src/components/SettingsTab.clearAllBack.test.tsx",
+        "src/features/chat-slots/afterBoxHarness.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/nameRowIcons.test.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
@@ -5188,10 +5254,12 @@
         "src/features/plugin-shell/pluginStorage.ts",
         "src/types/backgroundAsk.ts",
         "src/types/bonsaiUi.ts",
+        "src/utils/bonsaiSessionSurvival.ts",
         "src/utils/chatSlotTurns.ts",
         "src/utils/chatSlotsApi.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/afterBoxHarness.tsx",
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.test.ts",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
@@ -6794,6 +6862,7 @@
         "src/components/SettingsTabScreenshotHeading.test.tsx",
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/chat-slots/useChatSlotDeleteConfirm.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.deckPlace.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
@@ -6894,6 +6963,8 @@
       "importedBy": [
         "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/components/SettingsTabScreenshotHeading.test.tsx",
+        "src/features/chat-slots/afterBoxHarness.tsx",
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/nameRowIcons.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
@@ -7029,6 +7100,7 @@
         "src/components/SessionContextStrip.tsx",
         "src/components/StrategyChecklistPanel.tsx",
         "src/components/buildEarlierList.tsx",
+        "src/features/chat-slots/afterBoxHarness.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
         "src/hooks/useAskSessionSnapshotActions.ts",
@@ -7591,6 +7663,8 @@
       ],
       "importedBy": [
         "src/components/SettingsTab.clearAllBack.test.tsx",
+        "src/features/chat-slots/afterBoxHarness.tsx",
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/downloads/downloadNotice.tsx",
         "src/features/model-routing/useTryOrderPlaces.test.tsx",
         "src/features/model-routing/useTryOrderPlaces.ts",
@@ -7607,6 +7681,7 @@
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useBonsaiPluginShell.test.ts",
         "src/hooks/useBonsaiPluginShell.ts",
+        "src/hooks/useChatSlots.ts",
         "src/hooks/usePluginSettings.ts",
         "src/hooks/usePullModelOpenBookkeeping.test.tsx",
         "src/hooks/usePullModelOpenBookkeeping.ts",
@@ -7903,6 +7978,7 @@
         "src/utils/inputTransparency.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/fakeChatSlotsStore.ts",
         "src/features/chat-sum-up/chatSumUpModel.test.ts",
         "src/features/chat-sum-up/chatSumUpModel.ts",
         "src/features/chat-sum-up/useChatSumUpJob.ts",
@@ -8615,6 +8691,8 @@
         "src/components/PermissionsTab.tsx",
         "src/components/buildEarlierList.tsx",
         "src/components/injectChipNav.ts",
+        "src/features/chat-slots/afterBoxHarness.tsx",
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-title/ChatRowIcons.tsx",
@@ -9017,6 +9095,7 @@
         "src/data/bonsaiSettingsSchema.ts"
       ],
       "importedBy": [
+        "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
         "src/hooks/usePluginSettings.ts",
         "src/utils/settingsContracts.test.ts"

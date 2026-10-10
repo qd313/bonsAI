@@ -165,6 +165,7 @@
     "src/data/strategyGuideFollowup.test.ts",
     "src/data/uiScaleProfile.test.ts",
     "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
+    "src/features/chat-slots/afterDeleteRebuild.test.tsx",
     "src/features/chat-slots/useChatSlotDeleteConfirm.test.tsx",
     "src/features/chat-sum-up/SessionSumUpSection.deckPlace.test.tsx",
     "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",

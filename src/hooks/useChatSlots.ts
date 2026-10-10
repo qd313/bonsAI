@@ -44,6 +44,7 @@ import {
 import { useChatSumUpJob } from "../features/chat-sum-up/useChatSumUpJob";
 import { MAX_CHAT_SLOTS } from "../features/chat-slots/chatSlotLimit";
 import { saveActiveChatSlotId } from "../features/plugin-shell/pluginStorage";
+import { patchPendingSessionActiveSlot } from "../utils/bonsaiSessionSurvival";
 
 type OpenChatMemory = {
   slotId: string | null;
@@ -170,11 +171,17 @@ export function useChatSlots({
    * each call site: `selectSlot`, `createSlot`, `deleteSlot`, `ensureActiveSlotForAsk` and the
    * *Clear cache* detach all route through it. Writing null clears the stored pointer, so the
    * detach that keeps Clear cache clean (D32) keeps working across a reopen.
+   *
+   * It also corrects the note a popup took when it opened, if one is waiting: the Delete chat box
+   * (and New chat at ten chats) changes the open chat while the box is up, and the screen rebuilt
+   * as the box closes restores that note, so it must name the chat that is open now, not the one
+   * that was open before (plan 87, the Deck's 2026-10-10 night).
    */
   const setActiveSlot = useCallback(
     (id: string | null) => {
       activeSlotIdRef.current = id;
       saveActiveChatSlotId(id);
+      patchPendingSessionActiveSlot(id);
       setActiveSlotIdState(id);
     },
     [activeSlotIdRef],

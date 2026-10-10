@@ -340,11 +340,11 @@ tab bar up, the tab bar is still the first thing in bonsAI's box under Decky's b
 bonsAI's tab bar
 ```
 
-- **Left** is Steam's own move onto Decky's back arrow: the arrow and the name are siblings in Decky's one title
-  Focusable, so Steam walks between them itself (measured 2026-10-08: Right from the arrow reached a stop drawn
-  in the title spot). Nothing claims it.
-- **Right** holds still (claimed, nothing moves). The empty space on the right only balances the arrow; nothing
-  of bonsAI lies there.
+- **Left** reaches the + before the name, and **Right** the delete icon after it, both by Steam's transfer (plan 87
+  F5, the section "The + and the delete icon on the chat's name row" below). Before plan 87, Left was Steam's own
+  move onto Decky's back arrow (siblings in Decky's one title Focusable; measured 2026-10-08: Right from the arrow
+  reached a stop drawn in the title spot) and Right held still. Right still holds when the delete icon cannot be
+  reached; Left then goes Steam's own way, to the arrow.
 - **Down** goes to the tab bar right below, by Steam's transfer onto its registered nav node
   (`takeNavFocus("tab-bar")`). Steam's own Down from Decky's bar reached the tab bar too (2026-10-08), but the
   route is written down rather than left to Steam's guess. An open chats menu closes as the ring goes, so it is
@@ -488,6 +488,60 @@ Delete chat slot?                      <- the usual box (ModalRoot), two buttons
   remain; a pick then A on Cancel keeps ten; a pick then Delete leaves ten with a fresh chat on top, the picked
   chat's file gone and no other chat file changed.
 
+### The + and the delete icon on the chat's name row (plan 87 F5)
+
+The maintainer's call 2 of 2026-10-09: two quick actions at the two ends of the chat's name row in Decky's title
+bar. **A + before the name** starts a new chat; **a delete icon after the name** opens the usual Delete chat? box
+for the open chat. Icons only, no words; spoken names "New chat" and "Delete chat". The chats menu keeps both of its
+own actions. Code: `ChatRowIcons.tsx` (the two stops), `chatRowIconNav.ts` (their nav ids, "chat-name-new" and
+"chat-name-delete", and the note of where the delete box gives the ring back), `chatRowActions.ts` and
+`useChatRowActions.ts` (the Main tab's two calls, handed to the icons through a small module because the title bar is
+another React tree), `chatRowMoves.ts` (Up, Down and LB/RB, shared with the name).
+
+```
+[Decky's back arrow]  [ + ]  [ the chat's name ]  ....  [ delete ]
+        ^ Left from +        Right/Left between the three      Right from delete: holds
+          (Steam's own)      Up: tab bar   Down: the chat's first stop   LB/RB: previous/next tab
+```
+
+- **Stops, left to right in the page:** the + (A or tap: `useChatRowActions`' new chat), the name (unchanged: A opens
+  the chats menu), the delete icon (A or tap: the Delete chat? box). The icons are drawn before and after the name in
+  the page, so Steam's own walk from Decky's back arrow (Right) reaches the + first.
+- **Moves.** From the name: **Left** takes the + and **Right** the delete icon, both by Steam's transfer (the nav
+  node of the stop, never a plain `focus()`); Right holds (claimed) if the delete icon cannot be reached. From the
+  **+**: **Right** takes the name; **Left** is not claimed, so it is Steam's own, onto Decky's back arrow (the same
+  as from the name before). From the **delete icon**: **Left** takes the name; **Right holds** (claimed, nothing
+  moves: nothing of bonsAI lies to its right). **Up** takes the tab bar and **Down** the chat's first stop from all
+  three stops, and **LB and RB** switch tabs from all three (the ring goes to the tab bar first), by the shared
+  `chatRowMoves.ts`; an open chats menu closes as the ring goes.
+- **A.** On the +: a new chat, through `useStartNewChat` (F2's one rule), so below ten chats it makes the chat at
+  once (the ring stays on the +), and at ten it opens the picker (see "New chat at ten chats" above; its boxes give
+  the ring back to the name). On the delete icon: the Delete chat? box for the open chat (`useChatSlotDeleteConfirm`,
+  Cancel first, opening on Cancel), exactly the menu's Delete chat. The delete icon is **greyed at the new-chat
+  spot** (nothing saved to delete), as the menu's Delete chat is: still a stop, A does nothing.
+- **B on either icon** returns the ring to the name (`takeChatNameFocus`) and is claimed with `preventDefault`, or
+  Decky's own B would leave bonsAI. B on the name is unchanged.
+- **Where the ring lands after the Delete chat? box.** **Cancel or B: on the delete icon** (nothing changed, the person
+  stays where they were). **Delete: on the chat's name** (the chat the icon was for is gone; the delete wrapper
+  re-registers the name as the box's return owner before the box closes). Both by Steam's transfer through the
+  box-return registry under the id "chat-slot-rename"; for about a second afterwards a landing on Decky's back arrow
+  (where Steam put the ring as the box closed, 2026-10-08) is taken back to the same stop. **The note of which of
+  the two it is lives in `chatRowIconNav.ts`, outside every component**, because closing a Decky box rebuilds the
+  tab behind it; the transfer looks the icon up by its registry id each time it runs, so an icon drawn again between
+  the open and the close is still reached (tested with the title bar unmounted and mounted between the two).
+- **The ring look.** The icon's `class` attribute is static: Steam writes its own `gpfocus` marker into it, and a
+  React state change rewriting the attribute wiped the marker (the test model lost the ring the first time). The
+  white ring and the greyed look are `data-ring` and `data-off` attributes.
+- **The row's width.** Each icon takes 26 points (24 and a 2-point gap on its inner side). Decky's back arrow keeps
+  its 40 whatever the name (plan 87 B7: bonsAI's part of the bar starts from nothing, not from its content's
+  width, and the empty space that centres a short name gives way first). The name sits between the icons and a long
+  name spills into the empty space on its right, **never under the delete icon**; a short name stays centred on the
+  panel's centre line.
+- **Not backed by a device row yet.** The Deck check: both icons visible; Left from the name puts the ring on +, Right
+  on the delete icon, each fully visible; A on + makes a new chat; A on the delete icon opens the Delete chat? box
+  with the ring on Cancel, and Cancel keeps the chat and puts the ring back on the delete icon; B from each icon
+  returns the ring to the name; the back arrow's box is the same width with a 14-letter and a 60-letter name.
+
 ### The tab bar in Steam's strip, and Decky's bar per tab (plan 84 step 6)
 
 Plan 84 step 6 moves the tab bar out of bonsAI's box, up into the 14-point strip Steam leaves empty at the top
@@ -519,7 +573,7 @@ Stops: the tab bar (one stop, step 4's) and the chat's name (step 5's). Decky's 
   own, and Decky's plugin box takes it back to Decky's list.
 - **The chat's name.** **Up goes to the tab bar** and **Down to the chat's first stop** (`takeChatFirstStop`: the
   "N earlier" line, the first question's text, or the question box), both by Steam's transfer; either closes an
-  open chats menu as the ring goes. Left is Steam's own onto Decky's back arrow, Right holds, as in step 5.
+  open chats menu as the ring goes. Left and Right reach the + and the delete icon (plan 87 F5, below).
   **LB and RB switch tabs from the name too**, and the ring goes to the tab bar first, because the other tabs draw
   no name (left alone, the ring would sit on a control that is gone).
 - **Decky's back arrow** (Main only) takes no handler of ours. The name is drawn before the bar in the page (the

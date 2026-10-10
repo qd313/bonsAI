@@ -18,8 +18,18 @@
  *
  * Does not: Decide when the ring goes to the name; callers do. Does not watch the arrow outside the
  * short window after a box return, so a person who walks Left onto it on purpose is left there.
+ *
+ * Plan 87 F5: the same catch serves the + and the delete icon beside the name (chatRowIconNav.ts), which a box
+ * can also return the ring to; `catchArrowLandingAfterReturn(id)` takes the ring back to whichever stop the
+ * return was for.
  */
-import { registerNavFocus, takeNavFocus, unregisterNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
+import {
+  registerNavFocus,
+  takeNavFocus,
+  unregisterNavFocus,
+  type NavFocusId,
+  type NavRefHolder,
+} from "../../utils/navFocusRegistry";
 import { elementHasGamepadFocus } from "../../utils/uiDocument";
 import { deckyBackArrow } from "./deckyTitleParts";
 
@@ -67,7 +77,7 @@ export function chatNameElement(): HTMLElement | null {
  * places the ring itself as a box closes, and on the Deck it chose the arrow. Each call starts the window
  * again.
  */
-function catchArrowLandingAfterReturn(): void {
+export function catchArrowLandingAfterReturn(target: NavFocusId = "chat-name"): void {
   if (arrowCatch) clearTimeout(arrowCatch);
   let checksLeft = ARROW_CATCH_CHECKS;
   let takes = 0;
@@ -75,7 +85,7 @@ function catchArrowLandingAfterReturn(): void {
     arrowCatch = null;
     if (checksLeft-- <= 0) return;
     const arrow = deckyBackArrow();
-    if (arrow && takes < ARROW_CATCH_MAX_TAKES && elementHasGamepadFocus(arrow) && takeChatNameFocus()) takes += 1;
+    if (arrow && takes < ARROW_CATCH_MAX_TAKES && elementHasGamepadFocus(arrow) && takeNavFocus(target)) takes += 1;
     arrowCatch = setTimeout(check, ARROW_CATCH_POLL_MS);
   };
   arrowCatch = setTimeout(check, ARROW_CATCH_POLL_MS);

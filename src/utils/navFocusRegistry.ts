@@ -87,6 +87,9 @@ export type NavFocusId = "session-context-strip" | "preset-carousel" | "unified-
   /** The chat's name in Decky's title bar (plan 84 step 5, ChatTitleView.tsx): outside bonsAI's box, so
    *  every way onto it is a transfer. Registered by chatNameNav.ts. */
   | "chat-name"
+  /** The + and the delete icon at the two ends of the chat's name row (plan 87 F5): same view, same rule.
+   *  Registered by chatRowIconNav.ts. */
+  | "chat-name-new" | "chat-name-delete"
   /** One per tab body except Main (TabBodyFocusRoot): the collapsing bar's Down hands the ring here. */
   | `tab-body:${string}`;
 

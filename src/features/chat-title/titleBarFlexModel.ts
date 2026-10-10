@@ -81,13 +81,25 @@ function hasMinWidthZero(css: string, selector: string): boolean {
   return /min-width:\s*0/.test(ruleBody(css, selector) ?? "");
 }
 
-type TitleBarLayout = { arrow: number; root: number; name: number; mirror: number; nameLeft: number };
+type TitleBarLayout = {
+  arrow: number;
+  root: number;
+  name: number;
+  mirror: number;
+  /** Where the name's box starts and ends, from the bar's left edge. */
+  nameStart: number;
+  nameEnd: number;
+  /** The delete icon's left edge, from the bar's left edge (0 when there is no icon). */
+  deleteStart: number;
+};
 
 /**
  * Decky's bar with its back arrow and bonsAI's view, laid out from `css`. `nameNatural` is the name box's
- * natural width (its words and furniture in one line); `mirrorWidth` is the empty space's inline width.
+ * natural width (its words and furniture in one line); `mirrorWidth` is the empty space's inline width;
+ * `iconSlot` is the width one icon takes (the + before the name and the delete icon after the empty space),
+ * 0 when the row has none (plan 87 F5 added them).
  */
-export function layoutTitleBar(css: string, nameNatural: number, mirrorWidth: number): TitleBarLayout {
+export function layoutTitleBar(css: string, nameNatural: number, mirrorWidth: number, iconSlot = 0): TitleBarLayout {
   const room = DECKY_BAR.width - 2 * DECKY_BAR.padX - DECKY_BAR.gapAfterArrow;
   const rootFlex = flexOf(css, ".bonsai-chat-title");
   const nameFlex = flexOf(css, ".bonsai-chat-title__name");
@@ -104,7 +116,8 @@ export function layoutTitleBar(css: string, nameNatural: number, mirrorWidth: nu
     shrink: nameFlex.shrink,
     min: hasMinWidthZero(css, ".bonsai-chat-title__name") ? 0 : nameNatural,
   };
-  const rootNatural = nameNatural + mirrorWidth;
+  const iconBox: FlexBox = { basis: iconSlot, grow: 0, shrink: 0, min: iconSlot };
+  const rootNatural = nameNatural + mirrorWidth + 2 * iconSlot;
   const rootBox: FlexBox = {
     basis: rootFlex.basis === "auto" ? rootNatural : rootFlex.basis,
     grow: rootFlex.grow,
@@ -113,6 +126,16 @@ export function layoutTitleBar(css: string, nameNatural: number, mirrorWidth: nu
   };
   const arrowBox: FlexBox = { basis: DECKY_BAR.arrowNatural, grow: 0, shrink: 1, min: 0 };
   const [arrow, root] = solveFlexRow([arrowBox, rootBox], room);
-  const [name, mirror] = solveFlexRow([nameBox, mirrorBox], root);
-  return { arrow, root, name, mirror, nameLeft: DECKY_BAR.padX + arrow + DECKY_BAR.gapAfterArrow };
+  const [, name, mirror] = solveFlexRow([iconBox, nameBox, mirrorBox, iconBox], root);
+  const rootLeft = DECKY_BAR.padX + arrow + DECKY_BAR.gapAfterArrow;
+  const nameStart = rootLeft + iconSlot;
+  return {
+    arrow,
+    root,
+    name,
+    mirror,
+    nameStart,
+    nameEnd: nameStart + name,
+    deleteStart: iconSlot > 0 ? rootLeft + root - iconSlot : 0,
+  };
 }

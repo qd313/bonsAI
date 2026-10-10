@@ -13,6 +13,10 @@
  * not the shape step 6 expects, nothing of Decky's is changed: the bar stays in bonsAI's own box as
  * before, and the other tabs show the plain "bonsAI" wordmark here.
  *
+ * Plan 87 F5: a + sits before the name (a new chat) and a delete icon after it (the Delete chat? box), each a
+ * stop of its own (ChatRowIcons.tsx); the name keeps what is left between them and a long name spills into the
+ * empty space on its right, never under the delete icon.
+ *
  * The name is a stop for Steam's ring. While the ring is on it, LT and RT light up (they are dimmed
  * the rest of the time), a white ring is drawn round the name, and a name too long for its room
  * slides once to show the rest (ChatNameWords.tsx).
@@ -32,8 +36,8 @@
  * Steam's strip (plan 84 step 6)"), with the bar in the strip:
  *   Up    -> the tab bar, by Steam's transfer; an open chats menu closes as the ring goes
  *   Down  -> the chat's first stop (the Main tab's own action); an open chats menu closes
- *   Left  -> Steam's own move, onto Decky's back arrow beside it (the same bar, one container)
- *   Right -> holds still: nothing of bonsAI lies to the right of the name
+ *   Left  -> the + before the name (Steam's transfer; plan 87 F5, ChatRowIcons.tsx)
+ *   Right -> the delete icon after the name (the same); Right from the delete icon holds still
  *   LB/RB -> the previous or next tab; the ring goes to the tab bar first (the name is not drawn there)
  *   A, tap -> opens the chats menu, which takes the ring onto the open chat; again closes it
  *   B     -> with the menu open, closes it; otherwise Decky's own (back to its plugin list)
@@ -43,16 +47,16 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
 
-import { isBumperLeftDeckEvent, isBumperRightDeckEvent } from "../../utils/focusNavigation";
-import { takeNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
-import { neighbourTab } from "../plugin-shell/tabBarNav";
+import type { NavRefHolder } from "../../utils/navFocusRegistry";
 import { ChatNameWords } from "./ChatNameWords";
+import { ChatRowIcon } from "./ChatRowIcons";
+import { takeChatIconFocus } from "./chatRowIconNav";
+import { rowVerticalMoves, switchTabFromRow } from "./chatRowMoves";
 import { registerChatNameNav, rememberChatNameElement, unregisterChatNameNav } from "./chatNameNav";
 import { CHAT_TITLE_CSS } from "./chatTitleStyles";
 import {
   getChatTitleState,
   setChatsMenuOpen,
-  takeChatFirstStop,
   useChatTitleState,
   type ChatTitleChat,
 } from "./chatTitleStore";
@@ -78,23 +82,6 @@ function CaretIcon() {
 /** A or a tap on the name: open the chats menu, or close it when it is open (the ring is on the name then). */
 function toggleChatsMenu(): void {
   setChatsMenuOpen(!getChatTitleState().menuOpen);
-}
-
-/**
- * LB or RB on the name: the tab before or after, wrapping, as on the tab bar. The ring goes to the tab bar
- * first: the other tabs draw no name, so the ring would otherwise be left on a control that is gone.
- * False (left to Steam) for any other button, or before the plugin root has handed the tab bar over.
- */
-function switchTabFromName(evt: unknown): boolean {
-  const step = isBumperLeftDeckEvent(evt) ? -1 : isBumperRightDeckEvent(evt) ? 1 : 0;
-  const { tab, tabBar } = getChatTitleState();
-  if (step === 0 || !tabBar || tab === null) return false;
-  const next = neighbourTab(tabBar.tabIds, tab, step);
-  if (next === null || next === tab) return true;
-  setChatsMenuOpen(false);
-  takeNavFocus("tab-bar");
-  tabBar.selectTab(next);
-  return true;
 }
 
 /**
@@ -126,6 +113,7 @@ function ChatNameRow({
   const count = chatCountLine(chat);
   return (
     <div className={`bonsai-chat-title__row${ringOn ? " bonsai-chat-title__row--ring" : ""}`}>
+      <ChatRowIcon kind="new" off={false} strip={strip} />
       <Focusable
         className="bonsai-chat-title__name"
         ref={(el: HTMLElement | null) => rememberChatNameElement(el)}
@@ -144,23 +132,18 @@ function ChatNameRow({
           focusable: true,
           /* The view draws its own white ring (chatTitleStyles.ts); Steam's would sit on top of it. */
           noFocusRing: true,
-          onMoveRight: () => true,
+          /* Left and Right reach the + and the delete icon beside the name (plan 87 F5), by Steam's transfer.
+             Right holds when the icon cannot be reached; Left then goes Steam's own way, to Decky's arrow. */
+          onMoveLeft: () => takeChatIconFocus("new"),
+          onMoveRight: () => {
+            takeChatIconFocus("delete");
+            return true;
+          },
           /* An open menu the ring had left (a tap that opened it, then the ring came back here) closes
              as the ring goes, so it never stays open behind the ring. With the bar in the strip, Down
              enters the chat itself and Up is the bar; otherwise the bar is right below and Up is Steam's. */
-          onMoveDown: () => {
-            setChatsMenuOpen(false);
-            return strip ? takeChatFirstStop() : takeNavFocus("tab-bar");
-          },
-          ...(strip
-            ? {
-                onMoveUp: () => {
-                  setChatsMenuOpen(false);
-                  return takeNavFocus("tab-bar");
-                },
-              }
-            : {}),
-          onButtonDown: switchTabFromName,
+          ...rowVerticalMoves(strip),
+          onButtonDown: switchTabFromRow,
           /* B with the menu open closes it and keeps the ring here. Claimed only then: otherwise B is
              Decky's, and goes back to its plugin list. */
           ...(menuOpen
@@ -187,6 +170,7 @@ function ChatNameRow({
         </span>
       </Focusable>
       <span className="bonsai-chat-title__mirror" style={{ width: balance }} aria-hidden="true" />
+      <ChatRowIcon kind="delete" off={chat.place < 1} strip={strip} />
     </div>
   );
 }

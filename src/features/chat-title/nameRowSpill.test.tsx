@@ -70,7 +70,7 @@ describe("the back arrow keeps one size whatever the chat's name", () => {
   });
 
   it("the view starts at the same place whatever the name", () => {
-    const lefts = [SHORT, MID, LONG].map((n) => barFor(n).nameLeft);
+    const lefts = [SHORT, MID, LONG].map((n) => barFor(n).nameStart);
     expect(new Set(lefts).size).toBe(1);
   });
 });

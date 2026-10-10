@@ -40,6 +40,15 @@ export const KEY_DIM_OPACITY = 0.32;
 /** The accent the tab bar uses when no character colour has been handed over yet (tabIndicatorBar.ts). */
 const LIT_FALLBACK = "#52d88a";
 
+/**
+ * The + and the delete icon at the two ends of the name row (plan 87 F5): each stop is this wide, with a
+ * 2-point gap on its inner side, so each takes ICON_SLOT_PX of the row. The name keeps what is left.
+ */
+const ICON_W_PX = 24;
+const ICON_GAP_PX = 2;
+export const ICON_SLOT_PX = ICON_W_PX + ICON_GAP_PX;
+const ICON_SVG_PX = 13;
+
 /** What the name's own box loses to the spacer, the two gaps and the arrow, out of its width. */
 export const NAME_LINE_FURNITURE_PX = NAME_CARET_PX * 2 + NAME_CARET_GAP_PX * 2;
 
@@ -185,6 +194,45 @@ ${ROOT} .bonsai-chat-title__mirror {
   min-width: 0;
   width: ${DECKY_BACK_ARROW_W_PX}px;
   height: ${DECKY_TITLE_ROW_H_PX}px;
+}
+/* The + and the delete icon: icons only, the menu's own pictures at the menu's size and stroke. */
+${ROOT} .bonsai-chat-title__icon {
+  flex: none;
+  box-sizing: border-box;
+  width: ${ICON_W_PX}px;
+  height: ${DECKY_TITLE_ROW_H_PX}px;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none !important;
+  color: #9fb0c2;
+}
+${ROOT} .bonsai-chat-title__icon--new {
+  margin-right: ${ICON_GAP_PX}px;
+}
+${ROOT} .bonsai-chat-title__icon--delete {
+  margin-left: ${ICON_GAP_PX}px;
+  color: #f16a5a;
+}
+${ROOT} .bonsai-chat-title__icon svg {
+  width: ${ICON_SVG_PX}px;
+  height: ${ICON_SVG_PX}px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: block;
+}
+/* Greyed: still a stop, A does nothing (the delete icon at the new-chat spot, as the menu's Delete chat). */
+${ROOT} .bonsai-chat-title__icon[data-off="true"] {
+  opacity: 0.45;
+}
+${ROOT} .bonsai-chat-title__icon.gpfocus,
+${ROOT} .bonsai-chat-title__icon[data-ring="true"] {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.06);
 }
 @media (prefers-reduced-motion: reduce) {
   ${ROOT} .bonsai-chat-title__key,

@@ -48,6 +48,7 @@ import { useMainTabColumnFill } from "../hooks/useMainTabColumnFill";
 import { useDockClearanceOnFocus } from "../hooks/useDockClearanceOnFocus";
 import { useChatTitlePublisher } from "../features/chat-title/useChatTitlePublisher";
 import { useChatSwitchActions } from "../features/chat-title/useChatSwitchActions";
+import { useChatRowActions } from "../features/chat-title/useChatRowActions";
 import { useChatTriggerSwitch } from "../features/chat-title/useChatTriggerSwitch";
 import { takeFirstChatStop } from "../features/chat-title/takeFirstChatStop";
 import { ChatsMenu } from "../features/chat-title/ChatsMenu";
@@ -309,6 +310,15 @@ export function MainTab(props: MainTabProps) {
     },
     chatActions,
   );
+  /* The + and the delete icon on the chat's name row make a new chat and open the Delete chat? box (plan 87 F5). */
+  useChatRowActions({
+    activeSlotId: props.activeChatSlotId ?? null,
+    createSlot: props.onChatSlotCreate,
+    deleteSlot: props.onChatSlotDelete,
+    setAtCreate: setAtNewChatSpot,
+    onBeforeNestedDeckyModal: props.onBeforeNestedDeckyModal,
+    onCompleteNestedDeckyModalClose: props.onCompleteNestedDeckyModalClose,
+  });
   /* The chats menu, opened from the name in Decky's bar, drops over the answer from the dock's top edge. */
   const chatsMenuOpen = useChatTitleValue((s) => s.menuOpen);
   const titleChat = useChatTitleValue((s) => s.chat);

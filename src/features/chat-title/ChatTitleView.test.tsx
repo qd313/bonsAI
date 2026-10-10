@@ -213,11 +213,13 @@ describe("the name's own D-pad moves", () => {
     expect(hoisted.tabBarTakes).toBe(1);
   });
 
-  it("Right holds still; Left and Up are Steam's own", () => {
+  it("Right goes to the delete icon and holds; Left goes to the +; Up is Steam's own (plan 87 F5)", () => {
     const { container } = renderInDeckyBar(chat());
     const nav = (nameEl(container) as NavEl).__nav!;
     expect((nav.onMoveRight as () => boolean)()).toBe(true);
-    expect(nav.onMoveLeft).toBeUndefined();
+    expect(document.activeElement).toBe(container.querySelector(".bonsai-chat-title__icon--delete"));
+    expect((nav.onMoveLeft as () => boolean)()).toBe(true);
+    expect(document.activeElement).toBe(container.querySelector(".bonsai-chat-title__icon--new"));
     expect(nav.onMoveUp).toBeUndefined();
   });
 

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 797,
-  "edgeCount": 2391,
+  "fileCount": 805,
+  "edgeCount": 2436,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -512,6 +512,7 @@
         "src/features/chat-title/ChatsMenu.tsx",
         "src/features/chat-title/chatTitleStore.ts",
         "src/features/chat-title/takeFirstChatStop.ts",
+        "src/features/chat-title/useChatRowActions.ts",
         "src/features/chat-title/useChatSwitchActions.ts",
         "src/features/chat-title/useChatTitlePublisher.ts",
         "src/features/chat-title/useChatTriggerSwitch.ts",
@@ -533,6 +534,7 @@
         "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/chatTitleTestFixtures.tsx",
+        "src/features/chat-title/nameRowIcons.test.tsx",
         "src/features/chat-title/useChatTitlePublisher.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/plugin-shell/tabs/useMainTabPayload.tsx"
@@ -2859,7 +2861,8 @@
         "src/features/chat-slots/useChatSlotDeleteConfirm.tsx",
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
-        "src/features/chat-title/chatsMenuNewChatAtTen.test.tsx"
+        "src/features/chat-title/chatsMenuNewChatAtTen.test.tsx",
+        "src/features/chat-title/nameRowIcons.test.tsx"
       ]
     },
     "src/features/chat-slots/ChatSlotPickerModal.tsx": {
@@ -2870,7 +2873,8 @@
       ],
       "importedBy": [
         "src/features/chat-slots/useStartNewChat.tsx",
-        "src/features/chat-title/chatsMenuNewChatAtTen.test.tsx"
+        "src/features/chat-title/chatsMenuNewChatAtTen.test.tsx",
+        "src/features/chat-title/nameRowIcons.test.tsx"
       ]
     },
     "src/features/chat-slots/ChatSlotRenameModal.test.tsx": {
@@ -2916,7 +2920,8 @@
       "importedBy": [
         "src/features/chat-slots/useChatSlotDeleteConfirm.test.tsx",
         "src/features/chat-slots/useStartNewChat.tsx",
-        "src/features/chat-title/ChatsMenu.tsx"
+        "src/features/chat-title/ChatsMenu.tsx",
+        "src/features/chat-title/useChatRowActions.ts"
       ]
     },
     "src/features/chat-slots/useChatSlotRenameModal.tsx": {
@@ -2936,7 +2941,8 @@
         "src/features/plugin-shell/modalReturnFocusRegistry.ts"
       ],
       "importedBy": [
-        "src/features/chat-title/ChatsMenu.tsx"
+        "src/features/chat-title/ChatsMenu.tsx",
+        "src/features/chat-title/useChatRowActions.ts"
       ]
     },
     "src/features/chat-sum-up/SessionSumUpSection.deckPlace.test.tsx": {
@@ -3085,6 +3091,19 @@
         "src/features/chat-title/ChatTitleView.tsx"
       ]
     },
+    "src/features/chat-title/ChatRowIcons.tsx": {
+      "imports": [
+        "src/features/chat-title/chatNameNav.ts",
+        "src/features/chat-title/chatRowActions.ts",
+        "src/features/chat-title/chatRowIconNav.ts",
+        "src/features/chat-title/chatRowMoves.ts",
+        "src/features/chat-title/chatsMenuIcons.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/features/chat-title/ChatTitleView.tsx"
+      ]
+    },
     "src/features/chat-title/ChatTitleView.test.tsx": {
       "imports": [
         "src/features/chat-title/ChatTitleView.tsx",
@@ -3101,15 +3120,16 @@
     "src/features/chat-title/ChatTitleView.tsx": {
       "imports": [
         "src/features/chat-title/ChatNameWords.tsx",
+        "src/features/chat-title/ChatRowIcons.tsx",
         "src/features/chat-title/TitleTabStrip.tsx",
         "src/features/chat-title/chatNameNav.ts",
+        "src/features/chat-title/chatRowIconNav.ts",
+        "src/features/chat-title/chatRowMoves.ts",
         "src/features/chat-title/chatTitleStore.ts",
         "src/features/chat-title/chatTitleStyles.ts",
         "src/features/chat-title/deckyHeaderShape.ts",
         "src/features/chat-title/deckyTitleParts.ts",
         "src/features/chat-title/nameRowBalance.ts",
-        "src/features/plugin-shell/tabBarNav.ts",
-        "src/utils/focusNavigation.ts",
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
@@ -3117,6 +3137,8 @@
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/chatsMenuNewChatAtTen.test.tsx",
+        "src/features/chat-title/nameRowIcons.test.tsx",
+        "src/features/chat-title/nameRowSpill.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/topStripHeightLock.test.tsx",
         "src/features/chat-title/useChatTitlePublisher.test.tsx",
@@ -3180,15 +3202,52 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/features/chat-title/ChatRowIcons.tsx",
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/ChatTitleView.tsx",
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/ChatsMenu.tsx",
         "src/features/chat-title/TitleTabStrip.tsx",
+        "src/features/chat-title/chatRowIconNav.ts",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/chatsMenuNewChatAtTen.test.tsx",
+        "src/features/chat-title/nameRowIcons.test.tsx",
+        "src/features/chat-title/nameRowSpill.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
-        "src/features/chat-title/topStripHeightLock.test.tsx"
+        "src/features/chat-title/topStripHeightLock.test.tsx",
+        "src/features/chat-title/useChatRowActions.ts"
+      ]
+    },
+    "src/features/chat-title/chatRowActions.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/features/chat-title/ChatRowIcons.tsx",
+        "src/features/chat-title/nameRowIcons.test.tsx",
+        "src/features/chat-title/useChatRowActions.ts"
+      ]
+    },
+    "src/features/chat-title/chatRowIconNav.ts": {
+      "imports": [
+        "src/features/chat-title/chatNameNav.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/features/chat-title/ChatRowIcons.tsx",
+        "src/features/chat-title/ChatTitleView.tsx",
+        "src/features/chat-title/nameRowIcons.test.tsx",
+        "src/features/chat-title/useChatRowActions.ts"
+      ]
+    },
+    "src/features/chat-title/chatRowMoves.ts": {
+      "imports": [
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/features/plugin-shell/tabBarNav.ts",
+        "src/utils/focusNavigation.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/features/chat-title/ChatRowIcons.tsx",
+        "src/features/chat-title/ChatTitleView.tsx"
       ]
     },
     "src/features/chat-title/chatTitleStore.test.tsx": {
@@ -3210,11 +3269,15 @@
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/ChatsMenu.tsx",
         "src/features/chat-title/TitleTabStrip.tsx",
+        "src/features/chat-title/chatRowMoves.ts",
         "src/features/chat-title/chatTitleStore.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/chatsMenuNewChatAtTen.test.tsx",
+        "src/features/chat-title/nameRowIcons.test.tsx",
+        "src/features/chat-title/nameRowSpill.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/topStripHeightLock.test.tsx",
+        "src/features/chat-title/useChatRowActions.ts",
         "src/features/chat-title/useChatSwitchActions.ts",
         "src/features/chat-title/useChatTitlePublisher.test.tsx",
         "src/features/chat-title/useChatTitlePublisher.ts",
@@ -3232,7 +3295,9 @@
         "src/components/MainTabChatTranscript.textSize.test.tsx",
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/ChatTitleView.tsx",
-        "src/features/chat-title/nameRowBalance.ts"
+        "src/features/chat-title/nameRowBalance.ts",
+        "src/features/chat-title/nameRowIcons.test.tsx",
+        "src/features/chat-title/nameRowSpill.test.tsx"
       ]
     },
     "src/features/chat-title/chatTitleTestFixtures.tsx": {
@@ -3244,6 +3309,7 @@
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/chatsMenuNewChatAtTen.test.tsx",
+        "src/features/chat-title/nameRowIcons.test.tsx",
         "src/features/chat-title/noSavedChatsRow.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/useChatSwitchActions.limit.test.ts",
@@ -3274,6 +3340,7 @@
         "src/features/chat-title/chatsMenuModel.ts"
       ],
       "importedBy": [
+        "src/features/chat-title/ChatRowIcons.tsx",
         "src/features/chat-title/ChatsMenu.tsx"
       ]
     },
@@ -3340,6 +3407,7 @@
         "src/features/chat-title/chatNameNav.ts",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/deckyHeaderShape.ts",
+        "src/features/chat-title/nameRowIcons.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/topStripHeightLock.test.tsx"
       ]
@@ -3352,6 +3420,40 @@
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/ChatTitleView.tsx"
       ]
+    },
+    "src/features/chat-title/nameRowIcons.test.tsx": {
+      "imports": [
+        "src/components/MainTab.tsx",
+        "src/features/chat-slots/ChatSlotDeleteModal.tsx",
+        "src/features/chat-slots/ChatSlotPickerModal.tsx",
+        "src/features/chat-title/ChatTitleView.tsx",
+        "src/features/chat-title/chatNameNav.ts",
+        "src/features/chat-title/chatRowActions.ts",
+        "src/features/chat-title/chatRowIconNav.ts",
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/features/chat-title/chatTitleStyles.ts",
+        "src/features/chat-title/chatTitleTestFixtures.tsx",
+        "src/features/chat-title/deckyTitleParts.ts",
+        "src/features/chat-title/titleBarFlexModel.ts",
+        "src/features/plugin-shell/initialSessionSnapshot.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/hooks/useBonsaiPluginShell.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/chat-title/nameRowSpill.test.tsx": {
+      "imports": [
+        "src/features/chat-title/ChatTitleView.tsx",
+        "src/features/chat-title/chatNameNav.ts",
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/features/chat-title/chatTitleStyles.ts",
+        "src/features/chat-title/titleBarFlexModel.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
     },
     "src/features/chat-title/noSavedChatsRow.test.tsx": {
       "imports": [
@@ -3368,6 +3470,13 @@
       ],
       "importedBy": [
         "src/components/MainTab.tsx"
+      ]
+    },
+    "src/features/chat-title/titleBarFlexModel.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/features/chat-title/nameRowIcons.test.tsx",
+        "src/features/chat-title/nameRowSpill.test.tsx"
       ]
     },
     "src/features/chat-title/topStrip.test.tsx": {
@@ -3412,6 +3521,20 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": []
+    },
+    "src/features/chat-title/useChatRowActions.ts": {
+      "imports": [
+        "src/features/chat-slots/useChatSlotDeleteConfirm.tsx",
+        "src/features/chat-slots/useStartNewChat.tsx",
+        "src/features/chat-title/chatNameNav.ts",
+        "src/features/chat-title/chatRowActions.ts",
+        "src/features/chat-title/chatRowIconNav.ts",
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTab.tsx"
+      ]
     },
     "src/features/chat-title/useChatSwitchActions.limit.test.ts": {
       "imports": [
@@ -3683,6 +3806,7 @@
       ],
       "importedBy": [
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
+        "src/features/chat-title/nameRowIcons.test.tsx",
         "src/index.helpChip.test.tsx",
         "src/index.tsx",
         "src/utils/bonsaiSessionSurvival.test.ts"
@@ -3727,6 +3851,8 @@
         "src/features/chat-title/ChatsMenu.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/chatsMenuNewChatAtTen.test.tsx",
+        "src/features/chat-title/nameRowIcons.test.tsx",
+        "src/features/chat-title/useChatRowActions.ts",
         "src/features/chat-title/useChatTriggerSwitch.test.tsx",
         "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
@@ -3790,7 +3916,7 @@
         "src/utils/focusNavigation.ts"
       ],
       "importedBy": [
-        "src/features/chat-title/ChatTitleView.tsx",
+        "src/features/chat-title/chatRowMoves.ts",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/tabBarNav.test.ts"
       ]
@@ -4884,6 +5010,7 @@
       "importedBy": [
         "src/components/SettingsTab.clearAllBack.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
+        "src/features/chat-title/nameRowIcons.test.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
         "src/features/plugin-shell/useTabAndModeGuardEffects.ts",
         "src/hooks/useBonsaiPluginShell.test.ts",
@@ -6508,6 +6635,8 @@
         "src/features/chat-title/ChatsMenu.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/chatsMenuNewChatAtTen.test.tsx",
+        "src/features/chat-title/nameRowIcons.test.tsx",
+        "src/features/chat-title/nameRowSpill.test.tsx",
         "src/features/chat-title/noSavedChatsRow.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/topStripHeightLock.test.tsx",
@@ -6596,6 +6725,7 @@
       "importedBy": [
         "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
+        "src/features/chat-title/nameRowIcons.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/topStripHeightLock.test.tsx"
       ]
@@ -7899,7 +8029,7 @@
         "src/features/chat-sum-up/SessionTitleOffer.tsx",
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/features/chat-sum-up/sumUpDirectionHandlers.ts",
-        "src/features/chat-title/ChatTitleView.tsx",
+        "src/features/chat-title/chatRowMoves.ts",
         "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/plugin-shell/tabBarNav.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
@@ -8288,11 +8418,15 @@
         "src/components/buildEarlierList.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
+        "src/features/chat-title/ChatRowIcons.tsx",
         "src/features/chat-title/ChatTitleView.test.tsx",
         "src/features/chat-title/ChatTitleView.tsx",
         "src/features/chat-title/ChatsMenu.tsx",
         "src/features/chat-title/chatNameNav.ts",
+        "src/features/chat-title/chatRowIconNav.ts",
+        "src/features/chat-title/chatRowMoves.ts",
         "src/features/chat-title/deckyHeaderShape.ts",
+        "src/features/chat-title/nameRowIcons.test.tsx",
         "src/features/chat-title/takeFirstChatStop.ts",
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/topStripHeightLock.test.tsx",

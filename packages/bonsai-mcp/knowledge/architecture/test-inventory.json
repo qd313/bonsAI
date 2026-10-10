@@ -171,6 +171,8 @@
     "src/features/chat-title/chatTitleStore.test.tsx",
     "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
     "src/features/chat-title/chatsMenuNewChatAtTen.test.tsx",
+    "src/features/chat-title/nameRowIcons.test.tsx",
+    "src/features/chat-title/nameRowSpill.test.tsx",
     "src/features/chat-title/noSavedChatsRow.test.tsx",
     "src/features/chat-title/topStrip.test.tsx",
     "src/features/chat-title/topStripHeightLock.test.tsx",

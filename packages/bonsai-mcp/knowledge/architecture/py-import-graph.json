@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 120,
-  "edgeCount": 326,
+  "fileCount": 121,
+  "edgeCount": 329,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -90,6 +90,10 @@
       "count": 6
     },
     {
+      "path": "py_modules/backend/services/voice_whisper_runtime.py",
+      "count": 6
+    },
+    {
       "path": "py_modules/backend/services/ai_character_service.py",
       "count": 5
     },
@@ -111,10 +115,6 @@
     },
     {
       "path": "py_modules/backend/services/strategy_spoiler_policy.py",
-      "count": 5
-    },
-    {
-      "path": "py_modules/backend/services/voice_whisper_runtime.py",
       "count": 5
     },
     {
@@ -314,6 +314,10 @@
       "count": 2
     },
     {
+      "path": "py_modules/backend/services/voice_audio_capture_service.py",
+      "count": 2
+    },
+    {
       "path": "py_modules/backend/services/voice_model_download_service.py",
       "count": 2
     },
@@ -498,11 +502,11 @@
       "count": 1
     },
     {
-      "path": "py_modules/backend/services/voice_audio_capture_service.py",
+      "path": "py_modules/backend/services/voice_engine_build_service.py",
       "count": 1
     },
     {
-      "path": "py_modules/backend/services/voice_engine_build_service.py",
+      "path": "py_modules/backend/services/voice_level_gate.py",
       "count": 1
     },
     {
@@ -1754,12 +1758,22 @@
         "py_modules/backend/services/voice_whisper_runtime.py"
       ],
       "importedBy": [
+        "py_modules/backend/services/voice_level_gate.py",
         "py_modules/backend/services/voice_transcription_service.py"
       ]
     },
     "py_modules/backend/services/voice_engine_build_service.py": {
       "imports": [
         "py_modules/backend/services/voice_transcript_decode_service.py",
+        "py_modules/backend/services/voice_whisper_runtime.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/voice_transcription_service.py"
+      ]
+    },
+    "py_modules/backend/services/voice_level_gate.py": {
+      "imports": [
+        "py_modules/backend/services/voice_audio_capture_service.py",
         "py_modules/backend/services/voice_whisper_runtime.py"
       ],
       "importedBy": [
@@ -1810,6 +1824,7 @@
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/voice_audio_capture_service.py",
         "py_modules/backend/services/voice_engine_build_service.py",
+        "py_modules/backend/services/voice_level_gate.py",
         "py_modules/backend/services/voice_model_download_service.py",
         "py_modules/backend/services/voice_transcript_decode_service.py",
         "py_modules/backend/services/voice_whisper_daemon.py",
@@ -1838,6 +1853,7 @@
       "importedBy": [
         "py_modules/backend/services/voice_audio_capture_service.py",
         "py_modules/backend/services/voice_engine_build_service.py",
+        "py_modules/backend/services/voice_level_gate.py",
         "py_modules/backend/services/voice_transcript_decode_service.py",
         "py_modules/backend/services/voice_transcription_service.py",
         "py_modules/backend/services/voice_whisper_daemon.py"

@@ -142,6 +142,7 @@ from backend.services.voice_audio_capture_service import (
     _runtime_dir_usable,
     env_for_audio_capture,
 )
+from backend.services.voice_level_gate import VoiceLevelGate
 from backend.services.voice_transcript_decode_service import (
     FILLER_MIN_RMS,
     WHISPER_CLI_INFERENCE_ARGS,
@@ -181,8 +182,8 @@ ROLLING_BUFFER_MAX_SECONDS = 30
 TRANSCRIBE_INTERVAL_S = 0.4
 WINDOW_SECONDS = 3
 WHISPER_MIN_DECODE_PCM_BYTES = BYTES_PER_SECOND // 4  # 0.25 s before first decode pass
-# Deck internal mic in Gaming Mode often peaks ~150–250 RMS; 350 blocked all whisper passes.
-VOICE_RMS_THRESHOLD = 120.0
+# Whether a window holds speech is decided by voice_level_gate.VoiceLevelGate (the Deck's own mic
+# is quiet, speech peaks at ~150–250 RMS, so a fixed average-loudness number cut quiet speakers off).
 SILENCE_HOLD_SECONDS = 2.0
 
 
@@ -345,6 +346,7 @@ class VoiceTranscriptionSession:
         self._buffer_bytes = 0
         self._max_buffer_bytes = ROLLING_BUFFER_MAX_SECONDS * BYTES_PER_SECOND
         self._last_voice_monotonic = time.monotonic()
+        self._level_gate = VoiceLevelGate()
         self._last_partial = ""
         self._finalized = ""
         self._capture_backend = ""
@@ -384,8 +386,7 @@ class VoiceTranscriptionSession:
         if not chunk:
             return
         with self._lock:
-            rms = _pcm_rms(chunk)
-            if rms >= VOICE_RMS_THRESHOLD:
+            if self._level_gate.observe(chunk):
                 self._last_voice_monotonic = time.monotonic()
             self._pcm_buffer.append(chunk)
             self._buffer_bytes += len(chunk)
@@ -473,6 +474,7 @@ class VoiceTranscriptionSession:
         self._last_partial = ""
         self._finalized = ""
         self._last_voice_monotonic = time.monotonic()
+        self._level_gate = VoiceLevelGate()
 
         model_path = voice_model_path(self.plugin_root, self.settings_dir, self.model_id)
         engine = get_whisper_engine()
@@ -593,9 +595,9 @@ class VoiceTranscriptionSession:
             if len(pcm) < WHISPER_MIN_DECODE_PCM_BYTES:
                 continue
 
-            window_rms = _pcm_rms(pcm)
-            if window_rms < VOICE_RMS_THRESHOLD:
+            if not self._level_gate.window_voiced(pcm):
                 continue
+            window_rms = _pcm_rms(pcm)
 
             try:
                 text = self._transcribe_pcm(whisper_bin, model_path, env, pcm)

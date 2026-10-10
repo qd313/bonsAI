@@ -370,7 +370,9 @@ function revealStarts(panel) {
     const s = $("[data-start]", deck);
     const sc = s && s.closest(".scroll");
     if (!sc) continue;
-    const dy = (s.getBoundingClientRect().top - sc.getBoundingClientRect().top) / z - 10;
+    const sr = s.getBoundingClientRect(), cr = sc.getBoundingClientRect();
+    if (sr.top >= cr.top && sr.bottom <= cr.bottom) continue; // already in sight: leave the headings above it showing
+    const dy = (sr.top - cr.top) / z - 10;
     sc.scrollTop += dy;
   }
 }

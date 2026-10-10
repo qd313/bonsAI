@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 819,
-  "edgeCount": 2471,
+  "fileCount": 821,
+  "edgeCount": 2474,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -226,9 +226,9 @@
         "src/components/ChipExpandedBody.tsx",
         "src/components/chipLadderGrid.ts",
         "src/features/unified-input/constants.ts",
+        "src/hooks/chipLadderPlacement.ts",
         "src/hooks/useChipGridOrder.ts",
         "src/hooks/useChipLadderReveal.ts",
-        "src/utils/chatPanelScroll.ts",
         "src/utils/contextChipsFromSnapshot.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/focusPerTurnRow.ts",
@@ -4822,6 +4822,22 @@
         "src/hooks/useAskBarInitialRingClaim.ts"
       ]
     },
+    "src/hooks/chipLadderPlacement.test.ts": {
+      "imports": [
+        "src/hooks/chipLadderPlacement.ts"
+      ],
+      "importedBy": []
+    },
+    "src/hooks/chipLadderPlacement.ts": {
+      "imports": [
+        "src/utils/chatPanelScroll.ts"
+      ],
+      "importedBy": [
+        "src/components/ContextChipLadder.tsx",
+        "src/hooks/chipLadderPlacement.test.ts",
+        "src/hooks/useChipLadderReveal.ts"
+      ]
+    },
     "src/hooks/localOllamaStarterSet.tsx": {
       "imports": [
         "src/components/OllamaWhereAiRunsSection.constants.tsx",
@@ -5149,6 +5165,7 @@
     },
     "src/hooks/useChipLadderReveal.ts": {
       "imports": [
+        "src/hooks/chipLadderPlacement.ts",
         "src/utils/chatPanelScroll.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -7782,7 +7799,6 @@
     "src/utils/chatPanelScroll.ts": {
       "imports": [],
       "importedBy": [
-        "src/components/ContextChipLadder.tsx",
         "src/components/DrgGlossaryTermChip.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-sum-up/SessionTitleOffer.tsx",
@@ -7790,6 +7806,7 @@
         "src/features/details-slot/DetailsSlot.tsx",
         "src/features/details-slot/detailsSlotStore.ts",
         "src/features/plugin-shell/useTabBodyFocusScroll.ts",
+        "src/hooks/chipLadderPlacement.ts",
         "src/hooks/useChipLadderReveal.ts",
         "src/hooks/useDockClearanceOnFocus.ts",
         "src/hooks/useKbNotesFold.ts",

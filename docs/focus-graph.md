@@ -596,6 +596,18 @@ Code: `ContextChipLadder.tsx` (the moves), `chipLadderGrid.ts` (`packChipRows`, 
 - **Every move inside the grid** is a plain `focus()` between sibling chips in the one ladder container, the case
   AGENTS.md allows; leaving goes through the caller's own transfer, unchanged.
 - **B** closes the ladder (`onCancelButton` on each chip), unchanged. **A** does nothing on a chip, unchanged.
+- **Scroll (plan 87 call 6: the details stay readable).** When a chip opens, by a step or by the ring arriving, its
+  box's end must be above the dock. If it is, nothing moves. If not, one smooth scroll of just enough
+  (`chipLadderPlacement.ts`), but never so far that the chip itself rises into the 116 px Steam keeps clear at the
+  pane's top: Steam would glide it back down at the next press, and the two would fight. A chip off the top comes
+  back to that line, where Steam's own glide would put it; a chip behind the dock comes out just above it, where
+  the lift would. So neither Steam's glide nor the lift finds anything left to do, and every later pass of the
+  placement (a frame later, then 150, 300 and 900 ms, the lift's own schedule) measures and stops. A box too tall
+  to show with its chip (Developer details on the Deck's own screen) shows its end on the **first Down**, which
+  keeps the ring on the chip; the next Down moves on. Nothing scrolls once the ring has left the chips.
+- **The held block** (`bonsai-chip-ladder-hold`, unchanged): a step to a shorter box near the pane's end would let
+  the browser clamp the scroll and jump the whole row; an empty block after the box keeps the pane's height for
+  that step. Its two later checks stand down once the placement has scrolled for the step, so they never undo it.
 - **No layout** (a test page): each chip is a row of its own, so Down steps one chip at a time, as before the grid.
 - **Not backed by a device row yet.** The Deck check is in the plan 87 lane report.
 

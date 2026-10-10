@@ -12,6 +12,9 @@
  *         step that opens a taller or shorter body changes what is drawn under the row exactly as it
  *         does on the Deck. The checks read positions (the row's top edge, the pane's scrollTop),
  *         not only where the ring is.
+ * Since plan 87 (the maintainer's call 6: "the details must stay readable, with a smooth scroll, even if
+ * the row moves a little") a step moves the row when, and only when, its box's end would otherwise be
+ * behind the dock, by just enough; the tests below that once pinned a row that never moves now pin that.
  * Does not: Prove the real Steam scroller behaves this way: the Deck check does (a step with the row
  *           measured before and after, and a wait past one second after the ring leaves).
  */
@@ -246,17 +249,30 @@ function settle(): void {
   });
 }
 
-describe("the chip row holds still while the panel under it changes height", () => {
-  it("keeps the row's top edge in the same place through a walk down every chip and back up", () => {
+/** Where the open chip's details box ends on screen. */
+function boxBottom(scene: Scene): number {
+  const body = scene.ladder.querySelector(".bonsai-chip-ladder-hold")!.previousElementSibling as HTMLElement;
+  return body.getBoundingClientRect().bottom;
+}
+
+describe("the chip row moves only to keep the open chip's details readable (plan 87 call 6)", () => {
+  /*
+   * The row at 282, the box under it from 350, the dock at 586. Reply style (40), Thinking (60) and
+   * Spoiler risk (50) end above the dock where they open: nothing moves. Game context (300) would end at
+   * 650: the row rises 70 px, just enough to end it 6 px above the dock. Developer details (450) cannot
+   * show its end with its chip on screen: the row rises only until the chip meets Steam's 116 px line
+   * (y 204, so the chip's top at 180), and Down shows the rest. Back up, every box is readable where it
+   * opens and nothing moves.
+   */
+  it("moves the row only for a box whose end would be behind the dock, by just enough, and not at all on the way back", () => {
     const scene = mountScene();
     ringArrives(scene);
-    const start = rowTop(scene);
-    const seen: Array<[string, number]> = [[openLabel(scene.ladder), start]];
-
+    const seen: Array<[string, number]> = [[openLabel(scene.ladder), rowTop(scene)]];
     for (let i = 0; i < LABELS.length - 1; i += 1) {
       pressDown();
       settle();
       seen.push([openLabel(scene.ladder), rowTop(scene)]);
+      if (openLabel(scene.ladder) !== "Developer details") expect(boxBottom(scene)).toBeLessThanOrEqual(DOCK_TOP);
     }
     for (let i = 0; i < LABELS.length - 1; i += 1) {
       act(() => {
@@ -264,10 +280,11 @@ describe("the chip row holds still while the panel under it changes height", () 
       });
       settle();
       seen.push([openLabel(scene.ladder), rowTop(scene)]);
+      expect(boxBottom(scene)).toBeLessThanOrEqual(DOCK_TOP);
     }
 
     expect(seen.map(([label]) => label)).toEqual([...LABELS, ...LABELS.slice(0, -1).reverse()]);
-    expect(seen.map(([, top]) => top)).toEqual(seen.map(() => start));
+    expect(seen.map(([, top]) => top)).toEqual([282, 282, 212, 212, 180, 180, 180, 180, 180]);
   });
 
   it("does not move the row when a press comes before the arrival's own passes have run", () => {
@@ -278,27 +295,26 @@ describe("the chip row holds still while the panel under it changes height", () 
     });
     const start = rowTop(scene);
     pressDown();
-    pressDown();
     settle();
 
-    expect(openLabel(scene.ladder)).toBe("Game context");
+    expect(openLabel(scene.ladder)).toBe("Thinking");
     expect(rowTop(scene)).toBe(start);
   });
 
-  it("scrolls once on arrival to leave room under the row for a panel, then holds still", () => {
-    const scene = mountScene({ ladderScreenTop: 430 });
-    expect(rowTop(scene)).toBe(452);
+  it("on arrival, scrolls just enough to end the open chip's box above the dock", () => {
+    const scene = mountScene({ ladderScreenTop: 500 });
+    expect(rowTop(scene)).toBe(522);
+    expect(boxBottom(scene)).toBe(630);
     ringArrives(scene);
-    const arrived = rowTop(scene);
 
-    /* A short panel fitted without any scroll; the row still gives up the room a typical one needs. */
-    expect(arrived).toBeLessThan(452);
-    expect(arrived + ROW_H + 150).toBeLessThanOrEqual(DOCK_TOP);
-    for (let i = 0; i < LABELS.length - 1; i += 1) {
-      pressDown();
-      settle();
-      expect(rowTop(scene)).toBe(arrived);
-    }
+    expect(boxBottom(scene)).toBe(DOCK_TOP - 6);
+    expect(rowTop(scene)).toBe(522 - 50);
+  });
+
+  it("does not scroll on arrival when the open chip's box already ends above the dock", () => {
+    const scene = mountScene({ ladderScreenTop: 430 });
+    ringArrives(scene);
+    expect(rowTop(scene)).toBe(452);
   });
 });
 
@@ -419,13 +435,12 @@ describe("a step to a shorter panel does not pull the pane back under its scroll
     expect(rowTop(scene)).toBe(row);
   });
 
-  it("after reading Developer details to its end, Up to a shorter panel leaves the row and the scroll alone", () => {
+  it("after Developer details, Up to a shorter box leaves the row and the scroll alone", () => {
     const scene = deckScene(334.4);
     ringArrives(scene);
     walkToLastChip(scene);
-    pressDown();
-    settle();
-    expect(scene.onLeave).not.toHaveBeenCalled();
+    expect(openLabel(scene.ladder)).toBe("Developer details");
+    expect(boxBottom(scene)).toBeLessThanOrEqual(DOCK_TOP);
     const row = rowTop(scene);
     const scroll = scene.pane.scrollTop;
     expect(scroll).toBeGreaterThan(SECOND_CHIP_MAX_SCROLL);
@@ -440,22 +455,31 @@ describe("a step to a shorter panel does not pull the pane back under its scroll
     expect(rowTop(scene)).toBe(row);
   });
 
-  it("keeps the row still through a whole walk down and back up from the pane's end", () => {
+  it("from the pane's end: every box readable at every step, the row moving only to show one, and still on the way back", () => {
     const scene = deckScene(334.4);
     ringArrives(scene);
-    const row = rowTop(scene);
-    const scroll = scene.pane.scrollTop;
+    expect(boxBottom(scene)).toBeLessThanOrEqual(DOCK_TOP);
     for (let i = 0; i < DECK_LABELS.length - 1; i += 1) {
+      const before = rowTop(scene);
       pressDown();
       settle();
-      expect([rowTop(scene), scene.pane.scrollTop]).toEqual([row, scroll]);
+      expect(boxBottom(scene)).toBeLessThanOrEqual(DOCK_TOP);
+      /* A move is upward only, and no further than the box needed (its end 6 px above the dock, or less
+         when the pane runs out of scroll first). */
+      if (rowTop(scene) !== before) {
+        expect(rowTop(scene)).toBeLessThan(before);
+        expect(boxBottom(scene)).toBeGreaterThanOrEqual(DOCK_TOP - 6.5);
+      }
     }
+    const row = rowTop(scene);
+    const scroll = scene.pane.scrollTop;
     for (let i = 0; i < DECK_LABELS.length - 1; i += 1) {
       act(() => {
         (openChipProps().onMoveUp as () => boolean)();
       });
       settle();
       expect([rowTop(scene), scene.pane.scrollTop]).toEqual([row, scroll]);
+      expect(boxBottom(scene)).toBeLessThanOrEqual(DOCK_TOP);
     }
   });
 

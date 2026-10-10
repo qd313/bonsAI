@@ -4,14 +4,14 @@
  *          (plan64-DETAILS-LADDER-01-try2.json: the ringed ladder read 33% to 67% visible at several
  *          steps) and the same sighting in plan 72 free play (plan72-Z-FREEPLAY.json finding 1: the
  *          ladder's bottom at 652 against a dock top of 586, 67% visible, on "Chip 6 of 6").
- * Used for: ContextChipLadder.tsx, using chatPanelScroll.ts's revealBelowKeeping.
+ * Used for: ContextChipLadder.tsx, using chipLadderPlacement.ts.
  * Solves: Stepping between its chips changes what the ladder shows (the open chip's details
  *         grow or shrink underneath) with no focus event on the ladder for the dock lift to
- *         answer (since plan 79 the ring moves chip to chip, inside it). The ladder scrolls itself
- *         clear when it takes the ring, keeping its own top (the chip row) on screen. It does NOT
- *         scroll again for a step (2026-10-08: scrolling for every step moved the whole answer on
- *         every press; ContextChipLadder.stillRow.test.tsx holds the row still). Scrolling only;
- *         it never moves the ring.
+ *         answer (since plan 79 the ring moves chip to chip, inside it). The ladder scrolls the
+ *         open chip's box clear when it takes the ring, keeping the chip on screen, and again for a
+ *         step only when the new box's end would be behind the dock (plan 87 call 6; a step whose box
+ *         is readable moves nothing, ContextChipLadder.stillRow.test.tsx). Scrolling only; it never
+ *         moves the ring.
  * Does not: Prove it on the Deck. jsdom has no layout, so every box reads its place from the pane's
  *           scrollTop, the way the real screen would move it.
  */
@@ -65,10 +65,15 @@ function place(el: Element, pane: HTMLElement, top: number, bottom: number): voi
   };
 }
 
-/* Place the ladder and the open chip's panel (the part the arrival scroll clears from the dock). */
+/* Place the ladder, its chips (one row, 24 px tall, at its top) and the open chip's box under them. */
 function placeLadder(ladder: HTMLElement, pane: HTMLElement, top: number, bottom: number): void {
   place(ladder, pane, top, bottom);
-  place(ladder.querySelector(".bonsai-chip-ladder-hold")!.previousElementSibling!, pane, top, bottom);
+  ladder.querySelectorAll(".bonsai-chip-ladder-chip").forEach((c) => place(c, pane, top, top + 24));
+  place(ladder.querySelector(".bonsai-chip-ladder-hold")!.previousElementSibling!, pane, top + 32, bottom);
+}
+
+function boxOf(ladder: HTMLElement): DOMRect {
+  return (ladder.querySelector(".bonsai-chip-ladder-hold")!.previousElementSibling as HTMLElement).getBoundingClientRect();
 }
 
 function ringOn(el: Element): void {
@@ -114,7 +119,7 @@ afterEach(() => {
 });
 
 describe("the chip ladder holding the ring stays above the dock", () => {
-  it("the ring arriving scrolls the ladder clear of the dock (the measured 284-652 against 586)", () => {
+  it("the ring arriving scrolls the open chip's box clear of the dock (the measured 284-652 against 586)", () => {
     const pane = deckPane();
     const ladder = mountLadder(pane);
     placeLadder(ladder, pane, 284, 652);
@@ -125,12 +130,12 @@ describe("the chip ladder holding the ring stays above the dock", () => {
       vi.runAllTimers();
     });
 
-    expect(ladder.getBoundingClientRect().bottom).toBeLessThanOrEqual(DOCK_TOP);
+    expect(boxOf(ladder).bottom).toBeLessThanOrEqual(DOCK_TOP);
     expect(ladder.getBoundingClientRect().top).toBeGreaterThanOrEqual(PANE_TOP);
     expect(ladder.classList.contains("gpfocus")).toBe(true);
   });
 
-  it("a ladder taller than the room above the dock keeps its chip row on screen", () => {
+  it("a box taller than the room above the dock keeps its chip on screen, below Steam's own top margin", () => {
     const pane = deckPane();
     const ladder = mountLadder(pane);
     placeLadder(ladder, pane, 300, 1000);
@@ -141,11 +146,29 @@ describe("the chip ladder holding the ring stays above the dock", () => {
       vi.runAllTimers();
     });
 
-    expect(ladder.getBoundingClientRect().top).toBeGreaterThanOrEqual(PANE_TOP);
-    expect(ladder.getBoundingClientRect().top).toBeLessThan(PANE_TOP + 20);
+    const chip = ladder.querySelector(".bonsai-chip-ladder-chip")!.getBoundingClientRect();
+    expect(chip.top).toBeGreaterThanOrEqual(PANE_TOP);
+    expect(chip.bottom).toBeGreaterThanOrEqual(PANE_TOP + 116);
+    expect(boxOf(ladder).bottom).toBeGreaterThan(DOCK_TOP);
   });
 
-  it("a step between the chips leaves the pane where it is, even with the ladder behind the dock", () => {
+  it("a step whose box already ends above the dock leaves the pane where it is", () => {
+    const pane = deckPane();
+    const ladder = mountLadder(pane);
+    placeLadder(ladder, pane, 284, 500);
+    ringOn(ladder);
+
+    act(() => {
+      (ladderProps().onMoveDown as () => boolean)();
+    });
+    act(() => {
+      vi.runAllTimers();
+    });
+
+    expect(pane.scrollTop).toBe(START_SCROLL);
+  });
+
+  it("a step whose box would end behind the dock scrolls just enough to end it above the dock", () => {
     const pane = deckPane();
     const ladder = mountLadder(pane);
     placeLadder(ladder, pane, 284, 652);
@@ -158,7 +181,8 @@ describe("the chip ladder holding the ring stays above the dock", () => {
       vi.runAllTimers();
     });
 
-    expect(pane.scrollTop).toBe(START_SCROLL);
+    expect(pane.scrollTop).toBe(START_SCROLL + 652 - (DOCK_TOP - 6));
+    expect(boxOf(ladder).bottom).toBe(DOCK_TOP - 6);
   });
 
   it("leaves the view alone while the ring is somewhere else", () => {

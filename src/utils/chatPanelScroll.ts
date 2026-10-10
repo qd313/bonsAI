@@ -208,46 +208,6 @@ export function revealBelowKeepingAsItSettles(
   delaysMs.forEach((delayMs) => window.setTimeout(pass, delayMs));
 }
 
-/**
- * Scroll, up or down, only as far as needed to put `el` inside the readable band (below the pane's
- * top edge, above the dock). Used for the control holding the ring when a press did not move it
- * but may have left it out of view; it never scrolls for anything that is already on screen.
- * Returns true when it moved the pane.
- */
-export function bringIntoReadableBand(el: HTMLElement, padPx = 8): boolean {
-  const pane = findScrollablePanel(el);
-  if (!pane) return false;
-  const rect = el.getBoundingClientRect();
-  /* No box at all (not displayed, or not laid out): there is nothing to bring anywhere. */
-  if (rect.width === 0 && rect.height === 0) return false;
-  const paneTop = pane.getBoundingClientRect().top;
-  let delta = 0;
-  if (rect.top < paneTop) {
-    delta = rect.top - paneTop - padPx;
-  } else if (rect.bottom + padPx > readableBottomOf(pane)) {
-    delta = Math.min(rect.bottom + padPx - readableBottomOf(pane), rect.top - paneTop - padPx);
-  }
-  if (delta === 0) return false;
-  const before = pane.scrollTop;
-  pane.scrollTop = Math.max(0, Math.min(panelScrollMax(pane), before + delta));
-  return pane.scrollTop !== before;
-}
-
-/**
- * Scroll down so the end of `body` (a panel taller than the room under its chip row) clears the
- * dock, whatever that does to the row above it. Returns true only when it moved the pane, so a
- * caller can use it as "there was more to see" and let the next press carry on.
- */
-export function scrollRestOfBodyIntoView(body: HTMLElement, padPx = 8): boolean {
-  const pane = findScrollablePanel(body);
-  if (!pane) return false;
-  const hidden = body.getBoundingClientRect().bottom + padPx - readableBottomOf(pane);
-  if (hidden <= 4) return false;
-  const before = pane.scrollTop;
-  pane.scrollTop = Math.max(0, Math.min(panelScrollMax(pane), before + hidden));
-  return pane.scrollTop !== before;
-}
-
 const revealedOnMount = new WeakSet<HTMLElement>();
 
 /**

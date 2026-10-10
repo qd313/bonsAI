@@ -30,11 +30,13 @@
  * class, and hands it straight on to the open chip. The open chip's fill is a
  * hand-drawn cue in a different colour from the ring, on purpose: an earlier
  * version glowed it in the ring's colour, which was unreadable next to it.
- * Every chip is always drawn, at one size, none faded, and a step scrolls
- * nothing: the row stays where it is while the panel under it changes height
- * (useChipLadderReveal.ts; the whole answer jumped on every press before
- * 2026-10-08). Down off the last chip first scrolls the end of a tall panel
- * into view, then leaves.
+ * Every chip is always drawn, at one size, none faded. A step scrolls only
+ * to keep the open chip's details readable: when its box's end would be
+ * behind the dock, one smooth scroll of just enough; otherwise the row stays
+ * exactly where it is (useChipLadderReveal.ts, chipLadderPlacement.ts; the
+ * whole answer jumped on every press before 2026-10-08, and boxes sat behind
+ * the question box after it). Down on a chip whose box is too tall to show
+ * with it first scrolls the box's end into view, then moves on.
  *
  * The chips are a grid (plan 87 F3): packed into rows that fit the column
  * (useChipGridOrder.ts), Left and Right step through them in drawn order, Up
@@ -57,7 +59,7 @@ import { isOkDeckButtonEvent } from "../utils/focusNavigation";
 import { useChipLadderReveal } from "../hooks/useChipLadderReveal";
 import { useChipGridOrder } from "../hooks/useChipGridOrder";
 import { CHIP_GAP_PX, gridMove, rowsFromBoxes, type GridDirection } from "./chipLadderGrid";
-import { scrollRestOfBodyIntoView } from "../utils/chatPanelScroll";
+import { revealBoxEnd } from "../hooks/chipLadderPlacement";
 import { elementHasFocus } from "../utils/uiDocument";
 import { focusRowElement } from "../utils/focusPerTurnRow";
 import { DECK_HIGHLIGHT_CYAN } from "../features/unified-input/constants";
@@ -169,14 +171,12 @@ export function ContextChipLadder({
   const ladderElRef = useRef<HTMLElement | null>(null);
   const rowElRef = useRef<HTMLElement | null>(null);
   const bodyElRef = useRef<HTMLElement | null>(null);
-  const { duringStep, keepInView, holdPosition, holdRef, onFocusInside } = useChipLadderReveal(
-    ladderElRef,
-    rowElRef,
-    bodyElRef,
-  );
   /* Each drawn chip's own element, by its index in `chips`; the open chip's index as last drawn. */
   const chipEls = useRef(new Map<number, HTMLElement>());
   const openIndexRef = useRef(0);
+  const { duringStep, holdPosition, holdRef, onFocusInside } = useChipLadderReveal(ladderElRef, bodyElRef, () =>
+    chipEls.current.get(openIndexRef.current),
+  );
   /* The chips in the order they are drawn, packed into rows that fit (plan 87 F3). */
   const drawnOrder = useChipGridOrder(rowElRef, chipEls, chips.length);
 
@@ -248,32 +248,27 @@ export function ContextChipLadder({
    */
   const stepTo = (idx: number): boolean => {
     /*
-     * A step changes the panel drawn under the row and nothing else: the row stays exactly where it
-     * is on screen (maintainer's recording, 2026-10-08: the whole answer jumped on every press when
-     * a step also scrolled to clear the new panel from the dock). Only the ring's arrival scrolls;
-     * see useChipLadderReveal.
+     * A step changes the box drawn under the grid. The row stays exactly where it is unless the new
+     * box's end would be behind the dock, or the chip is off screen; then one smooth scroll of just
+     * enough, once the new box is drawn (useChipLadderReveal, chipLadderPlacement.ts; plan 87 call 6).
      */
+    openIndexRef.current = idx;
     duringStep(() => {
       setActiveIndex(idx);
       ringOnChip(idx);
     });
-    keepInView(chipEls.current.get(idx));
     holdPosition();
     return true;
   };
   /*
-   * Down (or Right) off the last chip. A panel taller than the room under the row has its end behind
-   * the dock while the row stays put (the maintainer, 2026-10-08: "it gets to the end and then the
-   * focus moves to the text box ... but the answer also scrolls still"). So the first press scrolls
-   * the rest of the panel into view and keeps the ring on the chip; the next press leaves. Not a new
-   * stop: the ring does not move. When the panel already fits, or the pane has no scroll left, the
-   * press leaves at once.
+   * A box too tall to show with its chip keeps its end behind the dock (the maintainer, 2026-10-08:
+   * "it gets to the end and then the focus moves to the text box"). So Down on any chip whose box's
+   * end is hidden first scrolls that end into view, smoothly, and keeps the ring on the chip; the next
+   * Down moves on. Not a new stop: the ring does not move. Right off the last chip does the same
+   * before it leaves. When the end is already readable, or the pane has no scroll left, the press
+   * moves on at once.
    */
-  const leaveDown = () => {
-    const body = bodyElRef.current;
-    if (body && scrollRestOfBodyIntoView(body)) return true;
-    return Boolean(onMoveDownFromLadder?.());
-  };
+  const leaveDown = () => revealBoxEnd(bodyElRef.current) || Boolean(onMoveDownFromLadder?.());
   /*
    * Where a press goes is read off the chips' boxes as drawn at that moment (chipLadderGrid.ts):
    * the rows are wherever the browser put them, so the walk always matches the screen.
@@ -283,6 +278,7 @@ export function ContextChipLadder({
     return r ? { left: r.left, right: r.right, top: r.top, bottom: r.bottom } : { left: 0, right: 0, top: 0, bottom: 0 };
   };
   const press = (idx: number, dir: GridDirection): boolean => {
+    if (dir === "down" && revealBoxEnd(bodyElRef.current)) return true;
     const move = gridMove(rowsFromBoxes(drawnOrder, boxOf), boxOf, idx, dir);
     if ("to" in move) return stepTo(move.to);
     return move.leave === "up" ? Boolean(onMoveUpFromLadder?.()) : leaveDown();

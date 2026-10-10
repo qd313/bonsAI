@@ -3959,6 +3959,7 @@
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/features/plugin-shell/usePluginHelpModal.tsx",
         "src/features/plugin-shell/useSessionResetActions.tsx",
+        "src/features/plugin-shell/useSessionRestoreAfterRemount.test.ts",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
         "src/features/plugin-shell/useUnifiedInputBehaviors.ts",
         "src/hooks/useBonsaiPluginShell.test.ts",
@@ -4240,6 +4241,15 @@
         "src/index.tsx"
       ]
     },
+    "src/features/plugin-shell/useSessionRestoreAfterRemount.test.ts": {
+      "imports": [
+        "src/features/plugin-shell/pluginStorage.ts",
+        "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
+        "src/hooks/useChatSlots.ts",
+        "src/utils/chatSlotsApi.ts"
+      ],
+      "importedBy": []
+    },
     "src/features/plugin-shell/useSessionRestoreAfterRemount.ts": {
       "imports": [
         "src/features/plugin-shell/pluginStorage.ts",
@@ -4256,6 +4266,7 @@
         "src/utils/settingsPayload.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/useSessionRestoreAfterRemount.test.ts",
         "src/index.tsx"
       ]
     },
@@ -5160,6 +5171,7 @@
       ],
       "importedBy": [
         "src/features/plugin-shell/useSessionResetActions.tsx",
+        "src/features/plugin-shell/useSessionRestoreAfterRemount.test.ts",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
         "src/hooks/useChatSlots.limit.test.ts",
         "src/hooks/useChatSlots.test.ts",
@@ -7870,6 +7882,7 @@
         "src/features/chat-sum-up/chatSumUpModel.test.ts",
         "src/features/chat-sum-up/chatSumUpModel.ts",
         "src/features/chat-sum-up/useChatSumUpJob.ts",
+        "src/features/plugin-shell/useSessionRestoreAfterRemount.test.ts",
         "src/hooks/useChatSlots.limit.test.ts",
         "src/hooks/useChatSlots.test.ts",
         "src/hooks/useChatSlots.ts",

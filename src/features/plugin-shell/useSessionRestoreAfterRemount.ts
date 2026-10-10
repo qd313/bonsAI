@@ -45,7 +45,7 @@ export type UseSessionRestoreAfterRemountArgs = {
   pluginDataClearSeenRef: React.MutableRefObject<number>;
   pendingSessionRestoreFinalizeRef: React.MutableRefObject<boolean>;
   activeSlotIdRef: React.MutableRefObject<string | null>;
-  chatSlots: Pick<ChatSlots, "selectSlot">;
+  chatSlots: Pick<ChatSlots, "restoreRememberedSlot">;
   setCurrentTab: PluginShell["setCurrentTab"];
   setUnifiedInput: (value: string) => void;
   setNavigationMessage: (value: string) => void;
@@ -101,7 +101,7 @@ export function useSessionRestoreAfterRemount({
       const storedSlotId = loadActiveChatSlotId();
       if (storedSlotId) {
         activeSlotIdRef.current = storedSlotId;
-        void chatSlots.selectSlot(storedSlotId);
+        void chatSlots.restoreRememberedSlot(storedSlotId);
       }
       return;
     }
@@ -125,10 +125,10 @@ export function useSessionRestoreAfterRemount({
     restoreSessionSnapshot(survived);
     if (survived.activeSlotId) {
       activeSlotIdRef.current = survived.activeSlotId;
-      void chatSlots.selectSlot(survived.activeSlotId);
+      void chatSlots.restoreRememberedSlot(survived.activeSlotId);
     }
     pendingSessionRestoreFinalizeRef.current = true;
-  }, [chatSlots.selectSlot, restoreSessionSnapshot, hydrateFromSettings]);
+  }, [chatSlots.restoreRememberedSlot, restoreSessionSnapshot, hydrateFromSettings]);
 
   useEffect(() => {
     if (!pendingSessionRestoreFinalizeRef.current) return;

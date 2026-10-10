@@ -250,8 +250,13 @@ export function useChatSlots({
     applySlotMemory(slot);
   }, [applySlotMemory, applySlotTranscript, refreshSummaries, setAskThreadCollapsed, setAskThreadDisplayQuestion, setExpandedTurnKey]);
 
-  const selectSlot = useCallback(
-    async (slotId: string | null) => {
+  /*
+   * Resolves `false` only when a chat was asked for and the back end had no such chat; every other
+   * outcome (switched, or switched to no chat) is `true`. `selectSlot` and `restoreRememberedSlot`
+   * below are the two doors onto it.
+   */
+  const selectSlotChecked = useCallback(
+    async (slotId: string | null): Promise<boolean> => {
       /* Captured before anything below overwrites them: they describe the slot being LEFT. */
       const leavingId = activeSlotIdRef.current;
       const leavingTurnCount = activeSlotTurnCountRef.current;
@@ -268,6 +273,7 @@ export function useChatSlots({
       resetLiveAskPresentation?.();
       // Same reason as the live answer above: the chat being left must not lend its card to the next.
       setChatMemory(NO_CHAT_MEMORY);
+      let loaded = true;
       if (!slotId) {
         activeSlotTurnCountRef.current = -1;
         setAskThreadCollapsed([]);
@@ -275,6 +281,7 @@ export function useChatSlots({
         setExpandedTurnKey("live");
       } else {
         const slot = await getChatSlot(slotId);
+        loaded = !!slot;
         if (slot) {
           const { collapsed, pendingQuestion } = applySlotTranscript(
             slot.turns,
@@ -299,6 +306,7 @@ export function useChatSlots({
       if (leavingId && leavingId !== slotId) {
         sweepIfNeverUsed(leavingId, leavingTurnCount);
       }
+      return loaded;
     },
     [
       applySlotMemory,
@@ -311,6 +319,28 @@ export function useChatSlots({
       setExpandedTurnKey,
       sweepIfNeverUsed,
     ],
+  );
+
+  const selectSlot = useCallback(
+    async (slotId: string | null) => {
+      await selectSlotChecked(slotId);
+    },
+    [selectSlotChecked],
+  );
+
+  /*
+   * The panel coming back to the chat it remembers. If that chat is gone (the saved chats were
+   * wiped or restored from an older copy while the screen's own memory stayed), the pointer is
+   * dropped, not kept: keeping it sent the next question to a chat that does not exist, where the
+   * back end made a bare chat under the dead id or, at ten chats, filed nothing. Not if the person
+   * has already moved to another chat while this loaded.
+   */
+  const restoreRememberedSlot = useCallback(
+    async (slotId: string) => {
+      const loaded = await selectSlotChecked(slotId);
+      if (!loaded && activeSlotIdRef.current === slotId) await selectSlotChecked(null);
+    },
+    [activeSlotIdRef, selectSlotChecked],
   );
 
   const createSlot = useCallback(async () => {
@@ -450,6 +480,7 @@ export function useChatSlots({
     refreshSummaries,
     reloadActiveSlotTranscript,
     selectSlot,
+    restoreRememberedSlot,
     createSlot,
     renameSlot,
     deleteSlot,

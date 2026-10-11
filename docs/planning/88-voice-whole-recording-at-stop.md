@@ -172,9 +172,11 @@ most of the speech over the game's level-up pause screen): a sign, not a firm nu
   3-second wait plus the engine being released under a pass still running (both gone now); for the
   3-to-4-second stop, the best guess is the order the screen writes two pieces of state (the "came
   from the mic" text before the box), which this change does not touch.
-- **Live words are slower.** On base.en with no game the live text changes about every 4 seconds; the
-  short "test test" recording showed no live words before Stop at all. Tunable (`LIVE_REST_FACTOR`) if
-  the maintainer wants it quicker.
+- **Live words are slower.** Done the same day by the follow-up (`cbbc88e5`, `4c58623e`; rows
+  P88B-VOICE-PACE-NOGAME and P88B-VOICE-PACE-GAME): live words now change every 2.6 to 3.1 s with no
+  game (were 4.4 to 5.5 s) and every 5.7 to 7.2 s with a game. The short "test test" recording still shows its
+  words late (2.8 s after the audio ended, just before Stop; final text right), probably because a lone
+  "test" counts as a possible noise word unless spoken loudly; not proven, and not a bug.
 - **A status check that errors** leaves the screen idle without telling the back end to stop; the
   two-minute cap now bounds that recording.
 - `docs/planning/10-wake-word-listening-feasibility.md` still names the removed silence constant.

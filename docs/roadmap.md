@@ -78,8 +78,6 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
   Other page names in that table may be wrong the same way: see the Verify entry "Check every Steam settings page the settings card can open". Evidence `docs/test-evidence/maintainer-2026-10-10-wifi-link-before.png` (the ring on the row) and `docs/test-evidence/maintainer-2026-10-10-wifi-link-opened-system.png` (what A opened).
 - ★ `[voice]` **A failed status check leaves the recording running in the back end** — **OPEN, found 2026-10-11 by reading the code (plan 88, "Left open"). No evidence file.**
   If the screen's check on the recording errors, the screen goes idle without telling the back end to stop. The two-minute limit now ends such a recording by itself.
-- ★ `[voice]` **Live words on base.en change only about every 4 seconds with no game** — **OPEN, found 2026-10-11 (plan 88, build `68317980`); a tuning call for the maintainer.**
-  The live text now changes every 3.7 to 5.5 s during a 15- or 21-second question (about every 1.6 s before plan 88, `docs/test-evidence/v1010-VOICE-BASE-NOGAME.json`), and a 9-second "test test" recording showed no live words until Stop. The rest between live passes can be shortened, at the cost of game speed. Evidence `docs/test-evidence/p88-VOICE-WHOLE-NOGAME.json`.
 - ★★ `[focus]` **On the Settings tab, Left or Right on the Text size choices scrolls the page down** — **OPEN, found by the maintainer 2026-10-10 on the Deck's own screen (checks page).**
   With the ring on Text size, pressing Left or Right to change the choice also scrolls the tab down. The maintainer called it "very strange behavior". Cause not known. Related: the Text size row (Done, row P87-F6-TEXT-SIZE) and the entry below about the page moving at every press.
 - ★★ `[focus]` **Up from the answer bubble, with Steam's ring on the whole answer, scrolls the whole answer instead of moving the ring** — **OPEN, found 2026-10-02 while fixing the trap (plan 79); not a trap, since the press does something.**
@@ -402,6 +400,12 @@ Parked work and watched sightings: [roadmap-shelved.md](roadmap-shelved.md).
 Everything closed since v0.5.0 (2026-07-15), one line each. Full record: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
 
 The Closed blocks from 2026-10-02 to 2026-10-07 (plans 79 to 82) were moved to [the archive](archive/roadmap-done-v0.5.0.md#done-for-v060) on 2026-10-07, and those from 2026-10-08 to plan 87's Deck blocks 4 and 5 (2026-10-10) on 2026-10-11, to keep this file under its size limit, newest first, copied line for line. Every entry in them is closed, so none stays here.
+
+**Closed 2026-10-11 (plan 88 follow-up, build `4c58623e`, the Deck on its monitor, a recorded voice played into a pretend microphone):**
+
+- ★ `[voice]` **Live words on base.en change only about every 4 seconds with no game** — **DONE 2026-10-11, passed on the Deck (rows P88B-VOICE-PACE-NOGAME and P88B-VOICE-PACE-GAME, build `4c58623e`; fixed by `cbbc88e5` and `4c58623e`).**
+  The mic press now tells the back end whether Steam has a game running (the plugin log's start line ends ", no game" or ", game running"). With no game, the live passes no longer rest between passes: the live words changed every 2.6 to 3.1 s (median 2.8 s; plan 88 alone gave 4.4 to 5.5 s), the first words came 2.9 s after the audio started, and the final text was whole. With Deep Rock Galactic: Survivor running, the lighter pace stays: gaps of 5.7 and 7.2 s, final text whole; frame rate 58 before, 44 and 45 while talking, 60 after (single readings, a level-up pause screen came up partway).
+  **Seen, not a bug:** the 9-second "test test 1 2 3 4" recording showed its live words only 2.8 s after the audio ended, just before Stop; the final text was right. A likely reason, not proven: a lone "test" counts as a possible noise word unless spoken loudly, and the recording is quiet on purpose. Evidence `docs/test-evidence/p88b-VOICE-PACE-NOGAME.json`, `p88b-VOICE-PACE-GAME.json`; Deck put back: `p88b-DECK-RESTORED.json`.
 
 **Closed 2026-10-11 (plan 88, build `68317980`, the Deck on its monitor, a recorded voice played into a pretend microphone):**
 

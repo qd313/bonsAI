@@ -1,0 +1,24 @@
+{
+  "row": "DECK-RESTORED (plan 88 follow-up, end of block)",
+  "build_commit": "4c58623e",
+  "deck_time_local": "2026-10-11 16:06-16:08 EDT",
+  "screen": "MONITOR live (page window 855 x 766)",
+  "setup": "After check 2, game closed over SSH.",
+  "pressed": "Over SSH: removed voice_capture_target, unloaded pretend mic module 536870916, removed /tmp/p88_pretend_*.wav, compared settings, removed ~/p88b-backup. deck_restorePowerSettings (keep-awake released). deck_reloadPlugin once with no game running. deck_openPlugin (failed 3 times after the reload: CEF debugger unreachable twice, then the QAM chord with no pane; worked on the 4th try).",
+  "seen": {
+    "default_sink_source": "unchanged: HiFi__Speaker__sink and the Internal_Mic loopback source",
+    "p88mic_sinks_left": 0,
+    "voice_capture_target_files": 0,
+    "p88_files_in_tmp": 0,
+    "settings_compare": "54 keys in the file and in the backup, 0 differences (no key was changed this block)",
+    "backup_removed": true,
+    "game_running": false,
+    "ollama_ps": "empty",
+    "keep_awake": "released (wasHeld true)",
+    "plugin": "open on the Main tab, test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7), box empty, page sampler gone (new page after the reload)",
+    "memory": "available 11450 MB"
+  },
+  "expected": "Pretend mic off, defaults as at start, wavs removed, settings identical to backup, no game, no model loaded, keep-awake released, plugin reloaded once, left on Main in the test chat with an empty box.",
+  "verdict": "PASS - every item matches.",
+  "side_effect": "None on settings. Steam keeps about 16 private screenshots from the capture calls. Game closed by SSH kill, not through Steam."
+}

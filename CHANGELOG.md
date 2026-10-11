@@ -83,6 +83,7 @@ All notable changes to this project are documented in this file.
 - **The mic button is amber and reads "Finishing voice input" while the final text is being read:** about 3 seconds on base.en with no game, under 1 second on tiny.en, about 4 seconds with a game running. A press during that wait is ignored, and the next press starts a new recording. Passed on the Deck 2026-10-11 with a recorded voice (row P88-VOICE-STOP-THEN-MIC); the real-voice check is still owed.
 - **Pressing Ask while you are still talking waits for the full text and asks with all of it,** the last words included. Passed on the Deck 2026-10-11 (row P88-VOICE-ASK-WHILE-TALKING).
 - **A recording stops by itself after two minutes.**
+- **With no game running, the live words while you talk now update about every 3 seconds** (they were about every 4 to 5). With a game running they stay at the lighter pace, about every 6 to 7 seconds. The mic press now tells the back end whether Steam has a game running; the plugin log's start line ends ", no game" or ", game running". Passed on the Deck 2026-10-11 (rows P88B-VOICE-PACE-NOGAME and P88B-VOICE-PACE-GAME).
 
 ### Plan 87 (2026-10-10)
 

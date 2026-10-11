@@ -1,0 +1,40 @@
+{
+  "row": "VOICE-PACE-NOGAME (plan 88 follow-up, check 1: live words pace, base.en, no game)",
+  "build_commit": "4c58623e (checkout tip, deployed with deck_deploy at about 15:59 Deck time)",
+  "deck_time_local": "2026-10-11 16:00-16:02 EDT",
+  "screen": "MONITOR live (page window 855 x 766, devicePixelRatio 1.28)",
+  "setup": "Main tab, test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7), speech model base.en, pretend mic p88mic.monitor (null sink module 536870916), no game running (pgrep empty), Ollama empty. Page sampler window.__p88b every 100 ms (page clock = Deck clock).",
+  "pressed": "Per dictation: DOWN (to Ask), LEFT (to Voice input), read focus = 'Voice input', A, paplay of the wav over SSH, read focus = 'Stop voice input', A. Box cleared with deck_send_ask.py --clear between dictations.",
+  "seen": {
+    "plugin_log_start_line": "[16:00:41,897] voice: recording started, model base.en, no game  (and for testtest [16:01:18,324] voice: recording started, model base.en, no game)",
+    "sentence10": {
+      "final_text": "How do I beat the final boss in this game, and which weapon should I upgrade first, because my health keeps running out before I can reach the second phase of the fight?",
+      "final_chars": 169,
+      "mic_press_to_first_live_words_s": 4.0,
+      "audio_start_to_first_live_words_s": 2.9,
+      "live_changes_during_audio": 5,
+      "live_text_sizes_chars": [10, 42, 83, 132, 169],
+      "change_times_s_after_mic_press": [4.0, 6.7, 9.3, 12.2, 15.3],
+      "gaps_between_live_changes_s": [2.7, 2.6, 2.9, 3.1],
+      "median_gap_s": 2.8,
+      "went_empty_after_words": false,
+      "button_sequence": "Voice input -> Starting voice input (amber) -> Stop voice input (red) -> Finishing voice input (amber) -> Voice input",
+      "amber_finishing_lasted_s": 2.2,
+      "paplay_ran_s": 15.4,
+      "last_live_text_equal_to_final": true
+    },
+    "testtest": {
+      "final_text": "Test test 1234 Test test 1234",
+      "final_chars": 29,
+      "phrase_count": 2,
+      "live_words_before_stop": "yes, but late: the text first appeared 12.7 s after the mic press and 2.8 s after the 9.0 s audio had finished playing, 0.7 s before the button went amber (Stop press). Nothing appeared during the 9 s of audio itself.",
+      "live_changes_before_stop": 1,
+      "amber_finishing_lasted_s": 2.0,
+      "went_empty_after_words": false
+    }
+  },
+  "expected": "Start line ends ', no game'; median gap between live changes in sentence10 under 3.5 s; testtest shows live words before Stop; both final texts whole.",
+  "verdict": "PASS - start line ends ', no game' (both dictations); median live gap 2.8 s (under 3.5 s, plan 88 alone was 4.4 to 5.5 s); sentence10 final text whole and ends 'the second phase of the fight'; testtest final text has the phrase twice.",
+  "verdict_testtest_live_words": "PASS on the runbook's wording (words were on screen before the Stop press) but marginal: first words arrived only 0.7 s before Stop and after the audio had finished, so the live pace on this short phrase is still slow. Owner to judge.",
+  "side_effect": "none"
+}

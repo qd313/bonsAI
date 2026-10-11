@@ -48,6 +48,8 @@ different tonight.
     still open.)
 14. **The old helper copies:** delete the landed ones.
 15. **The usage limit:** accept a possible stop.
+16. **The helper cap for this plan is 15 at once** (2026-10-11, after reading the plan; the standing cap of ten is
+    unchanged for other sessions).
 
 ## 3. The bugs, and what happens to each
 
@@ -123,8 +125,11 @@ Every Main-tab change tonight (the text size, the delete box) also owes the free
 | Bookkeeping | the bookkeeper, Sonnet 5.5 medium; every status names its evidence | 1 |
 | Deck checks | the `deck-driver`, Sonnet 5.5 medium, a fresh one per block | 1 on the Deck, 1 on the stand-in |
 
-**Peak: 9 editing helpers at once** (batch 1), within the cap of ten. **In all: 12 fix helpers, 1 bookkeeper, about 8
-Deck drivers and 1 or 2 stand-in drivers.**
+**The cap for this plan is 15 editing helpers at once** (the maintainer's call 16, D128; the standing cap is ten).
+Batch 1 starts 9; batch 2's three start as soon as block 1's measurements are in, without waiting for a batch 1
+slot; second rounds and the two features' fixes from Deck failures start the same way. **In all: 12 fix helpers
+planned, 1 bookkeeper, about 8 Deck drivers and 1 or 2 stand-in drivers.** The usage-window guard on starting lanes
+stays as it is; it has no count of its own.
 
 Rules as in plan 87 § 5: helpers run only the tests for what they touched; the full suites run at landing. Before
 every new batch, read the app's usage figure; start nothing new past 60 percent of the week or 75 percent of the

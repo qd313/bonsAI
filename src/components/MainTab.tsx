@@ -101,7 +101,7 @@ export type MainTabProps = {
   onCancelAsk: () => void;
   onMicInput: () => void;
   voiceRecording?: boolean;
-  voiceStarting?: boolean;
+  voiceBusy?: "starting" | "finishing" | null;
   selectedAttachment: AskAttachment | null;
   setSelectedAttachment: React.Dispatch<React.SetStateAction<AskAttachment | null>>;
   clearUnifiedInput: () => void;

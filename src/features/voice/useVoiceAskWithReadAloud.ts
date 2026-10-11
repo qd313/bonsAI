@@ -15,7 +15,7 @@
  * Does not: Decide whether a finished reply is read aloud — `useReadAloud.ts` does that, from
  * the `noteAskPressed` call this hook makes the moment Ask is pressed.
  */
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import { noteAskPressed, questionCameFromMic, setReadAloudCompletionContext } from "../../hooks/useReadAloud";
 import { useVoiceAskInput } from "./useVoiceAskInput";
@@ -43,6 +43,8 @@ export type UseVoiceAskWithReadAloudArgs = {
 export type VoiceAskWithReadAloud = {
   voiceRecording: boolean;
   voiceStarting: boolean;
+  /** Stop has gone to the back end and the final text is not back yet (the Ask bar draws the mic amber). */
+  voiceFinishing: boolean;
   onMicInput: () => void;
   micPermissionDenied: boolean;
   dismissMicPermissionDeny: () => void;
@@ -75,8 +77,9 @@ export function useVoiceAskWithReadAloud({
   const {
     voiceRecording,
     voiceStarting,
+    voiceFinishing,
     onMicInput,
-    endDictation,
+    finishDictation,
     micPermissionDenied,
     dismissMicPermissionDeny,
     askCameFromMic,
@@ -105,6 +108,13 @@ export function useVoiceAskWithReadAloud({
     setReadAloudCompletionContext(voiceReplyMode, strategySpoilerMaskingEnabled);
   }, [settingsLoaded, voiceReplyMode, strategySpoilerMaskingEnabled]);
 
+  /* What the render being drawn right now holds, for the code below that has to read the box after
+     an await (the final text has just been written into it and the closure of the press is stale). */
+  const latest = useRef({ onAskOllama, unifiedInput, askCameFromMic, lastVoiceText });
+  latest.current = { onAskOllama, unifiedInput, askCameFromMic, lastVoiceText };
+  /* True while an Ask is waiting for the final text, so a second press does not send the question twice. */
+  const askWaitingForTextRef = useRef(false);
+
   /*
    * "Came from the mic", captured the moment Ask is pressed (D99 call 3) and handed straight to
    * `noteAskPressed`, which ties it to the request number from the first status that carries one.
@@ -120,20 +130,41 @@ export function useVoiceAskWithReadAloud({
    * also checks that the text actually being asked still matches what the mic last wrote.
    */
   const onAskOllamaWithReadAloud = useCallback(
-    (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => {
+    async (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => {
+      /* Pressing Ask while the mic is listening (or still finishing a Stop) ends dictation first: the
+         back end reads the whole recording once, the final text goes into the box, and only then is the
+         question asked, so the last words said are never cut off. Nothing heard afterwards may be
+         written into the box during the answer. If the person typed in the box during the wait, the
+         final text is not written and the question is the box as it is. */
+      if (voiceRecording || voiceFinishing) {
+        if (askWaitingForTextRef.current) return;
+        askWaitingForTextRef.current = true;
+        try {
+          const written = await finishDictation();
+          if (written !== null) {
+            // The new text is on its way to the box; ask only once the screen shows it.
+            for (let i = 0; i < 100 && latest.current.unifiedInput !== written; i += 1) {
+              await new Promise((r) => setTimeout(r, 10));
+            }
+          }
+        } finally {
+          askWaitingForTextRef.current = false;
+        }
+        const now = latest.current;
+        noteAskPressed(questionCameFromMic(now.askCameFromMic, overrideQuestion ?? now.unifiedInput, now.lastVoiceText));
+        return now.onAskOllama(overrideQuestion, opts);
+      }
       const asked = overrideQuestion ?? unifiedInput;
-      /* Pressing Ask while the mic is still listening ends dictation: the question sent is the box as
-         it is now, and nothing heard afterwards may be written into the box during the answer. */
-      if (voiceRecording) endDictation(false);
       noteAskPressed(questionCameFromMic(askCameFromMic, asked, lastVoiceText));
       return onAskOllama(overrideQuestion, opts);
     },
-    [onAskOllama, askCameFromMic, unifiedInput, lastVoiceText, voiceRecording, endDictation],
+    [onAskOllama, askCameFromMic, unifiedInput, lastVoiceText, voiceRecording, voiceFinishing, finishDictation],
   );
 
   return {
     voiceRecording,
     voiceStarting,
+    voiceFinishing,
     onMicInput,
     micPermissionDenied,
     dismissMicPermissionDeny,

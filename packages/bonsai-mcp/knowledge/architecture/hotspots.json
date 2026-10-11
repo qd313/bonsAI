@@ -22,7 +22,7 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1318,
+      "lines": 1320,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
@@ -36,6 +36,11 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabUnifiedAskBar.tsx",
+      "lines": 1218,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/game_ai_request.py",
       "lines": 1209,
       "role": ""
@@ -43,11 +48,6 @@
     {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
       "lines": 1209,
-      "role": ""
-    },
-    {
-      "path": "src/components/MainTabUnifiedAskBar.tsx",
-      "lines": 1200,
       "role": ""
     },
     {

@@ -221,6 +221,7 @@
     "src/features/voice/useVoiceAskInput.test.ts",
     "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
     "src/features/voice/voiceClearAfterStop.test.tsx",
+    "src/features/voice/voiceFinishAtStop.test.tsx",
     "src/features/voice/voiceStartingFeedback.test.tsx",
     "src/hooks/askBarRingWatch.titleView.test.ts",
     "src/hooks/chipLadderPlacement.test.ts",

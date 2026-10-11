@@ -791,6 +791,7 @@ const Content: React.FC = () => {
   const {
     voiceRecording,
     voiceStarting,
+    voiceFinishing,
     onMicInput,
     micPermissionDenied,
     dismissMicPermissionDeny,
@@ -921,7 +922,8 @@ const Content: React.FC = () => {
     onCancelAsk,
     onMicInput,
     voiceRecording,
-    voiceStarting,
+    /* The mic button is amber while the voice server starts and while Stop reads the recording once more. */
+    voiceBusy: voiceStarting ? "starting" : voiceFinishing ? "finishing" : null,
     selectedAttachment,
     setSelectedAttachment,
     clearUnifiedInput,

@@ -20,11 +20,11 @@
  * This hook only starts and stops that process and reacts to what it
  * reports back.
  */
-import { useCallback, useEffect, useState, type Dispatch, type SetStateAction } from "react";
+import { useCallback, useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { call, toaster } from "@decky/api";
 
 import { formatDeckyRpcError } from "../../utils/deckyCall";
-import { useVoiceTranscription } from "../../hooks/useVoiceTranscription";
+import { useVoiceTranscription, type VoiceStopOutcome } from "../../hooks/useVoiceTranscription";
 import type { UiStringVars } from "../../i18n/catalog";
 import type { UiStringKey } from "../../i18n/keys";
 
@@ -77,17 +77,29 @@ export type UseVoiceAskInputArgs = {
  *    as well.
  * 9. `onMicInput()` is the button's own tap handler: shows a short "Mic is
  *    waiting" toast while a question is being asked; ignores a press while the
- *    start call from an earlier press is still pending (`voiceStarting`, which the
- *    Ask bar draws as an amber button); stops an already-running recording;
+ *    start call from an earlier press is still pending (`voiceStarting`) or
+ *    while a stop is still finishing (`voiceFinishing`) -- the Ask bar draws
+ *    both as an amber button; stops an already-running recording;
  *    shows the permission message and stops there if access is not
  *    granted; otherwise starts recording and shows an error toast if
  *    starting fails.
- * 10. Everything above is bundled together and returned.
+ * 10. A Stop takes a moment: the back end reads the whole recording once more and
+ *    the screen waits for that final text (`voiceFinishing`), which replaces the live
+ *    words only if the box is still as the microphone left it. `finishDictation()` is
+ *    the same wait for Ask: it stops, waits, and says what the box holds.
+ * 11. Everything above is bundled together and returned.
  */
 export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
   const [voiceRecording, setVoiceRecording] = useState(false);
   /** A press has gone to the back end and its start call has not returned yet (the voice server is starting, the model loading). */
   const [voiceStarting, setVoiceStarting] = useState(false);
+  /** Stop has gone to the back end (or the back end ended the recording itself) and the final text is not back yet. */
+  const [voiceFinishing, setVoiceFinishing] = useState(false);
+  /** The Stop call in flight, so Ask can wait for the same one a Stop press started. */
+  const stopInFlightRef = useRef<Promise<VoiceStopOutcome | null> | null>(null);
+  /** The question box as last rendered, for "has anything touched the box since Stop?". */
+  const boxRef = useRef(a.unifiedInput);
+  boxRef.current = a.unifiedInput;
   const [micPermissionDenied, setMicPermissionDenied] = useState(false);
   /**
    * "The field's text came from the mic" (D99 call 3, the middle Voice replies position). Set the
@@ -126,6 +138,7 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
   const onVoiceError = useCallback(
     (e: unknown) => {
       setVoiceRecording(false);
+      setVoiceFinishing(false);
       toaster.toast({
         title: a.uiT("toast.voiceInputError.title"),
         body: formatDeckyRpcError(e),
@@ -138,7 +151,47 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
   const { startVoiceTranscription, stopVoiceTranscription, invalidateVoice } = useVoiceTranscription(
     setUnifiedInputFromVoice,
     onVoiceError,
+    {
+      getCurrentInput: () => boxRef.current,
+      // A recording the back end ended itself (the two-minute limit, the microphone failing): amber
+      // while it reads the recording once more, then back to the plain microphone.
+      onBackendFinishing: () => {
+        setVoiceRecording(false);
+        setVoiceFinishing(true);
+      },
+      onSessionEnded: () => {
+        setVoiceRecording(false);
+        setVoiceFinishing(false);
+      },
+    },
   );
+
+  /**
+   * Stop: leave the recording state at once, show the amber "finishing" button, and wait for the back
+   * end's final text (the stop call returns only when it is ready). One call at a time; a second
+   * caller gets the same one.
+   */
+  const beginStop = useCallback((): Promise<VoiceStopOutcome | null> => {
+    if (stopInFlightRef.current) return stopInFlightRef.current;
+    setVoiceRecording(false);
+    setVoiceFinishing(true);
+    const pending = stopVoiceTranscription().finally(() => {
+      stopInFlightRef.current = null;
+      setVoiceFinishing(false);
+    });
+    stopInFlightRef.current = pending;
+    return pending;
+  }, [stopVoiceTranscription]);
+
+  /**
+   * Ask pressed while the mic is listening or finishing: stop (or wait for the stop already under
+   * way) and say what the box holds once the final text is in it. Resolves to the text now in the
+   * box, or null when the final text was not written (the box was edited, emptied, or nothing came back).
+   */
+  const finishDictation = useCallback(async (): Promise<string | null> => {
+    const outcome = await (stopInFlightRef.current ?? beginStop());
+    return outcome?.boxText ?? null;
+  }, [beginStop]);
 
   // Revoking mic access mid-recording must stop the session, not just hide the button.
   useEffect(() => {
@@ -164,9 +217,13 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
       invalidateVoice();
       setVoiceRecording(false);
       if (forgetWords) setLastVoiceText("");
-      // Raw call(), no deadline, like the other stop path: stop runs whisper finalization over the
-      // recorded buffer, which can exceed any UI timeout on Deck hardware (nobody waits on it here).
-      void call("stop_voice_transcription").catch(() => undefined);
+      // Raw call(), no deadline, like the other stop path: stop reads the whole recording once more,
+      // which can exceed any UI timeout on Deck hardware. Nobody uses its text here; the button is
+      // amber until the back end is done, so a new press does not collide with it.
+      setVoiceFinishing(true);
+      void call("stop_voice_transcription")
+        .catch(() => undefined)
+        .finally(() => setVoiceFinishing(false));
     },
     [invalidateVoice],
   );
@@ -196,10 +253,10 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
       return;
     }
     // The first press is still waiting on the back end; a second one must not send a second start.
-    if (voiceStarting) return;
+    // Likewise while a Stop is still reading the recording: the new recording would have to wait for it.
+    if (voiceStarting || voiceFinishing) return;
     if (voiceRecording) {
-      setVoiceRecording(false);
-      void stopVoiceTranscription();
+      void beginStop();
       return;
     }
     if (!a.microphoneAccess) {
@@ -235,18 +292,22 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
     a.isAsking,
     voiceRecording,
     voiceStarting,
+    voiceFinishing,
     a.microphoneAccess,
     startVoiceTranscription,
-    stopVoiceTranscription,
+    beginStop,
     a.unifiedInput,
   ]);
 
   return {
     voiceRecording,
     voiceStarting,
+    voiceFinishing,
     onMicInput,
-    /** Ends a recording that is still listening without touching the box (Ask pressed, X pressed). */
+    /** Ends a recording that is still listening without touching the box (the X pressed). */
     endDictation,
+    /** Stops (or waits for the stop under way), then says what the box holds: Ask's way of ending dictation. */
+    finishDictation,
     stopVoiceTranscription,
     invalidateVoice,
     micPermissionDenied,

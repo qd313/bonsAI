@@ -497,7 +497,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - **useThinkingNoticeGate.tsx** (src/hooks/useThinkingNoticeGate.tsx) — *The one-time notice before Thinking turns on*: The Thinking row on the Ollama tab has four choices: Off, Brief, Balanced, Deep (Off by default). The first time a person moves it off Off, this shows a popup first: "Thinking shows on screen as it happens and is not checked for spoilers. […]
 - **useTitleOverflow.ts** (src/hooks/useTitleOverflow.ts) — *Does an open question's title overflow its cap?*: Tells the chat transcript whether an OPEN question's title really runs past its five-line cap (roadmap: "A short question fades out at its right edge as if there were more to read"). […]
 - **useUiScaleProfile.ts** (src/hooks/useUiScaleProfile.ts) — *Sizing the panel for a handheld Deck versus a docked, bigger screen*: Measures how wide the plugin's own panel actually is, and from that (together with the screen's real size) works out whether this counts as a small handheld view or a larger docked one. […]
-- **useVoiceTranscription.ts** (src/hooks/useVoiceTranscription.ts) — *Dictating a question with the microphone*: Starts and stops microphone dictation on the back end, checks in several times a second while it is recording, and writes the words heard so far into the question box as they come in — first the words already settled, then whatever is still being worked out.
+- **useVoiceTranscription.ts** (src/hooks/useVoiceTranscription.ts) — *Dictating a question with the microphone*: Starts and stops microphone dictation on the back end, checks in several times a second while it is recording, and writes the words heard so far into the question box as they come in. […]
 
 ## src/i18n
 

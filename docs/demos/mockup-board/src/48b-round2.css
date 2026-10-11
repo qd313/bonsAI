@@ -95,4 +95,28 @@
 /* tab 8, round 2: your notes on the Search tab */
 .s2-notes { display: flex; flex-direction: column; margin-top: 8px; }
 .s2-notes .s-hint { margin-top: 2px; }
+/* tab 4, round 2: how far Text size reaches; --ts is 0.9, 1 or 1.15 */
+.t4-picks { display: grid; gap: 4px; }
+.t4r2 .k2-answer { font-size: calc(12px * var(--ts)); }
+.t4r2 .k2-q { font-size: calc(11px * var(--ts)); }
+.t4r2.reach-main .k2-chip, .t4r2.reach-all .k2-chip { font-size: calc(12.5px * var(--ts)); }
+.t4r2.reach-main .k2-field, .t4r2.reach-all .k2-field { font-size: calc(12px * var(--ts)); }
+.t4r2.reach-main .k2-nm b, .t4r2.reach-all .k2-nm b { font-size: calc(11.5px * var(--ts)); }
+.t4r2.reach-main .k2-game, .t4r2.reach-all .k2-game { font-size: calc(10px * var(--ts)); }
+.t4r2.reach-main .k2-mode, .t4r2.reach-all .k2-mode { font-size: calc(11px * var(--ts)); }
+.t4r2.reach-main .k2-ask, .t4r2.reach-all .k2-ask { font-size: calc(12px * var(--ts)); }
+.t4r2.reach-main .k2-epill, .t4r2.reach-all .k2-epill { font-size: calc(10px * var(--ts)); }
+.t4r2.reach-all .k2-mid { font-size: calc(11px * var(--ts)); }
+.t4r2.reach-all .k2-sub { font-size: calc(8px * var(--ts)); }
+.t4r2.reach-all .k2-key { font-size: calc(7px * var(--ts)); }
+.t4r2.reach-all .t4-settings .q-row { font-size: calc(12px * var(--ts)); }
+.t4r2.reach-all .t4-settings .q-row small { font-size: calc(10px * var(--ts)); }
+.t4r2.reach-all .t4-settings .q-section-title { font-size: calc(10px * var(--ts)); }
+.t4r2.reach-all .t4-sz { font-size: calc(10.5px * var(--ts)); }
+.t4-settings { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--q-bg); }
+.t4-set-in { padding: 0 8px 10px; }
+.t4-textrow { flex-wrap: wrap; }
+.t4-sizes { display: flex; gap: 3px; }
+.t4-sz { height: 24px; padding: 0 7px; border-radius: 5px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); color: #b4c6dc; font-size: 10.5px; font-weight: 600; }
+.t4-sz.on { background: rgba(56,189,248,.18); border-color: rgba(156,231,255,.5); color: #fff; }
 </style>

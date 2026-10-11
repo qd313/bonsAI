@@ -1,6 +1,6 @@
 # Plan 88: the mic reads the whole recording once at Stop
 
-**Status:** BUILDING, started 2026-10-11. The maintainer chose this on 2026-10-11 ("go with your
+**Status:** FINISHED 2026-10-11: built, landed (`4b32a914`..`68317980`) and every Deck row passed the same day. See "Finish" at the end. The maintainer chose this on 2026-10-11 ("go with your
 recommendation, I like that hybrid option").
 
 ## What changes for the person using it
@@ -98,3 +98,86 @@ file. Evidence prefix `p88-`.
 - Removing tiny.en from the list. Wait for P88-VOICE-WHOLE-GAME.
 - The other open mic bugs (stops after 3–4 s, Stop then mic). This change touches both paths; the
   Deck rows above are the first look at whether they are gone.
+
+## Finish (2026-10-11)
+
+### What a person notices now
+
+- Words still show up while you talk, in steps of a few seconds. When you press Stop, the mic button
+  turns amber ("Finishing voice input") for about 3 seconds with no game (2.6 to 2.9 s measured on
+  base.en, 0.9 s on tiny.en) and about 4 seconds with a game running (4.1 s), then the clean text
+  replaces the live words.
+- "test test 1 2 3 4, test test 1 2 3 4" now comes out with both halves on both models, nothing
+  repeated. The 15- and 21-second test questions came out word for word, with and without a game.
+- Pressing Ask while still talking waits about 2.5 s and asks the whole question, last words included.
+- Pressing the mic during the amber wait does nothing; the next press after it works.
+
+### How it is built (a short guide for the next developer)
+
+- **Back end, the speech session** (`py_modules/backend/services/voice_transcription_service.py`).
+  The session keeps every sample from start to Stop in one buffer, capped at 120 s (the cap ends the
+  recording by itself). Live passes read the current block (up to 28 s) from that buffer and replace
+  the block's text; a full block is read once more and frozen. After each pass the loop rests as long
+  as the pass took (`LIVE_REST_FACTOR`), and it skips a pass when no speech arrived since the last one.
+  When the recording ends, `_finish_recording` reads the whole buffer once; its text is the final
+  text, or the live text if that read fails or hears nothing. The status goes recording → finishing →
+  stopped. `voice_level_gate.speech_rms` judges a lone filler word by the loudness of the speech only.
+- **Back end, start and stop** (`voice_rpc.py`). The stop call returns only when the final text is
+  ready, and the session stays registered until then, so a start that arrives meanwhile waits for it
+  (through `force_stop`, which joins the same worker). The shared engine is released once per session.
+- **Screen** (`src/hooks/useVoiceTranscription.ts`, `src/features/voice/useVoiceAskInput.ts`,
+  `useVoiceAskWithReadAloud.ts`, the mic button in `MainTabUnifiedAskBar.tsx`). A Stop shows the amber
+  "finishing" state (the button's `voiceBusy` prop, "starting" or "finishing") and ignores presses.
+  The final text is written only if the box still holds what the mic last wrote, so the X, typing, a
+  new recording or a session clear drop it. Ask while recording calls `finishDictation`, waits for the
+  box to show the final text, then asks. A recording the back end ended by itself returns the button
+  to idle.
+- **Removed:** the overlap-matching code and its tests (nothing else used them).
+- **Tests:** `tests/test_voice_whole_recording.py` and `src/features/voice/voiceFinishAtStop.test.tsx`;
+  each was broken on purpose once and failed (the commit messages list how).
+
+### Deck results (build `68317980`, a recorded voice through a pretend microphone)
+
+| Row | Result | Evidence |
+|---|---|---|
+| P88-VOICE-WHOLE-ENGINE (before the build, engine only) | PASS: every word on both models read whole | `docs/test-evidence/p88-VOICE-WHOLE-ENGINE.json` |
+| P88-VOICE-WHOLE-NOGAME | PASS: all three sentences whole; Stop to final 2.6 to 2.9 s; live text never went empty | `p88-VOICE-WHOLE-NOGAME.json` |
+| P88-VOICE-STOP-THEN-MIC | PASS: a press 0.6 s after Stop was ignored; the next recording worked | `p88-VOICE-STOP-THEN-MIC.json` |
+| P88-VOICE-ASK-WHILE-TALKING | PASS: the asked question was the full sentence | `p88-VOICE-ASK-WHILE-TALKING.json` |
+| P88-VOICE-TINY | Report: correct, no repeats, Stop to final 0.9 s | `p88-VOICE-TINY.json` |
+| P88-VOICE-WHOLE-GAME | PASS: every word with Deep Rock Galactic: Survivor running; Stop to final 4.1 s | `p88-VOICE-WHOLE-GAME.json` |
+| Deck put back | PASS | `p88-DECK-RESTORED.json` |
+
+With the game, the frame rate read 59 before, 48 as the mic started, then 53 and 56 (single readings,
+most of the speech over the game's level-up pause screen): a sign, not a firm number.
+
+### Surprises and how they were handled
+
+- The 30-second rolling buffer was dropped: the whole-recording buffer serves the live passes too.
+- A new mic-button prop would have broken the "props handed to the tabs" size check; the two amber
+  states share one prop instead.
+- `_flush_final`'s tail read had never run (it only ran when the stop flag was not set, and the loop
+  only ended when it was). The final pass replaced it.
+- A live pass that raised used to kill the worker silently and freeze the live text; it is now logged
+  and skipped.
+- Landing: one generated file was locked by another program during regeneration (re-run by hand, no
+  change), and the full check failed on the roadmap's size, which another session's entries had pushed
+  over its limit; that session trimmed it (`630ac74e`).
+
+### Left open
+
+- **A real voice.** Every row used a recorded sentence. The two bugs the maintainer saw only with a
+  real voice (the mic stopping after 3 or 4 seconds, and Stop then the mic not working) need the
+  maintainer's own try. The helper's reading of the code: the Stop-then-mic bug is explained by the old
+  3-second wait plus the engine being released under a pass still running (both gone now); for the
+  3-to-4-second stop, the best guess is the order the screen writes two pieces of state (the "came
+  from the mic" text before the box), which this change does not touch.
+- **Live words are slower.** On base.en with no game the live text changes about every 4 seconds; the
+  short "test test" recording showed no live words before Stop at all. Tunable (`LIVE_REST_FACTOR`) if
+  the maintainer wants it quicker.
+- **A status check that errors** leaves the screen idle without telling the back end to stop; the
+  two-minute cap now bounds that recording.
+- `docs/planning/10-wake-word-listening-feasibility.md` still names the removed silence constant.
+- Test tooling: the rig's Steam-button press still doesn't open Steam's menu (games were started and
+  closed by hand routes); the settings snapshot tool failed once (ENOBUFS); opening the plugin failed
+  twice after a reload.

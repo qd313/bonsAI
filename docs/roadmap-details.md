@@ -46,19 +46,17 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [A Strategy checklist that arrives while the panel is closed never shows, and after any reopen a refine chip sends its follow-up in Speed mode](#a-strategy-checklist-that-arrives-while-the-panel-is-closed-never-shows-and-after-any-reopen-a-refine-chip-sends-its-follow-up-in-speed-mode)
 - [A faded ghost of the tab bar is left drawn over the chip row after touching the screen](#a-faded-ghost-of-the-tab-bar-is-left-drawn-over-the-chip-row-after-touching-the-screen)
 - [The chat summary reads oddly in places](#the-chat-summary-reads-oddly-in-places)
-- [When the length limit cuts a choice menu, the next part of the answer is lost](#when-the-length-limit-cuts-a-choice-menu-the-next-part-of-the-answer-is-lost)
 - [After the quick start is opened and closed, the help chip stayed and the suggestion chips never took the row](#after-the-quick-start-is-opened-and-closed-the-help-chip-stayed-and-the-suggestion-chips-never-took-the-row)
 - [A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind](#a-press-that-never-opens-its-box-parental-lock-on-can-leave-a-stale-return-the-ring-here-note-behind)
 - [The walk check calls a stop hidden when a corner icon merely overlaps its box](#the-walk-check-calls-a-stop-hidden-when-a-corner-icon-merely-overlaps-its-box)
 - [With Voice replies on "When I asked by voice", a spoken question's answer may not read itself aloud](#with-voice-replies-on-when-i-asked-by-voice-a-spoken-questions-answer-may-not-read-itself-aloud)
 - [Roadmap clean-up task: trim this file (done 2026-09-15)](#roadmap-clean-up-task-trim-this-file-done-2026-09-15)
-- [After picking a setting from the search list above the question box, Down cannot get past the answer](#after-picking-a-setting-from-the-search-list-above-the-question-box-down-cannot-get-past-the-answer)
 - [Steam's screen froze after an answer with a game running and the Deck's own AI](#steams-screen-froze-after-an-answer-with-a-game-running-and-the-decks-own-ai)
 - [Long suggestion chips: pause at the end, centred text](#long-suggestion-chips-pause-at-the-end-centred-text)
 - [Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted](#reloading-the-plugin-while-a-heavy-game-is-running-can-leave-steams-interface-gone-until-the-deck-is-restarted)
 - [While reading an answer, the Show details line takes the suggestion chip's place above the question box](#while-reading-an-answer-the-show-details-line-takes-the-suggestion-chips-place-above-the-question-box)
 - [The open reasoning block does not scroll in steps like the answer; one Down jumps past the whole of it](#the-open-reasoning-block-does-not-scroll-in-steps-like-the-answer-one-down-jumps-past-the-whole-of-it)
-- [Up from the bottom of the About tab cannot get back to the top](#up-from-the-bottom-of-the-about-tab-cannot-get-back-to-the-top)
+- [Merge the unlanded work left in thirteen old helper copies into experimental](#merge-the-unlanded-work-left-in-thirteen-old-helper-copies-into-experimental)
 <!-- /toc -->
 
 ## The panel stops half way down and the Ask button is out of reach
@@ -865,22 +863,6 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep
 
   Measured on this PC's copy of the Deck's model, 45 summaries: a non-game on the Game line in 24 before, 0 after; lines that say nothing, 25 lines before, 10 after (the rest carry a clause and are kept on purpose); real lines lost, 0. Unit tests: `tests/test_chat_summary_tidy.py` (23), one in `tests/test_chat_summary_service.py`. Deck row **P78-SUMUP-WORDING**: partly passed, below.
 
-## When the length limit cuts a choice menu, the next part of the answer is lost
-
-  **Two Deck sessions never produced the case (2026-09-30 build `7d84ee3b`, 2026-10-01 build `24cbbd6b`), both UNCLEAR:** at a limit of 300 and 340 tokens the long questions were cut and continued, with no fence text or JSON on screen and the screen and saved chat agreeing, but the model never reached its choice menu before the wall and no "dropped a choice fence" log line appeared. Unit tests are the proof so far. Evidence `docs/test-evidence/plan77-P77-CUT-MENU-TEXT.json`, `docs/test-evidence/plan78-P77-CUT-MENU-TEXT.json`.
-
-Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
-
-  On a test build with the limit at 300 tokens, the menu block opened right at the wall; the next piece's 1,018 letters never reached the screen or the saved chat, and no menu showed. Rare at the normal limit. Evidence `docs/test-evidence/plan77-SOFT-PREDICT-04.json`.
-  A choice menu cut by the length wall that the continuation does not finish is now dropped cleanly; the rest of the answer is kept, shown and saved. Limit: the piece after a dropped fence shows when it ends, not live. The check is the same low-limit run as SOFT-PREDICT-04: the final letters roughly equal the sum of the pieces, the same in the saved chat, no fence text or JSON on screen, and a "dropped a choice fence" log line. Deck check owed: row **P77-CUT-MENU-TEXT**.
-  Older note (2026-09-30, UNCLEAR, the same result as below): [roadmap-details.md](roadmap-details.md#when-the-length-limit-cuts-a-choice-menu-the-next-part-of-the-answer-is-lost).
-
-Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
-
-On a test build with the limit at 300 tokens, the piece after a menu cut by the length wall never reached the screen or the saved chat. Rare at the normal limit. Evidence `docs/test-evidence/plan77-SOFT-PREDICT-04.json`.
-
-A cut menu that the continuation does not finish is now dropped cleanly and the rest of the answer is kept, shown and saved. Deck check owed: row **P77-CUT-MENU-TEXT**; tried twice (2026-09-30, 2026-10-01), unclear both times because the model never reached a menu before the wall. Unit tests are the proof so far.
-
 ## After the quick start is opened and closed, the help chip stayed and the suggestion chips never took the row
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
@@ -922,34 +904,6 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep
 ## Roadmap clean-up task: trim this file (done 2026-09-15)
 
 **Clean-up task — trim this file. Done 2026-09-15.** The write-up (what it cost to read, the sizes before and after, and what was left on purpose) is in [archive/roadmap-trimmed-2026-10-roadmap-details.md](archive/roadmap-trimmed-2026-10-roadmap-details.md).
-
-## After picking a setting from the search list above the question box, Down cannot get past the answer
-
-Moved here from the roadmap entry on 2026-10-02 (docs sweep 4, plan 79), when it went to Verify. Nothing was removed.
-
-- ★★★ `[focus]` **After picking a setting from the search list above the question box, Down cannot get past the
-  answer** — **OPEN, found by the maintainer 2026-10-02; only a Steam restart cleared it.** The answer is also drawn
-  behind the question box, and the ring shows as one big box around both. Screenshot
-  `screenshots/DeckCapture_20261002_004346_game.png`. Measure on the Deck first; may be kin to the old focus trap.
-  **Not reproduced on the Deck in seven tries by three routes (2026-10-02; `docs/test-evidence/plan79-P79-M1-TRAP.json`, `-try2`, `-try3`).**
-  **2026-10-02 (plan 79):** two fixes for kin of this fault landed; neither is proven to be the maintainer's own route. Down with Steam's ring on the whole answer no longer does nothing when the panel's page has lost the browser's focus (`affa7fa0`, test `src/utils/answerBubbleNavigation.ringOnBubble.test.ts`), and a closing settings list now hands the ring to the question box (`8c8fffb0`, in Verify). Deck check owed: row **P79-TRAP-DOWN-BUBBLE**, the same route five times. Not run yet.
-
-**Routes tried on the Deck (plan 79, measured 2026-10-02):** a pick from the Quick Access list and from the Steam Settings list; the on-screen keyboard opened and closed (the word itself was put in by the test script, so the typing route is only half done); B on a list row, and a pick then back and B. Down and Up moved normally with one ring each time. One side finding became its own entry (the ring vanishes when the list closes under it).
-
-Original entries moved from Features on 2026-10-02 when their builds went to Verify, kept for their first wording:
-
-- ★★★ `[ollama]` **Fold the "Models & routing" section into the AI models box** — **OPEN, an idea from the
-  maintainer 2026-10-02.** Less clutter on the Ollama tab. **Mockups first, at a later time,** drawn true size, so
-  the maintainer can choose where each piece goes.
-- ★★★ `[layout]` `[focus]` `[chips]` **While reading an answer, the Show details line takes the suggestion
-  chip's place above the question box** — **NEW, filed by the maintainer 2026-09-23. Not started.** Today
-  the suggestion chip stays pinned above the question box no matter where in a reply the person has
-  scrolled. The idea: while scrolling through an answer, that answer's own Show details line shows there
-  instead of the chip; once the person scrolls past the answer and its Show details line, the chip comes
-  back. The maintainer's own proposed cure for the bug **"Show details' chip ladder hides under the
-  question box"**, below. **Needs a plan and animated mockups before anything is built**, since the swap
-  between the chip and the line happens as the person scrolls — drawn at the Deck's real size, from the
-  real screen, showing the swap in motion.
 
 ## Steam's screen froze after an answer with a game running and the Deck's own AI
 
@@ -1011,8 +965,45 @@ Owed on the Deck: row **P82-REASONING-BLOCK-PAGES** in [testing.md](testing.md);
 
 **Closed 2026-10-07 (plan 82 paperwork 7):** the Deck check above is done. The first round failed in block 4 (build `efd4258b`); the second round (`ce8ace71`, landed `6b5d5f49`) passed in block 5. Done line in the roadmap; full entry in [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md). Evidence `docs/test-evidence/plan82-P82-REASONING-BLOCK-PAGES-try2.json`.
 
-## Up from the bottom of the About tab cannot get back to the top
+## Merge the unlanded work left in thirteen old helper copies into experimental
 
-**2026-10-07 (plan 82, Deck block 1, the Deck on an external monitor):** did not reproduce with the rig: from the D-pad route (Down to "Support my Steam Sale habit"), Up moved to "Bugs & Feature Requests", three of three. The maintainer's screenshot shows no ring on any control, so the route matters (a scroll by right stick or touch first?). Stays OPEN; question for the maintainer (plan 82, question 5). Evidence `docs/test-evidence/plan82-M1-ABOUT-UP.json`.
-**2026-10-09 (plan 87 M8, D-pad only, three tries):** Up from "Support my Steam Sale habit" went to "Bugs & Feature Requests" each time; but the Deck was on its monitor, so the Deck's own screen is still not checked. Stays OPEN. Evidence `docs/test-evidence/plan87-M8-ABOUT-UP.json`.
-**Closed 2026-10-10:** the maintainer passed it on the Deck's own screen ("works as expected"), after it passed 3 of 3 on the monitor (`docs/test-evidence/plan87-P87-ABOUT-UP.json`). The plan 87 tab-scroll fix `0e652638` most likely fixed it. Evidence for the pass: the maintainer on the Deck's own screen, 2026-10-10, checks page. Done line in the roadmap; full entry in [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md#closed-2026-10-10-the-maintainers-checks-page-answers-after-plan-87).
+**Filed 2026-10-11 (plan 89 clean-up).** Copies kept when 23 fully landed ones were deleted. Each is at `.claude/worktrees/<name>` on branch `refactor/<name>`. Lines are commits (matched by title) or files not on experimental (`??`). Check each against experimental before merging.
+
+- **58p1-hk** (`refactor/58p1-hk`)
+  - a353e6506 NOT TO LAND UNTIL THE MAINTAINER PICKS: swap nine Hollow Knight notes to the wiki's own words
+- **58p1-hk2** (`refactor/58p1-hk2`)
+  - 904a7e73c NOT TO LAND UNTIL THE MAINTAINER PICKS: swap ten Hollow Knight notes to the wiki's own words (second run)
+- **58p1-notes-g** (`refactor/58p1-notes-g`)
+  - 866b077a0 Add Grand Theft Auto III - The Definitive Edition to the knowledge base
+  - 6d9ce1fd9 Add the original Super Smash Bros. to the knowledge base
+  - be6b09e18 Add Diddy Kong Racing to the knowledge base
+  - 0b77519fb Add Yoshi's Story to the knowledge base
+  - b8e855e0e Add Donkey Kong 64 to the knowledge base
+- **p64-shared-tip** (`refactor/p64-shared-tip`)
+  - fea198b9b Fix: a shared tip's source page now reaches its credit line
+- **p65-chips** (`refactor/p65-chips`)
+  - 5f4d444a4 Split preset chips: break the import cycle between the component and decode slots
+  - 7ebbcab23 Split preset chips: stop exporting PresetChipLabel, nothing outside its file uses it
+- **p65-index** (`refactor/p65-index`)
+  - c4ffa6767 Move the settings-snapshot-for-save memo out of index.tsx
+- **p65-voice** (`refactor/p65-voice`)
+  - 7419cf727 Fix a header check failure: don't call-format cross-file function names
+- **p65-where** (`refactor/p65-where`)
+  - Untracked file: scripts/prove_where_hook_order.py
+- **p68-screen** (`refactor/p68-screen`)
+  - 3c34fd3a7 Make forgetting the carried subject an internal step, now Clear is gone
+- **p70-g** (`refactor/p70-g`)
+  - 9a954a0a8 Fact-check all 18 new notes line by line against the pages they cite
+  - 31e332bb9 Fix two wrong claims in the Red Dead Redemption 2 starting-out note
+  - 6434a19aa Skyrim now gets the same spoiler caution as other story-driven games
+  - c656bf866 Knowledge base: "how do I get started" notes for Cyberpunk 2077, Fallout 4 and RDR2
+  - 4eeff266b Knowledge base: add Skyrim (Special Edition), 15 notes from UESP
+- **p70-k** (`refactor/p70-k`)
+  - a93ecd3ce Merge branch 'experimental' into refactor/p70-k
+  - e6d787f7b Merge branch 'experimental' into refactor/p70-k
+  - 51a021273 Stop repeating the neighbouring follow-up test file's own setup
+  - 77a588ad7 Merge branch 'experimental' into refactor/p70-k
+- **p77h** (`refactor/p77h`)
+  - Untracked file: docs/archive/research/kb-answer-eval-2026-09-29-p77h-cases.md
+- **p81frev** (`refactor/p81frev`)
+  - d8671410 Revert "Reword the AI's instructions so none of them shows the hidden-block label in the odd one-word shape"

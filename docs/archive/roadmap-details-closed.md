@@ -1208,3 +1208,56 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep t
   **2026-10-03 (plan 81 paperwork 5):** the first half passed its smoke test on the Deck (Show reasoning shows up to 88 characters of steps while writing and opens to 1348 characters afterwards, build `5eca4271`; `docs/test-evidence/plan81-D-SMOKE-REASONING.json`) and is a line in Done. Of findings 1 to 5: finding 3 is in Done, finding 2 closed earlier, findings 1, 4 and 5 are in Verify.
 
   **2026-10-08 (plan 83, `c99bd6f6`):** finding 6 is fixed: an answer that finished while the panel was shut is now written to the desktop note once the panel reopens (developer builds only). Proven by its test `src/hooks/useBonsaiAskOrchestration.desktopNote.test.ts`; no Deck check exists. Entry moved to Done and the archive.
+
+_Moved here 2026-10-11 (plan 89 bookkeeper), word for word, when their entries closed (the maintainer's calls 6 and 7, D128; the About-tab entry closed 2026-10-10)._
+
+## When the length limit cuts a choice menu, the next part of the answer is lost
+
+  **Two Deck sessions never produced the case (2026-09-30 build `7d84ee3b`, 2026-10-01 build `24cbbd6b`), both UNCLEAR:** at a limit of 300 and 340 tokens the long questions were cut and continued, with no fence text or JSON on screen and the screen and saved chat agreeing, but the model never reached its choice menu before the wall and no "dropped a choice fence" log line appeared. Unit tests are the proof so far. Evidence `docs/test-evidence/plan77-P77-CUT-MENU-TEXT.json`, `docs/test-evidence/plan78-P77-CUT-MENU-TEXT.json`.
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  On a test build with the limit at 300 tokens, the menu block opened right at the wall; the next piece's 1,018 letters never reached the screen or the saved chat, and no menu showed. Rare at the normal limit. Evidence `docs/test-evidence/plan77-SOFT-PREDICT-04.json`.
+  A choice menu cut by the length wall that the continuation does not finish is now dropped cleanly; the rest of the answer is kept, shown and saved. Limit: the piece after a dropped fence shows when it ends, not live. The check is the same low-limit run as SOFT-PREDICT-04: the final letters roughly equal the sum of the pieces, the same in the saved chat, no fence text or JSON on screen, and a "dropped a choice fence" log line. Deck check owed: row **P77-CUT-MENU-TEXT**.
+  Older note (2026-09-30, UNCLEAR, the same result as below): [roadmap-details.md](roadmap-details-closed.md#when-the-length-limit-cuts-a-choice-menu-the-next-part-of-the-answer-is-lost).
+
+Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
+
+On a test build with the limit at 300 tokens, the piece after a menu cut by the length wall never reached the screen or the saved chat. Rare at the normal limit. Evidence `docs/test-evidence/plan77-SOFT-PREDICT-04.json`.
+
+A cut menu that the continuation does not finish is now dropped cleanly and the rest of the answer is kept, shown and saved. Deck check owed: row **P77-CUT-MENU-TEXT**; tried twice (2026-09-30, 2026-10-01), unclear both times because the model never reached a menu before the wall. Unit tests are the proof so far.
+
+## After picking a setting from the search list above the question box, Down cannot get past the answer
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep 4, plan 79), when it went to Verify. Nothing was removed.
+
+- ★★★ `[focus]` **After picking a setting from the search list above the question box, Down cannot get past the
+  answer** — **OPEN, found by the maintainer 2026-10-02; only a Steam restart cleared it.** The answer is also drawn
+  behind the question box, and the ring shows as one big box around both. Screenshot
+  `screenshots/DeckCapture_20261002_004346_game.png`. Measure on the Deck first; may be kin to the old focus trap.
+  **Not reproduced on the Deck in seven tries by three routes (2026-10-02; `docs/test-evidence/plan79-P79-M1-TRAP.json`, `-try2`, `-try3`).**
+  **2026-10-02 (plan 79):** two fixes for kin of this fault landed; neither is proven to be the maintainer's own route. Down with Steam's ring on the whole answer no longer does nothing when the panel's page has lost the browser's focus (`affa7fa0`, test `src/utils/answerBubbleNavigation.ringOnBubble.test.ts`), and a closing settings list now hands the ring to the question box (`8c8fffb0`, in Verify). Deck check owed: row **P79-TRAP-DOWN-BUBBLE**, the same route five times. Not run yet.
+
+**Routes tried on the Deck (plan 79, measured 2026-10-02):** a pick from the Quick Access list and from the Steam Settings list; the on-screen keyboard opened and closed (the word itself was put in by the test script, so the typing route is only half done); B on a list row, and a pick then back and B. Down and Up moved normally with one ring each time. One side finding became its own entry (the ring vanishes when the list closes under it).
+
+Original entries moved from Features on 2026-10-02 when their builds went to Verify, kept for their first wording:
+
+- ★★★ `[ollama]` **Fold the "Models & routing" section into the AI models box** — **OPEN, an idea from the
+  maintainer 2026-10-02.** Less clutter on the Ollama tab. **Mockups first, at a later time,** drawn true size, so
+  the maintainer can choose where each piece goes.
+- ★★★ `[layout]` `[focus]` `[chips]` **While reading an answer, the Show details line takes the suggestion
+  chip's place above the question box** — **NEW, filed by the maintainer 2026-09-23. Not started.** Today
+  the suggestion chip stays pinned above the question box no matter where in a reply the person has
+  scrolled. The idea: while scrolling through an answer, that answer's own Show details line shows there
+  instead of the chip; once the person scrolls past the answer and its Show details line, the chip comes
+  back. The maintainer's own proposed cure for the bug **"Show details' chip ladder hides under the
+  question box"**, below. **Needs a plan and animated mockups before anything is built**, since the swap
+  between the chip and the line happens as the person scrolls — drawn at the Deck's real size, from the
+  real screen, showing the swap in motion.
+
+## Up from the bottom of the About tab cannot get back to the top
+
+**2026-10-07 (plan 82, Deck block 1, the Deck on an external monitor):** did not reproduce with the rig: from the D-pad route (Down to "Support my Steam Sale habit"), Up moved to "Bugs & Feature Requests", three of three. The maintainer's screenshot shows no ring on any control, so the route matters (a scroll by right stick or touch first?). Stays OPEN; question for the maintainer (plan 82, question 5). Evidence `docs/test-evidence/plan82-M1-ABOUT-UP.json`.
+**2026-10-09 (plan 87 M8, D-pad only, three tries):** Up from "Support my Steam Sale habit" went to "Bugs & Feature Requests" each time; but the Deck was on its monitor, so the Deck's own screen is still not checked. Stays OPEN. Evidence `docs/test-evidence/plan87-M8-ABOUT-UP.json`.
+**Closed 2026-10-10:** the maintainer passed it on the Deck's own screen ("works as expected"), after it passed 3 of 3 on the monitor (`docs/test-evidence/plan87-P87-ABOUT-UP.json`). The plan 87 tab-scroll fix `0e652638` most likely fixed it. Evidence for the pass: the maintainer on the Deck's own screen, 2026-10-10, checks page. Done line in the roadmap; full entry in [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md#closed-2026-10-10-the-maintainers-checks-page-answers-after-plan-87).
+

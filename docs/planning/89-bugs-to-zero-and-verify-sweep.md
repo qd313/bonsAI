@@ -50,6 +50,10 @@ different tonight.
 15. **The usage limit:** accept a possible stop.
 16. **The helper cap is 15 at once, for this plan and for every session from now on** (2026-10-11, after reading the
     plan; was ten since 2026-09-29). Written into AGENTS.md and the runbook.
+17. **Tonight only, the weekly usage line is ignored on starting new helpers** (2026-10-11 evening, during the run).
+    The five-hour rule stays: nothing new past 75 percent of the five-hour window.
+18. **For future sessions the weekly line is 80 percent** (was 60): start no new helpers past 80 percent of the weekly
+    limit or 75 percent of the five-hour window. Written into AGENTS.md and the runbook.
 
 ## 3. The bugs, and what happens to each
 
@@ -132,8 +136,8 @@ planned, 1 bookkeeper, about 8 Deck drivers and 1 or 2 stand-in drivers.** The u
 stays as it is; it has no count of its own.
 
 Rules as in plan 87 § 5: helpers run only the tests for what they touched; the full suites run at landing. Before
-every new batch, read the app's usage figure; start nothing new past 60 percent of the week or 75 percent of the
-five-hour window. Notifications: one after each landing batch, one when truly blocked, one for the report. A helper
+every new batch, read the app's usage figure; tonight the line is the five-hour one only: start nothing new past 75
+percent of the five-hour window (the weekly line is ignored for this run, call 17). Notifications: one after each landing batch, one when truly blocked, one for the report. A helper
 in the rig's folder works on a branch of that repo, commits there, and never pushes; the one running the session
 restarts the rig's tool server to pick up a change (the tool server reads its built code at start).
 
@@ -298,6 +302,12 @@ deploy), and the Settings walk needing a third round.
 - **2026-10-11 17:45:** the fifteen calls in (D128); the plan rewritten for the Opus chat; a note added to plan 86
   about what changes under it. The plan 87 chat could not be closed from here (its Remote Control link counts as live
   work); the maintainer closes it. Nothing built, nothing pressed.
+- **2026-10-11 18:00–18:30:** the Opus chat started. The tip f561c0e5 passed the quick check. Nine helpers started at
+  once (the docs constant and the status-check stop on Haiku; text size, the mic rule, the AI leaving memory sooner,
+  Update with downloads off, the rig's open-after-reload and its settings snapshot on Sonnet high; the delete box on
+  Sonnet medium). The install link was confirmed fixed on GitHub (v0.4.9 is Latest). Usage at the start: five-hour
+  window 59 percent (resets 19:00), week 50 percent. The maintainer's calls 17 and 18 (the weekly line) came in.
+  Old helper copies: 23 fully landed copies deleted (the shared packages folder checked before and after, unchanged); 13 with unlanded work kept and filed as a roadmap entry at the maintainer's request.
 
 ## 13. For the builders: where the code is (checked 2026-10-11 at `4e962bd3`)
 

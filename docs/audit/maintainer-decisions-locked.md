@@ -2258,5 +2258,10 @@ Made by the maintainer on 2026-10-11, early evening, answering a numbered list i
 16. **The helper cap is 15 editing helpers at once, for this plan and for every session from now on** (added after
     the plan was read: first "raise the cap to 15" for the night, then "for all sessions going forward"). Replaces the
     cap of ten from 2026-09-29. AGENTS.md, the bug-wave runbook and the routing evidence say fifteen now.
+17. **Tonight only, the weekly usage line is ignored on starting new helpers** (added during the run, evening of
+    2026-10-11). The old line was: start nothing new past 60 percent of the week. The five-hour rule stays: nothing new
+    past 75 percent of the five-hour window.
+18. **For future sessions, the weekly line is 80 percent** (was 60): start no new helpers past 80 percent of the weekly
+    limit or 75 percent of the five-hour window. Written into AGENTS.md and the bug-wave runbook.
 
 **At Go:** nothing is pushed; the maintainer publishes.

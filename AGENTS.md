@@ -369,7 +369,8 @@ Rules that go with it:
   at most three for a refactor, because refactor lanes overlap on files. Each brief carries the check on what its copy is based on, which
   files it owns, one change per commit, and the gates to run. **Lanes hand back code, tests and a
   short report only** — they never edit the roadmap, the testing documents or the changelog. Do not
-  start lanes just before the usage window resets. **The whole procedure for a bug wave** (briefs,
+  start lanes just before the usage window resets. Start no new helpers past 80 percent of the weekly limit or 75
+  percent of the five-hour window (the maintainer's call 2026-10-11, D128). **The whole procedure for a bug wave** (briefs,
   landing, the Deck in blocks, paperwork, running unattended) is written down in
   [docs/agents/bug-wave-runbook.md](docs/agents/bug-wave-runbook.md); land with `scripts/land_lane.sh`.
 - **Haiku 4.5 is on trial** for read-only lookups whose answer can be checked, and for summarising

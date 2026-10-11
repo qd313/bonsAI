@@ -232,6 +232,116 @@ describe("useVoiceAskInput when the box is emptied while the mic is still listen
   });
 });
 
+describe("useVoiceAskInput when the mic's words and the box land in two separate renders", () => {
+  /**
+   * Steam's React does not always batch two updates made outside a button press into one render.
+   * The mic writes "what the mic wrote" first and the box's text second, so for one render the words
+   * are set and the box is still empty. That in-between state is the mic's own and must never read
+   * as "the person emptied the box" (the likely cause of the early stop seen with a real voice on tiny.en,
+   * 2026-10-10; a guess from reading the code until the Deck shows it).
+   *
+   * The screen below holds the box's new text back until the test lets it through, so every mic write
+   * is two renders: the words first (box still as it was), then the box.
+   */
+  const quiet = () => {
+    setRpcHandler("start_voice_transcription", () => ({ accepted: true }));
+    setRpcHandler("get_voice_transcription_status", () => ({
+      status: "recording",
+      recording: true,
+      streaming: true,
+      partial_transcript: "",
+      finalized_transcript: "",
+    }));
+  };
+
+  const unbatchedScreen = () => {
+    const held: { value: string | null } = { value: null };
+    const renders: { box: string; last: string }[] = [];
+    const hook = renderHook(() => {
+      const [box, setBox] = useState("");
+      const setUnifiedInput: Dispatch<SetStateAction<string>> = (v) => {
+        held.value = String(v);
+      };
+      const voice = useVoiceAskInput({ setUnifiedInput, unifiedInput: box, microphoneAccess: true, isAsking: false, uiT });
+      renders.push({ box, last: voice.lastVoiceText });
+      return { box, setBox, voice };
+    });
+    /** One mic write as Steam's React may run it: the words render, then (a later render) the box. */
+    const micWrites = async (text: string) => {
+      const write = vi.mocked(useVoiceTranscription).mock.calls.at(-1)![0];
+      await act(async () => {
+        write(text);
+      });
+      await act(async () => {
+        hook.result.current.setBox(held.value ?? "");
+      });
+    };
+    const startListening = async () => {
+      await act(async () => {
+        hook.result.current.voice.onMicInput();
+        await new Promise((r) => setTimeout(r, 60));
+      });
+      expect(hook.result.current.voice.voiceRecording).toBe(true);
+    };
+    return { ...hook, renders, micWrites, startListening };
+  };
+
+  it("keeps listening through several partial transcripts and the box grows to the last one", async () => {
+    quiet();
+    const { result, renders, micWrites, startListening } = unbatchedScreen();
+    await startListening();
+    const heard = ["how do", "how do i beat", "how do i beat the first boss", "how do i beat the first boss quickly"];
+    for (const text of heard) {
+      await micWrites(text);
+      expect(result.current.voice.voiceRecording).toBe(true);
+      expect(result.current.box).toBe(text);
+    }
+    // The in-between render really happened: the mic's words set, the box still empty.
+    expect(renders.some((r) => r.last !== "" && r.box === "")).toBe(true);
+    expect(getRpcCallLog().some((c) => c.method === "stop_voice_transcription")).toBe(false);
+  });
+
+  it("still ends dictation when the person empties the box with the X afterwards", async () => {
+    quiet();
+    const { result, micWrites, startListening } = unbatchedScreen();
+    await startListening();
+    await micWrites("how do i beat");
+    await micWrites("how do i beat the first boss");
+    expect(result.current.voice.voiceRecording).toBe(true);
+    await act(async () => {
+      result.current.setBox("");
+    });
+    expect(result.current.voice.voiceRecording).toBe(false);
+    expect(getRpcCallLog().some((c) => c.method === "stop_voice_transcription")).toBe(true);
+  });
+
+  it("still ends dictation when the person deletes the text by hand", async () => {
+    quiet();
+    const { result, micWrites, startListening } = unbatchedScreen();
+    await startListening();
+    await micWrites("how do i beat");
+    // Hand deleting goes down one step at a time, to nothing.
+    await act(async () => {
+      result.current.setBox("how do i");
+    });
+    expect(result.current.voice.voiceRecording).toBe(true);
+    await act(async () => {
+      result.current.setBox("");
+    });
+    expect(result.current.voice.voiceRecording).toBe(false);
+  });
+
+  it("does not end a recording that has heard nothing yet while the box is empty", async () => {
+    quiet();
+    const { result, startListening } = unbatchedScreen();
+    await startListening();
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 300));
+    });
+    expect(result.current.voice.voiceRecording).toBe(true);
+  });
+});
+
 describe("useVoiceAskInput while an answer is arriving", () => {
   it("answers a mic press with a short toast and starts no recording", async () => {
     vi.mocked(toaster.toast).mockClear();

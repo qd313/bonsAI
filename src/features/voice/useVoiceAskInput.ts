@@ -113,6 +113,10 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
   /** The exact text the mic last wrote into the field, kept so Ask time can tell a hand edit apart
    * from an unmodified dictation even though the flag above stays set either way. */
   const [lastVoiceText, setLastVoiceText] = useState("");
+  /** True once a render has shown the box holding some text since the mic last started or was cut off.
+   * The "box was emptied" rule below trusts an empty box only after this, because the mic writes
+   * `lastVoiceText` and the box in two steps and Steam's React may render between them. */
+  const boxShownFilledRef = useRef(false);
 
   const setUnifiedInputFromVoice = useCallback<Dispatch<SetStateAction<string>>>(
     (value) => {
@@ -216,7 +220,10 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
     (forgetWords: boolean) => {
       invalidateVoice();
       setVoiceRecording(false);
-      if (forgetWords) setLastVoiceText("");
+      if (forgetWords) {
+        setLastVoiceText("");
+        boxShownFilledRef.current = false;
+      }
       // Raw call(), no deadline, like the other stop path: stop reads the whole recording once more,
       // which can exceed any UI timeout on Deck hardware. Nobody uses its text here; the button is
       // amber until the back end is done, so a new press does not collide with it.
@@ -228,8 +235,21 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
     [invalidateVoice],
   );
 
+  /*
+   * Why "the box has been seen filled" and not just "words written, box empty": the mic writes the
+   * words (`lastVoiceText`) and the box's text in two separate state updates. Without batching (Steam's
+   * React) there would be a render between them with the words set and the box still empty, and the
+   * rule below would end dictation on the first words. This is the likely cause of the early stop seen
+   * with a real voice on tiny.en (2026-10-10), a guess from reading the code until the Deck shows it. A box
+   * can only have been emptied by the person if it was showing text first, so the rule waits until a
+   * render has shown the box filled. Then the X or a hand delete still ends dictation as before.
+   */
   useEffect(() => {
-    if (!voiceRecording || lastVoiceText === "" || a.unifiedInput.trim() !== "") return;
+    if (a.unifiedInput.trim() !== "") {
+      boxShownFilledRef.current = true;
+      return;
+    }
+    if (!voiceRecording || lastVoiceText === "" || !boxShownFilledRef.current) return;
     endDictation(true);
   }, [voiceRecording, lastVoiceText, a.unifiedInput, endDictation]);
 
@@ -273,6 +293,7 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
        "box was emptied, so dictation is over" rule above fire the moment this recording begins (box
        emptied by hand or script after a dictation: the first press stopped itself 94 ms later). */
     setLastVoiceText("");
+    boxShownFilledRef.current = false;
     setVoiceStarting(true);
     void startVoiceTranscription(a.unifiedInput)
       .then(() => {

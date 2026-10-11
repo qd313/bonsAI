@@ -18,11 +18,7 @@ import { toaster } from "@decky/api";
 import { Navigation } from "@decky/ui";
 
 import { MODEL_POLICY_README_URL } from "../../data/modelPolicy";
-import { getSteamSettingsUrl } from "../../data/steamSettingsNavigation";
-
-type SteamUrlApi = {
-  ExecuteSteamURL(url: string): void;
-};
+import { openSteamSettingsPage } from "../../data/steamSettingsNavigation";
 
 export type ExternalNavigationActions = {
   openModelPolicyReadme: () => void;
@@ -47,8 +43,7 @@ export function useExternalNavigationActions(): ExternalNavigationActions {
 
   const onOpenControllerSettingsForShortcut = useCallback(() => {
     try {
-      const steamUrlApi = SteamClient.URL as unknown as SteamUrlApi;
-      steamUrlApi.ExecuteSteamURL(getSteamSettingsUrl("Settings > Controller"));
+      openSteamSettingsPage("Settings > Controller");
       toaster.toast({ title: "Opening settings", body: "Controller", duration: 2000 });
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);

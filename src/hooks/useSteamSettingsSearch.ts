@@ -9,13 +9,9 @@ import { useCallback, useMemo, type Dispatch, type SetStateAction } from "react"
 import { toaster } from "@decky/api";
 import { Navigation } from "@decky/ui";
 import { SETTINGS_DATABASE } from "../data/settingsDatabase";
-import { getQamTab, getSteamSettingsUrl, isQamSetting } from "../data/steamSettingsNavigation";
+import { getQamTab, isQamSetting, openSteamSettingsPage } from "../data/steamSettingsNavigation";
 import { searchSettingsWithIntentPacks } from "../utils/intentPackSearch";
 import type { IntentPackSearchIndex } from "../utils/intentPackSearch";
-
-type SteamUrlApi = {
-  ExecuteSteamURL(url: string): void;
-};
 
 export type UseSteamSettingsSearchOptions = {
   unifiedInput: string;
@@ -130,9 +126,7 @@ export function useSteamSettingsSearch({
           return;
         }
 
-        const steamUrlApi = SteamClient.URL as unknown as SteamUrlApi;
-        const steamUrl = getSteamSettingsUrl(settingPath);
-        steamUrlApi.ExecuteSteamURL(steamUrl);
+        openSteamSettingsPage(settingPath);
         toaster.toast({ title: "Opening settings", body: settingPath, duration: 2000 });
         setNavigationMessage(`Opened: ${settingPath}`);
       } catch (error) {

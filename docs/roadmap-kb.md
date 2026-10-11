@@ -95,9 +95,11 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   helpful or whether the model admitted not knowing. Add questions no card can answer, scored for an honest "I don't
   know", and a monthly read of ten replies by a person. **Sighting 2026-09-26:** a plain tip ("raise Render Scale") became
   advice that contradicts itself. [Detail](roadmap-kb-details.md#flow-l7-findings)
-- ★★★ `[KB]` **KB visual maps** — **OPEN.** Two shapes you named 2026-08-29: a dungeon map, and a boss outline with weak
-  points marked. Nothing draws anything in a reply today. A dungeon map has to be authored, which sits behind the source
-  policy and a corpus rebuild. Research first. [Detail](roadmap-kb-details.md#kb-visual-maps)
+- ★★★ `[KB]` **KB visual maps** — **OPEN; two shapes picked on the mock-up board 2026-10-10.** Nothing draws anything in a reply today.
+  **A route, one step at a time** (the maintainer: the best take on the strategy checklist): for "how do I get to…", the way there as a line of stops with what you need on the way. Later steps are covered; A shows the next. It needs no map picture.
+  **Your screenshot, marked**: up to three numbered marks (hit, avoid, dodge), each saying whether the Deck's AI is sure; an unsure mark is dashed. A scoring test first: a stronger model scores, out of ten, what the Deck's models mark, and helps teach them.
+  Not chosen as drawn: a fuller boss card, a whole-kingdom map. An area map must look real; maps taken from the game or a wiki need a licence check first.
+  [Mock-up board, tab 5](https://claude.ai/artifact/XyZfUSPGRZdm2P3mTGV9tR) · [notes](demos/mockup-board/README.md) · [Detail](roadmap-kb-details.md#kb-visual-maps)
 - ★★★ `[KB]` **Spoiler coverage as a tiered setting** — **OPEN, tiers confirmed 2026-09-01
   ([D50](audit/maintainer-decisions-archive.md#d50--locked-2026-09-01--spoiler-tiers-confirmed)).** Strict fences bosses,
   endings and chapters. Default fences only named story beats and endings. Open fences nothing you asked about. Naming a

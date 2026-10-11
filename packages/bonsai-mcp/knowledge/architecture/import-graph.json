@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 834,
-  "edgeCount": 2550,
+  "fileCount": 835,
+  "edgeCount": 2560,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1460,7 +1460,8 @@
     },
     "src/components/OllamaSetupStatusLine.tsx": {
       "imports": [
-        "src/components/OllamaWhereAiRunsSection.types.ts"
+        "src/components/OllamaWhereAiRunsSection.types.ts",
+        "src/features/downloads/downloadNotice.tsx"
       ],
       "importedBy": [
         "src/components/OllamaWhereAiRunsSection.tsx"
@@ -1545,6 +1546,18 @@
         "src/hooks/useMdnsOllamaDiscovery.tsx"
       ]
     },
+    "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx": {
+      "imports": [
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/features/downloads/downloadNotice.tsx",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/features/plugin-shell/settingsLoadedSignal.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx": {
       "imports": [
         "src/components/OllamaWhereAiRunsSection.tsx",
@@ -1626,6 +1639,7 @@
       "importedBy": [
         "src/components/OllamaFindLanHidden.test.tsx",
         "src/components/OllamaTab.tsx",
+        "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
         "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
@@ -2501,6 +2515,7 @@
         "src/components/MainTabChatTranscript.textSize.test.tsx",
         "src/components/OllamaSavedHostsRows.tsx",
         "src/components/OllamaTab.tsx",
+        "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
         "src/components/PermissionsTab.internetDownloads.test.tsx",
@@ -3845,6 +3860,8 @@
       ],
       "importedBy": [
         "src/components/KnowledgeBaseSection.tsx",
+        "src/components/OllamaSetupStatusLine.tsx",
+        "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
@@ -3853,6 +3870,7 @@
         "src/features/downloads/downloadNotice.test.tsx",
         "src/features/downloads/downloadSites.ts",
         "src/hooks/localOllamaStarterSet.tsx",
+        "src/hooks/useLocalOllamaSetupFlow.inPlace.test.tsx",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx",
@@ -3867,6 +3885,7 @@
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
         "src/hooks/localOllamaStarterSet.tsx",
+        "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx"
       ]
@@ -4028,6 +4047,7 @@
         "src/components/OllamaModelsHubModal.tsx",
         "src/components/OllamaTab.modalReturnFocus.test.tsx",
         "src/components/OllamaTab.tsx",
+        "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
         "src/components/OllamaWhereAiRunsSection.returnFocus.test.tsx",
@@ -4090,6 +4110,7 @@
       "imports": [],
       "importedBy": [
         "src/components/OllamaFindLanHidden.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
         "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
@@ -5467,6 +5488,7 @@
     "src/hooks/useLocalOllamaSetupFlow.inPlace.test.tsx": {
       "imports": [
         "src/components/OllamaWhereAiRunsSection.types.ts",
+        "src/features/downloads/downloadNotice.tsx",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/fakeDeckyUi.tsx"
@@ -5478,6 +5500,7 @@
         "src/components/OllamaWhereAiRunsSection.constants.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
         "src/features/downloads/downloadNotice.tsx",
+        "src/features/downloads/downloadSites.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/hooks/localOllamaStarterSet.tsx",
         "src/utils/deckyCall.ts",
@@ -6793,6 +6816,7 @@
         "src/components/MainTabPresetRow.ringHold.test.tsx",
         "src/components/MainTabPresetRow.test.tsx",
         "src/components/OllamaFindLanHidden.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
         "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
         "src/components/OllamaWhereAiRunsSection.noBoxNoteReturn.test.tsx",
@@ -6921,6 +6945,7 @@
         "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
         "src/components/OllamaTab.terseMode.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
         "src/components/OllamaWhereAiRunsSection.walk.test.tsx",

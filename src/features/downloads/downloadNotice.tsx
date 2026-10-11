@@ -92,6 +92,23 @@ export function useDownloadPermissionBridge(b: PermissionBridge): void {
   }, [enabled, kidsLockActive, capabilities, setCapabilities, onBeforeDeckyModal, onCompleteDeckyModalClose]);
 }
 
+/**
+ * The failed line the Ollama tab shows when a press was refused because Internet downloads are off.
+ * One wording for every place that shows it (the Update press that opens the box, and a refusal the
+ * back end sends back), so the person reads the same words each time.
+ */
+export const DOWNLOADS_OFF_FAILED_LINE = "Failed (check the Internet downloads permission?)";
+
+/** True when the permission is off and the box can ask (not under the kids lock, which no box can lift). */
+export function internetDownloadsAreOff(): boolean {
+  return bridge != null && !bridge.enabled && !bridge.kidsLockActive;
+}
+
+/** True only when the plugin root says downloads are on; false with no root mounted (tests of one screen). */
+export function internetDownloadsAreOn(): boolean {
+  return bridge != null && bridge.enabled;
+}
+
 /** The plain sentence for one site. */
 export function downloadNoticeLine(n: DownloadNotice): string {
   return `bonsAI will connect to ${n.site} to download ${n.what} (${n.size ?? SIZE_NOT_KNOWN}).`;

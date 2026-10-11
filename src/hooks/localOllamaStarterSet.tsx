@@ -18,7 +18,7 @@
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { TIER1_ESSENTIALS_TAG } from "../data/deckEssentialsTags";
-import { confirmDownload, type DownloadNotice } from "../features/downloads/downloadNotice";
+import { confirmDownload, DOWNLOADS_OFF_FAILED_LINE, type DownloadNotice } from "../features/downloads/downloadNotice";
 import { modelPullNotice } from "../features/downloads/downloadSites";
 import type { LocalOllamaSetupStatus } from "../components/OllamaWhereAiRunsSection.types";
 import {
@@ -76,14 +76,16 @@ export function startLocalOllamaSetup(
     onStatus?.({ phase: "failed", stage: "", profile, error: reason, done: true });
   };
   if (onRefused) onStatus?.({ phase: "running", stage: "check", profile, done: false });
-  void callDeckyWithTimeout<[{ profile: string }], { accepted?: boolean; reason?: string }>(
+  void callDeckyWithTimeout<[{ profile: string }], { accepted?: boolean; reason?: string; error?: string }>(
     "start_local_ollama_setup",
     [{ profile }],
     15000
   )
     .then((out) => {
       if (!out?.accepted) {
-        refuse(out?.reason ?? "Unknown error.", "Setup not started");
+        // In place, the tab's failed line names the likely cause in the same words as the Update press.
+        const downloadsOff = out?.error === "downloads_off" && onRefused != null;
+        refuse(downloadsOff ? DOWNLOADS_OFF_FAILED_LINE : (out?.reason ?? "Unknown error."), "Setup not started");
         return;
       }
       if (!onRefused) {

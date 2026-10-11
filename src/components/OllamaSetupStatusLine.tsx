@@ -17,6 +17,7 @@
  * above it are the only stops.
  */
 import type { LocalOllamaSetupStatus } from "./OllamaWhereAiRunsSection.types";
+import { DOWNLOADS_OFF_FAILED_LINE } from "../features/downloads/downloadNotice";
 
 const SUCCESS_TEXT = "#86efac";
 
@@ -69,7 +70,9 @@ export function OllamaSetupStatusLine({
           style={{ fontSize: 11, color: "tomato", lineHeight: 1.35, whiteSpace: "pre-wrap" }}
           aria-live="polite"
         >
-          {status.phase === "cancelled" ? plainWords(status.error) : `Failed: ${plainWords(status.error)}`}
+          {status.phase === "cancelled" || status.error === DOWNLOADS_OFF_FAILED_LINE
+            ? plainWords(status.error)
+            : `Failed: ${plainWords(status.error)}`}
         </div>
       ) : null}
       {logLines.length > 0 ? (

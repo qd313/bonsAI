@@ -11,7 +11,8 @@ import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const hoisted = vi.hoisted(() => ({ confirms: 0, modals: 0 }));
-vi.mock("../features/downloads/downloadNotice", () => ({
+vi.mock("../features/downloads/downloadNotice", async (orig) => ({
+  ...(await orig<typeof import("../features/downloads/downloadNotice")>()),
   confirmDownload: async () => {
     hoisted.confirms += 1;
     return false;

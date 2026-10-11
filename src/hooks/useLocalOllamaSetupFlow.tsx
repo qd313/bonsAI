@@ -5,7 +5,8 @@
  * itself or updates it: the press behind "Install Ollama" / "Update AI &
  * models", which runs in place on the tab with no box (only on a Deck with no
  * models, one box asks the real question, whether to also install the starter
- * models), the Cancel button's RPC, the status-line wording while a setup
+ * models; and while Internet downloads are off, the failed line plus the "Turn
+ * on internet downloads?" box), the Cancel button's RPC, the status-line wording while a setup
  * runs, the poll that reads setup progress every 1.5 seconds, and the effect
  * that runs a connection test automatically once a setup finishes cleanly.
  *
@@ -43,7 +44,20 @@ import {
 import { startLocalOllamaSetup, starterSetBoxBody, starterSetNotices } from "./localOllamaStarterSet";
 import { rememberReturnWhileBoxOpens } from "../utils/rememberReturnWhileBoxOpens";
 import type { ModalReturnFocusId } from "../features/plugin-shell/modalReturnFocusRegistry";
-import { confirmDownload } from "../features/downloads/downloadNotice";
+import {
+  confirmDownload,
+  DOWNLOADS_OFF_FAILED_LINE,
+  internetDownloadsAreOff,
+  internetDownloadsAreOn,
+} from "../features/downloads/downloadNotice";
+import { UPDATE_AI_NOTICES } from "../features/downloads/downloadSites";
+
+/**
+ * The "check the Internet downloads permission" failed line outlives the tab: the box it opens
+ * rebuilds the tab on close, and a hook ref would be lost with it. Only this one line is kept; every
+ * other refusal still lives in the hook, as before.
+ */
+let heldDownloadsOffLine = false;
 
 /**
  * The starter-models question, the in-place run, the Cancel RPC, the status-line wording, the setup poll, and the
@@ -105,7 +119,11 @@ export function useLocalOllamaSetupFlow({
    * so the reason is kept here and shown as a failed line until a run starts; the poll would
    * otherwise wipe it 1.5 seconds later.
    */
-  const refusalRef = useRef("");
+  const refusalRef = useRef(heldDownloadsOffLine ? DOWNLOADS_OFF_FAILED_LINE : "");
+  const setRefusal = (reason: string) => {
+    refusalRef.current = reason;
+    heldDownloadsOffLine = reason === DOWNLOADS_OFF_FAILED_LINE;
+  };
 
   const runLocalSetupInPlace = useCallback(
     (
@@ -118,6 +136,14 @@ export function useLocalOllamaSetupFlow({
         // A Deck with no models: one box asks whether to also install the starter models, with the
         // ring on "Not now". Declining (or B) installs the engine only, as before.
         let chosen: string = profile;
+        if (!opts?.offerStarterModels && internetDownloadsAreOff()) {
+          // Downloads are off: say so on the tab AND ask to turn them on, as the Install buttons do.
+          // The note that returns the ring here is armed only because this box really opens.
+          setRefusal(DOWNLOADS_OFF_FAILED_LINE);
+          setLocalSetupStatus({ phase: "failed", stage: "", profile, error: DOWNLOADS_OFF_FAILED_LINE, done: true });
+          const turnedOn = await rememberReturnWhileBoxOpens(returnId, () => confirmDownload(UPDATE_AI_NOTICES));
+          if (!turnedOn) return;
+        }
         if (opts?.offerStarterModels) {
           const wantsStarter = await rememberReturnWhileBoxOpens(returnId, () =>
             confirmDownload(starterSetNotices(), {
@@ -129,12 +155,10 @@ export function useLocalOllamaSetupFlow({
           );
           if (wantsStarter) chosen = LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS;
         }
-        refusalRef.current = "";
+        setRefusal("");
         setupAutoTestRanRef.current = false;
         lastCompletedSetupProfileRef.current = chosen;
-        startLocalOllamaSetup(chosen, setLocalSetupStatus, (reason) => {
-          refusalRef.current = reason;
-        });
+        startLocalOllamaSetup(chosen, setLocalSetupStatus, setRefusal);
       })();
     },
     [localSetupBusy]
@@ -154,7 +178,9 @@ export function useLocalOllamaSetupFlow({
         DECKY_RPC_TIMEOUT_MS
       )
         .then((st) => {
-          if (st.phase !== "idle") refusalRef.current = "";
+          if (st.phase !== "idle") setRefusal("");
+          // Downloads were turned on elsewhere (the Permissions tab): the old reason no longer applies.
+          else if (refusalRef.current === DOWNLOADS_OFF_FAILED_LINE && internetDownloadsAreOn()) setRefusal("");
           setLocalSetupStatus(
             st.phase === "idle" && refusalRef.current
               ? { ...st, phase: "failed", error: refusalRef.current, done: true }

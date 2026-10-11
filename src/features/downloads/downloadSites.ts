@@ -31,6 +31,12 @@ export const OLLAMA_PROGRAM_NOTICE: DownloadNotice = {
   size: null,
 };
 
+/** "Update AI & models": the newest Ollama, then newer copies of the models already installed. */
+export const UPDATE_AI_NOTICES: DownloadNotice[] = [
+  { site: OLLAMA_SITE, what: "the newest Ollama", size: null },
+  { site: OLLAMA_REGISTRY_SITE, what: "newer versions of the models you have installed", size: null },
+];
+
 /** One or more models by name; `size` from the bundled catalog when every one has a size. */
 export function modelPullNotice(tags: readonly string[], size: string | null): DownloadNotice {
   return { site: OLLAMA_REGISTRY_SITE, what: tags.join(", "), size };

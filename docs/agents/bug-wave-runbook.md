@@ -13,7 +13,7 @@ session.
 | Who | Does | Never |
 |---|---|---|
 | The one running the session (Opus) | Writes the briefs and the Deck checks, reads every change before it lands, lands, reads every Deck failure, decides anything unclear | Writes code; edits the roadmap or testing documents by hand |
-| Fix helpers (`bugfix-lane`, up to ten at once) | One bug each in its own copy of the repo, one fix per commit, every check green | Touch the roadmap, the testing documents, the changelog, the Deck |
+| Fix helpers (`bugfix-lane`, up to fifteen at once since 2026-10-11) | One bug each in its own copy of the repo, one fix per commit, every check green | Touch the roadmap, the testing documents, the changelog, the Deck |
 | A read-only lookup helper | Collects every owed Deck check the rig can run into one list of exact steps | Edits anything |
 | The bookkeeper | Every roadmap, testing and changelog change, from result lists the session writes | Invents a Deck result; commits while a landing runs |
 | The Deck driver (one at a time, a fresh one per block) | Runs written checks, one evidence file each | Fixes, edits, deploys unless told, decides what an unclear result means |

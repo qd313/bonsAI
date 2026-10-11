@@ -2255,7 +2255,8 @@ Made by the maintainer on 2026-10-11, early evening, answering a numbered list i
 14. **The old helper copies of the repo** whose work has landed are deleted; a copy holding unlanded work is kept and
     named in the report.
 15. **The usage limit:** no extra usage; a stop at the weekly cap is accepted, and helpers resume after the reset.
-16. **The helper cap for this plan is 15 editing helpers at once** (added after the plan was read, "everything else
-    looks good"). The standing cap of ten in AGENTS.md is unchanged for other sessions, as plan 79's fifteen was.
+16. **The helper cap is 15 editing helpers at once, for this plan and for every session from now on** (added after
+    the plan was read: first "raise the cap to 15" for the night, then "for all sessions going forward"). Replaces the
+    cap of ten from 2026-09-29. AGENTS.md, the bug-wave runbook and the routing evidence say fifteen now.
 
 **At Go:** nothing is pushed; the maintainer publishes.

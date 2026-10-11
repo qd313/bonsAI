@@ -365,7 +365,7 @@ Rules that go with it:
 - **Haiku high on trial:** mechanical one-star fixes only. Log each run and any miss in plan 33 § 4d; a
   miss that needed Sonnet to finish counts against it. Not for judgment fixes, features or bookkeeping:
   plan 83 found it falls short there.
-- **Helper lanes:** at most ten for feature or bug work (the maintainer's call 2026-09-29, was seven; fifteen for plan 79 only, D122),
+- **Helper lanes:** at most fifteen for feature or bug work (the maintainer's call 2026-10-11, D128; was ten from 2026-09-29, seven before that),
   at most three for a refactor, because refactor lanes overlap on files. Each brief carries the check on what its copy is based on, which
   files it owns, one change per commit, and the gates to run. **Lanes hand back code, tests and a
   short report only** — they never edit the roadmap, the testing documents or the changelog. Do not

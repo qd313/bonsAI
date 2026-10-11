@@ -1,0 +1,55 @@
+<style>
+/* ---------- SteamOS around the panel, measured from Deck screenshots on 2026-10-11 ----------
+   The Deck's own screen is 1280 by 800 at 1.5 screen pixels per panel pixel, so in the panel's own
+   pixels: Steam's top bar 40, the panel 454, Steam's button bar 40; the Quick Access side menu is
+   48 wide beside the 300-wide panel. Colours are sampled pixels:
+   panel #0e141b, ring fill on a row #32373d, row divider #272c32, Steam button #32373d (white with the
+   ring), switch on #1a9fff / off #32373d, labels #dcdedf (white with the ring), descriptions #b8bcbf,
+   section headings #b7b9bb, side-menu icons #8b929a, its picked item #23262e, the current tab #52d88a. */
+.steam { display: grid; grid-template-rows: 40px 454px 40px; width: 348px; background: #0b0f13; font-family: var(--q-font); color: #fff; box-shadow: 0 8px 30px rgba(0,0,0,.5); border-radius: 3px; overflow: hidden; }
+.steam .qam { box-shadow: none; border-left: 0; }
+.st-top { display: flex; align-items: center; justify-content: flex-end; gap: 0; padding: 0 10px 0 12px; background: linear-gradient(180deg, #06090b, #0a0e11); }
+.st-top .st-i { width: 17px; height: 17px; color: #fff; display: inline-flex; margin-right: 19px; }
+.st-top .st-i svg { width: 100%; height: 100%; }
+.st-top .st-i.first { margin-right: 19px; }
+.st-batt { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 500; margin-right: 20px; letter-spacing: 0.01em; }
+.st-batt i { position: relative; width: 25px; height: 12px; border: 1.5px solid #fff; border-radius: 2px; display: inline-block; }
+.st-batt i::before { content: ""; position: absolute; inset: 1.5px; right: 4px; background: #47c552; border-radius: 1px; }
+.st-batt i::after { content: ""; position: absolute; right: -4px; top: 3px; width: 2px; height: 4px; background: #fff; border-radius: 0 1px 1px 0; }
+.st-time { font-size: 15px; font-weight: 500; margin-right: 14px; white-space: nowrap; }
+.st-avatar { width: 33px; height: 33px; border-radius: 3px; background: linear-gradient(135deg, #3b4a63, #6a4a7c 60%, #b0507a); box-shadow: inset 0 0 0 1.5px #e05ca3; display: grid; place-items: center; font-size: 14px; font-weight: 700; color: rgba(255,255,255,.85); }
+.st-mid { display: grid; grid-template-columns: 48px 300px; min-height: 0; }
+.st-rail { background: #0e141b; display: flex; flex-direction: column; padding-top: 1px; border-right: 1px solid #070a0d; }
+.st-rail span { height: 64px; display: grid; place-items: center; color: #8b929a; position: relative; }
+.st-rail span svg { width: 21px; height: 21px; }
+.st-rail span.on { background: #23262e; }
+.st-rail span.on::after { content: ""; position: absolute; top: 12px; right: 10px; width: 8px; height: 8px; border-radius: 50%; background: #ffa500; }
+.st-foot { display: flex; align-items: center; justify-content: flex-end; gap: 7px; padding-right: 24px; background: linear-gradient(180deg, #0a0c0e, #040506); font-size: 13.5px; font-weight: 700; letter-spacing: 0.06em; }
+.st-foot b { width: 19px; height: 19px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 800; letter-spacing: 0; color: #fff; }
+.st-foot b.a { background: #59bf40; } .st-foot b.b { background: #c4402b; margin-left: 20px; }
+
+/* ---------- the plugin's tab bar as it ships: six tabs in fixed places, the current one named in green ---------- */
+.qam .k2-tabbar { display: flex; align-items: center; justify-content: space-between; gap: 0; padding: 0 15px 0 14px; grid-template-columns: none; }
+.qam .k2-sh { font-size: 9px; font-weight: 800; letter-spacing: 0.04em; color: #2d343d; opacity: 1; }
+.qam .k2-tb { display: inline-flex; align-items: center; gap: 4px; color: #6f7a86; }
+.qam .k2-tb .k2-ti { width: 12px; height: 12px; display: block; }
+.qam .k2-tb.on { color: #52d88a; }
+.qam .k2-tb.on .k2-ti { width: 13px; height: 13px; }
+.qam .k2-tb b { font-size: 11px; font-weight: 800; letter-spacing: 0.16em; line-height: 1; }
+.qam .k2-tb b.sc { font-variant: small-caps; letter-spacing: 0.12em; font-size: 12px; }
+.qam .k2-tb .k2-i { font-size: 13px; font-weight: 800; font-style: italic; line-height: 1; width: 12px; text-align: center; }
+
+/* ---------- the chat-name row as it ships: back, new chat, the name with its arrow, delete ---------- */
+.qam .k2-namerow { gap: 0; padding: 0 14px 0 16px; }
+.qam .k2-back { width: 40px; height: 28px; border-radius: 3px; background: #32373d; color: #e8eaed; }
+.qam .k2-plus { flex: none; width: 30px; display: grid; place-items: center; color: #a9bfd6; }
+.qam .k2-plus svg { width: 14px; height: 14px; stroke-width: 2; }
+.qam .k2-cpill { padding: 0 2px; }
+.qam .k2-nm::before { display: none; }
+.qam .k2-nm b { font-size: 13.5px; font-weight: 700; color: #eef1f4; }
+.qam .k2-car { color: #52d88a; margin-left: 2px; }
+.qam .k2-sub { font-size: 8.5px; color: #8b929a; }
+.qam .k2-key { opacity: 0.5; }
+.qam .k2-trash { flex: none; width: 22px; display: grid; place-items: center; color: #e5533d; }
+.qam .k2-trash svg { width: 14px; height: 14px; }
+</style>

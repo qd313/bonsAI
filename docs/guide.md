@@ -161,7 +161,13 @@ itself up on its own, so older parts aren't forgotten.
 2. On **Settings → Voice input**, pick a speech model — **base.en** (the default) is more accurate; **tiny.en** is
    lighter and quicker but makes more mistakes — then press **Install voice engine**. It builds the speech engine on the Deck, which
    takes a few minutes.
-3. Press the mic button on the question box and speak.
+3. Press the mic button on the question box and speak. Words appear as you talk, as a quick rough preview.
+4. Press the mic button again to stop, or press **Ask**. The button turns amber and reads **Finishing voice input**
+   for a moment while bonsAI reads the whole recording once more, then the text in the box is replaced with that
+   tidier version (no repeated phrases, no lost words). With no game running this takes about two seconds. With a
+   game running it takes a few seconds longer, about four or five, and a longer recording takes longer still.
+   If you press **Ask** while still talking, bonsAI waits for the tidier text and asks with it, so your last words
+   are never cut off. A recording stops by itself after two minutes.
 
 Your speech is turned into text on the Deck. The recording is deleted as soon as that's done.
 

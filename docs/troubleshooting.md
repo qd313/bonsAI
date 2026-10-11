@@ -232,11 +232,17 @@ component ("SD card", "controller layout", "remote play") rather than only the s
 
 **Cause (fixed 2026-07-07):** Voice RMS gate was too high for Gaming Mode mic levels (~150–250 RMS vs 350 threshold), so whisper never ran despite successful capture. Threshold lowered; filler hallucination filter unchanged.
 
+**Symptom:** After I press Stop the mic button turns amber and the words in the box change a little.
+
+**Cause:** This is on purpose. While you talk, bonsAI shows a quick rough preview. When you press Stop (or Ask) it reads the whole recording once more and swaps in that tidier text. With no game running the wait is about two seconds; with a game running it is about four or five seconds, and a longer recording takes longer. A recording also stops by itself after two minutes.
+
+**Fix:** Nothing to fix. Wait for the amber to clear; pressing the mic button during the wait does nothing. If you type in the box or press the X during the wait, the tidier text is dropped so it never overwrites you.
+
 **Symptom:** Interim text is slow or stalls.
 
-**Fix:** Close heavy games while transcribing. If it is still too slow, switch to **tiny.en**, which is lighter on the Deck but less accurate (it can repeat words). Audio is processed in RAM only — nothing is uploaded or saved to disk.
+**Fix:** The preview is lighter on purpose while a game runs (it updates every few seconds so the game keeps its speed); the text after Stop is the one to trust. Close heavy games while transcribing. If it is still too slow, switch to **tiny.en**, which is lighter on the Deck but less accurate (it can repeat words). Audio is processed in RAM only — nothing is uploaded or saved to disk.
 
-**Latency (2026-07-07):** Tier 1 tuning shortens decode interval/window, speeds UI poll, and uses 4 whisper threads (more CPU while mic is active).
+**Latency (2026-07-07):** Tier 1 tuning shortens decode interval/window, speeds UI poll, and uses 4 whisper threads (more CPU while mic is active). Changed 2026-10-11 (plan 88): the live preview now re-reads the recording so far (a block of at most 28 seconds) and rests as long as each read took, and Stop reads the whole recording once.
 
 **Session daemon (2026-07-17):** Mic sessions prefer a local `whisper-server` (`127.0.0.1:18765`) so the model loads once per recording. Re-run **Install voice engine** if you upgraded from an older build (incremental server install when CLI is already CPU-safe). If the server fails health checks, voice falls back to one-shot `whisper-cli` automatically.
 

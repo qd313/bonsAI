@@ -118,7 +118,8 @@ bonsAI summarizes the older part so it isn't forgotten, and you can ask it to su
 ### Talk instead of typing
 
 Press the mic button and talk. Your speech is turned into text on the Deck itself, and the
-recording is deleted as soon as that's done. bonsAI can also read answers aloud (beta).
+recording is deleted as soon as that's done. Words appear as you talk, and when you stop, bonsAI tidies the text with one
+more pass over the whole recording (a couple of seconds). bonsAI can also read answers aloud (beta).
 
 ### See how it answered
 

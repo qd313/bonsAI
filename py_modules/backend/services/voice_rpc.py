@@ -189,6 +189,8 @@ async def start_voice_transcription(self, PLUGIN_ROOT: str):
         else:
             old = None
     if old is not None:
+        # An earlier recording that is still finishing its final read is waited for here (force_stop
+        # joins the same worker), so the new recording never takes the engine out from under it.
         await asyncio.to_thread(old.force_stop)
 
     async with self._voice_lock:
@@ -218,10 +220,14 @@ async def start_voice_transcription(self, PLUGIN_ROOT: str):
 
 
 async def stop_voice_transcription(self):
-    """Stop capture and return finalized transcript."""
+    """Stop capture, read the whole recording once, and return that final transcript.
+
+    Returns only when the final text is ready (the screen calls this with no deadline). The session
+    stays registered until then: a start that arrives meanwhile finds it, waits for it to finish,
+    and only then opens a new recording, so two recordings never share the speech engine.
+    """
     async with self._voice_lock:
         session = self._voice_session
-        self._voice_session = None
     if session is None:
         logger.info("voice: stop pressed, no recording was running")
         return {
@@ -231,6 +237,10 @@ async def stop_voice_transcription(self):
             "partial_transcript": "",
         }
     out = await asyncio.to_thread(session.stop)
+    async with self._voice_lock:
+        # A newer start may already have replaced it; leave that one alone.
+        if self._voice_session is session:
+            self._voice_session = None
     logger.info(
         "voice: recording stopped, transcript %d characters",
         len(str(out.get("finalized_transcript") or "")),

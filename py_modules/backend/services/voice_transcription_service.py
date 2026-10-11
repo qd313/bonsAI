@@ -1,25 +1,29 @@
-"""Title: Turning your spoken question into text, live
+"""Title: Turning your spoken question into text, live and then once more at Stop
 
 Purpose: This is what happens between pressing the mic button and seeing
-your words appear as you talk: it records your microphone, feeds short
-slices of that recording to a local speech-to-text engine (whisper.cpp)
-again and again as you keep talking, and stitches those overlapping slices
-into one growing line of text. It is also what installs that engine in the
-first place -- SteamOS ships without it, so this file builds it from source
-inside a container the first time voice input is turned on, and downloads
-the speech model that engine reads from.
+your words in the question box: it records your microphone, shows words as
+you talk by reading the recording so far with a local speech-to-text engine
+(whisper.cpp), and when you press Stop (or Ask) it reads the whole recording
+once more in one go and hands back that cleaner text. It is also what installs
+that engine in the first place -- SteamOS ships without it, so this file builds
+it from source inside a container the first time voice input is turned on, and
+downloads the speech model that engine reads from.
 
 Used for: The mic button on the Ask bar. main.py creates one
 VoiceTranscriptionSession per recording and polls `status()` a few times a
 second while you are talking; the Settings screen's "Install voice engine"
 button drives `download_voice_model()` and `install_whisper_cli()`.
 
-Solves: Whisper only ever sees a few seconds of audio at a time, not your
-whole sentence, so a straightforward "decode and show" approach would repeat
-or drop words at the seams between one pass and the next. This file also
-copes with a Deck whose CPU does not support every instruction the built
-whisper binary assumes, and with a background plugin process that cannot
-simply "open the microphone" the way a normal desktop app can.
+Solves: Whisper reads a fixed window of audio per pass, so a running game
+slows down when the plugin asks for many passes, and stitching many short
+overlapping reads together repeats or drops words at the seams (found on the
+Deck on 2026-10-10: base.en took about 4.2 s per pass with a game running and
+fell behind, tiny.en repeated phrases). Here the live words are only a
+preview that is replaced as a whole on every pass, and the text you keep is the
+one pass over the whole recording at Stop (plan 88). This file also copes with
+a Deck whose CPU does not support every instruction the built whisper binary
+assumes, and with a background plugin process that cannot simply "open the
+microphone" the way a normal desktop app can.
 
 Does not: Talk to a cloud speech service, or listen for a wake word -- both
 are out of scope today. When the always-on background engine from
@@ -30,37 +34,37 @@ shared engine is started and stopped.
 Split (2026-09-24): finding and opening the microphone moved to
 voice_audio_capture_service.py, downloading the speech model moved to
 voice_model_download_service.py, turning one whisper decode pass into
-stitched, growing text moved to voice_transcript_decode_service.py, and
-compiling whisper.cpp from source inside its podman container moved to
-voice_engine_build_service.py. Every name any of them took is still
-imported back in here, so nothing outside this file had to change.
+text moved to voice_transcript_decode_service.py, and compiling whisper.cpp
+from source inside its podman container moved to voice_engine_build_service.py.
+Every name any of them took is still imported back in here, so nothing outside
+this file had to change.
 
 How it works:
 
-How a few seconds of audio become one growing line of text:
+How a recording becomes the text you keep:
 
-    mic --(pw-record / parecord / arecord)--> rolling buffer, last 30s
+    mic --(pw-record / parecord / arecord)--> the whole recording, kept up to
+                                              2 minutes (MAX_RECORDING_SECONDS)
                                                         |
-                               every 0.4s: grab the newest 3s of it
+        live, only while someone has just spoken, resting as long as the
+        last pass took: read the current block (at most 28 s, BLOCK_SECONDS)
+        from its start; that text REPLACES the block's earlier text
                                                         |
-                                                        v
-                                 whisper decodes that slice alone
+        a block that reaches 28 s is read once more over exactly those 28 s,
+        frozen, and the next block starts where it ended
                                                         |
-                        merge_sliding_window_transcript() stitches it onto
-                        what came before, using the words the two slices
-                        share in common so nothing doubles up or vanishes
+                                 screen shows: frozen blocks + current block
                                                         |
-                          2 seconds of silence? ---- no --> screen shows the
-                                  |                          growing partial
-                                 yes                              line
-                                  |
-                                  v
-                    partial line is folded into the finalized transcript,
-                    the partial clears, and listening continues
+    Stop, Ask, or the 2-minute limit -----> status "finishing" (recording off)
+                                                        |
+                       read the whole recording once with the chosen model
+                                                        |
+                          status "stopped", finalized_transcript = that text
+                          (if that read fails or hears nothing usable, the
+                          last live text is kept instead)
 
-    stop(), or silence past the limit -----> `_flush_final()` decodes
-    whatever audio is left over and appends it, so the last word spoken is
-    never lost to a boundary that happened to fall between two decode passes
+Rules the live part keeps: a pass that returns nothing never blanks words that
+already appeared; no pass runs when no speech has arrived since the last one.
 
 Installing the engine, the first time voice input is turned on:
  1. `download_voice_model()` fetches the chosen speech model file
@@ -87,6 +91,10 @@ Gotchas:
    body unreachable behind another method's return, and every voice request
    failed with a missing-attribute error until it was restored. Worth
    reading if this method is ever touched again.
+ - `stop()` returns only when the final text is ready, and its wait for the
+   worker thread is long on purpose: the engine is released right after it,
+   and releasing it under a pass still running made the next press unreliable.
+   The engine is released exactly once per session (`_release_engine_once`).
  - This runs as a background plugin process, not inside the normal desktop
    session, so it cannot simply assume where the microphone's audio socket
    lives -- `env_for_audio_capture()` and `_discover_session_runtime_dir()`
@@ -177,14 +185,33 @@ from backend.services.voice_whisper_runtime import (
 from backend.services.voice_whisper_daemon import get_whisper_engine
 
 BYTES_PER_SECOND = SAMPLE_RATE * CHANNELS * SAMPLE_WIDTH
-ROLLING_BUFFER_MAX_SECONDS = 30
-# Tier 1 latency tuning (2026-07-07): see docs/voice-input-follow-up.md for tradeoffs and Tier 2 options.
+# The shortest rest between two live passes, and how many times as long as the last pass took the
+# rest must be (plan 88). A pass on the Deck with a game running took about 4.2 s (base.en, 2026-10-10)
+# and the old loop started the next one at once, so the engine worked nearly all the time and the
+# game fell from 60 to 35 frames a second. Resting as long as the pass took keeps the engine busy about
+# half the time at most; the floor keeps a fast pass from running ten times a second.
 TRANSCRIBE_INTERVAL_S = 0.4
-WINDOW_SECONDS = 3
+LIVE_REST_FACTOR = 1.0
+# A live block reads the recording from where the block began. Whisper reads 30 s at a time, so a
+# block stops growing at 28 s: it is read once more over exactly those 28 s, frozen, and the next
+# block starts where it ended. Text from two blocks is joined, never matched on overlap.
+BLOCK_SECONDS = 28
+# A recording stops by itself here, as if Stop had been pressed (plan 88). Nobody asks a question for
+# two minutes, the whole recording is kept in memory (about 3.8 MB), and the final pass has to read it.
+MAX_RECORDING_SECONDS = 120
+# How long stop() waits for the worker thread: a live pass already running (the engine's own deadline
+# is 45 s) plus the final pass. Shorter than that and the engine was released under a pass still using
+# it, which made the next mic press unreliable.
+STOP_JOIN_TIMEOUT_S = 120.0
+# How long the final pass waits for the capture reader to hand over the last chunks of audio.
+READER_JOIN_TIMEOUT_S = 3.0
 WHISPER_MIN_DECODE_PCM_BYTES = BYTES_PER_SECOND // 4  # 0.25 s before first decode pass
-# Whether a window holds speech is decided by voice_level_gate.VoiceLevelGate (the Deck's own mic
-# is quiet, speech peaks at ~150–250 RMS, so a fixed average-loudness number cut quiet speakers off).
+# Unused by the session since plan 88; only tests/test_voice_overlap_merge.py still reads these two,
+# and the commit that removes the overlap-merge helpers removes them with it.
+WINDOW_SECONDS = 3
 SILENCE_HOLD_SECONDS = 2.0
+# Whether audio holds speech is decided by voice_level_gate.VoiceLevelGate (the Deck's own mic
+# is quiet, speech peaks at ~150–250 RMS, so a fixed average-loudness number cut quiet speakers off).
 
 
 def new_voice_transcription_state() -> dict[str, Any]:
@@ -322,7 +349,7 @@ def engine_readiness(plugin_root: str, settings_dir: str, model_id: str) -> dict
 
 
 class VoiceTranscriptionSession:
-    """Background capture + rolling whisper decode; thread-safe status reads."""
+    """Background capture + live whisper reads + one final read at Stop; thread-safe status reads."""
 
     def __init__(
         self,
@@ -338,19 +365,27 @@ class VoiceTranscriptionSession:
         self._lock = threading.Lock()
         self._state = new_voice_transcription_state()
         self._state["model_id"] = self.model_id
+        # Set by stop(): the person (or the screen) ended the recording.
         self._stop_event = threading.Event()
+        # Set when the recording ends by itself: the time limit, or the microphone going away.
+        self._finish_event = threading.Event()
+        # Set by force_stop(): tear down without the final pass (permission revoked, plugin unloading).
+        self._skip_final = False
         self._capture_proc: Optional[subprocess.Popen] = None
         self._reader_thread: Optional[threading.Thread] = None
         self._worker_thread: Optional[threading.Thread] = None
-        self._pcm_buffer: deque[bytes] = deque()
-        self._buffer_bytes = 0
-        self._max_buffer_bytes = ROLLING_BUFFER_MAX_SECONDS * BYTES_PER_SECOND
-        self._last_voice_monotonic = time.monotonic()
+        # Every sample from the start of the recording, up to MAX_RECORDING_SECONDS.
+        self._all_pcm = bytearray()
+        # Where the current live block begins in `_all_pcm`.
+        self._block_start = 0
+        self._frozen_text = ""
+        self._block_text = ""
+        # True when speech arrived since the last live pass began; a pass runs only then.
+        self._voiced_since_pass = False
         self._level_gate = VoiceLevelGate()
-        self._last_partial = ""
-        self._finalized = ""
         self._capture_backend = ""
         self._use_daemon = False
+        self._engine_held = False
 
     def _transcribe_pcm(
         self,
@@ -383,46 +418,49 @@ class VoiceTranscriptionSession:
             self._state.update(fields)
 
     def _append_pcm(self, chunk: bytes) -> None:
+        """Add audio to the whole-recording buffer; at the time limit, ask the recording to finish."""
         if not chunk:
             return
         with self._lock:
+            room = MAX_RECORDING_SECONDS * BYTES_PER_SECOND - len(self._all_pcm)
+            if room <= 0:
+                self._finish_event.set()
+                return
+            if len(chunk) >= room:
+                chunk = chunk[:room]
+                self._finish_event.set()
             if self._level_gate.observe(chunk):
-                self._last_voice_monotonic = time.monotonic()
-            self._pcm_buffer.append(chunk)
-            self._buffer_bytes += len(chunk)
-            while self._buffer_bytes > self._max_buffer_bytes and self._pcm_buffer:
-                dropped = self._pcm_buffer.popleft()
-                self._buffer_bytes -= len(dropped)
+                self._voiced_since_pass = True
+            self._all_pcm += chunk
 
-    def _window_pcm(self, seconds: float) -> bytes:
-        need = int(seconds * BYTES_PER_SECOND)
-        if need <= 0:
-            return b""
+    def _pcm_from(self, start: int, end: Optional[int] = None) -> bytes:
+        """A copy of the recording from byte `start` (to byte `end`, or to the latest audio)."""
         with self._lock:
-            chunks: list[bytes] = []
-            total = 0
-            for chunk in reversed(self._pcm_buffer):
-                chunks.append(chunk)
-                total += len(chunk)
-                if total >= need:
-                    break
-            chunks.reverse()
-            data = b"".join(chunks)
-        return data[-need:] if len(data) > need else data
+            return bytes(self._all_pcm[start:end])
 
-    def _drop_pcm_before(self, seconds: float) -> None:
-        drop_bytes = int(seconds * BYTES_PER_SECOND)
+    def _recorded_bytes(self) -> int:
         with self._lock:
-            while drop_bytes > 0 and self._pcm_buffer:
-                chunk = self._pcm_buffer.popleft()
-                if len(chunk) <= drop_bytes:
-                    drop_bytes -= len(chunk)
-                    self._buffer_bytes -= len(chunk)
-                else:
-                    keep = chunk[drop_bytes:]
-                    self._pcm_buffer.appendleft(keep)
-                    self._buffer_bytes -= drop_bytes
-                    drop_bytes = 0
+            return len(self._all_pcm)
+
+    def _live_text(self) -> str:
+        return _join_transcript_parts(self._frozen_text, self._block_text)
+
+    def _release_engine_once(self) -> None:
+        """Let go of the shared speech engine, once per session however many paths end it.
+
+        The engine counts holders by name, and every session is "mic": a second release, arriving
+        after a newer recording had already taken its hold, would drop the newer one.
+        """
+        with self._lock:
+            held, self._engine_held = self._engine_held, False
+        if held:
+            get_whisper_engine().release("mic")
+
+    def _begin_finishing(self) -> None:
+        """Recording is over for the person: the final pass is (about to be) running."""
+        with self._lock:
+            if self._state.get("status") == "recording":
+                self._state.update(status="finishing", recording=False, streaming=False)
 
     def start(self) -> dict[str, Any]:
         """Start one recording: check the engine is ready, open the
@@ -468,12 +506,14 @@ class VoiceTranscriptionSession:
             return {"accepted": True, "status": self.status()}
 
         self._stop_event.clear()
+        self._finish_event.clear()
+        self._skip_final = False
         with self._lock:
-            self._pcm_buffer.clear()
-            self._buffer_bytes = 0
-        self._last_partial = ""
-        self._finalized = ""
-        self._last_voice_monotonic = time.monotonic()
+            self._all_pcm = bytearray()
+            self._block_start = 0
+            self._frozen_text = ""
+            self._block_text = ""
+            self._voiced_since_pass = False
         self._level_gate = VoiceLevelGate()
 
         model_path = voice_model_path(self.plugin_root, self.settings_dir, self.model_id)
@@ -481,6 +521,7 @@ class VoiceTranscriptionSession:
         # acquire() answers for this model; daemon_available() would say yes
         # to a server another reason holds for a different one.
         self._use_daemon = engine.acquire("mic", model_path, self.plugin_root, self.settings_dir)
+        self._engine_held = True
 
         try:
             cmd, backend, capture_env = _resolve_capture_command(self.settings_dir)
@@ -494,7 +535,7 @@ class VoiceTranscriptionSession:
         except Exception as exc:
             err = str(exc)[:500]
             self._set_state(status="error", recording=False, streaming=False, error=err)
-            get_whisper_engine().release("mic")
+            self._release_engine_once()
             return {"accepted": False, "error": err}
 
         self._set_state(
@@ -523,7 +564,7 @@ class VoiceTranscriptionSession:
             return
         chunks_read = 0
         try:
-            while not self._stop_event.is_set():
+            while not self._stop_event.is_set() and not self._finish_event.is_set():
                 chunk = proc.stdout.read(4096)
                 if not chunk:
                     break
@@ -552,143 +593,166 @@ class VoiceTranscriptionSession:
                     streaming=False,
                     error=f"Microphone capture failed: {msg}",
                 )
+            # The microphone going away (or the time limit) ends the recording by itself: the worker
+            # then reads what was captured, exactly as if Stop had been pressed.
+            if not self._stop_event.is_set():
+                self._finish_event.set()
+
+    def _decode(self, pcm: bytes, whisper_bin: str, model_path: str, env: dict[str, str]) -> Optional[str]:
+        """One whisper read of `pcm`; its text, or None when the read failed or heard nothing usable.
+
+        Whether a lone filler word ("yes", "test") is believed depends on how loud the speech in
+        `pcm` was, not on the average of the whole read with its pauses.
+        """
+        try:
+            text = (self._transcribe_pcm(whisper_bin, model_path, env, pcm) or "").strip()
+        except Exception as exc:
+            self.logger.warning("voice whisper pass failed: %s", exc)
+            return None
+        if not text:
+            return None
+        if not _whisper_decode_usable(text, self._level_gate.speech_rms(pcm)):
+            return None
+        return text
+
+    def _freeze_block(self, whisper_bin: str, model_path: str, env: dict[str, str]) -> None:
+        """The current block has reached BLOCK_SECONDS: read exactly those seconds once more, keep
+        that text for good, and start the next block where this one ended."""
+        block_bytes = BLOCK_SECONDS * BYTES_PER_SECOND
+        pcm = self._pcm_from(self._block_start, self._block_start + block_bytes)
+        text = None
+        if self._level_gate.window_voiced(pcm):
+            text = self._decode(pcm, whisper_bin, model_path, env)
+        # A failed read keeps what the live passes had for this block.
+        self._frozen_text = _join_transcript_parts(self._frozen_text, text if text else self._block_text)
+        self._block_text = ""
+        self._block_start += block_bytes
+        # Whatever already sits in the new block gets its own live pass.
+        with self._lock:
+            self._voiced_since_pass = True
+        self._set_state(
+            partial_transcript="",
+            finalized_transcript=self._frozen_text,
+            streaming=True,
+        )
+
+    def _live_pass(self, whisper_bin: str, model_path: str, env: dict[str, str]) -> bool:
+        """One live read of the current block. True when a read was made (the engine was used)."""
+        block_bytes = BLOCK_SECONDS * BYTES_PER_SECOND
+        if self._recorded_bytes() - self._block_start >= block_bytes:
+            self._freeze_block(whisper_bin, model_path, env)
+            return True
+        with self._lock:
+            voiced, self._voiced_since_pass = self._voiced_since_pass, False
+        if not voiced:
+            return False
+        pcm = self._pcm_from(self._block_start)
+        if len(pcm) < WHISPER_MIN_DECODE_PCM_BYTES:
+            with self._lock:
+                self._voiced_since_pass = True
+            return False
+        if not self._level_gate.window_voiced(pcm):
+            return False
+        text = self._decode(pcm, whisper_bin, model_path, env)
+        # A read that returns nothing (or only noise) never blanks words that already appeared.
+        if text:
+            self._block_text = text
+            self._set_state(
+                partial_transcript=self._block_text,
+                finalized_transcript=self._frozen_text,
+                streaming=True,
+            )
+        return True
 
     def _transcribe_loop(self) -> None:
         """The background thread that keeps turning recorded audio into
-        text while a recording is running.
+        live text while a recording runs, then reads the whole recording once
+        when it ends.
 
         In: nothing directly -- it reads the audio `_capture_reader_loop()`
-        is appending to the shared buffer, roughly five times a second, and
-        keeps running until `stop()` sets the stop flag.
+        is appending to the shared buffer, and keeps running until `stop()`
+        sets the stop flag or the recording ends by itself.
 
-        Out: nothing returned. Instead it repeatedly calls `_set_state()`
-        so the plugin's own RPC can hand `status()` the latest partial and
-        finalized text on every poll, and finishes by calling
-        `_flush_final()` once, after the loop ends, to catch whatever last
-        few words never made it through a full decode pass.
+        Out: nothing returned. Instead it calls `_set_state()` so the plugin's
+        own RPC can hand `status()` the latest text on every poll, and ends
+        with `_finish_recording()`.
 
         What can go wrong: the speech engine or model files went missing
         after `start()` already checked them, in which case this ends the
         session in an error state immediately rather than looping forever;
-        or one single decode pass raises, which is logged and skipped
-        rather than ending the whole recording over one bad pass. A window
-        that is too short, too quiet, or whose words whisper is not
-        confident about is quietly skipped rather than shown, so a burst of
-        room noise does not get typed out as a word.
+        or one single read raises, which is logged and skipped rather than
+        ending the whole recording over one bad pass. Audio that is too short or too quiet is
+        skipped rather than shown, so a burst of room noise does not get typed out as a word.
         """
         whisper_bin = whisper_binary_usable(self.plugin_root, self.settings_dir)
         model_path = voice_model_path(self.plugin_root, self.settings_dir, self.model_id)
         env = voice_whisper_runtime_env(self.plugin_root, self.settings_dir)
         if not whisper_bin or not os.path.isfile(model_path):
             self._set_state(status="error", recording=False, streaming=False, error="Engine not ready.")
+            self._release_engine_once()
             return
 
-        last_pass = 0.0
-        while not self._stop_event.is_set():
-            now = time.monotonic()
-            if now - last_pass < TRANSCRIBE_INTERVAL_S:
+        next_pass_at = 0.0
+        while not self._stop_event.is_set() and not self._finish_event.is_set():
+            if time.monotonic() < next_pass_at:
                 time.sleep(0.05)
                 continue
-            last_pass = now
-
-            pcm = self._window_pcm(WINDOW_SECONDS)
-            if len(pcm) < WHISPER_MIN_DECODE_PCM_BYTES:
-                continue
-
-            if not self._level_gate.window_voiced(pcm):
-                continue
-            window_rms = _pcm_rms(pcm)
-
+            began = time.monotonic()
             try:
-                text = self._transcribe_pcm(whisper_bin, model_path, env, pcm)
+                ran = self._live_pass(whisper_bin, model_path, env)
             except Exception as exc:
-                self.logger.warning("voice whisper pass failed: %s", exc)
-                continue
-
-            text = (text or "").strip()
-            if not text:
-                continue
-            if not _whisper_decode_usable(text, window_rms):
-                continue
-
-            finalized, partial = merge_sliding_window_transcript(
-                self._finalized,
-                self._last_partial,
-                text,
-            )
-            self._finalized = finalized
-            self._last_partial = partial
-
-            silence = (time.monotonic() - self._last_voice_monotonic) >= SILENCE_HOLD_SECONDS
-            if silence and partial:
-                self._finalized = _join_transcript_parts(self._finalized, partial)
-                self._last_partial = ""
-                self._drop_pcm_before(min(WINDOW_SECONDS, 4.0))
-                self._set_state(
-                    partial_transcript="",
-                    finalized_transcript=self._finalized,
-                    streaming=True,
-                )
+                # One bad pass must not end the worker: a dead worker leaves the screen listening
+                # to a recording whose words never change again.
+                self.logger.warning("voice live pass crashed: %s", exc)
+                ran = True
+            if ran:
+                took = time.monotonic() - began
+                next_pass_at = time.monotonic() + max(TRANSCRIBE_INTERVAL_S, took * LIVE_REST_FACTOR)
             else:
-                self._set_state(
-                    partial_transcript=self._last_partial,
-                    finalized_transcript=self._finalized,
-                    streaming=True,
-                )
+                time.sleep(0.05)
 
-        self._flush_final(whisper_bin, model_path, env)
+        self._finish_recording(whisper_bin, model_path, env)
 
-    def _flush_final(self, whisper_bin: str, model_path: str, env: dict[str, str]) -> None:
+    def _finish_recording(self, whisper_bin: str, model_path: str, env: dict[str, str]) -> None:
+        """Read the whole recording once and publish that as the final text.
+
+        The status reads "finishing" (recording off) while this runs and "stopped" after. When the
+        read fails, hears nothing usable, or is skipped, the final text is the last live text.
+        """
+        self._begin_finishing()
+        reader = self._reader_thread
+        if reader is not None and reader.is_alive() and reader is not threading.current_thread():
+            reader.join(timeout=READER_JOIN_TIMEOUT_S)
+        final = self._live_text()
+        try:
+            if not self._skip_final:
+                pcm = self._pcm_from(0)
+                if len(pcm) >= WHISPER_MIN_DECODE_PCM_BYTES and self._level_gate.window_voiced(pcm):
+                    text = self._decode(pcm, whisper_bin, model_path, env)
+                    if text:
+                        final = text
+        except Exception as exc:
+            self.logger.warning("voice final pass failed: %s", exc)
         with self._lock:
-            if self._last_partial:
-                self._finalized = _join_transcript_parts(self._finalized, self._last_partial)
-                self._last_partial = ""
-
-        if self._stop_event.is_set():
-            self._set_state(
-                status="stopped",
+            failed = self._state.get("status") == "error"
+            self._state.update(
+                status="error" if failed else "stopped",
                 recording=False,
                 streaming=False,
                 partial_transcript="",
-                finalized_transcript=self._finalized,
+                finalized_transcript=final,
                 stopped_at=time.time(),
             )
-            return
-
-        pcm = self._window_pcm(WINDOW_SECONDS)
-        if pcm and len(pcm) >= BYTES_PER_SECOND // 4:
-            window_rms = _pcm_rms(pcm)
-            try:
-                tail = self._transcribe_pcm(whisper_bin, model_path, env, pcm).strip()
-                if tail and _whisper_decode_usable(tail, window_rms):
-                    finalized, partial = merge_sliding_window_transcript(
-                        self._finalized,
-                        self._last_partial,
-                        tail,
-                    )
-                    self._finalized = _join_transcript_parts(finalized, partial)
-                    self._last_partial = ""
-                elif self._last_partial:
-                    self._finalized = _join_transcript_parts(self._finalized, self._last_partial)
-                    self._last_partial = ""
-            except Exception as exc:
-                self.logger.warning("voice final flush failed: %s", exc)
-        elif self._last_partial:
-            self._finalized = _join_transcript_parts(self._finalized, self._last_partial)
-            self._last_partial = ""
-
-        self._set_state(
-            status="stopped",
-            recording=False,
-            streaming=False,
-            partial_transcript="",
-            finalized_transcript=self._finalized,
-            stopped_at=time.time(),
-        )
+        self._release_engine_once()
 
     def stop(self) -> dict[str, Any]:
+        """End the recording and return the final text. Returns only when that text is ready.
+
+        Safe to call twice at once (the second call just waits for the same worker): the screen's
+        Stop and a start that arrives while this is still finishing both end up here.
+        """
         self._stop_event.set()
-        self._set_state(recording=False, streaming=False)
+        self._begin_finishing()
         proc = self._capture_proc
         if proc is not None and proc.poll() is None:
             try:
@@ -699,10 +763,24 @@ class VoiceTranscriptionSession:
                     proc.kill()
                 except Exception:
                     pass
-        for thread in (self._reader_thread, self._worker_thread):
-            if thread is not None and thread.is_alive():
-                thread.join(timeout=3.0)
-        get_whisper_engine().release("mic")
+        reader = self._reader_thread
+        if reader is not None and reader.is_alive():
+            reader.join(timeout=READER_JOIN_TIMEOUT_S)
+        worker = self._worker_thread
+        if worker is not None and worker.is_alive():
+            worker.join(timeout=STOP_JOIN_TIMEOUT_S)
+            if worker.is_alive():
+                self.logger.warning("voice worker still running %s s after stop", STOP_JOIN_TIMEOUT_S)
+        with self._lock:
+            if self._state.get("status") == "finishing":
+                # No worker ever ran the final pass (it died or never started): keep what was live.
+                self._state.update(
+                    status="stopped",
+                    partial_transcript="",
+                    finalized_transcript=_join_transcript_parts(self._frozen_text, self._block_text),
+                    stopped_at=time.time(),
+                )
+        self._release_engine_once()
         st = self.status()
         return {
             "stopped": True,
@@ -712,5 +790,11 @@ class VoiceTranscriptionSession:
         }
 
     def force_stop(self) -> None:
-        """Immediate teardown when permission revoked."""
+        """Immediate teardown when permission is revoked or the plugin unloads: no final pass.
+
+        A stop already under way is not cut short; this then just waits for it, so a new recording
+        never starts while the old one is still finishing.
+        """
+        if not self._stop_event.is_set():
+            self._skip_final = True
         self.stop()

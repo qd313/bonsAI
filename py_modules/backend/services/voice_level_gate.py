@@ -1,13 +1,14 @@
 """Title: Deciding whether the microphone is hearing speech right now
 
-Purpose: While you talk, the plugin decodes the newest three seconds of the recording
-again and again. Decoding costs the Deck real CPU, so a pass is only worth running when
-there is speech in that window, and the plugin also needs to know when you last spoke so
-it can tell a pause from the end of a sentence. This file answers both from how loud the
-recording is, and the loudness it compares against adapts to this microphone and this room.
+Purpose: While you talk, the plugin reads the recording so far again and again. Decoding
+costs the Deck real CPU, so a pass is only worth running when there is speech in what it
+reads, and the plugin also needs to know whether any speech has arrived since the last pass.
+This file answers both from how loud the recording is, and the loudness it compares against
+adapts to this microphone and this room.
 
 Used for: voice_transcription_service.VoiceTranscriptionSession -- `observe()` on every
-chunk the capture process delivers, `window_voiced()` before every decode pass.
+chunk the capture process delivers, `window_voiced()` before every decode pass, and
+`speech_rms()` to judge a pass's text by how loud the speech itself was.
 
 Solves: Found on the Deck on 2026-10-09 and reproduced on 2026-10-10 with a recorded
 sentence played quietly: the gate used to compare the AVERAGE loudness of the last three
@@ -36,6 +37,7 @@ How it works:
 
 from __future__ import annotations
 
+import math
 from collections import deque
 
 from backend.services.voice_audio_capture_service import _pcm_rms
@@ -104,3 +106,17 @@ class VoiceLevelGate:
         """True when `pcm` (a decode window) holds enough speech to be worth a pass."""
         limit = self.threshold()
         return sum(1 for level in slice_levels(pcm) if level >= limit) >= MIN_VOICED_SLICES
+
+    def speech_rms(self, pcm: bytes) -> float:
+        """How loud the SPEECH in `pcm` is: the RMS of only its voiced slices, 0.0 if it has none.
+
+        The whole-recording average is useless for the "is this lone 'yes' real?" check, because a
+        long recording is mostly pauses (plan 88): one second of clear speech in thirty seconds of
+        room tone averages far under the filler bar. The voiced slices alone say how loud the
+        person actually spoke.
+        """
+        limit = self.threshold()
+        loud = [level for level in slice_levels(pcm) if level >= limit]
+        if not loud:
+            return 0.0
+        return math.sqrt(sum(level * level for level in loud) / len(loud))

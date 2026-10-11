@@ -589,6 +589,7 @@
     "tests/test_voice_session_status.py",
     "tests/test_voice_start_refused_while_downloading.py",
     "tests/test_voice_transcription_service.py",
-    "tests/test_voice_whisper_daemon.py"
+    "tests/test_voice_whisper_daemon.py",
+    "tests/test_voice_whole_recording.py"
   ]
 }

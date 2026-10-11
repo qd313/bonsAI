@@ -198,7 +198,7 @@ class VoiceTranscriptionServiceTests(unittest.TestCase):
         self.assertEqual(fin, "Testing, one two,")
         self.assertEqual(partial, "three, four.")
 
-    def test_pcm_buffer_survives_concurrent_append_and_window(self):
+    def test_recording_buffer_survives_concurrent_append_and_read(self):
         session = VoiceTranscriptionSession("/tmp", "/tmp", DEFAULT_VOICE_STT_MODEL, SimpleNamespace())
         chunk = struct.pack("<256h", *([100] * 256))
         stop = threading.Event()
@@ -215,8 +215,8 @@ class VoiceTranscriptionServiceTests(unittest.TestCase):
         t.start()
         try:
             for _ in range(500):
-                session._window_pcm(1.0)
-                session._drop_pcm_before(0.25)
+                session._pcm_from(0)
+                session._pcm_from(0, 4096)
         finally:
             stop.set()
             t.join(timeout=2.0)

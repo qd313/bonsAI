@@ -212,6 +212,9 @@ export function useVoiceTranscription(
         if (!isVoiceActive(seq)) return;
         recordingRef.current = false;
         clearPollTimer();
+        // The screen can no longer see this recording, so tell the back end to stop it too. Without
+        // this it keeps recording until its two-minute limit. Bare call(), as for start and stop.
+        void call("stop_voice_transcription").catch(() => undefined);
         onError(e);
       }
     },

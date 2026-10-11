@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 833,
-  "edgeCount": 2547,
+  "fileCount": 834,
+  "edgeCount": 2550,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -6125,6 +6125,14 @@
         "src/index.tsx"
       ]
     },
+    "src/hooks/useVoiceTranscription.test.ts": {
+      "imports": [
+        "src/hooks/useVoiceTranscription.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useVoiceTranscription.ts": {
       "imports": [
         "src/utils/deckyCall.ts"
@@ -6132,7 +6140,8 @@
       "importedBy": [
         "src/features/voice/useVoiceAskInput.test.ts",
         "src/features/voice/useVoiceAskInput.ts",
-        "src/features/voice/voiceStartGameFlag.test.tsx"
+        "src/features/voice/voiceStartGameFlag.test.tsx",
+        "src/hooks/useVoiceTranscription.test.ts"
       ]
     },
     "src/i18n/catalog.ts": {
@@ -6824,6 +6833,7 @@
         "src/hooks/useReadAloud.test.ts",
         "src/hooks/useReplyFeedbackChips.remount.test.tsx",
         "src/hooks/useReplyFeedbackChips.test.ts",
+        "src/hooks/useVoiceTranscription.test.ts",
         "src/index.helpChip.test.tsx",
         "src/index.test.tsx",
         "src/index.topStrip.test.tsx",
@@ -6963,6 +6973,7 @@
         "src/hooks/useLocalOllamaSetupFlow.inPlace.test.tsx",
         "src/hooks/useReplyFeedbackChips.remount.test.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
+        "src/hooks/useVoiceTranscription.test.ts",
         "src/index.helpChip.test.tsx",
         "src/test-harness/setup.ts",
         "src/utils/buildReasoningFoldElement.walk.test.tsx",

@@ -266,6 +266,7 @@
     "src/hooks/useSuggestedPromptChips.test.ts",
     "src/hooks/useThinkingNoticeGate.test.tsx",
     "src/hooks/useTitleOverflow.test.ts",
+    "src/hooks/useVoiceTranscription.test.ts",
     "src/index.helpChip.test.tsx",
     "src/index.test.tsx",
     "src/index.topStrip.test.tsx",

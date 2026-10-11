@@ -79,4 +79,17 @@
 .d2-steps-note { font-size: 9.5px; color: var(--q-ink-3); line-height: 1.35; }
 .d2-jump { position: absolute; inset: 0; z-index: 10; background: var(--q-bg); display: flex; flex-direction: column; }
 .d2-jump-in { padding: 2px 8px 10px; display: flex; flex-direction: column; gap: 6px; }
+/* tab 7, round 2: notes kept from what you said */
+.k2-thumbs .n2-keepbtn { padding: 0 7px; color: var(--q-cyan); border-color: rgba(156,231,255,.3); }
+.k2-thumbs .n2-keepbtn .ico { width: 11px; height: 11px; display: inline-flex; }
+.n2-card { margin-top: 4px; }
+.n2-who { justify-self: start; background: transparent; border: 1px solid rgba(255,255,255,.12); border-radius: 5px; padding: 2px 7px; font-size: 10px; color: #b4c6dc; }
+.n2-used { align-self: flex-start; display: inline-flex; align-items: center; gap: 5px; background: rgba(56,189,248,.08); border: 1px solid rgba(156,231,255,.25); border-radius: 10px; padding: 2px 8px; font-size: 10px; font-weight: 600; color: var(--q-cyan); }
+.n2-used .ico { width: 10px; height: 10px; display: inline-flex; }
+.n2-in { padding: 0 10px 8px; display: flex; flex-direction: column; gap: 4px; }
+.n2-say { font-size: 10.5px; color: var(--q-ink-3); line-height: 1.35; margin-bottom: 2px; }
+.n2-line { display: flex; gap: 4px; align-items: stretch; }
+.n2-line .note-row { margin-bottom: 0; }
+.n2-del { flex: 0 0 30px; display: grid; place-items: center; background: rgba(10,15,21,.5); border: 1px solid rgba(255,255,255,.08); border-radius: 6px; color: var(--q-ink-3); }
+.n2-del svg { width: 13px; height: 13px; }
 </style>

@@ -83,7 +83,8 @@ from backend.services.ollama_ask_extras import (
 )
 from backend.services.ollama_service import post_ollama_chat
 from backend.services.response_verify import build_live_spoiler_cover
-from backend.services.settings_service import sanitize_ollama_keep_alive, sanitize_reply_verbosity
+from backend.services.ollama_keep_alive_rule import effective_keep_alive
+from backend.services.settings_service import sanitize_reply_verbosity
 from backend.services.reply_language_service import resolve_effective_reply_language
 from backend.ollama_routing import (
     is_ollama_model_missing_error,
@@ -163,7 +164,7 @@ async def run_ask_ollama(
             character_enabled=bool(settings.get("ai_character_enabled")),
             character_preset_id=rp_meta.resolved_preset_id,
         )
-    keep_alive = sanitize_ollama_keep_alive(settings.get("ollama_keep_alive"))
+    keep_alive = effective_keep_alive(settings.get("ollama_keep_alive"), url, source="ask")  # 1m with a game on the Deck
     reply_verbosity = sanitize_reply_verbosity(settings.get("reply_verbosity"))
     reply_language = resolve_effective_reply_language(settings.get("reply_language"))
     # Terse mode (Speed answers in three lines): on only for a Speed question, and only for a real
@@ -172,8 +173,7 @@ async def run_ask_ollama(
     # reminder and the reply reader.
     terse_speed = ask_mode == "speed" and settings.get("terse_mode") is True
     apreset = str(settings.get("screenshot_attachment_preset") or "low")
-    if apreset not in ("low", "mid", "max"):
-        apreset = "low"
+    apreset = apreset if apreset in ("low", "mid", "max") else "low"
     from backend.services.screenshot_media import prepare_attachment_images
 
     prepared_images, attachment_warnings, attachment_errors = prepare_attachment_images(

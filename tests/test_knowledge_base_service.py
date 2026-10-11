@@ -1261,10 +1261,13 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     self.assertTrue(result.attached)
     self.assertEqual(result.retrieval_method, "keyword")
 
-  def _retrieve_dreadnought_weakpoint(self, settings_extra=None):
+  def _retrieve_dreadnought_weakpoint(self, settings_extra=None, game_running=False):
     """Both tests below ask retrieve_knowledge_context the same Glyphid Dreadnought question
     against the same mocked section vectors; only the settings passed in and what each one
     asserts afterward differ."""
+    from backend.services import ollama_keep_alive_rule
+
+    ollama_keep_alive_rule.note_game_running(game_running)  # never leave it to another test's Ask
     settings = {
       "use_local_knowledge_base": True,
       "rag_corpus_path": str(SEED_DB.parent),
@@ -1311,6 +1314,17 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     the same setting through so both models share one keep-alive."""
     _result, embed = self._retrieve_dreadnought_weakpoint({"ollama_keep_alive": "240m"})
     embed.assert_called_once()
+    self.assertEqual(embed.call_args.kwargs.get("keep_alive"), "240m")
+
+  def test_note_search_model_follows_the_short_hold_while_a_game_runs_on_the_deck(self):
+    """Plan 89 S4: Ollama keeps a model for the LAST request that touched it, so the note-search
+    lookup must not re-arm the long Unload delay right after a shortened answer."""
+    from backend.services import ollama_keep_alive_rule as rule
+
+    self.addCleanup(rule.note_game_running, False)
+    _result, embed = self._retrieve_dreadnought_weakpoint({"ollama_keep_alive": "240m"}, game_running=True)
+    self.assertEqual(embed.call_args.kwargs.get("keep_alive"), "1m")
+    _result, embed = self._retrieve_dreadnought_weakpoint({"ollama_keep_alive": "240m"})
     self.assertEqual(embed.call_args.kwargs.get("keep_alive"), "240m")
 
   def test_speed_mode_never_pays_for_the_meaning_search(self):

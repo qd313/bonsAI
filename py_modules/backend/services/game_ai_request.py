@@ -103,7 +103,7 @@ from backend.services.destructive_advice_guard import (
     check_destructive_advice,
 )
 from backend.services import chat_turn_recorder
-from backend.services import kb_followup_memory
+from backend.services import kb_followup_memory, ollama_keep_alive_rule
 from backend.services.input_sanitizer_service import apply_input_sanitizer_lane
 from backend.services.kb_other_game_named import other_game_besides
 from backend.services.kb_notes_footers import append_kb_notes_footers
@@ -254,6 +254,7 @@ async def run_game_ai_request(
     """
     start = time.time()
     app_context = "active" if app_id else "none"
+    ollama_keep_alive_rule.note_game_running(bool(app_id))  # a game runs iff the screen sent its id; before it may be set aside
     pcls = type(plugin)
     try:
         logger.info(

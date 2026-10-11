@@ -503,6 +503,7 @@
     "tests/test_ollama_embed_service.py",
     "tests/test_ollama_health_probe.py",
     "tests/test_ollama_https_refused.py",
+    "tests/test_ollama_keep_alive_rule.py",
     "tests/test_ollama_local_autostart_rpc.py",
     "tests/test_ollama_local_autostart_service.py",
     "tests/test_ollama_mdns_discovery_service.py",

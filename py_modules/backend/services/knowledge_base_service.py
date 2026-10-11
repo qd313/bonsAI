@@ -131,7 +131,7 @@ from backend.services.compat_topic_router import (
     question_targets_compat_corpus,
 )
 from backend.services.ollama_prompts import question_matches_troubleshooting_log_context
-from backend.services.settings_service import sanitize_ollama_keep_alive
+from backend.services.ollama_keep_alive_rule import effective_keep_alive
 
 from backend.services.knowledge_base_cards import (
     KnowledgeCard,
@@ -905,7 +905,7 @@ def retrieve_knowledge_context(
                 [format_embed_query(expanded, model=DEFAULT_EMBEDDING_MODEL)],
                 model=DEFAULT_EMBEDDING_MODEL,
                 timeout_s=3.0,
-                keep_alive=sanitize_ollama_keep_alive(settings.get("ollama_keep_alive")),
+                keep_alive=effective_keep_alive(settings.get("ollama_keep_alive"), pc_ip, source="notes lookup", log=False),
             )[0]
         )
         already_routed_to_tips = domain == "compat"
@@ -1137,7 +1137,7 @@ def retrieve_knowledge_context(
                                 [format_embed_query(stripped_question, model=DEFAULT_EMBEDDING_MODEL)],
                                 model=DEFAULT_EMBEDDING_MODEL,
                                 timeout_s=3.0,
-                                keep_alive=sanitize_ollama_keep_alive(settings.get("ollama_keep_alive")),
+                                keep_alive=effective_keep_alive(settings.get("ollama_keep_alive"), pc_ip, source="notes lookup", log=False),
                             )
                             best_meaning_without_game_name = _best_meaning_score(
                                 vectors_by_id, stripped_vectors[0]

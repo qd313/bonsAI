@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 **Contents**
 
 - [\[Unreleased\]](#unreleased)
+  - [Plan 88 (2026-10-11)](#plan-88-2026-10-11)
   - [Plan 87 (2026-10-10)](#plan-87-2026-10-10)
   - [Plan 84 (2026-10-09)](#plan-84-2026-10-09)
   - [Plan 83 (2026-10-08)](#plan-83-2026-10-08)
@@ -76,6 +77,13 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Plan 88 (2026-10-11)
+
+- **After Stop or Ask, the mic now reads the whole recording once and puts that text in the box in place of the live words.** This fixes repeated and lost words, including with a game running: "test test 1 2 3 4" said twice now comes out as both phrases on base.en and on tiny.en, and a recorded question with a game running came out with every word. While you talk, words still appear, a few seconds apart. Passed on the Deck 2026-10-11 with a recorded voice (rows P88-VOICE-WHOLE-NOGAME, P88-VOICE-WHOLE-GAME, P88-VOICE-TINY). A real voice is still the maintainer's check.
+- **The mic button is amber and reads "Finishing voice input" while the final text is being read:** about 3 seconds on base.en with no game, under 1 second on tiny.en, about 4 seconds with a game running. A press during that wait is ignored, and the next press starts a new recording. Passed on the Deck 2026-10-11 with a recorded voice (row P88-VOICE-STOP-THEN-MIC); the real-voice check is still owed.
+- **Pressing Ask while you are still talking waits for the full text and asks with all of it,** the last words included. Passed on the Deck 2026-10-11 (row P88-VOICE-ASK-WHILE-TALKING).
+- **A recording stops by itself after two minutes.**
+
 ### Plan 87 (2026-10-10)
 
 - **The Main tab's bar now says "bonsAI" in small capitals** where it said "MAIN", and the spoken name of Main's icon on the other tabs is "bonsAI". "Main" is left as it was in the Permissions tab's "Back to Main" banner, the "Switched to Main." toast and a few help lines. Passed on the Deck 2026-10-10 (row P87-F1-SMALL-CAPS).
@@ -106,7 +114,7 @@ All notable changes to this project are documented in this file.
 - **Deleting the open chat now leaves the next chat open, with its name row and the ring on the name,** whether you delete it with the name row's delete icon, the chats menu, or the "which chat to drop" box at ten chats. Before, the screen could stay on the deleted chat or lose its title strip with a dead D-pad. Passed on the Deck 2026-10-10 (row P87-DELETE-OPEN-CHAT).
 - **The first mic press after the question box was emptied now keeps recording.** The mic had remembered the words its last dictation wrote, so emptying the box by any route (by hand, the X, Ask) made it think dictation was over and stopped the next recording after a tenth of a second. A new recording now forgets the old words when it starts. Passed on the Deck 2026-10-10 (row P87-MIC-AFTER-CLEAR).
 - **Left and Right on the "From the notes" block no longer take the D-pad ring out of the plugin** into Steam's own side tab list; they are held there. Passed on the Deck 2026-10-10 (row P87-NOTES-CARD-LEFT).
-- **base.en is now the speech model a new install starts with** (an install with no saved choice), and the two rows in Settings → Voice input now read "tiny.en (faster, less accurate)" and "base.en (more accurate, recommended)". A choice already saved is kept, so most existing installs stay on tiny.en until their owner picks base.en. The guide and troubleshooting pages recommend base.en and keep tiny.en as the lighter fallback for a heavy game. Deck check 2026-10-10 evening (row VOICE-BASE-DEFAULT-01): the new labels and the default for a fresh install passed, and with no game running base.en took a recorded 15-second and a 21-second question whole. With a game running base.en falls behind and loses or garbles words (the game dropped from 60 to 35 frames a second while dictating), so that part failed and is open in the roadmap.
+- **base.en is now the speech model a new install starts with** (an install with no saved choice), and the two rows in Settings → Voice input now read "tiny.en (faster, less accurate)" and "base.en (more accurate, recommended)". A choice already saved is kept, so most existing installs stay on tiny.en until their owner picks base.en. The guide and troubleshooting pages recommend base.en and keep tiny.en as the lighter fallback for a heavy game. Deck check 2026-10-10 evening (row VOICE-BASE-DEFAULT-01): the new labels and the default for a fresh install passed, and with no game running base.en took a recorded 15-second and a 21-second question whole. With a game running base.en falls behind and loses or garbles words (the game dropped from 60 to 35 frames a second while dictating), so that part failed and is open in the roadmap. Plan 88 (above) fixed that part, and it passed on the Deck 2026-10-11.
 
 ### Plan 84 (2026-10-09)
 

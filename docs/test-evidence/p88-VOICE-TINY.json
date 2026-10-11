@@ -1,0 +1,22 @@
+{
+  "row": "VOICE-TINY (plan 88 check E, a report only)",
+  "build_commit": "68317980",
+  "deck_time_local": "2026-10-11 15:23-15:27 EDT",
+  "screen": "MONITOR live (page window 855 x 766)",
+  "setup": "No game. Pretend mic. Speech model switched to tiny.en in Settings (walked one press at a time from the tab bar: RIGHT, RIGHT to Settings tab, DOWN x8 to the tiny.en row, read focus, A). The settings file read tiny.en afterwards. Back on Main, dictated testtest. Then Settings again, DOWN x9 to the base.en row, read focus, A; the settings file read base.en.",
+  "pressed": "Settings: A on tiny.en row, later A on base.en row. Main: A on Voice input, paplay testtest, A on Stop.",
+  "seen": {
+    "log": "voice: recording started, model tiny.en (15:24:15); recording stopped, transcript 31 characters (15:24:32)",
+    "live_text": "Two live changes during the audio: 'Test test 1234' (14 chars), then 'Test test 1 2 3 4 Test test 1 2' (31 chars), then the text was 'Test test 1234. Test test 1234.' (31 chars) about 8 s before Stop was pressed (so the live text had already become the final shape)",
+    "final_text": "Test test 1234. Test test 1234.",
+    "phrase_count": 2,
+    "anything_repeated": false,
+    "went_empty_after_words": false,
+    "stop_to_final_text_s": "0.9 (amber 'Finishing voice input' lasted 0.87 s; the text did not change at Stop)",
+    "settings_file_after_switch_to_tiny": "tiny.en",
+    "settings_file_after_switch_back": "base.en"
+  },
+  "expected": "A report, no pass or fail: final text, whether anything repeated, time from Stop to final text.",
+  "verdict": "UNCLEAR (report only, no pass/fail defined. tiny.en gave the correct two phrases, no repeats, and the quickest Stop-to-text, 0.9 s)",
+  "side_effect": "none. Box cleared afterwards; model put back to base.en."
+}

@@ -1,0 +1,21 @@
+{
+  "row": "VOICE-ASK-WHILE-TALKING (plan 88 check C)",
+  "build_commit": "68317980",
+  "deck_time_local": "2026-10-11 15:21-15:23 EDT",
+  "screen": "MONITOR live (page window 855 x 766)",
+  "setup": "Main tab, test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7, read before the question), base.en, pretend mic, no game, box empty.",
+  "pressed": "A on Voice input, paplay sentence10 (returned), then without pressing Stop: RIGHT x2 (Voice input -> Clear -> Ask; focus read: Ask), A on Ask. The question box was never pressed.",
+  "seen": {
+    "live_text_before_ask": "4 changes before the Ask press were not all needed; at the Ask press the box held 'How do I beat the final boss ... weapon should' (66 chars) to 169 chars as the audio ended",
+    "after_ask_press": "mic button turned amber 'Finishing voice input' about 0.5 s after the press; the box still held the 169-character sentence for 2.5 s, then emptied and the question was sent",
+    "question_bubble_text": "How do I beat the final boss in this game, and which weapon should I upgrade first, because my health keeps running out before I can reach the second phase of the fight?",
+    "question_bubble_chars": 169,
+    "mic_button_at_the_end": "Voice input",
+    "answer": "Finished by itself after about 49 s (the answer text ended with a clarifying question 'Are you currently playing Hollow Knight or Deep Rock Galactic: Survivor?'); not interrupted.",
+    "box_after_answer": "empty; sampler read 0 characters from the answer's end (about 15:22:38) for at least 14 s; nothing was written back",
+    "ai_unload": "ollama ps listed gemma4:e2b-it-qat (2.2 GB) and nomic-embed-text:latest (488 MB); both unloaded with keep_alive 0; ollama ps then empty"
+  },
+  "expected": "The question the chat shows is the full sentence ending '...the second phase of the fight'; the mic button ends on 'Voice input'; after the answer the box is empty and stays empty for 10 s.",
+  "verdict": "PASS (full sentence asked, mic back to 'Voice input', box empty for 14 s after the answer)",
+  "side_effect": "One test question and its answer were added to the test chat (as the runbook wants). The Deck's AI model was loaded by this and was unloaded afterwards."
+}

@@ -1,0 +1,32 @@
+{
+  "row": "VOICE-STOP-THEN-MIC (plan 88 check B)",
+  "build_commit": "68317980",
+  "deck_time_local": "2026-10-11 15:20-15:22 EDT",
+  "screen": "MONITOR live (page window 855 x 766)",
+  "setup": "Main tab, test chat (chat 1 of 7), base.en, pretend mic p88mic.monitor, no game, box empty at the start.",
+  "pressed": "A on Voice input, paplay testtest, read focus ('Stop voice input'), A (Stop), read focus (label 'Finishing voice input'), A on the mic button again 0.59 s after Stop (bridge clock: 238462151 to 238462741 ms). After the button read 'Voice input': A, paplay testtest again, read focus, A (Stop).",
+  "seen": {
+    "part1": {
+      "second_press_after_stop_s": 0.59,
+      "button_during_second_press": "Finishing voice input (amber)",
+      "button_sequence": "Stop voice input -> Finishing voice input (amber) -> Voice input",
+      "amber_lasted_s": 5.5,
+      "final_text": "Test test 1 2 3 4, test test 1 2 3 4",
+      "new_recording_started_in_log_at_that_second": false,
+      "log": "recording started 15:20:20.9; recording stopped, transcript 36 characters 15:20:39.8; no other 'recording started' until the part 2 press at 15:20:48.4"
+    },
+    "part2": {
+      "new_recording_log_line": "voice: recording started, model base.en at 15:20:48.4",
+      "box_before": "Test test 1 2 3 4, test test 1 2 3 4",
+      "box_after": "Test test 1 2 3 4, test test 1 2 3 4 Test test 1234 test test 1234",
+      "box_after_chars": 66,
+      "amber_lasted_s": 2.4,
+      "log": "recording stopped, transcript 29 characters at 15:21:03.5"
+    }
+  },
+  "expected": "Part 1: a press on the amber button does nothing, the button returns to 'Voice input', no new recording started. Part 2: a new recording starts and the box ends with the first text followed by the new words (test test 1 2 3 4 twice again).",
+  "verdict": "PASS (part 1: the press during amber did nothing; the button stayed amber then returned; no extra 'recording started')",
+  "verdict_part2": "PASS (new recording started; box holds the first text then the new 'test test 1234 test test 1234')",
+  "observation": "The amber wait in part 1 was 5.5 s, against 2.4 to 2.9 s in every other dictation. It may be chance or may be caused by the press during amber; not tested further.",
+  "side_effect": "none. The box was cleared afterwards with deck_send_ask.py --clear."
+}

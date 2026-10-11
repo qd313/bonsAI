@@ -2224,3 +2224,36 @@ with the three defaults the planning session took where an answer left room.
 
 **At Go:** nothing is pushed; the maintainer publishes. The earlier calls stand: nothing moves to Done on its tests
 alone (D124 call 2), and the cut choice menu waits for a hand check (D123).
+
+### D128 — LOCKED 2026-10-11 (raised 2026-10-11) — Plan 89, the bug list and the Verify list as close to empty as they can get: the fifteen calls
+
+Made by the maintainer on 2026-10-11, early evening, answering a numbered list in chat while
+[plan 89](../planning/89-bugs-to-zero-and-verify-sweep.md) was written. The plan's own § 2 carries the same list.
+
+1. **Who runs it:** the planning was done on Fable 5.1; a separate Opus 5.5 extra-high chat runs the plan.
+2. **The two reload-under-a-game entries** stay in Bugs, untouched.
+3. **The sentence readable for a second before its cover** stays open; nothing built.
+4. **Up from the answer bubble scrolls the answer first:** explained again in plain words; no call yet. Meanwhile
+   unchanged.
+5. **The five Verify entries the Deck can never show** (the sliver on a tall section; a place moved with a model only
+   one machine has; the clean-up with no AI installed; a saved PC that is off; the typed follow-up's topic) **close on
+   their tests alone.** For these five only, this replaces D124 call 2.
+6. **The cut choice menu closes** on its prepared Deck pass of 2026-10-03 and its tests. This replaces D123's wait
+   for a hand check.
+7. **The search-list trap closes** as not seen again in ten routes; it reopens the day it is seen.
+8. **The frozen Steam after an answer with a game:** a reproduction try, placed last in the Deck night so a freeze
+   costs only a restart; and the lever is built: the Deck's own AI leaves memory sooner while a game runs (about a
+   minute after an answer instead of five).
+9. **The three test-rig bugs:** Sonnet or Opus helpers may work in the rig's own project folder, code and server side
+   only, never a reflash of the board tonight.
+10. **tiny.en stays** in the voice model list.
+11. **The two one-star features asked for on 2026-10-10** (the delete box's title and buttons; Update with internet
+    downloads off showing both the failed line and the box) are built tonight.
+12. **The Deck's saved chats** may be moved aside for one check, with a backup taken first and put back after.
+13. **The idle plan 87 chat** is closed so its link to the Deck clears. (The planning session could not close it:
+    its Remote Control link counts as live work; the maintainer closes it from the sidebar.)
+14. **The old helper copies of the repo** whose work has landed are deleted; a copy holding unlanded work is kept and
+    named in the report.
+15. **The usage limit:** no extra usage; a stop at the weekly cap is accepted, and helpers resume after the reset.
+
+**At Go:** nothing is pushed; the maintainer publishes.

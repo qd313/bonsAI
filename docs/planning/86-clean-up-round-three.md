@@ -112,6 +112,19 @@ change. Their research results and big output files still move.
     the maintainer.
 - **A rough guide:** after two weeks of normal work, expect the check to need about an hour of updating. After a
   month, expect to redo part of step 2.
+- **Known changes since `efecab1`, from plan 89 (the bug night of 2026-10-11), so step 0 does not have to find them:**
+  - **Text size now scales every word on every tab** through one number on the plugin's root (the maintainer's pick,
+    option B). Step 3's UI-scale removal must keep that number: a scaled size becomes a plain number **times the text
+    scale**, not a plain number. The sentence in § 2 saying the UI-scale removal closes the "UI scale twice" bug is
+    stale: that bug closes in plan 89.
+  - **The Settings, Ollama, Permissions, Developer and About tabs scroll differently under the D-pad** (the scroll
+    helper and its plan changed; focus work). Step 6b's measurements start from the new behaviour.
+  - **The Deck's AI may leave memory sooner while a game runs** (a back-end rule, possibly one new setting), so 6a's
+    count of settings may be one higher.
+  - **About 30 to 50 new evidence files** and one re-recorded saved walk, all of which move to the workshop in step 1.
+  - Changes to the test rig's own project do not touch this repo.
+  - Expected cost of the freshness check after plan 89: about an hour, mostly in step 3's UI-scale brief. The plan is
+    not stale.
 
 ## 6. The steps
 

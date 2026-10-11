@@ -240,7 +240,7 @@ component ("SD card", "controller layout", "remote play") rather than only the s
 
 **Symptom:** Interim text is slow or stalls.
 
-**Fix:** The preview is lighter on purpose while a game runs (it updates every few seconds so the game keeps its speed); the text after Stop is the one to trust. Close heavy games while transcribing. If it is still too slow, switch to **tiny.en**, which is lighter on the Deck but less accurate (it can repeat words). Audio is processed in RAM only — nothing is uploaded or saved to disk.
+**Fix:** The preview is lighter on purpose while a game runs (it updates every few seconds so the game keeps its speed); with no game running it updates as fast as the Deck can read your voice; the text after Stop is the one to trust. Close heavy games while transcribing. If it is still too slow, switch to **tiny.en**, which is lighter on the Deck but less accurate (it can repeat words). Audio is processed in RAM only — nothing is uploaded or saved to disk.
 
 **Latency (2026-07-07):** Tier 1 tuning shortens decode interval/window, speeds UI poll, and uses 4 whisper threads (more CPU while mic is active). Changed 2026-10-11 (plan 88): the live preview now re-reads the recording so far (a block of at most 28 seconds) and rests as long as each read took, and Stop reads the whole recording once.
 

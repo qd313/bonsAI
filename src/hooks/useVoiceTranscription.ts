@@ -28,6 +28,7 @@ import { useCallback, useEffect, useRef } from "react";
 // memory, either of which can exceed any UI timeout on Deck hardware. Only
 // the status poll below is wrapped.
 import { call } from "@decky/api";
+import { Router } from "@decky/ui";
 import { callDeckyWithTimeout } from "../utils/deckyCall";
 
 /** Poll interval while voice transcription is active (interim streaming). */
@@ -71,6 +72,20 @@ export type UseVoiceTranscriptionOptions = {
   /** The back end ended the recording by itself and the final text is in the box. */
   onSessionEnded?: () => void;
 };
+
+/**
+ * True when Steam reports a running app at this moment. The back end rests longer between live
+ * passes while a game runs, so the game keeps its frame rate; with no game the live words come as
+ * fast as the engine can make them. Asked once, at the press, and a failed read counts as "no game".
+ */
+function isGameRunningNow(): boolean {
+  try {
+    const appId = Router.MainRunningApp?.appid?.toString().trim() ?? "";
+    return appId !== "" && appId !== "0";
+  } catch {
+    return false;
+  }
+}
 
 /** Spaces and line breaks do not count as an edit when comparing the box with what the mic wrote. */
 const sameText = (a: string, b: string) => a.replace(/\s+/g, " ").trim() === b.replace(/\s+/g, " ").trim();
@@ -232,7 +247,7 @@ export function useVoiceTranscription(
       baseTextRef.current = currentInput;
       lastWrittenRef.current = null;
       try {
-        const out = await call<[], StartVoiceResult>("start_voice_transcription");
+        const out = await call<[boolean], StartVoiceResult>("start_voice_transcription", isGameRunningNow());
         if (!isMountedRef.current || seq !== voiceSeqRef.current) return out;
         if (!out?.accepted) {
           const msg = out?.reason || out?.error || "Voice input could not start.";

@@ -15,7 +15,6 @@ from backend.services.voice_transcription_service import (
     _pcm_rms,
     _runtime_dir_usable,
     _whisper_decode_usable,
-    merge_sliding_window_transcript,
     sanitize_voice_stt_model,
 )
 from backend.services.voice_whisper_runtime import (
@@ -107,26 +106,6 @@ class VoiceTranscriptionServiceTests(unittest.TestCase):
         self.assertFalse(_runtime_dir_usable(""))
         self.assertFalse(_runtime_dir_usable("/nonexistent/path"))
 
-    def test_merge_sliding_window_extends_partial(self):
-        fin, partial = merge_sliding_window_transcript("", "hello", "hello world")
-        self.assertEqual(fin, "")
-        self.assertEqual(partial, "hello world")
-
-    def test_merge_sliding_window_commits_on_overlap_shift(self):
-        fin, partial = merge_sliding_window_transcript("", "hello world", "world how are")
-        self.assertEqual(fin, "hello")
-        self.assertEqual(partial, "world how are")
-
-    def test_merge_sliding_window_commits_on_no_overlap(self):
-        fin, partial = merge_sliding_window_transcript("ask", "foo bar", "baz qux")
-        self.assertEqual(fin, "ask foo bar")
-        self.assertEqual(partial, "baz qux")
-
-    def test_merge_sliding_window_ignores_shorter_regression(self):
-        fin, partial = merge_sliding_window_transcript("", "hello world", "hello")
-        self.assertEqual(fin, "")
-        self.assertEqual(partial, "hello world")
-
     def test_parse_whisper_stdout_strips_timestamp_line(self):
         raw = "[00:00:00.000 --> 00:00:02.000]   Testing one, two, three."
         self.assertEqual(_parse_whisper_stdout(raw), "Testing one, two, three.")
@@ -164,39 +143,11 @@ class VoiceTranscriptionServiceTests(unittest.TestCase):
     def test_whisper_decode_usable_accepts_real_phrase_on_quiet_window(self):
         self.assertTrue(_whisper_decode_usable("Hello, this is a test", 200.0))
 
-    def test_merge_drops_isolated_you_when_speech_shifts(self):
-        fin, partial = merge_sliding_window_transcript("", "you", "Hello, this is a test")
-        self.assertEqual(fin, "")
-        self.assertEqual(partial, "Hello, this is a test")
-
     def test_whisper_decode_usable_rejects_quiet_yes(self):
         self.assertFalse(_whisper_decode_usable("Yes.", 400.0))
 
     def test_whisper_decode_usable_rejects_quiet_test(self):
         self.assertFalse(_whisper_decode_usable("Test.", 518.0))
-
-    def test_merge_drops_test_fragment_before_testing(self):
-        fin, partial = merge_sliding_window_transcript("", "Test.", "Testing one, two, three.")
-        self.assertEqual(fin, "")
-        self.assertEqual(partial, "Testing one, two, three.")
-
-    def test_merge_dedupes_after_silence_commit(self):
-        fin, partial = merge_sliding_window_transcript(
-            "Testing one, two, three.",
-            "",
-            "Testing one, two, three, four.",
-        )
-        self.assertEqual(fin, "Testing one, two, three.")
-        self.assertEqual(partial, "four.")
-
-    def test_merge_normalized_overlap_ignores_punctuation(self):
-        fin, partial = merge_sliding_window_transcript(
-            "",
-            "Testing, one two, three.",
-            "three, four.",
-        )
-        self.assertEqual(fin, "Testing, one two,")
-        self.assertEqual(partial, "three, four.")
 
     def test_recording_buffer_survives_concurrent_append_and_read(self):
         session = VoiceTranscriptionSession("/tmp", "/tmp", DEFAULT_VOICE_STT_MODEL, SimpleNamespace())

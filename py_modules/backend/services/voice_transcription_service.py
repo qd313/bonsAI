@@ -157,19 +157,13 @@ from backend.services.voice_transcript_decode_service import (
     WHISPER_FILLER_WORDS,
     WHISPER_NON_SPEECH_TAGS,
     _WHISPER_TS_LINE,
-    _is_isolated_filler_partial,
-    _is_stale_word_fragment,
     _is_whisper_filler_only,
     _is_whisper_non_speech_tag,
     _join_transcript_parts,
-    _normalize_merge_word,
     _normalize_whisper_word,
     _parse_whisper_stdout,
     _run_whisper_transcribe,
-    _suffix_prefix_word_overlap,
     _whisper_decode_usable,
-    _word_list,
-    merge_sliding_window_transcript,
 )
 from backend.services.voice_whisper_runtime import (
     CHANNELS,
@@ -206,10 +200,6 @@ STOP_JOIN_TIMEOUT_S = 120.0
 # How long the final pass waits for the capture reader to hand over the last chunks of audio.
 READER_JOIN_TIMEOUT_S = 3.0
 WHISPER_MIN_DECODE_PCM_BYTES = BYTES_PER_SECOND // 4  # 0.25 s before first decode pass
-# Unused by the session since plan 88; only tests/test_voice_overlap_merge.py still reads these two,
-# and the commit that removes the overlap-merge helpers removes them with it.
-WINDOW_SECONDS = 3
-SILENCE_HOLD_SECONDS = 2.0
 # Whether audio holds speech is decided by voice_level_gate.VoiceLevelGate (the Deck's own mic
 # is quiet, speech peaks at ~150–250 RMS, so a fixed average-loudness number cut quiet speakers off).
 

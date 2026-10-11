@@ -133,8 +133,12 @@ def _log_start_refused(model_id: str, error: str) -> None:
     logger.info("voice: recording start refused (%s), model %s", error, model_id)
 
 
-async def start_voice_transcription(self, PLUGIN_ROOT: str):
+async def start_voice_transcription(self, PLUGIN_ROOT: str, game_running: bool = False):
     """Start PipeWire/Pulse capture and local whisper interim transcription.
+
+    `game_running` is the screen's word that a game was running when the mic was pressed: the live
+    words then rest between passes to keep the game smooth, and without a game they come as fast as
+    the engine can make them. An old screen that sends nothing counts as "no game".
 
     Every outcome writes one plain line through the ordinary logger (the activity log is off by
     default), so the plugin log file shows whether a microphone press arrived.
@@ -199,6 +203,7 @@ async def start_voice_transcription(self, PLUGIN_ROOT: str):
             decky.DECKY_PLUGIN_SETTINGS_DIR,
             model_id,
             logger,
+            game_running=bool(game_running),
         )
         out = await asyncio.to_thread(session.start)
         if out.get("accepted"):
@@ -209,7 +214,11 @@ async def start_voice_transcription(self, PLUGIN_ROOT: str):
     if not out.get("accepted"):
         _log_start_refused(model_id, str(out.get("error") or out.get("reason") or "not_accepted")[:200])
     else:
-        logger.info("voice: recording started, model %s", model_id)
+        logger.info(
+            "voice: recording started, model %s, %s",
+            model_id,
+            "game running" if game_running else "no game",
+        )
         await self._persist_input_transparency(build_voice_transcribe_snapshot(model_id=model_id))
         await self._maybe_app_log(
             "voice.start",

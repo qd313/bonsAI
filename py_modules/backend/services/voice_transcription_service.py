@@ -179,13 +179,18 @@ from backend.services.voice_whisper_runtime import (
 from backend.services.voice_whisper_daemon import get_whisper_engine
 
 BYTES_PER_SECOND = SAMPLE_RATE * CHANNELS * SAMPLE_WIDTH
-# The shortest rest between two live passes, and how many times as long as the last pass took the
-# rest must be (plan 88). A pass on the Deck with a game running took about 4.2 s (base.en, 2026-10-10)
-# and the old loop started the next one at once, so the engine worked nearly all the time and the
-# game fell from 60 to 35 frames a second. Resting as long as the pass took keeps the engine busy about
-# half the time at most; the floor keeps a fast pass from running ten times a second.
+# The shortest rest between two live passes. A fast pass must not run ten times a second.
 TRANSCRIBE_INTERVAL_S = 0.4
-LIVE_REST_FACTOR = 1.0
+# How many times as long as the last pass took the rest must be, with a game running (plan 88). A pass
+# on the Deck with a game running took about 4.2 s (base.en, 2026-10-10) and the old loop started the
+# next one at once, so the engine worked nearly all the time and the game fell from 60 to 35 frames a
+# second. Resting as long as the pass took keeps the engine busy about half the time at most.
+LIVE_REST_FACTOR_GAME = 1.0
+# With no game running there is nothing to protect, so the rest is only the floor above and passes run
+# back to back, as before plan 88. Plan 88's rest of one pass length made a base.en pass (about 2.5 s
+# on the Deck, 2026-10-11) change the words only every 4.4 to 5.5 s: the first words came about 4.4 s
+# after the press, and a 9-second phrase showed no live words before Stop at all.
+LIVE_REST_FACTOR_NO_GAME = 0.0
 # A live block reads the recording from where the block began. Whisper reads 30 s at a time, so a
 # block stops growing at 28 s: it is read once more over exactly those 28 s, frozen, and the next
 # block starts where it ended. Text from two blocks is joined, never matched on overlap.
@@ -347,11 +352,14 @@ class VoiceTranscriptionSession:
         settings_dir: str,
         model_id: str,
         logger: Any,
+        game_running: bool = False,
     ) -> None:
         self.plugin_root = plugin_root
         self.settings_dir = settings_dir
         self.model_id = sanitize_voice_stt_model(model_id)
         self.logger = logger
+        # Whether a game was running when the mic was pressed; it decides how long the live passes rest.
+        self.game_running = bool(game_running)
         self._lock = threading.Lock()
         self._state = new_voice_transcription_state()
         self._state["model_id"] = self.model_id
@@ -434,6 +442,11 @@ class VoiceTranscriptionSession:
 
     def _live_text(self) -> str:
         return _join_transcript_parts(self._frozen_text, self._block_text)
+
+    def _live_rest_s(self, took: float) -> float:
+        """How long to wait before the next live pass, given how long the last one took."""
+        factor = LIVE_REST_FACTOR_GAME if self.game_running else LIVE_REST_FACTOR_NO_GAME
+        return max(TRANSCRIBE_INTERVAL_S, took * factor)
 
     def _release_engine_once(self) -> None:
         """Let go of the shared speech engine, once per session however many paths end it.
@@ -697,7 +710,7 @@ class VoiceTranscriptionSession:
                 ran = True
             if ran:
                 took = time.monotonic() - began
-                next_pass_at = time.monotonic() + max(TRANSCRIBE_INTERVAL_S, took * LIVE_REST_FACTOR)
+                next_pass_at = time.monotonic() + self._live_rest_s(took)
             else:
                 time.sleep(0.05)
 

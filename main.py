@@ -2301,9 +2301,9 @@ class Plugin:
         """Poll voice model download progress."""
         return await voice_rpc.get_voice_install_status(self)
 
-    async def start_voice_transcription(self):
+    async def start_voice_transcription(self, game_running: bool = False):
         """Start PipeWire/Pulse capture and local whisper interim transcription."""
-        return await voice_rpc.start_voice_transcription(self, PLUGIN_ROOT)
+        return await voice_rpc.start_voice_transcription(self, PLUGIN_ROOT, game_running)
 
     async def stop_voice_transcription(self):
         """Stop capture and return finalized transcript."""

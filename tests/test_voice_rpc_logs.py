@@ -22,14 +22,26 @@ from backend.services import voice_rpc  # noqa: E402
 
 
 class FakeSession:
-    def __init__(self, *_a, **_k) -> None:
-        pass
+    last: "FakeSession | None" = None
+
+    def __init__(self, *_a, **k) -> None:
+        self.kwargs = k
+        FakeSession.last = self
 
     def start(self) -> dict:
         return {"accepted": True}
 
     def stop(self) -> dict:
         return {"stopped": True, "finalized_transcript": "hello there"}
+
+
+async def _start_with_fake_session(plugin, *call_args) -> None:
+    """Press the mic through the real RPC with the engine reported ready and a stand-in session."""
+    ready = {"binary_ready": True, "model_ready": True}
+    plugin._voice_session = None
+    FakeSession.last = None
+    with mock.patch.object(voice_rpc, "engine_readiness", return_value=ready),             mock.patch.object(voice_rpc, "VoiceTranscriptionSession", FakeSession):
+        await plugin.start_voice_transcription(*call_args)
 
 
 def _lines(logger: mock.MagicMock) -> list[str]:
@@ -76,6 +88,23 @@ class VoiceStartStopLogging(PluginSettingsFileMixin, unittest.IsolatedAsyncioTes
         self.assertEqual(len(lines), 1)
         self.assertIn("started", lines[0])
         self.assertIn("tiny.en", lines[0])
+
+    async def test_start_log_line_names_the_pace_chosen(self) -> None:
+        """Plan 88 follow-up: a Deck check reads which rest the session got off this line."""
+        self._write_settings({"capabilities": {"microphone_access": True}, "voice_stt_model": "tiny.en"})
+        for sent, expected in ((True, "game running"), (False, "no game")):
+            with self.subTest(game_running=sent):
+                self.logger.reset_mock()
+                await _start_with_fake_session(self.plugin, sent)
+                lines = _lines(self.logger)
+                self.assertTrue(lines[0].endswith(", " + expected), lines[0])
+
+    async def test_start_hands_the_game_flag_to_the_session_and_defaults_to_no_game(self) -> None:
+        self._write_settings({"capabilities": {"microphone_access": True}, "voice_stt_model": "tiny.en"})
+        for call_args, expected in (((True,), True), ((False,), False), ((), False)):
+            with self.subTest(args=call_args):
+                await _start_with_fake_session(self.plugin, *call_args)
+                self.assertIs(FakeSession.last.kwargs.get("game_running"), expected)
 
     async def test_stop_logs_when_a_recording_ends(self) -> None:
         self._write_settings({"capabilities": {"microphone_access": True}, "voice_stt_model": "tiny.en"})

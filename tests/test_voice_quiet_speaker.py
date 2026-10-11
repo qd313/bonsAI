@@ -78,13 +78,15 @@ def room_stream(rms: float, seconds: float) -> bytes:
 class Recording:
     """Runs one session's listening loop over a prebuilt sound stream, on a jumping clock."""
 
-    def __init__(self, stream: bytes, word_times=()):
+    def __init__(self, stream: bytes, word_times=(), game_running: bool = False):
         self.stream = stream
         self.word_times = list(word_times)
         self.clock = 0.0
         self.fed = 0
         self.decode_calls = 0
-        self.session = vts.VoiceTranscriptionSession("/p", "/s", "tiny.en", mock.MagicMock())
+        self.session = vts.VoiceTranscriptionSession(
+            "/p", "/s", "tiny.en", mock.MagicMock(), game_running=game_running
+        )
 
     def _feed_until_now(self) -> None:
         until = min(len(self.stream), int(self.clock * BYTES_PER_SECOND))

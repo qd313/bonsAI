@@ -116,8 +116,15 @@ class Recording(QuietRecording):
     """The quiet-speaker test's jumping-clock run, with a stand-in that also notes where in the
     recording the audio it was handed came from, and what the session said about itself at that moment."""
 
-    def __init__(self, stream: bytes, word_times=(), words: Optional[list[str]] = None, stop_at_end: bool = True):
-        super().__init__(stream, word_times)
+    def __init__(
+        self,
+        stream: bytes,
+        word_times=(),
+        words: Optional[list[str]] = None,
+        stop_at_end: bool = True,
+        game_running: bool = False,
+    ):
+        super().__init__(stream, word_times, game_running=game_running)
         self.words = words if words is not None else [f"w{i}" for i in range(len(self.word_times))]
         self.stop_at_end = stop_at_end
         self.calls: list[Call] = []
@@ -228,6 +235,20 @@ class FinalReplacesLiveTests(unittest.TestCase):
         self.assertEqual(status["status"], "stopped")
 
 
+def _live_calls_when_each_pass_takes_two_seconds(game_running: bool) -> list[Call]:
+    stream, times = build_stream(30)
+    rec = Recording(stream, times, game_running=game_running)
+
+    def slow_pass(call: Call) -> Optional[str]:
+        if not call.whole:
+            rec.advance(2.0)  # this pass took two seconds
+        return None
+
+    rec.on_call = slow_pass
+    rec.run()
+    return rec.live_calls
+
+
 class LivePassesTests(unittest.TestCase):
     def test_live_text_is_replaced_by_each_pass_not_stitched(self) -> None:
         stream, times = build_stream(16)
@@ -239,21 +260,32 @@ class LivePassesTests(unittest.TestCase):
         starts = {round(c.start_s, 2) for c in rec.live_calls}
         self.assertEqual(len(starts), 1)
 
-    def test_the_engine_rests_at_least_as_long_as_the_pass_took(self) -> None:
-        stream, times = build_stream(30)
-        rec = Recording(stream, times)
-
-        def slow_pass(call: Call) -> Optional[str]:
-            if not call.whole:
-                rec.advance(2.0)  # this pass took two seconds
-            return None
-
-        rec.on_call = slow_pass
-        rec.run()
-        live = rec.live_calls
+    def test_with_a_game_the_engine_rests_at_least_as_long_as_the_pass_took(self) -> None:
+        live = _live_calls_when_each_pass_takes_two_seconds(game_running=True)
         self.assertGreater(len(live), 3)
         for before, after in zip(live, live[1:]):
             self.assertGreaterEqual(after.clock - before.finished_clock, 2.0 - 1e-6)
+
+    def test_with_no_game_a_slow_pass_is_followed_by_only_the_minimum_rest(self) -> None:
+        """Plan 88 follow-up: no game to protect, so passes run back to back (floor only)."""
+        live = _live_calls_when_each_pass_takes_two_seconds(game_running=False)
+        self.assertGreater(len(live), 3)
+        for before, after in zip(live, live[1:]):
+            gap = after.clock - before.finished_clock
+            self.assertGreaterEqual(gap, vts.TRANSCRIBE_INTERVAL_S - 1e-6)
+            self.assertLess(gap, 1.0, "no game: the rest must not grow with the pass length")
+
+    def test_the_session_defaults_to_no_game(self) -> None:
+        session = vts.VoiceTranscriptionSession("/p", "/s", "base.en", mock.MagicMock())
+        self.assertFalse(session.game_running)
+        self.assertAlmostEqual(session._live_rest_s(2.5), vts.TRANSCRIBE_INTERVAL_S)
+
+    def test_the_rest_after_a_pass_is_the_floor_with_no_game_and_the_pass_length_with_a_game(self) -> None:
+        idle = vts.VoiceTranscriptionSession("/p", "/s", "base.en", mock.MagicMock(), game_running=False)
+        busy = vts.VoiceTranscriptionSession("/p", "/s", "base.en", mock.MagicMock(), game_running=True)
+        self.assertAlmostEqual(idle._live_rest_s(4.2), vts.TRANSCRIBE_INTERVAL_S)
+        self.assertAlmostEqual(busy._live_rest_s(4.2), 4.2)
+        self.assertAlmostEqual(busy._live_rest_s(0.1), vts.TRANSCRIBE_INTERVAL_S)
 
     def test_fast_passes_are_still_spaced_by_the_minimum_rest(self) -> None:
         stream, times = build_stream(30)

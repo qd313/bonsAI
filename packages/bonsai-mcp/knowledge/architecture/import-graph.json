@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 832,
-  "edgeCount": 2544,
+  "fileCount": 833,
+  "edgeCount": 2547,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4956,6 +4956,14 @@
       ],
       "importedBy": []
     },
+    "src/features/voice/voiceStartGameFlag.test.tsx": {
+      "imports": [
+        "src/hooks/useVoiceTranscription.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/features/voice/voiceStartingFeedback.test.tsx": {
       "imports": [
         "src/index.tsx",
@@ -6123,7 +6131,8 @@
       ],
       "importedBy": [
         "src/features/voice/useVoiceAskInput.test.ts",
-        "src/features/voice/useVoiceAskInput.ts"
+        "src/features/voice/useVoiceAskInput.ts",
+        "src/features/voice/voiceStartGameFlag.test.tsx"
       ]
     },
     "src/i18n/catalog.ts": {
@@ -6800,6 +6809,7 @@
         "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
         "src/features/voice/voiceClearAfterStop.test.tsx",
         "src/features/voice/voiceFinishAtStop.test.tsx",
+        "src/features/voice/voiceStartGameFlag.test.tsx",
         "src/features/voice/voiceStartingFeedback.test.tsx",
         "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/useBackgroundGameAi.test.ts",
@@ -6946,6 +6956,7 @@
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
         "src/features/voice/voiceClearAfterStop.test.tsx",
         "src/features/voice/voiceFinishAtStop.test.tsx",
+        "src/features/voice/voiceStartGameFlag.test.tsx",
         "src/features/voice/voiceStartingFeedback.test.tsx",
         "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.saveFirst.test.tsx",

@@ -3270,6 +3270,12 @@ and the five-star **Deck health snapshot**; the earlier feature review said not 
 **Consequence if unanswered.** Nothing is built until 1 to 3 are answered. 4 to 7 have defaults that hold:
 typed command yes, the full report, consent asked for again at the time, four stars.
 
+**Amended 2026-10-11 (call 3), the maintainer's word after the mock-up board's round 2:** one exception to
+"one press per action". **Fix it for me** may run several steps from one press, as long as it lists every
+step before it starts, ticks each one off as it runs, and **Stop works**: Stop ends the run at any step and
+nothing changes after it. Everything else in the doctor still offers, one press per action. Roadmap entry
+**Connection doctor**; drawing at https://claude.ai/artifact/XyZfUSPGRZdm2P3mTGV9tR (tab 6).
+
 ### D65 — LOCKED 2026-09-05 — "Starting out" and comparison cards get their own kind
 
 Resolves D53. The maintainer chose **their own kind** (working name `guide`) over leaving them

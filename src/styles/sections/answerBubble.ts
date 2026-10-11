@@ -18,7 +18,7 @@
  * or the row of buttons underneath the bubble (still in section-6.ts).
  */
 import { uiScalePx } from "./uiScalePx";
-import { chatTextPx } from "./chatTextPx";
+import { textPx } from "./textPx";
 import { ANSWER_LINE_HEIGHT } from "./answerMarkdownFormatting";
 import { buildReadAloudCornerCss } from "./answerBubbleCorners";
 
@@ -46,19 +46,19 @@ export function buildAnswerBubbleSection(): string {
         }
         .bonsai-scope .bonsai-chat-ai-bubble.Panel.Focusable,
         .bonsai-scope .bonsai-chat-ai-bubble.Panel.Focusable > div {
-          font-size: ${chatTextPx(12)} !important;
+          font-size: ${textPx(12)} !important;
           line-height: ${ANSWER_LINE_HEIGHT} !important;
         }
         .bonsai-scope .bonsai-ai-response-plain-stream {
           white-space: pre-wrap !important;
           word-break: break-word !important;
           overflow-wrap: anywhere !important;
-          font-size: ${chatTextPx(12)} !important;
+          font-size: ${textPx(12)} !important;
           line-height: ${ANSWER_LINE_HEIGHT} !important;
           color: inherit !important;
         }
         .bonsai-scope .bonsai-chat-ai-bubble .bonsai-ai-response-chunk--in-bubble {
-          font-size: ${chatTextPx(12)} !important;
+          font-size: ${textPx(12)} !important;
           line-height: ${ANSWER_LINE_HEIGHT} !important;
         }
         .bonsai-scope .bonsai-chat-ai-bubble-inner {

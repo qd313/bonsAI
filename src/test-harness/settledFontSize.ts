@@ -4,9 +4,11 @@
  *          computed size gets the raw rule text back. This works the size out the way the browser
  *          does for the few shapes the plugin writes: a rule's `!important` beats the rest, then the
  *          more specific selector, then the later rule, with an element's own inline size beating a
- *          plain rule; `calc(Npx * var(--bonsai-chat-text-scale, 1))` is N times the scale the root
- *          carries; the UI scale counts as 1; `em` is of the parent; no rule means the parent's size.
- * Used for: tests that must show a font size really changed on screen (the chat's Text size).
+ *          plain rule; `calc(Npx * var(--bonsai-ui-scale, 1) * var(--bonsai-text-scale, 1))` (either
+ *          factor optional, `em` allowed in place of `px`) is N times the Text size step the root
+ *          carries; the UI scale counts as 1; a bare `em` is of the parent; no rule means the
+ *          parent's size.
+ * Used for: tests that must show a font size really changed on screen (the Text size setting).
  * Does not: Lay anything out, or read shorthand `font`. A size written some other way throws, so a new
  *           shape cannot silently read as the default.
  */
@@ -49,8 +51,8 @@ function specificity(selector: string): number {
 
 export type FontSizeReader = (el: Element) => number;
 
-/** `css` is every stylesheet in play; `chatTextScale` is the number the plugin's root carries in `--bonsai-chat-text-scale`. */
-export function makeFontSizeReader(css: string, chatTextScale: number): FontSizeReader {
+/** `css` is every stylesheet in play; `textScale` is the number the plugin's root carries in `--bonsai-text-scale`. */
+export function makeFontSizeReader(css: string, textScale: number): FontSizeReader {
   const rules = parseRules(css);
 
   const declaredOn = (el: Element): string | null => {
@@ -80,10 +82,11 @@ export function makeFontSizeReader(css: string, chatTextScale: number): FontSize
     const parent = el.parentElement;
     const parentPx = parent ? read(parent) : 16;
     if (value === null || value === "inherit") return parentPx;
-    let m = /^calc\(\s*([\d.]+)px \* var\(--bonsai-chat-text-scale, 1\)\s*\)$/.exec(value);
-    if (m) return Number(m[1]) * chatTextScale;
-    m = /^calc\(\s*([\d.]+)px \* var\(--bonsai-ui-scale, 1\)\s*\)$/.exec(value);
-    if (m) return Number(m[1]);
+    let m = /^calc\(\s*([\d.]+)(px|em)((?:\s*\*\s*var\(--bonsai-(?:ui|text)-scale, 1\))+)\s*\)$/.exec(value);
+    if (m) {
+      const base = Number(m[1]) * (m[2] === "em" ? parentPx : 1);
+      return m[3]!.includes("--bonsai-text-scale") ? base * textScale : base;
+    }
     m = /^([\d.]+)px$/.exec(value);
     if (m) return Number(m[1]);
     m = /^([\d.]+)em$/.exec(value);

@@ -271,6 +271,7 @@
     "src/hooks/useVoiceTranscription.test.ts",
     "src/index.helpChip.test.tsx",
     "src/index.test.tsx",
+    "src/index.textSize.test.tsx",
     "src/index.topStrip.test.tsx",
     "src/preview/replyLayoutReport.test.ts",
     "src/styles/buttonFocusRing.test.ts",

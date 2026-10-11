@@ -14,7 +14,7 @@
  * inside an answer once it has already landed somewhere.
  */
 
-import { chatTextPx } from "./chatTextPx";
+import { textPx } from "./textPx";
 
 /**
  * The answer's line spacing, as a multiple of its 12px text: 15px from one line to the next.
@@ -59,7 +59,7 @@ export function buildAnswerMarkdownFormattingSection(): string {
           white-space: normal;
           word-break: break-word;
           overflow-wrap: anywhere;
-          font-size: ${chatTextPx(12)};
+          font-size: ${textPx(12)};
           line-height: ${ANSWER_LINE_HEIGHT};
         }
         .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-p {
@@ -104,7 +104,7 @@ export function buildAnswerMarkdownFormattingSection(): string {
         }
         .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-fenced-code {
           font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
-          font-size: ${chatTextPx(11)};
+          font-size: ${textPx(11)};
           line-height: 1.35;
           display: block;
         }

@@ -8,22 +8,22 @@
  * Does not: Scale the chip row itself, the chip counter above it, the Show details line, or anything
  *           else on the panel's frame: only its words. The raw JSON dumps keep their size too.
  */
-import { chatTextPx } from "./chatTextPx";
+import { textPx } from "./textPx";
 
 export function buildChatDetailsTextSection(): string {
   return `        .bonsai-scope .bonsai-chip-body {
-          font-size: ${chatTextPx(11)} !important;
+          font-size: ${textPx(11)} !important;
         }
         /* The panel's small print is written inline at 10 and 9 px; it keeps its place under the title. */
         .bonsai-scope .bonsai-chip-body span[style*="font-size: 10px"],
         .bonsai-scope .bonsai-chip-body div[style*="font-size: 10px"] {
-          font-size: ${chatTextPx(10)} !important;
+          font-size: ${textPx(10)} !important;
         }
         .bonsai-scope .bonsai-chip-body span[style*="font-size: 9px"] {
-          font-size: ${chatTextPx(9)} !important;
+          font-size: ${textPx(9)} !important;
         }
         .bonsai-scope .bonsai-details-session-row {
-          font-size: ${chatTextPx(11)} !important;
+          font-size: ${textPx(11)} !important;
         }
 `;
 }

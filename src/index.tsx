@@ -168,12 +168,12 @@ import { useSessionResetActions } from "./features/plugin-shell/useSessionResetA
 import { useSessionRestoreAfterRemount } from "./features/plugin-shell/useSessionRestoreAfterRemount";
 import { useChatSlotActivityState } from "./features/plugin-shell/useChatSlotActivityState";
 import { useBonsaiScopeStyle } from "./features/plugin-shell/useBonsaiScopeStyle";
-import { withChatTextScale } from "./data/chatTextSize";
+import { textScaleValue, withTextScale } from "./data/chatTextSize";
 import { useExternalNavigationActions } from "./features/plugin-shell/useExternalNavigationActions";
 import { useAppLogPrefsAndCapturedErrors } from "./features/plugin-shell/useAppLogPrefsAndCapturedErrors";
 import { useTabAndModeGuardEffects } from "./features/plugin-shell/useTabAndModeGuardEffects";
 import { ChatTitleView } from "./features/chat-title/ChatTitleView";
-import { setChatTitleLitColor } from "./features/chat-title/chatTitleStore";
+import { setChatTitleLitColor, setChatTitleTextScale } from "./features/chat-title/chatTitleStore";
 import { tabBarExitDownFor, useTopStripTabBar } from "./features/chat-title/useTopStripTabBar";
 
 /*
@@ -622,23 +622,27 @@ const Content: React.FC = () => {
     [latencyTimeoutsCustomEnabled, latencyWarningSeconds]
   );
 
-  const bonsaiScopeStyleBase = useBonsaiScopeStyle({
+  /* The Text size step, in its own variable beside the UI scale: every font size reads it. It goes into the
+     style handed to useBonsaiScopeStyle, which publishes the merged style for popups, so a popup's words
+     follow the setting too. */
+  const uiScaleAndTextStyle = useMemo(
+    () => withTextScale(uiScale.scopeStyle, chatTextSize),
+    [uiScale.scopeStyle, chatTextSize],
+  );
+  const bonsaiScopeStyle = useBonsaiScopeStyle({
     aiCharacterEnabled,
     aiCharacterRandom,
     aiCharacterPresetId,
     aiCharacterCustomText,
-    uiScaleScopeStyle: uiScale.scopeStyle,
+    uiScaleScopeStyle: uiScaleAndTextStyle,
   });
-  // The Text size step, in its own variable on the root (not the UI scale): only the chat's words read it.
-  const bonsaiScopeStyle = useMemo(
-    () => withChatTextScale(bonsaiScopeStyleBase, chatTextSize),
-    [bonsaiScopeStyleBase, chatTextSize],
-  );
   /* The chat's name in Decky's bar is drawn outside this box (plan 84 step 5): it learns the
      character's lit colour (the tab bar's own) through its store, not through props; the tab showing
      goes the same way, with the tab bar's data (useTopStripTabBar, below). */
   const tabLitColor = (bonsaiScopeStyle as Record<string, unknown>)["--bonsai-ui-tab-lit"];
   useEffect(() => setChatTitleLitColor(typeof tabLitColor === "string" ? tabLitColor : null), [tabLitColor]);
+  /* The same goes for the Text size step: Decky's bar draws the chat's name and the tab bar outside the box. */
+  useEffect(() => setChatTitleTextScale(textScaleValue(chatTextSize)), [chatTextSize]);
 
   useTabAndModeGuardEffects({
     settingsLoaded,

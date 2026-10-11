@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 836,
-  "edgeCount": 2562,
+  "fileCount": 837,
+  "edgeCount": 2568,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2630,7 +2630,9 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.textSize.test.tsx",
         "src/data/chatTextSize.test.ts",
-        "src/index.tsx"
+        "src/features/chat-title/ChatTitleView.tsx",
+        "src/index.tsx",
+        "src/styles/sections/textPx.ts"
       ]
     },
     "src/data/deckEssentialsTags.ts": {
@@ -3294,6 +3296,7 @@
     },
     "src/features/chat-title/ChatTitleView.tsx": {
       "imports": [
+        "src/data/chatTextSize.ts",
         "src/features/chat-title/ChatNameWords.tsx",
         "src/features/chat-title/ChatRowIcons.tsx",
         "src/features/chat-title/TitleTabStrip.tsx",
@@ -6219,6 +6222,15 @@
       ],
       "importedBy": []
     },
+    "src/index.textSize.test.tsx": {
+      "imports": [
+        "src/index.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/rpcFixtures.ts",
+        "src/utils/uiScaleScopeBridge.ts"
+      ],
+      "importedBy": []
+    },
     "src/index.topStrip.test.tsx": {
       "imports": [
         "src/index.tsx",
@@ -6300,6 +6312,7 @@
         "src/features/voice/voiceStartingFeedback.test.tsx",
         "src/index.helpChip.test.tsx",
         "src/index.test.tsx",
+        "src/index.textSize.test.tsx",
         "src/index.topStrip.test.tsx"
       ]
     },
@@ -6421,7 +6434,7 @@
       "imports": [
         "src/styles/sections/answerBubbleCorners.ts",
         "src/styles/sections/answerMarkdownFormatting.ts",
-        "src/styles/sections/chatTextPx.ts",
+        "src/styles/sections/textPx.ts",
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [
@@ -6441,7 +6454,7 @@
     },
     "src/styles/sections/answerMarkdownFormatting.ts": {
       "imports": [
-        "src/styles/sections/chatTextPx.ts"
+        "src/styles/sections/textPx.ts"
       ],
       "importedBy": [
         "src/styles/sections/answerBubble.test.ts",
@@ -6451,7 +6464,7 @@
     },
     "src/styles/sections/chatDetailsText.ts": {
       "imports": [
-        "src/styles/sections/chatTextPx.ts"
+        "src/styles/sections/textPx.ts"
       ],
       "importedBy": [
         "src/styles/sections/section-6.ts"
@@ -6461,15 +6474,6 @@
       "imports": [],
       "importedBy": [
         "src/styles/sections/gamepadAndPullModels.ts"
-      ]
-    },
-    "src/styles/sections/chatTextPx.ts": {
-      "imports": [],
-      "importedBy": [
-        "src/styles/sections/answerBubble.ts",
-        "src/styles/sections/answerMarkdownFormatting.ts",
-        "src/styles/sections/chatDetailsText.ts",
-        "src/styles/sections/questionBubble.ts"
       ]
     },
     "src/styles/sections/detailsSlot.ts": {
@@ -6533,7 +6537,7 @@
     },
     "src/styles/sections/questionBubble.ts": {
       "imports": [
-        "src/styles/sections/chatTextPx.ts",
+        "src/styles/sections/textPx.ts",
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [
@@ -6681,6 +6685,17 @@
         "src/features/chat-title/TitleTabStrip.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/styles/bonsaiScopeStylesheet.ts"
+      ]
+    },
+    "src/styles/sections/textPx.ts": {
+      "imports": [
+        "src/data/chatTextSize.ts"
+      ],
+      "importedBy": [
+        "src/styles/sections/answerBubble.ts",
+        "src/styles/sections/answerMarkdownFormatting.ts",
+        "src/styles/sections/chatDetailsText.ts",
+        "src/styles/sections/questionBubble.ts"
       ]
     },
     "src/styles/sections/uiScalePx.ts": {
@@ -6869,6 +6884,7 @@
         "src/hooks/useVoiceTranscription.test.ts",
         "src/index.helpChip.test.tsx",
         "src/index.test.tsx",
+        "src/index.textSize.test.tsx",
         "src/index.topStrip.test.tsx",
         "src/test-harness/fakeDeckyRpc.test.ts",
         "src/test-harness/setup.ts",
@@ -7058,6 +7074,7 @@
         "src/hooks/usePullModelPinForAsk.test.tsx",
         "src/hooks/useReadAloud.test.ts",
         "src/index.test.tsx",
+        "src/index.textSize.test.tsx",
         "src/test-harness/fakeDeckyRpc.ts"
       ]
     },
@@ -9615,7 +9632,8 @@
       "imports": [],
       "importedBy": [
         "src/components/BonsaiModalScope.tsx",
-        "src/features/plugin-shell/useBonsaiScopeStyle.ts"
+        "src/features/plugin-shell/useBonsaiScopeStyle.ts",
+        "src/index.textSize.test.tsx"
       ]
     },
     "src/utils/unifiedInputPersistenceMode.test.ts": {

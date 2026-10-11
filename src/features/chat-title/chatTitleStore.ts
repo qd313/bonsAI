@@ -92,6 +92,8 @@ export type ChatTitleState = {
   tab: string | null;
   /** The character's lit accent colour (the tab bar's `--bonsai-ui-tab-lit`), or null for the default. */
   litColor: string | null;
+  /** The Text size step as the text for `--bonsai-text-scale` ("0.9", "1", "1.15"), or null before the plugin root says. */
+  textScale: string | null;
   /** The open chat, while the Main tab is drawn; null otherwise. */
   chat: ChatTitleChat | null;
   /** The Main tab's actions, while it is drawn; null otherwise. */
@@ -105,6 +107,7 @@ export type ChatTitleState = {
 const INITIAL: ChatTitleState = {
   tab: null,
   litColor: null,
+  textScale: null,
   chat: null,
   actions: null,
   menuOpen: false,
@@ -173,6 +176,15 @@ export function setChatTitleTab(tab: string | null): void {
 export function setChatTitleLitColor(litColor: string | null): void {
   if (litColor === state.litColor) return;
   set({ ...state, litColor });
+}
+
+/**
+ * The plugin root: the Text size step, so the chat's name and the tab bar here, which Decky draws outside
+ * bonsAI's box, follow the setting like every other word (plan 89).
+ */
+export function setChatTitleTextScale(textScale: string | null): void {
+  if (textScale === state.textScale) return;
+  set({ ...state, textScale });
 }
 
 /**

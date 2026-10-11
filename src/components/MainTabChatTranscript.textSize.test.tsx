@@ -17,7 +17,7 @@ import type { LastExchangeSnapshot } from "../types/backgroundAsk";
 import type { ContextChip, TransparencySnapshot } from "../utils/inputTransparency";
 import { buildBonsaiScopeStylesheet } from "../styles/bonsaiScopeStylesheet";
 import { CHAT_TITLE_CSS } from "../features/chat-title/chatTitleStyles";
-import { CHAT_TEXT_SCALE } from "../data/chatTextSize";
+import { TEXT_SCALE } from "../data/chatTextSize";
 import { makeFontSizeReader } from "../test-harness/settledFontSize";
 import type { ChatTextSize } from "../data/bonsaiSettingsSchema";
 
@@ -108,7 +108,7 @@ type Measured = { question: number; answer: number; details: number; tabLabel: n
 
 function measure(size: ChatTextSize): Measured {
   const { container, unmount } = renderChat();
-  const read = makeFontSizeReader(`${buildBonsaiScopeStylesheet()}\n${CHAT_TITLE_CSS}`, CHAT_TEXT_SCALE[size]);
+  const read = makeFontSizeReader(`${buildBonsaiScopeStylesheet()}\n${CHAT_TITLE_CSS}`, TEXT_SCALE[size]);
   const one = (sel: string): Element => {
     const el = container.querySelector(sel);
     expect(el, sel).not.toBeNull();
@@ -133,7 +133,7 @@ describe("Text size scales the chat's own words only", () => {
   it("steps the question, the answer and the Show details text by the chosen amount", () => {
     for (const size of ["small", "large"] as const) {
       const m = measure(size);
-      const step = CHAT_TEXT_SCALE[size];
+      const step = TEXT_SCALE[size];
       expect(m.question).toBeCloseTo(normal.question * step, 5);
       expect(m.answer).toBeCloseTo(normal.answer * step, 5);
       expect(m.details).toBeCloseTo(normal.details * step, 5);
@@ -165,7 +165,7 @@ describe("the scale lives in its own variable, apart from the UI scale", () => {
     const text = sheet.replace(/\/\*[\s\S]*?\*\//g, "");
     const selectors: string[] = [];
     for (const m of text.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-      if (m[2]!.includes("--bonsai-chat-text-scale")) selectors.push(m[1]!.trim());
+      if (m[2]!.includes("--bonsai-text-scale")) selectors.push(m[1]!.trim());
     }
     expect(selectors.length).toBeGreaterThan(0);
     for (const s of selectors) {
@@ -174,6 +174,6 @@ describe("the scale lives in its own variable, apart from the UI scale", () => {
       );
       expect(s).not.toMatch(/tab-bar|chat-title|settings|chip-ladder-chip/);
     }
-    expect(text).not.toMatch(/--bonsai-chat-text-scale[^;]*--bonsai-ui-scale|--bonsai-ui-scale[^;]*--bonsai-chat-text-scale/);
+    expect(text).not.toMatch(/--bonsai-text-scale[^;]*--bonsai-ui-scale|--bonsai-ui-scale[^;]*--bonsai-text-scale/);
   });
 });

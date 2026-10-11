@@ -14,7 +14,7 @@
  * the row of buttons underneath an answer (replyActionsRow.ts).
  */
 import { uiScalePx } from "./uiScalePx";
-import { chatTextPx } from "./chatTextPx";
+import { textPx } from "./textPx";
 
 /**
  * In: nothing -- every value here is a fixed string or read from a CSS
@@ -180,7 +180,7 @@ export function buildQuestionBubbleSection(): string {
         }
         .bonsai-scope .bonsai-chat-turn-row-title {
           display: block !important;
-          font-size: ${chatTextPx(11)} !important;
+          font-size: ${textPx(11)} !important;
           font-weight: 600 !important;
           line-height: 1.3 !important;
           white-space: nowrap !important;

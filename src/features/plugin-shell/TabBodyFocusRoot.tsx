@@ -9,8 +9,8 @@
  *         `navFocusRegistry` lets both hops skip it: `TakeFocus` on a container focuses within it,
  *         the same call Steam's `Tabs` makes on its own content container.
  *         It also keeps a few lines of clear space above the first heading, so it is not left under the
- *         pane's top fade (plan 87, B9), and places a small scroll before Steam's own as the ring walks the
- *         body (plan 87, B10; useTabBodyFocusScroll).
+ *         pane's top fade (plan 87, B9), and turns the page by a step, before Steam's own scroll, when the
+ *         ring walks near the pane's edge (plan 87 B10, plan 89; useTabBodyFocusScroll).
  * Does not: Style anything or claim any press but Up at the top; every other move stays with the
  *           controls inside.
  */

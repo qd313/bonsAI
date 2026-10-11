@@ -6,7 +6,9 @@
  *          last control and back Up the way the rig does: one landing per press, then Steam's own
  *          scroll-into-view runs, as it does on the Deck a moment after the ring lands.
  *          A stop marked "wrap" in the geometry is a button inside a Focusable wrapper, and the ring lands on the
- *          wrapper, as the Deck's voice model rows and Reinstall voice engine do.
+ *          wrapper, as the Deck's voice model rows and Reinstall voice engine do. Controls on the same line as a
+ *          stop (`beside` in the geometry: Settings' Text size choices, Clear all data...) are reached only by
+ *          `pressSideways`, a Left or Right; `autoWalk: false` leaves every press to the test (plan 89, M1).
  * Used for: TabBodyFocusRoot.walk.test.tsx.
  * Does not: Know Steam's one real rule. The Deck's moves (a control wholly outside Steam's padded band put in
  *           the middle of the pane, one partly outside moved to the nearest edge) are modelled three ways
@@ -63,12 +65,15 @@ interface TabWalkOptions {
    * (Terse mode, Use local knowledge base) and the 367 px Up jump came from.
    */
   focusVia?: "steam" | "plain" | "helper";
+  /** Walk Down to the last control and back Up at once (the default); false leaves the walking to `press`. */
+  autoWalk?: boolean;
 }
 
 interface Landing {
   press: number;
   stop: number;
-  direction: "down" | "up";
+  /** "side": a Left or Right onto a control on the same line (`beside`, then the stop the line starts with). */
+  direction: "down" | "up" | "side";
   /** How far the pane moved at this press, plugin and Steam together. */
   moved: number;
   /** Where the pane stands once the plugin and Steam are done. */
@@ -90,6 +95,13 @@ interface TabWalk {
   /** Landings that visited a stop already visited in the same leg. */
   repeated: number;
   scrollTop: () => number;
+  /** One D-pad press that lands the ring on stop `i`, Steam's scroll after it; returns how far the pane moved. */
+  press: (i: number, direction: "down" | "up") => number;
+  /**
+   * One Left or Right that lands the ring on control `k` of the line stop `i` starts (0 is stop `i` itself, 1 and on
+   * its `beside` controls), Steam's scroll after it; returns how far the pane moved.
+   */
+  pressSideways: (i: number, k: number) => number;
   /** Put the ring on stop `i` right after a tap, which Steam's own scroll looks after; returns how far the pane moved. */
   tap: (i: number) => number;
   unmount: () => void;
@@ -116,6 +128,10 @@ export function walkTab(opts: TabWalkOptions): TabWalk {
             button
           );
         /* A toggle sits in a row of its own, a Focusable holding only it. */
+        const line = (geometry.beside?.[i] ?? []).map((side, k) => (
+          <button key={`${i}-${k}`} className="Focusable" data-beside={`${i}-${k + 1}`} aria-label={side} />
+        ));
+        if (line.length > 0) return [leaf, ...line];
         return opts.steamTarget === "row" && height === TOGGLE_HEIGHT ? (
           <div key={i} className="Panel Focusable" data-row={i}>
             {leaf}
@@ -172,6 +188,12 @@ export function walkTab(opts: TabWalkOptions): TabWalk {
   /** The element the ring lands on for stop `i`: its wrapper when it has one, else the stop. */
   const ringOn = (i: number): HTMLElement => pane.querySelector<HTMLElement>(`[data-wrap="${i}"]`) ?? stops[i]!;
   stops.forEach((_, i) => place(ringOn(i), geometry.stops[i]![0], geometry.stops[i]![1]));
+  /** Control `k` of the line stop `i` starts: the stop itself, then the controls beside it, all at its height. */
+  const onLine = (i: number, k: number): HTMLElement =>
+    k === 0 ? ringOn(i) : pane.querySelector<HTMLElement>(`[data-beside="${i}-${k}"]`)!;
+  for (const [i, sides] of Object.entries(geometry.beside ?? {})) {
+    sides.forEach((_, k) => place(onLine(Number(i), k + 1), geometry.stops[Number(i)]![0], geometry.stops[Number(i)]![1]));
+  }
   /** What Steam is looking at for stop `i`: the element the ring is on, or its row (which stops short of the next stop). */
   const steamElement = (i: number): HTMLElement => {
     const row = pane.querySelector<HTMLElement>(`[data-row="${i}"]`);
@@ -209,23 +231,25 @@ export function walkTab(opts: TabWalkOptions): TabWalk {
   const landings: Landing[] = [];
   const headingTop = () => heading.getBoundingClientRect().top - PANE_TOP;
   const headingAtFirst: number[] = [];
-  const land = (i: number, direction: "down" | "up"): number => {
-    const el = ringOn(i);
+  const land = (i: number, direction: Landing["direction"], k = 0): number => {
+    const el = onLine(i, k);
     const before = scrollTop;
     act(() => {
       if (opts.focusVia === "plain") el.focus();
       else if (opts.focusVia === "helper") focusInTabBody(el);
       else el.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
     });
-    steamScrolls(steamElement(i));
+    steamScrolls(k === 0 ? steamElement(i) : el);
     const r = el.getBoundingClientRect();
     landings.push({ press: landings.length, stop: i, direction, moved: Math.abs(scrollTop - before), scrollAfter: scrollTop, top: r.top, bottom: r.bottom });
     if (i === 0) headingAtFirst.push(headingTop());
     return scrollTop;
   };
 
-  for (let i = 0; i < stops.length; i++) land(i, "down");
-  for (let i = stops.length - 1; i >= 0; i--) land(i, "up");
+  if (opts.autoWalk !== false) {
+    for (let i = 0; i < stops.length; i++) land(i, "down");
+    for (let i = stops.length - 1; i >= 0; i--) land(i, "up");
+  }
 
   HTMLElement.prototype.focus = realFocus;
 
@@ -233,13 +257,23 @@ export function walkTab(opts: TabWalkOptions): TabWalk {
   const up = landings.filter((l) => l.direction === "up");
   return {
     landings,
-    largestDown: Math.max(...down.map((l) => l.moved)),
-    largestUp: Math.max(...up.map((l) => l.moved)),
+    largestDown: Math.max(0, ...down.map((l) => l.moved)),
+    largestUp: Math.max(0, ...up.map((l) => l.moved)),
     headingTopAtFirstDown: headingAtFirst[0]!,
     headingTopAtFirstUp: headingAtFirst[1]!,
     notVisible: landings.filter((l) => l.top < PANE_TOP - 0.5 || l.bottom > PANE_TOP + opts.viewport + 0.5).map((l) => l.press),
     repeated: [down, up].reduce((n, leg) => n + leg.length - new Set(leg.map((l) => l.stop)).size, 0),
     scrollTop: () => scrollTop,
+    press: (i, direction) => {
+      const before = scrollTop;
+      land(i, direction);
+      return Math.abs(scrollTop - before);
+    },
+    pressSideways: (i, k) => {
+      const before = scrollTop;
+      land(i, "side", k);
+      return Math.abs(scrollTop - before);
+    },
     tap: (i) => {
       const el = stops[i]!;
       const before = scrollTop;

@@ -1,14 +1,20 @@
 /**
  * Title: Tab body focus scroll
- * Purpose: When the ring lands on a control in one of the plain tabs, move the pane a little first, to where
- *          the control is comfortably in view, so Steam's own scroll-into-view finds nothing to do.
+ * Purpose: When the ring lands on a control in one of the plain tabs, leave the pane still if the control is
+ *          comfortably in view, and otherwise turn the page by one step first, so Steam's own scroll-into-view
+ *          finds nothing to do.
  * Used for: TabBodyFocusRoot, around the Ollama, Settings, Permissions, Developer and About tabs.
- * Solves: A D-pad step that scrolled the tab half a screen (plan 87, B10). Steam moves a control that lies
- *         wholly outside its padded band to the middle of the pane; planning the move ourselves, a few
- *         controls ahead (tabBodyScrollPlan.ts), keeps every press to a couple of lines.
+ * Solves: A D-pad step that scrolled the tab half a screen (plan 87, B10): Steam moves a control that lies
+ *         wholly outside its padded band to the middle of the pane. Then the page moving at nearly every press,
+ *         Left and Right on one line included, and jumping to its end at the last control (plan 89): the plan
+ *         (tabBodyScrollPlan.ts) now moves only when the control is out of the band.
  * Does not: Move the ring, scroll Main (its answer sections and dock have their own placement), or react to a
- *           tap or the mouse (Steam's own scroll handles those). Does not animate: Steam looks at the control
- *           the moment focus lands, and a glide would show it still outside the band and make it scroll too.
+ *           tap or the mouse (Steam's own scroll handles those). Does not animate. Steam looks at the control
+ *           the moment focus lands and scrolls it in itself if it is outside its band; a glide of ours would
+ *           still have it outside, and Steam would scroll it too (to the middle, if it were wholly outside). The Deck shows Steam acting on that
+ *           moment: where the plan left a row a few px outside Steam's band, Steam glided it in itself
+ *           (4 to 8 px over 3 or 4 frames, plan89-M1-TAB-WALK.json). Nothing yet shows Steam leaving a pane we
+ *           glide alone, so the step is instant.
  *
  * How it works: two entry points, both ending in the same plan. A `focusin` listener in the capture phase on
  * the tab body, so it runs before Steam's own scroll (which comes after the focus event, and glides); and
@@ -107,7 +113,9 @@ function stopBox(stop: HTMLElement, root: HTMLElement, pane: HTMLElement, stops:
 
 /**
  * The pane's place for focus having landed on `target`, or null to leave it (not a plain stop, no pane, no
- * range to scroll). `lastTop` is where the ring was before, which says which way it is travelling.
+ * range to scroll). `lastTop` is where the ring was before, which says which way it is travelling: down, up, or
+ * along one line (Left and Right), which has no next control. Null (the ring has not been in this body yet) is
+ * down, the way in from the tab bar.
  */
 function scrollPlaceFor(
   root: HTMLElement,
@@ -135,18 +143,18 @@ function scrollPlaceFor(
   if (holdsStop(target) && inside.length !== 1) return null;
   const here = inside[0] ?? stops.find((s) => s === target || s.contains(target)) ?? target;
   const current = stopBox(here, root, pane, stops);
+  /* A control beside this one on the same line is neither above nor below it. */
   const others = stops.filter((s) => s !== here).map((s) => stopBox(s, root, pane, stops));
   const above = others.filter((b) => b.top < current.top - 1).sort((a, b) => b.top - a.top);
   const below = others.filter((b) => b.top > current.top + 1).sort((a, b) => a.top - b.top);
-  const goingUp = lastTop !== null && current.top < lastTop - 1;
+  const way = lastTop === null || current.top > lastTop + 1 ? below : current.top < lastTop - 1 ? above : [];
 
   return {
     top: current.top,
     scrollTop: planTabBodyScroll({
       current,
-      ahead: goingUp ? above : below,
+      next: way[0],
       atStart: above.length === 0,
-      atEnd: below.length === 0,
       scrollTop: pane.scrollTop,
       viewport,
       maxScroll,

@@ -1,7 +1,8 @@
 /**
  * Title: The five plain tabs' controls, as the Deck measured them
  * Purpose: Test data for the tab-body walk tests (tabBodyWalk.tsx): where every control sat in each tab,
- *          measured by the controller rig's Down walk on 2026-10-09 (plan 87, block M4).
+ *          measured by the controller rig's Down walk on 2026-10-09 (plan 87, block M4), Settings again on
+ *          2026-10-11 (plan 89, M1; docs/test-evidence/plan89-M1-TAB-WALK.json).
  * Used for: TabBodyFocusRoot.walk.test.tsx.
  * Solves: A walk test over invented spacing passes on any plan; these gaps (up to 405 px between two
  *         stops on Developer, 306 on Settings) are the ones that made Steam jump half a screen.
@@ -19,6 +20,8 @@ type TabStopData = [top: number, height: number, name: string, shape?: StopShape
 interface TabGeometry {
   contentHeight: number;
   stops: TabStopData[];
+  /** Stops on the same line as stop `i`, reached only by Left and Right; same top and height as stop `i`. */
+  beside?: Record<number, string[]>;
 }
 
 export const TAB_GEOMETRY: Record<"ollama" | "settings" | "permissions" | "developer" | "about", TabGeometry> = {
@@ -41,22 +44,28 @@ export const TAB_GEOMETRY: Record<"ollama" | "settings" | "permissions" | "devel
     ],
   },
   settings: {
-    contentHeight: 1981,
+    /* Re-measured 2026-10-11 (plan 89, M1: rect.y + scrollTop - 48, the pane at 24 and the body's 24 px inset above
+       the first heading); the Text size row had been added since plan 87. Its pane scrolled to 1392.2 at most. */
+    contentHeight: 2109,
     stops: [
-      [137, 22, "Adjust UI automatically"],
-      [231, 36, "Apply UI scale"],
-      [409, 44, "Set screenshot quality to Save mem"],
-      [541, 22, "Remember what I typed"],
-      [733, 22, "Hide spoilers until I tap"],
-      [887, 22, "Show one chip instead of two"],
-      [1193, 35, "tiny.en (faster, less accurate)", "wrap"],
-      [1233, 35, "base.en (more accurate, recommended)", "wrap"],
-      [1338, 38, "Reinstall voice engine", "wrap"],
-      [1496, 36, "Off: Answers are read only when yo"],
-      [1620, 22, "AI voice & personality"],
-      [1774, 22, "Show Developer tab"],
-      [1903, 38, "Clear cache..."],
+      [115, 22, "Adjust UI automatically"],
+      [209, 36, "Apply UI scale"],
+      [365, 44, "Set screenshot quality to Save mem"],
+      [545, 36, "Set text size to Small"],
+      [669, 22, "Remember what I typed"],
+      [861, 22, "Hide spoilers until I tap"],
+      [1015, 22, "Show one chip instead of two"],
+      [1321, 35, "tiny.en (faster, less accurate)", "wrap"],
+      [1361, 35, "base.en (more accurate, recommended)", "wrap"],
+      [1466, 38, "Reinstall voice engine", "wrap"],
+      [1623, 36, "Off: Answers are read only when yo"],
+      [1747, 22, "AI voice & personality"],
+      [1901, 22, "Show Developer tab"],
+      [2031, 38, "Clear cache..."],
     ],
+    /* On the same line as stop 3 (the Text size choices) and stop 13 (Clear all data... beside Clear cache...):
+       Left and Right reach them, Down and Up do not (SettingsTabChatTextSizeRow.tsx, SettingsTab.tsx). */
+    beside: { 3: ["Set text size to Normal", "Set text size to Large"], 13: ["Clear all data..."] },
   },
   permissions: {
     contentHeight: 762,

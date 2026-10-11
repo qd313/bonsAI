@@ -1,10 +1,12 @@
 /**
- * Title: Walking the plain tabs with the D-pad (plan 87, B9 and B10)
- * Purpose: Pin the Deck check for "walking some of the other tabs scrolls a long way at each step" and "the
- *          top of the tab cannot be scrolled fully into view": on Ollama, Settings, Permissions, Developer and
- *          About, Down from the first control to the last and back Up moves the pane by under a third of its
- *          height at any press, every control is wholly on screen when it has the ring, the ring is never on a
- *          control twice in one leg, and the first heading is below the pane's top fade at the first control.
+ * Title: Walking the plain tabs with the D-pad (plan 87, B9 and B10; plan 89, M1)
+ * Purpose: Pin the Deck checks for "walking some of the other tabs scrolls a long way at each step", "the
+ *          top of the tab cannot be scrolled fully into view", "walking Settings and Developer moves the page at
+ *          every press, then jumps at the end" and "Left or Right on the Text size choices scrolls the page": on
+ *          Ollama, Settings, Permissions, Developer and About, Down from the first control to the last and back Up
+ *          moves the pane by under half its height at any press, on Settings at no more than one press in three,
+ *          Left and Right along one line not at all, every control is wholly on screen when it has the ring, the
+ *          ring is never on a control twice in one leg, and the first heading is below the pane's top fade.
  *          Run against the controls' real positions (test-harness/tabBodyDeckGeometry.ts) with Steam's own
  *          scroll-into-view modelled three ways, because the Deck's exact rule is not known.
  * Used for: TabBodyFocusRoot.tsx, useTabBodyFocusScroll.ts, tabBodyScrollPlan.ts.
@@ -53,10 +55,10 @@ describe("walking a plain tab Down and back Up", () => {
   for (const tab of TABS) {
     for (const steam of RULES) {
       for (const steamTarget of ["leaf", "row"] as const) {
-        it(`${tab}, Steam's rule "${steam}" on the ${steamTarget}: no press moves the pane a third of its height; every stop is on screen; none is visited twice`, () => {
+        it(`${tab}, Steam's rule "${steam}" on the ${steamTarget}: no press moves the pane half its height; every stop is on screen; none is visited twice`, () => {
           const w = walkTab({ tab, viewport: MONITOR_PANE_PX, steam, steamTarget });
-          expect(w.largestDown).toBeLessThan(MONITOR_PANE_PX / 3);
-          expect(w.largestUp).toBeLessThan(MONITOR_PANE_PX / 3);
+          expect(w.largestDown).toBeLessThan(MONITOR_PANE_PX / 2);
+          expect(w.largestUp).toBeLessThan(MONITOR_PANE_PX / 2);
           expect(w.notVisible).toEqual([]);
           expect(w.repeated).toBe(0);
           expect(w.landings).toHaveLength(TAB_GEOMETRY[tab].stops.length * 2);
@@ -65,7 +67,7 @@ describe("walking a plain tab Down and back Up", () => {
     }
   }
 
-  it("Settings, Up from the tiny.en voice row to the toggle above it: the ring is on the row's wrapper, and the press moves the pane under a third", () => {
+  it("Settings, Up from the tiny.en voice row to the toggle above it: the ring is on the row's wrapper, and the press moves the pane under half", () => {
     /*
      * The one press both earlier rounds left alone: 325.8 px on the Deck (plan87-P87-B10-TAB-SCROLL-try2.json).
      * Steam puts the ring on the Focusable around the voice rows' buttons, and the plan used to skip any focused
@@ -77,8 +79,8 @@ describe("walking a plain tab Down and back Up", () => {
       for (const steamTarget of ["leaf", "row"] as const) {
         const w = walkTab({ tab: "settings", viewport: MONITOR_PANE_PX, steam, steamTarget, focusVia: "steam" });
         const press = w.landings.find((l) => l.direction === "up" && l.stop === tiny - 1)!;
-        expect(press.moved, `${steam} / ${steamTarget}`).toBeLessThan(MONITOR_PANE_PX / 3);
-        expect(w.largestUp, `${steam} / ${steamTarget}`).toBeLessThan(MONITOR_PANE_PX / 3);
+        expect(press.moved, `${steam} / ${steamTarget}`).toBeLessThan(MONITOR_PANE_PX / 2);
+        expect(w.largestUp, `${steam} / ${steamTarget}`).toBeLessThan(MONITOR_PANE_PX / 2);
         w.unmount();
       }
     }
@@ -97,8 +99,8 @@ describe("walking a plain tab Down and back Up", () => {
       for (const steam of RULES) {
         for (const steamTarget of ["leaf", "row"] as const) {
           const w = walkTab({ tab, viewport: MONITOR_PANE_PX, steam, steamTarget, focusVia: "helper" });
-          expect(w.largestUp, `${tab} / ${steam} / ${steamTarget} up`).toBeLessThan(MONITOR_PANE_PX / 3);
-          expect(w.largestDown, `${tab} / ${steam} / ${steamTarget} down`).toBeLessThan(MONITOR_PANE_PX / 3);
+          expect(w.largestUp, `${tab} / ${steam} / ${steamTarget} up`).toBeLessThan(MONITOR_PANE_PX / 2);
+          expect(w.largestDown, `${tab} / ${steam} / ${steamTarget} down`).toBeLessThan(MONITOR_PANE_PX / 2);
           expect(w.notVisible, `${tab} / ${steam} / ${steamTarget}`).toEqual([]);
           expect(w.repeated).toBe(0);
         }
@@ -120,6 +122,64 @@ describe("walking a plain tab Down and back Up", () => {
           expect(Math.max(w.largestDown, w.largestUp), `${tab} / ${steam} / ${steamTarget}`).toBeLessThan(OWN_SCREEN_PANE_PX * 0.65);
           expect(w.notVisible, `${tab} / ${steam} / ${steamTarget}`).toEqual([]);
         }
+      }
+    }
+  });
+});
+
+describe("the page turns only near the edge (plan 89, M1)", () => {
+  /*
+   * On the Deck (plan89-M1-TAB-WALK.json, the monitor's 741 px pane) Settings moved at 12 of 16 Down presses and
+   * 13 of 14 Up, and Left, Right, Right, Left on the Text size row scrolled 100.8, 81.2 and 64.1 px. This model
+   * gave 13 of 14 both ways and 99.9, 79.9 and 63.7 px before the fix.
+   */
+  const leg = (w: ReturnType<typeof walkTab>, direction: "down" | "up") => w.landings.filter((l) => l.direction === direction);
+  const moves = (w: ReturnType<typeof walkTab>, direction: "down" | "up") => leg(w, direction).filter((l) => l.moved > 0.5);
+
+  for (const steam of RULES) {
+    for (const steamTarget of ["leaf", "row"] as const) {
+      it(`Settings, Steam's rule "${steam}" on the ${steamTarget}: Down and Up each move the page on at most one press in three, under half the pane, with no jump at the end`, () => {
+        const w = walkTab({ tab: "settings", viewport: MONITOR_PANE_PX, steam, steamTarget });
+        for (const direction of ["down", "up"] as const) {
+          const presses = leg(w, direction);
+          expect(moves(w, direction).length * 3, direction).toBeLessThanOrEqual(presses.length);
+          expect(Math.max(...presses.map((l) => l.moved)), direction).toBeLessThan(MONITOR_PANE_PX / 2);
+          expect(presses[presses.length - 1]!.moved, `${direction}: the last press`).toBeLessThan(MONITOR_PANE_PX / 2);
+        }
+        expect(w.notVisible).toEqual([]);
+        expect(w.repeated).toBe(0);
+        w.unmount();
+      });
+
+      it(`Settings, Steam's rule "${steam}" on the ${steamTarget}: Left and Right along the Text size row, and onto Clear all data..., move the page 0 px`, () => {
+        const w = walkTab({ tab: "settings", viewport: MONITOR_PANE_PX, steam, steamTarget, autoWalk: false });
+        const textSize = TAB_GEOMETRY.settings.stops.findIndex(([, , name]) => name.startsWith("Set text size"));
+        for (let i = 0; i <= textSize; i++) w.press(i, "down");
+        /* Right, Right, Left, Left; then back onto Small from outside the panel, as Right from Decky's side rail does. */
+        expect([1, 2, 1, 0, 0].map((k) => w.pressSideways(textSize, k))).toEqual([0, 0, 0, 0, 0]);
+        const clearCache = TAB_GEOMETRY.settings.stops.length - 1;
+        for (let i = textSize + 1; i <= clearCache; i++) w.press(i, "down");
+        expect([1, 0].map((k) => w.pressSideways(clearCache, k))).toEqual([0, 0]);
+        expect(w.notVisible).toEqual([]);
+        w.unmount();
+      });
+    }
+  }
+
+  it("every tab, on the monitor's pane: no more moving presses than the page's length needs in steps under half the pane, plus one", () => {
+    /*
+     * Developer's page is 1,875 px longer than the pane: in steps under half of 741 px that is six moves at the
+     * least, so it cannot keep to one press in three over its 16 stops; its long gap (405 px, Force session RAG
+     * chips to the animation controls) costs one more, small, press going Up.
+     */
+    for (const tab of TABS) {
+      for (const steam of RULES) {
+        const w = walkTab({ tab, viewport: MONITOR_PANE_PX, steam });
+        const range = Math.max(0, 24 + TAB_GEOMETRY[tab].contentHeight - MONITOR_PANE_PX);
+        for (const direction of ["down", "up"] as const) {
+          expect(moves(w, direction).length, `${tab} / ${steam} / ${direction}`).toBeLessThanOrEqual(Math.ceil(range / (MONITOR_PANE_PX / 2)) + 1);
+        }
+        w.unmount();
       }
     }
   });

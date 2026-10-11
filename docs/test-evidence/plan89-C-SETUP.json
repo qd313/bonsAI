@@ -1,0 +1,25 @@
+{
+  "row": "plan89-C-SETUP",
+  "build_commit": "f561c0e5 (experimental tip, deployed by runbook A)",
+  "deck_time_local": "Sun 2026-10-11 18:46 to 19:15 EDT (Deck clock)",
+  "screen": "MONITOR: page window 855 x 766, devicePixelRatio 1.28.",
+  "setup": {
+    "keep_awake": "deck_holdAwake ttl 480 min, expiresAt 2026-10-12T06:46:59Z (02:46 EDT).",
+    "stand_in": "version call to 192.168.86.27:11500 answered 0.40.2; scenario file written per check (long-details, tall-section, pyro-chip, long-details), 'off' at the end.",
+    "old_state_noted_step1": {
+      "Run AI on this Deck": "ON (Ollama at 127.0.0.1:11434, 2 models)",
+      "PC address (shown when the toggle is OFF)": "192.168.86.27:11434",
+      "model": "gemma4:e2b-it-qat (text and vision routing order)",
+      "ask_mode": "strategy (not Speed or Ask as the runbook wants, so I changed it to Speed)",
+      "voice_replies": "off already (no change needed)",
+      "ai_character": "enabled false, preset tf2_heavy, random false, accent heavy"
+    },
+    "changed": "Run AI on this Deck turned OFF; PC address written with deck_send_ask.py on the Ollama tab: 192.168.86.27:11500 (VERIFIED), Test connection said 'Connected . Ollama v0.40.2 . 31 models' (standin.log shows the version and tags calls). Ask mode Speed (via mode menu). For C3: AI voice and personality ON and preset Pyro (Random off).",
+    "put_back": "Address written back as 192.168.86.27:11434 (VERIFIED), Test connection pressed, Run AI on this Deck turned back ON; Ollama tab reads 'Ollama runs on this Deck at 127.0.0.1:11434 ... Connected . Ollama v0.40.2 . 2 models' = the same as step 1. Character: preset back to Heavy, toggle OFF. Mode back to Strategy. settings.json diffed against ~/p89-backup/settings.json after all this: identical. Scenario file = off."
+  },
+  "pressed": "see the four check files",
+  "seen": "see the four check files",
+  "expected": "Everything put back exactly as noted.",
+  "verdict": "PASS - setup worked and every changed setting is back (settings.json identical to the backup).",
+  "side_effect": "A refused press once: the rig answered a DOWN with a lease message naming 'pid 33448 on desktop', deck_status showed the lease as mine, the retry worked. The plugin's own chat-summary call went through the stand-in to the PC's real Ollama once during C3 (17 s)."
+}

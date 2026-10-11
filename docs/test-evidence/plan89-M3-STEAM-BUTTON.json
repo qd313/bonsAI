@@ -1,0 +1,73 @@
+{
+  "row": "plan89-M3-STEAM-BUTTON",
+  "build_commit": "f561c0e5 (experimental tip, deployed to the Deck with deck_deploy at about 18:18 EDT by runbook A)",
+  "deck_time_local": "Sun 2026-10-11 about 18:36 to 18:39 EDT (Deck clock)",
+  "screen": "MONITOR (855 x 766 per runbook A); screenshot after the chord taken at 1920 x 1080 composited.",
+  "setup": {
+    "board": "'Espressif Systems ESP32S3_DEV' (vendor 303a, product 1001), handlers: event9 and js1. Two 'Microsoft X-Box 360 pad' virtual pads sit beside it (event6/js0 and event23/js2). Files: /dev/input/event9 is root:input, mode rw-rw----, with an ACL entry giving user deck rw (so the reader opened it); js1 is rw-rw-r--. The deck user is in groups deck, steamos-log-submitter, wheel (not input). So the event node was readable; the js node was not needed.",
+    "reader": "p89_evread.py copied to /tmp on the Deck. The runbook's start line (setsid nohup timeout 12 python3 ... &) left an empty file and no process twice, in a plain ssh. I used 'systemd-run --user --collect' with the output going to the file instead (journal showed the reader running). Then it worked. Run on /dev/input/event9 for 10 s.",
+    "start_state": "Quick Access closed (closed with the chord beforehand), Home page showing, no game. Steam main menu read by the MainMenu page's visibilityState: 'hidden' (2 x 1 px window) before every press.",
+    "menu_detection_note": "I judge 'menu opened' by the MainMenu_uid2 page's visibilityState turning visible and its size growing. It stayed hidden at 2 x 1 every time. I did not take a screenshot after the Steam-button presses, so the by-eye check is missing; the chord's own Quick Access opening was confirmed by the QuickAccess page turning visible and a screenshot."
+  },
+  "pressed": "deck_pressButton GUIDE held 80 ms, 150 ms, 400 ms (one try each, counted), then deck_pressChord GUIDE+A. A stray earlier press: one GUIDE 80 ms press (no reader running) while I found out the reader would not start; it also left the menu hidden.",
+  "seen": {
+    "press_80ms": {
+      "rig_result": "ok true, fidelity wire-sent, usb-hid:bridge, ack buttons 4096 (0x1000)",
+      "raw_events": [
+        "START /dev/input/event9 18:37:20 1791758240.379",
+        "1791758244.019 ev type 4 code 4 value 589837",
+        "1791758244.019 ev type 1 code 316 value 1",
+        "1791758244.099 ev type 4 code 4 value 589837",
+        "1791758244.099 ev type 1 code 316 value 0",
+        "END 1791758250.508"
+      ],
+      "plain": "A Steam-button press arrived: key code 316 (BTN_MODE) value 1, then released value 0, 80 ms later (244.019 to 244.099). Nothing else arrived. The Steam main menu did NOT open (MainMenu page stayed hidden, checked about 3 s after)."
+    },
+    "press_150ms": {
+      "rig_result": "ok true, wire-sent, ack buttons 4096",
+      "raw_events": [
+        "START /dev/input/event9 18:37:41 1791758261.232",
+        "1791758262.821 ev type 4 code 4 value 589837",
+        "1791758262.821 ev type 1 code 316 value 1",
+        "1791758262.971 ev type 4 code 4 value 589837",
+        "1791758262.971 ev type 1 code 316 value 0",
+        "END 1791758271.383"
+      ],
+      "plain": "Code 316 value 1 then value 0, 150 ms apart (262.821 to 262.971). Nothing else. The main menu did NOT open."
+    },
+    "press_400ms": {
+      "rig_result": "ok true, wire-sent, ack buttons 4096",
+      "raw_events": [
+        "START /dev/input/event9 18:37:56 1791758276.386",
+        "1791758280.658 ev type 4 code 4 value 589837",
+        "1791758280.658 ev type 1 code 316 value 1",
+        "1791758281.058 ev type 4 code 4 value 589837",
+        "1791758281.058 ev type 1 code 316 value 0",
+        "END 1791758286.465"
+      ],
+      "plain": "Code 316 value 1 then value 0, 400 ms apart (280.658 to 281.058). Nothing else. The main menu did NOT open."
+    },
+    "chord_steam_plus_a": {
+      "rig_result": "ok true, wire-sent, usb-hid:bridge:chord, 'chord sent'",
+      "raw_events": [
+        "START /dev/input/event9 18:38:14 1791758294.625",
+        "1791758296.718 ev type 4 code 4 value 589837",
+        "1791758296.718 ev type 1 code 316 value 1",
+        "1791758296.986 ev type 4 code 4 value 589825",
+        "1791758296.986 ev type 1 code 304 value 1",
+        "1791758297.125 ev type 4 code 4 value 589825",
+        "1791758297.125 ev type 1 code 304 value 0",
+        "1791758297.286 ev type 4 code 4 value 589837",
+        "1791758297.286 ev type 1 code 316 value 0",
+        "END 1791758304.695"
+      ],
+      "plain": "Code 316 down at 296.718; code 304 (BTN_SOUTH, the A button) down at 296.986 (268 ms later); A up at 297.125 (139 ms held); Steam button up at 297.286. Total 568 ms with A inside the Steam hold. Quick Access DID open (QuickAccess page visible, plugin panel mounted, screenshot shows the panel)."
+    }
+  },
+  "expected": "Findings only: what the Deck receives when the rig presses the Steam button.",
+  "verdict": [
+    "PASS (findings recorded) - the Deck's input system receives a clean press and release of the Steam button (code 316) at 80, 150 and 400 ms, with nothing extra, but Steam's main menu does not open for a bare press at any of the three lengths. The same button inside the chord (held 568 ms with A) does open Quick Access.",
+    "UNCLEAR - why a bare press does nothing: the Deck sees the events, so the board and the hold time are not the cause. What the runbook did not test: how Steam treats a Steam-button press that is not followed by anything (it may need the press to arrive while the Steam page has input focus, or a different hold)."
+  ],
+  "cleanup": "Reader and its output files removed from the Deck (/tmp has no p89 files left; no p89 service units left). Raw files copied to the scratch folder as m3-ev_1.txt to m3-ev_4.txt. Quick Access left open, the plugin panel on screen."
+}

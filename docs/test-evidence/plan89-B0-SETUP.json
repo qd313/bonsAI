@@ -1,0 +1,47 @@
+{
+  "row": "plan89-B0-SETUP",
+  "build_commit": "f561c0e5 (experimental tip, deployed to the Deck with deck_deploy at about 18:18 EDT)",
+  "deck_time_local": "Sun 2026-10-11 18:12 to 18:30 EDT",
+  "screen": "MONITOR (not the Deck's own panel). Quick Access page window.innerWidth x innerHeight = 855 x 766, devicePixelRatio 1.28, screen 1500 x 843. Matches the 855 x 766 plan 88 saw on the monitor. Screen was not changed.",
+  "setup": {
+    "deck_status": "automationArmed true, stop switch off (automationStoppedSince null), deckReachable true, bridge COM7 open. (status field ollamaReachable false is the PC-side check, the Deck's own Ollama answered over SSH.)",
+    "keep_awake": "deck_holdAwake ttlMinutes 480 returned held true, expiresAt 2026-10-12T06:11:33Z (UTC) = 2026-10-12 02:11 EDT. Verified in systemd-inhibit list.",
+    "backup": {
+      "folder": "/home/deck/p89-backup",
+      "files": {
+        "bonsAI-settings.tgz": "210050062 bytes (whole bonsAI settings folder incl. saved chats)",
+        "settings.json": "2227 bytes"
+      },
+      "made": "Sun Oct 11 18:12 EDT 2026"
+    },
+    "build_before_deploy": "Deck plugin folder dist dated Oct 11 15:59; package.json version string 0.5.0 (no commit hash in it). Plan 88 last deploy was 68317980 per runbook; no hash is shown by the plugin itself.",
+    "deploy": "deck_deploy ok (copied dist, main.py, plugin.json, package.json, assets, py_modules, bin); loader active in 692 ms. No permission refusal. dist/index.js is 3141987 bytes before and after (same size).",
+    "ollama": {
+      "service": "bonsai-ollama-autostart.service, user unit, active (running) since Sat 2026-10-10 01:17:17 EDT, main pid 140880",
+      "loaded_models": "none (api/ps returned empty list)",
+      "installed_models_seen_in_first_600_chars_of_tags": [
+        "nomic-embed-text:latest (274 MB)",
+        "gemma4:e2b-it-qat (4.3 GB)"
+      ],
+      "note": "tags output was cut at 600 chars, the list may have more models",
+      "memory_mb": "total 14800, used 2931, free 4835, available 11869"
+    },
+    "open_plugin": "First deck_openPlugin failed as expected (QAM chord sent, no pane). Second succeeded (steam-routed, panel confirmed by .bonsai-scope). Ring landed on the question box; no A pressed.",
+    "test_chat": "Open chat is 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' shown as 'chat 1 of 7' (so it is first of 7 saved chats). This is the plan 88 test chat (the name in the runbook has the same words). Chat thread shows '99 earlier' entries above the newest question. It was only read, nothing asked.",
+    "parental_lock": "Permissions tab text read in full: no lock or parental banner. The only match for 'lock' was the words 'bonsAI_logs' in the Save files description. Lock is off.",
+    "test_chips": "settings.json backup: dev_force_session_rag_chips false, dev_frozen_test_chips [] (empty), so no pinned test batch is set. Other chip keys: preset_chip_animation decode, preset_chip_fade_animation_enabled false, preset_single_chip false. Not changed.",
+    "recent_games": "Read-only. First two cards on the Home Recent Games row (seen when the ring was on Home before the panel opened): Deep Rock Galactic: Survivor (focused, 'Last two weeks: 6.6 hrs'), Left 4 Dead 2. The rest of the row was not readable once the panel was open (Home page not rendered then). From the Deck's Steam file, most recently played app ids in order: 2321470, 550, 204450, 420, 1942280, 241100 (names for 2321470 and 550 confirmed; the others were not checked). No game is running (RunningApps empty)."
+  },
+  "pressed": [
+    "QAM chord and D-pad presses by deck_openPlugin only"
+  ],
+  "seen": {
+    "screen_live": "monitor, 855x766",
+    "keep_awake_expires": "2026-10-12T06:11:33Z",
+    "plugin_open": true,
+    "open_chat": "How do I beat the boss in the Soul Sanctum in Hollow Knight? (1 of 7)"
+  },
+  "expected": "Deck reachable, lock taken, backup saved, tip deployed, Ollama running with no model loaded, plugin opens, test chat found, lock off, no pinned chips.",
+  "verdict": "PASS - every setup step done as written. Notes: Recent Games row only partly read (2 names + app ids); the models list was cut at 600 chars as the runbook command does.",
+  "side_effect": "none"
+}

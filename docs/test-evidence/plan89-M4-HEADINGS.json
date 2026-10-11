@@ -1,0 +1,43 @@
+{
+  "row": "plan89-M4-HEADINGS",
+  "build_commit": "f561c0e5 (experimental tip, deployed to the Deck with deck_deploy at about 18:18 EDT)",
+  "deck_time_local": "Sun 2026-10-11 about 18:34 EDT",
+  "screen": "monitor, window 855 x 766",
+  "setup": "Plugin open, Settings tab, read the tab's text from the page (innerText and textContent of .bonsai-scope). Nothing changed.",
+  "pressed": [
+    "RIGHT, RIGHT from the tab bar to reach Settings (tab switching only)"
+  ],
+  "seen": {
+    "UI scale": {
+      "heading_lines": 1,
+      "heading_quote": "UI SCALE (shown in capitals by the page's styling; text is 'UI scale') followed by 'Two real sizes: Handheld for the Deck's own screen, Couch for TV distance. Active: Handheld (1.00x). ...'",
+      "other_visible_mentions_not_headings": [
+        "inside the description sentence: '... Also check Steam Settings -> Accessibility -> UI Scale.' (plain sentence, not a heading)",
+        "button label 'Apply UI scale' (a control, not a heading)"
+      ],
+      "hidden_mentions": "3 mentions inside CSS comments in a style block (not shown on screen)"
+    },
+    "Screenshot quality": {
+      "heading_lines": 1,
+      "heading_quote": "SCREENSHOT QUALITY (text is 'Screenshot quality') followed by 'For vision questions - lower quality uses less memory.' then Save memory / Balanced / Best detail",
+      "other_mentions": "3 hidden accessibility labels 'Set screenshot quality to Save memory / Balanced / Best detail' on the buttons (not visible text)"
+    },
+    "whole_page_order_of_headings": [
+      "UI SCALE",
+      "SCREENSHOT QUALITY",
+      "TEXT SIZE",
+      "REMEMBER WHAT I TYPED",
+      "STORY SPOILERS (STRATEGY MODE)",
+      "SUGGESTION CHIPS",
+      "VOICE INPUT",
+      "VOICE REPLIES",
+      "AI VOICE & PERSONALITY",
+      "DATA"
+    ]
+  },
+  "expected": "Exactly one heading line for 'UI scale' and exactly one for 'Screenshot quality'. No second 'UI scale' line under the section title.",
+  "verdict_UI_scale": "PASS - exactly one heading line 'UI scale'; the other two hits are a sentence and a button, quoted above.",
+  "verdict_Screenshot_quality": "PASS - exactly one heading line 'Screenshot quality'.",
+  "verdict": "PASS - both halves pass (see verdict_UI_scale and verdict_Screenshot_quality).",
+  "side_effect": "none"
+}

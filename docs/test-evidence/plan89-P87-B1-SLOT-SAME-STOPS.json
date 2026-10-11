@@ -1,0 +1,45 @@
+{
+  "row": "plan89-P87-B1-SLOT-SAME-STOPS",
+  "build_commit": "f561c0e5 (experimental tip, deployed by runbook A)",
+  "deck_time_local": "Sun 2026-10-11 about 18:49 to 18:53 EDT (Deck clock)",
+  "screen": "MONITOR: page window 855 x 766, devicePixelRatio 1.28 (read from the Quick Access page just before the walk).",
+  "setup": {
+    "answers_are": "PREPARED ANSWER from the stand-in AI (scenario long-details, 14 plain paragraphs, streamed about 20 s). Every answer starts with [PREPARED TEST ANSWER]. standin.log line: 'POST /api/chat model=gemma4:e2b-it-qat scenario=long-details rule=answer request, scenario on -> PREPARED q=Give me some early game tips for Hollow Knight please'.",
+    "plugin_pointing_at": "Ollama tab: Run AI on this Deck OFF, PC address 192.168.86.27:11500 (the stand-in), Test connection said Connected, Ollama v0.40.2 (standin.log shows the version and tags calls passing through at 18:48:43).",
+    "mode": "Speed (was Strategy; changed from the mode menu: A on the mode button, read focus on 'speed', A). Old value Strategy, to be put back.",
+    "test_chat": "How do I beat the b... (chat 1 of 7, the test chat named in the handover note)",
+    "question": "Give me some early game tips for Hollow Knight please (sent with deck_send_ask.py, VERIFIED, read-back the whole text; Ask pressed with read focus = Ask)",
+    "voice_replies": "off already (voice_reply_mode off in settings.json)",
+    "logger": "A read-only page logger (setInterval every 120 ms, kept in window.__clog) recorded focus label, rect, the tab's scrollTop and whether each Show details line was visible (opacity, display, and inside the band between the pane top 52 and the dock top 658). Walk round 1 pressed by single deck_pressButton calls; round 2 by deck_saveCheck (deck_runSequence, 16 steps). The logger is removed at the end of the block."
+  },
+  "pressed": "Round 1: UP x8 then DOWN x8 (one deck_pressButton each; presses about 2 s apart on the way up; on the way down the first two were sent 1 s apart by mistake, the rest about 1.8 s apart). Round 2: deck_saveCheck runSequence UP x8, DOWN x8 (about 0.9 s between presses, so the 1.8 s settle was not always reached; the logger's 'chg' lines still show every stop).",
+  "seen": {
+    "first_state": "Answer finished, tab scrolled to its end (scrollTop 810 of 1524, pane height 713). Ring on the question box (49,691,298,44). Answer's own Show details line: box y 641 to 656, opacity 0 (hidden). The slot's Show details line: y 666 to 681, opacity 1 (visible). Dock top at y 658. In the screenshot only one Show details line shows, just above the question box. So the case holds: the answer's own line is not visible, the slot shows one instead of chips. NOTE: the answer's own line is hidden by opacity, not pushed behind the dock; its box sits at 641 to 656, just above the dock top.",
+    "up_walk_stops_round1": [
+      {"press": 1, "stop": "slot Show details line", "rect": [48,658,300,30], "scrollTop": 810, "visible_lines": "slot only"},
+      {"press": 2, "stop": "answer's own Show details line", "rect": [52,641,267,15], "scrollTop": 810, "visible_lines": "answer's own only (slot hidden)"},
+      {"press": 3, "stop": "Helpful button", "rect": [52,601,81,28], "scrollTop": 810, "visible_lines": "answer's own only"},
+      {"press": 4, "stop": "section 5 (Most of all, enjoy getting lost...)", "rect": [63,577,245,81], "scrollTop": 681, "visible_lines": "slot only"},
+      {"press": 5, "stop": "section 4 (If a room feels too hard...)", "rect": [63,309,245,267], "scrollTop": 681, "visible_lines": "slot only"},
+      {"press": 6, "stop": "section 3 (Your soul meter fills...)", "rect": [63,168,245,267], "scrollTop": 555, "visible_lines": "slot only"},
+      {"press": 7, "stop": "section 2 (Collect the small currency...)", "rect": [63,168,245,267], "scrollTop": 288, "visible_lines": "slot only"},
+      {"press": 8, "stop": "section 1 ([PREPARED TEST ANSWER]...)", "rect": [63,156,245,300], "scrollTop": 0, "visible_lines": "slot only"}
+    ],
+    "down_walk_stops_round1": [
+      {"press": 1, "stop": "section 2", "rect": [63,390,245,267], "scrollTop": 66, "note": "seen mid-scroll: the next press came about 1 s later (my mistake), so this stop did not settle"},
+      {"press": 2, "stop": "section 3", "rect": [63,168,245,267], "scrollTop": 555, "visible_lines": "slot only"},
+      {"press": 3, "stop": "section 4", "rect": [63,391,245,267], "scrollTop": 600, "visible_lines": "slot only (box bottom 658 = dock top, entered from above)"},
+      {"press": 4, "stop": "section 5", "rect": [63,448,245,81], "scrollTop": 810, "visible_lines": "slot only"},
+      {"press": 5, "stop": "Helpful button", "rect": [52,601,81,28], "scrollTop": 810, "visible_lines": "slot only at the first read, then answer's own"},
+      {"press": 6, "stop": "answer's own Show details line", "rect": [52,641,267,15], "scrollTop": 810, "visible_lines": "answer's own only (settled)"},
+      {"press": 7, "stop": "slot Show details line", "rect": [48,658,300,30], "scrollTop": 810, "visible_lines": "slot only (settled)"},
+      {"press": 8, "stop": "question box", "rect": [49,691,298,44], "scrollTop": 810, "visible_lines": "slot only"}
+    ],
+    "round2_runSequence": "16 of 16 steps moved focus; same eight stops up and the same eight down; ends on the question box (INPUT 'No gameSpeedAsk'); stopsFocusedButNotVisible 0 (rig's visibility check); no dead press. Logger lines for round 2 match the round 1 lists.",
+    "one_visible_line_at_every_stop": "At every settled stop exactly one Show details line was visible (slot or answer's own). Brief exceptions seen only in the logger's 120 ms samples while the pane was still scrolling: one sample at scrollTop 784 (Most of all, going up) read neither line visible, and a few samples read the old line for one frame. None lasted to the settled read.",
+    "stop_order_check": "Up list reversed equals Down list: box, slot line, answer line, Helpful, section 5, 4, 3, 2, 1. Not a stop and not scrolled: Not really (not reachable by Up/Down)."
+  },
+  "expected": "Each Down walk visits the same stops as the Up walk before it, in reverse order; at every stop exactly one Show details line is visible (the slot's or the answer's own); the answer's own line starts hidden with the ring on the box.",
+  "verdict": "PASS - same stops both ways in both rounds, one Show details line visible at every settled stop. Caveats: (1) the answer's own line was hidden by opacity (its box sat just above the dock), not off the bottom behind the dock; it was not visible, so the case counts. (2) In round 1 down and in round 2, section 2 was seen only mid-scroll on the way down (next press came within about 1 s); the rig still counted it as a stop and no press was dead. (3) Saved with deck_saveCheck as plan89-P87-B1-SLOT-SAME-STOPS (c:\\Users\\still\\Documents\\BonsAI\\checks\\plan89-P87-B1-SLOT-SAME-STOPS.json).",
+  "side_effect": "Changed the Deck's Ask mode from Strategy to Speed and the Ollama tab to Run AI on this Deck OFF with PC address 192.168.86.27:11500 (both are runbook setup, put back at the end). One question (and its prepared answer) now sits in the test chat 'How do I beat the b...'."
+}

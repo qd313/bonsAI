@@ -1,0 +1,418 @@
+{
+  "row": "STEAM-SETTINGS-PAGES-01",
+  "build_commit": "f561c0e5 (experimental tip, deployed to the Deck with deck_deploy at about 18:18 EDT by runbook A)",
+  "deck_time_local": "Sun 2026-10-11 about 18:30 to 18:36 EDT (Deck clock)",
+  "screen": "MONITOR. Quick Access page window 855 x 766 (read by runbook A; the main Steam window was read here; screen not changed).",
+  "setup": "Plugin open, no game running. Steam link sent from the SharedJSContext page with SteamClient.URL.ExecuteSteamURL. Page read from the main 'Steam Big Picture Mode' page: the highlighted entry in Settings' left-hand list (class containing 'Selected') and the heading (the first line of text after the list's last entry, Developer). A small watcher I placed on that page logged every change of both every 200 ms, and I matched its log to the send times (2.5 s apart). Watcher and my variables removed afterwards (checked: no p89 names left on either page). Way 2 reset: before each Navigate, I opened the Developer page by link (the System page for the 'developer' name), so a failed Navigate shows as Developer, not as a leftover of the page before.",
+  "second_way_found": {
+    "what_exists": "window.DFL is an object on SharedJSContext. DFL.Navigation has: Navigate, NavigateBack, NavigateToAppProperties, NavigateToExternalWeb, NavigateToInvites, NavigateToChat, NavigateToLibraryTab, NavigateToLayoutPreview, NavigateToSteamWeb, OpenSideMenu, OpenQuickAccessMenu, OpenMainMenu, CloseSideMenus, OpenPowerMenu. Other window keys matching the search: navigation, navigator, SteamUIStore, DFL, __ROUTER_HOOK_INSTANCE.",
+    "call_used": "window.DFL.Navigation.Navigate('/settings/<name>') with the same 24 names (lowercase). Page location after each call (SharedJSContext location.pathname) always read /routes/settings/<name>, even for names where the page did not change (controller showed System while the path said controller): so the router path is not proof the right page drew."
+  },
+  "pressed": "No controller presses for the 24 pages (script only). Controller presses later: one B press after the Wi-Fi row, and for step 4 five B presses (see side_effect and step4).",
+  "table": [
+    {
+      "label": "system",
+      "link_name": "system",
+      "way1_steam_link": {
+        "list_entry": "System",
+        "heading": "System",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "System",
+        "heading": "System",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "security",
+      "link_name": "security",
+      "way1_steam_link": {
+        "list_entry": "Security",
+        "heading": "Security",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Security",
+        "heading": "Security",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "internet",
+      "link_name": "internet",
+      "way1_steam_link": {
+        "list_entry": "System",
+        "heading": "System",
+        "opened_own_page": false,
+        "note": "the System page opened instead"
+      },
+      "way2_navigate": {
+        "lowercase /settings/internet": "Internet / Internet, opened own page",
+        "capital /settings/Internet": "Internet / Internet, opened own page"
+      },
+      "other_spellings_tried": {
+        "network": "Internet / Internet (opened own page)",
+        "wifi": "System / System",
+        "Internet": "System / System",
+        "note": "both ways were not needed for the other-spelling step (way 2 opened it), tried anyway: 3 spellings with way 1"
+      }
+    },
+    {
+      "label": "notifications",
+      "link_name": "notifications",
+      "way1_steam_link": {
+        "list_entry": "Notifications",
+        "heading": "Notifications",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Notifications",
+        "heading": "Notifications",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "display",
+      "link_name": "display",
+      "way1_steam_link": {
+        "list_entry": "Display",
+        "heading": "Display",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Display",
+        "heading": "Display",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "power",
+      "link_name": "power",
+      "way1_steam_link": {
+        "list_entry": "Power",
+        "heading": "Power",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Power",
+        "heading": "Power",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "audio",
+      "link_name": "audio",
+      "way1_steam_link": {
+        "list_entry": "Audio",
+        "heading": "Audio",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Audio",
+        "heading": "Audio",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "bluetooth",
+      "link_name": "bluetooth",
+      "way1_steam_link": {
+        "list_entry": "Bluetooth",
+        "heading": "Bluetooth",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Bluetooth",
+        "heading": "Bluetooth",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "controller",
+      "link_name": "controller",
+      "way1_steam_link": {
+        "list_entry": "Controller",
+        "heading": "Controller",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "lowercase /settings/controller": "System / System (did not open its own page)",
+        "capital /settings/Controller": "System / System (did not open its own page)",
+        "note": "lowercase tried twice (main pass and retry), capital once"
+      },
+      "other_spellings_tried": "not needed: way 1 opened Controller"
+    },
+    {
+      "label": "keyboard",
+      "link_name": "keyboard",
+      "way1_steam_link": {
+        "list_entry": "Keyboard",
+        "heading": "Keyboard",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Keyboard",
+        "heading": "Keyboard",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "customization",
+      "link_name": "customization",
+      "way1_steam_link": {
+        "list_entry": "Customization",
+        "heading": "Customization",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Customization",
+        "heading": "Customization",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "accessibility",
+      "link_name": "accessibility",
+      "way1_steam_link": {
+        "list_entry": "Accessibility",
+        "heading": "Accessibility",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Accessibility",
+        "heading": "Accessibility",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "friends & chat",
+      "link_name": "friends",
+      "way1_steam_link": {
+        "list_entry": "Friends & Chat",
+        "heading": "Friends & Chat",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Friends & Chat",
+        "heading": "Friends & Chat",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "downloads",
+      "link_name": "downloads",
+      "way1_steam_link": {
+        "list_entry": "Downloads",
+        "heading": "Downloads",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Downloads",
+        "heading": "Downloads",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "cloud",
+      "link_name": "cloud",
+      "way1_steam_link": {
+        "list_entry": "Cloud",
+        "heading": "Cloud",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Cloud",
+        "heading": "Cloud",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "in game",
+      "link_name": "ingame",
+      "way1_steam_link": {
+        "list_entry": "In Game",
+        "heading": "In Game",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "In Game",
+        "heading": "In Game",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "family",
+      "link_name": "family",
+      "way1_steam_link": {
+        "list_entry": "Family",
+        "heading": "Family",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Family",
+        "heading": "Family",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "remote play",
+      "link_name": "remoteplay",
+      "way1_steam_link": {
+        "list_entry": "System",
+        "heading": "System",
+        "opened_own_page": false,
+        "note": "the System page opened instead"
+      },
+      "way2_navigate": {
+        "lowercase /settings/remoteplay": "Remote Play / Remote Play, opened own page",
+        "capital /settings/RemotePlay": "Remote Play / Remote Play, opened own page"
+      },
+      "other_spellings_tried": {
+        "remote-play": "System / System",
+        "remote_play": "System / System",
+        "remote": "System / System",
+        "RemotePlay": "System / System"
+      }
+    },
+    {
+      "label": "storage",
+      "link_name": "storage",
+      "way1_steam_link": {
+        "list_entry": "Storage",
+        "heading": "Storage",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Storage",
+        "heading": "Storage",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "game recording",
+      "link_name": "gamerecording",
+      "way1_steam_link": {
+        "list_entry": "Game Recording",
+        "heading": "Game Recording",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Game Recording",
+        "heading": "Game Recording",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "home",
+      "link_name": "home",
+      "way1_steam_link": {
+        "list_entry": "Home",
+        "heading": "Home",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Home",
+        "heading": "Home",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "library",
+      "link_name": "library",
+      "way1_steam_link": {
+        "list_entry": "Library",
+        "heading": "Library",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Library",
+        "heading": "Library",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "store",
+      "link_name": "store",
+      "way1_steam_link": {
+        "list_entry": "Store",
+        "heading": "Store",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Store",
+        "heading": "Store",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    },
+    {
+      "label": "developer",
+      "link_name": "developer",
+      "way1_steam_link": {
+        "list_entry": "Developer",
+        "heading": "Developer",
+        "opened_own_page": true
+      },
+      "way2_navigate": {
+        "list_entry": "Developer",
+        "heading": "Developer",
+        "opened_own_page": true
+      },
+      "other_spellings_tried": "none needed"
+    }
+  ],
+  "seen": {
+    "way1_opened_own_page": 22,
+    "way1_failed": [
+      "internet (opened System)",
+      "remoteplay (opened System)"
+    ],
+    "way2_opened_own_page": 23,
+    "way2_failed": [
+      "controller (opened System, lowercase twice and capital once)"
+    ],
+    "neither_way_could_open": [],
+    "other_spellings_way1": "internet: network opened Internet; wifi, Internet opened System. remoteplay: remote-play, remote_play, remote, RemotePlay all opened System (more than three tries; the runbook's stop-at-three was for names both ways failed, and both ways did not fail for any name, so these are extra).",
+    "deck_still_answering": "yes; checked between passes, and the Deck stayed up. One Screensaver page appeared at about 18:33 during the second pass (no effect on results); cleared with a left-stick click."
+  },
+  "step4": {
+    "pressed": "B (single), then B,B,B,B, read after each batch",
+    "seen": "B steps back one entry in Steam's history, and my 100-plus script opens left a long alternating history of System/Developer settings pages (the history length read 30). After 5 B presses the page was still a settings page (Developer / System alternating). The Home screen was not reached by B.",
+    "then": "Following the rule 'do not improvise a new route', I note the deviation: I used window.DFL.Navigation.Navigate('/library/home') once to put the Home page back (location read /routes/library/home), then reopened the plugin (already open on arrival, ring on the question box)."
+  },
+  "step5_enable_wifi_row": {
+    "setup": "Test chat (the plan 88 test chat, 'chat 1 of 7'; the saved-chat file for it has 200 turns and the newest update time) open. 'wi-fi' put in the box with deck_send_ask.py (printed VERIFIED, field held 'wi-fi'; no A on the box).",
+    "layout_note": "The 'Steam settings' card showed BELOW the Ask button, not above the box as the runbook says. Rows: 'Enable Wi-Fi / Settings > Internet' and '* QAM > Wi-Fi (QAM > Quick Settings)'. I walked DOWN (deck_walkTo, one press at a time, reading focus after each) instead of UP: box, then Ask, then the Enable Wi-Fi row (2 presses). The ring was on the row 'Enable Wi-Fi Settings > Internet', visible 100 percent.",
+    "pressed": "A alone on the row (as its own step), then B once",
+    "seen": "Steam's Settings opened on System (list entry System, heading System; SharedJSContext location /routes/settings/system), NOT Internet. After B the page went back to Home (/routes/library/home). The box was empty with no card when the plugin was shown again (the plugin cleared it itself; I did not press the clear button)."
+  },
+  "expected": "Each of the 24 names opens its own settings page (list entry and heading match the label). The card's Enable Wi-Fi row opens the Internet page.",
+  "verdict": [
+    "PASS (way 1) for 22 of 24 names: system, security, notifications, display, power, audio, bluetooth, controller, keyboard, customization, accessibility, friends, downloads, cloud, ingame, family, storage, gamerecording, home, library, store, developer.",
+    "FAIL (way 1) for 2 of 24: internet and remoteplay each opened the System page.",
+    "Way 2 (DFL.Navigation.Navigate): 23 of 24 opened their own page, including internet and remoteplay; controller did not (System).",
+    "Names neither way could open: none. Only 'internet' has a working link spelling for way 1 ('network'); no way 1 spelling worked for remoteplay.",
+    "FAIL step 5: the card's Enable Wi-Fi row opened System, not Internet (it uses the failing link name 'internet')."
+  ],
+  "side_effect": "My 100-plus script opens left Steam's page history long. B walked back through System/Developer settings pages instead of reaching Home; I used one Navigate call to Home to restore it. A left-stick click (L3) woke the screensaver. No setting was changed."
+}

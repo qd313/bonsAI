@@ -373,7 +373,7 @@ flowchart TD
   kw -->|2 windows agree| wake["WAKE"]
   wake --> chime["Audible/visual cue (user knows mic is live)"]
   chime --> stt["Stage 3: VoiceTranscriptionSession (existing)"]
-  stt -->|SILENCE_HOLD_SECONDS| utt["Utterance end"]
+  stt -->|"Was a 2 s silence hold, removed in plan 88. Now Stop, Ask or the 2-minute limit"| utt["Utterance end"]
   utt --> ask["Backend-internal background Ask  ← NEW, see 5.2"]
   ask --> poll["Module-scope watcher (survives QAM close)"]
   poll --> toast["Reply ready toast"]
@@ -487,8 +487,12 @@ Non-negotiables for v1:
   recording. The user must never be unsure whether the mic is live.
 - **An unmissable cue at the moment of wake** — the transition from "listening for
   a word" to "recording you" is the one the user must never miss.
-- **A hard cap on post-wake capture** (~10 s), independent of
-  `SILENCE_HOLD_SECONDS = 2.0` ([:43](../../py_modules/backend/services/voice_transcription_service.py)).
+- **A hard cap on post-wake capture** (~10 s), independent of the silence hold
+  this study first named, `SILENCE_HOLD_SECONDS = 2.0` in
+  [voice_transcription_service.py](../../py_modules/backend/services/voice_transcription_service.py).
+  That constant was removed in plan 88 (2026-10-11): the voice service no longer
+  ends a recording on silence. Today a recording ends only on Stop, on Ask, at the
+  2-minute limit (`MAX_RECORDING_SECONDS`), or when the microphone stops delivering audio.
 - **Show the transcript before or as it is sent**, so a false wake is visible
   after the fact even if the QAM was closed.
 - **Never chain a second wake** from audio captured during a wake session.

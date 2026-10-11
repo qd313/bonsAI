@@ -30,6 +30,7 @@ import {
   ASK_READY_STATE_TRANSITION_MS,
   UNIFIED_INPUT_CORNER_RING_ROOM_PX,
 } from "../../features/unified-input/constants";
+import { textPx } from "./textPx";
 
 /**
  * In: nothing.
@@ -341,7 +342,7 @@ export function buildSection8Section(): string {
           justify-content: center !important;
           gap: 3px !important;
           box-sizing: border-box !important;
-          font-size: 12px !important;
+          font-size: ${textPx(12)} !important;
           font-weight: 800 !important;
           font-variant: small-caps !important;
           letter-spacing: 0.04em !important;

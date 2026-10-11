@@ -51,8 +51,22 @@ function specificity(selector: string): number {
 
 export type FontSizeReader = (el: Element) => number;
 
-/** `css` is every stylesheet in play; `textScale` is the number the plugin's root carries in `--bonsai-text-scale`. */
-export function makeFontSizeReader(css: string, textScale: number): FontSizeReader {
+/** The Text size step an element sees: the nearest ancestor-or-self carrying `--bonsai-text-scale` inline, else 1. */
+function textScaleFromDom(el: Element): number {
+  for (let at: Element | null = el; at; at = at.parentElement) {
+    const raw = (at as HTMLElement).style?.getPropertyValue("--bonsai-text-scale");
+    if (raw) return Number(raw);
+  }
+  return 1;
+}
+
+/**
+ * `css` is every stylesheet in play. `textScale` is the number the plugin's root carries in
+ * `--bonsai-text-scale`; leave it out and each element reads the number off the nearest ancestor that
+ * carries the variable inline, which is how the browser would hand it down (and what proves a view
+ * outside the plugin's box, like the chat's name in Decky's bar, really gets it).
+ */
+export function makeFontSizeReader(css: string, textScale?: number): FontSizeReader {
   const rules = parseRules(css);
 
   const declaredOn = (el: Element): string | null => {
@@ -85,7 +99,7 @@ export function makeFontSizeReader(css: string, textScale: number): FontSizeRead
     let m = /^calc\(\s*([\d.]+)(px|em)((?:\s*\*\s*var\(--bonsai-(?:ui|text)-scale, 1\))+)\s*\)$/.exec(value);
     if (m) {
       const base = Number(m[1]) * (m[2] === "em" ? parentPx : 1);
-      return m[3]!.includes("--bonsai-text-scale") ? base * textScale : base;
+      return m[3]!.includes("--bonsai-text-scale") ? base * (textScale ?? textScaleFromDom(el)) : base;
     }
     m = /^([\d.]+)px$/.exec(value);
     if (m) return Number(m[1]);

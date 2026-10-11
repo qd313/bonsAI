@@ -24,6 +24,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TabIndicatorBar } from "./TabIndicatorBar";
 import { ALL_BONSAI_TAB_IDS, type BonsaiTabId } from "./tabTitles";
 import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
+import { TEXT_SCALE } from "../../data/chatTextSize";
 
 const SIX = ALL_BONSAI_TAB_IDS;
 const FIVE: readonly BonsaiTabId[] = SIX.filter((id) => id !== "developer");
@@ -48,12 +49,19 @@ function textWidth(text: string, fontPx: number, letterSpacingPx: number, factor
   return w * factor + caps.length * letterSpacingPx;
 }
 
-/** A length as jsdom reports it, at UI scale 1: "16px", "calc(16px * var(--bonsai-ui-scale, 1))", "0.1em", "0", "". */
+/** The Text size step the bar is laid out at: 1 is Normal, TEXT_SCALE.large is Large. */
+let textStep = 1;
+
+/**
+ * A length as jsdom reports it, at UI scale 1 and the Text size step in `textStep`: "16px",
+ * "calc(16px * var(--bonsai-ui-scale, 1))", "calc(11px * var(--bonsai-ui-scale, 1) * var(--bonsai-text-scale, 1))",
+ * "0.1em", "0", "".
+ */
 function len(value: string, fontPx = 0): number {
   const v = value.trim();
   if (v === "" || v === "0" || v === "auto" || v === "normal") return 0;
-  let m = /^calc\((-?[\d.]+)px \* var\(--bonsai-ui-scale, 1\)\)$/.exec(v);
-  if (m) return Number(m[1]);
+  let m = /^calc\((-?[\d.]+)px((?: \* var\(--bonsai-(?:ui|text)-scale, 1\))+)\)$/.exec(v);
+  if (m) return Number(m[1]) * (m[2]!.includes("--bonsai-text-scale") ? textStep : 1);
   m = /^(-?[\d.]+)px$/.exec(v);
   if (m) return Number(m[1]);
   m = /^(-?[\d.]+)em$/.exec(v);
@@ -278,6 +286,36 @@ describe("the tab bar laid out at the Deck's 300 points (plan 87 F4, on plan 84'
       expect(laid.name.right, label).toBeLessThanOrEqual(cur.box.right);
       expect(laid.name.right, label).toBeLessThanOrEqual(DECK_BAR_W);
     });
+  });
+
+  /*
+   * Large grows the current tab's name by 15%. With the table's widest stand-in (1.15) the Permissions tab at six
+   * tabs would be 10 points too wide; at 1.0 it has 2.9 points to spare, and at 0.9 (what Steam's font measured
+   * closest to) 11.7. So the check runs at the two stand-ins the font can really be, and the Deck run measures the
+   * Permissions and Developer names on Large with the probe (the widest ones).
+   */
+  it("on Large text still fits: the longest name at six tabs runs into nothing and stays inside its box and the bar", () => {
+    textStep = TEXT_SCALE.large;
+    try {
+      let bars = 0;
+      for (const factor of [0.9, 1]) {
+        everyBar(factor, (laid, label) => {
+          bars += 1;
+          expect(laid.spare, `${label} at font ${factor}: spare room`).toBeGreaterThanOrEqual(0);
+          const drawn = laid.items.map((i) => i.icon);
+          for (let k = 1; k < drawn.length; k++) {
+            expect(drawn[k].left - drawn[k - 1].right, `${label}: icons ${k - 1} and ${k}`).toBeGreaterThanOrEqual(2);
+          }
+          const cur = laid.items.find((i) => i.current)!;
+          expect(laid.name.left, label).toBeGreaterThanOrEqual(cur.icon.right);
+          expect(laid.name.right, label).toBeLessThanOrEqual(cur.box.right);
+          expect(laid.name.right, label).toBeLessThanOrEqual(DECK_BAR_W);
+        });
+      }
+      expect(bars).toBe(2 * (FIVE.length + SIX.length));
+    } finally {
+      textStep = 1;
+    }
   });
 
   it("gives every tap target room to hit: LB and RB about 31 points wide, side icons at least 18, none overlapping", () => {

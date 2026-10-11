@@ -35,6 +35,7 @@ import { focusRowElement } from "../../utils/focusPerTurnRow";
 import { revealBelowKeepingAsItSettles } from "../../utils/chatPanelScroll";
 import { TITLE_OFFER_KEEP, TITLE_OFFER_YES } from "./chatSumUpModel";
 import { directionHandlers } from "./sumUpDirectionHandlers";
+import { uiTextPx } from "../../styles/sections/textPx";
 
 let renameEl: HTMLElement | null = null;
 let keepEl: HTMLElement | null = null;
@@ -91,7 +92,7 @@ function titleOfferCss(): string {
       border-top: 1px solid rgba(255, 255, 255, 0.07);
       border-radius: 0 0 8px 8px;
       background: rgba(14, 22, 32, 0.55);
-      font-size: ${uiScalePx(11)};
+      font-size: ${uiTextPx(11)};
       line-height: 1.4;
       color: #8fa8c4;
     }
@@ -106,7 +107,7 @@ function titleOfferCss(): string {
       border-radius: 6px;
       border: 1px solid rgba(255, 255, 255, 0.08);
       color: #8fa8c4;
-      font-size: ${uiScalePx(11)};
+      font-size: ${uiTextPx(11)};
       font-weight: 700;
       cursor: pointer;
       outline: none;

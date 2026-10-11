@@ -41,6 +41,7 @@ import {
   TAB_STRIP_BODY_GAP_PX,
 } from "../../features/unified-input/constants";
 import { uiScalePx } from "./uiScalePx";
+import { uiTextPx } from "./textPx";
 
 /** The dim colour of the LB and RB marks, the same grey-blue family as the other hint pills. */
 const MARK_COLOR = "rgba(168, 182, 198, 0.62)";
@@ -222,7 +223,7 @@ export function buildTabBarRules(root: string): string {
         ${root} .bonsai-tab-bar__name {
           flex: none;
           padding-left: 0.1em;
-          font-size: ${uiScalePx(TAB_BAR_NAME_PX)};
+          font-size: ${uiTextPx(TAB_BAR_NAME_PX)};
           line-height: 1;
           font-weight: 800;
           letter-spacing: 0.1em;

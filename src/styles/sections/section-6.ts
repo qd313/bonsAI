@@ -60,6 +60,7 @@ import { buildQuestionBubbleSection } from "./questionBubble";
 import { buildAnswerBubbleSection } from "./answerBubble";
 import { buildChatDetailsTextSection } from "./chatDetailsText";
 import { buildReplyRatingChoicesSection } from "./replyRatingChoices";
+import { textPx, uiTextPx } from "./textPx";
 
 /**
  * In: nothing — every value here is a fixed string or read from a CSS
@@ -199,7 +200,7 @@ export function buildSection6Section(): string {
            two could never line up. */
         .bonsai-scope .bonsai-unified-input-strategy-placeholder {
           font-style: italic;
-          font-size: ${uiScalePx(UNIFIED_TEXT_FONT_PX)};
+          font-size: ${uiTextPx(UNIFIED_TEXT_FONT_PX)};
           opacity: 0.45;
         }
 
@@ -250,7 +251,7 @@ ${buildChatDetailsTextSection()}
           align-self: flex-end !important;
           padding: 6px 12px !important;
           border-radius: 10px !important;
-          font-size: 11px !important;
+          font-size: ${textPx(11)} !important;
           font-weight: 600 !important;
           cursor: pointer !important;
           border: 1px solid rgba(110, 150, 200, 0.38) !important;
@@ -271,7 +272,7 @@ ${buildChatDetailsTextSection()}
           min-height: 32px !important;
           padding: 6px 12px !important;
           border-radius: 8px !important;
-          font-size: 12px !important;
+          font-size: ${textPx(12)} !important;
           font-weight: 600 !important;
           cursor: pointer !important;
           border: 1px solid rgba(110, 150, 200, 0.38) !important;
@@ -364,7 +365,7 @@ ${buildReplyRatingChoicesSection()}
           background: rgba(255, 255, 255, 0.09);
         }
         .bonsai-scope .bonsai-chat-details-divider-label {
-          font-size: ${uiScalePx(10)};
+          font-size: ${uiTextPx(10)};
           font-weight: 600;
           letter-spacing: 0.04em;
           color: #9fb7d5;
@@ -424,7 +425,7 @@ ${buildReplyRatingChoicesSection()}
           border-left: 2px solid rgba(159, 183, 213, 0.4) !important;
           margin-bottom: ${uiScalePx(8)} !important;
           min-width: 0 !important;
-          font-size: ${uiScalePx(9)} !important;
+          font-size: ${uiTextPx(9)} !important;
           font-style: italic !important;
           line-height: 1.15 !important;
           color: rgba(180, 198, 217, 0.6) !important;
@@ -444,7 +445,7 @@ ${buildReplyRatingChoicesSection()}
           border-radius: ${uiScalePx(6)} !important;
           padding: ${uiScalePx(8)} !important;
           margin-bottom: ${uiScalePx(6)} !important;
-          font-size: ${uiScalePx(11)} !important;
+          font-size: ${uiTextPx(11)} !important;
           line-height: 1.4 !important;
           color: #9fb7d5 !important;
           white-space: pre-wrap !important;
@@ -464,7 +465,7 @@ ${buildReplyRatingChoicesSection()}
           transform-origin: center center !important;
         }
         .bonsai-scope .bonsai-chat-feedback-row__label {
-          font-size: 11px !important;
+          font-size: ${textPx(11)} !important;
           color: #9fb7d5 !important;
           line-height: 1.35 !important;
         }
@@ -574,7 +575,7 @@ ${buildReplyRatingChoicesSection()}
           margin: ${uiScalePx(2)} 0 ${uiScalePx(6)};
         }
         .bonsai-scope .bonsai-chat-earlier-pill {
-          font-size: ${uiScalePx(10)};
+          font-size: ${uiTextPx(10)};
           font-weight: 600;
           letter-spacing: 0.04em;
           color: rgba(200, 214, 230, 0.85);
@@ -596,7 +597,7 @@ ${buildReplyRatingChoicesSection()}
           opacity: 0.9;
         }
         .bonsai-scope .bonsai-chat-earlier-chev {
-          font-size: ${uiScalePx(13)};
+          font-size: ${uiTextPx(13)};
           line-height: 1;
           color: #8fa8c4;
         }
@@ -617,7 +618,7 @@ ${buildReplyRatingChoicesSection()}
         }
         .bonsai-scope .bonsai-chat-empty-caption {
           font-style: italic;
-          font-size: ${uiScalePx(13)};
+          font-size: ${uiTextPx(13)};
           line-height: 1.55;
           max-width: ${uiScalePx(210)};
           text-align: center;
@@ -649,7 +650,7 @@ ${buildReplyRatingChoicesSection()}
           text-align: center;
           padding: ${uiScalePx(6)} ${uiScalePx(4)};
           border-radius: 6px;
-          font-size: ${uiScalePx(10)};
+          font-size: ${uiTextPx(10)};
           font-weight: 600;
           letter-spacing: 0.03em;
           color: #8fa8c4;
@@ -682,7 +683,7 @@ ${buildReplyRatingChoicesSection()}
           border: 1px solid rgba(255, 255, 255, 0.08);
           background: transparent;
           color: #8fa8c4;
-          font-size: ${uiScalePx(11)};
+          font-size: ${uiTextPx(11)};
           font-weight: 700;
           white-space: nowrap;
           cursor: pointer;
@@ -700,7 +701,7 @@ ${buildReplyRatingChoicesSection()}
           color: #dce8f4;
         }
         .bonsai-scope .bonsai-sumup-reason {
-          font-size: ${uiScalePx(11)};
+          font-size: ${uiTextPx(11)};
           line-height: 1.4;
           color: #8fa8c4;
           padding: 0 ${uiScalePx(2)};
@@ -712,7 +713,7 @@ ${buildReplyRatingChoicesSection()}
           border-radius: 8px;
           border: 1px solid rgba(125, 211, 252, 0.3);
           background: rgba(14, 22, 32, 0.55);
-          font-size: ${uiScalePx(11)};
+          font-size: ${uiTextPx(11)};
           line-height: 1.45;
           color: #dce8f4;
           outline: none;
@@ -726,7 +727,7 @@ ${buildReplyRatingChoicesSection()}
           display: flex;
           justify-content: space-between;
           gap: ${uiScalePx(8)};
-          font-size: ${uiScalePx(10)};
+          font-size: ${uiTextPx(10)};
           font-weight: 700;
           letter-spacing: 0.03em;
           color: #9fb7d5;
@@ -743,7 +744,7 @@ ${buildReplyRatingChoicesSection()}
           margin-top: ${uiScalePx(6)};
           padding-top: ${uiScalePx(6)};
           border-top: 1px solid rgba(255, 255, 255, 0.07);
-          font-size: ${uiScalePx(10)};
+          font-size: ${uiTextPx(10)};
           line-height: 1.4;
           color: #8fa8c4;
         }
@@ -759,7 +760,7 @@ ${buildReplyRatingChoicesSection()}
           box-sizing: border-box;
           padding: 1px ${uiScalePx(2)};
           border-radius: 4px;
-          font-size: ${uiScalePx(11)};
+          font-size: ${uiTextPx(11)};
           line-height: 1.35;
           color: #9fb7d5;
           cursor: pointer;
@@ -783,7 +784,7 @@ ${buildReplyRatingChoicesSection()}
         /* Summing up failed or ran out of time: the slow-answer line's warning yellow. */
         .bonsai-scope .bonsai-chat-summary-warn {
           color: #f2cf84;
-          font-size: ${uiScalePx(12)};
+          font-size: ${uiTextPx(12)};
           line-height: 1.35;
           margin: ${uiScalePx(8)} 0 ${uiScalePx(4)};
         }

@@ -19,6 +19,7 @@
 import { PRESET_CHIP_HEIGHT_PX } from "../../features/preset-carousel/presetRowLayout";
 import { TAB_BAR_SWITCH_FADE_MS } from "../../features/unified-input/constants";
 import { uiScalePx } from "./uiScalePx";
+import { uiTextPx } from "./textPx";
 
 /**
  * In: nothing.
@@ -82,7 +83,7 @@ export function buildDetailsSlotSection(): string {
           background: rgba(255, 255, 255, 0.09);
         }
         .bonsai-scope .bonsai-details-slot__label {
-          font-size: ${uiScalePx(10)};
+          font-size: ${uiTextPx(10)};
           font-weight: 600;
           letter-spacing: 0.04em;
           color: #9fb7d5;

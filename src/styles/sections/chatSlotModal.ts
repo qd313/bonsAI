@@ -31,10 +31,12 @@
  * plugin's normal column — `BonsaiModalScope` is what carries the UI-scale
  * setting into a popup like this one, not this file.
  */
+import { textPx } from "./textPx";
+
 export function buildChatSlotModalStylesheet(): string {
   return `
         .bonsai-scope .bonsai-chat-slot-modal-label {
-          font-size: 10px;
+          font-size: ${textPx(10)};
           font-weight: 700;
           letter-spacing: 0.1em;
           color: rgba(143, 168, 196, 0.8);
@@ -47,7 +49,7 @@ export function buildChatSlotModalStylesheet(): string {
           background: rgba(18, 26, 34, 0.55);
           border: 1px solid rgba(156, 231, 255, 0.5);
           box-shadow: 0 0 10px rgba(156, 231, 255, 0.12);
-          font-size: 14px;
+          font-size: ${textPx(14)};
           font-weight: 600;
           color: #e8eef5;
           caret-color: #9ce7ff;

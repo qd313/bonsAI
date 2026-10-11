@@ -28,6 +28,7 @@
  */
 import { BONSAI_PLUGIN_SIDE_PAD_PX } from "../../features/unified-input/constants";
 import { uiScalePx } from "./uiScalePx";
+import { TEXT_SCALE_ROOT_CSS, uiTextPx } from "./textPx";
 
 /**
  * In: nothing — every value here is a fixed string or read from a CSS
@@ -91,7 +92,7 @@ export function buildScopebaseSection(): string {
           align-self: stretch;
           overflow: hidden;
         }
-
+${TEXT_SCALE_ROOT_CSS}
         /* Durable QAM height lock (inline height on scope is wiped by React/Decky re-renders). */
         .bonsai-scope.bonsai-qam-height-locked {
           height: var(--bonsai-qam-lock-height) !important;
@@ -153,7 +154,7 @@ export function buildScopebaseSection(): string {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
-          font-size: ${uiScalePx(14)} !important;
+          font-size: ${uiTextPx(14)} !important;
           line-height: 1.4 !important;
         }
 
@@ -177,7 +178,7 @@ export function buildScopebaseSection(): string {
           overflow-wrap: anywhere !important;
           word-wrap: break-word !important;
           word-break: break-word !important;
-          font-size: ${uiScalePx(12)} !important;
+          font-size: ${uiTextPx(12)} !important;
           line-height: 1.4 !important;
         }
 

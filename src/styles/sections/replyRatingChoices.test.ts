@@ -110,7 +110,10 @@ function settled(el: Element, prop: string): string | null {
       }
     }
   }
-  return best ? best.value.replace(/calc\(\s*([\d.]+)px \* var\(--bonsai-ui-scale, 1\)\s*\)/g, "$1px") : null;
+  // At Normal both scales are 1, so a size written through the helpers reads as its plain pixels.
+  return best
+    ? best.value.replace(/calc\(\s*([\d.]+)px((?:\s*\*\s*var\(--bonsai-(?:ui|text)-scale, 1\))+)\s*\)/g, "$1px")
+    : null;
 }
 
 /**

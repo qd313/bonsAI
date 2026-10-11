@@ -18,6 +18,7 @@
  * top edge, its height measured from the room above the dock).
  */
 import { uiScalePx } from "../../styles/sections/uiScalePx";
+import { uiTextPx } from "../../styles/sections/textPx";
 
 const M = ".bonsai-scope .bonsai-chats-menu";
 const LIT = "var(--bonsai-ui-tab-lit, #52d88a)";
@@ -47,7 +48,7 @@ ${M} .bonsai-chats-menu__stops {
 }
 ${M} .bonsai-chats-menu__heading {
   margin: ${uiScalePx(2)} ${uiScalePx(4)} ${uiScalePx(4)};
-  font-size: ${uiScalePx(10)};
+  font-size: ${uiTextPx(10)};
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -63,7 +64,7 @@ ${M} .bonsai-chats-menu__chat {
   border-radius: 4px;
   border-left: 3px solid transparent;
   background: rgba(255, 255, 255, 0.04);
-  font-size: ${uiScalePx(12)};
+  font-size: ${uiTextPx(12)};
   color: #dfe6ee;
   min-width: 0;
 }
@@ -95,7 +96,7 @@ ${M} .bonsai-chats-menu__mark--writing {
 ${M} .bonsai-chats-menu__when {
   margin-left: auto;
   flex: none;
-  font-size: ${uiScalePx(10)};
+  font-size: ${uiTextPx(10)};
   font-weight: 400;
   color: #8fa8c4;
 }
@@ -113,7 +114,7 @@ ${M} .bonsai-chats-menu__action {
   padding: 0 ${uiScalePx(8)};
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.06);
-  font-size: ${uiScalePx(11)};
+  font-size: ${uiTextPx(11)};
   color: #dfe6ee;
   white-space: nowrap;
   overflow: hidden;
@@ -147,7 +148,7 @@ ${M} .bonsai-chats-menu__action.gpfocus {
 ${M} .bonsai-chats-menu__hint {
   margin: auto ${uiScalePx(4)} ${uiScalePx(2)};
   padding-top: ${uiScalePx(6)};
-  font-size: ${uiScalePx(10)};
+  font-size: ${uiTextPx(10)};
   color: #8fa8c4;
 }
 `;

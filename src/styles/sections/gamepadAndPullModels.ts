@@ -47,6 +47,7 @@
  *    everything above it, a small on-screen debug overlay.
  */
 import { buildChatSlotModalStylesheet } from "./chatSlotModal";
+import { TEXT_SCALE_ROOT_CSS, textPx } from "./textPx";
 
 /**
  * In: nothing.
@@ -162,7 +163,7 @@ export function buildGamepadFocusRingStylesheet(): string {
  * need into a single string it can carry with it.
  */
 export function buildModalPortalStylesheet(): string {
-  return `${buildGamepadFocusRingStylesheet()}${buildPullModelsStylesheet()}${buildChatSlotModalStylesheet()}`;
+  return `${TEXT_SCALE_ROOT_CSS}${buildGamepadFocusRingStylesheet()}${buildPullModelsStylesheet()}${buildChatSlotModalStylesheet()}`;
 }
 
 
@@ -181,7 +182,7 @@ export function buildPullModelsStylesheet(): string {
         .bonsai-scope .bonsai-models-hub-advanced-link {
           min-height: 22px !important;
           padding: 2px 8px !important;
-          font-size: 10px !important;
+          font-size: ${textPx(10)} !important;
           font-weight: 600 !important;
           border-radius: 4px !important;
           border: 1px solid rgba(255,255,255,0.14) !important;
@@ -235,7 +236,7 @@ export function buildPullModelsStylesheet(): string {
           margin-bottom: 8px;
         }
         .bonsai-scope .bonsai-pullmodels-recommend-title {
-          font-size: 10px;
+          font-size: ${textPx(10)};
           font-weight: 700;
           color: #9ce7ff;
           letter-spacing: 0.03em;
@@ -249,7 +250,7 @@ export function buildPullModelsStylesheet(): string {
           display: flex;
           flex-wrap: wrap;
           gap: 8px 14px;
-          font-size: 11px;
+          font-size: ${textPx(11)};
           color: #b8cce0;
           line-height: 1.35;
         }
@@ -266,7 +267,7 @@ export function buildPullModelsStylesheet(): string {
           min-width: 20px !important;
           min-height: 15px !important;
           padding: 0 4px !important;
-          font-size: 9px !important;
+          font-size: ${textPx(9)} !important;
           font-weight: 700 !important;
         }
         .bonsai-scope .bonsai-pullmodels-custom-tag-row {
@@ -286,7 +287,7 @@ export function buildPullModelsStylesheet(): string {
         .bonsai-scope .bonsai-pullmodels-custom-tag-row input {
           flex: 1 1 auto !important;
           min-width: 0 !important;
-          font-size: 11px !important;
+          font-size: ${textPx(11)} !important;
           min-height: 26px !important;
         }
         .bonsai-scope .bonsai-pullmodels-custom-pull-btn {
@@ -298,7 +299,7 @@ export function buildPullModelsStylesheet(): string {
           opacity: 0.45 !important;
         }
         .bonsai-scope .bonsai-pullmodels-custom-tag-hint {
-          font-size: 9px;
+          font-size: ${textPx(9)};
           color: #6b7c90;
           line-height: 1.3;
           margin-top: 3px;
@@ -330,7 +331,7 @@ export function buildPullModelsStylesheet(): string {
           min-width: 0 !important;
           min-height: 26px !important;
           padding: 4px 8px !important;
-          font-size: 10px !important;
+          font-size: ${textPx(10)} !important;
           border-radius: 4px !important;
           border: 1px solid rgba(255,255,255,0.18) !important;
           background: rgba(255,255,255,0.06) !important;
@@ -361,7 +362,7 @@ export function buildPullModelsStylesheet(): string {
           padding-bottom: 4px;
         }
         .bonsai-scope .bonsai-pullmodels-filterpanel-intro {
-          font-size: 9px;
+          font-size: ${textPx(9)};
           color: #9fb7d5;
           line-height: 1.4;
           margin: 0 0 4px;
@@ -376,7 +377,7 @@ export function buildPullModelsStylesheet(): string {
           min-height: 26px !important;
           padding: 4px 8px !important;
           margin-bottom: 2px !important;
-          font-size: 11px !important;
+          font-size: ${textPx(11)} !important;
           border-radius: 4px !important;
           border: 1px solid rgba(255,255,255,0.12) !important;
           background: rgba(255,255,255,0.03) !important;
@@ -402,7 +403,7 @@ export function buildPullModelsStylesheet(): string {
           width: 100% !important;
           min-height: 26px !important;
           margin-top: 4px !important;
-          font-size: 10px !important;
+          font-size: ${textPx(10)} !important;
           font-weight: 600 !important;
           border-radius: 4px !important;
           border: 1px solid rgba(255,255,255,0.14) !important;
@@ -412,7 +413,7 @@ export function buildPullModelsStylesheet(): string {
         .bonsai-scope .bonsai-pullmodels-chip {
           min-height: 24px !important;
           padding: 2px 8px !important;
-          font-size: 9px !important;
+          font-size: ${textPx(9)} !important;
           border-radius: 4px !important;
           border: 1px solid rgba(255,255,255,0.18) !important;
           background: rgba(255,255,255,0.06) !important;
@@ -435,7 +436,7 @@ export function buildPullModelsStylesheet(): string {
         }
         .bonsai-scope .bonsai-pullmodels-chip--foss-inline {
           align-self: flex-start;
-          font-size: 9px !important;
+          font-size: ${textPx(9)} !important;
           padding: 2px 6px !important;
           min-height: 17px !important;
           line-height: 1.2 !important;
@@ -453,7 +454,7 @@ export function buildPullModelsStylesheet(): string {
           max-width: 100%;
         }
         .bonsai-scope .bonsai-pullmodels-group-title {
-          font-size: 10px;
+          font-size: ${textPx(10)};
           font-weight: 700;
           letter-spacing: 0.04em;
           color: #8fa8c4;
@@ -491,7 +492,7 @@ export function buildPullModelsStylesheet(): string {
           z-index: 1;
           background: rgba(8, 14, 22, 0.96);
           border-bottom: 1px solid rgba(72, 98, 124, 0.45);
-          font-size: 10px;
+          font-size: ${textPx(10)};
           font-weight: 700;
           letter-spacing: 0.05em;
           text-transform: uppercase;
@@ -541,7 +542,7 @@ export function buildPullModelsStylesheet(): string {
         .bonsai-scope .bonsai-pullmodels-place-num {
           min-width: 14px;
           text-align: center;
-          font-size: 11px;
+          font-size: ${textPx(11)};
           font-weight: 700;
           color: #fcd34d;
         }
@@ -555,7 +556,7 @@ export function buildPullModelsStylesheet(): string {
           width: 22px !important;
           min-height: 22px !important;
           padding: 0 !important;
-          font-size: 10px !important;
+          font-size: ${textPx(10)} !important;
           scroll-margin-top: 32px;
         }
         .bonsai-scope .bonsai-pullmodels-col--try {
@@ -564,7 +565,7 @@ export function buildPullModelsStylesheet(): string {
         /* "Skipped: too big": the model keeps its place but is passed over when someone asks. */
         .bonsai-scope .bonsai-pullmodels-place-skipped {
           flex-basis: 100%;
-          font-size: 8px;
+          font-size: ${textPx(8)};
           line-height: 1.1;
           color: #f2cf84;
         }
@@ -584,25 +585,25 @@ export function buildPullModelsStylesheet(): string {
           gap: 6px;
         }
         .bonsai-scope .bonsai-pullmodels-tryorder-label {
-          font-size: 10px;
+          font-size: ${textPx(10)};
           color: #8fa8c4;
         }
         .bonsai-scope .bonsai-pullmodels-tryorder-saved {
           flex: 1 1 0;
           min-width: 0;
-          font-size: 10px;
+          font-size: ${textPx(10)};
           line-height: 1.2;
           color: #9fb7d5;
         }
         .bonsai-scope .bonsai-pullmodels-tryorder-note {
-          font-size: 10px;
+          font-size: ${textPx(10)};
           line-height: 1.35;
           color: #9fb7d5;
         }
         .bonsai-scope .bonsai-pullmodels-col {
           min-width: 0;
           max-width: 100%;
-          font-size: 10px;
+          font-size: ${textPx(10)};
           color: #dce8f4;
           line-height: 1.3;
           overflow: hidden;
@@ -647,7 +648,7 @@ export function buildPullModelsStylesheet(): string {
         }
         .bonsai-scope .bonsai-pullmodels-new-badge {
           flex-shrink: 0;
-          font-size: 8px;
+          font-size: ${textPx(8)};
           font-weight: 700;
           letter-spacing: 0.04em;
           padding: 1px 4px;
@@ -669,23 +670,23 @@ export function buildPullModelsStylesheet(): string {
         }
         .bonsai-scope .bonsai-pullmodels-col--date {
           white-space: nowrap;
-          font-size: 9px;
+          font-size: ${textPx(9)};
           overflow: hidden;
           text-overflow: ellipsis;
         }
         .bonsai-scope .bonsai-pullmodels-col--modes {
           white-space: nowrap;
-          font-size: 9px;
+          font-size: ${textPx(9)};
           overflow: hidden;
           text-overflow: ellipsis;
         }
         .bonsai-scope .bonsai-pullmodels-table-row--head .bonsai-pullmodels-col--date,
         .bonsai-scope .bonsai-pullmodels-table-row--head .bonsai-pullmodels-col--modes {
-          font-size: 9px;
+          font-size: ${textPx(9)};
         }
         .bonsai-scope .bonsai-pullmodels-col--rating {
           white-space: nowrap;
-          font-size: 8px;
+          font-size: ${textPx(8)};
           line-height: 1.2;
           text-align: center;
           overflow: hidden;
@@ -693,7 +694,7 @@ export function buildPullModelsStylesheet(): string {
         }
         .bonsai-scope .bonsai-pullmodels-col--stars {
           color: #fcd34d;
-          font-size: 8px;
+          font-size: ${textPx(8)};
           letter-spacing: 0;
           white-space: nowrap;
           text-align: center;
@@ -714,7 +715,7 @@ export function buildPullModelsStylesheet(): string {
           color: #fde68a !important;
           white-space: normal;
           text-align: center;
-          font-size: 8px !important;
+          font-size: ${textPx(8)} !important;
           line-height: 1.1 !important;
           padding: 1px 2px !important;
           min-height: 0 !important;
@@ -722,7 +723,7 @@ export function buildPullModelsStylesheet(): string {
           box-sizing: border-box;
         }
         .bonsai-scope .bonsai-pullmodels-blurb {
-          font-size: 8px;
+          font-size: ${textPx(8)};
           color: #8fa8c4;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -733,7 +734,7 @@ export function buildPullModelsStylesheet(): string {
           display: none;
         }
         .bonsai-scope .bonsai-pullmodels-installed-label {
-          font-size: 8px;
+          font-size: ${textPx(8)};
           font-weight: 700;
           letter-spacing: 0.06em;
           color: var(--bonsai-pullmodels-accent);
@@ -743,7 +744,7 @@ export function buildPullModelsStylesheet(): string {
           min-width: 24px !important;
           min-height: 24px !important;
           padding: 0 !important;
-          font-size: 14px !important;
+          font-size: ${textPx(14)} !important;
           font-weight: 700 !important;
           font-family: monospace !important;
           border: 1px solid rgba(255,255,255,0.22) !important;
@@ -771,7 +772,7 @@ export function buildPullModelsStylesheet(): string {
           background: transparent !important;
           box-shadow: none !important;
           color: var(--bonsai-pullmodels-accent) !important;
-          font-size: 14px !important;
+          font-size: ${textPx(14)} !important;
           font-weight: 700 !important;
         }
         /* "Use for Ask" pin -- installed rows repurpose the same slot button (no new column, no new
@@ -789,7 +790,7 @@ export function buildPullModelsStylesheet(): string {
           min-width: 24px !important;
           min-height: 24px !important;
           padding: 0 !important;
-          font-size: 11px !important;
+          font-size: ${textPx(11)} !important;
           font-weight: 700 !important;
           color: var(--bonsai-pullmodels-delete-fg) !important;
           border: 1px solid rgba(248, 113, 113, 0.45) !important;
@@ -801,7 +802,7 @@ export function buildPullModelsStylesheet(): string {
           pointer-events: none !important;
         }
         .bonsai-scope .bonsai-pullmodels-empty {
-          font-size: 11px;
+          font-size: ${textPx(11)};
           color: #6b7c90;
           padding: 12px 0;
         }
@@ -817,7 +818,7 @@ export function buildPullModelsStylesheet(): string {
           overflow: hidden !important;
           pointer-events: none !important;
           font-family: monospace !important;
-          font-size: 9px !important;
+          font-size: ${textPx(9)} !important;
           line-height: 1.25 !important;
           color: rgba(167, 243, 208, 0.88) !important;
           background: rgba(0, 0, 0, 0.28) !important;

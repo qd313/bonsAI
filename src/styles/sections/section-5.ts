@@ -41,6 +41,7 @@ import {
   UNIFIED_TEXT_OVERLAY_FALLBACK_WHITE_SPACE,
 } from "../../features/unified-input/constants";
 import { uiScalePx } from "./uiScalePx";
+import { uiTextPx } from "./textPx";
 
 /**
  * In: nothing.
@@ -111,7 +112,7 @@ export function buildSection5Section(): string {
           padding: ${uiScalePx(UNIFIED_TEXT_INSET_TOP_PX)} ${uiScalePx(UNIFIED_TEXT_INSET_RIGHT_PX)} ${uiScalePx(UNIFIED_TEXT_INSET_BOTTOM_PX)} ${uiScalePx(UNIFIED_TEXT_INSET_LEFT_PX)} !important;
           text-indent: 0 !important;
           box-sizing: border-box !important;
-          font-size: ${uiScalePx(UNIFIED_TEXT_FONT_PX)} !important;
+          font-size: ${uiTextPx(UNIFIED_TEXT_FONT_PX)} !important;
           line-height: ${UNIFIED_TEXT_LINE_HEIGHT} !important;
           vertical-align: top !important;
         }
@@ -189,7 +190,7 @@ export function buildSection5Section(): string {
            the field has two placeholder render paths and they have to read the same. */
         .bonsai-scope .bonsai-unified-input-host input::placeholder,
         .bonsai-scope .bonsai-unified-input-host textarea::placeholder {
-          font-size: ${uiScalePx(UNIFIED_TEXT_FONT_PX)} !important;
+          font-size: ${uiTextPx(UNIFIED_TEXT_FONT_PX)} !important;
           font-style: italic !important;
           color: rgba(200, 214, 230, 0.45) !important;
         }

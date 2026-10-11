@@ -19,6 +19,7 @@
  * resting highlight is dropped only on a button that does not hold the ring.
  */
 import { uiScalePx } from "./uiScalePx";
+import { textPx } from "./textPx";
 
 /**
  * In: nothing.
@@ -37,7 +38,7 @@ export function buildReplyRatingChoicesSection(): string {
           min-height: 28px !important;
           padding: 4px 10px !important;
           border-radius: 6px !important;
-          font-size: 11px !important;
+          font-size: ${textPx(11)} !important;
           font-weight: 500 !important;
           border: 1px solid rgba(110, 150, 200, 0.2) !important;
           background: linear-gradient(

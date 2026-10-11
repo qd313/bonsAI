@@ -23,6 +23,7 @@
  */
 
 import { BONSAI_FOREST_GREEN } from "../unified-input/constants";
+import { textPx } from "../../styles/sections/textPx";
 
 /** Decky's own back arrow, measured on the Deck 2026-10-08: the empty space on the right mirrors it. */
 export const DECKY_BACK_ARROW_W_PX = 40;
@@ -116,7 +117,7 @@ ${ROOT} .bonsai-chat-title__spacer {
   width: ${NAME_CARET_PX}px;
 }
 ${ROOT} .bonsai-chat-title__words {
-  font-size: ${NAME_FONT_PX}px !important;
+  font-size: ${textPx(NAME_FONT_PX)} !important;
   line-height: 16px !important;
   font-weight: 800 !important;
   color: #e8eef5;
@@ -160,7 +161,7 @@ ${ROOT} .bonsai-chat-title__sub {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: ${SUB_FONT_PX}px !important;
+  font-size: ${textPx(SUB_FONT_PX)} !important;
   line-height: 10px !important;
   font-weight: 400 !important;
   color: rgba(168, 182, 198, 0.72);
@@ -169,7 +170,7 @@ ${ROOT} .bonsai-chat-title__sub {
 }
 ${ROOT} .bonsai-chat-title__key {
   flex: none;
-  font-size: ${KEY_FONT_PX}px;
+  font-size: ${textPx(KEY_FONT_PX)};
   line-height: 8px;
   font-weight: 800;
   letter-spacing: 0.04em;

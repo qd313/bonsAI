@@ -23,3 +23,20 @@ import { TEXT_SCALE_VAR } from "../../data/chatTextSize";
 export function textPx(px: number): string {
   return `calc(${px}px * var(${TEXT_SCALE_VAR}, 1))`;
 }
+
+/** `px` pixels, times the UI scale and the Text size step. For a size that already followed the UI scale. */
+export function uiTextPx(px: number): string {
+  return `calc(${px}px * var(--bonsai-ui-scale, 1) * var(${TEXT_SCALE_VAR}, 1))`;
+}
+
+/**
+ * The step on the box itself: `1em` of the size it inherits, times the step (exactly the inherited size
+ * on Normal). Anything inside the box that takes its size from its parent, Steam's own controls
+ * included where they do, follows the setting; a size written through `textPx` is its own number and is
+ * not touched by this. Only the plugin's one box (and a popup's) carries it, so it is applied once.
+ */
+export const TEXT_SCALE_ROOT_CSS = `
+        .bonsai-scope {
+          font-size: calc(1em * var(${TEXT_SCALE_VAR}, 1));
+        }
+`;

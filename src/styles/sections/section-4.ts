@@ -88,6 +88,7 @@ import {
 } from "../../hooks/useSteamSettingsSearch";
 import { buildPresetChipLabelCss } from "./presetChipLabel";
 import { uiScalePx } from "./uiScalePx";
+import { textPx } from "./textPx";
 
 /**
  * In: nothing.
@@ -377,7 +378,7 @@ export function buildSection4Section(): string {
         }
         .bonsai-scope .bonsai-settings-results-card-heading {
           color: #8fa8c4;
-          font-size: 11px;
+          font-size: ${textPx(11)};
           line-height: 16px;
           padding-bottom: 6px;
         }

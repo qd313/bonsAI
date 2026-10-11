@@ -268,7 +268,7 @@ export function buildAnswerBubbleSection(): string {
           border-radius: 8px !important;
           border: 1px dashed rgba(56, 189, 248, 0.55) !important;
           color: #38bdf8 !important;
-          font-size: 12px !important;
+          font-size: ${textPx(12)} !important;
           line-height: 1.35 !important;
         }
         .bonsai-scope .bonsai-stream-fence-wait--code {

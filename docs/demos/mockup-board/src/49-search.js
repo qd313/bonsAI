@@ -341,6 +341,39 @@ function sChatsMenu(ctx, { find = false } = {}) {
   drawList(find ? ".s-findrow" : ".s-crow.on");
 }
 
+/* "You asked this before": typing a question you asked already shows the old one above the box */
+function sAskedWire(ctx) {
+  const { root } = ctx;
+  const field = ctx.dk.field;
+  field.setAttribute("data-start", "");
+  let card = null;
+  const typedQ = "how do i beat the mantis lords";
+  field.addEventListener("click", () => fakeKeyboard(root, ctx.panel, typedQ, (t) => {
+    if (!t) { Deck.setRing(root, field); return; }
+    field.textContent = t; field.classList.add("typed");
+    card && card.remove();
+    const keys = t.toLowerCase().split(/\s+/).filter((w) => w.length >= 4 && !S_SKIP.has(w));
+    const scored = [];
+    S_CHATS.forEach((c, ci) => c.qs.forEach((q, qi) => {
+      const s = keys.filter((k) => q.t.toLowerCase().includes(k)).length;
+      if (s >= 2) scored.push({ ci, qi, q, s });
+    }));
+    scored.sort((a, b) => b.s - a.s);
+    const top = scored.slice(0, 2);
+    card = h("div", { class: "s-asked" }, h("div", { class: "s-asked-h" }, h("span", { class: "s-gi", html: ICONS2.redo }), "You asked this before", h("small", {}, "A opens it · Ask asks again")),
+      ...top.map((m) => {
+        let html = sEsc(m.q.t);
+        for (const k of keys) html = html.replace(new RegExp("(" + k + ")", "ig"), "<mark>$1</mark>");
+        const b = h("button", { class: "s-hit", "data-stop": "" }, h("span", { class: "s-ht", html }), h("small", {}, `${S_CHATS[m.ci].name} · ${sDay(m.q) || S_CHATS[m.ci].when}`));
+        b.addEventListener("click", () => { card.remove(); card = null; field.textContent = "Describe the level, boss, or puzzle you're stuck on."; field.classList.remove("typed"); sJump(ctx, m.ci, m.qi); });
+        return b;
+      }));
+    ctx.dk.prepend(card);
+    Deck.setRing(root, $(".s-hit", card));
+  }));
+  ctx.dk.ask.addEventListener("click", () => toast(ctx.panel, field.classList.contains("typed") ? "Asks it again as a new question, as today." : "Type a question first.", 1500));
+}
+
 /* ---------- the options ---------- */
 function searchMock(kind) {
   const ctx = sCtx();
@@ -360,34 +393,7 @@ function searchMock(kind) {
   } else if (kind === "asked") {
     sMain(ctx, { dockOpts: { placeholder: "Describe the level, boss, or puzzle you're stuck on." } });
     sNewestView(ctx);
-    const field = ctx.dk.field;
-    field.setAttribute("data-start", "");
-    let card = null;
-    const typedQ = "how do i beat the mantis lords";
-    field.addEventListener("click", () => fakeKeyboard(root, ctx.panel, typedQ, (t) => {
-      if (!t) { Deck.setRing(root, field); return; }
-      field.textContent = t; field.classList.add("typed");
-      card && card.remove();
-      const keys = t.toLowerCase().split(/\s+/).filter((w) => w.length >= 4 && !S_SKIP.has(w));
-      const scored = [];
-      S_CHATS.forEach((c, ci) => c.qs.forEach((q, qi) => {
-        const s = keys.filter((k) => q.t.toLowerCase().includes(k)).length;
-        if (s >= 2) scored.push({ ci, qi, q, s });
-      }));
-      scored.sort((a, b) => b.s - a.s);
-      const top = scored.slice(0, 2);
-      card = h("div", { class: "s-asked" }, h("div", { class: "s-asked-h" }, h("span", { class: "s-gi", html: ICONS2.redo }), "You asked this before", h("small", {}, "A opens it · Ask asks again")),
-        ...top.map((m) => {
-          let html = sEsc(m.q.t);
-          for (const k of keys) html = html.replace(new RegExp("(" + k + ")", "ig"), "<mark>$1</mark>");
-          const b = h("button", { class: "s-hit", "data-stop": "" }, h("span", { class: "s-ht", html }), h("small", {}, `${S_CHATS[m.ci].name} · ${sDay(m.q) || S_CHATS[m.ci].when}`));
-          b.addEventListener("click", () => { card.remove(); card = null; field.textContent = "Describe the level, boss, or puzzle you're stuck on."; field.classList.remove("typed"); sJump(ctx, m.ci, m.qi); });
-          return b;
-        }));
-      ctx.dk.prepend(card);
-      Deck.setRing(root, $(".s-hit", card));
-    }));
-    ctx.dk.ask.addEventListener("click", () => toast(ctx.panel, field.classList.contains("typed") ? "Asks it again as a new question, as today." : "Type a question first.", 1500));
+    sAskedWire(ctx);
   } else if (kind === "tab") {
     const TABS_S = [TABS2[0], ["Search", "search"], ...TABS2.slice(1)];
     const all = S_CHATS.map((_, i) => i);

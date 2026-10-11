@@ -92,4 +92,7 @@
 .n2-line .note-row { margin-bottom: 0; }
 .n2-del { flex: 0 0 30px; display: grid; place-items: center; background: rgba(10,15,21,.5); border: 1px solid rgba(255,255,255,.08); border-radius: 6px; color: var(--q-ink-3); }
 .n2-del svg { width: 13px; height: 13px; }
+/* tab 8, round 2: your notes on the Search tab */
+.s2-notes { display: flex; flex-direction: column; margin-top: 8px; }
+.s2-notes .s-hint { margin-top: 2px; }
 </style>

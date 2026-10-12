@@ -8,7 +8,9 @@
  * the person's own questions (so the D-pad can pick a word with no typing), then either the matches in four
  * groups once a word is picked, or, before that, every note the person kept with its on/off switch. A on a
  * setting opens it in Steam, as the old card on the Main tab did; A on a game note reads it in its own words;
- * A on a note flips its switch; A on a chat match does nothing yet but say the jump comes in the next step.
+ * A on a note flips its switch; A on a chat match opens that chat on the question (useSearchJump.ts), and the
+ * "Back to where you were" line over that chat brings the person back here with the ring on the same match.
+ * B anywhere on the tab goes back to the tab the person came from.
  *
  * Used for: useSearchTabPayload.tsx, which index.tsx mounts as the first tab.
  *
@@ -19,9 +21,9 @@
  * ring (useSearchNav.ts).
  */
 import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { toaster } from "@decky/api";
 
 import type { IntentPackSearchIndex } from "../../utils/intentPackSearch";
+import { uiGamepadFocusElement } from "../../utils/uiDocument";
 import { GameNoteSheet } from "./GameNoteSheet";
 import { SearchFindBox } from "./SearchFindBox";
 import { SearchGameRow } from "./SearchGameRow";
@@ -38,12 +40,17 @@ import {
   searchGames,
   searchWords,
 } from "./searchModel";
+import { clearSearchArrival, peekSearchArrival } from "./searchJumpStore";
 import { SEARCH_TAB_CSS } from "./searchTabStyles";
 import { readSearchSaved, writeSearchSaved } from "./searchTabStore";
 import type { GameNote } from "./searchTypes";
 import { useGameNotes } from "./useGameNotes";
 import { useSearchIndex } from "./useSearchIndex";
+import { useSearchJump } from "./useSearchJump";
 import { useSearchNav } from "./useSearchNav";
+
+/** After the tab is drawn from outside (Y, or the way back), Steam may still move the ring once as the tab settles: look again after these waits. */
+const ARRIVAL_CHECKS_MS = [150, 450];
 
 /** Under this many letters a typed word searches nothing (one letter would match nearly everything). */
 const MIN_WORD_LETTERS = 2;
@@ -60,6 +67,8 @@ export type SearchTabProps = {
   intentPackIndex: IntentPackSearchIndex;
   /** Opens a setting in Steam (the Main tab's old A on a card row). */
   onSettingClick: (settingPath: string) => void;
+  /** Opens a saved chat and shows the Main tab (the plugin root's); without it a chat match does nothing. */
+  onOpenChat?: (slotId: string) => Promise<unknown> | void;
 };
 
 /**
@@ -77,13 +86,22 @@ export type SearchTabProps = {
  * 2. Narrows the questions and notes by the game, makes the word buttons, and finds the matches in four groups.
  * 3. Names the rows top to bottom for the stops (useSearchNav), and moves the ring after a redraw that asked for it.
  */
-export const SearchTab: React.FC<SearchTabProps> = ({ active, isAsking, intentPackIndex, onSettingClick }) => {
+export const SearchTab: React.FC<SearchTabProps> = ({ active, isAsking, intentPackIndex, onSettingClick, onOpenChat }) => {
   const saved = readSearchSaved();
   const [typed, setTypedState] = useState(saved.typed);
   const [game, setGameState] = useState<string | null>(saved.game);
   const [openNote, setOpenNoteState] = useState<GameNote | null>(saved.openNote);
   const index = useSearchIndex({ active, isAsking });
   const pending = useRef<PendingRing>(null);
+  const rootEl = useRef<HTMLElement | null>(null);
+  /* Arriving by Y (the ring goes to the find box) or by the Back line (to the match that was pressed). */
+  const arrival = useRef<PendingRing>(null);
+  useLayoutEffect(() => {
+    const came = peekSearchArrival();
+    if (came === null) return;
+    arrival.current = came === "find" ? "box" : { key: came.key };
+    pending.current = arrival.current;
+  }, []);
 
   const setTyped = useCallback((next: string) => {
     writeSearchSaved({ typed: next });
@@ -101,6 +119,7 @@ export const SearchTab: React.FC<SearchTabProps> = ({ active, isAsking, intentPa
   const words = useMemo(() => searchWords(narrowedQuestions.map((q) => q.text)), [narrowedQuestions]);
   const gameNotes = useGameNotes(searching ? word : "", game);
   const { notes, toggleNote } = index;
+  const jumpTo = useSearchJump({ word, game, onOpenChat });
 
   /** The matches, in the four groups' fixed order; a group with no match is left out. */
   const groups = useMemo<ResultGroup[]>(() => {
@@ -113,14 +132,17 @@ export const SearchTab: React.FC<SearchTabProps> = ({ active, isAsking, intentPa
       out.push({
         id: "chats",
         label: "Your chats",
-        rows: chats.map((q) => ({
-          key: `chat:${q.slotId}:${q.turnId}`,
-          rowName: next(),
-          title: q.text,
-          lit: true,
-          sub: [q.chatLabel, dayLabel(q.createdAt)].filter(Boolean).join(" · "),
-          press: () => toaster.toast({ title: "Search", body: "Jumping to a chat comes in the next step", duration: 2000 }),
-        })),
+        rows: chats.map((q) => {
+          const key = `chat:${q.slotId}:${q.turnId}`;
+          return {
+            key,
+            rowName: next(),
+            title: q.text,
+            lit: true,
+            sub: [q.chatLabel, dayLabel(q.createdAt)].filter(Boolean).join(" · "),
+            press: () => jumpTo(q, key),
+          };
+        }),
       });
     }
     const kept = matchNotes(narrowNotes(notes, game), word);
@@ -178,7 +200,7 @@ export const SearchTab: React.FC<SearchTabProps> = ({ active, isAsking, intentPa
       });
     }
     return out;
-  }, [searching, word, narrowedQuestions, notes, toggleNote, game, intentPackIndex, onSettingClick, gameNotes]);
+  }, [searching, word, narrowedQuestions, notes, toggleNote, game, intentPackIndex, onSettingClick, gameNotes, jumpTo]);
 
   const shownNotes = useMemo(() => narrowNotes(notes, game), [notes, game]);
   const resultRowNames = groups.flatMap((g) => g.rows.map((r) => r.rowName));
@@ -198,17 +220,33 @@ export const SearchTab: React.FC<SearchTabProps> = ({ active, isAsking, intentPa
     if (goal === null) return;
     if (typeof goal === "object") {
       const row = groups.flatMap((g) => g.rows).find((r) => r.key === goal.key);
-      /* A game note's row arrives with the library's answer: keep the wish until it has. */
-      if (!row && searching && gameNotes === null) return;
+      /* A game note's row arrives with the library's answer, a chat match with the chats' list: keep the wish until it has. */
+      if (!row && searching && (gameNotes === null || !index.chatsLoaded)) return;
       pending.current = null;
       nav.focusStop(row?.rowName ?? "find", 0);
+      checkArrival(() => nav.focusStop(row?.rowName ?? "find", 0));
       return;
     }
     pending.current = null;
     if (goal === "sheet") nav.focusStop("sheet-close", 0);
-    else if (goal === "box") nav.focusStop("find", 0);
-    else if (resultRowNames.length > 0) nav.focusStop(resultRowNames[0]!, 0);
+    else if (goal === "box") {
+      nav.focusStop("find", 0);
+      checkArrival(() => nav.focusStop("find", 0));
+    } else if (resultRowNames.length > 0) nav.focusStop(resultRowNames[0]!, 0);
   });
+
+  /* Only for an arrival from outside the tab (Y, the Back line): once, look again whether the ring is still on the tab. */
+  function checkArrival(again: () => void): void {
+    if (arrival.current === null) return;
+    arrival.current = null;
+    clearSearchArrival();
+    ARRIVAL_CHECKS_MS.forEach((ms) =>
+      window.setTimeout(() => {
+        const owner = uiGamepadFocusElement();
+        if (rootEl.current?.isConnected && !(owner && rootEl.current.contains(owner))) again();
+      }, ms),
+    );
+  }
 
   const pickWord = useCallback(
     (next: string) => {
@@ -229,7 +267,13 @@ export const SearchTab: React.FC<SearchTabProps> = ({ active, isAsking, intentPa
   }, []);
 
   return (
-    <div className="bonsai-search" data-bonsai-search-tab="true">
+    <div
+      className="bonsai-search"
+      data-bonsai-search-tab="true"
+      ref={(el) => {
+        rootEl.current = el;
+      }}
+    >
       <style>{SEARCH_TAB_CSS}</style>
       <div className="bonsai-search__title">Search</div>
       {openNote ? (

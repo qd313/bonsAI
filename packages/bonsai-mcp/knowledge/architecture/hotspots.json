@@ -22,7 +22,7 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1341,
+      "lines": 1344,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
@@ -53,11 +53,6 @@
     {
       "path": "src/components/KnowledgeBaseSection.tsx",
       "lines": 1042,
-      "role": ""
-    },
-    {
-      "path": "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
-      "lines": 1024,
       "role": ""
     },
     {
@@ -143,6 +138,11 @@
     {
       "path": "py_modules/backend/services/ollama_prompts.py",
       "lines": 784,
+      "role": ""
+    },
+    {
+      "path": "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
+      "lines": 781,
       "role": ""
     },
     {

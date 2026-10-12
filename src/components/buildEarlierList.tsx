@@ -7,6 +7,9 @@
  * in one place, so the transcript only draws what it is handed.
  * Does not: Draw a turn row, group questions by day (earlierTurnsByDay.ts does), or decide where the
  * ring goes on a press (chatTranscriptNavHelpers.ts does; this only passes the next turn's id in).
+ * It also draws the "Back to where you were" line above "N earlier" while a jump from the Search tab is live
+ * (searchJumpStore.ts; plan 90 § 3d), and wires the stops around it: Down from it to "N earlier", Up from
+ * "N earlier" to it.
  * Caution: Closing a day, or the whole list, while the open question is inside it hides that
  * question. The newest answer then opens again (`onTurnActivate` toggles to it) instead of leaving
  * every row closed with nothing open.
@@ -18,9 +21,15 @@ import { dayLineText, layoutEarlierByDay, moreLineText, type EarlierDay, type Ea
 import {
   dayLineNav,
   earlierLineNavHandlers,
+  earlierPillNav,
   earlierPillNavHandlers,
   moreLineNav,
+  takeHolderFocus,
 } from "../utils/chatTranscriptNavHelpers";
+import { takeOpenQuestionText } from "../utils/buildTurnHeaderElement";
+import { isUpDeckButtonEvent } from "../utils/focusNavigation";
+import { SearchBackLine, backLineNavHandlers } from "../features/search-tab/SearchBackLine";
+import { backLineShowsFor, backToSearch, searchBackNav } from "../features/search-tab/searchJumpStore";
 import { EarlierListLine } from "./EarlierListLine";
 
 export type BuildEarlierListArgs = {
@@ -39,10 +48,15 @@ export type BuildEarlierListArgs = {
   showMoreOfDay?: (dayKey: string, firstNewId: string) => void;
   expandedTurnKey: string | null;
   onTurnActivate?: (key: string | "live") => void;
+  /** Whether the "Back to where you were" line shows; when left out, whether a live jump points into these turns. */
+  backLine?: boolean;
 };
 
 export type EarlierList = {
-  /** The "N earlier" line, or null when there are fewer than two earlier turns. */
+  /**
+   * The "Back to where you were" line (while a jump from the Search tab is live) and the "N earlier" line (when
+   * there are two or more earlier turns); null when neither shows.
+   */
   line: ReactElement | null;
   /** The turns drawn as rows: every turn when there is no line, else those the open list shows. */
   turnsToRender: AskThreadCollapsedTurn[];
@@ -58,6 +72,8 @@ export type EarlierList = {
   moreLinesAfter: (turnId: string) => ReactElement[] | null;
   /** Whether a line (a day line, or this row's own "Show N more") is the next stop below the row for `turn`, whose next row is `nextTurn` (undefined: below the last row). */
   lineFollows: (turn: AskThreadCollapsedTurn, nextTurn: AskThreadCollapsedTurn | undefined) => boolean;
+  /** Up from the closed row for `turnId` when the Back line is the stop right above it (a short chat, no "N earlier" line): the transfer onto the Back line; else undefined. */
+  firstRowMoveUp: (turnId: string) => (() => boolean) | undefined;
 };
 
 /**
@@ -74,6 +90,9 @@ export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
       : null;
   const turnsToRender = layout ? layout.shown : hasLine ? turns.slice(earlierCount) : turns;
   const afterEarlier = showLiveTurn ? "live" : null;
+  const backLive = a.backLine ?? backLineShowsFor(turns);
+  /* With no "N earlier" line, the Back line is drawn right over the first row. */
+  const backIsAbove = (turnId: string): boolean => backLive && !hasLine && turnId === turnsToRender[0]?.id;
 
   const newestKey = showLiveTurn ? "live" : turns[turns.length - 1]?.id;
   const reopenNewestIfHidden = (hidden: AskThreadCollapsedTurn[]) => {
@@ -128,15 +147,40 @@ export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
     reopenNewestIfHidden(turns.slice(0, earlierCount));
     setEarlierExpanded(false);
   };
-  const line = hasLine ? (
+  /* Up from "N earlier" is the stop above the chat, unless the Back line is drawn over it. */
+  const earlierNav = (): Record<string, unknown> => {
+    const base = earlierLineNavHandlers(earlierExpanded ? null : turnsToRender[0]?.id ?? afterEarlier);
+    if (!backLive) return base;
+    const upToBack = () => takeHolderFocus(searchBackNav);
+    return {
+      ...base,
+      onMoveUp: upToBack,
+      onButtonDown: (button: unknown) => (isUpDeckButtonEvent(button) ? upToBack() : (base.onButtonDown as (b: unknown) => boolean)(button)),
+    };
+  };
+  const earlierLine = hasLine ? (
     <EarlierListLine
       kind="earlier"
       text={`${earlierCount} earlier`}
       open={earlierExpanded}
       onToggle={() => (earlierExpanded ? closeAll() : setEarlierExpanded(true))}
       onClose={closeAll}
-      nav={earlierLineNavHandlers(earlierExpanded ? null : turnsToRender[0]?.id ?? afterEarlier)}
+      nav={earlierNav()}
     />
+  ) : null;
+  const firstTurnId = turnsToRender[0]?.id;
+  const backLine = backLive ? (
+    <SearchBackLine
+      onBack={() => void backToSearch()}
+      nav={backLineNavHandlers(hasLine ? () => takeHolderFocus(earlierPillNav) : () => (firstTurnId ? takeOpenQuestionText(firstTurnId) : false))}
+    />
+  ) : null;
+  /* One Fragment whether or not the Back line is there, so the "N earlier" line keeps its place and is not remounted. */
+  const line = backLine || earlierLine ? (
+    <>
+      {backLine}
+      {earlierLine}
+    </>
   ) : null;
 
   return {
@@ -153,8 +197,9 @@ export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
     },
     navAbove: (turnId) => {
       const days = layout?.daysBefore.get(turnId);
-      return days?.length ? dayLineNav(days[days.length - 1]!.key) : moreNavAbove(turnId);
+      return days?.length ? dayLineNav(days[days.length - 1]!.key) : moreNavAbove(turnId) ?? (backIsAbove(turnId) ? searchBackNav : null);
     },
+    firstRowMoveUp: (turnId) => (backIsAbove(turnId) ? () => takeHolderFocus(searchBackNav) : undefined),
     navAboveLive: () => {
       const days = layout?.trailingDays;
       if (days?.length) return dayLineNav(days[days.length - 1]!.key);

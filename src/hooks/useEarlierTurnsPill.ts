@@ -10,6 +10,10 @@
  * It also counts the "Show N more" presses of each open day (a day shows six questions, then six more
  * per press), forgets them whenever the day or the whole list closes, and hands Steam's ring to the
  * first newly shown question once a press has drawn it.
+ * A jump from the Search tab (plan 90 § 3d) asks this hook, through searchJumpStore.ts, to put the chat on
+ * one question: once the chat is loaded it opens "N earlier", opens the day that holds the question,
+ * presses "Show N more" as often as needed, and hands the ring to the question's row. It also redraws the
+ * transcript when the jump starts or ends, because the "Back to where you were" line follows the store.
  * Does not: Decide how many turns count as "earlier", group them, or draw a line -- the transcript
  * and earlierTurnsByDay.ts do that, using the state this hook hands back.
  * Caution: Lifted out of MainTabChatTranscript on 2026-09-24, called from the exact spot the block
@@ -18,14 +22,32 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
 import { takeHolderFocus } from "../utils/chatTranscriptNavHelpers";
+import { locateEarlierTurn } from "../utils/earlierTurnsByDay";
 import type { NavRefHolder } from "../utils/navFocusRegistry";
+import { getUiDocument, uiGamepadFocusElement } from "../utils/uiDocument";
+import { getSearchJump, markJumpRevealed, pendingJumpReveal, subscribeSearchJump } from "../features/search-tab/searchJumpStore";
 
 export type UseEarlierTurnsPillArgs = {
   /** The finished-turn history. Only its identity (length + first id) matters here. */
   askThreadCollapsed: AskThreadCollapsedTurn[];
   /** A question row's Steam nav node, for putting the ring on a newly shown question. */
   headerNavFor?: (turnId: string) => NavRefHolder;
+  /** Whether a live question is drawn after the finished turns (then all of them are "earlier"). */
+  showLiveTurn?: boolean;
 };
+
+/** After a jump lands the ring, how long to wait before checking it stayed, and again: Steam may move it once more as the tab settles. */
+const RING_CHECKS_MS = [150, 450];
+
+/** How long a jump's request for the ring waits for the question's row to be drawn. */
+const RING_WAIT_MS = 3000;
+
+/** Whether Steam's ring is on something inside the chat's transcript. */
+function ringInTranscript(): boolean {
+  const owner = uiGamepadFocusElement();
+  const column = getUiDocument().querySelector(".bonsai-chat-transcript");
+  return Boolean(owner && column && column.contains(owner));
+}
 
 export interface EarlierTurnsPill {
   earlierExpanded: boolean;
@@ -48,13 +70,29 @@ const NO_PRESSES: ReadonlyMap<string, number> = new Map();
  * Every hook below must keep its position. React matches hooks by the order they run in.
  */
 export function useEarlierTurnsPill(a: UseEarlierTurnsPillArgs): EarlierTurnsPill {
-  const { askThreadCollapsed, headerNavFor } = a;
+  const { askThreadCollapsed, headerNavFor, showLiveTurn = false } = a;
 
   const [earlierExpanded, setExpanded] = useState(false);
   const [openDays, setOpenDays] = useState<ReadonlySet<string>>(NO_DAYS);
   const [morePresses, setMorePresses] = useState<ReadonlyMap<string, number>>(NO_PRESSES);
   /* The question the ring goes to once the press that shows it has been drawn. */
   const ringOnTurn = useRef<string | null>(null);
+  /* Redraws when a jump starts, finishes revealing or ends: the Back line and the reveal below follow the store.
+     Plain state, not useSyncExternalStore: that one redraws at once, ahead of the other updates the reveal
+     makes in the same effect, and the ring would be asked for before the question's row exists. */
+  const [jump, setJump] = useState(getSearchJump);
+  useEffect(() => {
+    setJump(getSearchJump());
+    return subscribeSearchJump(() => setJump(getSearchJump()));
+  }, []);
+  const [, setRingTick] = useState(0);
+  const alive = useRef(true);
+  /* The question a jump put the ring on, to check the ring stayed there. */
+  const jumpRing = useRef<string | null>(null);
+  const jumpRingUntil = useRef(0);
+  useEffect(() => () => {
+    alive.current = false;
+  }, []);
   /* A slot switch (or a cleared thread) re-collapses: the line is about this thread, not the user. */
   const earlierIdentity = `${askThreadCollapsed.length}:${askThreadCollapsed[0]?.id ?? ""}`;
   useEffect(() => {
@@ -89,14 +127,47 @@ export function useEarlierTurnsPill(a: UseEarlierTurnsPillArgs): EarlierTurnsPil
     setMorePresses((prev) => new Map(prev).set(dayKey, (prev.get(dayKey) ?? 0) + 1));
   }, []);
 
+  /* A jump from the Search tab: once its chat is loaded, show its question and ask for the ring there. This
+     runs after the reset above (same hook, later effect), so a chat switch cannot fold it away again. */
+  useEffect(() => {
+    const want = pendingJumpReveal();
+    if (!want || !askThreadCollapsed.some((t) => t.id === want.turnId)) return;
+    markJumpRevealed();
+    const earlierCount = showLiveTurn ? askThreadCollapsed.length : askThreadCollapsed.length - 1;
+    const place = earlierCount >= 2 ? locateEarlierTurn(askThreadCollapsed, earlierCount, want.turnId) : null;
+    if (place) {
+      setExpanded(true);
+      setOpenDays(new Set([place.dayKey]));
+      setMorePresses(place.presses > 0 ? new Map([[place.dayKey, place.presses]]) : NO_PRESSES);
+    }
+    ringOnTurn.current = want.turnId;
+    jumpRing.current = want.turnId;
+    jumpRingUntil.current = Date.now() + RING_WAIT_MS;
+    setRingTick((n) => n + 1);
+  }, [askThreadCollapsed, jump, showLiveTurn]);
+
   /* After the commit that drew the new questions: Steam's own transfer onto the first of them. The
      "Show N more" line is a different container from the question rows, and it may be gone by now. */
   useLayoutEffect(() => {
     const id = ringOnTurn.current;
     if (!id) return;
-    ringOnTurn.current = null;
     const holder = headerNavFor?.(id);
+    /* A jump's question may not be drawn in the very commit that asked for the ring (React can split the reveal's
+       updates over two): wait for the commit that has its row, for as long as the jump itself would. */
+    if (jumpRing.current === id && !holder?.current && Date.now() < jumpRingUntil.current) return;
+    ringOnTurn.current = null;
     if (holder) takeHolderFocus(holder);
+    if (jumpRing.current !== id) return;
+    /* The tab has only just been drawn and Steam may still move the ring while it settles: look again, and
+       take it back to the question if it is no longer in the chat. */
+    jumpRing.current = null;
+    RING_CHECKS_MS.forEach((ms) =>
+      window.setTimeout(() => {
+        if (!alive.current || ringInTranscript()) return;
+        const again = headerNavFor?.(id);
+        if (again) takeHolderFocus(again);
+      }, ms),
+    );
   });
 
   return { earlierExpanded, setEarlierExpanded, openDays, toggleDay, morePresses, showMoreOfDay };

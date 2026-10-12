@@ -15,99 +15,21 @@
  * Does not: Model Steam's real geometry choice for an unclaimed Up or Down; that is the stop-order
  *           stand-in the Retry walk (MainTabChatTranscript.retryNotAStop.test.tsx) already uses.
  */
-import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { act, cleanup, render } from "@testing-library/react";
+import { act, cleanup } from "@testing-library/react";
 
-import { MainTabChatTranscript } from "./MainTabChatTranscript";
 import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
-import type { TransparencySnapshot } from "../utils/inputTransparency";
 import { registerNavFocus, resetNavFocusRegistry } from "../utils/navFocusRegistry";
 import { resetUiDocument } from "../utils/uiDocument";
+import {
+  NOW, ROW, LINE, activate, focusOn, isRetry, lineEl, lines, nameOf, openEarlier,
+  press, renderChat as renderChatWith, rowTexts, seconds, stops, turn, walk,
+  type NavEl,
+} from "./earlierListTestKit";
 import { chipRowExitUp } from "../features/preset-carousel/presetRowFocusNav";
 
-type Dir = "Up" | "Down" | "Left" | "Right";
-type NavHandlers = Partial<Record<`onMove${Dir}` | "onActivate" | "onCancelButton", (e?: unknown) => unknown>>;
-type NavEl = HTMLElement & { __nav?: NavHandlers };
-
-vi.mock("@decky/ui", async () => {
-  const stubs = await import("../test-harness/fakeDeckyUi");
-  const Base = stubs.Focusable;
-  /* Keeps the move, activate and cancel handlers on the element and gives `navRef` Steam's
-     TakeFocus: the ring goes to the container's first live child. */
-  const NavFocusable = React.forwardRef<HTMLDivElement, Record<string, unknown>>(
-    function NavFocusable(props, ref) {
-      const { onMoveUp, onMoveDown, onMoveLeft, onMoveRight, onActivate, onCancelButton, navRef, ...rest } =
-        props as Record<string, unknown> & NavHandlers & { navRef?: { current: unknown } };
-      const setRef = (el: HTMLDivElement | null) => {
-        if (el) {
-          (el as NavEl).__nav = { onMoveUp, onMoveDown, onMoveLeft, onMoveRight, onActivate, onCancelButton };
-          if (navRef) {
-            navRef.current = {
-              TakeFocus: () => {
-                const first = el.querySelector<HTMLElement>("button:not([disabled]), [tabindex]");
-                /* Decky stamps tabindex="0" on a node it navigates; a row mounted a moment ago has not
-                   had it yet when Steam's transfer reaches it. */
-                if (!first && !el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
-                (first ?? el).focus();
-                return true;
-              },
-            };
-          }
-        }
-        if (typeof ref === "function") ref(el);
-        else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
-      };
-      return <Base {...rest} ref={setRef} />;
-    },
-  );
-  return { ...stubs, Focusable: NavFocusable };
-});
-
-const ANSWER = ["First paragraph of the answer.", "Second paragraph of the answer."].join("\n\n");
-
-function snapshot(): TransparencySnapshot {
-  return {
-    route: "ollama",
-    raw_question: "q",
-    sanitizer_action: "none",
-    sanitizer_reason_codes: [],
-    text_after_sanitizer: "q",
-    ollama_model: "llama3:8b",
-    system_prompt: null,
-    user_text_for_model: null,
-    user_image_count: 0,
-    attachment_paths: [],
-    assistant_raw: null,
-    assistant_after_attachment_format: null,
-    final_response: ANSWER,
-    applied: null,
-    success: true,
-    app_id: "",
-    app_name: "",
-    pc_ip: "",
-    error_message: "",
-    elapsed_seconds: 1.2,
-    context_chips: [],
-    ask_diagnostics: null,
-  } as TransparencySnapshot;
-}
-
-/** The Deck's local day: Friday 2 October 2026, noon. Monday 28 September is the oldest day. */
-const NOW = new Date(2026, 9, 2, 12, 0, 0);
-const seconds = (month: number, day: number, hour = 9) => new Date(2026, month, day, hour).getTime() / 1000;
-
-function turn(id: string, question: string, createdAt?: number, reasoning = false): AskThreadCollapsedTurn {
-  return {
-    id,
-    question,
-    answer: ANSWER,
-    transparency: snapshot(),
-    createdAt,
-    reasoning: reasoning ? { text: "They want a plan.", seconds: 18, tokens: 40 } : undefined,
-  };
-}
+vi.mock("@decky/ui", async () => (await import("./earlierListNavStub")).deckyUiWithNavNodes());
 
 /** Five questions on Monday, three yesterday, three today, then the newest (also today). */
 const TURNS: AskThreadCollapsedTurn[] = [
@@ -117,174 +39,9 @@ const TURNS: AskThreadCollapsedTurn[] = [
   turn("n1", "what is a good first upgrade in Hollow Knight", seconds(9, 2, 11), true),
 ];
 
-function renderChat(extra: Partial<MainTabChatTranscriptProps> = {}, turns = TURNS, open: string | null = "n1") {
-  const props: MainTabChatTranscriptProps = {
-    fullBleedRowStyle: {},
-    isAsking: false,
-    selectedAttachment: null,
-    ollamaContext: {} as MainTabChatTranscriptProps["ollamaContext"],
-    unifiedInput: "",
-    showSlowWarning: false,
-    latencyWarningSeconds: 30,
-    ollamaResponse: "",
-    elapsedSeconds: null,
-    lastApplied: null,
-    canSaveDesktopNote: false,
-    onOpenDesktopNoteSave: () => {},
-    askMode: "strategy",
-    askThreadCollapsed: turns,
-    expandedTurnKey: open,
-    askThreadDisplayQuestion: "",
-    lastExchange: { question: "q", answer: ANSWER },
-    transparencySnapshot: snapshot(),
-    liveReplyFeedbackRating: "up",
-    onReplyFeedback: () => {},
-    onReplyMicroAction: () => {},
-    onAskOllama: async () => {},
-    onTurnActivate: () => {},
-    ...extra,
-  };
-  const out = render(<MainTabChatTranscript {...props} />);
-  /* Decky stamps tabindex="0" on the nodes Steam navigates. */
-  const stamp = () =>
-    out.container
-      .querySelectorAll<HTMLElement>('[data-decky-ui="Focusable"]')
-      .forEach((el) => el.setAttribute("tabindex", "0"));
-  stamp();
-  return { ...out, stamp };
-}
+const renderChat = (extra: Partial<MainTabChatTranscriptProps> = {}, turns = TURNS, open: string | null = "n1") =>
+  renderChatWith(extra, turns, open);
 
-const LINE = ".bonsai-chat-earlier-pill-row";
-const ROW = ".bonsai-chat-turn-row-header:not(.bonsai-chat-turn-row-header--with-retry)";
-
-/** The controls the ring can sit on: the stops Steam walks, not the containers around them. */
-const STOP_SELECTOR = [
-  "button:not([disabled])",
-  LINE,
-  ROW,
-  ".bonsai-chat-turn-row-body",
-  ".bonsai-answer-stop",
-  ".bonsai-chat-reasoning-fold",
-  /* The Show details line under an answer: a Focusable line, not a button (D76). */
-  ".bonsai-chat-details-divider",
-].join(", ");
-
-function stops(container: HTMLElement): HTMLElement[] {
-  return Array.from(container.querySelectorAll<HTMLElement>(STOP_SELECTOR));
-}
-
-function lines(container: HTMLElement): string[] {
-  return Array.from(container.querySelectorAll(LINE)).map(
-    (el) => el.querySelector(".bonsai-chat-earlier-pill")?.textContent ?? "",
-  );
-}
-
-function lineEl(container: HTMLElement, text: string): HTMLElement {
-  const found = Array.from(container.querySelectorAll<HTMLElement>(LINE)).find(
-    (el) => el.querySelector(".bonsai-chat-earlier-pill")?.textContent === text,
-  );
-  if (!found) throw new Error(`no line reads "${text}"; the lines are ${JSON.stringify(lines(container))}`);
-  return found;
-}
-
-function rowTexts(container: HTMLElement): string[] {
-  return Array.from(container.querySelectorAll(`.bonsai-chat-turn-slot ${ROW}`)).map((el) => el.textContent ?? "");
-}
-
-function isRetry(el: Element | null): boolean {
-  return Boolean(el?.matches?.('[aria-label="Retry same prompt"]'));
-}
-
-function nameOf(el: Element | null): string {
-  if (!el) return "nothing";
-  const h = el as HTMLElement;
-  if (isRetry(h)) return "RETRY";
-  if (h.matches(LINE)) return `line:${h.querySelector(".bonsai-chat-earlier-pill")?.textContent}`;
-  if (h.classList.contains("bonsai-chat-turn-row-body")) return `question:${h.textContent}`;
-  if (h.classList.contains("bonsai-chat-turn-row-header")) return `row:${h.textContent}`;
-  if (h.classList.contains("bonsai-chat-reasoning-fold")) return "reasoning-line";
-  if (h.classList.contains("bonsai-answer-stop")) return `answer:${h.textContent?.slice(0, 12)}`;
-  return h.getAttribute("aria-label") ?? h.textContent?.trim() ?? h.className;
-}
-
-/** The row Steam never steps sideways inside on a vertical press. */
-function rowOf(el: Element | null): Element | null {
-  return el?.closest?.(".bonsai-chat-turn-row-header--with-retry") ?? null;
-}
-
-/** A on a stop: its own activate handler, as Steam calls it. */
-function activate(el: HTMLElement): void {
-  act(() => {
-    (el as NavEl).__nav?.onActivate?.();
-  });
-}
-
-/**
- * One press: the focused element's move handler first, then each containing Focusable's, until one
- * claims it. An unclaimed Up/Down is Steam's own move, modelled as in the Retry walk: it never steps
- * sideways inside the question's row, entering a row from above lands on its first control (Retry)
- * and from below on its last. `after` runs once a landing is made (the scroll model hooks in there).
- */
-function press(container: HTMLElement, dir: Dir, after?: () => void): boolean {
-  const key = `onMove${dir}` as const;
-  let el = document.activeElement as NavEl | null;
-  const start = document.activeElement;
-  let claimed = false;
-  act(() => {
-    while (el) {
-      const h = el.__nav?.[key];
-      if (h && h() === true) {
-        claimed = true;
-        return;
-      }
-      el = el.parentElement as NavEl | null;
-    }
-  });
-  if (claimed) {
-    after?.();
-    return true;
-  }
-  if (dir === "Left" || dir === "Right") return false;
-  const all = stops(container);
-  const here = all.indexOf(start as HTMLElement);
-  /* Past the last stop the model knows, Steam leaves the transcript: the walk is over. */
-  if (here < 0) return false;
-  const from = rowOf(start);
-  const rest = dir === "Down" ? all.slice(here + 1) : all.slice(0, here).reverse();
-  const candidates = rest.filter((c) => !from || rowOf(c) !== from);
-  if (!candidates.length) return false;
-  let target = candidates[0]!;
-  const entered = rowOf(target);
-  if (entered && dir === "Up") {
-    const inRow = candidates.filter((c) => rowOf(c) === entered);
-    target = inRow[inRow.length - 1]!;
-  }
-  act(() => target.focus());
-  after?.();
-  return true;
-}
-
-function focusOn(el: HTMLElement): void {
-  act(() => el.focus());
-  expect(document.activeElement).toBe(el);
-}
-
-/** Press `dir` until nothing moves (or the cap), returning every landing in order. */
-function walk(container: HTMLElement, dir: "Up" | "Down", after?: () => void, cap = 40): string[] {
-  const seen: string[] = [nameOf(document.activeElement)];
-  for (let i = 0; i < cap; i += 1) {
-    const before = document.activeElement;
-    if (!press(container, dir, after) || document.activeElement === before) break;
-    seen.push(nameOf(document.activeElement));
-  }
-  return seen;
-}
-
-/** Open "4 earlier"'s list: the line is the first stop, A opens it. */
-function openEarlier(container: HTMLElement, stamp: () => void): void {
-  activate(container.querySelector<HTMLElement>(LINE)!);
-  stamp();
-}
 
 describe('"N earlier" opens as one line per day (plan 79)', () => {
   beforeEach(() => {

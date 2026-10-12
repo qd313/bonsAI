@@ -5,7 +5,7 @@
  *          list with its switches before a word is picked; A on "mantis" listing the matches in the four
  *          groups in order with the word lit and the ring on the first; Clear; a game narrowing the chats,
  *          the notes and the game notes; a note's switch saving and going back when it is refused; A on a
- *          chat match only saying the jump comes next; A on a setting opening it; a game note's neutral title
+ *          chat match opening its chat (SearchTab.jump.test.tsx); A on a setting opening it; a game note's neutral title
  *          until A, then its own words, and the ring coming back to its row after the tab is rebuilt; the
  *          game notes absent when the library is not installed; the lists read when the tab opens and when an
  *          answer ends.
@@ -193,15 +193,6 @@ describe("picking a word", () => {
     expect(container.querySelector("[data-bonsai-search-results]")).toBeNull();
     expect(container.querySelector("[data-bonsai-search-notes]")).not.toBeNull();
     expect(ringLabel()).toBe("Search for a word");
-  });
-
-  it("A on a chat match does nothing but say the jump comes in the next step", async () => {
-    await pickMantis();
-    const before = (toaster.toast as ReturnType<typeof vi.fn>).mock.calls.length;
-    pressA(/^Where do I find the Mantis Claw\?/);
-    expect(toaster.toast).toHaveBeenCalledTimes(before + 1);
-    expect(toaster.toast).toHaveBeenLastCalledWith(expect.objectContaining({ body: "Jumping to a chat comes in the next step" }));
-    expect(api.saveUserNote).not.toHaveBeenCalled();
   });
 
   it("A on a note match flips its switch and nothing else", async () => {

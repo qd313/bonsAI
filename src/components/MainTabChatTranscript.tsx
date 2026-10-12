@@ -716,7 +716,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   /* The "N earlier" line's open/close state and which days are open under it — lifted into its
      own hook, called from exactly the spot this block occupied (tests/test_ask_hook_order.py). */
   const { earlierExpanded, setEarlierExpanded, openDays, toggleDay, morePresses, showMoreOfDay } =
-    useEarlierTurnsPill({ askThreadCollapsed, headerNavFor: (id) => headerRingProps(id).headerNavRef });
+    useEarlierTurnsPill({ askThreadCollapsed, showLiveTurn, headerNavFor: (id) => headerRingProps(id).headerNavRef });
 
   /* Whether an OPEN question's title really overflows its five-line cap — lifted into its own
      hook, called from exactly the spot this block occupied (see useTitleOverflow.ts). */
@@ -1179,7 +1179,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 turnHeaderElRefs.current[turn.id] = el;
               },
               /* Only a turn with no "N earlier" line above it has nothing for Up to climb to. */
-              onMoveUp: firstArchivedHeaderMoveUp(hasEarlierLine ? -1 : turnIndex),
+              onMoveUp: earlier.firstRowMoveUp(turn.id) ?? firstArchivedHeaderMoveUp(hasEarlierLine ? -1 : turnIndex),
               onMoveDownPast: earlier.lineFollows(turn, nextTurn)
                 ? undefined
                 : closedQuestionMoveDown(nextTurn?.id ?? (showLiveTurn ? "live" : null)),

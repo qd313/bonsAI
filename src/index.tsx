@@ -1144,6 +1144,9 @@ const Content: React.FC = () => {
     isAsking,
     intentPackIndex: intentPacks.index,
     onSettingClick,
+    currentTab,
+    selectTab,
+    selectSlot: chatSlots.selectSlot,
   });
 
   const deckyTabs = useMemo(

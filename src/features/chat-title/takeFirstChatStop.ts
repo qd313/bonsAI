@@ -8,6 +8,7 @@
  * first stop of the chat itself, or on the question box when the chat is empty.
  *
  * The first stop, in order of what can be there:
+ *   0. the "Back to where you were" line, while a jump from the Search tab is live (plan 90 § 3d);
  *   1. the "N earlier" line, when older questions are folded behind it (always the first stop then);
  *   2. the first question's text (never its Retry, plan 79);
  *   3. the open question's text, when the first question is a closed row with no text stop of its own
@@ -27,6 +28,7 @@
 import { takeOpenQuestionText } from "../../utils/buildTurnHeaderElement";
 import { takeEarlierLine } from "../../utils/chatTranscriptNavHelpers";
 import { takeNavFocus } from "../../utils/navFocusRegistry";
+import { takeBackLine } from "../search-tab/searchJumpStore";
 
 export type FirstChatStopSource = {
   /** The first turn drawn in the transcript (the first saved turn, or "live" when only the live turn shows). */
@@ -40,6 +42,7 @@ export type FirstChatStopSource = {
 export function takeFirstChatStop({ firstTurnId, openTurnId, chatEmpty }: FirstChatStopSource): boolean {
   if (chatEmpty) return takeNavFocus("unified-input");
   return (
+    takeBackLine() ||
     takeEarlierLine() ||
     takeOpenQuestionText(firstTurnId) ||
     (openTurnId && openTurnId !== firstTurnId ? takeOpenQuestionText(openTurnId) : false) ||

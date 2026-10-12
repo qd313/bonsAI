@@ -897,7 +897,7 @@ tab bar
 "N matches for 'word'"  [ Clear ]                           your notes, newest first, one stop each
    match rows, one stop each, in the order         A flips the note's switch
    chats, notes, settings, game and help notes     Down from the last row holds still
-   A: chat = a toast for now; note = its switch;
+   A: chat = opens that chat on the question (below); note = its switch;
    setting = opens it in Steam; game note = its sheet
 ```
 
@@ -944,6 +944,54 @@ tab bar
   tab: no stop twice, none off screen, no press turns the page half its height, Up from the top leaves through the
   bar, Left and Right reach every stop in a row and hold at both ends) and `SearchTab.test.tsx` (what each A does).
   Device rows: plan 92, block 3.
+
+### The jump from a chat match, the Back line and the way back (plan 92, lane N3b)
+
+A on a match under "Your chats" leaves the Search tab for the chat it came from. Three screens are involved, and
+they are never drawn together, so everything they share lives in one small module store (`searchJumpStore.ts`), not
+in component state (a tab switch throws the screen away; lessons-learned.md, section 3).
+
+```
+Search tab                                    Main tab (the chat is already loaded)
+[ match: "Where do I find the Mantis Claw?" ]
+   A  -> store: word, game, match, chat,      tab bar
+         question; Back line switched on         | Down (takeBackLine first, then takeEarlierLine)
+      -> root loads the chat, THEN selectTab   [ <  Back to where you were ]    <- the first stop under the bar
+         ("main")                                | Down (takeHolderFocus onto "N earlier")   ^ Up (takeAboveTheChat)
+                                               [ 27 earlier ]   A opens it       <- Up goes to the Back line
+                                                 | Down
+                                               [ Sun 20 Sep . 4 ]  [ Mon 21 Sep . 9  (open) ]   ...
+                                                   [ row ] x 9 (one "Show 3 more" press made the 9th appear)
+                                                   [ row: "...question 9..." ]    <- the ring lands here
+                                               [ newest question ]
+   A on the Back line -> store: jump over, Search tab remembers word and game, ring wish = the same match
+                      -> selectTab("search") (the shell's own switch)
+Search tab, drawn again: word and game back in the box; the ring goes to the same match once the chats are read.
+```
+
+- **The ring lands on the question through Steam's own transfer.** `useEarlierTurnsPill.ts` waits for the chat to be
+  loaded (the question is in `askThreadCollapsed`), opens "N earlier", opens the day that holds the question
+  (`locateEarlierTurn` in `earlierTurnsByDay.ts`), sets the day's "Show N more" count to the number of presses that
+  question needs, and hands the ring to the question row's nav node (`takeHolderFocus`), the same hand-off the real
+  "Show N more" press uses. It waits for the commit that draws the row (React may split the reveal's updates) and
+  looks again 150 and 450 ms later, taking the ring back to the question if Steam moved it while the tab settled. A
+  question among the newest turns (not under "N earlier"), or in a chat too short for the line, gets the ring where it
+  is, with "N earlier" left shut.
+- **The Back line is one stop, drawn only while the jump is live and the chat holds the jump's question.** It is the
+  first thing in the transcript (`SearchBackLine.tsx`, drawn by `buildEarlierList.tsx`). Down: onto "N earlier", or
+  onto the first question in a short chat. Up: onto the stop above the chat (`takeAboveTheChat`). Left and Right hold
+  still, since a Right nobody claims would carry the ring out of the plugin. "N earlier"'s Up and a short chat's first
+  question's Up go to the Back line instead of the tab bar while it shows; Down from the tab bar lands on it
+  (`takeFirstChatStop.ts`). A ends the jump and switches to the Search tab; B is not claimed (it closes nothing).
+- **The jump's memory** (`searchJumpStore.ts`) holds the word, the game, the match key, the chat and question, whether
+  the chat has been put on the question yet, the tab the person came from, and where the ring goes when the Search tab
+  is drawn next (the find box, or a match). The ring wish stays until the Search tab has landed the ring, so a tab
+  thrown away and drawn a second time still lands it. The Main tab and the Search tab are given the shell's own
+  `selectTab` (`useSearchTabPayload.tsx`), so a jump, the Back line, B and Y switch tabs exactly as the tab bar does.
+- **Pinned by** `MainTabChatTranscript.searchJump.test.tsx` (28 questions over five days, the match on day two,
+  question nine: the right day opens, enough questions show, the ring arrives through a nav node; the Back line's
+  Down, Up, Left, Right and a walk with no stop twice; A on it; the memory across an unmount and a remount),
+  `SearchTab.jump.test.tsx`, `earlierTurnsByDay.test.ts` and `useSearchTabPayload.test.tsx`. Device row: plan 92, block 5.
 
 ### A folded tab: section lines, the floating Open all button, the help strip (plan 91 § 2b, plan 92 T0)
 

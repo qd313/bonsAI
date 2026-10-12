@@ -115,6 +115,24 @@ export function groupEarlierTurnsByDay(
 }
 
 /**
+ * Where an older question sits once "N earlier" is open: the key of the day that holds it, and how many times
+ * that day's "Show N more" has to be pressed before the question is among those shown. Null when the question
+ * is not among the first `earlierCount` turns (it is already on screen, or not in the chat at all). Used by the
+ * jump from a Search match to put the chat on the question (useEarlierTurnsPill.ts).
+ */
+export function locateEarlierTurn(
+  turns: AskThreadCollapsedTurn[],
+  earlierCount: number,
+  turnId: string,
+  now?: Date
+): { dayKey: string; presses: number } | null {
+  const day = groupEarlierTurnsByDay(turns.slice(0, earlierCount), now).find((d) => d.turns.some((t) => t.id === turnId));
+  if (!day) return null;
+  const at = day.turns.findIndex((t) => t.id === turnId);
+  return { dayKey: day.key, presses: Math.floor(at / DAY_PAGE_SIZE) };
+}
+
+/**
  * What is on screen once "N earlier" is open: a line per day, the questions of the open days under
  * their line, and the turns after the earlier ones (the newest question and what follows it).
  */

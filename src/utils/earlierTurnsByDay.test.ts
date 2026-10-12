@@ -12,6 +12,7 @@ import {
   dayLineText,
   groupEarlierTurnsByDay,
   layoutEarlierByDay,
+  locateEarlierTurn,
   moreLineText,
   turnAskedAtMs,
 } from "./earlierTurnsByDay";
@@ -190,5 +191,50 @@ describe("an open day shows six questions, then six more per press (roadmap: ope
       "newest",
     ]);
     expect([...layout.moreAfter.keys()]).toEqual(["m6"]);
+  });
+});
+
+describe("locateEarlierTurn", () => {
+  /** 28 questions over five days: 4, 9, 7, 5 and 3, then the newest one on screen. */
+  const counts = [4, 9, 7, 5, 3];
+  const turns: AskThreadCollapsedTurn[] = [];
+  counts.forEach((n, d) => {
+    for (let i = 1; i <= n; i++) turns.push(turn(`d${d + 1}q${i}`, at(2026, 8, 20 + d, 6 + i)));
+  });
+  turns.push(turn("newest", at(2026, 9, 2, 11)));
+  const earlierCount = turns.length - 1;
+
+  it("finds the day that holds the question and no extra presses for one of the first six", () => {
+    expect(turns).toHaveLength(29);
+    const place = locateEarlierTurn(turns, earlierCount, "d1q3", NOW)!;
+    expect(place.dayKey).toBe("2026-09-20");
+    expect(place.presses).toBe(0);
+  });
+
+  it("question nine of day two needs one press of Show more, and then it is among the questions shown", () => {
+    const place = locateEarlierTurn(turns, earlierCount, "d2q9", NOW)!;
+    expect(place).toEqual({ dayKey: "2026-09-21", presses: 1 });
+    const layout = layoutEarlierByDay({
+      turns,
+      earlierCount,
+      openDays: new Set([place.dayKey]),
+      morePresses: new Map([[place.dayKey, place.presses]]),
+      now: NOW,
+    });
+    expect(layout.shown.map((t) => t.id)).toContain("d2q9");
+    expect(layout.shown.map((t) => t.id)).not.toContain("d1q1");
+    /* With no press the ninth question is still hidden: the press is what the jump has to make. */
+    const bare = layoutEarlierByDay({ turns, earlierCount, openDays: new Set([place.dayKey]), now: NOW });
+    expect(bare.shown.map((t) => t.id)).not.toContain("d2q9");
+  });
+
+  it("counts a question at the edge of a page: the seventh needs one press, the sixth none", () => {
+    expect(locateEarlierTurn(turns, earlierCount, "d3q6", NOW)!.presses).toBe(0);
+    expect(locateEarlierTurn(turns, earlierCount, "d3q7", NOW)!.presses).toBe(1);
+  });
+
+  it("says nothing for a question that is not among the earlier ones, or not in the chat", () => {
+    expect(locateEarlierTurn(turns, earlierCount, "newest", NOW)).toBeNull();
+    expect(locateEarlierTurn(turns, earlierCount, "nope", NOW)).toBeNull();
   });
 });

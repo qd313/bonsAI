@@ -201,7 +201,7 @@ export function beginSheet(turnKey: string): void {
 }
 
 /** How long after the sheet closes a line drawn again may take the ring back. The tab is drawn more than once. */
-export const SHEET_RETURN_WINDOW_MS = 3000;
+const SHEET_RETURN_WINDOW_MS = 3000;
 
 export function endSheetOpen(): void {
   set({ sheetOpen: false, sheetReturnUntil: Date.now() + SHEET_RETURN_WINDOW_MS });

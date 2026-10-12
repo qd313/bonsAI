@@ -206,6 +206,7 @@
     "src/features/folded-tabs/foldedTabArrival.test.ts",
     "src/features/folded-tabs/foldedTabsStore.test.ts",
     "src/features/folded-tabs/sectionSummary.test.ts",
+    "src/features/folded-tabs/settingsTabFolds.test.ts",
     "src/features/model-routing/useTryOrderPlaces.test.tsx",
     "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
     "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",

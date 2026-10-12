@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 920,
-  "edgeCount": 2980,
+  "fileCount": 922,
+  "edgeCount": 2984,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2756,6 +2756,7 @@
         "src/components/SettingsTabAccentIntensityMenuPopover.tsx",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
+        "src/features/folded-tabs/settingsTabFolds.ts",
         "src/features/plugin-shell/tabs/useMainTabPayload.tsx"
       ]
     },
@@ -2873,6 +2874,7 @@
         "src/features/downloads/downloadNotice.tsx",
         "src/features/folded-tabs/developerTabFolds.ts",
         "src/features/folded-tabs/ollamaTabFolds.ts",
+        "src/features/folded-tabs/settingsTabFolds.ts",
         "src/features/model-routing/useTryOrderPlaces.test.tsx",
         "src/features/model-routing/useTryOrderPlaces.ts",
         "src/features/plugin-shell/pluginStorage.ts",
@@ -4460,7 +4462,24 @@
       "importedBy": [
         "src/features/folded-tabs/developerTabFolds.ts",
         "src/features/folded-tabs/ollamaTabFolds.ts",
-        "src/features/folded-tabs/sectionSummary.test.ts"
+        "src/features/folded-tabs/sectionSummary.test.ts",
+        "src/features/folded-tabs/settingsTabFolds.ts"
+      ]
+    },
+    "src/features/folded-tabs/settingsTabFolds.test.ts": {
+      "imports": [
+        "src/features/folded-tabs/settingsTabFolds.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/folded-tabs/settingsTabFolds.ts": {
+      "imports": [
+        "src/data/aiCharacterAccentIntensity.ts",
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/features/folded-tabs/sectionSummary.ts"
+      ],
+      "importedBy": [
+        "src/features/folded-tabs/settingsTabFolds.test.ts"
       ]
     },
     "src/features/folded-tabs/useHelpStrip.ts": {

@@ -2265,3 +2265,40 @@ Made by the maintainer on 2026-10-11, early evening, answering a numbered list i
     limit or 75 percent of the five-hour window. Written into AGENTS.md and the bug-wave runbook.
 
 **At Go:** nothing is pushed; the maintainer publishes.
+
+### D129 — LOCKED 2026-10-12 (raised 2026-10-12) — Plans 90 to 92, the Search tab, your notes, the models box column and the denser tabs: the calls
+
+Made by the maintainer on 2026-10-12, in two rounds of chat answers, while
+[plan 90](../planning/90-search-tab-and-your-notes.md), [plan 91](../planning/91-models-filter-column-and-denser-tabs.md)
+and [plan 92](../planning/92-feature-night-search-notes-models-tabs.md) were written in a cloud session on the GitHub
+copy of `experimental` (`32f48643`), while plan 89's night was still running on the maintainer's PC. Plan 92 § 2
+carries the same list.
+
+1. **Who plans, who runs:** the planning on Fable 5.1; a separate Opus 5.5 extra-high chat runs plan 92 on the
+   maintainer's PC, after plan 89 is finished and pushed.
+2. **Three plans:** 90 (the Search tab and your notes), 91 (the models box's filters column and the denser tabs), 92
+   (the session that runs both, with the rig checking as the work lands).
+3. **The Search tab sits left of Main, and Search ships in this session**, not at 0.7.0 as the roadmap had it. This
+   replaces D127 call 2's rule that Main is always the far-left tab; LB and RB still wrap.
+4. **Y on the Main tab:** if the rig finds Y is already taken, or the press never reaches the plugin, there is no
+   shortcut and the tab alone is the way in.
+5. **How a note is heard:** a small word rule on the question's own text, with no extra trip to the AI. Typing
+   "remember …" opens the same card. Saying "remember" into the mic stays out (option C of the board was not picked).
+6. **Pushing:** the session may push to `experimental` when needed. Never to `main`. The maintainer still publishes
+   releases.
+7. **The first round's answers, the same day:** the Search tab's notes are the stash's notes, one storage and one
+   editor (the roadmap already said every note lives on the Search tab); notes are per game as well as for every game;
+   the stash's phase 1 only, the live session bundle (phase 2) stays on the backlog; the Steam settings search moves
+   from the Main tab's card to the Search tab; no version bump in this session; the Deck is driven through the rig as
+   part of the session.
+8. **Two defaults the maintainer did not object to:** the knowledge library's game notes are searchable on the Search
+   tab when the library is installed; the three chips from today's Filters row (Type a name, Install the starter set,
+   the Suggested models) move to the bottom of the new filters column.
+
+**Taken meanwhile, as the safe choice, and listed for the maintainer in plan 92 § 14:** the models list gives up its
+Date column for the filters column unless the Deck measurement shows it fits; Clear in the column leaves the licence
+pick alone; a folded tab opens its first section and remembers the open set for the session only; the find box's word
+buttons are the first path and the typed path is checked once; the offer rule's phrases are the list in plan 90 § 2a;
+with seven tabs the bar's side icons shrink one step; the help strip may cover list rows the ring is not on.
+
+**At go:** plan 89 finished and pushed; the Deck and the stand-in free; the maintainer's go.

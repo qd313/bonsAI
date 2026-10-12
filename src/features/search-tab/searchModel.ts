@@ -131,12 +131,15 @@ export function matchSettings(word: string, index: IntentPackSearchIndex | null 
 
 /**
  * How a game note is drawn before A opens it. A note whose name holds the person's word shows its name and
- * a snippet. Any other may be a boss they never named, so it shows "A <kind> note · <game>" and no snippet.
+ * a snippet. Any other may be a boss they never named, so it shows "A <kind> note · <game>" and no snippet:
+ * "An" before a vowel sound ("An item note"), and a kind's underscore read as a space ("starting out").
  */
 export function gameNoteLabel(note: GameNote): GameNoteLabel {
   if (note.name_matches) return { title: note.name, snippet: note.snippet, hidden: false };
   const game = note.game_title.trim() || "every game";
-  return { title: `A ${note.kind.trim() || "game"} note · ${game}`, snippet: "", hidden: true };
+  const kind = note.kind.replace(/_/g, " ").trim() || "game";
+  const article = /^[aeio]/i.test(kind) || /^u(?!ni|s|t)/i.test(kind) ? "An" : "A";
+  return { title: `${article} ${kind} note · ${game}`, snippet: "", hidden: true };
 }
 
 /** `text` cut round every place `word` appears, in any case, so the word can be lit. */

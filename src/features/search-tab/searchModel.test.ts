@@ -198,6 +198,18 @@ describe("the game notes", () => {
     expect(gameNoteLabel(unnamed)).toEqual({ title: "A boss note · Hollow Knight", snippet: "", hidden: true });
   });
 
+  it("says An before a vowel sound and A before the rest, and reads a kind's underscore as a space", () => {
+    const kind = (k: string) => gameNoteLabel({ ...unnamed, kind: k }).title;
+    expect(kind("item")).toBe("An item note · Hollow Knight");
+    expect(kind("area")).toBe("An area note · Hollow Knight");
+    expect(kind("encounter")).toBe("An encounter note · Hollow Knight");
+    expect(kind("upgrade")).toBe("An upgrade note · Hollow Knight");
+    expect(kind("unique item")).toBe("A unique item note · Hollow Knight");
+    expect(kind("quest")).toBe("A quest note · Hollow Knight");
+    expect(kind("starting_out")).toBe("A starting out note · Hollow Knight");
+    expect(kind("  ")).toBe("A game note · Hollow Knight");
+  });
+
   it("calls a note with no game one for every game", () => {
     expect(gameNoteLabel(help).title).toBe("A help note · every game");
   });

@@ -24,6 +24,12 @@
  * the same inside), asks `planTabBodyScroll` for the pane's place, and writes `scrollTop` once. The band the
  * plan keeps the control in is the pane's own `scroll-padding` (Steam's 116 px at the top and 80 at the
  * bottom), read off the pane, so what the plan leaves is what Steam's scroll leaves alone.
+ *
+ * Landing watchers (plan 92, the folded tabs' help strip): a tab can register one watcher, run first at
+ * every landing in its body, on the same event, before the plan. The watcher hands back how much of
+ * the pane's bottom it now covers (the strip, sized for the ringed row's text), and the plan's bottom
+ * margin grows by that much, so the ringed row is placed clear of it. A ring leaving the body tells the
+ * watcher with null.
  */
 import { useEffect, type RefObject } from "react";
 import { findTabContentsScroll, panelScrollMax } from "../../utils/chatPanelScroll";
@@ -122,6 +128,8 @@ function scrollPlaceFor(
   root: HTMLElement,
   target: HTMLElement,
   lastTop: number | null,
+  coveredBelow: number,
+  stepFraction: number | undefined,
 ): { scrollTop: number; top: number } | null {
   const pane = findTabContentsScroll(root);
   if (!pane || pane === target) return null;
@@ -131,7 +139,8 @@ function scrollPlaceFor(
 
   const style = getComputedStyle(pane);
   const padTop = px(style.scrollPaddingTop, STEAM_PAD_TOP_PX) + EDGE_SLACK_PX;
-  const padBottom = px(style.scrollPaddingBottom, STEAM_PAD_BOTTOM_PX) + EDGE_SLACK_PX;
+  /* Anything drawn over the pane's bottom (a folded tab's help strip) widens the margin by its height. */
+  const padBottom = px(style.scrollPaddingBottom, STEAM_PAD_BOTTOM_PX) + EDGE_SLACK_PX + coveredBelow;
 
   const stops = stopsUnder(root);
   /*
@@ -161,13 +170,43 @@ function scrollPlaceFor(
       maxScroll,
       padTop,
       padBottom,
+      stepFraction,
     }),
+  };
+}
+
+/**
+ * Told of every landing in one tab's body (null: the ring left it) before the plan runs; returns how many
+ * px at the pane's bottom it covers now, which the plan keeps the ringed control clear of.
+ */
+export type TabBodyLandingWatcher = (target: HTMLElement | null) => number;
+
+interface LandingWatch {
+  watcher: TabBodyLandingWatcher;
+  /** The page-turn step this tab wants (tabBodyScrollPlan's `stepFraction`), when not the default. */
+  stepFraction?: number;
+}
+
+const landingWatchers = new Map<string, LandingWatch>();
+
+/** Register the one landing watcher for tab `tabId`; returns its removal (which leaves a newer one alone). */
+export function watchTabBodyLandings(
+  tabId: string,
+  watcher: TabBodyLandingWatcher,
+  opts?: { stepFraction?: number },
+): () => void {
+  const entry: LandingWatch = { watcher, stepFraction: opts?.stepFraction };
+  landingWatchers.set(tabId, entry);
+  return () => {
+    if (landingWatchers.get(tabId) === entry) landingWatchers.delete(tabId);
   };
 }
 
 /** What one tab body remembers between landings. */
 interface BodyState {
   root: HTMLElement;
+  /** The tab's id, for its landing watcher; null for a body with none. */
+  tabId: string | null;
   /** Where the ring was before, in the pane's coordinates: says which way it is travelling. */
   lastTop: number | null;
   lastPointerAt: number;
@@ -179,8 +218,10 @@ const bodies = new Set<BodyState>();
 
 /** Plan and write the pane's place for focus landing on `target`; false when nothing was planned. */
 function placeFor(body: BodyState, target: HTMLElement): boolean {
+  const watch = body.tabId === null ? undefined : landingWatchers.get(body.tabId);
+  const covered = Math.max(0, watch?.watcher(target) ?? 0);
   if (performance.now() - body.lastPointerAt < POINTER_QUIET_MS) return false;
-  const place = scrollPlaceFor(body.root, target, body.lastTop);
+  const place = scrollPlaceFor(body.root, target, body.lastTop, covered, watch?.stepFraction);
   if (!place) return false;
   body.lastTop = place.top;
   const pane = findTabContentsScroll(body.root);
@@ -214,11 +255,11 @@ export function focusInTabBody(el: HTMLElement): void {
   el.focus();
 }
 
-export function useTabBodyFocusScroll(rootRef: RefObject<HTMLElement | null>): void {
+export function useTabBodyFocusScroll(rootRef: RefObject<HTMLElement | null>, tabId?: string): void {
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const body: BodyState = { root, lastTop: null, lastPointerAt: -Infinity, planned: null };
+    const body: BodyState = { root, tabId: tabId ?? null, lastTop: null, lastPointerAt: -Infinity, planned: null };
     bodies.add(body);
 
     const onPointer = () => {
@@ -233,13 +274,21 @@ export function useTabBodyFocusScroll(rootRef: RefObject<HTMLElement | null>): v
       }
       placeFor(body, target);
     };
+    /* The ring left the body (the tab bar, a floating button outside it): the watcher hides what it showed. */
+    const onFocusOut = (event: FocusEvent) => {
+      const next = event.relatedTarget as Node | null;
+      if (next && root.contains(next)) return;
+      if (body.tabId !== null) landingWatchers.get(body.tabId)?.watcher(null);
+    };
 
     root.addEventListener("focusin", onFocusIn, true);
+    root.addEventListener("focusout", onFocusOut, true);
     root.addEventListener("pointerdown", onPointer, true);
     return () => {
       root.removeEventListener("focusin", onFocusIn, true);
+      root.removeEventListener("focusout", onFocusOut, true);
       root.removeEventListener("pointerdown", onPointer, true);
       bodies.delete(body);
     };
-  }, [rootRef]);
+  }, [rootRef, tabId]);
 }

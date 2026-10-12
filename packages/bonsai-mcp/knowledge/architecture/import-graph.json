@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 873,
-  "edgeCount": 2753,
+  "fileCount": 879,
+  "edgeCount": 2767,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4082,6 +4082,40 @@
         "src/hooks/usePullModelSubmitSelected.tsx"
       ]
     },
+    "src/features/folded-tabs/TabHelpStrip.test.tsx": {
+      "imports": [
+        "src/features/folded-tabs/TabHelpStrip.tsx",
+        "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/features/folded-tabs/useHelpStrip.ts",
+        "src/features/plugin-shell/TabBodyFocusRoot.tsx",
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/styles/sections/foldedTabs.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/folded-tabs/TabHelpStrip.tsx": {
+      "imports": [
+        "src/features/folded-tabs/useHelpStrip.ts",
+        "src/utils/chatPanelScroll.ts"
+      ],
+      "importedBy": [
+        "src/features/folded-tabs/TabHelpStrip.test.tsx"
+      ]
+    },
+    "src/features/folded-tabs/foldedTabsStore.test.ts": {
+      "imports": [
+        "src/features/folded-tabs/foldedTabsStore.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/folded-tabs/foldedTabsStore.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/features/folded-tabs/TabHelpStrip.test.tsx",
+        "src/features/folded-tabs/foldedTabsStore.test.ts",
+        "src/features/folded-tabs/useHelpStrip.ts"
+      ]
+    },
     "src/features/folded-tabs/sectionSummary.test.ts": {
       "imports": [
         "src/features/folded-tabs/sectionSummary.ts"
@@ -4092,6 +4126,17 @@
       "imports": [],
       "importedBy": [
         "src/features/folded-tabs/sectionSummary.test.ts"
+      ]
+    },
+    "src/features/folded-tabs/useHelpStrip.ts": {
+      "imports": [
+        "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
+        "src/utils/tabBodyScrollPlan.ts"
+      ],
+      "importedBy": [
+        "src/features/folded-tabs/TabHelpStrip.test.tsx",
+        "src/features/folded-tabs/TabHelpStrip.tsx"
       ]
     },
     "src/features/model-routing/useTryOrderPlaces.test.tsx": {
@@ -4146,6 +4191,7 @@
         "src/components/AboutTab.walk.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/useTopStripTabBar.ts",
+        "src/features/folded-tabs/TabHelpStrip.test.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
         "src/features/search-tab/SearchTab.walk.test.tsx",
         "src/index.tsx",
@@ -4672,6 +4718,7 @@
         "src/components/SettingsTab.tsx",
         "src/components/SettingsTabConnectionTimeoutSlider.tsx",
         "src/components/SettingsTabUiScaleSection.tsx",
+        "src/features/folded-tabs/useHelpStrip.ts",
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
         "src/test-harness/tabBodyWalk.tsx"
@@ -6818,6 +6865,7 @@
       "imports": [
         "src/styles/sections/aboutTab.ts",
         "src/styles/sections/detailsSlot.ts",
+        "src/styles/sections/foldedTabs.ts",
         "src/styles/sections/gameRunningLighter.ts",
         "src/styles/sections/gamepadAndPullModels.ts",
         "src/styles/sections/scopeBase.ts",
@@ -6845,6 +6893,7 @@
         "src/components/textSizeEverywhere.test.tsx",
         "src/components/textSizeSurfaces.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
+        "src/features/folded-tabs/TabHelpStrip.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.mainLabel.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
@@ -6950,6 +6999,15 @@
       ],
       "importedBy": [
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
+        "src/styles/bonsaiScopeStylesheet.ts"
+      ]
+    },
+    "src/styles/sections/foldedTabs.ts": {
+      "imports": [
+        "src/styles/sections/textPx.ts"
+      ],
+      "importedBy": [
+        "src/features/folded-tabs/TabHelpStrip.test.tsx",
         "src/styles/bonsaiScopeStylesheet.ts"
       ]
     },
@@ -7224,6 +7282,7 @@
         "src/styles/sections/chatDetailsText.ts",
         "src/styles/sections/chatSlotModal.ts",
         "src/styles/sections/detailsSlot.ts",
+        "src/styles/sections/foldedTabs.ts",
         "src/styles/sections/gamepadAndPullModels.ts",
         "src/styles/sections/questionBubble.ts",
         "src/styles/sections/replyRatingChoices.ts",
@@ -8633,6 +8692,7 @@
         "src/features/chat-title/ChatsMenu.tsx",
         "src/features/details-slot/DetailsSlot.tsx",
         "src/features/details-slot/detailsSlotStore.ts",
+        "src/features/folded-tabs/TabHelpStrip.tsx",
         "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/hooks/chipLadderPlacement.ts",
         "src/hooks/useChipLadderReveal.ts",
@@ -10025,6 +10085,7 @@
     "src/utils/tabBodyScrollPlan.ts": {
       "imports": [],
       "importedBy": [
+        "src/features/folded-tabs/useHelpStrip.ts",
         "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/utils/tabBodyScrollPlan.test.ts"
       ]

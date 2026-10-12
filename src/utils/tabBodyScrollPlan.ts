@@ -55,6 +55,12 @@ export interface TabScrollPlanInput {
   /** The margins Steam keeps clear at the pane's top and bottom, and the plan keeps with them. */
   padTop: number;
   padBottom: number;
+  /**
+   * The page-turn step as a share of the pane, when a tab wants a shorter one than
+   * TAB_SCROLL_STEP_FRACTION: a folded tab's rows sit a line apart, and its Deck check allows no more
+   * than a third of the pane at one press (plan 91 § 4, T0; FOLDED_TAB_SCROLL_STEP_FRACTION).
+   */
+  stepFraction?: number;
 }
 
 /**
@@ -66,13 +72,21 @@ export interface TabScrollPlanInput {
 export const TAB_SCROLL_STEP_FRACTION = 0.48;
 
 /**
+ * The step for a folded tab (plan 91 § 2b). Its rows are one line each, about 35 to 45 px apart, so a
+ * third of the pane still covers three rows or more and the page still turns on at most one press in
+ * three; plan 91's Deck check allows no more than a third of the pane at any one press. 0.32, not a
+ * third, for the same rounding room 0.48 leaves under a half.
+ */
+export const FOLDED_TAB_SCROLL_STEP_FRACTION = 0.32;
+
+/**
  * Where the pane should be after focus lands on `current`. Equal to `scrollTop` when nothing needs to move.
  * The result is always inside the pane's range, and `current` is always inside the band when its box fits.
  */
 export function planTabBodyScroll(input: TabScrollPlanInput): number {
   const { current, next, scrollTop, viewport, maxScroll } = input;
   if (maxScroll <= 0) return scrollTop;
-  const step = viewport * TAB_SCROLL_STEP_FRACTION;
+  const step = viewport * (input.stepFraction ?? TAB_SCROLL_STEP_FRACTION);
   const [calmLo, calmHi, fits] = calmRange(current, input);
 
   let place: number;

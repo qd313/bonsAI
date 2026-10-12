@@ -9,7 +9,12 @@
  * Does not: Know Steam or the DOM.
  */
 import { describe, expect, it } from "vitest";
-import { planTabBodyScroll, TAB_SCROLL_STEP_FRACTION, type TabScrollPlanInput } from "./tabBodyScrollPlan";
+import {
+  FOLDED_TAB_SCROLL_STEP_FRACTION,
+  planTabBodyScroll,
+  TAB_SCROLL_STEP_FRACTION,
+  type TabScrollPlanInput,
+} from "./tabBodyScrollPlan";
 
 /* The band is 100 to 620 of a 700 px pane; one step is 336 px. */
 const base: TabScrollPlanInput = {
@@ -41,6 +46,14 @@ describe("planTabBodyScroll", () => {
     const place = planTabBodyScroll({ ...base, current: box(620) });
     expect(place).toBe(STEP);
     expect(620 - place).toBeGreaterThanOrEqual(base.padTop);
+  });
+
+  it("a folded tab asks for a shorter step: a landing below the band moves the pane under a third of it", () => {
+    /* Plan 91's Deck check for the folded Ollama tab allows no more than a third of the pane at one press. */
+    expect(FOLDED_TAB_SCROLL_STEP_FRACTION).toBeLessThan(1 / 3);
+    const place = planTabBodyScroll({ ...base, current: box(620), stepFraction: FOLDED_TAB_SCROLL_STEP_FRACTION });
+    expect(place).toBe(base.viewport * FOLDED_TAB_SCROLL_STEP_FRACTION);
+    expect(place).toBeLessThan(base.viewport / 3);
   });
 
   it("turns the page by one step going up, and the control stays in the band", () => {

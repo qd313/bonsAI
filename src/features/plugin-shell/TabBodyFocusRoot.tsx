@@ -45,7 +45,7 @@ export function TabBodyFocusRoot({ id, children }: TabBodyFocusRootProps): React
   const setRootEl = useCallback((el: HTMLElement | null) => {
     rootEl.current = el;
   }, []);
-  useTabBodyFocusScroll(rootEl);
+  useTabBodyFocusScroll(rootEl, id);
   useEffect(() => {
     const key = tabBodyNavFocusId(id);
     registerNavFocus(key, navRef);

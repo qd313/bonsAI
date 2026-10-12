@@ -1090,3 +1090,65 @@ the Show reasoning line when this turn has one, else the answer's first section
   the popup rebuilds the tab and the rebuilt line, seeing its own key with the sheet closed, takes the ring back (a
   few tries while the tab mounts) and clears the note. `NotesReadLine.test.tsx` unmounts and remounts between the open
   and the return, as lessons-learned requires.
+
+### The Developer tab, folded (plan 91 § 2b, plan 92 lane T2)
+
+The same pieces as the Ollama tab (`src/features/folded-tabs/`, the section above); only the sections and the rows are the Developer tab's. Six sections, in
+order: Knowledge base (dev QA) (drawn only when a seed install was passed in), Diagnostics, Navigation, Logging & exports,
+Animations, Integrations. Each section folds to one line with a summary (`developerTabFolds.ts`, `summarizeSection`); a first visit
+has every section closed, and the tab test sets the open state with the store's own functions.
+
+```
+tab bar
+   | Down                          ^ Up (from the first line)
+[ KNOWLEDGE BASE (DEV QA)   Hybrid retrieval (meaning search) on   ▸ ]  --Right-->  [ ⊞ Open all ]
+[ DIAGNOSTICS   On-screen debug HUD off · Warm the Ask model at boot off   ▾ ]
+   | Down (open: into the first stop)        <-- Up from the first stop comes back to this line
+   [ On-screen debug HUD ] [ Warm the Ask model at boot ] [ Jump to Steam Input ] [ Clear (N) ]
+   [ captured error 1 ] [ captured error 2 ] ...                    (each one a stop; Clear only with errors)
+   | Down from the last stop -> the next line
+[ NAVIGATION   Tab to open on (D15): B · Resume   ▸ ]
+[ LOGGING & EXPORTS   App activity logging to Desktop: Off · 0 of 3 on   ▸ ]
+   [ App activity logging (3 buttons) ] [ Open Permissions: only while Save files to Desktop is off ] [ Auto-save ]
+   [ Verbose Ask logging ] [ Force session RAG chips ] [ Frozen test chips (QA): a read-only stop ] [ Clear frozen test chips ]
+[ ANIMATIONS   Preset suggestions: fade · Scramble animation off   ▸ ]
+   [ Preset suggestions (4 buttons) ] [ Scramble animation ] and, only while it is on: [ How letters settle ]
+   [ How long each letter scrambles (settle style only) ] [ Scrambled letter colour ]
+[ INTEGRATIONS   ▸ ]    [ Steam Web API key (a text field) ]
+   | Down from the last line (or the last stop) holds still
+=========== the strip: "TAB TO OPEN ON (D15)  Reopen lands on the tab you left. Shipped default. Takes effect…" ===========
+```
+
+- **Stops:** the six section lines, the floating button, and inside an open section every control: a switch (Steam's own
+  `ToggleField`), a button (Steam's `ButtonItem` in the plugin's ring host, inside a `Focusable` that holds the edge moves),
+  the first button of an option row's strip (a horizontal `Focusable`), each captured error (a `Focusable`
+  with `focusable`), the Frozen test chips line (also `focusable`, nothing to press) and the key field. The strip, the
+  summaries, the "Captured runtime errors appear below." line, "No errors captured.", the pinned-chips list and the
+  loaded-models words are not stops.
+- **Moves:** only the section lines (`FoldedSection`) and the two edges of each open section are hand-written. A section's
+  rows are a list (`SectionRows`, `developerRows.tsx`); the first stop in it gets `onMoveUp` = its own line
+  (`takeFoldLine`) and the last stop gets `onMoveDown` = the next line (`foldLineBelow`), whatever those stops are on a given
+  day (the Clear button and the errors come and go; the scramble rows follow the switch). Between two stops of one
+  section Steam steps along the tab's one column (`FoldedColumn`, `flow-children="vertical"`). The handlers sit on the
+  switch itself, or on the `Focusable` round a button, a button strip or the field, because Decky's `Button` keeps no move
+  handler. A greyed button is not skipped by asking the DOM (the seed install button greys while it runs); it stays a stop.
+- **Entering a section** (`useDeveloperTabFocus.ts`, `chain`): Down from an open line puts the ring on the section's first
+  stop, Up from the line below on the previous open section's last stop. Each is a plain hop between controls of the one tab
+  body (`focusInTabBody`); it lands on the leaf control (the first match of `[tabindex], button, input` with no other match
+  inside it), not on the `Focusable` that wraps a button strip, which would sit outside the row's words.
+- **The key field:** its ref in Decky is the component, not the input, so nothing reads it; the tab's walk finds the DOM
+  node. A `Focusable` round it holds the edge moves (it is the only stop of its section, so it has both).
+- **The strip's words** ride on each row (`data-bonsai-help`, `DenseRow`): "Tab to open on" and "App activity logging" carry the
+  line for the picked button, so the strip re-reads it on a pick while the ring stays on the row (`useHelpStrip` watches the
+  row's attribute). Frozen test chips is a stop of its own so the board's long block stays out of the Force switch's words.
+- **Appearing:** nothing in the tab or its rows focuses or scrolls on mount (a test pins it); the pane's place when the tab
+  is shown is the shell's (lane T0c), not the tab's.
+- **Class names and data attributes a Deck driver can find:** the shared ones in the Ollama section above, with the tab
+  `[data-bonsai-tab-panel="developer"]`, the lines `[data-bonsai-fold-line="kb"|"diagnostics"|"navigation"|"logging"|"animations"|"integrations"]`,
+  the floating button `[data-bonsai-fold-all="developer"]`, the strip `[data-bonsai-help-strip="developer"]`, a row by its
+  name `[data-bonsai-help-label="Tab to open on (D15)"]` (the strip's text is its `data-bonsai-help`), and the option rows' buttons
+  by their `aria-label` ("A · Main: …", "Off: …", "Preset animation: fade").
+- **Tests:** `developerTabFolds.test.ts` (the summaries and every row's words against the board's data file),
+  `DeveloperTab.folded.test.tsx` (closed, open, the words on the rows, the buttons that run something, the tab appearing),
+  `DeveloperTab.foldedWalk.test.tsx` (closed and open walks Down and Up at two pane heights and Steam's three scroll rules,
+  the captured errors reached, the strip following a pick, the floating button). Device rows: plan 91 § 5, block 5.

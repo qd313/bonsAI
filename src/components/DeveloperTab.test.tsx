@@ -6,10 +6,15 @@
  * says "None pinned" in that state, so the button is rendered only once there is something to clear.
  */
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { DeveloperTab, type DeveloperTabProps } from "./DeveloperTab";
 import { STREAM_SCRAMBLE_OFF } from "../features/stream-scramble/streamScrambleContext";
+import { setAllSections } from "../features/folded-tabs/foldedTabsStore";
+import { DEVELOPER_FOLD_TAB, DEVELOPER_SECTIONS } from "../features/folded-tabs/developerTabFolds";
+
+/* The Developer tab folds (plan 92 T2): its rows are only on screen while their section is open. */
+beforeEach(() => setAllSections(DEVELOPER_FOLD_TAB, DEVELOPER_SECTIONS.map((s) => s.id), true));
 
 const CLEAR_LABEL = "Clear frozen test chips";
 

@@ -18,7 +18,7 @@
  *           on each tab is the check that the ring is not clipped.
  */
 import { render } from "@testing-library/react";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 import { AboutTab } from "./AboutTab";
 import { DeveloperTab } from "./DeveloperTab";
@@ -27,6 +27,11 @@ import { PermissionsTab } from "./PermissionsTab";
 import { SettingsTab } from "./SettingsTab";
 import { developerProps, outlines, settingsProps } from "./ringTestProps";
 import { buildBonsaiScopeStylesheet } from "../styles/bonsaiScopeStylesheet";
+import { setAllSections } from "../features/folded-tabs/foldedTabsStore";
+import { DEVELOPER_FOLD_TAB, DEVELOPER_SECTIONS } from "../features/folded-tabs/developerTabFolds";
+
+/* The Developer tab folds (plan 92 T2): its rows are only on screen while their section is open. */
+beforeEach(() => setAllSections(DEVELOPER_FOLD_TAB, DEVELOPER_SECTIONS.map((s) => s.id), true));
 
 /** The ring the Deck check looks for: 2px, solid, white at 0.88. */
 function isWhiteRing(outline: string): boolean {

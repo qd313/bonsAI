@@ -8,6 +8,11 @@
  * API key for ban lookups, and a handful of QA-only controls for testing
  * the preset chip carousel and the knowledge base.
  *
+ * Folded (plan 91 § 2b, plan 92 lane T2): each section is one line (FoldedSection) showing a summary of its
+ * values; A opens or closes it, several can be open at once, and a first visit starts with every section
+ * closed. Inside, one line per setting; a row's longer words show in the help strip at the bottom of the
+ * panel while the ring is on it; the floating Open all button opens or closes every section.
+ *
  * Used for: The Developer tab in index.tsx, shown only when Developer Mode
  * is on.
  *
@@ -18,153 +23,63 @@
  * Does not: Change anything about how Ask works for a normal user — most of
  * these rows exist to test or debug the plugin itself, and several are
  * gated behind their own developer settings and capabilities on top of
- * Developer Mode.
+ * Developer Mode. Does not scroll the pane or move the ring when it appears: nothing in this tab or its
+ * rows runs an effect that focuses or scrolls (a test pins that).
  *
  * How it works:
  *
- *     ┌─ Developer tab ──────────────────────────────────────┐
- *     │ Knowledge base (dev QA)  <- only when a seed-install  │
- *     │                             callback was passed in    │
- *     │ Diagnostics              <- HUD toggle, warm-at-boot, │
- *     │                             captured errors, loaded   │
- *     │                             models                    │
- *     │ Navigation               <- which tab reopens the     │
- *     │                             plugin (A/B/C buttons)    │
- *     │ Logging & exports        <- Desktop log level,        │
- *     │                             auto-save chat, verbose   │
- *     │                             Ask log, QA session-RAG   │
- *     │                             + frozen test chips       │
- *     │ Animations               <- preset chip animation,    │
- *     │                             scramble switch + its     │
- *     │                             settle style, settle time │
- *     │                             and colour rows (shown    │
- *     │                             only while it is on)      │
- *     │ Integrations             <- Steam Web API key         │
- *     └────────────────────────────────────────────────────────┘
+ *     Knowledge base (dev QA)  <- only when a seed-install callback was passed in
+ *     Diagnostics              <- HUD toggle, warm-at-boot, Steam Input jump, captured errors, loaded models
+ *     Navigation               <- which tab reopens the plugin
+ *     Logging & exports        <- Desktop log level, auto-save chat, verbose Ask log, QA session-RAG
+ *                                 chips + frozen test chips
+ *     Animations               <- preset chip animation, scramble switch + its settle style, settle
+ *                                 time and colour rows (shown only while it is on)
+ *     Integrations             <- Steam Web API key
  *
- * 1. Every row here is a plain panel row; Steam's own default vertical flow
- *    moves the D-pad between them, since nothing in this file wires a
- *    custom onMoveUp/onMoveDown.
- * 2. The "Tab to open on" and "App activity logging" rows are each a
- *    horizontal row of buttons built from a fixed option list
- *    (TAB_RESUME_MODE_OPTIONS, DESKTOP_APP_LOG_LEVEL_OPTIONS) — press one
- *    to select it, styled to show which is active. The Animations section's
- *    button rows are the same idea, built through the shared
- *    `DeveloperOptionRow` component instead of repeating the style block.
+ * 1. The section names, summaries and every row's longer words live in developerTabFolds.ts. Each section's
+ *    rows are a list (developerRowsDiagnostics.tsx, developerRowsLogging.tsx, developerRowsAnimations.tsx)
+ *    drawn by SectionRows, which hands the first stop's Up to the section's line and the last stop's Down to
+ *    the next line; Steam's own step along the tab's one column (FoldedColumn) does the rest.
+ * 2. The "Tab to open on" and "App activity logging" rows are each a horizontal row of buttons built from a
+ *    fixed option list; press one to select it, styled to show which is active. All the button rows are built
+ *    through the shared `DeveloperOptionRow`.
  * 3. runInstallSeedKb() drives the one asynchronous action on this tab: it
  *    disables its own button while running, calls the passed-in
  *    onInstallSeedKnowledgeBase, and shows a toast only if that fails.
- * 4. Everything else here reads and writes one setting directly — a
- *    toggle, a text field, or a small button row — with no local state of
- *    its own; every change goes straight back out through the setter it
- *    was handed. The four scramble settings are the one exception: they
- *    arrive as a single `streamScramble` object and change through a single
- *    `onStreamScrambleChange(patch)` function, so the plugin's main screen
- *    hands this tab one value and one function for the whole group instead
- *    of four of each — see streamScrambleContext.ts for why.
- * 5. The Animations section's "How letters settle" and "Scrambled letter
- *    colour" rows only render while the Scramble animation switch is on,
- *    and "How long each letter scrambles" only while it is on **and** the
- *    settle style is picked — a row that is not drawn is not focusable, so
- *    turning the switch off while the ring sits on it leaves the ring on
- *    the switch rather than stranding it on a row that just vanished.
+ * 4. Everything else here reads and writes one setting directly, with no local state of its own; every change
+ *    goes straight back out through the setter it was handed. The four scramble settings arrive as a single
+ *    `streamScramble` object and change through a single `onStreamScrambleChange(patch)` function — see
+ *    streamScrambleContext.ts for why.
+ * 5. The Animations section's "How letters settle" and "Scrambled letter colour" rows only render while the
+ *    Scramble animation switch is on, and "How long each letter scrambles" only while it is on **and** the
+ *    settle style is picked — a row that is not drawn is not focusable, so turning the switch off while the
+ *    ring sits on it leaves the ring on the switch rather than stranding it on a row that just vanished.
  */
 import React from "react";
-import {
-  Button,
-  ButtonItem,
-  Focusable,
-  PanelSection,
-  PanelSectionRow,
-  TextField,
-  ToggleField,
-} from "@decky/ui";
 import { toaster } from "@decky/api";
-import {
-  DESKTOP_APP_LOG_LEVEL_OPTIONS,
-  PRESET_CHIP_ANIMATION_OPTIONS,
-  STEAM_WEB_API_KEY_MAX_LEN,
-  STREAM_SCRAMBLE_COLOR_OPTIONS,
-  STREAM_SCRAMBLE_SETTLE_MS_CHOICES,
-  STREAM_SCRAMBLE_STYLE_OPTIONS,
-  TAB_RESUME_MODE_OPTIONS,
-  TAB_RESUME_RECENT_WINDOW_MS,
-  type DesktopAppLogLevel,
-  type StreamScrambleColor,
-  type StreamScrambleStyle,
-  type TabResumeMode,
-} from "../data/bonsaiSettingsSchema";
+import type { DesktopAppLogLevel, PresetChipAnimation, TabResumeMode } from "../data/bonsaiSettingsSchema";
 import { formatDeckyRpcError } from "../utils/deckyCall";
-import { DeveloperOptionRow } from "./DeveloperOptionRow";
-import { PermissionDenyAction } from "./PermissionDenyAction";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import type { StreamScrambleSettings } from "../features/stream-scramble/streamScrambleContext";
-import { FOCUS_RING_BTN_CLASS, FOCUS_RING_ITEM_HOST_CLASS } from "../styles/settingsGlassButton";
-import { textPx } from "../styles/sections/textPx";
+import { chainIds, FoldedColumn, FoldedSection, foldLineBelow, takeFoldLine } from "../features/folded-tabs/FoldedSection";
+import { FoldAllButton } from "../features/folded-tabs/FoldAllButton";
+import { TabHelpStrip } from "../features/folded-tabs/TabHelpStrip";
+import {
+  DEVELOPER_FOLD_TAB,
+  developerSectionSummaries,
+  developerSectionTitle,
+  developerSectionsShown,
+  type DeveloperSectionId,
+} from "../features/folded-tabs/developerTabFolds";
+import { SectionRows, type DevRow } from "./developerRows";
+import { diagnosticsRows, kbRows } from "./developerRowsDiagnostics";
+import { loggingRows, navigationRows } from "./developerRowsLogging";
+import { animationsRows, integrationsRows } from "./developerRowsAnimations";
+import { useDeveloperTabFocus } from "./useDeveloperTabFocus";
+import type { DeveloperConnectionStatus } from "./developerConnectionStatus";
 
-const desktopAppLogLevelLabel: Record<DesktopAppLogLevel, string> = {
-  off: "Off",
-  default: "Default",
-  verbose: "Verbose",
-};
-const desktopAppLogLevelDescription: Record<DesktopAppLogLevel, string> = {
-  off: "No app activity log file on Desktop.",
-  default: "Summary events (connection tests, asks, settings changes).",
-  verbose: "Default events plus RPC details, setup log lines, and frontend errors.",
-};
-
-const TAB_RESUME_RECENT_WINDOW_MINUTES = Math.round(TAB_RESUME_RECENT_WINDOW_MS / 60000);
-
-// Labelled by roadmap option letter on purpose: this control exists to compare D15 A/B/C
-// on-device, so the mapping back to the decision record should be readable from the Deck.
-const tabResumeModeLabel: Record<TabResumeMode, string> = {
-  always_main: "A · Main",
-  resume: "B · Resume",
-  resume_recent: `C · ${TAB_RESUME_RECENT_WINDOW_MINUTES} min`,
-};
-const tabResumeModeDescription: Record<TabResumeMode, string> = {
-  always_main: "Every reopen starts on Main, whatever tab you left from.",
-  resume: "Reopen lands on the tab you left. Shipped default.",
-  resume_recent: `Reopen resumes the tab within ${TAB_RESUME_RECENT_WINDOW_MINUTES} minutes, then falls back to Main.`,
-};
-
-const streamScrambleStyleLabel: Record<StreamScrambleStyle, string> = {
-  settle: "Settle",
-  chip: "Chip pace",
-  tail: "Fixed tail",
-};
-const streamScrambleStyleDescription: Record<StreamScrambleStyle, string> = {
-  settle: "Each letter scrambles for a moment after it arrives, then settles.",
-  chip: "Letters settle one at a time at the decode chips' pace, so a long answer stays scrambled until near the end.",
-  tail: "The last 10 letters are always scrambled.",
-};
-
-const streamScrambleColorLabel: Record<StreamScrambleColor, string> = {
-  same: "Same",
-  dim: "Dimmer",
-  green: "Green",
-  cyan: "Cyan",
-};
-const streamScrambleColorAriaLabel: Record<StreamScrambleColor, string> = {
-  same: "Same as text",
-  dim: "Dimmer",
-  green: "bonsAI green",
-  cyan: "Streaming cyan",
-};
-
-export type DeveloperConnectionStatus = {
-  reachable: boolean;
-  version?: string;
-  models?: string[];
-  ps_loaded?: Array<{
-    name: string;
-    size_bytes: number;
-    size_vram_bytes: number;
-    vram_weight_share_pct_appx: number | null;
-  }>;
-  error?: string;
-  recovery_attempted?: boolean;
-};
+export type { DeveloperConnectionStatus };
 
 export type DeveloperTabProps = {
   capturedErrors: string[];
@@ -181,8 +96,8 @@ export type DeveloperTabProps = {
   filesystemWrite: boolean;
   onJumpToPermission?: (capability: BonsaiCapabilityKey) => void;
 
-  presetChipAnimation: import("../data/bonsaiSettingsSchema").PresetChipAnimation;
-  setPresetChipAnimation: (v: import("../data/bonsaiSettingsSchema").PresetChipAnimation) => void;
+  presetChipAnimation: PresetChipAnimation;
+  setPresetChipAnimation: (v: PresetChipAnimation) => void;
 
   steamWebApiKey: string;
   setSteamWebApiKey: (v: string) => void;
@@ -217,44 +132,13 @@ export type DeveloperTabProps = {
  * each one, the list of captured runtime errors and a callback to clear
  * them, and the last connection test's result (used only to list which
  * models are currently loaded).
- * Out: the panel sections in the order drawn above.
+ * Out: the folded sections in the order drawn above, the help strip and the Open all button.
  *
  * What can go wrong: nothing here talks to the backend except
  * runInstallSeedKb() — every other row is a direct settings read/write.
  */
-export const DeveloperTab: React.FC<DeveloperTabProps> = ({
-  capturedErrors,
-  onClearErrors,
-  onSteamInputPhase1Jump,
-  lastConnectionStatus,
-  desktopDebugNoteAutoSave,
-  setDesktopDebugNoteAutoSave,
-  desktopAskVerboseLogging,
-  setDesktopAskVerboseLogging,
-  desktopAppLogLevel,
-  setDesktopAppLogLevel,
-  filesystemWrite,
-  onJumpToPermission,
-  presetChipAnimation,
-  setPresetChipAnimation,
-  steamWebApiKey,
-  setSteamWebApiKey,
-  showOnscreenDebugHud,
-  setShowOnscreenDebugHud,
-  devForceSessionRagChips,
-  setDevForceSessionRagChips,
-  devPreloadAskModel,
-  setDevPreloadAskModel,
-  devFrozenTestChips,
-  setDevFrozenTestChips,
-  ragHybridRetrievalEnabled,
-  setRagHybridRetrievalEnabled,
-  tabResumeMode,
-  setTabResumeMode,
-  onInstallSeedKnowledgeBase,
-  streamScramble,
-  onStreamScrambleChange,
-}) => {
+export const DeveloperTab: React.FC<DeveloperTabProps> = (props) => {
+  const { capturedErrors, onClearErrors, onSteamInputPhase1Jump, lastConnectionStatus, onInstallSeedKnowledgeBase, streamScramble } = props;
   const [seedKbBusy, setSeedKbBusy] = React.useState(false);
 
   const runInstallSeedKb = () => {
@@ -271,397 +155,103 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
       .finally(() => setSeedKbBusy(false));
   };
 
+  const shown = developerSectionsShown(Boolean(onInstallSeedKnowledgeBase));
+  const { chain, hostsFor } = useDeveloperTabFocus(shown.map((s) => s.id));
+  const summaries = developerSectionSummaries({
+    hasSeedKb: Boolean(onInstallSeedKnowledgeBase),
+    ragHybridRetrievalEnabled: props.ragHybridRetrievalEnabled,
+    showOnscreenDebugHud: props.showOnscreenDebugHud,
+    devPreloadAskModel: props.devPreloadAskModel,
+    tabResumeMode: props.tabResumeMode,
+    desktopAppLogLevel: props.desktopAppLogLevel,
+    desktopDebugNoteAutoSave: props.desktopDebugNoteAutoSave,
+    desktopAskVerboseLogging: props.desktopAskVerboseLogging,
+    devForceSessionRagChips: props.devForceSessionRagChips,
+    presetChipAnimation: props.presetChipAnimation,
+    scrambleEnabled: streamScramble.enabled,
+  });
+
+  const rowsFor = (id: DeveloperSectionId): DevRow[] => {
+    switch (id) {
+      case "kb":
+        return kbRows({
+          seedKbBusy,
+          onInstall: runInstallSeedKb,
+          hybrid: props.ragHybridRetrievalEnabled,
+          setHybrid: props.setRagHybridRetrievalEnabled,
+        });
+      case "diagnostics":
+        return diagnosticsRows({
+          hud: props.showOnscreenDebugHud,
+          setHud: props.setShowOnscreenDebugHud,
+          warm: props.devPreloadAskModel,
+          setWarm: props.setDevPreloadAskModel,
+          onSteamInputPhase1Jump,
+          capturedErrors,
+          onClearErrors,
+          lastConnectionStatus,
+        });
+      case "navigation":
+        return navigationRows({ tabResumeMode: props.tabResumeMode, setTabResumeMode: props.setTabResumeMode });
+      case "logging":
+        return loggingRows({
+          desktopAppLogLevel: props.desktopAppLogLevel,
+          setDesktopAppLogLevel: props.setDesktopAppLogLevel,
+          filesystemWrite: props.filesystemWrite,
+          onJumpToPermission: props.onJumpToPermission,
+          autoSave: props.desktopDebugNoteAutoSave,
+          setAutoSave: props.setDesktopDebugNoteAutoSave,
+          verbose: props.desktopAskVerboseLogging,
+          setVerbose: props.setDesktopAskVerboseLogging,
+          forceChips: props.devForceSessionRagChips,
+          setForceChips: props.setDevForceSessionRagChips,
+          frozenChips: props.devFrozenTestChips,
+          setFrozenChips: props.setDevFrozenTestChips,
+        });
+      case "animations":
+        return animationsRows({
+          presetChipAnimation: props.presetChipAnimation,
+          setPresetChipAnimation: props.setPresetChipAnimation,
+          streamScramble,
+          onStreamScrambleChange: props.onStreamScrambleChange,
+        });
+      case "integrations":
+        return integrationsRows({ steamWebApiKey: props.steamWebApiKey, setSteamWebApiKey: props.setSteamWebApiKey });
+    }
+  };
+
   return (
     <div
-      className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight bonsai-settings-section-stack"
+      className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight bonsai-settings-section-stack bonsai-folded-tab"
       data-bonsai-tab-panel="developer"
     >
-      {onInstallSeedKnowledgeBase ? (
-        <PanelSection title="Knowledge base (dev QA)">
-          <PanelSectionRow>
-            <div className="bonsai-settings-bleed" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
-              Public HF/GitHub download is not live yet. <strong>build.ps1</strong> copies a seed corpus (DRG
-              Survivor + OoT alias sample) to the Deck. Install it into <code>~/.bonsai/rag</code> for Phase 1
-              testing. Hybrid retrieval also needs vectorized seed + <strong>nomic-embed-text</strong> on your Ask
-              Ollama host.
-            </div>
-          </PanelSectionRow>
-          <PanelSectionRow>
-            <div className={FOCUS_RING_ITEM_HOST_CLASS}>
-              <ButtonItem layout="below" disabled={seedKbBusy} onClick={runInstallSeedKb}>
-                {seedKbBusy ? "Installing seed knowledge base…" : "Install seed knowledge base"}
-              </ButtonItem>
-            </div>
-          </PanelSectionRow>
-          <PanelSectionRow>
-            <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-              <ToggleField
-                label="Hybrid retrieval (meaning search)"
-                description="On, the knowledge base ranks cards by keyword match and meaning together. Off, it uses keyword match only — cards still attach, and Show details says Keyword search (hybrid disabled). Turn it off to tell a retrieval problem apart from an embedding one."
-                checked={ragHybridRetrievalEnabled}
-                onChange={(checked) => setRagHybridRetrievalEnabled(checked)}
-              />
-            </div>
-          </PanelSectionRow>
-        </PanelSection>
-      ) : null}
-      <PanelSection title="Diagnostics">
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="On-screen debug HUD"
-              description="Shows a small translucent log at the bottom of the plugin (focus, tab changes, ingest). Off by default so Settings and connection UI stay readable."
-              checked={showOnscreenDebugHud}
-              onChange={(checked) => setShowOnscreenDebugHud(checked)}
+      <FoldedColumn>
+        {shown.map((section) => (
+          <FoldedSection
+            key={section.id}
+            tab={DEVELOPER_FOLD_TAB}
+            chain={chain}
+            id={section.id}
+            title={developerSectionTitle(section.id)}
+            summary={summaries[section.id]}
+          >
+            <SectionRows
+              rows={rowsFor(section.id)}
+              wiring={{
+                up: () => takeFoldLine(DEVELOPER_FOLD_TAB, section.id),
+                down: () => foldLineBelow(DEVELOPER_FOLD_TAB, chain, section.id),
+                hosts: hostsFor(section.id),
+              }}
             />
-            <ToggleField
-              label="Warm the Ask model at boot"
-              description="Loads the default Ask model into memory when the plugin starts, so the first question skips the cold load. Only ever warms a model of 3B parameters or under, and skips quietly if memory is tight — no error, no stuck status line."
-              checked={devPreloadAskModel}
-              onChange={(checked) => setDevPreloadAskModel(checked)}
-            />
-          </div>
-        </PanelSectionRow>
-        {onSteamInputPhase1Jump ? (
-          <PanelSectionRow>
-            <div className="bonsai-settings-bleed" style={{ fontSize: textPx(12), color: "#9fb7d5", marginBottom: 6 }}>
-              Experimental: opens per-game controller configuration for the running game. Requires a focused/running
-              title.
-            </div>
-            <div className={FOCUS_RING_ITEM_HOST_CLASS}>
-              <ButtonItem layout="below" onClick={onSteamInputPhase1Jump}>
-                Jump to Steam Input (running game)
-              </ButtonItem>
-            </div>
-          </PanelSectionRow>
-        ) : null}
-        <PanelSectionRow>
-          <div style={{ fontSize: textPx(13), color: "gray", marginBottom: 4 }}>
-            Captured runtime errors appear below.
-          </div>
-        </PanelSectionRow>
-        {capturedErrors.length > 0 ? (
-          <PanelSectionRow>
-            <div className={FOCUS_RING_ITEM_HOST_CLASS}>
-              <ButtonItem layout="below" onClick={onClearErrors}>
-                <span style={{ fontSize: textPx(12) }}>Clear ({capturedErrors.length})</span>
-              </ButtonItem>
-            </div>
-          </PanelSectionRow>
-        ) : null}
-        {capturedErrors.length === 0 ? (
-          <PanelSectionRow>
-            <div style={{ color: "gray", fontSize: textPx(13) }}>No errors captured.</div>
-          </PanelSectionRow>
-        ) : (
-          capturedErrors.map((err, i) => (
-            <PanelSectionRow key={`err-${i}`}>
-              <Focusable
-                onActivate={() => {}}
-                noFocusRing={false}
-                style={{
-                  background: "#111",
-                  padding: 8,
-                  color: "tomato",
-                  whiteSpace: "pre-wrap",
-                  fontSize: textPx(11),
-                  lineHeight: "1.3",
-                  borderRadius: 4,
-                  wordBreak: "break-word",
-                }}
-              >
-                {err}
-              </Focusable>
-            </PanelSectionRow>
-          ))
-        )}
-        {lastConnectionStatus?.reachable && lastConnectionStatus.ps_loaded && lastConnectionStatus.ps_loaded.length > 0 ? (
-          <PanelSectionRow>
-            <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: textPx(11), color: "#b8dfe8", lineHeight: 1.4 }}>
-              <div style={{ fontWeight: 600, marginBottom: 4, color: "#9fb7d5" }}>
-                Last connection test — loaded models (GPU share)
-              </div>
-              {lastConnectionStatus.ps_loaded.map((m) => (
-                <div key={m.name} style={{ marginBottom: 6 }}>
-                  <span style={{ color: "#9ce7ff" }}>{m.name}</span>
-                  {m.vram_weight_share_pct_appx != null ? (
-                    <>
-                      {": "}
-                      <span style={{ fontVariantNumeric: "tabular-nums" }}>
-                        ~{m.vram_weight_share_pct_appx}% in GPU-visible VRAM ({m.size_vram_bytes} / {m.size_bytes} B)
-                      </span>
-                    </>
-                  ) : (
-                    <span style={{ color: "#9fb7d5" }}>: (no size split from Ollama)</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </PanelSectionRow>
-        ) : null}
-      </PanelSection>
+          </FoldedSection>
+        ))}
+      </FoldedColumn>
 
-      <PanelSection title="Navigation">
-        <PanelSectionRow>
-          {/*
-            Same shape as the app-log-level row below: one `Focusable` with horizontal flow owning
-            three leaf `Button`s. That row is shipped and its D-pad behaviour is known good, so the
-            new control inherits a focus graph rather than inventing one.
-          */}
-          <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13), marginBottom: 6 }}>
-              Tab to open on (D15)
-            </div>
-            <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-              {tabResumeModeDescription[tabResumeMode]} Takes effect the next time you close and
-              reopen the plugin.
-            </div>
-            <Focusable
-              flow-children="horizontal"
-              style={{ display: "flex", gap: 6, width: "100%", minWidth: 0, maxWidth: "100%", alignItems: "stretch" }}
-            >
-              {TAB_RESUME_MODE_OPTIONS.map((mode) => {
-                const active = mode === tabResumeMode;
-                return (
-                  <Button
-                    className={FOCUS_RING_BTN_CLASS}
-                    key={mode}
-                    onClick={() => setTabResumeMode(mode)}
-                    style={{
-                      flex: 1,
-                      minHeight: 36,
-                      fontSize: textPx(12),
-                      fontWeight: 600,
-                      padding: "4px 4px",
-                      borderRadius: 4,
-                      border: active ? "1px solid rgba(56,189,248,0.55)" : "1px solid rgba(255,255,255,0.12)",
-                      background: active
-                        ? "linear-gradient(180deg, rgba(56,189,248,0.22) 0%, rgba(14,116,144,0.35) 100%)"
-                        : "rgba(255,255,255,0.04)",
-                      color: active ? "#e0f2fe" : "#9fb0c0",
-                    }}
-                    aria-label={`${tabResumeModeLabel[mode]}: ${tabResumeModeDescription[mode]}`}
-                  >
-                    {tabResumeModeLabel[mode]}
-                  </Button>
-                );
-              })}
-            </Focusable>
-          </div>
-        </PanelSectionRow>
-      </PanelSection>
-
-      <PanelSection title="Logging & exports">
-        <PanelSectionRow>
-          <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13), marginBottom: 6 }}>
-              App activity logging to Desktop
-            </div>
-            <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-              {desktopAppLogLevelDescription[desktopAppLogLevel]} Writes{" "}
-              <span style={{ color: "#9ce7ff" }}>bonsai-app-YYYY-MM-DD.log</span> under Desktop/bonsAI_logs/.
-              {!filesystemWrite ? (
-                onJumpToPermission ? (
-                  <div style={{ marginTop: 6 }}>
-                    <PermissionDenyAction
-                      capability="filesystem_write"
-                      message="Enable Save files to Desktop in Permissions to save logs."
-                      onJump={onJumpToPermission}
-                      compact
-                    />
-                  </div>
-                ) : (
-                <span style={{ display: "block", marginTop: 6, color: "#fbbf24" }}>
-                  Enable Save files to Desktop in Permissions to save logs.
-                </span>
-                )
-              ) : null}
-            </div>
-            <Focusable
-              flow-children="horizontal"
-              style={{ display: "flex", gap: 6, width: "100%", minWidth: 0, maxWidth: "100%", alignItems: "stretch" }}
-            >
-              {DESKTOP_APP_LOG_LEVEL_OPTIONS.map((level) => {
-                const active = level === desktopAppLogLevel;
-                return (
-                  <Button
-                    className={FOCUS_RING_BTN_CLASS}
-                    key={level}
-                    onClick={() => setDesktopAppLogLevel(level)}
-                    style={{
-                      flex: 1,
-                      minHeight: 36,
-                      fontSize: textPx(12),
-                      fontWeight: 600,
-                      padding: "4px 4px",
-                      borderRadius: 4,
-                      border: active ? "1px solid rgba(56,189,248,0.55)" : "1px solid rgba(255,255,255,0.12)",
-                      background: active
-                        ? "linear-gradient(180deg, rgba(56,189,248,0.22) 0%, rgba(14,116,144,0.35) 100%)"
-                        : "rgba(255,255,255,0.04)",
-                      color: active ? "#e0f2fe" : "#9fb0c0",
-                    }}
-                    aria-label={`${desktopAppLogLevelLabel[level]}: ${desktopAppLogLevelDescription[level]}`}
-                  >
-                    {desktopAppLogLevelLabel[level]}
-                  </Button>
-                );
-              })}
-            </Focusable>
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="Auto-save chat to Desktop notes"
-              description="Append Q+A to Desktop/bonsAI_logs/bonsai-chat-YYYY-MM-DD.md (UTC). Needs Save files to Desktop."
-              checked={desktopDebugNoteAutoSave}
-              onChange={(checked) => setDesktopDebugNoteAutoSave(checked)}
-            />
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="Verbose Ask logging to Desktop notes"
-              description="Full Ollama trace to bonsai-ask-trace-*.md under Desktop/bonsAI_logs. Can be large/sensitive."
-              checked={desktopAskVerboseLogging}
-              onChange={(checked) => setDesktopAskVerboseLogging(checked)}
-            />
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="Force session RAG chips (QA)"
-              description="Always fill preset carousel slots from the knowledge base instead of a 30% chance each, and reseed the chips immediately. For verifying SESSION-RAG-CHIPS-01 without waiting on the roll. Needs Use local knowledge base on and a covered game running."
-              checked={devForceSessionRagChips}
-              onChange={(checked) => setDevForceSessionRagChips(checked)}
-            />
-            <div style={{ marginTop: 10 }}>
-              <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13), marginBottom: 4 }}>
-                Frozen test chips (QA)
-              </div>
-              <div
-                className="bonsai-prose"
-                style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}
-              >
-                {devFrozenTestChips.length === 0 ? (
-                  <>
-                    None pinned — the carousel is sampling normally. A pinned batch replaces the
-                    carousel with exact questions in order and stops it reseeding, so a QA row is one
-                    press per case instead of typing the sentence. Set the list from the host while
-                    preparing a run.
-                  </>
-                ) : (
-                  <>
-                    <span style={{ color: "#9ce7ff" }}>{devFrozenTestChips.length} pinned.</span> The
-                    carousel is showing these and will not reseed. Session RAG chips are suppressed
-                    while a batch is active, so corpus-chip checks cannot pass until you clear it.
-                  </>
-                )}
-              </div>
-              {devFrozenTestChips.length > 0 ? (
-                <ol
-                  className="bonsai-prose"
-                  style={{ fontSize: textPx(11), color: "#c8d8ea", margin: "0 0 6px 0", paddingLeft: 18, lineHeight: 1.4 }}
-                >
-                  {devFrozenTestChips.map((text) => (
-                    <li key={text}>{text}</li>
-                  ))}
-                </ol>
-              ) : null}
-              {devFrozenTestChips.length > 0 ? (
-                <div className={FOCUS_RING_ITEM_HOST_CLASS}>
-                  <ButtonItem layout="below" onClick={() => setDevFrozenTestChips([])}>
-                    Clear frozen test chips
-                  </ButtonItem>
-                </div>
-              ) : null}
-            </div>
-          </div>
-        </PanelSectionRow>
-      </PanelSection>
-
-      <PanelSection title="Animations">
-        <DeveloperOptionRow
-          title="Preset suggestions"
-          options={PRESET_CHIP_ANIMATION_OPTIONS.map((mode) => ({
-            value: mode,
-            label: mode,
-            ariaLabel: `Preset animation: ${mode}`,
-          }))}
-          activeValue={presetChipAnimation}
-          onSelect={setPresetChipAnimation}
-        />
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="Scramble animation"
-              description="New answer text scrambles through symbols for a moment before it settles into letters, like the decode chips. Off by default."
-              checked={streamScramble.enabled}
-              onChange={(checked) => onStreamScrambleChange({ enabled: checked })}
-            />
-          </div>
-        </PanelSectionRow>
-        {streamScramble.enabled ? (
-          <DeveloperOptionRow
-            title="How letters settle"
-            description={streamScrambleStyleDescription[streamScramble.style]}
-            options={STREAM_SCRAMBLE_STYLE_OPTIONS.map((style) => ({
-              value: style,
-              label: streamScrambleStyleLabel[style],
-            }))}
-            activeValue={streamScramble.style}
-            onSelect={(style) => onStreamScrambleChange({ style })}
-          />
-        ) : null}
-        {streamScramble.enabled && streamScramble.style === "settle" ? (
-          <DeveloperOptionRow
-            title={`How long each letter scrambles: ${streamScramble.settleMs} ms`}
-            options={STREAM_SCRAMBLE_SETTLE_MS_CHOICES.map((ms) => ({
-              value: ms,
-              label: String(ms),
-            }))}
-            activeValue={streamScramble.settleMs}
-            onSelect={(settleMs) => onStreamScrambleChange({ settleMs })}
-          />
-        ) : null}
-        {streamScramble.enabled ? (
-          <DeveloperOptionRow
-            title="Scrambled letter colour"
-            options={STREAM_SCRAMBLE_COLOR_OPTIONS.map((color) => ({
-              value: color,
-              label: streamScrambleColorLabel[color],
-              ariaLabel: streamScrambleColorAriaLabel[color],
-            }))}
-            activeValue={streamScramble.color}
-            onSelect={(color) => onStreamScrambleChange({ color })}
-          />
-        ) : null}
-      </PanelSection>
-
-      <PanelSection title="Integrations">
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13), marginBottom: 4 }}>Steam Web API key</div>
-            <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}>
-              For the <span style={{ color: "#9ce7ff" }}>bonsai:vac-check</span> command. Enable Steam ban lookup in
-              Permissions. Stored on this device.
-            </div>
-            <div className="bonsai-settings-text-field-host">
-              <TextField
-                label=""
-                value={steamWebApiKey}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const v = e.target.value.slice(0, STEAM_WEB_API_KEY_MAX_LEN);
-                  setSteamWebApiKey(v);
-                }}
-              />
-            </div>
-          </div>
-        </PanelSectionRow>
-      </PanelSection>
+      {/* Room under the last line, so the last rows can scroll up clear of the strip and the button. */}
+      <div className="bonsai-fold-tail" aria-hidden="true" />
+      <TabHelpStrip tab={DEVELOPER_FOLD_TAB}>
+        <FoldAllButton tab={DEVELOPER_FOLD_TAB} sections={chainIds(chain)} />
+      </TabHelpStrip>
     </div>
   );
 };

@@ -13,6 +13,7 @@
     "src/components/ContextChipLadder.ringWalk.test.tsx",
     "src/components/ContextChipLadder.stillRow.test.tsx",
     "src/components/ContextChipLadder.test.tsx",
+    "src/components/DeveloperTab.folded.test.tsx",
     "src/components/DeveloperTab.test.tsx",
     "src/components/DrgGlossaryTermChip.placement.test.tsx",
     "src/components/DrgGlossaryTermChip.test.tsx",

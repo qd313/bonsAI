@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 912,
-  "edgeCount": 2926,
+  "fileCount": 919,
+  "edgeCount": 2970,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -324,32 +324,54 @@
     },
     "src/components/DeveloperOptionRow.tsx": {
       "imports": [
+        "src/components/developerRows.tsx",
+        "src/features/folded-tabs/DenseRow.tsx",
         "src/styles/sections/textPx.ts",
         "src/styles/settingsGlassButton.ts"
       ],
       "importedBy": [
-        "src/components/DeveloperTab.tsx"
+        "src/components/developerRowsAnimations.tsx",
+        "src/components/developerRowsLogging.tsx"
       ]
+    },
+    "src/components/DeveloperTab.folded.test.tsx": {
+      "imports": [
+        "src/components/DeveloperTab.tsx",
+        "src/features/folded-tabs/developerTabFolds.ts",
+        "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/features/folded-tabs/useHelpStrip.ts",
+        "src/features/stream-scramble/streamScrambleContext.ts"
+      ],
+      "importedBy": []
     },
     "src/components/DeveloperTab.test.tsx": {
       "imports": [
         "src/components/DeveloperTab.tsx",
+        "src/features/folded-tabs/developerTabFolds.ts",
+        "src/features/folded-tabs/foldedTabsStore.ts",
         "src/features/stream-scramble/streamScrambleContext.ts"
       ],
       "importedBy": []
     },
     "src/components/DeveloperTab.tsx": {
       "imports": [
-        "src/components/DeveloperOptionRow.tsx",
-        "src/components/PermissionDenyAction.tsx",
+        "src/components/developerConnectionStatus.ts",
+        "src/components/developerRows.tsx",
+        "src/components/developerRowsAnimations.tsx",
+        "src/components/developerRowsDiagnostics.tsx",
+        "src/components/developerRowsLogging.tsx",
+        "src/components/useDeveloperTabFocus.ts",
         "src/data/bonsaiSettingsSchema.ts",
+        "src/features/folded-tabs/FoldAllButton.tsx",
+        "src/features/folded-tabs/FoldedSection.tsx",
+        "src/features/folded-tabs/TabHelpStrip.tsx",
+        "src/features/folded-tabs/developerTabFolds.ts",
         "src/features/stream-scramble/streamScrambleContext.ts",
-        "src/styles/sections/textPx.ts",
-        "src/styles/settingsGlassButton.ts",
         "src/utils/deckyCall.ts",
         "src/utils/permissionDeepLink.ts"
       ],
       "importedBy": [
+        "src/components/DeveloperTab.folded.test.tsx",
         "src/components/DeveloperTab.test.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
@@ -1756,7 +1778,6 @@
         "src/utils/permissionDeepLink.ts"
       ],
       "importedBy": [
-        "src/components/DeveloperTab.tsx",
         "src/components/MainTab.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabScreenshotBrowser.tsx",
@@ -2151,6 +2172,8 @@
         "src/components/PermissionsTab.tsx",
         "src/components/SettingsTab.tsx",
         "src/components/ringTestProps.ts",
+        "src/features/folded-tabs/developerTabFolds.ts",
+        "src/features/folded-tabs/foldedTabsStore.ts",
         "src/styles/bonsaiScopeStylesheet.ts"
       ],
       "importedBy": []
@@ -2160,6 +2183,8 @@
         "src/components/DeveloperTab.tsx",
         "src/components/SettingsTab.tsx",
         "src/components/ringTestProps.ts",
+        "src/features/folded-tabs/developerTabFolds.ts",
+        "src/features/folded-tabs/foldedTabsStore.ts",
         "src/styles/bonsaiScopeStylesheet.ts"
       ],
       "importedBy": []
@@ -2497,6 +2522,70 @@
         "src/components/deck/DeckFocusSlider.test.ts"
       ]
     },
+    "src/components/developerConnectionStatus.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/DeveloperTab.tsx",
+        "src/components/developerRowsDiagnostics.tsx"
+      ]
+    },
+    "src/components/developerRows.tsx": {
+      "imports": [
+        "src/features/folded-tabs/DenseRow.tsx",
+        "src/styles/sections/textPx.ts",
+        "src/styles/settingsGlassButton.ts"
+      ],
+      "importedBy": [
+        "src/components/DeveloperOptionRow.tsx",
+        "src/components/DeveloperTab.tsx",
+        "src/components/developerRowsAnimations.tsx",
+        "src/components/developerRowsDiagnostics.tsx",
+        "src/components/developerRowsLogging.tsx"
+      ]
+    },
+    "src/components/developerRowsAnimations.tsx": {
+      "imports": [
+        "src/components/DeveloperOptionRow.tsx",
+        "src/components/developerRows.tsx",
+        "src/components/developerRowsDiagnostics.tsx",
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/features/folded-tabs/developerTabFolds.ts",
+        "src/features/folded-tabs/useHelpStrip.ts",
+        "src/features/stream-scramble/streamScrambleContext.ts",
+        "src/styles/sections/textPx.ts"
+      ],
+      "importedBy": [
+        "src/components/DeveloperTab.tsx"
+      ]
+    },
+    "src/components/developerRowsDiagnostics.tsx": {
+      "imports": [
+        "src/components/developerConnectionStatus.ts",
+        "src/components/developerRows.tsx",
+        "src/features/folded-tabs/DenseRow.tsx",
+        "src/features/folded-tabs/developerTabFolds.ts",
+        "src/styles/sections/textPx.ts"
+      ],
+      "importedBy": [
+        "src/components/DeveloperTab.tsx",
+        "src/components/developerRowsAnimations.tsx",
+        "src/components/developerRowsLogging.tsx"
+      ]
+    },
+    "src/components/developerRowsLogging.tsx": {
+      "imports": [
+        "src/components/DeveloperOptionRow.tsx",
+        "src/components/developerRows.tsx",
+        "src/components/developerRowsDiagnostics.tsx",
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/features/folded-tabs/developerTabFolds.ts",
+        "src/styles/sections/textPx.ts",
+        "src/utils/permissionDeepLink.ts"
+      ],
+      "importedBy": [
+        "src/components/DeveloperTab.tsx"
+      ]
+    },
     "src/components/icons.bonsaiGeometry.test.tsx": {
       "imports": [
         "src/components/icons.tsx"
@@ -2615,6 +2704,15 @@
         "src/test-harness/settledFontSize.ts"
       ],
       "importedBy": []
+    },
+    "src/components/useDeveloperTabFocus.ts": {
+      "imports": [
+        "src/features/folded-tabs/FoldedSection.tsx",
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts"
+      ],
+      "importedBy": [
+        "src/components/DeveloperTab.tsx"
+      ]
     },
     "src/components/useOllamaTabFocus.ts": {
       "imports": [
@@ -2748,6 +2846,8 @@
         "src/components/SettingsTabChatTextSizeRow.tsx",
         "src/components/SettingsTabConnectionTimeoutSlider.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
+        "src/components/developerRowsAnimations.tsx",
+        "src/components/developerRowsLogging.tsx",
         "src/components/textSizeEverywhere.test.tsx",
         "src/components/textSizeSurfaces.test.tsx",
         "src/data/bonsaiSettingsNormalizers.ts",
@@ -4153,9 +4253,12 @@
         "src/features/folded-tabs/useHelpStrip.ts"
       ],
       "importedBy": [
+        "src/components/DeveloperOptionRow.tsx",
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/components/developerRows.tsx",
+        "src/components/developerRowsDiagnostics.tsx",
         "src/features/folded-tabs/DenseRow.test.tsx"
       ]
     },
@@ -4180,6 +4283,7 @@
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/components/DeveloperTab.tsx",
         "src/components/OllamaTab.tsx",
         "src/features/folded-tabs/FoldAllButton.test.tsx"
       ]
@@ -4201,7 +4305,9 @@
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/components/DeveloperTab.tsx",
         "src/components/OllamaTab.tsx",
+        "src/components/useDeveloperTabFocus.ts",
         "src/components/useOllamaTabFocus.ts",
         "src/features/folded-tabs/FoldAllButton.test.tsx",
         "src/features/folded-tabs/FoldAllButton.tsx",
@@ -4226,6 +4332,7 @@
         "src/utils/chatPanelScroll.ts"
       ],
       "importedBy": [
+        "src/components/DeveloperTab.tsx",
         "src/components/OllamaTab.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx"
       ]
@@ -4242,6 +4349,14 @@
         "src/features/folded-tabs/sectionSummary.ts"
       ],
       "importedBy": [
+        "src/components/DeveloperTab.folded.test.tsx",
+        "src/components/DeveloperTab.test.tsx",
+        "src/components/DeveloperTab.tsx",
+        "src/components/SettingsDeveloperLeftoverRing.test.tsx",
+        "src/components/SettingsDeveloperWrappedRing.test.tsx",
+        "src/components/developerRowsAnimations.tsx",
+        "src/components/developerRowsDiagnostics.tsx",
+        "src/components/developerRowsLogging.tsx",
         "src/features/folded-tabs/developerTabFolds.test.ts"
       ]
     },
@@ -4278,10 +4393,14 @@
     "src/features/folded-tabs/foldedTabsStore.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/DeveloperTab.folded.test.tsx",
+        "src/components/DeveloperTab.test.tsx",
         "src/components/OllamaTab.focusRing.test.tsx",
         "src/components/OllamaTab.foldedWalk.test.tsx",
         "src/components/OllamaTab.modalReturnFocus.test.tsx",
         "src/components/OllamaTab.terseMode.test.tsx",
+        "src/components/SettingsDeveloperLeftoverRing.test.tsx",
+        "src/components/SettingsDeveloperWrappedRing.test.tsx",
         "src/features/folded-tabs/FoldAllButton.test.tsx",
         "src/features/folded-tabs/FoldAllButton.tsx",
         "src/features/folded-tabs/FoldedSection.test.tsx",
@@ -4333,7 +4452,9 @@
         "src/utils/tabBodyScrollPlan.ts"
       ],
       "importedBy": [
+        "src/components/DeveloperTab.folded.test.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/components/developerRowsAnimations.tsx",
         "src/features/folded-tabs/DenseRow.tsx",
         "src/features/folded-tabs/FoldedSection.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx",
@@ -4921,6 +5042,7 @@
         "src/components/SettingsTab.tsx",
         "src/components/SettingsTabConnectionTimeoutSlider.tsx",
         "src/components/SettingsTabUiScaleSection.tsx",
+        "src/components/useDeveloperTabFocus.ts",
         "src/components/useOllamaTabFocus.ts",
         "src/features/folded-tabs/useHelpStrip.ts",
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
@@ -5556,11 +5678,13 @@
         "src/data/bonsaiSettingsSchema.ts"
       ],
       "importedBy": [
+        "src/components/DeveloperTab.folded.test.tsx",
         "src/components/DeveloperTab.test.tsx",
         "src/components/DeveloperTab.tsx",
         "src/components/MainTab.streamScramble.test.tsx",
         "src/components/MainTab.tsx",
         "src/components/StreamMarkdownPieces.test.tsx",
+        "src/components/developerRowsAnimations.tsx",
         "src/components/ringTestProps.ts",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.tsx",
@@ -7639,7 +7763,6 @@
         "src/components/ContextChipLadder.tsx",
         "src/components/DesktopNoteSaveModal.tsx",
         "src/components/DeveloperOptionRow.tsx",
-        "src/components/DeveloperTab.tsx",
         "src/components/DrgGlossaryTermChip.tsx",
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/MainTab.tsx",
@@ -7670,6 +7793,10 @@
         "src/components/StrategyChecklistPanel.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
         "src/components/deck/DeckFocusSlider.tsx",
+        "src/components/developerRows.tsx",
+        "src/components/developerRowsAnimations.tsx",
+        "src/components/developerRowsDiagnostics.tsx",
+        "src/components/developerRowsLogging.tsx",
         "src/data/pluginQuickStartInstructions.tsx",
         "src/features/chat-slots/ChatSlotDeleteModal.tsx",
         "src/features/chat-slots/ChatSlotPickerModal.tsx",
@@ -7748,7 +7875,6 @@
         "src/components/AboutLinks.tsx",
         "src/components/CharacterPickerModal.tsx",
         "src/components/DeveloperOptionRow.tsx",
-        "src/components/DeveloperTab.tsx",
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/OllamaSavedHostsRows.tsx",
         "src/components/OllamaTab.tsx",
@@ -7761,6 +7887,7 @@
         "src/components/SettingsTabChatTextSizeRow.tsx",
         "src/components/SettingsTabUiScaleSection.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
+        "src/components/developerRows.tsx",
         "src/features/chat-slots/ChatSlotDeleteModal.tsx",
         "src/features/chat-slots/ChatSlotPickerModal.tsx",
         "src/features/folded-tabs/FoldAllButton.test.tsx",
@@ -10089,6 +10216,7 @@
         "src/components/PermissionsTab.tsx",
         "src/components/SettingsTab.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
+        "src/components/developerRowsLogging.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.tsx",
         "src/hooks/usePermissionJump.ts",
         "src/utils/permissionDeepLink.test.ts",

@@ -171,11 +171,6 @@
       "role": "Load/save/merge settings.json"
     },
     {
-      "path": "src/components/DeveloperTab.tsx",
-      "lines": 667,
-      "role": ""
-    },
-    {
       "path": "src/utils/buildAnswerBubbleElement.tsx",
       "lines": 653,
       "role": ""
@@ -199,6 +194,11 @@
       "path": "py_modules/backend/services/strategy_spoiler_policy.py",
       "lines": 622,
       "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/ollama_service.py",
+      "lines": 621,
+      "role": "Prompt build, Ollama HTTP, streaming"
     }
   ]
 }

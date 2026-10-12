@@ -1,0 +1,21 @@
+{
+  "row": "P91-MODELS-DONE-KEEPS",
+  "build_commit": "b6d8e9a6 (no AI models file differs from 4e668a54)",
+  "deck_time_local": "2026-10-12 02:50 to 02:55 EDT",
+  "screen": "MONITOR live (Quick Access 855x766; Steam main window 1500x844)",
+  "setup": "Start state as in P91-MODELS-WIDTH. Queue line read 'Queue 0 - < 0.1 GB' before Done (nothing queued).",
+  "pressed": "DOWN x7 from Clear (each read) to Vision, A; DOWN x6 (each read) to Done, A on Done; A on 'AI models' (ring read first); DOWN x9 from Advanced (each read) to Vision, A; B.",
+  "seen": {
+    "after_A_on_Vision": "Vision ticked, 3 models match, 3 rows",
+    "before_Done": "ring on Done, Queue 0, 3 ticks on: Also try open-weight, Vision, Deck essentials only",
+    "after_Done": "box closed (no box in the Steam window); ring on the 'AI models' button on the Ollama tab",
+    "after_reopen": "ring on Advanced; Vision still ticked (aria-pressed true); '3 models match', 3 rows; licence 'Also try open-weight models' still ticked; Deck essentials only still ticked",
+    "after_untick": "Vision off; count '4 models match', 4 rows; ticks on: Also try open-weight models and Deck essentials only (same as start)",
+    "after_B": "box gone; ring on 'AI models'; api/ps empty"
+  },
+  "expected": "Vision stays ticked after Done and reopen; the licence row as at the start; start state put back afterwards; B closes with the ring back on AI models.",
+  "verdict_part_a_vision_kept": "PASS: Vision was still ticked after Done and reopen.",
+  "verdict_part_b_licence_kept": "PASS: licence row unchanged (Also try open-weight models ticked).",
+  "verdict_part_c_restore_and_B": "PASS: Vision unticked, start state back, B closed the box, ring on 'AI models'.",
+  "side_effect": "none (Done pressed once with nothing queued; no model pulled or removed)"
+}

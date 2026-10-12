@@ -1,0 +1,18 @@
+{
+  "row": "P91-MODELS-COLUMN-FILTERS",
+  "build_commit": "b6d8e9a6 (no AI models file differs from 4e668a54)",
+  "deck_time_local": "2026-10-12 02:47 EDT",
+  "screen": "MONITOR live (Quick Access 855x766; Steam main window 1500x844)",
+  "setup": "Box open, start state: licence 'Also try open-weight models' ticked, Deck essentials only ticked, Vision and the rest off, '4 models match', 4 rows.",
+  "pressed": "UP (ring read: Vision) then A; UP x7 (each read, ring read: Clear) then A.",
+  "seen": {
+    "before": {"count_line": "4 models match", "rows_drawn": 4, "number_beside_Vision": "3 (Speed, Strategy, Expert and Vision all show 3)"},
+    "after_A_on_Vision": {"vision_aria_pressed": "true", "count_line": "3 models match", "rows_drawn": 3, "rows": ["gemma4:e2b-it-qat", "qwen3.5:4b", "qwen2.5vl:3b"], "number_beside_Vision": "3 (unchanged; all four Good for counts stayed 3)", "timing": "the list was already changed when my first read came back, about 3 s after the press (two tool calls). I did not measure under 1 s precisely."},
+    "after_A_on_Clear": {"vision_aria_pressed": "false", "good_for_all_off": true, "show": "Deck essentials only on, Installed only off, Recently added off", "licence": "'Also try open-weight models' still ticked, others off (same as start)", "count_line": "4 models match", "rows_drawn": 4, "ring": "stayed on Clear"}
+  },
+  "expected": "A on Vision changes the list within 1 s and the count line equals the rows drawn; Clear unticks Vision, restores Good for/Show defaults and leaves the licence ticked as at the start.",
+  "verdict_part_a_vision": "PASS: Vision ticked, the list went from 4 rows to 3 and the count line said 3 models match, equal to 3 rows drawn. The under-1-second timing was not measured to that precision (the change had already happened at my first read, about 3 s later).",
+  "verdict_part_b_clear": "PASS: Vision unticked, Good for and Show at defaults, licence row unchanged.",
+  "put_back": "Nothing to put back: Clear left every tick as at the start.",
+  "side_effect": "none"
+}

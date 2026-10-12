@@ -1,0 +1,27 @@
+{
+  "row": "P91-MODELS-WIDTH",
+  "build_commit": "b6d8e9a6 (deployed this block; the runbook said 4e668a54, but the checkout had moved 4 commits on; git diff 4e668a54..HEAD touches no AI models file)",
+  "deck_time_local": "2026-10-12 02:35 EDT",
+  "screen": "MONITOR live: Quick Access page window 855x766, screen 1500x843; Steam main window (where the box lives) 1500x844.",
+  "setup": "Deploy done (deck_deploy, loader ready). deck_openPlugin: tries 1 and 2 could not reach Steam's debugger (expected after a deploy); tries 3 and 4 sent the Quick Access chord but no pane showed (Home screen focused on Deep Rock Galactic: Survivor tile, no game running); try 5 opened the plugin (ring on the question box, A never pressed). RB moved to Ollama tab; walked Down to 'AI models' (9 presses, walk tool reads each), A as its own press. Box opened with ring on 'Advanced ›'. START STATE: licence 'Also try open-weight models' ticked (the other two licence rows not); Good for: Speed, Strategy, Expert, Vision all off; Show: Deck essentials only ON, Installed only off, Recently added off; count line '4 models match'. Ollama api/ps empty.",
+  "pressed": ["RB", "DOWN x12 total via deck_walkTo (read after each by the tool)", "A on 'AI models'"],
+  "seen": {
+    "dialog_outer_rect_xywh": [420, 90.8, 660, 660.9],
+    "dialog_inner_rect_xywh": [463.5, 123.3, 572.9, 595.8],
+    "box_shell_rect_xywh": [463.5, 161.3, 572.9, 491.9],
+    "filters_column_rect_xywh": [463.5, 216.3, 170, 436.9],
+    "split_rect_xywh": [463.5, 216.3, 568.9, 436.9],
+    "list_side_rect_xywh": [641.5, 216.3, 390.9, 436.9],
+    "list_rect_xywh": [641.5, 246.3, 390.9, 406.9],
+    "header_columns_left_to_right_x_width": [["PULL", 645.5, 26], ["MODEL", 675.5, 118.6], ["SIZE", 798.1, 36], ["MODES", 838.1, 50.4], ["DECK FIT", 892.5, 40], ["TRY", 936.5, 64], ["DEL", 1004.5, 24]],
+    "date_column_present": false,
+    "model_column_width_header": 118.6,
+    "model_column_width_first_rows": [117.5, 118.6, 118.6, 117.5],
+    "rows_shown": 4,
+    "names_cut_off": "2 of 4 (gemma4:e2b-it-qat 66 visible of 85; nomic-embed-text:latest 66 visible of 108). qwen3.5:4b and qwen2.5vl:3b whole.",
+    "m_a_comparison": "M-A had 2 of 4 cut off and a 124.3 px Model column; now 2 of 4 and 118.6 px (4.6 percent narrower)."
+  },
+  "expected": "No Date column; Model column at least 112 px (no more than 10 percent narrower than 124.3); count of cut names compared with M-A (2 of 4).",
+  "verdict": "PASS: Date column gone (7 header columns, no DATE); Model column 118.6 px, at least 112. Cut-off names: 2 of 4, same as M-A (no change).",
+  "screenshot": "plan92-P91-MODELS-WIDTH.png"
+}

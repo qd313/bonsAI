@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 885,
-  "edgeCount": 2790,
+  "fileCount": 886,
+  "edgeCount": 2792,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1528,12 +1528,12 @@
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/SettingsTabConnectionTimeoutSlider.tsx",
         "src/components/SettingsTabOllamaKeepAliveSlider.tsx",
+        "src/components/useOllamaTabFocus.ts",
         "src/data/askThinkEffort.ts",
         "src/data/bonsaiSettingsSchema.ts",
         "src/data/modelPolicy.ts",
         "src/data/replyVerbosity.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
-        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/hooks/useThinkingNoticeGate.tsx",
         "src/styles/sections/textPx.ts",
         "src/styles/settingsGlassButton.ts"
@@ -2571,6 +2571,15 @@
         "src/test-harness/settledFontSize.ts"
       ],
       "importedBy": []
+    },
+    "src/components/useOllamaTabFocus.ts": {
+      "imports": [
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts"
+      ],
+      "importedBy": [
+        "src/components/OllamaTab.tsx"
+      ]
     },
     "src/context/UiScaleContext.tsx": {
       "imports": [
@@ -4377,6 +4386,7 @@
         "src/components/SettingsTab.clearAllBack.test.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
         "src/components/SettingsTab.tsx",
+        "src/components/useOllamaTabFocus.ts",
         "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/chat-slots/useChatSlotDeleteConfirm.test.tsx",
         "src/features/chat-slots/useChatSlotDeleteConfirm.tsx",
@@ -4780,11 +4790,11 @@
       "importedBy": [
         "src/components/AboutLinks.tsx",
         "src/components/KnowledgeBaseSection.tsx",
-        "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/SettingsTab.tsx",
         "src/components/SettingsTabConnectionTimeoutSlider.tsx",
         "src/components/SettingsTabUiScaleSection.tsx",
+        "src/components/useOllamaTabFocus.ts",
         "src/features/folded-tabs/useHelpStrip.ts",
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",

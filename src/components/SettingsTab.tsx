@@ -8,6 +8,11 @@
  * clearing cached data or wiping everything back to a fresh install.
  * Nothing about talking to Ollama lives here — that is the whole Ollama tab.
  *
+ * Folded (plan 91 § 2b, plan 92 T1): each of the ten sections is one line (FoldedSection) showing a summary
+ * of its values; A opens or closes it, several can be open at once. Inside, one line per setting; a row's
+ * longer text shows in the help strip at the bottom of the panel while the ring is on it; the floating
+ * Open all button opens or closes every section. UI scale is a section only while the Developer tab is on.
+ *
  * Used for: The Settings tab in index.tsx.
  *
  * Solves: One tab for every general plugin setting that is not about
@@ -20,118 +25,71 @@
  * How it works:
  *
  *     ┌─ Settings tab ─────────────────────────────────────┐
- *     │ UI scale               <- its own file, see         │
- *     │                           SettingsTabUiScaleSection  │
- *     │ Screenshot quality     <- Save memory / Balanced /   │
- *     │                           Best detail                │
+ *     │ UI scale               <- Developer tab on only; its  │
+ *     │                           own file, see               │
+ *     │                           SettingsTabUiScaleSection   │
+ *     │ Screenshot quality     <- Save memory / Balanced /    │
+ *     │                           Best detail                 │
  *     │ Text size              <- Small / Normal / Large,     │
- *     │                           its own file, see          │
- *     │                           SettingsTabChatTextSizeRow │
- *     │ Remember what I typed  <- one on/off switch          │
+ *     │                           its own file, see           │
+ *     │                           SettingsTabChatTextSizeRow  │
+ *     │ Remember what I typed  <- one on/off switch           │
  *     │ Story spoilers         <- hide-until-tap toggle       │
  *     │ Suggestion chips       <- one chip vs two toggle      │
  *     │ Voice input            <- its own file, see           │
  *     │                           VoiceInputSettingsSection   │
  *     │ Voice replies          <- Off / By voice / Always     │
- *     │ AI voice & personality <- toggle + character picker   │
- *     │                           button + accent intensity   │
- *     │                           popover menu                │
- *     │ Data                   <- Show Developer tab toggle   │
- *     │ Clear cache… / Clear all data…  <- two buttons        │
- *     │                                    side by side       │
+ *     │ AI voice & personality <- its own file, see           │
+ *     │                           SettingsTabCharacterSection │
+ *     │ Data                   <- its own file, see           │
+ *     │                           SettingsTabDataSection      │
  *     └───────────────────────────────────────────────────────┘
  *
- * 1. Most rows here are a plain toggle or a horizontal row of buttons built
- *    from a fixed option list, each one reading and writing a setting
- *    directly with no local state of its own.
- * 2. Two settings sections are big enough to live in their own file and are
- *    just dropped in here: SettingsTabUiScaleSection and
- *    VoiceInputSettingsSection.
- * 3. The AI voice & personality block is the one row with real local state:
- *    accentIntensityMenuOpen, tracking whether its own popover menu is
- *    open. toggleAccentIntensityMenu() flips it, guarded against firing
- *    twice for one press — see the gotcha below.
- * 4. That popover's open/closed state survives a remount of this whole tab
- *    (leaving Settings and coming back) through
- *    registerSettingsTabLocalGetter()/consumeSettingsTabLocalPending(),
- *    rather than resetting to closed every time.
- * 5. Clear cache and Clear all data both open a Steam ConfirmModal before
- *    doing anything, and both remember which button to return focus to
- *    once that modal closes.
- *
- * Gotchas: The accent intensity button carries both an onClick and an
- * onOKButton handler pointed at the same toggle, because a plain onClick
- * alone was not enough to catch a gamepad A press reliably elsewhere in
- * this plugin. Both can fire for a single press, so
- * accentIntensityMenuToggleOnceRef guards the toggle from running twice in
- * one press, which would open and immediately close the menu again.
+ * 1. The sections and their words live in features/folded-tabs/settingsTabFolds.ts; the chain the D-pad
+ *    follows between them in useSettingsTabFocus.ts. This file wraps each section's rows in a
+ *    FoldedSection inside one FoldedColumn and hands each section's first control Up (to its line) and its
+ *    last control Down (to the next line).
+ * 2. Most rows here are a plain switch or a row of buttons built from a fixed option list, each one
+ *    reading and writing a setting directly with no local state of its own.
+ * 3. Clear cache and Clear all data both open a Steam ConfirmModal before doing anything (see
+ *    SettingsTabDataSection); the accent menu's open state survives a remount of the tab (see
+ *    SettingsTabCharacterSection).
  */
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React from "react";
+import { PanelSection, PanelSectionRow } from "@decky/ui";
 import {
-  PanelSection,
-  PanelSectionRow,
-  ToggleField,
-  Button,
-  Focusable,
-  showModal,
-  ConfirmModal,
-} from "@decky/ui";
-import { SCREENSHOT_ATTACHMENT_PRESET_OPTIONS, VOICE_REPLY_MODE_OPTIONS, type ScreenshotAttachmentPreset, type UnifiedInputPersistenceMode, type VoiceReplyMode } from "../data/bonsaiSettingsSchema";
-import {
-  AI_CHARACTER_ACCENT_INTENSITY_OPTIONS,
-  type AiCharacterAccentIntensityId,
-} from "../data/aiCharacterAccentIntensity";
-import { formatAiCharacterSelectionLine } from "../data/characterCatalog";
-import { SettingsTabAccentIntensityMenuPopover } from "./SettingsTabAccentIntensityMenuPopover";
-import { elementHasGamepadFocus } from "../utils/uiDocument";
-import { ASK_LABEL_COLOR_50 } from "../features/unified-input/constants";
-import {
-  consumeSettingsTabLocalPending,
-  peekSettingsTabLocalPending,
-  registerSettingsTabLocalGetter,
-  unregisterSettingsTabLocalGetter,
-} from "../utils/settingsTabLocalSurvival";
+  SCREENSHOT_ATTACHMENT_PRESET_OPTIONS,
+  VOICE_REPLY_MODE_OPTIONS,
+  type ScreenshotAttachmentPreset,
+  type UnifiedInputPersistenceMode,
+  type VoiceReplyMode,
+} from "../data/bonsaiSettingsSchema";
+import type { AiCharacterAccentIntensityId } from "../data/aiCharacterAccentIntensity";
 import { VoiceInputSettingsSection } from "./VoiceInputSettingsSection";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import { SettingsTabUiScaleSection } from "./SettingsTabUiScaleSection";
 import { SettingsTabChatTextSizeRow, type ChatTextSizeSetting } from "./SettingsTabChatTextSizeRow";
+import { SettingsTabChoiceRow } from "./SettingsTabChoiceRow";
+import { SettingsTabCharacterSection } from "./SettingsTabCharacterSection";
+import { SettingsTabDataSection } from "./SettingsTabDataSection";
+import { useSettingsTabFocus } from "./useSettingsTabFocus";
 import type { UiScaleProfileId } from "../data/uiScaleProfile";
 import type { VoiceSttModelId } from "../data/bonsaiSettingsSchema";
+import { chainIds, FoldedColumn, FoldedSection, foldLineBelow, takeFoldLine } from "../features/folded-tabs/FoldedSection";
+import { FoldAllButton } from "../features/folded-tabs/FoldAllButton";
+import { TabHelpStrip } from "../features/folded-tabs/TabHelpStrip";
+import { DenseSwitchRow } from "../features/folded-tabs/DenseRow";
 import {
-  registerModalReturnFocusOwner,
-  rememberModalReturnFocus,
-} from "../features/plugin-shell/modalReturnFocusRegistry";
-import { FOCUS_RING_BTN_CLASS, FOCUS_RING_INSET_CLASS, FOCUS_RING_WRAP_CLASS } from "../styles/settingsGlassButton";
-import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
-import { textPx } from "../styles/sections/textPx";
-const voiceReplyModeLabel: Record<VoiceReplyMode, string> = {
-  off: "Off",
-  voice_only: "When I asked by voice",
-  always: "Always",
-};
-const voiceReplyModeShortLabel: Record<VoiceReplyMode, string> = {
-  off: "Off",
-  voice_only: "By voice",
-  always: "Always",
-};
-const voiceReplyModeDescription: Record<VoiceReplyMode, string> = {
-  off: "Answers are read only when you press Read aloud.",
-  voice_only: "An answer to a question you asked by voice is read out on its own.",
-  always: "Every answer is read out on its own.",
-};
-
-const screenshotPresetLabel: Record<ScreenshotAttachmentPreset, string> = {
-  low: "Save memory",
-  mid: "Balanced",
-  max: "Best detail",
-};
-
-const accentIntensityOutline: Record<AiCharacterAccentIntensityId, string> = {
-  subtle: "#eab308",
-  balanced: "#f97316",
-  heavy: "#b91c1c",
-  unleashed: "#a855f7",
-};
+  SCREENSHOT_PRESET_LABEL,
+  SETTINGS_FOLD_TAB,
+  SETTINGS_ROW_HELP,
+  SETTINGS_SECTIONS,
+  VOICE_REPLY_MODE_DESCRIPTION,
+  VOICE_REPLY_MODE_LABEL,
+  VOICE_REPLY_MODE_SHORT_LABEL,
+  settingsSectionSummaries,
+  type SettingsSectionId,
+} from "../features/folded-tabs/settingsTabFolds";
 
 export type SettingsTabProps = {
   screenshotAttachmentPreset: ScreenshotAttachmentPreset;
@@ -180,18 +138,7 @@ export type SettingsTabProps = {
   onCompleteDeckyModalClose: (close: () => void) => void;
   onResetSession: () => void;
   onClearAllPluginData: () => void | Promise<void>;
-
-
 };
-
-/**
- * Up from the screenshot-quality row goes to the UI scale Apply button above it. With that section
- * hidden (Developer tab off) this row is the top of the tab, so it keeps no Up handler and Steam's
- * own Up to the tab header takes over, as it did from the UI scale toggle.
- */
-export function screenshotQualityRowNav(focusUiScaleApply: (() => boolean) | null): Record<string, unknown> {
-  return focusUiScaleApply ? { onMoveUp: () => focusUiScaleApply() } : {};
-}
 
 /**
  * The whole tab. See "How it works" above for the layout and flow.
@@ -200,7 +147,7 @@ export function screenshotQualityRowNav(focusUiScaleApply: (() => boolean) | nul
  * character's current selection (to preview it on the picker button), and
  * callbacks to open the character picker, clear the session, wipe all
  * plugin data, and manage a nested Decky modal's focus handoff.
- * Out: the panel sections in the order drawn above.
+ * Out: the folded sections in the order drawn above.
  *
  * What can go wrong: nothing here talks to the backend directly except the
  * two Clear buttons — everything else is a settings read/write handed
@@ -241,475 +188,194 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   onResetSession,
   onClearAllPluginData,
 }) => {
-  const [accentIntensityMenuOpen, setAccentIntensityMenuOpen] = useState(
-    () => peekSettingsTabLocalPending()?.accentIntensityMenuOpen ?? false
+  const { chain, bodyRef } = useSettingsTabFocus(showDeveloperTab);
+  const summaries = settingsSectionSummaries({
+    uiScaleAutoEnabled,
+    screenshotAttachmentPreset,
+    chatTextSize: chatTextSizeSetting.value,
+    rememberTyped: unifiedInputPersistenceMode === "persist_all",
+    spoilerMasking: strategySpoilerMaskingEnabled,
+    singleChip: presetSingleChip,
+    voiceSttModel,
+    voiceReplyMode,
+    aiCharacterEnabled,
+    showDeveloperTab,
+  });
+  /** Up from a section's first control goes to its line; Down from its last goes to the next line. */
+  const up = (id: SettingsSectionId) => () => takeFoldLine(SETTINGS_FOLD_TAB, id);
+  const down = (id: SettingsSectionId) => () => foldLineBelow(SETTINGS_FOLD_TAB, chain, id);
+  const both = (id: SettingsSectionId) => ({ onMoveUp: up(id), onMoveDown: down(id) });
+  const fold = (id: SettingsSectionId, children: React.ReactNode) => (
+    <FoldedSection
+      key={id}
+      tab={SETTINGS_FOLD_TAB}
+      chain={chain}
+      id={id}
+      title={SETTINGS_SECTIONS.find((x) => x.id === id)?.title ?? id}
+      summary={summaries[id]}
+    >
+      <div ref={bodyRef(id)}>{children}</div>
+    </FoldedSection>
   );
-  const accentIntensityMenuAnchorRef = useRef<HTMLDivElement>(null);
-  const accentIntensityMenuFirstItemRef = useRef<HTMLDivElement>(null);
-  const accentIntensityMenuToggleOnceRef = useRef(false);
-  /** Steam's nav node for the wrapper around the accent control: the approved way to move the ring onto it. */
-  const accentTriggerNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
-  const screenshotDimensionNavRef = useRef<HTMLDivElement>(null);
-  const uiScaleApplyButtonRef = useRef<HTMLButtonElement>(null);
-
-  const focusScreenshotQualityRow = useCallback((): boolean => {
-    const host = screenshotDimensionNavRef.current;
-    if (!host) return false;
-    const target = host.querySelector<HTMLElement>("button:not([disabled])");
-    if (!target) return false;
-    focusInTabBody(target);
-    return true;
-  }, []);
-
-  const focusUiScaleApplyButton = useCallback((): boolean => {
-    const btn = uiScaleApplyButtonRef.current;
-    if (!btn || btn.disabled) return false;
-    focusInTabBody(btn);
-    return true;
-  }, []);
-
-  useLayoutEffect(() => {
-    const local = consumeSettingsTabLocalPending();
-    if (!local) return;
-    setAccentIntensityMenuOpen(local.accentIntensityMenuOpen);
-  }, []);
-
-  useEffect(() => {
-    registerSettingsTabLocalGetter(() => ({
-      accentIntensityMenuOpen,
-    }));
-    return () => unregisterSettingsTabLocalGetter();
-  }, [accentIntensityMenuOpen]);
-
-  const toggleAccentIntensityMenu = useCallback(() => {
-    if (accentIntensityMenuToggleOnceRef.current) return;
-    accentIntensityMenuToggleOnceRef.current = true;
-    setAccentIntensityMenuOpen((o) => !o);
-    requestAnimationFrame(() => {
-      accentIntensityMenuToggleOnceRef.current = false;
-    });
-  }, []);
-  const closeAccentIntensityMenu = useCallback(() => setAccentIntensityMenuOpen(false), []);
-  const focusAccentIntensityTrigger = useCallback((): boolean => {
-    const btn = accentIntensityMenuAnchorRef.current?.querySelector<HTMLElement>("button.bonsai-accent-intensity-trigger");
-    if (!btn) return false;
-    // The menu's rows are removed with the ring on one of them (a pick, or B), so nothing would own
-    // the ring (plan76-S3C.json). Steam's own transfer to the control first, its own focus if that
-    // did not land it.
-    try {
-      accentTriggerNavRef.current?.TakeFocus?.(true);
-    } catch {
-      /* the check below decides */
-    }
-    if (!elementHasGamepadFocus(btn.parentElement ?? btn)) focusInTabBody(btn);
-    return true;
-  }, []);
 
   return (
     <div
-      className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight bonsai-settings-section-stack"
+      className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight bonsai-settings-section-stack bonsai-folded-tab"
       data-bonsai-tab-panel="settings"
     >
-      {/* 0.6.0 (plan 72): Developer tab only, so no player lands on it. The size itself is held at
-          the default on load while the Developer tab is off (normalizeSettings). */}
-      {showDeveloperTab ? (
-        <SettingsTabUiScaleSection
-          uiScaleAutoEnabled={uiScaleAutoEnabled}
-          uiScaleManualProfile={uiScaleManualProfile}
-          appliedProfileId={appliedUiScaleProfileId}
-          onApply={onApplyUiScale}
-          applyButtonRef={uiScaleApplyButtonRef}
-          onMoveDownFromApply={focusScreenshotQualityRow}
-        />
-      ) : null}
-      <PanelSection title="Screenshot quality">
-        <PanelSectionRow>
-          <div
-            ref={screenshotDimensionNavRef}
-            className="bonsai-prose-host bonsai-settings-bleed"
-            style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}
-          >
-            <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-              For vision questions — lower quality uses less memory.
-            </div>
-            <Focusable
-              flow-children="horizontal"
-              style={{ display: "flex", gap: 6, width: "100%", minWidth: 0, maxWidth: "100%", alignItems: "stretch" }}
-              {...screenshotQualityRowNav(showDeveloperTab ? focusUiScaleApplyButton : null)}
-            >
-              {SCREENSHOT_ATTACHMENT_PRESET_OPTIONS.map((option) => {
-                const active = option === screenshotAttachmentPreset;
-                return (
-                  <Button
-                    className={FOCUS_RING_BTN_CLASS}
-                    key={`preset-${option}`}
-                    onClick={() => setScreenshotAttachmentPreset(option)}
-                    style={{
-                      flex: 1,
-                      minHeight: 36,
-                      fontSize: textPx(12),
-                      fontWeight: 600,
-                      padding: "4px 4px",
-                      borderRadius: 4,
-                      border: active ? "1px solid rgba(255,255,255,0.45)" : "1px solid rgba(255,255,255,0.12)",
-                      background: active
-                        ? "linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.1) 100%)"
-                        : "rgba(255,255,255,0.04)",
-                      color: active ? "#f0f4f8" : "#9fb0c0",
-                      boxShadow: active ? "inset 0 1px 0 rgba(255,255,255,0.15)" : "none",
-                    }}
-                    aria-label={`Set screenshot quality to ${screenshotPresetLabel[option]}`}
-                  >
-                    {screenshotPresetLabel[option]}
-                  </Button>
-                );
-              })}
-            </Focusable>
-          </div>
-        </PanelSectionRow>
-      </PanelSection>
-      <SettingsTabChatTextSizeRow setting={chatTextSizeSetting} />
-      <PanelSection title="Remember what I typed">
-        <PanelSectionRow>
-          <ToggleField
-            label="Remember what I typed"
-            description="On puts back what you typed in the question box when you reopen the plugin. Off clears it each time."
-            checked={unifiedInputPersistenceMode === "persist_all"}
-            onChange={(checked) => setUnifiedInputPersistenceMode(checked ? "persist_all" : "no_persist")}
-          />
-        </PanelSectionRow>
-      </PanelSection>
-      <PanelSection title="Story spoilers (Strategy mode)">
-        <PanelSectionRow>
-          <ToggleField
-            label="Hide spoilers until I tap"
-            description="Strategy mode masks spoiler sections until you choose to reveal them."
-            checked={strategySpoilerMaskingEnabled}
-            onChange={(checked) => setStrategySpoilerMaskingEnabled(checked)}
-          />
-        </PanelSectionRow>
-      </PanelSection>
-      <PanelSection title="Suggestion chips">
-        <PanelSectionRow>
-          <ToggleField
-            label="Show one chip instead of two"
-            description="The suggestion row above the question box shows one chip with the whole column, so its label reads more before it needs to scroll. Off shows two chips side by side — the default."
-            checked={presetSingleChip}
-            onChange={(checked) => setPresetSingleChip(checked)}
-          />
-        </PanelSectionRow>
-      </PanelSection>
-      <VoiceInputSettingsSection
-        voiceSttModel={voiceSttModel}
-        setVoiceSttModel={setVoiceSttModel}
-        microphoneAccessEnabled={microphoneAccessEnabled}
-        onJumpToPermission={onJumpToPermission}
-      />
-      <PanelSection title="Voice replies">
-        <PanelSectionRow>
-          <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-            <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-              {voiceReplyModeDescription[voiceReplyMode]}
-            </div>
-            <Focusable
-              flow-children="horizontal"
-              style={{ display: "flex", gap: 6, width: "100%", minWidth: 0, maxWidth: "100%", alignItems: "stretch" }}
-            >
-              {VOICE_REPLY_MODE_OPTIONS.map((mode) => {
-                const active = mode === voiceReplyMode;
-                return (
-                  <Button
-                    className={FOCUS_RING_BTN_CLASS}
-                    key={mode}
-                    onClick={() => {
-                      setVoiceReplyMode(mode);
-                    }}
-                    style={{
-                      flex: 1,
-                      minHeight: 36,
-                      fontSize: textPx(12),
-                      fontWeight: 600,
-                      padding: "4px 4px",
-                      borderRadius: 4,
-                      border: active ? "1px solid rgba(255,255,255,0.45)" : "1px solid rgba(255,255,255,0.12)",
-                      background: active
-                        ? "linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.1) 100%)"
-                        : "rgba(255,255,255,0.04)",
-                      color: active ? "#f0f4f8" : "#9fb0c0",
-                      boxShadow: active ? "inset 0 1px 0 rgba(255,255,255,0.15)" : "none",
-                    }}
-                    aria-label={`${voiceReplyModeLabel[mode]}: ${voiceReplyModeDescription[mode]}`}
-                  >
-                    {voiceReplyModeShortLabel[mode]}
-                  </Button>
-                );
-              })}
-            </Focusable>
-          </div>
-        </PanelSectionRow>
-      </PanelSection>
-      <PanelSection title="AI voice & personality">
-        <PanelSectionRow>
-          <div
-            className="bonsai-settings-ai-character-block"
-            style={{
-              width: "100%",
-              maxWidth: "100%",
-              minWidth: 0,
-              boxSizing: "border-box",
-            }}
-          >
-            <ToggleField
-              label="AI voice & personality"
-              description="Preset, random, or custom character tone in replies."
-              checked={aiCharacterEnabled}
-              onChange={(checked) => setAiCharacterEnabled(checked)}
+      <FoldedColumn>
+        {/* 0.6.0 (plan 72): Developer tab only, so no player lands on it. The size itself is held at
+            the default on load while the Developer tab is off (normalizeSettings). */}
+        {showDeveloperTab
+          ? fold(
+              "uiscale",
+              <SettingsTabUiScaleSection
+                uiScaleAutoEnabled={uiScaleAutoEnabled}
+                uiScaleManualProfile={uiScaleManualProfile}
+                appliedProfileId={appliedUiScaleProfileId}
+                onApply={onApplyUiScale}
+                onMoveUpFromFirst={up("uiscale")}
+                onMoveDownFromApply={down("uiscale")}
+              />,
+            )
+          : null}
+
+        {fold(
+          "screenshot",
+          <PanelSection>
+            <SettingsTabChoiceRow
+              label="Screenshot quality"
+              help={SETTINGS_ROW_HELP.screenshot}
+              options={SCREENSHOT_ATTACHMENT_PRESET_OPTIONS.map((option) => ({
+                id: option,
+                label: SCREENSHOT_PRESET_LABEL[option],
+                ariaLabel: `Set screenshot quality to ${SCREENSHOT_PRESET_LABEL[option]}`,
+              }))}
+              value={screenshotAttachmentPreset}
+              onPick={setScreenshotAttachmentPreset}
+              nav={both("screenshot")}
             />
-            {aiCharacterEnabled && (
-              <>
-                <Button
-                  className={`bonsai-ai-character-picker-open ${FOCUS_RING_BTN_CLASS}`}
-                  ref={(el: HTMLElement | null) =>
-                    registerModalReturnFocusOwner("character-picker-settings", el)
-                  }
-                  onClick={() => {
-                    rememberModalReturnFocus("character-picker-settings");
-                    onOpenCharacterPicker();
-                  }}
-                  style={{
-                    width: "100%",
-                    marginTop: 10,
-                    minHeight: 38,
-                    fontSize: textPx(12),
-                    fontWeight: 600,
-                    padding: "6px 10px",
-                    borderRadius: 4,
-                    border: "1px solid rgba(255,255,255,0.18)",
-                    background: "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%)",
-                    color: "#e8eef5",
-                    textAlign: "left",
-                  }}
-                >
-                  {formatAiCharacterSelectionLine({
-                    random: aiCharacterRandom,
-                    presetId: aiCharacterPresetId,
-                    customText: aiCharacterCustomText,
-                  })}
-                </Button>
-                <div
-                  className={
-                    "bonsai-settings-inline-menu-host" +
-                    (accentIntensityMenuOpen ? " bonsai-settings-accent-menu-open" : "")
-                  }
-                  style={{ marginTop: 12, width: "100%", maxWidth: "100%", minWidth: 0, position: "relative" }}
-                >
-                  <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13), marginBottom: 4 }}>
-                    Accent intensity
-                  </div>
-                  <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}>
-                    {
-                      AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.find((o) => o.id === aiCharacterAccentIntensity)
-                        ?.shortLabel ?? ""
-                    }{" "}
-                    — use the menu for full descriptions.
-                  </div>
-                  <div ref={accentIntensityMenuAnchorRef} style={{ display: "inline-flex", flexShrink: 0, position: "relative" }}>
-                    <Focusable
-                      className={FOCUS_RING_WRAP_CLASS}
-                      style={{ display: "flex", flexShrink: 0 }}
-                      onOKButton={toggleAccentIntensityMenu}
-                      {...({ navRef: accentTriggerNavRef } as Record<string, unknown>)}
-                    >
-                    <Button
-                      className={`bonsai-accent-intensity-trigger ${FOCUS_RING_BTN_CLASS} ${FOCUS_RING_INSET_CLASS}`}
-                      {...({
-                        onOKButton: (evt: { stopPropagation: () => void }) => {
-                          evt.stopPropagation();
-                          toggleAccentIntensityMenu();
-                        },
-                      } as Record<string, unknown>)}
-                      onClick={toggleAccentIntensityMenu}
-                      aria-expanded={accentIntensityMenuOpen}
-                      aria-haspopup="menu"
-                      aria-label={`Accent intensity: ${
-                        AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.find((o) => o.id === aiCharacterAccentIntensity)
-                          ?.shortLabel ?? ""
-                      }`}
-                      style={{
-                        minHeight: 26,
-                        padding: "4px 8px",
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: 4,
-                        borderRadius: 3,
-                        border: `1px solid ${accentIntensityOutline[aiCharacterAccentIntensity]}`,
-                        background: "transparent",
-                        color: ASK_LABEL_COLOR_50,
-                        flexShrink: 0,
-                        fontSize: textPx(10),
-                        fontWeight: 600,
-                        fontVariant: "small-caps",
-                        letterSpacing: 0.1,
-                        lineHeight: 1,
-                      }}
-                    >
-                      <span>
-                        {AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.find((o) => o.id === aiCharacterAccentIntensity)
-                          ?.shortLabel ?? ""}
-                      </span>
-                      <span style={{ color: "#7a8fa3", fontSize: textPx(9), lineHeight: 1 }} aria-hidden>
-                        ▾
-                      </span>
-                    </Button>
-                    </Focusable>
-                    <SettingsTabAccentIntensityMenuPopover
-                      open={accentIntensityMenuOpen}
-                      firstMenuItemRef={accentIntensityMenuFirstItemRef}
-                      selectedId={aiCharacterAccentIntensity}
-                      onSelect={(id) => setAiCharacterAccentIntensity(id)}
-                      onRequestClose={closeAccentIntensityMenu}
-                      onFocusTrigger={focusAccentIntensityTrigger}
-                    />
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </PanelSectionRow>
-      </PanelSection>
-      <PanelSection title="Data">
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="Show Developer tab"
-              description="Adds a Developer tab with logs, exports, and advanced tuning. Default off."
-              checked={showDeveloperTab}
-              onChange={(checked) => setShowDeveloperTab(checked)}
+          </PanelSection>,
+        )}
+
+        {fold(
+          "textsize",
+          <PanelSection>
+            <SettingsTabChatTextSizeRow setting={chatTextSizeSetting} nav={both("textsize")} />
+          </PanelSection>,
+        )}
+
+        {fold(
+          "remember",
+          <PanelSection>
+            <PanelSectionRow>
+              <DenseSwitchRow
+                label="Remember what I typed"
+                help={SETTINGS_ROW_HELP.remember}
+                checked={unifiedInputPersistenceMode === "persist_all"}
+                onChange={(checked) => setUnifiedInputPersistenceMode(checked ? "persist_all" : "no_persist")}
+                nav={both("remember")}
+              />
+            </PanelSectionRow>
+          </PanelSection>,
+        )}
+
+        {fold(
+          "spoilers",
+          <PanelSection>
+            <PanelSectionRow>
+              <DenseSwitchRow
+                label="Hide spoilers until I tap"
+                help={SETTINGS_ROW_HELP.spoilers}
+                checked={strategySpoilerMaskingEnabled}
+                onChange={(checked) => setStrategySpoilerMaskingEnabled(checked)}
+                nav={both("spoilers")}
+              />
+            </PanelSectionRow>
+          </PanelSection>,
+        )}
+
+        {fold(
+          "chips",
+          <PanelSection>
+            <PanelSectionRow>
+              <DenseSwitchRow
+                label="Show one chip instead of two"
+                help={SETTINGS_ROW_HELP.chips}
+                checked={presetSingleChip}
+                onChange={(checked) => setPresetSingleChip(checked)}
+                nav={both("chips")}
+              />
+            </PanelSectionRow>
+          </PanelSection>,
+        )}
+
+        {fold(
+          "voiceinput",
+          <VoiceInputSettingsSection
+            voiceSttModel={voiceSttModel}
+            setVoiceSttModel={setVoiceSttModel}
+            microphoneAccessEnabled={microphoneAccessEnabled}
+            onJumpToPermission={onJumpToPermission}
+            onMoveUpFromFirst={up("voiceinput")}
+            onMoveDownFromLast={down("voiceinput")}
+          />,
+        )}
+
+        {fold(
+          "voicereplies",
+          <PanelSection>
+            <SettingsTabChoiceRow
+              label="Voice replies"
+              help={VOICE_REPLY_MODE_DESCRIPTION[voiceReplyMode]}
+              options={VOICE_REPLY_MODE_OPTIONS.map((mode) => ({
+                id: mode,
+                label: VOICE_REPLY_MODE_SHORT_LABEL[mode],
+                ariaLabel: `${VOICE_REPLY_MODE_LABEL[mode]}: ${VOICE_REPLY_MODE_DESCRIPTION[mode]}`,
+              }))}
+              value={voiceReplyMode}
+              onPick={setVoiceReplyMode}
+              nav={both("voicereplies")}
             />
-          </div>
-        </PanelSectionRow>
-      </PanelSection>
-      {/*
-        Every other Settings button sits inside one of Steam's panel sections, which pads its rows
-        16 on each side (15.99 by scripts/probe_deck_ask_row_width.py). This row sits outside any
-        section, so on the Deck Clear cache... started at the column's own edge, 16 left of the
-        rest (plan72-Z-FREEPLAY.json finding 14: x 48 against x 64). The same 16 is padded in here,
-        raw rather than UI-scaled because Steam's own padding does not scale either.
-      */}
-      <Focusable
-        className="bonsai-settings-cache-row"
-        flow-children="horizontal"
-        style={{
-          width: "100%",
-          minWidth: 0,
-          maxWidth: "100%",
-          boxSizing: "border-box",
-          alignSelf: "stretch",
-          display: "flex",
-          flexDirection: "row",
-          gap: 8,
-          paddingLeft: 16,
-          paddingRight: 16,
-        }}
-      >
-        <Button
-          className={FOCUS_RING_BTN_CLASS}
-          ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("settings-clear-cache", el)}
-          onClick={() => {
-            rememberModalReturnFocus("settings-clear-cache");
-            onBeforeDeckyModal();
-            const handle = showModal(
-              <ConfirmModal
-                strTitle="Clear session cache?"
-                strDescription="Clears this session from RAM: input, reply, thread, transparency, branches, attachments, timers. Does not change settings.json, Ollama, or image files on disk."
-                /*
-                  Steam opens a confirm box with the ring on OK, so OK keeps everything and the
-                  clearing sits on the middle button (the Delete chat and Remove knowledge base
-                  boxes' shape): an A pressed by habit clears nothing. Cancel and B also change nothing.
-                */
-                strOKButtonText="Keep cache"
-                strMiddleButtonText="Clear"
-                strCancelButtonText="Cancel"
-                onOK={() => onCompleteDeckyModalClose(() => handle.Close())}
-                onMiddleButton={() => {
-                  onResetSession();
-                  onCompleteDeckyModalClose(() => handle.Close());
-                }}
-                onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
-              />
-            );
-          }}
-          style={{
-            flex: 1,
-            minWidth: 0,
-            minHeight: 38,
-            fontSize: textPx(12),
-            fontWeight: 600,
-            padding: "6px 10px",
-            borderRadius: 4,
-            border: "1px solid rgba(255,255,255,0.18)",
-            background: "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%)",
-            color: "#e8eef5",
-            boxSizing: "border-box",
-          }}
-        >
-          Clear cache...
-        </Button>
-        <Button
-          className={FOCUS_RING_BTN_CLASS}
-          ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("settings-clear-all-data", el)}
-          onClick={() => {
-            rememberModalReturnFocus("settings-clear-all-data");
-            /*
-              Tells the plugin shell which tab to come back to. Without it the shell came back to its
-              default, Main, so B on this box (or Cancel, or Keep my data) took the panel from Settings
-              to Main with the ring on "Main tab". Clear cache... above has always done this.
-            */
-            onBeforeDeckyModal();
-            const handle = showModal(
-              <ConfirmModal
-                strTitle="Clear all plugin data?"
-                strDescription={
-                  "This resets bonsAI like a fresh install for this device.\n\n" +
-                  "It deletes saved settings and permissions, runtime cache and plugin logs under Decky, " +
-                  "and clears the Ollama host field, safety disclaimer flag, and unified-input persistence stored in the plugin browser.\n\n" +
-                  "If Ollama on this Deck was enabled, this also removes downloaded models and the local Ollama install bonsAI set up under your account (~/.ollama and ~/.local/bin/ollama).\n\n" +
-                  "It does not delete Desktop logs under bonsAI_logs.\n\n" +
-                  "Afterward, set your Ollama host again and re-enable any permissions you need."
-                }
-                /* OK keeps everything and the wipe is the middle button; see the cache box above. */
-                strOKButtonText="Keep my data"
-                strMiddleButtonText="Clear all data"
-                strCancelButtonText="Cancel"
-                onOK={() => onCompleteDeckyModalClose(() => handle.Close())}
-                onMiddleButton={() => {
-                  void Promise.resolve(onClearAllPluginData()).finally(() => {
-                    onCompleteDeckyModalClose(() => handle.Close());
-                  });
-                }}
-                onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
-              />
-            );
-          }}
-          style={{
-            flex: 1,
-            minWidth: 0,
-            minHeight: 38,
-            fontSize: textPx(12),
-            fontWeight: 600,
-            padding: "6px 10px",
-            borderRadius: 4,
-            border: "1px solid rgba(255,255,255,0.18)",
-            background: "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%)",
-            color: "#e8eef5",
-            boxSizing: "border-box",
-          }}
-        >
-          Clear all data...
-        </Button>
-      </Focusable>
+          </PanelSection>,
+        )}
+
+        {fold(
+          "character",
+          <SettingsTabCharacterSection
+            aiCharacterEnabled={aiCharacterEnabled}
+            setAiCharacterEnabled={setAiCharacterEnabled}
+            aiCharacterRandom={aiCharacterRandom}
+            aiCharacterPresetId={aiCharacterPresetId}
+            aiCharacterCustomText={aiCharacterCustomText}
+            aiCharacterAccentIntensity={aiCharacterAccentIntensity}
+            setAiCharacterAccentIntensity={setAiCharacterAccentIntensity}
+            onOpenCharacterPicker={onOpenCharacterPicker}
+            onMoveUpFromFirst={up("character")}
+            onMoveDownFromLast={down("character")}
+          />,
+        )}
+
+        {fold(
+          "data",
+          <SettingsTabDataSection
+            showDeveloperTab={showDeveloperTab}
+            setShowDeveloperTab={setShowDeveloperTab}
+            onBeforeDeckyModal={onBeforeDeckyModal}
+            onCompleteDeckyModalClose={onCompleteDeckyModalClose}
+            onResetSession={onResetSession}
+            onClearAllPluginData={onClearAllPluginData}
+            onMoveUpFromFirst={up("data")}
+            onMoveDownFromLast={down("data")}
+          />,
+        )}
+      </FoldedColumn>
+
+      {/* Room under the last line, so the last rows can scroll up clear of the strip and the button. */}
+      <div className="bonsai-fold-tail" aria-hidden="true" />
+      <TabHelpStrip tab={SETTINGS_FOLD_TAB}>
+        <FoldAllButton tab={SETTINGS_FOLD_TAB} sections={chainIds(chain)} />
+      </TabHelpStrip>
     </div>
   );
 };

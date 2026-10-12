@@ -1,27 +1,29 @@
 /**
  * Title: Settings tab -- the UI scale heading appears once
  * Purpose: Pin the roadmap bug "The UI scale section says UI scale twice": the section's title and a
- *          second line right under it both read "UI scale". Keep one.
- * Used for: SettingsTabUiScaleSection (drawn when the Developer tab is on).
+ *          second line right under it both read "UI scale". Keep one. Folded (plan 92 T1) the title is the
+ *          section's line and nothing inside the section repeats it.
+ * Used for: SettingsTab's UI scale section (drawn when the Developer tab is on).
  * Does not: Check the rest of the section, which is left alone.
  */
 import { render } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { SettingsTabUiScaleSection } from "./SettingsTabUiScaleSection";
+vi.mock("@decky/ui", async () => {
+  const stubs = await import("../test-harness/fakeDeckyUi");
+  const { SteamRingFocusable } = await import("../test-harness/steamRing");
+  return { ...stubs, Focusable: SteamRingFocusable };
+});
+
+import { SettingsTab } from "./SettingsTab";
+import { settingsProps } from "./ringTestProps";
+import { openAllSettingsSections } from "../test-harness/settingsFoldOpen";
+
+beforeEach(() => openAllSettingsSections());
 
 describe("UI scale section heading", () => {
-  it("says UI scale exactly once", () => {
-    const { container } = render(
-      <SettingsTabUiScaleSection
-        uiScaleAutoEnabled={true}
-        uiScaleManualProfile="handheld"
-        appliedProfileId="handheld"
-        onApply={() => {}}
-        applyButtonRef={{ current: null }}
-        onMoveDownFromApply={() => true}
-      />,
-    );
+  it("says UI scale exactly once, with the section open", () => {
+    const { container } = render(<SettingsTab {...settingsProps()} showDeveloperTab />);
     const exact = Array.from(container.querySelectorAll("*")).filter(
       (el) => el.children.length === 0 && el.textContent?.trim() === "UI scale",
     );

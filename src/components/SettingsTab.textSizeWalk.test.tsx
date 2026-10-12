@@ -10,7 +10,7 @@
  *           Deck check in the plan (docs/focus-graph.md, "The Text size row").
  */
 import { render } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../test-harness/fakeDeckyUi");
@@ -21,6 +21,10 @@ vi.mock("@decky/ui", async () => {
 import { SettingsTab } from "./SettingsTab";
 import { settingsProps } from "./ringTestProps";
 import type { SteamEl } from "../test-harness/steamRing";
+import { openAllSettingsSections } from "../test-harness/settingsFoldOpen";
+
+/* The tab folds (plan 91 § 2b): these checks are about the rows, so every section is open. */
+beforeEach(() => openAllSettingsSections());
 
 const STOP = 'button:not([disabled]), [data-decky-ui="ToggleField"]';
 
@@ -55,12 +59,13 @@ describe("Settings tab walk with the Text size row", () => {
     });
   }
 
-  it("gives the Text size row no move handler of its own, so no press can be swallowed", () => {
+  it("gives the Text size row only Up and Down (to its section's line and the next line), so no Left or Right press can be swallowed", () => {
     const { container } = render(<SettingsTab {...settingsProps()} />);
     const row = container.querySelector<SteamEl>('[data-bonsai-chat-text-size-row="true"]');
     expect(row).toBeTruthy();
     expect(row!.getAttribute("flow-children")).toBe("horizontal");
-    for (const handler of Object.values(row!.__nav ?? {})) expect(handler).toBeUndefined();
+    const set = Object.entries(row!.__nav ?? {}).filter(([, handler]) => handler).map(([key]) => key);
+    expect(set).toEqual(["onMoveUp", "onMoveDown"]);
     const buttonsInRow = Array.from(row!.querySelectorAll<HTMLElement>("button"));
     expect(buttonsInRow).toHaveLength(3);
     for (const b of buttonsInRow) expect(b.hasAttribute("disabled")).toBe(false);

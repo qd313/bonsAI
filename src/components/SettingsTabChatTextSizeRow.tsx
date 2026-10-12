@@ -6,7 +6,8 @@
  * everywhere in bonsAI: the tab bar, the chat's name, the chat itself, the chips, the question box and
  * every other tab (plan 89). Steam's own controls, whose size Steam sets, may not follow.
  *
- * Used for: SettingsTab, right under Screenshot quality.
+ * Used for: SettingsTab, inside the folded "Text size" section (plan 91 § 2b, plan 92 T1). The words that
+ * used to sit above the buttons ride on the row for the help strip at the bottom of the panel.
  *
  * Solves: Plan 87 call 3, widened by plan 89. A person who finds the words too small (or too big) on the
  * Deck's panel gets one plain row to fix it, with no connection to the hidden UI scale section.
@@ -14,22 +15,16 @@
  * Does not: Scale anything. The size is written to `--bonsai-text-scale` on the plugin's root
  * (src/data/chatTextSize.ts) and every font size in the plugin reads it (src/styles/sections/textPx.ts).
  *
- * Focus: one `Focusable` with `flow-children="horizontal"` holding three buttons; no move handler of
- * its own, so Steam's own Left/Right walk the three and its Up/Down leave to the rows above and below
- * (see docs/focus-graph.md, "The Text size row").
+ * Focus: one `Focusable` with `flow-children="horizontal"` holding three buttons (SettingsTabChoiceRow).
+ * Left and Right are Steam's own and move the ring along the three, scrolling the page not at all (plan 89).
+ * The row carries only Up and Down, handed in by the tab (`nav`) to go to its section's line and the next
+ * line (see docs/focus-graph.md, "The Text size row").
  */
 import React from "react";
-import { Button, Focusable, PanelSection, PanelSectionRow } from "@decky/ui";
 
 import { CHAT_TEXT_SIZE_OPTIONS, type ChatTextSize } from "../data/bonsaiSettingsSchema";
-import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
-import { textPx } from "../styles/sections/textPx";
-
-const chatTextSizeLabel: Record<ChatTextSize, string> = {
-  small: "Small",
-  normal: "Normal",
-  large: "Large",
-};
+import { CHAT_TEXT_SIZE_LABEL, SETTINGS_ROW_HELP } from "../features/folded-tabs/settingsTabFolds";
+import { SettingsTabChoiceRow } from "./SettingsTabChoiceRow";
 
 /**
  * The saved choice and the way to change it, handed down as ONE prop. The main screen's hand-down to
@@ -43,53 +38,25 @@ export type ChatTextSizeSetting = {
 
 export type SettingsTabChatTextSizeRowProps = {
   setting: ChatTextSizeSetting;
+  /** Up (to the section's line) and Down (to the next line), on the row's Focusable. */
+  nav?: Record<string, unknown>;
 };
 
 export const SettingsTabChatTextSizeRow: React.FC<SettingsTabChatTextSizeRowProps> = ({
   setting: { value: chatTextSize, set: setChatTextSize },
+  nav,
 }) => (
-  <PanelSection title="Text size">
-    <PanelSectionRow>
-      <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-        <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-          How big the words are, everywhere in bonsAI: the tabs, the chat, the chips, the question box and
-          Settings. Rows keep their height, so a long chat name is cut off sooner on Large.
-        </div>
-        <Focusable
-          flow-children="horizontal"
-          data-bonsai-chat-text-size-row="true"
-          style={{ display: "flex", gap: 6, width: "100%", minWidth: 0, maxWidth: "100%", alignItems: "stretch" }}
-        >
-          {CHAT_TEXT_SIZE_OPTIONS.map((size) => {
-            const active = size === chatTextSize;
-            return (
-              <Button
-                className={FOCUS_RING_BTN_CLASS}
-                key={size}
-                onClick={() => setChatTextSize(size)}
-                style={{
-                  flex: 1,
-                  minHeight: 36,
-                  fontSize: textPx(12),
-                  fontWeight: 600,
-                  padding: "4px 4px",
-                  borderRadius: 4,
-                  border: active ? "1px solid rgba(255,255,255,0.45)" : "1px solid rgba(255,255,255,0.12)",
-                  background: active
-                    ? "linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.1) 100%)"
-                    : "rgba(255,255,255,0.04)",
-                  color: active ? "#f0f4f8" : "#9fb0c0",
-                  boxShadow: active ? "inset 0 1px 0 rgba(255,255,255,0.15)" : "none",
-                }}
-                aria-label={`Set text size to ${chatTextSizeLabel[size]}`}
-                aria-pressed={active}
-              >
-                {chatTextSizeLabel[size]}
-              </Button>
-            );
-          })}
-        </Focusable>
-      </div>
-    </PanelSectionRow>
-  </PanelSection>
+  <SettingsTabChoiceRow
+    label="Text size"
+    help={SETTINGS_ROW_HELP.textSize}
+    options={CHAT_TEXT_SIZE_OPTIONS.map((size) => ({
+      id: size,
+      label: CHAT_TEXT_SIZE_LABEL[size],
+      ariaLabel: `Set text size to ${CHAT_TEXT_SIZE_LABEL[size]}`,
+    }))}
+    value={chatTextSize}
+    onPick={setChatTextSize}
+    nav={nav}
+    rowProps={{ "data-bonsai-chat-text-size-row": "true" }}
+  />
 );

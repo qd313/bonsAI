@@ -12,7 +12,9 @@
  * row should hand the D-pad to its neighbours in this plugin — other
  * sections copy its shape.
  *
- * Used for: SettingsTab.
+ * Used for: SettingsTab, inside the folded "UI scale" section (plan 91 § 2b, plan 92 T1): the section line is
+ * its title, and the paragraph that used to head it (with the size in use now) rides on the switch for the
+ * help strip at the bottom of the panel.
  *
  * Solves: Wires the auto/manual toggle to the slider and the Apply button
  * with a D-pad path between all three that has been checked step by step
@@ -23,7 +25,7 @@
  * to ask them for, and sends it once you press Apply.
  */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Button, Focusable, PanelSection, PanelSectionRow, ToggleField } from "@decky/ui";
+import { Button, Focusable, PanelSection, PanelSectionRow } from "@decky/ui";
 import type { UiScaleProfileId } from "../data/uiScaleProfile";
 import {
   indexOfManualUiScaleProfile,
@@ -32,7 +34,9 @@ import {
   UI_SCALE_PROFILE_LABEL,
 } from "../data/uiScaleProfile";
 import { SettingsTabUiScaleSlider } from "./SettingsTabUiScaleSlider";
-import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
+import { DenseRow, DenseSwitchRow } from "../features/folded-tabs/DenseRow";
+import { uiScaleAutoHelp } from "../features/folded-tabs/settingsTabFolds";
+import { FOCUS_RING_BTN_CLASS, FOCUS_RING_INSET_CLASS, FOCUS_RING_WRAP_CLASS } from "../styles/settingsGlassButton";
 import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
 import { textPx } from "../styles/sections/textPx";
 
@@ -41,9 +45,9 @@ export type SettingsTabUiScaleSectionProps = {
   uiScaleManualProfile: UiScaleProfileId;
   appliedProfileId: UiScaleProfileId;
   onApply: (autoEnabled: boolean, manualProfile: UiScaleProfileId) => void | Promise<void>;
-  /** Parent ref for D-pad up from the section below (e.g. screenshot quality row). */
-  applyButtonRef?: React.Ref<HTMLButtonElement>;
-  /** D-pad down from Apply — e.g. focus screenshot quality presets. */
+  /** Up from the switch (the section's first control): its line in the folded tab. */
+  onMoveUpFromFirst?: () => boolean;
+  /** Down from Apply (the section's last control): the next line. */
   onMoveDownFromApply?: () => boolean;
 };
 
@@ -122,7 +126,7 @@ export const SettingsTabUiScaleSection: React.FC<SettingsTabUiScaleSectionProps>
   uiScaleManualProfile,
   appliedProfileId,
   onApply,
-  applyButtonRef,
+  onMoveUpFromFirst,
   onMoveDownFromApply,
 }) => {
   const [pendingAuto, setPendingAuto] = useState(uiScaleAutoEnabled);
@@ -135,6 +139,13 @@ export const SettingsTabUiScaleSection: React.FC<SettingsTabUiScaleSectionProps>
   const autoToggleHostRef = useRef<HTMLDivElement>(null);
   const resetButtonRef = useRef<HTMLButtonElement>(null);
   const applyButtonLocalRef = useRef<HTMLButtonElement>(null);
+  /*
+   * Whether Apply is greyed because it is running, kept by this section itself. A greyed Decky button still
+   * takes the ring on the Deck, so a hop never asks the button whether it is disabled (plan 92 second-night
+   * rules, item 4): it asks this.
+   */
+  const applyingRef = useRef(false);
+  applyingRef.current = applying;
 
   const focusSliderBridge = useCallback((): boolean => {
     return focusInHost(sliderBridgeRef.current);
@@ -144,31 +155,21 @@ export const SettingsTabUiScaleSection: React.FC<SettingsTabUiScaleSectionProps>
     return focusInHost(autoToggleHostRef.current);
   }, []);
 
+  /* Reset is never greyed (it exists only while Apply could change something), so there is nothing to skip. */
   const focusResetButton = useCallback((): boolean => {
     const btn = resetButtonRef.current;
-    if (!btn || btn.disabled) return false;
+    if (!btn) return false;
     focusInTabBody(btn);
     return true;
   }, []);
 
+  /* Apply is greyed while it runs; this section knows that, so the hop is declined by its own state. */
   const focusApplyButton = useCallback((): boolean => {
     const btn = applyButtonLocalRef.current;
-    if (!btn || btn.disabled) return false;
+    if (!btn || applyingRef.current) return false;
     focusInTabBody(btn);
     return true;
   }, []);
-
-  const setApplyButtonRef = useCallback(
-    (el: HTMLButtonElement | null) => {
-      applyButtonLocalRef.current = el;
-      if (!applyButtonRef) return;
-      if (typeof applyButtonRef === "function") applyButtonRef(el);
-      else if (typeof applyButtonRef === "object" && "current" in applyButtonRef) {
-        (applyButtonRef as React.MutableRefObject<HTMLButtonElement | null>).current = el;
-      }
-    },
-    [applyButtonRef],
-  );
 
   useEffect(() => {
     setPendingAuto(uiScaleAutoEnabled);
@@ -210,84 +211,83 @@ export const SettingsTabUiScaleSection: React.FC<SettingsTabUiScaleSectionProps>
   );
 
   return (
-    <PanelSection title="UI scale">
+    <PanelSection>
       <PanelSectionRow>
         <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-          <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-            Two real sizes: Handheld for the Deck's own screen, Couch for TV distance. Active:{" "}
-            <span style={{ color: "#9ce7ff", fontWeight: 600 }}>
-              {UI_SCALE_PROFILE_LABEL[appliedProfileId]} ({profileScaleMultiplier(appliedProfileId).toFixed(2)}×)
-            </span>
-            . Also check Steam Settings → Accessibility → UI Scale.
-          </div>
           <div ref={autoToggleHostRef}>
-            <ToggleField
+            <DenseSwitchRow
               label="Adjust UI automatically"
-              description="Applies Handheld sizing on its own — this panel is always narrow, so automatic never picks Couch."
+              help={uiScaleAutoHelp(
+                UI_SCALE_PROFILE_LABEL[appliedProfileId],
+                profileScaleMultiplier(appliedProfileId).toFixed(2),
+              )}
               checked={pendingAuto}
               onChange={setPendingAuto}
-              {...({
+              nav={{
+                onMoveUp: () => onMoveUpFromFirst?.() ?? false,
                 onMoveDown: () => {
                   if (!pendingAuto && focusSliderBridge()) return true;
                   return focusApplyButton();
                 },
-              } as unknown as Record<string, unknown>)}
+              }}
             />
           </div>
           {!pendingAuto ? (
             <div style={{ marginTop: 10 }}>
               <div ref={sliderBridgeRef}>
-                <Focusable
-                  className="bonsai-ui-scale-slider-focus-bridge"
-                  flow-children="vertical"
-                  style={{ width: "100%", minWidth: 0 }}
-                  onFocus={() => setBridgeSliderActive(true)}
-                  onBlur={() => {
-                    setBridgeSliderActive(false);
-                    setBridgeSliderEditing(false);
-                  }}
-                  {...bridgeSliderNav}
-                >
-                  <SettingsTabUiScaleSlider
-                    value={pendingManual}
-                    onChange={setPendingManual}
-                    thumbHostRef={sliderThumbRef}
-                    thumbFocusedExternal={bridgeSliderActive}
-                    thumbEditingExternal={bridgeSliderEditing}
-                    onMoveUp={() => focusAutoToggle()}
-                    onMoveDown={() => focusResetButton() || focusApplyButton()}
-                  />
-                </Focusable>
+                <DenseRow kind="slider" label="UI scale">
+                  <Focusable
+                    className="bonsai-ui-scale-slider-focus-bridge"
+                    flow-children="vertical"
+                    style={{ width: "100%", minWidth: 0 }}
+                    onFocus={() => setBridgeSliderActive(true)}
+                    onBlur={() => {
+                      setBridgeSliderActive(false);
+                      setBridgeSliderEditing(false);
+                    }}
+                    {...bridgeSliderNav}
+                  >
+                    <SettingsTabUiScaleSlider
+                      value={pendingManual}
+                      onChange={setPendingManual}
+                      thumbHostRef={sliderThumbRef}
+                      thumbFocusedExternal={bridgeSliderActive}
+                      thumbEditingExternal={bridgeSliderEditing}
+                      onMoveUp={() => focusAutoToggle()}
+                      onMoveDown={() => focusResetButton() || focusApplyButton()}
+                    />
+                  </Focusable>
+                </DenseRow>
               </div>
-              <Button
-                ref={(el) => {
-                  resetButtonRef.current = el as HTMLButtonElement | null;
-                }}
-                className={FOCUS_RING_BTN_CLASS}
-                onClick={handleResetAutomatic}
+              <Focusable
+                className={FOCUS_RING_WRAP_CLASS}
+                style={{ marginTop: 8 }}
                 {...({
                   onMoveUp: () => focusSliderBridge(),
                   onMoveDown: () => focusApplyButton(),
-                } as unknown as Record<string, unknown>)}
-                style={{
-                  marginTop: 8,
-                  minHeight: 32,
-                  fontSize: textPx(11),
-                  fontWeight: 600,
-                  padding: "4px 10px",
-                }}
+                } as Record<string, unknown>)}
               >
-                Reset to automatic
-              </Button>
+                <Button
+                  ref={(el) => {
+                    resetButtonRef.current = el as HTMLButtonElement | null;
+                  }}
+                  className={`${FOCUS_RING_BTN_CLASS} ${FOCUS_RING_INSET_CLASS}`}
+                  onClick={handleResetAutomatic}
+                  style={{
+                    minHeight: 32,
+                    fontSize: textPx(11),
+                    fontWeight: 600,
+                    padding: "4px 10px",
+                  }}
+                >
+                  Reset to automatic
+                </Button>
+              </Focusable>
             </div>
           ) : null}
-          <Button
-            ref={(el) => {
-              setApplyButtonRef(el as HTMLButtonElement | null);
-            }}
-            className={FOCUS_RING_BTN_CLASS}
-            onClick={handleApply}
-            disabled={applying}
+          <Focusable
+            className={FOCUS_RING_WRAP_CLASS}
+            style={{ marginTop: 12 }}
             {...({
               onMoveUp: () => {
                 if (!pendingAuto) {
@@ -297,17 +297,25 @@ export const SettingsTabUiScaleSection: React.FC<SettingsTabUiScaleSectionProps>
                 return focusAutoToggle();
               },
               onMoveDown: () => onMoveDownFromApply?.() ?? false,
-            } as unknown as Record<string, unknown>)}
-            style={{
-              marginTop: 12,
-              minHeight: 36,
-              fontSize: textPx(12),
-              fontWeight: 600,
-              width: "100%",
-            }}
+            } as Record<string, unknown>)}
           >
-            {applying ? "Applying…" : "Apply UI scale"}
-          </Button>
+            <Button
+              ref={(el) => {
+                applyButtonLocalRef.current = el as HTMLButtonElement | null;
+              }}
+              className={`${FOCUS_RING_BTN_CLASS} ${FOCUS_RING_INSET_CLASS}`}
+              onClick={handleApply}
+              disabled={applying}
+              style={{
+                minHeight: 36,
+                fontSize: textPx(12),
+                fontWeight: 600,
+                width: "100%",
+              }}
+            >
+              {applying ? "Applying…" : "Apply UI scale"}
+            </Button>
+          </Focusable>
         </div>
       </PanelSectionRow>
     </PanelSection>

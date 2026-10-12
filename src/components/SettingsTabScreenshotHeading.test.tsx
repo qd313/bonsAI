@@ -7,7 +7,7 @@
  *           covers the stops.
  */
 import { render } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../test-harness/fakeDeckyUi");
@@ -17,6 +17,10 @@ vi.mock("@decky/ui", async () => {
 
 import { SettingsTab } from "./SettingsTab";
 import { settingsProps } from "./ringTestProps";
+import { openAllSettingsSections } from "../test-harness/settingsFoldOpen";
+
+/* The tab folds (plan 91 § 2b): these checks are about the rows, so every section is open. */
+beforeEach(() => openAllSettingsSections());
 
 describe("Screenshot quality section heading", () => {
   for (const showDeveloperTab of [false, true]) {

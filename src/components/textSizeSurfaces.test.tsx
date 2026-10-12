@@ -92,7 +92,7 @@ function draw(size: ChatTextSize) {
   );
 }
 
-type Reads = { chip: number; questionBox: number; rowDescription: number; rowButton: number };
+type Reads = { chip: number; questionBox: number; rowButton: number };
 
 function readSurfaces(size: ChatTextSize): Reads {
   const { container, unmount } = draw(size);
@@ -105,7 +105,6 @@ function readSurfaces(size: ChatTextSize): Reads {
   const reads = {
     chip: read(one("button.bonsai-preset-glass")),
     questionBox: read(one(".bonsai-unified-input-host input")),
-    rowDescription: read(one(".bonsai-settings-section-stack .bonsai-prose")),
     rowButton: read(one('[data-bonsai-chat-text-size-row="true"] button')),
   };
   unmount();
@@ -117,8 +116,8 @@ afterEach(cleanup);
 describe("Text size on the chips, the question box and the Settings row", () => {
   const normal = readSurfaces("normal");
 
-  it("reads Normal as today's sizes: chip 12, question box 12, the row's description 12 (the Settings prose rule), its buttons 12", () => {
-    expect(normal).toEqual({ chip: 12, questionBox: 12, rowDescription: 12, rowButton: 12 });
+  it("reads Normal as today's sizes: chip 12, question box 12, the row's buttons 12 (its words moved to the help strip)", () => {
+    expect(normal).toEqual({ chip: 12, questionBox: 12, rowButton: 12 });
   });
 
   it("makes each one bigger on Large and smaller on Small, by exactly the step", () => {

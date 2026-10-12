@@ -21,6 +21,10 @@ import {
   resetModalReturnFocusRegistry,
   restoreModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
+import { openAllSettingsSections } from "../test-harness/settingsFoldOpen";
+
+/* The tab folds (plan 91 § 2b): these checks are about the rows, so every section is open. */
+beforeEach(() => openAllSettingsSections());
 
 function buildProps(overrides: Partial<SettingsTabProps> = {}): SettingsTabProps {
   return {
@@ -116,21 +120,21 @@ describe("SettingsTab modal return focus", () => {
 
 /*
  * Roadmap "Settings' "Clear cache..." sits 16 pixels left of the other buttons" (plan 72 free play,
- * docs/test-evidence/plan72-Z-FREEPLAY.json finding 14, runs/plan72-Z-settings-sweep.json): on the
- * Deck Clear cache... started at x 48, the column's own left edge, while every other Settings button
- * started at x 64 and ended at 332. The others sit inside one of Steam's panel sections, which pads
- * its rows 16 on each side (measured 15.99 by scripts/probe_deck_ask_row_width.py); this row sits
- * outside any section, so it had no inset at all. jsdom cannot measure where it lands, so this pins
- * what the code sets: the same inset, on both sides, inside the row's full width.
+ * docs/test-evidence/plan72-Z-FREEPLAY.json finding 14): on the Deck Clear cache... started at the
+ * column's own left edge while every other Settings button sat inside one of Steam's panel sections,
+ * which pads its rows 16 on each side (measured 15.99 by scripts/probe_deck_ask_row_width.py). The
+ * row used to sit outside any section and padded the 16 in by hand. Folded (plan 92 T1) it sits inside
+ * the Data section's own panel row like every other control, so Steam's inset applies and the row adds
+ * none of its own. jsdom cannot measure where it lands, so this pins what the code does.
  */
 describe("SettingsTab Clear cache... row lines up with the other buttons", () => {
-  it("insets the row 16 on each side, the same as Steam's panel sections inset theirs", () => {
+  it("sits inside a panel row, as every other button does, and adds no inset of its own", () => {
     const { getByText } = render(<SettingsTab {...buildProps()} />);
     const row = getByText("Clear cache...").closest(".bonsai-settings-cache-row") as HTMLElement | null;
     expect(row).not.toBeNull();
-    expect(row!.style.paddingLeft).toBe("16px");
-    expect(row!.style.paddingRight).toBe("16px");
-    // Inside the width, not added to it: the two buttons share what is left, as before.
+    expect(row!.closest('[data-decky-ui="PanelSectionRow"]')).not.toBeNull();
+    expect(row!.style.paddingLeft).toBe("");
+    expect(row!.style.paddingRight).toBe("");
     expect(row!.style.boxSizing).toBe("border-box");
     expect(row!.style.width).toBe("100%");
   });

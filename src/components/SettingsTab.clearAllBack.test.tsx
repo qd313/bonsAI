@@ -33,6 +33,10 @@ import { SettingsTab, type SettingsTabProps } from "./SettingsTab";
 import { useBonsaiPluginShell } from "../hooks/useBonsaiPluginShell";
 import { resetModalReturnFocusRegistry } from "../features/plugin-shell/modalReturnFocusRegistry";
 import type { BonsaiSessionSurvivalSnapshot } from "../utils/bonsaiSessionSurvival";
+import { openAllSettingsSections } from "../test-harness/settingsFoldOpen";
+
+/* The tab folds (plan 91 § 2b): these checks are about the rows, so every section is open. */
+beforeEach(() => openAllSettingsSections());
 
 const emptySnapshot = () => ({ currentTab: "main", unifiedInput: "" }) as unknown as BonsaiSessionSurvivalSnapshot;
 

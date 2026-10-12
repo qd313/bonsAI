@@ -151,11 +151,6 @@
       "role": ""
     },
     {
-      "path": "src/components/SettingsTab.tsx",
-      "lines": 715,
-      "role": ""
-    },
-    {
       "path": "src/components/PullModelsModal.tryOrder.test.tsx",
       "lines": 681,
       "role": ""
@@ -199,6 +194,11 @@
       "path": "py_modules/backend/services/ollama_service.py",
       "lines": 621,
       "role": "Prompt build, Ollama HTTP, streaming"
+    },
+    {
+      "path": "src/utils/settingsContracts.test.ts",
+      "lines": 617,
+      "role": ""
     }
   ]
 }

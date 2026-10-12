@@ -9,8 +9,9 @@
  * permission is off, this section shows a prompt to turn it on instead of
  * letting you install anything.
  *
- * Used for: SettingsTab, when voice input is available on this device and
- * the backend's voice engine (whisper.cpp) exists.
+ * Used for: SettingsTab, inside the folded "Voice input" section (plan 91 § 2b, plan 92 T1): the section
+ * line is its title, the two models sit side by side on one row, and the paragraph that used to head the
+ * section rides on that row for the help strip at the bottom of the panel.
  *
  * Solves: One place to see and fix voice-engine readiness — installed or
  * not, which model, and any install error — instead of it failing silently
@@ -19,11 +20,22 @@
  * Does not: Record audio or turn speech into text. That happens in the Ask
  * bar's mic button and the backend voice service; this section only picks
  * the model and manages the install.
+ *
+ * Focus: Up from the first row (the permission button while the microphone is off, else the model row)
+ * and Down from the install button go to the section's line and the next line, handed in by the tab on a
+ * `Focusable` around each, since Decky's Button keeps no move handler. The install button's popup (the
+ * download notice) is unchanged.
  */
 import React, { useCallback, useEffect, useState } from "react";
 import { PanelSection, PanelSectionRow, Button, Focusable } from "@decky/ui";
 import { toaster } from "@decky/api";
 import { VOICE_STT_MODEL_OPTIONS, type VoiceSttModelId } from "../data/bonsaiSettingsSchema";
+import { DenseRow } from "../features/folded-tabs/DenseRow";
+import {
+  SETTINGS_ROW_HELP,
+  VOICE_STT_MODEL_FULL_LABEL,
+  VOICE_STT_MODEL_SHORT_LABEL,
+} from "../features/folded-tabs/settingsTabFolds";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { PermissionDenyAction } from "./PermissionDenyAction";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
@@ -46,16 +58,15 @@ type VoiceEngineStatus = {
   };
 };
 
-const MODEL_LABELS: Record<VoiceSttModelId, string> = {
-  "tiny.en": "tiny.en (faster, less accurate)",
-  "base.en": "base.en (more accurate, recommended)",
-};
-
 type Props = {
   voiceSttModel: VoiceSttModelId;
   setVoiceSttModel: (v: VoiceSttModelId) => void;
   microphoneAccessEnabled: boolean;
   onJumpToPermission?: (capability: BonsaiCapabilityKey) => void;
+  /** Up from the section's first row: its line in the folded tab. */
+  onMoveUpFromFirst?: () => boolean;
+  /** Down from the install button: the next line. */
+  onMoveDownFromLast?: () => boolean;
 };
 
 /**
@@ -92,6 +103,8 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
   setVoiceSttModel,
   microphoneAccessEnabled,
   onJumpToPermission,
+  onMoveUpFromFirst,
+  onMoveDownFromLast,
 }) => {
   const [engineStatus, setEngineStatus] = useState<VoiceEngineStatus | null>(null);
   const [installBusy, setInstallBusy] = useState(false);
@@ -199,55 +212,61 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
       ? "Reinstall voice engine"
       : "Install voice engine";
 
+  const permissionRowShown = !microphoneAccessEnabled && Boolean(onJumpToPermission);
   return (
-    <PanelSection title="Voice input">
-      <PanelSectionRow>
-        <div className="bonsai-settings-bleed" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
-          Local speech-to-text for the Ask bar mic button. Enable the microphone permission in Permissions
-          first. Audio is processed on-device and never saved.
-        </div>
-      </PanelSectionRow>
-      {!microphoneAccessEnabled && onJumpToPermission ? (
+    <PanelSection>
+      {permissionRowShown ? (
         <PanelSectionRow>
-          <PermissionDenyAction
-            capability="microphone_access"
-            onJump={onJumpToPermission}
-            compact
-          />
+          <Focusable {...({ onMoveUp: onMoveUpFromFirst } as Record<string, unknown>)}>
+            <PermissionDenyAction capability="microphone_access" onJump={onJumpToPermission!} compact />
+          </Focusable>
         </PanelSectionRow>
       ) : null}
       <PanelSectionRow>
-        <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-          <div style={{ fontSize: textPx(13), fontWeight: 600, marginBottom: 6, color: "#dce8f4" }}>STT model</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            {VOICE_STT_MODEL_OPTIONS.map((id) => (
-              <Focusable key={id} className={FOCUS_RING_WRAP_CLASS} onOKButton={() => setVoiceSttModel(id)}>
-                <Button
-                  className={`${FOCUS_RING_BTN_CLASS} ${FOCUS_RING_INSET_CLASS}`}
-                  onClick={() => setVoiceSttModel(id)}
-                  style={{
-                    textAlign: "left",
-                    justifyContent: "flex-start",
-                    fontSize: textPx(12),
-                    padding: "8px 10px",
-                    borderRadius: 4,
-                    border:
-                      voiceSttModel === id
-                        ? "1px solid rgba(156, 231, 255, 0.55)"
-                        : "1px solid rgba(255,255,255,0.12)",
-                    background:
-                      voiceSttModel === id
-                        ? "rgba(56, 189, 248, 0.12)"
-                        : "rgba(255,255,255,0.04)",
-                    color: "#e8eef5",
-                  }}
+        <DenseRow kind="choice" label="STT model" help={SETTINGS_ROW_HELP.voiceInput}>
+          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
+            <Focusable
+              flow-children="horizontal"
+              style={{ display: "flex", gap: 6, width: "100%", minWidth: 0 }}
+              {...(permissionRowShown ? {} : ({ onMoveUp: onMoveUpFromFirst } as Record<string, unknown>))}
+            >
+              {VOICE_STT_MODEL_OPTIONS.map((id) => (
+                <Focusable
+                  key={id}
+                  className={FOCUS_RING_WRAP_CLASS}
+                  style={{ flex: 1, minWidth: 0, display: "flex" }}
+                  onOKButton={() => setVoiceSttModel(id)}
                 >
-                  {MODEL_LABELS[id]}
-                </Button>
-              </Focusable>
-            ))}
+                  <Button
+                    className={`${FOCUS_RING_BTN_CLASS} ${FOCUS_RING_INSET_CLASS}`}
+                    onClick={() => setVoiceSttModel(id)}
+                    aria-label={VOICE_STT_MODEL_FULL_LABEL[id]}
+                    aria-pressed={voiceSttModel === id}
+                    style={{
+                      flex: 1,
+                      minWidth: 0,
+                      minHeight: 30,
+                      fontSize: textPx(12),
+                      padding: "3px 4px",
+                      borderRadius: 4,
+                      border:
+                        voiceSttModel === id
+                          ? "1px solid rgba(156, 231, 255, 0.55)"
+                          : "1px solid rgba(255,255,255,0.12)",
+                      background:
+                        voiceSttModel === id
+                          ? "rgba(56, 189, 248, 0.12)"
+                          : "rgba(255,255,255,0.04)",
+                      color: "#e8eef5",
+                    }}
+                  >
+                    {VOICE_STT_MODEL_SHORT_LABEL[id]}
+                  </Button>
+                </Focusable>
+              ))}
+            </Focusable>
           </div>
-        </div>
+        </DenseRow>
       </PanelSectionRow>
       <PanelSectionRow>
         <div className="bonsai-settings-bleed" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
@@ -283,7 +302,11 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
       </PanelSectionRow>
       <PanelSectionRow>
         <div className="bonsai-settings-focus-btn-host">
-          <Focusable className={FOCUS_RING_WRAP_CLASS} onOKButton={() => void onDownloadModel()}>
+          <Focusable
+            className={FOCUS_RING_WRAP_CLASS}
+            onOKButton={() => void onDownloadModel()}
+            {...({ onMoveDown: onMoveDownFromLast } as Record<string, unknown>)}
+          >
             <Button
               className={`${FOCUS_RING_BTN_CLASS} ${FOCUS_RING_INSET_CLASS}`}
               onClick={() => void onDownloadModel()}

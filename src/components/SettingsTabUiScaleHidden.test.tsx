@@ -1,16 +1,19 @@
 /**
  * Title: Settings tab — UI scale section only with the Developer tab
  * Purpose: 0.6.0 (plan 72) hides the UI scale section from players; it comes back when the
- *          Developer tab is turned on. With it hidden, the screenshot-quality row becomes the top
- *          row, so it must not keep an Up handler that aims at the missing Apply button — Steam's
- *          own Up (to the tab header) takes over, the same as from the UI scale toggle before.
- * Does not: Prove the ring on the device; the move handlers never reach the DOM through the
- *           test harness's Focusable stub, which is why the Up wiring is a tested builder.
+ *          Developer tab is turned on. Folded (plan 92 T1), Screenshot quality's first control always
+ *          hands Up to its own section line, so there is no hop to the missing Apply button left to guard
+ *          (the old `screenshotQualityRowNav` is gone); the first section line's Up is the tab bar's.
+ * Does not: Prove the ring on the device.
  */
 import { render } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
-import { SettingsTab, screenshotQualityRowNav, type SettingsTabProps } from "./SettingsTab";
+import { SettingsTab, type SettingsTabProps } from "./SettingsTab";
+import { openAllSettingsSections } from "../test-harness/settingsFoldOpen";
+
+/* The tab folds (plan 91 § 2b): these checks are about the rows, so every section is open. */
+beforeEach(() => openAllSettingsSections());
 
 function buildProps(overrides: Partial<SettingsTabProps> = {}): SettingsTabProps {
   return {
@@ -65,21 +68,5 @@ describe("SettingsTab UI scale section", () => {
   it("is drawn when the Developer tab is on", () => {
     const { container } = render(<SettingsTab {...buildProps({ showDeveloperTab: true })} />);
     expect(container.querySelector(UI_SCALE_TOGGLE)).toBeTruthy();
-  });
-});
-
-describe("screenshotQualityRowNav", () => {
-  it("has no Up handler when the UI scale section is hidden", () => {
-    expect(screenshotQualityRowNav(null)).toEqual({});
-  });
-
-  it("sends Up to the UI scale Apply button when the section is shown", () => {
-    let called = 0;
-    const nav = screenshotQualityRowNav(() => {
-      called += 1;
-      return true;
-    }) as { onMoveUp?: () => boolean };
-    expect(nav.onMoveUp?.()).toBe(true);
-    expect(called).toBe(1);
   });
 });

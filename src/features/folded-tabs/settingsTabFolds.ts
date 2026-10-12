@@ -55,19 +55,25 @@ export function settingsSectionIds(showDeveloperTab: boolean): SettingsSectionId
   return SETTINGS_SECTIONS.map((s) => s.id).filter((id) => showDeveloperTab || id !== "uiscale");
 }
 
-const SCREENSHOT_PRESET_LABEL: Record<ScreenshotAttachmentPreset, string> = {
+export const SCREENSHOT_PRESET_LABEL: Record<ScreenshotAttachmentPreset, string> = {
   low: "Save memory",
   mid: "Balanced",
   max: "Best detail",
 };
 
-const CHAT_TEXT_SIZE_LABEL: Record<ChatTextSize, string> = {
+export const CHAT_TEXT_SIZE_LABEL: Record<ChatTextSize, string> = {
   small: "Small",
   normal: "Normal",
   large: "Large",
 };
 
-const VOICE_REPLY_MODE_SHORT_LABEL: Record<VoiceReplyMode, string> = {
+export const VOICE_REPLY_MODE_LABEL: Record<VoiceReplyMode, string> = {
+  off: "Off",
+  voice_only: "When I asked by voice",
+  always: "Always",
+};
+
+export const VOICE_REPLY_MODE_SHORT_LABEL: Record<VoiceReplyMode, string> = {
   off: "Off",
   voice_only: "By voice",
   always: "Always",
@@ -77,6 +83,16 @@ export const VOICE_REPLY_MODE_DESCRIPTION: Record<VoiceReplyMode, string> = {
   off: "Answers are read only when you press Read aloud.",
   voice_only: "An answer to a question you asked by voice is read out on its own.",
   always: "Every answer is read out on its own.",
+};
+
+/** The speech-to-text models' short names, as the drawing has them, and their full words (the buttons' labels for a screen reader). */
+export const VOICE_STT_MODEL_SHORT_LABEL: Record<VoiceSttModelId, string> = {
+  "tiny.en": "tiny.en · faster",
+  "base.en": "base.en · better",
+};
+export const VOICE_STT_MODEL_FULL_LABEL: Record<VoiceSttModelId, string> = {
+  "tiny.en": "tiny.en (faster, less accurate)",
+  "base.en": "base.en (more accurate, recommended)",
 };
 
 /** The rows' longer text, as the tab printed it before it folded. */

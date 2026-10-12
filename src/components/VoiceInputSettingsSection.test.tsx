@@ -26,8 +26,8 @@ describe("VoiceInputSettingsSection engine action", () => {
 
   it("on screen, base.en reads as the recommended model and tiny.en as the lighter one, in that order", () => {
     renderSection();
-    const base = screen.getByText("base.en (more accurate, recommended)");
-    const tiny = screen.getByText("tiny.en (faster, less accurate)");
+    const base = screen.getByLabelText("base.en (more accurate, recommended)");
+    const tiny = screen.getByLabelText("tiny.en (faster, less accurate)");
     expect(tiny.compareDocumentPosition(base) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 

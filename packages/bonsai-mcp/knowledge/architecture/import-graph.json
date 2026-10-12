@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 922,
-  "edgeCount": 2984,
+  "fileCount": 929,
+  "edgeCount": 3041,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2190,7 +2190,8 @@
         "src/components/ringTestProps.ts",
         "src/features/folded-tabs/developerTabFolds.ts",
         "src/features/folded-tabs/foldedTabsStore.ts",
-        "src/styles/bonsaiScopeStylesheet.ts"
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/test-harness/settingsFoldOpen.ts"
       ],
       "importedBy": []
     },
@@ -2201,14 +2202,16 @@
         "src/components/ringTestProps.ts",
         "src/features/folded-tabs/developerTabFolds.ts",
         "src/features/folded-tabs/foldedTabsStore.ts",
-        "src/styles/bonsaiScopeStylesheet.ts"
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/test-harness/settingsFoldOpen.ts"
       ],
       "importedBy": []
     },
     "src/components/SettingsTab.accentMenuRing.test.tsx": {
       "imports": [
         "src/components/SettingsTab.tsx",
-        "src/test-harness/fakeDeckyUi.tsx"
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/settingsFoldOpen.ts"
       ],
       "importedBy": []
     },
@@ -2218,6 +2221,7 @@
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/hooks/useBonsaiPluginShell.ts",
         "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/settingsFoldOpen.ts",
         "src/utils/bonsaiSessionSurvival.ts"
       ],
       "importedBy": []
@@ -2225,14 +2229,30 @@
     "src/components/SettingsTab.clearBoxes.test.tsx": {
       "imports": [
         "src/components/SettingsTab.tsx",
-        "src/test-harness/fakeDeckyUi.tsx"
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/settingsFoldOpen.ts"
       ],
       "importedBy": []
     },
     "src/components/SettingsTab.focusRing.test.tsx": {
       "imports": [
         "src/components/SettingsTab.tsx",
-        "src/styles/bonsaiScopeStylesheet.ts"
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/test-harness/settingsFoldOpen.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/SettingsTab.folded.test.tsx": {
+      "imports": [
+        "src/components/SettingsTab.tsx",
+        "src/components/ringTestProps.ts",
+        "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/features/folded-tabs/settingsTabFolds.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/settingsFoldOpen.ts",
+        "src/test-harness/steamRing.tsx",
+        "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": []
     },
@@ -2245,7 +2265,8 @@
     "src/components/SettingsTab.modalReturnFocus.test.tsx": {
       "imports": [
         "src/components/SettingsTab.tsx",
-        "src/features/plugin-shell/modalReturnFocusRegistry.ts"
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/test-harness/settingsFoldOpen.ts"
       ],
       "importedBy": []
     },
@@ -2254,28 +2275,29 @@
         "src/components/SettingsTab.tsx",
         "src/components/ringTestProps.ts",
         "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/settingsFoldOpen.ts",
         "src/test-harness/steamRing.tsx"
       ],
       "importedBy": []
     },
     "src/components/SettingsTab.tsx": {
       "imports": [
-        "src/components/SettingsTabAccentIntensityMenuPopover.tsx",
+        "src/components/SettingsTabCharacterSection.tsx",
         "src/components/SettingsTabChatTextSizeRow.tsx",
+        "src/components/SettingsTabChoiceRow.tsx",
+        "src/components/SettingsTabDataSection.tsx",
         "src/components/SettingsTabUiScaleSection.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
+        "src/components/useSettingsTabFocus.ts",
         "src/data/aiCharacterAccentIntensity.ts",
         "src/data/bonsaiSettingsSchema.ts",
-        "src/data/characterCatalog.ts",
         "src/data/uiScaleProfile.ts",
-        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
-        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
-        "src/features/unified-input/constants.ts",
-        "src/styles/sections/textPx.ts",
-        "src/styles/settingsGlassButton.ts",
-        "src/utils/permissionDeepLink.ts",
-        "src/utils/settingsTabLocalSurvival.ts",
-        "src/utils/uiDocument.ts"
+        "src/features/folded-tabs/DenseRow.tsx",
+        "src/features/folded-tabs/FoldAllButton.tsx",
+        "src/features/folded-tabs/FoldedSection.tsx",
+        "src/features/folded-tabs/TabHelpStrip.tsx",
+        "src/features/folded-tabs/settingsTabFolds.ts",
+        "src/utils/permissionDeepLink.ts"
       ],
       "importedBy": [
         "src/components/SettingsDeveloperLeftoverRing.test.tsx",
@@ -2284,11 +2306,13 @@
         "src/components/SettingsTab.clearAllBack.test.tsx",
         "src/components/SettingsTab.clearBoxes.test.tsx",
         "src/components/SettingsTab.focusRing.test.tsx",
+        "src/components/SettingsTab.folded.test.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
         "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/components/SettingsTabPresetSingleChip.test.tsx",
         "src/components/SettingsTabRememberTypedSwitch.test.tsx",
         "src/components/SettingsTabScreenshotHeading.test.tsx",
+        "src/components/SettingsTabUiScaleHeading.test.tsx",
         "src/components/SettingsTabUiScaleHidden.test.tsx",
         "src/components/ringTestProps.ts",
         "src/features/plugin-shell/tabs/useSettingsTabPayload.tsx"
@@ -2302,6 +2326,25 @@
         "src/styles/sections/textPx.ts"
       ],
       "importedBy": [
+        "src/components/SettingsTabCharacterSection.tsx"
+      ]
+    },
+    "src/components/SettingsTabCharacterSection.tsx": {
+      "imports": [
+        "src/components/SettingsTabAccentIntensityMenuPopover.tsx",
+        "src/data/aiCharacterAccentIntensity.ts",
+        "src/data/characterCatalog.ts",
+        "src/features/folded-tabs/DenseRow.tsx",
+        "src/features/folded-tabs/settingsTabFolds.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
+        "src/features/unified-input/constants.ts",
+        "src/styles/sections/textPx.ts",
+        "src/styles/settingsGlassButton.ts",
+        "src/utils/settingsTabLocalSurvival.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
         "src/components/SettingsTab.tsx"
       ]
     },
@@ -2313,14 +2356,25 @@
     },
     "src/components/SettingsTabChatTextSizeRow.tsx": {
       "imports": [
+        "src/components/SettingsTabChoiceRow.tsx",
         "src/data/bonsaiSettingsSchema.ts",
-        "src/styles/sections/textPx.ts",
-        "src/styles/settingsGlassButton.ts"
+        "src/features/folded-tabs/settingsTabFolds.ts"
       ],
       "importedBy": [
         "src/components/SettingsTab.tsx",
         "src/components/SettingsTabChatTextSizeRow.test.tsx",
         "src/components/textSizeSurfaces.test.tsx"
+      ]
+    },
+    "src/components/SettingsTabChoiceRow.tsx": {
+      "imports": [
+        "src/features/folded-tabs/DenseRow.tsx",
+        "src/styles/sections/textPx.ts",
+        "src/styles/settingsGlassButton.ts"
+      ],
+      "importedBy": [
+        "src/components/SettingsTab.tsx",
+        "src/components/SettingsTabChatTextSizeRow.tsx"
       ]
     },
     "src/components/SettingsTabConnectionTimeoutSlider.tsx": {
@@ -2336,6 +2390,18 @@
         "src/components/OllamaTab.tsx"
       ]
     },
+    "src/components/SettingsTabDataSection.tsx": {
+      "imports": [
+        "src/features/folded-tabs/DenseRow.tsx",
+        "src/features/folded-tabs/settingsTabFolds.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/styles/sections/textPx.ts",
+        "src/styles/settingsGlassButton.ts"
+      ],
+      "importedBy": [
+        "src/components/SettingsTab.tsx"
+      ]
+    },
     "src/components/SettingsTabOllamaKeepAliveSlider.tsx": {
       "imports": [
         "src/components/deck/DeckFocusSlider.tsx",
@@ -2348,13 +2414,15 @@
     },
     "src/components/SettingsTabPresetSingleChip.test.tsx": {
       "imports": [
-        "src/components/SettingsTab.tsx"
+        "src/components/SettingsTab.tsx",
+        "src/test-harness/settingsFoldOpen.ts"
       ],
       "importedBy": []
     },
     "src/components/SettingsTabRememberTypedSwitch.test.tsx": {
       "imports": [
-        "src/components/SettingsTab.tsx"
+        "src/components/SettingsTab.tsx",
+        "src/test-harness/settingsFoldOpen.ts"
       ],
       "importedBy": []
     },
@@ -2363,19 +2431,33 @@
         "src/components/SettingsTab.tsx",
         "src/components/ringTestProps.ts",
         "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/settingsFoldOpen.ts",
         "src/test-harness/steamRing.tsx"
       ],
       "importedBy": []
     },
     "src/components/SettingsTabUiScaleHeading.test.tsx": {
       "imports": [
-        "src/components/SettingsTabUiScaleSection.tsx"
+        "src/components/SettingsTab.tsx",
+        "src/components/ringTestProps.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/settingsFoldOpen.ts",
+        "src/test-harness/steamRing.tsx"
       ],
       "importedBy": []
     },
     "src/components/SettingsTabUiScaleHidden.test.tsx": {
       "imports": [
-        "src/components/SettingsTab.tsx"
+        "src/components/SettingsTab.tsx",
+        "src/test-harness/settingsFoldOpen.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/SettingsTabUiScaleSection.greyedApply.test.tsx": {
+      "imports": [
+        "src/components/SettingsTabUiScaleSection.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx"
       ],
       "importedBy": []
     },
@@ -2389,13 +2471,15 @@
       "imports": [
         "src/components/SettingsTabUiScaleSlider.tsx",
         "src/data/uiScaleProfile.ts",
+        "src/features/folded-tabs/DenseRow.tsx",
+        "src/features/folded-tabs/settingsTabFolds.ts",
         "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/styles/sections/textPx.ts",
         "src/styles/settingsGlassButton.ts"
       ],
       "importedBy": [
         "src/components/SettingsTab.tsx",
-        "src/components/SettingsTabUiScaleHeading.test.tsx",
+        "src/components/SettingsTabUiScaleSection.greyedApply.test.tsx",
         "src/components/SettingsTabUiScaleSection.test.ts"
       ]
     },
@@ -2470,6 +2554,8 @@
         "src/data/bonsaiSettingsSchema.ts",
         "src/features/downloads/downloadNotice.tsx",
         "src/features/downloads/downloadSites.ts",
+        "src/features/folded-tabs/DenseRow.tsx",
+        "src/features/folded-tabs/settingsTabFolds.ts",
         "src/styles/sections/textPx.ts",
         "src/styles/settingsGlassButton.ts",
         "src/utils/deckyCall.ts",
@@ -2682,8 +2768,10 @@
       "importedBy": [
         "src/components/SettingsDeveloperLeftoverRing.test.tsx",
         "src/components/SettingsDeveloperWrappedRing.test.tsx",
+        "src/components/SettingsTab.folded.test.tsx",
         "src/components/SettingsTab.textSizeWalk.test.tsx",
-        "src/components/SettingsTabScreenshotHeading.test.tsx"
+        "src/components/SettingsTabScreenshotHeading.test.tsx",
+        "src/components/SettingsTabUiScaleHeading.test.tsx"
       ]
     },
     "src/components/textSizeEverywhere.test.tsx": {
@@ -2740,6 +2828,16 @@
         "src/components/OllamaTab.tsx"
       ]
     },
+    "src/components/useSettingsTabFocus.ts": {
+      "imports": [
+        "src/features/folded-tabs/FoldedSection.tsx",
+        "src/features/folded-tabs/settingsTabFolds.ts",
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts"
+      ],
+      "importedBy": [
+        "src/components/SettingsTab.tsx"
+      ]
+    },
     "src/context/UiScaleContext.tsx": {
       "imports": [
         "src/data/uiScaleProfile.ts"
@@ -2754,6 +2852,7 @@
       "importedBy": [
         "src/components/SettingsTab.tsx",
         "src/components/SettingsTabAccentIntensityMenuPopover.tsx",
+        "src/components/SettingsTabCharacterSection.tsx",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
         "src/features/folded-tabs/settingsTabFolds.ts",
@@ -2922,7 +3021,7 @@
       "imports": [],
       "importedBy": [
         "src/components/CharacterPickerModal.tsx",
-        "src/components/SettingsTab.tsx",
+        "src/components/SettingsTabCharacterSection.tsx",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/characterCatalog.test.ts",
         "src/data/characterUiAccent.test.ts",
@@ -4275,6 +4374,12 @@
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/components/SettingsTab.tsx",
+        "src/components/SettingsTabCharacterSection.tsx",
+        "src/components/SettingsTabChoiceRow.tsx",
+        "src/components/SettingsTabDataSection.tsx",
+        "src/components/SettingsTabUiScaleSection.tsx",
+        "src/components/VoiceInputSettingsSection.tsx",
         "src/components/developerRows.tsx",
         "src/components/developerRowsDiagnostics.tsx",
         "src/features/folded-tabs/DenseRow.test.tsx"
@@ -4303,6 +4408,7 @@
       "importedBy": [
         "src/components/DeveloperTab.tsx",
         "src/components/OllamaTab.tsx",
+        "src/components/SettingsTab.tsx",
         "src/features/folded-tabs/FoldAllButton.test.tsx"
       ]
     },
@@ -4325,8 +4431,10 @@
       "importedBy": [
         "src/components/DeveloperTab.tsx",
         "src/components/OllamaTab.tsx",
+        "src/components/SettingsTab.tsx",
         "src/components/useDeveloperTabFocus.ts",
         "src/components/useOllamaTabFocus.ts",
+        "src/components/useSettingsTabFocus.ts",
         "src/features/folded-tabs/FoldAllButton.test.tsx",
         "src/features/folded-tabs/FoldAllButton.tsx",
         "src/features/folded-tabs/FoldedSection.test.tsx",
@@ -4352,6 +4460,7 @@
       "importedBy": [
         "src/components/DeveloperTab.tsx",
         "src/components/OllamaTab.tsx",
+        "src/components/SettingsTab.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx"
       ]
     },
@@ -4421,6 +4530,7 @@
         "src/components/OllamaTab.terseMode.test.tsx",
         "src/components/SettingsDeveloperLeftoverRing.test.tsx",
         "src/components/SettingsDeveloperWrappedRing.test.tsx",
+        "src/components/SettingsTab.folded.test.tsx",
         "src/features/folded-tabs/FoldAllButton.test.tsx",
         "src/features/folded-tabs/FoldAllButton.tsx",
         "src/features/folded-tabs/FoldedSection.test.tsx",
@@ -4429,7 +4539,8 @@
         "src/features/folded-tabs/foldedTabsStore.test.ts",
         "src/features/folded-tabs/useHelpStrip.ts",
         "src/hooks/useBonsaiPluginShell.foldedSwitch.test.ts",
-        "src/hooks/useBonsaiPluginShell.ts"
+        "src/hooks/useBonsaiPluginShell.ts",
+        "src/test-harness/settingsFoldOpen.ts"
       ]
     },
     "src/features/folded-tabs/ollamaTabFolds.ts": {
@@ -4479,7 +4590,16 @@
         "src/features/folded-tabs/sectionSummary.ts"
       ],
       "importedBy": [
-        "src/features/folded-tabs/settingsTabFolds.test.ts"
+        "src/components/SettingsTab.folded.test.tsx",
+        "src/components/SettingsTab.tsx",
+        "src/components/SettingsTabCharacterSection.tsx",
+        "src/components/SettingsTabChatTextSizeRow.tsx",
+        "src/components/SettingsTabDataSection.tsx",
+        "src/components/SettingsTabUiScaleSection.tsx",
+        "src/components/VoiceInputSettingsSection.tsx",
+        "src/components/useSettingsTabFocus.ts",
+        "src/features/folded-tabs/settingsTabFolds.test.ts",
+        "src/test-harness/settingsFoldOpen.ts"
       ]
     },
     "src/features/folded-tabs/useHelpStrip.ts": {
@@ -4668,8 +4788,10 @@
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/SettingsTab.clearAllBack.test.tsx",
+        "src/components/SettingsTab.folded.test.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
-        "src/components/SettingsTab.tsx",
+        "src/components/SettingsTabCharacterSection.tsx",
+        "src/components/SettingsTabDataSection.tsx",
         "src/components/useOllamaTabFocus.ts",
         "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/chat-slots/useChatSlotDeleteConfirm.test.tsx",
@@ -5076,11 +5198,12 @@
       "importedBy": [
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
-        "src/components/SettingsTab.tsx",
+        "src/components/SettingsTabCharacterSection.tsx",
         "src/components/SettingsTabConnectionTimeoutSlider.tsx",
         "src/components/SettingsTabUiScaleSection.tsx",
         "src/components/useDeveloperTabFocus.ts",
         "src/components/useOllamaTabFocus.ts",
+        "src/components/useSettingsTabFocus.ts",
         "src/features/folded-tabs/useHelpStrip.ts",
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
@@ -5762,8 +5885,8 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
-        "src/components/SettingsTab.tsx",
         "src/components/SettingsTabAccentIntensityMenuPopover.tsx",
+        "src/components/SettingsTabCharacterSection.tsx",
         "src/components/icons.tabStroke.test.tsx",
         "src/data/characterUiAccent.ts",
         "src/features/chat-title/chatTitleStyles.ts",
@@ -7823,10 +7946,11 @@
         "src/components/PullModelsTryOrder.tsx",
         "src/components/RagCorpusStoragePickerModal.tsx",
         "src/components/SessionContextStrip.tsx",
-        "src/components/SettingsTab.tsx",
         "src/components/SettingsTabAccentIntensityMenuPopover.tsx",
-        "src/components/SettingsTabChatTextSizeRow.tsx",
+        "src/components/SettingsTabCharacterSection.tsx",
+        "src/components/SettingsTabChoiceRow.tsx",
         "src/components/SettingsTabConnectionTimeoutSlider.tsx",
+        "src/components/SettingsTabDataSection.tsx",
         "src/components/SettingsTabUiScaleSection.tsx",
         "src/components/SettingsTabUiScaleSlider.tsx",
         "src/components/StrategyChecklistPanel.tsx",
@@ -7922,8 +8046,9 @@
         "src/components/PermissionDenyAction.tsx",
         "src/components/PermissionsTab.tsx",
         "src/components/RagCorpusStoragePickerModal.tsx",
-        "src/components/SettingsTab.tsx",
-        "src/components/SettingsTabChatTextSizeRow.tsx",
+        "src/components/SettingsTabCharacterSection.tsx",
+        "src/components/SettingsTabChoiceRow.tsx",
+        "src/components/SettingsTabDataSection.tsx",
         "src/components/SettingsTabUiScaleSection.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
         "src/components/developerRows.tsx",
@@ -8196,8 +8321,11 @@
         "src/components/SettingsTab.accentMenuRing.test.tsx",
         "src/components/SettingsTab.clearAllBack.test.tsx",
         "src/components/SettingsTab.clearBoxes.test.tsx",
+        "src/components/SettingsTab.folded.test.tsx",
         "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/components/SettingsTabScreenshotHeading.test.tsx",
+        "src/components/SettingsTabUiScaleHeading.test.tsx",
+        "src/components/SettingsTabUiScaleSection.greyedApply.test.tsx",
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/components/textSizeEverywhere.test.tsx",
         "src/components/textSizeSurfaces.test.tsx",
@@ -8316,6 +8444,28 @@
         "src/test-harness/fakeDeckyRpc.ts"
       ]
     },
+    "src/test-harness/settingsFoldOpen.ts": {
+      "imports": [
+        "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/features/folded-tabs/settingsTabFolds.ts"
+      ],
+      "importedBy": [
+        "src/components/SettingsDeveloperLeftoverRing.test.tsx",
+        "src/components/SettingsDeveloperWrappedRing.test.tsx",
+        "src/components/SettingsTab.accentMenuRing.test.tsx",
+        "src/components/SettingsTab.clearAllBack.test.tsx",
+        "src/components/SettingsTab.clearBoxes.test.tsx",
+        "src/components/SettingsTab.focusRing.test.tsx",
+        "src/components/SettingsTab.folded.test.tsx",
+        "src/components/SettingsTab.modalReturnFocus.test.tsx",
+        "src/components/SettingsTab.textSizeWalk.test.tsx",
+        "src/components/SettingsTabPresetSingleChip.test.tsx",
+        "src/components/SettingsTabRememberTypedSwitch.test.tsx",
+        "src/components/SettingsTabScreenshotHeading.test.tsx",
+        "src/components/SettingsTabUiScaleHeading.test.tsx",
+        "src/components/SettingsTabUiScaleHidden.test.tsx"
+      ]
+    },
     "src/test-harness/settledFontSize.ts": {
       "imports": [],
       "importedBy": [
@@ -8337,8 +8487,11 @@
         "src/components/DeveloperTab.foldedWalk.test.tsx",
         "src/components/OllamaTab.foldedWalk.test.tsx",
         "src/components/PullModelsFiltersColumn.test.tsx",
+        "src/components/SettingsTab.folded.test.tsx",
         "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/components/SettingsTabScreenshotHeading.test.tsx",
+        "src/components/SettingsTabUiScaleHeading.test.tsx",
+        "src/components/SettingsTabUiScaleSection.greyedApply.test.tsx",
         "src/features/chat-slots/afterBoxHarness.tsx",
         "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
@@ -10111,6 +10264,7 @@
         "src/components/PermissionsTab.tsx",
         "src/components/PullModelsFiltersColumn.tsx",
         "src/components/PullModelsModal.tsx",
+        "src/components/SettingsTab.folded.test.tsx",
         "src/components/buildEarlierList.tsx",
         "src/components/injectChipNav.ts",
         "src/components/pullModelsBoxMemory.ts",
@@ -10545,7 +10699,7 @@
         "src/utils/createTabLocalSurvival.ts"
       ],
       "importedBy": [
-        "src/components/SettingsTab.tsx",
+        "src/components/SettingsTabCharacterSection.tsx",
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/hooks/useBonsaiPluginShell.ts"
       ]
@@ -10857,7 +11011,7 @@
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/SessionContextStrip.tsx",
-        "src/components/SettingsTab.tsx",
+        "src/components/SettingsTabCharacterSection.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.deckPlace.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",

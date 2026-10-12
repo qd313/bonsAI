@@ -26,9 +26,14 @@ import { developerProps, outlines, settingsProps } from "./ringTestProps";
 import { buildBonsaiScopeStylesheet } from "../styles/bonsaiScopeStylesheet";
 import { setAllSections } from "../features/folded-tabs/foldedTabsStore";
 import { DEVELOPER_FOLD_TAB, DEVELOPER_SECTIONS } from "../features/folded-tabs/developerTabFolds";
+import { openAllSettingsSections } from "../test-harness/settingsFoldOpen";
 
-/* The Developer tab folds (plan 92 T2): its rows are only on screen while their section is open. */
-beforeEach(() => setAllSections(DEVELOPER_FOLD_TAB, DEVELOPER_SECTIONS.map((s) => s.id), true));
+/* Both tabs fold (plan 91 § 2b; plan 92 lanes T1 and T2): these checks are about the rows, so every section of
+   both tabs is open. */
+beforeEach(() => {
+  openAllSettingsSections();
+  setAllSections(DEVELOPER_FOLD_TAB, DEVELOPER_SECTIONS.map((s) => s.id), true);
+});
 
 const SOLID_WHITE = /solid/;
 

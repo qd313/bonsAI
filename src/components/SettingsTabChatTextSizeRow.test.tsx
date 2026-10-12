@@ -45,11 +45,13 @@ describe("Settings tab Text size row", () => {
     expect(setChatTextSize.mock.calls).toEqual([["large"], ["small"]]);
   });
 
-  it("says it changes every word, not only the chat's: no 'tabs and Settings stay the same'", () => {
+  it("says it changes every word, not only the chat's, in the words the strip shows: no 'tabs and Settings stay the same'", () => {
     const { container } = render(<SettingsTabChatTextSizeRow setting={{ value: "normal", set: () => {} }} />);
-    const words = (container.querySelector(".bonsai-prose")?.textContent ?? "").replace(/\s+/g, " ").trim();
+    const words = (container.querySelector("[data-bonsai-help]")?.getAttribute("data-bonsai-help") ?? "").replace(/\s+/g, " ").trim();
     expect(words).not.toMatch(/stay the same|never change|only the chat/i);
     expect(words).toMatch(/everywhere/i);
     for (const place of ["tabs", "chat", "chips", "question box", "Settings"]) expect(words).toContain(place);
+    /* One line: the words are not drawn under the title any more. */
+    expect(container.textContent).not.toContain("everywhere");
   });
 });

@@ -40,7 +40,8 @@
  *     │        Done / Pull selected (N) · X GB          Cancel        │
  *     └────────────────────────────────────────────────────────────────┘
  *
- *     Up from Clear, from the switch, or from the first row (no switch) -> Advanced (onMoveUpFromTop)
+ *     Advanced <-> Refresh (↻) <-> Clear, the same both ways (Refresh skipped while greyed; downFromAboveRef)
+ *     Up from the switch, or from the first row (no switch) -> Advanced (onMoveUpFromTop)
  *     Down past the column's last stop, or past the list's last row -> Steam carries it to Done
  *
  * 1. refreshInstalledAndMeta() runs on mount: refreshes the merged catalog,
@@ -198,6 +199,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
     embedded = false,
     onFooterStateChange,
     onMoveUpFromTop,
+    downFromAboveRef,
   } = props;
 
   const { mergedCatalog, catalogSource, refreshCatalog } = usePullModelCatalog();
@@ -263,6 +265,27 @@ export function PullModelsModal(props: PullModelsModalProps) {
 
   /** Up out of the top of the box (Clear, the switch, the first row): the hub's Advanced link, else Steam's own move. */
   const leaveTop = useCallback((): boolean => onMoveUpFromTop?.() ?? false, [onMoveUpFromTop]);
+
+  /*
+   * Advanced, the header's Refresh (↻) and the column's Clear, in that order both ways (plan 92's second round: on
+   * the Deck Down went Advanced, Refresh, Clear but Up from Clear skipped Refresh). Each hop is Steam's transfer
+   * onto the other part's nav node. A greyed Refresh (the catalog loading) is no stop: on the Deck a greyed button
+   * still takes the ring, so it is skipped here by the box's own state, never by asking the element.
+   */
+  const refreshNavRef = useRef<NavRefHolder["current"]>(null);
+  const toRefresh = (): boolean => !(refreshingMeta || loadingMeta) && handRingTo(refreshNavRef);
+  const toClear = (): boolean => {
+    if (!handRingTo(columnNavRef)) return false;
+    columnApi.current?.focusStop(null);
+    return true;
+  };
+  useEffect(() => {
+    if (!downFromAboveRef) return;
+    downFromAboveRef.current = () => toRefresh() || toClear();
+    return () => {
+      downFromAboveRef.current = null;
+    };
+  });
 
   /**
    * Up out of the first row: the try-order switch above the list, else the Advanced link. The list goes
@@ -728,7 +751,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
 
   const panelBody = (
         <BonsaiModalScope shellRef={shellRef} className="bonsai-pullmodels-shell bonsai-prose">
-          <div className="bonsai-pullmodels-header">
+          <Focusable className="bonsai-pullmodels-header" {...({ navRef: refreshNavRef } as Record<string, unknown>)}>
             <span>Installed {installedCatalogCount} · {formatSizeGb(installedTotalGb)}</span>
             <span>Queue {selectedTags.size} · {formatSizeGb(selectedTotalGb)}</span>
             <span className="bonsai-pullmodels-size-source">
@@ -745,6 +768,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
                 }}
                 aria-label="Refresh model catalog"
                 {...({
+                  onMoveUp: leaveTop,
+                  onMoveDown: toClear,
                   onOKButton: okButtonRuns(() => {
                     if (!refreshingMeta && !loadingMeta) void refreshInstalledAndMeta(true);
                   }),
@@ -753,7 +778,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                 ↻
               </Button>
             </span>
-          </div>
+          </Focusable>
 
           {/* One Focusable laid out as a row: Steam moves only along a container's flow, so the two sides are
               its children side by side, and a Down that neither side takes leaves the pair for the dialog's
@@ -778,7 +803,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
               focusAfterRedraw={focusAfterRedraw}
               okButtonRuns={okButtonRuns}
               toList={enterList}
-              upFromTop={leaveTop}
+              upFromTop={() => toRefresh() || leaveTop()}
             />
             <div className="bonsai-pullmodels-listside">
               {tryNav.bar({ okButtonRuns, onMoveUp: leaveTop, onMoveDown: moveDownPastSwitch, nested: { before: onBeforeNestedDeckyModal, complete: completeNestedModalClose } })}

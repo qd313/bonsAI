@@ -808,7 +808,9 @@ button and the panel it opened over the list: that route (Down or B inside the p
 
 ```
 title row: "AI models"  ................  [ Advanced › ]      (its own Focusable, so it can be a transfer target)
-   ^ Up from Clear                             ^ Up from the switch, or from the first row with no switch
+   | Down  ^ Up                                ^ Up from the switch, or from the first row with no switch
+Installed 3 · 9 GB   Queue 0 · 0 GB   Live catalog · Live sizes [ ↻ ]   (the header line; ↻ in its own Focusable)
+   | Down  ^ Up        (Advanced <-> ↻ <-> Clear; ↻ skipped both ways while greyed, the catalog loading)
 [ 7 models match        Clear ]   <- the column's first stop
 LICENCE   (•) Open source only        |  [ Text ][ Pictures ][ Reset order ]   (the try-order switch, above the list)
           ( ) Also try open-weight    |  the model list (its walk unchanged)
@@ -835,9 +837,15 @@ SHOW      [ ] Installed only ...      |
   `focus()` onto the remembered stop inside it. Right always lands on a row's star, never its Remove; with no rows the
   press is held. The remembered place is read **before** the transfer, because the transfer's own landing is noted
   like any other (`PullModelsFiltersColumn.test.tsx` caught this).
-- **Up from Clear** (and Up from the try-order switch, or from the first row when there is no switch) is the screen's
-  `onMoveUpFromTop`: a transfer onto the Advanced link's own `Focusable`. Without the screen (no handler) the press is
-  Steam's own.
+- **Advanced, Refresh (↻) and Clear, the same order both ways** (plan 92's second round: on the Deck Down went
+  Advanced, Refresh, Clear by Steam's own guess, but Up from Clear skipped Refresh). Down from Advanced is the hub's own
+  handler, calling the box's `downFromAboveRef`: a transfer onto the header line's `Focusable` (Refresh), or, while
+  Refresh is greyed, onto the column and its Clear. Down from Refresh is a transfer onto the column, then Clear. Up from
+  Clear is a transfer onto Refresh, or onto Advanced while Refresh is greyed; Up from Refresh is the screen's
+  `onMoveUpFromTop`, a transfer onto the Advanced link's own `Focusable`. A greyed Refresh is skipped by the box's own
+  state (the catalog loading or refreshing), never by asking the button, because on the Deck a greyed button still takes
+  the ring. Left and Right on Refresh are Steam's own. Up from the try-order switch, or from the first row when there is
+  no switch, goes straight to Advanced as before. Without the screen (no handler) the press is Steam's own.
 - **Down past the last stop** returns `false`, so Steam carries the ring on to the dialog's Done, the same rule the
   list's last row follows (focus-graph-patterns: a container's last stop must not claim Down).
 - **The containers and their flow.** Steam moves the ring between a container's children only along its
@@ -855,8 +863,9 @@ SHOW      [ ] Installed only ...      |
 - **Where the ring opens** is unchanged: on Advanced, Steam's first stop in the screen.
 - **Tests:** `PullModelsFiltersColumn.test.tsx` (steamRing stand-in, so a bare cross-container `focus()` fails): the rows
   and headings, the counts against the rows drawn under both licence picks, Clear, Right and Left with their memories
-  across an unmount and remount, Up to Advanced, Down left to Steam, Done keeping the picks, and a bounded walk of the
-  whole box with Steam's scroll in a short column and list. `PullModelsFiltersColumn.layout.test.ts` works the list's
+  across an unmount and remount, Advanced, Refresh and Clear mirrored (and Refresh skipped while greyed), Down left to
+  Steam, Done keeping the picks, and a bounded walk of the whole box from Advanced with Steam's scroll in a short column
+  and list. Its button stand-in draws a greyed button the Deck's way: a `Disabled` class, still focusable. `PullModelsFiltersColumn.layout.test.ts` works the list's
   grid out from the stylesheet's numbers (the Model column no more than 10 per cent narrower than M-A's 124.3).
 - **Device rows:** P91-MODELS-COLUMN-WALK, -FILTERS, -DONE-KEEPS, -WIDTH (plan 91 § 5, block 4).
 

@@ -35,11 +35,12 @@
  * - The Browse/Advanced section-button row is gone too (plan 62, § 3e #3): with only two
  *   sections left, and Policy no longer one of them, a whole row of buttons cost back the same
  *   height dropping Policy alone would have saved (two buttons stretch to fill the row exactly
- *   like three did). Advanced is now a small link at the top of the screen instead, wired with no
- *   custom Up/Down of its own -- the row it replaces never had any either, so Steam's own spatial
- *   nav already knows how to reach it and leave it. It sits in a Focusable of its own (plan 91) so
- *   Up from the top of Browse (the filters column's Clear, the try-order switch) can hand the ring
- *   to it by Steam's own transfer, never a plain focus() across containers.
+ *   like three did). Advanced is now a small link at the top of the screen instead. It sits in a
+ *   Focusable of its own (plan 91) so Up from the top of Browse (the header's Refresh, the
+ *   try-order switch, the first row) can hand the ring to it by Steam's own transfer, never a plain
+ *   focus() across containers. Its one move of its own is Down, into Browse's Refresh (or Clear
+ *   while Refresh is greyed), so Down and Up mirror each other (plan 92's second round); on the
+ *   Advanced screen Down is Steam's own.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button, ConfirmModal, Focusable } from "@decky/ui";
@@ -266,6 +267,8 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
   /** The Advanced link's nav node: Up from the top of Browse hands the ring here by Steam's transfer. */
   const advancedNavRef = useRef<NavRefHolder["current"]>(null);
   const upToAdvanced = useCallback(() => handRingTo(advancedNavRef), []);
+  /** Down from Advanced: Browse's Refresh, or its Clear while Refresh is greyed (Browse fills this while drawn). */
+  const browseDownFromAboveRef = useRef<(() => boolean) | null>(null);
 
   const toggleAdvanced = useCallback(() => {
     setSection((current) => (current === "advanced" ? "browse" : "advanced"));
@@ -303,6 +306,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
                 toggleAdvanced();
               }}
               {...({
+                onMoveDown: () => browseDownFromAboveRef.current?.() ?? false,
                 onOKButton: (evt: { stopPropagation: () => void }) => {
                   evt.stopPropagation();
                   toggleAdvanced();
@@ -327,6 +331,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
               onPullAccepted={browsePullAccepted}
               onFooterStateChange={handleBrowseFooterChange}
               onMoveUpFromTop={upToAdvanced}
+              downFromAboveRef={browseDownFromAboveRef}
               tryOrderHost={hostWithDraft}
             />
           ) : null}

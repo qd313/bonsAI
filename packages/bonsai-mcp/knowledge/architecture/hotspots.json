@@ -101,6 +101,11 @@
       "role": ""
     },
     {
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 863,
+      "role": ""
+    },
+    {
       "path": "src/utils/answerBubbleNavigation.ts",
       "lines": 862,
       "role": ""
@@ -113,11 +118,6 @@
     {
       "path": "src/features/details-slot/DetailsSlot.deck.test.tsx",
       "lines": 849,
-      "role": ""
-    },
-    {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 838,
       "role": ""
     },
     {

@@ -75,6 +75,9 @@ export type PullModelsModalProps = {
    *  with no switch): the hub hands the ring to its Advanced link by Steam's transfer. Left out, or
    *  false, and the press is Steam's own. */
   onMoveUpFromTop?: () => boolean;
+  /** Filled by the box while it is drawn, emptied when it goes: Down from the hub's Advanced link calls it to hand
+   *  the ring to the header's Refresh, or to the column's Clear while Refresh is greyed (plan 92's second round). */
+  downFromAboveRef?: { current: (() => boolean) | null };
   /** Which computer answers and the saved orders. Given: the box shows the try-order switch and each
    *  installed row's place (PullModelsTryOrder.tsx). Left out: Browse models looks as it always did. */
   tryOrderHost?: TryOrderHost;

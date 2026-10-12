@@ -5,8 +5,8 @@
  * filters sit in a column beside the model list from the moment the box opens ("N models match" and
  * Clear, then Licence, Good for with a count beside each choice, Show, then the chips); a tick changes
  * the list at once and the count beside it matches the rows drawn; Clear leaves the licence; Right and
- * Left cross between the column and the list, back to where the ring was; Up from the top reaches the
- * Advanced link; Down past the bottom is left to Steam, which carries it to Done; the picks survive the
+ * Left cross between the column and the list, back to where the ring was; Advanced, the header's Refresh
+ * and Clear come in the same order going Down and Up (Refresh skipped while greyed); Down past the bottom is left to Steam, which carries it to Done; the picks survive the
  * box closing (Done included) and opening again; and a bounded walk of the whole box never visits a
  * stop twice and never leaves the ring out of sight.
  *
@@ -171,6 +171,8 @@ const matchCount = (c: HTMLElement) =>
 const listRows = (c: HTMLElement) => list(c).querySelectorAll(".bonsai-pullmodels-table-row--data").length;
 const ticked = (c: HTMLElement, label: string) => rowButton(c, label).getAttribute("aria-pressed") === "true";
 const clearButton = (c: HTMLElement) => column(c).querySelector<HTMLButtonElement>(".bonsai-pullmodels-filtercol-clear")!;
+const refreshButton = (c: HTMLElement) => c.querySelector<HTMLButtonElement>(".bonsai-pullmodels-refresh-btn")!;
+const advanced = (c: HTMLElement) => c.querySelector<HTMLButtonElement>(".bonsai-models-hub-advanced-link")!;
 const firstRowStar = (c: HTMLElement) => list(c).querySelector<HTMLButtonElement>(".bonsai-pullmodels-slot")!;
 const stars = (c: HTMLElement) => Array.from(list(c).querySelectorAll<HTMLButtonElement>(".bonsai-pullmodels-slot"));
 const nameOf = (el: Element | null) => el?.getAttribute("aria-label") ?? el?.textContent ?? "(nothing)";
@@ -399,16 +401,33 @@ describe("the D-pad between the column and the list", () => {
 
 describe("the top and the bottom of the box (inside the AI models screen)", () => {
   const openHub = (over: Partial<React.ComponentProps<typeof OllamaModelsHubModal>> = {}) => loaded(renderHub(over));
-  const advanced = (c: HTMLElement) => c.querySelector<HTMLButtonElement>(".bonsai-models-hub-advanced-link")!;
-
-  it("Up from Clear, the column's first stop, reaches the Advanced link by Steam's transfer; so does Up from the list's first row", async () => {
+  it("Down and Up are mirror images at the top: Advanced, Refresh, Clear and back, each by Steam's transfer", async () => {
     const { container } = await openHub();
-    putSteamRingOn(rowButton(container, "Open source only (recommended)"));
+    // Up first: on the Deck, Up from Clear skipped Refresh and went straight to Advanced.
+    putSteamRingOn(clearButton(container));
     expect(press("Up")).toBe(true);
-    expect(steamRingHolder()).toBe(clearButton(container));
+    expect(nameOf(steamRingHolder()), "Up from Clear").toBe(nameOf(refreshButton(container)));
     expect(press("Up")).toBe(true);
-    expect(steamRingHolder()).toBe(advanced(container));
+    expect(nameOf(steamRingHolder()), "Up from Refresh").toBe(nameOf(advanced(container)));
+    expect(press("Down")).toBe(true);
+    expect(nameOf(steamRingHolder()), "Down from Advanced").toBe(nameOf(refreshButton(container)));
+    expect(press("Down")).toBe(true);
+    expect(nameOf(steamRingHolder()), "Down from Refresh").toBe(nameOf(clearButton(container)));
+  });
 
+  it("while the catalog is still loading (Refresh greyed) Refresh is no stop: Down from Advanced lands on Clear, Up from Clear on Advanced", async () => {
+    setRpcHandler("test_ollama_connection", () => new Promise(() => {})); // the Deck's Ollama has not answered yet
+    const { container } = renderHub();
+    expect(refreshButton(container).classList.contains("Disabled")).toBe(true);
+    putSteamRingOn(advanced(container));
+    expect(press("Down")).toBe(true);
+    expect(nameOf(steamRingHolder()), "Down from Advanced").toBe(nameOf(clearButton(container)));
+    expect(press("Up")).toBe(true);
+    expect(nameOf(steamRingHolder()), "Up from Clear").toBe(nameOf(advanced(container)));
+  });
+
+  it("Up from the list's first row reaches the Advanced link by Steam's transfer, as before", async () => {
+    const { container } = await openHub();
     putSteamRingOn(firstRowStar(container));
     expect(press("Up")).toBe(true);
     expect(steamRingHolder()).toBe(advanced(container));
@@ -512,7 +531,7 @@ describe("a walk of the whole box, Steam scrolling whatever takes the ring", () 
     };
     const inSight = (el: HTMLElement, where: string) => {
       const r = el.getBoundingClientRect();
-      if (el.classList.contains("bonsai-models-hub-advanced-link") || el === doneButton(c)) return; // title row and footer
+      if (el === advanced(c) || el === refreshButton(c) || el === doneButton(c)) return; // title row, header line, footer
       if (col.contains(el)) {
         expect(r.top, `${where}: top in the column`).toBeGreaterThanOrEqual(COL_TOP);
         expect(r.bottom, `${where}: bottom in the column`).toBeLessThanOrEqual(COL_TOP + COL_HEIGHT);
@@ -540,7 +559,8 @@ describe("a walk of the whole box, Steam scrolling whatever takes the ring", () 
     };
 
     const isDone = (el: HTMLElement) => el === doneButton(c);
-    putSteamRingOn(clearButton(c));
+    // From where the box opens (Advanced), Down walks the header's Refresh, the column, then Steam's own Done.
+    putSteamRingOn(advanced(c));
     const down = walk("Down", isDone);
     // Every stop the column draws, the greyed licence row aside, then Steam's own move on to Done. The greyed row
     // is drawn the Deck's way (a Disabled class, still focusable), so only the column's own walk can skip it.
@@ -549,15 +569,15 @@ describe("a walk of the whole box, Steam scrolling whatever takes the ring", () 
     const drawnButtons = Array.from(col.querySelectorAll<HTMLButtonElement>("button")).filter((b) => b !== greyedRow);
     const drawn = drawnButtons.map(nameOf);
     expect(down, "Down stopped on the greyed licence row").not.toContain(nameOf(greyedRow));
-    expect(down).toEqual([...drawn, "Done"]);
+    const top = [nameOf(advanced(c)), nameOf(refreshButton(c))];
+    expect(down).toEqual([...top, ...drawn, "Done"]);
     expect(col.scrollTop).toBeGreaterThan(0); // the walk really scrolled the column
 
     putSteamRingOn(drawnButtons[drawnButtons.length - 1]);
     steamScrolls(steamRingHolder());
-    const up = walk("Up", (el) => el.classList.contains("bonsai-models-hub-advanced-link"));
+    const up = walk("Up", (el) => el === advanced(c));
     expect(up, "Up stopped on the greyed licence row").not.toContain(nameOf(greyedRow));
-    expect(up.slice(0, -1)).toEqual([...drawn].reverse());
-    expect(up[up.length - 1]).toBe(nameOf(c.querySelector(".bonsai-models-hub-advanced-link")));
+    expect(up, "Up is Down reversed, Refresh included").toEqual([...top, ...drawn].reverse());
 
     putSteamRingOn(rowButton(c, "Speed"));
     expect(press("Right")).toBe(true);

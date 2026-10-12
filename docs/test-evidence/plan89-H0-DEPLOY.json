@@ -1,0 +1,22 @@
+{
+  "row": "plan89-H0-DEPLOY",
+  "build_commit": "f5e4dc12 (Delete box: Right and Left now step between Cancel and Delete); dist rebuilt by deck_deploy at 23:11:34 EDT on the Deck",
+  "deck_time_local": "Sun 2026-10-11 23:11 to 23:15 EDT",
+  "screen": "MONITOR: Quick Access page window 855 x 766, screen 1500 x 843",
+  "setup": "Keep-awake taken first: held, expiresAt 2026-10-12T11:11:04Z. Deck restarted by maintainer at 23:03 after a freeze at about 22:17. Quick Access was closed, plugin loaded fresh.",
+  "pressed": "deck_deploy; deck_openPlugin twice (first failed: 'something else owns input, no pane appeared'; second opened it, steam-routed).",
+  "seen": {
+    "deploy": "ok, loader active, copied dist/main.py/plugin.json/package.json/assets/py_modules/bin",
+    "open": "first attempt failed, second worked",
+    "panel": "Main tab, chat 1 of 7, ring on the empty question box, header 'chat 1 of 7'",
+    "text_size_setting": "chat_text_size = small (read from settings.json over SSH)",
+    "window": "855 x 766",
+    "memory": "12303 MB available"
+  },
+  "expected": "Deploy current experimental, record commit, open plugin (may fail once or twice), Main tab, test chat; Text size expected Small.",
+  "verdict": [
+    "PASS deploy done on f5e4dc12",
+    "PASS plugin opened on the second try (first failure expected)",
+    "PASS Text size read: small, as expected"
+  ]
+}

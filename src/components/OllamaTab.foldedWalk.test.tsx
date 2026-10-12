@@ -83,10 +83,10 @@ function props(): OllamaTabProps {
   };
 }
 
-function walk(viewport: number, steam: SteamFocusScroll) {
+function walk(viewport: number, steam: SteamFocusScroll, over: Partial<OllamaTabProps> = {}) {
   return walkFoldedTab({
     tabId: OLLAMA_FOLD_TAB,
-    tab: <OllamaTab {...props()} />,
+    tab: <OllamaTab {...props()} {...over} />,
     viewport,
     steam,
     stripHeight: stripHeightFor,
@@ -148,6 +148,26 @@ describe("the folded Ollama tab, every section closed", () => {
     const open = Array.from(w.container.querySelectorAll<HTMLElement>('.bonsai-fold-line[data-open="true"]'));
     expect(open.map((el) => el.dataset.bonsaiFoldLine)).toEqual(["where"]);
     expect(w.contentHeight() - TAIL).toBeLessThan(DECK_PANE * 1.5);
+    w.unmount();
+  });
+});
+
+describe("A on a closed section line only opens the section", () => {
+  it("A on the closed AI models line (and on Where AI runs) opens the sections and runs no button's action", () => {
+    const openHub = vi.fn();
+    const w = walk(DECK_PANE, "nearest", { onOpenOllamaModelsHub: openHub });
+    for (const id of ["where", "models"]) {
+      const line = w.container.querySelector<HTMLElement>(`[data-bonsai-fold-line="${id}"]`) as SteamEl;
+      act(() => {
+        putSteamRingOn(line);
+        (line.__nav?.onOKButton as (() => void) | undefined)?.();
+      });
+    }
+    const open = Array.from(w.container.querySelectorAll<HTMLElement>('.bonsai-fold-line[data-open="true"]'));
+    expect(open.map((el) => el.dataset.bonsaiFoldLine)).toEqual(["where", "models"]);
+    /* The buttons are drawn now, the first one of each section included, and none of them has been pressed. */
+    expect(w.container.querySelector('button[aria-label="AI models"]')).not.toBeNull();
+    expect(openHub).not.toHaveBeenCalled();
     w.unmount();
   });
 });

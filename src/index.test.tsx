@@ -13,6 +13,7 @@ import type { ReactElement } from "react";
 import { PLUGIN_VERSION } from "./pluginVersion";
 import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "./test-harness/fakeDeckyRpc";
 import { defaultSettingsFixture } from "./test-harness/rpcFixtures";
+import { mountedBonsaiTabIds } from "./features/plugin-shell/tabTitles";
 
 type DeckyPlugin = {
   name?: string;
@@ -117,6 +118,19 @@ describe("plugin root", () => {
       expect(ids).not.toContain("developer");
     });
 
+    it("lists the tabs in the strip's own order with Search first, left of Main (plan 92)", async () => {
+      const plugin = await freshPlugin();
+      const { container } = render(plugin.content as ReactElement);
+
+      await waitFor(() => {
+        expect(container.querySelectorAll("[data-tab-id]").length).toBeGreaterThan(0);
+      });
+      const ids = Array.from(container.querySelectorAll("[data-tab-id]")).map((el) => el.getAttribute("data-tab-id"));
+      expect(ids).toEqual(mountedBonsaiTabIds(false));
+      expect(ids[0]).toBe("search");
+      expect(ids[1]).toBe("main");
+    });
+
     // The preview suite scopes its DOM snapshots to one tab panel, because a snapshot of
     // `.bonsai-scope` is 8000 characters of the stylesheet BonsaiPluginShell injects as its
     // first child and never reaches rendered markup. These anchors are the only thing making
@@ -175,6 +189,8 @@ describe("plugin root", () => {
             el.getAttribute("data-tab-id"),
           );
           expect(ids).toContain("developer");
+          // Seven tabs in the strip's order: Search first, Developer just before About.
+          expect(ids).toEqual(mountedBonsaiTabIds(true));
         },
         { timeout: 3000 },
       );

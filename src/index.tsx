@@ -79,9 +79,9 @@
  *    reopens mid-question — and, the deliberate opposite of that,
  *    resetPluginSession and onClearAllPluginData, the two ways a session can
  *    be thrown away on purpose.
- * 4. Build one useXxxTabPayload() call per tab — useMainTabPayload,
- *    useSettingsTabPayload, useOllamaTabPayload, usePermissionsTabPayload,
- *    useDeveloperTabPayload, useAboutTabPayload — each one turning the state
+ * 4. Build one useXxxTabPayload() call per tab — useSearchTabPayload,
+ *    useMainTabPayload, useSettingsTabPayload, useOllamaTabPayload,
+ *    usePermissionsTabPayload, useDeveloperTabPayload, useAboutTabPayload — each one turning the state
  *    gathered above into exactly the props that tab's own components need.
  * 5. Assemble deckyTabs, the list Steam's own Tabs component draws from, and
  *    render the tab strip above it.
@@ -132,6 +132,7 @@ import { loadSavedSearchQuery, persistSearchQuery } from "./features/plugin-shel
 import { useOllamaConnectionState } from "./features/plugin-shell/useOllamaConnectionState";
 import { useDeveloperTabPayload } from "./features/plugin-shell/tabs/useDeveloperTabPayload";
 import { useAboutTabPayload } from "./features/plugin-shell/tabs/useAboutTabPayload";
+import { useSearchTabPayload } from "./features/plugin-shell/tabs/useSearchTabPayload";
 import { usePermissionsTabPayload } from "./features/plugin-shell/tabs/usePermissionsTabPayload";
 import { useSettingsTabPayload } from "./features/plugin-shell/tabs/useSettingsTabPayload";
 import { useOllamaTabPayload } from "./features/plugin-shell/tabs/useOllamaTabPayload";
@@ -1146,9 +1147,26 @@ const Content: React.FC = () => {
     t: uiT,
   });
 
+  const searchTab = useSearchTabPayload();
+
   const deckyTabs = useMemo(
     () => {
       const rows: Array<{ id: string; title: React.ReactElement; content: React.ReactNode }> = [
+        // Search is the first tab, left of Main (plan 92, D129 call 3).
+        {
+          id: "search",
+          title: DECKY_TAB_TITLES.search,
+          content: (
+            <TabBodyFocusRoot id="search">
+              <div
+                className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight"
+                data-bonsai-tab-panel="search"
+              >
+                {searchTab}
+              </div>
+            </TabBodyFocusRoot>
+          ),
+        },
         {
           id: "main",
           title: DECKY_TAB_TITLES.main,
@@ -1214,9 +1232,9 @@ const Content: React.FC = () => {
       });
       return rows;
     },
-    [showDeveloperTab, mainTab, ollamaTab, settingsTab, permissionsTab, developerTab, aboutTab]
+    [showDeveloperTab, searchTab, mainTab, ollamaTab, settingsTab, permissionsTab, developerTab, aboutTab]
   );
-  /** The bar's dash count follows the mounted tabs — five without Developer, six with. */
+  /** The bar's dash count follows the mounted tabs — six without Developer, seven with. */
   const tabBarIds = useMemo(() => deckyTabs.map((row) => row.id as BonsaiTabId), [deckyTabs]);
   /**
    * Down from the tab bar (plan 30 W4). On Main, the chat's first stop, or the question box

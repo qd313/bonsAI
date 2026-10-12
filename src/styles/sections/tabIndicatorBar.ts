@@ -4,7 +4,7 @@
  * Purpose: Styles the thin bar that replaced Steam's own tab strip, as
  * plan 84's design "T3" with plan 87 F4's fixed order: one 20-point row of
  * three columns, LB, the tabs and RB. The tabs are all drawn, always in the
- * strip's own order (Main far left, About far right, never wrapping round):
+ * strip's own order (Search far left since plan 92, About far right, never wrapping round):
  * the current tab's icon and name sit at its own place in the row and every
  * other tab is a small dimmed icon, 18 points wide at the least. LB and RB
  * marks sit 16 points in from each edge, dim until the ring is on the bar.

@@ -62,9 +62,10 @@ export function neighbourTab(tabIds: readonly string[], currentTab: string, step
 
 /**
  * Which tabs the bar draws beside the current one (plan 87 F4): the tabs before it, in strip order, on its
- * left, and the tabs after it, in strip order, on its right. Nothing wraps round here, so Main is always
- * the leftmost thing and About the rightmost; only LB, RB, Left and Right wrap (`neighbourTab`), and the
- * drawing does not move with them. A current tab that is not mounted gets no sides, so a stale id claims
+ * left, and the tabs after it, in strip order, on its right. Nothing wraps round here, so the first tab is
+ * always the leftmost thing and About the rightmost; only LB, RB, Left and Right wrap (`neighbourTab`), and
+ * the drawing does not move with them. The first tab is Search, since plan 92 (D129 call 3) put it left of
+ * Main; before that Main was always the leftmost. A current tab that is not mounted gets no sides, so a stale id claims
  * nothing.
  */
 export function tabBarSides<T extends string>(tabIds: readonly T[], currentTab: string): { left: T[]; right: T[] } {

@@ -9,25 +9,33 @@ import { describe, expect, it, vi } from "vitest";
 
 import { buildTabBarNavHandlers, neighbourTab, tabBarSides } from "./tabBarNav";
 
-const SIX = ["main", "ollama", "settings", "permissions", "developer", "about"] as const;
-const FIVE = SIX.filter((id) => id !== "developer");
+/** The tabs in the strip's order, since plan 92: Search first, left of Main. Seven with the Developer tab on, six without. */
+const SEVEN = ["search", "main", "ollama", "settings", "permissions", "developer", "about"] as const;
+const SIX = SEVEN.filter((id) => id !== "developer");
 
 /** The shape `deckButtonId` reads: a GamepadEvent with `detail.button`. A = 1, B = 2, LB = 5, RB = 6. */
 const press = (button: number) => ({ detail: { button } });
 
 describe("neighbourTab", () => {
   it("steps to the next and previous tab", () => {
-    expect(neighbourTab(SIX, "settings", 1)).toBe("permissions");
-    expect(neighbourTab(SIX, "settings", -1)).toBe("ollama");
+    expect(neighbourTab(SEVEN, "settings", 1)).toBe("permissions");
+    expect(neighbourTab(SEVEN, "settings", -1)).toBe("ollama");
   });
 
-  it("wraps at both ends, the way LB and RB do on the device", () => {
-    expect(neighbourTab(SIX, "main", -1)).toBe("about");
-    expect(neighbourTab(SIX, "about", 1)).toBe("main");
+  it("wraps at both ends, the way LB and RB do on the device: LB on Search goes to About, RB on About to Search", () => {
+    for (const ids of [SIX, SEVEN]) {
+      expect(neighbourTab(ids, "search", -1)).toBe("about");
+      expect(neighbourTab(ids, "about", 1)).toBe("search");
+    }
+  });
+
+  it("steps from Main to Search with LB or Left, and from Search to Main with RB or Right", () => {
+    expect(neighbourTab(SEVEN, "main", -1)).toBe("search");
+    expect(neighbourTab(SEVEN, "search", 1)).toBe("main");
   });
 
   it("resolves an unknown current tab to the first one, and an empty list to nothing", () => {
-    expect(neighbourTab(SIX, "nope", 1)).toBe("main");
+    expect(neighbourTab(SEVEN, "nope", 1)).toBe("search");
     expect(neighbourTab([], "main", 1)).toBeNull();
   });
 });
@@ -35,7 +43,7 @@ describe("neighbourTab", () => {
 describe("buildTabBarNavHandlers", () => {
   const make = (currentTab = "settings", exitDown: () => boolean = () => true) => {
     const selectTab = vi.fn();
-    const h = buildTabBarNavHandlers({ tabIds: SIX, currentTab, selectTab, exitDown });
+    const h = buildTabBarNavHandlers({ tabIds: SEVEN, currentTab, selectTab, exitDown });
     return { h, selectTab };
   };
 
@@ -48,12 +56,12 @@ describe("buildTabBarNavHandlers", () => {
   });
 
   it("wraps rather than stopping at the ends, so Left/Right and LB/RB agree", () => {
-    const first = make("main");
+    const first = make("search");
     expect(first.h.onMoveLeft()).toBe(true);
     expect(first.selectTab).toHaveBeenCalledWith("about");
     const last = make("about");
     expect(last.h.onMoveRight()).toBe(true);
-    expect(last.selectTab).toHaveBeenCalledWith("main");
+    expect(last.selectTab).toHaveBeenCalledWith("search");
   });
 
   it("switches on LB and RB itself, because Steam cannot see a bumper pressed outside its Tabs", () => {
@@ -90,7 +98,7 @@ describe("buildTabBarNavHandlers", () => {
   it("with upHolds (the bar at the very top, plan 84 step 6) Up claims and switches nothing", () => {
     const selectTab = vi.fn();
     const exitDown = vi.fn(() => true);
-    const h = buildTabBarNavHandlers({ tabIds: FIVE, currentTab: "settings", selectTab, exitDown, upHolds: true });
+    const h = buildTabBarNavHandlers({ tabIds: SIX, currentTab: "settings", selectTab, exitDown, upHolds: true });
     expect(h.onMoveUp()).toBe(true);
     expect(selectTab).not.toHaveBeenCalled();
     expect(exitDown).not.toHaveBeenCalled();
@@ -99,8 +107,8 @@ describe("buildTabBarNavHandlers", () => {
 
 describe("tabBarSides (plan 87 F4: a fixed order, never wrapping round)", () => {
   it.each([
-    ["five", FIVE],
     ["six", SIX],
+    ["seven", SEVEN],
   ] as const)("at %s tabs, the left is exactly the tabs before the current one and the right the tabs after it, both in strip order", (_n, ids) => {
     ids.forEach((current, index) => {
       const { left, right } = tabBarSides(ids, current);
@@ -109,17 +117,23 @@ describe("tabBarSides (plan 87 F4: a fixed order, never wrapping round)", () => 
     });
   });
 
-  it("never wraps: Main has nothing on its left and About nothing on its right, and the shoulder buttons still wrap", () => {
-    expect(tabBarSides(SIX, "main")).toEqual({ left: [], right: ["ollama", "settings", "permissions", "developer", "about"] });
-    expect(tabBarSides(SIX, "about")).toEqual({ left: ["main", "ollama", "settings", "permissions", "developer"], right: [] });
-    expect(tabBarSides(FIVE, "settings")).toEqual({ left: ["main", "ollama"], right: ["permissions", "about"] });
+  it("never wraps: Search has nothing on its left and About nothing on its right, and the shoulder buttons still wrap", () => {
+    expect(tabBarSides(SEVEN, "search")).toEqual({ left: [], right: ["main", "ollama", "settings", "permissions", "developer", "about"] });
+    expect(tabBarSides(SEVEN, "about")).toEqual({ left: ["search", "main", "ollama", "settings", "permissions", "developer"], right: [] });
+    expect(tabBarSides(SIX, "settings")).toEqual({ left: ["search", "main", "ollama"], right: ["permissions", "about"] });
     // The drawing stops moving; the buttons do not.
-    expect(neighbourTab(SIX, "main", -1)).toBe("about");
-    expect(neighbourTab(SIX, "about", 1)).toBe("main");
+    expect(neighbourTab(SEVEN, "search", -1)).toBe("about");
+    expect(neighbourTab(SEVEN, "about", 1)).toBe("search");
+  });
+
+  it("from Search the bar shows Search's name with every other tab on its right; from Main only Search is on its left (plan 92, D129 call 3)", () => {
+    expect(tabBarSides(SIX, "search")).toEqual({ left: [], right: ["main", "ollama", "settings", "permissions", "about"] });
+    expect(tabBarSides(SIX, "main")).toEqual({ left: ["search"], right: ["ollama", "settings", "permissions", "about"] });
+    expect(tabBarSides(SEVEN, "main")).toEqual({ left: ["search"], right: ["ollama", "settings", "permissions", "developer", "about"] });
   });
 
   it("shows no sides for a tab that is not mounted, so a stale id claims nothing", () => {
-    expect(tabBarSides(FIVE, "developer")).toEqual({ left: [], right: [] });
+    expect(tabBarSides(SIX, "developer")).toEqual({ left: [], right: [] });
     expect(tabBarSides([], "main")).toEqual({ left: [], right: [] });
   });
 });

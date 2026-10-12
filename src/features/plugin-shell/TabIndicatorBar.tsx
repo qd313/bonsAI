@@ -3,12 +3,12 @@
  *
  * Purpose: Draws the thin bar that replaced Steam's own tab strip at the
  * top of the plugin, as plan 84's design "T3" in plan 87 F4's fixed order:
- * every tab, always in the strip's own order, Main at the far left and
- * About at the far right and nothing wrapping round. The current tab is
+ * every tab, always in the strip's own order, Search (left of Main, since
+ * plan 92) at the far left and About at the far right and nothing wrapping round. The current tab is
  * drawn as its icon and name at its own place in the row, every other tab
  * as a small dimmed icon (the tabs before it on its left, the tabs after
  * it on its right), and LB and RB marks sit at the two ends. LB and RB
- * still wrap round (LB on Main goes to About); only the drawing stays put. LB and RB are dim until
+ * still wrap round (LB on Search goes to About, RB on About goes to Search); only the drawing stays put. LB and RB are dim until
  * the D-pad's ring is on the bar; then the whole bar wears the ring and
  * the marks light up. Nothing drops down from it.
  *
@@ -46,7 +46,7 @@ import { buildTabBarNavHandlers, neighbourTab, tabBarSides } from "./tabBarNav";
 import { BONSAI_TAB_SHORT_NAMES, bonsaiTabBarIcon, type BonsaiTabId } from "./tabTitles";
 
 export type TabIndicatorBarProps = {
-  /** The mounted tabs in strip order — five without Developer, six with. */
+  /** The mounted tabs in strip order — six without Developer, seven with. */
   tabIds: readonly BonsaiTabId[];
   /** `currentTab` from the plugin shell. An id that is not mounted lights nothing. */
   currentTab: string;

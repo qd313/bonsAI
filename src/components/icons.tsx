@@ -2,7 +2,7 @@
  * Title: The plugin's icon set
  *
  * Purpose: Every small icon drawn anywhere in the plugin, gathered in one
- * file: the tab-title icons (a lock for Permissions, a gear for Settings, a
+ * file: the tab-title icons (a magnifier for Search, a lock for Permissions, a gear for Settings, a
  * bonsai tree for Main, a bug for Developer, the Ollama mark, a lowercase
  * "i" for About), the plugin's own logo as an inline icon (the open tab
  * strip's Main cell, plan 59), the thumbs-up/down and copy icons on a
@@ -23,7 +23,7 @@
  * piece of inline content.
  */
 import React from "react";
-import { FiLock, FiSettings, FiThumbsDown, FiThumbsUp } from "react-icons/fi";
+import { FiLock, FiSearch, FiSettings, FiThumbsDown, FiThumbsUp } from "react-icons/fi";
 import { BONSAI_LOGO_PATH } from "./bonsaiLogoPath";
 const IconShell: React.FC<{ size: number; children: React.ReactNode }> = ({ size, children }) => (
   <span
@@ -63,6 +63,18 @@ export const LockIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
 export const GearIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
   <IconShell size={size}>
     <FiSettings
+      size={size}
+      strokeWidth={strokeForTabSize(size)}
+      aria-hidden
+      style={{ display: "block" }}
+    />
+  </IconShell>
+);
+
+/** Search tab: a magnifier in the same stroke style as the gear and the lock, so it reads at the tab bar's small sizes. */
+export const SearchTabIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
+  <IconShell size={size}>
+    <FiSearch
       size={size}
       strokeWidth={strokeForTabSize(size)}
       aria-hidden

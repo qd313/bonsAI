@@ -16,6 +16,7 @@ import {
   BONSAI_TAB_SHORT_NAMES,
   DECKY_TAB_TITLES,
   bonsaiTabIconTitle,
+  mountedBonsaiTabIds,
 } from "./tabTitles";
 
 describe("decky tab titles", () => {
@@ -38,6 +39,31 @@ describe("decky tab titles", () => {
     const { container } = render(bonsaiTabIconTitle("settings", <span>ignored</span>));
     const leaf = container.querySelector(".bonsai-tab-title-leaf");
     expect(leaf?.getAttribute("aria-label")).toBe(BONSAI_TAB_ACCESSIBLE_NAMES.settings);
+  });
+});
+
+describe("the strip's order (plan 92, D129 call 3)", () => {
+  it("puts Search first, left of Main, with the Developer tab off", () => {
+    expect(mountedBonsaiTabIds(false)).toEqual(["search", "main", "ollama", "settings", "permissions", "about"]);
+  });
+
+  it("puts Developer between Permissions and About when it is on, and keeps Search first", () => {
+    expect(mountedBonsaiTabIds(true)).toEqual([
+      "search",
+      "main",
+      "ollama",
+      "settings",
+      "permissions",
+      "developer",
+      "about",
+    ]);
+  });
+
+  it("names Search as the magnifier tab", () => {
+    expect(BONSAI_TAB_SHORT_NAMES.search).toBe("Search");
+    expect(BONSAI_TAB_ACCESSIBLE_NAMES.search).toBe("Search bonsAI");
+    const { container } = render(DECKY_TAB_TITLES.search);
+    expect(container.querySelector(".bonsai-tab-title-icon--search svg")).not.toBeNull();
   });
 });
 

@@ -57,14 +57,15 @@ function barProps(): Record<string, (...args: unknown[]) => unknown> {
 /** The shape `deckButtonId` reads: a GamepadEvent with `detail.button`. LB = 5, RB = 6. */
 const press = (button: number) => ({ detail: { button } });
 
-const SIX = ALL_BONSAI_TAB_IDS;
-const FIVE: readonly BonsaiTabId[] = SIX.filter((id) => id !== "developer");
+/** Seven tabs with the Developer tab on, six without: Search is the first tab since plan 92. */
+const SEVEN = ALL_BONSAI_TAB_IDS;
+const SIX: readonly BonsaiTabId[] = SEVEN.filter((id) => id !== "developer");
 
 /** The bar with its two callbacks stubbed; tests that care pass their own. */
 function bar(props: Partial<React.ComponentProps<typeof TabIndicatorBar>> = {}) {
   return (
     <TabIndicatorBar
-      tabIds={SIX}
+      tabIds={SEVEN}
       currentTab="main"
       selectTab={vi.fn()}
       exitDown={() => true}
@@ -153,8 +154,8 @@ describe("the tab bar as T3 (plan 84 step 4)", () => {
   });
 
   it.each([
-    ["five", FIVE],
     ["six", SIX],
+    ["seven", SEVEN],
   ] as const)("at %s tabs, every current tab draws all the tabs left to right in the strip's own order, the current one at its own place (plan 87 F4)", (_n, ids) => {
     for (const [index, current] of ids.entries()) {
       const { container, unmount } = render(bar({ tabIds: ids, currentTab: current }), { container: host() });
@@ -166,8 +167,8 @@ describe("the tab bar as T3 (plan 84 step 4)", () => {
       ).toEqual([...ids]);
       expect(drawn.findIndex(([, isCurrent]) => isCurrent), `${current}: where the current tab sits`).toBe(index);
       expect(drawn.filter(([, isCurrent]) => isCurrent)).toHaveLength(1);
-      // Main is the first thing after LB and About the last before RB, whichever tab is showing.
-      expect(drawn[0][0]).toBe("main");
+      // Search is the first thing after LB and About the last before RB, whichever tab is showing.
+      expect(drawn[0][0]).toBe("search");
       expect(drawn[drawn.length - 1][0]).toBe("about");
       for (const peek of Array.from(container.querySelectorAll(".bonsai-tab-bar__peek"))) {
         expect(peek.querySelector("svg")).not.toBeNull();
@@ -177,16 +178,22 @@ describe("the tab bar as T3 (plan 84 step 4)", () => {
     }
   });
 
-  it("does not wrap round: on Main nothing is drawn before it, on About nothing after it", () => {
+  it("does not wrap round: on Search nothing is drawn before it, on About nothing after it; on Main only Search is before it", () => {
+    const search = render(bar({ currentTab: "search" }), { container: host() });
+    expect(search.container.querySelector(".bonsai-tab-bar__tabs")!.firstElementChild!.className).toBe("bonsai-tab-bar__current");
+    expect(search.container.querySelector(".bonsai-tab-bar__name")?.textContent).toBe("Search");
+    search.unmount();
     const main = render(bar({ currentTab: "main" }), { container: host() });
-    expect(main.container.querySelector(".bonsai-tab-bar__tabs")!.firstElementChild!.className).toBe("bonsai-tab-bar__current");
+    const mainSides = Array.from(main.container.querySelector(".bonsai-tab-bar__tabs")!.children);
+    expect(mainSides[0]!.getAttribute("data-bonsai-tab")).toBe("search");
+    expect(mainSides[1]!.className).toBe("bonsai-tab-bar__current");
     main.unmount();
     const about = render(bar({ currentTab: "about" }), { container: host() });
     expect(about.container.querySelector(".bonsai-tab-bar__tabs")!.lastElementChild!.className).toBe("bonsai-tab-bar__current");
   });
 
   it("lights nothing and names nothing for a tab that is not mounted, so a stale id never claims a tab", () => {
-    const { container } = render(bar({ tabIds: FIVE, currentTab: "developer" }), { container: host() });
+    const { container } = render(bar({ tabIds: SIX, currentTab: "developer" }), { container: host() });
     expect(container.querySelector(".bonsai-tab-bar__name")?.textContent).toBe("");
     expect(container.querySelector(".bonsai-tab-bar__current-icon")).toBeNull();
     expect(container.querySelectorAll(".bonsai-tab-bar__peek")).toHaveLength(0);
@@ -229,7 +236,7 @@ describe("the tab bar as T3 (plan 84 step 4)", () => {
 describe("the tab bar's presses and taps (plan 84 step 4)", () => {
   it("Left and LB step back one tab and wrap from the first to the last; Right and RB step on and wrap back", () => {
     const selectTab = vi.fn();
-    const first = render(bar({ selectTab, currentTab: "main" }));
+    const first = render(bar({ selectTab, currentTab: "search" }));
     expect(barProps().onMoveLeft()).toBe(true);
     expect(selectTab).toHaveBeenLastCalledWith("about");
     expect(barProps().onButtonDown(press(5))).toBe(true);
@@ -237,8 +244,21 @@ describe("the tab bar's presses and taps (plan 84 step 4)", () => {
     first.unmount();
     render(bar({ selectTab, currentTab: "about" }));
     expect(barProps().onMoveRight()).toBe(true);
-    expect(selectTab).toHaveBeenLastCalledWith("main");
+    expect(selectTab).toHaveBeenLastCalledWith("search");
     expect(barProps().onButtonDown(press(6))).toBe(true);
+    expect(selectTab).toHaveBeenLastCalledWith("search");
+  });
+
+  it("Left from Main lands on Search, and Right from Search on Main (plan 92)", () => {
+    const selectTab = vi.fn();
+    const main = render(bar({ selectTab, currentTab: "main" }));
+    expect(barProps().onMoveLeft()).toBe(true);
+    expect(selectTab).toHaveBeenLastCalledWith("search");
+    expect(barProps().onButtonDown(press(5))).toBe(true);
+    expect(selectTab).toHaveBeenLastCalledWith("search");
+    main.unmount();
+    render(bar({ selectTab, currentTab: "search" }));
+    expect(barProps().onMoveRight()).toBe(true);
     expect(selectTab).toHaveBeenLastCalledWith("main");
   });
 
@@ -262,17 +282,17 @@ describe("the tab bar's presses and taps (plan 84 step 4)", () => {
 
   it("a tap on LB steps back one tab and a tap on RB steps on one, wrapping at both ends", () => {
     const selectTab = vi.fn();
-    const first = render(bar({ selectTab, currentTab: "main" }));
+    const first = render(bar({ selectTab, currentTab: "search" }));
     fireEvent.click(first.container.querySelector(".bonsai-tab-bar__shoulder--l") as HTMLElement);
     expect(selectTab).toHaveBeenLastCalledWith("about");
     first.unmount();
     const last = render(bar({ selectTab, currentTab: "about" }));
     fireEvent.click(last.container.querySelector(".bonsai-tab-bar__shoulder--r") as HTMLElement);
-    expect(selectTab).toHaveBeenLastCalledWith("main");
+    expect(selectTab).toHaveBeenLastCalledWith("search");
   });
 
   it("a tap on a side icon opens that tab", () => {
-    for (const ids of [FIVE, SIX]) {
+    for (const ids of [SIX, SEVEN]) {
       const selectTab = vi.fn();
       const { container, unmount } = render(bar({ tabIds: ids, selectTab, currentTab: "settings" }));
       const peeks = Array.from(container.querySelectorAll<HTMLElement>(".bonsai-tab-bar__peek"));
@@ -412,7 +432,7 @@ describe("nothing of the tab bar can be left drawn over the chip row (plan 84 st
   it.each(SEQUENCES.map((s) => [s.join(", "), s] as const))(
     "after %s, the bar draws exactly what it drew at rest, with no strip anywhere",
     (_label, sequence) => {
-      for (const tabIds of [SIX, FIVE]) {
+      for (const tabIds of [SEVEN, SIX]) {
         const host = scope.appendChild(document.createElement("div"));
         const { container, unmount } = render(bar({ tabIds, currentTab: "settings" }), { container: host });
         const root = container.querySelector(".bonsai-tab-bar") as HTMLElement;

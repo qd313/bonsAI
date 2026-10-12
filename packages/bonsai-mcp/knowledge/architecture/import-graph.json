@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 858,
-  "edgeCount": 2719,
+  "fileCount": 860,
+  "edgeCount": 2723,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4403,6 +4403,7 @@
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/tabTitles.test.tsx",
+        "src/index.test.tsx",
         "src/index.tsx"
       ]
     },
@@ -4446,6 +4447,14 @@
     "src/features/plugin-shell/tabs/usePermissionsTabPayload.tsx": {
       "imports": [
         "src/components/PermissionsTab.tsx"
+      ],
+      "importedBy": [
+        "src/index.tsx"
+      ]
+    },
+    "src/features/plugin-shell/tabs/useSearchTabPayload.tsx": {
+      "imports": [
+        "src/features/search-tab/SearchTab.tsx"
       ],
       "importedBy": [
         "src/index.tsx"
@@ -5031,6 +5040,14 @@
         "src/hooks/useSuggestedPromptChips.ts",
         "src/test-harness/chipRowSimulation.tsx",
         "src/utils/sessionRagChipCandidates.ts"
+      ]
+    },
+    "src/features/search-tab/SearchTab.tsx": {
+      "imports": [
+        "src/styles/sections/textPx.ts"
+      ],
+      "importedBy": [
+        "src/features/plugin-shell/tabs/useSearchTabPayload.tsx"
       ]
     },
     "src/features/search-tab/searchApi.test.ts": {
@@ -6503,6 +6520,7 @@
     },
     "src/index.test.tsx": {
       "imports": [
+        "src/features/plugin-shell/tabTitles.tsx",
         "src/index.tsx",
         "src/pluginVersion.ts",
         "src/test-harness/fakeDeckyRpc.ts",
@@ -6552,6 +6570,7 @@
         "src/features/plugin-shell/tabs/useMainTabPayload.tsx",
         "src/features/plugin-shell/tabs/useOllamaTabPayload.tsx",
         "src/features/plugin-shell/tabs/usePermissionsTabPayload.tsx",
+        "src/features/plugin-shell/tabs/useSearchTabPayload.tsx",
         "src/features/plugin-shell/tabs/useSettingsTabPayload.tsx",
         "src/features/plugin-shell/useAppLogPrefsAndCapturedErrors.ts",
         "src/features/plugin-shell/useBonsaiScopeStyle.ts",
@@ -7053,6 +7072,7 @@
         "src/features/plugin-shell/usePublishTextScale.test.tsx",
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetDecodeChipButton.tsx",
+        "src/features/search-tab/SearchTab.tsx",
         "src/hooks/localOllamaStarterSet.tsx",
         "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/usePullModelDeleteConfirm.tsx",

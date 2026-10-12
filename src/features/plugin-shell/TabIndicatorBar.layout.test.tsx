@@ -2,11 +2,14 @@
  * Title: Where the tab bar's parts sit on the Deck's 300-point bar
  * Purpose: Lay the real bar out at the Deck's width from the real scope stylesheet and pin what a
  *          person sees there (plan 87 F4, on plan 84's design "T3"): LB, then every tab in the
- *          strip's own order, then RB; the tabs spread from LB to RB so Main is the first thing after
+ *          strip's own order, then RB; the tabs spread from LB to RB so Search (since plan 92; Main before) is the first thing after
  *          LB and About the last before RB on every tab; LB and RB 16 points in from each edge; no
- *          icon box narrower than 18 points on any tab (the old bar shrank three of them to 15.2 on
- *          Permissions and 16.7 on Developer, measured on the Deck 2026-10-09); nothing running into
- *          anything even with the longest name at six tabs; and tap targets big enough to hit.
+ *          icon box narrower than 17 points on any tab (the old bar shrank three of them to 15.2 on
+ *          Permissions and 16.7 on Developer, measured on the Deck 2026-10-09; it was 18 until plan 92 put
+ *          Search first and the side icons shrank one step to make room for a seventh tab); nothing running
+ *          into anything with the longest name at six tabs, and at seven (Developer on) in the font the
+ *          Deck draws, with ONE case written down that does not fit (see KNOWN_SHORT); and tap targets big
+ *          enough to hit.
  * Used for: plan 87 F4 (the tab bar's fixed order), and plan 84's P84-TABS-01.
  * Solves: jsdom draws nothing, so a test that only reads classes would pass while an icon was
  *         crushed. This one reads every length the stylesheet gives the bar's parts, through jsdom's
@@ -26,8 +29,21 @@ import { ALL_BONSAI_TAB_IDS, type BonsaiTabId } from "./tabTitles";
 import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
 import { TEXT_SCALE } from "../../data/chatTextSize";
 
-const SIX = ALL_BONSAI_TAB_IDS;
-const FIVE: readonly BonsaiTabId[] = SIX.filter((id) => id !== "developer");
+/** Seven tabs with the Developer tab on, six without (Search joined as the first tab in plan 92). */
+const SEVEN = ALL_BONSAI_TAB_IDS;
+const SIX: readonly BonsaiTabId[] = SEVEN.filter((id) => id !== "developer");
+
+/** The narrowest a side tab's box may be: its 10-point icon and the 7-point gap (plan 92; it was 11 and 18). */
+const SIDE_BOX_MIN = 17;
+
+/**
+ * The one case that does not fit once there are seven tabs, even with the side icons a step smaller (plan 92):
+ * Developer on, the Permissions tab open (the longest name), in a font wider than Steam's or on Large text. The
+ * Deck run of plan 92 (M-B) measures it. Everything else fits at the widths the font can really be.
+ */
+function isKnownShort(ids: readonly BonsaiTabId[], current: BonsaiTabId, factor: number): boolean {
+  return ids === SEVEN && current === "permissions" && (factor > 1 || textStep > 1);
+}
 
 /** The panel column on the Deck's own screen (design-language.md; plan 84 § 1). */
 const DECK_BAR_W = 300;
@@ -205,13 +221,18 @@ describe("the tab bar laid out at the Deck's 300 points (plan 87 F4, on plan 84'
     scope.remove();
   });
 
-  /** Every tab list and current tab the Deck can show, laid out at `factor`. */
+  /**
+   * Every tab list and current tab the Deck can show, laid out at `factor`. A check about fitting skips
+   * the one case written down as KNOWN_SHORT (`skipKnownShort`, the default): the test after them pins it.
+   */
   function everyBar(
     factor: number,
     check: (laid: Laid, label: string, ids: readonly BonsaiTabId[], current: BonsaiTabId) => void,
+    { skipKnownShort = true }: { skipKnownShort?: boolean } = {},
   ) {
-    for (const ids of [FIVE, SIX]) {
+    for (const ids of [SIX, SEVEN]) {
       for (const current of ids) {
+        if (skipKnownShort && isKnownShort(ids, current, factor)) continue;
         const host = scope.appendChild(document.createElement("div"));
         const { container, unmount } = render(
           <TabIndicatorBar tabIds={ids} currentTab={current} selectTab={vi.fn()} exitDown={() => true} />,
@@ -239,7 +260,7 @@ describe("the tab bar laid out at the Deck's 300 points (plan 87 F4, on plan 84'
           laid.items.map((i) => (i.current ? current : i.id)),
           `${label}: order drawn`,
         ).toEqual([...ids]);
-        expect(laid.items[0].box.left, `${label}: Main flush after LB`).toBeCloseTo(laid.tabsColumn.left, 5);
+        expect(laid.items[0].box.left, `${label}: the first tab flush after LB`).toBeCloseTo(laid.tabsColumn.left, 5);
         expect(laid.items[laid.items.length - 1].box.right, `${label}: About flush before RB`).toBeCloseTo(
           laid.tabsColumn.right,
           5,
@@ -253,21 +274,25 @@ describe("the tab bar laid out at the Deck's 300 points (plan 87 F4, on plan 84'
     }
   });
 
-  it("gives every icon a box at least 18 points wide on all six tabs, Permissions and Developer included, in the widest font", () => {
+  it("gives every icon a box at least 17 points wide on all seven tabs, Permissions and Developer included, in the widest font", () => {
     let seen = 0;
-    everyBar(WIDEST, (laid, label, ids, current) => {
-      const widths = laid.items.filter((i) => !i.current);
-      for (const item of widths) {
-        expect(item.box.right - item.box.left, `${label}: ${item.id}`).toBeGreaterThanOrEqual(18 - 1e-9);
-        expect(item.shrink, `${label}: ${item.id} may not shrink`).toBe(0);
-      }
-      // The two tabs where the old bar shrank the boxes, counted so a failure to reach them reads plainly.
-      if (ids === SIX && (current === "permissions" || current === "developer")) seen += 1;
-    });
+    everyBar(
+      WIDEST,
+      (laid, label, ids, current) => {
+        const widths = laid.items.filter((i) => !i.current);
+        for (const item of widths) {
+          expect(item.box.right - item.box.left, `${label}: ${item.id}`).toBeGreaterThanOrEqual(SIDE_BOX_MIN - 1e-9);
+          expect(item.shrink, `${label}: ${item.id} may not shrink`).toBe(0);
+        }
+        // The two tabs where the old bar shrank the boxes, counted so a failure to reach them reads plainly.
+        if (ids === SEVEN && (current === "permissions" || current === "developer")) seen += 1;
+      },
+      { skipKnownShort: false },
+    );
     expect(seen).toBe(2);
   });
 
-  it("fits: even with the longest name at six tabs in a wide font, the row is no wider than the room between LB and RB, with a gap between neighbours", () => {
+  it("fits: even with the longest name at seven tabs in a wide font (bar the one KNOWN_SHORT case), the row is no wider than the room between LB and RB, with a gap between neighbours", () => {
     everyBar(WIDEST, (laid, label) => {
       expect(laid.spare, `${label}: spare room`).toBeGreaterThanOrEqual(0);
       const drawn = laid.items.map((i) => i.icon);
@@ -294,7 +319,7 @@ describe("the tab bar laid out at the Deck's 300 points (plan 87 F4, on plan 84'
    * closest to) 11.7. So the check runs at the two stand-ins the font can really be, and the Deck run measures the
    * Permissions and Developer names on Large with the probe (the widest ones).
    */
-  it("on Large text still fits: the longest name at six tabs runs into nothing and stays inside its box and the bar", () => {
+  it("on Large text still fits: the longest name at seven tabs runs into nothing and stays inside its box and the bar", () => {
     textStep = TEXT_SCALE.large;
     try {
       let bars = 0;
@@ -312,13 +337,42 @@ describe("the tab bar laid out at the Deck's 300 points (plan 87 F4, on plan 84'
           expect(laid.name.right, label).toBeLessThanOrEqual(DECK_BAR_W);
         });
       }
-      expect(bars).toBe(2 * (FIVE.length + SIX.length));
+      // The Permissions bar of seven is the one KNOWN_SHORT case, at both widths.
+      expect(bars).toBe(2 * (SIX.length + SEVEN.length) - 2);
     } finally {
       textStep = 1;
     }
   });
 
-  it("gives every tap target room to hit: LB and RB about 31 points wide, side icons at least 18, none overlapping", () => {
+  it("writes down the one case that does not fit with seven tabs, so a fix or a new shortfall shows (plan 92, the Deck run M-B measures it)", () => {
+    const spareOf = (factor: number, step: number): number => {
+      textStep = step;
+      try {
+        let spare = Number.NaN;
+        everyBar(
+          factor,
+          (laid, _label, ids, current) => {
+            if (ids === SEVEN && current === "permissions") spare = laid.spare;
+          },
+          { skipKnownShort: false },
+        );
+        return spare;
+      } finally {
+        textStep = 1;
+      }
+    };
+    // Fits in the widths Steam's font can really be on Normal text (the "fits" test above runs every bar there).
+    expect(spareOf(0.9, 1)).toBeGreaterThanOrEqual(0);
+    expect(spareOf(1, 1)).toBeGreaterThanOrEqual(0);
+    // Short in the widest stand-in font, by 7 points, and on Large text, by a quarter of a point (the font nearest Steam's) to nine.
+    expect(spareOf(WIDEST, 1)).toBeLessThan(0);
+    expect(spareOf(WIDEST, 1)).toBeGreaterThan(-8);
+    expect(spareOf(0.9, TEXT_SCALE.large)).toBeLessThan(0);
+    expect(spareOf(1, TEXT_SCALE.large)).toBeLessThan(0);
+    expect(spareOf(1, TEXT_SCALE.large)).toBeGreaterThan(-10);
+  });
+
+  it("gives every tap target room to hit: LB and RB about 31 points wide, side icons at least 17, none overlapping", () => {
     everyBar(WIDEST, (laid, label) => {
       for (const t of [laid.lbTarget, laid.rbTarget]) {
         expect(t.right - t.left, label).toBeGreaterThanOrEqual(28);
@@ -330,7 +384,7 @@ describe("the tab bar laid out at the Deck's 300 points (plan 87 F4, on plan 84'
     });
     // Every target is the bar's full height: the grid and the row of tabs stretch their items.
     const { container } = render(
-      <TabIndicatorBar tabIds={SIX} currentTab="main" selectTab={vi.fn()} exitDown={() => true} />,
+      <TabIndicatorBar tabIds={SEVEN} currentTab="main" selectTab={vi.fn()} exitDown={() => true} />,
       { container: scope.appendChild(document.createElement("div")) },
     );
     const root = container.querySelector(".bonsai-tab-bar") as HTMLElement;

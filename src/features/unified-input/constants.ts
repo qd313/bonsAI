@@ -165,7 +165,7 @@ export const TAB_BAR_CURRENT_ICON_GAP_PX = 4;
 /** The middle column's own left and right padding (the drawing's `.bal-t3 .mid`). */
 export const TAB_BAR_CURRENT_PAD_X_PX = 6;
 /** The other tabs' small dimmed icons. */
-export const TAB_BAR_SIDE_ICON_PX = 11;
+export const TAB_BAR_SIDE_ICON_PX = 10;
 /**
  * Added to the icon to make a side tab's tap target 18 wide (plan 87 F4). That width is fixed: the
  * bar spreads the tabs from LB to RB and never shrinks one (the old bar shrank them to 15 on the

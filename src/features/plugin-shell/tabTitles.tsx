@@ -24,6 +24,7 @@ import {
   GearIcon,
   LockIcon,
   OllamaTabIcon,
+  SearchTabIcon,
 } from "../../components/icons";
 import {
   TAB_BAR_BUG_ICON_SCALE,
@@ -32,14 +33,16 @@ import {
   TAB_TITLE_MAIN_TAB_ICON_PX,
 } from "../unified-input/constants";
 
-export type BonsaiTabId = "main" | "ollama" | "settings" | "permissions" | "developer" | "about";
+export type BonsaiTabId = "search" | "main" | "ollama" | "settings" | "permissions" | "developer" | "about";
 
 /**
- * Every tab id, including ones not always mounted (Developer).
+ * Every tab id in the strip's own order, including ones not always mounted (Developer). Search comes
+ * first, left of Main (plan 92, D129 call 3); LB on Search wraps to About and RB on About to Search.
  * The scoped stylesheet emits one active-marker rule per id, so a new tab that is missing here
  * renders correctly but never shows the marker.
  */
 export const ALL_BONSAI_TAB_IDS: readonly BonsaiTabId[] = [
+  "search",
   "main",
   "ollama",
   "settings",
@@ -47,6 +50,11 @@ export const ALL_BONSAI_TAB_IDS: readonly BonsaiTabId[] = [
   "developer",
   "about",
 ];
+
+/** The tabs that are mounted, in the strip's order: every tab, with Developer only while its switch is on. */
+export function mountedBonsaiTabIds(showDeveloperTab: boolean): BonsaiTabId[] {
+  return ALL_BONSAI_TAB_IDS.filter((id) => id !== "developer" || showDeveloperTab);
+}
 
 /**
  * What each tab is called out loud. The titles are icons with no text, so without this a tab has no
@@ -57,6 +65,7 @@ export const ALL_BONSAI_TAB_IDS: readonly BonsaiTabId[] = [
  * UI, not sentences.
  */
 export const BONSAI_TAB_ACCESSIBLE_NAMES: Readonly<Record<BonsaiTabId, string>> = {
+  search: "Search bonsAI",
   main: "Ask bonsAI",
   ollama: "Where AI runs",
   settings: "Settings",
@@ -72,6 +81,7 @@ export const BONSAI_TAB_ACCESSIBLE_NAMES: Readonly<Record<BonsaiTabId, string>> 
  * today; the UI catalog holds toasts only.
  */
 export const BONSAI_TAB_SHORT_NAMES: Readonly<Record<BonsaiTabId, string>> = {
+  search: "Search",
   // Drawn in small caps on the bar (tabIndicatorBar.ts), not upper-cased like the other names (plan 87 F1).
   main: "bonsAI",
   ollama: "Ollama",
@@ -89,6 +99,8 @@ export const BONSAI_TAB_SHORT_NAMES: Readonly<Record<BonsaiTabId, string>> = {
  */
 export function bonsaiTabBarIcon(id: BonsaiTabId, size: number): React.ReactElement {
   switch (id) {
+    case "search":
+      return <SearchTabIcon size={size} />;
     case "main":
       return <BonsaiLogoIcon size={size} />;
     case "ollama":
@@ -115,6 +127,7 @@ export function bonsaiTabIconTitle(classSuffix: BonsaiTabId, children: React.Rea
 }
 
 export const DECKY_TAB_TITLES = {
+  search: bonsaiTabIconTitle("search", <SearchTabIcon size={TAB_TITLE_ICON_PX} />),
   main: bonsaiTabIconTitle("main", <BonsaiTreeTabIcon size={TAB_TITLE_MAIN_TAB_ICON_PX} />),
   ollama: bonsaiTabIconTitle("ollama", <OllamaTabIcon size={TAB_TITLE_ICON_PX} />),
   settings: bonsaiTabIconTitle("settings", <GearIcon size={TAB_TITLE_ICON_PX} />),

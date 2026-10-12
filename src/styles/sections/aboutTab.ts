@@ -71,21 +71,15 @@ export function buildAboutTabSection(): string {
           color: ${BONSAI_FOREST_GREEN};
           padding: 1.2em 4px 2px;
         }
-        /* Reply language: the label on the left, Steam's own dropdown (its value and chevron) on the right. */
+        /* Reply language: Steam's own dropdown (its value and chevron) alone, as wide as the row. */
         .bonsai-scope .bonsai-about-lang {
           display: flex;
           align-items: center;
-          gap: 8px;
           width: 100%;
         }
-        .bonsai-scope .bonsai-about-lang-label {
-          flex: 1 1 auto;
-          min-width: 0;
-          font-size: ${textPx(13)};
-          color: #dcdedf;
-        }
         .bonsai-scope .bonsai-about-lang > :last-child {
-          flex: 0 0 56%;
+          flex: 1 1 100%;
+          width: 100%;
           min-width: 0;
         }
 

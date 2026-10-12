@@ -6,7 +6,7 @@
  *          always drawn. Now: "Version 0.5.0" sits on the title line beside "About bonsAI" (plain text, not a stop, no row of its own); the "What bonsAI is" paragraph
  *          and the green beta notice are plain text, always drawn, as before plan 92 (the maintainer asked for
  *          them back on 2026-10-12, so the reveal-on-focus row is gone and the first stop is the Reply language
- *          dropdown); "Reply language" is one line (the label and Steam's dropdown) whose hint opens
+ *          dropdown); "Reply language" is one line (Steam's dropdown at the full width of the row, no "Language" label) whose hint opens
  *          under it the same way; GitHub, Built on Ollama! and Bugs & Feature Requests are three small buttons
  *          beside a smaller QR code, which is a stop of its own (AboutLinks.test.tsx walks them).
  *          The words are checked against the drawing's own data (docs/demos/mockup-board-2/src/42-tabs-data.js
@@ -104,11 +104,29 @@ describe("About tab: the rows, in the drawing's order and words", () => {
     expect(stops).toEqual(["Dropdown", ...links]);
   });
 
-  it("labels the language row as the drawing does", () => {
+  it("has no 'Language' label beside the dropdown: the section title already says it", () => {
     const { container } = renderAbout();
-    const drawn = aboutData.match(/label: "([^"]+)", value: "([^"]+)"/)!;
-    expect(drawn.slice(1)).toEqual(["Language", "Follow system"]);
-    expect(container.querySelector(".bonsai-about-lang-label")!.textContent).toBe(drawn[1]);
+    const row = languageRow(container);
+    expect(row.querySelector(".bonsai-about-lang-label")).toBeNull();
+    expect(container.querySelector(".bonsai-about-lang-label")).toBeNull();
+    // The row holds the dropdown and nothing else, and no text of its own ("Language") sits in it.
+    expect(row.children).toHaveLength(1);
+    expect(row.children[0]!.getAttribute("data-decky-ui")).toBe("Dropdown");
+    expect(Array.from(row.childNodes).filter((n) => n.nodeType === Node.TEXT_NODE)).toHaveLength(0);
+    // The section title stays.
+    const titles = Array.from(container.querySelectorAll("[data-test-section-title]")).map((t) => t.firstChild?.textContent);
+    expect(titles).toContain("Reply language");
+  });
+
+  it("makes the dropdown as wide as the row, read out of the stylesheet", () => {
+    const row = declarations(".bonsai-scope .bonsai-about-lang");
+    expect(row).toMatch(/width:\s*100%/);
+    expect(row).toMatch(/display:\s*flex/);
+    const dropdown = declarations(".bonsai-scope .bonsai-about-lang > :last-child");
+    expect(dropdown).toMatch(/width:\s*100%/);
+    expect(dropdown).toMatch(/flex:\s*1 1 100%/);
+    // The old rule gave it 56 percent of the row beside a label.
+    expect(dropdown).not.toMatch(/56%/);
   });
 
   it("puts 'About bonsAI' and the version on one line: the version sits in the title itself, not in a row of its own", () => {

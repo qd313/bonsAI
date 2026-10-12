@@ -760,7 +760,7 @@ Reply language.
 tab bar
    | Down  (the tab body's own transfer)      ^ Up from the first stop (TabBodyFocusRoot's onMoveUp)
 (Version, "What bonsAI is" paragraph, beta notice: plain text above, no stops, no ring)
-[ Language        Follow system ▾ ]   <- Steam's Dropdown; its hint opens under the row while the ring is on it
+[ Follow system                                     ▾ ]   <- Steam's Dropdown, full width, no label; its hint opens under the row while the ring is on it
    | Down = takeNavFocus("about-links")       ^ Up (Steam's step)
 [ GitHub ]            ┐
 [ Built on Ollama! ]  ├─ Right from any -> [ QR: Support my Steam Sale habit ]

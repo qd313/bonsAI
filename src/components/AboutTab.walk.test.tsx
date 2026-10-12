@@ -103,7 +103,7 @@ function walkAbout(viewport: number) {
     const buttonWidth = WIDTH - QR_COLUMN - 8;
     return {
       boxes: {
-        "Reply language": { top: language, height: LANGUAGE_ROW, left: WIDTH * 0.44, width: WIDTH * 0.56 },
+        "Reply language": { top: language, height: LANGUAGE_ROW, left: 0, width: WIDTH },
         GitHub: { top: linksTop, height: ABOUT_LINK_HEIGHT_PX, left: 0, width: buttonWidth },
         "Built on Ollama!": { top: linksTop + step, height: ABOUT_LINK_HEIGHT_PX, left: 0, width: buttonWidth },
         "Bugs & Feature Requests": { top: linksTop + 2 * step, height: ABOUT_LINK_HEIGHT_PX, left: 0, width: buttonWidth },

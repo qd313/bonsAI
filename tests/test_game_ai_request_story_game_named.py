@@ -158,6 +158,19 @@ def _branches_from(reply: str):
     }
 
 
+def _without_timings(value):
+    """The chips with their measured times taken out: how long a search took is not what this compares.
+
+    On a busy PC the knowledge-base search takes 0.1 s on one run and 0.0 on the other, and the chips
+    carry that number, so comparing it made this test fail with seven helpers running (plan 92).
+    """
+    if isinstance(value, dict):
+        return {k: _without_timings(v) for k, v in value.items() if k != "elapsed_seconds"}
+    if isinstance(value, list):
+        return [_without_timings(v) for v in value]
+    return value
+
+
 class StoryGameNamedWhileANoStoryGameRunsTests(unittest.TestCase):
     def setUp(self):
         self._dir = Path(tempfile.mkdtemp(prefix="p78a-library-"))
@@ -264,7 +277,8 @@ class StoryGameNamedWhileANoStoryGameRunsTests(unittest.TestCase):
         self.assertEqual(with_drg["strategy_guide_branches"], with_nothing["strategy_guide_branches"])
         self.assertEqual(with_drg["kb_attached_notes"], with_nothing["kb_attached_notes"])
         self.assertEqual(
-            with_drg["transparency"]["context_chips"], with_nothing["transparency"]["context_chips"]
+            _without_timings(with_drg["transparency"]["context_chips"]),
+            _without_timings(with_nothing["transparency"]["context_chips"]),
         )
 
     def test_the_prompt_is_judged_as_a_story_game(self):

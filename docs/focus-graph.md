@@ -777,19 +777,28 @@ tab bar
   `takeNavFocus("about-links")`, a nav id the links block registers (`navFocusRegistry.ts`); a transfer onto a
   container lands on its first stop, GitHub. If the block is not registered the handler returns `false` and Steam
   steps as usual.
-- **Inside the links block** (siblings of one container, so a plain focus between them is safe, through
-  `focusInTabBody`): Right from a button remembers its index and focuses the QR; Left from the QR focuses the
-  remembered button; Down from the last button, and from the QR, is claimed and does nothing. The remembered
-  index lives in a module-level store (`rememberAboutLinkButton`), not in component state, because closing a
-  Decky popup rebuilds the tab (lessons § 3). The move handlers are on a `Focusable` around each `Button`, not on
-  the Button: a Decky `Button` does not forward `onMoveX`. Up from GitHub is left to Steam (it reaches Reply language).
+- **Inside the links block, Steam walks by each container's flow, not by distance.** The block is a `Focusable`
+  with `flow-children="horizontal"` holding two children: a `Focusable` with `flow-children="vertical"`
+  (`.bonsai-about-links-col`) around the three buttons' wrappers, then the QR's wrapper. Down and Up between the
+  buttons are Steam's own step along that column. **Round two (2026-10-12):** the first round left the block with
+  no flow and the buttons in a plain `div`; on the Deck (build 5d67f9d9) Down from GitHub was dead three presses
+  running: with no flow set, Steam did not step between those children. Right from a button
+  remembers its index and makes Steam's transfer onto the QR wrapper's own nav node (`TakeFocus` on its
+  `navRef`); Left from the QR makes the same transfer onto the remembered button's wrapper. If a node is not
+  filled in yet the handler returns `false`, and Right still reaches the QR by the block's row. Down from the
+  last button, and from the QR, is claimed and does nothing. The remembered index lives in a module-level store
+  (`rememberAboutLinkButton`), not in component state, because closing a Decky popup rebuilds the tab
+  (lessons § 3). The move handlers are on a `Focusable` around each `Button`, not on the Button: a Decky `Button`
+  does not forward `onMoveX`. Up from GitHub is left to Steam: it passes out of the column and the row to the
+  tab's own column of rows, which steps up to Reply language.
 - **A** (`onClick`) on a link opens it; A on the QR opens the support page (`https://paypal.me/quentind313`), as the
   old "Support my Steam Sale habit" button did.
 - **Tests:** `AboutTab.test.tsx` (the words against the drawing's data file, the paragraphs, the QR's size read
   out of the stylesheet), `AboutLinks.test.tsx` (the block's walk, the remembered height across an unmount and
   remount, A on each), `AboutTab.walk.test.tsx` (a bounded Down, Right, Left, Up walk of the whole tab in a
-  scrolling pane at 400 and 741 points, with Steam's own step and scroll modelled). jsdom has no spatial walk, so
-  the Deck walk is the real check (plan 92, block 3).
+  scrolling pane at 400 and 741 points, with Steam's step through its containers and their flows, and its scroll,
+  modelled by `steamStep` in `src/test-harness/aboutDeckyUi.tsx`; it fails on build 5d67f9d9 the way the Deck did).
+  The real check is the Deck walk (plan 92, block 3).
 
 ### The AI models box's filters column (plan 91, M1)
 

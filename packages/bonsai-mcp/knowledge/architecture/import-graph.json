@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 889,
-  "edgeCount": 2828,
+  "edgeCount": 2827,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -25,7 +25,6 @@
     },
     "src/components/AboutLinks.tsx": {
       "imports": [
-        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/styles/settingsGlassButton.ts",
         "src/utils/navFocusRegistry.ts"
       ],
@@ -4857,7 +4856,6 @@
         "src/utils/tabBodyScrollPlan.ts"
       ],
       "importedBy": [
-        "src/components/AboutLinks.tsx",
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/SettingsTab.tsx",

@@ -7,8 +7,11 @@
  *          element (`__nav`) for a test to call the way Steam does. Each is a stop the way Decky makes one:
  *          `tabindex="0"`, and a Focusable marked `focusable` is a real stop (`data-steam-stop`).
  * Used for: AboutTab.test.tsx, AboutLinks.test.tsx, AboutTab.walk.test.tsx.
- * Does not: Walk Steam's spatial navigation (AboutTab.walk.test.tsx models that itself), or fire a handler on its
- *           own: `callNav` presses one.
+ *          `steamStep` presses the D-pad the way Steam routes it: through its tree of containers and each one's
+ *          `flow-children`, not by distance on screen (a container with no flow set walks nothing; plan 92's Deck
+ *          run on build 5d67f9d9 found Down dead between the About link buttons for exactly that reason).
+ * Does not: Paint or measure (AboutTab.walk.test.tsx lays out boxes for Steam's scroll), or fire a handler on its
+ *           own: `callNav` and `steamStep` press one.
  */
 import React from "react";
 import { act } from "@testing-library/react";
@@ -118,4 +121,88 @@ export function pressNav(el: HTMLElement, name: string): boolean {
     if (callNav(up, name)) return true;
   }
   return false;
+}
+
+export type SteamDirection = "Up" | "Down" | "Left" | "Right";
+type Flow = "row" | "column";
+
+/** The Focusable that holds `el` in Steam's tree (plain divs in between are not nav nodes). */
+function navParent(el: HTMLElement): HTMLElement | null {
+  for (let up = el.parentElement; up; up = up.parentElement) {
+    if (up.dataset.deckyUi === "Focusable") return up;
+  }
+  return null;
+}
+
+const NAV_KINDS = new Set(["Focusable", "Button", "Dropdown"]);
+
+/** A container's own children in Steam's tree, in page order. */
+function navChildren(container: HTMLElement): HTMLElement[] {
+  return Array.from(container.querySelectorAll<HTMLElement>("[data-decky-ui]")).filter(
+    (el) => NAV_KINDS.has(el.dataset.deckyUi ?? "") && navParent(el) === container,
+  );
+}
+
+function isStop(el: HTMLElement): boolean {
+  return el.dataset.deckyUi === "Button" || el.dataset.deckyUi === "Dropdown" || el.dataset.steamStop === "true";
+}
+
+/** Where Steam's transfer onto a child lands: the child if it is a stop, else its first stop inside. */
+function firstStopIn(el: HTMLElement): HTMLElement | null {
+  if (isStop(el)) return el;
+  return (
+    Array.from(el.querySelectorAll<HTMLElement>("[data-decky-ui]")).find(
+      (inner) => NAV_KINDS.has(inner.dataset.deckyUi ?? "") && isStop(inner),
+    ) ?? null
+  );
+}
+
+export type SteamStepOptions = {
+  /**
+   * Containers with no `flow-children` that Steam is known to walk as a column anyway. The one measured case: a
+   * tab body's root (TabBodyFocusRoot), whose rows Down and Up walk on the Deck. Every other container with no
+   * flow set walks nothing, which is what the Deck showed for the About links block (plan 92, build 5d67f9d9).
+   */
+  columnWhereUnset?: (container: HTMLElement) => boolean;
+};
+
+function flowOf(container: HTMLElement, opts: SteamStepOptions): Flow | null {
+  const attr = container.getAttribute("flow-children");
+  if (attr === "horizontal" || attr === "row") return "row";
+  if (attr === "vertical" || attr === "column") return "column";
+  return opts.columnWhereUnset?.(container) ? "column" : null;
+}
+
+/**
+ * One D-pad press the way Steam routes it through its tree of nav nodes, not by geometry:
+ *  1. the focused stop's own move handler (it may claim the press);
+ *  2. then, climbing one container at a time: if the container's flow runs along the press (a column for
+ *     Up/Down, a row for Left/Right), Steam moves to the next child that way that holds a stop and lands on
+ *     its first stop; if not, or there is no such child, the container's own move handler gets the press;
+ *     a container with no flow set moves nothing among its children;
+ *  3. with no container left, nothing moves.
+ * Returns where the ring is afterwards (the same element when nothing moved).
+ */
+export function steamStep(from: HTMLElement, direction: SteamDirection, opts: SteamStepOptions = {}): HTMLElement {
+  const handler = `onMove${direction}`;
+  const ringBefore = document.activeElement;
+  const after = () => (document.activeElement as HTMLElement | null) ?? from;
+  if (callNav(from, handler)) return ringBefore === document.activeElement ? from : after();
+  const axis: Flow = direction === "Up" || direction === "Down" ? "column" : "row";
+  const forward = direction === "Down" || direction === "Right";
+  for (let child = from, container = navParent(from); container; child = container, container = navParent(container)) {
+    if (flowOf(container, opts) === axis) {
+      const siblings = navChildren(container);
+      const at = siblings.indexOf(child);
+      for (let i = at + (forward ? 1 : -1); at >= 0 && i >= 0 && i < siblings.length; i += forward ? 1 : -1) {
+        const target = firstStopIn(siblings[i]!);
+        if (target) {
+          act(() => target.focus());
+          return target;
+        }
+      }
+    }
+    if (callNav(container, handler)) return ringBefore === document.activeElement ? from : after();
+  }
+  return from;
 }

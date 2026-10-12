@@ -9,24 +9,32 @@
  * Used for: AboutTab.tsx, in its Links section.
  *
  * Solves: The links used to be four full-width rows plus a 132 point QR code (about 300 points). Here they
- * take the height of three small buttons. The D-pad walk inside the block is hand-wired (it is all siblings
- * of one container, so a plain focus between them is safe): Down the three buttons (Steam's own step), Right
- * from any button to the QR, Left from the QR back to the button the ring came from (kept in a module-level
- * store, so a tab rebuilt by a popup still goes back to the right height), Down from the last button holds still.
- * Up from the first button is Steam's own step up to Reply language. Down from Reply language is a transfer onto
- * this block (the "about-links" nav id), because the dropdown sits on the right of its row and Steam's own step
- * from there would pick the QR code.
+ * take the height of three small buttons. Steam walks a container's children only along its `flow-children`;
+ * a container with none set walks nothing (plan 92's Deck run on build 5d67f9d9: Down from GitHub was dead
+ * three presses running, because the block had no flow and the buttons sat in a plain div). So the block is a
+ * row (`flow-children="horizontal"`: the column of buttons, then the QR) and the buttons are a column of their
+ * own (`flow-children="vertical"`): Down and Up between the buttons are Steam's own step. Right from any button
+ * and Left from the QR are Steam's transfer onto that stop's own nav node (`TakeFocus`), so Left returns to the
+ * button the ring came from (kept in a module-level store, so a tab rebuilt by a popup still goes back to the
+ * right height). Down from the last button and from the QR holds still. Up from GitHub passes out of the column
+ * and the row to the tab's own column, which steps up to Reply language. Down from Reply language is a transfer
+ * onto this block (the "about-links" nav id), because the dropdown sits on the right of its row and Steam's own
+ * step from there would pick the QR code.
  *
  * Does not: Open anything but a link; touch the ring's look (the shared ring classes draw it); or move the
  * ring out of the block by hand.
  */
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Button, Focusable, Navigation } from "@decky/ui";
 import { toaster } from "@decky/api";
 
 import supportPaypalQr from "../assets/qrcode.png";
-import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
-import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../utils/navFocusRegistry";
+import {
+  refocusPanelWindowIfLost,
+  registerNavFocus,
+  unregisterNavFocus,
+  type NavRefHolder,
+} from "../utils/navFocusRegistry";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 
 export const PAYPAL_SUPPORT_URL = "https://paypal.me/quentind313";
@@ -53,7 +61,24 @@ export function resetAboutLinksMemory(): void {
   lastLinkButton = 0;
 }
 
-const deckNav = (handlers: Record<string, () => boolean | void>) => handlers as unknown as Record<string, unknown>;
+const deckNav = (handlers: Record<string, unknown>) => handlers as unknown as Record<string, unknown>;
+
+/**
+ * Steam's own transfer onto one nav node of this block, the way `takeNavFocus` makes it for a registered id:
+ * the move that carries the ring, where a plain `focus()` across two containers moves only the page's focus.
+ * In: the node's holder. Out: true when Steam took it; false (the press is left to Steam) when the node is not
+ * filled in yet or Steam declined.
+ */
+function takeFocusOf(holder: NavRefHolder | undefined): boolean {
+  const node = holder?.current;
+  if (!node || typeof node.TakeFocus !== "function") return false;
+  refocusPanelWindowIfLost();
+  try {
+    return node.TakeFocus(true) !== false;
+  } catch {
+    return false;
+  }
+}
 
 function openExternal(url: string, toastTitle: string) {
   try {
@@ -95,12 +120,13 @@ type Props = {
  * In: the three outbound addresses.
  * Out: the block: the three buttons in a column, the QR stop beside them.
  * Can go wrong: openExternal() falls back to a toast with the raw address if Steam's own call throws, so a
- * link never fails silently. A hand-wired step with no element to land on returns false and leaves the press
- * to Steam.
+ * link never fails silently. A transfer onto a node Steam has not filled in yet returns false and leaves the
+ * press to Steam (Right then still reaches the QR by the block's own row).
  */
 export const AboutLinks: React.FC<Props> = ({ githubRepoUrl, ollamaRepoUrl, githubIssuesUrl }) => {
-  const buttonEls = useRef<Array<HTMLElement | null>>([]);
-  const qrEl = useRef<HTMLElement | null>(null);
+  /* Steam fills these in: each button's wrapper and the QR's, as places Right and Left send the ring to. */
+  const buttonNavs = useRef<NavRefHolder[]>([{ current: null }, { current: null }, { current: null }]);
+  const qrNav = useRef<NavRefHolder>({ current: null });
   /* Steam fills this in: the block as a place the ring can be sent to (Down from Reply language). */
   const blockNav = useRef<NavRefHolder["current"]>(null);
   useEffect(() => {
@@ -115,16 +141,13 @@ export const AboutLinks: React.FC<Props> = ({ githubRepoUrl, ollamaRepoUrl, gith
   ];
   const last = links.length - 1;
 
-  /** A plain focus between siblings of this one block: the only kind of hop made by hand here. */
-  const focusSibling = useCallback((el: HTMLElement | null | undefined): boolean => {
-    if (!el) return false;
-    focusInTabBody(el);
-    return true;
-  }, []);
-
   return (
-    <Focusable className="bonsai-about-links" data-bonsai-about-links="" {...({ navRef: blockNav } as Record<string, unknown>)}>
-      <div className="bonsai-about-links-col">
+    <Focusable
+      className="bonsai-about-links"
+      data-bonsai-about-links=""
+      {...({ "flow-children": "horizontal", navRef: blockNav } as Record<string, unknown>)}
+    >
+      <Focusable className="bonsai-about-links-col" {...({ "flow-children": "vertical" } as Record<string, unknown>)}>
         {links.map((link, i) => (
           /*
             The move handlers sit on a Focusable around each button, not on the Decky Button: a Button does not
@@ -135,18 +158,16 @@ export const AboutLinks: React.FC<Props> = ({ githubRepoUrl, ollamaRepoUrl, gith
             key={link.id}
             className="bonsai-about-link-wrap"
             {...deckNav({
+              navRef: buttonNavs.current[i],
               onMoveRight: () => {
                 rememberAboutLinkButton(i);
-                return focusSibling(qrEl.current);
+                return takeFocusOf(qrNav.current);
               },
               // The last button has nothing below it: hold still instead of letting Steam pick something.
               ...(i === last ? { onMoveDown: () => true } : {}),
             })}
           >
             <Button
-              ref={(el: HTMLElement | null) => {
-                buttonEls.current[i] = el;
-              }}
               focusable
               className={`${FOCUS_RING_BTN_CLASS} bonsai-about-link`}
               data-bonsai-about-link={link.id}
@@ -159,18 +180,16 @@ export const AboutLinks: React.FC<Props> = ({ githubRepoUrl, ollamaRepoUrl, gith
             </Button>
           </Focusable>
         ))}
-      </div>
+      </Focusable>
       <Focusable
         className="bonsai-about-qr-wrap"
         {...deckNav({
-          onMoveLeft: () => focusSibling(buttonEls.current[recallAboutLinkButton()] ?? buttonEls.current[0]),
+          navRef: qrNav.current,
+          onMoveLeft: () => takeFocusOf(buttonNavs.current[recallAboutLinkButton()] ?? buttonNavs.current[0]),
           onMoveDown: () => true,
         })}
       >
         <Button
-          ref={(el: HTMLElement | null) => {
-            qrEl.current = el;
-          }}
           focusable
           className={`${FOCUS_RING_BTN_CLASS} bonsai-about-qr`}
           data-bonsai-about-qr=""

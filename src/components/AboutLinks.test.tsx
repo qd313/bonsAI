@@ -49,6 +49,20 @@ describe("About links: the walk", () => {
     expect(container.querySelector(".bonsai-about-links-col")!.contains(qr)).toBe(false);
   });
 
+  it("tells Steam how to walk it: the block is a row (buttons, then the QR) and the buttons are a column", () => {
+    // With no flow set Steam walked nothing between the buttons: Down from GitHub was dead on the Deck
+    // (plan 92, build 5d67f9d9). AboutTab.walk.test.tsx walks it; this pins the two flows by name.
+    const { container } = render(<AboutLinks {...URLS} />);
+    const block = container.querySelector<HTMLElement>("[data-bonsai-about-links]")!;
+    const col = container.querySelector<HTMLElement>(".bonsai-about-links-col")!;
+    expect(block.getAttribute("flow-children")).toBe("horizontal");
+    expect(col.getAttribute("data-decky-ui")).toBe("Focusable");
+    expect(col.getAttribute("flow-children")).toBe("vertical");
+    expect(col.parentElement).toBe(block);
+    expect(qrOf(container).closest(".bonsai-about-qr-wrap")!.parentElement).toBe(block);
+    for (const b of linkButtons(container)) expect(b.closest(".bonsai-about-link-wrap")!.parentElement).toBe(col);
+  });
+
   it("leaves Down on the first two buttons and Up on the first to Steam, and holds still on Down from the last", () => {
     const { container } = render(<AboutLinks {...URLS} />);
     const [github, ollama, bugs] = linkButtons(container);

@@ -4,16 +4,21 @@
  *          controller rig will (plan 92, block 3): Down from the first stop to the last, Right to the QR code,
  *          Left back, then Up to the top. The stops are, in order: What bonsAI is, Reply language, GitHub,
  *          Built on Ollama!, Bugs & Feature Requests, and the QR code (Version is not a stop). Each press is
- *          Steam's: the stop's own move handler first (it may claim the press), then Steam's own step to the
- *          nearest stop in that direction, then Steam's own scroll of the landing into its padded band, after
- *          the plugin's focus listener has placed the pane (useTabBodyFocusScroll). The row that opens its
- *          paragraph on the ring grows the page under itself, so the numbers are read with it open.
+ *          Steam's, routed through its tree of containers (steamStep in the About test kit): the stop's own move
+ *          handler first, then each container around it, which walks its children only along its own
+ *          `flow-children` and otherwise offers the press to its own handler; a container with no flow walks
+ *          nothing. Then Steam's own scroll of the landing into its padded band, after the plugin's focus
+ *          listener has placed the pane (useTabBodyFocusScroll). The row that opens its paragraph on the ring
+ *          grows the page under itself, so the numbers are read with it open.
  * Used for: AboutTab.tsx and its pieces; fails on the earlier layout (no "What bonsAI is" stop, the language
- *           dropdown first, four full-width link rows, a support button after a 132 point picture).
- * Does not: Know Steam's real spatial rule (it picks the nearest stop below, preferring the one whose middle is
- *           closest across), or paint: jsdom has no layout, so every stop's box is a number laid out below from
- *           the stylesheet's own sizes (the link height and the picture's side) and the drawing's row heights.
- *           The real walk is the Deck check.
+ *           dropdown first, four full-width link rows, a support button after a 132 point picture), and on the
+ *           first round's links block (build 5d67f9d9), exactly as the Deck did: Down from GitHub went nowhere,
+ *           because the block set no flow and the buttons sat in a plain div. A walk by distance on screen had
+ *           passed it.
+ * Does not: Know Steam's code (the tree model is what the Deck has shown: rows of a tab body walk as a column
+ *           with no flow set; the links block with none walked nothing), or paint: jsdom has no layout, so every
+ *           stop's box is a number laid out below from the stylesheet's own sizes (the link height and the
+ *           picture's side) and the drawing's row heights. The real walk is the Deck check.
  */
 import { act, render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -24,7 +29,7 @@ vi.mock("@decky/ui", async () => {
   return { ...stubs, Focusable: kit.KeepNavFocusable, Button: kit.KeepNavButton, Dropdown: kit.StopDropdown };
 });
 
-import { pressNav } from "../test-harness/aboutDeckyUi";
+import { steamStep } from "../test-harness/aboutDeckyUi";
 import { TabBodyFocusRoot } from "../features/plugin-shell/TabBodyFocusRoot";
 import { AboutTab } from "./AboutTab";
 import { resetAboutLinksMemory } from "./AboutLinks";
@@ -157,44 +162,17 @@ function walkAbout(viewport: number) {
   };
 
   /**
-   * One D-pad press: the stop's own handler first (it may claim the press), then Steam's own step to the nearest
-   * stop that way, the closer one across when two are as near.
+   * One D-pad press, routed the way Steam routes it: the stop's own handler, then up through its containers,
+   * each walking its children only along its own `flow-children` (steamStep). The tab body's root has no flow
+   * set and Steam walks its rows as a column anyway (measured: Down and Up between the rows work on the Deck);
+   * every other container with no flow walks nothing. Then Steam's scroll for the landing.
    */
   const press = (direction: "Down" | "Up" | "Left" | "Right"): string | null => {
-    const here = nameOf(document.activeElement)!;
-    const from = stops[here]!;
-    const ringBefore = document.activeElement;
+    const from = document.activeElement as HTMLElement;
     const pageBefore = scrollTop;
-    if (pressNav(from, `onMove${direction}`)) {
-      // Claimed: the handler may have moved the ring itself (a plain focus between siblings), or held it still.
-      if (document.activeElement !== ringBefore) settle(document.activeElement as HTMLElement, pageBefore);
-      return nameOf(document.activeElement);
-    }
-    const me = layout().boxes[here]!;
-    const cx = me.left + me.width / 2;
-    const cy = me.top + me.height / 2;
-    let best: { name: string; score: number } | null = null;
-    for (const name of names) {
-      if (name === here) continue;
-      const b = layout().boxes[name]!;
-      const bx = b.left + b.width / 2;
-      const by = b.top + b.height / 2;
-      const gapY = direction === "Down" ? b.top - (me.top + me.height) : direction === "Up" ? me.top - (b.top + b.height) : 0;
-      const gapX = direction === "Right" ? b.left - (me.left + me.width) : direction === "Left" ? me.left - (b.left + b.width) : 0;
-      const ahead =
-        direction === "Down" ? by > cy && gapY > -b.height
-        : direction === "Up" ? by < cy && gapY > -b.height
-        : direction === "Right" ? bx > cx && gapX > -b.width
-        : bx < cx && gapX > -b.width;
-      if (!ahead) continue;
-      const along = direction === "Down" || direction === "Up" ? Math.max(0, gapY) : Math.max(0, gapX);
-      const across = direction === "Down" || direction === "Up" ? Math.abs(bx - cx) : Math.abs(by - cy);
-      const score = along + across * 0.25;
-      if (!best || score < best.score) best = { name, score };
-    }
-    if (!best) return here; // nothing that way: the ring stays
-    land(stops[best.name]!);
-    return best.name;
+    const to = steamStep(from, direction, { columnWhereUnset: (c) => c.hasAttribute("data-bonsai-tab-body") });
+    if (to !== from) settle(to, pageBefore);
+    return nameOf(document.activeElement);
   };
 
   // The ring comes in from the tab bar onto the first stop, as the tab body's transfer does.

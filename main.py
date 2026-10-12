@@ -167,14 +167,9 @@ from backend.services import media_desktop_rpc
 from backend.services.input_sanitizer_service import (
     apply_input_sanitizer_lane,
     classify_sanitizer_command,
-    confirmation_message_for_command,
 )
 from backend.services.ask_local_commands import detect_local_ask_commands
-from backend.services.shortcut_setup_commands import (
-    classify_shortcut_setup_command,
-    response_message_for_shortcut,
-)
-from backend.services.vac_check_commands import parse_vac_check_command, response_for_vac_check
+from backend.services import ask_local_command_handlers
 from backend.services.screenshot_media import (
     MAX_ATTACHMENT_FILE_BYTES,
     MAX_ATTACHMENT_INLINE_BYTES,
@@ -818,61 +813,13 @@ class Plugin:
         }
 
     async def _try_handle_sanitizer_keyword_command(self, question: str, app_id: str) -> Optional[dict]:
-        """Persist sanitizer on/off from magic phrases; return ask-shaped dict or ``None``."""
-        cmd = classify_sanitizer_command(question)
-        if cmd is None:
-            return None
-        new_disabled = cmd == "disable"
-        await self.save_settings({"input_sanitizer_user_disabled": new_disabled})
-        app_context = "active" if app_id else "none"
-        return {
-            "success": True,
-            "response": confirmation_message_for_command(cmd),
-            "app_id": app_id,
-            "app_context": app_context,
-            "applied": None,
-            "elapsed_seconds": 0.0,
-        }
+        return await ask_local_command_handlers.try_handle_sanitizer_keyword_command(self, question, app_id)
 
     async def _try_handle_shortcut_setup_command(self, question: str, app_id: str) -> Optional[dict]:
-        """Return fixed shortcut guidance (no Ollama) or ``None`` if not a shortcut keyword."""
-        variant = classify_shortcut_setup_command(question)
-        if variant is None:
-            return None
-        app_context = "active" if app_id else "none"
-        # 0.6.0 (plan 72): the quick-launch chord is shelved; Developer tab only. No shortcut_setup, no button.
-        if not (await self.load_settings()).get("show_developer_tab"):
-            return {"success": True, "response": "That command isn't available in this version.", "app_id": app_id,
-                    "app_context": app_context, "applied": None, "elapsed_seconds": 0.0}
-        response = response_message_for_shortcut(variant)
-        return {
-            "success": True,
-            "response": response,
-            "app_id": app_id,
-            "app_context": app_context,
-            "applied": None,
-            "elapsed_seconds": 0.0,
-            "shortcut_setup": variant,
-        }
+        return await ask_local_command_handlers.try_handle_shortcut_setup_command(self, question, app_id)
 
     async def _try_handle_vac_check_command(self, question: str, app_id: str) -> Optional[dict]:
-        """Steam Web API GetPlayerBans via ``bonsai:vac-check`` (no Ollama)."""
-        parsed_arg = parse_vac_check_command(question)
-        if parsed_arg is None:
-            return None
-        settings = await self.load_settings()
-        ok = capability_enabled(settings, "steam_web_api")
-        key = str(settings.get("steam_web_api_key") or "")
-        response = response_for_vac_check(parsed_arg, api_key=key, capability_ok=ok)
-        app_context = "active" if app_id else "none"
-        return {
-            "success": True,
-            "response": response,
-            "app_id": app_id,
-            "app_context": app_context,
-            "applied": None,
-            "elapsed_seconds": 0.0,
-        }
+        return await ask_local_command_handlers.try_handle_vac_check_command(self, question, app_id)
 
     # --- Settings RPC ---
 

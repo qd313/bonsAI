@@ -22,8 +22,16 @@ route uses while it is still running; that is what it is remembered as once it i
 
 from __future__ import annotations
 
+import random
 from typing import Any, Optional
 
+from backend.services.ai_character_service import (
+    PYRO_ASSHOLE_TIP_LINES,
+    PYRO_MANAGER_TIP_LINES,
+    PYRO_MANAGER_TIP_PROBABILITY,
+    PYRO_PRESET_ID,
+    pyro_manager_carousel_tip_addon,
+)
 from backend.ollama_routing import (
     build_effective_models_to_try,
     filter_models_to_installed,
@@ -128,3 +136,15 @@ def resolve_ask_model_routing(
         non_foss_unlocked,
         ask_diagnostics,
     )
+
+
+def with_pyro_carousel_tip(roleplay: str, preset_id: str, asshole: bool) -> tuple[str, Optional[dict]]:
+    """The Pyro Manager character's occasional carousel tip: ``(roleplay text, inject)``.
+
+    Only for that preset and only when a character voice is on; otherwise the voice comes back
+    unchanged with ``None``. ``inject`` is ``{"text": <tip>}`` when a tip was added.
+    """
+    if preset_id != PYRO_PRESET_ID or not roleplay or random.random() >= PYRO_MANAGER_TIP_PROBABILITY:
+        return roleplay, None
+    tip = random.choice(PYRO_ASSHOLE_TIP_LINES if asshole else PYRO_MANAGER_TIP_LINES)
+    return roleplay + pyro_manager_carousel_tip_addon(tip, asshole=asshole), {"text": tip}

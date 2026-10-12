@@ -2,7 +2,7 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 2335,
+      "lines": 2282,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
@@ -41,13 +41,13 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 1210,
+      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
+      "lines": 1209,
       "role": ""
     },
     {
-      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 1209,
+      "path": "py_modules/backend/services/game_ai_request.py",
+      "lines": 1167,
       "role": ""
     },
     {

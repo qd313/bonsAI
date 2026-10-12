@@ -51,7 +51,6 @@ from __future__ import annotations
 
 import asyncio
 import functools
-import random
 import threading
 import time
 from typing import Any, Optional
@@ -59,14 +58,9 @@ from typing import Any, Optional
 import decky
 
 from backend.services.ai_character_service import (
-    PYRO_ASSHOLE_TIP_LINES,
-    PYRO_MANAGER_TIP_LINES,
-    PYRO_MANAGER_TIP_PROBABILITY,
-    PYRO_PRESET_ID,
     apply_roleplay_to_system_content,
     build_roleplay_system_suffix_meta,
     pyro_asshole_mode_active,
-    pyro_manager_carousel_tip_addon,
 )
 from backend.services.local_ollama_setup_service import (
     is_loopback_ollama_host,
@@ -80,6 +74,7 @@ from backend.services.chat_memory_step import add_chat_memory_to_prompt
 from backend.services.ollama_ask_extras import (
     build_ollama_request_extras,
     resolve_ask_model_routing,
+    with_pyro_carousel_tip,
 )
 from backend.services.ollama_service import post_ollama_chat
 from backend.services.response_verify import build_live_spoiler_cover
@@ -219,16 +214,9 @@ async def run_ask_ollama(
         )
     roleplay = rp_meta.suffix
     pyro_asshole = pyro_asshole_mode_active(settings, rp_meta.resolved_preset_id)
-    preset_carousel_inject = None
-    if rp_meta.resolved_preset_id == PYRO_PRESET_ID and roleplay:
-        if random.random() < PYRO_MANAGER_TIP_PROBABILITY:
-            if pyro_asshole:
-                tip = random.choice(PYRO_ASSHOLE_TIP_LINES)
-                roleplay = roleplay + pyro_manager_carousel_tip_addon(tip, asshole=True)
-            else:
-                tip = random.choice(PYRO_MANAGER_TIP_LINES)
-                roleplay = roleplay + pyro_manager_carousel_tip_addon(tip)
-            preset_carousel_inject = {"text": tip}
+    roleplay, preset_carousel_inject = with_pyro_carousel_tip(
+        roleplay, rp_meta.resolved_preset_id, pyro_asshole
+    )
     if roleplay:
         system_content = apply_roleplay_to_system_content(system_content, roleplay, terse=terse_speed)
 

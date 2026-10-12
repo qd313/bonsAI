@@ -103,9 +103,9 @@ from backend.services.destructive_advice_guard import (
     check_destructive_advice,
 )
 from backend.services import chat_turn_recorder
+from backend.services.chat_own_game_title import chat_own_game_title, text_resolved_title_for_turn
 from backend.services import kb_followup_memory, ollama_keep_alive_rule
 from backend.services.input_sanitizer_service import apply_input_sanitizer_lane
-from backend.services.kb_other_game_named import other_game_besides
 from backend.services.kb_notes_footers import append_kb_notes_footers
 from backend.services.ollama_prompts import (
     build_reply_followup_context_block,
@@ -188,34 +188,9 @@ from backend.tdp_intent import (
 logger = decky.logger
 
 
-_CHAT_OWN_GAME_LOOKBACK_TURNS = 12
-
-
 def _chat_own_game_title(settings: dict, chat: dict) -> str:
-    """The chat's own game, for the case D19 itself cannot resolve: nothing running and the
-    question naming nothing either (plan 68 step 2, the first memory-check failure from plan
-    68's own § 1 -- fixed here per its § 8 question 1 default). A running game and a title the
-    question names both still win over this; the caller only reaches here once both are absent.
-
-    Walks the chat's own turns newest first, at most the newest 12, for the first of: a turn's
-    own ``app_name`` (resolved against the corpus the same way D19 resolves the question itself,
-    or used as written when it does not resolve to anything), or a user turn's own text resolved
-    the same way. The chat's ``origin_app_name`` is the last resort. "" when none of that turns
-    up anything -- today's behaviour, unchanged.
-    """
-    turns = chat.get("turns")
-    if isinstance(turns, list) and turns:
-        for turn in reversed(turns[-_CHAT_OWN_GAME_LOOKBACK_TURNS:]):
-            if not isinstance(turn, dict):
-                continue
-            turn_app_name = str(turn.get("app_name") or "").strip()
-            if turn_app_name:
-                return resolve_title_from_question(settings, turn_app_name) or turn_app_name
-            if str(turn.get("role") or "") == "user":
-                resolved = resolve_title_from_question(settings, str(turn.get("text") or ""))
-                if resolved:
-                    return resolved
-    return str(chat.get("origin_app_name") or "").strip()
+    """The chat's own game (body in chat_own_game_title.py); the resolver is read here at call time."""
+    return chat_own_game_title(settings, chat, resolve_title_from_question)
 
 
 async def run_game_ai_request(
@@ -492,29 +467,11 @@ async def run_game_ai_request(
         # on why "nothing running" and "a game only named in the question" are different facts.
         text_resolved_title = ""
         if not str(app_id or "").strip() and not str(app_name or "").strip():
-            text_resolved_title = resolve_title_from_question(settings, title_text)
-            if not text_resolved_title:
-                # Plan 68 step 2: the first memory-check failure from the plan's own § 1 -- with
-                # no game running and the question naming nothing, the knowledge-base search used
-                # to get no game at all. Falls back to the chat's own game; still loses to a
-                # running game or a title the question names, both handled above already.
-                chat_own_title = _chat_own_game_title(settings, request_chat)
-                # A question naming some other well-known game the library has nothing on is not
-                # a bare follow-up: attach no game's notes rather than the chat's own.
-                other_game = other_game_besides(title_text, chat_own_title)
-                if other_game:
-                    logger.info(
-                        "kb: question names a game the library does not know (%s) -- "
-                        "not using the chat's own game %s",
-                        other_game,
-                        chat_own_title,
-                    )
-                elif chat_own_title:
-                    text_resolved_title = chat_own_title
-                    logger.info(
-                        "kb: no game running or named -- using the chat's own game %s",
-                        chat_own_title,
-                    )
+            # The title the question names, else (plan 68 step 2) the chat's own game; the rule
+            # and its log lines live in chat_own_game_title.py. Still loses to a running game.
+            text_resolved_title = text_resolved_title_for_turn(
+                settings, title_text, request_chat, resolve_title_from_question, logger
+            )
 
         kb_coverage_transparency = kb_coverage_to_transparency(
             summarize_kb_coverage(

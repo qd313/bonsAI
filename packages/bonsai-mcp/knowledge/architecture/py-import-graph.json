@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 128,
-  "edgeCount": 349,
+  "fileCount": 130,
+  "edgeCount": 356,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -37,6 +37,8 @@
     "py_modules/backend/services/strategy_checklist_session_service.py",
     "py_modules/backend/services/strategy_guide_parse.py",
     "py_modules/backend/services/tdp_service.py",
+    "py_modules/backend/services/user_note_commands.py",
+    "py_modules/backend/services/user_note_offer.py",
     "py_modules/backend/services/user_notes_service.py",
     "py_modules/backend/tdp_intent.py",
     "py_modules/backend/tls_ca_fallback.py"
@@ -91,20 +93,20 @@
       "count": 6
     },
     {
+      "path": "py_modules/backend/services/chat_slot_service.py",
+      "count": 6
+    },
+    {
+      "path": "py_modules/backend/services/knowledge_base_game_match.py",
+      "count": 6
+    },
+    {
       "path": "py_modules/backend/services/ollama_prompts.py",
       "count": 6
     },
     {
       "path": "py_modules/backend/services/voice_whisper_runtime.py",
       "count": 6
-    },
-    {
-      "path": "py_modules/backend/services/chat_slot_service.py",
-      "count": 5
-    },
-    {
-      "path": "py_modules/backend/services/knowledge_base_game_match.py",
-      "count": 5
     },
     {
       "path": "py_modules/backend/services/ollama_service.py",
@@ -247,6 +249,10 @@
       "count": 2
     },
     {
+      "path": "py_modules/backend/services/chat_own_game_title.py",
+      "count": 2
+    },
+    {
       "path": "py_modules/backend/services/chat_sum_up_job.py",
       "count": 2
     },
@@ -319,6 +325,14 @@
       "count": 2
     },
     {
+      "path": "py_modules/backend/services/user_note_commands.py",
+      "count": 2
+    },
+    {
+      "path": "py_modules/backend/services/user_note_offer.py",
+      "count": 2
+    },
+    {
       "path": "py_modules/backend/services/user_notes_service.py",
       "count": 2
     },
@@ -360,10 +374,6 @@
     },
     {
       "path": "py_modules/backend/services/chat_memory_step.py",
-      "count": 1
-    },
-    {
-      "path": "py_modules/backend/services/chat_own_game_title.py",
       "count": 1
     },
     {
@@ -716,8 +726,13 @@
     "py_modules/backend/services/ask_local_command_handlers.py": {
       "imports": [
         "py_modules/backend/services/capabilities.py",
+        "py_modules/backend/services/chat_own_game_title.py",
+        "py_modules/backend/services/chat_slot_service.py",
         "py_modules/backend/services/input_sanitizer_service.py",
+        "py_modules/backend/services/knowledge_base_game_match.py",
         "py_modules/backend/services/shortcut_setup_commands.py",
+        "py_modules/backend/services/user_note_commands.py",
+        "py_modules/backend/services/user_note_offer.py",
         "py_modules/backend/services/vac_check_commands.py"
       ],
       "importedBy": [
@@ -728,6 +743,7 @@
       "imports": [
         "py_modules/backend/services/input_sanitizer_service.py",
         "py_modules/backend/services/shortcut_setup_commands.py",
+        "py_modules/backend/services/user_note_commands.py",
         "py_modules/backend/services/vac_check_commands.py"
       ],
       "importedBy": [
@@ -841,6 +857,7 @@
         "py_modules/backend/services/kb_other_game_named.py"
       ],
       "importedBy": [
+        "py_modules/backend/services/ask_local_command_handlers.py",
         "py_modules/backend/services/game_ai_request.py"
       ]
     },
@@ -861,6 +878,7 @@
       ],
       "importedBy": [
         "main.py",
+        "py_modules/backend/services/ask_local_command_handlers.py",
         "py_modules/backend/services/chat_slot_rpc.py",
         "py_modules/backend/services/chat_sum_up_job.py",
         "py_modules/backend/services/chat_summary_service.py",
@@ -1000,6 +1018,7 @@
         "py_modules/backend/services/strategy_spoiler_policy.py",
         "py_modules/backend/services/tdp_service.py",
         "py_modules/backend/services/transparency_service.py",
+        "py_modules/backend/services/user_note_offer.py",
         "py_modules/backend/services/user_notes_for_ask.py",
         "py_modules/backend/tdp_intent.py"
       ],
@@ -1107,6 +1126,7 @@
         "py_modules/backend/services/knowledge_base_schema.py"
       ],
       "importedBy": [
+        "py_modules/backend/services/ask_local_command_handlers.py",
         "py_modules/backend/services/chat_memory_step.py",
         "py_modules/backend/services/chat_summary_service.py",
         "py_modules/backend/services/knowledge_base_chips.py",
@@ -1826,6 +1846,20 @@
         "py_modules/backend/services/game_ai_request.py",
         "py_modules/backend/services/media_desktop_rpc.py",
         "py_modules/backend/services/voice_rpc.py"
+      ]
+    },
+    "py_modules/backend/services/user_note_commands.py": {
+      "imports": [],
+      "importedBy": [
+        "py_modules/backend/services/ask_local_command_handlers.py",
+        "py_modules/backend/services/ask_local_commands.py"
+      ]
+    },
+    "py_modules/backend/services/user_note_offer.py": {
+      "imports": [],
+      "importedBy": [
+        "py_modules/backend/services/ask_local_command_handlers.py",
+        "py_modules/backend/services/game_ai_request.py"
       ]
     },
     "py_modules/backend/services/user_notes_for_ask.py": {

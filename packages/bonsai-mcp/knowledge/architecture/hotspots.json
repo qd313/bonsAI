@@ -2,7 +2,7 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 2303,
+      "lines": 2326,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
@@ -37,7 +37,7 @@
     },
     {
       "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 1173,
+      "lines": 1180,
       "role": ""
     },
     {
@@ -66,13 +66,13 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/bonsai_stream_tags.py",
-      "lines": 994,
+      "path": "py_modules/backend/services/transparency_service.py",
+      "lines": 1010,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/transparency_service.py",
-      "lines": 992,
+      "path": "py_modules/backend/services/bonsai_stream_tags.py",
+      "lines": 994,
       "role": ""
     },
     {

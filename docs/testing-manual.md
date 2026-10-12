@@ -250,31 +250,31 @@ see REASONING-02. Evidence `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`.
 
 **New controls from plan 92 (2026-10-12; Search tab = plan 90 lane N3, models column = plan 91 lane M1, About = lane T3, folded Ollama tab = lane T0):**
 
-*The Search tab (landed 2026-10-12; Deck rows P90-SEARCH-TAB-WALK, -WORDS, -GAMES, -SETTINGS, -KB):*
+*The Search tab (landed 2026-10-12; Deck rows P90-SEARCH-TAB-WALK, -WORDS, -GAMES, -SETTINGS, -KB; run on the Deck 2026-10-12, builds `649daecc` and `3115f3de`):*
 
-- [ ] The game row: Down from the tab bar lands on it, and picking a game narrows the matches. **Owed (Deck)**, rows P90-SEARCH-TAB-WALK and P90-SEARCH-GAMES.
-- [ ] The find box: reached by Down after the game row, visible, no stop twice. **Owed (Deck)**, row P90-SEARCH-TAB-WALK.
-- [ ] The word buttons: each reached by the D-pad; A lists the matches with the word highlighted. **Owed (Deck)**, row P90-SEARCH-WORDS.
-- [ ] The match rows: reached and visible; A on a Steam settings match opens that page in Steam (A on a chat match shows a one-line toast until the jump is built). **Owed (Deck)**, row P90-SEARCH-SETTINGS.
+- [x] The game row: Down from the tab bar lands on it, and picking a game narrows the matches. **PASS (Deck) 2026-10-12**, rows P90-SEARCH-TAB-WALK (second round, `docs/test-evidence/plan92-P90-SEARCH-TAB-WALK-try2.json`) and P90-SEARCH-GAMES (`docs/test-evidence/plan92-P90-SEARCH-GAMES.json`).
+- [x] The find box: reached by Down after the game row, visible, no stop twice. **PASS (Deck) 2026-10-12 on the second round**, row P90-SEARCH-TAB-WALK, `docs/test-evidence/plan92-P90-SEARCH-TAB-WALK-try2.json`.
+- [x] The word buttons: each reached by the D-pad; A lists the matches with the word highlighted. **PASS (Deck) 2026-10-12**, row P90-SEARCH-WORDS, `docs/test-evidence/plan92-P90-SEARCH-WORDS.json`.
+- [ ] The match rows: reached and visible; A on a Steam settings match opens that page in Steam (A on a chat match shows a one-line toast until the jump is built). **PASS in part (Deck) 2026-10-12**, row P90-SEARCH-SETTINGS, `docs/test-evidence/plan92-P90-SEARCH-SETTINGS.json`: a Steam page opened from the Search tab and Main has no settings card. **Still owed:** the re-run of the 24 Steam settings pages from this tab.
 - [ ] The notes list (before a word is picked): each note's on and off switch is reached. **Owed (Deck)**; waits for the note card to make notes (second night).
-- [ ] The game-note sheet: A on a game note shows the note's own words. **Owed (Deck)**, row P90-SEARCH-KB.
+- [ ] The game-note sheet: A on a game note shows the note's own words. **PASS in part (Deck) 2026-10-12**, row P90-SEARCH-KB, `docs/test-evidence/plan92-P90-SEARCH-KB.json` (library installed: passed). **Still owed:** the half with the library removed and installed again.
 
 *The About tab (landed 2026-10-12, build `5d67f9d9`):*
 
 - [x] The "What bonsAI is" row: reached by Down from the tab bar; its paragraph shows only while it has the ring. **PASS (Deck) 2026-10-12**, row P91-ABOUT-ROWS (height and paragraph half), evidence `docs/test-evidence/plan92-P91-ABOUT-ROWS.json`.
-- [ ] The link buttons (GitHub, Built on Ollama!, Bugs & Feature Requests): Down walks all three. **FAILED (Deck) 2026-10-12:** Down from GitHub is dead, so the other two cannot be reached (same evidence file). A fix landed (`649daecc`); a second round is owed.
+- [x] The link buttons (GitHub, Built on Ollama!, Bugs & Feature Requests): Down walks all three. **PASS (Deck) 2026-10-12 on the second round** (`649daecc`), row P91-ABOUT-ROWS, `docs/test-evidence/plan92-P91-ABOUT-ROWS-try2.json`; the first try failed (Down from GitHub was dead).
 - [x] The QR button: Right from GitHub reaches it, Left returns to GitHub, A opens the support page in Steam's browser. **PASS (Deck) 2026-10-12**, row P91-ABOUT-LINKS, evidence `docs/test-evidence/plan92-P91-ABOUT-LINKS.json`.
 
 *The AI models box, filters column (landed 2026-10-12, build `b6d8e9a6` on the Deck):*
 
-- [ ] The column's rows (Clear, the licence rows, Good for, Show) and the list reached with Down and Up in the right order, the greyed licence row skipped. **FAILED (Deck) 2026-10-12:** the greyed licence row takes the ring; Down from Advanced stops on the small Refresh button, Up from Clear skips it. Every stop visible and none repeated. Row P91-MODELS-COLUMN-WALK, evidence `docs/test-evidence/plan92-P91-MODELS-COLUMN-WALK.json`; a second round is owed.
+- [x] The column's rows (Clear, the licence rows, Good for, Show) and the list reached with Down and Up in the right order, the greyed licence row skipped. **PASS (Deck) 2026-10-12 on the second round** (build `3115f3de`), row P91-MODELS-COLUMN-WALK, `docs/test-evidence/plan92-P91-MODELS-COLUMN-WALK-try2.json`; the first try failed.
 - [x] Right from Vision or Installed only reaches the first row's star; Left returns to the same column row. **PASS (Deck) 2026-10-12**, same row and evidence file.
 
 *The folded Ollama tab (landed 2026-10-12, `5377006b` to `5ea2a26b`; Deck rows P91-FOLD-OLLAMA, P91-STRIP, P91-FOLD-ALL-BUTTON):*
 
-- [ ] A section's line: reached by the D-pad; A opens or closes it. **Owed (Deck)**, row P91-FOLD-OLLAMA.
-- [ ] The help strip: shows the ringed row's text on the same frame, and the row clears it. **Owed (Deck)**, row P91-STRIP.
-- [ ] The floating open-all button: Right from a section line reaches it; A opens or closes every section; any other press returns. **Owed (Deck)**, row P91-FOLD-ALL-BUTTON.
+- [x] A section's line: reached by the D-pad; A opens or closes it. **PASS (Deck) 2026-10-12 on the monitor**, rows P91-FOLD-OLLAMA and P91-FOLD-NAMES (`docs/test-evidence/plan92-P91-FOLD-OLLAMA.json`, `docs/test-evidence/plan92-P91-FOLD-NAMES.json`). **Still owed:** the "under 430 points" test on the Deck's own screen.
+- [x] The help strip: shows the ringed row's text on the same frame, and the row clears it. **PASS (Deck) 2026-10-12**, row P91-STRIP, `docs/test-evidence/plan92-P91-STRIP.json`.
+- [x] The floating open-all button: Right from a section line reaches it; A opens or closes every section; any other press returns. **PASS (Deck) 2026-10-12**, row P91-FOLD-ALL-BUTTON, `docs/test-evidence/plan92-P91-FOLD-ALL-BUTTON.json`.
 
 ---
 

@@ -87,6 +87,11 @@ All notable changes to this project are documented in this file.
 - **The AI models box keeps its filters in a column beside the list, always in view.** Each choice shows a count, "N models match" and Clear sit at the top, Done no longer loses your filter choice, and the list's Date column is gone to make room.
 - **The Ollama tab is folded into one-line sections.** Each section shows its current values on one line, opens when you press it, shows the longer text of the setting you are on in a strip at the bottom, and a small floating button opens or closes every section at once.
 - **The AI models screen no longer redraws itself for as long as it is open.**
+- **In the AI models box, Down and Up now take the same path through Advanced, Refresh and Clear, and the greyed licence row is no longer a stop.** Passed on the Deck 2026-10-12.
+- **On the About tab, Down now reaches all three link buttons.** Passed on the Deck 2026-10-12.
+- **On the Search tab, Down from any game button goes to the find box and Up comes back to the picked game; a hidden game note's title reads "An item note", not "A item note".** Passed on the Deck 2026-10-12.
+- **On the folded Ollama tab, a section's name is no longer cut short by its summary.** The summary gives way instead. Passed on the Deck 2026-10-12.
+- **The Tier 2 licence question now points to the Licence list beside the models**, since the Filters button is gone.
 
 ### Plan 89 (2026-10-11)
 

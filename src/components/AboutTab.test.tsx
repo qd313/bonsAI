@@ -3,9 +3,10 @@
  * Purpose: Pin the About tab's dense layout (plan 92, lane T3; plan 91 § 2c and § 3d; the maintainer's pick,
  *          round 2 option A with round 3 option D on the density board). On the Deck the tab was 877 points
  *          tall (two screens on the Deck's own screen) because every row was a full Steam row with its text
- *          always drawn. Now: "Version 0.5.0" is a plain line that is not a stop; "What bonsAI is" is a
- *          one-line row whose paragraph is drawn under it only while the ring is on it; the beta warning is one
- *          short visible line; "Reply language" is one line (the label and Steam's dropdown) whose hint opens
+ *          always drawn. Now: "Version 0.5.0" is a plain line that is not a stop; the "What bonsAI is" paragraph
+ *          and the green beta notice are plain text, always drawn, as before plan 92 (the maintainer asked for
+ *          them back on 2026-10-12, so the reveal-on-focus row is gone and the first stop is the Reply language
+ *          dropdown); "Reply language" is one line (the label and Steam's dropdown) whose hint opens
  *          under it the same way; GitHub, Built on Ollama! and Bugs & Feature Requests are three small buttons
  *          beside a smaller QR code, which is a stop of its own (AboutLinks.test.tsx walks them).
  *          The words are checked against the drawing's own data (docs/demos/mockup-board-2/src/42-tabs-data.js
@@ -36,7 +37,6 @@ import { buildBonsaiScopeStylesheet } from "../styles/bonsaiScopeStylesheet";
 
 const BOARD = join(__dirname, "../../docs/demos/mockup-board-2/src");
 const dataText = readFileSync(join(BOARD, "42-tabs-data.js"), "utf8");
-const drawingText = readFileSync(join(BOARD, "44-tabs.js"), "utf8");
 /** The About tab's rows as the drawing's data file lists them. */
 const aboutData = dataText.slice(dataText.indexOf("About: { icon"));
 const squash = (text: string) => text.replace(/\s+/g, " ").trim();
@@ -56,8 +56,17 @@ function renderAbout() {
   );
 }
 
-const whatIsRow = (root: HTMLElement) => root.querySelector<HTMLElement>('[data-bonsai-about-row="what-is"]')!;
+/** The beta sentence as the About tab worded it before plan 92 (commit d553a5b4), on one line. */
+const BETA_SENTENCE =
+  "This plugin is in beta. AI-generated recommendations — especially TDP and performance changes — should be verified before relying on them. Use at your own risk!";
 const languageRow = (root: HTMLElement) => root.querySelector<HTMLElement>("[data-bonsai-about-language-dropdown]")!;
+/** A rule's declarations in the plugin's real stylesheet, found by its selector. */
+function declarations(selector: string): string {
+  const css = buildBonsaiScopeStylesheet().replace(/\/\*[\s\S]*?\*\//g, "");
+  const at = css.indexOf(selector + " {");
+  expect(at, `${selector} has a rule`).toBeGreaterThan(-1);
+  return css.slice(at, css.indexOf("}", at));
+}
 const revealOf = (root: HTMLElement, id: string) => root.querySelector<HTMLElement>(`[data-bonsai-about-reveal="${id}"]`);
 
 describe("About tab: the rows, in the drawing's order and words", () => {
@@ -69,7 +78,7 @@ describe("About tab: the rows, in the drawing's order and words", () => {
     expect(titles).toEqual(drawn);
   });
 
-  it("has the stops in the drawing's order: What bonsAI is, Reply language, the three links, the QR", () => {
+  it("has the stops in order: Reply language first, then the three links and the QR (no 'What bonsAI is' stop)", () => {
     const { container } = renderAbout();
     const stops = Array.from(
       container.querySelectorAll<HTMLElement>(
@@ -81,15 +90,7 @@ describe("About tab: the rows, in the drawing's order and words", () => {
     const links = Array.from(aboutData.matchAll(/sbtn\("([^"]+)", \{ link: true \}\)/g)).map((m) => m[1]);
     expect(links).toEqual(["GitHub", "Built on Ollama!", "Bugs & Feature Requests", "Support my Steam Sale habit"]);
     // The QR block is the drawing's fourth link ("Support my Steam Sale habit"), beside the other three.
-    expect(stops).toEqual(["what-is", "Dropdown", ...links]);
-  });
-
-  it("names the first row and the beta line as the drawing words them", () => {
-    expect(drawingText).toContain('"What bonsAI is"');
-    const drawnBeta = drawingText.match(/"(Beta: [^"]+)"/)![1];
-    const { container } = renderAbout();
-    expect(whatIsRow(container).textContent).toBe("What bonsAI is");
-    expect(container.querySelector(".bonsai-about-beta")!.textContent).toBe(drawnBeta);
+    expect(stops).toEqual(["Dropdown", ...links]);
   });
 
   it("labels the language row as the drawing does", () => {
@@ -104,51 +105,41 @@ describe("About tab: the rows, in the drawing's order and words", () => {
     const line = screen.getByText(`Version ${PLUGIN_VERSION}`);
     expect(line.closest("button")).toBeNull();
     expect(line.closest("[tabindex]")).toBeNull();
-    expect(container.querySelectorAll("[data-bonsai-about-row]")).toHaveLength(1);
+    expect(container.querySelectorAll("[data-bonsai-about-row]")).toHaveLength(0);
   });
 });
 
-describe("About tab: the paragraph under 'What bonsAI is' is drawn only while the ring is on the row", () => {
-  it("is not drawn at first", () => {
+describe("About tab: the paragraph and the beta notice are always shown at the top, with no ring anywhere", () => {
+  it("draws the 'What bonsAI is' paragraph in the drawing's words, with nothing focused and no reveal row", () => {
     const { container } = renderAbout();
-    expect(revealOf(container, "what-is")).toBeNull();
-    expect(container.textContent).not.toContain("Backend Ollama Node for Steam");
-  });
-
-  it("opens under the row when Steam puts the ring on it, with the drawing's words, and closes when the ring leaves", () => {
-    const { container } = renderAbout();
-    const row = whatIsRow(container);
-    callNav(row, "onGamepadFocus");
-    const open = revealOf(container, "what-is");
-    expect(open).not.toBeNull();
+    expect(document.activeElement === document.body || document.activeElement === null).toBe(true);
+    const blurb = container.querySelector<HTMLElement>("[data-bonsai-about-blurb]")!;
+    expect(blurb).not.toBeNull();
     const drawn = aboutData.match(/para\("(Backend Ollama[^"]+)"/)![1];
-    expect(squash(open!.textContent!)).toBe(squash(drawn));
-    // Under the row, not inside it: the ring stays on the one line.
-    expect(row.contains(open)).toBe(false);
-    expect(row.parentElement!.contains(open)).toBe(true);
-    callNav(row, "onGamepadBlur");
-    expect(revealOf(container, "what-is")).toBeNull();
+    expect(squash(blurb.textContent!)).toBe(squash(drawn));
+    expect(container.querySelector("[data-bonsai-about-row]")).toBeNull();
+    expect(container.querySelector('[data-bonsai-about-reveal="what-is"]')).toBeNull();
   });
 
-  it("opens and closes on a plain focus and blur as well", () => {
+  it("draws the old green beta sentence in full, in the plugin's forest green, as plain text", () => {
     const { container } = renderAbout();
-    const row = whatIsRow(container);
-    act(() => row.focus());
-    expect(revealOf(container, "what-is")).not.toBeNull();
-    act(() => row.blur());
-    expect(revealOf(container, "what-is")).toBeNull();
+    const beta = container.querySelector<HTMLElement>("[data-bonsai-about-beta]")!;
+    expect(squash(beta.textContent!)).toBe(BETA_SENTENCE);
+    expect(beta.closest("button")).toBeNull();
+    expect(beta.closest("[tabindex]")).toBeNull();
+    const rule = declarations(".bonsai-scope .bonsai-about-beta");
+    expect(rule).toMatch(/color:\s*#2e8753/);
   });
 
-  it("keeps the beta line on screen whether or not the ring is on the row", () => {
+  it("sets the sizes of both through the text-size helper, not a raw size in the markup", () => {
     const { container } = renderAbout();
-    const beta = () => container.querySelector(".bonsai-about-beta");
-    expect(beta()).not.toBeNull();
-    callNav(whatIsRow(container), "onGamepadFocus");
-    expect(beta()).not.toBeNull();
-    expect(squash(beta()!.textContent!)).toMatch(/^Beta: check AI advice/);
+    for (const hook of ["[data-bonsai-about-blurb]", "[data-bonsai-about-beta]"]) {
+      expect(container.querySelector(hook)!.getAttribute("style")).toBeNull();
+    }
+    expect(declarations(".bonsai-scope .bonsai-about-blurb")).toMatch(/font-size:\s*calc\(/);
   });
 
-  it("opens the Reply language hint the same way, with the line naming Steam's language while on 'follow system'", () => {
+  it("opens the Reply language hint on the ring, with the line naming Steam's language while on 'follow system'", () => {
     const { container } = renderAbout();
     const row = languageRow(container);
     expect(revealOf(container, "language")).toBeNull();
@@ -162,14 +153,6 @@ describe("About tab: the paragraph under 'What bonsAI is' is drawn only while th
 });
 
 describe("About tab: the QR code is smaller", () => {
-  /** A rule's declarations in the plugin's real stylesheet, found by its selector. */
-  function declarations(selector: string): string {
-    const css = buildBonsaiScopeStylesheet().replace(/\/\*[\s\S]*?\*\//g, "");
-    const at = css.indexOf(selector + " {");
-    expect(at, `${selector} has a rule`).toBeGreaterThan(-1);
-    return css.slice(at, css.indexOf("}", at));
-  }
-
   it("draws the picture 88 points square, down from 132, read out of the stylesheet", () => {
     const rule = declarations(".bonsai-scope .bonsai-about-qr-img");
     expect(rule).toMatch(/width:\s*88px/);

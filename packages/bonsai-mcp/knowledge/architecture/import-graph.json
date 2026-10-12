@@ -47,8 +47,7 @@
     "src/components/AboutRevealRow.tsx": {
       "imports": [],
       "importedBy": [
-        "src/components/AboutReplyLanguageSection.tsx",
-        "src/components/AboutTab.tsx"
+        "src/components/AboutReplyLanguageSection.tsx"
       ]
     },
     "src/components/AboutTab.test.tsx": {
@@ -65,7 +64,6 @@
       "imports": [
         "src/components/AboutLinks.tsx",
         "src/components/AboutReplyLanguageSection.tsx",
-        "src/components/AboutRevealRow.tsx",
         "src/data/replyLanguage.ts",
         "src/i18n/keys.ts",
         "src/pluginVersion.ts",
@@ -5914,6 +5912,7 @@
         "src/features/plugin-shell/tabTitles.tsx",
         "src/features/unified-input/useUnifiedInputSurface.ts",
         "src/hooks/useTabStripBodyOffset.ts",
+        "src/styles/sections/aboutTab.ts",
         "src/styles/sections/detailsSlot.ts",
         "src/styles/sections/scopeBase.ts",
         "src/styles/sections/section-3.ts",
@@ -7640,6 +7639,7 @@
     },
     "src/styles/sections/aboutTab.ts": {
       "imports": [
+        "src/features/unified-input/constants.ts",
         "src/styles/sections/textPx.ts"
       ],
       "importedBy": [

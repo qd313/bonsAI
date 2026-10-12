@@ -1,9 +1,9 @@
 /**
  * Title: About tab
  *
- * Purpose: The About tab — the version, what bonsAI is (one line that
- * opens its paragraph under itself while the ring is on it), a one-line beta
- * warning, the reply-language row (its own file, AboutReplyLanguageSection),
+ * Purpose: The About tab — the version, what bonsAI is (its paragraph) and
+ * the beta notice, both always drawn as plain text at the top (as before plan 92;
+ * the maintainer asked for them back on 2026-10-12), the reply-language row (its own file, AboutReplyLanguageSection),
  * and the links out to GitHub, the Ollama project, the bug tracker and
  * support, as small buttons beside a smaller QR code (its own file,
  * AboutLinks). One line per row, so the tab fits on about one screen (plan 92).
@@ -23,7 +23,6 @@ import React from "react";
 import { PanelSection, PanelSectionRow } from "@decky/ui";
 import { AboutLinks } from "./AboutLinks";
 import { AboutReplyLanguageSection } from "./AboutReplyLanguageSection";
-import { AboutRevealRow } from "./AboutRevealRow";
 import type { ReplyLanguageId } from "../data/replyLanguage";
 import type { UiStringKey } from "../i18n/keys";
 import { PLUGIN_VERSION } from "../pluginVersion";
@@ -41,15 +40,15 @@ type Props = {
 };
 
 /**
- * The tab body: the version line, "What bonsAI is", the beta line, the
+ * The tab body: the version line, "What bonsAI is", the beta notice, the
  * reply-language section, and the Links section.
  *
  * In: the three outbound URLs (GitHub, Ollama, issues), the current reply
  * language and a callback to change it, and the translation helper for
  * this tab's own strings.
- * Out: the tab's panels, in order. The stops, top to bottom: What bonsAI is,
- * Reply language, the three link buttons, the QR code. The Version line and
- * the beta line are plain text.
+ * Out: the tab's panels, in order. The stops, top to bottom: Reply language,
+ * the three link buttons, the QR code. The Version line, the paragraph and
+ * the beta notice are plain text.
  *
  * What can go wrong: nothing here; AboutLinks falls back to a toast with the
  * raw URL if Steam's own external-navigation call throws.
@@ -70,14 +69,16 @@ export const AboutTab: React.FC<Props> = ({
         <PanelSectionRow>
           <div className="bonsai-about-block">
             <div className="bonsai-about-version">Version {PLUGIN_VERSION}</div>
-            <AboutRevealRow label="What bonsAI is" rowId="what-is">
+            <div className="bonsai-about-blurb" data-bonsai-about-blurb="">
               Backend Ollama Node for Steam (A.I.) - An AI assistant embedded in the
               Steam Deck Quick Access Menu. Ask questions, search settings, and get game-specific
               performance suggestions (TDP/GPU clock recommendations are read-only — apply them
               yourself in Steam&apos;s Performance tab if you choose).
-            </AboutRevealRow>
-            <div className="bonsai-about-beta">
-              Beta: check AI advice, especially TDP and performance changes, before relying on it.
+            </div>
+            <div className="bonsai-about-beta" data-bonsai-about-beta="">
+              This plugin is in beta. AI-generated recommendations — especially TDP
+              and performance changes — should be verified before relying on them.
+              Use at your own risk!
             </div>
           </div>
         </PanelSectionRow>

@@ -2,14 +2,14 @@
  * Title: The About tab, one line per row
  *
  * Purpose: Styles the About tab's dense layout (plan 92, lane T3; the maintainer's pick, "round 2 option A
- * with round 3 option D" on the density board): the Version line, the "What bonsAI is" row whose paragraph
- * opens under it while the ring is on it, the one-line beta warning, the Reply language row, and the three
- * small link buttons beside a smaller QR code. Every number here is read off the drawing
+ * with round 3 option D" on the density board): the Version line, the "What bonsAI is" paragraph and the
+ * beta notice (both always drawn, as before plan 92: the maintainer asked for them back at the top on
+ * 2026-10-12), the Reply language row, and the three small link buttons beside a smaller QR code. Every number here is read off the drawing
  * (docs/demos/mockup-board-2/src/43-tabs.css, `.k-row`, `.k-text`, `.k-lsmall`, `.k-lqrbtn`) and the
  * colours are the ones sampled from the Deck (docs/demos/mockup-board-2/README.md).
  *
  * Used for: Folded into bonsaiScopeStylesheet.ts. The class names are drawn by AboutTab.tsx,
- * AboutRevealRow.tsx, AboutReplyLanguageSection.tsx and AboutLinks.tsx.
+ * AboutReplyLanguageSection.tsx and AboutLinks.tsx.
  *
  * Solves: The tab was 877 points tall because every row was a full Steam row with its text always drawn;
  * on the Deck's own screen that is two screens. The QR code shrinks from 132 to 88 points here, and
@@ -17,6 +17,7 @@
  *
  * Does not: Draw the D-pad ring (the shared ring classes do, scopeBase.ts), and does not touch any other tab.
  */
+import { BONSAI_FOREST_GREEN } from "../../features/unified-input/constants";
 import { textPx } from "./textPx";
 
 /** The QR picture's side, in points: 132 before plan 92, about 88 in the drawing's "links beside the QR". */
@@ -40,26 +41,14 @@ export function buildAboutTabSection(): string {
           color: #c8c8c8;
           padding: 2px 4px 4px;
         }
-        /* A one-line row that is a stop: "What bonsAI is". The ring (white, inside the edge) is the shared
-           wrap-ring class; the lighter fill is the drawing's ringed row. */
-        .bonsai-scope .bonsai-about-row {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          width: 100%;
-          min-height: 30px;
-          box-sizing: border-box;
-          padding: 4px 10px;
-          border-bottom: 1px solid #1b2026;
-          color: #dcdedf;
-          font-size: ${textPx(13)};
-          line-height: 1.25;
+        /* "What bonsAI is": the paragraph, always drawn, as before plan 92 (not a stop). */
+        .bonsai-scope .bonsai-about-blurb {
+          font-size: ${textPx(12)};
+          line-height: 1.2;
+          color: #c8c8c8;
+          padding: 4px 4px 0;
         }
-        .bonsai-scope .bonsai-about-row.gpfocus {
-          background: #32373d;
-          color: #fff;
-        }
-        /* The paragraph that opens under the ringed row, and closes when the ring leaves. */
+        /* The Reply language hint, drawn under the row while the ring is on it, and removed when the ring leaves. */
         .bonsai-scope .bonsai-about-reveal {
           font-size: ${textPx(11)};
           line-height: 1.3;
@@ -71,13 +60,13 @@ export function buildAboutTabSection(): string {
           margin-top: 4px;
           color: #9ce7ff;
         }
-        /* The beta warning: one short line, always visible. */
+        /* The beta notice: the old wording, always drawn, in the plugin's forest green. */
         .bonsai-scope .bonsai-about-beta {
-          font-size: ${textPx(11)};
-          line-height: 1.3;
-          font-weight: 700;
-          color: #2e8753;
-          padding: 4px 4px 2px;
+          font-size: ${textPx(12)};
+          line-height: 1.2;
+          font-weight: 600;
+          color: ${BONSAI_FOREST_GREEN};
+          padding: 1.2em 4px 2px;
         }
         /* Reply language: the label on the left, Steam's own dropdown (its value and chevron) on the right. */
         .bonsai-scope .bonsai-about-lang {

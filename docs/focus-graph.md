@@ -749,15 +749,16 @@ Cancel               (drawn only while a run goes)
 
 ### The About tab, one line per row (plan 92, lane T3; plan 91 § 6)
 
-The About tab is `AboutTab.tsx`: a Version line, "What bonsAI is" (`AboutRevealRow.tsx`), the beta line, Reply
-language (`AboutReplyLanguageSection.tsx`), and the links (`AboutLinks.tsx`). Six stops, no hand-written move
-anywhere except inside the links block and one transfer out of Reply language.
+The About tab is `AboutTab.tsx`: a Version line, the "What bonsAI is" paragraph and the beta notice (plain text,
+always drawn, as before plan 92: the maintainer asked for them back on 2026-10-12), Reply language
+(`AboutReplyLanguageSection.tsx`, with `useRevealWhileRinged` from `AboutRevealRow.tsx` for its hint), and the links
+(`AboutLinks.tsx`). Five stops, no hand-written move anywhere except inside the links block and one transfer out of
+Reply language.
 
 ```
 tab bar
    | Down  (the tab body's own transfer)      ^ Up from the first stop (TabBodyFocusRoot's onMoveUp)
-[ What bonsAI is ]          <- its paragraph is drawn UNDER it while the ring is on it (not a stop)
-   | Down                                     ^ Up
+(Version, "What bonsAI is" paragraph, beta notice: plain text above, no stops, no ring)
 [ Language        Follow system ▾ ]   <- Steam's Dropdown; its hint opens under the row while the ring is on it
    | Down = takeNavFocus("about-links")       ^ Up (Steam's step)
 [ GitHub ]            ┐
@@ -766,14 +767,14 @@ tab bar
    Down from the last button: holds still        Down from the QR: holds still
 ```
 
-- **Stops:** exactly six, in this order: the "What bonsAI is" row, the Reply language dropdown, GitHub, Built on
-  Ollama!, Bugs & Feature Requests, the QR code. The Version line, the beta line and every paragraph are plain
-  text: no `tabindex`, no ring.
-- **The paragraphs open on the ring, and only then.** "What bonsAI is" and the Reply language hint are drawn
-  under their row while it holds the ring and removed when it leaves. The row is a `Focusable` marked `focusable`
-  that carries `onGamepadFocus` / `onGamepadBlur` (what Steam delivers) and `onFocus` / `onBlur` (a plain DOM focus, the
-  second signal, and the one the tests use). The text sits outside the `Focusable`, so the ring stays on the one
-  line. Nothing is remembered: a rebuilt tab starts with both closed.
+- **Stops:** exactly five, in this order: the Reply language dropdown, GitHub, Built on Ollama!, Bugs & Feature
+  Requests, the QR code. The Version line, the "What bonsAI is" paragraph, the beta notice and the hint are plain
+  text: no `tabindex`, no ring. The first stop is the dropdown, so Down from the tab bar lands on it.
+- **The Reply language hint opens on the ring, and only then.** It is drawn under the row while the row holds the
+  ring and removed when it leaves. The row's `Focusable` carries `onGamepadFocus` / `onGamepadBlur` (what Steam
+  delivers) and `onFocus` / `onBlur` (a plain DOM focus, the second signal, and the one the tests use). The text
+  sits outside the `Focusable`, so the ring stays on the one line. Nothing is remembered: a rebuilt tab starts
+  with it closed.
 - **Down from Reply language is a transfer, not a step.** The dropdown sits on the right of its row; Steam's own
   step from there would pick the QR code (it is straight below). The row's `Focusable` claims Down and calls
   `takeNavFocus("about-links")`, a nav id the links block registers (`navFocusRegistry.ts`); a transfer onto a

@@ -2,14 +2,15 @@
  * Title: About tab -- a bounded D-pad walk of the whole tab
  * Purpose: Walk the real About tab, inside the real tab-body root and a scrolling pane, the way the Deck's
  *          controller rig will (plan 92, block 3): Down from the first stop to the last, Right to the QR code,
- *          Left back, then Up to the top. The stops are, in order: What bonsAI is, Reply language, GitHub,
- *          Built on Ollama!, Bugs & Feature Requests, and the QR code (Version is not a stop). Each press is
+ *          Left back, then Up to the top. The stops are, in order: Reply language, GitHub,
+ *          Built on Ollama!, Bugs & Feature Requests, and the QR code (the Version line, the "What bonsAI is" paragraph
+ *          and the beta notice are plain text, not stops, since 2026-10-12). Each press is
  *          Steam's, routed through its tree of containers (steamStep in the About test kit): the stop's own move
  *          handler first, then each container around it, which walks its children only along its own
  *          `flow-children` and otherwise offers the press to its own handler; a container with no flow walks
  *          nothing. Then Steam's own scroll of the landing into its padded band, after the plugin's focus
- *          listener has placed the pane (useTabBodyFocusScroll). The row that opens its paragraph on the ring
- *          grows the page under itself, so the numbers are read with it open.
+ *          listener has placed the pane (useTabBodyFocusScroll). The Reply language hint opens under its
+ *          row on the ring and grows the page under itself, so the numbers are read with it open.
  * Used for: AboutTab.tsx and its pieces; fails on the earlier layout (no "What bonsAI is" stop, the language
  *           dropdown first, four full-width link rows, a support button after a 132 point picture), and on the
  *           first round's links block (build 5d67f9d9), exactly as the Deck did: Down from GitHub went nowhere,
@@ -50,7 +51,6 @@ const VIEWPORTS = [400, 741];
 const BODY_INSET = 24;
 const HEADING = 40;
 const VERSION = 22;
-const ROW = 30;
 const WHAT_IS_PARAGRAPH = 62;
 const LANGUAGE_HINT = 44;
 const BETA = 34;
@@ -83,7 +83,6 @@ function walkAbout(viewport: number) {
   const pane = view.container.querySelector<HTMLElement>("[data-pane]")!;
   const q = (selector: string) => pane.querySelector<HTMLElement>(selector)!;
   const stops: Record<string, HTMLElement> = {
-    "What bonsAI is": q('[data-bonsai-about-row="what-is"]'),
     "Reply language": q('[data-decky-ui="Dropdown"]'),
     GitHub: q('[data-bonsai-about-link="github"]'),
     "Built on Ollama!": q('[data-bonsai-about-link="ollama"]'),
@@ -96,9 +95,7 @@ function walkAbout(viewport: number) {
 
   /** Every stop's box in the page's own coordinates, with the paragraphs open or shut as they are right now. */
   const layout = (): { boxes: Record<string, Box>; contentHeight: number } => {
-    let y = BODY_INSET + HEADING + VERSION;
-    const whatIs = y;
-    y += ROW + (open("what-is") ? WHAT_IS_PARAGRAPH : 0) + BETA + HEADING;
+    let y = BODY_INSET + HEADING + VERSION + WHAT_IS_PARAGRAPH + BETA + HEADING;
     const language = y;
     y += LANGUAGE_ROW + (open("language") ? LANGUAGE_HINT : 0) + HEADING;
     const linksTop = y;
@@ -107,7 +104,6 @@ function walkAbout(viewport: number) {
     const buttonWidth = WIDTH - QR_COLUMN - 8;
     return {
       boxes: {
-        "What bonsAI is": { top: whatIs, height: ROW, left: 0, width: WIDTH },
         "Reply language": { top: language, height: LANGUAGE_ROW, left: WIDTH * 0.44, width: WIDTH * 0.56 },
         GitHub: { top: linksTop, height: ABOUT_LINK_HEIGHT_PX, left: 0, width: buttonWidth },
         "Built on Ollama!": { top: linksTop + step, height: ABOUT_LINK_HEIGHT_PX, left: 0, width: buttonWidth },
@@ -176,14 +172,14 @@ function walkAbout(viewport: number) {
   };
 
   // The ring comes in from the tab bar onto the first stop, as the tab body's transfer does.
-  land(stops["What bonsAI is"]!);
+  land(stops["Reply language"]!);
   return { press, landings, names, here: () => nameOf(document.activeElement), scrollTop: () => scrollTop, viewport, unmount: view.unmount, layout };
 }
 
 beforeEach(() => resetAboutLinksMemory());
 
 describe.each(VIEWPORTS)("About tab walk, pane %i points high", (viewport) => {
-  it("Down visits What bonsAI is, Reply language and the three links once each, then holds still", () => {
+  it("Down visits Reply language and the three links once each, then holds still", () => {
     const walk = walkAbout(viewport);
     const seen = [walk.here()!];
     for (let i = 0; i < 12; i++) {
@@ -191,7 +187,7 @@ describe.each(VIEWPORTS)("About tab walk, pane %i points high", (viewport) => {
       if (next === seen.at(-1)) break;
       seen.push(next!);
     }
-    expect(seen).toEqual(["What bonsAI is", "Reply language", "GitHub", "Built on Ollama!", "Bugs & Feature Requests"]);
+    expect(seen).toEqual(["Reply language", "GitHub", "Built on Ollama!", "Bugs & Feature Requests"]);
     expect(new Set(seen).size).toBe(seen.length);
     // Down at the last button changes nothing, however often it is pressed.
     expect(walk.press("Down")).toBe("Bugs & Feature Requests");
@@ -212,7 +208,7 @@ describe.each(VIEWPORTS)("About tab walk, pane %i points high", (viewport) => {
       if (next === up.at(-1)) break;
       up.push(next!);
     }
-    expect(up).toEqual(["Bugs & Feature Requests", "Built on Ollama!", "GitHub", "Reply language", "What bonsAI is"]);
+    expect(up).toEqual(["Bugs & Feature Requests", "Built on Ollama!", "GitHub", "Reply language"]);
     expect(new Set(up).size).toBe(up.length);
     walk.unmount();
   });
@@ -229,7 +225,6 @@ describe.each(VIEWPORTS)("About tab walk, pane %i points high", (viewport) => {
 
   it("Up from GitHub reaches Reply language, and Down from Reply language reaches GitHub, never the QR code", () => {
     const walk = walkAbout(viewport);
-    walk.press("Down");
     expect(walk.here()).toBe("Reply language");
     expect(walk.press("Down")).toBe("GitHub");
     expect(walk.press("Up")).toBe("Reply language");
@@ -254,12 +249,12 @@ describe.each(VIEWPORTS)("About tab walk, pane %i points high", (viewport) => {
   it("is bounded: the whole walk, down, across and back up, takes fewer than twenty presses", () => {
     const walk = walkAbout(viewport);
     let presses = 0;
-    for (const direction of ["Down", "Down", "Down", "Down", "Down", "Right", "Left", "Up", "Up", "Up", "Up", "Up"] as const) {
+    for (const direction of ["Down", "Down", "Down", "Down", "Right", "Left", "Up", "Up", "Up", "Up"] as const) {
       walk.press(direction);
       presses++;
     }
     expect(presses).toBeLessThan(20);
-    expect(walk.here()).toBe("What bonsAI is");
+    expect(walk.here()).toBe("Reply language");
     walk.unmount();
   });
 });

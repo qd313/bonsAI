@@ -350,8 +350,9 @@ above "N earlier" while a jump is live; Down from it goes to "N earlier" as befo
 ## 10. Developer guide: how the notes and the Search tab are built (written 2026-10-12, after the first night)
 
 What landed on the first night (plan 92): the notes' back end and Ask reading them, the game-notes search, and the
-Search tab's first half. The note card, the "Read N of your notes" line, the notes sheet (lane N2), and the jump
-into a chat with Y (lane N3b) are not built yet; § 4 still describes them.
+Search tab's first half. The second night (the same day) built the rest: the note card, the "Read N of your notes"
+line, the notes sheet and "remember …" (lane N2), and the jump into a chat with the Back line, B and Y (lane N3b); the
+last two paragraphs below describe them.
 
 **How a note travels.** A note is one small record (its words, a game or every game, on or off) kept in one file,
 `user_notes.json`, beside the saved chats in the plugin's settings folder. Three back-end calls read and change it:
@@ -389,3 +390,31 @@ side icons are one step smaller (`TAB_BAR_SIDE_ICON_PX`) so seven tabs fit with 
 for the matching, `SearchResults.tsx` for the drawing, a stop rule in `searchNav.ts`; what Ask does with the notes →
 `user_notes_for_ask.py` and the block's words in `user_notes_service.py`; the note limits → `user_notes_service.py`
 (the screen shows the back end's own words when it refuses).
+
+**The note card, the line and the sheet (lane N2, second night).** The back end decides whether a question holds
+something worth keeping (`py_modules/backend/services/user_note_offer.py`, a word rule on the question's own text: "I'm
+doing a … run", "I prefer", "no spoilers" and the like; questions such as "should I prefer …" are skipped) and puts the
+offer on the Ask reply (`note_offer`), worked out before the AI answers so a failed answer still carries it. Typing
+"remember …" or "note: …" is a local command (`ask_local_commands.py`, its handler in `ask_local_command_handlers.py`):
+no trip to the AI, the reply "Keep this as a note?" and the same offer. The screen pieces are in
+`src/features/user-notes/`: `NoteOfferCard.tsx` (under a finished answer, after the Helpful / Not really row: Keep, Edit,
+Not now, and a "For" line that flips between the game and every game), `NotesReadLine.tsx` (the "Read N of your notes ▸"
+line between the question and the answer, from the turn's `user_notes_attached`), `UserNotesSheet.tsx` (every note
+with its switch and its bin on one row), `useUserNotes.ts` (the back-end calls) and `userNotesStore.ts` (everything
+that must survive the tab being rebuilt: the pending offer, an edit in progress, which line opened the sheet, and a
+three-second window in which that line takes the ring back after the sheet closes, because the Ask bar also claims
+the ring each time the Main tab is redrawn). The card takes the ring when it appears unless you are typing, which means
+the question box holds the ring **and** has words in it (the box holds the ring whenever you were last there).
+
+**The jump, the Back line, B and Y (lane N3b, second night).** A on a match under "Your chats" remembers the word, the
+game and the match (`searchJumpStore.ts`, outside the components), switches to that chat with the shell's own tab
+switch, opens "N earlier", the day that holds the question and enough "Show N more" (`useEarlierTurnsPill.ts`,
+`earlierTurnsByDay.ts`), and hands the ring to the question's row through Steam's own transfer; `settleRing.ts` looks
+again for about two seconds and puts the ring back on the question if Steam left it on the day line, stopping the moment
+you press anything. While a jump is live, "‹ Back to where you were" (`SearchBackLine.tsx`, drawn by
+`buildEarlierList.tsx`) is the first stop under the tab bar; A on it returns to the Search tab with the same word, game
+and match. B anywhere on the Search tab returns to the tab you came from. Y (button 4, `isOptionsDeckButtonEvent` in
+`src/utils/focusNavigation.ts`) on the Main tab opens the Search tab with the ring on the find box
+(`useSearchShortcut.ts`); it is refused on other tabs, while the chats menu is open, and while a popup that asked for
+the ring back is open. The plugin has no signal for Steam's on-screen keyboard, so Y with the keyboard open is left to
+Steam (the maintainer's hand check).

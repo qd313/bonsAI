@@ -78,7 +78,9 @@ of showing filter names, and any question about room on the Deck (the Size colum
   two switches show "Label on" or "Label off"; three or more show "2 of 4 on"; the pieces are joined with " · ".
 - **A opens or closes a section; several can be open at once** (round 2, option B). On a first visit the first
   section is open and the rest closed; the open set is remembered for the session, not saved to disk (the call taken
-  meanwhile; plan 92 § 14).
+  meanwhile; plan 92 § 14). **Changed 2026-10-12 by the maintainer, after the first night:** every section starts
+  closed, and every real tab switch (LB, RB, the tab bar, Y) closes them all again, puts the page at its top and, after
+  LB or RB, the ring on the first section line; a section stays open while you stay on the tab and after a popup.
 - **Inside an open section, one line per setting:** the name and its switch, buttons or value. The longer text that
   today sits under every name or in help lines above and below is not drawn in the row.
 - **The strip at the bottom of the panel** shows the ringed setting's longer text: its name in bold, then the text,
@@ -330,7 +332,9 @@ tab bar
 ## 10. Developer guide: how the models box's column and the folded tabs are built (written 2026-10-12)
 
 What landed on the first night (plan 92): the models box's filters column (with a second round for the D-pad), the
-About tab, and the Ollama tab folded. Settings and Developer (lanes T1 and T2) are not folded yet.
+About tab, and the Ollama tab folded. The second night (the same day) folded Settings and Developer, made folded tabs
+close on a tab switch, reworked About and the models box's sideways presses at the maintainer's request; the last
+paragraphs below describe those.
 
 **The models box's column.** `src/components/PullModelsFiltersColumn.tsx` draws the column (the count and Clear,
 Licence, Good for with counts, Show, then the chips) from the box's own filter state and the rules in
@@ -361,3 +365,25 @@ strip and the floating button; test it with `walkFoldedTab` (`src/test-harness/f
 **The About tab.** `src/components/AboutTab.tsx` (one line per row), `AboutRevealRow.tsx` (a row whose paragraph opens
 under it while the ring is on it), and `AboutLinks.tsx` (three small buttons in a column beside the QR code). The
 links block is a row and the buttons a column for Steam (`flow-children`); that is what lets Down reach every button.
+
+**Second night: the models box's sideways presses.** The maintainer found Right from a filter jumping to the first model
+wherever the ring was (the first night's "remembered row" rule). Now Right and Left go to what sits beside the ring:
+`src/components/pullModelsBeside.ts` picks, at the moment of the press, the stop on the other side whose middle is
+nearest the ring's, within one and a half model rows (the one place that number lives), and the press holds when
+nothing is that close; the greyed licence row is never chosen. The title row's Refresh and Advanced reach each other
+the same way. Only one AI models box can be open at a time (`useOllamaModelsHubModal.tsx`).
+
+**Second night: folded tabs on a tab switch, Settings and Developer.** `foldedTabsStore.ts` starts every section closed
+and has `closeAllFoldedSections`, called from one place in `src/hooks/useBonsaiPluginShell.ts` (`noteRealTabSwitch`)
+for a bar press, Steam's shoulder switch and Y, but not for a popup closing, the post-popup lock or a restore.
+`foldedTabArrival.ts` puts the page at its top and, after LB or RB, the ring on the first section line unless the
+person has pressed something since (section lines count presses through `notePersonPress`). `shoulderSwitch.ts` lets
+LB and RB switch tabs with the ring on the floating button, which sits outside Steam's own tabs box. Settings
+(`settingsTabFolds.ts`, `useSettingsTabFocus.ts`, the row files beside `SettingsTab.tsx`) and Developer
+(`developerTabFolds.ts`, `useDeveloperTabFocus.ts`, the `developerRows*.tsx` files) follow the recipe above; their rows'
+longer words are the drawing's, word for word.
+
+**Second night: About.** The paragraph about bonsAI and the green beta notice are plain text at the top again (always
+shown, not stops); the version sits on the "About bonsAI" title line (passed to Steam's section title as a node); the
+Reply language dropdown fills its row with no label; the link buttons use Steam's button grey, shared with the floating
+button through `src/styles/settingsGlassButton.ts`.

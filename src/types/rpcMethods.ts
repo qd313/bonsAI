@@ -32,7 +32,7 @@
  *   - The count below is written as a comment rather than as a value anything can
  *     read. Nothing would use it, and an unused value fails one of the checks.
  *
- * 67 names at the time this was written.
+ * 68 names at the time this was written.
  */
 export type BonsaiRpcMethod =
   | "abort_background_game_ai"
@@ -74,6 +74,7 @@ export type BonsaiRpcMethod =
   | "import_intent_pack"
   | "install_rag_corpus_local"
   | "install_voice_engine"
+  | "list_chat_slot_questions"
   | "list_chat_slots"
   | "list_recent_screenshots"
   | "list_user_notes"

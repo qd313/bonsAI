@@ -2,7 +2,7 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 2300,
+      "lines": 2303,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {

@@ -7,8 +7,8 @@ of the same name on the plugin class in main.py; the method's body is now a one-
 hand-off to the function here. Every call that hands a full chat back to the screen also
 carries plan 68's own `can_sum_up` flag, for the Session tab's *Sum up this chat* button.
 
-Used for: list_chat_slots, get_chat_slot, create_chat_slot, delete_chat_slot,
-rename_chat_slot.
+Used for: list_chat_slots, list_chat_slot_questions, get_chat_slot, create_chat_slot,
+delete_chat_slot, rename_chat_slot.
 
 Solves: Keeps the chat-list panel's own RPC bodies -- reading and writing the store
 under its lock, and shaping what goes back to the screen -- out of main.py. Recording a
@@ -62,6 +62,66 @@ async def list_chat_slots(self):
     async with self._chat_slots_store_lock:
         rows = await asyncio.to_thread(_run)
     return {"slots": rows}
+
+
+async def list_chat_slot_questions(self):
+    """Every saved chat with the questions the person typed in it, for the Search tab (plan 90).
+
+    Read only: it loads each chat the way ``get_chat_slot`` does and never writes. Only the person's
+    own turns (role "user") come back, oldest first, in the chat list's own order (newest chat first).
+    ``text`` is the turn's ``display_text`` when it has one, else its ``text``. ``game_title`` is the
+    turn's own ``app_name``; a question asked with no game running gets the chat's own game, worked out
+    once per chat the way the Ask flow does it, or "" when neither gives one. A chat file that is gone
+    or unreadable is left out rather than failing the list."""
+    # Imported here, not at the top: the Ask flow's module is large, and this file is loaded by
+    # every chat call. It is only needed once a question has no game of its own.
+    from backend.services.game_ai_request import _chat_own_game_title
+
+    settings_dir = self._chat_slots_settings_dir()
+
+    def _read() -> list:
+        slots = []
+        for row in list_slot_summaries(settings_dir, logger):
+            slot = chat_load_slot(settings_dir, str(row.get("id") or ""), logger)
+            if slot is not None:
+                slots.append(slot)
+        return slots
+
+    async with self._chat_slots_store_lock:
+        slots = await asyncio.to_thread(_read)
+    settings = None
+    chats = []
+    for slot in slots:
+        own_game = None
+        questions = []
+        for turn in slot.get("turns") or []:
+            if str(turn.get("role") or "") != "user":
+                continue
+            title = str(turn.get("app_name") or "").strip()
+            if not title:
+                if own_game is None:
+                    if settings is None:
+                        settings = await self.load_settings()
+                    own_game = await asyncio.to_thread(_chat_own_game_title, settings, slot) or ""
+                title = own_game
+            questions.append(
+                {
+                    "turn_id": str(turn.get("id") or ""),
+                    "text": str(turn.get("display_text") or "") or str(turn.get("text") or ""),
+                    "created_at": int(turn.get("created_at") or 0),
+                    "app_id": str(turn.get("app_id") or ""),
+                    "game_title": title,
+                }
+            )
+        chats.append(
+            {
+                "slot_id": str(slot.get("id") or ""),
+                "label": str(slot.get("label") or ""),
+                "updated_at": int(slot.get("updated_at") or 0),
+                "questions": questions,
+            }
+        )
+    return {"ok": True, "chats": chats}
 
 
 async def get_chat_slot(self, slot_id: str = ""):

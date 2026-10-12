@@ -23,6 +23,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - [src/features/plugin-shell](#srcfeaturesplugin-shell)
 - [src/features/plugin-shell/tabs](#srcfeaturesplugin-shelltabs)
 - [src/features/preset-carousel](#srcfeaturespreset-carousel)
+- [src/features/search-tab](#srcfeaturessearch-tab)
 - [src/features/stream-scramble](#srcfeaturesstream-scramble)
 - [src/features/unified-input](#srcfeaturesunified-input)
 - [src/features/voice](#srcfeaturesvoice)
@@ -425,6 +426,11 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - **presetRowNav.ts** (src/features/preset-carousel/presetRowNav.ts) — *Preset row D-pad handlers*: The four move handlers a chip button carries: Left/Right walk the chips, Down hands the ring to the Ask field, Up hands it to the transcript.
 - **presetSlotRotation.ts** (src/features/preset-carousel/presetSlotRotation.ts) — *Preset slot rotation*: Choose the next prompt for one of the visible preset slots: a pinned QA batch walks in order, otherwise the one next-chip rule (nextChipRule.ts) over the opening seeds not yet shown, the running game's own chips and the sampled pool.
 - **sessionRagComposer.ts** (src/features/preset-carousel/sessionRagComposer.ts) — *Deciding which suggestion chips come from the game's own knowledge base*: Given the row of static preset chips and a list of chips pulled from the running game's own knowledge base, decides which of the row's slots actually show a knowledge-base chip instead of the static one — when the row is first built. (Which chip comes next afterwards is…
+
+## src/features/search-tab
+
+- **searchApi.ts** (src/features/search-tab/searchApi.ts) — *Asking the back end for what the Search tab searches*: The calls the Search tab makes: the questions asked in every saved chat. They go through the same deadline wrapper as every other call and come back as plain lists, with a failed call reading as nothing found" rather than an error the tab has to handle.
+- **searchTypes.ts** (src/features/search-tab/searchTypes.ts) — *The shapes the Search tab reads*: One place for the data shapes the Search tab passes around. Today that is a saved chat with its questions (plan 92's contract C6), copied word for word so the back end and the screen cannot drift without a type noticing; the note and game-note shapes join it with the tab's body.
 
 ## src/features/stream-scramble
 

@@ -969,6 +969,9 @@ class Plugin:
         """Return recent chat slot summaries (newest first)."""
         return await chat_slot_rpc.list_chat_slots(self)
 
+    async def list_chat_slot_questions(self):
+        return await chat_slot_rpc.list_chat_slot_questions(self)
+
     async def get_chat_slot(self, slot_id: str = ""):
         """Load one chat slot with full turn history."""
         return await chat_slot_rpc.get_chat_slot(self, slot_id)

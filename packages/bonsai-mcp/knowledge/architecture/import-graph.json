@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 855,
-  "edgeCount": 2716,
+  "fileCount": 858,
+  "edgeCount": 2719,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -5033,6 +5033,27 @@
         "src/utils/sessionRagChipCandidates.ts"
       ]
     },
+    "src/features/search-tab/searchApi.test.ts": {
+      "imports": [
+        "src/features/search-tab/searchApi.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/search-tab/searchApi.ts": {
+      "imports": [
+        "src/features/search-tab/searchTypes.ts",
+        "src/utils/deckyCall.ts"
+      ],
+      "importedBy": [
+        "src/features/search-tab/searchApi.test.ts"
+      ]
+    },
+    "src/features/search-tab/searchTypes.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/features/search-tab/searchApi.ts"
+      ]
+    },
     "src/features/stream-scramble/ScrambledAnswerText.test.tsx": {
       "imports": [
         "src/features/stream-scramble/ScrambledAnswerText.tsx",
@@ -8663,6 +8684,7 @@
         "src/features/plugin-shell/useDesktopNoteSaveModal.tsx",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/features/plugin-shell/useSessionResetActions.tsx",
+        "src/features/search-tab/searchApi.ts",
         "src/features/voice/useVoiceAskInput.ts",
         "src/hooks/localOllamaStarterSet.tsx",
         "src/hooks/saveReplyToDesktopNote.ts",

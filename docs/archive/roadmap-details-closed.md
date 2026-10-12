@@ -1261,3 +1261,20 @@ Original entries moved from Features on 2026-10-02 when their builds went to Ver
 **2026-10-09 (plan 87 M8, D-pad only, three tries):** Up from "Support my Steam Sale habit" went to "Bugs & Feature Requests" each time; but the Deck was on its monitor, so the Deck's own screen is still not checked. Stays OPEN. Evidence `docs/test-evidence/plan87-M8-ABOUT-UP.json`.
 **Closed 2026-10-10:** the maintainer passed it on the Deck's own screen ("works as expected"), after it passed 3 of 3 on the monitor (`docs/test-evidence/plan87-P87-ABOUT-UP.json`). The plan 87 tab-scroll fix `0e652638` most likely fixed it. Evidence for the pass: the maintainer on the Deck's own screen, 2026-10-10, checks page. Done line in the roadmap; full entry in [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md#closed-2026-10-10-the-maintainers-checks-page-answers-after-plan-87).
 
+## Long suggestion chips: pause at the end, centred text
+
+Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
+
+**Deck 2026-10-03 (plan 81, build `9e68bce1`, Deep Rock running, 200 s): mostly passed, with two long gaps when both chips were due at once.** 31 of 44 long chips began to leave 1.2 to 1.9 s after their words stopped; 11 read 1.12 to 1.20 s (the reads were about 0.57 s apart, so these cannot be told from 1.2 s); 2 read 3.4 and 4.6 s. A short chip's words were centred to 0 px in its text room. Row **P79-LONG-CHIPS** stays owed for the fade's opacity (never seen to change) and for a chip under the ring never changing (its words were hidden at that moment). Evidence `docs/test-evidence/plan81-P79-LONG-CHIPS-game.json`.
+
+Before the change (Deck 2026-10-02, build `678aaa3d`, Hades running): the words scrolled to their end and stood still, but the chip left 3.2 to 10.2 s later. Evidence `docs/test-evidence/plan79-P79-LONG-CHIP-PAUSE.json`. The soft blue fill passed and is in Done.
+
+Moved here from the roadmap entry on 2026-10-07 (plan 82 paperwork 4), when the note was rewritten after the lane found the fade reading was of the wrong element. Nothing was removed.
+
+**Deck 2026-10-07 (plan 82, Deck block 2, no game): the ring half passed; the fade half FAILED.** With the fade style set, over 120 s and 32 word changes the chips' opacity never went below 1.00, so a person sees the words swap with no fade (now its own entry in Bugs). With the ring on a chip for 30 s, that chip kept its words and box; the other chip also held still the whole time, so the row as a whole holds while the ring is on a chip (a finding, not judged). Row **P79-LONG-CHIPS**, evidence `docs/test-evidence/plan82-P79-LONG-CHIPS-NOGAME.json`.
+
+Moved here from the roadmap entry on 2026-10-08 (plan 83 docs sweep), to keep the entry to five lines. Nothing was removed.
+
+**Deck 2026-10-07 (plan 82, Deck block 2, no game): the fade reading was of the wrong element, and the ring half is UNCLEAR.** The 1.00 readings were of the chip button while the fade sat on a wrapper box around it, so they showed nothing about the fade (the fade now sits on the button; its row **P82-FADE-ON-BUTTON** passed on the Deck 2026-10-07, build `e34b0d57`, and the entry "The fade style's chips swap their words without fading" is in Done). With the ring on a chip for 30 s that chip kept its words and box, and the other chip held still too, so "the other chip changes" could not be shown; the row holding while the ring is on a chip is by design. Row **P79-LONG-CHIPS**, evidence `docs/test-evidence/plan82-P79-LONG-CHIPS-NOGAME.json`.
+
+*Moved here word for word from roadmap-details.md on 2026-10-12 (plan 89 docs sweep, pass 4): the entry closed on 2026-10-11 and is in Done.*

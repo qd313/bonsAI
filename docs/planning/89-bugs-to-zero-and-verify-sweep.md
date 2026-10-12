@@ -1,10 +1,6 @@
 # Plan 89: the bug list and the Verify list as close to empty as they can get
 
-**Status:** READY 2026-10-11, about 17:45. Planned on Fable 5.1; the maintainer's fifteen calls are in
-([D128](../audit/maintainer-decisions-locked.md#d128--locked-2026-10-11-raised-2026-10-11--plan-89-the-bug-list-and-the-verify-list-as-close-to-empty-as-they-can-get-the-fifteen-calls)).
-**A separate Opus 5.5 extra-high chat runs it.** Nothing is built and nothing has been pressed. The standing way of
-running a night like this is [the bug-wave runbook](../agents/bug-wave-runbook.md); this page says only what is
-different tonight.
+**Status:** FINISHED 2026-10-12 about 00:30 on Opus 5.5 extra-high. Every planned fix landed and was checked on the Deck except the rig's three fixes (proven in the next session, because the app cannot restart the rig's tool server mid-session) and the real-voice and look checks that are the maintainer's. The report is [the night report](https://claude.ai/artifact/4onrhCD7GzRYVPLquu5L4d); the maintainer's checks page (version 18, new group "Sunday 11 October") is [here](https://claude.ai/code/artifact/3e5ec678-b219-439d-b952-139d75ff2db4). Planned on Fable 5.1; the maintainer's calls are in ([D128](../audit/maintainer-decisions-locked.md#d128--locked-2026-10-11-raised-2026-10-11--plan-89-the-bug-list-and-the-verify-list-as-close-to-empty-as-they-can-get-the-fifteen-calls)). A separate Opus 5.5 extra-high chat ran it. The standing way of running a night like this is [the bug-wave runbook](../agents/bug-wave-runbook.md); this page says only what was different.
 
 ## 1. The short version
 
@@ -54,6 +50,9 @@ different tonight.
     The five-hour rule stays: nothing new past 75 percent of the five-hour window.
 18. **For future sessions the weekly line is 80 percent** (was 60): start no new helpers past 80 percent of the weekly
     limit or 75 percent of the five-hour window. Written into AGENTS.md and the runbook.
+19. **The thirteen kept old helper copies:** file their unlanded work as a roadmap entry to merge (the Features entry "Merge the unlanded work left in thirteen old helper copies into experimental").
+20. **The Developer tab's page moving on every second press is fine.** The two Settings and Developer walk entries then owe only the maintainer's look on the Deck's own screen.
+21. **Left from the Small text-size choice leaving the row is fine:** the Bugs entry "On the Settings tab, Left from the Small text-size choice leaves the row" is closed as working as intended.
 
 ## 3. The bugs, and what happens to each
 
@@ -310,6 +309,7 @@ deploy), and the Settings walk needing a third round.
   Old helper copies: 23 fully landed copies deleted (the shared packages folder checked before and after, unchanged); 13 with unlanded work kept and filed as a roadmap entry at the maintainer's request.
 - **2026-10-11 18:30–19:50:** Deck blocks 0, 1 and 2 done (setup, the two measurements and the four owed checks, all four passing on prepared answers); the 24-page check found 22 of 24; the rig's Steam button worked again after the maintainer re-plugged the board. Landed: the docs constant, the AI leaving memory sooner with a game, the mic rule, the status-check stop, Update with downloads off. The rig's five fixes are on the rig's own main branch (the maintainer's ok); they load in the next session because the app cannot restart the rig's tool server. Usage at 19:04: the five-hour window 2 percent after its reset, the week 54 percent.
 - **2026-10-11 19:50–21:15:** Deck blocks 3a, 3b and 5. Passed: the mic on tiny.en, Update with downloads off, Internet and Remote Play open their own pages, the Settings walk (Developer moves every second press by design), the AI leaving memory about a minute after an answer with a game running, the rig's own game launch. Failed and sent back: the delete box's Left and Right. Found: a stray "you" at the end of a dictation (fix written, landing), Left from Small leaving the Text size row. Landed: the settings pages, the delete box round 1, the Settings walk; text size, the stray-word fix and the delete box round 2 are landing. Usage at 21:15: the five-hour window 40 percent, the week 59 percent.
+- **2026-10-11 21:15 to 2026-10-12 00:00:** landed text size, the stray-word fix, the delete box round 2, and the question box keeping its height; Deck block 3c passed the delete box, the stray word and the free-play sweep, and found the question box growing on Large (fixed); the Deck froze at 22:17 with nothing running (Steam's screensaver) and was restarted at 23:03; an unknown pull from GitHub at 22:23 merged the plans 90 to 92 documents into experimental (no harm); leftover test processes from finished helpers slowed the PC until they were ended at 23:08. Blocks 6 and the end: the free-play sweep with a game passed; the freeze try did not freeze (a 153 s answer, memory down to 2.5 GB, the model gone about 60 s after the answer, every read answered for 16.5 minutes); the question box fix passed on the final build `02f719b8`; the Deck was left on Main, no game, no model, keep-awake released. Calls 19 to 21 came in (D128). The report and the checks page were published at about 00:30: [the night report](https://claude.ai/artifact/4onrhCD7GzRYVPLquu5L4d) and [the checks page](https://claude.ai/code/artifact/3e5ec678-b219-439d-b952-139d75ff2db4).
 
 ## 13. For the builders: where the code is (checked 2026-10-11 at `4e962bd3`)
 

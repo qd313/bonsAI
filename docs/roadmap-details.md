@@ -52,7 +52,6 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [With Voice replies on "When I asked by voice", a spoken question's answer may not read itself aloud](#with-voice-replies-on-when-i-asked-by-voice-a-spoken-questions-answer-may-not-read-itself-aloud)
 - [Roadmap clean-up task: trim this file (done 2026-09-15)](#roadmap-clean-up-task-trim-this-file-done-2026-09-15)
 - [Steam's screen froze after an answer with a game running and the Deck's own AI](#steams-screen-froze-after-an-answer-with-a-game-running-and-the-decks-own-ai)
-- [Long suggestion chips: pause at the end, centred text](#long-suggestion-chips-pause-at-the-end-centred-text)
 - [Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted](#reloading-the-plugin-while-a-heavy-game-is-running-can-leave-steams-interface-gone-until-the-deck-is-restarted)
 - [While reading an answer, the Show details line takes the suggestion chip's place above the question box](#while-reading-an-answer-the-show-details-line-takes-the-suggestion-chips-place-above-the-question-box)
 - [The open reasoning block does not scroll in steps like the answer; one Down jumps past the whole of it](#the-open-reasoning-block-does-not-scroll-in-steps-like-the-answer-one-down-jumps-past-the-whole-of-it)
@@ -912,6 +911,10 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep
 
 Older dated notes moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 7), to keep the entry to five lines. Nothing was removed.
 
+Moved here word for word on 2026-10-12 (plan 89 docs sweep, pass 4), to keep the entry to five lines:
+
+**2026-10-11 (plan 89, `1f666dba`):** the lever is built (the maintainer's call 8). With a game running and the AI on this Deck, every request now asks Ollama to keep the model about a minute (`keep_alive` 1m) instead of the Unload delay; the log says which value was used. Tests `tests/test_ollama_keep_alive_rule.py`. **Deck 2026-10-11 (plan 89 block 5, build `9b4d0503`): the lever is in place and passed** (row P89-KEEPALIVE-GAME): with no game the model stayed loaded past 150 s (the Unload delay on this Deck is 15 minutes; the log says `keep_alive 15m`); with Deep Rock Galactic: Survivor running the model left memory about 65 s after the answer (log `keep_alive 1m: game running, AI on this Deck (setting 15m)`), with 2,402 to 2,478 MB available while it was loaded (`docs/test-evidence/plan89-P89-KEEPALIVE-GAME-half1.json`, `-half2.json`). Owed: the reproduction try of the freeze. The freeze itself is not marked fixed. Older notes, including the two later runs that did not reproduce it (plan 81, Deck block 6, evidence `docs/test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`), are in [roadmap-details.md](roadmap-details.md#steams-screen-froze-after-an-answer-with-a-game-running-and-the-decks-own-ai); the hunt itself is in the [audit note](audit/plan81-freeze-after-answer.md).
+
   **2026-10-03, hunt written up: [audit note](audit/plan81-freeze-after-answer.md).** The Deck's own AI log shows the model was already loaded when the question was asked and sat idle after the answer, so a cold load does not explain it (a cold load costs about 5.8 GB). The note's best guess, about 60 percent sure, is that the memory went to Steam's own page processes after the answer; which program grew is not known. The same steps after a restart, with 9 GB free, did not freeze (`docs/test-evidence/plan81-DRG-01c-try2.json`). The freeze is measured again at the very end of the session.
 
   **2026-10-03, memory measured again (plan 81, Deck block 3b, build `9e68bce1`):** with the Deck's AI unloaded before the game started, 8.2 to 8.7 GB were free with the game up; with the AI loaded and the game running, 2.4 to 3.2 GB (lowest 2372 MB in the 5-second log, never under 1500 MB); no freeze in that block. The log has a gap of about two minutes around the first answer. Evidence `docs/test-evidence/plan81-P81-B3B-GAME-MEMORY.json`.
@@ -923,22 +926,6 @@ Older dated notes moved here from the roadmap entry on 2026-10-03 (plan 81 paper
 Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
 
 **2026-10-03 (plan 81, Deck block 6, build `7e963807`): not reproduced in two runs.** The same low-memory state as the freeze (about 2.3 to 2.5 GB free, the AI loaded, Deep Rock running), once with nothing else on the page and once with a page watcher reading every 200 ms: Steam answered every read for 12 minutes, no freeze. Only Steam's own page process grew (556 to 705 MB, peak 972 MB); the game and the AI stayed flat. The original freeze started from about 2.0 GB free, which these runs did not reach, and the watcher ran at full speed for only about 5.5 of the 12 minutes. Evidence `docs/test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`.
-
-## Long suggestion chips: pause at the end, centred text
-
-Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
-
-**Deck 2026-10-03 (plan 81, build `9e68bce1`, Deep Rock running, 200 s): mostly passed, with two long gaps when both chips were due at once.** 31 of 44 long chips began to leave 1.2 to 1.9 s after their words stopped; 11 read 1.12 to 1.20 s (the reads were about 0.57 s apart, so these cannot be told from 1.2 s); 2 read 3.4 and 4.6 s. A short chip's words were centred to 0 px in its text room. Row **P79-LONG-CHIPS** stays owed for the fade's opacity (never seen to change) and for a chip under the ring never changing (its words were hidden at that moment). Evidence `docs/test-evidence/plan81-P79-LONG-CHIPS-game.json`.
-
-Before the change (Deck 2026-10-02, build `678aaa3d`, Hades running): the words scrolled to their end and stood still, but the chip left 3.2 to 10.2 s later. Evidence `docs/test-evidence/plan79-P79-LONG-CHIP-PAUSE.json`. The soft blue fill passed and is in Done.
-
-Moved here from the roadmap entry on 2026-10-07 (plan 82 paperwork 4), when the note was rewritten after the lane found the fade reading was of the wrong element. Nothing was removed.
-
-**Deck 2026-10-07 (plan 82, Deck block 2, no game): the ring half passed; the fade half FAILED.** With the fade style set, over 120 s and 32 word changes the chips' opacity never went below 1.00, so a person sees the words swap with no fade (now its own entry in Bugs). With the ring on a chip for 30 s, that chip kept its words and box; the other chip also held still the whole time, so the row as a whole holds while the ring is on a chip (a finding, not judged). Row **P79-LONG-CHIPS**, evidence `docs/test-evidence/plan82-P79-LONG-CHIPS-NOGAME.json`.
-
-Moved here from the roadmap entry on 2026-10-08 (plan 83 docs sweep), to keep the entry to five lines. Nothing was removed.
-
-**Deck 2026-10-07 (plan 82, Deck block 2, no game): the fade reading was of the wrong element, and the ring half is UNCLEAR.** The 1.00 readings were of the chip button while the fade sat on a wrapper box around it, so they showed nothing about the fade (the fade now sits on the button; its row **P82-FADE-ON-BUTTON** passed on the Deck 2026-10-07, build `e34b0d57`, and the entry "The fade style's chips swap their words without fading" is in Done). With the ring on a chip for 30 s that chip kept its words and box, and the other chip held still too, so "the other chip changes" could not be shown; the row holding while the ring is on a chip is by design. Row **P79-LONG-CHIPS**, evidence `docs/test-evidence/plan82-P79-LONG-CHIPS-NOGAME.json`.
 
 ## Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted
 

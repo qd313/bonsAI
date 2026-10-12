@@ -554,6 +554,12 @@ times, and running `land_lane.sh` with the branch tip as its base runs only the 
     the sweep's immediate reads catch Steam's glide half way.
   - Phone notifications were switched off in the app, so none reached the maintainer; check that before a night run.
 
+**How plan 89 went (2026-10-11/12, one Opus chat, about fifteen helpers, a Deck night).** Four lessons from it:
+- **Finished helpers can leave test runs alive for hours.** About 110 node processes were still running at 23:00 and slowed the PC. End them after each helper finishes, before blaming load.
+- **A landing waiting script must match the landing script's exact end lines.** "TESTS FAILED ONCE" contains "FAIL", so a script looking for the word "FAIL" read a good landing as a failed one.
+- **A Deck driver must never print the settings file's values.** The file holds the Steam Web API key. Print key names only.
+- **The desktop app cannot restart a project's tool server mid-session,** so rig fixes landed at night are proven in the next session, not the same night.
+
 ---
 
 ## 5. Design and screen work

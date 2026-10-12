@@ -2263,6 +2263,9 @@ Made by the maintainer on 2026-10-11, early evening, answering a numbered list i
     past 75 percent of the five-hour window.
 18. **For future sessions, the weekly line is 80 percent** (was 60): start no new helpers past 80 percent of the weekly
     limit or 75 percent of the five-hour window. Written into AGENTS.md and the bug-wave runbook.
+19. **The thirteen kept old helper copies:** file their unlanded work as a roadmap entry to merge (the Features entry "Merge the unlanded work left in thirteen old helper copies into experimental").
+20. **The Developer tab's page moving on every second press is fine.** The two Settings and Developer walk entries then owe only the maintainer's look on the Deck's own screen.
+21. **Left from the Small text-size choice leaving the row is fine:** the Bugs entry "On the Settings tab, Left from the Small text-size choice leaves the row" is closed as working as intended.
 
 **At Go:** nothing is pushed; the maintainer publishes.
 

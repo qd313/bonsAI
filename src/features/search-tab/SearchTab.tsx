@@ -187,7 +187,10 @@ export const SearchTab: React.FC<SearchTabProps> = ({ active, isAsking, intentPa
     const top = ["games", "find", "w0", "w1"];
     return searching ? [...top, "clear", ...resultRowNames] : [...top, ...shownNotes.map((_, i) => `n${i}`)];
   }, [openNote, searching, resultRowNames, shownNotes]);
-  const nav = useSearchNav(rowOrder);
+  /* The find box spans its row, so its x names no stop: Up from it lands on the picked game (All when none),
+     Down from it on the first word (plan 92, the Deck's walk of build 649daecc). */
+  const pickedGameCol = game === null ? 0 : 1 + games.findIndex((g) => g.toLowerCase() === game.toLowerCase());
+  const nav = useSearchNav(rowOrder, (from, to) => (from !== "find" ? null : to === "games" ? Math.max(pickedGameCol, 0) : 0));
 
   /* After a draw that was asked to move the ring: the target exists now, so the transfer finds it. */
   useLayoutEffect(() => {

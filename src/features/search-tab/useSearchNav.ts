@@ -40,20 +40,32 @@ export type SearchNav = {
   focusStop: (row: string, col: number) => boolean;
 };
 
+/*
+ * A move handler must never throw: on the Deck a throw hands the press back to Steam, which steps along its own
+ * order (plan 92, build 649daecc: Down on a game button went to the next game). So a stop whose `ref` is not an
+ * element (a `ref` on Steam's text field holds the component) is not measured and not focused, rather than called.
+ */
 const centerX = (el: HTMLElement): number | null => {
+  if (typeof el.getBoundingClientRect !== "function") return null;
   const r = el.getBoundingClientRect();
   return r.width > 0 ? r.left + r.width / 2 : null;
 };
 
 /**
- * In: the rows' names top to bottom, as drawn right now (rows with no stop on screen are skipped).
+ * In: the rows' names top to bottom, as drawn right now (rows with no stop on screen are skipped), and
+ * `enter(from, to)`: the place a row is entered at from another, by name, or null for the nearest in x.
  * Out: `stop(row, col)` for each control, and `focusStop` for landing the ring from code.
  * Can go wrong: a stop that is not drawn yet is skipped, not waited for; a caller that moves the ring
  * right after a state change does it in a layout effect, once the control exists.
  */
-export function useSearchNav(rowOrder: readonly string[]): SearchNav {
+export function useSearchNav(
+  rowOrder: readonly string[],
+  enter: (from: string, to: string) => number | null = () => null,
+): SearchNav {
   const order = useRef(rowOrder);
   order.current = rowOrder;
+  const enterAt = useRef(enter);
+  enterAt.current = enter;
   const cells = useRef(new Map<string, Cell[]>());
 
   const cell = (row: string, col: number): Cell => {
@@ -74,7 +86,7 @@ export function useSearchNav(rowOrder: readonly string[]): SearchNav {
 
   const hop = useCallback((target: Cell): boolean => {
     if (takeHolderFocus(target.nav)) return true;
-    if (target.el === null) return false;
+    if (target.el === null || typeof target.el.focus !== "function") return false;
     target.el.focus();
     return true;
   }, []);
@@ -93,6 +105,7 @@ export function useSearchNav(rowOrder: readonly string[]): SearchNav {
         at,
         direction,
         centers,
+        (from, to) => enterAt.current(rows[from]!.key, rows[to]!.key),
       );
       if (move === "hold") return true;
       if (move === "leave") return takeNavFocus("tab-bar");

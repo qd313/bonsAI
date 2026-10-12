@@ -42,6 +42,15 @@ describe("between rows", () => {
     expect(searchMove([3, 4], { row: 0, col: 2 }, "down", (r) => (r === 0 ? [30, 110, 220] : [40, 110, 180, 250]))).toEqual({ row: 1, col: 3 });
   });
 
+  it("enters a row at the place the caller names, held inside the row, ahead of the nearest in x", () => {
+    const centers = (row: number) => (row === 0 ? [30, 110, 220] : row === 1 ? [150] : [40, 110, 180, 250]);
+    const enter = (from: number, to: number) => (from !== 1 ? null : to === 0 ? 2 : 0);
+    expect(searchMove(SIZES, { row: 1, col: 0 }, "up", centers, enter)).toEqual({ row: 0, col: 2 });
+    expect(searchMove(SIZES, { row: 1, col: 0 }, "down", centers, enter)).toEqual({ row: 2, col: 0 });
+    expect(searchMove(SIZES, { row: 1, col: 0 }, "up", centers, () => 9)).toEqual({ row: 0, col: 2 });
+    expect(searchMove(SIZES, { row: 2, col: 3 }, "down", centers, enter)).toEqual({ row: 3, col: 3 });
+  });
+
   it("goes to the first of two equally near stops", () => {
     expect(nearestColumn(0, 100, [50, 150], 2)).toBe(0);
   });

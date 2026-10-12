@@ -878,9 +878,9 @@ id `search`), so Down from the tab bar lands on its first stop and Up from its t
 tab bar
    | Down  (takeNavFocus "tab-body:search", lands on [ All ])      ^ Up  (takeNavFocus "tab-bar")
 [ All ] [ Hollow Knight ] [ Hades ] ...     Left / Right walk the row, hold still at both ends; A picks the game
-   | Down                                   ^ Up
+   | Down (from any game button)            ^ Up (onto the picked game, All when none)
 [ find box: "Chats, settings, notes..." ]   A opens Steam's keyboard; Left / Right hold still
-   | Down                                   ^ Up
+   | Down (onto the first word)             ^ Up (from any word of the first row)
 [ mantis 5 ] [ charm 3 ] [ claw 2 ] [ greenpath 2 ]     Left / Right along the row; A puts the word in the box
 [ lords 2 ]  [ battery 1 ] [ boon 1 ] [ build 1 ]       and the ring on the first match
    | Down                                   ^ Up
@@ -898,8 +898,15 @@ tab bar
 - **Every move is written by hand, in one place.** `searchNav.ts` is the rule (Left and Right along a row, holding
   still at both ends, so a Right nobody claims cannot carry the ring into Steam's side rail; Up and Down to the row
   above or below, onto the stop nearest in x, measured at the press, or the same place in the row where nothing is
-  measured; Up from the top row leaves; Down from the last row holds). `useSearchNav.ts` keeps the stops and moves
-  the ring.
+  measured; Up from the top row leaves; Down from the last row holds). The find box spans its row, so its x names
+  no stop: Up from it lands on the picked game (All when none) and Down from it on the first word. `useSearchNav.ts`
+  keeps the stops and moves the ring.
+- **A move handler never throws.** On the Deck a throw hands the press back to Steam, which steps along its own
+  order: build 649daecc measured the find box through a `ref` on Steam's text field, which holds the component (a
+  class), not the input, so every press that measured it threw, and Down on a game button went to the next game, Up
+  on a word to the word before it, Up from the box to the last game. The box's stop is now the input inside it, and
+  a stop that is not an element is skipped rather than measured. The tests' text field hands its `ref` the
+  component the same way, and a handler that throws steps along the page's order there too.
 - **No plain `focus()` across containers.** The find box is a Steam text field, which is a container of its own, so
   every hop (to and from it, and between the buttons too) is Steam's own transfer, the stop's nav node `TakeFocus`
   (`takeHolderFocus`); a plain `focus()` is only the fallback for the frames before Steam has filled the node. No

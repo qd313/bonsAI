@@ -39,12 +39,14 @@ export type SearchFindBoxProps = {
 };
 
 export function SearchFindBox({ nav, value, onType, onPickWord, words }: SearchFindBoxProps): React.ReactElement {
-  const find = nav.stop("find", 0);
+  /* The stop's element is the input inside the box: a `ref` on Steam's text field would hold the component,
+     not an element, and measuring it threw on the Deck (useSearchNav.ts). */
+  const { ref: findRef, ...find } = nav.stop("find", 0);
   const picked = value.trim().toLowerCase();
   const rows = [words.slice(0, WORDS_PER_ROW), words.slice(WORDS_PER_ROW, WORDS_PER_ROW * 2)];
   return (
     <div className="bonsai-search__find" data-bonsai-search-find="true">
-      <div className="bonsai-search__box">
+      <div className="bonsai-search__box" ref={(box) => findRef(box ? (box.querySelector("input") ?? box) : null)}>
         <span className="bonsai-search__mag" aria-hidden="true">
           <FiSearch size={13} />
         </span>

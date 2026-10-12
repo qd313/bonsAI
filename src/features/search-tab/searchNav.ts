@@ -6,7 +6,9 @@
  * stop: Left and Right walk along a row and hold still at its ends (a Right nobody claims would carry the
  * ring out of the plugin, into Steam's side rail); Up and Down go to the row above or below, landing on
  * the stop nearest in x, or on the same place in the row when nothing is measured; Up from the top row
- * leaves the tab to the tab bar, and Down from the last row holds still.
+ * leaves the tab to the tab bar, and Down from the last row holds still. A caller can name the stop a row is
+ * entered at from a given row instead (the find box spans the whole row, so its x says nothing: Up from it
+ * lands on the picked game, Down from it on the first word).
  *
  * Used for: useSearchNav.ts, which measures the rows and hands the ring over, and the tab's walk test.
  *
@@ -40,19 +42,23 @@ export function nearestColumn(fromCol: number, fromX: number | null, centers: re
 
 /**
  * One press. `sizes` is how many stops each row holds, top first (rows with none are left out by the
- * caller); `centers(row)` gives a row's stop centres in x, or null when they are not measured.
+ * caller); `centers(row)` gives a row's stop centres in x, or null when they are not measured;
+ * `enter(from, to)` names the place a row is entered at from another, or null for the nearest in x.
  */
 export function searchMove(
   sizes: readonly number[],
   at: SearchStopAt,
   direction: SearchDirection,
   centers: (row: number) => readonly number[] | null = () => null,
+  enter: (from: number, to: number) => number | null = () => null,
 ): SearchMove {
   if (direction === "left") return at.col > 0 ? { row: at.row, col: at.col - 1 } : "hold";
   if (direction === "right") return at.col < (sizes[at.row] ?? 0) - 1 ? { row: at.row, col: at.col + 1 } : "hold";
   const row = direction === "up" ? at.row - 1 : at.row + 1;
   if (row < 0) return "leave";
   if (row >= sizes.length) return "hold";
+  const named = enter(at.row, row);
+  if (named !== null) return { row, col: Math.min(Math.max(named, 0), sizes[row]! - 1) };
   const fromX = centers(at.row)?.[at.col] ?? null;
   return { row, col: nearestColumn(at.col, fromX, centers(row), sizes[row]!) };
 }

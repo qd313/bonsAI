@@ -317,3 +317,65 @@ describe("the walk touches every word button", () => {
     w.unmount();
   });
 });
+
+describe("the walk the Deck did (plan 92, build 649daecc)", () => {
+  /*
+   * On the Deck, Down on a game button stepped to the next game, Up on a word in the first row stepped to the word
+   * before it, and Up from the find box went to the last game. Every one of those presses measured the find box
+   * through a `ref` on Steam's text field, which holds the component, not the input; the measuring threw and Steam
+   * stepped along its own order. The kit's text field now hands its `ref` the component, as Steam's does, and a
+   * throwing handler steps along the page's order, as Steam did.
+   */
+  it("Down from All lands on the find box, not on the next game", async () => {
+    const w = await mountWalk(OWN_SCREEN_PANE_PX, "nearest", "");
+    expect(w.label()).toBe("All games");
+    expect(w.press("onMoveDown").label).toBe("Search for a word");
+    w.unmount();
+  });
+
+  it("Down from the third game button lands on the find box", async () => {
+    const w = await mountWalk(OWN_SCREEN_PANE_PX, "nearest", "");
+    w.press("onMoveRight");
+    expect(w.press("onMoveRight").label).toBe("Hades");
+    expect(w.press("onMoveDown").label).toBe("Search for a word");
+    w.unmount();
+  });
+
+  it("Up from the find box lands on All when no game is picked, not on the game the ring last left", async () => {
+    const w = await mountWalk(OWN_SCREEN_PANE_PX, "nearest", "");
+    w.press("onMoveRight");
+    w.press("onMoveRight");
+    w.press("onMoveDown");
+    expect(w.press("onMoveUp").label).toBe("All games");
+    w.unmount();
+  });
+
+  it("Up from the find box lands on the picked game", async () => {
+    const w = await mountWalk(OWN_SCREEN_PANE_PX, "nearest", "");
+    expect(w.press("onMoveRight").label).toBe("Hollow Knight");
+    act(() => {
+      pressOn(ringStop()!, "onOKButton");
+    });
+    await waitFor(() => expect(screen.getByLabelText("Hollow Knight").getAttribute("aria-pressed")).toBe("true"));
+    /* The stand-in's ring is a class, which the button's new class list (the gold look) wipes; Steam keeps its own. */
+    act(() => putSteamRingOn(screen.getByLabelText("Hollow Knight")));
+    w.press("onMoveRight");
+    w.press("onMoveDown");
+    expect(w.label()).toBe("Search for a word");
+    expect(w.press("onMoveUp").label).toBe("Hollow Knight");
+    w.unmount();
+  });
+
+  it("Up from the third word of the first row lands on the find box; Down from it lands on the third word below", async () => {
+    const w = await mountWalk(OWN_SCREEN_PANE_PX, "nearest", "");
+    const word = (p: { label: string }) => p.label.split(",")[0];
+    w.press("onMoveDown");
+    expect(word(w.press("onMoveDown"))).toBe("mantis");
+    w.press("onMoveRight");
+    expect(word(w.press("onMoveRight"))).toBe("claw");
+    expect(word(w.press("onMoveDown"))).toBe("boon");
+    expect(word(w.press("onMoveUp"))).toBe("claw");
+    expect(w.press("onMoveUp").label).toBe("Search for a word");
+    w.unmount();
+  });
+});

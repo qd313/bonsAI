@@ -21,8 +21,16 @@ import type { GameNote, SearchChat, UserNote } from "./searchTypes";
 
 const KEPT = ["onMoveUp", "onMoveDown", "onMoveLeft", "onMoveRight", "onOKButton", "onCancelButton", "onButtonDown"];
 
+/**
+ * What a `ref` on Steam's text field receives. Decky's `TextField` is Steam's own class component (Decky finds it
+ * by its static `validateUrl` and `validateEmail`), so a `ref` given to it is filled with the component, not the
+ * input: no `getBoundingClientRect`, no `focus`. The Deck showed what that does (plan 92, build 649daecc): every
+ * press that measured the find box failed and Steam stepped along its own order instead.
+ */
+export type SteamTextFieldInstance = { props: Record<string, unknown>; isSteamTextField: true };
+
 /** A Steam text field as a real input: Steam's ring on it, its nav node, and its move handlers kept on the element. */
-export const SteamRingTextField = React.forwardRef<HTMLInputElement, Record<string, unknown>>(function SteamRingTextField(props, ref) {
+export const SteamRingTextField = React.forwardRef<SteamTextFieldInstance, Record<string, unknown>>(function SteamRingTextField(props, ref) {
   const { navRef, onChange, value, placeholder, label: _label, spellCheck, focusable: _f, noFocusRing: _n, ...rest } = props as Record<string, unknown> & {
     navRef?: { current: unknown };
   };
@@ -45,8 +53,9 @@ export const SteamRingTextField = React.forwardRef<HTMLInputElement, Record<stri
           (el as unknown as SteamEl).__nav = nav as SteamEl["__nav"];
           if (navRef) navRef.current = { TakeFocus: () => (putSteamRingOn(el), true) };
         }
-        if (typeof ref === "function") ref(el);
-        else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = el;
+        const instance: SteamTextFieldInstance | null = el ? { props, isSteamTextField: true } : null;
+        if (typeof ref === "function") ref(instance);
+        else if (ref) ref.current = instance;
       }}
     />
   );
@@ -129,8 +138,26 @@ export function ringLabel(): string {
   return ringStop()?.getAttribute("aria-label") ?? "";
 }
 
-/** A Steam move press on the stop that has the ring (`__nav.onMoveDown` and so on), as Steam calls it. The ring is read from where the page's focus is, since a sibling hop moves it with a plain focus. */
+/**
+ * A Steam move press on the stop that has the ring (`__nav.onMoveDown` and so on), as Steam calls it. The ring is
+ * read from where the page's focus is, since a sibling hop moves it with a plain focus.
+ *
+ * A handler that throws does not stop the press on the Deck: Steam takes it back and steps along its own order
+ * (plan 92, build 649daecc: Down on a game button went to the next game, Up on a word to the word before it). That
+ * step is modelled as the stop before or after this one in the page's order, and the press reports `undefined`,
+ * as an unclaimed press does.
+ */
 export function pressOn(el: SteamEl, key: "onMoveUp" | "onMoveDown" | "onMoveLeft" | "onMoveRight" | "onOKButton" | "onCancelButton"): boolean | undefined {
   const handler = el.__nav?.[key];
-  return handler ? (handler() as boolean | undefined) : undefined;
+  if (!handler) return undefined;
+  try {
+    return handler() as boolean | undefined;
+  } catch {
+    if (key === "onOKButton" || key === "onCancelButton") return undefined;
+    const stops = Array.from(el.ownerDocument.querySelectorAll<HTMLElement>('[data-steam-stop="true"]'));
+    const at = stops.indexOf(el);
+    const next = stops[key === "onMoveDown" || key === "onMoveRight" ? at + 1 : at - 1];
+    if (at >= 0 && next) putSteamRingOn(next);
+    return undefined;
+  }
 }

@@ -1,6 +1,6 @@
 /**
  * Title: The folded tabs' memory: which sections are open, and where the ring was
- * Purpose: Pin the store under every folded tab (plan 91 § 2b): a tab's first visit opens its first section only;
+ * Purpose: Pin the store under every folded tab (plan 91 § 2b): a tab's first visit has every section closed;
  *          opening one leaves the others as they are; Open all and Close all; the tabs do not share an open set;
  *          a listener hears every change; and the section the ring last landed in is kept for the Open all
  *          button's way back. It lives outside React, which is what lets it outlast a rebuilt tab
@@ -25,15 +25,18 @@ const IDS = ["where", "kb", "reply"];
 beforeEach(() => resetFoldedTabsForTests());
 
 describe("the folded tabs' store", () => {
-  it("a first visit opens the first section only", () => {
-    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([true, false, false]);
+  it("a first visit has no section open", () => {
+    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([false, false, false]);
+    expect(allSectionsOpen("ollama", IDS)).toBe(false);
   });
 
   it("toggling one section leaves the others as they are; several can be open", () => {
     toggleSection("ollama", IDS, "reply");
-    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([true, false, true]);
-    toggleSection("ollama", IDS, "where");
     expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([false, false, true]);
+    toggleSection("ollama", IDS, "where");
+    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([true, false, true]);
+    toggleSection("ollama", IDS, "reply");
+    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([true, false, false]);
   });
 
   it("opens or closes every section at once", () => {

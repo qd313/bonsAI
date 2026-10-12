@@ -15,11 +15,12 @@
  * notice or a knowledge-base question closed, and the ring could not come back to the button it left.
  * Kept here, the open set and the way back outlive any rebuild.
  *
- * Does not: Save anything to disk. The open set lasts while the plugin stays loaded (plan 92 § 14,
- * call 3); a new session starts from the first visit's default again. Does not move the ring.
+ * Does not: Save anything to disk. The open set lasts while the plugin stays loaded, and a person
+ * switching tabs closes it again (the maintainer's call of 2026-10-12, replacing plan 92 § 14, call 3);
+ * a new session starts with every section closed. Does not move the ring.
  *
- * Gotchas: A tab's first visit opens its first section and closes the rest; that default is written
- * the first time the tab asks, so a tab must name its sections in a fixed order.
+ * Gotchas: A tab's first visit has every section closed; that state is written the first time the tab
+ * asks.
  */
 
 interface TabFold {
@@ -37,11 +38,11 @@ function changed(): void {
   for (const l of Array.from(listeners)) l();
 }
 
-/** The tab's state, made with the first-visit default (the first section open) when it has none yet. */
-function tabFold(tab: string, sections: readonly string[]): TabFold {
+/** The tab's state, made with the first-visit default (every section closed) when it has none yet. */
+function tabFold(tab: string, _sections: readonly string[]): TabFold {
   let fold = tabs.get(tab);
   if (!fold) {
-    fold = { open: new Set(sections.slice(0, 1)) };
+    fold = { open: new Set() };
     tabs.set(tab, fold);
   }
   return fold;

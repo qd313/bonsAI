@@ -9,7 +9,7 @@
  *          screen and, while the strip shows, its bottom edge with its ring sits 6 px or more above the strip's
  *          top. Right from Reply style reaches the floating button, A opens every section (it reads Close all),
  *          Down returns to Reply style. Closed, the tab is under one screen of the Deck's own (430 points); with
- *          the first section open, under one and a half.
+ *          the first section opened, under one and a half.
  * Used for: OllamaTab.tsx and the folded-tabs pieces (src/features/folded-tabs/).
  * Does not: Know the Deck's real heights: foldedTabWalk.tsx lays the stops out by a flow model, and the Deck
  *           walk measures the truth.
@@ -29,7 +29,7 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { OllamaTab, type OllamaTabProps } from "./OllamaTab";
-import { resetFoldedTabsForTests, setAllSections } from "../features/folded-tabs/foldedTabsStore";
+import { resetFoldedTabsForTests, setAllSections, toggleSection } from "../features/folded-tabs/foldedTabsStore";
 import { OLLAMA_FOLD_TAB, OLLAMA_SECTIONS } from "../features/folded-tabs/ollamaTabFolds";
 import { resetNavFocusRegistry } from "../utils/navFocusRegistry";
 import { stripHeightFor } from "../styles/sections/foldedTabs";
@@ -134,7 +134,16 @@ describe("the folded Ollama tab, every section closed", () => {
     w.unmount();
   });
 
-  it("on a first visit only Where AI runs is open, and the tab is under one and a half screens", () => {
+  it("on a first visit no section is open", () => {
+    const w = walk(DECK_PANE, "nearest");
+    const open = Array.from(w.container.querySelectorAll<HTMLElement>('.bonsai-fold-line[data-open="true"]'));
+    expect(open).toEqual([]);
+    expect(w.contentHeight() - TAIL).toBeLessThan(DECK_PANE);
+    w.unmount();
+  });
+
+  it("with Where AI runs opened, the tab is under one and a half screens", () => {
+    toggleSection(OLLAMA_FOLD_TAB, SECTION_IDS, "where");
     const w = walk(DECK_PANE, "nearest");
     const open = Array.from(w.container.querySelectorAll<HTMLElement>('.bonsai-fold-line[data-open="true"]'));
     expect(open.map((el) => el.dataset.bonsaiFoldLine)).toEqual(["where"]);

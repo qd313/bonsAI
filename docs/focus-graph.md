@@ -997,7 +997,7 @@ tab bar
   scroll plan's bottom margin grows by its measured height, so the ringed row is placed clear of it; a folded tab
   turns the page by a shorter step (`FOLDED_TAB_SCROLL_STEP_FRACTION`, under a third of the pane).
 - **Open sections survive a rebuild:** the open set is in `foldedTabsStore.ts`, for the session only. On a first
-  visit the first section is open and the rest are closed.
+  visit every section is closed.
 - **Class names a Deck driver can find:** the line `.bonsai-fold-line` (`[data-bonsai-fold-line="<section>"]`,
   `[data-open]`), its parts `.bonsai-fold-line__name`, `__summary`, `__chevron`; the open rows `.bonsai-fold-body`;
   the button's host `.bonsai-fold-all-host` (`[data-bonsai-fold-all="<tab>"]`) and the button `.bonsai-fold-all`;

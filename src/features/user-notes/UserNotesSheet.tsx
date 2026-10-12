@@ -21,7 +21,7 @@
  * place (or the one before, or Close), because the bin it was on is gone.
  */
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Button, ModalRoot, showModal } from "@decky/ui";
+import { Button, Focusable, ModalRoot, showModal } from "@decky/ui";
 
 import { BonsaiModalScope } from "../../components/BonsaiModalScope";
 import { TrashBinIcon } from "../../components/icons";
@@ -82,6 +82,7 @@ export function UserNotesSheet({ onClose, load = listUserNotes }: UserNotesSheet
   const [notes, setNotes] = useState<UserNote[] | null>(null);
   const [message, setMessage] = useState("");
   const toggleEls = useRef(new Map<string, HTMLElement>());
+  const binEls = useRef(new Map<string, HTMLElement>());
   const closeEl = useRef<HTMLElement | null>(null);
   const done = useRef(false);
 
@@ -129,6 +130,30 @@ export function UserNotesSheet({ onClose, load = listUserNotes }: UserNotesSheet
   };
 
   const rowButton: React.CSSProperties = { ...SETTINGS_GLASS_BTN, width: "100%" };
+  /*
+   * Every stop claims all four directions itself, so Steam's own guess (which put Up from Close on a bin and
+   * left Left from the bin dead, plan92-P90-NOTES-SHEET.json) is never asked. A note's switch and its bin are
+   * one row (Left and Right); Up and Down go note to note in the same column, the bins keeping to the bins,
+   * and Close is under the switches. All are siblings in this one popup, so a plain focus is the right move.
+   */
+  const ids = (notes ?? []).map((n) => n.id);
+  /* Looked up when the press happens, not when the sheet is drawn: the buttons register themselves after. */
+  const to = (find: () => HTMLElement | null | undefined) => () => {
+    find()?.focus();
+    return true;
+  };
+  const column = (els: Map<string, HTMLElement>, id: string, step: -1 | 1) => {
+    const at = ids.indexOf(id) + step;
+    if (at < 0) return to(() => els.get(id));
+    return at >= ids.length ? to(() => closeEl.current) : to(() => els.get(ids[at]!));
+  };
+  const hold = () => true;
+  const moves = (up: () => boolean, down: () => boolean, left: () => boolean, right: () => boolean) => ({
+    onMoveUp: up,
+    onMoveDown: down,
+    onMoveLeft: left,
+    onMoveRight: right,
+  });
   return (
     <ModalRoot onCancel={closeOnce}>
       <BonsaiModalScope>
@@ -143,7 +168,11 @@ export function UserNotesSheet({ onClose, load = listUserNotes }: UserNotesSheet
             {notes !== null && notes.length === 0 ? <div style={{ color: "#8fa8c4" }}>{SHEET_EMPTY}</div> : null}
             {(notes ?? []).map((note) => (
               <div key={note.id} data-bonsai-user-note={note.id} style={{ display: "flex", gap: 6, alignItems: "stretch" }}>
-                <div className="bonsai-settings-focus-btn-host" style={{ flex: "1 1 auto", minWidth: 0 }}>
+                <Focusable
+                  className="bonsai-settings-focus-btn-host"
+                  style={{ flex: "1 1 auto", minWidth: 0 }}
+                  {...moves(column(toggleEls.current, note.id, -1), column(toggleEls.current, note.id, 1), hold, to(() => binEls.current.get(note.id)))}
+                >
                   <Button
                     className={FOCUS_RING_BTN_CLASS}
                     ref={(el: HTMLElement | null) => {
@@ -161,24 +190,36 @@ export function UserNotesSheet({ onClose, load = listUserNotes }: UserNotesSheet
                     </span>
                     <Switch on={note.on} />
                   </Button>
-                </div>
-                <div className="bonsai-settings-focus-btn-host" style={{ flex: "0 0 auto" }}>
+                </Focusable>
+                <Focusable
+                  className="bonsai-settings-focus-btn-host"
+                  style={{ flex: "0 0 auto" }}
+                  {...moves(column(binEls.current, note.id, -1), column(binEls.current, note.id, 1), to(() => toggleEls.current.get(note.id)), hold)}
+                >
                   <Button
                     className={FOCUS_RING_BTN_CLASS}
+                    ref={(el: HTMLElement | null) => {
+                      if (el) binEls.current.set(note.id, el);
+                      else binEls.current.delete(note.id);
+                    }}
                     aria-label={`Remove note: ${note.text}`}
                     onClick={() => void remove(note)}
                     style={{ ...SETTINGS_GLASS_BTN, width: 34, minWidth: 34, padding: 0, height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
                   >
                     <TrashBinIcon size={14} />
                   </Button>
-                </div>
+                </Focusable>
               </div>
             ))}
           </div>
           <div aria-live="polite" style={{ minHeight: 16, margin: "6px 0", fontSize: textPx(11), color: "#8fa8c4" }}>
             {message}
           </div>
-          <div className="bonsai-settings-focus-btn-host" style={{ width: "100%" }}>
+          <Focusable
+            className="bonsai-settings-focus-btn-host"
+            style={{ width: "100%" }}
+            {...moves(to(() => toggleEls.current.get(ids[ids.length - 1]!)), hold, hold, hold)}
+          >
             <Button
               className={FOCUS_RING_BTN_CLASS}
               ref={(el: HTMLElement | null) => {
@@ -189,7 +230,7 @@ export function UserNotesSheet({ onClose, load = listUserNotes }: UserNotesSheet
             >
               Close
             </Button>
-          </div>
+          </Focusable>
         </div>
       </BonsaiModalScope>
     </ModalRoot>

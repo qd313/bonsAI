@@ -15,12 +15,14 @@ const hoisted = vi.hoisted(() => ({ cancel: null as null | (() => void), modals:
 
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../../test-harness/fakeDeckyUi");
+  const { SteamRingFocusable } = await import("../../test-harness/steamRing");
   const Root = ({ onCancel, children }: { onCancel?: () => void; children?: React.ReactNode }) => {
     hoisted.cancel = onCancel ?? null;
     return <div data-testid="modal-root">{children}</div>;
   };
   return {
     ...stubs,
+    Focusable: SteamRingFocusable,
     ModalRoot: Root,
     showModal: (el: React.ReactElement) => {
       hoisted.modals.push(el);
@@ -152,6 +154,96 @@ describe("the notes sheet", () => {
     act(() => hoisted.cancel?.());
     fireEvent.click([...container.querySelectorAll("button")].find((b) => b.textContent === "Close")!);
     expect(onClose).toHaveBeenCalledTimes(1);
+  });
+});
+
+type Dir = "onMoveUp" | "onMoveDown" | "onMoveLeft" | "onMoveRight";
+
+/** One press the way Steam runs it: the handler of the container around the focused button, then each parent's. */
+function press(dir: Dir): boolean {
+  let el = document.activeElement as (HTMLElement & { __nav?: Partial<Record<Dir, () => unknown>> }) | null;
+  while (el) {
+    if (el.__nav?.[dir]?.() === true) return true;
+    el = el.parentElement as typeof el;
+  }
+  return false;
+}
+
+describe("the D-pad in the sheet (Deck, plan92-P90-NOTES-SHEET.json: Up from Close hit the bin, Left from the bin was dead)", () => {
+  const bin = (c: HTMLElement, id: string) => row(c, id).querySelector<HTMLElement>("[aria-label^='Remove note']")!;
+  const closeButton = (c: HTMLElement) => [...c.querySelectorAll("button")].find((b) => b.textContent === "Close")!;
+  const on = (el: HTMLElement) => act(() => el.focus());
+
+  it("a note's switch and its Remove are one row: Right goes to the bin, Left comes back, both ends hold still", async () => {
+    const { container } = await mountSheet([NOTES[0]!]);
+    on(toggleOf(container, "n-3"));
+    expect(press("onMoveLeft")).toBe(true);
+    expect(document.activeElement).toBe(toggleOf(container, "n-3"));
+    expect(press("onMoveRight")).toBe(true);
+    expect(document.activeElement).toBe(bin(container, "n-3"));
+    expect(press("onMoveRight")).toBe(true);
+    expect(document.activeElement).toBe(bin(container, "n-3"));
+    expect(press("onMoveLeft")).toBe(true);
+    expect(document.activeElement).toBe(toggleOf(container, "n-3"));
+  });
+
+  it("Up from Close lands on the last note's switch, never on its bin", async () => {
+    const { container } = await mountSheet();
+    on(closeButton(container));
+    expect(press("onMoveUp")).toBe(true);
+    expect(document.activeElement).toBe(toggleOf(container, "n-1"));
+  });
+
+  it("Up and Down walk the switches note by note, then Close, each stop once", async () => {
+    const { container } = await mountSheet();
+    on(toggleOf(container, "n-3"));
+    const seen: Element[] = [document.activeElement!];
+    for (let i = 0; i < 3; i += 1) {
+      expect(press("onMoveDown")).toBe(true);
+      seen.push(document.activeElement!);
+    }
+    expect(seen).toEqual([toggleOf(container, "n-3"), toggleOf(container, "n-2"), toggleOf(container, "n-1"), closeButton(container)]);
+    expect(press("onMoveDown")).toBe(true);
+    expect(document.activeElement).toBe(closeButton(container));
+    for (let i = 0; i < 3; i += 1) press("onMoveUp");
+    expect(document.activeElement).toBe(toggleOf(container, "n-3"));
+    expect(press("onMoveUp")).toBe(true);
+    expect(document.activeElement).toBe(toggleOf(container, "n-3"));
+  });
+
+  it("Up and Down along the bins keep to the bins, ending on Close", async () => {
+    const { container } = await mountSheet();
+    on(bin(container, "n-3"));
+    press("onMoveDown");
+    expect(document.activeElement).toBe(bin(container, "n-2"));
+    press("onMoveDown");
+    press("onMoveDown");
+    expect(document.activeElement).toBe(closeButton(container));
+    expect(press("onMoveLeft")).toBe(true);
+    expect(press("onMoveRight")).toBe(true);
+    expect(document.activeElement).toBe(closeButton(container));
+    press("onMoveUp");
+    press("onMoveUp");
+    press("onMoveUp");
+    expect(document.activeElement).toBe(toggleOf(container, "n-3"));
+  });
+
+  it("every stop carries and claims all four directions", async () => {
+    const { container } = await mountSheet();
+    for (const el of [toggleOf(container, "n-2"), bin(container, "n-2"), closeButton(container)]) {
+      on(el);
+      for (const dir of ["onMoveUp", "onMoveDown", "onMoveLeft", "onMoveRight"] as Dir[]) {
+        on(el);
+        expect(press(dir)).toBe(true);
+      }
+    }
+  });
+
+  it("with no notes Close holds still on all four", async () => {
+    const { container } = await mountSheet([]);
+    on(closeButton(container));
+    for (const dir of ["onMoveUp", "onMoveDown", "onMoveLeft", "onMoveRight"] as Dir[]) expect(press(dir)).toBe(true);
+    expect(document.activeElement).toBe(closeButton(container));
   });
 });
 

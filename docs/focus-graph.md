@@ -1190,8 +1190,11 @@ the Show reasoning line when this turn has one, else the answer's first section
   so those hops are plain focus calls. The line has its own nav node.
 - **The sheet is a Steam popup** (`UserNotesSheet.tsx`): every note with its words, its game or "Every game", a switch
   (A on the words) and a Remove bin (A), under "Ask reads the ones that are on, every time you ask about that game."
-  Steam walks the rows (siblings in one box); after Remove the ring goes to the row now in its place, else the one
-  before, else Close. B or Close closes it once.
+  Every stop claims all four directions itself (Deck, plan 92: left to Steam, Up from Close landed on a bin and Left
+  from the bin was dead). A note's switch and its bin are one row: Right goes switch to bin, Left back, both ends hold
+  still. Up and Down go note to note in the same column (switches with switches, bins with bins), the last note's Down
+  is Close, and Up from Close is the last note's switch. All siblings in one popup, so a plain focus. After Remove the
+  ring goes to the row now in its place, else the one before, else Close. B or Close closes it once.
 - **The ring returns to the line.** Opening the sheet writes the turn's key into the store (`sheetOpenedFrom`); closing
   the popup rebuilds the tab and the rebuilt line, seeing its own key with the sheet closed, takes the ring back (a
   few tries while the tab mounts) and clears the note. `NotesReadLine.test.tsx` unmounts and remounts between the open

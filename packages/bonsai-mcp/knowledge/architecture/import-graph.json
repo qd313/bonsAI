@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 945,
-  "edgeCount": 3131,
+  "edgeCount": 3132,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -6263,7 +6263,8 @@
         "src/features/search-tab/searchTypes.ts",
         "src/features/user-notes/UserNotesSheet.tsx",
         "src/features/user-notes/userNotesStore.ts",
-        "src/test-harness/fakeDeckyUi.tsx"
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx"
       ],
       "importedBy": []
     },
@@ -8755,6 +8756,7 @@
         "src/features/user-notes/NotesReadLine.test.tsx",
         "src/features/user-notes/UserNotes.transcript.test.tsx",
         "src/features/user-notes/UserNotes.walk.test.tsx",
+        "src/features/user-notes/UserNotesSheet.test.tsx",
         "src/test-harness/foldedTabWalk.tsx"
       ]
     },

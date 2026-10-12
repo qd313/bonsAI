@@ -1,0 +1,11 @@
+{
+ "row": "plan89-E0-DEPLOY",
+ "build_commit": "2e89a22e (experimental tip, deployed by deck_deploy at 2026-10-11 ~20:00 EDT)",
+ "deck_time_local": "Sun 2026-10-11 20:03 EDT (Deck clock)",
+ "screen": "MONITOR: page window 855 x 766, screen 1500 x 843.",
+ "setup": "deck_holdAwake ttl 480 min, expiresAt 2026-10-12T08:00:09Z. deck_deploy: copied dist, main.py, plugin.json, package.json, assets, py_modules, bin; loader ready after 363 ms.",
+ "pressed": "deck_openPlugin three times: attempt 1 and attempt 2 failed (QAM chord sent, no pane appeared); attempt 3 opened the panel (confirmed by .bonsai-scope).",
+ "seen": "Panel open on Main tab. Chat title 'How do I beat the boss in the Soul Sanctum in Hollow Knight?', 'chat 1 of 7' (the plugin came back on the remembered test chat, not on a new unsaved chat). Ring on the empty question box. Mode Strategy, No game.",
+ "expected": "Deploy succeeds, plugin opens (first open fails once), Main tab, test chat.",
+ "verdict": "PASS for deploy and open. Note: the open failed TWICE, not once (second failure is worth reporting, runbook rule 8)."
+}

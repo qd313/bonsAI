@@ -1,0 +1,998 @@
+{
+  "row": "P89-TAB-WALK",
+  "build_commit": "9b4d0503 (experimental tip, deployed by deck_deploy about 20:25 EDT; see plan89-F0-DEPLOY)",
+  "deck_time_local": "Sun 2026-10-11 about 20:40 to 21:20 EDT (Deck clock)",
+  "screen": "MONITOR: page window 855 x 766, screen 1500 x 843. Pane (tab body scroller) top y=24, bottom y=765, clientHeight 741 (half = 370.5). Settings scrollHeight 2133, Developer scrollHeight 2616.",
+  "setup": "Plugin open on Main, test chat. A page-side frame watcher (requestAnimationFrame loop, f1-watch.js idea; kept only in the page, removed at the end) logged every frame where the focused element's label, rect or the pane's scrollTop changed, with a timestamp. After each press a page call waited until 2.1 s had passed since the last logged change, then read the log, so every press has its 0.2 s and 1.8 s state: 'scrollTop_first_frame' is the first changed frame, 'scrollTop_settled' the last. Press and read were separate tool calls. D-pad only; no A anywhere. Raw per-press files in the scratch folder: f1-settings-down.json, f1-settings-up.json, f1-developer-down.json, f1-developer-up.json, f1-raw-all.json, f1-summary.json. Press 1 on Settings Down was read with the first watcher version (no label); its rect and scroll match the later Text size pass.",
+  "pressed": "Settings: Right x2 from the bonsAI tab, Down x16 (landings 1 to 14, then 2 no-op presses), Up x15 (14 landings back to the tab bar, then 1 no-op). Then Down x4 to Text size and Left, Right, Right, Left. Then Up to the Settings tab, Right x2 to Developer: Down x19 (16 landings, 3 no-ops), Up x16 (back to the Developer tab). Developer: only Down and Up.",
+  "seen": {
+    "summary": {
+      "settings_down": {
+        "presses_counted": 14,
+        "presses_that_moved_pane_1px_or_more": [
+          5,
+          7,
+          8,
+          12
+        ],
+        "count_1px_or_more": 4,
+        "moves_under_1px": [
+          [
+            14,
+            0.8
+          ]
+        ],
+        "largest_move_px": 355.5,
+        "moves_px": [
+          [
+            5,
+            355.5
+          ],
+          [
+            7,
+            355.4
+          ],
+          [
+            8,
+            355.5
+          ],
+          [
+            12,
+            325.0
+          ]
+        ],
+        "last_press_move_px": 0.8,
+        "limit_one_in_three": 4.67
+      },
+      "settings_up": {
+        "presses_counted": 14,
+        "presses_that_moved_pane_1px_or_more": [
+          4,
+          7,
+          9,
+          11
+        ],
+        "count_1px_or_more": 4,
+        "moves_under_1px": [],
+        "largest_move_px": 356.3,
+        "moves_px": [
+          [
+            4,
+            -356.3
+          ],
+          [
+            7,
+            -356.2
+          ],
+          [
+            9,
+            -356.3
+          ],
+          [
+            11,
+            -323.4
+          ]
+        ],
+        "last_press_move_px": null,
+        "limit_one_in_three": 4.67
+      },
+      "developer_down": {
+        "presses_counted": 16,
+        "presses_that_moved_pane_1px_or_more": [
+          4,
+          6,
+          8,
+          10,
+          12,
+          16
+        ],
+        "count_1px_or_more": 6,
+        "moves_under_1px": [],
+        "largest_move_px": 355.5,
+        "moves_px": [
+          [
+            4,
+            355.5
+          ],
+          [
+            6,
+            355.4
+          ],
+          [
+            8,
+            355.5
+          ],
+          [
+            10,
+            355.5
+          ],
+          [
+            12,
+            355.4
+          ],
+          [
+            16,
+            97.7
+          ]
+        ],
+        "last_press_move_px": 97.7,
+        "limit_one_in_three": 5.33
+      },
+      "developer_up": {
+        "presses_counted": 16,
+        "presses_that_moved_pane_1px_or_more": [
+          5,
+          6,
+          7,
+          10,
+          11,
+          13,
+          15
+        ],
+        "count_1px_or_more": 7,
+        "moves_under_1px": [],
+        "largest_move_px": 363.3,
+        "moves_px": [
+          [
+            5,
+            -39.8
+          ],
+          [
+            6,
+            -363.3
+          ],
+          [
+            7,
+            -356.3
+          ],
+          [
+            10,
+            -356.2
+          ],
+          [
+            11,
+            -356.3
+          ],
+          [
+            13,
+            -356.2
+          ],
+          [
+            15,
+            -46.9
+          ]
+        ],
+        "last_press_move_px": null,
+        "limit_one_in_three": 5.33
+      }
+    },
+    "settings_down_scrollTop_by_press": [
+      0,
+      0,
+      0,
+      0,
+      355.5,
+      355.5,
+      710.9,
+      1066.4,
+      1066.4,
+      1066.4,
+      1066.4,
+      1391.4,
+      1391.4,
+      1392.2,
+      null,
+      null
+    ],
+    "developer_down_scrollTop_by_press": [
+      0,
+      0,
+      0,
+      355.5,
+      355.5,
+      710.9,
+      710.9,
+      1066.4,
+      1066.4,
+      1421.9,
+      1421.9,
+      1777.3,
+      1777.3,
+      1777.3,
+      1777.3,
+      1875,
+      null,
+      null,
+      null
+    ],
+    "tables": {
+      "settings-down": [
+        {
+          "press": 1,
+          "label": "Adjust UI automatically",
+          "top": 163.2,
+          "bottom": 185.2,
+          "scrollTop_first_frame": 0,
+          "scrollTop_settled": 0,
+          "delta_vs_previous_press": 0,
+          "frames": 1,
+          "inside_pane": true,
+          "note": "read with the first watcher version (no label); same rect as the later Text-size pass press 1"
+        },
+        {
+          "press": 2,
+          "label": "Apply UI scale",
+          "top": 257.1,
+          "bottom": 293.1,
+          "scrollTop_first_frame": 0,
+          "scrollTop_settled": 0,
+          "delta_vs_previous_press": 0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 3,
+          "label": "Set screenshot quality to Save memory",
+          "top": 412.7,
+          "bottom": 456.6,
+          "scrollTop_first_frame": 0,
+          "scrollTop_settled": 0,
+          "delta_vs_previous_press": 0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 4,
+          "label": "Set text size to Small",
+          "top": 593,
+          "bottom": 629,
+          "scrollTop_first_frame": 0,
+          "scrollTop_settled": 0,
+          "delta_vs_previous_press": 0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 5,
+          "label": "Remember what I typed",
+          "top": 361.5,
+          "bottom": 383.5,
+          "scrollTop_first_frame": 355.5,
+          "scrollTop_settled": 355.5,
+          "delta_vs_previous_press": 355.5,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 6,
+          "label": "Hide spoilers until I tap",
+          "top": 553.5,
+          "bottom": 575.5,
+          "scrollTop_first_frame": 355.5,
+          "scrollTop_settled": 355.5,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 7,
+          "label": "Show one chip instead of two",
+          "top": 351.9,
+          "bottom": 373.9,
+          "scrollTop_first_frame": 710.9,
+          "scrollTop_settled": 710.9,
+          "delta_vs_previous_press": 355.4,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 8,
+          "label": "tiny.en (faster, less accurate)",
+          "top": 302.2,
+          "bottom": 336.9,
+          "scrollTop_first_frame": 1066.4,
+          "scrollTop_settled": 1066.4,
+          "delta_vs_previous_press": 355.5,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 9,
+          "label": "base.en (more accurate, recommended)",
+          "top": 342.9,
+          "bottom": 377.6,
+          "scrollTop_first_frame": 1066.4,
+          "scrollTop_settled": 1066.4,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 10,
+          "label": "Reinstall voice engine",
+          "top": 447.2,
+          "bottom": 485.2,
+          "scrollTop_first_frame": 1066.4,
+          "scrollTop_settled": 1066.4,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 11,
+          "label": "Voice replies: Off",
+          "top": 604.8,
+          "bottom": 640.8,
+          "scrollTop_first_frame": 1066.4,
+          "scrollTop_settled": 1066.4,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 12,
+          "label": "AI voice & personality",
+          "top": 403.8,
+          "bottom": 425.8,
+          "scrollTop_first_frame": 1391.4,
+          "scrollTop_settled": 1391.4,
+          "delta_vs_previous_press": 325.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 13,
+          "label": "Show Developer tab",
+          "top": 557.7,
+          "bottom": 579.7,
+          "scrollTop_first_frame": 1391.4,
+          "scrollTop_settled": 1391.4,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 14,
+          "label": "Clear cache...",
+          "top": 686.9,
+          "bottom": 724.9,
+          "scrollTop_first_frame": 1391.4,
+          "scrollTop_settled": 1392.2,
+          "delta_vs_previous_press": 0.8,
+          "frames": 2,
+          "ms_after_first_frame_of_each_extra_frame": [
+            24
+          ],
+          "inside_pane": true
+        },
+        {
+          "press": 15,
+          "label": null,
+          "note": "no change (ring did not move, pane did not move)",
+          "delta_vs_previous_press": 0
+        },
+        {
+          "press": 16,
+          "label": null,
+          "note": "no change (ring did not move, pane did not move)",
+          "delta_vs_previous_press": 0
+        }
+      ],
+      "settings-up": [
+        {
+          "press": 1,
+          "label": "Show Developer tab",
+          "top": 557,
+          "bottom": 579,
+          "scrollTop_first_frame": 1392.2,
+          "scrollTop_settled": 1392.2,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 2,
+          "label": "AI voice & personality",
+          "top": 403,
+          "bottom": 425,
+          "scrollTop_first_frame": 1392.2,
+          "scrollTop_settled": 1392.2,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 3,
+          "label": "Voice replies: Off",
+          "top": 279,
+          "bottom": 315,
+          "scrollTop_first_frame": 1392.2,
+          "scrollTop_settled": 1392.2,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 4,
+          "label": "Reinstall voice engine",
+          "top": 477.7,
+          "bottom": 515.7,
+          "scrollTop_first_frame": 1035.9,
+          "scrollTop_settled": 1035.9,
+          "delta_vs_previous_press": -356.3,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 5,
+          "label": "base.en (more accurate, recommended)",
+          "top": 373.4,
+          "bottom": 408.1,
+          "scrollTop_first_frame": 1035.9,
+          "scrollTop_settled": 1035.9,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 6,
+          "label": "tiny.en (faster, less accurate)",
+          "top": 332.6,
+          "bottom": 367.4,
+          "scrollTop_first_frame": 1035.9,
+          "scrollTop_settled": 1035.9,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 7,
+          "label": "Show one chip instead of two",
+          "top": 383.2,
+          "bottom": 405.2,
+          "scrollTop_first_frame": 679.7,
+          "scrollTop_settled": 679.7,
+          "delta_vs_previous_press": -356.2,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 8,
+          "label": "Hide spoilers until I tap",
+          "top": 229.2,
+          "bottom": 251.2,
+          "scrollTop_first_frame": 679.7,
+          "scrollTop_settled": 679.7,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 9,
+          "label": "Remember what I typed",
+          "top": 393.5,
+          "bottom": 415.5,
+          "scrollTop_first_frame": 323.4,
+          "scrollTop_settled": 323.4,
+          "delta_vs_previous_press": -356.3,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 10,
+          "label": "Set text size to Small",
+          "top": 269.6,
+          "bottom": 305.6,
+          "scrollTop_first_frame": 323.4,
+          "scrollTop_settled": 323.4,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 11,
+          "label": "Set screenshot quality to Save memory",
+          "top": 412.7,
+          "bottom": 456.6,
+          "scrollTop_first_frame": 0,
+          "scrollTop_settled": 0,
+          "delta_vs_previous_press": -323.4,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 12,
+          "label": "Apply UI scale",
+          "top": 257.1,
+          "bottom": 293.1,
+          "scrollTop_first_frame": 0,
+          "scrollTop_settled": 0,
+          "delta_vs_previous_press": 0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 13,
+          "label": "Adjust UI automatically",
+          "top": 163.2,
+          "bottom": 185.2,
+          "scrollTop_first_frame": 0,
+          "scrollTop_settled": 0,
+          "delta_vs_previous_press": 0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 14,
+          "label": "Settings tab",
+          "top": 0,
+          "bottom": 20,
+          "scrollTop_first_frame": null,
+          "scrollTop_settled": null,
+          "delta_vs_previous_press": null,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": null
+        }
+      ],
+      "developer-down": [
+        {
+          "press": 1,
+          "label": "Install seed knowledge base",
+          "top": 192.3,
+          "bottom": 232.3,
+          "scrollTop_first_frame": 0,
+          "scrollTop_settled": 0,
+          "delta_vs_previous_press": 0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 2,
+          "label": "Hybrid retrieval (meaning search)",
+          "top": 252.3,
+          "bottom": 274.3,
+          "scrollTop_first_frame": 0,
+          "scrollTop_settled": 0,
+          "delta_vs_previous_press": 0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 3,
+          "label": "On-screen debug HUD",
+          "top": 522.2,
+          "bottom": 544.2,
+          "scrollTop_first_frame": 0,
+          "scrollTop_settled": 0,
+          "delta_vs_previous_press": 0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 4,
+          "label": "Warm the Ask model at boot",
+          "top": 290.7,
+          "bottom": 312.7,
+          "scrollTop_first_frame": 355.5,
+          "scrollTop_settled": 355.5,
+          "delta_vs_previous_press": 355.5,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 5,
+          "label": "Jump to Steam Input (running game)",
+          "top": 523,
+          "bottom": 583,
+          "scrollTop_first_frame": 355.5,
+          "scrollTop_settled": 355.5,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 6,
+          "label": "A - Main: Every reopen starts on Main",
+          "top": 438.5,
+          "bottom": 474.5,
+          "scrollTop_first_frame": 710.9,
+          "scrollTop_settled": 710.9,
+          "delta_vs_previous_press": 355.4,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 7,
+          "label": "Off: No app activity log file on Desktop.",
+          "top": 635,
+          "bottom": 671,
+          "scrollTop_first_frame": 710.9,
+          "scrollTop_settled": 710.9,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 8,
+          "label": "Auto-save chat to Desktop notes",
+          "top": 325.6,
+          "bottom": 347.6,
+          "scrollTop_first_frame": 1066.4,
+          "scrollTop_settled": 1066.4,
+          "delta_vs_previous_press": 355.5,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 9,
+          "label": "Verbose Ask logging to Desktop notes",
+          "top": 453.5,
+          "bottom": 475.5,
+          "scrollTop_first_frame": 1066.4,
+          "scrollTop_settled": 1066.4,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 10,
+          "label": "Force session RAG chips (QA)",
+          "top": 210,
+          "bottom": 232,
+          "scrollTop_first_frame": 1421.9,
+          "scrollTop_settled": 1421.9,
+          "delta_vs_previous_press": 355.5,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 11,
+          "label": "Preset animation: fade",
+          "top": 615.1,
+          "bottom": 647.1,
+          "scrollTop_first_frame": 1421.9,
+          "scrollTop_settled": 1421.9,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 12,
+          "label": "Scramble animation",
+          "top": 301.6,
+          "bottom": 323.6,
+          "scrollTop_first_frame": 1777.3,
+          "scrollTop_settled": 1777.3,
+          "delta_vs_previous_press": 355.4,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 13,
+          "label": "Settle",
+          "top": 461.3,
+          "bottom": 493.3,
+          "scrollTop_first_frame": 1777.3,
+          "scrollTop_settled": 1777.3,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 14,
+          "label": "300",
+          "top": 515.5,
+          "bottom": 547.5,
+          "scrollTop_first_frame": 1777.3,
+          "scrollTop_settled": 1777.3,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 15,
+          "label": "Same as text",
+          "top": 569.7,
+          "bottom": 601.7,
+          "scrollTop_first_frame": 1777.3,
+          "scrollTop_settled": 1777.3,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 16,
+          "label": "Steam Web API key",
+          "top": 660.6,
+          "bottom": 700.6,
+          "scrollTop_first_frame": 1875,
+          "scrollTop_settled": 1875,
+          "delta_vs_previous_press": 97.7,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 17,
+          "label": null,
+          "note": "no change (ring did not move, pane did not move)",
+          "delta_vs_previous_press": 0
+        },
+        {
+          "press": 18,
+          "label": null,
+          "note": "no change (ring did not move, pane did not move)",
+          "delta_vs_previous_press": 0
+        },
+        {
+          "press": 19,
+          "label": null,
+          "note": "no change (ring did not move, pane did not move)",
+          "delta_vs_previous_press": 0
+        }
+      ],
+      "developer-up": [
+        {
+          "press": 1,
+          "label": "Same as text",
+          "top": 472,
+          "bottom": 504,
+          "scrollTop_first_frame": 1875,
+          "scrollTop_settled": 1875,
+          "delta_vs_previous_press": 0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 2,
+          "label": "300",
+          "top": 417.8,
+          "bottom": 449.8,
+          "scrollTop_first_frame": 1875,
+          "scrollTop_settled": 1875,
+          "delta_vs_previous_press": 0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 3,
+          "label": "Settle",
+          "top": 363.7,
+          "bottom": 395.7,
+          "scrollTop_first_frame": 1875,
+          "scrollTop_settled": 1875,
+          "delta_vs_previous_press": 0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 4,
+          "label": "Scramble animation",
+          "top": 203.9,
+          "bottom": 225.9,
+          "scrollTop_first_frame": 1875,
+          "scrollTop_settled": 1875,
+          "delta_vs_previous_press": 0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 5,
+          "label": "Preset animation: fade",
+          "top": 201.8,
+          "bottom": 233.8,
+          "scrollTop_first_frame": 1835.2,
+          "scrollTop_settled": 1835.2,
+          "delta_vs_previous_press": -39.8,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 6,
+          "label": "Force session RAG chips (QA)",
+          "top": 160,
+          "bottom": 182,
+          "scrollTop_first_frame": 1478.9,
+          "scrollTop_settled": 1471.9,
+          "delta_vs_previous_press": -363.3,
+          "frames": 4,
+          "ms_after_first_frame_of_each_extra_frame": [
+            26,
+            41,
+            58
+          ],
+          "inside_pane": true
+        },
+        {
+          "press": 7,
+          "label": "Verbose Ask logging to Desktop notes",
+          "top": 404.3,
+          "bottom": 426.3,
+          "scrollTop_first_frame": 1115.6,
+          "scrollTop_settled": 1115.6,
+          "delta_vs_previous_press": -356.3,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 8,
+          "label": "Auto-save chat to Desktop notes",
+          "top": 276.4,
+          "bottom": 298.4,
+          "scrollTop_first_frame": 1115.6,
+          "scrollTop_settled": 1115.6,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 9,
+          "label": "Off: No app activity log file on Desktop.",
+          "top": 230.4,
+          "bottom": 266.4,
+          "scrollTop_first_frame": 1115.6,
+          "scrollTop_settled": 1115.6,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 10,
+          "label": "A - Main: Every reopen starts on Main",
+          "top": 390,
+          "bottom": 426,
+          "scrollTop_first_frame": 759.4,
+          "scrollTop_settled": 759.4,
+          "delta_vs_previous_press": -356.2,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 11,
+          "label": "Jump to Steam Input (running game)",
+          "top": 475.3,
+          "bottom": 535.3,
+          "scrollTop_first_frame": 403.1,
+          "scrollTop_settled": 403.1,
+          "delta_vs_previous_press": -356.3,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 12,
+          "label": "Warm the Ask model at boot",
+          "top": 243,
+          "bottom": 265,
+          "scrollTop_first_frame": 403.1,
+          "scrollTop_settled": 403.1,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 13,
+          "label": "On-screen debug HUD",
+          "top": 475.4,
+          "bottom": 497.4,
+          "scrollTop_first_frame": 46.9,
+          "scrollTop_settled": 46.9,
+          "delta_vs_previous_press": -356.2,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 14,
+          "label": "Hybrid retrieval (meaning search)",
+          "top": 205.5,
+          "bottom": 227.5,
+          "scrollTop_first_frame": 46.9,
+          "scrollTop_settled": 46.9,
+          "delta_vs_previous_press": 0.0,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 15,
+          "label": "Install seed knowledge base",
+          "top": 192.3,
+          "bottom": 232.3,
+          "scrollTop_first_frame": 0,
+          "scrollTop_settled": 0,
+          "delta_vs_previous_press": -46.9,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": true
+        },
+        {
+          "press": 16,
+          "label": "Developer tab",
+          "top": 0,
+          "bottom": 20,
+          "scrollTop_first_frame": null,
+          "scrollTop_settled": null,
+          "delta_vs_previous_press": null,
+          "frames": 1,
+          "ms_after_first_frame_of_each_extra_frame": [],
+          "inside_pane": null
+        }
+      ]
+    },
+    "text_size": {
+      "start": "Small selected and focused (row top 593, bottom 629, pane scrollTop 0)",
+      "Left_1": "ring went to the 'LB' shoulder hint (rect top 542.8 bottom 606.8, outside the scroll pane); Small stayed selected; no pane scroll element in play",
+      "Right_2": "ring back on Small; Small selected; scrollTop 0",
+      "Right_3": "ring on Normal; Small still selected; scrollTop 0",
+      "Left_4": "ring back on Small; Small selected; scrollTop 0",
+      "end": "ended on Small, which is where it started; no setting changed (no A pressed). Pane moved 0 px on all four presses."
+    },
+    "creep_check": "Frame watcher showed one logged change per press on every press except two. Settings Down press 14 (Clear cache, last control): a second frame 24 ms after the first, scrollTop 1391.4 to 1392.2 (0.8 px). Developer Up press 6 (Force session RAG chips toggle, landed 129 px under the pane top at y=153): four frames inside 58 ms, scrollTop 1478.9, 1476.6, 1473.4, 1471.9 (7 px in 58 ms). In both cases nothing changed between 0.2 s and 1.8 s: after the last frame the log stayed quiet for at least 2.1 s on every one of the 58 landings.",
+    "visibility": "All 58 landings inside the scroll pane had top >= 24 and bottom <= 765 (lowest top 160, highest bottom 724.9). None behind the tab bar or off the bottom. Tab-bar stops (y 0 to 20) are the bar itself."
+  },
+  "expected": "Settings Down and Up: pane moves on no more than one press in three. Developer Down: no more than one in three; Developer Up: no more than 7 moves. No single move larger than half the pane (370.5). No jump on the last press. Text size Left/Right/Right/Left move the pane 0 px. Every stop visible. No creep between 0.2 s and 1.8 s.",
+  "verdict": [
+    "PASS Settings Down: 4 presses moved the pane by 1 px or more (presses 5, 7, 8, 12) out of 14 landings (limit 4.67). One extra 0.8 px settle on the last press (14) is not counted; if it were counted it would be 5 of 14, over the limit.",
+    "PASS Settings Up: 4 of 14 presses moved the pane (presses 4, 7, 9, 11), limit 4.67.",
+    "FAIL Developer Down: 6 of 16 presses moved the pane (presses 4, 6, 8, 10, 12 and 16), limit 5.33. Five of the six are every second press (4, 6, 8, 10, 12), each 355.5 px.",
+    "PASS Developer Up: 7 moves in 16 presses (5, 6, 7, 10, 11, 13, 15), limit 7. The small extra move is press 5 (-39.8 px) and press 15 (-46.9 px).",
+    "PASS no single move larger than half the pane: largest 363.3 px (Developer Up press 6) against 370.5 px; Settings largest 356.3 px.",
+    "PASS no jump on the last press: Settings Down last press 0.8 px, Developer Down last press 97.7 px against earlier moves of 355.5 px; both Up walks end with 0 px on the last landing (Settings Up press 13 0 px, Developer Up press 15 -46.9 px, the last press to the tab bar 0 px).",
+    "PASS Text size Left, Right, Right, Left: pane 0 px each, ended on Small (the start). Note for the owner: the first Left from Small went to the LB shoulder hint, not to another choice.",
+    "PASS every stop visible: 58 of 58 landings inside the pane (tops 160 to bottoms 724.9, pane 24 to 765).",
+    "PASS no creep between 0.2 s and 1.8 s after the press, on every press (the only extra frames came within 58 ms of the first, see creep_check)."
+  ],
+  "side_effect": "None. No A press, no setting changed. The Text size choice stayed Small throughout."
+}

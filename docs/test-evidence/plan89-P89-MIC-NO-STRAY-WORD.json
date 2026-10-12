@@ -1,0 +1,37 @@
+{
+  "row": "P89-MIC-NO-STRAY-WORD",
+  "build_commit": "f5e4dc12, deployed this block",
+  "deck_time_local": "Sun 2026-10-11 about 23:23 to 23:27 EDT (Deck clock)",
+  "screen": "MONITOR: Quick Access page window 855 x 766, screen 1500 x 843.",
+  "setup": {
+    "old_values": "voice_stt_model base.en (settings file); no voice_capture_target file existed",
+    "changed": "STT model set to tiny.en with the plugin's own Settings control (walked to the row, focus read 'tiny.en (faster, less accurate)', then A as its own step; file read back tiny.en)",
+    "pretend_mic": "pactl load-module module-null-sink sink_name=p89mic returned module 536870916; voice_capture_target = p89mic.monitor; sentences uploaded to /tmp/p89_s15.wav (478124 bytes, 15.2 s of audio) and /tmp/p89_s21.wav (670284 bytes, 21.2 s). Played with a small script under systemd-run --user --collect that wrote the play start and end times to files.",
+    "page_script": "window.__p89 sampled the question box text and the Voice button's label every 250 ms (459 samples), removed at the end."
+  },
+  "pressed": "Box empty (send-question script, first run it was empty already; second run --clear, VERIFIED). Ring walked to Ask then Left to Voice input, focus read 'Voice input'. A alone. The play script was started in the same step (started 0.3 s after the A press). After the audio ended I waited, read focus ('Stop voice input') and the box, then A on Stop, then waited for 'Voice input' again and read the final text.",
+  "seen": {
+    "sentence_15s": {
+      "play_start_end_deck_clock": "1791775479.59 to 1791775494.83 (15.2 s)",
+      "silence_after_audio_end_before_Stop_press": "5.4 s (page clock 1791775500.26 at the read just before A; focus read 'Stop voice input')",
+      "label_stayed": "Stop voice input the whole time; changed to 'Finishing voice input' at 23.4 s after play start, then 'Voice input' at 24.7 s",
+      "text_growth": "1.7 s: 'How do I...'; 4.4 s: 'How do I beat the final boss in this game?'; 8.4 s: '... Because my health keeps running'; 11.4 s: whole sentence in the box and unchanged to the end",
+      "final_text": "How do I beat the final boss in this game? And which weapon should I upgrade first? Because my health keeps running out before I can reach the second phase of the fight."
+    },
+    "sentence_21s": {
+      "play_start_end_deck_clock": "1791775523.26 to 1791775544.46 (21.2 s)",
+      "silence_after_audio_end_before_Stop_press": "7.8 s (page clock 1791775552.2 at the read just before A; focus read 'Stop voice input')",
+      "label_stayed": "Stop voice input the whole time; 'Finishing voice input' at 31.3 s after play start, 'Voice input' at 32.5 s",
+      "text_growth": "9.5 s: '... I never have enough healing items when I get there.'; 12.3 s: '... Should I go back and farm the early levels for'; 17.3 s: '... that makes the fight easier?' (whole sentence, 252 characters) and unchanged to the end",
+      "final_text": "I keep dying to the boss with the big hammer in the second area, and I never have enough healing items when I get there. Should I go back and farm the early levels first, or is there a better weapon I can pick up on the way that makes the fight easier?"
+    },
+    "put_back": "voice_stt_model back to base.en (set with the plugin's own Settings control, A on 'base.en (more accurate, recommended)' with focus read first; settings file read back base.en). Null sink module 536870916 unloaded (0 p89mic sinks left), voice_capture_target removed, /tmp/p89_* wavs and scripts removed, no p89 systemd units left, page script removed, box left empty."
+  },
+  "expected": "Final text holds the whole sentence and ends with the sentence's own last word, with no extra word after it (earlier run ended both with ' you'), after 4 s of silence before Stop.",
+  "verdict": [
+    "PASS sentence 15 s: final text holds the whole sentence and ends with 'fight.' with no extra word (silence before Stop: 5.4 s)",
+    "PASS sentence 21 s: final text holds the whole sentence and ends with 'easier?' with no extra word (silence before Stop: 7.8 s)",
+    "FINDING two tries only, both silences were longer than the 4 s asked for (5.4 s and 7.8 s), so a shorter pause was not tried"
+  ],
+  "side_effect": "Settings changed and put back: voice_stt_model base.en -> tiny.en -> base.en (verified in the file). Nothing else touched. The page logger kept a 3 s gap in its early samples (timer ran slower while the pane was changing tabs); it ran normally during both dictations."
+}

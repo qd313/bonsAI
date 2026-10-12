@@ -1,0 +1,41 @@
+{
+  "row": "P89-TEXT-SIZE-EVERYWHERE",
+  "build_commit": "f5e4dc12 (deployed this block, see plan89-H0-DEPLOY)",
+  "deck_time_local": "Sun 2026-10-11 about 23:16 to 23:40 EDT",
+  "screen": "MONITOR: Quick Access page window 855 x 766, screen 1500 x 843. The popup lives on the main Steam window (Steam Big Picture Mode page).",
+  "setup": "Text size read as Small at the start (settings file chat_text_size = small). 'size check' put in the question box with the send-question script (VERIFIED) and left in the box for all three sizes so the typed-text size could be read. Order Normal, Large, Small. Each choice was set with the D-pad on the plugin's own Text size row: Right to the choice, focus read (aria-label 'Set text size to Normal' / 'Large'), then A as its own step; selected choice read back (aria-pressed) and the settings file read over SSH (normal, then small at the end). Measurements taken with page scripts on the Quick Access page: getComputedStyle font-size and getBoundingClientRect height.",
+  "pressed": "RB to Settings; Right, A (Normal); RB to Permissions, Developer, back to Main; RB RB to Settings; Right, A (Large); RB to Permissions, Developer, Main; Settings, walk Down to Clear cache..., A (Large popup), B; walk up, A on Small (back to Small); walk down again, A on Clear cache... (Small popup), B.",
+  "seen": {
+    "small_normal_large_fontsize_px_expected_in_brackets": {
+      "tab_name_Main/Settings/Permissions/Developer": "9.9 / 11 / 12.65 (all four tabs the same at each size) [11 / 12.65 / 9.9 listed as Normal/Large/Small: Normal 11, Large 12.65, Small 9.9]",
+      "chat_name_in_Decky_bar": "Small 11.7, Normal 13, Large 14.95 [13 / 14.95 / 11.7]",
+      "chat_name_small_second_line_chat_1_of_7": "Small 7.2, Normal 8, Large 9.2 [8 / 9.2 / 7.2]",
+      "chip_words": "Small 10.8, Normal 12, Large 13.8 [12 / 13.8 / 10.8]",
+      "question_box_typed_text": "Small 10.8, Normal 12, Large 13.8 [12 / 13.8 / 10.8]",
+      "answer_words": "Small 10.8, Normal 12, Large 13.8 [12 / 13.8 / 10.8]; line height Small 13.5, Normal 15, Large 17.25",
+      "Text_size_row_description_on_Settings": "Small 10.8, Normal 12, Large 13.8 [12 / 13.8 / 10.8]"
+    },
+    "box_heights_px_Small_Normal_Large": {
+      "tab_bar": "20 / 20 / 20",
+      "chat_name_row_in_Decky_bar": "27.99 / 27.99 / 27.99",
+      "chat_name_words_line": "15.99 / 15.99 / 15.99",
+      "suggestion_chip_box": "29.99 / 29.99 / 29.99",
+      "question_box_input": "42.99 / 43.99 / 47.00",
+      "question_box_whole_host": "73.56 / 74.56 / 77.55",
+      "answer_paragraph_height_(wraps, not a pass line)": "54 / 74.95 / 103.42"
+    },
+    "permissions_and_developer_tabs": "Tab name Small 9.9, Normal 11, Large 12.65 on both. Tab bar height 20 on both at every size. RB mark right edge 344 and bar right edge 348 at Small, Normal and Large: the RB mark stays inside the bar (4 pt to spare). On Large the Developer name's right edge is 282.3 and the RB mark's left edge 313.",
+    "steam_toggle_row_finding_d": "The Steam ToggleField label 'Remember what I typed' is 16 px at Small, Normal and Large: it did NOT change size. Its row box is 30 high at all three sizes (the label line is 22 high): it did not get taller. The description text under the toggles does change (Text size row description 10.8 / 12 / 13.8).",
+    "popup_finding_e": "Settings 'Clear cache...' opens Steam's own box 'Clear session cache?' (title 22 px, body 16 px on a 20 px line, buttons 16 px). Same numbers at Small and at Large: the popup's words did NOT change size. Ring was on 'Keep cache' on open; B closed it each time, nothing was cleared.",
+    "put_back": "Text size back to Small (settings file read back: chat_text_size small). 'size check' still in the question box at the end of this check; cleared at the end of the block (see handover-H)."
+  },
+  "expected": "Normal/Large/Small numbers: tab name 11 / 12.65 / 9.9; chat name 13 / 14.95 / 11.7; its small line 8 / 9.2 / 7.2; chip words 12 / 13.8 / 10.8; question text 12 / 13.8 / 10.8; Text size row description 12 / 13.8 / 10.8; answer 12 / 13.8 / 10.8. Pass lines: (a) larger on Large, smaller on Small, within 0.2 px; (b) every box height (tab bar, chip, question box, Decky name row) the same on all three; (c) on Large the RB mark stays inside the bar on Permissions and Developer.",
+  "verdict": [
+    "PASS (a) every measured word matches the expected number exactly (0.0 px off) at Normal, Large and Small",
+    "FAIL (b) the question box is not the same height on the three sizes: the input is 42.99 (Small), 43.99 (Normal), 47.00 (Large) px, and the whole question-box block is 73.56 / 74.56 / 77.55 px. The tab bar (20), the chip (29.99) and the Decky chat-name row (27.99) ARE the same on all three",
+    "PASS (c) on Large the RB mark stays inside the 300-point bar on both Permissions and Developer (RB right 344, bar right 348)",
+    "PASS (d, findings only) Steam toggle label does not change size (16 px at all three) and its row does not get taller (30 at all three)",
+    "PASS (e, findings only) popup words did not change size (22 and 16 px at both Small and Large)"
+  ],
+  "side_effect": "Text size was changed Small to Normal to Large to Small and ended on Small as found; two Steam 'Clear session cache?' boxes were opened and cancelled with B (nothing cleared). Two RB presses sent in one parallel batch landed as one tab step once, so the tab was one stop short (Ollama instead of Settings); no harm, one extra RB fixed it. The 'size check' text I typed is still in the question box."
+}

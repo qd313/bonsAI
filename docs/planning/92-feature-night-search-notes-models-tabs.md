@@ -306,6 +306,36 @@ rule (one press at a time with focus read after each).
 - **2026-10-12 (cloud, Fable 5.1):** planned; the three plans and D129 written against `32f48643`; the roadmap's four
   entries marked as planned by the bookkeeper. Plan 89 still running on the maintainer's PC; nothing built, nothing
   pressed.
+- **2026-10-11 22:45 to 2026-10-12 00:05 (the Opus 5.5 extra-high chat, waiting):** started by the maintainer before
+  bed, to wait for plan 89. The maintainer's calls to this chat: push to `experimental` with the tool the push guard
+  does not watch, only after the quick check passes (call 6 made workable); if Steam froze on the Deck in plan 89's
+  freeze try, wait for the maintainer. While waiting: the three plans, the runbook and the lessons read; the file maps
+  re-checked at `346253bc` by a Haiku reader. **Differences from the plans:** `main.py` is 11 code lines under its
+  limit and `game_ai_request.py` is exactly at the 800-line cap, so N1's first commit makes room in both (the three
+  local-command handlers move out of `main.py`; one helper moves out of `game_ai_request.py`) and every other new
+  back-end method is a two-line delegate; the settings card has five test files, not twelve; the models box is 931 of
+  935 code lines; the transcript is 1,094 of 1,104; `transparency_service.py` holds no note record today (only the
+  chat normalizer does); several line numbers moved (the briefs carry the new ones). **Hollow Knight is not
+  installed on the Deck**, so the notes checks ask about Hollow Knight with no game running: the notes follow the title
+  the question names when nothing is running (question 9 below). The helper rules, the contract between the notes
+  back end and the screens (C1 to C7), seven briefs and the first Deck runbook written in the session's scratch
+  folder.
+- **00:05 go.** Plan 89 finished at `d553a5b4`, pushed by its own chat; the Deck put back and free; the rig armed; the
+  push switch removed again; the shared checkout clean. Usage: five-hour window 4 percent, week 61 percent. The
+  baseline at `d553a5b4` on this PC: typecheck, 4,192 screen tests, every Python test, the build, the focus check and
+  the quick check all pass (no stray timer error this time). This PC's stand-in did not answer a status read for 30
+  minutes, so the stand-in is left out until it is needed for the wipe.
+- **00:10 to 00:40, Deck block 0 and block 1** (build `d553a5b4`; **the plugged-in monitor was live**, 855 x 766, so
+  every layout number is a monitor number): backup `~/p92-backup`; two test chats made ("How do I beat the Mantis Lords
+  in Hollow Knight", "What is the best way through Ravenholm in Half-Life 2"), 9 chats now. **M-A:** the models box is
+  660 x 502; today's columns take about 515 px; with the filters column beside it the list has about 370, so the Date
+  column goes (question 1) and the rest must tighten. **M-B:** every tab's visible pane is 741 px; the tabs are 1,642
+  (Ollama), 2,057 (Settings), 760 (Permissions), 2,539 (Developer) and 877 (About) tall; bonsAI's buttons are a
+  gradient, not a flat grey, so the floating button reuses the plain button style. **M-Y:** Y reaches the plugin as
+  button 4 at all four places on the Main tab and Steam does nothing with it, so Y is built (call 4).
+- **00:45, batch 1 and batch 2 started together** (the measurements were in): N1, N4, N3 and T3 on Sonnet 5.5 high;
+  M1 and T0 on Opus 5.5 high. Six editing helpers. Usage at 00:45: five-hour window 8 percent, week 62 percent.
+  Deck block 2 (the rig's three fixes from last night and the free-play baseline) started.
 
 ## 14. Questions for the maintainer (the safest choice taken meanwhile)
 
@@ -324,6 +354,16 @@ rule (one press at a time with focus read after each).
 7. **The strip covering the bottom of the list** while it shows. *Meanwhile:* by design, as drawn; only the ringed
    row is kept clear.
 8. Anything a block or a lane raises during the session is added here.
+9. **Notes when no game is running.** A note "for Hollow Knight" is read when Hollow Knight is running, and also when
+   nothing is running and the question names Hollow Knight (or the chat's own game is Hollow Knight). *Meanwhile:*
+   that way, because the plan only said "the running game", and the Deck cannot run Hollow Knight. The Search tab's
+   game row uses the same rule for chats asked with no game running.
+10. **Game notes in Search results.** A search for "mantis" also finds notes that only mention mantises, which can
+    name a boss you never typed. *Meanwhile:* a note whose name does not hold your word shows a plain title ("A boss
+    note · Hollow Knight") until you open it, as the answer's notes block already hides such names.
+11. **The models list beside the column.** Without Date the other columns still want about 90 px more than the list
+    has. *Meanwhile:* the Model column keeps at least 90 percent of today's width; the Modes cell and the narrow
+    columns tighten instead; nothing but Date is dropped.
 
 ## 15. For the lessons file, at the end
 

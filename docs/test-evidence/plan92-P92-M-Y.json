@@ -1,0 +1,31 @@
+{
+  "row": "P92-M-Y",
+  "build_commit": "d553a5b4 (deployed to the Deck 2026-10-12 00:11 EDT)",
+  "deck_time_local": "2026-10-12 00:19 to 00:21 EDT",
+  "screen": "MONITOR (not the Deck's own screen). Quick Access page window 855 x 766 CSS px at devicePixelRatio 1.28. A Y press is not a layout measurement, so the screen matters little here.",
+  "setup": "Main tab. Page logger installed on the Quick Access page's document (source: scratchpad deck/ylogger.js): window.__ylog = [] and a capture-phase 'vgp_onbuttondown' listener that pushes {t, button, focus label}. Cleared before each press. After each press: read log, focused element, whether the panel is still open, whether a Steam dialog or on-screen keyboard exists in the main Steam window, and one screenshot. Test chats used: 'What is the best way through Ravenholm in Half-Life 2' (question box, tab bar, chip) and 'How do I beat the Mantis Lords in Hollow Knight' (answer). No game running, no model loaded.",
+  "pressed": [
+    "Y on the question box (see side_effect: ring not read before this press)",
+    "Y on the tab bar (ring read first: 'bonsAI tab')",
+    "X on the tab bar (comparison)",
+    "Y on the first suggestion chip (ring read first: 'What TDP should I use for menus and idle?', left-most chip)",
+    "Y on the first stop of the answer in the Mantis Lords chat: the 'Show reasoning - 17 s' fold (ring read first)"
+  ],
+  "seen": {
+    "question_box": {"log": [{"button": 4, "focus": "Describe the level, boss, or puzzle you're stuck on"}], "after": "ring still on the question box; panel open on Main tab; no keyboard, no dialog, nothing new on screen (screenshot plan92-P92-M-Y-1-questionbox.png); the box was empty and still empty", "screenshot": "plan92-P92-M-Y-1-questionbox.png"},
+    "tab_bar_Y": {"log": [{"button": 4, "focus": "bonsAI tab"}], "after": "ring still on 'bonsAI tab'; panel open; tab did not change; no dialog or keyboard; screenshot looks the same as before", "screenshot": "plan92-P92-M-Y-2-tabbar-Y.png"},
+    "tab_bar_X_comparison": {"log": [{"button": 3, "focus": "bonsAI tab"}], "after": "ring still on 'bonsAI tab'; panel open; no dialog, no keyboard, nothing new on screen. So on this tab bar X also reached the plugin as button 3 and Steam did nothing visible with it either; the log alone cannot tell a 'used' button from a free one here.", "screenshot": "plan92-P92-M-Y-3-tabbar-X.png"},
+    "first_chip": {"log": [{"button": 4, "focus": "What TDP should I use for menus and idle?"}], "after": "ring still on that chip; the chip was NOT activated (the question box stayed empty, the chat still has 1 turn); no dialog, no keyboard; panel open", "screenshot": "plan92-P92-M-Y-4-chip.png"},
+    "answer_first_stop": {"log": [{"button": 4, "focus": "Show reasoning · 17 s"}], "after": "ring still on the fold; the fold did not open (label still 'Show reasoning · 17 s'); panel open; chat unchanged ('chat 2 of 9'); no dialog, no keyboard. Note: in this chat the answer text itself is not a stop; the first stop inside the answer is the reasoning fold, then the 'Was this helpful' buttons. The runbook's 'first section' was read as the first stop in the answer.", "screenshot": "plan92-P92-M-Y-5-answer.png"},
+    "main_steam_window_dialogs_after_each_press": "0 modal dialogs and no keyboard element after every press (read on the Steam Big Picture page)"
+  },
+  "expected": "Y is free: the log shows button 4 at every place and nothing in Steam changed (panel open, focus unchanged, nothing new on screen).",
+  "verdict": [
+    "PASS - question box: Y arrived as button 4, nothing changed (with the side_effect note below about the press order).",
+    "PASS - tab bar: Y arrived as button 4, nothing changed.",
+    "PASS - first suggestion chip: Y arrived as button 4, chip not activated, nothing changed.",
+    "PASS - answer (first stop, the reasoning fold, in the Mantis Lords test chat): Y arrived as button 4, nothing changed.",
+    "UNCLEAR - the X comparison: X arrived as button 3 and also changed nothing on screen, so it gave no picture of a 'used' button. Whether Steam itself keeps Y for something (for example search) outside this panel was not tested."
+  ],
+  "side_effect": "I pressed Y on the question box before reading focus. The ring had landed on the question box by itself when RB wrapped round to the Main tab, and the logger's own 'focus' field recorded the question box at the moment of the press, so the result stands, but the press order broke the 'read focus first' rule. Y changed nothing on the Deck. No A was pressed on the question box at any point."
+}

@@ -1,0 +1,50 @@
+{
+  "row": "P92-M-MODELS-BOX",
+  "build_commit": "d553a5b4 (deployed to the Deck 2026-10-12 00:11 EDT)",
+  "deck_time_local": "2026-10-12 00:15 EDT",
+  "screen": "MONITOR (not the Deck's own screen). Quick Access page window 855 x 766 CSS px at devicePixelRatio 1.28 (same numbers plan 89 saw on the monitor). The AI models box lives in the Steam main window, which read 1500 x 844 at 1.28; the screenshot is 1920 x 1080. The layout numbers below are monitor numbers, not wanted-on-Deck numbers.",
+  "setup": "Ollama tab, ring walked Down to 'AI models' (13 presses, read after each by the walk tool), ring confirmed on 'AI models' button, then A as its own press. Filters panel NOT opened. The settings had 2 filters on ('Also try open-weight models, Essentials only'), so only 4 rows exist (3 Deck Essentials + 1 'Other installed'). The Deck's own AI had been unloaded; Ollama has 2 models installed (gemma4:e2b-it-qat, nomic-embed-text).",
+  "pressed": ["DOWN x13 (via walk, AI models found)", "A (open box)", "B (close box)"],
+  "seen": {
+    "ring_when_box_opens": {"label": "Advanced ›", "rect_left_top_w_h": [967, 233, 66, 22], "note": "ring opens on the 'Advanced' link at the top right of the box, not on a model row. Never pressed A inside the box."},
+    "ring_after_B": "back on the 'AI models' button on the Ollama tab; box gone (no .bonsai-models-hub-shell in the page)",
+    "box_is_in": "a Steam modal dialog in the main Steam window (not inside the Quick Access panel)",
+    "box_outer_dialog_left_top_w_h": [420, 170.5, 660, 501.5],
+    "box_inner_content_left_top_w_h": [463.5, 203.1, 572.9, 436.4],
+    "box_body_left_top_w_h": [463.5, 241.1, 572.9, 398.4],
+    "model_list_box_left_top_w_h": [463.5, 358, 568.9, 215.5],
+    "model_list_clientHeight": 215,
+    "model_list_scrollHeight": 215,
+    "model_list_scrolls": "No. Nothing inside the dialog scrolls (no element with scrollHeight > clientHeight). The list is only as tall as its 4 rows plus 2 group titles.",
+    "table_header_columns_left_to_right_left_width": [
+      ["PULL", 469.5, 28],
+      ["MODEL", 503.5, 124.3],
+      ["SIZE", 633.9, 48.8],
+      ["DATE", 688.7, 55.1],
+      ["MODES", 749.7, 88.8],
+      ["DECK FIT", 844.5, 63.9],
+      ["TRY", 914.5, 78],
+      ["DEL", 998.4, 28]
+    ],
+    "model_column_first_rows": [
+      {"name": "gemma4:e2b-it-qat", "clientWidth": 72, "scrollWidth": 85, "cut_off": true},
+      {"name": "qwen3.5:4b", "clientWidth": 51, "scrollWidth": 51, "cut_off": false},
+      {"name": "qwen2.5vl:3b", "clientWidth": 58, "scrollWidth": 58, "cut_off": false},
+      {"name": "nomic-embed-text:latest", "clientWidth": 72, "scrollWidth": 108, "cut_off": true}
+    ],
+    "model_name_cells_cut_off": "2 of the 4 rows that exist (the box shows only 4 rows with these filters, not ten). The screenshot shows them cut with '...': 'gemma4:e2b-i...' and 'nomic-embed-...'. The name's holder is 72 px wide inside a 124 px Model column; a FOSS / licence chip sits beside the name and takes the rest.",
+    "rows_visible_without_scrolling": "4 of 4 (every row box sits wholly inside the list box: tops 408.4, 443.2, 478, 538.7; heights 34.8)",
+    "row_height": 34.8,
+    "filters_row_left_top_w_h": [463.5, 296, 568.9, 26],
+    "filters_row_height": 26,
+    "filters_row_top_offset_from_body_top": 54.9,
+    "other_parts_seen": "top strip with Advanced link (y 241), counts line 'Installed 2 · 4.3 GB / Queue 0 / Live catalog · Live sizes' (y 275, height 15), Filters row (y 296), 'Try order for Text / Pictures / Reset order' row (y 328, height 24), list (y 358), then Done and Cancel buttons under the list (seen in the screenshot only)."
+  },
+  "expected": "Numbers for sizing the new filters column; no pass/fail expectation in the runbook other than the box opens and B returns focus to 'AI models'.",
+  "verdict": [
+    "PASS - measurement taken: box opened, all asked numbers read, B closed it and the ring was back on the 'AI models' button.",
+    "UNCLEAR - the runbook asked for the first ten model rows; with the maintainer's current filters (Essentials only) only 4 rows exist, so 6 of the 10 could not be measured. Filters panel was not opened as instructed, so the full-catalogue list was not measured."
+  ],
+  "side_effect": "none. Pressed A only on the 'AI models' button (ring confirmed first). Never pressed A inside the box.",
+  "screenshot": "plan92-P92-M-MODELS-BOX.png (monitor, 1920x1080; a performance overlay at top left is Steam's own, not the plugin)"
+}

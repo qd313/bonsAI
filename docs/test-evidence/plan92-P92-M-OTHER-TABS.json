@@ -1,0 +1,61 @@
+{
+  "row": "P92-M-OTHER-TABS",
+  "build_commit": "d553a5b4 (deployed to the Deck 2026-10-12 00:11 EDT)",
+  "deck_time_local": "2026-10-12 00:17 to 00:25 EDT",
+  "screen": "MONITOR (not the Deck's own screen). Quick Access page window 855 x 766 CSS px at devicePixelRatio 1.28. All numbers below are monitor numbers.",
+  "setup": "Main tab, ring on the tab bar, RB to move between tabs. Each tab: read the scroll pane, tab bar and first control the ring reaches after one Down press. Never pressed A. Developer tab IS shown. Ollama 'bottom band' walk done one Down press at a time with a page read after each press (each read came about 3 to 6 s after its press, so the 1.8 s settle was met).",
+  "pressed": ["RB (to each tab)", "DOWN once per tab then UP once", "Ollama only: DOWN x13 one at a time to the last control, one more DOWN (no move), then UP x13 back to the bar (walk tool)"],
+  "seen": {
+    "tab_bar_box_all_tabs": {"left": 48, "top": 0, "width": 300, "height": 20, "bottom": 20, "note": "same box on every tab; the scroll pane starts at top 24"},
+    "tab_pane_box_all_tabs": {"left": 48, "top": 24, "width": 300, "height": 741, "bottom": 765},
+    "tabs": {
+      "Ollama": {"clientHeight": 741, "scrollHeight": 1642, "scrollTop_at_open": 0, "pane_top": 24, "pane_bottom": 765, "first_control_after_one_Down": "'Run AI on this Deck' toggle, rect left 290 top 88 width 38 height 22", "plan87_monitor_height": 1718, "difference_vs_plan87": -76},
+      "Settings": {"clientHeight": 741, "scrollHeight": 2057, "scrollTop_at_open": 0, "pane_top": 24, "pane_bottom": 765, "first_control_after_one_Down": "'Adjust UI automatically' toggle, rect left 290 top 156.5 width 38 height 22", "plan87_monitor_height": 2133, "difference_vs_plan87": -76},
+      "Permissions": {"clientHeight": 741, "scrollHeight": 760, "scrollTop_at_open": 0, "pane_top": 24, "pane_bottom": 765, "first_control_after_one_Down": "'Read game & screenshot context' toggle, rect left 290 top 170.3 width 38 height 22", "plan87_monitor_height": 786, "difference_vs_plan87": -26, "lock_banner": "none seen: the only 'lock' in the tab text is the word 'blocks'"},
+      "Developer": {"clientHeight": 741, "scrollHeight": 2539, "scrollTop_at_open": 0, "pane_top": 24, "pane_bottom": 765, "first_control_after_one_Down": "'Install seed knowledge base' button, rect left 64 top 182.7 width 268 height 40", "plan87_monitor_height": 2820, "difference_vs_plan87": -281},
+      "About": {"clientHeight": 741, "scrollHeight": 877, "scrollTop_at_open": 0, "pane_top": 24, "pane_bottom": 765, "first_control_after_one_Down": "'Follow system' button, rect left 64 top 365.2 width 268 height 40", "plan87_monitor_height": 915, "difference_vs_plan87": -38}
+    },
+    "comparison_note": "Plan 87's numbers are said (by the runbook) to be monitor numbers. This set is also monitor. The five heights are all smaller now (by 26 to 281 px); the question box / tab changes since plan 87 are the likely reason, not measured here. The visible height (741) is the same on every tab.",
+    "ollama_button_fill": {
+      "note": "Steam-style buttons here are drawn with a gradient image, not a flat fill: backgroundColor is transparent rgba(0,0,0,0) on every one.",
+      "AI models button, not focused (also read focused, identical)": {"backgroundColor": "rgba(0, 0, 0, 0)", "backgroundImage": "linear-gradient(rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 100%)", "textColor": "rgb(232, 238, 245)", "borderColor": "rgba(255, 255, 255, 0.22)"},
+      "AI models button, focused": {"backgroundColor": "rgba(0, 0, 0, 0)", "backgroundImage": "linear-gradient(rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 100%)", "textColor": "rgb(232, 238, 245)", "outline": "rgba(255,255,255,0.88) solid 1.5625px", "boxShadow": "rgba(255,255,255,0.45) 0 0 0 1px inset"},
+      "Update AI & models button, focused (blue 'primary' kind)": {"backgroundColor": "rgba(0, 0, 0, 0)", "backgroundImage": "linear-gradient(rgba(56,189,248,0.22) 0%, rgba(14,116,144,0.35) 100%)", "textColor": "rgb(224, 242, 254)", "borderColor": "rgba(56,189,248,0.55)"},
+      "Browse models button, not focused (same blue kind)": {"backgroundImage": "linear-gradient(rgba(56,189,248,0.15) 0%, rgba(14,116,144,0.28) 100%)", "textColor": "rgb(224, 242, 254)", "borderColor": "rgba(56,189,248,0.45)"},
+      "Test connection / Update knowledge base, not focused (plain kind)": {"backgroundImage": "linear-gradient(rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 100%)", "textColor": "rgb(232, 238, 245)"},
+      "reading": "Focus on the plain AI models button changes the fill not at all; it only adds a white outline (1.56 px at 0.88 opacity) and a white inner ring. Focus on the blue kind brightens the gradient (0.15 to 0.22 on top, 0.28 to 0.35 on the bottom)."
+    },
+    "ollama_bottom_band_walk": {
+      "pane_bottom": 765,
+      "scrollHeight": 1642,
+      "max_scrollTop": 901,
+      "one_row_per_press": [
+        {"press": 1, "control": "Run AI on this Deck (toggle)", "focus_bottom": 110, "gap_to_pane_bottom": 655, "scrollTop": 0},
+        {"press": 2, "control": "Start the AI with the Deck (toggle)", "focus_bottom": 186.2, "gap": 578.8, "scrollTop": 0},
+        {"press": 3, "control": "Update AI & models", "focus_bottom": 338.9, "gap": 426.1, "scrollTop": 0},
+        {"press": 4, "control": "Browse models", "focus_bottom": 382.9, "gap": 382.1, "scrollTop": 0},
+        {"press": 5, "control": "Test connection", "focus_bottom": 459.2, "gap": 305.8, "scrollTop": 0},
+        {"press": 6, "control": "Use local knowledge base (toggle)", "focus_bottom": 586.3, "gap": 178.7, "scrollTop": 0},
+        {"press": 7, "control": "Update knowledge base", "focus_bottom": 385, "gap": 380, "scrollTop": 355.5},
+        {"press": 8, "control": "Reply style row", "focus_bottom": 564.2, "gap": 200.8, "scrollTop": 355.5},
+        {"press": 9, "control": "Terse mode (toggle)", "focus_bottom": 258.4, "gap": 506.6, "scrollTop": 710.9},
+        {"press": 10, "control": "Thinking: Off / Brief / Deep row", "focus_bottom": 488.9, "gap": 276.1, "scrollTop": 710.9},
+        {"press": 11, "control": "Custom timeouts (toggle)", "focus_bottom": 598.9, "gap": 166.1, "scrollTop": 710.9},
+        {"press": 12, "control": "Unload delay row", "focus_bottom": 570.8, "gap": 194.2, "scrollTop": 900.8},
+        {"press": 13, "control": "AI models (last control)", "focus_bottom": 700.7, "gap": 64.3, "scrollTop": 901.6}
+      ],
+      "press_14": "DOWN again: nothing moved, ring stayed on 'AI models', scrollTop 901.6, focus_bottom 700.7",
+      "smallest_gap_between_a_focused_controls_bottom_and_pane_bottom": "64.3 px, on the last control (AI models). Pane's last 64 px stay empty below it; the body root's own bottom is at 724.7, so 40 px of padding sits under the last button.",
+      "scroll_behaviour": "The pane scrolls in jumps (355.5, 710.9, 900.8, 901.6) rather than a press at a time; at no press was the focused control outside the pane (every gap was positive, between 64.3 and 655).",
+      "walk_back_up": "UP x13 by the walk tool, ring back on 'Ollama tab'"
+    },
+    "tab_bar_with_seven_tabs": "owed to block 3"
+  },
+  "expected": "No fixed pass/fail in the runbook; numbers for sizing plus comparison with plan 87's monitor heights.",
+  "verdict": [
+    "PASS - all five tabs measured (Ollama, Settings, Permissions, Developer, About), first control after one Down press read on each, tab bar box read.",
+    "PASS - Ollama button fill and bottom-band numbers read; no focused control was ever clipped by the pane's bottom edge (smallest gap 64.3 px).",
+    "UNCLEAR - the runbook says 'the fill colour of a Steam button': these buttons have a transparent fill with a gradient image on top, so there is no single fill colour; the gradient values are recorded above for the owner to read."
+  ],
+  "side_effect": "none"
+}

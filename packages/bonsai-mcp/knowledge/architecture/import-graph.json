@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 889,
-  "edgeCount": 2827,
+  "fileCount": 890,
+  "edgeCount": 2828,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4214,6 +4214,12 @@
         "src/features/folded-tabs/TabHelpStrip.test.tsx"
       ]
     },
+    "src/features/folded-tabs/foldLineWidths.test.ts": {
+      "imports": [
+        "src/styles/bonsaiScopeStylesheet.ts"
+      ],
+      "importedBy": []
+    },
     "src/features/folded-tabs/foldedTabsStore.test.ts": {
       "imports": [
         "src/features/folded-tabs/foldedTabsStore.ts"
@@ -7038,6 +7044,7 @@
         "src/components/textSizeSurfaces.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx",
+        "src/features/folded-tabs/foldLineWidths.test.ts",
         "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.mainLabel.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",

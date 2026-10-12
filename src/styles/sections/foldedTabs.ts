@@ -76,16 +76,13 @@ export function buildFoldedTabsSection(): string {
           color: #ffffff;
         }
         .bonsai-scope .bonsai-fold-line__name {
-          flex: 0 1 auto;
-          min-width: 0;
-          max-width: 62%;
+          /* The name never shrinks and has no cap; the summary beside it gives way first (the drawing's .k-ft). */
+          flex: 0 0 auto;
           font-size: ${textPx(12)};
           font-weight: 700;
           letter-spacing: 0.05em;
           text-transform: uppercase;
           white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
         }
         .bonsai-scope .bonsai-fold-line__summary {
           flex: 1 1 auto;

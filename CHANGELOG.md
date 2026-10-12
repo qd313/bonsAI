@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 **Contents**
 
 - [\[Unreleased\]](#unreleased)
+  - [Plan 92 (2026-10-12)](#plan-92-2026-10-12)
   - [Plan 89 (2026-10-11)](#plan-89-2026-10-11)
   - [Plan 88 (2026-10-11)](#plan-88-2026-10-11)
   - [Plan 87 (2026-10-10)](#plan-87-2026-10-10)
@@ -77,6 +78,15 @@ All notable changes to this project are documented in this file.
 <!-- /toc -->
 
 ## [Unreleased]
+
+### Plan 92 (2026-10-12)
+
+- **There is a new Search tab, to the left of Main.** One find box looks through your chats, the Steam settings the plugin can open and the game notes, a row of games narrows the matches, and word buttons built from your questions let the D-pad pick a word with no typing. Jumping into a chat from a match and the Y shortcut are not in yet.
+- **The Steam settings search moved to the Search tab.** The card above the question box on the Main tab is gone.
+- **The About tab now fits on about one screen.** Each row is one line, the longer text opens under the row you are on, the links are small buttons beside a smaller QR code.
+- **The AI models box keeps its filters in a column beside the list, always in view.** Each choice shows a count, "N models match" and Clear sit at the top, Done no longer loses your filter choice, and the list's Date column is gone to make room.
+- **The Ollama tab is folded into one-line sections.** Each section shows its current values on one line, opens when you press it, shows the longer text of the setting you are on in a strip at the bottom, and a small floating button opens or closes every section at once.
+- **The AI models screen no longer redraws itself for as long as it is open.**
 
 ### Plan 89 (2026-10-11)
 

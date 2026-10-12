@@ -130,6 +130,7 @@ change. Their research results and big output files still move.
   removal and step 6b's measurements must be re-checked against that layout before this plan starts: the UI scale
   section will sit inside a folded section, and every row's longer text will live in a data attribute the strip reads,
   not under the row. Plan 91 § 7 says the same from its side.
+  - **Update 2026-10-12 (plan 92 bookkeeping):** plan 91's denser tabs have started. The Ollama tab is already folded (plan 92, `5377006b` to `5ea2a26b`) and the About tab is rebuilt (`5d67f9d9`); the Settings tab (and Developer) will change on a second night. Plan 86's Settings-tab steps need a re-check against that layout before it starts.
   - Expected cost of the freshness check after plan 89: about an hour, mostly in step 3's UI-scale brief. The plan is
     not stale.
 

@@ -137,6 +137,8 @@ every stop was visible or one of the two known corner-icon alarms, except one: a
 on the section's box with 67% of it, cover included, under the tab header. Filed as a small bug on the roadmap. Not done: a second carousel
 position, the whole-chat walk, the touch half (needs a person). The row stays open. Evidence `docs/test-evidence/plan76-QA-FREE-PLAY-01-try2.json`.
 
+**2026-10-12 (plan 92, Deck block 2, build `d553a5b4`, the monitor, no game): the "before" picture for tonight's Main-tab changes, UNCLEAR.** Two sweeps; 0 cycles; the Main tab and the Ollama tab each walked top to bottom and back. Two stops read as partly hidden: the chat-name button (92 percent visible) and the first suggestion chip (56 percent going down, 67 percent going up; its wording changes each time). The touch-screen half needs a person and was not run, so the row stays open. Evidence `docs/test-evidence/plan92-QA-FREE-PLAY-01-baseline.json`.
+
 **2026-10-11 (plan 89, Deck block 6, build `f5e4dc12`, the monitor, with Deep Rock Galactic: Survivor running): the half with a game running PASSED, tonight's build.** Two sweeps and a hand walk; every stop was focused and visible, 0 cycles, no dead vertical press, no repeated stop; the Context strip named the game. Evidence `docs/test-evidence/plan89-I1-QA-FREE-PLAY-01-game.json`. **Earlier the same night (block 3c, no game, build `f5e4dc12`): the half with no game PASSED.** Every stop focused and visible above the dock on the Main tab (twice) and the Ollama tab, no cycles, no repeated stops, no dead vertical press. One UNCLEAR finding: going Down the ring stops on the answer's "In short" paragraph, going Up it skips it (it is still reachable); filed as a roadmap Bugs entry. Evidence `docs/test-evidence/plan89-QA-FREE-PLAY-01.json`. Both halves have now passed for tonight's build; the touch-screen half stays the maintainer's, so the row stays open.
 
 **2026-10-11 (plan 89 Deck block 2, build `f561c0e5`, the monitor, a prepared answer from the stand-in AI): the slot half's "same stops both ways" PASSED.** With the answer's own Show details line out of sight and the slot showing its line, two Up and two Down walks visited the same 8 stops, reversed, and exactly one Show details line was visible at every settled stop (row P87-B1-SLOT-SAME-STOPS). Not a full sweep: the row stays open for the rest. Evidence `docs/test-evidence/plan89-P87-B1-SLOT-SAME-STOPS.json`.
@@ -245,6 +247,34 @@ see REASONING-02. Evidence `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`.
       button. Evidence `docs/test-evidence/plan68-SUMUP-02.json`.
 - [ ] The ring is visible above the dock, not just focused, at every one of the stops above. **Not proven**:
       the summary card itself sat behind the dock in this pass (new bug, filed on the roadmap).
+
+**New controls from plan 92 (2026-10-12; Search tab = plan 90 lane N3, models column = plan 91 lane M1, About = lane T3, folded Ollama tab = lane T0):**
+
+*The Search tab (landed 2026-10-12; Deck rows P90-SEARCH-TAB-WALK, -WORDS, -GAMES, -SETTINGS, -KB):*
+
+- [ ] The game row: Down from the tab bar lands on it, and picking a game narrows the matches. **Owed (Deck)**, rows P90-SEARCH-TAB-WALK and P90-SEARCH-GAMES.
+- [ ] The find box: reached by Down after the game row, visible, no stop twice. **Owed (Deck)**, row P90-SEARCH-TAB-WALK.
+- [ ] The word buttons: each reached by the D-pad; A lists the matches with the word highlighted. **Owed (Deck)**, row P90-SEARCH-WORDS.
+- [ ] The match rows: reached and visible; A on a Steam settings match opens that page in Steam (A on a chat match shows a one-line toast until the jump is built). **Owed (Deck)**, row P90-SEARCH-SETTINGS.
+- [ ] The notes list (before a word is picked): each note's on and off switch is reached. **Owed (Deck)**; waits for the note card to make notes (second night).
+- [ ] The game-note sheet: A on a game note shows the note's own words. **Owed (Deck)**, row P90-SEARCH-KB.
+
+*The About tab (landed 2026-10-12, build `5d67f9d9`):*
+
+- [x] The "What bonsAI is" row: reached by Down from the tab bar; its paragraph shows only while it has the ring. **PASS (Deck) 2026-10-12**, row P91-ABOUT-ROWS (height and paragraph half), evidence `docs/test-evidence/plan92-P91-ABOUT-ROWS.json`.
+- [ ] The link buttons (GitHub, Built on Ollama!, Bugs & Feature Requests): Down walks all three. **FAILED (Deck) 2026-10-12:** Down from GitHub is dead, so the other two cannot be reached (same evidence file). A fix landed (`649daecc`); a second round is owed.
+- [x] The QR button: Right from GitHub reaches it, Left returns to GitHub, A opens the support page in Steam's browser. **PASS (Deck) 2026-10-12**, row P91-ABOUT-LINKS, evidence `docs/test-evidence/plan92-P91-ABOUT-LINKS.json`.
+
+*The AI models box, filters column (landed 2026-10-12, build `b6d8e9a6` on the Deck):*
+
+- [ ] The column's rows (Clear, the licence rows, Good for, Show) and the list reached with Down and Up in the right order, the greyed licence row skipped. **FAILED (Deck) 2026-10-12:** the greyed licence row takes the ring; Down from Advanced stops on the small Refresh button, Up from Clear skips it. Every stop visible and none repeated. Row P91-MODELS-COLUMN-WALK, evidence `docs/test-evidence/plan92-P91-MODELS-COLUMN-WALK.json`; a second round is owed.
+- [x] Right from Vision or Installed only reaches the first row's star; Left returns to the same column row. **PASS (Deck) 2026-10-12**, same row and evidence file.
+
+*The folded Ollama tab (landed 2026-10-12, `5377006b` to `5ea2a26b`; Deck rows P91-FOLD-OLLAMA, P91-STRIP, P91-FOLD-ALL-BUTTON):*
+
+- [ ] A section's line: reached by the D-pad; A opens or closes it. **Owed (Deck)**, row P91-FOLD-OLLAMA.
+- [ ] The help strip: shows the ringed row's text on the same frame, and the row clears it. **Owed (Deck)**, row P91-STRIP.
+- [ ] The floating open-all button: Right from a section line reaches it; A opens or closes every section; any other press returns. **Owed (Deck)**, row P91-FOLD-ALL-BUTTON.
 
 ---
 

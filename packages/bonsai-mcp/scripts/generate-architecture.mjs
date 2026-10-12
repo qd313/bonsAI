@@ -28,6 +28,7 @@ const DOMAIN_KEYWORDS = {
   strategy: ["strategy_checklist"],
   language: ["reply_language"],
   chat_slots: ["chat_slot"],
+  user_notes: ["user_note"],
 };
 
 function classifyRpc(name) {

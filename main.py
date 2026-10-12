@@ -24,7 +24,8 @@ method, just as a one-line hand-off): the settings-search-pack buttons are in
 `backend/services/intent_pack_rpc.py`; the Strategy checklist's read/save/
 clear are in `backend/services/strategy_checklist_rpc.py`; the saved-chat
 list/open/create/delete/rename buttons are in
-`backend/services/chat_slot_rpc.py`; the knowledge base's download/update/
+`backend/services/chat_slot_rpc.py`; the notes the person asked bonsAI to remember
+(list/save/delete) are in `backend/services/user_notes_rpc.py`; the knowledge base's download/update/
 remove/chip-candidate buttons are in `backend/services/rag_corpus_rpc.py`;
 the voice-input and read-aloud buttons are in `backend/services/voice_rpc.py`;
 screenshots, the Desktop debug/chat/app logs, clipboard and the small
@@ -144,6 +145,7 @@ from backend.services.chat_slot_service import (
     wipe_all_slots,
 )
 from backend.services import chat_slot_rpc
+from backend.services import user_notes_rpc
 from backend.services import chat_sum_up_job
 from backend.services import chat_turn_recorder
 from backend.services.settings_service import (
@@ -982,6 +984,18 @@ class Plugin:
     async def rename_chat_slot(self, payload: Any = None):
         """Rename a chat slot label."""
         return await chat_slot_rpc.rename_chat_slot(self, payload)
+
+    async def list_user_notes(self):
+        """The notes the person asked bonsAI to remember, newest first."""
+        return await user_notes_rpc.list_user_notes(self)
+
+    async def save_user_note(self, payload: Any = None):
+        """Add a note (empty id) or change the keys sent for an existing one."""
+        return await user_notes_rpc.save_user_note(self, payload)
+
+    async def delete_user_note(self, note_id: str = ""):
+        """Remove one note."""
+        return await user_notes_rpc.delete_user_note(self, note_id)
 
     async def sum_up_chat_slot(self, slot_id: str = "", PcIp: str = ""):
         """The Session tab's *Sum up this chat* button: sums the chat up right away, as its own

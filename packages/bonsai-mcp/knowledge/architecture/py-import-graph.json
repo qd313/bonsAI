@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 125,
-  "edgeCount": 344,
+  "fileCount": 127,
+  "edgeCount": 346,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -37,6 +37,7 @@
     "py_modules/backend/services/strategy_checklist_session_service.py",
     "py_modules/backend/services/strategy_guide_parse.py",
     "py_modules/backend/services/tdp_service.py",
+    "py_modules/backend/services/user_notes_service.py",
     "py_modules/backend/tdp_intent.py",
     "py_modules/backend/tls_ca_fallback.py"
   ],
@@ -518,6 +519,14 @@
       "count": 1
     },
     {
+      "path": "py_modules/backend/services/user_notes_rpc.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/user_notes_service.py",
+      "count": 1
+    },
+    {
       "path": "py_modules/backend/services/voice_engine_build_service.py",
       "count": 1
     },
@@ -592,6 +601,7 @@
         "py_modules/backend/services/strategy_checklist_session_service.py",
         "py_modules/backend/services/tdp_service.py",
         "py_modules/backend/services/transparency_service.py",
+        "py_modules/backend/services/user_notes_rpc.py",
         "py_modules/backend/services/voice_read_aloud_service.py",
         "py_modules/backend/services/voice_rpc.py",
         "py_modules/backend/services/voice_transcription_service.py",
@@ -1809,6 +1819,20 @@
         "py_modules/backend/services/game_ai_request.py",
         "py_modules/backend/services/media_desktop_rpc.py",
         "py_modules/backend/services/voice_rpc.py"
+      ]
+    },
+    "py_modules/backend/services/user_notes_rpc.py": {
+      "imports": [
+        "py_modules/backend/services/user_notes_service.py"
+      ],
+      "importedBy": [
+        "main.py"
+      ]
+    },
+    "py_modules/backend/services/user_notes_service.py": {
+      "imports": [],
+      "importedBy": [
+        "py_modules/backend/services/user_notes_rpc.py"
       ]
     },
     "py_modules/backend/services/vac_check_commands.py": {

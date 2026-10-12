@@ -32,7 +32,7 @@
  *   - The count below is written as a comment rather than as a value anything can
  *     read. Nothing would use it, and an unused value fails one of the checks.
  *
- * 64 names at the time this was written.
+ * 67 names at the time this was written.
  */
 export type BonsaiRpcMethod =
   | "abort_background_game_ai"
@@ -50,6 +50,7 @@ export type BonsaiRpcMethod =
   | "dbg_fe_log"
   | "delete_chat_slot"
   | "delete_ollama_model"
+  | "delete_user_note"
   | "discover_mdns_ollama_hosts"
   | "export_intent_pack"
   | "fetch_ollama_catalog_metadata"
@@ -75,6 +76,7 @@ export type BonsaiRpcMethod =
   | "install_voice_engine"
   | "list_chat_slots"
   | "list_recent_screenshots"
+  | "list_user_notes"
   | "load_settings"
   | "pull_ollama_models"
   | "read_host_clipboard_text"
@@ -84,6 +86,7 @@ export type BonsaiRpcMethod =
   | "save_ask_feedback"
   | "save_settings"
   | "save_strategy_checklist_session"
+  | "save_user_note"
   | "search_rag_corpus_notes"
   | "set_intent_pack_enabled"
   | "set_kids_lock_state"

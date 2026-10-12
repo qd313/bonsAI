@@ -81,7 +81,7 @@ All notable changes to this project are documented in this file.
 
 ### Plan 92 (2026-10-12)
 
-- **There is a new Search tab, to the left of Main.** One find box looks through your chats, the Steam settings the plugin can open and the game notes, a row of games narrows the matches, and word buttons built from your questions let the D-pad pick a word with no typing. Jumping into a chat from a match and the Y shortcut are not in yet.
+- **There is a new Search tab, to the left of Main.** One find box looks through your chats, the Steam settings the plugin can open and the game notes, a row of games narrows the matches, and word buttons built from your questions let the D-pad pick a word with no typing.
 - **The Steam settings search moved to the Search tab.** The card above the question box on the Main tab is gone.
 - **The About tab now fits on about one screen.** Each row is one line, the longer text opens under the row you are on, the links are small buttons beside a smaller QR code.
 - **The AI models box keeps its filters in a column beside the list, always in view.** Each choice shows a count, "N models match" and Clear sit at the top, Done no longer loses your filter choice, and the list's Date column is gone to make room.
@@ -92,6 +92,13 @@ All notable changes to this project are documented in this file.
 - **On the Search tab, Down from any game button goes to the find box and Up comes back to the picked game; a hidden game note's title reads "An item note", not "A item note".** Passed on the Deck 2026-10-12.
 - **On the folded Ollama tab, a section's name is no longer cut short by its summary.** The summary gives way instead. Passed on the Deck 2026-10-12.
 - **The Tier 2 licence question now points to the Licence list beside the models**, since the Filters button is gone.
+- **Ask can now keep short notes in your own words.** When a question says something worth keeping, such as "I'm on a Steel Soul run", a small card under the answer offers Keep, Edit or Not now, for this game or every game. Typing "remember …" opens the same card with no AI answer. Later answers say "Read N of your notes" and pressing that line opens a sheet where you can switch a note off or remove it. The ring does not always land where it should after the card or the sheet closes yet; a fix is in, and the Deck has not checked it again.
+- **On the Search tab, A on a chat match now opens that chat on the question, with a "Back to where you were" line.** B goes back to the tab you came from, and Y on the Main tab opens the Search tab. The ring after the jump sits on the day row above the question instead of the question; that is not fixed yet.
+- **The Settings tab and the Developer tab are now folded into one-line sections too**, like the Ollama tab, each with a floating button that opens or closes every section. Passed on the Deck 2026-10-12.
+- **Folded tabs start with every section closed, and close them again when you switch tabs with LB or RB.** The page is back at its top and the ring goes to the first section line. A fix for the ring landing on the last line after RB then LB has not been checked on the Deck again.
+- **About tab: the paragraph and the beta notice are shown again at the top, the version sits on the same line as "About bonsAI", the language dropdown is the full width of its row with no label, and the link buttons are dark grey.** Passed on the Deck 2026-10-12.
+- **The tab bar's icons are drawn with thicker lines at the same size.** Up to about a third more ink on most icons on the Deck's own screen; the maintainer judges the look.
+- **In the AI models box, Right and Left go to what sits beside the ring, and only one AI models box can be open at a time.** Passed on the Deck 2026-10-12 for the filters and the stars; the Refresh and Advanced buttons in the title row still do not answer Right and Left.
 
 ### Plan 89 (2026-10-11)
 

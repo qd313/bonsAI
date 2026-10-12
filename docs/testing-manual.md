@@ -137,6 +137,8 @@ every stop was visible or one of the two known corner-icon alarms, except one: a
 on the section's box with 67% of it, cover included, under the tab header. Filed as a small bug on the roadmap. Not done: a second carousel
 position, the whole-chat walk, the touch half (needs a person). The row stays open. Evidence `docs/test-evidence/plan76-QA-FREE-PLAY-01-try2.json`.
 
+**2026-10-12 (plan 92 second night, Deck blocks B and C, build `f4215cf1`, the Deck's own screen, no game): stops and cycles PASSED, visibility UNCLEAR as before.** Two sweeps; 0 cycles and 0 unlabeled stops in both. Main walked 13 stops each way in the order the page now shows (the last turn in the chat was a "remember …" reply with its note card, so the stops differ from the baseline's long answer); the Ollama tab's five folded section lines were all reached. Not clean on visibility: the chat-name button 92 percent (clipped by the panel box, as before), two suggestion chips at 56 and 67 percent (covered by the Quick Access rail or another chip; the wording changes each run) and four Ollama section lines at 92 percent (the same clip). On Ollama, Down from the tab bar went straight to the last section line ("AI models") and then stalled (3 presses, 1 stop), while Up walked the other four. About, Settings and Developer were not part of this sweep. The touch-screen half needs a person and was not run, so the row stays open. Evidence `docs/test-evidence/plan92-QA-FREE-PLAY-01-n2.json`.
+
 **2026-10-12 (plan 92, Deck block 2, build `d553a5b4`, the monitor, no game): the "before" picture for tonight's Main-tab changes, UNCLEAR.** Two sweeps; 0 cycles; the Main tab and the Ollama tab each walked top to bottom and back. Two stops read as partly hidden: the chat-name button (92 percent visible) and the first suggestion chip (56 percent going down, 67 percent going up; its wording changes each time). The touch-screen half needs a person and was not run, so the row stays open. Evidence `docs/test-evidence/plan92-QA-FREE-PLAY-01-baseline.json`.
 
 **2026-10-11 (plan 89, Deck block 6, build `f5e4dc12`, the monitor, with Deep Rock Galactic: Survivor running): the half with a game running PASSED, tonight's build.** Two sweeps and a hand walk; every stop was focused and visible, 0 cycles, no dead vertical press, no repeated stop; the Context strip named the game. Evidence `docs/test-evidence/plan89-I1-QA-FREE-PLAY-01-game.json`. **Earlier the same night (block 3c, no game, build `f5e4dc12`): the half with no game PASSED.** Every stop focused and visible above the dock on the Main tab (twice) and the Ollama tab, no cycles, no repeated stops, no dead vertical press. One UNCLEAR finding: going Down the ring stops on the answer's "In short" paragraph, going Up it skips it (it is still reachable); filed as a roadmap Bugs entry. Evidence `docs/test-evidence/plan89-QA-FREE-PLAY-01.json`. Both halves have now passed for tonight's build; the touch-screen half stays the maintainer's, so the row stays open.
@@ -255,8 +257,8 @@ see REASONING-02. Evidence `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`.
 - [x] The game row: Down from the tab bar lands on it, and picking a game narrows the matches. **PASS (Deck) 2026-10-12**, rows P90-SEARCH-TAB-WALK (second round, `docs/test-evidence/plan92-P90-SEARCH-TAB-WALK-try2.json`) and P90-SEARCH-GAMES (`docs/test-evidence/plan92-P90-SEARCH-GAMES.json`).
 - [x] The find box: reached by Down after the game row, visible, no stop twice. **PASS (Deck) 2026-10-12 on the second round**, row P90-SEARCH-TAB-WALK, `docs/test-evidence/plan92-P90-SEARCH-TAB-WALK-try2.json`.
 - [x] The word buttons: each reached by the D-pad; A lists the matches with the word highlighted. **PASS (Deck) 2026-10-12**, row P90-SEARCH-WORDS, `docs/test-evidence/plan92-P90-SEARCH-WORDS.json`.
-- [ ] The match rows: reached and visible; A on a Steam settings match opens that page in Steam (A on a chat match shows a one-line toast until the jump is built). **PASS in part (Deck) 2026-10-12**, row P90-SEARCH-SETTINGS, `docs/test-evidence/plan92-P90-SEARCH-SETTINGS.json`: a Steam page opened from the Search tab and Main has no settings card. **Still owed:** the re-run of the 24 Steam settings pages from this tab.
-- [ ] The notes list (before a word is picked): each note's on and off switch is reached. **Owed (Deck)**; waits for the note card to make notes (second night).
+- [ ] The match rows: reached and visible; A on a Steam settings match opens that page in Steam (A on a chat match jumps into the chat; see the Back line block below). **PASS in part (Deck) 2026-10-12**, row P90-SEARCH-SETTINGS, `docs/test-evidence/plan92-P90-SEARCH-SETTINGS.json`: a Steam page opened from the Search tab and Main has no settings card. **Still owed:** the re-run of the 24 Steam settings pages from this tab.
+- [ ] The notes list (before a word is picked): each note's on and off switch is reached. **Owed (Deck)**; the note card now exists (second night, below), but the Search tab's own list was not walked.
 - [ ] The game-note sheet: A on a game note shows the note's own words. **PASS in part (Deck) 2026-10-12**, row P90-SEARCH-KB, `docs/test-evidence/plan92-P90-SEARCH-KB.json` (library installed: passed). **Still owed:** the half with the library removed and installed again.
 
 *The About tab (landed 2026-10-12, build `5d67f9d9`):*
@@ -272,9 +274,40 @@ see REASONING-02. Evidence `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`.
 
 *The folded Ollama tab (landed 2026-10-12, `5377006b` to `5ea2a26b`; Deck rows P91-FOLD-OLLAMA, P91-STRIP, P91-FOLD-ALL-BUTTON):*
 
-- [x] A section's line: reached by the D-pad; A opens or closes it. **PASS (Deck) 2026-10-12 on the monitor**, rows P91-FOLD-OLLAMA and P91-FOLD-NAMES (`docs/test-evidence/plan92-P91-FOLD-OLLAMA.json`, `docs/test-evidence/plan92-P91-FOLD-NAMES.json`). **Still owed:** the "under 430 points" test on the Deck's own screen.
+- [x] A section's line: reached by the D-pad; A opens or closes it. **PASS (Deck) 2026-10-12 on the monitor**, rows P91-FOLD-OLLAMA and P91-FOLD-NAMES (`docs/test-evidence/plan92-P91-FOLD-OLLAMA.json`, `docs/test-evidence/plan92-P91-FOLD-NAMES.json`). The "under 430 points" test on the Deck's own screen passed in plan 92's second night (closed 430 against 430 visible), row P92-FOLD-SWITCH, `docs/test-evidence/plan92-P92-FOLD-SWITCH.json`.
 - [x] The help strip: shows the ringed row's text on the same frame, and the row clears it. **PASS (Deck) 2026-10-12**, row P91-STRIP, `docs/test-evidence/plan92-P91-STRIP.json`.
 - [x] The floating open-all button: Right from a section line reaches it; A opens or closes every section; any other press returns. **PASS (Deck) 2026-10-12**, row P91-FOLD-ALL-BUTTON, `docs/test-evidence/plan92-P91-FOLD-ALL-BUTTON.json`.
+
+**New controls from plan 92's second night (2026-10-12; builds `74e6167c` and `f4215cf1`, run on the Deck's own screen):**
+
+*The note card (plan 90 lane N2; Deck rows P90-NOTE-CARD, P90-NOTE-COMMAND):*
+
+- [ ] The card under the answer: Keep, Edit and Not now each reached by the D-pad (Up from the question box walks chip, source row, Show details, For line, Keep); the ring is on Keep when the answer finishes. **FAILED (Deck) 2026-10-12:** the walk and the For line matched, but the ring was on the question box when the answer finished. Second round landed (`7e5eb154`); re-check owed. Row P90-NOTE-CARD, `docs/test-evidence/plan92-P90-NOTE-CARD.json`.
+- [x] The For line: A flips between this game and every game, and back. **PASS (Deck) 2026-10-12**, row P90-NOTE-CARD, same evidence file.
+- [x] Keep turns the card into "Kept." with the ring on Show details; Not now removes the card and the ring goes to Show details. **PASS (Deck) 2026-10-12**, rows P90-NOTE-CARD and P90-NOTE-COMMAND (`docs/test-evidence/plan92-P90-NOTE-COMMAND.json`).
+
+*The "Read N of your notes" line and the notes sheet (Deck rows P90-NOTE-LINE, P90-NOTE-READ, P90-NOTES-SHEET):*
+
+- [x] The line sits between the question and the answer. **PASS (Deck) 2026-10-12**, row P90-NOTE-LINE, `docs/test-evidence/plan92-P90-NOTE-READ.json`.
+- [ ] A on the line opens the sheet with the ring on Close; the note's switch and its bin are reached by the D-pad (a note's switch and its bin are one row you move along with Left and Right); A on the switch toggles it; B closes the sheet and the ring returns to the line. **FAILED (Deck) 2026-10-12:** the sheet's words and the switch toggling passed; B put the ring on the question box, and Left from the bin was dead. Second round landed (`309f4b98`, `f827f471`); re-check owed. Row P90-NOTES-SHEET, `docs/test-evidence/plan92-P90-NOTES-SHEET.json`.
+
+*The search jump, the Back line, B and Y (plan 90 lane N3b; Deck rows P90-SEARCH-JUMP-BACK, P90-SEARCH-B, P90-SEARCH-Y):*
+
+- [ ] A on a chat match: the chat opens on the matched question and the ring is on that question. **FAILED (Deck) 2026-10-12:** the question was on screen but the ring was on the day row two above it. Re-check owed after a fix. Row P90-SEARCH-JUMP-BACK, `docs/test-evidence/plan92-P90-SEARCH-JUMP-BACK.json`.
+- [x] The Back line ("‹ Back to where you were") is the first stop under the tab bar; A returns to Search with the same word and the ring on the same match; the line is gone after leaving Search. **PASS (Deck) 2026-10-12**, row P90-SEARCH-JUMP-BACK, same evidence file.
+- [x] B on the Search tab returns to the tab you came from (Main, About), Quick Access still open. **PASS (Deck) 2026-10-12**, row P90-SEARCH-B, `docs/test-evidence/plan92-P90-SEARCH-B.json`.
+- [ ] Y from the question box on Main opens Search with the ring on the find box; Y on the Ollama tab does nothing. **PASS (Deck) 2026-10-12**, row P90-SEARCH-Y, `docs/test-evidence/plan92-P90-SEARCH-Y.json`. **Still owed:** Y with Steam's on-screen keyboard open (the maintainer's hand check).
+
+*The folded Settings and Developer tabs (plan 91 lanes T1 and T2; Deck rows P91-FOLD-SETTINGS, P91-FOLD-DEVELOPER):*
+
+- [x] A section's line on Settings: reached by the D-pad, A opens or closes it, 22 Downs each move the ring, none twice; Left and Right on Text size move the page 0 points. **PASS (Deck) 2026-10-12**, row P91-FOLD-SETTINGS, `docs/test-evidence/plan92-P91-FOLD-SETTINGS.json`.
+- [x] A section's line on Developer: reached by the D-pad, A opens or closes it, a 24-stop Down walk with no dead press; the strip's words follow a pick. **PASS (Deck) 2026-10-12**, row P91-FOLD-DEVELOPER, `docs/test-evidence/plan92-P91-FOLD-DEVELOPER.json`.
+- [x] The floating open-all button on both tabs: Right from a section line reaches it, A opens or closes every section, Left returns to the first line. **PASS (Deck) 2026-10-12**, rows P91-FOLD-SETTINGS and P91-FOLD-DEVELOPER, same evidence files.
+
+*Folded tabs on a tab switch and the AI models box (Deck rows P92-FOLD-SWITCH, P92-MODELS-BESIDE):*
+
+- [ ] After LB or RB onto a folded tab the sections are closed, the page is at its top and the ring is on the first section line. **FAILED in part (Deck) 2026-10-12:** closed and at the top every time; LB then RB put the ring on the first line, but RB then LB put it on the last line, twice. Second round landed (`90182a56`, `997fedad`); re-check owed. Row P92-FOLD-SWITCH, `docs/test-evidence/plan92-P92-FOLD-SWITCH.json`.
+- [ ] The AI models box: Right from a filter and Left from a star reach what sits beside the ring; only one box open. **PASS in part (Deck) 2026-10-12:** the 12 filters and 4 stars passed (all within 52 px). **FAILED:** Right from the Refresh icon and Left from Advanced hold in the title row. Fix owed, then re-check. Row P92-MODELS-BESIDE, `docs/test-evidence/plan92-P92-MODELS-BESIDE.json`.
 
 ---
 

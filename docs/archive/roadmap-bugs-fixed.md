@@ -3278,3 +3278,20 @@ _Moved out of [roadmap.md](../roadmap.md) on 2026-10-12 (plan 92 docs sweep), co
 - ★ `[ollama]` **The Tier 2 licence question still says the setting is under AI models → Filters** — **OPEN, found 2026-10-12 (plan 92).**
   The Filters button is gone (plan 92 lane M1), but the question's last line still says "You can change this later under Ollama → AI models → Filters." (`src/hooks/usePullModelTier2Confirm.tsx`). Not fixed when this was written.
   **Closed 2026-10-12 (plan 92): fixed in `83afd7e4`.** The question's last line now points to the Licence list beside the models. Closed on tests only: the sentence is pinned by its test. No Deck check.
+
+### About tab: four changes the maintainer asked for (closed 2026-10-12)
+
+- ★ `[ui]` **About: the Reply language dropdown has a redundant "Language" label beside it** — **OPEN, reported 2026-10-12 (plan 92).**
+  The maintainer: "get rid of the 'Language' label to the left of the dropdown... Make the dropdown full width." Evidence: the maintainer's report on the Deck's screen, 2026-10-12; no test file yet. Being fixed on plan 92's second night (T3c).
+
+- ★ `[ui]` **About: the link buttons beside the QR are too bright** — **OPEN, reported 2026-10-12 (plan 92).**
+  The maintainer: they "should be in a darker color more akin to SteamOS or the bonsAI style." The new link style next to the QR code stays. Evidence: the maintainer's report on the Deck's screen, 2026-10-12; no test file yet. Being fixed on plan 92's second night (T3c).
+
+- ★ `[ui]` **About: the paragraph about bonsAI only shows while the ring is on its row** — **OPEN, reported 2026-10-12 (plan 92).**
+  The maintainer: "I'd prefer having the About notice at the top displayed by default... as it previously was, but I like the new link style next to the QR code." Evidence: the maintainer's report on the Deck's screen, 2026-10-12; no test file yet. Being fixed on plan 92's second night (T3c).
+
+- ★ `[ui]` **About: the version takes a row of its own** — **OPEN, reported 2026-10-12 (plan 92).**
+  The maintainer: "Put the version info next to the 'About bonsAI' in the first row." Evidence: the maintainer's report on the Deck's screen, 2026-10-12; no test file yet. Being fixed on plan 92's second night (T3c).
+
+**Closed 2026-10-12 (plan 92, second night, build `74e6167c`, the Deck's own screen, row P92-ABOUT-AFTER):** passed on all four. The title and the version are on one line; the paragraph and the beta notice are shown and inside the pane; the dropdown is the full row width with no "Language" label; the link buttons are dark grey with light text and the QR is unchanged. Evidence `docs/test-evidence/plan92-P92-ABOUT-AFTER.json`.
+

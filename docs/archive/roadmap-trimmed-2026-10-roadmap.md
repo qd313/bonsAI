@@ -782,3 +782,9 @@ Cut word for word from the two `[QA]` rig entries in the roadmap's Bugs list (th
 - Seen before on 2026-09-26 and 2026-10-01 (the rig findings table in [mcp-setup.md](mcp-setup.md)).
 
 - A leftover snapshot record sits on this PC (`C:\Users\still\.config\decky-plugin-studio\snapshots\settings-hold.json`).
+
+## Plan 92 note: what the first night built of the Search tab
+
+Cut word for word from the roadmap's Search in bonsAI entry (2026-10-12 docs sweep):
+
+  **Built so far 2026-10-12 (plan 92):** the tab's first half (`5e6f5af0`, `c254579f`, `1e8e4a2d`, `b6d8e9a6`) and the game-notes search (`64287145`). The Steam settings search moved here from the Main tab: the card above the question box is gone. Y was measured free on the Main tab (`docs/test-evidence/plan92-P92-M-Y.json`). **Passed on the Deck tonight:** seven tabs fit the bar (P92-M-TAB-BAR-SEVEN), the word buttons and Clear (P90-SEARCH-WORDS), the game row (P90-SEARCH-GAMES), a Steam page opens from the tab and Main has no settings card (P90-SEARCH-SETTINGS), the game notes with the library installed (P90-SEARCH-KB), and the tab walk after the second round, 14 of 14 presses as designed and the plain note titles reading "An item note" (P90-SEARCH-TAB-WALK, `docs/test-evidence/plan92-P90-SEARCH-TAB-WALK-try2.json`). Other evidence `docs/test-evidence/plan92-P92-M-TAB-BAR-SEVEN.json`, `P90-SEARCH-WORDS.json`, `-GAMES.json`, `-SETTINGS.json`, `-KB.json`. **Owed:** the notes library removed and installed again (P90-SEARCH-KB); the 24 Steam settings pages re-run from this tab (P90-SEARCH-SETTINGS); the jump into a chat, the way back and Y (plan 90 lane N3b), second night.

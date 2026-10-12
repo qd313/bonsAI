@@ -67,6 +67,9 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Evidence `docs/test-evidence/plan77-QA-FREE-PLAY-01.json`.
   Unshelves when: a new sighting.
 
+- ★ `[focus]` `[watching]` **After a tab switch onto About or Search, Steam puts the ring inside the tab, not on the tab bar** — seen on the Deck's own screen 2026-10-12 (plan 92 second night, blocks B and C), recorded as a quirk, not yet judged a bug. On About the ring started on the Reply language dropdown (one Up reached the bar); on Search the Up presses of P90-SEARCH-B started from "Clear the search" right after the switch. A tab's walk is not affected. Evidence `docs/test-evidence/plan92-P92-ABOUT-AFTER.json`, `docs/test-evidence/plan92-P90-SEARCH-B.json`.
+  Unshelves when: a new sighting, or the maintainer wants the ring on the bar after every switch.
+
 - ★ `[focus]` `[watching]` **After the screenshot picker closes, nothing holds the highlight until the next press** — seen
   once, 2026-10-01 (plan 78, block 3a). Evidence `docs/test-evidence/plan78-DOC-SWEEP-01.json`.
   Unshelves when: a new sighting.
@@ -173,6 +176,7 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **The first suggestion chip reads 33 to 67 percent visible to the probe while its words churn** — seen once, 2026-10-10 (plan 87 Deck block 6b). Evidence `docs/test-evidence/plan87-P87-SMOKE-FINAL.json`.
+  **Seen again 2026-10-12 (plan 92):** on Main the first Up from the question box lands on a chip the rig reads as only partly visible: 33 percent (`docs/test-evidence/plan92-P92-ICONS-AFTER-try2.json`), 56 and 67 percent (`docs/test-evidence/plan92-QA-FREE-PLAY-01-baseline.json`, `plan92-QA-FREE-PLAY-01-n2.json`; "wording changes every run"). Covered by the Quick Access rail and clipped by the chip carousel, per the first file.
   Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **In the AI models window, B did not close it; only Done did** — seen once, 2026-10-10 (plan 87 Deck block 6b). Evidence `docs/test-evidence/plan87-P87-DECK-RESTORED.json`.

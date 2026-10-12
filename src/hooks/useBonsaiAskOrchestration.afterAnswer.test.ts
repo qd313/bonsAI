@@ -41,7 +41,6 @@ function makeArgs(overrides: Partial<UseBonsaiAskOrchestrationArgs> = {}): UseBo
     unifiedInputHostRef: { current: null },
     setNavigationMessage: vi.fn(),
     saveIp: vi.fn(),
-    persistSearchQuery: vi.fn(),
     useLocalKnowledgeBase: false,
     ...overrides,
   };

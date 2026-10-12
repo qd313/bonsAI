@@ -13,9 +13,6 @@
  * This file also draws the two small menus those buttons open, and the
  * preview strip that shows an attached screenshot with a way to remove it.
  *
- *     (matching settings, only while what was typed
- *      also matches one of the plugin's own settings; drawn over the chat)
- *
  *     ┌─ input host ─────────────────────────────────────────┐
  *     │ [avatar]  the question box (multi-line)              │
  *     │           ...........................................│
@@ -27,12 +24,9 @@
  *     (attached screenshot, only while one is attached)
  *     [ thumbnail + name ......................... ] [ x ]
  *
- * The same question box doubles as a search box for the plugin's own
- * settings: typing something that matches a setting's name shows a card of
- * matches just above the box, drawn over the chat, whose rows the D-pad walks
- * (Up from the box enters the row nearest it). That search feature is
- * unrelated to asking the AI anything — it rides along on the same box because
- * the box was already there.
+ * Typing here only asks the AI. The card of matching Steam settings that used to
+ * pop up above the box while a setting's name was typed moved to the Search tab
+ * (plan 92).
  *
  * Used for: MainTab, as the Ask bar sitting in the dock at the bottom of the
  * screen.
@@ -62,11 +56,9 @@
  * 5. Assemble the question box itself: the visible field, a hidden "measure"
  *    copy used to size it, and, on the Deck skins that cannot show a real
  *    multiline field, a text overlay that mirrors what the field holds.
- *    Enter either submits the question, or, while the settings-search
- *    results are showing, activates whichever result is highlighted.
+ *    Enter submits the question.
  * 6. Render everything top to bottom, matching the drawing above: the input
- *    host with its strip, the two popovers anchored to their buttons, the
- *    settings-search card above the box, a status row for a screenshot
+ *    host with its strip, the two popovers anchored to their buttons, a status row for a screenshot
  *    capture or a media error, and the attached-screenshot preview when there
  *    is one. Every D-pad route in the strip is written down in
  *    docs/focus-graph.md, "The ask box's strip (plan 84)".
@@ -104,7 +96,7 @@ import {
   isLeftNavigationEvent,
   isRightNavigationEvent,
 } from "../utils/focusNavigation";
-import { getUiDocument, uiActiveElement } from "../utils/uiDocument";
+import { uiActiveElement } from "../utils/uiDocument";
 import { formatBytes, toFileUri } from "../utils/mediaFormat";
 import {
   screenshotMediaErrorCapability,
@@ -133,9 +125,7 @@ import { MainTabAskModeMenuPopover } from "./MainTabAskModeMenuPopover";
 import { MainTabAttachMenuPopover } from "./MainTabAttachMenuPopover";
 import { PermissionDenyAction } from "./PermissionDenyAction";
 import { useMainTabAskBarFocus } from "../hooks/useMainTabAskBarFocus";
-import { useAskBarSettingsCardRows } from "../hooks/useAskBarSettingsCardRows";
 import { useAskBarMenuToggles } from "../hooks/useAskBarMenuToggles";
-import { useAskBarSettingsCardVisibility } from "../hooks/useAskBarSettingsCardVisibility";
 import { useAskBarInitialRingClaim } from "../hooks/useAskBarInitialRingClaim";
 import { useAskBarPressHandlers } from "../hooks/useAskBarPressHandlers";
 import {
@@ -144,8 +134,6 @@ import {
   unregisterNavFocus,
   type NavRefHolder,
 } from "../utils/navFocusRegistry";
-import { SETTINGS_CARD_ROW_HEIGHT_PX } from "../hooks/useSteamSettingsSearch";
-import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 import { textPx } from "../styles/sections/textPx";
 
 // The prop type lives in MainTabUnifiedAskBar.types.ts now; re-exported here so nothing
@@ -188,8 +176,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     setIsUnifiedInputFocused,
     isUnifiedInputFocused,
     setUnifiedInput,
-    filteredSettings,
-    onSettingClick,
     isAsking,
     ollamaIp,
     onAskOllama,
@@ -213,7 +199,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     aiCharacterDebugLine = null,
     askMode,
     onAskModeChange,
-    isQamSetting,
     onFocusHandlersReady,
     onNavigateToPermissions,
     ollamaContext,
@@ -233,16 +218,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
   // The mic button is amber while the voice server starts and while Stop reads the recording once more.
   const voiceStarting = voiceBusy === "starting";
   const voiceFinishing = voiceBusy === "finishing";
-
-  // The card's hidden/closed/rows-shown state, and the reset-on-empty effect, live in
-  // useAskBarSettingsCardVisibility now (src/hooks) -- see that file.
-  const {
-    settingsCardHidden,
-    settingsCardRowsShown,
-    setSettingsCardRowsShown,
-    settingsCardClosedForSearch,
-    setSettingsCardClosedForSearch,
-  } = useAskBarSettingsCardVisibility(unifiedInput, filteredSettings.length);
 
   useEffect(() => {
     if (unifiedInput.trim() === "" && /\n/.test(unifiedInput)) setUnifiedInput("");
@@ -301,22 +276,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     return () => unregisterNavFocus("unified-input", unifiedInputNavRef);
   }, []);
 
-  // The card's own row-measuring, "last row" nav registration and typing-redirect effects live
-  // in useAskBarSettingsCardRows now (src/hooks) -- see that file for what each piece does.
-  const {
-    focusSettingsCardLastRow,
-    settingsCardRowRefs,
-    settingsCardHostRef,
-    settingsCardLastRowNavRef,
-  } = useAskBarSettingsCardRows({
-    filteredSettings,
-    unifiedInput,
-    unifiedInputSurfacePx,
-    unifiedInputHostRef,
-    focusUnifiedTextField,
-    setSettingsCardRowsShown,
-  });
-
   // "Opening the panel leaves nothing highlighted": tries a few times to place Steam's ring on
   // the question box when nothing owns it yet. Lives in useAskBarInitialRingClaim now
   // (src/hooks) -- see that file for the full story and the Deck evidence behind it.
@@ -341,48 +300,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     onTakeScreenshot,
     onOpenScreenshotBrowser,
   });
-
-  /*
-   * Computed here, ahead of the box's own JSX below, because the box's Up handler (onMoveUp on the
-   * TextField) needs to know whether there is a card to send the ring into before it renders --
-   * see the override next to unifiedInputDeckNavHandlers below. Kept as the single source both the
-   * box and the card itself read, rather than two places deciding independently whether the card
-   * is showing.
-   */
-  const settingsCardShownSettings = filteredSettings.slice(0, Math.max(0, settingsCardRowsShown));
-  const settingsCardHiddenCount = Math.max(0, filteredSettings.length - settingsCardShownSettings.length);
-  const showSettingsCard =
-    !settingsCardHidden &&
-    !settingsCardClosedForSearch &&
-    filteredSettings.length > 0 &&
-    settingsCardShownSettings.length > 0;
-
-  /*
-   * Tap outside the card behaves as B (plan 45 section 4's "Tap outside" row / plan 56 lane E2
-   * step 6): closes the card for the rest of this search and keeps what was typed. A document-
-   * level listener, not a handler local to one part of the bar, because the card floats above
-   * the whole tab -- a tap on the box's strip below it, or on the chat behind it, both count as
-   * "outside" just as much as a tap on some other tab entirely. A finger has no D-pad ring to
-   * hand back anywhere, so unlike B this only closes the card; it never calls
-   * focusUnifiedTextField(). Capture phase so this only ever decides whether to close the card
-   * and never stops a row's own click from reaching onSettingClick afterward. Checked with
-   * `.contains` against the card's own DOM node, not a class-name search, so a tap anywhere
-   * inside a row (its label, its breadcrumb text) still correctly counts as "on the card".
-   * Pointer/touch only, so this cannot be exercised through a Focusable move handler; it is not
-   * part of the focus-graph the D-pad rig walks -- see the session report.
-   */
-  useEffect(() => {
-    if (!showSettingsCard) return;
-    const onPointerDown = (ev: PointerEvent) => {
-      const cardEl = settingsCardHostRef.current;
-      if (!cardEl) return;
-      if (cardEl.contains(ev.target as Node)) return;
-      setSettingsCardClosedForSearch(true);
-    };
-    const doc = getUiDocument();
-    doc.addEventListener("pointerdown", onPointerDown, true);
-    return () => doc.removeEventListener("pointerdown", onPointerDown, true);
-  }, [showSettingsCard]);
 
   const unifiedTextFieldBody = (
     <>
@@ -419,7 +336,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
         /* Down lands on the small Ask button in the strip under the box, or Stop while an answer is being
            written (plan 84, useMainTabAskBarFocus.ts; docs/focus-graph.md, "The ask box's strip"). */
         {...unifiedInputDeckNavHandlers}
-        {...(showSettingsCard ? { onMoveUp: () => focusSettingsCardLastRow() } : {})}
         {...({ navRef: unifiedInputNavRef } as Record<string, unknown>)}
         style={{
           width: "100%",
@@ -447,9 +363,9 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
            * real D-pad press never produces (the focus law: Steam invokes a Focusable's own move
            * handlers directly, never a DOM keydown, and never delivers a direction press through
            * onButtonDown either). Deleted with the settings-results card's rewiring into real
-           * Focusable stops (plan 45 step 3 / plan 56 lane E2): the rows themselves now own their
-           * own Up/Down/A (see the row map below), so Enter here only has to keep doing the one
-           * thing a physical or on-screen keyboard's Enter key still means -- submit the question.
+           * Focusable stops (plan 45 step 3 / plan 56 lane E2); the card itself moved to the Search tab
+           * (plan 92), so Enter here only has to keep doing the one thing a physical or on-screen
+           * keyboard's Enter key still means -- submit the question.
            */
           if (ev.key === "Enter") {
             ev.preventDefault();
@@ -500,9 +416,9 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
   return (
     <>
 {/*
-  position: relative purely to anchor the settings-results card below -- see its own comment.
-  Nothing else about the box's own box model changes: this wrapper has no size of its own beyond
-  its one child's, so it never nudges the box.
+  position: relative, left from when the settings-results card was anchored to it (the card moved to the
+  Search tab, plan 92). Nothing else about the box's own box model changes: this wrapper has no size of
+  its own beyond its one child's, so it never nudges the box.
 */}
 <div style={{ position: "relative" }}>
 <PanelSectionRow>
@@ -548,14 +464,8 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             }}
           >
             {/*
-              avatarDeckNavHandlers never defines its own onMoveUp -- ordinarily Up out of the
-              avatar is left to Steam's own spatial nav, which reaches the preset chip row sitting
-              above the whole Ask bar. That is exactly the escape hatch plan 45 step 4 / plan 56
-              lane E2 closes while the settings-results card is open: without an explicit handler
-              here Up would slip past the card entirely (the box's own Up override next to
-              unifiedInputDeckNavHandlers only catches the OTHER way into the chips). Sends the
-              ring into the card the same way the box does, and only while there is a card to send
-              it into.
+              avatarDeckNavHandlers never defines its own onMoveUp -- Up out of the avatar is left to
+              Steam's own spatial nav, which reaches the preset chip row sitting above the whole Ask bar.
             */}
             <Focusable
               className="bonsai-ai-character-avatar"
@@ -565,7 +475,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                   : "Choose AI character"
               }
               {...avatarDeckNavHandlers}
-              {...(showSettingsCard ? { onMoveUp: () => focusSettingsCardLastRow() } : {})}
               onClick={() => onOpenCharacterPicker?.()}
               onActivate={() => {
                 onOpenCharacterPicker?.();
@@ -939,119 +848,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     </div>
   </div>
 </PanelSectionRow>
-{/*
-  The settings-results card. Anchored to the box's own top edge (bottom: 100% of this wrapper,
-  which is exactly the box's rendered height -- see the position:relative wrapper opened above)
-  so it draws over the chat and takes no layout space of its own: nothing below it ever moves,
-  which is the whole point (plan 45 section 1 -- "the list grows upward and pushes the box... up
-  the screen", fixed by taking the list out of that flow entirely). Rows beyond what
-  settingsCardRowsShown allows are simply not rendered -- see the measuring effect above -- and
-  are folded into the heading's "N more" count instead of being cut off mid-row.
-*/}
-{showSettingsCard && (
-  <div
-    ref={settingsCardHostRef}
-    className="bonsai-settings-results-card bonsai-glass-panel"
-    style={{
-      position: "absolute",
-      left: 0,
-      right: 0,
-      bottom: "100%",
-    }}
-  >
-    <div className="bonsai-settings-results-card-heading">
-      Steam settings
-      {settingsCardHiddenCount > 0 && (
-        <span className="bonsai-settings-results-card-heading-count">
-          {` · ${settingsCardHiddenCount} more`}
-        </span>
-      )}
-    </div>
-    {settingsCardShownSettings.map((s, i) => {
-      const isQam = isQamSetting(s);
-      const isLastRow = i === settingsCardShownSettings.length - 1;
-      const parts = s.split(">").map((part) => part.trim()).filter(Boolean);
-      const title = parts[parts.length - 1] ?? s;
-      const breadcrumb = parts.slice(0, -1).join(" > ");
-      const compactLine = isQam ? `* QAM > ${title}` : `${title}`;
-      const compactSubline = isQam ? `(${breadcrumb})` : breadcrumb;
-
-      return (
-        <Button
-          key={s}
-          ref={(el) => {
-            settingsCardRowRefs.current[i] = el;
-          }}
-          className={`bonsai-settings-results-card-row ${FOCUS_RING_BTN_CLASS}`}
-          {...({
-            /*
-             * Up walks toward the heading (index 0, nearest the tab bar) and holds still once
-             * there -- nothing above the top row is a stop of its own. Down walks the other way
-             * and, from the row nearest the box, hands the ring back to it (plan 45 section 4's
-             * Up/Down rows / plan 56 lane E2 step 3).
-             */
-            onMoveUp: () => {
-              if (i === 0) return true;
-              settingsCardRowRefs.current[i - 1]?.focus();
-              return true;
-            },
-            onMoveDown: () => {
-              if (isLastRow) return focusUnifiedTextField();
-              settingsCardRowRefs.current[i + 1]?.focus();
-              return true;
-            },
-            // A jumps to the setting exactly as the click does today -- see the Ask bar's other
-            // buttons (e.g. the Ask-mode menu rows) for the same onActivate/onOKButton pairing.
-            onActivate: () => onSettingClick(s),
-            onOKButton: (evt: { stopPropagation: () => void }) => {
-              evt.stopPropagation();
-              onSettingClick(s);
-            },
-            // B closes the card for the rest of this search and keeps what was typed; the ring
-            // goes back to the box, the same place Down from this row sends it.
-            onCancelButton: () => {
-              setSettingsCardClosedForSearch(true);
-              focusUnifiedTextField();
-              return true;
-            },
-            // Only the row nearest the box carries the shared nav node -- see
-            // focusSettingsCardLastRow's own comment for why it has to be this one row.
-            ...(isLastRow ? { navRef: settingsCardLastRowNavRef } : {}),
-          } as Record<string, unknown>)}
-          onClick={() => onSettingClick(s)}
-          style={{
-            width: "100%",
-            minHeight: SETTINGS_CARD_ROW_HEIGHT_PX,
-            padding: "2px 6px",
-            borderRadius: 4,
-            border: `1px solid ${isQam ? "rgba(243, 197, 91, 0.3)" : "rgba(255,255,255,0.1)"}`,
-            background: isQam ? "rgba(243, 197, 91, 0.08)" : "rgba(255,255,255,0.02)",
-          }}
-        >
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              textAlign: "center",
-            }}
-          >
-            <div style={{ fontSize: textPx(10), fontWeight: 700, color: isQam ? "#f2cf84" : "#d4dbe2", lineHeight: "1.15" }}>
-              {compactLine}
-            </div>
-            {compactSubline && (
-              <div style={{ fontSize: textPx(9), color: "#9fafbc", lineHeight: "1.1", marginTop: 1 }}>
-                {compactSubline}
-              </div>
-            )}
-          </div>
-        </Button>
-      );
-    })}
-  </div>
-)}
 </div>
 {(isCapturingScreenshot || mediaError) && (
   <PanelSectionRow>

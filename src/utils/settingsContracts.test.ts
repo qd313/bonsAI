@@ -107,6 +107,11 @@ describe("settings contracts", () => {
     expect(normalizeSettings({ voice_stt_model: "tiny.en" }).voice_stt_model).toBe("tiny.en");
   });
 
+  it("loads a saved \"Search only\" (the retired choice of Remember what I typed) as off", () => {
+    expect(normalizeSettings({ unified_input_persistence_mode: "persist_search_only" }).unified_input_persistence_mode).toBe("no_persist");
+    expect(normalizeSettings({ unified_input_persistence_mode: "persist_all" }).unified_input_persistence_mode).toBe("persist_all");
+  });
+
   it("normalizes full settings payload with defaults", () => {
     const settings = normalizeSettings({
       latency_warning_seconds: "21",

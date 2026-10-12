@@ -60,14 +60,13 @@ export function useSlowResponseWarningTimer({
 export type UseUnifiedInputPersistenceArgs = {
   unifiedInput: string;
   unifiedInputPersistenceMode: UnifiedInputPersistenceMode;
-  filteredSettingsCount: number;
   setUnifiedInput: (value: string) => void;
   clearAskCameFromMicRef: React.MutableRefObject<() => void>;
 };
 
 /*
- * In: the typed text, the persistence mode setting, and how many Steam settings currently match
- * it (search-only persistence writes nothing when nothing matched).
+ * In: the typed text and the persistence mode setting ("Remember what I typed": on keeps the text,
+ * off keeps nothing; the old "Search only" choice is retired).
  * Out: nothing — only calls `persistSearchQuery` and, on a mode change that should clear the
  * box, `setUnifiedInput("")`.
  * What can go wrong: the previous-mode ref must be updated every render this effect runs, even
@@ -76,7 +75,6 @@ export type UseUnifiedInputPersistenceArgs = {
 export function useUnifiedInputPersistence({
   unifiedInput,
   unifiedInputPersistenceMode,
-  filteredSettingsCount,
   setUnifiedInput,
   clearAskCameFromMicRef,
 }: UseUnifiedInputPersistenceArgs): void {
@@ -85,16 +83,8 @@ export function useUnifiedInputPersistence({
       persistSearchQuery(unifiedInput);
       return;
     }
-    if (unifiedInputPersistenceMode === "persist_search_only") {
-      if (filteredSettingsCount > 0) {
-        persistSearchQuery(unifiedInput);
-      } else {
-        persistSearchQuery("");
-      }
-      return;
-    }
     persistSearchQuery("");
-  }, [unifiedInput, unifiedInputPersistenceMode, filteredSettingsCount]);
+  }, [unifiedInput, unifiedInputPersistenceMode]);
 
   const unifiedInputPersistenceModePrevRef = useRef<typeof unifiedInputPersistenceMode | null>(null);
   useEffect(() => {

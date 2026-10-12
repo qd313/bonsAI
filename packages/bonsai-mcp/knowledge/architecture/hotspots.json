@@ -7,7 +7,7 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 2281,
+      "lines": 2280,
       "role": ""
     },
     {
@@ -17,22 +17,17 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1581,
+      "lines": 1575,
       "role": ""
     },
     {
       "path": "src/index.tsx",
-      "lines": 1349,
+      "lines": 1341,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
       "path": "py_modules/backend/services/knowledge_base_service.py",
       "lines": 1257,
-      "role": ""
-    },
-    {
-      "path": "src/components/MainTabUnifiedAskBar.tsx",
-      "lines": 1219,
       "role": ""
     },
     {
@@ -63,6 +58,11 @@
     {
       "path": "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
       "lines": 1024,
+      "role": ""
+    },
+    {
+      "path": "src/components/MainTabUnifiedAskBar.tsx",
+      "lines": 1015,
       "role": ""
     },
     {

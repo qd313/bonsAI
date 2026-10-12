@@ -37,7 +37,6 @@ function makeArgs(s: Switches): UseBonsaiAskOrchestrationArgs {
     unifiedInputHostRef: { current: null },
     setNavigationMessage: vi.fn(),
     saveIp: vi.fn(),
-    persistSearchQuery: vi.fn(),
     useLocalKnowledgeBase: false,
   };
 }

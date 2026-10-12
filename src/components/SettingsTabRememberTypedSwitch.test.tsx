@@ -86,7 +86,7 @@ describe("Settings tab: Remember what I typed is one switch", () => {
   });
 
   it("is off for an older saved Search", () => {
-    render(<SettingsTab {...buildProps({ unifiedInputPersistenceMode: "persist_search_only" })} />);
+    render(<SettingsTab {...buildProps({ unifiedInputPersistenceMode: "persist_search_only" as never })} />);
     expect(checkedOf(document.querySelector(SWITCH))).toBe(false);
   });
 

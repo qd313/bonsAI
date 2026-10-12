@@ -252,15 +252,17 @@ function enumOf<T extends string>(
   };
 }
 
-const readUnifiedInputPersistenceMode = enumOf<UnifiedInputPersistenceMode>(
-  ["persist_all", "persist_search_only", "no_persist"],
+/** The retired "Search only" name, still read from an older settings file. */
+const RETIRED_SEARCH_ONLY = "persist_search_only";
+const readUnifiedInputPersistenceMode = enumOf<UnifiedInputPersistenceMode | typeof RETIRED_SEARCH_ONLY>(
+  ["persist_all", RETIRED_SEARCH_ONLY, "no_persist"],
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
 );
 
 /** Mirrors Python's `sanitize_unified_input_persistence_mode`: a saved "Search" loads as off. */
 function normalizeUnifiedInputPersistenceMode(value: unknown): UnifiedInputPersistenceMode {
   const mode = readUnifiedInputPersistenceMode(value);
-  return mode === "persist_search_only" ? "no_persist" : mode;
+  return mode === RETIRED_SEARCH_ONLY ? "no_persist" : mode;
 }
 
 /** Trimmed and length-capped. A non-string is rejected outright, not stringified. */

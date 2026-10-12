@@ -453,11 +453,7 @@ const Content: React.FC = () => {
 
   const intentPacks = useIntentPacks();
 
-  const { filteredSettings, onSettingClick } = useSteamSettingsSearch({
-    unifiedInput,
-    intentPackIndex: intentPacks.index,
-    setNavigationMessage,
-  });
+  const { onSettingClick } = useSteamSettingsSearch({ setNavigationMessage });
 
   const { appLogPrefs, capturedErrors, setCapturedErrors } = useAppLogPrefsAndCapturedErrors({
     desktopAppLogLevel,
@@ -543,7 +539,6 @@ const Content: React.FC = () => {
     unifiedInputHostRef,
     setNavigationMessage,
     saveIp: persistOllamaIpIfRoutingToLan,
-    persistSearchQuery,
     onExternalFailure: (source, message, detail) => {
       appendAppDesktopLogWithPrefs(appLogPrefs, "verbose", "external.failure", message, {
         source,
@@ -768,7 +763,6 @@ const Content: React.FC = () => {
   useUnifiedInputPersistence({
     unifiedInput,
     unifiedInputPersistenceMode,
-    filteredSettingsCount: filteredSettings.length,
     setUnifiedInput,
     clearAskCameFromMicRef,
   });
@@ -919,8 +913,6 @@ const Content: React.FC = () => {
     usesNativeMultilineField,
     setIsUnifiedInputFocused,
     isUnifiedInputFocused,
-    filteredSettings,
-    onSettingClick,
     isAsking,
     ollamaIp: effectiveOllamaPcIp,
     onAskOllama: onAskOllamaWithReadAloud,

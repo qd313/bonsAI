@@ -27,7 +27,7 @@
  * box; the spacing under the chip row (the dock's one row gap, plan 72; the
  * box has none under it since plan 84, it is the last row); each chip's own size and
  * label; the carousel's sliding track; the chip's focus bar and its
- * out-of-chips flash; and last the settings-results card. (The big Ask
+ * out-of-chips flash. (The settings-results card that was drawn here moved to the Search tab, plan 92.) (The big Ask
  * row's own width rules went with the row, plan 84.)
  *
  * What changed on 2026-09-17 (plan 60), and why, since three rules below
@@ -81,14 +81,8 @@ import {
   PRESET_CHIP_GAP_PX,
   PRESET_VISIBLE_SLOTS,
 } from "../../features/preset-carousel/presetRowLayout";
-import {
-  SETTINGS_CARD_PAD_BOTTOM_PX,
-  SETTINGS_CARD_PAD_TOP_PX,
-  SETTINGS_CARD_ROW_GAP_PX,
-} from "../../hooks/useSteamSettingsSearch";
 import { buildPresetChipLabelCss } from "./presetChipLabel";
 import { uiScalePx } from "./uiScalePx";
-import { textPx } from "./textPx";
 
 /**
  * In: nothing.
@@ -331,66 +325,5 @@ export function buildSection4Section(): string {
             transition: none !important;
           }
         }
-
-        /*
-          The settings-results card (plan 45 / plan 56 lane E). Positioned by the component itself
-          (position: absolute; bottom: 100% of the box's own wrapper) — this only draws it, on the
-          same horizontal track as the box so it lines up with the textarea above which it floats.
-          Sized by its own content: MainTabUnifiedAskBar.tsx decides how many rows to render (never
-          more than fit the live-measured room above it), and the card simply stacks whatever it is
-          given. The heading-to-row-1 gap comes from the heading's own padding-bottom below, not
-          from this card's row gap, so the two never double up — see settingsCardHeightForRows in
-          useSteamSettingsSearch.ts, which this file's numbers are read from directly.
-        */
-        .bonsai-scope .bonsai-settings-results-card {
-          width: 100% !important;
-          max-width: none !important;
-          min-width: 0 !important;
-          margin-left: 0 !important;
-          margin-right: 0 !important;
-          box-sizing: border-box !important;
-          display: flex;
-          flex-direction: column;
-          border-radius: 8px;
-          padding: ${SETTINGS_CARD_PAD_TOP_PX}px 6px ${SETTINGS_CARD_PAD_BOTTOM_PX}px;
-          pointer-events: auto;
-          z-index: 5;
-        }
-        /*
-          A card floating over the chat needs its own solid surface — the transcript behind it is
-          not opaque (the same reason the dock itself carries an explicit background, section-6.ts).
-          Measured on the Deck 2026-09-16 (build ca12429, screenshots/DeckCapture_20260916_045914_game.png):
-          a chat slot title and a reply's own text both still read straight through the card at the
-          previous 0.92 alpha, over both the heading and rows four and five. Fully opaque now, not
-          just "mostly" — an alpha channel of any size leaves room for a CEF compositing surprise
-          like that one to show through again, and there is nothing behind this card worth blending
-          with. ".bonsai-settings-results-card.bonsai-glass-panel" is three class selectors, one more
-          than the shared ".bonsai-glass-panel" rule above (section-6.ts) that supplies the 0.25
-          fallback every other glass panel uses, so this rule already outranks it on specificity
-          alone (section-4.test.ts pins that count) — the blur is turned off here too, on its own
-          !important rule, since the shared blur rule (section-6.ts) carries none at all and a blur
-          has nothing left to do once the surface behind it can never show through regardless.
-        */
-        .bonsai-scope .bonsai-settings-results-card.bonsai-glass-panel {
-          background: rgb(18, 26, 34) !important;
-          backdrop-filter: none !important;
-          -webkit-backdrop-filter: none !important;
-        }
-        .bonsai-scope .bonsai-settings-results-card-heading {
-          color: #8fa8c4;
-          font-size: ${textPx(11)};
-          line-height: 16px;
-          padding-bottom: 6px;
-        }
-        .bonsai-scope .bonsai-settings-results-card-heading-count {
-          color: #6b7c90;
-        }
-        .bonsai-scope .bonsai-settings-results-card-row {
-          flex-shrink: 0;
-        }
-        .bonsai-scope .bonsai-settings-results-card-row + .bonsai-settings-results-card-row {
-          margin-top: ${SETTINGS_CARD_ROW_GAP_PX}px;
-        }
-
         `;
 }

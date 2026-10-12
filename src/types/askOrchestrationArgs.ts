@@ -37,7 +37,6 @@ export type UseBonsaiAskOrchestrationArgs = {
   unifiedInputHostRef: RefObject<HTMLDivElement | null>;
   setNavigationMessage: Dispatch<SetStateAction<string>>;
   saveIp: (ip: string) => void;
-  persistSearchQuery: (unifiedInputText: string) => void;
   /** When app log level is verbose, copy external/RPC failures into Desktop bonsAI_logs. */
   onExternalFailure?: (source: string, message: string, detail?: Record<string, unknown>) => void;
   aiCharacterEnabled?: boolean;

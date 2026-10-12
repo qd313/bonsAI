@@ -58,7 +58,8 @@ export { DEFAULT_OLLAMA_KEEP_ALIVE };
 export { DEFAULT_REPLY_VERBOSITY };
 export { DEFAULT_MODEL_POLICY_TIER };
 
-export type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" | "no_persist";
+/** "Remember what I typed" is one on/off switch: on is `persist_all`. The old "Search only" choice is retired; a saved one loads as off (bonsaiSettingsNormalizers.ts). */
+export type UnifiedInputPersistenceMode = "persist_all" | "no_persist";
 /**
  * Whether a finished answer is read aloud without a press (D99 call 3): never, only when the
  * question that produced it came in through the mic, or every time. Off is the shipped default.

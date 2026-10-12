@@ -60,9 +60,6 @@ import { uiWindowMissingFocus } from "./uiDocument";
 
 export type NavFocusId = "session-context-strip" | "preset-carousel" | "unified-input"
   | "tab-bar"
-  /** The settings-results card's own row nearest the question box (plan 45 step 3 / plan 56 lane
-   *  E2) — Up from the box takes Steam's ring here; see MainTabUnifiedAskBar.tsx. */
-  | "settings-results-card"
   /** The troubleshooting Ask hint and vac-check deny rows below the transcript — see
    *  MainTabChatTranscript.tsx's `focusChatPermissionHintRow`. Two ids, not one, because both rows
    *  can in principle be mounted at once and a single shared id would let the later-mounted row's

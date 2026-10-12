@@ -92,8 +92,6 @@ export type MainTabProps = {
   usesNativeMultilineField: boolean;
   setIsUnifiedInputFocused: (v: boolean) => void;
   isUnifiedInputFocused: boolean;
-  filteredSettings: string[];
-  onSettingClick: (settingPath: string) => void;
   isAsking: boolean;
   ollamaIp: string;
   onAskOllama: (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => void | Promise<void>;
@@ -116,7 +114,6 @@ export type MainTabProps = {
   isLoadingRecentScreenshots: boolean;
   onSelectRecentScreenshot: (item: ScreenshotItem) => void;
   navigationMessage: string;
-  isQamSetting: (settingPath: string) => boolean;
   showSlowWarning: boolean;
   latencyWarningSeconds: number;
   ollamaResponse: string;

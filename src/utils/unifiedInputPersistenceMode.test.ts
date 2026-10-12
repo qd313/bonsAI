@@ -12,7 +12,6 @@ describe("shouldClearUnifiedInputForPersistenceMode", () => {
 
   it("clears when user switches into no_persist", () => {
     expect(shouldClearUnifiedInputForPersistenceMode("persist_all", "no_persist")).toBe(true);
-    expect(shouldClearUnifiedInputForPersistenceMode("persist_search_only", "no_persist")).toBe(true);
   });
 
   it("does not clear when leaving no_persist", () => {

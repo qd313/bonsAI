@@ -1349,9 +1349,6 @@ export function useBonsaiAskOrchestration(
           if (ip.trim().length > 0) {
             a.saveIp(ip);
           }
-          if (a.unifiedInputPersistenceMode === "persist_search_only") {
-            a.persistSearchQuery("");
-          }
           if (data.meta === "shortcut_setup") {
             toaster.toast({
               title: "Quick-launch help",
@@ -1395,9 +1392,6 @@ export function useBonsaiAskOrchestration(
 
         if (ip.trim().length > 0) {
           a.saveIp(ip);
-        }
-        if (a.unifiedInputPersistenceMode === "persist_search_only") {
-          a.persistSearchQuery("");
         }
         startBackgroundStatusPolling(seq, q);
       } catch (e: unknown) {

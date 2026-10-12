@@ -35,8 +35,6 @@ export type MainTabUnifiedAskBarProps = {
   setIsUnifiedInputFocused: (v: boolean) => void;
   isUnifiedInputFocused: boolean;
   setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
-  filteredSettings: string[];
-  onSettingClick: (settingPath: string) => void;
   isAsking: boolean;
   ollamaIp: string;
   onAskOllama: (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => void | Promise<void>;
@@ -60,7 +58,6 @@ export type MainTabUnifiedAskBarProps = {
   aiCharacterDebugLine?: string | null;
   askMode: AskModeId;
   onAskModeChange: (mode: AskModeId) => void;
-  isQamSetting: (settingPath: string) => boolean;
   onFocusHandlersReady?: (handlers: { focusUnifiedTextField: () => boolean }) => void;
   onNavigateToPermissions?: (capability: BonsaiCapabilityKey) => void;
   /** The running game, for the game tag in the box's strip (AskStripGameTag.tsx, plan 84). */

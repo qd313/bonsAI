@@ -57,8 +57,6 @@ function buildProps(overrides: Partial<MainTabUnifiedAskBarProps> = {}): MainTab
     setIsUnifiedInputFocused: vi.fn(),
     isUnifiedInputFocused: false,
     setUnifiedInput: vi.fn(),
-    filteredSettings: [],
-    onSettingClick: vi.fn(),
     isAsking: false,
     ollamaIp: "192.168.1.50",
     onAskOllama: vi.fn(),
@@ -73,7 +71,6 @@ function buildProps(overrides: Partial<MainTabUnifiedAskBarProps> = {}): MainTab
     mediaError: "",
     askMode: "speed",
     onAskModeChange: vi.fn(),
-    isQamSetting: vi.fn(() => false),
     ...overrides,
   };
 }

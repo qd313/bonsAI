@@ -28,7 +28,7 @@ describe("nav focus registry", () => {
   });
 
   it("reports false for a target that was never registered", () => {
-    expect(takeNavFocus("settings-results-card")).toBe(false);
+    expect(takeNavFocus("session-summary-card")).toBe(false);
   });
 
   /*

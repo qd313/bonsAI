@@ -44,7 +44,6 @@ import {
   resolveMainTabAvatarBadgeLetter,
   resolveMainTabAvatarPresetId,
 } from "../../../data/characterCatalog";
-import { isQamSetting } from "../../../data/steamSettingsNavigation";
 import type { AiCharacterAccentIntensityId } from "../../../data/aiCharacterAccentIntensity";
 
 const FULL_BLEED_ROW_STYLE: React.CSSProperties = {
@@ -63,14 +62,13 @@ const PRESET_BUTTON_SURFACE: React.CSSProperties = {
 type MainTabProps = React.ComponentProps<typeof MainTab>;
 
 /**
- * Everything the Main tab renders, except the two layout constants and `isQamSetting`
+ * Everything the Main tab renders, except the two layout constants
  * (owned here) and the AI-character presentation, which is derived from the raw settings below.
  */
 export type UseMainTabPayloadArgs = Omit<
   MainTabProps,
   | "fullBleedRowStyle"
   | "presetButtonSurface"
-  | "isQamSetting"
   | "aiCharacterPadClass"
   | "aiCharacterAvatarPresetId"
   | "aiCharacterAvatarBadgeLetter"
@@ -176,8 +174,6 @@ export function useMainTabPayload({
     usesNativeMultilineField,
     setIsUnifiedInputFocused,
     isUnifiedInputFocused,
-    filteredSettings,
-    onSettingClick,
     isAsking,
     ollamaIp,
     onAskOllama,
@@ -290,8 +286,6 @@ export function useMainTabPayload({
         usesNativeMultilineField={usesNativeMultilineField}
         setIsUnifiedInputFocused={setIsUnifiedInputFocused}
         isUnifiedInputFocused={isUnifiedInputFocused}
-        filteredSettings={filteredSettings}
-        onSettingClick={onSettingClick}
         isAsking={isAsking}
         ollamaIp={ollamaIp}
         onAskOllama={onAskOllama}
@@ -314,7 +308,6 @@ export function useMainTabPayload({
         isLoadingRecentScreenshots={isLoadingRecentScreenshots}
         onSelectRecentScreenshot={onSelectRecentScreenshot}
         navigationMessage={navigationMessage}
-        isQamSetting={isQamSetting}
         showSlowWarning={showSlowWarning}
         latencyWarningSeconds={latencyWarningSeconds}
         ollamaResponse={ollamaResponse}
@@ -392,7 +385,6 @@ export function useMainTabPayload({
       unifiedInputSurfacePx,
       usesNativeMultilineField,
       isUnifiedInputFocused,
-      filteredSettings,
       isAsking,
       ollamaIp,
       selectedAttachment,

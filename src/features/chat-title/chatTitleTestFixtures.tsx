@@ -63,7 +63,6 @@ export function baseMainTabProps(): MainTabProps {
     onChatSlotRename: async () => true,
     onChatSlotDelete: async () => true,
     suggestedPrompts: [],
-    filteredSettings: [],
     recentScreenshots: [],
   } as unknown as MainTabProps;
 }

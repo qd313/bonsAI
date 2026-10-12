@@ -1,6 +1,6 @@
 /**
  * Title: Each Steam settings page opens its own page
- * Purpose: Pin what the settings card does when a person picks a row: for every one of the 24
+ * Purpose: Pin what happens when a person picks a settings match on the Search tab: for every one of the 24
  *          Steam Settings pages it opens that page, the way the Deck measurement says that page
  *          opens (a steam:// link for 22 and for Internet under the name "network"; Decky's own
  *          route for Remote Play).
@@ -69,8 +69,6 @@ const MEASURED: Array<[string, Opener]> = [
 function pickRow(settingPath: string): void {
   const { result } = renderHook(() =>
     useSteamSettingsSearch({
-      unifiedInput: "",
-      intentPackIndex: { byTarget: new Map() } as never,
       setNavigationMessage: vi.fn(),
     }),
   );

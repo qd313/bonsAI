@@ -41,7 +41,9 @@ import math
 from collections import deque
 
 from backend.services.voice_audio_capture_service import _pcm_rms
-from backend.services.voice_whisper_runtime import SAMPLE_WIDTH
+from backend.services.voice_whisper_runtime import CHANNELS, SAMPLE_RATE, SAMPLE_WIDTH
+
+_BYTES_PER_SECOND = SAMPLE_RATE * CHANNELS * SAMPLE_WIDTH
 
 # 64 ms of 16 kHz mono 16-bit sound.
 SLICE_BYTES = 2048
@@ -58,6 +60,13 @@ MIN_HISTORY_SLICES = 10
 # A window needs this many voiced slices (a quarter of a second) to count as speech, so one
 # click of the button does not start a decode.
 MIN_VOICED_SLICES = 4
+# How much quiet is kept after the last loud slice when the final read trims a recording's end
+# (plan 89). Half a second, not less: a soft last syllable can sit under the loudness gate, and a
+# quiet speaker's last word must not be clipped. The start of a recording is never trimmed -- the
+# same gate would clip the quiet first word of a soft speaker, and silence there did no harm.
+TAIL_KEEP_S = 0.5
+# Whisper refuses audio shorter than a second, so a trimmed read is never made shorter than this.
+MIN_TRIMMED_S = 1.0
 
 
 def slice_levels(pcm: bytes) -> list[float]:
@@ -120,3 +129,23 @@ class VoiceLevelGate:
         if not loud:
             return 0.0
         return math.sqrt(sum(level * level for level in loud) / len(loud))
+
+    def trim_trailing_silence(self, pcm: bytes) -> bytes:
+        """`pcm` without the silence after the speech, for the one final read at Stop (plan 89).
+
+        Whisper invents short words ("you") on silence, and a person pauses before pressing Stop,
+        so the end of a recording is often silence. A read that never hears the silence cannot
+        invent a word in it. Cuts just after the last loud slice (TAIL_KEEP_S of quiet kept);
+        everything before that point is untouched, so pauses inside the sentence stay. Audio with
+        no loud slice, or that ends in speech, comes back unchanged, and a result under
+        MIN_TRIMMED_S is grown back out into the audio that was cut because the engine will not
+        read less.
+        """
+        limit = self.threshold()
+        voiced = [i for i, level in enumerate(slice_levels(pcm)) if level >= limit]
+        if not voiced:
+            return pcm
+        keep = int(TAIL_KEEP_S * _BYTES_PER_SECOND) // SAMPLE_WIDTH * SAMPLE_WIDTH
+        end = min(len(pcm), (voiced[-1] + 1) * SLICE_BYTES + keep)
+        floor = int(MIN_TRIMMED_S * _BYTES_PER_SECOND) // SAMPLE_WIDTH * SAMPLE_WIDTH
+        return pcm[: min(len(pcm), max(end, floor))]

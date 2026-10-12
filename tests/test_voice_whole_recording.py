@@ -182,7 +182,10 @@ class FinalReplacesLiveTests(unittest.TestCase):
         wholes = [c for c in rec.calls if c.whole]
         self.assertEqual(len(wholes), 1)
         self.assertIs(rec.calls[-1], wholes[0])
-        self.assertAlmostEqual(wholes[0].length_s, len(stream) / BPS, places=1)
+        # One read from the very start; only the silence after the last word is left out (plan 89).
+        self.assertAlmostEqual(wholes[0].start_s, 0.0, places=2)
+        last_word_end = times[-1][1]
+        self.assertAlmostEqual(wholes[0].end_s, last_word_end + gate.TAIL_KEEP_S, delta=2 * SLICE_S)
 
     def test_a_failed_final_pass_keeps_the_live_text(self) -> None:
         for how in ("raises", "hears nothing", "only a quiet filler"):

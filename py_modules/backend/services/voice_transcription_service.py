@@ -58,6 +58,8 @@ How a recording becomes the text you keep:
     Stop, Ask, or the 2-minute limit -----> status "finishing" (recording off)
                                                         |
                        read the whole recording once with the chosen model
+                       (silence after the last word cut off first: whisper
+                        invents words such as "you" in it)
                                                         |
                           status "stopped", finalized_transcript = that text
                           (if that read fails or hears nothing usable, the
@@ -731,7 +733,8 @@ class VoiceTranscriptionSession:
             if not self._skip_final:
                 pcm = self._pcm_from(0)
                 if len(pcm) >= WHISPER_MIN_DECODE_PCM_BYTES and self._level_gate.window_voiced(pcm):
-                    text = self._decode(pcm, whisper_bin, model_path, env)
+                    # The silence after the speech is not handed over: whisper invents words in it.
+                    text = self._decode(self._level_gate.trim_trailing_silence(pcm), whisper_bin, model_path, env)
                     if text:
                         final = text
         except Exception as exc:

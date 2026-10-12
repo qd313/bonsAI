@@ -103,8 +103,13 @@ class Recording:
 
     def _hear(self, _bin, _model, _env, pcm: bytes) -> str:
         self.decode_calls += 1
-        end = self.fed / BYTES_PER_SECOND
-        start = end - len(pcm) / BYTES_PER_SECOND
+        if self.stream.startswith(pcm):
+            # The final read leaves out the silence after the last word (plan 89), so it no longer
+            # ends where the recording ends; it still starts where the recording starts.
+            start, end = 0.0, len(pcm) / BYTES_PER_SECOND
+        else:
+            end = self.fed / BYTES_PER_SECOND
+            start = end - len(pcm) / BYTES_PER_SECOND
         heard = [w for w, (a, b) in zip(SENTENCE, self.word_times) if a >= start - 0.02 and b <= end + 0.02]
         return " ".join(heard)
 

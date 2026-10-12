@@ -34,13 +34,18 @@ moves up one tier with the measurement in hand.
    `git worktree remove`; it follows the link and empties the shared folder.
 4. Write one short rules file all helpers read, and one brief each. Every brief carries:
    - the tip hash and the check that the copy is based on it;
-   - "run the baseline checks now, without an install";
+   - "do not install anything"; **no full test run at the start** (the one running the session runs one baseline on the
+     shared checkout at the tip, which covers every copy);
    - the files the helper owns, and "a fix that needs another file: stop and report";
    - one fix per commit, failing test first;
    - **the sentence that says what a pass looks like on the Deck, and one test at that same level**;
    - for a wording or label fix, a search for every place the words appear;
    - for a D-pad walk, tests that model Steam's own scroll on focus, and a bounded walk with no stop twice;
-   - the five checks and `python scripts/verify.py --quick` before every commit;
+   - before every commit: the typecheck, the build, the focus check, the test files it touched or added (by name),
+     and the unused-exports count; **never the full test sets** (they run once at landing, one landing at a time).
+     Seven helpers each running the full screen set at once took one run from 75 seconds to over an hour and froze
+     five runs (plan 92's second night, lessons § 4). Start helpers a few minutes apart, and end any test run a
+     finished helper left behind;
    - a scratch folder of its own, and `git -C <copy>` instead of `cd`;
    - **never `git stash`**: the stash list is one list shared by every copy, and two helpers stashing at the
      same moment swapped each other's uncommitted work (plan 78). A helper that wants to see its test fail

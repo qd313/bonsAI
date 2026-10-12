@@ -597,6 +597,32 @@ finish in a few minutes, or use Sonnet medium.
 the five-hour window from 8 to 75 percent. A plan of more than ten helpers will reach the 80 percent weekly line in one
 night unless it starts with the week well under half; plan the clean stopping point as the likely end.
 
+**Many helpers each running the full test set at once starve the PC** (plan 92's second night, 2026-10-12; the
+maintainer's theory, and the numbers bear it out). The full screen test set takes about 75 seconds on a quiet PC. With
+seven or eight helpers each running it before every commit (each run starts about 20 workers, one per core), one run
+took over an hour, five runs froze with one worker spinning and the rest idle, and free memory fell to 1.4 GB of 32.
+The worst moment was the start: every brief said "run all the checks first", so seven helpers ran the heaviest job in
+the same minute. What fixed it, and what to do from the start next time:
+- **Helpers run only the tests for what they touched** (by file name), plus the typecheck, the build and the focus
+  check; **the full sets run once, at landing**, one landing at a time. Switched to this at 13:33; the screen tests at
+  landing went from over an hour back to two or three minutes.
+- **No "run everything first" step in each helper.** One baseline on the shared checkout at the tip covers them all.
+- **Stagger the starts** by a few minutes, and **cap the workers** a helper's test run may use, so overlapping runs
+  share the PC instead of each taking all of it.
+- **List and end leftover test runs** whenever a helper finishes: one from the morning's cleanup helper had been
+  running for five and a half hours.
+- A stuck run is one worker spinning with the rest idle: stop it and re-run; the same full set then passed in 75
+  seconds, so it was memory, not a broken test.
+
+**A helper that skips the quick check can push the unused-exports count over its best.** Twice on the second night a
+second-round fix exported a number only its own file used, and the landing's quick check failed after the commits were
+already on `experimental`. When helpers run light gates, have them run the unused-exports count (`knip`) before they
+commit, or un-export at landing before the push.
+
+**A brief whose rule and pass check disagree gets built to the stricter one** (plan 92 lane M2: the rule said "hold only
+past a row and a half", the Deck check said "within half a row"; the helper built the check, which left dead presses).
+Read the brief's rule against its own check before sending it.
+
 ---
 
 ## 5. Design and screen work

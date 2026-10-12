@@ -54,6 +54,8 @@ type State = {
   /** The turn whose line opened the sheet; the ring goes back to that line when the sheet closes. */
   sheetOpenedFrom: string | null;
   sheetOpen: boolean;
+  /** Until when (ms since 1970) a line drawn again after the sheet closed may take the ring back. */
+  sheetReturnUntil: number;
   /** The Edit popup was opened from the card; the ring goes back to Keep when it closes. */
   editReturn: boolean;
   editOpen: boolean;
@@ -61,7 +63,7 @@ type State = {
 };
 
 function fresh(): State {
-  return { record: null, activeSlotId: "", sheetOpenedFrom: null, sheetOpen: false, editReturn: false, editOpen: false, modalHooks: {} };
+  return { record: null, activeSlotId: "", sheetOpenedFrom: null, sheetOpen: false, sheetReturnUntil: 0, editReturn: false, editOpen: false, modalHooks: {} };
 }
 
 let state: State = fresh();
@@ -198,11 +200,18 @@ export function beginSheet(turnKey: string): void {
   set({ sheetOpenedFrom: turnKey, sheetOpen: true });
 }
 
+/** How long after the sheet closes a line drawn again may take the ring back. The tab is drawn more than once. */
+export const SHEET_RETURN_WINDOW_MS = 3000;
+
 export function endSheetOpen(): void {
-  set({ sheetOpen: false });
+  set({ sheetOpen: false, sheetReturnUntil: Date.now() + SHEET_RETURN_WINDOW_MS });
 }
 
-/** Called by the rebuilt line once it has taken the ring back. */
+/**
+ * Called when the window for taking the ring back has run out. Landing once does NOT end it: closing a
+ * popup draws the Main tab more than once (and each draw's Ask bar claims the ring for the question box),
+ * so the line drawn last must still be able to take it (Deck, plan92-P90-NOTES-SHEET.json).
+ */
 export function sheetReturnDone(): void {
-  set({ sheetOpenedFrom: null });
+  set({ sheetOpenedFrom: null, sheetReturnUntil: 0 });
 }

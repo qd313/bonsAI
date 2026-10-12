@@ -30,6 +30,8 @@ import { NotesReadLine, buildNotesReadLine, notesLineLabel, notesReadFromSnapsho
 import { UserNotesSheet } from "./UserNotesSheet";
 import { getUserNotesState, resetUserNotesStore, setNotesModalHooks } from "./userNotesStore";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
+import { useAskBarInitialRingClaim } from "../../hooks/useAskBarInitialRingClaim";
+import { registerNavFocus, resetNavFocusRegistry } from "../../utils/navFocusRegistry";
 import { REPLY_STOP_ORDER, registerReplyStop } from "../../utils/replyStopRegistry";
 import type { ChatSlotTurnTransparency } from "../../utils/inputTransparency";
 
@@ -116,7 +118,8 @@ describe("opening the sheet", () => {
       await new Promise((r) => setTimeout(r, 120));
     });
     expect(steamRingHolder()).toBe(second.container.querySelector(".bonsai-notes-line"));
-    expect(getUserNotesState().sheetOpenedFrom).toBeNull();
+    /* Landing does not end the claim (the tab may be drawn again); only the window does. */
+    expect(getUserNotesState().sheetOpenedFrom).toBe("t1");
   });
 
   it("another turn's line does not take the ring", async () => {
@@ -143,6 +146,98 @@ describe("opening the sheet", () => {
       await new Promise((r) => setTimeout(r, 120));
     });
     expect(steamRingHolder()).toBeNull();
+  });
+});
+
+/**
+ * The Main tab's own ring claim (useAskBarInitialRingClaim), as it runs after every rebuild: a fresh mount of
+ * the Ask bar hands the ring to the question box if nothing owns it a beat later. The Deck showed it beating
+ * the line (plan92-P90-NOTES-SHEET.json), because the tab is drawn more than once when a popup closes and the
+ * claim runs on each, and because the line can be drawn after the bar has claimed.
+ */
+function AskBarStandIn(): React.ReactElement {
+  useAskBarInitialRingClaim();
+  return <input aria-label="question box" />;
+}
+
+describe("after the popup closes, whatever the Main tab does about the question box", () => {
+  beforeEach(() => {
+    resetNavFocusRegistry();
+  });
+
+  function registerBox(box: () => HTMLElement | null) {
+    registerNavFocus("unified-input", { current: { TakeFocus: () => (putSteamRingOn(box()), true) } });
+  }
+
+  async function openAndCloseTheSheet() {
+    setNotesModalHooks({ complete: (close) => close() });
+    const first = render(<NotesReadLine turnKey="t1" notes={{ read: 1, off: 0 }} />);
+    act(() => (first.container.querySelector(".bonsai-notes-line") as SteamEl).__nav?.onOKButton?.());
+    first.unmount();
+    act(() => (hoisted.modals[0]!.props as { onClose: () => void }).onClose());
+  }
+
+  const wait = (ms: number) =>
+    act(async () => {
+      await new Promise((r) => setTimeout(r, ms));
+    });
+
+  it("the line gets the ring when the bar and the line are drawn together", async () => {
+    await openAndCloseTheSheet();
+    const tab = render(
+      <>
+        <AskBarStandIn />
+        <NotesReadLine turnKey="t1" notes={{ read: 1, off: 0 }} />
+      </>,
+    );
+    registerBox(() => tab.container.querySelector("input"));
+    await wait(400);
+    expect(steamRingHolder()).toBe(tab.container.querySelector(".bonsai-notes-line"));
+  });
+
+  it("the line gets the ring when the bar claimed it for the question box first", async () => {
+    await openAndCloseTheSheet();
+    const bar = render(<AskBarStandIn />);
+    registerBox(() => bar.container.querySelector("input"));
+    await wait(200);
+    expect(steamRingHolder()).toBe(bar.container.querySelector("input"));
+    const line = render(<NotesReadLine turnKey="t1" notes={{ read: 1, off: 0 }} />);
+    await wait(300);
+    expect(steamRingHolder()).toBe(line.container.querySelector(".bonsai-notes-line"));
+  });
+
+  it("the tab drawn a second time, as it is when a popup closes, still ends with the ring on the line", async () => {
+    await openAndCloseTheSheet();
+    const one = render(
+      <>
+        <AskBarStandIn />
+        <NotesReadLine turnKey="t1" notes={{ read: 1, off: 0 }} />
+      </>,
+    );
+    registerBox(() => document.querySelector("input"));
+    await wait(200);
+    expect(steamRingHolder()).toBe(one.container.querySelector(".bonsai-notes-line"));
+    one.unmount(); // the rebuild: the ring goes with the old line
+    expect(steamRingHolder()).toBeNull();
+    const two = render(
+      <>
+        <AskBarStandIn />
+        <NotesReadLine turnKey="t1" notes={{ read: 1, off: 0 }} />
+      </>,
+    );
+    await wait(400);
+    expect(steamRingHolder()).toBe(two.container.querySelector(".bonsai-notes-line"));
+  });
+
+  it("stops claiming after a few seconds, so the line does not pull the ring back on a later mount", async () => {
+    vi.useFakeTimers();
+    await openAndCloseTheSheet();
+    act(() => void vi.advanceTimersByTime(10_000));
+    const later = render(<NotesReadLine turnKey="t1" notes={{ read: 1, off: 0 }} />);
+    act(() => void vi.advanceTimersByTime(1_000));
+    vi.useRealTimers();
+    expect(steamRingHolder()).toBeNull();
+    expect(later.container.querySelector(".bonsai-notes-line")).not.toBeNull();
   });
 });
 

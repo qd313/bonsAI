@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 945,
-  "edgeCount": 3129,
+  "edgeCount": 3131,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -6203,9 +6203,11 @@
         "src/features/user-notes/NotesReadLine.tsx",
         "src/features/user-notes/UserNotesSheet.tsx",
         "src/features/user-notes/userNotesStore.ts",
+        "src/hooks/useAskBarInitialRingClaim.ts",
         "src/test-harness/fakeDeckyUi.tsx",
         "src/test-harness/steamRing.tsx",
         "src/utils/inputTransparency.ts",
+        "src/utils/navFocusRegistry.ts",
         "src/utils/replyStopRegistry.ts"
       ],
       "importedBy": []
@@ -6518,6 +6520,7 @@
       ],
       "importedBy": [
         "src/components/MainTabUnifiedAskBar.tsx",
+        "src/features/user-notes/NotesReadLine.test.tsx",
         "src/hooks/useAskBarInitialRingClaim.freshOpen.test.ts",
         "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts",
         "src/hooks/useAskBarInitialRingClaim.test.ts"
@@ -10563,6 +10566,7 @@
         "src/features/search-tab/SearchTab.walk.test.tsx",
         "src/features/search-tab/searchJumpStore.ts",
         "src/features/search-tab/useSearchNav.ts",
+        "src/features/user-notes/NotesReadLine.test.tsx",
         "src/hooks/askBarRingWatch.titleView.test.ts",
         "src/hooks/askBarRingWatch.ts",
         "src/hooks/useAskBarInitialRingClaim.freshOpen.test.ts",

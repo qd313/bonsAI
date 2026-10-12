@@ -34,7 +34,7 @@ import React, { useEffect, useRef } from "react";
 import { Focusable } from "@decky/ui";
 
 import { NotePinIcon } from "./NotePinIcon";
-import { beginSheet, sheetReturnDone, useUserNotesState } from "./userNotesStore";
+import { beginSheet, getUserNotesState, sheetReturnDone, useUserNotesState } from "./userNotesStore";
 import { focusFirstAnswerChunk } from "../../utils/answerBubbleNavigation";
 import { focusDeckOwner, focusReplyShowReasoning, queryTurnSlot } from "../../utils/liveTurnFocusGraph";
 import { focusOpenQuestionText } from "../../utils/buildTurnHeaderElement";
@@ -49,8 +49,7 @@ import { elementHasGamepadFocus } from "../../utils/uiDocument";
 import type { ChatSlotTurnTransparency, TransparencySnapshot } from "../../utils/inputTransparency";
 import { openUserNotesSheet } from "./UserNotesSheet";
 
-/** How long, and how often, the ring is put back on the line while the rebuilt tab mounts. */
-const RETURN_TRIES = 12;
+/** How often the ring is put back on the line while the rebuilt tab mounts (the window is in the store). */
 const RETURN_EVERY_MS = 60;
 
 export type NotesRead = { read: number; off: number };
@@ -92,20 +91,24 @@ export function NotesReadLine({ turnKey, notes }: { turnKey: string; notes: Note
   const s = useUserNotesState();
   const el = useRef<HTMLElement | null>(null);
   const label = notesLineLabel(notes);
-  const returning = label !== null && s.sheetOpenedFrom === turnKey && !s.sheetOpen;
+  const returning =
+    label !== null && s.sheetOpenedFrom === turnKey && !s.sheetOpen && Date.now() < s.sheetReturnUntil;
 
-  /* The sheet closed and this line was drawn again: take the ring back, once it has landed. */
+  /*
+   * The sheet closed and this line was drawn again: take the ring back. Landing does not end the claim: the
+   * tab is drawn more than once when a popup closes and the ring is lost with each old line, so every line
+   * drawn inside the window tries until it holds the ring, and the window ends the claim.
+   */
   useEffect(() => {
     if (!returning) return undefined;
-    let tries = 0;
     let timer: number | undefined;
     const attempt = () => {
-      focusRegisteredReplyStop("notes-line");
-      if (elementHasGamepadFocus(el.current)) {
+      if (Date.now() >= getUserNotesState().sheetReturnUntil) {
         sheetReturnDone();
         return;
       }
-      if (++tries < RETURN_TRIES) timer = window.setTimeout(attempt, RETURN_EVERY_MS);
+      if (!elementHasGamepadFocus(el.current)) focusRegisteredReplyStop("notes-line");
+      timer = window.setTimeout(attempt, RETURN_EVERY_MS);
     };
     attempt();
     return () => {

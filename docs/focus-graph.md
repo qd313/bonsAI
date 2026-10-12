@@ -932,6 +932,12 @@ tab bar
   a small module store (`searchTabStore.ts`) because a rebuilt tab loses component state. The move is made in a layout
   effect, once the target is drawn (never on a frame timer). A match that arrives later (the game notes come from
   the knowledge library) keeps the wish until it appears.
+- **B anywhere on the tab goes back to the tab the person came from** (Main when unknown; About after the bumpers
+  wrapped round to Search). The tab's own root `Focusable` carries `onCancelButton`, so a B from any stop reaches it
+  after the stop's own, and the handler's presence keeps B from closing Quick Access. The tab before Search is noted
+  by `useSearchTabPayload.tsx` each time Search opens and kept in `searchJumpStore.ts`. The open game note's Close
+  and text keep their own B (they close the note and answer first). The find box is Steam's text field: B while
+  Steam's keyboard is open belongs to the keyboard.
 - **A game note opens inside the tab**, not in a Steam popup (closing a popup rebuilds the whole tab and the word and
   game would be lost). The sheet's stops are Close and the note's text; B on either closes it. The matches are
   unmounted while it is open, so no stop of theirs can be reached underneath.

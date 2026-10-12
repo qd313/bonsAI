@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 938,
-  "edgeCount": 3095,
+  "fileCount": 939,
+  "edgeCount": 3100,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -5685,6 +5685,16 @@
         "src/features/search-tab/SearchResults.tsx"
       ]
     },
+    "src/features/search-tab/SearchTab.back.test.tsx": {
+      "imports": [
+        "src/features/search-tab/SearchTab.tsx",
+        "src/features/search-tab/searchJumpStore.ts",
+        "src/features/search-tab/searchTabStore.ts",
+        "src/features/search-tab/searchTabTestKit.tsx",
+        "src/test-harness/steamRing.tsx"
+      ],
+      "importedBy": []
+    },
     "src/features/search-tab/SearchTab.jump.test.tsx": {
       "imports": [
         "src/features/search-tab/SearchTab.tsx",
@@ -5725,6 +5735,7 @@
       ],
       "importedBy": [
         "src/features/plugin-shell/tabs/useSearchTabPayload.tsx",
+        "src/features/search-tab/SearchTab.back.test.tsx",
         "src/features/search-tab/SearchTab.jump.test.tsx",
         "src/features/search-tab/SearchTab.test.tsx",
         "src/features/search-tab/SearchTab.walk.test.tsx"
@@ -5773,6 +5784,7 @@
         "src/features/plugin-shell/tabs/useSearchTabPayload.test.tsx",
         "src/features/plugin-shell/tabs/useSearchTabPayload.tsx",
         "src/features/search-tab/SearchBackLine.tsx",
+        "src/features/search-tab/SearchTab.back.test.tsx",
         "src/features/search-tab/SearchTab.jump.test.tsx",
         "src/features/search-tab/SearchTab.tsx",
         "src/features/search-tab/useSearchJump.ts",
@@ -5818,6 +5830,7 @@
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.searchJump.test.tsx",
+        "src/features/search-tab/SearchTab.back.test.tsx",
         "src/features/search-tab/SearchTab.jump.test.tsx",
         "src/features/search-tab/SearchTab.test.tsx",
         "src/features/search-tab/SearchTab.tsx",
@@ -5841,6 +5854,7 @@
         "src/test-harness/steamRing.tsx"
       ],
       "importedBy": [
+        "src/features/search-tab/SearchTab.back.test.tsx",
         "src/features/search-tab/SearchTab.jump.test.tsx",
         "src/features/search-tab/SearchTab.test.tsx",
         "src/features/search-tab/SearchTab.walk.test.tsx"
@@ -8644,6 +8658,7 @@
         "src/features/folded-tabs/FoldedSection.test.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
+        "src/features/search-tab/SearchTab.back.test.tsx",
         "src/features/search-tab/SearchTab.jump.test.tsx",
         "src/features/search-tab/SearchTab.test.tsx",
         "src/features/search-tab/SearchTab.walk.test.tsx",

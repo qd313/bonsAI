@@ -21,6 +21,7 @@
  * ring (useSearchNav.ts).
  */
 import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Focusable } from "@decky/ui";
 
 import type { IntentPackSearchIndex } from "../../utils/intentPackSearch";
 import { uiGamepadFocusElement } from "../../utils/uiDocument";
@@ -40,7 +41,7 @@ import {
   searchGames,
   searchWords,
 } from "./searchModel";
-import { clearSearchArrival, peekSearchArrival } from "./searchJumpStore";
+import { clearSearchArrival, leaveSearchTab, peekSearchArrival } from "./searchJumpStore";
 import { SEARCH_TAB_CSS } from "./searchTabStyles";
 import { readSearchSaved, writeSearchSaved } from "./searchTabStore";
 import type { GameNote } from "./searchTypes";
@@ -266,13 +267,22 @@ export const SearchTab: React.FC<SearchTabProps> = ({ active, isAsking, intentPa
     setOpenNoteState(null);
   }, []);
 
+  /* B anywhere on the tab goes back to the tab the person came from (Main when unknown). The mere presence of this
+     handler keeps B from closing Quick Access; a stop with a B of its own (the open note's) answers first. */
+  const leave = useCallback((evt?: unknown) => {
+    (evt as { preventDefault?: () => void } | undefined)?.preventDefault?.();
+    leaveSearchTab();
+    return true;
+  }, []);
+
   return (
-    <div
+    <Focusable
       className="bonsai-search"
       data-bonsai-search-tab="true"
-      ref={(el) => {
+      ref={(el: HTMLElement | null) => {
         rootEl.current = el;
       }}
+      {...({ onCancelButton: leave } as Record<string, unknown>)}
     >
       <style>{SEARCH_TAB_CSS}</style>
       <div className="bonsai-search__title">Search</div>
@@ -300,6 +310,6 @@ export const SearchTab: React.FC<SearchTabProps> = ({ active, isAsking, intentPa
           )}
         </>
       )}
-    </div>
+    </Focusable>
   );
 };

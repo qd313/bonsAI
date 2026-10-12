@@ -144,6 +144,15 @@ export function noteTabBeforeSearch(tabId: string | null): void {
   state = { ...state, cameFrom: tabId };
 }
 
+/** B on the Search tab: go back to the tab the person came from (Main when unknown). */
+export function leaveSearchTab(): boolean {
+  if (!switchTab) return false;
+  const to = state.cameFrom && state.cameFrom !== "search" ? state.cameFrom : "main";
+  switchTab(to);
+  return true;
+}
+
+
 /* --- The Back line's own stop: its Steam nav node, and its element while it is on screen. --- */
 
 /** The Back line's Steam nav node: the "N earlier" line's Up and the tab bar's Down hand the ring to it. */

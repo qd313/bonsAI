@@ -18,7 +18,7 @@ vi.mock("../../search-tab/SearchTab", () => ({
   },
 }));
 
-import { backToSearch, resetSearchJump, startSearchJump } from "../../search-tab/searchJumpStore";
+import { backToSearch, leaveSearchTab, resetSearchJump, startSearchJump } from "../../search-tab/searchJumpStore";
 import { useSearchTabPayload, type UseSearchTabPayloadArgs } from "./useSearchTabPayload";
 
 const NO_PACKS = { aliasSynonym: [], expansion: [] };
@@ -86,5 +86,35 @@ describe("the shell's tab switch reaches the Search tab's memory", () => {
     startSearchJump({ slotId: "hk", turnId: "hk2", matchKey: "k", word: "mantis", game: null });
     expect(backToSearch()).toBe(false);
     expect(calls).toEqual([]);
+  });
+});
+
+describe("the tab before Search, for B", () => {
+  function Switcher(props: { tab: string; args: UseSearchTabPayloadArgs }): React.ReactElement {
+    return useSearchTabPayload({ ...props.args, currentTab: props.tab });
+  }
+
+  function walkTo(from: string): string[] {
+    const calls: string[] = [];
+    const args = (): UseSearchTabPayloadArgs => ({
+      active: false,
+      isAsking: false,
+      intentPackIndex: NO_PACKS,
+      onSettingClick: vi.fn(),
+      currentTab: from,
+      selectTab: (tab) => calls.push(`tab:${tab}`),
+      selectSlot: async () => {},
+    });
+    const view = render(<Switcher tab={from} args={args()} />);
+    view.rerender(<Switcher tab="search" args={args()} />);
+    expect(leaveSearchTab()).toBe(true);
+    return calls;
+  }
+
+  it("B goes back to Main after Main, and to About after About", () => {
+    expect(walkTo("main")).toEqual(["tab:main"]);
+    cleanup();
+    resetSearchJump();
+    expect(walkTo("about")).toEqual(["tab:about"]);
   });
 });

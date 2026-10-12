@@ -1,0 +1,43 @@
+{
+  "row": "QA-FREE-PLAY-01-final",
+  "build_commit": "3115f3de",
+  "deck_time_local": "2026-10-12T08:36-08:40 -0400",
+  "screen": "monitor live: Quick Access window 855x766; Steam window 1500x844",
+  "setup": "No game. Plugin on Main tab, Mantis Lords test chat (chat 2 of 9), same long finished reply as the baseline. Ollama tab sections as found: Where AI runs open, other four folded. Automated no-game half only; touch half is the maintainer's and was NOT run.",
+  "pressed": "Same two sweeps as baseline, direction presses and RB only, no A, no B. Sweep 1: Down from the question box, budget 100, no lanes (runs/plan92_QA-FREE-PLAY-01-final.json). Sweep 2: Down from the tab bar, one RB lane, budget 100 (runs/plan92_QA-FREE-PLAY-01-final-lane2.json). Then LB back to Main.",
+  "seen": {
+    "sweep1": {
+      "stops": 14,
+      "visited": 13,
+      "unlabeled": 3,
+      "cycles": 0,
+      "focused_but_not_visible": 2,
+      "presses": 17,
+      "baseline": "14 / 13 / 3 / 0 / 2 / 17",
+      "same_stop_list_as_baseline": true,
+      "not_visible": [
+        "first suggestion chip 'How do I turn on Thinking mode?' 33% visible (Up leg), covered by another panel; baseline chip read 56-67%; the chip wording changes every run",
+        "chat-name button 92%, clipped by the panel box (same as baseline)"
+      ]
+    },
+    "sweep2": {
+      "stops": 46,
+      "visited": 24,
+      "unlabeled": 3,
+      "cycles": 0,
+      "focused_but_not_visible": 12,
+      "presses": 53,
+      "baseline": "52 / 28 / 3 / 0 / 4 / 59",
+      "main_tab": "same 13 stops down and 13 back as the baseline (bonsAI tab, chat name, question row, Show reasoning, 3 unnamed, Mark helpful, Show details, Mantis Lords wiki line, chip, question box, Ask). Settings card absent, nothing else on Main changed. Chip read 67% going down ('Diagnose a slow Ollama response') and 33% going up.",
+      "ollama_tab": "Down leg 11 stops: Ollama tab, Where AI runs section, Run AI on this Deck, Start the AI with the Deck, Update AI engine, Browse and pull models, Test connection, Knowledge base section, Reply style section, Connection tuning section, AI models section; reverse on the way back. Baseline had 14 stops with the sections' contents (KB, Update KB, Reply style rows, Terse, Thinking, Custom timeouts, Unload delay) listed as separate stops; those rows are now folded away, so the list is shorter by design.",
+      "new_stops_vs_baseline": "the five section lines (fold lines); 4 of the 5 read 92% visible (Where AI runs, Knowledge base, Reply style, Connection tuning), clipped by the same panel box div as the chat-name button; AI models line 100%.",
+      "lost_stops_vs_baseline": "the folded rows listed above; no stop on Main was lost."
+    }
+  },
+  "expected": "Compared with the baseline: same stops, no cycles, no unlabeled change; any new or lost stop named; Main lost only its settings card.",
+  "verdict_cycles": "PASS: 0 cycles in both sweeps; Main and Ollama each walked top to bottom and back.",
+  "verdict_stops": "PASS: Main has exactly the baseline's stops; Ollama's stop list changed only by the new folded sections (explained above). Unlabeled stops 3 and 3, same three on Main as baseline.",
+  "verdict_visibility": "UNCLEAR: still not clean. The two baseline items remain (chat-name 92%, suggestion chip partly covered; the chip is now 33% on the Up leg where the baseline read 56-67%, wording differs each run). New: four fold lines on the Ollama tab read 92% with the same clip as the chat-name button; screenshots (block 05b and this block) show them fully drawn, so likely the same 'clipped box, text fully drawn' false alarm, but the owner decides.",
+  "verdict_touch_half": "COULD NOT RUN: needs a person.",
+  "side_effect": "none"
+}

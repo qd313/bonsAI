@@ -1,0 +1,48 @@
+{
+  "row": "P91-MODELS-COLUMN-WALK-try2",
+  "build_commit": "3115f3de",
+  "deck_time_local": "2026-10-12T08:32 -0400",
+  "screen": "monitor live: Quick Access window 855x766, Steam main window 1500x844 (AI models box lives in the main window)",
+  "setup": "Ollama tab, AI models section opened (A on fold line, a fold toggle only), Down to the AI models button, A opened the box; ring on Advanced. Start ticks: Also try open-weight models on, Deck essentials only on, Open source only off, Any installed off (greyed), try order for text questions active.",
+  "pressed": "Rig sweep (deck_sweep, direction presses only, focus read after every press): Down x16 to Done and Up x16 back; also saved as repo check plan92-P91-MODELS-COLUMN-WALK. Earlier by hand, one press then focus read: Down (Refresh), Down (Clear), Up (Refresh), Up (Advanced). B to close. No A pressed on any model row.",
+  "seen": {
+    "hand_down": [
+      "Refresh model catalog",
+      "Clear the Good for and Show filters"
+    ],
+    "hand_up": [
+      "Refresh model catalog",
+      "Advanced"
+    ],
+    "down_walk": [
+      "Advanced",
+      "Refresh model catalog",
+      "Clear the Good for and Show filters",
+      "Open source only (recommended)",
+      "Also try open-weight models",
+      "Speed",
+      "Strategy",
+      "Expert",
+      "Vision",
+      "Installed only",
+      "Deck essentials only",
+      "Recently added",
+      "Type a model name by hand",
+      "Install the starter set",
+      "Done"
+    ],
+    "up_walk": "exact reverse of the down walk, same 15 stops, back to Advanced",
+    "stops": 29,
+    "unlabeled": 0,
+    "cycles": 0,
+    "focused_but_not_visible": 0,
+    "greyed_licence_row_stops": 0,
+    "dead_presses": 0,
+    "ticks_after_close": "identical to start",
+    "modal_closed": true,
+    "ring_after_B": "AI models button"
+  },
+  "expected": "Down/Up take the same path at the top (Advanced, Refresh, Clear and back); no stop on the greyed licence row; Down walk to Done and exact reverse; no dead press; no stop twice; all visible; ticks as at start.",
+  "verdict": "PASS: every landing matched, no stop on the greyed row, reverse path identical, all 29 stops visible, ticks unchanged.",
+  "side_effect": "none"
+}

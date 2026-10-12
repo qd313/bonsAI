@@ -1,0 +1,35 @@
+{
+  "row": "P90-SEARCH-TAB-WALK-try2",
+  "build_commit": "3115f3de",
+  "deck_time_local": "2026-10-12T08:33 -0400",
+  "screen": "monitor live: Quick Access window 855x766",
+  "setup": "Search tab, ring on the tab bar, find box empty. Chat open: How do I beat the Mantis Lords in Hollow Knight (test chat, no question asked).",
+  "pressed": "Rig runSequence, focus read after each press: Down, Down, Up, Right, Right, Down, Down, Right, Right, Up, Down, Right, Right, Down. Then send-question script with mantis (VERIFIED, field held 'mantis'), page read of the result rows, screenshot, script with empty text (VERIFIED, field empty). Then Up x4 back to the bar; the 14-press walk was re-run and saved as check plan92-P90-SEARCH-TAB-WALK. Rig run file runs/p92-search-tab-walk-try2.json.",
+  "seen": {
+    "landings": [
+      "1 Down: All games",
+      "2 Down: find box (Search for a word)",
+      "3 Up: All games",
+      "4 Right: Deep Rock Galactic: Survivor",
+      "5 Right: Hollow Knight",
+      "6 Down: find box",
+      "7 Down: hollow (first word)",
+      "8 Right: knight",
+      "9 Right: deep (third word)",
+      "10 Up: find box",
+      "11 Down: hollow",
+      "12 Right: knight",
+      "13 Right: deep",
+      "14 Down: boss (third word of the second row)"
+    ],
+    "also_seen_up_from_third_word_row1": "find box (a separate 4-press Up run: boss -> deep -> find box -> All games -> Search tab)",
+    "dead_presses": 0,
+    "stops_not_visible": 0,
+    "press_moves": "14 of 14 moved",
+    "mantis_rows": "6 matches for mantis: 3 chats, 3 game notes. Note titles: 'Mantis Lords', 'An item note \u00b7 Hollow Knight', 'An item note \u00b7 Hollow Knight'. No 'A item note' anywhere."
+  },
+  "expected": "Down from a game button lands on find box; Up from find box lands on All (none picked); Up from first-row word lands on find box; Down from first-row word lands on the word below; plain note titles say 'An item note'.",
+  "verdict": "PASS: all 14 landings matched; no dead press, no stop twice on the Down walk (the All games / find box pair is the Up-and-back the runbook asks for); note titles read 'An item note \u00b7 Hollow Knight' (2 of 2 plain titles).",
+  "screenshot": "plan92-P90-SEARCH-TAB-WALK-try2-mantis.png",
+  "side_effect": "none. Find box was filled and cleared with the script; nothing was asked."
+}

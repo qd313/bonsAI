@@ -1,0 +1,22 @@
+{
+  "row": "P92-END",
+  "build_commit": "3115f3de",
+  "deck_time_local": "2026-10-12T08:45 -0400",
+  "screen": "monitor live: Quick Access window 855x766",
+  "setup": "End of plan 92 block 06.",
+  "pressed": "SSH reads only for this row, plus deck_restorePowerSettings.",
+  "seen": {
+    "game_running": "none (no Steam launch processes found)",
+    "model_loaded": "api/ps returned {\"models\":[]}; nothing to unload",
+    "memory_mb": "14800 total, 6401 free, 11917 available",
+    "settings_file": "live file has 54 keys, backup ~/p92-backup/settings.json has 54 keys; 0 keys only in live, 0 only in backup, 0 values differ. Watched keys dev_frozen_test_chips, named_ollama_hosts, ollama_keep_alive, ollama_local_autostart, ollama_local_on_deck, preset_chip_animation, use_local_knowledge_base: all same as backup. (Key names only; no values printed.)",
+    "chats": "9 chats (title bar reads chat 2 of 9); both test chats still there: Mantis Lords in Hollow Knight, Ravenholm in Half-Life 2 (the latter seen in handover, not opened)",
+    "plugin": "open on Main tab, Mantis Lords test chat, ring on the tab bar (reads 'bonsAI tab'). Not moved to the maintainer's own Soul Sanctum chat: switching needs chat-menu presses and the runbook allowed the test chat as the fallback.",
+    "keep_awake": "deck_restorePowerSettings: wasHeld true, released true, 'this Deck sleeps normally again'; I took a 480 minute lock at the start (expiresAt was 2026-10-12T20:28:43Z) and released it",
+    "build_on_deck": "3115f3de deployed this block (loader came back ready in 285 ms)",
+    "ollama_tab_folds": "restored: AI models section opened for the check and closed again; Where AI runs open, other four closed, as found"
+  },
+  "expected": "No game, no model loaded, settings equal to backup, 9 chats, plugin on Main with ring on bar, keep-awake released, build 3115f3de.",
+  "verdict": "PASS: every item matched except the optional 'open in the maintainer's own last chat', which was left in the Mantis Lords test chat (the runbook's fallback).",
+  "side_effect": "none"
+}

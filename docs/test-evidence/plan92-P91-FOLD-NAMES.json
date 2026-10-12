@@ -1,0 +1,86 @@
+{
+  "row": "P91-FOLD-NAMES",
+  "build_commit": "3115f3de",
+  "deck_time_local": "2026-10-12T08:32 -0400",
+  "screen": "monitor live: Quick Access window 855x766 (panel column 300 wide)",
+  "setup": "Ollama tab, Where AI runs open, other four sections closed (as found). Measured with a read-only page script.",
+  "pressed": "nothing for this measurement (a read plus one screenshot); earlier in the block the AI models fold line was opened and closed again.",
+  "seen": [
+    {
+      "section": "Where AI runs",
+      "name_cut": false,
+      "name_scroll_vs_client": [
+        93,
+        93
+      ],
+      "summary_cut": true,
+      "summary_scroll_vs_client": [
+        247,
+        161
+      ],
+      "chevron_right": 336,
+      "line_right": 348
+    },
+    {
+      "section": "Knowledge base (offline)",
+      "name_cut": false,
+      "name_scroll_vs_client": [
+        168,
+        168
+      ],
+      "summary_cut": true,
+      "summary_scroll_vs_client": [
+        134,
+        86
+      ],
+      "chevron_right": 336,
+      "line_right": 348
+    },
+    {
+      "section": "Reply style",
+      "name_cut": false,
+      "name_scroll_vs_client": [
+        74,
+        74
+      ],
+      "summary_cut": true,
+      "summary_scroll_vs_client": [
+        215,
+        180
+      ],
+      "chevron_right": 336,
+      "line_right": 348
+    },
+    {
+      "section": "Connection tuning",
+      "name_cut": false,
+      "name_scroll_vs_client": [
+        126,
+        126
+      ],
+      "summary_cut": true,
+      "summary_scroll_vs_client": [
+        222,
+        129
+      ],
+      "chevron_right": 336,
+      "line_right": 348
+    },
+    {
+      "section": "AI models",
+      "name_cut": false,
+      "name_scroll_vs_client": [
+        64,
+        64
+      ],
+      "summary": "(empty)",
+      "summary_cut": false,
+      "chevron_right": 336,
+      "line_right": 348
+    }
+  ],
+  "screenshot": "plan92-P91-FOLD-NAMES.png (all five names fully drawn; summaries end in an ellipsis)",
+  "expected": "no section name cut; the summary beside it gives way; chevron inside the line.",
+  "verdict": "PASS: 0 of 5 names cut (scrollWidth equals clientWidth for each); 4 summaries give way with an ellipsis; all 5 chevrons end at 336, inside the line edge at 348.",
+  "side_effect": "none"
+}

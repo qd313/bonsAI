@@ -15,8 +15,11 @@
  * The ring: Steam brings the ring back to the control it was last on in that tab. Every section is closed on
  * arrival, so that control is gone, and the ring could be left on nothing or on the tab it came from. On the
  * Deck the ring came back to a "Terse mode" toggle deep in Reply style, and went to "Retry same prompt" on Main.
- * So after a shoulder switch, if the ring is not on anything inside the tab's body, the tab's first section line
- * takes it (Steam's own transfer onto the line's nav node). The first line, not the tab bar: it is what Steam does
+ * So after a shoulder switch the tab's first section line takes the ring (Steam's own transfer onto the line's nav
+ * node) unless it is there already. Not only when the ring is on nothing: on 2026-10-12 (plan92-P92-FOLD-SWITCH)
+ * Steam itself put the ring on the LAST line, inside the tab, twice. A ring Steam placed on arrival is not the
+ * person's, so it is put on the first line at every look until the person presses something on a section line
+ * (notePersonPress); from then on it is theirs and is never moved. The first line, not the tab bar: it is what Steam does
  * on every other tab (the ring lands in the content, not on the bar), it is always on screen with the page at its
  * top, and Down from it walks the tab. A bar press is not given this: the person is on the bar and stays there.
  *
@@ -24,11 +27,12 @@
  * Settings until it is folded): their pane is left as Steam keeps it. Does not keep dragging the page: it tries
  * at once, after one frame and at 80 ms, because the tab may not be drawn yet or Steam may put its place back
  * a moment later, and then lets go so a person scrolling is never fought. The ring is looked at once more at
- * 250 ms, and only moved while it is on nothing inside the tab, so a person who has already moved is never pulled.
+ * 250 ms.
  */
 import { findTabContentsScroll } from "../../utils/chatPanelScroll";
 import { getUiDocument } from "../../utils/uiDocument";
 import { takeFoldLine } from "./FoldedSection";
+import { personPressCount } from "./foldedTabsStore";
 
 /** When to look again after the switch: about one frame, then 80 ms (page and ring), then 250 ms (ring only). The first look is immediate. */
 const LATER_LOOKS_MS = [16, 80, 250];
@@ -48,14 +52,13 @@ function putPageAtTop(tab: string): void {
   if (pane && pane.scrollTop > 0) pane.scrollTop = 0;
 }
 
-/** If the ring is on nothing inside the tab's body (lost, or left on the tab it came from), the first section line takes it. */
-function keepRingInTab(tab: string): void {
+/** Unless the ring is on the first section line already, the first section line takes it. */
+function putRingOnFirstLine(tab: string): void {
   const body = foldedBody(tab);
   if (!body) return;
-  const holder = getUiDocument().querySelector(".gpfocus");
-  if (holder && body.contains(holder)) return;
-  const first = body.querySelector("[data-bonsai-fold-line]")?.getAttribute("data-bonsai-fold-line");
-  if (first) takeFoldLine(tab, first);
+  const line = body.querySelector("[data-bonsai-fold-line]");
+  if (!line || getUiDocument().querySelector(".gpfocus") === line) return;
+  takeFoldLine(tab, line.getAttribute("data-bonsai-fold-line") ?? "");
 }
 
 /**
@@ -63,9 +66,10 @@ function keepRingInTab(tab: string): void {
  * that the ring is inside it; returns the call that cancels the later looks.
  */
 export function scheduleFoldedTabArrival(tab: string, opts: { ring?: boolean } = {}): () => void {
+  const pressesAtSwitch = personPressCount();
   const look = (ms: number) => {
     if (ms <= LAST_PAGE_LOOK_MS) putPageAtTop(tab);
-    if (opts.ring) keepRingInTab(tab);
+    if (opts.ring && personPressCount() === pressesAtSwitch) putRingOnFirstLine(tab);
   };
   look(0);
   const timers = LATER_LOOKS_MS.map((ms) => setTimeout(() => look(ms), ms));

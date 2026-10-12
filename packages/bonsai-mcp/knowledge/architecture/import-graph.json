@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 944,
-  "edgeCount": 3121,
+  "edgeCount": 3123,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4583,6 +4583,7 @@
     "src/features/folded-tabs/foldedTabArrival.test.ts": {
       "imports": [
         "src/features/folded-tabs/foldedTabArrival.ts",
+        "src/features/folded-tabs/foldedTabsStore.ts",
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": []
@@ -4590,6 +4591,7 @@
     "src/features/folded-tabs/foldedTabArrival.ts": {
       "imports": [
         "src/features/folded-tabs/FoldedSection.tsx",
+        "src/features/folded-tabs/foldedTabsStore.ts",
         "src/utils/chatPanelScroll.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -4622,6 +4624,8 @@
         "src/features/folded-tabs/FoldedSection.test.tsx",
         "src/features/folded-tabs/FoldedSection.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx",
+        "src/features/folded-tabs/foldedTabArrival.test.ts",
+        "src/features/folded-tabs/foldedTabArrival.ts",
         "src/features/folded-tabs/foldedTabsStore.test.ts",
         "src/features/folded-tabs/useHelpStrip.ts",
         "src/hooks/useBonsaiPluginShell.foldedSwitch.test.ts",

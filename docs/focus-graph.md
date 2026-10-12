@@ -1103,9 +1103,9 @@ tab bar
   popup closes over it (the tab is rebuilt); any real tab switch (the bar, LB, RB, Y) closes them all again
   (`closeAllFoldedSections`, called from the shell's `selectTab` and `onTabsShowTab`, never from the post-popup
   lock's redirect, a remount or the session restore).
-  On arrival the page is put at its top (`foldedTabArrival.ts`), and after Steam's LB/RB switch the ring, if it is
-  on nothing inside the tab's body (Steam's remembered control is gone with its section), goes to the first section
-  line; a bar press keeps the ring on the bar.
+  On arrival the page is put at its top (`foldedTabArrival.ts`), and after Steam's LB/RB switch the first section
+  line has the ring (Steam's own placement on arrival, the last line included, is not the person's) until the
+  person presses something on a section line (`notePersonPress`); a bar press keeps the ring on the bar.
 - **Class names a Deck driver can find:** the line `.bonsai-fold-line` (`[data-bonsai-fold-line="<section>"]`,
   `[data-open]`), its parts `.bonsai-fold-line__name`, `__summary`, `__chevron`; the open rows `.bonsai-fold-body`;
   the button's host `.bonsai-fold-all-host` (`[data-bonsai-fold-all="<tab>"]`) and the button `.bonsai-fold-all`;

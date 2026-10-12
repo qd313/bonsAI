@@ -18,7 +18,7 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { FoldedSection, foldLineBelow, type FoldChainSection } from "./FoldedSection";
-import { resetFoldedTabsForTests, toggleSection } from "./foldedTabsStore";
+import { personPressCount, resetFoldedTabsForTests, toggleSection } from "./foldedTabsStore";
 import { registerNavFocus, resetNavFocusRegistry, unregisterNavFocus } from "../../utils/navFocusRegistry";
 import { steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
 
@@ -104,6 +104,28 @@ describe("a folded section", () => {
     pressA(el);
     expect(el.classList.contains("gpfocus")).toBe(true);
     expect(el.getAttribute("data-open")).toBe("true");
+  });
+});
+
+describe("a person's presses on a section line are noted (so the arrival code stops placing the ring)", () => {
+  it("Down, Up, Right and A on a line each count; nothing else does", () => {
+    const { container } = render(<Tab chain={CHAIN} />);
+    const before = personPressCount();
+    const el = line(container, "b");
+    act(() => {
+      el.__nav?.onMoveDown?.();
+    });
+    expect(personPressCount()).toBe(before + 1);
+    act(() => {
+      el.__nav?.onMoveUp?.();
+    });
+    expect(personPressCount()).toBe(before + 2);
+    act(() => {
+      el.__nav?.onMoveRight?.();
+    });
+    expect(personPressCount()).toBe(before + 3);
+    pressA(el);
+    expect(personPressCount()).toBe(before + 4);
   });
 });
 

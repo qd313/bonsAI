@@ -202,6 +202,16 @@ describe("after Steam's shoulder switch the ring lands on the first section line
     expect(take).toHaveBeenCalledTimes(1);
   });
 
+  it("RB then LB: Steam has put the ring on the LAST line inside the tab; the first line still takes it", () => {
+    const last = document.createElement("div");
+    last.className = "gpfocus";
+    last.setAttribute("data-bonsai-fold-line", "models");
+    document.querySelector(`[data-bonsai-tab-body="${OLLAMA_FOLD_TAB}"]`)!.appendChild(last);
+    const { result } = renderHook(() => useBonsaiPluginShell({ getSessionSnapshot: emptySnapshot }));
+    act(() => result.current.onTabsShowTab(OLLAMA_FOLD_TAB));
+    expect(take).toHaveBeenCalledTimes(1);
+  });
+
   it("a bar press (or Y) to the folded tab leaves the ring alone", () => {
     const { result } = renderHook(() => useBonsaiPluginShell({ getSessionSnapshot: emptySnapshot }));
     act(() => result.current.selectTab(OLLAMA_FOLD_TAB));

@@ -6,8 +6,10 @@
  *          pane where it was, 408 px down, and brings it back 330 px down, the first line off screen.
  *          The ring (after Steam's own shoulder switch): Steam sends it back to the control it was last on in
  *          the tab, which is gone once every section is closed (the Deck left it on a "Terse mode" toggle's old
- *          place, and on Main's "Retry same prompt"). If it is on nothing inside the tab's body, the first
- *          section line takes it; if it is already inside, or the person came by the bar, nothing moves it.
+ *          place, and on Main's "Retry same prompt"; on 2026-10-12 it came back on the LAST line twice, a ring
+ *          Steam had placed inside the tab). A ring Steam placed on arrival is not the person's: until the
+ *          person presses something, the first section line has it; after a press, nothing moves it. A person
+ *          who came by the bar keeps the ring where it is.
  * Used for: foldedTabArrival.ts.
  * Does not: Know when a switch happened (the shell does: useBonsaiPluginShell.foldedSwitch.test.ts).
  */
@@ -16,6 +18,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { registerNavFocus, resetNavFocusRegistry } from "../../utils/navFocusRegistry";
 
 import { scheduleFoldedTabArrival } from "./foldedTabArrival";
+import { notePersonPress } from "./foldedTabsStore";
 
 let cleanupDom: () => void = () => {};
 
@@ -103,6 +106,15 @@ describe("arriving on a folded tab, the page starts at its top", () => {
   });
 });
 
+/** A further section line in the same body, as Steam would have it. */
+function drawLine(body: HTMLElement, id: string): HTMLElement {
+  const line = document.createElement("div");
+  line.className = "bonsai-fold-line";
+  line.setAttribute("data-bonsai-fold-line", id);
+  body.appendChild(line);
+  return line;
+}
+
 /** The first section line's nav node, as Steam fills it in: TakeFocus puts the ring on the line. */
 function registerLine(tab: string, line: HTMLElement | null) {
   const takeFocus = vi.fn(() => {
@@ -135,13 +147,41 @@ describe("after Steam's shoulder switch, the ring is on something that exists", 
     elsewhere.remove();
   });
 
-  it("the ring already inside the body is left alone", () => {
+  it("the ring already on the first line is left alone", () => {
     const dom = drawPane({ tab: "ollama", scrollTop: 0 });
     dom.body.querySelector(".bonsai-fold-line")!.classList.add("gpfocus");
     const take = registerLine("ollama", null);
     scheduleFoldedTabArrival("ollama", { ring: true });
     vi.advanceTimersByTime(400);
     expect(take).not.toHaveBeenCalled();
+  });
+
+  it("Steam drops the ring on the LAST line at arrival: it ends on the first line", () => {
+    const dom = drawPane({ tab: "ollama", scrollTop: 0 });
+    const first = dom.body.querySelector<HTMLElement>(".bonsai-fold-line")!;
+    const last = drawLine(dom.body, "models");
+    last.classList.add("gpfocus");
+    registerLine("ollama", first);
+    scheduleFoldedTabArrival("ollama", { ring: true });
+    expect(document.querySelector(".gpfocus")).toBe(first);
+  });
+
+  it("Steam drops the ring on the last line a moment AFTER the first look: the later looks bring it back", () => {
+    const dom = drawPane({ tab: "ollama", scrollTop: 0 });
+    const first = dom.body.querySelector<HTMLElement>(".bonsai-fold-line")!;
+    const last = drawLine(dom.body, "models");
+    registerLine("ollama", first);
+    scheduleFoldedTabArrival("ollama", { ring: true });
+    vi.advanceTimersByTime(10);
+    first.classList.remove("gpfocus");
+    last.classList.add("gpfocus");
+    vi.advanceTimersByTime(30);
+    expect(document.querySelector(".gpfocus")).toBe(first);
+    vi.advanceTimersByTime(30);
+    first.classList.remove("gpfocus");
+    last.classList.add("gpfocus");
+    vi.advanceTimersByTime(300);
+    expect(document.querySelector(".gpfocus")).toBe(first);
   });
 
   it("a person who comes by the bar keeps the ring where it is", () => {
@@ -170,18 +210,27 @@ describe("after Steam's shoulder switch, the ring is on something that exists", 
     expect(take).not.toHaveBeenCalled();
   });
 
-  it("a person who moved on within the first moments is never pulled back", () => {
+  it("a person's Down after arrival is never pulled back", () => {
     const dom = drawPane({ tab: "ollama", scrollTop: 0 });
-    const line = dom.body.querySelector<HTMLElement>(".bonsai-fold-line")!;
-    const take = registerLine("ollama", line);
+    const first = dom.body.querySelector<HTMLElement>(".bonsai-fold-line")!;
+    const second = drawLine(dom.body, "kb");
+    const take = registerLine("ollama", first);
     scheduleFoldedTabArrival("ollama", { ring: true });
     vi.advanceTimersByTime(20);
-    const second = document.createElement("div");
-    second.className = "bonsai-fold-line gpfocus";
-    second.setAttribute("data-bonsai-fold-line", "kb");
-    dom.body.appendChild(second);
-    line.classList.remove("gpfocus");
+    /* The person presses Down: the line's move handler notes it, and the ring is on the second line. */
+    notePersonPress();
+    first.classList.remove("gpfocus");
+    second.classList.add("gpfocus");
     vi.advanceTimersByTime(400);
+    expect(take).toHaveBeenCalledTimes(1);
+    expect(document.querySelector(".gpfocus")).toBe(second);
+  });
+
+  it("a press made before the switch does not count as a press after it", () => {
+    const dom = drawPane({ tab: "ollama", scrollTop: 0 });
+    notePersonPress();
+    const take = registerLine("ollama", dom.body.querySelector<HTMLElement>(".bonsai-fold-line"));
+    scheduleFoldedTabArrival("ollama", { ring: true });
     expect(take).toHaveBeenCalledTimes(1);
   });
 

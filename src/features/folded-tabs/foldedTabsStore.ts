@@ -83,6 +83,22 @@ export function closeAllFoldedSections(): void {
   changed();
 }
 
+let presses = 0;
+
+/**
+ * A person pressed something on a section line (Down, Up, Right, A). The arrival code (foldedTabArrival) stops
+ * putting the ring on the first line once this has changed since the switch: a ring Steam placed on arrival
+ * is not the person's, but anything after a press is.
+ */
+export function notePersonPress(): void {
+  presses += 1;
+}
+
+/** How many presses have been noted so far. */
+export function personPressCount(): number {
+  return presses;
+}
+
 /** The ring landed in `section` (its line or a control in it). Quiet: nothing on screen depends on it. */
 export function rememberFoldSection(tab: string, section: string): void {
   lastSections.set(tab, section);

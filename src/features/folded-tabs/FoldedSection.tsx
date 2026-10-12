@@ -32,7 +32,14 @@ import React, { useEffect, useRef, useSyncExternalStore } from "react";
 import { Focusable } from "@decky/ui";
 
 import { registerNavFocus, takeNavFocus, unregisterNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
-import { foldedTabsVersion, isSectionOpen, rememberFoldSection, subscribeFoldedTabs, toggleSection } from "./foldedTabsStore";
+import {
+  foldedTabsVersion,
+  isSectionOpen,
+  notePersonPress,
+  rememberFoldSection,
+  subscribeFoldedTabs,
+  toggleSection,
+} from "./foldedTabsStore";
 import { FOLD_SECTION_ATTR } from "./useHelpStrip";
 
 /**
@@ -118,16 +125,21 @@ export function FoldedSection({ tab, chain, id, title, summary, children }: Fold
 
   const at = ids.indexOf(id);
   const moveDown = (): boolean => {
+    notePersonPress();
     if (open && chain[at]?.enterFromTop?.()) return true;
     return foldLineBelow(tab, chain, id);
   };
   const moveUp = (): boolean => {
+    notePersonPress();
     const prev = chain[at - 1];
     if (!prev) return takeNavFocus("tab-bar");
     if (isSectionOpen(tab, ids, prev.id) && prev.enterFromBottom?.()) return true;
     return takeFoldLine(tab, prev.id);
   };
-  const toggle = () => toggleSection(tab, ids, id);
+  const toggle = () => {
+    notePersonPress();
+    toggleSection(tab, ids, id);
+  };
 
   return (
     <div className="bonsai-fold-section" {...{ [FOLD_SECTION_ATTR]: id }} data-open={open ? "true" : "false"}>
@@ -151,6 +163,7 @@ export function FoldedSection({ tab, chain, id, title, summary, children }: Fold
           onMoveDown: moveDown,
           onMoveUp: moveUp,
           onMoveRight: () => {
+            notePersonPress();
             rememberFoldSection(tab, id);
             return takeNavFocus(foldAllNavId(tab));
           },

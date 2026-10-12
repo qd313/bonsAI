@@ -20,7 +20,7 @@
 import { getUiDocument } from "../../utils/uiDocument";
 
 /** When to look, in milliseconds after the first transfer. */
-export const SETTLE_CHECKS_MS = [150, 450, 1000, 2000];
+const SETTLE_CHECKS_MS = [150, 450, 1000, 2000];
 
 export type SettleRingArgs = {
   /** Steam's transfer onto the row; called again at a look where the ring is not on it. */

@@ -203,3 +203,56 @@ describe("useUnifiedInputSurface wrap/font/width mirroring", () => {
     expect(measure.style.width).toBe("274.463px");
   });
 });
+
+/**
+ * Text size (Small / Normal / Large) changes the size of the letters, never the height of the box
+ * (maintainer's rule: rows keep their heights, so bigger words never take room from the chat).
+ * Measured on the Deck 2026-10-11 (plan89-P89-TEXT-SIZE-EVERYWHERE): the one-line box was 42.99,
+ * 43.99 and 47.00 px, because the box's height was the hidden mirror's scrollHeight, and the mirror's
+ * line is 1.2 times the scaled letter size. jsdom has no layout, so the mirror's scrollHeight is
+ * modelled here the way the browser makes it: top and bottom inset (6 + 2) plus lines times
+ * 1.2 x 12 px x the text scale, rounded to a whole pixel.
+ */
+describe("question box height does not follow the Text size", () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+  });
+
+  const scales: Array<[string, string]> = [
+    ["Small", "0.9"],
+    ["Normal", "1"],
+    ["Large", "1.15"],
+  ];
+
+  function heightFor(textScale: string, lines: number): number {
+    const { host, layer, measure } = makeSurface();
+    const scope = document.createElement("div");
+    scope.style.setProperty("--bonsai-text-scale", textScale);
+    document.body.appendChild(scope);
+    scope.appendChild(host);
+    Object.defineProperty(measure, "scrollHeight", {
+      configurable: true,
+      get: () => Math.round(8 + lines * 12 * 1.2 * Number(textScale)),
+    });
+    const { result } = renderHook(() => useUnifiedInputSurface("main", "a typed question"));
+    result.current.bonsaiScopeRef.current = scope;
+    result.current.unifiedInputHostRef.current = host;
+    result.current.unifiedInputFieldLayerRef.current = layer;
+    result.current.unifiedInputMeasureRef.current = measure;
+    act(() => {
+      result.current.remeasureUnifiedInputSurface();
+    });
+    return result.current.unifiedInputSurfacePx;
+  }
+
+  it("a one-line box is today's Normal height (44) on Small, Normal and Large", () => {
+    for (const [, scale] of scales) expect(heightFor(scale, 1)).toBe(44);
+  });
+
+  it("two lines and three lines grow the box by the same fixed amount on all three sizes", () => {
+    for (const [, scale] of scales) {
+      expect(heightFor(scale, 2)).toBe(59);
+      expect(heightFor(scale, 3)).toBe(73);
+    }
+  });
+});

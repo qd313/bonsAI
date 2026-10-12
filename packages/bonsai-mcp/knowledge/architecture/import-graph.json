@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 843,
-  "edgeCount": 2661,
+  "edgeCount": 2662,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2718,6 +2718,7 @@
         "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx",
         "src/features/plugin-shell/usePublishTextScale.test.tsx",
         "src/features/plugin-shell/usePublishTextScale.ts",
+        "src/features/unified-input/useUnifiedInputSurface.ts",
         "src/index.tsx",
         "src/styles/sections/textPx.ts"
       ]
@@ -5031,6 +5032,7 @@
     },
     "src/features/unified-input/useUnifiedInputSurface.ts": {
       "imports": [
+        "src/data/chatTextSize.ts",
         "src/data/uiScaleProfile.ts",
         "src/features/unified-input/constants.ts"
       ],

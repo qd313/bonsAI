@@ -31,13 +31,37 @@ import {
   UNIFIED_TEXT_BODY_MAX_PX,
   UNIFIED_TEXT_BODY_MIN_PX,
   UNIFIED_TEXT_FONT_PX,
+  UNIFIED_TEXT_INSET_BOTTOM_PX,
   UNIFIED_TEXT_INSET_LEFT_PX,
   UNIFIED_TEXT_INSET_TOP_PX,
+  UNIFIED_TEXT_LINE_HEIGHT,
   UNIFIED_TEXT_OVERLAY_FALLBACK_FONT_FAMILY,
   UNIFIED_TEXT_OVERLAY_FALLBACK_OVERFLOW_WRAP,
   UNIFIED_TEXT_OVERLAY_FALLBACK_WHITE_SPACE,
 } from "./constants";
+import { TEXT_SCALE_VAR } from "../../data/chatTextSize";
 import { readUiScaleFromElement } from "../../data/uiScaleProfile";
+
+/** The Text size step written on the plugin's root (1 when none is set). */
+function readTextScaleFromElement(el: HTMLElement | null | undefined): number {
+  if (!el) return 1;
+  const parsed = parseFloat(getComputedStyle(el).getPropertyValue(TEXT_SCALE_VAR).trim());
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
+}
+
+/**
+ * The mirror's height as it would be at Normal text size. The mirror's lines are 1.2 times the scaled
+ * letter size, so its raw height grows with Large and shrinks with Small; the box must not (Text size
+ * moves the letters, never the box). Count the lines, then price each at the Normal line height. At
+ * Normal this returns the browser's own number, so today's box does not move.
+ */
+function mirrorHeightAtNormalText(rawPx: number, textScale: number, uiScale: number): number {
+  if (rawPx <= 0 || textScale === 1) return rawPx;
+  const insetsPx = (UNIFIED_TEXT_INSET_TOP_PX + UNIFIED_TEXT_INSET_BOTTOM_PX) * uiScale;
+  const normalLinePx = UNIFIED_TEXT_FONT_PX * UNIFIED_TEXT_LINE_HEIGHT;
+  const lines = Math.max(1, Math.round((rawPx - insetsPx) / (normalLinePx * textScale)));
+  return Math.round(insetsPx + lines * normalLinePx);
+}
 
 /**
  * Measures the hidden overlay + the native field's painted bounds so the caret overlay aligns with typed text.
@@ -136,8 +160,12 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
       "--bonsai-unified-field-font-family",
       fieldStyle?.fontFamily || UNIFIED_TEXT_OVERLAY_FALLBACK_FONT_FAMILY,
     );
-    const sh = measure.scrollHeight;
     const uiScale = readUiScaleFromElement(bonsaiScopeRef.current);
+    const sh = mirrorHeightAtNormalText(
+      measure.scrollHeight,
+      readTextScaleFromElement(bonsaiScopeRef.current),
+      uiScale,
+    );
     const bodyMinPx = UNIFIED_TEXT_BODY_MIN_PX * uiScale;
     const bodyMaxPx = UNIFIED_TEXT_BODY_MAX_PX * uiScale;
     const expandAheadPx = Math.ceil(UNIFIED_TEXT_FONT_PX * uiScale * 1.2);

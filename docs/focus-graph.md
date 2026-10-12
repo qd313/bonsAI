@@ -101,7 +101,7 @@ Remember what I typed (toggle)
   plain `focus()` across containers. The one hand-written Settings link (the UI scale Apply button to the
   Screenshot quality row, Developer tab on) is untouched, because this row sits below Screenshot quality.
 - **A** (`onClick`) saves the choice. The saved one is drawn with the lighter fill and `aria-pressed`; the
-  words in the chat change at once, nothing reloads, and the ring stays on the button that was pressed.
+  words everywhere in the plugin change size at once, nothing reloads, and the ring stays on the button that was pressed.
 - **Test:** `SettingsTab.textSizeWalk.test.tsx` lists the tab's stops with the row in it (Developer tab off and
   on): none twice, the three in order between Screenshot quality and Remember what I typed, no move handler on
   the row. jsdom has no spatial walk, so the Deck walk (Down through the whole tab, then Up) is the real check.

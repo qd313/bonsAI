@@ -2,17 +2,17 @@
  * Title: Settings tab -- Text size row
  *
  * Purpose: The "Text size" choice in Settings: Small, Normal or Large, drawn as three buttons side
- * by side, the same shape as Screenshot quality and Voice replies. It sets how big the words in the
- * chat are (the questions, the answers and the Show details text); the tab bar, the chat's name,
- * the chips and Settings themselves never change with it.
+ * by side, the same shape as Screenshot quality and Voice replies. It sets how big the words are
+ * everywhere in bonsAI: the tab bar, the chat's name, the chat itself, the chips, the question box and
+ * every other tab (plan 89). Steam's own controls, whose size Steam sets, may not follow.
  *
  * Used for: SettingsTab, right under Screenshot quality.
  *
- * Solves: Plan 87 call 3. A person who finds the chat's words too small (or too big) on the Deck's
- * panel gets one plain row to fix it, with no connection to the hidden UI scale section.
+ * Solves: Plan 87 call 3, widened by plan 89. A person who finds the words too small (or too big) on the
+ * Deck's panel gets one plain row to fix it, with no connection to the hidden UI scale section.
  *
  * Does not: Scale anything. The size is written to `--bonsai-text-scale` on the plugin's root
- * (src/data/chatTextSize.ts) and the chat's own styles read it.
+ * (src/data/chatTextSize.ts) and every font size in the plugin reads it (src/styles/sections/textPx.ts).
  *
  * Focus: one `Focusable` with `flow-children="horizontal"` holding three buttons; no move handler of
  * its own, so Steam's own Left/Right walk the three and its Up/Down leave to the rows above and below
@@ -52,8 +52,8 @@ export const SettingsTabChatTextSizeRow: React.FC<SettingsTabChatTextSizeRowProp
     <PanelSectionRow>
       <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
         <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-          How big the words in the chat are: your questions, the answers and the Show details text. The tabs and
-          Settings stay the same.
+          How big the words are, everywhere in bonsAI: the tabs, the chat, the chips, the question box and
+          Settings. Rows keep their height, so a long chat name is cut off sooner on Large.
         </div>
         <Focusable
           flow-children="horizontal"

@@ -65,9 +65,9 @@ export type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" 
  */
 export type VoiceReplyMode = "off" | "voice_only" | "always";
 /**
- * How big the words in the chat are drawn (plan 87, F6): the questions, the answers and the Show
- * details text. Small and Large step either side of Normal; the tab bar, the chat's name, the chips
- * and Settings never change with it.
+ * How big the words are drawn, everywhere in the plugin (plan 87 F6, widened by plan 89): the chat, the
+ * tab bar, the chat's name, the chips, the question box and every other tab. Small and Large step either
+ * side of Normal; the rows keep their heights.
  */
 export type ChatTextSize = "small" | "normal" | "large";
 export type DesktopAppLogLevel = "off" | "default" | "verbose";
@@ -116,7 +116,7 @@ export type BonsaiSettings = {
   unified_input_persistence_mode: UnifiedInputPersistenceMode;
   /** When a finished answer is read aloud on its own, without a Read aloud press (D99 call 3). */
   voice_reply_mode: VoiceReplyMode;
-  /** How big the chat's own words are drawn: small, normal (the default) or large. */
+  /** How big the words are drawn, everywhere: small, normal (the default) or large. */
   chat_text_size: ChatTextSize;
   /** Vision attachment downscale and JPEG quality preset. */
   screenshot_attachment_preset: ScreenshotAttachmentPreset;

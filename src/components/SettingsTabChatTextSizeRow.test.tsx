@@ -4,8 +4,8 @@
  *          marked, a press saves the choice that was pressed, and the row sits where a person looks
  *          (right under Screenshot quality) in the real Settings tab.
  * Used for: plan 87 F6, the Text size setting.
- * Does not: Draw the chat's words at a new size (see chatTextSize.chat.test.tsx) or walk the D-pad
- *           (see SettingsTab.textSizeWalk.test.tsx).
+ * Does not: Draw the words at a new size (see textSizeEverywhere.test.tsx and textSizeSurfaces.test.tsx)
+ *           or walk the D-pad (see SettingsTab.textSizeWalk.test.tsx).
  */
 import { fireEvent, render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
@@ -43,5 +43,13 @@ describe("Settings tab Text size row", () => {
     fireEvent.click(large);
     fireEvent.click(small);
     expect(setChatTextSize.mock.calls).toEqual([["large"], ["small"]]);
+  });
+
+  it("says it changes every word, not only the chat's: no 'tabs and Settings stay the same'", () => {
+    const { container } = render(<SettingsTabChatTextSizeRow setting={{ value: "normal", set: () => {} }} />);
+    const words = (container.querySelector(".bonsai-prose")?.textContent ?? "").replace(/\s+/g, " ").trim();
+    expect(words).not.toMatch(/stay the same|never change|only the chat/i);
+    expect(words).toMatch(/everywhere/i);
+    for (const place of ["tabs", "chat", "chips", "question box", "Settings"]) expect(words).toContain(place);
   });
 });

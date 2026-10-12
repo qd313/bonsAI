@@ -46,7 +46,13 @@ const IconShell: React.FC<{ size: number; children: React.ReactNode }> = ({ size
 );
 
 /** Permissions tab: stroke icon for inline UI and Decky tab title. */
-const strokeForTabSize = (size: number) => (size > 72 ? 2.5 : size > 48 ? 2.25 : 1.35);
+const strokeForTabSize = (size: number) => (size > 72 ? 2.5 : size > 48 ? 2.25 : TAB_ICON_STROKE);
+
+/** Line width, in the 24-unit drawing, of every line-drawn tab icon at the tab bar's small sizes (up from 1.35, the Deck's own screen made it hard to see). */
+const TAB_ICON_STROKE = 2;
+
+/** The reply row's thumbs keep the thinner line they always had; only the tab icons got heavier. */
+const strokeForThumb = (size: number) => (size > 72 ? 2.5 : size > 48 ? 2.25 : 1.35);
 
 export const LockIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
   <IconShell size={size}>
@@ -101,13 +107,13 @@ export const BonsaiTreeTabIcon: React.FC<{ size?: number }> = ({ size = 14 }) =>
         d="M12 6c-1.8 0-3.3 1.2-3.7 2.8A3.2 3.2 0 0 0 5.5 12c0 1.8 1.4 3.2 3.2 3.2c1.2 0 2.2-.5 2.9-1.4c.5.9 1.5 1.4 2.7 1.4c1.8 0 3.2-1.4 3.2-3.2c0-1.6-1.2-3-2.7-3.2A3.8 3.8 0 0 0 12 6Z"
         fill="none"
         stroke="currentColor"
-        strokeWidth={size > 22 ? 1.08 : 1}
+        strokeWidth={TAB_ICON_STROKE}
         strokeLinejoin="round"
       />
       <path
         d="M11.5 14.5v3.2m-4.8 0h9.6l-1.1 2.3H7.8l-1.1-2.3Z"
         stroke="currentColor"
-        strokeWidth={size > 22 ? 1.02 : 0.95}
+        strokeWidth={TAB_ICON_STROKE}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -140,13 +146,13 @@ export const BugIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
       <path
         d="M9 8.5A3 3 0 0 1 12 6a3 3 0 0 1 3 2.5M8 10h8v4.3a4 4 0 0 1-8 0V10Z"
         stroke="currentColor"
-        strokeWidth={size > 72 ? 1.75 : 1.45}
+        strokeWidth={size > 72 ? 1.75 : TAB_ICON_STROKE}
         strokeLinecap="round"
       />
       <path
         d="M7 12H4m13 0h3M9 16l-2 2m8-2l2 2M9 8L7 6m8 2l2-2"
         stroke="currentColor"
-        strokeWidth={size > 72 ? 1.65 : 1.35}
+        strokeWidth={size > 72 ? 1.65 : TAB_ICON_STROKE}
         strokeLinecap="round"
       />
     </svg>
@@ -237,7 +243,7 @@ export const ThumbUpOutlineIcon: React.FC<{ size?: number }> = ({ size = 14 }) =
   <IconShell size={size}>
     <FiThumbsUp
       size={size}
-      strokeWidth={strokeForTabSize(size)}
+      strokeWidth={strokeForThumb(size)}
       aria-hidden
       style={{ display: "block" }}
     />
@@ -248,7 +254,7 @@ export const ThumbDownOutlineIcon: React.FC<{ size?: number }> = ({ size = 14 })
   <IconShell size={size}>
     <FiThumbsDown
       size={size}
-      strokeWidth={strokeForTabSize(size)}
+      strokeWidth={strokeForThumb(size)}
       aria-hidden
       style={{ display: "block" }}
     />

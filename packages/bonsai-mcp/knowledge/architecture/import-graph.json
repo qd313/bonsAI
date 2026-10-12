@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 890,
-  "edgeCount": 2828,
+  "fileCount": 891,
+  "edgeCount": 2830,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2498,6 +2498,13 @@
       ],
       "importedBy": []
     },
+    "src/components/icons.tabStroke.test.tsx": {
+      "imports": [
+        "src/components/icons.tsx",
+        "src/features/unified-input/constants.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/icons.tsx": {
       "imports": [
         "src/components/bonsaiLogoPath.ts"
@@ -2510,6 +2517,7 @@
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/ReplyCopyButton.tsx",
         "src/components/icons.bonsaiGeometry.test.tsx",
+        "src/components/icons.tabStroke.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-title/chatsMenuIcons.tsx",
         "src/features/plugin-shell/tabTitles.tsx",
@@ -5544,6 +5552,7 @@
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/SettingsTab.tsx",
         "src/components/SettingsTabAccentIntensityMenuPopover.tsx",
+        "src/components/icons.tabStroke.test.tsx",
         "src/data/characterUiAccent.ts",
         "src/features/chat-title/chatTitleStyles.ts",
         "src/features/chat-title/deckyHeaderLayout.ts",

@@ -1,0 +1,21 @@
+{
+  "row": "P89-RIG-SNAPSHOT",
+  "build_commit": "d553a5b4",
+  "deck_time_local": "2026-10-12 00:50-00:53 EDT",
+  "screen": "not relevant to this row",
+  "setup": "Folder size read first: settings/bonsAI 228 MB (voice_models 216 MB, chat_slots 3, seed-knowledge-base 5, voice_bin 5); data/bonsAI 1 MB. Fresh extra backup made first: Deck ~/p92-backup/bonsAI-settings-0052.tgz (210,051,002 bytes). No contents of the snapshot were copied here.",
+  "pressed": "deck_snapshotSettings includeData true, three times. The tool refuses a second snapshot while one is unrestored (StaleSnapshotError), so deck_restoreSettings was run between 1 and 2 and between 2 and 3, and once after 3.",
+  "seen": {
+    "snapshot1": {"result": "ok", "method": "streamed", "sizeBytes": 238336000, "wrote": "C:\Users\still\.config\decky-plugin-studio\snapshots\settings-archives\settings-hold-1791780631777-29884.tar (+ settings-hold.json)", "restore": "ok"},
+    "snapshot1b_without_restore": "refused: StaleSnapshotError (a hold from 04:51Z was never restored)",
+    "snapshot2": {"result": "ok", "method": "streamed", "sizeBytes": 238336000, "same_sha256_as_1": true, "wrote": "settings-archives\settings-hold-1791780722264-29884.tar", "restore": "ok"},
+    "snapshot3": {"result": "ok", "method": "streamed", "sizeBytes": 238233600, "wrote": "settings-archives\settings-hold-1791780752155-29884.tar", "restore": "ERROR: ssh exited with code 2 (tar: Skipping to next header; Exiting with failure status). Saved copy kept."},
+    "archive3_check": "tar tf on archive 3 reports the same errors: it is 102,400 bytes shorter than 1 and 2 and damaged near settings/bonsAI/voice_models/ggml-base.en.bin",
+    "deck_after": "diff -rq of the Deck's settings folder against the 00:52 backup: no differences (52 files)",
+    "folder_over_64MB": true
+  },
+  "expected": "No error on any of the three; result says streamed (folder over 64 MB).",
+  "verdict_snapshot_calls": "PASS: all three snapshot calls returned ok and said streamed.",
+  "verdict_overall": "FAIL: the third snapshot reported ok but its saved copy is damaged (102,400 bytes short) and could not be restored; the earlier two restored fine. A second snapshot also needs a restore in between (by design). The failed restore left a pending hold that restores itself at 2026-10-12T05:22:37Z (01:22 EDT); it will fail the same way.",
+  "side_effect": "Three restores wrote the snapshot back over the Deck's settings and data folders. Content was identical (no setting changed); the Deck folder matched the backup afterwards. The unrestored third hold remains on this PC."
+}

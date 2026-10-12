@@ -1,0 +1,25 @@
+{
+  "row": "QA-FREE-PLAY-01",
+  "build_commit": "d553a5b4",
+  "deck_time_local": "2026-10-12 00:55-00:58 EDT",
+  "screen": "MONITOR live: Quick Access page window 855 x 766 at 1.28 scale; Steam window 1500 x 844. Not the Deck's own screen.",
+  "setup": "No game running. Plugin open on Main tab, Mantis Lords test chat (chat 2 of 9), long finished reply on screen (reasoning folded, 'Show details' closed). Automated no-game half only. The touch-screen half is the maintainer's and was NOT run.",
+  "pressed": "deck_sweep 1: Down, budget 100, no lanes, started with the ring on the question box. deck_sweep 2: Down from the tab bar, lanes 1 (RB), budget 100, so Main was walked top to bottom and back, then the Ollama tab (the other carousel position) both ways. Then LB back to Main. No A, no B.",
+  "seen": {
+    "sweep1": {"run_file": "runs/plan92_QA-FREE-PLAY-01-baseline.json", "stops": 14, "visited": 13, "unlabeled": 3, "cycles": 0, "focused_but_not_visible": 2, "presses": 17,
+      "labels_in_order": ["question box", "Ask", "question box", "Which Ollama essentials should I pull for this Deck? (chip, 67% visible)", "Mantis Lords . From the Hollow Knight wiki, show", "Show details", "Mark reply helpful", "(unnamed 245x27 at y291)", "(unnamed 245x81 at y210)", "(unnamed 245x68 at y143)", "Show reasoning . 17 s", "How do I beat the Mantis Lords in Hollow Knight (question row, 100%)", "chat 2 of 9 button, Opens your chats (92%)", "bonsAI tab"]},
+    "sweep2": {"run_file": "runs/plan92_QA-FREE-PLAY-01-baseline-lane2.json", "stops": 52, "visited": 28, "unlabeled": 3, "cycles": 0, "focused_but_not_visible": 4, "presses": 59,
+      "main_tab_down_leg": ["bonsAI tab", "chat 2 of 9 Opens your chats (92%)", "question row (100%)", "Show reasoning . 17 s", "(unnamed y143 h68)", "(unnamed y210 h81)", "(unnamed y291 h27)", "Mark reply helpful", "Show details", "Mantis Lords . From the Hollow Knight wiki, show", "Which Ollama model fits my Deck setup? (chip, 56% visible)", "question box", "Ask"],
+      "main_tab_up_leg": "same stops in reverse; the chip read 67% visible",
+      "ollama_tab_down_leg": ["Ollama tab", "Run AI on this Deck", "Start the AI with the Deck", "Update AI engine and installed models", "Browse and pull Ollama models", "Test connection to Ollama", "Use local knowledge base", "Update knowledge base", "Reply style: Balanced", "Terse mode", "Set thinking to Off", "Custom timeouts", "Unload delay: 15m", "AI models"],
+      "ollama_tab_up_leg": "same in reverse, back to Ollama tab; all 100% visible",
+      "not_fully_visible": ["chat-name button 'chat 2 of 9' 92% visible, clipped by div.oIVg-eNHeYCNPq0blN3Dk (both directions)", "first suggestion chip 56% visible going down, 67% going up, covered by the chip's own text run (button.bonsai-preset-glass ... bonsai-preset-chip-text-run); the chip's wording changes each time (it read 'Which Ollama essentials...' in sweep 1, 'Which Ollama model fits my Deck setup?' in sweep 2)"]},
+    "known_false_alarms": "The question row (100% visible) and last answer section (Mantis Lords wiki line, 100%) did not show as partial in this build.",
+    "totals_by_sweep": "see seen.sweep1 / seen.sweep2"
+  },
+  "expected": "Per row: every stop focused AND visible, no cycles; only the two known false alarms (question row behind Retry, last answer section behind Copy) may read as partly hidden.",
+  "verdict_cycles": "PASS: 0 cycles in both sweeps, Main tab and Ollama tab each reached from top to bottom and back.",
+  "verdict_visibility": "UNCLEAR: 2 stops that are NOT the two known false alarms read as partly hidden: the chat-name button (92%) and the first suggestion chip (56 to 67%). The two known ones did not appear. This is the baseline 'before' picture for tonight's Main-tab changes; the owner decides if these two are old known behaviour (plan 77 noted the chip ladder's first stop at 67% too).",
+  "verdict_touch_half": "COULD NOT RUN: the touch-screen half needs a person; skipped as instructed.",
+  "side_effect": "none. A saved walk (deck_saveCheck) was not made because the visibility half is not a clean pass."
+}

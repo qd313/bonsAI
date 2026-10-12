@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 943,
-  "edgeCount": 3118,
+  "fileCount": 944,
+  "edgeCount": 3120,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -5181,6 +5181,13 @@
         "src/index.tsx"
       ]
     },
+    "src/features/plugin-shell/useOllamaModelsHubModal.openOnce.test.tsx": {
+      "imports": [
+        "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/features/plugin-shell/useOllamaModelsHubModal.tsx": {
       "imports": [
         "src/components/OllamaModelsHubModal.tsx",
@@ -5191,6 +5198,7 @@
         "src/utils/deckyCall.ts"
       ],
       "importedBy": [
+        "src/features/plugin-shell/useOllamaModelsHubModal.openOnce.test.tsx",
         "src/index.tsx"
       ]
     },
@@ -8562,6 +8570,7 @@
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
+        "src/features/plugin-shell/useOllamaModelsHubModal.openOnce.test.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
         "src/features/search-tab/searchTabTestKit.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",

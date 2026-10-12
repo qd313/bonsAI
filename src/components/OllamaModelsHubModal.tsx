@@ -16,6 +16,9 @@
  * switches behind one Done button instead of separate popups each with
  * their own save step, so opening Advanced does not lose an unsaved pick.
  *
+ * Only one can be open: the opener asks `claimModelsHubOpen` first, and a second request while one is
+ * open (or on its way) does nothing.
+ *
  * Does not: Install Ollama itself, or actually download a model — the
  * browse-and-pull screen is a separate component (PullModelsModal) that
  * this file only hosts and asks to save on Done.
@@ -91,6 +94,26 @@ export type OllamaModelsHubModalProps = {
  */
 const HUB_BODY_MAX_HEIGHT = "min(calc(100vh - 270px), 520px)";
 
+/*
+ * One box at a time (plan 92's second night: the Deck showed two AI models boxes stacked, the second
+ * opened from "Browse models..." under the one "AI models" opened, plan92-P92-M-MODELS-MAP.json). A box
+ * counts itself while it is on the page, by its own mount and unmount, so every way it closes (Done,
+ * Cancel, a pull, Steam taking its popups down) frees the next open. Between the open request and the
+ * box's first draw the request itself holds the place, for a moment only, so a box that never draws
+ * cannot lock the opener for good.
+ */
+let hubsOnPage = 0;
+let askedAt: number | null = null;
+const ASK_HOLDS_MS = 1500;
+
+/** The opener asks this first: true (and the place is held) when no AI models box is open or on its way. */
+export function claimModelsHubOpen(now: number = Date.now()): boolean {
+  if (hubsOnPage > 0) return false;
+  if (askedAt !== null && now - askedAt < ASK_HOLDS_MS) return false;
+  askedAt = now;
+  return true;
+}
+
 /**
  * Unified fullscreen hub: the browse/pull table (licence choice included, as a filter) and
  * advanced routing.
@@ -120,6 +143,14 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
   // same screen (docs/test-evidence/plan70-RING-ON-FILTER-2c1.json). Both routes now open the
   // same way, ring on "Advanced ›". Since plan 91 there is no panel: the filters are a column
   // that is always on screen, so nothing is left to open.
+  useEffect(() => {
+    hubsOnPage += 1;
+    askedAt = null;
+    return () => {
+      hubsOnPage -= 1;
+    };
+  }, []);
+
   const [section, setSection] = useState<Exclude<OllamaModelsHubSection, "policy">>(
     initialSection === "policy" ? "browse" : initialSection
   );

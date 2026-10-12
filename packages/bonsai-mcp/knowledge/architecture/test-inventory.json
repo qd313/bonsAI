@@ -225,6 +225,7 @@
     "src/features/plugin-shell/tabs/useSearchTabPayload.test.tsx",
     "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
     "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
+    "src/features/plugin-shell/useOllamaModelsHubModal.openOnce.test.tsx",
     "src/features/plugin-shell/usePublishTextScale.test.tsx",
     "src/features/plugin-shell/useSessionRestoreAfterRemount.test.ts",
     "src/features/preset-carousel/carouselState.test.ts",

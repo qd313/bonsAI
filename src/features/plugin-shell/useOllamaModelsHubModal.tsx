@@ -13,6 +13,9 @@
  * separate unlock switch is already on, so a person cannot end up with a
  * setting that looks chosen but was never actually allowed.
  *
+ * Opens it once: a request while the popup is already open, from any of its buttons, does nothing
+ * (two were found stacked on the Deck, plan92-P92-M-MODELS-MAP.json).
+ *
  * Does not: Draw the hub's contents — see the OllamaModelsHubModal
  * component for that. This hook only opens it and saves what it returns.
  */
@@ -21,6 +24,7 @@ import { showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
 
 import {
+  claimModelsHubOpen,
   OllamaModelsHubModal,
   type OllamaModelsHubSection,
 } from "../../components/OllamaModelsHubModal";
@@ -146,6 +150,8 @@ export function useOllamaModelsHubModal({
 
   const openOllamaModelsHub = useCallback(
     (opts?: { initialSection?: OllamaModelsHubSection }) => {
+      // One box at a time, whichever button asked: a second request while one is open does nothing.
+      if (!claimModelsHubOpen()) return;
       captureSessionBeforeModal();
       const handle = showModal(
         <OllamaModelsHubModal

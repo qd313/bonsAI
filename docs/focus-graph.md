@@ -1196,6 +1196,9 @@ the Show reasoning line when this turn has one, else the answer's first section
   still. Up and Down go note to note in the same column (switches with switches, bins with bins), the last note's Down
   is Close, and Up from Close is the last note's switch. All siblings in one popup, so a plain focus. After Remove the
   ring goes to the row now in its place, else the one before, else Close. B or Close closes it once.
+- **The claim ends at the person's next press** (a button or key heard at the panel's document, ignoring the first
+  150 ms while B itself arrives) and once the line has held the ring for a second without being drawn again, so a Down
+  pressed just after B is never pulled back (Deck, plan92-P90-NOTES-SHEET-try2.json).
 - **The ring returns to the line.** Opening the sheet writes the turn's key into the store (`sheetOpenedFrom`); closing
   the popup rebuilds the tab and the rebuilt line, seeing its own key with the sheet closed, takes the ring back (a
   few tries while the tab mounts) and clears the note. `NotesReadLine.test.tsx` unmounts and remounts between the open

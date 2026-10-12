@@ -51,6 +51,8 @@ import { openUserNotesSheet } from "./UserNotesSheet";
 
 /** How often the ring is put back on the line while the rebuilt tab mounts (the window is in the store). */
 const RETURN_EVERY_MS = 60;
+/** How long the line must hold the ring, undisturbed, before the claim is over. */
+const RETURN_SETTLED_MS = 1000;
 
 export type NotesRead = { read: number; off: number };
 
@@ -102,12 +104,23 @@ export function NotesReadLine({ turnKey, notes }: { turnKey: string; notes: Note
   useEffect(() => {
     if (!returning) return undefined;
     let timer: number | undefined;
+    let heldSince = 0;
     const attempt = () => {
       if (Date.now() >= getUserNotesState().sheetReturnUntil) {
         sheetReturnDone();
         return;
       }
-      if (!elementHasGamepadFocus(el.current)) focusRegisteredReplyStop("notes-line");
+      if (elementHasGamepadFocus(el.current)) {
+        /* Held for a whole second without being drawn again: the tab has settled, the claim is over. */
+        heldSince ||= Date.now();
+        if (Date.now() - heldSince >= RETURN_SETTLED_MS) {
+          sheetReturnDone();
+          return;
+        }
+      } else {
+        heldSince = 0;
+        focusRegisteredReplyStop("notes-line");
+      }
       timer = window.setTimeout(attempt, RETURN_EVERY_MS);
     };
     attempt();

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 946,
-  "edgeCount": 3135,
+  "edgeCount": 3136,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -6321,7 +6321,8 @@
     },
     "src/features/user-notes/userNotesStore.ts": {
       "imports": [
-        "src/types/backgroundAsk.ts"
+        "src/types/backgroundAsk.ts",
+        "src/utils/uiDocument.ts"
       ],
       "importedBy": [
         "src/features/user-notes/NoteOfferCard.test.tsx",
@@ -11316,6 +11317,7 @@
         "src/features/user-notes/NoteOfferCard.tsx",
         "src/features/user-notes/NotesReadLine.tsx",
         "src/features/user-notes/UserNotes.transcript.test.tsx",
+        "src/features/user-notes/userNotesStore.ts",
         "src/hooks/askBarRingWatch.titleView.test.ts",
         "src/hooks/askBarRingWatch.ts",
         "src/hooks/useAskBarInitialRingClaim.freshOpen.test.ts",

@@ -20,6 +20,7 @@
 import { useSyncExternalStore } from "react";
 
 import type { BackgroundRequestStatus, NoteOffer } from "../../types/backgroundAsk";
+import { getUiDocument } from "../../utils/uiDocument";
 
 type OfferScope = "game" | "every";
 type OfferPhase = "offered" | "kept";
@@ -203,8 +204,30 @@ export function beginSheet(turnKey: string): void {
 /** How long after the sheet closes a line drawn again may take the ring back. The tab is drawn more than once. */
 const SHEET_RETURN_WINDOW_MS = 3000;
 
+/** B's own press may still be arriving at the panel as the sheet closes; a press this soon is not the person's next one. */
+const SHEET_RETURN_GRACE_MS = 150;
+
 export function endSheetOpen(): void {
-  set({ sheetOpen: false, sheetReturnUntil: Date.now() + SHEET_RETURN_WINDOW_MS });
+  const closedAt = Date.now();
+  set({ sheetOpen: false, sheetReturnUntil: closedAt + SHEET_RETURN_WINDOW_MS });
+  /*
+   * The claim ends for good at the person's next press, so it can never eat one (Deck: a Down 0.35 to 0.5 s
+   * after B was pulled back to the line). Heard at the panel's document, like the Search tab's settleRing.ts;
+   * a tab drawn again meanwhile finds the claim already over.
+   */
+  const doc = getUiDocument();
+  const heard = () => {
+    if (Date.now() - closedAt < SHEET_RETURN_GRACE_MS) return;
+    doc.removeEventListener("vgp_onbuttondown", heard, true);
+    doc.removeEventListener("keydown", heard, true);
+    if (getUserNotesState().sheetReturnUntil > 0) sheetReturnDone();
+  };
+  doc.addEventListener("vgp_onbuttondown", heard, true);
+  doc.addEventListener("keydown", heard, true);
+  window.setTimeout(() => {
+    doc.removeEventListener("vgp_onbuttondown", heard, true);
+    doc.removeEventListener("keydown", heard, true);
+  }, SHEET_RETURN_WINDOW_MS);
 }
 
 /**

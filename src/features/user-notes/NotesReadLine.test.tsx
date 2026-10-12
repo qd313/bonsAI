@@ -229,6 +229,69 @@ describe("after the popup closes, whatever the Main tab does about the question 
     expect(steamRingHolder()).toBe(two.container.querySelector(".bonsai-notes-line"));
   });
 
+  it("a press after the sheet closed ends the claim for good: the ring follows the press and is never pulled back", async () => {
+    await openAndCloseTheSheet();
+    const elsewhere = document.createElement("button");
+    document.body.appendChild(elsewhere);
+    const tab = render(
+      <>
+        <AskBarStandIn />
+        <NotesReadLine turnKey="t1" notes={{ read: 1, off: 0 }} />
+      </>,
+    );
+    registerBox(() => tab.container.querySelector("input"));
+    await wait(250);
+    expect(steamRingHolder()).toBe(tab.container.querySelector(".bonsai-notes-line"));
+    /* Down pressed 350 ms after B (the Deck's try): the ring moves on, and must stay moved. */
+    act(() => void document.dispatchEvent(new Event("vgp_onbuttondown")));
+    putSteamRingOn(elsewhere);
+    await wait(500);
+    expect(steamRingHolder()).toBe(elsewhere);
+    /* A line drawn again after that press does not claim either. */
+    tab.unmount();
+    const again = render(<NotesReadLine turnKey="t1" notes={{ read: 1, off: 0 }} />);
+    await wait(300);
+    expect(steamRingHolder()).not.toBe(again.container.querySelector(".bonsai-notes-line"));
+    elsewhere.remove();
+  });
+
+  it("a key press ends it too", async () => {
+    await openAndCloseTheSheet();
+    const elsewhere = document.createElement("button");
+    document.body.appendChild(elsewhere);
+    const tab = render(<NotesReadLine turnKey="t1" notes={{ read: 1, off: 0 }} />);
+    await wait(250);
+    act(() => void document.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" })));
+    putSteamRingOn(elsewhere);
+    await wait(300);
+    expect(steamRingHolder()).toBe(elsewhere);
+    tab.unmount();
+    elsewhere.remove();
+  });
+
+  it("a press in the first instants, while B itself is still arriving, does not end it", async () => {
+    await openAndCloseTheSheet();
+    act(() => void document.dispatchEvent(new Event("vgp_onbuttondown")));
+    const tab = render(<NotesReadLine turnKey="t1" notes={{ read: 1, off: 0 }} />);
+    await wait(300);
+    expect(steamRingHolder()).toBe(tab.container.querySelector(".bonsai-notes-line"));
+  });
+
+  it("with no press, B still returns the ring to the line and it stays once the tab has settled", async () => {
+    await openAndCloseTheSheet();
+    const elsewhere = document.createElement("button");
+    document.body.appendChild(elsewhere);
+    const tab = render(<NotesReadLine turnKey="t1" notes={{ read: 1, off: 0 }} />);
+    await wait(250);
+    expect(steamRingHolder()).toBe(tab.container.querySelector(".bonsai-notes-line"));
+    /* After the line has held the ring for a second the claim is over: something else may have it. */
+    await wait(1300);
+    putSteamRingOn(elsewhere);
+    await wait(400);
+    expect(steamRingHolder()).toBe(elsewhere);
+    elsewhere.remove();
+  });
+
   it("stops claiming after a few seconds, so the line does not pull the ring back on a later mount", async () => {
     vi.useFakeTimers();
     await openAndCloseTheSheet();

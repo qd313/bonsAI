@@ -3,7 +3,7 @@
  * Purpose: Pin the About tab's dense layout (plan 92, lane T3; plan 91 § 2c and § 3d; the maintainer's pick,
  *          round 2 option A with round 3 option D on the density board). On the Deck the tab was 877 points
  *          tall (two screens on the Deck's own screen) because every row was a full Steam row with its text
- *          always drawn. Now: "Version 0.5.0" is a plain line that is not a stop; the "What bonsAI is" paragraph
+ *          always drawn. Now: "Version 0.5.0" sits on the title line beside "About bonsAI" (plain text, not a stop, no row of its own); the "What bonsAI is" paragraph
  *          and the green beta notice are plain text, always drawn, as before plan 92 (the maintainer asked for
  *          them back on 2026-10-12, so the reveal-on-focus row is gone and the first stop is the Reply language
  *          dropdown); "Reply language" is one line (the label and Steam's dropdown) whose hint opens
@@ -13,7 +13,7 @@
  *          and 44-tabs.js), so the page and the board cannot drift apart unnoticed.
  *          What changed from the earlier version of this file: the first three tests (the support button is a
  *          button built like its three neighbours, holds only its words, and the QR sits above it) described
- *          the old full-width rows and are replaced; the PayPal press and the Version line tests stay.
+ *          the old full-width rows and are replaced; the PayPal press test stays.
  * Used for: AboutTab.tsx, AboutRevealRow.tsx, AboutReplyLanguageSection.tsx, styles/sections/aboutTab.ts.
  * Does not: Measure anything: jsdom has no layout. The size of the whole tab (under 1.3 times the pane) and the
  *           walk on the real screen are the Deck check (plan 92, block 3); AboutTab.walk.test.tsx models the walk.
@@ -27,7 +27,17 @@ import { describe, expect, it, vi } from "vitest";
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../test-harness/fakeDeckyUi");
   const kit = await import("../test-harness/aboutDeckyUi");
-  return { ...stubs, Focusable: kit.KeepNavFocusable, Button: kit.KeepNavButton, Dropdown: kit.StopDropdown };
+  const React = await import("react");
+  // Steam's PanelSection draws its title as the first child of the section, in a title element of its own; the
+  // shared stub only puts it in an attribute, so this one draws it, which is what lets a title hold a node.
+  const PanelSection = ({ title, children }: { title?: React.ReactNode; children?: React.ReactNode }) =>
+    React.createElement(
+      "div",
+      { "data-decky-ui": "PanelSection" },
+      React.createElement("div", { "data-test-section-title": "" }, title),
+      children,
+    );
+  return { ...stubs, PanelSection, Focusable: kit.KeepNavFocusable, Button: kit.KeepNavButton, Dropdown: kit.StopDropdown };
 });
 
 import { callNav } from "../test-harness/aboutDeckyUi";
@@ -73,7 +83,8 @@ describe("About tab: the rows, in the drawing's order and words", () => {
   it("draws the three section headings the drawing has", () => {
     const { container } = renderAbout();
     const drawn = Array.from(aboutData.matchAll(/sec\("([^"]+)"\)/g)).map((m) => m[1]);
-    const titles = Array.from(container.querySelectorAll('[data-decky-ui="PanelSection"]')).map((s) => s.getAttribute("title"));
+    // The words of each title: the first text in its title element (the About title also holds the version).
+    const titles = Array.from(container.querySelectorAll("[data-test-section-title]")).map((t) => t.firstChild?.textContent);
     expect(drawn).toEqual(["About bonsAI", "Reply language", "Links"]);
     expect(titles).toEqual(drawn);
   });
@@ -100,12 +111,32 @@ describe("About tab: the rows, in the drawing's order and words", () => {
     expect(container.querySelector(".bonsai-about-lang-label")!.textContent).toBe(drawn[1]);
   });
 
-  it("draws the Version line as plain text, not a stop", () => {
+  it("puts 'About bonsAI' and the version on one line: the version sits in the title itself, not in a row of its own", () => {
     const { container } = renderAbout();
-    const line = screen.getByText(`Version ${PLUGIN_VERSION}`);
-    expect(line.closest("button")).toBeNull();
-    expect(line.closest("[tabindex]")).toBeNull();
+    const title = container.querySelector<HTMLElement>("[data-test-section-title]")!;
+    expect(title.firstChild!.textContent).toBe("About bonsAI");
+    const version = title.querySelector<HTMLElement>("[data-bonsai-about-version]")!;
+    expect(version.textContent).toBe(`Version ${PLUGIN_VERSION}`);
+    // The version comes after the title's words, on the same line (a span inside the title element).
+    expect(title.textContent).toBe(`About bonsAI${version.textContent}`);
+    expect(version.tagName).toBe("SPAN");
+    // Nothing else on the tab says the version: no separate row.
+    expect(container.querySelectorAll("[data-bonsai-about-version]")).toHaveLength(1);
+    expect(container.querySelector(".bonsai-about-version")).toBeNull();
+    expect(screen.getAllByText(`Version ${PLUGIN_VERSION}`)).toHaveLength(1);
+  });
+
+  it("draws the version as plain text, not a stop, in the quieter description colour and plain case", () => {
+    const { container } = renderAbout();
+    const version = container.querySelector<HTMLElement>("[data-bonsai-about-version]")!;
+    expect(version.closest("button")).toBeNull();
+    expect(version.closest("[tabindex]")).toBeNull();
     expect(container.querySelectorAll("[data-bonsai-about-row]")).toHaveLength(0);
+    // Steam's title is capitals and bold; the version is not, and it takes the description grey.
+    const rule = declarations(".bonsai-scope .bonsai-about-title-version");
+    expect(rule).toMatch(/color:\s*#c8c8c8/);
+    expect(rule).toMatch(/text-transform:\s*none/);
+    expect(rule).toMatch(/font-size:\s*calc\(/);
   });
 });
 

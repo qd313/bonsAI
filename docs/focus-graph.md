@@ -749,8 +749,9 @@ Cancel               (drawn only while a run goes)
 
 ### The About tab, one line per row (plan 92, lane T3; plan 91 § 6)
 
-The About tab is `AboutTab.tsx`: a Version line, the "What bonsAI is" paragraph and the beta notice (plain text,
-always drawn, as before plan 92: the maintainer asked for them back on 2026-10-12), Reply language
+The About tab is `AboutTab.tsx`: the title line "About bonsAI" with the version beside it, the "What bonsAI is"
+paragraph and the beta notice (plain text, always drawn, as before plan 92: the maintainer asked for them back on
+2026-10-12), Reply language
 (`AboutReplyLanguageSection.tsx`, with `useRevealWhileRinged` from `AboutRevealRow.tsx` for its hint), and the links
 (`AboutLinks.tsx`). Five stops, no hand-written move anywhere except inside the links block and one transfer out of
 Reply language.
@@ -768,7 +769,7 @@ tab bar
 ```
 
 - **Stops:** exactly five, in this order: the Reply language dropdown, GitHub, Built on Ollama!, Bugs & Feature
-  Requests, the QR code. The Version line, the "What bonsAI is" paragraph, the beta notice and the hint are plain
+  Requests, the QR code. The version (in the title line), the "What bonsAI is" paragraph, the beta notice and the hint are plain
   text: no `tabindex`, no ring. The first stop is the dropdown, so Down from the tab bar lands on it.
 - **The Reply language hint opens on the ring, and only then.** It is drawn under the row while the row holds the
   ring and removed when it leaves. The row's `Focusable` carries `onGamepadFocus` / `onGamepadBlur` (what Steam

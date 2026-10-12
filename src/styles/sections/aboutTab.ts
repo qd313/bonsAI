@@ -2,7 +2,7 @@
  * Title: The About tab, one line per row
  *
  * Purpose: Styles the About tab's dense layout (plan 92, lane T3; the maintainer's pick, "round 2 option A
- * with round 3 option D" on the density board): the Version line, the "What bonsAI is" paragraph and the
+ * with round 3 option D" on the density board): the version on the title line, the "What bonsAI is" paragraph and the
  * beta notice (both always drawn, as before plan 92: the maintainer asked for them back at the top on
  * 2026-10-12), the Reply language row, and the three small link buttons beside a smaller QR code. Every number here is read off the drawing
  * (docs/demos/mockup-board-2/src/43-tabs.css, `.k-row`, `.k-text`, `.k-lsmall`, `.k-lqrbtn`) and the
@@ -34,12 +34,15 @@ export const ABOUT_LINK_HEIGHT_PX = 28;
  */
 export function buildAboutTabSection(): string {
   return `
-        /* The Version line: plain text, not a stop. */
-        .bonsai-scope .bonsai-about-version {
+        /* The version, on the title line beside "About bonsAI": plain text, not a stop. Steam's title is bold
+           capitals; this undoes that and takes the description colour. */
+        .bonsai-scope .bonsai-about-title-version {
+          margin-left: 8px;
           font-size: ${textPx(11)};
-          line-height: 1.2;
+          font-weight: 400;
+          letter-spacing: normal;
+          text-transform: none;
           color: #c8c8c8;
-          padding: 2px 4px 4px;
         }
         /* "What bonsAI is": the paragraph, always drawn, as before plan 92 (not a stop). */
         .bonsai-scope .bonsai-about-blurb {

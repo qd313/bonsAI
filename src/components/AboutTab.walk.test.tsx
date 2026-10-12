@@ -3,7 +3,7 @@
  * Purpose: Walk the real About tab, inside the real tab-body root and a scrolling pane, the way the Deck's
  *          controller rig will (plan 92, block 3): Down from the first stop to the last, Right to the QR code,
  *          Left back, then Up to the top. The stops are, in order: Reply language, GitHub,
- *          Built on Ollama!, Bugs & Feature Requests, and the QR code (the Version line, the "What bonsAI is" paragraph
+ *          Built on Ollama!, Bugs & Feature Requests, and the QR code (the version on the title line, the "What bonsAI is" paragraph
  *          and the beta notice are plain text, not stops, since 2026-10-12). Each press is
  *          Steam's, routed through its tree of containers (steamStep in the About test kit): the stop's own move
  *          handler first, then each container around it, which walks its children only along its own
@@ -50,7 +50,6 @@ const VIEWPORTS = [400, 741];
  */
 const BODY_INSET = 24;
 const HEADING = 40;
-const VERSION = 22;
 const WHAT_IS_PARAGRAPH = 62;
 const LANGUAGE_HINT = 44;
 const BETA = 34;
@@ -95,7 +94,7 @@ function walkAbout(viewport: number) {
 
   /** Every stop's box in the page's own coordinates, with the paragraphs open or shut as they are right now. */
   const layout = (): { boxes: Record<string, Box>; contentHeight: number } => {
-    let y = BODY_INSET + HEADING + VERSION + WHAT_IS_PARAGRAPH + BETA + HEADING;
+    let y = BODY_INSET + HEADING + WHAT_IS_PARAGRAPH + BETA + HEADING;
     const language = y;
     y += LANGUAGE_ROW + (open("language") ? LANGUAGE_HINT : 0) + HEADING;
     const linksTop = y;

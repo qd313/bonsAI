@@ -19,6 +19,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - [src/features/chat-title](#srcfeatureschat-title)
 - [src/features/details-slot](#srcfeaturesdetails-slot)
 - [src/features/downloads](#srcfeaturesdownloads)
+- [src/features/folded-tabs](#srcfeaturesfolded-tabs)
 - [src/features/model-routing](#srcfeaturesmodel-routing)
 - [src/features/plugin-shell](#srcfeaturesplugin-shell)
 - [src/features/plugin-shell/tabs](#srcfeaturesplugin-shelltabs)
@@ -362,6 +363,10 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 
 - **downloadNotice.tsx** (src/features/downloads/downloadNotice.tsx) — *The notice before every download, and the question that turns downloads on*: Before bonsAI downloads anything -- Ollama, an AI model, the voice engine, the knowledge library -- the player is told in plain words where it will connect and roughly how big it is: bonsAI will connect to https://ollama.com to download Ollama (size not known ahead of time)."…
 - **downloadSites.ts** (src/features/downloads/downloadSites.ts) — *Where each download connects, as the download notice names it*: The address and, where the code knows it, the size for every download button, so the notice before a download says exactly where bonsAI connects. […]
+
+## src/features/folded-tabs
+
+- **sectionSummary.ts** (src/features/folded-tabs/sectionSummary.ts) — *A folded section's one-line summary*: The short line of current values a folded section shows beside its name, so a person can read what a section is set to without opening it ("Balanced · Thinking: Off · Terse mode off" beside Reply style"). […]
 
 ## src/features/model-routing
 

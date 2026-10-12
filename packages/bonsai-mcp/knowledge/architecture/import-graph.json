@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 871,
-  "edgeCount": 2752,
+  "fileCount": 873,
+  "edgeCount": 2753,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4080,6 +4080,18 @@
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelSubmitSelected.tsx"
+      ]
+    },
+    "src/features/folded-tabs/sectionSummary.test.ts": {
+      "imports": [
+        "src/features/folded-tabs/sectionSummary.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/folded-tabs/sectionSummary.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/features/folded-tabs/sectionSummary.test.ts"
       ]
     },
     "src/features/model-routing/useTryOrderPlaces.test.tsx": {

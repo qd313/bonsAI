@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 837,
-  "edgeCount": 2584,
+  "fileCount": 838,
+  "edgeCount": 2586,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -427,7 +427,7 @@
     },
     "src/components/KnowledgeBaseSection.storagePicker.test.tsx": {
       "imports": [
-        "src/components/KnowledgeBaseSection.tsx",
+        "src/components/RagCorpusStoragePickerModal.tsx",
         "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
@@ -442,6 +442,7 @@
     "src/components/KnowledgeBaseSection.tsx": {
       "imports": [
         "src/components/KnowledgeBaseButtonLabel.tsx",
+        "src/components/RagCorpusStoragePickerModal.tsx",
         "src/components/icons.tsx",
         "src/features/downloads/downloadNotice.tsx",
         "src/features/downloads/downloadSites.ts",
@@ -467,7 +468,6 @@
         "src/components/KnowledgeBaseSection.remountDownload.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
-        "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
         "src/components/KnowledgeBaseSection.update.test.tsx",
         "src/components/OllamaTab.tsx"
@@ -1942,6 +1942,15 @@
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx"
+      ]
+    },
+    "src/components/RagCorpusStoragePickerModal.tsx": {
+      "imports": [
+        "src/styles/settingsGlassButton.ts"
+      ],
+      "importedBy": [
+        "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
+        "src/components/KnowledgeBaseSection.tsx"
       ]
     },
     "src/components/ReplyCopyButton.test.tsx": {
@@ -6765,6 +6774,7 @@
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/PermissionDenyAction.tsx",
         "src/components/PermissionsTab.tsx",
+        "src/components/RagCorpusStoragePickerModal.tsx",
         "src/components/SettingsTab.tsx",
         "src/components/SettingsTabChatTextSizeRow.tsx",
         "src/components/SettingsTabUiScaleSection.tsx",

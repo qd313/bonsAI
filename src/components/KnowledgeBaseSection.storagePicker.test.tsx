@@ -29,7 +29,7 @@ vi.mock("@decky/ui", async () => {
 });
 vi.mock("@decky/api", () => ({ toaster: { toast: () => {} } }));
 
-import { RagCorpusStoragePickerModal } from "./KnowledgeBaseSection";
+import { RagCorpusStoragePickerModal } from "./RagCorpusStoragePickerModal";
 
 const INTERNAL = { install_path: "~/.bonsai/rag", free_bytes: 731 * 1024 ** 3 };
 const SD = { install_path: "/run/media/deck/card/.bonsai/rag", free_bytes: 1141 * 1024 ** 3 };

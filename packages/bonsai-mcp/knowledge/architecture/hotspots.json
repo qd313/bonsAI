@@ -51,11 +51,6 @@
       "role": ""
     },
     {
-      "path": "src/components/KnowledgeBaseSection.tsx",
-      "lines": 1109,
-      "role": ""
-    },
-    {
       "path": "src/data/characterPlaceholderEmoticonGrids.ts",
       "lines": 1102,
       "role": ""
@@ -63,6 +58,11 @@
     {
       "path": "py_modules/backend/services/local_ollama_setup_service.py",
       "lines": 1072,
+      "role": ""
+    },
+    {
+      "path": "src/components/KnowledgeBaseSection.tsx",
+      "lines": 1036,
       "role": ""
     },
     {

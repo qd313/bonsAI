@@ -55,9 +55,28 @@ describe("tab bar icons draw thick lines at the tab bar's sizes", () => {
     });
   }
 
-  it("the filled icons stay filled shapes with no outline", () => {
-    for (const Icon of [BonsaiLogoIcon, OllamaTabIcon, AboutTabTitleIcon]) {
-      expect(lineWidths(<Icon size={TAB_BAR_SIDE_ICON_PX} />)).toEqual([]);
+  it("the filled icons keep their fill and gain a visible outline, about 3% of their width", () => {
+    for (const [name, Icon] of [
+      ["Main logo", BonsaiLogoIcon],
+      ["Ollama", OllamaTabIcon],
+      ["About", AboutTabTitleIcon],
+    ] as const) {
+      const { container, unmount } = render(<Icon size={TAB_BAR_SIDE_ICON_PX} />);
+      const svg = container.querySelector("svg") as SVGSVGElement;
+      const box = Number(svg.getAttribute("viewBox")!.split(" ")[2]);
+      const shapes = Array.from(container.querySelectorAll("svg path, svg circle, svg rect"));
+      expect(shapes.length, name).toBeGreaterThan(0);
+      for (const n of shapes) {
+        expect(n.getAttribute("stroke"), name).toBe("currentColor");
+        expect(n.getAttribute("paint-order"), name).toBe("stroke");
+        expect(n.getAttribute("stroke-linejoin"), name).toBe("round");
+        const fraction = Number(n.getAttribute("stroke-width")) / box;
+        expect(fraction, name).toBeGreaterThanOrEqual(0.025);
+        expect(fraction, name).toBeLessThanOrEqual(0.04);
+      }
+      const filled = svg.getAttribute("fill") === "currentColor" || shapes.every((n) => n.getAttribute("fill") === "currentColor" || n.closest("g[fill]")?.getAttribute("fill") === "currentColor");
+      expect(filled, name).toBe(true);
+      unmount();
     }
   });
 });

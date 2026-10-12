@@ -44,6 +44,7 @@ import { callNav } from "../test-harness/aboutDeckyUi";
 import { AboutTab } from "./AboutTab";
 import { PLUGIN_VERSION } from "../pluginVersion";
 import { buildBonsaiScopeStylesheet } from "../styles/bonsaiScopeStylesheet";
+import { SETTINGS_GLASS_BTN } from "../styles/settingsGlassButton";
 
 const BOARD = join(__dirname, "../../docs/demos/mockup-board-2/src");
 const dataText = readFileSync(join(BOARD, "42-tabs-data.js"), "utf8");
@@ -198,6 +199,39 @@ describe("About tab: the paragraph and the beta notice are always shown at the t
     expect(open!.textContent).toContain("Steam client language: English");
     callNav(row, "onGamepadBlur");
     expect(revealOf(container, "language")).toBeNull();
+  });
+});
+
+describe("About tab: the link buttons wear the floating Open all button's colours", () => {
+  const link = () => declarations(".bonsai-scope .bonsai-about-links .bonsai-about-link").replace(/\s+/g, " ");
+
+  it("reads the same background, border and text colour out of the stylesheet as the floating button's style object", () => {
+    // FoldAllButton spreads SETTINGS_GLASS_BTN onto its Button: that object is what is on the Deck.
+    expect(link()).toContain(`background: ${SETTINGS_GLASS_BTN.background} !important`);
+    expect(link()).toContain(`border: ${SETTINGS_GLASS_BTN.border} !important`);
+    expect(link()).toContain(`color: ${SETTINGS_GLASS_BTN.color} !important`);
+  });
+
+  it("is light text on a dark fill, and the old plain Steam fill is no longer what the links show", () => {
+    expect(SETTINGS_GLASS_BTN.color).toBe("#e8eef5");
+    expect(String(SETTINGS_GLASS_BTN.background)).toContain("rgba(255,255,255,0.16)");
+    expect(link()).not.toMatch(/background:\s*none/);
+  });
+
+  it("keeps the white focus ring class on every link and leaves the QR block's own look alone", () => {
+    const { container } = renderAbout();
+    for (const button of container.querySelectorAll("[data-bonsai-about-link]")) {
+      expect(button.classList.contains("bonsai-settings-focus-btn")).toBe(true);
+    }
+    const qr = declarations(".bonsai-scope .bonsai-about-links .bonsai-about-qr").replace(/\s+/g, " ");
+    expect(qr).toContain("background: none !important");
+    expect(qr).toContain("color: #b8bcbf");
+  });
+
+  it("does not keep a second copy of the colours: the About styles take them from the shared button file", () => {
+    const source = readFileSync(join(__dirname, "../styles/sections/aboutTab.ts"), "utf8");
+    expect(source).not.toContain("#e8eef5");
+    expect(source).not.toContain("rgba(255,255,255,0.16)");
   });
 });
 

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 930,
-  "edgeCount": 3051,
+  "edgeCount": 3053,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -55,6 +55,7 @@
         "src/components/AboutTab.tsx",
         "src/pluginVersion.ts",
         "src/styles/bonsaiScopeStylesheet.ts",
+        "src/styles/settingsGlassButton.ts",
         "src/test-harness/aboutDeckyUi.tsx",
         "src/test-harness/fakeDeckyUi.tsx"
       ],
@@ -7640,7 +7641,8 @@
     "src/styles/sections/aboutTab.ts": {
       "imports": [
         "src/features/unified-input/constants.ts",
-        "src/styles/sections/textPx.ts"
+        "src/styles/sections/textPx.ts",
+        "src/styles/settingsGlassButton.ts"
       ],
       "importedBy": [
         "src/components/AboutTab.walk.test.tsx",
@@ -8055,6 +8057,7 @@
       ],
       "importedBy": [
         "src/components/AboutLinks.tsx",
+        "src/components/AboutTab.test.tsx",
         "src/components/CharacterPickerModal.tsx",
         "src/components/DeveloperOptionRow.tsx",
         "src/components/KnowledgeBaseSection.tsx",
@@ -8076,7 +8079,8 @@
         "src/features/folded-tabs/FoldAllButton.test.tsx",
         "src/features/folded-tabs/FoldAllButton.tsx",
         "src/features/user-notes/UserNotesSheet.tsx",
-        "src/styles/buttonFocusRing.test.ts"
+        "src/styles/buttonFocusRing.test.ts",
+        "src/styles/sections/aboutTab.ts"
       ]
     },
     "src/test-harness/aboutDeckyUi.tsx": {

@@ -4,7 +4,8 @@
  * Purpose: Styles the About tab's dense layout (plan 92, lane T3; the maintainer's pick, "round 2 option A
  * with round 3 option D" on the density board): the version on the title line, the "What bonsAI is" paragraph and the
  * beta notice (both always drawn, as before plan 92: the maintainer asked for them back at the top on
- * 2026-10-12), the Reply language row, and the three small link buttons beside a smaller QR code. Every number here is read off the drawing
+ * 2026-10-12), the Reply language row, and the three small link buttons (in the floating
+ * Open all button's glass grey with light text, shared from settingsGlassButton.ts) beside a smaller QR code. Every number here is read off the drawing
  * (docs/demos/mockup-board-2/src/43-tabs.css, `.k-row`, `.k-text`, `.k-lsmall`, `.k-lqrbtn`) and the
  * colours are the ones sampled from the Deck (docs/demos/mockup-board-2/README.md).
  *
@@ -18,6 +19,11 @@
  * Does not: Draw the D-pad ring (the shared ring classes do, scopeBase.ts), and does not touch any other tab.
  */
 import { BONSAI_FOREST_GREEN } from "../../features/unified-input/constants";
+import {
+  SETTINGS_GLASS_BTN_BACKGROUND,
+  SETTINGS_GLASS_BTN_BORDER,
+  SETTINGS_GLASS_BTN_COLOR,
+} from "../settingsGlassButton";
 import { textPx } from "./textPx";
 
 /** The QR picture's side, in points: 132 before plan 92, about 88 in the drawing's "links beside the QR". */
@@ -109,6 +115,10 @@ export function buildAboutTabSection(): string {
           box-sizing: border-box !important;
           padding: 0 8px !important;
           border-radius: 2px !important;
+          /* Steam's own button grey with light text: the same three values the floating Open all button uses. */
+          background: ${SETTINGS_GLASS_BTN_BACKGROUND} !important;
+          border: ${SETTINGS_GLASS_BTN_BORDER} !important;
+          color: ${SETTINGS_GLASS_BTN_COLOR} !important;
           font-size: ${textPx(11.5)} !important;
           white-space: nowrap;
           overflow: hidden;
@@ -121,8 +131,10 @@ export function buildAboutTabSection(): string {
           flex: none;
           width: 100px;
         }
+        /* The icons take the label's colour (currentColor in the drawing's paths). */
         .bonsai-scope .bonsai-about-link-icon {
           flex: none;
+          color: inherit;
           width: 16px;
           height: 16px;
           display: inline-flex;

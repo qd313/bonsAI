@@ -55,6 +55,16 @@ export const FOCUS_RING_WRAP_CLASS = "bonsai-settings-focus-wrap";
  */
 export const FOCUS_RING_ITEM_HOST_CLASS = "bonsai-settings-item-ring-host";
 
+/**
+ * The glass button's three colours, named once so every button that wears the look reads the same value:
+ * the floating Open all button (SETTINGS_GLASS_BTN, below) and the About tab's link buttons (styles/sections/
+ * aboutTab.ts, as CSS). Over the panel's dark ground the fill comes out as Steam's own button grey.
+ */
+export const SETTINGS_GLASS_BTN_BACKGROUND =
+  "linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 100%)";
+export const SETTINGS_GLASS_BTN_BORDER = "1px solid rgba(255,255,255,0.22)";
+export const SETTINGS_GLASS_BTN_COLOR = "#e8eef5";
+
 /** SteamOS glass row button — matches Test connection / Browse models (no tint fill). Pair with FOCUS_RING_BTN_CLASS. */
 export const SETTINGS_GLASS_BTN: React.CSSProperties = {
   minHeight: 36,
@@ -63,9 +73,9 @@ export const SETTINGS_GLASS_BTN: React.CSSProperties = {
   fontSize: textPx(11),
   fontWeight: 600,
   borderRadius: 4,
-  border: "1px solid rgba(255,255,255,0.22)",
-  background: "linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 100%)",
-  color: "#e8eef5",
+  border: SETTINGS_GLASS_BTN_BORDER,
+  background: SETTINGS_GLASS_BTN_BACKGROUND,
+  color: SETTINGS_GLASS_BTN_COLOR,
   textAlign: "left",
   justifyContent: "flex-start",
 };

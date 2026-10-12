@@ -795,6 +795,11 @@ tab bar
   (lessons § 3). The move handlers are on a `Focusable` around each `Button`, not on the Button: a Decky `Button`
   does not forward `onMoveX`. Up from GitHub is left to Steam: it passes out of the column and the row to the
   tab's own column of rows, which steps up to Reply language.
+- **The look of the three link buttons** is the floating Open all button's: the glass fill, border and light text
+  from `settingsGlassButton.ts` (`SETTINGS_GLASS_BTN_*`, one shared value), with the white ring class as usual.
+  The QR block keeps its own plain look. Driver hooks: `[data-bonsai-about-link="github" | "ollama" | "bugs"]`,
+  `[data-bonsai-about-qr]`, `[data-bonsai-about-language-dropdown]`, `[data-bonsai-about-version]`,
+  `[data-bonsai-about-blurb]`, `[data-bonsai-about-beta]`.
 - **A** (`onClick`) on a link opens it; A on the QR opens the support page (`https://paypal.me/quentind313`), as the
   old "Support my Steam Sale habit" button did.
 - **Tests:** `AboutTab.test.tsx` (the words against the drawing's data file, the paragraphs, the QR's size read

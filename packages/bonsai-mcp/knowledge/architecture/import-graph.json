@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 919,
-  "edgeCount": 2970,
+  "fileCount": 920,
+  "edgeCount": 2980,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -344,6 +344,21 @@
       ],
       "importedBy": []
     },
+    "src/components/DeveloperTab.foldedWalk.test.tsx": {
+      "imports": [
+        "src/components/DeveloperTab.tsx",
+        "src/features/folded-tabs/developerTabFolds.ts",
+        "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/features/stream-scramble/streamScrambleContext.ts",
+        "src/styles/sections/foldedTabs.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/foldedTabWalk.tsx",
+        "src/test-harness/steamRing.tsx",
+        "src/test-harness/tabBodyWalk.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/DeveloperTab.test.tsx": {
       "imports": [
         "src/components/DeveloperTab.tsx",
@@ -372,6 +387,7 @@
       ],
       "importedBy": [
         "src/components/DeveloperTab.folded.test.tsx",
+        "src/components/DeveloperTab.foldedWalk.test.tsx",
         "src/components/DeveloperTab.test.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
@@ -4350,6 +4366,7 @@
       ],
       "importedBy": [
         "src/components/DeveloperTab.folded.test.tsx",
+        "src/components/DeveloperTab.foldedWalk.test.tsx",
         "src/components/DeveloperTab.test.tsx",
         "src/components/DeveloperTab.tsx",
         "src/components/SettingsDeveloperLeftoverRing.test.tsx",
@@ -4394,6 +4411,7 @@
       "imports": [],
       "importedBy": [
         "src/components/DeveloperTab.folded.test.tsx",
+        "src/components/DeveloperTab.foldedWalk.test.tsx",
         "src/components/DeveloperTab.test.tsx",
         "src/components/OllamaTab.focusRing.test.tsx",
         "src/components/OllamaTab.foldedWalk.test.tsx",
@@ -5679,6 +5697,7 @@
       ],
       "importedBy": [
         "src/components/DeveloperTab.folded.test.tsx",
+        "src/components/DeveloperTab.foldedWalk.test.tsx",
         "src/components/DeveloperTab.test.tsx",
         "src/components/DeveloperTab.tsx",
         "src/components/MainTab.streamScramble.test.tsx",
@@ -7541,6 +7560,7 @@
         "src/styles/sections/textPx.ts"
       ],
       "importedBy": [
+        "src/components/DeveloperTab.foldedWalk.test.tsx",
         "src/components/OllamaTab.foldedWalk.test.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx",
         "src/styles/bonsaiScopeStylesheet.ts"
@@ -8073,6 +8093,7 @@
         "src/components/ContextChipLadder.ringWalk.test.tsx",
         "src/components/ContextChipLadder.stillRow.test.tsx",
         "src/components/ContextChipLadder.test.tsx",
+        "src/components/DeveloperTab.foldedWalk.test.tsx",
         "src/components/DrgGlossaryTermChip.placement.test.tsx",
         "src/components/DrgGlossaryTermChip.test.tsx",
         "src/components/KnowledgeBaseSection.icons.test.tsx",
@@ -8227,6 +8248,7 @@
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/components/DeveloperTab.foldedWalk.test.tsx",
         "src/components/OllamaTab.foldedWalk.test.tsx"
       ]
     },
@@ -8293,6 +8315,7 @@
     "src/test-harness/steamRing.tsx": {
       "imports": [],
       "importedBy": [
+        "src/components/DeveloperTab.foldedWalk.test.tsx",
         "src/components/OllamaTab.foldedWalk.test.tsx",
         "src/components/PullModelsFiltersColumn.test.tsx",
         "src/components/SettingsTab.textSizeWalk.test.tsx",
@@ -8332,6 +8355,7 @@
         "src/test-harness/tabBodyDeckGeometry.ts"
       ],
       "importedBy": [
+        "src/components/DeveloperTab.foldedWalk.test.tsx",
         "src/components/OllamaTab.foldedWalk.test.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
@@ -10041,6 +10065,7 @@
         "src/components/AboutLinks.tsx",
         "src/components/AboutTab.tsx",
         "src/components/ContextChipLadder.ringWalk.test.tsx",
+        "src/components/DeveloperTab.foldedWalk.test.tsx",
         "src/components/MainTab.askStrip.deck.test.tsx",
         "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/components/MainTabChatTranscript.earlierByDay.test.tsx",

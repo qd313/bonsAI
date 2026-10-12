@@ -326,3 +326,38 @@ tab bar
 | T3 | Edits: `src/components/AboutTab.tsx` (170 lines; the sections at about lines 80 and 118, the QR image at about line 147), `AboutReplyLanguageSection.tsx` (one-line row), `src/features/plugin-shell/tabs/useAboutTabPayload.tsx`; new `src/components/AboutLinks.tsx` and tests |
 | Evidence and drawings to read first | `docs/demos/mockup-board-2/README.md` (the sampled colours: panel #0e141b, ring fill on a row #32373d, divider #272c32, Steam button #32373d, switch on #1a9fff, labels #dcdedf, descriptions #b8bcbf, headings #b7b9bb); `docs/test-evidence/plan87-M4-OTHER-TABS.json` (today's heights on the monitor: Ollama 1,718, Settings 2,133, Permissions 786, Developer 2,820, About 915; the first control's place on each); `plan87-P87-B10-TAB-SCROLL-try3.json` and plan 89's Settings walk evidence (the scroll rules the strip must respect); `docs/design-tokens.md` § Focus rings and § Layout constants; `docs/focus-graph.md` § "The Text size row" and § "The Ollama tab's setup buttons" |
 | Plan 89 touched | the three scroll files above (lane O1), the font sizes in every tab file and the styles (lane S1): the dense-tab lanes start from the tip after those landed |
+
+## 10. Developer guide: how the models box's column and the folded tabs are built (written 2026-10-12)
+
+What landed on the first night (plan 92): the models box's filters column (with a second round for the D-pad), the
+About tab, and the Ollama tab folded. Settings and Developer (lanes T1 and T2) are not folded yet.
+
+**The models box's column.** `src/components/PullModelsFiltersColumn.tsx` draws the column (the count and Clear,
+Licence, Good for with counts, Show, then the chips) from the box's own filter state and the rules in
+`src/utils/pullModelFilters.ts`; the counts come from `src/hooks/usePullModelTableData.ts`, the same data the list
+filters with. The Good for and Show picks, and "which column row and which list row the ring last left", live in
+`src/components/pullModelsBoxMemory.ts`, outside the components, so closing and reopening the box (a Decky popup)
+keeps them; the licence pick is still saved on Done. The column and the list sit side by side in one row
+(`.bonsai-pullmodels-split`); Right and Left between them go through Steam's own transfer onto the other side's nav
+node. A greyed row (the third licence row before the unlock, the Refresh button while the catalog loads) is skipped
+because the column knows it is off, not by asking the button: on the Deck a greyed button can still take the ring.
+The Date column is gone; the list's column widths are in `src/styles/sections/gamepadAndPullModels.ts` and are
+checked by `PullModelsFiltersColumn.layout.test.ts`.
+
+**A folded tab.** The pieces live in `src/features/folded-tabs/`: `sectionSummary.ts` (the one-line summary of a
+closed section, from the drawing's rule), `FoldedSection.tsx` (the section line and its body) with
+`foldedTabsStore.ts` (which sections are open, kept for the session outside the components), `DenseRow.tsx` (one line
+per setting, its longer words carried in a data attribute), `TabHelpStrip.tsx` with `useHelpStrip.ts` (the strip at
+the bottom that shows the ringed setting's longer words, and the extra bottom margin it adds to the tab's scroll rule
+in `src/utils/tabBodyScrollPlan.ts`), and `FoldAllButton.tsx` (Open all / Close all). One `FoldedColumn` holds every
+line and row so Steam steps Down and Up through them. `ollamaTabFolds.ts` lists the Ollama tab's sections.
+
+**To fold another tab (Settings or Developer):** list its sections once as a chain (each with where the ring enters
+from above and from below); wrap them in one `FoldedColumn`; give each a `FoldedSection` with its summary from
+`summarizeSection`; draw its rows with `DenseSwitchRow` or `DenseRow`, passing each row's old help text word for word;
+hand Up from a section's first control to its line and Down from its last to the next line; end the tab with the help
+strip and the floating button; test it with `walkFoldedTab` (`src/test-harness/foldedTabWalk.tsx`).
+
+**The About tab.** `src/components/AboutTab.tsx` (one line per row), `AboutRevealRow.tsx` (a row whose paragraph opens
+under it while the ring is on it), and `AboutLinks.tsx` (three small buttons in a column beside the QR code). The
+links block is a row and the buttons a column for Steam (`flow-children`); that is what lets Down reach every button.

@@ -346,3 +346,46 @@ above "N earlier" while a jump is live; Down from it goes to "N earlier" as befo
 | N3b | New: `src/features/search-tab/searchJumpStore.ts`, `useSearchJump.ts`, `SearchBackLine.tsx`, tests. Edits: `src/hooks/useEarlierTurnsPill.ts` (a "reveal this turn" function: open the day, press Show more, hand the ring to the row), `src/utils/earlierTurnsByDay.ts` (which day holds a turn), `src/components/buildEarlierList.tsx` (the Back line above "N earlier"), `src/hooks/useChatSlots.ts` (switch to a chat by id, read-only reuse), `src/utils/focusNavigation.ts` (`isOptionsDeckButtonEvent`, beside `isOkDeckButtonEvent` about line 152), `src/components/MainTab.tsx` (the Y handler on the Main tab's column) |
 | Evidence and drawings to read first | `docs/demos/mockup-board/src/47b-notes-r2.js`, `49b-search-r2.js`, `49-search.js` (the word rule `sWords`, the jump `sJump`, the finder `sFinder`); `docs/focus-graph.md` § "The 'From the notes' block" (a control between two stops, every trap), § "The 'Show N more' line"; `src/features/chat-sum-up/SessionTitleOffer.tsx` (an offer row under a card, the pattern for the note card's buttons) |
 | Plan 89 touched | `src/data/steamSettingsNavigation.ts` (the 24 page names, lane S3) and font sizes in most screen files (lane S1): read them at the tip before N3 and N2 start |
+
+## 10. Developer guide: how the notes and the Search tab are built (written 2026-10-12, after the first night)
+
+What landed on the first night (plan 92): the notes' back end and Ask reading them, the game-notes search, and the
+Search tab's first half. The note card, the "Read N of your notes" line, the notes sheet (lane N2), and the jump
+into a chat with Y (lane N3b) are not built yet; § 4 still describes them.
+
+**How a note travels.** A note is one small record (its words, a game or every game, on or off) kept in one file,
+`user_notes.json`, beside the saved chats in the plugin's settings folder. Three back-end calls read and change it:
+list, save (new or edit) and delete; they live in `py_modules/backend/services/user_notes_service.py` (the file, the
+40-note and 200-character limits, the crash-safe write) and `user_notes_rpc.py` (the calls), with two-line
+pass-throughs in `main.py` beside the chat calls. "Clear all plugin data" removes the file because it empties the
+whole settings folder. Before every Ask, `user_notes_for_ask.py` picks the notes that are on and fit the question's
+game (same Steam id; or the same game name when there is no id, and with nothing running, the game the question
+names or the chat's own game), newest first, at most 8 notes and 1,000 characters, and turns them into one block.
+`ollama_prompts.py` puts that block right after the AI's identity lines, ahead of the Proton and knowledge-base
+text, and keeps it there even when the knowledge block is moved to the end (the `user_notes_block` parameter). The
+same pick becomes the Show details record (`user_notes_attached`, and `user_notes_off_count` for "your notes are all
+off") and a "Your notes (N)" chip, built in `transparency_service.py` like the knowledge-base chip; the chat file keeps
+the record (`chat_slot_service.py`'s turn cleaner). The plugin log line for an Ask says `user_notes=N`.
+
+**How the Search tab finds things.** One back-end call, `list_chat_slot_questions` (in `chat_slot_rpc.py`), returns
+every saved chat with its questions; a question asked with no game running gets the chat's own game, so the game row
+can still name it. The screen does the rest in `src/features/search-tab/`: `searchModel.ts` holds the pure rules (the
+eight word buttons from your own questions: four letters or longer, everyday words skipped, plurals folded; the
+matching for each group; the game narrowing), `useSearchIndex.ts` loads the chats and notes when the tab opens and
+after an answer finishes, `searchApi.ts` holds the back-end calls by name. The four groups, in order: your chats,
+your notes, the Steam settings bonsAI can open (the same search the old card above the question box used, which is
+gone from the Main tab now), and the knowledge library's notes (`knowledge_base_notes_search.py`, a keyword pass over
+the library's own index; a note whose name does not hold your word shows a plain title until opened, so a boss you
+never typed is not named). A game note opens inside the tab (`GameNoteSheet.tsx`), not as a Decky popup, because
+closing a popup rebuilds the tab and would lose the word.
+
+**The D-pad.** Every stop on the Search tab handles all four directions itself (`searchNav.ts`, `useSearchNav.ts`,
+`SearchStop.tsx`), so nothing depends on how Steam groups the controls. The tab's state (the word, the game, which note
+is open) lives in `searchTabStore.ts`, outside the components, so a rebuilt tab keeps it. The tab's place: it is
+first in the tab list (`src/features/plugin-shell/tabTitles.tsx`, the tab rows in `src/index.tsx`), and the bar's
+side icons are one step smaller (`TAB_BAR_SIDE_ICON_PX`) so seven tabs fit with the Developer tab on.
+
+**To change something later:** a new word to skip on the word buttons → `searchModel.ts`; a new group → `searchModel.ts`
+for the matching, `SearchResults.tsx` for the drawing, a stop rule in `searchNav.ts`; what Ask does with the notes →
+`user_notes_for_ask.py` and the block's words in `user_notes_service.py`; the note limits → `user_notes_service.py`
+(the screen shows the back end's own words when it refuses).

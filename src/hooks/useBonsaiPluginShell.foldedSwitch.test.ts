@@ -121,3 +121,63 @@ describe("what is not a switch leaves the sections as they are", () => {
     expect(openIds()).toEqual(["reply", "models"]);
   });
 });
+
+/** Steam's pane around a drawn Ollama body (one fold line in it), with a scroll position a test can set and read. */
+function drawOllamaPane(scrollTop: number) {
+  let top = scrollTop;
+  const pane = document.createElement("div");
+  pane.className = "TabContentsScroll_abc123";
+  Object.defineProperty(pane, "scrollTop", { configurable: true, get: () => top, set: (v: number) => (top = v) });
+  const body = document.createElement("div");
+  body.setAttribute("data-bonsai-tab-body", OLLAMA_FOLD_TAB);
+  const line = document.createElement("div");
+  line.setAttribute("data-bonsai-fold-line", "where");
+  body.appendChild(line);
+  pane.appendChild(body);
+  document.body.appendChild(pane);
+  return { scrollTop: () => top, remove: () => pane.remove() };
+}
+
+describe("the page starts at its top on a real switch, and only then", () => {
+  let dom: ReturnType<typeof drawOllamaPane>;
+  beforeEach(() => {
+    dom = drawOllamaPane(330);
+  });
+  afterEach(() => dom.remove());
+
+  it("the bar and Steam's LB/RB put the page of the folded tab at 0", () => {
+    const { result } = renderHook(() => useBonsaiPluginShell({ getSessionSnapshot: emptySnapshot }));
+    act(() => result.current.selectTab(OLLAMA_FOLD_TAB));
+    expect(dom.scrollTop()).toBe(0);
+    dom.remove();
+    dom = drawOllamaPane(330);
+    act(() => result.current.onTabsShowTab("main"));
+    act(() => result.current.onTabsShowTab(OLLAMA_FOLD_TAB));
+    expect(dom.scrollTop()).toBe(0);
+  });
+
+  it("a tab rebuilt after a popup (mounted again on Ollama) keeps the page where it is", () => {
+    mountOnOllama();
+    expect(dom.scrollTop()).toBe(330);
+  });
+
+  it("the post-popup lock sending Steam's jump to Main back to Ollama keeps the page where it is", () => {
+    vi.useFakeTimers();
+    const { result } = mountOnOllama();
+    act(() => {
+      result.current.characterPickerReturnTabRef.current = OLLAMA_FOLD_TAB;
+      result.current.finalizeShowModalAndRestoreActiveTab(() => {});
+    });
+    act(() => result.current.onTabsShowTab("main"));
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+    expect(dom.scrollTop()).toBe(330);
+  });
+
+  it("asking for the tab already showing keeps the page where it is", () => {
+    const { result } = mountOnOllama();
+    act(() => result.current.selectTab(OLLAMA_FOLD_TAB));
+    expect(dom.scrollTop()).toBe(330);
+  });
+});

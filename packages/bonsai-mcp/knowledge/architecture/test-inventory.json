@@ -200,6 +200,7 @@
     "src/features/folded-tabs/FoldedSection.test.tsx",
     "src/features/folded-tabs/TabHelpStrip.test.tsx",
     "src/features/folded-tabs/foldLineWidths.test.ts",
+    "src/features/folded-tabs/foldedTabArrival.test.ts",
     "src/features/folded-tabs/foldedTabsStore.test.ts",
     "src/features/folded-tabs/sectionSummary.test.ts",
     "src/features/model-routing/useTryOrderPlaces.test.tsx",

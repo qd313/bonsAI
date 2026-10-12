@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 908,
-  "edgeCount": 2916,
+  "fileCount": 910,
+  "edgeCount": 2920,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4234,6 +4234,22 @@
       ],
       "importedBy": []
     },
+    "src/features/folded-tabs/foldedTabArrival.test.ts": {
+      "imports": [
+        "src/features/folded-tabs/foldedTabArrival.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/folded-tabs/foldedTabArrival.ts": {
+      "imports": [
+        "src/utils/chatPanelScroll.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/features/folded-tabs/foldedTabArrival.test.ts",
+        "src/hooks/useBonsaiPluginShell.ts"
+      ]
+    },
     "src/features/folded-tabs/foldedTabsStore.test.ts": {
       "imports": [
         "src/features/folded-tabs/foldedTabsStore.ts"
@@ -6163,6 +6179,7 @@
     },
     "src/hooks/useBonsaiPluginShell.ts": {
       "imports": [
+        "src/features/folded-tabs/foldedTabArrival.ts",
         "src/features/folded-tabs/foldedTabsStore.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/plugin-shell/pluginStorage.ts",
@@ -9126,6 +9143,7 @@
         "src/features/details-slot/DetailsSlot.tsx",
         "src/features/details-slot/detailsSlotStore.ts",
         "src/features/folded-tabs/TabHelpStrip.tsx",
+        "src/features/folded-tabs/foldedTabArrival.ts",
         "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/hooks/chipLadderPlacement.ts",
         "src/hooks/useChipLadderReveal.ts",
@@ -10659,6 +10677,7 @@
         "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/details-slot/DetailsSlot.tsx",
+        "src/features/folded-tabs/foldedTabArrival.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",

@@ -34,6 +34,7 @@ import {
   captureOllamaTabLocalSnapshot,
 } from "../utils/ollamaTabLocalSurvival";
 import { resolveResumeTab, saveLastTab } from "../features/plugin-shell/pluginStorage";
+import { scheduleFoldedTabArrival } from "../features/folded-tabs/foldedTabArrival";
 import { closeAllFoldedSections } from "../features/folded-tabs/foldedTabsStore";
 import {
   peekModalReturnFocus,
@@ -135,6 +136,13 @@ export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShel
   /** The tab on screen, readable from the switch callbacks (which are made once, so cannot close over the state). */
   const currentTabRef = useRef(currentTab);
   currentTabRef.current = currentTab;
+  /** The tab a real switch just named, until it has been drawn and its arrival (page to the top) has run. */
+  const arrivalTabRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (arrivalTabRef.current !== currentTab) return;
+    arrivalTabRef.current = null;
+    return scheduleFoldedTabArrival(currentTab);
+  }, [currentTab]);
   const finalizeModalCloseRef = useRef<(close: () => void) => void>((close) => close());
 
   useLayoutEffect(() => {
@@ -230,6 +238,7 @@ export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShel
   const noteRealTabSwitch = useCallback((to: string) => {
     if (to === currentTabRef.current) return;
     currentTabRef.current = to;
+    arrivalTabRef.current = to;
     closeAllFoldedSections();
   }, []);
 

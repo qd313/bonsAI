@@ -56,6 +56,7 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted](#reloading-the-plugin-while-a-heavy-game-is-running-can-leave-steams-interface-gone-until-the-deck-is-restarted)
 - [While reading an answer, the Show details line takes the suggestion chip's place above the question box](#while-reading-an-answer-the-show-details-line-takes-the-suggestion-chips-place-above-the-question-box)
 - [The open reasoning block does not scroll in steps like the answer; one Down jumps past the whole of it](#the-open-reasoning-block-does-not-scroll-in-steps-like-the-answer-one-down-jumps-past-the-whole-of-it)
+- [The mic stops after about 3 or 4 seconds of speech](#the-mic-stops-after-about-3-or-4-seconds-of-speech)
 - [Merge the unlanded work left in thirteen old helper copies into experimental](#merge-the-unlanded-work-left-in-thirteen-old-helper-copies-into-experimental)
 <!-- /toc -->
 
@@ -964,6 +965,18 @@ Before the fix (Deck 2026-10-07, plan 82, Deck block 1): Before the fix (Deck 20
 Owed on the Deck: row **P82-REASONING-BLOCK-PAGES** in [testing.md](testing.md); skipped in Deck block 3b because its commits were not on the branch yet (`docs/test-evidence/plan82-BLOCK3B-HANDOVER.json`). Tests: `src/utils/buildReasoningFoldElement.walk.test.tsx` (37 of 39 cases fail without the fix), `src/components/MainTabChatTranscript.reasoningBlockStop.test.tsx`.
 
 **Closed 2026-10-07 (plan 82 paperwork 7):** the Deck check above is done. The first round failed in block 4 (build `efd4258b`); the second round (`ce8ace71`, landed `6b5d5f49`) passed in block 5. Done line in the roadmap; full entry in [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md). Evidence `docs/test-evidence/plan82-P82-REASONING-BLOCK-PAGES-try2.json`.
+
+## The mic stops after about 3 or 4 seconds of speech
+
+Older notes moved here from the roadmap entry on 2026-10-11 (plan 89 docs sweep pass 2), when the entry moved to Verify. Nothing was removed. The heading the entry carried before: **OPEN again 2026-10-10 (reopened from Done): with a real voice on tiny.en it still stops after 3 or 4 seconds. First found by the maintainer 2026-10-09 on the Deck.**
+
+The loudness-gate fix (`d73f9f5a`) made a recorded ten-second sentence come through whole on tiny.en, but only through a pretend microphone (row P87-VOICE-QUIET-SENTENCE, passed on the Deck 2026-10-10; evidence `docs/test-evidence/plan87-P87-VOICE-QUIET-SENTENCE.json`). A real voice still stops early on tiny.en. On base.en the maintainer did not see the early stop.
+
+Cause of the stop that remains: not known. Related: the repeat bug and the entry about making base.en the default speech model (both Done 2026-10-11, plan 88). Earlier record: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
+
+**2026-10-10 evening (Deck, build `532761e2`, a recorded voice, no game):** not reproduced on either model: recorded 15- and 21-second questions grew to the end on tiny.en and on base.en (`docs/test-evidence/v1010-VOICE-TINY-NOGAME.json`, `docs/test-evidence/v1010-VOICE-BASE-NOGAME.json`). Stays OPEN: it was seen with a real voice only, so a real voice is the check.
+
+**2026-10-11 (plan 88, build `68317980`):** not seen with a recorded voice on the new build: 15- and 21-second questions grew to the end and the live text never went empty (`docs/test-evidence/p88-VOICE-WHOLE-NOGAME.json`). A guess from reading the code, not tested: the screen writes "what the mic wrote" before the box's text, and if Steam does not batch those two updates, the rule "the box was emptied, so dictation is over" can fire on the first words. Plan 88 does not touch this. Owed: the maintainer's real voice.
 
 ## Merge the unlanded work left in thirteen old helper copies into experimental
 

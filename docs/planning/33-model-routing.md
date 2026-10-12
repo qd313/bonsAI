@@ -321,6 +321,8 @@ else stays. Log each run below: the fix, the score or Deck result, the cost, and
 |---|---|---|---|---|
 | 2026-10-08 | Plan 83 J1, the leftover settings-card row number | 24 of 25 blind; passed on the Deck | $0.32 | No |
 | 2026-10-08 | Overnight: the Terse menu's fence spelled with an underscore (`21f62344`) | Clean first time, no nudges; passed on the Deck (10 of 10 menus) | $0.24, 12 min | No |
+| 2026-10-11 | Plan 89 H1, the wake-word study's silence constant (`92ed1d63`) | Landed first time; docs only; one Python test failed once under load and passed on re-run | not recorded | No |
+| 2026-10-11 | Plan 89 H2, the status-check stop (`32f48643`) | Landed first time; it twice ended its turn while its checks ran in the background and needed a one-line nudge to run them in the foreground | not recorded | No (a one-line nudge from the session owner) |
 
 ### 4e. Screen-work helpers, plan 84 (2026-10-08)
 

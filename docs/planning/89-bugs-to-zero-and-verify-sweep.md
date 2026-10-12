@@ -308,6 +308,7 @@ deploy), and the Settings walk needing a third round.
   Sonnet medium). The install link was confirmed fixed on GitHub (v0.4.9 is Latest). Usage at the start: five-hour
   window 59 percent (resets 19:00), week 50 percent. The maintainer's calls 17 and 18 (the weekly line) came in.
   Old helper copies: 23 fully landed copies deleted (the shared packages folder checked before and after, unchanged); 13 with unlanded work kept and filed as a roadmap entry at the maintainer's request.
+- **2026-10-11 18:30–19:50:** Deck blocks 0, 1 and 2 done (setup, the two measurements and the four owed checks, all four passing on prepared answers); the 24-page check found 22 of 24; the rig's Steam button worked again after the maintainer re-plugged the board. Landed: the docs constant, the AI leaving memory sooner with a game, the mic rule, the status-check stop, Update with downloads off. The rig's five fixes are on the rig's own main branch (the maintainer's ok); they load in the next session because the app cannot restart the rig's tool server. Usage at 19:04: the five-hour window 2 percent after its reset, the week 54 percent.
 
 ## 13. For the builders: where the code is (checked 2026-10-11 at `4e962bd3`)
 

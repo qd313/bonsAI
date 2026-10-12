@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 **Contents**
 
 - [\[Unreleased\]](#unreleased)
+  - [Plan 89 (2026-10-11)](#plan-89-2026-10-11)
   - [Plan 88 (2026-10-11)](#plan-88-2026-10-11)
   - [Plan 87 (2026-10-10)](#plan-87-2026-10-10)
   - [Plan 84 (2026-10-09)](#plan-84-2026-10-09)
@@ -76,6 +77,12 @@ All notable changes to this project are documented in this file.
 <!-- /toc -->
 
 ## [Unreleased]
+
+### Plan 89 (2026-10-11)
+
+- **The mic no longer ends dictation by itself on the first words.** The rule "the box was emptied, so dictation is over" fired on the mic's own in-between empty box, which could stop a recording after 3 or 4 seconds of speech. A guess from reading the code until the Deck shows it. Owes its Deck check (row P89-MIC-TINY), then the maintainer's real voice.
+- **With Internet downloads off, "Update AI & models" now shows both the failed line ("Failed (check the Internet downloads permission?)") and the "Turn on internet downloads?" box.** Yes turns the permission on and starts the update. Owes its Deck check (row P89-UPDATE-DOWNLOADS-OFF).
+- **With a game running and the AI on this Deck, the AI now leaves memory about a minute after an answer** instead of waiting for the Unload delay, which gives the game its memory back sooner. With no game it still stays for the Unload delay. Owes its Deck check (row P89-KEEPALIVE-GAME).
 
 ### Plan 88 (2026-10-11)
 

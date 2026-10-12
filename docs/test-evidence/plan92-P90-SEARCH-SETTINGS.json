@@ -1,0 +1,18 @@
+{
+  "row": "P90-SEARCH-SETTINGS",
+  "build_commit": "649daecc",
+  "deck_time_local": "2026-10-12 about 07:43-07:46 EDT",
+  "screen": "Monitor live: Quick Access page window 855x766; Steam window 1500x845",
+  "setup": "Search tab, 'brightness' put in the find box by the send-question script (VERIFIED, field read back 'brightness'). Test chat on Main is 'How do I beat the Mantis Lords in Hollow Knight' (chat 2 of 9).",
+  "pressed": "Focus was lost after the earlier note sheet closed, so UP once (landed on the last Settings row, 'Brightness (QAM > Quick Settings)'), UP x4 to 'Brightness, Settings > Display' (read focus), A. Then B once. deck_openPlugin to reopen. RB to Main. Script with 'brightness' on Main, then script with an empty text.",
+  "seen": {
+    "search_results": "6 matches for 'brightness'. Settings group 5 rows in order: Brightness (Settings > Display); Enable Adaptive Brightness (Settings > Display); Status LED Brightness (Settings > Display); SDR content brightness (on HDR) (Settings > Display); Brightness (QAM > Quick Settings). Game and help notes 1 row: 'A mechanic note - Doom 64' (plain title). No chats group, no notes group.",
+    "A_on_first_settings_row": "Steam opened its Settings > Display page (Steam Big Picture Mode page target: first heading text 'Display', then Brightness, Enable Adaptive Brightness, Adjust Display Colors...). Ring on the 'Brightness' slider (x412 y140 w1008 h24, fully visible). I did not touch the slider.",
+    "return": "B once went to Steam Home and the Quick Access menu was closed. deck_openPlugin reopened it in one press (it reported the panel open on the Search tab, ring on the tab bar, 'brightness' results still showing).",
+    "main_tab_card": "On Main, with 'brightness' in the question box: 0 elements with a class containing settings-results-card or settingsCard; 0 visible elements under the plugin whose class names contain 'settings' apart from the tab bar. Screenshot shows no card above the box.",
+    "question_box_cleared": "The script accepted --text '' and printed VERIFIED; the box reads '' now. Ask was never pressed. No question was asked."
+  },
+  "screenshots": ["plan92-P90-SEARCH-SETTINGS-main-no-card.png"],
+  "expected": "Settings group rows; A opens the Steam page; no settings card above the question box on Main.",
+  "verdict": "PASS: the Steam page opened from the Search tab and there is no settings card on Main."
+}

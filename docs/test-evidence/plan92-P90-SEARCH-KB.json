@@ -1,0 +1,18 @@
+{
+  "row": "P90-SEARCH-KB",
+  "build_commit": "649daecc",
+  "deck_time_local": "2026-10-12 about 07:50-07:55 EDT",
+  "screen": "Monitor live: Quick Access page window 855x766",
+  "setup": "Search tab, 'mantis' in the find box (sent by script, VERIFIED), All games picked, 6 matches. Installed notes only; the remove-and-reinstall half was not run tonight.",
+  "pressed": "DOWN x5 to Black Mesa, DOWN find box, DOWN hollow, DOWN survivor, DOWN Clear, DOWN x4 to the Mantis Lords row (focus read = 'Mantis Lords, The three sisters ...'), A. Then B. Then DOWN, focus read = 'A item note - Hollow Knight', A. Then A on the Close stop (focus read = 'Close the note').",
+  "seen": {
+    "group_game_and_help_notes": "3 rows: 'Mantis Lords' with a snippet ('The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either...'); two rows titled 'A item note - Hollow Knight' with no snippet",
+    "mantis_lords_row_box": "x54 y429 w288 h58 on the focused read",
+    "A_on_Mantis_Lords": "a sheet opened inside the tab (x54 y71 w288 h305), name 'Mantis Lords', 'boss - Hollow Knight', ring on 'Close the note'. First 200 characters of its words: 'The three sisters on the thrones in the Mantis Village do not attack until you challenge them, and then a cage closes with spike pits either side. One fights first: a lance dash along the whole floor, a drop from directl'",
+    "B_on_sheet": "sheet closed; ring back on the Mantis Lords row that opened it; still on the Search tab; no toast",
+    "A_on_plain_titled_note": "sheet opened with its real name 'Nail upgrades and Pale Ore' ('item - Hollow Knight'); words start 'The Nailsmith in the City of Tears reforges the nail four times, from 5 damage up to 21 ...'. Close (A on the Close stop) closed it and returned the ring to that same plain-titled row.",
+    "remove_and_reinstall_half": "not run tonight, waits for another night"
+  },
+  "expected": "Mantis Lords listed with name and snippet; mantis-only notes under a plain title with no snippet; A opens the note in the tab; B or Close returns the ring to the row; a plain-titled note shows its real name and words only once opened.",
+  "verdict": "PASS: all of the above matched. The remove-and-reinstall half is not covered (COULD NOT RUN tonight by the runbook's own plan)."
+}

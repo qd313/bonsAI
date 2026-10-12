@@ -1,0 +1,34 @@
+{
+  "row": "P90-SEARCH-WORDS",
+  "build_commit": "649daecc",
+  "deck_time_local": "2026-10-12 about 07:40-07:46 EDT",
+  "screen": "Monitor live: Quick Access page window 855x766",
+  "setup": "Search tab, game row at All games. 'mantis' was NOT one of the eight word buttons, so the first word 'hollow' was picked, then 'mantis' was put in with the send-question script.",
+  "pressed": "Ring on 'hollow' (focus read), A. Walk UP to Clear (focus read = 'Clear the search'), A. Script with 'mantis' (VERIFIED, field read back 'mantis'). Later (half 2): LB to Search, RIGHT x5, DOWN to the find box (focus read = INPUT 'Search for a word'), A (keyboard), B, DOWN, UP.",
+  "seen": {
+    "eight_word_buttons": [
+      "hollow 67", "knight 67", "deep 56", "rock 56",
+      "survivor 56", "galactic 54", "boss 48", "give 45"
+    ],
+    "layout": "two rows of four, each button w68.3 h14.8; row 0 at y128.1, row 1 at y147.9; x 54, 127.2, 200.5, 273.8",
+    "picked_hollow": "69 matches for 'hollow'. Groups in order: Your chats 67, Game and help notes 2 (Hollow Bough; Starting out in Hollow Knight). No Your notes group, no Settings group (no hits). The word is marked (a <mark>) once in each row title I read (4 chat rows, 2 game rows). The ring moved on its own to the first chat row after A on the word.",
+    "clear": "ring on Clear (x302 y170 w38 h20, visible), A: results gone (no results block, 0 hits), find box '' and ring moved to the find box; the notes empty-state is back.",
+    "typed_mantis_by_script": "6 matches for 'mantis'. Groups in order: Your chats 3 (How do I beat the Mantis Lords in Hollow Knight; two 'In two short paragraphs ...' chats), Game and help notes 3 (Mantis Lords; A item note - Hollow Knight x2). 'Mantis' is marked in the chat rows and in 'Mantis Lords'. Plain-titled notes have no mark.",
+    "typed_find_box_keyboard": {
+      "ring_on_find_box_before_A": "INPUT 'Search for a word' (read)",
+      "A": "Steam's on-screen keyboard opened (screenshot plan92-P90-SEARCH-WORDS-keyboard-open.png), the find box showed 'brightness' with a caret",
+      "B": "the keyboard closed; ring still on the find box (INPUT)",
+      "Down_after_keyboard": "ring moved to the first word 'hollow, in 67 of your questions'",
+      "Up_after_that": "ring back on the find box",
+      "d_pad": "not dead; no need to close and reopen Quick Access"
+    },
+    "screenshots": [
+      "plan92-P90-SEARCH-WORDS-mantis-results.png",
+      "plan92-P90-SEARCH-WORDS-keyboard-open.png"
+    ]
+  },
+  "side_effect": "At the end I put the find box back to empty with the send-question script (--text ''); it was 'brightness' from the typed-box test. Nothing was asked in any chat.",
+  "expected": "Eight buttons with counts; matches in the four groups' order (only groups with hits drawn); Clear empties them. Typed box: keyboard opens, B closes, D-pad still moves.",
+  "verdict_words_buttons_groups_clear": "PASS: eight word buttons with counts; groups in the order chats then game notes (only the ones with hits shown); Clear empties the results. (The word 'mantis' is not a button, so the button route was shown with 'hollow' and the mantis rows were read through the script.)",
+  "verdict_typed_find_box": "PASS: A opened Steam's keyboard, B closed it, Down moved to the word row and Up back to the box; the D-pad was not dead."
+}

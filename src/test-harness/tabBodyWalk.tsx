@@ -42,8 +42,12 @@ const STEAM_PAD_BOTTOM = 80;
 const HEADING: [top: number, height: number] = [0.8, 19.5];
 /** A toggle's switch is 22 px high in every tab (plan87-M4-OTHER-TABS.json). */
 const TOGGLE_HEIGHT = 22;
-/** A toggle's row: its top 10 px above the switch's, its description running up to this far below the switch's top. */
-const ROW_ABOVE_PX = 10;
+/**
+ * A toggle's row: its top 20 px above the switch's, its description running up to this far below the switch's top.
+ * The 20 is where Steam itself lines a toggle up (plan89-M1-TAB-WALK.json: after its own glide the switch rests 20 px
+ * below the band's top edge, e.g. Developer Down 2 and Up 6, 8, 12, 14, Settings Up 9); plan 87 had read 10.
+ */
+const ROW_ABOVE_PX = 20;
 const ROW_BELOW_PX = 92;
 
 interface TabWalkOptions {
@@ -76,6 +80,8 @@ interface Landing {
   direction: "down" | "up" | "side";
   /** How far the pane moved at this press, plugin and Steam together. */
   moved: number;
+  /** How much of `moved` was Steam's own scroll after the plugin had placed the pane: 0 when the plan's place stood. */
+  steamMoved: number;
   /** Where the pane stands once the plugin and Steam are done. */
   scrollAfter: number;
   /** The control's top and bottom on the screen once the pane has settled. */
@@ -239,9 +245,11 @@ export function walkTab(opts: TabWalkOptions): TabWalk {
       else if (opts.focusVia === "helper") focusInTabBody(el);
       else el.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
     });
+    const planned = scrollTop;
     steamScrolls(k === 0 ? steamElement(i) : el);
     const r = el.getBoundingClientRect();
-    landings.push({ press: landings.length, stop: i, direction, moved: Math.abs(scrollTop - before), scrollAfter: scrollTop, top: r.top, bottom: r.bottom });
+    const steamMoved = Math.abs(scrollTop - planned);
+    landings.push({ press: landings.length, stop: i, direction, moved: Math.abs(scrollTop - before), steamMoved, scrollAfter: scrollTop, top: r.top, bottom: r.bottom });
     if (i === 0) headingAtFirst.push(headingTop());
     return scrollTop;
   };

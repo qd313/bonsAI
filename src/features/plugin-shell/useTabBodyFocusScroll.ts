@@ -84,12 +84,13 @@ function stopsUnder(el: Element, out: HTMLElement[] = []): HTMLElement[] {
 
 /**
  * How far a stop's box may reach beyond the control itself, above and below. A toggle's row reaches about
- * 10 px above the switch and up to about 100 below it (measured 2026-10-09: toggles come to rest 65 to
- * 120 px above the band's bottom edge, and 10 px below its top edge). A section that holds one control
+ * 20 px above the switch and up to about 100 below it (measured 2026-10-09: toggles come to rest 65 to
+ * 120 px above the band's bottom edge; 2026-10-11, plan89-M1-TAB-WALK.json: where the plan left a switch 12 px
+ * below the band's top, Steam glided it another 4 to 8 px, to rest 20 px below). A section that holds one control
  * can reach much further (its heading and description), and keeping all of it in the band would move the
  * pane for text nobody is on. A limit, not a measurement of any one section.
  */
-const BOX_ABOVE_MAX_PX = 12;
+const BOX_ABOVE_MAX_PX = 22;
 const BOX_BELOW_MAX_PX = 110;
 
 /**

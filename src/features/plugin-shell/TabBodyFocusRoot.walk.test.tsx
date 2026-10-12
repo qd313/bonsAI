@@ -166,6 +166,24 @@ describe("the page turns only near the edge (plan 89, M1)", () => {
     }
   }
 
+  it("every tab, toggles in their rows: where the plan leaves the pane, Steam's own scroll finds nothing left to do", () => {
+    /*
+     * Steam lines a toggle up 20 px below the band's top (its row starts there). A plan that kept only 12 px above
+     * the switch left it 8 px short at the top edge, and Steam glided the pane another 4 to 8 px over 3 or 4
+     * frames (plan89-M1-TAB-WALK.json: Developer Down 2 and Up 6, 8, 12, 14; Settings Up 9).
+     */
+    for (const tab of TABS) {
+      for (const steam of RULES) {
+        for (const viewport of [MONITOR_PANE_PX, OWN_SCREEN_PANE_PX]) {
+          const w = walkTab({ tab, viewport, steam, steamTarget: "row" });
+          const glided = w.landings.filter((l) => l.steamMoved > 0.5).map((l) => `${l.direction} ${l.stop}: ${l.steamMoved.toFixed(1)}`);
+          expect(glided, `${tab} / ${steam} / ${viewport}`).toEqual([]);
+          w.unmount();
+        }
+      }
+    }
+  });
+
   it("every tab, on the monitor's pane: no more moving presses than the page's length needs in steps under half the pane, plus one", () => {
     /*
      * Developer's page is 1,875 px longer than the pane: in steps under half of 741 px that is six moves at the

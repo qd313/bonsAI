@@ -862,7 +862,8 @@ SHOW      [ ] Installed only ...      |
   Clear is a transfer onto Refresh, or onto Advanced while Refresh is greyed; Up from Refresh is the screen's
   `onMoveUpFromTop`, a transfer onto the Advanced link's own `Focusable`. A greyed Refresh is skipped by the box's own
   state (the catalog loading or refreshing), never by asking the button, because on the Deck a greyed button still takes
-  the ring. Left and Right on Refresh are Steam's own. Up from the try-order switch, or from the first row when there is
+  the ring. Right from Refresh goes to Advanced and Left from Advanced to Refresh, by the beside rule above (`isBeside`, the
+  same one and a half rows: they sit about 31 px apart on the Deck; never onto a greyed Refresh); Left on Refresh is Steam's own. Up from the try-order switch, or from the first row when there is
   no switch, goes straight to Advanced as before. Without the screen (no handler) the press is Steam's own.
 - **Down past the last stop** returns `false`, so Steam carries the ring on to the dialog's Done, the same rule the
   list's last row follows (focus-graph-patterns: a container's last stop must not claim Down).

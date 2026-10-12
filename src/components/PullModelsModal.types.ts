@@ -78,6 +78,10 @@ export type PullModelsModalProps = {
   /** Filled by the box while it is drawn, emptied when it goes: Down from the hub's Advanced link calls it to hand
    *  the ring to the header's Refresh, or to the column's Clear while Refresh is greyed (plan 92's second round). */
   downFromAboveRef?: { current: (() => boolean) | null };
+  /** The title row (plan 92's second night, the beside rule): the hub's Advanced link, so Right from Refresh can reach
+   *  it, and a function the box fills for Left from Advanced (In: the link) to reach Refresh. Each only when within reach. */
+  titleLinkRef?: { current: HTMLElement | null };
+  leftFromAboveRef?: { current: ((from: HTMLElement | null) => boolean) | null };
   /** Which computer answers and the saved orders. Given: the box shows the try-order switch and each
    *  installed row's place (PullModelsTryOrder.tsx). Left out: Browse models looks as it always did. */
   tryOrderHost?: TryOrderHost;

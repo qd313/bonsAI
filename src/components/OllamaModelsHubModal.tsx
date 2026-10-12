@@ -41,9 +41,10 @@
  *   like three did). Advanced is now a small link at the top of the screen instead. It sits in a
  *   Focusable of its own (plan 91) so Up from the top of Browse (the header's Refresh, the
  *   try-order switch, the first row) can hand the ring to it by Steam's own transfer, never a plain
- *   focus() across containers. Its one move of its own is Down, into Browse's Refresh (or Clear
- *   while Refresh is greyed), so Down and Up mirror each other (plan 92's second round); on the
- *   Advanced screen Down is Steam's own.
+ *   focus() across containers. Its moves of its own are Down, into Browse's Refresh (or Clear
+ *   while Refresh is greyed), so Down and Up mirror each other (plan 92's second round), and Left,
+ *   into Refresh when it sits within reach (the beside rule, plan 92's second night; Right from
+ *   Refresh comes back); on the Advanced screen both are Steam's own.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button, ConfirmModal, Focusable } from "@decky/ui";
@@ -300,6 +301,9 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
   const upToAdvanced = useCallback(() => handRingTo(advancedNavRef), []);
   /** Down from Advanced: Browse's Refresh, or its Clear while Refresh is greyed (Browse fills this while drawn). */
   const browseDownFromAboveRef = useRef<(() => boolean) | null>(null);
+  /** Left from Advanced: Browse's Refresh when it sits within reach (the beside rule); Browse fills it, measuring the link. */
+  const advancedElRef = useRef<HTMLElement | null>(null);
+  const browseLeftFromAboveRef = useRef<((from: HTMLElement | null) => boolean) | null>(null);
 
   const toggleAdvanced = useCallback(() => {
     setSection((current) => (current === "advanced" ? "browse" : "advanced"));
@@ -330,6 +334,9 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
             {...({ navRef: advancedNavRef } as Record<string, unknown>)}
           >
             <Button
+              ref={(el: HTMLElement | null) => {
+                advancedElRef.current = el;
+              }}
               className="bonsai-models-hub-advanced-link"
               onClick={(e) => {
                 e.preventDefault();
@@ -338,6 +345,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
               }}
               {...({
                 onMoveDown: () => browseDownFromAboveRef.current?.() ?? false,
+                onMoveLeft: () => browseLeftFromAboveRef.current?.(advancedElRef.current) ?? false,
                 onOKButton: (evt: { stopPropagation: () => void }) => {
                   evt.stopPropagation();
                   toggleAdvanced();
@@ -363,6 +371,8 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
               onFooterStateChange={handleBrowseFooterChange}
               onMoveUpFromTop={upToAdvanced}
               downFromAboveRef={browseDownFromAboveRef}
+              titleLinkRef={advancedElRef}
+              leftFromAboveRef={browseLeftFromAboveRef}
               tryOrderHost={hostWithDraft}
             />
           ) : null}

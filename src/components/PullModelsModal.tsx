@@ -41,6 +41,7 @@
  *     └────────────────────────────────────────────────────────────────┘
  *
  *     Advanced <-> Refresh (↻) <-> Clear, the same both ways (Refresh skipped while greyed; downFromAboveRef)
+ *     Refresh -> Right -> Advanced, Advanced -> Left -> Refresh, when within reach (titleLinkRef, leftFromAboveRef)
  *     Up from the switch, or from the first row (no switch) -> Advanced (onMoveUpFromTop)
  *     Down past the column's last stop, or past the list's last row -> Steam carries it to Done
  *
@@ -120,7 +121,7 @@ import {
 import { PullModelLicenceSlot } from "./PullModelLicenceSlot";
 import { PullModelsFiltersColumn } from "./PullModelsFiltersColumn";
 import { focusAndReveal, handRingTo, usePullModelsSessionFilters } from "./pullModelsBoxMemory";
-import { usePullModelsBeside, type FiltersColumnApi } from "./pullModelsBeside";
+import { isBeside, usePullModelsBeside, type FiltersColumnApi } from "./pullModelsBeside";
 import { PullModelsTableHeader } from "./PullModelsTableHeader";
 import { usePullModelTryNav } from "./PullModelsTryOrder";
 import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
@@ -195,6 +196,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
     onFooterStateChange,
     onMoveUpFromTop,
     downFromAboveRef,
+    titleLinkRef,
+    leftFromAboveRef,
   } = props;
 
   const { mergedCatalog, catalogSource, refreshCatalog } = usePullModelCatalog();
@@ -274,11 +277,16 @@ export function PullModelsModal(props: PullModelsModalProps) {
     columnApi.current?.focusStop(null);
     return true;
   };
+  /** Refresh's own element: the title row measures it (Right to Advanced and Left back, when within reach). */
+  const refreshBtnRef = useRef<HTMLElement | null>(null);
+  const besideTitle = (a: HTMLElement | null, b: HTMLElement | null) => isBeside(a, b, listRef.current);
   useEffect(() => {
+    if (leftFromAboveRef) leftFromAboveRef.current = (from) => besideTitle(from, refreshBtnRef.current) && toRefresh();
     if (!downFromAboveRef) return;
     downFromAboveRef.current = () => toRefresh() || toClear();
     return () => {
       downFromAboveRef.current = null;
+      if (leftFromAboveRef) leftFromAboveRef.current = null;
     };
   });
 
@@ -727,6 +735,9 @@ export function PullModelsModal(props: PullModelsModalProps) {
               {" · "}
               {sizeSource === "live" ? "Live sizes" : "Offline sizes"}
               <Button
+                ref={(el: HTMLElement | null) => {
+                  refreshBtnRef.current = el;
+                }}
                 className="bonsai-pullmodels-refresh-btn"
                 disabled={refreshingMeta || loadingMeta}
                 onClick={(ev) => {
@@ -738,6 +749,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                 {...({
                   onMoveUp: leaveTop,
                   onMoveDown: toClear,
+                  onMoveRight: () => besideTitle(refreshBtnRef.current, titleLinkRef?.current ?? null) && leaveTop(),
                   onOKButton: okButtonRuns(() => {
                     if (!refreshingMeta && !loadingMeta) void refreshInstalledAndMeta(true);
                   }),

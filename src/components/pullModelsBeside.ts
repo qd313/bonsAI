@@ -10,7 +10,8 @@
  * ring to go to what is directly beside it instead.
  *
  * Used for: PullModelsModal.tsx (Right from any column stop, through the column's `toList`; Left from a
- * row's first cell, the star or a PC row's up button).
+ * row's first cell, the star or a PC row's up button; and `isBeside` for the title row, Right from the
+ * header line's Refresh to the AI models screen's Advanced link and Left back).
  *
  * How it works:
  *
@@ -93,6 +94,17 @@ const ROW = "row:";
 
 /** One stop of the filters column, as the column hands it over: its key and its element on screen. */
 type ColumnStop = { key: string; el: HTMLElement };
+/**
+ * The same rule for one fixed pair of stops (the title row's Advanced and the header line's Refresh):
+ * true when `target` is within reach of `origin`'s centre, false when either is not a real element.
+ */
+export function isBeside(origin: Element | null, target: Element | null, list: HTMLElement | null): boolean {
+  const y = centreY(origin);
+  const ty = centreY(target);
+  if (y === null || ty === null || !origin) return false;
+  return pickBeside(y, [{ key: 0, y: ty }], reachPx(list, origin)) !== null;
+}
+
 /** What the box can ask of the column: its stops that can take the ring, and a sibling focus onto one (null: Clear). */
 export type FiltersColumnApi = { focusStop: (key: string | null) => boolean; stops: () => ColumnStop[] };
 

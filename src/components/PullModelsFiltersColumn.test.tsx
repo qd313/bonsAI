@@ -380,6 +380,9 @@ describe("the top and the bottom of the box (inside the AI models screen)", () =
     expect(nameOf(steamRingHolder()), "Down from Advanced").toBe(nameOf(clearButton(container)));
     expect(press("Up")).toBe(true);
     expect(nameOf(steamRingHolder()), "Up from Clear").toBe(nameOf(advanced(container)));
+    // Left from Advanced never lands on the greyed Refresh either (the beside rule skips it by the box's own state).
+    press("Left");
+    expect(steamRingHolder(), "Left from Advanced").not.toBe(refreshButton(container));
   });
 
   it("Up from the list's first row reaches the Advanced link by Steam's transfer, as before", async () => {
@@ -625,6 +628,9 @@ function layOutDeckMap(c: HTMLElement) {
   for (const chip of Array.from(c.querySelectorAll<HTMLElement>(".bonsai-pullmodels-tryorder-row button"))) {
     chip.getBoundingClientRect = () => box(183.3, 24);
   }
+  // The title row: Advanced on the right (cy 139) and the header line's Refresh (cy 169.7), 30.7 px apart.
+  advanced(c).getBoundingClientRect = () => box(128, 22);
+  refreshButton(c).getBoundingClientRect = () => box(162, 15.3);
   /** The nearest edge into a box, as Steam scrolls a ringed element into view. */
   const nearest = (scroller: HTMLElement, el: HTMLElement, top: number, bottom: number) => {
     const r = el.getBoundingClientRect();
@@ -700,6 +706,16 @@ describe("Right and Left go to what sits beside the ring (the Deck's own map, pl
     expect(list(c).scrollTop).toBe(0);
     expect(press("Left")).toBe(true);
     expect(steamRingHolder()).toBe(origin);
+  });
+
+  it("the title row: Right from Refresh lands on Advanced (31 px up) and Left from Advanced comes back, no dead press", async () => {
+    const { c, ringOn } = await openMap();
+    ringOn(refreshButton(c));
+    expect(press("Right")).toBe(true);
+    expect(steamRingHolder(), "Right from Refresh").toBe(advanced(c));
+    expect(gap(advanced(c), refreshButton(c))).toBeCloseTo(30.7, 0);
+    expect(press("Left")).toBe(true);
+    expect(steamRingHolder(), "Left from Advanced").toBe(refreshButton(c));
   });
 
   it("Install the starter set: the third star while the last row is out of sight, the last once the list has scrolled to it, and back", async () => {

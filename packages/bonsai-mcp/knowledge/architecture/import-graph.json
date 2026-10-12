@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 945,
-  "edgeCount": 3132,
+  "fileCount": 946,
+  "edgeCount": 3135,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -5942,6 +5942,14 @@
         "src/features/user-notes/useUserNotes.ts"
       ]
     },
+    "src/features/search-tab/settleRing.ts": {
+      "imports": [
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/hooks/useEarlierTurnsPill.ts"
+      ]
+    },
     "src/features/search-tab/useGameNotes.ts": {
       "imports": [
         "src/features/search-tab/searchApi.ts",
@@ -6843,7 +6851,9 @@
     "src/hooks/useEarlierTurnsPill.ts": {
       "imports": [
         "src/features/search-tab/searchJumpStore.ts",
+        "src/features/search-tab/settleRing.ts",
         "src/types/bonsaiUi.ts",
+        "src/utils/buildTurnHeaderElement.tsx",
         "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/earlierTurnsByDay.ts",
         "src/utils/navFocusRegistry.ts",
@@ -9718,6 +9728,7 @@
         "src/features/chat-title/takeFirstChatStop.ts",
         "src/features/user-notes/NotesReadLine.tsx",
         "src/features/user-notes/UserNotes.walk.test.tsx",
+        "src/hooks/useEarlierTurnsPill.ts",
         "src/utils/buildTurnHeaderElement.test.tsx",
         "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/questionBubbleFit.test.tsx"
@@ -11299,6 +11310,7 @@
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/search-tab/SearchTab.tsx",
+        "src/features/search-tab/settleRing.ts",
         "src/features/search-tab/useSearchShortcut.ts",
         "src/features/user-notes/NoteOfferCard.test.tsx",
         "src/features/user-notes/NoteOfferCard.tsx",

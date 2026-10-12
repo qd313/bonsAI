@@ -21,10 +21,12 @@
  */
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
+import { takeOpenQuestionText } from "../utils/buildTurnHeaderElement";
 import { takeHolderFocus } from "../utils/chatTranscriptNavHelpers";
 import { locateEarlierTurn } from "../utils/earlierTurnsByDay";
 import type { NavRefHolder } from "../utils/navFocusRegistry";
 import { getUiDocument, uiGamepadFocusElement } from "../utils/uiDocument";
+import { settleRing } from "../features/search-tab/settleRing";
 import { getSearchJump, markJumpRevealed, pendingJumpReveal, subscribeSearchJump } from "../features/search-tab/searchJumpStore";
 
 export type UseEarlierTurnsPillArgs = {
@@ -36,17 +38,14 @@ export type UseEarlierTurnsPillArgs = {
   showLiveTurn?: boolean;
 };
 
-/** After a jump lands the ring, how long to wait before checking it stayed, and again: Steam may move it once more as the tab settles. */
-const RING_CHECKS_MS = [150, 450];
-
 /** How long a jump's request for the ring waits for the question's row to be drawn. */
 const RING_WAIT_MS = 3000;
 
-/** Whether Steam's ring is on something inside the chat's transcript. */
-function ringInTranscript(): boolean {
+/** Whether Steam's ring is on the question's own row (its text or its Retry included). */
+function ringOnTurnRow(turnId: string): boolean {
   const owner = uiGamepadFocusElement();
-  const column = getUiDocument().querySelector(".bonsai-chat-transcript");
-  return Boolean(owner && column && column.contains(owner));
+  const rows = getUiDocument().querySelectorAll(".bonsai-chat-turn-row-header");
+  return Boolean(owner && Array.from(rows).some((row) => row.getAttribute("data-bonsai-turn-id") === turnId && row.contains(owner)));
 }
 
 export interface EarlierTurnsPill {
@@ -156,18 +155,20 @@ export function useEarlierTurnsPill(a: UseEarlierTurnsPillArgs): EarlierTurnsPil
        updates over two): wait for the commit that has its row, for as long as the jump itself would. */
     if (jumpRing.current === id && !holder?.current && Date.now() < jumpRingUntil.current) return;
     ringOnTurn.current = null;
-    if (holder) takeHolderFocus(holder);
-    if (jumpRing.current !== id) return;
-    /* The tab has only just been drawn and Steam may still move the ring while it settles: look again, and
-       take it back to the question if it is no longer in the chat. */
+    const forJump = jumpRing.current === id;
+    const take = () => {
+      /* A jump to the open question lands on its text (never its Retry); every other row on its own nav node. */
+      if (forJump && takeOpenQuestionText(id)) return;
+      const again = headerNavFor?.(id);
+      if (again) takeHolderFocus(again);
+    };
+    take();
+    if (!forJump) return;
+    /* The tab has only just been drawn, and Steam's transfer can reach a row before the row can take it: the
+       Deck left the ring on the day line above the question (P90-SEARCH-JUMP-BACK). Look again as it settles,
+       until the person presses something. */
     jumpRing.current = null;
-    RING_CHECKS_MS.forEach((ms) =>
-      window.setTimeout(() => {
-        if (!alive.current || ringInTranscript()) return;
-        const again = headerNavFor?.(id);
-        if (again) takeHolderFocus(again);
-      }, ms),
-    );
+    settleRing({ take, onTarget: () => ringOnTurnRow(id), alive: () => alive.current });
   });
 
   return { earlierExpanded, setEarlierExpanded, openDays, toggleDay, morePresses, showMoreOfDay };

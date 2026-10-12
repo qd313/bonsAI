@@ -19,7 +19,7 @@ import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
 import { registerNavFocus, resetNavFocusRegistry } from "../utils/navFocusRegistry";
 import { resetUiDocument } from "../utils/uiDocument";
 import {
-  NOW, LINE, activate, chatProps, focusOn, lines, nameOf, press, renderChat as renderChatWith, rowTexts, seconds, taken, turn, walk,
+  NOW, LINE, activate, chatProps, focusOn, isRetry, lines, nameOf, press, renderChat as renderChatWith, rowTexts, seconds, taken, turn, walk,
   type NavEl,
 } from "./earlierListTestKit";
 import {
@@ -249,5 +249,83 @@ describe("the jump's memory survives the Main tab being drawn again", () => {
     expect(pendingJumpReveal()).toEqual({ slotId: "chat-1", turnId: "d2q9" });
     const { container } = renderChat();
     expect(rowTexts(container)[8]).toContain("day 2 question 9");
+  });
+});
+
+/*
+ * The Deck's reading (P90-SEARCH-JUMP-BACK, build f4215cf1): after A on a match the chat opened with the question on
+ * screen, but the ring sat on the "Today · 3" day line two rows above it, read twice 1.5 s apart. Steam's transfer
+ * reaches a row it has only just been given before the row can take it. The test models that as the ring ending
+ * on a neighbour right after the first transfer, and asks that it ends on the question once things have settled.
+ */
+describe("the ring ends on the question once the tab has settled", () => {
+  /** The Deck's chat: four questions, all today; the match is the second one. */
+  const FOUR = ["t1", "t2", "t3", "t4"].map((id, i) => turn(id, `today question ${i + 1} about the mantis`, seconds(9, 2, 6 + i)));
+
+  const headerOf = (container: HTMLElement, id: string): HTMLElement =>
+    container.querySelector<HTMLElement>(`.bonsai-chat-turn-row-header[data-bonsai-turn-id="${id}"]`)!;
+  const settle = (ms: number) =>
+    act(() => {
+      vi.advanceTimersByTime(ms);
+    });
+
+  it("N earlier path: the ring Steam leaves on the day line goes to the question", () => {
+    start("t2");
+    const { container } = renderChatWith({}, FOUR, "t4");
+    const day = container.querySelector<HTMLElement>(".bonsai-chat-earlier-day-row")!;
+    expect(day.textContent).toContain("· 3");
+    expect(headerOf(container, "t2").contains(document.activeElement)).toBe(true);
+    focusOn(day);
+    settle(200);
+    expect(headerOf(container, "t2").contains(document.activeElement)).toBe(true);
+    expect(nameOf(document.activeElement)).toContain("today question 2");
+  });
+
+  it("the same on a long chat: day two's ninth question", () => {
+    start("d2q9");
+    const { container } = renderChat();
+    focusOn(dayLine(container, "· 9"));
+    settle(200);
+    expect(headerOf(container, "d2q9").contains(document.activeElement)).toBe(true);
+  });
+
+  it("newest path: the ring Steam leaves on N earlier goes to the newest question's text, never to its Retry", () => {
+    start(NEWEST);
+    const { container } = renderChat();
+    focusOn(container.querySelector<HTMLElement>(LINE)!);
+    settle(200);
+    expect(isRetry(document.activeElement)).toBe(false);
+    expect(headerOf(container, NEWEST).contains(document.activeElement)).toBe(true);
+    expect(nameOf(document.activeElement)).toContain("day 5 question 3");
+  });
+
+  it("a late move is put right at any of the looks, up to two seconds on", () => {
+    start("t2");
+    const { container } = renderChatWith({}, FOUR, "t4");
+    const day = container.querySelector<HTMLElement>(".bonsai-chat-earlier-day-row")!;
+    settle(1500);
+    focusOn(day);
+    settle(600);
+    expect(headerOf(container, "t2").contains(document.activeElement)).toBe(true);
+  });
+
+  it("does not take the ring back after the person has pressed a button", () => {
+    start("t2");
+    const { container } = renderChatWith({}, FOUR, "t4");
+    const day = container.querySelector<HTMLElement>(".bonsai-chat-earlier-day-row")!;
+    focusOn(day);
+    act(() => {
+      document.dispatchEvent(new CustomEvent("vgp_onbuttondown", { detail: { button: 10 }, bubbles: true }));
+    });
+    settle(3000);
+    expect(document.activeElement).toBe(day);
+  });
+
+  it("asks Steam for nothing more when the ring is already on the question", () => {
+    start("t2");
+    renderChatWith({}, FOUR, "t4");
+    const before = taken.length;
+    settle(3000);
+    expect(taken.length).toBe(before);
   });
 });

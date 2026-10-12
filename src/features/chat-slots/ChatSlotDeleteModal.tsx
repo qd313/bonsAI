@@ -1,8 +1,8 @@
 /**
- * Title: The "Delete chat slot?" box
+ * Title: The "Delete chat?" box
  *
  * Purpose: The box the chats menu's Delete chat opens (the old chat row's bin opened it until plan 84
- * step 5). It has exactly two buttons, Cancel and Delete, and
+ * step 5). It has exactly two buttons, Cancel and Delete, side by side on one row, and
  * Steam puts the ring on Cancel when it opens, so an A pressed by habit keeps the chat. B keeps
  * the chat too. Only A on Delete removes it.
  *
@@ -38,7 +38,7 @@ const Choice: React.FC<{ onChoose: () => void; danger?: boolean; children: React
   danger = false,
   children,
 }) => (
-  <div className="bonsai-settings-focus-btn-host" style={{ width: "100%" }}>
+  <div className="bonsai-settings-focus-btn-host" style={{ flex: 1, minWidth: 0 }}>
     <Focusable onOKButton={onChoose}>
       <Button
         className="bonsai-settings-focus-btn"
@@ -61,9 +61,9 @@ export function ChatSlotDeleteModal({ label, onKeep, onDelete }: ChatSlotDeleteM
   return (
     <ModalRoot onCancel={once(onKeep)}>
       <div className="bonsai-prose" style={{ fontSize: 12, lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
-        <div style={{ fontSize: 16, fontWeight: 700, color: "#ffffff", marginBottom: 10 }}>Delete chat slot?</div>
+        <div style={{ fontSize: 16, fontWeight: 700, color: "#ffffff", marginBottom: 10 }}>Delete chat?</div>
         <div style={{ marginBottom: 10 }}>{`Delete "${label}" and its transcript? This cannot be undone.`}</div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ display: "flex", flexDirection: "row", gap: 8 }}>
           <Choice onChoose={once(onKeep)}>Cancel</Choice>
           <Choice danger onChoose={once(onDelete)}>
             Delete

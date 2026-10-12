@@ -1,5 +1,5 @@
 /**
- * Title: The "Delete chat slot?" box, opened
+ * Title: The "Delete chat?" box, opened
  *
  * Purpose: Opens the delete box (ChatSlotDeleteModal.tsx: Cancel first, so an A pressed by habit keeps
  * the chat, and B keeps it too) for one chat, deletes the chat only on Delete, and closes the box through

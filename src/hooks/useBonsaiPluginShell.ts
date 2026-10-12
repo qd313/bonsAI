@@ -137,12 +137,12 @@ export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShel
   const currentTabRef = useRef(currentTab);
   currentTabRef.current = currentTab;
   /** The tab a real switch just named (and whether Steam's shoulder switch brought the person), until its arrival has run. */
-  const arrivalRef = useRef<{ tab: string; ring: boolean } | null>(null);
+  const arrivalRef = useRef<{ tab: string; ring: boolean; barIfNotFolded: boolean } | null>(null);
   useEffect(() => {
     const arrival = arrivalRef.current;
     if (!arrival || arrival.tab !== currentTab) return;
     arrivalRef.current = null;
-    return scheduleFoldedTabArrival(currentTab, { ring: arrival.ring });
+    return scheduleFoldedTabArrival(currentTab, { ring: arrival.ring, barIfNotFolded: arrival.barIfNotFolded });
   }, [currentTab]);
   const finalizeModalCloseRef = useRef<(close: () => void) => void>((close) => close());
 
@@ -236,10 +236,11 @@ export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShel
    * redirect back to the tab, from asking for the tab already showing, from a popup closing and the tab being
    * rebuilt, or from the session restore: those do not come through here.
    */
-  const noteRealTabSwitch = useCallback((to: string, viaSteam: boolean) => {
+  const noteRealTabSwitch = useCallback((to: string, how: "bar" | "steam" | "dock") => {
     if (to === currentTabRef.current) return;
     currentTabRef.current = to;
-    arrivalRef.current = { tab: to, ring: viaSteam };
+    /* The ring is placed after a shoulder switch: Steam's own, or the floating button's (whose ring is left on a hidden button). */
+    arrivalRef.current = { tab: to, ring: how !== "bar", barIfNotFolded: how === "dock" };
     closeAllFoldedSections();
   }, []);
 
@@ -251,7 +252,7 @@ export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShel
       setCurrentTab(lock.tab);
       return;
     }
-    noteRealTabSwitch(tabID, true);
+    noteRealTabSwitch(tabID, "steam");
     if (lock && now < lock.until) {
       if (tabID === lock.tab) {
         postPickerTabLockRef.current = null;
@@ -271,10 +272,10 @@ export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShel
    * after a modal closes, and a press on our bar is never spurious — redirecting it would be the
    * bug, not the protection. Steam's shoulder switches keep going through `onTabsShowTab`.
    */
-  const selectTab = useCallback((tabID: string) => {
+  const selectTab = useCallback((tabID: string, opts?: { fromShoulder?: boolean }) => {
     bonsaiDebugLog("useBonsaiPluginShell:selectTab", "bar tab", "H3", { to: tabID });
     postPickerTabLockRef.current = null;
-    noteRealTabSwitch(tabID, false);
+    noteRealTabSwitch(tabID, opts?.fromShoulder ? "dock" : "bar");
     setCurrentTab(tabID);
   }, [noteRealTabSwitch]);
 

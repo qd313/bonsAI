@@ -31,6 +31,7 @@
  */
 import { findTabContentsScroll } from "../../utils/chatPanelScroll";
 import { getUiDocument } from "../../utils/uiDocument";
+import { takeNavFocus } from "../../utils/navFocusRegistry";
 import { takeFoldLine } from "./FoldedSection";
 import { personPressCount } from "./foldedTabsStore";
 
@@ -62,14 +63,30 @@ function putRingOnFirstLine(tab: string): void {
 }
 
 /**
- * Put the folded tab's page at its top now and a moment later, and (`ring`, after Steam's shoulder switch) see
- * that the ring is inside it; returns the call that cancels the later looks.
+ * A switch made from the floating button leaves the ring on that button, which is hidden with its tab. Onto a tab
+ * that is not folded (nothing here places the ring), the tab bar takes it, unless the ring is somewhere real.
  */
-export function scheduleFoldedTabArrival(tab: string, opts: { ring?: boolean } = {}): () => void {
+function putRingOnBarIfLost(): void {
+  const holder = getUiDocument().querySelector(".gpfocus");
+  if (holder && holder.isConnected && !holder.closest(".bonsai-fold-dock")) return;
+  takeNavFocus("tab-bar");
+}
+
+/**
+ * Put the folded tab's page at its top now and a moment later, and (`ring`, after a shoulder switch) the ring on
+ * its first line; `barIfNotFolded` (the switch came from the floating button) sends the ring to the tab bar
+ * instead when the tab is not folded. Returns the call that cancels the later looks.
+ */
+export function scheduleFoldedTabArrival(
+  tab: string,
+  opts: { ring?: boolean; barIfNotFolded?: boolean } = {},
+): () => void {
   const pressesAtSwitch = personPressCount();
   const look = (ms: number) => {
     if (ms <= LAST_PAGE_LOOK_MS) putPageAtTop(tab);
-    if (opts.ring && personPressCount() === pressesAtSwitch) putRingOnFirstLine(tab);
+    if (!opts.ring || personPressCount() !== pressesAtSwitch) return;
+    if (foldedBody(tab)) putRingOnFirstLine(tab);
+    else if (opts.barIfNotFolded && ms === LATER_LOOKS_MS[LATER_LOOKS_MS.length - 1]) putRingOnBarIfLost();
   };
   look(0);
   const timers = LATER_LOOKS_MS.map((ms) => setTimeout(() => look(ms), ms));

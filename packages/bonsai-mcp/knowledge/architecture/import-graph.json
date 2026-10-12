@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 944,
-  "edgeCount": 3123,
+  "fileCount": 945,
+  "edgeCount": 3129,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4476,6 +4476,7 @@
         "src/features/folded-tabs/FoldAllButton.tsx",
         "src/features/folded-tabs/FoldedSection.tsx",
         "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/features/folded-tabs/shoulderSwitch.ts",
         "src/styles/settingsGlassButton.ts",
         "src/test-harness/fakeDeckyUi.tsx",
         "src/test-harness/steamRing.tsx",
@@ -4487,6 +4488,7 @@
       "imports": [
         "src/features/folded-tabs/FoldedSection.tsx",
         "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/features/folded-tabs/shoulderSwitch.ts",
         "src/styles/sections/textPx.ts",
         "src/styles/settingsGlassButton.ts",
         "src/utils/navFocusRegistry.ts"
@@ -4593,6 +4595,7 @@
         "src/features/folded-tabs/FoldedSection.tsx",
         "src/features/folded-tabs/foldedTabsStore.ts",
         "src/utils/chatPanelScroll.ts",
+        "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
@@ -4691,6 +4694,17 @@
         "src/components/useSettingsTabFocus.ts",
         "src/features/folded-tabs/settingsTabFolds.test.ts",
         "src/test-harness/settingsFoldOpen.ts"
+      ]
+    },
+    "src/features/folded-tabs/shoulderSwitch.ts": {
+      "imports": [
+        "src/utils/focusNavigation.ts"
+      ],
+      "importedBy": [
+        "src/features/folded-tabs/FoldAllButton.test.tsx",
+        "src/features/folded-tabs/FoldAllButton.tsx",
+        "src/features/plugin-shell/TabIndicatorBar.test.tsx",
+        "src/features/plugin-shell/TabIndicatorBar.tsx"
       ]
     },
     "src/features/folded-tabs/useHelpStrip.ts": {
@@ -4800,6 +4814,7 @@
     },
     "src/features/plugin-shell/TabIndicatorBar.test.tsx": {
       "imports": [
+        "src/features/folded-tabs/shoulderSwitch.ts",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/tabTitles.tsx",
         "src/styles/bonsaiScopeStylesheet.ts",
@@ -4810,6 +4825,7 @@
     },
     "src/features/plugin-shell/TabIndicatorBar.tsx": {
       "imports": [
+        "src/features/folded-tabs/shoulderSwitch.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/plugin-shell/tabBarNav.ts",
         "src/features/plugin-shell/tabTitles.tsx",
@@ -10097,6 +10113,7 @@
         "src/features/chat-sum-up/sumUpDirectionHandlers.ts",
         "src/features/chat-title/chatRowMoves.ts",
         "src/features/chat-title/useChatTriggerSwitch.ts",
+        "src/features/folded-tabs/shoulderSwitch.ts",
         "src/features/plugin-shell/tabBarNav.ts",
         "src/features/search-tab/SearchBackLine.tsx",
         "src/features/search-tab/useSearchShortcut.ts",
@@ -10536,6 +10553,7 @@
         "src/features/folded-tabs/FoldedSection.test.tsx",
         "src/features/folded-tabs/FoldedSection.tsx",
         "src/features/folded-tabs/foldedTabArrival.test.ts",
+        "src/features/folded-tabs/foldedTabArrival.ts",
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",

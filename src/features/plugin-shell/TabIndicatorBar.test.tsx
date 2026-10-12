@@ -22,6 +22,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import React from "react";
 
 import { TabIndicatorBar } from "./TabIndicatorBar";
+import { shoulderSwitchFromPress } from "../folded-tabs/shoulderSwitch";
 import { ALL_BONSAI_TAB_IDS, BONSAI_TAB_SHORT_NAMES, type BonsaiTabId } from "./tabTitles";
 import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
 import { buildTabBarRules } from "../../styles/sections/tabIndicatorBar";
@@ -230,6 +231,19 @@ describe("the tab bar as T3 (plan 84 step 4)", () => {
     root.classList.add("gpfocus");
     expect(getComputedStyle(root).boxShadow).toMatch(/inset 0 0 0 2px rgba\(255, 255, 255, 0\.85\)/);
     expect(getComputedStyle(root).backgroundColor).toBe("rgba(255, 255, 255, 0.06)");
+  });
+});
+
+describe("the folded tabs' floating button steps tabs through the bar (Deck, 2026-10-12)", () => {
+  it("the bar registers its stepping: LB and RB from the button go to the neighbours, as a shoulder switch", () => {
+    const selectTab = vi.fn();
+    const shown = render(bar({ selectTab, currentTab: "main" }));
+    expect(shoulderSwitchFromPress(press(5))).toBe(true);
+    expect(selectTab).toHaveBeenLastCalledWith("search", { fromShoulder: true });
+    expect(shoulderSwitchFromPress(press(6))).toBe(true);
+    expect(selectTab).toHaveBeenLastCalledWith("ollama", { fromShoulder: true });
+    shown.unmount();
+    expect(shoulderSwitchFromPress(press(5))).toBe(false);
   });
 });
 

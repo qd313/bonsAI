@@ -212,6 +212,12 @@ describe("after Steam's shoulder switch the ring lands on the first section line
     expect(take).toHaveBeenCalledTimes(1);
   });
 
+  it("a switch made from the floating button (selectTab with fromShoulder) puts the ring on the first line too", () => {
+    const { result } = renderHook(() => useBonsaiPluginShell({ getSessionSnapshot: emptySnapshot }));
+    act(() => result.current.selectTab(OLLAMA_FOLD_TAB, { fromShoulder: true }));
+    expect(take).toHaveBeenCalledTimes(1);
+  });
+
   it("a bar press (or Y) to the folded tab leaves the ring alone", () => {
     const { result } = renderHook(() => useBonsaiPluginShell({ getSessionSnapshot: emptySnapshot }));
     act(() => result.current.selectTab(OLLAMA_FOLD_TAB));

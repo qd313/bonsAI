@@ -1091,6 +1091,10 @@ tab bar
   reads "⊟ Close all") or closes them all, and the ring stays on the button; Up, Down, Left and B put the ring back
   on the line it came from; Right holds still. The line it came from is the section the ring last landed in, kept
   in `foldedTabsStore.ts`, so a rebuild of the tab (a Decky popup closing) does not lose it.
+- **LB and RB work with the ring on the button:** the dock is outside Steam's own Tabs, which never sees a shoulder
+  press there, so the button's host takes `onButtonDown` and asks the tab bar to step (`shoulderSwitch.ts`, registered
+  by `TabIndicatorBar`); the arrival then puts the ring on the new tab's first line, or on the bar when that tab is not
+  folded.
 - **The button and the strip are drawn beside Steam's scroll pane**, in bonsAI's tabs box (`TabHelpStrip.tsx`), not
   inside the pane: a focusable button at the very bottom of the pane lies outside Steam's band (116 px top, 80 px
   bottom) and Steam would scroll the pane to bring it in. They show only while their tab is the one on screen.

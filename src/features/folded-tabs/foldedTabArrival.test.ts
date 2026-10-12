@@ -244,3 +244,48 @@ describe("after Steam's shoulder switch, the ring is on something that exists", 
     expect(take).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("a switch from the floating button (the ring was on a button that is now hidden)", () => {
+  const registerBar = () => {
+    const take = vi.fn(() => true);
+    registerNavFocus("tab-bar", { current: { TakeFocus: take } });
+    return take;
+  };
+
+  it("to a tab that is not folded: the ring goes to the tab bar", () => {
+    drawPane({ tab: "main", scrollTop: 0, folded: false });
+    const dock = document.createElement("div");
+    dock.className = "bonsai-fold-dock";
+    const button = document.createElement("button");
+    button.className = "gpfocus";
+    dock.appendChild(button);
+    document.body.appendChild(dock);
+    const bar = registerBar();
+    scheduleFoldedTabArrival("main", { ring: true, barIfNotFolded: true });
+    vi.advanceTimersByTime(400);
+    expect(bar).toHaveBeenCalledTimes(1);
+    dock.remove();
+  });
+
+  it("to a tab that is not folded, with the ring already somewhere real: nothing moves it", () => {
+    drawPane({ tab: "main", scrollTop: 0, folded: false });
+    const real = document.createElement("button");
+    real.className = "gpfocus";
+    document.body.appendChild(real);
+    const bar = registerBar();
+    scheduleFoldedTabArrival("main", { ring: true, barIfNotFolded: true });
+    vi.advanceTimersByTime(400);
+    expect(bar).not.toHaveBeenCalled();
+    real.remove();
+  });
+
+  it("to a folded tab: the first section line, not the bar", () => {
+    const dom = drawPane({ tab: "ollama", scrollTop: 0 });
+    const take = registerLine("ollama", dom.body.querySelector<HTMLElement>(".bonsai-fold-line"));
+    const bar = registerBar();
+    scheduleFoldedTabArrival("ollama", { ring: true, barIfNotFolded: true });
+    vi.advanceTimersByTime(400);
+    expect(take).toHaveBeenCalledTimes(1);
+    expect(bar).not.toHaveBeenCalled();
+  });
+});

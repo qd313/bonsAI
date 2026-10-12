@@ -43,6 +43,7 @@ import { TAB_BAR_CURRENT_ICON_PX, TAB_BAR_SIDE_ICON_PX } from "../unified-input/
 import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
 import { registerModalReturnFocusOwner } from "./modalReturnFocusRegistry";
 import { buildTabBarNavHandlers, neighbourTab, tabBarSides } from "./tabBarNav";
+import { registerShoulderSwitch } from "../folded-tabs/shoulderSwitch";
 import { BONSAI_TAB_SHORT_NAMES, bonsaiTabBarIcon, type BonsaiTabId } from "./tabTitles";
 
 export type TabIndicatorBarProps = {
@@ -50,8 +51,11 @@ export type TabIndicatorBarProps = {
   tabIds: readonly BonsaiTabId[];
   /** `currentTab` from the plugin shell. An id that is not mounted lights nothing. */
   currentTab: string;
-  /** The shell's `selectTab`: sets the tab and clears the post-picker lock. */
-  selectTab: (id: string) => void;
+  /**
+   * The shell's `selectTab`: sets the tab and clears the post-picker lock. `fromShoulder` says LB or RB made the
+   * switch from the folded tabs' floating button, so the arrival places the ring as it does after Steam's own.
+   */
+  selectTab: (id: string, opts?: { fromShoulder?: boolean }) => void;
   /** Hand the ring to the current tab's first stop; true when it moved. */
   exitDown: () => boolean;
   /** Up holds still instead of being left to Steam (the bar at the very top, plan 84 step 6). */
@@ -102,6 +106,16 @@ export function TabIndicatorBar({
     registerNavFocus("tab-bar", navRef);
     return () => unregisterNavFocus("tab-bar", navRef);
   }, []);
+
+  /* The folded tabs' floating button is outside Steam's Tabs, so it asks the bar to step on LB and RB. */
+  useEffect(
+    () =>
+      registerShoulderSwitch((dir) => {
+        const next = neighbourTab(tabIds, currentTab, dir);
+        if (next !== null && next !== currentTab) selectTab(next, { fromShoulder: true });
+      }),
+    [tabIds, currentTab, selectTab],
+  );
 
   const handlers = buildTabBarNavHandlers({ tabIds, currentTab, selectTab, exitDown, upHolds });
 

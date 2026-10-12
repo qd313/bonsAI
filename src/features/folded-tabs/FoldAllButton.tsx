@@ -35,6 +35,7 @@ import {
   subscribeFoldedTabs,
 } from "./foldedTabsStore";
 import { foldAllNavId, takeFoldLine } from "./FoldedSection";
+import { shoulderSwitchFromPress } from "./shoulderSwitch";
 
 const FOLD_ALL_OPEN_LABEL = "Open all";
 const FOLD_ALL_CLOSE_LABEL = "Close all";
@@ -76,6 +77,8 @@ export function FoldAllButton({ tab, sections }: FoldAllButtonProps): React.Reac
         onMoveDown: back,
         onMoveLeft: back,
         onMoveRight: () => true,
+        /* LB and RB switch tabs from here as from anywhere: the dock is outside Steam's own Tabs, which never sees them. */
+        onButtonDown: shoulderSwitchFromPress,
         /* B goes back too. Claimed always: B is otherwise Decky's, and would leave the tab. */
         onCancelButton: (e: unknown) => {
           back();

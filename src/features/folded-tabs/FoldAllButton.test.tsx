@@ -21,6 +21,7 @@ vi.mock("@decky/ui", async () => {
 import { FoldedSection, chainIds, type FoldChainSection } from "./FoldedSection";
 import { FoldAllButton } from "./FoldAllButton";
 import { resetFoldedTabsForTests } from "./foldedTabsStore";
+import { registerShoulderSwitch, resetShoulderSwitchForTests } from "./shoulderSwitch";
 import { resetNavFocusRegistry } from "../../utils/navFocusRegistry";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
 import { SETTINGS_GLASS_BTN, FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
@@ -125,5 +126,32 @@ describe("the floating Open all button", () => {
     );
     expect(button.style.color).toBe("rgb(232, 238, 245)");
     expect(button.style.border).toContain("rgba(255, 255, 255, 0.22)");
+  });
+});
+
+describe("LB and RB with the ring on the floating button (Deck, 2026-10-12: LB did nothing)", () => {
+  afterEach(() => resetShoulderSwitchForTests());
+
+  it("LB steps the tab back and RB steps it on, and the press is claimed", () => {
+    const step = vi.fn();
+    registerShoulderSwitch(step);
+    const { container } = render(<Tab />);
+    const host = hostOf(container);
+    act(() => putSteamRingOn(buttonOf(container)));
+    expect(host.__nav?.onButtonDown?.({ detail: { button: 5 } })).toBe(true);
+    expect(step).toHaveBeenLastCalledWith(-1);
+    expect(host.__nav?.onButtonDown?.({ detail: { button: 6 } })).toBe(true);
+    expect(step).toHaveBeenLastCalledWith(1);
+  });
+
+  it("any other button is left alone, and with no tab bar to step nothing is claimed", () => {
+    const step = vi.fn();
+    const stop = registerShoulderSwitch(step);
+    const { container } = render(<Tab />);
+    const host = hostOf(container);
+    expect(host.__nav?.onButtonDown?.({ detail: { button: 1 } })).toBeFalsy();
+    expect(step).not.toHaveBeenCalled();
+    stop();
+    expect(host.__nav?.onButtonDown?.({ detail: { button: 5 } })).toBeFalsy();
   });
 });

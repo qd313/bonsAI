@@ -34,13 +34,9 @@ export async function listChatSlotQuestions(): Promise<SearchChat[]> {
   }
 }
 
-/* The next three names are added to the back end by lanes N1 and N4 of plan 92; until the generated list of
-   method names in this copy holds them, the line before each call keeps the type check quiet. */
-
 /** Every note the person kept, newest first; [] when the call fails. */
 export async function listUserNotes(): Promise<UserNote[]> {
   try {
-    // @ts-ignore -- "list_user_notes" joins the generated method list when lane N1 lands
     const res = await callDeckyWithTimeout<[], NotesRpc>("list_user_notes", []);
     return res?.ok === true && Array.isArray(res.notes) ? res.notes : [];
   } catch {
@@ -53,7 +49,6 @@ export type SaveNoteResult = { ok: true; note: UserNote } | { ok: false; error: 
 /** Turn a note on or off (contract C3: `{id, on}` edits only what is present). */
 export async function saveUserNote(patch: { id: string; on: boolean }): Promise<SaveNoteResult> {
   try {
-    // @ts-ignore -- "save_user_note" joins the generated method list when lane N1 lands
     const res = await callDeckyWithTimeout<[{ id: string; on: boolean }], SaveNoteRpc>("save_user_note", [patch]);
     if (res?.ok === true && res.note) return { ok: true, note: res.note };
     return { ok: false, error: typeof res?.error === "string" && res.error ? res.error : SAVE_FAILED };
@@ -65,7 +60,6 @@ export async function saveUserNote(patch: { id: string; on: boolean }): Promise<
 /** The knowledge library's game notes that hold `word` (contract C7); an uninstalled library is a plain empty answer. */
 export async function searchRagCorpusNotes(word: string, gameTitle: string): Promise<GameNotesResult> {
   try {
-    // @ts-ignore -- "search_rag_corpus_notes" joins the generated method list when lane N4 lands
     const res = await callDeckyWithTimeout<[string, string], GameNotesRpc>("search_rag_corpus_notes", [word, gameTitle]);
     if (res?.ok !== true) return { installed: false, notes: [], reason: "" };
     return {

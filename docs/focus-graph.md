@@ -908,3 +908,59 @@ tab bar
   tab: no stop twice, none off screen, no press turns the page half its height, Up from the top leaves through the
   bar, Left and Right reach every stop in a row and hold at both ends) and `SearchTab.test.tsx` (what each A does).
   Device rows: plan 92, block 3.
+
+### A folded tab: section lines, the floating Open all button, the help strip (plan 91 § 2b, plan 92 T0)
+
+The Ollama tab first; Settings and Developer reuse the same pieces (`src/features/folded-tabs/`). Each section
+folds to one line (`FoldedSection.tsx`): its name, a summary of its values, a chevron. A opens or closes it, several
+can be open at once. Inside an open section, one row per setting. The ringed row's longer text shows in the strip at
+the bottom of the panel. A small floating button in the bottom-right corner opens or closes every section.
+
+```
+tab bar
+   | Down                               ^ Up (from the first section line)
+[ WHERE AI RUNS   Run AI on this Deck on · Start…  ▾ ]  --Right-->  [ ⊞ Open all ]  (floating)
+   | Down (open: into the first control; closed: the next line)   <-- Up, Down, Left or B come back here
+   row, row, row ...                      (Up from the first row -> the section line)
+   | Down from the last row -> the next section line
+[ KNOWLEDGE BASE (OFFLINE)   Use local knowledge base on  ▸ ]
+   | Down                               ^ Up (an open section above: its last control; closed: its line)
+   ...
+[ AI MODELS                                             ▸ ]
+   | Down from the last line (or the last row) holds still
+=========== the strip: "TERSE MODE  Speed mode only. Keeps each answer to three short lines…" ===========
+```
+
+- **Stops:** each section line (a `Focusable` with `focusable: true` and `noFocusRing`; its class never changes,
+  open or closed is `data-open`, so Steam's `gpfocus` marker in the class is never wiped), every control inside an
+  open section, and the floating button. The strip and the summaries are not stops.
+- **Moves, all written by hand on the line** (`FoldedSection`): Down goes into the section's first control when it
+  is open (the tab's `enterFromTop`), else to the next line; Up goes to the previous section's last control when that
+  section is open (`enterFromBottom`), else to its line; the first line's Up goes to the tab bar; the last line's
+  Down holds still. Line to line, and onto the button and back, is Steam's own transfer (`takeNavFocus` onto the
+  line's registered nav node, `fold-line:<tab>:<section>`; the button's is `fold-all:<tab>`), never a plain
+  `focus()`. Into and out of a section's rows the tab uses its own row hops (`focusInTabBody`), inside the one tab
+  body, as before. A section's last control hands Down to the next line (`foldLineBelow`); its first control hands
+  Up to its own line.
+- **Right from any line** puts the ring on the floating button. **On the button:** A opens every section (it then
+  reads "⊟ Close all") or closes them all, and the ring stays on the button; Up, Down, Left and B put the ring back
+  on the line it came from; Right holds still. The line it came from is the section the ring last landed in, kept
+  in `foldedTabsStore.ts`, so a rebuild of the tab (a Decky popup closing) does not lose it.
+- **The button and the strip are drawn beside Steam's scroll pane**, in bonsAI's tabs box (`TabHelpStrip.tsx`), not
+  inside the pane: a focusable button at the very bottom of the pane lies outside Steam's band (116 px top, 80 px
+  bottom) and Steam would scroll the pane to bring it in. They show only while their tab is the one on screen.
+- **The strip** is filled on the landing's own focus event (the tab body's capture-phase listener, the one the
+  scroll plan uses), from the ringed row's `data-bonsai-help` and `data-bonsai-help-label`. While it shows, the
+  scroll plan's bottom margin grows by its measured height, so the ringed row is placed clear of it; a folded tab
+  turns the page by a shorter step (`FOLDED_TAB_SCROLL_STEP_FRACTION`, under a third of the pane).
+- **Open sections survive a rebuild:** the open set is in `foldedTabsStore.ts`, for the session only. On a first
+  visit the first section is open and the rest are closed.
+- **Class names a Deck driver can find:** the line `.bonsai-fold-line` (`[data-bonsai-fold-line="<section>"]`,
+  `[data-open]`), its parts `.bonsai-fold-line__name`, `__summary`, `__chevron`; the open rows `.bonsai-fold-body`;
+  the button's host `.bonsai-fold-all-host` (`[data-bonsai-fold-all="<tab>"]`) and the button `.bonsai-fold-all`;
+  the strip `.bonsai-fold-strip` (`[data-bonsai-help-strip="<tab>"]`), its `__label` and `__text`; the dock around
+  them `.bonsai-fold-dock`.
+- **Tests:** `FoldedSection.test.tsx` (open and closed, several open, the first-visit default, the open set through
+  an unmount and a remount, the line's moves), `FoldAllButton.test.tsx` (Right onto it, A, the four ways back, also
+  after a rebuild), `TabHelpStrip.test.tsx` (the strip's text on the landing, hidden without, the band arithmetic
+  from the stylesheet). Device rows: P91-FOLD-OLLAMA, P91-STRIP, P91-FOLD-ALL-BUTTON (plan 91 § 5).

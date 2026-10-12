@@ -366,6 +366,9 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 
 ## src/features/folded-tabs
 
+- **DenseRow.tsx** (src/features/folded-tabs/DenseRow.tsx) — *One line per setting in a folded tab*: The one-line shape of a row inside an open folded section (plan 91 § 2b): the setting's name and its switch, choice buttons, slider or button, and nothing else. […]
+- **FoldAllButton.tsx** (src/features/folded-tabs/FoldAllButton.tsx) — *The floating Open all / Close all button of a folded tab*: A small button in the bottom-right corner of a folded tab, above the help strip when it shows (plan 91 § 2b, round 3 option C). […]
+- **FoldedSection.tsx** (src/features/folded-tabs/FoldedSection.tsx) — *A folded section: its one-line header, and its rows while it is open*: One section of a folded tab (plan 91 § 2b). Folded, it is one line: its name, a short summary of its values, and a chevron. […]
 - **TabHelpStrip.tsx** (src/features/folded-tabs/TabHelpStrip.tsx) — *The help strip and the floating button's corner, pinned over the bottom of a tab's pane*: The bottom of a folded tab (plan 91 § 2b): a strip showing the ringed row's longer text (its name in bold, then the text), and, above it, the corner where the floating Open all button sits. […]
 - **foldedTabsStore.ts** (src/features/folded-tabs/foldedTabsStore.ts) — *Which folded sections are open, kept outside the tab*: A small memory, outside React, of which sections of a folded tab are open, and which section the ring was last in. […]
 - **sectionSummary.ts** (src/features/folded-tabs/sectionSummary.ts) — *A folded section's one-line summary*: The short line of current values a folded section shows beside its name, so a person can read what a section is set to without opening it ("Balanced · Thinking: Off · Terse mode off" beside Reply style"). […]

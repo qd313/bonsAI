@@ -92,7 +92,9 @@ export type NavFocusId = "session-context-strip" | "preset-carousel" | "unified-
   /** The About tab's block of link buttons and QR code (AboutLinks.tsx): Down from the Reply language row hands the
    *  ring here, and Steam's transfer onto a container lands on its first stop, GitHub. Without it Steam's own step
    *  from the language dropdown, which sits on the right of its row, would pick the QR code beside the buttons. */
-  | "about-links";
+  | "about-links"
+  /** A folded tab's section lines and its floating Open all button (plan 91 § 2b, src/features/folded-tabs). */
+  | `fold-line:${string}` | `fold-all:${string}`;
 
 /** The object Steam assigns to a `navRef`: a thin wrapper over the nav node. */
 type SteamNavNode = { TakeFocus?: (gamepad?: boolean) => unknown };

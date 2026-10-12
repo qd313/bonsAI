@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 879,
-  "edgeCount": 2767,
+  "fileCount": 885,
+  "edgeCount": 2790,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4082,6 +4082,67 @@
         "src/hooks/usePullModelSubmitSelected.tsx"
       ]
     },
+    "src/features/folded-tabs/DenseRow.test.tsx": {
+      "imports": [
+        "src/features/folded-tabs/DenseRow.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/features/folded-tabs/DenseRow.tsx": {
+      "imports": [
+        "src/features/folded-tabs/useHelpStrip.ts"
+      ],
+      "importedBy": [
+        "src/features/folded-tabs/DenseRow.test.tsx"
+      ]
+    },
+    "src/features/folded-tabs/FoldAllButton.test.tsx": {
+      "imports": [
+        "src/features/folded-tabs/FoldAllButton.tsx",
+        "src/features/folded-tabs/FoldedSection.tsx",
+        "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/styles/settingsGlassButton.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/folded-tabs/FoldAllButton.tsx": {
+      "imports": [
+        "src/features/folded-tabs/FoldedSection.tsx",
+        "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/styles/sections/textPx.ts",
+        "src/styles/settingsGlassButton.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/features/folded-tabs/FoldAllButton.test.tsx"
+      ]
+    },
+    "src/features/folded-tabs/FoldedSection.test.tsx": {
+      "imports": [
+        "src/features/folded-tabs/FoldedSection.tsx",
+        "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/folded-tabs/FoldedSection.tsx": {
+      "imports": [
+        "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/features/folded-tabs/useHelpStrip.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/features/folded-tabs/FoldAllButton.test.tsx",
+        "src/features/folded-tabs/FoldAllButton.tsx",
+        "src/features/folded-tabs/FoldedSection.test.tsx"
+      ]
+    },
     "src/features/folded-tabs/TabHelpStrip.test.tsx": {
       "imports": [
         "src/features/folded-tabs/TabHelpStrip.tsx",
@@ -4111,6 +4172,10 @@
     "src/features/folded-tabs/foldedTabsStore.ts": {
       "imports": [],
       "importedBy": [
+        "src/features/folded-tabs/FoldAllButton.test.tsx",
+        "src/features/folded-tabs/FoldAllButton.tsx",
+        "src/features/folded-tabs/FoldedSection.test.tsx",
+        "src/features/folded-tabs/FoldedSection.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx",
         "src/features/folded-tabs/foldedTabsStore.test.ts",
         "src/features/folded-tabs/useHelpStrip.ts"
@@ -4135,6 +4200,8 @@
         "src/utils/tabBodyScrollPlan.ts"
       ],
       "importedBy": [
+        "src/features/folded-tabs/DenseRow.tsx",
+        "src/features/folded-tabs/FoldedSection.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx",
         "src/features/folded-tabs/TabHelpStrip.tsx"
       ]
@@ -7266,6 +7333,7 @@
         "src/features/chat-title/chatTitleStyles.ts",
         "src/features/chat-title/chatsMenuStyles.ts",
         "src/features/downloads/downloadNotice.tsx",
+        "src/features/folded-tabs/FoldAllButton.tsx",
         "src/features/plugin-shell/usePublishTextScale.test.tsx",
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetDecodeChipButton.tsx",
@@ -7339,6 +7407,8 @@
         "src/components/VoiceInputSettingsSection.tsx",
         "src/features/chat-slots/ChatSlotDeleteModal.tsx",
         "src/features/chat-slots/ChatSlotPickerModal.tsx",
+        "src/features/folded-tabs/FoldAllButton.test.tsx",
+        "src/features/folded-tabs/FoldAllButton.tsx",
         "src/styles/buttonFocusRing.test.ts"
       ]
     },
@@ -7623,6 +7693,9 @@
         "src/features/chat-title/useChatTriggerSwitch.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/downloads/downloadNotice.test.tsx",
+        "src/features/folded-tabs/DenseRow.test.tsx",
+        "src/features/folded-tabs/FoldAllButton.test.tsx",
+        "src/features/folded-tabs/FoldedSection.test.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
@@ -7724,6 +7797,8 @@
         "src/features/chat-title/nameRowIcons.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/topStripHeightLock.test.tsx",
+        "src/features/folded-tabs/FoldAllButton.test.tsx",
+        "src/features/folded-tabs/FoldedSection.test.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
         "src/features/search-tab/SearchTab.test.tsx",
@@ -9483,6 +9558,10 @@
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/details-slot/DetailsSlot.tsx",
         "src/features/details-slot/detailsSlotStore.ts",
+        "src/features/folded-tabs/FoldAllButton.test.tsx",
+        "src/features/folded-tabs/FoldAllButton.tsx",
+        "src/features/folded-tabs/FoldedSection.test.tsx",
+        "src/features/folded-tabs/FoldedSection.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",

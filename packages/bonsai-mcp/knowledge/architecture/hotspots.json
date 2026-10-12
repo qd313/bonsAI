@@ -111,18 +111,23 @@
       "role": ""
     },
     {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 837,
-      "role": ""
-    },
-    {
       "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
       "lines": 836,
       "role": ""
     },
     {
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 830,
+      "role": ""
+    },
+    {
       "path": "src/utils/buildReplyActionsElement.tsx",
       "lines": 819,
+      "role": ""
+    },
+    {
+      "path": "src/components/PullModelsFiltersColumn.test.tsx",
+      "lines": 811,
       "role": ""
     },
     {
@@ -148,11 +153,6 @@
     {
       "path": "src/utils/buildReplyActionsElement.test.tsx",
       "lines": 777,
-      "role": ""
-    },
-    {
-      "path": "src/components/PullModelsFiltersColumn.test.tsx",
-      "lines": 758,
       "role": ""
     },
     {

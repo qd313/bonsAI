@@ -9,7 +9,8 @@
  * ring for 10 of the 12 column stops (plan92-P92-M-MODELS-MAP.json); the maintainer asked for the
  * ring to go to what is directly beside it instead.
  *
- * Used for: PullModelsModal.tsx (Right from any column stop, through the column's `toList`).
+ * Used for: PullModelsModal.tsx (Right from any column stop, through the column's `toList`; Left from a
+ * row's first cell, the star or a PC row's up button).
  *
  * How it works:
  *
@@ -19,20 +20,25 @@
  *       Also try open-weight        ------> ☆ gemma4 ...                         level: that row's star
  *       Speed                       ------> ☆ qwen2.5vl ...
  *       Strategy                    -x->   (a group title; the next row is scrolled out of sight)
+ *       Any installed (greyed)      <-x-   ☆ qwen3.5 ...       Left: the column stop level with the row,
+ *                                                              never the greyed row; held when none is
  *
  * 1. `pickBeside` (pure, no DOM): the candidate whose vertical centre is nearest the ring's, but only
  *    when it is within `reach`; otherwise none, and the press is held (it does nothing). A key named in
  *    `prefer` wins while it is still within reach, so a Right then a Left comes back to where it began.
  * 2. `usePullModelsBeside` measures the real elements at the press: the ring's own button, the
  *    switch's active chip and each row's star whose centre is inside the list's visible box (below its
- *    sticky header row, above its bottom edge). Rows scrolled out of sight are not candidates.
+ *    sticky header row, above its bottom edge) for Right; for Left, the column's stops (the column hands
+ *    over only the ones that can take the ring, the greyed licence row left out by its own state) whose
+ *    centre is inside the column's box. Anything scrolled out of sight is not a candidate.
  * 3. `reach` is half the height of one model row, read from the first row the list draws: the Deck
  *    check passes a landing within half a row of the ring (plan 92 lane M2 brief).
  * 4. The ring crosses only by Steam's own transfer onto the other side's nav node (`handRingTo`), then
  *    a sibling focus onto the chosen stop inside it, never a bare focus() across containers.
  *
- * Does not: Decide Up and Down (each side walks itself), skip the greyed licence row (the column
- * leaves it out of its stops by its own state), or remember anything after the box closes.
+ * Does not: Decide Up and Down (each side walks itself), skip the greyed licence row itself (the
+ * column leaves it out of its stops by its own state, never by asking the button: on the Deck a greyed
+ * button still takes the ring), or remember anything after the box closes.
  */
 import { useRef, type MutableRefObject } from "react";
 import type { NavRefHolder } from "../utils/navFocusRegistry";
@@ -80,9 +86,16 @@ function halfRow(list: HTMLElement | null, origin: Element): number {
 const SWITCH = "switch";
 const ROW = "row:";
 
+/** One stop of the filters column, as the column hands it over: its key and its element on screen. */
+type ColumnStop = { key: string; el: HTMLElement };
+/** What the box can ask of the column: its stops that can take the ring, and a sibling focus onto one (null: Clear). */
+export type FiltersColumnApi = { focusStop: (key: string | null) => boolean; stops: () => ColumnStop[] };
+
 type BesideArgs = {
-  /** The list's own nav node (Steam fills it): Right's transfer target. */
+  /** The two sides' nav nodes (Steam fills them): the transfer targets of Right and Left. */
   listNavRef: NavRefHolder;
+  columnNavRef: NavRefHolder;
+  columnApi: MutableRefObject<FiltersColumnApi | null>;
   /** The list's scroll box and its sticky column-header row (plain divs). */
   listRef: MutableRefObject<HTMLElement | null>;
   headerRef: MutableRefObject<HTMLElement | null>;
@@ -96,9 +109,10 @@ type BesideArgs = {
 };
 
 /**
- * In: the box's two sides, as above. Out: `enterList(origin, from)`, Right from a column stop: the
- * element the ring is on and the stop's key. True when the press is taken (moved, or held because
- * nothing is beside); false only when Steam's transfer failed, which leaves the press to Steam.
+ * In: the box's two sides, as above. Out: `enterList(origin, from)`, Right from a column stop (the
+ * element the ring is on and the stop's key), and `enterColumn(rowIndex)`, Left from a row's first
+ * cell. Each is true when the press is taken (moved, or held because nothing is beside); false only
+ * when Steam's transfer failed, which leaves the press to Steam.
  */
 export function usePullModelsBeside(a: BesideArgs) {
   /** The last crossing, so a press straight back returns to where it came from. */
@@ -132,5 +146,26 @@ export function usePullModelsBeside(a: BesideArgs) {
     return true;
   };
 
-  return { enterList };
+  const enterColumn = (rowIndex: number): boolean => {
+    const at = ROW + rowIndex;
+    const origin = a.selectCellRefs.current[rowIndex];
+    const y = centreY(origin);
+    const api = a.columnApi.current;
+    if (y === null || !origin || !api) return true;
+    const stops = api.stops();
+    const box = stops[0]?.el.closest(".bonsai-pullmodels-filtercol")?.getBoundingClientRect();
+    const candidates: BesideCandidate<string>[] = [];
+    for (const s of stops) {
+      const cy = centreY(s.el);
+      if (cy !== null && (!box || (cy >= box.top && cy <= box.bottom))) candidates.push({ key: s.key, y: cy });
+    }
+    const key = pickBeside(y, candidates, halfRow(a.listRef.current, origin), backTo(at));
+    if (key === null) return true;
+    if (!handRingTo(a.columnNavRef)) return false;
+    api.focusStop(key);
+    crossing.current = { from: at, to: key };
+    return true;
+  };
+
+  return { enterList, enterColumn };
 }

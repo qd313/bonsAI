@@ -11,7 +11,7 @@
  *     [ 7 models match            Clear ]   <- the first stop
  *     LICENCE   (•) Open source only            Up from Clear -> Refresh (↻), then Advanced
  *               ( ) Also try open-weight models
- *               ( ) Any installed model         (greyed until unlocked, and skipped)
+ *               ( ) Any installed model         (greyed until unlocked, and skipped, Left included)
  *     GOOD FOR  [ ] Speed               5       Right from any stop -> the stop level with it on the right
  *               [ ] Strategy … Vision   3
  *     SHOW      [ ] Installed only, Deck essentials only, Recently added
@@ -33,12 +33,12 @@
  * a plain button inside it, so Up and Down between stops are plain sibling focus moves (`step()`), the
  * greyed licence row and an absent starter chip skipped (the open "Type a name" row is its own small
  * Focusable, reached by the same plain hop it always was from the old Filters row; see docs/focus-graph.md).
- * Every stop notes itself in the session memory
- * when the ring lands on it, by any route, so Left from the list comes back to it. Left is held (nothing
- * sits to the left). B is not claimed: it does what it does for the box. Every press also goes through
+ * The box asks the column for its stops (`apiRef.stops`) when Left is
+ * pressed on a row, and lands on the one level with that row (pullModelsBeside.ts); the greyed row is
+ * never among them. Left inside the column is held (nothing sits to the left). B is not claimed: it does what it does for the box. Every press also goes through
  * `onOKButton` (the box is a confirm box with its own OK; Steam delivers A that way, never a click).
  */
-import { useEffect, useRef, type FocusEvent, type MutableRefObject } from "react";
+import { useEffect, useRef, type MutableRefObject } from "react";
 import { Button, Focusable } from "@decky/ui";
 import type { PullModelEntry, PullModelModeFilterId } from "../data/pullModelCatalog";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
@@ -51,19 +51,14 @@ import {
   type FilterPanelRow,
 } from "../utils/pullModelFilters";
 import type { NavRefHolder } from "../utils/navFocusRegistry";
-import {
-  DEFAULT_SESSION_FILTERS,
-  focusAndReveal,
-  noteFiltersColumnStop,
-  type PullModelsSessionFilters,
-} from "./pullModelsBoxMemory";
+import { DEFAULT_SESSION_FILTERS, focusAndReveal, type PullModelsSessionFilters } from "./pullModelsBoxMemory";
+import type { FiltersColumnApi } from "./pullModelsBeside";
 import { PullModelsCustomTagEntry } from "./PullModelsCustomTagEntry";
 import { PullModelsStarterSetChip } from "./PullModelsStarterSetChip";
 
 type OkRuns = (fn: () => void) => (evt: { stopPropagation: () => void }) => void;
 
-/** What the box can ask of the column: put the ring on a stop by its key (the remembered one), else on Clear. */
-export type FiltersColumnApi = { focusStop: (key: string | null) => boolean };
+export type { FiltersColumnApi };
 
 export type PullModelsFiltersColumnProps = {
   /** The column's nav node, filled by Steam: the target of the list's Left transfer. */
@@ -147,7 +142,7 @@ export function PullModelsFiltersColumn(props: PullModelsFiltersColumnProps) {
   const greyed = new Set(FILTER_PANEL_ROWS.filter(disabled).map(filterPanelRowKey));
   const usable = (key: string) => {
     const el = landings.current.get(key);
-    return el && !greyed.has(key) && !(el as HTMLButtonElement).disabled ? el : null;
+    return el && !greyed.has(key) ? el : null;
   };
   /** The next usable stop from `key` in `dir`, by a plain sibling focus; false past either end. */
   const step = (key: string, dir: 1 | -1): boolean => {
@@ -165,18 +160,12 @@ export function PullModelsFiltersColumn(props: PullModelsFiltersColumnProps) {
   });
 
   useEffect(() => {
-    props.apiRef.current = { focusStop: (key) => focusAndReveal((key && usable(key)) || usable(CLEAR)) };
+    props.apiRef.current = {
+      focusStop: (key) => focusAndReveal((key && usable(key)) || usable(CLEAR)),
+      // Left from a row measures these: every stop that can take the ring, the greyed row left out above.
+      stops: () => order.flatMap((key) => (usable(key) ? [{ key, el: areas.current.get(key) ?? usable(key)! }] : [])),
+    };
   });
-
-  /** A landing anywhere in the column, by any route, notes its stop for the list's Left. */
-  const noteLanding = (e: FocusEvent<HTMLElement>) => {
-    for (const [key, area] of areas.current) {
-      if (area && area.contains(e.target as Node)) {
-        noteFiltersColumnStop(key);
-        return;
-      }
-    }
-  };
 
   const n = props.matchCount;
   let lastHeading = "";
@@ -184,7 +173,6 @@ export function PullModelsFiltersColumn(props: PullModelsFiltersColumnProps) {
     <Focusable
       className="bonsai-pullmodels-filtercol"
       flow-children="column"
-      onFocus={noteLanding}
       {...({ navRef: props.navRef } as Record<string, unknown>)}
     >
       <div className="bonsai-pullmodels-filtercol-top">

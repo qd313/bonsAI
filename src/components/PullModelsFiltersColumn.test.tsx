@@ -5,7 +5,8 @@
  * filters sit in a column beside the model list from the moment the box opens ("N models match" and
  * Clear, then Licence, Good for with a count beside each choice, Show, then the chips); a tick changes
  * the list at once and the count beside it matches the rows drawn; Clear leaves the licence; Right and
- * Left cross between the column and the list, back to where the ring was; Advanced, the header's Refresh
+ * Left cross between the column and the list to what sits level with the ring, on the Deck's own
+ * measured map (plan 92's second night), and hold where nothing does; Advanced, the header's Refresh
  * and Clear come in the same order going Down and Up (Refresh skipped while greyed); Down past the bottom is left to Steam, which carries it to Done; the picks survive the
  * box closing (Done included) and opening again; and a bounded walk of the whole box never visits a
  * stop twice and never leaves the ring out of sight.
@@ -341,17 +342,6 @@ describe("the column beside the list", () => {
 });
 
 describe("the D-pad between the column and the list", () => {
-  it("remembers the column's stop across the box closing and opening again", async () => {
-    // The column's stop survived: the ring lands on a row in a reopened box, and Left goes back to Strategy.
-    const third = await openBox();
-    putSteamRingOn(rowButton(third.container, "Strategy"));
-    third.unmount();
-    const fourth = await openBox();
-    putSteamRingOn(firstRowStar(fourth.container));
-    press("Left");
-    expect(steamRingHolder()).toBe(rowButton(fourth.container, "Strategy"));
-  });
-
   it("Right lands on a row's star, never its Remove button, even when the ring was last on that Remove", async () => {
     const { container } = await openBox();
     const remove = list(container).querySelector<HTMLButtonElement>(".bonsai-pullmodels-delete-btn")!;
@@ -552,7 +542,9 @@ describe("a walk of the whole box, Steam scrolling whatever takes the ring", () 
     expect(steamRingHolder()).toBe(stars(c)[0]);
     const rowsDown = walk("Down", isDone);
     expect(rowsDown).toEqual([...stars(c).map(nameOf), "Done"]); // every row once, never a Remove, then Done
-    putSteamRingOn(stars(c).pop()!);
+    // Back at the list's top, Left from the first row's star is the stop level with it.
+    lst.scrollTop = 0;
+    putSteamRingOn(stars(c)[0]);
     expect(press("Left")).toBe(true);
     expect(steamRingHolder()).toBe(rowButton(c, "Open source only (recommended)"));
   });
@@ -730,6 +722,42 @@ describe("Right and Left go to what sits beside the ring (the Deck's own map, pl
     expect(steamRingHolder()).toBe(starter);
   });
 
+  it("Left from each row's star in sight lands on the column stop level with it: Also try, nothing (the greyed row), Speed", async () => {
+    const { c, stop } = await openMap();
+    const greyed = rowButton(c, "Any installed model");
+    // The Deck's way: greyed, yet a plain focus() still puts the ring on it, so only the column's own state skips it.
+    expect(greyed.classList.contains("Disabled")).toBe(true);
+    greyed.focus();
+    expect(document.activeElement).toBe(greyed);
+
+    const expected = [stop("Also try open-weight models"), null, stop("Speed")];
+    expected.forEach((target, row) => {
+      const star = stars(c)[row];
+      putSteamRingOn(star);
+      expect(press("Left"), `row ${row}: the press is taken`).toBe(true);
+      if (target === null) {
+        // Level with the greyed row, 11 px off; the nearest stops that can take the ring are 38 and 41 px away.
+        expect(steamRingHolder(), `row ${row}: held, never the greyed row`).toBe(star);
+      } else {
+        expect(steamRingHolder(), `row ${row}`).toBe(target);
+        expect(Math.abs(centre(target) - centre(star))).toBeLessThanOrEqual(HALF_ROW);
+        expect(press("Right")).toBe(true);
+        expect(steamRingHolder(), `row ${row}: Right comes back`).toBe(star);
+      }
+    });
+  });
+
+  it("Left from a row the column has scrolled away from lands on what is level now, not where the ring last was in the column", async () => {
+    const { c, stop, ringOn } = await openMap();
+    ringOn(stop("Install the starter set")); // the column scrolls to its foot
+    expect(column(c).scrollTop).toBeGreaterThan(0);
+    putSteamRingOn(stars(c)[2]);
+    expect(press("Left")).toBe(true);
+    const landed = steamRingHolder()!;
+    if (landed !== stars(c)[2]) expect(Math.abs(centre(landed) - centre(stars(c)[2]))).toBeLessThanOrEqual(HALF_ROW);
+    expect(landed).not.toBe(stop("Install the starter set"));
+  });
+
   it("a bounded walk down the column, Right and back at every stop: each Right lands within half a row or holds, and comes back", async () => {
     const { stop, ringOn, steamScrolls } = await openMap();
     ringOn(stop("Clear the Good for and Show filters"));
@@ -753,5 +781,30 @@ describe("Right and Left go to what sits beside the ring (the Deck's own map, pl
       steamScrolls(steamRingHolder());
     }
     expect(seen).toContain("Install the starter set");
+  });
+
+  it("a bounded walk down the list, Left and back at every row: each Left lands within half a row or holds, and comes back", async () => {
+    const { c, ringOn, steamScrolls } = await openMap();
+    ringOn(stars(c)[0]);
+    const seen: Element[] = [];
+    for (let i = 0; i < 12; i++) {
+      const origin = steamRingHolder()!;
+      if (nameOf(origin) === "Done") break;
+      expect(seen, `${nameOf(origin)} twice`).not.toContain(origin);
+      seen.push(origin);
+      const before = centre(origin);
+      expect(press("Left")).toBe(true);
+      steamScrolls(steamRingHolder());
+      if (steamRingHolder() !== origin) {
+        expect(Math.abs(centre(steamRingHolder()!) - before), `Left from ${nameOf(origin)}`).toBeLessThanOrEqual(HALF_ROW);
+        expect(steamRingHolder()).not.toBe(rowButton(c, "Any installed model"));
+        expect(press("Right")).toBe(true);
+        steamScrolls(steamRingHolder());
+        expect(steamRingHolder(), `Right back to ${nameOf(origin)}`).toBe(origin);
+      }
+      if (!press("Down")) break;
+      steamScrolls(steamRingHolder());
+    }
+    expect(seen).toHaveLength(4);
   });
 });

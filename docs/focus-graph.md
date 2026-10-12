@@ -820,11 +820,11 @@ title row: "AI models"  ................  [ Advanced › ]      (its own Focusab
    | Down  ^ Up                                ^ Up from the switch, or from the first row with no switch
 Installed 3 · 9 GB   Queue 0 · 0 GB   Live catalog · Live sizes [ ↻ ]   (the header line; ↻ in its own Focusable)
    | Down  ^ Up        (Advanced <-> ↻ <-> Clear; ↻ skipped both ways while greyed, the catalog loading)
-[ 7 models match        Clear ]   <- the column's first stop
-LICENCE   (•) Open source only        |  [ Text ][ Pictures ][ Reset order ]   (the try-order switch, above the list)
-          ( ) Also try open-weight    |  the model list (its walk unchanged)
-          ( ) Any installed model     |     Right from any column stop -> the list's remembered row (else the first)
-GOOD FOR  [ ] Speed 5 ... Vision 3    |     Left from a row's star     -> the column's remembered stop (else Clear)
+[ 7 models match        Clear ] <-> [ Text ][ Pictures ][ Reset order ]   (the try-order switch, level with Clear)
+LICENCE   (•) Open source only    -x  (the list's header row: nothing level, Right is held)
+          ( ) Also try open-weight <-> ☆ row 1                Right from a column stop -> what sits level with it
+          ( ) Any installed model  x-  ☆ row 2 (Left held)    Left from a row's star   -> the stop level with it
+GOOD FOR  [ ] Speed               <-> ☆ row 3                (both measured at the press; held when none is)
 SHOW      [ ] Installed only ...      |
 [ Type a name ] [ Install the starter set ] SUGGESTED [ chip ] [ chip ]
    | Down past the last stop -> Steam's own (Done)   | Down past the last row -> Steam's own (Done), as before
@@ -841,11 +841,18 @@ SHOW      [ ] Installed only ...      |
   "×" are Steam's own, and it owns B), and the moves into it (the chip opening onto "×", Down onto it) and out of it are
   plain `focus()` hops, exactly as they were from the old Filters row since plan 62. Watch it on the Deck; if the ring
   stays behind there, the fix is a transfer onto that row's nav node.
-- **Right and Left between the column and the list** go through Steam's own transfer onto the other side's nav node
-  (`handRingTo` in `pullModelsBoxMemory.ts`, a `TakeFocus` on the column's or the list's `navRef`), then a sibling
-  `focus()` onto the remembered stop inside it. Right always lands on a row's star, never its Remove; with no rows the
-  press is held. The remembered place is read **before** the transfer, because the transfer's own landing is noted
-  like any other (`PullModelsFiltersColumn.test.tsx` caught this).
+- **Right and Left between the column and the list go to what sits beside the ring** (plan 92's second night; the
+  maintainer's call after the Deck's map, plan92-P92-M-MODELS-MAP.json, found Right from 10 of 12 column stops landing
+  32 to 100 px above or below the ring on "the list's remembered row"). At the press, `pullModelsBeside.ts` measures the
+  ring's button and the candidates on the other side: for Right, the try-order switch's active chip and each row's star
+  whose centre is in sight in the list (below its sticky header row, above its bottom edge); for Left, the column's
+  stops whose centre is in sight in the column (the column hands over only the stops that can take the ring, the
+  greyed licence row left out by its own state). It picks the nearest centre within **half a model row** (half the
+  first drawn row's height); with none that near, or no rows at all, the press is **held**. Both sides scroll on their
+  own, so nothing is read from a stored index. A press straight back (Right then Left, or Left then Right) returns to
+  where the first came from while that is still level. The ring crosses only by Steam's own transfer (`handRingTo`, a
+  `TakeFocus` on the list's, the column's or the switch row's `navRef`), then a sibling `focus()` onto the chosen stop.
+  Right always lands on a row's star (or a PC row's up button), never its Remove. Left from the switch is Steam's own.
 - **Advanced, Refresh (↻) and Clear, the same order both ways** (plan 92's second round: on the Deck Down went
   Advanced, Refresh, Clear by Steam's own guess, but Up from Clear skipped Refresh). Down from Advanced is the hub's own
   handler, calling the box's `downFromAboveRef`: a transfer onto the header line's `Focusable` (Refresh), or, while
@@ -866,15 +873,18 @@ SHOW      [ ] Installed only ...      |
   its Remove. The walk test models exactly this rule, with a stand-in for the dialog's body and footer.
 - **Left** inside the column is held (nothing sits to its left). **B** is not claimed in the column, so it does what it
   does for the box; the one exception is the open "Type a name" field row, whose B closes just the field.
-- **The two "come back here" memories** (the column's stop and the list's row) and the Good for and Show picks live in a
-  module-level store (`pullModelsBoxMemory.ts`), noted by a focus listener on each side on every landing by any route,
-  because closing a Decky popup rebuilds what is behind it (lessons § 3). The licence pick is saved on Done, as before.
+- **The Good for and Show picks** live in a module-level store (`pullModelsBoxMemory.ts`), because closing a Decky popup
+  rebuilds what is behind it (lessons § 3). The licence pick is saved on Done, as before. Nothing is remembered for Right
+  and Left any more (the two "come back here" memories of plan 91 went with the beside rule).
 - **Where the ring opens** is unchanged: on Advanced, Steam's first stop in the screen.
 - **Tests:** `PullModelsFiltersColumn.test.tsx` (steamRing stand-in, so a bare cross-container `focus()` fails): the rows
-  and headings, the counts against the rows drawn under both licence picks, Clear, Right and Left with their memories
-  across an unmount and remount, Advanced, Refresh and Clear mirrored (and Refresh skipped while greyed), Down left to
+  and headings, the counts against the rows drawn under both licence picks, Clear, Advanced, Refresh and Clear mirrored (and Refresh skipped while greyed), Down left to
   Steam, Done keeping the picks, and a bounded walk of the whole box from Advanced with Steam's scroll in a short column
-  and list. Its button stand-in draws a greyed button the Deck's way: a `Disabled` class, still focusable. `PullModelsFiltersColumn.layout.test.ts` works the list's
+  and list. Its last block lays the box out on the Deck's own map (each side with its own scroll) and presses Right and
+  Left from the measured stops and rows, with two bounded walks (down the column pressing Right and back at every stop,
+  down the list pressing Left and back at every row: no stop twice, every landing within half a row or held, never the
+  greyed row); `pullModelsBeside.test.ts` pins the pure choice. Its button stand-in draws a greyed button the Deck's
+  way: a `Disabled` class, still focusable. `PullModelsFiltersColumn.layout.test.ts` works the list's
   grid out from the stylesheet's numbers (the Model column no more than 10 per cent narrower than M-A's 124.3).
 - **Device rows:** P91-MODELS-COLUMN-WALK, -FILTERS, -DONE-KEEPS, -WIDTH (plan 91 § 5, block 4).
 

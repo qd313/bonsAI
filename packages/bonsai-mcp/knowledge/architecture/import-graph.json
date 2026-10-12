@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 943,
-  "edgeCount": 3117,
+  "edgeCount": 3118,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1913,6 +1913,7 @@
       "imports": [
         "src/components/PullModelsCustomTagEntry.tsx",
         "src/components/PullModelsStarterSetChip.tsx",
+        "src/components/pullModelsBeside.ts",
         "src/components/pullModelsBoxMemory.ts",
         "src/data/modelPolicy.ts",
         "src/data/pullModelCatalog.ts",
@@ -2805,6 +2806,7 @@
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/components/PullModelsFiltersColumn.tsx",
         "src/components/PullModelsModal.tsx",
         "src/components/pullModelsBeside.test.ts"
       ]

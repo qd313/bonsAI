@@ -75,7 +75,8 @@
  *    D-pad walks the grid in a fixed, predictable order instead of
  *    Steam's automatic guess. Right from the column and Left from a row's
  *    star cross between the two by Steam's own transfer onto the other
- *    side's nav node, then a sibling focus onto the remembered stop.
+ *    side's nav node, then a sibling focus onto the stop level with the
+ *    ring, measured at the press (pullModelsBeside.ts); held when none is.
  * 7. The whole panel renders two ways: as its own modal by default
  *    (wrapped in ConfirmModal, with Pull selected/Cancel as its footer),
  *    or, when embedded is true, as a bare panel inside another modal (the
@@ -117,9 +118,9 @@ import {
   type PullModelEntry,
 } from "../data/pullModelCatalog";
 import { PullModelLicenceSlot } from "./PullModelLicenceSlot";
-import { PullModelsFiltersColumn, type FiltersColumnApi } from "./PullModelsFiltersColumn";
-import { focusAndReveal, handRingTo, rememberedFiltersColumnStop, usePullModelsSessionFilters } from "./pullModelsBoxMemory";
-import { usePullModelsBeside } from "./pullModelsBeside";
+import { PullModelsFiltersColumn } from "./PullModelsFiltersColumn";
+import { focusAndReveal, handRingTo, usePullModelsSessionFilters } from "./pullModelsBoxMemory";
+import { usePullModelsBeside, type FiltersColumnApi } from "./pullModelsBeside";
 import { PullModelsTableHeader } from "./PullModelsTableHeader";
 import { usePullModelTryNav } from "./PullModelsTryOrder";
 import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
@@ -360,16 +361,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
     return () => window.cancelAnimationFrame(id);
   }, [findModalFooterButton, selectedTags.size, pullBusy]);
 
-  /** Right from the column: the switch or the row's star level with the ring, by Steam's transfer; held when none is. */
-  const { enterList } = usePullModelsBeside({ listNavRef, listRef, headerRef: listHeaderRef, selectCellRefs, focusRowCell, switchChip: tryNav.switchChip, enterSwitch: tryNav.enterSwitch });
-
-  /** Left from a row's star: Steam's transfer onto the column, then the column's remembered stop (or Clear). */
-  const enterColumn = useCallback((): boolean => {
-    const stop = rememberedFiltersColumnStop();
-    if (!handRingTo(columnNavRef)) return false;
-    columnApi.current?.focusStop(stop);
-    return true;
-  }, []);
+  /** Right from the column and Left from a row's star: what sits level with the ring, by Steam's transfer; held when none is. */
+  const { enterList, enterColumn } = usePullModelsBeside({ listNavRef, columnNavRef, columnApi, listRef, headerRef: listHeaderRef, selectCellRefs, focusRowCell, switchChip: tryNav.switchChip, enterSwitch: tryNav.enterSwitch });
 
   const rowNavHandlers = useCallback(
     (rowIndex: number, cell: "select" | "delete", installed: boolean) => ({
@@ -401,7 +394,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
       },
       onMoveLeft: () => {
         if (cell === "delete") return tryNav.focusPlaceDown(rowIndex) || focusRowCell(rowIndex, "select");
-        return enterColumn();
+        return enterColumn(rowIndex);
       },
     }),
     [leaveListUp, focusNextRowSelect, focusPrevRowSelect, focusRowCell, tryNav, enterColumn]

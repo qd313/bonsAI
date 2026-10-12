@@ -1,18 +1,18 @@
 /**
  * Title: What the AI models box remembers while the plugin stays open
  *
- * Purpose: Three small memories of the AI models box, kept outside every component: the Good for and
- * Show filter picks (so closing the box and opening it again shows the same filters), the filters
- * column's stop the ring was last on (so Left from the model list comes back to it; Right goes to
- * what sits beside the ring, pullModelsBeside.ts, and needs no memory). Also the one helper that
- * hands Steam's ring to the column or the list (Steam's own transfer onto that part's nav node), and
- * the plain sibling move used inside one part.
+ * Purpose: The AI models box's one memory kept outside every component: the Good for and Show filter
+ * picks, so closing the box and opening it again shows the same filters. Also the one helper that
+ * hands Steam's ring to a part of the box (Steam's own transfer onto that part's nav node), and the
+ * plain sibling move used inside one part. (Until plan 92's second night it also remembered the
+ * column's stop and the list's row the ring was last on, for Right and Left; those now go to what
+ * sits beside the ring, pullModelsBeside.ts, and nothing is remembered for them.)
  *
- * Used for: PullModelsModal.tsx (the filter picks, the transfers) and
- * PullModelsFiltersColumn.tsx (the column's stop).
+ * Used for: PullModelsModal.tsx (the filter picks, the transfers), PullModelsFiltersColumn.tsx,
+ * pullModelsBeside.ts and PullModelsTryOrder.tsx (the transfers and the sibling move).
  *
  * Solves: A Decky popup rebuilds what is behind it when it closes, and the box itself is a popup, so
- * a pick or a "come back here" note kept in a component's state is lost the moment the box closes
+ * a pick kept in a component's state is lost the moment the box closes
  * (docs/lessons-learned.md § 3). Kept here they last until the plugin itself is reloaded. The licence
  * pick is not here: it is a saved setting, saved on Done as it always was.
  *
@@ -40,7 +40,6 @@ export const DEFAULT_SESSION_FILTERS: PullModelsSessionFilters = {
 };
 
 let sessionFilters: PullModelsSessionFilters = DEFAULT_SESSION_FILTERS;
-let columnStop: string | null = null;
 
 type FiltersChange = Partial<PullModelsSessionFilters> | ((prev: PullModelsSessionFilters) => Partial<PullModelsSessionFilters>);
 
@@ -59,15 +58,6 @@ export function usePullModelsSessionFilters(): [PullModelsSessionFilters, (chang
     });
   }, []);
   return [picks, change];
-}
-
-/** The column's stop the ring is on now (its key), noted on every landing. */
-export function noteFiltersColumnStop(key: string): void {
-  columnStop = key;
-}
-
-export function rememberedFiltersColumnStop(): string | null {
-  return columnStop;
 }
 
 /**
@@ -105,5 +95,4 @@ export function focusAndReveal(el: HTMLElement | null | undefined): boolean {
 /** Test-only: a plugin opened fresh. */
 export function resetPullModelsBoxMemory(): void {
   sessionFilters = DEFAULT_SESSION_FILTERS;
-  columnStop = null;
 }

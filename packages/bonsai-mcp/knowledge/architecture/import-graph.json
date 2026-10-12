@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 941,
-  "edgeCount": 3110,
+  "fileCount": 943,
+  "edgeCount": 3117,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1900,6 +1900,7 @@
         "src/components/PullModelsModal.tsx",
         "src/components/pullModelsBoxMemory.ts",
         "src/data/modelPolicy.ts",
+        "src/features/model-routing/useTryOrderPlaces.ts",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/fakeDeckyUi.tsx",
         "src/test-harness/pullModelsListLayout.ts",
@@ -2028,6 +2029,7 @@
         "src/components/PullModelsModal.types.ts",
         "src/components/PullModelsTableHeader.tsx",
         "src/components/PullModelsTryOrder.tsx",
+        "src/components/pullModelsBeside.ts",
         "src/components/pullModelsBoxMemory.ts",
         "src/components/pullModelsListClearance.ts",
         "src/data/deprioritizedModels.ts",
@@ -2124,11 +2126,13 @@
       "imports": [
         "src/components/PullModelsModal.types.ts",
         "src/components/PullModelsPcRow.tsx",
+        "src/components/pullModelsBoxMemory.ts",
         "src/data/modelPolicy.ts",
         "src/data/pullModelCatalog.ts",
         "src/features/model-routing/useTryOrderPlaces.ts",
         "src/styles/sections/textPx.ts",
         "src/utils/modelRoutingOrder.ts",
+        "src/utils/navFocusRegistry.ts",
         "src/utils/pullModelFilters.ts"
       ],
       "importedBy": [
@@ -2789,6 +2793,22 @@
         "src/hooks/useMainTabAskBarFocus.ts"
       ]
     },
+    "src/components/pullModelsBeside.test.ts": {
+      "imports": [
+        "src/components/pullModelsBeside.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/pullModelsBeside.ts": {
+      "imports": [
+        "src/components/pullModelsBoxMemory.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx",
+        "src/components/pullModelsBeside.test.ts"
+      ]
+    },
     "src/components/pullModelsBoxMemory.ts": {
       "imports": [
         "src/data/pullModelCatalog.ts",
@@ -2806,7 +2826,9 @@
         "src/components/PullModelsModal.listEnds.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
-        "src/components/PullModelsModal.tsx"
+        "src/components/PullModelsModal.tsx",
+        "src/components/PullModelsTryOrder.tsx",
+        "src/components/pullModelsBeside.ts"
       ]
     },
     "src/components/pullModelsListClearance.ts": {
@@ -4699,6 +4721,7 @@
       ],
       "importedBy": [
         "src/components/OllamaModelsHubModal.tsx",
+        "src/components/PullModelsFiltersColumn.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
         "src/components/PullModelsModal.types.ts",
         "src/components/PullModelsTryOrder.tsx",
@@ -10462,10 +10485,12 @@
         "src/components/PermissionsTab.tsx",
         "src/components/PullModelsFiltersColumn.tsx",
         "src/components/PullModelsModal.tsx",
+        "src/components/PullModelsTryOrder.tsx",
         "src/components/SettingsTab.folded.test.tsx",
         "src/components/SettingsTab.foldedWalk.test.tsx",
         "src/components/buildEarlierList.tsx",
         "src/components/injectChipNav.ts",
+        "src/components/pullModelsBeside.ts",
         "src/components/pullModelsBoxMemory.ts",
         "src/features/chat-slots/afterBoxHarness.tsx",
         "src/features/chat-slots/afterDeleteRebuild.test.tsx",

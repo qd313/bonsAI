@@ -12,7 +12,7 @@
  *     LICENCE   (•) Open source only            Up from Clear -> Refresh (↻), then Advanced
  *               ( ) Also try open-weight models
  *               ( ) Any installed model         (greyed until unlocked, and skipped)
- *     GOOD FOR  [ ] Speed               5       Right from any stop -> the list's remembered row
+ *     GOOD FOR  [ ] Speed               5       Right from any stop -> the stop level with it on the right
  *               [ ] Strategy … Vision   3
  *     SHOW      [ ] Installed only, Deck essentials only, Recently added
  *     [ Type a name ] [ Install the starter set ] Suggested: [ chip ] [ chip ]
@@ -26,7 +26,8 @@
  *
  * Does not: Hold the picks (the box does, through the session memory in pullModelsBoxMemory.ts), count
  * the models (usePullModelTableData.ts does), or move the ring into the list itself: Right calls the
- * box's `toList`, which hands the ring over by Steam's own transfer.
+ * box's `toList` with the stop's element, and the box picks what sits level with it (pullModelsBeside.ts)
+ * and hands the ring over by Steam's own transfer; with nothing level the press is held.
  *
  * Focus: one Focusable (`navRef`, so the list can hand the ring back by Steam's transfer); every stop is
  * a plain button inside it, so Up and Down between stops are plain sibling focus moves (`step()`), the
@@ -84,8 +85,8 @@ export type PullModelsFiltersColumnProps = {
   onPullAccepted: () => void;
   focusAfterRedraw: (fn: () => void) => void;
   okButtonRuns: OkRuns;
-  /** Right from any stop: the list's remembered row, by Steam's transfer. */
-  toList: () => boolean;
+  /** Right from a stop: what sits level with it on the right, by Steam's transfer (pullModelsBeside.ts). In: the stop's element and key. */
+  toList: (origin: HTMLElement | null, key: string) => boolean;
   /** Up from the first stop: the Refresh button above, else the title row's Advanced link. False leaves the press to Steam. */
   upFromTop: () => boolean;
 };
@@ -159,7 +160,7 @@ export function PullModelsFiltersColumn(props: PullModelsFiltersColumnProps) {
   const nav = (key: string): Record<string, unknown> => ({
     onMoveUp: () => step(key, -1) || props.upFromTop(),
     onMoveDown: () => step(key, 1),
-    onMoveRight: () => props.toList(),
+    onMoveRight: () => props.toList(areas.current.get(key) ?? null, key),
     onMoveLeft: () => true,
   });
 

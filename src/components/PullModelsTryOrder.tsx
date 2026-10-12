@@ -36,6 +36,8 @@
 import { useCallback, useRef, type ReactNode, type RefCallback } from "react";
 import { Button, ConfirmModal, Focusable, showModal } from "@decky/ui";
 import type { TableSection } from "./PullModelsModal.types";
+import type { NavRefHolder } from "../utils/navFocusRegistry";
+import { handRingTo } from "./pullModelsBoxMemory";
 import { PullModelsPcRow } from "./PullModelsPcRow";
 import type { PullModelEntry, PullModelModeFilterId } from "../data/pullModelCatalog";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
@@ -90,7 +92,7 @@ function hiddenLine(hidden: number): string {
  * listing, the starred model (so a star re-reads the places), the table's rows (to know which models
  * are shown), and the screen's reveal function (focus + scroll into view). It runs useTryOrderPlaces().
  * Out: `enabled`; focus helpers the screen's walking rules use (`focusSwitch`, `focusPlaceUp`,
- * `focusPlaceDown`); `cell()` for a row's Try column; and `bar()` for the switch row and quiet lines.
+ * `focusPlaceDown`, and `switchChip` with `enterSwitch` for Right from the filters column); `cell()` for a row's Try column; and `bar()` for the switch row and quiet lines.
  */
 export function usePullModelTryNav(a: {
   host: TryOrderHost | undefined;
@@ -124,6 +126,8 @@ export function usePullModelTryNav(a: {
     : [];
   const skipsBig = (tag: string) => host?.modelAllowHighVramFallbacks === false && isHighVramTag(tag, sizeOf(tag));
   const switchRefs = useRef<Partial<Record<TryOrderKind, HTMLElement | null>>>({});
+  /** The switch row's nav node (Steam fills it): Right from the filters column crosses onto it by Steam's transfer. */
+  const switchNavRef = useRef<NavRefHolder["current"]>(null);
   const upRefs = useRef<(HTMLElement | null)[]>([]);
   const downRefs = useRef<(HTMLElement | null)[]>([]);
 
@@ -131,6 +135,10 @@ export function usePullModelTryNav(a: {
     (): boolean => enabled && reveal(switchRefs.current[places.kind]),
     [enabled, places.kind, reveal],
   );
+  /** The active chip, while the switch is drawn: what Right from the filters column measures against. */
+  const switchChip = useCallback((): HTMLElement | null => (enabled ? switchRefs.current[places.kind] ?? null : null), [enabled, places.kind]);
+  /** Onto the switch from the other side of the box: Steam's transfer onto its row, then its active chip. */
+  const enterSwitch = useCallback((): boolean => enabled && handRingTo(switchNavRef) && focusSwitch(), [enabled, focusSwitch]);
   const focusPlaceUp = useCallback((rowIndex: number): boolean => reveal(upRefs.current[rowIndex]), [reveal]);
   const focusPlaceDown = useCallback((rowIndex: number): boolean => reveal(downRefs.current[rowIndex]), [reveal]);
 
@@ -272,7 +280,11 @@ export function usePullModelTryNav(a: {
     else if (places.status === "refused") note = places.refusal;
     return (
       <div className="bonsai-pullmodels-tryorder">
-        <Focusable flow-children="horizontal" className="bonsai-pullmodels-tryorder-row">
+        <Focusable
+          flow-children="horizontal"
+          className="bonsai-pullmodels-tryorder-row"
+          {...({ navRef: switchNavRef } as Record<string, unknown>)}
+        >
           <span className="bonsai-pullmodels-tryorder-label">Try order for</span>
           {KINDS.map(({ kind, label }) => (
             <Button
@@ -325,5 +337,5 @@ export function usePullModelTryNav(a: {
     );
   };
 
-  return { enabled, pcCount: pcTags.length, focusSwitch, focusPlaceUp, focusPlaceDown, cell, pcGroup, bar };
+  return { enabled, pcCount: pcTags.length, focusSwitch, switchChip, enterSwitch, focusPlaceUp, focusPlaceDown, cell, pcGroup, bar };
 }

@@ -96,11 +96,6 @@
       "role": ""
     },
     {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 863,
-      "role": ""
-    },
-    {
       "path": "src/utils/answerBubbleNavigation.ts",
       "lines": 862,
       "role": ""
@@ -113,6 +108,11 @@
     {
       "path": "src/features/details-slot/DetailsSlot.deck.test.tsx",
       "lines": 849,
+      "role": ""
+    },
+    {
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 837,
       "role": ""
     },
     {
@@ -148,6 +148,11 @@
     {
       "path": "src/utils/buildReplyActionsElement.test.tsx",
       "lines": 777,
+      "role": ""
+    },
+    {
+      "path": "src/components/PullModelsFiltersColumn.test.tsx",
+      "lines": 758,
       "role": ""
     },
     {
@@ -194,11 +199,6 @@
       "path": "py_modules/backend/services/ollama_service.py",
       "lines": 621,
       "role": "Prompt build, Ollama HTTP, streaming"
-    },
-    {
-      "path": "src/utils/settingsContracts.test.ts",
-      "lines": 617,
-      "role": ""
     }
   ]
 }

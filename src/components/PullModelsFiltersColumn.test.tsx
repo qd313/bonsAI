@@ -91,6 +91,7 @@ import { defaultSettingsFixture } from "../test-harness/rpcFixtures";
 import { putSteamRingOn, SteamRingFocusable, steamRingHolder } from "../test-harness/steamRing";
 import { LIST_HEIGHT, LIST_TOP, layOutList, steamNearest } from "../test-harness/pullModelsListLayout";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
+import type { TryOrderHost } from "../features/model-routing/useTryOrderPlaces";
 
 /** The Deck of M-A: one model on it plus the note-search model, so the starter set and Suggested chips show. */
 const FEW_MODELS = ["gemma4:e2b-it-qat", "nomic-embed-text:latest"];
@@ -340,44 +341,8 @@ describe("the column beside the list", () => {
 });
 
 describe("the D-pad between the column and the list", () => {
-  it("Right from a column row lands on the list's remembered row, and Left comes back to the column row it left", async () => {
-    const { container } = await openBox();
-    tap(rowButton(container, "Deck essentials only")); // enough rows to walk
-    putSteamRingOn(rowButton(container, "Vision"));
-
-    expect(press("Right")).toBe(true);
-    expect(steamRingHolder()).toBe(firstRowStar(container)); // nothing remembered yet: the first row
-    expect(press("Down")).toBe(true);
-    expect(press("Down")).toBe(true);
-    const third = stars(container)[2];
-    expect(steamRingHolder()).toBe(third);
-
-    expect(press("Left")).toBe(true);
-    expect(steamRingHolder()).toBe(rowButton(container, "Vision"));
-    expect(press("Down")).toBe(true); // to Installed only, a different stop
-    expect(press("Right")).toBe(true);
-    expect(steamRingHolder()).toBe(third); // the row the ring was last on, by Steam's transfer
-    expect(press("Left")).toBe(true);
-    expect(steamRingHolder()).toBe(rowButton(container, "Installed only"));
-  });
-
-  it("remembers both places across the box closing and opening again", async () => {
-    const first = await openBox();
-    putSteamRingOn(rowButton(first.container, "Strategy"));
-    press("Right");
-    press("Down");
-    const secondRow = nameOf(steamRingHolder());
-    first.unmount();
-
-    // The list's row survived: Right from a column stop goes back to it.
-    const again = await openBox();
-    putSteamRingOn(clearButton(again.container));
-    press("Right");
-    expect(nameOf(steamRingHolder())).toBe(secondRow);
-    again.unmount();
-
+  it("remembers the column's stop across the box closing and opening again", async () => {
     // The column's stop survived: the ring lands on a row in a reopened box, and Left goes back to Strategy.
-    resetPullModelsBoxMemory();
     const third = await openBox();
     putSteamRingOn(rowButton(third.container, "Strategy"));
     third.unmount();
@@ -579,13 +544,214 @@ describe("a walk of the whole box, Steam scrolling whatever takes the ring", () 
     expect(up, "Up stopped on the greyed licence row").not.toContain(nameOf(greyedRow));
     expect(up, "Up is Down reversed, Refresh included").toEqual([...top, ...drawn].reverse());
 
-    putSteamRingOn(rowButton(c, "Speed"));
+    // Right from the stop level with the first row (the column back at its top after the walk up).
+    expect(col.scrollTop).toBe(0);
+    putSteamRingOn(rowButton(c, "Open source only (recommended)"));
     expect(press("Right")).toBe(true);
     steamScrolls(steamRingHolder());
+    expect(steamRingHolder()).toBe(stars(c)[0]);
     const rowsDown = walk("Down", isDone);
     expect(rowsDown).toEqual([...stars(c).map(nameOf), "Done"]); // every row once, never a Remove, then Done
     putSteamRingOn(stars(c).pop()!);
     expect(press("Left")).toBe(true);
-    expect(steamRingHolder()).toBe(rowButton(c, "Speed"));
+    expect(steamRingHolder()).toBe(rowButton(c, "Open source only (recommended)"));
+  });
+});
+
+/*
+ * The Deck's own map of the box (plan92-P92-M-MODELS-MAP.json, the Deck's own screen, CSS pixels), with the column
+ * and the list each at its own scroll position. Every reading in the map log fits these boxes: the column's stops at
+ * a 27 px pitch (Expert, Vision and Installed only read 122.7 px up after the column scrolled), the list's rows 34.8
+ * px apart under a 26 px sticky header, the switch's chips level with Clear. Steam's scroll-into-view is modelled as
+ * the nearest edge into each side's box, the header counting as free space, as on the Deck.
+ */
+const MAP_COL = { top: 183, bottom: 392.5 };
+const MAP_LIST = { top: 215, header: 26, bottom: 392.5, title: 22.3, row: 34.8, slot: 24 };
+/** Each column stop's top and height with the column at the top of its scroll (the map log's readings). */
+const MAP_STOPS: Array<[string, number, number]> = [
+  ["Clear the Good for and Show filters", 185.3, 20],
+  ["Open source only (recommended)", 235.3, 26.9],
+  ["Also try open-weight models", 265.3, 24],
+  ["Any installed model", 292.3, 24],
+  ["Speed", 344.3, 24],
+  ["Strategy", 371.3, 24],
+  ["Expert", 398.3, 24],
+  ["Vision", 425.3, 24],
+  ["Installed only", 477.3, 24],
+  ["Deck essentials only", 504.3, 24],
+  ["Recently added", 531.3, 24],
+  ["Type a model name by hand", 565.3, 24],
+  ["Install the starter set", 593.3, 24],
+];
+const DECK_HOST: TryOrderHost = {
+  ollamaLocalOnDeck: true,
+  ollamaIp: "",
+  textModelRoutingOrder: [],
+  visionModelRoutingOrder: [],
+  modelAllowHighVramFallbacks: true,
+};
+const box = (top: number, h: number) =>
+  ({ top, bottom: top + h, left: 0, right: 0, width: 0, height: h, x: 0, y: top, toJSON: () => ({}) }) as DOMRect;
+const centre = (el: Element) => {
+  const r = el.getBoundingClientRect();
+  return (r.top + r.bottom) / 2;
+};
+
+/** Gives the box the Deck's boxes. Returns the column's stops by label and Steam's scroll for whatever takes the ring. */
+function layOutDeckMap(c: HTMLElement) {
+  const col = column(c);
+  const lst = list(c);
+  col.getBoundingClientRect = () => box(MAP_COL.top, MAP_COL.bottom - MAP_COL.top);
+  lst.getBoundingClientRect = () => box(MAP_LIST.top, MAP_LIST.bottom - MAP_LIST.top);
+  const stopsByName = new Map<string, HTMLElement>();
+  let lastBottom = 0;
+  for (const el of Array.from(col.querySelectorAll<HTMLElement>("button"))) {
+    const name = el.querySelector(".bonsai-pullmodels-filtercol-label")?.textContent ?? nameOf(el);
+    const known = MAP_STOPS.find(([label]) => label === name);
+    const top = known ? known[1] : lastBottom + 4; // a Suggested chip the Deck did not show: below the rest
+    const h = known ? known[2] : 24;
+    lastBottom = top + h;
+    el.getBoundingClientRect = () => box(top - col.scrollTop, h);
+    stopsByName.set(name, el);
+  }
+  Object.defineProperty(col, "scrollHeight", { value: lastBottom + 4 - MAP_COL.top, configurable: true });
+  const header = lst.querySelector<HTMLElement>(".bonsai-pullmodels-table-row--head")!;
+  header.getBoundingClientRect = () => box(MAP_LIST.top, MAP_LIST.header);
+  let y = MAP_LIST.top + MAP_LIST.header;
+  for (const el of Array.from(lst.querySelectorAll<HTMLElement>(".bonsai-pullmodels-group-title, .bonsai-pullmodels-table-row--data"))) {
+    const at = y;
+    const h = el.classList.contains("bonsai-pullmodels-group-title") ? MAP_LIST.title : MAP_LIST.row;
+    y += h;
+    el.getBoundingClientRect = () => box(at - lst.scrollTop, h);
+    const inset = (MAP_LIST.row - MAP_LIST.slot) / 2;
+    for (const b of Array.from(el.querySelectorAll<HTMLElement>("button"))) {
+      b.getBoundingClientRect = () => box(at + inset - lst.scrollTop, MAP_LIST.slot);
+    }
+  }
+  Object.defineProperty(lst, "scrollHeight", { value: y - MAP_LIST.top, configurable: true });
+  for (const chip of Array.from(c.querySelectorAll<HTMLElement>(".bonsai-pullmodels-tryorder-row button"))) {
+    chip.getBoundingClientRect = () => box(183.3, 24);
+  }
+  /** The nearest edge into a box, as Steam scrolls a ringed element into view. */
+  const nearest = (scroller: HTMLElement, el: HTMLElement, top: number, bottom: number) => {
+    const r = el.getBoundingClientRect();
+    const max = Math.max(0, scroller.scrollHeight - (bottom - top));
+    if (r.top < top) scroller.scrollTop = Math.max(0, scroller.scrollTop - (top - r.top));
+    else if (r.bottom > bottom) scroller.scrollTop = Math.min(max, scroller.scrollTop + (r.bottom - bottom));
+  };
+  const steamScrolls = (el: Element | null) => {
+    if (!(el instanceof HTMLElement)) return;
+    if (col.contains(el)) nearest(col, el, MAP_COL.top, MAP_COL.bottom);
+    else if (lst.contains(el)) nearest(lst, el, MAP_LIST.top, MAP_LIST.bottom); // the header counts as free space
+  };
+  Element.prototype.scrollIntoView = function (this: Element) {
+    steamScrolls(this);
+  };
+  const stop = (name: string) => {
+    const el = stopsByName.get(name);
+    if (!el) throw new Error(`no column stop ${name}`);
+    return el;
+  };
+  /** The ring onto an element the way a walk puts it there, Steam's scroll included. */
+  const ringOn = (el: HTMLElement) => {
+    putSteamRingOn(el);
+    steamScrolls(el);
+  };
+  return { col, lst, stop, ringOn, steamScrolls };
+}
+
+describe("Right and Left go to what sits beside the ring (the Deck's own map, plan 92's second night)", () => {
+  const HALF_ROW = MAP_LIST.row / 2;
+  const openMap = async () => {
+    const view = await loaded(renderHub({ tryOrderHost: DECK_HOST, modelPolicyTier: "open_weight" }));
+    return { c: view.container, ...layOutDeckMap(view.container) };
+  };
+  const switchChip = (c: HTMLElement) => c.querySelector<HTMLElement>('button[aria-label="Try order for text questions"]')!;
+
+  it("draws the Deck's box: four rows, the first star level with Also try, the switch level with Clear", async () => {
+    const { c, stop } = await openMap();
+    expect(stars(c)).toHaveLength(4);
+    expect(centre(stars(c)[0])).toBeCloseTo(280.7, 0);
+    expect(centre(stars(c)[2])).toBeCloseTo(350.3, 0);
+    expect(centre(stop("Also try open-weight models"))).toBeCloseTo(277.3, 0);
+    expect(centre(switchChip(c))).toBeCloseTo(195.3, 0);
+  });
+
+  it("Right from Clear lands on the try-order switch beside it, not the first row 85 px below", async () => {
+    const { c, stop, ringOn } = await openMap();
+    const clear = stop("Clear the Good for and Show filters");
+    ringOn(clear);
+    expect(press("Right")).toBe(true);
+    expect(nameOf(steamRingHolder())).toBe(nameOf(switchChip(c)));
+    expect(Math.abs(centre(steamRingHolder()!) - centre(clear))).toBeLessThanOrEqual(HALF_ROW);
+  });
+
+  it.each([
+    ["Also try open-weight models", 0],
+    ["Speed", 2],
+  ])("Right from %s lands on the star level with it (row %i), and Left comes back", async (label, row) => {
+    const { c, stop, ringOn, steamScrolls } = await openMap();
+    const origin = stop(label);
+    ringOn(origin);
+    const before = centre(origin);
+    expect(press("Right")).toBe(true);
+    steamScrolls(steamRingHolder());
+    expect(steamRingHolder()).toBe(stars(c)[row]);
+    expect(Math.abs(centre(steamRingHolder()!) - before), `${label}: the landing is level`).toBeLessThanOrEqual(HALF_ROW);
+    expect(press("Left")).toBe(true);
+    expect(steamRingHolder()).toBe(origin);
+  });
+
+  it("Right holds where nothing sits beside: Open source only, Strategy and Deck essentials only (below the last row in sight)", async () => {
+    const { c, stop, ringOn } = await openMap();
+    for (const label of ["Open source only (recommended)", "Strategy", "Deck essentials only"]) {
+      ringOn(stop(label));
+      expect(press("Right"), `${label}: the press is taken`).toBe(true);
+      expect(steamRingHolder() === stop(label), `${label}: held`).toBe(true);
+    }
+    expect(list(c).scrollTop).toBe(0);
+  });
+
+  it("Install the starter set: held while the last row is out of sight, level with it once the list has scrolled to it, and back", async () => {
+    const { c, stop, ringOn, steamScrolls } = await openMap();
+    const starter = stop("Install the starter set");
+    ringOn(starter);
+    expect(press("Right")).toBe(true);
+    expect(steamRingHolder()).toBe(starter);
+    // The person walks the list to its last row (the list scrolls), then comes back to the column's foot.
+    ringOn(stars(c)[3]);
+    expect(list(c).scrollTop).toBeGreaterThan(0);
+    ringOn(starter);
+    expect(press("Right")).toBe(true);
+    steamScrolls(steamRingHolder());
+    expect(steamRingHolder()).toBe(stars(c)[3]);
+    expect(Math.abs(centre(stars(c)[3]) - centre(starter))).toBeLessThanOrEqual(HALF_ROW);
+    expect(press("Left")).toBe(true);
+    expect(steamRingHolder()).toBe(starter);
+  });
+
+  it("a bounded walk down the column, Right and back at every stop: each Right lands within half a row or holds, and comes back", async () => {
+    const { stop, ringOn, steamScrolls } = await openMap();
+    ringOn(stop("Clear the Good for and Show filters"));
+    const seen: string[] = [];
+    for (let i = 0; i < 30; i++) {
+      const origin = steamRingHolder()!;
+      const name = nameOf(origin);
+      if (name === "Done") break;
+      expect(seen, `${name} twice`).not.toContain(name);
+      seen.push(name);
+      const before = centre(origin);
+      expect(press("Right")).toBe(true);
+      steamScrolls(steamRingHolder());
+      if (steamRingHolder() !== origin) {
+        expect(Math.abs(centre(steamRingHolder()!) - before), `Right from ${name}`).toBeLessThanOrEqual(HALF_ROW);
+        expect(press("Left")).toBe(true);
+        steamScrolls(steamRingHolder());
+        expect(nameOf(steamRingHolder()), `Left back to ${name}`).toBe(name);
+      }
+      if (!press("Down")) break;
+      steamScrolls(steamRingHolder());
+    }
+    expect(seen).toContain("Install the starter set");
   });
 });

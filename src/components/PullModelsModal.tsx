@@ -35,7 +35,7 @@
  *     │ │ LICENCE  (•) … │ │  ★  │tag…     │4GB │Chat…│★★★│1▲▼│ X   │ │
  *     │ │ GOOD FOR [ ] 5 │ │  ☐  │tag…     │…   │…    │…  │   │     │ │
  *     │ │ SHOW     [✔] … │ │                                       │ │
- *     │ │ [Type a name]… │ │      Right -> the list's remembered row│ │
+ *     │ │ [Type a name]… │ │  Right -> the row level with the ring │ │
  *     │ └────────────────┘ └ <- Left from a row's star ─────────────┘ │
  *     │        Done / Pull selected (N) · X GB          Cancel        │
  *     └────────────────────────────────────────────────────────────────┘
@@ -106,7 +106,7 @@
  *   entirely, so they are found by searching the page for a button with a
  *   matching label (findModalFooterButton()) rather than by a ref.
  */
-import { useCallback, useEffect, useMemo, useRef, useState, type FocusEvent, type RefCallback } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type RefCallback } from "react";
 import { Button, ConfirmModal, Focusable } from "@decky/ui";
 import {
   formatGtaStars,
@@ -118,14 +118,8 @@ import {
 } from "../data/pullModelCatalog";
 import { PullModelLicenceSlot } from "./PullModelLicenceSlot";
 import { PullModelsFiltersColumn, type FiltersColumnApi } from "./PullModelsFiltersColumn";
-import {
-  focusAndReveal,
-  handRingTo,
-  noteModelListRow,
-  rememberedFiltersColumnStop,
-  rememberedModelListRow,
-  usePullModelsSessionFilters,
-} from "./pullModelsBoxMemory";
+import { focusAndReveal, handRingTo, rememberedFiltersColumnStop, usePullModelsSessionFilters } from "./pullModelsBoxMemory";
+import { usePullModelsBeside } from "./pullModelsBeside";
 import { PullModelsTableHeader } from "./PullModelsTableHeader";
 import { usePullModelTryNav } from "./PullModelsTryOrder";
 import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
@@ -366,19 +360,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
     return () => window.cancelAnimationFrame(id);
   }, [findModalFooterButton, selectedTags.size, pullBusy]);
 
-  /**
-   * Right from the column: Steam's own transfer onto the list's nav node, then the row the ring was last
-   * on there (or the first), by a sibling move inside the list. Always the row's star, never its X. With
-   * no rows the press is held, so the ring does not wander off the column. The row is read before the
-   * transfer: the transfer's own landing (on the list's first stop) is noted like any other.
-   */
-  const enterList = useCallback((): boolean => {
-    if (!rowTotal) return true;
-    const row = rememberedModelListRow() ?? 0;
-    if (!handRingTo(listNavRef)) return false;
-    focusRowCell(row, "select");
-    return true;
-  }, [rowTotal, focusRowCell]);
+  /** Right from the column: the switch or the row's star level with the ring, by Steam's transfer; held when none is. */
+  const { enterList } = usePullModelsBeside({ listNavRef, listRef, headerRef: listHeaderRef, selectCellRefs, focusRowCell, switchChip: tryNav.switchChip, enterSwitch: tryNav.enterSwitch });
 
   /** Left from a row's star: Steam's transfer onto the column, then the column's remembered stop (or Clear). */
   const enterColumn = useCallback((): boolean => {
@@ -387,14 +370,6 @@ export function PullModelsModal(props: PullModelsModalProps) {
     columnApi.current?.focusStop(stop);
     return true;
   }, []);
-
-  /** Which row a landing in the list is on, by any route, so Right from the column can come back to it. */
-  const noteListLanding = (e: FocusEvent<HTMLElement>) => {
-    for (let el = e.target as HTMLElement | null; el && el !== listRef.current; el = el.parentElement) {
-      const i = el.dataset.rowIndex ? Number(el.dataset.rowIndex) : selectCellRefs.current.indexOf(el);
-      if (i >= 0) return noteModelListRow(i);
-    }
-  };
 
   const rowNavHandlers = useCallback(
     (rowIndex: number, cell: "select" | "delete", installed: boolean) => ({
@@ -811,7 +786,6 @@ export function PullModelsModal(props: PullModelsModalProps) {
                 ref={listRef}
                 className="bonsai-pullmodels-list"
                 aria-busy={loadingMeta}
-                onFocus={noteListLanding}
                 {...({ navRef: listNavRef } as Record<string, unknown>)}
               >
                 {rowTotal > 0 ? (

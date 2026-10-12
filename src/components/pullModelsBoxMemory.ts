@@ -3,12 +3,12 @@
  *
  * Purpose: Three small memories of the AI models box, kept outside every component: the Good for and
  * Show filter picks (so closing the box and opening it again shows the same filters), the filters
- * column's stop the ring was last on, and the model list's row the ring was last on (so Right and
- * Left between the column and the list come back to where the person was). Also the one helper that
+ * column's stop the ring was last on (so Left from the model list comes back to it; Right goes to
+ * what sits beside the ring, pullModelsBeside.ts, and needs no memory). Also the one helper that
  * hands Steam's ring to the column or the list (Steam's own transfer onto that part's nav node), and
  * the plain sibling move used inside one part.
  *
- * Used for: PullModelsModal.tsx (the filter picks, the list's row, the transfers) and
+ * Used for: PullModelsModal.tsx (the filter picks, the transfers) and
  * PullModelsFiltersColumn.tsx (the column's stop).
  *
  * Solves: A Decky popup rebuilds what is behind it when it closes, and the box itself is a popup, so
@@ -41,7 +41,6 @@ export const DEFAULT_SESSION_FILTERS: PullModelsSessionFilters = {
 
 let sessionFilters: PullModelsSessionFilters = DEFAULT_SESSION_FILTERS;
 let columnStop: string | null = null;
-let listRow: number | null = null;
 
 type FiltersChange = Partial<PullModelsSessionFilters> | ((prev: PullModelsSessionFilters) => Partial<PullModelsSessionFilters>);
 
@@ -69,15 +68,6 @@ export function noteFiltersColumnStop(key: string): void {
 
 export function rememberedFiltersColumnStop(): string | null {
   return columnStop;
-}
-
-/** The list's row the ring is on now (its index in the table), noted on every landing. */
-export function noteModelListRow(rowIndex: number): void {
-  listRow = rowIndex;
-}
-
-export function rememberedModelListRow(): number | null {
-  return listRow;
 }
 
 /**
@@ -116,5 +106,4 @@ export function focusAndReveal(el: HTMLElement | null | undefined): boolean {
 export function resetPullModelsBoxMemory(): void {
   sessionFilters = DEFAULT_SESSION_FILTERS;
   columnStop = null;
-  listRow = null;
 }

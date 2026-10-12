@@ -16,23 +16,25 @@
  *
  *     column (scrolls on its own)          right side (the switch, then the list, which scrolls on its own)
  *     [ 4 models match     Clear ] ------> [ Text ][ Pictures ][ Reset order ]   level: the switch
- *       Open source only            -x->   (the list's header, a group title)    nothing level: held
- *       Also try open-weight        ------> ☆ gemma4 ...                         level: that row's star
- *       Speed                       ------> ☆ qwen2.5vl ...
- *       Strategy                    -x->   (a group title; the next row is scrolled out of sight)
- *       Any installed (greyed)      <-x-   ☆ qwen3.5 ...       Left: the column stop level with the row,
- *                                                              never the greyed row; held when none is
+ *       Open source only            ------> ☆ gemma4 ... (32 px below: the nearest within reach)
+ *       Also try open-weight        <-----> ☆ gemma4 ...                         level: that row's star
+ *       Any installed (greyed)       <-x-   ☆ qwen3.5 ...  Left goes to Also try instead (38 px), never here
+ *       Speed                       <-----> ☆ qwen2.5vl ...
+ *       Strategy                    ------> ☆ qwen2.5vl ... (30 px; the next row is scrolled out of sight)
  *
  * 1. `pickBeside` (pure, no DOM): the candidate whose vertical centre is nearest the ring's, but only
- *    when it is within `reach`; otherwise none, and the press is held (it does nothing). A key named in
+ *    when it is within `reach`; otherwise none, and the press is held (it does nothing; on the Deck's
+ *    own screen that is only an empty list, since every stop has something within reach). A key named in
  *    `prefer` wins while it is still within reach, so a Right then a Left comes back to where it began.
  * 2. `usePullModelsBeside` measures the real elements at the press: the ring's own button, the
  *    switch's active chip and each row's star whose centre is inside the list's visible box (below its
  *    sticky header row, above its bottom edge) for Right; for Left, the column's stops (the column hands
  *    over only the ones that can take the ring, the greyed licence row left out by its own state) whose
  *    centre is inside the column's box. Anything scrolled out of sight is not a candidate.
- * 3. `reach` is half the height of one model row, read from the first row the list draws: the Deck
- *    check passes a landing within half a row of the ring (plan 92 lane M2 brief).
+ * 3. `reach` is `BESIDE_REACH_ROWS` (one and a half) model rows, the row's height read from the first
+ *    row the list draws: about 52 px on the Deck. The one running plan 92's second night chose this
+ *    over half a row, because a held press feels dead and "no dead press" is a standing Deck check;
+ *    this is the one place the number lives.
  * 4. The ring crosses only by Steam's own transfer onto the other side's nav node (`handRingTo`), then
  *    a sibling focus onto the chosen stop inside it, never a bare focus() across containers.
  *
@@ -76,11 +78,14 @@ function centreY(el: unknown): number | null {
   return (r.top + r.bottom) / 2;
 }
 
-/** Half a model row: how far a landing may sit from the ring and still be beside it. */
-function halfRow(list: HTMLElement | null, origin: Element): number {
+/** How many model rows away a landing may sit from the ring and still count as beside it. */
+export const BESIDE_REACH_ROWS = 1.5;
+
+/** The reach in pixels: `BESIDE_REACH_ROWS` of the list's first drawn row (else of the ring's own height). */
+function reachPx(list: HTMLElement | null, origin: Element): number {
   const row = list?.querySelector(".bonsai-pullmodels-table-row--data");
   const h = row?.getBoundingClientRect().height || origin.getBoundingClientRect().height;
-  return h / 2;
+  return h * BESIDE_REACH_ROWS;
 }
 
 const SWITCH = "switch";
@@ -134,7 +139,7 @@ export function usePullModelsBeside(a: BesideArgs) {
         if (cy !== null && cy >= top && cy <= box.bottom) candidates.push({ key: ROW + i, y: cy });
       });
     }
-    const key = pickBeside(y, candidates, halfRow(list, origin), backTo(from));
+    const key = pickBeside(y, candidates, reachPx(list, origin), backTo(from));
     if (key === null) return true;
     if (key === SWITCH) {
       if (!a.enterSwitch()) return false;
@@ -159,7 +164,7 @@ export function usePullModelsBeside(a: BesideArgs) {
       const cy = centreY(s.el);
       if (cy !== null && (!box || (cy >= box.top && cy <= box.bottom))) candidates.push({ key: s.key, y: cy });
     }
-    const key = pickBeside(y, candidates, halfRow(a.listRef.current, origin), backTo(at));
+    const key = pickBeside(y, candidates, reachPx(a.listRef.current, origin), backTo(at));
     if (key === null) return true;
     if (!handRingTo(a.columnNavRef)) return false;
     api.focusStop(key);

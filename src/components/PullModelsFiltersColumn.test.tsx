@@ -5,8 +5,8 @@
  * filters sit in a column beside the model list from the moment the box opens ("N models match" and
  * Clear, then Licence, Good for with a count beside each choice, Show, then the chips); a tick changes
  * the list at once and the count beside it matches the rows drawn; Clear leaves the licence; Right and
- * Left cross between the column and the list to what sits level with the ring, on the Deck's own
- * measured map (plan 92's second night), and hold where nothing does; Advanced, the header's Refresh
+ * Left cross between the column and the list to the nearest stop within one and a half rows, on the
+ * Deck's own measured map (plan 92's second night), never the greyed row; Advanced, the header's Refresh
  * and Clear come in the same order going Down and Up (Refresh skipped while greyed); Down past the bottom is left to Steam, which carries it to Done; the picks survive the
  * box closing (Done included) and opening again; and a bounded walk of the whole box never visits a
  * stop twice and never leaves the ring out of sight.
@@ -87,6 +87,7 @@ vi.mock("@decky/ui", async () => {
 import { PullModelsModal } from "./PullModelsModal";
 import { OllamaModelsHubModal } from "./OllamaModelsHubModal";
 import { resetPullModelsBoxMemory } from "./pullModelsBoxMemory";
+import { BESIDE_REACH_ROWS } from "./pullModelsBeside";
 import { resetFakeDeckyRpc, setRpcHandler } from "../test-harness/fakeDeckyRpc";
 import { defaultSettingsFixture } from "../test-harness/rpcFixtures";
 import { putSteamRingOn, SteamRingFocusable, steamRingHolder } from "../test-harness/steamRing";
@@ -653,12 +654,14 @@ function layOutDeckMap(c: HTMLElement) {
 }
 
 describe("Right and Left go to what sits beside the ring (the Deck's own map, plan 92's second night)", () => {
-  const HALF_ROW = MAP_LIST.row / 2;
+  /** One and a half model rows: about 52 px on the Deck (pullModelsBeside.ts holds the number). */
+  const REACH = MAP_LIST.row * BESIDE_REACH_ROWS;
   const openMap = async () => {
     const view = await loaded(renderHub({ tryOrderHost: DECK_HOST, modelPolicyTier: "open_weight" }));
     return { c: view.container, ...layOutDeckMap(view.container) };
   };
   const switchChip = (c: HTMLElement) => c.querySelector<HTMLElement>('button[aria-label="Try order for text questions"]')!;
+  const gap = (a: Element, b: Element) => Math.abs(centre(a) - centre(b));
 
   it("draws the Deck's box: four rows, the first star level with Also try, the switch level with Clear", async () => {
     const { c, stop } = await openMap();
@@ -667,6 +670,7 @@ describe("Right and Left go to what sits beside the ring (the Deck's own map, pl
     expect(centre(stars(c)[2])).toBeCloseTo(350.3, 0);
     expect(centre(stop("Also try open-weight models"))).toBeCloseTo(277.3, 0);
     expect(centre(switchChip(c))).toBeCloseTo(195.3, 0);
+    expect(REACH).toBeCloseTo(52.2, 1);
   });
 
   it("Right from Clear lands on the try-order switch beside it, not the first row 85 px below", async () => {
@@ -675,41 +679,36 @@ describe("Right and Left go to what sits beside the ring (the Deck's own map, pl
     ringOn(clear);
     expect(press("Right")).toBe(true);
     expect(nameOf(steamRingHolder())).toBe(nameOf(switchChip(c)));
-    expect(Math.abs(centre(steamRingHolder()!) - centre(clear))).toBeLessThanOrEqual(HALF_ROW);
+    expect(gap(steamRingHolder()!, clear)).toBeLessThan(1);
   });
 
   it.each([
-    ["Also try open-weight models", 0],
-    ["Speed", 2],
-  ])("Right from %s lands on the star level with it (row %i), and Left comes back", async (label, row) => {
+    ["Also try open-weight models", 0, 3.4],
+    ["Speed", 2, 6],
+    ["Open source only (recommended)", 0, 32],
+    ["Strategy", 2, 30.2],
+    ["Deck essentials only", 2, 30.2],
+  ])("Right from %s lands on the nearest star (row %i, %f px off), and Left comes back", async (label, row, px) => {
     const { c, stop, ringOn, steamScrolls } = await openMap();
     const origin = stop(label);
-    ringOn(origin);
+    ringOn(origin); // Steam scrolls a stop low in the column into view first, as the walk does
     const before = centre(origin);
     expect(press("Right")).toBe(true);
     steamScrolls(steamRingHolder());
     expect(steamRingHolder()).toBe(stars(c)[row]);
-    expect(Math.abs(centre(steamRingHolder()!) - before), `${label}: the landing is level`).toBeLessThanOrEqual(HALF_ROW);
+    expect(Math.abs(centre(steamRingHolder()!) - before)).toBeCloseTo(px, 0);
+    expect(list(c).scrollTop).toBe(0);
     expect(press("Left")).toBe(true);
     expect(steamRingHolder()).toBe(origin);
   });
 
-  it("Right holds where nothing sits beside: Open source only, Strategy and Deck essentials only (below the last row in sight)", async () => {
-    const { c, stop, ringOn } = await openMap();
-    for (const label of ["Open source only (recommended)", "Strategy", "Deck essentials only"]) {
-      ringOn(stop(label));
-      expect(press("Right"), `${label}: the press is taken`).toBe(true);
-      expect(steamRingHolder() === stop(label), `${label}: held`).toBe(true);
-    }
-    expect(list(c).scrollTop).toBe(0);
-  });
-
-  it("Install the starter set: held while the last row is out of sight, level with it once the list has scrolled to it, and back", async () => {
+  it("Install the starter set: the third star while the last row is out of sight, the last once the list has scrolled to it, and back", async () => {
     const { c, stop, ringOn, steamScrolls } = await openMap();
     const starter = stop("Install the starter set");
     ringOn(starter);
     expect(press("Right")).toBe(true);
-    expect(steamRingHolder()).toBe(starter);
+    expect(steamRingHolder()).toBe(stars(c)[2]);
+    expect(gap(stars(c)[2], starter)).toBeCloseTo(30.2, 0);
     // The person walks the list to its last row (the list scrolls), then comes back to the column's foot.
     ringOn(stars(c)[3]);
     expect(list(c).scrollTop).toBeGreaterThan(0);
@@ -717,48 +716,49 @@ describe("Right and Left go to what sits beside the ring (the Deck's own map, pl
     expect(press("Right")).toBe(true);
     steamScrolls(steamRingHolder());
     expect(steamRingHolder()).toBe(stars(c)[3]);
-    expect(Math.abs(centre(stars(c)[3]) - centre(starter))).toBeLessThanOrEqual(HALF_ROW);
+    expect(gap(stars(c)[3], starter)).toBeLessThan(1); // the list's last row and the column's last stop share the bottom edge
     expect(press("Left")).toBe(true);
     expect(steamRingHolder()).toBe(starter);
   });
 
-  it("Left from each row's star in sight lands on the column stop level with it: Also try, nothing (the greyed row), Speed", async () => {
-    const { c, stop } = await openMap();
+  it("Left from each star lands on the nearest filter, never the greyed row: Also try, Also try (the greyed row is nearer), Speed, Strategy", async () => {
+    const { c, stop, steamScrolls } = await openMap();
     const greyed = rowButton(c, "Any installed model");
     // The Deck's way: greyed, yet a plain focus() still puts the ring on it, so only the column's own state skips it.
     expect(greyed.classList.contains("Disabled")).toBe(true);
     greyed.focus();
     expect(document.activeElement).toBe(greyed);
 
-    const expected = [stop("Also try open-weight models"), null, stop("Speed")];
-    expected.forEach((target, row) => {
+    const expected: Array<[string, number]> = [
+      ["Also try open-weight models", 3.4],
+      ["Also try open-weight models", 38.2], // level with the greyed row (11 px); Speed is 40.8
+      ["Speed", 6],
+      ["Strategy", 0], // the list scrolled to its last row (3 px off); Strategy then scrolls fully into the column, level
+    ];
+    expected.forEach(([label, px], row) => {
       const star = stars(c)[row];
       putSteamRingOn(star);
+      steamScrolls(star);
       expect(press("Left"), `row ${row}: the press is taken`).toBe(true);
-      if (target === null) {
-        // Level with the greyed row, 11 px off; the nearest stops that can take the ring are 38 and 41 px away.
-        expect(steamRingHolder(), `row ${row}: held, never the greyed row`).toBe(star);
-      } else {
-        expect(steamRingHolder(), `row ${row}`).toBe(target);
-        expect(Math.abs(centre(target) - centre(star))).toBeLessThanOrEqual(HALF_ROW);
-        expect(press("Right")).toBe(true);
-        expect(steamRingHolder(), `row ${row}: Right comes back`).toBe(star);
-      }
+      steamScrolls(steamRingHolder());
+      expect(steamRingHolder(), `row ${row}`).toBe(stop(label));
+      expect(Math.abs(centre(stop(label)) - centre(star)), `row ${row}`).toBeCloseTo(px, 0);
+      expect(press("Right")).toBe(true);
+      expect(steamRingHolder(), `row ${row}: Right comes back`).toBe(star);
     });
   });
 
-  it("Left from a row the column has scrolled away from lands on what is level now, not where the ring last was in the column", async () => {
+  it("Left from a row the column has scrolled away from lands on what is near now: the third star goes to Type a name", async () => {
     const { c, stop, ringOn } = await openMap();
     ringOn(stop("Install the starter set")); // the column scrolls to its foot
     expect(column(c).scrollTop).toBeGreaterThan(0);
     putSteamRingOn(stars(c)[2]);
     expect(press("Left")).toBe(true);
-    const landed = steamRingHolder()!;
-    if (landed !== stars(c)[2]) expect(Math.abs(centre(landed) - centre(stars(c)[2]))).toBeLessThanOrEqual(HALF_ROW);
-    expect(landed).not.toBe(stop("Install the starter set"));
+    expect(steamRingHolder()).toBe(stop("Type a model name by hand"));
+    expect(gap(steamRingHolder()!, stars(c)[2])).toBeCloseTo(2.2, 0);
   });
 
-  it("a bounded walk down the column, Right and back at every stop: each Right lands within half a row or holds, and comes back", async () => {
+  it("a bounded walk down the column, Right and back at every stop: no dead press, each landing within reach, and back", async () => {
     const { stop, ringOn, steamScrolls } = await openMap();
     ringOn(stop("Clear the Good for and Show filters"));
     const seen: string[] = [];
@@ -771,19 +771,18 @@ describe("Right and Left go to what sits beside the ring (the Deck's own map, pl
       const before = centre(origin);
       expect(press("Right")).toBe(true);
       steamScrolls(steamRingHolder());
-      if (steamRingHolder() !== origin) {
-        expect(Math.abs(centre(steamRingHolder()!) - before), `Right from ${name}`).toBeLessThanOrEqual(HALF_ROW);
-        expect(press("Left")).toBe(true);
-        steamScrolls(steamRingHolder());
-        expect(nameOf(steamRingHolder()), `Left back to ${name}`).toBe(name);
-      }
+      expect(steamRingHolder(), `Right from ${name} held`).not.toBe(origin);
+      expect(Math.abs(centre(steamRingHolder()!) - before), `Right from ${name}`).toBeLessThanOrEqual(REACH);
+      expect(press("Left")).toBe(true);
+      steamScrolls(steamRingHolder());
+      expect(nameOf(steamRingHolder()), `Left back to ${name}`).toBe(name);
       if (!press("Down")) break;
       steamScrolls(steamRingHolder());
     }
     expect(seen).toContain("Install the starter set");
   });
 
-  it("a bounded walk down the list, Left and back at every row: each Left lands within half a row or holds, and comes back", async () => {
+  it("a bounded walk down the list, Left and back at every row: no dead press, each landing within reach, never the greyed row, and back", async () => {
     const { c, ringOn, steamScrolls } = await openMap();
     ringOn(stars(c)[0]);
     const seen: Element[] = [];
@@ -795,13 +794,12 @@ describe("Right and Left go to what sits beside the ring (the Deck's own map, pl
       const before = centre(origin);
       expect(press("Left")).toBe(true);
       steamScrolls(steamRingHolder());
-      if (steamRingHolder() !== origin) {
-        expect(Math.abs(centre(steamRingHolder()!) - before), `Left from ${nameOf(origin)}`).toBeLessThanOrEqual(HALF_ROW);
-        expect(steamRingHolder()).not.toBe(rowButton(c, "Any installed model"));
-        expect(press("Right")).toBe(true);
-        steamScrolls(steamRingHolder());
-        expect(steamRingHolder(), `Right back to ${nameOf(origin)}`).toBe(origin);
-      }
+      expect(steamRingHolder(), `Left from ${nameOf(origin)} held`).not.toBe(origin);
+      expect(Math.abs(centre(steamRingHolder()!) - before), `Left from ${nameOf(origin)}`).toBeLessThanOrEqual(REACH);
+      expect(steamRingHolder()).not.toBe(rowButton(c, "Any installed model"));
+      expect(press("Right")).toBe(true);
+      steamScrolls(steamRingHolder());
+      expect(steamRingHolder(), `Right back to ${nameOf(origin)}`).toBe(origin);
       if (!press("Down")) break;
       steamScrolls(steamRingHolder());
     }

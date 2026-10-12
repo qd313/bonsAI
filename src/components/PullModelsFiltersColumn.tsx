@@ -12,7 +12,7 @@
  *     LICENCE   (•) Open source only            Up from Clear -> Refresh (↻), then Advanced
  *               ( ) Also try open-weight models
  *               ( ) Any installed model         (greyed until unlocked, and skipped, Left included)
- *     GOOD FOR  [ ] Speed               5       Right from any stop -> the stop level with it on the right
+ *     GOOD FOR  [ ] Speed               5       Right from any stop -> the nearest stop on the right
  *               [ ] Strategy … Vision   3
  *     SHOW      [ ] Installed only, Deck essentials only, Recently added
  *     [ Type a name ] [ Install the starter set ] Suggested: [ chip ] [ chip ]
@@ -26,7 +26,7 @@
  *
  * Does not: Hold the picks (the box does, through the session memory in pullModelsBoxMemory.ts), count
  * the models (usePullModelTableData.ts does), or move the ring into the list itself: Right calls the
- * box's `toList` with the stop's element, and the box picks what sits level with it (pullModelsBeside.ts)
+ * box's `toList` with the stop's element, and the box picks the nearest stop beside it (pullModelsBeside.ts)
  * and hands the ring over by Steam's own transfer; with nothing level the press is held.
  *
  * Focus: one Focusable (`navRef`, so the list can hand the ring back by Steam's transfer); every stop is
@@ -34,7 +34,7 @@
  * greyed licence row and an absent starter chip skipped (the open "Type a name" row is its own small
  * Focusable, reached by the same plain hop it always was from the old Filters row; see docs/focus-graph.md).
  * The box asks the column for its stops (`apiRef.stops`) when Left is
- * pressed on a row, and lands on the one level with that row (pullModelsBeside.ts); the greyed row is
+ * pressed on a row, and lands on the one nearest that row (pullModelsBeside.ts); the greyed row is
  * never among them. Left inside the column is held (nothing sits to the left). B is not claimed: it does what it does for the box. Every press also goes through
  * `onOKButton` (the box is a confirm box with its own OK; Steam delivers A that way, never a click).
  */
@@ -80,7 +80,7 @@ export type PullModelsFiltersColumnProps = {
   onPullAccepted: () => void;
   focusAfterRedraw: (fn: () => void) => void;
   okButtonRuns: OkRuns;
-  /** Right from a stop: what sits level with it on the right, by Steam's transfer (pullModelsBeside.ts). In: the stop's element and key. */
+  /** Right from a stop: the nearest stop on the right, by Steam's transfer (pullModelsBeside.ts). In: the stop's element and key. */
   toList: (origin: HTMLElement | null, key: string) => boolean;
   /** Up from the first stop: the Refresh button above, else the title row's Advanced link. False leaves the press to Steam. */
   upFromTop: () => boolean;

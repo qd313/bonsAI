@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 944,
-  "edgeCount": 3120,
+  "edgeCount": 3121,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1898,6 +1898,7 @@
       "imports": [
         "src/components/OllamaModelsHubModal.tsx",
         "src/components/PullModelsModal.tsx",
+        "src/components/pullModelsBeside.ts",
         "src/components/pullModelsBoxMemory.ts",
         "src/data/modelPolicy.ts",
         "src/features/model-routing/useTryOrderPlaces.ts",
@@ -2806,6 +2807,7 @@
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/components/PullModelsFiltersColumn.test.tsx",
         "src/components/PullModelsFiltersColumn.tsx",
         "src/components/PullModelsModal.tsx",
         "src/components/pullModelsBeside.test.ts"

@@ -35,7 +35,7 @@
  *     │ │ LICENCE  (•) … │ │  ★  │tag…     │4GB │Chat…│★★★│1▲▼│ X   │ │
  *     │ │ GOOD FOR [ ] 5 │ │  ☐  │tag…     │…   │…    │…  │   │     │ │
  *     │ │ SHOW     [✔] … │ │                                       │ │
- *     │ │ [Type a name]… │ │  Right -> the row level with the ring │ │
+ *     │ │ [Type a name]… │ │  Right -> the nearest row to the ring │ │
  *     │ └────────────────┘ └ <- Left from a row's star ─────────────┘ │
  *     │        Done / Pull selected (N) · X GB          Cancel        │
  *     └────────────────────────────────────────────────────────────────┘
@@ -75,7 +75,7 @@
  *    D-pad walks the grid in a fixed, predictable order instead of
  *    Steam's automatic guess. Right from the column and Left from a row's
  *    star cross between the two by Steam's own transfer onto the other
- *    side's nav node, then a sibling focus onto the stop level with the
+ *    side's nav node, then a sibling focus onto the stop nearest the
  *    ring, measured at the press (pullModelsBeside.ts); held when none is.
  * 7. The whole panel renders two ways: as its own modal by default
  *    (wrapped in ConfirmModal, with Pull selected/Cancel as its footer),
@@ -361,7 +361,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
     return () => window.cancelAnimationFrame(id);
   }, [findModalFooterButton, selectedTags.size, pullBusy]);
 
-  /** Right from the column and Left from a row's star: what sits level with the ring, by Steam's transfer; held when none is. */
+  /** Right from the column and Left from a row's star: the nearest stop within reach, by Steam's transfer; held when none is. */
   const { enterList, enterColumn } = usePullModelsBeside({ listNavRef, columnNavRef, columnApi, listRef, headerRef: listHeaderRef, selectCellRefs, focusRowCell, switchChip: tryNav.switchChip, enterSwitch: tryNav.enterSwitch });
 
   const rowNavHandlers = useCallback(

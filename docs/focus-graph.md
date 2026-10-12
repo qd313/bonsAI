@@ -821,10 +821,10 @@ title row: "AI models"  ................  [ Advanced › ]      (its own Focusab
 Installed 3 · 9 GB   Queue 0 · 0 GB   Live catalog · Live sizes [ ↻ ]   (the header line; ↻ in its own Focusable)
    | Down  ^ Up        (Advanced <-> ↻ <-> Clear; ↻ skipped both ways while greyed, the catalog loading)
 [ 7 models match        Clear ] <-> [ Text ][ Pictures ][ Reset order ]   (the try-order switch, level with Clear)
-LICENCE   (•) Open source only    -x  (the list's header row: nothing level, Right is held)
-          ( ) Also try open-weight <-> ☆ row 1                Right from a column stop -> what sits level with it
-          ( ) Any installed model  x-  ☆ row 2 (Left held)    Left from a row's star   -> the stop level with it
-GOOD FOR  [ ] Speed               <-> ☆ row 3                (both measured at the press; held when none is)
+LICENCE   (•) Open source only     -> ☆ row 1 (32 px below)   Right from a column stop -> the nearest stop on the right
+          ( ) Also try open-weight <-> ☆ row 1                Left from a row's star   -> the nearest filter
+          ( ) Any installed model  x-  ☆ row 2 -> Also try    (both measured at the press, within 1.5 model rows,
+GOOD FOR  [ ] Speed               <-> ☆ row 3                 about 52 px; held only when nothing is that close)
 SHOW      [ ] Installed only ...      |
 [ Type a name ] [ Install the starter set ] SUGGESTED [ chip ] [ chip ]
    | Down past the last stop -> Steam's own (Done)   | Down past the last row -> Steam's own (Done), as before
@@ -847,8 +847,10 @@ SHOW      [ ] Installed only ...      |
   ring's button and the candidates on the other side: for Right, the try-order switch's active chip and each row's star
   whose centre is in sight in the list (below its sticky header row, above its bottom edge); for Left, the column's
   stops whose centre is in sight in the column (the column hands over only the stops that can take the ring, the
-  greyed licence row left out by its own state). It picks the nearest centre within **half a model row** (half the
-  first drawn row's height); with none that near, or no rows at all, the press is **held**. Both sides scroll on their
+  greyed licence row left out by its own state). It picks the nearest centre within **one and a half model rows**
+  (`BESIDE_REACH_ROWS` times the first drawn row's height, about 52 px on the Deck: the session's call, because a held
+  press feels dead); with none that near, or no rows at all, the press is **held**, which on the Deck's own screen
+  happens only with an empty list. Left from a star level with the greyed row goes to the nearest other filter. Both sides scroll on their
   own, so nothing is read from a stored index. A press straight back (Right then Left, or Left then Right) returns to
   where the first came from while that is still level. The ring crosses only by Steam's own transfer (`handRingTo`, a
   `TakeFocus` on the list's, the column's or the switch row's `navRef`), then a sibling `focus()` onto the chosen stop.
@@ -882,7 +884,7 @@ SHOW      [ ] Installed only ...      |
   Steam, Done keeping the picks, and a bounded walk of the whole box from Advanced with Steam's scroll in a short column
   and list. Its last block lays the box out on the Deck's own map (each side with its own scroll) and presses Right and
   Left from the measured stops and rows, with two bounded walks (down the column pressing Right and back at every stop,
-  down the list pressing Left and back at every row: no stop twice, every landing within half a row or held, never the
+  down the list pressing Left and back at every row: no stop twice, no dead press, every landing within reach, never the
   greyed row); `pullModelsBeside.test.ts` pins the pure choice. Its button stand-in draws a greyed button the Deck's
   way: a `Disabled` class, still focusable. `PullModelsFiltersColumn.layout.test.ts` works the list's
   grid out from the stylesheet's numbers (the Model column no more than 10 per cent narrower than M-A's 124.3).

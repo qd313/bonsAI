@@ -1,9 +1,12 @@
 /**
  * Title: About tab
  *
- * Purpose: The About tab — what bonsAI is, a beta warning, the
- * reply-language dropdown (its own file, AboutReplyLanguageSection), and
- * links out to GitHub, the Ollama project, the bug tracker, and support.
+ * Purpose: The About tab — the version, what bonsAI is (one line that
+ * opens its paragraph under itself while the ring is on it), a one-line beta
+ * warning, the reply-language row (its own file, AboutReplyLanguageSection),
+ * and the links out to GitHub, the Ollama project, the bug tracker and
+ * support, as small buttons beside a smaller QR code (its own file,
+ * AboutLinks). One line per row, so the tab fits on about one screen (plan 92).
  * Nothing here changes how the AI behaves; it is entirely things to read or
  * tap through to leave the plugin.
  *
@@ -17,18 +20,14 @@
  * OllamaTab for that.
  */
 import React from "react";
-import { ButtonItem, Navigation, PanelSection, PanelSectionRow } from "@decky/ui";
-import { toaster } from "@decky/api";
-import { BONSAI_FOREST_GREEN } from "../features/unified-input/constants";
-import supportPaypalQr from "../assets/qrcode.png";
+import { PanelSection, PanelSectionRow } from "@decky/ui";
+import { AboutLinks } from "./AboutLinks";
 import { AboutReplyLanguageSection } from "./AboutReplyLanguageSection";
+import { AboutRevealRow } from "./AboutRevealRow";
 import type { ReplyLanguageId } from "../data/replyLanguage";
 import type { UiStringKey } from "../i18n/keys";
 import { PLUGIN_VERSION } from "../pluginVersion";
-import { FOCUS_RING_ITEM_HOST_CLASS } from "../styles/settingsGlassButton";
-import { textPx } from "../styles/sections/textPx";
-
-const PAYPAL_SUPPORT_URL = "https://paypal.me/quentind313";
+import { takeNavFocus } from "../utils/navFocusRegistry";
 
 type Props = {
   githubRepoUrl: string;
@@ -42,29 +41,18 @@ type Props = {
 };
 
 /**
- * This tab explains plugin purpose/safety context and provides contributor support links.
- * It keeps project metadata and external navigation actions out of the main screen component.
- */
-function openExternal(url: string, toastTitle: string) {
-  try {
-    Navigation.NavigateToExternalWeb(url);
-  } catch {
-    toaster.toast({ title: toastTitle, body: url, duration: 4000 });
-  }
-}
-
-/**
- * The tab body: the about blurb, the beta warning, the reply-language
- * section, and the Links panel.
+ * The tab body: the version line, "What bonsAI is", the beta line, the
+ * reply-language section, and the Links section.
  *
  * In: the three outbound URLs (GitHub, Ollama, issues), the current reply
  * language and a callback to change it, and the translation helper for
  * this tab's own strings.
- * Out: the tab's panels, in order.
+ * Out: the tab's panels, in order. The stops, top to bottom: What bonsAI is,
+ * Reply language, the three link buttons, the QR code. The Version line and
+ * the beta line are plain text.
  *
- * What can go wrong: openExternal() falls back to a toast with the raw URL
- * if Steam's own external-navigation call throws, so a link never just
- * fails silently.
+ * What can go wrong: nothing here; AboutLinks falls back to a toast with the
+ * raw URL if Steam's own external-navigation call throws.
  */
 export const AboutTab: React.FC<Props> = ({
   githubRepoUrl,
@@ -77,24 +65,20 @@ export const AboutTab: React.FC<Props> = ({
   t: _t,
 }) => {
   return (
-    <>
+    <div className="bonsai-about-tab">
       <PanelSection title="About bonsAI">
         <PanelSectionRow>
-          <div style={{ fontSize: textPx(12), color: "#c8c8c8", lineHeight: "1.2" }}>Version {PLUGIN_VERSION}</div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div style={{ fontSize: textPx(12), color: "#c8c8c8", lineHeight: "1.2" }}>
-            Backend Ollama Node for Steam (A.I.) - An AI assistant embedded in the
-            Steam Deck Quick Access Menu. Ask questions, search settings, and get game-specific
-            performance suggestions (TDP/GPU clock recommendations are read-only — apply them
-            yourself in Steam&apos;s Performance tab if you choose).
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div style={{ fontSize: textPx(12), color: BONSAI_FOREST_GREEN, lineHeight: "1.2", fontWeight: 600, marginTop: "1.2em" }}>
-            This plugin is in beta. AI-generated recommendations — especially TDP
-            and performance changes — should be verified before relying on them.
-            Use at your own risk!
+          <div className="bonsai-about-block">
+            <div className="bonsai-about-version">Version {PLUGIN_VERSION}</div>
+            <AboutRevealRow label="What bonsAI is" rowId="what-is">
+              Backend Ollama Node for Steam (A.I.) - An AI assistant embedded in the
+              Steam Deck Quick Access Menu. Ask questions, search settings, and get game-specific
+              performance suggestions (TDP/GPU clock recommendations are read-only — apply them
+              yourself in Steam&apos;s Performance tab if you choose).
+            </AboutRevealRow>
+            <div className="bonsai-about-beta">
+              Beta: check AI advice, especially TDP and performance changes, before relying on it.
+            </div>
           </div>
         </PanelSectionRow>
       </PanelSection>
@@ -104,68 +88,14 @@ export const AboutTab: React.FC<Props> = ({
         onReplyLanguageChange={onReplyLanguageChange}
         effectiveLang={effectiveLang}
         steamClientLanguageLabel={steamClientLanguageLabel}
+        onMoveDown={() => takeNavFocus("about-links")}
       />
 
-      {/*
-        Plain ButtonItem rows, no Focusable wrappers and no onMoveUp/onMoveDown handlers.
-        The wrappers used to hand-roll the D-pad chain as dropdown -> GitHub -> PayPal, which
-        broke link access two ways: the handlers returned true (telling Steam the press was
-        handled, so default navigation was skipped) while moving focus with a plain DOM
-        `.focus()`, which does not transfer Steam's gamepad focus across nav containers — see
-        navFocusRegistry.ts, measured 2026-08-04 — so presses were consumed and focus never
-        moved. The chain also skipped the two middle links entirely, since they were never in it.
-        DeveloperTab uses bare ButtonItems this way and navigates correctly.
-      */}
       <PanelSection title="Links">
         <PanelSectionRow>
-          <div className={FOCUS_RING_ITEM_HOST_CLASS}>
-            <ButtonItem layout="below" onClick={() => openExternal(githubRepoUrl, "GitHub")}>
-              <span style={{ fontSize: textPx(13) }}>GitHub</span>
-            </ButtonItem>
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div className={FOCUS_RING_ITEM_HOST_CLASS}>
-            <ButtonItem layout="below" onClick={() => openExternal(ollamaRepoUrl, "Ollama")}>
-              <span style={{ fontSize: textPx(13) }}>Built on Ollama!</span>
-            </ButtonItem>
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div className={FOCUS_RING_ITEM_HOST_CLASS}>
-            <ButtonItem layout="below" onClick={() => openExternal(githubIssuesUrl, "Report a Bug")}>
-              <span style={{ fontSize: textPx(13) }}>Bugs & Feature Requests</span>
-            </ButtonItem>
-          </div>
-        </PanelSectionRow>
-        {/*
-          The PayPal QR code is a picture to scan with a phone, not part of the button. It used to be
-          drawn inside the support button, which made that one button 180 x 192 on the Deck against
-          268 x 42 for the three above (plan72-Z-FREEPLAY.json finding 14). It sits just above the
-          button, not below: the ring can only stop on the button, so the page scrolls to the
-          button, and a code under the tab's last button could be left off the bottom of the screen.
-        */}
-        <PanelSectionRow>
-          <img
-            src={supportPaypalQr}
-            alt="Support on PayPal — Support my Steam Sale habit"
-            style={{
-              display: "block",
-              width: 132,
-              maxWidth: "100%",
-              height: "auto",
-              margin: "0 auto",
-            }}
-          />
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div className={FOCUS_RING_ITEM_HOST_CLASS}>
-            <ButtonItem layout="below" onClick={() => openExternal(PAYPAL_SUPPORT_URL, "PayPal")}>
-              <span style={{ fontSize: textPx(13) }}>Support my Steam Sale habit</span>
-            </ButtonItem>
-          </div>
+          <AboutLinks githubRepoUrl={githubRepoUrl} ollamaRepoUrl={ollamaRepoUrl} githubIssuesUrl={githubIssuesUrl} />
         </PanelSectionRow>
       </PanelSection>
-    </>
+    </div>
   );
 };

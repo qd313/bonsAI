@@ -1,6 +1,8 @@
 {
   "vitest": [
+    "src/components/AboutLinks.test.tsx",
     "src/components/AboutTab.test.tsx",
+    "src/components/AboutTab.walk.test.tsx",
     "src/components/BonsaiPluginShell.test.tsx",
     "src/components/CharacterPickerModal.test.tsx",
     "src/components/CharacterRoleplayEmoticon.test.tsx",

@@ -91,7 +91,11 @@ export type NavFocusId = "session-context-strip" | "preset-carousel" | "unified-
    *  Registered by chatRowIconNav.ts. */
   | "chat-name-new" | "chat-name-delete"
   /** One per tab body except Main (TabBodyFocusRoot): the collapsing bar's Down hands the ring here. */
-  | `tab-body:${string}`;
+  | `tab-body:${string}`
+  /** The About tab's block of link buttons and QR code (AboutLinks.tsx): Down from the Reply language row hands the
+   *  ring here, and Steam's transfer onto a container lands on its first stop, GitHub. Without it Steam's own step
+   *  from the language dropdown, which sits on the right of its row, would pick the QR code beside the buttons. */
+  | "about-links";
 
 /** The object Steam assigns to a `navRef`: a thin wrapper over the nav node. */
 type SteamNavNode = { TakeFocus?: (gamepad?: boolean) => unknown };

@@ -744,3 +744,49 @@ Cancel               (drawn only while a run goes)
   `modalReturnFocusRegistry.ts`). It is a question with a choice, not a progress notice.
 - Pinned by `OllamaWhereAiRunsSection.walk.test.tsx` (the walk, with a run going) and
   `OllamaWhereAiRunsSection.inPlaceSetup.test.tsx` (no box, the lines). Device row: the plan 87 Ollama block.
+
+### The About tab, one line per row (plan 92, lane T3; plan 91 § 6)
+
+The About tab is `AboutTab.tsx`: a Version line, "What bonsAI is" (`AboutRevealRow.tsx`), the beta line, Reply
+language (`AboutReplyLanguageSection.tsx`), and the links (`AboutLinks.tsx`). Six stops, no hand-written move
+anywhere except inside the links block and one transfer out of Reply language.
+
+```
+tab bar
+   | Down  (the tab body's own transfer)      ^ Up from the first stop (TabBodyFocusRoot's onMoveUp)
+[ What bonsAI is ]          <- its paragraph is drawn UNDER it while the ring is on it (not a stop)
+   | Down                                     ^ Up
+[ Language        Follow system ▾ ]   <- Steam's Dropdown; its hint opens under the row while the ring is on it
+   | Down = takeNavFocus("about-links")       ^ Up (Steam's step)
+[ GitHub ]            ┐
+[ Built on Ollama! ]  ├─ Right from any -> [ QR: Support my Steam Sale habit ]
+[ Bugs & Feature Requests ] ┘    Left from the QR -> the button the ring left from (same height)
+   Down from the last button: holds still        Down from the QR: holds still
+```
+
+- **Stops:** exactly six, in this order: the "What bonsAI is" row, the Reply language dropdown, GitHub, Built on
+  Ollama!, Bugs & Feature Requests, the QR code. The Version line, the beta line and every paragraph are plain
+  text: no `tabindex`, no ring.
+- **The paragraphs open on the ring, and only then.** "What bonsAI is" and the Reply language hint are drawn
+  under their row while it holds the ring and removed when it leaves. The row is a `Focusable` marked `focusable`
+  that carries `onGamepadFocus` / `onGamepadBlur` (what Steam delivers) and `onFocus` / `onBlur` (a plain DOM focus, the
+  second signal, and the one the tests use). The text sits outside the `Focusable`, so the ring stays on the one
+  line. Nothing is remembered: a rebuilt tab starts with both closed.
+- **Down from Reply language is a transfer, not a step.** The dropdown sits on the right of its row; Steam's own
+  step from there would pick the QR code (it is straight below). The row's `Focusable` claims Down and calls
+  `takeNavFocus("about-links")`, a nav id the links block registers (`navFocusRegistry.ts`); a transfer onto a
+  container lands on its first stop, GitHub. If the block is not registered the handler returns `false` and Steam
+  steps as usual.
+- **Inside the links block** (siblings of one container, so a plain focus between them is safe, through
+  `focusInTabBody`): Right from a button remembers its index and focuses the QR; Left from the QR focuses the
+  remembered button; Down from the last button, and from the QR, is claimed and does nothing. The remembered
+  index lives in a module-level store (`rememberAboutLinkButton`), not in component state, because closing a
+  Decky popup rebuilds the tab (lessons § 3). The move handlers are on a `Focusable` around each `Button`, not on
+  the Button: a Decky `Button` does not forward `onMoveX`. Up from GitHub is left to Steam (it reaches Reply language).
+- **A** (`onClick`) on a link opens it; A on the QR opens the support page (`https://paypal.me/quentind313`), as the
+  old "Support my Steam Sale habit" button did.
+- **Tests:** `AboutTab.test.tsx` (the words against the drawing's data file, the paragraphs, the QR's size read
+  out of the stylesheet), `AboutLinks.test.tsx` (the block's walk, the remembered height across an unmount and
+  remount, A on each), `AboutTab.walk.test.tsx` (a bounded Down, Right, Left, Up walk of the whole tab in a
+  scrolling pane at 400 and 741 points, with Steam's own step and scroll modelled). jsdom has no spatial walk, so
+  the Deck walk is the real check (plan 92, block 3).

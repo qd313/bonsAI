@@ -1,12 +1,12 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 843,
-  "edgeCount": 2662,
+  "fileCount": 849,
+  "edgeCount": 2679,
   "cycles": [],
   "orphans": [],
   "unresolved": [
     {
-      "from": "src/components/AboutTab.tsx",
+      "from": "src/components/AboutLinks.tsx",
       "spec": "../assets/qrcode.png"
     },
     {
@@ -15,38 +15,80 @@
     }
   ],
   "modules": {
+    "src/components/AboutLinks.test.tsx": {
+      "imports": [
+        "src/components/AboutLinks.tsx",
+        "src/test-harness/aboutDeckyUi.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/components/AboutLinks.tsx": {
+      "imports": [
+        "src/features/plugin-shell/useTabBodyFocusScroll.ts",
+        "src/styles/settingsGlassButton.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/components/AboutLinks.test.tsx",
+        "src/components/AboutTab.tsx",
+        "src/components/AboutTab.walk.test.tsx"
+      ]
+    },
     "src/components/AboutReplyLanguageSection.tsx": {
       "imports": [
+        "src/components/AboutRevealRow.tsx",
         "src/data/steamLanguages.ts",
-        "src/styles/sections/textPx.ts",
         "src/utils/i18n.ts"
       ],
       "importedBy": [
         "src/components/AboutTab.tsx"
       ]
     },
+    "src/components/AboutRevealRow.tsx": {
+      "imports": [],
+      "importedBy": [
+        "src/components/AboutReplyLanguageSection.tsx",
+        "src/components/AboutTab.tsx"
+      ]
+    },
     "src/components/AboutTab.test.tsx": {
       "imports": [
         "src/components/AboutTab.tsx",
-        "src/pluginVersion.ts"
+        "src/pluginVersion.ts",
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/test-harness/aboutDeckyUi.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
     },
     "src/components/AboutTab.tsx": {
       "imports": [
+        "src/components/AboutLinks.tsx",
         "src/components/AboutReplyLanguageSection.tsx",
+        "src/components/AboutRevealRow.tsx",
         "src/data/replyLanguage.ts",
-        "src/features/unified-input/constants.ts",
         "src/i18n/keys.ts",
         "src/pluginVersion.ts",
-        "src/styles/sections/textPx.ts",
-        "src/styles/settingsGlassButton.ts"
+        "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
         "src/components/AboutTab.test.tsx",
+        "src/components/AboutTab.walk.test.tsx",
         "src/components/SettingsDeveloperLeftoverRing.test.tsx",
         "src/features/plugin-shell/tabs/useAboutTabPayload.tsx"
       ]
+    },
+    "src/components/AboutTab.walk.test.tsx": {
+      "imports": [
+        "src/components/AboutLinks.tsx",
+        "src/components/AboutTab.tsx",
+        "src/features/plugin-shell/TabBodyFocusRoot.tsx",
+        "src/styles/sections/aboutTab.ts",
+        "src/test-harness/aboutDeckyUi.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
     },
     "src/components/AskStripGameTag.tsx": {
       "imports": [
@@ -4042,6 +4084,7 @@
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/components/AboutTab.walk.test.tsx",
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/useTopStripTabBar.ts",
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
@@ -4554,6 +4597,7 @@
         "src/utils/tabBodyScrollPlan.ts"
       ],
       "importedBy": [
+        "src/components/AboutLinks.tsx",
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
@@ -4992,7 +5036,6 @@
     "src/features/unified-input/constants.ts": {
       "imports": [],
       "importedBy": [
-        "src/components/AboutTab.tsx",
         "src/components/ContextChipLadder.tsx",
         "src/components/MainTabAskModeMenuPopover.tsx",
         "src/components/MainTabAttachMenuPopover.tsx",
@@ -6500,6 +6543,7 @@
     },
     "src/styles/bonsaiScopeStylesheet.ts": {
       "imports": [
+        "src/styles/sections/aboutTab.ts",
         "src/styles/sections/detailsSlot.ts",
         "src/styles/sections/gameRunningLighter.ts",
         "src/styles/sections/gamepadAndPullModels.ts",
@@ -6516,6 +6560,7 @@
         "src/styles/sections/tabIndicatorBar.ts"
       ],
       "importedBy": [
+        "src/components/AboutTab.test.tsx",
         "src/components/BonsaiModalScope.tsx",
         "src/components/BonsaiPluginShell.tsx",
         "src/components/MainTab.askStrip.deck.test.tsx",
@@ -6557,6 +6602,15 @@
         "src/styles/bonsaiScopeStylesheet.ts"
       ],
       "importedBy": []
+    },
+    "src/styles/sections/aboutTab.ts": {
+      "imports": [
+        "src/styles/sections/textPx.ts"
+      ],
+      "importedBy": [
+        "src/components/AboutTab.walk.test.tsx",
+        "src/styles/bonsaiScopeStylesheet.ts"
+      ]
     },
     "src/styles/sections/answerBubble.test.ts": {
       "imports": [
@@ -6839,8 +6893,6 @@
         "src/data/chatTextSize.ts"
       ],
       "importedBy": [
-        "src/components/AboutReplyLanguageSection.tsx",
-        "src/components/AboutTab.tsx",
         "src/components/AskStripGameTag.tsx",
         "src/components/CharacterPickerModal.tsx",
         "src/components/ChatLatencyNotices.tsx",
@@ -6895,6 +6947,7 @@
         "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTier2Confirm.tsx",
         "src/hooks/usePullModelToggleSelection.tsx",
+        "src/styles/sections/aboutTab.ts",
         "src/styles/sections/answerBubble.ts",
         "src/styles/sections/answerMarkdownFormatting.ts",
         "src/styles/sections/chatDetailsText.ts",
@@ -6938,7 +6991,7 @@
         "src/styles/sections/textPx.ts"
       ],
       "importedBy": [
-        "src/components/AboutTab.tsx",
+        "src/components/AboutLinks.tsx",
         "src/components/CharacterPickerModal.tsx",
         "src/components/DeveloperOptionRow.tsx",
         "src/components/DeveloperTab.tsx",
@@ -6958,6 +7011,14 @@
         "src/features/chat-slots/ChatSlotDeleteModal.tsx",
         "src/features/chat-slots/ChatSlotPickerModal.tsx",
         "src/styles/buttonFocusRing.test.ts"
+      ]
+    },
+    "src/test-harness/aboutDeckyUi.tsx": {
+      "imports": [],
+      "importedBy": [
+        "src/components/AboutLinks.test.tsx",
+        "src/components/AboutTab.test.tsx",
+        "src/components/AboutTab.walk.test.tsx"
       ]
     },
     "src/test-harness/chipRowSimulation.tsx": {
@@ -7115,6 +7176,9 @@
     "src/test-harness/fakeDeckyUi.tsx": {
       "imports": [],
       "importedBy": [
+        "src/components/AboutLinks.test.tsx",
+        "src/components/AboutTab.test.tsx",
+        "src/components/AboutTab.walk.test.tsx",
         "src/components/ContextChipLadder.allChips.test.tsx",
         "src/components/ContextChipLadder.deckTry2.test.tsx",
         "src/components/ContextChipLadder.gridWalk.test.tsx",
@@ -9022,6 +9086,8 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/AboutLinks.tsx",
+        "src/components/AboutTab.tsx",
         "src/components/ContextChipLadder.ringWalk.test.tsx",
         "src/components/MainTab.askStrip.deck.test.tsx",
         "src/components/MainTab.tabBarDownRetry.test.tsx",

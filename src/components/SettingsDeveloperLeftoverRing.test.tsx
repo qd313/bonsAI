@@ -111,7 +111,7 @@ describe("the last Steam buttons on the four tabs draw the white ring", () => {
     expectOneRingPerRow(container, labels);
   });
 
-  it("the four About tab link rows show one ring", () => {
+  it("the three About tab link buttons and the QR stop show the ring", () => {
     const { container } = render(
       <div className="bonsai-scope">
         <AboutTab
@@ -126,7 +126,13 @@ describe("the last Steam buttons on the four tabs draw the white ring", () => {
         />
       </div>,
     );
-    expectOneRingPerRow(container, [/^GitHub$/, /^Built on Ollama!$/, /^Bugs & Feature Requests$/, /^Support my Steam Sale habit$/]);
+    // The links are plain Buttons since plan 92 (three small ones beside the QR stop), no longer Steam button
+    // rows (ButtonItem), so there is no row around them that Steam could mark instead: the button itself rings.
+    for (const re of [/^GitHub$/, /^Built on Ollama!$/, /^Bugs & Feature Requests$/, /^Support my Steam Sale habit$/]) {
+      const button = byText(container, re);
+      const [ring] = outlines([button], button);
+      expect(isWhiteRing(ring!), `${re}: ${ring}`).toBe(true);
+    }
   });
 
   it("the saved Ollama host buttons show the ring", () => {

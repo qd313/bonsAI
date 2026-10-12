@@ -387,6 +387,17 @@ rule (one press at a time with focus read after each).
   Owed to a second night: the note card, the "Read N of your notes" line and the notes sheet (N2), the jump into a
   chat with Back and Y (N3b), Settings and Developer folded (T1, T2), the stand-in's wipe check, and the Deck's own
   screen for every layout number (the monitor was live all session).
+- **2026-10-12 11:20, the second night started by the maintainer** after looking at the first night's work on the
+  Deck's own screen ("things look ok"); the Deck stays on its own screen tonight; "ignore the weekly usage, it's ok if
+  we hit the limit". Usage at 11:29: five-hour window 25 percent, week 75. **Seven new items from the maintainer,
+  rolled in:** folded tabs closed on arrival and on every tab switch (lane T0c; answers question 3); on About, the
+  paragraph shown at the top again, the version on the title line, the Reply language dropdown full width without its
+  "Language" label, and the link buttons in Steam's darker grey (lane T3c); thicker lines on the tab bar's icons (lane
+  I1); and the AI models box's Right and Left going to what sits beside the ring rather than a remembered row (a Deck
+  map first, then lane M2). **11:45: seven helpers started together** on the tip `ead687b4`: N2, N3b, T0c, T1, T2,
+  T3c on Sonnet 5.5 high, I1 on Sonnet 5.5 medium; Deck block A (the Deck's own screen: every tab's height, "before"
+  pictures, the LB/RB reproduction, and the models box's full D-pad map) and the bookkeeper (the seven items to the
+  roadmap) beside them.
 
 ## 14. Questions for the maintainer (the safest choice taken meanwhile)
 
@@ -395,7 +406,10 @@ rule (one press at a time with focus read after each).
 2. **Clear in the filters column** resets the Good for and Show filters only. *Meanwhile:* the licence pick is left
    alone; the drawing reset it.
 3. **Which sections open at first on a folded tab.** *Meanwhile:* the first section open, the rest closed, remembered
-   for the session only (saving it to disk is a new setting, about 18 files of plumbing).
+   for the session only (saving it to disk is a new setting, about 18 files of plumbing). **Answered 2026-10-12 by the
+   maintainer:** every section closed when you arrive on a folded tab (a first visit too), and closed again on every
+   tab switch, so the whole tab is in view and flipping tabs does not judder; a section stays open while you stay on
+   the tab and after a popup closes over it.
 4. **The typed find box** on the Search tab, if Steam's keyboard leaves it dead. *Meanwhile:* the word buttons are
    the first path; the typed path is checked once; a second round swaps in the question box's two-layer field.
 5. **The offer rule's phrases.** *Meanwhile:* the list in plan 90 § 2a, pinned by twenty tests; new phrases found on

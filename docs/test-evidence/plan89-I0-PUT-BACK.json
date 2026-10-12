@@ -1,0 +1,23 @@
+{
+ "row": "plan89-I0-PUT-BACK",
+ "build_commit": "f5e4dc12 (deployed in block H, not redeployed)",
+ "deck_time_local": "Sun 2026-10-11 23:28 EDT",
+ "screen": "MONITOR: Quick Access page window 855 x 845, screen 1500 x 843 (read at 23:30, with the game running).",
+ "setup": "Compared ~/homebrew/settings/bonsAI/settings.json with ~/p89-backup/settings.json over SSH, key by key. Printed only key names that differ. No values of key/token/secret keys printed.",
+ "pressed": "nothing (SSH read only)",
+ "seen": {
+  "keys_compared": 54,
+  "keys_that_differ": 0,
+  "voice_stt_model": "base.en",
+  "chat_text_size": "small (same as the backup, which is the value it was all night)",
+  "voice_reply_mode": "off",
+  "dev_frozen_test_chips": "[] (no pinned test chips)",
+  "ollama_local_on_deck": true,
+  "ollama_local_autostart": true,
+  "ollama_keep_alive": "15m (the Ollama tab shows 'Unload delay: 15m')",
+  "ollama_tab_run_ai_on_deck": "the first row on the Ollama tab is 'Run AI on this Deck'; the setting behind it (ollama_local_on_deck) reads true. I did not read the toggle's on/off look on screen."
+ },
+ "expected": "No differences except keys a check changed and put back; speech model base.en; Voice replies as it was; Text size as it was; no pinned test chips; Run AI on this Deck ON.",
+ "verdict": "PASS - no key differs from the backup; every item the runbook lists reads as expected.",
+ "side_effect": "none. Note: Ollama had a model (gemma4:e2b-it-qat) loaded at 23:28 although the block H handover said none; see the I1 and I2 files."
+}

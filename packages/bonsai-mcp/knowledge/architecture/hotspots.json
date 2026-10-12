@@ -31,11 +31,6 @@
       "role": ""
     },
     {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 1245,
-      "role": ""
-    },
-    {
       "path": "src/components/MainTabUnifiedAskBar.tsx",
       "lines": 1219,
       "role": ""
@@ -101,6 +96,11 @@
       "role": ""
     },
     {
+      "path": "src/styles/sections/gamepadAndPullModels.ts",
+      "lines": 866,
+      "role": ""
+    },
+    {
       "path": "src/utils/answerBubbleNavigation.ts",
       "lines": 862,
       "role": ""
@@ -116,8 +116,8 @@
       "role": ""
     },
     {
-      "path": "src/styles/sections/gamepadAndPullModels.ts",
-      "lines": 844,
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 838,
       "role": ""
     },
     {
@@ -157,7 +157,7 @@
     },
     {
       "path": "src/components/PullModelsModal.tryOrder.test.tsx",
-      "lines": 682,
+      "lines": 681,
       "role": ""
     },
     {

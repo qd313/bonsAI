@@ -55,12 +55,12 @@ export function usePullModelCatalogRefresh(a: UsePullModelCatalogRefreshArgs): P
     a;
 
   /**
-   * Several places here (opening/closing the Filters panel, opening/closing the custom-tag field)
+   * Several places here (opening/closing the custom-tag field, and once the old Filters panel)
    * change state and then move the ring onto something that change draws. The move used to wait
    * for the next animation frame and assume the redraw had landed by then. When the frame came
    * first -- a busy machine, or a press Steam delivers outside React's own batching -- the target
    * did not exist yet, the move found nothing, and nothing tried again: the ring landed nowhere
-   * (plan 70: PullModelsModal.filtersPanel.test.tsx failed about one full run in three that way).
+   * (plan 70: the old Filters panel's tests failed about one full run in three that way).
    *
    * Now the move is kept until the very commit the caller's state change produces, and runs in a
    * layout effect right after it: the tick bump below is batched with that state change, so the

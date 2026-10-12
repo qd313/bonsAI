@@ -790,3 +790,61 @@ tab bar
   remount, A on each), `AboutTab.walk.test.tsx` (a bounded Down, Right, Left, Up walk of the whole tab in a
   scrolling pane at 400 and 741 points, with Steam's own step and scroll modelled). jsdom has no spatial walk, so
   the Deck walk is the real check (plan 92, block 3).
+
+### The AI models box's filters column (plan 91, M1)
+
+The filters sit in a column to the left of the model list, always on screen (`PullModelsFiltersColumn.tsx`, inside
+`PullModelsModal.tsx`, inside the AI models screen `OllamaModelsHubModal.tsx`). It replaces plan 62's "Filters · N on"
+button and the panel it opened over the list: that route (Down or B inside the panel closing it) is gone.
+
+```
+title row: "AI models"  ................  [ Advanced › ]      (its own Focusable, so it can be a transfer target)
+   ^ Up from Clear                             ^ Up from the switch, or from the first row with no switch
+[ 7 models match        Clear ]   <- the column's first stop
+LICENCE   (•) Open source only        |  [ Text ][ Pictures ][ Reset order ]   (the try-order switch, above the list)
+          ( ) Also try open-weight    |  the model list (its walk unchanged)
+          ( ) Any installed model     |     Right from any column stop -> the list's remembered row (else the first)
+GOOD FOR  [ ] Speed 5 ... Vision 3    |     Left from a row's star     -> the column's remembered stop (else Clear)
+SHOW      [ ] Installed only ...      |
+[ Type a name ] [ Install the starter set ] SUGGESTED [ chip ] [ chip ]
+   | Down past the last stop -> Steam's own (Done)   | Down past the last row -> Steam's own (Done), as before
+[ Done ]  [ Cancel ]
+```
+
+- **Stops:** Clear, the ten filter rows (the greyed third licence row is skipped until it is unlocked), "Type a name"
+  (or, once open, its field row, whose landing is the "×"), "Install the starter set" while the starter model is
+  missing, and each Suggested chip. All are plain buttons directly inside one `Focusable` (the column), so Up and Down
+  between them are plain sibling `focus()` moves (`step()` in the column file). **The one exception, carried over
+  unchanged:** the open "Type a name" row is its own horizontal `Focusable` (Left and Right between the field, Pull and
+  "×" are Steam's own, and it owns B), and the moves into it (the chip opening onto "×", Down onto it) and out of it are
+  plain `focus()` hops, exactly as they were from the old Filters row since plan 62. Watch it on the Deck; if the ring
+  stays behind there, the fix is a transfer onto that row's nav node.
+- **Right and Left between the column and the list** go through Steam's own transfer onto the other side's nav node
+  (`handRingTo` in `pullModelsBoxMemory.ts`, a `TakeFocus` on the column's or the list's `navRef`), then a sibling
+  `focus()` onto the remembered stop inside it. Right always lands on a row's star, never its Remove; with no rows the
+  press is held. The remembered place is read **before** the transfer, because the transfer's own landing is noted
+  like any other (`PullModelsFiltersColumn.test.tsx` caught this).
+- **Up from Clear** (and Up from the try-order switch, or from the first row when there is no switch) is the screen's
+  `onMoveUpFromTop`: a transfer onto the Advanced link's own `Focusable`. Without the screen (no handler) the press is
+  Steam's own.
+- **Down past the last stop** returns `false`, so Steam carries the ring on to the dialog's Done, the same rule the
+  list's last row follows (focus-graph-patterns: a container's last stop must not claim Down).
+- **The containers and their flow.** Steam moves the ring between a container's children only along its
+  `flow-children`, and a container with no flow on that axis hands the press to its parent (plan 92, the About tab's
+  dead Down). So: the column is `flow-children="column"` with every row a direct nav child (the group headings and
+  row wrappers are plain divs); the column and the list sit in one `Focusable` with `flow-children="row"`
+  (`.bonsai-pullmodels-split`), so a Down neither side takes leaves the pair for the footer instead of stepping from
+  the column into the list; the list's own `Focusable` has no flow, so Steam never steps from a row's star along to
+  its Remove. The walk test models exactly this rule, with a stand-in for the dialog's body and footer.
+- **Left** inside the column is held (nothing sits to its left). **B** is not claimed in the column, so it does what it
+  does for the box; the one exception is the open "Type a name" field row, whose B closes just the field.
+- **The two "come back here" memories** (the column's stop and the list's row) and the Good for and Show picks live in a
+  module-level store (`pullModelsBoxMemory.ts`), noted by a focus listener on each side on every landing by any route,
+  because closing a Decky popup rebuilds what is behind it (lessons § 3). The licence pick is saved on Done, as before.
+- **Where the ring opens** is unchanged: on Advanced, Steam's first stop in the screen.
+- **Tests:** `PullModelsFiltersColumn.test.tsx` (steamRing stand-in, so a bare cross-container `focus()` fails): the rows
+  and headings, the counts against the rows drawn under both licence picks, Clear, Right and Left with their memories
+  across an unmount and remount, Up to Advanced, Down left to Steam, Done keeping the picks, and a bounded walk of the
+  whole box with Steam's scroll in a short column and list. `PullModelsFiltersColumn.layout.test.ts` works the list's
+  grid out from the stylesheet's numbers (the Model column no more than 10 per cent narrower than M-A's 124.3).
+- **Device rows:** P91-MODELS-COLUMN-WALK, -FILTERS, -DONE-KEEPS, -WIDTH (plan 91 § 5, block 4).

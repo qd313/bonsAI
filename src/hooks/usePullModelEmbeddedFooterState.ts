@@ -15,7 +15,7 @@
  *
  * Caution: Lifted out of PullModelsModal.tsx with the order of its own hooks unchanged, because
  * React only tolerates a fixed hook order. It is called from exactly the position the block used
- * to occupy, right after the render helpers and right before the "Filters · N on" summary. Keep it
+ * to occupy, right after the render helpers and right before the screen's own markup. Keep it
  * there.
  */
 import { useEffect } from "react";

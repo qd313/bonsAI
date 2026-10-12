@@ -2,12 +2,12 @@
  * Title: The AI models screen — Done semantics after Policy folded into Filters
  *
  * Purpose: Pins plan 62, § 3d: the standalone Policy section and its chip are gone (folded into
- * PullModelsModal's own Filters panel), and Done has to keep doing what it always did for the
+ * PullModelsModal's own filters, a column beside the list since plan 91), and Done has to keep doing what it always did for the
  * licence pick — save it — even though there is no longer a dedicated section whose own Done
  * press was the only thing that saved it. PullModelsModal is stubbed here on purpose: this file's
  * own contract (what Done does, which sections exist) does not need the real catalog table, the
- * RPC calls or the Filters panel behind it — those have their own coverage in
- * PullModelsModal.filtersPanel.test.tsx. ConfirmModal's fake never calls the real onOK/onCancel it
+ * RPC calls or the filters column behind it — those have their own coverage in
+ * PullModelsFiltersColumn.test.tsx. ConfirmModal's fake never calls the real onOK/onCancel it
  * is given (its stub throws both away, matching Steam's own chrome living outside this file's
  * DOM), so this file captures them directly instead of trying to click a stub into firing them.
  *
@@ -84,19 +84,20 @@ describe("no standalone Policy section, and no section-button row, any more", ()
     expect(link.textContent).toBe("Advanced ›");
   });
 
-  it('initialSection "policy" lands on Browse, panel closed, same as "browse" -- not a missing section', () => {
-    // Used to force the Filters panel open with the ring on the first licence row: measured on
+  it('initialSection "policy" lands on Browse, the same as "browse" -- not a missing section', () => {
+    // It once forced the old Filters panel open with the ring on the first licence row: measured on
     // the Deck 3 of 3 tries through "Manage AI models...", never through "Browse models..."
     // (docs/test-evidence/plan70-RING-ON-FILTER-2c1.json), one A press away from changing the
-    // licence filter with nothing pressed to put the ring there. Both buttons open the same
-    // screen now, the same way.
+    // licence filter with nothing pressed to put the ring there. Since plan 91 the filters are a
+    // column that is always on screen, so there is no panel to open and no prop to ask for one.
     render(<OllamaModelsHubModal {...buildProps({ initialSection: "policy" })} />);
-    expect(hoisted.pullModelsProps?.initialFiltersOpen).toBe(false);
+    expect(hoisted.pullModelsProps).not.toBeNull();
+    expect(hoisted.pullModelsProps).not.toHaveProperty("initialFiltersOpen");
   });
 
-  it('initialSection "browse" does not force the Filters panel open', () => {
+  it("hands Browse the way up to its Advanced link, for Up from the top of the filters column (plan 91)", () => {
     render(<OllamaModelsHubModal {...buildProps({ initialSection: "browse" })} />);
-    expect(hoisted.pullModelsProps?.initialFiltersOpen).toBe(false);
+    expect(typeof hoisted.pullModelsProps?.onMoveUpFromTop).toBe("function");
   });
 });
 
@@ -120,7 +121,7 @@ describe("Done saves the licence + advanced draft", () => {
     const onClose = vi.fn();
     render(<OllamaModelsHubModal {...buildProps({ onCommitOllamaModelsHub, onClose })} />);
 
-    // The Licence pick inside PullModelsModal's Filters panel calls this straight through —
+    // The Licence pick inside PullModelsModal's filters column calls this straight through —
     // exactly the callback the old Policy buttons used.
     act(() => {
       (hoisted.pullModelsProps?.onSelectModelPolicyTier as (t: string) => void)?.("open_weight");

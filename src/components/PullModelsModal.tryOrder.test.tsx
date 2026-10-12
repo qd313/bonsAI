@@ -2,7 +2,7 @@
  * Title: The AI models box shows each installed model's place in the try order
  *
  * Purpose: Pins what a person sees and presses on the Deck in the AI models box (option C of the
- * fold, plan 79): a Text / Pictures switch under the Filters row, each installed model's row with
+ * fold, plan 79): a Text / Pictures switch above the list, each installed model's row with
  * its place number and small up and down buttons, a change saved at once, the places belonging to
  * the PC when the AI runs on a PC, the refusal words the old order screens gave, and a D-pad walk of
  * the whole box both ways that never lands on a place button going up or down, never visits a stop
@@ -61,6 +61,7 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { PullModelsModal } from "./PullModelsModal";
+import { resetPullModelsBoxMemory } from "./pullModelsBoxMemory";
 import type { TryOrderHost } from "../features/model-routing/useTryOrderPlaces";
 import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../test-harness/fakeDeckyRpc";
 import { defaultSettingsFixture } from "../test-harness/rpcFixtures";
@@ -82,6 +83,7 @@ const originalScroll = Element.prototype.scrollIntoView;
 
 beforeEach(() => {
   hoisted.shown = [];
+  resetPullModelsBoxMemory();
   resetFakeDeckyRpc();
   setRpcHandler("load_settings", () => defaultSettingsFixture());
   setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: DECK_MODELS }));
@@ -167,7 +169,7 @@ describe("what the box draws", () => {
 
   it("the Pictures switch shows the picture order: a model that cannot read pictures has no place", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: true, models: ["qwen2.5vl:3b", "qwen3:4b"] }));
-    const { container } = renderBox(DECK, { initialFiltersOpen: false });
+    const { container } = renderBox(DECK);
     await waitFor(() => expect(placeOf(container, "qwen3:4b")).not.toBeNull());
     fireEvent.click(button(container, "Try order for pictures questions"));
     await waitFor(() => expect(placeOf(container, "qwen3:4b")).toBeNull());
@@ -533,7 +535,8 @@ describe("walking the box with the D-pad", () => {
   };
 
   it("goes Down switch, stars, never a place button or Remove, and back Up with no stop twice", async () => {
-    const { container } = renderBox(DECK);
+    const upToAdvanced = vi.fn(() => true);
+    const { container } = renderBox(DECK, { onMoveUpFromTop: upToAdvanced });
     await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
     const list = container.querySelector<HTMLElement>(".bonsai-pullmodels-list")!;
     const { header } = layOutList(list);
@@ -547,11 +550,8 @@ describe("walking the box with the D-pad", () => {
       expect(el.getBoundingClientRect().bottom, `${where}: button in view`).toBeLessThanOrEqual(LIST_TOP + LIST_HEIGHT);
     };
 
-    const filters = container.querySelector<HTMLButtonElement>(".bonsai-pullmodels-filters-button")!;
-    filters.focus();
-    // Down from Filters reaches the switch first, on the side that is on.
-    expect(press("onMoveDown")).toBe(true);
-    expect(labelOf(document.activeElement!)).toBe("Try order for text questions");
+    // The switch above the list, on the side that is on, is where the walk starts (Steam's own Down from the title row).
+    button(container, "Try order for text questions").focus();
     const visited: Element[] = [document.activeElement!];
     for (let guard = 0; guard < 40; guard++) {
       if (!press("onMoveDown")) break;
@@ -578,8 +578,9 @@ describe("walking the box with the D-pad", () => {
     expect(labelOf(document.activeElement!)).toBe("Try order for text questions");
     expect(up.length).toBe(visited.length - 1);
     expect(list.scrollTop).toBe(0);
+    // Up from the switch leaves the box's top for the Advanced link (plan 91; it was the Filters button).
     expect(press("onMoveUp")).toBe(true);
-    expect(document.activeElement).toBe(filters);
+    expect(upToAdvanced).toHaveBeenCalledTimes(1);
   });
 
   it("with the AI on a PC every PC model is reached by Down and back by Up, each once, never a Remove", async () => {
@@ -595,8 +596,7 @@ describe("walking the box with the D-pad", () => {
     Element.prototype.scrollIntoView = function (this: Element) {
       if (list.contains(this)) steamNearest(list, this as HTMLElement);
     };
-    container.querySelector<HTMLButtonElement>(".bonsai-pullmodels-filters-button")!.focus();
-    press("onMoveDown"); // the switch
+    button(container, "Try order for text questions").focus(); // the switch
     const visited: Element[] = [];
     for (let guard = 0; guard < 60; guard++) {
       if (!press("onMoveDown")) break;
@@ -640,8 +640,7 @@ describe("walking the box with the D-pad", () => {
       if (list.contains(this)) steamNearest(list, this as HTMLElement);
     };
     const firstRowTop = () => document.activeElement!.closest(".bonsai-pullmodels-table-row--data")!.getBoundingClientRect().top;
-    container.querySelector<HTMLButtonElement>(".bonsai-pullmodels-filters-button")!.focus();
-    press("onMoveDown"); // switch
+    button(container, "Try order for text questions").focus(); // the switch
     // Walk to the bottom so the list is scrolled, then all the way back to the switch.
     while (press("onMoveDown")) { /* bounded by the rows */ }
     expect(list.scrollTop).toBeGreaterThan(0);

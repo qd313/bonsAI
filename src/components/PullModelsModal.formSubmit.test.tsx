@@ -25,9 +25,12 @@
  */
 import type { FormEvent } from "react";
 import { fireEvent, render } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { PullModelsModal } from "./PullModelsModal";
+import { resetPullModelsBoxMemory } from "./pullModelsBoxMemory";
+
+beforeEach(() => resetPullModelsBoxMemory());
 
 function renderInForm(onSubmit: (e: FormEvent<HTMLFormElement>) => void) {
   return render(
@@ -54,15 +57,15 @@ describe("PullModelsModal buttons do not submit an enclosing form", () => {
     expect(container.querySelector('[aria-label="Deselect qwen2.5vl:3b"]')).not.toBeNull();
   });
 
-  it("pressing the Filters button does not submit the form", () => {
+  it("ticking a row in the filters column does not submit the form", () => {
     const onSubmit = vi.fn((e: FormEvent<HTMLFormElement>) => e.preventDefault());
     const { container } = renderInForm(onSubmit);
 
-    const filtersBtn = container.querySelector(".bonsai-pullmodels-filters-button") as HTMLButtonElement;
-    fireEvent.click(filtersBtn);
+    const vision = container.querySelector('.bonsai-pullmodels-filtercol-row[aria-label="Vision"]') as HTMLButtonElement;
+    fireEvent.click(vision);
 
     expect(onSubmit).not.toHaveBeenCalled();
-    expect(container.querySelector(".bonsai-pullmodels-filterpanel-close")).not.toBeNull();
+    expect(vision.getAttribute("aria-pressed")).toBe("true");
   });
 
   it("pressing the refresh button does not submit the form", () => {

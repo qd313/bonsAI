@@ -19,11 +19,9 @@ function renderModal() {
 }
 
 function showAllGroups(container: HTMLElement) {
-  fireEvent.click(container.querySelector(".bonsai-pullmodels-filters-button") as HTMLButtonElement);
   fireEvent.click(
-    container.querySelector('[aria-label="Essentials only — show Tier 1 and Tier 2 one-model presets"]') as HTMLButtonElement
+    container.querySelector('[aria-label="Deck essentials only — show Tier 1 and Tier 2 one-model presets"]') as HTMLButtonElement
   );
-  fireEvent.click(container.querySelector(".bonsai-pullmodels-filterpanel-close") as HTMLButtonElement);
 }
 
 function pillFor(container: HTMLElement, tag: string): string | null {

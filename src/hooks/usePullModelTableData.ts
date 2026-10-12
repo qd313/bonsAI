@@ -3,14 +3,15 @@
  *
  * Purpose: Turns the raw merged catalog and the screen's filter/installed state into everything
  * the table itself renders: the grouped, sectioned row list, the flat row list the D-pad walks by
- * index, and the header's installed/queued counts and sizes.
+ * index, the header's installed/queued counts and sizes, and the count beside each Good for choice
+ * in the filters column.
  *
- * Used for: PullModelsModal.tsx's table body and its header summary line.
+ * Used for: PullModelsModal.tsx's table body, its header summary line and its filters column.
  *
  * Solves: keeps one clear pipeline — filter, group, section, flatten, total — instead of scattering
  * these derivations through the render body, and keeps each step's own dependency list next to it.
  *
- * Does not: decide the filters themselves (the Filters panel and its state stay in the screen) or
+ * Does not: decide the filters themselves (the filters column and its state stay in the screen) or
  * fetch the catalog (usePullModelCatalog does that). This only reshapes what it is handed.
  *
  * Caution: Lifted out of PullModelsModal.tsx with the order of its own hooks unchanged, because
@@ -22,6 +23,7 @@ import { useMemo } from "react";
 import {
   PULL_MODEL_GROUP_LABELS,
   PULL_MODEL_GROUP_ORDER,
+  PULL_MODEL_MODE_FILTER_OPTIONS,
   comparePullModelEntriesNewestFirst,
   comparePullModelEntriesStretchOrder,
   type PullModelEntry,
@@ -59,6 +61,12 @@ export type PullModelTableData = {
   installedCatalogCount: number;
   installedTotalGb: number;
   selectedTotalGb: number;
+  /**
+   * Beside each Good for choice: how many rows the list would draw if that choice were the only Good
+   * for tick, under the licence and Show picks as they are. With that one choice ticked it is the
+   * number of rows the list draws, which is what the Deck check reads (plan 91 § 4, M1).
+   */
+  modeCounts: Record<PullModelModeFilterId, number>;
 };
 
 /** Own the filter -> group -> section -> flatten -> total pipeline behind the table. */
@@ -78,12 +86,12 @@ export function usePullModelTableData(a: UsePullModelTableDataArgs): PullModelTa
 
   const otherInstalledTags = useMemo(() => {
     const out: string[] = [];
-    for (const t of installedTags) {
-      if (!isCatalogModelTagInList(mergedCatalog, t)) out.push(t);
-    }
     // Not in the curated catalog, so there is no license or mode data to check the Licence /
     // Ask-mode filters against -- only "Recently added" (the New badge, tracked by tag alone)
     // applies to this section, same as it always applied to these rows' own badge.
+    for (const t of installedTags) {
+      if (!isCatalogModelTagInList(mergedCatalog, t)) out.push(t);
+    }
     const filtered = recentlyAddedOnly
       ? out.filter((t) => isRecentPullModelTag(pullRecord, t, Date.now()))
       : out;
@@ -91,10 +99,11 @@ export function usePullModelTableData(a: UsePullModelTableDataArgs): PullModelTa
     return filtered;
   }, [installedTags, mergedCatalog, recentlyAddedOnly, pullRecord]);
 
-  const filteredCatalog = useMemo(() => {
-    return mergedCatalog.filter((entry) => {
+  /** Every filter but Good for, which the caller checks (the table with the real ticks, a count with one). */
+  const shownBesidesGoodFor = useMemo(() => {
+    const now = Date.now();
+    return (entry: PullModelEntry): boolean => {
       if (!entryMatchesLicenceTier(entry, modelPolicyTier)) return false;
-      if (!entryMatchesModeFilters(entry, modeFilters)) return false;
       if (installedOnly && !isTagInstalled(entry.tag, installedTags)) return false;
       // Essentials only ON: show just the essentials group. OFF: show everything else,
       // stretch (Expert large) included -- it used to be dropped here too, through a
@@ -111,20 +120,26 @@ export function usePullModelTableData(a: UsePullModelTableDataArgs): PullModelTa
       }
       if (recentlyAddedOnly) {
         const installed = isTagInstalled(entry.tag, installedTags);
-        if (!installed || !isRecentPullModelTag(pullRecord, entry.tag, Date.now())) return false;
+        if (!installed || !isRecentPullModelTag(pullRecord, entry.tag, now)) return false;
       }
       return true;
-    });
-  }, [
-    modelPolicyTier,
-    modeFilters,
-    installedOnly,
-    essentialsOnly,
-    recentlyAddedOnly,
-    installedTags,
-    mergedCatalog,
-    pullRecord,
-  ]);
+    };
+  }, [modelPolicyTier, installedOnly, essentialsOnly, recentlyAddedOnly, installedTags, pullRecord]);
+
+  const filteredCatalog = useMemo(
+    () => mergedCatalog.filter((entry) => shownBesidesGoodFor(entry) && entryMatchesModeFilters(entry, modeFilters)),
+    [mergedCatalog, shownBesidesGoodFor, modeFilters]
+  );
+
+  const modeCounts = useMemo(() => {
+    const counts = {} as Record<PullModelModeFilterId, number>;
+    const shown = mergedCatalog.filter(shownBesidesGoodFor);
+    for (const { id } of PULL_MODEL_MODE_FILTER_OPTIONS) {
+      const only = new Set<PullModelModeFilterId>([id]);
+      counts[id] = shown.filter((entry) => entryMatchesModeFilters(entry, only)).length;
+    }
+    return counts;
+  }, [mergedCatalog, shownBesidesGoodFor]);
 
   const groupedCatalog = useMemo(() => {
     const map = new Map<PullModelGroup, PullModelEntry[]>();
@@ -151,14 +166,17 @@ export function usePullModelTableData(a: UsePullModelTableDataArgs): PullModelTa
         rows: entries.map((entry) => ({ kind: "catalog", entry, group })),
       });
     }
-    if (!installedOnly && otherInstalledTags.length > 0) {
+    // Under a Good for tick the section is left out: nothing says a model the catalog does not know is
+    // good for Vision, and the count beside Vision has to match the rows drawn (plan 91; the Deck's
+    // nomic-embed-text row stayed listed under Vision before). The header's counts still include them.
+    if (!installedOnly && modeFilters.size === 0 && otherInstalledTags.length > 0) {
       sections.push({
         title: "Other installed (not in curated catalog)",
         rows: otherInstalledTags.map((tag) => ({ kind: "other", tag })),
       });
     }
     return sections;
-  }, [groupedCatalog, installedOnly, otherInstalledTags]);
+  }, [groupedCatalog, installedOnly, modeFilters, otherInstalledTags]);
 
   const flatRows = useMemo(() => tableSections.flatMap((s) => s.rows), [tableSections]);
 
@@ -196,5 +214,6 @@ export function usePullModelTableData(a: UsePullModelTableDataArgs): PullModelTa
     installedCatalogCount,
     installedTotalGb,
     selectedTotalGb,
+    modeCounts,
   };
 }

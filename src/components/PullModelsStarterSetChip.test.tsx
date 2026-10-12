@@ -2,7 +2,7 @@
  * Title: Browse models offers "Install the starter set", asks first, then starts the same setup
  *
  * Purpose: Pin plan 79 (D122 call 5): with the Ollama tab's "Install options..." button gone, Browse
- * models carries one button on its top row that gets the starter set in one press plus the ask-first
+ * models carries one button (at the foot of the filters column since plan 91) that gets the starter set in one press plus the ask-first
  * box. The test works at the level the Deck check looks at: the real Browse models screen is drawn,
  * the button is pressed, and the box that opens is read as a person would see it (its title, the
  * size, the site, and that the ring starts on "Not now"). A decline starts nothing; the download
@@ -77,10 +77,11 @@ beforeEach(() => {
 });
 
 describe("Browse models: Install the starter set", () => {
-  it("is on the top row when the starter model is not installed, and gone once it is", async () => {
+  it("is in the filters column when the starter model is not installed, and gone once it is", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: [] }));
     const first = renderModal();
     await waitFor(() => expect(chip(first.container)).not.toBeNull());
+    expect(first.container.querySelector(".bonsai-pullmodels-filtercol")!.contains(chip(first.container))).toBe(true);
     first.unmount();
 
     setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: ["qwen2.5vl:3b"] }));
@@ -117,7 +118,7 @@ describe("Browse models: Install the starter set", () => {
     expect(setupCalls().map((c) => c.args)).toEqual([[{ profile: "tier1_essentials" }]]);
   });
 
-  it("answers the Steam A button like every other control here, and Down goes into the table", async () => {
+  it("answers the Steam A button like every other control here, and Up and Down walk the filters column", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: [] }));
     const { container } = renderModal();
     await waitFor(() => expect(chip(container)).not.toBeNull());
@@ -128,8 +129,10 @@ describe("Browse models: Install the starter set", () => {
     expect(stop).toHaveBeenCalledTimes(1);
     expect(hoisted.modal?.props.strTitle).toBe("Install the starter set?");
 
-    // Down is the same hand-wired move as its neighbours: into the first table row.
+    // It is one stop of the filters column (plan 91): Down to the first Suggested chip under it, Up to "Type a name".
     expect((props.onMoveDown as () => boolean)()).toBe(true);
-    expect(document.activeElement?.getAttribute("aria-label")).toMatch(/ to pull$/);
+    expect(document.activeElement?.getAttribute("aria-label")).toMatch(/^Queue /);
+    expect((props.onMoveUp as () => boolean)()).toBe(true);
+    expect(document.activeElement?.getAttribute("aria-label")).toBe("Type a model name by hand");
   });
 });

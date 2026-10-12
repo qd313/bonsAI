@@ -50,11 +50,6 @@ function latestByAriaLabel(label: string): Record<string, unknown> | undefined {
   return matches[matches.length - 1];
 }
 
-function latestByClassName(className: string): Record<string, unknown> | undefined {
-  const matches = hoisted.buttonProps.filter((p) => p.className === className);
-  return matches[matches.length - 1];
-}
-
 const original = Element.prototype.scrollIntoView;
 
 beforeEach(() => {
@@ -73,8 +68,9 @@ describe("the model list under its sticky header row", () => {
       version: "0.5.0",
       models: ["gemma4:e2b-it-qat", "qwen3.5:4b", "qwen2.5vl:3b", "nomic-embed-text"],
     }));
+    const upToAdvanced = vi.fn(() => true);
     const { container } = render(
-      <PullModelsModal activeRoutingTag={null} onCancel={() => {}} onPullAccepted={() => {}} embedded />
+      <PullModelsModal activeRoutingTag={null} onCancel={() => {}} onPullAccepted={() => {}} embedded onMoveUpFromTop={upToAdvanced} />
     );
     await waitFor(() => {
       expect(container.querySelectorAll(".bonsai-pullmodels-slot--installed").length).toBeGreaterThanOrEqual(4);
@@ -103,9 +99,8 @@ describe("the model list under its sticky header row", () => {
     };
     const labelOf = (el: Element) => el.getAttribute("aria-label") ?? "";
 
-    // Down: Filters hands Down to the first row (the plugin's own handler); every row hands it on.
-    const filters = latestByClassName("bonsai-pullmodels-filters-button")!;
-    expect((filters.onMoveDown as () => boolean)()).toBe(true);
+    // Down: the ring starts on the first row (where Right from the filters column lands); every row hands it on.
+    list.querySelector<HTMLElement>(".bonsai-pullmodels-slot")!.focus();
     steamScrollsFocused();
     const visited: string[] = [];
     for (let guard = 0; guard < 40; guard++) {
@@ -121,19 +116,19 @@ describe("the model list under its sticky header row", () => {
     // The list really did scroll on the way down (otherwise the walk proves nothing).
     expect(list.scrollTop).toBeGreaterThan(0);
 
-    // Up: every stop back to the first row, then the Filters button above the list.
+    // Up: every stop back to the first row, then out of the top of the box (the Advanced link, plan 91).
     const up: string[] = [];
     for (let guard = 0; guard < 40; guard++) {
       const el = document.activeElement as HTMLElement;
-      if (el.classList.contains("bonsai-pullmodels-filters-button")) break;
       expect(up, `stop visited twice on the way up: ${labelOf(el)}`).not.toContain(labelOf(el));
       up.push(labelOf(el));
       assertRowBelowHeader(el, `up at ${labelOf(el)}`);
       const moved = (latestByAriaLabel(labelOf(el))!.onMoveUp as () => boolean)();
       expect(moved).toBe(true);
+      if (upToAdvanced.mock.calls.length) break;
       steamScrollsFocused();
     }
-    expect(document.activeElement?.classList.contains("bonsai-pullmodels-filters-button")).toBe(true);
+    expect(upToAdvanced).toHaveBeenCalledTimes(1);
     expect(up.length).toBe(visited.length);
     expect(list.scrollTop).toBe(0);
   });

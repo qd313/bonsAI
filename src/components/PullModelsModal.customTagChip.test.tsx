@@ -1,9 +1,9 @@
 /**
- * Title: "Type a model name" as a chip on the Filters row
+ * Title: "Type a model name" as a chip in the filters column
  *
  * Purpose: Pins plan 62, § 3e #4 -- the typed-tag entry (a text field and a Pull button) used to
- * be its own permanent row above Filters. It is now one chip sharing the Filters row instead, and
- * pressing it swaps that same row over to the field. The cost named in the brief is real and
+ * be its own permanent row above the list. It is one chip instead (on the old Filters row, and since
+ * plan 91 at the foot of the filters column), and pressing it swaps the chip for the field. The cost named in the brief is real and
  * worth pinning: one extra press to reach the field that used to be visible immediately.
  *
  * Covers: the chip is what's shown by default (not the field); pressing it reveals the field and
@@ -18,7 +18,7 @@ import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { configure, fireEvent, render, waitFor } from "@testing-library/react";
 
-// See PullModelsModal.filtersPanel.test.tsx's own note on this: these assertions wait on a
+// As the old Filters panel's tests noted (that file is gone since plan 91): these assertions wait on a
 // requestAnimationFrame-scheduled focus move, and the default 1000ms waitFor window measured
 // flaky under the full related-test run (many jsdom environments sharing one worker), not because
 // the focus move itself was ever wrong.
@@ -43,6 +43,7 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { PullModelsModal } from "./PullModelsModal";
+import { resetPullModelsBoxMemory } from "./pullModelsBoxMemory";
 
 function renderModal(overrides: Partial<React.ComponentProps<typeof PullModelsModal>> = {}) {
   return render(
@@ -52,6 +53,7 @@ function renderModal(overrides: Partial<React.ComponentProps<typeof PullModelsMo
 
 beforeEach(() => {
   hoisted.buttonProps = [];
+  resetPullModelsBoxMemory();
 });
 
 afterEach(() => {
@@ -81,9 +83,9 @@ describe('"Type a model name" starts as a chip, not a field', () => {
       const closeBtn = container.querySelector('[aria-label="Close typing a model name by hand"]');
       expect(document.activeElement).toBe(closeBtn);
     });
-    // The Filters button is not part of the DOM while the field is showing -- same row, one or
-    // the other, never both, which is the whole point of not costing back the row's height.
-    expect(container.querySelector(".bonsai-pullmodels-filters-button")).toBeNull();
+    // The field opens where the chip was, at the foot of the filters column (plan 91).
+    const column = container.querySelector(".bonsai-pullmodels-filtercol")!;
+    expect(column.contains(container.querySelector('[aria-label="Pull custom model tag"]'))).toBe(true);
   });
 });
 

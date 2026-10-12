@@ -29,17 +29,20 @@
  * - Until 2026-09-20 this screen had a third, separate "Policy" section
  *   for the same three-tier choice the Browse screen's Licence filter
  *   makes now (plan 62, § 3d) — that section and its own chip are gone;
- *   the licence pick is one of the Filters panel's rows inside
- *   PullModelsModal, wired here exactly the same draft-until-Done way.
+ *   the licence pick is one of the filters column's rows inside
+ *   PullModelsModal (a column beside the list since plan 91), wired here
+ *   exactly the same draft-until-Done way.
  * - The Browse/Advanced section-button row is gone too (plan 62, § 3e #3): with only two
  *   sections left, and Policy no longer one of them, a whole row of buttons cost back the same
  *   height dropping Policy alone would have saved (two buttons stretch to fill the row exactly
  *   like three did). Advanced is now a small link at the top of the screen instead, wired with no
  *   custom Up/Down of its own -- the row it replaces never had any either, so Steam's own spatial
- *   nav already knows how to reach it and leave it.
+ *   nav already knows how to reach it and leave it. It sits in a Focusable of its own (plan 91) so
+ *   Up from the top of Browse (the filters column's Clear, the try-order switch) can hand the ring
+ *   to it by Steam's own transfer, never a plain focus() across containers.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Button, ConfirmModal } from "@decky/ui";
+import { Button, ConfirmModal, Focusable } from "@decky/ui";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
 import { useModelPolicyTierDraft } from "./ModelPolicyTierPanel";
 import {
@@ -50,6 +53,8 @@ import { PullModelsModal, type PullModelsFooterState } from "./PullModelsModal";
 import { BonsaiModalScope } from "./BonsaiModalScope";
 import { peekModalReturnFocus, rememberModalReturnFocus } from "../features/plugin-shell/modalReturnFocusRegistry";
 import type { TryOrderHost } from "../features/model-routing/useTryOrderPlaces";
+import type { NavRefHolder } from "../utils/navFocusRegistry";
+import { handRingTo } from "./pullModelsBoxMemory";
 
 export type OllamaModelsHubSection = "policy" | "browse" | "advanced";
 
@@ -105,14 +110,15 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
     tryOrderHost,
   } = props;
 
-  // "policy" used to be its own section; it is now the Filters panel's Licence group, inside
+  // "policy" used to be its own section; it is now the filters column's Licence group, inside
   // Browse. A caller still asking for it lands on plain Browse now -- this used to also force
-  // the Filters panel open with the ring on the first licence row (a "jump straight to the
+  // the old Filters panel open with the ring on the first licence row (a "jump straight to the
   // licence pick" shortcut), but measured on the Deck that left the ring one press away from
   // changing the licence filter with nothing pressed to put it there, reproducing 3 of 3 tries
   // through "Manage AI models..." and never through "Browse models..." even though both open the
   // same screen (docs/test-evidence/plan70-RING-ON-FILTER-2c1.json). Both routes now open the
-  // same way: panel closed, ring on "Advanced ›".
+  // same way, ring on "Advanced ›". Since plan 91 there is no panel: the filters are a column
+  // that is always on screen, so nothing is left to open.
   const [section, setSection] = useState<Exclude<OllamaModelsHubSection, "policy">>(
     initialSection === "policy" ? "browse" : initialSection
   );
@@ -257,6 +263,9 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
   }, [setDraft, onApplyTier2MultimodalPolicy]);
   const browseCancel = useCallback(() => handleHubClose("browseCancel"), [handleHubClose]);
   const browsePullAccepted = useCallback(() => handleHubClose("pullAccepted"), [handleHubClose]);
+  /** The Advanced link's nav node: Up from the top of Browse hands the ring here by Steam's transfer. */
+  const advancedNavRef = useRef<NavRefHolder["current"]>(null);
+  const upToAdvanced = useCallback(() => handRingTo(advancedNavRef), []);
 
   const toggleAdvanced = useCallback(() => {
     setSection((current) => (current === "advanced" ? "browse" : "advanced"));
@@ -282,7 +291,10 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
             paddingRight: 4,
           }}
         >
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Focusable
+            style={{ display: "flex", justifyContent: "flex-end" }}
+            {...({ navRef: advancedNavRef } as Record<string, unknown>)}
+          >
             <Button
               className="bonsai-models-hub-advanced-link"
               onClick={(e) => {
@@ -300,7 +312,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
             >
               {section === "advanced" ? "‹ Browse & pull" : "Advanced ›"}
             </Button>
-          </div>
+          </Focusable>
           {section === "browse" ? (
             <PullModelsModal
               embedded
@@ -314,7 +326,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
               onCancel={browseCancel}
               onPullAccepted={browsePullAccepted}
               onFooterStateChange={handleBrowseFooterChange}
-              initialFiltersOpen={false}
+              onMoveUpFromTop={upToAdvanced}
               tryOrderHost={hostWithDraft}
             />
           ) : null}

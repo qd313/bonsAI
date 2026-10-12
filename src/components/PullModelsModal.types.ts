@@ -60,7 +60,7 @@ export type PullModelsModalProps = {
   modelPolicyTier?: ModelPolicyTierId;
   /** Gates the "Any installed model" licence row exactly like it gated the old Tier 3 button. */
   modelPolicyNonFossUnlocked?: boolean;
-  /** Licence row picked directly in the Filters panel — a draft, saved the same way the three
+  /** Licence row picked directly in the filters column — a draft, saved the same way the three
    *  Policy buttons were (see OllamaModelsHubModal's Done handling). */
   onSelectModelPolicyTier?: (tier: ModelPolicyTierId) => void;
   onApplyTier2Policy?: () => void | Promise<void>;
@@ -71,9 +71,10 @@ export type PullModelsModalProps = {
   /** When true, render panel body only (for AI models hub). */
   embedded?: boolean;
   onFooterStateChange?: (state: PullModelsFooterState) => void;
-  /** Opens the Filters panel, ring inside it, the moment this screen mounts — used for the
-   *  "Manage models → Policy" shortcut now that Policy is a filter, not its own section. */
-  initialFiltersOpen?: boolean;
+  /** Up out of the top of the box (the filters column's Clear, the try-order switch, or the first row
+   *  with no switch): the hub hands the ring to its Advanced link by Steam's transfer. Left out, or
+   *  false, and the press is Steam's own. */
+  onMoveUpFromTop?: () => boolean;
   /** Which computer answers and the saved orders. Given: the box shows the try-order switch and each
    *  installed row's place (PullModelsTryOrder.tsx). Left out: Browse models looks as it always did. */
   tryOrderHost?: TryOrderHost;

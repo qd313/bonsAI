@@ -74,8 +74,8 @@ export const PULL_MODEL_GROUP_ORDER: readonly PullModelGroup[] = [
 ];
 
 /**
- * The four "matches an Ask mode" filters offered in the models screen's Filters panel (plan 62,
- * § 3d). Replaces the old single-select filter row (all/speed/strategy/expert/vision/coding):
+ * The four "Good for" filters offered in the models screen's filters column (plan 62, § 3d; a
+ * column since plan 91). Replaces the old single-select filter row (all/speed/strategy/expert/vision/coding):
  * "All" is gone because these are independent tickable rows now (ticking none shows every mode),
  * and "Coding" was dropped on purpose — nothing in the catalog is coding-only and no Ask mode
  * matches it. A model matches this group when it fits *any* ticked mode (OR, not AND).
@@ -463,16 +463,6 @@ export function comparePullModelEntriesStretchOrder(a: PullModelEntry, b: PullMo
   const bKey = bRank === -1 ? PULL_MODEL_STRETCH_BAKEOFF_ORDER.length : bRank;
   if (aKey !== bKey) return aKey - bKey;
   return comparePullModelEntriesNewestFirst(a, b);
-}
-
-/** Compact table date — e.g. May '25 — saves horizontal space in Pull models. */
-export function formatReleasedYmShort(ym: string): string {
-  const m = /^(\d{4})-(\d{2})$/.exec(ym.trim());
-  if (!m) return ym;
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const idx = parseInt(m[2], 10) - 1;
-  if (idx < 0 || idx > 11) return ym;
-  return `${months[idx]} '${m[1].slice(2)}`;
 }
 
 export function formatSizeGb(gb: number): string {

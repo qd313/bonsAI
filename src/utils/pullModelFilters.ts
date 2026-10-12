@@ -1,12 +1,12 @@
 /**
- * Title: Pull models table filtering and the Filters panel row model
+ * Title: Pull models table filtering and the filters column's row model
  *
  * Purpose: The pure matching checks PullModelsModal.tsx runs a catalog entry through (installed?
- * matches the licence tier? matches an Ask-mode filter? on the live registry?), plus the flat,
- * ordered row list that drives the Filters panel itself and the labels each row shows.
+ * matches the licence tier? matches a Good for filter? on the live registry?), plus the flat,
+ * ordered row list that drives the filters column beside the list and the words each row shows.
  *
- * Used for: PullModelsModal.tsx's table filtering (filteredCatalog) and its Filters panel
- * (FILTER_PANEL_ROWS and the D-pad walk over it).
+ * Used for: usePullModelTableData.ts's table filtering and counts, and PullModelsFiltersColumn.tsx
+ * (FILTER_PANEL_ROWS, its headings and labels, and the D-pad walk over it).
  *
  * Solves: keeps "does this entry match?" and "what does this filter row say?" as one small set of
  * pure functions, testable and readable apart from the screen's state and rendering.
@@ -14,7 +14,12 @@
  * Does not: hold any screen state (which filters are on, which tags are installed) — those stay in
  * PullModelsModal.tsx, which calls these with its own state on every render.
  */
-import { PULL_MODEL_MODE_FILTER_OPTIONS, type PullModelEntry, type PullModelModeFilterId } from "../data/pullModelCatalog";
+import {
+  PULL_MODEL_MODE_FILTER_OPTIONS,
+  type PullModelEntry,
+  type PullModelModeFilterId,
+  type PullModelUseTag,
+} from "../data/pullModelCatalog";
 import { MODEL_POLICY_TIER_IDS, MODEL_POLICY_TIER_LABELS_PLAIN, type ModelPolicyTierId } from "../data/modelPolicy";
 import type { CatalogMetadataResponse } from "../components/PullModelsModal.types";
 
@@ -37,6 +42,17 @@ export function findUnavailableRegistryTags(
   if (!meta || meta.source !== "live") return [];
   const tagMeta = meta.tags ?? {};
   return tags.filter((tag) => tagMeta[tag]?.exists !== true);
+}
+
+const SHORT_TAG: Record<PullModelUseTag, string> = { chat: "Chat", vision: "Vis", ocr: "OCR", strategy: "Strat", coding: "Code" };
+
+/**
+ * The list's Modes cell in short words ("Chat Vis OCR Strat"), so it reads on two lines in the narrow
+ * track the filters column leaves it (plan 91; the long words, "Chat · Vision · Ocr · Strategy", are
+ * the cell's title). Spaces, not dots, so the line breaks between words.
+ */
+export function formatModesShort(tags: ReadonlyArray<PullModelUseTag>): string {
+  return tags.map((t) => SHORT_TAG[t] ?? t).join(" ");
 }
 
 export function normalizeInstalledSet(models: string[]): Set<string> {
@@ -94,10 +110,10 @@ export function entryMatchesLicenceTier(entry: PullModelEntry, tier: ModelPolicy
 }
 
 /**
- * One row in the Filters panel (plan 62, § 3d) — the six filters, grouped under three headings.
- * Licence is a three-way pick (like the old Policy buttons); the rest are independent toggles.
- * A flat, ordered array rather than nested objects because every piece of D-pad wiring below
- * (Up/Down between rows, and the panel's own entry/exit) walks it by a single row index.
+ * One row in the filters column (plan 62, § 3d; a column since plan 91) — the filters, grouped under
+ * three headings. Licence is a three-way pick (like the old Policy buttons); the rest are independent
+ * toggles. A flat, ordered array rather than nested objects because the column's Up/Down walk goes
+ * through it by a single row index.
  */
 export type FilterPanelRow =
   | { kind: "licence"; tier: ModelPolicyTierId }
@@ -120,9 +136,10 @@ export function filterPanelRowKey(row: FilterPanelRow): string {
   return row.kind;
 }
 
+/** The drawing's words for the three groups (plan 91 § 2a): Licence, Good for, Show. */
 export function filterPanelRowGroupHeading(row: FilterPanelRow): string {
   if (row.kind === "licence") return "Licence";
-  if (row.kind === "mode") return "Matches Ask mode";
+  if (row.kind === "mode") return "Good for";
   return "Show";
 }
 
@@ -132,12 +149,12 @@ export function filterPanelRowLabel(row: FilterPanelRow): string {
     return PULL_MODEL_MODE_FILTER_OPTIONS.find((opt) => opt.id === row.id)?.label ?? row.id;
   }
   if (row.kind === "installedOnly") return "Installed only";
-  if (row.kind === "essentialsOnly") return "Essentials only";
+  if (row.kind === "essentialsOnly") return "Deck essentials only";
   return "Recently added";
 }
 
-/** Same text as filterPanelRowLabel, except Essentials only keeps its longer spoken description. */
+/** Same text as filterPanelRowLabel, except Deck essentials only keeps its longer spoken description. */
 export function filterPanelRowAriaLabel(row: FilterPanelRow): string {
-  if (row.kind === "essentialsOnly") return "Essentials only — show Tier 1 and Tier 2 one-model presets";
+  if (row.kind === "essentialsOnly") return "Deck essentials only — show Tier 1 and Tier 2 one-model presets";
   return filterPanelRowLabel(row);
 }

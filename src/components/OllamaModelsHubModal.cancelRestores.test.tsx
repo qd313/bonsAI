@@ -3,7 +3,7 @@
  *
  * Purpose: Pin plan 76 lane 2 round 3, bug 2 (roadmap: 'After Cancel on the AI models screen, the
  * saved licence setting and the screen disagree'; docs/test-evidence/plan76-P76-TIER2-MODEL-SAFE-FIRST.json).
- * Licence picks in the Filters panel are a draft until Done -- except that "Pull selected" saves the
+ * Licence picks in the filters column are a draft until Done -- except that "Pull selected" saves the
  * draft first, because the pull that follows needs it. Decline the pull's own box, press Cancel, and
  * the file kept the new licence while the reopened screen (which reads the value held when the tab was
  * rebuilt) showed the old one. Cancel already throws away every other draft on this screen, so it now
@@ -59,7 +59,7 @@ function draw(overrides: Partial<OllamaModelsHubModalProps> = {}) {
   return { commit, onClose };
 }
 
-/** The Filters panel picks a licence, a model is queued, and Pull selected (the footer OK) is pressed. */
+/** The filters column picks a licence, a model is queued, and Pull selected (the footer OK) is pressed. */
 async function pickOpenSourceQueueAndPressPullSelected(onOk = vi.fn()) {
   act(() => {
     (hoisted.pullModelsProps?.onSelectModelPolicyTier as (t: string) => void)("open_source_only");

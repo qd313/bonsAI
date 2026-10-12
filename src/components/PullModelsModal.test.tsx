@@ -8,7 +8,7 @@
  * (isPlausibleOllamaPullTag, in mergePullModelCatalog.test.ts) plus the button's driven-by-state
  * disabled/enabled behaviour here; the on-Deck row covers actually typing a tag.
  */
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { render, waitFor, fireEvent } from "@testing-library/react";
 import { toaster } from "@decky/api";
 
@@ -24,6 +24,10 @@ import {
 import { isEmbeddingOnlyTag } from "../data/pullModelCatalog";
 import { getRpcCallLog, setRpcHandler } from "../test-harness/fakeDeckyRpc";
 import { defaultSettingsFixture } from "../test-harness/rpcFixtures";
+import { resetPullModelsBoxMemory } from "./pullModelsBoxMemory";
+
+// The Good for and Show picks last for the session (plan 91): each test starts from a fresh plugin.
+beforeEach(() => resetPullModelsBoxMemory());
 
 function renderModal(overrides: Partial<React.ComponentProps<typeof PullModelsModal>> = {}) {
   return render(
@@ -46,21 +50,13 @@ function setInstalledModels(models: string[]) {
  * presets (all "essentials"-group, all vision-capable). A "smallest"-group, text-only tag like
  * qwen2.5:1.5b or llama3.2:3b needs this off to appear as a catalog row at all.
  *
- * Essentials only lives inside the Filters panel now (plan 62, § 3d) rather than as its own
- * always-visible chip, so this opens the panel first -- the button's own accessible name is the
- * dynamic "Filters, N on: ..." summary, so it is found by its class instead.
+ * Deck essentials only is a row of the filters column beside the list (plan 91), always on screen.
  */
 function showAllGroups(container: HTMLElement) {
-  const filtersButton = container.querySelector(".bonsai-pullmodels-filters-button") as HTMLButtonElement;
-  fireEvent.click(filtersButton);
   const toggle = container.querySelector(
-    '[aria-label="Essentials only — show Tier 1 and Tier 2 one-model presets"]'
+    '[aria-label="Deck essentials only — show Tier 1 and Tier 2 one-model presets"]'
   ) as HTMLButtonElement;
   fireEvent.click(toggle);
-  // The panel stays open until closed explicitly (it does not auto-close on a tick, so several
-  // filters can be set in one visit) -- close it so the table underneath is what these tests see.
-  const closeButton = container.querySelector(".bonsai-pullmodels-filterpanel-close") as HTMLButtonElement;
-  fireEvent.click(closeButton);
 }
 
 describe("isEmbeddingOnlyTag", () => {
@@ -150,7 +146,7 @@ describe("isRecentPullModelTag", () => {
 describe("PullModelsModal custom tag entry", () => {
   it("renders the custom tag field and starts the Pull button disabled with nothing typed", () => {
     const { container } = renderModal();
-    // "Type a model name" is a chip on the Filters row now (plan 62, § 3e #4) -- pressing it is
+    // "Type a model name" is a chip in the filters column (plan 62, § 3e #4; plan 91) -- pressing it is
     // what reveals the field and its Pull button, rather than either being shown by default.
     const chip = container.querySelector('[aria-label="Type a model name by hand"]') as HTMLButtonElement;
     expect(chip).not.toBeNull();

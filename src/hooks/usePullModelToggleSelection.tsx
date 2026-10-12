@@ -5,7 +5,7 @@
  * including the "this one is large" confirm dialog that a "stretch" model shows the first time it
  * is picked in this session.
  *
- * Used for: PullModelsModal.tsx's own table rows and the Suggested chips in the Filters panel —
+ * Used for: PullModelsModal.tsx's own table rows and the Suggested chips in the filters column —
  * both call the same toggle.
  *
  * Solves: keeps the large-model warning and the queue add/remove bookkeeping (with its toasts)

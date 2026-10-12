@@ -16,13 +16,8 @@
  * Does not: Pull, remove or star anything, or decide the order; the Try cell does the moving.
  */
 import type { ReactNode } from "react";
-import {
-  formatGtaStars,
-  formatPullModelTags,
-  formatReleasedYmShort,
-  formatSizeGb,
-  type PullModelEntry,
-} from "../data/pullModelCatalog";
+import { formatGtaStars, formatPullModelTags, formatSizeGb, type PullModelEntry } from "../data/pullModelCatalog";
+import { formatModesShort } from "../utils/pullModelFilters";
 import { PullModelLicenceSlot } from "./PullModelLicenceSlot";
 
 export function PullModelsPcRow(props: {
@@ -50,14 +45,15 @@ export function PullModelsPcRow(props: {
           {entry ? <PullModelLicenceSlot entry={entry} /> : <span className="bonsai-pullmodels-foss-slot" aria-hidden={true} />}
         </span>
       </div>
-      <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">
+      <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted bonsai-pullmodels-col--size" role="cell">
         {sizeGb != null && sizeGb > 0 ? formatSizeGb(sizeGb) : "?"}
       </div>
-      <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted bonsai-pullmodels-col--date" role="cell">
-        {entry ? formatReleasedYmShort(entry.releasedYm) : "—"}
-      </div>
-      <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted bonsai-pullmodels-col--modes" role="cell">
-        {entry ? formatPullModelTags(entry.tags) : "Other"}
+      <div
+        className="bonsai-pullmodels-col bonsai-pullmodels-col--muted bonsai-pullmodels-col--modes"
+        role="cell"
+        title={entry ? formatPullModelTags(entry.tags) : undefined}
+      >
+        {entry ? formatModesShort(entry.tags) : "Other"}
       </div>
       <div className="bonsai-pullmodels-col bonsai-pullmodels-col--stars" role="cell">
         {entry ? formatGtaStars(entry.rating) : "—"}

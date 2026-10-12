@@ -2,7 +2,8 @@
  * Title: Browse models' column-header row
  *
  * Purpose: The sticky row of column names above the models table in the AI models box (Pull, Model,
- * Size, Date, Modes, Deck fit, and Del; plus Try while the box shows the try order).
+ * Size, Modes, Deck fit, and Del; plus Try while the box shows the try order). Date went in plan 91 to
+ * make room for the filters column; its facts live on as the New badge and the Recently added filter.
  *
  * Used for: PullModelsModal.tsx, drawn once at the top of the table.
  *
@@ -21,7 +22,6 @@ export function PullModelsTableHeader(props: { headerRef?: Ref<HTMLDivElement>; 
       <div className="bonsai-pullmodels-col bonsai-pullmodels-col--pull" role="columnheader">Pull</div>
       <div className="bonsai-pullmodels-col bonsai-pullmodels-col--model" role="columnheader">Model</div>
       <div className="bonsai-pullmodels-col" role="columnheader">Size</div>
-      <div className="bonsai-pullmodels-col bonsai-pullmodels-col--date" role="columnheader">Date</div>
       <div className="bonsai-pullmodels-col bonsai-pullmodels-col--modes" role="columnheader">Modes</div>
       <div
         className="bonsai-pullmodels-col bonsai-pullmodels-col--rating"

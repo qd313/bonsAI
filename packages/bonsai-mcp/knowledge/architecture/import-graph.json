@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 850,
-  "edgeCount": 2683,
+  "fileCount": 855,
+  "edgeCount": 2716,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1493,15 +1493,18 @@
         "src/components/ModelPolicyTierPanel.tsx",
         "src/components/ModelRoutingAdvancedPanel.tsx",
         "src/components/PullModelsModal.tsx",
+        "src/components/pullModelsBoxMemory.ts",
         "src/data/modelPolicy.ts",
         "src/features/model-routing/useTryOrderPlaces.ts",
-        "src/features/plugin-shell/modalReturnFocusRegistry.ts"
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
         "src/components/OllamaModelsHubModal.cancelRestores.test.tsx",
         "src/components/OllamaModelsHubModal.renderLoop.test.tsx",
         "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
+        "src/components/PullModelsFiltersColumn.test.tsx",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx"
       ]
     },
@@ -1831,37 +1834,79 @@
         "src/components/PullModelsPcRow.tsx"
       ]
     },
+    "src/components/PullModelsCustomTagEntry.tsx": {
+      "imports": [
+        "src/components/pullModelsBoxMemory.ts",
+        "src/hooks/usePullModelCustomTagPull.tsx",
+        "src/utils/mergePullModelCatalog.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsFiltersColumn.tsx"
+      ]
+    },
+    "src/components/PullModelsFiltersColumn.layout.test.ts": {
+      "imports": [
+        "src/styles/sections/gamepadAndPullModels.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/PullModelsFiltersColumn.test.tsx": {
+      "imports": [
+        "src/components/OllamaModelsHubModal.tsx",
+        "src/components/PullModelsModal.tsx",
+        "src/components/pullModelsBoxMemory.ts",
+        "src/data/modelPolicy.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/pullModelsListLayout.ts",
+        "src/test-harness/rpcFixtures.ts",
+        "src/test-harness/steamRing.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/components/PullModelsFiltersColumn.tsx": {
+      "imports": [
+        "src/components/PullModelsCustomTagEntry.tsx",
+        "src/components/PullModelsStarterSetChip.tsx",
+        "src/components/pullModelsBoxMemory.ts",
+        "src/data/modelPolicy.ts",
+        "src/data/pullModelCatalog.ts",
+        "src/utils/navFocusRegistry.ts",
+        "src/utils/pullModelFilters.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.tsx"
+      ]
+    },
     "src/components/PullModelsModal.customTagCancel.test.tsx": {
       "imports": [
-        "src/components/PullModelsModal.tsx"
+        "src/components/PullModelsModal.tsx",
+        "src/components/pullModelsBoxMemory.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
     },
     "src/components/PullModelsModal.customTagChip.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
-        "src/test-harness/fakeDeckyUi.tsx"
-      ],
-      "importedBy": []
-    },
-    "src/components/PullModelsModal.filtersPanel.test.tsx": {
-      "imports": [
-        "src/components/PullModelsModal.tsx",
-        "src/test-harness/fakeDeckyRpc.ts",
+        "src/components/pullModelsBoxMemory.ts",
         "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
     },
     "src/components/PullModelsModal.formSubmit.test.tsx": {
       "imports": [
-        "src/components/PullModelsModal.tsx"
+        "src/components/PullModelsModal.tsx",
+        "src/components/pullModelsBoxMemory.ts"
       ],
       "importedBy": []
     },
     "src/components/PullModelsModal.gamepadOK.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
-        "src/test-harness/fakeDeckyRpc.ts"
+        "src/components/pullModelsBoxMemory.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
     },
@@ -1870,6 +1915,15 @@
         "src/components/PullModelsModal.tsx",
         "src/data/pullModelLicencePill.ts",
         "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/PullModelsModal.listEnds.test.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.tsx",
+        "src/components/pullModelsBoxMemory.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
     },
@@ -1902,6 +1956,7 @@
     "src/components/PullModelsModal.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
+        "src/components/pullModelsBoxMemory.ts",
         "src/data/pullModelCatalog.ts",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/rpcFixtures.ts"
@@ -1911,6 +1966,7 @@
     "src/components/PullModelsModal.tryOrder.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
+        "src/components/pullModelsBoxMemory.ts",
         "src/features/model-routing/useTryOrderPlaces.ts",
         "src/styles/sections/gamepadAndPullModels.ts",
         "src/test-harness/fakeDeckyRpc.ts",
@@ -1924,18 +1980,17 @@
       "imports": [
         "src/components/BonsaiModalScope.tsx",
         "src/components/PullModelLicenceSlot.tsx",
+        "src/components/PullModelsFiltersColumn.tsx",
         "src/components/PullModelsModal.types.ts",
-        "src/components/PullModelsStarterSetChip.tsx",
         "src/components/PullModelsTableHeader.tsx",
         "src/components/PullModelsTryOrder.tsx",
+        "src/components/pullModelsBoxMemory.ts",
         "src/components/pullModelsListClearance.ts",
         "src/data/deprioritizedModels.ts",
-        "src/data/modelPolicy.ts",
         "src/data/pullModelCatalog.ts",
         "src/data/storageKeys.ts",
         "src/hooks/usePullModelCatalog.ts",
         "src/hooks/usePullModelCatalogRefresh.ts",
-        "src/hooks/usePullModelCustomTagPull.tsx",
         "src/hooks/usePullModelDeleteConfirm.tsx",
         "src/hooks/usePullModelEmbeddedFooterState.ts",
         "src/hooks/usePullModelOpenBookkeeping.ts",
@@ -1944,19 +1999,20 @@
         "src/hooks/usePullModelTableData.ts",
         "src/hooks/usePullModelTier2Confirm.tsx",
         "src/hooks/usePullModelToggleSelection.tsx",
-        "src/utils/mergePullModelCatalog.ts",
+        "src/utils/navFocusRegistry.ts",
         "src/utils/pullModelFilters.ts",
         "src/utils/pullModelNewBadge.ts",
         "src/utils/pullModelRecommendations.ts"
       ],
       "importedBy": [
         "src/components/OllamaModelsHubModal.tsx",
+        "src/components/PullModelsFiltersColumn.test.tsx",
         "src/components/PullModelsModal.customTagCancel.test.tsx",
         "src/components/PullModelsModal.customTagChip.test.tsx",
-        "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/PullModelsModal.formSubmit.test.tsx",
         "src/components/PullModelsModal.gamepadOK.test.tsx",
         "src/components/PullModelsModal.licencePill.test.tsx",
+        "src/components/PullModelsModal.listEnds.test.tsx",
         "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",
         "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
@@ -1986,7 +2042,8 @@
     "src/components/PullModelsPcRow.tsx": {
       "imports": [
         "src/components/PullModelLicenceSlot.tsx",
-        "src/data/pullModelCatalog.ts"
+        "src/data/pullModelCatalog.ts",
+        "src/utils/pullModelFilters.ts"
       ],
       "importedBy": [
         "src/components/PullModelsTryOrder.tsx"
@@ -2008,7 +2065,7 @@
         "src/utils/pullModelFilters.ts"
       ],
       "importedBy": [
-        "src/components/PullModelsModal.tsx"
+        "src/components/PullModelsFiltersColumn.tsx"
       ]
     },
     "src/components/PullModelsTableHeader.tsx": {
@@ -2483,6 +2540,26 @@
         "src/hooks/useMainTabAskBarFocus.ts"
       ]
     },
+    "src/components/pullModelsBoxMemory.ts": {
+      "imports": [
+        "src/data/pullModelCatalog.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/components/OllamaModelsHubModal.tsx",
+        "src/components/PullModelsCustomTagEntry.tsx",
+        "src/components/PullModelsFiltersColumn.test.tsx",
+        "src/components/PullModelsFiltersColumn.tsx",
+        "src/components/PullModelsModal.customTagCancel.test.tsx",
+        "src/components/PullModelsModal.customTagChip.test.tsx",
+        "src/components/PullModelsModal.formSubmit.test.tsx",
+        "src/components/PullModelsModal.gamepadOK.test.tsx",
+        "src/components/PullModelsModal.listEnds.test.tsx",
+        "src/components/PullModelsModal.test.tsx",
+        "src/components/PullModelsModal.tryOrder.test.tsx",
+        "src/components/PullModelsModal.tsx"
+      ]
+    },
     "src/components/pullModelsListClearance.ts": {
       "imports": [],
       "importedBy": [
@@ -2833,7 +2910,8 @@
         "src/components/ModelRoutingAdvancedPanel.tsx",
         "src/components/OllamaModelsHubModal.tsx",
         "src/components/OllamaTab.tsx",
-        "src/components/PullModelsModal.tsx",
+        "src/components/PullModelsFiltersColumn.test.tsx",
+        "src/components/PullModelsFiltersColumn.tsx",
         "src/components/PullModelsModal.types.ts",
         "src/components/PullModelsTryOrder.tsx",
         "src/data/bonsaiSettingsNormalizers.ts",
@@ -2933,12 +3011,14 @@
       "imports": [],
       "importedBy": [
         "src/components/PullModelLicenceSlot.tsx",
+        "src/components/PullModelsFiltersColumn.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tsx",
         "src/components/PullModelsModal.types.ts",
         "src/components/PullModelsPcRow.tsx",
         "src/components/PullModelsTableHeader.tsx",
         "src/components/PullModelsTryOrder.tsx",
+        "src/components/pullModelsBoxMemory.ts",
         "src/data/pullModelCatalog.test.ts",
         "src/data/pullModelLicencePill.ts",
         "src/features/model-routing/useTryOrderPlaces.ts",
@@ -5850,7 +5930,7 @@
         "src/utils/mergePullModelCatalog.ts"
       ],
       "importedBy": [
-        "src/components/PullModelsModal.tsx",
+        "src/components/PullModelsCustomTagEntry.tsx",
         "src/hooks/usePullModelDownloadNotice.test.tsx"
       ]
     },
@@ -6716,6 +6796,7 @@
       ],
       "importedBy": [
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
+        "src/components/PullModelsFiltersColumn.layout.test.ts",
         "src/components/PullModelsModal.tryOrder.test.tsx",
         "src/styles/bonsaiScopeStylesheet.ts",
         "src/styles/presetChipFocusRing.test.ts",
@@ -7139,9 +7220,10 @@
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
         "src/components/OllamaWhereAiRunsSection.test.tsx",
         "src/components/OllamaWhereAiRunsSection.walk.test.tsx",
-        "src/components/PullModelsModal.filtersPanel.test.tsx",
+        "src/components/PullModelsFiltersColumn.test.tsx",
         "src/components/PullModelsModal.gamepadOK.test.tsx",
         "src/components/PullModelsModal.licencePill.test.tsx",
+        "src/components/PullModelsModal.listEnds.test.tsx",
         "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",
         "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
@@ -7269,8 +7351,11 @@
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
         "src/components/OllamaWhereAiRunsSection.walk.test.tsx",
         "src/components/PermissionDenyAction.test.tsx",
+        "src/components/PullModelsFiltersColumn.test.tsx",
+        "src/components/PullModelsModal.customTagCancel.test.tsx",
         "src/components/PullModelsModal.customTagChip.test.tsx",
-        "src/components/PullModelsModal.filtersPanel.test.tsx",
+        "src/components/PullModelsModal.gamepadOK.test.tsx",
+        "src/components/PullModelsModal.listEnds.test.tsx",
         "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
@@ -7336,6 +7421,7 @@
     "src/test-harness/pullModelsListLayout.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/PullModelsFiltersColumn.test.tsx",
         "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx"
       ]
@@ -7353,6 +7439,7 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/OllamaModelsHubModal.renderLoop.test.tsx",
+        "src/components/PullModelsFiltersColumn.test.tsx",
         "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
@@ -7393,6 +7480,7 @@
     "src/test-harness/steamRing.tsx": {
       "imports": [],
       "importedBy": [
+        "src/components/PullModelsFiltersColumn.test.tsx",
         "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/components/SettingsTabScreenshotHeading.test.tsx",
         "src/features/chat-slots/afterBoxHarness.tsx",
@@ -9058,7 +9146,7 @@
         "src/data/pullModelCatalog.ts"
       ],
       "importedBy": [
-        "src/components/PullModelsModal.tsx",
+        "src/components/PullModelsCustomTagEntry.tsx",
         "src/hooks/usePullModelCatalog.ts",
         "src/hooks/usePullModelCatalogRefresh.ts",
         "src/hooks/usePullModelCustomTagPull.tsx",
@@ -9127,10 +9215,14 @@
         "src/components/MainTabUnifiedAskBar.stopRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
+        "src/components/OllamaModelsHubModal.tsx",
         "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx",
         "src/components/PermissionsTab.tsx",
+        "src/components/PullModelsFiltersColumn.tsx",
+        "src/components/PullModelsModal.tsx",
         "src/components/buildEarlierList.tsx",
         "src/components/injectChipNav.ts",
+        "src/components/pullModelsBoxMemory.ts",
         "src/features/chat-slots/afterBoxHarness.tsx",
         "src/features/chat-slots/afterDeleteRebuild.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
@@ -9329,7 +9421,9 @@
         "src/data/pullModelCatalog.ts"
       ],
       "importedBy": [
+        "src/components/PullModelsFiltersColumn.tsx",
         "src/components/PullModelsModal.tsx",
+        "src/components/PullModelsPcRow.tsx",
         "src/components/PullModelsStarterSetChip.tsx",
         "src/components/PullModelsTryOrder.tsx",
         "src/hooks/usePullModelCatalogRefresh.ts",

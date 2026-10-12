@@ -820,7 +820,9 @@ SHOW      [ ] Installed only ...      |
 [ Done ]  [ Cancel ]
 ```
 
-- **Stops:** Clear, the ten filter rows (the greyed third licence row is skipped until it is unlocked), "Type a name"
+- **Stops:** Clear, the ten filter rows (the greyed third licence row is skipped until it is unlocked: the column skips
+  it by its own knowledge that the row is off, because on the Deck a greyed button carries only a `Disabled` class, not
+  the browser's `disabled`, and a plain `focus()` lands on it; plan 92's second round), "Type a name"
   (or, once open, its field row, whose landing is the "×"), "Install the starter set" while the starter model is
   missing, and each Suggested chip. All are plain buttons directly inside one `Focusable` (the column), so Up and Down
   between them are plain sibling `focus()` moves (`step()` in the column file). **The one exception, carried over

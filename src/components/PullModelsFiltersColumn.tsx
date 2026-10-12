@@ -9,7 +9,7 @@
  * changes at once.
  *
  *     [ 7 models match            Clear ]   <- the first stop
- *     LICENCE   (•) Open source only            Up from Clear -> the title row's Advanced link
+ *     LICENCE   (•) Open source only            Up from Clear -> Refresh (↻), then Advanced
  *               ( ) Also try open-weight models
  *               ( ) Any installed model         (greyed until unlocked, and skipped)
  *     GOOD FOR  [ ] Speed               5       Right from any stop -> the list's remembered row
@@ -86,7 +86,7 @@ export type PullModelsFiltersColumnProps = {
   okButtonRuns: OkRuns;
   /** Right from any stop: the list's remembered row, by Steam's transfer. */
   toList: () => boolean;
-  /** Up from the first stop: the title row's Advanced link. False leaves the press to Steam. */
+  /** Up from the first stop: the Refresh button above, else the title row's Advanced link. False leaves the press to Steam. */
   upFromTop: () => boolean;
 };
 
@@ -138,9 +138,15 @@ export function PullModelsFiltersColumn(props: PullModelsFiltersColumnProps) {
     STARTER,
     ...props.suggested.map((e) => suggestedKey(e.tag)),
   ];
+  /*
+   * A greyed row is skipped by what the column knows (the row is off), never by asking the element: on the
+   * Deck a greyed button carries only a Disabled class, not the browser's `disabled`, and a plain focus()
+   * put the ring on it (plan92-P91-MODELS-COLUMN-WALK.json: the third licence row, both ways).
+   */
+  const greyed = new Set(FILTER_PANEL_ROWS.filter(disabled).map(filterPanelRowKey));
   const usable = (key: string) => {
     const el = landings.current.get(key);
-    return el && !(el as HTMLButtonElement).disabled ? el : null;
+    return el && !greyed.has(key) && !(el as HTMLButtonElement).disabled ? el : null;
   };
   /** The next usable stop from `key` in `dir`, by a plain sibling focus; false past either end. */
   const step = (key: string, dir: 1 | -1): boolean => {

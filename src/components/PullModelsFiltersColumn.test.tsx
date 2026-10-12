@@ -22,7 +22,9 @@
  * models screen the dialog is a stand-in too: a column of its body (no flow of its own) and its footer
  * (Done, Cancel), which is how the Deck's list reached Done from its last row (plan64-MODELS-HUB-RETURN-01).
  * The column and the list are laid out in fixed boxes, and Steam's scroll-into-view runs on whatever took
- * the ring after every press.
+ * the ring after every press. A greyed button is drawn as Steam draws it, a Disabled class and still
+ * focusable (plan 92's second round: the greyed licence row passed here behind the browser's `disabled` and
+ * took the ring on the Deck, plan92-P91-MODELS-COLUMN-WALK.json).
  */
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -40,14 +42,24 @@ vi.mock("@decky/ui", async () => {
   const { SteamRingFocusable } = await import("../test-harness/steamRing");
   const RealButton = stubs.Button;
   const RealConfirm = stubs.ConfirmModal;
+  /* Steam's own button: greyed, it carries a Disabled class and still takes a plain focus() (the browser's `disabled`
+     would refuse it, which is how the greyed licence row passed here and took the ring on the Deck). One drawn with
+     `focusable={false}` is left out of Steam's own moves (`data-steam-skip`, read by `press` below). */
   const CapturingButton = React.forwardRef<HTMLButtonElement, Record<string, unknown>>(function CapturingButton(props, ref) {
     const own = React.useRef<HTMLButtonElement | null>(null);
     React.useLayoutEffect(() => {
       if (own.current) hoisted.propsByEl.set(own.current, props);
     });
+    const { disabled, focusable, className, ...rest } = props;
+    const deck = {
+      ...rest,
+      className: [className, disabled ? "Disabled" : ""].filter(Boolean).join(" ") || undefined,
+      "aria-disabled": disabled ? true : rest["aria-disabled"],
+      "data-steam-skip": focusable === false ? "true" : undefined,
+    };
     return (
       <RealButton
-        {...props}
+        {...deck}
         ref={(el: HTMLButtonElement | null) => {
           own.current = el;
           if (typeof ref === "function") ref(el);
@@ -167,14 +179,14 @@ const FOCUSABLE = '[data-decky-ui="Focusable"]';
 const navParent = (el: Element) => el.parentElement?.closest<HTMLElement>(FOCUSABLE) ?? null;
 /** A container's nav children in order: the stops and the containers whose nearest container it is. */
 const navChildren = (box: HTMLElement) =>
-  Array.from(box.querySelectorAll<HTMLElement>(`button:not([disabled]), ${FOCUSABLE}`)).filter((el) => navParent(el) === box);
+  Array.from(box.querySelectorAll<HTMLElement>(`button:not([data-steam-skip]), ${FOCUSABLE}`)).filter((el) => navParent(el) === box);
 const flowAxis = (box: HTMLElement) => {
   const flow = box.getAttribute("flow-children");
   return flow === "column" || flow === "vertical" ? "column" : flow === "row" || flow === "horizontal" ? "row" : null;
 };
 /** Where Steam's ring lands on a nav child: the stop itself, or a container's first stop inside. */
 const landingIn = (el: HTMLElement) =>
-  el.matches(FOCUSABLE) ? el.querySelector<HTMLElement>("button:not([disabled])") : el;
+  el.matches(FOCUSABLE) ? el.querySelector<HTMLElement>("button:not([data-steam-skip])") : el;
 
 /**
  * One D-pad press as Steam handles it: the ringed button's own handler first; when it is missing or
@@ -319,7 +331,7 @@ describe("the column beside the list", () => {
   it("greys the third licence row until it is unlocked; a licence tick reports the pick as a draft", async () => {
     const onSelectModelPolicyTier = vi.fn();
     const { container } = await openBox({ onSelectModelPolicyTier });
-    expect(rowButton(container, "Any installed model").disabled).toBe(true);
+    expect(rowButton(container, "Any installed model").getAttribute("aria-disabled")).toBe("true");
     tap(rowButton(container, "Also try open-weight models"));
     expect(onSelectModelPolicyTier).toHaveBeenCalledWith("open_weight");
   });
@@ -530,15 +542,20 @@ describe("a walk of the whole box, Steam scrolling whatever takes the ring", () 
     const isDone = (el: HTMLElement) => el === doneButton(c);
     putSteamRingOn(clearButton(c));
     const down = walk("Down", isDone);
-    // Every stop the column draws, the greyed licence row aside, then Steam's own move on to Done.
-    const drawnButtons = Array.from(col.querySelectorAll<HTMLButtonElement>("button:not([disabled])"));
+    // Every stop the column draws, the greyed licence row aside, then Steam's own move on to Done. The greyed row
+    // is drawn the Deck's way (a Disabled class, still focusable), so only the column's own walk can skip it.
+    const greyedRow = rowButton(c, "Any installed model");
+    expect(greyedRow.classList.contains("Disabled")).toBe(true);
+    const drawnButtons = Array.from(col.querySelectorAll<HTMLButtonElement>("button")).filter((b) => b !== greyedRow);
     const drawn = drawnButtons.map(nameOf);
+    expect(down, "Down stopped on the greyed licence row").not.toContain(nameOf(greyedRow));
     expect(down).toEqual([...drawn, "Done"]);
     expect(col.scrollTop).toBeGreaterThan(0); // the walk really scrolled the column
 
     putSteamRingOn(drawnButtons[drawnButtons.length - 1]);
     steamScrolls(steamRingHolder());
     const up = walk("Up", (el) => el.classList.contains("bonsai-models-hub-advanced-link"));
+    expect(up, "Up stopped on the greyed licence row").not.toContain(nameOf(greyedRow));
     expect(up.slice(0, -1)).toEqual([...drawn].reverse());
     expect(up[up.length - 1]).toBe(nameOf(c.querySelector(".bonsai-models-hub-advanced-link")));
 

@@ -1,0 +1,37 @@
+{
+  "row": "P91-FOLD-OLLAMA",
+  "build_commit": "649daecc (deployed by block 05a at 07:36 EDT; the dist file on the Deck is from 07:36 and holds the fold button and the About column class; the commit id itself is not printed anywhere on the Deck, so it was taken from the 05a handover)",
+  "deck_time_local": "2026-10-12 about 07:47-07:52 EDT",
+  "screen": "Monitor is live: page window 855 x 766, tab scroll pane 300 x 741 (the Deck's own screen is not in use, so the under-430 pass test cannot be applied; heights and ratios to the 741 visible are recorded instead)",
+  "setup": "Plugin open on the Ollama tab (reached with RB from the bonsAI tab). Sections at first read: Where AI runs open, the other four closed. Machine: deck (real Deck). Keep-awake lock taken, expires 2026-10-12T19:47:10Z.",
+  "pressed": "Down from tab bar to the Where line; A on the Where line (closed it); A on the Where line (reopened it); Right to the floating button; A on the button (Open all); Down from the button; Up to the tab bar; 36 Down presses from the tab bar (run p92-fold-ollama-open-down) with a 40 ms focus logger running in the page; 4 + 14 Up presses (run p92-fold-ollama-open-up); Down walk repeated as the saved check plan92-P91-FOLD-OLLAMA-OPEN. A only ever pressed on section lines and the floating button.",
+  "seen": {
+    "step1_section_lines": [
+      {"line": "Where AI runs", "summary": "Run AI on this Deck on · Start the AI with the Deck on", "open": true},
+      {"line": "Knowledge base (offline)", "summary": "Use local knowledge base on", "open": false},
+      {"line": "Reply style", "summary": "Balanced · Thinking: Balanced · Terse mode on", "open": false},
+      {"line": "Connection tuning", "summary": "Keep models loaded: 15m · Custom timeouts off", "open": false},
+      {"line": "AI models", "summary": "(empty)", "open": false}
+    ],
+    "step2_all_closed": {"column_height": 170, "dock_height": 36, "tab_scroll_pane": "741 visible, nothing to scroll", "panel_shell_height": 314, "ratio_to_visible_741": 0.42},
+    "step3_only_first_open": {"column_height": 498, "panel_shell_height": 642, "ratio_to_visible_741": 0.87, "scrollTop": 0},
+    "step4_all_open": {"tab_scroll_pane_scrollHeight": 1296, "clientHeight": 741, "ratio": 1.75, "column_height": 1088},
+    "down_walk_stops_in_order": ["Ollama tab (bar)", "Where AI runs section line", "Run AI on this Deck (switch)", "Start the AI with the Deck (switch)", "Update AI & models (button)", "Browse models (button)", "Test connection (button)", "Knowledge base section line", "Use local knowledge base (switch)", "Update knowledge base (button)", "Reply style section line", "Reply style slider", "Terse mode (switch)", "Set thinking to Off (button row)", "Connection tuning section line", "Custom timeouts (switch)", "Keep models loaded slider", "AI models section line", "AI models (button)"],
+    "stops_counted": "18 stops after the bar, no stop twice, then 17 further Down presses held still on the AI models button (the end).",
+    "pane_scrollTop_per_stop": "0 through Update knowledge base; 237 at Reply style slider (move 237); 237 at Terse and Thinking; 237 at Connection tuning line; 273 at Custom timeouts (move 36); 510 at Keep models loaded (move 237); 510 at AI models section and button (end).",
+    "largest_move_of_pane_in_one_landing": "237 points; a third of the 741 visible is 247; a third of the 705 above the dock is 235",
+    "every_stop_wholly_visible": "16 of 18 stops read 100 percent visible by the rig. The Where line and the Connection tuning line each read 93 percent (one of 15 sample points 'clipped' by the full-panel box that starts at the same left edge, x = 48). Screenshots DeckCapture_20261012_074941_auto.png and DeckCapture_20261012_075128_auto.png show the ring on both lines fully drawn and all their text inside. Reads as a rig edge artifact.",
+    "up_walk": "AI models, AI models section, Keep models loaded, Custom timeouts, Connection tuning, Set thinking, Terse, Reply style slider, Reply style line, Update KB, Use local KB, KB line, Test connection, Browse, Update AI, Start AI, Run AI, Where line, bar: 18 presses, one stop each, the same order reversed, nothing dead.",
+    "other_observation": "Section names are cut with an ellipsis on the monitor panel (WHERE AI..., KNOWLEDGE BASE (OF..., REPLY ST..., CONNECTION ...); summaries are cut too. Open AI models section holds only the one 'AI models...' button.",
+    "end_state": "Sections put back as at step 1: Where open, other four closed."
+  },
+  "expected": "All closed: tab under 430 points on the Deck's own screen (on the monitor: ratio under one screen). First section open: under 1.5 screens. All open: one stop per control, no stop twice going down, no landing moves the pane by more than a third of its visible height, every stop wholly visible; saved Down walk.",
+  "verdict": [
+    "PASS (step 2, all closed, monitor): 314 points in a 741 pane, ratio 0.42, under one screen. The Deck-screen 430 test was not run (monitor live).",
+    "PASS (step 3, first section open): 642 points, 0.87 screens, under 1.5.",
+    "PASS (step 4, every section open, Down walk): 18 stops, one per control, none twice, largest pane move 237 against a third of 741 = 247 (tight: against the area above the dock it is 235 and 237 is 2 over).",
+    "PASS (visibility): every stop wholly visible by eye in two screenshots; the rig's two 93 percent readings on the section lines at x = 48 are judged an edge artifact, owner may rule otherwise.",
+    "PASS (saved check): plan92-P91-FOLD-OLLAMA-OPEN saved in checks/."
+  ],
+  "side_effect": "Briefly closed then reopened the Where AI runs section and opened/closed all sections with the floating button; every section is back as at step 1. The AI models section was opened with the Open all button, which only draws its one button; nothing downloaded. No settings key was changed (the open/closed state is the plugin's own view state, if saved at all)."
+}

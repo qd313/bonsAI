@@ -1,0 +1,33 @@
+{
+  "row": "P91-FOLD-ALL-BUTTON",
+  "build_commit": "649daecc (from the 05a handover; dist on the Deck dated 07:36 EDT)",
+  "deck_time_local": "2026-10-12 about 07:48-07:51 EDT",
+  "screen": "Monitor live: window 855 x 766. Button at x 264, y 729, 74 x 28 in the bottom-right of the panel (above the screenshot: at the bottom right corner of the plugin panel).",
+  "setup": "Ollama tab. First part of the button test happened from the Where AI runs line (first section open, others closed); the Reply style part with every section open (after the Open all press).",
+  "pressed": "From Where line: Right, A. Then Down. Later from Reply style line: Right; Down; Right; Up; Right; Left; Right; B. Then Right, A (Close all), Down, Up, Up, A on the Where line to put sections back.",
+  "seen": {
+    "right_from_where_line": "ring on the floating button, aria-label 'Open all sections', label text 'Open all'",
+    "A_on_Open_all": "all five sections open (w+k+r+t+m+), label became 'Close all', ring stayed on the button (aria-label 'Close all sections'), content grew from 642 to 1232 (shell)",
+    "down_from_button_after_Open_all": "ring went to the Where AI runs line, the line it came from",
+    "from_Reply_style_line": {
+      "Right": "floating button",
+      "Down": "back on Reply style line",
+      "Right_then_Up": "button then back on Reply style line",
+      "Right_then_Left": "button then back on Reply style line",
+      "Right_then_B": "back on Reply style line; Quick Access stayed open (.bonsai-scope present); B did not close the panel"
+    },
+    "A_on_Close_all": "all five sections closed (w-k-r-t-m-), label 'Open all', ring stayed on the button; Down went back to the Reply style line",
+    "colours_floating_button": {"background_image": "linear-gradient(rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 100%)", "color": "rgb(232, 238, 245)", "border": "0.78125px solid rgba(255,255,255,0.22)", "radius": "4px"},
+    "colours_AI_models_button": {"background_image": "linear-gradient(rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 100%)", "color": "rgb(232, 238, 245)", "border": "0.78125px solid rgba(255,255,255,0.22)", "radius": "4px"},
+    "sections_put_back": "Where open, other four closed, as at step 1 of P91-FOLD-OLLAMA",
+    "note": "The runbook asked for the first A on the button with the ring started from Reply style; I pressed the first A (Open all) when the ring came from the Where line, because the A press had to come before the Down walk. Same button, same result; the Reply style routes were all tested with the ring started on Reply style."
+  },
+  "expected": "Right from a section line reaches the button; A opens every section, label reads Close all, ring stays on the button; Down, Up, Left or B return the ring to the line it came from (B must not close Quick Access); colours match the AI models button (white gradient 0.16 to 0.06, text about rgb(232,238,245)).",
+  "verdict": [
+    "PASS: Right reaches the button from a section line, both from the Where line and from Reply style.",
+    "PASS: A opens all, label reads Close all, ring stays on the button; A again closes all, label Open all, ring stays.",
+    "PASS: Down, Up, Left and B each put the ring back on the Reply style line; B did not close Quick Access.",
+    "PASS: colours of the floating button are the same as the AI models button, text rgb(232, 238, 245)."
+  ],
+  "side_effect": "none beyond the sections being opened and closed; they are back as at step 1."
+}

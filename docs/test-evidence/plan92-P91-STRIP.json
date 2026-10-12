@@ -1,0 +1,29 @@
+{
+  "row": "P91-STRIP",
+  "build_commit": "649daecc (from the 05a handover; dist on the Deck dated 07:36 EDT)",
+  "deck_time_local": "2026-10-12 about 07:48 EDT (the Down walk of P91-FOLD-OLLAMA step 4)",
+  "screen": "Monitor live: window 855 x 766; scroll pane 741 high; the dock sits at y = 729 with no strip and 626 to 707 when the strip shows",
+  "setup": "Every section open. A 40 ms poller in the page logged each ring change with the strip's label, text, top edge and the ring row's bottom edge, so the strip was read within about 40 ms of each landing. Read only, no writes to the page.",
+  "pressed": "36 Down presses from the tab bar (same walk as P91-FOLD-OLLAMA step 4).",
+  "seen": {
+    "stops_with_strip": [
+      {"stop": "Run AI on this Deck", "strip_label": "Run AI on this Deck", "strip_text_start": "Off: use a PC on your home network. On: AI runs on", "row_bottom": 114, "strip_top": 707, "gap": 593},
+      {"stop": "Start the AI with the Deck", "strip_label": "Start the AI with the Deck", "strip_text_start": "Starts the local AI when the Deck starts, and lets", "row_bottom": 156, "strip_top": 677, "gap": 521},
+      {"stop": "Use local knowledge base", "strip_label": "Use local knowledge base", "strip_text_start": "Ground Strategy and troubleshooting Asks with down", "row_bottom": 476, "strip_top": 692, "gap": 216},
+      {"stop": "Reply style slider", "strip_label": "Reply style", "strip_text_start": "Bullet-first vs paragraph depth. Ask mode and mode", "row_bottom": 454, "strip_top": 707, "gap": 254},
+      {"stop": "Terse mode", "strip_label": "Terse mode", "strip_text_start": "Speed mode only. Keeps each answer to three short", "row_bottom": 503, "strip_top": 662, "gap": 159},
+      {"stop": "Thinking buttons (Set thinking to Off)", "strip_label": "Thinking", "strip_text_start": "More reasoning on harder questions, shown on scree", "row_bottom": 572, "strip_top": 707, "gap": 136},
+      {"stop": "Keep models loaded slider", "strip_label": "Keep models loaded", "strip_text_start": "How long Ollama keeps the model in memory after a ", "row_bottom": 482, "strip_top": 707, "gap": 225}
+    ],
+    "stops_with_strip_hidden": ["Where AI runs line", "Update AI & models (row has an empty help text)", "Browse models", "Test connection", "Knowledge base line", "Update knowledge base", "Reply style line", "Connection tuning line", "Custom timeouts (row has an empty help text)", "AI models section line", "AI models button (row has an empty help text)"],
+    "label_matches_row": "On all 7 strip stops the strip's label equalled the ringed row's data-bonsai-help-label, in the same 40 ms sample as the ring move.",
+    "row_help_text_lengths": "Run AI 63, Start AI 187, Update AI & models 0, Use local KB 109, Reply style 70, Terse mode 258, Thinking 66, Custom timeouts 0, Keep models loaded 76, AI models 0 characters.",
+    "smallest_gap": "136 points (Thinking), against the 6 point minimum"
+  },
+  "expected": "Strip text changes with the ring on the same read, hides on a row with no longer text, and the gap between the ringed row's bottom and the strip's top is at least 6 points at every stop (at least six stops, two with no longer text).",
+  "verdict": [
+    "PASS: 7 stops showed the strip with the right label and a changing text; 11 stops hid it, including 3 rows that carry a label but an empty help text (Update AI & models, Custom timeouts, AI models) and the section lines and plain buttons.",
+    "PASS: smallest gap 136 points at the 18 stops; the strip never touched a ringed row."
+  ],
+  "side_effect": "none"
+}

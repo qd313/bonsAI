@@ -2,7 +2,8 @@
  * Title: What draws the Search tab
  *
  * Purpose: Runs while a person has the Search tab open. It builds that screen, the first tab in the strip
- * (left of Main), and hands it whatever the main plugin screen knows that it needs.
+ * (left of Main), and hands it what the main plugin screen knows that it needs: whether it is showing,
+ * whether an answer is being written, and how to look up and open a Steam setting.
  *
  * Used for: The tab bar's always-present Search tab (plan 92, lane N3).
  *
@@ -13,13 +14,24 @@
  */
 import React, { useMemo } from "react";
 
-import { SearchTab } from "../../search-tab/SearchTab";
+import { SearchTab, type SearchTabProps } from "../../search-tab/SearchTab";
+
+export type UseSearchTabPayloadArgs = SearchTabProps;
 
 /**
- * In: nothing yet; the body's hand-downs join here with it.
- * Out: the finished Search tab element, built once.
+ * In: whether Search is the tab showing, whether an answer is being written, the intent packs' index for
+ * settings and the function that opens a setting in Steam.
+ * Out: the finished Search tab element, rebuilt only when one of those changes.
  * Can go wrong: nothing; it only wires values into the tab component.
  */
-export function useSearchTabPayload(): React.ReactElement {
-  return useMemo(() => <SearchTab />, []);
+export function useSearchTabPayload({
+  active,
+  isAsking,
+  intentPackIndex,
+  onSettingClick,
+}: UseSearchTabPayloadArgs): React.ReactElement {
+  return useMemo(
+    () => <SearchTab active={active} isAsking={isAsking} intentPackIndex={intentPackIndex} onSettingClick={onSettingClick} />,
+    [active, isAsking, intentPackIndex, onSettingClick]
+  );
 }

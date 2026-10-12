@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 860,
-  "edgeCount": 2723,
+  "fileCount": 878,
+  "edgeCount": 2781,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3105,6 +3105,7 @@
     "src/data/settingsDatabase.ts": {
       "imports": [],
       "importedBy": [
+        "src/features/search-tab/searchModel.ts",
         "src/hooks/useSteamSettingsSearch.ts"
       ]
     },
@@ -4178,6 +4179,7 @@
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/useTopStripTabBar.ts",
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
+        "src/features/search-tab/SearchTab.walk.test.tsx",
         "src/index.tsx",
         "src/test-harness/tabBodyWalk.tsx"
       ]
@@ -5042,13 +5044,109 @@
         "src/utils/sessionRagChipCandidates.ts"
       ]
     },
-    "src/features/search-tab/SearchTab.tsx": {
+    "src/features/search-tab/GameNoteSheet.tsx": {
       "imports": [
-        "src/styles/sections/textPx.ts"
+        "src/features/search-tab/SearchStop.tsx",
+        "src/features/search-tab/searchTypes.ts",
+        "src/features/search-tab/useSearchNav.ts"
       ],
       "importedBy": [
-        "src/features/plugin-shell/tabs/useSearchTabPayload.tsx"
+        "src/features/search-tab/SearchTab.tsx"
       ]
+    },
+    "src/features/search-tab/SearchFindBox.tsx": {
+      "imports": [
+        "src/features/search-tab/SearchStop.tsx",
+        "src/features/search-tab/searchTypes.ts",
+        "src/features/search-tab/useSearchNav.ts"
+      ],
+      "importedBy": [
+        "src/features/search-tab/SearchTab.tsx"
+      ]
+    },
+    "src/features/search-tab/SearchGameRow.tsx": {
+      "imports": [
+        "src/features/search-tab/SearchStop.tsx",
+        "src/features/search-tab/useSearchNav.ts"
+      ],
+      "importedBy": [
+        "src/features/search-tab/SearchTab.tsx"
+      ]
+    },
+    "src/features/search-tab/SearchNotesList.tsx": {
+      "imports": [
+        "src/features/search-tab/SearchStop.tsx",
+        "src/features/search-tab/searchTypes.ts",
+        "src/features/search-tab/useSearchNav.ts"
+      ],
+      "importedBy": [
+        "src/features/search-tab/SearchTab.tsx"
+      ]
+    },
+    "src/features/search-tab/SearchResults.tsx": {
+      "imports": [
+        "src/features/search-tab/SearchStop.tsx",
+        "src/features/search-tab/searchModel.ts",
+        "src/features/search-tab/useSearchNav.ts"
+      ],
+      "importedBy": [
+        "src/features/search-tab/SearchTab.tsx"
+      ]
+    },
+    "src/features/search-tab/SearchStop.tsx": {
+      "imports": [
+        "src/features/search-tab/useSearchNav.ts"
+      ],
+      "importedBy": [
+        "src/features/search-tab/GameNoteSheet.tsx",
+        "src/features/search-tab/SearchFindBox.tsx",
+        "src/features/search-tab/SearchGameRow.tsx",
+        "src/features/search-tab/SearchNotesList.tsx",
+        "src/features/search-tab/SearchResults.tsx"
+      ]
+    },
+    "src/features/search-tab/SearchTab.test.tsx": {
+      "imports": [
+        "src/features/search-tab/SearchTab.tsx",
+        "src/features/search-tab/searchTabStore.ts",
+        "src/features/search-tab/searchTabTestKit.tsx",
+        "src/test-harness/steamRing.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/features/search-tab/SearchTab.tsx": {
+      "imports": [
+        "src/features/search-tab/GameNoteSheet.tsx",
+        "src/features/search-tab/SearchFindBox.tsx",
+        "src/features/search-tab/SearchGameRow.tsx",
+        "src/features/search-tab/SearchNotesList.tsx",
+        "src/features/search-tab/SearchResults.tsx",
+        "src/features/search-tab/searchModel.ts",
+        "src/features/search-tab/searchTabStore.ts",
+        "src/features/search-tab/searchTabStyles.ts",
+        "src/features/search-tab/searchTypes.ts",
+        "src/features/search-tab/useGameNotes.ts",
+        "src/features/search-tab/useSearchIndex.ts",
+        "src/features/search-tab/useSearchNav.ts",
+        "src/utils/intentPackSearch.ts"
+      ],
+      "importedBy": [
+        "src/features/plugin-shell/tabs/useSearchTabPayload.tsx",
+        "src/features/search-tab/SearchTab.test.tsx",
+        "src/features/search-tab/SearchTab.walk.test.tsx"
+      ]
+    },
+    "src/features/search-tab/SearchTab.walk.test.tsx": {
+      "imports": [
+        "src/features/plugin-shell/TabBodyFocusRoot.tsx",
+        "src/features/search-tab/SearchTab.tsx",
+        "src/features/search-tab/searchTabStore.ts",
+        "src/features/search-tab/searchTabTestKit.tsx",
+        "src/test-harness/steamRing.tsx",
+        "src/test-harness/tabBodyWalk.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
     },
     "src/features/search-tab/searchApi.test.ts": {
       "imports": [
@@ -5062,13 +5160,123 @@
         "src/utils/deckyCall.ts"
       ],
       "importedBy": [
-        "src/features/search-tab/searchApi.test.ts"
+        "src/features/search-tab/searchApi.test.ts",
+        "src/features/search-tab/useGameNotes.ts",
+        "src/features/search-tab/useSearchIndex.ts"
+      ]
+    },
+    "src/features/search-tab/searchModel.test.ts": {
+      "imports": [
+        "src/features/search-tab/searchModel.ts",
+        "src/features/search-tab/searchTypes.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/search-tab/searchModel.ts": {
+      "imports": [
+        "src/data/settingsDatabase.ts",
+        "src/features/search-tab/searchTypes.ts",
+        "src/utils/intentPackSearch.ts"
+      ],
+      "importedBy": [
+        "src/features/search-tab/SearchResults.tsx",
+        "src/features/search-tab/SearchTab.tsx",
+        "src/features/search-tab/searchModel.test.ts",
+        "src/features/search-tab/useSearchIndex.ts"
+      ]
+    },
+    "src/features/search-tab/searchNav.test.ts": {
+      "imports": [
+        "src/features/search-tab/searchNav.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/search-tab/searchNav.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/features/search-tab/searchNav.test.ts",
+        "src/features/search-tab/useSearchNav.ts"
+      ]
+    },
+    "src/features/search-tab/searchTabStore.ts": {
+      "imports": [
+        "src/features/search-tab/searchTypes.ts"
+      ],
+      "importedBy": [
+        "src/features/search-tab/SearchTab.test.tsx",
+        "src/features/search-tab/SearchTab.tsx",
+        "src/features/search-tab/SearchTab.walk.test.tsx"
+      ]
+    },
+    "src/features/search-tab/searchTabStyles.ts": {
+      "imports": [
+        "src/styles/sections/textPx.ts",
+        "src/styles/sections/uiScalePx.ts"
+      ],
+      "importedBy": [
+        "src/features/search-tab/SearchTab.tsx"
+      ]
+    },
+    "src/features/search-tab/searchTabTestKit.tsx": {
+      "imports": [
+        "src/features/search-tab/searchTypes.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx"
+      ],
+      "importedBy": [
+        "src/features/search-tab/SearchTab.test.tsx",
+        "src/features/search-tab/SearchTab.walk.test.tsx"
       ]
     },
     "src/features/search-tab/searchTypes.ts": {
       "imports": [],
       "importedBy": [
-        "src/features/search-tab/searchApi.ts"
+        "src/features/search-tab/GameNoteSheet.tsx",
+        "src/features/search-tab/SearchFindBox.tsx",
+        "src/features/search-tab/SearchNotesList.tsx",
+        "src/features/search-tab/SearchTab.tsx",
+        "src/features/search-tab/searchApi.ts",
+        "src/features/search-tab/searchModel.test.ts",
+        "src/features/search-tab/searchModel.ts",
+        "src/features/search-tab/searchTabStore.ts",
+        "src/features/search-tab/searchTabTestKit.tsx",
+        "src/features/search-tab/useGameNotes.ts",
+        "src/features/search-tab/useSearchIndex.ts"
+      ]
+    },
+    "src/features/search-tab/useGameNotes.ts": {
+      "imports": [
+        "src/features/search-tab/searchApi.ts",
+        "src/features/search-tab/searchTypes.ts"
+      ],
+      "importedBy": [
+        "src/features/search-tab/SearchTab.tsx"
+      ]
+    },
+    "src/features/search-tab/useSearchIndex.ts": {
+      "imports": [
+        "src/features/search-tab/searchApi.ts",
+        "src/features/search-tab/searchModel.ts",
+        "src/features/search-tab/searchTypes.ts"
+      ],
+      "importedBy": [
+        "src/features/search-tab/SearchTab.tsx"
+      ]
+    },
+    "src/features/search-tab/useSearchNav.ts": {
+      "imports": [
+        "src/features/search-tab/searchNav.ts",
+        "src/utils/chatTranscriptNavHelpers.ts",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/features/search-tab/GameNoteSheet.tsx",
+        "src/features/search-tab/SearchFindBox.tsx",
+        "src/features/search-tab/SearchGameRow.tsx",
+        "src/features/search-tab/SearchNotesList.tsx",
+        "src/features/search-tab/SearchResults.tsx",
+        "src/features/search-tab/SearchStop.tsx",
+        "src/features/search-tab/SearchTab.tsx"
       ]
     },
     "src/features/stream-scramble/ScrambledAnswerText.test.tsx": {
@@ -7072,7 +7280,7 @@
         "src/features/plugin-shell/usePublishTextScale.test.tsx",
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetDecodeChipButton.tsx",
-        "src/features/search-tab/SearchTab.tsx",
+        "src/features/search-tab/searchTabStyles.ts",
         "src/hooks/localOllamaStarterSet.tsx",
         "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/usePullModelDeleteConfirm.tsx",
@@ -7104,6 +7312,7 @@
       "importedBy": [
         "src/features/chat-sum-up/SessionTitleOffer.tsx",
         "src/features/chat-title/chatsMenuStyles.ts",
+        "src/features/search-tab/searchTabStyles.ts",
         "src/styles/sections/answerBubble.test.ts",
         "src/styles/sections/answerBubble.ts",
         "src/styles/sections/answerBubbleCorners.ts",
@@ -7435,6 +7644,7 @@
         "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
+        "src/features/search-tab/searchTabTestKit.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
         "src/features/voice/voiceClearAfterStop.test.tsx",
         "src/features/voice/voiceFinishAtStop.test.tsx",
@@ -7531,7 +7741,10 @@
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/chat-title/topStripHeightLock.test.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
-        "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx"
+        "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
+        "src/features/search-tab/SearchTab.test.tsx",
+        "src/features/search-tab/SearchTab.walk.test.tsx",
+        "src/features/search-tab/searchTabTestKit.tsx"
       ]
     },
     "src/test-harness/tabBodyDeckGeometry.ts": {
@@ -7550,7 +7763,8 @@
       ],
       "importedBy": [
         "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
-        "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx"
+        "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
+        "src/features/search-tab/SearchTab.walk.test.tsx"
       ]
     },
     "src/types.d.ts": {
@@ -8575,6 +8789,7 @@
         "src/features/chat-title/takeFirstChatStop.ts",
         "src/features/chat-title/topStrip.test.tsx",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
+        "src/features/search-tab/useSearchNav.ts",
         "src/hooks/useEarlierTurnsPill.ts",
         "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/handRingOnWhenGone.test.ts",
@@ -9010,6 +9225,8 @@
         "src/features/unified-input/constants.ts"
       ],
       "importedBy": [
+        "src/features/search-tab/SearchTab.tsx",
+        "src/features/search-tab/searchModel.ts",
         "src/hooks/useIntentPacks.ts",
         "src/hooks/useSteamSettingsSearch.ts",
         "src/utils/intentPackSearch.test.ts"
@@ -9293,6 +9510,8 @@
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
+        "src/features/search-tab/SearchTab.walk.test.tsx",
+        "src/features/search-tab/useSearchNav.ts",
         "src/hooks/askBarRingWatch.titleView.test.ts",
         "src/hooks/askBarRingWatch.ts",
         "src/hooks/useAskBarInitialRingClaim.freshOpen.test.ts",

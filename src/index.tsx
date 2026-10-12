@@ -1147,7 +1147,12 @@ const Content: React.FC = () => {
     t: uiT,
   });
 
-  const searchTab = useSearchTabPayload();
+  const searchTab = useSearchTabPayload({
+    active: currentTab === "search",
+    isAsking,
+    intentPackIndex: intentPacks.index,
+    onSettingClick,
+  });
 
   const deckyTabs = useMemo(
     () => {

@@ -848,3 +848,63 @@ SHOW      [ ] Installed only ...      |
   whole box with Steam's scroll in a short column and list. `PullModelsFiltersColumn.layout.test.ts` works the list's
   grid out from the stylesheet's numbers (the Model column no more than 10 per cent narrower than M-A's 124.3).
 - **Device rows:** P91-MODELS-COLUMN-WALK, -FILTERS, -DONE-KEEPS, -WIDTH (plan 91 § 5, block 4).
+
+### The Search tab (plan 92, lane N3)
+
+The first tab, left of Main, with a magnifier. `SearchTab.tsx` draws it inside the tab body root (`TabBodyFocusRoot`,
+id `search`), so Down from the tab bar lands on its first stop and Up from its top row goes back to the bar.
+
+```
+tab bar
+   | Down  (takeNavFocus "tab-body:search", lands on [ All ])      ^ Up  (takeNavFocus "tab-bar")
+[ All ] [ Hollow Knight ] [ Hades ] ...     Left / Right walk the row, hold still at both ends; A picks the game
+   | Down                                   ^ Up
+[ find box: "Chats, settings, notes..." ]   A opens Steam's keyboard; Left / Right hold still
+   | Down                                   ^ Up
+[ mantis 5 ] [ charm 3 ] [ claw 2 ] [ greenpath 2 ]     Left / Right along the row; A puts the word in the box
+[ lords 2 ]  [ battery 1 ] [ boon 1 ] [ build 1 ]       and the ring on the first match
+   | Down                                   ^ Up
+   -- a word of two letters or more is in the box --         -- before that --
+"N matches for 'word'"  [ Clear ]                           your notes, newest first, one stop each
+   match rows, one stop each, in the order         A flips the note's switch
+   chats, notes, settings, game and help notes     Down from the last row holds still
+   A: chat = a toast for now; note = its switch;
+   setting = opens it in Steam; game note = its sheet
+```
+
+- **Stops.** Every pressable control is one stop in a row of the tab: the game buttons, the find box, the word
+  buttons (two rows of four), Clear, each match, each note. The count line, the group headings, the hint lines and
+  the tab's heading are not stops.
+- **Every move is written by hand, in one place.** `searchNav.ts` is the rule (Left and Right along a row, holding
+  still at both ends, so a Right nobody claims cannot carry the ring into Steam's side rail; Up and Down to the row
+  above or below, onto the stop nearest in x, measured at the press, or the same place in the row where nothing is
+  measured; Up from the top row leaves; Down from the last row holds). `useSearchNav.ts` keeps the stops and moves
+  the ring.
+- **No plain `focus()` across containers.** The find box is a Steam text field, which is a container of its own, so
+  every hop (to and from it, and between the buttons too) is Steam's own transfer, the stop's nav node `TakeFocus`
+  (`takeHolderFocus`); a plain `focus()` is only the fallback for the frames before Steam has filled the node. No
+  hop searches the page: the stops are kept from their `ref`s.
+- **No stop relies on Steam's flow-children.** Steam moves the ring between a Focusable's children only along that
+  container's flow (row or column), not by where they sit; a group with no flow gave Down nowhere to go on the About
+  tab (Deck, 2026-10-12) while a test whose stand-ins moved by geometry passed. Here every stop carries all four move
+  handlers and each claims its press, so Steam's flow is never asked; the walk test's stand-ins move only when a
+  stop's own handler moves them, and a test checks every stop carries and claims all four.
+- **A is `onOKButton` and `onClick` together**, as the chats menu's rows are, with a press that arrives as both
+  counted once (`SearchStop.tsx`), so a note's switch cannot flip twice from one press.
+- **After a press that redraws, the ring goes where the person would look.** A word button puts it on the first
+  match; Clear puts it on the find box; closing a game note's sheet puts it back on the match that opened it, kept in
+  a small module store (`searchTabStore.ts`) because a rebuilt tab loses component state. The move is made in a layout
+  effect, once the target is drawn (never on a frame timer). A match that arrives later (the game notes come from
+  the knowledge library) keeps the wish until it appears.
+- **A game note opens inside the tab**, not in a Steam popup (closing a popup rebuilds the whole tab and the word and
+  game would be lost). The sheet's stops are Close and the note's text; B on either closes it. The matches are
+  unmounted while it is open, so no stop of theirs can be reached underneath.
+- **The typed path has a known hazard** (to be checked once on the Deck): A on a plain Steam text field opens Steam's
+  keyboard, and after it closes the field can leave the D-pad dead until the panel is closed and reopened
+  (deck-driver rule 1). The word buttons are the first path for that reason. The question box's two-layer field
+  (an invisible native field under a drawn copy) was not reused: it is built into the Ask bar's own state and styles.
+- **Pinned by** `searchNav.test.ts` (the rule), `SearchTab.walk.test.tsx` (the real tab walked Down and Up in a
+  scrolling pane with Steam's scroll modelled three ways, on a short screen and a tall one, in both states of the
+  tab: no stop twice, none off screen, no press turns the page half its height, Up from the top leaves through the
+  bar, Left and Right reach every stop in a row and hold at both ends) and `SearchTab.test.tsx` (what each A does).
+  Device rows: plan 92, block 3.

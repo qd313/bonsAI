@@ -740,3 +740,45 @@ Renamed to "Done for v0.6.0" (anchor `done-for-v060`) on 2026-10-03. The old hea
 <a id="done-for-v050"></a>
 
 ## Done for v0.5.0
+
+---
+
+## Moved here from the roadmap on 2026-10-12 (plan 92 second night filing)
+
+These dated notes were cut word for word from the open entries in `docs/roadmap.md` to keep it under its size limit. Links inside them may be stale.
+
+## Plan 89 note: the freeze reproduction try
+
+  **2026-10-11 (plan 89):** the lever is built and passed on the Deck (the Deck's own AI leaves memory about a minute after an answer with a game running; older note: [roadmap-details.md](roadmap-details.md#steams-screen-froze-after-an-answer-with-a-game-running-and-the-decks-own-ai)). **Reproduction try, Deck 2026-10-11 (build `f5e4dc12`, Deep Rock Galactic: Survivor running, a 153 s answer from the Deck's own AI): NOT REPRODUCED.** Free memory fell from 8,795 MB to 2,498 MB at the lowest and never under 1,000 MB; the model left memory about 60 s after the answer; all 17 rig reads over 16.5 minutes answered (52 to 291 ms); Steam's page processes did not grow. Not clear: memory never reached the old freeze's under-1 GB point. The entry stays OPEN, with the lever in place. Evidence `docs/test-evidence/plan89-FREEZE-TRY.json`. A different freeze (no game, nothing running) is the entry "The Deck's screen froze when Steam's screensaver started".
+
+## Plan 81 note: a reload with a game running did not freeze Steam
+
+  **2026-10-03 (plan 81, Deck block 6, build `7e963807`):** a developer reload with a game running did not freeze Steam in either try, so the 2026-10-01 freeze was not reproduced. The maintainer's call on marking it accepted is open (plan 81, question 3). Evidence `docs/test-evidence/plan81-P81-RELOAD-LOOK.json`. Older notes (block 3d, and the reload timings): [roadmap-details.md](roadmap-details.md#reloading-the-plugin-while-a-heavy-game-is-running-can-leave-steams-interface-gone-until-the-deck-is-restarted). Related: the entry above about the Home screen in front of a game.
+
+## Plan 81 note: two reloads left the game in front
+
+  **2026-10-03 (plan 81, Deck block 6, build `7e963807`):** two developer reloads with Deep Rock Galactic: Survivor running did not bring Steam's Home screen in front: the game's window stayed in front both times. Decky's plugin list has no reload control, and its settings page showed empty with a game running, so a player has no route to a reload. The maintainer's call on marking it accepted is open (plan 81, question 3). Evidence `docs/test-evidence/plan81-P81-RELOAD-LOOK.json`.
+
+## Plan 81 note: one pretend touch showed no ghost
+
+  **2026-10-03 (plan 81):** one pretend touch through the debug link on the Session tab: no ghost, one tab bar drawn throughout. The touch was on the tab already showing, so a touch on a different tab is not proven. Stays the maintainer's finger check. Evidence `docs/test-evidence/plan81-P81-LOOK-TAB-GHOST.json`.
+
+## Plan 84 note: the drop-down strip is gone
+
+  **2026-10-09 (plan 84 step 4):** the drop-down strip is gone from the code, so there is nothing left to be drawn over the chip row, and the helper's tests show the new bar cannot be left behind after any mix of focus, blur and taps. The rig cannot touch the screen, so this stays OPEN until a person's touch check with a game running passes (row **P84-TABS-02**, owed). Evidence `docs/test-evidence/plan84-STEPS4-5-7-DECK.json`.
+
+## Plan 92 note: what the first night built of the denser tabs
+
+  **Built so far 2026-10-12 (plan 92):** the About tab (`5d67f9d9`, its walk fixed in `649daecc`) and the Ollama tab folded (`5377006b` to `5ea2a26b`, section names kept whole in `b1c9fa77`). **Passed on the Deck tonight:** About: the links (P91-ABOUT-LINKS), the height and the paragraph, and the Down walk after the second round, which reaches all three link buttons (P91-ABOUT-ROWS, `docs/test-evidence/plan92-P91-ABOUT-ROWS-try2.json`). Ollama tab, on the monitor: folded height and the walk (P91-FOLD-OLLAMA), the help strip (P91-STRIP), the open-all button (P91-FOLD-ALL-BUTTON), section names uncut (P91-FOLD-NAMES), and Permissions unchanged (P91-PERMISSIONS-SAME). Evidence `docs/test-evidence/plan92-P91-FOLD-OLLAMA.json`, `-STRIP.json`, `-FOLD-ALL-BUTTON.json`, `-FOLD-NAMES.json`, `-PERMISSIONS-SAME.json`.
+
+## Plan 92 note: where a greyed button is skipped by asking the button
+
+  The shared test stand-in (`src/test-harness/fakeDeckyUi.tsx`, the comment above `focusableButtonStub`) says a disabled button refuses focus. On the Deck a greyed Decky button only carries a `Disabled` class and still takes the ring (measured 2026-09-16, and again 2026-10-12 in the AI models box: `docs/test-evidence/plan92-P91-MODELS-COLUMN-WALK.json`). Code that skips a greyed control by asking the button could hide the same bug the models box had: `OllamaWhereAiRunsSection.tsx` (about lines 236 and 247), `SettingsTab.tsx` (about 266), `SettingsTabUiScaleSection.tsx` (149 and 156), `useOllamaTabFocus.ts` (124), `liveTurnFocusGraph.ts` (112 to 115).
+
+## Plan 92 note: two sentences cut from the rig entries
+
+Cut word for word from the two `[QA]` rig entries in the roadmap's Bugs list (the plugin-open failure and the settings snapshot):
+
+- Seen before on 2026-09-26 and 2026-10-01 (the rig findings table in [mcp-setup.md](mcp-setup.md)).
+
+- A leftover snapshot record sits on this PC (`C:\Users\still\.config\decky-plugin-studio\snapshots\settings-hold.json`).

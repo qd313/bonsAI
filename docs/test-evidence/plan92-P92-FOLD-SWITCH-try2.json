@@ -1,0 +1,23 @@
+{
+ "row": "P92-FOLD-SWITCH-try2",
+ "build_commit": "b8d9575f (deployed with deck_deploy; shared tip later moved to 933a6ccb, docs only)",
+ "deck_time_local": "2026-10-12 about 15:30-15:45 EDT",
+ "screen": "Deck's own screen (Quick Access page 854 x 454)",
+ "setup": "Plugin open on Ollama, all five sections closed, scrollTop 0. Each trip: Down to Reply style, A to open it, Down into it, then the two shoulder presses, then read.",
+ "pressed": "Part 1: 5 x (RB then LB) and 5 x (LB then RB). Part 2: RB, LB, Down at once. Part 3: Right to the Open all button, LB, RB, Right, RB; then on Settings Right, LB; RB, Right, RB.",
+ "seen": {
+  "part1_RB_then_LB": "5 of 5: every section closed (where/kb/reply/tuning/models all open=false), scrollTop 0, ring on data-bonsai-fold-line=where",
+  "part1_LB_then_RB": "5 of 5: same reading (closed, scrollTop 0, ring on where). On the way, LB landed on Main's 'Show details' button.",
+  "part2_down_at_once": "Ring on the kb line at once, at +1 s and at +3 s; scrollTop 0; 0 sections open. Caveat: the rig waits for the shoulder press to settle (about 0.55 s) before sending Down, so the gap was about 0.6 s, a little over the half second asked.",
+  "part3_ollama_button": "Ring on 'Open all sections' (box 265,418,73x28) after Right from the kb line. LB: tab switched to Main, ring on the chip 'What should I do if Ask times out' (not the tab bar). Back with RB: Ollama, 0 open, scrollTop 0, ring on where line. Button again, RB: tab switched to Settings, 0 open, scrollTop 0, ring on the 'UI scale' first line.",
+  "part3_settings_button": "Right from UI scale line: ring on 'Open all sections' ([data-bonsai-fold-all=settings] exists). LB: Ollama, 0 open, ring on where line. Then RB, Right, RB: tab switched to Permissions, ring on a 38x22 toggle in the body (not in the tab bar)."
+ },
+ "expected": "Part 1: closed, scrollTop 0, ring on where, ten trips. Part 2: ring on Knowledge base and stays. Part 3: tab switches every time; folded tab arrival: ring on first line with sections closed; other tab arrival: ring on the tab bar.",
+ "verdict": [
+  "PASS part 1 (ten of ten trips)",
+  "PASS part 2 (kb line held at 0 s, 1 s, 3 s; gap before Down was about 0.6 s not 0.5 s)",
+  "PASS part 3a: LB and RB switch tabs every time with the ring on the Open all / Close all button (4 of 4 on Ollama and Settings), and folded-tab arrivals land on the first line, closed",
+  "FAIL part 3b as written: arriving on a non-folded tab the ring was NOT on the tab bar. Main: on a chip in the body. Permissions: on a toggle in the body. Not the tab bar."
+ ],
+ "side_effect": "None to the Deck's settings. Reply style was opened and closed by tab switches ten times."
+}

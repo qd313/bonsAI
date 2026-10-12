@@ -1,0 +1,25 @@
+{
+ "row": "P92-END-n2",
+ "build_commit": "b8d9575f",
+ "deck_time_local": "2026-10-12 about 16:55 EDT",
+ "screen": "Deck's own screen (854 x 454)",
+ "setup": "End of second night, after runbook 10.",
+ "pressed": "Read-only checks over SSH; unloaded the AI model that tonight's questions had loaded; releasing the keep-awake lock.",
+ "seen": {
+  "game": "none running (no process under steamapps/common)",
+  "model_loaded": "api/ps showed gemma4:e2b-it-qat (from tonight's questions) and then nomic-embed-text; both unloaded with keep_alive 0; api/ps now empty",
+  "notes_file": "0 notes",
+  "settings_compare": "live file 54 keys, backup ~/p92-backup/settings.json 54 keys; key names identical (none only in live, none only in backup); values differ for no key; tab_resume_mode (Tab to open on) matches the backup. Nothing changed, file never printed, snapshot tool never called.",
+  "chats": "9 chats; both test chats still there (Mantis Lords is chat 1, Ravenholm chat 2)",
+  "plugin": "open on Main in the Mantis Lords chat, ring on the tab bar ('bonsAI tab'). Ollama and Settings tabs: every section closed. Developer and About tabs not visited this block.",
+  "leftover": "The search 'Back to where you were' line is still live under the tab bar on Main, and the Search find box still holds 'mantis'.",
+  "memory": "about 11.8 GB available",
+  "keep_awake": "deck_restorePowerSettings: ok, wasHeld true, released true, 'this Deck sleeps normally again'"
+ },
+ "expected": "No game; no model loaded; notes file empty; settings keys and values match the backup; test chats stay; plugin on Main in the Mantis chat, ring on the bar; folded tabs closed; keep-awake released.",
+ "verdict": [
+  "PASS no game, no model loaded, notes empty, settings identical to the backup, 9 chats with both test chats, plugin on Main in the Mantis chat with ring on the bar, keep-awake released",
+  "UNCLEAR Developer and About folded tabs were not looked at this block (not touched either); the Back line from the search jump is still live"
+ ],
+ "side_effect": "Tonight's questions (Steel Soul and City of Tears) are now in the Mantis Lords test chat; the test note was created and removed."
+}

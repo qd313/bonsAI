@@ -1,0 +1,18 @@
+{
+ "row": "P90-NOTE-CARD-try2",
+ "build_commit": "b8d9575f",
+ "deck_time_local": "2026-10-12 about 15:40 EDT",
+ "screen": "Deck's own screen (854 x 454)",
+ "setup": "Main tab, chat 'How do I beat the Mantis Lords in Hollow Knight' (chat 1 of 9, the test chat). Notes file empty. Question put in with deck_send_ask.py (VERIFIED, whole text read back).",
+ "pressed": "Down, Down (question box, then Ask; never A on the box), A on Ask (own step). After the answer finished, read the ring. Then A on Keep (own step).",
+ "seen": {
+  "answer_finished_after_s": 38,
+  "card": "offered note card showed under the answer",
+  "ring_after_answer": "Keep this note (button box 61,315,80x26, fully on screen)",
+  "after_A_on_Keep": "line 'Kept. Ask reads it on every Hollow Knight question from now on.' shown; ring on Show details (box 52,329,267x13)",
+  "notes_file": "1 note (keys: app_id, created_at, game_title, id, on, source_turn_id, text)"
+ },
+ "expected": "Ring on Keep when the answer finishes; A on Keep: Kept. line, ring on Show details; notes file holds one note.",
+ "verdict": "PASS",
+ "side_effect": "One test note now exists in the notes file (kept on purpose); the clean-up step removes it. The test chat gained one Steel Soul question and answer."
+}

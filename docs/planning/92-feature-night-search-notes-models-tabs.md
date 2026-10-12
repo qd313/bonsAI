@@ -398,6 +398,26 @@ rule (one press at a time with focus read after each).
   T3c on Sonnet 5.5 high, I1 on Sonnet 5.5 medium; Deck block A (the Deck's own screen: every tab's height, "before"
   pictures, the LB/RB reproduction, and the models box's full D-pad map) and the bookkeeper (the seven items to the
   roadmap) beside them.
+- **11:50 to 15:50, the second night, on the Deck's own screen** (854 x 454 for the panel; usage at 11:29: five-hour
+  window 25, week 75; at 15:36: 84 and 89). **Deck block A** (build `3115f3de`): every tab's height on the Deck's own
+  screen (pane 430: Search 430, Main 565, Ollama 706 as found, Settings 2,056, Permissions 760, Developer 2,539, About
+  456), the "before" pictures, LB/RB keeping open sections and coming back scrolled, and **the AI models box's full
+  D-pad map: every Right from the filters column went to the first model, 32 to 100 px off in 10 of 12, and Left from
+  every model went to the starter-set chip.** **Nine pieces built and landed**, every gate green at each landing, all
+  pushed: the icons thicker (twice: the first try was too subtle on the Deck), folded tabs closing on every tab switch
+  (with a second round: the ring on the first line after LB/RB, LB/RB from the floating button), the four About
+  changes, Settings folded, Developer folded, the note card, line, sheet and "remember …" (second and third rounds for
+  the ring), the search jump with the Back line, B and Y (second round: the ring on the question, not the day line),
+  and the AI models box's sideways presses going to what sits beside the ring (with the title row in a third round).
+  **Deck blocks B, C and D** (builds `74e6167c`, `f4215cf1`, `b8d9575f`): About, Settings (548 of 430 closed),
+  Developer (430 of 430, now opening at its top), the folded Ollama tab (430 of 430 closed, the owed half), the note
+  card, line, read count, sheet, command and Remove, the search jump, Back, B and Y, the models box's column, stars and
+  title row, and the folded tabs' second round all PASS in the end; the icons are the maintainer's eye. **Open at the
+  end:** a Down pressed within half a second of closing the notes sheet is pulled back to the notes line (a third
+  round building). **What slowed the night:** seven helpers each running the full test sets at once starved the PC
+  (one run over an hour, five frozen, free memory 1.4 GB); from 13:33 helpers ran only their own tests and the full
+  sets ran once at landing (lessons § 4). The Deck put back: settings identical to the backup, no game, no model,
+  keep-awake released; the two test chats stay (the maintainer's call), 9 chats.
 
 ## 14. Questions for the maintainer (the safest choice taken meanwhile)
 
@@ -447,3 +467,10 @@ Ollama tab and the Deck passed them first time; Settings and Developer are the r
 reads: go 4 / 61 (five-hour / week); 00:45 8 / 62; 02:33 70 / 70; 02:41 75 / 71 (stopped starting anything);
 07:34 0 / 72; 08:40 20 / 74. Two Opus high helpers and four Sonnet high helpers at once cost about 8 points of the
 week in under two hours. The lessons go in lessons-learned § 3 and § 4.
+
+**Answers, 2026-10-12 (second night):** the maintainer looked at the first night's work on the Deck's own screen and
+added seven changes, which were built the same afternoon. Seven helpers started at once on top of a fresh tip clashed
+only in the focus map's appended sections and two tests both the Settings and Developer helpers changed (merged to open
+both tabs' sections); the real cost was the PC itself, starved by seven full test runs at once until the test rule
+changed (lessons § 4). The shared fold pieces held across Ollama, Settings and Developer with no changes to them from the
+two tab lanes. Budget reads (five-hour / week): 11:29 25 / 75; 13:16 22 / 81; 14:05 49 / 85; 14:47 64 / 87; 15:36 84 / 89.

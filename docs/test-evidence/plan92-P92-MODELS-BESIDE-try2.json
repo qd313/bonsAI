@@ -1,0 +1,27 @@
+{
+ "row": "P92-MODELS-BESIDE-try2",
+ "build_commit": "b8d9575f",
+ "deck_time_local": "2026-10-12 about 16:30-16:45 EDT",
+ "screen": "Deck's own screen. The box lives in the Steam Big Picture Mode page (innerWidth 854 x innerHeight 534).",
+ "setup": "Ollama tab, A on the 'AI models' line (read focus first), Down to the 'AI models' button (read focus), A. Box opened with the ring on Advanced (cy 139, box 662,128,65x22). One press at a time, 1.8 s wait inside each read. Never A on a model row, star, Pull or Remove. A pressed only on the fold line and the 'AI models' button.",
+ "pressed": "Left (from the Advanced stop the box opened on); Down; Right; Left; Right; Left; Down x4 to Speed; Right; Left; Down; Right; Left; B.",
+ "seen": {
+  "first_Left_from_Advanced_right_after_the_box_opened": "held on Advanced (nothing moved)",
+  "Down_from_Advanced": "Refresh model catalog (cy 169.7, box 441,162,20x15)",
+  "Right_from_Refresh": "Advanced (cy 139) - works",
+  "Left_from_Advanced": "Refresh (cy 169.7) - works; repeated a second time: Right = Advanced, Left = Refresh again",
+  "walk_to_Speed": "Down from Refresh: Clear (195.3), Open source only (248.8), Also try open-weight (277.3), Speed (356.3); the greyed row was skipped",
+  "Right_from_Speed": "star qwen2.5vl:3b (cy 350.0, 6.3 px higher) - same as block C",
+  "Left_from_that_star": "back to Speed (356.3, 6.3 px)",
+  "Qwen2.5-VL_star_from_another_filter": "Down from Speed = Strategy (379.9); Right = the qwen2.5vl:3b star (350.0, 29.9 px higher); Left = Strategy (379.9). Distance 29.9 px, inside 52. (Block C had this star's Left land on 'Install the starter set' 26.3 px away when reached from that filter; the box returns to the filter you came from.)",
+  "boxes": "1 while open; 0 after B",
+  "after_B": "ring on the 'AI models' button, 'AI models' section still open"
+ },
+ "expected": "Title row both ways (Refresh Right = Advanced, Advanced Left = Refresh); Right from Speed and Left from the first star land level as before; one box; B closes.",
+ "verdict": [
+  "PASS title row both ways (Right from Refresh goes to Advanced; Left from Advanced goes to Refresh; repeated twice)",
+  "PASS spot checks: Right from Speed lands on the qwen2.5vl star 6.3 px away; Left from the star returns to Speed 6.3 px; the other star Left lands 29.9 px away",
+  "UNCLEAR one oddity: the very first Left on the Advanced stop the box opened on did nothing, while every later Left from Advanced worked. Could be the first press after the box opens being lost; the owner decides whether that matters."
+ ],
+ "side_effect": "none. No A on any model row."
+}

@@ -1,0 +1,16 @@
+{
+ "row": "P90-NOTES-CLEANUP-try2",
+ "build_commit": "b8d9575f",
+ "deck_time_local": "2026-10-12 about 16:05 EDT",
+ "screen": "Deck's own screen",
+ "setup": "Notes sheet open with one test note (the Steel Soul note).",
+ "pressed": "Up (switch), Right (read: 'Remove note: I am doing a Steel Soul run...'), then A as its own step on the bin. B.",
+ "seen": {
+  "after_A": "0 note rows in the sheet; ring on Close",
+  "notes_file": "user_notes.json holds 0 notes (read over SSH, count only)",
+  "after_B": "sheet closed; ring on the 'Read 1 of your notes' line (line text not yet refreshed; it is part of the chat history)"
+ },
+ "expected": "Notes file holds no notes.",
+ "verdict": "PASS",
+ "side_effect": "none"
+}

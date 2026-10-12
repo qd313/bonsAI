@@ -1,0 +1,26 @@
+{
+ "row": "P90-NOTES-SHEET-try2",
+ "build_commit": "b8d9575f",
+ "deck_time_local": "2026-10-12 about 15:50-16:05 EDT",
+ "screen": "Deck's own screen (Quick Access page 854 x 454; the notes sheet lives in the Steam Big Picture Mode page, 854 x 534)",
+ "setup": "Main tab, Mantis Lords test chat. Notes file held the Steel Soul test note from the previous row. Question 'How do I get to the City of Tears in Hollow Knight' sent with deck_send_ask.py (VERIFIED), Ask pressed.",
+ "pressed": "Answer finished (about 40 s). Read ring. Walked Up 9 times to the 'Read 1 of your notes' line, reading each stop (never A on Mark helpful). A on the line. In the sheet: Up, Right, Left, Down. B, read at once, +1 s, +2 s. Then A on line again, B, Down (three timings).",
+ "seen": {
+  "ring_when_answer_finished": "on the question box (box 49,380,299x44), NOT on the notes line. The notes line was off screen above (y -178). Reached it with 9 presses of Up.",
+  "sheet_open": "A on the line opened the sheet; 1 note row; ring on Close (box 123,307,608x36)",
+  "Up_from_Close": "the note's switch (aria-pressed true, box 123,238,568x41)",
+  "Right": "the bin 'Remove note: ...' (box 697,238,34x41)",
+  "Left": "back on the switch",
+  "Down": "Close",
+  "B": "sheet closed; ring on 'Read 1 of your notes. Press to see them.' at once, at 1 s and at 2 s (y 147 each time)",
+  "opposite_check": "Three tries: A on the line, B, then Down 0.35 s, 0.35 s and 0.49 s after B (bridge ack times). Each time the ring stayed on the notes line at once, +1 s and +3 s. Down did not move it. I cannot tell whether the Down was lost while the sheet closed or the ring was pulled back. Control: with the sheet closed and a long wait, Down from the line goes to 'Show reasoning', so Down normally works there."
+ },
+ "expected": "After the answer the ring is on the notes line; in the sheet Close, Up, switch, Right bin, Left switch, Down Close; B returns the ring to the notes line (read at once, 1 s, 2 s); opposite check: a Down within half a second of B must be followed and not pulled back (read at 1 s and 3 s).",
+ "verdict": [
+  "UNCLEAR ring on the notes line after the answer finishes: it was on the question box. The 'fixed since' list does not promise this, so I walked to the line. Owner to decide.",
+  "PASS sheet moves: Up from Close = switch, Right = bin, Left = switch, Down = Close",
+  "PASS B returns the ring to the notes line, seen at once, at 1 s and at 2 s",
+  "FAIL opposite check: in three tries a Down sent 0.35 to 0.5 s after B did not move the ring; it stayed on the notes line for 3 s"
+ ],
+ "side_effect": "The test chat gained a City of Tears question and answer. Nothing else."
+}

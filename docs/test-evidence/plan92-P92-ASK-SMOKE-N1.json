@@ -1,0 +1,20 @@
+{
+  "row": "P92-ASK-SMOKE-N1",
+  "build_commit": "5d67f9d9",
+  "deck_time_local": "2026-10-12 02:07-02:10 EDT",
+  "screen": "Monitor live: page window 855x766, screen 1500x843.",
+  "setup": "Main tab. LB/RB to Main; open chat read as Mantis Lords (chat 2 of 9); LT switched to 'What is the best way through Ravenholm in Half-Life 2' (chat 1 of 9), name read before asking. No new chat started.",
+  "pressed": "Question sent with deck_send_ask.py: VERIFIED, read back whole: 'What should I bring into the Ravenholm section of Half-Life 2'. walkTo Ask (focus read: Ask button), then A as its own press. Then walkTo Show details, focus read, A, then B. Then unloaded the models with keep_alive 0 (gemma4:e2b-it-qat and nomic-embed-text); api/ps then read {models:[]}. RT back to the Mantis Lords chat, ring on tab bar.",
+  "seen": {
+    "answer_first_200": "When you're in Ravenholm, the main thing you need to focus on is conserving your limited ammo. Instead of relying on your guns constantly, you should be looking for ways to use the environment to your",
+    "answer_time": "arrived in well under a minute; Thinking: Balanced 20 s, about 581 tokens",
+    "plugin_log": "[2026-10-12 02:07:39,803][INFO]: user_notes=0 off=0 game='Half-Life 2' appid=-  (found in ~/homebrew/logs/bonsAI/2026-10-12 02.05.01.log, line 6; deck_readPluginLog journal filter did not find it)",
+    "user_notes_file": "ls of ~/homebrew/settings/bonsAI/ filtered for 'note': 0 matches, no user_notes.json",
+    "details_chips": "Keyword + meaning, KB: 9 sections, Spoiler risk: high, Reply style: balanced, Thinking: Balanced · 20 s · ~581 tokens, Routed gemma4:e2b-it-qat, Developer details. Chip 1 of 7. No 'Your notes' chip (text search for 'your notes' false). Sources panel: Half-Life 2 Ravenholm, Boss note (spoiler), Sandtraps.",
+    "B": "Closed the details; focus on Show details; QAM stayed open."
+  },
+  "expected": "Answer arrives, log says user_notes=0, no notes chip, no notes file.",
+  "verdict": "PASS - answer arrived, user_notes=0, no notes file, no Your notes chip",
+  "side_effect": "One test question added to the Ravenholm test chat (as intended). Models unloaded afterward by ollama keep_alive 0 call.",
+  "screenshot": "plan92-P92-ASK-SMOKE-N1-details.png"
+}

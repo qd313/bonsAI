@@ -1,0 +1,31 @@
+{
+  "row": "P92-ICONS-AFTER-try2",
+  "build_commit": "f4215cf1 (deployed this block with deck_deploy; tip, clean tree and no landing checked first)",
+  "deck_time_local": "2026-10-12 about 15:01 EDT (Deck clock 3:01 PM)",
+  "screen": "THE DECK'S OWN SCREEN: Quick Access page innerWidth 854 x innerHeight 454 at 1.5; screenshot 1280 x 800.",
+  "setup": "Deployed f4215cf1. deck_openPlugin failed three times (CEF debugger unreachable x2, then QAM chord with no pane) and worked on the fourth call. Walked Up x10 to the tab bar, RB once to Ollama.",
+  "pressed": ["UP x10 (question box to tab bar)", "RB once"],
+  "seen": {
+    "tab_bar_box": "left 48, top 0, width 300, height 20 (block A: 48,0,300,20)",
+    "icon_boxes": "Search 86,0,17x20 (glyph 10x10 at 89.5); bonsAI 110.4,0,17x20 (113.9); Ollama current icon 12x12 at 140.8 top 4; Settings 219.9,0,17x20 (223.4); Permissions 244.3,0,17x20 (247.8); Developer 268.6,0,17x20 (glyph 12x12 at 271.1); About 293,0,17x20 (296.5). All identical to plan92-P92-N2-SCREEN.json and to the first try.",
+    "stroke_widths_read_from_page": "line icons (Search, Settings, Permissions, Developer) 2.75 in the icon's own units, about 1.15 px at the 10 px size (first try read 2); bonsAI 1/19, Ollama 1/0.9, About 1/0.9.",
+    "ink_per_icon_before_firsttry_now": {
+      "method": "sum of brightness above the bar background inside each icon's column of the cropped strip (arbitrary units)",
+      "Search": [8474, 9648, 10908],
+      "Main": [14111, 16727, 17296],
+      "Ollama": [15555, 19813, 20859],
+      "Settings": [10458, 12096, 14140],
+      "Permissions": [9419, 10783, 12697],
+      "Developer": [9265, 10749, 12871],
+      "About": [5756, 6590, 6682]
+    },
+    "icon_by_icon_in_the_picture": "Looking at plan92-P92-ICONS-COMPARE.png (before on top, first try middle, now bottom, 3x): Search ring - a little heavier, +29 percent ink vs before. Main bonsai tree - slightly heavier, +23 percent. Ollama llama - heavier outline, +34 percent. Settings gear - heavier, +35 percent. Permissions padlock - heavier, +35 percent. Developer bug - heavier, +39 percent. About 'i' - barely different, +16 percent. Heavier than the first try for every icon except About (+1 percent) and Main (+3 percent). Noticeable side by side at 3x; at normal size it is a modest change, not dramatic.",
+    "screenshots": ["plan92-P92-ICONS-AFTER-try2-tabbar.png", "plan92-P92-ICONS-COMPARE.png"]
+  },
+  "expected": "Boxes unchanged and every icon visibly heavier than before. The maintainer judges the look.",
+  "verdict": [
+    "PASS - every icon box and the tab bar box are exactly as block A recorded them.",
+    "PASS - the lines are visibly heavier than before side by side for Search, Ollama, Settings, Permissions and Developer (+29 to +39 percent ink); UNCLEAR for Main (+23 percent) and About (+16 percent, the 'i' hardly changed). The maintainer should judge the look at normal size."
+  ],
+  "side_effect": "none. Also seen on the way up: the first Up from the question box landed on the chip 'What are the best FSR settings?' which the rig read as only 33 percent visible (covered by the Quick Access rail and clipped by the chip carousel); not part of this row."
+}

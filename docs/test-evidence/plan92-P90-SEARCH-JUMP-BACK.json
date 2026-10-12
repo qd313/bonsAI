@@ -1,0 +1,33 @@
+{
+  "row": "P90-SEARCH-JUMP-BACK",
+  "build_commit": "f4215cf1",
+  "deck_time_local": "2026-10-12 about 15:05 to 15:10 EDT",
+  "screen": "THE DECK'S OWN SCREEN: Quick Access page 854 x 454 at 1.5.",
+  "setup": "On Main, opened the Ravenholm chat ('What is the best way through Ravenholm in Half-Life 2') from the chats list (A on its row, read focus first; it showed as chat 2 of 9, not chat 1 as the runbook said, because the list order moved). Then LB to Search. 'mantis' is not a word button, so it went in with the send-question script (VERIFIED, field read back exactly 'mantis'). Result: 7 matches, 4 under Your chats. Walked Down to the match 'I am doing a Steel Soul run, how do I beat the mantis lords' (Mantis Lords chat, Today), read focus (ring on it, 100 percent visible), A.",
+  "pressed": ["A on the Ravenholm row in the chats list", "UP", "LB", "send-question script --text mantis", "DOWN x7 (walkTo, read each)", "A on the Steel Soul match", "UP x2 (3 earlier, then the Back line)", "A on the Back line"],
+  "seen": {
+    "after_A_on_match": {
+      "tab": "Main (bonsAI)",
+      "open_chat": "How do I beat the Mantis Lords in Hollow Knight, chat 1 of 9 (the Mantis Lords chat)",
+      "matched_question_row": "turn id 083a5acb-148d-4ea8-8683-9129971cdc33, on screen at left 75, top 206, 267 x 26 (pane visible 52 to 454)",
+      "ring": "NOT on the matched question. The ring was on the 'Today · 3' day-fold row (class bonsai-chat-earlier-day-row) at top 138, which sits two rows above the matched question. Read twice, 1.5 s apart: same. All four question rows are focusable, so the ring could have been on the matched one.",
+      "back_line": "present: class bonsai-search-back-row, aria-label 'Back to where you were, in the Search tab', text '‹ Back to where you were', box left 52 top 66 290 x 20, the first stop under the tab bar (Up from the Today row went to '3 earlier', Up again to the Back line)",
+      "screenshot": "plan92-P90-SEARCH-JUMP-BACK-after-jump.png"
+    },
+    "after_A_on_back_line": {
+      "tab": "Search",
+      "find_box_word": "mantis (input value read back)",
+      "result_line": "7 matches for mantis",
+      "ring": "on the same match: aria-label starts 'I am doing a Steel Soul run, how do I beat the mantis lords', same box (54, 255, 288 x 49) as before the jump",
+      "back_line_gone": true
+    },
+    "back_line_gone_after_leaving_search": "yes: after RB to Main the Back line was not there"
+  },
+  "expected": "Tab Main; open chat the Mantis Lords one; matched question's row on screen with the ring on it; the Back line is the first stop under the bar; A on it returns to Search with the same word and game and the ring on the same match.",
+  "verdict": [
+    "PASS - the jump lands on Main in the Mantis Lords chat with the matched question on screen.",
+    "FAIL - the ring is not on the matched question after the jump: it is on the 'Today · 3' fold row above it.",
+    "PASS - the Back line is the first stop under the tab bar; A on it returns to Search with 'mantis' still picked, 7 matches, and the ring on the same match."
+  ],
+  "side_effect": "Opened the Ravenholm chat and then jumped into the Mantis Lords chat: the Mantis Lords chat is open again as at the start. No question asked, nothing sent. The Search find box still holds 'mantis' (cleared/left at the end of the block, see SEARCH-Y evidence)."
+}

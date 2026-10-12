@@ -1,0 +1,28 @@
+{
+  "row": "P92-ABOUT-AFTER",
+  "build_commit": "74e6167c",
+  "deck_time_local": "2026-10-12 about 14:56 to 15:00 EDT (Deck clock 2:56 PM at the picture)",
+  "screen": "THE DECK'S OWN SCREEN: Quick Access page 854 x 454; screenshot 1280 x 800.",
+  "setup": "RB from Developer to About. The ring did NOT start on the tab bar: it landed on the Reply language dropdown ('Follow system'). One Up put it on the tab bar, then the picture and the readings were taken with the pane at scrollTop 0.",
+  "pressed": ["Left, RB (to About)", "Up (to the tab bar)", "Down x4 (dropdown, GitHub, Built on Ollama!, Bugs), Right, Left", "Up x4 (back to the bar)", "RB x3 (to Ollama for the Open all colours)"],
+  "seen": {
+    "picture": "plan92-P92-ABOUT-AFTER.png against plan92-P92-N2-BEFORE-about.png: before, 'ABOUT BONSAI' sat alone on its line with 'Version 0.5.0' on a second line, then a 'What bonsAI is' row, a small green beta line, a 'REPLY LANGUAGE' heading with a 'Language' label and a half-width cut dropdown ('Follow sys...'), and three WHITE link buttons. After: 'ABOUT BONSAI Version 0.5.0' on one line with the version small and grey; the whole 'What bonsAI is' paragraph and a longer green beta notice shown at the top; 'REPLY LANGUAGE' with only a full-width dropdown ('Follow system', not cut) and no 'Language' label; the three link buttons are dark grey with light text; the QR is where it was (to the right of the links) and looks the same.",
+    "title_and_version": "Section title element present: text 'ABOUT BONSAIVersion 0.5.0', rect left 64, top 48, width 268, height 24. The version span [data-bonsai-about-version]: 'Version 0.5.0', rect left 199.2, top 54.7, width 61.9, height 12.7, inside the title's box (48 to 72): so ON THE SAME LINE, not on a second line. Font size 9.9 px, colour rgb(200,200,200) (grey), text-transform none (not capitals).",
+    "blurb_and_beta": "Blurb rect 64,80, 268 x 94.7; beta notice 64,174.7, 268 x 66.8. Pane runs 24 to 454, so both are fully inside the pane with the ring on the tab bar. The picture shows both whole.",
+    "dropdown": "Dropdown rect 64,295.5, 268 x 40; its parent rows are also 268 wide: full row width. Elements whose own text is 'Language': 0.",
+    "link_buttons": "All three 160 x 28 at left 64 (tops 389.5, 422.5, 455.5 when the pane is at 0). The button elements read computed background-colour rgba(0,0,0,0) but draw with a background-image gradient (white 16 percent to 6 percent over the dark pane) and a faint border; rendered colour measured from the picture: rgb(48,53,59) (dark grey). Text colour rgb(232,238,245) (light). The floating Open all button on the Ollama tab: computed background rgb(14,20,27) with text rgb(150,150,150) on the element I could read; rendered colour measured in an earlier Ollama picture: about rgb(44,49,56) to rgb(51,56,62) with light words. So the link buttons are the same dark grey family as Open all.",
+    "qr": "[data-bonsai-about-qr] rect 232,389.5, 100 x 110.4 (unchanged shape, to the right of the links).",
+    "walk": "Down from the bar: Reply language dropdown ('Follow system', y 296 to 336); Down: GitHub (pane scrolled to 110); Down: Built on Ollama!; Down: Bugs & Feature Requests; Right: the QR (inside the QR element, 100 x 110); Left: back to Bugs. Every press moved, no stop twice. All stops fully inside the pane. Never pressed A on a link, the QR or the dropdown.",
+    "closed_height": "scrollHeight 540, clientHeight 430 on the Deck's own screen (block A: 456; before the change the tab was 26 px taller than the pane, now 110 px taller because the paragraph and beta notice are always shown)."
+  },
+  "expected": "Title and version on one line (version smaller, grey, not capitals); blurb and beta always shown; dropdown full width with no Language label; links dark grey with light text; QR unchanged; the walk as listed.",
+  "verdict": [
+    "PASS - the title is there and the version sits on the same line (no second line).",
+    "PASS - blurb and beta notice shown and inside the pane.",
+    "PASS - dropdown full row width, no 'Language' label.",
+    "PASS - link buttons dark grey with light text; QR unchanged.",
+    "PASS - the walk, press by press.",
+    "UNCLEAR - arriving on About with RB the ring starts on the dropdown, not on the tab bar as the runbook assumes; one Up reaches the bar. Not a fault of the changes, noted for the owner."
+  ],
+  "side_effect": "none"
+}

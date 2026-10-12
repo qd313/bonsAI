@@ -1,0 +1,24 @@
+{
+ "row": "P90-NOTE-LINE",
+ "build_commit": "74e6167c",
+ "deck_time_local": "2026-10-12 about 14:59 EDT",
+ "screen": "THE DECK'S OWN SCREEN: Quick Access page 854 x 454.",
+ "setup": "Same test chat 'How do I beat the Mantis Lords in Hollow Knight' (chat 1 of 9 now). One kept note (on true) from P90-NOTE-CARD. Question sent with deck_send_ask.py (VERIFIED), Down to the Ask button (read: Ask), A.",
+ "pressed": [
+  "Down x4 (Show details to Ask), A",
+  "Up x3 from the box to this turn's Show details (read: Show details), A (opened), A (closed)"
+ ],
+ "seen": {
+  "question": "How do I get to the City of Tears in Hollow Knight",
+  "notes_line": "'Read 1 of your notes' + the arrow, element .bonsai-notes-line. In the document it comes after the question text and before the answer text (compareDocumentPosition both true; y -232 question, -192 notes line, -136 answer: the pane was scrolled so these are above the visible area).",
+  "log": "Plugin log '2026-10-12 14.44.09.log' (the file name carries a time; no plain-date log exists): the Ask line for this turn reads 'user_notes=1 off=0 game=Hollow Knight' at 14:49:34. The turn before the note existed read 'user_notes=0' at 14:47:54.",
+  "details": "Show details for this turn lists the chip 'Your notes (1)' (also 'Keyword + meaning', 'KB: 14 sections', 'Reply style: balanced', 'Thinking: Balanced', 'Spoiler risk: high', 'Routed gemma4:e2b-it-qat'), and a body 'Your notes' with 'I am doing a Steel Soul run.'",
+  "answer_note": "The answer itself was thin and ended with a question 'Where are you at in Hollow Knight?' (A. Forgotten Crossroads / B. City of Tears area). Not part of this check."
+ },
+ "expected": "'Read 1 of your notes' between the question and the answer; user_notes=1 in the log; a 'Your notes (1)' chip whose body has the note's words.",
+ "verdict": [
+  "PASS - P90-NOTE-LINE: the line is there, between the question and the answer."
+ ],
+ "side_effect": "none",
+ "note": "Same turn as P90-NOTE-READ (plan92-P90-NOTE-READ.json)."
+}

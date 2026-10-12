@@ -1,0 +1,22 @@
+{
+  "row": "P90-NOTES-SHEET",
+  "build_commit": "74e6167c",
+  "deck_time_local": "2026-10-12 about 14:51 EDT (Deck clock 2:51 PM)",
+  "screen": "THE DECK'S OWN SCREEN: Quick Access page 854 x 454; the sheet is drawn in the Steam main window page (854 x 534).",
+  "setup": "Main tab, Mantis Lords chat, after the City of Tears turn. One note, on true.",
+  "pressed": ["Up x8 from Show details to the notes line (read: 'Read 1 of your notes. Press to see them.')", "A (sheet opened; ring on Close)", "Up (ring on Remove note)", "Left x2 (dead: ring stayed on Remove note)", "Down, Up (again Remove note)", "Up (ring on the switch: 'I am doing a Steel Soul run.. Hollow Knight. On. Press to switch.')", "A", "A", "B"],
+  "seen": {
+    "sheet": "Title 'Your notes', the note 'I am doing a Steel Soul run.', 'Hollow Knight' under it, its switch on, a bin button (Remove) to its right, and a Close button. Picture: plan92-P90-NOTES-SHEET-open.png.",
+    "first_A_on_switch": "aria-pressed false, label says Off; notes file 'on': false.",
+    "second_A": "aria-pressed true, label On; notes file 'on': true.",
+    "B": "Sheet gone (0 note rows in the page). The ring went to the QUESTION BOX (an INPUT), not to the notes line. Read twice.",
+    "reaching_the_switch": "After A the ring started on Close. Up went to Remove (the bin), not to the switch. Left from Remove did nothing (twice). Up from Remove reached the switch. So the switch is one Up above Remove, not one Left of it."
+  },
+  "expected": "Sheet opens with the note, 'Hollow Knight', switch on. A on switch: off (file on:false). A again: on. B: sheet closes and the ring is back on the notes line.",
+  "verdict": [
+    "PASS - sheet content, switch off then on, the file following each time.",
+    "FAIL - B closed the sheet but the ring landed on the question box, not on the notes line.",
+    "UNCLEAR - the runbook does not say how the ring gets from Close to the switch; Up from Close landed on Remove, Left from Remove was dead, Up from Remove reached the switch. A new bug candidate: the switch is not left of the bin by D-pad."
+  ],
+  "side_effect": "none (switch ended on, as found)."
+}

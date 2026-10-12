@@ -1,0 +1,32 @@
+{
+ "row": "P91-FOLD-SETTINGS",
+ "build_commit": "74e6167c",
+ "deck_time_local": "2026-10-12 about 15:00 to 15:05 EDT (Deck clock)",
+ "screen": "THE DECK'S OWN SCREEN: Quick Access page innerWidth 854 x innerHeight 454.",
+ "setup": "Arrived on Settings with RB twice from Main (via Ollama). Developer tab is on, so the UI scale section is shown (ten sections). Never pressed A on any setting; A only on the floating Open all / Close all button.",
+ "pressed": [
+  "RB, RB",
+  "Right (floating button), A (Open all), Left",
+  "Down x22 (rig sequences, 12 then 14 with the end dead presses)",
+  "Up x1, then Up x2 and Up x7 (reading strip rows), Up x6 (to Text size), Right, Left",
+  "Up, Right (floating button), A (Close all), LB"
+ ],
+ "seen": {
+  "step1": "On arrival all ten sections closed (uiscale, screenshot, textsize, remember, spoilers, chips, voiceinput, voicereplies, character, data all data-open false). scrollTop 0, scrollHeight 548, clientHeight 430: 1.27 times the visible height (block A measured 2,056 before). Ring on the first line (UI scale).",
+  "step2_open_all": "Right from the line: ring on the floating button 'Open all sections'. A: label became 'Close all', all ten sections open, scrollHeight 1392. Left: ring back on the UI scale line.",
+  "step2_walk": "22 presses Down, every one moved the ring (uiscale line, Adjust UI automatically, Apply UI scale, screenshot line, its quality button row (one stop), text size line, text size button row (one stop), Remember line, Remember row, Spoilers line, Hide spoilers row, Chips line, Show one chip row, Voice input line, STT model button row, Reinstall voice engine, Voice replies line, its button row, AI voice line, AI voice row, Data line, Show Developer tab row, Clear cache button). No stop twice (cycle none). The next Downs after Clear cache were dead: that is the end of the tab, 3 times. Visibility: every stop 100 percent visible except one: the 'Story spoilers (Strategy mode)' section LINE read 92 percent (11 of 12 points), clipped by a container, like the same 92 percent reading on the Ollama tab's section lines. Nothing was covered by the strip.",
+  "step3_strip": "Three rows: 'Show Developer tab', 'AI voice & personality', 'Show one chip instead of two'. For each, the strip's text is the row name in capitals then the row's data-bonsai-help words exactly (e.g. 'Adds a Developer tab with logs, exports, and advanced tuning. Default off.'; 'Preset, random, or custom character tone in replies.'; the long chip words). The strip sat at y 366 to 454 or lower; the ringed rows ended at y 202 to 257, clear of it. The strip is empty (0 x 0) when no row is ringed.",
+  "step4_text_size": "Ring on 'Set text size to Small'. scrollTop before 128.67. Right: ring on 'Set text size to Normal', scrollTop 128.67 (moved 0). Left: back on Small, scrollTop 128.67 (moved 0). A not pressed.",
+  "step5": "Right from the Text size line to the floating button, A: all ten closed, label 'Open all', scrollHeight 548, scrollTop 10 (not 0 after the close). LB left the tab. Quirk: with the ring on the floating button, LB did nothing (twice; tab stayed Settings). After Left (ring back on a section line) LB worked and went to Ollama, ring on 'where' (the first line)."
+ },
+ "expected": "All closed on arrival, closed height under 1.5 times visible; open all via the floating button; a Down walk with no dead press, no stop twice, every stop visible and clear of the strip; strip words equal the row's help; Text size Left/Right moves scrollTop by 0; close all and leave.",
+ "verdict": [
+  "PASS - closed on arrival, 548 against 430 visible (1.27 times).",
+  "PASS - open all and the label change.",
+  "PASS - the walk: no dead press until the end of the tab, no stop twice, nothing covered by the strip, the rows I checked clear of it. One stop (the Story spoilers section line) read 92 percent visible; I count it as the same known text-sample edge seen on the Ollama tab, but the owner should decide.",
+  "PASS - strip words match on three rows.",
+  "PASS - Text size Left and Right moved scrollTop by 0 points.",
+  "PASS - close all and leave."
+ ],
+ "side_effect": "none. No setting was changed."
+}

@@ -336,6 +336,34 @@ rule (one press at a time with focus read after each).
 - **00:45, batch 1 and batch 2 started together** (the measurements were in): N1, N4, N3 and T3 on Sonnet 5.5 high;
   M1 and T0 on Opus 5.5 high. Six editing helpers. Usage at 00:45: five-hour window 8 percent, week 62 percent.
   Deck block 2 (the rig's three fixes from last night and the free-play baseline) started.
+- **01:00, Deck block 2** (build `d553a5b4`): the rig's launch and exit tools work through Steam's menu (pass);
+  opening the plugin right after a reload still fails on the first try, three rounds of three (fail, the rig's own
+  project); the settings snapshot says "streamed" but one of three copies came back 100 KB short and could not be
+  restored (fail; the Deck's settings were never touched, because a restore unpacks to a side folder first; a
+  leftover snapshot record sits on this PC and only acts when someone takes a new snapshot, so the drivers take none);
+  the no-game free-play sweep is recorded as the "before" picture.
+- **01:00 to 02:45, six pieces landed, all checks green, pushed four times:** the game-notes search (N4); the notes
+  store and Ask reading the notes (N1, three commits: room made in the two full back-end files first, then the store,
+  then the reading); the About tab (T3); the AI models box's column (M1, two commits: it also found and fixed the
+  models screen redrawing itself for as long as it was open); the Search tab's first half (N3, four commits, the
+  settings card gone from Main); the folded Ollama tab (T0, five commits). **The "methods with no caller" count:** the
+  notes and game-notes back end landed before the screens that call them, so four method names sit in the count's
+  allow list with a comment naming the screen lane that removes each; the Search tab now calls three of them, so a
+  small cleanup removes those three, and the notes sheet removes the fourth when it lands. Landing clashes were only
+  the generated map files and three helpers each adding a section to the end of the focus map (all kept).
+- **02:20, Deck block 3a** (build `5d67f9d9`): the About tab fits on one screen (741 of 741 px), its paragraph opens
+  under "What bonsAI is" only with the ring on it, the QR is 88 px and opens the support page (pass); **but Down from
+  GitHub is dead, so the other two link buttons cannot be reached** (fail). Second round on Opus medium (the ladder's
+  step), building. An Ask after the notes change still answers, logs `user_notes=0` and shows no notes chip (pass).
+- **02:45, Deck block 4a** (the driver's deploy built the shared checkout as it stood, `b6d8e9a6`, while a landing's
+  checks were running; it worked, but **drivers must not deploy while a landing runs**): the models box's Date column is
+  gone and the model name column is 118.6 px, 4.6 percent narrower (pass); a tick changes the list at once, Clear leaves
+  the licence (pass); Done keeps the filters (pass); **the greyed licence row still takes the ring** (fail) and Down
+  from Advanced stops on the small Refresh button that Up skips (unclear). A second round after the usage reset.
+- **Budget:** 02:33 five-hour window 70 percent, week 70 percent (8 points in under two hours); 02:41 75 and 71. At the
+  five-hour line nothing new starts until it resets at 05:00. With the week near its 80 percent line, **the session
+  will stop at this plan's clean point**: the note card and line (N2), the jump and Y (N3b), and folded Settings and
+  Developer (T1, T2) move to a second night.
 
 ## 14. Questions for the maintainer (the safest choice taken meanwhile)
 

@@ -81,6 +81,10 @@ def new_background_state() -> dict[str, Any]:
         # nothing on the screen remembers which mode it pressed Ask in. "" when no mode applies
         # (a keyword command answered without asking the model).
         "ask_mode": "",
+        # Plan 92 lane N2: the offer to keep the question as a note, ``{"text", "app_id", "game_title"}``,
+        # or None. Worked out before the AI answers and filled in on the finished state; the screen draws
+        # the "Keep this as a note?" card from it. Never saved into the chat file.
+        "note_offer": None,
     }
 
 

@@ -53,6 +53,8 @@ EXPECTED_KEYS = {
     "kind",
     # Plan 78: the mode the question was asked in, so a reopened panel knows what the answer is.
     "ask_mode",
+    # Plan 92 lane N2: the offer to keep the question as a note, or None.
+    "note_offer",
 }
 
 

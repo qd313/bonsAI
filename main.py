@@ -1567,6 +1567,8 @@ class Plugin:
                 # None on a stopped request, the same as ``reasoning`` above is dropped for one --
                 # a stopped answer gets no mark.
                 "chat_summary": None if cancelled_rq else result.get("chat_summary"),
+                # Plan 92 lane N2: the offer to keep a note, worked out from the question before the AI answered.
+                "note_offer": result.get("note_offer"),
             }
             self._clear_partial_stream_snapshot()
         slot_id = self._chat_slot_by_request.pop(request_id, None)

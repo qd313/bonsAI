@@ -104,6 +104,7 @@ from backend.services.destructive_advice_guard import (
 )
 from backend.services import chat_turn_recorder
 from backend.services.chat_own_game_title import chat_own_game_title, text_resolved_title_for_turn
+from backend.services.user_note_offer import note_offer_for_question
 from backend.services.user_notes_for_ask import notes_for_ask
 from backend.services import kb_followup_memory, ollama_keep_alive_rule
 from backend.services.input_sanitizer_service import apply_input_sanitizer_lane
@@ -232,6 +233,7 @@ async def run_game_ai_request(
     app_context = "active" if app_id else "none"
     ollama_keep_alive_rule.note_game_running(bool(app_id))  # a game runs iff the screen sent its id; before it may be set aside
     pcls = type(plugin)
+    note_offer = None  # worked out before the AI answers (plan 92), so a failed answer still carries it
     try:
         logger.info(
             "run_game_ai_request: host=%s game=%r appid=%s question_len=%d",
@@ -486,6 +488,9 @@ async def run_game_ai_request(
 
         # Plan 92: the person's own notes for this game, picked before the knowledge-base search.
         user_notes = await notes_for_ask(plugin, app_id, app_name or text_resolved_title)
+        note_offer = note_offer_for_question(
+            question_for_retrieval, app_id=app_id, app_name=app_name, resolved_title=text_resolved_title
+        )
 
         kb_transparency = build_knowledge_base_transparency(
             attached=False,
@@ -1135,6 +1140,7 @@ async def run_game_ai_request(
             # on) -- see _publish_kb_attached_notes_live's docstring for the one thing reading
             # this back out of a *poll* still needs in main.py.
             "kb_attached_notes": kb_attached_notes,
+            "note_offer": note_offer,
         }
     except Exception as exc:
         elapsed = round(time.time() - start, 1)
@@ -1164,6 +1170,7 @@ async def run_game_ai_request(
             "elapsed_seconds": elapsed,
             "strategy_spoiler_asked_entity": "",
             "kb_attached_notes": [],
+            "note_offer": note_offer,
             "transparency": transparency_snapshot_for_chat_slot(error_route_snapshot),
             "strategy_guide_branches": None,
             "strategy_checklist": None,

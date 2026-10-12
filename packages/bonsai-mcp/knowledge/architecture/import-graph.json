@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 841,
-  "edgeCount": 2652,
+  "fileCount": 843,
+  "edgeCount": 2661,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2619,6 +2619,7 @@
         "src/features/plugin-shell/useCharacterPickerModal.tsx",
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
+        "src/features/plugin-shell/usePublishTextScale.ts",
         "src/features/plugin-shell/useUnifiedInputBehaviors.ts",
         "src/features/stream-scramble/streamScrambleContext.ts",
         "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
@@ -2715,6 +2716,8 @@
         "src/data/chatTextSize.test.ts",
         "src/features/chat-title/ChatTitleView.tsx",
         "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx",
+        "src/features/plugin-shell/usePublishTextScale.test.tsx",
+        "src/features/plugin-shell/usePublishTextScale.ts",
         "src/index.tsx",
         "src/styles/sections/textPx.ts"
       ]
@@ -3559,6 +3562,8 @@
         "src/features/chat-title/useChatTriggerSwitch.test.tsx",
         "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/chat-title/useTopStripTabBar.ts",
+        "src/features/plugin-shell/usePublishTextScale.test.tsx",
+        "src/features/plugin-shell/usePublishTextScale.ts",
         "src/index.tsx"
       ]
     },
@@ -4457,6 +4462,27 @@
       "importedBy": [
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
         "src/index.helpChip.test.tsx",
+        "src/index.tsx"
+      ]
+    },
+    "src/features/plugin-shell/usePublishTextScale.test.tsx": {
+      "imports": [
+        "src/data/chatTextSize.ts",
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/features/plugin-shell/usePublishTextScale.ts",
+        "src/styles/sections/textPx.ts",
+        "src/test-harness/settledFontSize.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/plugin-shell/usePublishTextScale.ts": {
+      "imports": [
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/data/chatTextSize.ts",
+        "src/features/chat-title/chatTitleStore.ts"
+      ],
+      "importedBy": [
+        "src/features/plugin-shell/usePublishTextScale.test.tsx",
         "src/index.tsx"
       ]
     },
@@ -6382,6 +6408,7 @@
         "src/features/plugin-shell/useOllamaConnectionState.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/features/plugin-shell/usePluginHelpModal.tsx",
+        "src/features/plugin-shell/usePublishTextScale.ts",
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
         "src/features/plugin-shell/useTabAndModeGuardEffects.ts",
@@ -6857,6 +6884,7 @@
         "src/features/chat-title/chatTitleStyles.ts",
         "src/features/chat-title/chatsMenuStyles.ts",
         "src/features/downloads/downloadNotice.tsx",
+        "src/features/plugin-shell/usePublishTextScale.test.tsx",
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetDecodeChipButton.tsx",
         "src/hooks/localOllamaStarterSet.tsx",
@@ -7272,7 +7300,8 @@
       "imports": [],
       "importedBy": [
         "src/components/textSizeEverywhere.test.tsx",
-        "src/components/textSizeSurfaces.test.tsx"
+        "src/components/textSizeSurfaces.test.tsx",
+        "src/features/plugin-shell/usePublishTextScale.test.tsx"
       ]
     },
     "src/test-harness/setup.ts": {

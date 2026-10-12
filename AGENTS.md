@@ -186,6 +186,7 @@ Full patterns:
   [docs/testing-manual.md](docs/testing-manual.md) for the new chain.
 - **Plan 62's three controls (Filters panel, Show details' Session tab, the Read aloud speaker)** have
   their D-pad routes written down in [focus-graph.md](docs/focus-graph.md#three-controls-from-plan-62).
+  The Filters button is now the filters column (2026-10-12, plan 91): [routes](docs/focus-graph.md#the-ai-models-boxs-filters-column-plan-91-m1).
 
 ### The "From the notes" block — a worked example
 

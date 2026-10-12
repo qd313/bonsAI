@@ -125,7 +125,9 @@ as a regression.
 
 _Moved here from AGENTS.md on 2026-09-27, word for word, for the same reason._
 
-**Plan 62, 2026-09-20 — three controls landed together, left to this note on purpose:** the AI models
+**Plan 62, 2026-09-20 — three controls landed together, left to this note on purpose** (the Filters
+button and panel described next were replaced on 2026-10-12 by the filters column, plan 91; see
+§ "The AI models box's filters column (plan 91, M1)" for its routes): the AI models
 screen's Filters button opens a panel of tickable rows (Down or B inside it, or Up from its first row,
 closes it and returns to the Filters button); the newest answer's Show details gained a second tab,
 Session (Left/Right switch tabs, Up leaves to Hide details, Down enters the open tab, B closes the whole

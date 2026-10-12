@@ -139,6 +139,7 @@
     "src/components/SettingsTab.clearBoxes.test.tsx",
     "src/components/SettingsTab.focusRing.test.tsx",
     "src/components/SettingsTab.folded.test.tsx",
+    "src/components/SettingsTab.foldedWalk.test.tsx",
     "src/components/SettingsTab.mdns.test.ts",
     "src/components/SettingsTab.modalReturnFocus.test.tsx",
     "src/components/SettingsTab.textSizeWalk.test.tsx",

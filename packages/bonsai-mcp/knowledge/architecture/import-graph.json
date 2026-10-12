@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 929,
-  "edgeCount": 3041,
+  "fileCount": 930,
+  "edgeCount": 3051,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2256,6 +2256,21 @@
       ],
       "importedBy": []
     },
+    "src/components/SettingsTab.foldedWalk.test.tsx": {
+      "imports": [
+        "src/components/SettingsTab.tsx",
+        "src/components/ringTestProps.ts",
+        "src/features/folded-tabs/settingsTabFolds.ts",
+        "src/styles/sections/foldedTabs.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/foldedTabWalk.tsx",
+        "src/test-harness/settingsFoldOpen.ts",
+        "src/test-harness/steamRing.tsx",
+        "src/test-harness/tabBodyWalk.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/SettingsTab.mdns.test.ts": {
       "imports": [
         "src/test-harness/fakeDeckyRpc.ts"
@@ -2307,6 +2322,7 @@
         "src/components/SettingsTab.clearBoxes.test.tsx",
         "src/components/SettingsTab.focusRing.test.tsx",
         "src/components/SettingsTab.folded.test.tsx",
+        "src/components/SettingsTab.foldedWalk.test.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
         "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/components/SettingsTabPresetSingleChip.test.tsx",
@@ -2769,6 +2785,7 @@
         "src/components/SettingsDeveloperLeftoverRing.test.tsx",
         "src/components/SettingsDeveloperWrappedRing.test.tsx",
         "src/components/SettingsTab.folded.test.tsx",
+        "src/components/SettingsTab.foldedWalk.test.tsx",
         "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/components/SettingsTabScreenshotHeading.test.tsx",
         "src/components/SettingsTabUiScaleHeading.test.tsx"
@@ -4591,6 +4608,7 @@
       ],
       "importedBy": [
         "src/components/SettingsTab.folded.test.tsx",
+        "src/components/SettingsTab.foldedWalk.test.tsx",
         "src/components/SettingsTab.tsx",
         "src/components/SettingsTabCharacterSection.tsx",
         "src/components/SettingsTabChatTextSizeRow.tsx",
@@ -7704,6 +7722,7 @@
       "importedBy": [
         "src/components/DeveloperTab.foldedWalk.test.tsx",
         "src/components/OllamaTab.foldedWalk.test.tsx",
+        "src/components/SettingsTab.foldedWalk.test.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx",
         "src/styles/bonsaiScopeStylesheet.ts"
       ]
@@ -8322,6 +8341,7 @@
         "src/components/SettingsTab.clearAllBack.test.tsx",
         "src/components/SettingsTab.clearBoxes.test.tsx",
         "src/components/SettingsTab.folded.test.tsx",
+        "src/components/SettingsTab.foldedWalk.test.tsx",
         "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/components/SettingsTabScreenshotHeading.test.tsx",
         "src/components/SettingsTabUiScaleHeading.test.tsx",
@@ -8396,7 +8416,8 @@
       ],
       "importedBy": [
         "src/components/DeveloperTab.foldedWalk.test.tsx",
-        "src/components/OllamaTab.foldedWalk.test.tsx"
+        "src/components/OllamaTab.foldedWalk.test.tsx",
+        "src/components/SettingsTab.foldedWalk.test.tsx"
       ]
     },
     "src/test-harness/pullModelsListLayout.ts": {
@@ -8457,6 +8478,7 @@
         "src/components/SettingsTab.clearBoxes.test.tsx",
         "src/components/SettingsTab.focusRing.test.tsx",
         "src/components/SettingsTab.folded.test.tsx",
+        "src/components/SettingsTab.foldedWalk.test.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
         "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/components/SettingsTabPresetSingleChip.test.tsx",
@@ -8488,6 +8510,7 @@
         "src/components/OllamaTab.foldedWalk.test.tsx",
         "src/components/PullModelsFiltersColumn.test.tsx",
         "src/components/SettingsTab.folded.test.tsx",
+        "src/components/SettingsTab.foldedWalk.test.tsx",
         "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/components/SettingsTabScreenshotHeading.test.tsx",
         "src/components/SettingsTabUiScaleHeading.test.tsx",
@@ -8529,6 +8552,7 @@
       "importedBy": [
         "src/components/DeveloperTab.foldedWalk.test.tsx",
         "src/components/OllamaTab.foldedWalk.test.tsx",
+        "src/components/SettingsTab.foldedWalk.test.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
         "src/features/search-tab/SearchTab.walk.test.tsx",
@@ -10265,6 +10289,7 @@
         "src/components/PullModelsFiltersColumn.tsx",
         "src/components/PullModelsModal.tsx",
         "src/components/SettingsTab.folded.test.tsx",
+        "src/components/SettingsTab.foldedWalk.test.tsx",
         "src/components/buildEarlierList.tsx",
         "src/components/injectChipNav.ts",
         "src/components/pullModelsBoxMemory.ts",

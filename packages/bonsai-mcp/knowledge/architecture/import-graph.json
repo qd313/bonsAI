@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 910,
-  "edgeCount": 2923,
+  "fileCount": 912,
+  "edgeCount": 2926,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2755,6 +2755,7 @@
         "src/data/chatTextSize.ts",
         "src/features/downloads/downloadNotice.test.tsx",
         "src/features/downloads/downloadNotice.tsx",
+        "src/features/folded-tabs/developerTabFolds.ts",
         "src/features/folded-tabs/ollamaTabFolds.ts",
         "src/features/model-routing/useTryOrderPlaces.test.tsx",
         "src/features/model-routing/useTryOrderPlaces.ts",
@@ -4229,6 +4230,21 @@
         "src/features/folded-tabs/TabHelpStrip.test.tsx"
       ]
     },
+    "src/features/folded-tabs/developerTabFolds.test.ts": {
+      "imports": [
+        "src/features/folded-tabs/developerTabFolds.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/folded-tabs/developerTabFolds.ts": {
+      "imports": [
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/features/folded-tabs/sectionSummary.ts"
+      ],
+      "importedBy": [
+        "src/features/folded-tabs/developerTabFolds.test.ts"
+      ]
+    },
     "src/features/folded-tabs/foldLineWidths.test.ts": {
       "imports": [
         "src/styles/bonsaiScopeStylesheet.ts"
@@ -4305,6 +4321,7 @@
     "src/features/folded-tabs/sectionSummary.ts": {
       "imports": [],
       "importedBy": [
+        "src/features/folded-tabs/developerTabFolds.ts",
         "src/features/folded-tabs/ollamaTabFolds.ts",
         "src/features/folded-tabs/sectionSummary.test.ts"
       ]

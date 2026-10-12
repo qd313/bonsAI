@@ -168,12 +168,13 @@ import { useSessionResetActions } from "./features/plugin-shell/useSessionResetA
 import { useSessionRestoreAfterRemount } from "./features/plugin-shell/useSessionRestoreAfterRemount";
 import { useChatSlotActivityState } from "./features/plugin-shell/useChatSlotActivityState";
 import { useBonsaiScopeStyle } from "./features/plugin-shell/useBonsaiScopeStyle";
-import { textScaleValue, withTextScale } from "./data/chatTextSize";
+import { withTextScale } from "./data/chatTextSize";
+import { usePublishTextScale } from "./features/plugin-shell/usePublishTextScale";
 import { useExternalNavigationActions } from "./features/plugin-shell/useExternalNavigationActions";
 import { useAppLogPrefsAndCapturedErrors } from "./features/plugin-shell/useAppLogPrefsAndCapturedErrors";
 import { useTabAndModeGuardEffects } from "./features/plugin-shell/useTabAndModeGuardEffects";
 import { ChatTitleView } from "./features/chat-title/ChatTitleView";
-import { setChatTitleLitColor, setChatTitleTextScale } from "./features/chat-title/chatTitleStore";
+import { setChatTitleLitColor } from "./features/chat-title/chatTitleStore";
 import { tabBarExitDownFor, useTopStripTabBar } from "./features/chat-title/useTopStripTabBar";
 
 /*
@@ -641,8 +642,9 @@ const Content: React.FC = () => {
      goes the same way, with the tab bar's data (useTopStripTabBar, below). */
   const tabLitColor = (bonsaiScopeStyle as Record<string, unknown>)["--bonsai-ui-tab-lit"];
   useEffect(() => setChatTitleLitColor(typeof tabLitColor === "string" ? tabLitColor : null), [tabLitColor]);
-  /* The same goes for the Text size step: Decky's bar draws the chat's name and the tab bar outside the box. */
-  useEffect(() => setChatTitleTextScale(textScaleValue(chatTextSize)), [chatTextSize]);
+  /* The same goes for the Text size step: Decky's bar draws the chat's name and the tab bar outside the box,
+     and plain popups sit in Steam's shared page (usePublishTextScale.ts). */
+  usePublishTextScale(chatTextSize);
 
   useTabAndModeGuardEffects({
     settingsLoaded,

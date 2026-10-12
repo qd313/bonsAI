@@ -51,7 +51,10 @@ function specificity(selector: string): number {
 
 export type FontSizeReader = (el: Element) => number;
 
-/** The Text size step an element sees: the nearest ancestor-or-self carrying `--bonsai-text-scale` inline, else 1. */
+/**
+ * The Text size step an element sees: the nearest ancestor-or-self carrying `--bonsai-text-scale` inline
+ * (the page's own root element is the last ancestor, as in the browser), else 1.
+ */
 function textScaleFromDom(el: Element): number {
   for (let at: Element | null = el; at; at = at.parentElement) {
     const raw = (at as HTMLElement).style?.getPropertyValue("--bonsai-text-scale");

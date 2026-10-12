@@ -1,9 +1,10 @@
 /**
  * Title: The Text size step reaches every place the plugin draws
  * Purpose: Mount the real plugin with Text size saved as Large (and as Normal) and check the step
- *          lands in all three places words are drawn: the plugin's own box, the popups (they read the
- *          style the root publishes, because they sit outside the box), and the chat's name and tab
- *          bar in Decky's title bar (outside the box too, so they read it from the title store).
+ *          lands in every place words are drawn: the plugin's own box, the popups that wrap themselves in
+ *          the plugin's look (they read the style the root publishes), the plain popups (they inherit it
+ *          from Steam's shared page), and the chat's name and tab bar in Decky's title bar (outside the
+ *          box too, so they read it from the title store).
  * Used for: plan 89 (S1), Text size changes every word.
  * Solves: A step written only on the box would scale the tabs and leave the title bar and every popup
  *         at today's size; these tests fail if any of the three is missed.
@@ -53,6 +54,8 @@ describe("the Text size step reaches the box, the popups and Decky's title bar",
       const root = title.container.querySelector(".bonsai-chat-title") as HTMLElement;
       expect(root.style.getPropertyValue(SCALE_VAR)).toBe("1.15");
     });
+    /* Plain popups (showModal with no box of the plugin's around the words) inherit it from the shared page. */
+    expect(document.documentElement.style.getPropertyValue(SCALE_VAR)).toBe("1.15");
   }, 30000);
 
   it("writes Normal as exactly 1 in all three places, and Small as 0.9", async () => {

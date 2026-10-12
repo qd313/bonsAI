@@ -146,6 +146,7 @@ import {
 } from "../utils/navFocusRegistry";
 import { SETTINGS_CARD_ROW_HEIGHT_PX } from "../hooks/useSteamSettingsSearch";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
+import { textPx } from "../styles/sections/textPx";
 
 // The prop type lives in MainTabUnifiedAskBar.types.ts now; re-exported here so nothing
 // that imports it from this file (tests included) needs to change.
@@ -400,7 +401,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
           visibility: "hidden",
           pointerEvents: "none",
           lineHeight: UNIFIED_TEXT_LINE_HEIGHT,
-          fontSize: UNIFIED_TEXT_FONT_PX,
+          fontSize: textPx(UNIFIED_TEXT_FONT_PX),
         }}
       >
         {unifiedInput || "\u00a0"}
@@ -426,7 +427,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
           height: unifiedInputSurfacePx,
           maxHeight: UNIFIED_TEXT_BODY_MAX_PX,
           overflow: "auto",
-          fontSize: UNIFIED_TEXT_FONT_PX,
+          fontSize: textPx(UNIFIED_TEXT_FONT_PX),
           lineHeight: UNIFIED_TEXT_LINE_HEIGHT,
           color: usesNativeMultilineField ? "rgba(236, 244, 252, 0.98)" : "transparent",
           caretColor: usesNativeMultilineField ? "white" : "transparent",
@@ -473,7 +474,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             bottom: UNIFIED_INPUT_ICON_STRIP_PX + UNIFIED_TEXT_OVERLAY_BOTTOM_GAP_PX,
             color: isUnifiedInputFocused ? "rgba(248, 250, 252, 0.98)" : "rgba(220, 232, 244, 0.95)",
             lineHeight: UNIFIED_TEXT_LINE_HEIGHT,
-            fontSize: UNIFIED_TEXT_FONT_PX,
+            fontSize: textPx(UNIFIED_TEXT_FONT_PX),
           }}
         >
           {!unifiedInput.trim() && askMode === "strategy" ? (
@@ -605,7 +606,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                   top: 16,
                   zIndex: 6,
                   maxWidth: "min(100vw - 48px, 280px)",
-                  fontSize: 9,
+                  fontSize: textPx(9),
                   lineHeight: 1.15,
                   color: "rgba(160, 220, 180, 0.95)",
                   wordBreak: "break-word",
@@ -734,7 +735,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                     borderRadius: 999,
                     background: "#dfeaf6",
                     color: "#1d2a38",
-                    fontSize: 9,
+                    fontSize: textPx(9),
                     lineHeight: "14px",
                     fontWeight: 700,
                     textAlign: "center",
@@ -801,7 +802,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                 alignItems: "center",
                 justifyContent: "center",
                 flexShrink: 0,
-                fontSize: 10,
+                fontSize: textPx(10),
                 fontWeight: 600,
                 fontVariant: "small-caps",
                 letterSpacing: 0.15,
@@ -1037,11 +1038,11 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
               textAlign: "center",
             }}
           >
-            <div style={{ fontSize: 10, fontWeight: 700, color: isQam ? "#f2cf84" : "#d4dbe2", lineHeight: "1.15" }}>
+            <div style={{ fontSize: textPx(10), fontWeight: 700, color: isQam ? "#f2cf84" : "#d4dbe2", lineHeight: "1.15" }}>
               {compactLine}
             </div>
             {compactSubline && (
-              <div style={{ fontSize: 9, color: "#9fafbc", lineHeight: "1.1", marginTop: 1 }}>
+              <div style={{ fontSize: textPx(9), color: "#9fafbc", lineHeight: "1.1", marginTop: 1 }}>
                 {compactSubline}
               </div>
             )}
@@ -1061,7 +1062,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
         aria-live="polite"
         style={{
           ...fullBleedRowStyle,
-          fontSize: 11,
+          fontSize: textPx(11),
           lineHeight: 1.4,
           color: "#9cb0c6",
         }}
@@ -1084,7 +1085,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
         aria-live="polite"
         style={{
           ...fullBleedRowStyle,
-          fontSize: 11,
+          fontSize: textPx(11),
           lineHeight: 1.4,
           color: "#f09a8d",
         }}
@@ -1173,7 +1174,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             <span
               style={{
                 display: "block",
-                fontSize: 11,
+                fontSize: textPx(11),
                 color: "#dbe7f3",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
@@ -1182,7 +1183,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             >
               {selectedAttachment.name}
             </span>
-            <span style={{ display: "block", fontSize: 8, color: "#cfdeed", fontWeight: 600, marginTop: 2 }}>
+            <span style={{ display: "block", fontSize: textPx(8), color: "#cfdeed", fontWeight: 600, marginTop: 2 }}>
               {formatBytes(selectedAttachment.size_bytes ?? 0)}
             </span>
           </div>

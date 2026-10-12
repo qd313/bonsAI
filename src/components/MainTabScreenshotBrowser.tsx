@@ -28,6 +28,7 @@ import { formatDeckyRpcError } from "../utils/deckyCall";
 import { BackChevronIcon, RefreshArrowIcon } from "./icons";
 import { PermissionDenyAction } from "./PermissionDenyAction";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
+import { textPx } from "../styles/sections/textPx";
 
 export type MainTabScreenshotBrowserProps = {
   fullBleedRowStyle: React.CSSProperties;
@@ -140,7 +141,7 @@ export function MainTabScreenshotBrowser({
             void onPasteClipboardStash();
           }}
           aria-label="Paste from clipboard into Ask field"
-          style={{ minHeight: 34, padding: "0 12px", fontSize: 12, ...presetButtonSurface }}
+          style={{ minHeight: 34, padding: "0 12px", fontSize: textPx(12), ...presetButtonSurface }}
         >
           Paste clipboard
         </Button>
@@ -164,7 +165,7 @@ export function MainTabScreenshotBrowser({
           compact
         />
       ) : mediaError ? (
-        <div style={{ color: "#f09a8d", fontSize: 11, lineHeight: 1.35 }}>{mediaError}</div>
+        <div style={{ color: "#f09a8d", fontSize: textPx(11), lineHeight: 1.35 }}>{mediaError}</div>
       ) : null}
 
       {recentScreenshots.length === 0 && !isLoadingRecentScreenshots ? (
@@ -176,7 +177,7 @@ export function MainTabScreenshotBrowser({
             compact
           />
         ) : (
-        <div style={{ color: "#9cb0c6", fontSize: 12, lineHeight: 1.4 }}>
+        <div style={{ color: "#9cb0c6", fontSize: textPx(12), lineHeight: 1.4 }}>
           {mediaLibraryEnabled
             ? "No recent screenshots found. Open Steam Media and take a screenshot, then refresh — or use Paste clipboard."
             : "Paste clipboard into Ask, or enable Media library access in Permissions to attach screenshots."}
@@ -221,13 +222,13 @@ export function MainTabScreenshotBrowser({
                   background: "rgba(255,255,255,0.04)",
                 }}
               />
-              <span style={{ fontSize: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <span style={{ fontSize: textPx(10), overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 {item.name}
               </span>
-              <span style={{ fontSize: 9, color: "#8ea2b8", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <span style={{ fontSize: textPx(9), color: "#8ea2b8", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 {formatScreenshotTimestamp(item.mtime)}
               </span>
-              <span style={{ fontSize: 10, color: "#d9e6f4", fontWeight: 700 }}>
+              <span style={{ fontSize: textPx(10), color: "#d9e6f4", fontWeight: 700 }}>
                 Size: {formatBytes(item.size_bytes ?? 0)}
               </span>
             </Button>

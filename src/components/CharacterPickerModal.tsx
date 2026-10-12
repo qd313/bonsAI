@@ -98,6 +98,7 @@ import {
 import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
 import { BonsaiModalScope } from "./BonsaiModalScope";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
+import { textPx } from "../styles/sections/textPx";
 
 export type AiCharacterPickerDraft = {
   random: boolean;
@@ -460,7 +461,7 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
         <div
           className="bonsai-ai-char-section-title"
           style={{
-            fontSize: 12,
+            fontSize: textPx(12),
             fontWeight: 700,
             color: "#b8c6d6",
             marginBottom: 6,
@@ -535,7 +536,7 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
                   />
                   <span
                     style={{
-                      fontSize: 12,
+                      fontSize: textPx(12),
                       fontWeight: 600,
                       minWidth: 0,
                       overflow: "hidden",
@@ -669,7 +670,7 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
             >
               <div
                 style={{
-                  fontSize: 12,
+                  fontSize: textPx(12),
                   fontWeight: 700,
                   color: "#b8c6d6",
                   letterSpacing: "0.02em",
@@ -744,7 +745,7 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
                       />
                       <span
                         style={{
-                          fontSize: 12,
+                          fontSize: textPx(12),
                           fontWeight: 600,
                           minWidth: 0,
                           overflow: "hidden",

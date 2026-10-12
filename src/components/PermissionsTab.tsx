@@ -43,6 +43,7 @@ import {
 } from "../utils/permissionJumpRegistry";
 import type { NavRefHolder } from "../utils/navFocusRegistry";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
+import { textPx } from "../styles/sections/textPx";
 
 type Props = {
   capabilities: BonsaiCapabilities;
@@ -178,7 +179,7 @@ export const PermissionsTab: React.FC<Props> = ({
             <Button
               className={FOCUS_RING_BTN_CLASS}
               onClick={() => onReturnFromPermissionJump?.()}
-              style={{ minHeight: 34, fontSize: 12, padding: "6px 12px" }}
+              style={{ minHeight: 34, fontSize: textPx(12), padding: "6px 12px" }}
             >
               Back to {backLabel}
             </Button>
@@ -188,7 +189,7 @@ export const PermissionsTab: React.FC<Props> = ({
           <PanelSectionRow>
             <Focusable
               className="bonsai-settings-bleed"
-              style={{ fontSize: 12, color: "#f0c674", lineHeight: 1.45, marginBottom: 4 }}
+              style={{ fontSize: textPx(12), color: "#f0c674", lineHeight: 1.45, marginBottom: 4 }}
               data-bonsai-kids-lock-banner="1"
             >
               {KIDS_LOCK_BANNER}
@@ -196,7 +197,7 @@ export const PermissionsTab: React.FC<Props> = ({
           </PanelSectionRow>
         ) : null}
         <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, marginBottom: 4 }}>
+          <div className="bonsai-settings-bleed" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45, marginBottom: 4 }}>
             High-impact actions stay off until you enable them here. AI requests on your home network are not
             gated by these toggles. Model policy and routing live on the <strong>Ollama</strong> tab. Docs,
             GitHub, and Steam settings links always open when you tap them.

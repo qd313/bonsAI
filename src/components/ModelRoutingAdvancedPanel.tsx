@@ -9,6 +9,7 @@
 import React from "react";
 import { Button, ToggleField } from "@decky/ui";
 import { MODEL_POLICY_SETTINGS_INTRO, type ModelPolicyTierId } from "../data/modelPolicy";
+import { textPx } from "../styles/sections/textPx";
 
 export type ModelRoutingAdvancedPanelProps = {
   modelPolicyTier: ModelPolicyTierId;
@@ -32,7 +33,7 @@ export function ModelRoutingAdvancedPanel({
 }: ModelRoutingAdvancedPanelProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "left" }}>
-      <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.45 }}>
+      <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", lineHeight: 1.45 }}>
         {MODEL_POLICY_SETTINGS_INTRO}
       </div>
       <ToggleField

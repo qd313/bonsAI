@@ -25,6 +25,7 @@ import { ConfirmModal, showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
 import { formatSizeGb, type PullModelEntry } from "../data/pullModelCatalog";
 import { isTagInstalled, resolveRowSizeGb } from "../utils/pullModelFilters";
+import { textPx } from "../styles/sections/textPx";
 
 export type UsePullModelToggleSelectionArgs = {
   installedTags: Set<string>;
@@ -103,7 +104,7 @@ export function usePullModelToggleSelection(a: UsePullModelToggleSelectionArgs):
           <ConfirmModal
             strTitle="Large model — continue?"
             strDescription={
-              <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45 }}>
+              <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
                 {entry.tag} is about {formatSizeGb(resolveRowSizeGb(entry, liveSizeGbByTag))} on disk and may run
                 slowly on Deck CPU/RAM. Pull only if you have room and accept longer waits.
               </div>

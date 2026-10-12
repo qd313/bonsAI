@@ -20,6 +20,7 @@ import {
   AI_CHARACTER_ACCENT_INTENSITY_OPTIONS,
   type AiCharacterAccentIntensityId,
 } from "../data/aiCharacterAccentIntensity";
+import { textPx } from "../styles/sections/textPx";
 
 export type SettingsTabAccentIntensityMenuPopoverProps = {
   open: boolean;
@@ -170,7 +171,7 @@ export function SettingsTabAccentIntensityMenuPopover(props: SettingsTabAccentIn
                   width: "100%",
                   minHeight: 0,
                   padding: `${DECK_MENU_ROW_PAD_Y_PX}px ${ACCENT_MENU_ROW_PAD_X_PX}px`,
-                  fontSize: DECK_MENU_FONT_PX,
+                  fontSize: textPx(DECK_MENU_FONT_PX),
                   fontWeight: isSelected ? 700 : 500,
                   fontVariant: "small-caps",
                   textTransform: "lowercase",
@@ -187,7 +188,7 @@ export function SettingsTabAccentIntensityMenuPopover(props: SettingsTabAccentIn
                 <span>{opt.shortLabel}</span>
                 <span
                   style={{
-                    fontSize: 11,
+                    fontSize: textPx(11),
                     fontWeight: 400,
                     fontVariant: "normal",
                     textTransform: "none",

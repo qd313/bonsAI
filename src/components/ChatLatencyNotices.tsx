@@ -14,6 +14,7 @@
  * text (formatAppliedTuningBannerText does).
  */
 import { PanelSectionRow } from "@decky/ui";
+import { textPx } from "../styles/sections/textPx";
 
 export type ChatLatencyNoticesProps = {
   isAsking: boolean;
@@ -38,7 +39,7 @@ export function ChatLatencyNotices({
     <>
       {isAsking && showSlowWarning && !isStreamingPreview && (
         <PanelSectionRow>
-          <div className="bonsai-chat-status-line" style={{ color: "#f2cf84", fontSize: 12, padding: "6px 0", lineHeight: 1.35 }}>
+          <div className="bonsai-chat-status-line" style={{ color: "#f2cf84", fontSize: textPx(12), padding: "6px 0", lineHeight: 1.35 }}>
             Slow (&gt;{latencyWarningSeconds}s): ensure <strong>Ollama</strong> uses your <strong>GPU</strong>, not{" "}
             <strong>CPU</strong>.
           </div>
@@ -46,7 +47,7 @@ export function ChatLatencyNotices({
       )}
       {!showEmptySlotPreview && !isAsking && elapsedSeconds != null && elapsedSeconds > latencyWarningSeconds && (
         <PanelSectionRow>
-          <div style={{ color: "#f2cf84", fontSize: 12, lineHeight: 1.35 }}>
+          <div style={{ color: "#f2cf84", fontSize: textPx(12), lineHeight: 1.35 }}>
             {elapsedSeconds}s (&gt;{latencyWarningSeconds}s): prefer <strong>GPU</strong> for <strong>Ollama</strong>, not{" "}
             <strong>CPU</strong>.
           </div>
@@ -54,7 +55,7 @@ export function ChatLatencyNotices({
       )}
       {!showEmptySlotPreview && appliedTuningBannerText && (
         <PanelSectionRow>
-          <div style={{ color: "#f2cf84", fontSize: 12, lineHeight: 1.35 }}>{appliedTuningBannerText}</div>
+          <div style={{ color: "#f2cf84", fontSize: textPx(12), lineHeight: 1.35 }}>{appliedTuningBannerText}</div>
         </PanelSectionRow>
       )}
     </>

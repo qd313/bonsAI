@@ -28,6 +28,7 @@ import {
   type ReplyLanguageId,
 } from "../data/steamLanguages";
 import { t as translate } from "../utils/i18n";
+import { textPx } from "../styles/sections/textPx";
 
 const deckNav = (handlers: Record<string, () => boolean | void>) =>
   handlers as unknown as Record<string, unknown>;
@@ -94,15 +95,15 @@ export const AboutReplyLanguageSection: React.FC<Props> = ({
             onMoveDown: () => onMoveDown?.() ?? false,
           })}
         >
-          <div style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.35, marginBottom: 8 }}>
+          <div style={{ fontSize: textPx(11), color: "#9fb7d5", lineHeight: 1.35, marginBottom: 8 }}>
             {hint}
           </div>
           {systemLine ? (
-            <div style={{ fontSize: 11, color: "#9ce7ff", lineHeight: 1.35, marginBottom: 8 }}>
+            <div style={{ fontSize: textPx(11), color: "#9ce7ff", lineHeight: 1.35, marginBottom: 8 }}>
               {systemLine}
             </div>
           ) : null}
-          <div style={{ fontSize: 12, fontWeight: 600, color: "#dce8f4", marginBottom: 6 }}>
+          <div style={{ fontSize: textPx(12), fontWeight: 600, color: "#dce8f4", marginBottom: 6 }}>
             {dropdownLabel}:{" "}
             <span style={{ color: "#9ce7ff" }}>{replyLanguageLabel(replyLanguage)}</span>
           </div>

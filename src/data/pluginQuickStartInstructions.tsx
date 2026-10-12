@@ -17,6 +17,7 @@
  * on the Ollama tab.
  */
 import React from "react";
+import { textPx } from "../styles/sections/textPx";
 
 /**
  * In: nothing — every word here is fixed.
@@ -34,7 +35,7 @@ export function PluginQuickStartInstructionsBody() {
           borderRadius: 6,
           background: "rgba(0,0,0,0.35)",
           border: "1px solid rgba(255,255,255,0.14)",
-          fontSize: 13,
+          fontSize: textPx(13),
           lineHeight: 1.45,
           color: "#e8eef4",
           textAlign: "left",
@@ -46,7 +47,7 @@ export function PluginQuickStartInstructionsBody() {
         Ollama usually runs on your <strong>main rig</strong> (not only on the Deck). On the{" "}
         <strong>Ollama</strong> tab, under <strong>Where AI runs</strong>, enter that PC&apos;s{" "}
         <strong>LAN IP</strong> (for example{" "}
-        <code style={{ fontSize: 12, color: "#b8dcc8" }}>
+        <code style={{ fontSize: textPx(12), color: "#b8dcc8" }}>
           192.168.1.50
         </code>
         ) or enable <strong>Ollama on this Deck</strong> for local inference.{" "}
@@ -56,7 +57,7 @@ export function PluginQuickStartInstructionsBody() {
       style={{
         margin: 0,
         paddingLeft: "1.15em",
-        fontSize: 13,
+        fontSize: textPx(13),
         lineHeight: 1.4,
         color: "#c8d4e0",
         textAlign: "left",

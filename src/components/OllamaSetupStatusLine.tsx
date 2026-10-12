@@ -18,6 +18,7 @@
  */
 import type { LocalOllamaSetupStatus } from "./OllamaWhereAiRunsSection.types";
 import { DOWNLOADS_OFF_FAILED_LINE } from "../features/downloads/downloadNotice";
+import { textPx } from "../styles/sections/textPx";
 
 const SUCCESS_TEXT = "#86efac";
 
@@ -43,7 +44,7 @@ export function OllamaSetupStatusLine({
 
   if (!status || (!busy && !ended && logLines.length === 0)) {
     return (
-      <div className="bonsai-prose" style={{ fontSize: 10, color: "#6b7c90", userSelect: "none" }}>
+      <div className="bonsai-prose" style={{ fontSize: textPx(10), color: "#6b7c90", userSelect: "none" }}>
         Install the official daemon, restart the service if needed, then pull models. Prefer stable Wi‑Fi.
       </div>
     );
@@ -51,14 +52,14 @@ export function OllamaSetupStatusLine({
   return (
     <>
       {status.phase === "running" ? (
-        <div className="bonsai-settings-bleed" style={{ fontSize: 11, color: "#9ce7ff", lineHeight: 1.4 }} aria-live="polite">
+        <div className="bonsai-settings-bleed" style={{ fontSize: textPx(11), color: "#9ce7ff", lineHeight: 1.4 }} aria-live="polite">
           {stageLine}
         </div>
       ) : null}
       {doneLine ? (
         <div
           className="bonsai-prose bonsai-settings-bleed"
-          style={{ fontSize: 11, color: SUCCESS_TEXT, lineHeight: 1.35 }}
+          style={{ fontSize: textPx(11), color: SUCCESS_TEXT, lineHeight: 1.35 }}
           aria-live="polite"
         >
           {doneLine}
@@ -67,7 +68,7 @@ export function OllamaSetupStatusLine({
       {failed && status.error ? (
         <div
           className="bonsai-prose bonsai-settings-bleed"
-          style={{ fontSize: 11, color: "tomato", lineHeight: 1.35, whiteSpace: "pre-wrap" }}
+          style={{ fontSize: textPx(11), color: "tomato", lineHeight: 1.35, whiteSpace: "pre-wrap" }}
           aria-live="polite"
         >
           {status.phase === "cancelled" || status.error === DOWNLOADS_OFF_FAILED_LINE
@@ -85,7 +86,7 @@ export function OllamaSetupStatusLine({
             maxHeight: 200,
             overflowY: "auto",
             fontFamily: "Consolas, 'Liberation Mono', monospace",
-            fontSize: 10,
+            fontSize: textPx(10),
             lineHeight: 1.35,
             color: "#aab8ca",
             background: "rgba(8,14,22,0.85)",
@@ -100,7 +101,7 @@ export function OllamaSetupStatusLine({
           {logLines.join("\n")}
         </pre>
       ) : busy ? (
-        <div className="bonsai-prose" style={{ fontSize: 10, color: "#6b7c90", userSelect: "none" }}>
+        <div className="bonsai-prose" style={{ fontSize: textPx(10), color: "#6b7c90", userSelect: "none" }}>
           Setup is running. The line above changes as it goes; a first-time install can take a few minutes.
         </div>
       ) : null}

@@ -26,6 +26,7 @@ import type { ReplyLanguageId } from "../data/replyLanguage";
 import type { UiStringKey } from "../i18n/keys";
 import { PLUGIN_VERSION } from "../pluginVersion";
 import { FOCUS_RING_ITEM_HOST_CLASS } from "../styles/settingsGlassButton";
+import { textPx } from "../styles/sections/textPx";
 
 const PAYPAL_SUPPORT_URL = "https://paypal.me/quentind313";
 
@@ -79,10 +80,10 @@ export const AboutTab: React.FC<Props> = ({
     <>
       <PanelSection title="About bonsAI">
         <PanelSectionRow>
-          <div style={{ fontSize: 12, color: "#c8c8c8", lineHeight: "1.2" }}>Version {PLUGIN_VERSION}</div>
+          <div style={{ fontSize: textPx(12), color: "#c8c8c8", lineHeight: "1.2" }}>Version {PLUGIN_VERSION}</div>
         </PanelSectionRow>
         <PanelSectionRow>
-          <div style={{ fontSize: 12, color: "#c8c8c8", lineHeight: "1.2" }}>
+          <div style={{ fontSize: textPx(12), color: "#c8c8c8", lineHeight: "1.2" }}>
             Backend Ollama Node for Steam (A.I.) - An AI assistant embedded in the
             Steam Deck Quick Access Menu. Ask questions, search settings, and get game-specific
             performance suggestions (TDP/GPU clock recommendations are read-only — apply them
@@ -90,7 +91,7 @@ export const AboutTab: React.FC<Props> = ({
           </div>
         </PanelSectionRow>
         <PanelSectionRow>
-          <div style={{ fontSize: 12, color: BONSAI_FOREST_GREEN, lineHeight: "1.2", fontWeight: 600, marginTop: "1.2em" }}>
+          <div style={{ fontSize: textPx(12), color: BONSAI_FOREST_GREEN, lineHeight: "1.2", fontWeight: 600, marginTop: "1.2em" }}>
             This plugin is in beta. AI-generated recommendations — especially TDP
             and performance changes — should be verified before relying on them.
             Use at your own risk!
@@ -119,21 +120,21 @@ export const AboutTab: React.FC<Props> = ({
         <PanelSectionRow>
           <div className={FOCUS_RING_ITEM_HOST_CLASS}>
             <ButtonItem layout="below" onClick={() => openExternal(githubRepoUrl, "GitHub")}>
-              <span style={{ fontSize: 13 }}>GitHub</span>
+              <span style={{ fontSize: textPx(13) }}>GitHub</span>
             </ButtonItem>
           </div>
         </PanelSectionRow>
         <PanelSectionRow>
           <div className={FOCUS_RING_ITEM_HOST_CLASS}>
             <ButtonItem layout="below" onClick={() => openExternal(ollamaRepoUrl, "Ollama")}>
-              <span style={{ fontSize: 13 }}>Built on Ollama!</span>
+              <span style={{ fontSize: textPx(13) }}>Built on Ollama!</span>
             </ButtonItem>
           </div>
         </PanelSectionRow>
         <PanelSectionRow>
           <div className={FOCUS_RING_ITEM_HOST_CLASS}>
             <ButtonItem layout="below" onClick={() => openExternal(githubIssuesUrl, "Report a Bug")}>
-              <span style={{ fontSize: 13 }}>Bugs & Feature Requests</span>
+              <span style={{ fontSize: textPx(13) }}>Bugs & Feature Requests</span>
             </ButtonItem>
           </div>
         </PanelSectionRow>
@@ -160,7 +161,7 @@ export const AboutTab: React.FC<Props> = ({
         <PanelSectionRow>
           <div className={FOCUS_RING_ITEM_HOST_CLASS}>
             <ButtonItem layout="below" onClick={() => openExternal(PAYPAL_SUPPORT_URL, "PayPal")}>
-              <span style={{ fontSize: 13 }}>Support my Steam Sale habit</span>
+              <span style={{ fontSize: textPx(13) }}>Support my Steam Sale habit</span>
             </ButtonItem>
           </div>
         </PanelSectionRow>

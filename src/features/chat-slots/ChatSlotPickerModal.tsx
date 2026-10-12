@@ -27,6 +27,7 @@ import { Button, Focusable, ModalRoot } from "@decky/ui";
 import { SETTINGS_GLASS_BTN } from "../../styles/settingsGlassButton";
 import { chatWhenLabel } from "../chat-title/chatsMenuModel";
 import { MAX_CHAT_SLOTS } from "./chatSlotLimit";
+import { textPx } from "../../styles/sections/textPx";
 
 export type ChatPickRow = { id: string; label: string; updatedAt: number };
 
@@ -60,8 +61,8 @@ export function ChatSlotPickerModal({ chats, onPick, onCancel }: ChatSlotPickerM
   };
   return (
     <ModalRoot onCancel={once(onCancel)}>
-      <div className="bonsai-prose" style={{ fontSize: 12, lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
-        <div style={{ fontSize: 16, fontWeight: 700, color: "#ffffff", marginBottom: 10 }}>
+      <div className="bonsai-prose" style={{ fontSize: textPx(12), lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
+        <div style={{ fontSize: textPx(16), fontWeight: 700, color: "#ffffff", marginBottom: 10 }}>
           {`You have ${MAX_CHAT_SLOTS} chats`}
         </div>
         <div style={{ marginBottom: 10 }}>

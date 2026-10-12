@@ -16,6 +16,7 @@ import React from "react";
 import { Button, Focusable, ModalRoot } from "@decky/ui";
 
 import { SETTINGS_GLASS_BTN } from "../styles/settingsGlassButton";
+import { textPx } from "../styles/sections/textPx";
 
 export type RagStorageOption = {
   id?: string;
@@ -67,8 +68,8 @@ export const RagCorpusStoragePickerModal: React.FC<StoragePickerModalProps> = ({
   onClose,
 }) => (
   <ModalRoot onCancel={onClose}>
-    <div className="bonsai-prose" style={{ fontSize: 12, lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
-      <div style={{ fontSize: 16, fontWeight: 700, color: "#ffffff", marginBottom: 10 }}>Choose download location</div>
+    <div className="bonsai-prose" style={{ fontSize: textPx(12), lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
+      <div style={{ fontSize: textPx(16), fontWeight: 700, color: "#ffffff", marginBottom: 10 }}>Choose download location</div>
       <div style={{ marginBottom: 10 }}>
         Wiki-derived strategy cards and compat notes (small — well under 5 MB). No Ask text is uploaded.
       </div>
@@ -82,7 +83,7 @@ export const RagCorpusStoragePickerModal: React.FC<StoragePickerModalProps> = ({
             SD card ({formatFreeGb(sdCard.free_bytes)})
           </StoragePickerChoice>
         ) : (
-          <div style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.35 }}>
+          <div style={{ fontSize: textPx(11), color: "#9fb7d5", lineHeight: 1.35 }}>
             No SD card detected. Insert a microSD formatted for Steam Deck storage, then try again.
           </div>
         )}

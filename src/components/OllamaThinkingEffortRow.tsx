@@ -26,6 +26,7 @@ import {
   type AskThinkEffortId,
 } from "../data/askThinkEffort";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
+import { textPx } from "../styles/sections/textPx";
 
 export type OllamaThinkingEffortRowProps = {
   value: AskThinkEffortId;
@@ -61,10 +62,10 @@ export function OllamaThinkingEffortRow({
 }: OllamaThinkingEffortRowProps) {
   return (
     <div ref={hostRef} style={{ width: "100%", minWidth: 0, maxWidth: "100%" }}>
-      <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13 }}>Thinking</div>
+      <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13) }}>Thinking</div>
       <div
         className="bonsai-prose"
-        style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}
+        style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}
       >
         {ASK_THINK_EFFORT_DESCRIPTIONS[value]}
       </div>
@@ -95,7 +96,7 @@ export function OllamaThinkingEffortRow({
               style={{
                 flex: 1,
                 minHeight: 36,
-                fontSize: 12,
+                fontSize: textPx(12),
                 fontWeight: 600,
                 padding: "4px 4px",
                 borderRadius: 4,

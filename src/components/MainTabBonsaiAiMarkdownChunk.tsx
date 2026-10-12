@@ -62,6 +62,7 @@ import { isDrgSurvivorAppId, splitTextForDrgGlossaryTerms } from "../utils/drgGl
 import { DrgGlossaryTermChip } from "./DrgGlossaryTermChip";
 import type { DrgGlossaryTerm } from "../data/drgGlossaryTerms";
 import { SCRAMBLE_SLOT_MARK } from "../features/stream-scramble/streamScrambleMath";
+import { textPx } from "../styles/sections/textPx";
 
 /** Per-mount counter for spoiler fence ids; only needs to be unique among mounted fences. */
 let spoilerFenceSeq = 0;
@@ -540,7 +541,7 @@ function BonsaiSpoilerFence(props: {
         >
           <div
             style={{
-              fontSize: 12,
+              fontSize: textPx(12),
               fontWeight: 600,
               color: "rgba(220, 232, 245, 0.92)",
               lineHeight: 1.35,
@@ -548,7 +549,7 @@ function BonsaiSpoilerFence(props: {
           >
             Spoiler — tap to show
           </div>
-          <div style={{ fontSize: 11, color: "rgba(190, 205, 220, 0.75)", marginTop: 4 }}>
+          <div style={{ fontSize: textPx(11), color: "rgba(190, 205, 220, 0.75)", marginTop: 4 }}>
             Hidden until you reveal (Strategy Guide).
           </div>
         </button>
@@ -606,7 +607,7 @@ function BonsaiSpoilerFence(props: {
             border: "none",
             padding: 0,
             minHeight: 0,
-            fontSize: 11,
+            fontSize: textPx(11),
             color: "rgba(170, 200, 230, 0.85)",
             fontWeight: 600,
             cursor: "pointer",

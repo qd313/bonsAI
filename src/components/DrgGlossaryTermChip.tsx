@@ -52,6 +52,7 @@ import {
   placeGlossaryTooltip,
   type GlossaryTooltipPlacement,
 } from "../utils/drgGlossaryTooltipPlacement";
+import { textPx } from "../styles/sections/textPx";
 
 /** Per-mount counter for chip ids; only needs to be unique among mounted chips. */
 let termChipSeq = 0;
@@ -356,7 +357,7 @@ export function DrgGlossaryTermChip(props: DrgGlossaryTermChipProps) {
               border: "1px solid rgba(150, 187, 223, 0.45)",
               background: "rgba(24, 40, 58, 0.95)",
               boxShadow: "0 4px 14px rgba(0, 0, 0, 0.45)",
-              fontSize: 11,
+              fontSize: textPx(11),
               lineHeight: 1.4,
               color: "rgba(220, 232, 245, 0.92)",
               whiteSpace: "normal",
@@ -382,7 +383,7 @@ export function DrgGlossaryTermChip(props: DrgGlossaryTermChipProps) {
                   padding: "4px 8px",
                   color: "rgba(156, 231, 255, 0.95)",
                   fontWeight: 600,
-                  fontSize: 11,
+                  fontSize: textPx(11),
                   cursor: "pointer",
                   font: "inherit",
                 }}

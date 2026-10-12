@@ -43,6 +43,7 @@ import { toaster } from "@decky/api";
 import { DEFAULT_CAPABILITIES, type BonsaiCapabilities } from "../../data/bonsaiSettingsSchema";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../utils/deckyCall";
 import { patchPendingSessionSettingsSnapshot } from "../../utils/bonsaiSessionSurvival";
+import { textPx } from "../../styles/sections/textPx";
 
 /** One site a download connects to. `size` is null when the code does not know it ahead of time. */
 export type DownloadNotice = {
@@ -207,7 +208,7 @@ export function confirmDownload(notices: DownloadNotice[], opts: DownloadBoxOpti
       <ConfirmModal
         strTitle={asking ? "Turn on internet downloads?" : (opts.title ?? "Download from the internet?")}
         strDescription={
-          <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
+          <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
             {notices.map((n) => (
               <div key={n.site} style={{ marginBottom: 8 }} data-bonsai-download-notice-line="1">
                 {downloadNoticeLine(n)}

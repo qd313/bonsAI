@@ -26,6 +26,7 @@ import React, { useRef } from "react";
 import { Button, Focusable, ModalRoot } from "@decky/ui";
 
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../../styles/settingsGlassButton";
+import { textPx } from "../../styles/sections/textPx";
 
 export type ChatSlotDeleteModalProps = {
   label: string;
@@ -60,8 +61,8 @@ export function ChatSlotDeleteModal({ label, onKeep, onDelete }: ChatSlotDeleteM
   };
   return (
     <ModalRoot onCancel={once(onKeep)}>
-      <div className="bonsai-prose" style={{ fontSize: 12, lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
-        <div style={{ fontSize: 16, fontWeight: 700, color: "#ffffff", marginBottom: 10 }}>Delete chat?</div>
+      <div className="bonsai-prose" style={{ fontSize: textPx(12), lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
+        <div style={{ fontSize: textPx(16), fontWeight: 700, color: "#ffffff", marginBottom: 10 }}>Delete chat?</div>
         <div style={{ marginBottom: 10 }}>{`Delete "${label}" and its transcript? This cannot be undone.`}</div>
         <div style={{ display: "flex", flexDirection: "row", gap: 8 }}>
           <Choice onChoose={once(onKeep)}>Cancel</Choice>

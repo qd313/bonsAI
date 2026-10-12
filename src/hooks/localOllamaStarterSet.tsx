@@ -28,6 +28,7 @@ import {
   LOCAL_SETUP_TIER1_DOWNLOAD_SIZE,
   OLLAMA_MODELS_DISK_HINT,
 } from "../components/OllamaWhereAiRunsSection.constants";
+import { textPx } from "../styles/sections/textPx";
 
 /** The words on the box's download button, and on the Browse models button that opens the same box. */
 export const STARTER_SET_BUTTON_LABEL = "Install the starter set";
@@ -40,7 +41,7 @@ export function starterSetNotices(): DownloadNotice[] {
 /** What the box says under the site line; `engineAlreadyAsked` is true for the follow-up box of Install Ollama. */
 export function starterSetBoxBody(engineAlreadyAsked: boolean) {
   return (
-    <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
+    <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
       <div style={{ marginBottom: 8 }}>
         The starter set is one small model, <span style={{ color: "#9ce7ff" }}>{TIER1_ESSENTIALS_TAG}</span>, that can
         chat, read screenshots and text in pictures, and help in Strategy mode. {LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB}

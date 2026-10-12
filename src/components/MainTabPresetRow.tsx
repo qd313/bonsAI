@@ -34,6 +34,7 @@ import {
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
+import { textPx } from "../styles/sections/textPx";
 
 /**
  * The help chip's own focus container. The chip sits alone in the row, so it needs the same two things the
@@ -217,7 +218,7 @@ export function MainTabPresetRow({
             style={{
               width: "100%",
               minHeight: PRESET_CHIP_HEIGHT_PX,
-              fontSize: 12,
+              fontSize: textPx(12),
             }}
             aria-label="How to use bonsAI — open quick start"
           >
@@ -252,7 +253,7 @@ export function MainTabPresetRow({
             style={{
               width: "100%",
               minHeight: PRESET_CHIP_HEIGHT_PX,
-              fontSize: 12,
+              fontSize: textPx(12),
               color: "#c4d3e2",
             }}
             aria-label="Agent suggestion"

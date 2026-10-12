@@ -49,6 +49,7 @@ import {
 } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { useThinkingNoticeGate } from "../hooks/useThinkingNoticeGate";
 import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
+import { textPx } from "../styles/sections/textPx";
 
 export type OllamaTabProps = {
   ollamaIp: string;
@@ -303,7 +304,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
 
       <PanelSection title="Reply style">
         <PanelSectionRow>
-          <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.4, marginBottom: 8 }}>
+          <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: textPx(11), color: "#9fb7d5", lineHeight: 1.4, marginBottom: 8 }}>
             Bullet-first vs paragraph depth. Ask mode and model routing unchanged.
           </div>
         </PanelSectionRow>
@@ -361,7 +362,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
         </PanelSectionRow>
         {!latencyTimeoutsCustomEnabled ? (
           <PanelSectionRow>
-            <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: 12, color: "#cdd9e6", lineHeight: 1.4 }}>
+            <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: textPx(12), color: "#cdd9e6", lineHeight: 1.4 }}>
               Default:{" "}
               <span style={{ color: "#ffd299", fontWeight: 700 }}>Warning {DEFAULT_LATENCY_WARNING_SECONDS}s</span>
               <span style={{ color: "rgba(255,255,255,0.35)" }}> | </span>
@@ -371,7 +372,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
         ) : (
           <PanelSectionRow>
             <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-              <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.35, marginBottom: 6 }}>
+              <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", lineHeight: 1.35, marginBottom: 6 }}>
                 <div>
                   <span style={{ color: "#ffd299", fontWeight: 700 }}>Warning</span>
                   {" = slow-reply nudge"}
@@ -399,8 +400,8 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
             className="bonsai-prose-host bonsai-settings-bleed"
             style={{ width: "100%", maxWidth: "100%", minWidth: 0, marginTop: 16 }}
           >
-            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>Keep models loaded</div>
-            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}>
+            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13), marginBottom: 4 }}>Keep models loaded</div>
+            <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}>
               How long Ollama keeps the model in memory after a prompt (VRAM on the host).
             </div>
             <SettingsTabOllamaKeepAliveSlider

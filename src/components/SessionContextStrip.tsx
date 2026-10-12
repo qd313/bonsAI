@@ -60,6 +60,7 @@ import { focusDeckOwner } from "../utils/liveTurnFocusGraph";
 import { getUiDocument } from "../utils/uiDocument";
 import { SessionSumUpSection, focusLastSumUpStop } from "../features/chat-sum-up/SessionSumUpSection";
 import type { ChatSumUpState } from "../features/chat-sum-up/chatSumUpModel";
+import { textPx } from "../styles/sections/textPx";
 
 export type SessionContextTurn = {
   id: string;
@@ -300,7 +301,7 @@ export function SessionContextTabBody({
                 ? "1px solid rgba(125, 211, 252, 0.55)"
                 : "1px solid rgba(255,255,255,0.08)",
             background: row.id === effectiveActive ? "rgba(56,189,248,0.12)" : "transparent",
-            fontSize: 11,
+            fontSize: textPx(11),
             color: "#dce8f4",
           }}
         >

@@ -30,6 +30,7 @@ import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import { confirmDownload } from "../features/downloads/downloadNotice";
 import { voiceEngineNotices } from "../features/downloads/downloadSites";
 import { FOCUS_RING_BTN_CLASS, FOCUS_RING_INSET_CLASS, FOCUS_RING_WRAP_CLASS } from "../styles/settingsGlassButton";
+import { textPx } from "../styles/sections/textPx";
 
 type VoiceEngineStatus = {
   model_id?: string;
@@ -201,7 +202,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
   return (
     <PanelSection title="Voice input">
       <PanelSectionRow>
-        <div className="bonsai-settings-bleed" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45 }}>
+        <div className="bonsai-settings-bleed" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
           Local speech-to-text for the Ask bar mic button. Enable the microphone permission in Permissions
           first. Audio is processed on-device and never saved.
         </div>
@@ -217,7 +218,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
       ) : null}
       <PanelSectionRow>
         <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 6, color: "#dce8f4" }}>STT model</div>
+          <div style={{ fontSize: textPx(13), fontWeight: 600, marginBottom: 6, color: "#dce8f4" }}>STT model</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             {VOICE_STT_MODEL_OPTIONS.map((id) => (
               <Focusable key={id} className={FOCUS_RING_WRAP_CLASS} onOKButton={() => setVoiceSttModel(id)}>
@@ -227,7 +228,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
                   style={{
                     textAlign: "left",
                     justifyContent: "flex-start",
-                    fontSize: 12,
+                    fontSize: textPx(12),
                     padding: "8px 10px",
                     borderRadius: 4,
                     border:
@@ -249,7 +250,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
         </div>
       </PanelSectionRow>
       <PanelSectionRow>
-        <div className="bonsai-settings-bleed" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45 }}>
+        <div className="bonsai-settings-bleed" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
           Engine: {binaryReady ? "whisper-cli ready" : "whisper-cli not installed"}
           <br />
           Model: {modelReady ? `${voiceSttModel} ready` : `${voiceSttModel} not downloaded`}
@@ -289,7 +290,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
               disabled={installBusy}
             style={{
               minHeight: 38,
-              fontSize: 12,
+              fontSize: textPx(12),
               fontWeight: 600,
               padding: "6px 10px",
               borderRadius: 4,

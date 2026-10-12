@@ -237,6 +237,16 @@ Two standing prohibitions, both recorded as reverts in the source:
 | Section labels | 10, weight 700, `letter-spacing: 0.03em`, `#9ce7ff` | — |
 | Empty / meta text | 10–11, `#6b7c90` | — |
 
+**Every size in this table is a Normal size.** Settings > Text size (Small 0.9, Normal 1, Large 1.15) multiplies
+every font size in the plugin, on every tab and in every popup: a size is written
+`textPx(n)` ([textPx.ts](../src/styles/sections/textPx.ts), `calc(${n}px * var(--bonsai-text-scale, 1))`),
+or `uiTextPx(n)` when it also follows the UI scale; inline `fontSize` values go through `textPx` the same way.
+The step is a variable of its own, written on the plugin's box, in the style popups read, and on the chat's
+name and tab bar in Decky's bar (they sit outside the box). Rows keep their heights: only the letters grow, so
+a fixed-height row cuts a long line off sooner on Large. Left alone on purpose: the LB and RB marks in the tab
+bar (button marks in a fixed-width box, like an icon), icon glyphs, and Steam's and Decky's own controls,
+which take their size from Steam's own stylesheet (a `1em` rule on the box lets those that inherit follow).
+
 The section-label row is the `.bonsai-pullmodels-recommend-title` treatment
 ([gamepadAndPullModels.ts:123-127](../src/styles/sections/gamepadAndPullModels.ts)) — the
 clearest instance of the pattern, not a shared class. New section labels should match it

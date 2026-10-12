@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1779,
+      "lines": 1769,
       "role": ""
     },
     {
@@ -37,7 +37,7 @@
     },
     {
       "path": "src/components/MainTabUnifiedAskBar.tsx",
-      "lines": 1218,
+      "lines": 1219,
       "role": ""
     },
     {
@@ -62,7 +62,7 @@
     },
     {
       "path": "src/components/KnowledgeBaseSection.tsx",
-      "lines": 1036,
+      "lines": 1037,
       "role": ""
     },
     {
@@ -92,7 +92,7 @@
     },
     {
       "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 917,
+      "lines": 918,
       "role": ""
     },
     {
@@ -107,7 +107,7 @@
     },
     {
       "path": "src/components/CharacterPickerModal.tsx",
-      "lines": 855,
+      "lines": 856,
       "role": ""
     },
     {
@@ -126,12 +126,12 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/voice_transcription_service.py",
-      "lines": 804,
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 805,
       "role": ""
     },
     {
-      "path": "src/utils/buildReplyActionsElement.tsx",
+      "path": "py_modules/backend/services/voice_transcription_service.py",
       "lines": 804,
       "role": ""
     },
@@ -152,7 +152,7 @@
     },
     {
       "path": "src/components/SettingsTab.tsx",
-      "lines": 714,
+      "lines": 715,
       "role": ""
     },
     {
@@ -162,7 +162,7 @@
     },
     {
       "path": "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
-      "lines": 678,
+      "lines": 679,
       "role": ""
     },
     {
@@ -172,7 +172,7 @@
     },
     {
       "path": "src/components/DeveloperTab.tsx",
-      "lines": 666,
+      "lines": 667,
       "role": ""
     },
     {

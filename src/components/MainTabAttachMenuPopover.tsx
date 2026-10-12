@@ -29,6 +29,7 @@ import {
   DECK_MENU_ROW_PAD_X_PX,
   DECK_MENU_ROW_PAD_Y_PX,
 } from "../features/unified-input/constants";
+import { textPx } from "../styles/sections/textPx";
 
 export type AttachMenuActionId = "take_screenshot" | "browse_recent";
 
@@ -226,7 +227,7 @@ export function MainTabAttachMenuPopover(props: MainTabAttachMenuPopoverProps) {
                   minHeight: 0,
                   margin: 0,
                   padding: `${DECK_MENU_ROW_PAD_Y_PX}px ${DECK_MENU_ROW_PAD_X_PX}px`,
-                  fontSize: DECK_MENU_FONT_PX,
+                  fontSize: textPx(DECK_MENU_FONT_PX),
                   fontWeight: 500,
                   lineHeight: 1.5,
                   borderRadius: 0,

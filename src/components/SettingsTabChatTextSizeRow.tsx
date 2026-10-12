@@ -11,7 +11,7 @@
  * Solves: Plan 87 call 3. A person who finds the chat's words too small (or too big) on the Deck's
  * panel gets one plain row to fix it, with no connection to the hidden UI scale section.
  *
- * Does not: Scale anything. The size is written to `--bonsai-chat-text-scale` on the plugin's root
+ * Does not: Scale anything. The size is written to `--bonsai-text-scale` on the plugin's root
  * (src/data/chatTextSize.ts) and the chat's own styles read it.
  *
  * Focus: one `Focusable` with `flow-children="horizontal"` holding three buttons; no move handler of
@@ -23,6 +23,7 @@ import { Button, Focusable, PanelSection, PanelSectionRow } from "@decky/ui";
 
 import { CHAT_TEXT_SIZE_OPTIONS, type ChatTextSize } from "../data/bonsaiSettingsSchema";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
+import { textPx } from "../styles/sections/textPx";
 
 const chatTextSizeLabel: Record<ChatTextSize, string> = {
   small: "Small",
@@ -50,7 +51,7 @@ export const SettingsTabChatTextSizeRow: React.FC<SettingsTabChatTextSizeRowProp
   <PanelSection title="Text size">
     <PanelSectionRow>
       <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-        <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
+        <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
           How big the words in the chat are: your questions, the answers and the Show details text. The tabs and
           Settings stay the same.
         </div>
@@ -69,7 +70,7 @@ export const SettingsTabChatTextSizeRow: React.FC<SettingsTabChatTextSizeRowProp
                 style={{
                   flex: 1,
                   minHeight: 36,
-                  fontSize: 12,
+                  fontSize: textPx(12),
                   fontWeight: 600,
                   padding: "4px 4px",
                   borderRadius: 4,

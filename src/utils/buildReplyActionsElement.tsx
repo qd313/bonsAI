@@ -114,6 +114,7 @@ import {
 } from "./drgGlossaryTermRegistry";
 import { findScrollablePanel, revealBelowKeepingAsItSettles } from "./chatPanelScroll";
 import { syncDetailsLine } from "../features/details-slot/detailsSlotStore";
+import { textPx } from "../styles/sections/textPx";
 
 /* Option E, the maintainer's pick (plan 72): two short-worded chips on top, three below. */
 const CHIP_ROW_REFINE: ReplyMicroActionId[] = ["bad_information", "misidentified_game"];
@@ -727,7 +728,7 @@ export function buildReplyActionsElement(
       {chipError ? (
         <div
           className="bonsai-chat-reply-chip-error"
-          style={{ color: "#f2a0a0", fontSize: 11, lineHeight: 1.35, marginTop: 2 }}
+          style={{ color: "#f2a0a0", fontSize: textPx(11), lineHeight: 1.35, marginTop: 2 }}
           role="alert"
         >
           {chipError}

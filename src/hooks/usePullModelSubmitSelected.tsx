@@ -32,6 +32,7 @@ import { findUnavailableRegistryTags } from "../utils/pullModelFilters";
 import type { CatalogMetadataResponse } from "../components/PullModelsModal.types";
 import { confirmDownload } from "../features/downloads/downloadNotice";
 import { modelPullNotice } from "../features/downloads/downloadSites";
+import { textPx } from "../styles/sections/textPx";
 
 /** "about N GB" from the bundled catalog, or null when any of the models has no size there. */
 function catalogSizeText(tags: readonly string[], catalog: readonly PullModelEntry[]): string | null {
@@ -156,7 +157,7 @@ export function usePullModelSubmitSelected(a: UsePullModelSubmitSelectedArgs): P
           <ConfirmModal
             strTitle="Enable Tier 2 before pulling?"
             strDescription={
-              <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45 }}>
+              <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
                 <div style={{ marginBottom: 8 }}>
                   Your queue includes open-weight model(s):{" "}
                   <span style={{ color: "#9ce7ff" }}>{tagList}</span>. Tier 1 only lets Ask use models with an

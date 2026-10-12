@@ -29,6 +29,7 @@ import {
 import type { ChipScrollListener } from "./presetChipStay";
 import type { SlotFade } from "./presetChipShared";
 import { joinPresetWithRunningGame } from "../../utils/joinPresetWithRunningGame";
+import { textPx } from "../../styles/sections/textPx";
 
 type ScrollPhase = "waiting" | "scrolling" | "end";
 
@@ -162,7 +163,7 @@ export function PresetChipLeadingBadges({ p }: { p: PresetPrompt }) {
           className="bonsai-preset-chip-test-badge"
           style={{
             marginRight: 6,
-            fontSize: 9,
+            fontSize: textPx(9),
             letterSpacing: "0.06em",
             textTransform: "uppercase",
             fontWeight: 700,
@@ -216,7 +217,7 @@ function PresetChipLabel({
         <span
           style={{
             marginLeft: 6,
-            fontSize: 10,
+            fontSize: textPx(10),
             fontStyle: "italic",
             color: "var(--bonsai-ui-accent-toned, #5b9e7e)",
             fontWeight: 600,
@@ -277,7 +278,7 @@ export function PresetChipButton(props: {
       style={{
         width: "100%",
         minHeight: PRESET_CHIP_HEIGHT_PX,
-        fontSize: 12,
+        fontSize: textPx(12),
         color: dimmed ? "#8fa3b8" : "#c4d3e2",
         opacity: fade ? fade.opacity : dimmed ? 0.55 : 1,
         transform: dimmed ? "scale(0.96)" : "scale(1)",

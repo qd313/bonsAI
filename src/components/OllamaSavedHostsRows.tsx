@@ -23,6 +23,7 @@ import { MAX_NAMED_OLLAMA_HOSTS } from "../data/bonsaiSettingsSchema";
 import type { NamedOllamaHost } from "../data/bonsaiSettingsSchema";
 import { isHttpsOllamaAddress } from "../utils/ollamaAddress";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
+import { textPx } from "../styles/sections/textPx";
 
 type OllamaSavedHostsRowsProps = {
   namedOllamaHosts: NamedOllamaHost[];
@@ -42,7 +43,7 @@ export const OllamaSavedHostsRows: React.FC<OllamaSavedHostsRowsProps> = ({
   <>
     {namedOllamaHosts.length > 0 ? (
       <PanelSectionRow>
-        <div style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6 }}>Saved Ollama hosts (LAN)</div>
+        <div style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 6 }}>Saved Ollama hosts (LAN)</div>
         <Focusable flow-children="horizontal" style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
           {namedOllamaHosts.map((entry) => (
             <Button
@@ -52,7 +53,7 @@ export const OllamaSavedHostsRows: React.FC<OllamaSavedHostsRowsProps> = ({
                 onOllamaIpChange(entry.host);
                 onPersistOllamaIp(entry.host);
               }}
-              style={{ minHeight: 32, fontSize: 11 }}
+              style={{ minHeight: 32, fontSize: textPx(11) }}
             >
               {entry.label}
             </Button>

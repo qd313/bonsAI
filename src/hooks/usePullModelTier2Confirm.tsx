@@ -23,6 +23,7 @@ import { useCallback, type RefObject } from "react";
 import { ConfirmModal, showModal } from "@decky/ui";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
 import type { PullModelEntry } from "../data/pullModelCatalog";
+import { textPx } from "../styles/sections/textPx";
 
 /**
  * What the "Enable Tier 2" boxes say about open-weight models, in plain words about the model(s)
@@ -89,7 +90,7 @@ export function usePullModelTier2Confirm(a: UsePullModelTier2ConfirmArgs): PullM
         <ConfirmModal
           strTitle="Enable Tier 2 for this model?"
           strDescription={
-            <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45 }}>
+            <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
               <div style={{ marginBottom: 8 }}>
                 <span style={{ color: "#9ce7ff" }}>{entry.tag}</span> is an open-weight model. With{" "}
                 <strong>Tier 1 (open-source only)</strong>, bonsAI will not route Ask to it after download.

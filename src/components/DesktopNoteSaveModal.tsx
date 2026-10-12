@@ -21,6 +21,7 @@
 import React, { useState } from "react";
 import { ConfirmModal, TextField } from "@decky/ui";
 import { BonsaiModalScope } from "./BonsaiModalScope";
+import { textPx } from "../styles/sections/textPx";
 
 export type DesktopNoteSaveModalProps = {
   /** Shown above the name field (path + append behavior). */
@@ -43,7 +44,7 @@ export function DesktopNoteSaveModal(props: DesktopNoteSaveModalProps) {
       strDescription={
         <BonsaiModalScope>
         <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "left" }}>
-          <div style={{ whiteSpace: "pre-wrap", fontSize: 13, lineHeight: 1.35, color: "#c8d4e0" }}>
+          <div style={{ whiteSpace: "pre-wrap", fontSize: textPx(13), lineHeight: 1.35, color: "#c8d4e0" }}>
             {strDescriptionPrefix}
           </div>
           <TextField

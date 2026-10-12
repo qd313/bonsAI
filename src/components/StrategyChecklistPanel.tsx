@@ -9,6 +9,7 @@ import { ToggleField } from "@decky/ui";
 
 import type { StrategyChecklistState } from "../types/bonsaiUi";
 import { deckNavHandlers } from "../utils/liveTurnFocusGraph";
+import { textPx } from "../styles/sections/textPx";
 
 type Props = {
   checklist: StrategyChecklistState;
@@ -44,8 +45,8 @@ export function StrategyChecklistPanel({
         boxSizing: "border-box",
       }}
     >
-      <div style={{ fontSize: 12, color: "#dce8f4", fontWeight: 600, marginBottom: 4 }}>{checklist.title}</div>
-      <div style={{ fontSize: 11, color: "#a8b8c8", lineHeight: 1.35, marginBottom: 6 }}>
+      <div style={{ fontSize: textPx(12), color: "#dce8f4", fontWeight: 600, marginBottom: 4 }}>{checklist.title}</div>
+      <div style={{ fontSize: textPx(11), color: "#a8b8c8", lineHeight: 1.35, marginBottom: 6 }}>
         Progress is saved for this game until you reset session cache or start a new Strategy thread.
       </div>
       {checklist.items.map((item, idx) => {

@@ -152,6 +152,8 @@
     "src/components/deck/DeckFocusSlider.test.ts",
     "src/components/icons.bonsaiGeometry.test.tsx",
     "src/components/textSizeEverywhere.test.tsx",
+    "src/components/textSizeScan.test.ts",
+    "src/components/textSizeSurfaces.test.tsx",
     "src/data/askThinkEffort.test.ts",
     "src/data/bonsaiSettingsContract.test.ts",
     "src/data/bonsaiSettingsHostileContract.test.ts",

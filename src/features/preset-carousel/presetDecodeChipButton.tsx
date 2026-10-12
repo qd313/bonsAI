@@ -21,6 +21,7 @@ import { PRESET_CHIP_HEIGHT_PX } from "./presetRowLayout";
 import type { DecodeTextParts } from "./presetChipDecodeText";
 import type { ChipScrollListener } from "./presetChipStay";
 import { joinPresetWithRunningGame } from "../../utils/joinPresetWithRunningGame";
+import { textPx } from "../../styles/sections/textPx";
 
 /**
  * A churning label's three spans, one per part of `composeDecodeParts`: the locked letters, the
@@ -85,7 +86,7 @@ export function DecodePresetChipButton(props: {
       style={{
         width: "100%",
         minHeight: PRESET_CHIP_HEIGHT_PX,
-        fontSize: 12,
+        fontSize: textPx(12),
         // Same normal chip-text colour PresetChipButton uses below (never the accent): the label
         // used to be tinted `--bonsai-ui-accent-toned` by a CSS rule in section-4.ts, which made a
         // decode chip's words read in the same colour family as its Tip dot -- the dot is the only
@@ -114,7 +115,7 @@ export function DecodePresetChipButton(props: {
           <span
             style={{
               marginLeft: 6,
-              fontSize: 10,
+              fontSize: textPx(10),
               fontStyle: "italic",
               color: "var(--bonsai-ui-accent-toned, #5b9e7e)",
               fontWeight: 600,

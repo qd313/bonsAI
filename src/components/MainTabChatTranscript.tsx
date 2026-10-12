@@ -230,6 +230,7 @@ import {
   focusSumUpButtonWhenMounted,
 } from "../features/chat-sum-up/buildChatSummaryNoteElement";
 import type { ChatSumUpState } from "../features/chat-sum-up/chatSumUpModel";
+import { textPx } from "../styles/sections/textPx";
 
 /* Re-exported so tests that import these focus helpers from this file (their home before this
  * split) need no edit — the block itself now lives in buildKbNotesBlockElement.tsx. */
@@ -955,7 +956,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
           boxSizing: "border-box",
         }}
       >
-        <div style={{ fontSize: 12, color: "#dce8f4", fontWeight: 600 }}>
+        <div style={{ fontSize: textPx(12), color: "#dce8f4", fontWeight: 600 }}>
           {strategyGuideBranches.question}
         </div>
         {strategyGuideBranches.options.map((opt, idx) => {
@@ -980,7 +981,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               style={{
                 width: "100%",
                 minHeight: 36,
-                fontSize: 12,
+                fontSize: textPx(12),
                 fontWeight: 600,
                 color: "#e8eef4",
                 justifyContent: "flex-start",
@@ -1234,7 +1235,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     role="status"
                     style={{
                       color: "#9fb7d5",
-                      fontSize: 12,
+                      fontSize: textPx(12),
                       lineHeight: 1.35,
                       marginBottom: 8,
                     }}
@@ -1461,7 +1462,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   alignItems: "center",
                   gap: 8,
                   color: "#9fb7d5",
-                  fontSize: 12,
+                  fontSize: textPx(12),
                   lineHeight: 1.35,
                   marginBottom: 8,
                 }}
@@ -1480,7 +1481,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 role="status"
                 style={{
                   color: "#9fb7d5",
-                  fontSize: 12,
+                  fontSize: textPx(12),
                   lineHeight: 1.35,
                   marginBottom: 8,
                 }}
@@ -1611,7 +1612,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 <div
                   style={{
                     marginTop: 6,
-                    fontSize: 11,
+                    fontSize: textPx(11),
                     color: "rgba(200, 215, 230, 0.85)",
                     lineHeight: 1.4,
                   }}
@@ -1634,7 +1635,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       className="bonsai-full-bleed-row"
       style={{
         ...fullBleedRowStyle,
-        fontSize: 10,
+        fontSize: textPx(10),
         color: "#8fa8c4",
         lineHeight: 1.35,
         fontStyle: "italic",
@@ -1671,7 +1672,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
         className="bonsai-full-bleed-row"
         style={{
           ...fullBleedRowStyle,
-          fontSize: 11,
+          fontSize: textPx(11),
           color: "#c8d8ea",
           lineHeight: 1.4,
           display: "flex",
@@ -1689,7 +1690,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
               focusable
               ref={troubleshootHintButtonRefs[0]}
               onClick={() => onNavigateToPermissions("steam_logs_read")}
-              style={{ fontSize: 11, padding: "4px 10px", minHeight: 34 }}
+              style={{ fontSize: textPx(11), padding: "4px 10px", minHeight: 34 }}
             >
               Open Permissions
             </Button>
@@ -1698,7 +1699,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
             focusable
             ref={troubleshootHintButtonRefs[1]}
             onClick={() => dismissHintKeepingRing(troubleshootHintButtonEls, dismissTroubleshootingPermHint)}
-            style={{ fontSize: 11, padding: "4px 10px", minHeight: 34 }}
+            style={{ fontSize: textPx(11), padding: "4px 10px", minHeight: 34 }}
           >
             Dismiss
           </Button>

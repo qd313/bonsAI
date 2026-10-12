@@ -40,6 +40,7 @@ import {
   valueToPct,
 } from "../utils/deckSliderMath";
 import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
+import { textPx } from "../styles/sections/textPx";
 
 export type SettingsTabConnectionTimeoutSliderProps = {
   warningSec: number;
@@ -250,7 +251,7 @@ export function SettingsTabConnectionTimeoutSlider(props: SettingsTabConnectionT
       <div
         className="bonsai-prose"
         style={{
-          fontSize: 13,
+          fontSize: textPx(13),
           color: "#cdd9e6",
           lineHeight: 1.35,
           paddingLeft: 2,

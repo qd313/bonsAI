@@ -34,6 +34,7 @@ import {
 import { SettingsTabUiScaleSlider } from "./SettingsTabUiScaleSlider";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
+import { textPx } from "../styles/sections/textPx";
 
 export type SettingsTabUiScaleSectionProps = {
   uiScaleAutoEnabled: boolean;
@@ -212,7 +213,7 @@ export const SettingsTabUiScaleSection: React.FC<SettingsTabUiScaleSectionProps>
     <PanelSection title="UI scale">
       <PanelSectionRow>
         <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-          <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
+          <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
             Two real sizes: Handheld for the Deck's own screen, Couch for TV distance. Active:{" "}
             <span style={{ color: "#9ce7ff", fontWeight: 600 }}>
               {UI_SCALE_PROFILE_LABEL[appliedProfileId]} ({profileScaleMultiplier(appliedProfileId).toFixed(2)}×)
@@ -271,7 +272,7 @@ export const SettingsTabUiScaleSection: React.FC<SettingsTabUiScaleSectionProps>
                 style={{
                   marginTop: 8,
                   minHeight: 32,
-                  fontSize: 11,
+                  fontSize: textPx(11),
                   fontWeight: 600,
                   padding: "4px 10px",
                 }}
@@ -300,7 +301,7 @@ export const SettingsTabUiScaleSection: React.FC<SettingsTabUiScaleSectionProps>
             style={{
               marginTop: 12,
               minHeight: 36,
-              fontSize: 12,
+              fontSize: textPx(12),
               fontWeight: 600,
               width: "100%",
             }}

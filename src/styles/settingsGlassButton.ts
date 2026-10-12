@@ -21,6 +21,7 @@
  * keeps everything else about that button as it already was.
  */
 import type React from "react";
+import { textPx } from "./sections/textPx";
 
 /**
  * The class that draws the plugin's white focus ring on a button while Steam
@@ -59,7 +60,7 @@ export const SETTINGS_GLASS_BTN: React.CSSProperties = {
   minHeight: 36,
   minWidth: 0,
   padding: "6px 10px",
-  fontSize: 11,
+  fontSize: textPx(11),
   fontWeight: 600,
   borderRadius: 4,
   border: "1px solid rgba(255,255,255,0.22)",

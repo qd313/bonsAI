@@ -23,6 +23,7 @@
  *    italics, and lets the name shrink to an ellipsis when the strip runs out of room.
  */
 import type { OllamaContextUi } from "../types/bonsaiUi";
+import { textPx } from "../styles/sections/textPx";
 
 /** The context line's own colour (MainTab.tsx before plan 84), kept so the tag reads as the same fact. */
 const GAME_TAG_COLOR = "#8fa8c4";
@@ -84,7 +85,7 @@ export function AskStripGameTag({ context }: { context: OllamaContextUi | undefi
         alignItems: "center",
         gap: 4,
         margin: "0 6px 0 7px",
-        fontSize: 10,
+        fontSize: textPx(10),
         lineHeight: 1.2,
         fontStyle: "italic",
         color: GAME_TAG_COLOR,

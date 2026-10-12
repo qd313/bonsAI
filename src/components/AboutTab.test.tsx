@@ -56,7 +56,7 @@ describe("About tab: the support button is sized like the other link buttons", (
       fontSize: (button.firstElementChild as HTMLElement | null)?.style.fontSize,
     });
     const neighbour = shape(buttonOf("GitHub"));
-    expect(neighbour).toEqual({ host: "bonsai-settings-item-ring-host", parent: "PanelSectionRow", layout: "below", fontSize: "13px" });
+    expect(neighbour).toEqual({ host: "bonsai-settings-item-ring-host", parent: "PanelSectionRow", layout: "below", fontSize: "calc(13px * var(--bonsai-text-scale, 1))" });
     expect(shape(buttonOf("Built on Ollama!"))).toEqual(neighbour);
     expect(shape(buttonOf("Bugs & Feature Requests"))).toEqual(neighbour);
     expect(shape(buttonOf("Support my Steam Sale habit"))).toEqual(neighbour);

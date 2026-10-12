@@ -32,6 +32,7 @@ import {
   MDNS_DISCOVERY_TIMEOUT_SECONDS,
   MDNS_DISCOVERY_RPC_MS,
 } from "../components/OllamaWhereAiRunsSection.constants";
+import { textPx } from "../styles/sections/textPx";
 
 /**
  * Search, and the confirm dialog that starts it. Every hook below must keep its position —
@@ -91,7 +92,7 @@ export function useMdnsOllamaDiscovery({
       <ConfirmModal
         strTitle="Find Ollama on LAN (mDNS)"
         strDescription={
-          <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
+          <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
             <div style={{ marginBottom: 8 }}>
               This browses your local network for services advertised as{" "}
               <code style={{ color: "#9ce7ff" }}>_ollama._tcp</code> (Bonjour / Avahi). It does not scan IP addresses or

@@ -124,6 +124,7 @@ import {
 } from "./OllamaWhereAiRunsSection.constants";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
+import { textPx } from "../styles/sections/textPx";
 
 export type { OllamaWhereAiRunsSectionProps } from "./OllamaWhereAiRunsSection.types";
 
@@ -434,7 +435,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
             <div
               className="bonsai-prose"
               style={{
-                fontSize: 10,
+                fontSize: textPx(10),
                 color: "#9fb7d5",
                 lineHeight: 1.35,
                 marginTop: 4,
@@ -464,7 +465,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
             <div
               className="bonsai-prose"
               style={{
-                fontSize: 10,
+                fontSize: textPx(10),
                 color: "#9fb7d5",
                 lineHeight: 1.35,
                 marginTop: 4,
@@ -478,7 +479,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
             {autostartStatus?.reason ? (
               <div
                 className="bonsai-prose"
-                style={{ fontSize: 10, color: "#8fa0b4", lineHeight: 1.35, marginTop: 4, userSelect: "none" }}
+                style={{ fontSize: textPx(10), color: "#8fa0b4", lineHeight: 1.35, marginTop: 4, userSelect: "none" }}
                 aria-live="polite"
               >
                 {autostartStatus.reason}
@@ -486,7 +487,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
             ) : autostartStatus?.installed ? (
               <div
                 className="bonsai-prose"
-                style={{ fontSize: 10, color: "#8fa0b4", lineHeight: 1.35, marginTop: 4, userSelect: "none" }}
+                style={{ fontSize: textPx(10), color: "#8fa0b4", lineHeight: 1.35, marginTop: 4, userSelect: "none" }}
                 aria-live="polite"
               >
                 Set up and answering questions.
@@ -510,7 +511,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
             >
               <div
                 className="bonsai-prose"
-                style={{ fontSize: 11, color: "#b8c6d6", fontWeight: 600, letterSpacing: "0.03em", userSelect: "none" }}
+                style={{ fontSize: textPx(11), color: "#b8c6d6", fontWeight: 600, letterSpacing: "0.03em", userSelect: "none" }}
               >
                 Local Ollama setup
                 {connectionStatus?.reachable && Array.isArray(connectionStatus.models) ? (
@@ -545,7 +546,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                     minHeight: 36,
                     minWidth: 0,
                     padding: "6px 8px",
-                    fontSize: 11,
+                    fontSize: textPx(11),
                     fontWeight: 600,
                     borderRadius: 4,
                     border: "1px solid rgba(56,189,248,0.55)",
@@ -573,7 +574,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                 <div
                   className="bonsai-prose"
                   style={{
-                    fontSize: 10,
+                    fontSize: textPx(10),
                     color: "#9fb7d5",
                     lineHeight: 1.4,
                     userSelect: "none",
@@ -609,7 +610,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                     minHeight: 36,
                     minWidth: 0,
                     padding: "6px 8px",
-                    fontSize: 11,
+                    fontSize: textPx(11),
                     fontWeight: 600,
                     borderRadius: 4,
                     border: "1px solid rgba(56,189,248,0.45)",
@@ -639,7 +640,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                       flex: "0 1 auto",
                       minHeight: 36,
                       padding: "6px 10px",
-                      fontSize: 11,
+                      fontSize: textPx(11),
                       fontWeight: 600,
                       borderRadius: 4,
                       border: "1px solid rgba(248,113,113,0.45)",
@@ -709,7 +710,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                     style={{
                       fontVariant: "small-caps",
                       letterSpacing: "0.06em",
-                      fontSize: 11,
+                      fontSize: textPx(11),
                       fontWeight: 600,
                       color: "#b8c6d6",
                       marginBottom: 2,
@@ -728,7 +729,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                     }}
                   />
                   {isHttpsOllamaAddress(ollamaIp) ? (
-                    <div className="bonsai-prose" style={{ fontSize: 11, color: "tomato", marginTop: 4 }}>
+                    <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "tomato", marginTop: 4 }}>
                       {OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE}
                     </div>
                   ) : null}
@@ -738,7 +739,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                   className="bonsai-prose"
                   style={{
                     flex: "1 1 auto",
-                    fontSize: 11,
+                    fontSize: textPx(11),
                     color: "#b8c6d6",
                     lineHeight: 1.35,
                     paddingBottom: 8,
@@ -768,7 +769,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                   height: 38,
                   maxWidth: ollamaLocalOnDeck ? "100%" : 68,
                   padding: "0 8px",
-                  fontSize: 11,
+                  fontSize: textPx(11),
                   fontWeight: 600,
                   borderRadius: 4,
                   border: "1px solid rgba(255,255,255,0.22)",
@@ -793,7 +794,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                     height: 38,
                     maxWidth: 88,
                     padding: "0 4px",
-                    fontSize: 10,
+                    fontSize: textPx(10),
                     fontWeight: 600,
                     borderRadius: 4,
                     border: "1px solid rgba(255,255,255,0.18)",
@@ -810,7 +811,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
               <div
                 className="bonsai-prose"
                 style={{
-                  fontSize: 10,
+                  fontSize: textPx(10),
                   color: "#6b7c90",
                   lineHeight: 1.35,
                   userSelect: "none",
@@ -827,7 +828,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
         </PanelSectionRow>
         {findLanShown && mdnsHosts.length > 0 ? (
           <PanelSectionRow>
-            <div style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6 }}>Found on LAN (mDNS)</div>
+            <div style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 6 }}>Found on LAN (mDNS)</div>
             <Focusable flow-children="vertical" style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               {mdnsHosts.map((entry) => (
                 <Focusable
@@ -846,7 +847,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                         duration: 2500,
                       });
                     }}
-                    style={{ minHeight: 32, fontSize: 11, flex: "1 1 auto" }}
+                    style={{ minHeight: 32, fontSize: textPx(11), flex: "1 1 auto" }}
                   >
                     Use {entry.label}
                     {entry.verified ? " ✓" : ""}
@@ -867,7 +868,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                       onPersistOllamaIp(host);
                       toaster.toast({ title: "Host saved", body: label, duration: 2500 });
                     }}
-                    style={{ minHeight: 32, fontSize: 10 }}
+                    style={{ minHeight: 32, fontSize: textPx(10) }}
                   >
                     Save
                   </Button>
@@ -878,7 +879,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
         ) : null}
         {findLanShown && mdnsDiscoveryMessage ? (
           <PanelSectionRow>
-            <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: 11, color: "#8fa0b4" }}>
+            <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: textPx(11), color: "#8fa0b4" }}>
               {mdnsDiscoveryMessage}
             </div>
           </PanelSectionRow>
@@ -891,7 +892,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
         ) && (
           <PanelSectionRow>
             {connectionStatus.reachable ? (
-              <div className="bonsai-settings-bleed" style={{ fontSize: 12, color: "#81c784" }}>
+              <div className="bonsai-settings-bleed" style={{ fontSize: textPx(12), color: "#81c784" }}>
                 <div>
                   Connected · Ollama v{connectionStatus.version}
                   {connectionStatus.models && connectionStatus.models.length > 0
@@ -899,13 +900,13 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                     : ""}
                 </div>
                 {connectionStatus.recovery_attempted ? (
-                  <div className="bonsai-prose" style={{ fontSize: 10, color: "#7d8fa3", marginTop: 4 }}>
+                  <div className="bonsai-prose" style={{ fontSize: textPx(10), color: "#7d8fa3", marginTop: 4 }}>
                     Started or woke the local AI service for this check.
                   </div>
                 ) : null}
               </div>
             ) : (
-              <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: 12, color: "tomato" }}>
+              <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: textPx(12), color: "tomato" }}>
                 Unreachable — {connectionStatus.error}
               </div>
             )}

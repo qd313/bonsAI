@@ -100,6 +100,7 @@ import { PermissionDenyAction } from "./PermissionDenyAction";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import type { StreamScrambleSettings } from "../features/stream-scramble/streamScrambleContext";
 import { FOCUS_RING_BTN_CLASS, FOCUS_RING_ITEM_HOST_CLASS } from "../styles/settingsGlassButton";
+import { textPx } from "../styles/sections/textPx";
 
 const desktopAppLogLevelLabel: Record<DesktopAppLogLevel, string> = {
   off: "Off",
@@ -278,7 +279,7 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
       {onInstallSeedKnowledgeBase ? (
         <PanelSection title="Knowledge base (dev QA)">
           <PanelSectionRow>
-            <div className="bonsai-settings-bleed" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45 }}>
+            <div className="bonsai-settings-bleed" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
               Public HF/GitHub download is not live yet. <strong>build.ps1</strong> copies a seed corpus (DRG
               Survivor + OoT alias sample) to the Deck. Install it into <code>~/.bonsai/rag</code> for Phase 1
               testing. Hybrid retrieval also needs vectorized seed + <strong>nomic-embed-text</strong> on your Ask
@@ -323,7 +324,7 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
         </PanelSectionRow>
         {onSteamInputPhase1Jump ? (
           <PanelSectionRow>
-            <div className="bonsai-settings-bleed" style={{ fontSize: 12, color: "#9fb7d5", marginBottom: 6 }}>
+            <div className="bonsai-settings-bleed" style={{ fontSize: textPx(12), color: "#9fb7d5", marginBottom: 6 }}>
               Experimental: opens per-game controller configuration for the running game. Requires a focused/running
               title.
             </div>
@@ -335,7 +336,7 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
           </PanelSectionRow>
         ) : null}
         <PanelSectionRow>
-          <div style={{ fontSize: 13, color: "gray", marginBottom: 4 }}>
+          <div style={{ fontSize: textPx(13), color: "gray", marginBottom: 4 }}>
             Captured runtime errors appear below.
           </div>
         </PanelSectionRow>
@@ -343,14 +344,14 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
           <PanelSectionRow>
             <div className={FOCUS_RING_ITEM_HOST_CLASS}>
               <ButtonItem layout="below" onClick={onClearErrors}>
-                <span style={{ fontSize: 12 }}>Clear ({capturedErrors.length})</span>
+                <span style={{ fontSize: textPx(12) }}>Clear ({capturedErrors.length})</span>
               </ButtonItem>
             </div>
           </PanelSectionRow>
         ) : null}
         {capturedErrors.length === 0 ? (
           <PanelSectionRow>
-            <div style={{ color: "gray", fontSize: 13 }}>No errors captured.</div>
+            <div style={{ color: "gray", fontSize: textPx(13) }}>No errors captured.</div>
           </PanelSectionRow>
         ) : (
           capturedErrors.map((err, i) => (
@@ -363,7 +364,7 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
                   padding: 8,
                   color: "tomato",
                   whiteSpace: "pre-wrap",
-                  fontSize: 11,
+                  fontSize: textPx(11),
                   lineHeight: "1.3",
                   borderRadius: 4,
                   wordBreak: "break-word",
@@ -376,7 +377,7 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
         )}
         {lastConnectionStatus?.reachable && lastConnectionStatus.ps_loaded && lastConnectionStatus.ps_loaded.length > 0 ? (
           <PanelSectionRow>
-            <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: 11, color: "#b8dfe8", lineHeight: 1.4 }}>
+            <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: textPx(11), color: "#b8dfe8", lineHeight: 1.4 }}>
               <div style={{ fontWeight: 600, marginBottom: 4, color: "#9fb7d5" }}>
                 Last connection test — loaded models (GPU share)
               </div>
@@ -408,10 +409,10 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
             new control inherits a focus graph rather than inventing one.
           */}
           <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 6 }}>
+            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13), marginBottom: 6 }}>
               Tab to open on (D15)
             </div>
-            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
+            <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
               {tabResumeModeDescription[tabResumeMode]} Takes effect the next time you close and
               reopen the plugin.
             </div>
@@ -429,7 +430,7 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
                     style={{
                       flex: 1,
                       minHeight: 36,
-                      fontSize: 12,
+                      fontSize: textPx(12),
                       fontWeight: 600,
                       padding: "4px 4px",
                       borderRadius: 4,
@@ -453,10 +454,10 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
       <PanelSection title="Logging & exports">
         <PanelSectionRow>
           <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 6 }}>
+            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13), marginBottom: 6 }}>
               App activity logging to Desktop
             </div>
-            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
+            <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
               {desktopAppLogLevelDescription[desktopAppLogLevel]} Writes{" "}
               <span style={{ color: "#9ce7ff" }}>bonsai-app-YYYY-MM-DD.log</span> under Desktop/bonsAI_logs/.
               {!filesystemWrite ? (
@@ -490,7 +491,7 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
                     style={{
                       flex: 1,
                       minHeight: 36,
-                      fontSize: 12,
+                      fontSize: textPx(12),
                       fontWeight: 600,
                       padding: "4px 4px",
                       borderRadius: 4,
@@ -538,12 +539,12 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
               onChange={(checked) => setDevForceSessionRagChips(checked)}
             />
             <div style={{ marginTop: 10 }}>
-              <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>
+              <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13), marginBottom: 4 }}>
                 Frozen test chips (QA)
               </div>
               <div
                 className="bonsai-prose"
-                style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}
+                style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}
               >
                 {devFrozenTestChips.length === 0 ? (
                   <>
@@ -563,7 +564,7 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
               {devFrozenTestChips.length > 0 ? (
                 <ol
                   className="bonsai-prose"
-                  style={{ fontSize: 11, color: "#c8d8ea", margin: "0 0 6px 0", paddingLeft: 18, lineHeight: 1.4 }}
+                  style={{ fontSize: textPx(11), color: "#c8d8ea", margin: "0 0 6px 0", paddingLeft: 18, lineHeight: 1.4 }}
                 >
                   {devFrozenTestChips.map((text) => (
                     <li key={text}>{text}</li>
@@ -643,8 +644,8 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
       <PanelSection title="Integrations">
         <PanelSectionRow>
           <div className="bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>Steam Web API key</div>
-            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}>
+            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13), marginBottom: 4 }}>Steam Web API key</div>
+            <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}>
               For the <span style={{ color: "#9ce7ff" }}>bonsai:vac-check</span> command. Enable Steam ban lookup in
               Permissions. Stored on this device.
             </div>

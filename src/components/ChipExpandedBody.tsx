@@ -12,7 +12,7 @@
  *
  * Does not: Take focus or scroll anything. The ladder keeps the box's end in view
  * (useChipLadderReveal.ts); this only draws it. The `bonsai-chip-body` class on the root is how
- * the Text size setting scales the details text (plan 87 F6); keep it on the root.
+ * the Text size setting sizes the details text (plan 87 F6, plan 89); keep it on the root.
  */
 import {
   ATTRIBUTION_ACCENT,
@@ -28,6 +28,7 @@ import {
   SPOILER_HIDDEN_CREDITS_TEXT,
 } from "../utils/contextChipsFromSnapshot";
 import type { AskDiagnosticsSnapshot, ContextChip } from "../utils/inputTransparency";
+import { textPx } from "../styles/sections/textPx";
 
 /**
  * The panel below the chip row: title, credit/attribution block, file
@@ -83,7 +84,7 @@ export function ChipExpandedBody({
         borderRadius: 8,
         border: "1px solid rgba(100, 140, 180, 0.28)",
         background: "rgba(14, 22, 32, 0.55)",
-        fontSize: 11,
+        fontSize: textPx(11),
         color: "#dce8f4",
         lineHeight: 1.45,
       }}
@@ -106,10 +107,10 @@ export function ChipExpandedBody({
             <div key={`${entry.source}|${entry.license}`} style={{ marginBottom: 2 }}>
               <span style={{ fontWeight: 700, color: ATTRIBUTION_ACCENT }}>{entry.source}</span>
               {entry.license ? (
-                <span style={{ fontSize: 10, color: "#c9b892" }}> · {entry.license}</span>
+                <span style={{ fontSize: textPx(10), color: "#c9b892" }}> · {entry.license}</span>
               ) : null}
               {entry.captured ? (
-                <span style={{ fontSize: 10, color: "#c9b892" }}> · as of {entry.captured}</span>
+                <span style={{ fontSize: textPx(10), color: "#c9b892" }}> · as of {entry.captured}</span>
               ) : null}
               {entry.cards.length > 0 ? (
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 3 }}>
@@ -125,7 +126,7 @@ export function ChipExpandedBody({
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
-                        fontSize: 9,
+                        fontSize: textPx(9),
                         padding: "1px 6px",
                         borderRadius: 999,
                         border: "1px solid rgba(214, 174, 116, 0.4)",
@@ -143,7 +144,7 @@ export function ChipExpandedBody({
         </div>
       ) : null}
       {paths.map((p) => (
-        <div key={p} style={{ fontSize: 10, color: "#9fb7d5", wordBreak: "break-all", marginBottom: 4 }}>
+        <div key={p} style={{ fontSize: textPx(10), color: "#9fb7d5", wordBreak: "break-all", marginBottom: 4 }}>
           {p}
         </div>
       ))}
@@ -158,7 +159,7 @@ export function ChipExpandedBody({
         <pre
           style={{
             marginTop: 8,
-            fontSize: 9,
+            fontSize: textPx(9),
             maxHeight: 200,
             overflow: "auto",
             whiteSpace: "pre-wrap",
@@ -179,7 +180,7 @@ export function ChipExpandedBody({
           <div style={{ fontWeight: 700, marginTop: 10, marginBottom: 6 }}>Ask diagnostics</div>
           <pre
             style={{
-              fontSize: 9,
+              fontSize: textPx(9),
               maxHeight: 200,
               overflow: "auto",
               whiteSpace: "pre-wrap",

@@ -103,6 +103,7 @@ import {
 } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { FOCUS_RING_BTN_CLASS, FOCUS_RING_INSET_CLASS, FOCUS_RING_WRAP_CLASS } from "../styles/settingsGlassButton";
 import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
+import { textPx } from "../styles/sections/textPx";
 const voiceReplyModeLabel: Record<VoiceReplyMode, string> = {
   off: "Off",
   voice_only: "When I asked by voice",
@@ -143,7 +144,7 @@ export type SettingsTabProps = {
   voiceReplyMode: VoiceReplyMode;
   setVoiceReplyMode: (v: VoiceReplyMode) => void;
 
-  /** How big the words in the chat are: small, normal or large (plan 87 call 3). */
+  /** How big the words are, everywhere in the plugin: small, normal or large (plan 87 call 3, plan 89). */
   chatTextSizeSetting: ChatTextSizeSetting;
 
   aiCharacterEnabled: boolean;
@@ -328,7 +329,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             className="bonsai-prose-host bonsai-settings-bleed"
             style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}
           >
-            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
+            <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
               For vision questions — lower quality uses less memory.
             </div>
             <Focusable
@@ -346,7 +347,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                     style={{
                       flex: 1,
                       minHeight: 36,
-                      fontSize: 12,
+                      fontSize: textPx(12),
                       fontWeight: 600,
                       padding: "4px 4px",
                       borderRadius: 4,
@@ -407,7 +408,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
       <PanelSection title="Voice replies">
         <PanelSectionRow>
           <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
+            <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
               {voiceReplyModeDescription[voiceReplyMode]}
             </div>
             <Focusable
@@ -426,7 +427,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                     style={{
                       flex: 1,
                       minHeight: 36,
-                      fontSize: 12,
+                      fontSize: textPx(12),
                       fontWeight: 600,
                       padding: "4px 4px",
                       borderRadius: 4,
@@ -479,7 +480,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                     width: "100%",
                     marginTop: 10,
                     minHeight: 38,
-                    fontSize: 12,
+                    fontSize: textPx(12),
                     fontWeight: 600,
                     padding: "6px 10px",
                     borderRadius: 4,
@@ -502,10 +503,10 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                   }
                   style={{ marginTop: 12, width: "100%", maxWidth: "100%", minWidth: 0, position: "relative" }}
                 >
-                  <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>
+                  <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13), marginBottom: 4 }}>
                     Accent intensity
                   </div>
-                  <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}>
+                  <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}>
                     {
                       AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.find((o) => o.id === aiCharacterAccentIntensity)
                         ?.shortLabel ?? ""
@@ -547,7 +548,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                         background: "transparent",
                         color: ASK_LABEL_COLOR_50,
                         flexShrink: 0,
-                        fontSize: 10,
+                        fontSize: textPx(10),
                         fontWeight: 600,
                         fontVariant: "small-caps",
                         letterSpacing: 0.1,
@@ -558,7 +559,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                         {AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.find((o) => o.id === aiCharacterAccentIntensity)
                           ?.shortLabel ?? ""}
                       </span>
-                      <span style={{ color: "#7a8fa3", fontSize: 9, lineHeight: 1 }} aria-hidden>
+                      <span style={{ color: "#7a8fa3", fontSize: textPx(9), lineHeight: 1 }} aria-hidden>
                         ▾
                       </span>
                     </Button>
@@ -644,7 +645,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             flex: 1,
             minWidth: 0,
             minHeight: 38,
-            fontSize: 12,
+            fontSize: textPx(12),
             fontWeight: 600,
             padding: "6px 10px",
             borderRadius: 4,
@@ -696,7 +697,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             flex: 1,
             minWidth: 0,
             minHeight: 38,
-            fontSize: 12,
+            fontSize: textPx(12),
             fontWeight: 600,
             padding: "6px 10px",
             borderRadius: 4,

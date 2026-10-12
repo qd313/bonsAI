@@ -20,6 +20,7 @@ import {
   type DeckSliderThumbVisualState,
 } from "./deck/DeckFocusSlider";
 import { clientXToPct, indexToPct, pctToIndex } from "../utils/deckSliderMath";
+import { textPx } from "../styles/sections/textPx";
 
 export type SettingsTabUiScaleSliderProps = {
   value: UiScaleProfileId;
@@ -102,7 +103,7 @@ export function SettingsTabUiScaleSlider(props: SettingsTabUiScaleSliderProps) {
             display: "flex",
             justifyContent: "space-between",
             marginTop: 8,
-            fontSize: 10,
+            fontSize: textPx(10),
             color: "#8fa0b4",
             fontWeight: 600,
             gap: 4,

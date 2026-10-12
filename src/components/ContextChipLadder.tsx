@@ -62,6 +62,7 @@ import { CHIP_GAP_PX, gridMove, rowsFromBoxes, type GridDirection } from "./chip
 import { elementHasFocus } from "../utils/uiDocument";
 import { focusRowElement } from "../utils/focusPerTurnRow";
 import { DECK_HIGHLIGHT_CYAN } from "../features/unified-input/constants";
+import { textPx } from "../styles/sections/textPx";
 
 const deckNav = (handlers: Record<string, () => boolean | void>) =>
   handlers as unknown as Record<string, unknown>;
@@ -194,7 +195,7 @@ export function ContextChipLadder({
 
   if (!chips.length) {
     return (
-      <div style={{ fontSize: 11, color: "#8fa6bd", marginTop: 8, fontStyle: "italic" }}>
+      <div style={{ fontSize: textPx(11), color: "#8fa6bd", marginTop: 8, fontStyle: "italic" }}>
         No context chips for this Ask.
       </div>
     );
@@ -227,7 +228,7 @@ export function ContextChipLadder({
             border: "none",
             padding: 0,
             color: "#7dd3fc",
-            fontSize: 11,
+            fontSize: textPx(11),
             textDecoration: "underline",
             cursor: "pointer",
             font: "inherit",
@@ -338,7 +339,7 @@ export function ContextChipLadder({
     >
       <div
         style={{
-          fontSize: 10,
+          fontSize: textPx(10),
           fontWeight: 600,
           // Grey, not cyan: the counter is a caption, and the only thing on this row allowed to be
           // coloured is the chip you are on.
@@ -388,7 +389,7 @@ export function ContextChipLadder({
                 maxWidth: "100%",
                 flex: "0 0 auto",
                 /* The same size and weight on every chip: a bigger open chip changed widths and re-wrapped the rows. */
-                fontSize: 10,
+                fontSize: textPx(10),
                 fontWeight: 400,
                 padding: "4px 10px",
                 borderRadius: 999,

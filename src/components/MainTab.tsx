@@ -62,6 +62,7 @@ import {
   type StreamScrambleSettings,
 } from "../features/stream-scramble/streamScrambleContext";
 import { gameIsRunning, lighterWhileGameRuns } from "../utils/lighterWhileGameRuns";
+import { textPx } from "../styles/sections/textPx";
 
 export type MainTabProps = {
   fullBleedRowStyle: React.CSSProperties;
@@ -420,7 +421,7 @@ export function MainTab(props: MainTabProps) {
               {props.onDismissMicPermissionDeny ? (
                 <Button
                   onClick={props.onDismissMicPermissionDeny}
-                  style={{ marginTop: 6, fontSize: 11, padding: "4px 10px", minHeight: 34 }}
+                  style={{ marginTop: 6, fontSize: textPx(11), padding: "4px 10px", minHeight: 34 }}
                 >
                   Dismiss
                 </Button>
@@ -450,7 +451,7 @@ export function MainTab(props: MainTabProps) {
 
         {props.navigationMessage && (
           <PanelSectionRow>
-            <div style={{ color: "#81c784", fontSize: 13 }}>{props.navigationMessage}</div>
+            <div style={{ color: "#81c784", fontSize: textPx(13) }}>{props.navigationMessage}</div>
           </PanelSectionRow>
         )}
         {/* The "Context: …" line that sat here is the game tag in the question box's strip now (plan 84). */}

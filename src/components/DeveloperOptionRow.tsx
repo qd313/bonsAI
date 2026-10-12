@@ -31,6 +31,7 @@
 import React from "react";
 import { Button, Focusable, PanelSectionRow } from "@decky/ui";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
+import { textPx } from "../styles/sections/textPx";
 
 export type DeveloperOptionRowOption<T extends string | number> = {
   value: T;
@@ -65,11 +66,11 @@ export function DeveloperOptionRow<T extends string | number>({
   return (
     <PanelSectionRow>
       <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-        <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>{title}</div>
+        <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13), marginBottom: 4 }}>{title}</div>
         {description ? (
           <div
             className="bonsai-prose"
-            style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}
+            style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}
           >
             {description}
           </div>
@@ -85,7 +86,7 @@ export function DeveloperOptionRow<T extends string | number>({
                 style={{
                   flex: 1,
                   minHeight: 32,
-                  fontSize: 11,
+                  fontSize: textPx(11),
                   fontWeight: 600,
                   borderRadius: 4,
                   border: active ? "1px solid rgba(56,189,248,0.55)" : "1px solid rgba(255,255,255,0.12)",

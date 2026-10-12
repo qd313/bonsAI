@@ -27,6 +27,7 @@ import { anySpoilerFenceOpen } from "../components/MainTabBonsaiAiMarkdownChunk"
 import { kbNotesUsedByAnswer } from "./kbNoteUsedByAnswer";
 import { BONSAI_CHAT_AI_MAX_WIDTH_CSS } from "../features/unified-input/constants";
 import { CREDITS_SHOWN, type CreditsView } from "./contextChipsFromSnapshot";
+import { textPx } from "../styles/sections/textPx";
 
 /**
  * Everyday name for a host the library has already cleared a note from — the header's job is to
@@ -346,7 +347,7 @@ export function buildKbNotesBlockElement(args: {
           flexDirection: "column",
           gap: 2,
           padding: "7px 10px",
-          fontSize: 11,
+          fontSize: textPx(11),
           lineHeight: 1.35,
         }}
       >
@@ -388,7 +389,7 @@ export function buildKbNotesBlockElement(args: {
             paddingTop: 8,
             borderTop: "1px solid rgba(214, 174, 116, 0.22)",
             color: "#d8cdb4",
-            fontSize: 11,
+            fontSize: textPx(11),
             lineHeight: 1.45,
           }}
         >

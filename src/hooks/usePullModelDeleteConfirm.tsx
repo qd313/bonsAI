@@ -27,6 +27,7 @@ import { toaster } from "@decky/api";
 import { formatSizeGb } from "../data/pullModelCatalog";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { loadSavedIp } from "../features/plugin-shell/pluginStorage";
+import { textPx } from "../styles/sections/textPx";
 
 export type UsePullModelDeleteConfirmArgs = {
   activeRoutingTag: string | null;
@@ -67,7 +68,7 @@ export function usePullModelDeleteConfirm(a: UsePullModelDeleteConfirmArgs): Pul
         <ConfirmModal
           strTitle={`Remove ${tag} from the Deck?`}
           strDescription={
-            <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45 }}>
+            <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
               This will free about {formatSizeGb(sizeGb)} by running <code>ollama rm {tag}</code>. Other models that
               depend on this tag will fall back to the next entry in the Ask-mode chain.
             </div>

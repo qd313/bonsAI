@@ -47,6 +47,7 @@ import {
   type TryOrderHost,
   type TryOrderKind,
 } from "../features/model-routing/useTryOrderPlaces";
+import { textPx } from "../styles/sections/textPx";
 
 type OkRuns = (fn: () => void) => (evt: { stopPropagation: () => void }) => void;
 /** The screen's nested-box handoff, so a box raised from here returns the ring the way its other boxes do. */
@@ -232,7 +233,7 @@ export function usePullModelTryNav(a: {
       <ConfirmModal
         strTitle={`Put the ${word} try order back to automatic?`}
         strDescription={
-          <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45 }}>
+          <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
             Automatic means bonsAI works the order out from the models installed, and keeps following its defaults when
             you add or remove a model. The order you set by hand is forgotten.
           </div>

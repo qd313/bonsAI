@@ -48,6 +48,7 @@
  */
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
+import { textPx } from "../../styles/sections/textPx";
 
 export type DeckSliderThumbVisualState = {
   focused: boolean;
@@ -392,7 +393,7 @@ export function DeckFocusSlider(props: DeckFocusSliderProps) {
       <div
         className="bonsai-prose"
         style={{
-          fontSize: 13,
+          fontSize: textPx(13),
           color: "#cdd9e6",
           lineHeight: 1.35,
           paddingLeft: 2,
@@ -466,7 +467,7 @@ export function DeckFocusSlider(props: DeckFocusSliderProps) {
         {belowTrack}
       </div>
       {description ? (
-        <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.35 }}>
+        <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", lineHeight: 1.35 }}>
           {description}
         </div>
       ) : null}

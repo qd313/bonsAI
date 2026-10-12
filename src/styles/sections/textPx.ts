@@ -11,7 +11,7 @@
  *
  * Solves: Plan 89 (S1). The Text size row used to scale only the chat's own words (`chatTextPx`);
  * the maintainer asked for every word on every tab. One helper means a new font size cannot forget
- * the setting without a test noticing (src/components/textSizeEverywhere.test.tsx scans for it).
+ * the setting without a test noticing (src/components/textSizeScan.test.ts reads the whole source for a size that skips it).
  *
  * Does not: Touch heights, paddings, gaps or icon sizes: only the size of the letters. Rows keep
  * their heights, so a long line is cut off with an ellipsis sooner on Large instead of growing the

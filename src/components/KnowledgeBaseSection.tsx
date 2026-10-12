@@ -95,6 +95,7 @@ import {
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
+import { textPx } from "../styles/sections/textPx";
 
 type RagCorpusStatus = {
   phase?: string;
@@ -714,7 +715,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
       <ConfirmModal
         strTitle="Remove knowledge base?"
         strDescription={
-          <div className="bonsai-prose" style={{ fontSize: 12, lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
+          <div className="bonsai-prose" style={{ fontSize: textPx(12), lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
             Deletes the offline corpus from disk and turns off <strong>Use local knowledge base</strong>. Strategy
             cards will stop grounding until you download again.
           </div>
@@ -803,7 +804,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
         </div>
       </PanelSectionRow>
       <PanelSectionRow>
-        <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.4 }}>
+        <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: textPx(11), color: "#9fb7d5", lineHeight: 1.4 }}>
           {installed ? (
             <>
               <span style={{ color: "#7dcea0", fontWeight: 600 }}>Installed</span>
@@ -857,7 +858,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
                       minHeight: KB_ACTION_ROW_MIN_HEIGHT,
                       height: KB_ACTION_ROW_MIN_HEIGHT,
                       boxSizing: "border-box",
-                      fontSize: 11,
+                      fontSize: textPx(11),
                     }}
                     {...deckNav({
                       onMoveUp: () => focusKbToggle(),

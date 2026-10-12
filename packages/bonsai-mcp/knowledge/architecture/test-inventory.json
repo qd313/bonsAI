@@ -486,6 +486,7 @@
     "tests/test_kb_typed_game_name_search.py",
     "tests/test_keep_awake.py",
     "tests/test_knowledge_base_chip_pool_size.py",
+    "tests/test_knowledge_base_notes_search.py",
     "tests/test_knowledge_base_schema.py",
     "tests/test_knowledge_base_schema_compat_app_id.py",
     "tests/test_knowledge_base_service.py",

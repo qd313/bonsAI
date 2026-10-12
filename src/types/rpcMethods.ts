@@ -32,7 +32,7 @@
  *   - The count below is written as a comment rather than as a value anything can
  *     read. Nothing would use it, and an unused value fails one of the checks.
  *
- * 63 names at the time this was written.
+ * 64 names at the time this was written.
  */
 export type BonsaiRpcMethod =
   | "abort_background_game_ai"
@@ -84,6 +84,7 @@ export type BonsaiRpcMethod =
   | "save_ask_feedback"
   | "save_settings"
   | "save_strategy_checklist_session"
+  | "search_rag_corpus_notes"
   | "set_intent_pack_enabled"
   | "set_kids_lock_state"
   | "start_background_game_ai"

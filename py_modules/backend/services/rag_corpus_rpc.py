@@ -31,6 +31,9 @@ from backend.services.knowledge_base_schema import (
     resolve_corpus_db_path,
     sanitize_corpus_install_dir,
 )
+from backend.services.knowledge_base_notes_search import (  # noqa: F401 -- main.py reaches it here
+    search_rag_corpus_notes,
+)
 from backend.services.knowledge_base_service import (
     session_rag_chip_candidates_to_rpc,
     suggest_chip_candidates,

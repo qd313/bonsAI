@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 122,
-  "edgeCount": 334,
+  "fileCount": 123,
+  "edgeCount": 339,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -51,7 +51,7 @@
     },
     {
       "path": "py_modules/backend/services/knowledge_base_schema.py",
-      "count": 12
+      "count": 13
     },
     {
       "path": "py_modules/backend/ollama_urls.py",
@@ -78,12 +78,12 @@
       "count": 8
     },
     {
-      "path": "py_modules/backend/services/token_accounting_service.py",
+      "path": "py_modules/backend/services/knowledge_base_cards.py",
       "count": 8
     },
     {
-      "path": "py_modules/backend/services/knowledge_base_cards.py",
-      "count": 7
+      "path": "py_modules/backend/services/token_accounting_service.py",
+      "count": 8
     },
     {
       "path": "py_modules/backend/services/ollama_prompts.py",
@@ -99,6 +99,10 @@
     },
     {
       "path": "py_modules/backend/services/chat_slot_service.py",
+      "count": 5
+    },
+    {
+      "path": "py_modules/backend/services/knowledge_base_game_match.py",
       "count": 5
     },
     {
@@ -123,10 +127,6 @@
     },
     {
       "path": "py_modules/backend/services/chat_turn_recorder.py",
-      "count": 4
-    },
-    {
-      "path": "py_modules/backend/services/knowledge_base_game_match.py",
       "count": 4
     },
     {
@@ -198,6 +198,10 @@
       "count": 3
     },
     {
+      "path": "py_modules/backend/services/knowledge_base_search.py",
+      "count": 3
+    },
+    {
       "path": "py_modules/backend/services/model_policy.py",
       "count": 3
     },
@@ -263,10 +267,6 @@
     },
     {
       "path": "py_modules/backend/services/kb_not_in_notes_notice.py",
-      "count": 2
-    },
-    {
-      "path": "py_modules/backend/services/knowledge_base_search.py",
       "count": 2
     },
     {
@@ -399,6 +399,10 @@
     },
     {
       "path": "py_modules/backend/services/knowledge_base_game_tip.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/knowledge_base_notes_search.py",
       "count": 1
     },
     {
@@ -1034,6 +1038,7 @@
         "py_modules/backend/services/knowledge_base_chips.py",
         "py_modules/backend/services/knowledge_base_game_match.py",
         "py_modules/backend/services/knowledge_base_game_tip.py",
+        "py_modules/backend/services/knowledge_base_notes_search.py",
         "py_modules/backend/services/knowledge_base_search.py",
         "py_modules/backend/services/knowledge_base_service.py",
         "py_modules/backend/services/transparency_service.py"
@@ -1059,6 +1064,7 @@
         "py_modules/backend/services/chat_memory_step.py",
         "py_modules/backend/services/chat_summary_service.py",
         "py_modules/backend/services/knowledge_base_chips.py",
+        "py_modules/backend/services/knowledge_base_notes_search.py",
         "py_modules/backend/services/knowledge_base_service.py"
       ]
     },
@@ -1071,6 +1077,17 @@
         "py_modules/backend/services/knowledge_base_service.py"
       ]
     },
+    "py_modules/backend/services/knowledge_base_notes_search.py": {
+      "imports": [
+        "py_modules/backend/services/knowledge_base_cards.py",
+        "py_modules/backend/services/knowledge_base_game_match.py",
+        "py_modules/backend/services/knowledge_base_schema.py",
+        "py_modules/backend/services/knowledge_base_search.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/rag_corpus_rpc.py"
+      ]
+    },
     "py_modules/backend/services/knowledge_base_schema.py": {
       "imports": [],
       "importedBy": [
@@ -1080,6 +1097,7 @@
         "py_modules/backend/services/knowledge_base_cards.py",
         "py_modules/backend/services/knowledge_base_chips.py",
         "py_modules/backend/services/knowledge_base_game_match.py",
+        "py_modules/backend/services/knowledge_base_notes_search.py",
         "py_modules/backend/services/knowledge_base_service.py",
         "py_modules/backend/services/ollama_embed_service.py",
         "py_modules/backend/services/rag_corpus_download_service.py",
@@ -1094,6 +1112,7 @@
       ],
       "importedBy": [
         "py_modules/backend/services/knowledge_base_game_tip.py",
+        "py_modules/backend/services/knowledge_base_notes_search.py",
         "py_modules/backend/services/knowledge_base_service.py"
       ]
     },
@@ -1505,6 +1524,7 @@
       "imports": [
         "py_modules/backend/services/async_background_job.py",
         "py_modules/backend/services/capabilities.py",
+        "py_modules/backend/services/knowledge_base_notes_search.py",
         "py_modules/backend/services/knowledge_base_schema.py",
         "py_modules/backend/services/knowledge_base_service.py",
         "py_modules/backend/services/rag_corpus_download_service.py",

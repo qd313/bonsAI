@@ -1220,6 +1220,10 @@ class Plugin:
             self, app_id, app_name, shortcut_name
         )
 
+    async def search_rag_corpus_notes(self, word: str = "", game_title: str = ""):
+        """Notes in the installed knowledge library that mention a word (Search tab)."""
+        return await rag_corpus_rpc.search_rag_corpus_notes(self, word, game_title)
+
     # --- Ollama model pull and catalog RPC ---
 
     async def pull_ollama_models(self, tags: Any = None):

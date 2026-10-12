@@ -110,11 +110,18 @@ function stopProps(self: () => HTMLElement | null, moves: Moves, navRef: unknown
   };
 }
 
-/** True unless the person is typing: the card then waits for them rather than taking the ring. */
+/**
+ * True unless the person is typing: the card then waits for them rather than taking the ring.
+ * "Typing" means a text box holds the ring AND has words in it. An empty box holding the ring is the
+ * ordinary case, not typing: the question was just sent from it (it empties on send), and the box holds
+ * the page's focus whenever the ring is on it, keyboard shut (Deck, plan92-P90-NOTE-CARD.json).
+ */
 function ringIsFreeForCard(): boolean {
   const owner = uiGamepadFocusElement();
   if (!owner || owner === getUiDocument().body) return true;
-  return !owner.matches?.("input, textarea, [contenteditable='true']");
+  if (!owner.matches?.("input, textarea, [contenteditable='true']")) return true;
+  const words = "value" in owner ? String((owner as HTMLInputElement).value) : owner.textContent ?? "";
+  return words.trim().length === 0;
 }
 
 /** Try `attempt` now and every 60 ms for a short while, until it says done; returns the cancel. */

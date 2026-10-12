@@ -117,10 +117,33 @@ describe("the note card", () => {
   it("does not take the ring from a person who is typing", () => {
     receiveStatusOffer({ note_offer: OFFER, request_id: 1, chat_slot_id: "" });
     const field = document.createElement("textarea");
+    field.value = "where do I go after";
     document.body.appendChild(field);
     putSteamRingOn(field);
     mountCard();
     expect(steamRingHolder()).toBe(field);
+    field.remove();
+  });
+
+  it("takes the ring from the question box when the question was sent from it and the box is empty (the Deck's real path)", () => {
+    receiveStatusOffer({ note_offer: OFFER, request_id: 1, chat_slot_id: "" });
+    const field = document.createElement("input");
+    field.value = "";
+    document.body.appendChild(field);
+    putSteamRingOn(field);
+    const { container } = mountCard();
+    expect(steamRingHolder()).toBe(stop(container, "Keep this note"));
+    field.remove();
+  });
+
+  it("a box holding only spaces counts as empty", () => {
+    receiveStatusOffer({ note_offer: OFFER, request_id: 1, chat_slot_id: "" });
+    const field = document.createElement("textarea");
+    field.value = "   ";
+    document.body.appendChild(field);
+    putSteamRingOn(field);
+    const { container } = mountCard();
+    expect(steamRingHolder()).toBe(stop(container, "Keep this note"));
     field.remove();
   });
 

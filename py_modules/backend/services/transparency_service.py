@@ -60,6 +60,10 @@ from backend.services.spoiler_risk_service import (
 )
 
 
+# The route of a typed "remember …" / "note: …" turn (plan 92): answered here, never sent to the AI.
+NOTE_COMMAND_ROUTE = "note_command"
+
+
 def _base_snapshot_fields() -> dict[str, Any]:
     return {
         "ollama_model": None,
@@ -514,6 +518,22 @@ def _tier_class_from_source_class(source_class: str) -> str:
     return ""
 
 
+def _developer_chip(snapshot: dict[str, Any], skips: list[str]) -> dict[str, Any]:
+    """The last chip: the raw record (a summary of it, not the full prompts) and anything skipped."""
+    return {
+        "id": "developer",
+        "rank": 999,
+        "label": "Developer details",
+        "attached": True,
+        "tier_class": "",
+        "body": _chip_body(
+            title="Full transparency snapshot",
+            bullets=["Raw RPC snapshot JSON below"] + ([f"Skipped: {s}" for s in skips] if skips else []),
+            dev_json=_developer_chip_snapshot_summary(snapshot),
+        ),
+    }
+
+
 def build_context_chips_manifest(
     *,
     snapshot: dict[str, Any],
@@ -522,6 +542,17 @@ def build_context_chips_manifest(
     """Assemble ranked context chips for F11 Option C UI from a near-complete snapshot."""
     chips: list[dict[str, Any]] = []
     rank = 1
+
+    if snapshot.get("route") == NOTE_COMMAND_ROUTE:
+        # Plan 92: a typed "remember …" never reached the AI, so the only things to show are that
+        # fact and the raw record; the answer chips (spoiler band, model, knowledge base) do not apply.
+        chips.append(
+            {
+                "id": "local_command", "rank": rank, "label": "Local note command", "attached": True, "tier_class": "",
+                "body": _chip_body(title="Local note command", bullets=["Answered on this Deck. The AI was not asked."]),
+            }
+        )
+        return {"context_chips": chips + [_developer_chip(snapshot, [])], "overflow_skips": []}
 
     if snapshot.get("proton_log_excerpt_attached") or snapshot.get("proton_log_notes"):
         sources = snapshot.get("proton_log_sources") or []
@@ -817,20 +848,7 @@ def build_context_chips_manifest(
         rank += 1
 
     skips = [str(s) for s in (overflow_skips or []) if str(s).strip()]
-    chips.append(
-        {
-            "id": "developer",
-            "rank": 999,
-            "label": "Developer details",
-            "attached": True,
-            "tier_class": "",
-            "body": _chip_body(
-                title="Full transparency snapshot",
-                bullets=["Raw RPC snapshot JSON below"] + ([f"Skipped: {s}" for s in skips] if skips else []),
-                dev_json=_developer_chip_snapshot_summary(snapshot),
-            ),
-        }
-    )
+    chips.append(_developer_chip(snapshot, skips))
 
     return {"context_chips": chips, "overflow_skips": skips}
 

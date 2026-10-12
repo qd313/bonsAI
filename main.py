@@ -823,6 +823,9 @@ class Plugin:
     async def _try_handle_vac_check_command(self, question: str, app_id: str) -> Optional[dict]:
         return await ask_local_command_handlers.try_handle_vac_check_command(self, question, app_id)
 
+    async def _try_handle_note_command(self, question: str, app_id: str, app_name: str, chat_slot_id: str = "") -> Optional[dict]:
+        return await ask_local_command_handlers.try_handle_note_command(self, question, app_id, app_name, chat_slot_id)
+
     # --- Settings RPC ---
 
     async def load_settings(self):
@@ -1289,6 +1292,7 @@ class Plugin:
         chat_slot_id: str = "",
         shortcut_setup_for_state: Any = _OMIT_SHORTCUT_SETUP_FIELD,
         shortcut_setup_for_response: Any = _OMIT_SHORTCUT_SETUP_FIELD,
+        note_offer: Optional[dict] = None,
     ) -> dict:
         """Persist transparency, publish ``completed`` background state, and return the RPC body.
 
@@ -1341,6 +1345,7 @@ class Plugin:
             shortcut_setup=shortcut_setup_for_state,
             app_name=app_name,
             chat_slot_id=chat_slot_id,
+            note_offer=note_offer,
         )
         self._background_task = None
         out: dict[str, Any] = {
@@ -1355,6 +1360,7 @@ class Plugin:
             "applied": None,
             "elapsed_seconds": 0.0,
             "meta": meta,
+            "note_offer": note_offer,
         }
         if shortcut_setup_for_response is not _OMIT_SHORTCUT_SETUP_FIELD:
             out["shortcut_setup"] = shortcut_setup_for_response
@@ -1459,6 +1465,10 @@ class Plugin:
             vac = await self._try_handle_vac_check_command(parsed_question, app_id)
             if vac is not None:
                 return vac
+        if local_kinds.note:
+            note = await self._try_handle_note_command(parsed_question, app_id, app_name)
+            if note is not None:
+                return note
         if not pc_ip:
             logger.info("ask_game_ai: rejected (empty pc_ip)")
             return Plugin._reject_ask_request("PC IP Address is required.", app_id=app_id)
@@ -1767,6 +1777,17 @@ class Plugin:
                         meta="vac_check",
                         chat_slot_id=chat_slot_id,
                         shortcut_setup_for_state=None,
+                    )
+
+            if local_kinds.note:
+                handled_n = await self._try_handle_note_command(parsed_question, app_id, app_name, chat_slot_id)
+                if handled_n is not None:
+                    return await self._finalize_immediate_background_local_command(
+                        parsed_question=parsed_question, resp=str(handled_n.get("response", "")), app_id=app_id,
+                        app_name=app_name, pc_ip=pc_ip, app_context=app_context, transparency_route="note_command",
+                        sanitizer_action="pass", sanitizer_reason_codes=[], state_question=parsed_question,
+                        meta="note_command", chat_slot_id=chat_slot_id, shortcut_setup_for_state=None,
+                        note_offer=handled_n.get("note_offer"),
                     )
 
             self._background_request_seq += 1

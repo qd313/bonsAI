@@ -133,8 +133,9 @@ def completed_local_command_state(
     shortcut_setup: Any = OMIT,
     app_name: str = "",
     chat_slot_id: Optional[str] = None,
+    note_offer: Optional[dict[str, Any]] = None,
 ) -> dict[str, Any]:
-    """Terminal state for a local keyword branch (sanitizer / shortcut / VAC).
+    """Terminal state for a local keyword branch (sanitizer / shortcut / VAC / note).
 
     These never spawn a background task, so they publish `completed` directly. `started_at` and
     `completed_at` are both `now` because no work was awaited. `chat_slot_id` names the chat it
@@ -156,6 +157,7 @@ def completed_local_command_state(
             "started_at": now,
             "completed_at": now,
             "chat_slot_id": chat_slot_id or None,
+            "note_offer": note_offer,
         }
     )
     if shortcut_setup is not OMIT:

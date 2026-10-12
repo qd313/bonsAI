@@ -999,6 +999,35 @@ Search tab, drawn again: word and game back in the box; the ring goes to the sam
   Down, Up, Left, Right and a walk with no stop twice; A on it; the memory across an unmount and a remount),
   `SearchTab.jump.test.tsx`, `earlierTurnsByDay.test.ts` and `useSearchTabPayload.test.tsx`. Device row: plan 92, block 5.
 
+### Y on the Main tab opens the Search tab (plan 92, lane N3b)
+
+```
+Main tab, the ring anywhere on the panel (question box, a chip, the chat's name in Decky's bar, an answer)
+   Y  (button 4, vgp_onbuttondown at the panel's document, capture phase)
+      -> selectTab("search")   the shell's own switch, as a press on the tab bar makes
+      -> Search tab drawn: Steam's ring goes to the find box, once the tab is on screen
+   B  -> back to Main (the tab before Search)
+```
+
+- **Y is heard at the panel's document, not on a control**, the way LT and RT are (`useChatTriggerSwitch.ts`): the
+  Deck measured (plan 92, M-Y) that a Y press arrives as button 4 with the ring on the question box, a chip, the tab
+  bar and an answer's first stop, and that Steam does nothing with it. `useSearchShortcut.ts` is one listener, kept
+  in `useSearchTabPayload.tsx` so it lives as long as the plugin root.
+- **It acts only on the Main tab**, and not while the chats menu is open (`chatTitleStore`'s `menuOpen`) or a box that
+  asked for the ring back is open (`peekModalReturnFocus`: rename, save, the character picker, the models hub and
+  the rest). Every other button passes by untouched, nothing is prevented or stopped.
+- **Steam's on-screen keyboard is not tested for**, because the plugin has no signal for it: with the ring on the
+  question box the page's focus is on the text field whether the keyboard is shut or open. The keyboard takes the
+  controller while it is open, so a Y then should never arrive. The Deck row presses Y with the keyboard open and
+  expects nothing; if Y gets through, the signal to add is a read of Steam's own keyboard state.
+- **The ring lands on the find box.** The wish is kept in `searchJumpStore.ts` (`arrival: "find"`) until the Search
+  tab has put the ring there; the tab looks again 150 and 450 ms later and takes the ring back if Steam moved it
+  while the tab settled. `isOptionsDeckButtonEvent` (`focusNavigation.ts`) is the Y predicate: button 4 only.
+- **Pinned by** `useSearchShortcut.test.tsx` (Y on Main opens Search; other tabs, the open menu and an open box do
+  nothing; every other button is left alone), `useSearchTabPayload.test.tsx` (the shell's switch is what Y uses),
+  `SearchTab.jump.test.tsx` (the ring on the find box) and `focusNavigation.test.ts` (the predicate). Device row:
+  plan 92, block 5.
+
 ### A folded tab: section lines, the floating Open all button, the help strip (plan 91 § 2b, plan 92 T0)
 
 The Ollama tab first; Settings and Developer reuse the same pieces (`src/features/folded-tabs/`). Each section

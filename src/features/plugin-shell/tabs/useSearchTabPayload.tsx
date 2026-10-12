@@ -5,8 +5,8 @@
  * (left of Main), and hands it what the main plugin screen knows that it needs: whether it is showing,
  * whether an answer is being written, how to look up and open a Steam setting, and how to open a saved chat.
  * It is also where the plugin root's tab switch is handed to the Search tab's own memory (searchJumpStore.ts),
- * so the "Back to where you were" line, B on the Search tab and Y on the Main tab switch tabs exactly the way a
- * press on the tab bar does, and where the tab the person came from is noted each time Search opens.
+ * so the "Back to where you were" line, B on the Search tab and Y on the Main tab (useSearchShortcut.ts) switch
+ * tabs exactly the way a press on the tab bar does, and where the tab the person came from is noted each time Search opens.
  *
  * Used for: The tab bar's always-present Search tab (plan 92, lanes N3 and N3b).
  *
@@ -19,6 +19,7 @@ import React, { useCallback, useEffect, useMemo, useRef } from "react";
 
 import { SearchTab, type SearchTabProps } from "../../search-tab/SearchTab";
 import { noteTabBeforeSearch, registerSearchTabSwitch } from "../../search-tab/searchJumpStore";
+import { useSearchShortcut } from "../../search-tab/useSearchShortcut";
 
 export type UseSearchTabPayloadArgs = Omit<SearchTabProps, "onOpenChat"> & {
   /** The tab showing now ("search" while this tab is up). */
@@ -47,6 +48,8 @@ export function useSearchTabPayload({
   selectSlot,
 }: UseSearchTabPayloadArgs): React.ReactElement {
   useEffect(() => registerSearchTabSwitch(selectTab), [selectTab]);
+  /* Y on the Main tab opens Search (the shell's own tab switch above, so a folded tab's sections close as on a bar press). */
+  useSearchShortcut(currentTab);
 
   /* The tab before Search, for B: noted when the tab changes to Search, from the tab it changed from. */
   const previous = useRef(currentTab);

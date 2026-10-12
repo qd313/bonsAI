@@ -118,3 +118,22 @@ describe("the tab before Search, for B", () => {
     expect(walkTo("about")).toEqual(["tab:about"]);
   });
 });
+
+describe("Y", () => {
+  const press = (button: number) =>
+    act(() => {
+      document.dispatchEvent(new CustomEvent("vgp_onbuttondown", { detail: { button }, bubbles: true }));
+    });
+
+  it("on the Main tab switches to Search with the shell's own tab switch; on another tab it does nothing", () => {
+    const calls: string[] = [];
+    mount(calls, { currentTab: "main" });
+    press(4);
+    expect(calls).toEqual(["tab:search"]);
+    cleanup();
+    const other: string[] = [];
+    mount(other, { currentTab: "about" });
+    press(4);
+    expect(other).toEqual([]);
+  });
+});

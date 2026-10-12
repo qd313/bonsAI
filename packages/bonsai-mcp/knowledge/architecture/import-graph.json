@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 939,
-  "edgeCount": 3100,
+  "fileCount": 941,
+  "edgeCount": 3110,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3987,6 +3987,8 @@
         "src/features/chat-title/useTopStripTabBar.ts",
         "src/features/plugin-shell/usePublishTextScale.test.tsx",
         "src/features/plugin-shell/usePublishTextScale.ts",
+        "src/features/search-tab/useSearchShortcut.test.tsx",
+        "src/features/search-tab/useSearchShortcut.ts",
         "src/index.tsx"
       ]
     },
@@ -4867,6 +4869,8 @@
         "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.test.ts",
+        "src/features/search-tab/useSearchShortcut.test.tsx",
+        "src/features/search-tab/useSearchShortcut.ts",
         "src/hooks/askBarRingWatch.titleView.test.ts",
         "src/hooks/askBarRingWatch.ts",
         "src/hooks/useAskBarInitialRingClaim.tabReturn.test.ts",
@@ -5021,7 +5025,8 @@
     "src/features/plugin-shell/tabs/useSearchTabPayload.tsx": {
       "imports": [
         "src/features/search-tab/SearchTab.tsx",
-        "src/features/search-tab/searchJumpStore.ts"
+        "src/features/search-tab/searchJumpStore.ts",
+        "src/features/search-tab/useSearchShortcut.ts"
       ],
       "importedBy": [
         "src/features/plugin-shell/tabs/useSearchTabPayload.test.tsx",
@@ -5788,6 +5793,8 @@
         "src/features/search-tab/SearchTab.jump.test.tsx",
         "src/features/search-tab/SearchTab.tsx",
         "src/features/search-tab/useSearchJump.ts",
+        "src/features/search-tab/useSearchShortcut.test.tsx",
+        "src/features/search-tab/useSearchShortcut.ts",
         "src/hooks/useEarlierTurnsPill.ts"
       ]
     },
@@ -5922,6 +5929,28 @@
         "src/features/search-tab/SearchResults.tsx",
         "src/features/search-tab/SearchStop.tsx",
         "src/features/search-tab/SearchTab.tsx"
+      ]
+    },
+    "src/features/search-tab/useSearchShortcut.test.tsx": {
+      "imports": [
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/features/search-tab/searchJumpStore.ts",
+        "src/features/search-tab/useSearchShortcut.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/search-tab/useSearchShortcut.ts": {
+      "imports": [
+        "src/features/chat-title/chatTitleStore.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/features/search-tab/searchJumpStore.ts",
+        "src/utils/focusNavigation.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/features/plugin-shell/tabs/useSearchTabPayload.tsx",
+        "src/features/search-tab/useSearchShortcut.test.tsx"
       ]
     },
     "src/features/stream-scramble/ScrambledAnswerText.test.tsx": {
@@ -10030,6 +10059,7 @@
         "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/plugin-shell/tabBarNav.ts",
         "src/features/search-tab/SearchBackLine.tsx",
+        "src/features/search-tab/useSearchShortcut.ts",
         "src/features/user-notes/NoteOfferCard.tsx",
         "src/features/user-notes/NotesReadLine.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
@@ -11203,6 +11233,7 @@
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/search-tab/SearchTab.tsx",
+        "src/features/search-tab/useSearchShortcut.ts",
         "src/features/user-notes/NoteOfferCard.test.tsx",
         "src/features/user-notes/NoteOfferCard.tsx",
         "src/features/user-notes/NotesReadLine.tsx",

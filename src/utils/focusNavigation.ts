@@ -123,6 +123,9 @@ export function isUpDeckButtonEvent(button: unknown): boolean {
  */
 const DECK_BUTTON_OK = 1;
 const DECK_BUTTON_CANCEL = 2;
+/* Y (`GamepadButton.OPTIONS`). Measured on the Deck 2026-10-12 (plan 92, M-Y): it reaches the plugin as button 4 at
+   the panel's document wherever the ring is, and Steam does nothing with it. */
+const DECK_BUTTON_OPTIONS = 4;
 const DECK_BUTTON_DIR_UP = 9;
 const DECK_BUTTON_DIR_DOWN = 10;
 const DECK_BUTTON_DIR_LEFT = 11;
@@ -162,6 +165,14 @@ export function isCancelDeckButtonEvent(button: unknown): boolean {
   if (id !== null) return id === DECK_BUTTON_CANCEL;
   const key = String(button ?? "").toLowerCase();
   return key === "escape" || key === "b" || key === "gamepadb";
+}
+
+/** True only for Y (the framework's OPTIONS, button 4), or the keyboard names "y" and "gamepady". Opens the Search tab from Main. */
+export function isOptionsDeckButtonEvent(button: unknown): boolean {
+  const id = deckButtonId(button);
+  if (id !== null) return id === DECK_BUTTON_OPTIONS;
+  const key = String(button ?? "").toLowerCase();
+  return key === "y" || key === "gamepady";
 }
 
 export function isBumperLeftDeckEvent(button: unknown): boolean {

@@ -8,6 +8,7 @@ import {
   isDeckDirectionUpEvent,
   isDownDeckButtonEvent,
   isOkDeckButtonEvent,
+  isOptionsDeckButtonEvent,
   isTriggerLeftDeckEvent,
   isTriggerRightDeckEvent,
   isUpDeckButtonEvent,
@@ -152,5 +153,23 @@ describe("the trigger predicates", () => {
   it("never match a key string: a trigger is never a keyboard key", () => {
     expect(isTriggerLeftDeckEvent("7")).toBe(false);
     expect(isTriggerRightDeckEvent("GamepadRightTrigger")).toBe(false);
+  });
+});
+
+/* Plan 92, lane N3b: Y reaches the plugin as button 4 (OPTIONS) and opens the Search tab from Main. */
+describe("the Y predicate", () => {
+  it("knows Y as button 4, as an event or a bare number, and by its keyboard names", () => {
+    expect(isOptionsDeckButtonEvent(gamepadEvent(4))).toBe(true);
+    expect(isOptionsDeckButtonEvent(4)).toBe(true);
+    expect(isOptionsDeckButtonEvent("y")).toBe(true);
+    expect(isOptionsDeckButtonEvent("GamepadY")).toBe(true);
+  });
+
+  it("says no to every other button, X (3) and the triggers (7, 8) included", () => {
+    for (const button of [OK, CANCEL, 3, 5, 6, 7, 8, DIR_UP, DIR_DOWN, DIR_LEFT, DIR_RIGHT]) {
+      expect(isOptionsDeckButtonEvent(gamepadEvent(button))).toBe(false);
+    }
+    expect(isOptionsDeckButtonEvent("Enter")).toBe(false);
+    expect(isOptionsDeckButtonEvent(undefined)).toBe(false);
   });
 });

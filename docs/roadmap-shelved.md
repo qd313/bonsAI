@@ -67,8 +67,11 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Evidence `docs/test-evidence/plan77-QA-FREE-PLAY-01.json`.
   Unshelves when: a new sighting.
 
-- ★ `[focus]` `[watching]` **After a tab switch onto About or Search, Steam puts the ring inside the tab, not on the tab bar** — seen on the Deck's own screen 2026-10-12 (plan 92 second night, blocks B and C), recorded as a quirk, not yet judged a bug. On About the ring started on the Reply language dropdown (one Up reached the bar); on Search the Up presses of P90-SEARCH-B started from "Clear the search" right after the switch. A tab's walk is not affected. Evidence `docs/test-evidence/plan92-P92-ABOUT-AFTER.json`, `docs/test-evidence/plan92-P90-SEARCH-B.json`.
+- ★ `[focus]` `[watching]` **After a tab switch onto About or Search, Steam puts the ring inside the tab, not on the tab bar** — seen on the Deck's own screen 2026-10-12 (plan 92 second night, blocks B and C), recorded as a quirk, not yet judged a bug. On About the ring started on the Reply language dropdown (one Up reached the bar); on Search the Up presses of P90-SEARCH-B started from "Clear the search" right after the switch. A tab's walk is not affected. Seen again on Main and Permissions after an LB or RB switch (the ring on a chip, and on a toggle); the session owner's call is that this is Steam's normal behaviour for any shoulder switch, not a fault. Evidence `docs/test-evidence/plan92-P92-ABOUT-AFTER.json`, `docs/test-evidence/plan92-P90-SEARCH-B.json`, `docs/test-evidence/plan92-P92-FOLD-SWITCH-try2.json`.
   Unshelves when: a new sighting, or the maintainer wants the ring on the bar after every switch.
+
+- ★ `[focus]` `[watching]` **In the AI models box, the first Left on Advanced right after the box opened did nothing** — seen once, 2026-10-12 (plan 92 second night, build `b8d9575f`); every later Left from Advanced worked. Possibly the first press after the box opens is lost. Evidence `docs/test-evidence/plan92-P92-MODELS-BESIDE-try2.json`.
+  Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **After the screenshot picker closes, nothing holds the highlight until the next press** — seen
   once, 2026-10-01 (plan 78, block 3a). Evidence `docs/test-evidence/plan78-DOC-SWEEP-01.json`.

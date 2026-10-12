@@ -102,20 +102,15 @@ def _base_jscpd_ignore() -> str:
 #                  it stops the AI answering anything.
 #   dbg_fe_log   - a logging hook used when testing on the Deck and the Deck
 #                  cannot reach the PC. Having no caller is the point of it.
-#   list_user_notes, save_user_note, delete_user_note, search_rag_corpus_notes -
-#                  TEMPORARY, plan 92: the back end lands before the screens that
-#                  call it. The Search tab (lane N3) drops list_user_notes,
-#                  save_user_note and search_rag_corpus_notes when it lands; the
-#                  notes sheet (lane N2) drops delete_user_note.
+#   delete_user_note - TEMPORARY, plan 92: the notes back end landed before the
+#                  notes sheet that calls it; the notes sheet lane (N2) drops it
+#                  when it lands.
 # ask_game_ai is deliberately NOT here: it is the older foreground ask path and a
 # real finding, held for now by the 2026-09-13 decision.
 RPC_METHODS_WITHOUT_A_FRONTEND_CALLER_BY_DESIGN = {
     "ask_ollama",
     "dbg_fe_log",
     "delete_user_note",
-    "list_user_notes",
-    "save_user_note",
-    "search_rag_corpus_notes",
 }
 
 

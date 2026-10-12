@@ -72,10 +72,10 @@ describe('"Enable Tier 2 for this model?"', () => {
     expect(box.strCancelButtonText).toBe("Cancel");
   });
 
-  it("points to where the licence can be changed today: the AI models button and its Filters, not the removed Manage AI models and Policy", () => {
+  it("points to where the licence can be changed today: the AI models button and its Licence list, not the removed Manage AI models and Policy", () => {
     const { box } = openBox();
     const { container } = render(<div>{box.strDescription}</div>);
-    expect(container.textContent).toContain("You can change this later under Ollama → AI models → Filters.");
+    expect(container.textContent).toContain("You can change this later under Ollama → AI models, in the Licence list beside the models.");
     expect(container.textContent).not.toContain("Manage AI models");
   });
 

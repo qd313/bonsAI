@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 127,
-  "edgeCount": 346,
+  "fileCount": 128,
+  "edgeCount": 348,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -315,6 +315,10 @@
       "count": 2
     },
     {
+      "path": "py_modules/backend/services/user_notes_service.py",
+      "count": 2
+    },
+    {
       "path": "py_modules/backend/services/vac_check_commands.py",
       "count": 2
     },
@@ -519,11 +523,11 @@
       "count": 1
     },
     {
-      "path": "py_modules/backend/services/user_notes_rpc.py",
+      "path": "py_modules/backend/services/user_notes_for_ask.py",
       "count": 1
     },
     {
-      "path": "py_modules/backend/services/user_notes_service.py",
+      "path": "py_modules/backend/services/user_notes_rpc.py",
       "count": 1
     },
     {
@@ -995,6 +999,7 @@
         "py_modules/backend/services/strategy_spoiler_policy.py",
         "py_modules/backend/services/tdp_service.py",
         "py_modules/backend/services/transparency_service.py",
+        "py_modules/backend/services/user_notes_for_ask.py",
         "py_modules/backend/tdp_intent.py"
       ],
       "importedBy": [
@@ -1821,6 +1826,14 @@
         "py_modules/backend/services/voice_rpc.py"
       ]
     },
+    "py_modules/backend/services/user_notes_for_ask.py": {
+      "imports": [
+        "py_modules/backend/services/user_notes_service.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/game_ai_request.py"
+      ]
+    },
     "py_modules/backend/services/user_notes_rpc.py": {
       "imports": [
         "py_modules/backend/services/user_notes_service.py"
@@ -1832,6 +1845,7 @@
     "py_modules/backend/services/user_notes_service.py": {
       "imports": [],
       "importedBy": [
+        "py_modules/backend/services/user_notes_for_ask.py",
         "py_modules/backend/services/user_notes_rpc.py"
       ]
     },

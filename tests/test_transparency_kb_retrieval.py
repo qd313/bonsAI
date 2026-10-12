@@ -207,7 +207,11 @@ class TransparencySnapshotForChatSlotTests(unittest.TestCase):
             elapsed_seconds=1.0,
         )
         trimmed = transparency_snapshot_for_chat_slot(full_snapshot)
-        self.assertEqual(set(trimmed.keys()), {"route", "success", "context_chips", "overflow_skips"})
+        # user_notes_* (plan 92): which of the person's own notes went in, kept on a saved turn.
+        self.assertEqual(
+            set(trimmed.keys()),
+            {"route", "success", "context_chips", "overflow_skips", "user_notes_attached", "user_notes_off_count"},
+        )
         self.assertEqual(trimmed["route"], "ollama")
         self.assertTrue(trimmed["success"])
         self.assertTrue(trimmed["context_chips"])

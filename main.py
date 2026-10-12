@@ -2111,6 +2111,7 @@ class Plugin:
         reply_verbosity: str = "balanced",
         reply_language: str = "english",
         terse_mode: bool = False,
+        user_notes_block: str = "",
     ) -> str:
         """Build the system prompt using plugin-local metadata lookups and attachment context."""
         proton = (proton_log_attachment or "").strip()
@@ -2135,6 +2136,7 @@ class Plugin:
             reply_verbosity=reply_verbosity,
             reply_language=reply_language,
             terse_mode=terse_mode,
+            user_notes_block=user_notes_block,
         )
         return append_deck_tdp_sysfs_grounding(
             base,
@@ -2170,6 +2172,7 @@ class Plugin:
         chat_turns: Optional[list] = None,
         chat: Optional[dict] = None,
         question_for_display: str = "",
+        user_notes_block: str = "",
     ):
         """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
         return await run_ask_ollama(
@@ -2198,6 +2201,7 @@ class Plugin:
             chat_turns=chat_turns,
             chat=chat,
             question_for_display=question_for_display,
+            user_notes_block=user_notes_block,
         )
 
     def chat_for_request(self, request_id: Any) -> dict:

@@ -117,6 +117,7 @@ async def run_ask_ollama(
     chat_turns: Optional[list] = None,
     chat: Optional[dict] = None,
     question_for_display: str = "",
+    user_notes_block: str = "",
 ) -> dict[str, Any]:
     """Orchestrate attachment prep, prompt assembly, and model fallback request execution.
 
@@ -197,6 +198,7 @@ async def run_ask_ollama(
         reply_verbosity=reply_verbosity,
         reply_language=reply_language,
         terse_mode=terse_speed,
+        user_notes_block=user_notes_block,
     )
     if ask_mode == "strategy":
         # Closes the last gap in the branch-picker chain. With this plus the

@@ -589,6 +589,7 @@
     "tests/test_transparency_kb_retrieval.py",
     "tests/test_transparency_service.py",
     "tests/test_update_rag_corpus_reports.py",
+    "tests/test_user_notes_in_ask.py",
     "tests/test_user_notes_rpc.py",
     "tests/test_user_notes_service.py",
     "tests/test_verify_decky_plugin_zip.py",

@@ -13,8 +13,12 @@ Solves: Gives notes one place to be stored crash-safely (a temporary file, then 
 way chats are), so a power cut mid-save leaves the old notes whole. A missing or unreadable file
 reads as no notes at all, and the next save writes a good one.
 
-Does not: Decide which notes an Ask reads, or put them into the instruction sheet -- that is
-user_notes_for_ask.py. It does not offer a note after a question either.
+Also here: the rule for which notes one Ask question reads (``pick_notes_for_turn``): the ones
+that are on and are for the question's game or for every game, newest first, at most 8 notes and
+1,000 characters. ``user_notes_for_ask.py`` runs it for a question; ``build_system_prompt`` puts
+the block it returns into the instruction sheet.
+
+Does not: Put notes into the instruction sheet, or offer a note after a question.
 
 A note, as the screen and the back end both see it: ``id`` ("n-" and the milliseconds since
 1970 when it was made), ``text`` (1 to 200 characters, trimmed), ``app_id`` ("" or the Steam
@@ -28,6 +32,7 @@ from __future__ import annotations
 import json
 import os
 import time
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Optional
 
@@ -225,3 +230,72 @@ def delete_note(settings_dir: str, note_id: Any, logger: Any = None) -> None:
     if not wanted or len(kept) == len(notes):
         raise UserNoteError("not_found")
     _write_notes(settings_dir, kept, logger)
+
+
+# --- What an Ask question reads ------------------------------------------------------------
+
+MAX_NOTES_PER_ASK = 8
+MAX_NOTES_CHARS_PER_ASK = 1000
+NOTES_BLOCK_HEADING = (
+    "The person asked bonsAI to remember these. Treat them as true for this chat and never "
+    "contradict them:"
+)
+
+
+@dataclass
+class AskNotes:
+    """The notes picked for one question: the block for the instruction sheet, the short list the
+    Show details record keeps (``id``, ``text``, ``game_title`` for each), and how many notes
+    matched the question's game but were switched off."""
+
+    block: str = ""
+    attached: list[dict[str, str]] = field(default_factory=list)
+    off_count: int = 0
+
+    def record(self) -> dict[str, Any]:
+        """The two fields the Show details record always carries."""
+        return {"user_notes_attached": list(self.attached), "user_notes_off_count": self.off_count}
+
+
+def _one_line(text: str) -> str:
+    return " ".join(str(text).split())
+
+
+def _note_applies(note: dict[str, Any], app_id: str, title: str) -> bool:
+    """Is this note for the turn's game, or for every game?
+
+    Same Steam app id when both sides have one; otherwise (the turn has no app id, or the note
+    was kept under a title only) the same game title, compared without case.
+    """
+    note_id, note_title = note["app_id"], note["game_title"].casefold()
+    if not note_id and not note_title:
+        return True
+    if note_id and app_id:
+        return note_id == app_id
+    return bool(title) and note_title == title
+
+
+def pick_notes_for_turn(notes: list[dict[str, Any]], *, app_id: str, game_title: str) -> AskNotes:
+    """The notes an Ask question reads: those that are on and apply, newest first, at most 8
+    notes and 1,000 characters of note text in all (a note that would pass the character cap
+    ends the list; an older, shorter one never jumps ahead of it).
+
+    ``app_id`` and ``game_title`` are the turn's own: the running game's id and name, or, with
+    nothing running, no id and the title the Ask flow worked out from the question's words or the
+    chat's own game. Switched-off notes that apply are only counted (``off_count``).
+    """
+    turn_id = str(app_id or "").strip()
+    turn_title = str(game_title or "").strip().casefold()
+    applying = [n for n in _newest_first(notes) if _note_applies(n, turn_id, turn_title)]
+    chosen: list[dict[str, str]] = []
+    used = 0
+    for note in applying:
+        if not note["on"]:
+            continue
+        text = _one_line(note["text"])
+        if len(chosen) >= MAX_NOTES_PER_ASK or used + len(text) > MAX_NOTES_CHARS_PER_ASK:
+            break
+        used += len(text)
+        chosen.append({"id": note["id"], "text": text, "game_title": note["game_title"]})
+    block = "\n".join([NOTES_BLOCK_HEADING, *(f"- {n['text']}" for n in chosen)]) if chosen else ""
+    return AskNotes(block=block, attached=chosen, off_count=sum(1 for n in applying if not n["on"]))

@@ -361,6 +361,7 @@ def build_system_prompt(
     reply_language: str = "english",
     knowledge_block_placement: str = "early",
     terse_mode: bool = False,
+    user_notes_block: str = "",
 ) -> str:
     """Build the system message used for Ollama requests from game and attachment context.
 
@@ -373,6 +374,11 @@ def build_system_prompt(
     always spliced in, right after identity. ``"late"`` moves it to immediately before the hardware
     appendix tail instead, so on a prompt that overflows the model's window and loses its start,
     the attached cards are the part nearest the end that survives (D46).
+
+    ``user_notes_block`` (plan 92): the notes the person asked bonsAI to remember, already picked
+    for this question (``user_notes_service.pick_notes_for_turn``). Spliced right after identity,
+    AHEAD of ``early_context_suffix``, and kept there whatever ``knowledge_block_placement`` is:
+    the placement setting moves the whole ``early_context_suffix`` late, never the notes.
 
     ``followup_subject``: non-empty only on the exact turn game_ai_request.py's follow-up memory
     used a remembered subject (a bare follow-up naming nothing of its own). Splices
@@ -528,12 +534,16 @@ def build_system_prompt(
 
     placement = knowledge_block_placement if knowledge_block_placement == "late" else "early"
 
+    notes_stripped = (user_notes_block or "").strip()
+    notes_block = f"\n\n{notes_stripped}" if notes_stripped else ""
+
     def _assemble(head: str, rest: str, tail_block: str) -> str:
         """Splice ``early_block`` (the Proton excerpt / knowledge-base cards) either right after
-        identity (today's order) or immediately before the tail, per ``placement``."""
+        identity (today's order) or immediately before the tail, per ``placement``. The person's
+        notes always go right after identity, ahead of both."""
         if placement == "late":
-            return head + rest + early_block + tail_block
-        return head + early_block + rest + tail_block
+            return head + notes_block + rest + early_block + tail_block
+        return head + notes_block + early_block + rest + tail_block
 
     hardware_tdp_appendix = (
         "Hardware appendix (apply only when relevant): The Steam Deck APU supports a TDP range of 3-15 watts and "

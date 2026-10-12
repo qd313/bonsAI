@@ -381,6 +381,9 @@ def transparency_snapshot_for_chat_slot(snapshot: dict[str, Any]) -> dict[str, A
         "success": bool(enriched.get("success")),
         "context_chips": enriched.get("context_chips") or [],
         "overflow_skips": enriched.get("overflow_skips") or [],
+        # Plan 92: the notes that went in, so a saved chat can say so (always a key).
+        "user_notes_attached": list(enriched.get("user_notes_attached") or []),
+        "user_notes_off_count": int(enriched.get("user_notes_off_count") or 0),
     }
 
 
@@ -579,6 +582,23 @@ def build_context_chips_manifest(
                     title="Screenshot attachment",
                     paths=att_paths,
                     bullets=[f"{img_count or len(att_paths)} image(s) sent to vision model"],
+                ),
+            }
+        )
+        rank += 1
+
+    user_notes = [n for n in (snapshot.get("user_notes_attached") or []) if isinstance(n, dict)]
+    if user_notes:
+        chips.append(
+            {
+                "id": "user_notes",
+                "rank": rank,
+                "label": f"Your notes ({len(user_notes)})",
+                "attached": True,
+                "tier_class": "",
+                "body": _chip_body(
+                    title="Your notes",
+                    bullets=[str(n.get("text") or "") for n in user_notes],
                 ),
             }
         )
@@ -911,6 +931,9 @@ def build_ollama_route_snapshot(
         "spoiler_risk_signals": ollama_result.get("spoiler_risk_signals"),
         "spy_lying_active": bool(ollama_result.get("spy_lying_active")),
         "spy_lies": list(ollama_result.get("spy_lies") or []),
+        # Plan 92: which of the person's own notes went into this question (always a key).
+        "user_notes_attached": list(ollama_result.get("user_notes_attached") or []),
+        "user_notes_off_count": int(ollama_result.get("user_notes_off_count") or 0),
     }
     chip_manifest = build_context_chips_manifest(
         snapshot=base,

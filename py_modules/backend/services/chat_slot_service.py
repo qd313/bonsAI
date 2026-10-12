@@ -184,6 +184,22 @@ def _normalize_kb_attached_notes(raw: Any) -> list[dict[str, Any]]:
     return out
 
 
+def _normalize_user_notes_attached(raw: Any) -> list[dict[str, str]]:
+    """The notes of the person's own that went into a turn (plan 92): ``id``, ``text`` and
+    ``game_title`` each, at most eight (the most an Ask reads), anything else dropped."""
+    out: list[dict[str, str]] = []
+    for item in (raw if isinstance(raw, list) else [])[:8]:
+        if isinstance(item, dict) and str(item.get("text") or "").strip():
+            out.append(
+                {
+                    "id": str(item.get("id") or "")[:40],
+                    "text": str(item["text"])[:200],
+                    "game_title": str(item.get("game_title") or "")[:120],
+                }
+            )
+    return out
+
+
 def _normalize_turn_transparency(raw: Any) -> dict[str, Any] | None:
     """Sanitize the trimmed snapshot ``transparency_snapshot_for_chat_slot`` hands us.
 
@@ -197,19 +213,26 @@ def _normalize_turn_transparency(raw: Any) -> dict[str, Any] | None:
     attached always carries a kb chip as well (build_context_chips_manifest adds one whenever
     kb_attached), so the two are not expected to disagree; if they ever do, the chip gate above
     still wins and the whole transparency object is dropped, notes included.
+
+    ``user_notes_attached`` and ``user_notes_off_count`` (plan 92) are kept when the snapshot
+    carries them -- the Ask flow always does -- and left off a turn saved before they existed.
     """
     if not isinstance(raw, dict):
         return None
     chips = raw.get("context_chips")
     if not isinstance(chips, list) or not chips:
         return None
-    return {
+    out = {
         "route": str(raw.get("route") or ""),
         "success": bool(raw.get("success")),
         "context_chips": chips,
         "overflow_skips": list(raw.get("overflow_skips") or []),
         "kb_attached_notes": _normalize_kb_attached_notes(raw.get("kb_attached_notes")),
     }
+    if "user_notes_attached" in raw:
+        out["user_notes_attached"] = _normalize_user_notes_attached(raw["user_notes_attached"])
+        out["user_notes_off_count"] = max(0, int(raw.get("user_notes_off_count") or 0))
+    return out
 
 
 def _normalize_turn_reasoning(raw: Any) -> dict[str, Any] | None:

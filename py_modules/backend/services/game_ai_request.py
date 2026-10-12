@@ -104,6 +104,7 @@ from backend.services.destructive_advice_guard import (
 )
 from backend.services import chat_turn_recorder
 from backend.services.chat_own_game_title import chat_own_game_title, text_resolved_title_for_turn
+from backend.services.user_notes_for_ask import notes_for_ask
 from backend.services import kb_followup_memory, ollama_keep_alive_rule
 from backend.services.input_sanitizer_service import apply_input_sanitizer_lane
 from backend.services.kb_notes_footers import append_kb_notes_footers
@@ -482,6 +483,9 @@ async def run_game_ai_request(
                 text_resolved_title=text_resolved_title,
             )
         )
+
+        # Plan 92: the person's own notes for this game, picked before the knowledge-base search.
+        user_notes = await notes_for_ask(plugin, app_id, app_name or text_resolved_title)
 
         kb_transparency = build_knowledge_base_transparency(
             attached=False,
@@ -862,6 +866,7 @@ async def run_game_ai_request(
             token_stream_request_id=token_stream_request_id,
             strategy_checklist_state=strategy_checklist_state,
             preferred_model=preferred_model,
+            user_notes_block=user_notes.block,
         )
         elapsed = round(time.time() - start, 1)
         base_response_text = str(ollama_result.get("response", "") or "No response text.")
@@ -1044,6 +1049,7 @@ async def run_game_ai_request(
                 **ollama_result,
                 **kb_transparency,
                 **kb_coverage_transparency,
+                **user_notes.record(),
                 "tdp_cap_watts": pre_cap if tdp_grounding_requested else None,
                 "ask_mode": ask_mode,
                 "spoiler_risk_signals": spoiler_risk_signals,

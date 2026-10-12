@@ -1,7 +1,8 @@
 /**
  * Title: Thinking effort row tests
- * Purpose: Pin that the row draws its four choices with the right labels and description text,
- *          and that pressing one calls `onChange` with the choice that was pressed.
+ * Purpose: Pin that the row draws its four choices with the right labels, no longer draws the
+ *          selected level's description (the folded Ollama tab shows it in its help strip, plan 91
+ *          § 2b), and that pressing one calls `onChange` with the choice that was pressed.
  * Used for: plan 57 step 2 (lane B).
  * Solves: Nothing pinned that pressing a button reports the right choice to the caller.
  * Does not: Cover the D-pad ring returning to this row after its one-time Thinking notice closes
@@ -26,12 +27,12 @@ describe("OllamaThinkingEffortRow", () => {
     expect(getByText("Deep")).toBeTruthy();
   });
 
-  it("shows the description for the currently selected level", () => {
-    const { getByText } = render(
+  it("does not draw the selected level's description in the row: the tab's help strip shows it", () => {
+    const { queryByText } = render(
       <OllamaThinkingEffortRow value="medium" onChange={() => {}} onMoveUp={() => true} onMoveDown={() => true} />
     );
 
-    expect(getByText(ASK_THINK_EFFORT_DESCRIPTIONS.medium)).toBeTruthy();
+    expect(queryByText(ASK_THINK_EFFORT_DESCRIPTIONS.medium)).toBeNull();
   });
 
   it("calls onChange with the choice that was pressed", () => {

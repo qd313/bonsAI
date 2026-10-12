@@ -1,14 +1,15 @@
 /**
  * Title: Ollama tab, Terse mode toggle
  * Purpose: Pin that the Ollama tab shows a Terse mode switch under the reply-style slider, that it
- *          starts off, that its help line says in plain words what it does and does not do, and that
+ *          starts off, that its longer text (shown in the folded tab's help strip, plan 91 § 2b, and no
+ *          longer drawn under the switch) says in plain words what it does and does not do, and that
  *          flipping it calls the setter the settings hook saves from.
  * Used for: roadmap "Terse mode: Speed answers in three lines" (details: roadmap-details.md).
  * Does not: Prove the D-pad walk on the device (that is a Deck check), or prove what the AI is told
  *           (see tests/test_terse_mode_prompt.py for that).
  */
 import { render } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 /* The shared Decky stub drops the Steam move props, so this file wraps ToggleField to keep the ones
    given to the Terse mode switch where the D-pad test can call them, the way Steam would. */
@@ -28,6 +29,14 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { OllamaTab, type OllamaTabProps } from "./OllamaTab";
+import { resetFoldedTabsForTests, setAllSections } from "../features/folded-tabs/foldedTabsStore";
+import { OLLAMA_FOLD_TAB, OLLAMA_SECTIONS } from "../features/folded-tabs/ollamaTabFolds";
+
+/* The tab folds (plan 91 § 2b): these checks are about the rows, so every section is open. */
+beforeEach(() => {
+  resetFoldedTabsForTests();
+  setAllSections(OLLAMA_FOLD_TAB, OLLAMA_SECTIONS.map((s) => s.id), true);
+});
 
 const noop = () => {};
 
@@ -107,7 +116,9 @@ describe("Ollama tab: Terse mode toggle", () => {
 
   it("explains in plain words that it shortens what you see, not the AI's thinking, and is Speed only", () => {
     render(<OllamaTab {...props()} />);
-    const help = String(document.querySelector(TOGGLE)?.getAttribute("description") ?? "");
+    /* Not drawn under the switch any more: the row carries it for the help strip. */
+    expect(document.querySelector(TOGGLE)?.getAttribute("description")).toBeNull();
+    const help = String(document.querySelector(TOGGLE)?.closest("[data-bonsai-help]")?.getAttribute("data-bonsai-help") ?? "");
     expect(help).toMatch(/Speed mode only/i);
     expect(help).toMatch(/three/i);
     expect(help).toMatch(/shortens what you see, not how hard the AI thinks/i);

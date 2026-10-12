@@ -15,7 +15,9 @@
  * tab's scroll plan uses (useTabBodyFocusScroll's landing watchers), not through React state. And the
  * scroll plan must keep the ringed row clear of the strip, so the watcher hands back the strip's own
  * measured height and the plan widens its bottom margin by exactly that (plan 92 brief, piece 4); it
- * also asks for the folded tabs' shorter page-turn step (FOLDED_TAB_SCROLL_STEP_FRACTION).
+ * also asks for the folded tabs' shorter page-turn step (FOLDED_TAB_SCROLL_STEP_FRACTION), and tells the
+ * plan's look-ahead how tall the strip will be for the next row (measured on an unseen copy of the strip),
+ * so a row bringing a taller strip than the last one is prepared for a press early, not met with a jump.
  *
  * Does not: Scroll anything, or move the ring. Does not know any row's text: it reads whatever the
  * row carries. Does not show anything for a section line, a control with no text, or a ring outside
@@ -49,11 +51,13 @@ function helpHost(target: HTMLElement): HTMLElement | null {
   return target.closest<HTMLElement>(`[${HELP_TEXT_ATTR}]`);
 }
 
-/** The strip's two parts, as TabHelpStrip draws them. */
+/** The strip's two parts, as TabHelpStrip draws them, and an unseen copy of the strip for measuring. */
 export interface HelpStripElements {
   strip: HTMLElement;
   label: HTMLElement;
   text: HTMLElement;
+  /** The same strip, never seen: what `coverOf` writes a row's text into to read the height it would take. */
+  measure: { strip: HTMLElement; label: HTMLElement; text: HTMLElement };
 }
 
 /**
@@ -72,6 +76,14 @@ function showHelpFor(parts: HelpStripElements, host: HTMLElement | null): number
   parts.text.textContent = text;
   parts.strip.hidden = false;
   return parts.strip.getBoundingClientRect().height;
+}
+
+/** The height the strip would take for the row around `target`, measured on the unseen copy (0: no text). */
+function heightFor(parts: HelpStripElements, target: HTMLElement): number {
+  const { strip, label, text } = parts.measure;
+  const height = showHelpFor({ strip, label, text, measure: parts.measure }, helpHost(target));
+  strip.hidden = true;
+  return height;
 }
 
 /**
@@ -101,7 +113,10 @@ export function useHelpStrip(tabId: string, partsRef: RefObject<HelpStripElement
       const section = target.closest<HTMLElement>(`[${FOLD_SECTION_ATTR}]`)?.getAttribute(FOLD_SECTION_ATTR);
       if (section) rememberFoldSection(tabId, section);
       return show(helpHost(target));
-    }, { stepFraction: FOLDED_TAB_SCROLL_STEP_FRACTION });
+    }, {
+      stepFraction: FOLDED_TAB_SCROLL_STEP_FRACTION,
+      coverOf: (el) => (partsRef.current ? heightFor(partsRef.current, el) : 0),
+    });
     return () => {
       stop();
       watch.disconnect();

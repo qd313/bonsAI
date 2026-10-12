@@ -55,13 +55,15 @@ describe("OllamaWhereAiRunsSection startup-entry toggle", () => {
     markSettingsLoaded();
   });
 
-  it("renders off by default with its plain-language explanation", () => {
+  it("renders off by default with its plain-language explanation, carried on the row for the help strip", () => {
     renderSection();
 
     const toggle = document.querySelector('[label="Start the AI with the Deck"]');
     expect(toggle).toBeTruthy();
     expect(checkedOf(toggle)).toBe(false);
-    expect(screen.getByText(/seven tenths of a second sooner/i)).toBeTruthy();
+    /* The Ollama tab folds (plan 91 § 2b): the explanation shows in the strip while the ring is on the row. */
+    expect(toggle?.closest("[data-bonsai-help]")?.getAttribute("data-bonsai-help")).toMatch(/seven tenths of a second sooner/i);
+    expect(screen.queryByText(/seven tenths of a second sooner/i)).toBeNull();
   });
 
   it("renders checked when the saved setting is on", () => {

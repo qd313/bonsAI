@@ -16,10 +16,18 @@
  *           check.
  */
 import { render } from "@testing-library/react";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 import { OllamaTab, type OllamaTabProps } from "./OllamaTab";
 import { buildBonsaiScopeStylesheet } from "../styles/bonsaiScopeStylesheet";
+import { resetFoldedTabsForTests, setAllSections } from "../features/folded-tabs/foldedTabsStore";
+import { OLLAMA_FOLD_TAB, OLLAMA_SECTIONS } from "../features/folded-tabs/ollamaTabFolds";
+
+/* The tab folds (plan 91 § 2b): these checks are about the rows, so every section is open. */
+beforeEach(() => {
+  resetFoldedTabsForTests();
+  setAllSections(OLLAMA_FOLD_TAB, OLLAMA_SECTIONS.map((s) => s.id), true);
+});
 
 const noop = () => {};
 

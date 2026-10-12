@@ -7,7 +7,8 @@
  * (instant, several minutes, hours, and so on) rather than any number in
  * between — there is no in-between value to land on.
  *
- * Used for: The Settings tab's Ollama section.
+ * Used for: The Ollama tab's Connection tuning section. Its name is on the slider's own line ("Keep
+ * models loaded: 5m"); the folded tab (plan 91 § 2b) shows its longer text in the help strip.
  *
  * Solves: One shared slider control (DeckFocusSlider) reused here with a
  * fixed list of duration presets instead of a free-form number field, since
@@ -92,7 +93,7 @@ export function SettingsTabOllamaKeepAliveSlider(props: SettingsTabOllamaKeepAli
       className="bonsai-ollama-keepalive-slider"
       header={
         <>
-          Unload delay:{" "}
+          Keep models loaded:{" "}
           <span style={{ color: "#9ce7ff", fontWeight: 700 }}>{OLLAMA_KEEP_ALIVE_CHIP_LABEL[value]}</span>
         </>
       }

@@ -13,14 +13,20 @@
  * the one row it was handed (a ref the row registered), never the page: under Decky the global
  * document is the wrong one.
  *
+ * Folded (plan 91 § 2b): it also lists the tab's five sections in order with each one's first and last
+ * control (`chain`), which the section lines use for Down into an open section and Up into the open
+ * section above.
+ *
  * Does not: Move the ring across containers. These are plain hops between controls of the one tab
  * body, through `focusInTabBody`, which plans the pane's place first so the browser's own scroll on
- * focus never jumps it (useTabBodyFocusScroll.ts).
+ * focus never jumps it (useTabBodyFocusScroll.ts). The section lines move by Steam's own transfer
+ * (FoldedSection.tsx).
  */
-import { useCallback, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 
 import { registerModalReturnFocusOwner } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
+import type { FoldChainSection } from "../features/folded-tabs/FoldedSection";
 
 /**
  * Give focus to the first matching stop inside one row's own container. The query is scoped to the
@@ -49,6 +55,9 @@ export function useOllamaTabFocus() {
   const replyVerbosityThumbHostRef = useRef<HTMLDivElement>(null);
   const terseToggleHostRef = useRef<HTMLDivElement>(null);
   const thinkingEffortHostRef = useRef<HTMLDivElement | null>(null);
+  const whereBodyRef = useRef<HTMLDivElement>(null);
+  const customTimeoutsHostRef = useRef<HTMLDivElement>(null);
+  const modelsBtnRef = useRef<HTMLButtonElement | null>(null);
 
   // Registers the row's own container as the modal return-focus owner for its one-time notice
   // (plan 57 bug D). A ref callback, not the ref object alone, because it has to re-register on
@@ -109,10 +118,51 @@ export function useOllamaTabFocus() {
     return focusKbToggle();
   }, [focusKbToggle]);
 
+  /* Where AI runs' last control, for Up from the next line: Test connection, unless it is disabled (a test or a setup running). */
   const focusConnectionTestBtn = useCallback((): boolean => {
-    if (connectionTestBtnRef.current) focusInTabBody(connectionTestBtnRef.current);
-    return Boolean(connectionTestBtnRef.current);
+    const el = connectionTestBtnRef.current;
+    if (!el || el.disabled) return false;
+    focusInTabBody(el);
+    return true;
   }, []);
+
+  /* Where AI runs' first control (Run AI on this Deck), for Down from its line. */
+  const focusWhereFirst = useCallback(
+    (): boolean => focusFirstStopIn(whereBodyRef.current, "[tabindex], button:not([disabled]), input"),
+    [],
+  );
+
+  const focusCustomTimeoutsToggle = useCallback(
+    (): boolean => focusFirstStopIn(customTimeoutsHostRef.current, "[tabindex], button, input"),
+    [],
+  );
+
+  const focusModelsBtn = useCallback((): boolean => {
+    if (modelsBtnRef.current) focusInTabBody(modelsBtnRef.current);
+    return Boolean(modelsBtnRef.current);
+  }, []);
+
+  /* The five sections in order, with each one's first and last control: the folded tab's D-pad chain. */
+  const chain = useMemo<FoldChainSection[]>(
+    () => [
+      { id: "where", enterFromTop: focusWhereFirst, enterFromBottom: focusConnectionTestBtn },
+      { id: "kb", enterFromTop: focusKbToggle, enterFromBottom: focusKbUpFromReplyVerbosity },
+      { id: "reply", enterFromTop: focusReplyVerbosityThumb, enterFromBottom: focusThinkingEffortRow },
+      { id: "tuning", enterFromTop: focusCustomTimeoutsToggle, enterFromBottom: focusOllamaKeepAliveThumb },
+      { id: "models", enterFromTop: focusModelsBtn, enterFromBottom: focusModelsBtn },
+    ],
+    [
+      focusConnectionTestBtn,
+      focusCustomTimeoutsToggle,
+      focusKbToggle,
+      focusKbUpFromReplyVerbosity,
+      focusModelsBtn,
+      focusOllamaKeepAliveThumb,
+      focusReplyVerbosityThumb,
+      focusThinkingEffortRow,
+      focusWhereFirst,
+    ],
+  );
 
   return {
     latencyWarningThumbHostRef,
@@ -124,6 +174,9 @@ export function useOllamaTabFocus() {
     connectionTestBtnRef,
     replyVerbosityThumbHostRef,
     terseToggleHostRef,
+    whereBodyRef,
+    customTimeoutsHostRef,
+    modelsBtnRef,
     setThinkingEffortHost,
     focusOllamaKeepAliveThumb,
     focusLatencyWarningThumb,
@@ -132,6 +185,7 @@ export function useOllamaTabFocus() {
     focusThinkingEffortRow,
     focusTerseToggle,
     focusKbUpFromReplyVerbosity,
-    focusConnectionTestBtn,
+    focusCustomTimeoutsToggle,
+    chain,
   };
 }

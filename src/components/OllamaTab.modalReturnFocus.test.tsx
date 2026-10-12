@@ -29,6 +29,14 @@ import {
   resetModalReturnFocusRegistry,
   restoreModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
+import { resetFoldedTabsForTests, setAllSections } from "../features/folded-tabs/foldedTabsStore";
+import { OLLAMA_FOLD_TAB, OLLAMA_SECTIONS } from "../features/folded-tabs/ollamaTabFolds";
+
+/* The tab folds (plan 91 § 2b): these checks are about the rows, so every section is open. */
+beforeEach(() => {
+  resetFoldedTabsForTests();
+  setAllSections(OLLAMA_FOLD_TAB, OLLAMA_SECTIONS.map((s) => s.id), true);
+});
 
 function buildProps(overrides: Partial<OllamaTabProps> = {}): OllamaTabProps {
   return {

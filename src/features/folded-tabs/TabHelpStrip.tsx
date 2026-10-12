@@ -54,10 +54,19 @@ export function TabHelpStrip({ tab, children }: TabHelpStripProps): React.ReactE
   const stripRef = useRef<HTMLDivElement | null>(null);
   const labelRef = useRef<HTMLSpanElement | null>(null);
   const textRef = useRef<HTMLSpanElement | null>(null);
+  const measureRef = useRef<HTMLDivElement | null>(null);
   const syncParts = useCallback(() => {
+    const m = measureRef.current;
+    const mLabel = m?.querySelector<HTMLElement>(".bonsai-fold-strip__label");
+    const mText = m?.querySelector<HTMLElement>(".bonsai-fold-strip__text");
     partsRef.current =
-      stripRef.current && labelRef.current && textRef.current
-        ? { strip: stripRef.current, label: labelRef.current, text: textRef.current }
+      stripRef.current && labelRef.current && textRef.current && m && mLabel && mText
+        ? {
+            strip: stripRef.current,
+            label: labelRef.current,
+            text: textRef.current,
+            measure: { strip: m, label: mLabel, text: mText },
+          }
         : null;
   }, []);
   useHelpStrip(tab, partsRef);
@@ -97,6 +106,10 @@ export function TabHelpStrip({ tab, children }: TabHelpStripProps): React.ReactE
     textRef.current = el;
     syncParts();
   };
+  const setMeasure = (el: HTMLDivElement | null) => {
+    measureRef.current = el;
+    syncParts();
+  };
 
   const dock = (
     <div ref={dockRef} className="bonsai-fold-dock" data-bonsai-fold-tab={tab}>
@@ -105,6 +118,11 @@ export function TabHelpStrip({ tab, children }: TabHelpStripProps): React.ReactE
       <div ref={setStrip} className="bonsai-fold-strip" data-bonsai-help-strip={tab} hidden aria-live="polite">
         <span ref={setLabel} className="bonsai-fold-strip__label" />
         <span ref={setText} className="bonsai-fold-strip__text" />
+      </div>
+      {/* The same strip, never seen, for the scroll plan to measure the next row's text in. */}
+      <div ref={setMeasure} className="bonsai-fold-strip bonsai-fold-strip--measure" aria-hidden="true" hidden>
+        <span className="bonsai-fold-strip__label" />
+        <span className="bonsai-fold-strip__text" />
       </div>
     </div>
   );

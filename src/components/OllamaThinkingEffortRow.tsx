@@ -20,7 +20,6 @@
 import { Focusable, Button } from "@decky/ui";
 
 import {
-  ASK_THINK_EFFORT_DESCRIPTIONS,
   ASK_THINK_EFFORT_IDS,
   ASK_THINK_EFFORT_LABELS,
   type AskThinkEffortId,
@@ -38,15 +37,15 @@ export type OllamaThinkingEffortRowProps = {
 };
 
 /**
- * The four buttons, plus the description line above them that explains what
- * the currently selected one does.
+ * The four buttons under the row's name. The line that explains what the selected one does is not
+ * drawn here any more: the Ollama tab folds (plan 91 § 2b) and shows it in its help strip while the
+ * ring is on the row (OllamaTab.tsx puts it on the row's DenseRow), so it changes with the pick there.
  *
  * In: the effort level currently selected, a callback to run when a
  * different button is pressed, an optional host ref so a neighbouring row
  * can hand focus straight to the first button, and the Up/Down handlers that
  * let the D-pad leave this row for whatever sits above or below it.
- * Out: the "Thinking" label, its description text, and a horizontal row of
- * four buttons — one per effort level.
+ * Out: the "Thinking" label and a horizontal row of four buttons, one per effort level.
  *
  * What can go wrong: Up and Down only work when wired on the Focusable that
  * wraps the buttons, never on the buttons themselves — a Decky Button does
@@ -62,13 +61,7 @@ export function OllamaThinkingEffortRow({
 }: OllamaThinkingEffortRowProps) {
   return (
     <div ref={hostRef} style={{ width: "100%", minWidth: 0, maxWidth: "100%" }}>
-      <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13) }}>Thinking</div>
-      <div
-        className="bonsai-prose"
-        style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}
-      >
-        {ASK_THINK_EFFORT_DESCRIPTIONS[value]}
-      </div>
+      <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13), marginBottom: 6 }}>Thinking</div>
       {/* onMove* live on the Focusable, never on the Buttons — they do not fire on a
           Decky Button. The parent owns the graph; the buttons are leaves. */}
       <Focusable

@@ -56,6 +56,12 @@ export interface TabScrollPlanInput {
   padTop: number;
   padBottom: number;
   /**
+   * The bottom margin to keep `next` clear of, when it differs from `current`'s: a folded tab's help strip
+   * shows each row's own text, so the row after this one may bring a taller strip with it, and the look-ahead
+   * must count that or the next press needs more than a step (plan 91 § 4, T0).
+   */
+  nextPadBottom?: number;
+  /**
    * The page-turn step as a share of the pane, when a tab wants a shorter one than
    * TAB_SCROLL_STEP_FRACTION: a folded tab's rows sit a line apart, and its Deck check allows no more
    * than a third of the pane at one press (plan 91 § 4, T0; FOLDED_TAB_SCROLL_STEP_FRACTION).
@@ -104,7 +110,7 @@ export function planTabBodyScroll(input: TabScrollPlanInput): number {
   if (!next || !fits) return place;
 
   /* The next control along: if reaching it from here would take more than a step, take the excess now. */
-  const [nextLo, nextHi] = calmRange(next, input);
+  const [nextLo, nextHi] = calmRange(next, { ...input, padBottom: input.nextPadBottom ?? input.padBottom });
   const need = place < nextLo ? nextLo - place : place > nextHi ? nextHi - place : 0;
   if (Math.abs(need) <= step) return place;
   return Math.max(calmLo, Math.min(calmHi, place + need - Math.sign(need) * step));

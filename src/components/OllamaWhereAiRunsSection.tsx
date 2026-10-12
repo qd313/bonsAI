@@ -84,7 +84,6 @@ import {
   PanelSection,
   PanelSectionRow,
   TextField,
-  ToggleField,
   Button,
   Focusable,
 } from "@decky/ui";
@@ -125,6 +124,9 @@ import {
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
 import { textPx } from "../styles/sections/textPx";
+import { DenseSwitchRow } from "../features/folded-tabs/DenseRow";
+import { helpAttributes } from "../features/folded-tabs/useHelpStrip";
+import { OLLAMA_ROW_HELP } from "../features/folded-tabs/ollamaTabFolds";
 
 export type { OllamaWhereAiRunsSectionProps } from "./OllamaWhereAiRunsSection.types";
 
@@ -158,6 +160,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
   onOpenOllamaModelsHub,
+  onMoveUpFromFirst,
   onMoveDownFromConnectionRow,
   connectionTestBtnRef,
 }) => {
@@ -265,9 +268,10 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     return tryMoveUpWithPanelScroll(ollamaIpConnectionNavRef.current, focusAutostartToggle);
   }, [focusAutostartToggle, focusBrowseModelsBtn, focusCancelSetupBtn, ollamaLocalOnDeck]);
 
+  /* Folded (plan 91): Up from the first switch goes to the section's own line, which the tab hands in. */
   const handleMoveUpFromLocalToggle = useCallback((): boolean => {
-    return tryMoveUpWithPanelScroll(ollamaLocalToggleNavRef.current);
-  }, []);
+    return onMoveUpFromFirst?.() || tryMoveUpWithPanelScroll(ollamaLocalToggleNavRef.current);
+  }, [onMoveUpFromFirst]);
 
   const handleMoveDownFromLocalToggle = useCallback((): boolean => {
     return focusAutostartToggle();
@@ -416,34 +420,24 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   });
 
   return (
-      <PanelSection title="Where AI runs">
+      <PanelSection>
+        {/* Folded (plan 91 § 2b): one line per switch; each one's longer text shows in the tab's help strip. */}
         <PanelSectionRow>
           <div
             ref={ollamaLocalToggleNavRef}
             className="bonsai-settings-bleed"
             style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}
           >
-            <ToggleField
+            <DenseSwitchRow
               label="Run AI on this Deck"
+              help={OLLAMA_ROW_HELP.runOnDeck}
               checked={ollamaLocalOnDeck}
               onChange={(c) => setOllamaLocalOnDeck(c)}
-              {...({
+              nav={{
                 onMoveUp: () => handleMoveUpFromLocalToggle(),
                 onMoveDown: () => handleMoveDownFromLocalToggle(),
-              } as unknown as Record<string, unknown>)}
-            />
-            <div
-              className="bonsai-prose"
-              style={{
-                fontSize: textPx(10),
-                color: "#9fb7d5",
-                lineHeight: 1.35,
-                marginTop: 4,
-                userSelect: "none",
               }}
-            >
-              Off: use a PC on your home network. On: AI runs on this device.
-            </div>
+            />
           </div>
         </PanelSectionRow>
         <PanelSectionRow>
@@ -452,30 +446,17 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
             className="bonsai-settings-bleed"
             style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}
           >
-            <ToggleField
+            <DenseSwitchRow
               label="Start the AI with the Deck"
+              help={OLLAMA_ROW_HELP.autostart}
               checked={ollamaLocalAutostart}
               disabled={autostartBusy}
               onChange={(c) => handleToggleAutostart(c)}
-              {...({
+              nav={{
                 onMoveUp: () => handleMoveUpFromAutostartToggle(),
                 onMoveDown: () => handleMoveDownFromAutostartToggle(),
-              } as unknown as Record<string, unknown>)}
-            />
-            <div
-              className="bonsai-prose"
-              style={{
-                fontSize: textPx(10),
-                color: "#9fb7d5",
-                lineHeight: 1.35,
-                marginTop: 4,
-                userSelect: "none",
               }}
             >
-              Starts the local AI when the Deck starts, and lets it keep the answering part and
-              the note-searching part in memory at once — so questions come back about seven
-              tenths of a second sooner.
-            </div>
             {autostartStatus?.reason ? (
               <div
                 className="bonsai-prose"
@@ -493,6 +474,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                 Set up and answering questions.
               </div>
             ) : null}
+            </DenseSwitchRow>
           </div>
         </PanelSectionRow>
         {ollamaLocalOnDeck ? (
@@ -520,7 +502,14 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                   </span>
                 ) : null}
               </div>
-              <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}>
+              <Focusable
+                flow-children="horizontal"
+                style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}
+                {...helpAttributes(
+                  ollamaEngineReady ? "Update AI & models" : "Install Ollama",
+                  localSetupBusy ? OLLAMA_ROW_HELP.setupBusy : ollamaEngineReady ? undefined : OLLAMA_ROW_HELP.setupFirstTime,
+                )}
+              >
                 <Button
                   ref={(el) => {
                     installUpdateBtnRef.current = el as HTMLButtonElement | null;
@@ -570,21 +559,6 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                       : "Install Ollama"}
                 </Button>
               </Focusable>
-              {!ollamaEngineReady || localSetupBusy ? (
-                <div
-                  className="bonsai-prose"
-                  style={{
-                    fontSize: textPx(10),
-                    color: "#9fb7d5",
-                    lineHeight: 1.4,
-                    userSelect: "none",
-                  }}
-                >
-                  {localSetupBusy
-                    ? "Install in progress — first-time setup can take up to 5 minutes. Keep Wi‑Fi on and avoid sleep or reboot until it finishes."
-                    : "First-time Install Ollama can take up to 5 minutes (download and setup). Use stable Wi‑Fi and AC power where possible."}
-                </div>
-              ) : null}
               <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}>
                 <Button
                   className={FOCUS_RING_BTN_CLASS}
@@ -760,14 +734,14 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                   onMoveDown: onMoveDownFromConnectionRow,
                 } as unknown as Record<string, unknown>)}
                 style={{
-                  flex: ollamaLocalOnDeck ? "1 1 100%" : "0 0 auto",
+                  /* Folded (plan 91): beside the address on this Deck too, not on a line of its own. */
+                  flex: "0 0 auto",
                   alignSelf: "flex-end",
                   marginBottom: 2,
                   minHeight: 38,
                   minWidth: ollamaLocalOnDeck ? 0 : 68,
-                  width: ollamaLocalOnDeck ? "100%" : undefined,
                   height: 38,
-                  maxWidth: ollamaLocalOnDeck ? "100%" : 68,
+                  maxWidth: ollamaLocalOnDeck ? undefined : 68,
                   padding: "0 8px",
                   fontSize: textPx(11),
                   fontWeight: 600,

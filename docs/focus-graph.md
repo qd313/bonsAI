@@ -942,6 +942,20 @@ tab bar
   `focus()`. Into and out of a section's rows the tab uses its own row hops (`focusInTabBody`), inside the one tab
   body, as before. A section's last control hands Down to the next line (`foldLineBelow`); its first control hands
   Up to its own line.
+- **One column holds them all.** Every line, every control of an open section and the next section's line are
+  children of one `Focusable` with `flow-children="vertical"` (`FoldedColumn`), in order. Steam moves the ring
+  between a container's children only along its flow (the About tab's link buttons, 2026-10-12, were dead going
+  Down in a container with none), so a press no handler claims still goes to the next thing below: on the Ollama
+  tab, Down from Test connection, from Update or Browse models, from the knowledge base's Download button (Decky's
+  Button keeps no move handler) and from Custom timeouts. `foldedTabWalk.tsx` models exactly that rule; with the
+  column's flow taken away the Ollama walk stops at Test connection.
+- **The Ollama tab's chain** (`useOllamaTabFocus.ts`, `chain`): Where AI runs enters at Run AI on this Deck and
+  leaves Up from Test connection (or Steam's own move while it is disabled); Knowledge base at its switch and its
+  Cancel, Download or Remove; Reply style at the slider's knob and the Thinking row; Connection tuning at Custom
+  timeouts and the Keep models loaded knob; AI models at its button, whose Down holds still (the floating button
+  sits below it). Run AI on this Deck, the knowledge base switch, the Reply style knob, Custom timeouts and the AI
+  models button hand Up to their own line; Thinking and Keep models loaded hand Down to the next line by hand,
+  and Test connection and the knowledge base's buttons get there by the column's flow.
 - **Right from any line** puts the ring on the floating button. **On the button:** A opens every section (it then
   reads "⊟ Close all") or closes them all, and the ring stays on the button; Up, Down, Left and B put the ring back
   on the line it came from; Right holds still. The line it came from is the section the ring last landed in, kept

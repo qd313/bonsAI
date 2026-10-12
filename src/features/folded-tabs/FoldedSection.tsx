@@ -35,6 +35,23 @@ import { registerNavFocus, takeNavFocus, unregisterNavFocus, type NavRefHolder }
 import { foldedTabsVersion, isSectionOpen, rememberFoldSection, subscribeFoldedTabs, toggleSection } from "./foldedTabsStore";
 import { FOLD_SECTION_ATTR } from "./useHelpStrip";
 
+/**
+ * The column a folded tab's sections sit in: one Steam container that walks its children top to bottom.
+ * Steam moves the ring between a container's own children only along that container's flow (a column
+ * or a row); a container with no flow set does not hand a press on to the next child (the About tab's
+ * link buttons, 2026-10-12 on the Deck). Every line, every control of an open section and the next
+ * section's line are children of this column, in order, so a press nobody claims (Down from Test
+ * connection or from the knowledge base's Download button, whose own handlers Decky's Button never
+ * forwards) still goes to the next thing below. A tab wraps all its FoldedSections in one of these.
+ */
+export function FoldedColumn({ children }: { children?: React.ReactNode }): React.ReactElement {
+  return (
+    <Focusable className="bonsai-fold-column" flow-children="vertical">
+      {children}
+    </Focusable>
+  );
+}
+
 /** One section of a folded tab, as the D-pad chain needs it. */
 export interface FoldChainSection {
   id: string;
@@ -84,6 +101,10 @@ export type FoldedSectionProps = {
   children?: React.ReactNode;
 };
 
+/**
+ * One section: its line (a stop with the moves written above, A to open or close) and, while it is open,
+ * its rows. The open state comes from foldedTabsStore, so it outlives a rebuilt tab.
+ */
 export function FoldedSection({ tab, chain, id, title, summary, children }: FoldedSectionProps): React.ReactElement {
   useSyncExternalStore(subscribeFoldedTabs, foldedTabsVersion);
   const ids = chainIds(chain);
@@ -116,7 +137,8 @@ export function FoldedSection({ tab, chain, id, title, summary, children }: Fold
         data-open={open ? "true" : "false"}
         role="button"
         aria-expanded={open}
-        aria-label={summary ? `${title}: ${summary}` : title}
+        /* "<name> section", so the line never shares its name with a control inside it (AI models). */
+        aria-label={summary ? `${title} section: ${summary}` : `${title} section`}
         /* A, or a tap: onOKButton for A and onClick for a finger, never onActivate as well (Steam fires it for A too). */
         onOKButton={toggle}
         onClick={toggle}

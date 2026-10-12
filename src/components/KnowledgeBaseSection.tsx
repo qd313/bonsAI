@@ -70,7 +70,7 @@
  */
 import { isHttpsOllamaAddress } from "../utils/ollamaAddress";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Button, ConfirmModal, Focusable, PanelSection, PanelSectionRow, ToggleField, showModal } from "@decky/ui";
+import { Button, ConfirmModal, Focusable, PanelSection, PanelSectionRow, showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { tryMoveUpWithPanelScroll } from "../utils/settingsPanelScroll";
@@ -96,6 +96,8 @@ import {
 } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
 import { textPx } from "../styles/sections/textPx";
+import { DenseSwitchRow } from "../features/folded-tabs/DenseRow";
+import { OLLAMA_ROW_HELP } from "../features/folded-tabs/ollamaTabFolds";
 
 type RagCorpusStatus = {
   phase?: string;
@@ -156,6 +158,7 @@ type Props = {
    * disabled then, so a ref to either one focuses nothing.
    */
   cancelBtnRef?: React.RefObject<HTMLButtonElement | null>;
+  /** Up from the switch: in the folded Ollama tab, the section's own line (plan 91). */
   onMoveUpToConnection?: () => boolean;
   onMoveDownFromRemove?: () => boolean;
 };
@@ -340,7 +343,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   );
 
   const handleMoveUpFromToggle = useCallback((): boolean => {
-    return tryMoveUpWithPanelScroll(toggleHost.current, () => onMoveUpToConnection?.() ?? false);
+    return onMoveUpToConnection?.() || tryMoveUpWithPanelScroll(toggleHost.current);
   }, [onMoveUpToConnection, toggleHost]);
 
   const refreshStatus = useCallback(async () => {
@@ -788,15 +791,17 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   const errorText = wasCancelled ? "" : (status?.error ?? "").trim();
 
   return (
-    <PanelSection title="Knowledge base (offline)">
+    <PanelSection>
+      {/* Folded (plan 91 § 2b): the switch is one line; its longer text shows in the tab's help strip. */}
       <PanelSectionRow>
-        <div ref={toggleHost} className="bonsai-settings-bleed" style={{ width: "100%" }}>
-          <ToggleField
+        <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
+          <DenseSwitchRow
             label="Use local knowledge base"
-            description="Ground Strategy and troubleshooting Asks with downloaded offline cards (keyword or Keyword + meaning search)."
+            help={OLLAMA_ROW_HELP.useKnowledgeBase}
+            hostRef={toggleHost}
             checked={useLocalKnowledgeBase}
             onChange={(checked) => setUseLocalKnowledgeBase(checked)}
-            {...deckNav({
+            nav={deckNav({
               onMoveUp: () => handleMoveUpFromToggle(),
               onMoveDown: () => focusBelowToggle(showNomicPullBtn),
             })}

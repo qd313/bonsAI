@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 886,
-  "edgeCount": 2792,
+  "fileCount": 889,
+  "edgeCount": 2828,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -506,6 +506,8 @@
         "src/components/icons.tsx",
         "src/features/downloads/downloadNotice.tsx",
         "src/features/downloads/downloadSites.ts",
+        "src/features/folded-tabs/DenseRow.tsx",
+        "src/features/folded-tabs/ollamaTabFolds.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/plugin-shell/useTabBodyFocusScroll.ts",
         "src/hooks/useHandRingOnGone.ts",
@@ -1501,13 +1503,31 @@
     "src/components/OllamaTab.focusRing.test.tsx": {
       "imports": [
         "src/components/OllamaTab.tsx",
+        "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/features/folded-tabs/ollamaTabFolds.ts",
         "src/styles/bonsaiScopeStylesheet.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/OllamaTab.foldedWalk.test.tsx": {
+      "imports": [
+        "src/components/OllamaTab.tsx",
+        "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/features/folded-tabs/ollamaTabFolds.ts",
+        "src/styles/sections/foldedTabs.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/foldedTabWalk.tsx",
+        "src/test-harness/steamRing.tsx",
+        "src/test-harness/tabBodyWalk.tsx",
+        "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": []
     },
     "src/components/OllamaTab.modalReturnFocus.test.tsx": {
       "imports": [
         "src/components/OllamaTab.tsx",
+        "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/features/folded-tabs/ollamaTabFolds.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts"
       ],
       "importedBy": []
@@ -1515,6 +1535,8 @@
     "src/components/OllamaTab.terseMode.test.tsx": {
       "imports": [
         "src/components/OllamaTab.tsx",
+        "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/features/folded-tabs/ollamaTabFolds.ts",
         "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
@@ -1533,6 +1555,11 @@
         "src/data/bonsaiSettingsSchema.ts",
         "src/data/modelPolicy.ts",
         "src/data/replyVerbosity.ts",
+        "src/features/folded-tabs/DenseRow.tsx",
+        "src/features/folded-tabs/FoldAllButton.tsx",
+        "src/features/folded-tabs/FoldedSection.tsx",
+        "src/features/folded-tabs/TabHelpStrip.tsx",
+        "src/features/folded-tabs/ollamaTabFolds.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/hooks/useThinkingNoticeGate.tsx",
         "src/styles/sections/textPx.ts",
@@ -1540,6 +1567,7 @@
       ],
       "importedBy": [
         "src/components/OllamaTab.focusRing.test.tsx",
+        "src/components/OllamaTab.foldedWalk.test.tsx",
         "src/components/OllamaTab.modalReturnFocus.test.tsx",
         "src/components/OllamaTab.terseMode.test.tsx",
         "src/features/plugin-shell/tabs/useOllamaTabPayload.tsx"
@@ -1656,6 +1684,9 @@
         "src/components/OllamaWhereAiRunsSection.constants.tsx",
         "src/components/OllamaWhereAiRunsSection.types.ts",
         "src/data/bonsaiSettingsSchema.ts",
+        "src/features/folded-tabs/DenseRow.tsx",
+        "src/features/folded-tabs/ollamaTabFolds.ts",
+        "src/features/folded-tabs/useHelpStrip.ts",
         "src/features/plugin-shell/developerTabSignal.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/plugin-shell/useTabBodyFocusScroll.ts",
@@ -2574,6 +2605,7 @@
     },
     "src/components/useOllamaTabFocus.ts": {
       "imports": [
+        "src/features/folded-tabs/FoldedSection.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/plugin-shell/useTabBodyFocusScroll.ts"
       ],
@@ -2636,6 +2668,7 @@
         "src/data/askThinkEffort.test.ts",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
+        "src/features/folded-tabs/ollamaTabFolds.ts",
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/hooks/useThinkingNoticeGate.tsx"
       ]
@@ -2709,6 +2742,7 @@
         "src/data/chatTextSize.ts",
         "src/features/downloads/downloadNotice.test.tsx",
         "src/features/downloads/downloadNotice.tsx",
+        "src/features/folded-tabs/ollamaTabFolds.ts",
         "src/features/model-routing/useTryOrderPlaces.test.tsx",
         "src/features/model-routing/useTryOrderPlaces.ts",
         "src/features/plugin-shell/pluginStorage.ts",
@@ -2904,7 +2938,8 @@
       "importedBy": [
         "src/components/SettingsTabOllamaKeepAliveSlider.tsx",
         "src/data/bonsaiSettingsNormalizers.ts",
-        "src/data/bonsaiSettingsSchema.ts"
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/features/folded-tabs/ollamaTabFolds.ts"
       ]
     },
     "src/data/pluginQuickStartInstructions.tsx": {
@@ -3066,7 +3101,8 @@
         "src/components/OllamaReplyVerbositySlider.tsx",
         "src/components/OllamaTab.tsx",
         "src/data/bonsaiSettingsNormalizers.ts",
-        "src/data/bonsaiSettingsSchema.ts"
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/features/folded-tabs/ollamaTabFolds.ts"
       ]
     },
     "src/data/settingsDatabase.ts": {
@@ -4103,6 +4139,9 @@
         "src/features/folded-tabs/useHelpStrip.ts"
       ],
       "importedBy": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/components/OllamaTab.tsx",
+        "src/components/OllamaWhereAiRunsSection.tsx",
         "src/features/folded-tabs/DenseRow.test.tsx"
       ]
     },
@@ -4127,6 +4166,7 @@
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/components/OllamaTab.tsx",
         "src/features/folded-tabs/FoldAllButton.test.tsx"
       ]
     },
@@ -4147,6 +4187,8 @@
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/components/OllamaTab.tsx",
+        "src/components/useOllamaTabFocus.ts",
         "src/features/folded-tabs/FoldAllButton.test.tsx",
         "src/features/folded-tabs/FoldAllButton.tsx",
         "src/features/folded-tabs/FoldedSection.test.tsx"
@@ -4169,6 +4211,7 @@
         "src/utils/chatPanelScroll.ts"
       ],
       "importedBy": [
+        "src/components/OllamaTab.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx"
       ]
     },
@@ -4181,6 +4224,10 @@
     "src/features/folded-tabs/foldedTabsStore.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/OllamaTab.focusRing.test.tsx",
+        "src/components/OllamaTab.foldedWalk.test.tsx",
+        "src/components/OllamaTab.modalReturnFocus.test.tsx",
+        "src/components/OllamaTab.terseMode.test.tsx",
         "src/features/folded-tabs/FoldAllButton.test.tsx",
         "src/features/folded-tabs/FoldAllButton.tsx",
         "src/features/folded-tabs/FoldedSection.test.tsx",
@@ -4188,6 +4235,24 @@
         "src/features/folded-tabs/TabHelpStrip.test.tsx",
         "src/features/folded-tabs/foldedTabsStore.test.ts",
         "src/features/folded-tabs/useHelpStrip.ts"
+      ]
+    },
+    "src/features/folded-tabs/ollamaTabFolds.ts": {
+      "imports": [
+        "src/data/askThinkEffort.ts",
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/data/ollamaKeepAlive.ts",
+        "src/data/replyVerbosity.ts",
+        "src/features/folded-tabs/sectionSummary.ts"
+      ],
+      "importedBy": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/components/OllamaTab.focusRing.test.tsx",
+        "src/components/OllamaTab.foldedWalk.test.tsx",
+        "src/components/OllamaTab.modalReturnFocus.test.tsx",
+        "src/components/OllamaTab.terseMode.test.tsx",
+        "src/components/OllamaTab.tsx",
+        "src/components/OllamaWhereAiRunsSection.tsx"
       ]
     },
     "src/features/folded-tabs/sectionSummary.test.ts": {
@@ -4199,6 +4264,7 @@
     "src/features/folded-tabs/sectionSummary.ts": {
       "imports": [],
       "importedBy": [
+        "src/features/folded-tabs/ollamaTabFolds.ts",
         "src/features/folded-tabs/sectionSummary.test.ts"
       ]
     },
@@ -4209,6 +4275,7 @@
         "src/utils/tabBodyScrollPlan.ts"
       ],
       "importedBy": [
+        "src/components/OllamaWhereAiRunsSection.tsx",
         "src/features/folded-tabs/DenseRow.tsx",
         "src/features/folded-tabs/FoldedSection.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx",
@@ -4271,6 +4338,7 @@
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
         "src/features/search-tab/SearchTab.walk.test.tsx",
         "src/index.tsx",
+        "src/test-harness/foldedTabWalk.tsx",
         "src/test-harness/tabBodyWalk.tsx"
       ]
     },
@@ -4497,7 +4565,8 @@
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/tabTitles.test.tsx",
         "src/index.test.tsx",
-        "src/index.tsx"
+        "src/index.tsx",
+        "src/test-harness/foldedTabWalk.tsx"
       ]
     },
     "src/features/plugin-shell/tabs/useAboutTabPayload.tsx": {
@@ -7084,6 +7153,7 @@
         "src/styles/sections/textPx.ts"
       ],
       "importedBy": [
+        "src/components/OllamaTab.foldedWalk.test.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx",
         "src/styles/bonsaiScopeStylesheet.ts"
       ]
@@ -7659,6 +7729,7 @@
         "src/components/OllamaModelsHubModal.renderLoop.test.tsx",
         "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
+        "src/components/OllamaTab.foldedWalk.test.tsx",
         "src/components/OllamaTab.terseMode.test.tsx",
         "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
@@ -7736,6 +7807,18 @@
         "src/utils/revealOpenedDetails.test.tsx"
       ]
     },
+    "src/test-harness/foldedTabWalk.tsx": {
+      "imports": [
+        "src/features/plugin-shell/TabBodyFocusRoot.tsx",
+        "src/features/plugin-shell/tabTitles.tsx",
+        "src/test-harness/steamRing.tsx",
+        "src/test-harness/tabBodyWalk.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": [
+        "src/components/OllamaTab.foldedWalk.test.tsx"
+      ]
+    },
     "src/test-harness/pullModelsListLayout.ts": {
       "imports": [],
       "importedBy": [
@@ -7798,6 +7881,7 @@
     "src/test-harness/steamRing.tsx": {
       "imports": [],
       "importedBy": [
+        "src/components/OllamaTab.foldedWalk.test.tsx",
         "src/components/PullModelsFiltersColumn.test.tsx",
         "src/components/SettingsTab.textSizeWalk.test.tsx",
         "src/components/SettingsTabScreenshotHeading.test.tsx",
@@ -7813,7 +7897,8 @@
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
         "src/features/search-tab/SearchTab.test.tsx",
         "src/features/search-tab/SearchTab.walk.test.tsx",
-        "src/features/search-tab/searchTabTestKit.tsx"
+        "src/features/search-tab/searchTabTestKit.tsx",
+        "src/test-harness/foldedTabWalk.tsx"
       ]
     },
     "src/test-harness/tabBodyDeckGeometry.ts": {
@@ -7831,9 +7916,11 @@
         "src/test-harness/tabBodyDeckGeometry.ts"
       ],
       "importedBy": [
+        "src/components/OllamaTab.foldedWalk.test.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.heading.test.tsx",
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
-        "src/features/search-tab/SearchTab.walk.test.tsx"
+        "src/features/search-tab/SearchTab.walk.test.tsx",
+        "src/test-harness/foldedTabWalk.tsx"
       ]
     },
     "src/types.d.ts": {
@@ -9539,6 +9626,7 @@
         "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/OllamaModelsHubModal.tsx",
+        "src/components/OllamaTab.foldedWalk.test.tsx",
         "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx",
         "src/components/PermissionsTab.tsx",
         "src/components/PullModelsFiltersColumn.tsx",
@@ -9593,6 +9681,7 @@
         "src/hooks/useMainTabAskBarFocus.ts",
         "src/hooks/usePermHintNavTargets.ts",
         "src/index.tsx",
+        "src/test-harness/foldedTabWalk.tsx",
         "src/utils/answerBubbleNavigation.ringOnBubble.test.ts",
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/buildDetailsPanelElement.tsx",

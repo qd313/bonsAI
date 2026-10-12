@@ -97,6 +97,7 @@
     "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
     "src/components/OllamaModelsHubModal.test.tsx",
     "src/components/OllamaTab.focusRing.test.tsx",
+    "src/components/OllamaTab.foldedWalk.test.tsx",
     "src/components/OllamaTab.modalReturnFocus.test.tsx",
     "src/components/OllamaTab.terseMode.test.tsx",
     "src/components/OllamaThinkingEffortRow.test.tsx",

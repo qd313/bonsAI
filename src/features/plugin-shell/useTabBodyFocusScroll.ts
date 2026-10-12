@@ -129,7 +129,7 @@ function scrollPlaceFor(
   target: HTMLElement,
   lastTop: number | null,
   coveredBelow: number,
-  stepFraction: number | undefined,
+  watch: LandingWatch | undefined,
 ): { scrollTop: number; top: number } | null {
   const pane = findTabContentsScroll(root);
   if (!pane || pane === target) return null;
@@ -140,7 +140,8 @@ function scrollPlaceFor(
   const style = getComputedStyle(pane);
   const padTop = px(style.scrollPaddingTop, STEAM_PAD_TOP_PX) + EDGE_SLACK_PX;
   /* Anything drawn over the pane's bottom (a folded tab's help strip) widens the margin by its height. */
-  const padBottom = px(style.scrollPaddingBottom, STEAM_PAD_BOTTOM_PX) + EDGE_SLACK_PX + coveredBelow;
+  const steamPadBottom = px(style.scrollPaddingBottom, STEAM_PAD_BOTTOM_PX) + EDGE_SLACK_PX;
+  const padBottom = steamPadBottom + coveredBelow;
 
   const stops = stopsUnder(root);
   /*
@@ -154,23 +155,26 @@ function scrollPlaceFor(
   const here = inside[0] ?? stops.find((s) => s === target || s.contains(target)) ?? target;
   const current = stopBox(here, root, pane, stops);
   /* A control beside this one on the same line is neither above nor below it. */
-  const others = stops.filter((s) => s !== here).map((s) => stopBox(s, root, pane, stops));
-  const above = others.filter((b) => b.top < current.top - 1).sort((a, b) => b.top - a.top);
-  const below = others.filter((b) => b.top > current.top + 1).sort((a, b) => a.top - b.top);
+  const others = stops.filter((s) => s !== here).map((el) => ({ el, box: stopBox(el, root, pane, stops) }));
+  const above = others.filter((o) => o.box.top < current.top - 1).sort((a, b) => b.box.top - a.box.top);
+  const below = others.filter((o) => o.box.top > current.top + 1).sort((a, b) => a.box.top - b.box.top);
   const way = lastTop === null || current.top > lastTop + 1 ? below : current.top < lastTop - 1 ? above : [];
+  const next = way[0];
 
   return {
     top: current.top,
     scrollTop: planTabBodyScroll({
       current,
-      next: way[0],
+      next: next?.box,
       atStart: above.length === 0,
       scrollTop: pane.scrollTop,
       viewport,
       maxScroll,
       padTop,
       padBottom,
-      stepFraction,
+      /* The strip the next control would bring, when the tab draws one (the folded tabs' help strip). */
+      nextPadBottom: next && watch?.coverOf ? steamPadBottom + Math.max(0, watch.coverOf(next.el)) : undefined,
+      stepFraction: watch?.stepFraction,
     }),
   };
 }
@@ -185,6 +189,8 @@ interface LandingWatch {
   watcher: TabBodyLandingWatcher;
   /** The page-turn step this tab wants (tabBodyScrollPlan's `stepFraction`), when not the default. */
   stepFraction?: number;
+  /** What the watcher would cover if the ring landed on `el` (the look-ahead's margin for the next control). */
+  coverOf?: (el: HTMLElement) => number;
 }
 
 const landingWatchers = new Map<string, LandingWatch>();
@@ -193,9 +199,9 @@ const landingWatchers = new Map<string, LandingWatch>();
 export function watchTabBodyLandings(
   tabId: string,
   watcher: TabBodyLandingWatcher,
-  opts?: { stepFraction?: number },
+  opts?: { stepFraction?: number; coverOf?: (el: HTMLElement) => number },
 ): () => void {
-  const entry: LandingWatch = { watcher, stepFraction: opts?.stepFraction };
+  const entry: LandingWatch = { watcher, stepFraction: opts?.stepFraction, coverOf: opts?.coverOf };
   landingWatchers.set(tabId, entry);
   return () => {
     if (landingWatchers.get(tabId) === entry) landingWatchers.delete(tabId);
@@ -221,7 +227,7 @@ function placeFor(body: BodyState, target: HTMLElement): boolean {
   const watch = body.tabId === null ? undefined : landingWatchers.get(body.tabId);
   const covered = Math.max(0, watch?.watcher(target) ?? 0);
   if (performance.now() - body.lastPointerAt < POINTER_QUIET_MS) return false;
-  const place = scrollPlaceFor(body.root, target, body.lastTop, covered, watch?.stepFraction);
+  const place = scrollPlaceFor(body.root, target, body.lastTop, covered, watch);
   if (!place) return false;
   body.lastTop = place.top;
   const pane = findTabContentsScroll(body.root);

@@ -1,7 +1,7 @@
 /**
  * Title: Ollama settings tab
  *
- * Purpose: The whole Ollama tab in Settings — where the AI's address lives,
+ * Purpose: The whole Ollama tab — where the AI's address lives,
  * how it decides which model to use, and everything about how it replies.
  * Top to bottom it holds: Where AI runs (its own section,
  * OllamaWhereAiRunsSection), the local knowledge base toggle, Reply style
@@ -11,6 +11,13 @@
  * (one button into the AI models box, which holds browsing, the licence
  * filter and the try order). This file also owns handing the D-pad between
  * every one of those pieces, since each is its own separate file.
+ *
+ * Folded (plan 91 § 2b, plan 92 T0): each of the five sections is one line (FoldedSection) showing a
+ * summary of its values; A opens or closes it, several can be open at once, the first is open on a
+ * first visit. Inside, one line per setting; a row's longer text shows in the help strip at the bottom
+ * of the panel while the ring is on it; the floating Open all button opens or closes every section. The
+ * hand-wired hops between sections now go to the section lines: a section's last control hands Down to
+ * the next line (foldLineBelow), its first control hands Up to its own line (takeFoldLine).
  *
  * Used for: The Ollama tab in index.tsx.
  *
@@ -29,7 +36,7 @@
  * plugin, and can find the wrong element entirely.
  */
 import React from "react";
-import { Button, PanelSection, PanelSectionRow, ToggleField } from "@decky/ui";
+import { Button, Focusable, PanelSection, PanelSectionRow } from "@decky/ui";
 import { DEFAULT_LATENCY_WARNING_SECONDS, DEFAULT_REQUEST_TIMEOUT_SECONDS, type OllamaKeepAliveDuration } from "../data/bonsaiSettingsSchema";
 import { MODEL_POLICY_TIER_LABELS_PLAIN, type ModelPolicyTierId } from "../data/modelPolicy";
 import type { DeveloperConnectionStatus } from "./DeveloperTab";
@@ -39,7 +46,7 @@ import { SettingsTabConnectionTimeoutSlider } from "./SettingsTabConnectionTimeo
 import { SettingsTabOllamaKeepAliveSlider } from "./SettingsTabOllamaKeepAliveSlider";
 import { OllamaReplyVerbositySlider } from "./OllamaReplyVerbositySlider";
 import type { ReplyVerbosityId } from "../data/replyVerbosity";
-import type { AskThinkEffortId } from "../data/askThinkEffort";
+import { ASK_THINK_EFFORT_DESCRIPTIONS, type AskThinkEffortId } from "../data/askThinkEffort";
 import { OllamaThinkingEffortRow } from "./OllamaThinkingEffortRow";
 import type { NamedOllamaHost } from "../data/bonsaiSettingsSchema";
 import { FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN } from "../styles/settingsGlassButton";
@@ -50,6 +57,17 @@ import {
 import { useOllamaTabFocus } from "./useOllamaTabFocus";
 import { useThinkingNoticeGate } from "../hooks/useThinkingNoticeGate";
 import { textPx } from "../styles/sections/textPx";
+import { chainIds, FoldedColumn, FoldedSection, foldLineBelow, takeFoldLine } from "../features/folded-tabs/FoldedSection";
+import { FoldAllButton } from "../features/folded-tabs/FoldAllButton";
+import { TabHelpStrip } from "../features/folded-tabs/TabHelpStrip";
+import { DenseRow, DenseSwitchRow } from "../features/folded-tabs/DenseRow";
+import {
+  OLLAMA_FOLD_TAB,
+  OLLAMA_ROW_HELP,
+  OLLAMA_SECTIONS,
+  ollamaSectionSummaries,
+  type OllamaSectionId,
+} from "../features/folded-tabs/ollamaTabFolds";
 
 export type OllamaTabProps = {
   ollamaIp: string;
@@ -177,15 +195,17 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
     connectionTestBtnRef,
     replyVerbosityThumbHostRef,
     terseToggleHostRef,
+    whereBodyRef,
+    customTimeoutsHostRef,
+    modelsBtnRef,
     setThinkingEffortHost,
     focusOllamaKeepAliveThumb,
     focusLatencyWarningThumb,
-    focusKbToggle,
     focusReplyVerbosityThumb,
     focusThinkingEffortRow,
     focusTerseToggle,
-    focusKbUpFromReplyVerbosity,
-    focusConnectionTestBtn,
+    focusCustomTimeoutsToggle,
+    chain,
   } = useOllamaTabFocus();
 
   const { requestThinkingEffortChange } = useThinkingNoticeGate(askThinkEffort, setAskThinkEffort, {
@@ -193,191 +213,233 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
     onCompleteDeckyModalClose,
   });
 
+  const summaries = ollamaSectionSummaries({
+    ollamaLocalOnDeck,
+    ollamaLocalAutostart,
+    useLocalKnowledgeBase,
+    replyVerbosity,
+    terseMode,
+    askThinkEffort,
+    latencyTimeoutsCustomEnabled,
+    ollamaKeepAlive,
+  });
+  const fold = (id: OllamaSectionId, children: React.ReactNode) => (
+    <FoldedSection
+      tab={OLLAMA_FOLD_TAB}
+      chain={chain}
+      id={id}
+      title={OLLAMA_SECTIONS.find((x) => x.id === id)?.title ?? id}
+      summary={summaries[id]}
+    >
+      {children}
+    </FoldedSection>
+  );
+
   return (
     <div
-      className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight bonsai-settings-section-stack"
+      className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight bonsai-settings-section-stack bonsai-folded-tab"
       data-bonsai-tab-panel="ollama"
     >
-      <OllamaWhereAiRunsSection
-        ollamaIp={ollamaIp}
-        onOllamaIpChange={onOllamaIpChange}
-        onPersistOllamaIp={onPersistOllamaIp}
-        ollamaLocalOnDeck={ollamaLocalOnDeck}
-        setOllamaLocalOnDeck={setOllamaLocalOnDeck}
-        ollamaLocalAutostart={ollamaLocalAutostart}
-        setOllamaLocalAutostart={setOllamaLocalAutostart}
-        onLastConnectionStatus={onLastConnectionStatus}
-        namedOllamaHosts={namedOllamaHosts}
-        setNamedOllamaHosts={setNamedOllamaHosts}
-        onBeforeDeckyModal={onBeforeDeckyModal}
-        onCompleteDeckyModalClose={onCompleteDeckyModalClose}
-        onOpenOllamaModelsHub={onOpenOllamaModelsHub}
-        onApplyTier2MultimodalPolicy={onApplyTier2MultimodalPolicy}
-        onMoveDownFromConnectionRow={focusKbToggle}
-        connectionTestBtnRef={connectionTestBtnRef}
-      />
-
-      <KnowledgeBaseSection
-        useLocalKnowledgeBase={useLocalKnowledgeBase}
-        setUseLocalKnowledgeBase={setUseLocalKnowledgeBase}
-        ragCorpusVersion={ragCorpusVersion}
-        ollamaIp={effectiveOllamaPcIp}
-        ollamaLocalOnDeck={ollamaLocalOnDeck}
-        onBeforeDeckyModal={onBeforeDeckyModal}
-        onCompleteDeckyModalClose={onCompleteDeckyModalClose}
-        toggleHostRef={kbToggleHostRef}
-        downloadBtnRef={kbDownloadBtnRef}
-        removeBtnRef={kbRemoveBtnRef}
-        cancelBtnRef={kbCancelBtnRef}
-        onMoveUpToConnection={focusConnectionTestBtn}
-        onMoveDownFromRemove={focusReplyVerbosityThumb}
-      />
-
-      <PanelSection title="Reply style">
-        <PanelSectionRow>
-          <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: textPx(11), color: "#9fb7d5", lineHeight: 1.4, marginBottom: 8 }}>
-            Bullet-first vs paragraph depth. Ask mode and model routing unchanged.
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div
-            className="bonsai-prose-host bonsai-settings-bleed"
-            style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}
-          >
-            <OllamaReplyVerbositySlider
-              value={replyVerbosity}
-              onChange={setReplyVerbosity}
-              thumbHostRef={replyVerbosityThumbHostRef}
-              onMoveUp={focusKbUpFromReplyVerbosity}
-              onMoveDown={focusTerseToggle}
+      <FoldedColumn>
+        {fold(
+          "where",
+          <div ref={whereBodyRef}>
+            <OllamaWhereAiRunsSection
+              ollamaIp={ollamaIp}
+              onOllamaIpChange={onOllamaIpChange}
+              onPersistOllamaIp={onPersistOllamaIp}
+              ollamaLocalOnDeck={ollamaLocalOnDeck}
+              setOllamaLocalOnDeck={setOllamaLocalOnDeck}
+              ollamaLocalAutostart={ollamaLocalAutostart}
+              setOllamaLocalAutostart={setOllamaLocalAutostart}
+              onLastConnectionStatus={onLastConnectionStatus}
+              namedOllamaHosts={namedOllamaHosts}
+              setNamedOllamaHosts={setNamedOllamaHosts}
+              onBeforeDeckyModal={onBeforeDeckyModal}
+              onCompleteDeckyModalClose={onCompleteDeckyModalClose}
+              onOpenOllamaModelsHub={onOpenOllamaModelsHub}
+              onApplyTier2MultimodalPolicy={onApplyTier2MultimodalPolicy}
+              onMoveUpFromFirst={() => takeFoldLine(OLLAMA_FOLD_TAB, "where")}
+              onMoveDownFromConnectionRow={() => foldLineBelow(OLLAMA_FOLD_TAB, chain, "where")}
+              connectionTestBtnRef={connectionTestBtnRef}
             />
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div ref={terseToggleHostRef} className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="Terse mode"
-              description="Speed mode only. Keeps each answer to three short lines and ends it with a menu of choices to dig deeper. It shortens what you see, not how hard the AI thinks, and the Reply style slider is ignored while it is on. Strategy and Expert answers are not changed."
-              checked={terseMode}
-              onChange={(checked) => setTerseMode(checked)}
-              {...({
-                onMoveUp: () => focusReplyVerbosityThumb(),
-                onMoveDown: () => focusThinkingEffortRow(),
-              } as unknown as Record<string, unknown>)}
-            />
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-            <OllamaThinkingEffortRow
-              value={askThinkEffort}
-              onChange={requestThinkingEffortChange}
-              hostRef={setThinkingEffortHost}
-              onMoveUp={focusTerseToggle}
-              onMoveDown={focusLatencyWarningThumb}
-            />
-          </div>
-        </PanelSectionRow>
-      </PanelSection>
-
-
-      <PanelSection title="Connection tuning">
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="Custom timeouts"
-              checked={latencyTimeoutsCustomEnabled}
-              onChange={(c) => setLatencyTimeoutsCustomEnabled(c)}
-            />
-          </div>
-        </PanelSectionRow>
-        {!latencyTimeoutsCustomEnabled ? (
-          <PanelSectionRow>
-            <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: textPx(12), color: "#cdd9e6", lineHeight: 1.4 }}>
-              Default:{" "}
-              <span style={{ color: "#ffd299", fontWeight: 700 }}>Warning {DEFAULT_LATENCY_WARNING_SECONDS}s</span>
-              <span style={{ color: "rgba(255,255,255,0.35)" }}> | </span>
-              <span style={{ color: "#9ce7ff", fontWeight: 700 }}>Timeout {DEFAULT_REQUEST_TIMEOUT_SECONDS}s</span>
-            </div>
-          </PanelSectionRow>
-        ) : (
-          <PanelSectionRow>
-            <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-              <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", lineHeight: 1.35, marginBottom: 6 }}>
-                <div>
-                  <span style={{ color: "#ffd299", fontWeight: 700 }}>Warning</span>
-                  {" = slow-reply nudge"}
-                </div>
-                <div style={{ marginTop: 4 }}>
-                  <span style={{ color: "#9ce7ff", fontWeight: 700 }}>Timeout</span>
-                  {" = abort if still busy"}
-                </div>
-              </div>
-              <SettingsTabConnectionTimeoutSlider
-                warningSec={latencyWarningSeconds}
-                timeoutSec={requestTimeoutSeconds}
-                onChange={(w, t) => {
-                  setLatencyWarningSeconds(w);
-                  setRequestTimeoutSeconds(t);
-                }}
-                warningThumbHostRef={latencyWarningThumbHostRef}
-                onMoveDownFromThumb={focusOllamaKeepAliveThumb}
-              />
-            </div>
-          </PanelSectionRow>
+          </div>,
         )}
-        <PanelSectionRow>
-          <div
-            className="bonsai-prose-host bonsai-settings-bleed"
-            style={{ width: "100%", maxWidth: "100%", minWidth: 0, marginTop: 16 }}
-          >
-            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: textPx(13), marginBottom: 4 }}>Keep models loaded</div>
-            <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}>
-              How long Ollama keeps the model in memory after a prompt (VRAM on the host).
-            </div>
-            <SettingsTabOllamaKeepAliveSlider
-              value={ollamaKeepAlive}
-              onChange={setOllamaKeepAlive}
-              thumbHostRef={ollamaKeepAliveThumbHostRef}
-              onMoveUp={latencyTimeoutsCustomEnabled ? focusLatencyWarningThumb : undefined}
-            />
-          </div>
-        </PanelSectionRow>
-      </PanelSection>
 
-      <PanelSection title="AI models">
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%", minWidth: 0 }}>
-            <Button
-              /*
-               * The one door into the AI models box (browse and pull, the licence filter, the Advanced
-               * switches, and each installed model's place in the try order). With the AI on a PC
-               * "Browse models..." is not drawn, so this is the only way in. The licence name stays on
-               * the button: it is the only line on the tab that says which models may be tried.
-               *
-               * It remembers itself before opening so the ring comes back here when the box closes:
-               * without that, closing it left the ring on Steam's own Quick Access rail (measured on
-               * the Deck 2026-09-20). Its own id, because the registry needs one per opener.
-               */
-              ref={(el) => {
-                registerModalReturnFocusOwner("ollama-models-hub-settings", el as HTMLElement | null);
-              }}
-              onClick={() => {
-                rememberModalReturnFocus("ollama-models-hub-settings");
-                onOpenOllamaModelsHub();
-              }}
-              className={FOCUS_RING_BTN_CLASS}
-              style={{
-                ...SETTINGS_GLASS_BTN,
-                width: "100%",
-              }}
-              aria-label="AI models"
-            >
-              AI models… — {MODEL_POLICY_TIER_LABELS_PLAIN[modelPolicyTier]}
-            </Button>
-          </div>
-        </PanelSectionRow>
-      </PanelSection>
+        {fold(
+          "kb",
+          <KnowledgeBaseSection
+            useLocalKnowledgeBase={useLocalKnowledgeBase}
+            setUseLocalKnowledgeBase={setUseLocalKnowledgeBase}
+            ragCorpusVersion={ragCorpusVersion}
+            ollamaIp={effectiveOllamaPcIp}
+            ollamaLocalOnDeck={ollamaLocalOnDeck}
+            onBeforeDeckyModal={onBeforeDeckyModal}
+            onCompleteDeckyModalClose={onCompleteDeckyModalClose}
+            toggleHostRef={kbToggleHostRef}
+            downloadBtnRef={kbDownloadBtnRef}
+            removeBtnRef={kbRemoveBtnRef}
+            cancelBtnRef={kbCancelBtnRef}
+            onMoveUpToConnection={() => takeFoldLine(OLLAMA_FOLD_TAB, "kb")}
+            onMoveDownFromRemove={() => foldLineBelow(OLLAMA_FOLD_TAB, chain, "kb")}
+          />,
+        )}
+
+        {fold(
+          "reply",
+          <PanelSection>
+            <PanelSectionRow>
+              <DenseRow kind="slider" label="Reply style" help={OLLAMA_ROW_HELP.replyStyle}>
+                <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
+                  <OllamaReplyVerbositySlider
+                    value={replyVerbosity}
+                    onChange={setReplyVerbosity}
+                    thumbHostRef={replyVerbosityThumbHostRef}
+                    onMoveUp={() => takeFoldLine(OLLAMA_FOLD_TAB, "reply")}
+                    onMoveDown={focusTerseToggle}
+                  />
+                </div>
+              </DenseRow>
+            </PanelSectionRow>
+            <PanelSectionRow>
+              <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
+                <DenseSwitchRow
+                  label="Terse mode"
+                  help={OLLAMA_ROW_HELP.terse}
+                  hostRef={terseToggleHostRef}
+                  checked={terseMode}
+                  onChange={(checked) => setTerseMode(checked)}
+                  nav={{ onMoveUp: () => focusReplyVerbosityThumb(), onMoveDown: () => focusThinkingEffortRow() }}
+                />
+              </div>
+            </PanelSectionRow>
+            <PanelSectionRow>
+              <div className="bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
+                <DenseRow kind="choice" label="Thinking" help={ASK_THINK_EFFORT_DESCRIPTIONS[askThinkEffort]}>
+                  <OllamaThinkingEffortRow
+                    value={askThinkEffort}
+                    onChange={requestThinkingEffortChange}
+                    hostRef={setThinkingEffortHost}
+                    onMoveUp={focusTerseToggle}
+                    onMoveDown={() => foldLineBelow(OLLAMA_FOLD_TAB, chain, "reply")}
+                  />
+                </DenseRow>
+              </div>
+            </PanelSectionRow>
+          </PanelSection>,
+        )}
+
+        {fold(
+          "tuning",
+          <PanelSection>
+            <PanelSectionRow>
+              <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
+                <DenseSwitchRow
+                  label="Custom timeouts"
+                  hostRef={customTimeoutsHostRef}
+                  checked={latencyTimeoutsCustomEnabled}
+                  onChange={(c) => setLatencyTimeoutsCustomEnabled(c)}
+                  nav={{ onMoveUp: () => takeFoldLine(OLLAMA_FOLD_TAB, "tuning") }}
+                >
+                  {!latencyTimeoutsCustomEnabled ? (
+                    <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#cdd9e6", lineHeight: 1.4 }}>
+                      Default:{" "}
+                      <span style={{ color: "#ffd299", fontWeight: 700 }}>Warning {DEFAULT_LATENCY_WARNING_SECONDS}s</span>
+                      <span style={{ color: "rgba(255,255,255,0.35)" }}> | </span>
+                      <span style={{ color: "#9ce7ff", fontWeight: 700 }}>Timeout {DEFAULT_REQUEST_TIMEOUT_SECONDS}s</span>
+                    </div>
+                  ) : null}
+                </DenseSwitchRow>
+              </div>
+            </PanelSectionRow>
+            {latencyTimeoutsCustomEnabled ? (
+              <PanelSectionRow>
+                <DenseRow kind="slider" label="Timeouts" help={OLLAMA_ROW_HELP.timeouts}>
+                  <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
+                    <SettingsTabConnectionTimeoutSlider
+                      warningSec={latencyWarningSeconds}
+                      timeoutSec={requestTimeoutSeconds}
+                      onChange={(w, t) => {
+                        setLatencyWarningSeconds(w);
+                        setRequestTimeoutSeconds(t);
+                      }}
+                      warningThumbHostRef={latencyWarningThumbHostRef}
+                      onMoveDownFromThumb={focusOllamaKeepAliveThumb}
+                    />
+                  </div>
+                </DenseRow>
+              </PanelSectionRow>
+            ) : null}
+            <PanelSectionRow>
+              <DenseRow kind="slider" label="Keep models loaded" help={OLLAMA_ROW_HELP.keepAlive}>
+                <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
+                  <SettingsTabOllamaKeepAliveSlider
+                    value={ollamaKeepAlive}
+                    onChange={setOllamaKeepAlive}
+                    thumbHostRef={ollamaKeepAliveThumbHostRef}
+                    onMoveUp={latencyTimeoutsCustomEnabled ? focusLatencyWarningThumb : focusCustomTimeoutsToggle}
+                    onMoveDown={() => foldLineBelow(OLLAMA_FOLD_TAB, chain, "tuning")}
+                  />
+                </div>
+              </DenseRow>
+            </PanelSectionRow>
+          </PanelSection>,
+        )}
+
+        {fold(
+          "models",
+          <PanelSection>
+            <PanelSectionRow>
+              <DenseRow kind="button" label="AI models">
+                <Focusable
+                  className="bonsai-settings-bleed"
+                  style={{ width: "100%", minWidth: 0 }}
+                  {...({
+                    onMoveUp: () => takeFoldLine(OLLAMA_FOLD_TAB, "models"),
+                    /* The tab's last control: Down holds still rather than reach the floating button below it. */
+                    onMoveDown: () => true,
+                  } as Record<string, unknown>)}
+                >
+                  <Button
+                    /*
+                     * The one door into the AI models box (browse and pull, the licence filter, the Advanced
+                     * switches, and each installed model's place in the try order). With the AI on a PC
+                     * "Browse models..." is not drawn, so this is the only way in. The licence name stays on
+                     * the button: it is the only line on the tab that says which models may be tried.
+                     *
+                     * It remembers itself before opening so the ring comes back here when the box closes:
+                     * without that, closing it left the ring on Steam's own Quick Access rail (measured on
+                     * the Deck 2026-09-20). Its own id, because the registry needs one per opener.
+                     */
+                    ref={(el) => {
+                      modelsBtnRef.current = el as HTMLButtonElement | null;
+                      registerModalReturnFocusOwner("ollama-models-hub-settings", el as HTMLElement | null);
+                    }}
+                    onClick={() => {
+                      rememberModalReturnFocus("ollama-models-hub-settings");
+                      onOpenOllamaModelsHub();
+                    }}
+                    className={FOCUS_RING_BTN_CLASS}
+                    style={{
+                      ...SETTINGS_GLASS_BTN,
+                      width: "100%",
+                    }}
+                    aria-label="AI models"
+                  >
+                    AI models… — {MODEL_POLICY_TIER_LABELS_PLAIN[modelPolicyTier]}
+                  </Button>
+                </Focusable>
+              </DenseRow>
+            </PanelSectionRow>
+          </PanelSection>,
+        )}
+      </FoldedColumn>
+
+      {/* Room under the last line, so the last rows can scroll up clear of the strip and the button. */}
+      <div className="bonsai-fold-tail" aria-hidden="true" />
+      <TabHelpStrip tab={OLLAMA_FOLD_TAB}>
+        <FoldAllButton tab={OLLAMA_FOLD_TAB} sections={chainIds(chain)} />
+      </TabHelpStrip>
     </div>
   );
 };

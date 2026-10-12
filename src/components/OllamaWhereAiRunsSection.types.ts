@@ -77,6 +77,8 @@ export type OllamaWhereAiRunsSectionProps = {
   onOpenOllamaModelsHub: (opts?: { initialSection?: "policy" | "browse" | "advanced" }) => void;
   /** No longer used here (the Tier 2 install button is gone, plan 79); OllamaTab still passes it, so it stays optional until that file drops it. */
   onApplyTier2MultimodalPolicy?: () => void | Promise<void>;
+  /** Focus graph: Up from the first switch, onto the section's own line in the folded tab (plan 91). */
+  onMoveUpFromFirst?: () => boolean;
   /** Focus graph: move from connection row into Knowledge base section. */
   onMoveDownFromConnectionRow?: () => void;
   /** Focus graph: ref for Test connection button (KB toggle onMoveUp target). */

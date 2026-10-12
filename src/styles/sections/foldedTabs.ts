@@ -172,6 +172,14 @@ export function buildFoldedTabsSection(): string {
         .bonsai-scope .bonsai-fold-strip[hidden] {
           display: none;
         }
+        /* The unseen copy the scroll plan measures a row's text in: laid out like the strip, never painted. */
+        .bonsai-scope .bonsai-fold-strip--measure:not([hidden]) {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          visibility: hidden;
+        }
         .bonsai-scope .bonsai-fold-strip__label {
           display: block;
           font-size: ${textPx(10)};

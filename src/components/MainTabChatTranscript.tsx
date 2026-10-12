@@ -159,6 +159,7 @@ import {
   dismissHintKeepingRing,
 } from "../utils/chatTranscriptNavHelpers";
 import { formatAppliedTuningBannerText } from "../utils/appliedTuningText";
+import { ChatLatencyNotices } from "./ChatLatencyNotices";
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
 import { StrategyChecklistPanel } from "./StrategyChecklistPanel";
 import { PermissionDenyAction } from "./PermissionDenyAction";
@@ -1736,27 +1737,15 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
     </Focusable>
   </PanelSectionRow>
 ) : null}
-{isAsking && showSlowWarning && !isStreamingPreview && (
-  <PanelSectionRow>
-    <div className="bonsai-chat-status-line" style={{ color: "#f2cf84", fontSize: 12, padding: "6px 0", lineHeight: 1.35 }}>
-      Slow (&gt;{latencyWarningSeconds}s): ensure <strong>Ollama</strong> uses your <strong>GPU</strong>, not{" "}
-      <strong>CPU</strong>.
-    </div>
-  </PanelSectionRow>
-)}
-{!showEmptySlotPreview && !isAsking && elapsedSeconds != null && elapsedSeconds > latencyWarningSeconds && (
-  <PanelSectionRow>
-    <div style={{ color: "#f2cf84", fontSize: 12, lineHeight: 1.35 }}>
-      {elapsedSeconds}s (&gt;{latencyWarningSeconds}s): prefer <strong>GPU</strong> for <strong>Ollama</strong>, not{" "}
-      <strong>CPU</strong>.
-    </div>
-  </PanelSectionRow>
-)}
-{!showEmptySlotPreview && appliedTuningBannerText && (
-  <PanelSectionRow>
-    <div style={{ color: "#f2cf84", fontSize: 12, lineHeight: 1.35 }}>{appliedTuningBannerText}</div>
-  </PanelSectionRow>
-)}
+<ChatLatencyNotices
+  isAsking={isAsking}
+  showSlowWarning={showSlowWarning}
+  isStreamingPreview={isStreamingPreview}
+  latencyWarningSeconds={latencyWarningSeconds}
+  showEmptySlotPreview={showEmptySlotPreview}
+  elapsedSeconds={elapsedSeconds}
+  appliedTuningBannerText={appliedTuningBannerText}
+/>
 {/*
  * The standalone "Ask diagnostics" block (its own always-visible button next to Show details) was
  * removed 2026-08-28 (roadmap: "Fold Show diagnostics into Show details") — same JSON, same gate on

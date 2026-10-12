@@ -58,6 +58,8 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [The open reasoning block does not scroll in steps like the answer; one Down jumps past the whole of it](#the-open-reasoning-block-does-not-scroll-in-steps-like-the-answer-one-down-jumps-past-the-whole-of-it)
 - [The mic stops after about 3 or 4 seconds of speech](#the-mic-stops-after-about-3-or-4-seconds-of-speech)
 - [Merge the unlanded work left in thirteen old helper copies into experimental](#merge-the-unlanded-work-left-in-thirteen-old-helper-copies-into-experimental)
+- [Walking Settings and Developer with the D-pad: the page moves at every press, then jumps at the end](#walking-settings-and-developer-with-the-d-pad-the-page-moves-at-every-press-then-jumps-at-the-end)
+- [On the Settings tab, Left or Right on the Text size choices scrolls the page down](#on-the-settings-tab-left-or-right-on-the-text-size-choices-scrolls-the-page-down)
 <!-- /toc -->
 
 ## The panel stops half way down and the Ask button is out of reach
@@ -1020,3 +1022,18 @@ Cause of the stop that remains: not known. Related: the repeat bug and the entry
   - Untracked file: docs/archive/research/kb-answer-eval-2026-09-29-p77h-cases.md
 - **p81frev** (`refactor/p81frev`)
   - d8671410 Revert "Reword the AI's instructions so none of them shows the hidden-block label in the odd one-word shape"
+
+## Walking Settings and Developer with the D-pad: the page moves at every press, then jumps at the end
+
+Older notes, word for word, from the entry's open form (moved here 2026-10-11, plan 89 docs sweep pass 3).
+
+  After the plan 87 fix (the entry "Walking some of the other tabs with the D-pad scrolls the tab a long way at each step", now in Done) the maintainer finds it better but not right. Wanted: the page does not scroll at every press; it moves only when the ring nears the edge, by a moderate amount, never a sudden page-sized jump because the end of the page was reached.
+  The maintainer also wants a smooth glide instead of the current judder. Checked on the Deck's own screen; the monitor runs passed (`docs/test-evidence/plan87-P87-B10-TAB-SCROLL-try3.json`).
+  **2026-10-11 (plan 89 Deck block 1, a measurement, build `f561c0e5`):** Settings Down moved the page on 12 of 16 presses and Up on 13 of 14; Developer Down on 15 of 18 and Up on 13 of 16. Evidence `docs/test-evidence/plan89-M1-TAB-WALK.json`.
+
+## On the Settings tab, Left or Right on the Text size choices scrolls the page down
+
+Older notes, word for word, from the entry's open form (moved here 2026-10-11, plan 89 docs sweep pass 3).
+
+  With the ring on Text size, pressing Left or Right to change the choice also scrolls the tab down. The maintainer called it "very strange behavior". Cause not known. Related: the Text size row (Done, row P87-F6-TEXT-SIZE) and the entry below about the page moving at every press.
+  **2026-10-11 (plan 89 Deck block 1, a measurement, build `f561c0e5`):** Left or Right moved the page 100.8, 81.2 and 64.1 px on three presses, while the row stayed on its line. Evidence `docs/test-evidence/plan89-M1-TAB-WALK.json`.

@@ -1,0 +1,11 @@
+{
+  "row": "plan89-J0-DEPLOY",
+  "build_commit": "02f719b8 (experimental tip at deploy time; deck_deploy copies the working checkout, which was clean apart from untracked evidence files)",
+  "deck_time_local": "2026-10-11 23:52 EDT",
+  "screen": "QAM page window 855x766 css px; screenshot composited 1920x1080; Steam Big Picture window 1500x845 (not the Deck's 1280x800 panel, so the live screen is the external one)",
+  "setup": "No game running (only oom_reaper in ps; 8.8 GB free). Keep-awake taken at 23:51 EDT, expiresAt 2026-10-12T11:51:34Z (480 min).",
+  "pressed": "deck_deploy; deck_openPlugin three times (first read said already open from the old page, second failed as expected, third opened it); no other presses",
+  "seen": "deploy ok, loader ready in 267 ms. Plugin dist files dated 23:52 on the Deck. Plugin opened on Main tab, test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7), ring on the question box, box empty.",
+  "expected": "Final build deployed, plugin opens (may fail once or twice), Main tab, test chat.",
+  "verdict": "PASS - build deployed and plugin opened on Main in the test chat after one failed open attempt."
+}

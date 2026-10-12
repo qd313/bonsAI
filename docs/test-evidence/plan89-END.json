@@ -1,0 +1,22 @@
+{
+  "row": "plan89-END",
+  "build_commit": "02f719b8",
+  "deck_time_local": "2026-10-11 23:57 EDT",
+  "screen": "QAM page window 855x766 css px; screenshot composited 1920x1080 (docs: screenshots/DeckCapture_20261011_235714_auto.png in the repo screenshots folder)",
+  "setup": "Test chat 'How do I beat the boss in the Soul Sanctum in Hollow Knight?' (chat 1 of 7), Strategy mode, No game.",
+  "pressed": "Walked to the Ask button (read label 'Ask' before pressing), A once for 'What is Hollow Knight'.",
+  "seen": {
+    "plugin_opens_on_main": true,
+    "settings_text_size": "small (settings file key chat_text_size = small; button read back as Small)",
+    "ollama_tab": "Connected - Ollama v0.40.3 - 2 models; runs on this Deck at 127.0.0.1:11434",
+    "smoke_answer": "got an answer in about 80 s: a 3-sentence description of Hollow Knight as a Metroidvania, a follow-up A/B menu, a source card from the Hollow Knight wiki. Reasoning 15 s.",
+    "model_after_answer": "gemma4:e2b-it-qat and nomic-embed-text loaded",
+    "unload": "keep_alive 0 sent for both; /api/ps now reads {\"models\":[]}",
+    "keep_awake": "released with deck_restorePowerSettings; systemd-inhibit shows no DPS lock; rig lease released",
+    "reader_files": "p89-i2reader.sh, .log and a leftover .err removed from the Deck",
+    "backup": "~/p89-backup still on the Deck",
+    "final_state": "Quick Access open on bonsAI Main, test chat, box empty (placeholder showing), no game, no model loaded"
+  },
+  "expected": "Plugin opens on Main, test chat, Settings Text size as it was, Ollama connected, one answer; keep-awake released; clean leave.",
+  "verdict": "PASS - every smoke item matched; keep-awake released."
+}

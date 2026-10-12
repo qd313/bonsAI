@@ -48,20 +48,20 @@ const IconShell: React.FC<{ size: number; children: React.ReactNode }> = ({ size
 /** Permissions tab: stroke icon for inline UI and Decky tab title. */
 const strokeForTabSize = (size: number) => (size > 72 ? 2.5 : size > 48 ? 2.25 : TAB_ICON_STROKE);
 
-/** Line width, in the 24-unit drawing, of every line-drawn tab icon at the tab bar's small sizes (up from 1.35, the Deck's own screen made it hard to see). */
-const TAB_ICON_STROKE = 2;
+/** Line width, in the 24-unit drawing, of every line-drawn tab icon at the tab bar's small sizes (up from 1.35, then 2.0; the Deck's own screen made it hard to see). */
+const TAB_ICON_STROKE = 2.75;
 
 /**
  * Outline drawn around the three filled tab icons so they read as heavy as the line icons on the
  * Deck's own screen. Each is a currentColor stroke painted behind the fill (the fill stays whole),
- * in the icon's own drawing units, about 3% of its width. The drawing is shrunk by the same amount
+ * in the icon's own drawing units, about 4% of its width. The drawing is shrunk by the same amount
  * about its centre so the outline stays inside the box. Logo and Ollama fill their box edge to
  * edge; About has room.
  */
-const LOGO_OUTLINE = 14;
-const OLLAMA_OUTLINE = 0.7;
-/** The "i" has a 1.35-unit gap between its dot and its stem; 0.8 leaves 0.55 of it open. */
-const ABOUT_OUTLINE = 0.8;
+const LOGO_OUTLINE = 19;
+const OLLAMA_OUTLINE = 0.9;
+/** The "i" has a 1.35-unit gap between its dot and its stem; 0.9 leaves 0.45 of it open. */
+const ABOUT_OUTLINE = 0.9;
 const outlineProps = (w: number) =>
   ({ stroke: "currentColor", strokeWidth: w, strokeLinejoin: "round", paintOrder: "stroke" }) as const;
 

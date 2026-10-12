@@ -17,7 +17,7 @@ import { BugIcon, BonsaiTreeTabIcon, GearIcon, LockIcon, SearchTabIcon } from ".
 import { BonsaiLogoIcon, OllamaTabIcon, AboutTabTitleIcon } from "./icons";
 import { TAB_BAR_CURRENT_ICON_PX, TAB_BAR_SIDE_ICON_PX } from "../features/unified-input/constants";
 
-const MIN_STROKE = 1.9;
+const MIN_STROKE = 2.6;
 const MAX_SPREAD = 0.35;
 
 /** Every drawn line width in the icon, in the icon's own 24-unit drawing. */
@@ -55,7 +55,7 @@ describe("tab bar icons draw thick lines at the tab bar's sizes", () => {
     });
   }
 
-  it("the filled icons keep their fill and gain a visible outline, about 3% of their width", () => {
+  it("the filled icons keep their fill and gain a visible outline, about 4% of their width", () => {
     for (const [name, Icon] of [
       ["Main logo", BonsaiLogoIcon],
       ["Ollama", OllamaTabIcon],
@@ -71,8 +71,8 @@ describe("tab bar icons draw thick lines at the tab bar's sizes", () => {
         expect(n.getAttribute("paint-order"), name).toBe("stroke");
         expect(n.getAttribute("stroke-linejoin"), name).toBe("round");
         const fraction = Number(n.getAttribute("stroke-width")) / box;
-        expect(fraction, name).toBeGreaterThanOrEqual(0.025);
-        expect(fraction, name).toBeLessThanOrEqual(0.04);
+        expect(fraction, name).toBeGreaterThanOrEqual(0.035);
+        expect(fraction, name).toBeLessThanOrEqual(0.045);
       }
       const filled = svg.getAttribute("fill") === "currentColor" || shapes.every((n) => n.getAttribute("fill") === "currentColor" || n.closest("g[fill]")?.getAttribute("fill") === "currentColor");
       expect(filled, name).toBe(true);

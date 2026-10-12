@@ -4,6 +4,10 @@ Written 2026-10-10 by the planning session, after a survey of the whole repo and
 maintainer. **Nothing here is built yet.** The plan is written so it can wait: on the day it starts, step 0 checks it
 against the code as it is then (§ 5).
 
+**When it starts (the maintainer's call, 2026-10-11):** after [plan 89](89-bugs-to-zero-and-verify-sweep.md) has
+finished, and after [plan 92](92-feature-night-search-notes-models-tabs.md) has built plans 90 and 91. Never alongside
+another session.
+
 **Written against:** `experimental` at `efecab1` (2026-10-10). Every number below was measured on that commit.
 
 Read first: [CLAUDE.md](../../CLAUDE.md); [AGENTS.md](../../AGENTS.md), the focus-graph section and "Which model does
@@ -144,16 +148,37 @@ changes what a player sees ends with a Deck block. Moving code and changing code
 
 1. The freshness check (§ 5).
 2. The freeze starts: no other sessions, no new features.
-3. Save the starting point, to compare against later: every test's name and the count, coverage on both sides, the
+3. **Land the work left in the thirteen old helper copies** (the maintainer's call, 2026-10-11; the
+   [roadmap entry](../roadmap-details.md#merge-the-unlanded-work-left-in-thirteen-old-helper-copies-into-experimental)
+   lists each copy and its commits). It goes here, before the starting point is saved and before anything moves: once
+   steps 1 and 4 have moved files, this work gets much harder to merge.
+   - **Check each copy against `experimental` first.** The list matched commits by title, so some work may already be
+     in under another title, and plans 89 and 92 will have changed some of the same code since. Drop what has landed or
+     no longer fits, and write down which and why. Work that touches the five removals, the glossary, the D-pad
+     helpers, the settings plumbing or the main screen is weighed the way the freshness check weighs a commit.
+   - **Land the rest one copy at a time**, every check green after each. This is changing code, so it never shares a
+     commit with a move.
+   - **The new knowledge-library notes** (five games, the Skyrim notes and the fact-check fixes) reach players only with
+     a library release, so they ride along with step 3's rebuild and point release.
+   - **The two Hollow Knight wording swaps** are marked by their own commits as waiting for the maintainer's pick: ask.
+     If the answer is still "wait", save them as patch files in the workshop in step 1, so step 8's fresh history
+     cannot lose them.
+   - **The two loose files** (a one-off script and a research note) go to the workshop with step 1.
+   - **Then delete the copies** the junction-safe way in
+     [lessons learned § 1](../lessons-learned.md#1-working-in-a-checkout-other-people-are-also-using), counting the shared
+     packages folder before and after. The copy helper's own prune command will not offer them, because it only
+     recognises work merged under its original commit.
+   - The bookkeeper closes the roadmap entry, naming the commits that landed and the ones dropped.
+4. Save the starting point, to compare against later: every test's name and the count, coverage on both sides, the
    size of the built plugin, the list of back-end methods the screen can call, and the § 3 numbers.
-4. **Stop saving tool-made maps in the repo.** The architecture maps and the code map are rewritten on every commit
+5. **Stop saving tool-made maps in the repo.** The architecture maps and the code map are rewritten on every commit
    today, so helpers working side by side clash over them. Build them when needed instead: the tool server builds its
    maps when it starts, and a script makes the code map on request. The commit hook drops those steps. While here: the
    hook files are stored without the "runnable" mark, so on Linux and Mac they never run at all.
-5. **Tools for moving files:** one command that moves a screen file and fixes every import and every explanation that
+6. **Tools for moving files:** one command that moves a screen file and fixes every import and every explanation that
    names it, and the same for back-end files; plus a "nothing changed by accident" check for every move commit.
-6. **Helper files for this plan** (§ 7), and this plan's helper caps written into AGENTS.md for its duration.
-7. **Fix the usage guard first.** It counts every token the same, whatever the model, so a big Haiku read-through
+7. **Helper files for this plan** (§ 7), and this plan's helper caps written into AGENTS.md for its duration.
+8. **Fix the usage guard first.** It counts every token the same, whatever the model, so a big Haiku read-through
    would stop new helpers early. Weigh tokens by model.
 
 ### Step 1 — The workshop repo (same session as step 0)
@@ -330,6 +355,7 @@ size is step 2: reading every file on Haiku costs less than one Sonnet helper on
 | Risk | Guard |
 |---|---|
 | The plan goes stale while it waits | The freshness check in step 0; file lists made on the day |
+| The old helper copies' work is lost in the moves or the fresh history | Step 0 lands it, or saves it in the workshop, before anything moves |
 | A removed feature turns out to be used somewhere | Step 2 lists every use; the type check and tests catch the rest; the Deck block after step 3 |
 | A move quietly changes something | Moves and changes never share a commit; the "nothing changed" check; test names and coverage compared |
 | Merged tests lose a case | The test-name lists before and after must match |

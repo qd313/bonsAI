@@ -364,6 +364,29 @@ rule (one press at a time with focus read after each).
   five-hour line nothing new starts until it resets at 05:00. With the week near its 80 percent line, **the session
   will stop at this plan's clean point**: the note card and line (N2), the jump and Y (N3b), and folded Settings and
   Developer (T1, T2) move to a second night.
+- **03:00 to 07:34, nothing ran.** The About links' second round landed at 02:56 (pass on the Deck later); the session
+  then waited for the five-hour window to reset at 05:00. **The 20-minute scheduled check never woke the chat**, so the
+  morning's work started only when the maintainer wrote "Continue" at 07:34: about two and a half hours lost.
+- **07:34 to 08:45, the second rounds and the last Deck blocks** (usage at 07:34: five-hour window 0, week 72; at
+  08:40: 20 and 74). Landed, every check green, pushed: the roadmap's first sweep (`526aad43`); the models box's second
+  round (the greyed licence row skipped, Down and Up the same path at the top: `172d013b`, `5b48a189`); the folded
+  section names no longer cut (`b1c9fa77`, a bug the Deck found this morning, one helper round); the Search tab's Down
+  and Up (`19214ab6`: the find box was measured through a link that points at Steam's text-field component, so every
+  move that measured it failed and Steam stepped in its own order) and "An item note" (`3115f3de`); the cleanup (three
+  leftover comments, the ratchet list down to `delete_user_note`, the Tier 2 question's sentence, two documents'
+  sentences about the old Filters panel: `6aadd166` to `a2e0c2c0`). The cheap Haiku helper failed the cleanup (it kept
+  ending its turn while its checks ran) and Sonnet medium redid it in one go. **Deck blocks 3, 4b and the last one**
+  (builds `649daecc` and `3115f3de`, the monitor): every row passed in the end. The Search tab (seven tabs fit; words,
+  games, game notes, settings; the walk after its second round); the folded Ollama tab (314 px closed in a 741 px pane,
+  was 1,642; the strip, the Open all button, the names whole); the About links after their second round; Permissions
+  unchanged; the models box's walk after its second round; the free-play sweep with the same stops on Main as before and
+  no loops. The Deck is put back: settings identical to the backup, no game, no model, keep-awake released; the two
+  test chats stay for the second night (9 chats).
+- **Stopped at the clean point** (§ 12). Built and proven on the first night: the notes back end and Ask reading them,
+  the game-notes search, the Search tab's first half, the About tab, the models box's column, the folded Ollama tab.
+  Owed to a second night: the note card, the "Read N of your notes" line and the notes sheet (N2), the jump into a
+  chat with Back and Y (N3b), Settings and Developer folded (T1, T2), the stand-in's wipe check, and the Deck's own
+  screen for every layout number (the monitor was live all session).
 
 ## 14. Questions for the maintainer (the safest choice taken meanwhile)
 
@@ -399,3 +422,14 @@ If anything would change the runbook, add it to [lessons-learned.md § 4](../les
 cloud session against the GitHub copy, while a night ran on the PC, cost anything at the re-check; whether four
 screen lanes at once on top of a fresh text-size change caused clashes; whether the shared fold pieces held up
 across three tabs; and the budget reads at each batch.
+
+
+**Answers, 2026-10-12 (first night):** planning in a cloud session against the GitHub copy while plan 89 ran cost little:
+the re-check found two files at their size limits, five settings-card test files instead of twelve and moved line
+numbers, all fixed in the briefs before any helper started. Four screen helpers at once on top of plan 89's text-size
+change clashed only where three of them added a section to the end of the focus map and two added a name to the same
+focus list (kept both each time); every new size went through the text-size helper. The shared fold pieces held on the
+Ollama tab and the Deck passed them first time; Settings and Developer are the real test, on the second night. Budget
+reads: go 4 / 61 (five-hour / week); 00:45 8 / 62; 02:33 70 / 70; 02:41 75 / 71 (stopped starting anything);
+07:34 0 / 72; 08:40 20 / 74. Two Opus high helpers and four Sonnet high helpers at once cost about 8 points of the
+week in under two hours. The lessons go in lessons-learned § 3 and § 4.

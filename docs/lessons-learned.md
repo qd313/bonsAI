@@ -444,6 +444,28 @@ itself copes (it stages with scp and moves with one sudo). Do not write `sudo` i
 session's own safety check refuses such a brief outright, and the right fix is the maintainer's `setup-dev`, said
 plainly and early.
 
+
+**Steam moves the ring between a container's children along its declared flow, so a walk test that moves by
+geometry can pass while the Deck's press dies.** The About tab's three link buttons each sat in their own focus box
+inside a plain container; every test walked Down from GitHub to the next button, and on the Deck Down from GitHub did
+nothing (plan 92, 2026-10-12). The fix declared the block a row and the buttons a column (`flow-children`). Model the
+flow in walk tests (`steamStep` in `src/test-harness/aboutDeckyUi.tsx`), or give every stop handlers for all four
+directions so nothing depends on it, as the Search tab does. Evidence `docs/test-evidence/plan92-P91-ABOUT-ROWS.json`,
+then `-try2.json`.
+
+**A Decky text field's ref is Steam's component, not the input, and a move handler that throws hands the press back
+to Steam.** The Search tab measured its find box through that ref; every measure threw, Steam took the press and
+stepped in its own page order, so Down from a game button went to the next game (plan 92, `19214ab6`). Measure the
+element you drew yourself, and never let a move handler throw.
+
+**A greyed Decky button still takes the ring on the Deck; the shared test stand-in says it cannot.** The models box
+asked the button whether it was disabled and the greyed licence row became a stop on the Deck while every test passed
+(plan 92, `172d013b`). Skip a greyed control because your own state says it is off; the stand-in is on the roadmap.
+
+**`deck_deploy` builds the shared checkout as it stands.** A driver deployed in the middle of a landing's checks
+(plan 92 block 4a); it worked by luck. Give the driver the exact commit, and have it check that the tip matches and
+the tree is clean before it deploys; land nothing until it reports the deploy done.
+
 ---
 
 ## 4. Briefing helpers
@@ -559,6 +581,21 @@ times, and running `land_lane.sh` with the branch tip as its base runs only the 
 - **A landing waiting script must match the landing script's exact end lines.** "TESTS FAILED ONCE" contains "FAIL", so a script looking for the word "FAIL" read a good landing as a failed one.
 - **A Deck driver must never print the settings file's values.** The file holds the Steam Web API key. Print key names only.
 - **The desktop app cannot restart a project's tool server mid-session,** so rig fixes landed at night are proven in the next session, not the same night.
+
+
+**The 20-minute scheduled check did not wake the session overnight** (plan 92, 2026-10-12, between 03:00 and 07:34):
+the chat sat idle with a usage pause over and nothing running until the maintainer wrote "Continue", about two and a
+half hours lost. Do not count on it alone: before a planned pause, leave a background job running (a timed `sleep`
+that ends when the pause should) so its finishing wakes the chat.
+
+**Haiku for mechanical work fails when the checks run long.** Plan 92's four-item cleanup ended its turn four times
+while its own checks ran in the background and committed nothing, even after being told to run them in the foreground;
+Sonnet medium did it in one go (plan 33 § 4d). Plan 89's H2 showed the same habit. Give Haiku only jobs whose checks
+finish in a few minutes, or use Sonnet medium.
+
+**Six helpers at once, two of them Opus high, cost about 8 points of the week in under two hours** (plan 92) and took
+the five-hour window from 8 to 75 percent. A plan of more than ten helpers will reach the 80 percent weekly line in one
+night unless it starts with the week well under half; plan the clean stopping point as the likely end.
 
 ---
 

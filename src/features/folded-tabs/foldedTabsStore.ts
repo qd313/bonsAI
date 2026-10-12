@@ -72,6 +72,17 @@ export function setAllSections(tab: string, sections: readonly string[], openAll
   changed();
 }
 
+/**
+ * A person switched tabs (the bar, LB or RB, Y): every folded tab's sections close again and the section
+ * to return to is forgotten. The one caller is the plugin shell, which alone knows a switch from a popup
+ * closing and the tab being rebuilt; a rebuilt tab never comes through here.
+ */
+export function closeAllFoldedSections(): void {
+  for (const fold of tabs.values()) fold.open = new Set();
+  lastSections.clear();
+  changed();
+}
+
 /** The ring landed in `section` (its line or a control in it). Quiet: nothing on screen depends on it. */
 export function rememberFoldSection(tab: string, section: string): void {
   lastSections.set(tab, section);

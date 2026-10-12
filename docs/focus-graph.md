@@ -996,8 +996,11 @@ tab bar
   scroll plan uses), from the ringed row's `data-bonsai-help` and `data-bonsai-help-label`. While it shows, the
   scroll plan's bottom margin grows by its measured height, so the ringed row is placed clear of it; a folded tab
   turns the page by a shorter step (`FOLDED_TAB_SCROLL_STEP_FRACTION`, under a third of the pane).
-- **Open sections survive a rebuild:** the open set is in `foldedTabsStore.ts`, for the session only. On a first
-  visit every section is closed.
+- **Open sections survive a rebuild but not a tab switch:** the open set is in `foldedTabsStore.ts`, for the
+  session only. Every section starts closed; one a person opens stays open while they stay on the tab and after a
+  popup closes over it (the tab is rebuilt); any real tab switch (the bar, LB, RB, Y) closes them all again
+  (`closeAllFoldedSections`, called from the shell's `selectTab` and `onTabsShowTab`, never from the post-popup
+  lock's redirect, a remount or the session restore).
 - **Class names a Deck driver can find:** the line `.bonsai-fold-line` (`[data-bonsai-fold-line="<section>"]`,
   `[data-open]`), its parts `.bonsai-fold-line__name`, `__summary`, `__chevron`; the open rows `.bonsai-fold-body`;
   the button's host `.bonsai-fold-all-host` (`[data-bonsai-fold-all="<tab>"]`) and the button `.bonsai-fold-all`;

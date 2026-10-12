@@ -261,6 +261,7 @@
     "src/hooks/useBonsaiAskOrchestration.desktopNote.test.ts",
     "src/hooks/useBonsaiAskOrchestration.noteOffer.test.ts",
     "src/hooks/useBonsaiAskOrchestration.test.ts",
+    "src/hooks/useBonsaiPluginShell.foldedSwitch.test.ts",
     "src/hooks/useBonsaiPluginShell.test.ts",
     "src/hooks/useChatSlots.limit.test.ts",
     "src/hooks/useChatSlots.test.ts",

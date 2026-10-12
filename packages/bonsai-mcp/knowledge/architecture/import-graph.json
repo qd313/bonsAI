@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 907,
-  "edgeCount": 2910,
+  "fileCount": 908,
+  "edgeCount": 2916,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4253,7 +4253,9 @@
         "src/features/folded-tabs/FoldedSection.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx",
         "src/features/folded-tabs/foldedTabsStore.test.ts",
-        "src/features/folded-tabs/useHelpStrip.ts"
+        "src/features/folded-tabs/useHelpStrip.ts",
+        "src/hooks/useBonsaiPluginShell.foldedSwitch.test.ts",
+        "src/hooks/useBonsaiPluginShell.ts"
       ]
     },
     "src/features/folded-tabs/ollamaTabFolds.ts": {
@@ -4271,7 +4273,8 @@
         "src/components/OllamaTab.modalReturnFocus.test.tsx",
         "src/components/OllamaTab.terseMode.test.tsx",
         "src/components/OllamaTab.tsx",
-        "src/components/OllamaWhereAiRunsSection.tsx"
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/hooks/useBonsaiPluginShell.foldedSwitch.test.ts"
       ]
     },
     "src/features/folded-tabs/sectionSummary.test.ts": {
@@ -4514,6 +4517,7 @@
         "src/features/plugin-shell/useSessionRestoreAfterRemount.test.ts",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
         "src/features/plugin-shell/useUnifiedInputBehaviors.ts",
+        "src/hooks/useBonsaiPluginShell.foldedSwitch.test.ts",
         "src/hooks/useBonsaiPluginShell.test.ts",
         "src/hooks/useBonsaiPluginShell.ts",
         "src/hooks/useChatSlots.ts",
@@ -6137,6 +6141,16 @@
         "src/preview/useDeckyPreviewTestHookRegistration.ts"
       ]
     },
+    "src/hooks/useBonsaiPluginShell.foldedSwitch.test.ts": {
+      "imports": [
+        "src/features/folded-tabs/foldedTabsStore.ts",
+        "src/features/folded-tabs/ollamaTabFolds.ts",
+        "src/features/plugin-shell/pluginStorage.ts",
+        "src/hooks/useBonsaiPluginShell.ts",
+        "src/utils/bonsaiSessionSurvival.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useBonsaiPluginShell.test.ts": {
       "imports": [
         "src/data/bonsaiSettingsSchema.ts",
@@ -6149,6 +6163,7 @@
     },
     "src/hooks/useBonsaiPluginShell.ts": {
       "imports": [
+        "src/features/folded-tabs/foldedTabsStore.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/plugin-shell/pluginStorage.ts",
         "src/utils/bonsaiDebugIngest.ts",
@@ -6163,6 +6178,7 @@
         "src/features/chat-title/nameRowIcons.test.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
         "src/features/plugin-shell/useTabAndModeGuardEffects.ts",
+        "src/hooks/useBonsaiPluginShell.foldedSwitch.test.ts",
         "src/hooks/useBonsaiPluginShell.test.ts",
         "src/index.tsx",
         "src/preview/useDeckyPreviewTestHookRegistration.ts"
@@ -8852,6 +8868,7 @@
         "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useBonsaiPluginShell.foldedSwitch.test.ts",
         "src/hooks/useBonsaiPluginShell.test.ts",
         "src/hooks/useBonsaiPluginShell.ts",
         "src/hooks/useChatSlots.ts",

@@ -34,6 +34,7 @@ import {
   captureOllamaTabLocalSnapshot,
 } from "../utils/ollamaTabLocalSurvival";
 import { resolveResumeTab, saveLastTab } from "../features/plugin-shell/pluginStorage";
+import { closeAllFoldedSections } from "../features/folded-tabs/foldedTabsStore";
 import {
   peekModalReturnFocus,
   restoreModalReturnFocusWithRetry,
@@ -131,6 +132,9 @@ export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShel
   const [currentTab, setCurrentTab] = useState(resolveInitialTab);
   const characterPickerReturnTabRef = useRef<string>("main");
   const postPickerTabLockRef = useRef<{ until: number; tab: string } | null>(null);
+  /** The tab on screen, readable from the switch callbacks (which are made once, so cannot close over the state). */
+  const currentTabRef = useRef(currentTab);
+  currentTabRef.current = currentTab;
   const finalizeModalCloseRef = useRef<(close: () => void) => void>((close) => close());
 
   useLayoutEffect(() => {
@@ -216,6 +220,19 @@ export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShel
     });
   }, [currentTab, getSessionSnapshot]);
 
+  /**
+   * A person moved to another tab: every folded tab's sections close again (plan 92, the maintainer's call of
+   * 2026-10-12). Called only from the two paths that are a real switch: a bar press or Y (`selectTab`) and
+   * Steam's shoulder switch to a tab that is not the one showing (`onTabsShowTab`). Never from the lock's
+   * redirect back to the tab, from asking for the tab already showing, from a popup closing and the tab being
+   * rebuilt, or from the session restore: those do not come through here.
+   */
+  const noteRealTabSwitch = useCallback((to: string) => {
+    if (to === currentTabRef.current) return;
+    currentTabRef.current = to;
+    closeAllFoldedSections();
+  }, []);
+
   const onTabsShowTab = useCallback((tabID: string) => {
     bonsaiDebugLog("index.tsx:onTabsShowTab", "bumper tab", "H3", { to: tabID });
     const lock = postPickerTabLockRef.current;
@@ -224,6 +241,7 @@ export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShel
       setCurrentTab(lock.tab);
       return;
     }
+    noteRealTabSwitch(tabID);
     if (lock && now < lock.until) {
       if (tabID === lock.tab) {
         postPickerTabLockRef.current = null;
@@ -235,7 +253,7 @@ export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShel
       postPickerTabLockRef.current = null;
     }
     setCurrentTab(tabID);
-  }, []);
+  }, [noteRealTabSwitch]);
 
   /**
    * A tab chosen on bonsAI's own bar (plan 30). Sets the tab and clears the post-picker lock rather
@@ -246,8 +264,9 @@ export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShel
   const selectTab = useCallback((tabID: string) => {
     bonsaiDebugLog("useBonsaiPluginShell:selectTab", "bar tab", "H3", { to: tabID });
     postPickerTabLockRef.current = null;
+    noteRealTabSwitch(tabID);
     setCurrentTab(tabID);
-  }, []);
+  }, [noteRealTabSwitch]);
 
   const prepareModalWithReturnTab = useCallback(
     (returnTab?: string) => {

@@ -84,6 +84,17 @@ describe("the Delete chat box", () => {
     expect(Array.from(row.children)).toEqual([cancelCell, deleteCell]);
   });
 
+  it("holds both buttons in one Focusable that tells Steam its children flow horizontally, so Right and Left step between them", () => {
+    const { buttons } = openDeleteBox(vi.fn(async () => true));
+    const cancelCell = buttons[0]!.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
+    const deleteCell = buttons[1]!.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
+    const row = cancelCell.parentElement as HTMLElement;
+    expect(deleteCell.parentElement).toBe(row);
+    expect(row.getAttribute("data-decky-ui")).toBe("Focusable");
+    expect(row.getAttribute("flow-children")).toBe("horizontal");
+    expect(Array.from(row.children)).toEqual([cancelCell, deleteCell]);
+  });
+
   it("the opening button keeps the chat: A on it deletes nothing and closes the box", () => {
     const onDeleteSlot = vi.fn(async () => true);
     const { buttons } = openDeleteBox(onDeleteSlot);

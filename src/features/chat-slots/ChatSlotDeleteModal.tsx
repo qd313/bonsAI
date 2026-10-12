@@ -19,6 +19,10 @@
  *
  * Gotchas:
  * - Cancel must stay first in the DOM order; that is what puts the ring on it.
+ * - The two buttons sit in one Focusable with flow-children="horizontal". Without it Steam's own
+ *   focus graph read them as a column: Right from Cancel did nothing and only Down reached Delete
+ *   (Deck, 2026-10-11, build 9b4d0503). Up and Down also still step between them, as Steam does
+ *   for any row; no handler of ours is involved.
  * - Each button is wired for A (onOKButton on its Focusable) and for a finger (onClick), the way
  *   the download-location box wires its choices, so a guard makes sure one press acts once.
  */
@@ -64,12 +68,12 @@ export function ChatSlotDeleteModal({ label, onKeep, onDelete }: ChatSlotDeleteM
       <div className="bonsai-prose" style={{ fontSize: textPx(12), lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
         <div style={{ fontSize: textPx(16), fontWeight: 700, color: "#ffffff", marginBottom: 10 }}>Delete chat?</div>
         <div style={{ marginBottom: 10 }}>{`Delete "${label}" and its transcript? This cannot be undone.`}</div>
-        <div style={{ display: "flex", flexDirection: "row", gap: 8 }}>
+        <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", gap: 8 }}>
           <Choice onChoose={once(onKeep)}>Cancel</Choice>
           <Choice danger onChoose={once(onDelete)}>
             Delete
           </Choice>
-        </div>
+        </Focusable>
       </div>
     </ModalRoot>
   );

@@ -49,6 +49,11 @@ export type ReplyStopId =
   | "show-reasoning"
   | "copy"
   | "summary-note"
+  /** The "Read N of your notes" line between the question and the answer (plan 92, user-notes/NotesReadLine.tsx). */
+  | "notes-line"
+  /** The note card under the rating row: its Keep button (the card's first stop) and its "For: <game>" line (its last). */
+  | "note-keep"
+  | "note-for"
   /** The Read aloud speaker in the answer bubble's lower-left corner (plan 84 step 3). */
   | "read-aloud-corner"
   /** The first "What went wrong?" choice, the landing for a Down that leaves the answer's corner. */
@@ -70,6 +75,11 @@ export type ReplyStopId =
  * `summary-note` (plan 68) is the "The chat summed itself up before this answer" line directly
  * under the answer bubble, on the newest answer only, after Copy and before the thumbs.
  *
+ * `notes-line` (plan 92) is the other stop above the answer: "Read N of your notes", between the question and
+ * the Show reasoning line. `note-keep` and `note-for` are the note card's first and last stops, under the
+ * rating row and its reason chips and above Show details; both exist on the newest answer only, and only
+ * while a note is on offer.
+ *
  * `show-reasoning` is the one stop that is NOT below the answer: it is the Show reasoning line
  * between the question and the answer, on a turn whose model thought first (plan 57). It sits
  * between `retry` and `copy` because that is where a person meets it walking down — Retry is on
@@ -78,6 +88,7 @@ export type ReplyStopId =
  */
 export const REPLY_STOP_ORDER: readonly ReplyStopId[] = [
   "retry",
+  "notes-line",
   "show-reasoning",
   "read-aloud-corner",
   "copy",
@@ -85,6 +96,8 @@ export const REPLY_STOP_ORDER: readonly ReplyStopId[] = [
   "helpful",
   "not-really",
   "reason-chips",
+  "note-keep",
+  "note-for",
   "show-details",
 ];
 

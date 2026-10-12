@@ -114,6 +114,7 @@ import {
 } from "./drgGlossaryTermRegistry";
 import { findScrollablePanel, revealBelowKeepingAsItSettles } from "./chatPanelScroll";
 import { syncDetailsLine } from "../features/details-slot/detailsSlotStore";
+import { NoteOfferCard } from "../features/user-notes/NoteOfferCard";
 import { textPx } from "../styles/sections/textPx";
 
 /* Option E, the maintainer's pick (plan 72): two short-worded chips on top, three below. */
@@ -248,12 +249,14 @@ function renderChipRow(
     parts: ChipRowParts;
     /* On the row, not a chip: a Decky button does not forward move props on the Deck. */
     onMoveUp: () => boolean;
+    /** Down off the row, tried before Steam's own: the note card under the choices (plan 92). */
+    onMoveDown?: () => boolean;
     rowRef?: (el: HTMLElement | null) => void;
     /** Registers the first chip under this reply-stop name, so a Down from above can land on it. */
     firstChipStop?: ReplyStopId;
   }
 ): React.ReactElement | null {
-  const { chipsDisabled, onChip, rowClassName, parts, onMoveUp, rowRef, firstChipStop } = args;
+  const { chipsDisabled, onChip, rowClassName, parts, onMoveUp, onMoveDown, rowRef, firstChipStop } = args;
   if (!onChip) return null;
   const defs = chipIds.map((id) => replyMicroActionById(id)).filter(Boolean);
   if (!defs.length) return null;
@@ -262,7 +265,7 @@ function renderChipRow(
       className={rowClassName}
       flow-children="horizontal"
       ref={rowRef}
-      {...({ navRef: parts.nav, onMoveUp } as Record<string, unknown>)}
+      {...({ navRef: parts.nav, onMoveUp, ...(onMoveDown ? { onMoveDown } : {}) } as Record<string, unknown>)}
     >
       {defs.map((def, i) => (
         <BonsaiChatSecondaryButton
@@ -553,10 +556,15 @@ export function buildReplyActionsElement(
    * Below the thumbs sits the Show details line — the button row that used to be here, and the
    * separate Read aloud line below it, are both gone.
    */
-  const downFromThumbs = () => {
-    if (showChipRows) return false;
+  /* Down off the note card (plan 92), or off the rating row when no card is on offer: Show details, then what follows it. */
+  const downPastNoteCard = () => {
     if (showDetailsDivider && focusReplyShowDetails(liveSlot())) return true;
     return downFromDivider();
+  };
+  const downFromThumbs = () => {
+    if (showChipRows) return false;
+    if (focusRegisteredReplyStop("note-keep")) return true;
+    return downPastNoteCard();
   };
   /*
    * Last fallback on the way up: hand the ring straight to a glossary chip inside this turn's
@@ -606,9 +614,9 @@ export function buildReplyActionsElement(
     return focusLastAnswerChunk(replyKey);
   };
 
-  /* Up from Show details: straight to the thumbs row above it (the separate Read aloud line this
-     used to check for first is gone — see upFromRetry). */
-  const upFromDivider = () => upFromRetry();
+  /* Up from Show details: the note card's last stop when one is on offer (plan 92), else straight to the
+     thumbs row above it (the separate Read aloud line this used to check for first is gone — see upFromRetry). */
+  const upFromDivider = () => focusRegisteredReplyStop("note-for") || upFromRetry();
 
   /*
    * The two "What went wrong?" rows (plan 72 A-4). Measured on the Deck
@@ -722,6 +730,7 @@ export function buildReplyActionsElement(
             rowClassName: "bonsai-chat-reply-actions-row bonsai-chat-reply-actions-row--chips",
             parts: lengthRow,
             onMoveUp: upFromLengthRow,
+            onMoveDown: () => focusRegisteredReplyStop("note-keep"),
             rowRef: revealChipsWhenTheyAppear,
           })
         : null}
@@ -733,6 +742,11 @@ export function buildReplyActionsElement(
         >
           {chipError}
         </div>
+      ) : null}
+      {/* The note card (plan 92): on the newest answer only, never on the live turn (it is archived the moment the
+          answer finishes, and a card drawn there would be rebuilt under the ring). It draws nothing unless a note is on offer. */}
+      {showFeedback && replyKey !== "live" ? (
+        <NoteOfferCard replyKey={replyKey} onMoveUpOut={upFromRetry} onMoveDownOut={downPastNoteCard} />
       ) : null}
       {showDetailsDivider ? (
         /*

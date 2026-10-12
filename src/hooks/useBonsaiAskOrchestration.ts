@@ -155,6 +155,7 @@ import { useInputTransparencyRefresh } from "./useInputTransparencyRefresh";
 import { useAskMountRestore } from "./useAskMountRestore";
 import { useStrategyBranchActions } from "./useStrategyBranchActions";
 import { useAskSessionSnapshotActions } from "./useAskSessionSnapshotActions";
+import { receiveStatusOffer } from "../features/user-notes/userNotesStore";
 
 export type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
 
@@ -697,6 +698,7 @@ export function useBonsaiAskOrchestration(
         }
 
         setLastRequestId(typeof status.request_id === "number" ? status.request_id : null);
+        receiveStatusOffer(status); // plan 92: the offer to keep the question as a note, or none
         if (status.status === "completed" && status.success) {
           const q = (status.question || fallbackQuestion || "").trim();
           // Same blank-only guard as the pending branch above: closes the case where the Ask
@@ -1340,6 +1342,7 @@ export function useBonsaiAskOrchestration(
             model_policy_disclosure: null,
             strategy_spoiler_consent_effective: false,
             shortcut_setup: data.shortcut_setup ?? null,
+            note_offer: data.note_offer ?? null,
             // Carried through so an Ask that completes on the start call still reports a
             // model that refused to think; this path never polls, so nothing else would.
             thinking_unsupported: data.thinking_unsupported ?? false,

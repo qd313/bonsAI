@@ -27,6 +27,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - [src/features/search-tab](#srcfeaturessearch-tab)
 - [src/features/stream-scramble](#srcfeaturesstream-scramble)
 - [src/features/unified-input](#srcfeaturesunified-input)
+- [src/features/user-notes](#srcfeaturesuser-notes)
 - [src/features/voice](#srcfeaturesvoice)
 - [src/hooks](#srchooks)
 - [src/i18n](#srci18n)
@@ -475,6 +476,17 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - **constants.ts** (src/features/unified-input/constants.ts) — *Unified input layout constants*: Shared pixel constants for Ask bar typography, insets, carousel timing, and search thresholds.
 - **useUnifiedInputSurface.ts** (src/features/unified-input/useUnifiedInputSurface.ts) — *Lining up the fake caret with the real question box*: The Main tab's question box is drawn as two layers: an invisible native text field that the Deck's own on-screen keyboard and text handling actually type into, and a visible copy of the typed text with a blinking caret drawn on top of it, positioned to sit exactly over the real…
 
+## src/features/user-notes
+
+- **NoteEditModal.tsx** (src/features/user-notes/NoteEditModal.tsx) — *Changing the words of a note before keeping it*: The small popup Edit opens on the note card: a text box with the note's words already in it, plus Save and Cancel, shaped like the popup that renames a chat (ChatSlotRenameModal.tsx) and built with the same popup shell. […]
+- **NoteOfferCard.tsx** (src/features/user-notes/NoteOfferCard.tsx) — *The card that offers to keep what you said as a note*: Under the newest answer, after the Helpful / Not really row, a small card offers to keep a sentence from the question as a note (plan 90 § 2a, drawn on the mock-up board's tab 7, round 2, option B): a lead line, the note's words, three choices (Keep, Edit, Not now) and a "For…
+- **NotePinIcon.tsx** (src/features/user-notes/NotePinIcon.tsx) — *The pin that marks a note*: The small pushpin drawn beside a note: on the kept line, on the "Read N of your notes" line and in the notes sheet. […]
+- **NotesReadLine.tsx** (src/features/user-notes/NotesReadLine.tsx) — *The line above an answer that says it read your notes*: When an answer was written with some of the person's notes in hand, one small line sits between the question and the answer: "Read 2 of your notes ▸" (or "Read 1 of your notes ▸"); when every note for that game was switched off, "Your notes are all off ▸". […]
+- **UserNotesSheet.tsx** (src/features/user-notes/UserNotesSheet.tsx) — *Your notes, over the panel*: What A on the "Read N of your notes" line opens (plan 90 § 2a, drawn on the mock-up board's tab 7, round 2): every note the person kept, newest first, one row each with its words, the game it is for (or "Every game"), a switch, and a Remove button beside it, under the line "Ask…
+- **useUserNotes.ts** (src/features/user-notes/useUserNotes.ts) — *Asking the back end to keep, change or remove a note*: The calls the note card and the notes sheet make (plan 92, contract C3): save a new note from an offer, switch a note on or off, and remove one. […]
+- **useUserNotesBridge.ts** (src/features/user-notes/useUserNotesBridge.ts) — *Telling the notes screens what the Main tab knows*: The note card and the notes line are drawn by plain builder functions deep inside the chat transcript, where the shell's popup hooks (the capture before a popup opens, the finish after it closes) and the open chat's id are not at hand. […]
+- **userNotesStore.ts** (src/features/user-notes/userNotesStore.ts) — *What the notes screens remember between rebuilds*: Everything the note card, the "Read N of your notes" line and the notes sheet must not lose when the tab behind them is rebuilt: the pending offer to keep a note (its words, which game it is for, and whether it was kept), which line opened the sheet, and a card button waiting to…
+
 ## src/features/voice
 
 - **useVoiceAskInput.ts** (src/features/voice/useVoiceAskInput.ts) — *The microphone button on the Ask bar*: Runs while a person taps the microphone icon to speak a question instead of typing it. Owns whether recording is on, checks permission before starting, writes the recognized words into the question box as they arrive, and shows an error message if anything goes wrong.
@@ -593,6 +605,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - **tabIndicatorBar.ts** (src/styles/sections/tabIndicatorBar.ts) — *The plugin's own tab bar, at the very top of the screen*: Styles the thin bar that replaced Steam's own tab strip, as plan 84's design "T3" with plan 87 F4's fixed order: one 20-point row of three columns, LB, the tabs and RB. […]
 - **textPx.ts** (src/styles/sections/textPx.ts) — *A font size that follows the Text size setting*: `textPx(12)` is `calc(12px * var(--bonsai-text-scale, 1))`: today's size for the words, times the step the person picked under Settings > Text size (1 when none is set, so Normal is exactly today's size). […]
 - **uiScalePx.ts** (src/styles/sections/uiScalePx.ts) — *Scale a pixel size*: Every fixed size in the stylesheet is meant to pass through here, so turning the plugin's own "UI scale" setting up or down resizes it too, instead of only resizing the handful of things Steam already knows how to scale on its own.
+- **userNotes.ts** (src/styles/sections/userNotes.ts) — *The note card, the "Read N of your notes" line and the kept note's look*: The stylesheet for src/features/user-notes (plan 90 § 2a, plan 92 lane N2), drawn on the mock-up board's tab 7, round 2, option B (docs/demos/mockup-board/src/47b-notes-r2.js and the rules in 48b-round2.css). […]
 
 ## src/types
 

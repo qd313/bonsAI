@@ -37,9 +37,11 @@ describe("reply stop registry", () => {
    * down meets it after Retry and before the answer's own Copy. The order is what every "which
    * stop has focus?" lookup scans, so the position matters, not just the presence.
    */
-  it("walks Retry, then Show reasoning, then Read aloud and Copy along the answer's bottom edge", () => {
+  it("walks Retry, then the notes line, then Show reasoning, then Read aloud and Copy along the answer's bottom edge", () => {
+    /* Plan 92: "Read N of your notes" sits between the question and the Show reasoning line. */
+    expect(REPLY_STOP_ORDER.indexOf("notes-line")).toBe(REPLY_STOP_ORDER.indexOf("retry") + 1);
     expect(REPLY_STOP_ORDER.indexOf("show-reasoning")).toBe(
-      REPLY_STOP_ORDER.indexOf("retry") + 1,
+      REPLY_STOP_ORDER.indexOf("notes-line") + 1,
     );
     /* Plan 84 step 3: left to right on the bubble's bottom edge, Read aloud then Copy. */
     expect(REPLY_STOP_ORDER.indexOf("read-aloud-corner")).toBe(

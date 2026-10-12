@@ -59,9 +59,22 @@ function isVacCheckCommand(question: string): boolean {
 }
 
 /**
+ * True when the Ask line is a note command: ``remember ...`` or ``note: ...`` (plan 92; same detection as
+ * ``parse_note_command`` in user_note_commands.py). It is answered with an offer to keep a note, no AI.
+ */
+function isNoteCommand(question: string): boolean {
+  return /^\s*(?:remember\b|note\s*:)/i.test(question || "");
+}
+
+/**
  * Ask lines that the backend handles without Ollama / LAN PC IP (see ``start_background_game_ai``).
  * When this is true, the Main tab must not block submission on an empty Ollama host field.
  */
 export function questionBypassesOllamaPcIpRequirement(question: string): boolean {
-  return isSanitizerKeywordCommand(question) || isShortcutSetupCommand(question) || isVacCheckCommand(question);
+  return (
+    isSanitizerKeywordCommand(question) ||
+    isShortcutSetupCommand(question) ||
+    isVacCheckCommand(question) ||
+    isNoteCommand(question)
+  );
 }

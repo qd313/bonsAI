@@ -63,6 +63,7 @@ import {
 } from "../features/stream-scramble/streamScrambleContext";
 import { gameIsRunning, lighterWhileGameRuns } from "../utils/lighterWhileGameRuns";
 import { textPx } from "../styles/sections/textPx";
+import { useUserNotesBridge } from "../features/user-notes/useUserNotesBridge";
 
 export type MainTabProps = {
   fullBleedRowStyle: React.CSSProperties;
@@ -308,6 +309,8 @@ export function MainTab(props: MainTabProps) {
     },
     chatActions,
   );
+  /* The note card and the notes line open popups from deep in the transcript: hand them the shell's hooks (plan 92). */
+  useUserNotesBridge({ activeSlotId: props.activeChatSlotId, before: props.onBeforeNestedDeckyModal, complete: props.onCompleteNestedDeckyModalClose });
   /* The + and the delete icon on the chat's name row make a new chat and open the Delete chat? box (plan 87 F5). */
   useChatRowActions({
     activeSlotId: props.activeChatSlotId ?? null,

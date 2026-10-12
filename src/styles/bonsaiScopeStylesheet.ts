@@ -20,6 +20,7 @@ import { buildTabIndicatorBarSection } from "./sections/tabIndicatorBar";
 import { buildAboutTabSection } from "./sections/aboutTab";
 import { buildGameRunningLighterSection } from "./sections/gameRunningLighter";
 import { buildFoldedTabsSection } from "./sections/foldedTabs";
+import { buildUserNotesSection } from "./sections/userNotes";
 import {
   buildGamepadFocusRingStylesheet,
   buildPullModelsStylesheet,
@@ -45,6 +46,7 @@ export function buildBonsaiScopeStylesheet(): string {
     buildGamepadFocusRingStylesheet() +
     buildPullModelsStylesheet() +
     buildFoldedTabsSection() +
+    buildUserNotesSection() +
     /* Last: its rules hold still animations defined above (plan 70). */
     buildGameRunningLighterSection()
   );

@@ -145,6 +145,10 @@ export type TransparencySnapshot = {
   /** Plan 58 phase 1: the notes behind the "From the notes" block. Empty on every turn with
    *  nothing attached, absent only on a snapshot built before this field existed. */
   kb_attached_notes?: KbAttachedNote[];
+  /** Plan 92: the person's own notes that went into this answer (always present on a newer record). */
+  user_notes_attached?: { id: string; text: string; game_title: string }[];
+  /** Plan 92: how many notes matched this turn's game but were switched off. */
+  user_notes_off_count?: number;
 };
 
 /**
@@ -158,7 +162,7 @@ export type TransparencySnapshot = {
  */
 export type ChatSlotTurnTransparency = Pick<
   TransparencySnapshot,
-  "route" | "success" | "context_chips" | "overflow_skips" | "kb_attached_notes"
+  "route" | "success" | "context_chips" | "overflow_skips" | "kb_attached_notes" | "user_notes_attached" | "user_notes_off_count"
 >;
 
 export type AskDiagnosticsSnapshot = {

@@ -23,7 +23,7 @@ import {
   isUpDeckButtonEvent,
 } from "./focusNavigation";
 import { focusRegisteredReplyStop } from "./replyStopRegistry";
-import { focusReplyShowReasoning } from "./liveTurnFocusGraph";
+import { focusReplyNotesLine, focusReplyShowReasoning } from "./liveTurnFocusGraph";
 import { fitOpenQuestionBubble } from "./questionBubbleFit";
 import { elementHasFocus } from "./uiDocument";
 
@@ -205,7 +205,8 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
   const bodyEl: { current: HTMLElement | null } = { current: null };
 
   /*
-   * Down goes to the Show reasoning line first, and into the answer only when there is no line.
+   * Down goes to the notes line first (plan 92), then the Show reasoning line, and into the answer only when
+   * there is neither.
    *
    * On a turn where the model thought before it answered, that line sits between this question and
    * its answer, so it is the next thing down the screen. `focusRegisteredReplyStop` reports false
@@ -215,6 +216,8 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
    */
   const focusAnswer = () => {
     if (!expanded) return false;
+    /* Plan 92: "Read N of your notes" sits right under the question, above the Show reasoning line. */
+    if (focusReplyNotesLine(null)) return true;
     if (focusReplyShowReasoning(null)) return true;
     return focusFirstAnswerChunk(turnId);
   };

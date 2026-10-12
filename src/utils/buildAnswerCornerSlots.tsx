@@ -101,6 +101,7 @@ function downOutOfCorner(): boolean {
     focusRegisteredReplyStop("summary-note") ||
     focusRegisteredReplyStop("helpful") ||
     focusRegisteredReplyStop("reason-chips") ||
+    focusRegisteredReplyStop("note-keep") ||
     focusRegisteredReplyStop("show-details")
   );
 }

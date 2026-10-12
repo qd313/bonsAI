@@ -36,6 +36,13 @@ import type { KbAttachedNote, TransparencySnapshot } from "../utils/inputTranspa
 /** Shortcut-setup keyword replies surface this so the UI can deep-link Controller settings. */
 type ShortcutSetupKind = "deck" | "stadia";
 
+/**
+ * The offer to keep a question as a note (plan 92, contract C5): the words, and the game they are for
+ * (an id and a name, both empty for every game). Worked out from the question's own text before the AI
+ * answers, so it arrives with a failed answer too; never saved into the chat file.
+ */
+export type NoteOffer = { text: string; app_id: string; game_title: string };
+
 export type BackgroundStartResponse = {
   accepted?: boolean;
   status: "pending" | "busy" | "invalid" | "completed" | "blocked";
@@ -62,6 +69,8 @@ export type BackgroundStartResponse = {
   thinking_unsupported?: boolean;
   /** Model that answered, used to warn about unsupported thinking once per model. */
   model?: string | null;
+  /** The "Keep this as a note?" offer a typed `remember ...` command answers with (plan 92). */
+  note_offer?: NoteOffer | null;
 };
 
 export type BackgroundRequestStatus = {
@@ -173,6 +182,8 @@ export type BackgroundRequestStatus = {
    * own "Summing up · N s", so the count survives the tab being rebuilt.
    */
   summing_up_seconds?: number;
+  /** The offer to keep the question as a note, or null/absent when it said nothing worth keeping (plan 92). */
+  note_offer?: NoteOffer | null;
 };
 
 export type PresetCarouselInjectPayload = {

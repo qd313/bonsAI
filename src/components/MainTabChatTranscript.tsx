@@ -170,6 +170,7 @@ import { BonsaiChatSecondaryButton } from "./BonsaiChatSecondaryButton";
 import { buildReplyActionsElement } from "../utils/buildReplyActionsElement";
 import { archivedTurnTransparency } from "../utils/archivedTurnTransparency";
 import { buildAnswerBubbleElement } from "../utils/buildAnswerBubbleElement";
+import { buildNotesReadLine } from "../features/user-notes/NotesReadLine";
 import { buildAnswerCopyText } from "../utils/answerCopyText";
 import { buildThinkingBlurbTextElement } from "../utils/buildThinkingBlurbTextElement";
 import { buildTurnHeaderElement, focusOpenQuestionText } from "../utils/buildTurnHeaderElement";
@@ -195,6 +196,7 @@ import type { ReplyMicroActionId } from "../data/replyMicroActions";
 import {
   focusDeckOwner,
   focusReplyShowDetails,
+  focusReplyNotesLine,
   focusReplyUtilityRow,
   queryLiveTurnSlot,
   registerStrategyBranchPickerNav,
@@ -635,6 +637,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
        * right move here (AGENTS.md, "The Steam Deck focus graph").
        */
       onMoveUp: () => {
+        if (focusReplyNotesLine(queryTurnSlot(turnKey))) return true;
         if (focusOpenQuestionText(turnKey)) return true;
         return focusDeckOwner(turnHeaderElRefs.current[turnKey] ?? null);
       },
@@ -1244,6 +1247,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   </div>
                 ) : null}
                 {buildChatSummaryWarningElement(turn.chatSummary)}
+                {buildNotesReadLine(turn.id, archivedTransparencyFor(turn, turnIndex))}
                 {renderReasoningFold(turn.id, turn.reasoning)}
                 {renderAnswerBubble(turn.answer, false, turn.id, archivedSpoilerFacts(turn, turnIndex), turn.answer, kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex)))}
                 {buildChatSummaryNoteElement({

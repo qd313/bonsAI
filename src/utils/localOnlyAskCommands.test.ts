@@ -23,6 +23,20 @@ describe("questionBypassesOllamaPcIpRequirement", () => {
     expect(questionBypassesOllamaPcIpRequirement("Check Steam players for bansheeX")).toBe(false);
   });
 
+  it("allows the note commands without PC IP (plan 92: remember ... and note: ...)", () => {
+    expect(questionBypassesOllamaPcIpRequirement("remember no spoilers past the City of Tears")).toBe(true);
+    expect(questionBypassesOllamaPcIpRequirement("  Remember that I prefer dodging")).toBe(true);
+    expect(questionBypassesOllamaPcIpRequirement("remember")).toBe(true);
+    expect(questionBypassesOllamaPcIpRequirement("note: I use dash on R1")).toBe(true);
+    expect(questionBypassesOllamaPcIpRequirement("Note : I use dash on R1")).toBe(true);
+  });
+
+  it("does not treat a question that only starts like a note command as one", () => {
+    expect(questionBypassesOllamaPcIpRequirement("rememberable moments in Hollow Knight")).toBe(false);
+    expect(questionBypassesOllamaPcIpRequirement("note that the lords drop at once")).toBe(false);
+    expect(questionBypassesOllamaPcIpRequirement("do you remember where the bench is")).toBe(false);
+  });
+
   it("requires PC IP for normal asks", () => {
     expect(questionBypassesOllamaPcIpRequirement("What TDP should I use?")).toBe(false);
   });

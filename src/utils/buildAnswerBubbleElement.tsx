@@ -441,6 +441,7 @@ export function buildAnswerBubbleElement(
       !hasStrategyChrome &&
       (focusRegisteredReplyStop("helpful") ||
         focusRegisteredReplyStop("reason-chips") ||
+        focusRegisteredReplyStop("note-keep") ||
         focusRegisteredReplyStop("show-details"))
     ) {
       return true;

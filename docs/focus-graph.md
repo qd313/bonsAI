@@ -1007,3 +1007,80 @@ tab bar
   an unmount and a remount, the line's moves), `FoldAllButton.test.tsx` (Right onto it, A, the four ways back, also
   after a rebuild), `TabHelpStrip.test.tsx` (the strip's text on the landing, hidden without, the band arithmetic
   from the stylesheet). Device rows: P91-FOLD-OLLAMA, P91-STRIP, P91-FOLD-ALL-BUTTON (plan 91 § 5).
+
+
+### The note card and the "Read N of your notes" line (plan 92, lane N2)
+
+_Code: `src/features/user-notes/` (`NoteOfferCard.tsx`, `NotesReadLine.tsx`, `UserNotesSheet.tsx`, `userNotesStore.ts`);
+mounted by `buildReplyActionsElement.tsx` (the card), `MainTabChatTranscript.tsx` (the line); stops registered in
+`replyStopRegistry.ts` as `notes-line`, `note-keep` and `note-for`._
+
+**The card**, under the newest answer, after the Helpful / Not really row (and its "What went wrong?" choices when the
+reply was rated down) and before the Show details line. It exists only while a note is on offer (the back end sent
+`note_offer` with the answer, or "remember ..." was typed) and never on the live turn, which is archived the moment the
+answer finishes. Drawn top to bottom: the lead line, the note's words, the three buttons, then the "For" line.
+
+```
+the rating row (or the last row of its reason choices)        <- Down from it lands on Keep
+   | Down                                         ^ Up (from any of the three)
+[ Keep ] --Right--> [ Edit ] --Right--> [ Not now ]      Left at Keep and Right at Not now hold still
+   | Down (from any of the three)                 ^ Up
+"For: Hollow Knight ▸"                                    A flips this game / every game; Left and Right hold still
+   | Down                                         ^ Up
+the Show details line, as before
+```
+
+- **Every stop carries all four move handlers and claims its press** (the About tab's Deck failure, 2026-10-12: a
+  group with no flow gave Down nowhere to go). Keep, Edit and Not now are siblings in one row, so the hops between them
+  are Steam's transfer onto the sibling's nav node followed by a plain focus. Everything that crosses containers goes
+  through Steam's transfer: Keep and the "For" line each have their own nav node (`replyStopNavRef`), so the hop
+  between the row and the "For" line, and in and out of the card, is `focusRegisteredReplyStop`.
+- **In and out of the card are the turn's own graph, not the card's.** Down from Helpful (`downFromThumbs`), from the
+  last reason choice (the choices' row gained an `onMoveDown`), from the answer's end (`focusDownFromLiveAnswerBubble`,
+  the bubble's own Down, the corner icons' Down and the summed-up note's Down: each chain gained `note-keep` after
+  `reason-chips`) all land on Keep. Up from Show details lands on the "For" line (`upFromDivider`); Up from Keep, Edit
+  or Not now goes where Up from Show details used to go (`upFromRetry`: the choices, Helpful, the branch picker, the
+  summed-up note, the answer's last section). Down from the "For" line goes to Show details.
+- **Keep, Edit and the "For" line are A as `onOKButton` plus `onClick`**, never `onActivate` too (Steam fires it for A as
+  well). Keep saves through `save_user_note` and the card becomes one line; the ring was on Keep, which is gone, so it is
+  handed to Show details once the card has changed (the same hand-over Helpful makes). Not now removes the card and
+  hands the ring on the same way. A refusal keeps the card and shows the back end's words.
+- **The card is the ring's first stop when it appears**, once, unless the person is typing in a text box. The wish
+  ("put the ring on Keep for this offer") is in the store, so a rebuilt tab neither forgets it nor repeats it.
+- **Edit opens a Steam popup** (`NoteEditModal.tsx`, shaped like the chat rename). Closing a popup rebuilds the tab
+  (docs/lessons-learned.md), so the pending offer, the edited words and "the ring goes back to Keep" all live in
+  `userNotesStore.ts`, and the rebuilt card tries a few times, while the tab mounts, to put the ring back on Keep. The
+  popup goes through the shell's `onBeforeNestedDeckyModal` / `onCompleteNestedDeckyModalClose`, handed in by
+  `useUserNotesBridge` (one call in `MainTab.tsx`) because the transcript's builders cannot reach them.
+- **Drawn order differs from the plan's sketch on purpose.** Plan 90 § 6 draws the "For" line below the buttons and the
+  mock-up board's card (47b-notes-r2.js) draws it above; this follows the plan's graph and its Deck check (rating row,
+  card, "For" line, Show details), so the D-pad order is the drawn order.
+- **Pinned by** `NoteOfferCard.test.tsx` (buttons, Keep / Edit / Not now, the popup through a rebuild, all four
+  directions on every stop), `UserNotes.walk.test.tsx` (the rows walked Down and Up in the Deck's numbers under every
+  Steam scroll rule: no stop twice, none off screen, with and without thumbs and choices) and
+  `UserNotes.transcript.test.tsx` (the real transcript). Device rows: plan 92, block 5.
+
+**The line**, between the question and the answer (above the Show reasoning line when the turn has one). It is one
+stop, `notes-line`, drawn only on a turn whose saved record says notes were read ("Read 1 of your notes", "Read 2 of
+your notes") or were all off ("Your notes are all off").
+
+```
+the question (its text, or its row when it has no Retry)       <- Down from it lands on the line
+   | Down                                         ^ Up
+Read 1 of your notes ▸                              A opens the sheet; Left and Right hold still
+   | Down                                         ^ Up
+the Show reasoning line when this turn has one, else the answer's first section
+```
+
+- The question's Down (`buildTurnHeaderElement`) tries the line before the Show reasoning line; the Show reasoning
+  line's Up tries the line before the question; the line's Up is the question's text (`focusOpenQuestionText`), else its
+  row; the line's Down is the Show reasoning line, else the answer's first section. All inside the turn's own column,
+  so those hops are plain focus calls. The line has its own nav node.
+- **The sheet is a Steam popup** (`UserNotesSheet.tsx`): every note with its words, its game or "Every game", a switch
+  (A on the words) and a Remove bin (A), under "Ask reads the ones that are on, every time you ask about that game."
+  Steam walks the rows (siblings in one box); after Remove the ring goes to the row now in its place, else the one
+  before, else Close. B or Close closes it once.
+- **The ring returns to the line.** Opening the sheet writes the turn's key into the store (`sheetOpenedFrom`); closing
+  the popup rebuilds the tab and the rebuilt line, seeing its own key with the sheet closed, takes the ring back (a
+  few tries while the tab mounts) and clears the note. `NotesReadLine.test.tsx` unmounts and remounts between the open
+  and the return, as lessons-learned requires.

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 891,
-  "edgeCount": 2830,
+  "fileCount": 907,
+  "edgeCount": 2910,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -138,7 +138,9 @@
         "src/components/OllamaModelsHubModal.tsx",
         "src/components/PluginHelpModal.tsx",
         "src/components/PullModelsModal.tsx",
-        "src/features/chat-slots/ChatSlotRenameModal.tsx"
+        "src/features/chat-slots/ChatSlotRenameModal.tsx",
+        "src/features/user-notes/NoteEditModal.tsx",
+        "src/features/user-notes/UserNotesSheet.tsx"
       ]
     },
     "src/components/BonsaiPluginShell.test.tsx": {
@@ -615,6 +617,7 @@
         "src/features/chat-title/useChatTitlePublisher.ts",
         "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/stream-scramble/streamScrambleContext.ts",
+        "src/features/user-notes/useUserNotesBridge.ts",
         "src/hooks/useDockClearanceOnFocus.ts",
         "src/hooks/useMainTabColumnFill.ts",
         "src/styles/sections/textPx.ts",
@@ -1018,6 +1021,7 @@
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/features/chat-sum-up/chatSumUpModel.ts",
         "src/features/unified-input/constants.ts",
+        "src/features/user-notes/NotesReadLine.tsx",
         "src/hooks/useEarlierTurnsPill.ts",
         "src/hooks/useKbNotesFold.ts",
         "src/hooks/useLiveTurnHeaderRingRestore.ts",
@@ -1098,7 +1102,8 @@
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
         "src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx",
-        "src/components/textSizeEverywhere.test.tsx"
+        "src/components/textSizeEverywhere.test.tsx",
+        "src/features/user-notes/UserNotes.transcript.test.tsx"
       ]
     },
     "src/components/MainTabChatTranscript.turnTitle.test.tsx": {
@@ -2521,6 +2526,7 @@
         "src/features/chat-sum-up/SessionSumUpSection.tsx",
         "src/features/chat-title/chatsMenuIcons.tsx",
         "src/features/plugin-shell/tabTitles.tsx",
+        "src/features/user-notes/UserNotesSheet.tsx",
         "src/index.tsx",
         "src/utils/buildAnswerCornerSlots.tsx",
         "src/utils/buildReplyActionsElement.tsx",
@@ -5334,7 +5340,8 @@
       "importedBy": [
         "src/features/search-tab/searchApi.test.ts",
         "src/features/search-tab/useGameNotes.ts",
-        "src/features/search-tab/useSearchIndex.ts"
+        "src/features/search-tab/useSearchIndex.ts",
+        "src/features/user-notes/useUserNotes.ts"
       ]
     },
     "src/features/search-tab/searchModel.test.ts": {
@@ -5413,7 +5420,10 @@
         "src/features/search-tab/searchTabStore.ts",
         "src/features/search-tab/searchTabTestKit.tsx",
         "src/features/search-tab/useGameNotes.ts",
-        "src/features/search-tab/useSearchIndex.ts"
+        "src/features/search-tab/useSearchIndex.ts",
+        "src/features/user-notes/UserNotesSheet.test.tsx",
+        "src/features/user-notes/UserNotesSheet.tsx",
+        "src/features/user-notes/useUserNotes.ts"
       ]
     },
     "src/features/search-tab/useGameNotes.ts": {
@@ -5591,6 +5601,179 @@
       "importedBy": [
         "src/features/unified-input/useUnifiedInputSurface.test.ts",
         "src/index.tsx"
+      ]
+    },
+    "src/features/user-notes/NoteEditModal.tsx": {
+      "imports": [
+        "src/components/BonsaiModalScope.tsx"
+      ],
+      "importedBy": [
+        "src/features/user-notes/NoteOfferCard.test.tsx",
+        "src/features/user-notes/NoteOfferCard.tsx"
+      ]
+    },
+    "src/features/user-notes/NoteOfferCard.test.tsx": {
+      "imports": [
+        "src/features/user-notes/NoteEditModal.tsx",
+        "src/features/user-notes/NoteOfferCard.tsx",
+        "src/features/user-notes/userNotesStore.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx",
+        "src/utils/replyStopRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/user-notes/NoteOfferCard.tsx": {
+      "imports": [
+        "src/features/user-notes/NoteEditModal.tsx",
+        "src/features/user-notes/NotePinIcon.tsx",
+        "src/features/user-notes/useUserNotes.ts",
+        "src/features/user-notes/userNotesStore.ts",
+        "src/utils/focusNavigation.ts",
+        "src/utils/replyStopRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/features/user-notes/NoteOfferCard.test.tsx",
+        "src/utils/buildReplyActionsElement.tsx"
+      ]
+    },
+    "src/features/user-notes/NotePinIcon.tsx": {
+      "imports": [],
+      "importedBy": [
+        "src/features/user-notes/NoteOfferCard.tsx",
+        "src/features/user-notes/NotesReadLine.tsx",
+        "src/features/user-notes/UserNotesSheet.tsx"
+      ]
+    },
+    "src/features/user-notes/NotesReadLine.test.tsx": {
+      "imports": [
+        "src/features/user-notes/NotesReadLine.tsx",
+        "src/features/user-notes/UserNotesSheet.tsx",
+        "src/features/user-notes/userNotesStore.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx",
+        "src/utils/inputTransparency.ts",
+        "src/utils/replyStopRegistry.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/user-notes/NotesReadLine.tsx": {
+      "imports": [
+        "src/features/user-notes/NotePinIcon.tsx",
+        "src/features/user-notes/UserNotesSheet.tsx",
+        "src/features/user-notes/userNotesStore.ts",
+        "src/utils/answerBubbleNavigation.ts",
+        "src/utils/buildTurnHeaderElement.tsx",
+        "src/utils/focusNavigation.ts",
+        "src/utils/inputTransparency.ts",
+        "src/utils/liveTurnFocusGraph.ts",
+        "src/utils/replyStopRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/features/user-notes/NotesReadLine.test.tsx",
+        "src/features/user-notes/UserNotes.walk.test.tsx"
+      ]
+    },
+    "src/features/user-notes/UserNotes.transcript.test.tsx": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/features/user-notes/userNotesStore.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx",
+        "src/types/bonsaiUi.ts",
+        "src/utils/inputTransparency.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/user-notes/UserNotes.walk.test.tsx": {
+      "imports": [
+        "src/features/user-notes/NotesReadLine.tsx",
+        "src/features/user-notes/userNotesStore.ts",
+        "src/test-harness/deckAnswerWalk.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/steamRing.tsx",
+        "src/utils/buildReplyActionsElement.tsx",
+        "src/utils/buildTurnHeaderElement.tsx",
+        "src/utils/inputTransparency.ts",
+        "src/utils/liveTurnFocusGraph.ts",
+        "src/utils/replyStopRegistry.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/user-notes/UserNotesSheet.test.tsx": {
+      "imports": [
+        "src/features/search-tab/searchTypes.ts",
+        "src/features/user-notes/UserNotesSheet.tsx",
+        "src/features/user-notes/userNotesStore.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/features/user-notes/UserNotesSheet.tsx": {
+      "imports": [
+        "src/components/BonsaiModalScope.tsx",
+        "src/components/icons.tsx",
+        "src/features/search-tab/searchTypes.ts",
+        "src/features/user-notes/NotePinIcon.tsx",
+        "src/features/user-notes/useUserNotes.ts",
+        "src/features/user-notes/userNotesStore.ts",
+        "src/styles/sections/textPx.ts",
+        "src/styles/settingsGlassButton.ts"
+      ],
+      "importedBy": [
+        "src/features/user-notes/NotesReadLine.test.tsx",
+        "src/features/user-notes/NotesReadLine.tsx",
+        "src/features/user-notes/UserNotesSheet.test.tsx"
+      ]
+    },
+    "src/features/user-notes/useUserNotes.ts": {
+      "imports": [
+        "src/features/search-tab/searchApi.ts",
+        "src/features/search-tab/searchTypes.ts",
+        "src/types/backgroundAsk.ts",
+        "src/utils/deckyCall.ts"
+      ],
+      "importedBy": [
+        "src/features/user-notes/NoteOfferCard.tsx",
+        "src/features/user-notes/UserNotesSheet.tsx"
+      ]
+    },
+    "src/features/user-notes/useUserNotesBridge.ts": {
+      "imports": [
+        "src/features/user-notes/userNotesStore.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTab.tsx"
+      ]
+    },
+    "src/features/user-notes/userNotesStore.test.ts": {
+      "imports": [
+        "src/features/user-notes/userNotesStore.ts"
+      ],
+      "importedBy": []
+    },
+    "src/features/user-notes/userNotesStore.ts": {
+      "imports": [
+        "src/types/backgroundAsk.ts"
+      ],
+      "importedBy": [
+        "src/features/user-notes/NoteOfferCard.test.tsx",
+        "src/features/user-notes/NoteOfferCard.tsx",
+        "src/features/user-notes/NotesReadLine.test.tsx",
+        "src/features/user-notes/NotesReadLine.tsx",
+        "src/features/user-notes/UserNotes.transcript.test.tsx",
+        "src/features/user-notes/UserNotes.walk.test.tsx",
+        "src/features/user-notes/UserNotesSheet.test.tsx",
+        "src/features/user-notes/UserNotesSheet.tsx",
+        "src/features/user-notes/useUserNotesBridge.ts",
+        "src/features/user-notes/userNotesStore.test.ts",
+        "src/hooks/useBonsaiAskOrchestration.noteOffer.test.ts",
+        "src/hooks/useBonsaiAskOrchestration.ts"
       ]
     },
     "src/features/voice/useVoiceAskInput.test.ts": {
@@ -5875,6 +6058,16 @@
       ],
       "importedBy": []
     },
+    "src/hooks/useBonsaiAskOrchestration.noteOffer.test.ts": {
+      "imports": [
+        "src/features/user-notes/userNotesStore.ts",
+        "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/rpcFixtures.ts",
+        "src/types/backgroundAsk.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useBonsaiAskOrchestration.test.ts": {
       "imports": [
         "src/data/bonsaiSettingsSchema.ts",
@@ -5894,6 +6087,7 @@
         "src/data/presets.ts",
         "src/data/replyMicroActions.ts",
         "src/data/strategyGuideFollowup.ts",
+        "src/features/user-notes/userNotesStore.ts",
         "src/hooks/saveReplyToDesktopNote.ts",
         "src/hooks/useAskMountRestore.ts",
         "src/hooks/useAskSessionSnapshotActions.ts",
@@ -5937,6 +6131,7 @@
         "src/features/voice/useVoiceAskWithReadAloud.ts",
         "src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts",
         "src/hooks/useBonsaiAskOrchestration.desktopNote.test.ts",
+        "src/hooks/useBonsaiAskOrchestration.noteOffer.test.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/index.tsx",
         "src/preview/useDeckyPreviewTestHookRegistration.ts"
@@ -7037,7 +7232,8 @@
         "src/styles/sections/section-7.ts",
         "src/styles/sections/section-8.ts",
         "src/styles/sections/section-9.ts",
-        "src/styles/sections/tabIndicatorBar.ts"
+        "src/styles/sections/tabIndicatorBar.ts",
+        "src/styles/sections/userNotes.ts"
       ],
       "importedBy": [
         "src/components/AboutTab.test.tsx",
@@ -7432,6 +7628,7 @@
         "src/features/preset-carousel/presetChipButton.tsx",
         "src/features/preset-carousel/presetDecodeChipButton.tsx",
         "src/features/search-tab/searchTabStyles.ts",
+        "src/features/user-notes/UserNotesSheet.tsx",
         "src/hooks/localOllamaStarterSet.tsx",
         "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/usePullModelDeleteConfirm.tsx",
@@ -7453,6 +7650,7 @@
         "src/styles/sections/section-6.ts",
         "src/styles/sections/section-8.ts",
         "src/styles/sections/tabIndicatorBar.ts",
+        "src/styles/sections/userNotes.ts",
         "src/styles/settingsGlassButton.ts",
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/buildReplyActionsElement.tsx"
@@ -7475,7 +7673,17 @@
         "src/styles/sections/section-4.ts",
         "src/styles/sections/section-5.ts",
         "src/styles/sections/section-6.ts",
-        "src/styles/sections/tabIndicatorBar.ts"
+        "src/styles/sections/tabIndicatorBar.ts",
+        "src/styles/sections/userNotes.ts"
+      ]
+    },
+    "src/styles/sections/userNotes.ts": {
+      "imports": [
+        "src/styles/sections/textPx.ts",
+        "src/styles/sections/uiScalePx.ts"
+      ],
+      "importedBy": [
+        "src/styles/bonsaiScopeStylesheet.ts"
       ]
     },
     "src/styles/settingsGlassButton.ts": {
@@ -7503,6 +7711,7 @@
         "src/features/chat-slots/ChatSlotPickerModal.tsx",
         "src/features/folded-tabs/FoldAllButton.test.tsx",
         "src/features/folded-tabs/FoldAllButton.tsx",
+        "src/features/user-notes/UserNotesSheet.tsx",
         "src/styles/buttonFocusRing.test.ts"
       ]
     },
@@ -7538,6 +7747,7 @@
       "importedBy": [
         "src/components/ContextChipLadder.gridWalk.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
+        "src/features/user-notes/UserNotes.walk.test.tsx",
         "src/test-harness/deckChipLadderPane.ts",
         "src/utils/answerBubbleNavigation.controlsLift.test.ts",
         "src/utils/answerBubbleNavigation.coverMargin.test.ts",
@@ -7647,6 +7857,7 @@
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts",
         "src/hooks/useBonsaiAskOrchestration.desktopNote.test.ts",
+        "src/hooks/useBonsaiAskOrchestration.noteOffer.test.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/useLocalOllamaSetupFlow.inPlace.test.tsx",
         "src/hooks/usePluginSettings.readBack.test.ts",
@@ -7798,6 +8009,11 @@
         "src/features/preset-carousel/presetRowFocusNav.upFromChips.test.tsx",
         "src/features/search-tab/searchTabTestKit.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
+        "src/features/user-notes/NoteOfferCard.test.tsx",
+        "src/features/user-notes/NotesReadLine.test.tsx",
+        "src/features/user-notes/UserNotes.transcript.test.tsx",
+        "src/features/user-notes/UserNotes.walk.test.tsx",
+        "src/features/user-notes/UserNotesSheet.test.tsx",
         "src/features/voice/voiceClearAfterStop.test.tsx",
         "src/features/voice/voiceFinishAtStop.test.tsx",
         "src/features/voice/voiceStartGameFlag.test.tsx",
@@ -7867,6 +8083,7 @@
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts",
         "src/hooks/useBonsaiAskOrchestration.desktopNote.test.ts",
+        "src/hooks/useBonsaiAskOrchestration.noteOffer.test.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/usePluginSettings.test.ts",
         "src/hooks/usePullModelOpenBookkeeping.test.tsx",
@@ -7912,6 +8129,10 @@
         "src/features/search-tab/SearchTab.test.tsx",
         "src/features/search-tab/SearchTab.walk.test.tsx",
         "src/features/search-tab/searchTabTestKit.tsx",
+        "src/features/user-notes/NoteOfferCard.test.tsx",
+        "src/features/user-notes/NotesReadLine.test.tsx",
+        "src/features/user-notes/UserNotes.transcript.test.tsx",
+        "src/features/user-notes/UserNotes.walk.test.tsx",
         "src/test-harness/foldedTabWalk.tsx"
       ]
     },
@@ -7979,6 +8200,8 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/components/textSizeEverywhere.test.tsx",
         "src/features/chat-sum-up/useChatSumUpJob.ts",
+        "src/features/user-notes/useUserNotes.ts",
+        "src/features/user-notes/userNotesStore.ts",
         "src/features/voice/useVoiceAskWithReadAloud.test.tsx",
         "src/hooks/saveReplyToDesktopNote.ts",
         "src/hooks/useAskMountRestore.ts",
@@ -7987,6 +8210,7 @@
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBackgroundGameAi.ts",
         "src/hooks/useBonsaiAskOrchestration.afterAnswer.test.ts",
+        "src/hooks/useBonsaiAskOrchestration.noteOffer.test.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useChatSlots.ts",
         "src/hooks/useReadAloud.test.ts",
@@ -8050,6 +8274,7 @@
         "src/features/chat-slots/afterBoxHarness.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/plugin-shell/useDesktopNoteSaveModal.olderChat.test.tsx",
+        "src/features/user-notes/UserNotes.transcript.test.tsx",
         "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useChatSlots.ts",
@@ -8303,6 +8528,7 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
+        "src/features/user-notes/NotesReadLine.tsx",
         "src/test-harness/deckAnswerWalk.ts",
         "src/utils/answerBubbleNavigation.coverMirror.test.ts",
         "src/utils/answerBubbleNavigation.coverUp.test.ts",
@@ -8808,6 +9034,7 @@
         "src/components/icons.tsx",
         "src/data/replyMicroActions.ts",
         "src/features/details-slot/detailsSlotStore.ts",
+        "src/features/user-notes/NoteOfferCard.tsx",
         "src/styles/sections/textPx.ts",
         "src/utils/answerBubbleElRegistry.ts",
         "src/utils/answerBubbleNavigation.ts",
@@ -8821,6 +9048,7 @@
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
+        "src/features/user-notes/UserNotes.walk.test.tsx",
         "src/hooks/useReplyFeedbackChips.remount.test.tsx",
         "src/utils/buildReplyActionsElement.ratingKeepsRing.test.tsx",
         "src/utils/buildReplyActionsElement.revealChips.test.tsx",
@@ -8858,6 +9086,8 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
         "src/features/chat-title/takeFirstChatStop.ts",
+        "src/features/user-notes/NotesReadLine.tsx",
+        "src/features/user-notes/UserNotes.walk.test.tsx",
         "src/utils/buildTurnHeaderElement.test.tsx",
         "src/utils/chatTranscriptNavHelpers.ts",
         "src/utils/questionBubbleFit.test.tsx"
@@ -9091,6 +9321,7 @@
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/features/search-tab/searchApi.ts",
+        "src/features/user-notes/useUserNotes.ts",
         "src/features/voice/useVoiceAskInput.ts",
         "src/hooks/localOllamaStarterSet.tsx",
         "src/hooks/saveReplyToDesktopNote.ts",
@@ -9253,6 +9484,8 @@
         "src/features/chat-title/chatRowMoves.ts",
         "src/features/chat-title/useChatTriggerSwitch.ts",
         "src/features/plugin-shell/tabBarNav.ts",
+        "src/features/user-notes/NoteOfferCard.tsx",
+        "src/features/user-notes/NotesReadLine.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildAnswerCornerSlots.tsx",
         "src/utils/buildDetailsPanelElement.tsx",
@@ -9364,6 +9597,10 @@
         "src/components/SessionContextStrip.tsx",
         "src/components/textSizeEverywhere.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
+        "src/features/user-notes/NotesReadLine.test.tsx",
+        "src/features/user-notes/NotesReadLine.tsx",
+        "src/features/user-notes/UserNotes.transcript.test.tsx",
+        "src/features/user-notes/UserNotes.walk.test.tsx",
         "src/hooks/useAskSessionSnapshotActions.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useInputTransparencyRefresh.ts",
@@ -9511,6 +9748,8 @@
         "src/components/StrategyChecklistPanel.tsx",
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
+        "src/features/user-notes/NotesReadLine.tsx",
+        "src/features/user-notes/UserNotes.walk.test.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildDetailsPanelElement.tsx",
         "src/utils/buildKbNotesBlockElement.tsx",
@@ -9989,6 +10228,11 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/features/chat-sum-up/buildChatSummaryNoteElement.tsx",
         "src/features/details-slot/detailsSlotStore.ts",
+        "src/features/user-notes/NoteOfferCard.test.tsx",
+        "src/features/user-notes/NoteOfferCard.tsx",
+        "src/features/user-notes/NotesReadLine.test.tsx",
+        "src/features/user-notes/NotesReadLine.tsx",
+        "src/features/user-notes/UserNotes.walk.test.tsx",
         "src/hooks/useLiveTurnHeaderRingRestore.ts",
         "src/utils/buildAnswerBubbleElement.test.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
@@ -10402,6 +10646,10 @@
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
+        "src/features/user-notes/NoteOfferCard.test.tsx",
+        "src/features/user-notes/NoteOfferCard.tsx",
+        "src/features/user-notes/NotesReadLine.tsx",
+        "src/features/user-notes/UserNotes.transcript.test.tsx",
         "src/hooks/askBarRingWatch.titleView.test.ts",
         "src/hooks/askBarRingWatch.ts",
         "src/hooks/useAskBarInitialRingClaim.freshOpen.test.ts",

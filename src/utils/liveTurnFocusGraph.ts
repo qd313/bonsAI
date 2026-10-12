@@ -187,6 +187,20 @@ export function focusReplyShowReasoning(liveSlot: HTMLElement | null): boolean {
   return focusReplyStop(liveSlot, "show-reasoning");
 }
 
+/**
+ * The "Read N of your notes" line between the question and the answer (plan 92). Mounted only on a turn
+ * whose answer read, or skipped, some of the person's notes, so this reports false on every other turn
+ * and the caller carries on to the next stop: the same shape as the Show reasoning line above.
+ */
+export function focusReplyNotesLine(liveSlot: HTMLElement | null): boolean {
+  return focusReplyStop(liveSlot, "notes-line");
+}
+
+/** The note card's Keep button, its first stop (plan 92); false when no note is on offer. */
+function focusReplyNoteKeep(liveSlot: HTMLElement | null): boolean {
+  return focusReplyStop(liveSlot, "note-keep");
+}
+
 function focusReplyCopy(liveSlot: HTMLElement | null): boolean {
   return focusReplyStop(liveSlot, "copy");
 }
@@ -264,7 +278,8 @@ export function focusBottomOfNewestReply(): boolean {
 }
 
 /**
- * After answer bubble scroll is exhausted: branch → checklist → thumbs → Retry/Copy → Show details.
+ * After answer bubble scroll is exhausted: branch → checklist → thumbs → the note card (when one is on offer)
+ * → Retry/Copy → Show details.
  * The last two are the fallback for an answer with no thumbs and no corner buttons, so the ring never
  * falls through to Steam's geometry guess past the new line. Read aloud is not on the way down any
  * more: since plan 84 step 3 it sits in the answer's lower-left corner, above these, and is reached
@@ -274,6 +289,8 @@ export function focusDownFromLiveAnswerBubble(liveSlot: HTMLElement | null): boo
   if (focusStrategyBranchButton(liveSlot, "first")) return true;
   if (focusStrategyChecklistToggle(liveSlot, "first")) return true;
   if (focusReplyThumbsRow(liveSlot)) return true;
+  if (focusReplyStop(liveSlot, "reason-chips")) return true;
+  if (focusReplyNoteKeep(liveSlot)) return true;
   if (focusReplyUtilityRow(liveSlot)) return true;
   return focusReplyShowDetails(liveSlot);
 }

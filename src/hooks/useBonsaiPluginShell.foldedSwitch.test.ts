@@ -13,6 +13,7 @@ import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useBonsaiPluginShell } from "./useBonsaiPluginShell";
+import { registerNavFocus, resetNavFocusRegistry } from "../utils/navFocusRegistry";
 import { isSectionOpen, resetFoldedTabsForTests, toggleSection } from "../features/folded-tabs/foldedTabsStore";
 import { OLLAMA_FOLD_TAB, OLLAMA_SECTIONS } from "../features/folded-tabs/ollamaTabFolds";
 import { saveLastTab } from "../features/plugin-shell/pluginStorage";
@@ -179,5 +180,45 @@ describe("the page starts at its top on a real switch, and only then", () => {
     const { result } = mountOnOllama();
     act(() => result.current.selectTab(OLLAMA_FOLD_TAB));
     expect(dom.scrollTop()).toBe(330);
+  });
+});
+
+describe("after Steam's shoulder switch the ring lands on the first section line; the bar leaves it alone", () => {
+  let dom: ReturnType<typeof drawOllamaPane>;
+  let take: ReturnType<typeof vi.fn>;
+  beforeEach(() => {
+    dom = drawOllamaPane(0);
+    take = vi.fn(() => true);
+    registerNavFocus(`fold-line:${OLLAMA_FOLD_TAB}:where`, { current: { TakeFocus: take } });
+  });
+  afterEach(() => {
+    resetNavFocusRegistry();
+    dom.remove();
+  });
+
+  it("LB or RB to the folded tab, with the ring on nothing inside it: the first line takes the ring", () => {
+    const { result } = renderHook(() => useBonsaiPluginShell({ getSessionSnapshot: emptySnapshot }));
+    act(() => result.current.onTabsShowTab(OLLAMA_FOLD_TAB));
+    expect(take).toHaveBeenCalledTimes(1);
+  });
+
+  it("a bar press (or Y) to the folded tab leaves the ring alone", () => {
+    const { result } = renderHook(() => useBonsaiPluginShell({ getSessionSnapshot: emptySnapshot }));
+    act(() => result.current.selectTab(OLLAMA_FOLD_TAB));
+    expect(take).not.toHaveBeenCalled();
+  });
+
+  it("the tab rebuilt after a popup, or the lock's redirect, does not take the ring", () => {
+    vi.useFakeTimers();
+    const { result } = mountOnOllama();
+    act(() => {
+      result.current.characterPickerReturnTabRef.current = OLLAMA_FOLD_TAB;
+      result.current.finalizeShowModalAndRestoreActiveTab(() => {});
+    });
+    act(() => result.current.onTabsShowTab("main"));
+    act(() => {
+      vi.advanceTimersByTime(400);
+    });
+    expect(take).not.toHaveBeenCalled();
   });
 });

@@ -136,12 +136,13 @@ export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShel
   /** The tab on screen, readable from the switch callbacks (which are made once, so cannot close over the state). */
   const currentTabRef = useRef(currentTab);
   currentTabRef.current = currentTab;
-  /** The tab a real switch just named, until it has been drawn and its arrival (page to the top) has run. */
-  const arrivalTabRef = useRef<string | null>(null);
+  /** The tab a real switch just named (and whether Steam's shoulder switch brought the person), until its arrival has run. */
+  const arrivalRef = useRef<{ tab: string; ring: boolean } | null>(null);
   useEffect(() => {
-    if (arrivalTabRef.current !== currentTab) return;
-    arrivalTabRef.current = null;
-    return scheduleFoldedTabArrival(currentTab);
+    const arrival = arrivalRef.current;
+    if (!arrival || arrival.tab !== currentTab) return;
+    arrivalRef.current = null;
+    return scheduleFoldedTabArrival(currentTab, { ring: arrival.ring });
   }, [currentTab]);
   const finalizeModalCloseRef = useRef<(close: () => void) => void>((close) => close());
 
@@ -235,10 +236,10 @@ export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShel
    * redirect back to the tab, from asking for the tab already showing, from a popup closing and the tab being
    * rebuilt, or from the session restore: those do not come through here.
    */
-  const noteRealTabSwitch = useCallback((to: string) => {
+  const noteRealTabSwitch = useCallback((to: string, viaSteam: boolean) => {
     if (to === currentTabRef.current) return;
     currentTabRef.current = to;
-    arrivalTabRef.current = to;
+    arrivalRef.current = { tab: to, ring: viaSteam };
     closeAllFoldedSections();
   }, []);
 
@@ -250,7 +251,7 @@ export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShel
       setCurrentTab(lock.tab);
       return;
     }
-    noteRealTabSwitch(tabID);
+    noteRealTabSwitch(tabID, true);
     if (lock && now < lock.until) {
       if (tabID === lock.tab) {
         postPickerTabLockRef.current = null;
@@ -273,7 +274,7 @@ export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShel
   const selectTab = useCallback((tabID: string) => {
     bonsaiDebugLog("useBonsaiPluginShell:selectTab", "bar tab", "H3", { to: tabID });
     postPickerTabLockRef.current = null;
-    noteRealTabSwitch(tabID);
+    noteRealTabSwitch(tabID, false);
     setCurrentTab(tabID);
   }, [noteRealTabSwitch]);
 

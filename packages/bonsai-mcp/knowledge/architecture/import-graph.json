@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 910,
-  "edgeCount": 2920,
+  "edgeCount": 2923,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4204,7 +4204,8 @@
         "src/components/useOllamaTabFocus.ts",
         "src/features/folded-tabs/FoldAllButton.test.tsx",
         "src/features/folded-tabs/FoldAllButton.tsx",
-        "src/features/folded-tabs/FoldedSection.test.tsx"
+        "src/features/folded-tabs/FoldedSection.test.tsx",
+        "src/features/folded-tabs/foldedTabArrival.ts"
       ]
     },
     "src/features/folded-tabs/TabHelpStrip.test.tsx": {
@@ -4236,12 +4237,14 @@
     },
     "src/features/folded-tabs/foldedTabArrival.test.ts": {
       "imports": [
-        "src/features/folded-tabs/foldedTabArrival.ts"
+        "src/features/folded-tabs/foldedTabArrival.ts",
+        "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": []
     },
     "src/features/folded-tabs/foldedTabArrival.ts": {
       "imports": [
+        "src/features/folded-tabs/FoldedSection.tsx",
         "src/utils/chatPanelScroll.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -6163,7 +6166,8 @@
         "src/features/folded-tabs/ollamaTabFolds.ts",
         "src/features/plugin-shell/pluginStorage.ts",
         "src/hooks/useBonsaiPluginShell.ts",
-        "src/utils/bonsaiSessionSurvival.ts"
+        "src/utils/bonsaiSessionSurvival.ts",
+        "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": []
     },
@@ -9948,6 +9952,7 @@
         "src/features/folded-tabs/FoldAllButton.tsx",
         "src/features/folded-tabs/FoldedSection.test.tsx",
         "src/features/folded-tabs/FoldedSection.tsx",
+        "src/features/folded-tabs/foldedTabArrival.test.ts",
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
@@ -9963,6 +9968,7 @@
         "src/hooks/useAskBarInitialRingClaim.test.ts",
         "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarPressHandlers.ts",
+        "src/hooks/useBonsaiPluginShell.foldedSwitch.test.ts",
         "src/hooks/useEarlierTurnsPill.ts",
         "src/hooks/useLiveTurnHeaderRingRestore.ts",
         "src/hooks/useMainTabAskBarFocus.test.ts",

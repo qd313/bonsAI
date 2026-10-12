@@ -123,6 +123,13 @@ change. Their research results and big output files still move.
     count of settings may be one higher.
   - **About 30 to 50 new evidence files** and one re-recorded saved walk, all of which move to the workshop in step 1.
   - Changes to the test rig's own project do not touch this repo.
+- **Known changes coming from plan 91 (the denser tabs, planned 2026-10-12, built under plan 92 after plan 89):**
+  the Ollama, Settings and Developer tabs fold each section to one line, keep several sections open at once, show the
+  ringed setting's longer text in a strip at the bottom of the panel, and gain a floating open-all button; the About
+  tab becomes one line per row with its links beside a smaller QR code; Permissions is untouched. Step 3's UI-scale
+  removal and step 6b's measurements must be re-checked against that layout before this plan starts: the UI scale
+  section will sit inside a folded section, and every row's longer text will live in a data attribute the strip reads,
+  not under the row. Plan 91 § 7 says the same from its side.
   - Expected cost of the freshness check after plan 89: about an hour, mostly in step 3's UI-scale brief. The plan is
     not stale.
 

@@ -97,6 +97,7 @@
     "src/components/MainTabUnifiedAskBar.test.tsx",
     "src/components/OllamaFindLanHidden.test.tsx",
     "src/components/OllamaModelsHubModal.cancelRestores.test.tsx",
+    "src/components/OllamaModelsHubModal.renderLoop.test.tsx",
     "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
     "src/components/OllamaModelsHubModal.test.tsx",
     "src/components/OllamaTab.focusRing.test.tsx",

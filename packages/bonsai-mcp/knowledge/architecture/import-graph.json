@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 849,
-  "edgeCount": 2679,
+  "fileCount": 850,
+  "edgeCount": 2683,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1463,6 +1463,15 @@
       ],
       "importedBy": []
     },
+    "src/components/OllamaModelsHubModal.renderLoop.test.tsx": {
+      "imports": [
+        "src/components/OllamaModelsHubModal.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/rpcFixtures.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/OllamaModelsHubModal.returnFocus.test.tsx": {
       "imports": [
         "src/components/OllamaModelsHubModal.tsx",
@@ -1490,6 +1499,7 @@
       ],
       "importedBy": [
         "src/components/OllamaModelsHubModal.cancelRestores.test.tsx",
+        "src/components/OllamaModelsHubModal.renderLoop.test.tsx",
         "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx"
@@ -7120,6 +7130,7 @@
         "src/components/MainTabPresetRow.ringHold.test.tsx",
         "src/components/MainTabPresetRow.test.tsx",
         "src/components/OllamaFindLanHidden.test.tsx",
+        "src/components/OllamaModelsHubModal.renderLoop.test.tsx",
         "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
         "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
@@ -7249,6 +7260,7 @@
         "src/components/MainTabUnifiedAskBar.stopRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/OllamaModelsHubModal.cancelRestores.test.tsx",
+        "src/components/OllamaModelsHubModal.renderLoop.test.tsx",
         "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
         "src/components/OllamaTab.terseMode.test.tsx",
@@ -7340,6 +7352,7 @@
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
+        "src/components/OllamaModelsHubModal.renderLoop.test.tsx",
         "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",

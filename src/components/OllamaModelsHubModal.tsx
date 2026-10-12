@@ -245,6 +245,19 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
       });
   }, [section, browseFooter, commitPolicyAndAdvanced, handleHubClose]);
 
+  /*
+   * The three functions Browse is handed stay the same from one draw to the next. Browse rebuilds its
+   * queued-pull handler whenever one of them changes and reports its footer up whenever that handler
+   * changes, and the report draws this screen again: written inline, a new function each draw kept the
+   * screen drawing itself for as long as it was open (OllamaModelsHubModal.renderLoop.test.tsx).
+   */
+  const applyTier2FromBrowse = useCallback(async () => {
+    setDraft("open_weight");
+    await onApplyTier2MultimodalPolicy?.();
+  }, [setDraft, onApplyTier2MultimodalPolicy]);
+  const browseCancel = useCallback(() => handleHubClose("browseCancel"), [handleHubClose]);
+  const browsePullAccepted = useCallback(() => handleHubClose("pullAccepted"), [handleHubClose]);
+
   const toggleAdvanced = useCallback(() => {
     setSection((current) => (current === "advanced" ? "browse" : "advanced"));
   }, []);
@@ -295,14 +308,11 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
               modelPolicyTier={draftTier}
               modelPolicyNonFossUnlocked={draftNonFossUnlocked}
               onSelectModelPolicyTier={setDraft}
-              onApplyTier2Policy={async () => {
-                setDraft("open_weight");
-                await onApplyTier2MultimodalPolicy?.();
-              }}
+              onApplyTier2Policy={applyTier2FromBrowse}
               onBeforeNestedDeckyModal={onBeforeNestedDeckyModal}
               onCompleteNestedDeckyModalClose={onCompleteNestedDeckyModalClose}
-              onCancel={() => handleHubClose("browseCancel")}
-              onPullAccepted={() => handleHubClose("pullAccepted")}
+              onCancel={browseCancel}
+              onPullAccepted={browsePullAccepted}
               onFooterStateChange={handleBrowseFooterChange}
               initialFiltersOpen={false}
               tryOrderHost={hostWithDraft}

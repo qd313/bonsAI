@@ -59,12 +59,20 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
 
 - ★ `[ask]` **If only the screen side reloads, the last answer's note offer can show again** — **OPEN, reported 2026-10-12 by plan 92 lane N2; not seen on the Deck.**
   The offer to keep your question as a note comes with the answer. If only the screen side of the plugin reloads (the back end keeps running), the last answer's card can be drawn again. Found by reading the code, no evidence file.
+- ★ `[ask]` **The default text is not shown in the text area** — **OPEN, reported 2026-10-13 by the maintainer.**
+  Which default text is meant (the hint inside the box, or a starter question) is not stated; confirm on the Deck.
 - ★ `[focus]` **Hand-written D-pad moves on some Ollama-tab buttons never run** — **OPEN, found 2026-10-12 by plan 92 lane T0.**
   In the Ollama tab's "where the AI runs" and knowledge-base sections (`OllamaWhereAiRunsSection.tsx`, `KnowledgeBaseSection.tsx`) several hand-written D-pad moves are spread onto Decky Buttons, which never pass move handlers on (for example Test connection's Down, and the knowledge base's Download and Remove). Steam's own move does the work today, so a person notices nothing. The focus-pattern checker misses handlers passed this way.
 - ★ `[focus]` **In the chats menu, Down skips the Rename chat and Save to Desktop note rows** — **OPEN, seen 2026-10-11 by the Deck driver (plan 89); a sighting, not yet checked.**
   Going Down the menu the ring went New chat, Sum up this chat, Delete chat: the Rename chat and Save to Desktop note rows were not visited. Not known whether they are meant to be left out. Seen by the driver, no evidence file.
 - ★ `[focus]` **Two documents disagree about whether a Decky button passes D-pad moves on** — **OPEN, found 2026-10-12 (plan 92).**
   AGENTS.md (the focus section, "Know which handler actually fires") and the focus-pattern checker (`scripts/check-focus-patterns.mjs`, rule 17) say a Decky Button never runs its own move handlers. Plan 92 lanes found Deck walks where they seemed to fire. One Deck reading would settle it. No evidence file yet.
+- ★ `[ollama]` **"Run AI on this Deck" should be on by default** — **OPEN, reported 2026-10-13 by the maintainer.**
+  A fresh install should start with it switched on.
+- ★ `[ollama]` **gemma4e2b-it-qat is labelled FOSS but can only be used with Tier 2 turned on** — **OPEN, reported 2026-10-13 by the maintainer.**
+  The label and the rule disagree. Fix whichever is wrong.
+- ★ `[ollama]` **qwen2.5vl should not be the model downloaded first** — **OPEN, reported 2026-10-13 by the maintainer.**
+  A first-time setup downloads qwen2.5vl. Pick a better starter model. See the first-time setup item in Features.
 - ★ `[platform]` **A plugin reload while a game is running can put Steam's Home screen in front of the game** — **OPEN, found 2026-09-28 (plan 75). Developer-only: a player has no route to it (2026-10-03).**
   Seen three times. Once the game came back through the Steam menu (`docs/test-evidence/plan38-M1-deck.json`). Once it never showed a window (`docs/test-evidence/t75-feature-F1-REAL-POPUP.json`). Once, on 2026-09-29, one A on Resume brought it back (`docs/test-evidence/plan77-P77-TRAP-LONG.json`).
   **2026-10-03 (plan 81):** two developer reloads did not bring the Home screen in front. [Full note](archive/roadmap-trimmed-2026-10-roadmap.md#plan-81-note-two-reloads-left-the-game-in-front).
@@ -82,8 +90,16 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
   One press of Up brought the ring back. Lane N3c names a likely cause: a move onto a stop that is drawn in the same moment falls back to a plain focus that Steam's ring does not follow (`src/features/search-tab/SearchTab.tsx` about line 189, and `hop` in `useSearchNav.ts`). Needs a Deck reading first. The Search tab evidence files (`docs/test-evidence/plan92-P90-SEARCH-TAB-WALK.json`, `-KB.json`) do not hold the sighting.
 - ★ `[ui]` **Text size does not reach Steam's own controls** — **OPEN, found 2026-10-11 (plan 89 Deck block 3c); the maintainer's call whether that is acceptable.**
   The toggle labels (for example "Remember what I typed") stay 16 px, and Steam's own confirm popups (for example "Clear session cache?") stay 22 and 16 px, at Small, Normal and Large. The plugin never targets Steam's own classes by name, so the words the plugin draws follow the setting and these do not. Evidence `docs/test-evidence/plan89-P89-TEXT-SIZE-EVERYWHERE.json`.
+- ★★ `[chat]` **After deleting the last chat, Main shows the old answer instead of a blank new chat** — **OPEN, reported 2026-10-13 by the maintainer.**
+  The old answer appears, with "..." in the question bubble. Expected: a blank new chat.
+- ★★ `[focus]` `[ollama]` **Cancel in the first Ollama and model download, and the Refresh button in the AI models screen, cannot be reached with the D-pad** — **OPEN, reported 2026-10-13 by the maintainer.**
+  During the first download of Ollama and the AI model, Cancel cannot take the ring.
+  In the AI models screen, Refresh also cannot take the ring, does nothing when pressed, and nobody knows what it is for. Remove it or make it do something clear.
 - ★★ `[focus]` **Going Up through an answer skips a paragraph that going Down stops on** — **OPEN, seen 2026-10-11 (plan 89 free-play sweep, no game).**
   Going Down, the ring stops on the answer's "In short" paragraph; going Up it skips it (Mark reply helpful goes straight to the section above). The paragraph is still reachable, and so are Read aloud and Copy from it. Not known whether it is the tall-section rule or a bug. Evidence `docs/test-evidence/plan89-QA-FREE-PLAY-01.json`.
+- ★★ `[focus]` `[tabs]` **Open all is reached with Right, not Down, and the floating Open all button clashes with the tabs** — **OPEN, reported 2026-10-13 by the maintainer.**
+  D-pad Down should reach Open all; today it takes Right. The floating Open all button also overlaps the tab layout.
+  Likely one cause; look at both together.
 - ★★ `[focus]` **Tests treat a greyed button as one the ring cannot reach; on the Deck it can** — **OPEN, found 2026-10-12 (plan 92 lane M1b).**
   The shared test stand-in says a disabled button refuses focus; on the Deck a greyed Decky button still takes the ring (measured 2026-09-16, and 2026-10-12 in the AI models box: `docs/test-evidence/plan92-P91-MODELS-COLUMN-WALK.json`). Code that skips a greyed control by asking the button could hide the same bug. [Files to check](archive/roadmap-trimmed-2026-10-roadmap.md#plan-92-note-where-a-greyed-button-is-skipped-by-asking-the-button).
 - ★★ `[focus]` **Up from the answer bubble, with Steam's ring on the whole answer, scrolls the whole answer instead of moving the ring** — **OPEN, found 2026-10-02 while fixing the trap (plan 79); not a trap, since the press does something.**
@@ -94,15 +110,31 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
   **2026-10-03 (plan 81):** a developer reload with a game running did not freeze Steam in either try. [Full note](archive/roadmap-trimmed-2026-10-roadmap.md#plan-81-note-a-reload-with-a-game-running-did-not-freeze-steam).
 - ★★ `[platform]` **The Deck's screen froze when Steam's screensaver started (no game, plugin idle)** — **OPEN, seen once, 2026-10-11 22:17 (plan 89); likely Steam's own.**
   No game, no AI loaded, 11 GB free, nobody pressing. Steam's screensaver was shown at 22:17:27 and its drawing failed at once (GLX pixmap errors in Steam's own log). Steam and the plugin kept running underneath until the maintainer restarted the Deck at 23:03. Not the same as the freeze after an answer with a game (the entry below). Evidence `docs/test-evidence/plan89-DECK-HANG-SCREENSAVER.json`.
+- ★★ `[reply]` **Terse mode does not seem to shorten answers** — **OPEN, reported 2026-10-13 by the maintainer.**
+  All answers look longer than expected with Terse mode on. See the Terse mode item in Features for earlier measurements.
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** — **OPEN, failed by hand 2026-09-23 (build `a224fb6`).**
   After Show details → Session, both tab bars stayed drawn at once. The D-pad half did not reproduce (2026-09-28, 2026-09-29); the touch half needs a finger and is on the maintainer's checks page (plan 77).
   Row **TAB-BAR-GHOST-01** in [testing-manual.md](testing-manual.md). Older notes: [details](roadmap-details.md#a-faded-ghost-of-the-tab-bar-is-left-drawn-over-the-chip-row-after-touching-the-screen).
   **2026-10-03 (plan 81):** one pretend touch showed no ghost. [Full note](archive/roadmap-trimmed-2026-10-roadmap.md#plan-81-note-one-pretend-touch-showed-no-ghost).
   **2026-10-09 (plan 84):** the drop-down strip is gone; stays OPEN until a person's touch check with a game running passes (row **P84-TABS-02**, owed). [Full note](archive/roadmap-trimmed-2026-10-roadmap.md#plan-84-note-the-drop-down-strip-is-gone).
+- ★★ `[ui]` **Confirm pop-ups show extra buttons, and are not in the SteamOS style** — **OPEN, reported 2026-10-13 by the maintainer.**
+  Clear cache, Clear data and "Turn on internet downloads" each show more than two choices. They should show only the action and Cancel.
+  Check every pop-up in the app for the same extra choice. Every pop-up should look like a normal Steam settings pop-up (the delete-chat one is the model).
+- ★★ `[ui]` **Disclaimers and warnings are long blocks of text; the Permissions tab is too wordy** — **OPEN, reported 2026-10-13 by the maintainer.**
+  Every disclaimer and warning in the app should be much shorter. The Permissions tab needs shorter explanations too.
+- ★★ `[ui]` **Some settings text ignores the Text size choice (Permissions tab and others)** — **OPEN, reported 2026-10-13 by the maintainer.**
+  The Permissions tab's text, and text in other tabs, does not follow the Text size setting. Needs a sweep of every tab. Related: "Text size does not reach Steam's own controls" above.
+- ★★★ `[chips]` **Preset chips cannot always be reached near the end of an answer** — **OPEN, reported 2026-10-13 by the maintainer.**
+  Scrolled to the end of an answer with the Show details line close, the chips turn into the Show details chip. D-pad away and they turn back, but the ring can fail to reach the chips. Related: the Show details slot item in Verify.
+- ★★★ `[focus]` `[tabs]` **Tab sections: the D-pad ring goes wrong after sections are opened (Terse mode unreachable, details line fires on press)** — **OPEN, root cause not known yet, reported 2026-10-13 by the maintainer.**
+  (a) The extra details line under a setting (seen on the Developer tab, Tab to open) should appear when the ring lands on the setting, not on a press. (b) After opening some sections and walking with the D-pad, Terse mode could not take the ring.
+  (c) The maintainer suspects the details text that lengthens a setting throws the ring off. An alternative: keep the sections but show all the details text when a section is opened. Find the root cause before changing the design again.
 - ★★★ `[platform]` **Steam's screen froze after an answer with a game running and the Deck's own AI** — **OPEN, seen once on the Deck 2026-10-03 (plan 81, build `afd2f444`); not reproduced in two later runs.**
   Deep Rock Galactic: Survivor running, the notes library moved aside for a check, a 55-second answer from the AI on the Deck. The answer finished; over the next three minutes free memory fell from about 2 GB to under 1 GB, Steam's page processes ran at full load, and Steam's screen stopped answering until the Deck was restarted. No plugin reload was involved.
   Cause not known yet; a page script the test rig had put on the page is one suspect. Related: the two entries above about reloading the plugin while a game is running (the Home screen in front of the game; Steam's interface gone until the Deck is restarted). Evidence `docs/test-evidence/plan81-DRG-01c.json`.
   **2026-10-11 (plan 89):** a 153 s try with a game running did not reproduce it; the entry stays OPEN. [Full note](archive/roadmap-trimmed-2026-10-roadmap.md#plan-89-note-the-freeze-reproduction-try).
+- ★★★ `[reply]` **When an answer finishes streaming, the screen flickers and then jumps to the end** — **OPEN, reported 2026-10-13 by the maintainer.**
+  After the answer lands, the screen flickers and then scrolls to the end in one jump. It should scroll smoothly and follow the end of the answer as it arrives.
 
 ---
 
@@ -122,6 +154,10 @@ replace it with a specific issue when one exists.
   On 2026-10-11, 23 old helper copies whose work had all landed were deleted. These 13 were kept, because each holds commits or files that are not on experimental.
   They were matched by commit title, so some may have landed under another title: check each before merging. Two are marked by their own commit as not to land until the maintainer picks (the Hollow Knight wording swaps).
   Each copy lives at `.claude/worktrees/<name>` on branch `refactor/<name>`. The full list, copy by copy: [roadmap-details.md](roadmap-details.md#merge-the-unlanded-work-left-in-thirteen-old-helper-copies-into-experimental).
+- ★ `[tabs]` **Tab sections slightly shaded, with bold titles** — **OPEN, reported 2026-10-13 by the maintainer.**
+  So a section stands apart from the settings inside it.
+- ★ `[ui]` **A very small Text size choice** — **OPEN, reported 2026-10-13 by the maintainer.**
+  Add a choice smaller than the current smallest.
 - ★★ `[chat]` **A day in the "N earlier" list can show one game at a time, and the whole list can flip to group by game** — **OPEN, picked by the maintainer on the mock-up board 2026-10-10 (options C and Wild of round 2).**
   An open day starts with a row of game buttons (All, each game asked about that day, No game). A on one shows only that game's questions, six at a time, and each row carries its game's name.
   Left or Right on the "N earlier" line flips the whole list: by day, as now, or one line per game across every day, each question stamped with its day. The maintainer: some players remember the day, some remember the game; this serves both.
@@ -142,6 +178,9 @@ replace it with a specific issue when one exists.
   The denser grid passed (Done, row P87-F3-CHIPS-GRID), but the usual eight chips still take five rows, about 210 px above the open box.
   Picked: short names in smaller pills ("Thought 16 s", "Spoilers: high", "gemma4:e2b"), so eight fit in two rows (about 74 px). The "This answer / Session" row and the "Chip 1 of 8" line go; Session becomes a dashed chip at the end that opens Sum up this chat. Each box keeps the chip's full wording under its title. The Show details line stays.
   Not chosen: one sliding row, a row of icons, the pills always under the answer with no Show details line. The full list of short names is on the board. [Density board, tab 1](https://claude.ai/artifact/MjXaLUjnoSLNseFaixcA6g) · [notes](demos/mockup-board-2/README.md).
+- ★★ `[reply]` **Decode as the default animation for answers and chips; new items animate in** — **OPEN, reported 2026-10-13 by the maintainer.**
+  Decode becomes the default for both answers and chips, and the animation settings are removed from the Developer tab. The maintainer will give the stock settings.
+  The rating buttons and follow-up questions under an answer should animate in the same way instead of appearing at once.
 - ★★ `[reply]` **Headline first: every answer opens with one line that stands alone** — **OPEN, filed 2026-09-08. Not yet ([D99](audit/maintainer-decisions-locked.md#d99--locked-2026-09-12--after-the-frame-bench-two-not-yet-reading-aloud-goes-with-a-three-way-setting-and-a-clear-button-in-the-session-context-strip)): it waits for its own go.**
   The model would open every answer with one short sentence that carries the point and gives nothing away. The 2026-09-12 count: 2 of 10 answers already did, 0 of 10 gave anything away. By the maintainer's own rule that means build it, but they said not yet.
   [Detail](roadmap-details.md#headline-first-every-answer-opens-with-one-line-that-stands-alone).
@@ -160,9 +199,15 @@ replace it with a specific issue when one exists.
 - ★★ `[voice]` **Voice follow-ups** — **OPEN, filed 2026-09-08; Read answers aloud shipped 2026-09-12.**
   For a few seconds after a spoken answer ends, the mic listens for four words: again, go on, stop, next. A short rising tone when it opens, a short falling tone when it closes. One setting, off by default.
   Hangs off the middle position of the Voice replies setting ([D99](audit/maintainer-decisions-locked.md#d99--locked-2026-09-12--after-the-frame-bench-two-not-yet-reading-aloud-goes-with-a-three-way-setting-and-a-clear-button-in-the-session-context-strip)). [Plan](planning/49-steam-frame-features.md) · [Second look § 3](planning/52-frame-features-second-look.md#3-voice-follow-ups-a-sound-a-short-listen-a-few-words).
+- ★★★ `[focus]` **Smoother D-pad scrolling: the page snaps to an option** — **OPEN, reported 2026-10-13 by the maintainer.**
+  Moving the ring makes the page snap, which is jarring. Ideas: a smooth glide, or a short blur during the move. Is a blur over-engineering? Decide after measuring. Related: the Verify item about the page moving at every press.
+- ★★★ `[ollama]` `[ui]` **AI models screen: a much bigger catalog and far simpler filters** — **OPEN, reported 2026-10-13 by the maintainer.**
+  Only a few models show up now. Grow the catalog a lot. The filters are confusing; cut them down to a few clear ones.
 - ★★★ `[ollama]` **Dynamic keep-alive / smart unload** — **OPEN, research spike.** Hold models loaded, or unload when a game takes
   focus on the Deck APU? The spike decides go or no-go; no production unload before it. Pairs with "What bonsAI costs a running game".
   [Detail](roadmap-details.md#ask--reply-items-with-short-entries-as-filed).
+- ★★★ `[ollama]` **First-time setup: bring back the starter set and make it simpler** — **OPEN, reported 2026-10-13 by the maintainer.**
+  First-time setup is painful. Put the starter set first and cut the steps. See the qwen2.5vl bug in Bugs.
 - ★★★ `[ollama]` **How fast is this model on this Deck** — **OPEN, planned 2026-09-06, six calls open ([D75](audit/maintainer-decisions-locked.md#d75--open-raised-2026-09-06--the-model-speed-readout-six-calls-before-anything-is-built)).**
   Next to each installed model: how fast it answered on this Deck last time, and a button to time it now with one fixed question. A last-ten record per model, a badge in the picker, a plain line under Show details; nothing is reordered. [Plan](planning/43-model-speed-readout.md).
 - ★★★ `[ollama]` **Per-mode latency timeouts** — **OPEN, weighed and deliberately not built 2026-09-05.** Separate warning and

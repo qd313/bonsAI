@@ -58,6 +58,7 @@
     "src/components/MainTabChatTranscript.kbNotesGap.test.tsx",
     "src/components/MainTabChatTranscript.kbNotesSideways.test.tsx",
     "src/components/MainTabChatTranscript.liveConsent.test.tsx",
+    "src/components/MainTabChatTranscript.olderTurnDownToNewer.test.tsx",
     "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
     "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
     "src/components/MainTabChatTranscript.questionFade.test.tsx",

@@ -7,7 +7,8 @@
  * words, the transcript rendered with the props it needs, the selectors for the lines and rows, and a D-pad
  * press that follows Steam's order (the focused element's handler, then each container's, then Steam's own step).
  *
- * Used for: the two test files above.
+ * Used for: the two test files above, and MainTabChatTranscript.olderTurnDownToNewer.test.tsx. `steamScroll` (Steam's
+ * scroll-into-view in three rules) moved here from the first so the third walks the same model.
  *
  * Solves: One copy of the stand-ins and the press model, so a change to how the ring is modelled changes both.
  *
@@ -126,7 +127,7 @@ const STOP_SELECTOR = [
   ".bonsai-chat-details-divider",
 ].join(", ");
 
-export function stops(container: HTMLElement): HTMLElement[] {
+function stops(container: HTMLElement): HTMLElement[] {
   return Array.from(container.querySelectorAll<HTMLElement>(STOP_SELECTOR));
 }
 
@@ -243,4 +244,44 @@ export function walk(container: HTMLElement, dir: "Up" | "Down", after?: () => v
 export function openEarlier(container: HTMLElement, stamp: () => void): void {
   activate(container.querySelector<HTMLElement>(LINE)!);
   stamp();
+}
+
+/* ---- Steam's scroll-into-view, modelled on the Deck's Quick Access numbers ---- */
+const PANE_TOP = 88;
+const DOCK_TOP = 290;
+export type ScrollRule = "top" | "padded" | "center";
+
+/**
+ * Lays the stops out in one column and scrolls like Steam after each landing: "top" aligns a stop that
+ * is not wholly in the readable band to the pane's top, "padded" puts it 116 px below, "center" also
+ * re-centres a stop that was already on screen. Boxes follow the scroll, as on the Deck.
+ */
+export function steamScroll(container: HTMLElement, rule: ScrollRule) {
+  const state = { scrollTop: 0 };
+  const boxes = new Map<Element, [number, number]>();
+  let y = PANE_TOP;
+  for (const el of stops(container)) {
+    const h = el.matches(LINE) ? 26 : 34;
+    boxes.set(el, [y, y + h]);
+    y += h + 8;
+  }
+  const rectOf = (el: Element): [number, number] => {
+    const [top, bottom] = boxes.get(el)!;
+    return [top - state.scrollTop, bottom - state.scrollTop];
+  };
+  const after = () => {
+    const el = document.activeElement;
+    if (!el || !boxes.has(el)) return;
+    const [top, bottom] = rectOf(el);
+    const onScreen = top >= PANE_TOP && bottom <= DOCK_TOP;
+    if (rule === "top" && !onScreen) state.scrollTop += top - PANE_TOP;
+    if (rule === "padded" && !onScreen) state.scrollTop += top - (PANE_TOP + 116);
+    if (rule === "center") state.scrollTop += (top + bottom) / 2 - (PANE_TOP + DOCK_TOP) / 2;
+    state.scrollTop = Math.max(0, state.scrollTop);
+  };
+  const visible = (el: Element) => {
+    const [top, bottom] = rectOf(el);
+    return top >= PANE_TOP && bottom <= DOCK_TOP;
+  };
+  return { after, visible };
 }

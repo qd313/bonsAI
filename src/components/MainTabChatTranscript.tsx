@@ -1298,7 +1298,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   if (!showFeedbackHere && !transparencyAvailableHere) {
                     return [];
                   }
+                  /* What is drawn under this turn (a day line, the next question) before the dock (plan 93). */
                   const downPastUtilityRow = () =>
+                    earlier.downBelowRow(turn, nextTurn, (id) => headerRingProps(id).headerNavRef) ||
                     focusDownFromReplyUtilityRowOrPermHint(queryTurnSlot(turn.id));
                   const kbNotesHere = kbNotesToShow(turn, strategySpoilerMaskingEnabled,
                     kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex)));

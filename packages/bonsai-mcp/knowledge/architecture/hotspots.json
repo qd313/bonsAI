@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1677,
+      "lines": 1679,
       "role": ""
     },
     {
@@ -146,13 +146,13 @@
       "role": ""
     },
     {
-      "path": "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
-      "lines": 781,
+      "path": "src/utils/buildReplyActionsElement.test.tsx",
+      "lines": 777,
       "role": ""
     },
     {
-      "path": "src/utils/buildReplyActionsElement.test.tsx",
-      "lines": 777,
+      "path": "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
+      "lines": 741,
       "role": ""
     },
     {

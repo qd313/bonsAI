@@ -74,6 +74,19 @@ export type EarlierList = {
   lineFollows: (turn: AskThreadCollapsedTurn, nextTurn: AskThreadCollapsedTurn | undefined) => boolean;
   /** Up from the closed row for `turnId` when the Back line is the stop right above it (a short chat, no "N earlier" line): the transfer onto the Back line; else undefined. */
   firstRowMoveUp: (turnId: string) => (() => boolean) | undefined;
+  /**
+   * Down out of the open turn `turn` (whose next row is `nextTurn`) onto what is drawn right under it: its own
+   * "Show N more" line, else the first day line before the next row (or after the last row), else the next
+   * question (its text when it has Retry, so the ring skips Retry, else its row through `headerNavOf`), else the
+   * live one. False when nothing is (the newest turn), so the press goes on to the dock.
+   * Plan 93 (plan93-P93-O4-MIRROR.json): an opened older answer's Down went straight to the dock past the
+   * "Today" line and the newer question that Up stopped on.
+   */
+  downBelowRow: (
+    turn: AskThreadCollapsedTurn,
+    nextTurn: AskThreadCollapsedTurn | undefined,
+    headerNavOf: (turnId: string) => NavRefHolder,
+  ) => boolean;
 };
 
 /**
@@ -210,5 +223,13 @@ export function buildEarlierList(a: BuildEarlierListArgs): EarlierList {
     lineFollows: (turn, nextTurn) =>
       moreAfter(turn.id) !== undefined ||
       (nextTurn ? (layout?.daysBefore.get(nextTurn.id)?.length ?? 0) > 0 : (layout?.trailingDays.length ?? 0) > 0),
+    downBelowRow: (turn, nextTurn, headerNavOf) => {
+      const more = moreAfter(turn.id);
+      const days = nextTurn ? layout?.daysBefore.get(nextTurn.id) : layout?.trailingDays;
+      const line = more ? moreLineNav(more.day.key) : days?.length ? dayLineNav(days[0]!.key) : null;
+      if (line) return takeHolderFocus(line);
+      const next = nextTurn?.id ?? afterEarlier;
+      return next ? takeOpenQuestionText(next) || takeHolderFocus(headerNavOf(next)) : false;
+    },
   };
 }

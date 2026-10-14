@@ -24,8 +24,8 @@ import { registerNavFocus, resetNavFocusRegistry } from "../utils/navFocusRegist
 import { resetUiDocument } from "../utils/uiDocument";
 import {
   NOW, ROW, LINE, activate, focusOn, isRetry, lineEl, lines, nameOf, openEarlier,
-  press, renderChat as renderChatWith, rowTexts, seconds, stops, turn, walk,
-  type NavEl,
+  press, renderChat as renderChatWith, rowTexts, seconds, steamScroll, turn, walk,
+  type NavEl, type ScrollRule,
 } from "./earlierListTestKit";
 import { chipRowExitUp } from "../features/preset-carousel/presetRowFocusNav";
 
@@ -403,46 +403,6 @@ describe("Up from the open question's text goes to whatever is drawn right over 
     expect(nameOf(document.activeElement)).toBe("line:Today · 3");
   });
 });
-
-/* ---- Steam's scroll-into-view, modelled on the Deck's Quick Access numbers ---- */
-const PANE_TOP = 88;
-const DOCK_TOP = 290;
-type ScrollRule = "top" | "padded" | "center";
-
-/**
- * Lays the stops out in one column and scrolls like Steam after each landing: "top" aligns a stop that
- * is not wholly in the readable band to the pane's top, "padded" puts it 116 px below, "center" also
- * re-centres a stop that was already on screen. Boxes follow the scroll, as on the Deck.
- */
-function steamScroll(container: HTMLElement, rule: ScrollRule) {
-  const state = { scrollTop: 0 };
-  const boxes = new Map<Element, [number, number]>();
-  let y = PANE_TOP;
-  for (const el of stops(container)) {
-    const h = el.matches(LINE) ? 26 : 34;
-    boxes.set(el, [y, y + h]);
-    y += h + 8;
-  }
-  const rectOf = (el: Element): [number, number] => {
-    const [top, bottom] = boxes.get(el)!;
-    return [top - state.scrollTop, bottom - state.scrollTop];
-  };
-  const after = () => {
-    const el = document.activeElement;
-    if (!el || !boxes.has(el)) return;
-    const [top, bottom] = rectOf(el);
-    const onScreen = top >= PANE_TOP && bottom <= DOCK_TOP;
-    if (rule === "top" && !onScreen) state.scrollTop += top - PANE_TOP;
-    if (rule === "padded" && !onScreen) state.scrollTop += top - (PANE_TOP + 116);
-    if (rule === "center") state.scrollTop += (top + bottom) / 2 - (PANE_TOP + DOCK_TOP) / 2;
-    state.scrollTop = Math.max(0, state.scrollTop);
-  };
-  const visible = (el: Element) => {
-    const [top, bottom] = rectOf(el);
-    return top >= PANE_TOP && bottom <= DOCK_TOP;
-  };
-  return { after, visible };
-}
 
 describe("the walk with Steam's own scroll modelled (plan 79)", () => {
   beforeEach(() => {

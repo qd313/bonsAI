@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 974,
-  "edgeCount": 3272,
+  "fileCount": 975,
+  "edgeCount": 3274,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1392,6 +1392,7 @@
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/preset-carousel/presetRowLayout.ts",
+        "src/features/preset-carousel/useChipsHeldUnderRing.ts",
         "src/styles/sections/textPx.ts",
         "src/utils/joinPresetWithRunningGame.ts",
         "src/utils/navFocusRegistry.ts"
@@ -5882,6 +5883,14 @@
         "src/hooks/useSuggestedPromptChips.ts",
         "src/test-harness/chipRowSimulation.tsx",
         "src/utils/sessionRagChipCandidates.ts"
+      ]
+    },
+    "src/features/preset-carousel/useChipsHeldUnderRing.ts": {
+      "imports": [
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabPresetRow.tsx"
       ]
     },
     "src/features/search-tab/GameNoteSheet.tsx": {
@@ -11726,6 +11735,7 @@
         "src/features/plugin-shell/useHiddenTabHeaderTrap.test.tsx",
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
+        "src/features/preset-carousel/useChipsHeldUnderRing.ts",
         "src/features/search-tab/SearchTab.tsx",
         "src/features/search-tab/SearchTab.unmount.test.tsx",
         "src/features/search-tab/settleRing.ts",

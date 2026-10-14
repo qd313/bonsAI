@@ -466,6 +466,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - **presetRowNav.ts** (src/features/preset-carousel/presetRowNav.ts) — *Preset row D-pad handlers*: The four move handlers a chip button carries: Left/Right walk the chips, Down hands the ring to the Ask field, Up hands it to the transcript.
 - **presetSlotRotation.ts** (src/features/preset-carousel/presetSlotRotation.ts) — *Preset slot rotation*: Choose the next prompt for one of the visible preset slots: a pinned QA batch walks in order, otherwise the one next-chip rule (nextChipRule.ts) over the opening seeds not yet shown, the running game's own chips and the sampled pool.
 - **sessionRagComposer.ts** (src/features/preset-carousel/sessionRagComposer.ts) — *Deciding which suggestion chips come from the game's own knowledge base*: Given the row of static preset chips and a list of chips pulled from the running game's own knowledge base, decides which of the row's slots actually show a knowledge-base chip instead of the static one — when the row is first built. (Which chip comes next afterwards is…
+- **useChipsHeldUnderRing.ts** (src/features/preset-carousel/useChipsHeldUnderRing.ts) — *New suggestion chips wait while the ring is on the row*: When an answer finishes, the suggestion chips are re-seeded and their walk restarts, so the chip under the ring changed its words at that moment. […]
 
 ## src/features/search-tab
 

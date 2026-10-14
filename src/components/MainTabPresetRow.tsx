@@ -18,11 +18,12 @@
  * Does not: Own the chips' own animation timing — see MainTabPresetAnimatedChips().
  * The suggestion text itself comes from the presets data file, not from here.
  */
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button, Focusable } from "@decky/ui";
 import type { PresetPrompt } from "../data/presets";
 import type { AskModeId } from "../data/askMode";
 import { MainTabPresetAnimatedChips } from "./MainTabPresetAnimatedChips";
+import { useChipsHeldUnderRing } from "../features/preset-carousel/useChipsHeldUnderRing";
 import { DetailsSlot } from "../features/details-slot/DetailsSlot";
 import { PRESET_CHIP_HEIGHT_PX } from "../features/preset-carousel/presetRowLayout";
 import { chipRowExitUp } from "../features/preset-carousel/presetRowFocusNav";
@@ -190,6 +191,10 @@ export function MainTabPresetRow({
     }
     wasAskingRef.current = isAsking;
   }, [isAsking]);
+  /* New chips wait while the ring is on the row: a finished answer must not change the chip a
+     person is standing on (useChipsHeldUnderRing.ts, plan 93). */
+  const newestChips = useMemo(() => ({ seeds: suggestedPrompts, token: askRestartToken }), [suggestedPrompts, askRestartToken]);
+  const chips = useChipsHeldUnderRing(presetCarouselHostRef, newestChips);
 
   return (
     <div
@@ -229,14 +234,14 @@ export function MainTabPresetRow({
         /* While an answer's own Show details line is out of sight, it takes the chips' place. */
         <DetailsSlot focusUnifiedTextField={leaveRowDown}>
           <MainTabPresetAnimatedChips
-            seeds={suggestedPrompts}
+            seeds={chips.seeds}
             setUnifiedInput={setUnifiedInput}
             fadeAnimationEnabled={presetChipAnimation === "fade"}
             animationMode={presetChipAnimation}
             onPreferAskMode={onPresetPreferAskMode}
             onCarouselExitDown={leaveRowDown}
             useLocalKnowledgeBase={useLocalKnowledgeBase}
-            askRestartToken={askRestartToken}
+            askRestartToken={chips.token}
             holdStill={isAsking}
             presetSingleChip={presetSingleChip}
           />

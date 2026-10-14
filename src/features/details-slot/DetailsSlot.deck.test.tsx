@@ -182,7 +182,7 @@ function snapshot(): TransparencySnapshot {
   } as unknown as TransparencySnapshot;
 }
 
-function Harness({ asking = false }: { asking?: boolean }) {
+function Harness({ asking = false, prompts }: { asking?: boolean; prompts?: string[] }) {
   const expanded = "t1";
   const turn: AskThreadCollapsedTurn = { id: "t1", question: QUESTION, answer: ANSWER, transparency: snapshot() };
   const props = {
@@ -193,7 +193,7 @@ function Harness({ asking = false }: { asking?: boolean }) {
     lastExchange: { question: QUESTION, answer: ANSWER }, transparencySnapshot: snapshot(),
     liveReplyFeedbackRating: null, onReplyFeedback: () => {}, onReplyMicroAction: () => {},
     onAskOllama: async () => {}, onTurnActivate: () => {}, onRetryLastResponse: () => {},
-    suggestedPrompts: [{ text: "How can I optimize for battery life?" }], showPluginHelpChip: false,
+    suggestedPrompts: (prompts ?? ["How can I optimize for battery life?"]).map((text) => ({ text })), showPluginHelpChip: false,
     presetChipAnimation: "static", recentScreenshots: [],
     setUnifiedInput: () => {}, presetCarouselInject: null, setIsUnifiedInputFocused: () => {},
     isUnifiedInputFocused: false, ollamaIp: "127.0.0.1",
@@ -216,11 +216,12 @@ function renderChat(asking = false) {
   Object.defineProperty(pane, "clientHeight", { value: PANE_BOTTOM - PANE_TOP, configurable: true });
   scope.appendChild(pane);
   document.body.appendChild(scope);
-  render(<Harness asking={asking} />, { container: pane });
+  const view = render(<Harness asking={asking} />, { container: pane });
   pane.querySelectorAll<HTMLElement>('[data-decky-ui="Focusable"], [data-decky-ui="TextField"]').forEach((el) => {
     if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
   });
   settle(400);
+  return view;
 }
 
 /* ---------- what a person sees ---------- */
@@ -844,5 +845,48 @@ describe("a long answer: the walk Up from the question box and the walk Down bac
     ringOnRealLine();
     const down = walkWithSlot("onMoveDown", "question box");
     expect(stopsOf(down)).toEqual(["real line", "chip", "question box"]);
+  });
+});
+
+/*
+ * Plan 93, round 2 (plan93-P93-M4-ANSWER-FINISH-after-try2.json, run B): the ring on a suggestion chip
+ * while an answer was written. At the finish the chips were swapped for new ones under the ring and the
+ * slot handed the ring to its Show details line; the page jumped about 215 px and the ring left the chip
+ * by itself. Nothing in the dock may change under the ring at the finish: the chip it is on stays, with
+ * its words, and nothing is handed anywhere. Once the ring leaves the chip, the new chips come and the
+ * slot follows its usual rule.
+ */
+describe("an answer finishing while the ring is on a chip", () => {
+  function finishWithRingOnChip() {
+    const view = renderChat(true);
+    scrollChatTo(300); // the answer's own Show details line will be out of sight at the finish
+    const chip = slotChips().querySelector<HTMLElement>("button")!;
+    act(() => chip.focus());
+    settle(400);
+    const words = chip.textContent;
+    const top = pane.scrollTop;
+    hoisted.transfers = [];
+    view.rerender(<Harness asking={false} prompts={["How do I get past this part?"]} />);
+    settle(2000);
+    return { view, chip, words, top };
+  }
+
+  it("keeps the ring on the same chip, with the same words, and moves nothing", () => {
+    const { chip, words, top } = finishWithRingOnChip();
+    expect(ring()).toBe(chip);
+    expect(chip.isConnected).toBe(true);
+    expect(chip.textContent).toBe(words);
+    expect(slotHolds()).toBe("chip");
+    expect(hoisted.transfers).toEqual([]);
+    expect(pane.scrollTop).toBe(top);
+  });
+
+  it("brings the new chips and the slot's line once the ring leaves the chip", () => {
+    const { chip } = finishWithRingOnChip();
+    /* The harness's chip carries no move handlers (see above): the ring leaves the way Down would take it. */
+    focusQuestionBox();
+    settle(1000);
+    expect(slotHolds()).toBe("line: Show details ↓");
+    expect(chip.textContent).toContain("How do I get past this part?");
   });
 });

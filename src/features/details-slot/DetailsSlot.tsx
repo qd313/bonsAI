@@ -42,6 +42,10 @@
  *    chips for the moment, and the slot draws the line again as the ring lands on it (the real line
  *    fades, so only one is ever seen). The memory is dropped once the ring leaves the answer and the
  *    dock, when another answer takes over, or when the answer is out of the reading area.
+ * 7. An answer finishing with the ring on a chip is not a swap: its line arrives out of sight, but
+ *    the slot keeps the chips until the ring leaves them (or a finger scrolls the chat). Handing the
+ *    ring to the line at that moment moved it off the chip by itself and the page jumped about 215 px
+ *    (plan93-P93-M4-ANSWER-FINISH-after-try2.json, run B); nothing in the dock changes under the ring.
  *
  * Does not: Open the details itself (the real line's own handler does, in the chat under that
  * line), and B is left to Steam on the slot, as it is on a chip.
@@ -163,18 +167,24 @@ function useDetailsSlotFace(hostRef: React.RefObject<HTMLElement | null>): SlotF
   /** Point 6: did the slot stand in as the line when the ring came into this answer? null: the ring is elsewhere. */
   const walkLineRef = useRef<boolean | null>(null);
   const walkEl = useRef<HTMLElement | null>(null);
+  /* Point 7: the line arrived (an answer finished) with the ring on a chip; the chips stay until it leaves. */
+  const availableRef = useRef(false);
+  const ringKeepsChipsRef = useRef(false);
   useEffect(() => {
     let frame = 0;
     const measure = () => {
       frame = 0;
       const seen = measureFace(hostRef.current, showingRef.current);
+      if (seen.available && !availableRef.current && seen.onChip) ringKeepsChipsRef.current = true;
+      if (!seen.onChip) ringKeepsChipsRef.current = false;
+      availableRef.current = seen.available;
       walkLineRef.current = nextWalkMemory(seen.lineEl === walkEl.current ? walkLineRef.current : null, seen);
       walkEl.current = seen.lineEl;
       if (!seen.onSlotLine) clearLineForcedOnRing();
       setWalkHoldsLine(seen.available && walkLineRef.current === true);
       /* The ring just carried to the line by the memory: the slot draws the line it is on. */
       const forced = seen.available && seen.reading && seen.onSlotLine && lineIsForcedOnRing();
-      const next: SlotFace = { showLine: seen.showLine || forced, open: seen.open };
+      const next: SlotFace = { showLine: (seen.showLine || forced) && !ringKeepsChipsRef.current, open: seen.open };
       showingRef.current = next.showLine;
       setSlotShowsLine(next.showLine);
       heldRef.current = markRealLine(heldRef.current, next.showLine);
@@ -191,7 +201,10 @@ function useDetailsSlotFace(hostRef: React.RefObject<HTMLElement | null>): SlotF
     /* A scroll long after the ring last moved is a finger or a stick, not Steam bringing the ring's stop on
        screen: what the walk remembered no longer describes this view, so the next measure decides afresh. */
     const onScroll = () => {
-      if (Date.now() - lastRingMoveAt > RING_GLIDE_MS) walkLineRef.current = null;
+      if (Date.now() - lastRingMoveAt > RING_GLIDE_MS) {
+        walkLineRef.current = null;
+        ringKeepsChipsRef.current = false;
+      }
       soon();
     };
     const doc = hostRef.current?.ownerDocument ?? document;

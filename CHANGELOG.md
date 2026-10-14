@@ -85,25 +85,26 @@ All notable changes to this project are documented in this file.
 - **Going Down through an answer now stops on every section that going Up stops on**, and Up's order is Down's reversed. Checked on the Deck 2026-10-14 for the answer itself; the rows below an older answer were fixed afterwards (see below).
 - **Going Up from the rating row no longer leaves the answer's last section with its last lines hidden under the dock.** Checked on the Deck 2026-10-14.
 - **The empty question box shows a grey hint in every Ask mode**, not only Strategy. Speed says "Ask a quick question about your game." and Expert says "Ask for the full detail: builds, numbers, every step." Checked on the Deck 2026-10-14.
-- **On the Developer tab, the help line under a row of option buttons now follows the ring as it lands on each option**, before you press A. Not yet checked on the Deck.
+- **On the Developer tab, the help line under a row of option buttons now follows the ring as it lands on each option**, before you press A. Checked on the Deck 2026-10-14; the "(D15)" label that showed in its heading is gone.
 - **A note offer you already kept or dismissed no longer comes back when only the screen side of the plugin reloads.** Checked by its tests only.
-- **On the Search tab, the ring no longer vanishes when the matches are redrawn just as it comes back from a game note.** Not yet checked on the Deck.
+- **On the Search tab, the ring no longer vanishes when the matches are redrawn just as it comes back from a game note.** Checked on the Deck 2026-10-14 after a second fix (Down from the game chips had stopped working).
 - **After you delete your last chat, Main shows the empty new-chat view instead of the old answer.** Checked on the Deck 2026-10-14.
-- **Text size now reaches the words Steam draws inside its own controls:** switch names, the Permissions descriptions, two buttons on the Developer tab and the About tab's section titles. At Normal nothing changes. Not yet checked on the Deck.
+- **Text size now reaches the words Steam draws inside its own controls:** switch names, the Permissions descriptions, two buttons on the Developer tab and the About tab's section titles. At Normal nothing changes. Checked on the Deck 2026-10-14; at Large the "Update knowledge base" button now wraps to two lines instead of cutting its label.
 - **"Run AI on this Deck" now starts switched on in a fresh install**, and the Local runtime (beta) notice shows once on the first open. A saved "off" stays off. Not yet checked on the Deck.
 
-- **Every confirm box is now one shared box with two buttons:** Cancel (the ring starts on it) and the action. B is Cancel, and the words follow Text size. Not yet checked on the Deck.
-- **Down from "Update AI & models" reaches Cancel while the first Ollama and model download runs**, and the AI models screen no longer has a Refresh button. Not yet checked on the Deck.
+- **Every confirm box is now one shared box with two buttons:** Cancel (the ring starts on it) and the action. B is Cancel, and the words follow Text size. Checked on the Deck 2026-10-14 for Clear cache, Clear all data, Remove knowledge base and Remove a model (the ring now returns to the Remove control after that box); four boxes could not be opened and are still owed.
+- **Down from "Update AI & models" reaches Cancel while the first Ollama and model download runs**, and the AI models screen no longer has a Refresh button. Checked on the Deck 2026-10-14; the ring now lands on "Update AI & models" when Cancel ends the run.
 - **Some hand-written D-pad moves on Ollama-tab buttons that never ran are removed**, and the focus checker now catches that mistake. Not yet checked on the Deck.
-- **Down from the last section line reaches Open all**, and a strip in the panel's own colour sits behind the button so no row's words show under it. Not yet checked on the Deck.
-- **Terse is now the first stop of the Reply style slider** (Terse, Caveman, Balanced, Detailed) and works in every Ask mode; the separate Terse switch is gone, and a saved Terse on loads as the Terse stop. Not yet checked on the Deck.
-- **A long answer is cut into sections while it writes, so the finish no longer redraws it or jumps the view to the end.** Checked on the Deck 2026-10-14: the page moved 0 px at the finish; a ring on a follow-up chip was fixed afterwards and is not yet checked.
-- **Remove knowledge base now switches "Use local knowledge base" off on screen**, and its box no longer promises more than it does. Not yet checked on the Deck.
-- **Disclaimers, notices and the Permissions tab are much shorter**, in the wording the maintainer approved. Not yet checked on the Deck.
-- **A first setup now names gemma4:e2b-it-qat, not qwen2.5vl.** "Install the starter set" brings it, the note-search model and the two speech models, skipping what is already there; neither Qwen 2.5 3B model is offered under "Open source only", and the shipped try order starts with gemma4:e2b-it-qat. Not yet checked on the Deck.
+- **Down from the last section line reaches Open all**, and a strip in the panel's own colour sits behind the button so no row's words show under it. Checked on the Deck 2026-10-14.
+- **Terse is now the first stop of the Reply style slider** (Terse, Caveman, Balanced, Detailed) and works in every Ask mode; the separate Terse switch is gone, and a saved Terse on loads as the Terse stop. Checked on the Deck 2026-10-14.
+- **A long answer is cut into sections while it writes, so the finish no longer redraws it or jumps the view to the end.** Checked on the Deck 2026-10-14: the page moved 0 px at the finish; a ring on a follow-up chip was fixed afterwards and also moved 0 px (checked on the Deck 2026-10-14).
+- **Remove knowledge base now switches "Use local knowledge base" off on screen**, and its box no longer promises more than it does. Checked on the Deck 2026-10-14 for Remove; after the library is downloaded again the screen can still show the switch off (open bug).
+- **Disclaimers, notices and the Permissions tab are much shorter**, in the wording the maintainer approved. Checked on the Deck 2026-10-14.
+- **A first setup now names gemma4:e2b-it-qat, not qwen2.5vl.** "Install the starter set" brings it, the note-search model and the two speech models, skipping what is already there; neither Qwen 2.5 3B model is offered under "Open source only", and the shipped try order starts with gemma4:e2b-it-qat. The starter set and "Open source only" were checked on the Deck 2026-10-14; a fresh install on the stand-in is not yet checked.
 - **While an answer is being written, Left from the mode button no longer lands on the greyed paperclip.** Checked on the Deck 2026-10-14.
-- **Down from an opened older answer now reaches the newer turns below it, as Up does.** Not yet checked on the Deck.
-- **While an answer is still writing, Up from below and Down from above stop on its finished sections**, and a ring left on a section stays there through the finish. Not yet checked on the Deck.
+- **Down from an opened older answer now reaches the newer turns below it, as Up does.** Checked on the Deck 2026-10-14.
+- **While an answer is still writing, Up from below and Down from above stop on its finished sections**, and a ring left on a section stays there through the finish. Checked on the Deck 2026-10-14 for the Up walk and for the ring staying put; the notes block's visibility is still owed.
+- **"Install the starter set" no longer runs the Ollama installer again when Ollama is already installed in ~/.local/bin**, and the button goes away on the open screen when the run finishes. Not yet checked on the Deck.
 - **The test stand-in now lets a greyed button take the ring, as the Deck does.** Tests only.
 
 ### Plan 92 (2026-10-12)

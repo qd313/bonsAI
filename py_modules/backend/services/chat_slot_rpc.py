@@ -23,6 +23,7 @@ and calls that service.
 import asyncio
 from typing import Any
 
+from backend.services.async_task_lifecycle import cancel_and_await
 from backend.services.chat_slot_service import (
     MAX_CHAT_SLOTS,
     ChatLimitReached,
@@ -182,7 +183,33 @@ async def delete_chat_slot(self, slot_id: str = "", payload: Any = None):
         removed = await asyncio.to_thread(chat_delete_slot, settings_dir, sid, logger)
     if not removed:
         return {"ok": False, "error": "Slot not found"}
+    await _forget_answer_of_deleted_chat(self, sid)
     return {"ok": True}
+
+
+async def _forget_answer_of_deleted_chat(self, sid: str) -> None:
+    """Drop the stored answer when the chat it came from is deleted (any chat, not only the last).
+
+    The back end keeps its last answer so a reopened panel can paint it back (``get_background_game_ai_status``
+    runs on every mount). Deleting the last chat left that answer behind: the panel rebuilt as the Delete chat
+    box closed, read it back with no chat open, and drew it under a blank question -- the old answer with "...".
+    Only the chat's own answer goes; an answer asked with no chat, or in another chat, is left alone. One still
+    arriving is stopped, and its chat-slot entry is dropped first so nothing is written into the gone chat."""
+    async with self._background_lock:
+        if str(self._background_state.get("chat_slot_id") or "") != sid:
+            return
+        task = self._background_task
+        self._background_task = None
+        was_running = task is not None and not task.done()
+        for rid in [r for r, s in self._chat_slot_by_request.items() if s == sid]:
+            self._chat_slot_by_request.pop(rid, None)
+        self._background_state = self._new_background_state()
+        self._background_request_seq += 1
+    logger.info("delete_chat_slot: stored answer of the deleted chat dropped (stopped=%s)", was_running)
+    if was_running:
+        await self.abort_background_game_ai()
+    await cancel_and_await(task)
+    await asyncio.to_thread(self._read_aloud_service.stop)
 
 
 async def rename_chat_slot(self, payload: Any = None):

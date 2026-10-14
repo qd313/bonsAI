@@ -2,38 +2,28 @@
  * Title: "Enable Tier 2 before pulling?" opens on the safe choice
  *
  * Purpose: Pin plan 74 lane 3, bug 2 (roadmap: "Two older boxes open with the ring on their action
- * button, not the safe choice"). Steam opens a ConfirmModal with the ring on its OK button, so OK
- * must be the choice that changes nothing ("Not now") and the action sits on the middle button --
- * the download notice's own shape (downloadNotice.tsx). The action itself is unchanged: Tier 2 is
- * turned on, then the pull runs.
+ * button, not the safe choice") and plan 93. Steam puts the ring on the first button of a box, so Cancel
+ * is first and the action beside it; the box used to show three buttons (Not now / action / Cancel).
+ * Drawn and read off the page. The action itself is unchanged: Tier 2 is turned on, then the pull runs.
  *
  * Does not: prove where the ring lands on the device; that is the Deck row's job.
  */
 import { act, renderHook } from "@testing-library/react";
-import type { ReactElement } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PullModelEntry } from "../data/pullModelCatalog";
 
-type BoxProps = {
-  strOKButtonText?: unknown;
-  strMiddleButtonText?: unknown;
-  onOK?: () => void;
-  onMiddleButton?: () => void;
-  onCancel?: () => void;
-};
-
 const hoisted = vi.hoisted(() => ({
-  box: null as BoxProps | null,
+  box: null as unknown,
   closed: 0,
   notices: 0,
   tier2Applied: 0,
 }));
 
-vi.mock("@decky/ui", () => ({
-  ConfirmModal: () => null,
-  showModal: (el: ReactElement<BoxProps>) => {
-    hoisted.box = el.props;
+vi.mock("@decky/ui", async () => ({
+  ...(await import("../test-harness/fakeDeckyUi")),
+  showModal: (el: unknown) => {
+    hoisted.box = el;
     return { Close: () => (hoisted.closed += 1), Update: () => {} };
   },
 }));
@@ -50,11 +40,12 @@ vi.mock("../utils/deckyCall", () => ({
 }));
 vi.mock("@decky/api", () => ({ toaster: { toast: () => {} } }));
 
+import { drawConfirmBox, type DrawnConfirmBox } from "../test-harness/confirmBoxProbe";
 import { usePullModelSubmitSelected } from "./usePullModelSubmitSelected";
 
 const CATALOG = [{ tag: "gemma3:4b", sizeGb: 3.3, licenseClass: "open_weight" }] as unknown as PullModelEntry[];
 
-async function openBox(): Promise<BoxProps> {
+async function openBox(): Promise<DrawnConfirmBox> {
   const hook = renderHook(() =>
     usePullModelSubmitSelected({
       selectedTags: new Set(["gemma3:4b"]),
@@ -71,7 +62,7 @@ async function openBox(): Promise<BoxProps> {
   ).result.current;
   await act(() => hook.onPullSelected());
   expect(hoisted.box).not.toBeNull();
-  return hoisted.box!;
+  return drawConfirmBox(hoisted.box);
 }
 
 beforeEach(() => {
@@ -82,31 +73,30 @@ beforeEach(() => {
 });
 
 describe('"Enable Tier 2 before pulling?"', () => {
-  it("puts the safe choice on OK, where the ring lands, and the action on the middle button", async () => {
+  it("shows Cancel and the action only, Cancel first where the ring lands", async () => {
     const box = await openBox();
-    expect(box.strOKButtonText).toBe("Not now");
-    expect(box.strMiddleButtonText).toBe("Enable Tier 2 and pull");
+    expect(box.labels).toEqual(["Cancel", "Enable Tier 2 and pull"]);
   });
 
-  it("OK (the ring's first stop) closes the box and changes nothing", async () => {
+  it("Cancel (the ring's first stop) closes the box and changes nothing", async () => {
     const box = await openBox();
-    await act(async () => box.onOK?.());
+    await act(async () => box.pressCancel());
     expect(hoisted.closed).toBe(1);
     expect(hoisted.tier2Applied).toBe(0);
     expect(hoisted.notices).toBe(0);
   });
 
-  it("the middle button still does what OK used to: Tier 2 on, then the pull (via the download notice)", async () => {
+  it("the action button still does what OK used to: Tier 2 on, then the pull (via the download notice)", async () => {
     const box = await openBox();
-    await act(async () => box.onMiddleButton?.());
+    await act(async () => box.pressAction());
     expect(hoisted.closed).toBe(1);
     expect(hoisted.tier2Applied).toBe(1);
     expect(hoisted.notices).toBe(1);
   });
 
-  it("Cancel and B also change nothing", async () => {
+  it("B also changes nothing", async () => {
     const box = await openBox();
-    await act(async () => box.onCancel?.());
+    await act(async () => box.pressB());
     expect(hoisted.closed).toBe(1);
     expect(hoisted.tier2Applied).toBe(0);
     expect(hoisted.notices).toBe(0);

@@ -21,8 +21,9 @@
  * it there.
  */
 import { useCallback, type Dispatch, type RefObject, type SetStateAction } from "react";
-import { ConfirmModal, showModal } from "@decky/ui";
+import { showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
+import { CancelFirstConfirmModal } from "../components/CancelFirstConfirmModal";
 import { formatSizeGb, type PullModelEntry } from "../data/pullModelCatalog";
 import { isTagInstalled, resolveRowSizeGb } from "../utils/pullModelFilters";
 import { textPx } from "../styles/sections/textPx";
@@ -101,29 +102,25 @@ export function usePullModelToggleSelection(a: UsePullModelToggleSelectionArgs):
       if (entry.group === "stretch" && !stretchConfirmedRef.current.has(entry.tag)) {
         onBeforeNestedDeckyModal?.();
         const handle = showModal(
-          <ConfirmModal
-            strTitle="Large model — continue?"
-            strDescription={
+          <CancelFirstConfirmModal
+            title="Large model — continue?"
+            body={
               <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
                 {entry.tag} is about {formatSizeGb(resolveRowSizeGb(entry, liveSizeGbByTag))} on disk and may run
                 slowly on Deck CPU/RAM. Pull only if you have room and accept longer waits.
               </div>
             }
             /*
-              Steam opens a confirm box with the ring on OK, so OK queues nothing and "Pull anyway" sits
-              on the middle button (the download notice's shape): an A pressed by habit no longer
-              queues a big download. Cancel and B also change nothing.
+              Two buttons, Cancel first where Steam puts the ring (it was Not now / Pull anyway /
+              Cancel): an A pressed by habit does not queue a big download. B is Cancel.
             */
-            strOKButtonText="Not now"
-            strMiddleButtonText="Pull anyway"
-            strCancelButtonText="Cancel"
-            onOK={() => completeNestedModalClose(() => handle.Close())}
-            onMiddleButton={() => {
+            actionLabel="Pull anyway"
+            onCancel={() => completeNestedModalClose(() => handle.Close())}
+            onAction={() => {
               stretchConfirmedRef.current.add(entry.tag);
               completeNestedModalClose(() => handle.Close());
               confirmOpenWeightTierIfNeeded(entry, queueSelection);
             }}
-            onCancel={() => completeNestedModalClose(() => handle.Close())}
           />
         );
         return;

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 960,
-  "edgeCount": 3209,
+  "edgeCount": 3225,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -180,8 +180,14 @@
       ],
       "importedBy": [
         "src/components/CancelFirstConfirmModal.test.tsx",
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/components/PullModelsTryOrder.tsx",
         "src/components/SettingsTabDataSection.tsx",
-        "src/features/downloads/downloadNotice.tsx"
+        "src/features/downloads/downloadNotice.tsx",
+        "src/hooks/usePullModelDeleteConfirm.tsx",
+        "src/hooks/usePullModelSubmitSelected.tsx",
+        "src/hooks/usePullModelTier2Confirm.tsx",
+        "src/hooks/usePullModelToggleSelection.tsx"
       ]
     },
     "src/components/CharacterPickerModal.test.tsx": {
@@ -536,6 +542,7 @@
     "src/components/KnowledgeBaseSection.removeBox.test.tsx": {
       "imports": [
         "src/components/KnowledgeBaseSection.tsx",
+        "src/test-harness/confirmBoxProbe.tsx",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/fakeDeckyUi.tsx"
       ],
@@ -566,6 +573,7 @@
     },
     "src/components/KnowledgeBaseSection.tsx": {
       "imports": [
+        "src/components/CancelFirstConfirmModal.tsx",
         "src/components/KnowledgeBaseButtonLabel.tsx",
         "src/components/RagCorpusStoragePickerModal.tsx",
         "src/components/icons.tsx",
@@ -2058,6 +2066,7 @@
         "src/components/pullModelsBoxMemory.ts",
         "src/features/model-routing/useTryOrderPlaces.ts",
         "src/styles/sections/gamepadAndPullModels.ts",
+        "src/test-harness/confirmBoxProbe.tsx",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/fakeDeckyUi.tsx",
         "src/test-harness/pullModelsListLayout.ts",
@@ -2169,6 +2178,7 @@
     },
     "src/components/PullModelsTryOrder.tsx": {
       "imports": [
+        "src/components/CancelFirstConfirmModal.tsx",
         "src/components/PullModelsModal.types.ts",
         "src/components/PullModelsPcRow.tsx",
         "src/components/pullModelsBoxMemory.ts",
@@ -7287,12 +7297,15 @@
     },
     "src/hooks/usePullModelDeleteConfirm.safeFirst.test.tsx": {
       "imports": [
-        "src/hooks/usePullModelDeleteConfirm.tsx"
+        "src/hooks/usePullModelDeleteConfirm.tsx",
+        "src/test-harness/confirmBoxProbe.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
     },
     "src/hooks/usePullModelDeleteConfirm.tsx": {
       "imports": [
+        "src/components/CancelFirstConfirmModal.tsx",
         "src/data/pullModelCatalog.ts",
         "src/features/plugin-shell/pluginStorage.ts",
         "src/styles/sections/textPx.ts",
@@ -7369,12 +7382,15 @@
     "src/hooks/usePullModelSubmitSelected.tier2Box.test.tsx": {
       "imports": [
         "src/data/pullModelCatalog.ts",
-        "src/hooks/usePullModelSubmitSelected.tsx"
+        "src/hooks/usePullModelSubmitSelected.tsx",
+        "src/test-harness/confirmBoxProbe.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
     },
     "src/hooks/usePullModelSubmitSelected.tsx": {
       "imports": [
+        "src/components/CancelFirstConfirmModal.tsx",
         "src/components/PullModelsModal.types.ts",
         "src/data/modelPolicy.ts",
         "src/data/pullModelCatalog.ts",
@@ -7410,12 +7426,15 @@
     "src/hooks/usePullModelTier2Confirm.safeFirst.test.tsx": {
       "imports": [
         "src/data/pullModelCatalog.ts",
-        "src/hooks/usePullModelTier2Confirm.tsx"
+        "src/hooks/usePullModelTier2Confirm.tsx",
+        "src/test-harness/confirmBoxProbe.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
     },
     "src/hooks/usePullModelTier2Confirm.tsx": {
       "imports": [
+        "src/components/CancelFirstConfirmModal.tsx",
         "src/data/modelPolicy.ts",
         "src/data/pullModelCatalog.ts",
         "src/styles/sections/textPx.ts"
@@ -7438,12 +7457,15 @@
     "src/hooks/usePullModelToggleSelection.safeFirst.test.tsx": {
       "imports": [
         "src/data/pullModelCatalog.ts",
-        "src/hooks/usePullModelToggleSelection.tsx"
+        "src/hooks/usePullModelToggleSelection.tsx",
+        "src/test-harness/confirmBoxProbe.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
     },
     "src/hooks/usePullModelToggleSelection.tsx": {
       "imports": [
+        "src/components/CancelFirstConfirmModal.tsx",
         "src/data/pullModelCatalog.ts",
         "src/styles/sections/textPx.ts",
         "src/utils/pullModelFilters.ts"
@@ -8509,10 +8531,16 @@
       "imports": [],
       "importedBy": [
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
+        "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
+        "src/components/PullModelsModal.tryOrder.test.tsx",
         "src/components/PullModelsStarterSetChip.test.tsx",
-        "src/features/downloads/downloadNotice.test.tsx"
+        "src/features/downloads/downloadNotice.test.tsx",
+        "src/hooks/usePullModelDeleteConfirm.safeFirst.test.tsx",
+        "src/hooks/usePullModelSubmitSelected.tier2Box.test.tsx",
+        "src/hooks/usePullModelTier2Confirm.safeFirst.test.tsx",
+        "src/hooks/usePullModelToggleSelection.safeFirst.test.tsx"
       ]
     },
     "src/test-harness/deckAnswerWalk.ts": {
@@ -8817,6 +8845,10 @@
         "src/hooks/useDisclaimerAndLocalRuntimeGates.firstOpen.test.tsx",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.saveFirst.test.tsx",
         "src/hooks/useLocalOllamaSetupFlow.inPlace.test.tsx",
+        "src/hooks/usePullModelDeleteConfirm.safeFirst.test.tsx",
+        "src/hooks/usePullModelSubmitSelected.tier2Box.test.tsx",
+        "src/hooks/usePullModelTier2Confirm.safeFirst.test.tsx",
+        "src/hooks/usePullModelToggleSelection.safeFirst.test.tsx",
         "src/hooks/useReplyFeedbackChips.remount.test.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/hooks/useVoiceTranscription.test.ts",

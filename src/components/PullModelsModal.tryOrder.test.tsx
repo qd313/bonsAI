@@ -61,6 +61,7 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { PullModelsModal } from "./PullModelsModal";
+import { drawConfirmBox } from "../test-harness/confirmBoxProbe";
 import { resetPullModelsBoxMemory } from "./pullModelsBoxMemory";
 import type { TryOrderHost } from "../features/model-routing/useTryOrderPlaces";
 import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../test-harness/fakeDeckyRpc";
@@ -282,12 +283,12 @@ describe("pressing a place button", () => {
     await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
     const box = askReset(container);
     expect(savedOrders()).toEqual([]); // asking changes nothing
-    (box.onMiddleButton as () => void)();
+    (box.onAction as () => void)();
     await waitFor(() => expect(savedOrders()).toEqual([{ text_model_routing_order: [] }]));
     await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
   });
 
-  it("Reset order asks first: the ring lands on the choice that changes nothing, and Not now, Cancel and B all leave the order alone", async () => {
+  it("Reset order asks first with Cancel and Reset order only: the ring lands on Cancel, and Cancel and B leave the order alone", async () => {
     setRpcHandler("load_settings", () => ({
       ...defaultSettingsFixture(),
       text_model_routing_order: ["gemma4:e2b-it-qat", "qwen2.5vl:3b", "qwen3.5:4b"],
@@ -295,12 +296,12 @@ describe("pressing a place button", () => {
     const { container } = renderBox(DECK);
     await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
     const box = askReset(container);
-    expect(box.strTitle).toBe("Put the text try order back to automatic?");
-    // Steam puts the ring on OK, so OK is the harmless one and the action is the middle button.
-    expect(box.strOKButtonText).toBe("Not now");
-    expect(box.strMiddleButtonText).toBe("Reset order");
-    (box.onOK as () => void)();
-    (box.onCancel as () => void)();
+    expect(box.title).toBe("Put the text try order back to automatic?");
+    // Two buttons, Cancel first where Steam puts the ring (the harmless one), Reset order beside it.
+    const drawn = drawConfirmBox(hoisted.shown[hoisted.shown.length - 1]);
+    expect(drawn.labels).toEqual(["Cancel", "Reset order"]);
+    drawn.pressCancel();
+    drawn.pressB();
     await new Promise((r) => setTimeout(r, 30));
     expect(savedOrders()).toEqual([]);
     expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1");
@@ -317,8 +318,8 @@ describe("pressing a place button", () => {
     fireEvent.click(button(container, "Try order for pictures questions"));
     await waitFor(() => expect(placeOf(container, "qwen3.5:4b")).toBe("1"));
     const box = askReset(container);
-    expect(box.strTitle).toBe("Put the pictures try order back to automatic?");
-    (box.onMiddleButton as () => void)();
+    expect(box.title).toBe("Put the pictures try order back to automatic?");
+    (box.onAction as () => void)();
     await waitFor(() => expect(savedOrders()).toEqual([{ vision_model_routing_order: [] }]));
   });
 

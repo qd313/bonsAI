@@ -22,8 +22,9 @@
  * it there.
  */
 import { useCallback, type Dispatch, type SetStateAction } from "react";
-import { ConfirmModal, showModal } from "@decky/ui";
+import { showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
+import { CancelFirstConfirmModal } from "../components/CancelFirstConfirmModal";
 import { formatSizeGb } from "../data/pullModelCatalog";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { loadSavedIp } from "../features/plugin-shell/pluginStorage";
@@ -65,25 +66,23 @@ export function usePullModelDeleteConfirm(a: UsePullModelDeleteConfirmArgs): Pul
       }
       onBeforeNestedDeckyModal?.();
       const handle = showModal(
-        <ConfirmModal
-          strTitle={`Remove ${tag} from the Deck?`}
-          strDescription={
+        <CancelFirstConfirmModal
+          title={`Remove ${tag} from the Deck?`}
+          body={
             <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
               This will free about {formatSizeGb(sizeGb)} by running <code>ollama rm {tag}</code>. Other models that
               depend on this tag will fall back to the next entry in the Ask-mode chain.
             </div>
           }
           /*
-           * Steam opens a ConfirmModal with the ring on OK, so OK is the choice that removes
-           * nothing and the action sits on the middle button -- the download notice's own shape
-           * (downloadNotice.tsx). This box used to open with the ring on "Remove model"
-           * (plan76-P76-NOMIC-REMOVE-HINT.json). B and Cancel also remove nothing.
+           * Two buttons, Cancel first where Steam puts the ring, so an A pressed by habit removes
+           * nothing (this box once opened with the ring on "Remove model",
+           * plan76-P76-NOMIC-REMOVE-HINT.json; then it had Not now / Remove model / Cancel). B is Cancel.
            */
-          strOKButtonText="Not now"
-          strMiddleButtonText="Remove model"
-          strCancelButtonText="Cancel"
-          onOK={() => completeNestedModalClose(() => handle.Close())}
-          onMiddleButton={() => {
+          actionLabel="Remove model"
+          danger
+          onCancel={() => completeNestedModalClose(() => handle.Close())}
+          onAction={() => {
             completeNestedModalClose(() => handle.Close());
             void (async () => {
               setDeleteBusyTag(tag);
@@ -129,7 +128,6 @@ export function usePullModelDeleteConfirm(a: UsePullModelDeleteConfirmArgs): Pul
               }
             })();
           }}
-          onCancel={() => completeNestedModalClose(() => handle.Close())}
         />
       );
     },

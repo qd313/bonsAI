@@ -14,7 +14,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PullModelEntry } from "../data/pullModelCatalog";
 
-type BoxProps = { strTitle?: unknown; strDescription?: ReactNode };
+type BoxProps = { title?: unknown; body?: ReactNode };
 
 const hoisted = vi.hoisted(() => ({ box: null as BoxProps | null }));
 
@@ -39,7 +39,7 @@ import { usePullModelTier2Confirm } from "./usePullModelTier2Confirm";
 const ENTRY = { tag: "gemma3:4b", sizeGb: 3.3, licenseClass: "open_weight" } as unknown as PullModelEntry;
 
 function textOfBox(): string {
-  const { container } = render(<div>{hoisted.box?.strDescription}</div>);
+  const { container } = render(<div>{hoisted.box?.body}</div>);
   return container.textContent ?? "";
 }
 
@@ -63,7 +63,7 @@ describe('"Enable Tier 2 before pulling?" (Pull selected)', () => {
     ).result.current;
     await act(() => hook.onPullSelected());
 
-    expect(hoisted.box?.strTitle).toBe("Enable Tier 2 before pulling?");
+    expect(hoisted.box?.title).toBe("Enable Tier 2 before pulling?");
     const text = textOfBox();
     expect(text).toContain("gemma3:4b");
     expect(text).toContain("Tier 2");
@@ -83,7 +83,7 @@ describe('"Enable Tier 2 for this model?" (one model ticked)', () => {
     ).result.current;
     hook.confirmOpenWeightTierIfNeeded(ENTRY, () => {});
 
-    expect(hoisted.box?.strTitle).toBe("Enable Tier 2 for this model?");
+    expect(hoisted.box?.title).toBe("Enable Tier 2 for this model?");
     const text = textOfBox();
     expect(text).toContain("gemma3:4b");
     expect(text.toLowerCase()).not.toContain("reply");

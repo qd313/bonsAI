@@ -1,40 +1,30 @@
 /**
  * Title: "Large model -- continue?" opens on the safe choice
  *
- * Purpose: Steam opens a ConfirmModal with the ring on its OK button, and this box had "Pull anyway"
- * there, so an A pressed by habit queued a big download (plan 79, round four). OK is now "Not now" and
- * "Pull anyway" sits on the middle button, the download notice's shape. What queueing does is
- * unchanged. Cancel and B queue nothing.
+ * Purpose: Steam puts the ring on the first button of a box, and this box had "Pull anyway" there, so an A
+ * pressed by habit queued a big download (plan 79, round four). It then showed three buttons (Not now /
+ * Pull anyway / Cancel); it is now the shared two-button box, drawn and read off the page: Cancel first,
+ * Pull anyway beside it (plan 93). What queueing does is unchanged. Cancel and B queue nothing.
  *
  * Does not: prove where the ring lands on the device; that is the Deck row's job.
  */
 import { act, renderHook } from "@testing-library/react";
-import type { ReactElement } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PullModelEntry } from "../data/pullModelCatalog";
 
-type BoxProps = {
-  strTitle?: unknown;
-  strOKButtonText?: unknown;
-  strMiddleButtonText?: unknown;
-  strCancelButtonText?: unknown;
-  onOK?: () => void;
-  onMiddleButton?: () => void;
-  onCancel?: () => void;
-};
+const hoisted = vi.hoisted(() => ({ box: null as unknown, closed: 0 }));
 
-const hoisted = vi.hoisted(() => ({ box: null as BoxProps | null, closed: 0 }));
-
-vi.mock("@decky/ui", () => ({
-  ConfirmModal: () => null,
-  showModal: (el: ReactElement<BoxProps>) => {
-    hoisted.box = el.props;
+vi.mock("@decky/ui", async () => ({
+  ...(await import("../test-harness/fakeDeckyUi")),
+  showModal: (el: unknown) => {
+    hoisted.box = el;
     return { Close: () => (hoisted.closed += 1), Update: () => {} };
   },
 }));
 vi.mock("@decky/api", () => ({ toaster: { toast: () => {} } }));
 
+import { drawConfirmBox } from "../test-harness/confirmBoxProbe";
 import { usePullModelToggleSelection } from "./usePullModelToggleSelection";
 
 const ENTRY = { tag: "big-model:70b", group: "stretch", sizeGb: 40 } as unknown as PullModelEntry;
@@ -54,7 +44,7 @@ function openBox() {
   ).result.current;
   act(() => hook.toggleSelected(ENTRY));
   expect(hoisted.box).not.toBeNull();
-  return { box: hoisted.box!, confirmed, queueIfConfirmed };
+  return { box: drawConfirmBox(hoisted.box), confirmed, queueIfConfirmed };
 }
 
 beforeEach(() => {
@@ -63,26 +53,24 @@ beforeEach(() => {
 });
 
 describe('"Large model -- continue?"', () => {
-  it("puts the safe choice on OK, where the ring lands, and Pull anyway on the middle button", () => {
+  it("shows Cancel and Pull anyway only, Cancel first where the ring lands", () => {
     const { box } = openBox();
-    expect(box.strTitle).toBe("Large model — continue?");
-    expect(box.strOKButtonText).toBe("Not now");
-    expect(box.strMiddleButtonText).toBe("Pull anyway");
-    expect(box.strCancelButtonText).toBe("Cancel");
+    expect(box.title).toBe("Large model — continue?");
+    expect(box.labels).toEqual(["Cancel", "Pull anyway"]);
   });
 
-  it("OK, Cancel and B queue nothing and do not mark the model as accepted", () => {
+  it("Cancel and B queue nothing and do not mark the model as accepted", () => {
     const { box, confirmed, queueIfConfirmed } = openBox();
-    act(() => box.onOK?.());
-    act(() => box.onCancel?.());
+    act(() => box.pressCancel());
+    act(() => box.pressB());
     expect(hoisted.closed).toBe(2);
     expect(queueIfConfirmed).not.toHaveBeenCalled();
     expect(confirmed.size).toBe(0);
   });
 
-  it("the middle button accepts the warning and carries on, as OK used to", () => {
+  it("the Pull anyway button accepts the warning and carries on, as OK used to", () => {
     const { box, confirmed, queueIfConfirmed } = openBox();
-    act(() => box.onMiddleButton?.());
+    act(() => box.pressAction());
     expect(hoisted.closed).toBe(1);
     expect(confirmed.has("big-model:70b")).toBe(true);
     expect(queueIfConfirmed).toHaveBeenCalledTimes(1);

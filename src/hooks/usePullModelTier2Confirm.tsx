@@ -20,9 +20,10 @@
  * delete-confirm hooks that call `completeNestedModalClose`. Keep it there.
  */
 import { useCallback, type RefObject } from "react";
-import { ConfirmModal, showModal } from "@decky/ui";
+import { showModal } from "@decky/ui";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
 import type { PullModelEntry } from "../data/pullModelCatalog";
+import { CancelFirstConfirmModal } from "../components/CancelFirstConfirmModal";
 import { textPx } from "../styles/sections/textPx";
 
 /**
@@ -87,9 +88,9 @@ export function usePullModelTier2Confirm(a: UsePullModelTier2ConfirmArgs): PullM
       }
       onBeforeNestedDeckyModal?.();
       const handle = showModal(
-        <ConfirmModal
-          strTitle="Enable Tier 2 for this model?"
-          strDescription={
+        <CancelFirstConfirmModal
+          title="Enable Tier 2 for this model?"
+          body={
             <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
               <div style={{ marginBottom: 8 }}>
                 <span style={{ color: "#9ce7ff" }}>{entry.tag}</span> is an open-weight model. With{" "}
@@ -102,17 +103,14 @@ export function usePullModelTier2Confirm(a: UsePullModelTier2ConfirmArgs): PullM
             </div>
           }
           /*
-           * Steam opens a ConfirmModal with the ring on OK, so OK is the choice that changes
-           * nothing and the action sits on the middle button -- the download notice's own shape
-           * (downloadNotice.tsx), and the sister box in usePullModelSubmitSelected.tsx. This box
-           * used to open with the ring on the action (found in the code, plan 76 lane 2).
-           * B and Cancel also change nothing.
+           * Two buttons, Cancel first where Steam puts the ring, so an A pressed by habit changes
+           * nothing, the sister box in usePullModelSubmitSelected.tsx (this box once opened with the ring
+           * on the action, found in the code, plan 76 lane 2; then it had Not now / Enable Tier 2 and
+           * queue / Cancel). B is Cancel.
            */
-          strOKButtonText="Not now"
-          strMiddleButtonText="Enable Tier 2 and queue"
-          strCancelButtonText="Cancel"
-          onOK={() => completeNestedModalClose(() => handle.Close())}
-          onMiddleButton={() => {
+          actionLabel="Enable Tier 2 and queue"
+          onCancel={() => completeNestedModalClose(() => handle.Close())}
+          onAction={() => {
             openWeightTierConfirmedRef.current.add(entry.tag);
             void (async () => {
               await onApplyTier2Policy?.();
@@ -120,7 +118,6 @@ export function usePullModelTier2Confirm(a: UsePullModelTier2ConfirmArgs): PullM
               completeNestedModalClose(() => handle.Close());
             })();
           }}
-          onCancel={() => completeNestedModalClose(() => handle.Close())}
         />
       );
     },

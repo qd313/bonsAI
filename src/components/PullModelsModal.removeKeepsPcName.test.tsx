@@ -69,8 +69,8 @@ async function removeQwenFromTheBox(): Promise<void> {
   });
   fireEvent.click(row.querySelector<HTMLButtonElement>(".bonsai-pullmodels-delete-btn")!);
   const box = hoisted.shown[hoisted.shown.length - 1]!.props;
-  expect(box.strTitle).toBe("Remove qwen2.5:3b from the Deck?");
-  (box.onMiddleButton as () => void)();
+  expect(box.title).toBe("Remove qwen2.5:3b from the Deck?");
+  (box.onAction as () => void)();
   await waitFor(() => expect(getRpcCallLog().some((c) => c.method === "delete_ollama_model")).toBe(true));
 }
 

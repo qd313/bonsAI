@@ -34,9 +34,10 @@
  * this screen must (the screen is a confirm box with its own OK).
  */
 import { useCallback, useRef, type ReactNode, type RefCallback } from "react";
-import { Button, ConfirmModal, Focusable, showModal } from "@decky/ui";
+import { Button, Focusable, showModal } from "@decky/ui";
 import type { TableSection } from "./PullModelsModal.types";
 import type { NavRefHolder } from "../utils/navFocusRegistry";
+import { CancelFirstConfirmModal } from "./CancelFirstConfirmModal";
 import { handRingTo } from "./pullModelsBoxMemory";
 import { PullModelsPcRow } from "./PullModelsPcRow";
 import type { PullModelEntry, PullModelModeFilterId } from "../data/pullModelCatalog";
@@ -233,28 +234,25 @@ export function usePullModelTryNav(a: {
       </div>
     );
 
-  /** The box that asks before the order goes back to automatic. The ring lands on the choice that changes nothing. */
+  /** The box that asks before the order goes back to automatic: Cancel first, so the ring lands on the choice that changes nothing. */
   const askReset = (nested: NestedModalHooks) => {
     const word = places.kind === "vision" ? "pictures" : "text";
     nested.before?.();
     const handle = showModal(
-      <ConfirmModal
-        strTitle={`Put the ${word} try order back to automatic?`}
-        strDescription={
+      <CancelFirstConfirmModal
+        title={`Put the ${word} try order back to automatic?`}
+        body={
           <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
             Automatic means bonsAI works the order out from the models installed, and keeps following its defaults when
             you add or remove a model. The order you set by hand is forgotten.
           </div>
         }
-        strOKButtonText="Not now"
-        strMiddleButtonText="Reset order"
-        strCancelButtonText="Cancel"
-        onOK={() => nested.complete(() => handle.Close())}
-        onMiddleButton={() => {
+        actionLabel="Reset order"
+        onCancel={() => nested.complete(() => handle.Close())}
+        onAction={() => {
           nested.complete(() => handle.Close());
           void places.reset();
         }}
-        onCancel={() => nested.complete(() => handle.Close())}
       />,
     );
   };

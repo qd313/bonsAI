@@ -1,40 +1,29 @@
 /**
  * Title: "Remove <model> from the Deck?" opens on the safe choice
  *
- * Purpose: Pin plan 76 lane 2 round 3, bug 1 (docs/test-evidence/plan76-P76-NOMIC-REMOVE-HINT.json).
- * Steam opens a ConfirmModal with the ring on its OK button, and this box had "Remove model" there,
- * so one A press removed an installed model (a download to get back). OK is now "Not now" and
- * "Remove model" sits on the middle button, the download notice's own shape (downloadNotice.tsx).
- * What removing does is unchanged. Cancel and B remove nothing.
+ * Purpose: Pin plan 76 lane 2 round 3, bug 1 (docs/test-evidence/plan76-P76-NOMIC-REMOVE-HINT.json)
+ * and plan 93. Steam puts the ring on the first button of a box, and this box had "Remove model" there,
+ * so one A press removed an installed model (a download to get back). It then showed three buttons
+ * (Not now / Remove model / Cancel); it is now the shared two-button box, drawn and read off the page:
+ * Cancel first, Remove model beside it. What removing does is unchanged. Cancel and B remove nothing.
  *
  * Does not: prove where the ring lands on the device; that is the Deck row's job.
  */
 import { act, renderHook } from "@testing-library/react";
-import type { ReactElement } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-type BoxProps = {
-  strTitle?: unknown;
-  strOKButtonText?: unknown;
-  strMiddleButtonText?: unknown;
-  strCancelButtonText?: unknown;
-  onOK?: () => void;
-  onMiddleButton?: () => void;
-  onCancel?: () => void;
-};
-
 const hoisted = vi.hoisted(() => ({
-  box: null as BoxProps | null,
+  box: null as unknown,
   closed: 0,
   deletes: [] as string[],
   deleteArgs: [] as unknown[][],
   savedIp: "",
 }));
 
-vi.mock("@decky/ui", () => ({
-  ConfirmModal: () => null,
-  showModal: (el: ReactElement<BoxProps>) => {
-    hoisted.box = el.props;
+vi.mock("@decky/ui", async () => ({
+  ...(await import("../test-harness/fakeDeckyUi")),
+  showModal: (el: unknown) => {
+    hoisted.box = el;
     return { Close: () => (hoisted.closed += 1), Update: () => {} };
   },
 }));
@@ -52,9 +41,10 @@ vi.mock("../utils/deckyCall", () => ({
   },
 }));
 
+import { drawConfirmBox, type DrawnConfirmBox } from "../test-harness/confirmBoxProbe";
 import { usePullModelDeleteConfirm } from "./usePullModelDeleteConfirm";
 
-function openBox(): BoxProps {
+function openBox(): DrawnConfirmBox {
   const hook = renderHook(() =>
     usePullModelDeleteConfirm({
       activeRoutingTag: null,
@@ -66,7 +56,7 @@ function openBox(): BoxProps {
   ).result.current;
   hook.confirmDelete("nomic-embed-text:latest", 0.3);
   expect(hoisted.box).not.toBeNull();
-  return hoisted.box!;
+  return drawConfirmBox(hoisted.box);
 }
 
 beforeEach(() => {
@@ -78,30 +68,28 @@ beforeEach(() => {
 });
 
 describe('"Remove nomic-embed-text:latest from the Deck?"', () => {
-  it("puts the safe choice on OK, where the ring lands, and Remove model on the middle button", () => {
+  it("shows Cancel and Remove model only, Cancel first where the ring lands", () => {
     const box = openBox();
-    expect(box.strOKButtonText).toBe("Not now");
-    expect(box.strMiddleButtonText).toBe("Remove model");
-    expect(box.strCancelButtonText).toBe("Cancel");
+    expect(box.labels).toEqual(["Cancel", "Remove model"]);
   });
 
-  it("OK (the ring's first stop) closes the box and removes nothing", async () => {
+  it("Cancel (the ring's first stop) closes the box and removes nothing", async () => {
     const box = openBox();
-    await act(async () => box.onOK?.());
+    await act(async () => box.pressCancel());
     expect(hoisted.closed).toBe(1);
     expect(hoisted.deletes).toEqual([]);
   });
 
-  it("Cancel and B also remove nothing", async () => {
+  it("B also removes nothing", async () => {
     const box = openBox();
-    await act(async () => box.onCancel?.());
+    await act(async () => box.pressB());
     expect(hoisted.closed).toBe(1);
     expect(hoisted.deletes).toEqual([]);
   });
 
-  it("the middle button removes the model, as OK used to", async () => {
+  it("the Remove model button removes the model, as OK used to", async () => {
     const box = openBox();
-    await act(async () => box.onMiddleButton?.());
+    await act(async () => box.pressAction());
     expect(hoisted.closed).toBe(1);
     expect(hoisted.deletes).toEqual(["nomic-embed-text:latest"]);
   });
@@ -111,13 +99,13 @@ describe("the remove call carries the PC address", () => {
   it("sends the address the screen last saved, so a PC that has the model keeps its place in the order", async () => {
     hoisted.savedIp = " 192.168.1.20 ";
     const box = openBox();
-    await act(async () => box.onMiddleButton?.());
+    await act(async () => box.pressAction());
     expect(hoisted.deleteArgs).toEqual([["nomic-embed-text:latest", "192.168.1.20"]]);
   });
 
   it("sends an empty address when none was ever saved", async () => {
     const box = openBox();
-    await act(async () => box.onMiddleButton?.());
+    await act(async () => box.pressAction());
     expect(hoisted.deleteArgs).toEqual([["nomic-embed-text:latest", ""]]);
   });
 });

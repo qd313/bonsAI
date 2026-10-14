@@ -16,7 +16,7 @@ import { starterSetBoxBody } from "./localOllamaStarterSet";
 
 const hoisted = vi.hoisted(() => ({
   opts: null as Record<string, unknown> | null,
-  pullBox: null as { strDescription?: ReactNode; strTitle?: string } | null,
+  pullBox: null as { body?: ReactNode; title?: string } | null,
 }));
 vi.mock("../features/downloads/downloadNotice", () => ({
   confirmDownload: async (_n: unknown, opts?: Record<string, unknown>) => {
@@ -29,7 +29,7 @@ vi.mock("@decky/ui", async () => {
   return {
     ...stubs,
     ConfirmModal: () => null,
-    showModal: (el: ReactElement<{ strDescription?: ReactNode; strTitle?: string }>) => {
+    showModal: (el: ReactElement<{ body?: ReactNode; title?: string }>) => {
       hoisted.pullBox = el.props;
       return { Close: () => {}, Update: () => {} };
     },
@@ -76,7 +76,7 @@ describe("wording of the install and pull boxes", () => {
     ).result.current;
     await act(() => hook.onPullSelected());
     expect(hoisted.pullBox).not.toBeNull();
-    const { container } = render(<div>{hoisted.pullBox!.strDescription}</div>);
+    const { container } = render(<div>{hoisted.pullBox!.body}</div>);
     expect(container.textContent).toContain("open-source licence");
     expect(container.textContent).not.toMatch(/FOSS/);
   });

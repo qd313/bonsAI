@@ -1278,3 +1278,91 @@ Moved here from the roadmap entry on 2026-10-08 (plan 83 docs sweep), to keep th
 **Deck 2026-10-07 (plan 82, Deck block 2, no game): the fade reading was of the wrong element, and the ring half is UNCLEAR.** The 1.00 readings were of the chip button while the fade sat on a wrapper box around it, so they showed nothing about the fade (the fade now sits on the button; its row **P82-FADE-ON-BUTTON** passed on the Deck 2026-10-07, build `e34b0d57`, and the entry "The fade style's chips swap their words without fading" is in Done). With the ring on a chip for 30 s that chip kept its words and box, and the other chip held still too, so "the other chip changes" could not be shown; the row holding while the ring is on a chip is by design. Row **P79-LONG-CHIPS**, evidence `docs/test-evidence/plan82-P79-LONG-CHIPS-NOGAME.json`.
 
 *Moved here word for word from roadmap-details.md on 2026-10-12 (plan 89 docs sweep, pass 4): the entry closed on 2026-10-11 and is in Done.*
+
+_Four finished sections moved here word for word from [roadmap-details.md](../roadmap-details.md) on 2026-10-14 (plan 93 docs sweep 2), to keep that file under its size limit._
+
+## A chat that is still writing does not look busy from another chat
+
+- ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
+  2026-09-18.** While one chat is still writing and you switch to another chat, nothing tells you the first
+  one is busy: its dot in the chat row looks like every idle chat's dot, with no hollow cyan ring and no spark
+  beside its ghost title; the other chat's own Ask button reads ready instead of busy; and when the first chat
+  finishes, its dot never turns green. Seen on three separate tries. The code already has both dot states and
+  the ask flow does mark a chat as generating and later clear it, so the state is not reaching the row on the
+  device — worth a closer look, not yet explained. Evidence
+  `docs/test-evidence/plan61-CHAT-SLOTS-V3-05a-busyhalf.json`, `docs/test-evidence/plan61-CHAT-SLOTS-V3-06a.json`,
+  `docs/test-evidence/plan61-CHAT-SLOTS-V3-06b.json`.
+
+**Ruled out 2026-09-21:** the shape that has bitten this repo before — a per-turn fact reaching the
+screen only once an answer completes, not during the half-written updates along the way — does not apply
+here; the chat's own name rides every update, including the half-written ones, and there is now a test
+proving it. Every step from the back end to the dot reads correctly in the code. What would settle it is
+a log captured on the Deck while the fault is actually happening.
+
+**Three more clean tries on the Deck 2026-09-26 (plan 70, flow 4.4), dot half did not appear.** Two test
+chats (X writing, Y switched-to), each try switching to Y about 19 seconds after X's first words. In all 3
+counted tries, X's dot showed busy (a hollow cyan ring) from the moment of the switch until the answer
+finished, and turned green within the same second the plugin's own log said it finished — the dot itself
+behaved correctly every time. **Ask half, unclear, the maintainer's call:** Y's own Ask button read greyed
+(not "ready") the whole time X was writing, even once in a try with words already typed into Y's box —
+and turned ready the moment X finished. The row as written expects Y's Ask to read ready while X writes;
+what was seen is the opposite. Which reading is actually correct behaviour is for the maintainer to
+decide. Evidence `docs/test-evidence/plan70-F4-BUSY-DOT.json` (+ screenshots).
+
+**2026-10-03 (plan 81, build `afd2f444`): passed.** 05a's busy half, 06a and 06b all passed on the Deck (the neighbour chat's Ask button greyed, the writing chat's dot a hollow cyan ring with a spark, solid green when it finished while away), so the sighting is off the watch list. Which reading of the Ask button is right (ready or busy) is still open, no decision recorded. Evidence `docs/test-evidence/plan81-CHAT-SLOTS-V3-05a-busyhalf.json`, `plan81-CHAT-SLOTS-V3-06a.json`, `plan81-CHAT-SLOTS-V3-06b.json`.
+
+## The open tab strip redrawn: six equal cells, one icon family, only the current tab named
+
+- ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab named** —
+  **VERIFY, landed 2026-09-17.** Six equal cells with one 22px icon each, only the current tab named, in the
+  accent colour. **Deck run 2026-09-18: rows 01, 02, 04, 05 and 06 pass; 03 is captured and waits on the
+  maintainer's own look.** Row 07 (the dots) is not a lost bug: it was settled by the maintainer's 2026-09-26 call
+  (keep the dots, make them line up exactly), fixed in `e3e849bd` and closed 2026-09-27, the Deck's own screen
+  included (evidence `docs/test-evidence/plan72-F5-DOTS-rowlit-deckscreen.json`, written up in
+  [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md)). No pick is owed.
+  [Plan](archive/59-tab-strip-redesign-build.md).
+  **2026-10-09: replaced by [plan 84](planning/84-more-room-for-the-answer.md) step 4.** The open tab strip no longer exists, so this entry moved to Done; row 03's look and row 07 are replaced and nothing is owed. Evidence `docs/test-evidence/plan84-STEPS4-5-7-DECK.json`.
+
+## Summing up offers a fresher title
+
+Asked for by the maintainer 2026-09-25, while plan 68 was being tested on the Deck.
+
+**What a person would see.** A chat is named after its first question, and a long chat drifts: the Deck's
+longest chat is still called "wheatley fight" while it has spent its last forty questions on Half-Life 2
+weapons. Every time the person presses *Sum up this chat*, the AI also looks at the chat's current title. If it
+judges the title stale, the summary card offers its suggestion — for example *Rename to "Half-Life 2 weapons"?*
+— with a choice to rename or keep. If the title still fits, nothing extra shows. The chat is never renamed
+without the person saying yes.
+
+**How it would work.** The same summary request carries the current title and asks for one more line at the
+end: a suggested title, or "keep". One call, not two — plan 68 measured each summary call on the Deck at 13 to
+40 seconds with a game running, and the extra line costs a few words of output, well under a second. The
+suggestion is stored with the summary, not applied, so a reopened chat still shows the offer until it is
+answered. Renaming goes through the existing rename path, so the chat list and the chat row update as they
+do today.
+
+**Built 2026-10-02 (plan 79, [D122](audit/maintainer-decisions-locked.md#d122--locked-2026-10-02-raised-2026-10-02--plan-79-the-last-session-before-060-the-ten-calls) call 6).**
+The questions that stood here before it was built (a desk test of the wording, whether the automatic summary may also
+offer a title, where the offer sits, whether a hand-renamed title is second-guessed) are in
+[archive/roadmap-trimmed-2026-10-roadmap-details.md](archive/roadmap-trimmed-2026-10-roadmap-details.md).
+Passed on the Deck 2026-10-02: the offer card from the automatic summing-up, both buttons reachable by the D-pad,
+and Keep leaves the title. **Still owed:** pressing Rename, and the Sum up button route (it was greyed that day).
+Row **P79-FRESHER-TITLE**, evidence `docs/test-evidence/plan79-P79-FRESHER-TITLE.json`.
+
+**Connected:** plan 68 (the chat sums itself up); the chat rename box.
+
+## Saved Deck-walk replay across builds
+
+**Proven on the Deck 2026-09-26 (plan 70 flow 0).** A saved Settings walk (31 steps) replayed against a
+newer build; the build fingerprint still read as different, but the replay ran to the end with no
+refusal and reported zero differing landings. Evidence `docs/test-evidence/plan70-FLOW0-REPLAY.json`.
+
+**All 30 saved walks re-run and re-saved where they still applied, 2026-09-26 (plan 70, flow L6), closed.**
+20 of 30 landed exactly where saved (small id or pixel-shift differences only) and were re-saved fresh on
+tonight's build. 7 were not re-saved because the screen itself changed since they were made, on purpose or
+by content, and need the maintainer's own call on what the walk should now expect: a Session-tab walk now
+stops on "Sum up this chat" (the plan 68 button); a tall-answer walk needs an answer as tall as the one it
+was saved on; a reply-buttons walk now spends its presses on a branch menu instead of reaching Show
+details and Ask; a chip walk's first step now lands on "Save chat to Desktop" (tonight's own fix); a
+session-tab walk expects 7 rows where tonight's chat has 6. The remaining 2 need a chat that has already
+been summed up, which nothing on the Deck tonight was. Evidence `docs/test-evidence/plan70-FLOW6-RESAVE.json`.

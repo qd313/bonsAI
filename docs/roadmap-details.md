@@ -33,10 +33,6 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [The floating panel inside SteamVR](#the-floating-panel-inside-steamvr)
 - [One decision for three items: the SteamVR panel, leaving Decky, and reopening llama.cpp](#one-decision-for-three-items-the-steamvr-panel-leaving-decky-and-reopening-llamacpp)
 - [Named chat slots](#named-chat-slots)
-- [A chat that is still writing does not look busy from another chat](#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat)
-- [The open tab strip redrawn: six equal cells, one icon family, only the current tab named](#the-open-tab-strip-redrawn-six-equal-cells-one-icon-family-only-the-current-tab-named)
-- [Summing up offers a fresher title](#summing-up-offers-a-fresher-title)
-- [Saved Deck-walk replay across builds](#saved-deck-walk-replay-across-builds)
 - [Cost to a running game, second sighting](#cost-to-a-running-game-second-sighting)
 - [Flow 2b bugs](#flow-2b-bugs)
 - [Flow L6 findings](#flow-l6-findings)
@@ -59,6 +55,9 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [Merge the unlanded work left in thirteen old helper copies into experimental](#merge-the-unlanded-work-left-in-thirteen-old-helper-copies-into-experimental)
 - [Walking Settings and Developer with the D-pad: the page moves at every press, then jumps at the end](#walking-settings-and-developer-with-the-d-pad-the-page-moves-at-every-press-then-jumps-at-the-end)
 - [On the Settings tab, Left or Right on the Text size choices scrolls the page down](#on-the-settings-tab-left-or-right-on-the-text-size-choices-scrolls-the-page-down)
+- [The default text is not shown in the text area](#the-default-text-is-not-shown-in-the-text-area)
+- [The ring can vanish on the Search tab after closing a game note when a new word arrives](#the-ring-can-vanish-on-the-search-tab-after-closing-a-game-note-when-a-new-word-arrives)
+- [Some settings text ignores the Text size choice (Permissions tab and others)](#some-settings-text-ignores-the-text-size-choice-permissions-tab-and-others)
 <!-- /toc -->
 
 ## The panel stops half way down and the Ask button is out of reach
@@ -645,92 +644,6 @@ limit (word for word):**
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
-## A chat that is still writing does not look busy from another chat
-
-- ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
-  2026-09-18.** While one chat is still writing and you switch to another chat, nothing tells you the first
-  one is busy: its dot in the chat row looks like every idle chat's dot, with no hollow cyan ring and no spark
-  beside its ghost title; the other chat's own Ask button reads ready instead of busy; and when the first chat
-  finishes, its dot never turns green. Seen on three separate tries. The code already has both dot states and
-  the ask flow does mark a chat as generating and later clear it, so the state is not reaching the row on the
-  device — worth a closer look, not yet explained. Evidence
-  `docs/test-evidence/plan61-CHAT-SLOTS-V3-05a-busyhalf.json`, `docs/test-evidence/plan61-CHAT-SLOTS-V3-06a.json`,
-  `docs/test-evidence/plan61-CHAT-SLOTS-V3-06b.json`.
-
-**Ruled out 2026-09-21:** the shape that has bitten this repo before — a per-turn fact reaching the
-screen only once an answer completes, not during the half-written updates along the way — does not apply
-here; the chat's own name rides every update, including the half-written ones, and there is now a test
-proving it. Every step from the back end to the dot reads correctly in the code. What would settle it is
-a log captured on the Deck while the fault is actually happening.
-
-**Three more clean tries on the Deck 2026-09-26 (plan 70, flow 4.4), dot half did not appear.** Two test
-chats (X writing, Y switched-to), each try switching to Y about 19 seconds after X's first words. In all 3
-counted tries, X's dot showed busy (a hollow cyan ring) from the moment of the switch until the answer
-finished, and turned green within the same second the plugin's own log said it finished — the dot itself
-behaved correctly every time. **Ask half, unclear, the maintainer's call:** Y's own Ask button read greyed
-(not "ready") the whole time X was writing, even once in a try with words already typed into Y's box —
-and turned ready the moment X finished. The row as written expects Y's Ask to read ready while X writes;
-what was seen is the opposite. Which reading is actually correct behaviour is for the maintainer to
-decide. Evidence `docs/test-evidence/plan70-F4-BUSY-DOT.json` (+ screenshots).
-
-**2026-10-03 (plan 81, build `afd2f444`): passed.** 05a's busy half, 06a and 06b all passed on the Deck (the neighbour chat's Ask button greyed, the writing chat's dot a hollow cyan ring with a spark, solid green when it finished while away), so the sighting is off the watch list. Which reading of the Ask button is right (ready or busy) is still open, no decision recorded. Evidence `docs/test-evidence/plan81-CHAT-SLOTS-V3-05a-busyhalf.json`, `plan81-CHAT-SLOTS-V3-06a.json`, `plan81-CHAT-SLOTS-V3-06b.json`.
-
-## The open tab strip redrawn: six equal cells, one icon family, only the current tab named
-
-- ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab named** —
-  **VERIFY, landed 2026-09-17.** Six equal cells with one 22px icon each, only the current tab named, in the
-  accent colour. **Deck run 2026-09-18: rows 01, 02, 04, 05 and 06 pass; 03 is captured and waits on the
-  maintainer's own look.** Row 07 (the dots) is not a lost bug: it was settled by the maintainer's 2026-09-26 call
-  (keep the dots, make them line up exactly), fixed in `e3e849bd` and closed 2026-09-27, the Deck's own screen
-  included (evidence `docs/test-evidence/plan72-F5-DOTS-rowlit-deckscreen.json`, written up in
-  [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md)). No pick is owed.
-  [Plan](archive/59-tab-strip-redesign-build.md).
-  **2026-10-09: replaced by [plan 84](planning/84-more-room-for-the-answer.md) step 4.** The open tab strip no longer exists, so this entry moved to Done; row 03's look and row 07 are replaced and nothing is owed. Evidence `docs/test-evidence/plan84-STEPS4-5-7-DECK.json`.
-
-## Summing up offers a fresher title
-
-Asked for by the maintainer 2026-09-25, while plan 68 was being tested on the Deck.
-
-**What a person would see.** A chat is named after its first question, and a long chat drifts: the Deck's
-longest chat is still called "wheatley fight" while it has spent its last forty questions on Half-Life 2
-weapons. Every time the person presses *Sum up this chat*, the AI also looks at the chat's current title. If it
-judges the title stale, the summary card offers its suggestion — for example *Rename to "Half-Life 2 weapons"?*
-— with a choice to rename or keep. If the title still fits, nothing extra shows. The chat is never renamed
-without the person saying yes.
-
-**How it would work.** The same summary request carries the current title and asks for one more line at the
-end: a suggested title, or "keep". One call, not two — plan 68 measured each summary call on the Deck at 13 to
-40 seconds with a game running, and the extra line costs a few words of output, well under a second. The
-suggestion is stored with the summary, not applied, so a reopened chat still shows the offer until it is
-answered. Renaming goes through the existing rename path, so the chat list and the chat row update as they
-do today.
-
-**Built 2026-10-02 (plan 79, [D122](audit/maintainer-decisions-locked.md#d122--locked-2026-10-02-raised-2026-10-02--plan-79-the-last-session-before-060-the-ten-calls) call 6).**
-The questions that stood here before it was built (a desk test of the wording, whether the automatic summary may also
-offer a title, where the offer sits, whether a hand-renamed title is second-guessed) are in
-[archive/roadmap-trimmed-2026-10-roadmap-details.md](archive/roadmap-trimmed-2026-10-roadmap-details.md).
-Passed on the Deck 2026-10-02: the offer card from the automatic summing-up, both buttons reachable by the D-pad,
-and Keep leaves the title. **Still owed:** pressing Rename, and the Sum up button route (it was greyed that day).
-Row **P79-FRESHER-TITLE**, evidence `docs/test-evidence/plan79-P79-FRESHER-TITLE.json`.
-
-**Connected:** plan 68 (the chat sums itself up); the chat rename box.
-
-## Saved Deck-walk replay across builds
-
-**Proven on the Deck 2026-09-26 (plan 70 flow 0).** A saved Settings walk (31 steps) replayed against a
-newer build; the build fingerprint still read as different, but the replay ran to the end with no
-refusal and reported zero differing landings. Evidence `docs/test-evidence/plan70-FLOW0-REPLAY.json`.
-
-**All 30 saved walks re-run and re-saved where they still applied, 2026-09-26 (plan 70, flow L6), closed.**
-20 of 30 landed exactly where saved (small id or pixel-shift differences only) and were re-saved fresh on
-tonight's build. 7 were not re-saved because the screen itself changed since they were made, on purpose or
-by content, and need the maintainer's own call on what the walk should now expect: a Session-tab walk now
-stops on "Sum up this chat" (the plan 68 button); a tall-answer walk needs an answer as tall as the one it
-was saved on; a reply-buttons walk now spends its presses on a branch menu instead of reaching Show
-details and Ask; a chip walk's first step now lands on "Save chat to Desktop" (tonight's own fix); a
-session-tab walk expects 7 rows where tonight's chat has 6. The remaining 2 need a chat that has already
-been summed up, which nothing on the Deck tonight was. Evidence `docs/test-evidence/plan70-FLOW6-RESAVE.json`.
-
 ## Cost to a running game, second sighting
 
 **2026-09-26 (plan 70 flow 0).** Deep Rock Galactic: Survivor, sitting at its own title screen,
@@ -1024,3 +937,27 @@ Older notes, word for word, from the entry's open form (moved here 2026-10-11, p
 
   With the ring on Text size, pressing Left or Right to change the choice also scrolls the tab down. The maintainer called it "very strange behavior". Cause not known. Related: the Text size row (Done, row P87-F6-TEXT-SIZE) and the entry below about the page moving at every press.
   **2026-10-11 (plan 89 Deck block 1, a measurement, build `f561c0e5`):** Left or Right moved the page 100.8, 81.2 and 64.1 px on three presses, while the row stayed on its line. Evidence `docs/test-evidence/plan89-M1-TAB-WALK.json`.
+
+## The default text is not shown in the text area
+
+Older open-form text, word for word (moved here 2026-10-14, plan 93 docs sweep, when the entry went to Verify).
+
+- ★ `[ask]` **The default text is not shown in the text area** — **OPEN, reported 2026-10-13 by the maintainer.**
+  Which default text is meant (the hint inside the box, or a starter question) is not stated; confirm on the Deck.
+  **2026-10-13 (plan 93):** the hint inside the box is what is meant, and it is confirmed on the Deck. Strategy mode shows a grey hint ("Describe the level, boss, or puzzle you're stuck on."); Speed and Expert show nothing. The maintainer's call (2026-10-13): Speed and Expert get the same kind of hint. Evidence `docs/test-evidence/plan93-P93-M12-ASK-HINTS-try2.json`, `plan93-M12-ASK-HINTS-speed.png`, `-strategy.png`, `-expert.png`.
+
+## The ring can vanish on the Search tab after closing a game note when a new word arrives
+
+Older open-form text, word for word (moved here 2026-10-14, plan 93 docs sweep, when the entry went to Verify).
+
+- ★ `[tabs]` **The ring can vanish on the Search tab after closing a game note when a new word arrives** — **OPEN, seen once on the Deck 2026-10-12 (plan 92, block 3); a sighting, not yet checked.**
+  One press of Up brought the ring back. Lane N3c names a likely cause: a move onto a stop that is drawn in the same moment falls back to a plain focus that Steam's ring does not follow (`src/features/search-tab/SearchTab.tsx` about line 189, and `hop` in `useSearchNav.ts`). Needs a Deck reading first. The Search tab evidence files (`docs/test-evidence/plan92-P90-SEARCH-TAB-WALK.json`, `-KB.json`) do not hold the sighting.
+
+## Some settings text ignores the Text size choice (Permissions tab and others)
+
+Both open entries, word for word (moved here 2026-10-14, plan 93 docs sweep, when they went to Verify as one entry).
+
+- ★★ `[ui]` **Some settings text ignores the Text size choice (Permissions tab and others)** — **OPEN, reported 2026-10-13 by the maintainer.**
+  The Permissions tab's text, and text in other tabs, does not follow the Text size setting. Needs a sweep of every tab. Related: "Text size does not reach Steam's own controls" above.
+- ★ `[ui]` **Text size does not reach Steam's own controls** — **OPEN, found 2026-10-11 (plan 89 Deck block 3c); the maintainer's call whether that is acceptable.**
+  The toggle labels (for example "Remember what I typed") stay 16 px, and Steam's own confirm popups (for example "Clear session cache?") stay 22 and 16 px, at Small, Normal and Large. The plugin never targets Steam's own classes by name, so the words the plugin draws follow the setting and these do not. Evidence `docs/test-evidence/plan89-P89-TEXT-SIZE-EVERYWHERE.json`.

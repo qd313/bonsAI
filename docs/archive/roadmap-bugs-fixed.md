@@ -3341,3 +3341,11 @@ _Moved out of [roadmap.md](../roadmap.md) on 2026-10-14 (plan 93 docs sweep), co
   All answers look longer than expected with Terse mode on. See the Terse mode item in Features for earlier measurements.
 
 **Closed 2026-10-13 (plan 93, Deck block B1, the Deck's own screen, row P93-M11-TERSE-LINES):** Five Speed questions with Terse on, the Deck's own AI: each answer was one line of text with no line break, 17 to 36 words, which took 3 or 4 lines on the Deck's panel; 4 of 5 had a two-button choice menu. The length rule works. The maintainer's call (2026-10-13): the entry closes on this measurement; the wish to have Terse in Strategy and Expert too is the Features change "Terse mode: Speed answers in three lines". Evidence `docs/test-evidence/plan93-M11-TERSE-LINES.json`.
+
+### gemma4e2b-it-qat is labelled FOSS but can only be used with Tier 2 turned on (closed 2026-10-14)
+
+- ★ `[ollama]` **gemma4e2b-it-qat is labelled FOSS but can only be used with Tier 2 turned on** — **OPEN, reported 2026-10-13 by the maintainer.**
+  The label and the rule disagree. Fix whichever is wrong.
+  **2026-10-13 (plan 93):** in the Browse models catalog the model is listed under "Open source only" in all four filter states, with an open-source pill. The maintainer then said the gap was in the model picker (the list of installed models a person picks from), not the catalog; the picker is measured next. Evidence `docs/test-evidence/plan93-P93-M13-GEMMA-FILTER.json`.
+
+**Closed 2026-10-14 (plan 93, rows P93-M13-GEMMA-FILTER and P93-M13b-GEMMA-PICKER):** closed as not reproduced. In the Browse models catalog the model is listed under "Open source only" in all four filter states, with an open-source pill (`docs/test-evidence/plan93-P93-M13-GEMMA-FILTER.json`). In the AI models screen, the only model picker, it is offered under "Open source only" at try order 1, and the Model chip under Show details names it (`plan93-M13b-GEMMA-PICKER.json`). The Pictures try-order list was not opened. The maintainer (2026-10-14) thinks another filter hid it, maybe "Deck essentials only"; that question went to the Features entry "AI models screen: a much bigger catalog and far simpler filters".

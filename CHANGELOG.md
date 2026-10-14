@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 **Contents**
 
 - [\[Unreleased\]](#unreleased)
+  - [Plan 93 (2026-10-14)](#plan-93-2026-10-14)
   - [Plan 92 (2026-10-12)](#plan-92-2026-10-12)
   - [Plan 89 (2026-10-11)](#plan-89-2026-10-11)
   - [Plan 88 (2026-10-11)](#plan-88-2026-10-11)
@@ -78,6 +79,18 @@ All notable changes to this project are documented in this file.
 <!-- /toc -->
 
 ## [Unreleased]
+
+### Plan 93 (2026-10-14)
+
+- **Going Down through an answer now stops on every section that going Up stops on**, and Up's order is Down's reversed. Not yet checked on the Deck.
+- **Going Up from the rating row no longer leaves the answer's last section with its last lines hidden under the dock.** Not yet checked on the Deck.
+- **The empty question box shows a grey hint in every Ask mode**, not only Strategy. Speed says "Ask a quick question about your game." and Expert says "Ask for the full detail: builds, numbers, every step." Not yet checked on the Deck.
+- **On the Developer tab, the help line under a row of option buttons now follows the ring as it lands on each option**, before you press A. Not yet checked on the Deck.
+- **A note offer you already kept or dismissed no longer comes back when only the screen side of the plugin reloads.** Checked by its tests only.
+- **On the Search tab, the ring no longer vanishes when the matches are redrawn just as it comes back from a game note.** Not yet checked on the Deck.
+- **After you delete your last chat, Main shows the empty new-chat view instead of the old answer.** Not yet checked on the Deck.
+- **Text size now reaches the words Steam draws inside its own controls:** switch names, the Permissions descriptions, two buttons on the Developer tab and the About tab's section titles. At Normal nothing changes. Not yet checked on the Deck.
+- **"Run AI on this Deck" now starts switched on in a fresh install**, and the Local runtime (beta) notice shows once on the first open. A saved "off" stays off. Not yet checked on the Deck.
 
 ### Plan 92 (2026-10-12)
 

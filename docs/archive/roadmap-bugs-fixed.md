@@ -3330,3 +3330,14 @@ _Moved out of [roadmap.md](../roadmap.md) on 2026-10-12 (plan 92 docs sweep, thi
   B closes the sheet and the ring returns to the "Read N of your notes" line. In three tries a Down sent 0.35 to 0.5 s later left the ring on that line for 3 s; after a long wait Down works. Not known whether the press is lost while the sheet closes or the ring is pulled back. Row P90-NOTES-SHEET; evidence `docs/test-evidence/plan92-P90-NOTES-SHEET-try2.json`.
 
 **Closed 2026-10-12 (plan 92, second night, third round, build `e6afe2bd`, the Deck's own screen, row P90-NOTES-SHEET):** Third try (build `e6afe2bd`, the Deck's own screen): after A on the line and B the ring was on the notes line at once, at 1 s and at 2 s; then B and a Down 349, 356 and 352 ms apart, three of three times: the ring went to "Show reasoning" (the stop below the line) and stayed there at once, at +1 s and at +3 s, never back on the notes line (the +1 and +3 s marks count from a read taken 0.5 to 1 s after the Down). Evidence `docs/test-evidence/plan92-P90-NOTES-SHEET-try3.json`.
+
+## Moved from the roadmap 2026-10-14
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-10-14 (plan 93 docs sweep), copied line for line from its Bugs entry, with the closing note added at the end._
+
+### Terse mode does not seem to shorten answers (closed 2026-10-13)
+
+- ★★ `[reply]` **Terse mode does not seem to shorten answers** — **OPEN, reported 2026-10-13 by the maintainer.**
+  All answers look longer than expected with Terse mode on. See the Terse mode item in Features for earlier measurements.
+
+**Closed 2026-10-13 (plan 93, Deck block B1, the Deck's own screen, row P93-M11-TERSE-LINES):** Five Speed questions with Terse on, the Deck's own AI: each answer was one line of text with no line break, 17 to 36 words, which took 3 or 4 lines on the Deck's panel; 4 of 5 had a two-button choice menu. The length rule works. The maintainer's call (2026-10-13): the entry closes on this measurement; the wish to have Terse in Strategy and Expert too is the Features change "Terse mode: Speed answers in three lines". Evidence `docs/test-evidence/plan93-M11-TERSE-LINES.json`.

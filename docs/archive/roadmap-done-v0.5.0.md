@@ -1713,6 +1713,24 @@ _The blocks from here down to the 2026-10-07 note above the plan 83 full entries
 
 **Closed 2026-10-11 (the maintainer's calls 5, 6 and 7 of D128, and the install link, plan 89):**
 
+- ★ `[focus]` **Walking Up can land on a section taller than the screen with only a sliver of it showing at the top** — **DONE 2026-10-11, closed on the maintainer's call (D128 call 5): tests only.** Row **P81-UP-NO-SLIVER**.
+
+- ★ `[ollama]` **Moving a place in the AI models box while the AI runs on a PC wiped the saved places of models only the Deck has (and the other way round)** — **DONE 2026-10-11, closed on the maintainer's call (D128 call 5): tests only.** Row **P81-MOVE-KEEPS-OTHER-NAMES**.
+
+- ★ `[ollama]` **The clean-up of saved try orders also runs when Ollama is not set up on the Deck at all** — **DONE 2026-10-11, closed on the maintainer's call (D128 call 5): tests only.** Row **P81-PC-CLEANUP-NO-OLLAMA**.
+
+- ★ `[ollama]` **When a saved PC does not answer, removing a model on the Deck drops nothing from the saved try orders** — **DONE 2026-10-11, closed on the maintainer's call (D128 call 5): tests only.** Row **P81-REMOVE-KEEPS-PC-SILENT**.
+
+- ★ `[reply]` **A typed follow-up shows the AI the reminder's own words as the question's topic** — **DONE 2026-10-11, closed on the maintainer's call (D128 call 5): tests only.** Row **P81-FOLLOWUP-TOPIC**.
+
+- ★★ `[reply]` **When the length limit cuts a choice menu, the next part of the answer is lost** — **DONE 2026-10-11, closed on the maintainer's call (D128 call 6): closed on the prepared pass of 2026-10-03 (`docs/test-evidence/plan81-P77-CUT-MENU-TEXT.json`) and the tests; the real-AI hand check is no longer owed.** Row **P77-CUT-MENU-TEXT**.
+
+- ★★★ `[focus]` **After picking a setting from the search list above the question box, Down cannot get past the answer** — **DONE 2026-10-11, closed on the maintainer's call (D128 call 7): closed as not seen again in ten routes (`docs/test-evidence/plan79-P79-TRAP-ROUTES-AFTER.json`, `plan79-P79-TRAP-ROUTE-H.json`); it reopens if anyone sees it. The separate open question about Up from the answer bubble stays in Bugs.** Row **P79-TRAP-DOWN-BUBBLE**.
+
+- ★ `[platform]` **New users cannot install bonsAI: the install link in the README gives "not found"** — **DONE 2026-10-11 (GitHub shows v0.4.9 as Latest; script half `c167f089`).** No Deck check.
+
+**Closed 2026-10-11 (the maintainer's calls 5, 6 and 7 of D128, and the install link, plan 89):**
+
 - ★ `[focus]` **Walking Up can land on a section taller than the screen with only a sliver of it showing at the top** — **VERIFY, fixed 2026-10-03 (plan 81, `5653fd18`). Was OPEN, found 2026-09-30 in the test setup (plan 78 helper D), not seen on the Deck.**
   **Closed 2026-10-11 on the maintainer's call (D128 call 5): tests only (the case could not be made on the Deck, and the maintainer chose to accept the tests as the proof). Row P81-UP-NO-SLIVER.**
   Going Up onto a section taller than the room, the section was left where it was when its end stood above the dock, so only 1 to 8 px of it showed under the header. Its end is now brought down to the dock, never past the top of the page. Up from the first underlined word inside a tall section is a different path and is unchanged.

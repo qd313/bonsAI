@@ -352,6 +352,7 @@ tier until someone measured on the device — the measurement fixed them, not a 
 | Documents and bookkeeping | | The `bookkeeper` helper, Sonnet medium; every status it changes names its evidence | |
 | Read-only lookups with a checkable answer | | Haiku 4.5 or Sonnet 5.5 low; whoever asked confirms with a search | |
 | Deck testing | Opus writes the rows and the expected results | The `deck-driver` helper (Sonnet medium) runs rows already written; never Haiku | Opus reads the failures |
+| A second opinion for the one running a big session (on trial since plan 93, 2026-10-13) | | The `advisor` helper, Fable 5.1 high (extra-high only for a five- or six-star question or a Deck failure that resisted two fixes): one bounded question at each consult point, one recommendation back, read-only; persona in [docs/agents/advisor.md](docs/agents/advisor.md); every consult logged in the plan | |
 
 Rules that go with it:
 

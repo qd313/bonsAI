@@ -2343,3 +2343,11 @@ the same list; its § 15 marks which questions are still open.
     as part of the catalog feature.
 12. **"Update AI & models" keeps working as it does:** it runs at once once Internet downloads is on and the site was
     accepted; no box there.
+13. **Terse works in Speed** (the Deck measured one model line of 17 to 36 words per answer), **and the maintainer still
+    wants it in Strategy and Expert:** the slider stop of call 4 gives that; the bug entry closes on the measurement.
+14. **A new position for every big session from now on: the advisor.** Fable 5.1 at high effort (extra-high only for a
+    five- or six-star question or a Deck failure that has resisted two fixes), asked one bounded question at a time by
+    the one running the session at fixed consult points (before go; after a Deck failure on a second try; before a focus
+    or layout landing; an uncovered decision; before the morning report), answering with one recommendation and the
+    reason; read-only, never on the Deck, never starting helpers; on trial with every consult logged. Persona:
+    `docs/agents/advisor.md`; wrapper: `.claude/agents/advisor.md`; the runbook and AGENTS.md carry the row.

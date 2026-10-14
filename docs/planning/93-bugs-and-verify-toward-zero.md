@@ -104,6 +104,16 @@ weekly usage meter has reset (§ 3):**
     "AI models screen: a much bigger catalog and far simpler filters", not built in this session.
 12. **"Update AI & models" keeps working as it does:** it runs at once when Internet downloads is on and the site was
     accepted once; no box there. Lane B4 only reshapes the boxes that do show.
+13. **Terse works in Speed (block B1 measured it), and the maintainer still wants it in Strategy and Expert.** The
+    slider stop (call 4) does exactly that: on the Terse stop every Ask mode gets the short answer. The bug entry
+    "Terse mode does not seem to shorten answers" closes on the measurement; the change is lane B13.
+14. **A new position for this plan and every big session from now on: the advisor.** Fable 5.1 at high effort
+    (extra-high only for a five- or six-star question or a Deck failure that has resisted two fixes), asked one
+    bounded question at a time by the one running the session at fixed consult points, answering with one
+    recommendation and the reason; read-only, never on the Deck, never starting helpers. The persona is
+    [docs/agents/advisor.md](../agents/advisor.md); the Claude Code wrapper is `.claude/agents/advisor.md` (usable
+    from the next new chat, which the morning chat is). On trial from this plan: every consult is logged in § 14
+    with its cost and what it changed, so the maintainer can judge the position after a few sessions.
 
 ## 3. Before go: the budget, the model, the Deck
 
@@ -233,6 +243,14 @@ with and without a game.
 | Reading jobs (the owed-checks list, evidence summaries, label searches) | Haiku 5.5 high only when the job's checks finish in minutes; else Sonnet medium | as needed |
 | Bookkeeping: roadmap, testing rows, changelog, this plan's log | the bookkeeper, Sonnet 5.5 medium, in its own copy, landed like a helper; every status names its evidence | 1 |
 | Deck checks | the `deck-driver`, Sonnet 5.5 medium, a fresh one per block; runbooks written by the Opus chat | 1 on the Deck |
+| **The advisor** (new, call 14): one bounded question at each consult point, one recommendation back | Fable 5.1 high (`advisor`); extra-high only for a Deck failure that resisted two fixes | 1, at most about six consults in the session |
+
+**The advisor's consult points for this plan:** (1) before go, the lane table and the batch 1 briefs read for
+contradictions; (2) after any Deck failure on a second try, before a fix moves up a tier; (3) before landing O1, O3
+and O4 (the focus and streaming lanes), the diff against the block A and B1 measurements; (4) any question the
+maintainer's calls do not cover where the safe choice is not obvious; (5) before the morning report, the claims
+against the evidence files. Each consult: the question, the exact files or evidence, a cap of about 100,000 tokens of
+reading; the answer logged in § 14.
 
 The cap is fifteen at once (D128 call 16). **The ladder** when a helper's work is not good enough: Sonnet medium →
 Sonnet high → Opus medium → Opus high, one step at a time, after a failed landing review or a Deck failure with a
@@ -461,9 +479,10 @@ hardest focus piece), and the finish-flicker lane if the measurement sends it to
 5. **gemma4e2b-it-qat and Tier 2.** **Answered 2026-10-13:** the maintainer believes the model is hidden from the
    list when "Open source only" is picked, and may be wrong; the Deck checks it tonight (M13).
 6. **Refresh in the AI models screen.** **Answered 2026-10-13:** removed.
-7. **Terse mode.** **Answered 2026-10-13, corrected the same evening:** the maintainer was in Speed mode; Terse
-   becomes the fourth stop of the Reply style slider that sets an answer's length (Terse · Caveman · Balanced ·
-   Detailed), not a fourth Ask mode, and it applies in every Ask mode. **7b, still open:** the cap itself. "Three lines" of model text
+7. **Terse mode.** **Answered 2026-10-13, corrected the same evening, confirmed after block B1:** Terse works in
+   Speed (one model line, 17 to 36 words); the maintainer still wants it in Strategy and Expert, which the slider
+   stop gives (Terse · Caveman · Balanced · Detailed, applying in every Ask mode). The bug entry closes on the
+   measurement; lane B13 builds the stop. **7b, still open:** the cap itself. "Three lines" of model text
    is nine or more lines on the Deck's narrow panel. A word cap instead (about 40 words, roughly three short
    sentences)? *Meanwhile:* the lane keeps "three lines" and adds "no sentence over 15 words", and M11 measures how
    many screen lines that makes.

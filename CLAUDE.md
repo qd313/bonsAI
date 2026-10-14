@@ -38,6 +38,7 @@ agent, or another tool calls the matching MCP prompt:
 |---|---|---|
 | `foss-advocate` | `.claude/agents/foss-advocate.md` | [docs/agents/foss-advocate.md](docs/agents/foss-advocate.md) |
 | `security-auditor` | `.claude/agents/security-auditor.md` | [docs/agents/security-auditor.md](docs/agents/security-auditor.md) |
+| `advisor` | `.claude/agents/advisor.md` (Fable 5.1 high, read-only) | [docs/agents/advisor.md](docs/agents/advisor.md) |
 
 The helpers in AGENTS.md, 'Which model does which work' (`bookkeeper`, the `*-lane` agents,
 `deck-driver`) are files there too; front matter sets model and effort.

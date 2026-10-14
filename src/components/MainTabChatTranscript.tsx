@@ -153,17 +153,12 @@ import {
   questionMoveUpOut,
   earlierPillNav,
   firstArchivedHeaderMoveUp,
-  troubleshootHintRowNavHandlers,
-  vacDenyRowMoveDown,
-  vacDenyRowMoveUp,
-  dismissHintKeepingRing,
 } from "../utils/chatTranscriptNavHelpers";
 import { formatAppliedTuningBannerText } from "../utils/appliedTuningText";
 import { ChatLatencyNotices } from "./ChatLatencyNotices";
+import { ChatTranscriptHintRows } from "./ChatTranscriptHintRows";
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
 import { StrategyChecklistPanel } from "./StrategyChecklistPanel";
-import { PermissionDenyAction } from "./PermissionDenyAction";
-import { isVacCheckCapabilityDenyResponse } from "../utils/permissionDeepLink";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import { isPendingPlaceholderResponse, isStopNoticeResponse } from "../utils/askThinkingPhases";
 import { BonsaiChatSecondaryButton } from "./BonsaiChatSecondaryButton";
@@ -209,7 +204,6 @@ import { focusAnswerChunkAtIndex, focusFirstAnswerChunk, focusLastAnswerChunk } 
 import { getRegisteredAnswerBubble } from "../utils/answerBubbleElRegistry";
 import { focusedAnswerStopIndex, orderedAnswerStops } from "../utils/answerStopRegistry";
 import { focusRegisteredReplyStop } from "../utils/replyStopRegistry";
-import { questionLooksLikeTroubleshootingAsk } from "../utils/troubleshootingAskHeuristic";
 import { dismissTroubleshootHint, isTroubleshootHintDismissed } from "../utils/troubleshootHintDismissals";
 import type { DrgGlossaryTerm } from "../data/drgGlossaryTerms";
 import {
@@ -765,8 +759,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
 
   /* Nav targets for the two permission-hint rows below the transcript — lifted into its own
      hook, called from exactly the spot this block occupied (tests/test_ask_hook_order.py). */
-  const { troubleshootHintNavRef, vacDenyRowNavRef, troubleshootHintButtonEls, troubleshootHintButtonRefs } =
-    usePermHintNavTargets();
+  const permHintNavTargets = usePermHintNavTargets();
 
   const chatMainColumnRef = useRef<HTMLDivElement | null>(null);
   /*
@@ -1633,115 +1626,19 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     </div>
   </PanelSectionRow>
 )}
-{!isAsking && !selectedAttachment && noActiveGameContext && unifiedInput.trim() ? (
-  <PanelSectionRow>
-    <div
-      className="bonsai-full-bleed-row"
-      style={{
-        ...fullBleedRowStyle,
-        fontSize: textPx(10),
-        color: "#8fa8c4",
-        lineHeight: 1.35,
-        fontStyle: "italic",
-      }}
-    >
-      No game detected — capture & attach a screenshot or name the game for sharper answers.
-    </div>
-  </PanelSectionRow>
-) : null}
-{!isAsking &&
-!gameContextReadEnabled &&
-!troubleshootingPermHintDismissed &&
-questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
-  <PanelSectionRow>
-    {/*
-     * Wrapped in its own Focusable so Down/Up can be caught here: a Decky `Button` does not
-     * forward `onMoveUp`/`onMoveDown`, and this row sits outside the live turn's own Focusable, so
-     * Steam's default fallback (proven elsewhere in this file to skip nearby rows and jump straight
-     * to the session strip) cannot be trusted to land here. `flow-children="horizontal"` keeps
-     * Left/Right between Open Permissions and Dismiss. `navRef` registers this row as a Steam nav
-     * node (`focusChatPermissionHintRow` above, `takeNavFocus` only) — the button-ref + plain-focus
-     * approach this replaced moved `activeElement` but not the gamepad ring, measured on device
-     * 2026-09-04 (build 49241e7).
-     */}
-    <Focusable
-      className="bonsai-chat-troubleshoot-perm-hint-row"
-      flow-children="horizontal"
-      {...({
-        navRef: troubleshootHintNavRef,
-        ...troubleshootHintRowNavHandlers(troubleshootHintButtonEls),
-      } as Record<string, unknown>)}
-    >
-      <div
-        className="bonsai-full-bleed-row"
-        style={{
-          ...fullBleedRowStyle,
-          fontSize: textPx(11),
-          color: "#c8d8ea",
-          lineHeight: 1.4,
-          display: "flex",
-          flexDirection: "column",
-          gap: 6,
-        }}
-      >
-        <div>
-          Troubleshooting Ask detected. Enable <strong>Read game & screenshot context</strong> in Permissions
-          to auto-attach Proton logs and screenshots (never turned on automatically).
-        </div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          {onNavigateToPermissions ? (
-            <Button
-              focusable
-              ref={troubleshootHintButtonRefs[0]}
-              onClick={() => onNavigateToPermissions("steam_logs_read")}
-              style={{ fontSize: textPx(11), padding: "4px 10px", minHeight: 34 }}
-            >
-              Open Permissions
-            </Button>
-          ) : null}
-          <Button
-            focusable
-            ref={troubleshootHintButtonRefs[1]}
-            onClick={() => dismissHintKeepingRing(troubleshootHintButtonEls, dismissTroubleshootingPermHint)}
-            style={{ fontSize: textPx(11), padding: "4px 10px", minHeight: 34 }}
-          >
-            Dismiss
-          </Button>
-        </div>
-      </div>
-    </Focusable>
-  </PanelSectionRow>
-) : null}
-{/* Not on the [+] create-position screen: these lines describe the reply of the chat that is
-    still active behind it (plan 74 P74-LOCAL-CMD-CHAT), and that screen claims to be a new chat. */}
-{!showEmptySlotPreview && !isAsking && onNavigateToPermissions && isVacCheckCapabilityDenyResponse(vacDenyReplyText) ? (
-  <PanelSectionRow>
-    {/*
-     * Same reasoning as the troubleshooting hint's wrapper just above: this row sits outside the
-     * live turn's own Focusable, between the reply actions row and the session context strip,
-     * PermissionDenyAction's own Button cannot forward onMoveUp/onMoveDown itself, and `navRef`
-     * (not a button ref plus plain focus) is the only transfer Steam's ring actually follows here —
-     * see `focusChatPermissionHintRow` above.
-     */}
-    <Focusable
-      className="bonsai-chat-vac-deny-row"
-      flow-children="horizontal"
-      {...({
-        navRef: vacDenyRowNavRef,
-        onMoveUp: vacDenyRowMoveUp,
-        onMoveDown: vacDenyRowMoveDown,
-      } as Record<string, unknown>)}
-    >
-      <div className="bonsai-full-bleed-row" style={fullBleedRowStyle}>
-        <PermissionDenyAction
-          capability="steam_web_api"
-          onJump={onNavigateToPermissions}
-          compact
-        />
-      </div>
-    </Focusable>
-  </PanelSectionRow>
-) : null}
+<ChatTranscriptHintRows
+  fullBleedRowStyle={fullBleedRowStyle}
+  isAsking={isAsking}
+  showNoGameRow={!selectedAttachment && noActiveGameContext && Boolean(unifiedInput.trim())}
+  gameContextReadEnabled={gameContextReadEnabled}
+  troubleshootingPermHintDismissed={troubleshootingPermHintDismissed}
+  unifiedInput={unifiedInput}
+  showEmptySlotPreview={showEmptySlotPreview}
+  onNavigateToPermissions={onNavigateToPermissions}
+  dismissTroubleshootingPermHint={dismissTroubleshootingPermHint}
+  vacDenyReplyText={vacDenyReplyText}
+  navTargets={permHintNavTargets}
+/>
 <ChatLatencyNotices
   isAsking={isAsking}
   showSlowWarning={showSlowWarning}

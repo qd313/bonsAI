@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 963,
-  "edgeCount": 3241,
+  "fileCount": 964,
+  "edgeCount": 3246,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -238,6 +238,19 @@
     "src/components/ChatLatencyNotices.tsx": {
       "imports": [
         "src/styles/sections/textPx.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx"
+      ]
+    },
+    "src/components/ChatTranscriptHintRows.tsx": {
+      "imports": [
+        "src/components/PermissionDenyAction.tsx",
+        "src/hooks/usePermHintNavTargets.ts",
+        "src/styles/sections/textPx.ts",
+        "src/utils/chatTranscriptNavHelpers.ts",
+        "src/utils/permissionDeepLink.ts",
+        "src/utils/troubleshootingAskHeuristic.ts"
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx"
@@ -1095,7 +1108,7 @@
       "imports": [
         "src/components/BonsaiChatSecondaryButton.tsx",
         "src/components/ChatLatencyNotices.tsx",
-        "src/components/PermissionDenyAction.tsx",
+        "src/components/ChatTranscriptHintRows.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/StrategyChecklistPanel.tsx",
         "src/components/buildEarlierList.tsx",
@@ -1145,7 +1158,6 @@
         "src/utils/permissionDeepLink.ts",
         "src/utils/replyStopRegistry.ts",
         "src/utils/troubleshootHintDismissals.ts",
-        "src/utils/troubleshootingAskHeuristic.ts",
         "src/utils/uiDocument.ts",
         "src/utils/unwrapAskedEntitySpoilerFences.ts"
       ],
@@ -1858,8 +1870,8 @@
         "src/utils/permissionDeepLink.ts"
       ],
       "importedBy": [
+        "src/components/ChatTranscriptHintRows.tsx",
         "src/components/MainTab.tsx",
-        "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabScreenshotBrowser.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/PermissionDenyAction.test.tsx",
@@ -7225,6 +7237,7 @@
         "src/utils/navFocusRegistry.ts"
       ],
       "importedBy": [
+        "src/components/ChatTranscriptHintRows.tsx",
         "src/components/MainTabChatTranscript.tsx"
       ]
     },
@@ -8397,6 +8410,7 @@
         "src/components/CancelFirstConfirmModal.tsx",
         "src/components/CharacterPickerModal.tsx",
         "src/components/ChatLatencyNotices.tsx",
+        "src/components/ChatTranscriptHintRows.tsx",
         "src/components/ChipExpandedBody.tsx",
         "src/components/ContextChipLadder.tsx",
         "src/components/DesktopNoteSaveModal.tsx",
@@ -10122,6 +10136,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/ChatTranscriptHintRows.tsx",
         "src/components/EarlierListLine.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/components/buildEarlierList.tsx",
@@ -10979,6 +10994,7 @@
         "src/data/bonsaiSettingsSchema.ts"
       ],
       "importedBy": [
+        "src/components/ChatTranscriptHintRows.tsx",
         "src/components/DeveloperTab.tsx",
         "src/components/MainTab.tsx",
         "src/components/MainTabChatTranscript.tsx",
@@ -11550,7 +11566,7 @@
     "src/utils/troubleshootingAskHeuristic.ts": {
       "imports": [],
       "importedBy": [
-        "src/components/MainTabChatTranscript.tsx"
+        "src/components/ChatTranscriptHintRows.tsx"
       ]
     },
     "src/utils/uiDocument.test.ts": {

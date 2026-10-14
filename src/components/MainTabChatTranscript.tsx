@@ -199,6 +199,7 @@ import {
   focusReplyShowDetails,
   focusReplyNotesLine,
   focusReplyUtilityRow,
+  focusLiveAnswerFromBelow,
   queryLiveTurnSlot,
   registerStrategyBranchPickerNav,
   ringIsOnFirstStrategyBranch,
@@ -902,6 +903,13 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               buildAnswerCopyText({ body: closeMatchAgrees(body, facts.askQuestion, notes), spoilerMaskingEnabled: strategySpoilerMaskingEnabled, ...facts })
           : undefined,
       ...(readAloudBody === undefined ? {} : readAloudRowProps(answerKey, closeMatchAgrees(readAloudBody, facts.askQuestion, notes), facts)),
+      /* Under an answer still writing: the notes block, an open details panel, then the dock (plan 93). The
+         same chain as the reply row's Down past it, which is not drawn until the answer finishes. */
+      onMoveDownWhileWriting: () =>
+        focusKbNotesBlock(answerKey) ||
+        focusDetailsTabsRow(answerKey) ||
+        focusChipLadderRow(answerKey) ||
+        focusDownFromReplyUtilityRowOrPermHint(queryTurnSlot(answerKey) ?? queryLiveTurnSlot()),
     });
 
   /*
@@ -1564,8 +1572,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     notes: kbNotesHere,
                     open: isKbNotesOpen("live"),
                     onToggle: () => toggleKbNotesOpen("live"),
+                    /* While the answer writes there is no Show details yet: its last section is next (plan 93). */
                     onMoveUp: () =>
                       focusReplyShowDetails(queryLiveTurnSlot()) ||
+                      focusLiveAnswerFromBelow(queryLiveTurnSlot()) ||
                       focusReplyUtilityRow(queryLiveTurnSlot()),
                     onMoveDown: () =>
                       focusDetailsTabsRow("live") ||

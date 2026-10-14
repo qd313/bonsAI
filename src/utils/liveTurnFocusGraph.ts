@@ -10,6 +10,8 @@ import { focusRegisteredReplyStop, type ReplyStopId } from "./replyStopRegistry"
 import { elementHasFocus, elementHasGamepadFocus, getUiDocument } from "./uiDocument";
 import { focusRowElement } from "./focusPerTurnRow";
 import { takeNavFocus } from "./navFocusRegistry";
+import { getRegisteredAnswerBubble } from "./answerBubbleElRegistry";
+import { focusLastAnswerChunk } from "./answerBubbleNavigation";
 
 const FOCUSABLE_SELECTOR =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -254,7 +256,8 @@ export function focusOwnBonsaiRow(el: HTMLElement | null | undefined): boolean {
  * the reply: the open details panel's own last stop first — the chip ladder (the "This answer" tab's,
  * or the Session tab's active row's), else, on a Session tab with no rows, the summary card or the
  * Sum up button (plan 68: the last stop, not the top of the tab) — then the tabs row itself, then
- * the notes block, then the Show details line, then the reply's utility row. Each one reports false
+ * the notes block, then the Show details line, then an answer still writing (its last section), then the
+ * reply's utility row. Each one reports false
  * when it is not mounted, so a closed panel, a reply with no notes and an empty chat all fall
  * through cleanly.
  */
@@ -274,7 +277,20 @@ export function focusBottomOfNewestReply(): boolean {
     if (focusOwnBonsaiRow(slot.querySelector<HTMLElement>(selector))) return true;
   }
   if (focusReplyShowDetails(slot)) return true;
+  if (focusLiveAnswerFromBelow(slot)) return true;
   return focusReplyUtilityRow(slot);
+}
+
+/**
+ * Up into the answer still writing in `slot`, onto its last section, as Up from a finished answer's Show
+ * details line does (`focusLastAnswerChunk`). While it writes there is no Show details line and no reply row,
+ * so the next stop down the chain was the turn's Retry corner, at the turn's TOP: on the Deck Up went chip,
+ * notes block, Retry, never into the sections (plan93-P93-M4-ANSWER-FINISH-after-try2.json, run C). False
+ * when no live answer is drawn in `slot`. The registered bubble, not a page search.
+ */
+export function focusLiveAnswerFromBelow(slot: HTMLElement | null): boolean {
+  const bubble = getRegisteredAnswerBubble("live");
+  return Boolean(slot && bubble && slot.contains(bubble)) && focusLastAnswerChunk("live");
 }
 
 /**

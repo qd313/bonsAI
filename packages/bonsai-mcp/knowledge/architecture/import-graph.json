@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 975,
-  "edgeCount": 3274,
+  "fileCount": 976,
+  "edgeCount": 3284,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1126,6 +1126,19 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/test-harness/fakeDeckyUi.tsx",
         "src/utils/answerStopRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/MainTabChatTranscript.streamingSectionStops.test.tsx": {
+      "imports": [
+        "src/components/earlierListNavStub.tsx",
+        "src/components/earlierListTestKit.tsx",
+        "src/features/preset-carousel/presetRowFocusNav.tsx",
+        "src/test-harness/deckAnswerWalk.ts",
+        "src/utils/answerStopRegistry.ts",
+        "src/utils/inputTransparency.ts",
+        "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": []
@@ -2854,6 +2867,7 @@
         "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
         "src/components/MainTabChatTranscript.olderTurnDownToNewer.test.tsx",
         "src/components/MainTabChatTranscript.searchJump.test.tsx",
+        "src/components/MainTabChatTranscript.streamingSectionStops.test.tsx",
         "src/components/earlierListTestKit.tsx"
       ]
     },
@@ -2867,7 +2881,8 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
         "src/components/MainTabChatTranscript.olderTurnDownToNewer.test.tsx",
-        "src/components/MainTabChatTranscript.searchJump.test.tsx"
+        "src/components/MainTabChatTranscript.searchJump.test.tsx",
+        "src/components/MainTabChatTranscript.streamingSectionStops.test.tsx"
       ]
     },
     "src/components/icons.bonsaiGeometry.test.tsx": {
@@ -5777,6 +5792,7 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
         "src/components/MainTabChatTranscript.olderTurnDownToNewer.test.tsx",
+        "src/components/MainTabChatTranscript.streamingSectionStops.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabPresetRow.tsx",
         "src/features/details-slot/DetailsSlot.tsx",
@@ -8680,6 +8696,7 @@
       ],
       "importedBy": [
         "src/components/ContextChipLadder.gridWalk.test.tsx",
+        "src/components/MainTabChatTranscript.streamingSectionStops.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/user-notes/UserNotes.walk.test.tsx",
         "src/test-harness/deckChipLadderPane.ts",
@@ -9384,7 +9401,8 @@
         "src/utils/buildAnswerBubbleElement.test.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildReplyActionsElement.test.tsx",
-        "src/utils/buildReplyActionsElement.tsx"
+        "src/utils/buildReplyActionsElement.tsx",
+        "src/utils/liveTurnFocusGraph.ts"
       ]
     },
     "src/utils/answerBubbleNavigation.controlsLift.test.ts": {
@@ -9561,7 +9579,8 @@
         "src/utils/buildReasoningFoldElement.walk.test.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/buildTurnHeaderElement.test.tsx",
-        "src/utils/buildTurnHeaderElement.tsx"
+        "src/utils/buildTurnHeaderElement.tsx",
+        "src/utils/liveTurnFocusGraph.ts"
       ]
     },
     "src/utils/answerBubbleNavigation.upEntryCoverSection.test.ts": {
@@ -9666,6 +9685,7 @@
         "src/components/MainTabChatTranscript.answerFinishStill.test.tsx",
         "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
+        "src/components/MainTabChatTranscript.streamingSectionStops.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/test-harness/deckAnswerWalk.ts",
         "src/utils/answerBubbleCoverUp.ts",
@@ -10650,6 +10670,7 @@
         "src/components/MainTabChatTranscript.retryNotAStop.test.tsx",
         "src/components/MainTabChatTranscript.sessionLadderExit.test.tsx",
         "src/components/MainTabChatTranscript.spoilerCredits.test.tsx",
+        "src/components/MainTabChatTranscript.streamingSectionStops.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
         "src/components/MainTabChatTranscript.vacRowAfterSwitch.test.tsx",
@@ -10804,6 +10825,8 @@
     },
     "src/utils/liveTurnFocusGraph.ts": {
       "imports": [
+        "src/utils/answerBubbleElRegistry.ts",
+        "src/utils/answerBubbleNavigation.ts",
         "src/utils/focusPerTurnRow.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/replyStopRegistry.ts",
@@ -10936,6 +10959,7 @@
         "src/components/MainTabChatTranscript.retryNotAStop.test.tsx",
         "src/components/MainTabChatTranscript.searchJump.test.tsx",
         "src/components/MainTabChatTranscript.sessionLadderExit.test.tsx",
+        "src/components/MainTabChatTranscript.streamingSectionStops.test.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
         "src/components/MainTabEmptyChatHelpChip.test.tsx",
         "src/components/MainTabInjectChipFocus.test.tsx",
@@ -11708,6 +11732,7 @@
         "src/components/MainTabChatTranscript.retryNotAStop.test.tsx",
         "src/components/MainTabChatTranscript.searchJump.test.tsx",
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
+        "src/components/MainTabChatTranscript.streamingSectionStops.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabChatTranscript.upWalk.test.tsx",
         "src/components/MainTabEmptyChatHelpChip.test.tsx",

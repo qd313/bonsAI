@@ -136,6 +136,12 @@ export type BuildAnswerBubbleElementArgs = {
    */
   onReadAloudToggle?: () => void;
   readAloudLabel?: string;
+  /**
+   * Down past the last section while the answer is still writing: what is drawn under it then (the notes
+   * block, an open details panel, the dock). Without it the chain below ended on the turn's Retry, at the
+   * turn's top (plan 93). Not used once the answer has finished: the reply row is there then.
+   */
+  onMoveDownWhileWriting?: () => boolean;
 };
 
 const noopChunkRef = { current: 0 };
@@ -247,6 +253,7 @@ export function buildAnswerBubbleElement(
     getAnswerCopyText,
     onReadAloudToggle,
     readAloudLabel = "Read aloud",
+    onMoveDownWhileWriting,
   } = args;
   const spoilerUnwrapEligible =
     spoilerConsentEffective ||
@@ -287,6 +294,8 @@ export function buildAnswerBubbleElement(
      * skipping the answer text between here and there.
      */
     if (handleAnswerBubbleMoveDown(bubble, noopChunkRef, chunkTotal, answerKey)) return true;
+    /* Still writing: no reply row yet, so the chain below would end on Retry, above the answer (plan 93). */
+    if (streaming && onMoveDownWhileWriting) return onMoveDownWhileWriting();
     /*
      * Nothing left inside the bubble. Name the branch buttons / checklist / reply chrome that comes
      * next instead of leaving it to Steam's own sibling geometry to guess — the walk needs to reach

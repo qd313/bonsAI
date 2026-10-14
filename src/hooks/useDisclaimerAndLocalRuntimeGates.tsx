@@ -173,15 +173,14 @@ export function useDisclaimerAndLocalRuntimeGates(
     if (!hasAcceptedDisclaimer()) return;
 
     const prevDeck = ollamaLocalOnDeckPrevRef.current;
-    if (prevDeck === null) {
-      ollamaLocalOnDeckPrevRef.current = ollamaLocalOnDeck;
-      return;
-    }
-
-    const userTurnedLocalOn = !prevDeck && ollamaLocalOnDeck;
     ollamaLocalOnDeckPrevRef.current = ollamaLocalOnDeck;
 
-    if (!userTurnedLocalOn) return;
+    // The switch now starts on (plan 93), so a fresh install never flips it. The first look at the
+    // loaded settings counts too: switch on and notice never seen -> show it once.
+    const firstLookWithSwitchOn = prevDeck === null && ollamaLocalOnDeck;
+    const userTurnedLocalOn = prevDeck === false && ollamaLocalOnDeck;
+
+    if (!userTurnedLocalOn && !firstLookWithSwitchOn) return;
     if (hasDismissedLocalRuntimeBeta()) return;
     if (localRuntimeBetaPromptIssuedRef.current) return;
 

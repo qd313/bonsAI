@@ -1,6 +1,6 @@
 # Plan 93: the bug list and the Verify list as close to zero as they can get, with the rig busy the whole time
 
-**Status:** LOCKED 2026-10-13 evening, written on Fable 5.1 in the shared checkout at `c7c85259` (the roadmap with the
+**Status:** RAN 2026-10-14 (the morning chat, 08:41 to about 14:00; every lane landed; see § 14 and the report https://claude.ai/artifact/WoD2cLeM75FG6TfmyisPv7). LOCKED 2026-10-13 evening, written on Fable 5.1 in the shared checkout at `c7c85259` (the roadmap with the
 20 items the maintainer added on 2026-10-12 at 23:00). The maintainer's first round of calls is in § 2a and in
 [D130](../audit/maintainer-decisions-locked.md#d130--partly-locked-2026-10-13-raised-2026-10-13--plan-93-the-bug-list-and-the-verify-list-toward-zero-the-first-calls);
 the questions still open are marked in § 15. **Tonight (2026-10-13) the planning chat runs the Deck's preliminary
@@ -561,6 +561,23 @@ hardest focus piece), and the finish-flicker lane if the measurement sends it to
   session (`73e35a6d`). The rig's two fixes are on the rig's `main` (fast-forward), its build waits for the last Deck
   block. Block D4 (the second rounds on the Deck) started 13:10. The stand-in wipe check waits for the maintainer to set
   Steam offline with Big Picture in front.
+- **13:10 to 13:50: block D4 and the last rounds.** Block D4 (build `5537e84c`) passed all seven checks: the finish
+  with the ring on a follow-up chip stayed at 0 px for 17 s (the build before jumped 324 px; round 3 found the "follow
+  the end" switch still on in the finishing frame); the Search tab's Down from the chips is back and the ring held a stop
+  at 10 of 10 readings; after Cancel the ring lands on Update; Remove a model returns the ring to its row; the knowledge
+  switch reads off after a remove; "Update knowledge base" whole at Large; no "(D15)". Found and given one short round
+  each, both landed: the switch stayed off after a re-download until a refresh (`d5aa65a5`), and "Remove" split
+  mid-word at Large (`96a77da5`). The starter set's installer re-run and lingering button were fixed and landed
+  (`511a61fb`, `08f67393`). The bookkeeper's fourth sweep (`1c01d5c9`) closed twelve entries on the Deck evidence. The
+  maintainer set the stand-in's Steam offline at about 13:30; block S1 (the wipe and the fresh defaults) ran on the
+  stand-in. **The advisor on trial (§ 2a call 14):** consult 1 before go (about 30,000 tokens; nine contradictions,
+  all fixed: the most useful consult of the day), consult 3 before the O4, O1 and O3 landings (about 22,000, 35,000 and
+  50,000 tokens; each said land; the O1 one named the panel-colour reading that D0 then took). No consult was needed at
+  points 6 and 7 (no clash beyond what the file map caught; the maintainer lifted the five-hour rule at 11:00). Usage at
+  13:45: week 19 percent, five-hour window 54. Owed for the next session: the fresh install on the stand-in if S1 did not
+  finish (row P93-B3-FIRST-RUN, P93-B1-WIPE-DEFAULT); the Deck re-checks of the four last fixes (the starter-set
+  installer and button, the switch after a download, "Remove" at Large); the four model-screen boxes the rig could not
+  open; the push (the maintainer's); the rig's rebuild (done by the session at the end, its proof in the next session).
 
 ## 15. Questions for the maintainer (the safest choice taken meanwhile)
 

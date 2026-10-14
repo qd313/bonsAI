@@ -27,9 +27,13 @@ Mandatory, and cheap because each is bounded:
 4. **When a question comes up that the maintainer's calls do not cover** and the safest choice is not obvious.
 5. **Before the morning report:** the report's claims against the evidence files. Nothing is called fixed or
    verified without its evidence; anything short of that is said plainly.
+6. **When two helpers' work clashes** (the same file changed two ways, or a landing that undoes an earlier one):
+   which lands, which is re-cut, and from what base.
+7. **When the usage budget forces a choice about what to drop** (the five-hour window or the weekly line is near):
+   what to finish, what to stop mid-way and resume later, and what to leave for the next session.
+   (The maintainer made 6 and 7 mandatory on 2026-10-13; they were optional in the first draft.)
 
-Optional: when two helpers' work clashes; when the usage budget forces a choice about what to drop; when a lane's
-report contradicts the plan.
+Optional: when a lane's report contradicts the plan.
 
 Not for: routine landings, bookkeeping, reading evidence summaries, anything a Sonnet reader or a search answers.
 

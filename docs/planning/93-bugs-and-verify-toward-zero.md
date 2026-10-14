@@ -249,7 +249,9 @@ with and without a game.
 contradictions; (2) after any Deck failure on a second try, before a fix moves up a tier; (3) before landing O1, O3
 and O4 (the focus and streaming lanes), the diff against the block A and B1 measurements; (4) any question the
 maintainer's calls do not cover where the safe choice is not obvious; (5) before the morning report, the claims
-against the evidence files. Each consult: the question, the exact files or evidence, a cap of about 100,000 tokens of
+against the evidence files; (6) when two helpers' work clashes, which lands and which is re-cut; (7) when the
+usage budget forces a choice, what to finish, what to stop and what to leave (the maintainer made 6 and 7 mandatory
+on 2026-10-13). Each consult: the question, the exact files or evidence, a cap of about 100,000 tokens of
 reading; the answer logged in § 14.
 
 The cap is fifteen at once (D128 call 16). **The ladder** when a helper's work is not good enough: Sonnet medium →

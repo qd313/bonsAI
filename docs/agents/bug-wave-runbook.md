@@ -17,7 +17,7 @@ session.
 | A read-only lookup helper | Collects every owed Deck check the rig can run into one list of exact steps | Edits anything |
 | The bookkeeper | Every roadmap, testing and changelog change, from result lists the session writes | Invents a Deck result; commits while a landing runs |
 | The Deck driver (one at a time, a fresh one per block) | Runs written checks, one evidence file each | Fixes, edits, deploys unless told, decides what an unclear result means |
-| The advisor (`advisor`, Fable 5.1 high; on trial since plan 93, 2026-10-13) | Answers one bounded question at each consult point with one recommendation and the reason: before go (the briefs read for contradictions), after a Deck failure on a second try, before a focus or layout landing, an uncovered decision, before the morning report. Every consult is logged in the plan | Edits anything; touches the Deck; starts a helper; speaks to the maintainer on its own; more than about six consults a session |
+| The advisor (`advisor`, Fable 5.1 high; on trial since plan 93, 2026-10-13) | Answers one bounded question at each consult point with one recommendation and the reason: before go (the briefs read for contradictions), after a Deck failure on a second try, before a focus or layout landing, an uncovered decision, before the morning report, when two helpers clash, when the budget forces a choice. Every consult is logged in the plan | Edits anything; touches the Deck; starts a helper; speaks to the maintainer on its own; more than about six consults a session |
 
 Models: [AGENTS.md, "Which model does which work"](../../AGENTS.md). A fix that has failed on the Deck twice
 moves up one tier with the measurement in hand.

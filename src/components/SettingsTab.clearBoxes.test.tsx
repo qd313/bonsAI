@@ -129,3 +129,21 @@ describe.each([
     expect(clear).toHaveBeenCalledTimes(1);
   });
 });
+
+/** Plan 93 lane B9: the words under the title, as drawn (the box is title, words, then the two buttons). */
+function bodyWords(container: HTMLElement): string {
+  const prose = container.querySelector(".bonsai-prose");
+  return prose?.children[1]?.textContent ?? "";
+}
+
+describe("the Clear all data box words stay short", () => {
+  it("says what is deleted and what stays in at most 40 words", () => {
+    const { box } = openBox("Clear all data...", { onClearAllPluginData: vi.fn() });
+    const words = bodyWords(box.container);
+    expect(words.split(/\s+/).filter(Boolean).length).toBeLessThanOrEqual(40);
+    expect(words).toMatch(/fresh install/);
+    expect(words).toMatch(/settings, permissions, chats, notes, cache and logs are deleted/);
+    expect(words).toMatch(/downloaded models and the Ollama install/);
+    expect(words).toMatch(/Desktop logs stay/);
+  });
+});

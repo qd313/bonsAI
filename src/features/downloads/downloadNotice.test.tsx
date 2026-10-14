@@ -109,6 +109,20 @@ describe("confirmDownload", () => {
     expect(hoisted.calls).toHaveLength(0);
   });
 
+  it("with downloads off, the explanation is short and the site line is still there (plan 93 lane B9)", async () => {
+    bridge(false);
+    const answer = confirmDownload([OLLAMA]);
+    const box = draw();
+    const line = downloadNoticeLine(OLLAMA);
+    expect(box.text).toContain(line);
+    const explanation = box.text.slice(box.text.indexOf(line) + line.length).replace(/Cancel.*$/, "");
+    expect(explanation).toContain("Internet downloads are off. Turning them on lets bonsAI download only when you press a download button.");
+    expect(explanation).toContain("You can turn them off in Permissions.");
+    expect(explanation.split(/\s+/).filter(Boolean).length).toBeLessThanOrEqual(40);
+    box.pressCancel();
+    await answer;
+  });
+
   it("with downloads off, B starts nothing either", async () => {
     const setCaps = bridge(false);
     const answer = confirmDownload([OLLAMA]);
@@ -135,6 +149,7 @@ describe("confirmDownload", () => {
     const notice = draw();
     expect(notice.title).toBe("Download from the internet?");
     expect(notice.labels).toEqual(["Cancel", "Download"]);
+    expect(notice.text).toContain("Shown once per site. After that, the size shows on the button.");
     notice.pressAction();
     await expect(first).resolves.toBe(true);
     expect(hoisted.calls).toHaveLength(0);

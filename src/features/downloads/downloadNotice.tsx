@@ -219,11 +219,11 @@ export function confirmDownload(notices: DownloadNotice[], opts: DownloadBoxOpti
             {opts.body ? <div style={{ marginBottom: 8 }}>{opts.body}</div> : null}
             {asking ? (
               <div style={{ color: "#c5d4e3" }}>
-                Internet downloads are off in Permissions. Turning them on lets bonsAI download when you press a
-                download button; nothing downloads on its own. You can turn them off again there.
+                Internet downloads are off. Turning them on lets bonsAI download only when you press a download
+                button. You can turn them off in Permissions.
               </div>
             ) : opts.always ? null : (
-              <div style={{ color: "#c5d4e3" }}>This shows once for each site. After that, the size shows on the button.</div>
+              <div style={{ color: "#c5d4e3" }}>Shown once per site. After that, the size shows on the button.</div>
             )}
           </div>
         }

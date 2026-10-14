@@ -1,0 +1,20 @@
+{
+  "row": "P93-M9-CONFIRM-BOXES-after (D4-3, Remove-a-model box returns the ring to its opener)",
+  "build_commit": "5537e84c",
+  "machine": "deck (real Steam Deck)",
+  "deck_time_local": "2026-10-14 about 13:20-13:24 EDT",
+  "screen": "Deck's own screen. Quick Access page 854x454; the AI models screen is a pop-up in the 'Steam Big Picture Mode' page, 854x534.",
+  "setup": "Ollama tab, AI models section opened (A on the section line), then A on the 'AI models' button to open the screen. Walked one press at a time, reading focus after each: Down x5 to the left filter column, Right onto 'Select qwen2.5vl:3b to pull' (box x305 y336), Up, Up to 'Use gemma4:e2b-it-qat for Ask', Right x3 (Move up, Move down, then 'Remove from Deck'). Read focus: 'Remove from Deck', box x699 y266 24x24 (gemma4:e2b-it-qat row).",
+  "pressed": "A on 'Remove from Deck' (as its own step after the read), read: box open, ring on 'Cancel' (x122 y287 300x36). B, read. A, read (ring on Cancel). B, read. A, read (ring on Cancel). A on Cancel (focus read first), read. Never moved to or pressed 'Remove model'.",
+  "seen": [
+    "Try 1 (B): box 'Remove gemma4:e2b-it-qat from the Deck?' gone; ring on 'Remove from Deck' x699 y266 24x24, the same control that opened it.",
+    "Try 2 (B): box gone; ring on 'Remove from Deck' x699 y266 24x24, same control.",
+    "Try 3 (Cancel, A on the Cancel button): box gone; ring on 'Remove from Deck' x699 y266 24x24, same control.",
+    "D2's first try put the ring on the next row's pull tick box ('Select qwen3.5:4b to pull' at y2935 in the list); not seen tonight. After all three tries 'ollama list' still shows gemma4:e2b-it-qat (4.3 GB) and nomic-embed-text."
+  ],
+  "expected": "Ring back on the same 'Remove from Deck' after B (twice) and after Cancel; model not removed.",
+  "verdict_B_twice": "PASS: 2 of 2 tries, ring on the opener (x699 y266).",
+  "verdict_cancel": "PASS: 1 of 1 try, ring on the opener.",
+  "verdict": "PASS. Screen left open on the AI models screen with the ring on the gemma4 row's Remove from Deck; closed next with B presses (see D4-4 setup).",
+  "side_effect": "none"
+}

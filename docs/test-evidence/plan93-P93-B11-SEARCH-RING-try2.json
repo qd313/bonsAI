@@ -1,0 +1,28 @@
+{
+  "row": "P93-B11-SEARCH-RING (D4-1)",
+  "build_commit": "5537e84c",
+  "machine": "deck (real Steam Deck)",
+  "deck_time_local": "2026-10-14 about 13:15-13:35 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Plugin open, test chat 'What is the fastest way to earn geo early in Hollow Knight' (chat 1 of 2). Search tab, walked there from the tab bar with Right presses. Search tab had two game chips only (All games, Deep Rock Galactic: Survivor); there was no Hollow Knight chip tonight.",
+  "pressed": "Replay of checks/plan92-P90-SEARCH-TAB-WALK.json (twice: the first time by mistake from the Main tab, the second from the Search tab bar). Then by hand: Down/Up/Right on the chips; five rounds of word button A, ring read, walk down to a game note, A, B, ring read.",
+  "seen": {
+    "replay_from_search_tab": "Did not match the saved check, but only for data reasons: the saved check expected a Hollow Knight chip and word counts of 67/67/56/48; tonight there are 2 chips and counts 17/17/10/4. Step 2 matched what the runbook names: Down from 'All games' landed on the input 'Search for a word'.",
+    "replay_from_main_tab_by_mistake": "Started on the question box, so it checked nothing (side effect: only D-pad presses, ring ended on the Ask area).",
+    "chips_walk": "Down from All games -> 'Search for a word' (moved). Down again -> word button 'hollow, in 17 of your questions'. Up, Up -> back to All games. Right -> Deep Rock Galactic: Survivor. Down from Deep Rock -> 'Search for a word'. Down -> word 'hollow'. Up, Up -> All games. 10 of 10 steps moved, all stops visible (visibility verdict visible, 0 stops not visible). Evidence runs/d4-1-chips.json.",
+    "five_rounds": [
+      "round 1: word 'hollow' A -> 19 matches, ring on first chat result (box y=214, 288x49); note 'Starting out in Hollow Knight' A opened note, ring on 'Close the note'; B -> ring on same note row (y=346, 288x59)",
+      "round 2: word 'knight' A -> 20 matches, ring on first chat result (y=214); note A, B -> ring on 'Starting out in Hollow Knight' row (y=312, 59 tall)",
+      "round 3: word 'region' A -> 7 matches, ring on first chat result (y=214); note 'An area note' A, B -> ring on same row (y=381, 24 tall)",
+      "round 4: word 'charm' A -> 8 matches, ring on first chat result (y=214); note 'Charms and notches' A, B -> ring on same row (y=262, 59 tall)",
+      "round 5: word 'region' A -> 7 matches, ring on first chat result (y=214); note 'An area note' A, B -> ring on same row (y=381)"
+    ],
+    "numbers": "5 word presses of A, 5 note opens, 5 B presses; 10 of 10 readings had the ring on a labelled stop inside the visible 454 px; 0 readings with no ring. Walking Up/Down through the results also never lost the ring (about 100 presses, every stop named)."
+  },
+  "expected": "Down from the game chips lands on the search box; Down again on the word buttons; after B from a note and A on a word, the ring is on a stop at every reading.",
+  "verdict_replay_step2": "PASS: Down from 'All games' lands on the search box 'Search for a word' (the only part of the saved replay that tests the fix; the rest of the replay differs because the data differs).",
+  "verdict_chips": "PASS: Down from All and from Deep Rock reaches the search box, Down again reaches the word buttons, Up returns.",
+  "verdict_five_rounds": "PASS: ring on a stop at all 10 readings.",
+  "verdict": "PASS. Note: the saved walk cannot be replayed as-is tonight (no Hollow Knight chip, different counts); it needs re-saving once the owner agrees.",
+  "side_effect": "I first ran the replay while the Main tab was showing; it only pressed D-pad directions (no A), and moved the ring on the Main tab. Nothing changed on the Deck. Words were pressed with A only on word buttons and notes were opened and closed (B); no Remove or Ask pressed."
+}

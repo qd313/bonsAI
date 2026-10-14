@@ -1,0 +1,21 @@
+{
+  "row": "P93-K1-KB-SWITCH (D4-4, the knowledge switch after Remove)",
+  "build_commit": "5537e84c",
+  "machine": "deck (real Steam Deck)",
+  "deck_time_local": "2026-10-14 13:18-13:21 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Ollama tab, knowledge base section opened. Before: section line 'Use local knowledge base on', switch on (aria-checked true), 'Installed - version 2026.09.26', path on the SD card (/run/media/deck/<card>/.bonsai/rag, 3 files, corpus.db 2,998,272 bytes). Settings file: use_local_knowledge_base true, rag_corpus_version 2026.09.26. Backups: ~/p93-backup/d4/settings.json and ~/p93-backup/d4/rag-copy (library copy).",
+  "pressed": "Down to the switch, Down to 'Update knowledge base', Right to 'Remove' (read focus), A (box opens), Right to the box's 'Remove' button (read focus), A. Waited 5 s, read. Waited 30 s, screenshot. Right then Left on the tab bar (left the Ollama tab and came back), reopened the section. Then Down x2 to 'Download knowledge base' (read focus), A, Down, Down, read focus 'SD card (~1131 GB free)', A.",
+  "seen": {
+    "after_remove_5s": "Section reads 'Not installed - download to enable grounded strategy help.' Switch off (aria-checked false), line 'Use local knowledge base off', summary line 'Use local knowledge base off'. Settings file at 13:19:14: use_local_knowledge_base False (only that key changed vs. the backup as far as I read; rag_corpus_version is now empty). The SD card rag folder was gone.",
+    "after_30s": "Screenshot DeckCapture_20261014_131950_auto.png: switch visibly off, 'Not installed', Download button with the ring. Settings file still False at 13:20:06.",
+    "after_leaving_and_returning": "Collapsed line 'Use local knowledge base off'; reopened: switch off (aria-checked false), 'Not installed'. File False.",
+    "after_download": "At 13:20:36 the file says use_local_knowledge_base True, rag_corpus_version 2026.09.26; the SD card folder is back with the same three files and the same byte sizes (ATTRIBUTIONS.md 26,743, corpus-manifest.json 29,838, corpus.db 2,998,272). On screen: 'Installed - version 2026.09.26' with the SD card path, but the switch reads OFF (aria-checked false) and the line reads 'Use local knowledge base off'. Still off after a screenshot at 13:20:55 and after leaving the tab and coming back (about 13:21). File still True at 13:21. Screenshot DeckCapture_20261014_132055_auto.png.",
+    "mismatch": "After the Download the file (true) and the screen (off) disagree."
+  },
+  "expected": "After Remove: 'Not installed', switch and line off, settings file false; still off after 30 s and after leaving the tab; then Download puts the library back; record the switch and the key.",
+  "verdict_remove_half": "PASS: 'Not installed', switch off, line off, key use_local_knowledge_base False after 5 s; unchanged after 30 s and after leaving the tab and returning.",
+  "verdict_download_half": "UNCLEAR: the runbook only says to record. Recorded: version returned as 2026.09.26 (same), settings file key True, but the screen's switch and its line read off. A person would see the switch off while the saved setting is on; I do not know which one the next Ask follows. The owner should decide.",
+  "verdict": "PASS for the Remove half; UNCLEAR for the Download half (screen and file disagree).",
+  "side_effect": "The library was removed and put back from the plugin's own Download button (SD card), as the runbook allows. Same version and same file sizes. Settings key use_local_knowledge_base is true again in the file."
+}

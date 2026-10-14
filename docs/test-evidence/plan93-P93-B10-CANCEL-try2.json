@@ -1,0 +1,19 @@
+{
+  "row": "P93-B10-CANCEL (D4-2)",
+  "build_commit": "5537e84c",
+  "machine": "deck (real Steam Deck)",
+  "deck_time_local": "2026-10-14 13:15-13:17 EDT",
+  "screen": "Deck's own screen, page window 854x454",
+  "setup": "Ollama tab, 'Where AI runs' section opened (A on its header). Ollama 0.40.4 installed, 2 models, connected.",
+  "pressed": "Cancel run: A on 'Update AI & models'; Down; read focus = 'Cancel local Ollama setup'; A on Cancel. Waited. Then one Down, one Up. Finish run: A on Update; Down to Cancel (read focus: Cancel); no further press; waited for the run to end by itself.",
+  "seen": {
+    "cancel_run": "After A on Cancel the line kept reading 'Installing Ollama…' with Cancel on screen for about 20 seconds (the installer was downloading the Ollama archive from ollama.com; a curl process was visible over SSH at 13:15:43). At 13:16:01 the section read 'Cancelled.', Update AI & models was back and the ring (read by page and by a screenshot) was on 'Update AI engine and installed models' (box x64 y208 268x36, fully visible), with no extra press. Footer in the screenshot showed 'A SELECT' and 'B BACK'. One Down moved the ring to 'Browse and pull Ollama models'; Up moved it back to Update.",
+    "finish_run": "Ring on Cancel at the start. About 1 minute later (13:17:05 plus a read) the section read 'Ollama 0.40.4 is up to date. 2 models refreshed.' and the ring was on 'Update AI engine and installed models' (box x64 y208 268x36), no press from me in between.",
+    "screenshot": "screenshots/DeckCapture_20261014_131603_auto.png (taken after Cancelled.)"
+  },
+  "expected": "After Cancel ends the setup the section reads 'Cancelled.' with the ring on Update AI & models without an extra press, the A hint stays in the footer, one Down goes on as before; letting a run finish with the ring on Cancel lands the ring on Update again.",
+  "verdict_cancel_run": "PASS: ring on Update AI & models when 'Cancelled.' showed; A hint stayed; Down went to Browse models.",
+  "verdict_finish_run": "PASS: ring landed on Update AI & models when the run finished with the ring on Cancel.",
+  "verdict": "PASS (both halves). Observation, not a failure: Cancel took about 20 s to show 'Cancelled.' while the archive download was running.",
+  "side_effect": "Two real update runs were started (the runbook asks for them). The second one ran to the end and reported 'up to date'; nothing was installed or changed (version still 0.40.4, 2 models). The first was cancelled during its download."
+}

@@ -42,8 +42,10 @@ moves up one tier with the measurement in hand.
    - **the sentence that says what a pass looks like on the Deck, and one test at that same level**;
    - for a wording or label fix, a search for every place the words appear;
    - for a D-pad walk, tests that model Steam's own scroll on focus, and a bounded walk with no stop twice;
-   - before every commit: the typecheck, the build, the focus check, the test files it touched or added (by name),
-     and the unused-exports count; **never the full test sets** (they run once at landing, one landing at a time).
+   - before every commit: the typecheck, the build, the focus check, the test files it touched or added (by name,
+     `--maxWorkers=2`), and the header, ratchet (unused exports, copy-paste) and growth checks; **never the full test
+     sets and never `verify.py --quick`**, whose related-tests step is a near-full run for a central file (plan 93:
+     twelve helpers took the PC to 23 GB). The quick check and the full sets run once at landing, one at a time.
      Seven helpers each running the full screen set at once took one run from 75 seconds to over an hour and froze
      five runs (plan 92's second night, lessons § 4). Start helpers a few minutes apart, and end any test run a
      finished helper left behind;

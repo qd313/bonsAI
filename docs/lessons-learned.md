@@ -619,6 +619,19 @@ second-round fix exported a number only its own file used, and the landing's qui
 already on `experimental`. When helpers run light gates, have them run the unused-exports count (`knip`) before they
 commit, or un-export at landing before the push.
 
+**The quick check is not a light gate for a helper** (plan 93, 2026-10-14). Twelve helpers each ran
+`verify.py --quick` before a commit; its `vitest related` step runs every test that imports a changed file, which for a
+central file (the settings normalizers, the folded rows, the storage keys) is hundreds of files on every core. The PC
+reached about 190 test processes, 23 GB and 3 GB free; runs sat for 20 minutes and two landings failed on timeouts.
+Ending the six oldest runs freed 11 GB at once. Helpers now run: the typecheck, their own test files by name with
+`--maxWorkers=2`, the header, ratchet and growth checks, the Python set only if a `.py` changed, the build and the focus
+check. The quick check and the full sets run once, at landing.
+
+**A landing's commit hook can stop on a generated file Windows holds for a moment** ("UNKNOWN: unknown error, open
+...architecture/hotspots.json"). Twice on plan 93 the pick was left open with every conflict resolved; `git cherry-pick
+--continue` again finished it, and `land_lane.sh` with the picked commit as its base ran the rest. Read `.git/CHERRY_PICK_HEAD`
+before anything else.
+
 **A brief whose rule and pass check disagree gets built to the stricter one** (plan 92 lane M2: the rule said "hold only
 past a row and a half", the Deck check said "within half a row"; the helper built the check, which left dead presses).
 Read the brief's rule against its own check before sending it.

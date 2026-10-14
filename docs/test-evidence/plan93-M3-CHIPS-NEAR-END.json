@@ -1,0 +1,91 @@
+{
+ "row": "P93-M3-CHIPS-NEAR-END",
+ "build_commit": "build on the Deck matches the local build (block A); repo tip then 06d1ab6e",
+ "deck_time_local": "2026-10-13 about 21:45 to 22:05 EDT",
+ "screen": "Deck's own screen, page window 854 x 454; transcript scroll box 402 tall",
+ "setup": "Test chat 'What is the fastest way to earn geo early in Hollow Knight'. Long answer from check 2: Expert mode, Terse off, Reply style Balanced, the Deck's own AI. Answer = 7 sections (stops), bubble 1316 px tall, scroll height 1667, 434 words, its own 'Show reasoning - 19 s' fold at the top and 'Show details' divider at the end, 3 spoiler boxes inside sections 4, 5 and 6 (counting from 0). Never pressed A on a spoiler box or on the question box.",
+ "pressed": "Up and Down one press at a time with focus and the slot state read after each (reads: gpfocus element, its box, transcript scrollTop, whether the slot's chip row carries the 'away' class and whether its 'Show details' line carries the 'shown' class).",
+ "seen": {
+  "rounds": [
+   {
+    "round": 1,
+    "start": "ring walked up from the question box to the last section",
+    "presses_and_landings": [
+     "box",
+     "UP -> slot line 'Show details' (box top 348, h 30; chips hidden, line shown)",
+     "UP -> the answer's own 'Show details' divider (333/13; slot now shows chips, line hidden)",
+     "UP -> Mark reply helpful (293/28)",
+     "UP -> last section (idx 6, 240/109)",
+     "DOWN -> spoiler box inside it (248/52)",
+     "DOWN -> last section again (239/109)",
+     "DOWN -> Mark reply helpful (313/28)",
+     "DOWN -> divider (333/13)",
+     "DOWN -> slot line (348/30)",
+     "DOWN -> question box (380/44)",
+     "UP -> slot line 'Show details' (348/30)"
+    ],
+    "landing_from_box": "slot line",
+    "reached": true
+   },
+   {
+    "round": "1b",
+    "start": "second pass: UP into the answer, DOWN, DOWN to box, UP",
+    "presses_and_landings": [
+     "UP -> divider (333/13)",
+     "DOWN -> slot line (348/30)",
+     "DOWN -> box (not read, same press as before)",
+     "UP -> slot line (348/30)"
+    ],
+    "landing_from_box": "slot line",
+    "reached": true
+   },
+   {
+    "round": 2,
+    "start": "two sections up from the end (spoiler box in section 5, 176/52)",
+    "presses_and_landings": [
+     "DOWN x9 walked down through section 6, Mark reply helpful, divider, slot line, box, Ask (then 2 more DOWN that did not move)",
+     "UP -> box",
+     "UP -> slot line (348/30)"
+    ],
+    "landing_from_box": "slot line",
+    "reached": true
+   },
+   {
+    "round": 3,
+    "start": "top of the answer (its 'Show reasoning' fold), then DOWN presses to the box (see check 6)",
+    "presses_and_landings": [
+     "UP from box -> slot line (348/30)"
+    ],
+    "landing_from_box": "slot line",
+    "reached": true
+   },
+   {
+    "round": 4,
+    "start": "B pressed once on the box",
+    "presses_and_landings": [
+     "B -> ring left the box and went to the tab bar ('bonsAI tab', top 0 h 20); the panel did not close",
+     "DOWN -> chat name row (20/28)",
+     "DOWN x15 walked through '5 earlier', the question row, the answer to the box",
+     "UP from box -> slot line 'Show details' (348/30)"
+    ],
+    "landing_from_box": "slot line",
+    "reached": true
+   },
+   {
+    "round": 5,
+    "start": "waited 2.5 s on the box before Up",
+    "presses_and_landings": [
+     "UP from box -> slot line 'Show details' (348/30)"
+    ],
+    "landing_from_box": "slot line",
+    "reached": true
+   }
+  ],
+  "slot_states": "Whenever the ring is on the question box, the slot line, or the answer's last stops, the slot shows its 'Show details' line and the chip row is hidden (opacity 0, visibility hidden, class 'away'). When the ring is on the answer's own 'Show details' divider the slot swaps: chip row visible, line hidden. In every round the transcript sat at its end (scrollTop 1265) as soon as the ring was on the box.",
+  "up_from_box_in_all_rounds": "always the slot's 'Show details' line (348/30). Never a chip, never nothing.",
+  "note": "Because the chips only appear in the slot when the ring is on the divider, I could not make UP from the box reach a chip row in any round. DOWN from the divider also goes to the slot's line, not to the chip row that is showing at that moment. No sample was ever 'nothing focused' after Up from the box."
+ },
+ "expected": "PASS if Up from the box reached a chip or the slot's line in all five rounds; FAIL naming the round and presses; UNCLEAR with the landings.",
+ "verdict": "PASS - Up from the question box reached the slot's 'Show details' line in all 5 rounds (and in a repeat of round 1), 0 failures. Caveat: it was always the line, never a chip, because the transcript is scrolled to the end whenever the box has the ring; the maintainer's case (chips showing, transcript mid-way) was not produced.",
+ "side_effect": "B on the box moved the ring to the tab bar (it did not close the panel). Nothing else changed."
+}

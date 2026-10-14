@@ -41,7 +41,7 @@ import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../test-harness
 import { defaultSettingsFixture } from "../test-harness/rpcFixtures";
 
 const PC_ADDRESS = "192.168.86.27:11434";
-const DECK_MODELS = ["qwen2.5:3b", "nomic-embed-text:latest", "gemma4:e2b-it-qat"];
+const DECK_MODELS = ["qwen3:4b", "nomic-embed-text:latest", "gemma4:e2b-it-qat"];
 
 beforeEach(() => {
   hoisted.shown = [];
@@ -62,14 +62,14 @@ async function removeQwenFromTheBox(): Promise<void> {
   );
   const row = await waitFor(() => {
     const r = Array.from(container.querySelectorAll<HTMLElement>(".bonsai-pullmodels-table-row--data")).find(
-      (x) => x.querySelector(".bonsai-pullmodels-tag-name-text")?.textContent?.trim() === "qwen2.5:3b",
+      (x) => x.querySelector(".bonsai-pullmodels-tag-name-text")?.textContent?.trim() === "qwen3:4b",
     );
-    if (!r) throw new Error("no qwen2.5:3b row");
+    if (!r) throw new Error("no qwen3:4b row");
     return r;
   });
   fireEvent.click(row.querySelector<HTMLButtonElement>(".bonsai-pullmodels-delete-btn")!);
   const box = hoisted.shown[hoisted.shown.length - 1]!.props;
-  expect(box.title).toBe("Remove qwen2.5:3b from the Deck?");
+  expect(box.title).toBe("Remove qwen3:4b from the Deck?");
   (box.onAction as () => void)();
   await waitFor(() => expect(getRpcCallLog().some((c) => c.method === "delete_ollama_model")).toBe(true));
 }
@@ -78,7 +78,7 @@ describe("Remove from Deck, then the refresh the box runs right after", () => {
   it("sends the saved PC address with the removal", async () => {
     await removeQwenFromTheBox();
     const del = getRpcCallLog().find((c) => c.method === "delete_ollama_model")!;
-    expect(del.args).toEqual(["qwen2.5:3b", PC_ADDRESS]);
+    expect(del.args).toEqual(["qwen3:4b", PC_ADDRESS]);
   });
 
   it("sends the same address with every models-list look after the removal, so the back end keeps the PC's name", async () => {

@@ -63,15 +63,11 @@ describe("comparePullModelEntriesStretchOrder", () => {
 });
 
 // Licence labels pass (plan 77): every model in the "open source only" class must carry an Apache
-// or MIT licence on its own model card. The Qwen 2.5 3B text size below is the exception the maintainer
-// kept on purpose (labels only, never change what gets picked); its label names the real licence.
-// qwen2.5vl:3b left the open-source class on 2026-10-13 (plan 93): it is research-only.
+// or MIT licence on its own model card. The two Qwen 3B sizes that were once kept there on purpose
+// (qwen2.5vl:3b and qwen2.5:3b) left the open-source class on 2026-10-13 (plan 93): both are research-only.
 describe("PULL_MODEL_CATALOG licence labels", () => {
-  const KEPT_IN_OPEN_SOURCE_PENDING_CALL = ["qwen2.5:3b"];
-
-  it("lists only Apache or MIT licences under the open-source class, bar the one kept 3B size", () => {
+  it("lists only Apache or MIT licences under the open-source class, with no exception", () => {
     for (const e of PULL_MODEL_CATALOG.filter((x) => x.licenseClass === "foss")) {
-      if (KEPT_IN_OPEN_SOURCE_PENDING_CALL.includes(e.tag)) continue;
       expect(e.license, `${e.tag} sits in open source only`).toMatch(/^(Apache 2\.0|MIT)/);
     }
   });
@@ -81,6 +77,7 @@ describe("PULL_MODEL_CATALOG licence labels", () => {
     expect(byTag("qwen2.5vl:3b")?.license).toMatch(/^Qwen Research/);
     expect(byTag("qwen2.5vl:3b")?.licenseClass).toBe("open_weight");
     expect(byTag("qwen2.5:3b")?.license).toMatch(/^Qwen Research/);
+    expect(byTag("qwen2.5:3b")?.licenseClass).toBe("open_weight");
     expect(byTag("qwen2.5-coder:3b")?.license).toMatch(/^Qwen Research/);
     expect(byTag("qwen2.5-coder:3b")?.licenseClass).toBe("open_weight");
   });

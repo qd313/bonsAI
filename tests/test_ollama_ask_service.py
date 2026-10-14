@@ -127,7 +127,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             **kwargs: Any,
         ) -> dict[str, Any]:
             call_models.append(model_name)
-            if model_name == "qwen2.5:3b":
+            if model_name == "gemma4:e2b-it-qat":
                 return {
                     "success": False,
                     "status": 404,
@@ -145,7 +145,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
         with (
             patch(
                 "backend.services.ollama_ask_service.list_installed_ollama_tags",
-                return_value=["qwen2.5:3b", "gemma4:e2b-it-qat"],
+                return_value=["gemma4:e2b-it-qat", "gemma4:e2b"],
             ),
             patch(
                 "backend.services.ollama_ask_service.probe_ollama_http_ok",
@@ -170,11 +170,12 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             )
 
         self.assertTrue(out.get("success"))
-        # qwen2.5vl:3b is no longer offered under the default "Open source only" policy (plan 93).
-        self.assertEqual(out.get("model"), "gemma4:e2b-it-qat")
-        self.assertEqual(call_models, ["qwen2.5:3b", "gemma4:e2b-it-qat"])
+        # The two Qwen Research 3B models are not offered under the default "Open source only" policy
+        # (plan 93), so the first model tried, and missing, is now the starter model.
+        self.assertEqual(out.get("model"), "gemma4:e2b")
+        self.assertEqual(call_models, ["gemma4:e2b-it-qat", "gemma4:e2b"])
         diag = out.get("ask_diagnostics") or {}
-        self.assertEqual(diag.get("model_succeeded"), "gemma4:e2b-it-qat")
+        self.assertEqual(diag.get("model_succeeded"), "gemma4:e2b")
         self.assertEqual(diag.get("routing_strategy"), "installed_in_policy_chain")
 
     async def test_connecting_model_publishes_before_the_first_attempt(self) -> None:
@@ -189,7 +190,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             return {
                 "success": True,
                 "status": 200,
-                "model": "qwen2.5:3b",
+                "model": "qwen3:4b",
                 "response": "ok",
                 "assistant_raw": "ok",
             }
@@ -197,7 +198,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
         with (
             patch(
                 "backend.services.ollama_ask_service.list_installed_ollama_tags",
-                return_value=["qwen2.5:3b"],
+                return_value=["qwen3:4b"],
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
@@ -229,7 +230,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             return {
                 "success": True,
                 "status": 200,
-                "model": "qwen2.5:3b",
+                "model": "qwen3:4b",
                 "response": "ok",
                 "assistant_raw": "ok",
             }
@@ -237,7 +238,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
         with (
             patch(
                 "backend.services.ollama_ask_service.list_installed_ollama_tags",
-                return_value=["qwen2.5:3b"],
+                return_value=["qwen3:4b"],
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
@@ -278,7 +279,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             return {
                 "success": True,
                 "status": 200,
-                "model": "qwen2.5:3b",
+                "model": "qwen3:4b",
                 "response": "Here is the answer.",
                 "assistant_raw": "Here is the answer.",
             }
@@ -286,7 +287,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
         with (
             patch(
                 "backend.services.ollama_ask_service.list_installed_ollama_tags",
-                return_value=["qwen2.5:3b"],
+                return_value=["qwen3:4b"],
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
@@ -327,7 +328,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             return {
                 "success": True,
                 "status": 200,
-                "model": "qwen2.5:3b",
+                "model": "qwen3:4b",
                 "response": "ok",
                 "assistant_raw": "ok",
             }
@@ -335,7 +336,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
         with (
             patch(
                 "backend.services.ollama_ask_service.list_installed_ollama_tags",
-                return_value=["qwen2.5:3b"],
+                return_value=["qwen3:4b"],
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
@@ -372,7 +373,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             return {
                 "success": True,
                 "status": 200,
-                "model": "qwen2.5:3b",
+                "model": "qwen3:4b",
                 "response": "Here is the answer.",
                 "assistant_raw": "Here is the answer.",
             }
@@ -380,7 +381,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
         with (
             patch(
                 "backend.services.ollama_ask_service.list_installed_ollama_tags",
-                return_value=["qwen2.5:3b"],
+                return_value=["qwen3:4b"],
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
@@ -417,7 +418,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             return {
                 "success": True,
                 "status": 200,
-                "model": "qwen2.5:3b",
+                "model": "qwen3:4b",
                 "response": "Here is the answer.",
                 "assistant_raw": "Here is the answer.",
             }
@@ -425,7 +426,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
         with (
             patch(
                 "backend.services.ollama_ask_service.list_installed_ollama_tags",
-                return_value=["qwen2.5:3b"],
+                return_value=["qwen3:4b"],
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
@@ -455,7 +456,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
         def fake_post_ollama_chat(
             _url: str, model_name: str, *_args: Any, **_kwargs: Any
         ) -> dict[str, Any]:
-            if model_name == "qwen2.5:3b":
+            if model_name == "gemma4:e2b-it-qat":
                 return {
                     "success": False,
                     "status": 404,
@@ -473,7 +474,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
         with (
             patch(
                 "backend.services.ollama_ask_service.list_installed_ollama_tags",
-                return_value=["qwen2.5:3b", "gemma4:e2b-it-qat"],
+                return_value=["gemma4:e2b-it-qat", "gemma4:e2b"],
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
@@ -501,7 +502,7 @@ class SpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
         stack.enter_context(
             patch(
                 "backend.services.ollama_ask_service.list_installed_ollama_tags",
-                return_value=["qwen2.5:3b"],
+                return_value=["qwen3:4b"],
             )
         )
         stack.enter_context(
@@ -539,7 +540,7 @@ class SpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
             return {
                 "success": True,
                 "status": 200,
-                "model": "qwen2.5:3b",
+                "model": "qwen3:4b",
                 "response": "The next boss is Soul Master and he fakes death.",
                 "assistant_raw": "The next boss is Soul Master and he fakes death.",
             }
@@ -575,7 +576,7 @@ class SpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
             return {
                 "success": True,
                 "status": 200,
-                "model": "qwen2.5:3b",
+                "model": "qwen3:4b",
                 "response": "General advice for this fight.",
                 "assistant_raw": "General advice for this fight.",
             }
@@ -609,7 +610,7 @@ class SpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
             return {
                 "success": True,
                 "status": 200,
-                "model": "qwen2.5:3b",
+                "model": "qwen3:4b",
                 "response": "The next boss is The Hive.",
                 "assistant_raw": "The next boss is The Hive.",
             }
@@ -658,7 +659,7 @@ class SpoilerConsentPublishedBeforeTheFirstPartialTests(unittest.IsolatedAsyncio
             return {
                 "success": True,
                 "status": 200,
-                "model": "qwen2.5:3b",
+                "model": "qwen3:4b",
                 "response": "Plan. Done.",
                 "assistant_raw": "Plan. Done.",
             }
@@ -709,7 +710,7 @@ class ThinkingSpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
         stack.enter_context(
             patch(
                 "backend.services.ollama_ask_service.list_installed_ollama_tags",
-                return_value=["qwen2.5:3b"],
+                return_value=["qwen3:4b"],
             )
         )
         stack.enter_context(
@@ -750,7 +751,7 @@ class ThinkingSpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
             return {
                 "success": True,
                 "status": 200,
-                "model": "qwen2.5:3b",
+                "model": "qwen3:4b",
                 "response": "Here is the answer.",
                 "assistant_raw": "Here is the answer.",
             }
@@ -785,7 +786,7 @@ class ThinkingSpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
             return {
                 "success": True,
                 "status": 200,
-                "model": "qwen2.5:3b",
+                "model": "qwen3:4b",
                 "response": "Here is the answer.",
                 "assistant_raw": "Here is the answer.",
             }
@@ -834,7 +835,7 @@ class ChatMemoryReachesTheModelTests(unittest.IsolatedAsyncioTestCase):
 
         with (
             patch("backend.services.ollama_ask_service.list_installed_ollama_tags",
-                  return_value=["qwen2.5:3b"]),
+                  return_value=["qwen3:4b"]),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch("backend.services.screenshot_media.prepare_attachment_images",
                   return_value=([], [], [])),
@@ -938,7 +939,7 @@ class ChatSummaryWiringTests(unittest.IsolatedAsyncioTestCase):
 
         with (
             patch("backend.services.ollama_ask_service.list_installed_ollama_tags",
-                  return_value=["qwen2.5:3b"]),
+                  return_value=["qwen3:4b"]),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch("backend.services.screenshot_media.prepare_attachment_images",
                   return_value=([], [], [])),
@@ -1041,7 +1042,7 @@ class QuestionForDisplayNeverLeaksTheModelBoundTextTests(unittest.IsolatedAsynci
         return (
             patch(
                 "backend.services.ollama_ask_service.list_installed_ollama_tags",
-                return_value=["qwen2.5:3b"],
+                return_value=["qwen3:4b"],
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
@@ -1057,7 +1058,7 @@ class QuestionForDisplayNeverLeaksTheModelBoundTextTests(unittest.IsolatedAsynci
     @staticmethod
     def _fake_post_ollama_chat(*_args: Any, **_kwargs: Any) -> dict[str, Any]:
         return {
-            "success": True, "status": 200, "model": "qwen2.5:3b",
+            "success": True, "status": 200, "model": "qwen3:4b",
             "response": "ok", "assistant_raw": "ok",
         }
 

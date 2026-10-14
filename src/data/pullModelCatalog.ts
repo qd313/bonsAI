@@ -247,11 +247,11 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     sizeGb: 1.9,
     releasedYm: "2024-09",
     license: "Qwen Research (3B size)",
-    licenseClass: "foss",
+    licenseClass: "open_weight",
     group: "smallest",
     tags: ["chat"],
     rating: 5,
-    blurb: "Fast text-only fallback if you skip the essentials VLM.",
+    blurb: "Fast text-only fallback. Not open source: Qwen's own card gives the 3B size the Qwen Research licence, so it needs the open-weight setting.",
   },
   {
     tag: "qwen2.5:1.5b",

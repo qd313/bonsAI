@@ -103,7 +103,7 @@ class AskRequestBodyTests(unittest.IsolatedAsyncioTestCase):
         plugin._settings["ollama_keep_alive"] = setting
         seen = _Captured()
         with (
-            patch("backend.services.ollama_ask_service.list_installed_ollama_tags", return_value=["qwen2.5:3b"]),
+            patch("backend.services.ollama_ask_service.list_installed_ollama_tags", return_value=["qwen3:4b"]),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch("backend.services.screenshot_media.prepare_attachment_images", return_value=([], [], [])),
             patch("backend.services.ollama_service.choose_window_tokens", return_value=0),

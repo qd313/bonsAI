@@ -26,11 +26,11 @@ class MediaPermissionTests(unittest.IsolatedAsyncioTestCase):
         with (
             patch("backend.services.screenshot_media.prepare_attachment_images") as prep,
             patch("backend.services.ollama_ask_service.post_ollama_chat") as post,
-            patch("backend.services.ollama_ask_service.list_installed_ollama_tags", return_value=["qwen2.5:3b"]),
+            patch("backend.services.ollama_ask_service.list_installed_ollama_tags", return_value=["qwen3:4b"]),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
         ):
             prep.return_value = ([], [], [])
-            post.return_value = {"success": True, "status": 200, "model": "qwen2.5:3b", "response": "ok"}
+            post.return_value = {"success": True, "status": 200, "model": "qwen3:4b", "response": "ok"}
             out = await run_ask_ollama(plugin, "what is this", "127.0.0.1:11434", "", "", attachments=SHOT)
         return out, prep, post
 

@@ -18,7 +18,7 @@ CATALOG_POLICY_PARITY: dict[str, str] = {
     "gemma3:4b": "open_weight",
     "qwen3:1.7b": "foss",
     "gemma3:1b": "open_weight",
-    "qwen2.5:3b": "foss",
+    "qwen2.5:3b": "open_weight",
     "qwen2.5:1.5b": "foss",
     "llama3.2:3b": "open_weight",
     "llama3.2:1b": "open_weight",

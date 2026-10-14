@@ -79,12 +79,15 @@ class ModelPolicyTests(unittest.TestCase):
         self.assertEqual(classify_ollama_model_name("llava-llama3"), "open_weight")
         self.assertEqual(classify_ollama_model_name("llava-phi3"), "foss")
 
-    def test_tier1_keeps_the_second_text_fallback_only(self):
-        """The maintainer's call (labels only): qwen2.5:3b stays in Tier 1 even though Qwen's own
-        card gives the 3B size the Qwen Research licence. Flipping this is the one-line change to
-        KEPT_IN_TIER_1_PENDING_CALL."""
-        self.assertEqual(classify_ollama_model_name("qwen2.5:3b"), "foss")
-        self.assertEqual(KEPT_IN_TIER_1_PENDING_CALL, frozenset({("qwen2.5", "3b")}))
+    def test_no_research_only_qwen_size_is_kept_in_tier_1_any_more(self):
+        """Plan 93, the maintainer's calls of 2026-10-13: qwen2.5:3b (the second text fallback) left
+        Tier 1 like qwen2.5vl:3b. Qwen's own card gives the 3B size the Qwen Research licence, so
+        "Open source only" neither offers nor tries it; its 7B and 32B sizes stay open source."""
+        self.assertEqual(KEPT_IN_TIER_1_PENDING_CALL, frozenset())
+        self.assertEqual(classify_ollama_model_name("qwen2.5:3b"), "open_weight")
+        self.assertEqual(classify_ollama_model_name("qwen2.5:3b-instruct-q4_K_M"), "open_weight")
+        self.assertEqual(classify_ollama_model_name("qwen2.5:7b"), "foss")
+        self.assertEqual(filter_model_list(["qwen2.5:3b", "qwen2.5:7b"], "open_source_only", False), ["qwen2.5:7b"])
 
     def test_qwen25vl_3b_is_classed_by_its_licence_not_kept_in_tier_1(self):
         """Plan 93: qwen2.5vl:3b is research-only, so it is not offered under "Open source only"

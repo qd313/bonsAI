@@ -210,3 +210,64 @@ describe("the chat reload after the finish keeps the very same answer on screen"
     expect(slots[1]!.querySelector(".bonsai-chat-ai-bubble")?.textContent).toContain("A follow-up answer");
   });
 });
+
+/*
+ * The scroll pane, as the Deck measured it (plan93-M4-ANSWER-FINISH.json): a 402 px box whose answer
+ * runs to 1,667 px, the ring on the question box in the dock. jsdom has no layout, so the pane and
+ * the transcript's rects are set by hand; every way the code can move the pane is counted.
+ */
+function inScrollPane() {
+  const pane = document.createElement("div");
+  pane.className = "TabContentsScroll";
+  pane.getBoundingClientRect = () => ({ top: 0, bottom: 402, left: 0, right: 300, width: 300, height: 402, x: 0, y: 0, toJSON: () => ({}) }) as DOMRect;
+  let top = 0;
+  const moves = { scrollTopWrites: 0 };
+  Object.defineProperty(pane, "scrollTop", {
+    configurable: true,
+    get: () => top,
+    set: (v: number) => {
+      moves.scrollTopWrites += 1;
+      top = v;
+    },
+  });
+  const host = document.createElement("div");
+  pane.appendChild(host);
+  document.body.appendChild(pane);
+  return { pane, host, moves, get scrollTop() { return top; } };
+}
+
+describe("the view does not move when an answer finishes", () => {
+  const realScrollIntoView = Element.prototype.scrollIntoView;
+  beforeEach(() => {
+    resetAnswerStopRegistry();
+    resetUiDocument();
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+    Element.prototype.scrollIntoView = realScrollIntoView;
+    document.body.innerHTML = "";
+  });
+
+  it("sets no scroll position through the finish, the reload and two seconds after", () => {
+    const scrolled = vi.fn();
+    Element.prototype.scrollIntoView = scrolled;
+    const pane = inScrollPane();
+    const { container, rerender } = render(<MainTabChatTranscript {...writing(ANSWER)} />, { container: pane.host });
+    const column = container.querySelector<HTMLElement>(".bonsai-chat-main-column")!;
+    column.getBoundingClientRect = () => ({ top: 0, bottom: 1667, left: 0, right: 300, width: 300, height: 1667, x: 0, y: 0, toJSON: () => ({}) }) as DOMRect;
+    rerender(<MainTabChatTranscript {...writing(ANSWER)} />);
+    scrolled.mockClear();
+    pane.moves.scrollTopWrites = 0;
+
+    rerender(<MainTabChatTranscript {...finished()} />);
+    rerender(<MainTabChatTranscript {...archived()} />);
+    vi.advanceTimersByTime(2000);
+
+    expect(scrolled).not.toHaveBeenCalled();
+    expect(pane.moves.scrollTopWrites).toBe(0);
+    expect(pane.scrollTop).toBe(0);
+  });
+});

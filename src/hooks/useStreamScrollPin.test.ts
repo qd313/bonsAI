@@ -391,14 +391,14 @@ describe("stream scroll follow", () => {
 });
 
 /*
- * The delivery window. The completion poll disables the follow in the SAME commit that lands the
- * final answer text, and the slot reload then rebuilds the transcript with the pane back at 0 —
- * so on device every scroll taken while streaming was thrown away ~50ms after the last token
- * (measured 2026-08-31: scrollTop 0, 366px of answer below the fold, every run). For a short
- * window after the Ask ends the hook keeps delivering the tail, and ignores the scroll churn the
- * rebuild causes.
+ * After the Ask ends. These passes used to deliver the answer's tail into view, to undo the slot
+ * reload's rebuild that threw the pane back to 0 (measured 2026-08-31). Since plan 93 the reload
+ * keeps the live turn's elements (useLiveTurnTwin.ts), and the tail delivery was itself the jump the
+ * maintainer reported: on the Deck 2026-10-13 (plan93-M4-ANSWER-FINISH.json) the pane jumped
+ * 1,264.7 px to the end 0.26 s after the finish. The view now stays put; only a ring stranded wholly
+ * out of view on a control in the chat is brought back.
  */
-describe("post-answer delivery", () => {
+describe("after the answer finishes", () => {
   afterEach(() => {
     cleanup();
     vi.useRealTimers();
@@ -414,54 +414,71 @@ describe("post-answer delivery", () => {
     return hook;
   }
 
-  it("delivers the tail on the commit that ends the Ask", () => {
+  it("does not move the pane on the commit that ends the Ask, though the tail is below the fold", () => {
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mountAsk(t);
     expect(t.scrollTop).toBe(150);
+    t.scrollIntoView.mockClear();
 
     // Growth the streaming passes never saw: the final text and "follow off" land together.
     t.grow(200);
     commit(rerender, { text: "final answer text", on: false });
 
-    expect(t.scrollTop).toBe(350);
+    expect(t.scrollTop).toBe(150);
+    expect(t.scrollIntoView).not.toHaveBeenCalled();
   });
 
-  it("re-delivers after the slot rebuild yanks the pane back to the top", () => {
+  it("does not move the pane in the passes after the finish either", () => {
     vi.useFakeTimers();
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mountAsk(t);
+    t.scrollIntoView.mockClear();
 
+    t.grow(200);
     commit(rerender, { text: "final answer text", on: false });
-    expect(t.scrollTop).toBe(150);
-
-    // The rebuild: Steam lands the pane at 0. Not the user, and must not pin.
-    act(() => t.userScrollTo(0));
-    act(() => vi.advanceTimersByTime(400));
+    act(() => vi.advanceTimersByTime(2000));
 
     expect(t.scrollTop).toBe(150);
+    expect(t.scrollIntoView).not.toHaveBeenCalled();
   });
 
   /*
    * On the Deck 2026-09-23 (plan 64): Down 0.8s after an answer finished put the ring on "40
    * earlier", and the 900ms delivery pass then scrolled to the end of the answer, leaving the ring
-   * 656px above the pane.
+   * 656px above the pane. A ring left wholly out of view (a rebuild the twin could not prevent) is
+   * the one thing still brought back, and only its own control.
    */
-  it("brings the ring's own control back, not the answer's end, when the ring is in the transcript", () => {
+  it("brings the ring's own control back when it is wholly out of view", () => {
     vi.useFakeTimers();
     const t = makeTranscript({ contentBottom: 400 });
     const { rerender } = mountAsk(t);
 
     commit(rerender, { text: "final answer text", on: false });
-    // The rebuild lands the pane at the top, and the person walks onto a control up there.
-    act(() => t.userScrollTo(0));
     const control = document.createElement("div");
     control.className = "gpfocus";
+    control.getBoundingClientRect = () => rect(-300, -260);
     control.scrollIntoView = vi.fn();
     t.anchor.appendChild(control);
     act(() => vi.advanceTimersByTime(1000));
 
-    expect(t.scrollTop).toBe(0);
     expect(control.scrollIntoView).toHaveBeenCalledWith({ block: "nearest", behavior: "auto" });
+    expect(t.scrollTop).toBe(150);
+  });
+
+  it("leaves a ring that can be seen exactly where it is", () => {
+    vi.useFakeTimers();
+    const t = makeTranscript({ contentBottom: 400 });
+    const { rerender } = mountAsk(t);
+
+    commit(rerender, { text: "final answer text", on: false });
+    const control = document.createElement("div");
+    control.className = "gpfocus";
+    control.getBoundingClientRect = () => rect(100, 140);
+    control.scrollIntoView = vi.fn();
+    t.anchor.appendChild(control);
+    act(() => vi.advanceTimersByTime(1000));
+
+    expect(control.scrollIntoView).not.toHaveBeenCalled();
   });
 
   it("stops delivering once the window has passed", () => {

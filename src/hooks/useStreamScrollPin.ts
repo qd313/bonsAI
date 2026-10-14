@@ -22,18 +22,20 @@ const SELF_SCROLL_EPSILON_PX = 1;
 const DOCK_SELECTOR = ".bonsai-main-tab-dock";
 
 /**
- * How long after an Ask ends the hook keeps delivering the answer's tail into view.
+ * How long after an Ask ends the hook keeps an eye on the ring.
  *
- * The completion poll disables the follow and lands the final text in the SAME React commit
- * (useBonsaiAskOrchestration sets both under one batch), and the slot reload that follows rebuilds
- * the transcript with the pane back at 0 — so every scroll taken while streaming is thrown away
- * about 50ms after the last token. Measured on device 2026-08-31: pane at scrollTop 0 with 366px
- * of answer below the fold, every run. The window covers that rebuild plus the markdown/glossary
- * layout that finishes over the following frames.
+ * These passes used to deliver the answer's TAIL into view, because the slot reload after the
+ * finish rebuilt the transcript and threw the pane back to 0 (measured 2026-08-31). Since plan 93
+ * the reload keeps the live turn's own elements (useLiveTurnTwin.ts), so nothing is thrown back,
+ * and the tail delivery was itself the jump the maintainer reported: on the Deck 2026-10-13
+ * (plan93-M4-ANSWER-FINISH.json) the pane sat at 0 for the whole 50 s answer and then jumped
+ * 1,264.7 px to the end 0.26 s after the finish. The maintainer's pick: at the finish the view does
+ * not move. What is left is one narrow case: the ring is on a control in the chat and that control
+ * is wholly out of view (a rebuild the twin could not prevent), and then only that control comes back.
  */
 const DELIVERY_WINDOW_MS = 1200;
 
-/** When the delivery passes run, counted from the commit that ended the Ask. */
+/** When those passes run, counted from the commit that ended the Ask. */
 const DELIVERY_PASS_DELAYS_MS = [300, 900];
 
 /**
@@ -79,6 +81,12 @@ function ringOnScrollingContent(scroll: HTMLElement): HTMLElement | null {
   return dock && dock.contains(ring) ? null : ring;
 }
 
+/** Whether no part of `el` can be seen in the pane: wholly above it, or wholly at or below the fold. */
+function whollyOutOfView(el: HTMLElement, scroll: HTMLElement): boolean {
+  const r = el.getBoundingClientRect();
+  return r.bottom <= scroll.getBoundingClientRect().top || r.top >= visibleBottom(scroll);
+}
+
 /**
  * Whether the user is still looking at the end of the transcript.
  *
@@ -95,8 +103,8 @@ function transcriptTailIsInView(anchor: HTMLElement, scroll: HTMLElement): boole
 
 /**
  * While tokens stream in, keep the newest text on screen — unless the user has scrolled up, in which
- * case hold exactly where they left off. After the Ask ends, keep delivering for a short window so
- * the slot-reload rebuild cannot leave the answer below the fold.
+ * case hold exactly where they left off. When the Ask ends the view stays where it is (plan 93): for
+ * a short window the hook only brings back a control the ring is on that is wholly out of view.
  *
  * HOW it scrolls matters more than when: assigning `scrollTop` on Steam's TabContentsScroll is a
  * no-op on device. Steam's own scroller re-asserts its recorded position around every commit, so a
@@ -135,8 +143,8 @@ export function useStreamScrollPin(
 
   /*
    * Computed during render, consumed by the effects of this same commit: the commit where enabled
-   * flips false is ALSO the commit where the final answer text lands, so the effects below must
-   * treat it as one more active pass rather than returning early.
+   * flips false is ALSO the commit where the final answer text lands, so the effects below run one
+   * more pass then (a ring pass only, since plan 93) rather than returning early.
    */
   const justEnded = wasEnabledRef.current && !enabled;
 
@@ -263,22 +271,22 @@ export function useStreamScrollPin(
         return;
       }
       const ring = ringOnScrollingContent(scroll);
-      if (ring) {
-        if (enabled) return;
+      if (!enabled) {
         /*
-         * A delivery pass with the ring on the chat, not the dock, brings the ring's own control
-         * back, not the answer's end. The passes exist to undo the slot rebuild's jump to the top,
-         * and for a person walking the reply that jump strands the control they are on. Delivering the
-         * tail instead threw it off screen: on the Deck 2026-09-23 (plan 64), Down 0.8s after an
-         * answer finished put the ring on "40 earlier" and the 900ms pass then scrolled to the end
-         * of the answer, leaving the ring 656px above the pane. "nearest" leaves a control that is
-         * already in view where it is; the lift takes it out from behind the dock.
+         * After the finish the tail is never delivered (plan 93: the view does not move). Only a
+         * ring stranded wholly out of view on a control in the chat is brought back, "nearest", the
+         * lift taking it out from behind the dock -- never the answer's end, which on the Deck
+         * 2026-09-23 (plan 64) left a ring on "40 earlier" 656 px above the pane. A ring on the dock,
+         * or on something already in view, moves nothing.
          */
-        ring.scrollIntoView({ block: "nearest", behavior: "auto" });
-        liftAboveDock(ring);
-        selfWroteTopRef.current = scroll.scrollTop;
+        if (ring && whollyOutOfView(ring, scroll)) {
+          ring.scrollIntoView({ block: "nearest", behavior: "auto" });
+          liftAboveDock(ring);
+          selfWroteTopRef.current = scroll.scrollTop;
+        }
         return;
       }
+      if (ring) return;
 
       const overshoot = tailBelowFold();
       if (overshoot <= 0) return;
@@ -308,12 +316,10 @@ export function useStreamScrollPin(
     if (enabled) return;
 
     /*
-     * Delivery passes, timed rather than observed: the slot reload's own expand-turn
-     * scrollIntoView fires one animation frame after its commit, and whichever scroll runs LAST
-     * wins against Steam's scroller — so the passes are placed after it, not raced against it via
-     * a ResizeObserver that would also keep firing on unrelated layout for as long as it lived.
-     * Idempotent by construction: each pass scrolls only if the tail is still below the fold and
-     * the user has not pinned.
+     * The ring passes after the finish, timed rather than observed: a rebuild the live turn's
+     * twin could not prevent (useLiveTurnTwin.ts) lands over the following frames, and a
+     * ResizeObserver would keep firing on unrelated layout for as long as it lived. Idempotent by
+     * construction: a pass moves the pane only for a ring wholly out of view (see `follow`).
      */
     const timers = DELIVERY_PASS_DELAYS_MS.map((ms) => window.setTimeout(follow, ms));
     return () => timers.forEach((timer) => window.clearTimeout(timer));

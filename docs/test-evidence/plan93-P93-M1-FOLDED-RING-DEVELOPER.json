@@ -1,0 +1,25 @@
+{
+  "row": "P93-M1-FOLDED-RING-DEVELOPER",
+  "build_commit": "Deck build matches local build (plan 92 code); repo tip 06d1ab6e",
+  "deck_time_local": "2026-10-13 21:28 to 21:31 EDT",
+  "screen": "Deck own screen, page window 854 x 454",
+  "setup": "Developer tab present (show_developer_tab = true). Arrived with RB x3 from Ollama; all six sections closed (Knowledge base (dev QA), Diagnostics, Navigation, Logging & exports, Animations, Integrations). Navigation section opened with A on its line. Old value of the setting touched: tab_resume_mode = resume_recent (button 'C · 5 min').",
+  "pressed": "DOWN x3 to the Navigation section line; A (opens it); DOWN x1 (lands on the first button of the Tab to open row); wait; A once; RIGHT x2 to 'C · 5 min'; A (restore).",
+  "seen": {
+    "row": "'Tab to open on (D15)' is a row of THREE buttons in one line, not one cycling button: 'A · Main' (48,168,96x32), 'B · Resume', 'C · 5 min' (252,168,96x32). Each has its own description in its label. The section line reads 'Tab to open on (D15): C · 5 min' before and after.",
+    "landing": "DOWN from the Navigation line landed on 'A · Main', the first button, NOT on the chosen 'C · 5 min'.",
+    "strip_right_after_landing_(about 1 s)": "'Tab to open on (D15)' + 'Reopen resumes the tab within 5 minutes, then falls back to Main. Takes effect the next time you close and reopen the plugin.' (strip box 48,381,300x73)",
+    "strip_1.5_s_later_(about 6 s)": "unchanged, same text",
+    "note_on_strip": "The strip text describes the CHOSEN option (C), while the ring sat on A. The focused button's own description ('Every reopen starts on Main, whatever tab you left from.') was not shown in the strip.",
+    "after_one_A_on_A_Main": "strip text changed to 'Every reopen starts on Main, whatever tab you left from. Takes effect the next time you close and reopen the plugin.'; the section line changed to '...: A · Main'; settings file tab_resume_mode changed to always_main (read by key name).",
+    "ring_on_C_before_the_restoring_A": "strip still said the Main text while the ring was on 'C · 5 min' (the ring's own option text never shows in the strip until it is chosen).",
+    "after_restoring_A_on_C": "section line 'Tab to open on (D15): C · 5 min', strip 'Reopen resumes the tab within 5 minutes...', settings file tab_resume_mode = resume_recent (matches the value found)."
+  },
+  "expected": "Strip text present right after landing; no dead press.",
+  "verdict": [
+    "PASS: a strip text is present right after landing and 1.5 s later (it is not empty).",
+    "UNCLEAR: the maintainer's description (details appear on a press, not when the ring lands) is reproduced in this sense: the strip shows the chosen option's text; moving the ring onto another option does not show that option's text. It only changes after A selects it. Whether that is the bug the maintainer meant, the owner decides.",
+    "PASS: no dead press, no loop on the DOWN walks used here (3 + 1 presses all moved)."
+  ],
+  "side_effect": "The Tab to open setting was changed from C (resume_recent) to A (always_main) by the one A press the runbook asks for, then put back to C and confirmed on screen and in the settings file. The Navigation section is left open on the Developer tab (fold state only)."
+}

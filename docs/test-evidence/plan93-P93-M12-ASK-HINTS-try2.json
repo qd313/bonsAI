@@ -1,0 +1,22 @@
+{
+  "row": "P93-M12-ASK-HINTS (try 2, done the corrected way after the coordinator's message; try 1 is plan93-P93-M12-ASK-HINTS.json and used the wrong control, the Ollama tab reply-style section, which I only opened and did not change)",
+  "build_commit": "Deck build matches local build (plan 92 code); repo tip 06d1ab6e",
+  "deck_time_local": "2026-10-13 21:28 to 21:30 EDT",
+  "screen": "Deck own screen, page window 854 x 454",
+  "setup": "Main tab, question box empty (value empty string), A never pressed on the box. Ask mode found first: Speed (settings file ask_mode = speed).",
+  "pressed": "LB to Main; walked DOWN to the Ask button (the walk overshot the chip; the chip sits left of the mic and Ask); LEFT x2 to 'Inference mode: Speed. Open to change.' (221,426,36x20); A (popup opened with the ring on 'speed'); DOWN (ring on 'strategy'); A. Then A on chip, DOWN x2 (ring on 'expert'), A. Then A on chip (ring on 'speed'), A to put Speed back.",
+  "seen": {
+    "popup": "three buttons in a column: speed (170,320,87x34), strategy (170,353), expert; the ring starts on 'speed' each time",
+    "speed": "no hint; input placeholder is the empty string (screenshot plan93-M12-ASK-HINTS-speed.png from try 1)",
+    "strategy": "hint 'Describe the level, boss, or puzzle you're stuck on.' shown in grey in the box (it is a separate element, class bonsai-unified-input-strategy-placeholder; the input's own placeholder reads the same). Screenshot docs/test-evidence/plan93-M12-ASK-HINTS-strategy.png",
+    "expert": "no hint, placeholder empty string, no hint element. Screenshot docs/test-evidence/plan93-M12-ASK-HINTS-expert.png",
+    "restored": "chip reads 'Inference mode: Speed. Open to change.'; settings file ask_mode = speed"
+  },
+  "expected": "A hint in Strategy only; Speed and Expert empty.",
+  "verdict": [
+    "PASS: Speed shows no hint",
+    "PASS: Strategy shows the hint 'Describe the level, boss, or puzzle you're stuck on.'",
+    "PASS: Expert shows no hint"
+  ],
+  "side_effect": "The Ask mode was changed Speed to Strategy to Expert and back to Speed (put back and confirmed on screen and in the settings file). The chip walk overshot onto the Ask button but no A was pressed there."
+}

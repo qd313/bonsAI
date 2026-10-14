@@ -1,0 +1,61 @@
+{
+  "row": "P93-M9-CONFIRM-BOXES",
+  "build_commit": "Deck build matches local build (plan 92 code); repo tip 06d1ab6e",
+  "deck_time_local": "2026-10-13 21:24 to 21:27 EDT",
+  "screen": "Deck own screen, page window 854 x 454 (the confirm boxes are drawn in the 'Steam Big Picture Mode' page, 854 x 534)",
+  "setup": "Settings tab with all sections open for 5.1 and 5.2; Ollama tab for 5.3 and 5.4; Main tab chat name row for 5.5. A was pressed only on the opener buttons (Clear cache..., Clear all data..., Update AI & models, Remove, Delete chat), each read first. A was never pressed on an action button inside a box. Every box was closed with one B.",
+  "pressed": "5.1 walk DOWN 23 presses to 'Clear cache...', A, B. 5.2 RIGHT x1 to 'Clear all data...', A, B. 5.3 Ollama tab, Where AI runs opened, DOWN x3 to 'Update AI engine and installed models', A (no box, see below). 5.4 Knowledge base section opened, DOWN x2 then RIGHT x1 to 'Remove', A, B. 5.5 LB to Main, UP to the tab bar, DOWN x1 (chat name row), RIGHT x1 (Delete chat icon, 308,20,24x28), A, B.",
+  "seen": {
+    "5.1_clear_cache": {
+      "title": "Clear session cache?",
+      "text": "Clears this session from RAM: input, reply, thread, transparency, branches, attachments, timers. Does not change settings.json, Ollama, or image files on disk.",
+      "buttons_in_order_(one row)": ["Keep cache (123,308,194x40) [ring]", "Clear (330,308,194x40)", "Cancel (537,308,194x40)"],
+      "count": 3,
+      "ring": "Keep cache",
+      "screenshot": "docs/test-evidence/plan93-M9-CONFIRM-clear-cache.png"
+    },
+    "5.2_clear_all_plugin_data": {
+      "title": "Clear all plugin data?",
+      "text": "This resets bonsAI like a fresh install for this device. It deletes saved settings and permissions, runtime cache and plugin logs under Decky, and clears the Ollama host field, safety disclaimer flag, and unified-input persistence stored in the plugin browser. If Ollama on this Deck was enabled, this also removes downloaded models and the local Ollama install bonsAI set up under your account (~/.ollama and ~/.local/bin/ollama). It does not delete Desktop logs under bonsAI_logs. Afterward, set your Ollama host again and re-enable any permissions you need.",
+      "buttons_in_order_(one row)": ["Keep my data (123,358,194x40) [ring]", "Clear all data (330,358,194x40)", "Cancel (537,358,194x40)"],
+      "count": 3,
+      "ring": "Keep my data",
+      "screenshot": "docs/test-evidence/plan93-M9-CONFIRM-clear-all-data.png"
+    },
+    "5.3_update_ai_and_models": {
+      "internet_downloads_value": "true (settings file capabilities.internet_downloads = True; Permissions tab shows the switch on)",
+      "result": "NO BOX appeared. The first A on 'Update AI & models' started the update at once: the button turned to 'Updating...', a Cancel button appeared, the line read 'Installing Ollama...', then within about 20 seconds read 'Ollama 0.40.3 is up to date. 2 models refreshed.' Network showed about 48 MB/s down for a moment.",
+      "check_after": "ollama list still shows gemma4:e2b-it-qat and nomic-embed-text:latest; Ollama version still 0.40.3; no model loaded.",
+      "why_(code_reading,_not_a_test)": "src/hooks/useLocalOllamaSetupFlow.tsx line 144 calls confirmDownload(UPDATE_AI_NOTICES) without the 'always' option; src/features/downloads/downloadNotice.tsx returns at once when downloads are on and the site's notice was already seen on this device. The header comment of downloadNotice.tsx says Update AI & models passes 'always', which the call does not.",
+      "screenshot": "docs/test-evidence/plan93-M9-CONFIRM-update-ai-no-box.png (taken mid-update)",
+      "box_buttons": "none, no box"
+    },
+    "5.4_remove_knowledge_base": {
+      "title": "Remove knowledge base?",
+      "text": "Deletes the offline corpus from disk and turns off Use local knowledge base. Strategy cards will stop grounding until you download again.",
+      "buttons_in_order_(one row)": ["Not now (123,295,194x40) [ring]", "Remove (330,295,194x40)", "Cancel (537,295,194x40)"],
+      "count": 3,
+      "ring": "Not now",
+      "opener": "'Remove' sits to the RIGHT of 'Update knowledge base' (238,246,94x44); DOWN never lands on it",
+      "screenshot": "docs/test-evidence/plan93-M9-CONFIRM-remove-kb.png"
+    },
+    "5.5_delete_chat": {
+      "title": "Delete chat?",
+      "text": "Delete \"How do I balance FPS and battery?\" and its transcript? This cannot be undone.",
+      "buttons_in_order_(one row)": ["Cancel (123,278,300x36) [ring]", "Delete (431,278,300x36)"],
+      "count": 2,
+      "ring": "Cancel",
+      "note": "The test chat 'How do I beat the Mantis Lords' is not on the Deck (only one chat exists), so the box was opened on the one chat that is there, then closed with B. chat_slots/index.json still lists that chat afterwards.",
+      "screenshot": "docs/test-evidence/plan93-M9-CONFIRM-delete-chat.png"
+    }
+  },
+  "expected": "5.1 to 5.4 show three buttons each (a safe choice, the action, Cancel); 5.5 shows two (Cancel, Delete) on one row with the ring on Cancel; 5.3 shows a download box first.",
+  "verdict": [
+    "PASS: 5.1 Clear cache box has three buttons (Keep cache, Clear, Cancel), ring on Keep cache",
+    "PASS: 5.2 Clear all plugin data box has three buttons (Keep my data, Clear all data, Cancel), ring on Keep my data",
+    "FAIL: 5.3 no box appeared for Update AI & models with internet downloads on; the update started with the first A. (The code reading above shows this is the seen-site shortcut, so the maintainer or owner decides whether a box is wanted every time.)",
+    "PASS: 5.4 Remove knowledge base box has three buttons (Not now, Remove, Cancel), ring on Not now",
+    "PASS: 5.5 Delete chat box has two buttons (Cancel, Delete) on one row, ring on Cancel"
+  ],
+  "side_effect": "5.3: the runbook's 'press nothing more' was followed. The update ran by itself and finished within about 20 seconds: 'Ollama 0.40.3 is up to date. 2 models refreshed.' It used the internet (about 48 MB/s for a few seconds). Installed models and Ollama version are unchanged. Nothing was deleted anywhere; no action button was pressed in any box."
+}

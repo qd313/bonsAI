@@ -1,0 +1,39 @@
+{
+  "row": "P93-SETUP",
+  "build_commit": "deck build matches local build (deck_checkReady buildMatches pass, 160 files); repo tip 06d1ab6e; expected plan 92 code e6afe2bd",
+  "deck_time_local": "2026-10-13 21:12 EDT (Deck clock)",
+  "screen": "Deck own screen: page window 854 x 454 (innerWidth x innerHeight), screen 853 x 533",
+  "setup": "Rig armed, no other process holding the lease (a stale lease from pid 51088 dated 2026-10-12 shows heldByOther false). Plugin opened first time with no failure. Test: none asked in this block.",
+  "pressed": "deck_openPlugin; UP x11 (walkTo chat name row); A on chat name row; B; RB x3 (Main to Ollama to Settings to Permissions)",
+  "seen": {
+    "keep_awake": "held, 480 min, expiresAt 2026-10-14T09:12:05Z (verified in systemd-inhibit list)",
+    "build": "checkReady: machineKind pass, awake pass, buildMatches pass",
+    "backup": "~/p93-backup on the Deck holds settings.json (2171 bytes) and chat_slots/ (index.json + 1 chat file). The chats live in ~/homebrew/settings/bonsAI/chat_slots, not a folder named chats.",
+    "ollama_models_installed": ["nomic-embed-text:latest", "gemma4:e2b-it-qat"],
+    "ollama_loaded_now": [],
+    "ollama_binary": "~/.local/bin/ollama (not on the ssh PATH; ollama serve is running, pid 11763)",
+    "settings_values": {
+      "ollama_local_on_deck": true,
+      "model_policy_tier": "open_weight",
+      "ask_mode": "speed",
+      "ask_think_effort": "medium",
+      "reply_verbosity": "balanced",
+      "terse_mode": true,
+      "capabilities.internet_downloads": true
+    },
+    "chats": "The chats menu lists exactly ONE chat: 'How do I balance FPS and battery?' (open now, 'chat 1 of 1', 2 turns). The plan 92 test chat 'How do I beat the Mantis Lords...' is NOT on the Deck (chat_slots/index.json has one slot).",
+    "permissions_tab": "no lock banner; switches: Read game & screenshot context=on, Save files to Desktop=on, Steam ban lookup=off, Voice input=on, Internet downloads=on",
+    "main_tab_chips": "ordinary chips: 'How do I balance FPS and battery?', 'What's ahead (without spoilers)?', 'How do I start a new named chat?' (and, on a later read, 'What does Kids master lock do?', 'Where do your game tips come from?'); no pinned test batch seen",
+    "recent_games_by_last_played_from_Steam_store_not_by_eye": ["Left 4 Dead 2", "Deep Rock Galactic: Survivor", "Sifu", "Hades", "Red Dead Redemption 2", "Batman: Arkham Asylum GOTY Edition", "Call of Juarez Gunslinger", "Doom 64: Retribution"],
+    "memory": "free -m: 14800 total, 11694 available; no game running"
+  },
+  "expected": "Rig ready, keep-awake held, Deck's own screen, build matching, test chat present, no lock banner, ordinary chips.",
+  "verdict": [
+    "PASS: rig armed and keep-awake held to 2026-10-14T09:12Z",
+    "PASS: screen is the Deck's own, 854 x 454",
+    "PASS: build on the Deck matches the local build",
+    "FAIL: the test chat 'How do I beat the Mantis Lords' is not on the Deck; only one chat exists. No questions were needed in this block and none were asked. Later blocks that need the test chat must create it or ask the owner.",
+    "PASS: no lock banner, ordinary chips"
+  ],
+  "side_effect": "none. I opened and closed the chats menu with A then B on the chat name row; nothing changed."
+}

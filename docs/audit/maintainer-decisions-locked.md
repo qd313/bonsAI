@@ -2337,3 +2337,9 @@ the same list; its § 15 marks which questions are still open.
 10. **The finish of an answer** (later the same evening): go. The flicker and jump when an answer finishes is fixed by
     building the already-picked Features entry "A long answer is cut into sections while it writes". The smooth
     follow while it writes stays separate, after a frame-rate measurement.
+11. **Gemma and the open-source filter** (after the first Deck block): the maintainer saw the model missing in the model
+    picker (the list of installed models a person picks from), not in the Browse models catalog, which lists it in every
+    filter state. The picker is measured first. The maintainer also wants the "Deck essentials only" filter rethought,
+    as part of the catalog feature.
+12. **"Update AI & models" keeps working as it does:** it runs at once once Internet downloads is on and the site was
+    accepted; no box there.

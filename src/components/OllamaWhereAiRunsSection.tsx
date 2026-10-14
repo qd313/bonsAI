@@ -130,6 +130,11 @@ import { OLLAMA_ROW_HELP } from "../features/folded-tabs/ollamaTabFolds";
 
 export type { OllamaWhereAiRunsSectionProps } from "./OllamaWhereAiRunsSection.types";
 
+/** Steam calls a Focusable's move handlers (never a Decky Button's); the typings do not list them, hence the cast. */
+function focusableMoves(onMoveUp: () => boolean, onMoveDown: (() => void) | (() => boolean) | undefined): Record<string, unknown> {
+  return { onMoveUp, onMoveDown };
+}
+
 /**
  * The whole panel. See "How it works" above for the layout and flow.
  *
@@ -182,6 +187,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     () => peekOllamaTabLocalPending()?.mdnsDiscoveryMessage ?? null
   );
   const [localSetupStatus, setLocalSetupStatus] = useState<LocalOllamaSetupStatus | null>(null);
+  const localSetupBusy = localSetupStatus?.phase === "running";
   const setupAutoTestRanRef = useRef(false);
   const lastCompletedSetupProfileRef = useRef<string>("");
   const onTestConnectionRef = useRef<(opts?: { quiet?: boolean }) => Promise<void>>(async () => {});
@@ -227,27 +233,33 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   }, []);
 
   /*
-   * Put the ring on a button of the chain, but only if it can take it: a disabled button refuses
-   * focus, and a hand-wired move that claimed the press anyway would leave the ring where it was
-   * (the old chain did exactly that while a setup ran).
+   * Put the ring on a button of the chain, unless the plugin itself has it greyed. A greyed Decky
+   * button is not a disabled control: it keeps its place in Steam's graph and takes the ring
+   * (measured 2026-09-16, 2026-10-12), so asking the button whether it is `disabled` never skips
+   * one -- that is how Down from Update landed on greyed Browse and Cancel could not be reached.
+   * `greyed` is the plugin's own state for that button.
    */
-  const focusChainBtn = useCallback((ref: { current: HTMLButtonElement | null }): boolean => {
+  const focusChainBtn = useCallback((ref: { current: HTMLButtonElement | null }, greyed: boolean): boolean => {
     const el = ref.current;
-    if (!el || el.disabled) return false;
+    if (!el || greyed) return false;
     focusInTabBody(el);
     return true;
   }, []);
 
-  const focusInstallUpdateBtn = useCallback((): boolean => focusChainBtn(installUpdateBtnRef), [focusChainBtn]);
-  const focusBrowseModelsBtn = useCallback((): boolean => focusChainBtn(browseModelsBtnRef), [focusChainBtn]);
-  const focusCancelSetupBtn = useCallback((): boolean => focusChainBtn(cancelSetupBtnRef), [focusChainBtn]);
+  /* Test connection is greyed exactly when its own `disabled` prop below says so. */
+  const testConnectionGreyed = connectionTesting || localSetupBusy || (!ollamaLocalOnDeck && !ollamaIp.trim());
 
-  const focusConnectionTestBtn = useCallback((): boolean => {
-    const el = connectionTestBtnRef?.current;
-    if (!el || el.disabled) return false;
-    focusInTabBody(el);
-    return true;
-  }, [connectionTestBtnRef]);
+  const focusInstallUpdateBtn = useCallback((): boolean => focusChainBtn(installUpdateBtnRef, false), [focusChainBtn]);
+  const focusBrowseModelsBtn = useCallback(
+    (): boolean => focusChainBtn(browseModelsBtnRef, localSetupBusy),
+    [focusChainBtn, localSetupBusy],
+  );
+  const focusCancelSetupBtn = useCallback((): boolean => focusChainBtn(cancelSetupBtnRef, false), [focusChainBtn]);
+
+  const focusConnectionTestBtn = useCallback(
+    (): boolean => focusChainBtn(connectionTestBtnRef ?? { current: null }, testConnectionGreyed),
+    [connectionTestBtnRef, focusChainBtn, testConnectionGreyed],
+  );
 
   /** Down from the last button of the chain: Test connection, or (it is disabled while a setup runs) on to the next section. */
   const moveDownToTestOrOn = useCallback((): boolean => {
@@ -387,7 +399,6 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     // being loaded) alone, on purpose; ollamaIp is read fresh via the ref above.
   }, [ollamaLocalOnDeck, settingsLoaded]);
 
-  const localSetupBusy = localSetupStatus?.phase === "running";
   const ollamaEngineReady = Boolean(connectionStatus?.reachable);
 
   const { openMdnsDiscoveryConfirm } = useMdnsOllamaDiscovery({
@@ -505,6 +516,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
               <Focusable
                 flow-children="horizontal"
                 style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}
+                {...focusableMoves(() => focusAutostartToggle(), () => focusBrowseModelsBtn() || focusCancelSetupBtn())}
                 {...helpAttributes(
                   ollamaEngineReady ? "Update AI & models" : "Install Ollama",
                   localSetupBusy ? OLLAMA_ROW_HELP.setupBusy : ollamaEngineReady ? undefined : OLLAMA_ROW_HELP.setupFirstTime,
@@ -526,10 +538,6 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                       offerStarterModels: noModels,
                     });
                   }}
-                  {...({
-                    onMoveUp: () => focusAutostartToggle(),
-                    onMoveDown: () => focusBrowseModelsBtn() || focusCancelSetupBtn(),
-                  } as unknown as Record<string, unknown>)}
                   style={{
                     flex: "1 1 100%",
                     minHeight: 36,
@@ -559,7 +567,11 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                       : "Install Ollama"}
                 </Button>
               </Focusable>
-              <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}>
+              <Focusable
+                flow-children="horizontal"
+                style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}
+                {...focusableMoves(() => focusInstallUpdateBtn(), () => moveDownToTestOrOn())}
+              >
                 <Button
                   className={FOCUS_RING_BTN_CLASS}
                   ref={(el) => {
@@ -575,10 +587,6 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                     onBeforeDeckyModal();
                     onOpenOllamaModelsHub({ initialSection: "browse" });
                   }}
-                  {...({
-                    onMoveUp: () => focusInstallUpdateBtn(),
-                    onMoveDown: () => moveDownToTestOrOn(),
-                  } as unknown as Record<string, unknown>)}
                   style={{
                     flex: "1 1 160px",
                     minHeight: 36,
@@ -599,17 +607,17 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                 </Button>
               </Focusable>
               {localSetupBusy ? (
-                <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}>
+                <Focusable
+                  flow-children="horizontal"
+                  style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}
+                  {...focusableMoves(() => focusInstallUpdateBtn() || focusAutostartToggle(), () => moveDownToTestOrOn())}
+                >
                   <Button
                     className={FOCUS_RING_BTN_CLASS}
                     ref={(el) => {
                       cancelSetupBtnRef.current = el as HTMLButtonElement | null;
                     }}
                     onClick={() => void cancelLocalSetup()}
-                    {...({
-                      onMoveUp: () => focusInstallUpdateBtn() || focusAutostartToggle(),
-                      onMoveDown: () => moveDownToTestOrOn(),
-                    } as unknown as Record<string, unknown>)}
                     style={{
                       flex: "0 1 auto",
                       minHeight: 36,
@@ -722,21 +730,20 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                   Ollama runs on this Deck at <span style={{ color: "#9ce7ff" }}>127.0.0.1:11434</span>
                 </div>
               )}
+              {/* A Decky Button never passes move handlers on, so Steam's moves are caught on this wrapper. */}
+              <Focusable
+                {...focusableMoves(() => handleMoveUpFromConnection(), onMoveDownFromConnectionRow)}
+                /* Folded (plan 91): beside the address on this Deck too, not on a line of its own. */
+                style={{ display: "flex", flex: "0 0 auto", alignSelf: "flex-end" }}
+              >
               <Button
                 className={FOCUS_RING_BTN_CLASS}
                 ref={(el) => {
                   if (connectionTestBtnRef) connectionTestBtnRef.current = el as HTMLButtonElement | null;
                 }}
                 onClick={() => void onTestConnection()}
-                disabled={connectionTesting || localSetupBusy || (!ollamaLocalOnDeck && !ollamaIp.trim())}
-                {...({
-                  onMoveUp: () => handleMoveUpFromConnection(),
-                  onMoveDown: onMoveDownFromConnectionRow,
-                } as unknown as Record<string, unknown>)}
+                disabled={testConnectionGreyed}
                 style={{
-                  /* Folded (plan 91): beside the address on this Deck too, not on a line of its own. */
-                  flex: "0 0 auto",
-                  alignSelf: "flex-end",
                   marginBottom: 2,
                   minHeight: 38,
                   minWidth: ollamaLocalOnDeck ? 0 : 68,
@@ -754,6 +761,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
               >
                 {connectionTesting ? "…" : "Test connection"}
               </Button>
+              </Focusable>
               {findLanShown ? (
                 <Button
                   className={FOCUS_RING_BTN_CLASS}

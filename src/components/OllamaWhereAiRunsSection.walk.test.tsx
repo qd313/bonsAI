@@ -4,8 +4,9 @@
  * Purpose: Pin plan 79 (D122 call 5, roadmap "Remove the Install options button"). The real "Where AI
  * runs" section is drawn on a Deck (Run AI on this Deck on) and read as a person would see it: the
  * "Install options..." button, its Tier 1 / Tier 2 choices and the "Install model bundles" label are
- * gone. The hand-wired vertical chain is then walked through the buttons' own move handlers (the
- * only thing Steam calls on the device), Down from the first switch to the end and Up back again:
+ * gone. The hand-wired vertical chain is then walked through the move handlers Steam really calls on
+ * the device (a Focusable's, never a Decky Button's: `press` below finds the nearest Focusable that has
+ * one), Down from the first switch to the end and Up back again:
  * Run AI on this Deck, Start the AI with the Deck, Install/Update, Browse models, Test connection,
  * each visited exactly once, in a bounded number of presses, with no press that lands nowhere.
  *
@@ -17,7 +18,11 @@ import React from "react";
 import { act, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const hoisted = vi.hoisted(() => ({ props: new Map<string, Record<string, unknown>>() }));
+const hoisted = vi.hoisted(() => ({
+  props: new Map<string, Record<string, unknown>>(),
+  /* Every Focusable's props by its element, so a press can find the one Steam would call. */
+  focusables: new Map<HTMLElement, Record<string, unknown>>(),
+}));
 
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../test-harness/fakeDeckyUi");
@@ -38,9 +43,27 @@ vi.mock("@decky/ui", async () => {
     });
     return <button aria-label={stubs.wordsOf(props.label)}>{stubs.wordsOf(props.label)}</button>;
   };
-  return { ...stubs, Button: CapturingButton, ToggleField: CapturingToggle };
+  /* Steam calls a Focusable's move handlers; the stub throws them away, so keep them by element. */
+  const CapturingFocusable = React.forwardRef<HTMLDivElement, Record<string, unknown>>(
+    function CapturingFocusable(props, ref) {
+      const Base = stubs.Focusable;
+      return (
+        <Base
+          {...props}
+          ref={(el: HTMLDivElement | null) => {
+            if (el) hoisted.focusables.set(el, props);
+            else if (typeof ref === "function") ref(null);
+            if (typeof ref === "function") ref(el);
+            else if (ref) ref.current = el;
+          }}
+        />
+      );
+    }
+  );
+  return { ...stubs, Button: CapturingButton, ToggleField: CapturingToggle, Focusable: CapturingFocusable };
 });
 
+import { isGreyedDeckyButton } from "../test-harness/fakeDeckyUi";
 import { OllamaWhereAiRunsSection } from "./OllamaWhereAiRunsSection";
 import { resetFakeDeckyRpc, setRpcHandler } from "../test-harness/fakeDeckyRpc";
 import { markSettingsLoaded, resetSettingsLoadedSignalForTests } from "../features/plugin-shell/settingsLoadedSignal";
@@ -76,13 +99,26 @@ function draw() {
 }
 
 const here = () => document.activeElement?.getAttribute("aria-label") ?? "(nothing)";
-const press = (label: string, dir: "onMoveDown" | "onMoveUp") =>
-  (hoisted.props.get(label)![dir] as () => unknown)();
+/*
+ * A press the way Steam delivers it. A Decky Button never passes `onMoveDown`/`onMoveUp` on, so for a
+ * button the handler Steam calls is the nearest Focusable around it that has one; a switch (our own
+ * `DenseSwitchRow` passes its handlers on) keeps its own.
+ */
+const press = (label: string, dir: "onMoveDown" | "onMoveUp") => {
+  const el = document.querySelector(`[aria-label="${label}"]`) as HTMLElement;
+  if (el.getAttribute("data-decky-ui") !== "Button") return (hoisted.props.get(label)![dir] as () => unknown)();
+  for (let up: HTMLElement | null = el.parentElement; up; up = up.parentElement) {
+    const handler = hoisted.focusables.get(up)?.[dir] as (() => unknown) | undefined;
+    if (handler) return handler();
+  }
+  return undefined; // nothing Steam would call: its own geometry decides, which the plugin cannot rely on
+};
 
 beforeEach(() => {
   resetFakeDeckyRpc();
   resetSettingsLoadedSignalForTests();
   hoisted.props.clear();
+  hoisted.focusables.clear();
   setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.12.0", models: ["qwen2.5vl:3b"] }));
   markSettingsLoaded();
 });
@@ -123,8 +159,7 @@ describe("Where AI runs on a Deck", () => {
     expect(up).toEqual([TEST, BROWSE, UPDATE, BOOT, RUN]);
   });
 
-  /* `it.fails` until the next commit: the truthful stand-in now shows the walk missing Cancel on the Deck. */
-  it.fails("while a setup runs, Update stays a stop, Browse and Test are disabled and Cancel is reached: no press lands nowhere", async () => {
+  it("while a setup runs, Update stays a stop, Browse and Test are disabled and Cancel is reached: no press lands nowhere", async () => {
     setRpcHandler("get_local_ollama_setup_status", () => ({ phase: "running", stage: "install", log_tail: [] }));
     const { exitDown } = draw();
     const CANCEL = "Cancel local Ollama setup";
@@ -145,5 +180,42 @@ describe("Where AI runs on a Deck", () => {
     expect(here()).toBe(UPDATE);
     press(UPDATE, "onMoveUp");
     expect(here()).toBe(BOOT);
+  });
+
+  it("while a setup runs the whole chain walks Down and Up through Cancel, each stop once, with Browse and Test greyed but skipped by the plugin's own state", async () => {
+    setRpcHandler("get_local_ollama_setup_status", () => ({ phase: "running", stage: "install", log_tail: [] }));
+    const { exitDown } = draw();
+    const CANCEL = "Cancel local Ollama setup";
+    await screen.findByLabelText(CANCEL);
+    // The stand-in tells the Deck's truth: a greyed button is not native-disabled and would take the ring.
+    expect(isGreyedDeckyButton(document.querySelector(`[aria-label="${BROWSE}"]`))).toBe(true);
+    expect(isGreyedDeckyButton(document.querySelector(`[aria-label="${TEST}"]`))).toBe(true);
+    expect((document.querySelector(`[aria-label="${BROWSE}"]`) as HTMLButtonElement).disabled).toBe(false);
+    await act(async () => void (document.querySelector(`[aria-label="${RUN}"]`) as HTMLElement).focus());
+
+    const down: string[] = [here()];
+    for (let i = 0; i < 8 && here() !== CANCEL; i++) {
+      expect(press(here(), "onMoveDown")).toBe(true);
+      down.push(here());
+    }
+    expect(down).toEqual([RUN, BOOT, UPDATE, CANCEL]);
+    press(CANCEL, "onMoveDown");
+    expect(exitDown).toHaveBeenCalledTimes(1);
+
+    const up: string[] = [here()];
+    for (let i = 0; i < 8 && here() !== RUN; i++) {
+      expect(press(here(), "onMoveUp")).toBe(true);
+      up.push(here());
+    }
+    expect(up).toEqual([CANCEL, UPDATE, BOOT, RUN]);
+    expect(new Set([...down, ...up]).size).toBe(4);
+  });
+
+  it("Up from Test connection reaches Browse when no setup runs, by a Focusable Steam calls", async () => {
+    draw();
+    await screen.findByText("Update AI & models");
+    await act(async () => void (document.querySelector(`[aria-label="${TEST}"]`) as HTMLElement).focus());
+    expect(press(TEST, "onMoveUp")).toBe(true);
+    expect(here()).toBe(BROWSE);
   });
 });

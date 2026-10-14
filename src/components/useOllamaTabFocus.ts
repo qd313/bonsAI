@@ -118,10 +118,15 @@ export function useOllamaTabFocus() {
     return focusKbToggle();
   }, [focusKbToggle]);
 
-  /* Where AI runs' last control, for Up from the next line: Test connection, unless it is disabled (a test or a setup running). */
+  /*
+   * Where AI runs' last control, for Up from the next line: Test connection. When it is greyed (a test or a
+   * setup running) it still takes the ring on the Deck, so it is no use asking the button; the ring lands
+   * on it and its own Up (Where AI runs, `handleMoveUpFromConnection`) goes on to Cancel or Browse by the
+   * plugin's own state.
+   */
   const focusConnectionTestBtn = useCallback((): boolean => {
     const el = connectionTestBtnRef.current;
-    if (!el || el.disabled) return false;
+    if (!el) return false;
     focusInTabBody(el);
     return true;
   }, []);

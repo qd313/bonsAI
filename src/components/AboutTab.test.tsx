@@ -67,9 +67,8 @@ function renderAbout() {
   );
 }
 
-/** The beta sentence as the About tab worded it before plan 92 (commit d553a5b4), on one line. */
-const BETA_SENTENCE =
-  "This plugin is in beta. AI-generated recommendations — especially TDP and performance changes — should be verified before relying on them. Use at your own risk!";
+/** The beta sentence as the About tab worded it before plan 92 (commit d553a5b4), on one line, minus the clause about TDP and performance changes (cut 2026-10-14: bonsAI stopped making them on 2026-07-30). */
+const BETA_SENTENCE = "This plugin is in beta. AI-generated recommendations should be verified before relying on them. Use at your own risk!";
 const languageRow = (root: HTMLElement) => root.querySelector<HTMLElement>("[data-bonsai-about-language-dropdown]")!;
 /** A rule's declarations in the plugin's real stylesheet, found by its selector. */
 function declarations(selector: string): string {

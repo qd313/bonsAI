@@ -95,9 +95,8 @@ export const AboutTab: React.FC<Props> = ({
               yourself in Steam&apos;s Performance tab if you choose).
             </div>
             <div className="bonsai-about-beta" data-bonsai-about-beta="">
-              This plugin is in beta. AI-generated recommendations — especially TDP
-              and performance changes — should be verified before relying on them.
-              Use at your own risk!
+              This plugin is in beta. AI-generated recommendations should be verified
+              before relying on them. Use at your own risk!
             </div>
           </div>
         </PanelSectionRow>

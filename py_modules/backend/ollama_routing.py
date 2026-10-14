@@ -63,6 +63,10 @@ def _dedupe_preserve_order(tags: list[str]) -> list[str]:
 
 # --- Essentials routing: one small multimodal default, short tails for legacy + Tier 2 open-weight.
 # Ask mode (speed/strategy/expert) differs by prompt and token budget only — not separate tag lists.
+# These try-order seeds only choose among models that are already installed; they do not decide what
+# is downloaded first (that is TIER1_ESSENTIALS_PULL_TAGS, gemma4:e2b-it-qat since 2026-10-13). They
+# still lead with qwen2.5vl:3b, as the copy in src/utils/modelRoutingOrder.ts does; moving the
+# starter to the front of both is a separate change that rewrites many try-order screen tests.
 _TEXT_FOSS_ESSENTIALS = [
     "qwen2.5vl:3b",
     "qwen2.5:3b",
@@ -127,11 +131,10 @@ _VISION_HIGH_VRAM_DEEP: list[str] = [
     "qwen2.5vl",
 ]
 
-# Deck essentials — one Tier-1 multimodal pull. Keep in sync with README and deckEssentialsTags.ts.
-# Licence note (2026-09-29): Qwen's own card puts the 3B size under the Qwen Research licence, so it is
-# not called "FOSS" in wording; it stays in Tier 1 until the maintainer decides (see
-# model_policy.KEPT_IN_TIER_1_PENDING_CALL).
-TIER1_ESSENTIALS_PULL_TAGS = ("qwen2.5vl:3b",)
+# Deck essentials — the starter model, one multimodal pull. Keep in sync with README and
+# deckEssentialsTags.ts (tests/test_starter_tag_parity.py fails if they drift). Since 2026-10-13 it is
+# Gemma 4 (Apache 2.0), not qwen2.5vl:3b, whose own licence is research-only.
+TIER1_ESSENTIALS_PULL_TAGS = ("gemma4:e2b-it-qat",)
 
 # Tier-2 one-model multimodal preset (registry may fall back to gemma4:e2b in setup service).
 TIER2_MULTIMODAL_PULL_TAGS = ("gemma4:e2b-it-qat",)
@@ -528,10 +531,10 @@ def no_installed_routing_models_message(installed: list[str], requires_vision: b
         installed_clause = f"Installed on this host: {shown}. "
     else:
         installed_clause = "Ollama reports no installed models. "
-    essential = "qwen2.5vl:3b"
+    essential = "gemma4:e2b-it-qat"
     return (
         f"No {kind}model in bonsAI's routing list is installed on this Ollama host. "
         f"{installed_clause}"
         f"Open {OLLAMA_TAB_WHERE_AI_RUNS} and use Install Ollama or Browse models (Install the starter set), or pull {essential} "
-        "(one small multimodal model for chat and screenshots). Optional: gemma4:e2b-it-qat."
+        "(one small multimodal model for chat and screenshots)."
     )

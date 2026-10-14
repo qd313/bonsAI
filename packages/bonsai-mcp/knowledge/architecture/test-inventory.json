@@ -627,6 +627,7 @@
     "tests/test_spoiler_title_profiles_contract.py",
     "tests/test_spy_confession_service.py",
     "tests/test_stage_zip_extras.py",
+    "tests/test_starter_tag_parity.py",
     "tests/test_steam_vac_service.py",
     "tests/test_stopped_answer_cut_in_hidden_block.py",
     "tests/test_strategy_checklist_session_service.py",

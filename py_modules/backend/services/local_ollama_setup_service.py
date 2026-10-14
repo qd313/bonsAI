@@ -743,7 +743,7 @@ def _format_ollama_pull_failure(tag: str, code: int, tail_lines: list[str]) -> s
             "Tap Install Ollama on the Ollama tab, or run ``ollama serve`` once in Konsole."
         )
     elif "manifest" in low and ("not exist" in low or "does not exist" in low):
-        advice = f"Tag «{tag}» is not on the Ollama library — try qwen2.5vl:3b or gemma4:e2b-it-qat."
+        advice = f"Tag «{tag}» is not on the Ollama library — try gemma4:e2b-it-qat or qwen3.5:4b."
 
     detail = f"ollama pull {tag} failed with exit code {code}"
     if tail_snip:

@@ -1,7 +1,7 @@
 /**
  * Title: The starter models: what they are, what the box says, and how they start
  *
- * Purpose: The starter models are one small model (qwen2.5vl:3b) that can chat, read screenshots
+ * Purpose: The starter models are one small model (gemma4:e2b-it-qat) that can chat, read screenshots
  * and help in Strategy mode. This file holds the one place that says what the starter set is, the
  * words of the box that asks before downloading it, the call that starts the download, and the
  * one-press "ask first, then start" used by the Browse models screen.

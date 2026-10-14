@@ -95,8 +95,9 @@ describe("Install Ollama with no models installed", () => {
     expect(drawn.labels).toEqual(["Cancel", "Install Ollama and the starter models"]);
     drawn.unmount();
     const text = textOf(box);
-    expect(text).toContain("qwen2.5vl:3b");
-    expect(text).toContain("about 3–4 GiB");
+    expect(text).toContain("gemma4:e2b-it-qat");
+    expect(text).not.toContain("qwen2.5vl");
+    expect(text).toContain("about 4 GiB");
     expect(text).toContain("installs Ollama only");
     expect(setupProfiles()).toEqual([]);
   });

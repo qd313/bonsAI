@@ -66,7 +66,7 @@ describe("the model list under its sticky header row", () => {
     setRpcHandler("test_ollama_connection", () => ({
       reachable: true,
       version: "0.5.0",
-      models: ["gemma4:e2b-it-qat", "qwen3.5:4b", "qwen2.5vl:3b", "nomic-embed-text"],
+      models: ["qwen3.5:4b", "qwen2.5vl:3b", "nomic-embed-text"],
     }));
     const upToAdvanced = vi.fn(() => true);
     const { container } = render(
@@ -136,7 +136,7 @@ describe("the model list under its sticky header row", () => {
     setRpcHandler("test_ollama_connection", () => ({
       reachable: true,
       version: "0.5.0",
-      models: ["gemma4:e2b-it-qat", "qwen3.5:4b", "qwen2.5vl:3b", "nomic-embed-text"],
+      models: ["qwen3.5:4b", "qwen2.5vl:3b", "nomic-embed-text"],
     }));
     const { container } = render(
       <PullModelsModal activeRoutingTag={null} onCancel={() => {}} onPullAccepted={() => {}} embedded />
@@ -150,7 +150,7 @@ describe("the model list under its sticky header row", () => {
     list.scrollTop = 41.3; // the list as the walk down left it
 
     const second = latestByAriaLabel("Use qwen3.5:4b for Ask")!;
-    const first = latestByAriaLabel("Use gemma4:e2b-it-qat for Ask")!;
+    const first = latestByAriaLabel("Use qwen3.5:4b for Ask")!;
     expect((first.onMoveDown as () => boolean)()).toBe(true); // ring on the second model
     expect((second.onMoveUp as () => boolean)()).toBe(true); // Up onto the first model
     const firstRow = () =>

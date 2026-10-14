@@ -116,13 +116,13 @@
       "role": ""
     },
     {
-      "path": "src/utils/buildReplyActionsElement.tsx",
+      "path": "src/components/PullModelsFiltersColumn.test.tsx",
       "lines": 819,
       "role": ""
     },
     {
-      "path": "src/components/PullModelsFiltersColumn.test.tsx",
-      "lines": 817,
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 819,
       "role": ""
     },
     {

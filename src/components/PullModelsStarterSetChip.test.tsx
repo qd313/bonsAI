@@ -85,7 +85,7 @@ describe("Browse models: Install the starter set", () => {
     expect(first.container.querySelector(".bonsai-pullmodels-filtercol")!.contains(chip(first.container))).toBe(true);
     first.unmount();
 
-    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: ["qwen2.5vl:3b"] }));
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: ["gemma4:e2b-it-qat"] }));
     const second = renderModal();
     await waitFor(() => expect(second.container.textContent).toContain("Installed 1 ·"));
     expect(chip(second.container)).toBeNull();
@@ -106,8 +106,9 @@ describe("Browse models: Install the starter set", () => {
     expect(drawn.labels).toEqual(["Cancel", LABEL]);
     drawn.unmount();
     const text = boxText();
-    expect(text).toContain("qwen2.5vl:3b");
-    expect(text).toContain("about 3–4 GiB");
+    expect(text).toContain("gemma4:e2b-it-qat");
+    expect(text).not.toContain("qwen2.5vl");
+    expect(text).toContain("about 4 GiB");
     expect(text).toContain("registry.ollama.ai");
 
     (p.onCancel as () => void)();

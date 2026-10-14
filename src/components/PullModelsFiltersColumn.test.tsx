@@ -96,7 +96,7 @@ import type { ModelPolicyTierId } from "../data/modelPolicy";
 import type { TryOrderHost } from "../features/model-routing/useTryOrderPlaces";
 
 /** The Deck of M-A: one model on it plus the note-search model, so the starter set and Suggested chips show. */
-const FEW_MODELS = ["gemma4:e2b-it-qat", "nomic-embed-text:latest"];
+const FEW_MODELS = ["qwen3.5:4b", "nomic-embed-text:latest"];
 const COL_TOP = 217;
 const COL_HEIGHT = 200;
 
@@ -350,7 +350,9 @@ describe("the D-pad between the column and the list", () => {
     expect(press("Right")).toBe(true);
     const landed = steamRingHolder()!;
     expect(landed.classList.contains("bonsai-pullmodels-slot")).toBe(true);
-    expect(landed.closest('[role="row"]')).toBe(remove.closest('[role="row"]'));
+    expect(landed.classList.contains("bonsai-pullmodels-delete-btn")).toBe(false);
+    // Right from the column lands on the first row of the list, whichever model that is.
+    expect(landed.closest('[role="row"]')).toBe(list(container).querySelector(".bonsai-pullmodels-table-row--data"));
   });
 });
 

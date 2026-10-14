@@ -244,7 +244,7 @@ async def _start_custom_ollama_pull(self, pull_tags: list[str]) -> dict[str, Any
             "accepted": False,
             "reason": (
                 f"Tag(s) not on Ollama library: {bad_list}. "
-                "Try qwen2.5vl:3b or gemma4:e2b-it-qat."
+                "Try gemma4:e2b-it-qat or qwen3.5:4b."
             ),
             "error": "invalid_registry_tag",
             "invalid_tags": registry_bad,

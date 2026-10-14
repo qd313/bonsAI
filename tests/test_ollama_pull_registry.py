@@ -23,7 +23,7 @@ class OllamaPullFailureFormatTests(unittest.TestCase):
         )
         self.assertIn("exit code 1", msg)
         self.assertIn("not on the Ollama library", msg)
-        self.assertIn("qwen2.5vl:3b", msg)
+        self.assertIn("gemma4:e2b-it-qat", msg)
 
     def test_advice_comes_before_the_raw_command_output(self):
         """What to do about it leads; the command's own words follow.

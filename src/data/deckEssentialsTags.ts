@@ -2,7 +2,7 @@
  * Title: The starter model's tag
  *
  * Purpose: When the AI runs on the Deck itself instead of a PC, one small
- * model (qwen2.5vl:3b: chat, screenshots, OCR and Strategy mode) is offered
+ * model (gemma4:e2b-it-qat: chat, screenshots, OCR and Strategy mode) is offered
  * as the starter set, by the first "Install Ollama" on a Deck with no models
  * and by Browse models' "Install the starter set" button. This file names
  * exactly which Ollama tag that is.
@@ -16,14 +16,14 @@
  *
  * Does not: list every model available to pull — see pullModelCatalog for
  * the full browsable list, of which this tag is just the recommended first
- * pick. It also does not keep itself in sync automatically with the
+ * pick (since 2026-10-13 it is Gemma 4, not qwen2.5vl:3b, whose own licence is research-only). It also does not keep itself in sync automatically with the
  * matching tag on the computer or Deck side
  * (`py_modules/backend/ollama_routing.py`): that file has its own copy of
  * the same tag, kept aligned by a comment telling a person to update both,
- * not by either file importing the other. The bigger Gemma 4 model is no
+ * not by either file importing the other (tests/test_starter_tag_parity.py fails if they drift). The bigger Gemma 4 model is no
  * longer a one-tap download (plan 79); it is reached through Browse models.
  */
-export const TIER1_ESSENTIALS_TAG = "qwen2.5vl:3b" as const;
+export const TIER1_ESSENTIALS_TAG = "gemma4:e2b-it-qat" as const;
 
 export const TIER1_ESSENTIALS_PULL_TAGS: readonly string[] = [TIER1_ESSENTIALS_TAG];
 

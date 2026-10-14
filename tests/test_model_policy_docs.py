@@ -52,7 +52,7 @@ class ModelPolicyDocsTests(unittest.TestCase):
     def test_no_model_message_does_not_call_the_default_foss(self):
         msg = no_installed_routing_models_message([], False)
         self.assertNotIn("FOSS", msg)
-        self.assertIn("qwen2.5vl:3b", msg)
+        self.assertIn("gemma4:e2b-it-qat", msg)
 
 
 if __name__ == "__main__":

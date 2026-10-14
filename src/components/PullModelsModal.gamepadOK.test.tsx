@@ -72,10 +72,10 @@ describe("PullModelsModal -- every control answers A, not just Advanced", () => 
   afterEach(() => cleanup());
 
   it("gives every button in the box, the filters column's included, an onOKButton", async () => {
-    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: ["gemma4:e2b-it-qat"] }));
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: ["qwen3.5:4b"] }));
     const { container } = renderModal();
     await waitFor(() => {
-      expect(container.querySelector('[aria-label="Use gemma4:e2b-it-qat for Ask"]')).not.toBeNull();
+      expect(container.querySelector('[aria-label="Use qwen3.5:4b for Ask"]')).not.toBeNull();
     });
     const column = container.querySelector(".bonsai-pullmodels-filtercol")!;
     // Clear, ten filter rows, "Type a name" and the starter set at the least.

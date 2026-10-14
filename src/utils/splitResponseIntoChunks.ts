@@ -29,8 +29,8 @@
  *     a list item and plain text that continues it;
  *   - a sentence end inside a plain line of prose (not a list item, heading, quote or table row),
  *     where no bold, code or link mark is left open.
- * Whatever its length, a section also closes before a fence opens and right after it closes, so a
- * fence sits alone. While the text is still arriving (`final` false), its last line is not yet a
+ * Whatever its length, a section also closes before a fence that starts a paragraph, and at the
+ * first paragraph break after a fence, so a fence sits with no paragraph but its own. While the text is still arriving (`final` false), its last line is not yet a
  * whole line: a cut that would depend on how that line goes on is not made until it can be.
  */
 import { stepFence, type OpenFence } from "./markdownFenceReader";
@@ -77,7 +77,8 @@ export function cutAnswerSections(text: string, final = true): string[] {
   const cuts: number[] = [];
   let sectionStart = 0;
   let open: OpenFence | null = null;
-  let fenceJustClosed = false;
+  /* The section holds a fence: it closes at the next paragraph break, full or not. */
+  let holdsFence = false;
   let sawBlank = false;
   let prev: string | null = null;
   let prevInList = false;
@@ -88,6 +89,7 @@ export function cutAnswerSections(text: string, final = true): string[] {
     if (sectionLength(at) > 0) {
       cuts.push(at);
       sectionStart = at;
+      holdsFence = false;
     }
   };
 
@@ -99,10 +101,7 @@ export function cutAnswerSections(text: string, final = true): string[] {
 
     if (open) {
       if (!whole) break;
-      if (stepFence(line, open).kind === "close") {
-        open = null;
-        fenceJustClosed = true;
-      }
+      if (stepFence(line, open).kind === "close") open = null;
       continue;
     }
     if (line.trim() === "") {
@@ -119,8 +118,11 @@ export function cutAnswerSections(text: string, final = true): string[] {
       !(prev !== null && TABLE_ROW.test(prev) && TABLE_ROW.test(line)) &&
       !SETEXT_UNDERLINE.test(line) &&
       !(prevInList && !LIST_ITEM.test(line));
-    if (fenceJustClosed || opensFence || (full && (sawBlank || safeLineBreak))) cut(lineStart);
-    fenceJustClosed = false;
+    /* A fence that starts a paragraph starts a section; one that opens inside a paragraph stays
+       with it (the old cut kept such a paragraph whole: a "**7." heading above a hidden block was
+       otherwise a four-letter stop of its own, plan 93 round 2). */
+    if ((sawBlank && (holdsFence || opensFence)) || (full && (sawBlank || safeLineBreak))) cut(lineStart);
+    if (opensFence) holdsFence = true;
     sawBlank = false;
     prevInList = LIST_ITEM.test(line) || (prevInList && INDENTED.test(line));
     prev = line;

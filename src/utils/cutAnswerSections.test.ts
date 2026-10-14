@@ -31,6 +31,8 @@ const SHAPES: Record<string, string> = {
   "a heading underline": `${para(9)}\nA heading\n---------\n${para(9)}`,
   "an indented continuation": `${Array.from({ length: 8 }, (_, i) => `- Item ${i} ${SENTENCE.trim()}\n  More about item ${i}.`).join("\n")}`,
   "an unclosed fence at the end": `${para(9)}\n\n${F}\nstill code ${SENTENCE}\n\nmore code`,
+  /* A one-line hidden block inside a bold heading, as expandOneLineSpoilerFences opens it out. */
+  "a hidden block inside a heading": `${para(9)}\n\n**7. \n${F}bonsai-spoiler\nCity of Tears\n${F}\n (Mid-Game)**\n- **What to Find:** ${SENTENCE}\n\n${para(8)}`,
 };
 
 describe("cutAnswerSections looks backwards only", () => {
@@ -61,6 +63,20 @@ describe("cutAnswerSections looks backwards only", () => {
     const sections = cutAnswerSections(SHAPES["a code fence among prose"]!);
     const fence = sections.find((s) => s.startsWith(F));
     expect(fence).toBe(`${F}python\nprint("a")\n\nprint("b")\n${F}`);
+  });
+
+  /*
+   * Plan 93 round 2: the Deck showed "**7." as a label of its own above a hidden block (M10). The bold
+   * is broken by the block either way (that part is the hidden block's own shape, before any cut), but
+   * the cut must not make those four letters a D-pad stop: a block opening inside a paragraph stays
+   * in that paragraph's section, as the old cut kept it.
+   */
+  it("keeps a block that opens inside a paragraph in that paragraph's section", () => {
+    const sections = cutAnswerSections(SHAPES["a hidden block inside a heading"]!);
+    expect(sections).not.toContain("**7.");
+    const withBlock = sections.find((s) => s.includes("City of Tears"))!;
+    expect(withBlock).toContain(`**7. \n${F}bonsai-spoiler`);
+    expect(withBlock).toContain("(Mid-Game)**");
   });
 
   it("never cuts a table, an indented continuation or a heading from its underline", () => {

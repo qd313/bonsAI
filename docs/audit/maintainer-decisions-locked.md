@@ -2330,3 +2330,5 @@ the same list; its § 15 marks which questions are still open.
    other question in plan 93 § 15 not marked answered (the chats menu's grid, Up from the answer bubble, shelving the
    five platform bugs, Text size on Steam-drawn words, the API key, the two one-star features, the Verify closings, the
    maintainer's own checks, the Deck's chats, pushing, the chips' swap, the nine confirm boxes).
+9. **The question box's hint** (later the same evening): Speed and Expert get the same grey hint treatment Strategy
+   has; the lane writes one short hint per mode in that style and lists the wording for the maintainer's veto.

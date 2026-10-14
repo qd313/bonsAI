@@ -87,6 +87,9 @@ weekly usage meter has reset (§ 3):**
 7. **The plan is committed and kept current** with every call and every piece of Deck evidence.
 8. **Still open after this round:** the finish of an answer (question 18, the maintainer asked what "the finish"
    means; answered in chat: the moment the answer stops arriving), and every question in § 15 not marked answered.
+9. **The question box's hint (2026-10-13, later the same evening):** Speed and Expert get the same grey hint
+   treatment Strategy has. The lane writes one short hint per mode in Strategy's style and lists the wording in its
+   report for the maintainer's veto.
 
 ## 3. Before go: the budget, the model, the Deck
 
@@ -152,7 +155,7 @@ Deck before any lane is cut; "your call" means nothing happens until the maintai
 | Bug | What settles it |
 |---|---|
 | Two documents disagree about whether a Decky button passes D-pad moves on (★ focus) | M7: a page-side logger on one Decky Button's move handler, one press. The bookkeeper fixes whichever document is wrong. |
-| The default text is not shown in the text area (★ ask) | M12: a screenshot of the empty question box in each Ask mode. The lookup found the cause: only Strategy mode has a hint ("Describe the level, boss, or puzzle you're stuck on"); Speed and Expert have none, on both drawing paths. A Sonnet medium lane once § 15 gives the two hints (or lets the lane write them). |
+| The default text is not shown in the text area (★ ask) | M12: a screenshot of the empty question box in each Ask mode. The lookup found the cause: only Strategy mode has a hint ("Describe the level, boss, or puzzle you're stuck on"); Speed and Expert have none, on both drawing paths. The maintainer's call (§ 2a, call 9): Speed and Expert get the same treatment; a Sonnet medium lane (B14) writes a short hint per mode in Strategy's style, on both drawing paths, and lists the wording in its report. |
 | Terse mode does not seem to shorten answers (★★ reply) | M11 first (five Speed questions with Terse on: model lines and screen lines counted). The lookup found the wiring sound: with Terse on, every Speed answer is asked for at most three lines and a menu; nothing counts or trims lines; plan 83 measured 26 of 30 answers within three lines. The maintainer was in Speed mode (§ 2a), so the likely reading is that three model lines wrap to nine or more on the Deck's 300-point-wide panel. **The maintainer's call:** Terse becomes the fourth stop of the Reply style slider (Terse · Speed · Strategy · Expert) and the switch goes. A Sonnet high lane (B13, batch 1 now): the slider's fourth stop, the saved switch mapped onto it, the prompt block applied on that stop for first turns and follow-ups, and a tighter cap measured against the panel (question 7b: a word cap, say 40 words, instead of "three lines"). |
 | In the chats menu, Down skips Rename chat and Save to Desktop note (★ focus) | The code says the menu is a two-column grid: Down walks the left column, Right reaches the right one. Working as designed unless § 15 says otherwise. |
 
@@ -360,10 +363,9 @@ hardest focus piece), and the finish-flicker lane if the measurement sends it to
 1. **When to start** (§ 3). **Answered 2026-10-13:** the Deck tonight, the helpers tomorrow morning in a separate
    chat, the plan committed first.
 2. **The model:** a new Opus 5.5 extra-high chat runs this (pick it in the menu before Go). *Meanwhile:* so.
-3. **The default text in the question box:** the code has a grey hint only in Strategy mode ("Describe the level,
-   boss, or puzzle you're stuck on"); Speed and Expert show an empty box. Is that what you saw? Give the two hints,
-   or let the lane write them (for example "Ask about your game" for Speed, "Ask for the full picture" for Expert).
-   *Meanwhile:* the lane writes them; M12 photographs the box in each mode.
+3. **The default text in the question box.** **Answered 2026-10-13:** Speed and Expert get the same grey hint
+   treatment Strategy has ("Describe the level, boss, or puzzle you're stuck on"); the lane writes a short hint per
+   mode in that style and lists the wording for the maintainer's veto. M12 photographs the box in each mode tonight.
 4. **The starter model.** **Answered 2026-10-13:** gemma4:e2b-it-qat, and the starter set also installs the
    note-search model and the voice engine's tiny.en and base.en.
    **4b.** With "Run AI on this Deck" on by default, the one-time "Local runtime (beta)" notice (today shown only when

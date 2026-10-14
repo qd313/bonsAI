@@ -2305,3 +2305,28 @@ buttons are the first path and the typed path is checked once; the offer rule's 
 with seven tabs the bar's side icons shrink one step; the help strip may cover list rows the ring is not on.
 
 **At go:** plan 89 finished and pushed; the Deck and the stand-in free; the maintainer's go.
+
+### D130 — PARTLY LOCKED 2026-10-13 (raised 2026-10-13) — Plan 93, the bug list and the Verify list toward zero: the first calls
+
+Made by the maintainer on 2026-10-13 in the evening, in chat, after reading
+[plan 93](../planning/93-bugs-and-verify-toward-zero.md) as drafted on Fable 5.1 at `c7c85259`. Plan 93 § 2a carries
+the same list; its § 15 marks which questions are still open.
+
+1. **When:** the preliminary Deck checks tonight, from the planning chat, before the usage meter runs out (the week
+   stood at 94 percent at 21:45, resetting 2026-10-14 at 09:00); the fix lanes tomorrow morning in a separate Opus 5.5
+   extra-high chat. The plan is committed before any Deck press, so a locked plan is on disk if the meter stops the chat.
+2. **The starter model is gemma4:e2b-it-qat.** The starter set also installs the note-search model (nomic-embed-text)
+   and the voice engine's two speech models (tiny.en and base.en). qwen2.5vl is no longer the first download.
+3. **Refresh in the AI models screen is removed.**
+4. **Terse mode:** the maintainer was in Speed mode when answers looked long. Terse becomes the fourth stop of the Reply
+   style slider (Terse · Speed · Strategy · Expert), available in every mode; the separate switch goes. Still open: the
+   cap itself (three model lines wrap to nine or more on the Deck's panel; a word cap is proposed).
+5. **The disclaimers and the Permissions tab are cut, and the new wording is run by the maintainer before it lands.**
+6. **Gemma and the open-source filter:** the maintainer believes the model is hidden when "Open source only" is picked
+   and may be wrong; the Deck checks it first.
+7. **The plan is committed and kept current** with every call and every piece of Deck evidence.
+8. **Still open:** the finish of an answer (the maintainer asked what "the finish" means: the moment an answer stops
+   arriving; the proposal is to build the already-picked "sections close as they fill" feature as the fix), and every
+   other question in plan 93 § 15 not marked answered (the chats menu's grid, Up from the answer bubble, shelving the
+   five platform bugs, Text size on Steam-drawn words, the API key, the two one-star features, the Verify closings, the
+   maintainer's own checks, the Deck's chats, pushing, the chips' swap, the nine confirm boxes).

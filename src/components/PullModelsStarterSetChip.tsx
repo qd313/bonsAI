@@ -9,7 +9,9 @@
  *
  * Used for: PullModelsFiltersColumn.tsx, drawn until the whole set is there: the answer model and the
  * note-search model installed in Ollama, and both speech models on disk. The speech models are read from
- * the voice engine's status; until that answers (or if it cannot), only Ollama's two models decide.
+ * the voice engine's status; until that answers (or if it cannot), only Ollama's two models decide. A run
+ * this button started is watched: when it ends "done" the button goes at once, and when it ends any other
+ * way the speech models are read again (so the button follows what is really on the Deck).
  *
  * Solves: Without it a person looking for models on a fresh Deck had to find the right model in the
  * table and queue it by hand.
@@ -27,6 +29,8 @@
  */
 import { useEffect, useState } from "react";
 import { Button } from "@decky/ui";
+import { useHandRingOnGone } from "../hooks/useHandRingOnGone";
+import { useStarterSetRunWatch } from "../hooks/useStarterSetRunWatch";
 import { STARTER_NOTE_SEARCH_TAG, STARTER_SPEECH_MODELS, TIER1_ESSENTIALS_TAG } from "../data/deckEssentialsTags";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../utils/deckyCall";
 import { isTagInstalled } from "../utils/pullModelFilters";
@@ -41,6 +45,18 @@ export function PullModelsStarterSetChip(props: {
   const { installedTags, nav, bindStop, okButtonRuns } = props;
   // Which speech models are on disk, from the voice engine's status (null until it answers, or if it cannot).
   const [speechReady, setSpeechReady] = useState<Record<string, boolean> | null>(null);
+  // A run this button started has ended: "done" means every piece is there, so the button goes at once;
+  // whatever the ending, the speech models are read again.
+  const [runDone, setRunDone] = useState(false);
+  const [lookAgain, setLookAgain] = useState(0);
+  const watchRun = useStarterSetRunWatch((phase) => {
+    if (phase === "done") setRunDone(true);
+    setLookAgain((n) => n + 1);
+  });
+  // The button can vanish under the ring (the run ended while it was on it): hand the ring to the stop above.
+  const ringRef = useHandRingOnGone(() => {
+    (nav.onMoveUp as (() => boolean) | undefined)?.();
+  });
   useEffect(() => {
     let alive = true;
     callDeckyWithTimeout<[], { speech_models_ready?: Record<string, boolean> }>("get_voice_engine_status", [], DECKY_RPC_TIMEOUT_MS)
@@ -49,16 +65,21 @@ export function PullModelsStarterSetChip(props: {
     return () => {
       alive = false;
     };
-  }, [installedTags.size]);
+  }, [installedTags.size, lookAgain]);
   const ollamaPartThere = isTagInstalled(TIER1_ESSENTIALS_TAG, installedTags) && isTagInstalled(STARTER_NOTE_SEARCH_TAG, installedTags);
   const speechMissing = speechReady != null && STARTER_SPEECH_MODELS.some((m) => speechReady[m] !== true);
-  if (ollamaPartThere && !speechMissing) return null;
+  if (runDone || (ollamaPartThere && !speechMissing)) return null;
   const press = () => {
-    void askThenInstallStarterSet();
+    void askThenInstallStarterSet().then((started) => {
+      if (started) watchRun();
+    });
   };
   return (
     <Button
-      ref={bindStop}
+      ref={(el: HTMLElement | null) => {
+        bindStop(el);
+        ringRef(el);
+      }}
       className="bonsai-pullmodels-chip bonsai-pullmodels-starter-set-chip"
       onClick={(ev) => {
         ev.stopPropagation();

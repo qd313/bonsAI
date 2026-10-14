@@ -118,6 +118,65 @@ describe("Browse models: the starter set is more than the answer model", () => {
   });
 });
 
+describe("Browse models: the button goes away on the open screen when the run ends", () => {
+  const FULL = ["gemma4:e2b-it-qat", "nomic-embed-text:latest"];
+
+  /** A run that is "running" for its first two looks (the first is the one pressing the button makes) and then ends with `end`. */
+  function runEndingWith(end: Record<string, unknown>) {
+    let looks = 0;
+    setRpcHandler("get_local_ollama_setup_status", () => {
+      looks += 1;
+      const profile = "tier1_essentials";
+      return looks < 3 ? { profile, phase: "running", done: false } : { profile, done: true, ...end };
+    });
+  }
+
+  async function pressInstall(container: HTMLElement) {
+    fireEvent.click(chip(container)!);
+    (hoisted.modal!.props.onAction as () => void)();
+    await settle();
+  }
+
+  it("is gone from the open screen once the run reports done, with no close and reopen", async () => {
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: FULL }));
+    setRpcHandler("get_voice_engine_status", voiceStatus(true, false)); // read before the run; stays as it was
+    runEndingWith({ phase: "done" });
+    const { container } = renderModal();
+    await waitFor(() => expect(chip(container)).not.toBeNull());
+    await pressInstall(container);
+    expect(setupCalls()).toHaveLength(1);
+    expect(chip(container)).not.toBeNull(); // still running: still drawn
+    await waitFor(() => expect(chip(container)).toBeNull(), { timeout: 8000 });
+  });
+
+  it("reads the speech models again when a run ends with a problem, and goes once they are there", async () => {
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: FULL }));
+    let speechReady = false;
+    setRpcHandler("get_voice_engine_status", () => ({ speech_models_ready: { "tiny.en": true, "base.en": speechReady } }));
+    let statusCalls = 0;
+    setRpcHandler("get_local_ollama_setup_status", () => {
+      speechReady = true; // the run got the speech model in before it stopped on something else
+      const profile = "tier1_essentials";
+      return statusCalls++ < 2 ? { profile, phase: "running", done: false } : { profile, phase: "failed", done: true, error: "x" };
+    });
+    const { container } = renderModal();
+    await waitFor(() => expect(chip(container)).not.toBeNull());
+    await pressInstall(container);
+    await waitFor(() => expect(chip(container)).toBeNull(), { timeout: 8000 });
+  });
+
+  it("stays when the run ends cancelled and a speech model is still missing", async () => {
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: FULL }));
+    setRpcHandler("get_voice_engine_status", voiceStatus(true, false));
+    runEndingWith({ phase: "cancelled" });
+    const { container } = renderModal();
+    await waitFor(() => expect(chip(container)).not.toBeNull());
+    await pressInstall(container);
+    await new Promise((r) => setTimeout(r, 3600));
+    expect(chip(container)).not.toBeNull();
+  });
+});
+
 describe("Browse models: Install the starter set", () => {
   it("is in the filters column when the starter model is not installed, and gone once it is", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: [] }));

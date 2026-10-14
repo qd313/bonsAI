@@ -51,7 +51,7 @@
  *    targets this Deck.
  * 6. A fresh install (never an Update) that lands with the embed model
  *    still missing on this Deck's own Ollama is asked about once, with a
- *    Steam confirm dialog (Download / Not now) — never a silent gap, and
+ *    confirm box (Cancel / Download) — never a silent gap, and
  *    never on its own. Skipped the same way the standing hint is when Ask
  *    is routed elsewhere.
  *
@@ -70,7 +70,7 @@
  */
 import { isHttpsOllamaAddress } from "../utils/ollamaAddress";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Button, ConfirmModal, Focusable, PanelSection, PanelSectionRow, showModal } from "@decky/ui";
+import { Button, Focusable, PanelSection, PanelSectionRow, showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { tryMoveUpWithPanelScroll } from "../utils/settingsPanelScroll";
@@ -86,6 +86,7 @@ import {
 import { confirmDownload } from "../features/downloads/downloadNotice";
 import { KNOWLEDGE_LIBRARY_NOTICES, MEANING_SEARCH_MODEL_NOTICE } from "../features/downloads/downloadSites";
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../styles/settingsGlassButton";
+import { CancelFirstConfirmModal } from "./CancelFirstConfirmModal";
 import { KnowledgeBaseButtonLabel } from "./KnowledgeBaseButtonLabel";
 import { RagCorpusStoragePickerModal, type RagStorageOption } from "./RagCorpusStoragePickerModal";
 import { DownloadArrowIcon, RefreshArrowIcon, TrashBinIcon } from "./icons";
@@ -524,7 +525,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
    */
   const pullNomicEmbed = () => {
     if (nomicPullBusy) return;
-    // Not now / B return to this button; Download to the library's own button (this one turns into
+    // Cancel / B return to this button; Download to the library's own button (this one turns into
     // a disabled "Starting..." and cannot take the ring).
     void rememberReturnWhileBoxOpens(
       "kb-nomic-pull",
@@ -590,7 +591,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     if (status.embeddings_populated !== true) return;
     if (status.embed_model_available !== false) return;
     // The offer is the download notice itself (plan72-F-DL): the site, the size, the permission
-    // question while downloads are off, and the ring on "Not now" rather than on Download.
+    // question while downloads are off, and the ring on Cancel rather than on Download.
     void confirmDownload([MEANING_SEARCH_MODEL_NOTICE], {
       always: true,
       title: `Also download the meaning-search model (${MEANING_SEARCH_MODEL_NOTICE.size})?`,
@@ -715,26 +716,24 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     rememberModalReturnFocus("kb-remove");
     onBeforeDeckyModal();
     const handle = showModal(
-      <ConfirmModal
-        strTitle="Remove knowledge base?"
-        strDescription={
+      <CancelFirstConfirmModal
+        title="Remove knowledge base?"
+        body={
           <div className="bonsai-prose" style={{ fontSize: textPx(12), lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
             Deletes the offline corpus from disk and turns off <strong>Use local knowledge base</strong>. Strategy
             cards will stop grounding until you download again.
           </div>
         }
         /*
-         * Steam opens a ConfirmModal with the ring on OK, so OK is the choice that deletes nothing
-         * and Remove sits on the middle button -- the download notice's own shape
-         * (downloadNotice.tsx). On the Deck this box opened with the ring on "Remove" and one A
-         * deleted the whole library (six runs, plan74-P74-SAFE-FIRST-PICKER.json, t75-*-Q6).
-         * B and Cancel also delete nothing.
+         * Two buttons, Cancel first where Steam puts the ring, Remove beside it. On the Deck this box
+         * once opened with the ring on "Remove" and one A deleted the whole library (six runs,
+         * plan74-P74-SAFE-FIRST-PICKER.json, t75-*-Q6); then it was Not now / Remove / Cancel
+         * (Steam adds a Cancel to its own box), now just Cancel / Remove (plan 93). B is Cancel.
          */
-        strOKButtonText="Not now"
-        strMiddleButtonText="Remove"
-        strCancelButtonText="Cancel"
-        onOK={() => onCompleteDeckyModalClose(() => handle.Close())}
-        onMiddleButton={() => {
+        actionLabel="Remove"
+        danger
+        onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
+        onAction={() => {
           // The Remove button is about to go; the ring goes to the button that stays in its row.
           rememberModalReturnFocus("kb-download");
           onCompleteDeckyModalClose(() => handle.Close());
@@ -749,7 +748,6 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
               toaster.toast({ title: "Remove failed", body: formatDeckyRpcError(e), duration: 5000 }),
             );
         }}
-        onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
       />,
     );
   };

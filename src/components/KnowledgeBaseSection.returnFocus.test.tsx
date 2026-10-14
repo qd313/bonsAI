@@ -7,7 +7,7 @@
  * shell already hands the ring back to whichever button opened a box, when that button signed up in
  * modalReturnFocusRegistry.ts and said "it was me" when pressed ("Browse models..." does). Here:
  *  - "Download knowledge base" opens the location box; B or "Not now" returns to it.
- *  - "Remove" opens its box; "Not now" or B returns to Remove.
+ *  - "Remove" opens its box; Cancel or B returns to Remove.
  *  - Once Remove has gone (the box's Remove button), the ring goes to the button that now stands
  *    where the controls were: "Download knowledge base".
  *
@@ -18,7 +18,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import type { ReactElement } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-type BoxProps = { onClose?: () => void; onPick?: (p: string, s: string) => void; onOK?: () => void; onMiddleButton?: () => void };
+type BoxProps = { onClose?: () => void; onPick?: (p: string, s: string) => void; onCancel?: () => void; onAction?: () => void };
 
 const hoisted = vi.hoisted(() => ({ box: null as BoxProps | null }));
 
@@ -106,13 +106,13 @@ describe("the library's location box", () => {
 });
 
 describe('"Remove knowledge base?"', () => {
-  it("Not now (or B) returns the ring to Remove", async () => {
+  it("Cancel (or B) returns the ring to Remove", async () => {
     const { remove } = await draw(true);
     fireEvent.click(remove!);
     await waitFor(() => expect(hoisted.box).not.toBeNull());
 
     ringLeaves();
-    hoisted.box!.onOK?.();
+    hoisted.box!.onCancel?.();
     restoreModalReturnFocus();
 
     expect(document.activeElement).toBe(remove);
@@ -124,7 +124,7 @@ describe('"Remove knowledge base?"', () => {
     await waitFor(() => expect(hoisted.box).not.toBeNull());
 
     ringLeaves();
-    hoisted.box!.onMiddleButton?.();
+    hoisted.box!.onAction?.();
     restoreModalReturnFocus();
 
     // The Remove button itself is about to be removed, so the ring must not go back to it.

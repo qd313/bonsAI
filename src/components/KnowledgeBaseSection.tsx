@@ -83,7 +83,13 @@ import {
   resetKbDownloadMarkerForTests,
   setKbDownloadMarker,
 } from "../utils/kbDownloadMarker";
-import { addKbRemovedListener, announceKbRemoved, resetKbRemovedSignalForTests } from "../utils/kbRemovedSignal";
+import {
+  addKbLibraryListener,
+  announceKbLibraryChange,
+  expectKbInstall,
+  noteKbStatusRead,
+  resetKbLibrarySignalForTests,
+} from "../utils/kbLibrarySignal";
 import { confirmDownload } from "../features/downloads/downloadNotice";
 import { KNOWLEDGE_LIBRARY_NOTICES, MEANING_SEARCH_MODEL_NOTICE } from "../features/downloads/downloadSites";
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../styles/settingsGlassButton";
@@ -229,7 +235,7 @@ function kbNomicPullLikelyInFlight(): boolean {
 /** Test seam: forget any in-flight marker between tests. */
 export function resetKbDownloadInFlightForTests(): void {
   resetKbDownloadMarkerForTests();
-  resetKbRemovedSignalForTests();
+  resetKbLibrarySignalForTests();
   kbInstallNomicOfferPending = false;
   kbNomicPullStartedAtMs = null;
 }
@@ -350,6 +356,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
         DECKY_RPC_TIMEOUT_MS,
       );
       setStatus(st);
+      noteKbStatusRead(st);
       // A download already running on the back end (started before a remount) still gets polled.
       if (st?.phase === "running" && !st.done) setDownloadBusy(true);
       if (
@@ -391,17 +398,19 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   }, [refreshStatus, ragCorpusVersion]);
 
   /*
-   * The library was removed (here, or by the copy of this section that pressed Remove before the box closed
-   * and rebuilt the tab): the switch goes off, as the Remove box says and the back end has already saved.
-   * The setter and the status read are kept in a ref so the listener is added once per mount.
+   * The library was removed or put back (here, or by the copy of this section that pressed the button before
+   * a box closed and rebuilt the tab): the switch follows what the back end saved, off after Remove and on
+   * after an install. The setter and the status read are kept in a ref so the listener is added once per mount.
    */
-  const whenRemovedRef = useRef<() => void>(() => {});
-  whenRemovedRef.current = () => {
-    setUseLocalKnowledgeBase(false);
-    setUpdateNote(null);
-    void refreshStatus();
+  const whenLibraryChangesRef = useRef<(on: boolean) => void>(() => {});
+  whenLibraryChangesRef.current = (on) => {
+    setUseLocalKnowledgeBase(on);
+    if (!on) {
+      setUpdateNote(null);
+      void refreshStatus();
+    }
   };
-  useEffect(() => addKbRemovedListener(() => whenRemovedRef.current()), []);
+  useEffect(() => addKbLibraryListener((change) => whenLibraryChangesRef.current(change.installed)), []);
 
   useEffect(() => {
     const onDownloadChange = (running: boolean) => {
@@ -421,6 +430,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
       )
         .then((st) => {
           setStatus(st);
+          noteKbStatusRead(st);
           if (st?.phase === "failed" && (st.error ?? "").trim()) {
             const errKey = `${st.error}|${st.stage ?? ""}`;
             if (sessionStorage.getItem(KB_FAILURE_TOAST_KEY) !== errKey) {
@@ -490,6 +500,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   const startDownload = async (installPath: string, storage: string) => {
     if (!(await confirmDownload(KNOWLEDGE_LIBRARY_NOTICES))) return;
     setKbDownloadMarker(Date.now());
+    expectKbInstall();
     setDownloadBusy(true);
     try {
       const out = await callDeckyWithTimeout<
@@ -698,6 +709,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
           text: out.version ? `Newer version ${out.version} found — downloading…` : "Newer version found — downloading…",
         });
         setKbDownloadMarker(Date.now());
+        expectKbInstall();
         setDownloadBusy(true);
       })
       .catch((e) => {
@@ -745,7 +757,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
           void callDeckyWithTimeout<[], { ok?: boolean }>("remove_rag_corpus", [], DECKY_RPC_TIMEOUT_MS)
             .then(() => {
               // This copy may be gone (the box closing rebuilt the tab): tell whichever copy is on screen.
-              announceKbRemoved();
+              announceKbLibraryChange({ installed: false });
               toaster.toast({ title: "Knowledge base removed", body: "Corpus deleted from disk.", duration: 3000 });
             })
             .catch((e) =>

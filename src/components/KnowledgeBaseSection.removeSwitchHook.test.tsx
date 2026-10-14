@@ -10,8 +10,7 @@
  *
  * Does not: run the real back end or Decky; the box and its rebuild are stood in for (as afterBoxHarness does).
  */
-import React from "react";
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const hoisted = vi.hoisted(() => ({ box: null as unknown }));
@@ -27,57 +26,10 @@ vi.mock("@decky/ui", async () => {
   };
 });
 
-import { KnowledgeBaseSection, resetKbDownloadInFlightForTests } from "./KnowledgeBaseSection";
-import { usePluginSettings } from "../hooks/usePluginSettings";
-import { buildInitialSessionSnapshot } from "../features/plugin-shell/initialSessionSnapshot";
-import {
-  captureBonsaiSessionForModal,
-  clearBonsaiSessionSurvival,
-  consumeBonsaiSessionAfterRemount,
-  finalizeSessionRestoreAfterRemount,
-} from "../utils/bonsaiSessionSurvival";
+import { resetKbDownloadInFlightForTests } from "./KnowledgeBaseSection";
 import { drawConfirmBox } from "../test-harness/confirmBoxProbe";
-import { ragCorpusStatusFixture, resetFakeDeckyRpc, setRpcHandler } from "../test-harness/fakeDeckyRpc";
-import { defaultSettingsFixture } from "../test-harness/rpcFixtures";
-
-const SWITCH = '[label="Use local knowledge base"]';
-const switchIsOn = () => Boolean((document.querySelector(SWITCH) as unknown as { checked?: boolean })?.checked);
-const settle = () => act(() => new Promise<void>((r) => setTimeout(r, 0)));
-
-type Disk = Record<string, unknown>;
-let disk: Disk;
-let finishDelete: () => void;
-let closeBox: () => void;
-let rebuild: () => void;
-let screens: Array<{ unmount: () => void }>;
-
-/** The plugin's screen as index.tsx builds it, down to what Remove touches: the hook, the note, the section. */
-function PluginScreen() {
-  // A rebuilt screen reads the note taken as the box opened (useSessionRestoreAfterRemount does this on the Deck).
-  const restored = React.useRef(consumeBonsaiSessionAfterRemount());
-  const settings = usePluginSettings();
-  React.useEffect(() => finalizeSessionRestoreAfterRemount(), []);
-  void restored;
-  return (
-    <KnowledgeBaseSection
-      useLocalKnowledgeBase={settings.useLocalKnowledgeBase}
-      setUseLocalKnowledgeBase={settings.setUseLocalKnowledgeBase}
-      ragCorpusVersion={settings.ragCorpusVersion}
-      ollamaIp="127.0.0.1"
-      ollamaLocalOnDeck={true}
-      onBeforeDeckyModal={() =>
-        captureBonsaiSessionForModal({ ...buildInitialSessionSnapshot(), settingsSnapshot: settings.settingsSnapshot })
-      }
-      onCompleteDeckyModalClose={(close) => {
-        closeBox = close;
-      }}
-    />
-  );
-}
-
-function mountScreen() {
-  screens.push(render(<PluginScreen />));
-}
+import { mountScreen, rebuild, setUpWorld, settle, switchIsOn, world } from "../test-harness/kbSwitchWorld";
+import { setRpcHandler } from "../test-harness/fakeDeckyRpc";
 
 async function pressRemove() {
   fireEvent.click(await screen.findByText("Remove"));
@@ -87,47 +39,15 @@ async function pressRemove() {
 }
 
 async function finishRemoval() {
-  finishDelete();
+  world.finishDelete();
   await settle();
   await settle();
 }
 
 beforeEach(() => {
-  resetFakeDeckyRpc();
   resetKbDownloadInFlightForTests();
-  clearBonsaiSessionSurvival();
+  setUpWorld({ installed: true });
   hoisted.box = null;
-  screens = [];
-  disk = {
-    ...defaultSettingsFixture(),
-    use_local_knowledge_base: true,
-    rag_corpus_path: "/run/media/deck/card/.bonsai/rag",
-    rag_corpus_version: "1.0.0",
-  };
-  setRpcHandler("load_settings", () => ({ ...disk }));
-  setRpcHandler("save_settings", (...args: unknown[]) => {
-    disk = { ...disk, ...(args[0] as Disk) };
-    return { ...disk };
-  });
-  setRpcHandler("get_rag_corpus_status", () =>
-    ragCorpusStatusFixture({ installed: disk.rag_corpus_path !== "", corpus_version: String(disk.rag_corpus_version) }),
-  );
-  setRpcHandler(
-    "remove_rag_corpus",
-    () =>
-      new Promise((resolve) => {
-        finishDelete = () => {
-          disk = { ...disk, use_local_knowledge_base: false, rag_corpus_path: "", rag_corpus_version: "" };
-          resolve({ ok: true, removed: true });
-        };
-      }),
-  );
-  rebuild = () => {
-    screens.forEach((s) => s.unmount());
-    screens = [];
-    mountScreen();
-    closeBox();
-  };
 });
 
 describe("after Remove, with the switch read from the settings hook and the box rebuilding the screen", () => {
@@ -141,7 +61,7 @@ describe("after Remove, with the switch read from the settings hook and the box 
     await waitFor(() => expect(switchIsOn()).toBe(false));
     await act(() => new Promise<void>((r) => setTimeout(r, 600)));
     expect(switchIsOn()).toBe(false);
-    expect(disk.use_local_knowledge_base).toBe(false);
+    expect(world.disk.use_local_knowledge_base).toBe(false);
   });
 
   it("reads off when the screen is rebuilt first and the delete finishes afterwards", async () => {
@@ -154,7 +74,7 @@ describe("after Remove, with the switch read from the settings hook and the box 
     await waitFor(() => expect(switchIsOn()).toBe(false));
     await act(() => new Promise<void>((r) => setTimeout(r, 600)));
     expect(switchIsOn()).toBe(false);
-    expect(disk.use_local_knowledge_base).toBe(false);
+    expect(world.disk.use_local_knowledge_base).toBe(false);
   });
 
   it("reads off when the delete finishes while the rebuilt screen is still loading its settings", async () => {
@@ -165,7 +85,7 @@ describe("after Remove, with the switch read from the settings hook and the box 
     const held = new Promise<void>((r) => (release = r));
     setRpcHandler("load_settings", async () => {
       await held;
-      return { ...disk };
+      return { ...world.disk };
     });
     act(() => rebuild());
     await finishRemoval();
@@ -174,6 +94,6 @@ describe("after Remove, with the switch read from the settings hook and the box 
     });
     await settle();
     await waitFor(() => expect(switchIsOn()).toBe(false));
-    expect(disk.use_local_knowledge_base).toBe(false);
+    expect(world.disk.use_local_knowledge_base).toBe(false);
   });
 });

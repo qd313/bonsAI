@@ -20,6 +20,7 @@
     "src/components/DrgGlossaryTermChip.placement.test.tsx",
     "src/components/DrgGlossaryTermChip.test.tsx",
     "src/components/KnowledgeBaseSection.downloadNotice.test.tsx",
+    "src/components/KnowledgeBaseSection.downloadSwitch.test.tsx",
     "src/components/KnowledgeBaseSection.httpsHost.test.tsx",
     "src/components/KnowledgeBaseSection.icons.test.tsx",
     "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",

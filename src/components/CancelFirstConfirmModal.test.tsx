@@ -8,11 +8,14 @@
  * ring going back to the control that opened the box after the screen behind it was rebuilt (unmounted and
  * mounted again while the box was open, the way closing a real Decky box does).
  *
+ * The box also follows the Text size setting: its title, words and button words are sized through textPx, so
+ * Small and Large move them (Steam's old confirm box drew a 22 px title and 16 px words at every size).
+ *
  * Does not: open a real Steam box, so where the ring lands inside the box on the Deck is the device row's job.
  */
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { act, fireEvent, render } from "@testing-library/react";
+import { act, fireEvent, render, renderHook } from "@testing-library/react";
 
 type Handlers = Record<string, unknown>;
 let modalRootCancel: (() => void) | undefined;
@@ -29,6 +32,9 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { CancelFirstConfirmModal } from "./CancelFirstConfirmModal";
+import { TEXT_SCALE, TEXT_SCALE_VAR } from "../data/chatTextSize";
+import { usePublishTextScale } from "../features/plugin-shell/usePublishTextScale";
+import { makeFontSizeReader } from "../test-harness/settledFontSize";
 import {
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
@@ -43,6 +49,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.useRealTimers();
+  document.documentElement.style.removeProperty(TEXT_SCALE_VAR);
 });
 
 function drawBox(over: Partial<React.ComponentProps<typeof CancelFirstConfirmModal>> = {}) {
@@ -111,6 +118,26 @@ describe("the shared two-button confirm box", () => {
     const red = drawBox({ actionLabel: "Remove", danger: true });
     expect(plain.buttons[1]!.getAttribute("style")).not.toBe(red.buttons[1]!.getAttribute("style"));
     expect(plain.buttons[0]!.getAttribute("style")).toBe(plain.buttons[1]!.getAttribute("style"));
+  });
+
+  it("follows the Text size setting: the title, the words and the button words are bigger on Large and smaller on Small", () => {
+    const sizes: Record<string, number[]> = {};
+    for (const size of ["small", "normal", "large"] as const) {
+      const published = renderHook(() => usePublishTextScale(size));
+      const { view, buttons } = drawBox();
+      /* No step handed in: the reader asks the elements above, up to the page's root, as the browser would. */
+      const read = makeFontSizeReader("");
+      const title = view.getByText("Clear session cache?");
+      const words = view.getByText("Clears this session from RAM.");
+      sizes[size] = [read(title), read(words), read(buttons[0]!), read(buttons[1]!)];
+      view.unmount();
+      published.unmount();
+    }
+    // Normal is today's sizes: 16 for the title, 12 for the words, 11 for the buttons.
+    expect(sizes.normal).toEqual([16, 12, 11, 11]);
+    expect(sizes.small).toEqual([16, 12, 11, 11].map((n) => n * TEXT_SCALE.small));
+    expect(sizes.large).toEqual([16, 12, 11, 11].map((n) => n * TEXT_SCALE.large));
+    expect(sizes.large![0]).toBeGreaterThan(sizes.small![0]!);
   });
 
   it("gives the ring back to the opener after the screen behind the box was rebuilt while it was open", () => {

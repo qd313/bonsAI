@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 960,
-  "edgeCount": 3206,
+  "edgeCount": 3209,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -165,8 +165,11 @@
     "src/components/CancelFirstConfirmModal.test.tsx": {
       "imports": [
         "src/components/CancelFirstConfirmModal.tsx",
+        "src/data/chatTextSize.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
-        "src/test-harness/fakeDeckyUi.tsx"
+        "src/features/plugin-shell/usePublishTextScale.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/settledFontSize.ts"
       ],
       "importedBy": []
     },
@@ -3236,6 +3239,7 @@
         "src/data/bonsaiSettingsSchema.ts"
       ],
       "importedBy": [
+        "src/components/CancelFirstConfirmModal.test.tsx",
         "src/components/steamWordsScaled.test.tsx",
         "src/components/textSizeEverywhere.test.tsx",
         "src/components/textSizeSurfaces.test.tsx",
@@ -5376,6 +5380,7 @@
         "src/features/chat-title/chatTitleStore.ts"
       ],
       "importedBy": [
+        "src/components/CancelFirstConfirmModal.test.tsx",
         "src/features/plugin-shell/usePublishTextScale.test.tsx",
         "src/index.tsx"
       ]
@@ -8915,6 +8920,7 @@
     "src/test-harness/settledFontSize.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/CancelFirstConfirmModal.test.tsx",
         "src/components/steamWordsScaled.test.tsx",
         "src/components/textSizeEverywhere.test.tsx",
         "src/components/textSizeSurfaces.test.tsx",

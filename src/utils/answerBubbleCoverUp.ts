@@ -22,8 +22,9 @@
  */
 import { readableBottomOf } from "./chatPanelScroll";
 import {
-  CUT_TOLERANCE_PX, elementIsWhollyInBandOf, elementIsWithinViewportOf, hasBoxStop, lastHiddenCoverIn, settleUpLanding,
+  CUT_TOLERANCE_PX, elementIsWhollyInBandOf, elementIsWithinViewportOf, hasBoxStop, lastHiddenCoverIn,
 } from "./answerBubbleBandGeometry";
+import { settleBoxGoingUp } from "./answerBubbleWordsUp";
 import { findLastSpoilerFenceIn, focusSpoilerFence } from "./spoilerFenceRegistry";
 import { focusAnswerStop } from "./answerStopRegistry";
 import { uiGamepadFocusElement } from "./uiDocument";
@@ -58,8 +59,10 @@ function focusCoverGoingUp(section: HTMLElement, scroll: HTMLElement | null): bo
  * so Up goes the box, then the cover:
  *
  * - a section with a box stop (`hasBoxStop`) -> the box, brought into the band from its top when that
- *   takes no more than a screen's scroll; the next Up (`coverToLandOnGoingUp`) then lands on the
- *   cover, scrolling it into view first if it still is not;
+ *   takes no more than a screen's scroll, and put back again once Steam's own glide is over
+ *   (`settleBoxGoingUp`, as for a section with no cover: on the Deck Up from the rating row left this
+ *   box's last line under the dock, plan93-QA-FREE-PLAY-01-before.json); the next Up
+ *   (`coverToLandOnGoingUp`) then lands on the cover, scrolling it into view first if it still is not;
  * - a section that is only its cover, or ends with it -> the cover (`focusCoverGoingUp`).
  *
  * False when the section holds no hidden cover, so the caller lands on the box as for any section.
@@ -68,7 +71,7 @@ export function stepUpIntoSection(section: HTMLElement, scroll: HTMLElement): bo
   if (!lastHiddenCoverIn(section)) return false;
   if (!hasBoxStop(section)) return focusCoverGoingUp(section, scroll);
   if (!focusAnswerStop(section)) return false;
-  settleUpLanding(section, scroll);
+  settleBoxGoingUp(section, scroll);
   return true;
 }
 

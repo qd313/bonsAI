@@ -133,6 +133,29 @@ export function steamGlide(
 }
 
 /**
+ * Steam's glide when the ring comes into an answer from outside it (the rating row's Up, the turn header's
+ * Down): the whole bubble scrolled "nearest" inside the pane less Steam's scroll padding (116 px at the top,
+ * 80 at the bottom). For a bubble taller than that, with its top above the screen and its bottom showing,
+ * that puts its bottom 80 px above the pane's bottom, wherever the dock is. Two Deck runs ended at exactly
+ * that scroll position, from two different starting points (plan93-M6-UP-SKIPS-PARAGRAPH.json and
+ * plan93-QA-FREE-PLAY-01-before.json: scrollTop 1137, the last section's bottom at y 349). Applied by the
+ * test after the press, before the walk's own after-glide passes run.
+ */
+export function steamBubbleGlide(bubble: HTMLElement, pane: HTMLElement, paneTop: number, paneBottom: number): void {
+  const r = bubble.getBoundingClientRect();
+  const boxTop = paneTop + STEAM_SCROLL_PADDING_TOP;
+  const boxBottom = paneBottom - STEAM_SCROLL_PADDING_BOTTOM;
+  const larger = r.bottom - r.top > boxBottom - boxTop;
+  const topOut = r.top < boxTop;
+  const bottomOut = r.bottom > boxBottom;
+  if (topOut && bottomOut) return;
+  let delta = 0;
+  if ((topOut && !larger) || (bottomOut && larger)) delta = r.top - boxTop;
+  else if (topOut || bottomOut) delta = r.bottom - boxBottom;
+  pane.scrollTop = Math.max(0, pane.scrollTop + delta);
+}
+
+/**
  * An answer inside a scroll pane, in the Deck's numbers. A box is given as [top, bottom] in the
  * answer's own coordinates (its screen y when the panel is scrolled to 0), and follows the scroll.
  */
@@ -434,6 +457,20 @@ export const TALL_416: AnswerShape = {
   covers: [[0, [647, 702]], [1, [718, 773]]],
   start: 0,
 };
+
+/**
+ * Plan 93's geo answer (plan93-M6-UP-SKIPS-PARAGRAPH.json), in page coordinates (each stop's box top plus the
+ * pane's scroll position when it was read): sections 0 to 6 are 277, 273, 273, 95, 114, 141 and 109 px tall;
+ * the 52 px covers are in sections 4, 5 and 6 (counting from 0), 22, 8 and 8 px below their section's top.
+ */
+export const GEO_ANSWER: AnswerShape = {
+  sections: [[204, 481], [481, 754], [754, 1027], [1027, 1122], [1122, 1236], [1236, 1377], [1377, 1486]],
+  covers: [[4, [1144, 1196]], [5, [1244, 1296]], [6, [1385, 1437]]],
+  start: 7,
+};
+
+/** The Deck's own screen in plan 93 (no game): the transcript box 402 tall from y 52 (page 454 high). */
+export const DECK_SCREEN = { paneTop: 52, paneBottom: 454 };
 
 /** Every Steam scroll rule the harness models, and none. */
 export const WALK_RULES: Array<SteamScrollRule | undefined> = [undefined, "top", "padded", "center"];

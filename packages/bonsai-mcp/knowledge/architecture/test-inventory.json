@@ -355,6 +355,7 @@
     "src/utils/answerBubbleNavigation.tallSectionLift.test.ts",
     "src/utils/answerBubbleNavigation.tallUpFromWord.test.ts",
     "src/utils/answerBubbleNavigation.test.ts",
+    "src/utils/answerBubbleNavigation.upEntryCoverSection.test.ts",
     "src/utils/answerBubbleNavigation.upLandingClear.test.ts",
     "src/utils/answerBubbleNavigation.walkThrough.test.ts",
     "src/utils/answerBubbleNavigation.wordMirror.test.ts",

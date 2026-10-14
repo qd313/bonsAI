@@ -21,30 +21,18 @@
  */
 import { beforeEach, describe, expect, it } from "vitest";
 import {
+  DECK_SCREEN,
+  GEO_ANSWER,
   WALK_RULES,
   deckAnswer,
   resetDeckAnswerWalk,
   shapedAnswer,
   walkAnswer,
-  type AnswerShape,
 } from "../test-harness/deckAnswerWalk";
 
 beforeEach(resetDeckAnswerWalk);
 
-/*
- * The Deck's answer in page coordinates (each stop's box top plus the pane's scroll position when it was
- * read): sections 0 to 6 are 277, 273, 273, 95, 114, 141 and 109 px tall; the covers are in sections 4, 5
- * and 6 (counting from 0), 22, 8 and 8 px below their section's top. Section 5's cover read 176 against its
- * section's 168 at the same scroll.
- */
-const GEO_ANSWER: AnswerShape = {
-  sections: [[204, 481], [481, 754], [754, 1027], [1027, 1122], [1122, 1236], [1236, 1377], [1377, 1486]],
-  covers: [[4, [1144, 1196]], [5, [1244, 1296]], [6, [1385, 1437]]],
-  start: 7,
-};
-
-/** The Deck's own screen in that run: transcript box 402 tall from y 52, the slot line (dock) at 348. */
-const DECK_SCREEN = { paneTop: 52, paneBottom: 454 };
+/** The slot line (the dock's top) in that run. */
 const DECK_DOCK = 348;
 
 describe.each(WALK_RULES)("the measured answer on the Deck's own screen, Steam scroll rule: %s", (rule) => {

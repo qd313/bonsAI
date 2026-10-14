@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 953,
-  "edgeCount": 3175,
+  "fileCount": 954,
+  "edgeCount": 3177,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -8459,6 +8459,7 @@
         "src/utils/answerBubbleNavigation.tallEntry.test.ts",
         "src/utils/answerBubbleNavigation.tallSectionLift.test.ts",
         "src/utils/answerBubbleNavigation.tallUpFromWord.test.ts",
+        "src/utils/answerBubbleNavigation.upEntryCoverSection.test.ts",
         "src/utils/answerBubbleNavigation.upLandingClear.test.ts",
         "src/utils/answerBubbleNavigation.walkThrough.test.ts",
         "src/utils/answerBubbleNavigation.wordMirror.test.ts",
@@ -9080,6 +9081,7 @@
     "src/utils/answerBubbleCoverUp.ts": {
       "imports": [
         "src/utils/answerBubbleBandGeometry.ts",
+        "src/utils/answerBubbleWordsUp.ts",
         "src/utils/answerStopRegistry.ts",
         "src/utils/chatPanelScroll.ts",
         "src/utils/spoilerFenceRegistry.ts",
@@ -9290,6 +9292,12 @@
         "src/utils/buildTurnHeaderElement.tsx"
       ]
     },
+    "src/utils/answerBubbleNavigation.upEntryCoverSection.test.ts": {
+      "imports": [
+        "src/test-harness/deckAnswerWalk.ts"
+      ],
+      "importedBy": []
+    },
     "src/utils/answerBubbleNavigation.upLandingClear.test.ts": {
       "imports": [
         "src/test-harness/deckAnswerWalk.ts"
@@ -9317,6 +9325,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/utils/answerBubbleCoverUp.ts",
         "src/utils/answerBubbleNavigation.ts"
       ]
     },

@@ -297,6 +297,7 @@
     "src/hooks/useKidsLock.test.ts",
     "src/hooks/useLocalOllamaSetupFlow.inPlace.test.tsx",
     "src/hooks/useMainTabAskBarFocus.test.ts",
+    "src/hooks/useMdnsOllamaDiscovery.wording.test.tsx",
     "src/hooks/usePermissionJump.test.ts",
     "src/hooks/usePluginSettings.readBack.test.ts",
     "src/hooks/usePluginSettings.test.ts",

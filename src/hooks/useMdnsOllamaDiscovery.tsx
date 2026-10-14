@@ -93,15 +93,8 @@ export function useMdnsOllamaDiscovery({
         strTitle="Find Ollama on LAN (mDNS)"
         strDescription={
           <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
-            <div style={{ marginBottom: 8 }}>
-              This browses your local network for services advertised as{" "}
-              <code style={{ color: "#9ce7ff" }}>_ollama._tcp</code> (Bonjour / Avahi). It does not scan IP addresses or
-              ports.
-            </div>
-            <div>
-              Stock Ollama on a PC often needs an Avahi or Bonjour publish step — see troubleshooting. You can still
-              enter a PC address manually.
-            </div>
+            This looks on your home network for an Ollama PC. It does not scan addresses or ports. If nothing shows,
+            type the PC&apos;s address yourself.
           </div>
         }
         strOKButtonText="Search"

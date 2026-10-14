@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 969,
-  "edgeCount": 3256,
+  "fileCount": 970,
+  "edgeCount": 3258,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -7238,8 +7238,16 @@
         "src/utils/deckyCall.ts"
       ],
       "importedBy": [
-        "src/components/OllamaWhereAiRunsSection.tsx"
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/hooks/useMdnsOllamaDiscovery.wording.test.tsx"
       ]
+    },
+    "src/hooks/useMdnsOllamaDiscovery.wording.test.tsx": {
+      "imports": [
+        "src/hooks/useMdnsOllamaDiscovery.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
     },
     "src/hooks/useOllamaGameContextSync.ts": {
       "imports": [
@@ -8919,6 +8927,7 @@
         "src/hooks/useDisclaimerAndLocalRuntimeGates.saveFirst.test.tsx",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.wordCount.test.tsx",
         "src/hooks/useLocalOllamaSetupFlow.inPlace.test.tsx",
+        "src/hooks/useMdnsOllamaDiscovery.wording.test.tsx",
         "src/hooks/usePullModelDeleteConfirm.safeFirst.test.tsx",
         "src/hooks/usePullModelSubmitSelected.tier2Box.test.tsx",
         "src/hooks/usePullModelTier2Confirm.safeFirst.test.tsx",

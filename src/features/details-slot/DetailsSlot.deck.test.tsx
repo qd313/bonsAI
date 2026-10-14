@@ -182,7 +182,9 @@ function snapshot(): TransparencySnapshot {
   } as unknown as TransparencySnapshot;
 }
 
-function Harness({ asking = false, prompts }: { asking?: boolean; prompts?: string[] }) {
+/** `live`: the answer is the live turn (still asking, settling, or finished before the chat's reload). */
+type LiveTurn = { text: string; asking: boolean; streaming: boolean };
+function Harness({ asking = false, prompts, live }: { asking?: boolean; prompts?: string[]; live?: LiveTurn }) {
   const expanded = "t1";
   const turn: AskThreadCollapsedTurn = { id: "t1", question: QUESTION, answer: ANSWER, transparency: snapshot() };
   const props = {
@@ -203,11 +205,19 @@ function Harness({ asking = false, prompts }: { asking?: boolean; prompts?: stri
     unifiedInputHostRef: { current: null }, unifiedInputFieldLayerRef: { current: null },
     unifiedInputMeasureRef: { current: null }, attachActionHostRef: { current: null },
     askBarHostRef: { current: null }, screenshotBrowserHostRef: { current: null },
+    ...(live
+      ? {
+          isAsking: live.asking, isStreamingPreview: live.streaming, streamDisplayText: live.streaming ? live.text : "",
+          ollamaResponse: live.text, askThreadCollapsed: [], expandedTurnKey: "live", askThreadDisplayQuestion: QUESTION,
+          lastExchange: live.asking ? null : { question: QUESTION, answer: live.text },
+          transparencySnapshot: live.asking ? null : snapshot(),
+        }
+      : {}),
   } as unknown as MainTabProps;
   return <MainTab {...props} />;
 }
 
-function renderChat(asking = false) {
+function renderChat(asking = false, live?: LiveTurn) {
   const scope = document.createElement("div");
   scope.className = "bonsai-scope";
   pane = document.createElement("div");
@@ -216,7 +226,7 @@ function renderChat(asking = false) {
   Object.defineProperty(pane, "clientHeight", { value: PANE_BOTTOM - PANE_TOP, configurable: true });
   scope.appendChild(pane);
   document.body.appendChild(scope);
-  const view = render(<Harness asking={asking} />, { container: pane });
+  const view = render(<Harness asking={asking} live={live} />, { container: pane });
   pane.querySelectorAll<HTMLElement>('[data-decky-ui="Focusable"], [data-decky-ui="TextField"]').forEach((el) => {
     if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
   });
@@ -888,5 +898,55 @@ describe("an answer finishing while the ring is on a chip", () => {
     settle(1000);
     expect(slotHolds()).toBe("line: Show details ↓");
     expect(chip.textContent).toContain("How do I get past this part?");
+  });
+});
+
+/*
+ * Plan 93 round 3 (plan93-P93-M4-ANSWER-FINISH-after-chip-D3.json): with the ring on a follow-up chip
+ * the chip now stays, but the page still jumped 324 px at the finish, in the sample where the rating
+ * buttons appeared. The finish comes in two commits: the poll's (the Ask is over, the final text and the
+ * rating row land, the reveal still settling for one frame) and the settle's. Every mover is logged from
+ * the poll's commit on, with the size watchers firing as they do on the Deck (the stand-in never fires).
+ */
+describe("an answer finishing while the ring is on a chip, size watchers live", () => {
+  it("moves the page by nothing from the poll's commit on", () => {
+    const watchers = new Set<(entries: unknown[]) => void>();
+    const StandIn = globalThis.ResizeObserver;
+    globalThis.ResizeObserver = class {
+      constructor(private cb: (entries: unknown[]) => void) {}
+      observe() { watchers.add(this.cb); }
+      unobserve() {}
+      disconnect() { watchers.delete(this.cb); }
+    } as unknown as typeof ResizeObserver;
+    try {
+      const view = renderChat(true, { text: ANSWER.slice(0, 120), asking: true, streaming: true });
+      /* The transcript runs past the dock, as a long answer does. */
+      const column = pane.querySelector<HTMLElement>(".bonsai-chat-main-column")!;
+      column.getBoundingClientRect = () => rect(100 - pane.scrollTop, 800 - pane.scrollTop);
+      const chip = slotChips().querySelector<HTMLElement>("button")!;
+      act(() => chip.focus());
+      chip.classList.add("gpfocus");
+      const step = (live: LiveTurn) => {
+        view.rerender(<Harness live={live} />);
+        act(() => watchers.forEach((cb) => cb([])));
+        settle(30);
+      };
+      step({ text: ANSWER, asking: true, streaming: true });
+      const moves: string[] = [];
+      const top = pane.scrollTop;
+      Object.defineProperty(pane, "scrollTop", { configurable: true, get: () => top, set: (v: number) => moves.push(`scrollTop=${v}`) });
+      const steamScroll = Element.prototype.scrollIntoView;
+      Element.prototype.scrollIntoView = function (this: Element, arg?: boolean | ScrollIntoViewOptions) {
+        moves.push(`scrollIntoView on ${this.className}`);
+        steamScroll.call(this, arg);
+      };
+      step({ text: ANSWER, asking: false, streaming: true }); // the poll's commit
+      step({ text: ANSWER, asking: false, streaming: false }); // the settle's
+      settle(2000);
+      expect(moves).toEqual([]);
+      expect(ring()).toBe(chip);
+    } finally {
+      globalThis.ResizeObserver = StandIn;
+    }
   });
 });

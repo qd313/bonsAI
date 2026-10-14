@@ -787,7 +787,13 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
      * waiting phrase was 21px, so the end of the transcript moves when it appears.
      */
     `${isStreamingPreview ? streamDisplayText : ollamaResponse}${liveReasoningPartial}`,
-    isAsking || isStreamingPreview,
+    /*
+     * The Ask, not the reveal: the poll that ends the Ask lands the rating row while the reveal still
+     * settles for one frame, and the follow running in that frame brought the transcript's end into
+     * view -- the page jumped 324 px with the ring on a chip (plan93-P93-M4-ANSWER-FINISH-after-chip-D3.json).
+     * At the finish the view does not move (plan 93).
+     */
+    isAsking,
   );
 
   /*

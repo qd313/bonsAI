@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1689,
+      "lines": 1695,
       "role": ""
     },
     {
@@ -76,6 +76,11 @@
       "role": ""
     },
     {
+      "path": "src/features/details-slot/DetailsSlot.deck.test.tsx",
+      "lines": 953,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
       "lines": 946,
       "role": ""
@@ -83,11 +88,6 @@
     {
       "path": "src/components/OllamaWhereAiRunsSection.tsx",
       "lines": 921,
-      "role": ""
-    },
-    {
-      "path": "src/features/details-slot/DetailsSlot.deck.test.tsx",
-      "lines": 893,
       "role": ""
     },
     {

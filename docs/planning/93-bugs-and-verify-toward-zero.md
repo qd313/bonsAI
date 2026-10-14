@@ -510,6 +510,29 @@ hardest focus piece), and the finish-flicker lane if the measurement sends it to
   for the maintainer** (all blocks under 40 words; it waits for their yes). **The maintainer's answers (10:10):**
   Text size yes (lane B5 started); the Gemma gap was another filter; the chips miss was D-pad only, maybe after
   Open all or Close all; the performance overlay is theirs and stays.
+- **10:25 to 11:35: every lane of batch 1 and 2 landed** (one at a time, the five gates and the quick check after
+  each, all green in the end). In landing order: B15 Developer help line (`f60ce2b5`), B6 note offer (`0e619d7c`), B11
+  Search tab ring (`49ba8afa`), B8 delete last chat (`1601ccc5`, `e344932b`), O4's second job, the last section clear
+  of the dock (`29bd921c`), B5 Text size on Steam-drawn words (`95e1b33c`), B1 Run AI on this Deck on by default
+  (`5397a614`, `33a50b8e`, and a one-word test fix by the session, `336861ad`: the read-back test's "changed" value had
+  to become off), B4 the nine two-button confirm boxes (`714adcbb` to `e8bb1c1a`), B10 greyed buttons, Cancel and the
+  dead handlers (to `e41330e5`), B13 Terse as the Reply style slider's first stop (`9c12ccce`, a hand-resolved clash
+  with B5 in one test file, to `a21ad0e1`), O1 Open all by Down and a strip so it covers no row (to `e43978aa`), B11's
+  stray timer (`18218632`), O3 the answer cut into sections while it writes, no redraw and no jump at the finish (to
+  `e550ca42`), B12 Refresh removed (`9679d7d7`), the bookkeeper's second sweep (`ce45abc1`) with the Deck evidence
+  (`68139788`), A1 the greyed paperclip skipped while an answer is written (`52521a85`), B9 the shorter warnings with
+  the maintainer's two edits (to `076a709e`), K1 the knowledge switch off after a remove (`a917f2fe`), B3 the starter
+  set plus the maintainer's two follow-ups (qwen2.5:3b out of Tier 1; the try order starts with the starter).
+  **Advisor consults 3** for O4 (land), O1 (land; read the panel colour first: D0 read it, #0E141B, the strip's own
+  colour) and O3 (land; judge on the Deck re-run of the finish), about 22,000, 35,000 and 50,000 tokens. **Block D0**
+  (readings, no deploy): the panel is one solid #0E141B; the ring does land on the greyed paperclip while an answer is
+  written (twice), which became lane A1. **New lanes from today's findings:** A1 (the paperclip, found by B10's truthful
+  stand-in, measured in D0), K1 (the knowledge switch stayed on after a remove, found by block C part 2; the cause was
+  the box closing rebuilding the tab before the delete finished), B11's timer. **The maintainer (11:00 to 11:30):**
+  ignore the 75 percent five-hour rule for now; the warnings approved with two edits (the Steam ban lookup line keeps
+  its old words; "grounding" replaced in the Remove knowledge base box); fix the second Qwen model and the try order
+  (done in B3). Two Windows file locks stopped a landing's commit hook (generated files); continuing the pick fixed
+  both, as in plan 87.
 
 ## 15. Questions for the maintainer (the safest choice taken meanwhile)
 
@@ -534,7 +557,7 @@ hardest focus piece), and the finish-flicker lane if the measurement sends it to
    is nine or more lines on the Deck's narrow panel. A word cap instead (about 40 words, roughly three short
    sentences)? *Meanwhile:* the lane keeps "three lines" and adds "no sentence over 15 words", and M11 measures how
    many screen lines that makes.
-8. **Disclaimers and the Permissions tab.** **Answered 2026-10-13:** yes, cut them, and the new wording is run by the
+8. **Disclaimers and the Permissions tab.** **Answered 2026-10-13; the wording approved 2026-10-14 with two edits (the ban lookup line kept; no "grounding"):** yes, cut them, and the new wording is run by the
    maintainer before it lands. The targets stand unless the maintainer says otherwise: no block over 40 words, no
    switch description over 12.
 9. **The chats menu's Down** skipping Rename chat and Save to Desktop note: it is a two-column grid by design (Down

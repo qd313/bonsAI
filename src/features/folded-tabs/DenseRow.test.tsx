@@ -23,6 +23,7 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { DenseRow, DenseSwitchRow } from "./DenseRow";
+import { wordsOf } from "../../test-harness/fakeDeckyUi";
 
 describe("a dense row", () => {
   it("a switch is Steam's ToggleField with no description; its text and name ride on the row", () => {
@@ -35,7 +36,8 @@ describe("a dense row", () => {
     const row = container.querySelector<HTMLElement>(".bonsai-dense-row--switch")!;
     expect(row.getAttribute("data-bonsai-help")).toBe("Speed mode only.");
     expect(row.getAttribute("data-bonsai-help-label")).toBe("Terse mode");
-    expect(toggleProps.current.label).toBe("Terse mode");
+    /* Steam gets the name as a scaled element (steamWordsScaled.test.tsx); its words are still the row's name. */
+    expect(wordsOf(toggleProps.current.label)).toBe("Terse mode");
     expect(toggleProps.current.description).toBeUndefined();
     expect(toggleProps.current.onMoveUp).toBe(up);
     expect(row.textContent).toContain("status");

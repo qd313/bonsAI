@@ -20,7 +20,7 @@ vi.mock("@decky/ui", async () => {
   return {
     ...real,
     ToggleField: (p: Record<string, unknown>) => {
-      if (p.label === "Terse mode") {
+      if ((real.wordsOf as (node: unknown) => string)(p.label) === "Terse mode") {
         terseNav.current = { onMoveUp: p.onMoveUp as () => boolean, onMoveDown: p.onMoveDown as () => boolean };
       }
       return <RealToggle {...p} />;

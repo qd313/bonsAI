@@ -32,6 +32,7 @@ import {
 } from "../data/steamLanguages";
 import { t as translate } from "../utils/i18n";
 import { useRevealWhileRinged } from "./AboutRevealRow";
+import { scaledSteamWords } from "./scaledSteamWords";
 
 const deckNav = (handlers: Record<string, () => boolean | void>) =>
   handlers as unknown as Record<string, unknown>;
@@ -85,7 +86,7 @@ export const AboutReplyLanguageSection: React.FC<Props> = ({
   const { open, focusProps } = useRevealWhileRinged();
 
   return (
-    <PanelSection title={sectionTitle}>
+    <PanelSection title={scaledSteamWords(sectionTitle, 16) as unknown as string}>
       <PanelSectionRow>
         <div className="bonsai-about-item" data-bonsai-about-item="language">
           <Focusable
@@ -106,6 +107,7 @@ export const AboutReplyLanguageSection: React.FC<Props> = ({
               selectedOption={selectedOption}
               onChange={(opt) => onReplyLanguageChange((opt.data as ReplyLanguageId) ?? REPLY_LANGUAGE_FOLLOW_SYSTEM)}
               strDefaultLabel={replyLanguageLabel(replyLanguage)}
+              renderButtonValue={() => scaledSteamWords(replyLanguageLabel(replyLanguage), 16)}
             />
           </Focusable>
           {open ? (

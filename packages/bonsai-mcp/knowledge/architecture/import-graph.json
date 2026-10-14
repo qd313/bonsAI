@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 954,
-  "edgeCount": 3177,
+  "fileCount": 956,
+  "edgeCount": 3191,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -37,6 +37,7 @@
     "src/components/AboutReplyLanguageSection.tsx": {
       "imports": [
         "src/components/AboutRevealRow.tsx",
+        "src/components/scaledSteamWords.tsx",
         "src/data/steamLanguages.ts",
         "src/utils/i18n.ts"
       ],
@@ -65,6 +66,7 @@
       "imports": [
         "src/components/AboutLinks.tsx",
         "src/components/AboutReplyLanguageSection.tsx",
+        "src/components/scaledSteamWords.tsx",
         "src/data/replyLanguage.ts",
         "src/i18n/keys.ts",
         "src/pluginVersion.ts",
@@ -74,6 +76,7 @@
         "src/components/AboutTab.test.tsx",
         "src/components/AboutTab.walk.test.tsx",
         "src/components/SettingsDeveloperLeftoverRing.test.tsx",
+        "src/components/steamWordsScaled.test.tsx",
         "src/features/plugin-shell/tabs/useAboutTabPayload.tsx"
       ]
     },
@@ -1856,6 +1859,7 @@
     },
     "src/components/PermissionsTab.tsx": {
       "imports": [
+        "src/components/scaledSteamWords.tsx",
         "src/data/bonsaiSettingsSchema.ts",
         "src/styles/sections/textPx.ts",
         "src/styles/settingsGlassButton.ts",
@@ -1868,6 +1872,7 @@
         "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx",
         "src/components/PermissionsTab.test.tsx",
         "src/components/SettingsDeveloperLeftoverRing.test.tsx",
+        "src/components/steamWordsScaled.test.tsx",
         "src/features/plugin-shell/tabs/usePermissionsTabPayload.tsx"
       ]
     },
@@ -2716,6 +2721,7 @@
       "imports": [
         "src/components/developerConnectionStatus.ts",
         "src/components/developerRows.tsx",
+        "src/components/scaledSteamWords.tsx",
         "src/features/folded-tabs/DenseRow.tsx",
         "src/features/folded-tabs/developerTabFolds.ts",
         "src/styles/sections/textPx.ts"
@@ -2723,7 +2729,8 @@
       "importedBy": [
         "src/components/DeveloperTab.tsx",
         "src/components/developerRowsAnimations.tsx",
-        "src/components/developerRowsLogging.tsx"
+        "src/components/developerRowsLogging.tsx",
+        "src/components/steamWordsScaled.test.tsx"
       ]
     },
     "src/components/developerRowsLogging.tsx": {
@@ -2868,6 +2875,31 @@
         "src/components/SettingsTabScreenshotHeading.test.tsx",
         "src/components/SettingsTabUiScaleHeading.test.tsx"
       ]
+    },
+    "src/components/scaledSteamWords.tsx": {
+      "imports": [
+        "src/styles/sections/textPx.ts"
+      ],
+      "importedBy": [
+        "src/components/AboutReplyLanguageSection.tsx",
+        "src/components/AboutTab.tsx",
+        "src/components/PermissionsTab.tsx",
+        "src/components/developerRowsDiagnostics.tsx",
+        "src/features/folded-tabs/DenseRow.tsx"
+      ]
+    },
+    "src/components/steamWordsScaled.test.tsx": {
+      "imports": [
+        "src/components/AboutTab.tsx",
+        "src/components/PermissionsTab.tsx",
+        "src/components/developerRowsDiagnostics.tsx",
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/data/chatTextSize.ts",
+        "src/features/folded-tabs/DenseRow.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/settledFontSize.ts"
+      ],
+      "importedBy": []
     },
     "src/components/textSizeEverywhere.test.tsx": {
       "imports": [
@@ -3070,6 +3102,7 @@
         "src/components/VoiceInputSettingsSection.tsx",
         "src/components/developerRowsAnimations.tsx",
         "src/components/developerRowsLogging.tsx",
+        "src/components/steamWordsScaled.test.tsx",
         "src/components/textSizeEverywhere.test.tsx",
         "src/components/textSizeSurfaces.test.tsx",
         "src/data/bonsaiSettingsNormalizers.ts",
@@ -3178,6 +3211,7 @@
         "src/data/bonsaiSettingsSchema.ts"
       ],
       "importedBy": [
+        "src/components/steamWordsScaled.test.tsx",
         "src/components/textSizeEverywhere.test.tsx",
         "src/components/textSizeSurfaces.test.tsx",
         "src/data/chatTextSize.test.ts",
@@ -4509,6 +4543,7 @@
     },
     "src/features/folded-tabs/DenseRow.tsx": {
       "imports": [
+        "src/components/scaledSteamWords.tsx",
         "src/features/folded-tabs/useHelpStrip.ts"
       ],
       "importedBy": [
@@ -4524,6 +4559,7 @@
         "src/components/VoiceInputSettingsSection.tsx",
         "src/components/developerRows.tsx",
         "src/components/developerRowsDiagnostics.tsx",
+        "src/components/steamWordsScaled.test.tsx",
         "src/features/folded-tabs/DenseRow.test.tsx"
       ]
     },
@@ -8301,6 +8337,7 @@
         "src/components/developerRowsAnimations.tsx",
         "src/components/developerRowsDiagnostics.tsx",
         "src/components/developerRowsLogging.tsx",
+        "src/components/scaledSteamWords.tsx",
         "src/data/pluginQuickStartInstructions.tsx",
         "src/features/chat-slots/ChatSlotDeleteModal.tsx",
         "src/features/chat-slots/ChatSlotPickerModal.tsx",
@@ -8678,6 +8715,7 @@
         "src/components/SettingsTabUiScaleSection.greyedApply.test.tsx",
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/components/earlierListNavStub.tsx",
+        "src/components/steamWordsScaled.test.tsx",
         "src/components/textSizeEverywhere.test.tsx",
         "src/components/textSizeSurfaces.test.tsx",
         "src/features/chat-slots/ChatSlotRenameModal.test.tsx",
@@ -8826,6 +8864,7 @@
     "src/test-harness/settledFontSize.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/steamWordsScaled.test.tsx",
         "src/components/textSizeEverywhere.test.tsx",
         "src/components/textSizeSurfaces.test.tsx",
         "src/features/plugin-shell/usePublishTextScale.test.tsx"

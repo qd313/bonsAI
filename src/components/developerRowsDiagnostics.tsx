@@ -17,6 +17,7 @@ import { Focusable, PanelSectionRow } from "@decky/ui";
 import { DenseSwitchRow } from "../features/folded-tabs/DenseRow";
 import { DEVELOPER_ROW_HELP, DEVELOPER_ROW_LABELS } from "../features/folded-tabs/developerTabFolds";
 import { textPx } from "../styles/sections/textPx";
+import { scaledSteamWords } from "./scaledSteamWords";
 import type { DeveloperConnectionStatus } from "./developerConnectionStatus";
 import { DevButtonRow, DevNote, type DevRow, type EdgeNav } from "./developerRows";
 
@@ -61,7 +62,7 @@ export function kbRows(args: {
           disabled={args.seedKbBusy}
           onClick={args.onInstall}
         >
-          {args.seedKbBusy ? "Installing seed knowledge base…" : "Install seed knowledge base"}
+          {scaledSteamWords(args.seedKbBusy ? "Installing seed knowledge base…" : "Install seed knowledge base", 16)}
         </DevButtonRow>
       ),
     },
@@ -159,7 +160,7 @@ export function diagnosticsRows(args: {
       stop: true,
       render: (nav) => (
         <DevButtonRow label={DEVELOPER_ROW_LABELS.steamInput} help={DEVELOPER_ROW_HELP.steamInput} nav={nav} onClick={jump}>
-          Jump to Steam Input (running game)
+          {scaledSteamWords("Jump to Steam Input (running game)", 16)}
         </DevButtonRow>
       ),
     });

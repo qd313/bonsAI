@@ -34,9 +34,9 @@ vi.mock("@decky/ui", async () => {
   // A switch the walk can stand on: a real focusable button carrying the label, props captured.
   const CapturingToggle = (props: Record<string, unknown>) => {
     React.useLayoutEffect(() => {
-      hoisted.props.set(props.label as string, props);
+      hoisted.props.set(stubs.wordsOf(props.label), props);
     });
-    return <button aria-label={props.label as string}>{props.label as string}</button>;
+    return <button aria-label={stubs.wordsOf(props.label)}>{stubs.wordsOf(props.label)}</button>;
   };
   return { ...stubs, Button: CapturingButton, ToggleField: CapturingToggle };
 });

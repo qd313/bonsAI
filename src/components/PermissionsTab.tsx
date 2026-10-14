@@ -44,6 +44,7 @@ import {
 import type { NavRefHolder } from "../utils/navFocusRegistry";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 import { textPx } from "../styles/sections/textPx";
+import { scaledSteamWords } from "./scaledSteamWords";
 
 type Props = {
   capabilities: BonsaiCapabilities;
@@ -173,7 +174,7 @@ export const PermissionsTab: React.FC<Props> = ({
 
   return (
     <>
-      <PanelSection title="Permissions">
+      <PanelSection title={scaledSteamWords("Permissions", 16) as unknown as string}>
         {showBack ? (
           <PanelSectionRow>
             <Button
@@ -206,8 +207,11 @@ export const PermissionsTab: React.FC<Props> = ({
         <PanelSectionRow>
           <PermissionToggleHost focusId="game_context_read">
             <ToggleField
-              label="Read game & screenshot context"
-              description="Lets bonsAI attach Steam screenshots and, on troubleshooting Asks, auto-attach local game/Proton log excerpts. One permission for screenshots and logs."
+              label={scaledSteamWords("Read game & screenshot context", 16)}
+              description={scaledSteamWords(
+                "Lets bonsAI attach Steam screenshots and, on troubleshooting Asks, auto-attach local game/Proton log excerpts. One permission for screenshots and logs.",
+                12,
+              )}
               checked={kidsLockActive ? false : gameContextReadEnabled(capabilities)}
               disabled={kidsLockActive}
               onChange={(checked) => {
@@ -225,8 +229,8 @@ export const PermissionsTab: React.FC<Props> = ({
           <PanelSectionRow key={row.key}>
             <PermissionToggleHost focusId={row.focusId}>
               <ToggleField
-                label={row.title}
-                description={row.description}
+                label={scaledSteamWords(row.title, 16)}
+                description={scaledSteamWords(row.description, 12)}
                 checked={kidsLockActive ? false : capabilities[row.key]}
                 disabled={kidsLockActive}
                 onChange={(checked) => {

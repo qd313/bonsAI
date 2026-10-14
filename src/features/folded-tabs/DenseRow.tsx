@@ -21,6 +21,7 @@
 import React from "react";
 import { ToggleField } from "@decky/ui";
 
+import { scaledSteamWords } from "../../components/scaledSteamWords";
 import { helpAttributes } from "./useHelpStrip";
 
 export type DenseRowKind = "switch" | "choice" | "slider" | "button";
@@ -57,7 +58,10 @@ export type DenseSwitchRowProps = {
   children?: React.ReactNode;
 };
 
-/** A switch: Steam's ToggleField with no description, its text on the row for the strip. */
+/**
+ * A switch: Steam's ToggleField with no description, its text on the row for the strip. The name is handed to
+ * Steam as a scaled element (16, Steam's own size) so it follows Text size; the plain `label` stays on the row.
+ */
 export function DenseSwitchRow({
   label,
   help,
@@ -70,7 +74,7 @@ export function DenseSwitchRow({
 }: DenseSwitchRowProps): React.ReactElement {
   return (
     <DenseRow kind="switch" label={label} help={help} hostRef={hostRef}>
-      <ToggleField label={label} checked={checked} disabled={disabled} onChange={onChange} {...(nav ?? {})} />
+      <ToggleField label={scaledSteamWords(label, 16)} checked={checked} disabled={disabled} onChange={onChange} {...(nav ?? {})} />
       {children}
     </DenseRow>
   );

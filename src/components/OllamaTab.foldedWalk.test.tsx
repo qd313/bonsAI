@@ -23,7 +23,7 @@ vi.mock("@decky/ui", async () => {
   /* Steam's switch row: a stop of its own that keeps the move handlers it is given, as Decky's ToggleField does. */
   const ToggleField = (p: Record<string, unknown>) => {
     const { label, checked: _checked, onChange: _onChange, description: _d, disabled: _x, ...rest } = p;
-    return <SteamRingFocusable {...rest} focusable aria-label={String(label)} data-decky-ui="ToggleField" />;
+    return <SteamRingFocusable {...rest} focusable aria-label={stubs.wordsOf(label)} data-decky-ui="ToggleField" />;
   };
   return { ...stubs, Focusable: SteamRingFocusable, ToggleField };
 });

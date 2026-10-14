@@ -24,6 +24,7 @@ import React from "react";
 import { PanelSection, PanelSectionRow } from "@decky/ui";
 import { AboutLinks } from "./AboutLinks";
 import { AboutReplyLanguageSection } from "./AboutReplyLanguageSection";
+import { scaledSteamWords } from "./scaledSteamWords";
 import type { ReplyLanguageId } from "../data/replyLanguage";
 import type { UiStringKey } from "../i18n/keys";
 import { PLUGIN_VERSION } from "../pluginVersion";
@@ -45,13 +46,13 @@ type Props = {
  *
  * Decky types a section's title as text only, but Steam draws it as the first child of its title element, so a
  * node there keeps Steam's own title look (size, weight, capitals, colour) with nothing measured or guessed on
- * our side; only the version span undoes the capitals and takes the quieter description colour
+ * our side (the words themselves are a span sized by the Text size step, scaledSteamWords.tsx); only the version span undoes the capitals and takes the quieter description colour
  * (aboutTab.ts, `.bonsai-about-title-version`). If a Steam build ever refuses a node, the Deck check shows the
  * title missing and the fallback is to draw this line ourselves.
  */
 const ABOUT_TITLE_LINE = (
   <>
-    About bonsAI
+    {scaledSteamWords("About bonsAI", 16)}
     <span className="bonsai-about-title-version" data-bonsai-about-version="">
       Version {PLUGIN_VERSION}
     </span>
@@ -110,7 +111,7 @@ export const AboutTab: React.FC<Props> = ({
         onMoveDown={() => takeNavFocus("about-links")}
       />
 
-      <PanelSection title="Links">
+      <PanelSection title={scaledSteamWords("Links", 16) as unknown as string}>
         <PanelSectionRow>
           <AboutLinks githubRepoUrl={githubRepoUrl} ollamaRepoUrl={ollamaRepoUrl} githubIssuesUrl={githubIssuesUrl} />
         </PanelSectionRow>

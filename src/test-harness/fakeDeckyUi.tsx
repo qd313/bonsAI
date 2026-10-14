@@ -100,7 +100,29 @@ function focusableButtonStub(name: string) {
 export const PanelSection = stub("PanelSection");
 export const PanelSectionRow = stub("PanelSectionRow");
 export const TextField = stub("TextField");
-export const ToggleField = stub("ToggleField");
+/** The words inside a node, as the plain text a person reads (a string stays itself). */
+export function wordsOf(node: unknown): string {
+  if (node === null || node === undefined || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(wordsOf).join("");
+  return wordsOf((node as { props?: { children?: unknown } }).props?.children);
+}
+
+/**
+ * Steam's switch takes its name and description as nodes (the plugin hands them over as spans it sizes
+ * itself, so Text size reaches them). The generic stub would print such a node as `[object Object]` in
+ * the `label` and `description` attributes that tests look a switch up by, so those two attributes carry
+ * the plain words. A test that wants the element itself wraps this stub and reads the props it is
+ * handed (src/components/steamWordsScaled.test.tsx does).
+ */
+const ToggleFieldBase = stub("ToggleField");
+export const ToggleField = React.forwardRef<HTMLDivElement, StubProps>(function ToggleFieldStub(props, ref) {
+  const { label, description, ...rest } = props;
+  const out: StubProps = { ...rest };
+  if (label !== undefined) out.label = wordsOf(label);
+  if (description !== undefined) out.description = wordsOf(description);
+  return <ToggleFieldBase ref={ref} {...out} />;
+});
 export const Button = focusableButtonStub("Button");
 export const ButtonItem = focusableButtonStub("ButtonItem");
 export const Focusable = stub("Focusable");

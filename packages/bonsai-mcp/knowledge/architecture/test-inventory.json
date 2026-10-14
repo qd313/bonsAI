@@ -162,6 +162,7 @@
     "src/components/icons.bonsaiGeometry.test.tsx",
     "src/components/icons.tabStroke.test.tsx",
     "src/components/pullModelsBeside.test.ts",
+    "src/components/steamWordsScaled.test.tsx",
     "src/components/textSizeEverywhere.test.tsx",
     "src/components/textSizeScan.test.ts",
     "src/components/textSizeSurfaces.test.tsx",

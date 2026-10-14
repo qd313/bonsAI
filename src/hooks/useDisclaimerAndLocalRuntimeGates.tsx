@@ -25,7 +25,6 @@
  */
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { showModal, ConfirmModal } from "@decky/ui";
-import { TIER1_ESSENTIALS_TAG } from "../data/deckEssentialsTags";
 
 const DISCLAIMER_STORAGE_KEY = "bonsai:disclaimer-accepted";
 const LOCAL_RUNTIME_BETA_DISMISSED_STORAGE_KEY = "bonsai:local-runtime-beta-dismissed-v1";
@@ -38,34 +37,24 @@ export type DeckyModalSurvivalHooks = {
   onCompleteDeckyModalClose: (close: () => void) => void;
 };
 
-/** Full local-runtime banner text (one-time when Ollama on Deck is enabled). */
+/**
+ * The one-time notice when Run AI on this Deck is turned on (plan 93 lane B9: no more than 40 words).
+ * It names no model: the starter set is described where it is offered, on the Ollama tab.
+ */
 export function localRuntimeBetaNoticeDescription(): string {
   return (
-    "You are using Ollama on this device (local runtime).\n\n" +
-    "If you have another PC on your LAN that can host Ollama, that path is typically much faster than on-device inference.\n\n" +
-    "Heavy local AI while a game has high VRAM / graphics load may crash the game or cause unstable behavior from memory pressure — " +
-    "use at your own risk. This path is beta: screenshots and attachments use vision-capable models where available; Expert and heavier models can add delay.\n\n" +
-    "Speed (Fast) is the default for quick answers. Use Strategy when you need branching choices. Expert is heavier and slower.\n\n" +
-    `Default pull: ${TIER1_ESSENTIALS_TAG} (one small model for chat and screenshots). ` +
-    "On the Ollama tab, under Where AI runs, Install Ollama offers the starter model; Browse models has others, including a bigger all-in-one model (Gemma 4).\n\n" +
-    "You can turn off Run AI on this Deck on the Ollama tab if you prefer a LAN host."
+    "AI runs on this Deck. A PC on your home network is usually much faster. " +
+    "Heavy AI during a game can crash it: use at your own risk. " +
+    "To stop, turn off Run AI on this Deck (Ollama tab)."
   );
 }
 
-/** Shared copy for the global beta banner (first run and replay after clearing plugin data). */
+/** Shared copy for the global beta banner (first run and replay after clearing plugin data); plan 93 lane B9: no more than 40 words. */
 const BONSAI_BETA_NOTICE_DESCRIPTION =
-  "Welcome to bonsAI!\n\n" +
-  "This plugin is currently in beta. Some features may not work as expected, " +
-  "and answers come from an AI, so they can be wrong. " +
-  "Check anything important before relying on it.\n\n" +
-  "Use at your own risk.\n\n" +
-  "If you have another PC on your LAN that can host Ollama, that path is typically much faster than inference on-device.\n\n" +
-  "Running heavy local AI while a game has high VRAM / graphics load may crash the game or cause unstable behavior " +
-  "from memory pressure — use at your own risk.\n\n" +
-  "To report bugs or request features, visit:\n" +
-  GITHUB_ISSUES_URL +
-  "\n\n" +
-  "By continuing, you acknowledge this is experimental software.";
+  "Welcome to bonsAI! This plugin is in beta, and its AI can be wrong, so check anything important. " +
+  "Heavy AI on the Deck can crash a game. Use at your own risk.\n\n" +
+  "Report bugs at " +
+  GITHUB_ISSUES_URL;
 
 function hasAcceptedDisclaimer(): boolean {
   try {

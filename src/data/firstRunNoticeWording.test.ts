@@ -22,10 +22,16 @@ describe("first-run notice wording", () => {
     expect(gates).not.toMatch(/Adjust power limits/i);
   });
 
-  it("local-runtime notice names the Ollama tab and Where AI runs", () => {
+  it("local-runtime notice names the Ollama tab and the real switch", () => {
     expect(gates).not.toMatch(/Under Connection/);
     expect(gates).not.toMatch(/Ollama on Deck in Settings/);
-    expect(gates).toMatch(/under Where AI runs/);
-    expect(gates).toMatch(/Run AI on this Deck on the Ollama tab/);
+    // Plan 93 lane B9 cut the notice to 40 words: it points at the switch and the tab, no section.
+    expect(gates).toMatch(/turn off Run AI on this Deck \(Ollama tab\)/);
+  });
+
+  it("no first-run notice names the old starter model or its old size", () => {
+    expect(gates).not.toMatch(/qwen2\.5vl/i);
+    expect(gates).not.toMatch(/3–4 GiB/);
+    expect(gates).not.toMatch(/TIER1_ESSENTIALS_TAG/);
   });
 });

@@ -30,15 +30,12 @@ const OLLAMA_MODELS_DISK_HINT =
 const LOCAL_SETUP_TIER1_DOWNLOAD_SIZE = "about 4.5 GiB";
 const LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB = `Rough download: ${LOCAL_SETUP_TIER1_DOWNLOAD_SIZE} in all (the answer model, the note-search model and the speech models).`;
 
+/** The time, awake and power hint under a download box (plan 93 lane B9: 22 words, was 48). */
 const LOCAL_SETUP_NETWORK_AND_POWER_HINT = (
-  <>
-    <div style={{ marginBottom: 8 }}>
-      Total time depends heavily on <span style={{ color: "#9ce7ff" }}>Wi‑Fi speed and disk</span>. You may close the
-      bonsAI plugin while downloads run as long as Ollama stays up; <span style={{ fontWeight: 700 }}>avoid</span>{" "}
-      suspending the Steam Deck, restarting, toggling network off, or powering down until pulls finish.
-    </div>
-    <div>Use AC power where possible for long Tier‑1 batches.</div>
-  </>
+  <div>
+    Downloads can take a while. Keep Ollama running and the Deck awake and online until they finish. Plug in if you
+    can.
+  </div>
 );
 
 export {

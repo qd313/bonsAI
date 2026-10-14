@@ -109,6 +109,7 @@
     "src/components/OllamaTab.terseMode.test.tsx",
     "src/components/OllamaThinkingEffortRow.test.tsx",
     "src/components/OllamaWhereAiRunsSection.constants.test.tsx",
+    "src/components/OllamaWhereAiRunsSection.constants.wording.test.tsx",
     "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
     "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
     "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",

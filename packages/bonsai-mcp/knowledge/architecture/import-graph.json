@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 972,
-  "edgeCount": 3264,
+  "fileCount": 973,
+  "edgeCount": 3266,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1742,11 +1742,19 @@
       "imports": [],
       "importedBy": [
         "src/components/OllamaWhereAiRunsSection.constants.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.constants.wording.test.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/hooks/localOllamaStarterSet.tsx",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/useMdnsOllamaDiscovery.tsx"
       ]
+    },
+    "src/components/OllamaWhereAiRunsSection.constants.wording.test.tsx": {
+      "imports": [
+        "src/components/OllamaWhereAiRunsSection.constants.tsx",
+        "src/hooks/localOllamaStarterSet.tsx"
+      ],
+      "importedBy": []
     },
     "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx": {
       "imports": [
@@ -6689,6 +6697,7 @@
         "src/utils/deckyCall.ts"
       ],
       "importedBy": [
+        "src/components/OllamaWhereAiRunsSection.constants.wording.test.tsx",
         "src/components/PullModelsStarterSetChip.tsx",
         "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/useLocalOllamaSetupFlow.tsx"

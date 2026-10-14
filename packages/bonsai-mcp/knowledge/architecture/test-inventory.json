@@ -90,6 +90,7 @@
     "src/components/MainTabUnifiedAskBar.boxDown.test.tsx",
     "src/components/MainTabUnifiedAskBar.boxRing.test.tsx",
     "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
+    "src/components/MainTabUnifiedAskBar.hint.test.tsx",
     "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
     "src/components/MainTabUnifiedAskBar.noSettingsCard.test.tsx",
     "src/components/MainTabUnifiedAskBar.stopRing.test.tsx",

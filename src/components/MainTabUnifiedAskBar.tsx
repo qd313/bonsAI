@@ -135,6 +135,7 @@ import {
   type NavRefHolder,
 } from "../utils/navFocusRegistry";
 import { textPx } from "../styles/sections/textPx";
+import { ASK_MODE_HINTS } from "../data/askModeHints";
 
 // The prop type lives in MainTabUnifiedAskBar.types.ts now; re-exported here so nothing
 // that imports it from this file (tests included) needs to change.
@@ -328,11 +329,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
         value={unifiedInput}
         spellCheck={false}
         {...({ multiline: true, rows: 3 } as unknown as Record<string, unknown>)}
-        {...(askMode === "strategy"
-          ? ({
-              placeholder: "Describe the level, boss, or puzzle you're stuck on.",
-            } as Record<string, unknown>)
-          : {})}
+        {...({ placeholder: ASK_MODE_HINTS[askMode] } as Record<string, unknown>)}
         /* Down lands on the small Ask button in the strip under the box, or Stop while an answer is being
            written (plan 84, useMainTabAskBarFocus.ts; docs/focus-graph.md, "The ask box's strip"). */
         {...unifiedInputDeckNavHandlers}
@@ -393,13 +390,13 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             fontSize: textPx(UNIFIED_TEXT_FONT_PX),
           }}
         >
-          {!unifiedInput.trim() && askMode === "strategy" ? (
+          {!unifiedInput.trim() ? (
             <>
               {isUnifiedInputFocused && (
                 <span className="bonsai-unified-input-fake-caret bonsai-unified-input-fake-caret--before-hint" aria-hidden />
               )}
               <span className="bonsai-unified-input-strategy-placeholder">
-                Describe the level, boss, or puzzle you're stuck on.
+                {ASK_MODE_HINTS[askMode]}
               </span>
             </>
           ) : (

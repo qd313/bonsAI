@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 947,
-  "edgeCount": 3137,
+  "fileCount": 949,
+  "edgeCount": 3143,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1370,6 +1370,15 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabUnifiedAskBar.hint.test.tsx": {
+      "imports": [
+        "src/components/MainTabUnifiedAskBar.tsx",
+        "src/data/askMode.ts",
+        "src/data/askModeHints.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx": {
       "imports": [
         "src/components/MainTabUnifiedAskBar.tsx",
@@ -1412,6 +1421,7 @@
         "src/components/PermissionDenyAction.tsx",
         "src/components/icons.tsx",
         "src/data/askMode.ts",
+        "src/data/askModeHints.ts",
         "src/features/unified-input/constants.ts",
         "src/hooks/useAskBarInitialRingClaim.ts",
         "src/hooks/useAskBarMenuToggles.ts",
@@ -1429,6 +1439,7 @@
         "src/components/MainTabUnifiedAskBar.boxDown.test.tsx",
         "src/components/MainTabUnifiedAskBar.boxRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
+        "src/components/MainTabUnifiedAskBar.hint.test.tsx",
         "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
         "src/components/MainTabUnifiedAskBar.noSettingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.stopRing.test.tsx",
@@ -2950,8 +2961,10 @@
         "src/components/MainTabAskModeMenuPopover.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabPresetRow.tsx",
+        "src/components/MainTabUnifiedAskBar.hint.test.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/MainTabUnifiedAskBar.types.ts",
+        "src/data/askModeHints.ts",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
         "src/data/presets.ts",
@@ -2961,6 +2974,15 @@
         "src/features/preset-carousel/sessionRagComposer.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/types/backgroundAsk.ts"
+      ]
+    },
+    "src/data/askModeHints.ts": {
+      "imports": [
+        "src/data/askMode.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabUnifiedAskBar.hint.test.tsx",
+        "src/components/MainTabUnifiedAskBar.tsx"
       ]
     },
     "src/data/askThinkEffort.test.ts": {
@@ -8543,6 +8565,7 @@
         "src/components/MainTabUnifiedAskBar.boxDown.test.tsx",
         "src/components/MainTabUnifiedAskBar.boxRing.test.tsx",
         "src/components/MainTabUnifiedAskBar.cornerRing.test.tsx",
+        "src/components/MainTabUnifiedAskBar.hint.test.tsx",
         "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
         "src/components/MainTabUnifiedAskBar.noSettingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.stopRing.test.tsx",

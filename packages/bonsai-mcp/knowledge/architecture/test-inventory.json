@@ -110,6 +110,7 @@
     "src/components/OllamaTab.modalReturnFocus.test.tsx",
     "src/components/OllamaTab.terseMode.test.tsx",
     "src/components/OllamaThinkingEffortRow.test.tsx",
+    "src/components/OllamaWhereAiRunsSection.cancelRing.test.tsx",
     "src/components/OllamaWhereAiRunsSection.constants.test.tsx",
     "src/components/OllamaWhereAiRunsSection.constants.wording.test.tsx",
     "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",

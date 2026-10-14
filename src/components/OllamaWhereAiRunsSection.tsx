@@ -122,6 +122,8 @@ import {
   LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
 } from "./OllamaWhereAiRunsSection.constants";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
+import { useHandRingOnGone } from "../hooks/useHandRingOnGone";
+import { elementHasGamepadFocus } from "../utils/uiDocument";
 import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
 import { textPx } from "../styles/sections/textPx";
 import { DenseSwitchRow } from "../features/folded-tabs/DenseRow";
@@ -250,6 +252,23 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   const testConnectionGreyed = connectionTesting || localSetupBusy || (!ollamaLocalOnDeck && !ollamaIp.trim());
 
   const focusInstallUpdateBtn = useCallback((): boolean => focusChainBtn(installUpdateBtnRef, false), [focusChainBtn]);
+
+  /*
+   * Cancel is taken away when the run ends (cancelled, finished or failed). With the ring on it, nothing
+   * held the ring afterwards until the next Down (Deck, 2026-10-14, plan93-P93-B10-CANCEL.json). The ring
+   * goes to the Update / Install button: Steam's own transfer onto its row first, then the button's own
+   * focus if that did not land it.
+   */
+  const updateRowNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
+  const cancelRowRef = useHandRingOnGone(() => {
+    try {
+      updateRowNavRef.current?.TakeFocus?.(true);
+    } catch {
+      /* the check below decides */
+    }
+    const update = installUpdateBtnRef.current;
+    if (!elementHasGamepadFocus(update)) focusInstallUpdateBtn();
+  });
   const focusBrowseModelsBtn = useCallback(
     (): boolean => focusChainBtn(browseModelsBtnRef, localSetupBusy),
     [focusChainBtn, localSetupBusy],
@@ -517,6 +536,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                 flow-children="horizontal"
                 style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}
                 {...focusableMoves(() => focusAutostartToggle(), () => focusBrowseModelsBtn() || focusCancelSetupBtn())}
+                {...({ navRef: updateRowNavRef } as Record<string, unknown>)}
                 {...helpAttributes(
                   ollamaEngineReady ? "Update AI & models" : "Install Ollama",
                   localSetupBusy ? OLLAMA_ROW_HELP.setupBusy : ollamaEngineReady ? undefined : OLLAMA_ROW_HELP.setupFirstTime,
@@ -611,6 +631,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                   flow-children="horizontal"
                   style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}
                   {...focusableMoves(() => focusInstallUpdateBtn() || focusAutostartToggle(), () => moveDownToTestOrOn())}
+                  ref={cancelRowRef}
                 >
                   <Button
                     className={FOCUS_RING_BTN_CLASS}

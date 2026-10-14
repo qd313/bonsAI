@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 976,
-  "edgeCount": 3284,
+  "fileCount": 977,
+  "edgeCount": 3290,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1757,6 +1757,15 @@
         "src/components/OllamaThinkingEffortRow.test.tsx"
       ]
     },
+    "src/components/OllamaWhereAiRunsSection.cancelRing.test.tsx": {
+      "imports": [
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/features/plugin-shell/settingsLoadedSignal.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/OllamaWhereAiRunsSection.constants.test.tsx": {
       "imports": [
         "src/components/OllamaWhereAiRunsSection.constants.tsx"
@@ -1866,6 +1875,7 @@
         "src/features/plugin-shell/developerTabSignal.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/plugin-shell/useTabBodyFocusScroll.ts",
+        "src/hooks/useHandRingOnGone.ts",
         "src/hooks/useLocalOllamaSetupFlow.tsx",
         "src/hooks/useMdnsOllamaDiscovery.tsx",
         "src/hooks/useOllamaLocalAutostart.ts",
@@ -1875,11 +1885,13 @@
         "src/utils/deckyCall.ts",
         "src/utils/ollamaAddress.ts",
         "src/utils/ollamaTabLocalSurvival.ts",
-        "src/utils/settingsPanelScroll.ts"
+        "src/utils/settingsPanelScroll.ts",
+        "src/utils/uiDocument.ts"
       ],
       "importedBy": [
         "src/components/OllamaFindLanHidden.test.tsx",
         "src/components/OllamaTab.tsx",
+        "src/components/OllamaWhereAiRunsSection.cancelRing.test.tsx",
         "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
         "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
@@ -5184,6 +5196,7 @@
       "imports": [],
       "importedBy": [
         "src/components/OllamaFindLanHidden.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.cancelRing.test.tsx",
         "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
         "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
@@ -7171,6 +7184,7 @@
       ],
       "importedBy": [
         "src/components/KnowledgeBaseSection.tsx",
+        "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/SettingsTabAccentIntensityMenuPopover.tsx"
       ]
     },
@@ -8778,6 +8792,7 @@
         "src/components/MainTabPresetRow.test.tsx",
         "src/components/OllamaFindLanHidden.test.tsx",
         "src/components/OllamaModelsHubModal.renderLoop.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.cancelRing.test.tsx",
         "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.httpsAddress.test.tsx",
         "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
@@ -8915,6 +8930,7 @@
         "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
         "src/components/OllamaTab.foldedWalk.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.cancelRing.test.tsx",
         "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
@@ -11739,6 +11755,7 @@
         "src/components/MainTabInjectChipFocus.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
+        "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/SettingsTabCharacterSection.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.deckPlace.test.tsx",

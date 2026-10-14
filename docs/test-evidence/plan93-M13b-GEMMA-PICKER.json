@@ -1,0 +1,25 @@
+{
+ "row": "P93-M13b-GEMMA-PICKER",
+ "machine": "deck (real Steam Deck, 192.168.86.52)",
+ "build_commit": "same build as plan 93 blocks A and B1 (repo tip 06d1ab6e per handover A; no deploy or reload this block)",
+ "deck_time_local": "2026-10-14 09:01-09:04 EDT",
+ "screen": "Deck's own screen: Quick Access page 854x454, modal page 854x534",
+ "setup": "Test chat 'What is the fastest way to earn geo early in Hollow Knight' open (chat 1 of 2). Policy key model_policy_tier found = open_weight (label 'Also try open-weight models').",
+ "pressed": "Ollama tab > AI models section (A to unfold) > AI models... button (A) > in the model screen DOWN x3 to licence radio 'Open source only (recommended)', read focus, A. Then walked to Done, A. Later Show details on Main tab > chip 'Routed gemma4:e2b-it-qat' (A once). Put back: same route, radio 'Also try open-weight models', Done.",
+ "seen": {
+  "pickers_found": "Only one list of installed/offered models exists: the AI models screen (list rows + the Text try-order). The Ollama tab has no separate model row or try-order list outside that screen. The Model chip under Show details is the chip 'Routed gemma4:e2b-it-qat'; pressing A on it opens a small card 'Model source policy' with one line (the same name). It is not a list.",
+  "policy_as_found_open_weight": ["gemma4:e2b-it-qat (FOSS, try order 1)", "qwen3.5:4b (FOSS)", "qwen2.5vl:3b (Qwen Research)", "also under 'other installed': nomic-embed-text:latest"],
+  "policy_open_source_only": ["gemma4:e2b-it-qat (FOSS, try order 1, up/down arrows shown)", "qwen3.5:4b (FOSS)", "qwen2.5vl:3b (Qwen Research, the vision model)", "also under 'other installed': nomic-embed-text:latest"],
+  "gemma_offered_under_open_source_only": true,
+  "qwen_vision_offered_under_open_source_only": true,
+  "models_match_count": "4 in both states",
+  "settings_file_after_change": "model_policy_tier = open_source_only after Done",
+  "settings_file_after_restore": "model_policy_tier = open_weight (confirmed true)",
+  "not_checked": "The Pictures try-order list was not opened (only the Text list read)."
+ },
+ "expected": "Gemma tag offered in every picker under 'Open source only'.",
+ "verdict": "PASS - the Gemma tag is offered in the AI models list and the try order with 'Open source only' picked, and the Model chip names it. The maintainer's miss did not reproduce.",
+ "verdict_pictures_list": "UNCLEAR - Pictures try-order list not opened.",
+ "side_effect": "Changed model_policy_tier open_weight -> open_source_only -> open_weight (restored, confirmed). Pressing Done may have re-saved the try-order, content unchanged as far as read.",
+ "screenshots": ["plan93-M13b-GEMMA-PICKER-ai-models-as-found.png","plan93-M13b-GEMMA-PICKER-ai-models-open-source-only.png","plan93-M13b-GEMMA-PICKER-model-chip.png"]
+}

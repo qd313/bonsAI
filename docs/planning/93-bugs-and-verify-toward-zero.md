@@ -464,6 +464,26 @@ hardest focus piece), and the finish-flicker lane if the measurement sends it to
     Ask. B on the question box sends the ring to the tab bar; it does not close the panel.
   The Deck as left: plugin open on Main in the test chat, Speed, Terse on, the Deck's AI loaded (11.6 GB free), no
   game; the settings changed (the Ask mode, the Terse switch) put back and confirmed in the file.
+- **2026-10-14 08:41 to 09:40 (the morning chat, Opus 5.5 extra-high, the shared checkout):** the week read 97 percent
+  until its reset at 09:00, then 0 (the five-hour window 2). The full baseline passed at `6c616276` (all sets, 239 s).
+  The bookkeeper's sweep of blocks A and B1 landed (`76c0125d`: eleven entries noted, the Terse bug closed to Done
+  on its measurement). **Block B2 done** (driver on the Deck 09:00 to 09:15; keep-awake to 17:00 local):
+  - **The Gemma model in the model picker: PASS.** The only picker is the AI models screen; with "Open source only"
+    the Gemma tag is offered (try order 1), and so is qwen2.5vl. The maintainer's sighting did not reproduce in the
+    catalog or the picker: **no lane (B2 dropped)**; the maintainer is asked how they saw it. Evidence
+    `plan93-M13b-GEMMA-PICKER.json`.
+  - **The Search tab ring: PASS on 48 of 48 readings**, but the rig cannot press a word within half a second of B, so
+    the suspected race was not tried. The code holds a fallback to a plain focus Steam's ring does not follow: a
+    small defensive lane (B11, Sonnet high), proven by its test. Evidence `plan93-M5-SEARCH-RING.json`.
+  - **Text size: every fixed word is Steam-drawn** (switch labels and descriptions, Steam buttons, About's titles and
+    dropdown); Permissions is the worst tab (11 fixed, 2 scaled). Lane B5 waits for question 12a. Evidence
+    `plan93-M10-TEXT-SIZE-STEAM-WORDS.json` and 21 raw files.
+  **Lane changes:** a file lookup found B7 (dead handlers) and B10 (greyed buttons) edit the same Ollama-tab
+  buttons, so **B7 is folded into B10** (one Sonnet high helper, in order). B9 leaves the two confirm boxes' words
+  until B4 lands. B12 waits for B4. Copies cut for every lane at `6c616276`; the rig's two bugs (lane R) started at
+  09:14 in a separate copy of the rig's repo (its running tool server is not rebuilt mid-session). Block C part 1
+  (the walks on the Deck's own screen, the 24 settings pages, the free-play sweep) started at 09:35. Advisor consult 1
+  (the briefs read for contradictions) running.
 
 ## 15. Questions for the maintainer (the safest choice taken meanwhile)
 

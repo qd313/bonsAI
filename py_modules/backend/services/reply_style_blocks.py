@@ -44,13 +44,13 @@ def user_asks_for_detail_depth(question: str) -> bool:
     return any(n in q for n in DEPTH_PHRASES)
 
 
-def terse_mode_applies(terse_mode: object, ask_mode: str) -> bool:
-    """True when the Terse mode setting is really on AND the question is a Speed one.
+def terse_reply_applies(reply_verbosity: object) -> bool:
+    """True when the Reply style slider is on its Terse stop (plan 93).
 
-    Strategy and Expert are never affected. Only a literal ``True`` counts, the same rule the
-    saved setting follows, so a stray truthy value cannot shorten anyone's answers.
+    Terse is a stop on the slider, not an Ask mode, so it applies in Speed, Strategy and Expert
+    alike. Only the exact saved id counts, so a stray value cannot shorten anyone's answers.
     """
-    return terse_mode is True and ask_mode == "speed"
+    return reply_verbosity == "terse"
 
 
 from backend.services.reply_language_service import language_display_name
@@ -73,26 +73,34 @@ def build_reply_language_block(reply_language: str) -> str:
     )
 
 
-def build_terse_reply_block(question: str, *, character_roleplay_on: bool = False) -> str:
-    """Terse mode for a Speed question: three lines, then a menu of ways to go deeper.
+def build_terse_reply_block(
+    question: str, *, character_roleplay_on: bool = False, ask_mode: str = "speed"
+) -> str:
+    """The Terse stop: three lines, then a menu of ways to go deeper, in any Ask mode.
 
     Wording only. Nothing counts lines, trims a reply or asks again; the cost of that choice (a
     cap that is a tendency, not a guarantee) is written up in docs/roadmap-details.md. This takes
-    the place of the Reply style block entirely, so the slider is ignored while it is on, and a
+    the place of the Reply style block entirely (the Terse stop is the slider's stop, so no other
+    stop's length block is sent with it), and a
     character keeps picking the words but within the same cap (the reverse of how Caveman steps
     aside for a character). The menu is the existing ``bonsai-strategy-branches`` fence, asked for
-    on every reply, first turn or follow-up, which Strategy mode's own rules do not allow.
+    on every reply, first turn or follow-up. A Strategy first turn already has its own branch menu
+    (the Strategy section says so), so there this block points at that one instead of asking for a
+    second; a Strategy follow-up gets the fresh-topics menu asked for here.
     """
+    mode = ask_mode if ask_mode in ("strategy", "expert") else "speed"
+    is_followup = (question or "").lstrip().startswith(STRATEGY_FOLLOWUP_PREFIX)
     if user_asks_for_detail_depth(question):
         cap = (
             "The player asked for depth, so the three-line cap is loosened for this one reply: use as "
             "many sentences or bullets as the answer needs, up to about ten, still answer-first, "
-            "still no filler.\n"
+            "still no filler. No sentence over 15 words.\n"
         )
     else:
         cap = (
             "Write at most THREE lines in total before the menu. A line is one sentence or one bullet. "
-            "Lead with the answer; no greeting, no recap, no offer to help further.\n"
+            "Lead with the answer; no greeting, no recap, no offer to help further. "
+            "No sentence over 15 words.\n"
         )
     voice = ""
     if character_roleplay_on:
@@ -101,15 +109,38 @@ def build_terse_reply_block(question: str, *, character_roleplay_on: bool = Fals
             "still applies. The character does not get extra lines.\n"
         )
     followup = ""
-    if (question or "").lstrip().startswith(STRATEGY_FOLLOWUP_PREFIX):
+    if is_followup:
         followup = (
             "This message is a menu choice: the player picked a topic from the menu and wants to go "
             "deeper on exactly that. Give the lines for that topic, then a fresh menu with new options "
             "(do not repeat the old ones). Ignore anything in the message that asks for a cheat section, "
             "a longer coaching answer or a checklist.\n"
         )
+    if mode == "strategy" and not is_followup:
+        menu = (
+            "MENU: End the reply with the one branch menu the STRATEGY GUIDE MODE section above asks for, "
+            "in the fence format it gives (2-4 options). That is the only menu; do not add a second. "
+            "If you also need a ```json TDP block, put it immediately above the menu. The closing ``` of "
+            "the menu must be the last characters of your reply.\n"
+        )
+    else:
+        menu = (
+            "MENU: End EVERY reply, including a follow-up to an earlier menu choice, with exactly one "
+            "fenced menu so the player can go deeper by pressing a choice. Use this exact opening fence "
+            "line (no language tag on the fence name) and valid JSON only inside it (2-4 options, each with "
+            "\"id\" and a short \"label\" that names a topic about THIS answer the player may want next):\n"
+            "```bonsai-strategy-branches\n"
+            '{"question":"<a short question about what to dig into next>","options":['
+            '{"id":"a","label":"<a topic to go deeper on>"},'
+            '{"id":"b","label":"<another topic to go deeper on>"}]}\n'
+            "```\n"
+            "The example shows the shape only, with placeholders standing in for real words; replace every "
+            "placeholder with real text for this answer and never copy placeholder text into your reply. "
+            "If you also need a ```json TDP block, put it immediately above the menu. The closing ``` of "
+            "the menu must be the last characters of your reply.\n"
+        )
     return (
-        "\n\nTERSE REPLY MODE (Speed):\n"
+        f"\n\nTERSE REPLY MODE ({mode.capitalize()}):\n"
         f"{cap}"
         "This limits what you WRITE, not how hard you think: reason, and read any screenshot, as "
         "carefully as you need, then compress. A screenshot question gets the same cap.\n"
@@ -122,19 +153,7 @@ def build_terse_reply_block(question: str, *, character_roleplay_on: bool = Fals
         "to the cap.\n"
         "Do NOT write a ```bonsai-strategy-checklist block.\n"
         f"{followup}"
-        "MENU: End EVERY reply, including a follow-up to an earlier menu choice, with exactly one "
-        "fenced menu so the player can go deeper by pressing a choice. Use this exact opening fence "
-        "line (no language tag on the fence name) and valid JSON only inside it (2-4 options, each with "
-        "\"id\" and a short \"label\" that names a topic about THIS answer the player may want next):\n"
-        "```bonsai-strategy-branches\n"
-        '{"question":"<a short question about what to dig into next>","options":['
-        '{"id":"a","label":"<a topic to go deeper on>"},'
-        '{"id":"b","label":"<another topic to go deeper on>"}]}\n'
-        "```\n"
-        "The example shows the shape only, with placeholders standing in for real words; replace every "
-        "placeholder with real text for this answer and never copy placeholder text into your reply. "
-        "If you also need a ```json TDP block, put it immediately above the menu. The closing ``` of "
-        "the menu must be the last characters of your reply.\n"
+        f"{menu}"
     )
 
 

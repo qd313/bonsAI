@@ -226,7 +226,7 @@ def post_ollama_chat(
 ) -> dict:
     """Execute an Ollama chat attempt with soft continue on ``done_reason=length``.
 
-    ``terse_branch_menu``: Terse mode is on for a Speed question, whose reply ends with the
+    ``terse_branch_menu``: the Terse stop is on for a Speed or Expert question, whose reply ends with the
     branch-menu fence. Only the menu is read out of such a reply (as Strategy's is); a Speed
     reply never carries a checklist, and a Strategy reply is read exactly as before whatever
     this says.

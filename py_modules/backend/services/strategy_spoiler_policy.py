@@ -311,7 +311,7 @@ def _strategy_spoiler_constitution_compact_block(
 ) -> str:
     """Short constitution inject for Speed/Expert turns with strategy KB cards attached.
 
-    ``terse_branch_menu``: Terse mode is on for this Speed turn, so the reply must end with the
+    ``terse_branch_menu``: the Terse stop is on for this Speed or Expert turn, so the reply must end with the
     branch menu (reply_style_blocks.build_terse_reply_block). The closing line then bans only the
     checklist; banning the menu too gave the model two orders that clash on exactly the
     knowledge-base questions Terse mode's ten-question test asks (plan 83, the judge's finding).

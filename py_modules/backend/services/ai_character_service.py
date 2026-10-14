@@ -188,7 +188,7 @@ _ROLEPLAY_TERSE_RECAP = (
 def apply_roleplay_to_system_content(system_content: str, roleplay: str, *, terse: bool = False) -> str:
     """Append roleplay after the bonsAI preamble so recency favors in-character replies.
 
-    ``terse``: Terse mode is on for this Speed question. The voice is still the character's, but the
+    ``terse``: the Reply style slider is on its Terse stop (any Ask mode). The voice is still the character's, but the
     closing reminder says the three-line cap holds, so the recency of the character text does not
     quietly win back the length.
     """

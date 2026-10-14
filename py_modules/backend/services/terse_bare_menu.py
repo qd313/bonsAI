@@ -1,14 +1,14 @@
 """Title: Reading a choice menu the AI wrote as bare JSON
 
-Purpose: In Terse mode (Speed answers in three lines) the AI is asked to end every answer with a
+Purpose: On the Terse stop of the Reply style slider (answers in three lines) the AI is asked to end every answer with a
 menu of choices, written as a fenced block. The small model on the Deck sometimes writes the menu
 as a plain JSON object with no fence (three answers in ten on 2026-10-08), and the plugin used to
 show that JSON as text inside the answer. This file finds such a menu at the end of the answer,
 turns it into the same choice buttons a fenced menu gives, and takes it out of the text.
 
-Used for: Terse Speed replies only. The Ask path calls `split_trailing_bare_branch_menu()` on the
+Used for: Terse Speed and Expert replies only. The Ask path calls `split_trailing_bare_branch_menu()` on the
 finished reply and `hide_bare_branch_menu()` on the text shown while the answer is still arriving.
-Strategy and Expert replies, and every reply with Terse off, never come through here.
+Strategy replies, and every reply with the slider on another stop, never come through here.
 
 Solves: raw JSON in the middle of an answer, and the missing buttons that went with it.
 

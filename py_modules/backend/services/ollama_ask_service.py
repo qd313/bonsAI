@@ -163,11 +163,11 @@ async def run_ask_ollama(
     keep_alive = effective_keep_alive(settings.get("ollama_keep_alive"), url, source="ask")  # 1m with a game on the Deck
     reply_verbosity = sanitize_reply_verbosity(settings.get("reply_verbosity"))
     reply_language = resolve_effective_reply_language(settings.get("reply_language"))
-    # Terse mode (Speed answers in three lines): on only for a Speed question, and only for a real
-    # saved true (the rule reply_style_blocks.terse_mode_applies states; written inline here to keep
-    # this file under the 400-line check). Decided once and handed to the prompt, the character
-    # reminder and the reply reader.
-    terse_speed = ask_mode == "speed" and reply_verbosity == "terse"
+    # The Reply style slider's Terse stop (three lines and a menu): in every Ask mode. Decided once
+    # (the rule reply_style_blocks.terse_reply_applies states; written inline here to keep this file
+    # under the 400-line check) and handed to the character reminder and the reply reader; the prompt
+    # reads the same stop from reply_verbosity itself.
+    terse = reply_verbosity == "terse"
     apreset = str(settings.get("screenshot_attachment_preset") or "low")
     apreset = apreset if apreset in ("low", "mid", "max") else "low"
     from backend.services.screenshot_media import prepare_attachment_images
@@ -197,7 +197,6 @@ async def run_ask_ollama(
         strategy_checklist_state=strategy_checklist_state,
         reply_verbosity=reply_verbosity,
         reply_language=reply_language,
-        terse_mode=terse_speed,
         user_notes_block=user_notes_block,
     )
     if ask_mode == "strategy":
@@ -220,7 +219,7 @@ async def run_ask_ollama(
         roleplay, rp_meta.resolved_preset_id, pyro_asshole
     )
     if roleplay:
-        system_content = apply_roleplay_to_system_content(system_content, roleplay, terse=terse_speed)
+        system_content = apply_roleplay_to_system_content(system_content, roleplay, terse=terse)
 
     # D112 #7, the spoiler safety net -- the live half (belt and braces alongside the finished-
     # reply cover in game_ai_request.py). The whole policy lookup lives behind this call now.
@@ -439,9 +438,9 @@ async def run_ask_ollama(
                         on_http_response_done=_on_http_response_done,
                         on_delta=on_delta_cb,
                         think_effort=str(settings.get("ask_think_effort") or "off"),
-                        # Terse mode asks for a branch menu on a Speed reply, so the reply reader must
+                        # The Terse stop asks for a branch menu on a Speed or Expert reply, so the reply reader must
                         # read it out (it only did for Strategy). False for everything else.
-                        terse_branch_menu=terse_speed,
+                        terse_branch_menu=terse,
                         # Let the plugin decide how much room the model gets, instead of taking
                         # the server's default -- 4,096 on the Deck, against a model that can hold
                         # 131,072. Decided once per model per session inside post_ollama_chat.

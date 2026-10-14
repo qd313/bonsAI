@@ -131,7 +131,7 @@ from backend.services.reply_style_blocks import (
     build_reply_language_block,
     build_reply_verbosity_block,
     build_terse_reply_block,
-    terse_mode_applies,
+    terse_reply_applies,
 )
 from backend.services.reply_followup_blocks import (
     sanitize_reply_followup,
@@ -360,7 +360,6 @@ def build_system_prompt(
     reply_verbosity: str = "balanced",
     reply_language: str = "english",
     knowledge_block_placement: str = "early",
-    terse_mode: bool = False,
     user_notes_block: str = "",
 ) -> str:
     """Build the system message used for Ollama requests from game and attachment context.
@@ -387,11 +386,13 @@ def build_system_prompt(
     (D98). A no-op when blank, or when ``early_context_suffix`` never attached a knowledge-base
     block at all.
 
-    ``terse_mode``: the person's Terse mode setting. It only does anything for a Speed question
-    (``ask_mode == "speed"``): the Reply style block is replaced by the three-line rule and the
-    branch-menu requirement (reply_style_blocks.build_terse_reply_block). Strategy and Expert
-    prompts are word for word what they are with it off.
+    ``reply_verbosity``: the Reply style slider's stop. On its Terse stop (plan 93) the length block
+    of the other stops is replaced by the three-line rule and the branch-menu requirement
+    (reply_style_blocks.build_terse_reply_block), in every Ask mode, first turn and follow-up. A
+    Strategy first turn keeps its own branch menu; a Strategy follow-up drops its checklist and
+    cheat-section orders, which the Terse rule would otherwise fight.
     """
+    terse = terse_reply_applies(reply_verbosity)
     attachment_app_ids = sorted(
         {
             str(att.get("app_id", "") or "").strip()
@@ -585,9 +586,9 @@ def build_system_prompt(
             tail = hardware_tdp_appendix
         else:
             tail = hardware_tdp_appendix
-        if terse_mode_applies(terse_mode, ask_mode):
+        if terse:
             verbosity_block = build_terse_reply_block(
-                question, character_roleplay_on=character_roleplay_on
+                question, character_roleplay_on=character_roleplay_on, ask_mode=ask_mode
             )
         else:
             verbosity_block = build_reply_verbosity_block(
@@ -605,7 +606,7 @@ def build_system_prompt(
                 app_id=app_id,
                 app_name=app_name,
                 title_profile=strategy_title_profile,
-                terse_branch_menu=terse_mode_applies(terse_mode, ask_mode),
+                terse_branch_menu=terse,
             )
         return _assemble(
             dynamic_block + general_block + drg_glossary_block,
@@ -626,7 +627,17 @@ def build_system_prompt(
         app_name=app_name,
         title_profile=strategy_title_profile,
     )
-    if followup:
+    if followup and terse:
+        # The Terse rule at the end of the prompt sets the length and ends the reply with a fresh menu,
+        # so the orders below that fight it (no menu, a checklist, a cheat section) are not sent.
+        strategy_block = (
+            "\n\nSTRATEGY GUIDE MODE (active — follow-up turn):\n"
+            f"{spoiler_policy}"
+            "The user's message begins with the plugin's branch selection prefix. They already chose where they are stuck.\n"
+            "Give direct, controller-first coaching for that exact beat on a Steam Deck (gamepad; short steps; pause-friendly; no PC keyboard assumptions).\n"
+            "The TERSE REPLY MODE section at the end of this message sets how long the reply is and what ends it.\n"
+        )
+    elif followup:
         strategy_block = (
             "\n\nSTRATEGY GUIDE MODE (active — follow-up turn):\n"
             f"{spoiler_policy}"
@@ -747,12 +758,17 @@ def build_system_prompt(
         )
         tail += hardware_tdp_appendix
 
-    verbosity_block = build_reply_verbosity_block(
-        reply_verbosity,
-        question=question,
-        ask_mode=ask_mode,
-        character_roleplay_on=character_roleplay_on,
-    )
+    if terse:
+        verbosity_block = build_terse_reply_block(
+            question, character_roleplay_on=character_roleplay_on, ask_mode=ask_mode
+        )
+    else:
+        verbosity_block = build_reply_verbosity_block(
+            reply_verbosity,
+            question=question,
+            ask_mode=ask_mode,
+            character_roleplay_on=character_roleplay_on,
+        )
     language_block = build_reply_language_block(reply_language)
     return _assemble(
         dynamic_block + general_block + drg_glossary_block,

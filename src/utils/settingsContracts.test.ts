@@ -427,7 +427,6 @@ describe("settings contracts", () => {
       askMode: DEFAULT_ASK_MODE,
       ollamaKeepAlive: DEFAULT_OLLAMA_KEEP_ALIVE,
       replyVerbosity: DEFAULT_REPLY_VERBOSITY,
-      terseMode: false,
       chatTextSize: "normal" as const,
       askThinkEffort: "off" as const,
       replyLanguage: REPLY_LANGUAGE_FOLLOW_SYSTEM,

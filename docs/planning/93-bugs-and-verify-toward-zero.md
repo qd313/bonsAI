@@ -260,6 +260,16 @@ says so.
 
 ## 8. The Deck, in blocks
 
+**The runbooks and handovers are in the repo** so the morning chat can use them without this chat's scratch folder:
+[block A](assets/93-runbook-block-A.md) (run 2026-10-13, its [handover](assets/93-handover-A.md)),
+[block B1](assets/93-runbook-block-B1.md) (run 2026-10-13), [block B2](assets/93-runbook-block-B2.md) (the Search
+tab ring, Text size on Steam-drawn words, the Gemma model in the model picker: **first thing in the morning**),
+[block C](assets/93-runbook-block-C.md) (the owed checks, two parts: **after B2, while batch 1 builds**). The paths
+inside them that point at a scratch folder mean "the handover beside this file" for the morning chat. **The morning
+chat's first three jobs, before any lane:** the bookkeeper's sweep of block A's and B1's findings into the roadmap
+(this chat could not edit the roadmap by rule, and the week's meter ran out before a bookkeeper run); block B2; then
+the lanes, with block C running beside them.
+
 Standing rules as in the runbook: one driver at a time, a fresh driver per block, every Deck command exactly
 `ssh deck@192.168.86.52 '<command>'`, evidence files `plan93-<ROW>.json` in `docs/test-evidence/`, every file stamped
 with the build and the machine, the settings file read by key name only. If a deploy is refused: "run setup-dev".

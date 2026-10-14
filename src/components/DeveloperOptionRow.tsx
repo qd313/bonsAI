@@ -9,7 +9,10 @@
  * Folded (plan 91 § 2b, plan 92 T2): drawn as one line, the title over the buttons and nothing else. The line
  * that says what the active choice does (`description`) is not drawn in the row: it rides on the row and shows
  * in the help strip at the bottom of the panel while the ring is on it. It is the description of the active
- * choice, so it changes with the pick (the strip watches the row and re-reads it).
+ * choice, so it changes with the pick (the strip watches the row and re-reads it). A row that passes
+ * `optionHelp` also puts each option's own words on its button (plan 93 B15): the strip then describes the
+ * option the ring is on as soon as the ring lands on it, not only the chosen one; the row's words show
+ * when the ring is on the row but on none of the buttons.
  *
  * Used for: DeveloperTab.tsx's Tab to open on, App activity logging and Animations rows.
  *
@@ -28,6 +31,7 @@
 import React from "react";
 import { Button, Focusable, PanelSectionRow } from "@decky/ui";
 import { DenseRow } from "../features/folded-tabs/DenseRow";
+import { helpAttributes } from "../features/folded-tabs/useHelpStrip";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 import { textPx } from "../styles/sections/textPx";
 import type { EdgeNav } from "./developerRows";
@@ -46,6 +50,11 @@ export type DeveloperOptionRowProps<T extends string | number> = {
   options: ReadonlyArray<DeveloperOptionRowOption<T>>;
   activeValue: T;
   onSelect: (value: T) => void;
+  /**
+   * The strip words for one option, shown while the ring is on that option's button (the ring landing on it
+   * is enough; no press). Omit it and every button falls back to the row's `description`.
+   */
+  optionHelp?: (value: T) => string | undefined;
   /** The section-edge hand-offs, when this row is the first or the last stop of its section. */
   nav?: EdgeNav;
 };
@@ -63,6 +72,7 @@ export function DeveloperOptionRow<T extends string | number>({
   options,
   activeValue,
   onSelect,
+  optionHelp,
   nav,
 }: DeveloperOptionRowProps<T>): React.ReactElement {
   return (
@@ -95,6 +105,7 @@ export function DeveloperOptionRow<T extends string | number>({
                     color: active ? "#e0f2fe" : "#9fb0c0",
                   }}
                   aria-label={option.ariaLabel ?? option.label}
+                  {...(optionHelp ? helpAttributes(title, optionHelp(option.value) ?? description) : {})}
                 >
                   {option.label}
                 </Button>

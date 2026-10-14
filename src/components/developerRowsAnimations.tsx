@@ -93,6 +93,7 @@ export function animationsRows(args: {
           options={STREAM_SCRAMBLE_STYLE_OPTIONS.map((style) => ({ value: style, label: streamScrambleStyleLabel[style] }))}
           activeValue={sc.style}
           onSelect={(style) => onStreamScrambleChange({ style })}
+          optionHelp={(style) => streamScrambleStyleDescription[style]}
           nav={nav}
         />
       ),

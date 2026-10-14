@@ -52,6 +52,7 @@ export function navigationRows(args: { tabResumeMode: TabResumeMode; setTabResum
           }))}
           activeValue={args.tabResumeMode}
           onSelect={args.setTabResumeMode}
+          optionHelp={tabToOpenOnHelp}
           nav={nav}
         />
       ),
@@ -93,6 +94,7 @@ export function loggingRows(args: {
           }))}
           activeValue={args.desktopAppLogLevel}
           onSelect={args.setDesktopAppLogLevel}
+          optionHelp={(level) => appLogHelp(level, args.filesystemWrite)}
           nav={nav}
         />
       ),

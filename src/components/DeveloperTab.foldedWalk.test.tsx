@@ -277,11 +277,12 @@ describe("the folded Developer tab, every section open", () => {
     expect(names(down)[3]).toMatch(/^A · Main/);
     const stripText = () => w.container.querySelector<HTMLElement>("[data-bonsai-help-strip]")!.textContent ?? "";
     expect(stripText()).toBe(
-      "Tab to open on (D15)Reopen lands on the tab you left. Shipped default. Takes effect the next time you close and reopen the plugin.",
+      "Tab to open on (D15)Every reopen starts on Main, whatever tab you left from. Takes effect the next time you close and reopen the plugin.",
     );
     const press = async (label: string) => {
       const b = Array.from(w.container.querySelectorAll<HTMLButtonElement>("button")).find((x) => x.textContent === label)!;
       await act(async () => {
+        b.focus();
         b.click();
       });
     };
@@ -293,6 +294,29 @@ describe("the folded Developer tab, every section open", () => {
     expect(stripText()).toBe(
       "Tab to open on (D15)Every reopen starts on Main, whatever tab you left from. Takes effect the next time you close and reopen the plugin.",
     );
+    w.unmount();
+  });
+});
+
+describe("Tab to open on: the strip describes the option the ring is on", () => {
+  const TAIL_WORDS = "Takes effect the next time you close and reopen the plugin.";
+  it("Right between Main, Resume and 5 min changes the words with no press, and the choice is untouched", () => {
+    setAllSections(DEVELOPER_FOLD_TAB, SECTION_IDS, false);
+    toggleSection(DEVELOPER_FOLD_TAB, SECTION_IDS, "navigation");
+    const chosen = vi.fn();
+    const w = walk(DECK_PANE, "nearest", { setTabResumeMode: chosen });
+    w.enter();
+    w.walk("down", 3);
+    const stripText = () => w.container.querySelector<HTMLElement>("[data-bonsai-help-strip]")!.textContent ?? "";
+    const button = (label: string) =>
+      Array.from(w.container.querySelectorAll<HTMLButtonElement>("button")).find((x) => x.textContent === label)!;
+    /* The ring is on Main, the chosen mode is Resume: the strip says Main's words, not Resume's. */
+    expect(stripText()).toBe(`Tab to open on (D15)Every reopen starts on Main, whatever tab you left from. ${TAIL_WORDS}`);
+    act(() => button("B · Resume").focus());
+    expect(stripText()).toBe(`Tab to open on (D15)Reopen lands on the tab you left. Shipped default. ${TAIL_WORDS}`);
+    act(() => button("C · 5 min").focus());
+    expect(stripText()).toBe(`Tab to open on (D15)Reopen resumes the tab within 5 minutes, then falls back to Main. ${TAIL_WORDS}`);
+    expect(chosen).not.toHaveBeenCalled();
     w.unmount();
   });
 });

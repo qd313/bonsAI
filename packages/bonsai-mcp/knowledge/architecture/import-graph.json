@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 949,
-  "edgeCount": 3143,
+  "edgeCount": 3144,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -325,6 +325,7 @@
       "imports": [
         "src/components/developerRows.tsx",
         "src/features/folded-tabs/DenseRow.tsx",
+        "src/features/folded-tabs/useHelpStrip.ts",
         "src/styles/sections/textPx.ts",
         "src/styles/settingsGlassButton.ts"
       ],
@@ -4736,6 +4737,7 @@
         "src/utils/tabBodyScrollPlan.ts"
       ],
       "importedBy": [
+        "src/components/DeveloperOptionRow.tsx",
         "src/components/DeveloperTab.folded.test.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/developerRowsAnimations.tsx",

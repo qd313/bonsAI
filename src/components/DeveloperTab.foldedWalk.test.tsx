@@ -40,6 +40,7 @@ import { DEVELOPER_FOLD_TAB, DEVELOPER_SECTIONS } from "../features/folded-tabs/
 import { resetNavFocusRegistry } from "../utils/navFocusRegistry";
 import { stripHeightFor } from "../styles/sections/foldedTabs";
 import { walkFoldedTab, type FoldedLanding } from "../test-harness/foldedTabWalk";
+import { paintedFrom, worstFoldAllCover } from "../test-harness/foldAllCover";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../test-harness/steamRing";
 import type { SteamFocusScroll } from "../test-harness/tabBodyWalk";
 
@@ -226,6 +227,25 @@ describe("the folded Developer tab, every section open", () => {
         w.unmount();
       });
     }
+  }
+
+  for (const steam of RULES) {
+    it(`Steam's rule "${steam}": wherever the walk puts the pane, the Open all button covers no row's words or arrow on view (plan 93)`, () => {
+      setAllSections(DEVELOPER_FOLD_TAB, SECTION_IDS, true);
+      const w = walk(DECK_PANE, steam, BUSIEST());
+      const pane = { top: 24, bottom: 24 + DECK_PANE, right: 300 };
+      const landings = [w.enter(), ...w.walk("down", 80), ...w.walk("up", 80)];
+      for (const l of landings) {
+        const strip = l.stripTop === null ? 0 : pane.bottom - l.stripTop;
+        const c = worstFoldAllCover(w.container, pane, strip);
+        expect(c, `press ${l.press} onto ${l.name}: ${c.what}`).toMatchObject({ w: 0, h: 0 });
+        /* And the ringed row itself is above the band, never under it. */
+        if (!l.stop.closest("[data-bonsai-fold-all]")) {
+          expect(l.bottom, `${l.name} above the band`).toBeLessThanOrEqual(paintedFrom(pane.bottom, strip, pane.right));
+        }
+      }
+      w.unmount();
+    });
   }
 
   it("the captured errors' rows are reachable inside Diagnostics and the stops after them are still reached", () => {

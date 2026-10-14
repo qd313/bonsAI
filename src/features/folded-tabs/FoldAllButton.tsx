@@ -2,8 +2,10 @@
  * Title: The floating Open all / Close all button of a folded tab
  *
  * Purpose: A small button in the bottom-right corner of a folded tab, above the help strip when it
- * shows (plan 91 § 2b, round 3 option C). It reads "⊞ Open all" while any section is closed and
- * "⊟ Close all" once every section is open; A on it opens or closes every section at once.
+ * shows (plan 91 § 2b, round 3 option C), on a band of the panel's colour across the tab's width so
+ * it never sits over a row's words (plan 93; foldedTabs.ts draws the band). It reads "⊞ Open all"
+ * while any section is closed and "⊟ Close all" once every section is open; A on it opens or closes
+ * every section at once.
  *
  * Used for: TabHelpStrip's corner, on the Ollama tab now and the Settings and Developer tabs next.
  *
@@ -21,7 +23,7 @@
  * Does not: Look different from the tab's other plain buttons. It IS one: the same class and the same
  * style object as the AI models button (FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN), so its fill, text
  * and ring match by construction; only its size is smaller. A dark plate behind it, the panel's own
- * colour, stops the list showing through its see-through fill as the list scrolls under it.
+ * colour, the same as the band it sits on.
  */
 import React, { useEffect, useRef, useSyncExternalStore } from "react";
 import { Button, Focusable } from "@decky/ui";

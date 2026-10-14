@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 960,
-  "edgeCount": 3228,
+  "fileCount": 962,
+  "edgeCount": 3236,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -383,6 +383,7 @@
         "src/features/stream-scramble/streamScrambleContext.ts",
         "src/styles/sections/foldedTabs.ts",
         "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/foldAllCover.ts",
         "src/test-harness/foldedTabWalk.tsx",
         "src/test-harness/steamRing.tsx",
         "src/test-harness/tabBodyWalk.tsx",
@@ -1619,6 +1620,7 @@
         "src/features/folded-tabs/ollamaTabFolds.ts",
         "src/styles/sections/foldedTabs.ts",
         "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/foldAllCover.ts",
         "src/test-harness/foldedTabWalk.tsx",
         "src/test-harness/steamRing.tsx",
         "src/test-harness/tabBodyWalk.tsx",
@@ -2337,6 +2339,7 @@
         "src/features/folded-tabs/settingsTabFolds.ts",
         "src/styles/sections/foldedTabs.ts",
         "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/foldAllCover.ts",
         "src/test-harness/foldedTabWalk.tsx",
         "src/test-harness/settingsFoldOpen.ts",
         "src/test-harness/steamRing.tsx",
@@ -4711,6 +4714,14 @@
         "src/components/developerRowsLogging.tsx",
         "src/features/folded-tabs/developerTabFolds.test.ts"
       ]
+    },
+    "src/features/folded-tabs/foldAllCover.test.ts": {
+      "imports": [
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/styles/sections/foldedTabs.ts",
+        "src/test-harness/foldAllCover.ts"
+      ],
+      "importedBy": []
     },
     "src/features/folded-tabs/foldLineWidths.test.ts": {
       "imports": [
@@ -8029,6 +8040,7 @@
         "src/components/textSizeSurfaces.test.tsx",
         "src/features/details-slot/DetailsSlot.deck.test.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx",
+        "src/features/folded-tabs/foldAllCover.test.ts",
         "src/features/folded-tabs/foldLineWidths.test.ts",
         "src/features/plugin-shell/TabIndicatorBar.layout.test.tsx",
         "src/features/plugin-shell/TabIndicatorBar.mainLabel.test.tsx",
@@ -8038,7 +8050,8 @@
         "src/styles/sections/gameRunningLighter.test.ts",
         "src/styles/sections/gamepadAndPullModels.test.ts",
         "src/styles/sections/presetChipLabel.test.ts",
-        "src/styles/sections/replyRatingChoices.test.ts"
+        "src/styles/sections/replyRatingChoices.test.ts",
+        "src/test-harness/foldAllCover.ts"
       ]
     },
     "src/styles/buttonFocusRing.test.ts": {
@@ -8150,7 +8163,9 @@
         "src/components/SettingsTab.foldedWalk.test.tsx",
         "src/features/folded-tabs/FoldAllButton.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx",
+        "src/features/folded-tabs/foldAllCover.test.ts",
         "src/styles/bonsaiScopeStylesheet.ts",
+        "src/test-harness/foldAllCover.ts",
         "src/test-harness/foldedTabWalk.tsx"
       ]
     },
@@ -8868,6 +8883,18 @@
         "src/utils/oneLineSpoilerBlock.test.tsx",
         "src/utils/questionBubbleFit.test.tsx",
         "src/utils/revealOpenedDetails.test.tsx"
+      ]
+    },
+    "src/test-harness/foldAllCover.ts": {
+      "imports": [
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/styles/sections/foldedTabs.ts"
+      ],
+      "importedBy": [
+        "src/components/DeveloperTab.foldedWalk.test.tsx",
+        "src/components/OllamaTab.foldedWalk.test.tsx",
+        "src/components/SettingsTab.foldedWalk.test.tsx",
+        "src/features/folded-tabs/foldAllCover.test.ts"
       ]
     },
     "src/test-harness/foldedTabWalk.tsx": {

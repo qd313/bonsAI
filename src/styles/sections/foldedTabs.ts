@@ -5,7 +5,9 @@
  * Ollama tab, round 2 option B and round 3 option C: docs/demos/mockup-board-2/src/43-tabs.css). A
  * section line is one row: its name in small capitals, its summary greyed and cut off with an
  * ellipsis, a chevron. The strip is a dark band over the bottom of the panel: the ringed row's name in
- * small grey capitals, then its text. The Open all button floats in the bottom-right corner above it.
+ * small grey capitals, then its text. The Open all button sits in the bottom-right corner above it, on a
+ * band of the panel's own colour across the whole width (plan 93: floating alone, it sat over the words
+ * and arrow of whichever row scrolled under it).
  *
  * Used for: bonsaiScopeStylesheet.ts, which folds it into the plugin's one stylesheet. The class
  * names are the contract the Settings and Developer tabs reuse unchanged.
@@ -41,9 +43,13 @@ export const FOLD_ALL_HEIGHT_PX = 28;
 export const FOLD_ALL_GAP_PX = 8;
 const FOLD_ALL_RIGHT_PX = 10;
 
+/** The panel's own colour: the band behind the Open all button, and the plate under its see-through fill. */
+const PANEL_BG = "#0e141b";
+
 /**
  * Room at the end of a folded tab, under its last line, so the last rows can scroll up clear of the
- * strip and the button (the drawing's 120 px of padding under a tab with a strip).
+ * strip and the button (the drawing's 120 px of padding under a tab with a strip). Taller than the
+ * button's band (8 + 28 + 8 = 44 px), so the last line can always be read above it.
  */
 const FOLD_TAIL_PX = 120;
 
@@ -130,7 +136,14 @@ export function buildFoldedTabsSection(): string {
           height: ${FOLD_TAIL_PX}px;
         }
 
-        /* The dock: drawn in bonsAI's tabs box beside Steam's pane, over the pane's bottom (TabHelpStrip.tsx). */
+        /*
+         * The dock: drawn in bonsAI's tabs box beside Steam's pane, over the pane's bottom (TabHelpStrip.tsx).
+         * Its top is a band of the panel's colour across the whole width, a gap above the button down to the
+         * strip: a row that reaches the bottom of the pane goes under the band, never under the button alone,
+         * so the button never sits over a row's words or arrow (plan 93). 44 px with the strip hidden, inside
+         * the 80 px Steam keeps clear at the pane's bottom, so the ringed row is never under it; it takes the
+         * presses on it, so a tap there never reaches a row hidden underneath.
+         */
         .bonsai-scope .bonsai-decky-tabs-root:has(> .bonsai-fold-dock) {
           position: relative !important;
         }
@@ -147,7 +160,9 @@ export function buildFoldedTabsSection(): string {
           flex: none !important;
           min-height: 0 !important;
           overflow: visible !important;
-          pointer-events: none;
+          padding-top: ${FOLD_ALL_GAP_PX}px;
+          background: ${PANEL_BG};
+          pointer-events: auto;
         }
         ${onlyWhileShown} {
           display: none !important;
@@ -157,8 +172,8 @@ export function buildFoldedTabsSection(): string {
           margin: 0 ${FOLD_ALL_RIGHT_PX}px ${FOLD_ALL_GAP_PX}px 0;
           pointer-events: auto;
           border-radius: 4px;
-          /* The panel's own colour under the see-through fill, so the list does not show through it. */
-          background: #0e141b;
+          /* The panel's own colour under the see-through fill, the band's own. */
+          background: ${PANEL_BG};
           box-shadow: 0 3px 10px rgba(0, 0, 0, 0.55);
         }
         .bonsai-scope .bonsai-fold-strip {

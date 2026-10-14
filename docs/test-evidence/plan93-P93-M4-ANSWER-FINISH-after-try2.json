@@ -1,0 +1,40 @@
+{
+ "row": "P93-M4-ANSWER-FINISH-after (try 2, Reply style really on Balanced)",
+ "build_commit": "0ef34f82 deployed by block D1 at ~11:30 Deck time; Deck dist/index.js sha256 starts 017637aff771; machine deck (real Steam Deck)",
+ "deck_time_local": "2026-10-14 12:08-12:16 EDT",
+ "screen": "Deck's own screen, page window 854 x 454; transcript scroll box clientHeight 402",
+ "setup": "Test chat (chat 1 of 2), Ask mode Expert (set again from Speed through the mode menu), the Deck's own AI (gemma4:e2b-it-qat). Reply style: on the Ollama tab the section read 'Terse - Thinking: Balanced' (the plugin had turned the old terse_mode=true key into reply_verbosity='terse' at its first save, see the mistake note in plan93-P93-M4-ANSWER-FINISH-after.json). I set the Reply style slider RIGHT twice (Terse -> Caveman -> Balanced), read 'Reply style: Balanced', and confirmed reply_verbosity = balanced in the settings file (key name only). It is put back to Terse at the end of the block. Sampler probe_d1.py (scratchpad/tools), every ~85 ms. Questions sent with deck_send_ask.py, each VERIFIED with the whole text.",
+ "pressed": "Run A ('Describe every area of Hollow Knight in order with what to do in each', the prescribed question): walk RIGHT from the mode button to Ask (Voice input, Clear, Ask, no A on them), read focus = Ask (--ready), start sampler, A (focus jumped to the box by itself), no other presses. Run B ('List every boss in Hollow Knight in the order you meet them with a tip for each'): DOWN to Ask (read), sampler, A, then UP twice while it was still writing. Run C ('Walk through every region of Hollow Knight in order and say what to do in each'): walk to Ask, sampler, A, then UP four times and DOWN once, reading the ring after each.",
+ "seen": {
+  "runA_prescribed_question": {
+   "answer": "1,998 characters, bubble 938 px tall at the end, 4 answer sections counted while writing (1 -> 2 at t=-14.9 s, 3 at -8.5 s, 4 at -2.3 s before the finish), about 49 s from Ask to finish (the bubble itself was visible for the last ~20 s).",
+   "scroll": "scrollTop 0 in every sample from the first live sample to the finish and in every sample after it (set of values after the finish: {0}); scroll height grew 402 -> 1302 -> 1329 at the finish. Scroll change at the finish: 0 px (last night: 1,264.7 px).",
+   "focus": "the question box (box top 380, height 44) in every sample from the start of writing to the end of the recording, including the finish; it never moved.",
+   "marker": "data-d1mark set on the bubble's top element at the first live bubble sample (sample 358); still present and still the same element as the newest bubble at the finish and after (mk=1, mkIsLast=1 to the end). Marker survived.",
+   "bubble_height": "no drop at the finish (938 px at the last live sample, 938 after). But 7 small dips WHILE it was still writing: 166 -> 158 (t=-17.3 s), 319 -> 305 (-14.2), 419 -> 406 (-12.1), 515 -> 501 (-9.9), 691 -> 685 (-6.1), 800 -> 787 (-4.2), 806 -> 792 (-3.8); 6 to 27 px each, then it grows again.",
+   "sections_counted_while_writing": "1 up to 4 (more than one)"
+  },
+  "runB_second_wording_ring_on_the_chip_row": {
+   "answer": "569 characters, 5 answer sections, bubble 344 px; the bubble was visible for only about 5 s before the finish (the rest of the 40 s was the AI thinking).",
+   "ring": "my two UP presses landed on a follow-up chip ('Any known issues running this on Deck?', box top 348, height 30), and the page scrolled to keep it in view (scrollTop 0 -> 8). The second UP came after the finish and landed on the answer's 'Show details' divider.",
+   "scroll_at_finish": "ring on the chip: scrollTop 8 -> 222.7 at the last live sample (when the rating buttons appeared), 222.7 -> 226.7 -> 258 after. About 215 px of movement at the finish. At the finish the chip row was replaced and the ring moved by itself from the chip to the dock's 'Show details' line (class bonsai-details-slot__line).",
+   "bubble_height": "3 dips, 3 to 13 px, during writing (153 -> 150, 259 -> 246), and one 344 -> 336 half a second AFTER the finish (it moved when the ring reached the divider and the pane scrolled; may be a rounding of the box, not the bubble shrinking)"
+  },
+  "runC_third_wording_ring_walking_up_while_writing": {
+   "answer": "1,512 characters, 3 sections, bubble 612 px, 48 s; bubble visible for about 20 s before the finish.",
+   "ring_path_while_writing": "from the question box UP: follow-up chip 'How do I use strategy mode?' (348,30) -> the 'Leaving the Forgotten Crossroads - From...' tips block (class bonsai-kb-notes-block) -> 'Retry same prompt' at the top of the turn (class bonsai-turn-retry-corner, box top 115). While it was writing the answer's sections were NOT stops: the ring went from the tips block straight to the Retry button. So 'walk into a section while it is still writing' cannot be done.",
+   "scroll_at_finish": "ring on the Retry button, scrollTop 0 in every sample before and after the finish (scroll height 946 -> 1003); the page did not move. The ring stayed on Retry (it did not move by itself) until my next press, which went DOWN to the turn's question row.",
+   "bubble_height": "dips only while writing (171 -> 163, 263 -> 252, 555 -> 541); none at the finish"
+  },
+  "files": ["plan93-P93-M4-ANSWER-FINISH-after-balanced-run1-samples.jsonl (run A)", "plan93-P93-M4-ANSWER-FINISH-after-balanced-run2-samples.jsonl (run B)", "plan93-P93-M4-ANSWER-FINISH-after-balanced-run3-samples.jsonl (run C)"]
+ },
+ "expected": "0 px scroll change at the finish; no sample shows the bubble's height drop; focus stays on the question box; more than one section counted while writing; marker survives. Second run: ring still on the same section at the finish and the page did not move.",
+ "verdict_scroll_at_finish_ring_on_box": "PASS - run A: 0 px (0 in every sample, 1,998-character answer with 4 sections and 938 px bubble)",
+ "verdict_focus_stays_on_box": "PASS - run A: the question box in every sample",
+ "verdict_marker": "PASS - survived in runs A, B and C",
+ "verdict_more_than_one_section": "PASS - run A counted 1 to 4 while writing",
+ "verdict_bubble_height_drop": "FAIL - read literally: run A shows 7 dips of 6 to 27 px while the text was still being written (none at or after the finish). The runbook says no sample may show a drop through the stream; whether a dip while writing matters to a person is the owner's call.",
+ "verdict_same_section_half": "UNCLEAR - the answer's sections are not focus stops while it is writing (run C: chip -> tips block -> Retry button), so the ring cannot be put on a section before the finish; two differently worded tries (B, C). What I could test: with the ring on the Retry button the page did not move at the finish (0 px); with the ring on a follow-up chip the page moved about 215 px and the ring jumped to 'Show details' (run B).",
+ "verdict": "FAIL - the key claim passes (0 px page movement at the finish with the ring on the box, long 4-section answer, focus never moved, marker survived), but the bubble's height dips 7 times (6 to 27 px) while writing, and when the ring sits on a follow-up chip at the finish the page still jumps about 215 px and the ring leaves the chip. The same-section half could not be run.",
+ "side_effect": "Reply style slider changed Terse -> Balanced for this check (the Ollama tab's Reply style section was left open). To be put back to Terse. Ask mode changed Speed -> Expert and not yet restored at this point. Three more questions added to the test chat (it now has about 28 turns)."
+}

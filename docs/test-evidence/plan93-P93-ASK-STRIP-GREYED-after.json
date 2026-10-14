@@ -1,0 +1,29 @@
+{
+ "row": "P93-ASK-STRIP-GREYED-after",
+ "build_commit": "0ef34f82 deployed by block D1 at ~11:30 Deck time; Deck dist/index.js sha256 starts 017637aff771; machine deck (real Steam Deck)",
+ "deck_time_local": "2026-10-14 11:44-11:47 EDT",
+ "screen": "Deck's own screen, page window 854 x 454",
+ "setup": "Main tab, test chat (chat 1 of 2), Expert mode, no game. Question 'Walk me through every charm location in Hollow Knight area by area' sent by the send script (VERIFIED, whole text). Before-reading for comparison: plan93-P93-ASK-STRIP-GREYED.json (block D0: LEFT from the mode button landed on the greyed paperclip, and LEFT again did not move).",
+ "pressed": "Walk RIGHT/DOWN to Ask (read focus = Ask, class bonsai-ask-primary--ready), A (focus jumped to the question box by itself). While the answer wrote (live marker present, Stop generation button shown), one press at a time with a focus read after each: DOWN, LEFT, LEFT, RIGHT, UP (back to the box), LEFT. After the answer finished: DOWN (to Ask), LEFT x2 (Voice input, mode button), LEFT.",
+ "seen": {
+  "while_writing": [
+   ["after A", "question box (box left 49, top 380); the Attach button has class Disabled (greyed)"],
+   ["DOWN from box", "Stop generation (left 261, top 426), enabled"],
+   ["LEFT", "Inference mode: Expert. Open to change. (left 215, top 426), enabled"],
+   ["LEFT again", "ring held still on the mode button (same left 215, top 426); the greyed paperclip was NOT reached; Attach still Disabled"],
+   ["RIGHT", "Stop generation"],
+   ["UP", "question box"],
+   ["LEFT from the question box", "ring held still on the question box (left 49, top 380)"]
+  ],
+  "after_finish": [
+   ["finish", "live marker gone, 1 rating button pair shown; answer 118 characters, 1 section, 'Show reasoning 23 s'"],
+   ["DOWN from box then LEFT x2", "Ask -> Voice input -> mode button"],
+   ["LEFT from the mode button", "'Attach screenshot to Ask' (left 54, top 426), class not Disabled (live)"]
+  ]
+ },
+ "expected": "While writing: Down from the box lands on Stop; Left goes to the mode button; Left again holds still (never on the greyed paperclip); Right goes back to Stop; Left from the box holds still. After the answer: Left from the mode button reaches the paperclip, live.",
+ "verdict_while_writing": "PASS - Stop, mode button, hold still on the second Left, back to Stop, hold still on Left from the box; the greyed paperclip was never focused (all 5 landings as expected)",
+ "verdict_after_finish": "PASS - Left from the mode button reaches the paperclip, which is no longer greyed",
+ "verdict": "PASS - fixed: last time (block D0) the second Left landed on the greyed paperclip, now it holds still",
+ "side_effect": "One more question and answer added to the test chat (chat now 22 turns; 'Walk me through every charm location in Hollow Knight area by area'). Mode still Expert."
+}

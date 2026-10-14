@@ -1,0 +1,19 @@
+{
+ "row": "P93-M12-ASK-HINTS-after",
+ "build_commit": "0ef34f82 deployed by block D1 at ~11:30 Deck time; Deck dist/index.js sha256 starts 017637aff771; machine deck (real Steam Deck)",
+ "deck_time_local": "2026-10-14 11:33 EDT",
+ "screen": "Deck's own screen, page window 854 x 454",
+ "setup": "Main tab, test chat 'What is the fastest way to earn geo early in Hollow Knight' (chat 1 of 2), question box empty (value ''), no game. Ask mode was Speed (settings key ask_mode = speed) before the check.",
+ "pressed": "Walk LEFT from Ask to the mode button (2 presses: Voice input, mode). A (menu opens on the current mode), A on 'speed'; then A, DOWN, read focus = strategy, A; then A, DOWN (first DOWN landed before the menu drew, still strategy), DOWN, read focus = expert, A. Never A on the question box.",
+ "seen": {
+  "speed": "placeholder text 'Ask a quick question about your game.'; mode chip text 'Speed'; screenshot plan93-P93-M12-ASK-HINTS-after-speed.png shows it in the box",
+  "strategy": "placeholder text \"Describe the level, boss, or puzzle you're stuck on.\"; mode chip 'Strategy'; screenshot plan93-P93-M12-ASK-HINTS-after-strategy.png",
+  "expert": "placeholder text 'Ask for the full detail: builds, numbers, every step.'; mode chip 'Expert'; screenshot plan93-P93-M12-ASK-HINTS-after-expert.png"
+ },
+ "expected": "Speed 'Ask a quick question about your game.', Strategy 'Describe the level, boss, or puzzle you're stuck on.', Expert 'Ask for the full detail: builds, numbers, every step.'",
+ "verdict_speed": "PASS - text matches exactly",
+ "verdict_strategy": "PASS - text matches exactly",
+ "verdict_expert": "PASS - text matches exactly",
+ "verdict": "PASS - all three hints read exactly as the runbook says",
+ "side_effect": "Mode was left on Expert on purpose, because the next check (D1-1) needs Expert. It is put back to Speed at the end of the block."
+}

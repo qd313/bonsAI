@@ -90,6 +90,11 @@ weekly usage meter has reset (§ 3):**
 9. **The question box's hint (2026-10-13, later the same evening):** Speed and Expert get the same grey hint
    treatment Strategy has. The lane writes one short hint per mode in Strategy's style and lists the wording in its
    report for the maintainer's veto.
+10. **The finish of an answer (2026-10-13, later the same evening): go.** The flicker and jump when an answer
+    finishes is fixed by building the Features entry "A long answer is cut into sections while it writes" (sections
+    close as they fill, nothing is redrawn at the finish, the view does not move). An Opus high lane (O3) after the
+    finish measurement (M4). The "follow the end smoothly while it writes" half stays separate and waits for a
+    frame-rate measurement.
 
 ## 3. Before go: the budget, the model, the Deck
 
@@ -413,13 +418,9 @@ hardest focus piece), and the finish-flicker lane if the measurement sends it to
 16. **The Deck's chats:** the two plan 92 test chats stay (9 chats)? And the chats may be moved aside, with a backup,
     for the delete-last-chat check? *Meanwhile:* kept; moved aside with a backup and put back.
 17. **Pushing** to `experimental` after each landing batch, as in plan 92? *Meanwhile:* yes.
-18. **The finish flicker is the Features entry "A long answer is cut into sections while it writes"** (picked on the
-    mock-up board 2026-10-10: sections close as they fill, nothing changes at the finish, the view does not move).
-    The code lookup confirms the flicker is the finished bubble replacing the live one and three instant scroll
-    passes after it. Build that feature tonight as the fix (an Opus high lane after the measurement)? And the
-    "follow the end smoothly while it writes" half: every scroll in the transcript is instant on purpose (the ring's
-    sake, plan 64) and the frame rate is tight (plan 69), so it is a second small lane after a frame-rate measurement,
-    or not tonight. *Meanwhile:* the feature is built as the fix; the smooth follow waits.
+18. **The finish flicker.** **Answered 2026-10-13: go.** The Features entry "A long answer is cut into sections while
+    it writes" is built as the fix (an Opus high lane after the finish measurement). The "follow the end smoothly
+    while it writes" half waits for a frame-rate measurement.
 19. **The nine confirm boxes:** the lookup found nine with the three-button shape (Clear cache, Clear all data, the
     shared download box, Remove knowledge base, and five inside the models box: try order, delete a model, install the
     picked ones, enable Tier 2, tick a model). All nine go to action-plus-Cancel? *Meanwhile:* all nine.

@@ -2332,3 +2332,6 @@ the same list; its § 15 marks which questions are still open.
    maintainer's own checks, the Deck's chats, pushing, the chips' swap, the nine confirm boxes).
 9. **The question box's hint** (later the same evening): Speed and Expert get the same grey hint treatment Strategy
    has; the lane writes one short hint per mode in that style and lists the wording for the maintainer's veto.
+10. **The finish of an answer** (later the same evening): go. The flicker and jump when an answer finishes is fixed by
+    building the already-picked Features entry "A long answer is cut into sections while it writes". The smooth
+    follow while it writes stays separate, after a frame-rate measurement.

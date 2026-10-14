@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 979,
-  "edgeCount": 3304,
+  "fileCount": 981,
+  "edgeCount": 3314,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2149,6 +2149,18 @@
       ],
       "importedBy": []
     },
+    "src/components/PullModelsModal.removeBoxReturn.test.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.tsx",
+        "src/components/pullModelsRemoveReturn.ts",
+        "src/data/storageKeys.ts",
+        "src/test-harness/confirmBoxProbe.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/rpcFixtures.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/PullModelsModal.removeKeepsPcName.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
@@ -2195,6 +2207,7 @@
         "src/components/pullModelsBeside.ts",
         "src/components/pullModelsBoxMemory.ts",
         "src/components/pullModelsListClearance.ts",
+        "src/components/pullModelsRemoveReturn.ts",
         "src/data/deprioritizedModels.ts",
         "src/data/pullModelCatalog.ts",
         "src/data/storageKeys.ts",
@@ -2224,6 +2237,7 @@
         "src/components/PullModelsModal.listEnds.test.tsx",
         "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",
+        "src/components/PullModelsModal.removeBoxReturn.test.tsx",
         "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
@@ -3013,6 +3027,16 @@
         "src/components/PullModelsModal.tsx"
       ]
     },
+    "src/components/pullModelsRemoveReturn.ts": {
+      "imports": [
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/components/PullModelsModal.removeBoxReturn.test.tsx",
+        "src/components/PullModelsModal.tsx",
+        "src/hooks/usePullModelDeleteConfirm.tsx"
+      ]
+    },
     "src/components/ringTestProps.ts": {
       "imports": [
         "src/components/DeveloperTab.tsx",
@@ -3684,6 +3708,7 @@
     "src/data/storageKeys.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/PullModelsModal.removeBoxReturn.test.tsx",
         "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
         "src/components/PullModelsModal.tsx",
         "src/features/plugin-shell/initialSessionSnapshot.ts",
@@ -7483,6 +7508,7 @@
     "src/hooks/usePullModelDeleteConfirm.tsx": {
       "imports": [
         "src/components/CancelFirstConfirmModal.tsx",
+        "src/components/pullModelsRemoveReturn.ts",
         "src/data/pullModelCatalog.ts",
         "src/features/plugin-shell/pluginStorage.ts",
         "src/styles/sections/textPx.ts",
@@ -8718,6 +8744,7 @@
         "src/components/KnowledgeBaseSection.removeSwitchHook.test.tsx",
         "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
+        "src/components/PullModelsModal.removeBoxReturn.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
         "src/components/PullModelsStarterSetChip.test.tsx",
         "src/features/downloads/downloadNotice.test.tsx",
@@ -8838,6 +8865,7 @@
         "src/components/PullModelsModal.listEnds.test.tsx",
         "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/PullModelsModal.otherInstalledSize.test.tsx",
+        "src/components/PullModelsModal.removeBoxReturn.test.tsx",
         "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
@@ -8975,6 +9003,7 @@
         "src/components/PullModelsModal.gamepadOK.test.tsx",
         "src/components/PullModelsModal.listEnds.test.tsx",
         "src/components/PullModelsModal.listScroll.test.tsx",
+        "src/components/PullModelsModal.removeBoxReturn.test.tsx",
         "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
@@ -9111,6 +9140,7 @@
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/OllamaModelsHubModal.renderLoop.test.tsx",
         "src/components/PullModelsFiltersColumn.test.tsx",
+        "src/components/PullModelsModal.removeBoxReturn.test.tsx",
         "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
@@ -11797,6 +11827,7 @@
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/SettingsTabCharacterSection.tsx",
+        "src/components/pullModelsRemoveReturn.ts",
         "src/features/chat-sum-up/SessionSumUpSection.deckPlace.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.reveal.test.tsx",
         "src/features/chat-sum-up/SessionSumUpSection.tsx",

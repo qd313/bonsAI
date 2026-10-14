@@ -13,6 +13,9 @@
  * The call also carries the PC address the screen last saved, so the back end can keep the removed
  * model's place in the try order when that PC still has it.
  *
+ * When the box closes with Cancel or B the ring goes back to the same row's Remove control
+ * (pullModelsRemoveReturn.ts); the plugin's other boxes get that from the shell, but this row is inside a popup.
+ *
  * Does not: decide whether the Del button itself is disabled — the screen still checks
  * activeRoutingTag and its own deleteBusyTag before rendering that button as clickable.
  *
@@ -27,6 +30,7 @@ import { toaster } from "@decky/api";
 import { CancelFirstConfirmModal } from "../components/CancelFirstConfirmModal";
 import { formatSizeGb } from "../data/pullModelCatalog";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
+import { clearRemoveReturn, rememberRemoveReturn, restoreRemoveReturn } from "../components/pullModelsRemoveReturn";
 import { loadSavedIp } from "../features/plugin-shell/pluginStorage";
 import { textPx } from "../styles/sections/textPx";
 
@@ -37,6 +41,10 @@ export type UsePullModelDeleteConfirmArgs = {
   refreshInstalledAndMeta: (forceCatalog?: boolean) => Promise<void>;
   setSelectedTags: Dispatch<SetStateAction<Set<string>>>;
   setDeleteBusyTag: Dispatch<SetStateAction<string | null>>;
+  /** Puts the ring on a row's Remove control (the screen's own row move). Without it the ring is not handed back. */
+  focusRemoveControl?: (el: HTMLElement) => void;
+  /** Brings the ring back into the list first when it strayed outside (Steam's transfer). */
+  enterList?: () => boolean;
 };
 
 export type PullModelDeleteConfirm = {
@@ -52,6 +60,8 @@ export function usePullModelDeleteConfirm(a: UsePullModelDeleteConfirmArgs): Pul
     refreshInstalledAndMeta,
     setSelectedTags,
     setDeleteBusyTag,
+    focusRemoveControl,
+    enterList,
   } = a;
 
   const confirmDelete = useCallback(
@@ -64,6 +74,7 @@ export function usePullModelDeleteConfirm(a: UsePullModelDeleteConfirmArgs): Pul
         });
         return;
       }
+      rememberRemoveReturn(tag);
       onBeforeNestedDeckyModal?.();
       const handle = showModal(
         <CancelFirstConfirmModal
@@ -81,8 +92,14 @@ export function usePullModelDeleteConfirm(a: UsePullModelDeleteConfirmArgs): Pul
            */
           actionLabel="Remove model"
           danger
-          onCancel={() => completeNestedModalClose(() => handle.Close())}
+          onCancel={() => {
+            completeNestedModalClose(() => handle.Close());
+            if (focusRemoveControl) restoreRemoveReturn(focusRemoveControl, enterList);
+            else clearRemoveReturn();
+          }}
           onAction={() => {
+            // The row is about to go, so there is no control to hand the ring back to.
+            clearRemoveReturn();
             completeNestedModalClose(() => handle.Close());
             void (async () => {
               setDeleteBusyTag(tag);
@@ -131,7 +148,7 @@ export function usePullModelDeleteConfirm(a: UsePullModelDeleteConfirmArgs): Pul
         />
       );
     },
-    [activeRoutingTag, refreshInstalledAndMeta, completeNestedModalClose, onBeforeNestedDeckyModal]
+    [activeRoutingTag, refreshInstalledAndMeta, completeNestedModalClose, onBeforeNestedDeckyModal, focusRemoveControl, enterList]
   );
 
   return { confirmDelete };

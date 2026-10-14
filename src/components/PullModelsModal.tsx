@@ -127,6 +127,7 @@ import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
 import { PULL_MODEL_NEW_BADGE_STORAGE_KEY } from "../data/storageKeys";
 import { useListHeaderClearance } from "./pullModelsListClearance";
 import { BonsaiModalScope } from "./BonsaiModalScope";
+import { registerRemoveControl } from "./pullModelsRemoveReturn";
 import { recommendPullModelsForGaps } from "../utils/pullModelRecommendations";
 import { usePullModelCatalog } from "../hooks/usePullModelCatalog";
 import { usePullModelTier2Confirm } from "../hooks/usePullModelTier2Confirm";
@@ -455,6 +456,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
   // Lifted into usePullModelDeleteConfirm. It must stay at exactly this point in the hook list:
   // React matches hooks by the order they run, not by name.
   const { confirmDelete } = usePullModelDeleteConfirm({
+    focusRemoveControl: focusAndReveal,
+    enterList: () => handRingTo(listNavRef),
     activeRoutingTag,
     onBeforeNestedDeckyModal,
     completeNestedModalClose,
@@ -484,10 +487,13 @@ export function PullModelsModal(props: PullModelsModalProps) {
     };
 
   const bindDeleteRef =
-    (rowIndex: number): RefCallback<HTMLElement> =>
+    (rowIndex: number, tag: string): RefCallback<HTMLElement> =>
     (el) => {
       deleteCellRefs.current[rowIndex] = el;
       if (el) el.tabIndex = -1;
+      // By model name, outside this component, so the Remove box can hand the ring back to the row
+      // even when this screen was drawn again while the box was open (pullModelsRemoveReturn.ts).
+      registerRemoveControl(tag, el);
     };
 
   const renderCatalogRow = (entry: PullModelEntry, rowIndex: number) => {
@@ -571,7 +577,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--del" role="cell">
           {installed ? (
             <Button
-              ref={bindDeleteRef(rowIndex)}
+              ref={bindDeleteRef(rowIndex, entry.tag)}
               focusable={false}
               className="bonsai-pullmodels-delete-btn"
               disabled={deleteDisabled}
@@ -666,7 +672,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
         {tryCell(tag, rowIndex, true)}
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--del" role="cell">
           <Button
-            ref={bindDeleteRef(rowIndex)}
+            ref={bindDeleteRef(rowIndex, tag)}
             focusable={false}
             className="bonsai-pullmodels-delete-btn"
             disabled={deleteDisabled}

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 132,
-  "edgeCount": 362,
+  "fileCount": 133,
+  "edgeCount": 364,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -109,6 +109,10 @@
       "count": 6
     },
     {
+      "path": "py_modules/backend/ollama_connectivity.py",
+      "count": 5
+    },
+    {
       "path": "py_modules/backend/services/ollama_service.py",
       "count": 5
     },
@@ -123,10 +127,6 @@
     {
       "path": "py_modules/backend/tls_ca_fallback.py",
       "count": 5
-    },
-    {
-      "path": "py_modules/backend/ollama_connectivity.py",
-      "count": 4
     },
     {
       "path": "py_modules/backend/services/chat_turn_recorder.py",
@@ -469,6 +469,10 @@
       "count": 1
     },
     {
+      "path": "py_modules/backend/services/ollama_locate.py",
+      "count": 1
+    },
+    {
       "path": "py_modules/backend/services/ollama_mdns_discovery_service.py",
       "count": 1
     },
@@ -657,6 +661,7 @@
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/ollama_embed_service.py",
         "py_modules/backend/services/ollama_keep_alive_rule.py",
+        "py_modules/backend/services/ollama_locate.py",
         "py_modules/backend/services/ollama_stop_service.py"
       ]
     },
@@ -1221,6 +1226,7 @@
         "py_modules/backend/ollama_urls.py",
         "py_modules/backend/services/local_setup_progress_text.py",
         "py_modules/backend/services/ollama_catalog_service.py",
+        "py_modules/backend/services/ollama_locate.py",
         "py_modules/backend/services/ollama_server_restart.py",
         "py_modules/backend/services/starter_set_extras.py"
       ],
@@ -1419,6 +1425,14 @@
       ],
       "importedBy": [
         "main.py"
+      ]
+    },
+    "py_modules/backend/services/ollama_locate.py": {
+      "imports": [
+        "py_modules/backend/ollama_connectivity.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/local_ollama_setup_service.py"
       ]
     },
     "py_modules/backend/services/ollama_mdns_discovery_service.py": {

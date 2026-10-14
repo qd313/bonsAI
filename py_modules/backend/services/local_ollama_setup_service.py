@@ -540,9 +540,9 @@ def tier1_foss_recommended_pull_tags(profile: str) -> list[str]:
     return setup_recommended_pull_tags(profile)
 
 
-def resolve_ollama_executable() -> Optional[str]:
-    """Return path to ``ollama`` CLI if present on PATH."""
-    return shutil.which("ollama")
+# The path to the ``ollama`` program: the PATH, then ~/.local/bin and the other usual folders, then the
+# program a running server started from (ollama_locate.py). Decky's own PATH lacks ~/.local/bin.
+from backend.services.ollama_locate import find_ollama_executable as resolve_ollama_executable  # noqa: E402
 
 
 def _prefer_user_prefix_ollama_install_linux() -> bool:

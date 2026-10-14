@@ -578,6 +578,7 @@
     "tests/test_ollama_keep_alive_rule.py",
     "tests/test_ollama_local_autostart_rpc.py",
     "tests/test_ollama_local_autostart_service.py",
+    "tests/test_ollama_locate.py",
     "tests/test_ollama_mdns_discovery_service.py",
     "tests/test_ollama_preload.py",
     "tests/test_ollama_prompts_branch_example.py",

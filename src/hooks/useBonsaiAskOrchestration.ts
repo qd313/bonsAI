@@ -502,6 +502,16 @@ export function useBonsaiAskOrchestration(
        */
       const payloadSlotId = typeof status.chat_slot_id === "string" ? status.chat_slot_id : null;
       const activeSlotIdNow = a.activeSlotIdRef?.current ?? null;
+      /*
+       * With no chat open at all, an answer that names a chat is nobody's on screen: the chat it came
+       * from was deleted or is not the one remembered. The panel is rebuilt as the Delete chat box
+       * closes and this read runs on every start, so the answer the back end still held came back
+       * under a blank question, drawn as "..." (the last chat deleted, plan 93 lane B8). The safer
+       * rule is to refuse it, finished or pending: a chat to put the answer in always exists before a
+       * question is sent (`ensureActiveSlotForAsk`), and an answer asked with no chat carries no
+       * `chat_slot_id`, so it is not refused. Only when the hook was given the chat pointer at all.
+       */
+      if (payloadSlotId && a.activeSlotIdRef && !activeSlotIdNow) return;
       const paintsForeignSlot = Boolean(
         payloadSlotId && activeSlotIdNow && payloadSlotId !== activeSlotIdNow,
       );

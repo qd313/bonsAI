@@ -205,6 +205,20 @@ export function useChatSlots({
     [setAskThreadCollapsed, setAskThreadDisplayQuestion, setExpandedTurnKey],
   );
 
+  /**
+   * True from a question asked with no chat to put it in (the back end refused to make one) until a chat
+   * is next opened: that answer is on screen, unsaved, and has nowhere else to live.
+   */
+  const unsavedAskOnScreenRef = useRef(false);
+  /**
+   * The screen's reload from "no chat open" blanks the live answer along with the question. Left on screen,
+   * the answer of a chat that was just deleted drew under a blank question as "..." (the Delete chat box
+   * rebuilds the tab, and the start-up read gave the answer back). An answer asked unsaved is kept.
+   */
+  const blankLiveAnswerWithNoChat = useCallback(() => {
+    if (!unsavedAskOnScreenRef.current) resetLiveAskPresentation?.();
+  }, [resetLiveAskPresentation]);
+
   const refreshSummaries = useCallback(async () => {
     const rows = await listChatSlots();
     summariesRef.current = rows;
@@ -249,13 +263,14 @@ export function useChatSlots({
       setAskThreadDisplayQuestion("");
       setExpandedTurnKey("live");
       setChatMemory(NO_CHAT_MEMORY);
+      blankLiveAnswerWithNoChat();
       return;
     }
     const slot = await getChatSlot(sid);
     if (!slot) return;
     applySlotTranscript(slot.turns, slot.origin_app_id ?? "", slot.origin_app_name ?? "");
     applySlotMemory(slot);
-  }, [applySlotMemory, applySlotTranscript, refreshSummaries, setAskThreadCollapsed, setAskThreadDisplayQuestion, setExpandedTurnKey]);
+  }, [applySlotMemory, applySlotTranscript, blankLiveAnswerWithNoChat, refreshSummaries, setAskThreadCollapsed, setAskThreadDisplayQuestion, setExpandedTurnKey]);
 
   /*
    * Resolves `false` only when a chat was asked for and the back end had no such chat; every other
@@ -267,6 +282,7 @@ export function useChatSlots({
       /* Captured before anything below overwrites them: they describe the slot being LEFT. */
       const leavingId = activeSlotIdRef.current;
       const leavingTurnCount = activeSlotTurnCountRef.current;
+      unsavedAskOnScreenRef.current = false;
       setActiveSlot(slotId);
       /*
        * Blank the live answer BEFORE the transcript round-trip below, not after: the fetch is
@@ -424,7 +440,10 @@ export function useChatSlots({
          */
         const rows = await refreshSummaries();
         const newest = rows[0];
-        if (!newest || rows.length < MAX_CHAT_SLOTS) return null;
+        if (!newest || rows.length < MAX_CHAT_SLOTS) {
+          unsavedAskOnScreenRef.current = true;
+          return null;
+        }
         setActiveSlot(newest.id);
         toaster.toast({
           title: "Ten chats are saved",
@@ -434,6 +453,7 @@ export function useChatSlots({
         return newest.id;
       }
       await refreshSummaries();
+      unsavedAskOnScreenRef.current = false;
       setActiveSlot(slot.id);
       return slot.id;
     },

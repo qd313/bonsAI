@@ -11,7 +11,10 @@
  * Used for: afterDeleteRebuild.test.tsx only. Not part of the plugin.
  * Solves: The tests that passed one step from the screen all left the plugin standing while a box was
  *         open. The Deck rebuilds it, and the chat that should be open afterwards was lost in the gap.
- * Does not: Draw the question box (a single stop stands in for it), the answer, or any other tab.
+ *          A test may also hand the world an Ask layer (`useAsk`): the real Ask hook, wired as index.tsx wires it
+ *          (the open chat's pointer, the chat list's reload and its live-answer blanking), so the answer the back
+ *          end stored is read on every build and drawn in the real Main tab.
+ * Does not: Draw the question box (a single stop stands in for it) or any other tab.
  */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { act, render } from "@testing-library/react";
@@ -29,17 +32,35 @@ import { peekBonsaiSessionPendingRestore } from "../../utils/bonsaiSessionSurviv
 import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
 import { SteamRingFocusable, putSteamRingOn, steamRingHolder } from "../../test-harness/steamRing";
 import type { AskThreadCollapsedTurn, AskThreadExpandedTurnKey } from "../../types/bonsaiUi";
+import type { useBonsaiAskOrchestration } from "../../hooks/useBonsaiAskOrchestration";
 
 const noop = () => undefined;
 
+/** What an Ask layer is given: the open chat's pointer, and the chat list's reload to call when an answer lands. */
+export type AskLayerArgs = {
+  activeSlotIdRef: React.MutableRefObject<string | null>;
+  onSlotTurnsChanged: () => void;
+};
+/** The real Ask hook, as the test wires it; the harness reads its live answer and thread from what it returns. */
+export type UseAsk = (args: AskLayerArgs) => ReturnType<typeof useBonsaiAskOrchestration>;
+
 /** The plugin's own screen, as index.tsx builds it, down to the parts a Delete box touches. */
-function PluginScreen() {
+function PluginScreen({ useAsk }: { useAsk?: UseAsk }) {
   const { activeSlotIdRef } = useChatSlotActivityState();
-  const [collapsed, setCollapsed] = useState<AskThreadCollapsedTurn[]>(
+  const [ownCollapsed, setOwnCollapsed] = useState<AskThreadCollapsedTurn[]>(
     () => peekBonsaiSessionPendingRestore()?.askThreadCollapsed ?? [],
   );
-  const [displayQuestion, setDisplayQuestion] = useState("");
-  const [expanded, setExpanded] = useState<AskThreadExpandedTurnKey>("live");
+  const [ownDisplayQuestion, setOwnDisplayQuestion] = useState("");
+  const [ownExpanded, setOwnExpanded] = useState<AskThreadExpandedTurnKey>("live");
+  /* With an Ask layer the thread lives in the Ask hook, as in index.tsx; the order of hooks never changes per world. */
+  const reloadRef = useRef<() => Promise<void>>(async () => undefined);
+  const ask = useAsk?.({ activeSlotIdRef, onSlotTurnsChanged: () => void reloadRef.current() });
+  const collapsed = ask?.askThreadCollapsed ?? ownCollapsed;
+  const setCollapsed = ask?.setAskThreadCollapsed ?? setOwnCollapsed;
+  const displayQuestion = ask?.askThreadDisplayQuestion ?? ownDisplayQuestion;
+  const setDisplayQuestion = ask?.setAskThreadDisplayQuestion ?? setOwnDisplayQuestion;
+  const expanded = ask?.expandedTurnKey ?? ownExpanded;
+  const setExpanded = ask?.setExpandedTurnKey ?? setOwnExpanded;
   const sessionSnapshotRef = useRef<() => ReturnType<typeof buildInitialSessionSnapshot>>(buildInitialSessionSnapshot);
   const shell = useBonsaiPluginShell({ getSessionSnapshot: () => sessionSnapshotRef.current() });
   const chatSlots = useChatSlots({
@@ -48,7 +69,10 @@ function PluginScreen() {
     setAskThreadCollapsed: setCollapsed,
     setAskThreadDisplayQuestion: setDisplayQuestion,
     setExpandedTurnKey: setExpanded,
+    resetLiveAskPresentation: ask?.resetLiveAskPresentation,
+    restoreLastExchange: ask?.restoreLastExchangeFromSavedChat,
   });
+  reloadRef.current = chatSlots.reloadActiveSlotTranscript;
   useEffect(() => {
     void chatSlots.refreshSummaries();
   }, [chatSlots.refreshSummaries]);
@@ -87,6 +111,8 @@ function PluginScreen() {
         {...baseMainTabProps()}
         chatSlotSummaries={chatSlots.summaries}
         activeChatSlotId={chatSlots.activeSlotId}
+        isAsking={ask?.isAsking ?? false}
+        ollamaResponse={ask?.ollamaResponse ?? ""}
         askThreadCollapsed={collapsed}
         askThreadDisplayQuestion={displayQuestion}
         expandedTurnKey={expanded}
@@ -137,7 +163,10 @@ export class DeckyWorld {
   private titleUnmount: () => void;
   private open = 0;
 
-  constructor(private readonly when: RebuildWhen) {
+  constructor(
+    private readonly when: RebuildWhen,
+    private readonly useAsk?: UseAsk,
+  ) {
     setChatTitleTab("main");
     const t = render(
       <div data-testid="decky-title">
@@ -157,7 +186,7 @@ export class DeckyWorld {
     this.builds += 1;
     this.screen = document.body.appendChild(document.createElement("div"));
     act(() => {
-      const r = render(<PluginScreen />, { container: this.screen });
+      const r = render(<PluginScreen useAsk={this.useAsk} />, { container: this.screen });
       this.unmountScreen = r.unmount;
     });
   }

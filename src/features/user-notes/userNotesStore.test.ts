@@ -5,7 +5,7 @@
  * Used for: userNotesStore.ts (plan 92, lane N2).
  * Does not: Draw anything; the card, the line and the sheet have their own tests.
  */
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
   dismissOffer,
@@ -15,6 +15,7 @@ import {
   resetUserNotesStore,
   setActiveSlot,
   setOfferText,
+  simulateScreenReload,
   toggleOfferScope,
   visibleRecord,
 } from "./userNotesStore";
@@ -84,5 +85,36 @@ describe("userNotesStore", () => {
     receiveStatusOffer({ note_offer: OFFER, request_id: 7, chat_slot_id: "" });
     dismissOffer();
     expect(getUserNotesState().record).toBeNull();
+  });
+
+  it("does not draw a kept offer again after a screen-only reload", () => {
+    receiveStatusOffer({ note_offer: OFFER, request_id: 9, chat_slot_id: "slot-a" });
+    markOfferKept();
+    simulateScreenReload();
+    receiveStatusOffer({ note_offer: OFFER, request_id: 9, chat_slot_id: "slot-a" });
+    expect(visibleRecord(getUserNotesState())).toBeNull();
+  });
+
+  it("does not draw a dismissed offer again after a screen-only reload", () => {
+    receiveStatusOffer({ note_offer: OFFER, request_id: 10, chat_slot_id: "slot-a" });
+    dismissOffer();
+    simulateScreenReload();
+    receiveStatusOffer({ note_offer: OFFER, request_id: 10, chat_slot_id: "slot-a" });
+    expect(visibleRecord(getUserNotesState())).toBeNull();
+  });
+
+  it("still offers a new answer's offer after a reload, and works with no storage", () => {
+    receiveStatusOffer({ note_offer: OFFER, request_id: 11, chat_slot_id: "" });
+    dismissOffer();
+    simulateScreenReload();
+    receiveStatusOffer({ note_offer: OFFER, request_id: 12, chat_slot_id: "" });
+    expect(visibleRecord(getUserNotesState())?.requestId).toBe(12);
+    const spy = vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+      throw new Error("blocked");
+    });
+    simulateScreenReload();
+    receiveStatusOffer({ note_offer: OFFER, request_id: 12, chat_slot_id: "" });
+    expect(visibleRecord(getUserNotesState())).not.toBeNull();
+    spy.mockRestore();
   });
 });

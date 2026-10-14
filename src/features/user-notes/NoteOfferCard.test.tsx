@@ -37,6 +37,7 @@ import {
   resetUserNotesStore,
   setActiveSlot,
   setNotesModalHooks,
+  simulateScreenReload,
 } from "./userNotesStore";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
 import { REPLY_STOP_ORDER, registerReplyStop } from "../../utils/replyStopRegistry";
@@ -391,5 +392,16 @@ describe("the D-pad on the card", () => {
         expect(press(dir)).toBe(true);
       }
     }
+  });
+
+  it("after Not now and a screen-only reload, the same answer's offer is not drawn again", () => {
+    receiveStatusOffer({ note_offer: OFFER, request_id: 1, chat_slot_id: "" });
+    const first = mountCard();
+    act(() => stop(first.container, "Not now").__nav?.onOKButton?.());
+    first.unmount();
+    simulateScreenReload();
+    receiveStatusOffer({ note_offer: OFFER, request_id: 1, chat_slot_id: "" });
+    const { container } = mountCard();
+    expect(container.querySelector("[data-bonsai-note-card]")).toBeNull();
   });
 });

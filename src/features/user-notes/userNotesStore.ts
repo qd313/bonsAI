@@ -19,6 +19,7 @@
  */
 import { useSyncExternalStore } from "react";
 
+import { NOTE_OFFERS_HANDLED_STORAGE_KEY } from "../../data/storageKeys";
 import type { BackgroundRequestStatus, NoteOffer } from "../../types/backgroundAsk";
 import { getUiDocument } from "../../utils/uiDocument";
 
@@ -63,6 +64,33 @@ type State = {
   modalHooks: NotesModalHooks;
 };
 
+/** How many handled offers the device remembers. */
+const HANDLED_KEEP = 8;
+
+function offerKey(requestId: number | null, offer: NoteOffer): string {
+  return `${requestId ?? "-"}|${offer.text}`;
+}
+
+function readHandled(): string[] {
+  try {
+    const parsed: unknown = JSON.parse(window.localStorage.getItem(NOTE_OFFERS_HANDLED_STORAGE_KEY) ?? "[]");
+    return Array.isArray(parsed) ? parsed.filter((k): k is string => typeof k === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Remember on the device that this offer was kept or dismissed; a missing storage just means "not remembered". */
+function rememberHandled(requestId: number | null, offer: NoteOffer): void {
+  try {
+    const key = offerKey(requestId, offer);
+    const next = [...readHandled().filter((k) => k !== key), key].slice(-HANDLED_KEEP);
+    window.localStorage.setItem(NOTE_OFFERS_HANDLED_STORAGE_KEY, JSON.stringify(next));
+  } catch {
+    /* storage unavailable: the offer may come back after a screen-only reload */
+  }
+}
+
 function fresh(): State {
   return { record: null, activeSlotId: "", sheetOpenedFrom: null, sheetOpen: false, sheetReturnUntil: 0, editReturn: false, editOpen: false, modalHooks: {} };
 }
@@ -98,6 +126,17 @@ export function useUserNotesState(): State {
 /** Test-only: back to a clean store. */
 export function resetUserNotesStore(): void {
   state = fresh();
+  try {
+    window.localStorage.removeItem(NOTE_OFFERS_HANDLED_STORAGE_KEY);
+  } catch {
+    /* nothing to clear */
+  }
+  listeners.forEach((l) => l());
+}
+
+/** Test-only: the screen side starts over (memory gone) but the device storage stays, as in a screen-only reload. */
+export function simulateScreenReload(): void {
+  state = fresh();
   listeners.forEach((l) => l());
 }
 
@@ -125,6 +164,7 @@ export function receiveStatusOffer(status: Pick<BackgroundRequestStatus, "note_o
     if (state.record) set({ record: null });
     return;
   }
+  if (readHandled().includes(offerKey(requestId, offer))) return;
   set({
     record: {
       requestId,
@@ -172,11 +212,15 @@ export function setOfferError(error: string): void {
 }
 
 export function markOfferKept(): void {
+  if (state.record) rememberHandled(state.record.requestId, state.record.offer);
   setRecord({ phase: "kept", error: "", ringPending: false });
 }
 
 export function dismissOffer(): void {
-  if (state.record) set({ record: null });
+  if (state.record) {
+    rememberHandled(state.record.requestId, state.record.offer);
+    set({ record: null });
+  }
 }
 
 /** The ring has been put on Keep for this offer; do not do it again after a rebuild. */

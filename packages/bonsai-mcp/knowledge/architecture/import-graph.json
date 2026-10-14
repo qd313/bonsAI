@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 949,
-  "edgeCount": 3144,
+  "edgeCount": 3145,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3499,6 +3499,7 @@
         "src/features/plugin-shell/pluginStorage.ts",
         "src/features/plugin-shell/tabs/useAboutTabPayload.tsx",
         "src/features/plugin-shell/useSessionResetActions.tsx",
+        "src/features/user-notes/userNotesStore.ts",
         "src/hooks/useBonsaiPluginShell.test.ts",
         "src/hooks/usePullModelOpenBookkeeping.ts",
         "src/index.helpChip.test.tsx"
@@ -6345,6 +6346,7 @@
     },
     "src/features/user-notes/userNotesStore.ts": {
       "imports": [
+        "src/data/storageKeys.ts",
         "src/types/backgroundAsk.ts",
         "src/utils/uiDocument.ts"
       ],

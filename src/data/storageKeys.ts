@@ -61,3 +61,10 @@ export const PULL_MODEL_NEW_BADGE_STORAGE_KEY = "bonsai:pull-model-new-badge-v1"
 
 export const GITHUB_ISSUES_URL = "https://github.com/qd313/bonsAI/issues";
 export const OLLAMA_UPSTREAM_REPO_URL = "https://github.com/ollama/ollama";
+
+/**
+ * The last few note offers a person already kept or dismissed (each named by its request and words), so a
+ * reload of only the screen side does not draw the same offer card again. `bonsai:`-prefixed so
+ * *Clear all plugin data* takes it too.
+ */
+export const NOTE_OFFERS_HANDLED_STORAGE_KEY = "bonsai:note-offers-handled-v1";

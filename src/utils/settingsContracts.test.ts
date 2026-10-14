@@ -145,7 +145,7 @@ describe("settings contracts", () => {
     expect(settings.model_policy_tier).toBe("open_source_only");
     expect(settings.model_policy_non_foss_unlocked).toBe(false);
     expect(settings.model_allow_high_vram_fallbacks).toBe(false);
-    expect(settings.ollama_local_on_deck).toBe(false);
+    expect(settings.ollama_local_on_deck).toBe(true);
     expect(settings.ollama_local_autostart).toBe(false);
     expect(settings.terse_mode).toBe(false);
     expect(settings.chat_text_size).toBe("normal");
@@ -160,11 +160,11 @@ describe("settings contracts", () => {
     );
   });
 
-  it("normalizes ollama_local_on_deck: missing key defaults off; explicit true enables", () => {
+  it("normalizes ollama_local_on_deck: missing key defaults on; a saved false stays off", () => {
     expect(normalizeSettings({ ollama_local_on_deck: true }).ollama_local_on_deck).toBe(true);
     expect(normalizeSettings({ ollama_local_on_deck: false }).ollama_local_on_deck).toBe(false);
-    expect(normalizeSettings({}).ollama_local_on_deck).toBe(false);
-    expect(normalizeSettings({ ollama_local_on_deck: "yes" as unknown as boolean }).ollama_local_on_deck).toBe(false);
+    expect(normalizeSettings({}).ollama_local_on_deck).toBe(true);
+    expect(normalizeSettings({ ollama_local_on_deck: "yes" as unknown as boolean }).ollama_local_on_deck).toBe(true);
   });
 
   it("normalizes terse_mode: missing key defaults off; only an explicit true enables", () => {

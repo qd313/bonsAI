@@ -500,8 +500,8 @@ const SIMPLE_FIELDS = {
   ),
   reply_language: normalizeReplyLanguage,
   ollama_keep_alive: normalizeOllamaKeepAlive,
-  // `undefined`/`null` mean "never saved", which is off — same as any other non-`true`.
-  ollama_local_on_deck: boolDefaultFalse,
+  // On for a fresh install (plan 93): a missing value takes the default; a saved `false` stays off.
+  ollama_local_on_deck: boolDefaultTrue,
   // Off unless the person turns it on — it changes how the Deck starts.
   ollama_local_autostart: boolDefaultFalse,
   model_allow_high_vram_fallbacks: boolDefaultFalse,

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 956,
-  "edgeCount": 3191,
+  "edgeCount": 3192,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3069,6 +3069,7 @@
         "src/data/bonsaiSettingsContract.test.ts",
         "src/data/bonsaiSettingsHostileContract.test.ts",
         "src/features/plugin-shell/useCharacterPickerModal.tsx",
+        "src/hooks/usePluginSettings.test.ts",
         "src/hooks/usePluginSettings.ts",
         "src/test-harness/rpcFixtures.ts",
         "src/utils/settingsContracts.test.ts"
@@ -7175,6 +7176,7 @@
     },
     "src/hooks/usePluginSettings.test.ts": {
       "imports": [
+        "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
         "src/features/plugin-shell/developerTabSignal.ts",
         "src/hooks/usePluginSettings.ts",

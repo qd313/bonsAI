@@ -30,7 +30,7 @@
   "named_ollama_hosts": [],
   "ollama_keep_alive": "5m",
   "ollama_local_autostart": false,
-  "ollama_local_on_deck": false,
+  "ollama_local_on_deck": true,
   "preset_chip_animation": "fade",
   "preset_chip_fade_animation_enabled": true,
   "preset_single_chip": false,

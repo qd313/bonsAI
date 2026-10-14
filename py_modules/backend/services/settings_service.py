@@ -474,8 +474,8 @@ _SIMPLE_FIELDS: dict[str, Any] = {
     "terse_mode": _bool_default_false,
     "ask_think_effort": _enum(_VALID_ASK_THINK_EFFORTS, DEFAULT_ASK_THINK_EFFORT, strip=True),
     "ollama_keep_alive": _ollama_keep_alive_field,
-    # ``None`` means "never saved", which is off -- same result as any other non-``True``.
-    "ollama_local_on_deck": _bool_default_false,
+    # On for a fresh install (plan 93): a missing value takes the default; a saved ``False`` stays off.
+    "ollama_local_on_deck": _bool_default_true,
     # Off unless the person turns it on -- it changes how the Deck starts.
     "ollama_local_autostart": _bool_default_false,
     "model_allow_high_vram_fallbacks": _bool_default_false,

@@ -80,7 +80,7 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertEqual(sanitized["model_policy_tier"], "open_source_only")
         self.assertFalse(sanitized["model_policy_non_foss_unlocked"])
         self.assertFalse(sanitized["model_allow_high_vram_fallbacks"])
-        self.assertFalse(sanitized["ollama_local_on_deck"])
+        self.assertTrue(sanitized["ollama_local_on_deck"])
         self.assertFalse(sanitized["ollama_local_autostart"])
         self.assertTrue(sanitized["strategy_spoiler_masking_enabled"])
         self.assertFalse(sanitized["strategy_spoiler_auto_reveal_after_consent"])
@@ -449,8 +449,8 @@ class SettingsServiceTests(unittest.TestCase):
         )
         self.assertFalse(garbled["input_sanitizer_user_disabled"])
 
-    def test_sanitize_ollama_local_on_deck_default_off_explicit_true_enables(self):
-        """Omitted key defaults off (LAN routing); literal JSON ``true`` enables local Ollama."""
+    def test_sanitize_ollama_local_on_deck_default_on_saved_off_stays_off(self):
+        """Omitted key defaults on (plan 93, fresh install); a saved ``false`` stays off."""
         base_kwargs = dict(
             default_latency_warning_seconds=15,
             default_request_timeout_seconds=120,
@@ -464,7 +464,7 @@ class SettingsServiceTests(unittest.TestCase):
             default_ask_mode="speed",
         )
         missing = sanitize_settings(data={}, **base_kwargs)
-        self.assertFalse(missing["ollama_local_on_deck"])
+        self.assertTrue(missing["ollama_local_on_deck"])
 
         explicit_false = sanitize_settings(data={"ollama_local_on_deck": False}, **base_kwargs)
         self.assertFalse(explicit_false["ollama_local_on_deck"])
@@ -472,7 +472,21 @@ class SettingsServiceTests(unittest.TestCase):
         on = sanitize_settings(data={"ollama_local_on_deck": True}, **base_kwargs)
         self.assertTrue(on["ollama_local_on_deck"])
         garbled = sanitize_settings(data={"ollama_local_on_deck": "yes"}, **base_kwargs)
-        self.assertFalse(garbled["ollama_local_on_deck"])
+        self.assertTrue(garbled["ollama_local_on_deck"])
+
+    def test_saved_settings_file_with_run_ai_off_stays_off_and_missing_key_loads_on(self):
+        """An existing install's saved ``false`` survives a load; a file without the key gets the new default."""
+        logger = _Logger()
+
+        sanitize_fn = _sanitize_with_defaults
+
+        with tempfile.TemporaryDirectory() as tmp:
+            settings_path = Path(tmp) / "settings.json"
+            settings_path.write_text('{"ollama_local_on_deck": false}', encoding="utf-8")
+            self.assertFalse(load_settings(str(settings_path), sanitize_fn, logger)["ollama_local_on_deck"])
+            settings_path.write_text('{"latency_warning_seconds": 30}', encoding="utf-8")
+            self.assertTrue(load_settings(str(settings_path), sanitize_fn, logger)["ollama_local_on_deck"])
+            self.assertTrue(load_settings(str(Path(tmp) / "none.json"), sanitize_fn, logger)["ollama_local_on_deck"])
 
     def test_sanitize_ollama_local_autostart_default_off_explicit_true_enables(self):
         """Omitted key defaults off (no startup entry); literal JSON ``true`` enables it."""

@@ -4,6 +4,7 @@ import { call } from "@decky/api";
 import { usePluginSettings } from "./usePluginSettings";
 import { defaultSettingsFixture } from "../test-harness/rpcFixtures";
 import { dispatchFakeRpc, getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../test-harness/fakeDeckyRpc";
+import { normalizeSettings } from "../data/bonsaiSettingsNormalizers";
 import { DEFAULT_LATENCY_WARNING_SECONDS } from "../data/bonsaiSettingsSchema";
 import { peekDeveloperTabShown, resetDeveloperTabSignalForTests } from "../features/plugin-shell/developerTabSignal";
 describe("usePluginSettings", () => {
@@ -25,6 +26,20 @@ describe("usePluginSettings", () => {
     await waitFor(() => expect(peekDeveloperTabShown()).toBe(true));
     act(() => result.current.setShowDeveloperTab(false));
     expect(peekDeveloperTabShown()).toBe(false);
+  });
+
+  it("a fresh install, with nothing saved, opens with Run AI on this Deck switched on", async () => {
+    setRpcHandler("load_settings", () => normalizeSettings({}));
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+    expect(result.current.ollamaLocalOnDeck).toBe(true);
+  });
+
+  it("an install that saved Run AI on this Deck as off keeps it off", async () => {
+    setRpcHandler("load_settings", () => normalizeSettings({ ollama_local_on_deck: false }));
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+    expect(result.current.ollamaLocalOnDeck).toBe(false);
   });
 
   it("loads settings on mount via load_settings RPC", async () => {

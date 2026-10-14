@@ -574,8 +574,8 @@ hardest focus piece), and the finish-flicker lane if the measurement sends it to
   all fixed: the most useful consult of the day), consult 3 before the O4, O1 and O3 landings (about 22,000, 35,000 and
   50,000 tokens; each said land; the O1 one named the panel-colour reading that D0 then took). No consult was needed at
   points 6 and 7 (no clash beyond what the file map caught; the maintainer lifted the five-hour rule at 11:00). Usage at
-  13:45: week 19 percent, five-hour window 54. Owed for the next session: the fresh install on the stand-in if S1 did not
-  finish (row P93-B3-FIRST-RUN, P93-B1-WIPE-DEFAULT); the Deck re-checks of the four last fixes (the starter-set
+  13:45: week 19 percent, five-hour window 54. Block S1 on the stand-in passed all three (Run AI on after a wipe, both notices once, the starter-set box, the help
+  chip, open source only; a new small bug: cancelling the downloads box reads as "Failed"). Owed for the next session: the Deck re-checks of the four last fixes (the starter-set
   installer and button, the switch after a download, "Remove" at Large); the four model-screen boxes the rig could not
   open; the push (the maintainer's); the rig's rebuild (done by the session at the end, its proof in the next session).
 

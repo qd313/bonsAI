@@ -1,0 +1,18 @@
+{
+ "row": "P93-ASK-STRIP-GREYED",
+ "build_commit": "unchanged since block A (no deploy or reload); machine deck (real Steam Deck)",
+ "deck_time_local": "2026-10-14 ~10:49-10:51",
+ "screen": "Deck's own screen, page window 854x454",
+ "setup": "Main tab, test chat 'What is the fastest way to earn geo early in Hollow Knight' (chat 1 of 2), Speed mode, no game. send-question script printed VERIFIED with the whole text 'Describe every area of Hollow Knight in order with what to do in each'.",
+ "pressed": "Walk DOWN to Ask (12 presses, ring read on Ask, class bonsai-ask-primary--ready), A. Then DOWN, LEFT, LEFT, RIGHT, UP, then runSequence DOWN, LEFT, LEFT, LEFT, RIGHT, RIGHT, RIGHT, RIGHT. Focus read after each press.",
+ "seen": {
+  "after_A": "Focus jumped to the question box (empty). Strip while writing: Attach button has class Disabled (greyed), Ask has class Disabled and opacity 0.38, Stop generation button shown (enabled), mode button 'Speed' enabled.",
+  "walk_1": "From box DOWN: Stop generation (enabled, rect 261,426 20x20). LEFT: mode button 'Inference mode: Speed' (enabled). LEFT again: 'Attach screenshot to Ask', class Disabled (greyed), rect 54,426 20x20, ring visible on it. So Left from the mode button DOES land on the greyed paperclip. Screenshot: plan93-P93-ASK-STRIP-GREYED-ring-on-attach.png. RIGHT back: mode button.",
+  "walk_2_runSequence": "box -DOWN-> Stop; LEFT -> mode; LEFT -> Attach (greyed); LEFT -> no move (left end = Attach); RIGHT -> mode; RIGHT -> Stop; RIGHT -> no move; RIGHT -> no move (right end = Stop). Landing boxes all 100 percent visible. Evidence run file: runs/plan93-D0-ASK-STRIP-walk.json",
+  "greyed_ask": "The greyed Ask button was never reached: RIGHT from Stop does not move; no press landed on Ask while the answer was being written.",
+  "stop_step": "Not pressed. Stop generation was still present at the last walk step, then the answer finished (about 50 s after A); focus then showed 'Voice input'. Answer text finished normally."
+ },
+ "expected": "Reading only, no pass or fail.",
+ "verdict": "UNCLEAR (reading, no pass or fail asked): ring DID sit on a greyed button (Attach, 2 times in this block); ring did NOT sit on greyed Ask",
+ "side_effect": "One real question was asked in the test chat (as planned). A model (gemma4:e2b-it-qat) was left loaded by it; I unloaded it with ollama stop afterwards."
+}

@@ -12,7 +12,10 @@
  * Does not: Handle clicks or focus; the button around it does. The words are passed in
  * unchanged, so anything that finds a button by its text still finds it.
  *
- * How it works: a row with the icon first, a 6 px gap, then the label text.
+ * How it works: a row with the icon first, a 6 px gap, then the label text. The text may shrink and wrap
+ * (min-width 0, a tight line height) and the icon may not shrink, so on Large "Update knowledge base"
+ * takes two lines inside the button's fixed 44 points instead of being cut to "Update knowledge bas"
+ * (plan 93, M10); at Normal it is one line, as before.
  */
 import React from "react";
 
@@ -20,8 +23,8 @@ export const KnowledgeBaseButtonLabel: React.FC<{ icon: React.ReactNode; childre
   icon,
   children,
 }) => (
-  <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-    {icon}
-    {children}
+  <span style={{ display: "inline-flex", alignItems: "center", gap: 6, minWidth: 0 }}>
+    <span style={{ display: "inline-flex", flexShrink: 0 }}>{icon}</span>
+    <span style={{ minWidth: 0, lineHeight: 1.15, overflowWrap: "anywhere" }}>{children}</span>
   </span>
 );

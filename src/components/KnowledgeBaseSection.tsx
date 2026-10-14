@@ -926,9 +926,11 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
                   minHeight: KB_ACTION_ROW_MIN_HEIGHT,
                   height: KB_ACTION_ROW_MIN_HEIGHT,
                   boxSizing: "border-box",
-                  whiteSpace: "nowrap",
+                  /* The words wrap to a second line at Large instead of being cut (plan 93, M10): two lines of the
+                     largest step fit the fixed 44 by design (KnowledgeBaseButtonLabel.tsx), so the row keeps its height. */
+                  padding: "4px 10px",
+                  whiteSpace: "normal",
                   overflow: "hidden",
-                  textOverflow: "ellipsis",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "flex-start",

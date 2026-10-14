@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 977,
-  "edgeCount": 3290,
+  "fileCount": 978,
+  "edgeCount": 3295,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -522,6 +522,16 @@
       ],
       "importedBy": []
     },
+    "src/components/KnowledgeBaseSection.largeText.test.tsx": {
+      "imports": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/data/chatTextSize.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/settledFontSize.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/KnowledgeBaseSection.nomicPull.test.tsx": {
       "imports": [
         "src/components/KnowledgeBaseSection.tsx",
@@ -622,6 +632,7 @@
         "src/components/KnowledgeBaseSection.httpsHost.test.tsx",
         "src/components/KnowledgeBaseSection.icons.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
+        "src/components/KnowledgeBaseSection.largeText.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.noticeReturnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.pullHint.test.tsx",
@@ -3341,6 +3352,7 @@
       ],
       "importedBy": [
         "src/components/CancelFirstConfirmModal.test.tsx",
+        "src/components/KnowledgeBaseSection.largeText.test.tsx",
         "src/components/steamWordsScaled.test.tsx",
         "src/components/textSizeEverywhere.test.tsx",
         "src/components/textSizeSurfaces.test.tsx",
@@ -8775,6 +8787,7 @@
         "src/components/KnowledgeBaseSection.httpsHost.test.tsx",
         "src/components/KnowledgeBaseSection.icons.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
+        "src/components/KnowledgeBaseSection.largeText.test.tsx",
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.noticeReturnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.pullHint.test.tsx",
@@ -8869,6 +8882,7 @@
         "src/components/DrgGlossaryTermChip.test.tsx",
         "src/components/KnowledgeBaseSection.icons.test.tsx",
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
+        "src/components/KnowledgeBaseSection.largeText.test.tsx",
         "src/components/KnowledgeBaseSection.pullHint.test.tsx",
         "src/components/KnowledgeBaseSection.remountDownload.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
@@ -9129,6 +9143,7 @@
       "imports": [],
       "importedBy": [
         "src/components/CancelFirstConfirmModal.test.tsx",
+        "src/components/KnowledgeBaseSection.largeText.test.tsx",
         "src/components/steamWordsScaled.test.tsx",
         "src/components/textSizeEverywhere.test.tsx",
         "src/components/textSizeSurfaces.test.tsx",

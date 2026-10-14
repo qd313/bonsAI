@@ -81,3 +81,38 @@ describe("PermissionsTab kids lock", () => {
     expect(screen.getByTestId("stored-caps").textContent).toBe(JSON.stringify(ALL_ON));
   });
 });
+
+/**
+ * Plan 93 lane B9 (the maintainer, 2026-10-13: "every warning should be much shorter"). Read at the
+ * level the Deck shows: the words drawn on the Permissions tab, counted by whitespace.
+ */
+const words = (text: string | null | undefined) => (text ?? "").split(/\s+/).filter(Boolean).length;
+
+describe("PermissionsTab wording stays short", () => {
+  it("the intro is at most 40 words", () => {
+    render(<Harness kidsLockActive={false} />);
+    const intro = document.querySelector("[data-bonsai-permissions-intro]");
+    expect(intro).toBeTruthy();
+    expect(words(intro!.textContent)).toBeLessThanOrEqual(40);
+  });
+
+  it("every switch description is at most 12 words", () => {
+    render(<Harness kidsLockActive={false} />);
+    const toggles = document.querySelectorAll('[data-decky-ui="ToggleField"]');
+    expect(toggles.length).toBe(5);
+    for (const toggle of toggles) {
+      const description = toggle.getAttribute("description");
+      expect(description, toggle.getAttribute("label") ?? "").toBeTruthy();
+      expect(words(description), `${toggle.getAttribute("label")}: ${description}`).toBeLessThanOrEqual(12);
+    }
+  });
+
+  it("the parental-controls banner is at most 40 words and keeps the facts that matter", () => {
+    render(<Harness kidsLockActive={true} />);
+    const banner = document.querySelector('[data-bonsai-kids-lock-banner="1"]');
+    expect(words(banner!.textContent)).toBeLessThanOrEqual(40);
+    expect(banner!.textContent).toMatch(/every switch here is off/i);
+    expect(banner!.textContent).toMatch(/Ask still works/i);
+    expect(banner!.textContent).toMatch(/does not filter what the AI says/i);
+  });
+});

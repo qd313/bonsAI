@@ -8,6 +8,7 @@
  * Does not: Prove anything about geometry or D-pad focus. The test runner has no layout engine and
  *   the preview suite does not validate focus graphs — that is the device rows' job.
  */
+import { isGreyedDeckyButton } from "../test-harness/fakeDeckyUi";
 import { describe, expect, it, vi } from "vitest";
 import { render } from "@testing-library/react";
 
@@ -189,7 +190,7 @@ describe("a finished reply, all three changes together", () => {
     const { container } = renderReply(SHORT_ANSWER, { isAsking: true });
     const retry = container.querySelector(".bonsai-turn-retry-corner") as HTMLButtonElement | null;
     expect(retry).not.toBeNull();
-    expect(retry!.disabled).toBe(true);
+    expect(isGreyedDeckyButton(retry)).toBe(true);
   });
 
   it("offers no Retry on an older question, only on the newest", () => {

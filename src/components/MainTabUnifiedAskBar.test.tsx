@@ -10,6 +10,7 @@
  *         happens to be sitting on before it even checks whether there is a question to send --
  *         but nothing ever claimed the ring afterward, so it dropped to nothing.
  */
+import { isGreyedDeckyButton } from "../test-harness/fakeDeckyUi";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 
@@ -115,8 +116,8 @@ describe("Ask button press -> where the ring goes next", () => {
     );
     const askButton = container.querySelector("button.bonsai-ask-primary") as HTMLButtonElement;
     expect(askButton).toBeTruthy();
-    // A real disabled <button> refuses both the click and the focus a click would otherwise cause.
-    expect(askButton.disabled).toBe(true);
+    // Greyed the way the Deck draws it: the button swallows the click (it still takes the ring there).
+    expect(isGreyedDeckyButton(askButton)).toBe(true);
 
     fireEvent.click(askButton);
 

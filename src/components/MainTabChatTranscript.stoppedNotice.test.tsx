@@ -13,6 +13,7 @@
  * Does not: Cover useBonsaiAskOrchestration.ts itself (owned by a different lane) — only what
  *           MainTabChatTranscript does with the props it is handed.
  */
+import { isGreyedDeckyButton } from "../test-harness/fakeDeckyUi";
 import { describe, expect, it, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 
@@ -48,9 +49,9 @@ function baseProps(overrides: Partial<MainTabChatTranscriptProps>): MainTabChatT
   };
 }
 
-/** Decky's Button may render a real <button> or a div wrapper; read whichever says disabled. */
+/** Greyed the way the Deck draws it: a Decky button that keeps the ring but swallows the press. */
 function isDisabled(el: HTMLElement): boolean {
-  return (el as HTMLButtonElement).disabled === true || el.hasAttribute("disabled");
+  return isGreyedDeckyButton(el) || (el as HTMLButtonElement).disabled === true || el.hasAttribute("disabled");
 }
 
 describe("stopped turn — notice and reply actions restored on the archived turn", () => {

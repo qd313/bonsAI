@@ -22,6 +22,7 @@ import {
 import type { LastExchangeSnapshot, ReplyFollowUpPending } from "../types/backgroundAsk";
 import { buildReplyActionsElement } from "../utils/buildReplyActionsElement";
 import { resetUiDocument } from "../utils/uiDocument";
+import { isGreyedDeckyButton } from "../test-harness/fakeDeckyUi";
 import { dispatchFakeRpc, resetFakeDeckyRpc } from "../test-harness/fakeDeckyRpc";
 
 vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
@@ -72,15 +73,15 @@ describe("the Helpful row after the panel is closed and opened again", () => {
       fireEvent.click(thumb("Mark reply not helpful"));
     });
     expect(screen.getByText("What went wrong?")).toBeTruthy();
-    expect(thumb("Mark reply helpful").disabled).toBe(true);
+    expect(isGreyedDeckyButton(thumb("Mark reply helpful"))).toBe(true);
 
     // The save window closes the side panel: the whole plugin unmounts, then mounts again.
     first.unmount();
     render(<NewestAnswerRow exchange={{ ...REPLY }} requestId={7} />);
 
     expect(screen.getByText("What went wrong?")).toBeTruthy();
-    expect(thumb("Mark reply helpful").disabled).toBe(true);
-    expect(thumb("Mark reply not helpful").disabled).toBe(true);
+    expect(isGreyedDeckyButton(thumb("Mark reply helpful"))).toBe(true);
+    expect(isGreyedDeckyButton(thumb("Mark reply not helpful"))).toBe(true);
   });
 
   it("Helpful: still reads as saved after a remount, with no live thumbs", async () => {
@@ -106,7 +107,7 @@ describe("the Helpful row after the panel is closed and opened again", () => {
     first.unmount();
     render(<NewestAnswerRow exchange={{ ...REPLY }} requestId={7} />);
 
-    expect((screen.getByText("Too long").closest("button") as HTMLButtonElement).disabled).toBe(true);
+    expect(isGreyedDeckyButton(screen.getByText("Too long").closest("button"))).toBe(true);
   });
 
   it("the same words from a new question are not already rated (the answer cache)", async () => {
@@ -118,7 +119,7 @@ describe("the Helpful row after the panel is closed and opened again", () => {
     render(<NewestAnswerRow exchange={{ ...REPLY }} requestId={8} />);
 
     expect(screen.queryByText("What went wrong?")).toBeNull();
-    expect(thumb("Mark reply helpful").disabled).toBe(false);
+    expect(isGreyedDeckyButton(thumb("Mark reply helpful"))).toBe(false);
   });
 });
 

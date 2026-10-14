@@ -68,9 +68,10 @@ function stub(name: string) {
  *
  * 1. On device Decky wires a real button into Steam's nav graph and stamps `tabindex="0"` itself
  *    once it registers the node (the focus-graph policy documents this), so a button is always
- *    programmatically focusable there, and a *disabled* one refuses focus the way any disabled
- *    native control does. A stub `<div>` needed a manual `tabIndex` trick to fake that; a real
- *    `<button>` gets focus/disabled semantics for free from jsdom, so the trick is gone.
+ *    programmatically focusable there. A *greyed* one (`disabled`) is not a disabled native control:
+ *    it keeps its place in Steam's graph and still takes the ring (measured on the Deck 2026-09-16
+ *    and 2026-10-12), so the stub drops the native attribute and marks it with `aria-disabled`
+ *    instead (`isGreyedDeckyButton` reads it). A real `<button>` still gives focus for free from jsdom.
  * 2. Decky's real `Button` renders a plain `<button>` with no `type` attribute -- a submit button by
  *    default -- and `ModelRoutingOrderModal`'s picker sits inside Steam's `ConfirmModal`, which
  *    renders a `<form>`. An un-prevented click there submits the form and takes the modal's own
@@ -86,15 +87,38 @@ function stub(name: string) {
  */
 function focusableButtonStub(name: string) {
   return React.forwardRef<HTMLButtonElement, StubProps>(function DeckyUiButtonStub(
-    { children, ...rest },
+    { children, disabled, onClick, ...rest },
     ref
   ) {
+    /* A greyed Decky button is NOT a disabled native control: it only carries a `Disabled` class, stays in
+       Steam's focus graph and takes the ring (measured on the Deck 2026-09-16 and 2026-10-12). So the
+       stub never sets the native `disabled` attribute (jsdom would refuse focus and `el.disabled`
+       would read true, which the Deck never does); it marks the button with `aria-disabled` and
+       swallows the press, which a greyed Decky button also does. (It leaves `className` alone on
+       purpose: a test that sets the ring's class by hand must not lose it when a button greys.) */
+    const greyed = Boolean(disabled);
+    /* A greyed press does nothing at all, and does not submit an enclosing form either (as a native
+       disabled button would not): it only cancels the browser's default. */
+    const press: React.MouseEventHandler | undefined = greyed
+      ? (e) => e.preventDefault()
+      : (onClick as React.MouseEventHandler | undefined);
     return (
-      <button ref={ref} data-decky-ui={name} {...withoutSteamNavProps(rest)}>
+      <button
+        ref={ref}
+        data-decky-ui={name}
+        {...(greyed ? { "aria-disabled": true } : {})}
+        {...withoutSteamNavProps(rest)}
+        onClick={press}
+      >
         {children as React.ReactNode}
       </button>
     );
   });
+}
+
+/** True for a Decky button the stub drew greyed: still a focus stop, press swallowed (see above). */
+export function isGreyedDeckyButton(el: Element | null | undefined): boolean {
+  return Boolean(el) && (el as Element).getAttribute("aria-disabled") === "true";
 }
 
 export const PanelSection = stub("PanelSection");

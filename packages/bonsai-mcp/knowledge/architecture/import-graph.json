@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 960,
-  "edgeCount": 3225,
+  "edgeCount": 3226,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2056,6 +2056,7 @@
         "src/components/pullModelsBoxMemory.ts",
         "src/data/pullModelCatalog.ts",
         "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
         "src/test-harness/rpcFixtures.ts"
       ],
       "importedBy": []
@@ -8783,6 +8784,7 @@
         "src/components/PullModelsModal.listEnds.test.tsx",
         "src/components/PullModelsModal.listScroll.test.tsx",
         "src/components/PullModelsModal.removeKeepsPcName.test.tsx",
+        "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
         "src/components/PullModelsStarterSetChip.test.tsx",
         "src/components/ReplyCopyButton.test.tsx",

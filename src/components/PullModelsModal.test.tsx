@@ -8,6 +8,7 @@
  * (isPlausibleOllamaPullTag, in mergePullModelCatalog.test.ts) plus the button's driven-by-state
  * disabled/enabled behaviour here; the on-Deck row covers actually typing a tag.
  */
+import { isGreyedDeckyButton } from "../test-harness/fakeDeckyUi";
 import { beforeEach, describe, expect, it } from "vitest";
 import { render, waitFor, fireEvent } from "@testing-library/react";
 import { toaster } from "@decky/api";
@@ -156,7 +157,7 @@ describe("PullModelsModal custom tag entry", () => {
     expect(field).not.toBeNull();
     const btn = container.querySelector('[aria-label="Pull custom model tag"]') as HTMLButtonElement;
     expect(btn).not.toBeNull();
-    expect(btn.disabled).toBe(true);
+    expect(isGreyedDeckyButton(btn)).toBe(true);
   });
 });
 

@@ -329,6 +329,7 @@
     "src/utils/activeOllamaRoutingTag.test.ts",
     "src/utils/answerBubbleElRegistry.test.ts",
     "src/utils/answerBubbleNavigation.controlsLift.test.ts",
+    "src/utils/answerBubbleNavigation.coverAtSectionTop.test.ts",
     "src/utils/answerBubbleNavigation.coverMargin.test.ts",
     "src/utils/answerBubbleNavigation.coverMirror.test.ts",
     "src/utils/answerBubbleNavigation.coverUp.test.ts",

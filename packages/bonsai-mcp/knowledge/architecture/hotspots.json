@@ -91,13 +91,13 @@
       "role": ""
     },
     {
-      "path": "src/styles/sections/gamepadAndPullModels.ts",
-      "lines": 866,
+      "path": "src/utils/answerBubbleNavigation.ts",
+      "lines": 876,
       "role": ""
     },
     {
-      "path": "src/utils/answerBubbleNavigation.ts",
-      "lines": 862,
+      "path": "src/styles/sections/gamepadAndPullModels.ts",
+      "lines": 866,
       "role": ""
     },
     {

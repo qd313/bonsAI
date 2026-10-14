@@ -10,12 +10,14 @@
  * move the ring on to whatever sits outside the bubble entirely.
  *
  *     Pressing Down, in order:
- *       1. a hidden spoiler cover on screen and ahead of the ring  -> land on the cover
- *       2. a glossary-term chip on screen, ahead of the ring and in the ring's own section -> land on
+ *       1. the ring is on the LAST hidden cover of its section and text runs on below it
+ *          -> land on the section's box (`boxAfterLastCover`), once per walk; before any other cover,
+ *          so a cover of the next section already on screen cannot skip this box (plan 93)
+ *       2. a hidden spoiler cover on screen and ahead of the ring, in the ring's own section or the one
+ *          right after it -> land on the cover
+ *       3. a glossary-term chip on screen, ahead of the ring and in the ring's own section -> land on
  *          the chip (both are lifted clear of the dock if it covers them); a word in the next section
  *          waits for that section's box (step 4), as its first stop
- *       3. the ring is on the LAST hidden cover of its section and text runs on below it
- *          -> land on the section's box (`boxAfterLastCover`), once per walk
  *       4. the next section, but only if it is already on screen (a section that is only its
  *          cover lands on the cover instead: the box stands in for it). When the ring's section
  *          is already fully read (its bottom is inside the band) and the next one starts below the
@@ -657,7 +659,34 @@ function moveDownInAnswer(
   const anchor = walkAnchor(bubble, answerKey);
   /* True when the walk is somewhere other than where the ring sits (the ring is on a section, see walkAnchor). */
   const anchored = anchor !== uiGamepadFocusElement();
-  const fence = findNextSpoilerFenceInView(bubble, inView, anchor);
+
+  /*
+   * The ring is on the last hidden cover of its section and text runs on below it: the section's box
+   * is the next stop (`boxAfterLastCover`), the mirror of Up landing on the box before the cover. It
+   * comes before any other cover on screen: with the next section's cover already showing, that cover
+   * used to win and the box was never a stop going Down, while Up stopped on it (plan 93, the Deck:
+   * plan93-M6-UP-SKIPS-PARAGRAPH.json, a 141 px section whose cover sat 8 px below its top).
+   */
+  const box = answerKey ? boxAfterLastCover(bubble, answerKey) : null;
+  if (box && focusAnswerStop(box)) {
+    boxLandedIn = box;
+    /* Placed as any landing: clear of the dock, a box taller than the band up to the header. The lift
+       used to do the second half and now leaves sections to the walk (useDockClearanceOnFocus.ts). */
+    revealBelowDock(box, scroll);
+    revealSectionInBand(box, scroll);
+    return true; // the walk keeps its memory: the cover the ring just left is not offered again
+  }
+
+  /*
+   * A cover ahead is one in the ring's own section or the section right after it, never further: a cover
+   * two sections on, already on screen, took the ring past the whole short section between (Up walks
+   * through that section, so the walks no longer matched). With the ring on the bubble itself, any.
+   */
+  const own = ringSection(bubble, answerKey);
+  const sections = answerKey ? orderedAnswerStops(answerKey, bubble) : [];
+  const following = own ? sections[sections.indexOf(own) + 1] : undefined;
+  const near = (el: HTMLElement) => !own || own.contains(el) || Boolean(following?.contains(el));
+  const fence = findNextSpoilerFenceInView(bubble, (el) => inView(el) && near(el), anchor);
   if (fence && focusSpoilerFence(fence)) {
     walk = null;
     /* A cover half behind the dock is not a landing a person can read; lift it clear, as for a section. */
@@ -681,7 +710,6 @@ function moveDownInAnswer(
    * which Down skipped when the word was already on screen (plan 79 helper AC; the Deck,
    * plan78-QA-FREE-PLAY-01-GAME-try3.json, went from the last word of section 1 to the first of 2).
    */
-  const own = ringSection(bubble, answerKey);
   const termChip = findNextDrgGlossaryTermChipInView(
     bubble,
     (el) =>
@@ -693,20 +721,6 @@ function moveDownInAnswer(
     walk = null;
     revealBelowDock(termChip, scroll);
     return true;
-  }
-
-  /*
-   * The ring is on the last hidden cover of its section and text runs on below it: the section's box
-   * is the next stop (`boxAfterLastCover`), the mirror of Up landing on the box before the cover.
-   */
-  const box = answerKey ? boxAfterLastCover(bubble, answerKey) : null;
-  if (box && focusAnswerStop(box)) {
-    boxLandedIn = box;
-    /* Placed as any landing: clear of the dock, a box taller than the band up to the header. The lift
-       used to do the second half and now leaves sections to the walk (useDockClearanceOnFocus.ts). */
-    revealBelowDock(box, scroll);
-    revealSectionInBand(box, scroll);
-    return true; // the walk keeps its memory: the cover the ring just left is not offered again
   }
 
   /*

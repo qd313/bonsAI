@@ -3495,3 +3495,15 @@ _Moved out of [roadmap.md](../roadmap.md) on 2026-10-14 (plan 93 docs sweep 4), 
   **Fixed 2026-10-14 (plan 93):** closing the box rebuilt the tab before the delete finished, so the switch never went off on screen; the switch-off now survives that. The box's words no longer promise the switch. Owes row **P93-K1-KB-SWITCH** on the Deck: after Remove, "Use local knowledge base" reads off.
 
 **Closed 2026-10-14 (plan 93 Deck blocks D2 and D4, row P93-K1-KB-SWITCH) for Remove:** passed on the Deck after the round-2 fix `e2b8a161`. The first try (build `0ef34f82`) wrote the setting off but the screen kept showing the switch on (`docs/test-evidence/plan93-P93-K1-KB-SWITCH.json`). On build `5537e84c` the section read "Not installed", the switch and its line read off, and the saved setting was off after 5 s, after 30 s and after leaving the tab and coming back (`plan93-P93-K1-KB-SWITCH-try2.json`). The Download half is not part of this fix: after Download the screen kept showing off while the saved setting was on (`plan93-P93-K1-KB-SWITCH-try2-followup.json`); it is the new open Bugs entry about the switch after the library is downloaded again.
+
+## Plan 93 block S1: the fix the stand-in passed
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-10-14 (plan 93 stand-in sweep), copied line for line from its Verify entry, with the closing note added at the end._
+
+### "Run AI on this Deck" should be on by default (closed 2026-10-14)
+
+- ★ `[ollama]` **"Run AI on this Deck" should be on by default** — **VERIFY, fixed 2026-10-14 (plan 93, `5397a614`, `33a50b8e`, test fix `336861ad`). Was OPEN, reported 2026-10-13 by the maintainer.**
+  A fresh install should start with it switched on.
+  **Fixed 2026-10-14 (plan 93):** a fresh install starts with the switch on and shows the Local runtime (beta) notice once on its first open; a saved "off" stays off. Owes row **P93-B1-WIPE-DEFAULT** on the Deck (on the stand-in, after Clear all plugin data).
+
+**Closed 2026-10-14 (plan 93 block S1, the stand-in, this PC, build `7888115e`):** passed on the stand-in (this PC), the plan's machine for a wipe, row P93-B1-WIPE-DEFAULT. Run AI on this Deck read off before Clear all plugin data and on after it, with no press of mine on it. Evidence `docs/test-evidence/plan93-P93-B1-WIPE-DEFAULT-standin.json`.

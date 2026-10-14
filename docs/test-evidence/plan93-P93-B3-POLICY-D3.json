@@ -1,0 +1,19 @@
+{
+  "row": "P93-B3-POLICY (block D3-5)",
+  "build_commit": "8ff99a0a deployed by block D3 at ~12:34 Deck time; Deck dist/index.js sha256 starts 2e0bda30de01; machine deck",
+  "deck_time_local": "2026-10-14 12:45-12:48 EDT",
+  "screen": "Deck's own screen; the AI models screen is a pop-up in the 'Steam Big Picture Mode' page target",
+  "setup": "Ollama tab > AI models section (opened) > 'AI models' button > the AI models screen. Policy as found: 'Also try open-weight models' (settings key model_policy_tier = open_weight; backup copy of the whole settings file at ~/p93-backup/d3/settings.json). Installed on the Deck: gemma4:e2b-it-qat and nomic-embed-text:latest (Installed 2, 4.3 GB). Internet downloads are not touched.",
+  "pressed": "one press at a time with a focus read after each: Advanced > (opened with A on the section button, focus landed on 'Advanced') DOWN to 'Clear the Good for and Show filters' (not pressed), DOWN to 'Open source only (recommended)', A. Then RIGHT (landed on 'Use gemma4:e2b-it-qat for Ask', NOT pressed), UP to 'Try order for text questions', RIGHT to 'Try order for pictures questions', A (showed the Pictures order). Then LEFT, LEFT to the 'Open source only' radio, DOWN to 'Also try open-weight models', A (put back).",
+  "seen": {
+    "as_found_open_weight": "4 models match; Deck essentials list: gemma4:e2b-it-qat (FOSS), qwen3.5:4b (FOSS), qwen2.5vl:3b (not FOSS) and one more row below the fold (screenshot DeckCapture_20261014_124500_auto.png).",
+    "open_source_only": "3 models match: Deck essentials = gemma4:e2b-it-qat (FOSS, installed, 4.0 GB, try order 1) and qwen3.5:4b (FOSS, not installed); Other installed = nomic-embed-text:latest. qwen2.5vl:3b and qwen2.5:3b are not in the list (screenshots DeckCapture_20261014_124528_auto.png and DeckCapture_20261014_124545_auto.png).",
+    "text_try_order": "gemma4:e2b-it-qat is 1, with up and down arrows; no other model has a number. The screen shows no word 'Automatic'; the saved hand-set orders text_model_routing_order and vision_model_routing_order are both empty lists in the settings file.",
+    "pictures_try_order": "gemma4:e2b-it-qat is 1 as well (the only installed model that handles pictures); no 'Automatic' word either.",
+    "after_put_back": "'4 models match' again, radio 'Also try open-weight models' set, settings file model_policy_tier reads open_weight (same as the backup)."
+  },
+  "expected": "With Open source only neither qwen2.5vl:3b nor qwen2.5:3b is offered and gemma4:e2b-it-qat is; read the try orders as shown (record whether it says Automatic).",
+  "verdict": "PASS - with Open source only, qwen2.5vl:3b and qwen2.5:3b are not offered and gemma4:e2b-it-qat is",
+  "verdict_try_orders": "UNCLEAR - both orders show gemma4:e2b-it-qat as 1; the screen has no word 'Automatic' to read (the saved orders are empty lists, which is the automatic state)",
+  "side_effect": "The licence choice is saved at once. I changed it open_weight -> open_source -> open_weight; the file reads open_weight now. I read the old value out of the backup file, which is a policy name, not a secret."
+}

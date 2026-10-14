@@ -1,0 +1,20 @@
+{
+  "row": "QA-FREE-PLAY-01 (game half, block D3-8)",
+  "build_commit": "8ff99a0a deployed by block D3 at ~12:34 Deck time; Deck dist/index.js sha256 starts 2e0bda30de01; machine deck",
+  "deck_time_local": "2026-10-14 12:56-12:57 EDT",
+  "screen": "Deck's own screen, Quick Access page window 854 x 454 (with the game running the panel is drawn 40 px lower: chat title row at y 60, Ask button at y 465)",
+  "setup": "Deep Rock Galactic: Survivor running (2321470), Strategy mode, test chat, newest turn 'Who is the final boss called Zorblax' (answer with a branching choice A/B). B pressed once to put the ring on the tab bar ('bonsAI tab'), then deck_saveCheck with deck_sweep DOWN, budget 90, return trip on. Saved check file: checks/QA-FREE-PLAY-01-plan93-game-D3.json (not committed).",
+  "pressed": "deck_sweep only: D-pad DOWN to the end, then UP back (28 presses, no A).",
+  "seen": {
+    "totals": "25 stops recorded, 13 distinct controls, 28 presses, 2 legs, 0 loops (cycles 0), 0 press retries, each leg ended by a stall at its end (Ask on the way down, the tab bar on the way up); the sweep reached Ask",
+    "stops_down": "bonsAI tab, chat title row (What is the fastest way to earn geo..., chat 1 of 2), '23 earlier', 'Who is the final boss called Zorblax' row, 'Show reasoning - 55 s', answer section (unnamed), 'A. Early progression in the tutorial area', 'B. Late game challenges and final boss fight', 'Mark reply helpful', 'Show details' (twice), question box (unnamed), Ask. The way up was the same list reversed.",
+    "unnamed_stops": "2 (the answer text section and the question box; one each way counted twice)",
+    "not_fully_visible": "2 stops, both the chat title row (down leg #1 and up leg #23): 83% visible (5 of 6 sample points), covered by a div.Panel.Focusable and clipped by div.oIVg-eNHeYCNPq0blN3Dk. Same 83% reading as the D1 free-play run without a game (plan93-QA-FREE-PLAY-01-after.json lists the chat name row at 83% too). Every other stop read visible, 100%."
+  },
+  "expected": "every focused stop visible, no loop, no dead press",
+  "verdict_loop": "PASS - 0 loops",
+  "verdict_dead_press": "PASS - 0 retries; only the end-of-leg stalls",
+  "verdict_all_stops_visible": "UNCLEAR - 23 of 25 stops are 100% visible; the chat title row reads 83% (same as without a game), so 'every stop visible' is not met to the letter; the words of the row were not measured",
+  "verdict": "UNCLEAR - no loop, no dead press, reached Ask; the only imperfect stop is the chat title row at 83%, as seen without a game too",
+  "side_effect": "none"
+}

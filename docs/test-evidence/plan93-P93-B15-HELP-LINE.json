@@ -1,0 +1,24 @@
+{
+  "row": "P93-B15-HELP-LINE",
+  "build_commit": "0ef34f82 (Deck dist/index.js sha256 starts 017637aff771)",
+  "machine": "deck (real Steam Deck)",
+  "deck_time_local": "2026-10-14 12:21 to 12:23",
+  "screen": "Deck's own screen, Quick Access page 854 x 454",
+  "setup": "Developer tab with every section open, Navigation section, row 'Tab to open on' with three options A Main, B Resume, C 5 min. The chosen option is C, 5 min (tab_resume_mode resume_recent in the settings file before and after). Ring came up the walk and entered the row on A (not on the chosen option).",
+  "pressed": "UP x14 from 'Close all sections' to the row (landed on A), RIGHT (B), RIGHT (C, the chosen one), RIGHT (end), DOWN. No A anywhere. Strip read after each press.",
+  "seen": [
+    {"ring_on": "A - Main (rect 48,229,96x32)", "strip_label": "TAB TO OPEN ON (D15)", "strip_words": "Every reopen starts on Main, whatever tab you left from. Takes effect the next time you close and reopen the plugin."},
+    {"ring_on": "B - Resume (rect 150,229)", "strip_label": "TAB TO OPEN ON (D15)", "strip_words": "Reopen lands on the tab you left. Shipped default. Takes effect the next time you close and reopen the plugin."},
+    {"ring_on": "C - 5 min, the chosen option (rect 252,229)", "strip_label": "TAB TO OPEN ON (D15)", "strip_words": "Reopen resumes the tab within 5 minutes, then falls back to Main. Takes effect the next time you close and reopen the plugin."},
+    {"ring_on": "C again after one more RIGHT (end of the row held)", "strip_words": "unchanged (C words)"},
+    {"ring_on": "DOWN out of the row: 'Logging & exports section' line", "strip_label": "(empty)", "strip_words": "(empty, the strip clears on a section line)"}
+  ],
+  "expected": "The help strip changes to each option's own words as the ring lands, before any A, and shows the chosen one's words with the ring on it.",
+  "verdict": [
+    "PASS: the strip showed three different sets of words, one per option, each as the ring landed on it, with no A pressed.",
+    "PASS: with the ring on the chosen option (C, 5 min) the strip shows C's own words.",
+    "PASS: the setting did not change (resume_recent before and after)."
+  ],
+  "new_finding": "The strip's heading reads 'TAB TO OPEN ON (D15)'. D15 looks like an internal decision number showing on screen. Seen on all three options.",
+  "side_effect": "none"
+}

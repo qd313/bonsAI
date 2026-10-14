@@ -1,0 +1,22 @@
+{
+  "row": "P93-B11-SEARCH-RING",
+  "build_commit": "0ef34f82 (Deck dist/index.js sha256 starts 017637aff771)",
+  "machine": "deck (real Steam Deck)",
+  "deck_time_local": "2026-10-14 12:21 to 12:27",
+  "screen": "Deck's own screen, Quick Access page 854 x 454",
+  "setup": "Search tab open, nothing typed. Chips: All, Hollow Knight, Deep Rock Galactic: Survivor. Search box 'Chats, settings, notes...'. Word buttons: hollow 13, knight 13, order 7, area 5, describe 4, boss 3, charm 3, crossroads 2 (the saved walk expected hollow 67, knight 67, deep 56, boss 48; the counts differ because the saved chats changed since 10-12, not a bug).",
+  "pressed": "deck_replayChecks on checks/plan92-P90-SEARCH-TAB-WALK.json (14 presses). Then by hand, three more times: tab bar, DOWN, DOWN; with the ring on All, on Hollow Knight and on Deep Rock Galactic: Survivor in turn, each time one DOWN read after 0.6 to 0.9 s, once with a 200 ms hold.",
+  "seen": {
+    "replay": "failed at step 2 of 14 (ran 6, passed 5, failed 1). Step 1 DOWN from the tab bar landed on 'All games' as saved. Step 2 DOWN from 'All games' did NOT move (saved: landed on the INPUT 'Search for a word'). The walk then went UP to the tab bar and RIGHT along the tab bar, so steps 7 to 14 never ran.",
+    "by_hand": "From All, from Hollow Knight and from Deep Rock Galactic: Survivor, DOWN changes nothing: the ring stays on the chip (read 0.6 to 0.9 s after, also with a longer 200 ms press, also after leaving the tab and coming back). LEFT and RIGHT along the chips work; UP goes to the tab bar. The search box (an INPUT, tabIndex 0, visible, not disabled, rect 54,92,286x28) and all eight word buttons are therefore not reachable with the D-pad from the chips.",
+    "page_state": "document.hasFocus() true, so it is not the panel-lost-focus trap. Plugin log had no entries.",
+    "likely_cause": "read-only look at src/features/search-tab/useSearchNav.ts: a move onto a stop whose nav node Steam has not filled waits eight frames and then does nothing ('a dead press is better than a lost ring'); the search box is Steam's own text field, so its stop may never get a nav node. I did not test this idea.",
+    "five_rounds": "could not start: the word buttons are unreachable, so no round (note open, B, word, A) could be made. I did not open a note or press A on anything on this tab."
+  },
+  "expected": "Replay matches (Down from All lands on the search box, then words, etc.). Then five rounds of note, B, word button A, with the ring on a stop at every reading.",
+  "verdict": [
+    "FAIL: the saved Search tab walk does not match; Down from the chip row is dead, so the search box and the words cannot be reached.",
+    "COULD NOT RUN: the five rounds (note, B, word, A), because no word button can be reached. I tried the route three times (replay, then twice by hand)."
+  ],
+  "side_effect": "none (no A pressed on this tab). The replay moved the ring along the tab bar to the Ollama tab; I walked back by hand."
+}

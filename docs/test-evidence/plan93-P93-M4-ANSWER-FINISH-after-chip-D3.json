@@ -1,0 +1,21 @@
+{
+  "row": "P93-M4-ANSWER-FINISH-after (chip half), block D3-1",
+  "build_commit": "8ff99a0a deployed by block D3 at ~12:34 Deck time; Deck dist/index.js sha256 starts 2e0bda30de01; machine deck (real Steam Deck)",
+  "deck_time_local": "2026-10-14 12:35-12:38 EDT",
+  "screen": "Deck's own screen, page window 854 x 454; transcript scroll box clientHeight 402",
+  "setup": "Test chat 'What is the fastest way to earn geo early in Hollow Knight' (chat 1 of 2). Ask mode set to Expert through the mode menu (was Speed). Reply style slider set Terse -> Caveman -> Balanced on the Ollama tab ('Reply style: Balanced' read back). Question sent with deck_send_ask.py, VERIFIED, full text: 'Explain how to beat every major boss in Hollow Knight from the start of the game to the end with a tip for each'. Sampler probe_d1.py every ~85 ms, 846 samples. Raw: scratchpad/driverD3/run1-samples.jsonl",
+  "pressed": "walk DOWN from the tab bar to Ask (focus read = Ask), sampler started, A on Ask, one UP from the question box while the answer was writing. Ring read: the follow-up chip 'What are the best settings for 60fps?' (box top 348, height 30). Left alone until the finish. Then DOWN once.",
+  "seen": {
+    "answer": "1,087 characters, 3 sections, bubble 432 px at the end, about 58 s from the first live sample to the finish",
+    "ring_through_the_finish": "the same chip, label 'What are the best settings for 60fps?', class bonsai-preset-glass, box top 348 height 30, in every sample from before the finish to 3 s after (focus boxes set seen over the run: {(348,30),(380,44)}; the (380,44) is the question box before my UP). The chip words did not change and the ring did not move.",
+    "scroll_at_finish": "scrollTop 0 in every sample until 0.08 s before the finish; at the finish sample scrollTop 324 (scroll height 647 -> 770). Change at the finish: 324 px in one step. The bubble's top went from 182.6 to -141.4 (it moved up 324 px). The rating buttons (btn 2) appeared in that same sample.",
+    "bubble_height": "dips of 8 px (302 -> 294) and 8 px while writing; none at the finish (402 -> 432 grows)",
+    "after_down": "DOWN from the chip went to the question box (box top 380, height 44)"
+  },
+  "expected": "page moves 0 px at the finish; the ring stays on the same follow-up chip with its words unchanged until I move; Down to the question box.",
+  "verdict_ring_stays_on_chip": "PASS - same chip, same words, same box in every sample through the finish and 3 s after",
+  "verdict_page_moves_0px": "FAIL - the page scrolled 324 px at the finish (scrollTop 0 -> 324) while the ring sat on the chip. (D1 try2 run B measured about 215 px on the earlier build 0ef34f82; the chip case is still not fixed.)",
+  "verdict_down_to_box": "PASS - the ring went to the question box",
+  "verdict": "FAIL - the ring half passes, but the page still jumps 324 px at the finish with the ring on a follow-up chip",
+  "side_effect": "Added one question to the test chat (turn 37-ish). Mode changed Speed -> Expert and Reply style Terse -> Balanced on purpose; put back at the end of the block (see the handover)."
+}

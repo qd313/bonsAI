@@ -1,0 +1,27 @@
+{
+  "row": "P93-O3-SPOILER-CUT (block D3-4)",
+  "build_commit": "8ff99a0a deployed by block D3 at ~12:34 Deck time; Deck dist/index.js sha256 starts 2e0bda30de01; machine deck",
+  "deck_time_local": "2026-10-14 about 12:44 EDT",
+  "screen": "Deck's own screen, page window 854 x 454",
+  "setup": "Test chat (chat 1 of 2), the older answer 'Describe every area of Hollow Knight in the order a new player usually reaches them...' (yesterday's), opened from 'N earlier' > 'Yesterday - 6'.",
+  "pressed": "deck_walkTo UP to its 'Show reasoning - 19 s' fold, then DOWN one press at a time, reading the stop's text after each press.",
+  "seen": {
+    "stops_in_order": [
+      "fold 'Show reasoning - 19 s'",
+      "1: 'The progression in Hollow Knight is less a strict linear path...' (703 chars, box top 70, h 277)",
+      "2: '2. Greenpath What to Find...' (596 chars, top 74, h 273)",
+      "3: '4. Fungal Wastes What to Find...' (589 chars, top 74, h 273)",
+      "4: 'Spoiler - tap to show / Hidden until you reveal' alone (63 chars, top 182, h 52)",
+      "5: '6. Areas Unlocked by Abilities (Mid-Game Progression) As you progress,...' (408 chars, top 133, h 214) - its text holds '**7.' at character 271, then the Spoiler - tap to show block, then 'What to Find: This is a major landmark and a significant challenge.'",
+      "6: 'Spoiler - tap to show' alone (63 chars, top 168, h 52)",
+      "7: 'Spoiler - tap to show ... What to...' with its paragraph (242 chars, top 168, h 141)",
+      "8: 'Spoiler - tap to show' alone (63 chars, top 295, h 52)"
+    ],
+    "the_star_line": "In the DOM the section chunk reads: '... swim in acid.\\n\\n**7.\\n\\nSpoiler - tap to show\\nHidden until you reveal (Strategy Guide).\\nWhat to Find: This is a major landmark and a significant challenge.' So '**7.' is inside stop 5 together with the hidden block; no stop of its own consists of '**7.'",
+    "raw_stars_still_show": "yes - the two raw asterisks '**' before '7.' are still in the drawn text of stop 5 (the known separate bug)"
+  },
+  "expected": "'**7.' is not a separate stop; the stop that holds it also holds the hidden block.",
+  "verdict": "PASS - '**7.' sits inside stop 5 with the Spoiler block, not a stop of its own",
+  "verdict_raw_stars": "UNCLEAR (not a pass/fail of this row) - the raw '**' still shows, as the brief says it would",
+  "side_effect": "none"
+}

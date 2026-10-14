@@ -1,0 +1,47 @@
+{
+  "row": "P93-O1-OPEN-ALL",
+  "build_commit": "0ef34f82 (Deck dist/index.js sha256 starts 017637aff771)",
+  "machine": "deck (real Steam Deck)",
+  "deck_time_local": "2026-10-14 12:16 to 12:21",
+  "screen": "Deck's own screen, Quick Access page window 854 x 454 (plugin column x 48 to 348, 300 wide)",
+  "setup": "Ollama, Settings and Developer tabs, text size Small. Every section closed at the start of part (a) on each tab (folds reset on re-entry).",
+  "pressed": "Per tab: DOWN to the last section line, DOWN, DOWN again, UP (part a); DOWN to the button, A, then UP and DOWN walks over every stop of the open tab (parts b and c). Every landing was read by a page-side sampler (focus label, row box, strip box, button box, strip colour, scroll) settled 180 ms after each press; presses were about 350 ms apart, so each press produced one reading (counts below match the presses). Two screenshots at scrolled positions per tab pair, kept beside this file.",
+  "seen": {
+    "strip": {
+      "element": "div.bonsai-fold-dock (holds the Open all / Close all button)",
+      "box_every_landing_and_tab": "x 48, y 410, 300 wide, 44 tall = the whole plugin column; never changed on any tab or scroll position",
+      "colour": "rgb(14, 20, 27) = #0E141B, the same as the panel colour",
+      "button_box": "x 264/265, y 418, 73/74 wide, 28 tall; button top is 8 px below the strip top at every landing (gap 8 in all readings)"
+    },
+    "Ollama": {
+      "a": "All five sections closed. DOWN on the last section line ('AI models') landed on 'Open all sections'. Three more DOWN presses held on it. UP returned to the 'AI models section' line. (The first DOWN from the tab bar jumped straight to the AI models line because the tab remembered the last focus from earlier; the walk down from the top was exercised in part c.)",
+      "b": "A opened every section (button now reads 'Close all'). Walking Down to the last control ('AI models' button) then DOWN landed on 'Close all sections'. UP from there landed on the 'AI models section' LINE (not on the 'AI models' button below it, which the walk down does reach). Matches the runbook words; note the last section's own control is skipped on the way up from the button.",
+      "c": "Down walk 18 stop readings (13 + 5), up walk 17 readings. In every reading the focused row's bottom was above the strip top (row bottom <= 410), true for all stops except the button itself. Screenshots show no words inside the strip around the button; in one scrolled position a text line ('Keep models loaded: 5m') is cut by the strip's top edge, as any scroll clip. Stops visited: Where AI runs line, 2 switches, Update, Browse, Test connection, KB line, KB switch, Update KB, Reply style line, slider, Thinking Off, Connection tuning line, Custom timeouts switch, Keep models slider, AI models line, AI models button, Close all."
+    },
+    "Settings": {
+      "a": "Ten section lines walked (UI scale to Data). DOWN on Data landed on 'Open all sections' (rect 265,418,73x28). Two more DOWN held. UP returned to the 'Data section' line (rect 48,236).",
+      "b": "A opened everything. Down walk: 24 stops, the last control 'Clear cache...' then DOWN landed on 'Close all sections' ('Clear all data...' beside it is skipped by Down). UP from Close all landed on the 'Data section' line (skipping the Data section's own controls below it).",
+      "c": "Up walk 22 readings and down walk 24 readings: row bottom above strip top at every stop (true in all), gap 8 at all of them, strip box unchanged. Settings tab scroll went to 957."
+    },
+    "Developer": {
+      "a": "Six section lines (Knowledge base (dev QA), Diagnostics, Navigation, Logging & exports, Animations, Integrations). DOWN on Integrations landed on 'Open all sections'; the next DOWN held; UP returned to 'Integrations section' line.",
+      "b": "A opened all (scrollHeight 1382). Down walk ended 'Integrations section' > one control (rect 48,226,300x40, no label) > 'Close all sections'. UP from Close all landed on the 'Integrations section' line.",
+      "c": "Up walk 23 readings, down walk 24 readings: row bottom above strip top at every one (true for all), gap 8, strip box 48,410,300x44, colour #0E141B. Scroll reached 952."
+    },
+    "closed_tab_by_eye": "Ollama with everything closed (screenshot kept): the strip does not show as a stripe; the area behind the Open all button is the panel colour (#0E141B)."
+  },
+  "expected": "(a) Down from the last closed section line lands on Open all sections, Down again holds, Up returns to that line. (b) A opens all; walking to the last control then Down lands on Close all; Up lands on the last section's line. (c) Strip spans the plugin column, top about 8 px above the button, focused row bottom above strip top at every landing; no stripe when everything is closed.",
+  "verdict": [
+    "PASS: Ollama (a)",
+    "PASS: Settings (a)",
+    "PASS: Developer (a)",
+    "PASS: Ollama (b)",
+    "PASS: Settings (b)",
+    "PASS: Developer (b)",
+    "PASS: Ollama (c) strip spans the column, button 8 px below the strip top, rows always above the strip",
+    "PASS: Settings (c)",
+    "PASS: Developer (c)",
+    "PASS: by eye, no stripe on the closed Ollama tab"
+  ],
+  "side_effect": "none. I pressed A on the Open all button on each tab (opens sections only). Folds reset when a tab is re-entered. A page-side sampling script (read only, no changes to the page) was left running in the Quick Access page and stops on a page reload."
+}

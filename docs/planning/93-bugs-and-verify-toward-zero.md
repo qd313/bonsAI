@@ -533,6 +533,34 @@ hardest focus piece), and the finish-flicker lane if the measurement sends it to
   its old words; "grounding" replaced in the Remove knowledge base box); fix the second Qwen model and the try order
   (done in B3). Two Windows file locks stopped a landing's commit hook (generated files); continuing the pick fixed
   both, as in plan 87.
+- **11:30 to 13:10: three Deck blocks on the landed build, and second rounds.** The push to GitHub was refused by the
+  session's no-push hook (the maintainer pushes, or says "push"). **Block D1** (build `0ef34f82`): the finish of a long
+  answer moved the page **0 px** (last night 1,264.7 px) with the bubble kept and the ring unmoved; the answer walk is a
+  mirror inside the answer, section 5 a stop going Down; the last section clear of the dock; the hints; delete the last
+  chat (chats restored byte for byte); the paperclip skipped while writing: all pass. Found: a ring on a follow-up chip
+  at the finish still saw a 215 px jump; Down from an opened older answer skipped the rows below it; the answer's
+  sections could not be reached while it wrote; raw "**" in a spoiler heading; small height dips while writing.
+  **Block D2**: the Terse slider, Open all (the strip exactly the panel's #0E141B), Refresh removed, the Developer help
+  line, Text size on Steam's words (every size right, Normal unchanged) and the shorter words (Permissions 507 px against
+  688) pass; Cancel during a setup passes. Found: the Search tab's Down from the game chips dead (caused by lane B11's
+  first fix: a ref cleared the search box's Steam node on every redraw); the Remove-a-model box returned the ring to the
+  next row; the ring vanished when Cancel ended a setup; the knowledge switch still read on after a remove (file off);
+  "Update knowledge base" clipped at Large; "(D15)" shown on the Developer tab. **Block D3** (build `8ff99a0a`): Down from
+  an older answer to the rows below, the spoiler-heading cut, "Open source only" (neither 3B Qwen offered; gemma first in
+  both try orders), the starter set on the Deck (speech models downloaded, gemma and nomic skipped) and sections reachable
+  while writing (a ring on a section stays through the finish) pass; the notes line in Strategy with a game passes for
+  the made-up boss and fails for "buy a house" (a real Gold note attached: the known wrong-subject notes bug); the sweep
+  with a game has no loop and no dead press. Found: with the ring on a chip the page still jumped 324 px at the finish
+  (cause found in round 3: the "follow the end" switch was still on in the finishing frame); the starter set re-ran the
+  Ollama installer (its PATH lacks ~/.local/bin); the starter button lingers until the screen reopens. **Second rounds
+  landed** (all green): O4 older-answer Down (`25fa1e5c`), O3 the chip kept at the finish and the spoiler cut
+  (`abb3c329`, `32c6cc79`), O4 sections reachable while writing (`cca413bb`), B15 "(D15)" removed, B11 the Search tab
+  Down restored, B10 the ring to Update after Cancel, B5 the label wraps at Large, K1 the switch corrected in the saved
+  session copy too, B4 the Remove box returns the ring to its row, O3 the follow switched off when the answer ends
+  (to `5537e84c`). A docs test went red after the third sweep (the guide no longer said "Qwen Research"); fixed by the
+  session (`73e35a6d`). The rig's two fixes are on the rig's `main` (fast-forward), its build waits for the last Deck
+  block. Block D4 (the second rounds on the Deck) started 13:10. The stand-in wipe check waits for the maintainer to set
+  Steam offline with Big Picture in front.
 
 ## 15. Questions for the maintainer (the safest choice taken meanwhile)
 

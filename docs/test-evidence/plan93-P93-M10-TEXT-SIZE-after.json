@@ -1,0 +1,36 @@
+{
+  "row": "P93-M10-TEXT-SIZE-after",
+  "build_commit": "0ef34f82 (Deck dist/index.js sha256 starts 017637aff771)",
+  "machine": "deck (real Steam Deck)",
+  "deck_time_local": "2026-10-14 12:14 to 12:30",
+  "screen": "Deck's own screen. Page window 854 x 454 on every probe.",
+  "setup": "Text size found = Small (chat_text_size small). Probe = block B2's read-only script (scratchpad driverB2/probe_text.py), run on Ollama, Settings, Permissions, Developer and About at Small (scale 0.9), Normal (1.0) and Large (1.15). Ollama, Settings and Developer had every section opened with Open all (A on the button). Raw files: scratchpad/driverD2/raw/<Tab>-<size>.json (15 files). Compared with this morning's plan93-M10-<Tab>-normal.json.",
+  "pressed": "Settings > Text size section buttons Small/Normal/Large (A on each; Normal, then Large, then Small again). Tab bar LEFT/RIGHT; DOWN to Open all, A.",
+  "seen": {
+    "switch_names_and_other_steam_words_px": {
+      "small / normal / large": "14.4 / 16 / 18.4 on every one read: Ollama (Run AI on this Deck, Start the AI with the Deck, Use local knowledge base, Custom timeouts), Settings (Adjust UI automatically, Remember what I typed, Hide spoilers until I tap, Show one chip instead of two, AI voice & personality, Show Developer tab), Permissions (the tab title and all five switch names), Developer (Install seed knowledge base, Hybrid retrieval, On-screen debug HUD, Warm the Ask model at boot, Jump to Steam Input, Auto-save chat to Desktop notes, Verbose Ask logging, Force session RAG chips, Scramble animation), About (About bonsAI, Reply language, Follow system, Links)"
+    },
+    "permissions_descriptions_px": "10.8 / 12 / 13.8 for all six texts (intro and five descriptions)",
+    "developer_two_buttons": "'Install seed knowledge base' and 'Jump to Steam Input (running game)' 14.4 / 16 / 18.4",
+    "about_titles": "'About bonsAI', 'Reply language', 'Links' 14.4 / 16 / 18.4; 'Version 0.5.0' 9.9 / 11 / 12.65",
+    "normal_vs_this_morning": "For every text found in both sets, the font size at Normal equals this morning's on all five tabs (0 differences on Ollama, Settings, Permissions, Developer, About). Texts that changed by design: Ollama lost 'Terse mode' and the 'Install the official daemon...' line and gained 'Terse - Thinking: Balanced'; Permissions has new shorter words; About no longer shows the two lines 'Plugin UI may stay partly Engl...' and 'Steam client language: English' (13 items this morning, 11 now); Settings gained the Text size section words.",
+    "large_by_eye_and_script": {
+      "settings": "screenshot at Large: no switch row or button clipped in the view; 'Save memory' button wraps to two lines.",
+      "permissions": "screenshot at Large: all switches and words whole, nothing clipped.",
+      "ollama": "FAILS: the 'Update knowledge base' button shows 'Update knowledge bas' (the last letter cut) with its label wider than the button (script: box 166 wide, content 186 wide). Screenshot kept. The other text boxes the script flagged on Ollama and Developer are the section summary lines, which end in an ellipsis by design.",
+      "developer": "script only (no screenshot at Large): no switch row or button label overflows; flagged boxes are section summary lines (ellipsis by design) and the 'Tab to open on (D15)' summary.",
+      "about": "screenshot at Large: title 'ABOUT BONSAI Version 0.5.0' shows the version; Reply language dropdown shows 'Follow system'. A on it opened the language list (Follow system, Always English, Arabic, ... English); B closed it with nothing chosen (reply_language follow_system before and after)."
+    }
+  },
+  "expected": "Every switch name 14.4 / 16 / 18.4 px, Permissions descriptions 10.8 / 12 / 13.8, the two Developer buttons and About titles 14.4 / 16 / 18.4, Normal equal to this morning's; at Large no switch row or button clipped, About title shows the version, About dropdown still shows its choice and opens.",
+  "verdict": [
+    "PASS: switch names 14.4 / 16 / 18.4 px on all five tabs.",
+    "PASS: Permissions descriptions 10.8 / 12 / 13.8 px.",
+    "PASS: the two Developer buttons and the About titles 14.4 / 16 / 18.4 px.",
+    "PASS: every size at Normal equals this morning's for the same texts.",
+    "FAIL: at Large the 'Update knowledge base' button on the Ollama tab cuts its own label ('Update knowledge bas').",
+    "PASS: at Large the About title still shows the version, the language dropdown still shows its choice and opens (B closed it unchanged).",
+    "UNCLEAR: Large was checked by eye only on Settings, Permissions, Ollama (one view), About; Developer and Settings were not scrolled end to end by eye."
+  ],
+  "side_effect": "Text size changed Small > Normal > Large > Small; put back to Small (chat_text_size small confirmed in the settings file). During the walk one extra B press closed the plugin panel back to the Decky list; I re-opened it with deck_openPlugin (no setting changed)."
+}

@@ -250,7 +250,7 @@ The model policy decides which licences are allowed:
 | **Also try open-weight models** | Also models whose weights are public but whose licence is the maker's own, such as Llama, Gemma 3 and older |
 | **Any installed model** | Anything you've installed, once you unlock it |
 
-The starter model, Gemma 4 (gemma4:e2b-it-qat), is open source (Apache 2.0). Two small Qwen models are not: Qwen 2.5 VL 3B and Qwen 2.5 3B carry Qwen's research-only licence, so neither is open source and **Open source only** neither lists nor tries them; they show up once you allow open-weight models. These labels were checked on
+The starter model, Gemma 4 (gemma4:e2b-it-qat), is open source (Apache 2.0). Two small Qwen models are not: Qwen 2.5 VL 3B and Qwen 2.5 3B carry the Qwen Research licence (research use only), so neither is open source and **Open source only** neither lists nor tries them; they show up once you allow open-weight models. These labels were checked on
 2026-09-29; they're a guide, not legal advice. The full list is in
 [troubleshooting](troubleshooting.md#model-licences-and-the-tiers).
 

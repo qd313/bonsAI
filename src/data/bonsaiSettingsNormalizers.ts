@@ -488,9 +488,6 @@ const SIMPLE_FIELDS = {
   }),
   // Normal unless the person picks another; an old settings file with no value reads as Normal.
   chat_text_size: enumOf<ChatTextSize>(CHAT_TEXT_SIZE_OPTIONS, DEFAULT_CHAT_TEXT_SIZE, { trim: true }),
-  reply_verbosity: normalizeReplyVerbosity,
-  // Off unless the person turns it on; an unrecognised value must not shorten anyone's answers.
-  terse_mode: boolDefaultFalse,
   // Trimmed before matching, case-sensitive, and an unknown value falls back to `off` —
   // an unrecognised effort must not silently turn thinking on.
   ask_think_effort: enumOf<AskThinkEffortId>(
@@ -592,6 +589,10 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     // Read a legacy key as well as their own.
     screenshot_attachment_preset: normalizeScreenshotAttachmentPreset(rawRecord),
     ask_mode: normalizeAskMode(raw.ask_mode),
+    // The old Terse switch (`terse_mode`, before plan 93) is read once: a saved true is the slider's
+    // Terse stop, whatever style was saved; anything else leaves the slider where it was. The key
+    // itself is not in the result, so the next save does not write it again.
+    reply_verbosity: rawRecord?.terse_mode === true ? "terse" : normalizeReplyVerbosity(raw.reply_verbosity),
     show_developer_tab: showDeveloperTab,
     preset_chip_animation: presetChipAnimation,
     // Deprecated, and derived from the live field rather than read independently — Python

@@ -231,7 +231,7 @@ class TheRealAskPath(unittest.IsolatedAsyncioTestCase):
             return await self.plugin.ask_ollama(question, "127.0.0.1:11434", "", "", ask_mode=ask_mode)
 
     async def test_a_speed_question_with_terse_on_sends_the_three_line_rule_and_the_menu(self):
-        out = await self._ask("how do i beat the dreadnought", settings={"terse_mode": True})
+        out = await self._ask("how do i beat the dreadnought", settings={"reply_verbosity": "terse"})
         self.assertTrue(out.get("success"))
         sent = self.sent_system_prompts[0]
         self.assertIn(CAP_SENTENCE, sent)
@@ -240,13 +240,13 @@ class TheRealAskPath(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(out["system_prompt"], sent)
 
     async def test_the_slider_is_ignored_on_the_real_path_too(self):
-        await self._ask("what does proton do", settings={"terse_mode": True, "reply_verbosity": "caveman"})
+        await self._ask("what does proton do", settings={"reply_verbosity": "terse"})
         self.assertNotIn("CAVEMAN REPLY STYLE", self.sent_system_prompts[0])
         self.assertIn(CAP_SENTENCE, self.sent_system_prompts[0])
 
     async def test_a_character_on_the_real_path_still_gets_the_three_line_rule(self):
         settings = {
-            "terse_mode": True,
+            "reply_verbosity": "terse",
             "ai_character_enabled": True,
             "ai_character_random": False,
             "ai_character_preset_id": "",
@@ -259,19 +259,19 @@ class TheRealAskPath(unittest.IsolatedAsyncioTestCase):
         self.assertIn("three lines", sent.split("lighthouse keeper", 1)[1])
 
     async def test_terse_off_and_terse_on_in_other_modes_send_no_terse_rule(self):
-        await self._ask("what does proton do", settings={"terse_mode": False})
-        await self._ask("what does proton do", settings={"terse_mode": True}, ask_mode="strategy")
-        await self._ask("what does proton do", settings={"terse_mode": True}, ask_mode="expert")
+        await self._ask("what does proton do", settings={"reply_verbosity": "balanced"})
+        await self._ask("what does proton do", settings={"reply_verbosity": "terse"}, ask_mode="strategy")
+        await self._ask("what does proton do", settings={"reply_verbosity": "terse"}, ask_mode="expert")
         await self._ask("what does proton do", settings={})
         for sent in self.sent_system_prompts:
             self.assertNotIn("TERSE REPLY MODE", sent)
 
     async def test_the_ask_tells_the_model_call_to_read_the_menu_only_when_terse_applies(self):
-        await self._ask("what does proton do", settings={"terse_mode": True})
+        await self._ask("what does proton do", settings={"reply_verbosity": "terse"})
         self.assertIs(self.post_kwargs.get("terse_branch_menu"), True)
-        await self._ask("what does proton do", settings={"terse_mode": False})
+        await self._ask("what does proton do", settings={"reply_verbosity": "balanced"})
         self.assertIs(self.post_kwargs.get("terse_branch_menu"), False)
-        await self._ask("what does proton do", settings={"terse_mode": True}, ask_mode="expert")
+        await self._ask("what does proton do", settings={"reply_verbosity": "terse"}, ask_mode="expert")
         self.assertIs(self.post_kwargs.get("terse_branch_menu"), False)
 
 

@@ -7,7 +7,7 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 2280,
+      "lines": 2279,
       "role": ""
     },
     {
@@ -22,7 +22,7 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1344,
+      "lines": 1340,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
@@ -156,6 +156,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/settings_service.py",
+      "lines": 685,
+      "role": "Load/save/merge settings.json"
+    },
+    {
       "path": "src/components/PullModelsModal.tryOrder.test.tsx",
       "lines": 682,
       "role": ""
@@ -164,11 +169,6 @@
       "path": "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
       "lines": 679,
       "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/settings_service.py",
-      "lines": 671,
-      "role": "Load/save/merge settings.json"
     },
     {
       "path": "src/utils/buildAnswerBubbleElement.tsx",

@@ -513,14 +513,44 @@ class SettingsServiceTests(unittest.TestCase):
         garbled = sanitize_settings(data={"ollama_local_autostart": "yes"}, **base_kwargs)
         self.assertFalse(garbled["ollama_local_autostart"])
 
-    def test_sanitize_terse_mode_default_off_explicit_true_enables(self):
-        """Terse mode (Speed answers in three lines) is off unless a literal true was saved."""
-        self.assertIs(_sanitize_with_defaults({})["terse_mode"], False)
-        self.assertIs(_sanitize_with_defaults({"terse_mode": False})["terse_mode"], False)
-        self.assertIs(_sanitize_with_defaults({"terse_mode": True})["terse_mode"], True)
-        for garbled_value in ("yes", "true", 1, None, [], {}):
-            garbled = _sanitize_with_defaults({"terse_mode": garbled_value})
-            self.assertIs(garbled["terse_mode"], False, repr(garbled_value))
+    def test_the_old_terse_switch_saved_on_lands_the_slider_on_its_terse_stop(self):
+        """Terse is the first stop of the Reply style slider now (plan 93). A saved terse_mode true
+        puts the slider on it, over whatever style was saved, and the old key is gone from the result."""
+        moved = _sanitize_with_defaults({"terse_mode": True, "reply_verbosity": "detailed"})
+        self.assertEqual(moved["reply_verbosity"], "terse")
+        self.assertNotIn("terse_mode", moved)
+        self.assertEqual(_sanitize_with_defaults({"terse_mode": True})["reply_verbosity"], "terse")
+
+    def test_the_old_terse_switch_saved_off_or_garbled_leaves_the_slider_alone(self):
+        for old in (False, "yes", "true", 1, None, [], {}):
+            kept = _sanitize_with_defaults({"terse_mode": old, "reply_verbosity": "caveman"})
+            self.assertEqual(kept["reply_verbosity"], "caveman", repr(old))
+        self.assertEqual(_sanitize_with_defaults({})["reply_verbosity"], "balanced")
+
+    def test_terse_is_a_known_reply_style_and_an_unknown_one_still_falls_back(self):
+        self.assertEqual(_sanitize_with_defaults({"reply_verbosity": "terse"})["reply_verbosity"], "terse")
+        self.assertEqual(_sanitize_with_defaults({"reply_verbosity": " Terse "})["reply_verbosity"], "balanced")
+        self.assertEqual(_sanitize_with_defaults({"reply_verbosity": "terser"})["reply_verbosity"], "balanced")
+
+    def test_saving_after_the_mapping_never_writes_the_old_key_again(self):
+        """Once: the first save after the upgrade writes reply_verbosity "terse" and no terse_mode;
+        moving the slider off Terse afterwards stays off (the old true cannot pull it back)."""
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "settings.json"
+            path.write_text(json.dumps({"terse_mode": True, "reply_verbosity": "balanced"}), encoding="utf-8")
+            logger = _Logger()
+            current = load_settings(str(path), _sanitize_with_defaults, logger)
+            self.assertEqual(current["reply_verbosity"], "terse")
+            first = save_settings(str(path), tmp, {}, current, _sanitize_with_defaults, logger)
+            self.assertEqual(first["reply_verbosity"], "terse")
+            on_disk = json.loads(path.read_text(encoding="utf-8"))
+            self.assertNotIn("terse_mode", on_disk)
+            self.assertEqual(on_disk["reply_verbosity"], "terse")
+            current = load_settings(str(path), _sanitize_with_defaults, logger)
+            save_settings(str(path), tmp, {"reply_verbosity": "balanced"}, current, _sanitize_with_defaults, logger)
+            again = load_settings(str(path), _sanitize_with_defaults, logger)
+            self.assertEqual(again["reply_verbosity"], "balanced")
+            self.assertNotIn("terse_mode", json.loads(path.read_text(encoding="utf-8")))
 
     def test_load_settings_grandfathers_capabilities_when_block_missing(self):
         """Legacy settings files without a capabilities object get known scopes enabled except Steam Web API."""

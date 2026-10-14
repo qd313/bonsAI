@@ -111,9 +111,6 @@ export type OllamaTabProps = {
 
   replyVerbosity: ReplyVerbosityId;
   setReplyVerbosity: (v: ReplyVerbosityId) => void;
-  /** Terse mode: Speed answers capped at three lines. Sits right under the reply-style slider. */
-  terseMode: boolean;
-  setTerseMode: (v: boolean) => void;
   askThinkEffort: AskThinkEffortId;
   setAskThinkEffort: (v: AskThinkEffortId) => void;
 };
@@ -180,8 +177,6 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
   ragCorpusVersion,
   replyVerbosity,
   setReplyVerbosity,
-  terseMode,
-  setTerseMode,
   askThinkEffort,
   setAskThinkEffort,
 }) => {
@@ -194,7 +189,6 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
     kbCancelBtnRef,
     connectionTestBtnRef,
     replyVerbosityThumbHostRef,
-    terseToggleHostRef,
     whereBodyRef,
     customTimeoutsHostRef,
     modelsBtnRef,
@@ -203,7 +197,6 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
     focusLatencyWarningThumb,
     focusReplyVerbosityThumb,
     focusThinkingEffortRow,
-    focusTerseToggle,
     focusCustomTimeoutsToggle,
     chain,
   } = useOllamaTabFocus();
@@ -218,7 +211,6 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
     ollamaLocalAutostart,
     useLocalKnowledgeBase,
     replyVerbosity,
-    terseMode,
     askThinkEffort,
     latencyTimeoutsCustomEnabled,
     ollamaKeepAlive,
@@ -296,22 +288,10 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
                     onChange={setReplyVerbosity}
                     thumbHostRef={replyVerbosityThumbHostRef}
                     onMoveUp={() => takeFoldLine(OLLAMA_FOLD_TAB, "reply")}
-                    onMoveDown={focusTerseToggle}
+                    onMoveDown={focusThinkingEffortRow}
                   />
                 </div>
               </DenseRow>
-            </PanelSectionRow>
-            <PanelSectionRow>
-              <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-                <DenseSwitchRow
-                  label="Terse mode"
-                  help={OLLAMA_ROW_HELP.terse}
-                  hostRef={terseToggleHostRef}
-                  checked={terseMode}
-                  onChange={(checked) => setTerseMode(checked)}
-                  nav={{ onMoveUp: () => focusReplyVerbosityThumb(), onMoveDown: () => focusThinkingEffortRow() }}
-                />
-              </div>
             </PanelSectionRow>
             <PanelSectionRow>
               <div className="bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
@@ -320,7 +300,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
                     value={askThinkEffort}
                     onChange={requestThinkingEffortChange}
                     hostRef={setThinkingEffortHost}
-                    onMoveUp={focusTerseToggle}
+                    onMoveUp={focusReplyVerbosityThumb}
                     onMoveDown={() => foldLineBelow(OLLAMA_FOLD_TAB, chain, "reply")}
                   />
                 </DenseRow>

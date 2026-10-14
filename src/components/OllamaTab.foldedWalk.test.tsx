@@ -76,8 +76,6 @@ function props(): OllamaTabProps {
     ragCorpusVersion: "",
     replyVerbosity: "balanced",
     setReplyVerbosity: noop,
-    terseMode: false,
-    setTerseMode: noop,
     askThinkEffort: "off",
     setAskThinkEffort: noop,
   };
@@ -184,7 +182,7 @@ describe("the folded Ollama tab, every section open", () => {
         const order = names(down);
         expect(order[0]).toMatch(/^Where AI runs/);
         expect(order).toContain("Run AI on this Deck");
-        expect(order).toContain("Terse mode");
+        expect(order).not.toContain("Terse mode");
         expect(order).toContain("Set thinking to Off");
         expect(order[order.length - 1]).toBe("AI models");
         expect(order.length).toBeGreaterThanOrEqual(17);
@@ -203,7 +201,7 @@ describe("the folded Ollama tab, every section open", () => {
     const w = walk(MONITOR_PANE, "nearest");
     const seen = new Map<string, string>();
     for (const l of [w.enter(), ...w.walk("down")]) seen.set(l.name, l.stripText);
-    expect(seen.get("Terse mode")).toMatch(/^Terse modeSpeed mode only\./);
+    expect(seen.has("Terse mode")).toBe(false);
     expect(seen.get("Run AI on this Deck")).toBe("Run AI on this DeckOff: use a PC on your home network. On: AI runs on this device.");
     expect(seen.get("Set thinking to Off")).toBe("ThinkingAnswer straight away. Fastest.");
     expect(seen.get("Use local knowledge base")).toMatch(/Ground Strategy and troubleshooting Asks/);

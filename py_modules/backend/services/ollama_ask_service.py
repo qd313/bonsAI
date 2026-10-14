@@ -167,7 +167,7 @@ async def run_ask_ollama(
     # saved true (the rule reply_style_blocks.terse_mode_applies states; written inline here to keep
     # this file under the 400-line check). Decided once and handed to the prompt, the character
     # reminder and the reply reader.
-    terse_speed = ask_mode == "speed" and settings.get("terse_mode") is True
+    terse_speed = ask_mode == "speed" and reply_verbosity == "terse"
     apreset = str(settings.get("screenshot_attachment_preset") or "low")
     apreset = apreset if apreset in ("low", "mid", "max") else "low"
     from backend.services.screenshot_media import prepare_attachment_images

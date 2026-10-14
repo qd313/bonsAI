@@ -1,32 +1,14 @@
 /**
- * Title: Ollama tab, Terse mode toggle
- * Purpose: Pin that the Ollama tab shows a Terse mode switch under the reply-style slider, that it
- *          starts off, that its longer text (shown in the folded tab's help strip, plan 91 § 2b, and no
- *          longer drawn under the switch) says in plain words what it does and does not do, and that
- *          flipping it calls the setter the settings hook saves from.
- * Used for: roadmap "Terse mode: Speed answers in three lines" (details: roadmap-details.md).
- * Does not: Prove the D-pad walk on the device (that is a Deck check), or prove what the AI is told
- *           (see tests/test_terse_mode_prompt.py for that).
+ * Title: Ollama tab, Terse is the Reply style slider's first stop
+ * Purpose: Pin that the Ollama tab has no separate Terse switch any more (plan 93: Terse is the first stop of
+ *          the Reply style slider, in every Ask mode), that the slider's header names the Terse stop when it
+ *          is picked.
+ * Used for: roadmap "Terse becomes the first stop of the Reply style slider" (plan 93, lane B13).
+ * Does not: Prove the D-pad walk (OllamaTab.foldedWalk.test.tsx does, with Steam's scroll modelled), or
+ *           prove what the AI is told (tests/test_terse_mode_prompt.py does).
  */
 import { render } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-
-/* The shared Decky stub drops the Steam move props, so this file wraps ToggleField to keep the ones
-   given to the Terse mode switch where the D-pad test can call them, the way Steam would. */
-const terseNav = vi.hoisted(() => ({ current: {} as Record<string, () => boolean> }));
-vi.mock("@decky/ui", async () => {
-  const real = (await import("../test-harness/fakeDeckyUi")) as unknown as Record<string, unknown>;
-  const RealToggle = real.ToggleField as React.ComponentType<Record<string, unknown>>;
-  return {
-    ...real,
-    ToggleField: (p: Record<string, unknown>) => {
-      if ((real.wordsOf as (node: unknown) => string)(p.label) === "Terse mode") {
-        terseNav.current = { onMoveUp: p.onMoveUp as () => boolean, onMoveDown: p.onMoveDown as () => boolean };
-      }
-      return <RealToggle {...p} />;
-    },
-  };
-});
+import { beforeEach, describe, expect, it } from "vitest";
 
 import { OllamaTab, type OllamaTabProps } from "./OllamaTab";
 import { resetFoldedTabsForTests, setAllSections } from "../features/folded-tabs/foldedTabsStore";
@@ -69,84 +51,32 @@ function props(overrides: Partial<OllamaTabProps> = {}): OllamaTabProps {
     ragCorpusVersion: "",
     replyVerbosity: "balanced",
     setReplyVerbosity: noop,
-    terseMode: false,
-    setTerseMode: noop,
     askThinkEffort: "off",
     setAskThinkEffort: noop,
     ...overrides,
   };
 }
 
-const TOGGLE = '[label="Terse mode"]';
+const SWITCH = '[label="Terse mode"]';
 
-/** ToggleField is a test-harness stub div; React sets `checked` as a DOM property, not attribute. */
-function checkedOf(el: Element | null): unknown {
-  return (el as unknown as { checked?: unknown } | null)?.checked;
-}
-
-/** The stub keeps the real props on the element's React props; call them like Steam would. */
-function reactProps(el: Element): Record<string, (...a: unknown[]) => unknown> {
-  const key = Object.keys(el).find((k) => k.startsWith("__reactProps"));
-  return (el as unknown as Record<string, Record<string, (...a: unknown[]) => unknown>>)[key ?? ""] ?? {};
-}
-
-describe("Ollama tab: Terse mode toggle", () => {
-  it("shows one Terse mode switch, off, when nothing was saved", () => {
-    render(<OllamaTab {...props()} />);
-    const toggles = document.querySelectorAll(TOGGLE);
-    expect(toggles).toHaveLength(1);
-    expect(checkedOf(toggles[0])).toBe(false);
+describe("Ollama tab: Terse is a stop on the Reply style slider, not a switch", () => {
+  it("draws no Terse mode switch and no words 'Terse mode' anywhere in the open tab", () => {
+    const { container } = render(<OllamaTab {...props()} />);
+    expect(document.querySelector(SWITCH)).toBeNull();
+    expect(container.textContent).not.toMatch(/Terse mode/i);
   });
 
-  it("shows the switch on when the setting is on", () => {
-    render(<OllamaTab {...props({ terseMode: true })} />);
-    expect(checkedOf(document.querySelector(TOGGLE))).toBe(true);
+  it("the slider's header names the Terse stop when it is picked", () => {
+    const { container } = render(<OllamaTab {...props({ replyVerbosity: "terse" })} />);
+    const header = container.querySelector(".bonsai-reply-verbosity-slider")?.textContent ?? "";
+    expect(header).toMatch(/Reply style:\s*Terse/);
   });
 
-  it("sits right under the reply-style slider and above the Thinking row", () => {
+  it("the Thinking row still follows the slider directly", () => {
     const { container } = render(<OllamaTab {...props()} />);
     const slider = container.querySelector(".bonsai-reply-verbosity-slider");
-    const toggle = container.querySelector(TOGGLE);
     const thinking = Array.from(container.querySelectorAll("div")).find((d) => d.textContent === "Thinking");
-    expect(slider && toggle && thinking).toBeTruthy();
-    const before = (a: Node, b: Node) => Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
-    expect(before(slider as Node, toggle as Node)).toBe(true);
-    expect(before(toggle as Node, thinking as Node)).toBe(true);
-  });
-
-  it("explains in plain words that it shortens what you see, not the AI's thinking, and is Speed only", () => {
-    render(<OllamaTab {...props()} />);
-    /* Not drawn under the switch any more: the row carries it for the help strip. */
-    expect(document.querySelector(TOGGLE)?.getAttribute("description")).toBeNull();
-    const help = String(document.querySelector(TOGGLE)?.closest("[data-bonsai-help]")?.getAttribute("data-bonsai-help") ?? "");
-    expect(help).toMatch(/Speed mode only/i);
-    expect(help).toMatch(/three/i);
-    expect(help).toMatch(/shortens what you see, not how hard the AI thinks/i);
-    expect(help).toMatch(/Strategy and Expert/i);
-  });
-
-  it("calls the setter the settings hook saves from, with the new value", () => {
-    const setTerseMode = vi.fn();
-    render(<OllamaTab {...props({ setTerseMode })} />);
-    const el = document.querySelector(TOGGLE) as Element;
-    reactProps(el).onChange?.(true);
-    reactProps(el).onChange?.(false);
-    expect(setTerseMode.mock.calls).toEqual([[true], [false]]);
-  });
-
-  it("is a stop on the Down/Up walk: Up goes to the slider, Down goes to the Thinking row", () => {
-    const { container } = render(<OllamaTab {...props()} />);
-    const sliderThumb = container.querySelector<HTMLElement>("[data-bonsai-reply-verbosity-thumb]");
-    const thinkingButton = container.querySelector<HTMLElement>('button[aria-label^="Set thinking to"]');
-    expect(sliderThumb && thinkingButton).toBeTruthy();
-    /* Decky stamps tabindex="0" on what it navigates; the stub does not, so do it here. */
-    const thumbStop = (sliderThumb as HTMLElement).firstElementChild as HTMLElement;
-    thumbStop.setAttribute("tabindex", "0");
-    const focusUp = vi.spyOn(thumbStop, "focus");
-    const focusDown = vi.spyOn(thinkingButton as HTMLElement, "focus");
-    expect(terseNav.current.onMoveUp?.()).toBe(true);
-    expect(focusUp).toHaveBeenCalled();
-    expect(terseNav.current.onMoveDown?.()).toBe(true);
-    expect(focusDown).toHaveBeenCalled();
+    expect(slider && thinking).toBeTruthy();
+    expect(Boolean((slider as Node).compareDocumentPosition(thinking as Node) & Node.DOCUMENT_POSITION_FOLLOWING)).toBe(true);
   });
 });

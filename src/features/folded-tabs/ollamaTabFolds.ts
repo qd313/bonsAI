@@ -46,8 +46,6 @@ export const OLLAMA_ROW_HELP = {
   useKnowledgeBase:
     "Ground Strategy and troubleshooting Asks with downloaded offline cards (keyword or Keyword + meaning search).",
   replyStyle: "Bullet-first vs paragraph depth. Ask mode and model routing unchanged.",
-  terse:
-    "Speed mode only. Keeps each answer to three short lines and ends it with a menu of choices to dig deeper. It shortens what you see, not how hard the AI thinks, and the Reply style slider is ignored while it is on. Strategy and Expert answers are not changed.",
   timeouts: "Warning = slow-reply nudge. Timeout = abort if still busy.",
   keepAlive: "How long Ollama keeps the model in memory after a prompt (VRAM on the host).",
 } as const;
@@ -57,7 +55,6 @@ export interface OllamaFoldValues {
   ollamaLocalAutostart: boolean;
   useLocalKnowledgeBase: boolean;
   replyVerbosity: ReplyVerbosityId;
-  terseMode: boolean;
   askThinkEffort: AskThinkEffortId;
   latencyTimeoutsCustomEnabled: boolean;
   ollamaKeepAlive: OllamaKeepAliveDuration;
@@ -75,7 +72,6 @@ export function ollamaSectionSummaries(v: OllamaFoldValues): Record<OllamaSectio
     ]),
     reply: summarizeSection("Reply style", [
       { kind: "slider", label: "Reply style", value: REPLY_VERBOSITY_LABELS[v.replyVerbosity] },
-      { kind: "switch", label: "Terse mode", on: v.terseMode },
       { kind: "choice", label: "Thinking", value: ASK_THINK_EFFORT_LABELS[v.askThinkEffort] },
     ]),
     tuning: summarizeSection("Connection tuning", [

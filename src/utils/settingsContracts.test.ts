@@ -147,7 +147,6 @@ describe("settings contracts", () => {
     expect(settings.model_allow_high_vram_fallbacks).toBe(false);
     expect(settings.ollama_local_on_deck).toBe(true);
     expect(settings.ollama_local_autostart).toBe(false);
-    expect(settings.terse_mode).toBe(false);
     expect(settings.chat_text_size).toBe("normal");
   });
 
@@ -167,13 +166,17 @@ describe("settings contracts", () => {
     expect(normalizeSettings({ ollama_local_on_deck: "yes" as unknown as boolean }).ollama_local_on_deck).toBe(true);
   });
 
-  it("normalizes terse_mode: missing key defaults off; only an explicit true enables", () => {
-    expect(normalizeSettings({}).terse_mode).toBe(false);
-    expect(normalizeSettings({ terse_mode: false }).terse_mode).toBe(false);
-    expect(normalizeSettings({ terse_mode: true }).terse_mode).toBe(true);
+  it("reads the old Terse switch once: a saved true is the slider's Terse stop, anything else leaves it", () => {
+    const old = (data: Record<string, unknown>) => normalizeSettings(data as never) as unknown as Record<string, unknown>;
+    expect(old({ terse_mode: true }).reply_verbosity).toBe("terse");
+    expect(old({ terse_mode: true, reply_verbosity: "detailed" }).reply_verbosity).toBe("terse");
+    expect(old({ terse_mode: false, reply_verbosity: "detailed" }).reply_verbosity).toBe("detailed");
     for (const garbled of ["yes", "true", 1, null, [], {}]) {
-      expect(normalizeSettings({ terse_mode: garbled as unknown as boolean }).terse_mode).toBe(false);
+      expect(old({ terse_mode: garbled, reply_verbosity: "caveman" }).reply_verbosity).toBe("caveman");
     }
+    // The old key is never in the result, so the next save cannot write it again.
+    expect("terse_mode" in old({ terse_mode: true })).toBe(false);
+    expect("terse_mode" in old({})).toBe(false);
   });
 
   it("normalizes chat_text_size: missing key reads as normal; only small, normal, large are kept", () => {
@@ -209,7 +212,9 @@ describe("settings contracts", () => {
     expect(normalizeSettings({ ollama_keep_alive: "bogus" }).ollama_keep_alive).toBe(DEFAULT_OLLAMA_KEEP_ALIVE);
   });
 
-  it("normalizes reply_verbosity to caveman, balanced, or detailed", () => {
+  it("normalizes reply_verbosity to terse, caveman, balanced, or detailed", () => {
+    expect(normalizeSettings({ reply_verbosity: "terse" }).reply_verbosity).toBe("terse");
+    expect(normalizeSettings({ reply_verbosity: "terser" as never }).reply_verbosity).toBe(DEFAULT_REPLY_VERBOSITY);
     expect(normalizeSettings({ reply_verbosity: "caveman" }).reply_verbosity).toBe("caveman");
     expect(normalizeSettings({ reply_verbosity: "short" }).reply_verbosity).toBe("caveman");
     expect(normalizeSettings({ reply_verbosity: "detailed" }).reply_verbosity).toBe("detailed");
@@ -350,7 +355,6 @@ describe("settings contracts", () => {
       askMode: "expert",
       ollamaKeepAlive: "30s",
       replyVerbosity: "detailed",
-      terseMode: true,
       chatTextSize: "large",
       askThinkEffort: "high",
       replyLanguage: "japanese",
@@ -388,7 +392,7 @@ describe("settings contracts", () => {
     expect(p.ask_mode).toBe("expert");
     expect(p.ollama_keep_alive).toBe("30s");
     expect(p.reply_verbosity).toBe("detailed");
-    expect(p.terse_mode).toBe(true);
+    expect("terse_mode" in p).toBe(false);
     expect(p.chat_text_size).toBe("large");
     expect(p.reply_language).toBe("japanese");
     expect(p.model_allow_high_vram_fallbacks).toBe(true);
@@ -574,7 +578,6 @@ describe("settings contracts", () => {
       askMode: normalized.ask_mode,
       ollamaKeepAlive: normalized.ollama_keep_alive,
       replyVerbosity: normalized.reply_verbosity,
-      terseMode: normalized.terse_mode,
       chatTextSize: normalized.chat_text_size,
       askThinkEffort: normalized.ask_think_effort,
       replyLanguage: normalized.reply_language,

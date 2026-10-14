@@ -3,7 +3,7 @@
  *
  * Purpose: The refs the Ollama tab's rows register, and the small "put the ring on that row's control"
  * helpers the tab hands from one section to the next (the knowledge base switch, the reply-style
- * slider's knob, Terse mode, the Thinking row, the timeout and keep-models-loaded knobs, Test
+ * slider's knob, the Thinking row, the timeout and keep-models-loaded knobs, Test
  * connection). Moved out of OllamaTab.tsx unchanged, so the tab's own file is its layout.
  *
  * Used for: OllamaTab.tsx.
@@ -53,7 +53,6 @@ export function useOllamaTabFocus() {
   const kbCancelBtnRef = useRef<HTMLButtonElement>(null);
   const connectionTestBtnRef = useRef<HTMLButtonElement>(null);
   const replyVerbosityThumbHostRef = useRef<HTMLDivElement>(null);
-  const terseToggleHostRef = useRef<HTMLDivElement>(null);
   const thinkingEffortHostRef = useRef<HTMLDivElement | null>(null);
   const whereBodyRef = useRef<HTMLDivElement>(null);
   const customTimeoutsHostRef = useRef<HTMLDivElement>(null);
@@ -91,13 +90,6 @@ export function useOllamaTabFocus() {
   // which under Decky searches a 14-element shell rather than the plugin's DOM.
   const focusThinkingEffortRow = useCallback((): boolean => {
     return focusFirstStopIn(thinkingEffortHostRef.current, "button:not([disabled])");
-  }, []);
-
-  // Same shape as focusKbToggle: an element-scoped query on the row's own ref. The slider above and
-  // the Thinking row below both hand focus here, so the toggle is a stop on the Down/Up walk
-  // rather than a row the explicit slider-to-Thinking hop would jump over.
-  const focusTerseToggle = useCallback((): boolean => {
-    return focusFirstStopIn(terseToggleHostRef.current, "[tabindex], button, input");
   }, []);
 
   const focusKbUpFromReplyVerbosity = useCallback((): boolean => {
@@ -178,7 +170,6 @@ export function useOllamaTabFocus() {
     kbCancelBtnRef,
     connectionTestBtnRef,
     replyVerbosityThumbHostRef,
-    terseToggleHostRef,
     whereBodyRef,
     customTimeoutsHostRef,
     modelsBtnRef,
@@ -188,7 +179,6 @@ export function useOllamaTabFocus() {
     focusKbToggle,
     focusReplyVerbosityThumb,
     focusThinkingEffortRow,
-    focusTerseToggle,
     focusKbUpFromReplyVerbosity,
     focusCustomTimeoutsToggle,
     chain,

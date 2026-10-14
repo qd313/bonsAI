@@ -368,7 +368,8 @@ OLLAMA_KEEP_ALIVE_OPTIONS = frozenset(
 )
 DEFAULT_OLLAMA_KEEP_ALIVE = "5m"
 
-REPLY_VERBOSITY_OPTIONS = frozenset({"caveman", "balanced", "detailed"})
+# "terse" is the first stop of the Reply style slider (plan 93): the short answer in every Ask mode.
+REPLY_VERBOSITY_OPTIONS = frozenset({"terse", "caveman", "balanced", "detailed"})
 DEFAULT_REPLY_VERBOSITY = "balanced"
 
 
@@ -384,6 +385,19 @@ def sanitize_reply_verbosity(value: Any) -> str:
     if isinstance(value, str) and value.strip().lower() == "short":
         value = "caveman"
     return _reply_verbosity_field(value)
+
+
+def sanitize_reply_verbosity_with_old_terse_switch(value: Any, old_terse_mode: Any) -> str:
+    """The slider's stop, reading the old Terse switch once.
+
+    Before plan 93 Terse was its own switch (``terse_mode``). A saved literal ``True`` puts the
+    slider on its Terse stop whatever style was saved; anything else (false, garbled, missing)
+    leaves the slider where it was. ``terse_mode`` is never in the result, so the next save does
+    not write it again.
+    """
+    if old_terse_mode is True:
+        return "terse"
+    return sanitize_reply_verbosity(value)
 
 
 def sanitize_ollama_keep_alive(value: Any) -> str:
@@ -468,10 +482,6 @@ _SIMPLE_FIELDS: dict[str, Any] = {
     # Ask behavior.
     "input_sanitizer_user_disabled": _bool_default_false,
     "latency_timeouts_custom_enabled": _bool_default_false,
-    "reply_verbosity": sanitize_reply_verbosity,
-    # Terse mode: Speed-mode answers capped at three lines, with a branch menu on every reply.
-    # Off unless the person turns it on; an unrecognised value must not shorten anyone's answers.
-    "terse_mode": _bool_default_false,
     "ask_think_effort": _enum(_VALID_ASK_THINK_EFFORTS, DEFAULT_ASK_THINK_EFFORT, strip=True),
     "ollama_keep_alive": _ollama_keep_alive_field,
     # On for a fresh install (plan 93): a missing value takes the default; a saved ``False`` stays off.
@@ -575,6 +585,10 @@ def sanitize_settings(
                 default_persistence_mode,
             ),
             "ask_mode": sanitize_ask_mode(raw.get("ask_mode"), valid_ask_modes, default_ask_mode),
+            # Reads the old Terse switch (``terse_mode``) as well as its own key; see the function.
+            "reply_verbosity": sanitize_reply_verbosity_with_old_terse_switch(
+                raw.get("reply_verbosity"), raw.get("terse_mode")
+            ),
             # Read a legacy key as well as their own.
             "screenshot_attachment_preset": resolve_screenshot_attachment_preset(raw, "low"),
             "preset_chip_animation": preset_chip_animation,

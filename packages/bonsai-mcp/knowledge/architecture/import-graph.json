@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 960,
-  "edgeCount": 3226,
+  "edgeCount": 3225,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1638,8 +1638,7 @@
       "imports": [
         "src/components/OllamaTab.tsx",
         "src/features/folded-tabs/foldedTabsStore.ts",
-        "src/features/folded-tabs/ollamaTabFolds.ts",
-        "src/test-harness/fakeDeckyUi.tsx"
+        "src/features/folded-tabs/ollamaTabFolds.ts"
       ],
       "importedBy": []
     },
@@ -8771,7 +8770,6 @@
         "src/components/OllamaModelsHubModal.returnFocus.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
         "src/components/OllamaTab.foldedWalk.test.tsx",
-        "src/components/OllamaTab.terseMode.test.tsx",
         "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.inPlaceSetup.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",

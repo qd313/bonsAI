@@ -151,13 +151,12 @@ export type BonsaiSettings = {
   ask_mode: AskModeId;
   /** Ollama `keep_alive` for each Ask (how long the model stays in VRAM on the host after the request). */
   ollama_keep_alive: OllamaKeepAliveDuration;
-  /** Global reply prose style (Short / Balanced / Detailed); Balanced = no verbosity inject. */
-  reply_verbosity: ReplyVerbosityId;
   /**
-   * Terse mode: a Speed-mode answer is capped at three lines (a sentence or a bullet each) and
-   * ends with the branch menu. Shortens what is shown, not how hard the AI thinks. Off by default.
+   * Global reply prose style (Terse / Caveman / Balanced / Detailed); Balanced = no verbosity inject.
+   * Terse is the short answer (three lines, then a menu) in every Ask mode; it was the separate
+   * `terse_mode` switch before plan 93.
    */
-  terse_mode: boolean;
+  reply_verbosity: ReplyVerbosityId;
   /** Hidden model reasoning before the reply; `off` sends `think: false`. Off by default. */
   ask_think_effort: AskThinkEffortId;
   /** Ask reply language: follow Steam client, always English, or a fixed Steam language code. */
@@ -258,7 +257,6 @@ export type BonsaiSettingsSnapshotInput = {
   askMode: AskModeId;
   ollamaKeepAlive: OllamaKeepAliveDuration;
   replyVerbosity: ReplyVerbosityId;
-  terseMode: boolean;
   askThinkEffort: AskThinkEffortId;
   replyLanguage: ReplyLanguageId;
   showDeveloperTab: boolean;

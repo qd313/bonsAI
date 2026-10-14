@@ -1,27 +1,30 @@
 /**
  * Title: How long the AI's replies are
  *
- * Purpose: A three-stop slider in the Ollama tab controls how long-winded
- * the AI's answers are: Caveman (short, blunt, key points only), Balanced
- * (the default, no particular instruction either way), and Detailed (more
- * explanation, examples, and steps). This file holds the three stops, their
- * labels, and the math that turns a slider position into one of the three
- * (and back).
+ * Purpose: A four-stop slider in the Ollama tab controls how long-winded
+ * the AI's answers are: Terse (a few short lines and a menu of choices, in
+ * every Ask mode), Caveman (short, blunt, key points only), Balanced (the
+ * default, no particular instruction either way), and Detailed (more
+ * explanation, examples, and steps). This file holds the four stops, their
+ * labels, and the math that turns a slider position into one of the four
+ * (and back). Terse used to be its own switch (`terse_mode`); it is the
+ * slider's first stop since plan 93.
  *
  * Used for: the verbosity slider in the Ollama tab, and the settings
  * clean-up file that reads a saved choice back.
  *
- * Solves: one shared list of the three stops and their order, so the slider
+ * Solves: one shared list of the four stops and their order, so the slider
  * and the settings clean-up file agree on what "Balanced" is and which
  * direction the slider moves in.
  *
- * Does not: change the wording the AI is actually given. Choosing Caveman or
- * Detailed only saves that choice; turning it into an instruction the AI
+ * Does not: change the wording the AI is actually given. Choosing Terse,
+ * Caveman or Detailed only saves that choice; turning it into an instruction the AI
  * follows happens on the computer or Deck side, when a question is sent.
  */
-export type ReplyVerbosityId = "caveman" | "balanced" | "detailed";
+export type ReplyVerbosityId = "terse" | "caveman" | "balanced" | "detailed";
 
 export const REPLY_VERBOSITY_ORDER: readonly ReplyVerbosityId[] = [
+  "terse",
   "caveman",
   "balanced",
   "detailed",
@@ -32,6 +35,7 @@ export const DEFAULT_REPLY_VERBOSITY: ReplyVerbosityId = "balanced";
 const _set = new Set<string>(REPLY_VERBOSITY_ORDER);
 
 export const REPLY_VERBOSITY_LABELS: Record<ReplyVerbosityId, string> = {
+  terse: "Terse",
   caveman: "Caveman",
   balanced: "Balanced",
   detailed: "Detailed",

@@ -441,35 +441,64 @@
     }
   },
   {
-    "name": "an old settings file predating terse mode loads it off and leaves everything else untouched",
+    "name": "an old settings file predating the Terse stop keeps its reply style and has no terse_mode key",
     "input": {
       "reply_verbosity": "detailed",
       "desktop_app_log_level": "verbose",
       "preset_chip_animation": "carousel"
     },
     "expected": {
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    }
+  },
+  {
+    "name": "the old Terse switch saved on lands the slider on its Terse stop, over whatever style was saved",
+    "input": {
+      "terse_mode": true,
+      "reply_verbosity": "detailed"
+    },
+    "expected": {
+      "reply_verbosity": "terse"
+    }
+  },
+  {
+    "name": "the old Terse switch saved off leaves the slider where it was",
+    "input": {
       "terse_mode": false,
-      "reply_verbosity": "detailed",
-      "desktop_app_log_level": "verbose",
-      "preset_chip_animation": "carousel"
+      "reply_verbosity": "detailed"
+    },
+    "expected": {
+      "reply_verbosity": "detailed"
     }
   },
   {
-    "name": "terse mode needs an explicit true, a truthy string does not shorten anyone's answers",
+    "name": "the old Terse switch needs an explicit true, a truthy string does not move the slider",
     "input": {
-      "terse_mode": "yes"
+      "terse_mode": "yes",
+      "reply_verbosity": "caveman"
     },
     "expected": {
-      "terse_mode": false
+      "reply_verbosity": "caveman"
     }
   },
   {
-    "name": "terse mode saved on stays on",
+    "name": "the Terse stop saved on the slider stays on it",
     "input": {
-      "terse_mode": true
+      "reply_verbosity": "terse"
     },
     "expected": {
-      "terse_mode": true
+      "reply_verbosity": "terse"
+    }
+  },
+  {
+    "name": "an unknown reply style still falls back to balanced, not to Terse",
+    "input": {
+      "reply_verbosity": "terse-ish"
+    },
+    "expected": {
+      "reply_verbosity": "balanced"
     }
   },
   {

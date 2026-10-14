@@ -60,8 +60,6 @@ function props(): OllamaTabProps {
     ragCorpusVersion: "",
     replyVerbosity: "balanced",
     setReplyVerbosity: noop,
-    terseMode: false,
-    setTerseMode: noop,
     askThinkEffort: "off",
     setAskThinkEffort: noop,
   };

@@ -127,7 +127,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             **kwargs: Any,
         ) -> dict[str, Any]:
             call_models.append(model_name)
-            if model_name == "qwen2.5vl:3b":
+            if model_name == "qwen2.5:3b":
                 return {
                     "success": False,
                     "status": 404,
@@ -145,7 +145,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
         with (
             patch(
                 "backend.services.ollama_ask_service.list_installed_ollama_tags",
-                return_value=["qwen2.5vl:3b", "qwen2.5:3b"],
+                return_value=["qwen2.5:3b", "gemma4:e2b-it-qat"],
             ),
             patch(
                 "backend.services.ollama_ask_service.probe_ollama_http_ok",
@@ -170,10 +170,11 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             )
 
         self.assertTrue(out.get("success"))
-        self.assertEqual(out.get("model"), "qwen2.5:3b")
-        self.assertEqual(call_models, ["qwen2.5vl:3b", "qwen2.5:3b"])
+        # qwen2.5vl:3b is no longer offered under the default "Open source only" policy (plan 93).
+        self.assertEqual(out.get("model"), "gemma4:e2b-it-qat")
+        self.assertEqual(call_models, ["qwen2.5:3b", "gemma4:e2b-it-qat"])
         diag = out.get("ask_diagnostics") or {}
-        self.assertEqual(diag.get("model_succeeded"), "qwen2.5:3b")
+        self.assertEqual(diag.get("model_succeeded"), "gemma4:e2b-it-qat")
         self.assertEqual(diag.get("routing_strategy"), "installed_in_policy_chain")
 
     async def test_connecting_model_publishes_before_the_first_attempt(self) -> None:
@@ -454,7 +455,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
         def fake_post_ollama_chat(
             _url: str, model_name: str, *_args: Any, **_kwargs: Any
         ) -> dict[str, Any]:
-            if model_name == "qwen2.5vl:3b":
+            if model_name == "qwen2.5:3b":
                 return {
                     "success": False,
                     "status": 404,
@@ -472,7 +473,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
         with (
             patch(
                 "backend.services.ollama_ask_service.list_installed_ollama_tags",
-                return_value=["qwen2.5vl:3b", "qwen2.5:3b"],
+                return_value=["qwen2.5:3b", "gemma4:e2b-it-qat"],
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(

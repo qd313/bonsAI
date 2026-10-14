@@ -99,13 +99,13 @@ describe("PullModelsModal -- every control answers A, not just Advanced", () => 
   it("pressing A on an uninstalled model's tick box queues it instead of doing nothing to close the screen", async () => {
     const { container } = renderModal();
     const target = await waitFor(() => {
-      const el = container.querySelector('[aria-label="Select qwen2.5vl:3b to pull"]');
+      const el = container.querySelector('[aria-label="Select qwen3.5:4b to pull"]');
       expect(el).not.toBeNull();
       return el!;
     });
     okOf(target)({ stopPropagation: () => {} });
     await waitFor(() => {
-      expect(container.querySelector('[aria-label="Deselect qwen2.5vl:3b"]')).not.toBeNull();
+      expect(container.querySelector('[aria-label="Deselect qwen3.5:4b"]')).not.toBeNull();
     });
   });
 });

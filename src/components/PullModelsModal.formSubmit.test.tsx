@@ -46,7 +46,7 @@ describe("PullModelsModal buttons do not submit an enclosing form", () => {
     const { container } = renderInForm(onSubmit);
 
     const tick = container.querySelector(
-      '[aria-label="Select qwen2.5vl:3b to pull"]'
+      '[aria-label="Select qwen3.5:4b to pull"]'
     ) as HTMLButtonElement;
     expect(tick).not.toBeNull();
     fireEvent.click(tick);
@@ -54,7 +54,7 @@ describe("PullModelsModal buttons do not submit an enclosing form", () => {
     expect(onSubmit).not.toHaveBeenCalled();
     // The tick itself still ran -- preventDefault on the click stops the browser's default submit
     // action, not the handler's own effect.
-    expect(container.querySelector('[aria-label="Deselect qwen2.5vl:3b"]')).not.toBeNull();
+    expect(container.querySelector('[aria-label="Deselect qwen3.5:4b"]')).not.toBeNull();
   });
 
   it("ticking a row in the filters column does not submit the form", () => {

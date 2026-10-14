@@ -125,12 +125,12 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     sizeGb: 3.2,
     releasedYm: "2025-01",
     license: "Qwen Research (3B size)",
-    licenseClass: "foss",
+    licenseClass: "open_weight",
     group: "essentials",
     tags: ["chat", "vision", "ocr", "strategy"],
     rating: 6,
     blurb:
-      "Tier 1 default — one small pull for chat, screenshots, OCR, and Strategy mode. Qwen's own card gives the 3B size the Qwen Research licence.",
+      "Small chat, screenshots, OCR, and Strategy mode in one pull. Not open source: Qwen's own card gives the 3B size the Qwen Research licence (research use only), so it needs the open-weight setting.",
   },
   {
     tag: "qwen3.5:4b",
@@ -143,7 +143,7 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     tags: ["chat", "vision", "ocr", "strategy"],
     rating: 6,
     blurb:
-      "FOSS native multimodal — vision fallback after qwen2.5vl; open-source-tier alternative to gemma4:e2b.",
+      "FOSS native multimodal — an open-source-tier vision model beside gemma4:e2b-it-qat.",
   },
   {
     tag: "gemma4:e2b-it-qat",

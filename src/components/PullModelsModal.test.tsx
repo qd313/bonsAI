@@ -194,7 +194,7 @@ describe("PullModelsModal 'Pull selected' names a tag the registry does not have
     setRpcHandler("fetch_ollama_catalog_metadata", () => ({
       source: "live",
       tags: {
-        "qwen2.5vl:3b": { exists: true, size_bytes: 3_200_000_000 },
+        "gemma4:e2b-it-qat": { exists: true, size_bytes: 4_300_000_000 },
         "qwen3.5:4b": { exists: false },
       },
     }));
@@ -206,7 +206,7 @@ describe("PullModelsModal 'Pull selected' names a tag the registry does not have
       },
     });
 
-    selectByLabel(container, "Select qwen2.5vl:3b to pull");
+    selectByLabel(container, "Select gemma4:e2b-it-qat to pull");
     selectByLabel(container, "Select qwen3.5:4b to pull");
 
     await waitFor(() => {
@@ -218,7 +218,7 @@ describe("PullModelsModal 'Pull selected' names a tag the registry does not have
     await waitFor(() => {
       const pullCall = getRpcCallLog().find((c) => c.method === "pull_ollama_models");
       expect(pullCall).toBeTruthy();
-      expect(pullCall?.args[0]).toEqual(["qwen2.5vl:3b"]);
+      expect(pullCall?.args[0]).toEqual(["gemma4:e2b-it-qat"]);
     });
 
     expect(toaster.toast).toHaveBeenCalledWith(
@@ -233,7 +233,7 @@ describe("PullModelsModal 'Pull selected' names a tag the registry does not have
     setRpcHandler("fetch_ollama_catalog_metadata", () => ({
       source: "live",
       tags: {
-        "qwen2.5vl:3b": { exists: true, size_bytes: 3_200_000_000 },
+        "gemma4:e2b-it-qat": { exists: true, size_bytes: 4_300_000_000 },
         "qwen3.5:4b": { exists: true, size_bytes: 3_400_000_000 },
       },
     }));
@@ -245,7 +245,7 @@ describe("PullModelsModal 'Pull selected' names a tag the registry does not have
       },
     });
 
-    selectByLabel(container, "Select qwen2.5vl:3b to pull");
+    selectByLabel(container, "Select gemma4:e2b-it-qat to pull");
     selectByLabel(container, "Select qwen3.5:4b to pull");
 
     await waitFor(() => {
@@ -257,7 +257,7 @@ describe("PullModelsModal 'Pull selected' names a tag the registry does not have
     await waitFor(() => {
       const pullCall = getRpcCallLog().find((c) => c.method === "pull_ollama_models");
       expect(pullCall).toBeTruthy();
-      expect(pullCall?.args[0]).toEqual(["qwen2.5vl:3b", "qwen3.5:4b"]);
+      expect(pullCall?.args[0]).toEqual(["gemma4:e2b-it-qat", "qwen3.5:4b"]);
     });
 
     expect(toaster.toast).not.toHaveBeenCalledWith(
@@ -343,12 +343,12 @@ describe("PullModelsModal 'Use for Ask' pin", () => {
   });
 
   it("also pins the vision try-order when the model is a catalog vision entry", async () => {
-    // qwen2.5vl:3b carries the "vision" tag in the bundled catalog.
-    setInstalledModels(["qwen2.5vl:3b"]);
+    // qwen3.5:4b carries the "vision" tag in the bundled catalog.
+    setInstalledModels(["qwen3.5:4b"]);
     const { container } = renderModal();
 
     const pinBtn = await waitFor(() => {
-      const el = container.querySelector('[aria-label="Use qwen2.5vl:3b for Ask"]');
+      const el = container.querySelector('[aria-label="Use qwen3.5:4b for Ask"]');
       expect(el).not.toBeNull();
       return el as HTMLButtonElement;
     });
@@ -362,8 +362,8 @@ describe("PullModelsModal 'Use for Ask' pin", () => {
 
     const saveCall = getRpcCallLog().find((c) => c.method === "save_settings");
     const payload = saveCall?.args[0] as { text_model_routing_order?: string[]; vision_model_routing_order?: string[] };
-    expect(payload.text_model_routing_order).toEqual(["qwen2.5vl:3b"]);
-    expect(payload.vision_model_routing_order).toEqual(["qwen2.5vl:3b"]);
+    expect(payload.text_model_routing_order).toEqual(["qwen3.5:4b"]);
+    expect(payload.vision_model_routing_order).toEqual(["qwen3.5:4b"]);
   });
 
   it("pins a custom (uncatalogued) installed tag to text order only, not vision", async () => {

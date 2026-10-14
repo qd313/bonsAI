@@ -1,11 +1,12 @@
 /**
  * Title: The licence pill in the models list says what the licence really is
  *
- * Purpose: Pin plan 77 (licence labels, round 3). qwen2.5vl:3b and qwen2.5:3b are kept in the
- * "Open source only" class for now, but Qwen's own card gives the 3B size the Qwen Research
- * licence, and the row still showed a green "FOSS" pill (found on the Deck, P77-LICENCE-FILTER).
- * A row whose licence label is not Apache or MIT now shows that licence's name in the pill
- * instead. Classes, tiers and filters are unchanged.
+ * Purpose: Pin plan 77 (licence labels, round 3). qwen2.5:3b is kept in the "Open source only"
+ * class for now, but Qwen's own card gives the 3B size the Qwen Research licence, and the row still
+ * showed a green "FOSS" pill (found on the Deck, P77-LICENCE-FILTER). A row whose licence label is
+ * not Apache or MIT now shows that licence's name in the pill instead. Classes, tiers and filters
+ * are unchanged. qwen2.5vl:3b is no longer in that class (plan 93), so "Open source only" does not
+ * list it at all; it appears once the open-weight setting is on.
  */
 import { describe, expect, it } from "vitest";
 import { fireEvent, render, waitFor } from "@testing-library/react";
@@ -50,11 +51,11 @@ describe("pullModelLicencePillText", () => {
 });
 
 describe("licence pill in the list", () => {
-  it("shows Qwen Research, not FOSS, on the two kept 3B Qwen rows", async () => {
+  it("shows Qwen Research, not FOSS, on the kept 3B Qwen row, and does not list qwen2.5vl:3b under Open source only", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: [] }));
     const { container } = renderModal();
-    await waitFor(() => expect(pillFor(container, "qwen2.5vl:3b")).not.toBeNull());
-    expect(pillFor(container, "qwen2.5vl:3b")).toBe("Qwen Research");
+    await waitFor(() => expect(pillFor(container, "qwen3.5:4b")).not.toBeNull());
+    expect(pillFor(container, "qwen2.5vl:3b")).toBeNull();
     expect(pillFor(container, "qwen3.5:4b")).toBe("FOSS");
     showAllGroups(container);
     await waitFor(() => expect(pillFor(container, "qwen2.5:3b")).not.toBeNull());

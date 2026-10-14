@@ -79,16 +79,32 @@ class ModelPolicyTests(unittest.TestCase):
         self.assertEqual(classify_ollama_model_name("llava-llama3"), "open_weight")
         self.assertEqual(classify_ollama_model_name("llava-phi3"), "foss")
 
-    def test_tier1_keeps_the_default_picture_model_and_second_text_fallback(self):
-        """The maintainer's call (labels only): qwen2.5vl:3b and qwen2.5:3b stay in Tier 1 even
-        though Qwen's own cards give the 3B size the Qwen Research licence. Flipping this is the
-        one-line change to KEPT_IN_TIER_1_PENDING_CALL."""
-        self.assertEqual(classify_ollama_model_name("qwen2.5vl:3b"), "foss")
+    def test_tier1_keeps_the_second_text_fallback_only(self):
+        """The maintainer's call (labels only): qwen2.5:3b stays in Tier 1 even though Qwen's own
+        card gives the 3B size the Qwen Research licence. Flipping this is the one-line change to
+        KEPT_IN_TIER_1_PENDING_CALL."""
         self.assertEqual(classify_ollama_model_name("qwen2.5:3b"), "foss")
+        self.assertEqual(KEPT_IN_TIER_1_PENDING_CALL, frozenset({("qwen2.5", "3b")}))
+
+    def test_qwen25vl_3b_is_classed_by_its_licence_not_kept_in_tier_1(self):
+        """Plan 93: qwen2.5vl:3b is research-only, so it is not offered under "Open source only"
+        (2026-10-13). Its larger sibling sizes keep their own classes."""
+        self.assertEqual(classify_ollama_model_name("qwen2.5vl:3b"), "open_weight")
+        self.assertEqual(classify_ollama_model_name("qwen2.5vl:3b-q4_K_M"), "open_weight")
+        self.assertEqual(filter_model_list(["qwen2.5vl:3b", "qwen3.5:4b"], "open_source_only", False), ["qwen3.5:4b"])
         self.assertEqual(
-            KEPT_IN_TIER_1_PENDING_CALL,
-            frozenset({("qwen2.5vl", "3b"), ("qwen2.5", "3b")}),
+            filter_model_list(["qwen2.5vl:3b", "qwen3.5:4b"], "open_weight", False), ["qwen2.5vl:3b", "qwen3.5:4b"]
         )
+
+    def test_picture_questions_still_have_open_source_vision_models_without_qwen25vl(self):
+        """qwen2.5vl:3b was not the only picture model open to "Open source only": Gemma 4,
+        qwen3.5:4b and llava:7b are all open-source-class and read pictures."""
+        from backend.ollama_routing import select_ollama_models
+
+        vision = filter_model_list(select_ollama_models(True, "speed"), "open_source_only", False)
+        self.assertNotIn("qwen2.5vl:3b", vision)
+        self.assertEqual(vision[0], "qwen3.5:4b")
+        self.assertIn("gemma4:e2b-it-qat", vision)
 
     def test_filter_tier1_drops_size_limited_and_legacy_models(self):
         models = ["qwen2.5:72b", "qwen2.5-coder:3b", "vicuna:latest", "orca-mini:latest",

@@ -101,7 +101,9 @@ afterEach(() => {
 
 function renderBox(host: TryOrderHost | undefined, props: Record<string, unknown> = {}) {
   return render(
-    <PullModelsModal activeRoutingTag={null} onCancel={() => {}} onPullAccepted={() => {}} embedded tryOrderHost={host} {...props} />,
+    // qwen2.5vl:3b is research-only (plan 93), so "Open source only" no longer lists it; these tests
+    // use it as a sample model, so they run with the open-weight setting on.
+    <PullModelsModal activeRoutingTag={null} onCancel={() => {}} onPullAccepted={() => {}} embedded tryOrderHost={host} modelPolicyTier="open_weight" {...props} />,
   );
 }
 
@@ -204,7 +206,7 @@ describe("pressing a place button", () => {
     const onSubmit = vi.fn((e: React.FormEvent) => e.preventDefault());
     const { container } = render(
       <form onSubmit={onSubmit}>
-        <PullModelsModal activeRoutingTag={null} onCancel={() => {}} onPullAccepted={() => {}} embedded tryOrderHost={DECK} />
+        <PullModelsModal activeRoutingTag={null} onCancel={() => {}} onPullAccepted={() => {}} embedded tryOrderHost={DECK} modelPolicyTier="open_weight" />
       </form>,
     );
     await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("2"));
@@ -243,7 +245,7 @@ describe("pressing a place button", () => {
     const onSubmit = vi.fn((e: React.FormEvent) => e.preventDefault());
     const { container } = render(
       <form onSubmit={onSubmit}>
-        <PullModelsModal activeRoutingTag={null} onCancel={() => {}} onPullAccepted={() => {}} embedded tryOrderHost={DECK} />
+        <PullModelsModal activeRoutingTag={null} onCancel={() => {}} onPullAccepted={() => {}} embedded tryOrderHost={DECK} modelPolicyTier="open_weight" />
       </form>,
     );
     await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
@@ -391,7 +393,7 @@ describe("the AI on a PC", () => {
       ...defaultSettingsFixture(),
       text_model_routing_order: ["gemma4:e2b-it-qat", "gemma3:4b", "qwen3.5:4b"],
     }));
-    const { container } = renderBox(PC);
+    const { container } = renderBox(PC, { modelPolicyTier: "open_source_only" });
     await waitFor(() => expect(placeOf(container, "qwen3.5:4b", true)).toBe("3"));
     expect(hasRow(container, "gemma3:4b", true)).toBe(false);
     expect(placeOf(container, "gemma4:e2b-it-qat", true)).toBe("1");
@@ -509,15 +511,15 @@ describe("a model the filters hide", () => {
     // gemma3:4b is open-weight: the default licence filter (open source only) hides its row.
     setRpcHandler("test_ollama_connection", () => ({
       reachable: true,
-      models: ["gemma3:4b", "qwen2.5vl:3b", "gemma4:e2b-it-qat"],
+      models: ["gemma3:4b", "qwen3.5:4b", "gemma4:e2b-it-qat"],
     }));
     setRpcHandler("load_settings", () => ({
       ...defaultSettingsFixture(),
-      text_model_routing_order: ["qwen2.5vl:3b", "gemma3:4b", "gemma4:e2b-it-qat"],
+      text_model_routing_order: ["qwen3.5:4b", "gemma3:4b", "gemma4:e2b-it-qat"],
     }));
-    const { container } = renderBox(DECK);
+    const { container } = renderBox(DECK, { modelPolicyTier: "open_source_only" });
     await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("3"));
-    expect(placeOf(container, "qwen2.5vl:3b")).toBe("1");
+    expect(placeOf(container, "qwen3.5:4b")).toBe("1");
     expect(container.textContent).toContain("1 model in the order is hidden by the filters.");
   });
 });

@@ -48,14 +48,14 @@ _SIZE_LIMITED_LICENCE: Final[dict[str, tuple[str, ...]]] = {
 # licences on every size, ollama.com/library/qwen) and llava-llama3 (a Llama 3 fine-tune).
 _LIMITED_LICENCE_FAMILIES: Final[frozenset[str]] = frozenset(("qwen", "llava-llama3"))
 
-# Decision pending with the maintainer (2026-09-29, plan 77 helper D): these two sizes are under
-# the Qwen Research licence on Qwen's own cards (Ollama's qwen2.5vl page ships Apache 2.0 text),
-# yet they are the Tier 1 default picture model and the second Tier 1 text fallback. The call was
-# "labels only, never change what gets picked", so they stay in Tier 1 for now. Emptying this set
-# moves both to Tier 2 -- and empties Tier 1's essentials, so it is a call, not a clean-up.
-KEPT_IN_TIER_1_PENDING_CALL: Final[frozenset[tuple[str, str]]] = frozenset(
-    (("qwen2.5vl", "3b"), ("qwen2.5", "3b"))
-)
+# Decision pending with the maintainer (2026-09-29, plan 77 helper D): this size is under the
+# Qwen Research licence on Qwen's own cards, yet it is the second Tier 1 text fallback. The call was
+# "labels only, never change what gets picked", so it stays in Tier 1 for now. Emptying this set
+# moves it to Tier 2, so it is a call, not a clean-up.
+# qwen2.5vl:3b was in this set too. It left on 2026-10-13 (plan 93, the maintainer's call): it is no
+# longer the starter model (gemma4:e2b-it-qat is), so it is classed by its licence like any other
+# research-only model, and "Open source only" no longer offers it.
+KEPT_IN_TIER_1_PENDING_CALL: Final[frozenset[tuple[str, str]]] = frozenset((("qwen2.5", "3b"),))
 
 def _normalize_base_model(name: str) -> str:
     """First path segment of Ollama model id (before `:`), after optional `repo/` prefix."""

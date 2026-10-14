@@ -71,7 +71,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+// FOCUS_PATTERNS_ROOT lets the checker's own test point it at a small fixture tree.
+const ROOT = process.env.FOCUS_PATTERNS_ROOT
+  ? path.resolve(process.env.FOCUS_PATTERNS_ROOT)
+  : path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = path.join(ROOT, "src");
 const BASELINE = path.join(ROOT, "scripts", "focus-baseline.json");
 
@@ -228,6 +231,39 @@ function checkFile(absPath) {
   // unrelated querySelector elsewhere in the app is not this check's business.
   const fileIsFocusLogic = /focus|navigation/i.test(relPath);
 
+  /** Move-handler keys written inside `expr`, following a bare name to its same-file object literal (one step). */
+  const moveKeysIn = (expr, sourceFile) => {
+    const found = [];
+    const scan = (n, depth) => {
+      if (
+        (ts.isPropertyAssignment(n) || ts.isShorthandPropertyAssignment(n) || ts.isMethodDeclaration(n)) &&
+        n.name &&
+        MOVE_PROP.test(n.name.getText(sourceFile))
+      ) {
+        found.push(n.name.getText(sourceFile));
+      }
+      if (ts.isIdentifier(n) && depth === 0) {
+        const decl = namedObjects.get(n.text);
+        if (decl) scan(decl, 1);
+        return;
+      }
+      ts.forEachChild(n, (c) => scan(c, depth));
+    };
+    scan(expr, 0);
+    return found;
+  };
+  /** Same-file `const name = { ... }` objects, for the spread check above. */
+  const namedObjects = new Map();
+  const collectNamed = (n) => {
+    if (ts.isVariableDeclaration(n) && ts.isIdentifier(n.name) && n.initializer) {
+      let init = n.initializer;
+      while (ts.isAsExpression(init) || ts.isParenthesizedExpression(init)) init = init.expression;
+      if (ts.isObjectLiteralExpression(init)) namedObjects.set(n.name.text, init);
+    }
+    ts.forEachChild(n, collectNamed);
+  };
+  collectNamed(sf);
+
   const visit = (node, inFocus) => {
     let focus = inFocus;
 
@@ -245,6 +281,13 @@ function checkFile(absPath) {
               lineOf(prop, sf),
               `${prop.name.getText()} on <${tag}>`,
             );
+          }
+          // A spread carries them too: {...({ onMoveDown: ... } as Record<string, unknown>)}, or a
+          // same-file object the spread names. The named-attribute check above never saw these.
+          if (ts.isJsxSpreadAttribute(prop)) {
+            for (const name of moveKeysIn(prop.expression, sf)) {
+              add("move-props-on-button", lineOf(prop, sf), `${name} spread on <${tag}>`);
+            }
           }
         }
       }
@@ -361,7 +404,7 @@ function readBaseline() {
   }
 }
 
-function writeBaseline(counts) {
+function writeBaseline(counts, reasons = {}) {
   const total = Object.values(counts)
     .flatMap((r) => Object.values(r))
     .reduce((a, b) => a + b, 0);
@@ -372,6 +415,14 @@ function writeBaseline(counts) {
     total,
     counts: Object.fromEntries(Object.entries(counts).sort(([a], [b]) => (a < b ? -1 : 1))),
   };
+  // Why a case is kept: { file: { rule: "reason" } }, only for entries that still count.
+  const kept = {};
+  for (const [file, rules] of Object.entries(reasons)) {
+    for (const [rule, why] of Object.entries(rules)) {
+      if (counts[file]?.[rule]) (kept[file] ??= {})[rule] = why;
+    }
+  }
+  if (Object.keys(kept).length > 0) body.reasons = Object.fromEntries(Object.entries(kept).sort(([a], [b]) => (a < b ? -1 : 1)));
   fs.writeFileSync(BASELINE, `${JSON.stringify(body, null, 2)}\n`, "utf8");
   return total;
 }
@@ -383,7 +434,7 @@ const findings = files.flatMap(checkFile);
 const counts = tally(findings);
 
 if (process.argv.includes("--update")) {
-  const total = writeBaseline(counts);
+  const total = writeBaseline(counts, readBaseline().reasons ?? {});
   console.log(`focus-patterns: baseline written -- ${total} known violations`);
   console.log(`  ${rel(BASELINE)}`);
   process.exit(0);

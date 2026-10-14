@@ -123,9 +123,15 @@ export function patchPendingSessionSettingsSnapshot(
   patch: Partial<BonsaiSettingsSnapshotInput>
 ): void {
   const pending = survival.peekPending();
-  if (!pending?.settingsSnapshot) return;
-  const nextSettings = { ...pending.settingsSnapshot, ...patch };
-  survival.captureDirect({ ...pending, settingsSnapshot: nextSettings });
+  if (pending?.settingsSnapshot) {
+    const nextSettings = { ...pending.settingsSnapshot, ...patch };
+    survival.captureDirect({ ...pending, settingsSnapshot: nextSettings });
+  }
+  /*
+   * The restored copy is patched on its own: the screen that came back has already taken the note, and is
+   * waiting on its settings load to fill itself from that copy. Returning early when no note is waiting left
+   * this copy stale (plan 93, the library's Remove switch).
+   */
   if (restoredSettingsSnapshot) {
     restoredSettingsSnapshot = { ...restoredSettingsSnapshot, ...patch };
   }

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 978,
-  "edgeCount": 3295,
+  "fileCount": 979,
+  "edgeCount": 3304,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -581,6 +581,19 @@
       ],
       "importedBy": []
     },
+    "src/components/KnowledgeBaseSection.removeSwitchHook.test.tsx": {
+      "imports": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/features/plugin-shell/initialSessionSnapshot.ts",
+        "src/hooks/usePluginSettings.ts",
+        "src/test-harness/confirmBoxProbe.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/rpcFixtures.ts",
+        "src/utils/bonsaiSessionSurvival.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/KnowledgeBaseSection.returnFocus.test.tsx": {
       "imports": [
         "src/components/KnowledgeBaseSection.tsx",
@@ -639,6 +652,7 @@
         "src/components/KnowledgeBaseSection.remountDownload.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.removeSwitch.test.tsx",
+        "src/components/KnowledgeBaseSection.removeSwitchHook.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
         "src/components/KnowledgeBaseSection.update.test.tsx",
@@ -5105,6 +5119,7 @@
         "src/utils/bonsaiSessionSurvival.ts"
       ],
       "importedBy": [
+        "src/components/KnowledgeBaseSection.removeSwitchHook.test.tsx",
         "src/features/chat-slots/afterBoxHarness.tsx",
         "src/features/chat-title/chatsMenuBoxReturn.test.tsx",
         "src/features/chat-title/nameRowIcons.test.tsx",
@@ -7409,6 +7424,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/KnowledgeBaseSection.removeSwitchHook.test.tsx",
         "src/features/plugin-shell/useDeveloperToolActions.ts",
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/features/plugin-shell/useSessionRestoreAfterRemount.ts",
@@ -8699,6 +8715,7 @@
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.removeSwitch.test.tsx",
+        "src/components/KnowledgeBaseSection.removeSwitchHook.test.tsx",
         "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
@@ -8794,6 +8811,7 @@
         "src/components/KnowledgeBaseSection.remountDownload.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.removeSwitch.test.tsx",
+        "src/components/KnowledgeBaseSection.removeSwitchHook.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
         "src/components/KnowledgeBaseSection.update.test.tsx",
@@ -8887,6 +8905,7 @@
         "src/components/KnowledgeBaseSection.remountDownload.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
         "src/components/KnowledgeBaseSection.removeSwitch.test.tsx",
+        "src/components/KnowledgeBaseSection.removeSwitchHook.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
         "src/components/MainTab.askStrip.deck.test.tsx",
@@ -9088,6 +9107,7 @@
         "src/types/backgroundAsk.ts"
       ],
       "importedBy": [
+        "src/components/KnowledgeBaseSection.removeSwitchHook.test.tsx",
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/OllamaModelsHubModal.renderLoop.test.tsx",
         "src/components/PullModelsFiltersColumn.test.tsx",
@@ -9917,6 +9937,7 @@
         "src/utils/inputTransparency.ts"
       ],
       "importedBy": [
+        "src/components/KnowledgeBaseSection.removeSwitchHook.test.tsx",
         "src/components/SettingsTab.clearAllBack.test.tsx",
         "src/features/chat-slots/afterBoxHarness.tsx",
         "src/features/chat-slots/afterDeleteLastChat.test.tsx",
@@ -9954,7 +9975,8 @@
         "src/preview/useDeckyPreviewTestHookRegistration.ts",
         "src/types/askOrchestration.ts",
         "src/utils/askOrchestrationRestore.ts",
-        "src/utils/bonsaiSessionSurvival.test.ts"
+        "src/utils/bonsaiSessionSurvival.test.ts",
+        "src/utils/kbRemovedSignal.ts"
       ]
     },
     "src/utils/buildAnswerBubbleElement.test.tsx": {
@@ -10810,7 +10832,9 @@
       ]
     },
     "src/utils/kbRemovedSignal.ts": {
-      "imports": [],
+      "imports": [
+        "src/utils/bonsaiSessionSurvival.ts"
+      ],
       "importedBy": [
         "src/components/KnowledgeBaseSection.tsx"
       ]

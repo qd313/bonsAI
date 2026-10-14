@@ -30,6 +30,7 @@
     "src/components/KnowledgeBaseSection.remountDownload.test.tsx",
     "src/components/KnowledgeBaseSection.removeBox.test.tsx",
     "src/components/KnowledgeBaseSection.removeSwitch.test.tsx",
+    "src/components/KnowledgeBaseSection.removeSwitchHook.test.tsx",
     "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
     "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
     "src/components/KnowledgeBaseSection.test.tsx",

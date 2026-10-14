@@ -13,9 +13,16 @@
  *
  * Solves: The switch staying on after the library is gone, on the copy of the section a person looks at.
  *
+ * Round 2 (docs/test-evidence/plan93-P93-K1-KB-SWITCH.json): telling the section was not enough. The switch is
+ * read from the settings hook above the tab, which the box rebuilds too, and the rebuilt hook is filled from the
+ * note taken as the box opened (bonsaiSessionSurvival.ts), which still said "on". So the announcement also
+ * corrects that note.
+ *
  * Does not: Delete anything or save anything; the back end already writes the setting off when it removes
  * the library. This only tells the screen.
  */
+import { patchPendingSessionSettingsSnapshot } from "./bonsaiSessionSurvival";
+
 const HEARD_WINDOW_MS = 10 * 60 * 1000;
 
 const listeners = new Set<() => void>();
@@ -24,6 +31,11 @@ let unheardSinceMs: number | null = null;
 
 /** The library was removed: tell every mounted copy, or keep the note for the next copy to mount. */
 export function announceKbRemoved(): void {
+  /*
+   * A screen rebuilt by the box is filled from the note taken as the box opened, and that note still says the
+   * library is there and the switch is on. Correct it first, so a screen built from it afterwards is right.
+   */
+  patchPendingSessionSettingsSnapshot({ useLocalKnowledgeBase: false, ragCorpusPath: "", ragCorpusVersion: "" });
   if (listeners.size === 0) {
     unheardSinceMs = Date.now();
     return;

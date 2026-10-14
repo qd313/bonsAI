@@ -2,7 +2,8 @@
  * Title: Ollama tab, Terse is the Reply style slider's first stop
  * Purpose: Pin that the Ollama tab has no separate Terse switch any more (plan 93: Terse is the first stop of
  *          the Reply style slider, in every Ask mode), that the slider's header names the Terse stop when it
- *          is picked.
+ *          is picked, that the folded section's summary line names it, and that the slider's help line (shown
+ *          in the help strip) says in plain words what the Terse stop does, in every Ask mode.
  * Used for: roadmap "Terse becomes the first stop of the Reply style slider" (plan 93, lane B13).
  * Does not: Prove the D-pad walk (OllamaTab.foldedWalk.test.tsx does, with Steam's scroll modelled), or
  *           prove what the AI is told (tests/test_terse_mode_prompt.py does).
@@ -12,7 +13,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 import { OllamaTab, type OllamaTabProps } from "./OllamaTab";
 import { resetFoldedTabsForTests, setAllSections } from "../features/folded-tabs/foldedTabsStore";
-import { OLLAMA_FOLD_TAB, OLLAMA_SECTIONS } from "../features/folded-tabs/ollamaTabFolds";
+import { OLLAMA_FOLD_TAB, OLLAMA_SECTIONS, ollamaSectionSummaries } from "../features/folded-tabs/ollamaTabFolds";
 
 /* The tab folds (plan 91 § 2b): these checks are about the rows, so every section is open. */
 beforeEach(() => {
@@ -70,6 +71,31 @@ describe("Ollama tab: Terse is a stop on the Reply style slider, not a switch", 
     const { container } = render(<OllamaTab {...props({ replyVerbosity: "terse" })} />);
     const header = container.querySelector(".bonsai-reply-verbosity-slider")?.textContent ?? "";
     expect(header).toMatch(/Reply style:\s*Terse/);
+  });
+
+  it("the slider's help line says what the Terse stop does, in plain words, in every Ask mode", () => {
+    const { container } = render(<OllamaTab {...props()} />);
+    const help = String(
+      container.querySelector(".bonsai-reply-verbosity-slider")?.closest("[data-bonsai-help]")?.getAttribute("data-bonsai-help") ?? "",
+    );
+    expect(help).toMatch(/Terse gives three short lines and a menu of choices/);
+    expect(help).toMatch(/Speed, Strategy and Expert/);
+    expect(help).toMatch(/shortens what you see, not how hard the AI thinks/);
+    expect(help).not.toMatch(/Speed mode only/i);
+  });
+
+  it("the folded Reply style section names the Terse stop in its summary line", () => {
+    const summaries = ollamaSectionSummaries({
+      ollamaLocalOnDeck: false,
+      ollamaLocalAutostart: false,
+      useLocalKnowledgeBase: false,
+      replyVerbosity: "terse",
+      askThinkEffort: "off",
+      latencyTimeoutsCustomEnabled: false,
+      ollamaKeepAlive: "5m",
+    });
+    expect(summaries.reply).toMatch(/Terse/);
+    expect(summaries.reply).not.toMatch(/Terse mode/);
   });
 
   it("the Thinking row still follows the slider directly", () => {

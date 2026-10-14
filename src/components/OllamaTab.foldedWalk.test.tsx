@@ -36,6 +36,7 @@ import { stripHeightFor } from "../styles/sections/foldedTabs";
 import { walkFoldedTab, type FoldedLanding } from "../test-harness/foldedTabWalk";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../test-harness/steamRing";
 import type { SteamFocusScroll } from "../test-harness/tabBodyWalk";
+import type { ReplyVerbosityId } from "../data/replyVerbosity";
 
 const noop = () => {};
 const DECK_PANE = 430;
@@ -207,6 +208,60 @@ describe("the folded Ollama tab, every section open", () => {
     expect(seen.get("Use local knowledge base")).toMatch(/Ground Strategy and troubleshooting Asks/);
     expect(seen.get("AI models")).toBe("");
     for (const [name, text] of seen) if (/ section(:|$)/.test(name)) expect(text, name).toBe("");
+    w.unmount();
+  });
+});
+
+describe("the Reply style slider's four stops, Terse first (plan 93)", () => {
+  /** The slider's knob: the Focusable inside the thumb host, the way Steam holds it. */
+  const knobOf = (w: ReturnType<typeof walk>) =>
+    w.container.querySelector<HTMLElement>("[data-bonsai-reply-verbosity-thumb] > *") as SteamEl;
+
+  it("Terse is the first of four stops: each Right or Left press moves one stop from where the knob stands, and the ends hold", () => {
+    setAllSections(OLLAMA_FOLD_TAB, SECTION_IDS, true);
+    const order: ReplyVerbosityId[] = ["terse", "caveman", "balanced", "detailed"];
+    for (let i = 0; i < order.length; i++) {
+      const picked: ReplyVerbosityId[] = [];
+      const w = walk(DECK_PANE, "nearest", { replyVerbosity: order[i], setReplyVerbosity: (v) => picked.push(v) });
+      const knob = knobOf(w);
+      act(() => putSteamRingOn(knob));
+      act(() => void knob.__nav?.onMoveRight?.());
+      act(() => void knob.__nav?.onMoveLeft?.());
+      expect(picked, order[i]).toEqual([order[Math.min(3, i + 1)], order[Math.max(0, i - 1)]]);
+      w.unmount();
+    }
+  });
+
+  it("with every section open and the slider on Terse, Down lands on the slider once, then on Thinking, and no stop twice", () => {
+    for (const steam of RULES) {
+      setAllSections(OLLAMA_FOLD_TAB, SECTION_IDS, true);
+      const w = walk(DECK_PANE, steam, { replyVerbosity: "terse" });
+      const down = [w.enter(), ...w.walk("down")];
+      const labels = names(down);
+      expect(repeats(down), `${steam}: ${labels.join(" | ")}`).toBe(0);
+      const at = down.findIndex((l) => l.stop.closest("[data-bonsai-reply-verbosity-thumb]"));
+      expect(at, labels.join(" | ")).toBeGreaterThan(0);
+      expect(down.filter((l) => l.stop.closest("[data-bonsai-reply-verbosity-thumb]"))).toHaveLength(1);
+      expect(labels[at + 1], steam).toBe("Set thinking to Off");
+      const up = w.walk("up");
+      const upLabels = names(up);
+      expect(repeats(up), `${steam}: ${upLabels.join(" | ")}`).toBe(0);
+      const upAt = up.findIndex((l) => l.stop.closest("[data-bonsai-reply-verbosity-thumb]"));
+      expect(upAt, upLabels.join(" | ")).toBeGreaterThanOrEqual(0);
+      expect(up[upAt - 1]?.name, steam).toBe("Set thinking to Off");
+      w.unmount();
+    }
+  });
+
+  it("the strip shows the slider's help while the ring is on the knob, and it names the Terse stop", () => {
+    setAllSections(OLLAMA_FOLD_TAB, SECTION_IDS, true);
+    const w = walk(MONITOR_PANE, "nearest");
+    const landing = [w.enter(), ...w.walk("down")].find((l) => l.stop.closest("[data-bonsai-reply-verbosity-thumb]"));
+    expect(landing?.stripText).toMatch(/^Reply style/);
+    expect(landing?.stripText).toMatch(/Terse/);
+    expect(landing?.stripText).toMatch(/three short lines/);
+    expect(landing?.stripText).toMatch(/Speed, Strategy and Expert/);
+    expect(landing?.stripText).not.toMatch(/Bullet-first vs paragraph depth/);
     w.unmount();
   });
 });

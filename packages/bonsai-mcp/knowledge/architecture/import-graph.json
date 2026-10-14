@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 960,
-  "edgeCount": 3225,
+  "edgeCount": 3226,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1614,6 +1614,7 @@
     "src/components/OllamaTab.foldedWalk.test.tsx": {
       "imports": [
         "src/components/OllamaTab.tsx",
+        "src/data/replyVerbosity.ts",
         "src/features/folded-tabs/foldedTabsStore.ts",
         "src/features/folded-tabs/ollamaTabFolds.ts",
         "src/styles/sections/foldedTabs.ts",
@@ -3509,6 +3510,7 @@
       "imports": [],
       "importedBy": [
         "src/components/OllamaReplyVerbositySlider.tsx",
+        "src/components/OllamaTab.foldedWalk.test.tsx",
         "src/components/OllamaTab.tsx",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",

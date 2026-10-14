@@ -130,7 +130,7 @@ If Windows still falls back to CPU after FIX A:
 
 ## 1a. Permissions tab (blocked actions)
 
-**Feature:** The **Permissions** tab (lock icon) controls high-impact actions: saving notes to Desktop, attaching Steam screenshots and auto-attaching Proton/game logs on troubleshooting Asks (**Read game & screenshot context**), **voice input (microphone)**, and Steam ban lookup. Docs, GitHub, and Steam settings / Steam Input jumps always open when you tap them — no permission toggle. TDP/GPU clock suggestions from Ask are **read-only** (apply them yourself in Steam Performance if you choose).
+**Feature:** The **Permissions** tab (lock icon) opens with: "Everything here starts off until you turn it on. AI questions to a PC on your home network are not blocked by these switches." Its switches cover: saving notes to Desktop, attaching Steam screenshots and auto-attaching Proton/game logs on troubleshooting Asks (**Read game & screenshot context**), **voice input (microphone)**, and Steam ban lookup. Docs, GitHub, and Steam settings / Steam Input jumps always open when you tap them — no permission toggle. TDP/GPU clock suggestions from Ask are **read-only** (apply them yourself in Steam Performance if you choose).
 
 **Symptom:** Toasts like “Permission required” or backend errors mentioning Permissions when you try those actions.
 
@@ -270,7 +270,7 @@ component ("SD card", "controller layout", "remote play") rather than only the s
 
 ### Deck essentials models (Tier 1 / Tier 2)
 
-**Default Tier 1 pull:** `qwen2.5vl:3b` — one small multimodal model for chat, screenshots, OCR, and Strategy mode. (Qwen's own card gives this 3B size the Qwen Research licence, not Apache 2.0 — see [Model licences and the tiers](#model-licences-and-the-tiers); it stays in Tier 1 for now so the default keeps working.) In bonsAI → **Ollama** → **Install Tier 1 essentials** (or `ollama pull qwen2.5vl:3b`).
+**Default starter set:** `gemma4:e2b-it-qat` (text and pictures, Apache 2.0, Tier 1), the note-search model `nomic-embed-text`, and the speech models `tiny.en` and `base.en`, about 4.5 GB in all. In bonsAI → **Ollama** → **Install the starter set** (or `ollama pull gemma4:e2b-it-qat`). What is already installed is skipped. `qwen2.5vl:3b` and `qwen2.5:3b` are not open source (Qwen's research-only licence); see [Model licences and the tiers](#model-licences-and-the-tiers).
 
 **Optional Gemma 4 install (all-in-one model):** `gemma4:e2b-it-qat` (falls back to `gemma4:e2b` if the QAT tag is unavailable on the registry). Gemma 4 is Apache 2.0, so the model itself counts as Tier 1; only Gemma 3 and older are Tier 2. The button also switches Model policy to Tier 2. Use **Install Gemma 4 (all-in-one model)** under **Ollama → Where AI runs**; bonsAI switches Model policy to Tier 2 (open-weight) and shows license disclosure before pull.
 
@@ -285,7 +285,7 @@ Each model was checked on 2026-09-29 against its Ollama page (`ollama.com/librar
 | Model | Licence | Tier |
 |---|---|---|
 | Qwen 3, Qwen 3.5, Qwen 3-VL, Qwen 2.5 (0.5b, 1.5b, 7b, 14b, 32b), Qwen 2.5 coder (all but 3b), Qwen 2.5 VL 7b and 32b, Qwen 2 (all but 72b) | Apache 2.0 | 1 |
-| Qwen 2.5 VL 3b (the default), Qwen 2.5 3b | Qwen Research on Qwen's cards (Ollama's qwen2.5vl page lists Apache 2.0) | 1, kept on purpose for now |
+| Qwen 2.5 VL 3b, Qwen 2.5 3b | Qwen Research on Qwen's cards (Ollama's qwen2.5vl page lists Apache 2.0) | 2 (not open source; since 2026-10-14) |
 | Qwen 2.5 72b, Qwen 2.5 VL 72b, Qwen 2.5 coder 3b, Qwen 2 72b | Qwen's own licences | 2 |
 | Qwen 1.5 (`qwen`) | Tongyi Qianwen licences | 2 |
 | Gemma 4 | Apache 2.0 | 1 |
@@ -326,7 +326,7 @@ Each model was checked on 2026-09-29 against its Ollama page (`ollama.com/librar
 **Checks:**
 
 1. List installed tags: `curl -s http://127.0.0.1:11434/api/tags` (or your PC IP).
-2. Confirm `qwen2.5vl:3b` (Tier 1) or your Tier 2 Gemma tag is listed.
+2. Confirm `gemma4:e2b-it-qat` (Tier 1) or your Tier 2 Gemma tag is listed.
 3. Tier 1 policy only allows open-source (Apache 2.0 or MIT) tags. Gemma 4 counts; Gemma 3 and older need Tier 2.
 
 ---

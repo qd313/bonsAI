@@ -175,8 +175,9 @@ install, so nothing downloads without your say-so.
 Open the **Ollama** tab. Pick one:
 
 - **On the Deck** (works anywhere, slower in games): switch on **Run AI on this Deck**, then press
-  **Install Ollama**. When it asks whether to add the starter model too, say yes. That's about a
-  3 GB download.
+  **Install Ollama**. When it asks whether to add the starter set too, say yes. It brings the
+  answer model (gemma4:e2b-it-qat), the note-search model (nomic-embed-text) and the speech models
+  tiny.en and base.en, about 4.5 GB in all.
 - **On a PC on your home network** (much faster): install [Ollama](https://ollama.com/download) on
   the PC and download a model there. Then type the PC's address into **PC address** on the Deck —
   something like `http://192.168.1.20:11434` — and press **Test connection**. The

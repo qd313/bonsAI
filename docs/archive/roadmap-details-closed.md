@@ -1366,3 +1366,59 @@ was saved on; a reply-buttons walk now spends its presses on a branch menu inste
 details and Ask; a chip walk's first step now lands on "Save chat to Desktop" (tonight's own fix); a
 session-tab walk expects 7 rows where tonight's chat has 6. The remaining 2 need a chat that has already
 been summed up, which nothing on the Deck tonight was. Evidence `docs/test-evidence/plan70-FLOW6-RESAVE.json`.
+
+## Some saved answers have a hidden block's markers written twice, cause found
+
+Found 2026-09-25 during plan 68's Deck pass. A saved answer had its hidden spoiler block's opening marker
+written twice and its closing marker written twice. The screen still drew one closed block correctly, but
+the code that strips such a block out before the AI reads the chat stopped at the second opening marker, so
+the hidden text went into the chat's memory as plain words — for every later question in that chat since
+2026-09-21, and into its summary.
+
+The chat memory now copes with doubled markers (`6843f8e1`) and hides more, not less, whenever it is in
+doubt, proved by breaking it on all three doubled shapes (both doubled, opening doubled, closing doubled).
+**Why an answer ends up saved with doubled markers in the first place was not known until 2026-10-03.**
+
+**Cause found and fixed 2026-10-03 (plan 81, `ec329983`, `9be94867`, `8fba3a4f`), Deck check owed (row P81-CONTINUE-ONE-MARK).** When a long answer hits its
+length limit inside a hidden block, the AI opens the block again when it carries on, and the plugin glued both opening marks together. On this
+PC with the Deck's model, 7 of 23 continued answers had it before; none from that cause after. Also fixed: when the limit cut the mark itself in
+half, the hidden sentence showed in plain view with no cover. The AI's own doubling inside one piece remains, handled by the guard from `6843f8e1`.
+Test `tests/test_soft_continue_spoiler_join.py`.
+
+**Found by the helper, not fixed:** a half mark at the very end of an answer shows as an empty code block; a half mark before ordinary prose turns
+that prose into a code block (no hidden text leaks); a stopped answer cut inside a hidden block is saved ending on a bare opening mark.
+
+**Two of the three fixed 2026-10-03 (plan 81, `6c708a78`, `e891bdc4`), Both rest on tests (rows P81-HALF-MARK-AT-END, because it is hard to make happen; P81-STOP-IN-HIDDEN-BLOCK, because the Deck could not be made to stop an answer inside the block: the chip lasts about 2 s).**
+A half-typed mark at the very end of a finished answer is now cut off. A stopped answer cut inside a hidden block is now saved without the bare opening
+mark: an open block with nothing in it is dropped, and one with words in it is closed, so the words stay covered or are dropped, never shown.
+Tests `tests/test_soft_continue_spoiler_join.py`, `tests/test_stopped_answer_cut_in_hidden_block.py`.
+**Left on purpose:** a half mark before ordinary prose (a continued piece that starts with a bare code mark) cannot be told apart from a real code block
+safely, so it is not touched.
+
+---
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  **2026-09-30 (plan 77 block 3, row SUMUP-12):** the Deck check of the guards PASSED: a saved answer with its markers doubled loaded as one closed cover, and the hidden word appeared nowhere in the log's memory line, the new answer or the rest of the chat file (no summary existed to check). The original cause is still unproven, so this stays PARTIAL. Evidence `docs/test-evidence/plan77-SUMUP-12.json`.
+
+Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 7), to bring the entry to five lines. Nothing was removed.
+
+  **Deck 2026-10-03 (build `5eca4271`), PARTIAL:** at the two joins of one long answer no opening mark was doubled and no half mark appeared; but the AI itself left one hidden block unclosed and opened another later in the same piece (the evidence file's verdict line reads FAIL for that); on screen both were covers, no fence text. The AI's own doubling is the part the chat memory already guards. Evidence `docs/test-evidence/plan81-P81-CONTINUE-ONE-MARK.json`.
+
+Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
+
+**Deck 2026-10-03 (build `5eca4271`), PARTIAL:** no opening mark doubled at the two joins and no half mark; the AI itself left one hidden block unclosed, which the chat memory already guards. Evidence `docs/test-evidence/plan81-P81-CONTINUE-ONE-MARK.json`. Full note: [roadmap-details.md](roadmap-details.md#some-saved-answers-have-a-hidden-blocks-markers-written-twice-cause-found).
+
+**Also fixed 2026-10-03 (plan 81, `e891bdc4`, `6c708a78`), from the "found, not fixed" list:** a stopped answer cut inside a hidden block is saved without the bare opening mark (its words stay covered or are dropped, never shown), and a half-typed mark at the very end of a finished answer is dropped. Left on purpose: a continued piece that starts with a bare code mark cannot be told apart from a real code block safely. Rows **P81-STOP-IN-HIDDEN-BLOCK** (tests only: could not be made on the Deck; tried twice 2026-10-03, build `7e963807`, the chip "Spoiler hidden until complete" lasted about 2 s and the answer finished before Stop could be pressed) and **P81-HALF-MARK-AT-END** (tests only: hard to make happen).
+
+**Closed 2026-10-10 (plan 87 block 2): row P81-CONTINUE-ONE-MARK passed on the Deck, evidence `docs/test-evidence/plan87-P81-CONTINUE-ONE-MARK.json`.** Earlier: Deck check owed, row **P81-CONTINUE-ONE-MARK**. Tests: `tests/test_soft_continue_spoiler_join.py`, `tests/test_stopped_answer_cut_in_hidden_block.py`. [Detail, and what was found but not fixed](roadmap-details.md#some-saved-answers-have-a-hidden-blocks-markers-written-twice-cause-found).
+
+
+## The default text is not shown in the text area
+
+Older open-form text, word for word (moved here 2026-10-14, plan 93 docs sweep, when the entry went to Verify).
+
+- ★ `[ask]` **The default text is not shown in the text area** — **OPEN, reported 2026-10-13 by the maintainer.**
+  Which default text is meant (the hint inside the box, or a starter question) is not stated; confirm on the Deck.
+  **2026-10-13 (plan 93):** the hint inside the box is what is meant, and it is confirmed on the Deck. Strategy mode shows a grey hint ("Describe the level, boss, or puzzle you're stuck on."); Speed and Expert show nothing. The maintainer's call (2026-10-13): Speed and Expert get the same kind of hint. Evidence `docs/test-evidence/plan93-P93-M12-ASK-HINTS-try2.json`, `plan93-M12-ASK-HINTS-speed.png`, `-strategy.png`, `-expert.png`.
+

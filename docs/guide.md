@@ -202,7 +202,7 @@ Ollama can run on the Deck or on a PC.
 | **On a PC on your home network** | Much faster, especially with a graphics card. The PC has to be on |
 
 **On the Deck:** on the **Ollama** tab, switch on **Run AI on this Deck** and press **Install
-Ollama**. Say yes when it offers the starter model. **Start the AI with the Deck** starts it each
+Ollama**. Say yes when it offers the starter set. **Start the AI with the Deck** starts it each
 time the Deck turns on, so the first answer comes sooner. Later, the same button reads **Update AI &
 models**.
 
@@ -215,7 +215,7 @@ long a model stays ready after an answer.
 ## Running the AI on a PC
 
 1. Install [Ollama](https://ollama.com/download) on the PC.
-2. Download a model on the PC. In a terminal: `ollama pull qwen2.5vl:3b` (the same starter model the
+2. Download a model on the PC. In a terminal: `ollama pull gemma4:e2b-it-qat` (the same starter model the
    Deck uses), or pick a bigger one if your graphics card has room.
 3. Let Ollama accept connections from your network. Set the setting `OLLAMA_HOST` to `0.0.0.0`
    and restart Ollama, then allow port **11434** through the PC's firewall.
@@ -238,7 +238,7 @@ the same network and point it at the PC that streams your Frame games.
 
 **Ollama → Browse models…** shows models you can download. Filter by what they're good at, whether
 they can see pictures, or what's already installed. Models too big for the Deck are marked. **Install
-the starter set** gets the recommended model in one press.
+the starter set** gets the recommended set in one press: the answer model gemma4:e2b-it-qat, the note-search model nomic-embed-text and the speech models tiny.en and base.en.
 
 **Ollama → AI models…** decides which of your installed models bonsAI may use, and in which order.
 
@@ -250,9 +250,7 @@ The model policy decides which licences are allowed:
 | **Also try open-weight models** | Also models whose weights are public but whose licence is the maker's own, such as Llama, Gemma 3 and older |
 | **Any installed model** | Anything you've installed, once you unlock it |
 
-The starter model, Qwen 2.5 VL 3B, is an exception you should know about. Qwen's own page gives this
-size the Qwen Research licence (Ollama's page lists Apache 2.0). It stays allowed under **Open source
-only** for now so the default works. Its licence label shows in amber. These labels were checked on
+The starter model, Gemma 4 (gemma4:e2b-it-qat), is open source (Apache 2.0). Two small Qwen models are not: Qwen 2.5 VL 3B and Qwen 2.5 3B carry Qwen's research-only licence, so neither is open source and **Open source only** neither lists nor tries them; they show up once you allow open-weight models. These labels were checked on
 2026-09-29; they're a guide, not legal advice. The full list is in
 [troubleshooting](troubleshooting.md#model-licences-and-the-tiers).
 

@@ -3349,3 +3349,54 @@ _Moved out of [roadmap.md](../roadmap.md) on 2026-10-14 (plan 93 docs sweep), co
   **2026-10-13 (plan 93):** in the Browse models catalog the model is listed under "Open source only" in all four filter states, with an open-source pill. The maintainer then said the gap was in the model picker (the list of installed models a person picks from), not the catalog; the picker is measured next. Evidence `docs/test-evidence/plan93-P93-M13-GEMMA-FILTER.json`.
 
 **Closed 2026-10-14 (plan 93, rows P93-M13-GEMMA-FILTER and P93-M13b-GEMMA-PICKER):** closed as not reproduced. In the Browse models catalog the model is listed under "Open source only" in all four filter states, with an open-source pill (`docs/test-evidence/plan93-P93-M13-GEMMA-FILTER.json`). In the AI models screen, the only model picker, it is offered under "Open source only" at try order 1, and the Model chip under Show details names it (`plan93-M13b-GEMMA-PICKER.json`). The Pictures try-order list was not opened. The maintainer (2026-10-14) thinks another filter hid it, maybe "Deck essentials only"; that question went to the Features entry "AI models screen: a much bigger catalog and far simpler filters".
+
+## Plan 93 docs sweep 3: the fixes the Deck passed on 2026-10-14
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-10-14 (plan 93 docs sweep 3), copied line for line from its Verify and Bugs entries, with the closing note added at the end of each._
+
+### The default text is not shown in the text area (closed 2026-10-14)
+
+- ★ `[ask]` **The default text is not shown in the text area** — **VERIFY, fixed 2026-10-14 (plan 93, `b460dbc9`). Was OPEN, reported 2026-10-13 by the maintainer.**
+  The grey hint inside the empty question box is what is meant. **2026-10-13 (plan 93):** confirmed on the Deck: Strategy mode showed "Describe the level, boss, or puzzle you're stuck on."; Speed and Expert showed nothing. Evidence `docs/test-evidence/plan93-P93-M12-ASK-HINTS-try2.json`, `plan93-M12-ASK-HINTS-speed.png`, `-strategy.png`, `-expert.png`.
+  **Fixed 2026-10-14 (plan 93, `b460dbc9`):** the empty box shows a grey hint in every Ask mode: Speed "Ask a quick question about your game.", Strategy unchanged, Expert "Ask for the full detail: builds, numbers, every step." (the maintainer may veto the two new lines). Owes row **P93-M12-ASK-HINTS-after** on the Deck. Original open entry: [roadmap-details-closed.md](roadmap-details-closed.md#the-default-text-is-not-shown-in-the-text-area).
+
+**Closed 2026-10-14 (plan 93 Deck block D1, build `0ef34f82`, row P93-M12-ASK-HINTS-after):** the empty question box read "Ask a quick question about your game." in Speed, "Describe the level, boss, or puzzle you're stuck on." in Strategy and "Ask for the full detail: builds, numbers, every step." in Expert; the text matched on all three. Evidence `docs/test-evidence/plan93-P93-M12-ASK-HINTS-after.json`, pictures `plan93-P93-M12-ASK-HINTS-after-speed.png`, `-strategy.png`, `-expert.png`.
+
+### After deleting the last chat, Main shows the old answer instead of a blank new chat (closed 2026-10-14)
+
+- ★★ `[chat]` **After deleting the last chat, Main shows the old answer instead of a blank new chat** — **VERIFY, fixed 2026-10-14 (plan 93, `1601ccc5`, `e344932b`). Was OPEN, reported 2026-10-13 by the maintainer.**
+  The old answer appeared, with "..." in the question bubble. Expected: a blank new chat.
+  **Fixed 2026-10-14 (plan 93):** the back end drops a deleted chat's stored answer, and with no chat open the screen refuses a stored answer that names a chat. Owes row **P93-B8-DELETE-LAST** on the Deck: with the chats backed up, delete every chat; Main shows the empty new-chat view, no answer, no "..."; the chats are put back.
+
+**Closed 2026-10-14 (plan 93 Deck block D1, build `0ef34f82`, row P93-B8-DELETE-LAST):** after the last Delete chat, Main read "New chat, not saved yet" with no answer bubble and no "..."; the stored chat list was empty. Both chats were put back from a backup, byte for byte, with no plugin reload. Evidence `docs/test-evidence/plan93-P93-B8-DELETE-LAST.json`. Side sighting: Rename chat and Save to Desktop note were not separate stops in the chats menu walk (see the Bugs entry about the chats menu).
+
+### Going Down and going Up through an answer stop on different parts (closed 2026-10-14)
+
+- ★★ `[focus]` **Going Down and going Up through an answer stop on different parts** — **VERIFY, fixed 2026-10-14 (plan 93, `9f6eb165`). Was OPEN, seen 2026-10-11 (plan 89 free-play sweep, no game).**
+  Going Down, the ring stops on the answer's "In short" paragraph; going Up it skips it (Mark reply helpful goes straight to the section above). The paragraph is still reachable, and so are Read aloud and Copy from it. Not known whether it is the tall-section rule or a bug. Evidence `docs/test-evidence/plan89-QA-FREE-PLAY-01.json`.
+  **2026-10-13 (plan 93):** measured the other way round (old title: "Going Up through an answer skips a paragraph that going Down stops on"). Going Down, one section (141 px, not a tall one) is skipped, and the spoiler boxes inside two sections are visited before their section; going Up, every section is a stop. Evidence `docs/test-evidence/plan93-M6-UP-SKIPS-PARAGRAPH.json`.
+  **Fixed 2026-10-14 (plan 93, `9f6eb165`):** going Down now stops on every section that Up stops on, and Up's order is Down's reversed. Owes row **P93-O4-MIRROR** on the Deck: on a long answer with spoiler boxes, Down from the "Show reasoning" fold to the question box and Up back give mirror-image stop lists, every section a stop both ways, no stop twice, every stop visible.
+
+**Closed 2026-10-14 for the answer itself (plan 93 Deck block D1, build `0ef34f82`, row P93-O4-MIRROR):** inside the answer Up is Down reversed; sections 0 to 6 and the three spoiler boxes are stops both ways, section 5 included going Down; no stop twice. Up's list also stopped on two rows below the answer ("List every boss..." and "Today - 4") that Down skipped: that is the Verify entry "Down from an opened older answer skips the newer turns below it". Two stops read 1 px under the dock (348 against 347), one sample taken while the page settled: UNCLEAR. Evidence `docs/test-evidence/plan93-P93-O4-MIRROR.json`.
+
+### Going Up from the rating row, the answer's last section can sit with its last lines under the dock (closed 2026-10-14)
+
+- ★★ `[focus]` **Going Up from the rating row, the answer's last section can sit with its last lines under the dock** — **VERIFY, found and fixed 2026-10-14 (plan 93, `29bd921c`). Found 2026-10-14 by the free-play sweep.**
+  Going Up from "Mark reply helpful", the answer's last section was focused with its last lines behind the dock: the section's box ran 240 to 349 with the dock's top at 330, so its last line was wholly under it. Evidence `docs/test-evidence/plan93-QA-FREE-PLAY-01-before.json` and `plan93-QA-FREE-PLAY-01-before-last-section-behind-dock.png`.
+  **Fixed 2026-10-14 (plan 93, `29bd921c`):** after Steam slides the answer, the walk now puts a section that holds a spoiler box back clear of the dock, as it already did for one without. Owes row **P93-O4-DOCK** on the Deck: Down to "Mark reply helpful", Up once; after 1.5 s the section's bottom is at or above the dock's top, three times.
+
+**Closed 2026-10-14 (plan 93 Deck block D1, build `0ef34f82`, row P93-O4-DOCK):** 3 of 3 on the long answer's last section, bottom at 269 against the dock's top at 347, at once and after 1.5 s, reached from its "Show details" divider because that older turn has no rating buttons. On the newest answer Up from "Mark reply helpful" lands on an option button of the answer's choice card (bottom 257), not on a text section, so the case the row names did not arise there (UNCLEAR for that case). Evidence `docs/test-evidence/plan93-P93-O4-DOCK.json`, picture `plan93-P93-O4-DOCK-last-section-after-up.png`.
+
+### While an answer is being written, Left from the mode button puts the ring on the greyed paperclip (closed 2026-10-14)
+
+- ★★ `[focus]` **While an answer is being written, Left from the mode button puts the ring on the greyed paperclip** — **found 2026-10-14 by the truthful test stand-in; measured in Deck block D0.**
+  Left from the mode button put the ring on the greyed Attach button, and a second Left did not move. Evidence `docs/test-evidence/plan93-P93-ASK-STRIP-GREYED.json`, picture `plan93-P93-ASK-STRIP-GREYED-ring-on-attach.png`.
+
+**Closed 2026-10-14 (fixed in `52521a85`, passed on the Deck in block D1, build `0ef34f82`, row P93-ASK-STRIP-GREYED-after):** while an answer wrote, Down from the box landed on Stop, Left on the mode button, a second Left held still, Right went back to Stop, and Left from the box held still; the greyed paperclip was never focused. After the answer, Left from the mode button reached the paperclip, live. Evidence `docs/test-evidence/plan93-P93-ASK-STRIP-GREYED-after.json`.
+
+### Tests treat a greyed button as one the ring cannot reach; on the Deck it can (closed 2026-10-14)
+
+- ★★ `[focus]` **Tests treat a greyed button as one the ring cannot reach; on the Deck it can** — **OPEN, found 2026-10-12 (plan 92 lane M1b).**
+  The shared test stand-in says a disabled button refuses focus; on the Deck a greyed Decky button still takes the ring (measured 2026-09-16, and 2026-10-12 in the AI models box: `docs/test-evidence/plan92-P91-MODELS-COLUMN-WALK.json`). Code that skips a greyed control by asking the button could hide the same bug. [Files to check](archive/roadmap-trimmed-2026-10-roadmap.md#plan-92-note-where-a-greyed-button-is-skipped-by-asking-the-button).
+
+**Closed 2026-10-14, on tests only (`4ed64b75`):** the shared test stand-in now lets a greyed button take the ring, as the Deck does. A test-harness bug, so no Deck row.

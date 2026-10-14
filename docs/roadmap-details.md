@@ -13,7 +13,6 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 
 - [The panel stops half way down and the Ask button is out of reach](#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach)
 - [Terse mode (Speed answers in three lines)](#terse-mode-speed-answers-in-three-lines)
-- [Some saved answers have a hidden block's markers written twice, cause found](#some-saved-answers-have-a-hidden-blocks-markers-written-twice-cause-found)
 - [Make the preset chips look more like chips](#make-the-preset-chips-look-more-like-chips)
 - [Shipped, QA owed — why each was built this way](#shipped-qa-owed--why-each-was-built-this-way)
 - [Small and cosmetic, as filed](#small-and-cosmetic-as-filed)
@@ -55,9 +54,9 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [Merge the unlanded work left in thirteen old helper copies into experimental](#merge-the-unlanded-work-left-in-thirteen-old-helper-copies-into-experimental)
 - [Walking Settings and Developer with the D-pad: the page moves at every press, then jumps at the end](#walking-settings-and-developer-with-the-d-pad-the-page-moves-at-every-press-then-jumps-at-the-end)
 - [On the Settings tab, Left or Right on the Text size choices scrolls the page down](#on-the-settings-tab-left-or-right-on-the-text-size-choices-scrolls-the-page-down)
-- [The default text is not shown in the text area](#the-default-text-is-not-shown-in-the-text-area)
 - [The ring can vanish on the Search tab after closing a game note when a new word arrives](#the-ring-can-vanish-on-the-search-tab-after-closing-a-game-note-when-a-new-word-arrives)
 - [Some settings text ignores the Text size choice (Permissions tab and others)](#some-settings-text-ignores-the-text-size-choice-permissions-tab-and-others)
+- [Plan 93 notes moved from the roadmap (2026-10-14, docs sweep 3)](#plan-93-notes-moved-from-the-roadmap-2026-10-14-docs-sweep-3)
 <!-- /toc -->
 
 ## The panel stops half way down and the Ask button is out of reach
@@ -253,52 +252,6 @@ the maintainer described belong to **KB visual maps** in the backlog, which stay
 Terse ships without them.
 
 ---
-
-## Some saved answers have a hidden block's markers written twice, cause found
-
-Found 2026-09-25 during plan 68's Deck pass. A saved answer had its hidden spoiler block's opening marker
-written twice and its closing marker written twice. The screen still drew one closed block correctly, but
-the code that strips such a block out before the AI reads the chat stopped at the second opening marker, so
-the hidden text went into the chat's memory as plain words — for every later question in that chat since
-2026-09-21, and into its summary.
-
-The chat memory now copes with doubled markers (`6843f8e1`) and hides more, not less, whenever it is in
-doubt, proved by breaking it on all three doubled shapes (both doubled, opening doubled, closing doubled).
-**Why an answer ends up saved with doubled markers in the first place was not known until 2026-10-03.**
-
-**Cause found and fixed 2026-10-03 (plan 81, `ec329983`, `9be94867`, `8fba3a4f`), Deck check owed (row P81-CONTINUE-ONE-MARK).** When a long answer hits its
-length limit inside a hidden block, the AI opens the block again when it carries on, and the plugin glued both opening marks together. On this
-PC with the Deck's model, 7 of 23 continued answers had it before; none from that cause after. Also fixed: when the limit cut the mark itself in
-half, the hidden sentence showed in plain view with no cover. The AI's own doubling inside one piece remains, handled by the guard from `6843f8e1`.
-Test `tests/test_soft_continue_spoiler_join.py`.
-
-**Found by the helper, not fixed:** a half mark at the very end of an answer shows as an empty code block; a half mark before ordinary prose turns
-that prose into a code block (no hidden text leaks); a stopped answer cut inside a hidden block is saved ending on a bare opening mark.
-
-**Two of the three fixed 2026-10-03 (plan 81, `6c708a78`, `e891bdc4`), Both rest on tests (rows P81-HALF-MARK-AT-END, because it is hard to make happen; P81-STOP-IN-HIDDEN-BLOCK, because the Deck could not be made to stop an answer inside the block: the chip lasts about 2 s).**
-A half-typed mark at the very end of a finished answer is now cut off. A stopped answer cut inside a hidden block is now saved without the bare opening
-mark: an open block with nothing in it is dropped, and one with words in it is closed, so the words stay covered or are dropped, never shown.
-Tests `tests/test_soft_continue_spoiler_join.py`, `tests/test_stopped_answer_cut_in_hidden_block.py`.
-**Left on purpose:** a half mark before ordinary prose (a continued piece that starts with a bare code mark) cannot be told apart from a real code block
-safely, so it is not touched.
-
----
-
-Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
-
-  **2026-09-30 (plan 77 block 3, row SUMUP-12):** the Deck check of the guards PASSED: a saved answer with its markers doubled loaded as one closed cover, and the hidden word appeared nowhere in the log's memory line, the new answer or the rest of the chat file (no summary existed to check). The original cause is still unproven, so this stays PARTIAL. Evidence `docs/test-evidence/plan77-SUMUP-12.json`.
-
-Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 7), to bring the entry to five lines. Nothing was removed.
-
-  **Deck 2026-10-03 (build `5eca4271`), PARTIAL:** at the two joins of one long answer no opening mark was doubled and no half mark appeared; but the AI itself left one hidden block unclosed and opened another later in the same piece (the evidence file's verdict line reads FAIL for that); on screen both were covers, no fence text. The AI's own doubling is the part the chat memory already guards. Evidence `docs/test-evidence/plan81-P81-CONTINUE-ONE-MARK.json`.
-
-Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
-
-**Deck 2026-10-03 (build `5eca4271`), PARTIAL:** no opening mark doubled at the two joins and no half mark; the AI itself left one hidden block unclosed, which the chat memory already guards. Evidence `docs/test-evidence/plan81-P81-CONTINUE-ONE-MARK.json`. Full note: [roadmap-details.md](roadmap-details.md#some-saved-answers-have-a-hidden-blocks-markers-written-twice-cause-found).
-
-**Also fixed 2026-10-03 (plan 81, `e891bdc4`, `6c708a78`), from the "found, not fixed" list:** a stopped answer cut inside a hidden block is saved without the bare opening mark (its words stay covered or are dropped, never shown), and a half-typed mark at the very end of a finished answer is dropped. Left on purpose: a continued piece that starts with a bare code mark cannot be told apart from a real code block safely. Rows **P81-STOP-IN-HIDDEN-BLOCK** (tests only: could not be made on the Deck; tried twice 2026-10-03, build `7e963807`, the chip "Spoiler hidden until complete" lasted about 2 s and the answer finished before Stop could be pressed) and **P81-HALF-MARK-AT-END** (tests only: hard to make happen).
-
-**Closed 2026-10-10 (plan 87 block 2): row P81-CONTINUE-ONE-MARK passed on the Deck, evidence `docs/test-evidence/plan87-P81-CONTINUE-ONE-MARK.json`.** Earlier: Deck check owed, row **P81-CONTINUE-ONE-MARK**. Tests: `tests/test_soft_continue_spoiler_join.py`, `tests/test_stopped_answer_cut_in_hidden_block.py`. [Detail, and what was found but not fixed](roadmap-details.md#some-saved-answers-have-a-hidden-blocks-markers-written-twice-cause-found).
 
 ## Make the preset chips look more like chips
 
@@ -938,14 +891,6 @@ Older notes, word for word, from the entry's open form (moved here 2026-10-11, p
   With the ring on Text size, pressing Left or Right to change the choice also scrolls the tab down. The maintainer called it "very strange behavior". Cause not known. Related: the Text size row (Done, row P87-F6-TEXT-SIZE) and the entry below about the page moving at every press.
   **2026-10-11 (plan 89 Deck block 1, a measurement, build `f561c0e5`):** Left or Right moved the page 100.8, 81.2 and 64.1 px on three presses, while the row stayed on its line. Evidence `docs/test-evidence/plan89-M1-TAB-WALK.json`.
 
-## The default text is not shown in the text area
-
-Older open-form text, word for word (moved here 2026-10-14, plan 93 docs sweep, when the entry went to Verify).
-
-- ★ `[ask]` **The default text is not shown in the text area** — **OPEN, reported 2026-10-13 by the maintainer.**
-  Which default text is meant (the hint inside the box, or a starter question) is not stated; confirm on the Deck.
-  **2026-10-13 (plan 93):** the hint inside the box is what is meant, and it is confirmed on the Deck. Strategy mode shows a grey hint ("Describe the level, boss, or puzzle you're stuck on."); Speed and Expert show nothing. The maintainer's call (2026-10-13): Speed and Expert get the same kind of hint. Evidence `docs/test-evidence/plan93-P93-M12-ASK-HINTS-try2.json`, `plan93-M12-ASK-HINTS-speed.png`, `-strategy.png`, `-expert.png`.
-
 ## The ring can vanish on the Search tab after closing a game note when a new word arrives
 
 Older open-form text, word for word (moved here 2026-10-14, plan 93 docs sweep, when the entry went to Verify).
@@ -961,3 +906,46 @@ Both open entries, word for word (moved here 2026-10-14, plan 93 docs sweep, whe
   The Permissions tab's text, and text in other tabs, does not follow the Text size setting. Needs a sweep of every tab. Related: "Text size does not reach Steam's own controls" above.
 - ★ `[ui]` **Text size does not reach Steam's own controls** — **OPEN, found 2026-10-11 (plan 89 Deck block 3c); the maintainer's call whether that is acceptable.**
   The toggle labels (for example "Remember what I typed") stay 16 px, and Steam's own confirm popups (for example "Clear session cache?") stay 22 and 16 px, at Small, Normal and Large. The plugin never targets Steam's own classes by name, so the words the plugin draws follow the setting and these do not. Evidence `docs/test-evidence/plan89-P89-TEXT-SIZE-EVERYWHERE.json`.
+
+## Plan 93 notes moved from the roadmap (2026-10-14, docs sweep 3)
+
+Open entries and older dated notes, word for word, moved here when their entries went to Verify or were rewritten (plan 93 docs sweep 3).
+
+**Terse mode: Speed answers in three lines:**
+
+- ★★★ `[reply]` **Terse mode: Speed answers in three lines** — **PARTIAL, the switch passed on the Deck 2026-10-08 (plan 83, row P83-J4-TERSE-TOGGLE, evidence `docs/test-evidence/plan83-P83-J4-TERSE-TOGGLE.json`); the answer test ran three times that night and the length cap holds on most answers, not all.**
+  Built: a "Terse mode" switch on the Ollama tab under the Reply style slider, off by default. With it on, a Speed answer is asked to keep to three lines and end with a menu of choices, first answers and follow-ups alike; Strategy, Expert and Speed with it off are as before. Answer test, ten questions with Deep Rock Galactic: Survivor running (plan 83 overnight, 2026-10-08): run 1 (build `0d3af3de`) 10 of 10 within three lines, choice buttons on 4 of 10, three menus shown as raw text; run 2 (`2ccf4075`) 9 of 10 within three lines, buttons on 1 of 10, nine menus shown in a code box; run 3 (`21f62344`) **buttons on 10 of 10 and no raw menu text**, but **7 of 10 within three lines** (8 needed; the three misses ran 4 lines). Cause of the missing buttons: the AI spelled the menu's fence name with an underscore, which the plugin did not read; `21f62344` reads either spelling. Across the three runs 26 of 30 answers fit. Evidence `docs/test-evidence/plan83-P83N-TERSE-01.json`, `P83N-TERSE-01-AFTER-FIX.json`, `P83N-TERSE-01-FIX2.json`. [Detail](roadmap-details.md#terse-mode-speed-answers-in-three-lines).
+  **Still owed:** (a) the maintainer's call on the length result: TERSE-01 as written (8 of 10 in one run) passed on length in 2 of 3 runs and failed in 1, so it is not marked passed; (b) the stacked full-width buttons (screen work, needs a Deck measurement first); (c) a menu press sends a follow-up saying "I'm at: <label>" and asking for an "If you want to cheat" section, which the terse wording has to talk the AI out of; (d) in the endless terse loop each menu press stores the whole previous composed question as "Earlier I asked", so the question grows with every press (the question is stored in `src/hooks/useBonsaiAskOrchestration.ts`, about line 776, and quoted back in `src/hooks/useStrategyBranchActions.ts`, about line 113); (e) with Terse on, the AI often repeats a menu from an earlier answer ("Which weapon should I focus on first?" under unrelated questions, `docs/test-evidence/plan83-P83N-TERSE-01-AFTER-FIX.json`); (f) the maintainer's call on whether to keep the reader for a menu written as bare JSON with no fence (`2ccf4075`, tested): that case was never actually seen, it rested on run 1 being misread.
+  **2026-10-13 (plan 93):** the maintainer's call: Terse becomes the first stop of the Reply style slider (Terse, Caveman, Balanced, Detailed) and applies in every Ask mode; the separate switch goes (planned in plan 93). Five Speed questions with Terse on gave one line each, 17 to 36 words; see the closed bug "Terse mode does not seem to shorten answers" in Done. Evidence `docs/test-evidence/plan93-M11-TERSE-LINES.json`.
+
+**Confirm pop-ups show extra buttons, and are not in the SteamOS style (open entry, word for word):**
+
+- ★★ `[ui]` **Confirm pop-ups show extra buttons, and are not in the SteamOS style** — **OPEN, reported 2026-10-13 by the maintainer.**
+  Clear cache, Clear data and "Turn on internet downloads" each show more than two choices. They should show only the action and Cancel.
+  Check every pop-up in the app for the same extra choice. Every pop-up should look like a normal Steam settings pop-up (the delete-chat one is the model).
+  **2026-10-13 (plan 93):** Clear cache, Clear all plugin data and Remove knowledge base each show three buttons, the ring on the safe one; Delete chat shows two. "Update AI & models" showed no box at all with internet downloads on and the site already accepted; the maintainer's call (2026-10-13): that stays as it is. Evidence `docs/test-evidence/plan93-P93-M9-CONFIRM-BOXES.json`.
+
+**Open all is reached with Right, not Down (open entry, word for word):**
+
+- ★★ `[focus]` `[tabs]` **Open all is reached with Right, not Down, and the floating Open all button clashes with the tabs** — **OPEN, reported 2026-10-13 by the maintainer.**
+  D-pad Down should reach Open all; today it takes Right. The floating Open all button also overlaps the tab layout.
+  Likely one cause; look at both together.
+  **2026-10-13 (plan 93):** with every section closed, the button is reached by Right only, Down holds still, and the button covers nothing. With sections open and the tab scrolled, the fixed button covers 56 x 14 px of the Connection tuning row's summary text and its 10 x 14 px arrow, and does not move with the scroll. Evidence `docs/test-evidence/plan93-P93-M2-OPEN-ALL.json`, `plan93-M2-OPEN-ALL-scrolled.png`.
+
+**When an answer finishes streaming, the screen flickers and then jumps to the end (open entry, word for word):**
+
+- ★★★ `[reply]` **When an answer finishes streaming, the screen flickers and then jumps to the end** — **OPEN, reported 2026-10-13 by the maintainer.**
+  After the answer lands, the screen flickers and then scrolls to the end in one jump. It should scroll smoothly and follow the end of the answer as it arrives.
+  **2026-10-13 (plan 93):** measured, a fail: through a 50-second answer (1,316 px tall in a 402 px box) the page stayed at the top and never followed it; about a quarter of a second after the finish it jumped to the end, about 1,265 px, in one step. The maintainer's call (2026-10-13): fixed by building the Features entry "A long answer is cut into sections while it writes" (planned in plan 93); following the end smoothly while it writes is a separate, later piece. Evidence `docs/test-evidence/plan93-M4-ANSWER-FINISH.json`.
+
+**A long answer is cut into sections while it writes (entry before the 2026-10-14 rewrite, word for word):**
+
+- ★★ `[reply]` **A long answer is cut into sections while it writes, so nothing changes when it finishes** — **OPEN, decided on the mock-up board 2026-10-10 (option A of round 2); carried over 2026-09-24 from plan 05.**
+  Today a long answer arrives as one block; when it finishes it is cut into sections, the Helpful and Not really buttons pop in, and the view jumps to the top and back.
+  Picked: each section closes as soon as it is full, so the answer never changes at the finish. Then only the buttons and Show details fade in under it; the view does not move and the ring stays where it was. The maintainer: better, especially when the D-pad moves while the answer writes.
+  Not chosen: keeping today's rebuild and making it gentler. Touches [plan 69](planning/69-streamed-answers-scramble.md). [P6](archive/05-token-streaming-review.md) · [Mock-up board, tab 3](https://claude.ai/artifact/XyZfUSPGRZdm2P3mTGV9tR) · [notes](demos/mockup-board/README.md).
+
+**Hand-written D-pad moves on some Ollama-tab buttons never run (open entry, word for word):**
+
+- ★ `[focus]` **Hand-written D-pad moves on some Ollama-tab buttons never run** — **OPEN, found 2026-10-12 by plan 92 lane T0.**
+  In the Ollama tab's "where the AI runs" and knowledge-base sections (`OllamaWhereAiRunsSection.tsx`, `KnowledgeBaseSection.tsx`) several hand-written D-pad moves are spread onto Decky Buttons, which never pass move handlers on (for example Test connection's Down, and the knowledge base's Download and Remove). Steam's own move does the work today, so a person notices nothing. The focus-pattern checker misses handlers passed this way.

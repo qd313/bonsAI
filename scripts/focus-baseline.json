@@ -1,6 +1,6 @@
 {
   "note": "Known focus-pattern violations, per file per rule. The check fails only when a count goes UP. Regenerate with: node scripts/check-focus-patterns.mjs --update",
-  "total": 85,
+  "total": 80,
   "counts": {
     "src/components/AskStripSendButtons.tsx": {
       "move-props-on-button": 2
@@ -8,10 +8,6 @@
     "src/components/CharacterPickerModal.tsx": {
       "page-search": 2,
       "move-props-on-button": 2
-    },
-    "src/components/KnowledgeBaseSection.tsx": {
-      "page-search": 1,
-      "move-props-on-button": 4
     },
     "src/components/MainTabAskModeMenuPopover.tsx": {
       "move-props-on-button": 1
@@ -101,9 +97,6 @@
     },
     "src/components/CharacterPickerModal.tsx": {
       "move-props-on-button": "Found by the spread check added in plan 93 lane B10 (2026-10-14); the owner of this file decides: remove the dead handler or move it onto a Focusable."
-    },
-    "src/components/KnowledgeBaseSection.tsx": {
-      "move-props-on-button": "Removed in the next commit of plan 93 lane B10 (dead handlers on the knowledge base Buttons)."
     },
     "src/components/MainTabAskModeMenuPopover.tsx": {
       "move-props-on-button": "Found by the spread check added in plan 93 lane B10 (2026-10-14); the owner of this file decides: remove the dead handler or move it onto a Focusable."

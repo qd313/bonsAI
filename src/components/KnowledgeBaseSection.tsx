@@ -161,6 +161,10 @@ type Props = {
   cancelBtnRef?: React.RefObject<HTMLButtonElement | null>;
   /** Up from the switch: in the folded Ollama tab, the section's own line (plan 91). */
   onMoveUpToConnection?: () => boolean;
+  /**
+   * Not used any more (plan 93 lane B10): it rode on the action row's Decky Buttons, which never pass move
+   * handlers on, so Steam's own Down has always done this hop. Kept so the tab that hands it in still compiles.
+   */
   onMoveDownFromRemove?: () => boolean;
 };
 
@@ -258,7 +262,6 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   removeBtnRef: removeBtnRefProp,
   cancelBtnRef: cancelBtnRefProp,
   onMoveUpToConnection,
-  onMoveDownFromRemove,
 }) => {
   const [status, setStatus] = useState<RagCorpusStatus | null>(null);
   const [downloadBusy, setDownloadBusy] = useState(kbDownloadLikelyInFlight);
@@ -281,19 +284,6 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     if (primaryBtnRefLocal.current) focusInTabBody(primaryBtnRefLocal.current);
     return true;
   }, [downloadBtnRefProp]);
-
-  const focusKbToggle = useCallback((): boolean => {
-    const host = toggleHost.current;
-    const target = host?.querySelector<HTMLElement>("[tabindex], button, input");
-    if (!target) return false;
-    focusInTabBody(target);
-    return true;
-  }, [toggleHost]);
-
-  const focusRemoveBtn = useCallback((): boolean => {
-    if (removeBtnRef.current) focusInTabBody(removeBtnRef.current);
-    return Boolean(removeBtnRef.current);
-  }, []);
 
   const focusCancelBtn = useCallback((): boolean => {
     if (cancelBtnRef.current) focusInTabBody(cancelBtnRef.current);
@@ -863,10 +853,6 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
                       boxSizing: "border-box",
                       fontSize: textPx(11),
                     }}
-                    {...deckNav({
-                      onMoveUp: () => focusKbToggle(),
-                      onMoveDown: () => focusActionRow(),
-                    })}
                   >
                     {nomicPullStarted
                       ? "Pulling… (Ollama → Where AI runs)"
@@ -933,12 +919,6 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
                   alignItems: "center",
                   justifyContent: "flex-start",
                 }}
-                {...deckNav({
-                  onMoveUp: () => (showNomicPullBtn ? focusNomicBtn() : focusKbToggle()),
-                  onMoveDown: () => onMoveDownFromRemove?.() ?? false,
-                  onMoveRight: () =>
-                    downloadBusy ? focusCancelBtn() : installed ? focusRemoveBtn() : false,
-                })}
               >
                 <KnowledgeBaseButtonLabel icon={installed ? <RefreshArrowIcon size={16} /> : <DownloadArrowIcon size={16} />}>
                   {downloadBusy ? "Downloading…" : installed ? "Update knowledge base" : "Download knowledge base"}
@@ -980,13 +960,6 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
                     alignItems: "center",
                     justifyContent: "center",
                   }}
-                  {...deckNav({
-                    onMoveUp: () => focusKbToggle(),
-                    onMoveDown: () => onMoveDownFromRemove?.() ?? false,
-                    // Left goes nowhere on purpose: the primary button is disabled while
-                    // downloading, so yielding would drop focus out of the section.
-                    onMoveLeft: () => true,
-                  })}
                 >
                   {cancelBusy ? "Cancelling…" : "Cancel"}
                 </Button>
@@ -1021,11 +994,6 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
                     alignItems: "center",
                     justifyContent: "center",
                   }}
-                  {...deckNav({
-                    onMoveUp: () => focusKbToggle(),
-                    onMoveLeft: () => focusPrimaryBtn(),
-                    onMoveDown: () => onMoveDownFromRemove?.() ?? false,
-                  })}
                 >
                   <KnowledgeBaseButtonLabel icon={<TrashBinIcon size={16} />}>Remove</KnowledgeBaseButtonLabel>
                 </Button>

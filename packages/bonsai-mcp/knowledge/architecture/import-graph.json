@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 957,
-  "edgeCount": 3194,
+  "fileCount": 959,
+  "edgeCount": 3199,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -160,6 +160,23 @@
       "importedBy": [
         "src/components/BonsaiPluginShell.test.tsx",
         "src/index.tsx"
+      ]
+    },
+    "src/components/CancelFirstConfirmModal.test.tsx": {
+      "imports": [
+        "src/components/CancelFirstConfirmModal.tsx",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/components/CancelFirstConfirmModal.tsx": {
+      "imports": [
+        "src/styles/sections/textPx.ts",
+        "src/styles/settingsGlassButton.ts"
+      ],
+      "importedBy": [
+        "src/components/CancelFirstConfirmModal.test.tsx"
       ]
     },
     "src/components/CharacterPickerModal.test.tsx": {
@@ -4975,6 +4992,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/CancelFirstConfirmModal.test.tsx",
         "src/components/KnowledgeBaseSection.noticeReturnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.tsx",
@@ -8306,6 +8324,7 @@
       ],
       "importedBy": [
         "src/components/AskStripGameTag.tsx",
+        "src/components/CancelFirstConfirmModal.tsx",
         "src/components/CharacterPickerModal.tsx",
         "src/components/ChatLatencyNotices.tsx",
         "src/components/ChipExpandedBody.tsx",
@@ -8427,6 +8446,7 @@
       "importedBy": [
         "src/components/AboutLinks.tsx",
         "src/components/AboutTab.test.tsx",
+        "src/components/CancelFirstConfirmModal.tsx",
         "src/components/CharacterPickerModal.tsx",
         "src/components/DeveloperOptionRow.tsx",
         "src/components/KnowledgeBaseSection.tsx",
@@ -8626,6 +8646,7 @@
         "src/components/AboutLinks.test.tsx",
         "src/components/AboutTab.test.tsx",
         "src/components/AboutTab.walk.test.tsx",
+        "src/components/CancelFirstConfirmModal.test.tsx",
         "src/components/ContextChipLadder.allChips.test.tsx",
         "src/components/ContextChipLadder.deckTry2.test.tsx",
         "src/components/ContextChipLadder.gridWalk.test.tsx",

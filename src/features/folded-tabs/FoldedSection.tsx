@@ -11,7 +11,7 @@
  * Solves: The line is a stop with its own D-pad moves, so the walk through a folded tab never depends
  * on Steam guessing which control lies below a line that changes height:
  *   Down from a line: into the section's first control when open, else the next line; on the last
- *     line, it holds still.
+ *     line, the floating Open all button below the list (plan 93: Down never reached it before).
  *   Up from a line: the previous section's last control when that section is open, else its line;
  *     from the first line, the tab bar.
  *   Right from a line: the floating Open all button (FoldAllButton). Left is Steam's own.
@@ -22,8 +22,8 @@
  * tab) does not fold it shut.
  *
  * Does not: Draw the rows or wire them: the tab draws them inside, and a section's last control hands
- * Down to the next line itself (`foldLineBelow`). Does not scroll: the tab body's scroll plan sees a
- * line like any other stop.
+ * Down to the next line itself (`foldLineBelow`; the last section's, to the Open all button). Does not
+ * scroll: the tab body's scroll plan sees a line like any other stop.
  *
  * Gotchas: The line's class never changes; open or closed is a data attribute. Steam writes its own
  * focus marker (`gpfocus`) into the class attribute, and React rewriting it would wipe the ring.
@@ -89,12 +89,20 @@ export function chainIds(chain: readonly FoldChainSection[]): string[] {
 }
 
 /**
- * Down from the last control of section `section`: the next section's line, or (the last section)
- * hold still. Always claims the press, so Steam never carries it past the tab's end.
+ * Down from the last control of section `section` (and from its line, when it is closed): the next
+ * section's line, or, from the last section, the tab's floating Open all button. That button is drawn
+ * outside the scroll pane, so the move is Steam's own transfer onto its registered node; Up from it
+ * comes back to this section's line (FoldAllButton). Always claims the press, so Steam never carries it
+ * past the tab's end; with no button on screen the ring holds still.
  */
 export function foldLineBelow(tab: string, chain: readonly FoldChainSection[], section: string): boolean {
   const next = chain[chain.findIndex((s) => s.id === section) + 1];
-  if (next) takeFoldLine(tab, next.id);
+  if (next) {
+    takeFoldLine(tab, next.id);
+    return true;
+  }
+  rememberFoldSection(tab, section);
+  takeNavFocus(foldAllNavId(tab));
   return true;
 }
 

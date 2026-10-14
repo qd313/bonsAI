@@ -33,8 +33,13 @@ const STRIP_BORDER_TOP_PX = 1;
 const STRIP_LABEL_LINE_PX = 13;
 const STRIP_TEXT_LINE_PX = 15;
 
-/** The Open all button's gap above the strip (and above the panel's bottom when the strip is hidden). */
-const FOLD_ALL_GAP_PX = 8;
+/**
+ * The Open all button: its height (FoldAllButton draws it at this), its gap above the strip (and above the
+ * panel's bottom when the strip is hidden), and its gap from the panel's right edge.
+ */
+export const FOLD_ALL_HEIGHT_PX = 28;
+export const FOLD_ALL_GAP_PX = 8;
+const FOLD_ALL_RIGHT_PX = 10;
 
 /**
  * Room at the end of a folded tab, under its last line, so the last rows can scroll up clear of the
@@ -149,7 +154,7 @@ export function buildFoldedTabsSection(): string {
         }
         .bonsai-scope .bonsai-fold-all-host {
           align-self: flex-end;
-          margin: 0 10px ${FOLD_ALL_GAP_PX}px 0;
+          margin: 0 ${FOLD_ALL_RIGHT_PX}px ${FOLD_ALL_GAP_PX}px 0;
           pointer-events: auto;
           border-radius: 4px;
           /* The panel's own colour under the see-through fill, so the list does not show through it. */

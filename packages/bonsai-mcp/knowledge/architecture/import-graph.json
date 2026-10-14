@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 960,
-  "edgeCount": 3226,
+  "edgeCount": 3228,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -4624,6 +4624,7 @@
         "src/features/folded-tabs/FoldedSection.tsx",
         "src/features/folded-tabs/foldedTabsStore.ts",
         "src/features/folded-tabs/shoulderSwitch.ts",
+        "src/styles/sections/foldedTabs.ts",
         "src/styles/sections/textPx.ts",
         "src/styles/settingsGlassButton.ts",
         "src/utils/navFocusRegistry.ts"
@@ -8147,8 +8148,10 @@
         "src/components/DeveloperTab.foldedWalk.test.tsx",
         "src/components/OllamaTab.foldedWalk.test.tsx",
         "src/components/SettingsTab.foldedWalk.test.tsx",
+        "src/features/folded-tabs/FoldAllButton.tsx",
         "src/features/folded-tabs/TabHelpStrip.test.tsx",
-        "src/styles/bonsaiScopeStylesheet.ts"
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/test-harness/foldedTabWalk.tsx"
       ]
     },
     "src/styles/sections/gameRunningLighter.test.ts": {
@@ -8871,6 +8874,7 @@
       "imports": [
         "src/features/plugin-shell/TabBodyFocusRoot.tsx",
         "src/features/plugin-shell/tabTitles.tsx",
+        "src/styles/sections/foldedTabs.ts",
         "src/test-harness/steamRing.tsx",
         "src/test-harness/tabBodyWalk.tsx",
         "src/utils/navFocusRegistry.ts"

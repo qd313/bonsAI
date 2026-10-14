@@ -7,9 +7,10 @@
  *          twice; with every section closed the walk is the five lines; with every section open it stops once
  *          per control; no landing moves the pane more than a third of it; every ringed control is wholly on
  *          screen and, while the strip shows, its bottom edge with its ring sits 6 px or more above the strip's
- *          top. Right from Reply style reaches the floating button, A opens every section (it reads Close all),
- *          Down returns to Reply style. Closed, the tab is under one screen of the Deck's own (430 points); with
- *          the first section opened, under one and a half.
+ *          top. Down from the tab's end (the last line, or the last control with every section open) reaches
+ *          the floating button and holds there (plan 93); Up from it comes back. Right from Reply style reaches
+ *          the button, A opens every section (it reads Close all), Up returns to Reply style. Closed, the tab is
+ *          under one screen of the Deck's own (430 points); with the first section opened, under one and a half.
  * Used for: OllamaTab.tsx and the folded-tabs pieces (src/features/folded-tabs/).
  * Does not: Know the Deck's real heights: foldedTabWalk.tsx lays the stops out by a flow model, and the Deck
  *           walk measures the truth.
@@ -115,13 +116,15 @@ beforeEach(() => {
 afterEach(() => cleanup());
 
 describe("the folded Ollama tab, every section closed", () => {
-  it("Down from the tab bar walks the five section lines, once each, then holds; Up walks them back", () => {
+  it("Down from the tab bar walks the five section lines, once each, then the Open all button, and holds there; Up walks every line back", () => {
     setAllSections(OLLAMA_FOLD_TAB, SECTION_IDS, false);
     const w = walk(DECK_PANE, "centerIfHidden");
     const down = [w.enter(), ...w.walk("down")];
-    expect(names(down).map((n) => n.split(" section")[0])).toEqual(OLLAMA_SECTIONS.map((s) => s.title));
+    expect(names(down).map((n) => n.split(" section")[0])).toEqual([...OLLAMA_SECTIONS.map((s) => s.title), "Open all"]);
+    expect(names(down)[OLLAMA_SECTIONS.length]).toBe("Open all sections");
+    expect(repeats(down)).toBe(0);
     const up = w.walk("up");
-    expect(names(up).map((n) => n.split(" section")[0])).toEqual(OLLAMA_SECTIONS.slice(0, -1).map((s) => s.title).reverse());
+    expect(names(up).map((n) => n.split(" section")[0])).toEqual(OLLAMA_SECTIONS.map((s) => s.title).reverse());
     checkLandings([...down, ...up], DECK_PANE, "closed");
     w.unmount();
   });
@@ -185,11 +188,14 @@ describe("the folded Ollama tab, every section open", () => {
         expect(order).toContain("Run AI on this Deck");
         expect(order).not.toContain("Terse mode");
         expect(order).toContain("Set thinking to Off");
-        expect(order[order.length - 1]).toBe("AI models");
-        expect(order.length).toBeGreaterThanOrEqual(17);
+        /* The last control, then Down once more onto the floating button (plan 93), where the walk holds. */
+        expect(order.slice(-2)).toEqual(["AI models", "Close all sections"]);
+        expect(order.length).toBeGreaterThanOrEqual(18);
         checkLandings(down, viewport, `${steam} down`);
         const up = w.walk("up");
         expect(repeats(up), names(up).join(" | ")).toBe(0);
+        /* Up from the button: the line of the section the ring came from. */
+        expect(up[0]!.name).toMatch(/^AI models section/);
         expect(up[up.length - 1]!.name).toMatch(/^Where AI runs/);
         checkLandings(up, viewport, `${steam} up`);
         w.unmount();
@@ -267,7 +273,7 @@ describe("the Reply style slider's four stops, Terse first (plan 93)", () => {
 });
 
 describe("the floating Open all button on the Ollama tab", () => {
-  it("Right from Reply style puts the ring on it; A opens every section (Close all); Down returns to Reply style", () => {
+  it("Right from Reply style puts the ring on it; A opens every section (Close all); Down holds; Up returns to Reply style", () => {
     const w = walk(DECK_PANE, "nearest");
     const line = w.container.querySelector<HTMLElement>('[data-bonsai-fold-line="reply"]') as SteamEl;
     const host = w.container.querySelector<HTMLElement>('[data-bonsai-fold-all="ollama"]') as SteamEl;
@@ -283,6 +289,10 @@ describe("the floating Open all button on the Ollama tab", () => {
     expect(steamRingHolder()).toBe(button);
     act(() => {
       host.__nav?.onMoveDown?.();
+    });
+    expect(steamRingHolder()).toBe(button);
+    act(() => {
+      host.__nav?.onMoveUp?.();
     });
     expect(steamRingHolder()).toBe(w.container.querySelector('[data-bonsai-fold-line="reply"]'));
     w.unmount();

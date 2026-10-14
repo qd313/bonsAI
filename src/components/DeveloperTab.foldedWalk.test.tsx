@@ -131,13 +131,15 @@ beforeEach(() => {
 afterEach(() => cleanup());
 
 describe("the folded Developer tab, every section closed", () => {
-  it("Down from the tab bar walks the six section lines, once each, then holds; Up walks them back", () => {
+  it("Down from the tab bar walks the six section lines, once each, then the Open all button, and holds; Up walks every line back", () => {
     setAllSections(DEVELOPER_FOLD_TAB, SECTION_IDS, false);
     const w = walk(DECK_PANE, "centerIfHidden");
     const down = [w.enter(), ...w.walk("down")];
-    expect(lineTitles(down)).toEqual(DEVELOPER_SECTIONS.map((s) => s.title));
+    expect(lineTitles(down)).toEqual([...DEVELOPER_SECTIONS.map((s) => s.title), "Open all"]);
+    expect(names(down)[DEVELOPER_SECTIONS.length]).toBe("Open all sections");
+    expect(repeats(down)).toBe(0);
     const up = w.walk("up");
-    expect(lineTitles(up)).toEqual(DEVELOPER_SECTIONS.slice(0, -1).map((s) => s.title).reverse());
+    expect(lineTitles(up)).toEqual(DEVELOPER_SECTIONS.map((s) => s.title).reverse());
     checkLandings([...down, ...up], DECK_PANE, "closed");
     w.unmount();
   });
@@ -153,7 +155,7 @@ describe("the folded Developer tab, every section closed", () => {
     setAllSections(DEVELOPER_FOLD_TAB, SECTION_IDS, false);
     const w = walk(DECK_PANE, "nearest", { onInstallSeedKnowledgeBase: undefined });
     const down = [w.enter(), ...w.walk("down")];
-    expect(lineTitles(down)).toEqual(DEVELOPER_SECTIONS.slice(1).map((s) => s.title));
+    expect(lineTitles(down)).toEqual([...DEVELOPER_SECTIONS.slice(1).map((s) => s.title), "Open all"]);
     w.unmount();
   });
 
@@ -212,10 +214,13 @@ describe("the folded Developer tab, every section open", () => {
         const found = expectedOrder.map(at);
         expect(found.includes(-1), `missing stop in: ${order.join(" | ")}`).toBe(false);
         expect([...found].sort((a, b) => a - b), "in order").toEqual(found);
-        expect(order[order.length - 1]).toBe("Steam Web API key");
+        /* The last control, then Down once more onto the floating button (plan 93), where the walk holds. */
+        expect(order.slice(-2)).toEqual(["Steam Web API key", "Close all sections"]);
         checkLandings(down, viewport, `${steam} down`);
         const up = w.walk("up", 80);
         expect(repeats(up), names(up).join(" | ")).toBe(0);
+        /* Up from the button: the line of the section the ring came from. */
+        expect(up[0]!.name).toMatch(/^Integrations section/);
         expect(up[up.length - 1]!.name).toMatch(/^Knowledge base \(dev QA\)/);
         checkLandings(up, viewport, `${steam} up`);
         w.unmount();
@@ -242,6 +247,7 @@ describe("the folded Developer tab, every section open", () => {
       "Logging & exports",
       "Animations",
       "Integrations",
+      "Open all",
     ]);
     w.unmount();
   });
@@ -322,7 +328,7 @@ describe("Tab to open on: the strip describes the option the ring is on", () => 
 });
 
 describe("the floating Open all button on the Developer tab", () => {
-  it("Right from Logging & exports puts the ring on it; A opens every section (Close all); Down returns to Logging & exports", () => {
+  it("Right from Logging & exports puts the ring on it; A opens every section (Close all); Down holds; Up returns to Logging & exports", () => {
     setAllSections(DEVELOPER_FOLD_TAB, SECTION_IDS, false);
     const w = walk(DECK_PANE, "nearest");
     const line = w.container.querySelector<HTMLElement>('[data-bonsai-fold-line="logging"]') as SteamEl;
@@ -338,6 +344,10 @@ describe("the floating Open all button on the Developer tab", () => {
     expect(button.textContent).toContain("Close all");
     act(() => {
       host.__nav?.onMoveDown?.();
+    });
+    expect(steamRingHolder()).toBe(button);
+    act(() => {
+      host.__nav?.onMoveUp?.();
     });
     expect(steamRingHolder()).toBe(w.container.querySelector('[data-bonsai-fold-line="logging"]'));
     w.unmount();

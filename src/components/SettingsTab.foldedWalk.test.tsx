@@ -8,8 +8,9 @@
  *          buttons side by side is one stop going Down, its other buttons are Left and Right); no landing moves the
  *          pane more than a third of it; every ringed control is wholly on screen and, while the strip shows, its
  *          bottom edge with its ring sits 6 px or more above the strip's top. Closed, the tab is under one and a
- *          half screens of the Deck's own. The strip shows the right words on three rows. Right from a line
- *          reaches the floating button and each exit comes back.
+ *          half screens of the Deck's own. The strip shows the right words on three rows. Right from a line, or
+ *          Down from the tab's end (plan 93), reaches the floating button; Down holds there and each exit comes
+ *          back.
  * Used for: SettingsTab.tsx and the folded-tabs pieces (src/features/folded-tabs/).
  * Does not: Know the Deck's real heights: foldedTabWalk.tsx lays the stops out by a flow model, and the Deck
  *           walk measures the truth.
@@ -84,14 +85,16 @@ afterEach(() => cleanup());
 
 describe("the folded Settings tab, every section closed", () => {
   for (const showDeveloperTab of [true, false]) {
-    it(`Developer tab ${showDeveloperTab ? "on" : "off"}: Down from the tab bar walks the section lines once each, then holds; Up walks them back`, () => {
+    it(`Developer tab ${showDeveloperTab ? "on" : "off"}: Down from the tab bar walks the section lines once each, then the Open all button, and holds; Up walks every line back`, () => {
       closeAllSettingsSections();
       const w = walk(DECK_PANE, "centerIfHidden", { showDeveloperTab });
       const titles = SETTINGS_SECTIONS.filter((s) => showDeveloperTab || s.id !== "uiscale").map((s) => s.title);
       const down = [w.enter(), ...w.walk("down")];
-      expect(names(down).map(sectionName)).toEqual(titles);
+      expect(names(down).map(sectionName)).toEqual([...titles, "Open all"]);
+      expect(names(down)[titles.length]).toBe("Open all sections");
+      expect(repeats(down)).toBe(0);
       const up = w.walk("up");
-      expect(names(up).map(sectionName)).toEqual(titles.slice(0, -1).reverse());
+      expect(names(up).map(sectionName)).toEqual([...titles].reverse());
       checkLandings([...down, ...up], DECK_PANE, "closed");
       w.unmount();
     });
@@ -132,6 +135,8 @@ describe("the folded Settings tab, every section open", () => {
     /^Data/,
     "Show Developer tab",
     "Clear cache...",
+    /* Down from the last control: the floating button (plan 93), where the walk holds. */
+    "Close all sections",
   ];
 
   for (const viewport of [DECK_PANE, MONITOR_PANE]) {
@@ -150,6 +155,8 @@ describe("the folded Settings tab, every section open", () => {
         checkLandings(down, viewport, `${steam} down`);
         const up = w.walk("up");
         expect(repeats(up), names(up).join(" | ")).toBe(0);
+        /* Up from the button: the line of the section the ring came from. */
+        expect(up[0]!.name).toMatch(/^Data section/);
         expect(up[up.length - 1]!.name).toMatch(/^UI scale/);
         checkLandings(up, viewport, `${steam} up`);
         w.unmount();
@@ -165,7 +172,7 @@ describe("the folded Settings tab, every section open", () => {
     expect(repeats(down), got.join(" | ")).toBe(0);
     expect(got.some((n) => /^UI scale/.test(n) || n === "Apply UI scale")).toBe(false);
     expect(got.some((n) => /^Character$|^Accent intensity/.test(n))).toBe(false);
-    expect(got.slice(-3)).toEqual([expect.stringMatching(/^Data/), "Show Developer tab", "Clear cache..."]);
+    expect(got.slice(-4)).toEqual([expect.stringMatching(/^Data/), "Show Developer tab", "Clear cache...", "Close all sections"]);
     w.unmount();
   });
 
@@ -205,7 +212,7 @@ describe("the floating Open all button on the Settings tab", () => {
   const lineOf = (c: HTMLElement, id: string) => c.querySelector<SteamEl>(`[data-bonsai-fold-line="${id}"]`)!;
   const hostOf = (c: HTMLElement) => c.querySelector<SteamEl>(`[data-bonsai-fold-all="${SETTINGS_FOLD_TAB}"]`)!;
 
-  it("Right from Voice replies puts the ring on it; A opens every section (Close all); Down returns to Voice replies", () => {
+  it("Right from Voice replies puts the ring on it; A opens every section (Close all); Down holds; Up returns to Voice replies", () => {
     closeAllSettingsSections();
     const w = walk(DECK_PANE, "nearest");
     const host = hostOf(w.container);
@@ -221,6 +228,10 @@ describe("the floating Open all button on the Settings tab", () => {
     expect(steamRingHolder()).toBe(button);
     act(() => {
       host.__nav?.onMoveDown?.();
+    });
+    expect(steamRingHolder()).toBe(button);
+    act(() => {
+      host.__nav?.onMoveUp?.();
     });
     expect(steamRingHolder()).toBe(lineOf(w.container, "voicereplies"));
     w.unmount();

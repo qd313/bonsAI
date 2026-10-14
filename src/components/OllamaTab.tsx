@@ -376,8 +376,8 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
                   style={{ width: "100%", minWidth: 0 }}
                   {...({
                     onMoveUp: () => takeFoldLine(OLLAMA_FOLD_TAB, "models"),
-                    /* The tab's last control: Down holds still rather than reach the floating button below it. */
-                    onMoveDown: () => true,
+                    /* The tab's last control: Down goes on to the floating Open all button below it (plan 93). */
+                    onMoveDown: () => foldLineBelow(OLLAMA_FOLD_TAB, chain, "models"),
                   } as Record<string, unknown>)}
                 >
                   <Button

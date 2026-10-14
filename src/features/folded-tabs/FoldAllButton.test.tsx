@@ -1,10 +1,10 @@
 /**
- * Title: The floating Open all button: how the ring gets there, what A does, and its four ways back
- * Purpose: Pin the Deck check P91-FOLD-ALL-BUTTON: Right from a section line puts Steam's ring on the
- *          button; A opens every section, the label reads "Close all" and the ring stays on the button;
- *          Up, Down, Left and B each put the ring back on the line it came from, also after the tab was
- *          unmounted and mounted again in between (lessons-learned § 3); and its fill, text and border
- *          are the AI models button's own, by construction.
+ * Title: The floating Open all button: how the ring gets there, what A does, and its three ways back
+ * Purpose: Pin the Deck check P91-FOLD-ALL-BUTTON: Right from a section line, or Down from the last one
+ *          (plan 93), puts Steam's ring on the button; A opens every section, the label reads "Close all"
+ *          and the ring stays on the button; Up, Left and B each put the ring back on the line it came from,
+ *          also after the tab was unmounted and mounted again in between (lessons-learned § 3); Down and
+ *          Right hold still; and its fill, text and border are the AI models button's own, by construction.
  * Used for: FoldAllButton.tsx, FoldedSection.tsx (Right), foldedTabsStore.ts (the way back).
  * Does not: Model Steam's spatial walk; every move here is one the plugin makes itself, through Steam's
  *           own transfer (steamRing.tsx moves the ring only for a transfer, never for a plain focus()).
@@ -82,7 +82,7 @@ describe("the floating Open all button", () => {
     expect(buttonOf(container).textContent).toContain("Open all");
   });
 
-  for (const way of ["onMoveUp", "onMoveDown", "onMoveLeft", "onCancelButton"] as const) {
+  for (const way of ["onMoveUp", "onMoveLeft", "onCancelButton"] as const) {
     it(`${way === "onCancelButton" ? "B" : way.replace("onMove", "")} puts the ring back on the line it came from`, () => {
       const { container } = render(<Tab />);
       rightFrom(container, "tuning");
@@ -94,21 +94,49 @@ describe("the floating Open all button", () => {
     });
   }
 
-  it("Right on the button holds still", () => {
+  for (const way of ["onMoveRight", "onMoveDown"] as const) {
+    it(`${way.replace("onMove", "")} on the button holds still, and claims the press`, () => {
+      const { container } = render(<Tab />);
+      rightFrom(container, "kb");
+      let claimed: unknown;
+      act(() => {
+        claimed = hostOf(container).__nav?.[way]?.();
+      });
+      expect(claimed).toBe(true);
+      expect(steamRingHolder()).toBe(buttonOf(container));
+    });
+  }
+
+  it("Down from the last section line puts the ring on the button; Up returns to that line, also after A", () => {
     const { container } = render(<Tab />);
-    rightFrom(container, "kb");
-    expect(hostOf(container).__nav?.onMoveRight?.()).toBe(true);
+    act(() => {
+      putSteamRingOn(lineOf(container, "models"));
+      lineOf(container, "models").__nav?.onMoveDown?.();
+    });
     expect(steamRingHolder()).toBe(buttonOf(container));
+    act(() => {
+      hostOf(container).__nav?.onMoveUp?.();
+    });
+    expect(steamRingHolder()).toBe(lineOf(container, "models"));
+    act(() => {
+      lineOf(container, "models").__nav?.onMoveDown?.();
+    });
+    act(() => buttonOf(container).click());
+    expect(openCount(container)).toBe(5);
+    act(() => {
+      hostOf(container).__nav?.onMoveUp?.();
+    });
+    expect(steamRingHolder()).toBe(lineOf(container, "models"));
   });
 
-  it("the way back is kept outside the tab: Down still returns to the same line after the tab is rebuilt", () => {
+  it("the way back is kept outside the tab: Up still returns to the same line after the tab is rebuilt", () => {
     const first = render(<Tab />);
     rightFrom(first.container, "kb");
     first.unmount();
     const again = render(<Tab />);
     act(() => {
       putSteamRingOn(buttonOf(again.container));
-      hostOf(again.container).__nav?.onMoveDown?.();
+      hostOf(again.container).__nav?.onMoveUp?.();
     });
     expect(steamRingHolder()).toBe(lineOf(again.container, "kb"));
   });

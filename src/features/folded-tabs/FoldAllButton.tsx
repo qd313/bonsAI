@@ -8,9 +8,11 @@
  * Used for: TabHelpStrip's corner, on the Ollama tab now and the Settings and Developer tabs next.
  *
  * Solves: Opening or closing a whole tab without walking to each line. The D-pad rules:
- *   Right from any section line puts the ring here (FoldedSection's line does it).
+ *   Right from any section line puts the ring here (FoldedSection's line does it), and so does Down
+ *   from the tab's end: the last section's line, or its last control while it is open (plan 93).
  *   A opens or closes every section and keeps the ring here.
- *   Up, Down, Left or B put the ring back on the section line it came from. Right holds still.
+ *   Up, Left or B put the ring back on the section line it came from. Down and Right hold still: the
+ *   button is the tab's last stop, and Down going back up would walk in a circle.
  * The section it came from is the last one the ring landed in, kept in foldedTabsStore, so it
  * survives a rebuild of the tab. Every move to and from here is Steam's own transfer onto a registered
  * nav node, never a plain focus() across containers: this button is drawn outside the tab's scroll
@@ -27,6 +29,7 @@ import { Button, Focusable } from "@decky/ui";
 import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
 import { FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN } from "../../styles/settingsGlassButton";
 import { textPx } from "../../styles/sections/textPx";
+import { FOLD_ALL_HEIGHT_PX } from "../../styles/sections/foldedTabs";
 import {
   allSectionsOpen,
   foldSectionToReturnTo,
@@ -74,7 +77,7 @@ export function FoldAllButton({ tab, sections }: FoldAllButtonProps): React.Reac
       {...({
         navRef,
         onMoveUp: back,
-        onMoveDown: back,
+        onMoveDown: () => true,
         onMoveLeft: back,
         onMoveRight: () => true,
         /* LB and RB switch tabs from here as from anywhere: the dock is outside Steam's own Tabs, which never sees them. */
@@ -92,8 +95,8 @@ export function FoldAllButton({ tab, sections }: FoldAllButtonProps): React.Reac
         aria-label={allOpen ? "Close all sections" : "Open all sections"}
         style={{
           ...SETTINGS_GLASS_BTN,
-          minHeight: 28,
-          height: 28,
+          minHeight: FOLD_ALL_HEIGHT_PX,
+          height: FOLD_ALL_HEIGHT_PX,
           padding: "0 10px 0 8px",
           display: "inline-flex",
           alignItems: "center",

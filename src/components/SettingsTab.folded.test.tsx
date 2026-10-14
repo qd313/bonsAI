@@ -4,7 +4,8 @@
  *          (its name, a summary, a chevron) and its rows are not drawn while it is closed; opened, one line per
  *          setting with its longer text on the row for the help strip, word for word; the rows that open their
  *          own popups still do; a section's first control hands Up to its line and its last control Down to the
- *          next line; the Text size row still carries no Left or Right handler.
+ *          next line (the last section's, to the floating Open all button); the Text size row still carries no
+ *          Left or Right handler.
  * Used for: SettingsTab.tsx and the Settings section files.
  * Does not: Walk the D-pad through the tab (SettingsTab.foldedWalk.test.tsx) or know any pixel.
  */
@@ -204,17 +205,16 @@ describe("the Settings tab's moves out of a section", () => {
     }
   });
 
-  it("holds still on Down from the last section's last control (nothing below the Clear buttons)", () => {
+  it("Down from the last section's last control (the Clear buttons) goes on to the floating Open all button (plan 93)", () => {
     const { container } = render(<SettingsTab {...props()} />);
     const pair = container.querySelector<SteamEl>(".bonsai-settings-cache-row")!;
     act(() => putSteamRingOn(pair.querySelector("button")));
-    const before = steamRingHolder();
     let claimed: unknown;
     act(() => {
       claimed = pair.__nav?.onMoveDown?.();
     });
     expect(claimed).toBe(true);
-    expect(steamRingHolder()).toBe(before);
+    expect(steamRingHolder()).toBe(container.querySelector(`[data-bonsai-fold-all="${SETTINGS_FOLD_TAB}"] button`));
   });
 
   it("gives the Text size row only Up and Down: no Left or Right handler to swallow a press", () => {

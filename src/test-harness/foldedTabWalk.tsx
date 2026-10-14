@@ -22,6 +22,7 @@ import { act, render } from "@testing-library/react";
 import { TabBodyFocusRoot, tabBodyNavFocusId } from "../features/plugin-shell/TabBodyFocusRoot";
 import type { BonsaiTabId } from "../features/plugin-shell/tabTitles";
 import { takeNavFocus } from "../utils/navFocusRegistry";
+import { FOLD_ALL_GAP_PX, FOLD_ALL_HEIGHT_PX } from "../styles/sections/foldedTabs";
 import { steamRingHolder, type SteamEl } from "./steamRing";
 import type { SteamFocusScroll } from "./tabBodyWalk";
 
@@ -324,8 +325,14 @@ export function walkFoldedTab(opts: FoldedTabWalkOptions): FoldedTabWalk {
     if (!to || to === from) return null;
     ringEl = to;
     if (!root.contains(to)) {
-      /* Off the tab body (the tab bar, the floating button): no landing in the pane to measure. */
-      return { press: presses++, stop: to, name: nameOf(to), moved: Math.abs(scrollTop - before), top: NaN, bottom: NaN, stripTop: null, stripText: "" };
+      const moved = Math.abs(scrollTop - before);
+      /* The floating button: fixed over the pane's bottom, its gap above the strip (hidden: the ring left the body). */
+      if (to.closest("[data-bonsai-fold-all]")) {
+        const bottom = PANE_TOP + opts.viewport - stripHeightNow() - FOLD_ALL_GAP_PX;
+        return { press: presses++, stop: to, name: nameOf(to), moved, top: bottom - FOLD_ALL_HEIGHT_PX, bottom, stripTop: null, stripText: "" };
+      }
+      /* Off the tab body otherwise (the tab bar): no landing in the pane to measure. */
+      return { press: presses++, stop: to, name: nameOf(to), moved, top: NaN, bottom: NaN, stripTop: null, stripText: "" };
     }
     return landing(to, before);
   };

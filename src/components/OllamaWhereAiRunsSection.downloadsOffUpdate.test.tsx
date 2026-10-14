@@ -36,6 +36,7 @@ import {
   restoreModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { setDownloadPermissionBridge } from "../features/downloads/downloadNotice";
+import { drawConfirmBox } from "../test-harness/confirmBoxProbe";
 import { DEFAULT_CAPABILITIES } from "../data/bonsaiSettingsSchema";
 
 const FAILED_LINE = "Failed (check the Internet downloads permission?)";
@@ -102,8 +103,10 @@ describe("Update AI & models with Internet downloads off", () => {
     await later(20);
     expect(screen.getByText(FAILED_LINE)).toBeTruthy();
     expect(hoisted.modals).toHaveLength(1);
-    expect(hoisted.modals[0].props.strTitle).toBe("Turn on internet downloads?");
-    expect(hoisted.modals[0].props.strOKButtonText).toBe("Not now");
+    const box = drawConfirmBox(hoisted.modals[0]);
+    expect(box.title).toBe("Turn on internet downloads?");
+    expect(box.labels).toEqual(["Cancel", "Turn on and download"]);
+    box.unmount();
     // nothing started yet: the person has not answered
     expect(calls("start_local_ollama_setup")).toHaveLength(0);
   });
@@ -113,7 +116,7 @@ describe("Update AI & models with Internet downloads off", () => {
     draw();
     await pressUpdate();
     await later(20);
-    await act(async () => void (hoisted.modals[0].props.onMiddleButton as () => void)());
+    await act(async () => void (hoisted.modals[0].props.onAction as () => void)());
     await later(20);
     expect(setCaps).toHaveBeenCalledWith(expect.objectContaining({ internet_downloads: true }));
     expect(calls("save_settings")).toHaveLength(1);
@@ -121,12 +124,12 @@ describe("Update AI & models with Internet downloads off", () => {
     expect(screen.queryByText(FAILED_LINE)).toBeNull();
   });
 
-  it("the box's no starts nothing, leaves the permission off, and the failed line stays after the tab is rebuilt", async () => {
+  it("the box's Cancel starts nothing, leaves the permission off, and the failed line stays after the tab is rebuilt", async () => {
     const setCaps = bridge({ enabled: false });
     const first = draw();
     await pressUpdate();
     await later(20);
-    await act(async () => void (hoisted.modals[0].props.onOK as () => void)());
+    await act(async () => void (hoisted.modals[0].props.onCancel as () => void)());
     await later(20);
     expect(setCaps).not.toHaveBeenCalled();
     expect(calls("start_local_ollama_setup")).toHaveLength(0);
@@ -142,7 +145,7 @@ describe("Update AI & models with Internet downloads off", () => {
     const btn = await pressUpdate();
     expect(peekModalReturnFocus()).toBe("ollama-local-setup");
     await later(120); // a person takes longer than a blink to answer
-    await act(async () => void (hoisted.modals[0].props.onOK as () => void)());
+    await act(async () => void (hoisted.modals[0].props.onCancel as () => void)());
     (document.activeElement as HTMLElement | null)?.blur();
     restoreModalReturnFocus();
     expect(document.activeElement).toBe(btn);

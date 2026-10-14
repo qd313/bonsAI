@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 959,
-  "edgeCount": 3200,
+  "fileCount": 960,
+  "edgeCount": 3206,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -177,7 +177,8 @@
       ],
       "importedBy": [
         "src/components/CancelFirstConfirmModal.test.tsx",
-        "src/components/SettingsTabDataSection.tsx"
+        "src/components/SettingsTabDataSection.tsx",
+        "src/features/downloads/downloadNotice.tsx"
       ]
     },
     "src/components/CharacterPickerModal.test.tsx": {
@@ -492,6 +493,7 @@
     "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx": {
       "imports": [
         "src/components/KnowledgeBaseSection.tsx",
+        "src/test-harness/confirmBoxProbe.tsx",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/fakeDeckyUi.tsx"
       ],
@@ -1703,6 +1705,7 @@
         "src/features/downloads/downloadNotice.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/plugin-shell/settingsLoadedSignal.ts",
+        "src/test-harness/confirmBoxProbe.tsx",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/fakeDeckyUi.tsx"
       ],
@@ -1753,6 +1756,7 @@
         "src/features/downloads/downloadNotice.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/plugin-shell/settingsLoadedSignal.ts",
+        "src/test-harness/confirmBoxProbe.tsx",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/fakeDeckyUi.tsx"
       ],
@@ -2136,6 +2140,7 @@
       "imports": [
         "src/components/PullModelsModal.tsx",
         "src/features/downloads/downloadNotice.tsx",
+        "src/test-harness/confirmBoxProbe.tsx",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/fakeDeckyUi.tsx"
       ],
@@ -4511,12 +4516,14 @@
       "imports": [
         "src/data/bonsaiSettingsSchema.ts",
         "src/features/downloads/downloadNotice.tsx",
+        "src/test-harness/confirmBoxProbe.tsx",
         "src/test-harness/fakeDeckyUi.tsx"
       ],
       "importedBy": []
     },
     "src/features/downloads/downloadNotice.tsx": {
       "imports": [
+        "src/components/CancelFirstConfirmModal.tsx",
         "src/data/bonsaiSettingsSchema.ts",
         "src/styles/sections/textPx.ts",
         "src/utils/bonsaiSessionSurvival.ts",
@@ -8491,6 +8498,16 @@
       ],
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.simulation.test.tsx"
+      ]
+    },
+    "src/test-harness/confirmBoxProbe.tsx": {
+      "imports": [],
+      "importedBy": [
+        "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
+        "src/components/PullModelsStarterSetChip.test.tsx",
+        "src/features/downloads/downloadNotice.test.tsx"
       ]
     },
     "src/test-harness/deckAnswerWalk.ts": {

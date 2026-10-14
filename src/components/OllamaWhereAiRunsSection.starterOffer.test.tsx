@@ -34,6 +34,7 @@ import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../test-harness
 import { markSettingsLoaded, resetSettingsLoadedSignalForTests } from "../features/plugin-shell/settingsLoadedSignal";
 import { resetModalReturnFocusRegistry } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { setDownloadPermissionBridge } from "../features/downloads/downloadNotice";
+import { drawConfirmBox } from "../test-harness/confirmBoxProbe";
 
 function drawOnDeck() {
   return render(
@@ -63,7 +64,7 @@ const setupProfiles = () =>
 function textOf(modal: { props: Record<string, unknown> }): string {
   const host = document.createElement("div");
   document.body.appendChild(host);
-  return render(modal.props.strDescription as React.ReactElement, { container: host }).container.textContent ?? "";
+  return render(modal.props.body as React.ReactElement, { container: host }).container.textContent ?? "";
 }
 
 async function pressInstall(label: string) {
@@ -83,15 +84,16 @@ beforeEach(() => {
 });
 
 describe("Install Ollama with no models installed", () => {
-  it("asks about the starter models, opening on Not now, naming the size", async () => {
+  it("asks about the starter models with Cancel and the install button only, naming the size", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: false, error: "unreachable" }));
     drawOnDeck();
     await pressInstall("Install Ollama");
     expect(hoisted.modals).toHaveLength(1);
     const box = hoisted.modals[0];
-    expect(box.props.strTitle).toBe("Also install the starter models?");
-    expect(box.props.strOKButtonText).toBe("Not now");
-    expect(box.props.strMiddleButtonText).toBe("Install Ollama and the starter models");
+    const drawn = drawConfirmBox(box);
+    expect(drawn.title).toBe("Also install the starter models?");
+    expect(drawn.labels).toEqual(["Cancel", "Install Ollama and the starter models"]);
+    drawn.unmount();
     const text = textOf(box);
     expect(text).toContain("qwen2.5vl:3b");
     expect(text).toContain("about 3–4 GiB");
@@ -103,7 +105,7 @@ describe("Install Ollama with no models installed", () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: false, error: "unreachable" }));
     drawOnDeck();
     await pressInstall("Install Ollama");
-    (hoisted.modals[0].props.onMiddleButton as () => void)();
+    (hoisted.modals[0].props.onAction as () => void)();
     await settle();
     expect(setupProfiles()).toEqual(["tier1_essentials"]);
   });
@@ -112,7 +114,7 @@ describe("Install Ollama with no models installed", () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: false, error: "unreachable" }));
     drawOnDeck();
     await pressInstall("Install Ollama");
-    (hoisted.modals[0].props.onOK as () => void)();
+    (hoisted.modals[0].props.onCancel as () => void)();
     await settle();
     expect(setupProfiles()).toEqual(["update_installed"]);
   });
@@ -122,7 +124,7 @@ describe("Install Ollama with no models installed", () => {
     drawOnDeck();
     await pressInstall("Update AI & models");
     expect(hoisted.modals).toHaveLength(1);
-    expect(hoisted.modals[0].props.strTitle).toBe("Also install the starter models?");
+    expect(hoisted.modals[0].props.title).toBe("Also install the starter models?");
   });
 
   it("with models already installed there is no box at all, the update just runs", async () => {

@@ -5,7 +5,7 @@
  * models carries one button (at the foot of the filters column since plan 91) that gets the starter set in one press plus the ask-first
  * box. The test works at the level the Deck check looks at: the real Browse models screen is drawn,
  * the button is pressed, and the box that opens is read as a person would see it (its title, the
- * size, the site, and that the ring starts on "Not now"). A decline starts nothing; the download
+ * size, the site, and that the box shows Cancel and the download button only, Cancel first). A decline starts nothing; the download
  * button starts the same setup run (profile tier1_essentials) the old Tier 1 button started.
  *
  * Does not: prove the ring on the device (jsdom has no Steam ring); that is the Deck row's job.
@@ -45,6 +45,7 @@ vi.mock("@decky/ui", async () => {
 import { PullModelsModal } from "./PullModelsModal";
 import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../test-harness/fakeDeckyRpc";
 import { setDownloadPermissionBridge } from "../features/downloads/downloadNotice";
+import { drawConfirmBox } from "../test-harness/confirmBoxProbe";
 
 const LABEL = "Install the starter set";
 
@@ -59,7 +60,7 @@ const settle = () => act(() => new Promise<void>((r) => setTimeout(r, 0)));
 
 /** What the open box says, as text a person reads. */
 function boxText(): string {
-  const desc = hoisted.modal!.props.strDescription as React.ReactElement;
+  const desc = hoisted.modal!.props.body as React.ReactElement;
   const host = document.createElement("div");
   document.body.appendChild(host);
   const { container } = render(desc, { container: host });
@@ -90,7 +91,7 @@ describe("Browse models: Install the starter set", () => {
     expect(chip(second.container)).toBeNull();
   });
 
-  it("asks first with the size, opens on Not now, and starts nothing until the download button", async () => {
+  it("asks first with the size, shows Cancel and the download button only, and starts nothing until the download button", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: [] }));
     const { container } = renderModal();
     await waitFor(() => expect(chip(container)).not.toBeNull());
@@ -99,21 +100,22 @@ describe("Browse models: Install the starter set", () => {
     expect(hoisted.modal).not.toBeNull();
     expect(setupCalls()).toHaveLength(0);
     const p = hoisted.modal!.props;
-    expect(p.strTitle).toBe("Install the starter set?");
-    // Steam opens a ConfirmModal with the ring on its OK button: that is the choice that downloads nothing.
-    expect(p.strOKButtonText).toBe("Not now");
-    expect(p.strMiddleButtonText).toBe(LABEL);
+    const drawn = drawConfirmBox(hoisted.modal);
+    expect(drawn.title).toBe("Install the starter set?");
+    // Two buttons, Cancel first (where the ring opens, the choice that downloads nothing).
+    expect(drawn.labels).toEqual(["Cancel", LABEL]);
+    drawn.unmount();
     const text = boxText();
     expect(text).toContain("qwen2.5vl:3b");
     expect(text).toContain("about 3–4 GiB");
     expect(text).toContain("registry.ollama.ai");
 
-    (p.onOK as () => void)();
+    (p.onCancel as () => void)();
     await settle();
     expect(setupCalls()).toHaveLength(0);
 
     fireEvent.click(chip(container)!);
-    (hoisted.modal!.props.onMiddleButton as () => void)();
+    (hoisted.modal!.props.onAction as () => void)();
     await settle();
     expect(setupCalls().map((c) => c.args)).toEqual([[{ profile: "tier1_essentials" }]]);
   });
@@ -127,7 +129,7 @@ describe("Browse models: Install the starter set", () => {
     const stop = vi.fn();
     (props.onOKButton as (e: { stopPropagation: () => void }) => void)({ stopPropagation: stop });
     expect(stop).toHaveBeenCalledTimes(1);
-    expect(hoisted.modal?.props.strTitle).toBe("Install the starter set?");
+    expect(hoisted.modal?.props.title).toBe("Install the starter set?");
 
     // It is one stop of the filters column (plan 91): Down to the first Suggested chip under it, Up to "Type a name".
     expect((props.onMoveDown as () => boolean)()).toBe(true);

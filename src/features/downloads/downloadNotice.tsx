@@ -27,10 +27,11 @@
  * the Deck (plan72-F-DL) "Update AI & models" opened its older box with the ring on "Start update"
  * and no site or size.
  *
- * Focus: the box is Decky's own ConfirmModal, the plugin's usual confirm-box look. Steam opens a
- * ConfirmModal with the ring on its OK button, so OK is the choice that does NOT download ("Not
- * now") and the download sits on the box's middle button. Decky always adds its own Cancel too;
- * B and Cancel also download nothing. No DOM focus() or keydown is involved.
+ * Focus: the box is the shared two-button box (CancelFirstConfirmModal, the Delete chat box's shape):
+ * Cancel first, where Steam puts the ring, and the download beside it, so an A pressed by habit
+ * downloads nothing and B is Cancel too. It used to be Steam's own ConfirmModal with "Not now" as
+ * OK and the download in the middle, and Steam's added Cancel made it three buttons (plan 93). No
+ * DOM focus() or keydown is involved.
  *
  * Gotcha: opening a box snapshots the whole session, and Decky's remount after it closes restores
  * settings from that snapshot (see useThinkingNoticeGate.tsx, bug b). Turning the permission on
@@ -38,8 +39,9 @@
  * that starts next is not refused by a back end that has not heard yet.
  */
 import { useEffect, type ReactNode } from "react";
-import { ConfirmModal, showModal } from "@decky/ui";
+import { showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
+import { CancelFirstConfirmModal } from "../../components/CancelFirstConfirmModal";
 import { DEFAULT_CAPABILITIES, type BonsaiCapabilities } from "../../data/bonsaiSettingsSchema";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../utils/deckyCall";
 import { patchPendingSessionSettingsSnapshot } from "../../utils/bonsaiSessionSurvival";
@@ -205,9 +207,9 @@ export function confirmDownload(notices: DownloadNotice[], opts: DownloadBoxOpti
     };
     b.onBeforeDeckyModal();
     const handle = showModal(
-      <ConfirmModal
-        strTitle={asking ? "Turn on internet downloads?" : (opts.title ?? "Download from the internet?")}
-        strDescription={
+      <CancelFirstConfirmModal
+        title={asking ? "Turn on internet downloads?" : (opts.title ?? "Download from the internet?")}
+        body={
           <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
             {notices.map((n) => (
               <div key={n.site} style={{ marginBottom: 8 }} data-bonsai-download-notice-line="1">
@@ -225,14 +227,12 @@ export function confirmDownload(notices: DownloadNotice[], opts: DownloadBoxOpti
             )}
           </div>
         }
-        strOKButtonText="Not now"
-        strMiddleButtonText={asking ? "Turn on and download" : (opts.actionLabel ?? "Download")}
-        strCancelButtonText="Cancel"
-        onOK={() => {
+        actionLabel={asking ? "Turn on and download" : (opts.actionLabel ?? "Download")}
+        onCancel={() => {
           b.onCompleteDeckyModalClose(() => handle.Close());
           finish(false);
         }}
-        onMiddleButton={() => {
+        onAction={() => {
           markSitesSeen(sites);
           b.onCompleteDeckyModalClose(() => handle.Close());
           if (asking) {
@@ -240,10 +240,6 @@ export function confirmDownload(notices: DownloadNotice[], opts: DownloadBoxOpti
           } else {
             finish(true);
           }
-        }}
-        onCancel={() => {
-          b.onCompleteDeckyModalClose(() => handle.Close());
-          finish(false);
         }}
       />
     );

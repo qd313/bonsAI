@@ -2,18 +2,20 @@
  * Title: The notice before every download, and the "Turn on internet downloads?" question
  *
  * Purpose: Pin confirmDownload: the kids lock downloads nothing and asks nothing; with downloads
- * off the notice asks to turn them on, "Not now"/Cancel start nothing, and yes turns the
+ * off the notice asks to turn them on, Cancel (and B) start nothing, and yes turns the
  * permission on (saved whole, and patched into the pending remount snapshot) before the download
- * starts; with downloads on the notice shows once per site and then gets out of the way. The
- * choice under Steam's opening ring (the ConfirmModal's OK button) is always the one that does not
- * download.
+ * starts; with downloads on the notice shows once per site and then gets out of the way. The box is
+ * drawn and read off the page: exactly Cancel and the download, Cancel first (where Steam puts the
+ * ring), so the first choice is always the one that does not download (plan 93: it used to show a
+ * third button).
  */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { DEFAULT_CAPABILITIES } from "../../data/bonsaiSettingsSchema";
+import { drawConfirmBox, type DrawnConfirmBox } from "../../test-harness/confirmBoxProbe";
 
 const hoisted = vi.hoisted(() => ({
-  modal: null as { props: Record<string, unknown> } | null,
+  modal: null as unknown,
   calls: [] as { method: string; args: unknown[] }[],
   toasts: [] as unknown[],
   patches: [] as unknown[],
@@ -24,7 +26,7 @@ vi.mock("@decky/ui", async () => {
   return {
     ...stubs,
     showModal: (content: unknown) => {
-      hoisted.modal = content as { props: Record<string, unknown> };
+      hoisted.modal = content;
       return { Close: () => {} };
     },
   };
@@ -64,7 +66,8 @@ function bridge(enabled: boolean, kidsLockActive = false) {
   return setCapabilities;
 }
 
-const press = (name: "onOK" | "onMiddleButton" | "onCancel") => (hoisted.modal!.props[name] as () => void)();
+/** Draw the box the notice handed to Steam. */
+const draw = (): DrawnConfirmBox => drawConfirmBox(hoisted.modal);
 const settle = () => new Promise((r) => setTimeout(r, 0));
 
 beforeEach(() => {
@@ -95,22 +98,21 @@ describe("confirmDownload", () => {
     expect(hoisted.toasts).toHaveLength(1);
   });
 
-  it("with downloads off, asks to turn them on, opening on the choice that does not download", async () => {
+  it("with downloads off, asks to turn them on with two buttons only, opening on the one that does not download", async () => {
     bridge(false);
     const answer = confirmDownload([OLLAMA, REGISTRY]);
-    const p = hoisted.modal!.props;
-    expect(p.strTitle).toBe("Turn on internet downloads?");
-    expect(p.strOKButtonText).toBe("Not now");
-    expect(p.strMiddleButtonText).toBe("Turn on and download");
-    press("onOK");
+    const box = draw();
+    expect(box.title).toBe("Turn on internet downloads?");
+    expect(box.labels).toEqual(["Cancel", "Turn on and download"]);
+    box.pressCancel();
     await expect(answer).resolves.toBe(false);
     expect(hoisted.calls).toHaveLength(0);
   });
 
-  it("with downloads off, Cancel (and B) start nothing either", async () => {
+  it("with downloads off, B starts nothing either", async () => {
     const setCaps = bridge(false);
     const answer = confirmDownload([OLLAMA]);
-    press("onCancel");
+    draw().pressB();
     await expect(answer).resolves.toBe(false);
     expect(setCaps).not.toHaveBeenCalled();
   });
@@ -118,7 +120,7 @@ describe("confirmDownload", () => {
   it("with downloads off, yes turns them on and saves before the download starts", async () => {
     const setCaps = bridge(false);
     const answer = confirmDownload([OLLAMA]);
-    press("onMiddleButton");
+    draw().pressAction();
     await expect(answer).resolves.toBe(true);
     const turnedOn = { ...DEFAULT_CAPABILITIES, microphone_access: true, internet_downloads: true };
     expect(setCaps).toHaveBeenCalledWith(turnedOn);
@@ -130,9 +132,10 @@ describe("confirmDownload", () => {
   it("with downloads on, shows once per site, then gets out of the way", async () => {
     bridge(true);
     const first = confirmDownload([REGISTRY]);
-    expect(hoisted.modal!.props.strTitle).toBe("Download from the internet?");
-    expect(hoisted.modal!.props.strOKButtonText).toBe("Not now");
-    press("onMiddleButton");
+    const notice = draw();
+    expect(notice.title).toBe("Download from the internet?");
+    expect(notice.labels).toEqual(["Cancel", "Download"]);
+    notice.pressAction();
     await expect(first).resolves.toBe(true);
     expect(hoisted.calls).toHaveLength(0);
 
@@ -143,14 +146,14 @@ describe("confirmDownload", () => {
     // A second site not seen yet brings the notice back for that download.
     const both = confirmDownload([REGISTRY, OLLAMA]);
     expect(hoisted.modal).not.toBeNull();
-    press("onOK");
+    draw().pressCancel();
     await expect(both).resolves.toBe(false);
   });
 
   it("a declined notice is not remembered as seen", async () => {
     bridge(true);
     const answer = confirmDownload([REGISTRY]);
-    press("onOK");
+    draw().pressCancel();
     await answer;
     await settle();
     hoisted.modal = null;
@@ -162,24 +165,24 @@ describe("confirmDownload", () => {
 describe("confirmDownload as a button's own box (always)", () => {
   const opts = { always: true, title: "Update Ollama and models?", actionLabel: "Start update", body: "Re-runs the installer." };
 
-  it("shows every time even when on and seen, opening on the choice that does not download", async () => {
+  it("shows every time even when on and seen, opening on Cancel", async () => {
     bridge(true);
     window.localStorage.setItem(DOWNLOAD_SITES_SEEN_STORAGE_KEY, JSON.stringify(["https://ollama.com"]));
     const answer = confirmDownload([OLLAMA], opts);
-    const p = hoisted.modal!.props;
-    expect(p.strTitle).toBe("Update Ollama and models?");
-    expect(p.strOKButtonText).toBe("Not now");
-    expect(p.strMiddleButtonText).toBe("Start update");
-    press("onOK");
+    const box = draw();
+    expect(box.title).toBe("Update Ollama and models?");
+    expect(box.labels).toEqual(["Cancel", "Start update"]);
+    box.pressCancel();
     await expect(answer).resolves.toBe(false);
   });
 
   it("while off it is the permission question, and yes turns downloads on", async () => {
     const setCaps = bridge(false);
     const answer = confirmDownload([OLLAMA], opts);
-    expect(hoisted.modal!.props.strTitle).toBe("Turn on internet downloads?");
-    expect(hoisted.modal!.props.strMiddleButtonText).toBe("Turn on and download");
-    press("onMiddleButton");
+    const box = draw();
+    expect(box.title).toBe("Turn on internet downloads?");
+    expect(box.labels).toEqual(["Cancel", "Turn on and download"]);
+    box.pressAction();
     await expect(answer).resolves.toBe(true);
     expect(setCaps).toHaveBeenCalled();
   });

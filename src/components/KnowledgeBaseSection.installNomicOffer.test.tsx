@@ -10,8 +10,8 @@
  *
  * Does not: render a live Decky modal. The test harness's `showModal` (fakeDeckyUi.tsx)
  * discards its argument, so this file locally overrides it to capture the element and
- * call its `onOK`/`onCancel` props directly — the same technique
- * `useThinkingNoticeGate.test.tsx` uses. The storage-picker modal is captured and driven
+ * call its `onAction`/`onCancel` props directly (the shared two-button box, Cancel first),
+ * and draws the offer once to read its buttons off the page. The storage-picker modal is captured and driven
  * the same way, since a fresh install has to go through it before a download starts.
  */
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
@@ -33,6 +33,7 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { KnowledgeBaseSection, resetKbDownloadInFlightForTests } from "./KnowledgeBaseSection";
+import { drawConfirmBox } from "../test-harness/confirmBoxProbe";
 import { getRpcCallLog, ragCorpusStatusFixture, resetFakeDeckyRpc, setRpcHandler } from "../test-harness/fakeDeckyRpc";
 
 const pullCalls = () => getRpcCallLog().filter((c) => c.method === "pull_ollama_models");
@@ -93,12 +94,11 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
     });
 
     await waitFor(() => {
-      expect(hoisted.modal?.props.strTitle).toBe("Also download the meaning-search model (about 270 MB)?");
+      expect(hoisted.modal?.props.title).toBe("Also download the meaning-search model (about 270 MB)?");
     });
-    // The offer is the download notice (plan72-F-DL): Steam opens a ConfirmModal with the ring on
-    // OK, so OK is the choice that downloads nothing and Download is the middle button.
-    expect(hoisted.modal?.props.strOKButtonText).toBe("Not now");
-    expect(hoisted.modal?.props.strMiddleButtonText).toBe("Download");
+    // The offer is the download notice (plan72-F-DL): two buttons only, Cancel first (where the ring
+    // opens, the choice that downloads nothing) and Download beside it (plan 93).
+    expect(drawConfirmBox(hoisted.modal).labels).toEqual(["Cancel", "Download"]);
   });
 
   it("does not ask when the model is already present", async () => {
@@ -111,7 +111,7 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
     });
 
     // Only the storage picker (already closed) should ever have reached showModal.
-    expect(hoisted.modal?.props.strTitle).not.toBe("Also download the meaning-search model (about 270 MB)?");
+    expect(hoisted.modal?.props.title).not.toBe("Also download the meaning-search model (about 270 MB)?");
   });
 
   it("does not ask when Ask is routed to another computer's own AI", async () => {
@@ -123,7 +123,7 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
       embed_model_available: false,
     });
 
-    expect(hoisted.modal?.props.strTitle).not.toBe("Also download the meaning-search model (about 270 MB)?");
+    expect(hoisted.modal?.props.title).not.toBe("Also download the meaning-search model (about 270 MB)?");
   });
 
   it("Download calls the pull once, reusing the existing pull_ollama_models call", async () => {
@@ -135,18 +135,18 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
       embed_model_available: false,
     });
     await waitFor(() => {
-      expect(hoisted.modal?.props.strTitle).toBe("Also download the meaning-search model (about 270 MB)?");
+      expect(hoisted.modal?.props.title).toBe("Also download the meaning-search model (about 270 MB)?");
     });
 
     await act(async () => {
-      (hoisted.modal!.props.onMiddleButton as () => void)();
+      (hoisted.modal!.props.onAction as () => void)();
     });
 
     await waitFor(() => expect(pullCalls()).toHaveLength(1));
     expect(pullCalls()[0].args).toEqual([["nomic-embed-text"]]);
   });
 
-  it("Not now calls nothing", async () => {
+  it("Cancel calls nothing", async () => {
     renderNotInstalled(true);
     await finishFreshInstall({
       installed: true,
@@ -155,7 +155,7 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
       embed_model_available: false,
     });
     await waitFor(() => {
-      expect(hoisted.modal?.props.strTitle).toBe("Also download the meaning-search model (about 270 MB)?");
+      expect(hoisted.modal?.props.title).toBe("Also download the meaning-search model (about 270 MB)?");
     });
 
     await act(async () => {
@@ -177,11 +177,11 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
       embed_model_available: false,
     });
     await waitFor(() => {
-      expect(hoisted.modal?.props.strTitle).toBe("Also download the meaning-search model (about 270 MB)?");
+      expect(hoisted.modal?.props.title).toBe("Also download the meaning-search model (about 270 MB)?");
     });
 
     await act(async () => {
-      (hoisted.modal!.props.onMiddleButton as () => void)();
+      (hoisted.modal!.props.onAction as () => void)();
     });
 
     // The pull's own catch handler is reused as-is; its button reverts to idle,
@@ -190,7 +190,7 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
     await screen.findByText("Pull nomic-embed-text · about 270 MB");
   });
 
-  it("Not now, where the ring opens, downloads nothing", async () => {
+  it("Cancel, where the ring opens, downloads nothing", async () => {
     renderNotInstalled(true);
     await finishFreshInstall({
       installed: true,
@@ -199,11 +199,11 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
       embed_model_available: false,
     });
     await waitFor(() => {
-      expect(hoisted.modal?.props.strTitle).toBe("Also download the meaning-search model (about 270 MB)?");
+      expect(hoisted.modal?.props.title).toBe("Also download the meaning-search model (about 270 MB)?");
     });
 
     await act(async () => {
-      (hoisted.modal!.props.onOK as () => void)();
+      (hoisted.modal!.props.onCancel as () => void)();
     });
 
     expect(pullCalls()).toHaveLength(0);
@@ -247,6 +247,6 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
     );
     await waitFor(() => expect(screen.queryByText("Downloading…")).toBeNull(), { timeout: 4000 });
 
-    expect(hoisted.modal?.props.strTitle).not.toBe("Also download the meaning-search model (about 270 MB)?");
+    expect(hoisted.modal?.props.title).not.toBe("Also download the meaning-search model (about 270 MB)?");
   });
 });

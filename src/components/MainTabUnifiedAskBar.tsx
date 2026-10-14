@@ -681,7 +681,9 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             <Button
               className="bonsai-askbar-target bonsai-ask-mode-trigger"
               {...({
-                onMoveLeft: () => focusAttachPaperclip(),
+                /* The paperclip rests during an answer but would still take the ring (measured on the Deck
+                   2026-10-14): decided by our own state, so the mode button is the strip's left end then. */
+                onMoveLeft: () => (isAsking ? true : focusAttachPaperclip()),
                 onMoveRight: () => focusMicOrStop(),
                 ...(askModeMenuOpen
                   ? {

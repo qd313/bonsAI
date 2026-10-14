@@ -493,12 +493,11 @@ describe("P84-ASK-02: the D-pad in and around the strip (docs/focus-graph.md, 'T
     }
   });
 
-  /* KNOWN BUG, found by plan 93 lane B10 when the stand-in began to tell the truth: a greyed Decky button
-     takes the ring on the Deck, and the mode button's Left hop focuses the resting paperclip, so a walk
-     Left during an answer ends on a greyed Attach button, where A does nothing. The two cases below state
-     what the strip should do; `it.fails` keeps them passing until the strip is fixed (its owner: take the
-     paperclip out of the Left hop while `isAsking`), then this turns red: change `it.fails` back to `it`. */
-  it.fails("while an answer is being written, Down from the box lands on Stop and no walk lands on the resting ASK", () => {
+  /* Plan 93 lane A1 (found by lane B10, measured on the Deck 2026-10-14, runs/plan93-D0-ASK-STRIP-walk.json):
+     a greyed Decky button still takes the ring, so while an answer is being written the paperclip is not a
+     stop. The strip's left end is then the mode button; the plugin's own state (isAsking) decides it, never
+     the button. */
+  it("while an answer is being written, Down from the box lands on Stop and no walk lands on the resting ASK", () => {
     renderMain(NO_GAME, { isAsking: true });
     putRingOn(questionBox());
     press("onMoveDown");
@@ -510,12 +509,39 @@ describe("P84-ASK-02: the D-pad in and around the strip (docs/focus-graph.md, 'T
     expect(walk("onMoveRight")).toEqual([MODE, STOP]);
   });
 
-  it.fails("while an answer is being written with words in the box, the walk ends on the X", () => {
+  it("while an answer is being written with words in the box, the walk ends on the X", () => {
     renderMain(NO_GAME, { ...WITH_WORDS, isAsking: true });
     putRingOn(questionBox());
     press("onMoveDown");
 
     expect(walk("onMoveRight")).toEqual([STOP, CLEAR]);
     expect(walk("onMoveLeft")).toEqual([CLEAR, STOP, MODE]);
+  });
+
+  it("Left from the mode button while an answer is being written holds still: never onto the greyed paperclip", () => {
+    renderMain(NO_GAME, { isAsking: true });
+    putRingOn(byLabel(MODE));
+
+    expect(press("onMoveLeft")).toBe(true);
+    expect(nameOf(ring())).toBe(MODE);
+    expect(isGreyedDeckyButton(ring())).toBe(false);
+  });
+
+  it("Left from the question box while an answer is being written holds still too, not onto the paperclip", () => {
+    renderMain(NO_GAME, { isAsking: true });
+    putRingOn(questionBox());
+
+    press("onMoveLeft");
+    expect(ring()).toBe(questionBox());
+  });
+
+  it("once the answer has finished, the paperclip is a stop again: Left from the mode button reaches it", () => {
+    const view = renderMain(NO_GAME, { isAsking: true });
+    view.rerender(<Harness context={NO_GAME} over={{ isAsking: false }} />);
+    putRingOn(byLabel(MODE));
+
+    press("onMoveLeft");
+    expect(nameOf(ring())).toBe(PAPERCLIP);
+    expect(isGreyedDeckyButton(ring())).toBe(false);
   });
 });

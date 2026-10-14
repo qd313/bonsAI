@@ -232,7 +232,8 @@ export function useMainTabAskBarFocus(
     () =>
       ({
         onMoveUp: () => focusFirstPresetChip(),
-        onMoveLeft: () => focusAttachPaperclip(),
+        /* The paperclip rests while an answer is written but still takes the ring on the Deck: hold still. */
+        onMoveLeft: () => (isAskInFlight ? true : focusAttachPaperclip()),
         onMoveDown: () => {
           /*
            * The box's Down since plan 84: the small Ask button sits in the strip right under the box,
@@ -277,9 +278,10 @@ export function useMainTabAskBarFocus(
     () =>
       ({
         onMoveRight: () => focusUnifiedTextField(),
-        onMoveDown: () => focusAttachPaperclip(),
+        /* Same as the box's Left: the resting paperclip is not a stop while an answer is written. */
+        onMoveDown: () => (isAskInFlight ? true : focusAttachPaperclip()),
       }) as Record<string, unknown>,
-    [focusAttachPaperclip, focusUnifiedTextField],
+    [focusAttachPaperclip, focusUnifiedTextField, isAskInFlight],
   );
 
   return {

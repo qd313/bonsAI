@@ -51,6 +51,11 @@
       "role": ""
     },
     {
+      "path": "src/components/KnowledgeBaseSection.tsx",
+      "lines": 1022,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabUnifiedAskBar.tsx",
       "lines": 1014,
       "role": ""
@@ -58,11 +63,6 @@
     {
       "path": "py_modules/backend/services/transparency_service.py",
       "lines": 1010,
-      "role": ""
-    },
-    {
-      "path": "src/components/KnowledgeBaseSection.tsx",
-      "lines": 1008,
       "role": ""
     },
     {

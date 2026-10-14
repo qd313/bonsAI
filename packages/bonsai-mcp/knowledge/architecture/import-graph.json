@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 970,
-  "edgeCount": 3258,
+  "fileCount": 972,
+  "edgeCount": 3263,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -562,6 +562,15 @@
       ],
       "importedBy": []
     },
+    "src/components/KnowledgeBaseSection.removeSwitch.test.tsx": {
+      "imports": [
+        "src/components/KnowledgeBaseSection.tsx",
+        "src/test-harness/confirmBoxProbe.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/KnowledgeBaseSection.returnFocus.test.tsx": {
       "imports": [
         "src/components/KnowledgeBaseSection.tsx",
@@ -602,6 +611,7 @@
         "src/styles/settingsGlassButton.ts",
         "src/utils/deckyCall.ts",
         "src/utils/kbDownloadMarker.ts",
+        "src/utils/kbRemovedSignal.ts",
         "src/utils/ollamaAddress.ts",
         "src/utils/rememberReturnWhileBoxOpens.ts",
         "src/utils/settingsPanelScroll.ts",
@@ -617,6 +627,7 @@
         "src/components/KnowledgeBaseSection.pullHint.test.tsx",
         "src/components/KnowledgeBaseSection.remountDownload.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
+        "src/components/KnowledgeBaseSection.removeSwitch.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
         "src/components/KnowledgeBaseSection.update.test.tsx",
@@ -8612,6 +8623,7 @@
       "importedBy": [
         "src/components/KnowledgeBaseSection.installNomicOffer.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
+        "src/components/KnowledgeBaseSection.removeSwitch.test.tsx",
         "src/components/OllamaWhereAiRunsSection.downloadsOffUpdate.test.tsx",
         "src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx",
         "src/components/PullModelsModal.tryOrder.test.tsx",
@@ -8704,6 +8716,7 @@
         "src/components/KnowledgeBaseSection.pullHint.test.tsx",
         "src/components/KnowledgeBaseSection.remountDownload.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
+        "src/components/KnowledgeBaseSection.removeSwitch.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
         "src/components/KnowledgeBaseSection.update.test.tsx",
@@ -8794,6 +8807,7 @@
         "src/components/KnowledgeBaseSection.pullHint.test.tsx",
         "src/components/KnowledgeBaseSection.remountDownload.test.tsx",
         "src/components/KnowledgeBaseSection.removeBox.test.tsx",
+        "src/components/KnowledgeBaseSection.removeSwitch.test.tsx",
         "src/components/KnowledgeBaseSection.returnFocus.test.tsx",
         "src/components/KnowledgeBaseSection.storagePicker.test.tsx",
         "src/components/MainTab.askStrip.deck.test.tsx",
@@ -10706,6 +10720,12 @@
         "src/utils/buildKbNotesBlockElement.tsx",
         "src/utils/kbCloseMatchLineAgrees.ts",
         "src/utils/kbNoteUsedByAnswer.test.ts"
+      ]
+    },
+    "src/utils/kbRemovedSignal.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/KnowledgeBaseSection.tsx"
       ]
     },
     "src/utils/keepIfUnchanged.test.ts": {

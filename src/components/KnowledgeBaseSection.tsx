@@ -83,6 +83,7 @@ import {
   resetKbDownloadMarkerForTests,
   setKbDownloadMarker,
 } from "../utils/kbDownloadMarker";
+import { addKbRemovedListener, announceKbRemoved, resetKbRemovedSignalForTests } from "../utils/kbRemovedSignal";
 import { confirmDownload } from "../features/downloads/downloadNotice";
 import { KNOWLEDGE_LIBRARY_NOTICES, MEANING_SEARCH_MODEL_NOTICE } from "../features/downloads/downloadSites";
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../styles/settingsGlassButton";
@@ -228,6 +229,7 @@ function kbNomicPullLikelyInFlight(): boolean {
 /** Test seam: forget any in-flight marker between tests. */
 export function resetKbDownloadInFlightForTests(): void {
   resetKbDownloadMarkerForTests();
+  resetKbRemovedSignalForTests();
   kbInstallNomicOfferPending = false;
   kbNomicPullStartedAtMs = null;
 }
@@ -387,6 +389,19 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
   useEffect(() => {
     void refreshStatus();
   }, [refreshStatus, ragCorpusVersion]);
+
+  /*
+   * The library was removed (here, or by the copy of this section that pressed Remove before the box closed
+   * and rebuilt the tab): the switch goes off, as the Remove box says and the back end has already saved.
+   * The setter and the status read are kept in a ref so the listener is added once per mount.
+   */
+  const whenRemovedRef = useRef<() => void>(() => {});
+  whenRemovedRef.current = () => {
+    setUseLocalKnowledgeBase(false);
+    setUpdateNote(null);
+    void refreshStatus();
+  };
+  useEffect(() => addKbRemovedListener(() => whenRemovedRef.current()), []);
 
   useEffect(() => {
     const onDownloadChange = (running: boolean) => {
@@ -729,9 +744,8 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
           onCompleteDeckyModalClose(() => handle.Close());
           void callDeckyWithTimeout<[], { ok?: boolean }>("remove_rag_corpus", [], DECKY_RPC_TIMEOUT_MS)
             .then(() => {
-              setUseLocalKnowledgeBase(false);
-              setUpdateNote(null);
-              void refreshStatus();
+              // This copy may be gone (the box closing rebuilt the tab): tell whichever copy is on screen.
+              announceKbRemoved();
               toaster.toast({ title: "Knowledge base removed", body: "Corpus deleted from disk.", duration: 3000 });
             })
             .catch((e) =>

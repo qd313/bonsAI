@@ -68,7 +68,7 @@ const NON_DEFAULT: Record<string, unknown> = {
   named_ollama_hosts: [{ label: "Living room PC", host: "192.168.1.20:11434" }],
   ollama_keep_alive: "30m",
   ollama_local_autostart: true,
-  ollama_local_on_deck: true,
+  ollama_local_on_deck: false,
   preset_chip_animation: "decode",
   preset_chip_fade_animation_enabled: false,
   preset_single_chip: true,

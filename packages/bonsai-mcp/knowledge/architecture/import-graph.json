@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 956,
-  "edgeCount": 3192,
+  "fileCount": 957,
+  "edgeCount": 3194,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -6939,6 +6939,13 @@
         "src/components/ContextChipLadder.tsx"
       ]
     },
+    "src/hooks/useDisclaimerAndLocalRuntimeGates.firstOpen.test.tsx": {
+      "imports": [
+        "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useDisclaimerAndLocalRuntimeGates.saveFirst.test.tsx": {
       "imports": [
         "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
@@ -6953,6 +6960,7 @@
       "importedBy": [
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/hooks/setupAndPullBoxWording.test.tsx",
+        "src/hooks/useDisclaimerAndLocalRuntimeGates.firstOpen.test.tsx",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.saveFirst.test.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/hooks/useThinkingNoticeGate.tsx",
@@ -8761,6 +8769,7 @@
         "src/features/voice/voiceStartGameFlag.test.tsx",
         "src/features/voice/voiceStartingFeedback.test.tsx",
         "src/hooks/setupAndPullBoxWording.test.tsx",
+        "src/hooks/useDisclaimerAndLocalRuntimeGates.firstOpen.test.tsx",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.saveFirst.test.tsx",
         "src/hooks/useLocalOllamaSetupFlow.inPlace.test.tsx",
         "src/hooks/useReplyFeedbackChips.remount.test.tsx",

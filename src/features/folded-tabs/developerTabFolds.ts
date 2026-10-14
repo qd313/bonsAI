@@ -106,7 +106,7 @@ export const DEVELOPER_ROW_LABELS = {
   hud: "On-screen debug HUD",
   warm: "Warm the Ask model at boot",
   steamInput: "Jump to Steam Input (running game)",
-  tabToOpenOn: "Tab to open on (D15)",
+  tabToOpenOn: "Tab to open on",
   appLog: "App activity logging to Desktop",
   autoSave: "Auto-save chat to Desktop notes",
   verbose: "Verbose Ask logging to Desktop notes",

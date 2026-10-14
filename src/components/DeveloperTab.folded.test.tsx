@@ -77,7 +77,7 @@ describe("the folded Developer tab, every section closed", () => {
     expect(lines(container).map((l) => [lineName(l), lineSummary(l)])).toEqual([
       ["Knowledge base (dev QA)", "Hybrid retrieval (meaning search) on"],
       ["Diagnostics", "On-screen debug HUD off · Warm the Ask model at boot off"],
-      ["Navigation", "Tab to open on (D15): B · Resume"],
+      ["Navigation", "Tab to open on: B · Resume"],
       ["Logging & exports", "App activity logging to Desktop: Off · 0 of 3 on"],
       ["Animations", "Preset suggestions: fade · Scramble animation off"],
       ["Integrations", ""],
@@ -97,7 +97,7 @@ describe("the folded Developer tab, every section closed", () => {
     );
     const by = Object.fromEntries(lines(container).map((l) => [lineName(l), lineSummary(l)]));
     expect(by["Diagnostics"]).toBe("On-screen debug HUD on · Warm the Ask model at boot off");
-    expect(by["Navigation"]).toBe("Tab to open on (D15): A · Main");
+    expect(by["Navigation"]).toBe("Tab to open on: A · Main");
     expect(by["Logging & exports"]).toBe("App activity logging to Desktop: Verbose · 1 of 3 on");
   });
 
@@ -105,7 +105,7 @@ describe("the folded Developer tab, every section closed", () => {
     const { container } = render(<DeveloperTab {...props()} />);
     expect(container.querySelector('[data-bonsai-fold-line="navigation"]')).toBeTruthy();
     act(() => toggleSection(DEVELOPER_FOLD_TAB, SECTION_IDS, "navigation"));
-    expect(screen.getByText("Tab to open on (D15)")).toBeTruthy();
+    expect(screen.getByText("Tab to open on")).toBeTruthy();
     expect(container.querySelectorAll(".bonsai-fold-body")).toHaveLength(1);
   });
 });
@@ -126,7 +126,8 @@ describe("the folded Developer tab, every section open: one line per setting, th
       const words = item.descs ? item.descs[item.sel ?? 0] : item.desc;
       if (!words) continue;
       /* The board's "Jump to Steam Input" row is a button with the label of its words; the field is "Steam Web API key". */
-      expect(helpOf(container, item.label), item.label).toBe(stripTags(words));
+      const label = item.label?.replace(/ \(D\d+\)/, ""); /* the drawing's decision number is not drawn on screen */
+      expect(helpOf(container, label), label).toBe(stripTags(words));
       checked += 1;
     }
     expect(checked).toBe(12);
@@ -148,7 +149,7 @@ describe("the folded Developer tab, every section open: one line per setting, th
 
   it("an option row's strip words change with the pick: Tab to open on, App activity logging, How letters settle", () => {
     const { container, rerender } = render(<DeveloperTab {...props({ streamScramble: { ...STREAM_SCRAMBLE_OFF, enabled: true } })} />);
-    const tab = "Tab to open on (D15)";
+    const tab = "Tab to open on";
     expect(helpOf(container, tab)).toBe("Reopen lands on the tab you left. Shipped default. Takes effect the next time you close and reopen the plugin.");
     rerender(<DeveloperTab {...props({ tabResumeMode: "resume_recent", streamScramble: { ...STREAM_SCRAMBLE_OFF, enabled: true } })} />);
     expect(helpOf(container, tab)).toBe("Reopen resumes the tab within 5 minutes, then falls back to Main. Takes effect the next time you close and reopen the plugin.");

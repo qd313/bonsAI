@@ -44,7 +44,8 @@ type BoardItem = { t: string; label: string; desc?: string; descs?: string[]; se
 function boardDeveloperItems(): BoardItem[] {
   const file = path.resolve(__dirname, "../../../docs/demos/mockup-board-2/src/42-tabs-data.js");
   const data = new Function(`${fs.readFileSync(file, "utf8")}; return TAB_DATA;`)() as Record<string, { items: BoardItem[] }>;
-  return data.Developer!.items;
+  /* The drawing still carries the decision number in one label; the tab does not show it. */
+  return data.Developer!.items.map((i) => ({ ...i, label: i.label?.replace(/ \(D\d+\)/, "") }));
 }
 
 /** The drawing's own tag-stripping (44-tabs.js, `stripTags`): line breaks become spaces, tags go. */
@@ -76,7 +77,7 @@ describe("a Developer section's summary line, as the drawing writes it", () => {
     expect(developerSectionSummaries(DRAWN)).toEqual({
       kb: "Hybrid retrieval (meaning search) on",
       diagnostics: "On-screen debug HUD off · Warm the Ask model at boot off",
-      navigation: "Tab to open on (D15): B · Resume",
+      navigation: "Tab to open on: B · Resume",
       logging: "App activity logging to Desktop: Off · 0 of 3 on",
       animations: "Preset suggestions: fade · Scramble animation off",
       integrations: "",
@@ -96,7 +97,7 @@ describe("a Developer section's summary line, as the drawing writes it", () => {
     });
     expect(s.kb).toBe("Hybrid retrieval (meaning search) off");
     expect(s.diagnostics).toBe("On-screen debug HUD on · Warm the Ask model at boot off");
-    expect(s.navigation).toBe("Tab to open on (D15): C · 5 min");
+    expect(s.navigation).toBe("Tab to open on: C · 5 min");
     expect(s.logging).toBe("App activity logging to Desktop: Verbose · 2 of 3 on");
     expect(s.animations).toBe("Preset suggestions: decode · Scramble animation off");
   });

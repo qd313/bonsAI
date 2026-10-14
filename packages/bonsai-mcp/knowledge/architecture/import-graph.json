@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 949,
-  "edgeCount": 3145,
+  "fileCount": 950,
+  "edgeCount": 3150,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -5790,6 +5790,16 @@
       ],
       "importedBy": []
     },
+    "src/features/search-tab/SearchTab.ringReturn.test.tsx": {
+      "imports": [
+        "src/features/search-tab/SearchTab.tsx",
+        "src/features/search-tab/searchTabStore.ts",
+        "src/features/search-tab/searchTabTestKit.tsx",
+        "src/features/search-tab/useSearchNav.ts",
+        "src/test-harness/steamRing.tsx"
+      ],
+      "importedBy": []
+    },
     "src/features/search-tab/SearchTab.test.tsx": {
       "imports": [
         "src/features/search-tab/SearchTab.tsx",
@@ -5822,6 +5832,7 @@
         "src/features/plugin-shell/tabs/useSearchTabPayload.tsx",
         "src/features/search-tab/SearchTab.back.test.tsx",
         "src/features/search-tab/SearchTab.jump.test.tsx",
+        "src/features/search-tab/SearchTab.ringReturn.test.tsx",
         "src/features/search-tab/SearchTab.test.tsx",
         "src/features/search-tab/SearchTab.walk.test.tsx"
       ]
@@ -5919,6 +5930,7 @@
         "src/components/MainTabChatTranscript.searchJump.test.tsx",
         "src/features/search-tab/SearchTab.back.test.tsx",
         "src/features/search-tab/SearchTab.jump.test.tsx",
+        "src/features/search-tab/SearchTab.ringReturn.test.tsx",
         "src/features/search-tab/SearchTab.test.tsx",
         "src/features/search-tab/SearchTab.tsx",
         "src/features/search-tab/SearchTab.walk.test.tsx",
@@ -5943,6 +5955,7 @@
       "importedBy": [
         "src/features/search-tab/SearchTab.back.test.tsx",
         "src/features/search-tab/SearchTab.jump.test.tsx",
+        "src/features/search-tab/SearchTab.ringReturn.test.tsx",
         "src/features/search-tab/SearchTab.test.tsx",
         "src/features/search-tab/SearchTab.walk.test.tsx"
       ]
@@ -6016,6 +6029,7 @@
         "src/features/search-tab/SearchNotesList.tsx",
         "src/features/search-tab/SearchResults.tsx",
         "src/features/search-tab/SearchStop.tsx",
+        "src/features/search-tab/SearchTab.ringReturn.test.tsx",
         "src/features/search-tab/SearchTab.tsx"
       ]
     },
@@ -8788,6 +8802,7 @@
         "src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx",
         "src/features/search-tab/SearchTab.back.test.tsx",
         "src/features/search-tab/SearchTab.jump.test.tsx",
+        "src/features/search-tab/SearchTab.ringReturn.test.tsx",
         "src/features/search-tab/SearchTab.test.tsx",
         "src/features/search-tab/SearchTab.walk.test.tsx",
         "src/features/search-tab/searchTabTestKit.tsx",

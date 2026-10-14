@@ -242,6 +242,7 @@
     "src/features/preset-carousel/sessionRagComposer.test.ts",
     "src/features/search-tab/SearchTab.back.test.tsx",
     "src/features/search-tab/SearchTab.jump.test.tsx",
+    "src/features/search-tab/SearchTab.ringReturn.test.tsx",
     "src/features/search-tab/SearchTab.test.tsx",
     "src/features/search-tab/SearchTab.walk.test.tsx",
     "src/features/search-tab/searchApi.test.ts",

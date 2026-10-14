@@ -12,17 +12,33 @@
  *
  * Solves: A text field is a container of its own for Steam, so a plain `focus()` from it onto a button (or
  * back) moves the page's focus while Steam's ring stays behind (AGENTS.md, "The Steam Deck focus graph").
- * Going through the nav node everywhere removes that whole class of bug and needs no page search.
+ * Going through the nav node everywhere removes that whole class of bug and needs no page search. A stop drawn in
+ * the same moment as the move (new matches arriving as the ring comes back from a closed note) may not have its
+ * nav node yet: the move waits a few frames for it and never falls back to a plain `focus()`, which would leave
+ * the ring on nothing (plan 93, lane B11; seen once on the Deck 2026-10-12, plan 92 block 3).
  *
  * Does not: Draw anything, or decide what a press on a stop does; the controls supply that.
  */
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import { takeHolderFocus } from "../../utils/chatTranscriptNavHelpers";
 import { takeNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
 import { searchMove, type SearchDirection, type SearchStopAt } from "./searchNav";
 
-type Cell = { el: HTMLElement | null; nav: NavRefHolder };
+/** How many frames a move waits for a stop that was drawn in the same moment to get its nav node (about 130 ms). */
+export const NAV_WAIT_FRAMES = 8;
+
+/** The next frame, or a short timer where the page has no frames; returns how to cancel it. */
+function nextFrame(run: () => void): () => void {
+  if (typeof window.requestAnimationFrame === "function") {
+    const id = window.requestAnimationFrame(run);
+    return () => window.cancelAnimationFrame(id);
+  }
+  const id = window.setTimeout(run, 16);
+  return () => window.clearTimeout(id);
+}
+
+type Cell = { el: HTMLElement | null; nav: NavRefHolder; setEl?: (el: HTMLElement | null) => void };
 
 export type SearchStopProps = {
   ref: (el: HTMLElement | null) => void;
@@ -56,7 +72,9 @@ const centerX = (el: HTMLElement): number | null => {
  * `enter(from, to)`: the place a row is entered at from another, by name, or null for the nearest in x.
  * Out: `stop(row, col)` for each control, and `focusStop` for landing the ring from code.
  * Can go wrong: a stop that is not drawn yet is skipped, not waited for; a caller that moves the ring
- * right after a state change does it in a layout effect, once the control exists.
+ * right after a state change does it in a layout effect, once the control exists. A stop that is drawn but
+ * whose nav node Steam has not filled yet is waited for (NAV_WAIT_FRAMES); one that never gets it is left
+ * alone and the ring stays where it was.
  */
 export function useSearchNav(
   rowOrder: readonly string[],
@@ -84,15 +102,42 @@ export function useSearchNav(
     return out;
   }, []);
 
-  const hop = useCallback((target: Cell): boolean => {
-    if (takeHolderFocus(target.nav)) return true;
-    if (target.el === null || typeof target.el.focus !== "function") return false;
-    target.el.focus();
-    return true;
+  /* The wait for one stop's nav node; a newer move, or the tab going away, ends it. */
+  const waiting = useRef<(() => void) | null>(null);
+  const stopWaiting = useCallback(() => {
+    waiting.current?.();
+    waiting.current = null;
   }, []);
+  useEffect(() => stopWaiting, [stopWaiting]);
+
+  /**
+   * Steam's transfer onto the stop. Every stop here is a Focusable of its own, so the ring crosses a
+   * container on every hop and a plain `focus()` would move the page's focus while Steam's ring stayed
+   * behind and then cleared; there is no hop in this tab that stays inside one container, so there is no plain
+   * focus. A stop drawn in this same moment may not have its nav node yet: wait for it a few frames. If it never
+   * comes, leave the ring where it is (a dead press is better than a lost ring). True only when the ring moved
+   * now; a move that is still waiting reports false.
+   */
+  const hop = useCallback(
+    (target: Cell): boolean => {
+      stopWaiting();
+      if (takeHolderFocus(target.nav)) return true;
+      if (target.el === null) return false;
+      let left = NAV_WAIT_FRAMES;
+      const look = () => {
+        waiting.current = null;
+        if (target.el === null || takeHolderFocus(target.nav)) return;
+        if (--left > 0) waiting.current = nextFrame(look);
+      };
+      waiting.current = nextFrame(look);
+      return false;
+    },
+    [stopWaiting],
+  );
 
   const press = useCallback(
     (row: string, col: number, direction: SearchDirection): boolean => {
+      stopWaiting();
       const rows = live();
       const at: SearchStopAt = { row: rows.findIndex((r) => r.key === row), col };
       if (at.row < 0) return false;
@@ -111,16 +156,20 @@ export function useSearchNav(
       if (move === "leave") return takeNavFocus("tab-bar");
       return hop(rows[move.row]!.cells[move.col]!) || true;
     },
-    [live, hop],
+    [live, hop, stopWaiting],
   );
 
   const stop = useCallback(
     (row: string, col: number): SearchStopProps => {
       const c = cell(row, col);
       return {
-        ref: (el) => {
+        /* One function for the life of the cell, so it runs only when the control is drawn or goes away. When the
+           control goes away its nav node goes with it: a later move onto a stop drawn in its place must wait for
+           that stop's own node, not transfer onto the old one (plan 93, lane B11). */
+        ref: (c.setEl ??= (el) => {
           c.el = el;
-        },
+          if (el === null) c.nav.current = null;
+        }),
         navRef: c.nav,
         onMoveUp: () => press(row, col, "up"),
         onMoveDown: () => press(row, col, "down"),

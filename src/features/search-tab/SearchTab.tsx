@@ -20,7 +20,7 @@
  * Does not: Find or fetch anything itself (searchModel.ts, useSearchIndex.ts, useGameNotes.ts), or move the
  * ring (useSearchNav.ts).
  */
-import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
 
 import type { IntentPackSearchIndex } from "../../utils/intentPackSearch";
@@ -95,6 +95,15 @@ export const SearchTab: React.FC<SearchTabProps> = ({ active, isAsking, intentPa
   const index = useSearchIndex({ active, isAsking });
   const pending = useRef<PendingRing>(null);
   const rootEl = useRef<HTMLElement | null>(null);
+  /* The arrival looks that are still waiting; the tab going away ends them (a look after it is gone read a document that was torn down). */
+  const arrivalTimers = useRef<number[]>([]);
+  useEffect(
+    () => () => {
+      arrivalTimers.current.forEach((id) => window.clearTimeout(id));
+      arrivalTimers.current = [];
+    },
+    [],
+  );
   /* Arriving by Y (the ring goes to the find box) or by the Back line (to the match that was pressed). */
   const arrival = useRef<PendingRing>(null);
   useLayoutEffect(() => {
@@ -242,10 +251,12 @@ export const SearchTab: React.FC<SearchTabProps> = ({ active, isAsking, intentPa
     arrival.current = null;
     clearSearchArrival();
     ARRIVAL_CHECKS_MS.forEach((ms) =>
-      window.setTimeout(() => {
-        const owner = uiGamepadFocusElement();
-        if (rootEl.current?.isConnected && !(owner && rootEl.current.contains(owner))) again();
-      }, ms),
+      arrivalTimers.current.push(
+        window.setTimeout(() => {
+          const owner = uiGamepadFocusElement();
+          if (rootEl.current?.isConnected && !(owner && rootEl.current.contains(owner))) again();
+        }, ms),
+      ),
     );
   }
 

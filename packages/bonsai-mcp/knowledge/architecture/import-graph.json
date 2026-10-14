@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 962,
-  "edgeCount": 3236,
+  "fileCount": 963,
+  "edgeCount": 3241,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -5961,8 +5961,19 @@
         "src/features/search-tab/SearchTab.jump.test.tsx",
         "src/features/search-tab/SearchTab.ringReturn.test.tsx",
         "src/features/search-tab/SearchTab.test.tsx",
+        "src/features/search-tab/SearchTab.unmount.test.tsx",
         "src/features/search-tab/SearchTab.walk.test.tsx"
       ]
+    },
+    "src/features/search-tab/SearchTab.unmount.test.tsx": {
+      "imports": [
+        "src/features/search-tab/SearchTab.tsx",
+        "src/features/search-tab/searchJumpStore.ts",
+        "src/features/search-tab/searchTabStore.ts",
+        "src/features/search-tab/searchTabTestKit.tsx",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
     },
     "src/features/search-tab/SearchTab.walk.test.tsx": {
       "imports": [
@@ -6010,6 +6021,7 @@
         "src/features/search-tab/SearchTab.back.test.tsx",
         "src/features/search-tab/SearchTab.jump.test.tsx",
         "src/features/search-tab/SearchTab.tsx",
+        "src/features/search-tab/SearchTab.unmount.test.tsx",
         "src/features/search-tab/useSearchJump.ts",
         "src/features/search-tab/useSearchShortcut.test.tsx",
         "src/features/search-tab/useSearchShortcut.ts",
@@ -6060,6 +6072,7 @@
         "src/features/search-tab/SearchTab.ringReturn.test.tsx",
         "src/features/search-tab/SearchTab.test.tsx",
         "src/features/search-tab/SearchTab.tsx",
+        "src/features/search-tab/SearchTab.unmount.test.tsx",
         "src/features/search-tab/SearchTab.walk.test.tsx",
         "src/features/search-tab/searchJumpStore.ts"
       ]
@@ -6084,6 +6097,7 @@
         "src/features/search-tab/SearchTab.jump.test.tsx",
         "src/features/search-tab/SearchTab.ringReturn.test.tsx",
         "src/features/search-tab/SearchTab.test.tsx",
+        "src/features/search-tab/SearchTab.unmount.test.tsx",
         "src/features/search-tab/SearchTab.walk.test.tsx"
       ]
     },
@@ -11595,6 +11609,7 @@
         "src/features/plugin-shell/useHiddenTabHeaderTrap.ts",
         "src/features/preset-carousel/presetRowFocusNav.tsx",
         "src/features/search-tab/SearchTab.tsx",
+        "src/features/search-tab/SearchTab.unmount.test.tsx",
         "src/features/search-tab/settleRing.ts",
         "src/features/search-tab/useSearchShortcut.ts",
         "src/features/user-notes/NoteOfferCard.test.tsx",

@@ -70,6 +70,27 @@ describe('"Enable Tier 2 before pulling?" (Pull selected)', () => {
     expect(text.toLowerCase()).not.toContain("reply");
     expect(text).not.toContain("This reply used");
   });
+
+  it("is at most 40 words and still says why Tier 2 and what the licences may limit (plan 93 lane B9)", async () => {
+    const hook = renderHook(() =>
+      usePullModelSubmitSelected({
+        selectedTags: new Set(["gemma3:4b"]),
+        modelPolicyTier: "open_source_only",
+        mergedCatalog: [ENTRY],
+        onApplyTier2Policy: () => {},
+        completeNestedModalClose: (close) => close(),
+        onPullAccepted: () => {},
+        setPullBusy: () => {},
+        openWeightTierConfirmedRef: { current: new Set() },
+      })
+    ).result.current;
+    await act(() => hook.onPullSelected());
+    const text = textOfBox();
+    expect(text.split(/\s+/).filter(Boolean).length).toBeLessThanOrEqual(40);
+    expect(text).toContain("will not use them for Ask");
+    expect(text).toContain("may limit use or sharing");
+    expect(text).not.toContain("Apache 2.0");
+  });
 });
 
 describe('"Enable Tier 2 for this model?" (one model ticked)', () => {
@@ -87,5 +108,21 @@ describe('"Enable Tier 2 for this model?" (one model ticked)', () => {
     const text = textOfBox();
     expect(text).toContain("gemma3:4b");
     expect(text.toLowerCase()).not.toContain("reply");
+  });
+
+  it("is at most 40 words and still says why Tier 2 and what the licence may limit (plan 93 lane B9)", () => {
+    const hook = renderHook(() =>
+      usePullModelTier2Confirm({
+        modelPolicyTier: "open_source_only",
+        onApplyTier2Policy: () => {},
+        openWeightTierConfirmedRef: { current: new Set() },
+      })
+    ).result.current;
+    hook.confirmOpenWeightTierIfNeeded(ENTRY, () => {});
+    const text = textOfBox();
+    expect(text.split(/\s+/).filter(Boolean).length).toBeLessThanOrEqual(40);
+    expect(text).toContain("will not use it for Ask");
+    expect(text).toContain("may limit use or sharing");
+    expect(text).toContain("Ollama → AI models → Licence");
   });
 });

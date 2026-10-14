@@ -26,7 +26,6 @@ import { toaster } from "@decky/api";
 import { CancelFirstConfirmModal } from "../components/CancelFirstConfirmModal";
 import { formatSizeGb, type PullModelEntry } from "../data/pullModelCatalog";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
-import { TIER2_PULL_NOTE } from "./usePullModelTier2Confirm";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { loadSavedIp } from "../features/plugin-shell/pluginStorage";
 import { findUnavailableRegistryTags } from "../utils/pullModelFilters";
@@ -159,13 +158,10 @@ export function usePullModelSubmitSelected(a: UsePullModelSubmitSelectedArgs): P
             title="Enable Tier 2 before pulling?"
             body={
               <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
-                <div style={{ marginBottom: 8 }}>
-                  Your queue includes open-weight model(s):{" "}
-                  <span style={{ color: "#9ce7ff" }}>{tagList}</span>. Tier 1 only lets Ask use models with an
-                  open-source licence (Apache 2.0 or MIT).
-                </div>
-                <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
-                  Enable <strong>Tier 2 (open-weight)</strong> before pulling so these models can be used. {TIER2_PULL_NOTE}
+                <div>
+                  Your queue has open-weight models: <span style={{ color: "#9ce7ff" }}>{tagList}</span>.{" "}
+                  <strong>Tier 1 (open-source licences only)</strong> will not use them for Ask. Enable{" "}
+                  <strong>Tier 2</strong> to allow them. Their licences may limit use or sharing.
                 </div>
               </div>
             }

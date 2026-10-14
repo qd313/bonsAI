@@ -26,14 +26,6 @@ import type { PullModelEntry } from "../data/pullModelCatalog";
 import { CancelFirstConfirmModal } from "../components/CancelFirstConfirmModal";
 import { textPx } from "../styles/sections/textPx";
 
-/**
- * What the "Enable Tier 2" boxes say about open-weight models, in plain words about the model(s)
- * about to be pulled. Both boxes used to borrow the Ask-answer footnote ("This reply used an 'open
- * model'..."), which talks about a reply that does not exist when a model is only being pulled.
- */
-export const TIER2_PULL_NOTE =
-  "Open-weight models publish their weights for local use, but their training code, data or licence can differ from Tier 1's open-source rules, including limits on use or sharing.";
-
 export type UsePullModelTier2ConfirmArgs = {
   modelPolicyTier: ModelPolicyTierId;
   onApplyTier2Policy?: () => void | Promise<void>;
@@ -93,13 +85,11 @@ export function usePullModelTier2Confirm(a: UsePullModelTier2ConfirmArgs): PullM
           body={
             <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
               <div style={{ marginBottom: 8 }}>
-                <span style={{ color: "#9ce7ff" }}>{entry.tag}</span> is an open-weight model. With{" "}
-                <strong>Tier 1 (open-source only)</strong>, bonsAI will not route Ask to it after download.
+                <span style={{ color: "#9ce7ff" }}>{entry.tag}</span> is open-weight, so{" "}
+                <strong>Tier 1 (open-source only)</strong> will not use it for Ask. Enable <strong>Tier 2</strong> to allow
+                it. Its licence may limit use or sharing.
               </div>
-              <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
-                Enable <strong>Tier 2 (open-weight)</strong> so this tag is eligible for Ask fallbacks. {TIER2_PULL_NOTE}
-              </div>
-              <div>You can change this later under Ollama → AI models, in the Licence list beside the models.</div>
+              <div style={{ color: "#c5d4e3" }}>Change this later in Ollama → AI models → Licence.</div>
             </div>
           }
           /*

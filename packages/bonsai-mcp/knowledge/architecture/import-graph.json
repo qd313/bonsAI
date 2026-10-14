@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 969,
-  "edgeCount": 3257,
+  "edgeCount": 3256,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -7464,7 +7464,6 @@
         "src/features/downloads/downloadNotice.tsx",
         "src/features/downloads/downloadSites.ts",
         "src/features/plugin-shell/pluginStorage.ts",
-        "src/hooks/usePullModelTier2Confirm.tsx",
         "src/styles/sections/textPx.ts",
         "src/utils/deckyCall.ts",
         "src/utils/pullModelFilters.ts"
@@ -7508,7 +7507,6 @@
       ],
       "importedBy": [
         "src/components/PullModelsModal.tsx",
-        "src/hooks/usePullModelSubmitSelected.tsx",
         "src/hooks/usePullModelTier2Confirm.safeFirst.test.tsx",
         "src/hooks/usePullModelTier2Wording.test.tsx"
       ]

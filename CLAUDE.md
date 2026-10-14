@@ -1,7 +1,6 @@
 # CLAUDE.md
 
-Claude Code's own orientation. Facts only — if something here disagrees with the code, the code is
-right and this file is a bug.
+Claude Code's own orientation. Facts only; if this disagrees with the code, the code is right.
 
 Everything about the project itself lives in [AGENTS.md](AGENTS.md), the one guide for people and
 any AI tool, and the traps already hit are in
@@ -30,15 +29,14 @@ raises — an internal error lets the action through rather than blocking it:
 
 ## Agents
 
-`.claude/agents/` holds this repo's Claude agents. Two are five-line wrappers around a tool-neutral
-persona document, so the guidance reads the same whether a human opens the doc, Claude runs the
-agent, or another tool calls the matching MCP prompt:
+`.claude/agents/` holds this repo's Claude agents. Three are five-line wrappers around a tool-neutral
+persona document, so the guidance reads the same for a person, for Claude, or for another tool:
 
 | Agent | Wrapper | Full body |
 |---|---|---|
 | `foss-advocate` | `.claude/agents/foss-advocate.md` | [docs/agents/foss-advocate.md](docs/agents/foss-advocate.md) |
 | `security-auditor` | `.claude/agents/security-auditor.md` | [docs/agents/security-auditor.md](docs/agents/security-auditor.md) |
-| `advisor` | `.claude/agents/advisor.md` (Fable 5.1 high, read-only) | [docs/agents/advisor.md](docs/agents/advisor.md) |
+| `advisor` | `.claude/agents/advisor.md` | [docs/agents/advisor.md](docs/agents/advisor.md) |
 
 The helpers in AGENTS.md, 'Which model does which work' (`bookkeeper`, the `*-lane` agents,
 `deck-driver`) are files there too; front matter sets model and effort.
@@ -47,4 +45,4 @@ The helpers in AGENTS.md, 'Which model does which work' (`bookkeeper`, the `*-la
 
 Commands are in [AGENTS.md § Commands](AGENTS.md#commands); there are no Claude-only slash
 commands. The desktop app keeps this PC awake during a session; the VS Code extension does not, so
-there, start `python scripts/keep_awake.py --hours 8` in the background at the start of a long one.
+there, start `python scripts/keep_awake.py --hours 8` at the start of a long one.

@@ -352,7 +352,7 @@ tier until someone measured on the device — the measurement fixed them, not a 
 | Documents and bookkeeping | | The `bookkeeper` helper, Sonnet medium; every status it changes names its evidence | |
 | Read-only lookups with a checkable answer | | Haiku 4.5 or Sonnet 5.5 low; whoever asked confirms with a search | |
 | Deck testing | Opus writes the rows and the expected results | The `deck-driver` helper (Sonnet medium) runs rows already written; never Haiku | Opus reads the failures |
-| A second opinion for the one running a big session (on trial since plan 93, 2026-10-13) | | The `advisor` helper, Fable 5.1 high (extra-high only for a five- or six-star question or a Deck failure that resisted two fixes): one bounded question at each consult point, one recommendation back, read-only; persona in [docs/agents/advisor.md](docs/agents/advisor.md); every consult logged in the plan | |
+| A second opinion for whoever runs a big session (trial) | | The `advisor` helper, Fable 5.1 high, read-only: one bounded question per consult point, one recommendation back, each logged ([persona](docs/agents/advisor.md)) | |
 
 Rules that go with it:
 
@@ -367,7 +367,7 @@ Rules that go with it:
 - **Haiku high on trial:** mechanical one-star fixes only. Log each run and any miss in plan 33 § 4d; a
   miss that needed Sonnet to finish counts against it. Not for judgment fixes, features or bookkeeping:
   plan 83 found it falls short there.
-- **Helper lanes:** at most fifteen for feature or bug work (the maintainer's call 2026-10-11, D128; was ten from 2026-09-29, seven before that),
+- **Helper lanes:** at most fifteen for feature or bug work (D128, 2026-10-11),
   at most three for a refactor, because refactor lanes overlap on files. Each brief carries the check on what its copy is based on, which
   files it owns, one change per commit, and the gates to run. **Lanes hand back code, tests and a
   short report only** — they never edit the roadmap, the testing documents or the changelog. Do not
@@ -375,8 +375,6 @@ Rules that go with it:
   percent of the five-hour window (the maintainer's call 2026-10-11, D128). **The whole procedure for a bug wave** (briefs,
   landing, the Deck in blocks, paperwork, running unattended) is written down in
   [docs/agents/bug-wave-runbook.md](docs/agents/bug-wave-runbook.md); land with `scripts/land_lane.sh`.
-- **Haiku 4.5 is on trial** for read-only lookups whose answer can be checked, and for summarising
-  logs. Not for editing documents, anything on the device, or any code.
 
 ## The two tool servers
 

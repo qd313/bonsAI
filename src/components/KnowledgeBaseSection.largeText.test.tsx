@@ -53,6 +53,8 @@ function expectWholeLabel(words: string) {
   expect(style.whiteSpace, `${words} may wrap`).not.toBe("nowrap");
   expect(style.textOverflow, `${words} is not cut with an ellipsis`).not.toBe("ellipsis");
   expect(parseFloat(text.style.minWidth), `${words} may shrink`).toBe(0);
+  expect(text.style.overflowWrap, `${words} never breaks inside a word`).not.toMatch(/anywhere|break-word/);
+  expect(text.style.wordBreak).not.toBe("break-all");
   const lineHeight = Number(text.style.lineHeight);
   expect(lineHeight).toBeGreaterThan(0);
   const font = makeFontSizeReader("")(text);
@@ -67,6 +69,20 @@ describe("knowledge base buttons at Large", () => {
     await screen.findByText("Update knowledge base");
     expectWholeLabel("Update knowledge base");
     expectWholeLabel("Remove");
+  });
+
+  it("Remove stays one whole word in the 93-wide box the Deck measured at Large (not Remov / e)", async () => {
+    renderAtLarge(true);
+    const text = await screen.findByText("Remove");
+    const button = text.closest("button") as HTMLButtonElement;
+    // Marked one word: it cannot wrap at all, so it cannot split.
+    expect(text.style.whiteSpace).toBe("nowrap");
+    // And the word, the 16 icon and the 6 gap fit between the button's border and side padding. The word is
+    // estimated generously (0.65 of the font size a letter, bold), since jsdom cannot measure it.
+    const font = makeFontSizeReader("")(text);
+    const [, padH] = button.style.padding.split(" ").map((p) => parseFloat(p));
+    const room = 93 - 2 - 2 * padH! - 16 - 6;
+    expect(room, `the word needs about ${(6 * 0.65 * font).toFixed(1)} of ${room}`).toBeGreaterThanOrEqual(6 * 0.65 * font);
   });
 
   it("Download knowledge base (not installed yet) shows every line of its words", async () => {

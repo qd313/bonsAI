@@ -1018,12 +1018,16 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
                     minHeight: KB_ACTION_ROW_MIN_HEIGHT,
                     height: KB_ACTION_ROW_MIN_HEIGHT,
                     boxSizing: "border-box",
+                    /* Side padding 6, not 12: the word, its icon and gap must fit the 93-wide box at Large. */
+                    padding: "4px 6px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                   }}
                 >
-                  <KnowledgeBaseButtonLabel icon={<TrashBinIcon size={16} />}>Remove</KnowledgeBaseButtonLabel>
+                  <KnowledgeBaseButtonLabel icon={<TrashBinIcon size={16} />} oneWord>
+                    Remove
+                  </KnowledgeBaseButtonLabel>
                 </Button>
               </Focusable>
             </div>

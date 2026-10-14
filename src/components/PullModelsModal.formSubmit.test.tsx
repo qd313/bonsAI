@@ -67,14 +67,4 @@ describe("PullModelsModal buttons do not submit an enclosing form", () => {
     expect(onSubmit).not.toHaveBeenCalled();
     expect(vision.getAttribute("aria-pressed")).toBe("true");
   });
-
-  it("pressing the refresh button does not submit the form", () => {
-    const onSubmit = vi.fn((e: FormEvent<HTMLFormElement>) => e.preventDefault());
-    const { container } = renderInForm(onSubmit);
-
-    const refreshBtn = container.querySelector('[aria-label="Refresh model catalog"]') as HTMLButtonElement;
-    fireEvent.click(refreshBtn);
-
-    expect(onSubmit).not.toHaveBeenCalled();
-  });
 });

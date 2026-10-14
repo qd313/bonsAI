@@ -138,8 +138,6 @@ export function buildGamepadFocusRingStylesheet(): string {
         .bonsai-scope button.bonsai-pullmodels-slot:focus-visible,
         .bonsai-scope button.bonsai-pullmodels-delete-btn.gpfocus,
         .bonsai-scope button.bonsai-pullmodels-delete-btn:focus-visible,
-        .bonsai-scope button.bonsai-pullmodels-refresh-btn.gpfocus,
-        .bonsai-scope button.bonsai-pullmodels-refresh-btn:focus-visible,
         .bonsai-scope button.bonsai-pullmodels-filtercol-row.gpfocus,
         .bonsai-scope button.bonsai-pullmodels-filtercol-row:focus-visible,
         .bonsai-scope button.bonsai-pullmodels-filtercol-clear.gpfocus,
@@ -269,17 +267,6 @@ export function buildPullModelsStylesheet(): string {
           display: inline-flex;
           align-items: center;
           gap: 6px;
-        }
-        /* The counts line's own height came from this button, not its text (plan 62, § 3e #6) --
-           the header row's 11px/1.35 text sits in about a 15px line box, and this button's old
-           24px min-height forced the whole row taller than the words in it ever needed. Shrunk
-           to match the text's own line box instead of an arbitrary icon-button size. */
-        .bonsai-scope .bonsai-pullmodels-refresh-btn {
-          min-width: 20px !important;
-          min-height: 15px !important;
-          padding: 0 4px !important;
-          font-size: ${textPx(9)} !important;
-          font-weight: 700 !important;
         }
         .bonsai-scope .bonsai-pullmodels-custom-tag-row {
           display: flex;

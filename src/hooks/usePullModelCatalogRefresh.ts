@@ -6,14 +6,14 @@
  * once on mount, plus `focusAfterRedraw`, which a few other pieces of the screen use to move the
  * ring onto something their own state change is about to draw.
  *
- * Used for: PullModelsModal.tsx's own mount effect, its manual refresh button, and every other
+ * Used for: PullModelsModal.tsx's own mount effect (the manual Refresh button is gone, plan 93), and every other
  * hook/handler on the screen that needs to move the ring once a state change has been drawn.
  *
  * Solves: keeps the two RPCs, run in parallel, and their shared busy/error handling in one place,
  * since they always run together and always fall back to the offline catalog the same way on
  * failure.
  *
- * Does not: decide when to run — the caller's own "Refresh" button and its mount effect are both
+ * Does not: decide when to run — the caller's mount effect and the remove-a-model path are both
  * just calls to the returned function.
  *
  * Caution: Lifted out of PullModelsModal.tsx with the order of its own hooks unchanged, because
@@ -40,7 +40,6 @@ export type UsePullModelCatalogRefreshArgs = {
   setSizeSource: Dispatch<SetStateAction<"live" | "offline">>;
   setLiveSizeGbByTag: Dispatch<SetStateAction<Record<string, number>>>;
   setLoadingMeta: Dispatch<SetStateAction<boolean>>;
-  setRefreshingMeta: Dispatch<SetStateAction<boolean>>;
 };
 
 export type PullModelCatalogRefresh = {
@@ -51,8 +50,7 @@ export type PullModelCatalogRefresh = {
 
 /** Own the after-redraw focus move and the installed-tags/catalog-metadata refresh. */
 export function usePullModelCatalogRefresh(a: UsePullModelCatalogRefreshArgs): PullModelCatalogRefresh {
-  const { refreshCatalog, setInstalledTags, setSizeSource, setLiveSizeGbByTag, setLoadingMeta, setRefreshingMeta } =
-    a;
+  const { refreshCatalog, setInstalledTags, setSizeSource, setLiveSizeGbByTag, setLoadingMeta } = a;
 
   /**
    * Several places here (opening/closing the custom-tag field, and once the old Filters panel)
@@ -81,8 +79,7 @@ export function usePullModelCatalogRefresh(a: UsePullModelCatalogRefreshArgs): P
 
   const refreshInstalledAndMeta = useCallback(
     async (forceCatalog = false) => {
-      if (forceCatalog) setRefreshingMeta(true);
-      else setLoadingMeta(true);
+      setLoadingMeta(true);
       try {
         const overlayRes = await refreshCatalog(forceCatalog);
         const catalog = mergePullModelCatalog(PULL_MODEL_CATALOG, overlayRes ?? undefined);
@@ -133,7 +130,6 @@ export function usePullModelCatalogRefresh(a: UsePullModelCatalogRefreshArgs): P
         });
       } finally {
         setLoadingMeta(false);
-        setRefreshingMeta(false);
       }
     },
     [refreshCatalog]

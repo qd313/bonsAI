@@ -6,8 +6,8 @@
  * Clear, then Licence, Good for with a count beside each choice, Show, then the chips); a tick changes
  * the list at once and the count beside it matches the rows drawn; Clear leaves the licence; Right and
  * Left cross between the column and the list to the nearest stop within one and a half rows, on the
- * Deck's own measured map (plan 92's second night), never the greyed row; Advanced, the header's Refresh
- * and Clear come in the same order going Down and Up (Refresh skipped while greyed); Down past the bottom is left to Steam, which carries it to Done; the picks survive the
+ * Deck's own measured map (plan 92's second night), never the greyed row; Advanced and Clear
+ * come in the same order going Down and Up (the header line's old Refresh button is gone, plan 93); Down past the bottom is left to Steam, which carries it to Done; the picks survive the
  * box closing (Done included) and opening again; and a bounded walk of the whole box never visits a
  * stop twice and never leaves the ring out of sight.
  *
@@ -174,7 +174,6 @@ const matchCount = (c: HTMLElement) =>
 const listRows = (c: HTMLElement) => list(c).querySelectorAll(".bonsai-pullmodels-table-row--data").length;
 const ticked = (c: HTMLElement, label: string) => rowButton(c, label).getAttribute("aria-pressed") === "true";
 const clearButton = (c: HTMLElement) => column(c).querySelector<HTMLButtonElement>(".bonsai-pullmodels-filtercol-clear")!;
-const refreshButton = (c: HTMLElement) => c.querySelector<HTMLButtonElement>(".bonsai-pullmodels-refresh-btn")!;
 const advanced = (c: HTMLElement) => c.querySelector<HTMLButtonElement>(".bonsai-models-hub-advanced-link")!;
 const firstRowStar = (c: HTMLElement) => list(c).querySelector<HTMLButtonElement>(".bonsai-pullmodels-slot")!;
 const stars = (c: HTMLElement) => Array.from(list(c).querySelectorAll<HTMLButtonElement>(".bonsai-pullmodels-slot"));
@@ -357,32 +356,36 @@ describe("the D-pad between the column and the list", () => {
 
 describe("the top and the bottom of the box (inside the AI models screen)", () => {
   const openHub = (over: Partial<React.ComponentProps<typeof OllamaModelsHubModal>> = {}) => loaded(renderHub(over));
-  it("Down and Up are mirror images at the top: Advanced, Refresh, Clear and back, each by Steam's transfer", async () => {
+  it("Down and Up are mirror images at the top: Advanced and Clear, each by Steam's transfer, with no Refresh between", async () => {
     const { container } = await openHub();
-    // Up first: on the Deck, Up from Clear skipped Refresh and went straight to Advanced.
     putSteamRingOn(clearButton(container));
     expect(press("Up")).toBe(true);
-    expect(nameOf(steamRingHolder()), "Up from Clear").toBe(nameOf(refreshButton(container)));
-    expect(press("Up")).toBe(true);
-    expect(nameOf(steamRingHolder()), "Up from Refresh").toBe(nameOf(advanced(container)));
+    expect(nameOf(steamRingHolder()), "Up from Clear").toBe(nameOf(advanced(container)));
     expect(press("Down")).toBe(true);
-    expect(nameOf(steamRingHolder()), "Down from Advanced").toBe(nameOf(refreshButton(container)));
-    expect(press("Down")).toBe(true);
-    expect(nameOf(steamRingHolder()), "Down from Refresh").toBe(nameOf(clearButton(container)));
+    expect(nameOf(steamRingHolder()), "Down from Advanced").toBe(nameOf(clearButton(container)));
   });
 
-  it("while the catalog is still loading (Refresh greyed) Refresh is no stop: Down from Advanced lands on Clear, Up from Clear on Advanced", async () => {
+  it("the header line has no Refresh button at all, and the box still asks Ollama for its catalog when it opens (plan 93)", async () => {
+    let asked = 0;
+    setRpcHandler("test_ollama_connection", () => {
+      asked++;
+      return { reachable: true, version: "0.5.0", models: FEW_MODELS };
+    });
+    const { container } = await openHub();
+    expect(container.querySelector(".bonsai-pullmodels-refresh-btn")).toBeNull();
+    expect(container.querySelector('[aria-label="Refresh model catalog"]')).toBeNull();
+    expect(container.textContent).not.toContain("↻");
+    expect(asked, "the catalog is read once on open").toBeGreaterThan(0);
+  });
+
+  it("while the catalog is still loading, Down from Advanced lands on Clear and Up from Clear on Advanced", async () => {
     setRpcHandler("test_ollama_connection", () => new Promise(() => {})); // the Deck's Ollama has not answered yet
     const { container } = renderHub();
-    expect(refreshButton(container).classList.contains("Disabled")).toBe(true);
     putSteamRingOn(advanced(container));
     expect(press("Down")).toBe(true);
     expect(nameOf(steamRingHolder()), "Down from Advanced").toBe(nameOf(clearButton(container)));
     expect(press("Up")).toBe(true);
     expect(nameOf(steamRingHolder()), "Up from Clear").toBe(nameOf(advanced(container)));
-    // Left from Advanced never lands on the greyed Refresh either (the beside rule skips it by the box's own state).
-    press("Left");
-    expect(steamRingHolder(), "Left from Advanced").not.toBe(refreshButton(container));
   });
 
   it("Up from the list's first row reaches the Advanced link by Steam's transfer, as before", async () => {
@@ -490,7 +493,7 @@ describe("a walk of the whole box, Steam scrolling whatever takes the ring", () 
     };
     const inSight = (el: HTMLElement, where: string) => {
       const r = el.getBoundingClientRect();
-      if (el === advanced(c) || el === refreshButton(c) || el === doneButton(c)) return; // title row, header line, footer
+      if (el === advanced(c) || el === doneButton(c)) return; // title row, footer
       if (col.contains(el)) {
         expect(r.top, `${where}: top in the column`).toBeGreaterThanOrEqual(COL_TOP);
         expect(r.bottom, `${where}: bottom in the column`).toBeLessThanOrEqual(COL_TOP + COL_HEIGHT);
@@ -518,7 +521,7 @@ describe("a walk of the whole box, Steam scrolling whatever takes the ring", () 
     };
 
     const isDone = (el: HTMLElement) => el === doneButton(c);
-    // From where the box opens (Advanced), Down walks the header's Refresh, the column, then Steam's own Done.
+    // From where the box opens (Advanced), Down walks the column, then Steam's own Done.
     putSteamRingOn(advanced(c));
     const down = walk("Down", isDone);
     // Every stop the column draws, the greyed licence row aside, then Steam's own move on to Done. The greyed row
@@ -528,7 +531,7 @@ describe("a walk of the whole box, Steam scrolling whatever takes the ring", () 
     const drawnButtons = Array.from(col.querySelectorAll<HTMLButtonElement>("button")).filter((b) => b !== greyedRow);
     const drawn = drawnButtons.map(nameOf);
     expect(down, "Down stopped on the greyed licence row").not.toContain(nameOf(greyedRow));
-    const top = [nameOf(advanced(c)), nameOf(refreshButton(c))];
+    const top = [nameOf(advanced(c))];
     expect(down).toEqual([...top, ...drawn, "Done"]);
     expect(col.scrollTop).toBeGreaterThan(0); // the walk really scrolled the column
 
@@ -536,7 +539,7 @@ describe("a walk of the whole box, Steam scrolling whatever takes the ring", () 
     steamScrolls(steamRingHolder());
     const up = walk("Up", (el) => el === advanced(c));
     expect(up, "Up stopped on the greyed licence row").not.toContain(nameOf(greyedRow));
-    expect(up, "Up is Down reversed, Refresh included").toEqual([...top, ...drawn].reverse());
+    expect(up, "Up is Down reversed").toEqual([...top, ...drawn].reverse());
 
     // Right from the stop level with the first row (the column back at its top after the walk up).
     expect(col.scrollTop).toBe(0);
@@ -628,9 +631,8 @@ function layOutDeckMap(c: HTMLElement) {
   for (const chip of Array.from(c.querySelectorAll<HTMLElement>(".bonsai-pullmodels-tryorder-row button"))) {
     chip.getBoundingClientRect = () => box(183.3, 24);
   }
-  // The title row: Advanced on the right (cy 139) and the header line's Refresh (cy 169.7), 30.7 px apart.
+  // The title row: Advanced on the right (cy 139).
   advanced(c).getBoundingClientRect = () => box(128, 22);
-  refreshButton(c).getBoundingClientRect = () => box(162, 15.3);
   /** The nearest edge into a box, as Steam scrolls a ringed element into view. */
   const nearest = (scroller: HTMLElement, el: HTMLElement, top: number, bottom: number) => {
     const r = el.getBoundingClientRect();
@@ -706,16 +708,6 @@ describe("Right and Left go to what sits beside the ring (the Deck's own map, pl
     expect(list(c).scrollTop).toBe(0);
     expect(press("Left")).toBe(true);
     expect(steamRingHolder()).toBe(origin);
-  });
-
-  it("the title row: Right from Refresh lands on Advanced (31 px up) and Left from Advanced comes back, no dead press", async () => {
-    const { c, ringOn } = await openMap();
-    ringOn(refreshButton(c));
-    expect(press("Right")).toBe(true);
-    expect(steamRingHolder(), "Right from Refresh").toBe(advanced(c));
-    expect(gap(advanced(c), refreshButton(c))).toBeCloseTo(30.7, 0);
-    expect(press("Left")).toBe(true);
-    expect(steamRingHolder(), "Left from Advanced").toBe(refreshButton(c));
   });
 
   it("Install the starter set: the third star while the last row is out of sight, the last once the list has scrolled to it, and back", async () => {

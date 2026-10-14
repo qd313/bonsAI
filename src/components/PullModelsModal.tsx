@@ -40,8 +40,7 @@
  *     │        Done / Pull selected (N) · X GB          Cancel        │
  *     └────────────────────────────────────────────────────────────────┘
  *
- *     Advanced <-> Refresh (↻) <-> Clear, the same both ways (Refresh skipped while greyed; downFromAboveRef)
- *     Refresh -> Right -> Advanced, Advanced -> Left -> Refresh, when within reach (titleLinkRef, leftFromAboveRef)
+ *     Advanced <-> Clear, the same both ways (downFromAboveRef; the header line's Refresh button was removed, plan 93)
  *     Up from the switch, or from the first row (no switch) -> Advanced (onMoveUpFromTop)
  *     Down past the column's last stop, or past the list's last row -> Steam carries it to Done
  *
@@ -121,7 +120,7 @@ import {
 import { PullModelLicenceSlot } from "./PullModelLicenceSlot";
 import { PullModelsFiltersColumn } from "./PullModelsFiltersColumn";
 import { focusAndReveal, handRingTo, usePullModelsSessionFilters } from "./pullModelsBoxMemory";
-import { isBeside, usePullModelsBeside, type FiltersColumnApi } from "./pullModelsBeside";
+import { usePullModelsBeside, type FiltersColumnApi } from "./pullModelsBeside";
 import { PullModelsTableHeader } from "./PullModelsTableHeader";
 import { usePullModelTryNav } from "./PullModelsTryOrder";
 import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
@@ -196,8 +195,6 @@ export function PullModelsModal(props: PullModelsModalProps) {
     onFooterStateChange,
     onMoveUpFromTop,
     downFromAboveRef,
-    titleLinkRef,
-    leftFromAboveRef,
   } = props;
 
   const { mergedCatalog, catalogSource, refreshCatalog } = usePullModelCatalog();
@@ -209,7 +206,6 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const [sizeSource, setSizeSource] = useState<"live" | "offline">("offline");
   const [liveSizeGbByTag, setLiveSizeGbByTag] = useState<Record<string, number>>({});
   const [loadingMeta, setLoadingMeta] = useState(true);
-  const [refreshingMeta, setRefreshingMeta] = useState(false);
   const [pullBusy, setPullBusy] = useState(false);
   const [deleteBusyTag, setDeleteBusyTag] = useState<string | null>(null);
   const [pinnedAskTag, setPinnedAskTag] = useState<string | null>(null);
@@ -235,7 +231,6 @@ export function PullModelsModal(props: PullModelsModalProps) {
     setSizeSource,
     setLiveSizeGbByTag,
     setLoadingMeta,
-    setRefreshingMeta,
   });
 
   // Lifted into usePullModelOpenBookkeeping. It must stay at exactly this point in the hook
@@ -265,28 +260,19 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const leaveTop = useCallback((): boolean => onMoveUpFromTop?.() ?? false, [onMoveUpFromTop]);
 
   /*
-   * Advanced, the header's Refresh (↻) and the column's Clear, in that order both ways (plan 92's second round: on
-   * the Deck Down went Advanced, Refresh, Clear but Up from Clear skipped Refresh). Each hop is Steam's transfer
-   * onto the other part's nav node. A greyed Refresh (the catalog loading) is no stop: on the Deck a greyed button
-   * still takes the ring, so it is skipped here by the box's own state, never by asking the element.
+   * Advanced and the column's Clear, the same both ways (the header line's Refresh button between them is gone,
+   * plan 93). Each hop is Steam's transfer onto the other part's nav node.
    */
-  const refreshNavRef = useRef<NavRefHolder["current"]>(null);
-  const toRefresh = (): boolean => !(refreshingMeta || loadingMeta) && handRingTo(refreshNavRef);
   const toClear = (): boolean => {
     if (!handRingTo(columnNavRef)) return false;
     columnApi.current?.focusStop(null);
     return true;
   };
-  /** Refresh's own element: the title row measures it (Right to Advanced and Left back, when within reach). */
-  const refreshBtnRef = useRef<HTMLElement | null>(null);
-  const besideTitle = (a: HTMLElement | null, b: HTMLElement | null) => isBeside(a, b, listRef.current);
   useEffect(() => {
-    if (leftFromAboveRef) leftFromAboveRef.current = (from) => besideTitle(from, refreshBtnRef.current) && toRefresh();
     if (!downFromAboveRef) return;
-    downFromAboveRef.current = () => toRefresh() || toClear();
+    downFromAboveRef.current = toClear;
     return () => {
       downFromAboveRef.current = null;
-      if (leftFromAboveRef) leftFromAboveRef.current = null;
     };
   });
 
@@ -727,38 +713,15 @@ export function PullModelsModal(props: PullModelsModalProps) {
 
   const panelBody = (
         <BonsaiModalScope shellRef={shellRef} className="bonsai-pullmodels-shell bonsai-prose">
-          <Focusable className="bonsai-pullmodels-header" {...({ navRef: refreshNavRef } as Record<string, unknown>)}>
+          <div className="bonsai-pullmodels-header">
             <span>Installed {installedCatalogCount} · {formatSizeGb(installedTotalGb)}</span>
             <span>Queue {selectedTags.size} · {formatSizeGb(selectedTotalGb)}</span>
             <span className="bonsai-pullmodels-size-source">
               {catalogSource === "live" || catalogSource === "cached" ? "Live catalog" : "Offline catalog"}
               {" · "}
               {sizeSource === "live" ? "Live sizes" : "Offline sizes"}
-              <Button
-                ref={(el: HTMLElement | null) => {
-                  refreshBtnRef.current = el;
-                }}
-                className="bonsai-pullmodels-refresh-btn"
-                disabled={refreshingMeta || loadingMeta}
-                onClick={(ev) => {
-                  ev.stopPropagation();
-                  ev.preventDefault();
-                  void refreshInstalledAndMeta(true);
-                }}
-                aria-label="Refresh model catalog"
-                {...({
-                  onMoveUp: leaveTop,
-                  onMoveDown: toClear,
-                  onMoveRight: () => besideTitle(refreshBtnRef.current, titleLinkRef?.current ?? null) && leaveTop(),
-                  onOKButton: okButtonRuns(() => {
-                    if (!refreshingMeta && !loadingMeta) void refreshInstalledAndMeta(true);
-                  }),
-                } as unknown as Record<string, unknown>)}
-              >
-                ↻
-              </Button>
             </span>
-          </Focusable>
+          </div>
 
           {/* One Focusable laid out as a row: Steam moves only along a container's flow, so the two sides are
               its children side by side, and a Down that neither side takes leaves the pair for the dialog's
@@ -783,7 +746,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
               focusAfterRedraw={focusAfterRedraw}
               okButtonRuns={okButtonRuns}
               toList={enterList}
-              upFromTop={() => toRefresh() || leaveTop()}
+              upFromTop={leaveTop}
             />
             <div className="bonsai-pullmodels-listside">
               {tryNav.bar({ okButtonRuns, onMoveUp: leaveTop, onMoveDown: moveDownPastSwitch, nested: { before: onBeforeNestedDeckyModal, complete: completeNestedModalClose } })}

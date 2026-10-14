@@ -9,7 +9,7 @@
  * changes at once.
  *
  *     [ 7 models match            Clear ]   <- the first stop
- *     LICENCE   (•) Open source only            Up from Clear -> Refresh (↻), then Advanced
+ *     LICENCE   (•) Open source only            Up from Clear -> Advanced
  *               ( ) Also try open-weight models
  *               ( ) Any installed model         (greyed until unlocked, and skipped, Left included)
  *     GOOD FOR  [ ] Speed               5       Right from any stop -> the nearest stop on the right
@@ -82,7 +82,7 @@ export type PullModelsFiltersColumnProps = {
   okButtonRuns: OkRuns;
   /** Right from a stop: the nearest stop on the right, by Steam's transfer (pullModelsBeside.ts). In: the stop's element and key. */
   toList: (origin: HTMLElement | null, key: string) => boolean;
-  /** Up from the first stop: the Refresh button above, else the title row's Advanced link. False leaves the press to Steam. */
+  /** Up from the first stop: the title row's Advanced link. False leaves the press to Steam. */
   upFromTop: () => boolean;
 };
 

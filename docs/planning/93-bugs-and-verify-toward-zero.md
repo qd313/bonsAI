@@ -74,11 +74,13 @@ weekly usage meter has reset (§ 3):**
    answers, the note search and the microphone in one go.
 3. **Refresh in the AI models screen is removed.**
 4. **Terse mode:** the maintainer was in Speed mode when answers looked long. Terse stops being a switch and becomes
-   the fourth stop of the Reply style slider (Terse · Speed · Strategy · Expert), available whatever else is set.
-   *The session owner's reading, to confirm:* the separate Terse switch goes; a saved "Terse on" maps to the Terse
-   stop; on the Terse stop every answer, first turn and follow-up, is asked for three short lines and a menu; the
-   three-lines rule is measured against the Deck's narrow panel, where three model lines wrap to nine or more
-   (question 7b).
+   the fourth stop of the Reply style slider on the Ollama tab, which today has three stops for how long an answer
+   is (Caveman · Balanced · Detailed): it reads **Terse · Caveman · Balanced · Detailed**. Terse is not an Ask mode:
+   it applies whichever Ask mode is picked (Speed, Strategy or Expert), where today it applied to Speed only.
+   *Corrected by the maintainer 2026-10-13 after a first wrong reading that put Terse on the Speed / Strategy / Expert
+   list.* The session owner's reading, still to confirm: the separate Terse switch goes; a saved "Terse on" maps to
+   the Terse stop; the three-lines-and-a-menu rule is measured against the Deck's narrow panel, where three model
+   lines wrap to nine or more (question 7b).
 5. **The disclaimers and the Permissions tab are cut, and the new wording goes to the maintainer before it lands.**
    The lane writes the before-and-after into a page the maintainer can read from a phone; the landing waits for the
    maintainer's yes.
@@ -161,7 +163,7 @@ Deck before any lane is cut; "your call" means nothing happens until the maintai
 |---|---|
 | Two documents disagree about whether a Decky button passes D-pad moves on (★ focus) | M7: a page-side logger on one Decky Button's move handler, one press. The bookkeeper fixes whichever document is wrong. |
 | The default text is not shown in the text area (★ ask) | M12: a screenshot of the empty question box in each Ask mode. The lookup found the cause: only Strategy mode has a hint ("Describe the level, boss, or puzzle you're stuck on"); Speed and Expert have none, on both drawing paths. The maintainer's call (§ 2a, call 9): Speed and Expert get the same treatment; a Sonnet medium lane (B14) writes a short hint per mode in Strategy's style, on both drawing paths, and lists the wording in its report. |
-| Terse mode does not seem to shorten answers (★★ reply) | M11 first (five Speed questions with Terse on: model lines and screen lines counted). The lookup found the wiring sound: with Terse on, every Speed answer is asked for at most three lines and a menu; nothing counts or trims lines; plan 83 measured 26 of 30 answers within three lines. The maintainer was in Speed mode (§ 2a), so the likely reading is that three model lines wrap to nine or more on the Deck's 300-point-wide panel. **The maintainer's call:** Terse becomes the fourth stop of the Reply style slider (Terse · Speed · Strategy · Expert) and the switch goes. A Sonnet high lane (B13, batch 1 now): the slider's fourth stop, the saved switch mapped onto it, the prompt block applied on that stop for first turns and follow-ups, and a tighter cap measured against the panel (question 7b: a word cap, say 40 words, instead of "three lines"). |
+| Terse mode does not seem to shorten answers (★★ reply) | M11 first (five Speed questions with Terse on: model lines and screen lines counted). The lookup found the wiring sound: with Terse on, every Speed answer is asked for at most three lines and a menu; nothing counts or trims lines; plan 83 measured 26 of 30 answers within three lines. The maintainer was in Speed mode (§ 2a), so the likely reading is that three model lines wrap to nine or more on the Deck's 300-point-wide panel. **The maintainer's call:** Terse becomes the first stop of the Reply style slider, the one that sets how long an answer is (Terse · Caveman · Balanced · Detailed), and the switch goes; it applies in every Ask mode, not Speed only. A Sonnet high lane (B13, batch 1 now): the slider's fourth stop, the saved switch mapped onto it, the prompt block applied on that stop in every Ask mode for first turns and follow-ups (the Strategy branch menus included), and a tighter cap measured against the panel (question 7b: a word cap, say 40 words, instead of "three lines"). |
 | In the chats menu, Down skips Rename chat and Save to Desktop note (★ focus) | The code says the menu is a two-column grid: Down walks the left column, Right reaches the right one. Working as designed unless § 15 says otherwise. |
 
 ### Your call (nothing happens until § 15 is answered)
@@ -379,8 +381,9 @@ hardest focus piece), and the finish-flicker lane if the measurement sends it to
 5. **gemma4e2b-it-qat and Tier 2.** **Answered 2026-10-13:** the maintainer believes the model is hidden from the
    list when "Open source only" is picked, and may be wrong; the Deck checks it tonight (M13).
 6. **Refresh in the AI models screen.** **Answered 2026-10-13:** removed.
-7. **Terse mode.** **Answered 2026-10-13:** the maintainer was in Speed mode; Terse becomes the fourth stop of the
-   Reply style slider and is available in every mode. **7b, still open:** the cap itself. "Three lines" of model text
+7. **Terse mode.** **Answered 2026-10-13, corrected the same evening:** the maintainer was in Speed mode; Terse
+   becomes the fourth stop of the Reply style slider that sets an answer's length (Terse · Caveman · Balanced ·
+   Detailed), not a fourth Ask mode, and it applies in every Ask mode. **7b, still open:** the cap itself. "Three lines" of model text
    is nine or more lines on the Deck's narrow panel. A word cap instead (about 40 words, roughly three short
    sentences)? *Meanwhile:* the lane keeps "three lines" and adds "no sentence over 15 words", and M11 measures how
    many screen lines that makes.

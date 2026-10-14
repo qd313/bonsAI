@@ -2319,8 +2319,10 @@ the same list; its § 15 marks which questions are still open.
    and the voice engine's two speech models (tiny.en and base.en). qwen2.5vl is no longer the first download.
 3. **Refresh in the AI models screen is removed.**
 4. **Terse mode:** the maintainer was in Speed mode when answers looked long. Terse becomes the fourth stop of the Reply
-   style slider (Terse · Speed · Strategy · Expert), available in every mode; the separate switch goes. Still open: the
-   cap itself (three model lines wrap to nine or more on the Deck's panel; a word cap is proposed).
+   style slider that sets how long an answer is, so it reads Terse · Caveman · Balanced · Detailed; it is not a separate
+   Ask mode and applies in every Ask mode (Speed, Strategy, Expert); the separate switch goes. (A first reading that
+   put it on the Speed / Strategy / Expert list was corrected by the maintainer the same evening.) Still open: the cap
+   itself (three model lines wrap to nine or more on the Deck's panel; a word cap is proposed).
 5. **The disclaimers and the Permissions tab are cut, and the new wording is run by the maintainer before it lands.**
 6. **Gemma and the open-source filter:** the maintainer believes the model is hidden when "Open source only" is picked
    and may be wrong; the Deck checks it first.

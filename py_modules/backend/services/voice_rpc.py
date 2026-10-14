@@ -33,7 +33,11 @@ from backend.services.async_background_job import (
 )
 from backend.services.capabilities import capability_enabled, downloads_off_refusal
 from backend.services.transparency_service import build_voice_transcribe_snapshot
-from backend.services.voice_model_download_service import install_in_progress_refusal
+from backend.services.voice_model_download_service import (
+    VALID_VOICE_STT_MODELS,
+    install_in_progress_refusal,
+    model_file_complete,
+)
 from backend.services.voice_transcription_service import (
     VoiceTranscriptionSession,
     download_voice_model,
@@ -66,7 +70,12 @@ async def get_voice_engine_status(self, PLUGIN_ROOT: str):
     model_id = sanitize_voice_stt_model(settings.get("voice_stt_model"))
     ready = engine_readiness(PLUGIN_ROOT, decky.DECKY_PLUGIN_SETTINGS_DIR, model_id)
     install = dict(self._voice_install_state)
-    return {**ready, "install": install}
+    # Both speech models, not only the chosen one: Browse models' "Install the starter set" button stays
+    # while either is missing.
+    speech_models_ready = {
+        m: model_file_complete(PLUGIN_ROOT, decky.DECKY_PLUGIN_SETTINGS_DIR, m) for m in sorted(VALID_VOICE_STT_MODELS)
+    }
+    return {**ready, "install": install, "speech_models_ready": speech_models_ready}
 
 
 async def install_voice_engine(self, PLUGIN_ROOT: str, model_id: str = ""):

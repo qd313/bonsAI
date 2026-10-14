@@ -42,8 +42,7 @@ class BackendHelperTests(unittest.TestCase):
     def test_setup_recommended_pull_tags_tier1_essentials(self):
         tags = setup_recommended_pull_tags("tier1_essentials")
         self.assertEqual(tags, list(TIER1_ESSENTIALS_PULL_TAGS))
-        self.assertEqual(len(tags), 1)
-        self.assertEqual(tags[0], "gemma4:e2b-it-qat")
+        self.assertEqual(tags, ["gemma4:e2b-it-qat", "nomic-embed-text"])
 
     def test_setup_recommended_pull_tags_tier2_multimodal(self):
         tags = setup_recommended_pull_tags("tier2_multimodal")

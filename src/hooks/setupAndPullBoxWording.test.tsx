@@ -56,8 +56,11 @@ beforeEach(() => {
 describe("wording of the install and pull boxes", () => {
   it("the starter models box does not call the default model FOSS", () => {
     const { container } = render(<div>{starterSetBoxBody(true)}</div>);
-    expect(container.textContent).toContain("one small model");
+    expect(container.textContent).toContain("answer model");
     expect(container.textContent).not.toMatch(/FOSS/);
+    // Cancel is how a person declines (the "Not now" button is gone); the sentence says what it does.
+    expect(container.textContent).toContain("Cancel or B installs Ollama only, with no models");
+    expect(container.textContent).not.toContain("Not now");
   });
 
   it("the Enable Tier 2 pull box explains Tier 1 in plain words", async () => {

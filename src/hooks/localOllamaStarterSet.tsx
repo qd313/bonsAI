@@ -1,8 +1,9 @@
 /**
  * Title: The starter models: what they are, what the box says, and how they start
  *
- * Purpose: The starter models are one small model (gemma4:e2b-it-qat) that can chat, read screenshots
- * and help in Strategy mode. This file holds the one place that says what the starter set is, the
+ * Purpose: The starter set is three kinds of download: the answer model (gemma4:e2b-it-qat, which can
+ * chat, read screenshots and help in Strategy mode), the note-search model (nomic-embed-text) and the two
+ * speech models the microphone reads from (tiny.en and base.en). This file holds the one place that says what the starter set is, the
  * words of the box that asks before downloading it, the call that starts the download, and the
  * one-press "ask first, then start" used by the Browse models screen.
  *
@@ -13,19 +14,19 @@
  * one the old "Install options..." button started), so they share this instead of each copying it.
  *
  * Does not: install Ollama's engine by itself (the setup run does that when the engine is missing),
+ * download anything itself (the back end's setup run fetches all three kinds, see starter_set_extras.py),
  * or offer the second, bigger Gemma 4 model: that one is only reachable through Browse models now.
  */
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
-import { TIER1_ESSENTIALS_TAG } from "../data/deckEssentialsTags";
+import { STARTER_NOTE_SEARCH_TAG, STARTER_SPEECH_MODELS, TIER1_ESSENTIALS_TAG } from "../data/deckEssentialsTags";
 import { confirmDownload, DOWNLOADS_OFF_FAILED_LINE, type DownloadNotice } from "../features/downloads/downloadNotice";
-import { modelPullNotice } from "../features/downloads/downloadSites";
+import { modelPullNotice, SPEECH_MODELS_NOTICE } from "../features/downloads/downloadSites";
 import type { LocalOllamaSetupStatus } from "../components/OllamaWhereAiRunsSection.types";
 import {
   LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
   LOCAL_SETUP_NETWORK_AND_POWER_HINT,
   LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB,
-  LOCAL_SETUP_TIER1_DOWNLOAD_SIZE,
   OLLAMA_MODELS_DISK_HINT,
 } from "../components/OllamaWhereAiRunsSection.constants";
 import { textPx } from "../styles/sections/textPx";
@@ -35,7 +36,7 @@ export const STARTER_SET_BUTTON_LABEL = "Install the starter set";
 
 /** The model site and the size, in the shape the download notice takes. */
 export function starterSetNotices(): DownloadNotice[] {
-  return [modelPullNotice([TIER1_ESSENTIALS_TAG], LOCAL_SETUP_TIER1_DOWNLOAD_SIZE)];
+  return [modelPullNotice([TIER1_ESSENTIALS_TAG, STARTER_NOTE_SEARCH_TAG], "about 4.6 GB"), SPEECH_MODELS_NOTICE];
 }
 
 /** What the box says under the site line; `engineAlreadyAsked` is true for the follow-up box of Install Ollama. */
@@ -43,12 +44,20 @@ export function starterSetBoxBody(engineAlreadyAsked: boolean) {
   return (
     <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
       <div style={{ marginBottom: 8 }}>
-        The starter set is one small model, <span style={{ color: "#9ce7ff" }}>{TIER1_ESSENTIALS_TAG}</span>, that can
-        chat, read screenshots and text in pictures, and help in Strategy mode. {LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB}
+        The starter set is the answer model <span style={{ color: "#9ce7ff" }}>{TIER1_ESSENTIALS_TAG}</span>, which can
+        chat, read screenshots and text in pictures, and help in Strategy mode; the note-search model{" "}
+        <span style={{ color: "#9ce7ff" }}>{STARTER_NOTE_SEARCH_TAG}</span>; and the speech models{" "}
+        <span style={{ color: "#9ce7ff" }}>{STARTER_SPEECH_MODELS.join(" and ")}</span> for the microphone.{" "}
+        {LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB}
+      </div>
+      <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
+        A model you already have is not downloaded again. If one download fails the others still go ahead, and the
+        tab says which one failed. The speech models download even with the microphone permission off; Voice input
+        stays off until you turn it on in the Permissions tab.
       </div>
       {engineAlreadyAsked ? (
         <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
-          Not now, Cancel or B installs Ollama only, with no models. You can pull models later from Browse models.
+          Cancel or B installs Ollama only, with no models. You can pull models later from Browse models.
         </div>
       ) : null}
       <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
@@ -106,8 +115,8 @@ export function startLocalOllamaSetup(
 }
 
 /**
- * Browse models' "Install the starter set": the download notice first (the site, the size, the ring
- * on "Not now"), then the same setup run the old Tier 1 button started. Resolves true when it started.
+ * Browse models' "Install the starter set": the download notice first (the sites, the sizes, the ring
+ * on Cancel), then the same setup run the old Tier 1 button started. Resolves true when it started.
  */
 export async function askThenInstallStarterSet(): Promise<boolean> {
   const go = await confirmDownload(starterSetNotices(), {

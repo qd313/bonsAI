@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 972,
-  "edgeCount": 3263,
+  "edgeCount": 3264,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2202,6 +2202,7 @@
       "imports": [
         "src/data/deckEssentialsTags.ts",
         "src/hooks/localOllamaStarterSet.tsx",
+        "src/utils/deckyCall.ts",
         "src/utils/pullModelFilters.ts"
       ],
       "importedBy": [
@@ -10333,6 +10334,7 @@
         "src/components/KnowledgeBaseSection.tsx",
         "src/components/MainTabScreenshotBrowser.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/components/PullModelsStarterSetChip.tsx",
         "src/components/VoiceInputSettingsSection.tsx",
         "src/features/chat-sum-up/useChatSumUpJob.ts",
         "src/features/downloads/downloadNotice.tsx",

@@ -35,6 +35,7 @@ cosmetic win. Does not run `ollama pull`/`ollama rm` itself, or talk to the regi
 """
 
 import asyncio
+import os
 import time
 from typing import Any
 
@@ -69,6 +70,7 @@ from backend.services.ollama_pc_models import ask_known_pcs
 from backend.services.ollama_try_order_prune import prune_saved_orders_to_installed
 from backend.services import ollama_pull_resume_service as pull_resume
 from backend.services.ollama_embed_service import forget_embed_availability_after_pull
+from backend.services.starter_speech_models import download_speech_models
 from backend.services.capabilities import capability_enabled, downloads_off_refusal
 
 import decky
@@ -141,6 +143,19 @@ async def start_local_ollama_setup(self, data: Any = None):
         setup_loop = asyncio.get_running_loop()
         on_stage, on_verbose_line = make_local_ollama_setup_hooks(self, setup_loop)
 
+        # The starter set also downloads the speech models, through the voice engine's own download. That
+        # is a file download, not listening, so it goes ahead with the microphone permission off; the
+        # run's closing sentence says the microphone is still off.
+        starter_kwargs: dict[str, Any] = {}
+        if prof == "tier1_essentials":
+            plugin_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+            starter_kwargs = {
+                "speech_download": lambda log, progress, cancel: download_speech_models(
+                    plugin_root, decky.DECKY_PLUGIN_SETTINGS_DIR, log, progress, cancel
+                ),
+                "microphone_enabled": capability_enabled(settings, "microphone_access"),
+            }
+
         async def runner() -> None:
             assert self._local_ollama_cancel_event is not None
             try:
@@ -151,6 +166,7 @@ async def start_local_ollama_setup(self, data: Any = None):
                     cancel_event=self._local_ollama_cancel_event,
                     on_stage=on_stage,
                     on_verbose_line=on_verbose_line,
+                    **starter_kwargs,
                 )
             finally:
                 # Ended (done, failed or cancelled): forget it. A plugin reload ends it too, and

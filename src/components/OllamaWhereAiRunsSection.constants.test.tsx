@@ -6,6 +6,6 @@ import { LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB } from "./OllamaWhereAiRunsSectio
 describe("Tier 1 essentials size line", () => {
   it("does not call the download FOSS", () => {
     expect(LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB).not.toMatch(/FOSS/i);
-    expect(LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB).toMatch(/multimodal/);
+    expect(LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB).toMatch(/answer model.*note-search model.*speech models/);
   });
 });

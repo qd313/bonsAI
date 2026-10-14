@@ -27,8 +27,8 @@ const LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED = "update_installed";
 const OLLAMA_MODELS_DISK_HINT =
   "Default model folder on this account: /home/deck/.ollama/models (override with the OLLAMA_MODELS environment variable if you moved the store).";
 /** The rough model sizes alone, also named by the download notice (features/downloads). */
-const LOCAL_SETUP_TIER1_DOWNLOAD_SIZE = "about 4 GiB";
-const LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB = `Rough download: ${LOCAL_SETUP_TIER1_DOWNLOAD_SIZE} (one small multimodal model — chat, screenshots, Strategy).`;
+const LOCAL_SETUP_TIER1_DOWNLOAD_SIZE = "about 4.5 GiB";
+const LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB = `Rough download: ${LOCAL_SETUP_TIER1_DOWNLOAD_SIZE} in all (the answer model, the note-search model and the speech models).`;
 
 const LOCAL_SETUP_NETWORK_AND_POWER_HINT = (
   <>
@@ -50,6 +50,5 @@ export {
   LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
   OLLAMA_MODELS_DISK_HINT,
   LOCAL_SETUP_SIZE_TIER1_ESSENTIALS_GIB,
-  LOCAL_SETUP_TIER1_DOWNLOAD_SIZE,
   LOCAL_SETUP_NETWORK_AND_POWER_HINT,
 };

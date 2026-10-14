@@ -45,6 +45,13 @@ export function modelPullNotice(tags: readonly string[], size: string | null): D
 /** KnowledgeBaseSection.tsx's own title for the meaning-search model offer says about 270 MB. */
 export const MEANING_SEARCH_MODEL_NOTICE: DownloadNotice = modelPullNotice(["nomic-embed-text"], "about 270 MB");
 
+/** The starter set's two speech models (voice_model_download_service.py: tiny.en 78 MB, base.en 148 MB). */
+export const SPEECH_MODELS_NOTICE: DownloadNotice = {
+  site: HUGGING_FACE_SITE,
+  what: "the tiny.en and base.en speech models",
+  size: "about 230 MB",
+};
+
 /** The library's size is only known once its list file has been fetched. */
 export const KNOWLEDGE_LIBRARY_NOTICES: DownloadNotice[] = [
   { site: HUGGING_FACE_SITE, what: "the knowledge library", size: null },

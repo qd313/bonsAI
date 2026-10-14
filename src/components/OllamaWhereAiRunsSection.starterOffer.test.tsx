@@ -97,7 +97,14 @@ describe("Install Ollama with no models installed", () => {
     const text = textOf(box);
     expect(text).toContain("gemma4:e2b-it-qat");
     expect(text).not.toContain("qwen2.5vl");
-    expect(text).toContain("about 4 GiB");
+    // The set is three kinds of download, and the box names all three in plain words (plan 93).
+    expect(text).toContain("nomic-embed-text");
+    expect(text).toContain("note-search model");
+    expect(text).toContain("tiny.en and base.en");
+    expect(text).toContain("speech models");
+    expect(text).toContain("about 4.5 GiB");
+    expect(text).toContain("huggingface.co");
+    expect(text).toContain("registry.ollama.ai");
     expect(text).toContain("installs Ollama only");
     expect(setupProfiles()).toEqual([]);
   });

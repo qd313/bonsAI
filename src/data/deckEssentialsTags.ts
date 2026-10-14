@@ -25,5 +25,12 @@
  */
 export const TIER1_ESSENTIALS_TAG = "gemma4:e2b-it-qat" as const;
 
-export const TIER1_ESSENTIALS_PULL_TAGS: readonly string[] = [TIER1_ESSENTIALS_TAG];
+/** The note-search model the starter set also installs (the knowledge library reads it). */
+export const STARTER_NOTE_SEARCH_TAG = "nomic-embed-text" as const;
+
+/** The two speech models the starter set downloads through the voice engine, not Ollama. */
+export const STARTER_SPEECH_MODELS: readonly string[] = ["tiny.en", "base.en"];
+
+/** What Ollama pulls for the starter set, in order. Python's TIER1_ESSENTIALS_PULL_TAGS must match (tests/test_starter_set_extras.py). */
+export const TIER1_ESSENTIALS_PULL_TAGS: readonly string[] = [TIER1_ESSENTIALS_TAG, STARTER_NOTE_SEARCH_TAG];
 

@@ -77,6 +77,47 @@ beforeEach(() => {
   Element.prototype.scrollIntoView = vi.fn();
 });
 
+/** The voice engine's status, as the back end now returns it: which speech models are on disk. */
+const voiceStatus = (tiny: boolean, base: boolean) => () => ({ speech_models_ready: { "tiny.en": tiny, "base.en": base } });
+
+describe("Browse models: the starter set is more than the answer model", () => {
+  const FULL = ["gemma4:e2b-it-qat", "nomic-embed-text:latest"];
+
+  it("is still offered when the models are in Ollama but a speech model is missing", async () => {
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: FULL }));
+    setRpcHandler("get_voice_engine_status", voiceStatus(true, false));
+    const { container } = renderModal();
+    await waitFor(() => expect(chip(container)).not.toBeNull());
+  });
+
+  it("is offered when the note-search model is missing", async () => {
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: ["gemma4:e2b-it-qat"] }));
+    setRpcHandler("get_voice_engine_status", voiceStatus(true, true));
+    const { container } = renderModal();
+    await waitFor(() => expect(chip(container)).not.toBeNull());
+  });
+
+  it("is gone once the answer model, the note-search model and both speech models are there", async () => {
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: FULL }));
+    setRpcHandler("get_voice_engine_status", voiceStatus(true, true));
+    const { container } = renderModal();
+    await waitFor(() => expect(container.textContent).toContain("Installed 2 ·"));
+    await settle();
+    expect(chip(container)).toBeNull();
+  });
+
+  it("with the voice engine silent only Ollama's two models decide", async () => {
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: FULL }));
+    setRpcHandler("get_voice_engine_status", () => {
+      throw new Error("no answer");
+    });
+    const { container } = renderModal();
+    await waitFor(() => expect(container.textContent).toContain("Installed 2 ·"));
+    await settle();
+    expect(chip(container)).toBeNull();
+  });
+});
+
 describe("Browse models: Install the starter set", () => {
   it("is in the filters column when the starter model is not installed, and gone once it is", async () => {
     setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: [] }));
@@ -85,9 +126,15 @@ describe("Browse models: Install the starter set", () => {
     expect(first.container.querySelector(".bonsai-pullmodels-filtercol")!.contains(chip(first.container))).toBe(true);
     first.unmount();
 
-    setRpcHandler("test_ollama_connection", () => ({ reachable: true, version: "0.5.0", models: ["gemma4:e2b-it-qat"] }));
+    setRpcHandler("test_ollama_connection", () => ({
+      reachable: true,
+      version: "0.5.0",
+      models: ["gemma4:e2b-it-qat", "nomic-embed-text:latest"],
+    }));
+    setRpcHandler("get_voice_engine_status", voiceStatus(true, true));
     const second = renderModal();
-    await waitFor(() => expect(second.container.textContent).toContain("Installed 1 ·"));
+    await waitFor(() => expect(second.container.textContent).toContain("Installed 2 ·"));
+    await settle();
     expect(chip(second.container)).toBeNull();
   });
 
@@ -108,8 +155,11 @@ describe("Browse models: Install the starter set", () => {
     const text = boxText();
     expect(text).toContain("gemma4:e2b-it-qat");
     expect(text).not.toContain("qwen2.5vl");
-    expect(text).toContain("about 4 GiB");
+    expect(text).toContain("nomic-embed-text");
+    expect(text).toContain("tiny.en and base.en");
+    expect(text).toContain("about 4.5 GiB");
     expect(text).toContain("registry.ollama.ai");
+    expect(text).toContain("huggingface.co");
 
     (p.onCancel as () => void)();
     await settle();

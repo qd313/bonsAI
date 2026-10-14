@@ -134,7 +134,10 @@ _VISION_HIGH_VRAM_DEEP: list[str] = [
 # Deck essentials — the starter model, one multimodal pull. Keep in sync with README and
 # deckEssentialsTags.ts (tests/test_starter_tag_parity.py fails if they drift). Since 2026-10-13 it is
 # Gemma 4 (Apache 2.0), not qwen2.5vl:3b, whose own licence is research-only.
-TIER1_ESSENTIALS_PULL_TAGS = ("gemma4:e2b-it-qat",)
+STARTER_NOTE_SEARCH_TAG = "nomic-embed-text"
+# The starter set: the answer model first, then the note-search model (both through Ollama). The two speech
+# models the microphone reads from are not Ollama tags; starter_set_extras.py downloads them.
+TIER1_ESSENTIALS_PULL_TAGS = ("gemma4:e2b-it-qat", STARTER_NOTE_SEARCH_TAG)
 
 # Tier-2 one-model multimodal preset (registry may fall back to gemma4:e2b in setup service).
 TIER2_MULTIMODAL_PULL_TAGS = ("gemma4:e2b-it-qat",)

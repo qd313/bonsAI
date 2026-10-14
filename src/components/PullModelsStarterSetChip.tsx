@@ -2,18 +2,21 @@
  * Title: Browse models' "Install the starter set" button
  *
  * Purpose: One button near the bottom of the AI models box's filters column (under "Type a name") that asks
- * first, with the size, and then downloads the starter set: the small model that can chat, read
- * screenshots and help in Strategy mode. It is the one-press way to get started on a Deck with no
- * models, now that the Ollama tab's "Install options..." button is gone.
+ * first, with the sizes, and then downloads the starter set: the answer model (it can chat, read
+ * screenshots and help in Strategy mode), the note-search model and the two speech models. It is the
+ * one-press way to get started on a Deck with no models, now that the Ollama tab's "Install options..."
+ * button is gone.
  *
- * Used for: PullModelsFiltersColumn.tsx, drawn only while the starter model is not installed yet.
+ * Used for: PullModelsFiltersColumn.tsx, drawn until the whole set is there: the answer model and the
+ * note-search model installed in Ollama, and both speech models on disk. The speech models are read from
+ * the voice engine's status; until that answers (or if it cannot), only Ollama's two models decide.
  *
  * Solves: Without it a person looking for models on a fresh Deck had to find the right model in the
  * table and queue it by hand.
  *
  * Does not: install anything itself. askThenInstallStarterSet() (localOllamaStarterSet.tsx) shows the
  * download notice and starts the same setup run the old Tier 1 button started. Hiding the button
- * once the model is installed is the only decision made here.
+ * once the whole set is installed is the only decision made here.
  *
  * Focus: one stop of the filters column; the column hands in its moves (`nav`: Up and Down to the
  * neighbouring stops, Right to the list) and is told where the ring lands (`bindStop`), so a chip that
@@ -22,8 +25,10 @@
  * box with its own OK). The box is the shell's usual download notice, so closing it hands the ring
  * back through the same nested-box handoff as the screen's other download boxes.
  */
+import { useEffect, useState } from "react";
 import { Button } from "@decky/ui";
-import { TIER1_ESSENTIALS_TAG } from "../data/deckEssentialsTags";
+import { STARTER_NOTE_SEARCH_TAG, STARTER_SPEECH_MODELS, TIER1_ESSENTIALS_TAG } from "../data/deckEssentialsTags";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../utils/deckyCall";
 import { isTagInstalled } from "../utils/pullModelFilters";
 import { askThenInstallStarterSet, STARTER_SET_BUTTON_LABEL } from "../hooks/localOllamaStarterSet";
 
@@ -34,7 +39,20 @@ export function PullModelsStarterSetChip(props: {
   okButtonRuns: (fn: () => void) => (evt: { stopPropagation: () => void }) => void;
 }) {
   const { installedTags, nav, bindStop, okButtonRuns } = props;
-  if (isTagInstalled(TIER1_ESSENTIALS_TAG, installedTags)) return null;
+  // Which speech models are on disk, from the voice engine's status (null until it answers, or if it cannot).
+  const [speechReady, setSpeechReady] = useState<Record<string, boolean> | null>(null);
+  useEffect(() => {
+    let alive = true;
+    callDeckyWithTimeout<[], { speech_models_ready?: Record<string, boolean> }>("get_voice_engine_status", [], DECKY_RPC_TIMEOUT_MS)
+      .then((st) => alive && setSpeechReady(st?.speech_models_ready ?? null))
+      .catch(() => alive && setSpeechReady(null));
+    return () => {
+      alive = false;
+    };
+  }, [installedTags.size]);
+  const ollamaPartThere = isTagInstalled(TIER1_ESSENTIALS_TAG, installedTags) && isTagInstalled(STARTER_NOTE_SEARCH_TAG, installedTags);
+  const speechMissing = speechReady != null && STARTER_SPEECH_MODELS.some((m) => speechReady[m] !== true);
+  if (ollamaPartThere && !speechMissing) return null;
   const press = () => {
     void askThenInstallStarterSet();
   };

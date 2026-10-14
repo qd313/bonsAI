@@ -47,7 +47,7 @@
     },
     {
       "path": "py_modules/backend/services/local_ollama_setup_service.py",
-      "lines": 1072,
+      "lines": 1088,
       "role": ""
     },
     {
@@ -162,7 +162,7 @@
     },
     {
       "path": "src/components/PullModelsModal.tryOrder.test.tsx",
-      "lines": 682,
+      "lines": 684,
       "role": ""
     },
     {

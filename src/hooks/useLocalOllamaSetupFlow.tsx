@@ -133,8 +133,8 @@ export function useLocalOllamaSetupFlow({
     ) => {
       if (localSetupBusy) return;
       void (async () => {
-        // A Deck with no models: one box asks whether to also install the starter models, with the
-        // ring on "Not now". Declining (or B) installs the engine only, as before.
+        // A Deck with no models: one box asks whether to also install the starter models. Cancel (or B)
+        // installs the engine only, as before.
         let chosen: string = profile;
         if (!opts?.offerStarterModels && internetDownloadsAreOff()) {
           // Downloads are off: say so on the tab AND ask to turn them on, as the Install buttons do.

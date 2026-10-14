@@ -9,9 +9,9 @@
  *
  * Solves: Moving the two Clear buttons out of SettingsTab.tsx unchanged in behaviour. Both remember which
  * button to return the ring to once the box closes (modalReturnFocusRegistry) and both tell the plugin
- * shell which tab to come back to (`onBeforeDeckyModal`). In the confirm boxes the first button, which
- * Steam puts the ring on, keeps everything and the clearing sits on the middle button: an A pressed by
- * habit clears nothing.
+ * shell which tab to come back to (`onBeforeDeckyModal`). The confirm boxes are the shared two-button box
+ * (CancelFirstConfirmModal): Cancel first, where Steam puts the ring, and the clearing beside it, so an A
+ * pressed by habit clears nothing.
  *
  * Does not: Clear anything itself: the caller's `onResetSession` and `onClearAllPluginData` do.
  *
@@ -21,8 +21,9 @@
  * on each side like every other button on the tab.
  */
 import React from "react";
-import { Button, ConfirmModal, Focusable, PanelSection, PanelSectionRow, showModal } from "@decky/ui";
+import { Button, Focusable, PanelSection, PanelSectionRow, showModal } from "@decky/ui";
 
+import { CancelFirstConfirmModal } from "./CancelFirstConfirmModal";
 import { DenseSwitchRow } from "../features/folded-tabs/DenseRow";
 import { SETTINGS_ROW_HELP } from "../features/folded-tabs/settingsTabFolds";
 import { registerModalReturnFocusOwner, rememberModalReturnFocus } from "../features/plugin-shell/modalReturnFocusRegistry";
@@ -63,8 +64,8 @@ const CLEAR_BUTTON_STYLE: React.CSSProperties = {
  * hand-offs the tab gives (Up to the section's line, Down to the next line).
  * Out: a panel section with the switch row and the button pair row.
  *
- * What can go wrong: nothing here clears anything by itself; a clear happens only from the middle button of
- * a confirm box.
+ * What can go wrong: nothing here clears anything by itself; a clear happens only from the action button
+ * of a confirm box.
  */
 export const SettingsTabDataSection: React.FC<SettingsTabDataSectionProps> = ({
   showDeveloperTab,
@@ -111,23 +112,20 @@ export const SettingsTabDataSection: React.FC<SettingsTabDataSectionProps> = ({
             rememberModalReturnFocus("settings-clear-cache");
             onBeforeDeckyModal();
             const handle = showModal(
-              <ConfirmModal
-                strTitle="Clear session cache?"
-                strDescription="Clears this session from RAM: input, reply, thread, transparency, branches, attachments, timers. Does not change settings.json, Ollama, or image files on disk."
+              <CancelFirstConfirmModal
+                title="Clear session cache?"
+                body="Clears this session from RAM: input, reply, thread, transparency, branches, attachments, timers. Does not change settings.json, Ollama, or image files on disk."
                 /*
-                  Steam opens a confirm box with the ring on OK, so OK keeps everything and the
-                  clearing sits on the middle button (the Delete chat and Remove knowledge base
-                  boxes' shape): an A pressed by habit clears nothing. Cancel and B also change nothing.
+                  Two buttons, Cancel first where Steam puts the ring (the Delete chat box's shape): an A
+                  pressed by habit clears nothing, and B is Cancel too.
                 */
-                strOKButtonText="Keep cache"
-                strMiddleButtonText="Clear"
-                strCancelButtonText="Cancel"
-                onOK={() => onCompleteDeckyModalClose(() => handle.Close())}
-                onMiddleButton={() => {
+                actionLabel="Clear"
+                danger
+                onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
+                onAction={() => {
                   onResetSession();
                   onCompleteDeckyModalClose(() => handle.Close());
                 }}
-                onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
               />,
             );
           }}
@@ -142,32 +140,32 @@ export const SettingsTabDataSection: React.FC<SettingsTabDataSectionProps> = ({
             rememberModalReturnFocus("settings-clear-all-data");
             /*
               Tells the plugin shell which tab to come back to. Without it the shell came back to its
-              default, Main, so B on this box (or Cancel, or Keep my data) took the panel from Settings
+              default, Main, so B on this box (or Cancel) took the panel from Settings
               to Main with the ring on "Main tab". Clear cache... above has always done this.
             */
             onBeforeDeckyModal();
             const handle = showModal(
-              <ConfirmModal
-                strTitle="Clear all plugin data?"
-                strDescription={
-                  "This resets bonsAI like a fresh install for this device.\n\n" +
-                  "It deletes saved settings and permissions, runtime cache and plugin logs under Decky, " +
-                  "and clears the Ollama host field, safety disclaimer flag, and unified-input persistence stored in the plugin browser.\n\n" +
-                  "If Ollama on this Deck was enabled, this also removes downloaded models and the local Ollama install bonsAI set up under your account (~/.ollama and ~/.local/bin/ollama).\n\n" +
-                  "It does not delete Desktop logs under bonsAI_logs.\n\n" +
-                  "Afterward, set your Ollama host again and re-enable any permissions you need."
+              <CancelFirstConfirmModal
+                title="Clear all plugin data?"
+                body={
+                  <div style={{ whiteSpace: "pre-line" }}>
+                    {"This resets bonsAI like a fresh install for this device.\n\n" +
+                      "It deletes saved settings and permissions, runtime cache and plugin logs under Decky, " +
+                      "and clears the Ollama host field, safety disclaimer flag, and unified-input persistence stored in the plugin browser.\n\n" +
+                      "If Ollama on this Deck was enabled, this also removes downloaded models and the local Ollama install bonsAI set up under your account (~/.ollama and ~/.local/bin/ollama).\n\n" +
+                      "It does not delete Desktop logs under bonsAI_logs.\n\n" +
+                      "Afterward, set your Ollama host again and re-enable any permissions you need."}
+                  </div>
                 }
-                /* OK keeps everything and the wipe is the middle button; see the cache box above. */
-                strOKButtonText="Keep my data"
-                strMiddleButtonText="Clear all data"
-                strCancelButtonText="Cancel"
-                onOK={() => onCompleteDeckyModalClose(() => handle.Close())}
-                onMiddleButton={() => {
+                /* Cancel first and the wipe beside it; see the cache box above. */
+                actionLabel="Clear all data"
+                danger
+                onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
+                onAction={() => {
                   void Promise.resolve(onClearAllPluginData()).finally(() => {
                     onCompleteDeckyModalClose(() => handle.Close());
                   });
                 }}
-                onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
               />,
             );
           }}

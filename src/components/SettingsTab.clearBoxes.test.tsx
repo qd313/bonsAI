@@ -1,10 +1,11 @@
 /**
- * Title: The Settings Clear boxes open on the button that clears nothing
+ * Title: The Settings Clear boxes show Cancel and the action, and nothing else
  *
- * Purpose: Steam opens a confirm box with the ring on its OK button. "Clear session cache?" and
- * "Clear all plugin data?" had the clearing as OK, so an A pressed by habit cleared (found in plan 79,
- * round three). OK now keeps everything, the clearing is the middle button, and Cancel and B change
- * nothing. Checked on the box each button really hands to Steam.
+ * Purpose: The "Clear session cache?" and "Clear all plugin data?" boxes used to be Steam's ConfirmModal with
+ * a safe choice first, and Steam adds its own Cancel, so a person saw three buttons (Keep cache / Clear /
+ * Cancel). Each is now the shared two-button box: Cancel first (where Steam puts the ring) and the clearing
+ * beside it, and B is Cancel. Checked on the box each button really hands to Steam, drawn the way Steam draws
+ * it: the buttons read off the page, each one pressed, and B.
  *
  * Does not: open a real Steam box; the stub only records what the tab asks Steam to show.
  */
@@ -13,12 +14,20 @@ import { fireEvent, render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 let shown: React.ReactElement[] = [];
+let modalRootCancel: (() => void) | undefined;
 const close = vi.fn();
 
 vi.mock("@decky/ui", async () => {
   const fake = await import("../test-harness/fakeDeckyUi");
+  const ModalRoot = React.forwardRef<HTMLDivElement, Record<string, unknown> & { children?: React.ReactNode }>(
+    function CapturingModalRoot(props, ref) {
+      modalRootCancel = props.onCancel as (() => void) | undefined;
+      return <fake.ModalRoot {...props} ref={ref} />;
+    },
+  );
   return {
     ...fake,
+    ModalRoot,
     showModal: (el: React.ReactElement) => {
       shown.push(el);
       return { Close: close, Update: () => undefined };
@@ -70,16 +79,19 @@ function buildProps(overrides: Partial<SettingsTabProps> = {}): SettingsTabProps
   };
 }
 
-type Box = Record<string, unknown>;
-function openBox(label: string, overrides: Partial<SettingsTabProps>): Box {
+/** Open the box a Clear button asks Steam for, then draw it and hand back its buttons. */
+function openBox(label: string, overrides: Partial<SettingsTabProps>) {
   const { getByText } = render(<SettingsTab {...buildProps(overrides)} />);
   fireEvent.click(getByText(label));
   expect(shown).toHaveLength(1);
-  return shown[0]!.props as Box;
+  const box = render(shown[0]!);
+  const buttons = Array.from(box.container.querySelectorAll("button"));
+  return { box, buttons, labels: buttons.map((b) => b.textContent ?? "") };
 }
 
 beforeEach(() => {
   shown = [];
+  modalRootCancel = undefined;
   close.mockClear();
 });
 
@@ -87,23 +99,32 @@ describe.each([
   ["Clear cache...", "Clear", "onResetSession"],
   ["Clear all data...", "Clear all data", "onClearAllPluginData"],
 ] as const)("the %s box", (button, clearLabel, prop) => {
-  it("opens on a button that clears nothing: OK, Cancel and B change nothing", () => {
-    const clear = vi.fn();
-    const box = openBox(button, { [prop]: clear });
-    // Steam puts the ring on OK, so OK must be the keep-everything choice.
-    expect(box.strOKButtonText).not.toBe(clearLabel);
-    expect(box.strOKButtonText).toMatch(/^Keep /);
-    (box.onOK as () => void)();
-    (box.onCancel as () => void)();
-    expect(clear).not.toHaveBeenCalled();
-    expect(close).toHaveBeenCalledTimes(2);
+  it("shows the action and Cancel only: two buttons, Cancel first where the ring opens", () => {
+    const { labels } = openBox(button, { [prop]: vi.fn() });
+    expect(labels).toEqual(["Cancel", clearLabel]);
   });
 
-  it("still clears, on its own labelled middle button", async () => {
+  it("opens on a button that clears nothing: A on the first button and B change nothing", () => {
     const clear = vi.fn();
-    const box = openBox(button, { [prop]: clear });
-    expect(box.strMiddleButtonText).toBe(clearLabel);
-    (box.onMiddleButton as () => void)();
+    const { buttons } = openBox(button, { [prop]: clear });
+    fireEvent.click(buttons[0]!);
+    expect(clear).not.toHaveBeenCalled();
+    expect(close).toHaveBeenCalledTimes(1);
+  });
+
+  it("B is Cancel: it closes the box and clears nothing", () => {
+    const clear = vi.fn();
+    openBox(button, { [prop]: clear });
+    expect(modalRootCancel).toBeTypeOf("function");
+    modalRootCancel!();
+    expect(clear).not.toHaveBeenCalled();
+    expect(close).toHaveBeenCalledTimes(1);
+  });
+
+  it("still clears, on its own labelled action button, once", async () => {
+    const clear = vi.fn();
+    const { buttons } = openBox(button, { [prop]: clear });
+    fireEvent.click(buttons[1]!);
     await Promise.resolve();
     expect(clear).toHaveBeenCalledTimes(1);
   });

@@ -1,7 +1,7 @@
 /**
  * Title: B on the "Clear all plugin data?" box leaves the panel on Settings
  *
- * Purpose: On the Deck, closing the "Clear all plugin data?" box with B (or Cancel, or "Keep my data")
+ * Purpose: On the Deck, closing the "Clear all plugin data?" box with B (or Cancel, or "Keep my data", as the box was then)
  * put the panel on the Main tab with the ring on "Main tab". The "Clear cache..." button tells the
  * plugin shell which tab to come back to before it opens its box; "Clear all data..." did not, so the
  * shell came back to its default, Main. Checked here with the real shell hook and the real Settings
@@ -108,7 +108,7 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-async function openAndClose(button: string, how: "onCancel" | "onOK" | "onMiddleButton", clearAll = vi.fn()) {
+async function openAndClose(button: string, how: "onCancel" | "onAction", clearAll = vi.fn()) {
   const view = render(<Panel clearAll={clearAll} />);
   const btn = view.getByText(button);
   const focus = vi.spyOn(btn, "focus");
@@ -126,11 +126,11 @@ async function openAndClose(button: string, how: "onCancel" | "onOK" | "onMiddle
 
 describe.each([
   ["Clear all data...", "onCancel (B and the Cancel button)"],
-  ["Clear all data...", "onOK (Keep my data)"],
-  ["Clear all data...", "onMiddleButton (the wipe)"],
+  ["Clear all data...", "onAction (the wipe)"],
+  ["Clear cache...", "onAction (the clearing)"],
   ["Clear cache...", "onCancel (B and the Cancel button)"],
 ] as const)("%s, closing with %s", (button, how) => {
-  const key = how.split(" ")[0] as "onCancel" | "onOK" | "onMiddleButton";
+  const key = how.split(" ")[0] as "onCancel" | "onAction";
 
   it("leaves the panel on Settings, not Main, with the ring back on the button", async () => {
     const { view, focus } = await openAndClose(button, key);

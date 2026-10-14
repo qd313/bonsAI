@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 959,
-  "edgeCount": 3199,
+  "edgeCount": 3200,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -176,7 +176,8 @@
         "src/styles/settingsGlassButton.ts"
       ],
       "importedBy": [
-        "src/components/CancelFirstConfirmModal.test.tsx"
+        "src/components/CancelFirstConfirmModal.test.tsx",
+        "src/components/SettingsTabDataSection.tsx"
       ]
     },
     "src/components/CharacterPickerModal.test.tsx": {
@@ -2462,6 +2463,7 @@
     },
     "src/components/SettingsTabDataSection.tsx": {
       "imports": [
+        "src/components/CancelFirstConfirmModal.tsx",
         "src/features/folded-tabs/DenseRow.tsx",
         "src/features/folded-tabs/settingsTabFolds.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",

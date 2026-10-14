@@ -395,7 +395,10 @@ export function buildAnswerBubbleElement(
 
   const bubble = (
     <Focusable
-      key={`answer-bubble-${answerKey}`}
+      /* Not the answer's key: when the chat reload turns the live answer into its saved twin, the
+         answer's key changes ("live" to the turn's id) but the element must stay (plan 93). There is
+         one bubble per turn's row, so a fixed key is unique where it matters. */
+      key="answer-bubble"
       /* Mount-time registration. Without it the only route to this element was `activeElement`,
          which plugin code cannot read for its own UI — see uiDocument.ts. */
       ref={(el: HTMLElement | null) => registerAnswerBubbleEl(answerKey, el)}

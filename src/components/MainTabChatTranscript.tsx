@@ -73,6 +73,11 @@
  *   all (measured on device), so every hand-off lives on the elements
  *   themselves instead — buildTurnHeaderElement()'s own move into the
  *   answer, and buildAnswerBubbleElement()'s own walk through it.
+ * - The live turn's row and its saved twin are ONE element (useLiveTurnTwin.ts,
+ *   plan 93): when the chat reload turns the live turn into the newest saved
+ *   turn, the row keeps its React key and every piece in it is named
+ *   (`turnPiece`), so the answer, the question and the rating row are not
+ *   rebuilt. A new piece needs a name, in the same order in both branches.
  * - The permission-hint rows below the transcript register themselves as
  *   Steam navigation targets (the navRef pattern) rather than being found by
  *   a plain button and a focus() call, because a DOM focus() alone does not
@@ -185,6 +190,7 @@ import type {
 import { ThinkingSpinnerIcon } from "./icons";
 import type { KbAttachedNote, TransparencySnapshot } from "../utils/inputTransparency";
 import { useStreamScrollPin } from "../hooks/useStreamScrollPin";
+import { turnPiece, useLiveTurnTwin } from "../hooks/useLiveTurnTwin";
 import type { AskModeId } from "../data/askMode";
 import type { LastExchangeSnapshot, LiveThinkingSnapshot } from "../types/backgroundAsk";
 import type { ReplyMicroActionId } from "../data/replyMicroActions";
@@ -807,8 +813,12 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     Boolean(strategyChecklist?.items.length) &&
     Boolean(onStrategyChecklistToggle);
 
+  /* The live turn's row and its saved twin are one element (useLiveTurnTwin.ts, plan 93). */
+  const twin = useLiveTurnTwin(showLiveTurn, askThreadCollapsed.map((t) => t.id), activeChatSlotId);
   useEffect(() => {
-    if (!expandedTurnKey) return;
+    /* Not when the chat reload makes the live turn its saved twin: the turn is already where it
+       was, and "nearest" from there scrolled a long answer back up to its question (plan 93). */
+    if (!expandedTurnKey || expandedTurnKey === twin.twinNow) return;
     window.requestAnimationFrame(() => {
       const header = getUiDocument().querySelector(
         `[data-bonsai-turn-id="${expandedTurnKey}"]`
@@ -1151,11 +1161,11 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
           return [
           ...(earlier.dayLinesBefore(turn.id) ?? []),
           <Focusable
-            key={turn.id}
+            key={twin.slotKeyFor(turn.id)}
             flow-children="vertical"
             className="bonsai-chat-turn-slot"
           >
-            {buildTurnHeaderElement({
+            {[turnPiece("header", buildTurnHeaderElement({
               turnId: turn.id,
               /* D60: an open turn shows the whole question (CSS caps it visually at five lines
                  with a fade on the last line); a closed turn keeps today's single cut line. */
@@ -1220,10 +1230,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     }
                   : undefined,
               retryDisabled: isAsking,
-            })}
-            {expandedTurnKey === turn.id ? (
-              <>
-                {isNewestStoppedArchivedTurn ? (
+            })),
+            ...(expandedTurnKey === turn.id ? [
+                turnPiece("stopped", isNewestStoppedArchivedTurn ? (
                   /* Same status, same placement as the live-turn Stopped notice below — a
                      stopped turn just does not stay "live" long enough to reach it. */
                   <div
@@ -1238,27 +1247,27 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   >
                     Stopped — partial answer kept.
                   </div>
-                ) : null}
-                {buildChatSummaryWarningElement(turn.chatSummary)}
-                {buildNotesReadLine(turn.id, archivedTransparencyFor(turn, turnIndex))}
-                {renderReasoningFold(turn.id, turn.reasoning)}
-                {renderAnswerBubble(turn.answer, false, turn.id, archivedSpoilerFacts(turn, turnIndex), turn.answer, kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex)))}
-                {buildChatSummaryNoteElement({
+                ) : null),
+                turnPiece("summary-warning", buildChatSummaryWarningElement(turn.chatSummary)),
+                turnPiece("notes-read", buildNotesReadLine(turn.id, archivedTransparencyFor(turn, turnIndex))),
+                turnPiece("fold", renderReasoningFold(turn.id, turn.reasoning)),
+                turnPiece("bubble", renderAnswerBubble(turn.answer, false, turn.id, archivedSpoilerFacts(turn, turnIndex), turn.answer, kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex)))),
+                turnPiece("summary-note", buildChatSummaryNoteElement({
                   turnKey: turn.id,
                   chatSummary: turn.chatSummary,
                   isNewest: isNewestArchivedTurn,
                   onOpen: openSessionTabFromNote,
-                })}
-                {/*
+                })),
+                /*
                  * Same placement as in the live turn — between the answer bubble and the reply
                  * actions — so the D-pad walk down the slot is unchanged. Gated to the newest
                  * archived turn because both payloads describe the newest answer only: hanging
                  * them off an older expanded turn would offer branches for an answer that is no
                  * longer on screen.
-                 */}
-                {isNewestArchivedTurn ? renderStrategyBranchPicker(turn.id) : null}
-                {isNewestArchivedTurn ? renderStrategyChecklist(turn.id) : null}
-                {/*
+                 */
+                turnPiece("branches", isNewestArchivedTurn ? renderStrategyBranchPicker(turn.id) : null),
+                turnPiece("checklist", isNewestArchivedTurn ? renderStrategyChecklist(turn.id) : null),
+                /*
                  * Show details on an expanded archived turn. Without this the control is
                  * unreachable after a completed Ask: the slot reload expands the archived turn
                  * rather than "live", and the live-only row below renders nothing.
@@ -1270,8 +1279,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                  * ordinary path. Wiring it here, gated to the newest archived turn while it still
                  * matches `lastExchange`, is the same fix already applied to Show details: teach the
                  * archived branch to render the control instead of assuming it stays live-only.
-                 */}
-                {(() => {
+                 */
+                ...((() => {
                   /* Restores Helpful / Not really / Retry on a stopped turn (roadmap: "Stopping a
                      reply leaves no 'Stopped' notice"). `lastExchange` is cleared to null on
                      cancel (useBonsaiAskOrchestration.ts), which is right for its own job — it
@@ -1287,7 +1296,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   /* Read aloud is not part of this row any more: it is in the answer bubble's lower-left
                      corner (plan 84 step 3), so a turn with nothing else to offer has no row at all. */
                   if (!showFeedbackHere && !transparencyAvailableHere) {
-                    return null;
+                    return [];
                   }
                   const downPastUtilityRow = () =>
                     focusDownFromReplyUtilityRowOrPermHint(queryTurnSlot(turn.id));
@@ -1321,10 +1330,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                       focusChipLadderRow(turn.id) ||
                       downPastUtilityRow(),
                   });
-                  return (
-                    <>
-                      {actionsEl}
-                      {buildKbNotesBlockElement({
+                  return [
+                      turnPiece("actions", actionsEl),
+                      turnPiece("kb-notes", buildKbNotesBlockElement({
                         turnKey: turn.id,
                         notes: kbNotesHere,
                         open: isKbNotesOpen(turn.id),
@@ -1347,11 +1355,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                                 querySlot: () => queryTurnSlot(turn.id),
                               })
                             : undefined,
-                      })}
-                    </>
-                  );
-                })()}
-                {transparencyDetailsOpen &&
+                      })),
+                  ];
+                })()),
+                turnPiece("details", transparencyDetailsOpen &&
                 transparencyUiAvailable(archivedTransparencyFor(turn, turnIndex)) ? (
                   <div style={{ width: "100%", minWidth: 0, boxSizing: "border-box" }}>
                     {buildDetailsPanelElement({
@@ -1383,8 +1390,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                       creditsViewFor,
                     })}
                   </div>
-                ) : null}
-                {/*
+                ) : null),
+                /*
                   A "Context used · view in session context ↓" jump link used to render here (added
                   in 98434b0 alongside the transparency work). Removed 2026-08-23 at the maintainer's
                   call: it sat mid-transcript under every archived turn that had chips, cost two
@@ -1393,16 +1400,15 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   highlight state it drove is still reachable: expanding a turn's own details sets it
                   (see `transparencyDetailsOpen` below), so nothing lost a capability, only a
                   shortcut.
-                */}
-              </>
-            ) : null}
+                */
+            ] : []),
+            ]}
           </Focusable>,
           ...(earlier.moreLinesAfter(turn.id) ?? []),
           ];
-        }), ...(earlier.trailingDayLines ?? [])]}
-        {showLiveTurn ? (
-          <Focusable key="live" flow-children="vertical" className="bonsai-chat-turn-slot">
-            {buildTurnHeaderElement({
+        }), ...(earlier.trailingDayLines ?? []), ...(showLiveTurn ? [
+          <Focusable key={twin.liveSlotKey} flow-children="vertical" className="bonsai-chat-turn-slot">
+            {[turnPiece("header", buildTurnHeaderElement({
               turnId: "live",
               variant: "live",
               /* Same open/closed split as the archived-turn header above (D60). */
@@ -1429,8 +1435,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               ),
               onRetry: expandedTurnKey === "live" ? onRetryLastResponse : undefined,
               retryDisabled: isAsking,
-            })}
-            {showLiveReasoningBlock && liveSteps.length > 0 ? (
+            })),
+            turnPiece("reasoning-live", showLiveReasoningBlock && liveSteps.length > 0 ? (
               /*
                * The titles of the model's thinking steps, where the stock waiting phrase would be:
                * finished ones faded with a tick, the current one last (the maintainer's option B,
@@ -1441,8 +1447,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               <div className="bonsai-chat-reasoning-live" role="status" aria-live="polite">
                 {buildLiveReasoningSteps(liveSteps)}
               </div>
-            ) : null}
-            {expandedTurnKey === "live" && isAsking && thinkingSummary && !hasLiveReasoning && !showLiveResponse ? (
+            ) : null),
+            turnPiece("thinking", expandedTurnKey === "live" && isAsking && thinkingSummary && !hasLiveReasoning && !showLiveResponse ? (
               /*
                * The stock waiting phrase, unchanged — and still the whole story with thinking
                * off, on a model that cannot think, and in the seconds before the model's first
@@ -1467,8 +1473,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 <ThinkingSpinnerIcon size={14} className="bonsai-thinking-spinner" />
                 {buildThinkingBlurbTextElement(thinkingSummary, strategySpoilerMaskingEnabled)}
               </div>
-            ) : null}
-            {expandedTurnKey === "live" && askStopped ? (
+            ) : null),
+            turnPiece("stopped", expandedTurnKey === "live" && askStopped ? (
               /*
                * A status, not an answer. The drafted text stays in the bubble below — replacing it
                * with a cancel literal is what STREAM-04 was reported for.
@@ -1485,11 +1491,11 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               >
                 {showLiveResponse ? "Stopped — partial answer kept." : "Stopped."}
               </div>
-            ) : null}
-            {expandedTurnKey === "live" && showLiveResponse
+            ) : null),
+            turnPiece("fold", expandedTurnKey === "live" && showLiveResponse
               ? renderReasoningFold("live", liveTurnReasoning)
-              : null}
-            {expandedTurnKey === "live" && showLiveResponse
+              : null),
+            turnPiece("bubble", expandedTurnKey === "live" && showLiveResponse
               ? renderAnswerBubble(
                   liveResponseBody,
                   isStreamingPreview,
@@ -1498,10 +1504,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   /* Read aloud reads the finished exchange's answer, so it waits for the ask to end. */
                   isAsking ? undefined : lastExchange?.answer, liveKbNotes
                 )
-              : null}
-            {expandedTurnKey === "live" ? renderStrategyBranchPicker("live") : null}
-            {expandedTurnKey === "live" ? renderStrategyChecklist("live") : null}
-            {expandedTurnKey === "live" &&
+              : null),
+            turnPiece("branches", expandedTurnKey === "live" ? renderStrategyBranchPicker("live") : null),
+            turnPiece("checklist", expandedTurnKey === "live" ? renderStrategyChecklist("live") : null),
+            turnPiece("actions", expandedTurnKey === "live" &&
             !isAsking &&
             (lastExchange?.answer?.trim() || onRetryLastResponse)
               ? buildReplyActionsElement({
@@ -1525,8 +1531,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     focusChipLadderRow("live") ||
                     focusDownFromReplyUtilityRowOrPermHint(queryLiveTurnSlot()),
                 })
-              : null}
-            {expandedTurnKey === "live"
+              : null),
+            turnPiece("kb-notes", expandedTurnKey === "live"
               ? (() => {
                   /*
                    * Unlike the row above, not gated on `!isAsking`: the whole point of publishing
@@ -1575,8 +1581,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                       : undefined,
                   });
                 })()
-              : null}
-            {renderInlineLadder ? (
+              : null),
+            turnPiece("details", renderInlineLadder ? (
               <div style={{ width: "100%", minWidth: 0, boxSizing: "border-box" }}>
                 {buildDetailsPanelElement({
                   turnKey: "live",
@@ -1597,8 +1603,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   creditsViewFor,
                 })}
               </div>
-            ) : null}
-            {expandedTurnKey === "live" && shortcutSetupVariant && onOpenControllerSettings ? (
+            ) : null),
+            turnPiece("controller", expandedTurnKey === "live" && shortcutSetupVariant && onOpenControllerSettings ? (
               <div
                 style={{
                   marginTop: 10,
@@ -1619,9 +1625,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     : "Pick a spare button on your Stadia layout, then Guide Button Chord. Full steps: docs (§5)."}
                 </div>
               </div>
-            ) : null}
-          </Focusable>
-        ) : null}
+            ) : null),
+            ]}
+          </Focusable>,
+        ] : [])]}
       </div>
     </div>
   </PanelSectionRow>

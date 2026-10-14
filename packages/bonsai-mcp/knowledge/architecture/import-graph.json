@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 967,
-  "edgeCount": 3255,
+  "fileCount": 968,
+  "edgeCount": 3256,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1136,6 +1136,7 @@
         "src/hooks/useEarlierTurnsPill.ts",
         "src/hooks/useKbNotesFold.ts",
         "src/hooks/useLiveTurnHeaderRingRestore.ts",
+        "src/hooks/useLiveTurnTwin.ts",
         "src/hooks/usePermHintNavTargets.ts",
         "src/hooks/useReadAloudAutoStop.ts",
         "src/hooks/useReasoningFoldState.ts",
@@ -7161,6 +7162,12 @@
         "src/utils/replyStopRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx"
+      ]
+    },
+    "src/hooks/useLiveTurnTwin.ts": {
+      "imports": [],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx"
       ]

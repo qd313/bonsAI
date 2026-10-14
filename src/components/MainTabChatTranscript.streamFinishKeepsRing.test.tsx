@@ -114,10 +114,11 @@ describe("the ring survives an answer finishing while it is being walked", () =>
 
     const after = archivedStops(container, "turn-1");
     expect(after.length).toBeGreaterThanOrEqual(3);
-    /* The live subtree is gone — this is a different element than `before[1]`, proving the fix
-       does not merely keep an old node alive. */
-    expect(after[1]).not.toBe(before[1]);
-    expect(document.activeElement).toBe(after[1]);
+    /* Plan 93: the reload keeps the live turn's own elements (useLiveTurnTwin.ts), so the section
+       holding the ring is the very same node, still connected and still holding the ring. */
+    expect(after[1]).toBe(before[1]);
+    expect(before[1]!.isConnected).toBe(true);
+    expect(before[1]!.classList.contains("gpfocus")).toBe(true);
   });
 
   it("does nothing when the ring was on Ask, not the answer, at the finish", () => {

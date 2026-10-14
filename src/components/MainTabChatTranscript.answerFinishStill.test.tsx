@@ -134,3 +134,79 @@ describe("an answer is cut into its finished sections while it writes", () => {
     expect(container.querySelector(".bonsai-chat-ai-bubble")).toBe(bubble);
   });
 });
+
+/* The chat reload after the finish: the turn comes back as the newest saved turn (applySlotTranscript). */
+function archived(): MainTabChatTranscriptProps {
+  return {
+    ...finished(),
+    askThreadDisplayQuestion: "",
+    expandedTurnKey: "turn-1",
+    askThreadCollapsed: [{ id: "turn-1", question: QUESTION, answer: ANSWER }],
+  };
+}
+
+describe("the chat reload after the finish keeps the very same answer on screen", () => {
+  beforeEach(() => {
+    resetAnswerStopRegistry();
+    resetUiDocument();
+    draws.length = 0;
+  });
+  afterEach(() => cleanup());
+
+  it("keeps the bubble, its sections and the ring's element through the finish and the reload", () => {
+    const { container, rerender } = render(<MainTabChatTranscript {...writing(ANSWER.slice(0, 900))} />);
+    const bubble = container.querySelector(".bonsai-chat-ai-bubble");
+    const slot = container.querySelector(".bonsai-chat-turn-slot");
+    /* The ring on the first section, the way a person walking the answer while it writes leaves it. */
+    const ringStop = stops(container)[0]!;
+    ringStop.classList.add("gpfocus");
+    ringStop.setAttribute("tabindex", "-1");
+    ringStop.focus();
+    rerender(<MainTabChatTranscript {...writing(ANSWER)} />);
+    const closedBefore = stops(container).slice(0, -1);
+    const drawsBefore = draws.length;
+
+    rerender(<MainTabChatTranscript {...finished()} />);
+    rerender(<MainTabChatTranscript {...archived()} />);
+
+    expect(container.querySelector(".bonsai-chat-ai-bubble")).toBe(bubble);
+    expect(container.querySelector(".bonsai-chat-turn-slot")).toBe(slot);
+    const after = stops(container);
+    closedBefore.forEach((el, i) => expect(after[i]).toBe(el));
+    expect(after[0]).toBe(ringStop);
+    expect(ringStop.isConnected).toBe(true);
+    expect(ringStop.classList.contains("gpfocus")).toBe(true);
+    expect(document.activeElement).toBe(ringStop);
+    /* Only the section that was still live is drawn once more, as a finished one. */
+    const closedTexts = cutAnswerSections(ANSWER).slice(0, closedBefore.length);
+    expect(draws.slice(drawsBefore).filter((d) => closedTexts.includes(d))).toEqual([]);
+    /* And the saved turn answers to its own id from now on (the D-pad helpers look it up so). */
+    expect(container.querySelector('[data-bonsai-answer-key="turn-1"]')).not.toBeNull();
+  });
+
+  it("keeps the rating row the same element through the reload", () => {
+    const { container, rerender } = render(<MainTabChatTranscript {...writing(ANSWER)} />);
+    rerender(<MainTabChatTranscript {...finished()} />);
+    const helpful = container.querySelector(".bonsai-chat-reply-actions");
+    expect(helpful).not.toBeNull();
+    rerender(<MainTabChatTranscript {...archived()} />);
+    expect(container.querySelector(".bonsai-chat-reply-actions")).toBe(helpful);
+  });
+
+  it("draws the reopened chat's saved turn the same way, and a follow-up as a turn of its own", () => {
+    const reopened = render(<MainTabChatTranscript {...archived()} />);
+    expect(stops(reopened.container)).toHaveLength(cutAnswerSections(ANSWER).length);
+    const savedSlot = reopened.container.querySelector(".bonsai-chat-turn-slot");
+    reopened.rerender(
+      <MainTabChatTranscript
+        {...writing("A follow-up answer")}
+        askThreadDisplayQuestion="And the next area?"
+        askThreadCollapsed={archived().askThreadCollapsed}
+      />
+    );
+    const slots = reopened.container.querySelectorAll(".bonsai-chat-turn-slot");
+    expect(slots).toHaveLength(2);
+    expect(slots[0]).toBe(savedSlot);
+    expect(slots[1]!.querySelector(".bonsai-chat-ai-bubble")?.textContent).toContain("A follow-up answer");
+  });
+});

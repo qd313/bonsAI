@@ -8,6 +8,8 @@
  *         held the ring after the finish, and within about 3 s the view slid to the end of the
  *         answer, leaving the Retry icon 196-356 px above the pane. The answer-section restore
  *         beside it (streamFinishKeepsRing.test.tsx) only ever covered the answer's own sections.
+ * Since plan 93 the reload keeps the live turn's own elements (useLiveTurnTwin.ts), so the ring
+ *          is never destroyed in the first place; these tests now pin that the very element keeps it.
  * Does not: Prove the fix on the Deck. The check this owes: put the ring on the live question's
  *           Retry while an answer is written, let it finish, and see the ring still on Retry,
  *           in view, a few seconds later.
@@ -112,23 +114,28 @@ describe("the ring on the live question row survives the answer finishing", () =
 
     rerender(<MainTabChatTranscript {...archivedProps()} />);
 
-    expect(liveRetry.isConnected).toBe(false);
-    const archivedRetry = retryIn(headerOf(container, "turn-1"));
-    expect(document.activeElement).toBe(archivedRetry);
+    /* Plan 93: the reload no longer rebuilds the turn. The live Retry IS the saved turn's Retry,
+       still holding the ring, so there is nothing to put back. */
+    expect(liveRetry.isConnected).toBe(true);
+    expect(retryIn(headerOf(container, "turn-1"))).toBe(liveRetry);
+    expect(liveRetry.classList.contains("gpfocus")).toBe(true);
   });
 
   it("puts the ring on the archived question's text when it was on the live question's text", () => {
     const focusSpy = vi.spyOn(HTMLElement.prototype, "focus");
     const { container, rerender } = render(<MainTabChatTranscript {...streamingProps()} />);
-    putRingOn(questionBodyIn(headerOf(container, "live")));
+    const liveBody = questionBodyIn(headerOf(container, "live"));
+    putRingOn(liveBody);
     rerender(<MainTabChatTranscript {...streamingProps()} />);
     focusSpy.mockClear();
 
     rerender(<MainTabChatTranscript {...archivedProps()} />);
 
+    /* Plan 93: the same element, ring and all; nothing was focused on the ring's behalf. */
     const archivedBody = questionBodyIn(headerOf(container, "turn-1"));
+    expect(archivedBody).toBe(liveBody);
+    expect(archivedBody.classList.contains("gpfocus")).toBe(true);
     const focused = focusSpy.mock.contexts as unknown[];
-    expect(focused).toContain(archivedBody);
     expect(focused).not.toContain(retryIn(headerOf(container, "turn-1")));
   });
 

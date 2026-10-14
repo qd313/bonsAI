@@ -1,233 +1,154 @@
 /**
- * Title: Breaking a long reply into D-pad-sized pieces
+ * Title: Cutting an answer into D-pad-sized sections
  *
- * Purpose: A finished Ask or Strategy reply can be long. Showing it as one solid block would
- * mean a single D-pad press scrolls through all of it with no stopping point along the way, so
- * this file breaks a reply up into a few pieces first, each becoming its own stop the D-pad can
- * land on. It never cuts a piece of code in the middle — a fenced code block (a part of a reply
- * wrapped in three backticks or three tildes) always stays whole in one piece.
+ * Purpose: An answer can be long. Showing it as one solid block would mean a single D-pad press
+ * scrolls through all of it with no stopping point, so the answer is cut into sections, each its own
+ * stop the D-pad can land on. A fenced block (a part of the answer wrapped in three backticks or
+ * three tildes) is never cut, and always sits in a section of its own.
  *
- * Used for: `buildAnswerBubbleElement` and the answer bubble's up/down D-pad navigation.
+ * Used for: `buildAnswerBubbleElement`, both while an answer is still arriving and once it is
+ * finished, and Copy (`answerCopyText`), which puts a blank line wherever the screen cuts.
  *
- * Solves: without this, a reply is either one long scroll with no stopping point, or, if split
- * too finely, a string of D-pad presses for what reads as a handful of short paragraphs.
+ * Solves: The answer must look the same while it writes and after it finishes (plan 93, the
+ * maintainer's pick on the mock-up board, tab 3, option A). The old cut looked ahead: it merged
+ * whole paragraphs up to 900 letters, so where a section ended depended on how long the NEXT
+ * paragraph turned out to be, and a one-paragraph answer was cut every 300 letters only if no second
+ * paragraph ever came. Text still arriving could not know either, so the answer was drawn as one
+ * block while it wrote and re-cut at the finish. Every cut here is decided by the text BEFORE it, so
+ * a section that has closed while the answer writes is exactly the section the finished answer has.
  *
- * Does not: remove the model's own control tags from the text first — see
- * `stripAssistantDisplayTags.ts`, a separate cleanup step that runs before this one.
+ * Does not: Remove the model's own control tags (`stripAssistantDisplayTags.ts` runs first), or
+ * decide what a half-written fence shows while it arrives (`streamMarkdownPrepare.ts`).
  *
- * How it works: paragraphs (chunks separated by a blank line) are the first split, as long as
- * doing so never cuts a fence in half. Paragraphs that are individually short are then merged
- * back together, up to about 900 characters — roughly half a screen's worth of the reply column
- * on the Deck — so a finished answer becomes a handful of D-pad stops rather than one per
- * paragraph. A single long paragraph with no natural breaks falls back to a length-based split
- * that looks for a natural place to cut — the end of a sentence, or else a gap between two words
- * — rather than cutting through the middle of one, again never cutting inside a fence.
+ * How it works: the text is read line by line, the way the panel reads fences
+ * (markdownFenceReader). A section is "full" once it holds SECTION_FULL_CHARS letters; a full section
+ * closes at the first of these that follows:
+ *   - a paragraph break (a blank line);
+ *   - a line break that is safe to cut at: not before an indented line (a list item's next
+ *     paragraph, indented code), not inside a table, not before a heading's underline, not between
+ *     a list item and plain text that continues it;
+ *   - a sentence end inside a plain line of prose (not a list item, heading, quote or table row),
+ *     where no bold, code or link mark is left open.
+ * Whatever its length, a section also closes before a fence opens and right after it closes, so a
+ * fence sits alone. While the text is still arriving (`final` false), its last line is not yet a
+ * whole line: a cut that would depend on how that line goes on is not made until it can be.
  */
-import { hasBalancedFenceMarkers, mayHoldFence, stepFence, type OpenFence } from "./markdownFenceReader";
+import { stepFence, type OpenFence } from "./markdownFenceReader";
 
 /**
- * Per-line fence state up to a character index (treats each line in `before` as complete for
- * toggles). Fences are read the way the panel draws them (markdownFenceReader): ``` or ~~~, and a
- * block ends only on its own matching closing line, so a blank line inside one is not a split point.
+ * How full a section gets before it closes at the next good place, in letters.
+ *
+ * About a third of a screen of the Deck's reading area (roughly 45 letters a line, 40 lines a screen),
+ * so a section usually ends between 600 and 900 letters: the "about half a screen" of the
+ * maintainer's call of 2026-09-06, now decided looking backwards only (the session's call, plan 93).
  */
-function isIndexInsideCodeFence(text: string, index: number): boolean {
-  if (index <= 0) {
-    return false;
-  }
-  const before = text.slice(0, index);
+export const SECTION_FULL_CHARS = 600;
+
+const LIST_ITEM = /^\s{0,3}([-*+]|\d{1,9}[.)])(\s|$)/;
+const INDENTED = /^( {2,}|\t)/;
+const TABLE_ROW = /^\s*\|/;
+const SETEXT_UNDERLINE = /^\s{0,3}(=+|-+)\s*$/;
+/** A line that may still become a fence opener, a heading underline or an indent: not yet decided. */
+const UNDECIDED_START = /^\s*$|^\s{0,3}([`~]{1,2}|[-=]+\s*)$/;
+/** A plain line of prose: sentence ends inside it are places to cut. */
+const NOT_PROSE = /^\s*([-*+>#|]|\d{1,9}[.)]\s|[`~]{3})/;
+/** A sentence end, its closing marks, the spaces after it, and the start of the next sentence. */
+const SENTENCE_END = /[.!?]["')\]*_]*\s+(?=[^\s\p{Ll}])/gu;
+
+function count(s: string, needle: string): number {
+  return s.split(needle).length - 1;
+}
+
+/** Whether nothing inline (code, bold, a link) is left open in `s`, so a cut after it is clean. */
+function inlineClosed(s: string): boolean {
+  if (count(s, "`") % 2 === 1) return false;
+  const bold = count(s, "**");
+  if (bold % 2 === 1) return false;
+  if (count(s.split("**").join(""), "*") % 2 === 1) return false;
+  return count(s, "[") === count(s, "]") && count(s, "(") === count(s, ")");
+}
+
+/**
+ * The sections of `text`, in order; joined they hold every word of it. With `final` false the text
+ * is still arriving: every section but the last is closed for good, and the last one is still
+ * filling. With `final` true (the default) the text is the whole answer.
+ */
+export function cutAnswerSections(text: string, final = true): string[] {
+  const cuts: number[] = [];
+  let sectionStart = 0;
   let open: OpenFence | null = null;
-  for (const line of before.split("\n")) {
-    open = stepFence(line, open).open;
-  }
-  return open !== null;
-}
-
-/**
- * Like text.split(/\\n\\n+/).filter(Boolean), but does not break apart fenced code
- * blocks (paragraph breaks inside a fence are ignored as split points).
- */
-function splitByParagraphsRespectingFences(text: string): string[] {
-  const re = /\n\n+/g;
-  const segments: string[] = [];
-  let last = 0;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(text)) !== null) {
-    if (!isIndexInsideCodeFence(text, m.index)) {
-      const seg = text.slice(last, m.index).trim();
-      if (seg) {
-        segments.push(seg);
-      }
-      last = m.index + m[0]!.length;
-    }
-  }
-  const tail = text.slice(last).trim();
-  if (tail) {
-    segments.push(tail);
-  }
-  return segments;
-}
-
-/**
- * Long-text splits at ~maxLen, preferring space/sentence breaks, never splitting
- * between unbalanced code fences.
- */
-function splitLongRespectingFences(text: string, maxLen: number): string[] {
-  if (text.length <= maxLen) {
-    return [text];
-  }
-  const out: string[] = [];
-  let start = 0;
-  while (text.length - start > maxLen) {
-    const endBudget = start + maxLen;
-    let cut = findSafeCutInRange(text, start, endBudget);
-    if (cut <= start) {
-      cut = Math.min(text.length, endBudget);
-    }
-    const piece = text.slice(start, cut).trim();
-    if (piece) {
-      out.push(piece);
-    }
-    start = cut;
-    while (start < text.length && /\s/.test(text[start]!)) {
-      start++;
-    }
-  }
-  const rest = text.slice(start).trim();
-  if (rest) {
-    out.push(rest);
-  }
-  return out.length > 0 ? out : [text];
-}
-
-/**
- * Picks a cut in (start, maxEnd] so the slice [start, cut) has balanced fences, preferring
- * . / space boundaries.
- */
-function findSafeCutInRange(text: string, start: number, maxEnd: number): number {
-  const limit = Math.min(maxEnd, text.length);
-  let c = text.lastIndexOf(". ", limit);
-  /*
-   * `lastIndexOf(". ", limit)` returns the index of the "." itself, not the boundary after it — used
-   * as-is, the slice ends right before the period, so the sentence's own full stop is orphaned onto
-   * the start of the next chunk ("...go BOOM" / ". The trick is..."). Advance past both characters so
-   * the period stays with the sentence it closes.
-   */
-  if (c >= 0) {
-    c += 2;
-  }
-  if (c < start + 80) {
-    c = text.lastIndexOf(" ", limit);
-  }
-  if (c < start + 80) {
-    c = limit;
-  }
-  for (let tryCut = c; tryCut > start; ) {
-    if (hasBalancedFenceMarkers(text.slice(start, tryCut))) {
-      return tryCut;
-    }
-    tryCut = text.lastIndexOf(" ", tryCut - 1);
-    if (tryCut <= start) {
-      break;
-    }
-  }
-  for (let tryCut = limit; tryCut < text.length; tryCut++) {
-    if (hasBalancedFenceMarkers(text.slice(start, tryCut))) {
-      return tryCut;
-    }
-  }
-  return limit;
-}
-
-/**
- * How much text one D-pad stop may hold, in characters.
- *
- * About half a screen of the Deck's reading area: the answer bubble is ~245px wide inside its
- * padding at 12px/1.4, which is roughly 45 characters a line, and the scrollable column is 667px
- * tall — call it 40 lines a screen, so ~1800 characters full and ~900 for half. Half rather than
- * full so a press still leaves some of the previous section on screen to keep your place.
- * Maintainer's call, 2026-09-06.
- *
- * Only the paragraph and line paths below merge. The density split (`splitLongRespectingFences`)
- * exists to break ONE long paragraph up, so merging its output would undo the thing it just did.
- */
-const SECTION_MERGE_MAX_CHARS = 900;
-
-/**
- * Feature: fewer D-pad stops on a finished reply.
- * Input: pieces from one split pass, and the separator that split produced them.
- * Output: the same words in the same order, in fewer pieces.
- *
- * Down only moves the ring to a section that is already on screen (answerBubbleNavigation.ts) —
- * an off-screen section makes it scroll instead — so merging removes the wasted presses that
- * happen when several short paragraphs share one screen. No text is skipped by it.
- *
- * A piece holding a code fence is left alone in both directions: fences stay whole and stay by
- * themselves, exactly as before.
- */
-function mergeShortChunks(pieces: string[], joiner: string): string[] {
-  if (pieces.length <= 1) {
-    return pieces;
-  }
-  const out: string[] = [];
-  let current: string | null = null;
-  const flush = () => {
-    if (current !== null) {
-      out.push(current);
-      current = null;
+  let fenceJustClosed = false;
+  let sawBlank = false;
+  let prev: string | null = null;
+  let prevInList = false;
+  let offset = 0;
+  const lines = text.split("\n");
+  const sectionLength = (end: number) => text.slice(sectionStart, end).trim().length;
+  const cut = (at: number) => {
+    if (sectionLength(at) > 0) {
+      cuts.push(at);
+      sectionStart = at;
     }
   };
-  for (const piece of pieces) {
-    if (mayHoldFence(piece) || piece.length >= SECTION_MERGE_MAX_CHARS) {
-      flush();
-      out.push(piece);
+
+  for (let i = 0; i < lines.length; i += 1) {
+    const line = lines[i]!;
+    const lineStart = offset;
+    offset += line.length + 1;
+    const whole = final || i < lines.length - 1;
+
+    if (open) {
+      if (!whole) break;
+      if (stepFence(line, open).kind === "close") {
+        open = null;
+        fenceJustClosed = true;
+      }
       continue;
     }
-    if (current === null) {
-      current = piece;
-    } else if (current.length + joiner.length + piece.length <= SECTION_MERGE_MAX_CHARS) {
-      current = current + joiner + piece;
-    } else {
-      flush();
-      current = piece;
+    if (line.trim() === "") {
+      if (prev !== null) sawBlank = true;
+      continue;
+    }
+    if (!whole && UNDECIDED_START.test(line)) break;
+
+    const step = stepFence(line, null);
+    const opensFence = step.kind === "open";
+    const full = sectionLength(lineStart) >= SECTION_FULL_CHARS;
+    const safeLineBreak =
+      !INDENTED.test(line) &&
+      !(prev !== null && TABLE_ROW.test(prev) && TABLE_ROW.test(line)) &&
+      !SETEXT_UNDERLINE.test(line) &&
+      !(prevInList && !LIST_ITEM.test(line));
+    if (fenceJustClosed || opensFence || (full && (sawBlank || safeLineBreak))) cut(lineStart);
+    fenceJustClosed = false;
+    sawBlank = false;
+    prevInList = LIST_ITEM.test(line) || (prevInList && INDENTED.test(line));
+    prev = line;
+    if (opensFence) {
+      open = step.open;
+      continue;
+    }
+
+    if (NOT_PROSE.test(line) || INDENTED.test(line)) continue;
+    for (const m of line.matchAll(SENTENCE_END)) {
+      const at = lineStart + m.index! + m[0].length;
+      if (sectionLength(at) >= SECTION_FULL_CHARS && inlineClosed(text.slice(Math.max(lineStart, sectionStart), at))) {
+        cut(at);
+      }
     }
   }
-  flush();
-  return out;
+
+  const sections: string[] = [];
+  let from = 0;
+  for (const at of [...cuts, text.length]) {
+    const piece = text.slice(from, at).trim();
+    if (piece) sections.push(piece);
+    from = at;
+  }
+  return sections;
 }
 
-/**
- * Keep responses readable in Decky by splitting dense output into panel-sized chunks.
- * Code fences (``` or ~~~) are never split across chunks: paragraph/density splits are skipped
- * when they would break inside a block. Neighbouring short paragraphs (or lines) are then merged
- * back up to SECTION_MERGE_MAX_CHARS, so a finished answer is a few D-pad stops rather than one
- * per paragraph — see mergeShortChunks.
- */
+/** The sections of a finished answer (see cutAnswerSections). */
 export function splitResponseIntoChunks(text: string): string[] {
-  const t = text.trim();
-  if (!t) {
-    return [];
-  }
-
-  const byParagraph = splitByParagraphsRespectingFences(t);
-  if (byParagraph.length > 1) {
-    return mergeShortChunks(byParagraph, "\n\n");
-  }
-
-  const block = byParagraph[0] ?? t;
-  if (mayHoldFence(block)) {
-    if (block.length <= 8000) {
-      return [block];
-    }
-    return splitLongRespectingFences(block, 300);
-  }
-
-  const byLine = block.split("\n").filter((l) => l.trim());
-  if (byLine.length > 1) {
-    /* A single newline, not a blank line: a bullet list rejoined with blank lines
-       renders as a loose list with extra spacing, which would change how the answer
-       looks. This change is only about how many stops there are. */
-    return mergeShortChunks(byLine, "\n");
-  }
-
-  return splitLongRespectingFences(block, 300);
+  return cutAnswerSections(text, true);
 }

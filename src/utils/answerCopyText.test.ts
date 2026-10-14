@@ -108,9 +108,9 @@ describe("buildAnswerCopyText", () => {
 
 /*
  * Roadmap: "Copy joined two paragraphs into one" (plan72-Z-FREEPLAY.json, finding 13). An answer
- * written as one long paragraph, with no line breaks, is cut by the screen into pieces of about
- * 300 letters at sentence ends, each drawn as its own block -- so it reads as two paragraphs.
- * Copy took the source text, which has only a space there.
+ * written as one long paragraph, with no line breaks, is cut by the screen at the first sentence
+ * end after about 600 letters (plan 93; it was every 300 letters before), each piece drawn as its
+ * own block -- so it reads as two paragraphs. Copy took the source text, which has only a space there.
  */
 describe("buildAnswerCopyText keeps the breaks the screen shows", () => {
   const LONG_ONE_PARAGRAPH =
@@ -119,14 +119,26 @@ describe("buildAnswerCopyText keeps the breaks the screen shows", () => {
     "When her health drops she calls in help from the Underworld's shades, and the room gets crowded fast. " +
     "Clear the small ones first with a sweeping attack, then turn back to her once the floor is quiet. " +
     "Pick a boon that adds damage to your dash, because you will be dashing a lot in this fight.";
+  /* Past SECTION_FULL_CHARS (600), so the screen cuts it once, at the first sentence end after that. */
+  const LONGER_ONE_PARAGRAPH =
+    `${LONG_ONE_PARAGRAPH} The second Fury fights the same way, only faster, and her sister after her ` +
+    "calls more shades, so expect the crowd to arrive sooner. Keep the same dash boon for both of " +
+    "them, and save your cast for the shades.";
 
   it("puts a blank line where the screen cuts one long paragraph into two blocks", () => {
-    const shown = splitResponseIntoChunks(LONG_ONE_PARAGRAPH);
-    expect(shown.length).toBeGreaterThan(1);
+    const shown = splitResponseIntoChunks(LONGER_ONE_PARAGRAPH);
+    expect(shown).toHaveLength(2);
+    expect(shown[0]!.length).toBeGreaterThanOrEqual(600);
+    expect(shown[0]!.endsWith(".")).toBe(true);
 
-    const copied = buildAnswerCopyText({ body: LONG_ONE_PARAGRAPH });
+    const copied = buildAnswerCopyText({ body: LONGER_ONE_PARAGRAPH });
 
     expect(copied.split("\n\n")).toEqual(shown);
+  });
+
+  it("leaves a one-paragraph answer the screen keeps whole exactly as written", () => {
+    expect(splitResponseIntoChunks(LONG_ONE_PARAGRAPH)).toEqual([LONG_ONE_PARAGRAPH]);
+    expect(buildAnswerCopyText({ body: LONG_ONE_PARAGRAPH })).toBe(LONG_ONE_PARAGRAPH);
   });
 
   it("leaves a short one-paragraph answer exactly as written", () => {

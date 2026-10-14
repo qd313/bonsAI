@@ -685,7 +685,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    * (docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json): the stop was destroyed one step
    * earlier, when the finished answer re-rendered its sections under new keys inside the still-live
    * bubble, so by the archive edge the recorded position already read "no ring". Section keys are
-   * now positional (buildAnswerBubbleElement.tsx, answerStopKey), so that step keeps the element;
+   * now positional (buildAnswerSections.tsx), so that step keeps the element;
    * this watches for the element going away at any step rather than at one named edge.
    */
   const liveAnswerRingStopRef = useRef<{ index: number; el: HTMLElement } | null>(null);

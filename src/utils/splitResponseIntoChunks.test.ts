@@ -41,15 +41,15 @@ describe("splitResponseIntoChunks", () => {
 
   describe("long single-paragraph text — sentence-boundary cuts", () => {
     /*
-     * A ~160-char filler with no blank line, so the whole thing stays one paragraph and one line —
-     * only `splitLongRespectingFences`'s density split (maxLen 300) can produce a second chunk here.
-     * Long enough to push the shout sentence past the "prefer a nearby '. '" floor (start + 80) but
-     * still inside the 300-char cut window, so `findSafeCutInRange` picks the period this test cares
-     * about rather than a later or earlier one.
+     * One paragraph, one line, no sentence end in the filler: about 640 letters with only commas,
+     * so the first sentence end past SECTION_FULL_CHARS (600) is the shout sentence's own. Plan 93
+     * (lane O3): a long paragraph is cut there, looking backwards only, so the cut is the same while
+     * the answer writes and once it is finished. (It used to be cut every 300 letters, but only
+     * when no second paragraph ever followed, which a stream cannot know.)
      */
     const FILLER =
       "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut " +
-      "labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation. ";
+      "labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation, ";
     const TAIL =
       " and never let them corner you, because that is when things go from bad to worse for " +
       "everyone involved and nobody in the squad wants that outcome at all, trust me on this one.";
@@ -60,18 +60,29 @@ describe("splitResponseIntoChunks", () => {
          break, landing the period at the start of the next chunk instead of the end of this one. */
       'keeps "%s." on the same chunk as the sentence it ends, not orphaned onto the next one',
       (shoutWord) => {
-        const text = `${FILLER}they walk right into ya and go ${shoutWord}. The trick is to keep your distance${TAIL}`;
+        const text = `${FILLER.repeat(4)}they walk right into ya and go ${shoutWord}. The trick is to keep your distance${TAIL}`;
         const chunks = splitResponseIntoChunks(text);
 
-        expect(chunks.length).toBeGreaterThan(1);
+        expect(chunks).toHaveLength(2);
         for (const chunk of chunks) {
           expect(chunk.trimStart().startsWith(".")).toBe(false);
         }
-        const shoutChunk = chunks.find((c) => c.includes(shoutWord));
-        expect(shoutChunk).toBeDefined();
-        expect(shoutChunk).toContain(`${shoutWord}.`);
+        expect(chunks[0]!.endsWith(`${shoutWord}.`)).toBe(true);
+        expect(chunks[1]!.startsWith("The trick")).toBe(true);
       }
     );
+
+    it("leaves a one-paragraph answer under about 600 letters whole", () => {
+      const text = `${FILLER}they go BOOM. The trick is to keep your distance${TAIL}`;
+      expect(text.length).toBeLessThan(600);
+      expect(splitResponseIntoChunks(text)).toEqual([text]);
+    });
+
+    it("does not cut where a bold or code mark is still open", () => {
+      const text = `${FILLER.repeat(4)}**they go BOOM. The trick** is to keep away. Then dash${TAIL}`;
+      const chunks = splitResponseIntoChunks(text);
+      expect(chunks[0]!.endsWith("keep away.")).toBe(true);
+    });
   });
   /*
    * Fewer D-pad stops on a finished reply. One stop per paragraph meant ten-plus Down presses

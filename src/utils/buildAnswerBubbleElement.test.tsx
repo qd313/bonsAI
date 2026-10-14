@@ -23,6 +23,13 @@ function collectByClassName(node: React.ReactNode, cls: string): React.ReactElem
     }
     if (!n || typeof n !== "object" || !("props" in n)) return;
     const el = n as React.ReactElement;
+    /* A section is drawn by its own memoised component now (buildAnswerSections.tsx), so its
+       class sits one render below this tree: stand in for it with the handlers it is handed. */
+    const sectionProps = el.props as { body?: unknown; nav?: Record<string, unknown> };
+    if (sectionProps.body && sectionProps.nav && cls === "bonsai-answer-stop") {
+      out.push(React.createElement("div", { className: "bonsai-answer-stop", ...sectionProps.nav }));
+      return;
+    }
     const className = (el.props as Record<string, unknown>).className;
     if (typeof className === "string" && className.split(/\s+/).includes(cls)) out.push(el);
     walk((el.props as { children?: React.ReactNode }).children);

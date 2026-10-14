@@ -38,11 +38,12 @@
  *    cover still open mid-stream. Both are asked the same question on purpose, so
  *    a spoiler is never masked while it arrives and then revealed the instant it
  *    finishes — which looks like a flicker and gives the answer away anyway.
- * 3. Cutting into stops. Finished text goes to `splitResponseIntoChunks()`.
- *    Text still arriving goes to `renderStreamMarkdownStack()`, a different job
- *    with its own note below.
- * 4. Every stop registers itself by number through `registerAnswerStop()`, which
- *    is how the D-pad finds it again later.
+ * 3. Cutting into stops. Finished text and text still arriving go through the
+ *    same cut (splitResponseIntoChunks.ts, drawn by `buildAnswerSections()`): while
+ *    an answer writes, every section but the last is already drawn exactly as it
+ *    will be when finished, so the finish changes nothing above the last one.
+ * 4. Every stop registers itself by number in answerStopRegistry.ts, which is how
+ *    the D-pad finds it again later.
  * 5. The edges. `moveDown()` and `moveUp()` handle movement inside the bubble and
  *    then answer "not mine" at the ends, letting Steam move on to the next thing.
  *    They deliberately do not move focus themselves — see the gotcha below.
@@ -64,9 +65,7 @@
  */
 import React from "react";
 import { Focusable } from "@decky/ui";
-import { ScrambledAnswerText } from "../features/stream-scramble/ScrambledAnswerText";
 import type { DrgGlossaryTerm } from "../data/drgGlossaryTerms";
-import { StreamFenceWaitChip } from "../components/StreamFenceWaitChip";
 import { buildAnswerCorners } from "./buildAnswerCornerSlots";
 import {
   getRegisteredAnswerBubble,
@@ -80,7 +79,7 @@ import {
   handleUpFromSpoilerCover,
   openHiddenCoverIn,
 } from "./answerBubbleNavigation";
-import { registerAnswerStop } from "./answerStopRegistry";
+import { answerSectionBodies, buildAnswerSections } from "./buildAnswerSections";
 import {
   focusDownFromLiveAnswerBubble,
   queryLiveTurnSlot,
@@ -94,9 +93,7 @@ import {
   isUpDeckButtonEvent,
 } from "./focusNavigation";
 import { focusRegisteredReplyStop } from "./replyStopRegistry";
-import { prepareStreamMarkdown } from "./streamMarkdownPrepare";
 import { expandOneLineSpoilerFences } from "./expandOneLineSpoilerFences";
-import { splitResponseIntoChunks } from "./splitResponseIntoChunks";
 import { stripAssistantDisplayTags } from "./stripAssistantDisplayTags";
 import {
   shouldUnwrapSpoilerFence,
@@ -157,8 +154,6 @@ function captureBubble(answerKey: string): HTMLElement | null {
   return bubble;
 }
 
-const STOP_CLASS = "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop";
-
 /**
  * Props every section stop carries.
  *
@@ -194,7 +189,7 @@ const STOP_CLASS = "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble
  * glossary-term chip or a masked spoiler fence is only ever offered on a Down or Up press (see
  * handleAnswerBubbleMoveDown/handleAnswerBubbleMoveUp above), so there is nothing for either
  * direction to reach here. The last section's own Right-into-Copy hand-off overrides this default
- * where it applies — it is spread in after `stopNavProps` in `stopAttrs`, below.
+ * where it applies — it is spread in after `stopNavProps` as the last section's `lastNav`, below.
  */
 export function stopNavProps(
   moveDown: () => boolean,
@@ -226,129 +221,6 @@ export function stopNavProps(
       return false;
     },
   };
-}
-
-/* Cast for the same reason `navHandlers` below is cast: `data-*` is only structurally typed on
-   intrinsic elements, and Decky's Focusable props do not carry an index signature. */
-function stopAttrs(
-  stopNav: Record<string, unknown>,
-  index: number,
-  extra?: Record<string, unknown>
-): Record<string, unknown> {
-  return {
-    ...stopNav,
-    ...extra,
-    "data-bonsai-chunk-index": String(index),
-  } as Record<string, unknown>;
-}
-
-/**
- * One key per section POSITION, shared by the streaming stack (closed blocks, the fence wait chip,
- * the live tail) and the finished chunks. They used to carry their kind in the key (`-closed-0`,
- * `-tail`, `-chunk-0`), so the moment an answer finished every section was a new element and the
- * one holding Steam's ring was destroyed with it: the ring vanished and the view fell to the end
- * (Deck, docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json -- ring on the only section while
- * writing, gone at the finish). Keyed by position, React keeps the same element for section N
- * across the switch, and the ring stays on it.
- */
-function answerStopKey(answerKey: string, index: number): string {
-  return `${answerKey}-stop-${index}`;
-}
-
-/*
- * Cuts an answer that is still arriving into D-pad stops.
- *
- * In: the text so far, the two spoiler settings, the answer's key, and the
- * movement handlers every stop shares.
- * Out: a list of React nodes, one per stop, in the order they are drawn.
- *
- * Text arriving live cannot be cut the same way finished text is, because the
- * last paragraph is still growing and a half-written code fence or table is not
- * yet something that can be drawn. So the text splits three ways:
- *
- *     closed blocks   -> drawn normally, they are finished and will not change
- *     a wait chip     -> shown when something is half-written, e.g. a code fence
- *                        that has opened and not yet closed
- *     the live tail   -> the last, still-growing paragraph
- *
- * What can go wrong: the stop numbers have to run 0, 1, 2 with no gaps, because
- * the D-pad walks them by counting. The wait chip and the live tail never appear
- * together today, and the numbering here still allows for both so that a change
- * upstream cannot silently punch a hole in the middle of the sequence.
- */
-function renderStreamMarkdownStack(
-  body: string,
-  spoilerMaskingEnabled: boolean,
-  spoilerDefaultExpanded: boolean,
-  answerKey: string,
-  stopNav: Record<string, unknown>,
-  unwrapOpenSpoilerFence?: (openFenceText: string) => boolean,
-  appId?: string | null,
-  onDrgGlossaryExplainFurther?: (term: DrgGlossaryTerm) => void
-): React.ReactNode {
-  const prepared = prepareStreamMarkdown(body, { unwrapOpenSpoilerFence });
-  const nodes: React.ReactNode[] = [];
-
-  prepared.closedBlocks.forEach((block, i) => {
-    nodes.push(
-      <Focusable
-        key={answerStopKey(answerKey, i)}
-        className={`${STOP_CLASS} bonsai-ai-response-chunk--stream-closed`}
-        ref={(el: HTMLElement | null) => registerAnswerStop(answerKey, i, el)}
-        {...stopAttrs(stopNav, i)}
-      >
-        <ScrambledAnswerText
-          plain={block}
-          raw={block}
-          streaming={false}
-          spoilerMaskingEnabled={spoilerMaskingEnabled}
-          spoilerDefaultExpanded={spoilerDefaultExpanded}
-          appId={appId}
-          onDrgGlossaryExplainFurther={onDrgGlossaryExplainFurther}
-        />
-      </Focusable>
-    );
-  });
-
-  if (prepared.waitChip) {
-    const waitIndex = prepared.closedBlocks.length;
-    nodes.push(
-      <Focusable
-        key={answerStopKey(answerKey, waitIndex)}
-        className={`${STOP_CLASS} bonsai-ai-response-chunk--stream-wait`}
-        ref={(el: HTMLElement | null) => registerAnswerStop(answerKey, waitIndex, el)}
-        {...stopAttrs(stopNav, waitIndex)}
-      >
-        <StreamFenceWaitChip label={prepared.waitChip.label} kind={prepared.waitChip.kind} />
-      </Focusable>
-    );
-  }
-
-  if (prepared.liveTail) {
-    /* prepareStreamMarkdown returns a tail or a chip, never both; the term is defensive so the
-       indices stay contiguous if that ever changes. */
-    const tailIndex = prepared.closedBlocks.length + (prepared.waitChip ? 1 : 0);
-    nodes.push(
-      <Focusable
-        key={answerStopKey(answerKey, tailIndex)}
-        className={STOP_CLASS}
-        ref={(el: HTMLElement | null) => registerAnswerStop(answerKey, tailIndex, el)}
-        {...stopAttrs(stopNav, tailIndex, { "data-bonsai-stream-preview": "true" })}
-      >
-        <ScrambledAnswerText
-          plain={prepared.liveTail}
-          raw={prepared.liveTailRaw ?? prepared.liveTail}
-          streaming
-          spoilerMaskingEnabled={spoilerMaskingEnabled}
-          spoilerDefaultExpanded={spoilerDefaultExpanded}
-          appId={appId}
-          onDrgGlossaryExplainFurther={onDrgGlossaryExplainFurther}
-        />
-      </Focusable>
-    );
-  }
-
-  return nodes;
 }
 
 /**
@@ -399,10 +271,12 @@ export function buildAnswerBubbleElement(
     ? (openFenceText: string) => shouldUnwrapSpoilerFence(openFenceText, spoilerUnwrapOpts)
     : undefined;
 
-  const prepared = streaming ? prepareStreamMarkdown(displayBody, { unwrapOpenSpoilerFence }) : null;
-  const displayChunks = streaming ? [] : splitResponseIntoChunks(displayBody);
-  const chunkTotal = streaming ? 1 : displayChunks.length;
-  const fenceWaitActive = prepared?.waitChip?.kind === "fence";
+  /* The same sections live and finished (buildAnswerSections.tsx): only the last one is still
+     filling while the answer writes, so the finish changes nothing above it (plan 93). */
+  const bodies = answerSectionBodies(displayBody, streaming, unwrapOpenSpoilerFence);
+  const chunkTotal = bodies.length;
+  const lastBody = bodies[bodies.length - 1];
+  const fenceWaitActive = lastBody?.kind === "wait" && lastBody.waitKind === "fence";
 
   const moveDown = () => {
     const bubble = captureBubble(answerKey);
@@ -556,58 +430,33 @@ export function buildAnswerBubbleElement(
         data-bonsai-answer-key={answerKey}
       >
         <div className="bonsai-ai-response-stack bonsai-ai-response-stack--in-bubble">
-          {streaming
-            ? renderStreamMarkdownStack(
-                displayBody,
-                spoilerMaskingEnabled,
-                spoilerDefaultExpanded,
-                answerKey,
-                stopNav,
-                unwrapOpenSpoilerFence,
-                appId,
-                onDrgGlossaryExplainFurther
-              )
-            : /* Same stop treatment as the streaming stack, so navigating a turn feels the same
-                 whether or not it streamed — and so a turn does not change shape under the user at
-                 T3, when the layout switches from stream sections to these chunks. */
-              displayChunks.map((chunk, i) => (
-                <Focusable
-                  key={answerStopKey(answerKey, i)}
-                  className={STOP_CLASS}
-                  ref={(el: HTMLElement | null) => registerAnswerStop(answerKey, i, el)}
-                  {...stopAttrs(
-                    stopNav,
-                    i,
-                    /* Only the last section offers Right into the corner icons: they are pinned to
-                       the bottom of the bubble, so anywhere else the ring would jump past text. */
-                    (showCornerCopy || showCornerReadAloud) && i === displayChunks.length - 1
-                      ? {
-                          /* onMoveLeft is left unset here on purpose — it falls through to
-                             stopNav's own "hold still", which is exactly right for the last
-                             section too (there is nothing to its left). */
-                          onMoveRight: () => rightIntoCorner(),
-                          onButtonDown: (button: unknown) => {
-                            if (isDeckDirectionRightEvent(button)) return rightIntoCorner();
-                            if (isDeckDirectionLeftEvent(button)) return true;
-                            if (isDownDeckButtonEvent(button)) return moveDown();
-                            if (isUpDeckButtonEvent(button)) return moveUp();
-                            return false;
-                          },
-                        }
-                      : undefined
-                  )}
-                >
-                  <ScrambledAnswerText
-                    plain={chunk}
-                    raw={chunk}
-                    streaming={false}
-                    spoilerMaskingEnabled={spoilerMaskingEnabled}
-                    spoilerDefaultExpanded={spoilerDefaultExpanded}
-                    appId={appId}
-                    onDrgGlossaryExplainFurther={onDrgGlossaryExplainFurther}
-                  />
-                </Focusable>
-              ))}
+          {buildAnswerSections({
+            answerKey,
+            bodies,
+            nav: stopNav,
+            /* Only the last section of a finished answer offers Right into the corner icons: they
+               are pinned to the bottom of the bubble, so anywhere else the ring would jump past
+               text. onMoveLeft is left to stopNav's own "hold still", right for the last section
+               too (there is nothing to its left). */
+            lastNav:
+              showCornerCopy || showCornerReadAloud
+                ? {
+                    ...stopNav,
+                    onMoveRight: () => rightIntoCorner(),
+                    onButtonDown: (button: unknown) => {
+                      if (isDeckDirectionRightEvent(button)) return rightIntoCorner();
+                      if (isDeckDirectionLeftEvent(button)) return true;
+                      if (isDownDeckButtonEvent(button)) return moveDown();
+                      if (isUpDeckButtonEvent(button)) return moveUp();
+                      return false;
+                    },
+                  }
+                : undefined,
+            spoilerMaskingEnabled,
+            spoilerDefaultExpanded,
+            appId,
+            onDrgGlossaryExplainFurther,
+          })}
         </div>
       </div>
     </Focusable>
@@ -619,7 +468,7 @@ export function buildAnswerBubbleElement(
    * finish the element at this position changed type and React rebuilt the whole bubble: every
    * section, including the one holding Steam's ring, was a new element, the ring vanished and the
    * view fell to the end (Deck, docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json). With one
-   * wrapper shape the bubble keeps its identity, and its sections keep theirs (answerStopKey).
+   * wrapper shape the bubble keeps its identity, and its sections keep theirs (keyed by position, buildAnswerSections.tsx).
    *
    * Copy sits just under the answer, tucked to its bottom right — a SIBLING of the bubble, not a
    * child of it. Measured twice on the Deck 2026-09-06, and both failures came from it being

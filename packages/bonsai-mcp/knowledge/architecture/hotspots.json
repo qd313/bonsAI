@@ -32,7 +32,7 @@
     },
     {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 1209,
+      "lines": 1216,
       "role": ""
     },
     {
@@ -171,11 +171,6 @@
       "role": ""
     },
     {
-      "path": "src/utils/buildAnswerBubbleElement.tsx",
-      "lines": 653,
-      "role": ""
-    },
-    {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",
       "lines": 642,
       "role": ""
@@ -199,6 +194,11 @@
       "path": "py_modules/backend/services/ollama_service.py",
       "lines": 621,
       "role": "Prompt build, Ollama HTTP, streaming"
+    },
+    {
+      "path": "src/utils/settingsContracts.test.ts",
+      "lines": 619,
+      "role": ""
     }
   ]
 }

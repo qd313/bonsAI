@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 964,
-  "edgeCount": 3246,
+  "fileCount": 967,
+  "edgeCount": 3255,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -781,6 +781,7 @@
       ],
       "importedBy": [
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
+        "src/components/MainTabChatTranscript.answerFinishStill.test.tsx",
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
         "src/components/MainTabChatTranscript.cutSpoilerCover.test.tsx",
         "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
@@ -796,6 +797,17 @@
         "src/utils/gluedSpoilerOpener.test.tsx",
         "src/utils/oneLineSpoilerBlock.test.tsx"
       ]
+    },
+    "src/components/MainTabChatTranscript.answerFinishStill.test.tsx": {
+      "imports": [
+        "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/answerStopRegistry.ts",
+        "src/utils/splitResponseIntoChunks.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": []
     },
     "src/components/MainTabChatTranscript.closeMatchLine.test.tsx": {
       "imports": [
@@ -1164,6 +1176,7 @@
       "importedBy": [
         "src/components/ContextChipLadder.ringWalk.test.tsx",
         "src/components/MainTab.tsx",
+        "src/components/MainTabChatTranscript.answerFinishStill.test.tsx",
         "src/components/MainTabChatTranscript.closeMatchLine.test.tsx",
         "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
@@ -2613,7 +2626,7 @@
     "src/components/StreamFenceWaitChip.tsx": {
       "imports": [],
       "importedBy": [
-        "src/utils/buildAnswerBubbleElement.tsx"
+        "src/utils/buildAnswerSections.tsx"
       ]
     },
     "src/components/StreamMarkdownPieces.test.tsx": {
@@ -3305,6 +3318,7 @@
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/components/StreamMarkdownPieces.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
+        "src/utils/buildAnswerSections.tsx",
         "src/utils/drgGlossaryAsk.test.ts",
         "src/utils/drgGlossaryAsk.ts",
         "src/utils/drgGlossaryTermMatch.test.ts",
@@ -6230,7 +6244,7 @@
       "importedBy": [
         "src/components/StreamMarkdownPieces.test.tsx",
         "src/features/stream-scramble/ScrambledAnswerText.test.tsx",
-        "src/utils/buildAnswerBubbleElement.tsx"
+        "src/utils/buildAnswerSections.tsx"
       ]
     },
     "src/features/stream-scramble/liveScrambleMemo.test.ts": {
@@ -8769,6 +8783,7 @@
         "src/components/MainTab.tabBarDownRetry.test.tsx",
         "src/components/MainTabAskModeMenuPopover.test.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
+        "src/components/MainTabChatTranscript.answerFinishStill.test.tsx",
         "src/components/MainTabChatTranscript.closeMatchLine.test.tsx",
         "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.coverRevealHandle.test.tsx",
@@ -9580,6 +9595,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/MainTabChatTranscript.answerFinishStill.test.tsx",
         "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
         "src/components/MainTabChatTranscript.streamFinishKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
@@ -9592,7 +9608,7 @@
         "src/utils/answerBubbleWordsUp.ts",
         "src/utils/answerStopRegistry.test.ts",
         "src/utils/buildAnswerBubbleElement.test.tsx",
-        "src/utils/buildAnswerBubbleElement.tsx",
+        "src/utils/buildAnswerSections.tsx",
         "src/utils/buildReplyActionsElement.test.tsx",
         "src/utils/emptyLabelSpoilerMark.test.tsx",
         "src/utils/gluedSpoilerOpener.test.tsx",
@@ -9837,19 +9853,15 @@
     },
     "src/utils/buildAnswerBubbleElement.tsx": {
       "imports": [
-        "src/components/StreamFenceWaitChip.tsx",
         "src/data/drgGlossaryTerms.ts",
-        "src/features/stream-scramble/ScrambledAnswerText.tsx",
         "src/utils/answerBubbleElRegistry.ts",
         "src/utils/answerBubbleNavigation.ts",
-        "src/utils/answerStopRegistry.ts",
         "src/utils/buildAnswerCornerSlots.tsx",
+        "src/utils/buildAnswerSections.tsx",
         "src/utils/expandOneLineSpoilerFences.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/replyStopRegistry.ts",
-        "src/utils/splitResponseIntoChunks.ts",
-        "src/utils/streamMarkdownPrepare.ts",
         "src/utils/stripAssistantDisplayTags.ts",
         "src/utils/uiDocument.ts",
         "src/utils/unwrapAskedEntitySpoilerFences.ts"
@@ -9871,6 +9883,19 @@
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/replyStopRegistry.ts"
+      ],
+      "importedBy": [
+        "src/utils/buildAnswerBubbleElement.tsx"
+      ]
+    },
+    "src/utils/buildAnswerSections.tsx": {
+      "imports": [
+        "src/components/StreamFenceWaitChip.tsx",
+        "src/data/drgGlossaryTerms.ts",
+        "src/features/stream-scramble/ScrambledAnswerText.tsx",
+        "src/utils/answerStopRegistry.ts",
+        "src/utils/splitResponseIntoChunks.ts",
+        "src/utils/streamMarkdownPrepare.ts"
       ],
       "importedBy": [
         "src/utils/buildAnswerBubbleElement.tsx"
@@ -10233,6 +10258,12 @@
         "src/utils/ollamaTabLocalSurvival.ts",
         "src/utils/settingsTabLocalSurvival.ts"
       ]
+    },
+    "src/utils/cutAnswerSections.test.ts": {
+      "imports": [
+        "src/utils/splitResponseIntoChunks.ts"
+      ],
+      "importedBy": []
     },
     "src/utils/deckSliderMath.test.ts": {
       "imports": [
@@ -11307,12 +11338,14 @@
         "src/utils/markdownFenceReader.ts"
       ],
       "importedBy": [
+        "src/components/MainTabChatTranscript.answerFinishStill.test.tsx",
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
         "src/utils/answerBubbleNavigation.test.ts",
         "src/utils/answerCopyText.test.ts",
         "src/utils/answerCopyText.ts",
         "src/utils/buildAnswerBubbleElement.test.tsx",
-        "src/utils/buildAnswerBubbleElement.tsx",
+        "src/utils/buildAnswerSections.tsx",
+        "src/utils/cutAnswerSections.test.ts",
         "src/utils/splitResponseIntoChunks.test.ts"
       ]
     },
@@ -11455,7 +11488,7 @@
         "src/hooks/useSmoothStreamReveal.test.ts",
         "src/hooks/useSmoothStreamReveal.ts",
         "src/utils/buildAnswerBubbleElement.test.tsx",
-        "src/utils/buildAnswerBubbleElement.tsx",
+        "src/utils/buildAnswerSections.tsx",
         "src/utils/streamMarkdownPrepare.test.ts"
       ]
     },
@@ -11590,6 +11623,7 @@
         "src/components/MainTab.askStrip.deck.test.tsx",
         "src/components/MainTab.tabBarDownEarlier.test.tsx",
         "src/components/MainTab.tabBarDownRetry.test.tsx",
+        "src/components/MainTabChatTranscript.answerFinishStill.test.tsx",
         "src/components/MainTabChatTranscript.earlierByDay.test.tsx",
         "src/components/MainTabChatTranscript.finishKeepsHeaderRing.test.tsx",
         "src/components/MainTabChatTranscript.ratingRowWalk.test.tsx",

@@ -107,6 +107,14 @@ describe("PermissionsTab wording stays short", () => {
     }
   });
 
+  it("the Steam ban lookup switch keeps its old words (the maintainer, 2026-10-14)", () => {
+    render(<Harness kidsLockActive={false} />);
+    const row = document.querySelector('[label="Steam ban lookup"]');
+    expect(row!.getAttribute("description")).toBe(
+      "For the bonsai:vac-check command. API key lives in Developer → Integrations.",
+    );
+  });
+
   it("the parental-controls banner is at most 40 words and keeps the facts that matter", () => {
     render(<Harness kidsLockActive={true} />);
     const banner = document.querySelector('[data-bonsai-kids-lock-banner="1"]');

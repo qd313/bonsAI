@@ -72,7 +72,7 @@ const ROWS: {
     key: "steam_web_api",
     focusId: "steam_web_api",
     title: "Steam ban lookup",
-    description: "Asks Steam about bans. Your key goes in Developer → Integrations.",
+    description: "For the bonsai:vac-check command. API key lives in Developer → Integrations.",
   },
   {
     key: "microphone_access",

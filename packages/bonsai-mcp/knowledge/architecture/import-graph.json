@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 968,
-  "edgeCount": 3256,
+  "fileCount": 969,
+  "edgeCount": 3257,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3297,8 +3297,7 @@
       "imports": [],
       "importedBy": [
         "src/components/PullModelsStarterSetChip.tsx",
-        "src/hooks/localOllamaStarterSet.tsx",
-        "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx"
+        "src/hooks/localOllamaStarterSet.tsx"
       ]
     },
     "src/data/deprioritizedModels.ts": {
@@ -7051,19 +7050,25 @@
       "importedBy": []
     },
     "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx": {
-      "imports": [
-        "src/data/deckEssentialsTags.ts"
-      ],
+      "imports": [],
       "importedBy": [
         "src/features/plugin-shell/useSessionResetActions.tsx",
         "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.firstOpen.test.tsx",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.saveFirst.test.tsx",
+        "src/hooks/useDisclaimerAndLocalRuntimeGates.wordCount.test.tsx",
         "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/hooks/useThinkingNoticeGate.tsx",
         "src/index.tsx",
         "src/preview/useDeckyPreviewTestHookRegistration.ts"
       ]
+    },
+    "src/hooks/useDisclaimerAndLocalRuntimeGates.wordCount.test.tsx": {
+      "imports": [
+        "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
     },
     "src/hooks/useDockClearanceOnFocus.test.ts": {
       "imports": [
@@ -8914,6 +8919,7 @@
         "src/hooks/setupAndPullBoxWording.test.tsx",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.firstOpen.test.tsx",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.saveFirst.test.tsx",
+        "src/hooks/useDisclaimerAndLocalRuntimeGates.wordCount.test.tsx",
         "src/hooks/useLocalOllamaSetupFlow.inPlace.test.tsx",
         "src/hooks/usePullModelDeleteConfirm.safeFirst.test.tsx",
         "src/hooks/usePullModelSubmitSelected.tier2Box.test.tsx",

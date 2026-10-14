@@ -1,0 +1,47 @@
+{
+  "row": "P90-SEARCH-SETTINGS (24 Steam settings pages from the Search tab)",
+  "build_commit": "unchanged since block A (repo tip 06d1ab6e at block A); no deploy or reload",
+  "machine": "deck (real Steam Deck)",
+  "deck_time_local": "2026-10-14 about 09:17-09:30 -0400",
+  "screen": "Deck's own screen: Quick Access page window 854 x 454; Steam page 854 x 534",
+  "setup": "Search tab. The only way to put a word in is the find box (a text box; not used, per brief) or the word buttons, which are words taken from the saved chats: hollow, knight, crossroads, area, balance, battery, bench, charm. Word 'charm' was selected when I arrived (no settings group). I pressed A on the 'battery' word button: 9 matches, Settings group of 7 rows.",
+  "pressed": "Walked to word 'battery' (read focus), A. Then Down to rows (focus read before every A). A on 'On battery power, dim after' (Settings > Power); B; deck_openPlugin. A on 'Allow battery limit full range' (Settings > Developer); B; deck_openPlugin. A on 'TDP Limit' (QAM > Performance). deck_openPlugin to come back. Finally A on 'Clear the search'.",
+  "seen": {
+    "settings_group_via_battery": [
+      "Battery Percentage (Settings > Power)",
+      "Enable battery charging limit (Settings > Power)",
+      "On battery power, dim after (Settings > Power)",
+      "On battery power, sleep after (Settings > Power)",
+      "Enable display-off downloads on battery power (Settings > Power)",
+      "Allow battery limit full range (Settings > Developer)",
+      "TDP Limit (QAM > Performance)"
+    ],
+    "opened": [
+      {
+        "result": "On battery power, dim after",
+        "page_opened": "Steam Settings, page heading 'Power' (Battery, Battery Percentage, Dim display after...)",
+        "own_page": true
+      },
+      {
+        "result": "Allow battery limit full range",
+        "page_opened": "Steam Settings, page heading 'Developer' (Profiling, Enable System Tracing, Development Kit...)",
+        "own_page": true
+      },
+      {
+        "result": "TDP Limit",
+        "page_opened": "Quick Access menu Performance tab (Performance Overlay Level, Frame Limit, TDP Limit...)",
+        "own_page": true
+      }
+    ],
+    "not_opened": "The other four rows in the battery group (3 more Power rows, same Power page) were not opened.",
+    "return_route": "B once from the Steam page goes to Steam Home and shuts Quick Access; deck_openPlugin reopens it on the Search tab with the same word and results. After the QAM Performance tab, deck_openPlugin used 3 rail presses and came back to the Search tab on the TDP row.",
+    "other_words": "balance, area, bench, hollow, knight, crossroads were not tried; charm showed no Settings group. Internet, Remote Play, Display, Controller, Security, Audio and the other pages cannot be reached from these words without typing in the find box.",
+    "pages_proven_of_24": 2,
+    "pages_reached_total": "Power, Developer (plus the QAM Performance tab)"
+  },
+  "expected": "Each of the 24 settings results opens its own Steam page; Internet opens Internet; Remote Play opens by Decky's own route.",
+  "verdict": "UNCLEAR - 2 of the 24 Steam pages (Power, Developer) plus one Quick Access tab opened their own page from the Search tab. The other 22 (including Internet and Remote Play) could not be reached without typing in the find box, which the brief forbids; so they were not run.",
+  "verdict_reached_rows": "PASS for the 3 rows tried (Power, Developer, QAM Performance each opened its own page)",
+  "verdict_rest": "COULD NOT RUN for 22 of 24 pages (needs typed words)",
+  "side_effect": "The Search tab's selected word was 'charm' when I arrived; it is now cleared (A on Clear the search). I used a wrong cdpUrl argument once on deck_openPlugin; it failed before pressing anything."
+}

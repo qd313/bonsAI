@@ -484,6 +484,32 @@ hardest focus piece), and the finish-flicker lane if the measurement sends it to
   09:14 in a separate copy of the rig's repo (its running tool server is not rebuilt mid-session). Block C part 1
   (the walks on the Deck's own screen, the 24 settings pages, the free-play sweep) started at 09:35. Advisor consult 1
   (the briefs read for contradictions) running.
+- **09:40 to 10:25:** **Advisor consult 1** (Fable high, about 30,000 tokens read): nine contradictions in the briefs,
+  all fixed before go (the B1 rule for a missing key; O3 and O4 sharing walk tests; B3's pass naming B9's words; the
+  Ollama tab walk changed by B10, B13 and O1, now landing in that order; B8 and O3 in one function, B8 lands first; B6
+  screen side only; B13's pass matching its rule; B10's new checker rule baselining Refresh; three small ones). **Lanes
+  started** 09:52 to 10:02, staggered: O3, O4, O1 (Opus high); B4, B10, B8, B3, B13, B9 (Sonnet high); B1, B14, B15,
+  B6 (Sonnet medium); B11 (Sonnet high). **Block C part 1 done** (evidence `plan93-P89-TAB-WALK-OWN-SCREEN-SETTINGS.json`,
+  `-DEVELOPER.json`, `plan93-P90-SEARCH-SETTINGS.json`, `plan93-QA-FREE-PLAY-01-before.json` and its picture): the
+  Settings and Developer walks on the Deck's own screen move at most 138 px a press (limit 227), no jump, no creep,
+  Text size's Left/Right 0 px (the 92 percent section lines are the rig's known false alarm); only 3 of the 24 Steam
+  settings pages could be reached without typing (all 3 open their own page); **a new bug in the free-play sweep:**
+  Up from "Mark reply helpful" puts the ring on the answer's last section with its last line under the dock (box
+  240-349, dock top 330), given to lane O4 as a second job. **O4 landed** (`9f6eb165`, Down now stops on every
+  section Up stops on; advisor consult 3, about 22,000 tokens: land as it is). **Block C part 2:** C4 PASS (the
+  knowledge library removed through the plugin and put back by its own Download button, same version 2026.09.26;
+  evidence `plan93-P90-SEARCH-KB.json`).
+- **About 09:40 local the PC restarted for a Windows update** and stopped every helper, a landing and the Deck
+  driver. Nothing was lost (each copy kept its edits; the Deck had no game running). All were resumed by message.
+  **Then the PC ran out of memory** (about 190 test processes, 23 GB, 3 GB free): each helper's quick check runs every
+  test that imports a changed file, hundreds of files for a central one, on every core. The six oldest runs were
+  ended and every helper moved to a lighter gate (its own tests with two workers, the typecheck, the build, the cheap
+  checks); the quick check and the full sets run once at landing. Free memory back to 14 GB. A lesson for the
+  runbook. **B14 landed** (`b460dbc9`, hints in Speed and Expert; its full test run failed twice under that load, both
+  files pass alone; the gates are re-run on a quiet PC). Done and waiting to land: B15, B6. **B9's proposal published
+  for the maintainer** (all blocks under 40 words; it waits for their yes). **The maintainer's answers (10:10):**
+  Text size yes (lane B5 started); the Gemma gap was another filter; the chips miss was D-pad only, maybe after
+  Open all or Close all; the performance overlay is theirs and stays.
 
 ## 15. Questions for the maintainer (the safest choice taken meanwhile)
 
@@ -526,6 +552,7 @@ hardest focus piece), and the finish-flicker lane if the measurement sends it to
     class names targeted); or style Steam's own classes by name (not recommended, they change without notice).
     (b) **The Steam Web API key** in plain text: keep the file as is and make a new key, or move the key into its own
     file readable only by the deck user? *Meanwhile:* (a) the measurement runs, no lane; (b) unchanged.
+    **(a) answered 2026-10-14: yes, pass the words as the plugin's own scaled pieces** (lane B5, Sonnet high).
 13. **The two one-star features from last night** (shaded sections with bold titles; a very small Text size choice):
     include them tonight? And for Decode as the default animation you said you would give the stock settings; give
     them if you want it tonight. One more cheap one from the code lookup: the models list shows only 3 of its 26
@@ -553,7 +580,9 @@ hardest focus piece), and the finish-flicker lane if the measurement sends it to
     fixed. Does the swap itself stay? *Meanwhile:* it stays.
 24. **The chips near the end of an answer:** the rig could not make the ring miss the chips with the D-pad (block
     B1). How did you reach that state: a right-stick scroll, a touch scroll, or D-pad only? Which chat, how long an
-    answer? *Meanwhile:* no lane.
+    answer? *Meanwhile:* no lane. **Answered 2026-10-14:** the D-pad only; the maintainer does not know what caused
+    it and may have used a tab's Open all or Close all button before walking. A Deck try with that route goes in a
+    later block; still no lane until it reproduces.
 25. **The skipped paragraph:** on the Deck it is Down that skips a section and Up that stops on it, the reverse of
     your report. Did you see it going Up, or both? *Meanwhile:* the lane fixes both directions to visit the same
     stops in the same order.
@@ -562,6 +591,10 @@ hardest focus piece), and the finish-flicker lane if the measurement sends it to
 23. **The Gemma model under "Open source only".** **Answered 2026-10-13:** it was the model picker (the installed
     models a person picks from), not the catalog. Measured first thing tomorrow (M13b); a lane only if it reproduces.
     The maintainer also wants the "Deck essentials only" filter rethought (a note on the catalog feature).
+    **2026-10-14:** block B2 found it offered in the picker too; the maintainer thinks another filter hid it, maybe
+    "Deck essentials only". So the bug closes as not reproduced, and the filter question belongs to the catalog feature.
+26. **Steam's performance overlay** was showing on the Deck. **Answered 2026-10-14:** the maintainer turned it on; it
+    stays (it puts the frame rate in every Deck picture).
 21. **The six feature requests from last night** (shaded sections, a very small text size, Decode as the default,
     smoother D-pad scrolling, the bigger catalog with simpler filters, the simpler first-time setup): apart from the
     two one-star ones in question 13, none is built tonight; they wait for a feature session. Confirm.

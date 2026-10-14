@@ -1,0 +1,19 @@
+{
+  "row": "P90-SEARCH-KB (knowledge library removed through the plugin and installed again)",
+  "build_commit": "unchanged since block A (no deploy or reload); machine deck (real Steam Deck)",
+  "machine": "deck",
+  "deck_time_local": "2026-10-14 about 09:20-09:35 -0400",
+  "screen": "Deck's own screen: Quick Access page window 854 x 454; Steam page (confirm boxes) 854 x 534",
+  "setup": "Ollama tab, Knowledge base (offline) section opened with A on its header. Search tab word 'hollow' picked by its word button.",
+  "pressed": "Before: read section line and Search word. Remove: Down to Update knowledge base, Right to Remove (read focus: 'Remove'), A. Box 'Remove knowledge base?' with Not now / Remove / Cancel opened with focus on Not now; Right to Remove (read focus: 'Remove'), A. Search tab (2 LB from Ollama via Main), word 'hollow' still picked. Then Ollama tab, Down to the section, A to open, Down x2 to 'Download knowledge base' (read focus), A. A 'Choose download location' box showed (Not now / Internal storage ~733 GB free / SD card ~1131 GB free); Down x2 to SD card (read focus), A. This is the same place the library was before (SD card path).",
+  "seen": {
+    "step1_before": {"section": "Installed - version 2026.09.26, path on the SD card /run/media/deck/<card>/.bonsai/rag, buttons Update knowledge base and Remove", "search_word_hollow": "5 matches: YOUR CHATS 3, GAME AND HELP NOTES 2 (Hollow Bough, Starting out in Hollow Knight); a 'Hollow Knight' game chip beside the 'All' chip"},
+    "step2_after_remove": {"section": "Not installed - download to enable grounded strategy help. (button: Download knowledge base)", "disk": "ls of the rag folder over SSH: No such file or directory", "toggle_header_line": "still read 'Use local knowledge base on'"},
+    "step3_search_without_library": {"word_hollow": "3 matches: YOUR CHATS 3 only; no GAME AND HELP NOTES group; the 'Hollow Knight' game chip is gone; other word buttons and the chats group still work"},
+    "step4_download": {"plugin_download_button_worked": true, "box_shown": "Choose download location box did show (call 12 of plan 93: the box shows)", "progress": "Downloading... with Cancel", "after_about_20s": "Installed - version 2026.09.26, same SD card path", "seed_button_used": false},
+    "step5_search_after": {"word_hollow": "5 matches: YOUR CHATS 3, GAME AND HELP NOTES 2 (same two notes), 'Hollow Knight' game chip back"}
+  },
+  "expected": "Step 3 no game notes, other groups work; step 5 game notes back with same count; version after download matches version before.",
+  "verdict": "PASS - step 3 read as expected (0 game notes, chats still found), step 5 read as expected (2 game notes back), version 2026.09.26 before and after, installed by the plugin's own Download button (published library, not the seed).",
+  "side_effect": "The library was deleted and re-downloaded on the SD card (same path, same version). The settings line 'Use local knowledge base' read 'on' before and after (the box text says it turns it off, but the line did not change). The Search tab's picked word 'hollow' is left picked."
+}

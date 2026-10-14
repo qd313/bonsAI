@@ -19,6 +19,8 @@ const api = vi.hoisted(() => ({
   searchRagCorpusNotes: vi.fn(),
 }));
 /** Steam fills a stop's nav node while the gate is open; while it is shut the fill waits for `open()`. */
+/** How Decky's text field fills its nav node: every redraw (the stand-in's way), once when drawn (Steam's), or never. */
+const text = vi.hoisted(() => ({ fill: "every" as "every" | "once" | "never" }));
 const gate = vi.hoisted(() => {
   const state = { shut: false, queue: [] as Array<() => void> };
   return {
@@ -37,6 +39,8 @@ vi.mock("@decky/ui", async () => {
   const Inner = base.Focusable as React.ComponentType<Record<string, unknown>>;
   const Late = React.forwardRef<HTMLDivElement, Record<string, unknown>>(function Late(props, ref) {
     const real = props.navRef as { current: unknown } | undefined;
+    /* Steam drops the node of a control that is removed. */
+    React.useEffect(() => () => void (real && (real.current = null)), [real]);
     if (!real) return React.createElement(Inner, { ...props, ref });
     const local = {
       get current() {
@@ -49,7 +53,24 @@ vi.mock("@decky/ui", async () => {
     };
     return React.createElement(Inner, { ...props, navRef: local, ref });
   });
-  return { ...base, Focusable: Late };
+  const InnerText = base.TextField as React.ComponentType<Record<string, unknown>>;
+  const Field = React.forwardRef<unknown, Record<string, unknown>>(function Field(props, ref) {
+    const real = props.navRef as { current: unknown } | undefined;
+    const filled = React.useRef(false);
+    if (!real || text.fill === "every") return React.createElement(InnerText, { ...props, ref });
+    const local = {
+      get current() {
+        return real.current;
+      },
+      set current(v: unknown) {
+        if (text.fill === "never" || filled.current) return;
+        filled.current = true;
+        real.current = v;
+      },
+    };
+    return React.createElement(InnerText, { ...props, navRef: local, ref });
+  });
+  return { ...base, Focusable: Late, TextField: Field };
 });
 
 import { SearchTab } from "./SearchTab";
@@ -76,6 +97,7 @@ async function frames(n: number) {
 beforeEach(() => {
   gate.state.shut = false;
   gate.state.queue = [];
+  text.fill = "every";
   resetSearchSaved();
   api.listChatSlotQuestions.mockReset().mockResolvedValue(CHATS);
   api.listUserNotes.mockReset().mockResolvedValue(NOTES);
@@ -149,5 +171,34 @@ describe("the ring comes back to a stop drawn in the same moment", () => {
     act(() => gate.open());
     await frames(2);
     expect(ringStop()).not.toBe(first);
+  });
+});
+
+describe("Down from a game chip reaches the find box the way Decky's text field is filled", () => {
+  it("still does after the tab is redrawn, when Steam filled the box's node only once", async () => {
+    text.fill = "once";
+    const view = render(tab());
+    await screen.findByLabelText("Hollow Knight");
+    view.rerender(tab());
+    await act(async () => {});
+    const chip = screen.getByLabelText("Hollow Knight");
+    act(() => putSteamRingOn(chip));
+    act(() => {
+      pressOn(chip as SteamEl, "onMoveDown");
+    });
+    expect(ringStop()).toBe(screen.getByLabelText("Search for a word"));
+  });
+
+  it("reaches the box by a plain focus when its node is never filled", async () => {
+    text.fill = "never";
+    render(tab());
+    await screen.findByLabelText("Hollow Knight");
+    const chip = screen.getByLabelText("Hollow Knight");
+    act(() => putSteamRingOn(chip));
+    act(() => {
+      pressOn(chip as SteamEl, "onMoveDown");
+    });
+    await frames(NAV_WAIT_FRAMES + 2);
+    expect(document.activeElement).toBe(screen.getByLabelText("Search for a word"));
   });
 });

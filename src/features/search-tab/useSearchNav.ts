@@ -38,7 +38,7 @@ function nextFrame(run: () => void): () => void {
   return () => window.clearTimeout(id);
 }
 
-type Cell = { el: HTMLElement | null; nav: NavRefHolder; setEl?: (el: HTMLElement | null) => void };
+type Cell = { el: HTMLElement | null; nav: NavRefHolder };
 
 export type SearchStopProps = {
   ref: (el: HTMLElement | null) => void;
@@ -74,7 +74,7 @@ const centerX = (el: HTMLElement): number | null => {
  * Can go wrong: a stop that is not drawn yet is skipped, not waited for; a caller that moves the ring
  * right after a state change does it in a layout effect, once the control exists. A stop that is drawn but
  * whose nav node Steam has not filled yet is waited for (NAV_WAIT_FRAMES); one that never gets it is left
- * alone and the ring stays where it was.
+ * alone and the ring stays where it was, unless it is the find box's input (plain focus, as before).
  */
 export function useSearchNav(
   rowOrder: readonly string[],
@@ -115,8 +115,9 @@ export function useSearchNav(
    * container on every hop and a plain `focus()` would move the page's focus while Steam's ring stayed
    * behind and then cleared; there is no hop in this tab that stays inside one container, so there is no plain
    * focus. A stop drawn in this same moment may not have its nav node yet: wait for it a few frames. If it never
-   * comes, leave the ring where it is (a dead press is better than a lost ring). True only when the ring moved
-   * now; a move that is still waiting reports false.
+   * comes, leave the ring where it is (a dead press is better than a lost ring) - except for a text field, whose
+   * node Decky may never fill: that one gets the plain focus the walk of 2026-10-12 reached it by. True only
+   * when the ring moved now; a move that is still waiting reports false.
    */
   const hop = useCallback(
     (target: Cell): boolean => {
@@ -128,6 +129,7 @@ export function useSearchNav(
         waiting.current = null;
         if (target.el === null || takeHolderFocus(target.nav)) return;
         if (--left > 0) waiting.current = nextFrame(look);
+        else if (target.el.tagName === "INPUT") target.el.focus();
       };
       waiting.current = nextFrame(look);
       return false;
@@ -163,13 +165,12 @@ export function useSearchNav(
     (row: string, col: number): SearchStopProps => {
       const c = cell(row, col);
       return {
-        /* One function for the life of the cell, so it runs only when the control is drawn or goes away. When the
-           control goes away its nav node goes with it: a later move onto a stop drawn in its place must wait for
-           that stop's own node, not transfer onto the old one (plan 93, lane B11). */
-        ref: (c.setEl ??= (el) => {
+        /* The nav node is never cleared here: Steam fills a control's `navRef` once, when it is drawn, and the find
+           box's `ref` is called again on every redraw (null, then the input), so clearing on null threw the box's node
+           away and Down from the game chips went nowhere (plan 93, lane B11, the Deck 2026-10-14). */
+        ref: (el) => {
           c.el = el;
-          if (el === null) c.nav.current = null;
-        }),
+        },
         navRef: c.nav,
         onMoveUp: () => press(row, col, "up"),
         onMoveDown: () => press(row, col, "down"),

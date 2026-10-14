@@ -710,7 +710,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
         title="Remove knowledge base?"
         body={
           <div className="bonsai-prose" style={{ fontSize: textPx(12), lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
-            Deletes the offline knowledge base from disk. Strategy cards will stop grounding until you download
+            Deletes the offline knowledge base from disk. Answers won&apos;t use its game notes until you download it
             again.
           </div>
         }

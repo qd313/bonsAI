@@ -71,7 +71,8 @@ describe('"Remove knowledge base?"', () => {
   it("says it deletes the library and no longer claims to turn the switch off (the Deck kept it on)", async () => {
     const box = await openBox();
     expect(box.text).toContain("Deletes the offline knowledge base from disk.");
-    expect(box.text).toContain("Strategy cards will stop grounding until you download again.");
+    expect(box.text).toContain("Answers won't use its game notes until you download it again.");
+    expect(box.text).not.toMatch(/grounding/i);
     expect(box.text).not.toMatch(/turns off/i);
     expect(box.text).not.toContain("Use local knowledge base");
   });

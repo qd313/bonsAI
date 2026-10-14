@@ -30,6 +30,20 @@ class ModelRoutingOrderTests(unittest.TestCase):
         self.assertIn("gemma4:latest", order)
         self.assertIn("tinyllama", order)
 
+    def test_a_fresh_install_and_automatic_try_the_starter_model_first_for_text_and_pictures(self):
+        installed = ["qwen2.5vl:3b", "gemma4:e2b-it-qat", "qwen3.5:4b"]
+        self.assertEqual(resolve_routing_order(False, {}, installed)[0], "gemma4:e2b-it-qat")
+        self.assertEqual(resolve_routing_order(True, {}, installed)[0], "gemma4:e2b-it-qat")
+        # Automatic is an empty saved list.
+        auto = {"text_model_routing_order": [], "vision_model_routing_order": []}
+        self.assertEqual(resolve_routing_order(False, auto, installed)[0], "gemma4:e2b-it-qat")
+
+    def test_an_order_a_person_set_by_hand_is_not_touched_by_the_seeds(self):
+        installed = ["qwen2.5vl:3b", "gemma4:e2b-it-qat", "qwen3.5:4b"]
+        mine = ["qwen3.5:4b", "qwen2.5vl:3b", "gemma4:e2b-it-qat"]
+        self.assertEqual(resolve_routing_order(False, {"text_model_routing_order": mine}, installed), mine)
+        self.assertEqual(resolve_routing_order(True, {"vision_model_routing_order": mine}, installed), mine)
+
     def test_resolve_skips_high_vram_when_toggle_off(self):
         settings = {
             "model_allow_high_vram_fallbacks": False,

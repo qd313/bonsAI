@@ -6,7 +6,7 @@
  * separate "unknown" reading for anything that displays a warning to a person.
  */
 import { describe, expect, it } from "vitest";
-import { isHighVramTag, modelSizeWarning } from "./modelRoutingOrder";
+import { buildPickerOrder, isHighVramTag, modelSizeWarning } from "./modelRoutingOrder";
 
 describe("modelSizeWarning", () => {
   it("warns nothing for a known small model", () => {
@@ -31,5 +31,22 @@ describe("modelSizeWarning", () => {
   it("never disagrees with isHighVramTag about which models count as large", () => {
     expect(modelSizeWarning("gemma3:27b") === "large").toBe(isHighVramTag("gemma3:27b"));
     expect(modelSizeWarning("qwen2.5:3b", 1.9) === "large").toBe(isHighVramTag("qwen2.5:3b", 1.9));
+  });
+});
+
+// Plan 93: the starter model comes first in the shipped order ("Automatic", a fresh install), for text and
+// for pictures. An order a person saved by hand is never rewritten by it.
+describe("buildPickerOrder with the starter model first", () => {
+  const installed = ["qwen2.5vl:3b", "qwen3.5:4b", "gemma4:e2b-it-qat"];
+
+  it("puts the starter model first in the shipped order, for text and for pictures", () => {
+    expect(buildPickerOrder("text", installed, [])[0]).toBe("gemma4:e2b-it-qat");
+    expect(buildPickerOrder("vision", installed, [])[0]).toBe("gemma4:e2b-it-qat");
+  });
+
+  it("keeps an order a person saved, as they left it", () => {
+    const mine = ["qwen3.5:4b", "qwen2.5vl:3b", "gemma4:e2b-it-qat"];
+    expect(buildPickerOrder("text", installed, mine)).toEqual(mine);
+    expect(buildPickerOrder("vision", installed, mine)).toEqual(mine);
   });
 });

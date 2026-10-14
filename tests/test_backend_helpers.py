@@ -62,23 +62,24 @@ class BackendHelperTests(unittest.TestCase):
         self.assertFalse(is_valid_setup_pull_profile(None))
 
     def test_select_ollama_models_text_and_vision(self):
-        """Essentials chains: qwen2.5vl first; Tier 2 gemma tail; deprioritized tags last."""
+        """Essentials chains: the starter (gemma4:e2b-it-qat) first, older picks after; deprioritized tags last."""
         text = select_ollama_models(False, "speed")
-        self.assertEqual(text[0], "qwen2.5vl:3b")
+        self.assertEqual(text[0], "gemma4:e2b-it-qat")
         self.assertIn("qwen2.5:3b", text)
         self.assertIn("gemma4:e2b-it-qat", text)
         self.assertIn("gemma4:latest", text)
-        self.assertEqual(select_ollama_models(False, "strategy")[0], "qwen2.5vl:3b")
-        self.assertEqual(select_ollama_models(False, "expert")[0], "qwen2.5vl:3b")
+        self.assertEqual(select_ollama_models(False, "strategy")[0], "gemma4:e2b-it-qat")
+        self.assertEqual(select_ollama_models(False, "expert")[0], "gemma4:e2b-it-qat")
 
         vision = select_ollama_models(True, "speed")
-        self.assertEqual(vision[0], "qwen2.5vl:3b")
-        self.assertEqual(vision[1], "qwen3.5:4b")
+        self.assertEqual(vision[0], "gemma4:e2b-it-qat")
+        self.assertEqual(vision[1], "qwen2.5vl:3b")
+        self.assertEqual(vision[2], "qwen3.5:4b")
         self.assertIn("gemma4:e2b-it-qat", vision)
         self.assertIn("llava:7b", vision)
         self.assertLess(vision.index("gemma4:e2b-it-qat"), vision.index("llava:7b"))
 
-        self.assertEqual(select_ollama_models(False, "invalid")[0], "qwen2.5vl:3b")
+        self.assertEqual(select_ollama_models(False, "invalid")[0], "gemma4:e2b-it-qat")
 
         safe_speed = select_ollama_models(False, "speed", False)
         hi_speed = select_ollama_models(False, "speed", True)

@@ -48,12 +48,25 @@ class TestStarterTagParity(unittest.TestCase):
     def test_back_end_pull_tag_matches_the_screen(self):
         self.assertEqual(TIER1_ESSENTIALS_PULL_TAGS[0], _screen_starter_tag())
 
-    def test_try_order_seeds_agree_on_both_sides(self):
-        # The seeds only order models already installed. They are the same list in Python and on the screen.
-        self.assertEqual(default_text_routing_seed()[0], _screen_seed_first("DEFAULT_TEXT_ROUTING_SEED"))
-        self.assertEqual(default_vision_routing_seed()[0], _screen_seed_first("DEFAULT_VISION_ROUTING_SEED"))
-        self.assertIn(STARTER, default_text_routing_seed())
-        self.assertIn(STARTER, default_vision_routing_seed())
+    def test_try_order_seeds_start_with_the_starter_on_both_sides(self):
+        # The seeds only order models already installed ("Automatic", a fresh install), for text and for
+        # pictures (Gemma 4 reads both). They are the same list in Python and on the screen.
+        self.assertEqual(default_text_routing_seed()[0], STARTER)
+        self.assertEqual(default_vision_routing_seed()[0], STARTER)
+        self.assertEqual(_screen_seed_first("DEFAULT_TEXT_ROUTING_SEED"), STARTER)
+        self.assertEqual(_screen_seed_first("DEFAULT_VISION_ROUTING_SEED"), STARTER)
+
+    def test_the_two_seeds_list_the_same_models_in_the_same_order(self):
+        text = (ROOT / "src" / "utils" / "modelRoutingOrder.ts").read_text(encoding="utf-8")
+        for name, py_seed in (
+            ("DEFAULT_TEXT_ROUTING_SEED", default_text_routing_seed()),
+            ("DEFAULT_VISION_ROUTING_SEED", default_vision_routing_seed()),
+        ):
+            body = re.search(rf"const {name}: readonly string\[\] = \[([^\]]*)\]", text).group(1)
+            screen = re.findall(r'"([^"]+)"', body)
+            # The Python chain sorts older picks (llava, gemma3) to the end; the screen list keeps source order.
+            self.assertEqual(sorted(screen), sorted(py_seed), name)
+            self.assertEqual(screen[:3], py_seed[:3], name)
 
     def test_setup_script_pulls_the_starter(self):
         script = (ROOT / "scripts" / "setup-ollama.sh").read_text(encoding="utf-8")

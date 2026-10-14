@@ -61,20 +61,20 @@ def _dedupe_preserve_order(tags: list[str]) -> list[str]:
     return out
 
 
-# --- Essentials routing: one small multimodal default, short tails for legacy + Tier 2 open-weight.
+# --- Essentials routing: the starter model first (gemma4:e2b-it-qat since the maintainer's call of
+# 2026-10-13, for text and for pictures: it reads both), then older picks and the open-weight fallbacks.
 # Ask mode (speed/strategy/expert) differs by prompt and token budget only — not separate tag lists.
-# These try-order seeds only choose among models that are already installed; they do not decide what
-# is downloaded first (that is TIER1_ESSENTIALS_PULL_TAGS, gemma4:e2b-it-qat since 2026-10-13). They
-# still lead with qwen2.5vl:3b, as the copy in src/utils/modelRoutingOrder.ts does; moving the
-# starter to the front of both is a separate change that rewrites many try-order screen tests.
+# These seeds only order models that are already installed, and only when the person has not saved an
+# order by hand ("Automatic", a fresh install). The same order is copied in src/utils/modelRoutingOrder.ts;
+# tests/test_starter_tag_parity.py fails if the two drift or stop starting with the starter.
 _TEXT_FOSS_ESSENTIALS = [
+    "gemma4:e2b-it-qat",
     "qwen2.5vl:3b",
     "qwen2.5:3b",
 ]
 
-# Tier 2 one-model multimodal preset + long-tail open-weight fallbacks.
+# Long-tail open-weight fallbacks.
 _TEXT_OPEN_WEIGHT_ESSENTIALS = [
-    "gemma4:e2b-it-qat",
     "gemma4:e2b",
     "gemma4:latest",
 ]
@@ -97,13 +97,13 @@ _TEXT_HIGH_VRAM_DEEP: list[str] = [
 ]
 
 _VISION_FOSS_ESSENTIALS = [
+    "gemma4:e2b-it-qat",
     "qwen2.5vl:3b",
     "qwen3.5:4b",
     "llava:7b",
 ]
 
 _VISION_OPEN_WEIGHT_ESSENTIALS = [
-    "gemma4:e2b-it-qat",
     "gemma4:e2b",
     "gemma3:4b",
 ]

@@ -77,7 +77,7 @@ const DECK: TryOrderHost = {
   modelAllowHighVramFallbacks: true,
 };
 const PC: TryOrderHost = { ...DECK, ollamaLocalOnDeck: false, ollamaIp: "192.168.1.20" };
-const DECK_MODELS = ["qwen2.5vl:3b", "qwen3.5:4b", "gemma4:e2b-it-qat", "nomic-embed-text:latest"];
+const DECK_MODELS = ["gemma4:e2b-it-qat", "qwen3.5:4b", "qwen2.5vl:3b", "nomic-embed-text:latest"];
 
 let styleEl: HTMLStyleElement;
 const originalScroll = Element.prototype.scrollIntoView;
@@ -101,7 +101,7 @@ afterEach(() => {
 
 function renderBox(host: TryOrderHost | undefined, props: Record<string, unknown> = {}) {
   return render(
-    // qwen2.5vl:3b is research-only (plan 93), so "Open source only" no longer lists it; these tests
+    // gemma4:e2b-it-qat is research-only (plan 93), so "Open source only" no longer lists it; these tests
     // use it as a sample model, so they run with the open-weight setting on.
     <PullModelsModal activeRoutingTag={null} onCancel={() => {}} onPullAccepted={() => {}} embedded tryOrderHost={host} modelPolicyTier="open_weight" {...props} />,
   );
@@ -142,8 +142,8 @@ const button = (container: HTMLElement, label: string) =>
 describe("what the box draws", () => {
   it("shows the switch and each installed model's place, and none for a note-search model", async () => {
     const { container } = renderBox(DECK);
-    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
-    expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("2");
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
+    expect(placeOf(container, "qwen2.5vl:3b")).toBe("2");
     expect(placeOf(container, "qwen3.5:4b")).toBe("3");
     expect(rowOf(container, "nomic-embed-text:latest").querySelector(".bonsai-pullmodels-place-num")).toBeNull();
     expect(button(container, "Try order for text questions").getAttribute("aria-pressed")).toBe("true");
@@ -154,7 +154,7 @@ describe("what the box draws", () => {
   it("keeps the switch row one row tall: the saved-at-once words sit beside the buttons, not on a line of their own", async () => {
     // The box's body is 264 px tall on the Deck's own screen; a line of its own would cost a model row.
     const { container } = renderBox(DECK);
-    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
     const row = container.querySelector(".bonsai-pullmodels-tryorder-row")!;
     expect(row.querySelector(".bonsai-pullmodels-tryorder-saved")?.textContent).toContain("saved at once");
     expect(container.querySelectorAll(".bonsai-pullmodels-tryorder-note")).toHaveLength(0);
@@ -171,12 +171,12 @@ describe("what the box draws", () => {
   });
 
   it("the Pictures switch shows the picture order: a model that cannot read pictures has no place", async () => {
-    setRpcHandler("test_ollama_connection", () => ({ reachable: true, models: ["qwen2.5vl:3b", "qwen3:4b"] }));
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, models: ["gemma4:e2b-it-qat", "qwen3:4b"] }));
     const { container } = renderBox(DECK);
     await waitFor(() => expect(placeOf(container, "qwen3:4b")).not.toBeNull());
     fireEvent.click(button(container, "Try order for pictures questions"));
     await waitFor(() => expect(placeOf(container, "qwen3:4b")).toBeNull());
-    expect(placeOf(container, "qwen2.5vl:3b")).toBe("1");
+    expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1");
     expect(button(container, "Try order for pictures questions").getAttribute("aria-pressed")).toBe("true");
   });
 });
@@ -184,21 +184,21 @@ describe("what the box draws", () => {
 describe("pressing a place button", () => {
   it("moves the model one place and the order on disk changes at once", async () => {
     const { container } = renderBox(DECK);
-    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("2"));
-    fireEvent.click(button(container, "Move gemma4:e2b-it-qat up"));
-    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
-    expect(placeOf(container, "qwen2.5vl:3b")).toBe("2");
-    expect(savedOrders()).toEqual([{ text_model_routing_order: ["gemma4:e2b-it-qat", "qwen2.5vl:3b", "qwen3.5:4b"] }]);
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("2"));
+    fireEvent.click(button(container, "Move qwen2.5vl:3b up"));
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
+    expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("2");
+    expect(savedOrders()).toEqual([{ text_model_routing_order: ["qwen2.5vl:3b", "gemma4:e2b-it-qat", "qwen3.5:4b"] }]);
   });
 
   it("A on the button (the Deck's OK path) moves it and stops there: nothing closes or removes", async () => {
     const { container } = renderBox(DECK);
-    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
-    const down = button(container, "Move qwen2.5vl:3b down");
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
+    const down = button(container, "Move gemma4:e2b-it-qat down");
     const stop = vi.fn();
     (hoisted.propsByEl.get(down)!.onOKButton as (e: unknown) => void)({ stopPropagation: stop });
     expect(stop).toHaveBeenCalled();
-    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("2"));
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("2"));
     expect(getRpcCallLog().some((c) => c.method === "delete_ollama_model")).toBe(false);
   });
 
@@ -209,21 +209,21 @@ describe("pressing a place button", () => {
         <PullModelsModal activeRoutingTag={null} onCancel={() => {}} onPullAccepted={() => {}} embedded tryOrderHost={DECK} modelPolicyTier="open_weight" />
       </form>,
     );
-    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("2"));
-    fireEvent.click(button(container, "Move gemma4:e2b-it-qat up"));
-    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("2"));
+    fireEvent.click(button(container, "Move qwen2.5vl:3b up"));
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
   it("the ring stays on the button that was pressed, even when that press takes it to the end", async () => {
     const { container } = renderBox(DECK);
-    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("2"));
-    const up = button(container, "Move gemma4:e2b-it-qat up");
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("2"));
+    const up = button(container, "Move qwen2.5vl:3b up");
     up.focus();
     fireEvent.click(up);
-    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
     // Now first in the order, the button is dim but is the same element, still focusable, still holding the ring.
-    expect(button(container, "Move gemma4:e2b-it-qat up")).toBe(up);
+    expect(button(container, "Move qwen2.5vl:3b up")).toBe(up);
     expect(up.getAttribute("aria-disabled")).toBe("true");
     expect(up.hasAttribute("disabled")).toBe(false);
     expect(document.activeElement).toBe(up);
@@ -233,9 +233,9 @@ describe("pressing a place button", () => {
     const onCancel = vi.fn();
     const onPullAccepted = vi.fn();
     const { container } = renderBox(DECK, { onCancel, onPullAccepted });
-    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("2"));
-    fireEvent.click(button(container, "Move gemma4:e2b-it-qat up"));
-    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("2"));
+    fireEvent.click(button(container, "Move qwen2.5vl:3b up"));
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
     expect(onCancel).not.toHaveBeenCalled();
     expect(onPullAccepted).not.toHaveBeenCalled();
     expect(getRpcCallLog().some((c) => c.method === "pull_ollama_models" || c.method === "delete_ollama_model")).toBe(false);
@@ -248,9 +248,9 @@ describe("pressing a place button", () => {
         <PullModelsModal activeRoutingTag={null} onCancel={() => {}} onPullAccepted={() => {}} embedded tryOrderHost={DECK} modelPolicyTier="open_weight" />
       </form>,
     );
-    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
-    fireEvent.click(button(container, "Move qwen2.5vl:3b down"));
-    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("2"));
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
+    fireEvent.click(button(container, "Move gemma4:e2b-it-qat down"));
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("2"));
     fireEvent.click(button(container, "Try order for pictures questions"));
     await new Promise((r) => setTimeout(r, 30));
     expect(onSubmit).not.toHaveBeenCalled();
@@ -258,7 +258,7 @@ describe("pressing a place button", () => {
 
   it("opening the box and switching sides writes no order", async () => {
     const { container } = renderBox(DECK);
-    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
     fireEvent.click(button(container, "Try order for pictures questions"));
     fireEvent.click(button(container, "Try order for text questions"));
     await new Promise((r) => setTimeout(r, 30));
@@ -267,8 +267,8 @@ describe("pressing a place button", () => {
 
   it("at the top or bottom of the order the button stays, dim, and does nothing", async () => {
     const { container } = renderBox(DECK);
-    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
-    const top = button(container, "Move qwen2.5vl:3b up");
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
+    const top = button(container, "Move gemma4:e2b-it-qat up");
     expect(top.getAttribute("aria-disabled")).toBe("true");
     expect(top.hasAttribute("disabled")).toBe(false); // still a place the ring can stand on
     fireEvent.click(top);
@@ -279,24 +279,24 @@ describe("pressing a place button", () => {
   it("Reset order puts the order back to automatic", async () => {
     setRpcHandler("load_settings", () => ({
       ...defaultSettingsFixture(),
-      text_model_routing_order: ["gemma4:e2b-it-qat", "qwen2.5vl:3b", "qwen3.5:4b"],
+      text_model_routing_order: ["qwen2.5vl:3b", "gemma4:e2b-it-qat", "qwen3.5:4b"],
     }));
     const { container } = renderBox(DECK);
-    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
     const box = askReset(container);
     expect(savedOrders()).toEqual([]); // asking changes nothing
     (box.onAction as () => void)();
     await waitFor(() => expect(savedOrders()).toEqual([{ text_model_routing_order: [] }]));
-    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
   });
 
   it("Reset order asks first with Cancel and Reset order only: the ring lands on Cancel, and Cancel and B leave the order alone", async () => {
     setRpcHandler("load_settings", () => ({
       ...defaultSettingsFixture(),
-      text_model_routing_order: ["gemma4:e2b-it-qat", "qwen2.5vl:3b", "qwen3.5:4b"],
+      text_model_routing_order: ["qwen2.5vl:3b", "gemma4:e2b-it-qat", "qwen3.5:4b"],
     }));
     const { container } = renderBox(DECK);
-    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
     const box = askReset(container);
     expect(box.title).toBe("Put the text try order back to automatic?");
     // Two buttons, Cancel first where Steam puts the ring (the harmless one), Reset order beside it.
@@ -306,17 +306,17 @@ describe("pressing a place button", () => {
     drawn.pressB();
     await new Promise((r) => setTimeout(r, 30));
     expect(savedOrders()).toEqual([]);
-    expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1");
+    expect(placeOf(container, "qwen2.5vl:3b")).toBe("1");
   });
 
   it("the Reset question names the pictures order when the switch is on Pictures", async () => {
-    setRpcHandler("test_ollama_connection", () => ({ reachable: true, models: ["qwen2.5vl:3b", "qwen3.5:4b"] }));
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, models: ["gemma4:e2b-it-qat", "qwen3.5:4b"] }));
     setRpcHandler("load_settings", () => ({
       ...defaultSettingsFixture(),
-      vision_model_routing_order: ["qwen3.5:4b", "qwen2.5vl:3b"],
+      vision_model_routing_order: ["qwen3.5:4b", "gemma4:e2b-it-qat"],
     }));
     const { container } = renderBox(DECK);
-    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).not.toBeNull());
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).not.toBeNull());
     fireEvent.click(button(container, "Try order for pictures questions"));
     await waitFor(() => expect(placeOf(container, "qwen3.5:4b")).toBe("1"));
     const box = askReset(container);
@@ -331,7 +331,7 @@ describe("pressing a place button", () => {
     // "Use for Ask" puts the model first on disk; the box reads the order again.
     setRpcHandler("load_settings", () => ({
       ...defaultSettingsFixture(),
-      text_model_routing_order: ["qwen3.5:4b", "qwen2.5vl:3b", "gemma4:e2b-it-qat"],
+      text_model_routing_order: ["qwen3.5:4b", "gemma4:e2b-it-qat", "qwen2.5vl:3b"],
     }));
     fireEvent.click(button(container, "Use qwen3.5:4b for Ask"));
     await waitFor(() => expect(placeOf(container, "qwen3.5:4b")).toBe("1"));
@@ -345,14 +345,14 @@ describe("the AI on a PC", () => {
     );
 
   it("the places belong to the PC's models: an \"On the PC\" group, and the Deck's rows carry no place", async () => {
-    pcModels(["gemma4:e2b-it-qat", "qwen3.5:4b"]);
+    pcModels(["qwen2.5vl:3b", "qwen3.5:4b"]);
     const { container } = renderBox(PC);
-    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat", true)).toBe("1"));
+    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b", true)).toBe("1"));
     expect(placeOf(container, "qwen3.5:4b", true)).toBe("2");
     expect(Array.from(container.querySelectorAll(".bonsai-pullmodels-group-title")).map((e) => e.textContent)).toContain("On the PC");
     // The Deck's own rows (what Pull and Remove act on) keep their star and X but claim no place.
-    expect(placeOf(container, "qwen2.5vl:3b")).toBeNull();
     expect(placeOf(container, "gemma4:e2b-it-qat")).toBeNull();
+    expect(placeOf(container, "qwen2.5vl:3b")).toBeNull();
     // A PC row has no star, no Remove and no pull box: nothing on it says the Deck has the model.
     const pcRow = rowOf(container, "qwen3.5:4b", true);
     expect(pcRow.querySelector(".bonsai-pullmodels-slot")).toBeNull();
@@ -360,30 +360,30 @@ describe("the AI on a PC", () => {
     expect(pcRow.textContent).toContain("PC");
     expect(container.textContent).toContain("Pull and Remove act on this Deck.");
     fireEvent.click(button(container, "Move qwen3.5:4b up"));
-    await waitFor(() => expect(savedOrders()).toEqual([{ text_model_routing_order: ["qwen3.5:4b", "gemma4:e2b-it-qat"] }]));
+    await waitFor(() => expect(savedOrders()).toEqual([{ text_model_routing_order: ["qwen3.5:4b", "qwen2.5vl:3b"] }]));
     await waitFor(() => expect(placeOf(container, "qwen3.5:4b", true)).toBe("1"));
   });
 
   it("a person with no model on the Deck can still reorder the PC's models", async () => {
     setRpcHandler("test_ollama_connection", (target) =>
       String(target).startsWith("192.168.1.20")
-        ? { reachable: true, models: ["gemma4:e2b-it-qat", "qwen3.5:4b", "qwen2.5vl:3b"] }
+        ? { reachable: true, models: ["qwen2.5vl:3b", "qwen3.5:4b", "gemma4:e2b-it-qat"] }
         : { reachable: true, models: [] },
     );
     const { container } = renderBox(PC);
-    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b", true)).toBe("1"));
-    expect(placeOf(container, "gemma4:e2b-it-qat", true)).toBe("2");
-    fireEvent.click(button(container, "Move qwen2.5vl:3b down"));
-    await waitFor(() => expect(savedOrders()).toEqual([{ text_model_routing_order: ["gemma4:e2b-it-qat", "qwen2.5vl:3b", "qwen3.5:4b"] }]));
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat", true)).toBe("1"));
+    expect(placeOf(container, "qwen2.5vl:3b", true)).toBe("2");
+    fireEvent.click(button(container, "Move gemma4:e2b-it-qat down"));
+    await waitFor(() => expect(savedOrders()).toEqual([{ text_model_routing_order: ["qwen2.5vl:3b", "gemma4:e2b-it-qat", "qwen3.5:4b"] }]));
   });
 
   it("the PC's Pictures order lists only the PC models that can read pictures", async () => {
-    pcModels(["qwen2.5vl:3b", "qwen3:4b"]);
+    pcModels(["gemma4:e2b-it-qat", "qwen3:4b"]);
     const { container } = renderBox(PC);
     await waitFor(() => expect(placeOf(container, "qwen3:4b", true)).not.toBeNull());
     fireEvent.click(button(container, "Try order for pictures questions"));
     await waitFor(() => expect(hasRow(container, "qwen3:4b", true)).toBe(false));
-    expect(placeOf(container, "qwen2.5vl:3b", true)).toBe("1");
+    expect(placeOf(container, "gemma4:e2b-it-qat", true)).toBe("1");
   });
 
   it("a PC model the person's own licence filter hides keeps its place, and one quiet line says so", async () => {
@@ -401,7 +401,7 @@ describe("the AI on a PC", () => {
   });
 
   it("a PC model the catalog does not know still gets a row", async () => {
-    pcModels(["my-own-model:7b", "gemma4:e2b-it-qat"]);
+    pcModels(["my-own-model:7b", "qwen2.5vl:3b"]);
     const { container } = renderBox(PC);
     await waitFor(() => expect(hasRow(container, "my-own-model:7b", true)).toBe(true));
     expect(rowOf(container, "my-own-model:7b", true).textContent).toContain("Other");
@@ -413,14 +413,14 @@ describe("a place must not promise a model that never runs", () => {
   // (ollama_routing.py resolve_routing_order), so the row says so.
   const BIG = "qwen2.5:32b";
   const withBig = () =>
-    setRpcHandler("test_ollama_connection", () => ({ reachable: true, models: ["gemma4:e2b-it-qat", BIG] }));
+    setRpcHandler("test_ollama_connection", () => ({ reachable: true, models: ["qwen2.5vl:3b", BIG] }));
 
   it("marks a big model's place \"Skipped: too big\" while the switch is off, and only that model", async () => {
     withBig();
     const { container } = renderBox({ ...DECK, modelAllowHighVramFallbacks: false });
     await waitFor(() => expect(placeOf(container, BIG)).not.toBeNull());
     expect(rowOf(container, BIG).textContent).toContain("Skipped: too big");
-    expect(rowOf(container, "gemma4:e2b-it-qat").textContent).not.toContain("Skipped");
+    expect(rowOf(container, "qwen2.5vl:3b").textContent).not.toContain("Skipped");
   });
 
   it("shows no mark when big models are allowed", async () => {
@@ -433,7 +433,7 @@ describe("a place must not promise a model that never runs", () => {
   it("marks a big PC model too", async () => {
     setRpcHandler("test_ollama_connection", (target) =>
       String(target).startsWith("192.168.1.20")
-        ? { reachable: true, models: ["gemma4:e2b-it-qat", BIG] }
+        ? { reachable: true, models: ["qwen2.5vl:3b", BIG] }
         : { reachable: true, models: [] },
     );
     const { container } = renderBox({ ...PC, modelAllowHighVramFallbacks: false });
@@ -449,8 +449,8 @@ describe("a place must not promise a model that never runs", () => {
       String(target).startsWith("192.168.1.20")
         ? {
             reachable: true,
-            models: ["gemma4:e2b-it-qat", "qwen3.6:27b", "gemma-cursor:latest"],
-            model_sizes: { "gemma4:e2b-it-qat": 2 * GB, "qwen3.6:27b": 17.4 * GB, "gemma-cursor:latest": 18 * GB },
+            models: ["qwen2.5vl:3b", "qwen3.6:27b", "gemma-cursor:latest"],
+            model_sizes: { "qwen2.5vl:3b": 2 * GB, "qwen3.6:27b": 17.4 * GB, "gemma-cursor:latest": 18 * GB },
           }
         : { reachable: true, models: [] },
     );
@@ -458,14 +458,14 @@ describe("a place must not promise a model that never runs", () => {
     await waitFor(() => expect(placeOf(container, "qwen3.6:27b", true)).not.toBeNull());
     expect(rowOf(container, "qwen3.6:27b", true).textContent).toContain("Skipped: too big");
     expect(rowOf(container, "gemma-cursor:latest", true).textContent).toContain("Skipped: too big");
-    expect(rowOf(container, "gemma4:e2b-it-qat", true).textContent).not.toContain("Skipped");
+    expect(rowOf(container, "qwen2.5vl:3b", true).textContent).not.toContain("Skipped");
   });
 
   it("the PC's rows show the size the PC reports, and no mark when big models are allowed", async () => {
     const GB = 1024 * 1024 * 1024;
     setRpcHandler("test_ollama_connection", (target) =>
       String(target).startsWith("192.168.1.20")
-        ? { reachable: true, models: ["gemma4:e2b-it-qat", "qwen3.6:27b"], model_sizes: { "qwen3.6:27b": 17.4 * GB } }
+        ? { reachable: true, models: ["qwen2.5vl:3b", "qwen3.6:27b"], model_sizes: { "qwen3.6:27b": 17.4 * GB } }
         : { reachable: true, models: [] },
     );
     const { container } = renderBox({ ...PC, modelAllowHighVramFallbacks: true });
@@ -540,7 +540,7 @@ describe("walking the box with the D-pad", () => {
   it("goes Down switch, stars, never a place button or Remove, and back Up with no stop twice", async () => {
     const upToAdvanced = vi.fn(() => true);
     const { container } = renderBox(DECK, { onMoveUpFromTop: upToAdvanced });
-    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
     const list = container.querySelector<HTMLElement>(".bonsai-pullmodels-list")!;
     const { header } = layOutList(list);
     Element.prototype.scrollIntoView = function (this: Element) {
@@ -589,11 +589,11 @@ describe("walking the box with the D-pad", () => {
   it("with the AI on a PC every PC model is reached by Down and back by Up, each once, never a Remove", async () => {
     setRpcHandler("test_ollama_connection", (target) =>
       String(target).startsWith("192.168.1.20")
-        ? { reachable: true, models: ["gemma4:e2b-it-qat", "qwen3.5:4b", "qwen2.5vl:3b"] }
+        ? { reachable: true, models: ["qwen2.5vl:3b", "qwen3.5:4b", "gemma4:e2b-it-qat"] }
         : { reachable: true, models: [] },
     );
     const { container } = renderBox(PC);
-    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b", true)).toBe("1"));
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat", true)).toBe("1"));
     const list = container.querySelector<HTMLElement>(".bonsai-pullmodels-list")!;
     layOutList(list);
     Element.prototype.scrollIntoView = function (this: Element) {
@@ -636,7 +636,7 @@ describe("walking the box with the D-pad", () => {
 
   it("the first model is whole under the column header when Down goes switch to first row, and when Up comes back", async () => {
     const { container } = renderBox(DECK);
-    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
     const list = container.querySelector<HTMLElement>(".bonsai-pullmodels-list")!;
     const { header } = layOutList(list);
     Element.prototype.scrollIntoView = function (this: Element) {
@@ -656,28 +656,28 @@ describe("walking the box with the D-pad", () => {
 
   it("along a row it walks star, up, down, Remove by Right and back by Left, and Up or Down from a place button is the row's own", async () => {
     const { container } = renderBox(DECK);
-    await waitFor(() => expect(placeOf(container, "qwen2.5vl:3b")).toBe("1"));
+    await waitFor(() => expect(placeOf(container, "gemma4:e2b-it-qat")).toBe("1"));
     const list = container.querySelector<HTMLElement>(".bonsai-pullmodels-list")!;
     layOutList(list);
     Element.prototype.scrollIntoView = function (this: Element) {
       if (list.contains(this)) steamNearest(list, this as HTMLElement);
     };
-    const row = rowOf(container, "gemma4:e2b-it-qat");
+    const row = rowOf(container, "qwen2.5vl:3b");
     row.querySelector<HTMLElement>(".bonsai-pullmodels-slot")!.focus();
     const walk = (dir: "onMoveRight" | "onMoveLeft") => {
       press(dir);
       return labelOf(document.activeElement!);
     };
-    expect(walk("onMoveRight")).toBe("Move gemma4:e2b-it-qat up");
-    expect(walk("onMoveRight")).toBe("Move gemma4:e2b-it-qat down");
+    expect(walk("onMoveRight")).toBe("Move qwen2.5vl:3b up");
+    expect(walk("onMoveRight")).toBe("Move qwen2.5vl:3b down");
     // Down from a place button goes to the next row's star, not along the row and not to Remove.
     press("onMoveDown");
     expect(document.activeElement?.className).toMatch(/bonsai-pullmodels-slot/);
     expect(document.activeElement).not.toBe(row.querySelector(".bonsai-pullmodels-slot"));
-    rowOf(container, "gemma4:e2b-it-qat").querySelector<HTMLElement>(`button[aria-label="Move gemma4:e2b-it-qat down"]`)!.focus();
+    rowOf(container, "qwen2.5vl:3b").querySelector<HTMLElement>(`button[aria-label="Move qwen2.5vl:3b down"]`)!.focus();
     expect(walk("onMoveRight")).toBe("Remove from Deck");
-    expect(walk("onMoveLeft")).toBe("Move gemma4:e2b-it-qat down");
-    expect(walk("onMoveLeft")).toBe("Move gemma4:e2b-it-qat up");
-    expect(walk("onMoveLeft")).toMatch(/^(Use gemma4:e2b-it-qat for Ask|gemma4:e2b-it-qat is used for Ask)$/);
+    expect(walk("onMoveLeft")).toBe("Move qwen2.5vl:3b down");
+    expect(walk("onMoveLeft")).toBe("Move qwen2.5vl:3b up");
+    expect(walk("onMoveLeft")).toMatch(/^(Use qwen2.5vl:3b for Ask|qwen2.5vl:3b is used for Ask)$/);
   });
 });

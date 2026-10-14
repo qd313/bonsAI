@@ -35,18 +35,18 @@ import type { PullModelEntry } from "../data/pullModelCatalog";
 
 /** Keep aligned with ``ollama_routing.py`` essentials chains. */
 const DEFAULT_TEXT_ROUTING_SEED: readonly string[] = [
+  "gemma4:e2b-it-qat",
   "qwen2.5vl:3b",
   "qwen2.5:3b",
-  "gemma4:e2b-it-qat",
   "gemma4:e2b",
   "gemma4:latest",
 ];
 
 const DEFAULT_VISION_ROUTING_SEED: readonly string[] = [
+  "gemma4:e2b-it-qat",
   "qwen2.5vl:3b",
   "qwen3.5:4b",
   "llava:7b",
-  "gemma4:e2b-it-qat",
   "gemma4:e2b",
   "gemma3:4b",
 ];

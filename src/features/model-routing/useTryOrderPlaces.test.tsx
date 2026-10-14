@@ -102,7 +102,7 @@ describe("which computer's models get a place", () => {
   });
 
   it("Pictures lists only models that can read pictures", async () => {
-    const { box } = mountPlaces({ host: DECK_HOST, deckInstalled: ["qwen2.5vl:3b", "gemma4:e2b-it-qat", "qwen2.5:7b"] });
+    const { box } = mountPlaces({ host: DECK_HOST, deckInstalled: ["qwen2.5vl:3b", "qwen2.5:7b"] });
     await waitFor(() => expect(box.latest!.status).toBe("ready"));
     expect(box.latest!.placeOf("qwen2.5:7b")).not.toBeNull();
     act(() => box.latest!.setKind("vision"));
@@ -146,17 +146,17 @@ describe("a place change saves at once", () => {
     captureBonsaiSessionForModal(sessionWithOrders([], []));
     const { box } = mountPlaces({ host: DECK_HOST, deckInstalled: ["gemma4:e2b-it-qat", "qwen3.5:4b", "qwen2.5vl:3b"] });
     await waitFor(() => expect(box.latest!.status).toBe("ready"));
-    // The seed order puts qwen2.5vl:3b first, then gemma4:e2b-it-qat, then the rest.
-    expect(box.latest!.placeOf("qwen2.5vl:3b")).toBe(1);
-    await act(async () => {
-      await box.latest!.move("gemma4:e2b-it-qat", -1);
-    });
-    expect(savedBody()).toEqual([{ text_model_routing_order: ["gemma4:e2b-it-qat", "qwen2.5vl:3b", "qwen3.5:4b"] }]);
+    // The seed order puts the starter model gemma4:e2b-it-qat first, then qwen2.5vl:3b, then the rest.
     expect(box.latest!.placeOf("gemma4:e2b-it-qat")).toBe(1);
-    expect(box.latest!.placeOf("qwen2.5vl:3b")).toBe(2);
+    await act(async () => {
+      await box.latest!.move("qwen2.5vl:3b", -1);
+    });
+    expect(savedBody()).toEqual([{ text_model_routing_order: ["qwen2.5vl:3b", "gemma4:e2b-it-qat", "qwen3.5:4b"] }]);
+    expect(box.latest!.placeOf("qwen2.5vl:3b")).toBe(1);
+    expect(box.latest!.placeOf("gemma4:e2b-it-qat")).toBe(2);
     expect(consumeBonsaiSessionAfterRemount()?.settingsSnapshot.textModelRoutingOrder).toEqual([
-      "gemma4:e2b-it-qat",
       "qwen2.5vl:3b",
+      "gemma4:e2b-it-qat",
       "qwen3.5:4b",
     ]);
   });

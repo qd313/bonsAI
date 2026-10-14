@@ -99,6 +99,14 @@ class ModelPolicyTests(unittest.TestCase):
             filter_model_list(["qwen2.5vl:3b", "qwen3.5:4b"], "open_weight", False), ["qwen2.5vl:3b", "qwen3.5:4b"]
         )
 
+    def test_the_text_chain_under_open_source_only_is_the_gemma_4_models(self):
+        """With both Qwen Research 3B models out, the shipped text chain under "Open source only" is
+        gemma4:e2b-it-qat, gemma4:e2b and gemma4:latest (qwen3.5:4b is tried too when it is installed)."""
+        from backend.ollama_routing import select_ollama_models
+
+        text = filter_model_list(select_ollama_models(False, "speed"), "open_source_only", False)
+        self.assertEqual(text, ["gemma4:e2b-it-qat", "gemma4:e2b", "gemma4:latest"])
+
     def test_picture_questions_still_have_open_source_vision_models_without_qwen25vl(self):
         """qwen2.5vl:3b was not the only picture model open to "Open source only": Gemma 4,
         qwen3.5:4b and llava:7b are all open-source-class and read pictures."""
@@ -106,8 +114,8 @@ class ModelPolicyTests(unittest.TestCase):
 
         vision = filter_model_list(select_ollama_models(True, "speed"), "open_source_only", False)
         self.assertNotIn("qwen2.5vl:3b", vision)
-        self.assertEqual(vision[0], "qwen3.5:4b")
-        self.assertIn("gemma4:e2b-it-qat", vision)
+        self.assertEqual(vision[:2], ["gemma4:e2b-it-qat", "qwen3.5:4b"])
+        self.assertIn("llava:7b", vision)
 
     def test_filter_tier1_drops_size_limited_and_legacy_models(self):
         models = ["qwen2.5:72b", "qwen2.5-coder:3b", "vicuna:latest", "orca-mini:latest",

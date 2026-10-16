@@ -24,7 +24,6 @@
  * underneath.
  */
 import { BONSAI_PLUGIN_SIDE_PAD_PX } from "../../features/unified-input/constants";
-import { uiScalePx } from "./uiScalePx";
 
 /**
  * In: nothing — every value here is a fixed string or read from a CSS
@@ -41,7 +40,7 @@ import { uiScalePx } from "./uiScalePx";
  *    height to a shared size variable so it fills the box instead of
  *    growing past it.
  * 3. Sets the scroll area's top gap and its left/right side padding — the
- *    padding scales with the UI scale setting, and this is the one rule in
+ *    padding is a plain pixel size, and this is the one rule in
  *    this group that actually reaches a real Deck.
  * 4. Forces the scroll area's direct child into a top-to-bottom layout,
  *    because the Deck sometimes decides it should be a row aligned to the
@@ -106,8 +105,8 @@ export function buildSection3Section(): string {
           top: auto !important;
           margin-left: 0 !important;
           margin-right: 0 !important;
-          padding-left: ${uiScalePx(BONSAI_PLUGIN_SIDE_PAD_PX)} !important;
-          padding-right: ${uiScalePx(BONSAI_PLUGIN_SIDE_PAD_PX)} !important;
+          padding-left: ${BONSAI_PLUGIN_SIDE_PAD_PX}px !important;
+          padding-right: ${BONSAI_PLUGIN_SIDE_PAD_PX}px !important;
           box-sizing: border-box !important;
           flex: 1 1 0% !important;
           min-height: 0 !important;

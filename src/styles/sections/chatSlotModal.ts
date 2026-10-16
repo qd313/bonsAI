@@ -26,10 +26,10 @@
  * Out: a block of CSS text.
  * Can go wrong: nothing — this always returns the same fixed string.
  *
- * Uses plain pixel sizes rather than the usual UI-scale helper: this popup
- * renders inside Steam's own dialog, at Steam's own scale, outside the
- * plugin's normal column — `BonsaiModalScope` is what carries the UI-scale
- * setting into a popup like this one, not this file.
+ * Uses plain pixel sizes: this popup renders inside Steam's own dialog, at
+ * Steam's own scale, outside the plugin's normal column — `BonsaiModalScope`
+ * is what carries the Text size setting into a popup like this one, not this
+ * file.
  */
 import { textPx } from "./textPx";
 

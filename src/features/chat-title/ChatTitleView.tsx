@@ -30,7 +30,7 @@
  *
  * Does not: Switch chats or draw the chats menu: switching is the Main tab's, reached through the store,
  * and the menu is drawn in bonsAI's own box (ChatsMenu.tsx); A or a tap on the name only says "open"
- * or "close" through the store. Does not scale with bonsAI's UI-size setting (see chatTitleStyles.ts).
+ * or "close" through the store. Its sizes are fixed points (see chatTitleStyles.ts).
  *
  * Focus (docs/focus-graph.md, "The chat's name and the chats menu (plan 84 step 5)" and "The tab bar in
  * Steam's strip (plan 84 step 6)"), with the bar in the strip:

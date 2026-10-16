@@ -40,8 +40,7 @@ import {
   UNIFIED_TEXT_OVERLAY_FALLBACK_OVERFLOW_WRAP,
   UNIFIED_TEXT_OVERLAY_FALLBACK_WHITE_SPACE,
 } from "../../features/unified-input/constants";
-import { uiScalePx } from "./uiScalePx";
-import { uiTextPx } from "./textPx";
+import { textPx } from "./textPx";
 
 /**
  * In: nothing.
@@ -109,10 +108,10 @@ export function buildSection5Section(): string {
           color: transparent !important;
           -webkit-text-fill-color: transparent !important;
           margin: 0 !important;
-          padding: ${uiScalePx(UNIFIED_TEXT_INSET_TOP_PX)} ${uiScalePx(UNIFIED_TEXT_INSET_RIGHT_PX)} ${uiScalePx(UNIFIED_TEXT_INSET_BOTTOM_PX)} ${uiScalePx(UNIFIED_TEXT_INSET_LEFT_PX)} !important;
+          padding: ${UNIFIED_TEXT_INSET_TOP_PX}px ${UNIFIED_TEXT_INSET_RIGHT_PX}px ${UNIFIED_TEXT_INSET_BOTTOM_PX}px ${UNIFIED_TEXT_INSET_LEFT_PX}px !important;
           text-indent: 0 !important;
           box-sizing: border-box !important;
-          font-size: ${uiTextPx(UNIFIED_TEXT_FONT_PX)} !important;
+          font-size: ${textPx(UNIFIED_TEXT_FONT_PX)} !important;
           line-height: ${UNIFIED_TEXT_LINE_HEIGHT} !important;
           vertical-align: top !important;
         }
@@ -142,7 +141,7 @@ export function buildSection5Section(): string {
         */
         .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-measure,
         .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-text-overlay {
-          padding: ${uiScalePx(UNIFIED_TEXT_INSET_TOP_PX)} ${uiScalePx(UNIFIED_TEXT_INSET_RIGHT_PX)} ${uiScalePx(UNIFIED_TEXT_INSET_BOTTOM_PX)} ${uiScalePx(UNIFIED_TEXT_INSET_LEFT_PX)} !important;
+          padding: ${UNIFIED_TEXT_INSET_TOP_PX}px ${UNIFIED_TEXT_INSET_RIGHT_PX}px ${UNIFIED_TEXT_INSET_BOTTOM_PX}px ${UNIFIED_TEXT_INSET_LEFT_PX}px !important;
           box-sizing: border-box !important;
           white-space: var(--bonsai-unified-field-white-space, ${UNIFIED_TEXT_OVERLAY_FALLBACK_WHITE_SPACE}) !important;
           overflow-wrap: var(--bonsai-unified-field-overflow-wrap, ${UNIFIED_TEXT_OVERLAY_FALLBACK_OVERFLOW_WRAP}) !important;
@@ -190,7 +189,7 @@ export function buildSection5Section(): string {
            the field has two placeholder render paths and they have to read the same. */
         .bonsai-scope .bonsai-unified-input-host input::placeholder,
         .bonsai-scope .bonsai-unified-input-host textarea::placeholder {
-          font-size: ${uiTextPx(UNIFIED_TEXT_FONT_PX)} !important;
+          font-size: ${textPx(UNIFIED_TEXT_FONT_PX)} !important;
           font-style: italic !important;
           color: rgba(200, 214, 230, 0.45) !important;
         }
@@ -219,7 +218,7 @@ export function buildSection5Section(): string {
         /*
          * The blinking cursor. The real field underneath is invisible, so the cursor is drawn: a
          * thin bar that sits IN the line of text, never at a fixed spot in the box. Whatever
-         * places the text -- the field's padding, the text size, the line height, the UI scale --
+         * places the text -- the field's padding, the text size, the line height --
          * places the cursor too, so a later change to any of them cannot leave it behind.
          *
          * It came loose exactly that way, more than once (roadmap bug, 2026-09-24). On the empty

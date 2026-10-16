@@ -82,7 +82,6 @@ import {
   PRESET_VISIBLE_SLOTS,
 } from "../../features/preset-carousel/presetRowLayout";
 import { buildPresetChipLabelCss } from "./presetChipLabel";
-import { uiScalePx } from "./uiScalePx";
 
 /**
  * In: nothing.
@@ -170,20 +169,20 @@ export function buildSection4Section(): string {
           margin-top: 0 !important;
           padding-top: 0 !important;
           padding-bottom: ${PRESET_CHIP_SHADOW_ROOM_PX}px !important;
-          margin-bottom: calc(${uiScalePx(DOCK_ROW_GAP_PX)} - ${PRESET_CHIP_SHADOW_ROOM_PX}px) !important;
+          margin-bottom: calc(${DOCK_ROW_GAP_PX}px - ${PRESET_CHIP_SHADOW_ROOM_PX}px) !important;
         }
 
         /* Fade mode had 12px under its chips; since plan 72 it has the same row gap as every mode. */
         .bonsai-scope .bonsai-preset-row-host--fade-anim {
           gap: 3px !important;
-          margin-bottom: calc(${uiScalePx(DOCK_ROW_GAP_PX)} - ${PRESET_CHIP_SHADOW_ROOM_PX}px) !important;
+          margin-bottom: calc(${DOCK_ROW_GAP_PX}px - ${PRESET_CHIP_SHADOW_ROOM_PX}px) !important;
           margin-top: 0 !important;
         }
 
         ${buildPresetChipLabelCss()}
 
         .bonsai-scope .bonsai-chat-response-stack {
-          margin-top: ${uiScalePx(BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX)} !important;
+          margin-top: ${BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX}px !important;
         }
 
         .bonsai-scope .bonsai-preset-carousel-focus-root {

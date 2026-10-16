@@ -13,7 +13,6 @@
  * Does not: Style the answer bubble across from it (answerBubble.ts) or
  * the row of buttons underneath an answer (replyActionsRow.ts).
  */
-import { uiScalePx } from "./uiScalePx";
 import { textPx } from "./textPx";
 
 /**
@@ -90,8 +89,8 @@ export function buildQuestionBubbleSection(): string {
           position: absolute !important;
           top: auto !important;
           right: auto !important;
-          left: ${uiScalePx(6)} !important;
-          bottom: ${uiScalePx(3)} !important;
+          left: 6px !important;
+          bottom: 3px !important;
           margin: 0 !important;
           /* Above the question text's box, which follows it in the DOM and is itself positioned:
              without this a hit-test at the icon returned the title span, so a TAP on the icon
@@ -129,7 +128,7 @@ export function buildQuestionBubbleSection(): string {
           .bonsai-chat-turn-row-title::after {
           content: "" !important;
           float: left !important;
-          width: ${uiScalePx(19)} !important;
+          width: 19px !important;
           height: 1.3em !important;
         }
         /* Once questionBubbleFit.ts has fitted the bubble, the title box itself starts clear of
@@ -144,8 +143,8 @@ export function buildQuestionBubbleSection(): string {
         .bonsai-scope button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner,
         .bonsai-scope button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.DialogButton {
           min-height: 0 !important;
-          width: ${uiScalePx(20)} !important;
-          height: ${uiScalePx(20)} !important;
+          width: 20px !important;
+          height: 20px !important;
           padding: 0 !important;
           gap: 0 !important;
           border: none !important;

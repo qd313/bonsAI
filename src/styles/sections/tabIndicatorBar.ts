@@ -40,8 +40,7 @@ import {
   TAB_BAR_SIDE_ICON_PX,
   TAB_STRIP_BODY_GAP_PX,
 } from "../../features/unified-input/constants";
-import { uiScalePx } from "./uiScalePx";
-import { uiTextPx } from "./textPx";
+import { textPx } from "./textPx";
 
 /** The dim colour of the LB and RB marks, the same grey-blue family as the other hint pills. */
 const MARK_COLOR = "rgba(168, 182, 198, 0.62)";
@@ -69,8 +68,8 @@ const ACCENT = "var(--bonsai-ui-tab-lit, #52d88a)";
  * 1. Locks the bar's height to one fixed size, so the two hooks that
  *    measure "how much room does the tab area need" never see it change.
  * 2. Sets the small gap under the bar as a plain CSS value too, not only
- *    the one a hook writes inline — needed because changing the UI scale
- *    rebuilds the tab area and can leave the inline value stale.
+ *    the one a hook writes inline — needed because a rebuild of the tab
+ *    area can leave the inline value stale.
  * 3. Lays the bar out as a three-column grid: LB, the tabs, RB. The tabs
  *    column takes what is left and spreads its items from one end to the
  *    other, so the first tab is flush after LB and the last flush before
@@ -95,12 +94,12 @@ export function buildTabIndicatorBarSection(): string {
            tall, always: nothing opens from it and nothing inside it is drawn outside it.
            ========================================================================== */
         /* The 4px gap under the bar as a stylesheet value, not only the inline one the hook writes:
-           a UI-scale Apply remounts the tabs root and its inline --bonsai-tab-strip-reserve with it,
-           and with no pointer moving (a controller) the hook never re-wrote it — measured 2026-09-02,
-           the body started flush under the bar after Apply (TAB-BAR-10). Declared where the bar is
+           a remount of the tabs root (a UI-scale Apply did it, before that setting was removed) loses its
+           inline --bonsai-tab-strip-reserve, and with no pointer moving (a controller) the hook never re-wrote it —
+           measured 2026-09-02, the body started flush under the bar after Apply (TAB-BAR-10). Declared where the bar is
            mounted, so a scope without the bar keeps the measuring path's value. */
         .bonsai-scope:has(.bonsai-tab-bar) .bonsai-decky-tabs-root {
-          --bonsai-tab-strip-reserve: ${uiScalePx(TAB_STRIP_BODY_GAP_PX)};
+          --bonsai-tab-strip-reserve: ${TAB_STRIP_BODY_GAP_PX}px;
         }
 ${buildTabBarRules(".bonsai-scope")}`;
 }
@@ -117,9 +116,9 @@ export function buildTabBarRules(root: string): string {
            .Panel.Focusable to height: auto !important, and the bar is one. Measured 2026-09-02: the
            bar read 11px (its tallest child) until this rule. */
         ${root} .bonsai-tab-bar.Panel.Focusable {
-          height: ${uiScalePx(TAB_BAR_HEIGHT_PX)} !important;
-          min-height: ${uiScalePx(TAB_BAR_HEIGHT_PX)} !important;
-          max-height: ${uiScalePx(TAB_BAR_HEIGHT_PX)} !important;
+          height: ${TAB_BAR_HEIGHT_PX}px !important;
+          min-height: ${TAB_BAR_HEIGHT_PX}px !important;
+          max-height: ${TAB_BAR_HEIGHT_PX}px !important;
         }
         /* Three columns (plan 87 F4): LB, the tabs (minmax(0, 1fr), so it takes whatever LB and RB
            leave) and RB, with the bar's 16-point edge padding (the drawing's .edge16). Items stretch
@@ -132,15 +131,15 @@ export function buildTabBarRules(root: string): string {
           box-sizing: border-box;
           width: 100%;
           min-width: 0;
-          height: ${uiScalePx(TAB_BAR_HEIGHT_PX)};
+          height: ${TAB_BAR_HEIGHT_PX}px;
           padding-top: 0;
           padding-bottom: 0;
-          padding-left: ${uiScalePx(TAB_BAR_EDGE_PAD_PX)};
-          padding-right: ${uiScalePx(TAB_BAR_EDGE_PAD_PX)};
+          padding-left: ${TAB_BAR_EDGE_PAD_PX}px;
+          padding-right: ${TAB_BAR_EDGE_PAD_PX}px;
           display: grid;
           grid-template-columns: auto minmax(0, 1fr) auto;
           align-items: stretch;
-          column-gap: ${uiScalePx(TAB_BAR_COLUMN_GAP_PX)};
+          column-gap: ${TAB_BAR_COLUMN_GAP_PX}px;
           overflow: hidden;
           user-select: none;
         }
@@ -149,10 +148,10 @@ export function buildTabBarRules(root: string): string {
            half the column gap in, with negative margins taking the same room back, so nothing moves. */
         ${root} .bonsai-tab-bar__shoulder {
           box-sizing: content-box;
-          width: ${uiScalePx(TAB_BAR_SHOULDER_W_PX)};
+          width: ${TAB_BAR_SHOULDER_W_PX}px;
           display: flex;
           align-items: center;
-          font-size: ${uiScalePx(TAB_BAR_SHOULDER_MARK_PX)};
+          font-size: ${TAB_BAR_SHOULDER_MARK_PX}px;
           line-height: 1;
           font-weight: 800;
           letter-spacing: 0.06em;
@@ -163,17 +162,17 @@ export function buildTabBarRules(root: string): string {
         }
         ${root} .bonsai-tab-bar__shoulder--l {
           justify-content: flex-start;
-          padding-left: ${uiScalePx(TAB_BAR_SHOULDER_REACH_PX)};
-          margin-left: ${uiScalePx(-TAB_BAR_SHOULDER_REACH_PX)};
-          padding-right: ${uiScalePx(halfColumnGap)};
-          margin-right: ${uiScalePx(-halfColumnGap)};
+          padding-left: ${TAB_BAR_SHOULDER_REACH_PX}px;
+          margin-left: ${-TAB_BAR_SHOULDER_REACH_PX}px;
+          padding-right: ${halfColumnGap}px;
+          margin-right: ${-halfColumnGap}px;
         }
         ${root} .bonsai-tab-bar__shoulder--r {
           justify-content: flex-end;
-          padding-right: ${uiScalePx(TAB_BAR_SHOULDER_REACH_PX)};
-          margin-right: ${uiScalePx(-TAB_BAR_SHOULDER_REACH_PX)};
-          padding-left: ${uiScalePx(halfColumnGap)};
-          margin-left: ${uiScalePx(-halfColumnGap)};
+          padding-right: ${TAB_BAR_SHOULDER_REACH_PX}px;
+          margin-right: ${-TAB_BAR_SHOULDER_REACH_PX}px;
+          padding-left: ${halfColumnGap}px;
+          margin-left: ${-halfColumnGap}px;
         }
         /* The tabs, in the strip's own order, spread from one end to the other (plan 87 F4): the first
            one flush after LB, the last flush before RB, the spare room shared out between them. Nothing
@@ -189,8 +188,8 @@ export function buildTabBarRules(root: string): string {
         }
         /* Each other tab: its icon in its own tap target, an icon plus a gap wide, never narrower. */
         ${root} .bonsai-tab-bar__peek {
-          flex: 0 0 ${uiScalePx(TAB_BAR_SIDE_ICON_PX + TAB_BAR_SIDE_ICON_GAP_PX)};
-          min-width: ${uiScalePx(TAB_BAR_SIDE_ICON_PX + TAB_BAR_SIDE_ICON_GAP_PX)};
+          flex: 0 0 ${TAB_BAR_SIDE_ICON_PX + TAB_BAR_SIDE_ICON_GAP_PX}px;
+          min-width: ${TAB_BAR_SIDE_ICON_PX + TAB_BAR_SIDE_ICON_GAP_PX}px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -205,16 +204,16 @@ export function buildTabBarRules(root: string): string {
           display: flex;
           align-items: center;
           min-width: 0;
-          padding-left: ${uiScalePx(TAB_BAR_CURRENT_PAD_X_PX)};
-          padding-right: ${uiScalePx(TAB_BAR_CURRENT_PAD_X_PX)};
+          padding-left: ${TAB_BAR_CURRENT_PAD_X_PX}px;
+          padding-right: ${TAB_BAR_CURRENT_PAD_X_PX}px;
           white-space: nowrap;
           color: ${ACCENT};
         }
         ${root} .bonsai-tab-bar__current-icon {
           flex: none;
-          width: ${uiScalePx(TAB_BAR_CURRENT_ICON_PX)};
-          height: ${uiScalePx(TAB_BAR_CURRENT_ICON_PX)};
-          margin-right: ${uiScalePx(TAB_BAR_CURRENT_ICON_GAP_PX)};
+          width: ${TAB_BAR_CURRENT_ICON_PX}px;
+          height: ${TAB_BAR_CURRENT_ICON_PX}px;
+          margin-right: ${TAB_BAR_CURRENT_ICON_GAP_PX}px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -223,7 +222,7 @@ export function buildTabBarRules(root: string): string {
         ${root} .bonsai-tab-bar__name {
           flex: none;
           padding-left: 0.1em;
-          font-size: ${uiTextPx(TAB_BAR_NAME_PX)};
+          font-size: ${textPx(TAB_BAR_NAME_PX)};
           line-height: 1;
           font-weight: 800;
           letter-spacing: 0.1em;
@@ -254,7 +253,7 @@ export function buildTabBarRules(root: string): string {
           outline: none !important;
           box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.85) !important;
           background: rgba(255, 255, 255, 0.06);
-          border-radius: ${uiScalePx(3)};
+          border-radius: 3px;
         }
         /* LB and RB light up only while the ring is on the bar (the drawing's .deck.dimkeys.ring-tabs;
            D126: a row's hints dim unless the ring is on that row). No fade: a state change, so

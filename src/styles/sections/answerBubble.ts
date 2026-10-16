@@ -16,7 +16,6 @@
  * formatting of the text inside the bubble (answerMarkdownFormatting.ts),
  * or the row of buttons underneath the bubble (still in section-6.ts).
  */
-import { uiScalePx } from "./uiScalePx";
 import { textPx } from "./textPx";
 import { ANSWER_LINE_HEIGHT } from "./answerMarkdownFormatting";
 
@@ -83,9 +82,9 @@ export function buildAnswerBubbleSection(): string {
              on the Deck 2026-09-06, where -24 left the icon at 1155–1175 against a bubble ending at
              1165. The margin below puts the reply block back where it sat before the icon existed,
              so the reply loses no height to it. */
-          margin-top: ${uiScalePx(-38)} !important;
-          margin-bottom: ${uiScalePx(12)} !important;
-          padding-right: ${uiScalePx(7)} !important;
+          margin-top: -38px !important;
+          margin-bottom: 12px !important;
+          padding-right: 7px !important;
           box-sizing: border-box !important;
           position: relative !important;
           z-index: 1 !important;
@@ -124,14 +123,14 @@ export function buildAnswerBubbleSection(): string {
           float: right !important;
           /* Icon 20 wide, 7 in from the bubble's right border; the text ends 11 in. 24 leaves a
              4px gap between the last word and the icon. */
-          width: ${uiScalePx(24)} !important;
+          width: 24px !important;
           height: 1em !important;
         }
         .bonsai-scope .bonsai-chat-ai-bubble--with-copy .bonsai-answer-stop:last-child > .bonsai-md-ul:last-child > .bonsai-md-li:last-child:not(:has(> .bonsai-md-p))::after,
         .bonsai-scope .bonsai-chat-ai-bubble--with-copy .bonsai-answer-stop:last-child > .bonsai-md-ol:last-child > .bonsai-md-li:last-child:not(:has(> .bonsai-md-p))::after {
           content: "" !important;
           float: right !important;
-          width: ${uiScalePx(24)} !important;
+          width: 24px !important;
           height: 1em !important;
         }
         /*
@@ -148,7 +147,7 @@ export function buildAnswerBubbleSection(): string {
          * other shape) keeps today's layout exactly.
          */
         .bonsai-scope .bonsai-chat-ai-bubble--with-copy .bonsai-answer-stop:last-child > .bonsai-md-fenced-pre:last-child {
-          margin-bottom: ${uiScalePx(28)} !important;
+          margin-bottom: 28px !important;
         }
         /*
          * Icon only: no border, no gradient, no minimum height. Overrides the shared secondary
@@ -157,8 +156,8 @@ export function buildAnswerBubbleSection(): string {
         .bonsai-scope button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner,
         .bonsai-scope button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.DialogButton {
           min-height: 0 !important;
-          width: ${uiScalePx(20)} !important;
-          height: ${uiScalePx(20)} !important;
+          width: 20px !important;
+          height: 20px !important;
           padding: 0 !important;
           gap: 0 !important;
           border: none !important;

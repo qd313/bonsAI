@@ -24,11 +24,6 @@ export function textPx(px: number): string {
   return `calc(${px}px * var(${TEXT_SCALE_VAR}, 1))`;
 }
 
-/** `px` pixels, times the UI scale and the Text size step. For a size that already followed the UI scale. */
-export function uiTextPx(px: number): string {
-  return `calc(${px}px * var(--bonsai-ui-scale, 1) * var(${TEXT_SCALE_VAR}, 1))`;
-}
-
 /**
  * The step on the box itself: `1em` of the size it inherits, times the step (exactly the inherited size
  * on Normal). Anything inside the box that takes its size from its parent, Steam's own controls

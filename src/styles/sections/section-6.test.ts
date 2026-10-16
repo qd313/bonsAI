@@ -30,7 +30,7 @@ describe("copy icon room reserved below a trailing code box (section 6 CSS)", ()
     // The icon is 20 tall (section-6.ts, button.bonsai-reply-copy-corner); the reserved room must
     // be at least that plus a little breathing space, and marked !important so it outranks the
     // shared `.bonsai-md-fenced-pre` margin reset above it.
-    const marginMatch = body.match(/margin-bottom:\s*calc\((\d+)px/);
+    const marginMatch = body.match(/margin-bottom:\s*(\d+)px/);
     expect(marginMatch).toBeTruthy();
     expect(Number(marginMatch![1])).toBeGreaterThanOrEqual(24);
     expect(body).toMatch(/!important/);
@@ -182,22 +182,22 @@ describe("the 'What went wrong?' reason chips are tighter than the other reply b
   // smaller and softer"): 5 gap, 24 tall, 2 by 8 padding. The final settled sizes are read off the
   // whole stylesheet in replyRatingChoices.test.ts; this pins that the shared button is left alone.
   const css = buildSection6Section();
-  const scaled = (px: number) => `calc(${px}px * var(--bonsai-ui-scale, 1))`;
+  const plain = (px: number) => `${px}px`;
 
-  it("puts 5 between the reason chips, scaled and able to beat the shared row gap", () => {
+  it("puts 5 between the reason chips, able to beat the shared row gap", () => {
     const match = css.match(/\.bonsai-scope \.bonsai-chat-reply-actions-row--chips\s*\{([^}]*)\}/);
     expect(match).toBeTruthy();
-    expect(match![1]!).toContain(`gap: ${scaled(5)} !important`);
+    expect(match![1]!).toContain(`gap: ${plain(5)} !important`);
   });
 
-  it("makes each reason chip 24 tall with 2 by 8 padding, scaled", () => {
+  it("makes each reason chip 24 tall with 2 by 8 padding", () => {
     const match = css.match(
       /\.bonsai-scope \.bonsai-chat-reply-actions \.bonsai-chat-reply-actions-row--chips button\.bonsai-chat-secondary-btn\.DialogButton\s*\{([^}]*)\}/,
     );
     expect(match).toBeTruthy();
     const body = match![1]!;
-    expect(body).toContain(`min-height: ${scaled(24)} !important`);
-    expect(body).toContain(`padding: ${scaled(2)} ${scaled(8)} !important`);
+    expect(body).toContain(`min-height: ${plain(24)} !important`);
+    expect(body).toContain(`padding: ${plain(2)} ${plain(8)} !important`);
   });
 
   it("leaves the shared reply button at its own size", () => {
@@ -218,6 +218,6 @@ describe("the 'What went wrong?' reason chips are tighter than the other reply b
       /\.bonsai-scope \.bonsai-chat-reply-actions-row--chips \+ \.bonsai-chat-reply-actions-row--chips\s*\{([^}]*)\}/,
     );
     expect(match).toBeTruthy();
-    expect(match![1]!).toContain(`margin-top: calc(${scaled(5)} - 8px) !important`);
+    expect(match![1]!).toContain(`margin-top: calc(${plain(5)} - 8px) !important`);
   });
 });

@@ -4,9 +4,8 @@
  *          computed size gets the raw rule text back. This works the size out the way the browser
  *          does for the few shapes the plugin writes: a rule's `!important` beats the rest, then the
  *          more specific selector, then the later rule, with an element's own inline size beating a
- *          plain rule; `calc(Npx * var(--bonsai-ui-scale, 1) * var(--bonsai-text-scale, 1))` (either
- *          factor optional, `em` allowed in place of `px`) is N times the Text size step the root
- *          carries; the UI scale counts as 1; a bare `em` is of the parent; no rule means the
+ *          plain rule; `calc(Npx * var(--bonsai-text-scale, 1))` (the factor optional, `em` allowed in place of
+ *          `px`) is N times the Text size step the root carries; a bare `em` is of the parent; no rule means the
  *          parent's size.
  * Used for: tests that must show a font size really changed on screen (the Text size setting).
  * Does not: Lay anything out, or read shorthand `font`. A size written some other way throws, so a new

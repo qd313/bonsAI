@@ -174,10 +174,9 @@ describe("room under the suggestion chips (section 4 CSS)", () => {
     expect(decl).toBeTruthy();
     return decl![1]!;
   }
-  /** Evaluates a declared length at one UI size: plain px, uiScalePx's calc(), and sums of both. */
-  function px(value: string, uiScale: number): number {
+  /** Evaluates a declared length: plain px, and sums of them. */
+  function px(value: string): number {
     const expr = value
-      .replace(/var\(--bonsai-ui-scale,\s*1\)/g, String(uiScale))
       .replace(/calc\(/g, "(")
       .replace(/px/g, "");
     expect(expr).toMatch(/^[\d\s.+\-*()]+$/);
@@ -187,18 +186,14 @@ describe("room under the suggestion chips (section 4 CSS)", () => {
   const FADE_ROW = /\.bonsai-scope \.bonsai-preset-row-host--fade-anim\s*\{([^}]*)\}/;
   const BOX = /\.bonsai-scope \.bonsai-unified-input-host\.bonsai-full-bleed-row\s*\{([^}]*)\}/;
 
-  it("puts the chip one row gap above the question box, at every UI size", () => {
-    for (const uiScale of [1, 1.18, 1.5]) {
-      const chipToBox = px(declared(ROW, "padding-bottom"), uiScale) + px(declared(ROW, "margin-bottom"), uiScale);
-      expect(chipToBox).toBeCloseTo(DOCK_ROW_GAP_PX * uiScale, 6);
-    }
+  it("puts the chip one row gap above the question box", () => {
+    const chipToBox = px(declared(ROW, "padding-bottom")) + px(declared(ROW, "margin-bottom"));
+    expect(chipToBox).toBeCloseTo(DOCK_ROW_GAP_PX, 6);
   });
 
   it("does the same in fade mode, the default, which has its own rule", () => {
-    for (const uiScale of [1, 1.18]) {
-      const chipToBox = px(declared(ROW, "padding-bottom"), uiScale) + px(declared(FADE_ROW, "margin-bottom"), uiScale);
-      expect(chipToBox).toBeCloseTo(DOCK_ROW_GAP_PX * uiScale, 6);
-    }
+    const chipToBox = px(declared(ROW, "padding-bottom")) + px(declared(FADE_ROW, "margin-bottom"));
+    expect(chipToBox).toBeCloseTo(DOCK_ROW_GAP_PX, 6);
   });
 
   /*
@@ -208,14 +203,12 @@ describe("room under the suggestion chips (section 4 CSS)", () => {
    * bottom edge, taken from the answer. The plan's 57 points for the answer are the Ask row's 37, the
    * context line's 18 and this gap's 2.
    */
-  it("leaves no gap under the question box, the dock's last row since plan 84, at every UI size", () => {
-    for (const uiScale of [1, 1.18, 1.5]) {
-      expect(px(declared(BOX, "margin-bottom"), uiScale)).toBe(0);
-    }
+  it("leaves no gap under the question box, the dock's last row since plan 84", () => {
+    expect(px(declared(BOX, "margin-bottom"))).toBe(0);
   });
 
   it("still keeps 5px under the chips inside the row, so the row does not cut the chip's shadow", () => {
-    expect(px(declared(ROW, "padding-bottom"), 1)).toBe(PRESET_CHIP_SHADOW_ROOM_PX);
+    expect(px(declared(ROW, "padding-bottom"))).toBe(PRESET_CHIP_SHADOW_ROOM_PX);
   });
 
   it("lets the shadow out of the carousel's own clipping box without changing its height", () => {

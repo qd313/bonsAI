@@ -1,7 +1,7 @@
 /**
  * Title: No font size in the source skips the Text size setting
  * Purpose: Read every source file under src/ (not the tests, not the test harness) and fail on a font size
- *          that does not go through `textPx` / `uiTextPx`: an inline `fontSize` that is not `textPx(...)`, or a
+ *          that does not go through `textPx`: an inline `fontSize` that is not `textPx(...)`, or a
  *          stylesheet `font-size` that is a plain number of pixels. A new word added tomorrow at a plain 11
  *          would stay 11 on Large; this catches it the day it is written.
  * Used for: plan 89 S1, Text size changes every word.
@@ -50,7 +50,7 @@ describe("every font size in the source follows the Text size setting", () => {
           if (/^\s*(\*|\/\/)/.test(line)) return; // comments
           if (PLAIN_ON_PURPOSE.some((p) => p.file === rel && p.line.test(line))) return;
           if (/\bfontSize\s*:/.test(line) && !/textPx\(/.test(line)) loose.push(`${rel}:${i + 1}: ${line.trim()}`);
-          if (/\bfont-size\s*:/.test(line) && !/textPx\(|uiTextPx\(|calc\(1em \* var\(|:\s*(inherit|[\d.]+em)\b/.test(line)) {
+          if (/\bfont-size\s*:/.test(line) && !/textPx\(|calc\(1em \* var\(|:\s*(inherit|[\d.]+em)\b/.test(line)) {
             loose.push(`${rel}:${i + 1}: ${line.trim()}`);
           }
         });

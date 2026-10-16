@@ -18,8 +18,7 @@
  */
 import { PRESET_CHIP_HEIGHT_PX } from "../../features/preset-carousel/presetRowLayout";
 import { TAB_BAR_SWITCH_FADE_MS } from "../../features/unified-input/constants";
-import { uiScalePx } from "./uiScalePx";
-import { uiTextPx } from "./textPx";
+import { textPx } from "./textPx";
 
 /**
  * In: nothing.
@@ -69,10 +68,10 @@ export function buildDetailsSlotSection(): string {
           display: flex !important;
           flex-direction: row !important;
           align-items: center !important;
-          gap: ${uiScalePx(8)} !important;
+          gap: 8px !important;
           height: ${PRESET_CHIP_HEIGHT_PX}px;
           box-sizing: border-box !important;
-          padding: 0 ${uiScalePx(8)};
+          padding: 0 8px;
           border-radius: 4px;
           cursor: pointer;
           outline: none;
@@ -83,12 +82,12 @@ export function buildDetailsSlotSection(): string {
           background: rgba(255, 255, 255, 0.09);
         }
         .bonsai-scope .bonsai-details-slot__label {
-          font-size: ${uiTextPx(10)};
+          font-size: ${textPx(10)};
           font-weight: 600;
           letter-spacing: 0.04em;
           color: #9fb7d5;
           white-space: nowrap;
-          padding: 0 ${uiScalePx(2)};
+          padding: 0 2px;
         }
         /* The ring sits inside the line: the chip row clips anything outside its box, which is why
            the chips show a bar instead (design-tokens.md, Focus rings). */

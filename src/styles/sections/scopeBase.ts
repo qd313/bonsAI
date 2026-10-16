@@ -27,8 +27,7 @@
  * width resets for the scroll area underneath (section-3.ts).
  */
 import { BONSAI_PLUGIN_SIDE_PAD_PX } from "../../features/unified-input/constants";
-import { uiScalePx } from "./uiScalePx";
-import { TEXT_SCALE_ROOT_CSS, uiTextPx } from "./textPx";
+import { TEXT_SCALE_ROOT_CSS, textPx } from "./textPx";
 
 /**
  * In: nothing — every value here is a fixed string or read from a CSS
@@ -57,7 +56,7 @@ import { TEXT_SCALE_ROOT_CSS, uiTextPx } from "./textPx";
  *    content lines up flush with a panel section's title instead of
  *    sitting indented from it.
  * 7. `.bonsai-settings-section-stack`: the gap between stacked blocks in
- *    Settings, and their text size, both scaled by the UI scale setting.
+ *    Settings, and their text size (which follows the Text size setting).
  * 8. `.bonsai-prose-host` / `.bonsai-prose`: makes blocks of wrapped text
  *    (such as help text) actually wrap on the Deck's browser engine,
  *    which does not always inherit ordinary wrap settings on its own.
@@ -144,17 +143,17 @@ ${TEXT_SCALE_ROOT_CSS}
           box-sizing: border-box;
           width: 100%;
           max-width: 100%;
-          margin-left: calc(-1 * (${uiScalePx(BONSAI_PLUGIN_SIDE_PAD_PX)}));
-          margin-right: calc(-1 * (${uiScalePx(BONSAI_PLUGIN_SIDE_PAD_PX)}));
-          padding-left: ${uiScalePx(BONSAI_PLUGIN_SIDE_PAD_PX)};
-          padding-right: ${uiScalePx(BONSAI_PLUGIN_SIDE_PAD_PX)};
+          margin-left: calc(-1 * (${BONSAI_PLUGIN_SIDE_PAD_PX}px));
+          margin-right: calc(-1 * (${BONSAI_PLUGIN_SIDE_PAD_PX}px));
+          padding-left: ${BONSAI_PLUGIN_SIDE_PAD_PX}px;
+          padding-right: ${BONSAI_PLUGIN_SIDE_PAD_PX}px;
         }
 
         .bonsai-scope .bonsai-settings-section-stack {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
-          font-size: ${uiTextPx(14)} !important;
+          font-size: ${textPx(14)} !important;
           line-height: 1.4 !important;
         }
 
@@ -178,7 +177,7 @@ ${TEXT_SCALE_ROOT_CSS}
           overflow-wrap: anywhere !important;
           word-wrap: break-word !important;
           word-break: break-word !important;
-          font-size: ${uiTextPx(12)} !important;
+          font-size: ${textPx(12)} !important;
           line-height: 1.4 !important;
         }
 

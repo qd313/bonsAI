@@ -26,7 +26,6 @@ export const UNIFIED_INPUT_ICON_STRIP_PX = 24 + UNIFIED_INPUT_CORNER_RING_ROOM_P
  * The one gap between the dock's stacked rows: the suggestion chips to the question box (plan 72, the
  * maintainer's polish list: the chip sat 8px above the box while the box sat 2px above Ask). The second
  * gap, the box to the big Ask bar, went with that bar in plan 84: the box is the dock's last row now.
- * Scaled with the UI size where it is used.
  */
 export const DOCK_ROW_GAP_PX = 2;
 /** Room kept under a suggestion chip, inside the row that clips it, for its soft drop shadow (0 2px 3px). */
@@ -38,7 +37,7 @@ export const UNIFIED_TEXT_FONT_PX = 12;
 export const UNIFIED_TEXT_LINE_HEIGHT = 1.2;
 /**
  * The drawn blinking cursor: a bar this wide, this far clear of the letter beside it. A hairline,
- * so it does not follow the UI scale (design-tokens.md). The maintainer's ask, 2026-09-24: the
+ * so it stays a raw pixel size (design-tokens.md). The maintainer's ask, 2026-09-24: the
  * cursor sits right against the "D" of the empty box's hint, about half a pixel clear of it.
  */
 export const UNIFIED_CARET_WIDTH_PX = 1.5;
@@ -127,7 +126,7 @@ export const TAB_TITLE_DEBUG_TAB_ICON_PX = 36;
 export const TAB_BAR_STRIP_BG_HEX = "#141c24";
 /**
  * The tab bar's height: 20 in every state (plan 30; workshop:archive/30-collapsing-tab-bar.md § 4.8).
- * CSS px before `--bonsai-ui-scale`; every use goes through `uiScalePx()`. Steam's own strip cost
+ * Plain CSS px. Steam's own strip cost
  * 80.66px (measured 2026-09-02). Plan 84 step 6 moved the bar into Steam's strip at the very top, which
  * keeps this height: Steam's 14 points plus Decky's own 6 (deckyHeaderLayout.ts).
  */
@@ -135,7 +134,7 @@ export const TAB_BAR_HEIGHT_PX = 20;
 /*
  * Plan 84 step 4 — the tab bar as T3 (drawing docs/planning/assets/84-vertical-room.html,
  * `balancedBar("T3", ...)` with "edge16", frame "Z"): LB | the tabs before | the current tab's icon
- * and name | the tabs after | RB, on one 20-point row. CSS px before `--bonsai-ui-scale`.
+ * and name | the tabs after | RB, on one 20-point row. Plain CSS px.
  */
 /** The bar's left and right padding: LB and RB sit this far in from each edge, as Decky's back button does. */
 export const TAB_BAR_EDGE_PAD_PX = 16;

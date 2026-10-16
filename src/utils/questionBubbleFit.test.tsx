@@ -204,9 +204,9 @@ describe("the open question bubble's stylesheet (option D)", () => {
     const icon = css.match(/\.bonsai-turn-retry-corner\.DialogButton\s*\{([^}]*)\}/)![1]!;
     const float = css.match(/\.bonsai-chat-turn-row-title::after\s*\{([^}]*)\}/)![1]!;
     const paddingLeft = px(header, /padding:\s*\d+px (\d+)px/);
-    const iconLeft = px(slot, /left:\s*calc\((\d+)px/);
-    const iconWidth = px(icon, /width:\s*calc\((\d+)px/);
-    const floatWidth = px(float, /width:\s*calc\((\d+)px/);
+    const iconLeft = px(slot, /left:\s*(\d+)px/);
+    const iconWidth = px(icon, /width:\s*(\d+)px/);
+    const floatWidth = px(float, /width:\s*(\d+)px/);
     /* Both measured from the bubble's padding edge: the icon ends at left + width, the text
        starts after the padding and the room kept for the icon. */
     expect(paddingLeft + floatWidth - (iconLeft + iconWidth)).toBe(3);

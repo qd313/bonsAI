@@ -5,8 +5,8 @@
  * mock-up board's tab 7, round 2, option B (docs/demos/mockup-board/src/47b-notes-r2.js and the rules
  * in 48b-round2.css). The card is a small cyan-edged panel under the rating row: a lead line, the note's
  * words, three choices (Keep filled blue, Edit and Not now outlined) and the "For: <game> ▸" line. The
- * line above an answer is a small cyan pill with a pin and a chevron. Every size goes through the
- * Text size and UI scale helpers, like the rest of the sheet.
+ * line above an answer is a small cyan pill with a pin and a chevron. Every letter size goes through the
+ * Text size helper, like the rest of the sheet.
  *
  * Used for: bonsaiScopeStylesheet.ts, which folds it into the plugin's one stylesheet.
  *
@@ -17,7 +17,6 @@
  * and carry their own inline styles (UserNotesSheet.tsx, NoteEditModal.tsx).
  */
 import { textPx } from "./textPx";
-import { uiScalePx } from "./uiScalePx";
 
 const RING = `
           outline: 2px solid rgba(255, 255, 255, 0.9) !important;
@@ -31,9 +30,9 @@ export function buildUserNotesSection(): string {
           box-sizing: border-box;
           width: 100%;
           display: grid;
-          gap: ${uiScalePx(5)};
-          margin: ${uiScalePx(4)} 0;
-          padding: ${uiScalePx(7)} ${uiScalePx(8)};
+          gap: 5px;
+          margin: 4px 0;
+          padding: 7px 8px;
           border: 1px solid rgba(156, 231, 255, 0.3);
           border-radius: 8px;
           background: rgba(14, 22, 32, 0.8);
@@ -52,7 +51,7 @@ export function buildUserNotesSection(): string {
         }
         .bonsai-scope .bonsai-note-card__buttons {
           display: flex;
-          gap: ${uiScalePx(5)};
+          gap: 5px;
         }
         .bonsai-scope .bonsai-note-card__btn {
           flex: 1 1 0;
@@ -60,8 +59,8 @@ export function buildUserNotesSection(): string {
           display: flex;
           align-items: center;
           justify-content: center;
-          min-height: ${uiScalePx(26)};
-          padding: 0 ${uiScalePx(8)};
+          min-height: 26px;
+          padding: 0 8px;
           border-radius: 6px;
           border: 1px solid rgba(255, 255, 255, 0.08);
           background: transparent;
@@ -79,7 +78,7 @@ export function buildUserNotesSection(): string {
         .bonsai-scope .bonsai-note-card__for {
           justify-self: start;
           box-sizing: border-box;
-          padding: ${uiScalePx(2)} ${uiScalePx(7)};
+          padding: 2px 7px;
           border: 1px solid rgba(255, 255, 255, 0.12);
           border-radius: 5px;
           font-size: ${textPx(10)};
@@ -101,7 +100,7 @@ export function buildUserNotesSection(): string {
         .bonsai-scope .bonsai-note-card--kept {
           display: flex;
           align-items: flex-start;
-          gap: ${uiScalePx(6)};
+          gap: 6px;
           font-size: ${textPx(11)};
           line-height: 1.35;
           color: #dce8f4;
@@ -116,11 +115,11 @@ export function buildUserNotesSection(): string {
           align-self: flex-start;
           display: inline-flex;
           align-items: center;
-          gap: ${uiScalePx(5)};
+          gap: 5px;
           box-sizing: border-box;
           max-width: 100%;
-          margin: ${uiScalePx(2)} 0 ${uiScalePx(4)};
-          padding: ${uiScalePx(2)} ${uiScalePx(8)};
+          margin: 2px 0 4px;
+          padding: 2px 8px;
           border: 1px solid rgba(156, 231, 255, 0.25);
           border-radius: 10px;
           background: rgba(56, 189, 248, 0.08);

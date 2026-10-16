@@ -21,8 +21,7 @@ import { Focusable } from "@decky/ui";
 
 import { isDeckDirectionLeftEvent, isDeckDirectionRightEvent, isDownDeckButtonEvent, isUpDeckButtonEvent } from "../../utils/focusNavigation";
 import { takeAboveTheChat } from "../../utils/chatTranscriptNavHelpers";
-import { uiScalePx } from "../../styles/sections/uiScalePx";
-import { uiTextPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/sections/textPx";
 import { registerBackLineEl, searchBackNav } from "./searchJumpStore";
 
 const BACK_LINE_CSS = `
@@ -30,14 +29,14 @@ const BACK_LINE_CSS = `
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin: ${uiScalePx(2)} 0 ${uiScalePx(6)};
+  margin: 2px 0 6px;
 }
 .bonsai-scope .bonsai-search-back {
-  font-size: ${uiTextPx(10)};
+  font-size: ${textPx(10)};
   font-weight: 600;
   color: #a8b4c4;
-  padding: ${uiScalePx(3)} ${uiScalePx(8)};
-  border-radius: ${uiScalePx(4)};
+  padding: 3px 8px;
+  border-radius: 4px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   white-space: nowrap;
 }

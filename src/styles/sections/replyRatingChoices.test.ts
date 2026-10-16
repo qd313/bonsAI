@@ -91,7 +91,7 @@ function specificity(selector: string): number {
 
 const rules = parseRules(buildBonsaiScopeStylesheet());
 
-/** The value the cascade settles on for `prop` on `el`, or null. `calc(Npx * var(--bonsai-ui-scale, 1))` reads as N px. */
+/** The value the cascade settles on for `prop` on `el`, or null. `calc(Npx * var(--bonsai-text-scale, 1))` (a letter size) reads as N px. */
 function settled(el: Element, prop: string): string | null {
   let best: { key: [number, number, number]; value: string } | null = null;
   for (const rule of rules) {
@@ -110,9 +110,9 @@ function settled(el: Element, prop: string): string | null {
       }
     }
   }
-  // At Normal both scales are 1, so a size written through the helpers reads as its plain pixels.
+  // At Normal the Text size step is 1, so a letter size written through `textPx` reads as its plain pixels.
   return best
-    ? best.value.replace(/calc\(\s*([\d.]+)px((?:\s*\*\s*var\(--bonsai-(?:ui|text)-scale, 1\))+)\s*\)/g, "$1px")
+    ? best.value.replace(/calc\(\s*([\d.]+)px\s*\*\s*var\(--bonsai-text-scale, 1\)\s*\)/g, "$1px")
     : null;
 }
 

@@ -14,7 +14,7 @@
  *
  * Solves: The bar sat in bonsAI's own box under Decky's bar and took 24 points of the answer's height.
  * The view is drawn outside bonsAI's box, so the bar's rules come with it (`buildTabBarRules` under the
- * view's own root); the bar does not scale with bonsAI's UI-size setting here, like Decky's bar and the
+ * view's own root); the bar's sizes are fixed points here, like Decky's bar and the
  * chat's name, because the strip it fills is a fixed 20 points.
  *
  * Does not: Switch tabs or move the ring into a tab itself: both are the plugin root's, handed over through

@@ -69,15 +69,14 @@ function textWidth(text: string, fontPx: number, letterSpacingPx: number, factor
 let textStep = 1;
 
 /**
- * A length as jsdom reports it, at UI scale 1 and the Text size step in `textStep`: "16px",
- * "calc(16px * var(--bonsai-ui-scale, 1))", "calc(11px * var(--bonsai-ui-scale, 1) * var(--bonsai-text-scale, 1))",
- * "0.1em", "0", "".
+ * A length as jsdom reports it, with the Text size step in `textStep`: "16px",
+ * "calc(11px * var(--bonsai-text-scale, 1))", "0.1em", "0", "".
  */
 function len(value: string, fontPx = 0): number {
   const v = value.trim();
   if (v === "" || v === "0" || v === "auto" || v === "normal") return 0;
-  let m = /^calc\((-?[\d.]+)px((?: \* var\(--bonsai-(?:ui|text)-scale, 1\))+)\)$/.exec(v);
-  if (m) return Number(m[1]) * (m[2]!.includes("--bonsai-text-scale") ? textStep : 1);
+  let m = /^calc\((-?[\d.]+)px \* var\(--bonsai-text-scale, 1\)\)$/.exec(v);
+  if (m) return Number(m[1]) * textStep;
   m = /^(-?[\d.]+)px$/.exec(v);
   if (m) return Number(m[1]);
   m = /^(-?[\d.]+)em$/.exec(v);

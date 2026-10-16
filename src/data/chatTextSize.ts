@@ -11,9 +11,8 @@
  * it to the places outside the root), and textPx.ts (reads it).
  *
  * Solves: Plan 87 call 3, widened by plan 89 (S1): Small, Normal and Large change every word on every
- * tab, not only the chat's. A variable of its own, not the UI scale: the UI scale scales boxes, bars
- * and chips as well, and is going away (plan 86); this one scales only the letters, and will keep
- * working when it does.
+ * tab, not only the chat's. A variable of its own: it scales only the letters, never boxes, bars or
+ * chips (the old UI scale setting, removed in plan 86, scaled those).
  *
  * Why 0.9 / 1 / 1.15: the chat column is 300 px wide and the answer bubble leaves about 240 px for
  * words (92% of the row, less the bubble's and the section's padding). Large turns the 12 px answer
@@ -24,7 +23,7 @@
  * as that text stays readable on the Deck's screen. The same steps now apply to the tab bar's 11 px
  * name (12.65 px on Large inside a fixed 20-point bar) and the 30-point chips (12 px to 13.8 px).
  *
- * Does not: Know about the UI scale, or scale anything that is not a letter's size: rows keep their
+ * Does not: Scale anything that is not a letter's size: rows keep their
  * heights, so a long line is cut off sooner on Large instead of growing its row.
  */
 import type React from "react";

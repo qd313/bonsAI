@@ -13,9 +13,8 @@
  * Solves: Without its own rules the name drew in Decky's title type (22 points, heavy) and looked
  * like a heading, not the drawing's 13-point name over an 8-point line.
  *
- * Does not: Scale with bonsAI's UI-size setting. `uiScalePx` writes `var(--bonsai-ui-scale, 1)`, and
- * that variable is set on bonsAI's own box, which this view is outside of, so it would always read 1
- * here anyway; Decky's bar itself (its 28-point row and 40 by 28 back arrow) does not scale either.
+ * Does not: Scale its boxes. They are fixed points, and Decky's bar itself (its 28-point row and 40 by 28
+ * back arrow) does not scale either; only the letters follow the Text size setting.
  * Every number below is the drawing's own, in points, at the size the Deck shows.
  *
  * The numbers come from the drawing docs/planning/assets/84-vertical-room.html, frame "Z", round eight's

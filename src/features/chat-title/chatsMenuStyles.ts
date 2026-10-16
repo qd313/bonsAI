@@ -7,7 +7,7 @@
  * ring, the two-column grid of actions with Delete in red, the hint line at the foot, and the white inset
  * ring that marks the stop Steam's ring is on (design-tokens.md, "Focus rings": the inset ring is the
  * one for menu rows). ChatsMenu.tsx draws it in a `<style>` of its own, under `.bonsai-scope`, so it
- * reaches only the menu and follows bonsAI's UI-size setting through `uiScalePx`.
+ * reaches only the menu and its letters follow the Text size setting through `textPx`.
  *
  * Used for: ChatsMenu.tsx.
  *
@@ -17,8 +17,7 @@
  * Does not: Place the menu on the screen; ChatsMenu.tsx does (over the answer, its foot on the dock's
  * top edge, its height measured from the room above the dock).
  */
-import { uiScalePx } from "../../styles/sections/uiScalePx";
-import { uiTextPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/sections/textPx";
 
 const M = ".bonsai-scope .bonsai-chats-menu";
 const LIT = "var(--bonsai-ui-tab-lit, #52d88a)";
@@ -33,9 +32,9 @@ ${M} {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  max-height: ${uiScalePx(260)};
+  max-height: 260px;
   overflow-y: auto;
-  padding: ${uiScalePx(6)};
+  padding: 6px;
   /* Fully opaque: the answer behind must not read through (section-4.ts, the settings card). */
   background: rgb(18, 26, 34);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -43,12 +42,12 @@ ${M} {
 ${M} .bonsai-chats-menu__stops {
   display: flex;
   flex-direction: column;
-  gap: ${uiScalePx(4)};
+  gap: 4px;
   min-height: 100%;
 }
 ${M} .bonsai-chats-menu__heading {
-  margin: ${uiScalePx(2)} ${uiScalePx(4)} ${uiScalePx(4)};
-  font-size: ${uiTextPx(10)};
+  margin: 2px 4px 4px;
+  font-size: ${textPx(10)};
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -56,15 +55,15 @@ ${M} .bonsai-chats-menu__heading {
 }
 ${M} .bonsai-chats-menu__chat {
   flex: none;
-  height: ${uiScalePx(27)};
+  height: 27px;
   display: flex;
   align-items: center;
-  gap: ${uiScalePx(8)};
-  padding: 0 ${uiScalePx(10)} 0 ${uiScalePx(7)};
+  gap: 8px;
+  padding: 0 10px 0 7px;
   border-radius: 4px;
   border-left: 3px solid transparent;
   background: rgba(255, 255, 255, 0.04);
-  font-size: ${uiTextPx(12)};
+  font-size: ${textPx(12)};
   color: #dfe6ee;
   min-width: 0;
 }
@@ -81,8 +80,8 @@ ${M} .bonsai-chats-menu__label {
 }
 ${M} .bonsai-chats-menu__mark {
   flex: none;
-  width: ${uiScalePx(6)};
-  height: ${uiScalePx(6)};
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   box-sizing: border-box;
 }
@@ -96,25 +95,25 @@ ${M} .bonsai-chats-menu__mark--writing {
 ${M} .bonsai-chats-menu__when {
   margin-left: auto;
   flex: none;
-  font-size: ${uiTextPx(10)};
+  font-size: ${textPx(10)};
   font-weight: 400;
   color: #8fa8c4;
 }
 ${M} .bonsai-chats-menu__actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: ${uiScalePx(4)};
-  margin-top: ${uiScalePx(4)};
+  gap: 4px;
+  margin-top: 4px;
 }
 ${M} .bonsai-chats-menu__action {
-  height: ${uiScalePx(27)};
+  height: 27px;
   display: flex;
   align-items: center;
-  gap: ${uiScalePx(6)};
-  padding: 0 ${uiScalePx(8)};
+  gap: 6px;
+  padding: 0 8px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.06);
-  font-size: ${uiTextPx(11)};
+  font-size: ${textPx(11)};
   color: #dfe6ee;
   white-space: nowrap;
   overflow: hidden;
@@ -122,8 +121,8 @@ ${M} .bonsai-chats-menu__action {
 }
 ${M} .bonsai-chats-menu__action svg {
   flex: none;
-  width: ${uiScalePx(13)};
-  height: ${uiScalePx(13)};
+  width: 13px;
+  height: 13px;
   color: #9fb0c2;
   fill: none;
   stroke: currentColor;
@@ -146,9 +145,9 @@ ${M} .bonsai-chats-menu__action.gpfocus {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
 }
 ${M} .bonsai-chats-menu__hint {
-  margin: auto ${uiScalePx(4)} ${uiScalePx(2)};
-  padding-top: ${uiScalePx(6)};
-  font-size: ${uiTextPx(10)};
+  margin: auto 4px 2px;
+  padding-top: 6px;
+  font-size: ${textPx(10)};
   color: #8fa8c4;
 }
 `;

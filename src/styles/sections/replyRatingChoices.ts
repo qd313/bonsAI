@@ -17,7 +17,6 @@
  * Does not: Touch the D-pad ring (gamepadAndPullModels.ts) or the Show details line. The ring's box-shadow is
  * not overridden while a button holds it: the resting highlight is dropped only on a button that does not hold the ring.
  */
-import { uiScalePx } from "./uiScalePx";
 import { textPx } from "./textPx";
 
 /**
@@ -53,17 +52,17 @@ export function buildReplyRatingChoicesSection(): string {
         /* The "What went wrong?" reasons run tighter still: 24 tall, 5 apart (plan 72 option E, then plan 79). */
         .bonsai-scope .bonsai-chat-reply-actions-row--chips {
           flex-wrap: wrap;
-          gap: ${uiScalePx(5)} !important;
+          gap: 5px !important;
         }
         .bonsai-scope .bonsai-chat-reply-actions .bonsai-chat-reply-actions-row--chips button.bonsai-chat-secondary-btn,
         .bonsai-scope .bonsai-chat-reply-actions .bonsai-chat-reply-actions-row--chips button.bonsai-chat-secondary-btn.DialogButton {
-          min-height: ${uiScalePx(24)} !important;
-          padding: ${uiScalePx(2)} ${uiScalePx(8)} !important;
+          min-height: 24px !important;
+          padding: 2px 8px !important;
         }
         /* The two rows sit 5 apart as well: the reply block's own gap is 8, so the second row
            pulls up by the difference (Deck re-check, plan 72: the rows measured the block's 8). */
         .bonsai-scope .bonsai-chat-reply-actions-row--chips + .bonsai-chat-reply-actions-row--chips {
-          margin-top: calc(${uiScalePx(5)} - 8px) !important;
+          margin-top: calc(5px - 8px) !important;
         }
 `;
 }

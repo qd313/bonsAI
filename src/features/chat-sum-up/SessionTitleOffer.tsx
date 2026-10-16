@@ -28,14 +28,13 @@
 import React from "react";
 import { Focusable } from "@decky/ui";
 
-import { uiScalePx } from "../../styles/sections/uiScalePx";
 import { isDeckDirectionLeftEvent, isDeckDirectionRightEvent } from "../../utils/focusNavigation";
 import { elementHasGamepadFocus } from "../../utils/uiDocument";
 import { focusRowElement } from "../../utils/focusPerTurnRow";
 import { revealBelowKeepingAsItSettles } from "../../utils/chatPanelScroll";
 import { TITLE_OFFER_KEEP, TITLE_OFFER_YES } from "./chatSumUpModel";
 import { directionHandlers } from "./sumUpDirectionHandlers";
-import { uiTextPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/sections/textPx";
 
 let renameEl: HTMLElement | null = null;
 let keepEl: HTMLElement | null = null;
@@ -86,13 +85,13 @@ function titleOfferCss(): string {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: ${uiScalePx(6)};
-      padding: ${uiScalePx(6)} ${uiScalePx(10)} ${uiScalePx(8)};
+      gap: 6px;
+      padding: 6px 10px 8px;
       border: 1px solid rgba(125, 211, 252, 0.3);
       border-top: 1px solid rgba(255, 255, 255, 0.07);
       border-radius: 0 0 8px 8px;
       background: rgba(14, 22, 32, 0.55);
-      font-size: ${uiTextPx(11)};
+      font-size: ${textPx(11)};
       line-height: 1.4;
       color: #8fa8c4;
     }
@@ -103,11 +102,11 @@ function titleOfferCss(): string {
       flex: 1 1 0;
       box-sizing: border-box;
       text-align: center;
-      padding: ${uiScalePx(5)} 0;
+      padding: 5px 0;
       border-radius: 6px;
       border: 1px solid rgba(255, 255, 255, 0.08);
       color: #8fa8c4;
-      font-size: ${uiTextPx(11)};
+      font-size: ${textPx(11)};
       font-weight: 700;
       cursor: pointer;
       outline: none;

@@ -347,7 +347,7 @@ describe("the rule that hides Steam's tab header", () => {
   it("keeps the bar 20px with an !important height, because section 3 sets every Panel.Focusable to height: auto", () => {
     const heightRule = rules.find(([selector]) => selector === ".bonsai-scope .bonsai-tab-bar.Panel.Focusable");
     expect(heightRule).toBeDefined();
-    expect(heightRule?.[1]).toMatch(/height:\s*calc\(20px \* var\(--bonsai-ui-scale, 1\)\)\s*!important/);
+    expect(heightRule?.[1]).toMatch(/height:\s*20px\s*!important/);
     const reset = rules.find(([selector, decls]) => selector === ".bonsai-scope .Panel.Focusable" && /height:\s*auto\s*!important/.test(decls));
     expect(reset).toBeDefined();
   });
@@ -366,7 +366,7 @@ describe("the rule that hides Steam's tab header", () => {
   it("declares the 4px reserve in the stylesheet so a tabs-root remount cannot lose it", () => {
     const reserveRule = rules.find(([selector]) => selector === ".bonsai-scope:has(.bonsai-tab-bar) .bonsai-decky-tabs-root");
     expect(reserveRule).toBeDefined();
-    expect(reserveRule?.[1]).toMatch(/--bonsai-tab-strip-reserve:\s*calc\(4px \* var\(--bonsai-ui-scale, 1\)\)/);
+    expect(reserveRule?.[1]).toMatch(/--bonsai-tab-strip-reserve:\s*4px/);
   });
 });
 

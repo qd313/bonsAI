@@ -201,7 +201,7 @@ changes what a player sees ends with a Deck block. Moving code and changing code
 1. The freshness check (§ 5).
 2. The freeze starts: no other sessions, no new features.
 3. **Land the work left in the thirteen old helper copies** (the maintainer's call, 2026-10-11; the
-   [roadmap entry](../roadmap-details.md#merge-the-unlanded-work-left-in-thirteen-old-helper-copies-into-experimental)
+   [roadmap entry](../archive/roadmap-details-closed.md#merge-the-unlanded-work-left-in-thirteen-old-helper-copies-into-experimental)
    lists each copy and its commits). It goes here, before the starting point is saved and before anything moves: once
    steps 1 and 4 have moved files, this work gets much harder to merge.
    - **Check each copy against `experimental` first.** The list matched commits by title, so some work may already be

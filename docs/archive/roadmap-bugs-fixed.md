@@ -3544,3 +3544,16 @@ _Moved out of [roadmap.md](../roadmap.md) on 2026-10-16, copied line for line fr
   Not fixed. A test comment calls it by design (Up leaves the bubble after scrolling it back). The maintainer will check it by hand later. Seen in the test setup's walk, not on the Deck. No evidence file.
 
 **Closed 2026-10-16:** designed. The maintainer keeps "Up scrolls first" ([D131](../audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page), call 8).
+
+## Plan 86 step 0 (2026-10-16)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-10-16, copied line for line from the Bugs entry, with the closing line added at the end._
+
+### Merge the unlanded work left in thirteen old helper copies into experimental (closed 2026-10-16)
+
+- ★ `[repo]` **Merge the unlanded work left in thirteen old helper copies into experimental** — **OPEN, found 2026-10-11 (plan 89 clean-up); the maintainer asked for it to be merged ([D128](../audit/maintainer-decisions-locked.md#d128--locked-2026-10-11-raised-2026-10-11--plan-89-the-bug-list-and-the-verify-list-as-close-to-empty-as-they-can-get-the-fifteen-calls) call 19).**
+  On 2026-10-11, 23 old helper copies whose work had all landed were deleted. These 13 were kept, because each holds commits or files that are not on experimental.
+  They were matched by commit title, so some may have landed under another title: check each before merging. Two are marked by their own commit as not to land until the maintainer picks (the Hollow Knight wording swaps).
+  Each copy lives at `.claude/worktrees/<name>` on branch `refactor/<name>`. The full list, copy by copy: [roadmap-details.md](roadmap-details-closed.md#merge-the-unlanded-work-left-in-thirteen-old-helper-copies-into-experimental).
+
+**Closed 2026-10-16 (plan 86 step 0, commit `719aac71`):** nothing needed landing. Every leftover commit was checked by content and was already in under another title: the five games' notes, Skyrim's notes and fact-checks, Skyrim's spoiler caution, the shared tip's credit-line fix, the preset-chip and voice tidy-ups, the follow-up test setup, and the carried-subject step. Two were dropped with reasons: the stale settings-snapshot move (plan 86 step 6a replaces it) and plan 81's revert copy (a measuring copy, never meant to land). The two Hollow Knight wording swaps are saved for later as patch files in the workshop repo's `held-back/` folder ([D132](../audit/maintainer-decisions-locked.md#d132--locked-2026-10-16-raised-2026-10-16--plan-86-go-day-the-four-calls-before-step-0) call 2). Two loose files went to the workshop. All 62 old copies were removed on 2026-10-16; their branches were kept. Evidence: [plan 86 § 12](../planning/86-clean-up-round-three.md), the entry "step 0 item 3, the 13 old copies", and commit `719aac71`.

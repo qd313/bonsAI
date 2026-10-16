@@ -1422,3 +1422,48 @@ Older open-form text, word for word (moved here 2026-10-14, plan 93 docs sweep, 
   Which default text is meant (the hint inside the box, or a starter question) is not stated; confirm on the Deck.
   **2026-10-13 (plan 93):** the hint inside the box is what is meant, and it is confirmed on the Deck. Strategy mode shows a grey hint ("Describe the level, boss, or puzzle you're stuck on."); Speed and Expert show nothing. The maintainer's call (2026-10-13): Speed and Expert get the same kind of hint. Evidence `workshop:test-evidence/plan93-P93-M12-ASK-HINTS-try2.json`, `plan93-M12-ASK-HINTS-speed.png`, `-strategy.png`, `-expert.png`.
 
+
+## Merge the unlanded work left in thirteen old helper copies into experimental
+
+**Filed 2026-10-11 (plan 89 clean-up).** Copies kept when 23 fully landed ones were deleted. Each is at `.claude/worktrees/<name>` on branch `refactor/<name>`. Lines are commits (matched by title) or files not on experimental (`??`). Check each against experimental before merging.
+
+- **58p1-hk** (`refactor/58p1-hk`)
+  - a353e6506 NOT TO LAND UNTIL THE MAINTAINER PICKS: swap nine Hollow Knight notes to the wiki's own words
+- **58p1-hk2** (`refactor/58p1-hk2`)
+  - 904a7e73c NOT TO LAND UNTIL THE MAINTAINER PICKS: swap ten Hollow Knight notes to the wiki's own words (second run)
+- **58p1-notes-g** (`refactor/58p1-notes-g`)
+  - 866b077a0 Add Grand Theft Auto III - The Definitive Edition to the knowledge base
+  - 6d9ce1fd9 Add the original Super Smash Bros. to the knowledge base
+  - be6b09e18 Add Diddy Kong Racing to the knowledge base
+  - 0b77519fb Add Yoshi's Story to the knowledge base
+  - b8e855e0e Add Donkey Kong 64 to the knowledge base
+- **p64-shared-tip** (`refactor/p64-shared-tip`)
+  - fea198b9b Fix: a shared tip's source page now reaches its credit line
+- **p65-chips** (`refactor/p65-chips`)
+  - 5f4d444a4 Split preset chips: break the import cycle between the component and decode slots
+  - 7ebbcab23 Split preset chips: stop exporting PresetChipLabel, nothing outside its file uses it
+- **p65-index** (`refactor/p65-index`)
+  - c4ffa6767 Move the settings-snapshot-for-save memo out of index.tsx
+- **p65-voice** (`refactor/p65-voice`)
+  - 7419cf727 Fix a header check failure: don't call-format cross-file function names
+- **p65-where** (`refactor/p65-where`)
+  - Untracked file: scripts/prove_where_hook_order.py
+- **p68-screen** (`refactor/p68-screen`)
+  - 3c34fd3a7 Make forgetting the carried subject an internal step, now Clear is gone
+- **p70-g** (`refactor/p70-g`)
+  - 9a954a0a8 Fact-check all 18 new notes line by line against the pages they cite
+  - 31e332bb9 Fix two wrong claims in the Red Dead Redemption 2 starting-out note
+  - 6434a19aa Skyrim now gets the same spoiler caution as other story-driven games
+  - c656bf866 Knowledge base: "how do I get started" notes for Cyberpunk 2077, Fallout 4 and RDR2
+  - 4eeff266b Knowledge base: add Skyrim (Special Edition), 15 notes from UESP
+- **p70-k** (`refactor/p70-k`)
+  - a93ecd3ce Merge branch 'experimental' into refactor/p70-k
+  - e6d787f7b Merge branch 'experimental' into refactor/p70-k
+  - 51a021273 Stop repeating the neighbouring follow-up test file's own setup
+  - 77a588ad7 Merge branch 'experimental' into refactor/p70-k
+- **p77h** (`refactor/p77h`)
+  - Untracked file: workshop:archive/research/kb-answer-eval-2026-09-29-p77h-cases.md
+- **p81frev** (`refactor/p81frev`)
+  - d8671410 Revert "Reword the AI's instructions so none of them shows the hidden-block label in the odd one-word shape"
+
+**Closed 2026-10-16 (plan 86 step 0):** nothing needed landing; see the Done list in [roadmap.md](../roadmap.md).

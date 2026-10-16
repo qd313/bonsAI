@@ -51,7 +51,6 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [While reading an answer, the Show details line takes the suggestion chip's place above the question box](#while-reading-an-answer-the-show-details-line-takes-the-suggestion-chips-place-above-the-question-box)
 - [The open reasoning block does not scroll in steps like the answer; one Down jumps past the whole of it](#the-open-reasoning-block-does-not-scroll-in-steps-like-the-answer-one-down-jumps-past-the-whole-of-it)
 - [The mic stops after about 3 or 4 seconds of speech](#the-mic-stops-after-about-3-or-4-seconds-of-speech)
-- [Merge the unlanded work left in thirteen old helper copies into experimental](#merge-the-unlanded-work-left-in-thirteen-old-helper-copies-into-experimental)
 - [Walking Settings and Developer with the D-pad: the page moves at every press, then jumps at the end](#walking-settings-and-developer-with-the-d-pad-the-page-moves-at-every-press-then-jumps-at-the-end)
 - [On the Settings tab, Left or Right on the Text size choices scrolls the page down](#on-the-settings-tab-left-or-right-on-the-text-size-choices-scrolls-the-page-down)
 - [The ring can vanish on the Search tab after closing a game note when a new word arrives](#the-ring-can-vanish-on-the-search-tab-after-closing-a-game-note-when-a-new-word-arrives)
@@ -832,49 +831,6 @@ Cause of the stop that remains: not known. Related: the repeat bug and the entry
 **2026-10-10 evening (Deck, build `532761e2`, a recorded voice, no game):** not reproduced on either model: recorded 15- and 21-second questions grew to the end on tiny.en and on base.en (`workshop:test-evidence/v1010-VOICE-TINY-NOGAME.json`, `workshop:test-evidence/v1010-VOICE-BASE-NOGAME.json`). Stays OPEN: it was seen with a real voice only, so a real voice is the check.
 
 **2026-10-11 (plan 88, build `68317980`):** not seen with a recorded voice on the new build: 15- and 21-second questions grew to the end and the live text never went empty (`workshop:test-evidence/p88-VOICE-WHOLE-NOGAME.json`). A guess from reading the code, not tested: the screen writes "what the mic wrote" before the box's text, and if Steam does not batch those two updates, the rule "the box was emptied, so dictation is over" can fire on the first words. Plan 88 does not touch this. Owed: the maintainer's real voice.
-
-## Merge the unlanded work left in thirteen old helper copies into experimental
-
-**Filed 2026-10-11 (plan 89 clean-up).** Copies kept when 23 fully landed ones were deleted. Each is at `.claude/worktrees/<name>` on branch `refactor/<name>`. Lines are commits (matched by title) or files not on experimental (`??`). Check each against experimental before merging.
-
-- **58p1-hk** (`refactor/58p1-hk`)
-  - a353e6506 NOT TO LAND UNTIL THE MAINTAINER PICKS: swap nine Hollow Knight notes to the wiki's own words
-- **58p1-hk2** (`refactor/58p1-hk2`)
-  - 904a7e73c NOT TO LAND UNTIL THE MAINTAINER PICKS: swap ten Hollow Knight notes to the wiki's own words (second run)
-- **58p1-notes-g** (`refactor/58p1-notes-g`)
-  - 866b077a0 Add Grand Theft Auto III - The Definitive Edition to the knowledge base
-  - 6d9ce1fd9 Add the original Super Smash Bros. to the knowledge base
-  - be6b09e18 Add Diddy Kong Racing to the knowledge base
-  - 0b77519fb Add Yoshi's Story to the knowledge base
-  - b8e855e0e Add Donkey Kong 64 to the knowledge base
-- **p64-shared-tip** (`refactor/p64-shared-tip`)
-  - fea198b9b Fix: a shared tip's source page now reaches its credit line
-- **p65-chips** (`refactor/p65-chips`)
-  - 5f4d444a4 Split preset chips: break the import cycle between the component and decode slots
-  - 7ebbcab23 Split preset chips: stop exporting PresetChipLabel, nothing outside its file uses it
-- **p65-index** (`refactor/p65-index`)
-  - c4ffa6767 Move the settings-snapshot-for-save memo out of index.tsx
-- **p65-voice** (`refactor/p65-voice`)
-  - 7419cf727 Fix a header check failure: don't call-format cross-file function names
-- **p65-where** (`refactor/p65-where`)
-  - Untracked file: scripts/prove_where_hook_order.py
-- **p68-screen** (`refactor/p68-screen`)
-  - 3c34fd3a7 Make forgetting the carried subject an internal step, now Clear is gone
-- **p70-g** (`refactor/p70-g`)
-  - 9a954a0a8 Fact-check all 18 new notes line by line against the pages they cite
-  - 31e332bb9 Fix two wrong claims in the Red Dead Redemption 2 starting-out note
-  - 6434a19aa Skyrim now gets the same spoiler caution as other story-driven games
-  - c656bf866 Knowledge base: "how do I get started" notes for Cyberpunk 2077, Fallout 4 and RDR2
-  - 4eeff266b Knowledge base: add Skyrim (Special Edition), 15 notes from UESP
-- **p70-k** (`refactor/p70-k`)
-  - a93ecd3ce Merge branch 'experimental' into refactor/p70-k
-  - e6d787f7b Merge branch 'experimental' into refactor/p70-k
-  - 51a021273 Stop repeating the neighbouring follow-up test file's own setup
-  - 77a588ad7 Merge branch 'experimental' into refactor/p70-k
-- **p77h** (`refactor/p77h`)
-  - Untracked file: workshop:archive/research/kb-answer-eval-2026-09-29-p77h-cases.md
-- **p81frev** (`refactor/p81frev`)
-  - d8671410 Revert "Reword the AI's instructions so none of them shows the hidden-block label in the odd one-word shape"
 
 ## Walking Settings and Developer with the D-pad: the page moves at every press, then jumps at the end
 

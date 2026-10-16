@@ -582,3 +582,11 @@ From its [postmortem](../../../bonsAI-workshop/audit/refactor-round-two/postmort
   lookup, read aloud, UI scale, glossary move); they land one at a time in that order, each later one rebased on what
   landed. Budget at go: 91 % of the five-hour window (the maintainer said to start before its 22:20 reset), 33 % of
   the week.
+  - **Landed 1, the preview tool** (`ebd791d0`..`ca436256`, 22:20 UTC, every check green): 4 tests deleted, as listed.
+    Its copy is in `workshop:held-back/preview-tool/` with a patch that puts it back and the Deck-tool issue text
+    (workshop `c569687`); the old run reports that sat ignored in `tests/preview-results/` went there too.
+  - **Landed 2, the weekly refresh** (`5283c0b3`..`3970a4b0`, 22:29 UTC, every check green): 11 tests deleted, as
+    listed; 67 back-end methods. The helper's back-end and screen commits were folded into one, because either alone
+    fails a check (a call to a method that is gone, or a method nobody calls); a stale comment fixed after it.
+  - **Deck, block A:** build `ca436256` deployed 22:22; a Deck helper records the size and spacing of every part of
+    the panel on every tab, so the UI scale removal can be compared number by number afterwards.

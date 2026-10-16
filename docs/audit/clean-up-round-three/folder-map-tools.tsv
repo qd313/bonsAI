@@ -169,3 +169,4 @@ tests/preview-suite/tier2-deep.json	-
 tests/preview-suite/tier2-strategy-streaming.json	-
 tests/preview-suite/tier3-ui-navigation.json	-
 tests/preview-suite/unit-gates.json	-
+src/test-harness/glossaryTestTerms.ts	src/test-harness/glossaryTestTerms.ts

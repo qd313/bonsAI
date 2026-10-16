@@ -187,3 +187,9 @@ tests/fixtures/kb_eval_es_probe_v0.json	tests/fixtures/kb_eval_es_probe_v0.json
 tests/fixtures/kb_eval_paraphrase_v0.json	-
 tests/fixtures/kb_eval_v0.json	tests/fixtures/kb_eval_v0.json
 tests/fixtures/kb_eval_v2.json	tests/fixtures/kb_eval_v2.json
+data/kb/glossary_terms.json	data/kb/glossary_terms.json
+py_modules/backend/services/knowledge_base_glossary.py	py_modules/backend/knowledge/knowledge_base_glossary.py
+src/utils/glossaryStore.ts	src/features/glossary/glossaryStore.ts
+src/utils/glossaryStore.test.ts	src/features/glossary/glossaryStore.test.ts
+tests/test_build_rag_glossary.py	tests/test_build_rag_glossary.py
+tests/test_knowledge_base_glossary.py	tests/test_knowledge_base_glossary.py

@@ -140,3 +140,10 @@ Step 3 (the five removals and the glossary move, 2026-10-16) changed test names 
 [step-3-test-name-changes.txt](step-3-test-name-changes.txt): 289 names went and 80 came, between `8553cc99` and
 `fd56e160`, each named by a step 3 helper's own list or, for one contract case, by the ban lookup's cut list. Step 5
 compares the names after merging against the starting point above minus the "went" lines, plus the "came" lines.
+
+**The folder map after step 3.** Step 3 added nine code files (the glossary move's reader, store, test terms, data
+file and five test files); each now has a row in its area's `.tsv`, placed beside its neighbours (the store with the
+other glossary files in `src/features/glossary/`, the reader in `py_modules/backend/knowledge/`, tests and data where
+they are). Every file step 3 deleted already had a "goes" row. Two names still carry old words on purpose, for step
+4's rename commits: the `Drg` glossary files (glossary move § 3.5) and the pop-up bridge `uiScaleScopeBridge.ts`,
+which now only carries the accent colour and Text size.

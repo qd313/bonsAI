@@ -472,3 +472,4 @@ src/utils/unifiedInputPersistenceMode.test.ts	src/features/ask/bar/unifiedInputP
 src/utils/unifiedInputPersistenceMode.ts	src/features/ask/bar/unifiedInputPersistenceMode.ts
 src/utils/unwrapAskedEntitySpoilerFences.test.ts	src/features/spoilers/unwrapAskedEntitySpoilerFences.test.ts
 src/utils/unwrapAskedEntitySpoilerFences.ts	src/features/spoilers/unwrapAskedEntitySpoilerFences.ts
+src/components/MainTabChatTranscript.glossaryWords.test.tsx	src/features/answer/transcript/MainTabChatTranscript.glossaryWords.test.tsx

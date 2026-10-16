@@ -271,3 +271,4 @@ tests/test_voice_whisper_daemon.py	tests/test_voice_whisper_daemon.py
 tests/test_voice_whole_recording.py	tests/test_voice_whole_recording.py
 tests/fixtures/chat_summary_wording_chats.json	tests/fixtures/chat_summary_wording_chats.json
 tests/fixtures/plan68_real_summaries.json	tests/fixtures/plan68_real_summaries.json
+tests/test_ollama_prompts_glossary.py	tests/test_ollama_prompts_glossary.py

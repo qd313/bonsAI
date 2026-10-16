@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 /**
- * Validate knowledge/ frontmatter and generated-file freshness.
+ * Validate knowledge/ frontmatter and that src/types/rpcMethods.ts is fresh.
+ *
+ * rpcMethods.ts is the only generated file saved in the repo (the type check needs it in a
+ * fresh clone). The architecture JSON maps are no longer saved; the tool server and the
+ * checks build them when they need them, so there is nothing to compare for those.
  *
  * Freshness check runs when:
  *   - `--check-generated` is passed (default for `pnpm run mcp:validate`), or
@@ -59,49 +63,30 @@ for (const sub of ["policies", "workflows", "personas"]) {
   }
 }
 
-const archDir = path.join(KNOWLEDGE, "architecture");
-const requiredJson = [
-  "rpc-map.json",
-  "hotspots.json",
-  "import-graph.json",
-  "test-inventory.json",
-  "preview-tiers.json",
-  "env-vars.json",
-];
-for (const name of requiredJson) {
-  const p = path.join(archDir, name);
-  if (!fs.existsSync(p)) {
-    fail(`Missing generated file: ${p} — run pnpm run mcp:generate`);
-  }
-}
-
+// The one saved generated file: rewrite it from main.py and compare with the last commit.
+// Compare to HEAD (not the index): staged-but-uncommitted output must still fail, matching
+// what CI checks after a clean checkout.
+const GENERATED_TYPES = "src/types/rpcMethods.ts";
 if (checkGenerated) {
   try {
-    execSync("node scripts/generate-architecture.mjs", {
+    execSync("node scripts/generate-architecture.mjs --types-only", {
       cwd: path.join(REPO_ROOT, "packages", "bonsai-mcp"),
       stdio: "pipe",
     });
   } catch (e) {
     const detail = e instanceof Error ? e.message : String(e);
-    fail(`Failed to regenerate architecture snapshots: ${detail}`);
+    fail(`Failed to regenerate ${GENERATED_TYPES}: ${detail}`);
   }
 
   if (errors === 0) {
     try {
-      const stale = [];
-      for (const name of requiredJson) {
-        const rel = `packages/bonsai-mcp/knowledge/architecture/${name}`;
-        // Compare to HEAD (not the index): staged-but-uncommitted snapshots must still fail,
-        // matching what CI checks after a clean checkout.
-        const diff = execSync(`git diff HEAD --name-only -- "${rel}"`, {
-          cwd: REPO_ROOT,
-          encoding: "utf8",
-        }).trim();
-        if (diff) stale.push(name);
-      }
-      if (stale.length) {
+      const diff = execSync(`git diff HEAD --name-only -- "${GENERATED_TYPES}"`, {
+        cwd: REPO_ROOT,
+        encoding: "utf8",
+      }).trim();
+      if (diff) {
         fail(
-          `Stale architecture JSON (${stale.join(", ")}) — run: pnpm run mcp:generate && git add packages/bonsai-mcp/knowledge/architecture/`,
+          `Stale ${GENERATED_TYPES} (it no longer matches main.py) — run: node packages/bonsai-mcp/scripts/generate-architecture.mjs --types-only && git add ${GENERATED_TYPES}`,
         );
       }
     } catch (e) {
@@ -110,7 +95,7 @@ if (checkGenerated) {
       if (/not a git repository/i.test(detail)) {
         console.warn("validate-knowledge: skip freshness check (not a git repository)");
       } else {
-        fail(`Architecture freshness check failed: ${detail}`);
+        fail(`${GENERATED_TYPES} freshness check failed: ${detail}`);
       }
     }
   }

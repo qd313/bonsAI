@@ -4,8 +4,9 @@
 Purpose: Write docs/code-map.md, one line per app file with its Title and the
 opening of its Purpose, grouped by folder, so somebody can find the file they
 want by scanning one page instead of opening three hundred.
-Used for: runs on its own in the pre-commit hook, so the map cannot fall behind
-the headers. `python scripts/code_map.py` refreshes it by hand.
+Used for: `python scripts/code_map.py`, run when somebody wants the map. The file
+is not saved in the repo (it is ignored), so it is always built from the headers as
+they are right now and cannot fall behind them.
 Solves: There was no single place listing what every file is for — only the
 headers themselves, spread across three hundred files.
 Does not: Check whether a header is missing or wrong — see

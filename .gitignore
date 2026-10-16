@@ -102,3 +102,9 @@ runs/
 
 # Shared "who is driving the Deck right now" queue (scripts/deck_queue.py) — local coordination state, not plugin content
 .decky/deck-queue.json
+
+# Maps built on demand by the tool server and the checks (scripts/architecture_maps.py,
+# packages/bonsai-mcp/src/architectureMaps.ts), not saved in the repo. The two hand-written .md
+# files in the same folder stay tracked. docs/code-map.md: python scripts/code_map.py
+packages/bonsai-mcp/knowledge/architecture/*.json
+docs/code-map.md

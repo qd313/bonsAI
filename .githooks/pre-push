@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
-# Block push when bonsai-mcp architecture snapshots are stale vs main.py / src / etc.
+# Block a push when src/types/rpcMethods.ts no longer matches main.py (the only generated file
+# saved in the repo), and when the tool server's knowledge files fail validation.
 # Enable once per clone: git config core.hooksPath .githooks
 set -e
 cd "$(dirname "$0")/.."

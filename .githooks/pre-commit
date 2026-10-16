@@ -1,16 +1,9 @@
 #!/usr/bin/env sh
-# Auto-regenerate + stage bonsai-mcp architecture JSON on every commit.
+# Rewrite and stage src/types/rpcMethods.ts on every commit (fast). It is the only generated file
+# still saved in the repo: the type check needs it in a fresh clone, and it changes only when a
+# back-end method is added or removed. The architecture JSON maps and docs/code-map.md are not
+# saved any more; the tool server and the checks build them when needed.
 # Enable once per clone: pnpm run mcp:install-hooks
 set -e
 cd "$(dirname "$0")/.."
 node packages/bonsai-mcp/scripts/sync-architecture-for-commit.mjs
-python scripts/py_import_graph.py
-git add -- packages/bonsai-mcp/knowledge/architecture/py-import-graph.json
-
-# The code map: one line per file, taken from the description at the top of each
-# one. Nothing rebuilt it before, so it silently fell behind -- four files added
-# in an earlier phase were simply missing from it, and a map you cannot trust to
-# be complete is worse than no map. Now it cannot drift: it is rebuilt from the
-# headers themselves on every commit.
-python scripts/code_map.py
-git add -- docs/code-map.md

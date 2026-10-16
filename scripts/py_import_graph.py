@@ -5,9 +5,10 @@ Purpose: Map the python import edges among main.py and py_modules/backend/**
 the way the Decky loader resolves them, so a refactor can see which service
 files depend on which — and which ones sit in an import cycle — before
 moving code.
-Used for: `.githooks/pre-commit` regenerates and stages
-packages/bonsai-mcp/knowledge/architecture/py-import-graph.json on every
-commit; `--check` verifies the committed file still matches the source tree.
+Used for: scripts/architecture_maps.py and the tool server in packages/bonsai-mcp
+run it to write packages/bonsai-mcp/knowledge/architecture/py-import-graph.json
+when a check needs it (the file is not saved in the repo); `--check` verifies
+the file on disk still matches the source tree.
 Solves: The front-end already has import-graph.json; the back end had
 nothing, so seeing "what imports settings_service.py" meant grepping by hand.
 Does not: Track third-party or standard-library imports, or follow dynamic

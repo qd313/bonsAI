@@ -25,7 +25,8 @@ How it works:
 
     +- what's on screen right now (game, screenshot hints)........ always present
     +- who bonsAI is, plus the required "thinking out loud" line... always present
-    +- (Deep Rock Galactic: Survivor only) a small jargon note..... one specific game
+    +- (only when the library holds words for this game) a small
+    |  tap-to-define jargon note................................ one game at a time
     +- background material: Proton log excerpts, knowledge-base
     |  notes -- spliced in early, UNLESS the prompt is at risk of
     |  overflowing, in which case it moves to just above the last
@@ -87,7 +88,7 @@ re-exported here.
 """
 
 import re
-from typing import Callable, Optional
+from typing import Callable, Optional, Sequence
 
 from backend.tdp_intent import is_current_tdp_read_intent
 from backend.services.strategy_guide_parse import (
@@ -303,36 +304,18 @@ FOLLOWUP_SUBJECT_NOTE_TEMPLATE = (
 )
 
 
-# DRG Survivor jargon glossary (roadmap: tap-to-define jargon). AppID matches the game row at
-# data/kb/strategy_seed.json:4. Terms match the frontend's curated list at
-# src/data/drgGlossaryTerms.ts -- keep the two in sync by hand; there is no shared source yet
-# because this is a deliberately small, single-title first cut, not a generic cross-game
-# jargon framework the roadmap explicitly rules out building.
-DRG_SURVIVOR_APP_ID = "2321470"
-_DRG_SURVIVOR_NAME_NEEDLE = "deep rock galactic: survivor"
-_DRG_GLOSSARY_TERM_LABELS = ("kiting", "overclock")
+def _glossary_clause(game_title: str = "", terms: Sequence[str] = ()) -> str:
+    """Tell the model a game's jargon is tap-to-define, so it can use the words without derailing to explain them.
 
-
-def _is_drg_survivor_title(app_id: str = "", app_name: str = "") -> bool:
-    """True for Deep Rock Galactic: Survivor, by AppID or by name."""
-    if (app_id or "").strip() == DRG_SURVIVOR_APP_ID:
-        return True
-    return _DRG_SURVIVOR_NAME_NEEDLE in (app_name or "").strip().lower()
-
-
-def _drg_survivor_glossary_clause(app_id: str = "", app_name: str = "") -> str:
-    """Tell the model DRG Survivor jargon is tap-to-define, so it can use terms without derailing to explain them.
-
-    Conditional on the title, the same shape as STRUCTURED CARDS above: an unconditional clause
-    would spend tokens on every Ask regardless of game. Scoped to this one title on purpose --
-    see the module-level comment above; this is a curated single-title glossary, not a generic
-    jargon-detection framework.
+    The words come from the knowledge library (knowledge_base_glossary), picked by the caller the
+    way the person's own notes are; with none, no clause and no tokens spent. The text for Deep
+    Rock Galactic: Survivor is the same as it was when this file held that one title's list.
     """
-    if not _is_drg_survivor_title(app_id=app_id, app_name=app_name):
+    labels = " / ".join(str(t) for t in terms if str(t).strip())
+    if not labels:
         return ""
-    terms = " / ".join(_DRG_GLOSSARY_TERM_LABELS)
     return (
-        f"\nGLOSSARY (Deep Rock Galactic: Survivor): {terms} are tap-to-define in this UI -- "
+        f"\nGLOSSARY ({game_title}): {labels} are tap-to-define in this UI -- "
         "the player can select one of these words to see its definition. Use them naturally "
         "where they fit rather than stopping to define them inline; only spell one out in "
         "prose if the player directly asks what it means.\n"
@@ -361,6 +344,8 @@ def build_system_prompt(
     reply_language: str = "english",
     knowledge_block_placement: str = "early",
     user_notes_block: str = "",
+    glossary_game_title: str = "",
+    glossary_terms: Sequence[str] = (),
 ) -> str:
     """Build the system message used for Ollama requests from game and attachment context.
 
@@ -378,6 +363,11 @@ def build_system_prompt(
     for this question (``user_notes_service.pick_notes_for_turn``). Spliced right after identity,
     AHEAD of ``early_context_suffix``, and kept there whatever ``knowledge_block_placement`` is:
     the placement setting moves the whole ``early_context_suffix`` late, never the notes.
+
+    ``glossary_game_title`` / ``glossary_terms``: the running game's tap-to-define words, read from
+    the knowledge library by the caller (``knowledge_base_glossary.glossary_for_game``). With words,
+    a one-paragraph GLOSSARY note names the game and them; with none (no library, an older library,
+    the switch off, another game) there is no note at all.
 
     ``followup_subject``: non-empty only on the exact turn game_ai_request.py's follow-up memory
     used a remembered subject (a bare follow-up naming nothing of its own). Splices
@@ -494,7 +484,7 @@ def build_system_prompt(
             character_roleplay_on=character_roleplay_on,
         )
     )
-    drg_glossary_block = _drg_survivor_glossary_clause(app_id=app_id, app_name=app_name)
+    glossary_block = _glossary_clause(glossary_game_title, glossary_terms)
     strategy_domain = strategy_domain_guidance or ask_mode == "strategy"
     strategy_kb_relaxed = strategy_domain and _strategy_kb_spoiler_clause_suppressed(
         app_id=app_id,
@@ -609,7 +599,7 @@ def build_system_prompt(
                 terse_branch_menu=terse,
             )
         return _assemble(
-            dynamic_block + general_block + drg_glossary_block,
+            dynamic_block + general_block + glossary_block,
             middle + language_block + verbosity_block,
             tail,
         )
@@ -771,7 +761,7 @@ def build_system_prompt(
         )
     language_block = build_reply_language_block(reply_language)
     return _assemble(
-        dynamic_block + general_block + drg_glossary_block,
+        dynamic_block + general_block + glossary_block,
         middle + language_block + verbosity_block,
         tail,
     )

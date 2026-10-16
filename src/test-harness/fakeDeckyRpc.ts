@@ -61,6 +61,7 @@ export const FRONTEND_RPC_METHODS = [
   "cancel_rag_corpus_download",
   "update_rag_corpus",
   "remove_rag_corpus",
+  "get_rag_corpus_glossary",
   "list_chat_slots",
   "get_chat_slot",
   "create_chat_slot",
@@ -225,6 +226,8 @@ function defaultHandlers(): Record<string, RpcHandler> {
     cancel_rag_corpus_download: () => ({ cancel_requested: true }),
     update_rag_corpus: () => ({ ok: true }),
     remove_rag_corpus: () => ({ ok: true }),
+    // The running game's tap-to-define words: none, as with no library installed.
+    get_rag_corpus_glossary: () => ({ ok: true, installed: false, game_title: "", terms: [], reason: "" }),
     list_chat_slots: () => ({ slots: [] }),
     get_chat_slot: () => ({ ok: false, error: "Slot not found" }),
     create_chat_slot: () => ({

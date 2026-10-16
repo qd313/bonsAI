@@ -1,8 +1,8 @@
 /**
- * Title: DRG glossary term chip
+ * Title: Glossary term chip
  *
- * Purpose: One underlined word inside an AI reply, for a Deep Rock Galactic
- * Survivor term the game does not explain well on its own (like "kiting").
+ * Purpose: One underlined word inside an AI reply, for a term the game does
+ * not explain well on its own (like "kiting" in Deep Rock Galactic: Survivor).
  * Tapping or pressing A on it opens a small floating definition — a short
  * one-line peek first, then the full explanation — with a button to ask the
  * AI to explain further. It closes itself again after a few seconds, or
@@ -15,9 +15,9 @@
  * player look one up without derailing the conversation to ask about it.
  *
  * Does not: Decide which words count as glossary terms, or find them inside
- * the reply text — that is data/drgGlossaryTerms.ts and
- * drgGlossaryTermMatch.ts. This file only draws one term that has already
- * been matched.
+ * the reply text — the words come from the knowledge library (glossaryStore.ts)
+ * and drgGlossaryTermMatch.ts finds them. This file only draws one term that
+ * has already been matched.
  *
  * Gotchas:
  * - Touch and the D-pad behave differently on purpose. A tap shows the
@@ -37,7 +37,7 @@ import { Focusable } from "@decky/ui";
 
 import { getUiDocument } from "../utils/uiDocument";
 
-import type { DrgGlossaryTerm } from "../data/drgGlossaryTerms";
+import type { DrgGlossaryTerm } from "../utils/glossaryStore";
 import {
   isCancelDeckButtonEvent,
   isDeckDirectionDownEvent,

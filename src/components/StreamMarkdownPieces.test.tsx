@@ -12,7 +12,7 @@ import { MainTabBonsaiAiMarkdownChunk } from "./MainTabBonsaiAiMarkdownChunk";
 import { ScrambledAnswerText } from "../features/stream-scramble/ScrambledAnswerText";
 import { StreamScrambleContext } from "../features/stream-scramble/streamScrambleContext";
 import { resetLiveScrambleMemoForTests } from "../features/stream-scramble/liveScrambleMemo";
-import { DRG_SURVIVOR_APP_ID } from "../data/drgGlossaryTerms";
+import { TEST_GLOSSARY_APP_ID, clearGlossary, primeGlossary } from "../test-harness/glossaryTestTerms";
 
 vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
 
@@ -39,6 +39,7 @@ const ANSWER = [
 ].join("\n\n");
 
 afterEach(() => {
+  clearGlossary();
   parsed.length = 0;
   delete (window as Window & { __bonsaiGameLoad?: unknown }).__bonsaiGameLoad;
 });
@@ -183,14 +184,15 @@ describe("a new callback on every update (the app's own shape)", () => {
   });
 
   it("a tap on a settled piece reaches the newest callback, not the one it was drawn with", () => {
+    primeGlossary();
     const first = vi.fn();
     const second = vi.fn();
     const source = "Mining is not a side activity, so a run spent only kiting is a run that ends underpowered.";
     const { container, rerender } = render(
-      <StreamMarkdownPieces source={`${source}\n\nA second`} appId={DRG_SURVIVOR_APP_ID} onDrgGlossaryExplainFurther={first} />
+      <StreamMarkdownPieces source={`${source}\n\nA second`} appId={TEST_GLOSSARY_APP_ID} onDrgGlossaryExplainFurther={first} />
     );
     rerender(
-      <StreamMarkdownPieces source={`${source}\n\nA second paragraph`} appId={DRG_SURVIVOR_APP_ID} onDrgGlossaryExplainFurther={second} />
+      <StreamMarkdownPieces source={`${source}\n\nA second paragraph`} appId={TEST_GLOSSARY_APP_ID} onDrgGlossaryExplainFurther={second} />
     );
     fireEvent.click(container.querySelector(".bonsai-drg-glossary-term-text")!);
     fireEvent.click(container.querySelector(".bonsai-drg-glossary-term-text")!);
@@ -200,8 +202,9 @@ describe("a new callback on every update (the app's own shape)", () => {
   });
 
   it("with no callback at all, tapping the explain-further button does nothing and does not throw", () => {
+    primeGlossary();
     const source = "Mining is not a side activity, so a run spent only kiting is a run that ends underpowered.";
-    const { container } = render(<StreamMarkdownPieces source={source} appId={DRG_SURVIVOR_APP_ID} />);
+    const { container } = render(<StreamMarkdownPieces source={source} appId={TEST_GLOSSARY_APP_ID} />);
     fireEvent.click(container.querySelector(".bonsai-drg-glossary-term-text")!);
     fireEvent.click(container.querySelector(".bonsai-drg-glossary-term-text")!);
     expect(() => fireEvent.click(document.querySelector(".bonsai-drg-glossary-explain-further")!)).not.toThrow();

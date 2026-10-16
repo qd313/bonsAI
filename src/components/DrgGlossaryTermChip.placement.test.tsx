@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, cleanup, fireEvent, render } from "@testing-library/react";
 
 import { DrgGlossaryTermChip } from "./DrgGlossaryTermChip";
-import { DRG_SURVIVOR_GLOSSARY_TERMS } from "../data/drgGlossaryTerms";
+import { TEST_GLOSSARY_TERMS } from "../test-harness/glossaryTestTerms";
 
 vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
 
@@ -14,7 +14,7 @@ vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
  * back from where the component drew it.
  */
 
-const kitingTerm = DRG_SURVIVOR_GLOSSARY_TERMS.find((t) => t.id === "kiting")!;
+const kitingTerm = TEST_GLOSSARY_TERMS.find((t) => t.id === "kiting")!;
 
 const WINDOW_H = 534;
 const PANE_TOP = 128;

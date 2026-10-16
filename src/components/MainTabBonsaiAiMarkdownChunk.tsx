@@ -4,9 +4,9 @@
  * Purpose: Turns one chunk of an AI answer's raw markdown text into the
  * actual page — paragraphs, lists, code blocks, links — and handles two
  * special cases along the way: a spoiler fence that a Strategy Guide answer
- * can hide until it is tapped open, and, on DRG Survivor, turning a curated
- * glossary word inside the text into a tappable chip that can ask a
- * follow-up question about it.
+ * can hide until it is tapped open, and, for a game the knowledge library
+ * holds words for, turning a glossary word inside the text into a tappable
+ * chip that can ask a follow-up question about it.
  *
  * Used for: MainTabChatTranscript, for both a reply still streaming in and
  * one already finished.
@@ -34,10 +34,11 @@
  *    code block at all: it is handed to BonsaiSpoilerFence(), which draws
  *    either a "tap to show" cover or the revealed text, and holds its own
  *    open/closed state.
- * 4. Where DRG Survivor glossary terms are turned on for the current game,
- *    ordinary text passes through linkifyDrgGlossaryNode(), which finds a
- *    curated term already parsed (or one level into bold or italic text)
- *    and wraps it in a tappable DrgGlossaryTermChip.
+ * 4. Where the library has glossary words for the current game
+ *    (glossaryStore, asked for by MainTabChatTranscript before the answer
+ *    streams in), ordinary text passes through linkifyDrgGlossaryNode(),
+ *    which finds a term already parsed (or one level into bold or italic
+ *    text) and wraps it in a tappable DrgGlossaryTermChip.
  *
  * Gotchas:
  * - Revealing or hiding a spoiler unmounts the Focusable the D-pad ring was
@@ -58,9 +59,9 @@ import { Focusable } from "@decky/ui";
 
 import { focusSpoilerFence, registerSpoilerFence } from "../utils/spoilerFenceRegistry";
 import { isOkDeckButtonEvent } from "../utils/focusNavigation";
-import { isDrgSurvivorAppId, splitTextForDrgGlossaryTerms } from "../utils/drgGlossaryTermMatch";
+import { splitTextForDrgGlossaryTerms } from "../utils/drgGlossaryTermMatch";
 import { DrgGlossaryTermChip } from "./DrgGlossaryTermChip";
-import type { DrgGlossaryTerm } from "../data/drgGlossaryTerms";
+import { useGlossaryTerms, type DrgGlossaryTerm } from "../utils/glossaryStore";
 import { SCRAMBLE_SLOT_MARK } from "../features/stream-scramble/streamScrambleMath";
 import { textPx } from "../styles/sections/textPx";
 
@@ -119,7 +120,7 @@ export type MainTabBonsaiAiMarkdownChunkProps = {
   spoilerMaskingEnabled?: boolean;
   /** When masking is on, start expanded if the last reply had spoiler consent and Settings allow it. */
   spoilerDefaultExpanded?: boolean;
-  /** Turn's game AppID. Curated DRG Survivor glossary terms only mark up when this matches. */
+  /** Turn's game AppID. The library's glossary words for this game, if it has any, are marked up. */
   appId?: string | null;
   /** Wired to onAskOllama by MainTabChatTranscript; starts a new Ask turn about the tapped term. */
   onDrgGlossaryExplainFurther?: (term: DrgGlossaryTerm) => void;
@@ -136,7 +137,8 @@ type MdArgs = {
   spoilerMaskingEnabled: boolean;
   spoilerDefaultExpanded: boolean;
   depth: number;
-  drgGlossaryEnabled: boolean;
+  /** The game's glossary words; empty means no glossary markup at all. */
+  glossaryTerms: readonly DrgGlossaryTerm[];
   onDrgGlossaryExplainFurther?: (term: DrgGlossaryTerm) => void;
   scrambleSlotRef?: (el: HTMLSpanElement | null) => void;
 };
@@ -181,17 +183,18 @@ function rehypeScrambleSlot() {
 const SCRAMBLE_SLOT_PLUGINS = [rehypeScrambleSlot];
 
 /**
- * Wrap curated DRG Survivor glossary terms inside already-parsed markdown children with a tappable
+ * Wrap the game's glossary terms inside already-parsed markdown children with a tappable
  * chip. Recurses one level into `strong`/`em` (bold/italic prose can still carry the term); any other
  * element (links, inline code, nested block content) is left alone rather than reached into.
  */
 function linkifyDrgGlossaryNode(
   node: ReactNode,
+  glossaryTerms: readonly DrgGlossaryTerm[],
   onExplainFurther: ((term: DrgGlossaryTerm) => void) | undefined,
   depth = 0
 ): ReactNode {
   if (typeof node === "string") {
-    const segments = splitTextForDrgGlossaryTerms(node);
+    const segments = splitTextForDrgGlossaryTerms(node, glossaryTerms);
     if (segments.length === 1 && segments[0].kind === "text") return node;
     return segments.map((seg, i) =>
       seg.kind === "text" ? (
@@ -208,7 +211,7 @@ function linkifyDrgGlossaryNode(
   }
   if (Array.isArray(node)) {
     return node.map((child, i) => (
-      <Fragment key={i}>{linkifyDrgGlossaryNode(child, onExplainFurther, depth)}</Fragment>
+      <Fragment key={i}>{linkifyDrgGlossaryNode(child, glossaryTerms, onExplainFurther, depth)}</Fragment>
     ));
   }
   if (
@@ -220,7 +223,7 @@ function linkifyDrgGlossaryNode(
     return cloneElement(
       node,
       undefined,
-      linkifyDrgGlossaryNode(elProps.children, onExplainFurther, depth + 1)
+      linkifyDrgGlossaryNode(elProps.children, glossaryTerms, onExplainFurther, depth + 1)
     );
   }
   return node;
@@ -241,7 +244,7 @@ function fenceBodyText(children: ReactNode): string {
  * how deep inside a nested spoiler this call is (a spoiler's own revealed
  * text can itself contain markdown, rendered through a second, nested
  * ReactMarkdown — depth stops that from masking a spoiler inside a spoiler),
- * whether DRG Survivor glossary terms are turned on, and the callback a
+ * the game's glossary words (none means no glossary markup), and the callback a
  * glossary chip uses to ask a follow-up question.
  * Out: a react-markdown Components table — one rendering function per
  * markdown tag this file cares about; every tag it does not mention falls
@@ -256,19 +259,20 @@ function buildMdComponents(args: MdArgs): Components {
     spoilerMaskingEnabled,
     spoilerDefaultExpanded,
     depth,
-    drgGlossaryEnabled,
+    glossaryTerms,
     onDrgGlossaryExplainFurther,
     scrambleSlotRef,
   } = args;
+  const drgGlossaryEnabled = glossaryTerms.length > 0;
   const linkify = (children: ReactNode): ReactNode =>
-    drgGlossaryEnabled ? linkifyDrgGlossaryNode(children, onDrgGlossaryExplainFurther) : children;
+    drgGlossaryEnabled ? linkifyDrgGlossaryNode(children, glossaryTerms, onDrgGlossaryExplainFurther) : children;
 
   const base: Components = {
     /*
      * A glossary term chip is a Decky `Focusable`, which renders a `<div>` (@decky/ui's own type:
      * `RefAttributes<HTMLDivElement>`) — invalid inside `<p>`, whose content model is phrasing
      * content only. `<li>` has no such restriction (flow content), so only `p` needs this; when
-     * glossary markup is off (`drgGlossaryEnabled` false, i.e. every non-DRG-Survivor reply) this
+     * glossary markup is off (`drgGlossaryEnabled` false, i.e. a game the library has no words for) this
      * renders a real `<p>` exactly as before. `.bonsai-md-p` is a class-only selector
      * (section-6.ts:108) so the swap changes nothing visually.
      */
@@ -336,7 +340,7 @@ function buildMdComponents(args: MdArgs): Components {
               spoilerMaskingEnabled: false,
               spoilerDefaultExpanded: true,
               depth: 1,
-              drgGlossaryEnabled,
+              glossaryTerms,
               onDrgGlossaryExplainFurther,
             })}
           >
@@ -355,7 +359,7 @@ function buildMdComponents(args: MdArgs): Components {
               spoilerMaskingEnabled,
               spoilerDefaultExpanded,
               depth: depth + 1,
-              drgGlossaryEnabled,
+              glossaryTerms,
               onDrgGlossaryExplainFurther,
             })}
           />
@@ -634,7 +638,7 @@ export const MainTabBonsaiAiMarkdownChunk = memo(function MainTabBonsaiAiMarkdow
 ) {
   const masking = props.spoilerMaskingEnabled !== false;
   const defaultEx = props.spoilerDefaultExpanded === true;
-  const drgGlossaryEnabled = isDrgSurvivorAppId(props.appId);
+  const glossaryTerms = useGlossaryTerms(props.appId);
   const scrambleSlotRef = props.scrambleSlotRef;
   /*
    * The "explain further" callback is read through a ref, so a new function identity never rebuilds
@@ -658,13 +662,13 @@ export const MainTabBonsaiAiMarkdownChunk = memo(function MainTabBonsaiAiMarkdow
         spoilerMaskingEnabled: masking,
         spoilerDefaultExpanded: defaultEx,
         depth: 0,
-        drgGlossaryEnabled,
+        glossaryTerms,
         onDrgGlossaryExplainFurther: hasExplainFurther ? onDrgGlossaryExplainFurther : undefined,
         scrambleSlotRef,
       }),
     // `scrambleSlotRef` is kept stable by the scramble for its whole life; the callback is stable
     // by construction above.
-    [masking, defaultEx, drgGlossaryEnabled, hasExplainFurther, onDrgGlossaryExplainFurther, scrambleSlotRef]
+    [masking, defaultEx, glossaryTerms, hasExplainFurther, onDrgGlossaryExplainFurther, scrambleSlotRef]
   );
 
   return (

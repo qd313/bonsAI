@@ -1,15 +1,16 @@
 """Title: The knowledge base's own download, update and remove buttons
 
 Purpose: The offline knowledge base is a folder of notes downloaded once and kept on
-disk. This file is the screen's seven calls for that: check its status, start the
+disk. This file is the screen's eight calls for that: check its status, start the
 download, cancel one in progress, check for and pull an update, remove it, install one
-from a local folder for testing, and pull the preset-chip suggestions it can offer for
-the game you're playing. Each stays a method of the same name on the plugin class in
-main.py; the method's body is now a one-line hand-off to the function here.
+from a local folder for testing, pull the preset-chip suggestions it can offer for
+the game you're playing, and read that game's tap-to-define words. Each stays a
+method of the same name on the plugin class in main.py; the method's body is now a
+one-line hand-off to the function here.
 
 Used for: get_rag_corpus_status, start_rag_corpus_download, cancel_rag_corpus_download,
 update_rag_corpus, remove_rag_corpus, install_rag_corpus_local,
-get_session_rag_chip_candidates.
+get_session_rag_chip_candidates, get_rag_corpus_glossary.
 
 Solves: Keeps the knowledge-base panel's own RPC bodies -- the background-download
 task, its cancel flag, and the chip-candidate lookup -- out of main.py.
@@ -30,6 +31,9 @@ from backend.services.knowledge_base_schema import (
     default_corpus_dir_internal,
     resolve_corpus_db_path,
     sanitize_corpus_install_dir,
+)
+from backend.services.knowledge_base_glossary import (  # noqa: F401 -- main.py reaches it here
+    get_rag_corpus_glossary,
 )
 from backend.services.knowledge_base_notes_search import (  # noqa: F401 -- main.py reaches it here
     search_rag_corpus_notes,

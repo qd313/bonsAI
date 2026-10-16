@@ -70,6 +70,7 @@ from backend.services.local_ollama_setup_service import (
 )
 from backend.services.model_policy import disclosure_for_model, empty_filter_user_message
 from backend.services.ask_payload import screen_ask_attachments
+from backend.services.knowledge_base_glossary import glossary_for_prompt
 from backend.services.chat_memory_step import add_chat_memory_to_prompt
 from backend.services.ollama_ask_extras import (
     build_ollama_request_extras,
@@ -176,6 +177,9 @@ async def run_ask_ollama(
         normalized_attachments,
         apreset,
     )
+    glossary_game_title, glossary_terms = await asyncio.to_thread(
+        glossary_for_prompt, settings, app_id, app_name
+    )
     system_content = plugin_inst._build_system_prompt(
         question,
         app_id,
@@ -198,6 +202,8 @@ async def run_ask_ollama(
         reply_verbosity=reply_verbosity,
         reply_language=reply_language,
         user_notes_block=user_notes_block,
+        glossary_game_title=glossary_game_title,
+        glossary_terms=glossary_terms,
     )
     if ask_mode == "strategy":
         # Closes the last gap in the branch-picker chain. With this plus the

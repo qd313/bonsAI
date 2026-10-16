@@ -884,6 +884,37 @@ class ChatMemoryReachesTheModelTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(sent["system"].startswith("system prompt"))
 
 
+class GlossaryReachesThePromptTests(unittest.IsolatedAsyncioTestCase):
+    """Plan 86 step 3: the running game's tap-to-define words are read from the knowledge library
+    and handed to the prompt builder, so the AI is told about them only when there are some."""
+
+    async def _words_handed_to_the_prompt(self, found: tuple[str, list[str]]) -> dict[str, Any]:
+        handed: dict[str, Any] = {}
+
+        def _record(_plugin: Any, *_args: Any, **kwargs: Any) -> str:
+            handed.update(kwargs)
+            return "system prompt"
+
+        with (
+            patch.object(_FakePlugin, "_build_system_prompt", _record),
+            patch("backend.services.ollama_ask_service.glossary_for_prompt", return_value=found),
+        ):
+            await ChatMemoryReachesTheModelTests._ask_with_chat(self, [])
+        return handed
+
+    async def test_the_glossary_words_for_the_running_game_reach_the_prompt(self) -> None:
+        handed = await self._words_handed_to_the_prompt(
+            ("Deep Rock Galactic: Survivor", ["kiting", "overclock"])
+        )
+        self.assertEqual(handed["glossary_game_title"], "Deep Rock Galactic: Survivor")
+        self.assertEqual(handed["glossary_terms"], ["kiting", "overclock"])
+
+    async def test_no_glossary_words_when_the_library_has_none(self) -> None:
+        handed = await self._words_handed_to_the_prompt(("", []))
+        self.assertEqual(handed["glossary_game_title"], "")
+        self.assertEqual(handed["glossary_terms"], [])
+
+
 class ChatSummaryWiringTests(unittest.IsolatedAsyncioTestCase):
     """Plan 68 step 3: run_ask_ollama sums a chat up first when it has outgrown its room, before
     building the question's own memory. Uses a real chat-slot file on disk (a temp dir) so a

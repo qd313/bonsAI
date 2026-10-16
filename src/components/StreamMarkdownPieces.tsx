@@ -12,7 +12,7 @@
  * one renderer's did, so the stylesheet and the D-pad stops see the same shape.
  */
 import { useCallback, useRef } from "react";
-import type { DrgGlossaryTerm } from "../data/drgGlossaryTerms";
+import type { DrgGlossaryTerm } from "../utils/glossaryStore";
 import {
   MainTabBonsaiAiMarkdownChunk,
   type MainTabBonsaiAiMarkdownChunkProps,

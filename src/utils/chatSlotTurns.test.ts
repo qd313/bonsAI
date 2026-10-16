@@ -67,7 +67,7 @@ describe("turnsToCollapsedTurns", () => {
   it("carries the persisted app id onto the collapsed turn", () => {
     // Regression (DRG-GLOSSARY-01, device 2026-08-28): this was hardcoded to "", so a reply that
     // showed glossary chips while it streamed lost them the moment it settled into history —
-    // MainTabBonsaiAiMarkdownChunk gates on isDrgSurvivorAppId(props.appId).
+    // MainTabBonsaiAiMarkdownChunk reads the game's glossary words by props.appId.
     const { collapsed } = turnsToCollapsedTurns([
       { id: "u1", role: "user", text: "what is kiting?", app_id: "548430" },
       { id: "a1", role: "assistant", text: "keep moving", app_id: "548430" },

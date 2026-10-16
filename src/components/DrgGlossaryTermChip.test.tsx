@@ -6,7 +6,7 @@ import {
   TAP_FULL_DISMISS_MS,
   TAP_PEEK_DISMISS_MS,
 } from "./DrgGlossaryTermChip";
-import { DRG_SURVIVOR_GLOSSARY_TERMS } from "../data/drgGlossaryTerms";
+import { TEST_GLOSSARY_TERMS } from "../test-harness/glossaryTestTerms";
 import { composeDrgGlossaryExplainFurtherQuestion } from "../utils/drgGlossaryAsk";
 
 /*
@@ -18,7 +18,7 @@ import { composeDrgGlossaryExplainFurtherQuestion } from "../utils/drgGlossaryAs
  */
 vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
 
-const kitingTerm = DRG_SURVIVOR_GLOSSARY_TERMS.find((t) => t.id === "kiting")!;
+const kitingTerm = TEST_GLOSSARY_TERMS.find((t) => t.id === "kiting")!;
 
 describe("DrgGlossaryTermChip", () => {
   it("renders the matched text with no tooltip while idle", () => {

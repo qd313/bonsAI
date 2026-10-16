@@ -211,7 +211,7 @@ import { getRegisteredAnswerBubble } from "../utils/answerBubbleElRegistry";
 import { focusedAnswerStopIndex, orderedAnswerStops } from "../utils/answerStopRegistry";
 import { focusRegisteredReplyStop } from "../utils/replyStopRegistry";
 import { dismissTroubleshootHint, isTroubleshootHintDismissed } from "../utils/troubleshootHintDismissals";
-import type { DrgGlossaryTerm } from "../data/drgGlossaryTerms";
+import { ensureGlossaryLoaded, type DrgGlossaryTerm } from "../utils/glossaryStore";
 import {
   composeDrgGlossaryExplainFurtherQuestion,
   drgGlossaryExplainFurtherThreadDisplay,
@@ -513,6 +513,16 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       : lastExchange?.spoilerConsentEffective === true,
     protectedNames: protectedNamesFromNotes(liveKbNotes),
   };
+  /* The knowledge library's glossary words for each game drawn here, asked for as soon as the game is
+     known (the live question, or an earlier turn) so they are already in when an answer streams in: the
+     first words to arrive redraw the answer's paragraphs, and that must not happen mid-reveal. */
+  const glossaryAppIdsKey = [liveSpoilerFacts.appId, ...askThreadCollapsed.map((t) => t.appId)]
+    .map((id) => (id ?? "").trim())
+    .filter((id, i, all) => id && all.indexOf(id) === i)
+    .join("|");
+  useEffect(() => {
+    glossaryAppIdsKey.split("|").forEach((id) => ensureGlossaryLoaded(id));
+  }, [glossaryAppIdsKey]);
   const showLiveResponse =
     Boolean(liveResponseBody.trim()) &&
     !(isAsking && !isStreamingPreview && isPendingPlaceholderResponse(liveResponseBody));

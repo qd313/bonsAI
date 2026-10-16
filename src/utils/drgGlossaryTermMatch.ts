@@ -1,11 +1,10 @@
 /**
- * Title: Spotting DRG Survivor game terms inside a reply
+ * Title: Spotting a game's glossary words inside a reply
  *
- * Purpose: For the game DRG Survivor, this plugin keeps a short hand-picked list of the game's own
- * jargon — words a new player might not know. This file finds every occurrence of one of those words
- * inside an AI reply's text, so the reply can be redrawn with those words turned into tappable chips
- * the player can open for a definition. It also has a small helper that recognizes DRG Survivor by
- * its Steam ID.
+ * Purpose: A game can have a short list of its own jargon in the knowledge library — words a new
+ * player might not know. This file finds every occurrence of one of those words inside an AI reply's
+ * text, so the reply can be redrawn with those words turned into tappable chips the player can open
+ * for a definition.
  *
  * Used for: the AI reply text renderer (MainTabBonsaiAiMarkdownChunk), which asks this file to split a
  * reply into plain text and matched-term pieces before drawing it, and this file's own tests.
@@ -13,16 +12,10 @@
  * Solves: gives whole-word, spelling-case-insensitive matching against a small hand-picked list,
  * without needing any language-understanding library to do it.
  *
- * Does not: decide whether the current game is DRG Survivor in the first place — the caller checks
- * the running game's Steam ID first (using this file's own `isDrgSurvivorAppId`) and only calls the
- * matching functions here once that check has already passed.
+ * Does not: know which game it is, or fetch the words — the caller passes the running game's list
+ * (from glossaryStore) and only calls the matching functions here when that list has words.
  */
-import { DRG_SURVIVOR_GLOSSARY_TERMS, DRG_SURVIVOR_APP_ID, type DrgGlossaryTerm } from "../data/drgGlossaryTerms";
-
-/** True when `appId` is the running/attached game for a turn is DRG Survivor. */
-export function isDrgSurvivorAppId(appId?: string | null): boolean {
-  return (appId ?? "").trim() === DRG_SURVIVOR_APP_ID;
-}
+import type { DrgGlossaryTerm } from "./glossaryStore";
 
 export type DrgGlossaryTermMatch = {
   term: DrgGlossaryTerm;
@@ -35,10 +28,17 @@ function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function buildPattern(): { pattern: RegExp; lookup: Map<string, DrgGlossaryTerm> } {
+type BuiltPattern = { pattern: RegExp; lookup: Map<string, DrgGlossaryTerm> };
+
+/** Built once per word list: the list object only changes when the library's words do. */
+const builtPatterns = new WeakMap<readonly DrgGlossaryTerm[], BuiltPattern>();
+
+function buildPattern(terms: readonly DrgGlossaryTerm[]): BuiltPattern {
+  const cached = builtPatterns.get(terms);
+  if (cached) return cached;
   const lookup = new Map<string, DrgGlossaryTerm>();
   const words: string[] = [];
-  for (const term of DRG_SURVIVOR_GLOSSARY_TERMS) {
+  for (const term of terms) {
     for (const form of [term.term, ...(term.altForms ?? [])]) {
       const key = form.toLowerCase();
       if (lookup.has(key)) continue;
@@ -48,13 +48,17 @@ function buildPattern(): { pattern: RegExp; lookup: Map<string, DrgGlossaryTerm>
   }
   // Longest first so "overclocks" is not truncated by an earlier match of "overclock".
   words.sort((a, b) => b.length - a.length);
-  return { pattern: new RegExp(`\\b(${words.join("|")})\\b`, "gi"), lookup };
+  const built = { pattern: new RegExp(`\\b(${words.join("|")})\\b`, "gi"), lookup };
+  builtPatterns.set(terms, built);
+  return built;
 }
 
-/** Non-overlapping matches of any curated DRG Survivor glossary term inside `text`, in order. */
-export function findDrgGlossaryTermMatches(text: string): DrgGlossaryTermMatch[] {
-  if (!text || DRG_SURVIVOR_GLOSSARY_TERMS.length === 0) return [];
-  const { pattern, lookup } = buildPattern();
+/** Non-overlapping matches of any of the game's glossary terms inside `text`, in order. */
+export function findDrgGlossaryTermMatches(text: string, terms: readonly DrgGlossaryTerm[]): DrgGlossaryTermMatch[] {
+  if (!text || terms.length === 0) return [];
+  const { pattern, lookup } = buildPattern(terms);
+  // The pattern is shared between calls (it is built once per list), so start from the top.
+  pattern.lastIndex = 0;
   const matches: DrgGlossaryTermMatch[] = [];
   let m: RegExpExecArray | null;
   while ((m = pattern.exec(text)) !== null) {
@@ -75,8 +79,11 @@ export type DrgGlossaryTextSegment =
   | { kind: "term"; value: string; term: DrgGlossaryTerm };
 
 /** Split `text` into plain and glossary-term segments, in order, covering the whole string. */
-export function splitTextForDrgGlossaryTerms(text: string): DrgGlossaryTextSegment[] {
-  const matches = findDrgGlossaryTermMatches(text);
+export function splitTextForDrgGlossaryTerms(
+  text: string,
+  terms: readonly DrgGlossaryTerm[]
+): DrgGlossaryTextSegment[] {
+  const matches = findDrgGlossaryTermMatches(text, terms);
   if (matches.length === 0) return [{ kind: "text", value: text }];
   const segments: DrgGlossaryTextSegment[] = [];
   let cursor = 0;

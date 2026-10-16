@@ -26,7 +26,7 @@ clear are in `backend/services/strategy_checklist_rpc.py`; the saved-chat
 list/open/create/delete/rename buttons are in
 `backend/services/chat_slot_rpc.py`; the notes the person asked bonsAI to remember
 (list/save/delete) are in `backend/services/user_notes_rpc.py`; the knowledge base's download/update/
-remove/chip-candidate buttons are in `backend/services/rag_corpus_rpc.py`;
+remove/chip-candidate/tap-to-define-words buttons are in `backend/services/rag_corpus_rpc.py`;
 the voice-input buttons are in `backend/services/voice_rpc.py`;
 screenshots, the Desktop debug/chat/app logs, clipboard and the small
 transparency/feedback/language reads are in `backend/services/media_desktop_rpc.py`;
@@ -95,7 +95,7 @@ import os
 import sys
 import threading
 import time
-from typing import Any, Optional, Tuple
+from typing import Any, Optional, Sequence, Tuple
 
 import decky
 
@@ -1180,6 +1180,10 @@ class Plugin:
         """Notes in the installed knowledge library that mention a word (Search tab)."""
         return await rag_corpus_rpc.search_rag_corpus_notes(self, word, game_title)
 
+    async def get_rag_corpus_glossary(self, app_id: str = ""):
+        """Tap-to-define words the knowledge library holds for a game (answer screen)."""
+        return await rag_corpus_rpc.get_rag_corpus_glossary(self, app_id)
+
     # --- Ollama model pull and catalog RPC ---
 
     async def pull_ollama_models(self, tags: Any = None):
@@ -2096,6 +2100,8 @@ class Plugin:
         reply_verbosity: str = "balanced",
         reply_language: str = "english",
         user_notes_block: str = "",
+        glossary_game_title: str = "",
+        glossary_terms: Sequence[str] = (),
     ) -> str:
         """Build the system prompt using plugin-local metadata lookups and attachment context."""
         proton = (proton_log_attachment or "").strip()
@@ -2120,6 +2126,8 @@ class Plugin:
             reply_verbosity=reply_verbosity,
             reply_language=reply_language,
             user_notes_block=user_notes_block,
+            glossary_game_title=glossary_game_title,
+            glossary_terms=glossary_terms,
         )
         return append_deck_tdp_sysfs_grounding(
             base,

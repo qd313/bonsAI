@@ -8,7 +8,7 @@ import {
   resetSpoilerFenceOpenCountForTests,
   subscribeToSpoilerFenceOpenChange,
 } from "./MainTabBonsaiAiMarkdownChunk";
-import { DRG_SURVIVOR_APP_ID } from "../data/drgGlossaryTerms";
+import { TEST_GLOSSARY_APP_ID, clearGlossary, primeGlossary } from "../test-harness/glossaryTestTerms";
 import { SCRAMBLE_SLOT_MARK } from "../features/stream-scramble/streamScrambleMath";
 
 /*
@@ -73,15 +73,20 @@ describe("MainTabBonsaiAiMarkdownChunk spoiler fence DOM shape", () => {
   });
 });
 
-describe("MainTabBonsaiAiMarkdownChunk DRG Survivor glossary markup", () => {
+describe("MainTabBonsaiAiMarkdownChunk glossary markup", () => {
   /*
-   * Roadmap: "DRG Survivor glossary terms" — a reply that uses "kiting" should let the user tap it
-   * for a definition, but only when the turn's game is DRG Survivor. Scoped to that one AppID on
-   * purpose (see data/drgGlossaryTerms.ts); a reply about any other game must render the word plain.
+   * A reply that uses "kiting" should let the user tap it for a definition, but only when the
+   * knowledge library holds words for the turn's game. The store is filled for one AppID here; a reply
+   * about any other game must render the word plain.
    */
-  it("marks up a curated term as a tappable chip when the turn's game is DRG Survivor", () => {
+  beforeEach(() => {
+    clearGlossary();
+    primeGlossary();
+  });
+
+  it("marks up a curated term as a tappable chip when the library has words for the turn's game", () => {
     const { container } = render(
-      <MainTabBonsaiAiMarkdownChunk source={DRG_KITING_SOURCE} appId={DRG_SURVIVOR_APP_ID} />
+      <MainTabBonsaiAiMarkdownChunk source={DRG_KITING_SOURCE} appId={TEST_GLOSSARY_APP_ID} />
     );
     const chip = container.querySelector(".bonsai-drg-glossary-term");
     expect(chip).toBeTruthy();
@@ -91,7 +96,7 @@ describe("MainTabBonsaiAiMarkdownChunk DRG Survivor glossary markup", () => {
     expect(container.textContent).toContain("ends underpowered.");
   });
 
-  it("leaves the same text plain for a non-DRG-Survivor turn", () => {
+  it("leaves the same text plain for a game the library has no words for", () => {
     const { container } = render(
       <MainTabBonsaiAiMarkdownChunk source={DRG_KITING_SOURCE} appId="570" />
     );
@@ -109,7 +114,7 @@ describe("MainTabBonsaiAiMarkdownChunk DRG Survivor glossary markup", () => {
     const { container } = render(
       <MainTabBonsaiAiMarkdownChunk
         source={DRG_KITING_SOURCE}
-        appId={DRG_SURVIVOR_APP_ID}
+        appId={TEST_GLOSSARY_APP_ID}
         onDrgGlossaryExplainFurther={onDrgGlossaryExplainFurther}
       />
     );
@@ -126,7 +131,7 @@ describe("MainTabBonsaiAiMarkdownChunk DRG Survivor glossary markup", () => {
     const source =
       "Opening about kiting.\n\n```bonsai-spoiler\nOverclock the boss weapon.\n```\n\nDone.";
     const { container } = render(
-      <MainTabBonsaiAiMarkdownChunk source={source} appId={DRG_SURVIVOR_APP_ID} spoilerMaskingEnabled={true} />
+      <MainTabBonsaiAiMarkdownChunk source={source} appId={TEST_GLOSSARY_APP_ID} spoilerMaskingEnabled={true} />
     );
     // The plain-text "kiting" outside the fence still gets marked up.
     expect(container.querySelector(".bonsai-drg-glossary-term")?.textContent).toBe("kiting");

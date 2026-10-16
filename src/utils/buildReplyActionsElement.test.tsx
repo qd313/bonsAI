@@ -19,7 +19,7 @@ import {
   registerDrgGlossaryTermChip,
   resetDrgGlossaryTermRegistry,
 } from "./drgGlossaryTermRegistry";
-import { getReplyStop, registerReplyStop, setReplyStopUnavailable } from "./replyStopRegistry";
+import { registerReplyStop, setReplyStopUnavailable } from "./replyStopRegistry";
 import { resetUiDocument } from "./uiDocument";
 
 vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
@@ -50,30 +50,6 @@ function findByClassName(node: React.ReactNode, className: string): React.ReactE
     return node;
   }
   return findByClassName(props.children as React.ReactNode, className);
-}
-
-/**
- * Every element carrying an `aria-label`, in tree order, recursing through Fragments and arrays —
- * for reading the left-to-right order of a row whose items are grouped in a Fragment (Helpful and
- * Not really) alongside a plain sibling (the speaker).
- */
-function elementsWithAriaLabel(
-  node: React.ReactNode,
-  out: React.ReactElement<{ "aria-label"?: string }>[] = []
-): React.ReactElement<{ "aria-label"?: string }>[] {
-  if (node == null || typeof node !== "object") return out;
-  if (Array.isArray(node)) {
-    for (const child of node) elementsWithAriaLabel(child, out);
-    return out;
-  }
-  if (!React.isValidElement(node)) return out;
-  const props = node.props as Record<string, unknown>;
-  if (typeof props["aria-label"] === "string") {
-    out.push(node as React.ReactElement<{ "aria-label"?: string }>);
-    return out;
-  }
-  elementsWithAriaLabel(props.children as React.ReactNode, out);
-  return out;
 }
 
 /** A bubble with `count` registered `.bonsai-answer-stop` sections, under answerKey "live". */
@@ -721,16 +697,6 @@ describe("buildReplyActionsElement no longer draws Read aloud", () => {
       ...over,
     });
 
-  it("draws no speaker beside the thumbs", () => {
-    const el = build({ showFeedback: true });
-    expect(findByClassName(el, "bonsai-chat-read-aloud-btn")).toBeNull();
-    const row = findByClassName(el, "bonsai-chat-reply-actions-row");
-    const labels = elementsWithAriaLabel((row!.props as { children?: React.ReactNode }).children).map(
-      (c) => c.props["aria-label"]
-    );
-    expect(labels).toEqual(["Mark reply helpful", "Mark reply not helpful"]);
-  });
-
   it("draws nothing at all for a reply that has no thumbs, no details line and no chips", () => {
     expect(build()).toBeNull();
   });
@@ -739,11 +705,6 @@ describe("buildReplyActionsElement no longer draws Read aloud", () => {
     const el = build({ showFeedback: true });
     expect(el).not.toBeNull();
     expect(findByClassName(el, "bonsai-chat-reply-actions-row")).not.toBeNull();
-  });
-
-  it("registers no speaker stop", () => {
-    render(build({ showFeedback: true, onToggleTransparency: () => {} })!);
-    expect(getReplyStop("read-aloud-corner")).toBeNull();
   });
 });
 

@@ -1,23 +1,19 @@
-"""Title: The voice input and read-aloud buttons the screen calls
+"""Title: The voice input buttons the screen calls
 
-Purpose: This is the code behind two related but separate voice features: typing a
-question by talking (install the engine, start/stop/poll a recording) and having an
-answer read back out loud (start/stop/poll a reading). Every function here is a
-straight hand-off from a method of the same name on the plugin class in main.py -- the
-class keeps the method so the screen's call still works, and the method's body just
-calls the matching function here.
+Purpose: This is the code behind typing a question by talking (install the engine,
+start/stop/poll a recording). Every function here is a straight hand-off from a method
+of the same name on the plugin class in main.py -- the class keeps the method so the
+screen's call still works, and the method's body just calls the matching function here.
 
 Used for: get_voice_engine_status, install_voice_engine, get_voice_install_status,
-start_voice_transcription, stop_voice_transcription, get_voice_transcription_status,
-start_voice_read_aloud, stop_voice_read_aloud, get_voice_read_aloud_status.
+start_voice_transcription, stop_voice_transcription, get_voice_transcription_status.
 
-Solves: Keeps the Settings screen's Voice input panel and the answer's read-aloud
-button out of main.py, next to the download/session-lifecycle code the other
-background-job features in this plugin already use.
+Solves: Keeps the Settings screen's Voice input panel out of main.py, next to the
+download/session-lifecycle code the other background-job features in this plugin already
+use.
 
-Does not: Do the actual speech-to-text or text-to-speech work, or install/download
-anything itself -- `voice_transcription_service.py`, `voice_whisper_daemon.py` and
-`voice_read_aloud_service.py` do that. Stopping a transcription session that has
+Does not: Do the actual speech-to-text work, or install/download anything itself --
+`voice_transcription_service.py` and `voice_whisper_daemon.py` do that. Stopping a transcription session that has
 nothing to do with a running Ask -- e.g. on plugin unload, or when the microphone
 permission is revoked mid-save -- stays a small helper on the Plugin class itself
 (``_stop_voice_transcription_internal``), since main.py's lifecycle and settings-save
@@ -293,29 +289,3 @@ async def get_voice_transcription_status(self):
         bool(st.get("partial_transcript")) or bool(st.get("finalized_transcript"))
     )
     return st
-
-
-async def start_voice_read_aloud(self, text: str):
-    """Feature: read an answer's text aloud in the Deck's own voice.
-
-    Input: plain text, already stripped of markdown and hidden spoiler blocks by the frontend
-    (see plan 42 § 5, § 8 step 1 for the shared text helper). Output: {"ok", "sentence_count",
-    "error"}. Returns at once — the reading itself runs in the background so no call here can
-    outrun the RPC deadline. Starting while a previous reading is still going stops it first.
-    """
-    return await asyncio.to_thread(self._read_aloud_service.start, text)
-
-
-async def stop_voice_read_aloud(self):
-    """Feature: stop reading aloud. Output: {"ok", "stopped"} — stopped is True only when a
-    reading was actually in progress. Safe to call when nothing is playing."""
-    return await asyncio.to_thread(self._read_aloud_service.stop)
-
-
-async def get_voice_read_aloud_status(self):
-    """Feature: poll the read-aloud state while it plays in the background.
-
-    Output: {"state": "idle"|"speaking"|"done"|"error", "sentence_index", "sentence_count",
-    "error", "started_at"}.
-    """
-    return await asyncio.to_thread(self._read_aloud_service.status)

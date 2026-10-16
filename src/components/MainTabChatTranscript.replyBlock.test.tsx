@@ -92,21 +92,16 @@ describe("a finished reply, all three changes together", () => {
     expect(container.querySelector(".bonsai-chat-turn-row-header--with-retry")).not.toBeNull();
   });
 
-  it("reads top to bottom: question, answer, Read aloud and Copy in its corners, Was this helpful?, then Show details", () => {
+  it("reads top to bottom: question, answer, Copy in its corner, Was this helpful?, then Show details", () => {
     const { container } = renderReply(SHORT_ANSWER, { transparencySnapshot: TRANSPARENCY });
-    /* Read aloud is a bare speaker glyph in the answer bubble's lower-left corner (plan 84 step 3),
-       not a line of its own and not in the thumbs row — the divider shape is Show details alone. */
+    /* The divider shape is Show details alone. */
     const lines = container.querySelectorAll(".bonsai-chat-details-divider");
     expect(lines.length).toBe(1);
     expect(lines[0]!.textContent).toContain("Show details");
-    const speaker = container.querySelector(".bonsai-chat-read-aloud-btn");
-    expect(speaker).not.toBeNull();
-    expect(speaker!.getAttribute("aria-label")).toMatch(/Read aloud|Stop/);
 
     const order = [
       ".bonsai-chat-turn-row-header",
       ".bonsai-chat-ai-bubble",
-      ".bonsai-reply-read-aloud-corner-slot",
       ".bonsai-reply-copy-corner-slot",
       ".bonsai-chat-feedback-row__label",
       ".bonsai-chat-details-divider",
@@ -122,13 +117,6 @@ describe("a finished reply, all three changes together", () => {
         `${i} should follow ${i - 1}`
       ).toBeTruthy();
     }
-  });
-
-  it("keeps the speaker out of the row under the answer", () => {
-    const { container } = renderReply(SHORT_ANSWER, { transparencySnapshot: TRANSPARENCY });
-    const block = container.querySelector(".bonsai-chat-reply-actions")!;
-    expect(block.querySelector(".bonsai-chat-read-aloud-btn")).toBeNull();
-    expect(container.querySelector(".bonsai-reply-read-aloud-corner-slot .bonsai-chat-read-aloud-btn")).not.toBeNull();
   });
 
   it("puts Show details last, with nothing between it and the chips it opens", () => {

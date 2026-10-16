@@ -6,9 +6,7 @@
  * checks in on it, about once a second (faster, several times a second,
  * while the answer's text is actively streaming in), until it is finished
  * or has failed. Each check hands what it learned to a function the caller
- * supplies, which turns it into what the screen actually shows. It also
- * tells the read-aloud feature the moment an answer finishes or fails, so a
- * reply set to read itself out loud can start without anyone pressing play.
+ * supplies, which turns it into what the screen actually shows.
  *
  * Used for: useBonsaiAskOrchestration, right after it hands a question to
  * the back end.
@@ -24,7 +22,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import { callDeckyWithTimeout } from "../utils/deckyCall";
 import type { BackgroundRequestStatus } from "../types/backgroundAsk";
-import { handleAskPendingForReadAloud, handleAskTerminalForReadAloud } from "./useReadAloud";
 
 /** Poll interval while backend ``status`` stays ``pending`` (matches Steam Deck cadence vs RPC load). */
 export const BACKGROUND_STATUS_POLL_MS = 1200;
@@ -85,19 +82,8 @@ export function useBackgroundGameAi(
           );
           if (!isRequestActive(seq)) return;
           applyBackgroundStatusToUi(status, fallbackQuestion);
-          /*
-           * Read on its own (D99 call 3), when the Main tab is the one watching this poll rather
-           * than bonsaiAskCompletionWatch's module-level loop (that runs only once the person has
-           * left the tab). Deduped by request_id inside the handler, so whichever path sees a given
-           * request's terminal status first is the one that fires it.
-           */
-          if (status.status === "completed" || status.status === "failed") {
-            handleAskTerminalForReadAloud(status);
-          }
 
           if (status.status === "pending") {
-            /* Ties the waiting Ask press (spoken or typed) to this request number, early. */
-            handleAskPendingForReadAloud(status);
             /*
              * Only while tokens are actually arriving. Keying this on the *setting* instead meant a
              * 150ms poll for the whole pending window — including prep phases (KB search, Proton

@@ -1,13 +1,12 @@
 /**
- * Copy and Read aloud must hide a hidden block whatever way the model wrote its fence -- plan 76
- * lane 1. Both used to pair backtick runs anywhere, so a `~~~` block, a longer fence, or a block
- * whose closing marker was glued onto a sentence was copied or read aloud, while the panel kept it
- * behind its cover. They now read blocks the way the panel does (markdownFenceReader.ts).
+ * Copy must hide a hidden block whatever way the model wrote its fence -- plan 76 lane 1. It used
+ * to pair backtick runs anywhere, so a `~~~` block, a longer fence, or a block whose closing marker
+ * was glued onto a sentence was copied, while the panel kept it behind its cover. It now reads
+ * blocks the way the panel does (markdownFenceReader.ts).
  */
 import { describe, expect, it } from "vitest";
 
 import { SPOILER_HIDDEN_COPY_PLACEHOLDER, buildAnswerCopyText } from "./answerCopyText";
-import { SPOILER_HIDDEN_SPOKEN_PHRASE, buildAnswerReadableText } from "./answerReadableText";
 
 const F = "`".repeat(3);
 const F4 = "`".repeat(4);
@@ -65,24 +64,11 @@ describe("a hidden block written oddly, in Copy and Read aloud", () => {
       for (const seen of shape.visible) expect(copied).toContain(seen);
     });
 
-    it(`is never read aloud (${name})`, () => {
-      const spoken = buildAnswerReadableText({ body: shape.body });
-      expect(spoken).not.toContain(SECRET);
-      for (const hidden of shape.alsoHidden ?? []) expect(spoken).not.toContain(hidden);
-      expect(spoken).toContain(SPOILER_HIDDEN_SPOKEN_PHRASE);
-      expect(spoken).not.toContain("bonsai-spoiler");
-      for (const seen of shape.visible) expect(spoken).toContain(seen);
-    });
-
     it(`is copied and read as its words when spoiler covers are off (${name})`, () => {
       const copied = buildAnswerCopyText({ body: shape.body, spoilerMaskingEnabled: false });
-      const spoken = buildAnswerReadableText({ body: shape.body, spoilerMaskingEnabled: false });
-      for (const out of [copied, spoken]) {
-        expect(out).toContain(SECRET);
-        expect(out).not.toContain("bonsai-spoiler");
-        expect(out).not.toContain(SPOILER_HIDDEN_COPY_PLACEHOLDER);
-        expect(out).not.toContain(SPOILER_HIDDEN_SPOKEN_PHRASE);
-      }
+      expect(copied).toContain(SECRET);
+      expect(copied).not.toContain("bonsai-spoiler");
+      expect(copied).not.toContain(SPOILER_HIDDEN_COPY_PLACEHOLDER);
     });
   }
 
@@ -90,14 +76,11 @@ describe("a hidden block written oddly, in Copy and Read aloud", () => {
     // The consent unwrap knows only backtick fences, so the panel still draws the cover.
     const body = SHAPES["a ~~~ block"]!.body;
     expect(buildAnswerCopyText({ body, spoilerConsentEffective: true })).not.toContain(SECRET);
-    expect(buildAnswerReadableText({ body, spoilerConsentEffective: true })).not.toContain(SECRET);
   });
 
   it("hides what follows a closer glued onto a sentence, because the panel does", () => {
     const copied = buildAnswerCopyText({ body: GLUED_CLOSER });
     expect(copied).toBe(`Intro.\n\n${SPOILER_HIDDEN_COPY_PLACEHOLDER}`);
-    const spoken = buildAnswerReadableText({ body: GLUED_CLOSER });
-    expect(spoken).toBe(`Intro. ${SPOILER_HIDDEN_SPOKEN_PHRASE}`);
   });
 
   it("hides two ~~~ blocks separately and keeps the words between them", () => {

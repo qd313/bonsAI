@@ -296,10 +296,6 @@ describe("Ask while the mic is listening", () => {
         microphoneAccess: true,
         isAsking: false,
         uiT: uiT as never,
-        clearAskCameFromMicRef: { current: () => {} },
-        voiceReplyMode: "off",
-        strategySpoilerMaskingEnabled: true,
-        settingsLoaded: true,
         onAskOllama: onAskOllama as never,
       });
       return { ...field, voice };

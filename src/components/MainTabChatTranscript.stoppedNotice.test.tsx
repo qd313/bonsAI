@@ -186,34 +186,8 @@ describe("stopped turn — notice and reply actions restored on the archived tur
     expect(queryByLabelText("Mark reply helpful")).toBeNull();
   });
 
-  /*
-   * Roadmap "After Stop or Helpful, Read aloud sits alone above a blank gap" (plan 72 free play,
-   * workshop:test-evidence/plan72-Z-FREEPLAY.json finding 9, screenshots/plan72/Z-after-stop.png): after
-   * a stop that kept nothing, the reply is the back end's own "Request cancelled." -- no thumbs, no
-   * Retry, by the rule above -- yet the speaker still drew, alone at the right of an empty row, and
-   * would have read the words "Request cancelled." aloud. Nothing readable was kept, so there is
-   * nothing to read either. A kept partial answer still offers it (next test).
-   */
-  it("offers no Read aloud on an empty stop: there is nothing to read", () => {
-    const emptyStopTurn: AskThreadCollapsedTurn = {
-      id: "stopped-3",
-      question: "any known issues running this on deck?",
-      answer: "Request cancelled.",
-    };
-    const { queryByLabelText } = render(
-      <MainTabChatTranscript
-        {...baseProps({
-          askThreadCollapsed: [emptyStopTurn],
-          expandedTurnKey: emptyStopTurn.id,
-          askStopped: true,
-        })}
-      />
-    );
-    expect(queryByLabelText("Read aloud")).toBeNull();
-  });
-
-  /* Plan 74 leftover (roadmap "Small leftovers from plan 74", part a): fb68ef3c took Read aloud off the
-     "Request cancelled." bubble, but its Copy corner icon stayed, and would copy those words. */
+  /* Plan 74 leftover (roadmap "Small leftovers from plan 74", part a): the Copy corner icon stayed on the
+     "Request cancelled." bubble, and would copy those words. */
   it("offers no Copy on an empty stop, and still offers it on a kept partial answer", () => {
     const emptyStopTurn: AskThreadCollapsedTurn = {
       id: "stopped-4",
@@ -241,19 +215,6 @@ describe("stopped turn — notice and reply actions restored on the archived tur
       />
     );
     expect(kept.queryByLabelText("Copy reply text")).not.toBeNull();
-  });
-
-  it("still offers Read aloud on a stop that kept part of the answer", () => {
-    const { queryByLabelText } = render(
-      <MainTabChatTranscript
-        {...baseProps({
-          askThreadCollapsed: [stoppedTurn],
-          expandedTurnKey: stoppedTurn.id,
-          askStopped: true,
-        })}
-      />
-    );
-    expect(queryByLabelText("Read aloud")).not.toBeNull();
   });
 
   it("does not show the notice on an older archived turn even when askStopped is true", () => {

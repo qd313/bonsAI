@@ -337,11 +337,6 @@ ${buildReplyRatingChoicesSection()}
           max-width: none !important;
         }
         /*
-         * Read aloud used to be styled here, at the right-hand end of the Helpful / Not really row
-         * (plan 62 section 3b). It is in the answer's lower-left corner now (plan 84 step 3), and its
-         * look lives next to Copy's in answerBubble.ts.
-         */
-        /*
          * Show details, as a line across the reply rather than a button in the row (D76).
          *
          * Same shape as the collapsed-history row above: a label centred on a hairline. The

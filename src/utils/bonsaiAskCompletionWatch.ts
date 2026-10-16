@@ -5,7 +5,7 @@
  * different Steam tab) while the answer is still being written. This file is what keeps checking, in
  * the background, whether that answer has finished, failed, or been cancelled — even while none of
  * the plugin's own screen is showing. When it notices the answer is done, it is what triggers the
- * "your reply is ready" notification and read-aloud, if either is turned on.
+ * "your reply is ready" notification, if it is turned on.
  *
  * Used for: index.tsx, started right after a question is sent in the background, for the case where
  * the part of the screen that would normally show the answer arriving might not be visible to check
@@ -31,7 +31,6 @@ import {
   BACKGROUND_STREAM_POLL_MS,
 } from "../hooks/useBackgroundGameAi";
 import { handleAskPollErrorForToast, handleAskTerminalForToast } from "./bonsaiReplyReadyToast";
-import { handleAskPendingForReadAloud, handleAskTerminalForReadAloud } from "../hooks/useReadAloud";
 
 let watchSeq = 0;
 let pollTimer: number | null = null;
@@ -58,7 +57,6 @@ async function pollOnce(seq: number): Promise<void> {
 
     if (status.status === "completed" || status.status === "failed") {
       handleAskTerminalForToast(status);
-      handleAskTerminalForReadAloud(status);
       stopAskCompletionWatch();
       return;
     }
@@ -69,7 +67,6 @@ async function pollOnce(seq: number): Promise<void> {
     }
 
     if (status.status === "pending") {
-      handleAskPendingForReadAloud(status);
       const delayMs = status.streaming ? BACKGROUND_STREAM_POLL_MS : BACKGROUND_STATUS_POLL_MS;
       pollTimer = window.setTimeout(() => {
         void pollOnce(seq);

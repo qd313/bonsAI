@@ -209,7 +209,6 @@ async def _forget_answer_of_deleted_chat(self, sid: str) -> None:
     if was_running:
         await self.abort_background_game_ai()
     await cancel_and_await(task)
-    await asyncio.to_thread(self._read_aloud_service.stop)
 
 
 async def rename_chat_slot(self, payload: Any = None):

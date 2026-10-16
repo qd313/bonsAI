@@ -190,7 +190,6 @@ function focusOn(el: HTMLElement): void {
 const STOP_LABELS = [
   "Mark reply helpful",
   "Mark reply not helpful",
-  "Read aloud",
   "Copy reply text",
   "Bad info",
   "Wrong game or topic",
@@ -247,15 +246,14 @@ describe("Up and Down between the rating choices, the thumbs and the corner icon
   });
 
   /*
-   * Plan 84 step 3: the speaker is in the answer's corner now, so a Down from it (or from Copy) has to
-   * land on the rows under the answer. With the reply rated down the thumbs are greyed and skipped, and
+   * Copy is in the answer's corner, so a Down from it has to land on the rows under the answer. With the reply rated down the thumbs are greyed and skipped, and
    * the first choice is the next stop -- stepping over the whole block to Show details would leave the
    * choices unreachable from above.
    */
   it("Down from either corner icon lands on the first choice, whichever choice was left last", () => {
     const { container } = renderTurn();
     for (const lastLeft of ["Bad info", "Wrong game or topic", "Spoiled it", "Too short"]) {
-      for (const icon of ["Read aloud", "Copy reply text"]) {
+      for (const icon of ["Copy reply text"]) {
         focusOn(byLabel(container, lastLeft));
         focusOn(byLabel(container, icon));
         expect(press("onMoveDown")).toBe(true);
@@ -306,24 +304,8 @@ describe("Up and Down between the rating choices, the thumbs and the corner icon
     expect(new Set(down).size).toBe(down.length);
   });
 
-  it("walks the corner: the speaker, Copy, Down to Bad info, Up to Helpful -- no stop twice", () => {
-    const { container } = renderTurn();
-    const seen: string[] = [];
-    focusOn(byLabel(container, "Read aloud"));
-    seen.push(where());
-    expect(press("onMoveRight")).toBe(true);
-    seen.push(where());
-    expect(press("onMoveDown")).toBe(true);
-    seen.push(where());
-    expect(press("onMoveUp")).toBe(true);
-    seen.push(where());
-    expect(seen).toEqual(["Read aloud", "Copy reply text", "Bad info", "Mark reply helpful"]);
-    expect(new Set(seen).size).toBe(seen.length);
-  });
-
   /*
-   * Plan 84 step 3 follow-up: a newest answer with a summed-up note, rated "Not really". Down from the
-   * note used to reach the speaker in the thumbs row; with the speaker in the corner it has to land on
+   * A newest answer with a summed-up note, rated "Not really". Down from the note has to land on
    * the first choice, not step over the whole block to Show details.
    */
   it("Down from the summed-up note lands on the first choice, not Show details", () => {

@@ -9,9 +9,7 @@ uses to decide whether a decode pass is worth running at all.
 
 Used for: voice_transcription_service's `VoiceTranscriptionSession.start()`,
 to choose and launch the microphone capture process, and its capture-reader
-and transcribe loops, to gate on loudness. voice_read_aloud_service reuses
-`env_for_audio_capture()` for playback rather than duplicating the same
-session-socket discovery.
+and transcribe loops, to gate on loudness.
 
 Solves: This runs as a background plugin process, not inside the normal
 desktop session, so it cannot simply assume where the microphone's audio
@@ -118,9 +116,8 @@ def _discover_session_runtime_dir() -> str:
 def env_for_audio_capture() -> dict[str, str]:
     """Child env with the Deck user's PipeWire/Pulse session sockets (plugin_loader often lacks these).
 
-    Public (renamed from ``_env_for_audio_capture`` 2026-09-12): the read-aloud service reuses this
-    same session-socket discovery for playback rather than duplicating it — see
-    voice_read_aloud_service.py.
+    Public (renamed from ``_env_for_audio_capture`` 2026-09-12); the voice transcription service
+    re-exports it.
     """
     env = dict(_env_for_host_system_tools())
     rd = _discover_session_runtime_dir()

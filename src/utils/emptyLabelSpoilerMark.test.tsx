@@ -5,8 +5,8 @@
  * "bonsai-spoiler" twice as plain text, drew no cover, and the sentence between the marks was
  * readable. The mark is now a mark, never text: outside a block it opens one, inside it closes it.
  *
- * These render the answer the way the panel does and count covers and readable words; Copy and
- * Read aloud are checked on the same text.
+ * These render the answer the way the panel does and count covers and readable words; Copy is
+ * checked on the same text.
  */
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render } from "@testing-library/react";
@@ -15,7 +15,6 @@ import { buildAnswerBubbleElement } from "./buildAnswerBubbleElement";
 import { expandOneLineSpoilerFences } from "./expandOneLineSpoilerFences";
 import { resetAnswerStopRegistry } from "./answerStopRegistry";
 import { SPOILER_HIDDEN_COPY_PLACEHOLDER, buildAnswerCopyText } from "./answerCopyText";
-import { SPOILER_HIDDEN_SPOKEN_PHRASE, buildAnswerReadableText } from "./answerReadableText";
 import { toastSafeText } from "./toastAnswerPreview";
 import { resetSpoilerFenceOpenCountForTests } from "../components/MainTabBonsaiAiMarkdownChunk";
 
@@ -74,16 +73,12 @@ describe("a hidden-block mark with nothing between the label and the closing bac
 
   it("1. Copy and Read aloud hide it and keep the rest", () => {
     const copied = buildAnswerCopyText({ body: DECK });
-    const spoken = buildAnswerReadableText({ body: DECK });
-    for (const out of [copied, spoken]) {
-      expect(out).not.toContain("real secret");
-      expect(out).not.toContain("bonsai-spoiler");
-      expect(out).not.toContain("`");
-      expect(out).toContain("little skirmish");
-      expect(out).toContain("gist of it");
-    }
+    expect(copied).not.toContain("real secret");
+    expect(copied).not.toContain("bonsai-spoiler");
+    expect(copied).not.toContain("`");
+    expect(copied).toContain("little skirmish");
+    expect(copied).toContain("gist of it");
     expect(copied).toContain(SPOILER_HIDDEN_COPY_PLACEHOLDER);
-    expect(spoken).toContain(SPOILER_HIDDEN_SPOKEN_PHRASE);
   });
 
   it("1. the text turns into one ordinary block", () => {
@@ -102,7 +97,7 @@ describe("a hidden-block mark with nothing between the label and the closing bac
       unmount();
       resetAnswerStopRegistry();
     }
-    for (const out of [buildAnswerCopyText({ body }), buildAnswerReadableText({ body })]) {
+    for (const out of [buildAnswerCopyText({ body })]) {
       expect(out).not.toContain("Listen");
       expect(out).not.toContain("bonsai-spoiler");
     }
@@ -129,7 +124,6 @@ describe("a hidden-block mark with nothing between the label and the closing bac
     expect(container.textContent).not.toContain("bonsai-spoiler");
     expect(container.textContent).toContain("keep your head up");
     expect(buildAnswerCopyText({ body })).not.toContain("real secret");
-    expect(buildAnswerReadableText({ body })).not.toContain("real secret");
   });
 
   it("4. an ordinary opener and the mark as the closer: the text after it stays readable", () => {
@@ -139,7 +133,7 @@ describe("a hidden-block mark with nothing between the label and the closing bac
     expect(container.textContent).not.toContain("real secret");
     expect(container.textContent).not.toContain("bonsai-spoiler");
     expect(container.textContent).toContain("keep your head up");
-    for (const out of [buildAnswerCopyText({ body }), buildAnswerReadableText({ body })]) {
+    for (const out of [buildAnswerCopyText({ body })]) {
       expect(out).not.toContain("real secret");
       expect(out).not.toContain("bonsai-spoiler");
       expect(out).toContain("keep your head up");
@@ -154,7 +148,7 @@ describe("a hidden-block mark with nothing between the label and the closing bac
     expect(container.textContent).not.toContain("bonsai-spoiler");
     expect(container.textContent).toContain("Middle words stay.");
     expect(container.textContent).toContain("keep your head up");
-    for (const out of [buildAnswerCopyText({ body }), buildAnswerReadableText({ body })]) {
+    for (const out of [buildAnswerCopyText({ body })]) {
       expect(out).not.toContain("hidden line");
       expect(out).toContain("Middle words stay.");
       expect(out).toContain("keep your head up");
@@ -170,7 +164,7 @@ describe("a hidden-block mark with nothing between the label and the closing bac
     expect(container.textContent).not.toContain("bonsai-spoiler");
     expect(container.textContent).toContain("little skirmish");
     expect(container.textContent).toContain("keep your head up");
-    for (const out of [buildAnswerCopyText({ body }), buildAnswerReadableText({ body })]) {
+    for (const out of [buildAnswerCopyText({ body })]) {
       expect(out).not.toContain("real secret");
       expect(out).not.toContain("bonsai-spoiler");
     }
@@ -194,10 +188,7 @@ describe("a hidden-block mark with nothing between the label and the closing bac
   });
 
   it("with covers switched off, Copy and Read aloud give the words and no mark text", () => {
-    for (const out of [
-      buildAnswerCopyText({ body: DECK, spoilerMaskingEnabled: false }),
-      buildAnswerReadableText({ body: DECK, spoilerMaskingEnabled: false }),
-    ]) {
+    for (const out of [buildAnswerCopyText({ body: DECK, spoilerMaskingEnabled: false })]) {
       expect(out).toContain("real secret");
       expect(out).not.toContain("bonsai-spoiler");
       expect(out).not.toContain("`");

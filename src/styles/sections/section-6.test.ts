@@ -221,21 +221,3 @@ describe("the 'What went wrong?' reason chips are tighter than the other reply b
     expect(match![1]!).toContain(`margin-top: calc(${scaled(5)} - 8px) !important`);
   });
 });
-
-describe("Read aloud is no longer styled as a row item (section 6 CSS, plan 84 step 3)", () => {
-  // The speaker moved into the answer's lower-left corner, whose look lives in answerBubble.ts. The
-  // old rules pinned it to the right-hand end of the thumbs row (auto left margin, a 30 x 32 box) and
-  // would fight the corner's 20 x 20 icon if they stayed, since the button keeps the same class name.
-  const css = buildSection6Section();
-
-  it("has no rule left that styles the speaker in the thumbs row", () => {
-    /* The old rules were keyed on the shared button class plus the speaker's own, with an auto left
-       margin and a 30 wide box. Others still name the class (the reply-rating rules leave it out with
-       a :not(...); the corner speaker's red colour hangs off it), but none selects it on its own. */
-    expect(css).not.toMatch(/button\.bonsai-chat-secondary-btn\.bonsai-chat-read-aloud-btn/);
-  });
-
-  it("has no \"Saved on this Deck\" centring rule for a row the label no longer shares", () => {
-    expect(css).not.toContain(".bonsai-chat-reply-actions-row > .bonsai-chat-feedback-row__label");
-  });
-});

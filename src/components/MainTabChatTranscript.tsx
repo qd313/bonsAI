@@ -15,7 +15,7 @@
  *     ── older question ──
  *     ...
  *     ── newest / live question ──
- *        the answer (Read aloud in its lower-left corner, Copy in the lower-right)
+ *        the answer (Copy in its lower-right corner)
  *        (a Strategy Guide branch picker or checklist, if one applies)
  *        Helpful / Not really, chips, Show details
  *          (opened: This answer | Session · N tabs, then that tab's own
@@ -216,9 +216,7 @@ import {
   composeDrgGlossaryExplainFurtherQuestion,
   drgGlossaryExplainFurtherThreadDisplay,
 } from "../utils/drgGlossaryAsk";
-import { buildAnswerReadableText } from "../utils/answerReadableText";
 import { protectedNamesFromNotes, type TurnSpoilerFacts } from "../utils/unwrapAskedEntitySpoilerFences";
-import { useReadAloudAutoStop } from "../hooks/useReadAloudAutoStop";
 import { useEarlierTurnsPill } from "../hooks/useEarlierTurnsPill";
 import { buildEarlierList } from "./buildEarlierList";
 import { useTitleOverflow } from "../hooks/useTitleOverflow";
@@ -431,43 +429,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   const dismissTroubleshootingPermHint = () => {
     dismissTroubleshootHint(activeChatSlotId);
     setTroubleshootHintDismissTick((n) => n + 1);
-  };
-
-  /*
-   * Read aloud / Stop (plan 42 step 3a). One instance for the whole transcript — the background
-   * reader can only speak one answer at a time, so "which turn is speaking" lives here rather than
-   * per-turn state. Stopping on a new Ask (`wasAskingRef` and its effect) is lifted into the hook
-   * itself now — see useReadAloudAutoStop.ts.
-   */
-  const readAloud = useReadAloudAutoStop(isAsking);
-  /** Read aloud props for one turn's answer bubble (its lower-left corner): same shape at every call site. */
-  const readAloudRowProps = (key: string, body: string, facts: TurnSpoilerFacts) => {
-    /* Nothing readable, or the back end's own stop placeholder ("Request cancelled."): no speaker, so
-       it cannot read that status aloud (plan72-Z-FREEPLAY.json finding 9). Same test as Retry's. */
-    if (!body.trim() || isStopNoticeResponse(body)) return {};
-    /*
-     * A reading that started on its own (Voice replies set to Always or By voice) is keyed "live"
-     * by the hook, because the hook cannot know which block will draw the newest answer. Measured
-     * on the Deck 2026-09-12: by the time the reading starts, the finished answer is already
-     * drawn as the newest *archived* turn (its key is the turn id), so a plain key match left the
-     * line saying Read aloud while the Deck was talking, and a press restarted it instead of
-     * stopping it. "live" therefore matches whichever block is drawing the newest answer.
-     */
-    const newestAnswerKey = showLiveTurn ? "live" : askThreadCollapsed[askThreadCollapsed.length - 1]?.id;
-    const isReadingThis =
-      readAloud.state === "speaking" &&
-      (readAloud.speakingKey === key || (readAloud.speakingKey === "live" && key === newestAnswerKey));
-    return {
-      readAloudLabel: isReadingThis ? "Stop" : "Read aloud",
-      onReadAloudToggle: () => {
-        if (isReadingThis) {
-          readAloud.stop();
-          return;
-        }
-        const spoilerMaskingEnabled = strategySpoilerMaskingEnabled;
-        readAloud.start(key, buildAnswerReadableText({ body, spoilerMaskingEnabled, ...facts }));
-      },
-    };
   };
 
   /*
@@ -875,9 +836,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     streaming: boolean,
     answerKey: string,
     facts: TurnSpoilerFacts,
-    /* The text Read aloud would read, which puts the speaker in the bubble's lower-left corner
-       (plan 84 step 3); left out where the answer cannot be read yet. */
-    readAloudBody?: string,
     /* The turn's attached notes: the "No close match" line comes off an answer that used one. */
     notes: KbAttachedNote[] = []) =>
     buildAnswerBubbleElement({
@@ -901,13 +859,12 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
        * would change under the press.
        */
       /* Nor on the back end's own stop placeholder ("Request cancelled."): nothing readable was kept,
-         so there is nothing to copy (plan 74 leftover; Read aloud already skips it). */
+         so there is nothing to copy (plan 74 leftover). */
       getAnswerCopyText:
         !streaming && body.trim() && !isStopNoticeResponse(body)
           ? () =>
               buildAnswerCopyText({ body: closeMatchAgrees(body, facts.askQuestion, notes), spoilerMaskingEnabled: strategySpoilerMaskingEnabled, ...facts })
           : undefined,
-      ...(readAloudBody === undefined ? {} : readAloudRowProps(answerKey, closeMatchAgrees(readAloudBody, facts.askQuestion, notes), facts)),
       /* Under an answer still writing: the notes block, an open details panel, then the dock (plan 93). The
          same chain as the reply row's Down past it, which is not drawn until the answer finishes. */
       onMoveDownWhileWriting: () =>
@@ -945,8 +902,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     };
     /*
      * Down from the LAST button onto Helpful (plan 74 lane 3), through Helpful's own nav node, so it
-     * does not land on whichever button the reply row last held (Read aloud, on the Deck:
-     * plan72-Z-FREEPLAY.json). Not while a checklist sits between, nor when Helpful is greyed or
+     * does not land on whichever button the reply row last held (plan72-Z-FREEPLAY.json).
+     * Not while a checklist sits between, nor when Helpful is greyed or
      * gone: Steam's own step already reaches the next row there.
      */
     const downOutOfChoices = () => {
@@ -1252,7 +1209,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 turnPiece("summary-warning", buildChatSummaryWarningElement(turn.chatSummary)),
                 turnPiece("notes-read", buildNotesReadLine(turn.id, archivedTransparencyFor(turn, turnIndex))),
                 turnPiece("fold", renderReasoningFold(turn.id, turn.reasoning)),
-                turnPiece("bubble", renderAnswerBubble(turn.answer, false, turn.id, archivedSpoilerFacts(turn, turnIndex), turn.answer, kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex)))),
+                turnPiece("bubble", renderAnswerBubble(turn.answer, false, turn.id, archivedSpoilerFacts(turn, turnIndex), kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex)))),
                 turnPiece("summary-note", buildChatSummaryNoteElement({
                   turnKey: turn.id,
                   chatSummary: turn.chatSummary,
@@ -1294,8 +1251,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   const transparencyAvailableHere = transparencyUiAvailable(
                     archivedTransparencyFor(turn, turnIndex)
                   );
-                  /* Read aloud is not part of this row any more: it is in the answer bubble's lower-left
-                     corner (plan 84 step 3), so a turn with nothing else to offer has no row at all. */
+                  /* A turn with nothing else to offer has no row at all (Copy is in the answer bubble's corner). */
                   if (!showFeedbackHere && !transparencyAvailableHere) {
                     return [];
                   }
@@ -1504,8 +1460,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   isStreamingPreview,
                   "live",
                   liveSpoilerFacts,
-                  /* Read aloud reads the finished exchange's answer, so it waits for the ask to end. */
-                  isAsking ? undefined : lastExchange?.answer, liveKbNotes
+                  liveKbNotes
                 )
               : null),
             turnPiece("branches", expandedTurnKey === "live" ? renderStrategyBranchPicker("live") : null),

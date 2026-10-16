@@ -61,7 +61,6 @@ export type UseUnifiedInputPersistenceArgs = {
   unifiedInput: string;
   unifiedInputPersistenceMode: UnifiedInputPersistenceMode;
   setUnifiedInput: (value: string) => void;
-  clearAskCameFromMicRef: React.MutableRefObject<() => void>;
 };
 
 /*
@@ -76,7 +75,6 @@ export function useUnifiedInputPersistence({
   unifiedInput,
   unifiedInputPersistenceMode,
   setUnifiedInput,
-  clearAskCameFromMicRef,
 }: UseUnifiedInputPersistenceArgs): void {
   useEffect(() => {
     if (unifiedInputPersistenceMode === "persist_all") {
@@ -92,7 +90,6 @@ export function useUnifiedInputPersistence({
     unifiedInputPersistenceModePrevRef.current = unifiedInputPersistenceMode;
     if (shouldClearUnifiedInputForPersistenceMode(prev, unifiedInputPersistenceMode)) {
       setUnifiedInput("");
-      clearAskCameFromMicRef.current();
     }
   }, [unifiedInputPersistenceMode]);
 }

@@ -27,7 +27,7 @@ list/open/create/delete/rename buttons are in
 `backend/services/chat_slot_rpc.py`; the notes the person asked bonsAI to remember
 (list/save/delete) are in `backend/services/user_notes_rpc.py`; the knowledge base's download/update/
 remove/chip-candidate buttons are in `backend/services/rag_corpus_rpc.py`;
-the voice-input and read-aloud buttons are in `backend/services/voice_rpc.py`;
+the voice-input buttons are in `backend/services/voice_rpc.py`;
 screenshots, the Desktop debug/chat/app logs, clipboard and the small
 transparency/feedback/language reads are in `backend/services/media_desktop_rpc.py`;
 installing Ollama on the Deck and pulling/deleting/pricing its models are in
@@ -215,7 +215,6 @@ from backend.services.voice_transcription_service import (
     new_voice_install_state,
 )
 from backend.services import voice_rpc
-from backend.services.voice_read_aloud_service import VoiceReadAloudService
 from backend.services.rag_corpus_download_service import new_rag_corpus_download_state
 from backend.services import rag_corpus_rpc
 from backend.constants import DEFAULT_OLLAMA_PCIP
@@ -304,9 +303,6 @@ class Plugin:
         self._rag_corpus_download_state: dict = new_rag_corpus_download_state()
         self._chat_slots_store_lock = asyncio.Lock()
         self._chat_slot_by_request: dict[int, str] = {}
-        self._read_aloud_service = VoiceReadAloudService(
-            os.path.join(decky.DECKY_PLUGIN_SETTINGS_DIR, "read_aloud_tmp")
-        )
 
     def _abort_ollama_chat_check(self) -> bool:
         """True when frontend requested Stop mid-generation (closes HTTP quickly; executor thread exits)."""
@@ -417,7 +413,6 @@ class Plugin:
             ce.set()
         await cancel_and_await(getattr(self, "_local_ollama_setup_task", None))
         await self._stop_voice_transcription_internal()
-        await asyncio.to_thread(self._read_aloud_service.stop)
         vit = getattr(self, "_voice_install_task", None)
         if vit is not None and not vit.done():
             ce_voice = getattr(self, "_voice_install_cancel", None)
@@ -2069,8 +2064,6 @@ class Plugin:
             await self.abort_background_game_ai()
         await cancel_and_await(task)
         await chat_turn_recorder.save_answer_a_clear_stopped(self, stopped_answer)
-        # A cleared session must go silent: a reading of the old answer must not keep playing.
-        await asyncio.to_thread(self._read_aloud_service.stop)
 
         await self._maybe_app_log(
             "ask.forget",
@@ -2271,18 +2264,6 @@ class Plugin:
     async def get_voice_transcription_status(self):
         """Poll interim/final transcript while recording."""
         return await voice_rpc.get_voice_transcription_status(self)
-
-    async def start_voice_read_aloud(self, text: str):
-        """Feature: read an answer's text aloud in the Deck's own voice. See voice_rpc.py."""
-        return await voice_rpc.start_voice_read_aloud(self, text)
-
-    async def stop_voice_read_aloud(self):
-        """Feature: stop reading aloud. See voice_rpc.py."""
-        return await voice_rpc.stop_voice_read_aloud(self)
-
-    async def get_voice_read_aloud_status(self):
-        """Feature: poll the read-aloud state while it plays in the background. See voice_rpc.py."""
-        return await voice_rpc.get_voice_read_aloud_status(self)
 
     def _build_ollama_chat_url(self, pc_ip: str) -> str:
         """Build the Ollama chat endpoint URL from current connection input."""

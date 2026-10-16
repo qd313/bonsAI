@@ -24,10 +24,10 @@
  *     │  section 2                    <- a stop      │
  *     │  ...                                         │
  *     │  last section                                │
- *     │  [ read aloud ]                    [ copy ]  │
+ *     │                                    [ copy ]  │
  *     └──────────────────────────────────────────────┘
  *            │ down                  ▲ right, from the last section
- *            ▼                       │   (answer, Read aloud, Copy)
+ *            ▼                       │
  *       the thumbs row, which is somebody else's file
  *
  * 1. `stripAssistantDisplayTags()` removes the marks meant for the program
@@ -54,10 +54,6 @@
  *   like anything else; the stylesheet then pulls it up into the bottom-right
  *   corner, and a spacer keeps the last line of text clear of it. Anyone reading
  *   the picture above and expecting to find it nested inside will not.
- * - The Read aloud speaker is the same thing mirrored (plan 84 step 3): a sibling
- *   after the bubble and before Copy, drawn into the bottom-LEFT corner, with the
- *   bubble marked `--with-read-aloud` so the stylesheet keeps the answer clear of
- *   it. The D-pad walks the bottom edge left to right: answer, Read aloud, Copy.
  * - Never move focus by hand here. Calling focus() straight from a section moves
  *   the browser's idea of what is focused while Steam's own idea stays behind, and
  *   the two disagreeing is the exact shape of bug this repo has lost three fixes
@@ -128,14 +124,6 @@ export type BuildAnswerBubbleElementArgs = {
    * would copy changes under the press.
    */
   getAnswerCopyText?: () => string;
-  /**
-   * When set, the bubble's bottom-left corner gains a small speaker (plan 84 step 3): Read aloud,
-   * which used to sit in the reply-actions row under the answer. `readAloudLabel` is its aria-label
-   * and decides which glyph it draws -- "Read aloud" or "Stop" -- the caller picks by tracking which
-   * answer is currently speaking. Like Copy, only on a finished answer.
-   */
-  onReadAloudToggle?: () => void;
-  readAloudLabel?: string;
   /**
    * Down past the last section while the answer is still writing: what is drawn under it then (the notes
    * block, an open details panel, the dock). Without it the chain below ended on the turn's Retry, at the
@@ -251,8 +239,6 @@ export function buildAnswerBubbleElement(
     protectedNames = null,
     onDrgGlossaryExplainFurther,
     getAnswerCopyText,
-    onReadAloudToggle,
-    readAloudLabel = "Read aloud",
     onMoveDownWhileWriting,
   } = args;
   const spoilerUnwrapEligible =
@@ -361,17 +347,14 @@ export function buildAnswerBubbleElement(
   const stopNav = stopNavProps(moveDown, moveUp);
 
   /*
-   * The corner icons -- Read aloud lower-left (plan 84 step 3), Copy lower-right (D77) -- and where
-   * the D-pad goes between them and the answer. Built in buildAnswerCornerSlots.tsx; the bubble only
-   * needs to know which show (to mark itself for the stylesheet) and where Right from its last
-   * section goes.
+   * The corner icon -- Copy lower-right (D77) -- and where the D-pad goes between it and the
+   * answer. Built in buildAnswerCornerSlots.tsx; the bubble only needs to know whether it shows (to
+   * mark itself for the stylesheet) and where Right from its last section goes.
    */
-  const { showCornerCopy, showCornerReadAloud, rightIntoCorner, slots } = buildAnswerCorners({
+  const { showCornerCopy, rightIntoCorner, slots } = buildAnswerCorners({
     answerKey,
     streaming,
     getAnswerCopyText,
-    onReadAloudToggle,
-    readAloudLabel,
   });
 
   /*
@@ -416,9 +399,6 @@ export function buildAnswerBubbleElement(
       }${fenceWaitActive ? " bonsai-chat-ai-bubble--fence-wait" : ""}${
         /* Lets the stylesheet keep the answer's last line clear of the corner icon. */
         showCornerCopy ? " bonsai-chat-ai-bubble--with-copy" : ""
-      }${
-        /* And the same for the speaker in the lower-left corner (plan 84 step 3). */
-        showCornerReadAloud ? " bonsai-chat-ai-bubble--with-read-aloud" : ""
       }`}
       {...navHandlers}
       {...({ navRef: bubbleNavRef } as Record<string, unknown>)}
@@ -451,7 +431,7 @@ export function buildAnswerBubbleElement(
                text. onMoveLeft is left to stopNav's own "hold still", right for the last section
                too (there is nothing to its left). */
             lastNav:
-              showCornerCopy || showCornerReadAloud
+              showCornerCopy
                 ? {
                     ...stopNav,
                     onMoveRight: () => rightIntoCorner(),
@@ -500,9 +480,7 @@ export function buildAnswerBubbleElement(
    * as well, which is the route a person is told about. Where it DRAWS is a separate matter: the
    * stylesheet pulls it up into the bubble's bottom-right corner (the maintainer asked for it
    * inside the bubble, 2026-09-06), and a spacer on the answer's last line keeps the text clear
-   * of it — the --with-copy rules in answerBubble.ts. Read aloud follows the same plan on the left
-   * (plan 84 step 3): a sibling between the bubble and Copy, so the tree order is the left-to-right
-   * order of the stops, and the --with-read-aloud rules keep the text clear of it.
+   * of it — the --with-copy rules in answerBubble.ts.
    */
   return (
     <>

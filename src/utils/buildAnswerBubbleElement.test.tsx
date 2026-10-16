@@ -5,7 +5,7 @@ import { cleanup, render } from "@testing-library/react";
 import { buildAnswerBubbleElement, stopNavProps } from "./buildAnswerBubbleElement";
 import { orderedAnswerStops, resetAnswerStopRegistry } from "./answerStopRegistry";
 import { registerAnswerBubbleEl } from "./answerBubbleElRegistry";
-import { getReplyStop, registerReplyStop, setReplyStopUnavailable } from "./replyStopRegistry";
+import { registerReplyStop, setReplyStopUnavailable } from "./replyStopRegistry";
 import { splitResponseIntoChunks } from "./splitResponseIntoChunks";
 import { SPOILER_STREAM_MASK_LABEL } from "./streamMarkdownPrepare";
 import { StreamScrambleContext } from "../features/stream-scramble/streamScrambleContext";
@@ -250,7 +250,7 @@ describe("answer bubble section stops", () => {
    * buildReplyActionsElement.tsx whenever its own `thumbsDisabled` is true — the same mark
    * buildAnswerBubbleElement's `moveDown` now checks before it ever reaches Retry. Retry itself
    * sits above the answer, in the turn's own header, so it is no longer where Down should land
-   * even once Helpful is skipped — Show details, below the thumbs, is. (Read aloud used to be the stop here; since plan 84 it is in the answer's lower-left corner, above.)
+   * even once Helpful is skipped — Show details, below the thumbs, is.
    */
   it("Down from the last section reaches Show details, not Retry, when the thumbs are greyed", () => {
     const slot = document.createElement("div");
@@ -281,18 +281,18 @@ describe("answer bubble section stops", () => {
     retry.type = "button";
     retry.textContent = "Retry same prompt";
     slot.appendChild(retry);
-    const readAloud = document.createElement("div");
-    readAloud.tabIndex = 0;
-    slot.appendChild(readAloud);
+    const detailsLine = document.createElement("div");
+    detailsLine.tabIndex = 0;
+    slot.appendChild(detailsLine);
     registerReplyStop("helpful", helpful);
     registerReplyStop("retry", retry);
-    registerReplyStop("show-details", readAloud);
+    registerReplyStop("show-details", detailsLine);
     setReplyStopUnavailable("helpful", true);
 
     try {
       const onMoveDown = bubbleProps(el!).onMoveDown as () => boolean;
       expect(onMoveDown()).toBe(true);
-      expect(document.activeElement).toBe(readAloud);
+      expect(document.activeElement).toBe(detailsLine);
       expect(document.activeElement).not.toBe(helpful);
       expect(document.activeElement).not.toBe(retry);
       // The button itself is still perfectly capable of taking focus — proving the skip came from
@@ -395,11 +395,11 @@ describe("answer bubble section stops", () => {
    * Measured on the Deck 2026-09-16 (plan56-BUG-restored-turn-down-loop.json): a chat restored from
    * its saved slot, its one turn expanded, no live exchange this session. The thumbs row never
    * mounts for a turn like this — MainTabChatTranscript's `showFeedbackHere` reads `lastExchange`,
-   * which is empty after a restore — but the Read aloud line does, since it only needs the turn's
-   * own saved answer text. On the device, Down from the last paragraph reached the Retry corner
+   * which is empty after a restore — but a line that only needs the turn's
+   * own saved answer text did, then. On the device, Down from the last paragraph reached the Retry corner
    * instead, then the question row, then the paragraphs again, forever: Retry sits above the answer
    * in the turn's own header, so landing on it from a Down press walks backwards, and nothing ever
-   * reached Read aloud, Show details or the Ask bar below it.
+   * reached Show details or the Ask bar below it.
    *
    * This turn is not "live" — `queryLiveTurnSlot` finds nothing for it — so this is also what
    * proves the fix resolves the PRESSED turn's own slot (`queryTurnSlot`, by id) rather than only
@@ -433,16 +433,16 @@ describe("answer bubble section stops", () => {
     retry.type = "button";
     retry.textContent = "Retry same prompt";
     slot.appendChild(retry);
-    const readAloud = document.createElement("div");
-    readAloud.tabIndex = 0;
-    slot.appendChild(readAloud);
+    const detailsLine = document.createElement("div");
+    detailsLine.tabIndex = 0;
+    slot.appendChild(detailsLine);
     registerReplyStop("retry", retry);
-    registerReplyStop("show-details", readAloud);
+    registerReplyStop("show-details", detailsLine);
 
     try {
       const onMoveDown = bubbleProps(el!).onMoveDown as () => boolean;
       expect(onMoveDown()).toBe(true);
-      expect(document.activeElement).toBe(readAloud);
+      expect(document.activeElement).toBe(detailsLine);
       expect(document.activeElement).not.toBe(retry);
     } finally {
       registerReplyStop("retry", null);
@@ -925,9 +925,8 @@ describe("Copy in the answer bubble's corner", () => {
 
   /*
    * Measured on the Deck 2026-09-12: on a restored answer with no thumbs row, Down from the Copy
-   * corner went straight to Show details and the Read aloud line above it could not be reached from
-   * above at all. Since plan 84 the speaker is a corner beside Copy, not a line below it, so
-   * `downOutOfCopy` tries the note, the thumbs, then Show details.
+   * corner went straight to Show details, past the lines above it. `downOutOfCopy` tries the note,
+   * the thumbs, then Show details.
    */
   it("Down from the icon reaches Show details when there is no thumbs row to stop at first", () => {
     const showDetails = document.createElement("div");
@@ -960,218 +959,12 @@ describe("Copy in the answer bubble's corner", () => {
       helpful.remove();
     }
   });
-});
-
-/*
- * Plan 84 step 3: Read aloud leaves the row under the answer and sits in the bubble's lower-left
- * corner, opposite Copy. It is built exactly the way Copy is: its own step after the bubble in the
- * tree, drawn into the corner by the stylesheet. The D-pad runs left to right along the bubble's
- * bottom edge: the answer, Read aloud, Copy.
- */
-describe("Read aloud in the answer bubble's lower-left corner (plan 84 step 3)", () => {
-  beforeEach(() => {
-    resetAnswerStopRegistry();
-    registerAnswerBubbleEl(ANSWER_KEY, null);
-  });
-  afterEach(() => {
-    cleanup();
-    resetAnswerStopRegistry();
-  });
-
-  const build = (
-    opts: {
-      streaming?: boolean;
-      withCopy?: boolean;
-      withReadAloud?: boolean;
-      label?: string;
-      onToggle?: () => void;
-    } = {}
-  ) => {
-    const { streaming = false, withCopy = true, withReadAloud = true, label, onToggle } = opts;
-    return buildAnswerBubbleElement({
-      body: FENCED_BODY,
-      streaming,
-      spoilerMaskingEnabled: true,
-      maxWidthCss: "100%",
-      answerKey: ANSWER_KEY,
-      getAnswerCopyText: withCopy ? () => "copied text" : undefined,
-      onReadAloudToggle: withReadAloud ? (onToggle ?? (() => undefined)) : undefined,
-      readAloudLabel: label,
-    })!;
-  };
-
-  const slotProps = (el: React.ReactElement, cls: string) =>
-    collectByClassName(el, cls)[0]!.props as Record<string, (() => boolean) | undefined>;
-  const lastSectionProps = (el: React.ReactElement) => {
-    const sections = collectByClassName(el, "bonsai-answer-stop");
-    return sections[sections.length - 1]!.props as Record<string, (() => boolean) | undefined>;
-  };
-  const ringLabel = () => document.activeElement?.getAttribute("aria-label");
-
-  it("draws the speaker inside a corner slot on a finished answer, icon only", () => {
-    const { container } = render(build());
-    const slot = container.querySelector(".bonsai-reply-read-aloud-corner-slot");
-    expect(slot).not.toBeNull();
-    const button = slot!.querySelector("button.bonsai-reply-read-aloud-corner");
-    expect(button).not.toBeNull();
-    expect(button!.getAttribute("aria-label")).toBe("Read aloud");
-    expect(button!.textContent).toBe("");
-    /* Same class the speaker always had, so the transcript tests and the stylesheet's speaking
-       colour keep finding it. */
-    expect(button!.classList.contains("bonsai-chat-read-aloud-btn")).toBe(true);
-  });
-
-  it("says Stop and turns red while this answer is being read", () => {
-    const { container } = render(build({ label: "Stop" }));
-    const button = container.querySelector(".bonsai-reply-read-aloud-corner")!;
-    expect(button.getAttribute("aria-label")).toBe("Stop");
-    expect(button.classList.contains("bonsai-chat-read-aloud-btn--speaking")).toBe(true);
-  });
-
-  it("sits after the bubble and before Copy, never inside the bubble", () => {
-    const { container } = render(build());
-    const bubble = container.querySelector(".bonsai-chat-ai-bubble")!;
-    const read = container.querySelector(".bonsai-reply-read-aloud-corner-slot")!;
-    const copy = container.querySelector(".bonsai-reply-copy-corner-slot")!;
-    expect(bubble.contains(read)).toBe(false);
-    expect(bubble.compareDocumentPosition(read) & 4).toBeTruthy();
-    expect(read.compareDocumentPosition(copy) & 4).toBeTruthy();
-  });
-
-  it("draws nothing while the answer is still arriving, or when no handler is supplied", () => {
-    expect(
-      render(build({ streaming: true })).container.querySelector(".bonsai-reply-read-aloud-corner")
-    ).toBeNull();
-    cleanup();
-    expect(
-      render(build({ withReadAloud: false })).container.querySelector(".bonsai-reply-read-aloud-corner")
-    ).toBeNull();
-  });
-
-  it("still draws without Copy (a speaker alone is a valid corner)", () => {
-    const { container } = render(build({ withCopy: false }));
-    expect(container.querySelector(".bonsai-reply-read-aloud-corner")).not.toBeNull();
-    expect(container.querySelector(".bonsai-reply-copy-corner")).toBeNull();
-  });
-
-  it("marks the bubble so the stylesheet can keep the last line clear of the speaker", () => {
-    expect(
-      render(build()).container.querySelector(".bonsai-chat-ai-bubble--with-read-aloud")
-    ).not.toBeNull();
-    cleanup();
-    expect(
-      render(build({ withReadAloud: false })).container.querySelector(".bonsai-chat-ai-bubble--with-read-aloud")
-    ).toBeNull();
-    cleanup();
-    expect(
-      render(build({ streaming: true })).container.querySelector(".bonsai-chat-ai-bubble--with-read-aloud")
-    ).toBeNull();
-  });
-
-  it("A on the speaker calls the toggle, every press", () => {
-    const onToggle = vi.fn();
-    const { container } = render(build({ onToggle }));
-    const button = container.querySelector<HTMLElement>(".bonsai-reply-read-aloud-corner")!;
-    button.click();
-    button.click();
-    expect(onToggle).toHaveBeenCalledTimes(2);
-  });
-
-  it("registers under its own reply-stop name, read-aloud-corner", () => {
-    const { container } = render(build());
-    const button = container.querySelector(".bonsai-reply-read-aloud-corner");
-    expect(getReplyStop("read-aloud-corner")).toBe(button);
-  });
-
-  it("Right from the last section reaches Read aloud first, and Copy only when there is no speaker", () => {
-    const el = build();
-    render(el);
-    expect(lastSectionProps(el).onMoveRight!()).toBe(true);
-    expect(ringLabel()).toBe("Read aloud");
-    cleanup();
-    const copyOnly = build({ withReadAloud: false });
-    render(copyOnly);
-    expect(lastSectionProps(copyOnly).onMoveRight!()).toBe(true);
-    expect(ringLabel()).toBe("Copy reply text");
-  });
-
-  it("walks the bottom edge right and back: answer, Read aloud, Copy, Read aloud, answer, no stop twice going right", () => {
-    const el = build();
-    render(el);
-    const read = slotProps(el, "bonsai-reply-read-aloud-corner-slot");
-    const copy = slotProps(el, "bonsai-reply-copy-corner-slot");
-    const going: Array<string | null | undefined> = [];
-    expect(lastSectionProps(el).onMoveRight!()).toBe(true);
-    going.push(ringLabel());
-    expect(read.onMoveRight!()).toBe(true);
-    going.push(ringLabel());
-    expect(going).toEqual(["Read aloud", "Copy reply text"]);
-    const coming: Array<string | null | undefined> = [];
-    expect(copy.onMoveLeft!()).toBe(true);
-    coming.push(ringLabel());
-    expect(read.onMoveLeft!()).toBe(true);
-    coming.push(
-      document.activeElement?.className.includes("bonsai-answer-stop") ? "answer" : ringLabel()
-    );
-    expect(coming).toEqual(["Read aloud", "answer"]);
-  });
-
-  it("Up from Read aloud goes back to the answer's last section, like Copy's Up", () => {
-    const el = build();
-    render(el);
-    slotProps(el, "bonsai-reply-read-aloud-corner-slot").onMoveUp!();
-    expect(document.activeElement?.className).toContain("bonsai-answer-stop");
-  });
 
   it("Left from Copy with no speaker still returns to the answer", () => {
-    const el = build({ withReadAloud: false });
+    const el = build(false)!;
     render(el);
-    slotProps(el, "bonsai-reply-copy-corner-slot").onMoveLeft!();
+    (collectByClassName(el, "bonsai-reply-copy-corner-slot")[0]!.props as Record<string, () => boolean>).onMoveLeft!();
     expect(document.activeElement?.className).toContain("bonsai-answer-stop");
-  });
-
-  it("Down from Read aloud goes where Down from Copy goes: Helpful, else Show details", () => {
-    const helpful = document.createElement("button");
-    const details = document.createElement("div");
-    details.tabIndex = 0;
-    document.body.append(helpful, details);
-    registerReplyStop("show-details", details);
-    try {
-      const el = build();
-      render(el);
-      const read = slotProps(el, "bonsai-reply-read-aloud-corner-slot");
-      expect(read.onMoveDown!()).toBe(true);
-      expect(document.activeElement).toBe(details);
-      registerReplyStop("helpful", helpful);
-      expect(read.onMoveDown!()).toBe(true);
-      expect(document.activeElement).toBe(helpful);
-    } finally {
-      registerReplyStop("helpful", null);
-      registerReplyStop("show-details", null);
-      helpful.remove();
-      details.remove();
-    }
-  });
-
-  it("the speaker is no longer a stop below the answer: Down never lands on it", () => {
-    const stale = document.createElement("div");
-    stale.tabIndex = 0;
-    const details = document.createElement("div");
-    details.tabIndex = 0;
-    document.body.append(stale, details);
-    registerReplyStop("read-aloud-corner", stale);
-    registerReplyStop("show-details", details);
-    try {
-      const el = build();
-      render(el);
-      expect(slotProps(el, "bonsai-reply-copy-corner-slot").onMoveDown!()).toBe(true);
-      expect(document.activeElement).toBe(details);
-    } finally {
-      registerReplyStop("read-aloud-corner", null);
-      registerReplyStop("show-details", null);
-      stale.remove();
-      details.remove();
-    }
   });
 });
 

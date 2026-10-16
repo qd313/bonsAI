@@ -12,11 +12,10 @@
  *
  * Solves: The shared reply button (`.bonsai-chat-secondary-btn`) is also the Retry and Copy corners and
  * more, so the calmer look cannot be written on the shared rule. Every selector here starts at
- * `.bonsai-chat-reply-actions`, the block only the reply row draws, and leaves the speaker alone.
+ * `.bonsai-chat-reply-actions`, the block only the reply row draws.
  *
- * Does not: Touch the D-pad ring (gamepadAndPullModels.ts), the Show details line, or the speaker's
- * own rules in section-6.ts. The ring's box-shadow is not overridden while a button holds it: the
- * resting highlight is dropped only on a button that does not hold the ring.
+ * Does not: Touch the D-pad ring (gamepadAndPullModels.ts) or the Show details line. The ring's box-shadow is
+ * not overridden while a button holds it: the resting highlight is dropped only on a button that does not hold the ring.
  */
 import { uiScalePx } from "./uiScalePx";
 import { textPx } from "./textPx";
@@ -30,8 +29,6 @@ export function buildReplyRatingChoicesSection(): string {
   return `        /*
          * Helpful, Not really and the five reasons: soft fill, soft outline, small medium-weight
          * words. The class count outranks the shared button rule whatever order the rules arrive in.
-         * (The Read aloud speaker used to be left out of this block with a :not(); it sits in the
-         * answer's corner now, never inside .bonsai-chat-reply-actions.)
          */
         .bonsai-scope .bonsai-chat-reply-actions button.bonsai-chat-secondary-btn,
         .bonsai-scope .bonsai-chat-reply-actions button.bonsai-chat-secondary-btn.DialogButton {

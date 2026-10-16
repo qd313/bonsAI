@@ -245,7 +245,7 @@ export function focusOwnBonsaiRow(el: HTMLElement | null | undefined): boolean {
  *
  * Roadmap: "Walking up from the question box skips every reply row". Measured on the Deck
  * 2026-09-21: Up from the suggestion chip went straight to the chat slot row, stepping over the
- * question row, the thinking line, every answer section, Read aloud, Show details and the notes
+ * question row, the thinking line, every answer section, Show details and the notes
  * block. The cause is a leftover, not a missing handler. The chips' own `exitUp` aimed at the
  * session context strip, which WAS the last stop above the dock -- until plan 62 3c folded that
  * strip into the Show details panel as a tab and removed it. With nothing registered under that
@@ -297,9 +297,7 @@ export function focusLiveAnswerFromBelow(slot: HTMLElement | null): boolean {
  * After answer bubble scroll is exhausted: branch → checklist → thumbs → the note card (when one is on offer)
  * → Retry/Copy → Show details.
  * The last two are the fallback for an answer with no thumbs and no corner buttons, so the ring never
- * falls through to Steam's geometry guess past the new line. Read aloud is not on the way down any
- * more: since plan 84 step 3 it sits in the answer's lower-left corner, above these, and is reached
- * by Right from the answer's last section.
+ * falls through to Steam's geometry guess past the new line.
  */
 export function focusDownFromLiveAnswerBubble(liveSlot: HTMLElement | null): boolean {
   if (focusStrategyBranchButton(liveSlot, "first")) return true;

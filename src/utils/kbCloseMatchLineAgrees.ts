@@ -8,8 +8,8 @@
  * block names a note the answer repeated. This takes the line off the answer shown on screen in
  * that one case, so the line and the block never share a reply.
  *
- * Used for: MainTabChatTranscript.tsx's answer bubble, the copy text and the read-aloud text of an
- * answer (live and saved).
+ * Used for: MainTabChatTranscript.tsx's answer bubble and the copy text of an answer (live and
+ * saved).
  * Solves: Found in the maintainer's saved chats: the shotgun answer built on the Gravity Gun note
  * and the Hollow Knight boss answer naming Broken Vessel both carried the line under a block that
  * listed the note (kbNoteUsedByAnswer.fixtures.json). The 2026-10-08 Deck report of the line with

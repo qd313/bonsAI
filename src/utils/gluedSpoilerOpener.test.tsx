@@ -5,8 +5,7 @@
  * Measured on the real renderer before the fix: the markdown reader takes an opening mark that
  * is not at the start of a line for the start of an inline code span, so once the closing mark
  * arrived the whole block was drawn as visible inline code, and while it streamed in its words
- * showed as plain text. Copy and Read aloud already hid it (the older backtick pairing); the
- * screen did not.
+ * showed as plain text. Copy already hid it (the older backtick pairing); the screen did not.
  */
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render } from "@testing-library/react";
@@ -15,7 +14,6 @@ import { buildAnswerBubbleElement } from "./buildAnswerBubbleElement";
 import { expandOneLineSpoilerFences } from "./expandOneLineSpoilerFences";
 import { resetAnswerStopRegistry } from "./answerStopRegistry";
 import { buildAnswerCopyText } from "./answerCopyText";
-import { buildAnswerReadableText } from "./answerReadableText";
 import { resetSpoilerFenceOpenCountForTests } from "../components/MainTabBonsaiAiMarkdownChunk";
 
 vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
@@ -73,7 +71,7 @@ describe("a hidden block whose opening mark is glued onto a sentence", () => {
     });
 
     it(`is still hidden in Copy and Read aloud (${name})`, () => {
-      for (const out of [buildAnswerCopyText({ body }), buildAnswerReadableText({ body })]) {
+      for (const out of [buildAnswerCopyText({ body })]) {
         expect(out).not.toContain("Soul Master");
         expect(out).not.toContain("bonsai-spoiler");
       }

@@ -17,12 +17,6 @@
  *     │  ──────── Show details ↓ ───        │
  *     └───────────────────────────────────────┘
  *
- * Read aloud is not here any more. It used to be its own full-width line
- * (plan 42), then a bare glyph at the end of the thumbs row (plan 62
- * section 3b); since plan 84 step 3 it sits in the answer's lower-left
- * corner, opposite Copy, built by buildAnswerBubbleElement. A reply whose
- * only action was the speaker therefore has no row here at all.
- *
  * Used for: MainTabChatTranscript, once per reply, and the wider chat
  * screen's D-pad wiring that connects this row to the reply above it and
  * whatever comes after it.
@@ -291,8 +285,8 @@ function renderChipRow(
  * its own React tree — see the file header's Solves note.
  *
  * In: BuildReplyActionsElementArgs — the reply's own key, its current rating,
- * whether feedback and the chip rows should show, the Read aloud and Show
- * details callbacks, and the handful of D-pad hand-off functions a caller
+ * whether feedback and the chip rows should show, the Show
+ * details callback, and the handful of D-pad hand-off functions a caller
  * can supply for the row's own Up and Down edges.
  * Out: the finished row, or null when nothing in it would show.
  * What can go wrong: a caller that forgets to supply onChip simply gets no
@@ -303,7 +297,7 @@ function renderChipRow(
  * as the button a person actually wants next.
  *
  * 1. Read the args apart and work out which optional pieces are showing:
- *    the thumbs, the Read aloud speaker, the chip rows, the Show details
+ *    the thumbs, the chip rows, the Show details
  *    divider.
  * 2. Work out whether feedback is currently allowed to be given at all
  *    (feedbackDisabled) and whether it has already been given (thumbsLocked).
@@ -341,12 +335,11 @@ export function buildReplyActionsElement(
 
   const showChipRows = Boolean(onChip) && rating === "down";
   /* Helpful / Not really render only pre-rating or once rated down (a "rated up" reply shows the
-     "Saved on this Deck" label instead) — same condition the row used before Read aloud moved in. */
+     "Saved on this Deck" label instead) — same condition the row has always used. */
   const showThumbs = showFeedback && (rating === null || rating === "down");
   /*
-   * "Saved on this Deck" takes the thumbs' place, on a line of its own. It shared the speaker's row
-   * while the speaker sat there (plan 72 free play, finding 10); with the speaker in the answer's
-   * corner (plan 84 step 3) there is no row to share. Plain words, not a D-pad stop.
+   * "Saved on this Deck" takes the thumbs' place, on a line of its own. Plain words, not a D-pad
+   * stop.
    */
   const showSavedLabel = showFeedback && rating === "up";
   const savedLabel = showSavedLabel ? (
@@ -532,8 +525,7 @@ export function buildReplyActionsElement(
    * live row is untouched: Steam's own Left/Right between Helpful and Not really is unchanged.
    *
    * The Read aloud speaker once shared this row (plan 62 section 3b) and made swallowing wrong while
-   * it was there; it sits in the answer's corner now (plan 84 step 3), so a greyed pair has nowhere
-   * live to go sideways. The five "What went wrong?" choices below reach the greyed thumbs by Up and
+   * it was there; it is gone, so a greyed pair has nowhere live to go sideways. The five "What went wrong?" choices below reach the greyed thumbs by Up and
    * need them to step to each other, so the press is left to Steam while they show.
    */
   const swallowThumbsSideways = () => thumbsDisabled && !showChipRows;

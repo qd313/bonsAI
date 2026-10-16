@@ -118,9 +118,8 @@ function settled(el: Element, prop: string): string | null {
 
 /**
  * The reply row as the Deck draws it: the real class names, the shared button carrying Decky's own class too.
- * The Read aloud speaker is in the answer's corner slot, outside the row (plan 84 step 3).
  */
-function mount(): { thumb: HTMLElement; reason: HTMLElement; speaker: HTMLElement; outsider: HTMLElement; reasonRows: HTMLElement[] } {
+function mount(): { thumb: HTMLElement; reason: HTMLElement; outsider: HTMLElement; reasonRows: HTMLElement[] } {
   document.body.innerHTML = `
     <div class="bonsai-scope">
       <div class="bonsai-chat-reply-actions">
@@ -132,13 +131,10 @@ function mount(): { thumb: HTMLElement; reason: HTMLElement; speaker: HTMLElemen
         </div>
         <div class="bonsai-chat-reply-actions-row bonsai-chat-reply-actions-row--chips" id="row2"></div>
       </div>
-      <div class="bonsai-reply-read-aloud-corner-slot">
-        <button class="bonsai-chat-secondary-btn DialogButton bonsai-reply-read-aloud-corner bonsai-chat-read-aloud-btn" id="speaker"></button>
-      </div>
       <button class="bonsai-chat-secondary-btn DialogButton" id="outsider">Retry</button>
     </div>`;
   const get = (id: string) => document.getElementById(id)!;
-  return { thumb: get("thumb"), reason: get("reason"), speaker: get("speaker"), outsider: get("outsider"), reasonRows: [get("row1"), get("row2")] };
+  return { thumb: get("thumb"), reason: get("reason"), outsider: get("outsider"), reasonRows: [get("row1"), get("row2")] };
 }
 
 afterEach(() => {
@@ -179,14 +175,6 @@ describe("the calmer rating choices (plan 79, after 2: smaller and softer)", () 
     const { reasonRows } = mount();
     expect(settled(reasonRows[0]!, "gap")).toBe("5px");
     expect(settled(reasonRows[1]!, "margin-top")).toBe("calc(5px - 8px)");
-  });
-
-  it("leaves the speaker's bare glyph alone: it is Copy's kind of icon in the answer's corner, not a choice", () => {
-    const { speaker } = mount();
-    expect(settled(speaker, "min-height")).toBe("0");
-    expect(settled(speaker, "border")).toBe("none");
-    expect(settled(speaker, "background")).toBe("none");
-    expect(settled(speaker, "width")).toBe("20px");
   });
 
   it("leaves every other reply button at the shared size", () => {

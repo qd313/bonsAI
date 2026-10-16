@@ -20,10 +20,10 @@
  * Focus graph (plan 68 § 6), on the newest answer only:
  *
  *   the answer's last paragraph  [ Copy ]
- *      | Down (from either)              ^ Up
+ *      | Down (from Copy)                ^ Up
  *   The chat summed itself up ...         <- stop, registered as the "summary-note" reply stop
  *      | Down                            ^ Up (from the branch picker, the checklist, Helpful)
- *   the branch picker / checklist when they show, else Helpful -> Read aloud -> Show details
+ *   the branch picker / checklist when they show, else Helpful -> Show details
  *
  * A opens Show details on the Session tab and moves the ring to *Sum up this chat*. `onOKButton` and
  * `onClick`, never `onActivate` too: Steam fires `onActivate` for A as well, so wiring both would

@@ -205,11 +205,6 @@ function answerStops(container: HTMLElement): HTMLElement[] {
   return Array.from(container.querySelectorAll<HTMLElement>(".bonsai-answer-stop"));
 }
 
-/** True when no Read aloud speaker sits inside the reply-actions block (it is in the answer's corner). */
-function screen_noReadAloudRow(container: HTMLElement): boolean {
-  return !container.querySelector(".bonsai-chat-reply-actions [aria-label='Read aloud']");
-}
-
 function focusOn(el: HTMLElement): void {
   act(() => el.focus());
   expect(document.activeElement).toBe(el);
@@ -249,17 +244,6 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
     expect(document.activeElement).toBe(fold);
   });
 
-  /* Plan 84 step 3: Read aloud sits in the answer's lower-left corner, ABOVE the choices, so Up from
-     it goes back into the answer, like Copy's Up. It used to be in the row under the choices, and Up
-     from there went to the last choice button. */
-  it("Read aloud, in the answer's corner, goes Up into the answer's last section, not onto a choice", () => {
-    const { container } = renderTurn();
-    focusOn(byLabel(container, "Read aloud"));
-    expect(press("onMoveUp")).toBe(true);
-    const stops = answerStops(container);
-    expect(document.activeElement).toBe(stops[stops.length - 1]);
-  });
-
   it("Up from the last choice is Steam's own step to the first; the first goes Up into the answer's last section", () => {
     const { container } = renderTurn();
     const buttons = Array.from(container.querySelectorAll<HTMLElement>(".bonsai-strategy-branch-btn"));
@@ -271,14 +255,6 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
     expect(press("onMoveUp")).toBe(true);
     const stops = answerStops(container);
     expect(stops.length).toBeGreaterThan(0);
-    expect(document.activeElement).toBe(stops[stops.length - 1]);
-  });
-
-  it("with no choices, Read aloud still goes Up into the answer's last section", () => {
-    const { container } = renderTurn({ strategyGuideBranches: null });
-    focusOn(byLabel(container, "Read aloud"));
-    expect(press("onMoveUp")).toBe(true);
-    const stops = answerStops(container);
     expect(document.activeElement).toBe(stops[stops.length - 1]);
   });
 
@@ -305,7 +281,7 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
     expect(document.activeElement).toBe(byText(container, "Wrong game or topic"));
   });
 
-  /* Plan 79: the greyed thumbs are stops now -- Up lands on the thumb drawn above the chip, not the speaker. */
+  /* Plan 79: the greyed thumbs are stops now -- Up lands on the thumb drawn above the chip, not a stale button. */
   it("the top chip row goes Up onto the thumb above each chip, greyed or not", () => {
     const { container } = renderTurn();
     focusOn(byText(container, "Wrong game or topic"));
@@ -317,14 +293,13 @@ describe("Up under a finished answer visits the rows Down visits (plan 72 A-4)",
     expect(document.activeElement).toBe(byLabel(container, "Mark reply helpful"));
   });
 
-  /* The speaker is not in the row under the answer any more, so with no thumbs row to land on, Up
-     from Show details goes on past it to the choices above (here, the last choice button). */
+  /* With no thumbs row to land on, Up from Show details goes on to the choices above (here, the last
+     choice button). */
   it("with no reason chips and no thumbs row, Show details goes Up onto the last choice", () => {
     const { container } = renderTurn({ liveReplyFeedbackRating: "up" });
     focusOn(byLabel(container, "Show details"));
     expect(press("onMoveUp")).toBe(true);
     expect(document.activeElement?.textContent).toBe(`B. ${BRANCHES.options[1]!.label}`);
-    expect(screen_noReadAloudRow(container)).toBe(true);
   });
 
   /*

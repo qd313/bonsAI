@@ -2,7 +2,7 @@
  * Title: Moving the controller's highlight between a reply's small buttons
  *
  * Purpose: An Ask or Strategy reply on the Main tab has several small controls around it — Retry,
- * Copy, the Helpful / Not really buttons, Read aloud, and Show details — and a person using a
+ * Copy, the Helpful / Not really buttons, and Show details — and a person using a
  * controller needs to move the highlight between them with the D-pad. This file keeps a live map
  * from each control's name to the actual on-screen element currently mounted for it, and can move
  * the controller's highlight to any of them by name.
@@ -21,8 +21,8 @@
  *   - The order in `REPLY_STOP_ORDER` is the order a person walks the controls with the D-pad,
  *     not a description of where they sit on screen. After two earlier redesigns the controls are
  *     no longer in one row: Retry sits on the question above the answer, Copy sits in the corner
- *     of the answer itself, Helpful and Not really are two buttons below that, and Read aloud and
- *     Show details are two lines under those.
+ *     of the answer itself, Helpful and Not really are two buttons below that, and
+ *     Show details is the line under those.
  *   - `ensureFocusable()` only marks an element as reachable by the D-pad (`tabindex="-1"`) when
  *     it actually needs it — a plain button already works without this. Measured on device
  *     2026-08-04: an earlier version stamped that attribute onto every target including the Retry
@@ -54,8 +54,6 @@ export type ReplyStopId =
   /** The note card under the rating row: its Keep button (the card's first stop) and its "For: <game>" line (its last). */
   | "note-keep"
   | "note-for"
-  /** The Read aloud speaker in the answer bubble's lower-left corner (plan 84 step 3). */
-  | "read-aloud-corner"
   /** The first "What went wrong?" choice, the landing for a Down that leaves the answer's corner. */
   | "reason-chips";
 
@@ -65,9 +63,6 @@ export type ReplyStopId =
  * These no longer sit in one grid. After D76 and D77 the button row is gone: `retry` is an icon on
  * the question bubble above the answer, `copy` an icon in the answer bubble's bottom-right corner,
  * `helpful` and `not-really` the two buttons under it, and `show-details` the line below them.
- * `read-aloud-corner` is the Read aloud speaker in the answer bubble's lower-left corner, beside
- * `copy` (plan 84 step 3); it used to be a line above `show-details` (plan 42 step 3), then a glyph at
- * the end of the thumbs row (plan 62), under the name `read-aloud`, which no longer exists.
  * `reason-chips` is the first "What went wrong?" choice, which only exists once a reply is rated down.
  * The order below is the order a person walks them, which is what the "which stop has focus?"
  * lookups want; it is not a claim about layout.
@@ -90,7 +85,6 @@ export const REPLY_STOP_ORDER: readonly ReplyStopId[] = [
   "retry",
   "notes-line",
   "show-reasoning",
-  "read-aloud-corner",
   "copy",
   "summary-note",
   "helpful",
@@ -111,7 +105,7 @@ const stopNavs = new Map<ReplyStopId, SteamNavHolder>();
  * The holder for a stop's own Steam nav node, handed to a Focusable wrapped around just that stop
  * as its `navRef` (plan 74 lane 3: Helpful). Steam hands the ring into a row on the button that row
  * last held, and a plain focus() after that does not reliably move it on: on the Deck a straight
- * Down from the answer landed on Read aloud, not Helpful (plan72-Z-FREEPLAY.json). A node around the
+ * Down from the answer landed on a stale button, not Helpful (plan72-Z-FREEPLAY.json). A node around the
  * stop alone has nothing else to land on. One stable holder per stop, since only one of each is
  * mounted at a time.
  */

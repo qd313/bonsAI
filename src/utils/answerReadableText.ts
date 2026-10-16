@@ -1,44 +1,11 @@
 /**
- * Title: Answer readable text builder
- * Purpose: Turn a stored answer (the plugin's markdown, tags and fences) into plain spoken text.
- * Used for: useReadAloud, building the text handed to start_voice_read_aloud. The reply-ready
- *   notification's text (toastAnswerPreview) borrows only this file's table finder; the two share
- *   the way of finding hidden blocks in markdownFenceReader.
- * Solves: Reading internal control tags, a hidden spoiler's actual text, table cells, code, or
- *   markdown punctuation out loud instead of the words a person would read on screen.
- * Does not: Split the result into sentences — the background reader (Python) does that. Does not
- *   touch the Strategy branch-menu control; that is stripped along with the other internal tags.
+ * Title: Markdown table finder
+ * Purpose: Find the pipe tables in an answer's markdown and swap each one for a replacement.
+ * Used for: the reply-ready notification's text (toastAnswerPreview), which drops the table.
+ * Solves: A table's bars and dashes showing up as clutter in a one-line preview.
+ * Does not: Touch anything but tables. The file's name is left over from the removed read-aloud
+ *   feature; moving the finder next to toastAnswerPreview is a later step.
  */
-import { expandOneLineSpoilerFences } from "./expandOneLineSpoilerFences";
-import { replaceFencedCodeBlocks, replaceSpoilerFences } from "./markdownFenceReader";
-import { stripAssistantDisplayTags } from "./stripAssistantDisplayTags";
-import { unwrapAskedEntitySpoilerFences, type UnwrapSpoilerOpts } from "./unwrapAskedEntitySpoilerFences";
-
-const CODE_FENCE_RE = /```[^\n`]*\n[\s\S]*?```/g;
-
-/** Said out loud in place of a spoiler block the screen keeps masked (D74 call 3). */
-export const SPOILER_HIDDEN_SPOKEN_PHRASE = "A spoiler is hidden here.";
-/** Said out loud in place of a markdown table. */
-export const TABLE_SPOKEN_PHRASE = "There is a table on screen.";
-/** Said out loud in place of a fenced code block. */
-export const CODE_SPOKEN_PHRASE = "There is code on screen.";
-
-export type BuildAnswerReadableTextArgs = {
-  /** Raw turn body, same string passed to buildAnswerBubbleElement / buildAnswerCopyText. */
-  body: string;
-  /** Whether Settings has spoiler masking on. When off, every fence reads as plain text, the
-   *  same rule buildAnswerCopyText follows. */
-  spoilerMaskingEnabled?: boolean;
-  askQuestion?: string;
-  appId?: string | null;
-  /** Active game's display name — for a title reachable only by name (plan 54 gap 1). */
-  appName?: string | null;
-  /** The thing the backend worked out the question named (plan 54 gap 2). */
-  askedEntity?: string | null;
-  spoilerConsentEffective?: boolean;
-  /** This turn's protected names (D112 #7): a cover naming one is never opened. */
-  protectedNames?: readonly string[] | null;
-};
 
 /** A row with a bar in it. A fence marker line never counts, even with a bar in its label, so
  *  taking a table out can never take out a fence's opening line and bare what it hides. */
@@ -54,8 +21,8 @@ function isTableSeparatorLine(line: string): boolean {
 
 /**
  * Replace each GFM pipe-table block (a row with a bar, then a dashes row, then more rows with a
- * bar) with `replacement`. The header row needs no leading bar. Read aloud says one phrase; the
- * reply-ready notification passes "" to drop the table.
+ * bar) with `replacement`. The header row needs no leading bar. The reply-ready notification
+ * passes "" to drop the table.
  */
 export function replaceMarkdownTables(text: string, replacement: string): string {
   const lines = text.split("\n");
@@ -76,76 +43,4 @@ export function replaceMarkdownTables(text: string, replacement: string): string
     i++;
   }
   return out.join("\n");
-}
-
-/** Strip a leading heading/bullet/numbered-list marker from one line, keeping its words. */
-function flattenLineMarkers(line: string): string {
-  let l = line.replace(/^\s{0,3}#{1,6}\s+/, "");
-  l = l.replace(/^\s*[-*+]\s+/, "");
-  l = l.replace(/^\s*\d+[.)]\s+/, "");
-  return l;
-}
-
-/** Flatten inline markdown (links, bold, italic, inline code) to plain words. */
-function flattenInlineMarkdown(text: string): string {
-  let t = text;
-  t = t.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1");
-  t = t.replace(/\*\*([^*]+)\*\*/g, "$1");
-  t = t.replace(/__([^_]+)__/g, "$1");
-  t = t.replace(/\*([^*]+)\*/g, "$1");
-  t = t.replace(/(?<![A-Za-z0-9])_([^_]+)_(?![A-Za-z0-9])/g, "$1");
-  t = t.replace(/`([^`]+)`/g, "$1");
-  return t;
-}
-
-/**
- * The plain text a Read-aloud press hands to the background speaker: internal tags out, the
- * Strategy branch menu out, spoiler fences resolved exactly as the screen resolves them (unwrapped
- * inline where the render would show them, said as one short phrase where the screen keeps them
- * masked), tables and code each announced with one phrase, and the remaining markdown flattened to
- * the words a person reading the bubble would say. Empty or marker-only text returns "".
- */
-export function buildAnswerReadableText(args: BuildAnswerReadableTextArgs): string {
-  const {
-    body,
-    spoilerMaskingEnabled = true,
-    askQuestion = "",
-    appId = null,
-    appName = null,
-    askedEntity = null,
-    spoilerConsentEffective = false,
-    protectedNames = null,
-  } = args;
-
-  let text = expandOneLineSpoilerFences(stripAssistantDisplayTags(body || ""));
-  if (!text.trim()) return "";
-
-  const opts: UnwrapSpoilerOpts = {
-    question: askQuestion,
-    appId,
-    appName,
-    askedEntity,
-    spoilerConsentEffective,
-    protectedNames,
-  };
-  text = unwrapAskedEntitySpoilerFences(text, opts);
-
-  // Hidden blocks are found the way the panel finds them (markdownFenceReader): ~~~ and longer
-  // fences, a blank line inside, a closer glued onto a sentence. Masking off reads the words.
-  text = replaceSpoilerFences(text, spoilerMaskingEnabled ? SPOILER_HIDDEN_SPOKEN_PHRASE : null);
-
-  // Code blocks the same way, so a ~~~ block or a longer fence says the phrase too; the older
-  // backtick pairing stays as a safety net for anything the reader leaves behind.
-  text = replaceFencedCodeBlocks(text, CODE_SPOKEN_PHRASE);
-  text = text.replace(CODE_FENCE_RE, CODE_SPOKEN_PHRASE);
-  text = replaceMarkdownTables(text, TABLE_SPOKEN_PHRASE);
-
-  text = text
-    .split("\n")
-    .map(flattenLineMarkers)
-    .join("\n");
-  text = flattenInlineMarkdown(text);
-
-  text = text.replace(/\s+/g, " ").trim();
-  return text;
 }

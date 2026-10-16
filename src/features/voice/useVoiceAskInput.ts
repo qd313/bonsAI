@@ -46,36 +46,32 @@ export type UseVoiceAskInputArgs = {
  * permission is on, whether a question is currently being asked, and a
  * function to translate a message key into on-screen text.
  * Out: whether the mic is recording, the mic button's tap handler, the
- * "permission denied" flag and how to dismiss it, and whether — and
- * with what text — the question box's current words came from the mic.
+ * "permission denied" flag and how to dismiss it, and the words the mic
+ * last wrote.
  * Can go wrong: nothing catastrophic — every path that can fail shows a
  * toast and turns recording back off rather than leaving the button in
  * an unclear state.
  *
- * 1. Four pieces of state: is the mic recording, was permission just
- *    denied, did the question box's text come from the mic (and if so,
- *    what exact words did it write — used later to tell a hands-off
- *    dictation apart from one a person then edited by hand).
+ * 1. Pieces of state: is the mic recording, was permission just
+ *    denied, and what exact words did the mic last write (used to tell
+ *    that the box was emptied by hand while listening).
  * 2. `setUnifiedInputFromVoice()` wraps the question box's own setter so
- *    every word written by the mic also marks where it came from — it
+ *    every word written by the mic is also remembered — it
  *    accepts both a plain new value and an updater function, matching
  *    how the box's own setter can be called.
- * 3. `clearAskCameFromMic()` resets that "came from the mic" flag; the
- *    caller decides when that should happen (a manual edit does not
- *    clear it on its own — see the flag's own note above).
- * 4. `onVoiceError()` turns off recording and shows an error toast — the
+ * 3. `onVoiceError()` turns off recording and shows an error toast — the
  *    one place every failure path below routes through.
- * 5. Wires up the actual speech-to-text hook, handing it the wrapped
- *    setter from step 2 and the error handler from step 4.
- * 6. If microphone permission is taken away while recording is in
+ * 4. Wires up the actual speech-to-text hook, handing it the wrapped
+ *    setter from step 2 and the error handler from step 3.
+ * 5. If microphone permission is taken away while recording is in
  *    progress, stops the recording rather than leaving it running with
  *    no permission to be running at all.
- * 7. Clears the "permission denied" message automatically once
+ * 6. Clears the "permission denied" message automatically once
  *    permission is granted, so it does not linger after the person
  *    fixes it.
- * 8. `dismissMicPermissionDeny()` lets the message be dismissed by hand
+ * 7. `dismissMicPermissionDeny()` lets the message be dismissed by hand
  *    as well.
- * 9. `onMicInput()` is the button's own tap handler: shows a short "Mic is
+ * 8. `onMicInput()` is the button's own tap handler: shows a short "Mic is
  *    waiting" toast while a question is being asked; ignores a press while the
  *    start call from an earlier press is still pending (`voiceStarting`) or
  *    while a stop is still finishing (`voiceFinishing`) -- the Ask bar draws
@@ -83,11 +79,11 @@ export type UseVoiceAskInputArgs = {
  *    shows the permission message and stops there if access is not
  *    granted; otherwise starts recording and shows an error toast if
  *    starting fails.
- * 10. A Stop takes a moment: the back end reads the whole recording once more and
+ * 9. A Stop takes a moment: the back end reads the whole recording once more and
  *    the screen waits for that final text (`voiceFinishing`), which replaces the live
  *    words only if the box is still as the microphone left it. `finishDictation()` is
  *    the same wait for Ask: it stops, waits, and says what the box holds.
- * 11. Everything above is bundled together and returned.
+ * 10. Everything above is bundled together and returned.
  */
 export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
   const [voiceRecording, setVoiceRecording] = useState(false);
@@ -101,17 +97,8 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
   const boxRef = useRef(a.unifiedInput);
   boxRef.current = a.unifiedInput;
   const [micPermissionDenied, setMicPermissionDenied] = useState(false);
-  /**
-   * "The field's text came from the mic" (D99 call 3, the middle Voice replies position). Set the
-   * moment a transcription is written into the field, and cleared by the caller (index.tsx, which
-   * owns the field's other writers) on a settings-driven reset, a session clear, or reusing an old
-   * question. Typing over the text or picking a suggestion chip does not clear it — those writers
-   * never go through this hook — so Ask time compares the text being asked against `lastVoiceText`
-   * below rather than trusting the flag alone.
-   */
-  const [askCameFromMic, setAskCameFromMic] = useState(false);
-  /** The exact text the mic last wrote into the field, kept so Ask time can tell a hand edit apart
-   * from an unmodified dictation even though the flag above stays set either way. */
+  /** The exact text the mic last wrote into the field, kept so the "box was emptied" rule below can
+   * tell a box the person emptied from one the mic simply has not filled yet. */
   const [lastVoiceText, setLastVoiceText] = useState("");
   /** True once a render has shown the box holding some text since the mic last started or was cut off.
    * The "box was emptied" rule below trusts an empty box only after this, because the mic writes
@@ -120,7 +107,6 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
 
   const setUnifiedInputFromVoice = useCallback<Dispatch<SetStateAction<string>>>(
     (value) => {
-      setAskCameFromMic(true);
       if (typeof value === "function") {
         a.setUnifiedInput((prev) => {
           const next = value(prev);
@@ -134,10 +120,6 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
     },
     [a.setUnifiedInput],
   );
-
-  const clearAskCameFromMic = useCallback(() => {
-    setAskCameFromMic(false);
-  }, []);
 
   const onVoiceError = useCallback(
     (e: unknown) => {
@@ -333,8 +315,6 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
     invalidateVoice,
     micPermissionDenied,
     dismissMicPermissionDeny,
-    askCameFromMic,
-    clearAskCameFromMic,
     lastVoiceText,
   };
 }

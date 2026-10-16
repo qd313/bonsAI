@@ -54,7 +54,7 @@
  * post-remount session restore moved to
  * features/plugin-shell/useSessionRestoreAfterRemount.ts; the chat-slot activity refs moved to
  * features/plugin-shell/useChatSlotActivityState.ts; the accent/UI-scale scope style moved to
- * features/plugin-shell/useBonsaiScopeStyle.ts; voice input plus its read-aloud glue moved to
+ * features/plugin-shell/useBonsaiScopeStyle.ts; voice input plus its Ask glue moved to
  * features/voice/useVoiceAskWithReadAloud.ts; the two Developer-tab actions moved to
  * features/plugin-shell/useDeveloperToolActions.ts; the slow-warning timer and the unified-input
  * persistence effects moved to features/plugin-shell/useUnifiedInputBehaviors.ts; the two
@@ -237,13 +237,6 @@ const Content: React.FC = () => {
 
   const pendingSessionRestoreFinalizeRef = useRef(false);
   const pluginDataClearSeenRef = useRef(getPluginDataClearedGeneration());
-  /*
-   * "The field's text came from the mic" (D99 call 3) is cleared here too, ahead of where
-   * useVoiceAskWithReadAloud is called below — a ref so the clear points that run earlier in this
-   * function do not have to wait on hook declaration order. Populated once useVoiceAskWithReadAloud
-   * mounts (it wraps useVoiceAskInput).
-   */
-  const clearAskCameFromMicRef = useRef<() => void>(() => {});
 
   // --- Unified input/search state ---
   const [unifiedInput, setUnifiedInput] = useState(() => {
@@ -740,7 +733,6 @@ const Content: React.FC = () => {
     unifiedInput,
     unifiedInputPersistenceMode,
     setUnifiedInput,
-    clearAskCameFromMicRef,
   });
 
 
@@ -750,7 +742,6 @@ const Content: React.FC = () => {
     reseedSuggestedPrompts,
     uiT,
     setUnifiedInput,
-    clearAskCameFromMicRef,
     setNavigationMessage,
     setSelectedAttachment,
     setLastConnectionStatus,
@@ -772,7 +763,6 @@ const Content: React.FC = () => {
     onMicInput,
     micPermissionDenied,
     dismissMicPermissionDeny,
-    clearAskCameFromMic,
     onAskOllamaWithReadAloud,
   } = useVoiceAskWithReadAloud({
     setUnifiedInput,
@@ -780,10 +770,6 @@ const Content: React.FC = () => {
     microphoneAccess: gatedCapabilities.microphone_access,
     isAsking,
     uiT,
-    clearAskCameFromMicRef,
-    voiceReplyMode,
-    strategySpoilerMaskingEnabled,
-    settingsLoaded,
     onAskOllama,
   });
 
@@ -935,7 +921,6 @@ const Content: React.FC = () => {
     transparencySnapshot: lastTransparency,
     onRunOriginalAsk: (text) => {
       setUnifiedInput(text);
-      clearAskCameFromMic();
       if (unifiedInputPersistenceMode === "persist_all") {
         persistSearchQuery(text);
       }

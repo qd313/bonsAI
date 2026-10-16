@@ -2,7 +2,7 @@
  * Title: The small button under an AI reply
  *
  * Purpose: One of the small controls that sit under an AI answer — Helpful,
- * Not really, Read aloud, Show details. This file draws the button itself:
+ * Not really, Show details. This file draws the button itself:
  * Steam's own button, made into a real D-pad stop, so a person can reach it
  * with the controller and not just a mouse or touch. When a caller passes
  * an id, the button also adds itself to a shared list (replyStopRegistry) so

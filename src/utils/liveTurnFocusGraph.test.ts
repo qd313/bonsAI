@@ -340,34 +340,6 @@ describe("liveTurnFocusGraph", () => {
     expect(document.activeElement?.id).toBe("strip");
   });
 
-  /*
-   * Measured on the Deck 2026-09-12: a restored answer with no thumbs row sent Down straight to
-   * Show details, skipping the new Read aloud line entirely. `focusDownFromLiveAnswerBubble` then
-   * fell through branch -> checklist -> thumbs -> Retry/Copy -> Read aloud -> Show details. Plan 84
-   * step 3 moved the speaker into the answer's lower-left corner, above, so it is no longer a stop
-   * on the way down: the chain ends thumbs -> Retry/Copy -> Show details.
-   */
-  it("focusDownFromLiveAnswerBubble no longer stops at a Read aloud line, even with the corner speaker mounted", () => {
-    resetReplyStops();
-    mountLiveTurn(`
-      <div class="bonsai-chat-turn-slot">
-        <div class="bonsai-chat-turn-row-header bonsai-chat-turn-row-header--live"></div>
-        <div class="bonsai-chat-ai-bubble Panel Focusable" tabindex="-1"></div>
-      </div>
-    `);
-    const readAloud = document.createElement("button");
-    readAloud.id = "stop-read-aloud";
-    document.body.appendChild(readAloud);
-    const showDetails = document.createElement("button");
-    showDetails.id = "stop-show-details";
-    document.body.appendChild(showDetails);
-    registerReplyStop("read-aloud-corner", readAloud);
-    registerReplyStop("show-details", showDetails);
-    const slot = queryLiveTurnSlot(document.body);
-    expect(focusDownFromLiveAnswerBubble(slot)).toBe(true);
-    expect(document.activeElement?.id).toBe("stop-show-details");
-  });
-
   it("focusDownFromLiveAnswerBubble goes to Show details when nothing else is mounted", () => {
     resetReplyStops();
     mountLiveTurn(`

@@ -1,0 +1,14 @@
+{
+  "note": "Shared by scripts/move_screen_file.mjs and scripts/check_move_commit.py. 'generated' files are written by a generator on every commit, so a move never edits them and the move check never judges them. 'history' folders are records of what was true at the time, so the mover leaves their old paths as written. A '*' matches within one path segment.",
+  "generated": [
+    "packages/bonsai-mcp/knowledge/architecture/*.json",
+    "docs/code-map.md",
+    "src/types/rpcMethods.ts"
+  ],
+  "history": [
+    "docs/archive/",
+    "docs/test-evidence/",
+    "docs/planning/",
+    "docs/audit/"
+  ]
+}

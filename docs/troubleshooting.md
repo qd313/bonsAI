@@ -358,7 +358,7 @@ Each model was checked on 2026-09-29 against its Ollama page (`ollama.com/librar
 | `~/homebrew/logs/bonsAI/` | Plugin log files |
 | Browser `bonsai:*` keys | Ollama host draft, disclaimer dismissals, unified-input persistence (CEF localStorage) |
 | `~/Desktop/bonsAI_logs/` | Optional Desktop notes, app activity, verbose Ask traces (not removed by Clear all data) |
-| `~/.bonsai/cache/` | Pull-model catalog overlay |
+| `~/.bonsai/cache/` | Left over from older versions (a downloaded model list); safe to delete |
 | `~/.bonsai/proton_experiment_journal.json` | Leftover Proton experiment journal (obsolete UI; safe to delete; Clear all removes it) |
 
 **Settings → Advanced** (bottom of the tab): **Clear cache…** only clears the **current session** in RAM (Main transcript, attachments, etc.) and does **not** delete `settings.json` or on-disk logs.
@@ -368,7 +368,7 @@ Each model was checked on 2026-09-29 against its Ollama page (`ollama.com/librar
 - Wipes the full `~/homebrew/settings/bonsAI/` directory (settings, permissions, voice models/bin, feedback log, intent packs, checklist session) and rewrites defaults
 - Clears `~/homebrew/data/bonsAI/` and log files under `~/homebrew/logs/bonsAI/`
 - Clears all `bonsai:*` browser storage keys
-- Removes `~/.bonsai/cache/` (catalog overlay)
+- Removes `~/.bonsai/cache/` (left over from older versions)
 - Removes `~/.bonsai/proton_experiment_journal.json` (legacy Proton experiment timeline)
 - When **Ollama on this Deck** was enabled: also removes local model blobs (`~/.ollama`), user-prefix Ollama under `~/.local`
 - Shows beta disclaimer and permission prompts again
@@ -535,7 +535,7 @@ Then `sudo systemctl restart avahi-daemon` and ensure `OLLAMA_HOST=0.0.0.0` and 
 
 **What bonsAI does (v0.3.0+):** With **Test** targeting loopback (**Ollama on this Deck on**, or **`127.0.0.1` / localhost** typed as the host), an initial failed probe triggers a best‑effort **wake** (**`systemctl --user try-restart` / start `ollama`**, then **`ollama serve`** if needed — same primitives as Starter setup under `py_modules/backend/services/local_ollama_setup_service.py`) and **retests once**. Prefer waiting a minute after boot before assuming Ollama is broken.
 
-**Keeping Ollama and models current:** With **Ollama on this Deck** enabled, opening the **Ollama** tab quietly probes the local host so **Update AI & models** appears when Ollama is reachable (no need to tap **Test connection** first). **Update AI & models** (or **Install Ollama** when not reachable yet) re-runs the official installer (binary refresh), then **`ollama pull`** each tag already installed locally — downloads only when upstream weights changed. That flow also refreshes the **Pull Models living catalog** (bonsAI-recommended overlay from GitHub; cached under `~/.bonsai/cache`). In **Browse models…**, tap **↻** to refresh installed tags, catalog recommendations, and live sizes.
+**Keeping Ollama and models current:** With **Ollama on this Deck** enabled, opening the **Ollama** tab quietly probes the local host so **Update AI & models** appears when Ollama is reachable (no need to tap **Test connection** first). **Update AI & models** (or **Install Ollama** when not reachable yet) re-runs the official installer (binary refresh), then **`ollama pull`** each tag already installed locally — downloads only when upstream weights changed. In **Browse models…**, tap **↻** to refresh installed tags and live sizes.
 
 **Text/vision try order:** **AI models… →** the **Text / Pictures** switch asks the computer that answers for its installed tags when the box opens (this Deck's own list, or one connection test to the PC). If there is no PC address, the PC cannot be reached, or nothing that can answer is installed, the box says so where the places would be. Up and down save at once; there is no Done step for the order.
 
@@ -543,7 +543,7 @@ Then `sudo systemctl restart avahi-daemon` and ensure `OLLAMA_HOST=0.0.0.0` and 
 
 **Fix:** Tap **Install Ollama** on the Ollama tab (reinitializes `~/.ollama`), or run `ollama serve` once in Konsole before pulling again.
 
-**Network (user-initiated only):** Catalog refresh may contact `raw.githubusercontent.com` (overlay JSON) and `registry.ollama.ai` (manifest sizes), same trust class as existing size lookup — no background sync.
+**Network (user-initiated only):** The size refresh may contact `registry.ollama.ai` (manifest sizes) — no background sync. The plugin does not download a model list from GitHub.
 
 ### Proton logs on troubleshooting Asks
 

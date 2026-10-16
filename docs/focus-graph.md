@@ -818,8 +818,8 @@ button and the panel it opened over the list: that route (Down or B inside the p
 ```
 title row: "AI models"  ................  [ Advanced › ]      (its own Focusable, so it can be a transfer target)
    | Down  ^ Up                                ^ Up from the switch, or from the first row with no switch
-Installed 3 · 9 GB   Queue 0 · 0 GB   Live catalog · Live sizes [ ↻ ]   (the header line; ↻ in its own Focusable)
-   | Down  ^ Up        (Advanced <-> ↻ <-> Clear; ↻ skipped both ways while greyed, the catalog loading)
+Installed 3 · 9 GB   Queue 0 · 0 GB   Live sizes [ ↻ ]   (the header line; ↻ in its own Focusable)
+   | Down  ^ Up        (Advanced <-> ↻ <-> Clear; ↻ skipped both ways while greyed, the list loading)
 [ 7 models match        Clear ] <-> [ Text ][ Pictures ][ Reset order ]   (the try-order switch, level with Clear)
 LICENCE   (•) Open source only     -> ☆ row 1 (32 px below)   Right from a column stop -> the nearest stop on the right
           ( ) Also try open-weight <-> ☆ row 1                Left from a row's star   -> the nearest filter
@@ -861,7 +861,7 @@ SHOW      [ ] Installed only ...      |
   Refresh is greyed, onto the column and its Clear. Down from Refresh is a transfer onto the column, then Clear. Up from
   Clear is a transfer onto Refresh, or onto Advanced while Refresh is greyed; Up from Refresh is the screen's
   `onMoveUpFromTop`, a transfer onto the Advanced link's own `Focusable`. A greyed Refresh is skipped by the box's own
-  state (the catalog loading or refreshing), never by asking the button, because on the Deck a greyed button still takes
+  state (the list loading or refreshing), never by asking the button, because on the Deck a greyed button still takes
   the ring. Right from Refresh goes to Advanced and Left from Advanced to Refresh, by the beside rule above (`isBeside`, the
   same one and a half rows: they sit about 31 px apart on the Deck; never onto a greyed Refresh); Left on Refresh is Steam's own. Up from the try-order switch, or from the first row when there is
   no switch, goes straight to Advanced as before. Without the screen (no handler) the press is Steam's own.

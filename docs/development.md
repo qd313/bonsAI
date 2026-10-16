@@ -116,9 +116,9 @@ curl -s http://127.0.0.1:11434/api/tags
 ollama run qwen2.5:1.5b "Hello from bonsAI"
 ```
 
-**In-app model management:** With **Ollama on this Deck** enabled, open **Ollama → Browse models…** (or the AI models hub) to open the Pull Models picker — bundled catalog merged with a **living overlay** from `data/pull-model-catalog-overlay.json` (fetched on **Update AI & models** completion and when you tap **↻** in the picker). Live registry sizes when online (offline fallback), multi-select pull, and per-row delete. Progress appears in the Local Ollama setup log on the Ollama tab.
+**In-app model management:** With **Ollama on this Deck** enabled, open **Ollama → Browse models…** (or the AI models hub) to open the Pull Models picker — the bundled catalog. Live registry sizes when online (offline fallback), multi-select pull, and per-row delete. Progress appears in the Local Ollama setup log on the Ollama tab.
 
-**Maintainers — add a recommended model without a plugin release:** Edit [`data/pull-model-catalog-overlay.json`](../data/pull-model-catalog-overlay.json) (`entries`, `removed_tags`, `overrides`). Ship to `main`; Decks pick it up on the next forced catalog refresh. Ask routing chains in `backend/ollama_routing.py` still require a plugin release until explicitly updated.
+**Maintainers — add a recommended model:** it needs a plugin release (the bundled catalog and the Ask routing chains in `backend/ollama_routing.py`). The plugin no longer downloads a model list from GitHub.
 
 ## Build and deploy (same Deck)
 
@@ -263,7 +263,6 @@ Build output: [`dist/index.js`](../dist/index.js) (referenced by [`plugin.json`]
 | `screenshot_media.py` | Vision attachment capture and encoding |
 | `local_ollama_setup_service.py` | In-plugin Ollama install/pull helpers |
 | `ollama_catalog_service.py` | Pull Models tag validation + registry.ollama.ai metadata fetch |
-| `pull_model_catalog_service.py` | Living Pull Models overlay fetch + `~/.bonsai/cache` |
 | `tdp_service.py` | TDP/sysfs read/write |
 | `desktop_note_service.py` | Desktop note and verbose Ask trace append |
 | `capabilities.py` | Permission capability checks |

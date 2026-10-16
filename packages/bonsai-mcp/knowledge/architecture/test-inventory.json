@@ -630,6 +630,7 @@
     "tests/test_soft_continue_repeat_trim.py",
     "tests/test_soft_continue_spoiler_join.py",
     "tests/test_source_attribution.py",
+    "tests/test_spawn_line.py",
     "tests/test_spoiler_label_wording.py",
     "tests/test_spoiler_risk_service.py",
     "tests/test_spoiler_title_profiles.py",

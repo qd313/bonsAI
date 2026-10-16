@@ -487,3 +487,45 @@ From its [postmortem](../../../bonsAI-workshop/audit/refactor-round-two/postmort
   - **Removed:** all 62 copies (the 13, 48 from plans 92 and 93, and the readiness chat's), each link stripped
     first; the shared packages folder counted the same before and after. Their branches are kept for step 8's archive.
   - The library notes were already in its source data, so step 3's rebuild carries nothing extra from these copies.
+- **2026-10-16, step 0 item 4, the starting point:** saved on `dd481869` in
+  [audit/clean-up-round-three](../audit/clean-up-round-three/README.md): 4,836 screen tests and 2,885 back-end tests,
+  all passing; coverage 90.85 % of screen lines and 80.91 % of back-end statements; the built plugin 3,378,277 bytes;
+  68 back-end methods. The screen tests' coverage tool was added for it (`dd481869`).
+- **2026-10-16, step 0 items 5 to 8, four helpers (Sonnet 5.5 high), each in its own copy:**
+  - **Item 8, the usage guard** (landed first, `0113c5ea`): it now counts list-price dollars (tokens times the price of
+    that model and kind of token), reads helpers' own transcripts (818 of 970 transcripts on this PC sit one folder
+    down, and the old pattern missed every one), and reads the whole window in about 0.1 s. `--calibrate <percent>`
+    gives the budget to set. Not calibrated yet: that needs the usage screen's figure late in a five-hour window.
+  - **Item 6, the move tools:** `scripts/move_screen_file.mjs` (ts-morph; fixes imports, `vi.mock` paths, dynamic
+    imports, document mentions and links; `--with-tests`, `--map`), `scripts/move_backend_file.py` (every import form,
+    dotted strings in `patch(...)`, mixed import lines split, new packages get a headed `__init__.py`) and
+    `scripts/check_move_commit.py` (a move commit passes only if nothing but paths changed, untouched stale importers
+    included). Tried on scratch clones of the real code: the full type check and test sets passed after moving a
+    68-importer screen file and a 25-importer back-end service.
+  - **Item 5, the tool-made maps:** no longer saved. The seven architecture maps and the code map are built when
+    needed: the tool server builds them when it starts, the ratchet builds what it reads, `python scripts/code_map.py`
+    writes the code map on request. The commit hook only refreshes `src/types/rpcMethods.ts`, which stays saved (the
+    type check needs it in a fresh clone). Both hook files are now marked runnable.
+  - **Item 7:** five helper roles for steps 2 to 5 (`docs/agents/clean-up-helpers.md` and five wrappers), and the
+    plan's caps in AGENTS.md (30 reading, 15 editing).
+- **2026-10-16, step 1, the workshop:** the private repo `qd313/bonsAI-workshop` was made (call 15) and filled next
+  to this folder: 2,659 files, byte for byte (every blob hash checked), plus the two Hollow Knight swaps and the two
+  loose files. The repo went from 4,344 files and about 358 MB to 1,685 files. 292 files had their references
+  pointed at the workshop: links open `../bonsAI-workshop/...`, written paths read `workshop:<path>`; in code only
+  comments and docstrings changed. No link that worked before broke.
+- **2026-10-16, step 1, calls made on the day** (none changes a decision in § 4):
+  - **The workshop drops `docs/` from paths** (`docs/test-evidence/x` is `workshop:test-evidence/x`), so written
+    references stay about as long as before; links between files that moved together still work.
+  - **Links point at the folder next to this repo** (`../bonsAI-workshop/...`), not at GitHub, so they open on this
+    PC and for every AI tool; on GitHub's own pages they do not. The roadmap's size limits ruled out full addresses.
+  - **What stayed although it looks like history:** the roadmap's and testing documents' own archives (the
+    closed-rows check reads them), `docs/archive/major-redesign.md` (the agreed look), the decisions files, the
+    mock-up boards (three screen tests read them), and these plans, which are open or living: 17, 18, 19, 28, 30, 33,
+    37, 66, 67, 73, 85, 86, the spoiler constitution and the web-permission discovery.
+  - **Scripts:** only the clear-cut ones moved (the archived one-offs, the SteamVR bench, six Deck probes, the
+    bake-off report). The knowledge-library probe (it has tests) and everything else wait for step 2's verdicts.
+    The knowledge-library tools get their own folder in step 4, with the move tools, not here.
+  - **The shelved list's size ceiling** went from 20 to 21 KB: the longer references alone took it over (reason in
+    `scripts/ratchet.json`). Step 3's read-aloud removal shrinks it again.
+  - **The landing script kept one map** on a clash (`test-inventory.json`); a follow-up commit stopped tracking it.
+    The updated landing script handles that clash now.

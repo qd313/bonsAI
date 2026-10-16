@@ -575,3 +575,10 @@ From its [postmortem](../../../bonsAI-workshop/audit/refactor-round-two/postmort
 - **2026-10-16, evening: D133 answered.** The maintainer approved the five cut lists, the glossary move and the folder
   map (calls 1 and 2), and the defaults for calls 3 to 12. **Next: step 3** (remove five features, move the glossary
   words), its own session and a Deck block, working from the cut lists. Nothing pushed.
+- **2026-10-16, about 22:10 UTC: step 3 starts** (one Opus 5.5 chat, extra-high, on `8553cc99`). The maintainer
+  confirmed steps 0 to 2 are pushed, the freeze holds, and the Deck is free tonight with the rig armed; the
+  Deck-tool issue about the preview tool is written to a file and the maintainer posts it. Every check green at
+  `8553cc99`. Six Sonnet 5.5 high helpers started together, each in its own copy (preview tool, weekly refresh, ban
+  lookup, read aloud, UI scale, glossary move); they land one at a time in that order, each later one rebased on what
+  landed. Budget at go: 91 % of the five-hour window (the maintainer said to start before its 22:20 reset), 33 % of
+  the week.

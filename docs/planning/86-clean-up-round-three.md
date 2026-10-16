@@ -471,3 +471,19 @@ From its [postmortem](../audit/refactor-round-two/postmortem.md):
 - **2026-10-16, about 13:00:** readiness check, then the maintainer's go and calls 13 to 16. The 2026-10-11 plan change
   landed (`b7748b37`). Freshness check done (§ 5): small changes only. The freeze starts now: no other sessions and no
   new features until this plan says otherwise. Budget at go: 3 % of the five-hour window, 20 % of the week.
+- **2026-10-16, step 0 item 3, the 13 old copies:** nothing needed landing. Each leftover commit was checked by content
+  against `experimental`, not by title:
+  - **Already in, under other titles:** the five games' notes (Grand Theft Auto III DE, Super Smash Bros., Diddy Kong
+    Racing, Yoshi's Story, Donkey Kong 64: every added line present); Skyrim's 15 notes, the three "getting started"
+    notes and their fact-check fixes (every line present in its checked form); Skyrim's spoiler caution; the shared
+    tip's credit-line fix (as `4ce37bc`, its code now in the attached-notes module); the preset-chip cycle break and
+    un-export; the voice header fix; the follow-up test file's shared setup; the carried subject's forget step (it is
+    already an internal method).
+  - **Dropped, with the reason:** the settings-snapshot move out of the main screen (`c4ffa676`): three weeks stale,
+    and step 6a replaces that memo with the generated settings plumbing, so moving it now would be undone. Plan 81's
+    revert copy (`d8671410`): a "before" copy made to measure lane F against, never meant to land.
+  - **Saved for the workshop:** the two Hollow Knight wording swaps as patch files (call 14), the where-panel proof
+    script and the plan 77 answer-test cases note (step 1 carries them).
+  - **Removed:** all 62 copies (the 13, 48 from plans 92 and 93, and the readiness chat's), each link stripped
+    first; the shared packages folder counted the same before and after. Their branches are kept for step 8's archive.
+  - The library notes were already in its source data, so step 3's rebuild carries nothing extra from these copies.

@@ -1,0 +1,29 @@
+{
+  "commit": "dd481869",
+  "screen_tests": {
+    "files": 462,
+    "tests": 4836,
+    "passed": 4836,
+    "failed": 0
+  },
+  "python_tests": {
+    "tests": 2885
+  },
+  "coverage_screen_percent": {
+    "lines": 90.85,
+    "statements": 90.85,
+    "functions": 88.63,
+    "branches": 89.08
+  },
+  "coverage_screen_lines": {
+    "covered": 38220,
+    "total": 42069
+  },
+  "coverage_python_percent": 80.91,
+  "coverage_python_statements": {
+    "covered": 12493,
+    "total": 15441
+  },
+  "built_plugin_bytes": 3378277,
+  "rpc_methods": 68
+}

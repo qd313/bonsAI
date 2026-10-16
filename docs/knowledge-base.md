@@ -109,6 +109,8 @@ Default install path: `~/.bonsai/rag/` containing:
 - `corpus.db` — read-only SQLite (FTS5 external content over sections)
 - `corpus-manifest.json` — version, chunk SHA-256, HF/GitHub URLs
 
+**Tap-to-define words (`glossary_terms` table).** The underlined words in an answer ("kiting", "overclock" for Deep Rock Galactic: Survivor) come from the library, not from the plugin's code. The table has one row per word per game: the game (its id, and so its title), the word, its other forms, a short peek and the full text. The source is `data/kb/glossary_terms.json`, written into the table by `scripts/build_rag_db.py`. The plugin reads it through `get_rag_corpus_glossary`. A library built before the table existed has none, and then the plugin simply shows no underlined words, with no error. Turning "Use local knowledge base" off also turns the words off. To add words for another game, add rows to the source file and rebuild the library; no plugin change is needed.
+
 Settings: `rag_corpus_path`, `rag_corpus_version`, `use_local_knowledge_base`.
 
 ## Title resolution ladder

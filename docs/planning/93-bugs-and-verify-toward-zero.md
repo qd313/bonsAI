@@ -666,3 +666,25 @@ hardest focus piece), and the finish-flicker lane if the measurement sends it to
 21. **The six feature requests from last night** (shaded sections, a very small text size, Decode as the default,
     smoother D-pad scrolling, the bigger catalog with simpler filters, the simpler first-time setup): apart from the
     two one-star ones in question 13, none is built tonight; they wait for a feature session. Confirm.
+
+### The report's nine questions, answered 2026-10-16
+
+The report page asked nine questions of its own. The maintainer's answers:
+
+1. **The small shrink while an answer writes:** fix it. A helper changes how the letter scramble draws a paragraph
+   gap; the Deck measures that the 6 to 27 px shrinks are gone.
+2. **The voice engine after the starter set:** add it. "Install the starter set" also builds the voice engine
+   program, so the microphone works with no trip to Settings.
+3. **Terse length:** a 40-word cap replaces "three lines".
+4. **The five crash-type bugs** (two reload bugs, the screensaver freeze, the freeze after an answer, the sentence
+   readable for a second): move them to the Shelved list as watched.
+5. **The Settings and Developer walk entries:** close, on the rig's run on the Deck's own screen (largest move 138 px
+   of 227).
+6. **The chats menu's two-column grid:** keep it; the bug closes as designed.
+7. **Up from the answer bubble:** the maintainer did not follow the question; it is explained again in plain words.
+   *Meanwhile:* kept.
+8. **The Steam Web API key:** the maintainer wants the Steam ban lookup deprecated (the only thing the key is for).
+   Removing the feature also removes the stored key, which closes the plain-text bug. The scope is confirmed before
+   a helper builds it.
+9. **"(QA)" and "(dev QA)" on Developer labels:** the maintainer asked "as opposed to what?"; the choices are put
+   again in plain words. *Meanwhile:* left.

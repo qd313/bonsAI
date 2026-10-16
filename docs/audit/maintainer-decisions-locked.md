@@ -2352,3 +2352,14 @@ the same list; its § 15 marks which questions are still open.
     forces a choice, the last two made mandatory the same evening), answering with one recommendation and the
     reason; read-only, never on the Deck, never starting helpers; on trial with every consult logged. Persona:
     `docs/agents/advisor.md`; wrapper: `.claude/agents/advisor.md`; the runbook and AGENTS.md carry the row.
+
+### D131 — PARTLY LOCKED 2026-10-16 (raised 2026-10-14) — Plan 93 report: the nine questions on the report page
+
+1. **The small shrink while an answer writes is fixed** (the letter scramble's paragraph gap).
+2. **The starter set also builds the voice engine program.**
+3. **Terse answers are capped at about 40 words** instead of "three lines".
+4. **The five crash-type platform bugs move to Shelved as watched.**
+5. **The Settings and Developer walk entries close** on the rig's run on the Deck's own screen.
+6. **The chats menu keeps its two-column grid;** the bug closes as designed.
+7. **The Steam ban lookup is to be deprecated,** taking the stored Web API key with it; scope confirmed before the build.
+8. **Still open:** Up from the answer bubble, and the "(QA)" labels on the Developer tab (both asked again in plain words).

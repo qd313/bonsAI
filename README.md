@@ -46,15 +46,13 @@ bonsAI is free and open source. You start it up yourself on your hardware, no da
 
 - **Installing Ollama** (the program that runs the AI) — from ollama.com and GitHub.
 - **Downloading AI models** — from Ollama's own model library.
-- ~~**The recommended-models list** — refreshes itself from GitHub at most once a week.~~
 - **The knowledge library** — from Hugging Face, or GitHub if Hugging Face is down.
 - **Voice input** — the speech engine from GitHub, the tools to build it from Ubuntu's servers, and
   the speech model from Hugging Face.
-- ~~**The Steam ban lookup** — Valve's servers, and only if you give it your own Steam key.~~
 
 Nothing downloads until you switch on **Internet downloads** on the Permissions tab, and bonsAI
 tells you where each download comes from before it starts. Links inside answers open only when you
-tap them.
+tap them. The recommended-models list no longer refreshes itself, and the Steam ban lookup is gone.
 
 ## What it does
 
@@ -119,7 +117,7 @@ bonsAI summarizes the older part so it isn't forgotten, and you can ask it to su
 
 Press the mic button and talk. Your speech is turned into text on the Deck itself, and the
 recording is deleted as soon as that's done. Words appear as you talk, and when you stop, bonsAI tidies the text with one
-more pass over the whole recording (a couple of seconds). bonsAI can also read answers aloud (beta).
+more pass over the whole recording (a couple of seconds).
 
 ### See how it answered
 

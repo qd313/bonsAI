@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 **Contents**
 
 - [\[Unreleased\]](#unreleased)
+  - [Plan 86 step 3 (2026-10-16)](#plan-86-step-3-2026-10-16)
   - [Plan 93 (2026-10-14)](#plan-93-2026-10-14)
   - [Plan 92 (2026-10-12)](#plan-92-2026-10-12)
   - [Plan 89 (2026-10-11)](#plan-89-2026-10-11)
@@ -79,6 +80,18 @@ All notable changes to this project are documented in this file.
 <!-- /toc -->
 
 ## [Unreleased]
+
+### Plan 86 step 3 (2026-10-16)
+
+Five features and a developer tool were taken out completely, not hidden. Checked on the Deck's own screen (build `cf724c9f`) unless a line says otherwise.
+
+- **Removed: the Steam ban lookup.** The `bonsai:vac-check` command, its Permissions switch (four switches remain) and the Developer tab's Integrations section with the Steam Web API key field are gone; the command is now an ordinary question. Checked on the Deck: Permissions has four switches, Developer has five sections, the command gives no ban report. The chip half of the check is still owed.
+- **Security: the saved Steam Web API key is removed from the settings file the first time the new version loads.** Checked on the Deck: right after the first open, the file held no key and no ban-lookup permission, and no error showed.
+- **Removed: Read aloud and Voice replies.** The speaker in an answer's corner and the Voice replies setting are gone; voice input stays. Answers are 17 px shorter, because the speaker's band under the text went with it. Checked on the Deck: no speaker, Copy sits bottom-right, nothing speaks, the long-answer walk is clean.
+- **Removed: the UI scale setting** (it showed on the Developer tab only). Sizes are now plain numbers and nothing looks different. **If you had picked a size other than Handheld, you go back to the normal size.** Checked on the Deck on the session's reading: the only size that changed is the answer's bottom space.
+- **Removed: the weekly model-list download.** The AI models box no longer fetches a list from GitHub; it still shows your installed models and their sizes. Its header now reads "Live sizes" or "Offline sizes" (it said "Live catalog" and "Offline catalog"). Checked on the Deck: opening the box made no downloaded list file.
+- **Removed: the in-panel preview test tool.** It was a developer tool; nothing changes for a player.
+- **Changed: the underlined game words ("kiting" and "overclock" in Deep Rock Galactic: Survivor) now come from the knowledge library, not from the plugin.** You need the updated library to keep seeing them; with an older library the words show plain, with no error. "Use local knowledge base" off turns them off too. Not yet checked on the Deck.
 
 ### Plan 93 (2026-10-14)
 

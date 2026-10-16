@@ -3537,3 +3537,10 @@ _Moved out of [roadmap.md](../roadmap.md) on 2026-10-16, copied line for line fr
   **Deck 2026-10-14 (plan 93 Deck block C part 1, the Deck's own screen, row P89-TAB-WALK):** Settings and Developer, 26 presses each way: the largest move was 138 px against a limit of 227, no jump at the end, no creep. The section lines read 92 percent visible, the rig's known false alarm (its own Bugs entry; the files mark visibility UNCLEAR). Evidence `docs/test-evidence/plan93-P89-TAB-WALK-OWN-SCREEN-SETTINGS.json`, `-DEVELOPER.json`. **Still owed: the maintainer's word** (plan 93 question 14b).
 
 **Closed 2026-10-16:** passed on the Deck's own screen, row P89-TAB-WALK, `docs/test-evidence/plan93-P89-TAB-WALK-OWN-SCREEN-SETTINGS.json` and `docs/test-evidence/plan93-P89-TAB-WALK-OWN-SCREEN-DEVELOPER.json`, plus [D131](audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page) call 5.
+
+### Up from the answer bubble, with Steam's ring on the whole answer, scrolls the whole answer instead of moving the ring (closed 2026-10-16)
+
+- ★★ `[focus]` **Up from the answer bubble, with Steam's ring on the whole answer, scrolls the whole answer instead of moving the ring** — **OPEN, found 2026-10-02 while fixing the trap (plan 79); not a trap, since the press does something.**
+  Not fixed. A test comment calls it by design (Up leaves the bubble after scrolling it back). The maintainer will check it by hand later. Seen in the test setup's walk, not on the Deck. No evidence file.
+
+**Closed 2026-10-16:** designed. The maintainer keeps "Up scrolls first" ([D131](../audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page), call 8).

@@ -2362,4 +2362,6 @@ the same list; its § 15 marks which questions are still open.
 5. **The Settings and Developer walk entries close** on the rig's run on the Deck's own screen.
 6. **The chats menu keeps its two-column grid;** the bug closes as designed.
 7. **The Steam ban lookup is to be deprecated,** taking the stored Web API key with it; scope confirmed before the build.
-8. **Still open:** Up from the answer bubble, and the "(QA)" labels on the Developer tab (both asked again in plain words).
+8. **Up from the answer bubble keeps "Up scrolls first";** the bug closes as designed (answered after a plain re-ask).
+9. **The "(QA)" and "(dev QA)" tags come off the Developer tab's labels** (done the same day).
+10. **The ban lookup is hidden for now, not removed:** the command, the key field and the permission stop showing, the stored key is cleared, the code stays.

@@ -688,3 +688,5 @@ The report page asked nine questions of its own. The maintainer's answers:
    a helper builds it.
 9. **"(QA)" and "(dev QA)" on Developer labels:** the maintainer asked "as opposed to what?"; the choices are put
    again in plain words. *Meanwhile:* left.
+
+**Follow-up answers, 2026-10-16:** 7, Up from the answer bubble: keep it as it is (the bug closes as designed). 8, the ban lookup: hide it for now, not remove it; the stored key is cleared. 9, the "(QA)" labels: remove the tag (done the same day: "Knowledge base", "Force session RAG chips", "Frozen test chips").

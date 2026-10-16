@@ -186,7 +186,7 @@ Full patterns:
   [docs/testing-manual.md](docs/testing-manual.md) for the new chain.
 - **Plan 62's three controls (Filters panel, Show details' Session tab, the Read aloud speaker)** have
   their D-pad routes written down in [focus-graph.md](docs/focus-graph.md#three-controls-from-plan-62).
-  The Filters button is now the filters column (2026-10-12, plan 91): [routes](docs/focus-graph.md#the-ai-models-boxs-filters-column-plan-91-m1).
+  The Filters button is now a column (plan 91): [routes](docs/focus-graph.md#the-ai-models-boxs-filters-column-plan-91-m1).
 
 ### The "From the notes" block — a worked example
 
@@ -368,11 +368,12 @@ Rules that go with it:
   miss that needed Sonnet to finish counts against it. Not for judgment fixes, features or bookkeeping:
   plan 83 found it falls short there.
 - **Helper lanes:** at most fifteen for feature or bug work (D128, 2026-10-11),
-  at most three for a refactor, because refactor lanes overlap on files. Each brief carries the check on what its copy is based on, which
+  at most three for a refactor, because refactor lanes overlap on files. **During plan 86:** 30 reading, 15
+  editing, each owning its files ([helpers](docs/agents/clean-up-helpers.md)). Each brief carries the check on what its copy is based on, which
   files it owns, one change per commit, and the gates to run. **Lanes hand back code, tests and a
   short report only** — they never edit the roadmap, the testing documents or the changelog. Do not
   start lanes just before the usage window resets. Start no new helpers past 80 percent of the weekly limit or 75
-  percent of the five-hour window (the maintainer's call 2026-10-11, D128). **The whole procedure for a bug wave** (briefs,
+  percent of the five-hour window (D128). **The whole procedure for a bug wave** (briefs,
   landing, the Deck in blocks, paperwork, running unattended) is written down in
   [docs/agents/bug-wave-runbook.md](docs/agents/bug-wave-runbook.md); land with `scripts/land_lane.sh`.
 
@@ -393,6 +394,5 @@ The two personas that review code live in [docs/agents/](docs/agents/) as plain 
 read the same whether a person opens them, Claude runs them as an agent, or another tool calls the
 matching prompt.
 
-**The in-panel preview is shelved.** It has never got past its loading screen on this machine, so
-nothing gates on it, and it cannot check Deck focus behaviour in any case — it has no equivalent of
-Steam's gamepad focus system. Use the device.
+**The in-panel preview is shelved, and plan 86 removes it.** It never got past its loading screen,
+and it cannot check Deck focus behaviour in any case. Use the device.

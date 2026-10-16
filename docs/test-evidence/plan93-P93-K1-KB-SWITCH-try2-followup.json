@@ -1,7 +1,0 @@
-{
-  "row": "P93-K1-KB-SWITCH follow-up to the try2 file (written because that file may not be overwritten)",
-  "build_commit": "5537e84c",
-  "deck_time_local": "2026-10-14 about 13:21-13:22 EDT",
-  "seen": "After the library came back with Download, the screen's switch read OFF while the settings file said true. About a minute later, after I had changed Text size on the Settings tab and returned to the Ollama tab, the section line read 'Use local knowledge base on' and the switch was on (aria-checked true), matching the file. So the screen caught up only after another visit/refresh; it did not refresh by itself right after Download (checked at 13:20:36, 13:20:55 and after leaving and returning to the Ollama tab at about 13:21).",
-  "verdict": "UNCLEAR (supports the Download-half note in the try2 file: a stale 'off' stays on screen after Download until something else refreshes the page)."
-}

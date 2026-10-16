@@ -61,6 +61,7 @@ from typing import Callable, Optional
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from code_line_count import code_line_count  # noqa: E402 -- needs the path line above
+import architecture_maps  # noqa: E402 -- builds the maps this file reads, on demand
 
 ROOT = Path(__file__).resolve().parent.parent
 SCRIPTS_DIR = ROOT / "scripts"
@@ -431,9 +432,11 @@ def metric_unused_exports_fe():
 # --------------------------------------------------------------------------- #
 
 
-def _cycle_count_from(path: Path) -> tuple[Optional[int], Optional[str]]:
+def _cycle_count_from(name: str) -> tuple[Optional[int], Optional[str]]:
+    # The maps are not saved in the repo any more; they are built here, fresh, when asked for.
+    path, build_problem = architecture_maps.map_path(name)
     if not path.exists():
-        return None, f"{_to_posix(path)} does not exist yet"
+        return None, f"{_to_posix(path)} could not be built ({build_problem or 'no reason given'})"
     data = _load_json(path)
     if not isinstance(data, dict) or "cycles" not in data:
         return None, f"{_to_posix(path)} did not have a top-level 'cycles' list"
@@ -509,11 +512,11 @@ def metric_be_names_defined_twice():
 
 
 def metric_import_cycles_be():
-    return _cycle_count_from(ROOT / "packages/bonsai-mcp/knowledge/architecture/py-import-graph.json")
+    return _cycle_count_from("py-import-graph.json")
 
 
 def metric_import_cycles_fe():
-    return _cycle_count_from(ROOT / "packages/bonsai-mcp/knowledge/architecture/import-graph.json")
+    return _cycle_count_from("import-graph.json")
 
 
 # --------------------------------------------------------------------------- #
@@ -533,7 +536,7 @@ _PAT_WRAPPED_CALL = re.compile(r"callDeckyWithTimeout\s*(?:<[\s\S]*?>)?\s*\(\s*[
 # between "call" and the "D" that follows it there).
 _PAT_RAW_CALL = re.compile(r"(?<!\.)\bcall\b\s*(?:<[\s\S]*?>)?\s*\(\s*['\"]([A-Za-z_][A-Za-z0-9_]*)['\"]")
 
-_RPC_MAP_PATH = ROOT / "packages/bonsai-mcp/knowledge/architecture/rpc-map.json"
+_RPC_MAP_NAME = "rpc-map.json"
 
 _rpc_analysis_cache = None
 
@@ -562,7 +565,8 @@ def _rpc_analysis():
 
     be_methods: Optional[set[str]] = None
     be_note = None
-    rpc_map = _load_json(_RPC_MAP_PATH)
+    rpc_map_path, build_problem = architecture_maps.map_path(_RPC_MAP_NAME)
+    rpc_map = _load_json(rpc_map_path)
     if isinstance(rpc_map, dict) and isinstance(rpc_map.get("methods"), list):
         be_methods = {
             m["name"]
@@ -570,7 +574,11 @@ def _rpc_analysis():
             if isinstance(m, dict) and isinstance(m.get("name"), str)
         }
     else:
-        be_note = f"{_to_posix(_RPC_MAP_PATH)} did not have the expected shape"
+        be_note = (
+            f"{_to_posix(rpc_map_path)} could not be built ({build_problem})"
+            if build_problem
+            else f"{_to_posix(rpc_map_path)} did not have the expected shape"
+        )
 
     _rpc_analysis_cache = (fe_called, raw_sites, be_methods, be_note)
     return _rpc_analysis_cache

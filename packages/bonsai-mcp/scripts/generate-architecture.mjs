@@ -390,14 +390,29 @@ ${body};
   console.log("wrote", path.relative(REPO_ROOT, out), `(${names.length} methods)`);
 }
 
-fs.mkdirSync(OUT_DIR, { recursive: true });
+// Two switches, because the two kinds of output are kept differently:
+//   --maps-only   write the JSON maps (untracked, built on demand), skip src/types/rpcMethods.ts
+//   --types-only  write src/types/rpcMethods.ts (tracked, the commit hook keeps it fresh), skip the maps
+// With neither, both are written, as `npm run generate` always did.
+const mapsOnly = process.argv.includes("--maps-only");
+const typesOnly = process.argv.includes("--types-only");
+if (mapsOnly && typesOnly) {
+  console.error("generate-architecture: --maps-only and --types-only together would write nothing");
+  process.exit(2);
+}
+
 const rpcMap = generateRpcMap();
-writeJson("rpc-map.json", rpcMap);
-writeRpcMethodType(rpcMap);
-// Named for what it contains: a size ranking, not a dependency graph. The graph
-// is import-graph.json.
-writeJson("hotspots.json", generateHotspots());
-writeJson("import-graph.json", generateImportGraph());
-writeJson("test-inventory.json", generateTestInventory());
-writeJson("preview-tiers.json", generatePreviewTiers());
-writeJson("env-vars.json", generateEnvVars());
+if (!typesOnly) {
+  fs.mkdirSync(OUT_DIR, { recursive: true });
+  writeJson("rpc-map.json", rpcMap);
+}
+if (!mapsOnly) writeRpcMethodType(rpcMap);
+if (!typesOnly) {
+  // Named for what it contains: a size ranking, not a dependency graph. The graph
+  // is import-graph.json.
+  writeJson("hotspots.json", generateHotspots());
+  writeJson("import-graph.json", generateImportGraph());
+  writeJson("test-inventory.json", generateTestInventory());
+  writeJson("preview-tiers.json", generatePreviewTiers());
+  writeJson("env-vars.json", generateEnvVars());
+}

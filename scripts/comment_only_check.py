@@ -74,10 +74,11 @@ NODE_HELPER = os.path.join(REPO_ROOT, "scripts", "strip_ts_comments.mjs")
 PY_SUFFIXES = (".py",)
 TS_SUFFIXES = (".ts", ".tsx")
 
-# Files nobody writes by hand: a git hook rebuilds them from the code on every
-# commit. Adding comments moves line numbers, so these change as a side effect
-# and their changing proves nothing either way. They are listed separately
-# rather than passed silently. Anything generated that is also compiled --
+# Files nobody writes by hand: they are rebuilt from the code. Adding comments moves
+# line numbers, so these change as a side effect and their changing proves nothing
+# either way. They are listed separately rather than passed silently. They are no
+# longer saved in the repo, so a new change never touches them; the entries stay for
+# a branch cut before they were dropped. Anything generated that is also compiled --
 # src/types/rpcMethods.ts, for one -- is deliberately NOT here: it is real code,
 # and phase 5 changing it would mean a worker had moved a method.
 GENERATED_PATHS = (

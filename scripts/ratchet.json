@@ -84,7 +84,7 @@
     "target": 0,
     "start_2026_09_09": 2,
     "direction": "lower_is_better",
-    "measured_by": "packages/bonsai-mcp/knowledge/architecture/py-import-graph.json"
+    "measured_by": "py-import-graph.json, built fresh by scripts/architecture_maps.py (not saved in the repo)"
   },
   "import_cycles_fe": {
     "label": "Import cycles, front end",
@@ -92,7 +92,7 @@
     "target": 0,
     "start_2026_09_09": 0,
     "direction": "lower_is_better",
-    "measured_by": "packages/bonsai-mcp/knowledge/architecture/import-graph.json"
+    "measured_by": "import-graph.json, built fresh by scripts/architecture_maps.py (not saved in the repo)"
   },
   "raw_call_sites": {
     "label": "Raw call() sites outside the four allowed",
@@ -116,7 +116,7 @@
     "target": 0,
     "start_2026_09_09": 0,
     "direction": "lower_is_better",
-    "measured_by": "rpc-map.json method names compared against call()/callDeckyWithTimeout( names grepped from front-end app code"
+    "measured_by": "rpc-map.json (built fresh by scripts/architecture_maps.py) method names compared against call()/callDeckyWithTimeout( names grepped from front-end app code"
   },
   "be_methods_with_no_caller": {
     "label": "Back-end methods with no caller",
@@ -124,7 +124,7 @@
     "target": 0,
     "start_2026_09_09": 1,
     "direction": "lower_is_better",
-    "measured_by": "rpc-map.json method names compared against call()/callDeckyWithTimeout( names grepped from front-end app code",
+    "measured_by": "rpc-map.json (built fresh by scripts/architecture_maps.py) method names compared against call()/callDeckyWithTimeout( names grepped from front-end app code",
     "definition_corrected_2026_09_13": "Re-recorded 2026-09-13: the definition was corrected, not the code. See docs/audit/refactor-round-two/phase2-decisions.md B2-3."
   },
   "settings_field_list_repeats": {

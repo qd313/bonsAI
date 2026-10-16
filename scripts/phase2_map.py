@@ -848,6 +848,10 @@ def main(argv=None) -> int:
         except (AttributeError, ValueError):
             pass
 
+    # The import graphs and the RPC map are not saved in the repo; build them fresh first.
+    for problem in ratchet.architecture_maps.build_maps():
+        print(f"warning: could not build {problem}", file=sys.stderr)
+
     parser = argparse.ArgumentParser(description="Run every phase 2 code-inspection list.")
     parser.add_argument("--only", choices=sorted(LISTS), help="run one list instead of all of them")
     parser.add_argument("--out", default=str(DEFAULT_OUT), help="where to write the JSON files and the summary")

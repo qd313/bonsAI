@@ -36,8 +36,11 @@ echo "== land $BR from $BASE onto $WORK at $(date)"
 [ -z "$(git status --porcelain --untracked-files=no)" ] || { echo "TREE NOT CLEAN"; git status --short; exit 1; }
 git merge-base --is-ancestor "$BASE" "$BR" || { echo "BASE $BASE IS NOT AN ANCESTOR OF $BR"; exit 1; }
 
-# Generated files clash on almost every landing. The working branch's side is taken and they are
-# regenerated below, so a clash in them is never a real one.
+# The one generated file still saved in the repo (src/types/rpcMethods.ts) can clash when two helpers
+# add back-end methods. The working branch's side is taken and it is regenerated below, so a clash in
+# it is never a real one. The architecture JSON files and docs/code-map.md are no longer saved in the
+# repo (they are built when a check needs them); they stay in the pattern only for a helper cut before
+# that change, whose commits still touch them. Such a clash resolves to "not saved", which is right.
 GEN='packages/bonsai-mcp/knowledge/architecture/|docs/code-map.md|src/types/rpcMethods.ts'
 for c in $(git rev-list --reverse "$BASE..$BR"); do
   echo "-- pick $(git log --oneline -1 "$c")"
@@ -49,16 +52,18 @@ for c in $(git rev-list --reverse "$BASE..$BR"); do
       echo "The cherry-pick is left open. Resolve by hand, continue it, then run this script again."
       exit 2
     fi
-    for f in $bad; do git checkout --ours -- "$f"; git add "$f"; done
+    for f in $bad; do
+      if git cat-file -e "HEAD:$f" 2>/dev/null; then git checkout --ours -- "$f" && git add "$f"; else git rm -q -f -- "$f"; fi
+    done
     GIT_EDITOR=true git cherry-pick --continue || { echo "CONTINUE FAILED"; exit 2; }
   fi
 done
 
-echo "== regenerate generated files"
-node packages/bonsai-mcp/scripts/sync-architecture-for-commit.mjs && python scripts/py_import_graph.py && python scripts/code_map.py
-git add -- packages/bonsai-mcp/knowledge/architecture docs/code-map.md src/types/rpcMethods.ts
+echo "== regenerate the back-end method list (the only generated file saved in the repo)"
+node packages/bonsai-mcp/scripts/generate-architecture.mjs --types-only
+git add -- src/types/rpcMethods.ts
 if ! git diff --cached --quiet; then
-  git commit -q -m "Regenerate the architecture files after landing $BR
+  git commit -q -m "Regenerate the back-end method list after landing $BR
 
 Co-Authored-By: $COAUTHOR" && echo "REGEN COMMITTED"
 fi

@@ -59,7 +59,6 @@ DOCS = [
     "docs/roadmap-details.md",
     "docs/roadmap-kb-details.md",
     "docs/knowledge-base.md",
-    "docs/code-map.md",
     "docs/development.md",
     "docs/lessons-learned.md",
     "docs/design-language.md",

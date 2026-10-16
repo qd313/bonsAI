@@ -44,11 +44,10 @@
  *     Up from the switch, or from the first row (no switch) -> Advanced (onMoveUpFromTop)
  *     Down past the column's last stop, or past the list's last row -> Steam carries it to Done
  *
- * 1. refreshInstalledAndMeta() runs on mount: refreshes the merged catalog,
- *    tests the connection to this Deck's own Ollama to learn which tags
- *    are already installed, and fetches live size metadata for every
- *    catalog tag — all three in parallel, falling back to offline data on
- *    any failure.
+ * 1. refreshInstalledAndMeta() runs on mount: tests the connection to this
+ *    Deck's own Ollama to learn which tags are already installed, then
+ *    fetches live size metadata for every catalog tag — one after the other,
+ *    falling back to offline data on any failure.
  * 2. Tags are matched against the catalog (isTagInstalled(),
  *    isCatalogModelTagInList()) and filtered — by the licence tier
  *    (entryMatchesLicenceTier(), the same three tiers the old Policy
@@ -110,6 +109,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type RefCallback } from "react";
 import { Button, ConfirmModal, Focusable } from "@decky/ui";
 import {
+  PULL_MODEL_CATALOG,
   formatGtaStars,
   formatPullModelTags,
   formatSizeGb,
@@ -129,7 +129,6 @@ import { useListHeaderClearance } from "./pullModelsListClearance";
 import { BonsaiModalScope } from "./BonsaiModalScope";
 import { registerRemoveControl } from "./pullModelsRemoveReturn";
 import { recommendPullModelsForGaps } from "../utils/pullModelRecommendations";
-import { usePullModelCatalog } from "../hooks/usePullModelCatalog";
 import { usePullModelTier2Confirm } from "../hooks/usePullModelTier2Confirm";
 import { usePullModelToggleSelection } from "../hooks/usePullModelToggleSelection";
 import { usePullModelDeleteConfirm } from "../hooks/usePullModelDeleteConfirm";
@@ -161,6 +160,9 @@ export {
   type PullModelPullRecord,
 };
 export { PULL_MODEL_NEW_BADGE_STORAGE_KEY };
+
+// The built-in list is the only list. One copy made at load, for the try-order code's writable type.
+const BUILT_IN_CATALOG: PullModelEntry[] = [...PULL_MODEL_CATALOG];
 
 /**
  * The whole screen. See "How it works" above for the flow. Pass to
@@ -198,7 +200,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
     downFromAboveRef,
   } = props;
 
-  const { mergedCatalog, catalogSource, refreshCatalog } = usePullModelCatalog();
+  const mergedCatalog = BUILT_IN_CATALOG;
   const [installedTags, setInstalledTags] = useState<Set<string>>(() => new Set());
   const [selectedTags, setSelectedTags] = useState<Set<string>>(() => new Set());
   // The Good for and Show picks, kept for the session so a closed and reopened box shows the same (plan 91 § 2a).
@@ -227,7 +229,6 @@ export function PullModelsModal(props: PullModelsModalProps) {
   // Lifted into usePullModelCatalogRefresh. It must stay at exactly this point in the hook
   // list: React matches hooks by the order they run, not by name.
   const { refreshInstalledAndMeta, focusAfterRedraw } = usePullModelCatalogRefresh({
-    refreshCatalog,
     setInstalledTags,
     setSizeSource,
     setLiveSizeGbByTag,
@@ -723,8 +724,6 @@ export function PullModelsModal(props: PullModelsModalProps) {
             <span>Installed {installedCatalogCount} · {formatSizeGb(installedTotalGb)}</span>
             <span>Queue {selectedTags.size} · {formatSizeGb(selectedTotalGb)}</span>
             <span className="bonsai-pullmodels-size-source">
-              {catalogSource === "live" || catalogSource === "cached" ? "Live catalog" : "Offline catalog"}
-              {" · "}
               {sizeSource === "live" ? "Live sizes" : "Offline sizes"}
             </span>
           </div>

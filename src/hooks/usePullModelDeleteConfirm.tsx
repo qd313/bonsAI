@@ -38,7 +38,7 @@ export type UsePullModelDeleteConfirmArgs = {
   activeRoutingTag: string | null;
   onBeforeNestedDeckyModal?: () => void;
   completeNestedModalClose: (close: () => void) => void;
-  refreshInstalledAndMeta: (forceCatalog?: boolean) => Promise<void>;
+  refreshInstalledAndMeta: () => Promise<void>;
   setSelectedTags: Dispatch<SetStateAction<Set<string>>>;
   setDeleteBusyTag: Dispatch<SetStateAction<string | null>>;
   /** Puts the ring on a row's Remove control (the screen's own row move). Without it the ring is not handed back. */
@@ -118,7 +118,7 @@ export function usePullModelDeleteConfirm(a: UsePullModelDeleteConfirmArgs): Pul
                     next.delete(tag);
                     return next;
                   });
-                  await refreshInstalledAndMeta(false);
+                  await refreshInstalledAndMeta();
                 } else if (res.error === "in_use") {
                   toaster.toast({
                     title: "Model in use",

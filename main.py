@@ -1211,10 +1211,6 @@ class Plugin:
         runs here asks that PC too, so a name it still has is not dropped."""
         return await ollama_local_setup_rpc.fetch_ollama_catalog_metadata(self, tags, pc_ip)
 
-    async def fetch_pull_model_catalog(self, opts: Any = None):
-        """Living Pull Models overlay (remote JSON + disk cache) for frontend merge."""
-        return await ollama_local_setup_rpc.fetch_pull_model_catalog(self, opts)
-
     # --- Screenshot and media RPC ---
 
     async def list_recent_screenshots(self, app_id: str = "", limit: int = 5):

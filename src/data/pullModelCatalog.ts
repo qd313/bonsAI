@@ -18,11 +18,9 @@
  * Models still has something to show with no internet connection, or before
  * a fresher list has ever been downloaded.
  *
- * Does not: fetch anything live, or stay perfectly current forever. A newer
- * list can be downloaded from the computer or Deck side and laid over this
- * one — adding, removing, or overriding individual entries — by
- * `mergePullModelCatalog.ts`; this file is only the starting point that
- * merge begins from.
+ * Does not: fetch anything live, or stay perfectly current forever. This
+ * file is the list itself; a model is added, changed or removed here, in
+ * a plugin update.
  *
  * How it works: (1) the types and the four group ids come first — essentials,
  * smallest ("More models"), stretch ("Expert (large)"), specialist; (2) small

@@ -5,8 +5,7 @@ Permissions tab, off on a fresh install and on an old settings file, forced off 
 While it is off, every way bonsAI downloads something is refused before it reaches the internet:
 installing or updating Ollama, pulling a model (including the meaning-search model), the voice
 engine and its models, and the knowledge library. The two things that reached the internet on
-their own when the models screen opened -- the recommended-models list from GitHub and the size
-lookups at registry.ollama.ai -- stay offline too.
+their own when the models screen opened -- the size lookups at registry.ollama.ai -- stay offline too.
 Used for: capabilities.py (the switch), ollama_local_setup_rpc.py, rag_corpus_rpc.py and
 voice_rpc.py (the refusals).
 Does not: Touch the network. Every call that would reach it is replaced with one that fails the
@@ -28,7 +27,6 @@ from plugin_settings_file_harness import PluginSettingsFileMixin  # noqa: E402
 import main  # noqa: E402
 from backend.services import capabilities  # noqa: E402
 from backend.services import ollama_local_setup_rpc as setup_rpc  # noqa: E402
-from backend.services import pull_model_catalog_service as catalog  # noqa: E402
 from backend.services import rag_corpus_rpc  # noqa: E402
 
 OFF = {"ollama_local_on_deck": True, "capabilities": {"microphone_access": True}}
@@ -94,13 +92,6 @@ class DownloadsRefusedWhileOff(PluginSettingsFileMixin, unittest.IsolatedAsyncio
                 mock.patch("backend.services.voice_rpc.download_voice_model", side_effect=_must_not_run):
             self.assertRefused(await self.plugin.install_voice_engine("tiny.en"))
 
-    async def test_recommended_list_stays_offline(self) -> None:
-        with mock.patch.object(catalog, "_fetch_remote_overlay", side_effect=_must_not_run), \
-                mock.patch.object(catalog, "_read_cache", return_value=None):
-            out = await self.plugin.fetch_pull_model_catalog({"force": True})
-        self.assertEqual(out["source"], "bundled")
-        self.assertEqual(out["error"], "downloads_off")
-
     async def test_size_lookups_stay_offline(self) -> None:
         with mock.patch.object(setup_rpc, "fetch_catalog_metadata", side_effect=_must_not_run), \
                 mock.patch.object(setup_rpc, "list_installed_ollama_tag_sizes", return_value={"a:1": 5}):
@@ -125,12 +116,6 @@ class DownloadsAllowedWhileOn(PluginSettingsFileMixin, unittest.IsolatedAsyncioT
             out = await self.plugin.pull_ollama_models(["mistral:7b"])
             await self.plugin._local_ollama_setup_task
         self.assertTrue(out["accepted"])
-
-    async def test_recommended_list_may_refresh(self) -> None:
-        with mock.patch.object(catalog, "_fetch_remote_overlay", return_value=(None, "offline")), \
-                mock.patch.object(catalog, "_read_cache", return_value=None):
-            out = await self.plugin.fetch_pull_model_catalog({"force": True})
-        self.assertEqual(out["error"], "offline")
 
 
 if __name__ == "__main__":

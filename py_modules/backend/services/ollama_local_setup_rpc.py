@@ -9,7 +9,7 @@ now a one-line hand-off to the function here.
 
 Used for: start_local_ollama_setup, get_local_ollama_setup_status,
 cancel_local_ollama_setup, pull_ollama_models, delete_ollama_model,
-fetch_ollama_catalog_metadata, fetch_pull_model_catalog. merge_pulled_tags_into_routing_orders is
+fetch_ollama_catalog_metadata. merge_pulled_tags_into_routing_orders is
 no longer an RPC: the custom-pull runner calls it when a download finishes.
 
 Solves: Keeps the Deck-side install/pull/delete machinery -- the one-at-a-time lock, the
@@ -30,8 +30,7 @@ Does not: Cover the two small autostart-toggle RPCs (apply_ollama_local_autostar
 get_ollama_local_autostart_status) -- those stay on the Plugin class itself because a
 test patches the names main.py imports them under, and moving them would only be a
 cosmetic win. Does not run `ollama pull`/`ollama rm` itself, or talk to the registry --
-`local_ollama_setup_service.py`, `ollama_catalog_service.py` and
-`pull_model_catalog_service.py` do that.
+`local_ollama_setup_service.py` and `ollama_catalog_service.py` do that.
 """
 
 import asyncio
@@ -62,9 +61,6 @@ from backend.ollama_routing import (
     is_vision_capable_tag,
     merge_pulled_tag,
     remove_tag_from_routing_orders,
-)
-from backend.services.pull_model_catalog_service import (
-    fetch_pull_model_catalog as fetch_pull_model_catalog_service,
 )
 from backend.services.ollama_pc_models import ask_known_pcs
 from backend.services.ollama_try_order_prune import prune_saved_orders_to_installed
@@ -528,42 +524,3 @@ async def fetch_ollama_catalog_metadata(self, tags: Any = None, pc_ip: str = "")
     except Exception:
         out = {"source": "offline", "error": "fetch_failed", "tags": {}, "fetched_at": None}
     return out
-
-
-async def fetch_pull_model_catalog(self, opts: Any = None):
-    """Living Pull Models overlay (remote JSON + disk cache) for frontend merge."""
-    ok_gate, gate_out = await _require_local_ollama_on_deck(self)
-    force = False
-    if isinstance(opts, dict):
-        force = bool(opts.get("force"))
-    elif isinstance(opts, bool):
-        force = opts
-    if ok_gate and not await _internet_downloads_allowed(self):
-        # The recommended-models list is a download from GitHub: while Internet downloads is off,
-        # the saved copy (any age) or the bundled list answers instead.
-        return await asyncio.to_thread(fetch_pull_model_catalog_service, force, allow_network=False)
-    if not ok_gate:
-        return {
-            **(gate_out or {}),
-            "source": "bundled",
-            "entries": [],
-            "removed_tags": [],
-            "overrides": {},
-            "fetched_at": None,
-            "updated_at": None,
-        }
-    try:
-        return await asyncio.wait_for(
-            asyncio.to_thread(fetch_pull_model_catalog_service, force),
-            timeout=12.0,
-        )
-    except Exception:
-        return {
-            "source": "bundled",
-            "error": "fetch_failed",
-            "entries": [],
-            "removed_tags": [],
-            "overrides": {},
-            "fetched_at": None,
-            "updated_at": None,
-        }

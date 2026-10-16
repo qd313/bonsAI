@@ -76,7 +76,7 @@ CAPABILITY_KEYS = (
     "steam_web_api",
     "microphone_access",
     # Downloads from the internet: Ollama itself, AI models, the voice engine and its models,
-    # the knowledge library, and the recommended-models list and size lookups. Downloads only;
+    # the knowledge library, and size lookups. Downloads only;
     # a later live web search is a separate switch.
     "internet_downloads",
 )

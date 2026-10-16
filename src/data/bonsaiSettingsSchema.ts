@@ -98,7 +98,7 @@ export type BonsaiCapabilities = {
   steam_web_api: boolean;
   /** Local microphone capture for speech-to-text in the Ask bar. */
   microphone_access: boolean;
-  /** Downloads from the internet (Ollama, models, voice engine, knowledge library, model list). */
+  /** Downloads from the internet (Ollama, models, voice engine, knowledge library). */
   internet_downloads: boolean;
 };
 

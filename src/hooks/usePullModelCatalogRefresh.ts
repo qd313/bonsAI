@@ -2,14 +2,14 @@
  * Title: Pull models — refreshing installed tags and catalog metadata
  *
  * Purpose: Owns the round trip that learns which tags are actually on this Deck (a connection test
- * against local Ollama) and how big each catalog tag is (live size metadata), run together and run
- * once on mount, plus `focusAfterRedraw`, which a few other pieces of the screen use to move the
+ * against local Ollama) and how big each catalog tag is (live size metadata), run one after the
+ * other and run once on mount, plus `focusAfterRedraw`, which a few other pieces of the screen use to move the
  * ring onto something their own state change is about to draw.
  *
  * Used for: PullModelsModal.tsx's own mount effect (the manual Refresh button is gone, plan 93), and every other
  * hook/handler on the screen that needs to move the ring once a state change has been drawn.
  *
- * Solves: keeps the two RPCs, run in parallel, and their shared busy/error handling in one place,
+ * Solves: keeps the two RPCs, run one after the other, and their shared busy/error handling in one place,
  * since they always run together and always fall back to the offline catalog the same way on
  * failure.
  *
@@ -27,7 +27,7 @@ import { PULL_MODEL_CATALOG, bytesToGb } from "../data/pullModelCatalog";
 import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP } from "../data/bonsaiSettingsSchema";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { loadSavedIp } from "../features/plugin-shell/pluginStorage";
-import { getCatalogTags, isCatalogModelTagInList, mergePullModelCatalog } from "../utils/mergePullModelCatalog";
+import { getCatalogTags, isCatalogModelTagInList } from "../utils/mergePullModelCatalog";
 import { normalizeInstalledSet } from "../utils/pullModelFilters";
 import type { CatalogMetadataResponse, ConnectionTestResult } from "../components/PullModelsModal.types";
 
@@ -35,7 +35,6 @@ const TEST_CONNECTION_TIMEOUT_SECONDS = 10;
 const LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS = 42000;
 
 export type UsePullModelCatalogRefreshArgs = {
-  refreshCatalog: (force: boolean) => Promise<unknown>;
   setInstalledTags: Dispatch<SetStateAction<Set<string>>>;
   setSizeSource: Dispatch<SetStateAction<"live" | "offline">>;
   setLiveSizeGbByTag: Dispatch<SetStateAction<Record<string, number>>>;
@@ -43,14 +42,14 @@ export type UsePullModelCatalogRefreshArgs = {
 };
 
 export type PullModelCatalogRefresh = {
-  refreshInstalledAndMeta: (forceCatalog?: boolean) => Promise<void>;
+  refreshInstalledAndMeta: () => Promise<void>;
   /** Runs `fn` right after the redraw the caller's own state change asked for (see below). */
   focusAfterRedraw: (fn: () => void) => void;
 };
 
 /** Own the after-redraw focus move and the installed-tags/catalog-metadata refresh. */
 export function usePullModelCatalogRefresh(a: UsePullModelCatalogRefreshArgs): PullModelCatalogRefresh {
-  const { refreshCatalog, setInstalledTags, setSizeSource, setLiveSizeGbByTag, setLoadingMeta } = a;
+  const { setInstalledTags, setSizeSource, setLiveSizeGbByTag, setLoadingMeta } = a;
 
   /**
    * Several places here (opening/closing the custom-tag field, and once the old Filters panel)
@@ -78,11 +77,10 @@ export function usePullModelCatalogRefresh(a: UsePullModelCatalogRefreshArgs): P
   }
 
   const refreshInstalledAndMeta = useCallback(
-    async (forceCatalog = false) => {
+    async () => {
       setLoadingMeta(true);
       try {
-        const overlayRes = await refreshCatalog(forceCatalog);
-        const catalog = mergePullModelCatalog(PULL_MODEL_CATALOG, overlayRes ?? undefined);
+        const catalog = PULL_MODEL_CATALOG;
         const catalogTags = getCatalogTags(catalog);
 
         // Which tags are actually on this Deck has to come before the size lookup: a model
@@ -132,11 +130,11 @@ export function usePullModelCatalogRefresh(a: UsePullModelCatalogRefreshArgs): P
         setLoadingMeta(false);
       }
     },
-    [refreshCatalog]
+    []
   );
 
   useEffect(() => {
-    void refreshInstalledAndMeta(false);
+    void refreshInstalledAndMeta();
   }, [refreshInstalledAndMeta]);
 
   return { refreshInstalledAndMeta, focusAfterRedraw };

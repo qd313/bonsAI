@@ -35,7 +35,6 @@
 import { useCallback, useEffect, useRef, type MutableRefObject, type RefObject } from "react";
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../utils/deckyCall";
-import { notifyPullModelCatalogRefresh } from "../utils/pullModelCatalogRefresh";
 import type { LocalOllamaSetupStatus } from "../components/OllamaWhereAiRunsSection.types";
 import {
   LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
@@ -202,22 +201,11 @@ export function useLocalOllamaSetupFlow({
     }
     if (localSetupStatus.phase === "done" && localSetupStatus.done !== false && !setupAutoTestRanRef.current && !(localSetupStatus.error ?? "").trim()) {
       setupAutoTestRanRef.current = true;
-      const wasUpdateInstalled =
-        lastCompletedSetupProfileRef.current === LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED ||
-        localSetupStatus.profile === LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED;
-      if (wasUpdateInstalled) {
-        notifyPullModelCatalogRefresh(true);
-        void callDeckyWithTimeout<[{ force?: boolean }], { source?: string }>(
-          "fetch_pull_model_catalog",
-          [{ force: true }],
-          DECKY_RPC_TIMEOUT_MS
-        ).catch(() => {});
-      }
       // A custom pull joins the saved try order in the back end, where the download ends
       // (ollama_local_setup_rpc); this screen only saw the finish while it stayed open.
       toaster.toast({
         title: "Local Ollama setup complete",
-        body: wasUpdateInstalled ? "Running connection test and refreshing model catalog." : "Running connection test.",
+        body: "Running connection test.",
         duration: 4000,
       });
       void onTestConnectionRef.current();

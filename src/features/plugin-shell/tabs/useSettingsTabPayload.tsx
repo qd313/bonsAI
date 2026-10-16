@@ -2,7 +2,7 @@
  * Title: What draws the Settings tab
  *
  * Purpose: Runs while a person has the Settings tab open — screenshot
- * behavior, the AI's on-screen character, voice replies, UI scale, and
+ * behavior, the AI's on-screen character, UI scale, and
  * more. It builds that screen from the current settings it is handed.
  *
  * Used for: The tab bar's always-present Settings tab.
@@ -33,8 +33,6 @@ export function useSettingsTabPayload({
   setScreenshotAttachmentPreset,
   unifiedInputPersistenceMode,
   setUnifiedInputPersistenceMode,
-  voiceReplyMode,
-  setVoiceReplyMode,
   chatTextSizeSetting,
   aiCharacterEnabled,
   setAiCharacterEnabled,
@@ -72,8 +70,6 @@ export function useSettingsTabPayload({
         setScreenshotAttachmentPreset={setScreenshotAttachmentPreset}
         unifiedInputPersistenceMode={unifiedInputPersistenceMode}
         setUnifiedInputPersistenceMode={setUnifiedInputPersistenceMode}
-        voiceReplyMode={voiceReplyMode}
-        setVoiceReplyMode={setVoiceReplyMode}
         chatTextSizeSetting={chatTextSizeSetting}
         aiCharacterEnabled={aiCharacterEnabled}
         setAiCharacterEnabled={setAiCharacterEnabled}
@@ -106,7 +102,6 @@ export function useSettingsTabPayload({
     [
       screenshotAttachmentPreset,
       unifiedInputPersistenceMode,
-      voiceReplyMode,
       chatTextSizeSetting,
       aiCharacterEnabled,
       aiCharacterRandom,

@@ -46,8 +46,6 @@ function buildProps(shell: ReturnType<typeof useBonsaiPluginShell>, clearAll: ()
     setScreenshotAttachmentPreset: () => {},
     unifiedInputPersistenceMode: "persist_all",
     setUnifiedInputPersistenceMode: () => {},
-    voiceReplyMode: "off",
-    setVoiceReplyMode: () => {},
     chatTextSizeSetting: { value: "normal", set: () => {} },
     aiCharacterEnabled: false,
     setAiCharacterEnabled: () => {},

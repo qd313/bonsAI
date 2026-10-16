@@ -23,8 +23,6 @@ function buildProps(overrides: Partial<SettingsTabProps> = {}): SettingsTabProps
     setScreenshotAttachmentPreset: () => {},
     unifiedInputPersistenceMode: "no_persist",
     setUnifiedInputPersistenceMode: () => {},
-    voiceReplyMode: "off",
-    setVoiceReplyMode: () => {},
     chatTextSizeSetting: { value: "normal", set: () => {} },
     aiCharacterEnabled: false,
     setAiCharacterEnabled: () => {},

@@ -32,7 +32,6 @@ function minimalSnapshot(overrides: Partial<BonsaiSessionSurvivalSnapshot> = {})
       requestTimeoutSeconds: 120,
       latencyTimeoutsCustomEnabled: false,
       unifiedInputPersistenceMode: "persist_all",
-      voiceReplyMode: "off",
       chatTextSize: "normal",
       screenshotAttachmentPreset: "mid",
       desktopDebugNoteAutoSave: false,

@@ -61,11 +61,6 @@ export { DEFAULT_MODEL_POLICY_TIER };
 /** "Remember what I typed" is one on/off switch: on is `persist_all`. The old "Search only" choice is retired; a saved one loads as off (bonsaiSettingsNormalizers.ts). */
 export type UnifiedInputPersistenceMode = "persist_all" | "no_persist";
 /**
- * Whether a finished answer is read aloud without a press (D99 call 3): never, only when the
- * question that produced it came in through the mic, or every time. Off is the shipped default.
- */
-export type VoiceReplyMode = "off" | "voice_only" | "always";
-/**
  * How big the words are drawn, everywhere in the plugin (plan 87 F6, widened by plan 89): the chat, the
  * tab bar, the chat's name, the chips, the question box and every other tab. Small and Large step either
  * side of Normal; the rows keep their heights.
@@ -113,8 +108,6 @@ export type BonsaiSettings = {
   /** When true, stored warning/timeout apply; when false, defaults (60s / 180s) for Ask + Ollama. */
   latency_timeouts_custom_enabled: boolean;
   unified_input_persistence_mode: UnifiedInputPersistenceMode;
-  /** When a finished answer is read aloud on its own, without a Read aloud press (D99 call 3). */
-  voice_reply_mode: VoiceReplyMode;
   /** How big the words are drawn, everywhere: small, normal (the default) or large. */
   chat_text_size: ChatTextSize;
   /** Vision attachment downscale and JPEG quality preset. */
@@ -234,7 +227,6 @@ export type BonsaiSettingsSnapshotInput = {
   requestTimeoutSeconds: number;
   latencyTimeoutsCustomEnabled: boolean;
   unifiedInputPersistenceMode: UnifiedInputPersistenceMode;
-  voiceReplyMode: VoiceReplyMode;
   chatTextSize: ChatTextSize;
   screenshotAttachmentPreset: ScreenshotAttachmentPreset;
   desktopDebugNoteAutoSave: boolean;
@@ -303,8 +295,6 @@ export const MAX_REQUEST_TIMEOUT_SECONDS = 600;
 export const LATENCY_WARNING_STEP_SECONDS = 5;
 export const REQUEST_TIMEOUT_STEP_SECONDS = 10;
 export const DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE: UnifiedInputPersistenceMode = "no_persist";
-export const DEFAULT_VOICE_REPLY_MODE: VoiceReplyMode = "off";
-export const VOICE_REPLY_MODE_OPTIONS: VoiceReplyMode[] = ["off", "voice_only", "always"];
 export const DEFAULT_CHAT_TEXT_SIZE: ChatTextSize = "normal";
 export const CHAT_TEXT_SIZE_OPTIONS: ChatTextSize[] = ["small", "normal", "large"];
 export const SCREENSHOT_ATTACHMENT_PRESET_OPTIONS: ScreenshotAttachmentPreset[] = ["low", "mid", "max"];

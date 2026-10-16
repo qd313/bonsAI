@@ -32,7 +32,7 @@ import { settingsSectionIds, type SettingsSectionId } from "../features/folded-t
 const STOP_SELECTOR = "[tabindex], button, input";
 
 /** Sections that are one row of buttons: the ring enters on the first button from above and from below. */
-const FIRST_BUTTON_BOTH_WAYS: ReadonlySet<SettingsSectionId> = new Set(["screenshot", "textsize", "voicereplies"]);
+const FIRST_BUTTON_BOTH_WAYS: ReadonlySet<SettingsSectionId> = new Set(["screenshot", "textsize"]);
 
 /** The stops inside `host`, top to bottom: the innermost matches only. */
 function stopsIn(host: HTMLElement): HTMLElement[] {

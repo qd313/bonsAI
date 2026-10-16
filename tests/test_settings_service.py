@@ -671,6 +671,43 @@ class SettingsServiceTests(unittest.TestCase):
             self.assertIn("capabilities", loaded)
             self.assertFalse(settings_path.with_suffix(".json.tmp").exists())
 
+    def test_a_file_saved_with_removed_settings_still_loads_and_the_old_keys_are_dropped(self):
+        """A settings file written before a setting was removed still loads: no error, the old value is ignored and never written back."""
+        logger = _Logger()
+        removed_keys = ("voice_reply_mode",)
+        old_file = {"voice_reply_mode": "always", "latency_warning_seconds": 20}
+
+        sanitized = _sanitize_with_defaults(dict(old_file))
+        self.assertEqual(sanitized["latency_warning_seconds"], 20)
+        for key in removed_keys:
+            self.assertNotIn(key, sanitized)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            settings_dir = Path(tmp)
+            settings_path = settings_dir / "settings.json"
+            settings_path.write_text(json.dumps(old_file), encoding="utf-8")
+
+            loaded = load_settings(str(settings_path), _sanitize_with_defaults, logger)
+            self.assertEqual(loaded["latency_warning_seconds"], 20)
+            for key in removed_keys:
+                self.assertNotIn(key, loaded)
+
+            persisted = save_settings(
+                path=str(settings_path),
+                settings_dir=str(settings_dir),
+                incoming={"latency_warning_seconds": 30},
+                current=loaded,
+                sanitize_func=_sanitize_with_defaults,
+                logger=logger,
+            )
+            self.assertEqual(persisted["latency_warning_seconds"], 30)
+            on_disk = json.loads(settings_path.read_text(encoding="utf-8"))
+            reloaded = load_settings(str(settings_path), _sanitize_with_defaults, logger)
+            for key in removed_keys:
+                self.assertNotIn(key, persisted)
+                self.assertNotIn(key, on_disk)
+                self.assertNotIn(key, reloaded)
+
     def test_ui_scale_settings_defaults_and_sanitize(self):
         logger = _Logger()
 

@@ -36,6 +36,13 @@ describe("settings contracts", () => {
   });
 
 
+  it("normalizeSettings: a settings file saved with removed settings (voice replies, UI scale) still loads and the old keys are not carried", () => {
+    const loaded = normalizeSettings({ voice_reply_mode: "always", latency_warning_seconds: 20 });
+    expect(loaded.latency_warning_seconds).toBe(20);
+    expect("voice_reply_mode" in loaded).toBe(false);
+    expect(loaded.chat_text_size).toBe(normalizeSettings({}).chat_text_size);
+  });
+
   it("normalizeSettings: ui scale defaults and manual profile", () => {
     const defaults = normalizeSettings({});
     expect(defaults.ui_scale_auto_enabled).toBe(true);
@@ -352,7 +359,6 @@ describe("settings contracts", () => {
       requestTimeoutSeconds: 150,
       latencyTimeoutsCustomEnabled: true,
       unifiedInputPersistenceMode: "no_persist",
-      voiceReplyMode: "off",
       screenshotAttachmentPreset: "mid",
       desktopDebugNoteAutoSave: true,
       desktopAskVerboseLogging: false,
@@ -422,7 +428,6 @@ describe("settings contracts", () => {
       requestTimeoutSeconds: 45,
       latencyTimeoutsCustomEnabled: false,
       unifiedInputPersistenceMode: "persist_all" as const,
-      voiceReplyMode: "off" as const,
       screenshotAttachmentPreset: DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
       desktopDebugNoteAutoSave: false,
       desktopAskVerboseLogging: false,
@@ -571,7 +576,6 @@ describe("settings contracts", () => {
       requestTimeoutSeconds: normalized.request_timeout_seconds,
       latencyTimeoutsCustomEnabled: normalized.latency_timeouts_custom_enabled,
       unifiedInputPersistenceMode: normalized.unified_input_persistence_mode,
-      voiceReplyMode: normalized.voice_reply_mode,
       screenshotAttachmentPreset: normalized.screenshot_attachment_preset,
       desktopDebugNoteAutoSave: normalized.desktop_debug_note_auto_save,
       desktopAskVerboseLogging: normalized.desktop_ask_verbose_logging,

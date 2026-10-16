@@ -3,7 +3,7 @@
  *
  * Purpose: The Settings tab — screen size, whether the Ask bar remembers
  * what you typed, story spoiler masking, how many suggestion chips show,
- * voice input and voice reply settings, the AI's voice & personality
+ * voice input settings, the AI's voice & personality
  * picker, whether the Developer tab is visible, and two buttons for
  * clearing cached data or wiping everything back to a fresh install.
  * Nothing about talking to Ollama lives here — that is the whole Ollama tab.
@@ -38,7 +38,6 @@
  *     │ Suggestion chips       <- one chip vs two toggle      │
  *     │ Voice input            <- its own file, see           │
  *     │                           VoiceInputSettingsSection   │
- *     │ Voice replies          <- Off / By voice / Always     │
  *     │ AI voice & personality <- its own file, see           │
  *     │                           SettingsTabCharacterSection │
  *     │ Data                   <- its own file, see           │
@@ -59,10 +58,8 @@ import React from "react";
 import { PanelSection, PanelSectionRow } from "@decky/ui";
 import {
   SCREENSHOT_ATTACHMENT_PRESET_OPTIONS,
-  VOICE_REPLY_MODE_OPTIONS,
   type ScreenshotAttachmentPreset,
   type UnifiedInputPersistenceMode,
-  type VoiceReplyMode,
 } from "../data/bonsaiSettingsSchema";
 import type { AiCharacterAccentIntensityId } from "../data/aiCharacterAccentIntensity";
 import { VoiceInputSettingsSection } from "./VoiceInputSettingsSection";
@@ -84,9 +81,6 @@ import {
   SETTINGS_FOLD_TAB,
   SETTINGS_ROW_HELP,
   SETTINGS_SECTIONS,
-  VOICE_REPLY_MODE_DESCRIPTION,
-  VOICE_REPLY_MODE_LABEL,
-  VOICE_REPLY_MODE_SHORT_LABEL,
   settingsSectionSummaries,
   type SettingsSectionId,
 } from "../features/folded-tabs/settingsTabFolds";
@@ -97,10 +91,6 @@ export type SettingsTabProps = {
 
   unifiedInputPersistenceMode: UnifiedInputPersistenceMode;
   setUnifiedInputPersistenceMode: (v: UnifiedInputPersistenceMode) => void;
-
-  /** When a finished answer is read aloud on its own, without a Read aloud press (D99 call 3). */
-  voiceReplyMode: VoiceReplyMode;
-  setVoiceReplyMode: (v: VoiceReplyMode) => void;
 
   /** How big the words are, everywhere in the plugin: small, normal or large (plan 87 call 3, plan 89). */
   chatTextSizeSetting: ChatTextSizeSetting;
@@ -158,8 +148,6 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   setScreenshotAttachmentPreset,
   unifiedInputPersistenceMode,
   setUnifiedInputPersistenceMode,
-  voiceReplyMode,
-  setVoiceReplyMode,
   chatTextSizeSetting,
   aiCharacterEnabled,
   setAiCharacterEnabled,
@@ -197,7 +185,6 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
     spoilerMasking: strategySpoilerMaskingEnabled,
     singleChip: presetSingleChip,
     voiceSttModel,
-    voiceReplyMode,
     aiCharacterEnabled,
     showDeveloperTab,
   });
@@ -320,24 +307,6 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             onMoveUpFromFirst={up("voiceinput")}
             onMoveDownFromLast={down("voiceinput")}
           />,
-        )}
-
-        {fold(
-          "voicereplies",
-          <PanelSection>
-            <SettingsTabChoiceRow
-              label="Voice replies"
-              help={VOICE_REPLY_MODE_DESCRIPTION[voiceReplyMode]}
-              options={VOICE_REPLY_MODE_OPTIONS.map((mode) => ({
-                id: mode,
-                label: VOICE_REPLY_MODE_SHORT_LABEL[mode],
-                ariaLabel: `${VOICE_REPLY_MODE_LABEL[mode]}: ${VOICE_REPLY_MODE_DESCRIPTION[mode]}`,
-              }))}
-              value={voiceReplyMode}
-              onPick={setVoiceReplyMode}
-              nav={both("voicereplies")}
-            />
-          </PanelSection>,
         )}
 
         {fold(

@@ -517,24 +517,6 @@
     }
   },
   {
-    "name": "an unknown voice reply mode falls back to off, never to reading on its own",
-    "input": {
-      "voice_reply_mode": "whenever"
-    },
-    "expected": {
-      "voice_reply_mode": "off"
-    }
-  },
-  {
-    "name": "voice reply mode is trimmed before matching",
-    "input": {
-      "voice_reply_mode": " always "
-    },
-    "expected": {
-      "voice_reply_mode": "always"
-    }
-  },
-  {
     "name": "scramble style is trimmed before matching",
     "input": {
       "stream_scramble_style": " chip "

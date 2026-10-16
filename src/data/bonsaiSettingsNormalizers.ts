@@ -78,10 +78,8 @@ import {
   DEFAULT_STREAM_SCRAMBLE_SETTLE_MS,
   DEFAULT_STREAM_SCRAMBLE_STYLE,
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
-  DEFAULT_VOICE_REPLY_MODE,
   DEFAULT_CHAT_TEXT_SIZE,
   CHAT_TEXT_SIZE_OPTIONS,
-  VOICE_REPLY_MODE_OPTIONS,
   DEFAULT_VOICE_STT_MODEL,
   LATENCY_WARNING_STEP_SECONDS,
   MAX_LATENCY_WARNING_SECONDS,
@@ -110,7 +108,6 @@ import {
   type StreamScrambleStyle,
   type TabResumeMode,
   type UnifiedInputPersistenceMode,
-  type VoiceReplyMode,
   type ChatTextSize,
   type VoiceSttModelId,
 } from "./bonsaiSettingsSchema";
@@ -474,11 +471,6 @@ const SIMPLE_FIELDS = {
   // One on/off switch now: `persist_all` is on, everything else is off. The old "Search" name is
   // still read from an older settings file, but it loads as off (the maintainer's call, plan 79).
   unified_input_persistence_mode: normalizeUnifiedInputPersistenceMode,
-  // Off unless the person turns it on; an unrecognised value must not start reading answers
-  // out loud on its own.
-  voice_reply_mode: enumOf<VoiceReplyMode>(VOICE_REPLY_MODE_OPTIONS, DEFAULT_VOICE_REPLY_MODE, {
-    trim: true,
-  }),
   // Normal unless the person picks another; an old settings file with no value reads as Normal.
   chat_text_size: enumOf<ChatTextSize>(CHAT_TEXT_SIZE_OPTIONS, DEFAULT_CHAT_TEXT_SIZE, { trim: true }),
   // Trimmed before matching, case-sensitive, and an unknown value falls back to `off` —

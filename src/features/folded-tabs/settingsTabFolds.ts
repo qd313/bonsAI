@@ -1,9 +1,9 @@
 /**
  * Title: The Settings tab's folded sections: their names, their summaries, and the rows' longer text
  *
- * Purpose: What the folded Settings tab (plan 91 § 2b, § 3c; plan 92 T1) says about itself: the ten
+ * Purpose: What the folded Settings tab (plan 91 § 2b, § 3c; plan 92 T1) says about itself: the nine
  * sections in order (UI scale, Screenshot quality, Text size, Remember what I typed, Story spoilers,
- * Suggestion chips, Voice input, Voice replies, AI voice & personality, Data), each one's summary line
+ * Suggestion chips, Voice input, AI voice & personality, Data), each one's summary line
  * from the current settings, and the longer text of each row that the help strip shows, word for word
  * as the tab used to print it under or above the row.
  *
@@ -27,7 +27,6 @@ import {
 import type {
   ChatTextSize,
   ScreenshotAttachmentPreset,
-  VoiceReplyMode,
   VoiceSttModelId,
 } from "../../data/bonsaiSettingsSchema";
 import { summarizeSection } from "./sectionSummary";
@@ -43,7 +42,6 @@ export const SETTINGS_SECTIONS = [
   { id: "spoilers", title: "Story spoilers (Strategy mode)" },
   { id: "chips", title: "Suggestion chips" },
   { id: "voiceinput", title: "Voice input" },
-  { id: "voicereplies", title: "Voice replies" },
   { id: "character", title: "AI voice & personality" },
   { id: "data", title: "Data" },
 ] as const;
@@ -65,24 +63,6 @@ export const CHAT_TEXT_SIZE_LABEL: Record<ChatTextSize, string> = {
   small: "Small",
   normal: "Normal",
   large: "Large",
-};
-
-export const VOICE_REPLY_MODE_LABEL: Record<VoiceReplyMode, string> = {
-  off: "Off",
-  voice_only: "When I asked by voice",
-  always: "Always",
-};
-
-export const VOICE_REPLY_MODE_SHORT_LABEL: Record<VoiceReplyMode, string> = {
-  off: "Off",
-  voice_only: "By voice",
-  always: "Always",
-};
-
-export const VOICE_REPLY_MODE_DESCRIPTION: Record<VoiceReplyMode, string> = {
-  off: "Answers are read only when you press Read aloud.",
-  voice_only: "An answer to a question you asked by voice is read out on its own.",
-  always: "Every answer is read out on its own.",
 };
 
 /** The speech-to-text models' short names, as the drawing has them, and their full words (the buttons' labels for a screen reader). */
@@ -136,7 +116,6 @@ export interface SettingsFoldValues {
   spoilerMasking: boolean;
   singleChip: boolean;
   voiceSttModel: VoiceSttModelId;
-  voiceReplyMode: VoiceReplyMode;
   aiCharacterEnabled: boolean;
   showDeveloperTab: boolean;
 }
@@ -155,9 +134,6 @@ export function settingsSectionSummaries(v: SettingsFoldValues): Record<Settings
     ]),
     chips: summarizeSection("Suggestion chips", [{ kind: "switch", label: "Show one chip instead of two", on: v.singleChip }]),
     voiceinput: summarizeSection("Voice input", [{ kind: "choice", label: "STT model", value: v.voiceSttModel }]),
-    voicereplies: summarizeSection("Voice replies", [
-      { kind: "choice", label: "Voice replies", value: VOICE_REPLY_MODE_SHORT_LABEL[v.voiceReplyMode] },
-    ]),
     character: summarizeSection("AI voice & personality", [
       { kind: "switch", label: "AI voice & personality", on: v.aiCharacterEnabled },
     ]),

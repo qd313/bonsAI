@@ -41,8 +41,6 @@ function props(overrides: Partial<SettingsTabProps> = {}): SettingsTabProps {
     setScreenshotAttachmentPreset: () => {},
     unifiedInputPersistenceMode: "persist_all",
     setUnifiedInputPersistenceMode: () => {},
-    voiceReplyMode: "off",
-    setVoiceReplyMode: () => {},
     chatTextSizeSetting: { value: "normal", set: () => {} },
     aiCharacterEnabled: true,
     setAiCharacterEnabled: () => {},

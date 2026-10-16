@@ -19,14 +19,13 @@ import {
   settingsSectionIds,
   settingsSectionSummaries,
   uiScaleAutoHelp,
-  VOICE_REPLY_MODE_DESCRIPTION,
   type SettingsFoldValues,
 } from "./settingsTabFolds";
 
 const DRAWING_STATE = join(process.cwd(), "docs", "demos", "mockup-board-2", "src", "42-tabs-data.js");
 const drawn = readFileSync(DRAWING_STATE, "utf8");
 
-/** The state the drawing's Settings tab is in: auto on, Save memory, Normal, remember off, spoilers on, chip off, base.en, By voice, character on, Developer on. */
+/** The state the drawing's Settings tab is in: auto on, Save memory, Normal, remember off, spoilers on, chip off, base.en, character on, Developer on. */
 const DRAWN: SettingsFoldValues = {
   uiScaleAutoEnabled: true,
   screenshotAttachmentPreset: "low",
@@ -35,7 +34,6 @@ const DRAWN: SettingsFoldValues = {
   spoilerMasking: true,
   singleChip: false,
   voiceSttModel: "base.en",
-  voiceReplyMode: "voice_only",
   aiCharacterEnabled: true,
   showDeveloperTab: true,
 };
@@ -45,10 +43,10 @@ describe("the Settings tab's sections", () => {
     expect(SETTINGS_FOLD_TAB).toBe("settings");
   });
 
-  it("are the drawing's ten, in the drawing's order, under the drawing's names", () => {
+  it("are the drawing's sections, in the drawing's order, under the drawing's names", () => {
     const names = Array.from(drawn.matchAll(/sec\("([^"]+)"\)/g)).map((m) => m[1]!);
     const settingsStart = names.indexOf("UI scale");
-    expect(names.slice(settingsStart, settingsStart + 10)).toEqual(SETTINGS_SECTIONS.map((s) => s.title));
+    expect(names.slice(settingsStart, settingsStart + SETTINGS_SECTIONS.length)).toEqual(SETTINGS_SECTIONS.map((s) => s.title));
     expect(SETTINGS_SECTIONS.map((s) => s.id)).toEqual([
       "uiscale",
       "screenshot",
@@ -57,7 +55,6 @@ describe("the Settings tab's sections", () => {
       "spoilers",
       "chips",
       "voiceinput",
-      "voicereplies",
       "character",
       "data",
     ]);
@@ -65,9 +62,9 @@ describe("the Settings tab's sections", () => {
 
   it("leave UI scale out while the Developer tab is off", () => {
     expect(settingsSectionIds(false)).not.toContain("uiscale");
-    expect(settingsSectionIds(false)).toHaveLength(9);
+    expect(settingsSectionIds(false)).toHaveLength(8);
     expect(settingsSectionIds(true)[0]).toBe("uiscale");
-    expect(settingsSectionIds(true)).toHaveLength(10);
+    expect(settingsSectionIds(true)).toHaveLength(9);
   });
 });
 
@@ -81,7 +78,6 @@ describe("the Settings tab's summaries, by the drawing's rule", () => {
       spoilers: "Hide spoilers until I tap on",
       chips: "Show one chip instead of two off",
       voiceinput: "STT model: base.en",
-      voicereplies: "By voice",
       character: "on",
       data: "Show Developer tab on",
     });
@@ -96,7 +92,6 @@ describe("the Settings tab's summaries, by the drawing's rule", () => {
       spoilerMasking: false,
       singleChip: true,
       voiceSttModel: "tiny.en",
-      voiceReplyMode: "always",
       aiCharacterEnabled: false,
       showDeveloperTab: false,
     });
@@ -108,7 +103,6 @@ describe("the Settings tab's summaries, by the drawing's rule", () => {
       spoilers: "Hide spoilers until I tap off",
       chips: "Show one chip instead of two on",
       voiceinput: "STT model: tiny.en",
-      voicereplies: "Always",
       character: "off",
       data: "Show Developer tab off",
     });
@@ -126,9 +120,6 @@ describe("the Settings tab's strip words", () => {
       ["Voice input", SETTINGS_ROW_HELP.voiceInput],
       ["AI voice & personality", SETTINGS_ROW_HELP.character],
       ["Show Developer tab", SETTINGS_ROW_HELP.developerTab],
-      ["Voice replies: Off", VOICE_REPLY_MODE_DESCRIPTION.off],
-      ["Voice replies: By voice", VOICE_REPLY_MODE_DESCRIPTION.voice_only],
-      ["Voice replies: Always", VOICE_REPLY_MODE_DESCRIPTION.always],
     ];
     for (const [row, words] of fromDrawing) expect(drawn, row).toContain(words);
   });

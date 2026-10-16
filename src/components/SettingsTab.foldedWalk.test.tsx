@@ -127,8 +127,6 @@ describe("the folded Settings tab, every section open", () => {
     /^Voice input/,
     "tiny.en (faster, less accurate)",
     "Install voice engine",
-    /^Voice replies/,
-    /^Off: /,
     /^AI voice & personality section/,
     "AI voice & personality",
     "Character",
@@ -232,14 +230,14 @@ describe("the floating Open all button on the Settings tab", () => {
   const lineOf = (c: HTMLElement, id: string) => c.querySelector<SteamEl>(`[data-bonsai-fold-line="${id}"]`)!;
   const hostOf = (c: HTMLElement) => c.querySelector<SteamEl>(`[data-bonsai-fold-all="${SETTINGS_FOLD_TAB}"]`)!;
 
-  it("Right from Voice replies puts the ring on it; A opens every section (Close all); Down holds; Up returns to Voice replies", () => {
+  it("Right from Voice input puts the ring on it; A opens every section (Close all); Down holds; Up returns to Voice input", () => {
     closeAllSettingsSections();
     const w = walk(DECK_PANE, "nearest");
     const host = hostOf(w.container);
     const button = host.querySelector("button")!;
     act(() => {
-      putSteamRingOn(lineOf(w.container, "voicereplies"));
-      lineOf(w.container, "voicereplies").__nav?.onMoveRight?.();
+      putSteamRingOn(lineOf(w.container, "voiceinput"));
+      lineOf(w.container, "voiceinput").__nav?.onMoveRight?.();
     });
     expect(steamRingHolder()).toBe(button);
     act(() => button.click());
@@ -253,7 +251,7 @@ describe("the floating Open all button on the Settings tab", () => {
     act(() => {
       host.__nav?.onMoveUp?.();
     });
-    expect(steamRingHolder()).toBe(lineOf(w.container, "voicereplies"));
+    expect(steamRingHolder()).toBe(lineOf(w.container, "voiceinput"));
     w.unmount();
   });
 

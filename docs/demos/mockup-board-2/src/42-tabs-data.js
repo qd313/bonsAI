@@ -62,8 +62,6 @@ const TAB_DATA = {
     { t: "stack", label: "STT model", opts: ["tiny.en (faster, less accurate)", "base.en (more accurate, recommended)"], sel: 1, desc: "Local speech-to-text for the Ask bar mic button. Enable the microphone permission in Permissions first. Audio is processed on-device and never saved.", how: "above" },
     line("Engine: whisper-cli ready<br>Model: base.en ready<br>Voice engine is ready for on-device transcription.", "info"),
     gbtn("Reinstall voice engine"),
-    sec("Voice replies"),
-    choice("Voice replies", ["Off", "By voice", "Always"], 1, { descs: ["Answers are read only when you press Read aloud.", "An answer to a question you asked by voice is read out on its own.", "Every answer is read out on its own."], how: "above" }),
     sec("AI voice & personality"),
     tog("AI voice & personality", "Preset, random, or custom character tone in replies.", true),
     gbtn("Random", { picker: true }),

@@ -31,7 +31,6 @@ import {
   SETTINGS_FOLD_TAB,
   SETTINGS_ROW_HELP,
   SETTINGS_SECTIONS,
-  VOICE_REPLY_MODE_DESCRIPTION,
   accentIntensityHelp,
   settingsSectionIds,
   uiScaleAutoHelp,
@@ -79,13 +78,12 @@ describe("the Settings tab with every section closed", () => {
     closeAllSettingsSections();
     const { container } = render(
       <SettingsTab
-        {...props({ showDeveloperTab: true, screenshotAttachmentPreset: "max", voiceReplyMode: "always", voiceSttModel: "base.en" })}
+        {...props({ showDeveloperTab: true, screenshotAttachmentPreset: "max", voiceSttModel: "base.en" })}
       />,
     );
     const summary = (id: string) =>
       container.querySelector(`[data-bonsai-fold-line="${id}"] .bonsai-fold-line__summary`)?.textContent;
     expect(summary("screenshot")).toBe("Best detail");
-    expect(summary("voicereplies")).toBe("Always");
     expect(summary("voiceinput")).toBe("STT model: base.en");
     expect(summary("data")).toBe("Show Developer tab on");
   });
@@ -115,7 +113,6 @@ describe("the Settings tab with every section open: one line per setting, longer
     expect(helpOf(container, "Hide spoilers until I tap")).toBe(SETTINGS_ROW_HELP.spoilers);
     expect(helpOf(container, "Show one chip instead of two")).toBe(SETTINGS_ROW_HELP.chips);
     expect(helpOf(container, "STT model")).toBe(SETTINGS_ROW_HELP.voiceInput);
-    expect(helpOf(container, "Voice replies")).toBe(VOICE_REPLY_MODE_DESCRIPTION.off);
     expect(helpOf(container, "AI voice & personality")).toBe(SETTINGS_ROW_HELP.character);
     expect(helpOf(container, "Accent intensity")).toBe(accentIntensityHelp("balanced"));
     expect(helpOf(container, "Show Developer tab")).toBe(SETTINGS_ROW_HELP.developerTab);
@@ -133,18 +130,10 @@ describe("the Settings tab with every section open: one line per setting, longer
       SETTINGS_ROW_HELP.voiceInput,
       SETTINGS_ROW_HELP.character,
       SETTINGS_ROW_HELP.developerTab,
-      VOICE_REPLY_MODE_DESCRIPTION.off,
     ]) {
       expect(text, words).not.toContain(words);
     }
     expect(container.querySelector(".bonsai-prose")).toBeNull();
-  });
-
-  it("changes the Voice replies words with the pick", () => {
-    const view = render(<SettingsTab {...props({ voiceReplyMode: "off" })} />);
-    expect(helpOf(view.container, "Voice replies")).toBe(VOICE_REPLY_MODE_DESCRIPTION.off);
-    view.rerender(<SettingsTab {...props({ voiceReplyMode: "always" })} />);
-    expect(helpOf(view.container, "Voice replies")).toBe(VOICE_REPLY_MODE_DESCRIPTION.always);
   });
 
   it("names the size in use in the UI scale words", () => {
@@ -191,7 +180,6 @@ describe("the Settings tab's moves out of a section", () => {
       ["Remember what I typed", "remember"],
       ["Hide spoilers until I tap", "spoilers"],
       ["Show one chip instead of two", "chips"],
-      ["Voice replies", "voicereplies"],
     ];
     for (const [label, id] of rows) {
       const control = firstControl(label);

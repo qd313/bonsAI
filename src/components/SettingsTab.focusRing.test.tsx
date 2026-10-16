@@ -4,7 +4,7 @@
  *          2026-10-02, plan79-P79-M2-SETTINGS-DEV.json: no ring on the character picker button or
  *          Clear cache). Steam shows focus on its own buttons by changing their fill; these buttons
  *          set their fill inline, which always wins, so no ring appeared.
- * Used for: Screenshot quality and Voice replies choices (selected and not), the character picker
+ * Used for: Screenshot quality choices (selected and not), the character picker
  *           button, the Accent intensity button, Clear cache and Clear all data.
  * Does not: See pixels (jsdom has no paint engine). It runs the CSS cascade: the real tab inside
  *           `.bonsai-scope` with the plugin's real stylesheet, Steam's focus class put on each
@@ -26,8 +26,6 @@ function props(overrides: Partial<SettingsTabProps> = {}): SettingsTabProps {
     setScreenshotAttachmentPreset: () => {},
     unifiedInputPersistenceMode: "persist_all",
     setUnifiedInputPersistenceMode: () => {},
-    voiceReplyMode: "off",
-    setVoiceReplyMode: () => {},
     chatTextSizeSetting: { value: "normal", set: () => {} },
     aiCharacterEnabled: true,
     setAiCharacterEnabled: () => {},
@@ -87,7 +85,6 @@ describe("Settings tab: a focused button always shows a ring", () => {
     const { container, getAllByLabelText, getByText } = renderTab();
     const buttons: [string, HTMLElement][] = [
       ...getAllByLabelText(/^Set screenshot quality to /).map((b): [string, HTMLElement] => ["screenshot " + b.textContent, b]),
-      ...getAllByLabelText(/^(Off|When I asked by voice|Always): /).map((b): [string, HTMLElement] => ["voice " + b.textContent, b]),
       ["character picker", container.querySelector("button.bonsai-ai-character-picker-open") as HTMLElement],
       ["accent", container.querySelector("button.bonsai-accent-intensity-trigger") as HTMLElement],
       ["clear cache", getByText("Clear cache...").closest("button") as HTMLElement],

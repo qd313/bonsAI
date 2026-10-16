@@ -55,7 +55,7 @@ describe("permissionJumpRegistry", () => {
 
   it("reports false, honestly, when no row has registered a nav node at all", async () => {
     vi.useFakeTimers();
-    armPermissionJump("main", "steam_web_api");
+    armPermissionJump("main", "microphone_access");
 
     let claimed: boolean | null = null;
     restorePermissionJumpFocusWithRetry((ok) => {
@@ -71,8 +71,8 @@ describe("permissionJumpRegistry", () => {
   it("reports false when the registered row's own nav node declines the move", async () => {
     vi.useFakeTimers();
     const declines = fakeNavHolder(false);
-    registerPermissionRowNavFocus("steam_web_api", declines);
-    armPermissionJump("main", "steam_web_api");
+    registerPermissionRowNavFocus("microphone_access", declines);
+    armPermissionJump("main", "microphone_access");
 
     let claimed: boolean | null = null;
     let attempts = 0;
@@ -92,8 +92,8 @@ describe("permissionJumpRegistry", () => {
   it("restores focus via the row's own registered nav node, not a DOM focus() call", async () => {
     vi.useFakeTimers();
     const claims = fakeNavHolder(true);
-    registerPermissionRowNavFocus("steam_web_api", claims);
-    armPermissionJump("main", "steam_web_api");
+    registerPermissionRowNavFocus("microphone_access", claims);
+    armPermissionJump("main", "microphone_access");
 
     let claimed: boolean | null = null;
     restorePermissionJumpFocusWithRetry((ok) => {

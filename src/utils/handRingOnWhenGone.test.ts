@@ -2,8 +2,7 @@
  * Title: A control that removes itself hands the ring on
  * Purpose: Pin the fix for plan 70 flow L5.2 (workshop:test-evidence/plan70-L5-PERMS-CLEAN-06.json):
  *          A on the troubleshooting hint's Dismiss removed the hint, and nothing held the ring
- *          afterwards; the next Down placed it on the ban-lookup row. The shared helper is the same
- *          one Helpful uses (buildReplyActionsElement.tsx).
+ *          afterwards. The shared helper is the same one Helpful uses (buildReplyActionsElement.tsx).
  * Used for: handRingOnWhenGone.ts and chatTranscriptNavHelpers.ts's dismissHintKeepingRing.
  * Does not: Prove the fix on the Deck (see the commit for the check it owes).
  */
@@ -43,20 +42,7 @@ afterEach(() => {
 });
 
 describe("Dismiss on the troubleshooting hint", () => {
-  it("hands the ring to the ban-lookup row below when the hint goes away", () => {
-    const { dismissBtn, buttons, dismiss } = mountHint();
-    const deny = fakeNavHolder();
-    registerNavFocus("chat-perm-hint-deny", deny);
-    dismissBtn.focus();
-
-    dismissHintKeepingRing(buttons, dismiss);
-    vi.runAllTimers();
-
-    expect(dismiss).toHaveBeenCalledTimes(1);
-    expect(deny.current.TakeFocus).toHaveBeenCalledWith(true);
-  });
-
-  it("falls through to the chips when the ban-lookup row is not showing", () => {
+  it("hands the ring to the chips when the hint goes away", () => {
     const { dismissBtn, buttons, dismiss } = mountHint();
     const chips = fakeNavHolder();
     registerNavFocus("preset-carousel", chips);
@@ -93,13 +79,13 @@ describe("Dismiss on the troubleshooting hint", () => {
     const elsewhere = document.createElement("button");
     document.body.appendChild(elsewhere);
     elsewhere.focus();
-    const deny = fakeNavHolder();
-    registerNavFocus("chat-perm-hint-deny", deny);
+    const chips = fakeNavHolder();
+    registerNavFocus("preset-carousel", chips);
 
     dismissHintKeepingRing(buttons, dismiss);
     vi.runAllTimers();
 
     expect(dismiss).toHaveBeenCalledTimes(1);
-    expect(deny.current.TakeFocus).not.toHaveBeenCalled();
+    expect(chips.current.TakeFocus).not.toHaveBeenCalled();
   });
 });

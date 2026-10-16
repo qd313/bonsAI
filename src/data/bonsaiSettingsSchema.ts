@@ -94,8 +94,6 @@ export type BonsaiCapabilities = {
   filesystem_write: boolean;
   media_library_access: boolean;
   steam_logs_read: boolean;
-  /** Outbound Steam Web API (GetPlayerBans) for ``bonsai:vac-check``; key stored in settings. */
-  steam_web_api: boolean;
   /** Local microphone capture for speech-to-text in the Ask bar. */
   microphone_access: boolean;
   /** Downloads from the internet (Ollama, models, voice engine, knowledge library). */
@@ -185,8 +183,6 @@ export type BonsaiSettings = {
   strategy_spoiler_masking_enabled: boolean;
   /** When true, spoiler blocks start expanded after the user consented on that Ask (still collapsible). */
   strategy_spoiler_auto_reveal_after_consent: boolean;
-  /** Steam Web API key for GetPlayerBans (VAC check command); stored on device with plugin settings. */
-  steam_web_api_key: string;
   /** When true, show the translucent on-screen ingest debug HUD (Developer tab opt-in). */
   show_onscreen_debug_hud: boolean;
   /**
@@ -269,7 +265,6 @@ export type BonsaiSettingsSnapshotInput = {
   ollamaLocalAutostart: boolean;
   strategySpoilerMaskingEnabled: boolean;
   strategySpoilerAutoRevealAfterConsent: boolean;
-  steamWebApiKey: string;
   showOnscreenDebugHud: boolean;
   devForceSessionRagChips: boolean;
   devPreloadAskModel: boolean;
@@ -335,14 +330,11 @@ export const PRESET_CHIP_ANIMATION_OPTIONS: PresetChipAnimation[] = ["fade", "ca
 export const OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP = "127.0.0.1:11434";
 export const DEFAULT_ASK_MODE: AskModeId = "speed";
 export const DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED = true;
-/** Align with backend ``STEAM_WEB_API_KEY_MAX_LEN``. */
-export const STEAM_WEB_API_KEY_MAX_LEN = 128;
 
 export const DEFAULT_CAPABILITIES: BonsaiCapabilities = {
   filesystem_write: false,
   media_library_access: false,
   steam_logs_read: false,
-  steam_web_api: false,
   microphone_access: false,
   internet_downloads: false,
 };

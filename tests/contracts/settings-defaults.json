@@ -11,8 +11,7 @@
     "internet_downloads": false,
     "media_library_access": false,
     "microphone_access": false,
-    "steam_logs_read": false,
-    "steam_web_api": false
+    "steam_logs_read": false
   },
   "chat_text_size": "normal",
   "desktop_app_log_level": "off",
@@ -43,7 +42,6 @@
   "screenshot_attachment_preset": "low",
   "show_developer_tab": false,
   "show_onscreen_debug_hud": false,
-  "steam_web_api_key": "",
   "strategy_spoiler_auto_reveal_after_consent": false,
   "strategy_spoiler_masking_enabled": true,
   "stream_scramble_color": "green",

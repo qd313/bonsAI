@@ -57,8 +57,6 @@ function permissionRowNavFocusId(id: PermissionFocusTargetId): NavFocusId {
       return "permissions-row-game-context-read";
     case "filesystem_write":
       return "permissions-row-filesystem-write";
-    case "steam_web_api":
-      return "permissions-row-steam-web-api";
     case "microphone_access":
       return "permissions-row-microphone-access";
     case "internet_downloads":

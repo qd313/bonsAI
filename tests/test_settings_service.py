@@ -63,8 +63,6 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertFalse(sanitized["desktop_debug_note_auto_save"])
         self.assertFalse(sanitized["desktop_ask_verbose_logging"])
         self.assertFalse(sanitized["capabilities"]["filesystem_write"])
-        self.assertFalse(sanitized["capabilities"]["steam_web_api"])
-        self.assertEqual(sanitized["steam_web_api_key"], "")
         self.assertFalse(sanitized["ai_character_enabled"])
         self.assertTrue(sanitized["ai_character_random"])
         self.assertEqual(sanitized["ai_character_preset_id"], "")
@@ -580,8 +578,51 @@ class SettingsServiceTests(unittest.TestCase):
             caps = loaded["capabilities"]
             self.assertTrue(caps["filesystem_write"])
             self.assertTrue(caps["media_library_access"])
-            self.assertFalse(caps["steam_web_api"])
             self.assertFalse(caps["microphone_access"])
+
+    @staticmethod
+    def _write_file_with_retired_steam_settings(settings_path: Path) -> None:
+        settings_path.write_text(
+            json.dumps(
+                {
+                    "steam_web_api_key": "not-a-real-value",
+                    "capabilities": {"steam_web_api": True, "filesystem_write": True},
+                    "latency_warning_seconds": 30,
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    def test_a_file_saved_with_the_retired_steam_key_and_permission_still_loads(self):
+        """The Steam ban lookup was removed (plan 86): an older file that still holds its key and
+        permission loads with no error, both are ignored, and every other value is intact."""
+        with tempfile.TemporaryDirectory() as tmp:
+            settings_path = Path(tmp) / "settings.json"
+            self._write_file_with_retired_steam_settings(settings_path)
+            loaded = load_settings(str(settings_path), _sanitize_with_defaults, _Logger())
+            self.assertNotIn("steam_web_api_key", loaded)
+            self.assertNotIn("steam_web_api", loaded["capabilities"])
+            self.assertTrue(loaded["capabilities"]["filesystem_write"])
+            self.assertEqual(loaded["latency_warning_seconds"], 30)
+
+    def test_loading_a_file_with_the_retired_steam_key_removes_it_from_the_file(self):
+        """The one-time scrub: the saved key and permission are gone from settings.json straight
+        after the first load, without waiting for a later save, and nothing else in the file changes."""
+        with tempfile.TemporaryDirectory() as tmp:
+            settings_path = Path(tmp) / "settings.json"
+            self._write_file_with_retired_steam_settings(settings_path)
+            load_settings(str(settings_path), _sanitize_with_defaults, _Logger())
+            on_disk = json.loads(settings_path.read_text(encoding="utf-8"))
+            self.assertNotIn("steam_web_api_key", on_disk)
+            self.assertEqual(on_disk["capabilities"], {"filesystem_write": True})
+            self.assertEqual(on_disk["latency_warning_seconds"], 30)
+            self.assertFalse(settings_path.with_suffix(".json.tmp").exists())
+
+            # An old file with no permissions block keeps its old-file defaults after the scrub.
+            settings_path.write_text(json.dumps({"steam_web_api_key": "not-a-real-value"}), encoding="utf-8")
+            loaded = load_settings(str(settings_path), _sanitize_with_defaults, _Logger())
+            self.assertTrue(loaded["capabilities"]["filesystem_write"])
+            self.assertEqual(json.loads(settings_path.read_text(encoding="utf-8")), {})
 
     def test_load_save_settings_round_trip(self):
         """Ensure load/save helpers persist sanitized values and reload them consistently."""

@@ -24,9 +24,8 @@ import { takeChipSlotFocus } from "../features/details-slot/detailsSlotStore";
 import { topStripActive } from "../features/chat-title/deckyHeaderShape";
 
 /**
- * Hand the ring to whichever permission-hint row is mounted below the transcript — the
- * troubleshooting Ask hint's "Open Permissions", or the vac-check capability deny action's own
- * "Open Permissions" — using Steam's own transfer and nothing else.
+ * Hand the ring to the permission-hint row mounted below the transcript — the
+ * troubleshooting Ask hint's "Open Permissions" — using Steam's own transfer and nothing else.
  *
  * `focusChatPermissionHintRow` used to look these up by a registered *button* handle and land on it
  * with `focusDeckOwner`, a plain `.focus()` with a defensive `tabindex` stamp. Measured wrong on
@@ -35,14 +34,13 @@ import { topStripActive } from "../features/chat-title/deckyHeaderShape";
  * itself was corrupting — Steam's real Focusables carry no `tabindex` attribute on device at all, so
  * the "only stamp when one is missing" guard fired every time and the *wrapping* `.Panel.Focusable`
  * (the nearest ancestor `focusDeckOwner` climbs to, since the button itself lacked one) came away
- * `tabindex="-1"`, dropping the whole row out of Steam's nav graph. Both rows register a
- * `navRef` on their own wrapping Focusable (see MainTabChatTranscript.tsx's two `useEffect`s and
+ * `tabindex="-1"`, dropping the whole row out of Steam's nav graph. The row registers a
+ * `navRef` on its own wrapping Focusable (see usePermHintNavTargets.ts and
  * navFocusRegistry.ts), and this function is `takeNavFocus` only — no DOM query, no `.focus()`, no
  * tabindex of any kind.
  */
 export function focusChatPermissionHintRow(): boolean {
-  if (takeNavFocus("chat-perm-hint-troubleshoot")) return true;
-  return takeNavFocus("chat-perm-hint-deny");
+  return takeNavFocus("chat-perm-hint-troubleshoot");
 }
 
 /**
@@ -253,9 +251,8 @@ export function firstArchivedHeaderMoveUp(turnIndex: number): (() => boolean) | 
  * the two buttons with a plain focus() -- two siblings in this one container. Both ends hold still:
  * Steam's own "past the edge" is the Quick Access rail.
  *
- * Down goes to the ban-lookup row when it sits below, else to the slot above the question box (the
- * chips, or the Show details line standing in for them: left to Steam, the press chose a hidden chip,
- * plan81-QA-FREE-PLAY-01-NOGAME.json). The old Down aimed at the session context strip, which plan 62
+ * Down goes to the slot above the question box (the chips, or the Show details line standing in
+ * for them: left to Steam, the press chose a hidden chip, plan81-QA-FREE-PLAY-01-NOGAME.json). The old Down aimed at the session context strip, which plan 62
  * removed. Up is unchanged.
  */
 export function troubleshootHintRowNavHandlers(buttons: {
@@ -276,41 +273,21 @@ export function troubleshootHintRowNavHandlers(buttons: {
     onMoveRight: () => step(0, 1),
     onMoveLeft: () => step(1, 0),
     onMoveUp: focusUpPastLiveKbNotesBlock,
-    onMoveDown: () => takeNavFocus("chat-perm-hint-deny") || takeChipSlotFocus(),
+    onMoveDown: () => takeChipSlotFocus(),
   };
-}
-
-/**
- * Down from the ban-lookup row: the last row under a blocked reply, so what follows is the slot above
- * the question box (the chips, or the Show details line standing in for them). Left to Steam the press
- * chose the hidden chip while the line held the slot (plan81-QA-FREE-PLAY-01-NOGAME.json).
- */
-export function vacDenyRowMoveDown(): boolean {
-  return focusSessionContextStrip() || takeChipSlotFocus();
-}
-
-/**
- * Up from the ban-lookup row: the troubleshooting hint sits right above it when both show, and
- * walking Up used to skip it (plan70-PERMS-CLEAN-05-06.json).
- */
-export function vacDenyRowMoveUp(): boolean {
-  return takeNavFocus("chat-perm-hint-troubleshoot") || focusUpPastLiveKbNotesBlock();
 }
 
 /**
  * A on the troubleshooting hint's Dismiss removes the whole hint, button included, and left the ring
  * on nothing (plan70-L5-PERMS-CLEAN-06.json). Once the hint is gone, hand the ring to the next row
- * down through Steam's own transfer: the ban-lookup row when it shows, else the chip's slot, which is
- * the Show details line while an answer is read (the chips are hidden then, plan 79), else the chips.
+ * down through Steam's own transfer: the chip's slot, which is the Show details line while an answer
+ * is read (the chips are hidden then, plan 79), else the chips.
  */
 export function dismissHintKeepingRing(
   buttons: { current: (HTMLElement | null)[] },
   dismiss: () => void,
 ): void {
   pressThenHandRingOn(buttons.current[1], dismiss, () => {
-    void (
-      takeNavFocus("chat-perm-hint-deny") ||
-      takeChipSlotFocus()
-    );
+    void takeChipSlotFocus();
   });
 }

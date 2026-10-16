@@ -173,8 +173,8 @@ export const SHOW_BETA_PRESET_CHIPS = false;
 
 /**
  * A raw typed command ("bonsai:...") is never offered as a suggestion chip either: plan 70 saw
- * "bonsai:vac-check" rotate through the chips like a question. A command in plain words ("Check
- * Steam players for bans", the ban lookup) is a chip like any other.
+ * "bonsai:vac-check" rotate through the chips like a question. The shortcut-setup and note
+ * commands still match that rule.
  */
 function samplerPool(options?: PresetSamplerOptions): PresetPrompt[] {
   return PRESET_PROMPTS.filter(
@@ -204,7 +204,6 @@ const PRESET_PROMPTS: PresetPrompt[] = [
   { text: "How do I fix stuttering?", category: "troubleshooting" },
   { text: "Help me troubleshoot a Proton issue", category: "troubleshooting" },
   { text: "Game won't launch, what should I check?", category: "troubleshooting" },
-  { text: "Check Steam players for bans", category: "troubleshooting" },
   { text: "Diagnose a slow Ollama response", category: "ollama" },
   { text: "How do I find Ollama on my LAN?", category: "ollama", beta: true },
   { text: "How do I use Find LAN on the Ollama tab?", category: "ollama", beta: true },

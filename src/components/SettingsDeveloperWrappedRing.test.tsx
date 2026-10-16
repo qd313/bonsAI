@@ -1,43 +1,36 @@
 /**
- * Title: Wrapped Settings controls and the Steam Web API key field show one white ring
+ * Title: Wrapped Settings controls show one white ring
  *
- * Purpose: Pin roadmap "Some controls get only a thin grey frame, and the Steam Web API key field
- *          gets no ring" (Deck 2026-10-02, plan79-P79-RING-WALK-TABS.json). On the Settings tab the
- *          Accent intensity button and Reinstall voice engine showed a thin grey frame, the two voice
- *          model rows a grey frame round the whole row, and on the Developer tab the Steam Web API
- *          key field turned white with no ring. The first four are a Button inside a Focusable
- *          wrapper; the plugin's ring rule only covered a bare Button, so the ring never drew where
- *          Steam put its focus mark (on the wrapper, or on the button inside it, clipped).
- * Used for: Accent intensity, Reinstall voice engine, tiny.en and base.en rows, the key field.
+ * Purpose: Pin roadmap "Some controls get only a thin grey frame" (Deck 2026-10-02,
+ *          plan79-P79-RING-WALK-TABS.json). On the Settings tab the Accent intensity button and
+ *          Reinstall voice engine showed a thin grey frame, and the two voice model rows a grey
+ *          frame round the whole row. Each is a Button inside a Focusable wrapper; the plugin's
+ *          ring rule only covered a bare Button, so the ring never drew where Steam put its focus
+ *          mark (on the wrapper, or on the button inside it, clipped).
+ * Used for: Accent intensity, Reinstall voice engine, tiny.en and base.en rows.
  * How it works: the real tab with the plugin's real stylesheet inside `.bonsai-scope`. Steam's
  *          `gpfocus` class is put on ONE element at a time, first on the wrapper, then on the button
  *          inside it (the device does one or the other), and the computed outline is read back. Both
- *          must show exactly one solid white ring, never none and never two. For the key field the
- *          class goes on the input, then on its container.
+ *          must show exactly one solid white ring, never none and never two.
  * Does not: See pixels (jsdom has no paint engine) or know which element Steam really marks; that
  *           is why both are tried. Whether the ring is clipped on screen is a Deck check.
  */
 import { render } from "@testing-library/react";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-import { DeveloperTab } from "./DeveloperTab";
 import { SettingsTab } from "./SettingsTab";
-import { developerProps, outlines, settingsProps } from "./ringTestProps";
+import { outlines, settingsProps } from "./ringTestProps";
 import { buildBonsaiScopeStylesheet } from "../styles/bonsaiScopeStylesheet";
-import { setAllSections } from "../features/folded-tabs/foldedTabsStore";
-import { DEVELOPER_FOLD_TAB, DEVELOPER_SECTIONS } from "../features/folded-tabs/developerTabFolds";
 import { openAllSettingsSections } from "../test-harness/settingsFoldOpen";
 
-/* Both tabs fold (plan 91 § 2b; plan 92 lanes T1 and T2): these checks are about the rows, so every section of
-   both tabs is open. */
+/* The Settings tab folds (plan 91 § 2b; plan 92 lane T1): these checks are about the rows, so every section is open. */
 beforeEach(() => {
   openAllSettingsSections();
-  setAllSections(DEVELOPER_FOLD_TAB, DEVELOPER_SECTIONS.map((s) => s.id), true);
 });
 
 const SOLID_WHITE = /solid/;
 
-describe("wrapped controls and the key field show one white ring", () => {
+describe("wrapped controls show one white ring", () => {
   let sheet: HTMLStyleElement;
   beforeAll(() => {
     sheet = document.createElement("style");
@@ -108,40 +101,5 @@ describe("wrapped controls and the key field show one white ring", () => {
     expect(w, "wrapper: no frame of its own").toBe("none");
     expect(outlines([wrapper, button], button)[1], "button keeps the white ring").toMatch(SOLID_WHITE);
     expect(b).toBe("");
-  });
-
-  it("the Steam Web API key field draws one solid ring whichever of its parts Steam marks, and the key text is untouched", () => {
-    const { container } = render(
-      <div className="bonsai-scope">
-        <DeveloperTab {...developerProps()} steamWebApiKey="ABCDEF0123456789" />
-      </div>,
-    );
-    // Steam's TextField is a container holding the input; the stub is a bare div, so give it one.
-    const field = container.querySelector('[data-decky-ui="TextField"]') as HTMLElement;
-    expect(field).toBeTruthy();
-    const input = document.createElement("input");
-    input.className = "DialogInput";
-    input.value = "ABCDEF0123456789";
-    field.appendChild(input);
-
-    const layoutOf = (el: HTMLElement) => {
-      const s = getComputedStyle(el);
-      return [s.padding, s.border, s.width, s.margin, s.fontSize, s.color, s.display, s.position].join("|");
-    };
-    const before = layoutOf(input);
-
-    const [inputOnly, containerWhenInput] = outlines([input, field], input);
-    expect(inputOnly, "input marked: input ring").toMatch(SOLID_WHITE);
-    expect(containerWhenInput, "input marked: no second ring on the container").not.toMatch(SOLID_WHITE);
-
-    const [inputWhenContainer, containerOnly] = outlines([input, field], field);
-    expect(containerOnly, "container marked: container ring").toMatch(SOLID_WHITE);
-    expect(inputWhenContainer, "container marked: no second ring on the input").not.toMatch(SOLID_WHITE);
-
-    expect(outlines([input, field], null)).toEqual(["", ""]);
-
-    input.classList.add("gpfocus");
-    expect(layoutOf(input), "the ring must not move or restyle the key text").toBe(before);
-    expect(input.value).toBe("ABCDEF0123456789");
   });
 });

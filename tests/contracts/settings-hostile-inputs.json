@@ -215,7 +215,6 @@
         "filesystem_write": false,
         "media_library_access": false,
         "steam_logs_read": false,
-        "steam_web_api": false,
         "microphone_access": false,
         "internet_downloads": false
       }
@@ -266,15 +265,6 @@
     },
     "expected": {
       "rag_hybrid_retrieval_enabled": false
-    }
-  },
-  {
-    "name": "api key rejects a non-string",
-    "input": {
-      "steam_web_api_key": 12345
-    },
-    "expected": {
-      "steam_web_api_key": ""
     }
   },
   {

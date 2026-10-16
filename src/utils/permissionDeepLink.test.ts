@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  isVacCheckCapabilityDenyResponse,
   permissionJumpReturnTabLabel,
   PERMISSION_DENY_MESSAGES,
   PERMISSION_TOGGLE_LABELS,
@@ -13,7 +12,6 @@ describe("permissionDeepLink", () => {
     expect(resolvePermissionFocusTarget("filesystem_write")).toBe("filesystem_write");
     expect(resolvePermissionFocusTarget("media_library_access")).toBe("game_context_read");
     expect(resolvePermissionFocusTarget("steam_logs_read")).toBe("game_context_read");
-    expect(resolvePermissionFocusTarget("steam_web_api")).toBe("steam_web_api");
     expect(resolvePermissionFocusTarget("microphone_access")).toBe("microphone_access");
   });
 
@@ -26,17 +24,11 @@ describe("permissionDeepLink", () => {
 
   it("labels every focus target", () => {
     expect(PERMISSION_TOGGLE_LABELS.game_context_read).toMatch(/screenshot context/i);
-    expect(PERMISSION_TOGGLE_LABELS.steam_web_api).toMatch(/ban lookup/i);
   });
 
   it("formats return-tab labels for shell tabs", () => {
     expect(permissionJumpReturnTabLabel("main")).toBe("Main");
     expect(permissionJumpReturnTabLabel("ollama")).toBe("Ollama");
     expect(permissionJumpReturnTabLabel("unknown-tab")).toBe("unknown-tab");
-  });
-
-  it("detects VAC-check capability-off replies", () => {
-    expect(isVacCheckCapabilityDenyResponse("**Steam Web API is off for bonsAI.**\n\nEnable …")).toBe(true);
-    expect(isVacCheckCapabilityDenyResponse("All clear — no VAC bans.")).toBe(false);
   });
 });

@@ -50,7 +50,7 @@ describe("liveTurnFocusGraph", () => {
    * Focusables carry no `tabindex` attribute here at all, unlike this file's other fixtures (all
    * pre-stamped `tabindex="-1"` for exactly this reason). The old "stamp whenever one is absent"
    * guard therefore fired on a genuine `.Panel.Focusable` it had climbed to, and the stamp itself is
-   * what dropped `.bonsai-chat-vac-deny-row` out of Steam's nav graph (same shape as REPLY-DOWN-01,
+   * what dropped the permission-hint row out of Steam's nav graph (same shape as REPLY-DOWN-01,
    * 2026-08-04, docs/testing.md — `focusRegisteredReplyStop` stamping `-1` onto Retry and its row).
    * This fixture matches the bug's actual shape: a native `<button>` (needs no tabindex — buttons
    * are natively focusable) nested in a wrapping Focusable that, on device, has none either.

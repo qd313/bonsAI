@@ -33,4 +33,3 @@ DECK_OLLAMA_CLI_PATH = f"{DECK_HOME}/.local/bin/ollama"
 
 # UI navigation paths (keep aligned with src/ tab labels)
 OLLAMA_TAB_WHERE_AI_RUNS = "Ollama → Where AI runs"
-DEVELOPER_TAB_INTEGRATIONS = "Developer → Integrations"

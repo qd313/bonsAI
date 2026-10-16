@@ -209,7 +209,7 @@ class DesktopNoteServiceTests(unittest.TestCase):
                 category="settings.save",
                 message="settings updated",
                 fields={
-                    "steam_web_api_key": "secret-key",
+                    "example_api_key": "secret-key",
                     "system_prompt": "long prompt text",
                     "question_len": 12,
                 },
@@ -217,7 +217,7 @@ class DesktopNoteServiceTests(unittest.TestCase):
             self.assertTrue(r.get("ok"))
             path = r.get("path")
             text = Path(path).read_text(encoding="utf-8")
-            self.assertIn("steam_web_api_key=<redacted>", text)
+            self.assertIn("example_api_key=<redacted>", text)
             self.assertIn("system_prompt_len=", text)
             self.assertNotIn("secret-key", text)
             self.assertNotIn("long prompt text", text)

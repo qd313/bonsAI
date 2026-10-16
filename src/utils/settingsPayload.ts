@@ -19,12 +19,9 @@
  * and forgetting one does not break anything visibly -- that setting just quietly
  * stops being saved from one screen while working fine from another.
  *
- * Does not: check anything. Whatever the screen hands over is what gets sent. The
- * one exception is the Steam web key, which is trimmed and cut to its maximum
- * length here because an over-long key is rejected further down with a message
- * that does not say why. Reading settings back the other way, and filling in
- * anything an older saved file is missing, is a different file
- * (bonsaiSettingsNormalizers).
+ * Does not: check anything. Whatever the screen hands over is what gets sent. Reading
+ * settings back the other way, and filling in anything an older saved file is missing, is a
+ * different file (bonsaiSettingsNormalizers).
  *
  * Gotchas:
  *   - Adding a setting cannot be forgotten *here*, and that is worth knowing
@@ -37,11 +34,7 @@
  *     not been told about the change yet -- but it means passing a stale one here
  *     saves the stale one.
  */
-import {
-  STEAM_WEB_API_KEY_MAX_LEN,
-  type BonsaiSettings,
-  type BonsaiSettingsSnapshotInput,
-} from "../data/bonsaiSettingsSchema";
+import type { BonsaiSettings, BonsaiSettingsSnapshotInput } from "../data/bonsaiSettingsSchema";
 
 /** Build the object the back end expects. The second argument, when given, is laid over the top -- that is how picking a character or granting a permission saves straight away. */
 export function toBonsaiSettingsPayload(
@@ -84,7 +77,6 @@ export function toBonsaiSettingsPayload(
     ollama_local_autostart: input.ollamaLocalAutostart,
     strategy_spoiler_masking_enabled: input.strategySpoilerMaskingEnabled,
     strategy_spoiler_auto_reveal_after_consent: input.strategySpoilerAutoRevealAfterConsent,
-    steam_web_api_key: input.steamWebApiKey.trim().slice(0, STEAM_WEB_API_KEY_MAX_LEN),
     show_onscreen_debug_hud: input.showOnscreenDebugHud,
     dev_force_session_rag_chips: input.devForceSessionRagChips,
     dev_preload_ask_model: input.devPreloadAskModel,

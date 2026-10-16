@@ -1,7 +1,7 @@
 /**
- * Title: Nav targets for the chat's two permission-hint rows
- * Purpose: Register the troubleshooting Ask hint's and the vac-check deny action's own wrapping
- * Focusables as Steam nav targets, for the lifetime of the transcript component.
+ * Title: Nav targets for the chat's permission-hint row
+ * Purpose: Register the troubleshooting Ask hint's own wrapping Focusable as a Steam nav
+ * target, for the lifetime of the transcript component.
  * Used for: MainTabChatTranscript.tsx — see `focusChatPermissionHintRow`'s own comment
  * (chatTranscriptNavHelpers.ts) for why this replaced a registered button handle and
  * `focusDeckOwner`.
@@ -9,7 +9,7 @@
  * rendered: `takeNavFocus` already treats an unpopulated or stale holder as "not available"
  * (navFocusRegistry.ts), which is exactly the state a conditionally-unmounted row leaves behind,
  * so there is nothing to additionally guard here.
- * Does not: Draw either row, or decide when one is shown — the transcript still does both.
+ * Does not: Draw the row, or decide when it is shown — the transcript still does both.
  * Caution: Lifted out of MainTabChatTranscript on 2026-09-24, called from the exact spot the block
  * occupied — see tests/test_ask_hook_order.py's `hook_sequence` for why that position matters.
  */
@@ -18,7 +18,6 @@ import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../util
 
 export interface PermHintNavTargets {
   troubleshootHintNavRef: MutableRefObject<NavRefHolder["current"]>;
-  vacDenyRowNavRef: MutableRefObject<NavRefHolder["current"]>;
   /** The troubleshooting hint's two buttons, [Open Permissions, Dismiss], for its Left/Right. */
   troubleshootHintButtonEls: MutableRefObject<(HTMLElement | null)[]>;
   /** Stable ref callbacks filling `troubleshootHintButtonEls`, one per button. */
@@ -30,14 +29,9 @@ export interface PermHintNavTargets {
  */
 export function usePermHintNavTargets(): PermHintNavTargets {
   const troubleshootHintNavRef = useRef<NavRefHolder["current"]>(null);
-  const vacDenyRowNavRef = useRef<NavRefHolder["current"]>(null);
   useEffect(() => {
     registerNavFocus("chat-perm-hint-troubleshoot", troubleshootHintNavRef);
     return () => unregisterNavFocus("chat-perm-hint-troubleshoot", troubleshootHintNavRef);
-  }, []);
-  useEffect(() => {
-    registerNavFocus("chat-perm-hint-deny", vacDenyRowNavRef);
-    return () => unregisterNavFocus("chat-perm-hint-deny", vacDenyRowNavRef);
   }, []);
 
   const troubleshootHintButtonEls = useRef<(HTMLElement | null)[]>([null, null]);
@@ -47,5 +41,5 @@ export function usePermHintNavTargets(): PermHintNavTargets {
     }),
   ).current;
 
-  return { troubleshootHintNavRef, vacDenyRowNavRef, troubleshootHintButtonEls, troubleshootHintButtonRefs };
+  return { troubleshootHintNavRef, troubleshootHintButtonEls, troubleshootHintButtonRefs };
 }

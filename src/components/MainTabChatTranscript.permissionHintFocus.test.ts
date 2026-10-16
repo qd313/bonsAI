@@ -1,7 +1,7 @@
 /**
  * Title: Chat transcript permission-hint focus tests
  * Purpose: Cover the D-pad Down/Up chain between the reply utility row, the troubleshooting Ask
- *          hint / vac-check deny action rows, and the session context strip.
+ *          hint row and the session context strip.
  * Used for: MainTabChatTranscript.tsx focus-graph regression coverage.
  * Solves: Neither permission-hint row was in the Down chain before the first fix — Down from Retry
  *         or Copy jumped straight to the session context strip and skipped both (filed 2026-09-03,
@@ -26,8 +26,7 @@ import {
   focusChatPermissionHintRow,
   focusDownFromReplyUtilityRowOrPermHint,
 } from "./MainTabChatTranscript";
-import { registerNavFocus,
-  unregisterNavFocus, resetNavFocusRegistry } from "../utils/navFocusRegistry";
+import { registerNavFocus, resetNavFocusRegistry } from "../utils/navFocusRegistry";
 
 function mount(html: string): void {
   document.body.innerHTML = html;
@@ -52,17 +51,6 @@ describe("focusChatPermissionHintRow", () => {
     expect(focusChatPermissionHintRow()).toBe(false);
   });
 
-  it("hands focus to the vac-check deny row's registered nav node via TakeFocus, never a plain focus()", () => {
-    const deny = fakeNavHolder();
-    registerNavFocus("chat-perm-hint-deny", deny);
-
-    expect(focusChatPermissionHintRow()).toBe(true);
-    // `true` marks the move as gamepad-sourced, matching every other takeNavFocus caller.
-    expect(deny.current.TakeFocus).toHaveBeenCalledWith(true);
-    // No DOM node anywhere was focused — the transfer is Steam's own, not ours.
-    expect(document.activeElement).toBe(document.body);
-  });
-
   it("hands focus to the troubleshooting hint's registered nav node via TakeFocus", () => {
     const hint = fakeNavHolder();
     registerNavFocus("chat-perm-hint-troubleshoot", hint);
@@ -71,40 +59,6 @@ describe("focusChatPermissionHintRow", () => {
     expect(hint.current.TakeFocus).toHaveBeenCalledWith(true);
   });
 
-  it("prefers the troubleshooting hint over the deny action when both are registered", () => {
-    const hint = fakeNavHolder();
-    const deny = fakeNavHolder();
-    registerNavFocus("chat-perm-hint-troubleshoot", hint);
-    registerNavFocus("chat-perm-hint-deny", deny);
-
-    expect(focusChatPermissionHintRow()).toBe(true);
-    expect(hint.current.TakeFocus).toHaveBeenCalled();
-    expect(deny.current.TakeFocus).not.toHaveBeenCalled();
-  });
-
-  it("falls through to the deny row when the troubleshooting hint's own transfer declines", () => {
-    const hint = fakeNavHolder(false); // registered, but Steam itself declines the move
-    const deny = fakeNavHolder(true);
-    registerNavFocus("chat-perm-hint-troubleshoot", hint);
-    registerNavFocus("chat-perm-hint-deny", deny);
-
-    expect(focusChatPermissionHintRow()).toBe(true);
-    expect(hint.current.TakeFocus).toHaveBeenCalled();
-    expect(deny.current.TakeFocus).toHaveBeenCalled();
-  });
-
-  it("falls through to the deny row once the troubleshooting hint unregisters (unmounts)", () => {
-    const troubleshoot = fakeNavHolder();
-    registerNavFocus("chat-perm-hint-troubleshoot", troubleshoot);
-    const deny = fakeNavHolder();
-    registerNavFocus("chat-perm-hint-deny", deny);
-    // The real unmount cleanup calls unregisterNavFocus(id, itsOwnHolder) — Dismiss, or the hint's
-    // own condition going false, does exactly this.
-    unregisterNavFocus("chat-perm-hint-troubleshoot", troubleshoot);
-
-    expect(focusChatPermissionHintRow()).toBe(true);
-    expect(deny.current.TakeFocus).toHaveBeenCalled();
-  });
 });
 
 describe("focusDownFromReplyUtilityRowOrPermHint", () => {
@@ -114,19 +68,10 @@ describe("focusDownFromReplyUtilityRowOrPermHint", () => {
         <div class="bonsai-chip-ladder"><button type="button">Ladder</button></div>
       </div>
     `);
-    registerNavFocus("chat-perm-hint-deny", fakeNavHolder());
+    registerNavFocus("chat-perm-hint-troubleshoot", fakeNavHolder());
     const slot = document.querySelector<HTMLElement>(".bonsai-chat-turn-slot");
     expect(focusDownFromReplyUtilityRowOrPermHint(slot)).toBe(true);
     expect(document.activeElement?.textContent).toBe("Ladder");
-  });
-
-  it("hands off to the deny row's registered nav node when no ladder or hint is mounted in this turn", () => {
-    mount(`<div class="bonsai-chat-turn-slot"></div>`);
-    const deny = fakeNavHolder();
-    registerNavFocus("chat-perm-hint-deny", deny);
-    const slot = document.querySelector<HTMLElement>(".bonsai-chat-turn-slot");
-    expect(focusDownFromReplyUtilityRowOrPermHint(slot)).toBe(true);
-    expect(deny.current.TakeFocus).toHaveBeenCalledWith(true);
   });
 
   it("falls back to the session context strip when no permission-hint row is registered either", () => {

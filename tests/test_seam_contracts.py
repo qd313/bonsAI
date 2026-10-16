@@ -107,7 +107,6 @@ FROZEN: dict[str, dict[str, str | None]] = {
     # ask command text rules
     "backend.services.ask_command_text": {
         "normalize_ask_command_input": "(text: 'str', *, allow_leading_slash: 'bool' = False) -> 'str'",
-        "strip_optional_leading_slash": "(text: 'str') -> 'str'",
     },
     # local ask commands
     "backend.services.ask_local_commands": {
@@ -156,7 +155,6 @@ class SeamContractTests(unittest.TestCase):
                 "backend.services.ask_local_commands",
                 "backend.services.input_sanitizer_service",
                 "backend.services.shortcut_setup_commands",
-                "backend.services.vac_check_commands",
             ),
             "backend.services.voice_whisper_runtime": (
                 "backend.services.voice_transcription_service",

@@ -4,9 +4,8 @@
  * Purpose: The Developer tab, only visible once Developer Mode is turned
  * on. It is for troubleshooting and testing bonsAI itself, not for changing
  * how the AI answers: captured crash logs, which tab reopens the plugin,
- * whether app activity gets written to Desktop as a log file, a Steam Web
- * API key for ban lookups, and a handful of QA-only controls for testing
- * the preset chip carousel and the knowledge base.
+ * whether app activity gets written to Desktop as a log file, and a handful of QA-only controls for
+ * testing the preset chip carousel and the knowledge base.
  *
  * Folded (plan 91 § 2b, plan 92 lane T2): each section is one line (FoldedSection) showing a summary of its
  * values; A opens or closes it, several can be open at once, and a first visit starts with every section
@@ -35,7 +34,6 @@
  *                                 chips + frozen test chips
  *     Animations               <- preset chip animation, scramble switch + its settle style, settle
  *                                 time and colour rows (shown only while it is on)
- *     Integrations             <- Steam Web API key
  *
  * 1. The section names, summaries and every row's longer words live in developerTabFolds.ts. Each section's
  *    rows are a list (developerRowsDiagnostics.tsx, developerRowsLogging.tsx, developerRowsAnimations.tsx)
@@ -75,7 +73,7 @@ import {
 import { SectionRows, type DevRow } from "./developerRows";
 import { diagnosticsRows, kbRows } from "./developerRowsDiagnostics";
 import { loggingRows, navigationRows } from "./developerRowsLogging";
-import { animationsRows, integrationsRows } from "./developerRowsAnimations";
+import { animationsRows } from "./developerRowsAnimations";
 import { useDeveloperTabFocus } from "./useDeveloperTabFocus";
 import type { DeveloperConnectionStatus } from "./developerConnectionStatus";
 
@@ -98,9 +96,6 @@ export type DeveloperTabProps = {
 
   presetChipAnimation: PresetChipAnimation;
   setPresetChipAnimation: (v: PresetChipAnimation) => void;
-
-  steamWebApiKey: string;
-  setSteamWebApiKey: (v: string) => void;
 
   showOnscreenDebugHud: boolean;
   setShowOnscreenDebugHud: (v: boolean) => void;
@@ -215,8 +210,6 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = (props) => {
           streamScramble,
           onStreamScrambleChange: props.onStreamScrambleChange,
         });
-      case "integrations":
-        return integrationsRows({ steamWebApiKey: props.steamWebApiKey, setSteamWebApiKey: props.setSteamWebApiKey });
     }
   };
 

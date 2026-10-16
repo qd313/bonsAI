@@ -36,8 +36,6 @@ function props(overrides: Partial<DeveloperTabProps> = {}): DeveloperTabProps {
     filesystemWrite: true,
     presetChipAnimation: "fade",
     setPresetChipAnimation: () => {},
-    steamWebApiKey: "",
-    setSteamWebApiKey: () => {},
     showOnscreenDebugHud: false,
     setShowOnscreenDebugHud: () => {},
     devForceSessionRagChips: false,
@@ -72,7 +70,7 @@ afterEach(() => cleanup());
 describe("the folded Developer tab, every section closed", () => {
   beforeEach(() => setAllSections(DEVELOPER_FOLD_TAB, SECTION_IDS, false));
 
-  it("is six one-line sections, each with its summary, and no row drawn", () => {
+  it("is five one-line sections, each with its summary, and no row drawn", () => {
     const { container } = render(<DeveloperTab {...props()} />);
     expect(lines(container).map((l) => [lineName(l), lineSummary(l)])).toEqual([
       ["Knowledge base", "Hybrid retrieval (meaning search) on"],
@@ -80,7 +78,6 @@ describe("the folded Developer tab, every section closed", () => {
       ["Navigation", "Tab to open on: B · Resume"],
       ["Logging & exports", "App activity logging to Desktop: Off · 0 of 3 on"],
       ["Animations", "Preset suggestions: fade · Scramble animation off"],
-      ["Integrations", ""],
     ]);
     expect(container.querySelectorAll(".bonsai-fold-body")).toHaveLength(0);
     expect(container.querySelector(".bonsai-dense-row")).toBeNull();
@@ -88,7 +85,7 @@ describe("the folded Developer tab, every section closed", () => {
 
   it("leaves the knowledge-base section out without a seed-install callback", () => {
     const { container } = render(<DeveloperTab {...props({ onInstallSeedKnowledgeBase: undefined })} />);
-    expect(lines(container).map(lineName)).toEqual(["Diagnostics", "Navigation", "Logging & exports", "Animations", "Integrations"]);
+    expect(lines(container).map(lineName)).toEqual(["Diagnostics", "Navigation", "Logging & exports", "Animations"]);
   });
 
   it("the summaries follow the settings", () => {
@@ -125,12 +122,12 @@ describe("the folded Developer tab, every section open: one line per setting, th
     for (const item of data.Developer!.items) {
       const words = item.descs ? item.descs[item.sel ?? 0] : item.desc;
       if (!words) continue;
-      /* The board's "Jump to Steam Input" row is a button with the label of its words; the field is "Steam Web API key". */
+      /* The board's "Jump to Steam Input" row is a button with the label of its words. */
       const label = item.label?.replace(/ \(D\d+\)/, ""); /* the drawing's decision number is not drawn on screen */
       expect(helpOf(container, label), label).toBe(stripTags(words));
       checked += 1;
     }
-    expect(checked).toBe(12);
+    expect(checked).toBe(11);
   });
 
   it("the Force switch keeps its own words; the frozen test chips row carries the board's block", () => {
@@ -212,13 +209,6 @@ describe("the folded Developer tab, every section open: one line per setting, th
     expect(screen.getByText("q one")).toBeTruthy();
     fireEvent.click(screen.getByText("Clear frozen test chips"));
     expect(set).toHaveBeenCalledWith([]);
-  });
-
-  it("the Steam Web API key field is there, with its words for the strip", () => {
-    const { container } = render(<DeveloperTab {...props({ steamWebApiKey: "abc" })} />);
-    expect(helpOf(container, "Steam Web API key")).toBe(DEVELOPER_ROW_HELP.steamWebApiKey);
-    const field = container.querySelector('[data-decky-ui="TextField"]') as HTMLElement | null;
-    expect(field).toBeTruthy();
   });
 });
 

@@ -45,7 +45,7 @@ export function focusDeckOwner(el: HTMLElement | null | undefined): boolean {
    * with the ring genuinely on Retry, Copy and Open Permissions in turn, every one of them read
    * `tabindex: null` — real Steam Focusables carry no `tabindex` attribute at all here. The old guard
    * therefore fired on every one of them, and stamping the wrapping `.Panel.Focusable` a caller had
-   * climbed to (`panel`) is what corrupted `.bonsai-chat-vac-deny-row` and dropped it from Steam's
+   * climbed to (`panel`) is what corrupted the permission-hint row and dropped it from Steam's
    * nav graph. `panel` already tells us, independent of the tabindex attribute, whether `target` is
    * one of Steam's own nodes: if climbing (or a direct match) found one, it needs nothing from us —
    * Steam manages its own focus semantics regardless of what the DOM attribute says — and only the

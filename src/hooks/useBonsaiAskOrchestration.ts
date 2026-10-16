@@ -1342,7 +1342,7 @@ export function useBonsaiAskOrchestration(
             // Null is correct here, and this was filed as a bug on 2026-08-27 for looking like it
             // was not. `start_background_game_ai` only ever answers "completed" from
             // `_finalize_immediate_background_local_command` (main.py:2173), whose three call
-            // sites are all guarded by `local_kinds.sanitizer` / `.shortcut` / `.vac`
+            // sites are all guarded by `local_kinds.sanitizer` / `.shortcut` / `.note`
             // (main.py:2588, :2607, :2627). Those are local commands -- the model is never asked,
             // so there is no branch picker, no checklist and no policy disclosure to carry. The
             // old note guessed this path was unreachable only because replies are slow; it is
@@ -1377,13 +1377,6 @@ export function useBonsaiAskOrchestration(
               title: "Sanitizer",
               body: "Mode saved. See README for commands.",
               duration: 4000,
-            });
-          }
-          if (data.meta === "vac_check") {
-            toaster.toast({
-              title: "Steam ban lookup",
-              body: "Account-level GetPlayerBans only — not proof someone was your opponent.",
-              duration: 6000,
             });
           }
           return;

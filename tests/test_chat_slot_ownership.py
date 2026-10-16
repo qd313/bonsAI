@@ -240,52 +240,16 @@ class ChatSlotOwnershipTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(user_turns[0]["display_text"], "I'm at: the twins")
         self.assertEqual(user_turns[0]["text"], "[Strategy follow-up] I'm at: the twins")
 
-    async def test_vac_check_deny_reply_persists_turn_and_renames_slot(self) -> None:
-        """Regression: a deterministic local command (bonsai:vac-check, ban lookup off) used to
-        return from _finalize_immediate_background_local_command without ever touching the chat
-        slot. The slot never gained a first turn, so its title stayed the "New chat" default and
-        a later transcript reload found nothing -- which is what blanked the turn header back to
-        "..." on the frontend (traced in docs/roadmap-details.md).
-        """
-        slot = create_slot(self.tmp)
-        sid = slot["id"]
-        self.assertEqual(slot["label"], "New chat")
-
-        with patch.object(Plugin, "load_settings", return_value={}):
-            ack = await self.plugin.start_background_game_ai(
-                {
-                    "question": "bonsai:vac-check",
-                    "PcIp": "",
-                    "chat_slot_id": sid,
-                }
-            )
-
-        self.assertTrue(ack.get("accepted"))
-        self.assertEqual(ack.get("status"), "completed")
-
-        loaded = load_slot(self.tmp, sid)
-        self.assertIsNotNone(loaded)
-        assert loaded is not None
-        self.assertEqual(len(loaded["turns"]), 2)
-        user_turn, assistant_turn = loaded["turns"]
-        self.assertEqual(user_turn["role"], "user")
-        self.assertEqual(user_turn["text"], "bonsai:vac-check")
-        self.assertEqual(assistant_turn["role"], "assistant")
-        self.assertIn("Steam Web API is off", assistant_turn["text"])
-        self.assertEqual(loaded["label"], "bonsai:vac-check")
-        self.assertNotEqual(loaded["label"], "New chat")
-
     async def test_local_command_status_names_its_chat(self) -> None:
-        """Roadmap: "the ban-lookup row can follow it into a different chat". The finished status
-        of a local command (here bonsai:vac-check with ban lookup off) carried no chat_slot_id, so
-        the screen's one status read on a Quick Access reopen could not tell it belonged to another
-        chat and painted it -- and the ban-lookup row under it -- into whichever chat was open
+        """The finished status of a local command (here bonsai:shortcut-setup-deck) carried no
+        chat_slot_id, so the screen's one status read on a Quick Access reopen could not tell it
+        belonged to another chat and painted it into whichever chat was open
         (workshop:test-evidence/plan70-L6-AFTER-DISMISS.json). An ordinary Ask's status already names it.
         """
         sid = create_slot(self.tmp)["id"]
-        with patch.object(Plugin, "load_settings", return_value={}):
+        with patch.object(Plugin, "load_settings", return_value={"show_developer_tab": True}):
             await self.plugin.start_background_game_ai(
-                {"question": "bonsai:vac-check", "PcIp": "", "chat_slot_id": sid}
+                {"question": "bonsai:shortcut-setup-deck", "PcIp": "", "chat_slot_id": sid}
             )
             status = await self.plugin.get_background_game_ai_status()
 
@@ -293,9 +257,9 @@ class ChatSlotOwnershipTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(status.get("chat_slot_id"), sid)
 
     async def test_shortcut_setup_reply_also_persists_to_chat_slot(self) -> None:
-        """Same fix, second call site: sanitizer / shortcut-setup / VAC check all finalize through
+        """Same fix, second call site: sanitizer / shortcut-setup / note all finalize through
         the same shared helper, so a passed chat_slot_id has to reach every one of them, not just
-        the VAC branch the bug report happened to name.
+        the branch the bug report happened to name.
         """
         slot = create_slot(self.tmp)
         sid = slot["id"]

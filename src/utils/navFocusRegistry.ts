@@ -27,7 +27,7 @@
  *     moment and then disappeared entirely. Three D-pad presses afterward all still went to the
  *     reply row, and each one was logged as a successful move.
  *   - 2026-09-04 (build 49241e7): the same mistake reappeared in a different row — the
- *     permission-hint row above the vac-check chat feature used a plain `.focus()` call
+ *     troubleshooting permission-hint row below the transcript used a plain `.focus()` call
  *     (`focusDeckOwner`) instead of this file, and hit a second problem at the same time: on
  *     a real Deck, none of these rows carry the `tabindex` attribute Steam is supposed to look
  *     for, so `focusDeckOwner`'s safety check — "add `tabindex="-1"` if the row does not already
@@ -60,18 +60,16 @@ import { uiWindowMissingFocus } from "./uiDocument";
 
 export type NavFocusId = "session-context-strip" | "preset-carousel" | "unified-input"
   | "tab-bar"
-  /** The troubleshooting Ask hint and vac-check deny rows below the transcript — see
-   *  MainTabChatTranscript.tsx's `focusChatPermissionHintRow`. Two ids, not one, because both rows
-   *  can in principle be mounted at once and a single shared id would let the later-mounted row's
-   *  registration silently clobber the other's. */
-  | "chat-perm-hint-troubleshoot" | "chat-perm-hint-deny"
+  /** The troubleshooting Ask hint row below the transcript — see
+   *  MainTabChatTranscript.tsx's `focusChatPermissionHintRow`. */
+  | "chat-perm-hint-troubleshoot"
   /** One per Permissions-tab capability row — see permissionJumpRegistry.ts's `focusOwnerById`.
    *  Recurred 2026-09-05 (build 4/517804a, PERM-JUMP-01 step 3): the jump landed on "Back to Main"
    *  instead of the armed toggle, because `focusOwnerById` climbed to a registered element and
    *  called a plain `.focus()` on it — the same cross-container failure this whole file exists
    *  for, just in a file neither chat fix had touched yet. */
   | "permissions-row-game-context-read" | "permissions-row-filesystem-write"
-  | "permissions-row-steam-web-api" | "permissions-row-microphone-access"
+  | "permissions-row-microphone-access"
   | "permissions-row-internet-downloads"
   /** The Session tab's "What the AI remembers" card: where the ring goes when Sum up finishes
    *  (plan 72 job E2; a plain focus() there left Steam's ring on the button, plan72-F6-SUMUP.json). */

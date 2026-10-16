@@ -5,7 +5,7 @@
  *          pinned test chips, the Open Permissions button), and a few open, walked Down to the end and back Up
  *          a bounded number of presses, the D-pad pressed the way Steam calls it (the move handlers first, then
  *          Steam's own step along the column), Steam's own scroll-into-view modelled three ways. No stop is
- *          visited twice; closed, the walk is the six lines; open, it stops once per control, the captured
+ *          visited twice; closed, the walk is the five lines; open, it stops once per control, the captured
  *          errors' rows included; no landing moves the pane more than a third of it; every ringed control is
  *          wholly on screen and, while the strip shows, its bottom edge with its ring sits 6 px or more above
  *          the strip's top. Closed, the tab is under one screen of the Deck's own (430 points). Picking another
@@ -26,11 +26,7 @@ vi.mock("@decky/ui", async () => {
     const { label, checked: _checked, onChange: _onChange, description: _d, disabled: _x, ...rest } = p;
     return <SteamRingFocusable {...rest} focusable aria-label={stubs.wordsOf(label)} data-decky-ui="ToggleField" />;
   };
-  /* Steam's text field: an input Steam can ring. */
-  const TextField = (p: Record<string, unknown>) => (
-    <input type="text" tabIndex={0} aria-label="Steam Web API key" data-decky-ui="TextField" defaultValue={String(p.value ?? "")} />
-  );
-  return { ...stubs, Focusable: SteamRingFocusable, ToggleField, TextField };
+  return { ...stubs, Focusable: SteamRingFocusable, ToggleField };
 });
 
 import { DeveloperTab, type DeveloperTabProps } from "./DeveloperTab";
@@ -67,8 +63,6 @@ function props(overrides: Partial<DeveloperTabProps> = {}): DeveloperTabProps {
     filesystemWrite: true,
     presetChipAnimation: "fade",
     setPresetChipAnimation: noop,
-    steamWebApiKey: "",
-    setSteamWebApiKey: noop,
     showOnscreenDebugHud: false,
     setShowOnscreenDebugHud: noop,
     devForceSessionRagChips: false,
@@ -132,7 +126,7 @@ beforeEach(() => {
 afterEach(() => cleanup());
 
 describe("the folded Developer tab, every section closed", () => {
-  it("Down from the tab bar walks the six section lines, once each, then the Open all button, and holds; Up walks every line back", () => {
+  it("Down from the tab bar walks the five section lines, once each, then the Open all button, and holds; Up walks every line back", () => {
     setAllSections(DEVELOPER_FOLD_TAB, SECTION_IDS, false);
     const w = walk(DECK_PANE, "centerIfHidden");
     const down = [w.enter(), ...w.walk("down")];
@@ -152,7 +146,7 @@ describe("the folded Developer tab, every section closed", () => {
     w.unmount();
   });
 
-  it("without a seed install the walk is the five other lines", () => {
+  it("without a seed install the walk is the four other lines", () => {
     setAllSections(DEVELOPER_FOLD_TAB, SECTION_IDS, false);
     const w = walk(DECK_PANE, "nearest", { onInstallSeedKnowledgeBase: undefined });
     const down = [w.enter(), ...w.walk("down")];
@@ -209,19 +203,17 @@ describe("the folded Developer tab, every section open", () => {
           "Settle",
           "300",
           "Same as text",
-          /^Integrations/,
-          "Steam Web API key",
         ];
         const found = expectedOrder.map(at);
         expect(found.includes(-1), `missing stop in: ${order.join(" | ")}`).toBe(false);
         expect([...found].sort((a, b) => a - b), "in order").toEqual(found);
         /* The last control, then Down once more onto the floating button (plan 93), where the walk holds. */
-        expect(order.slice(-2)).toEqual(["Steam Web API key", "Close all sections"]);
+        expect(order.slice(-2)).toEqual(["Same as text", "Close all sections"]);
         checkLandings(down, viewport, `${steam} down`);
         const up = w.walk("up", 80);
         expect(repeats(up), names(up).join(" | ")).toBe(0);
         /* Up from the button: the line of the section the ring came from. */
-        expect(up[0]!.name).toMatch(/^Integrations section/);
+        expect(up[0]!.name).toMatch(/^Animations section/);
         expect(up[up.length - 1]!.name).toMatch(/^Knowledge base section/);
         checkLandings(up, viewport, `${steam} up`);
         w.unmount();
@@ -266,7 +258,6 @@ describe("the folded Developer tab, every section open", () => {
       "Navigation",
       "Logging & exports",
       "Animations",
-      "Integrations",
       "Open all",
     ]);
     w.unmount();
@@ -280,9 +271,6 @@ describe("the folded Developer tab, every section open", () => {
     expect(seen.get("Warm the Ask model at boot")).toMatch(/^Warm the Ask model at bootLoads the default Ask model into memory/);
     expect(seen.get("Install seed knowledge base")).toMatch(/Public HF\/GitHub download is not live yet\./);
     expect(seen.get("Frozen test chips")).toMatch(/^Frozen test chips2 pinned\. The carousel is showing these/);
-    expect(seen.get("Steam Web API key")).toBe(
-      "Steam Web API keyFor the bonsai:vac-check command. Enable Steam ban lookup in Permissions. Stored on this device.",
-    );
     /* No words on a captured error or a Clear button: the strip hides. */
     expect(seen.get("first boom")).toBe("");
     expect(seen.get("Clear (2)")).toBe("");
@@ -360,7 +348,7 @@ describe("the floating Open all button on the Developer tab", () => {
     });
     expect(steamRingHolder()).toBe(button);
     act(() => button.click());
-    expect(w.container.querySelectorAll('.bonsai-fold-line[data-open="true"]')).toHaveLength(6);
+    expect(w.container.querySelectorAll('.bonsai-fold-line[data-open="true"]')).toHaveLength(5);
     expect(button.textContent).toContain("Close all");
     act(() => {
       host.__nav?.onMoveDown?.();

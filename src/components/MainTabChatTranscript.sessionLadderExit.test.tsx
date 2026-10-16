@@ -267,7 +267,7 @@ describe("the Session tab with no rows and no chips: Down off its last stop", ()
     const input = navNode("unified-input");
     expect(pressOn("bonsai-sumup-btn")).toBe(true);
     expect(input).toHaveBeenCalledTimes(1);
-    const hint = navNode("chat-perm-hint-deny");
+    const hint = navNode("chat-perm-hint-troubleshoot");
     expect(pressOn("bonsai-sumup-btn")).toBe(true);
     expect(hint).toHaveBeenCalledTimes(1);
     expect(input).toHaveBeenCalledTimes(1);

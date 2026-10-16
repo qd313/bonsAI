@@ -135,12 +135,12 @@ def completed_local_command_state(
     chat_slot_id: Optional[str] = None,
     note_offer: Optional[dict[str, Any]] = None,
 ) -> dict[str, Any]:
-    """Terminal state for a local keyword branch (sanitizer / shortcut / VAC / note).
+    """Terminal state for a local keyword branch (sanitizer / shortcut / note).
 
     These never spawn a background task, so they publish `completed` directly. `started_at` and
     `completed_at` are both `now` because no work was awaited. `chat_slot_id` names the chat it
     answered, as an ordinary Ask's state does: without it the screen's status read on a Quick
-    Access reopen painted this reply (and the ban-lookup row under it) into whichever chat was open.
+    Access reopen painted this reply into whichever chat was open.
     """
     state = new_background_state()
     state.update(

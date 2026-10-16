@@ -72,7 +72,7 @@ logger = logging.getLogger(__name__)
 # Entries use UTC ISO-8601 timestamps (suffix Z) for deterministic, locale-independent logs.
 _MAX_STEM_LEN = 80
 _MAX_APP_LOG_FIELD_LEN = 240
-_SENSITIVE_FIELD_SUBSTRINGS = ("password", "token", "secret", "steam_web_api", "api_key")
+_SENSITIVE_FIELD_SUBSTRINGS = ("password", "token", "secret", "api_key")
 _BLOB_LOG_FIELD_KEYS = frozenset(
     {
         "system_prompt",

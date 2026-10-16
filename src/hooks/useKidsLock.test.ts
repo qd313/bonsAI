@@ -30,7 +30,6 @@ describe("effectiveCapabilities", () => {
       filesystem_write: true,
       media_library_access: true,
       steam_logs_read: true,
-      steam_web_api: true,
       microphone_access: true,
       internet_downloads: true,
     };
@@ -39,7 +38,6 @@ describe("effectiveCapabilities", () => {
       filesystem_write: false,
       media_library_access: false,
       steam_logs_read: false,
-      steam_web_api: false,
       microphone_access: false,
       internet_downloads: false,
     });

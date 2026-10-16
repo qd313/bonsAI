@@ -54,8 +54,6 @@ export function useDeveloperTabPayload({
   filesystemWrite,
   presetChipAnimation,
   setPresetChipAnimation,
-  steamWebApiKey,
-  setSteamWebApiKey,
   showOnscreenDebugHud,
   setShowOnscreenDebugHud,
   devForceSessionRagChips,
@@ -93,8 +91,6 @@ export function useDeveloperTabPayload({
         onJumpToPermission={onJumpToPermission}
         presetChipAnimation={presetChipAnimation}
         setPresetChipAnimation={setPresetChipAnimation}
-        steamWebApiKey={steamWebApiKey}
-        setSteamWebApiKey={setSteamWebApiKey}
         showOnscreenDebugHud={showOnscreenDebugHud}
         setShowOnscreenDebugHud={setShowOnscreenDebugHud}
         devForceSessionRagChips={devForceSessionRagChips}
@@ -121,7 +117,6 @@ export function useDeveloperTabPayload({
       desktopAppLogLevel,
       filesystemWrite,
       presetChipAnimation,
-      steamWebApiKey,
       showOnscreenDebugHud,
       devForceSessionRagChips,
       devPreloadAskModel,

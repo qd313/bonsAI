@@ -1,17 +1,16 @@
-"""Title: The six permissions the user grants, and the one question "am I allowed to"
+"""Title: The five permissions the user grants, and the one question "am I allowed to"
 
-Purpose: The plugin can do six things that a person would want to be asked about
+Purpose: The plugin can do five things that a person would want to be asked about
 first: write files to the Desktop, look through the Steam screenshot and video
-library, read Steam's own logs, talk to Steam's servers over the internet with the
-user's key, switch the microphone on, and download from the internet (Ollama, AI
-models, the voice engine, the knowledge library). Each one is a switch in the
-Permission Center, off until it is turned on. This file holds the list of the six,
-decides what a saved settings file means when it says something odd, and answers the
-single question every piece of code asks before doing one of those six things: am I
-allowed to.
+library, read Steam's own logs, switch the microphone on, and download from the
+internet (Ollama, AI models, the voice engine, the knowledge library). Each one is a
+switch in the Permission Center, off until it is turned on. This file holds the list
+of the five, decides what a saved settings file means when it says something odd, and
+answers the single question every piece of code asks before doing one of those five
+things: am I allowed to.
 
-Used for: the Permission Center screen, which shows and sets the six switches; the
-check at the top of every piece of code that does one of those six things; and
+Used for: the Permission Center screen, which shows and sets the five switches; the
+check at the top of every piece of code that does one of those five things; and
 settings files written before the switches existed, which need a sensible answer
 rather than an empty one.
 
@@ -29,7 +28,7 @@ How the answer is decided, in order -- the first "no" wins:
                  |
                  no
                  v
-    is this one of the six names?      -- no  --> NO
+    is this one of the five names?     -- no  --> NO
                  |
                 yes
                  v
@@ -56,14 +55,13 @@ Gotchas:
     accept it. So a permissions block that has never been through the tidy-up and
     holds a 1 reads as off, and the same block after tidying reads as on. Nothing
     writes a 1 today -- this is only worth knowing before adding a second way in.
-  - **Old settings files get three of the six, not all six.** A settings file from
+  - **Old settings files get three of the five, not all five.** A settings file from
     before the switches existed is treated as having granted what the plugin was
     already doing at the time: writing files, reading the screenshot library, and
-    reading Steam's logs. Three are deliberately left off even so -- talking to
-    Steam's servers, because that spends the user's own key on traffic they never
-    agreed to; the microphone, because it is a microphone; and internet downloads,
-    because the first download notice asks for it in place (the maintainer, 2026-09-26:
-    off on a fresh install, and nothing reaches the internet while it is off).
+    reading Steam's logs. Two are deliberately left off even so -- the microphone,
+    because it is a microphone; and internet downloads, because the first download
+    notice asks for it in place (the maintainer, 2026-09-26: off on a fresh install,
+    and nothing reaches the internet while it is off).
 """
 
 from typing import Any
@@ -73,7 +71,6 @@ CAPABILITY_KEYS = (
     "filesystem_write",
     "media_library_access",
     "steam_logs_read",
-    "steam_web_api",
     "microphone_access",
     # Downloads from the internet: Ollama itself, AI models, the voice engine and its models,
     # the knowledge library, and size lookups. Downloads only;
@@ -118,8 +115,6 @@ def sanitize_capabilities(value: Any) -> dict[str, bool]:
 def legacy_grandfather_capabilities() -> dict[str, bool]:
     """All-on defaults for settings files created before the capabilities block existed."""
     out = {k: True for k in CAPABILITY_KEYS}
-    # Outbound Steam Web API uses the user's key; do not auto-enable for legacy installs.
-    out["steam_web_api"] = False
     # Microphone capture is opt-in even for legacy installs.
     out["microphone_access"] = False
     # Internet downloads are asked for in place by the first download notice.

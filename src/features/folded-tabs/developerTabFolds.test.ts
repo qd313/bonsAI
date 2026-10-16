@@ -52,14 +52,13 @@ function boardDeveloperItems(): BoardItem[] {
 const stripTags = (s: string) => s.replace(/<br>/g, " ").replace(/<[^>]+>/g, "");
 
 describe("the Developer tab's section list", () => {
-  it("names the six sections in the drawing's order", () => {
+  it("names the five sections in the drawing's order", () => {
     expect(DEVELOPER_SECTIONS.map((s) => s.title)).toEqual([
       "Knowledge base",
       "Diagnostics",
       "Navigation",
       "Logging & exports",
       "Animations",
-      "Integrations",
     ]);
     expect(boardDeveloperItems().filter((i) => i.t === "sec").map((i) => i.label)).toEqual(
       DEVELOPER_SECTIONS.map((s) => s.title),
@@ -67,8 +66,8 @@ describe("the Developer tab's section list", () => {
   });
 
   it("leaves the knowledge-base section out when no seed-install callback was passed", () => {
-    expect(developerSectionsShown(false).map((s) => s.id)).toEqual(["diagnostics", "navigation", "logging", "animations", "integrations"]);
-    expect(developerSectionsShown(true)).toHaveLength(6);
+    expect(developerSectionsShown(false).map((s) => s.id)).toEqual(["diagnostics", "navigation", "logging", "animations"]);
+    expect(developerSectionsShown(true)).toHaveLength(5);
   });
 });
 
@@ -80,7 +79,6 @@ describe("a Developer section's summary line, as the drawing writes it", () => {
       navigation: "Tab to open on: B · Resume",
       logging: "App activity logging to Desktop: Off · 0 of 3 on",
       animations: "Preset suggestions: fade · Scramble animation off",
-      integrations: "",
     });
   });
 
@@ -125,7 +123,6 @@ describe("every Developer row's longer text, word for word against the board's d
     /* The board puts the frozen-chips block after the Force switch's words; the tab gives it its own row. */
     [DEVELOPER_ROW_LABELS.forceChips]: DEVELOPER_ROW_HELP.forceChips,
     [DEVELOPER_ROW_LABELS.scramble]: DEVELOPER_ROW_HELP.scramble,
-    [DEVELOPER_ROW_LABELS.steamWebApiKey]: DEVELOPER_ROW_HELP.steamWebApiKey,
   };
 
   it("each board row that has words matches what the tab hands the strip", () => {

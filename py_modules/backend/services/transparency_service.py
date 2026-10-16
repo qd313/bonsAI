@@ -88,7 +88,7 @@ def build_immediate_command_snapshot(
     app_name: str,
     pc_ip: str,
 ) -> dict[str, Any]:
-    """Transparency row for sanitizer/shortcut/VAC paths that finish inside ``start_background_game_ai``."""
+    """Transparency row for sanitizer/shortcut/note paths that finish inside ``start_background_game_ai``."""
     return ensure_context_chips_on_snapshot(
         {
             "route": route,

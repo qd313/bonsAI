@@ -77,6 +77,23 @@ describe("settings contracts", () => {
     expect(loaded.ui_scale_manual_profile).toBe("handheld");
   });
 
+  /**
+   * The Steam ban lookup and its Steam Web API key were removed (plan 86 step 3). Someone whose
+   * settings.json still holds the old key and the old permission must load cleanly, through the same
+   * normalizeSettings() path the real loader uses, with both dropped and the other settings intact.
+   */
+  it("normalizeSettings: a settings file saved with the retired Steam ban lookup key and permission still loads, and both are dropped", () => {
+    const loaded = normalizeSettings({
+      steam_web_api_key: "not-a-real-value",
+      capabilities: { steam_web_api: true, filesystem_write: true },
+      latency_warning_seconds: 45,
+    } as never);
+    expect("steam_web_api_key" in loaded).toBe(false);
+    expect("steam_web_api" in loaded.capabilities).toBe(false);
+    expect(loaded.capabilities.filesystem_write).toBe(true);
+    expect(loaded.latency_warning_seconds).toBe(45);
+  });
+
   it("normalizes latency warning to configured bounds and step", () => {
     expect(normalizeLatencyWarningSeconds(2)).toBe(5);
     expect(normalizeLatencyWarningSeconds(299)).toBe(300);
@@ -128,10 +145,8 @@ describe("settings contracts", () => {
     expect(settings.desktop_ask_verbose_logging).toBe(false);
     expect(settings.desktop_app_log_level).toBe("off");
     expect(settings.capabilities.filesystem_write).toBe(false);
-    expect(settings.capabilities.steam_web_api).toBe(false);
     expect(settings.capabilities.microphone_access).toBe(false);
     expect(settings.voice_stt_model).toBe("base.en");
-    expect(settings.steam_web_api_key).toBe("");
     expect(settings.ai_character_enabled).toBe(false);
     expect(settings.ai_character_random).toBe(true);
     expect(settings.ai_character_preset_id).toBe("");
@@ -366,7 +381,6 @@ describe("settings contracts", () => {
       ollamaLocalAutostart: false,
       strategySpoilerMaskingEnabled: false,
       strategySpoilerAutoRevealAfterConsent: false,
-      steamWebApiKey: "abc",
       showOnscreenDebugHud: false, devForceSessionRagChips: false, devPreloadAskModel: false, devFrozenTestChips: [],
       tabResumeMode: "resume",
       namedOllamaHosts: [],
@@ -399,7 +413,6 @@ describe("settings contracts", () => {
     expect(p.ollama_local_on_deck).toBe(true);
     expect(p.strategy_spoiler_masking_enabled).toBe(false);
     expect(p.strategy_spoiler_auto_reveal_after_consent).toBe(false);
-    expect(p.steam_web_api_key).toBe("abc");
     expect(p.show_developer_tab).toBe(true);
   });
 
@@ -438,7 +451,6 @@ describe("settings contracts", () => {
       ollamaLocalAutostart: false,
       strategySpoilerMaskingEnabled: DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
       strategySpoilerAutoRevealAfterConsent: false,
-      steamWebApiKey: "",
       showOnscreenDebugHud: false, devForceSessionRagChips: false, devPreloadAskModel: false, devFrozenTestChips: [],
       tabResumeMode: "resume" as const,
       namedOllamaHosts: [],
@@ -588,7 +600,6 @@ describe("settings contracts", () => {
       ollamaLocalAutostart: normalized.ollama_local_autostart,
       strategySpoilerMaskingEnabled: normalized.strategy_spoiler_masking_enabled,
       strategySpoilerAutoRevealAfterConsent: normalized.strategy_spoiler_auto_reveal_after_consent,
-      steamWebApiKey: normalized.steam_web_api_key,
       showOnscreenDebugHud: normalized.show_onscreen_debug_hud,
       devForceSessionRagChips: normalized.dev_force_session_rag_chips,
       devPreloadAskModel: normalized.dev_preload_ask_model,

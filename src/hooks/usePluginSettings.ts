@@ -157,7 +157,6 @@ const SETTINGS_FIELD_BACKEND_KEY: Record<keyof BonsaiSettingsSnapshotInput, keyo
   ollamaLocalAutostart: "ollama_local_autostart",
   strategySpoilerMaskingEnabled: "strategy_spoiler_masking_enabled",
   strategySpoilerAutoRevealAfterConsent: "strategy_spoiler_auto_reveal_after_consent",
-  steamWebApiKey: "steam_web_api_key",
   showOnscreenDebugHud: "show_onscreen_debug_hud",
   devForceSessionRagChips: "dev_force_session_rag_chips",
   devPreloadAskModel: "dev_preload_ask_model",

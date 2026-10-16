@@ -27,8 +27,8 @@ stores.
 How it works:
  1. Most settings are one of a few repeating shapes -- an on/off switch, a
     pick from a fixed list, a bounded piece of text -- built by
-    `_bool_default_false()`, `_bool_default_true()`, `_enum()`,
-    `_bounded_str()` and `_coerced_str()`. Each setting that fits one of
+    `_bool_default_false()`, `_bool_default_true()`, `_enum()` and
+    `_coerced_str()`. Each setting that fits one of
     these shapes is one row in the `_SIMPLE_FIELDS` table rather than its
     own function.
  2. A setting whose rule needs something more -- another setting's value, an
@@ -48,8 +48,8 @@ How it works:
     existed, it grants the three permissions the plugin was already using at
     the time (writing files, reading the screenshot library, reading Steam's
     logs) rather than silently switching everything off -- but not the other
-    two, Steam Web API and the microphone, which stay off even for an old
-    install (see capabilities.py for why).
+    two, the microphone and internet downloads, which stay off even for an
+    old install (see capabilities.py for why).
  5. `save_settings()` merges an incoming change into what is already saved,
     cleans up the result the same way, and writes it to a temporary file
     that is only swapped into place once the write has finished, so a crash
@@ -159,22 +159,11 @@ def _clamped_whole_number(default: int, minimum: int, maximum: int):
     return _coerce
 
 
-def _bounded_str(max_len: int):
-    """Trimmed and length-capped. A non-string is rejected outright, not stringified."""
-
-    def _coerce(value: Any) -> str:
-        if not isinstance(value, str):
-            return ""
-        return value.strip()[:max_len]
-
-    return _coerce
-
-
 def _coerced_str(max_len: int):
-    """As ``_bounded_str`` but stringifies non-strings, so ``123`` becomes ``"123"``.
+    """Trimmed and length-capped, and stringifies non-strings, so ``123`` becomes ``"123"``.
 
-    Kept distinct because ``rag_corpus_version`` has always behaved this way and a version
-    written as a number would otherwise start coming back empty.
+    ``rag_corpus_version`` has always behaved this way and a version written as a number
+    would otherwise start coming back empty.
     """
 
     def _coerce(value: Any) -> str:
@@ -266,8 +255,6 @@ def sanitize_preset_chip_animation(value: Any, legacy_fade: Any) -> str:
         return "static"
     return "fade"
 
-
-STEAM_WEB_API_KEY_MAX_LEN = 128
 
 
 def sanitize_show_developer_tab(value: Any, legacy_show_debug_tab: Any = None) -> bool:
@@ -508,8 +495,6 @@ _SIMPLE_FIELDS: dict[str, Any] = {
     # How big the chat's own words are drawn. Normal unless the person picks another; an old
     # settings file with no value, or an unrecognised one, reads as Normal.
     "chat_text_size": _enum(frozenset({"small", "normal", "large"}), "normal", strip=True),
-    # Credentials.
-    "steam_web_api_key": _bounded_str(STEAM_WEB_API_KEY_MAX_LEN),
     # Developer-tab switch: a streaming answer's newest text scrambles for a moment before
     # settling, the way a decode chip does. Off by default (plan 69).
     "stream_scramble_enabled": _bool_default_false,
@@ -635,6 +620,41 @@ def sanitize_settings(
     return out
 
 
+# The removed Steam ban lookup's saved key name and permission name (plan 86). Only the names are
+# kept here, to find and drop them from an older settings file.
+_RETIRED_STEAM_KEY = "steam_web_api_key"
+_RETIRED_STEAM_PERMISSION = "steam_web_api"
+
+
+def _scrub_retired_steam_settings(path: str, data: dict, logger: Any) -> None:
+    """One-time clean-up: take the removed Steam ban lookup's saved key and permission out of the file.
+
+    Both are ignored on load anyway, but until the next save of any setting they would stay in
+    settings.json (the key in plain text). This edits the RAW file contents, not the sanitized
+    form: for an old file with no ``capabilities`` block the sanitized form would turn the
+    old-file grandfathering off. It writes the way ``save_settings`` does (temporary file, then
+    swap) and never raises: a file that cannot be written is left alone and the scrub tries again
+    on the next load. A failure logs the path and the error, never a setting's value.
+    """
+    caps = data.get("capabilities")
+    has_key = _RETIRED_STEAM_KEY in data
+    has_permission = isinstance(caps, dict) and _RETIRED_STEAM_PERMISSION in caps
+    if not (has_key or has_permission):
+        return
+    try:
+        cleaned = {k: v for k, v in data.items() if k != _RETIRED_STEAM_KEY}
+        if has_permission:
+            cleaned["capabilities"] = {k: v for k, v in caps.items() if k != _RETIRED_STEAM_PERMISSION}
+        tmp_path = f"{path}.tmp"
+        with open(tmp_path, "w", encoding="utf-8") as f:
+            json.dump(cleaned, f, indent=2, sort_keys=True)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp_path, path)
+    except Exception as exc:
+        logger.warning("load_settings: could not remove retired Steam settings from %s: %s", path, exc)
+
+
 def load_settings(path: str, sanitize_func: Callable[[Any], dict], logger: Any) -> dict:
     """Read settings from disk and return a sanitized settings object on every path.
 
@@ -650,6 +670,7 @@ def load_settings(path: str, sanitize_func: Callable[[Any], dict], logger: Any) 
         sanitized = sanitize_func(data)
         if "capabilities" not in data or not isinstance(data.get("capabilities"), dict):
             sanitized = {**sanitized, "capabilities": legacy_grandfather_capabilities()}
+        _scrub_retired_steam_settings(path, data, logger)
         return sanitized
     except FileNotFoundError:
         return sanitize_func({})

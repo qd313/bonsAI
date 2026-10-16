@@ -213,7 +213,6 @@ export function usePresetRowNav(
  */
 export function chipRowExitUp(): boolean {
   return (
-    takeNavFocus("chat-perm-hint-deny") ||
     takeNavFocus("chat-perm-hint-troubleshoot") ||
     takeNavFocus("newest-closed-question") ||
     focusBottomOfNewestReply() ||

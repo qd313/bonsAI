@@ -2,8 +2,8 @@
  * Title: Permissions tab
  *
  * Purpose: The Permissions tab — the screen where you turn on the things the
- * AI is allowed to touch: saving files to your desktop, looking up your
- * Steam ban status, using the microphone, downloading from the internet, and
+ * AI is allowed to touch: saving files to your desktop, using the
+ * microphone, downloading from the internet, and
  * reading game screenshots and Proton logs to help with troubleshooting. Every one of these starts off
  * for a new install. Turning a toggle on here is what lets the Python side
  * of the plugin do that thing at all when Ask needs it; leaving it off
@@ -67,12 +67,6 @@ const ROWS: {
     focusId: "filesystem_write",
     title: "Save files to Desktop",
     description: "Saves notes and logs to Desktop/bonsAI_logs.",
-  },
-  {
-    key: "steam_web_api",
-    focusId: "steam_web_api",
-    title: "Steam ban lookup",
-    description: "For the bonsai:vac-check command. API key lives in Developer → Integrations.",
   },
   {
     key: "microphone_access",

@@ -2,8 +2,8 @@
  * Title: Questions that do not need the AI, or a PC, to answer
  *
  * Purpose: A few special typed lines are not really questions for the AI at all — turning the content
- * filter on or off, running the Deck controller shortcut setup, or checking for VAC (anti-cheat)
- * problems. Those are handled directly by the back end without ever reaching the AI model, which
+ * filter on or off, running the Deck controller shortcut setup, or keeping a note. Those are
+ * handled directly by the back end without ever reaching the AI model, which
  * normally runs on a separate PC over the local network. This file recognizes that a typed line is
  * one of those special commands, so the screen knows in advance that it should not block sending it
  * just because the field for that PC's network address is empty.
@@ -20,7 +20,7 @@
  */
 import { INPUT_SANITIZER_COMMAND_DISABLE, INPUT_SANITIZER_COMMAND_ENABLE } from "../data/inputSanitizerCommands";
 
-/** Match ``backend/services/shortcut_setup_commands.py`` / ``vac_check_commands`` slash handling. */
+/** Match ``backend/services/shortcut_setup_commands.py`` slash handling. */
 function normalizeAskWithOptionalLeadingSlash(text: string): string {
   let s = (text || "").trim().toLowerCase();
   if (s.startsWith("/")) {
@@ -36,26 +36,10 @@ function isSanitizerKeywordCommand(question: string): boolean {
 
 const SHORTCUT_DECK = "bonsai:shortcut-setup-deck";
 const SHORTCUT_STADIA = "bonsai:shortcut-setup-stadia";
-const VAC_PREFIX = "bonsai:vac-check";
-/** The ban lookup chip's plain wording; mirrors ``VAC_CHECK_PLAIN_PHRASE`` in vac_check_commands.py. */
-const VAC_PLAIN_PHRASE = "Check Steam players for bans";
 
 function isShortcutSetupCommand(question: string): boolean {
   const key = normalizeAskWithOptionalLeadingSlash(question);
   return key === SHORTCUT_DECK || key === SHORTCUT_STADIA;
-}
-
-/** True when the Ask line is a ``bonsai:vac-check`` command (same detection as ``parse_vac_check_command``). */
-function isVacCheckCommand(question: string): boolean {
-  let raw = (question || "").trim();
-  if (raw.startsWith("/")) {
-    raw = raw.slice(1).trimStart();
-  }
-  const low = raw.toLowerCase();
-  return [VAC_PREFIX, VAC_PLAIN_PHRASE].some((command) => {
-    const prefix = command.toLowerCase();
-    return low === prefix || low.startsWith(`${prefix} `) || low.startsWith(`${prefix}\t`);
-  });
 }
 
 /**
@@ -74,7 +58,6 @@ export function questionBypassesOllamaPcIpRequirement(question: string): boolean
   return (
     isSanitizerKeywordCommand(question) ||
     isShortcutSetupCommand(question) ||
-    isVacCheckCommand(question) ||
     isNoteCommand(question)
   );
 }

@@ -67,7 +67,6 @@ const ALL_OFF: BonsaiCapabilities = {
   filesystem_write: false,
   media_library_access: false,
   steam_logs_read: false,
-  steam_web_api: false,
   microphone_access: false,
   internet_downloads: false,
 };
@@ -82,14 +81,14 @@ describe("Text size reaches the words inside Steam's own controls", () => {
     }
   });
 
-  it("Permissions: the title, the five switch names and the five descriptions follow Text size (16 and 12 at Normal)", () => {
+  it("Permissions: the title, the four switch names and the four descriptions follow Text size (16 and 12 at Normal)", () => {
     for (const size of SIZES) {
       const { container, unmount } = inBox(size, <PermissionsTab capabilities={ALL_OFF} setCapabilities={() => {}} />);
       expect(sizeOf(container, "[data-test-section-title]", "Permissions")).toBeCloseTo(16 * TEXT_SCALE[size], 5);
       const labels = container.querySelectorAll("[data-test-label]");
       const descriptions = container.querySelectorAll("[data-test-desc]");
-      expect(labels).toHaveLength(5);
-      expect(descriptions).toHaveLength(5);
+      expect(labels).toHaveLength(4);
+      expect(descriptions).toHaveLength(4);
       labels.forEach((el) => expect(read(el.querySelector("[data-bonsai-scaled-words]")!)).toBeCloseTo(16 * TEXT_SCALE[size], 5));
       descriptions.forEach((el) => expect(read(el.querySelector("[data-bonsai-scaled-words]")!)).toBeCloseTo(12 * TEXT_SCALE[size], 5));
       unmount();

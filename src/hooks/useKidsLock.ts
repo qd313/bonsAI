@@ -2,9 +2,9 @@
  * Title: The Kids lock — following Steam's own parental control for this session
  *
  * Purpose: Watches Steam's own parental lock and, for as long as it is on,
- * turns off every one of the plugin's five permissions for this session —
- * writing files, the screenshot and video library, Steam's logs, talking
- * to Steam's own servers, and the microphone — no matter what the person
+ * turns off every one of the plugin's permissions for this session —
+ * writing files, the screenshot and video library, Steam's logs, the
+ * microphone and internet downloads — no matter what the person
  * had actually granted. It does not touch the saved permissions
  * themselves, only what they are allowed to do while the lock is active.
  *
@@ -35,7 +35,6 @@ const DENIED_CAPABILITIES: BonsaiCapabilities = {
   filesystem_write: false,
   media_library_access: false,
   steam_logs_read: false,
-  steam_web_api: false,
   microphone_access: false,
   internet_downloads: false,
 };

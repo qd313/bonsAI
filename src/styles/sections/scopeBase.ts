@@ -203,7 +203,7 @@ ${TEXT_SCALE_ROOT_CSS}
         }
         /*
           A Button inside a Focusable wrapper (accent intensity, Reinstall voice engine, the voice
-          model rows) and the Steam Web API key field. Steam put only a thin grey frame on these
+          model rows). Steam put only a thin grey frame on these
           (Deck 2026-10-02, plan79-P79-RING-WALK-TABS.json) because the ring rule above only knew a
           bare Button, and a ring drawn outside a button inside a wrapper can be clipped. Steam
           marks focus on the wrapper OR on the button inside it, so each draws the same white ring
@@ -223,11 +223,8 @@ ${TEXT_SCALE_ROOT_CSS}
           outline: none !important;
           box-shadow: none !important;
         }
-        /* The key field: the ring goes on the innermost part Steam marks (the input, or its container
-           if that is what Steam marks), never both. Outline only, so the key text does not move. */
         /* A Steam button row (ButtonItem: Jump to Steam Input, Clear, Install seed knowledge base...)
            has no class hook of its own, so it sits in a host and gets the same ring by the same rule. */
-        .bonsai-scope .bonsai-settings-text-field-host .gpfocus:not(:has(.gpfocus)),
         .bonsai-scope .bonsai-settings-item-ring-host .gpfocus:not(:has(.gpfocus)) {
           outline: 2px solid rgba(255, 255, 255, 0.88) !important;
           outline-offset: -2px !important;

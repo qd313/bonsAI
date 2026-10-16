@@ -58,8 +58,7 @@
  *    renderStrategyChecklist() between the answer and the reply actions.
  * 5. Below all of the turns: a handful of situational hint rows (no game
  *    detected, a troubleshooting-shaped question with game-reading
- *    permission off, a VAC-check permission denial), then the slow-answer
- *    and applied-tuning banners.
+ *    permission off), then the slow-answer and applied-tuning banners.
  * 6. (Save chat to Desktop is no longer here: it is an action in the chats
  *    menu opened from the chat's name in Decky's title bar, ChatsMenu.tsx.)
  *    (The separate "Session context (N turns)" box that used to sit here is
@@ -1109,18 +1108,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   });
   const archivedTurnsToRender = earlier.turnsToRender;
 
-  /*
-   * The text the ban-lookup permission row is judged on. The live reply while there is one; after a
-   * chat switch the live text is blank and the same reply is drawn as the chat's newest saved turn,
-   * so read that instead (plan 74 P74-LOCAL-CMD-CHAT: the row was gone on coming back to its chat).
-   * Not while a saved question is still waiting for its answer (the newest saved answer is then not
-   * the newest turn), and it is the active chat's own turns, so the row never follows a reply into
-   * another chat.
-   */
-  const vacDenyReplyText =
-    ollamaResponse ||
-    (askThreadDisplayQuestion.trim() ? "" : askThreadCollapsed[askThreadCollapsed.length - 1]?.answer ?? "");
-
   return (
     <>
 {(showEmptySlotPreview || (askThreadCollapsed.length === 0 && !showLiveTurn)) && (
@@ -1658,10 +1645,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   gameContextReadEnabled={gameContextReadEnabled}
   troubleshootingPermHintDismissed={troubleshootingPermHintDismissed}
   unifiedInput={unifiedInput}
-  showEmptySlotPreview={showEmptySlotPreview}
   onNavigateToPermissions={onNavigateToPermissions}
   dismissTroubleshootingPermHint={dismissTroubleshootingPermHint}
-  vacDenyReplyText={vacDenyReplyText}
   navTargets={permHintNavTargets}
 />
 <ChatLatencyNotices

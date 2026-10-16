@@ -1,9 +1,9 @@
 /**
  * Title: The Developer tab's folded sections: their names, their summaries, and the rows' longer text
  *
- * Purpose: What the folded Developer tab (plan 91 § 2b, plan 92 lane T2) says about itself: the six
- * sections in order (Knowledge base, Diagnostics, Navigation, Logging & exports, Animations,
- * Integrations), each one's summary line from the current settings, the labels the tab's choice rows
+ * Purpose: What the folded Developer tab (plan 91 § 2b, plan 92 lane T2) says about itself: the five
+ * sections in order (Knowledge base, Diagnostics, Navigation, Logging & exports, Animations),
+ * each one's summary line from the current settings, the labels the tab's choice rows
  * show, and the longer text of each row that the strip shows, word for word as the tab used to print it
  * under or above the row (the density board's data file, docs/demos/mockup-board-2/src/42-tabs-data.js,
  * lists every one).
@@ -35,7 +35,6 @@ export const DEVELOPER_SECTIONS = [
   { id: "navigation", title: "Navigation" },
   { id: "logging", title: "Logging & exports" },
   { id: "animations", title: "Animations" },
-  { id: "integrations", title: "Integrations" },
 ] as const;
 
 export type DeveloperSectionId = (typeof DEVELOPER_SECTIONS)[number]["id"];
@@ -117,7 +116,6 @@ export const DEVELOPER_ROW_LABELS = {
   howLettersSettle: "How letters settle",
   settleTime: "How long each letter scrambles",
   scrambleColour: "Scrambled letter colour",
-  steamWebApiKey: "Steam Web API key",
 } as const;
 
 /** The rows' longer text (the strip shows it while the ring is on the row), as the tab printed it before it folded. */
@@ -143,8 +141,6 @@ export const DEVELOPER_ROW_HELP = {
     `${count} pinned. The carousel is showing these and will not reseed. Session RAG chips are suppressed while a batch is active, so corpus-chip checks cannot pass until you clear it.`,
   scramble:
     "New answer text scrambles through symbols for a moment before it settles into letters, like the decode chips. Off by default.",
-  steamWebApiKey:
-    "For the bonsai:vac-check command. Enable Steam ban lookup in Permissions. Stored on this device.",
 } as const;
 
 /** The strip's words for "Tab to open on": the picked mode's line, then when it takes effect. */
@@ -208,6 +204,5 @@ export function developerSectionSummaries(v: DeveloperFoldValues): Record<Develo
       { kind: "switch", label: DEVELOPER_ROW_LABELS.forceChips, on: v.devForceSessionRagChips },
     ]),
     animations: summarizeSection(title("animations"), animationsSummaryRows(v)),
-    integrations: summarizeSection(title("integrations"), []),
   };
 }

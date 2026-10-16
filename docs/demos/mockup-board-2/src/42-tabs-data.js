@@ -78,7 +78,6 @@ const TAB_DATA = {
     para("High-impact actions stay off until you enable them here. AI requests on your home network are not gated by these toggles. Model policy and routing live on the <b>Ollama</b> tab. Docs, GitHub, and Steam settings links always open when you tap them.", { intro: true }),
     tog("Read game & screenshot context", "Lets bonsAI attach Steam screenshots and, on troubleshooting Asks, auto-attach local game/Proton log excerpts. One permission for screenshots and logs.", true),
     tog("Save files to Desktop", "Notes, logs, and exports under Desktop/bonsAI_logs. Off blocks those writes.", true),
-    tog("Steam ban lookup", "For the bonsai:vac-check command. API key lives in Developer → Integrations.", false),
     tog("Voice input (microphone)", "Record from this device's microphone for local speech-to-text in the Ask bar. Audio stays on-device and is never saved.", true),
     tog("Internet downloads", "Lets bonsAI download Ollama, AI models, voice models and the knowledge library, and refresh the recommended-models list. Off, nothing downloads.", true),
   ] },
@@ -109,8 +108,6 @@ const TAB_DATA = {
     sec("Animations"),
     choice("Preset suggestions", ["fade", "carousel", "static", "decode"], 0, { cyan: true, titled: true, small: true }),
     tog("Scramble animation", "New answer text scrambles through symbols for a moment before it settles into letters, like the decode chips. Off by default.", false),
-    sec("Integrations"),
-    { t: "field", label: "Steam Web API key", value: "", desc: "For the <b>bonsai:vac-check</b> command. Enable Steam ban lookup in Permissions. Stored on this device.", how: "above" },
   ] },
 
   About: { icon: 5, measured: 915, items: [

@@ -33,16 +33,15 @@ class CapabilitiesTests(unittest.TestCase):
         self.assertNotIn("hardware_control", out)
         self.assertNotIn("external_navigation", out)
 
-    def test_legacy_grandfather_all_true_except_steam_web_api(self):
-        # Matches legacy_grandfather_capabilities docstring: outbound Steam Web API, the microphone
-        # and internet downloads stay off for legacy installs.
+    def test_legacy_grandfather_all_true_except_microphone_and_downloads(self):
+        # Matches legacy_grandfather_capabilities docstring: the microphone and internet downloads
+        # stay off for legacy installs.
         g = legacy_grandfather_capabilities()
         self.assertEqual(set(g.keys()), set(CAPABILITY_KEYS))
-        self.assertFalse(g["steam_web_api"])
         self.assertFalse(g["microphone_access"])
         self.assertFalse(g["internet_downloads"])
         for key in CAPABILITY_KEYS:
-            if key not in ("steam_web_api", "microphone_access", "internet_downloads"):
+            if key not in ("microphone_access", "internet_downloads"):
                 self.assertTrue(g[key], msg=key)
 
     def test_capability_enabled_requires_explicit_true(self):

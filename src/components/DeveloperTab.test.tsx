@@ -31,8 +31,6 @@ function baseProps(overrides: Partial<DeveloperTabProps> = {}): DeveloperTabProp
     filesystemWrite: false,
     presetChipAnimation: "fade",
     setPresetChipAnimation: () => {},
-    steamWebApiKey: "",
-    setSteamWebApiKey: () => {},
     showOnscreenDebugHud: false,
     setShowOnscreenDebugHud: () => {},
     devForceSessionRagChips: false,

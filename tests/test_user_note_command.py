@@ -53,8 +53,8 @@ class PrefixRuleTests(unittest.TestCase):
         self.assertTrue(detect_local_ask_commands(REMEMBER).note)
         self.assertTrue(detect_local_ask_commands(REMEMBER).any)
         self.assertFalse(detect_local_ask_commands("how do I beat the mantis lords").note)
-        self.assertFalse(detect_local_ask_commands("bonsai:vac-check").note)
-        self.assertTrue(detect_local_ask_commands("bonsai:vac-check").any)
+        self.assertFalse(detect_local_ask_commands("bonsai:shortcut-setup-deck").note)
+        self.assertTrue(detect_local_ask_commands("bonsai:shortcut-setup-deck").any)
 
 
 class AnswersWithoutTheAiTests(PluginOnATempFolder):
@@ -160,8 +160,8 @@ class ShowDetailsSaysLocalNoteCommand(unittest.TestCase):
 
     def test_other_routes_are_unchanged(self):
         snapshot = build_immediate_command_snapshot(
-            route="vac_check",
-            parsed_question="bonsai:vac-check",
+            route="shortcut_setup",
+            parsed_question="bonsai:shortcut-setup-deck",
             resp="x",
             sanitizer_action="pass",
             sanitizer_reason_codes=[],

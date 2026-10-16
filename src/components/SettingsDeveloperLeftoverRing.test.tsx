@@ -168,7 +168,7 @@ describe("the last Steam buttons on the four tabs draw the white ring", () => {
     const { container } = render(
       <div className="bonsai-scope">
         <PermissionsTab
-          capabilities={{ filesystem_write: false, media_library_access: false, steam_logs_read: false, steam_web_api: false, microphone_access: false, internet_downloads: false }}
+          capabilities={{ filesystem_write: false, media_library_access: false, steam_logs_read: false, microphone_access: false, internet_downloads: false }}
           setCapabilities={() => {}}
           permissionJumpReturnTab="settings"
           onReturnFromPermissionJump={() => {}}

@@ -64,7 +64,7 @@ The path a question takes:
  1. `parse_ask_payload()` turns whatever shape the screen sent into plain values.
  2. Obvious refusals first: no question, or no address for the PC running the AI.
  3. Some questions never reach the AI at all. A few are commands the Deck
-    answers itself -- setting up a shortcut, checking an anti-cheat, a keyword
+    answers itself -- setting up a shortcut, keeping a note, a keyword
     the safety check recognises. These finish here, inside the handler.
  4. The safety check reads the question and may block it outright, in which case
     what happened is recorded so the Transparency screen can show it.
@@ -233,7 +233,7 @@ _BACKGROUND_TASK_FAILED_USER_MESSAGE = (
     "Backend error: something went wrong while processing your request. Details were logged on the device."
 )
 
-# Sentinel: sanitizer immediate-complete path omits ``shortcut_setup`` from state/response; VAC sets state only.
+# Sentinel: sanitizer immediate-complete path omits ``shortcut_setup`` from state/response.
 # Imported from background_request_state so the state builder and this file agree on one object identity.
 
 
@@ -741,15 +741,12 @@ class Plugin:
 
     @staticmethod
     def _settings_change_keys_for_log(before: dict, after: dict) -> list[str]:
-        sensitive = frozenset({"steam_web_api_key"})
         changed: list[str] = []
         keys = set(before.keys()) | set(after.keys())
         for key in sorted(keys):
             if before.get(key) == after.get(key):
                 continue
-            if key in sensitive:
-                changed.append(f"{key}=<redacted>")
-            elif key == "capabilities" and isinstance(before.get(key), dict) and isinstance(after.get(key), dict):
+            if key == "capabilities" and isinstance(before.get(key), dict) and isinstance(after.get(key), dict):
                 cap_keys = set(before["capabilities"].keys()) | set(after["capabilities"].keys())
                 for ck in sorted(cap_keys):
                     if before["capabilities"].get(ck) != after["capabilities"].get(ck):
@@ -819,9 +816,6 @@ class Plugin:
 
     async def _try_handle_shortcut_setup_command(self, question: str, app_id: str) -> Optional[dict]:
         return await ask_local_command_handlers.try_handle_shortcut_setup_command(self, question, app_id)
-
-    async def _try_handle_vac_check_command(self, question: str, app_id: str) -> Optional[dict]:
-        return await ask_local_command_handlers.try_handle_vac_check_command(self, question, app_id)
 
     async def _try_handle_note_command(self, question: str, app_id: str, app_name: str, chat_slot_id: str = "") -> Optional[dict]:
         return await ask_local_command_handlers.try_handle_note_command(self, question, app_id, app_name, chat_slot_id)
@@ -1259,7 +1253,7 @@ class Plugin:
         app_name: str,
         pc_ip: str,
     ) -> dict:
-        """Shared transparency row for sanitizer/shortcut/VAC paths that finish inside ``start_background_game_ai``."""
+        """Shared transparency row for sanitizer/shortcut/note paths that finish inside ``start_background_game_ai``."""
         return build_immediate_command_snapshot(
             route=route,
             parsed_question=parsed_question,
@@ -1292,7 +1286,7 @@ class Plugin:
     ) -> dict:
         """Persist transparency, publish ``completed`` background state, and return the RPC body.
 
-        Local keyword branches (sanitizer / shortcut / VAC) never spawn ``_run_background_request``; they must
+        Local keyword branches (sanitizer / shortcut / note) never spawn ``_run_background_request``; they must
         still mint a monotonic ``request_id`` so UI polling and Desktop autosave dedupe stay consistent. They
         also never reach the normal path's own chat-slot persistence further down ``start_background_game_ai``
         (guarded there on ``has_local_command`` being false), so when a slot is active this records the same
@@ -1457,10 +1451,6 @@ class Plugin:
             sc = await self._try_handle_shortcut_setup_command(parsed_question, app_id)
             if sc is not None:
                 return sc
-        if local_kinds.vac:
-            vac = await self._try_handle_vac_check_command(parsed_question, app_id)
-            if vac is not None:
-                return vac
         if local_kinds.note:
             note = await self._try_handle_note_command(parsed_question, app_id, app_name)
             if note is not None:
@@ -1753,26 +1743,6 @@ class Plugin:
                         chat_slot_id=chat_slot_id,
                         shortcut_setup_for_state=variant,
                         shortcut_setup_for_response=variant,
-                    )
-
-            if local_kinds.vac:
-                handled_v = await self._try_handle_vac_check_command(parsed_question, app_id)
-                if handled_v is not None:
-                    resp = str(handled_v.get("response", ""))
-                    return await self._finalize_immediate_background_local_command(
-                        parsed_question=parsed_question,
-                        resp=resp,
-                        app_id=app_id,
-                        app_name=app_name,
-                        pc_ip=pc_ip,
-                        app_context=app_context,
-                        transparency_route="vac_check",
-                        sanitizer_action="pass",
-                        sanitizer_reason_codes=[],
-                        state_question=parsed_question,
-                        meta="vac_check",
-                        chat_slot_id=chat_slot_id,
-                        shortcut_setup_for_state=None,
                     )
 
             if local_kinds.note:

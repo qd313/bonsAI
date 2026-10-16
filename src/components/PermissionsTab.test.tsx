@@ -9,7 +9,6 @@ const ALL_ON: BonsaiCapabilities = {
   filesystem_write: true,
   media_library_access: true,
   steam_logs_read: true,
-  steam_web_api: true,
   microphone_access: true,
   internet_downloads: true,
 };
@@ -36,7 +35,7 @@ describe("PermissionsTab kids lock", () => {
     expect(document.querySelector('[data-bonsai-kids-lock-banner="1"]')).toBeTruthy();
 
     const toggles = document.querySelectorAll('[data-decky-ui="ToggleField"]');
-    expect(toggles.length).toBe(5);
+    expect(toggles.length).toBe(4);
     for (const toggle of toggles) {
       expect(toggle.hasAttribute("disabled")).toBe(true);
       expect(toggle.hasAttribute("checked")).toBe(false);
@@ -66,7 +65,7 @@ describe("PermissionsTab kids lock", () => {
 
     expect(screen.queryByText(/Parental controls active/i)).toBeNull();
     const toggles = document.querySelectorAll('[data-decky-ui="ToggleField"]');
-    expect(toggles.length).toBe(5);
+    expect(toggles.length).toBe(4);
     for (const toggle of toggles) {
       expect(toggle.hasAttribute("disabled")).toBe(false);
     }
@@ -99,20 +98,12 @@ describe("PermissionsTab wording stays short", () => {
   it("every switch description is at most 12 words", () => {
     render(<Harness kidsLockActive={false} />);
     const toggles = document.querySelectorAll('[data-decky-ui="ToggleField"]');
-    expect(toggles.length).toBe(5);
+    expect(toggles.length).toBe(4);
     for (const toggle of toggles) {
       const description = toggle.getAttribute("description");
       expect(description, toggle.getAttribute("label") ?? "").toBeTruthy();
       expect(words(description), `${toggle.getAttribute("label")}: ${description}`).toBeLessThanOrEqual(12);
     }
-  });
-
-  it("the Steam ban lookup switch keeps its old words (the maintainer, 2026-10-14)", () => {
-    render(<Harness kidsLockActive={false} />);
-    const row = document.querySelector('[label="Steam ban lookup"]');
-    expect(row!.getAttribute("description")).toBe(
-      "For the bonsai:vac-check command. API key lives in Developer → Integrations.",
-    );
   });
 
   it("the parental-controls banner is at most 40 words and keeps the facts that matter", () => {

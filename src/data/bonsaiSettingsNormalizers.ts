@@ -30,7 +30,7 @@
  *
  * How it works: Most settings are declared as one row in the `SIMPLE_FIELDS` table near the
  * bottom, built from one of a handful of shared field-kind functions near the top of the file
- * (`boolDefaultFalse`, `enumOf`, `boundedString`, `clampedWholeNumber`, and the rest) — mirroring
+ * (`boolDefaultFalse`, `enumOf`, `clampedWholeNumber`, and the rest) — mirroring
  * `_SIMPLE_FIELDS` in settings_service.py row for row. `normalizeSettings()` runs every row
  * through its coercer, then layers the handful of settings that need something a table row
  * cannot express — a legacy key, another field's value, or a nested structure — on top by
@@ -93,7 +93,6 @@ import {
   MIN_REQUEST_TIMEOUT_SECONDS,
   PRESET_CHIP_ANIMATION_OPTIONS,
   REQUEST_TIMEOUT_STEP_SECONDS,
-  STEAM_WEB_API_KEY_MAX_LEN,
   STREAM_SCRAMBLE_COLOR_OPTIONS,
   STREAM_SCRAMBLE_SETTLE_MS_MAX,
   STREAM_SCRAMBLE_SETTLE_MS_MIN,
@@ -265,11 +264,6 @@ function normalizeUnifiedInputPersistenceMode(value: unknown): UnifiedInputPersi
   return mode === RETIRED_SEARCH_ONLY ? "no_persist" : mode;
 }
 
-/** Trimmed and length-capped. A non-string is rejected outright, not stringified. */
-function boundedString(maxLength: number): (value: unknown) => string {
-  return (value: unknown): string => (typeof value === "string" ? value.trim().slice(0, maxLength) : "");
-}
-
 /**
  * A whole number clamped to `[minimum, maximum]`, or `fallback` for anything that is not a
  * finite number. Mirrors Python's `_clamped_whole_number` in settings_service.py: a non-whole
@@ -423,7 +417,6 @@ function normalizeCapabilities(value: unknown): BonsaiCapabilities {
     filesystem_write: raw.filesystem_write === true,
     media_library_access: raw.media_library_access === true,
     steam_logs_read: raw.steam_logs_read === true,
-    steam_web_api: raw.steam_web_api === true,
     microphone_access: raw.microphone_access === true,
     internet_downloads: raw.internet_downloads === true,
   };
@@ -526,7 +519,6 @@ const SIMPLE_FIELDS = {
   voice_stt_model: enumOf<VoiceSttModelId>(VOICE_STT_MODEL_OPTIONS, DEFAULT_VOICE_STT_MODEL, {
     trim: true,
   }),
-  steam_web_api_key: boundedString(STEAM_WEB_API_KEY_MAX_LEN),
   // Developer-tab switch: a streaming answer's newest text scrambles before settling. Off by
   // default (plan 69).
   stream_scramble_enabled: boolDefaultFalse,

@@ -27,7 +27,6 @@ const ALL_ON: BonsaiCapabilities = {
   filesystem_write: true,
   media_library_access: true,
   steam_logs_read: true,
-  steam_web_api: true,
   microphone_access: true,
   internet_downloads: true,
 };
@@ -44,7 +43,6 @@ afterEach(() => {
 describe.each([
   ["permissions-row-game-context-read"],
   ["permissions-row-filesystem-write"],
-  ["permissions-row-steam-web-api"],
   ["permissions-row-microphone-access"],
 ] as const)("%s row nav registration", (navId) => {
   it("registers a nav holder on mount and clears it on unmount", () => {

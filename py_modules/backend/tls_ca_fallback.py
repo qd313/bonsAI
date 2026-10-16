@@ -11,7 +11,7 @@ retries once using one of a few file locations where SteamOS keeps its own
 trusted-certificate list on disk.
 Used for: wrapping every secure download the plugin makes -- the search-
 knowledge download, the Pull Models list, installing Ollama, downloading a
-speech-to-text model, and checking Steam's anti-cheat status -- so each of
+speech-to-text model -- so each of
 them gets the retry without writing it out for themselves.
 Solves: a real error, seen on the Deck itself: "CERTIFICATE_VERIFY_FAILED:
 unable to get local issuer certificate". It happens only inside Decky's

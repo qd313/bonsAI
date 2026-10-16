@@ -74,7 +74,6 @@ function minimalSurvivalSnapshot(
       ollamaLocalAutostart: false,
       strategySpoilerMaskingEnabled: true,
       strategySpoilerAutoRevealAfterConsent: false,
-      steamWebApiKey: "",
       showOnscreenDebugHud: false,
       devForceSessionRagChips: false,
       devPreloadAskModel: false,
@@ -217,7 +216,7 @@ describe("useBonsaiAskOrchestration", () => {
       );
 
       await act(async () => {
-        await result.current.onAskOllama("bonsai:vac-check 76561198000000000");
+        await result.current.onAskOllama("bonsai:shortcut-setup-deck");
       });
 
       expect(startCalls()).toHaveLength(1);

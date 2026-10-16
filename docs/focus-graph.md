@@ -11,11 +11,11 @@ _What AGENTS.md used to say about this example, moved here 2026-09-27:_ One cont
 
 A new stop under a reply that used a note or a shared troubleshooting tip
 (`MainTabChatTranscript.tsx`, `buildKbNotesBlockElement`), one per turn ("live" or an archived
-turn's own id). It sits after Show details / Read aloud in the walk, before whatever the utility
+turn's own id). It sits after Show details in the walk, before whatever the utility
 row used to reach:
 
 ```
-Show details / Read aloud (unchanged)
+Show details (unchanged)
    | Down                              ^ Up
 "From the notes" block header   <- new stop, one per turn
    | Down                              ^ Up
@@ -83,8 +83,8 @@ the session context strip)
 ### The Text size row (plan 87, F6)
 
 A Settings row of three buttons, Small / Normal / Large (`SettingsTabChatTextSizeRow.tsx`), drawn under
-Screenshot quality and above Remember what I typed. It is built the way Screenshot quality and Voice replies
-are: one `Focusable` with `flow-children="horizontal"` holding three plain buttons.
+Screenshot quality and above Remember what I typed. It is built the way Screenshot quality
+is: one `Focusable` with `flow-children="horizontal"` holding three plain buttons.
 
 ```
 Screenshot quality (Small / Balanced / Best detail)
@@ -131,38 +131,27 @@ button and panel described next were replaced on 2026-10-12 by the filters colum
 screen's Filters button opens a panel of tickable rows (Down or B inside it, or Up from its first row,
 closes it and returns to the Filters button); the newest answer's Show details gained a second tab,
 Session (Left/Right switch tabs, Up leaves to Hide details, Down enters the open tab, B closes the whole
-panel); Read aloud was a small speaker on the Helpful/Not row (since plan 84 it is in the answer's lower-left
-corner, see below). None of the three has a device check yet — see [docs/testing.md](testing.md).
+panel); a small Read aloud speaker on the Helpful/Not row was the third (it has since been removed). Neither
+of the other two has a device check yet — see [docs/testing.md](testing.md).
 
-**Plan 84 step 3 — the Read aloud speaker moves to the answer's lower-left corner (route as built):** it is
-its own stop, a sibling of the answer bubble drawn into the bubble's corner by the stylesheet, exactly as
-Copy is in the lower-right (`bonsai-reply-read-aloud-corner-slot`, built in `buildAnswerCornerSlots.tsx` for `buildAnswerBubbleElement.tsx`).
-It is registered under the reply-stop name `read-aloud-corner`; the old name `read-aloud`, which meant
-the speaker in the reply-actions row, is gone. The slot and the Copy slot are each their own navigation
-container. The first "What went wrong?" choice is a named stop too (`reason-chips`), so Down from the
-corner icons and Down from the summed-up note both land on it once a reply is rated down.
+**Plan 84 step 3 — Copy in the answer's lower-right corner (route as built):** Copy is its own stop, a sibling of the
+answer bubble drawn into the bubble's corner by the stylesheet (`bonsai-reply-copy-corner-slot`). The slot is its own
+navigation container. The first "What went wrong?" choice is a named stop too (`reason-chips`), so Down from the
+corner icon and Down from the summed-up note both land on it once a reply is rated down.
 
 ```
 answer sections 0..n-1            (Up/Down walk them, unchanged)
-   last section:  Right -> Read aloud   (Copy when the answer has no speaker)
-      Read aloud:  Right -> Copy        Left -> last section   Up -> last section
-      Copy:        Left  -> Read aloud  Up   -> last section   (Left -> last section when there is no speaker)
-   Down from Read aloud OR Copy -> the summed-up note, else Helpful, else Show details
-                                   (the same chain Down from Copy used before; the speaker is no longer in it)
+   last section:  Right -> Copy
+      Copy:        Left -> last section   Up -> last section
+   Down from Copy -> the summed-up note, else Helpful, else Show details
 ```
 
-- **Left to right on the bubble's bottom edge: answer, Read aloud, Copy.** Every move between them is Steam's
-  own transfer onto the target slot's nav node (`TakeFocus`) followed by the registry focus, never a bare
-  `focus()` across containers.
-- **Down from either corner** goes where Down from Copy always went. The speaker is no longer a stop below
-  the answer, so it is not tried in that chain (`focusDownFromLiveAnswerBubble`, `downOutOfCopy`, the bubble's
-  own Down).
-- **The reply-actions row** under the answer keeps Helpful / Not really and Show details only. A reply whose
-  only action was the speaker no longer has the row at all. After Helpful (both thumbs swap for "Saved on this
-  Deck") the ring goes down to Show details, where it used to go to the speaker.
-- **A** on the speaker starts reading; the button then says Stop and A stops it. Same label and states as before.
-- **Scroll:** the slot is an ordinary step in the turn's flow, so Steam scrolls it into view the way it does Copy
-  (P84-READ-01 checks the ring is fully visible on an answer longer than the screen).
+- **Between the answer and Copy:** every move is Steam's own transfer onto the target slot's nav node (`TakeFocus`)
+  followed by the registry focus, never a bare `focus()` across containers.
+- **The reply-actions row** under the answer holds Helpful / Not really and Show details. After Helpful (both thumbs
+  swap for "Saved on this Deck") the ring goes down to Show details.
+- **Scroll:** the slot is an ordinary step in the turn's flow, so Steam scrolls it into view (P84-READ-01 checks the
+  ring is fully visible on an answer longer than the screen).
 
 ### The "Show N more" line at the end of an open day (plan 83)
 
@@ -1281,7 +1270,6 @@ tab bar
 [ STORY SPOILERS (STRATEGY MODE)   Hide spoilers … on  ▸ ]
 [ SUGGESTION CHIPS   Show one chip instead of two off  ▸ ]
 [ VOICE INPUT   STT model: base.en                     ▸ ]
-[ VOICE REPLIES   By voice                             ▸ ]
 [ AI VOICE & PERSONALITY   on                          ▸ ]
 [ DATA   Show Developer tab on                         ▾ ]
    | Down (open: into the first control)    <-- the button's Up, Down, Left and B come back to the line it left
@@ -1292,7 +1280,7 @@ tab bar
 ```
 
 - **Stops:** the section lines; in an open section, one per control: each switch; ONE stop for a row of buttons
-  side by side (Screenshot quality, Text size, Voice replies, the two speech models, the two Clear buttons: Left
+  side by side (Screenshot quality, Text size, the two speech models, the two Clear buttons: Left
   and Right walk them, Down and Up leave the row); the character picker button; the Accent intensity control; the
   voice install button (and the Open Permissions button above the models while the microphone is off); in UI
   scale, the switch, the manual slider's bridge and Reset (only while automatic is off) and Apply; and the
@@ -1321,7 +1309,7 @@ tab bar
   to Apply by it (`SettingsTabUiScaleSection.greyedApply.test.tsx`, with a Button stand-in that takes focus when
   greyed). The old Up from Screenshot quality to Apply is gone: the first control of a section goes to its line.
 - **Class names and attributes a Deck driver can find:** the lines `.bonsai-fold-line`
-  (`[data-bonsai-fold-line="uiscale|screenshot|textsize|remember|spoilers|chips|voiceinput|voicereplies|character|data"]`,
+  (`[data-bonsai-fold-line="uiscale|screenshot|textsize|remember|spoilers|chips|voiceinput|character|data"]`,
   `[data-open]`); the rows `.bonsai-dense-row` (`[data-bonsai-help-label="<row name>"]`, `[data-bonsai-help]`
   its strip words); the Text size row `[data-bonsai-chat-text-size-row="true"]`; the picker
   `button.bonsai-ai-character-picker-open`; the accent control `button.bonsai-accent-intensity-trigger`; the Clear

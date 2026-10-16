@@ -11,7 +11,7 @@ The shoulder buttons switch tabs, as they do elsewhere in Steam. **B** steps bac
 - [The knowledge library](#the-knowledge-library)
 - [Spoilers](#spoilers)
 - [Saved chats](#saved-chats)
-- [Voice input and read aloud](#voice-input-and-read-aloud)
+- [Voice input](#voice-input)
 - [Characters](#characters)
 - [Where the AI runs](#where-the-ai-runs)
 - [Running the AI on a PC](#running-the-ai-on-a-pc)
@@ -30,7 +30,7 @@ The shoulder buttons switch tabs, as they do elsewhere in Steam. **B** steps bac
 - [The knowledge library](#the-knowledge-library)
 - [Spoilers](#spoilers)
 - [Saved chats](#saved-chats)
-- [Voice input and read aloud](#voice-input-and-read-aloud)
+- [Voice input](#voice-input)
 - [Characters](#characters)
 - [Where the AI runs](#where-the-ai-runs)
 - [Running the AI on a PC](#running-the-ai-on-a-pc)
@@ -93,8 +93,7 @@ done.
 
 - **Helpful** / **Not really** — saved in a small file on your Deck and never sent anywhere. It
   doesn't change your answers.
-- The **speaker** button reads the answer aloud.
-- **Copy**, and **retry** on your question to ask it again.
+- **Copy** (in the answer's bottom-right corner), and **retry** on your question to ask it again.
 - **Show details** — which model answered, which notes it used and where they came from, and the
   rest of the chat's history.
 
@@ -153,9 +152,9 @@ while the row is selected.
 card of what the AI remembers from the chat, and may suggest a better name. A long chat also sums
 itself up on its own, so older parts aren't forgotten.
 
-## Voice input and read aloud
+## Voice input
 
-**Voice input** — talk instead of typing.
+Talk instead of typing.
 
 1. Switch on **Voice input (microphone)** and **Internet downloads** on the Permissions tab.
 2. On **Settings → Voice input**, pick a speech model — **base.en** (the default) is more accurate; **tiny.en** is
@@ -170,17 +169,6 @@ itself up on its own, so older parts aren't forgotten.
    are never cut off. A recording stops by itself after two minutes.
 
 Your speech is turned into text on the Deck. The recording is deleted as soon as that's done.
-
-**Read aloud** uses the Deck's own voice, so there's nothing to download. Press the speaker under an
-answer, or set **Settings → Voice replies**:
-
-| Setting | What happens |
-|---|---|
-| **Off** | Only when you press the speaker. The default |
-| **By voice** | Answers are read aloud when you asked by voice |
-| **Always** | Every answer is read aloud |
-
-Code, tables and covered spoilers are mentioned, not read out.
 
 ## Characters
 

@@ -35,7 +35,7 @@ adding a surface; read this one while building it.
   - [The chat's name row](#the-chats-name-row)
   - [The chats menu](#the-chats-menu)
   - [The question box's strip](#the-question-boxs-strip)
-  - [The answer's corner icons](#the-answers-corner-icons)
+  - [The answer's corner icon](#the-answers-corner-icon)
 - [Known drift](#known-drift)
 <!-- /toc -->
 
@@ -363,16 +363,15 @@ Plan 84 step 2. Left to right: paperclip, game tag, mode, mic (Stop while an ans
 | Small Ask, words in the box | Word `ASK_LABEL_READY_COLOR`, fill `rgba(255,255,255,0.14)` |
 | Small Ask, resting (an answer is being written) | 38% opacity and disabled |
 
-### The answer's corner icons
+### The answer's corner icon
 
-Plan 84 step 3. Read aloud in the lower-left, Copy in the lower-right, both in the bottom band of the answer's bubble ([answerBubbleCorners.ts](../src/styles/sections/answerBubbleCorners.ts) and [answerBubble.ts](../src/styles/sections/answerBubble.ts)).
+Plan 84 step 3. Copy sits in the lower-right of the answer's bubble, in its bottom band ([answerBubbleCorners.ts](../src/styles/sections/answerBubbleCorners.ts) and [answerBubble.ts](../src/styles/sections/answerBubble.ts)).
 
 | What | Value |
 |---|---|
-| Each icon | A 20 by 20 box with no border or fill, `#d4dde6` at 50% opacity, 95% with the ring. Read aloud turns `#f87171` while it speaks; Copy turns `#9ce7ff` when copied and `#f16a5a` on an error |
+| Each icon | A 20 by 20 box with no border or fill, `#d4dde6` at 50% opacity, 95% with the ring. Copy turns `#9ce7ff` when copied and `#f16a5a` on an error |
 | The ring on a corner icon | `2px rgba(255,255,255,0.9)`, offset 0, hugging the box |
-| The bottom band | **25 points** of padding under the last line when Read aloud is there (Copy alone keeps 8). Bottom up: the box sits 2 above the bubble's edge, 20 tall, the ring 2, 2 of clearance. Measured on the Deck 2026-10-08: the last line's bottom is 4 points clear of the box and 2 of the ring |
-| Left inset | The speaker's strip is padded 7 from the bubble's left edge |
+| The bottom band | **25 points** of padding under the last line. Bottom up: the box sits 2 above the bubble's edge, 20 tall, the ring 2, 2 of clearance. Measured on the Deck 2026-10-08: the last line's bottom is 4 points clear of the box and 2 of the ring |
 
 ---
 

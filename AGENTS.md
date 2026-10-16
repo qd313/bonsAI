@@ -184,7 +184,7 @@ Full patterns:
   [focus-graph.md § Where the ring starts](docs/focus-graph.md#where-the-ring-starts-when-the-plugin-opens).
 - **Never mark Deck-facing work done without a D-pad row** in [docs/testing.md](docs/testing.md) or
   [docs/testing-manual.md](docs/testing-manual.md) for the new chain.
-- **Plan 62's three controls (Filters panel, Show details' Session tab, the Read aloud speaker)** have
+- **Plan 62's two controls (Filters panel, Show details' Session tab)** have
   their D-pad routes written down in [focus-graph.md](docs/focus-graph.md#three-controls-from-plan-62).
   The Filters button is now a column (plan 91): [routes](docs/focus-graph.md#the-ai-models-boxs-filters-column-plan-91-m1).
 

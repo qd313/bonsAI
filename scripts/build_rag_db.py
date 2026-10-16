@@ -410,6 +410,89 @@ def mistyped_starting_out_rows(sections: list[dict]) -> list[str]:
     )
 
 
+def _glossary_row_problems(rows: list[Any], game_ids: dict[str, int]) -> list[str]:
+    """Reasons the glossary file cannot be built; empty when every row is fine.
+
+    The matcher on the screen keeps the first of two words with one spelling and silently
+    skips the second, so a repeat is refused here rather than lost there.
+    """
+    problems: list[str] = []
+    seen_ids: set[int] = set()
+    seen_keys: set[tuple[str, str]] = set()
+    seen_spellings: set[tuple[str, str]] = set()
+    for index, row in enumerate(rows):
+        label = f"row {index + 1}"
+        if not isinstance(row, dict):
+            problems.append(f"{label} is not an object")
+            continue
+        label = f"{label} ({row.get('term_key') or row.get('term') or '?'})"
+        app_id = str(row.get("app_id") or "").strip()
+        if app_id not in game_ids:
+            problems.append(f"{label}: no game has app_id {app_id!r}")
+        for field in ("term_key", "term", "peek", "full_text"):
+            if not str(row.get(field) or "").strip():
+                problems.append(f"{label}: {field} is empty")
+        alt_forms = row.get("alt_forms", [])
+        if not isinstance(alt_forms, list) or not all(isinstance(a, str) for a in alt_forms):
+            problems.append(f"{label}: alt_forms must be a list of text")
+            alt_forms = []
+        try:
+            term_id = int(row["term_id"])
+        except (KeyError, TypeError, ValueError):
+            problems.append(f"{label}: term_id is missing or not a number")
+        else:
+            if term_id in seen_ids:
+                problems.append(f"{label}: term_id {term_id} repeats")
+            seen_ids.add(term_id)
+        key = (app_id, str(row.get("term_key") or "").strip())
+        if key in seen_keys:
+            problems.append(f"{label}: term_key repeats for this game")
+        seen_keys.add(key)
+        for spelling in [str(row.get("term") or ""), *alt_forms]:
+            spelling_key = (app_id, spelling.strip().lower())
+            if spelling.strip() and spelling_key in seen_spellings:
+                problems.append(f"{label}: the spelling {spelling!r} is used twice for this game")
+            seen_spellings.add(spelling_key)
+    return problems
+
+
+def _seed_glossary_terms(conn: sqlite3.Connection) -> int:
+    """Write data/kb/glossary_terms.json into the glossary_terms table; returns the row count.
+
+    A missing file gives 0 rows, the way the tips file does. A bad row stops the build.
+    """
+    path = KB_DATA_DIR / "glossary_terms.json"
+    if not path.is_file():
+        return 0
+    rows = _load_json(path)
+    if not isinstance(rows, list):
+        raise SystemExit("glossary_terms.json: the file must hold a list of words")
+    game_ids = {
+        str(app_id): int(game_id)
+        for game_id, app_id in conn.execute("SELECT game_id, app_id FROM games WHERE app_id IS NOT NULL")
+    }
+    problems = _glossary_row_problems(rows, game_ids)
+    if problems:
+        raise SystemExit("glossary_terms.json: " + "; ".join(problems))
+    conn.executemany(
+        "INSERT INTO glossary_terms(term_id, game_id, term_key, term, alt_forms, peek, full_text) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?)",
+        [
+            (
+                int(r["term_id"]),
+                game_ids[str(r["app_id"]).strip()],
+                str(r["term_key"]).strip(),
+                str(r["term"]).strip(),
+                json.dumps(r.get("alt_forms") or [], ensure_ascii=False),
+                str(r["peek"]),
+                str(r["full_text"]),
+            )
+            for r in rows
+        ],
+    )
+    return len(rows)
+
+
 def _seed_strategy_corpus(conn: sqlite3.Connection) -> None:
     path = KB_DATA_DIR / "strategy_seed.json"
     if not path.is_file():
@@ -563,6 +646,8 @@ def seed_sample_corpus_legacy(conn: sqlite3.Connection) -> None:
 def seed_sample_corpus(conn: sqlite3.Connection) -> None:
     """Seed dev/sample rows: 11-title strategy mix + shared compat tip sheet."""
     _seed_strategy_corpus(conn)
+    # After the games exist: each word is filed under its game's app id.
+    _seed_glossary_terms(conn)
     tip_count = _seed_compat_patterns(conn)
     if tip_count == 0:
         conn.execute(
@@ -723,6 +808,7 @@ def build_corpus(out_dir: Path, *, seed: bool, allow_missing_embeddings: bool = 
     embedding_compat_count = 0
     section_total = 0
     compat_total = 0
+    glossary_term_count = 0
     refusal: str | None = None
     try:
         apply_schema(conn)
@@ -733,6 +819,7 @@ def build_corpus(out_dir: Path, *, seed: bool, allow_missing_embeddings: bool = 
         embedding_section_count, section_total = populate_section_vectors(conn)
         embedding_compat_count, compat_total = populate_compat_vectors(conn)
         embeddings_populated = embedding_section_count > 0 or embedding_compat_count > 0
+        glossary_term_count = int(conn.execute("SELECT COUNT(*) FROM glossary_terms").fetchone()[0])
         conn.commit()
 
         section_missing = section_total - embedding_section_count
@@ -795,6 +882,9 @@ def build_corpus(out_dir: Path, *, seed: bool, allow_missing_embeddings: bool = 
         "embedding_compat_total_count": compat_total,
         "embedding_missing_count": section_total - embedding_section_count
         + (compat_total - embedding_compat_count),
+        # Information only (nothing reads it): lets the maintainer see at publish time that
+        # the library carries the tap-to-define words.
+        "glossary_term_count": glossary_term_count,
         "db_filename": CORPUS_DB_FILENAME,
         "db_sha256": db_sha,
         "compressed_filename": compressed.name,

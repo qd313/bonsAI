@@ -25,6 +25,7 @@ FORBIDDEN_CORPUS_BASENAMES = frozenset(
         "attributions.md",
         "strategy_seed.json",
         "compat_patterns.json",
+        "glossary_terms.json",
     }
 )
 

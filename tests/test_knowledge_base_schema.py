@@ -1,9 +1,11 @@
 import os
+import sqlite3
 import unittest
 from pathlib import Path
 from unittest import mock
 
 from backend.services.knowledge_base_schema import (
+    apply_schema,
     corpus_compat_vectors_fully_indexed,
     corpus_has_usable_compat_vectors,
     corpus_has_usable_section_vectors,
@@ -175,6 +177,37 @@ class CorpusFullyIndexedTests(unittest.TestCase):
             (pack_embedding_vector([0.1]),),
         )
         self.assertTrue(corpus_compat_vectors_fully_indexed(conn, manifest=None))
+
+
+class GlossaryTableTests(unittest.TestCase):
+    def test_apply_schema_creates_the_glossary_table_with_no_search_index_or_vectors(self):
+        conn = sqlite3.connect(":memory:")
+        try:
+            apply_schema(conn)
+            tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+            self.assertIn("glossary_terms", tables)
+            self.assertNotIn("glossary_terms_fts", tables)
+            self.assertNotIn("glossary_term_vectors", tables)
+            columns = [r[1] for r in conn.execute("PRAGMA table_info(glossary_terms)")]
+            self.assertEqual(
+                columns, ["term_id", "game_id", "term_key", "term", "alt_forms", "peek", "full_text"]
+            )
+        finally:
+            conn.close()
+
+    def test_apply_schema_is_harmless_on_a_library_that_has_the_glossary_table(self):
+        conn = sqlite3.connect(":memory:")
+        try:
+            apply_schema(conn)
+            conn.execute("INSERT INTO games(game_id, app_id, canonical_title) VALUES (1, '10', 'G')")
+            conn.execute(
+                "INSERT INTO glossary_terms(term_id, game_id, term_key, term, peek, full_text) "
+                "VALUES (1, 1, 'k', 'k', 'p', 'f')"
+            )
+            apply_schema(conn)
+            self.assertEqual(conn.execute("SELECT COUNT(*) FROM glossary_terms").fetchone()[0], 1)
+        finally:
+            conn.close()
 
 
 if __name__ == "__main__":

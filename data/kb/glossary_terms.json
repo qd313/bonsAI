@@ -1,0 +1,20 @@
+[
+  {
+    "term_id": 1,
+    "app_id": "2321470",
+    "term_key": "kiting",
+    "term": "kiting",
+    "alt_forms": ["kite", "kited", "kites"],
+    "peek": "Backing away while you keep shooting.",
+    "full_text": "Kiting means backing away from an enemy while you keep shooting it, using your movement speed to stay just out of melee range instead of tanking hits. It buys survival time, but a run spent only kiting mines nothing — kite between waves, not instead of mining."
+  },
+  {
+    "term_id": 2,
+    "app_id": "2321470",
+    "term_key": "overclock",
+    "term": "overclock",
+    "alt_forms": ["overclocks", "overclocked"],
+    "peek": "A weapon mod that changes what it does, not just its numbers.",
+    "full_text": "An overclock is a weapon mod that changes what a weapon is for rather than simply making it bigger — read what it removes as well as what it adds before slotting one. Save your best overclock, or a nuke, for an armor-break window on a boss like the Dreadnought."
+  }
+]

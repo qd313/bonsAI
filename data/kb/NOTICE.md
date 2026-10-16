@@ -54,6 +54,12 @@ What each licence name means, with a link to its plain-language summary:
 These are tips written for bonsAI (every one is marked `bonsAI-maintainer`). Where a tip has a
 `source_url`, that is the page where a fact in it was checked, not a page it was copied from.
 
+## `glossary_terms.json`
+
+The tap-to-define words (a short peek and a full definition for jargon such as "kiting"), filed
+by game. Written for bonsAI by its maintainer; no wiki source. They go into the knowledge
+library's `glossary_terms` table, not into the notes.
+
 ## Copies of the notes elsewhere in the repository
 
 `src/utils/kbNoteUsedByAnswer.fixtures.json` holds copies of 13 of the wiki-adapted notes above

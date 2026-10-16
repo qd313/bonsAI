@@ -93,6 +93,16 @@ class PluginZipCorpusGuardTests(unittest.TestCase):
                 self.assertEqual(guard.find_forbidden_corpus_paths(root), [f"data/kb/{name}"])
                 self.assertEqual(guard.main(["--dir", str(root)]), 1)
 
+    def test_planted_glossary_terms_file_fails(self):
+        # The tap-to-define words are library source data, like the notes: never in the plugin.
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "main.py").write_text("# plugin" + chr(10), encoding="utf-8")
+            (root / "data" / "kb").mkdir(parents=True)
+            (root / "data" / "kb" / "glossary_terms.json").write_text("[]" + chr(10), encoding="utf-8")
+            self.assertEqual(guard.find_forbidden_corpus_paths(root), ["data/kb/glossary_terms.json"])
+            self.assertEqual(guard.main(["--dir", str(root)]), 1)
+
     def test_zip_with_game_notes_fails(self):
         with tempfile.TemporaryDirectory() as tmp:
             zpath = Path(tmp) / "plugin.zip"

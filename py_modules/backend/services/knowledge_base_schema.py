@@ -27,8 +27,9 @@ How it works:
  1. `CREATE_SCHEMA_SQL` and `apply_schema()` create the tables a knowledge
     base needs: games, their alternate names, strategy write-ups, genre-wide
     and compatibility tips, a fast keyword-search index kept in sync by the
-    triggers in `FTS_SYNC_TRIGGERS_SQL`, and, when the download includes
-    them, a table of vectors for meaning-based search.
+    triggers in `FTS_SYNC_TRIGGERS_SQL`, a table of each game's tap-to-define
+    words (searched by nothing, read by game only), and, when the download
+    includes them, a table of vectors for meaning-based search.
  2. `list_rag_storage_options()`, `default_corpus_dir_internal()` and
     `default_corpus_dir_sd()` work out where the knowledge base can be
     installed -- inside your home folder, or on a plugged-in SD card -- and
@@ -184,6 +185,23 @@ CREATE TABLE IF NOT EXISTS compat_pattern_vectors (
     pattern_id INTEGER PRIMARY KEY REFERENCES compat_patterns(pattern_id) ON DELETE CASCADE,
     embedding BLOB
 );
+
+-- A game's tap-to-define words. Its own table, not a kind of note: nothing searches it, so no
+-- full-text index and no vectors, and a word never shows up as a note, a chip or a search hit.
+-- Read by game only. A library built before this table existed simply lacks it, and the reader
+-- (knowledge_base_glossary) treats that as "no words". Schema version stays 4 on purpose.
+CREATE TABLE IF NOT EXISTS glossary_terms (
+    term_id INTEGER PRIMARY KEY,
+    game_id INTEGER NOT NULL REFERENCES games(game_id) ON DELETE CASCADE,
+    term_key TEXT NOT NULL,
+    term TEXT NOT NULL,
+    alt_forms TEXT NOT NULL DEFAULT '[]',
+    peek TEXT NOT NULL,
+    full_text TEXT NOT NULL,
+    UNIQUE (game_id, term_key)
+);
+
+CREATE INDEX IF NOT EXISTS idx_glossary_terms_game_id ON glossary_terms(game_id);
 """
 
 FTS_SYNC_TRIGGERS_SQL = """

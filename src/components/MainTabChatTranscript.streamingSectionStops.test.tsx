@@ -1,7 +1,7 @@
 /**
  * Title: While an answer writes, its sections are D-pad stops, Up from below and Down from above
  *
- * Purpose: Pin plan 93's Deck finding (docs/test-evidence/plan93-P93-M4-ANSWER-FINISH-after-try2.json,
+ * Purpose: Pin plan 93's Deck finding (workshop:test-evidence/plan93-P93-M4-ANSWER-FINISH-after-try2.json,
  * run C): with an answer still writing, Up from the question box went chip row, the "From the notes"
  * block, then the turn's Retry, never into the answer's sections, though they are already cut and
  * drawn as the finished answer's sections (the picked design: they are stops while it writes).

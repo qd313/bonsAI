@@ -32,7 +32,7 @@ import { uiGamepadFocusElement } from "./uiDocument";
 /**
  * Going Up into `section`: land on a still-hidden spoiler cover inside it instead of on the section
  * (plan 74 lane 3). A section's own A does nothing, so Up used to leave the ring beside the cover
- * with no way to open it (docs/test-evidence/plan70-SPOILER-CREDITS-01.json); Down already parks on
+ * with no way to open it (workshop:test-evidence/plan70-SPOILER-CREDITS-01.json); Down already parks on
  * a cover first. A plain focus: the cover is inside the answer's own container, the move Down's
  * cover step already makes on the device (spoilerFenceRegistry.ts). The next Down walks on past it
  * because the ring is on it, not because it was flagged.
@@ -40,7 +40,7 @@ import { uiGamepadFocusElement } from "./uiDocument";
  * A cover still above the screen counts too (plan 74 lane 3, round two). Going Up, a section comes
  * into view from its bottom, so a cover at its top is the last part of it to appear: the Deck found
  * Up out of a tall second section landing on the first section around its cover, every time
- * (docs/test-evidence/plan74-P74-COVER-UP.json). `showCoverFromAbove` brings such a cover down onto
+ * (workshop:test-evidence/plan74-P74-COVER-UP.json). `showCoverFromAbove` brings such a cover down onto
  * the screen first, when that is no more than a screen's scroll.
  */
 function focusCoverGoingUp(section: HTMLElement, scroll: HTMLElement | null): boolean {
@@ -54,7 +54,7 @@ function focusCoverGoingUp(section: HTMLElement, scroll: HTMLElement | null): bo
 
 /**
  * Going Up into `section` from the one below: the stops it offers, mirroring what a walk Down does
- * there (plan 77 helper E; the maintainer's call of 2026-09-29, docs/test-evidence/
+ * there (plan 77 helper E; the maintainer's call of 2026-09-29, workshop:test-evidence/
  * plan76-REPLY-STOPS-MIRROR-01-try2.json). Down goes cover, then the section's box (`boxAfterLastCover`),
  * so Up goes the box, then the cover:
  *

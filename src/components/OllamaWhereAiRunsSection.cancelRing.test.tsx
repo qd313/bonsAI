@@ -1,7 +1,7 @@
 /**
  * Title: When Cancel ends the first Ollama download, the ring lands on Update, not on nothing
  *
- * Purpose: Pin the Deck finding of 2026-10-14 (docs/test-evidence/plan93-P93-B10-CANCEL.json): A on
+ * Purpose: Pin the Deck finding of 2026-10-14 (workshop:test-evidence/plan93-P93-B10-CANCEL.json): A on
  * Cancel stopped the run, the Cancel button was taken away with the ring on it, and no control held the
  * ring until the next Down. The real "Where AI runs" section is drawn on a Deck with a setup running,
  * the ring is put on Cancel, the back end then reports the run ended (cancelled, finished or failed),

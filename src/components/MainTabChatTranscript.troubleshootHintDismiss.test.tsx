@@ -5,7 +5,7 @@
  * Used for: MainTabChatTranscript.tsx's troubleshooting hint, troubleshootHintDismissals.ts.
  * Solves: Roadmap "A dismissed troubleshooting hint comes back once Quick Access is closed and
  *         reopened" -- the dismissal was plain screen state, lost on every rebuild
- *         (docs/test-evidence/plan70-L6-AFTER-DISMISS.json), and shared by every chat.
+ *         (workshop:test-evidence/plan70-L6-AFTER-DISMISS.json), and shared by every chat.
  * Does not: Prove the ring's hand-off after Dismiss (handRingOnWhenGone.test.ts does).
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";

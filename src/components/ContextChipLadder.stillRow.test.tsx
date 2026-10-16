@@ -44,7 +44,7 @@ vi.mock("@decky/ui", async () => {
 
 const OPEN_CHIP = "bonsai-chip-ladder-chip bonsai-chip-ladder-chip--active";
 
-/* Where the Deck draws things (docs/test-evidence/plan72-Z-FREEPLAY.json: dock top 586). */
+/* Where the Deck draws things (workshop:test-evidence/plan72-Z-FREEPLAY.json: dock top 586). */
 const PANE_TOP = 88;
 const PANE_BOTTOM = 766;
 const DOCK_TOP = 586;

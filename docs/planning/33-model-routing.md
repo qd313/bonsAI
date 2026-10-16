@@ -184,7 +184,7 @@ Verdict after ten rows: keep it if two or fewer misses; drop it and strike this 
 ### 4b. The lane model trial: Sonnet high, Opus low, Opus medium (proposed 2026-09-26, the maintainer's idea)
 
 Which lane model gives the best fix per unit of usage? Nothing measured Opus low or medium as a lane yet.
-First run in the release bug session ([plan 72](72-release-bug-session.md) § 3): a few tasks done two or
+First run in the release bug session ([plan 72](../../../bonsAI-workshop/planning/72-release-bug-session.md) § 3): a few tasks done two or
 three ways from the same brief and start point, reviewed blind (labelled A, B, C), the best one landed.
 Efficiency numbers come from a script that reads each helper's log, priced the way § 1 was.
 
@@ -241,7 +241,7 @@ Opus 5.5 low for mechanical fixes and moves, decided by whether the fix needs a 
 The bookkeeper runs on Opus low (the maintainer's call, see above). AGENTS.md, the reminder hook, the roadmap
 note and the helper settings files were updated the same day.
 
-**Third trial, D-pad fixes on Opus high (2026-09-28, [plan 74](74-release-wave-two.md) lane 3, the maintainer's
+**Third trial, D-pad fixes on Opus high (2026-09-28, [plan 74](../../../bonsAI-workshop/planning/74-release-wave-two.md) lane 3, the maintainer's
 call).** The table above sends D-pad work to Opus xhigh. The maintainer asked for one lane of D-pad fixes whose cause
 the Deck had already shown to run on Opus high instead, and to measure it. No paired run (screen work stays out of
 paired runs); the wave's other lanes give a rough comparison, on different work. Usage priced from each helper's log
@@ -262,7 +262,7 @@ The rest of the wave, for comparison (different kinds of work, so only a rough g
 | 4, looks | Opus xhigh (general helper at the session's effort) | 3 (5) | 5 of 5 | about $10.70 | about $2.14 |
 | 3, D-pad, both rounds | Opus high | 6 (7) | 5 of 6, then the sixth on round 2 | $17.35 | $2.48 (see below) |
 
-**Pricing slip, corrected 2026-09-28 ([plan 75](75-sonnet-5-5-trial.md) § 10).** This trial's first write-up
+**Pricing slip, corrected 2026-09-28 ([plan 75](../../../bonsAI-workshop/planning/75-sonnet-5-5-trial.md) § 10).** This trial's first write-up
 priced Opus 5.5 cache reads at $0.40 per million; the list price is $0.20. Every figure in the two tables above is
 re-priced from the same token counts; lane 4's log has grown since, so its figure is scaled from the ratio. The
 verdict does not change.
@@ -281,7 +281,7 @@ verdict does not change.
   helper, with Opus xhigh still reviewing and landing them. Measure one more wave with Opus high as a normal helper
   from the start, to get a clean cost per fix, before changing the table.
 
-**Fifth trial, D-pad fixes on Sonnet 5.5 high ([plan 76](76-release-wave-three.md), 2026-09-29, the maintainer's call).** Both D-pad lanes
+**Fifth trial, D-pad fixes on Sonnet 5.5 high ([plan 76](../../../bonsAI-workshop/planning/76-release-wave-three.md), 2026-09-29, the maintainer's call).** Both D-pad lanes
 (2 and 3) ran on Sonnet 5.5 high instead of Opus, to measure it. No paired run; screen work stays out of paired runs.
 
 - **Result:** 11 D-pad fixes were checked on the Deck and 10 passed the first time. Lane 2: 9 of 9. Lane 3: 1 of 2. The miss was the cover walk:
@@ -297,7 +297,7 @@ verdict does not change.
 
 Five settings (Sonnet 5.5 low, medium, high; Opus 5.5 low, medium) each did the same five jobs, reviewed blind:
 a simple fix, a fix needing judgment, a feature, a bookkeeping replay and a Deck check list. Full tables in
-[plan 75](75-sonnet-5-5-trial.md). In short: Sonnet 5.5 no longer runs up cost the way Sonnet 5 did; Sonnet high
+[plan 75](../../../bonsAI-workshop/planning/75-sonnet-5-5-trial.md). In short: Sonnet 5.5 no longer runs up cost the way Sonnet 5 did; Sonnet high
 scored best overall (82 of 100) and Opus medium next (81); only those two passed the judgment job; no Deck run
 passed a check that should fail. One run per setting per job. **Adopted 2026-09-28, the maintainer's call:** every
 helper moves to Sonnet 5.5 -- high wherever an Opus medium helper ran (features, knowledge base, fixes that need a
@@ -308,7 +308,7 @@ plans, orchestrates and lands. The table in § 2 is updated; keep adding a row p
 
 Four settings (Sonnet 5.5 medium and high, Haiku 5.5 medium and high) did the same six jobs, judged blind by Opus
 5.5 extra-high: two bugs, two features, a roadmap trim and the paperwork after landing. Full tables in
-[plan 83](83-haiku-5-5-trial.md) § 8. In short, of 150: Sonnet high 122, Sonnet medium 114, Haiku high 104, Haiku
+[plan 83](../../../bonsAI-workshop/planning/83-haiku-5-5-trial.md) § 8. In short, of 150: Sonnet high 122, Sonnet medium 114, Haiku high 104, Haiku
 medium 101. Haiku high won the mechanical bug (24 of 25, a quarter of Sonnet's cost) and came close on the clear
 two-star feature, but fell short on the timing bug, the three-star feature and both bookkeeping jobs, where every
 Haiku run either missed by more than two points or lost sentences while saying it had not. Haiku 5.5's price
@@ -327,7 +327,7 @@ else stays. Log each run below: the fix, the score or Deck result, the cost, and
 
 ### 4e. Screen-work helpers, plan 84 (2026-10-08)
 
-Two layout-and-focus helpers ran side by side, briefed from a measured drawing ([plan 84](84-more-room-for-the-answer.md)
+Two layout-and-focus helpers ran side by side, briefed from a measured drawing ([plan 84](../../../bonsAI-workshop/planning/84-more-room-for-the-answer.md)
 § 10). Not a trial; logged so the record shows how screen work went.
 
 | Step | Model and effort | Commits | Checks green first time? | Review or Deck fixes | Deck first time? | Helper tokens | Minutes |
@@ -344,7 +344,7 @@ Haiku 4.5 has been used once here: a six-turn documentation lookup on 09-04, for
 no evidence either way about it doing more, which is why § 4a is a trial with a log and a drop rule.
 
 **2026-10-08:** Haiku 5.5 gets a full trial on real bugs, features and bookkeeping, judged blind against Sonnet:
-[plan 83](83-haiku-5-5-trial.md). The "not a fit" list below is what that trial tests.
+[plan 83](../../../bonsAI-workshop/planning/83-haiku-5-5-trial.md). The "not a fit" list below is what that trial tests.
 
 Where it is a safe fit, because the answer can be checked by the caller:
 

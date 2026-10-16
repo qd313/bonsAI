@@ -3,7 +3,7 @@
 **Status:** written 2026-09-23 from a planning chat with the maintainer. Nothing built, nothing installed,
 nothing run. Phase 0 is next, and it starts only when the maintainer says so.
 **Roadmap entry:** **Stand-in Decks on the maintainer's PC** — ★★★★★ `[QA]` `[platform]`, under Features.
-**Related:** [plan 21](21-ai-owned-testing-program.md), the wider AI-owned testing program, and
+**Related:** [plan 21](../../../bonsAI-workshop/planning/21-ai-owned-testing-program.md), the wider AI-owned testing program, and
 [plan 19](19-controller-macro-test-rig.md), the controller test rig. This plan adds more machines to
 test on. It does not replace either.
 **Order, set 2026-09-24:** the maintainer made finishing the controller test rig priority 1 (see the top of

@@ -7,7 +7,7 @@
  * other test — the component simply stops re-rendering when that prop changes, and a
  * feature threaded down from settings silently does nothing on device.
  *
- * The step 11 friction test (docs/audit/03-friction.md) ranked that failure mode
+ * The step 11 friction test (workshop:audit/03-friction.md) ranked that failure mode
  * among the highest costs in this repo. These tests exist so the next person to add a
  * prop and forget the comparator finds out from a red suite rather than from a Deck.
  */
@@ -98,7 +98,7 @@ describe("MainTabPresetAnimatedChips memo gate", () => {
    * fade / carousel / static, but decode mode draws its own label from scratch
    * (DecodePresetChipButton) and never carried the badge over -- on the Deck, where the pinned
    * chip animation setting is decode, a frozen QA batch showed no badge anywhere
-   * (docs/test-evidence/plan47-frozen-chip-findings.json, finding_1).
+   * (workshop:test-evidence/plan47-frozen-chip-findings.json, finding_1).
    */
   it("badges a pinned test chip in every animation mode, including decode", () => {
     for (const mode of ["static", "fade", "carousel", "decode"] as const) {

@@ -1,7 +1,7 @@
 /**
  * Title: Up and Down between the rating choices and the speaker, on the real row
  * Purpose: Pin plan 79's "Up and Down between the rating choices and the speaker button go to the
- *          wrong place". Measured on the Deck (docs/test-evidence/plan79-P79-M7-RATING-ROW.json):
+ *          wrong place". Measured on the Deck (workshop:test-evidence/plan79-P79-M7-RATING-ROW.json):
  *          under a reply rated "Not really", Up from "Bad info" landed on the speaker instead of
  *          "Helpful", Down from the speaker landed on whichever choice was left last, and Up from
  *          any choice never reached "Helpful" or "Not really" at all. The maintainer's rule: the

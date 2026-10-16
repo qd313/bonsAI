@@ -5,7 +5,7 @@ This document is the advanced/power-user guide for bonsAI.
 For first-time setup, use `README.md` first (simple self-hosted install flow, Ollama setup, and starter model pulls).
 For contributor workflows, use [development.md](development.md) (Windows/Bazzite build and deploy paths).
 
-Roadmap and future features: [roadmap.md](roadmap.md). Steam Input search/jump and deep-link feasibility notes: [archive/research/steam-input-research.md](archive/research/steam-input-research.md). Opt-in character voice preset planning: [archive/research/voice-character-catalog.md](archive/research/voice-character-catalog.md).
+Roadmap and future features: [roadmap.md](roadmap.md). Steam Input search/jump and deep-link feasibility notes: [archive/research/steam-input-research.md](../../bonsAI-workshop/archive/research/steam-input-research.md). Opt-in character voice preset planning: [archive/research/voice-character-catalog.md](../../bonsAI-workshop/archive/research/voice-character-catalog.md).
 
 This file tracks resolved issues, hardware-specific overrides, and architectural constraints for the bonsAI (Backend Ollama Node for Steam A.I.) project.
 
@@ -254,7 +254,7 @@ component ("SD card", "controller layout", "remote play") rather than only the s
 
 **Fix:** Stop/restart the plugin, or delete `voice_bin/whisper-server.pid` and kill the stale PID. **Clear all data** or revoking the mic permission also force-stops the server.
 
-**Maintainers — podman image:** Install pins `WHISPER_CPP_IMAGE` by **digest** (not `:main`). To bump: pull a whisper.cpp image on Deck/Linux → `podman inspect … --format '{{.Digest}}'` → update `WHISPER_CPP_IMAGE` in `voice_transcription_service.py` → delete `~/homebrew/settings/bonsAI/voice_bin/` (or reinstall voice engine) → confirm mic → interim text. Do **not** copy prebuilt binaries from the image without a Deck CPU-safe compile + inference smoke. Full maintainer notes: [archive/voice-input-follow-up.md](archive/voice-input-follow-up.md).
+**Maintainers — podman image:** Install pins `WHISPER_CPP_IMAGE` by **digest** (not `:main`). To bump: pull a whisper.cpp image on Deck/Linux → `podman inspect … --format '{{.Digest}}'` → update `WHISPER_CPP_IMAGE` in `voice_transcription_service.py` → delete `~/homebrew/settings/bonsAI/voice_bin/` (or reinstall voice engine) → confirm mic → interim text. Do **not** copy prebuilt binaries from the image without a Deck CPU-safe compile + inference smoke. Full maintainer notes: [archive/voice-input-follow-up.md](../../bonsAI-workshop/archive/voice-input-follow-up.md).
 
 **Triage if voice breaks again:** (1) Permissions → mic on; (2) Settings → Voice input ready / Install voice engine; (3) red mic no text → logs / SIGILL → reinstall CPU-safe build; low RMS → speak closer; (4) install fail → podman / digest / compile timeout.
 
@@ -343,7 +343,7 @@ Each model was checked on 2026-09-29 against its Ollama page (`ollama.com/librar
 
 **Cause (fixed 2026-05-19):** Character instructions were prepended *before* the long bonsAI identity block; later lines (“answer directly, concisely, in English”) overrode voice. Build now **appends** character voice + a short end-of-system reminder.
 
-**Plan for stronger model honesty:** [archive/plans/post-p0-feature-backlog.md](archive/plans/post-p0-feature-backlog.md) (model truth section).
+**Plan for stronger model honesty:** [archive/plans/post-p0-feature-backlog.md](../../bonsAI-workshop/archive/plans/post-p0-feature-backlog.md) (model truth section).
 
 ---
 
@@ -757,7 +757,7 @@ Phase 1 is the **completed** scope for this feature; full search + catalog (Phas
 
 1. **MainRunningApp:** The jump uses `Router.MainRunningApp` from Decky. A title should be running or focused in a way Steam reports to the client. If you are only on the Steam shell with no game, start or focus a game and retry.
 2. **steam:// behavior:** Phase 1 uses `steam://controllerconfig/<appId>` via `SteamClient.URL.ExecuteSteamURL` (same family as Settings search `steam://open/settings/...`). If nothing happens, confirm Steam handled other `steam://` links from bonsAI recently; restart Steam if the client URL dispatcher is stuck.
-3. **After a Steam update:** Big Picture routes and `steam://` targets can change. Follow the smoke-test and changelog discipline in [archive/research/steam-input-research.md](archive/research/steam-input-research.md) and update `src/data/steam-input-lexicon.ts` if needed.
+3. **After a Steam update:** Big Picture routes and `steam://` targets can change. Follow the smoke-test and changelog discipline in [archive/research/steam-input-research.md](../../bonsAI-workshop/archive/research/steam-input-research.md) and update `src/data/steam-input-lexicon.ts` if needed.
 4. **Wrong tab inside controller UI:** Sub-tabs may be local React state without distinct URLs. Use breadcrumb hints in the lexicon entry and optional `primaryPathTemplate` once you have verified paths from CEF sniffing.
 
 ---

@@ -65,7 +65,7 @@ type RememberedFeedback = { rating: "up" | "down" | null; chipUsed: boolean };
  * for its own windows (the chat row's save icon does this), and on every QAM close and reopen --
  * while the answer itself comes back from the session-survival snapshot. Without this the
  * restored answer drew as never rated: thumbs live again and the "What went wrong?" chips gone
- * (plan 72, docs/test-evidence/plan72-F-ROW.json). A chat switch away and back is the same
+ * (plan 72, workshop:test-evidence/plan72-F-ROW.json). A chat switch away and back is the same
  * story. Keyed by request id as well as the words, so the same words served again for a new
  * question (the answer cache) start unrated. A plugin reload still forgets; the rating is not
  * written into the chat's saved file.

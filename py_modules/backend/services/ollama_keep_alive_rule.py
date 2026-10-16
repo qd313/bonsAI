@@ -4,7 +4,7 @@ Purpose: One place that decides the ``keep_alive`` every request to Ollama carri
 the person's own "Unload delay" setting. While a game is running AND the AI runs on this Deck, it is
 cut to about a minute, so the AI's memory (about 5.8 GB with the Deck's model) goes back to the game
 soon after an answer instead of five minutes later (plan 89, the maintainer's call 8; the freeze of
-2026-10-03, docs/audit/plan81-freeze-after-answer.md).
+2026-10-03, workshop:audit/plan81-freeze-after-answer.md).
 Used for: ollama_ask_service (the answer), chat_sum_up_job (the chat sum-up), knowledge_base_service
 (the search-by-meaning lookups); the memory step and the chat summary inside an Ask take the value the
 Ask worked out. game_ai_request.py tells this file whether a game is running at the start of each Ask.

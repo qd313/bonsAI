@@ -85,7 +85,7 @@ export function useMainTabAskBarFocus(
    * True while a question is in flight. The Ask button greys out for that whole window (the
    * maintainer wants it visible, not gone), but a greyed control still doing nothing when the
    * D-pad lands on it is its own bug (measured 2026-09-05,
-   * docs/test-evidence/round35-CHECK-stop-press.json: Down from the question box landed the ring
+   * workshop:test-evidence/round35-CHECK-stop-press.json: Down from the question box landed the ring
    * on it, then a second Down lost the ring entirely). `focusAskPrimary` and the box's own Down
    * edge both read this so the greyed button never takes the ring from a D-pad move.
    */

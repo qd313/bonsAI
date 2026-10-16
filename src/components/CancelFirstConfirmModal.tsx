@@ -14,7 +14,7 @@
  *
  * Solves: Steam's own ConfirmModal always draws a Cancel button beside its OK button, so a box built as
  * "safe choice first" ended with three buttons (Keep cache / Clear / Cancel; plan 93 bug, measured on the
- * Deck 2026-10-13, docs/test-evidence/plan93-P93-M9-CONFIRM-BOXES.json). Built on ModalRoot, the base a
+ * Deck 2026-10-13, workshop:test-evidence/plan93-P93-M9-CONFIRM-BOXES.json). Built on ModalRoot, the base a
  * ConfirmModal is made from, the buttons are ours, so there are exactly two and Cancel is the first one.
  *
  * Does not: do anything itself, close itself, or move the ring after it closes. The caller passes onCancel

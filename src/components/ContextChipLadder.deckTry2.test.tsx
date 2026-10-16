@@ -1,6 +1,6 @@
 /**
  * Title: The Show details chips in the Deck's second round (2026-10-10), walked as Steam delivers the presses
- * Purpose: Pin what the Deck showed on build 95139093 (docs/test-evidence/plan87-P87-F3-CHIPS-GRID-try2.json):
+ * Purpose: Pin what the Deck showed on build 95139093 (workshop:test-evidence/plan87-P87-F3-CHIPS-GRID-try2.json):
  *          (a) walking back Left or Up from Developer details read to its end, the row moved once (fine), then
  *          23.5 px again at the second chip and 57.8 px on reaching the "This answer | Session" toggle, because
  *          Steam glides any stop whose top is above its line; (b) the first chip's box, entered from the toggle,

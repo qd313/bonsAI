@@ -1,6 +1,6 @@
 /**
  * Title: The suggestion chips hold still while Steam's ring is on them
- * Purpose: Pin the fix for plan 72 free play, finding 4 (docs/test-evidence/plan72-Z-FREEPLAY.json):
+ * Purpose: Pin the fix for plan 72 free play, finding 4 (workshop:test-evidence/plan72-Z-FREEPLAY.json):
  *          the driver read "Why is my Deck running hot?" with the ring on it, pressed A about 2 s
  *          later, and got "Recommended TDP for this game?" -- the chip had changed under the ring
  *          (decode style, scrambled letters on it). Roadmap: "a rotating suggestion chip can take a

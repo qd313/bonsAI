@@ -1,7 +1,7 @@
 /**
  * Title: The ring goes back to the Accent intensity control after the menu closes
  *
- * Purpose: Pin plan 76 lane 2 follow-up, bug 1 (docs/test-evidence/plan76-S3C.json). On the Deck,
+ * Purpose: Pin plan 76 lane 2 follow-up, bug 1 (workshop:test-evidence/plan76-S3C.json). On the Deck,
  * picking a level in the Accent intensity menu with A (or leaving it with B) removed the menu's
  * rows while the ring was on one of them, so nothing owned the ring; the first LB then put it on the
  * "Show Developer tab" switch and did not change tab. The menu now notices its own removal with the

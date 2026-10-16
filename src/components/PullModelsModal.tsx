@@ -408,7 +408,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
    * as its `onClick` already does for a mouse -- this screen is a confirm box with its own OK, and
    * Steam delivers A through `onOKButton`, never a DOM click, so a control with only `onClick`
    * loses every A press straight to that OK, closing the whole screen instead of doing anything
-   * (found on the Deck 2026-09-21, docs/test-evidence/plan62-MODELS-FILTERS-01-A-closes-screen.json).
+   * (found on the Deck 2026-09-21, workshop:test-evidence/plan62-MODELS-FILTERS-01-A-closes-screen.json).
    * Every one of the affected controls wants the identical two-line wrapper, so it is written once
    * rather than inline at each (the filters column gets it as a prop).
    */

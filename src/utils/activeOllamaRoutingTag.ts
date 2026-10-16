@@ -5,7 +5,7 @@
  * now, so a removal can't race a live request. `modelPolicyDisclosure` only ever names the model
  * that answered the most recent finished question -- it is not cleared once that answer settles,
  * so reusing it directly kept Remove disabled forever after any question was ever answered, until
- * the plugin reloaded (docs/test-evidence/plan64-PRELOAD-01-try3-timing.json, step6_restore).
+ * the plugin reloaded (workshop:test-evidence/plan64-PRELOAD-01-try3-timing.json, step6_restore).
  *
  * Used for: index.tsx, feeding useOllamaModelsHubModal's `activeRoutingTag`.
  *

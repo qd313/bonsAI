@@ -1,7 +1,7 @@
 /**
  * Title: Reading an open reasoning block with the D-pad, a screen at a time
  * Purpose: Pin the plan 82 bug "the open reasoning block does not scroll in steps like the answer; one Down
- *          jumps past the whole of it". On the Deck (docs/test-evidence/plan82-M5-REASONING-SCROLL.json) the
+ *          jumps past the whole of it". On the Deck (workshop:test-evidence/plan82-M5-REASONING-SCROLL.json) the
  *          open block was 818 px tall in a readable band of 513 px (pane top 88, dock 601). One Down from the
  *          Hide reasoning line moved the pane 554.7 px and put the ring on the answer's first section: the
  *          person never stopped on any of the reasoning. Up did the same backwards.

@@ -126,7 +126,7 @@ const revealedPanels = new WeakSet<HTMLElement>();
 
 /**
  * Bring a just-opened panel out from behind the dock, once per opening (plan 70 flow 4.2,
- * docs/test-evidence/plan70-F4-SHOW-DETAILS.json: the tab row opened at y 617 behind the dock at
+ * workshop:test-evidence/plan70-F4-SHOW-DETAILS.json: the tab row opened at y 617 behind the dock at
  * 600, with no scroll, so only the words "Hide details" changed). A frame later, so the panel's
  * content has laid out; never past the control holding the ring.
  */

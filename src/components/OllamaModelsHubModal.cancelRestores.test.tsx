@@ -2,7 +2,7 @@
  * Title: Cancel on the AI models screen leaves the saved licence setting as it was on opening
  *
  * Purpose: Pin plan 76 lane 2 round 3, bug 2 (roadmap: 'After Cancel on the AI models screen, the
- * saved licence setting and the screen disagree'; docs/test-evidence/plan76-P76-TIER2-MODEL-SAFE-FIRST.json).
+ * saved licence setting and the screen disagree'; workshop:test-evidence/plan76-P76-TIER2-MODEL-SAFE-FIRST.json).
  * Licence picks in the filters column are a draft until Done -- except that "Pull selected" saves the
  * draft first, because the pull that follows needs it. Decline the pull's own box, press Cancel, and
  * the file kept the new licence while the reopened screen (which reads the value held when the tab was

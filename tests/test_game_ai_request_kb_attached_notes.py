@@ -700,7 +700,7 @@ class KbSearchAppLogTests(unittest.TestCase):
 
 
 class NamedEntityGameNameStrippingWiringTests(unittest.TestCase):
-    """Plan 70 helper M follow-up (docs/test-evidence/plan70-L1-8-HELPER-M.json): Hollow Knight
+    """Plan 70 helper M follow-up (workshop:test-evidence/plan70-L1-8-HELPER-M.json): Hollow Knight
     is both the game's own name and its final boss's name. Asking about the final fight used to
     name a wrong note instead -- first "Starting out in Hollow Knight" (fixed, then re-measured
     on the Deck), then "False Knight" once that one card was excluded, because the word "knight"
@@ -764,7 +764,7 @@ class NamedEntityGameNameStrippingWiringTests(unittest.TestCase):
 
 
 class SpoilerBandReadsKbDomainWiringTests(unittest.TestCase):
-    """Plan 70 helper M follow-up (docs/test-evidence/plan70-L1-8-HELPER-M.json): "my deck fan
+    """Plan 70 helper M follow-up (workshop:test-evidence/plan70-L1-8-HELPER-M.json): "my deck fan
     gets very loud while sitting idle on the home screen" got a troubleshooting tip attached
     (this turn routed to the shared tip sheet, kb_domain "compat") but names none of the
     troubleshooting word list's words, so Show details still read "Spoiler risk: med". Proven

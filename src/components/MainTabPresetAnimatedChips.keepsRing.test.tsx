@@ -2,7 +2,7 @@
  * Title: A suggestion chip keeps the ring when it changes question
  * Purpose: Pin the fix for PRESET-ONE-LINE-03's plan 70 failure in the fade and static chip styles:
  *          with the ring on the single chip, about 5 to 8 s later the chip swapped question and
- *          nothing held focus (docs/test-evidence/plan70-PRESET-ONE-LINE-03.json). Decode style
+ *          nothing held focus (workshop:test-evidence/plan70-PRESET-ONE-LINE-03.json). Decode style
  *          passed the same walk, because it keeps one button per slot and only changes its text.
  * Used for: MainTabPresetAnimatedChipsInner (fade and static) in MainTabPresetAnimatedChips.tsx.
  * Does not: Prove the fix on the Deck. The check this owes: in fade and in static style, put the

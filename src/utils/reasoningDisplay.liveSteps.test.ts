@@ -6,7 +6,7 @@
  * Used for: reasoningDisplay.ts's mergeLiveSteps and liveStepLines, which useReasoningFoldState
  *           and the transcript's live block are built on.
  * Solves: the Deck still showed rule-shaped lines and quoted a game note word for word, reward
- *         included, after every line-by-line clean-up (docs/test-evidence/plan72-F3-THINK.json).
+ *         included, after every line-by-line clean-up (workshop:test-evidence/plan72-F3-THINK.json).
  * Does not: test the drawing (MainTabChatTranscript.reasoningLiveBlock.test.tsx does).
  *
  * The fixture is every distinct text the Deck's live line drew during that check, in order

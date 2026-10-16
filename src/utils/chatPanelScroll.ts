@@ -126,7 +126,7 @@ export function chunkHasContentAboveViewport(chunkEl: HTMLElement, scrollEl: HTM
  * Put `el`'s top edge at the scroll pane's own top edge, `padPx` below it. Unlike
  * `scrollIntoView({ block: "start" })` this ignores the pane's `scroll-padding-top`, which Steam's
  * Quick Access scroll area sets to 116 px: measured on the Deck
- * (docs/test-evidence/plan64-NOTES-OPEN-SCROLL-rec.json), opening a "From the notes" block asked to
+ * (workshop:test-evidence/plan64-NOTES-OPEN-SCROLL-rec.json), opening a "From the notes" block asked to
  * bring its header to the top, the header already sat exactly 116 px down, and the view moved 1 px
  * -- 17% of the block showed in a band of about 200 px above the dock. Nothing of ours is pinned
  * to the top of that pane (only the dock, at the bottom), so the full band is free to use.
@@ -147,7 +147,7 @@ export function scrollElementTopToPaneTop(el: HTMLElement, padPx = 4): boolean {
  * Scroll down just enough that `el` (something that has just opened) clears the bottom dock,
  * without pushing its own top, or `keep` (the control holding the ring, above it), off the top of
  * the pane. Plain scrollTop arithmetic, for the scroll-padding reason on scrollElementTopToPaneTop.
- * Plan 70 flow 4.2 (docs/test-evidence/plan70-F4-SHOW-DETAILS.json): Show details opened its panel
+ * Plan 70 flow 4.2 (workshop:test-evidence/plan70-F4-SHOW-DETAILS.json): Show details opened its panel
  * with the tab row at y 617 behind the dock (top 600) and no scroll, so nothing seemed to happen.
  * `roomBelowPx` asks for that much clear room under `el` too (a row of chips that is about to have
  * a panel of unknown height drawn under it). Returns true when it moved the pane.

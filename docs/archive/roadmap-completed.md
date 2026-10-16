@@ -1,4 +1,4 @@
-> **Archived** — see [archive README](README.md). Active summary: [roadmap.md](../roadmap.md) · [Verify](../roadmap.md#verify) · [fixed bugs](roadmap-bugs-fixed.md)
+> **Archived** — see [archive README](../../../bonsAI-workshop/archive/README.md). Active summary: [roadmap.md](../roadmap.md) · [Verify](../roadmap.md#verify) · [fixed bugs](roadmap-bugs-fixed.md)
 
 # bonsAI roadmap — completed features (full detail)
 
@@ -13,20 +13,20 @@ Headings group related work. Star counts match the historical list.
 - ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **VERIFY, landed 2026-09-28 as `abfdd45e` (plan 75).**
   The popup shows the answer's first words across its two lines for eight seconds, hidden blocks never appear, and with nothing
   safe left it shows *Reply ready* as before. Deck: three hard answers (ordinary, all capitals, wide letters) fit both lines with
-  room to spare, `docs/test-evidence/t75-feature-F2-HARD-LINES.json`. **Owed:** a real answer finishing with the menu closed over a
+  room to spare, `workshop:test-evidence/t75-feature-F2-HARD-LINES.json`. **Owed:** a real answer finishing with the menu closed over a
   running game (**T75-FEATURE-F1-REAL-POPUP**; `t75-feature-F1-REAL-POPUP.json`: could not run). [Plan](planning/38-toast-answer-lines.md).
 
-**Closed 2026-09-28 (plan 76), passed on the Deck (row T75-FEATURE-F1-REAL-POPUP, build `c71f1d8b`).** Over Deep Rock Galactic: Survivor, with the menu closed before the answer finished (49.5 s), the popup showed "Kite between waves and focus on hitting" and "the weak-point armor plates as they…" across two lines, matching the answer's start, with no comma before the "…". Evidence `docs/test-evidence/plan76-T75-FEATURE-F1-REAL-POPUP.json`. The popup stayed up 10.08 s rather than about 8; that is filed as a small roadmap bug.
+**Closed 2026-09-28 (plan 76), passed on the Deck (row T75-FEATURE-F1-REAL-POPUP, build `c71f1d8b`).** Over Deep Rock Galactic: Survivor, with the menu closed before the answer finished (49.5 s), the popup showed "Kite between waves and focus on hitting" and "the weak-point armor plates as they…" across two lines, matching the answer's start, with no comma before the "…". Evidence `workshop:test-evidence/plan76-T75-FEATURE-F1-REAL-POPUP.json`. The popup stayed up 10.08 s rather than about 8; that is filed as a small roadmap bug.
 
 ### A latency budget for a game question (closed 2026-09-28)
 
 - ★★ `[KB]` **A latency budget for a game question** — **OPEN, added 2026-09-05.** The slowdown above was only caught because
   one QA row happened to record a band. Write down the budget (embed time plus first token with a game running) so the next
-  regression fails a check instead of relying on luck. Planned as wave three ([48](48-kb-wave-three-session.md)).
+  regression fails a check instead of relying on luck. Planned as wave three ([48](../../../bonsAI-workshop/archive/48-kb-wave-three-session.md)).
 
 **Closed 2026-09-28 (release clean-up).** The budget is written in [knowledge-base.md](../knowledge-base.md)
 ("Time budget for a game question"); its check was fixed in `7be015a5` and passed three times on the Deck
-2026-09-15: 547, 23 and 28 ms against 1000. Evidence: [wave three's report](48-kb-wave-three-session.md), row W3-R6.
+2026-09-15: 547, 23 and 28 ms against 1000. Evidence: [wave three's report](../../../bonsAI-workshop/archive/48-kb-wave-three-session.md), row W3-R6.
 
 ### Eval tooling: the weight sweep, per-question results for what ships, a second right answer (closed 2026-09-28)
 
@@ -58,7 +58,7 @@ planned 8,192, proven on the Deck 2026-09-21 (`e6223c1a`). Written up further do
 
 **Closed 2026-09-28 (release clean-up).** Per D113 #10, the relevance-floor row was reworded to match the
 behaviour accepted 2026-08-27; its on-topic half passed 2026-09-15 and 2026-09-19
-(`docs/test-evidence/plan61-KB-FLOOR-01-ontopic-retry3.json`). All five settled: rows **W2-R8**, **KB-FLOOR-01**.
+(`workshop:test-evidence/plan61-KB-FLOOR-01-ontopic-retry3.json`). All five settled: rows **W2-R8**, **KB-FLOOR-01**.
 
 ### Save chat becomes an icon in the chat tab, and the "+" gets a clearer icon (closed 2026-09-27)
 
@@ -69,8 +69,8 @@ behaviour accepted 2026-08-27; its on-topic half passed 2026-09-15 and 2026-09-1
 
 **Closed 2026-09-27 (plan 72, `dfd133c9`, `4b32343b`).** Save is now an icon in the chat tab, the old row under
   the answer is gone, and the "+" has a clearer icon. The older-chat icon is re-checked in the next Deck block.
-  Evidence `docs/test-evidence/plan72-F-ROW.json`, `docs/test-evidence/plan72-F-NOSAVEROW.json`.
-  **2026-09-27:** the save icon on older chats passed too (`4b32343b`), `docs/test-evidence/plan72-F3-OLDSAVE.json`.
+  Evidence `workshop:test-evidence/plan72-F-ROW.json`, `workshop:test-evidence/plan72-F-NOSAVEROW.json`.
+  **2026-09-27:** the save icon on older chats passed too (`4b32343b`), `workshop:test-evidence/plan72-F3-OLDSAVE.json`.
 
 ### Say where a download goes before it starts, and a download permission to gate it (closed 2026-09-27)
 
@@ -80,10 +80,10 @@ behaviour accepted 2026-08-27; its on-topic half passed 2026-09-15 and 2026-09-1
   https://… to download …"), at least the first time per site. A new permission, off by default, gates
   every download and the automatic model-list refresh. Downloads only (the maintainer, 2026-09-26); live
   web search stays the separate Web permission entry, after 0.6.0. Plan 72, lane 1.
-  The new "Internet downloads" switch is there and off by default, `docs/test-evidence/plan72-F-DL.json`; the update button lacked the notice, since fixed. Deck check owed: row **F3-DL**.
+  The new "Internet downloads" switch is there and off by default, `workshop:test-evidence/plan72-F-DL.json`; the update button lacked the notice, since fixed. Deck check owed: row **F3-DL**.
 
 **Closed 2026-09-27 (plan 72, `e4715d5a`, `ed022b89`, `eb4f4d16`).** Every Ollama setup button, the update button
-  included, now shows the notice first. Evidence `docs/test-evidence/plan72-F3-DL.json`.
+  included, now shows the notice first. Evidence `workshop:test-evidence/plan72-F3-DL.json`.
 
 ### The chat sums itself up instead of being cleared (closed 2026-09-26)
 
@@ -354,12 +354,12 @@ of almost none of it, sized by the plugin's own budget rather than by whatever h
 about her second phase" — the reply knew "her" meant Megaera but gave only generic fight advice, and Show
 details said no search ran at all ("No game is running, so there is nothing to look up"). A third question,
 "what weapon works best against her", lost track of who "her" was entirely and asked which game and
-character were meant. Evidence `docs/test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`.
+character were meant. Evidence `workshop:test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`.
 
 **Tried again 2026-09-23 with Hades running, still FAIL by this row's own rule:** 34 earlier turns were
 carried, but the reply still opened with "I ain't got no idea what you're talkin' about without a name…
 tell me which part" before guessing the right subject (Sandtraps) and giving two lines on it — the same
-deflect-then-recover shape as with nothing running. Evidence `docs/test-evidence/plan64-CHAT-MEMORY-01.json`.
+deflect-then-recover shape as with nothing running. Evidence `workshop:test-evidence/plan64-CHAT-MEMORY-01.json`.
 
 **The no-game half had a fix land 2026-09-25 (plan 68):** with nothing running and the question naming no
 game, a follow-up now searches the chat's own game instead of finding nothing to look up. **The second
@@ -370,7 +370,7 @@ SUMUP-01 checks**, since it is the case a chat that has outgrown its room is bui
 knowledge-base search on the chat's own game, the log records using the chat's own game rather than one
 named in the question, and the answer stays on subject without asking which game is meant. With a game
 running, plan 68's chat summary (built the same night) keeps a long chat on subject, proved by SUMUP-01
-passing on the Half-Life 2 chat. Evidence `docs/test-evidence/plan68-CHAT-MEMORY-01.json` (+ `.png`).
+passing on the Half-Life 2 chat. Evidence `workshop:test-evidence/plan68-CHAT-MEMORY-01.json` (+ `.png`).
 
 ---
 
@@ -396,7 +396,7 @@ end._
   installed" stays greyed out until it is unlocked, as designed — neither is a bug. One behaviour change,
   not filed as a bug: pressing A on the "Filters · N on" button while the panel is open now moves the ring
   into the panel instead of closing it, where it closed the panel on 2026-09-22; "Close filters" and Up
-  still close it. Evidence `docs/test-evidence/plan64-MODELS-FILTERS-01.json` (+ `.png`). **The "more room"
+  still close it. Evidence `workshop:test-evidence/plan64-MODELS-FILTERS-01.json` (+ `.png`). **The "more room"
   half of this entry's own title is not covered here** — it is tracked under **MODELS-LIST-CAP-01** and a
   new "Done falls below the visible edge" bug, both still open in [Verify](../roadmap.md#verify) and
   [Bugs](../roadmap.md#bugs).
@@ -418,8 +418,8 @@ line for line from this session's Verify entry, nothing reworded, with the closi
 
   **Closed 2026-09-23, confirmed on the Deck with a game actually attached.** "HADES" showed above the
   Hades chat's title with the ring on it, and was gone on a chat with no game attached; the row held its
-  height at 48 pixels throughout. Evidence `docs/test-evidence/plan64-CHAT-SLOTS-V3-14c.json` (+ `.png`),
-  saved replay check `checks/plan64-CHAT-SLOTS-V3-14c.json`.
+  height at 48 pixels throughout. Evidence `workshop:test-evidence/plan64-CHAT-SLOTS-V3-14c.json` (+ `.png`),
+  saved replay check `workshop:checks/plan64-CHAT-SLOTS-V3-14c.json`.
 
 ### Read aloud is a small speaker on the Helpful row, not a dividing line (closed 2026-09-23)
 
@@ -435,7 +435,7 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   **Closed 2026-09-23, confirmed on the Deck for a stopped reply.** Stopped at 213 characters with the
   "Stopped — partial answer kept" notice shown, Helpful/Not really greyed and Retry live, the speaker button
   took the ring, and A read the kept 585-character partial answer aloud (icon red, reading "Stop"); a second
-  A stopped it. Evidence `docs/test-evidence/plan64-READ-ALOUD-07-stopped.json` (+ `.png`).
+  A stopped it. Evidence `workshop:test-evidence/plan64-READ-ALOUD-07-stopped.json` (+ `.png`).
 
 ### Session context folds into Show details (closed 2026-09-23)
 
@@ -453,8 +453,8 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   opens. **Two new focus bugs were found in the same pass, filed separately in Bugs, with a fix already being
   built this session:** the confirm box opens with the ring on the destructive Clear button rather than
   Cancel, and cancelling it puts the ring on the tab bar with the whole details panel closed rather than
-  back on the row list. Evidence `docs/test-evidence/plan64-SESSION-TAB-01.json` + screenshot, saved check
-  `checks/plan64-SESSION-TAB-01-B-close.json`.
+  back on the row list. Evidence `workshop:test-evidence/plan64-SESSION-TAB-01.json` + screenshot, saved check
+  `workshop:checks/plan64-SESSION-TAB-01-B-close.json`.
 
 ### The plugin owns its token numbers (closed 2026-09-23)
 
@@ -473,7 +473,7 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   the limit (1,040 of 2,112 tokens, and 653 of 1,712). One correction: the row's own pass clause said "Show
   details reports the reply finishing normally," but Show details has no such line — reworded to what can
   actually be checked (the log's own stop reason and token counts). Evidence
-  `docs/test-evidence/plan64-TOKEN-BUDGET-01.json`.
+  `workshop:test-evidence/plan64-TOKEN-BUDGET-01.json`.
 
 ### Reasoning display (2026-09-17)
 
@@ -503,10 +503,10 @@ for line from this session's Verify entry, nothing reworded, with the closing no
   notice again. **The only thing still owed here is REASONING-05's body-text half:** its reasoning chip reads
   correctly, but the whole Show details chip row cannot be reached by the D-pad, so the chip's own body can
   only be read by a page read, not a controller — filed as its own Bugs entry, above; blocked on that bug.
-  Evidence `docs/test-evidence/plan57-REASONING-01.json` … `-07.json`,
-  `docs/test-evidence/plan57-REASONING-07-rerun.json`, `docs/test-evidence/plan57-REASONING-06a-rerun.json`,
-  `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`, `docs/test-evidence/plan57-QA-FREE-PLAY-01.json`.
-  [Plan](40-reasoning-display.md) · [Build plan](57-reasoning-display-build.md).
+  Evidence `workshop:test-evidence/plan57-REASONING-01.json` … `-07.json`,
+  `workshop:test-evidence/plan57-REASONING-07-rerun.json`, `workshop:test-evidence/plan57-REASONING-06a-rerun.json`,
+  `workshop:test-evidence/plan57-FOCUS-GRAPH-01.json`, `workshop:test-evidence/plan57-QA-FREE-PLAY-01.json`.
+  [Plan](../../../bonsAI-workshop/archive/40-reasoning-display.md) · [Build plan](../../../bonsAI-workshop/archive/57-reasoning-display-build.md).
 
   **Closed 2026-09-18:** six of the seven Deck rows pass, plus the focus-graph checklist and the free-play
   sweep. The one piece left, REASONING-05's body-text half, is not a fresh owed check of its own — it rides
@@ -519,7 +519,7 @@ _Moved out of [roadmap.md](../roadmap.md) on 2026-09-18 once the rig's own check
 line from this session's Verify entry, with the Deck results added at the end._
 
 - ★★ `[reply]` **Token streaming Phase A/B** — **VERIFY.** Start stutter fixed, sections as D-pad stops, scroll follow. Rows
-  **STREAM-REVEAL-01**, **STREAM-09**, **STREAM-FOLLOW-01**. [Review](05-token-streaming-review.md).
+  **STREAM-REVEAL-01**, **STREAM-09**, **STREAM-FOLLOW-01**. [Review](../../../bonsAI-workshop/archive/05-token-streaming-review.md).
 
   **Passed on the Deck 2026-09-04, everything the rig can drive:** **STREAM-09** — three answer sections on one
   reply each took the ring going Down in turn, no dead end (Up skipping them on the way back is a separate,
@@ -538,7 +538,7 @@ line from this session's Verify entry, with the closing note added at the end._
   20px bar with the active tab's name at rest, opening to a strip that labels all six. Steam's header 81px to 20px. Rows 01 to 06,
   09 and 10 pass; owed **TAB-BAR-08** (touch). **TAB-BAR-07** (legibility by eye) was retired
   2026-09-17, replaced by **TAB-STRIP-2A-03** (plan 59). Closes the "tab names never appear" bug and D44.
-  [Plan](30-collapsing-tab-bar.md) · [Detail](roadmap-details-closed.md#the-tab-names-never-appear).
+  [Plan](../../../bonsAI-workshop/archive/30-collapsing-tab-bar.md) · [Detail](roadmap-details-closed.md#the-tab-names-never-appear).
 
   **Closed 2026-09-18:** **TAB-BAR-11**'s three rig-drivable remount paths all pass — the Clear cache modal
   return and two QAM chord close/reopens (2026-09-04), then a full loader restart (2026-09-05). The one path
@@ -564,19 +564,19 @@ from this session's Verify entry, with the closing note added at the end._
 
 - ★★ `[QA]` **Deferred manual QA** — **VERIFY.** SMOKE-A, SMOKE-F, SMOKE-E and SMOKE-H all pass on the Deck: SMOKE-A
   2026-09-03; SMOKE-F re-confirmed 2026-09-17 (all four built-in commands answered with the same fixed wording,
-  evidence `docs/test-evidence/plan57-QA-SMOKE-F.json`); SMOKE-E's spoiler tap-to-reveal path 2026-09-04; SMOKE-H
+  evidence `workshop:test-evidence/plan57-QA-SMOKE-F.json`); SMOKE-E's spoiler tap-to-reveal path 2026-09-04; SMOKE-H
   2026-09-16. SMOKE-B was retired 2026-09-03 (D57 #6). Left: **SMOKE-C** is blocked by the Open Permissions jump bug,
   above, not owed as a test of its own. **Two of the three Tier 1 extras passed on the Deck 2026-09-18:** the last
   question and answer were still on screen after closing and reopening the panel, seen twice; and one Ask in Speed
-  and one in Expert both worked as expected. Evidence `docs/test-evidence/plan61-tier1-speed.json`,
-  `docs/test-evidence/plan61-tier1-expert.json`. Left: **"What game am I playing?"** with a game focused — needs a
+  and one in Expert both worked as expected. Evidence `workshop:test-evidence/plan61-tier1-speed.json`,
+  `workshop:test-evidence/plan61-tier1-expert.json`. Left: **"What game am I playing?"** with a game focused — needs a
   game running, scheduled for the games block. Round in progress:
-  [plan 31](31-deck-verification-round.md).
+  [plan 31](../../../bonsAI-workshop/archive/31-deck-verification-round.md).
 
   **Closed 2026-09-18:** the third Tier 1 extra passed too — asked with Half-Life 2 running and focused, the
   plugin named the game correctly and gave real Half-Life 2 advice with a note card attached. All three Tier 1
   extras and SMOKE-A/E/F/H now pass. What's left, SMOKE-C, rides on the still-open Open Permissions jump bug
-  rather than being owed as a check of its own. Evidence `docs/test-evidence/plan61-tier1-what-game.json`.
+  rather than being owed as a check of its own. Evidence `workshop:test-evidence/plan61-tier1-what-game.json`.
 
 ### Expert offers the stronger Deck-run models first, and the licence list learns the Sept 2026 models (2026-09-17)
 
@@ -589,13 +589,13 @@ for line from this session's Verify entry, nothing reworded, with the confirmati
   9B, Granite 4.2 8B, Gemma 4 E4B, LFM 2.5. Gemma 4 and Granite now count as open source under the default
   open-source-only setting, and LFM as open-weight. **The order half passed on the Deck 2026-09-16:** with
   Essentials only off, the Expert (large) group read in the locked order, the five bake-off models first,
-  then the three older ones. Evidence `docs/test-evidence/plan56-EXPERT-ORDER-01.json`,
-  `docs/test-evidence/plan56-EXPERT-ORDER-01-essentials-off.json`. Row **EXPERT-ORDER-01**.
-  [Bake-off](../planning/41-deck-model-survey.md).
+  then the three older ones. Evidence `workshop:test-evidence/plan56-EXPERT-ORDER-01.json`,
+  `workshop:test-evidence/plan56-EXPERT-ORDER-01-essentials-off.json`. Row **EXPERT-ORDER-01**.
+  [Bake-off](../../../bonsAI-workshop/planning/41-deck-model-survey.md).
 
   **The licence half passed on the Deck 2026-09-17:** in the AI models hub, a Gemma 4 tag reads as an allowed
   open-source tag even at the strictest policy tier. With the order half already passed 2026-09-16, the whole
-  row is done. Evidence `docs/test-evidence/plan57-QA-EXPERT-ORDER-01.json`.
+  row is done. Evidence `workshop:test-evidence/plan57-QA-EXPERT-ORDER-01.json`.
 
 ### Three voice fixes and the custom-model picker, closed by the wipe run (2026-09-16)
 
@@ -615,7 +615,7 @@ confirmation added at the end._
   data*, the voice panel read "Engine: whisper-cli not installed · Model: tiny.en not downloaded · Tap Install
   voice engine below" — it no longer claimed the engine was ready. Together with the backend half already
   confirmed 2026-08-04, this row is now closed both ways. Evidence
-  `docs/test-evidence/plan56-WIPE-01.summary.json`. **Still open, not a row of this entry:** whether spoken
+  `workshop:test-evidence/plan56-WIPE-01.summary.json`. **Still open, not a row of this entry:** whether spoken
   words come back transcribed correctly is unmeasured and needs a person to talk to the plugin; the wipe also
   removed the Deck's own local AI program and every downloaded model, so voice input cannot be exercised on
   this Deck until "Run AI on this Deck" is switched back on and the voice engine is reinstalled.
@@ -631,7 +631,7 @@ confirmation added at the end._
   **PULL-NEW-BADGE-01 passed on the Deck 2026-09-16, as part of the wipe run:** the browser-storage key
   holding the New labels' record was one of the eight plugin keys the wipe removed; after the wipe nothing
   was left to badge stale models as New. That was the entry's one owed check, so it is now closed. Evidence
-  `docs/test-evidence/plan56-WIPE-01.summary.json`.
+  `workshop:test-evidence/plan56-WIPE-01.summary.json`.
 
 ### The Clear button, the quiet answer checker, and the Spy's lies, confirmed on the Deck (2026-09-16)
 
@@ -654,8 +654,8 @@ this session's Verify entries, nothing reworded, with the confirmation added at 
   chat and the bar's six turns stayed on screen throughout. **Not read this pass:** the toast's own text, which
   Steam draws in a layer the rig cannot see, and whether the next bare follow-up genuinely drops the old
   subject, which needs two model questions rather than a log line. Evidence
-  `docs/test-evidence/plan56-SESSION-CLEAR-01.json`, `docs/test-evidence/plan56-SESSION-CLEAR-01-left.json`,
-  `docs/test-evidence/plan56-SESSION-CLEAR-01.summary.json`.
+  `workshop:test-evidence/plan56-SESSION-CLEAR-01.json`, `workshop:test-evidence/plan56-SESSION-CLEAR-01-left.json`,
+  `workshop:test-evidence/plan56-SESSION-CLEAR-01.summary.json`.
 
 - ★ `[ask]` **Run the answer checker quietly and count what it catches** — **VERIFY, landed 2026-09-16
   (commit `cce6bf9`).** The plugin's answer checker now runs on every answer and only writes one line to the
@@ -666,7 +666,7 @@ this session's Verify entries, nothing reworded, with the confirmation added at 
   **Passed on the Deck 2026-09-16, the first time the checker has ever run:** the log carried
   `run_game_ai_request: answer checker ran rules_fired=0 warnings=[]` beside the answer's own completion line,
   nothing shown on screen, no second model call. The checker is now left running through normal use so what it
-  catches can be counted over time. Evidence `docs/test-evidence/plan56-SPY-REVEAL-01.json` (the same Deck
+  catches can be counted over time. Evidence `workshop:test-evidence/plan56-SPY-REVEAL-01.json` (the same Deck
   pass also carries this row).
 
 - ★★★ `[reply]` **Spy: a character who lies to you on purpose** — **VERIFY, landed 2026-09-16 (commits
@@ -685,7 +685,7 @@ this session's Verify entries, nothing reworded, with the confirmation added at 
   doing:** reading the chip's own body on screen by D-pad is blocked by the separate chip-row bug filed on
   the roadmap (Down from Hide details skips the whole chip row); and the Balanced "no chip" half was not
   re-run, to keep the Deck's character setting changes to one for the pass. Evidence
-  `docs/test-evidence/plan56-SPY-REVEAL-01.json`, `docs/test-evidence/plan56-SPY-REVEAL-01-ladder-walk.json`.
+  `workshop:test-evidence/plan56-SPY-REVEAL-01.json`, `workshop:test-evidence/plan56-SPY-REVEAL-01-ladder-walk.json`.
 
 ### Rows span the QAM panel width, confirmed by eye on the Deck (2026-09-15)
 
@@ -698,14 +698,14 @@ line, nothing reworded, with the closing measurement added at the end._
 
 **Passed on the Deck 2026-09-15.** Every Main row measured by rect spans the full 300-pixel column (48 to
 348), nothing overflows sideways, and the screenshot shows the rows sitting flush by eye. Evidence
-`docs/test-evidence/plan55-ASK-WIDTH-01.json`, screenshot `screenshots/DeckCapture_20260915_200505_game.png`.
+`workshop:test-evidence/plan55-ASK-WIDTH-01.json`, screenshot `screenshots/DeckCapture_20260915_200505_game.png`.
 
 ### The seven-phase clean-up, round two (2026-09-15)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-15 when the last phase finished. The entry below is
 copied line for line, nothing reworded, with its closing state added at the end. The plan itself is
-archived at [51-refactor-round-two.md](51-refactor-round-two.md) and the honest account of what it cost
-and what it missed is [the postmortem](../audit/refactor-round-two/postmortem.md)._
+archived at [51-refactor-round-two.md](../../../bonsAI-workshop/archive/51-refactor-round-two.md) and the honest account of what it cost
+and what it missed is [the postmortem](../../../bonsAI-workshop/audit/refactor-round-two/postmortem.md)._
 
 - ★★★★★ `[platform]` **Refactor round two (plan 51)** — **OPEN, planned 2026-09-11, calls locked (D89 to D96).** A
   seven-phase clean-up touching the code, the tests, the build scripts, the docs and how agent sessions work here,
@@ -797,7 +797,7 @@ line, nothing reworded._
 
 - ★★ **Code clarity refactor Phase 0–2 (2026-07-30):** House-style file headers ([code-clarity.md](../code-clarity.md)), [glossary.md](../glossary.md), Ask-path map, section labels in `useBonsaiAskOrchestration.ts`, extracted `useStrategyChecklistSession.ts`, hotspot headers (Ask path, Ollama UI, `main.py` Ask/Settings RPC, key backend services). No behavior change.
 - ★★ **Handoff refactor Phase 0–1 (2026-08-02):** Deleted `src/config.ts` (zero importers) together with the `do_generate_config` generator in `scripts/build.sh` and its dead `PC_IP` preflight, and removed the 56-file untracked `src/v0-drafts/` (archived outside the repo first). Wrote [CLAUDE.md](../../CLAUDE.md) — layout, entry points, the TS↔Python RPC boundary, commands, conventions, refactor rules — kept distinct from [AGENTS.md](../../AGENTS.md) (MCP tooling) and `.cursorrules` (Cursor bootstrap). Fixed two stale Python tests that had been failing silently in the suite (`test_local_ollama_teardown` patched a `subprocess` import the module never had; `test_ollama_prompts_stream_instruction` asserted copy removed by `ff6547f`), so all four suites are now green. Recon persisted in [docs/audit/](../audit/). No behavior change.
-- ★★ **Agent architecture snapshot fixes (2026-08-02):** `generateRpcMap` matched `/^\s+async def/` at any indentation, so four nested `async def runner()` local coroutines were published as RPC methods (59 entries for 55 real ones); now anchored to indent 4. Renamed `module-map.json` → `hotspots.json` (size ranking, not a dependency graph) and added `import-graph.json` — imports/importedBy for all 223 `src/` TS files with cycle and orphan detection, built dependency-free so the pre-commit hook stays fast (479 edges, 0 cycles, 0 orphans). Completed the `DOMAIN_KEYWORDS` taxonomy: all 55 RPC methods classify, none fall through to `other`. Files: `generate-architecture.mjs`, `validate-knowledge.mjs`, `sync-architecture-for-commit.mjs`, `packages/bonsai-mcp/src/server.ts`. Detail: [phase1-map-verification.md](../audit/phase1-map-verification.md).
+- ★★ **Agent architecture snapshot fixes (2026-08-02):** `generateRpcMap` matched `/^\s+async def/` at any indentation, so four nested `async def runner()` local coroutines were published as RPC methods (59 entries for 55 real ones); now anchored to indent 4. Renamed `module-map.json` → `hotspots.json` (size ranking, not a dependency graph) and added `import-graph.json` — imports/importedBy for all 223 `src/` TS files with cycle and orphan detection, built dependency-free so the pre-commit hook stays fast (479 edges, 0 cycles, 0 orphans). Completed the `DOMAIN_KEYWORDS` taxonomy: all 55 RPC methods classify, none fall through to `other`. Files: `generate-architecture.mjs`, `validate-knowledge.mjs`, `sync-architecture-for-commit.mjs`, `packages/bonsai-mcp/src/server.ts`. Detail: [phase1-map-verification.md](../../../bonsAI-workshop/audit/phase1-map-verification.md).
 - ★★ **RPC timeout wrapper coverage (2026-08-02):** `deckyCall.ts` exists so no RPC can hang the UI, but raw `call()` outnumbered it 29 to 24 — including every `save_settings`/`load_settings` site, which the wrapper's own docstring claimed to cover. Bounded calls now route through `callDeckyWithTimeout` (args move from spread into an array); four long-running calls stay unbounded with an inline reason. **Behavior change, not a pure refactor** — a hung backend now surfaces a timeout instead of waiting forever. On-Deck QA: **RPC-TIMEOUT-01** in [testing.md](../testing.md).
 - ★★ **Code clarity remainder sweep (2026-07-30):** Headers on remaining `src/` hooks/utils/components/data/features/i18n`, all `py_modules/` services, `main.py` domain section labels, `refactor_helpers.py`, preview/styles entry files. Skipped per policy: `v0-drafts/`, `styles/sections/*` token dumps, `characterPlaceholderEmoticonGrids.ts`, generated `pluginVersion.ts`, `types.d.ts`. No behavior change.
 
@@ -813,7 +813,7 @@ line, nothing reworded._
 - ★★ **Voice STT session daemon (2026-07-17):** Session-scoped CPU-safe `whisper-server` on `127.0.0.1:18765` reuses one loaded model per mic recording (no per-pass `whisper-cli` spawn). **Install voice engine** now builds `whisper-cli` + `whisper-server`; existing CPU-safe installs get incremental server-only build. CLI fallback when server missing or health fails. `voice_whisper_daemon.py`, `voice_transcription_service.py`, `main.py`; tests `test_voice_whisper_daemon.py`. On-Deck QA: **VOICE-06**, **VOICE-07** in [testing.md](../testing.md).
 - ★★★ **Reply ready toast (2026-07-17):** When any Ask completes (typed, mic-button STT) and bonsAI Main is not already visible, show a Decky **Reply ready** toast; tap opens QAM to Decky/bonsAI Main. Ask failure → error toast; cancel → no toast. Module-level `bonsaiAskCompletionWatch` keeps polling after QAM close unmounts `Content`; phase toasts replace prior via `bonsaiPhaseToast`. Files: `bonsaiPhaseToast.ts`, `bonsaiReplySurface.ts`, `bonsaiReplyReadyToast.ts`, `bonsaiAskCompletionWatch.ts`, `useBonsaiAskOrchestration.ts`, `index.tsx`. Unit: `bonsaiPhaseToast.test.ts`, `bonsaiReplyReadyToast.test.ts`, `bonsaiAskCompletionWatch.test.ts`. On-Deck QA: **REPLY-READY-01…05** in [testing.md](../testing.md).
 - ★★★★ **Proton experiment journal + context chip ladder (2026-07-17):** Per-AppID Proton attempt timeline in `~/.bonsai/proton_experiment_journal.json`; Settings **Proton troubleshooting** editor + inject toggle; troubleshooting Asks stack **Proton logs → journal → KB**; Main-tab **F11 Option C** context chip ladder + session strip (replaces bottom Input handling panel / standalone model disclosure). Files: `proton_experiment_journal_service.py`, `transparency_service.py`, `ContextChipLadder.tsx`, `SessionContextStrip.tsx`, `ProtonExperimentJournalSection.tsx`, `game_ai_request.py`, `MainTabChatTranscript.tsx`. On-Deck QA: **PROTON-JOURNAL-01…04**, **CONTEXT-LADDER-01…03** in [testing.md](../testing.md). Design ref: [context-transparency-mockup.html](../demos/context-transparency-mockup.html).
-- ★★ **Voice STT SIGILL fix (2026-07-07):** Mic capture worked but whisper never transcribed on Steam Deck — prebuilt podman `whisper-cli` hit illegal instruction during decode. Install now **compiles** CPU-safe ggml (`GGML_NATIVE=OFF`, AVX512 off) and pins podman image **digest**; readiness runs inference smoke test. **Tier 1 latency** (decode interval/window, poll, threads). Follow-up: [voice-input-follow-up.md](voice-input-follow-up.md). `voice_transcription_service.py`, `useVoiceTranscription.ts`; tests `test_voice_transcription_service.py`.
+- ★★ **Voice STT SIGILL fix (2026-07-07):** Mic capture worked but whisper never transcribed on Steam Deck — prebuilt podman `whisper-cli` hit illegal instruction during decode. Install now **compiles** CPU-safe ggml (`GGML_NATIVE=OFF`, AVX512 off) and pins podman image **digest**; readiness runs inference smoke test. **Tier 1 latency** (decode interval/window, poll, threads). Follow-up: [voice-input-follow-up.md](../../../bonsAI-workshop/archive/voice-input-follow-up.md). `voice_transcription_service.py`, `useVoiceTranscription.ts`; tests `test_voice_transcription_service.py`.
 - ★★ **Clear all data — settings/permissions wipe fix (2026-07-06):** In-app **Clear all data** no longer restores pre-clear settings via modal session survival or a redundant post-clear `save_settings`. Backend wipe now clears the full `settings/` dir (voice assets, feedback log), always removes `~/.bonsai/cache`, and stops voice install tasks. Uninstall still leaves Decky data dirs by platform design — documented in [troubleshooting.md](../troubleshooting.md) §1b. Files: `bonsaiSessionSurvival.ts`, `index.tsx`, `SettingsTab.tsx`, `usePluginSettings.ts`, `plugin_data_reset.py`, `main.py`; tests `bonsaiSessionSurvival.test.ts`, `clearBonsaiBrowserStorage.test.ts`, `test_plugin_data_reset.py`.
 - ★★ **Decky plugin release `.zip` (CI) + clean install proof:** [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) builds the shippable zip via Decky CLI on **`v*` tags** and **workflow_dispatch**; [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh) enforces the same file layout as deploy (`main.py`, `refactor_helpers.py`, `py_modules/backend/services/`, `dist/`). Maintainer flow and versioning: [development.md](../development.md) → **Release (plugin zip)**. **QA log template:** [testing.md](../testing.md#regression-gates) §5 — run README-only path from **no Ollama yet**, then record Pass/Partial/Fail (human gate).
 - ★★ **README — end-user install and usage:** [README.md](../../README.md) gives **plain, step-by-step** guidance for **(1)** installing **Ollama** (Deck vs PC, official download or repo helper scripts; firewall/`OLLAMA_HOST` in [troubleshooting.md](../troubleshooting.md)), **(2)** obtaining and installing the bonsAI plugin (**`.zip`** from e.g. GitHub Release, load in Decky Loader), **(3)** **using the app** (Decky/QAM, Ollama host/base URL in Settings, pull a model, Ask, optional permissions). Troubleshooting deep-dives remain in `docs/`, not the main path.
@@ -824,7 +824,7 @@ line, nothing reworded._
 - ★ **Suggested AI Prompts:** Show curated prompt presets, randomize initial suggestions, and generate contextual follow-ups after responses.
 - ★ **Preset chip refresh (advice-first, 2026-04-24):** [`src/data/presets.ts`](../../src/data/presets.ts) `PRESET_PROMPTS` rephrased to advice-first questions; action wording only for strong shipped surfaces; `beta: true` chips preview roadmap items honestly. Content tuning only — no schema, RPC, or carousel logic change. See [CHANGELOG.md](../../CHANGELOG.md) § Changed.
 - ★ **Preset chip expansion (2026-06-26):** Incremental strings for LAN/Ollama, Expert/voice, Steam Input; graduated stale beta labels; see [CHANGELOG.md](../../CHANGELOG.md) § Unreleased.
-- ★ **Preset chip expansion — Wave 1 batch (2026-08-07):** Four prompts in `presets.ts` — Find LAN on Ollama tab, BonsAI quick-launch chord, two token-streaming beta strings; category keywords for `chord` / `quick-launch` / `token streaming` / `stream in`. Unit: `presets.test.ts`. On-Deck QA: **PRESET-EXPAND-W1-01** in [testing.md](../testing.md). Detail: [wave1.md](wave1.md).
+- ★ **Preset chip expansion — Wave 1 batch (2026-08-07):** Four prompts in `presets.ts` — Find LAN on Ollama tab, BonsAI quick-launch chord, two token-streaming beta strings; category keywords for `chord` / `quick-launch` / `token streaming` / `stream in`. Unit: `presets.test.ts`. On-Deck QA: **PRESET-EXPAND-W1-01** in [testing.md](../testing.md). Detail: [wave1.md](../../../bonsAI-workshop/archive/wave1.md).
 - ★★★ **Session RAG preset chips (2026-07-18):** Main-tab carousel seeds ~30% RAG / ~70% static per slot when `use_local_knowledge_base` is on and corpus is installed — curtailed strategy (boss/dungeon) + compat prompts from offline KB for the running AppID; category-biased static follow-ups after Ask; reseed on AppID change and cold mount. Setup tip **Enable local knowledge base for better game tips** in static pool (sampled, not forced). `suggest_chip_candidates` + RPC `get_session_rag_chip_candidates`; `sessionRagComposer.ts`, `composePresetSeedsWithSessionRag.ts`, `useBonsaiAskOrchestration.ts`. Unit: `sessionRagComposer.test.ts`, `test_knowledge_base_service.py`. On-Deck QA: **SESSION-RAG-CHIPS** in [testing.md](../testing.md).
 - ★★ **Prompt-testing MVP:** [testing.md](../testing.md#device-qa-runbook) (tiered run order) + [testing.md](../testing.md) (shipped-feature coverage, scenarios, Test Results) + optional frozen preset carousel (`TEMP_PRESET_CAROUSEL_FROZEN` / `TEMP_CAROUSEL_FROZEN_TEXTS` in `src/data/presets.ts`). **Status:** Refactored 2026-05-24; Tier 0–1 execution tracked in **In Progress**.
 - ★★ **Input sanitizer lane (hybrid):** Deterministic Ask cleanup and conservative block before Ollama; default on; no Settings UI. Magic phrases `bonsai:disable-sanitize` / `bonsai:enable-sanitize` (exact whole message, trim + casefold) persist `input_sanitizer_user_disabled` via `save_settings` and return confirmation without calling the model. Backend `backend/services/input_sanitizer_service.py`, `main.py` (`ask_game_ai` / `start_background_game_ai`); frontend types and completion path in `src/index.tsx`; phrase constants in `src/data/inputSanitizerCommands.ts`.
@@ -834,7 +834,7 @@ line, nothing reworded._
 - ★★ **Thinking phase copy polish (2026-06-27):** Mid-Ask `_publish_thinking_phase_key` lines stay prompt-woven — `format_thinking_phase()` accepts `question` and weaves snippet + game for proton/TDP/screenshot/build/retry phases (character variants preserved); redundant background `starting` publish removed. Files: `bonsai_stream_tags.py`, `main.py`, `game_ai_request.py`; tests `tests/test_bonsai_stream_tags.py`, `tests/test_background_partial_state.py`.
 - ★★ **Always-sarcastic thinking blurb (2026-07-05):** Thinking status lines always use witty/deadpan copy (no Character Voice gate, no ~30% roll); streaming fallbacks and model `<bonsai-status>` prompt aligned; italic line stays visible during token preview and updates from backend/model tags. Client instant opener via `composeThinkingBlurb.ts`. Files: `bonsai_stream_tags.py`, `ollama_prompts.py`, `thinking_tiny_model_service.py`, `composeThinkingBlurb.ts`, `useBonsaiAskOrchestration.ts`, `MainTabChatTranscript.tsx`.
 - ★★ **Thinking blurb copy refresh (2026-07-17):** Phase/intent-native witty and deadpan pools in `compose_thinking_blurb` / `format_thinking_phase` (no `Yeah,` / `Fine.` / `Oh joy` prefix farm); game-title lines only when a running title is set; emoji-only blurbs allowed; selection by `request_id` only (no elapsed-time rotation); client mirror in `composeThinkingBlurb.ts`; `<bonsai-status>` tone hint aligned in `ollama_prompts.py`. Tests: `composeThinkingBlurb.test.ts`, `tests/test_bonsai_stream_tags.py`. On-Deck QA: **THINKING-01…03**, **THINKING-COPY-01** in [testing.md](../testing.md).
-- ★★★ **System prompt reorder + general-purpose assistant clause:** Shipped — `build_system_prompt` in [`py_modules/backend/services/ollama_service.py`](../../py_modules/backend/services/ollama_service.py) assembles the Ollama **system** message in layers: dynamic game/attachment/vision → identity + general-purpose clause → optional early context (e.g. Proton via `early_context_suffix` from `main.py`) → topic/mode injects → **TDP + ```json``` contract tail** last; `append_deck_tdp_sysfs_grounding` after that; AI character roleplay remains a **prefix** when enabled. Unit ordering tests in [`tests/test_ollama_service.py`](../../tests/test_ollama_service.py); maintainer notes in [testing.md](../testing.md) (**System message layer order**). **Still needs on-device / matrix validation:** use Input transparency to confirm layer order and quality on real Asks (Speed, Strategy, Ollama-host, TDP/read paths) — track in [testing.md](../testing.md) and [testing.md](../testing.md#regression-gates) as appropriate. RAG injection in-prompt remains future (see [archive/research/rag-sources-research.md](../archive/research/rag-sources-research.md)); **not in scope:** changing TDP/GPU JSON schema.
+- ★★★ **System prompt reorder + general-purpose assistant clause:** Shipped — `build_system_prompt` in [`py_modules/backend/services/ollama_service.py`](../../py_modules/backend/services/ollama_service.py) assembles the Ollama **system** message in layers: dynamic game/attachment/vision → identity + general-purpose clause → optional early context (e.g. Proton via `early_context_suffix` from `main.py`) → topic/mode injects → **TDP + ```json``` contract tail** last; `append_deck_tdp_sysfs_grounding` after that; AI character roleplay remains a **prefix** when enabled. Unit ordering tests in [`tests/test_ollama_service.py`](../../tests/test_ollama_service.py); maintainer notes in [testing.md](../testing.md) (**System message layer order**). **Still needs on-device / matrix validation:** use Input transparency to confirm layer order and quality on real Asks (Speed, Strategy, Ollama-host, TDP/read paths) — track in [testing.md](../testing.md) and [testing.md](../testing.md#regression-gates) as appropriate. RAG injection in-prompt remains future (see [archive/research/rag-sources-research.md](../../../bonsAI-workshop/archive/research/rag-sources-research.md)); **not in scope:** changing TDP/GPU JSON schema.
 
 **Also counted in shipped baseline (not separate checklist lines above):** background prompt completion (V1); Linux Ollama compatibility.
 
@@ -845,7 +845,7 @@ line, nothing reworded._
 - ★★★★ **RAG Deck query — hybrid vectors (Phase 2, 2026-07-28):** Maintainer `build_rag_db.py` bakes `section_vectors` via local `nomic-embed-text`; Strategy Asks FTS shortlist (N=30) → Ollama `/api/embed` query → cosine re-rank to mode `top_k`. Fallbacks: **Keyword search** when vectors/nomic missing; **Keyword search (embed unavailable)** on embed failure. Transparency chips: **Keyword + meaning** / **Keyword search**; Ollama tab soft hint when corpus has vectors but embed model missing (no auto-pull). Files: `ollama_embed_service.py`, `knowledge_base_service.py`, `transparency_service.py`, `KnowledgeBaseSection.tsx`, `main.py`. Compat hybrid deferred Phase 3. QA: **KB-SMOKE-04**–**07** Open in [testing.md](../testing.md).
 - ★★★★ **RAG Deck query — compat hybrid + corpus maturity (Phase 3, 2026-07-29):** Schema v2 (`compat_patterns` + `platforms`, FTS5, `compat_pattern_vectors`); **124** shared troubleshooting tips (`data/kb/compat_patterns.json`) with hybrid FTS→`nomic-embed-text` re-rank on troubleshooting Asks; interim **11-title** strategy seed (`data/kb/strategy_seed.json`, 22 section cards). Show details **Source: shared troubleshooting tips** when compat domain attaches. Eval fixture `tests/fixtures/kb_eval_v0.json` (~25 queries). Files: `knowledge_base_schema.py`, `knowledge_base_service.py`, `build_rag_db.py`, `transparency_service.py`, `game_ai_request.py`. **Not** public HF (→ Phase 6 as of 2026-07-30 phasing). QA: **KB-SMOKE-07**–**10**, **KB-EVAL-01** Open in [testing.md](../testing.md).
 - ★★★★ **RAG Deck query — public publish (Phase 6, closed 2026-08-16):** First public versioned corpus, published on both channels and verified on a real Deck end to end. **Legal:** scrub DONE 2026-08-09 (plan 15, Stages 1–5); **D20** (2026-08-14) reopened D19b to include ShareAlike sources, so the corpus ships as one **CC BY-SA 4.0** work. **Tooling:** `scripts/publish_corpus.py` (licence gate + manifest self-consistency check), `tests/test_rag_corpus_download.py` (10 tests — the download path had zero coverage before), stable `qd313` HF/GitHub addresses in `knowledge_base_schema.py`, UI copy corrected (dev-only placeholder text removed, the "~5 GB" claim fixed — the real corpus is ~1 MB). Fixed along the way: a live repo-identity hole (stale `cantcurecancer` username used at runtime by the manifest fetch and the Pull Models overlay), a Windows `os.statvfs` crash in the download path, and a cancel-state bug where cancelling orphaned the running task's progress reference. **Published:** HF dataset `qd313/bonsai-knowledge-base` + GitHub release `knowledge-base-v1`, first push 2026-08-14 (`2026.08.14`, sha `081af237…`, 758507 bytes), point release **`2026.08.16`** (sha `34bff336…`, 758502 bytes) — schema v3, 13 games / 117 sections / 124 compat tips, all vectors populated. **Reproducibility fixed 2026-08-15:** `_seed_strategy_corpus` stamped `crawled = _utc_now()` into the 58 maintainer-authored rows, so every rebuild changed `db_sha256` (three 2026-08-14 builds gave 758505 / 758506 / 758507 bytes). Those rows were never crawled and the attribution generator already skips url-less rows, so the stamp had no consumer — it now writes empty, and a row citing a `source_url` without a `crawled_at` fails the build rather than being silently backdated. Two consecutive builds now produce an identical `db_sha256` (`019acc7c…`); guarded by `tests/test_build_rag_reproducible.py`. The `2026.08.14` artifact predated that fix and could not be rebuilt from source, which is why the maintainer took the version bump. **Verified on Deck:** 2026-08-15 backend (live HF download passes the sha gate, GitHub mirror failover returns the same version and sha, retrieval 7/7 with the hybrid path live at ~60 ms embed, cross-game leak guard holding, **KB-ATTRIB-02** Verified); 2026-08-16 UI half (build `6329577`, run against a Deck still holding `2026.08.14` so the version-compare Update was genuine — Update → progress row → `2026.08.16`, second Update correctly a no-op, Remove → storage picker → first install, Strategy Ask attaches cards; the SD-card storage option was exercised as a side effect and both installs *and* serves retrieval). **KB-SMOKE-01 / KB-DOWNLOAD Verified — Phase 6 exits.** One row does **not** come with it: **KB-CANCEL-01** is not testable as written (a 758 KB corpus installs in ~0.9 s and leaves no cancel window) and stays in [Verify](../roadmap.md#verify). [knowledge-base.md](../knowledge-base.md) § Phase 6 / Source attribution.
-- ★★★★ **RAG retrieval quality remediation (PR1 + PR2, 2026-08-09):** PR1 replaced cosine-only re-rank with RRF, added BM25 floor / column weights / stopwords / schema v3 prefixes. PR2 deepened the seed to **13 titles / 119 sections**, shipped the hybrid kill-switch and D16 compat topic router, signed off `kb_eval_v2` (221 queries / 140 labeled), and ran the three-way bake-off. Holdout top-3: keyword 83.3% vs RRF 80.6% — **no separation**; equal RRF weights and loose floor locked. Report: [kb-retrieval-pr2-bakeoff-2026-08-09.md](research/kb-retrieval-pr2-bakeoff-2026-08-09.md). Plan: [rag-retrieval-quality-remediation-implementation-plan.md](rag-retrieval-quality-remediation-implementation-plan.md). QA: **KB-EVAL-02** Verified (PC); on-Deck hybrid engagement still **KB-RRF-01**.
+- ★★★★ **RAG retrieval quality remediation (PR1 + PR2, 2026-08-09):** PR1 replaced cosine-only re-rank with RRF, added BM25 floor / column weights / stopwords / schema v3 prefixes. PR2 deepened the seed to **13 titles / 119 sections**, shipped the hybrid kill-switch and D16 compat topic router, signed off `kb_eval_v2` (221 queries / 140 labeled), and ran the three-way bake-off. Holdout top-3: keyword 83.3% vs RRF 80.6% — **no separation**; equal RRF weights and loose floor locked. Report: [kb-retrieval-pr2-bakeoff-2026-08-09.md](../../../bonsAI-workshop/archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md). Plan: [rag-retrieval-quality-remediation-implementation-plan.md](../../../bonsAI-workshop/archive/rag-retrieval-quality-remediation-implementation-plan.md). QA: **KB-EVAL-02** Verified (PC); on-Deck hybrid engagement still **KB-RRF-01**.
 ** New **Ollama** LB/RB tab (outline llama icon) between Main and Settings consolidates **Where AI runs**, response verification, connection timeouts/keep-alive, and **Models & routing** → **Open AI models…** fullscreen hub with **Policy**, **Browse & pull**, and **Advanced** chips (tier selection, pull table, Tier 3 unlock / high-VRAM fallbacks). Removed scattered controls from Permissions (model policy), Settings (connection block), and Developer (verify + tuning + routing). Implemented in `src/components/OllamaTab.tsx`, `OllamaWhereAiRunsSection.tsx`, `OllamaModelsHubModal.tsx`, `ModelPolicyTierPanel.tsx`, `ModelRoutingAdvancedPanel.tsx`; tab wiring in `src/index.tsx`.
 - ★★★★ **UI scale profiles (Handheld / Desktop / Couch):** Settings **UI scale** — **Adjust UI automatically** (default) classifies from QAM viewport width + internal/external display heuristics; manual snap slider (Handheld · Desktop · Couch) behind toggle; **Apply UI scale** soft-reloads panels. Scoped `--bonsai-ui-scale` on `.bonsai-scope` + modal bridge; merges former **10-foot readability slider** and **Couch 10-foot UI profile** roadmap items. `src/data/uiScaleProfile.ts`, `src/hooks/useUiScaleProfile.ts`, `SettingsTabUiScaleSection.tsx`, `bonsaiScopeStylesheet.ts`, `settings_service.py`.
 - ★★ **Ollama Network Routing Fix:** Route frontend requests through Decky backend (`call("ask_game_ai", ...)`) to resolve cross-origin failures.
@@ -896,9 +896,9 @@ line, nothing reworded._
 
 ### Steam Input
 
-- ★★★★★ **Steam Input Jump (Phase 1):** Debug tab jump to per-game controller config via `steam://controllerconfig/{appId}` (`SteamClient.URL.ExecuteSteamURL`), versioned lexicon in `src/data/steam-input-lexicon.ts`, helper in `src/utils/steamInputJump.ts`. Documented in [archive/research/steam-input-research.md](../archive/research/steam-input-research.md). **Phase 2+** (indexed search, full catalog, ranked results) is **not** planned to continue.
+- ★★★★★ **Steam Input Jump (Phase 1):** Debug tab jump to per-game controller config via `steam://controllerconfig/{appId}` (`SteamClient.URL.ExecuteSteamURL`), versioned lexicon in `src/data/steam-input-lexicon.ts`, helper in `src/utils/steamInputJump.ts`. Documented in [archive/research/steam-input-research.md](../../../bonsAI-workshop/archive/research/steam-input-research.md). **Phase 2+** (indexed search, full catalog, ranked results) is **not** planned to continue.
 - ★★ **Global quick-launch macro (documentation + verification checklist):** Guide-chord path QAM → Decky → bonsAI with **Fire Start Delay** and per-user rail depth documented in [troubleshooting.md](../troubleshooting.md) §5; [README.md](../../README.md) quick-launch blurb. **Archived from Planned (2026-07-30):** cool for power users, **not worth further product effort** for casual users — refresh only if Steam/Decky QAM layout changes or **Native QAM shortcut tile** lands.
-- ★ **Shortcut setup keywords (Ask, no Ollama):** `bonsai:shortcut-setup-deck` and `bonsai:shortcut-setup-stadia` typed in Ask (optional leading `/`); `backend/services/shortcut_setup_commands.py`; response + optional **Open Controller settings**; documented in [troubleshooting.md](../troubleshooting.md) §5 and [testing.md](../testing.md). **Not in scope:** auto-writing Steam Input / VDF (see [archive/research/steam-input-research.md](../archive/research/steam-input-research.md)).
+- ★ **Shortcut setup keywords (Ask, no Ollama):** `bonsai:shortcut-setup-deck` and `bonsai:shortcut-setup-stadia` typed in Ask (optional leading `/`); `backend/services/shortcut_setup_commands.py`; response + optional **Open Controller settings**; documented in [troubleshooting.md](../troubleshooting.md) §5 and [testing.md](../testing.md). **Not in scope:** auto-writing Steam Input / VDF (see [archive/research/steam-input-research.md](../../../bonsAI-workshop/archive/research/steam-input-research.md)).
 - ★★ **VAC / ban lookup (Phase 1 — Ask command) — complete:** `bonsai:vac-check` with user-supplied 64-bit SteamIDs or `/profiles/765…` URLs; Steam **GetPlayerBans** via `backend/services/steam_vac_service.py`, `vac_check_commands.py`; Permission **`steam_web_api`** (default off; legacy grandfather leaves it off); Settings **Steam Web API key**; TTL cache; disclaimer that results are account-level, not opponent attribution. README + optional preset chip. **Phase 2** (live opponent IDs) remains in [Planned](#long-term). **On-device QA:** Phase 1 is **not** fully covered in the matrices until someone runs [testing.md](../testing.md) § **VAC / Steam ban lookup (`bonsai:vac-check`)** and records Pass / Partial / Fail + build id; optional smoke row in [testing.md](../testing.md#regression-gates) § **Permissions**.
 
 ### About tab and main surface polish
@@ -914,7 +914,7 @@ line, nothing reworded._
 
 ### Permissions and capability gating
 
-- ★★★ **Kids master lock (2026-08-09):** When Steam reports parental controls locked, session-forces all `CAPABILITY_KEYS` deny via `capability_enabled` + greys Permissions toggles without mutating stored prefs. Ask / local Ollama / offline KB keep working. `steamParental.ts`, `useKidsLock.ts`, RPC `set_kids_lock_state`, `PermissionsTab` banner. On-Deck QA Open: **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-REGRESS-01** in [testing.md](../testing.md). Research [08](08-kids-master-lock-feasibility.md); plan [14](14-kids-master-lock-implementation-plan.md).
+- ★★★ **Kids master lock (2026-08-09):** When Steam reports parental controls locked, session-forces all `CAPABILITY_KEYS` deny via `capability_enabled` + greys Permissions toggles without mutating stored prefs. Ask / local Ollama / offline KB keep working. `steamParental.ts`, `useKidsLock.ts`, RPC `set_kids_lock_state`, `PermissionsTab` banner. On-Deck QA Open: **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-REGRESS-01** in [testing.md](../testing.md). Research [08](../../../bonsAI-workshop/archive/08-kids-master-lock-feasibility.md); plan [14](../../../bonsAI-workshop/archive/14-kids-master-lock-implementation-plan.md).
 - ★★★★ **Capability Permission Center (User-Controlled Access):** Permissions tab (lock icon, same title scale as other tabs) with toggles for filesystem writes, hardware control (TDP apply), media library access (screenshot attach), Steam/Proton log read (troubleshooting Ask excerpts), **Steam Web API** (outbound GetPlayerBans for `bonsai:vac-check`), and external/Steam navigation (About links, Debug Steam Input jump). Persisted `settings.json` `capabilities`; new installs default OFF; legacy installs without a `capabilities` block are grandfathered ON until saved (**Steam Web API** stays off in that path). Backend enforces gates on `append_desktop_debug_note`, `append_desktop_chat_event`, `list_recent_screenshots`, ask-with-attachments, TDP apply, `capture_screenshot`, bounded reads for Proton/log attachment when enabled, and Steam ban lookups when enabled. Files: `backend/services/capabilities.py`, `PermissionsTab`, `main.py`, `src/utils/settingsAndResponse.ts`.
 - ★★★ **Debugging and Proton log analysis:** Settings → Advanced **Attach Proton logs when troubleshooting** (`attach_proton_logs_when_troubleshooting`) plus Permissions **Steam / Proton log read** (`steam_logs_read`). On Linux, when the sanitized question matches the troubleshooting heuristic and a running AppID is present, the backend attaches bounded tails from `~/steam-<appid>.log` (typical with `PROTON_LOG=1`) and shallow `steamapps/compatdata/<appid>/*.log` files into the **system** prompt before roleplay prefixing (`backend/services/proton_troubleshooting_logs.py`, `backend/services/game_ai_request.py`, `main.py`). Main **Input handling** shows excerpt/notes. Does **not** enable Proton logging automatically. **On-device QA:** not yet exercised in the prompt matrix — follow [testing.md](../testing.md) § **Proton / Steam log attachment (QA)**; optional Permissions smoke row in [testing.md](../testing.md#regression-gates) § Permissions.
 - ★★★★ **Model policy tiers + disclosure UX:** Persisted `model_policy_tier` / `model_policy_non_foss_unlocked` and related allow-high-VRAM flag; Settings **Model policy** (tier chips, unlock flow, README link); backend `backend/services/model_policy.py` classifies model tags and enforces tier when selecting fallbacks; successful replies can include **Model source disclosure** on Main. `src/data/modelPolicy.ts`, `MainTab.tsx`, `src/utils/inputTransparency.ts`, `main.py`, [README.md](../../README.md) § Model policy tiers.
@@ -928,7 +928,7 @@ line, nothing reworded._
 - ★★ **Running-game character suggestions (AI picker):** On `CharacterPickerModal` open, read `Router.MainRunningApp`, resolve 1–3 catalog presets via `src/utils/runningGameCharacterSuggestions.ts` (Steam AppID map + normalized title match + TF2 merge), show **Playing:** headline and suggestion row with `CharacterRoleplayEmoticon`; async after first paint with delayed spinner (~160 ms); D-pad links Random, suggestions, column 0, and custom field.
 - ★★ **Random character “?” avatar (picker + main):** When **Random** is on, picker tile, main-tab glass avatar, and related summary chips use a single **“?”** affordance. `CharacterRoleplayEmoticon.tsx`, `CharacterPickerModal.tsx`, `MainTab.tsx`.
 - ★★★ **Character-derived UI accent theme (preset-selected):** With AI character on and a fixed catalog preset (not Random / not custom), accent tokens follow `src/data/characterUiAccent.ts` and catalog-driven colors; **AI character off**, **Random**, and **Custom** stay bonsAI forest green. `src/index.tsx` scoped CSS / token wiring, `MainTab.tsx`, `CharacterPickerModal.tsx`.
-- ★★★★ **Pyro talent-manager easter egg (hidden preset):** With AI character on and resolved voice **Pyro** (`tf2_pyro`, fixed picker or Random), replies use a Hollywood-style talent-manager parody (Ari Gold–style archetype only—not in-universe Pyro speech, no likeness claims). **Two tiers:** at **Subtle/Balanced** accent the manager stays smarmy but **helpful** (OSS-angled carousel tips); at **Heavy/Nightmare** accent the same unlock becomes a **worthless asshole AI**—mocking replies, deliberately bad Deck/game advice, never admits failure—while the backend **never applies TDP/hardware** from those replies (even if the model emits JSON). Some successful Asks attach structured **`preset_carousel_inject`** so Main shows an extra orange-outlined suggestion chip **beside** the three-slot carousel—the inject chip does not use `PRESET_CAROUSEL_ACTIVE_MS` and stays focusable after the trio may rest. Clears on the next Ask or **Reset session cache**. `backend/services/ai_character_service.py` (`build_roleplay_system_suffix_meta`, tips), `main.py` (`ask_ollama`), `game_ai_request.py`, `MainTab.tsx`, `bonsaiScopeStylesheet.ts`. [archive/research/voice-character-catalog.md](../archive/research/voice-character-catalog.md). **On-device QA:** not yet fully exercised in the standing matrices — follow [testing.md](../testing.md#regression-gates) §2 (character / carousel touches) and §3 Main tab (Pyro + inject chip; Nightmare asshole tier).
+- ★★★★ **Pyro talent-manager easter egg (hidden preset):** With AI character on and resolved voice **Pyro** (`tf2_pyro`, fixed picker or Random), replies use a Hollywood-style talent-manager parody (Ari Gold–style archetype only—not in-universe Pyro speech, no likeness claims). **Two tiers:** at **Subtle/Balanced** accent the manager stays smarmy but **helpful** (OSS-angled carousel tips); at **Heavy/Nightmare** accent the same unlock becomes a **worthless asshole AI**—mocking replies, deliberately bad Deck/game advice, never admits failure—while the backend **never applies TDP/hardware** from those replies (even if the model emits JSON). Some successful Asks attach structured **`preset_carousel_inject`** so Main shows an extra orange-outlined suggestion chip **beside** the three-slot carousel—the inject chip does not use `PRESET_CAROUSEL_ACTIVE_MS` and stays focusable after the trio may rest. Clears on the next Ask or **Reset session cache**. `backend/services/ai_character_service.py` (`build_roleplay_system_suffix_meta`, tips), `main.py` (`ask_ollama`), `game_ai_request.py`, `MainTab.tsx`, `bonsaiScopeStylesheet.ts`. [archive/research/voice-character-catalog.md](../../../bonsAI-workshop/archive/research/voice-character-catalog.md). **On-device QA:** not yet fully exercised in the standing matrices — follow [testing.md](../testing.md#regression-gates) §2 (character / carousel touches) and §3 Main tab (Pyro + inject chip; Nightmare asshole tier).
 
 ### Shipped detail (extensions and deferred phases)
 
@@ -1016,7 +1016,7 @@ line, nothing reworded._
 
 - **Phase 1 shipped** — see **Completed** → Steam Input Jump. **Phase 2+ deferred** unless revived: indexed catalog, unified search, ranked results, Edit Layout enumeration.
 - **Goal (if resumed):** Search setting names and navigate to relevant surfaces; deep-link feasibility gated.
-- **Files:** `src/index.tsx`, `main.py`, [archive/research/steam-input-research.md](../archive/research/steam-input-research.md).
+- **Files:** `src/index.tsx`, `main.py`, [archive/research/steam-input-research.md](../../../bonsAI-workshop/archive/research/steam-input-research.md).
 - **Depends on:** route-discovery research and fallback UX.
 - **Not in scope:** private UI patching or brittle route injection.
 
@@ -1027,7 +1027,7 @@ line, nothing reworded._
 ### Frontend structure (maintainer)
 
 - ★★ **Phase 4d–4f frontend split (2026-07-05):** `MainTab.tsx` orchestrates `MainTabPresetRow`, `MainTabUnifiedAskBar`, `MainTabScreenshotBrowser`, and `MainTabChatTranscript`; `index.tsx` delegates to `useScreenshotBrowser`, `useSteamSettingsSearch`, and `useBonsaiPluginShell`; `bonsaiScopeStylesheet.ts` composes `src/styles/sections/*.ts`. Shared `DeckFocusSlider`, `deckSliderMath`, `createTabLocalSurvival`, settings schema split. No user-visible behavior change; `pnpm test` + `pnpm run build` pass.
-- ★★★ **Phase 3 backend extraction (2026-07-05):** `ollama_ask_service.py`, `async_background_job.py`, `network_service.py`, `transparency_service.py`, `ask_local_commands.py`; `main.py` −509 LOC. Removed llama.cpp POC module; centralized Ollama constants in `py_modules/backend/constants.py` + `ollama_connectivity.py`. Report: [refactor-specialist-sweep-2026.md](refactor/refactor-specialist-sweep-2026.md).
+- ★★★ **Phase 3 backend extraction (2026-07-05):** `ollama_ask_service.py`, `async_background_job.py`, `network_service.py`, `transparency_service.py`, `ask_local_commands.py`; `main.py` −509 LOC. Removed llama.cpp POC module; centralized Ollama constants in `py_modules/backend/constants.py` + `ollama_connectivity.py`. Report: [refactor-specialist-sweep-2026.md](../../../bonsAI-workshop/archive/refactor/refactor-specialist-sweep-2026.md).
 - ★★★ **Critical regression fixes (2026-07-05):** Re-applied seven high-severity fixes still missing from experimental after refactor: settings save RMW lock, abort busy gate (Stop releases pending Ask), voice PCM buffer lock, intent pack corrupt-file preservation, Pillow decode containment, strategy checklist stale-ref + game-switch hydration, intent-pack and strategy-checklist store write locks. Regression tests: `test_background_abort_busy`, `test_settings_save_lock`, `test_intent_pack_store_lock`, `test_strategy_checklist_store_lock`, `test_load_preserves_corrupt_file`, `test_pcm_buffer_survives_concurrent_append_and_window`.
 
 **Shipped** — see **Completed** / baseline index.
@@ -1048,7 +1048,7 @@ All of these are **Verified on device** in testing.md. They were still sitting i
 was outstanding that had in fact been signed off. Kept in full for the reasoning.
 
 - ★ **You cannot ask for "the boss"** — a card's type was not searchable, so *"how do i beat the boss"* found nothing on a game whose boss card was right there. Fixed 2026-08-19 by pulling that game's cards of the named kind into the pool, only when the keyword half found none of that kind. **KB-TYPE-01** owed on device. The reversible option was taken over a schema change; [why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way) has the trade-off and a standing maintainer question.
-- ★★ **D-pad reaches the spoiler reveal, and A opens it** — fixed 2026-08-27, already confirmed on device **by script** (`docs/test-evidence/SPOILER-REVEAL-AFTER-onmove-fix.json`: ask → header → the fence takes the ring; A reveals it, masked 1→0). **SPOILER-DPAD-01** — by-hand residue only: B over a masked fence must not reveal; expect one absorbed Down press on the fence before the walk moves on (offered-once diversion, cosmetic). The *tap to hide* control is a separate open bug (it never takes the ring — see Bugs). Writeup: [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md).
+- ★★ **D-pad reaches the spoiler reveal, and A opens it** — fixed 2026-08-27, already confirmed on device **by script** (`workshop:test-evidence/SPOILER-REVEAL-AFTER-onmove-fix.json`: ask → header → the fence takes the ring; A reveals it, masked 1→0). **SPOILER-DPAD-01** — by-hand residue only: B over a masked fence must not reveal; expect one absorbed Down press on the fence before the walk moves on (offered-once diversion, cosmetic). The *tap to hide* control is a separate open bug (it never takes the ring — see Bugs). Writeup: [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md).
 - ★★ **You cannot ask about a game unless it is running** — fixed 2026-08-19 (**D19**); **KB-NEWTITLE-01** owed on device. The question is matched against the alias table as a last resort, only when Steam supplies no AppID. [why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way)
 - ★★ **Compat retrieval returned a tip from the wrong topic** — fixed 2026-08-18 (**D22**); **KB-ROUTER-02** owed on device. The router worked the topic out and retrieval threw it away. The report's premise was half wrong and the fix changed as a result — [why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way)
 - ★★ **Session context counts the newest turn twice** — fixed 2026-08-27, **confirmed on-Deck the same day by the rig with real controller presses**; **SESSION-CONTEXT-DEDUPE-01 Verified.** After a completed Ask, `liveTurn` and the newest `askThreadCollapsed` entry were the same turn shown twice; the strip now drops the live row when its question matches the newest archived one — see [testing.md](testing.md). Writeup: [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md).
@@ -1090,7 +1090,7 @@ whole, rationale included — the reasoning is why they were built the way they 
   - **Why it is the answer to "focus isn't considered when new UI is built":** the rule is 26 lines of hard-won correctness that only works if read at the right moment. A check does not need to be remembered.
 - ★★ **AI character avatars — prop emblems** (design handoff received 2026-08-26) — **BOTH HALVES SHIPPED. Main tab 2026-08-26 (on-Deck check owed, AVATAR-PROP-01); picker 2026-08-27 once [D33](audit/maintainer-decisions-locked.md) locked at 26px — measured on device, row **CHAR-AVATAR-26-01** in [testing.md](testing.md) is Partial pending the maintainer's own look at the size.**
   - **Goal:** Replace the 8×8/16×16 pixel-grid character placeholders with drawn prop emblems — one object per character (Scout's bat, Heavy's sandvich, Nick Valentine's fedora) on a tinted, vignetted disc. Covers all 33 keys plus `__random__` and `__custom__`. Vector, so it stays legible from 18px up without a per-character art pipeline, and it is props rather than likenesses, which keeps it clear of the copyright problem.
-  - **What shipped 2026-08-26:** the Ask-bar avatar draws the prop emblem. [CharacterRoleplayEmoticon](../src/components/CharacterRoleplayEmoticon.tsx) gained an `art` prop that defaults to `"grid"`, so the picker is byte-for-byte unchanged and only the main tab opts in with `art="prop"`. The design's module-level gradient counter became `React.useId()` with the colons stripped, and the art array got its missing React keys. First tests for the component: `CharacterRoleplayEmoticon.test.tsx` (9). Design bundle and the approved prototype are in `docs/design/handoffs/ai-character-avatars/`.
+  - **What shipped 2026-08-26:** the Ask-bar avatar draws the prop emblem. [CharacterRoleplayEmoticon](../src/components/CharacterRoleplayEmoticon.tsx) gained an `art` prop that defaults to `"grid"`, so the picker is byte-for-byte unchanged and only the main tab opts in with `art="prop"`. The design's module-level gradient counter became `React.useId()` with the colons stripped, and the art array got its missing React keys. First tests for the component: `CharacterRoleplayEmoticon.test.tsx` (9). Design bundle and the approved prototype are in `workshop:design/handoffs/ai-character-avatars/`.
   - **The main tab is settled (2026-08-26).** A true-size mock-up confirmed the Ask bar can take the new artwork with **no layout change at all** — same 18 × 18 slot, same 50.0 × 276.8px text row, same corner badge — as long as it renders the plain glyph rather than the design's `CharacterAvatar` wrapper, whose selection chip the slot's `overflow: hidden` would clip. The art also clearly beats what is there now: today seven of eight grids resolve to the same hooded silhouette at 18px.
   - **What blocked it, and how it was answered.** The picker only. The art was reviewed at 44px, the picker rendered at 24px, and the design's badge breakpoint (26px) fell in the middle of the picker's five actual sizes (22, 24, 24, 26, 26) — so one screen would have shown two badge styles. **[D33](audit/maintainer-decisions-locked.md) locked 2026-08-27 at 26px** (option C: part of the way, not the full 44). All five sizes collapsed into `PICKER_AVATAR_PX` and the picker opted into `art="prop"`. **Measured on device the same day:** 34 avatars, every one 26px on the emblem viewBox, rows still **38px so nothing gets shorter**, badges unclipped. The maintainer explicitly reserved the right to change the number after seeing it — it is one constant, so that is a one-line edit.
   - **Sequencing note:** this adds a *selection ring* to the character picker, which already carries the open **★★★ focus ring invisible / D-pad does not move** bug above. Fix the focus bug first or expect to debug both at once.
@@ -1127,7 +1127,7 @@ Shipped features moved out of the roadmap in the 2026-09-02 cleanup, verbatim. S
 ### Preset row: one line, then two chips across with scrolling labels (D43)
 
 - ★★★★ **Preset chips on a single line** — **rebuilt 2026-09-01 as two chips side by side (D43); on-Deck confirmation owed** — see
-  *The preset chips* under [Bugs](#bugs) and [29-preset-row-three-thirds-plan.md](29-preset-row-three-thirds-plan.md).
+  *The preset chips* under [Bugs](#bugs) and [29-preset-row-three-thirds-plan.md](../../../bonsAI-workshop/archive/29-preset-row-three-thirds-plan.md).
   The 2026-08-31 build showed one chip; the mockup ([major-redesign.md § 2.3](major-redesign.md)) has three side by side; the
   maintainer chose two after the width research. The height gain stays. The paragraph below records what `fc1b245` actually did, and
   stands only as the measurement baseline. The chip block went from 118px (three
@@ -1146,15 +1146,15 @@ Shipped features moved out of the roadmap in the 2026-09-02 cleanup, verbatim. S
   passed on the Deck, row 01b passed 2026-09-03. Since 2026-09-17 (plan 60) the two chips sit 147 pixels wide
   with a 6-pixel gap, not 148 and 4. **Row 04's speed-by-eye half passed on the Deck 2026-09-17:** the long
   label crawls at about 27 pixels a second, close to the intended 25. Evidence
-  `docs/test-evidence/plan57-QA-PRESET-ONE-LINE-04.json`. **Row 04's decode-mode half passed on the Deck
+  `workshop:test-evidence/plan57-QA-PRESET-ONE-LINE-04.json`. **Row 04's decode-mode half passed on the Deck
   2026-09-18:** the chip animation held a flat 60 frames a second for a full 8-second sample, with no frame
-  slower than about 17 milliseconds. Evidence `docs/test-evidence/plan61-PRESET-ONE-LINE-04-decode.json`.
+  slower than about 17 milliseconds. Evidence `workshop:test-evidence/plan61-PRESET-ONE-LINE-04-decode.json`.
   Nothing measurable is left for the rig; reduced motion and the maintainer's own feel for the speed stay on
   the maintainer's own page.
 - ★★★★ **The tab icon bar collapses when it is not in use**
   - **Goal:** The tab strip stops holding full height while nobody is using it, while still answering *which tab am I on?* at a glance —
     the sketch on the table is a thin bar of dashes showing your position in the carousel. Interacting with it opens the fuller strip.
-  - **Workshopped and planned 2026-09-01:** [30-collapsing-tab-bar.md](30-collapsing-tab-bar.md). Twelve
+  - **Workshopped and planned 2026-09-01:** [30-collapsing-tab-bar.md](../../../bonsAI-workshop/archive/30-collapsing-tab-bar.md). Twelve
     discovery decisions are recorded there (our own thin bar of dashes plus the active tab's name, opening to a floating strip only
     while the ring is on it; Steam's `Tabs` stays underneath for LB/RB). **Build is gated on the device spike in its § 5 W1**: if
     LB/RB stop working with Steam's bar hidden, work stops and comes back to the maintainer. Reopens R5 as **D44**. Folds in
@@ -1237,7 +1237,7 @@ Shipped features moved out of the roadmap in the 2026-09-02 cleanup, verbatim. S
 - ★★★★★ **Named chat slots** (labeled threads — redesign only)
   - **GitHub:** [bonsAI Issues](https://github.com/qd313/bonsAI/issues) — issue TBD.
   - **Goal:** Up to 8 named, persistent chats with Main-tab LB/RB carousel (option C). Do not re-ship old mini-list picker.
-  - **Status:** Code landed 2026-08-09 (storage, RPC, row UI). **The row never rendered in the composed plugin between `dba34e7` (2026-08-03, step-8 payload-hook extraction) and 2026-08-30** — `useMainTabPayload` dropped all six chat-slot props, both nested-modal callbacks and `askStopped`; W0 of [28-named-chat-slots-v3-implementation-plan.md](28-named-chat-slots-v3-implementation-plan.md) threads them through, so the V2 QA rows are runnable on device for the first time. **Redesign v3 landed 2026-08-30** ([28-named-chat-slots-v3-implementation-plan.md](28-named-chat-slots-v3-implementation-plan.md)) — the Main tab layout inverts to slot row → transcript → presets → Ask bar → context line, and the background status payload now carries `chat_slot_id` so a mid-stream slot switch can never paint one slot's tokens into another. All 19 commits W0–W18 are in; every gate green. **What is left is device QA:** run **CHAT-SLOTS-V2-05** (the P-0 bumper spike, never yet run) first, then the rest of V2 and all of **CHAT-SLOTS-V3-01…08**. Follow-up 2026-08-30 after the first on-device look: the Main tab column now stretches to the scroll viewport's bottom edge and pins presets + Ask bar there (`useMainTabColumnFill` + `.bonsai-main-tab-dock`), matching the mockups' bottom-anchored Ask bar. **On-Deck QA open** — all **CHAT-SLOTS-V2-01…06** and the **CHAT-SLOTS-V3** rows must pass before Completed. **P-0 bumper spike** result still pending on device ([major-redesign.md](major-redesign.md) § 7 R1).
+  - **Status:** Code landed 2026-08-09 (storage, RPC, row UI). **The row never rendered in the composed plugin between `dba34e7` (2026-08-03, step-8 payload-hook extraction) and 2026-08-30** — `useMainTabPayload` dropped all six chat-slot props, both nested-modal callbacks and `askStopped`; W0 of [28-named-chat-slots-v3-implementation-plan.md](../../../bonsAI-workshop/archive/28-named-chat-slots-v3-implementation-plan.md) threads them through, so the V2 QA rows are runnable on device for the first time. **Redesign v3 landed 2026-08-30** ([28-named-chat-slots-v3-implementation-plan.md](../../../bonsAI-workshop/archive/28-named-chat-slots-v3-implementation-plan.md)) — the Main tab layout inverts to slot row → transcript → presets → Ask bar → context line, and the background status payload now carries `chat_slot_id` so a mid-stream slot switch can never paint one slot's tokens into another. All 19 commits W0–W18 are in; every gate green. **What is left is device QA:** run **CHAT-SLOTS-V2-05** (the P-0 bumper spike, never yet run) first, then the rest of V2 and all of **CHAT-SLOTS-V3-01…08**. Follow-up 2026-08-30 after the first on-device look: the Main tab column now stretches to the scroll viewport's bottom edge and pins presets + Ask bar there (`useMainTabColumnFill` + `.bonsai-main-tab-dock`), matching the mockups' bottom-anchored Ask bar. **On-Deck QA open** — all **CHAT-SLOTS-V2-01…06** and the **CHAT-SLOTS-V3** rows must pass before Completed. **P-0 bumper spike** result still pending on device ([major-redesign.md](major-redesign.md) § 7 R1).
   - **Unblocked 2026-08-16** (`d167f8e`). The data-loss bug that made all six rows unrunnable — every turn dropped before it reached `chat_slots/` — is fixed; run the one-Ask persistence check in [Verify](#verify) before starting 01…06.
   - **Design:** [major-redesign.md](major-redesign.md), [07-named-chat-slots-postmortem.md](planning/07-named-chat-slots-postmortem.md).
 
@@ -1253,7 +1253,7 @@ Shipped features moved out of the roadmap in the 2026-09-02 cleanup, verbatim. S
     writing the CSS.
   - **Closed 2026-09-02, folded into plan 30:** the labels shipped on the open strip (8px caps under every icon) and the active
     tab's name sits on the thin bar at rest; the wide active cell was dropped by the maintainer in discovery. R5 is superseded by D44.
-  - **Folded into [30-collapsing-tab-bar.md](30-collapsing-tab-bar.md) on 2026-09-01.** The labels ship on
+  - **Folded into [30-collapsing-tab-bar.md](../../../bonsAI-workshop/archive/30-collapsing-tab-bar.md) on 2026-09-01.** The labels ship on
     that plan's open strip; the wide active cell is dropped (maintainer call in discovery). R5 is reopened there as **D44**. Do not
     build this separately.
 
@@ -1295,7 +1295,7 @@ Shipped features moved out of the roadmap in the 2026-09-02 cleanup, verbatim. S
   maintainer asks and proved them on hardware under **DRG-GLOSSARY-02**: full underline (skip-ink off, computed style read on device),
   tap → temporary plain-language popup (peek 4s / full 10s, unit-tested; the tap itself needs one manual finger check), and consistent
   D-pad reachability — the visited-once flag replaced with reading-order geometry, proven by a `deck_runSequence` that landed the ring on
-  the chip three passes running (`docs/test-evidence/DRG-GLOSSARY-02-dpad-consistency.json`). Two small D-pad warts found and filed above (B backs out
+  the chip three passes running (`workshop:test-evidence/DRG-GLOSSARY-02-dpad-consistency.json`). Two small D-pad warts found and filed above (B backs out
   of the pane; from-below is Up-then-Down). Remaining: one touch tap, and the Explain-further auto-send on device.
   - Two curated terms, "kiting" and "overclock," both read undefined in the shipped DRG Survivor cards. A DRG Survivor reply that uses one renders it as a tappable inline chip; a floating tooltip (not inline-push) shows a short peek on focus alone, the full definition on A, and an **explain further** chip that auto-sends a new Ask turn. Frontend-only data (`src/data/drgGlossaryTerms.ts`) — no Python retrieval needed for a two-term DRG-only list; the model prompt separately gets a small clause telling it the terms are tap-to-define so it doesn't stop to explain them.
   - **Not in scope:** general jargon-detection across every game's KB content — DRG Survivor only, as planned.
@@ -1326,13 +1326,13 @@ Both entries tested **TDP apply**, which the permissions cleanup of 2026-07-30 r
 
 ## Moved from the roadmap 2026-09-03
 
-Verify entries that passed on the Deck during [plan 31](31-deck-verification-round.md), moved out of the roadmap the same day, verbatim as they read there. The roadmap keeps a one-line **Done** entry for each.
+Verify entries that passed on the Deck during [plan 31](../../../bonsAI-workshop/archive/31-deck-verification-round.md), moved out of the roadmap the same day, verbatim as they read there. The roadmap keeps a one-line **Done** entry for each.
 
 - ★★ `[tabs]` **Your tab is remembered when you leave and reopen** — **VERIFY.** Shipped 2026-08-04 with a three-way Developer choice
   (D15). Rows **TAB-RESUME-01** (Partial), **TAB-RESUME-MODE-01**, **TAB-RESUME-FOCUS-01**.
-  - **Evidence, 2026-09-03 on build `3b0e9d7`:** `docs/test-evidence/TAB-RESUME-FOCUS-01.json`,
-    `docs/test-evidence/TAB-RESUME-MODE-01-a-select-main-and-close.json`, `docs/test-evidence/TAB-RESUME-MODE-01-c-select-5min-and-close.json`,
-    `docs/test-evidence/TAB-RESUME-MODE-01-f-select-resume-and-close.json`. The first-press-snaps-to-top focus gap is unchanged and stays
+  - **Evidence, 2026-09-03 on build `3b0e9d7`:** `workshop:test-evidence/TAB-RESUME-FOCUS-01.json`,
+    `workshop:test-evidence/TAB-RESUME-MODE-01-a-select-main-and-close.json`, `workshop:test-evidence/TAB-RESUME-MODE-01-c-select-5min-and-close.json`,
+    `workshop:test-evidence/TAB-RESUME-MODE-01-f-select-resume-and-close.json`. The first-press-snaps-to-top focus gap is unchanged and stays
     tracked with the picker focus-restore item.
 
 - ★ `[chips]` **The static seed stops telling you to enable the knowledge base when it is already on** — **VERIFY.** Fixed 2026-08-07.
@@ -1361,15 +1361,15 @@ visibility-oracle plan (decky-plugin-studio planning/06) will turn it into one t
 
 - ★★★ **Clear cache cleared the screen but not the session** — **fixed and device-confirmed 2026-08-27**, after three separate causes. Two halves stay owed: what a clear does to the **orphan chat slots** it leaves behind (one per clear-and-reask), and clearing **while a reply is still being written** — unit-tested, but not reproducible by hand because this model answers faster than the walk to the button. [why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way)
 - ★ **A finished voice install survives "Clear all plugin data"** — **VOICE-CLEAR-01** Partial (backend verified; UI half open).
-- ★ **Bonsai pot ~1px right of canopy (tab + plugin-list icon)** — fix landed 2026-08-07 (Wave 1 D); **BONSAI-ICON-GEOM-01**. [wave1.md](wave1.md).
+- ★ **Bonsai pot ~1px right of canopy (tab + plugin-list icon)** — fix landed 2026-08-07 (Wave 1 D); **BONSAI-ICON-GEOM-01**. [wave1.md](../../../bonsAI-workshop/archive/wave1.md).
 - ★ **Developer toggle for "resume last tab" (D15 B)** — shipped 2026-08-04; **TAB-RESUME-MODE-01**, **TAB-RESUME-FOCUS-01** Open/Partial.
-- ★ **Install voice engine button when already ready** — fix landed 2026-08-07 (Wave 1 B); **VOICE-REINSTALL-01**. [wave1.md](wave1.md).
+- ★ **Install voice engine button when already ready** — fix landed 2026-08-07 (Wave 1 B); **VOICE-REINSTALL-01**. [wave1.md](../../../bonsAI-workshop/archive/wave1.md).
 - ★ **Rows span the QAM panel width** — bug **fixed 2026-08-16** (`0fcaf00`), measured on-Deck: unified host and Ask row `x=63.99 w=268.02` → `x=48 w=300`, 32px reclaimed. **ASK-WIDTH-01** still Open in testing.md — the *visual* walk was never run, only the probe. Confirm the three Main rows look flush and nothing overflows the 300px column. Writeup: [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md); rule earned: [design-language.md](design-language.md) Rule 1.
 - ★ **British spellings found nothing** — *armour* returned nothing while *armor* returned the card. Fixed 2026-08-19 by searching for **both** spellings rather than rewriting the question, so a British spelling can never lose a result an American one finds. **KB-SPELLING-01** owed on device.
 - ★ **Static seed tells you to enable KB when it is already on** — fixed 2026-08-07 (Wave 2 F); **PRESET-KB-SEED-01**.
-- ★ **Thinking blurb italicizes emojis** — fix landed 2026-08-07 (Wave 1 A); **THINKING-EMOJI-01**. [wave1.md](wave1.md).
-- ★ **Thinking line vanishes mid-Ask (lazy status tag)** — fix landed 2026-08-08; **THINKING-SANITIZE-01**. [06-thinking-blurbs-review.md § 10.1](06-thinking-blurbs-review.md#101-landed-2026-08-08--7-items-13).
-- ★ **Token streaming stutters once at start** — fix landed 2026-08-07 (Phase A); **STREAM-REVEAL-01**. [05-token-streaming-review.md § 3.1](05-token-streaming-review.md).
+- ★ **Thinking blurb italicizes emojis** — fix landed 2026-08-07 (Wave 1 A); **THINKING-EMOJI-01**. [wave1.md](../../../bonsAI-workshop/archive/wave1.md).
+- ★ **Thinking line vanishes mid-Ask (lazy status tag)** — fix landed 2026-08-08; **THINKING-SANITIZE-01**. [06-thinking-blurbs-review.md § 10.1](../../../bonsAI-workshop/archive/06-thinking-blurbs-review.md#101-landed-2026-08-08--7-items-13).
+- ★ **Token streaming stutters once at start** — fix landed 2026-08-07 (Phase A); **STREAM-REVEAL-01**. [05-token-streaming-review.md § 3.1](../../../bonsAI-workshop/archive/05-token-streaming-review.md).
 - ★ **VAC / `bonsai:vac-check` (Phase 1) — on-device QA** — implementation complete; finish **VAC-02…06** after Tier 0 **SMOKE-F** passes.
 - ★ **~22% of Asks show bare emoji for every phase change** — fix landed 2026-08-08; **THINKING-EMOJI-CLUSTER-01**.
 - ★★ **Asked-entity extraction (player typing patterns)** — fixed 2026-08-09; **STRAT-ENTITY-01**.
@@ -1388,7 +1388,7 @@ visibility-oracle plan (decky-plugin-studio planning/06) will turn it into one t
   typecheck, build) when it shipped; **confirmed on device the same day — DIAG-FOLD-01 Verified.** No button matching "diagnostics"
   survives anywhere, and the raw JSON is where it should be, on chip 6 of 6. The verbose-logging-**off** half was not re-run.
   [testing.md](testing.md).
-- ★★ **Thinking blurbs — three writers disagree** — fix landed 2026-08-08; re-verify **THINKING-COPY-01**, **THINKING-SLOW-01**, **THINKING-LIVE-01**, **THINKING-SPOILER-01**. [06-thinking-blurbs-review.md § 10](06-thinking-blurbs-review.md#10-implementation-log).
+- ★★ **Thinking blurbs — three writers disagree** — fix landed 2026-08-08; re-verify **THINKING-COPY-01**, **THINKING-SLOW-01**, **THINKING-LIVE-01**, **THINKING-SPOILER-01**. [06-thinking-blurbs-review.md § 10](../../../bonsAI-workshop/archive/06-thinking-blurbs-review.md#10-implementation-log).
 - ★★ **Wave 4 G slider direction handlers** — Deck-check: **ONBUTTONDOWN-AUDIT-01** (distinguish nothing happens vs double-step; cover Ollama keep-alive, Reply verbosity, Connection timeout sliders).
 - ★★ **Your tab is not remembered when you leave and reopen** — **TAB-RESUME-01** Partial (tab + scroll restore; focus-after-reopen separate).
 - ★★★ **D11 legacy-loader shim removal** — **D11-SHIM-01** Partial (RPC probe ok; Main-tab Ask UI pass open).
@@ -1408,7 +1408,7 @@ visibility-oracle plan (decky-plugin-studio planning/06) will turn it into one t
 - **Reply-language snapshot RPC (2026-08-03 fix)** — verified via `probe_deck_rpc_surface.py`; UI translation spot-check optional.
 - **Session RAG / routing merge RPCs (2026-08-02)** — **SESSION-RAG-CHIPS-01** Verified; **ROUTING-MERGE-01** Open.
 - **Shell state + tab payload extractions (step 8)** — **SHELL-PAYLOAD-01** Open. Smoke: six tabs, one Ask, Ollama tab after Clear all plugin data.
-- **Token streaming Phase B — multi-stop navigation + scroll follow (2026-08-07)** — **STREAM-09**, **STREAM-FOLLOW-01** Open. [05-token-streaming-review.md § 3.2](05-token-streaming-review.md).
+- **Token streaming Phase B — multi-stop navigation + scroll follow (2026-08-07)** — **STREAM-09**, **STREAM-FOLLOW-01** Open. [05-token-streaming-review.md § 3.2](../../../bonsAI-workshop/archive/05-token-streaming-review.md).
 - **Voice input `status()` missing (2026-08-03 fix)** — on-Deck retry of live recording still needed. [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md).
 
 
@@ -1418,7 +1418,7 @@ visibility-oracle plan (decky-plugin-studio planning/06) will turn it into one t
 - ★★ `[KB]` **Compat routing widened to word-boundary topics (D16)** — **VERIFY.** Fixed 2026-08-06. Row **KB-ROUTER-01**.
   - Verified on the Deck 2026-09-04, Speed mode, no game running. All four KB-ROUTER-01 sentences routed to `compat_tips`
     with `Source: shared troubleshooting tips`: the memory-card one, the online-kick one, the touchpad one and the
-    PlayStation 2 one (whose answer names EmuDeck). Evidence `docs/test-evidence/KB-ROUTER-01-q*.json`.
+    PlayStation 2 one (whose answer names EmuDeck). Evidence `workshop:test-evidence/KB-ROUTER-01-q*.json`.
 
 - ★★★ `[KB]` **Source attribution on knowledge chips** — **VERIFY.** Shipped 2026-08-09. Both sub-checks closed on device; the
   2026-08-14 capture-date check is still owed. Row **KB-ATTRIB-01**.
@@ -1442,7 +1442,7 @@ Both owed Deck checks had in fact passed before this entry was moved; nobody had
 
 - **THINK-EFFORT-05 — PASS 2026-09-03.** Down from the Reply style slider reaches the row at *Off*; Right walks
   Off → Brief → Balanced → Deep and stops; Left walks back; Down leaves to *Custom timeouts*; Up returns. No button
-  acted on a direction press. `docs/test-evidence/ONBUTTONDOWN-AUDIT-01-and-THINK-EFFORT-05-b.json`.
+  acted on a direction press. `workshop:test-evidence/ONBUTTONDOWN-AUDIT-01-and-THINK-EFFORT-05-b.json`.
 - **THINK-EFFORT-04 — PASS 2026-09-04.** `qwen3.5:4b` forced first in the try order with Thinking on **Deep**: a 212 s
   answer arrived, Show details read `Routed qwen3.5:4b`, and no reasoning leaked into the reply body. All four segments
   took the ring, which re-confirmed the D-pad row.
@@ -1522,7 +1522,7 @@ extractor on the deployed build over SSH; the screen shows only its consequence,
 render, one Ask end to end, the Ollama tab after Clear all plugin data. Main, Ollama, Settings, Permissions
 and Developer were walked 2026-09-03. The Ollama tab after a wipe passed on the Deck 2026-09-16: the tab came
 back reading as a fresh, unconfigured Deck, with nothing stale left over. Evidence
-`docs/test-evidence/plan56-WIPE-01.summary.json`. Row **SHELL-PAYLOAD-01**.
+`workshop:test-evidence/plan56-WIPE-01.summary.json`. Row **SHELL-PAYLOAD-01**.
 
 - **Verified on the Deck 2026-09-18:** the About tab's own D-pad walk down its four links, row
   **ABOUT-LINKS-01**, was the only piece left. Down from the language dropdown reached all four links in
@@ -1530,7 +1530,7 @@ back reading as a fresh, unconfigured Deck, with nothing stale left over. Eviden
   pressing the button on the GitHub link opened Steam's own browser at the project's page. One thing worth
   knowing: pressing the back button to leave that browser closed the whole plugin panel rather than only the
   browser page, but reopening the panel landed back on the About tab with nothing lost. Evidence
-  `docs/test-evidence/plan61-ABOUT-LINKS-01.json`.
+  `workshop:test-evidence/plan61-ABOUT-LINKS-01.json`.
 
 ## Moved from the roadmap 2026-09-23
 
@@ -1547,14 +1547,14 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   the GitHub release 2026-09-23** — both hosts read back as serving 2026.09.18. Still owed: pressing the
   Update knowledge base button on the Deck so it pulls from those public hosts, and moving the library onto
   the SD card; both scheduled for later in plan 64. Evidence
-  `docs/test-evidence/plan58p1-QA-TEN-GAMES-01.json`.
+  `workshop:test-evidence/plan58p1-QA-TEN-GAMES-01.json`.
 
   **Closed 2026-09-23, both owed pieces confirmed on the Deck.** Pressing Update knowledge base read
   version 2026.09.18 and reached the public manifest (it could only say "Version 2026.09.18 is the latest"
   after reading it), though nothing needed downloading since the Deck already had that version. The
   download-from-a-public-host proof came from the next check instead: removing the library and downloading
   it again pulled `corpus.db.zlib` from huggingface.co, landed on the SD card, and read version 2026.09.18.
-  Evidence `docs/test-evidence/plan64-W1-R1.json`, `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD.json`.
+  Evidence `workshop:test-evidence/plan64-W1-R1.json`, `workshop:test-evidence/plan64-TWO-TAPS-DOWNLOAD.json`.
 
 ### Speed-mode VRAM preload (closed for its timing check, 2026-09-23, flow H)
 
@@ -1570,7 +1570,7 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   2026-09-23 (flow G):** a small model was pulled by typed name to stand in for one under the cap, but the
   AI models screen's default view (Essentials only) showed no row for an installed model outside the three
   essentials, so there was nothing to star for Ask and no way to remove it without opening Filters by hand.
-  **Found and fixed the same night, `b26f536`.** Evidence `docs/test-evidence/plan64-PRELOAD-01-try2.json` (+ screenshot).
+  **Found and fixed the same night, `b26f536`.** Evidence `workshop:test-evidence/plan64-PRELOAD-01-try2.json` (+ screenshot).
 
   **Closed 2026-09-23 for the timing check, confirmed on the Deck (flow H).** With `qwen2.5:1.5b` starred
   for Ask (now possible after the `b26f536` fix above), warming it up at boot then asking a first question:
@@ -1581,8 +1581,8 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   first words came 2.3 seconds sooner than cold (7.72s against 10.05s), and the small model was not loaded a
   second time; one other model did load after the warm press, but that is the note-search model, which the
   warm-up does not cover and which the cold run loaded too. Evidence
-  `docs/test-evidence/plan64-PRELOAD-01-try3.json`, `docs/test-evidence/plan64-PRELOAD-01-try3-timing.json`,
-  `docs/test-evidence/plan64-PRELOAD-01-try4.json`. **Still open, not covered by this row's close:** the
+  `workshop:test-evidence/plan64-PRELOAD-01-try3.json`, `workshop:test-evidence/plan64-PRELOAD-01-try3-timing.json`,
+  `workshop:test-evidence/plan64-PRELOAD-01-try4.json`. **Still open, not covered by this row's close:** the
   memory-pressure case (**PRELOAD-02**, `docs/testing.md`) and whether a warmed model survives the Deck
   sleeping — neither has been run.
 
@@ -1597,7 +1597,7 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   high-VRAM switch on, but the saved text try order was an empty list the whole time, and the plugin
   deliberately leaves an empty saved order alone rather than writing one — so nothing could move "to the
   top" of a list that was never written. A redo is planned with an order saved first. Evidence
-  `docs/test-evidence/plan64-ROUTING-MERGE-01-top.json`.
+  `workshop:test-evidence/plan64-ROUTING-MERGE-01-top.json`.
 
   **Closed 2026-09-23, confirmed on the Deck (flow H, redo with a saved order).** With a non-empty text
   order saved first, `gemma3:27b` pulled by typed name with the high-VRAM switch on went to the front of
@@ -1610,7 +1610,7 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   `gemma4:e2b-it-qat` first and `gemma3:27b` second, greyed "Tier blocked" because the licence setting
   blocks it, while the saved key (what Ask actually reads) had `gemma3:27b` first. Whether a licence-blocked
   model should still be allowed to sit at the top of the saved order, and whether the screen should show
-  that, is unsettled. Evidence `docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json`.
+  that, is unsettled. Evidence `workshop:test-evidence/plan64-ROUTING-MERGE-01-top-try2.json`.
 
 ### VAC check (`bonsai:vac-check`) on-device QA (closed 2026-09-23, flow H)
 
@@ -1628,7 +1628,7 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   server), but the log never names that request even when the permission is on and a real lookup succeeds
   — so this half proves less than it sounds like it does. Also noted: the ban report itself draws as plain
   lines of pipes and dashes, not as an actual table — filed as its own small bug. Evidence
-  `docs/test-evidence/plan64-VAC-03-06.json`.
+  `workshop:test-evidence/plan64-VAC-03-06.json`.
 
 ### Trim the five documents that are still big (closed 2026-09-24, plan 65)
 
@@ -1643,7 +1643,7 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   149,062 to 100,450 bytes, the manual Deck checks from 141,611 to 58,918, the maintainer-decisions file
   from 429,015 to 124,027, and the long notes behind roadmap entries from 256,301 to 134,168 — 975,989 to
   417,563 bytes together, 57% less to read before any work is marked done. [Plan
-  65](65-trim-docs-split-long-files.md).
+  65](../../../bonsAI-workshop/archive/65-trim-docs-split-long-files.md).
 
 ### The eleven long files, left long on purpose (closed 2026-09-24, plan 65)
 
@@ -1654,13 +1654,13 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   so nobody has to re-measure. Two smaller files already came out of the Ask file the same safe way, each with
   its own test. Do the rest one at a time, each with its own Deck check.
   [Full file list and sizes](../roadmap-details.md#the-eleven-long-files-left-long-on-purpose) ·
-  [Plan](51-refactor-round-two.md).
+  [Plan](../../../bonsAI-workshop/archive/51-refactor-round-two.md).
 
   **Closed 2026-09-24 (plan 65).** Fourteen long files (the eleven plus three found along the way) were
   split, code lines going from 18,767 to 11,521 overall — most files came out between a tenth and two
   thirds smaller, not half, because the screen-drawing code and the one long question-building function
   cannot move without a rewrite. A new check now stops any file over 800 lines of code from growing back.
-  [Plan 65](65-trim-docs-split-long-files.md).
+  [Plan 65](../../../bonsAI-workshop/archive/65-trim-docs-split-long-files.md).
 
 ## Moved from the roadmap 2026-09-28 (plan 76, docs sweep 1)
 
@@ -1672,7 +1672,7 @@ _Copied line for line from the roadmap, nothing reworded, with the closing note 
   and **SETTINGS-CARD-07** (the card rises as the box grows and never reaches the tab bar; only the one-line
   box was measured). Rows 01 to 05 passed. [Plan](archive/45-settings-shortcut-card.md).
 
-**Closed 2026-09-28.** SETTINGS-CARD-06 and SETTINGS-CARD-07 both passed on the Deck 2026-09-26 (plan 70, flow 2b.2), as `docs/testing.md` already says. Evidence `docs/test-evidence/plan70-SETTINGS-CARD-06-07.json`. The three-line case of 07 cannot be made, because the longest setting name fits on two lines; that is not a fail.
+**Closed 2026-09-28.** SETTINGS-CARD-06 and SETTINGS-CARD-07 both passed on the Deck 2026-09-26 (plan 70, flow 2b.2), as `docs/testing.md` already says. Evidence `workshop:test-evidence/plan70-SETTINGS-CARD-06-07.json`. The three-line case of 07 cannot be made, because the longest setting name fits on two lines; that is not a fail.
 
 ## Closed 2026-10-02 (plan 79, Deck block 2a, build `d810328b`)
 
@@ -1680,12 +1680,12 @@ _Copied line for line from the roadmap, nothing reworded, with the closing note 
   2026-10-02.** It repeats what Browse models already offers. One thing to keep: on a fresh Deck it is today the
   only one-press way to get the starter models (Install Ollama installs the engine only). Before removing it, give
   Browse models a one-press "install the starter set", or have a first Install Ollama offer the starter models.
-  **Closed 2026-10-02, passed on the Deck (rows P79-OLLAMA-WALK and P79-STARTER-SET-BUTTON; fixes `c76ef452`, `d9c00827`, `745e3bad`).** The button is gone; the walk had no dead press; Browse models has an "Install the starter set" button whose ask-first box opens on Not now and downloads nothing. Still owed: pressing yes, and the offer after a first Install Ollama (unit tests only). Evidence `docs/test-evidence/plan79-P79-OLLAMA-WALK-AFTER.json`, `plan79-P79-STARTER-SET-BUTTON.json`.
+  **Closed 2026-10-02, passed on the Deck (rows P79-OLLAMA-WALK and P79-STARTER-SET-BUTTON; fixes `c76ef452`, `d9c00827`, `745e3bad`).** The button is gone; the walk had no dead press; Browse models has an "Install the starter set" button whose ask-first box opens on Not now and downloads nothing. Still owed: pressing yes, and the offer after a first Install Ollama (unit tests only). Evidence `workshop:test-evidence/plan79-P79-OLLAMA-WALK-AFTER.json`, `plan79-P79-STARTER-SET-BUTTON.json`.
 
 - ★ `[ui]` **"Remember what I typed" becomes one on/off switch** — **OPEN, asked for by the maintainer 2026-10-02.**
   Today it is three buttons: All, Search, None. Wanted: one switch, on = All, off = None. A saved "Search" becomes
   off (the maintainer's call, 2026-10-02).
-  **Closed 2026-10-02, passed on the Deck with the session's ruling on the ring (row P79-REMEMBER-TYPED-SWITCH; fixes `a16aca77`, `268e2f8a`).** One switch; on kept the typed words, off cleared them, off stayed off after a reload; the D-pad lands on it with a grey row highlight, counted as the pass. Still owed: a Deck with "Search" saved showing off, and the on position after a reload. Evidence `docs/test-evidence/plan79-P79-REMEMBER-TYPED-SWITCH.json`.
+  **Closed 2026-10-02, passed on the Deck with the session's ruling on the ring (row P79-REMEMBER-TYPED-SWITCH; fixes `a16aca77`, `268e2f8a`).** One switch; on kept the typed words, off cleared them, off stayed off after a reload; the D-pad lands on it with a grey row highlight, counted as the pass. Still owed: a Deck with "Search" saved showing off, and the on position after a reload. Evidence `workshop:test-evidence/plan79-P79-REMEMBER-TYPED-SWITCH.json`.
 
 - ★★ `[platform]` **The settings list is written out seven times** — **OPEN, deferred on purpose 2026-09-15
   (plan 55, D104), carried over 2026-09-24 when that plan was archived.** About fifty settings, and the screen
@@ -1698,20 +1698,20 @@ _Copied line for line from the roadmap, nothing reworded, with the closing note 
 
 - ★★ `[chat]` **A chat's Save and Delete buttons show only while its row has the ring, and Delete is a bin with two slots** — **VERIFY, built 2026-10-02 (`deea4f20`, `d2c1d93c`), asked for by the maintainer; the maintainer picked icon 2, the bin with slots.**
   **Deck 2026-10-02 (build `d810328b`): four of five steps pass.** With the ring elsewhere there is no disk or bin; Left reaches the disk and A opens Save, B closes it; Right twice reaches Delete, a bin with a lid and two slots, A opens the Delete box, B closes it; moving away hides both. **FAIL: the chat's name moves 15.2 px right and shrinks 31.8 px when the ring comes onto the row (the pass line is under 1 px).** A second round has not landed yet; re-check owed.
-  Row **P79-CHAT-ROW-BUTTONS**. Evidence `docs/test-evidence/plan79-P79-CHAT-ROW-BUTTONS.json`. The Delete box opening on Delete is its own bug under Bugs.
-  **Closed 2026-10-02, passed on the Deck (row P79-CHAT-ROW-BUTTONS; fixes `deea4f20`, `d2c1d93c`, `c3dcf37e`).** The chat's name box moved 0 px in x, y and width between the ring on a chip, on the row and on the "N earlier" line; disk and bin show only with the ring on the row; Left reaches Save, Right twice reaches Delete (a bin with a lid and two slots), A opens the Delete box on "Keep chat". Evidence `docs/test-evidence/plan79-P79-CHAT-ROW-BUTTONS-try2.json`.
+  Row **P79-CHAT-ROW-BUTTONS**. Evidence `workshop:test-evidence/plan79-P79-CHAT-ROW-BUTTONS.json`. The Delete box opening on Delete is its own bug under Bugs.
+  **Closed 2026-10-02, passed on the Deck (row P79-CHAT-ROW-BUTTONS; fixes `deea4f20`, `d2c1d93c`, `c3dcf37e`).** The chat's name box moved 0 px in x, y and width between the ring on a chip, on the row and on the "N earlier" line; disk and bin show only with the ring on the row; Left reaches Save, Right twice reaches Delete (a bin with a lid and two slots), A opens the Delete box on "Keep chat". Evidence `workshop:test-evidence/plan79-P79-CHAT-ROW-BUTTONS-try2.json`.
 
 - ★★★ `[chat]` **Opening "N earlier" floods a long chat with rows** — **OPEN, reported by the maintainer
   2026-09-25; needs a drawing of the options first.** Every earlier question becomes its own row, 42 in one
   chat, filling the screen. [Detail](roadmap-details.md#opening-n-earlier-floods-a-long-chat-with-rows).
-  **Closed 2026-10-02, passed on the Deck (row P79-EARLIER-BY-DAY; fixes `86f80087`, `6a13c469`, `927666c5`).** Opening "N earlier" shows one line per day: Wed 30 Sep 16, Yesterday 67, Today 16, which add up to the 99. Down and Up visit the same stops in opposite order, none twice, never Retry; Up from the newest question lands on the day line over it; Up from "N earlier" reaches the chat row in one press; B closes a day line, then "N earlier". Opening or closing a day line drops the ring for one press (filed under Bugs). Evidence `docs/test-evidence/plan79-P79-EARLIER-BY-DAY.json`.
+  **Closed 2026-10-02, passed on the Deck (row P79-EARLIER-BY-DAY; fixes `86f80087`, `6a13c469`, `927666c5`).** Opening "N earlier" shows one line per day: Wed 30 Sep 16, Yesterday 67, Today 16, which add up to the 99. Down and Up visit the same stops in opposite order, none twice, never Retry; Up from the newest question lands on the day line over it; Up from "N earlier" reaches the chat row in one press; B closes a day line, then "N earlier". Opening or closing a day line drops the ring for one press (filed under Bugs). Evidence `workshop:test-evidence/plan79-P79-EARLIER-BY-DAY.json`.
 
 - ★ `[KB]` `[chips]` **A game offers ten of its own suggestion chips, not six** — **VERIFY, built 2026-10-02 (`c88f140c`), the maintainer's add-on (D122 item 9).**
   A given game chip came back about every 66 seconds; now about every 108. Deck check owed: row **P79-GAME-CHIPS-TEN**: with a game running, ten different game chips before one repeats.
-  **Closed 2026-10-02, passed on the Deck (row P79-GAME-CHIPS-TEN; `c88f140c`).** Ten different Hades chips (bosses, a place, items, mechanics) before the first repeat at 100 s. The panel shows two chips at once, one of them general. Evidence `docs/test-evidence/plan79-P79-TEN-GAME-CHIPS.json`.
+  **Closed 2026-10-02, passed on the Deck (row P79-GAME-CHIPS-TEN; `c88f140c`).** Ten different Hades chips (bosses, a place, items, mechanics) before the first repeat at 100 s. The panel shows two chips at once, one of them general. Evidence `workshop:test-evidence/plan79-P79-TEN-GAME-CHIPS.json`.
 
 - ★★ `[chips]` **The suggestion chip under the D-pad ring gets a soft blue fill instead of the bottom bar** — built as `27172839`, the maintainer's pick (drawing 1); part of the Verify entry "Long suggestion chips".
-  **Closed 2026-10-02, passed on the Deck on what was measured (row P79-CHIP-SOFT-FILL).** Ring on the chip: a pale blue layer (rgba 56,189,248,0.2) over the grey gradient, no bar under it; ring away: grey only. The computed edge is white at 10 percent, 0.67 px, the same on or off. Look: the maintainer's checks page. Evidence `docs/test-evidence/plan79-P79-CHIP-SOFT-FILL.json`.
+  **Closed 2026-10-02, passed on the Deck on what was measured (row P79-CHIP-SOFT-FILL).** Ring on the chip: a pale blue layer (rgba 56,189,248,0.2) over the grey gradient, no bar under it; ring away: grey only. The computed edge is white at 10 percent, 0.67 px, the same on or off. Look: the maintainer's checks page. Evidence `workshop:test-evidence/plan79-P79-CHIP-SOFT-FILL.json`.
 
 ## Closed 2026-10-03 (plan 81, Deck block 2a, moved from Verify)
 
@@ -1719,7 +1719,7 @@ _Copied line for line from the roadmap's Verify entry, nothing reworded, with th
 
 - ★ `[ui]` **Icons on the "Update knowledge base" and "Remove" buttons** — **VERIFY, built 2026-10-02 (`2975570f`), asked for by the maintainer.**
   Update keeps the refresh arrow, Download gets a download arrow, Remove gets a bin; words and D-pad order unchanged. Deck check owed, never run: **P79-KB-BUTTON-ICONS**.
-  **Closed 2026-10-03, passed on the Deck (plan 81, Deck block 2a, build `afd2f444`; row P79-KB-BUTTON-ICONS).** Installed (library 2026.09.26): Update has a circular refresh arrow and Remove a bin, one 16 px icon before each label; Down, Right and Left landed on Update, Remove and back on Update as before. Not installed (library folder moved aside): the tab offers "Download knowledge base" with a download arrow (an arrow pointing down onto a line); Down, Right and Up moved as expected. Neither button was pressed. Evidence `docs/test-evidence/plan81-P79-KB-BUTTON-ICONS-installed.json`, `docs/test-evidence/plan81-P79-KB-BUTTON-ICONS-notinstalled.json` (+ .png).
+  **Closed 2026-10-03, passed on the Deck (plan 81, Deck block 2a, build `afd2f444`; row P79-KB-BUTTON-ICONS).** Installed (library 2026.09.26): Update has a circular refresh arrow and Remove a bin, one 16 px icon before each label; Down, Right and Left landed on Update, Remove and back on Update as before. Not installed (library folder moved aside): the tab offers "Download knowledge base" with a download arrow (an arrow pointing down onto a line); Down, Right and Up moved as expected. Neither button was pressed. Evidence `workshop:test-evidence/plan81-P79-KB-BUTTON-ICONS-installed.json`, `workshop:test-evidence/plan81-P79-KB-BUTTON-ICONS-notinstalled.json` (+ .png).
 
 ## Closed 2026-10-03 (plan 81, Deck block 2c, moved from Verify)
 
@@ -1727,8 +1727,8 @@ _Copied line for line from the roadmap's Verify entry, nothing reworded, with th
 
 - ★★ `[chat]` **Summing up offers a fresher title** — **VERIFY, built 2026-10-02 (plan 79, `a7fe4ac2`, `888a0efa`, `379f8d8b`, `aaf9dca3`), asked for by the maintainer 2026-09-25 ([D122](audit/maintainer-decisions-locked.md#d122--locked-2026-10-02-raised-2026-10-02--plan-79-the-last-session-before-060-the-ten-calls) call 6).**
   When the AI judges the chat's title stale, the summary card ends with "Rename this chat to ...?" with Rename and Keep; a chat renamed by hand is never offered one. **Deck 2026-10-02 (build `d810328b`):** an offer from the automatic summing-up showed both buttons, the D-pad reached both, and Keep took the offer away and left the title.
-  **Still owed:** pressing Rename (never pressed, so "a yes renames the chat everywhere it shows" is unproven) and the Sum up button route (it was greyed, already summed up). Row **P79-FRESHER-TITLE**. Evidence `docs/test-evidence/plan79-P79-FRESHER-TITLE.json`.
-  **Closed 2026-10-03, passed on the Deck (plan 81, Deck block 2c, build `afd2f444`; row P79-FRESHER-TITLE).** Keep passed 2026-10-02. On 2026-10-03 the Sum up button (summary cleared first) made a card ending "Rename this chat to 'Hollow Knight and Game Tips'?" with Rename and Keep; A on Rename took the offer away and the chat row showed the new name; the chat file and the chat index both held it, and it was still there after closing and reopening Quick Access. The Session tab shows only a count and the list of questions, and no separate chat list was found, so the name could not be compared there. The chat was put back to its old name afterwards. Evidence `docs/test-evidence/plan81-P79-FRESHER-TITLE.json`.
+  **Still owed:** pressing Rename (never pressed, so "a yes renames the chat everywhere it shows" is unproven) and the Sum up button route (it was greyed, already summed up). Row **P79-FRESHER-TITLE**. Evidence `workshop:test-evidence/plan79-P79-FRESHER-TITLE.json`.
+  **Closed 2026-10-03, passed on the Deck (plan 81, Deck block 2c, build `afd2f444`; row P79-FRESHER-TITLE).** Keep passed 2026-10-02. On 2026-10-03 the Sum up button (summary cleared first) made a card ending "Rename this chat to 'Hollow Knight and Game Tips'?" with Rename and Keep; A on Rename took the offer away and the chat row showed the new name; the chat file and the chat index both held it, and it was still there after closing and reopening Quick Access. The Session tab shows only a count and the list of questions, and no separate chat list was found, so the name could not be compared there. The chat was put back to its old name afterwards. Evidence `workshop:test-evidence/plan81-P79-FRESHER-TITLE.json`.
 
 ## Closed 2026-10-03 (plan 81, Deck block 3b, moved from Verify)
 
@@ -1736,18 +1736,18 @@ _Copied line for line from the roadmap's Verify entry, nothing reworded, with th
 
 - ★★★ `[ollama]` **Fold the "Models & routing" section into the AI models box** — **VERIFY, built 2026-10-02 (plan 79, the maintainer's pick, option C; `24708949`, `81ea843d`, `6c70c744`, `4337adbd`, `98ba929e`, `9a33f7bb`).**
   The Ollama tab has one "AI models" button; in the box each installed model shows its place in the try order with up and down buttons, a Text / Pictures switch picks the order, "Reset order" asks first, PC models get their own rows and models too big for the Deck say they are skipped. The two old try-order screens are gone.
-  **Deck 2026-10-02 (build `6e297645`):** opening and closing the box, the Try order row and its arrows, Reset order and the Text / Pictures switch pass. **Deck 2026-10-03 (build `afd2f444`):** moving a place and the half with the AI on a PC pass; "Skipped: too big" failed (the box did not know the PC models' sizes) and is fixed in `76f015d1` (entry in Verify). **Still owed:** the "Skipped: too big" label on a new build. Row **P79-MODELS-TRY-ORDER**. Evidence `docs/test-evidence/plan79-P79-MODELS-TRY-ORDER.json`, `docs/test-evidence/plan81-P79-MODELS-TRY-ORDER.json`.
-  **Closed 2026-10-03, every part passed on the Deck (plan 81, Deck block 3b, build `9e68bce1`; row P79-MODELS-TRY-ORDER).** The last part, "Skipped: too big": with the Deck pointed at the PC's real AI (31 models), the box showed the label on qwen3.6:27b (16 GB, place 11), gemma4:26b (17 GB, place 14) and gemma-cursor:latest (17 GB, place 12) and on no other PC model; with "Allow high-VRAM models in routing" on there were 0 labels, off again 3. B closed the box; the saved setting still read false; the Deck was put back on its own AI. Parts a, b, d and e passed 2026-10-02 (build `6e297645`); c and the PC rows passed 2026-10-03 (build `afd2f444`). Evidence `docs/test-evidence/plan79-P79-MODELS-TRY-ORDER.json`, `docs/test-evidence/plan81-P79-MODELS-TRY-ORDER.json`, `docs/test-evidence/plan81-P79-MODELS-TRY-ORDER-try2.json` (+ .png).
+  **Deck 2026-10-02 (build `6e297645`):** opening and closing the box, the Try order row and its arrows, Reset order and the Text / Pictures switch pass. **Deck 2026-10-03 (build `afd2f444`):** moving a place and the half with the AI on a PC pass; "Skipped: too big" failed (the box did not know the PC models' sizes) and is fixed in `76f015d1` (entry in Verify). **Still owed:** the "Skipped: too big" label on a new build. Row **P79-MODELS-TRY-ORDER**. Evidence `workshop:test-evidence/plan79-P79-MODELS-TRY-ORDER.json`, `workshop:test-evidence/plan81-P79-MODELS-TRY-ORDER.json`.
+  **Closed 2026-10-03, every part passed on the Deck (plan 81, Deck block 3b, build `9e68bce1`; row P79-MODELS-TRY-ORDER).** The last part, "Skipped: too big": with the Deck pointed at the PC's real AI (31 models), the box showed the label on qwen3.6:27b (16 GB, place 11), gemma4:26b (17 GB, place 14) and gemma-cursor:latest (17 GB, place 12) and on no other PC model; with "Allow high-VRAM models in routing" on there were 0 labels, off again 3. B closed the box; the saved setting still read false; the Deck was put back on its own AI. Parts a, b, d and e passed 2026-10-02 (build `6e297645`); c and the PC rows passed 2026-10-03 (build `afd2f444`). Evidence `workshop:test-evidence/plan79-P79-MODELS-TRY-ORDER.json`, `workshop:test-evidence/plan81-P79-MODELS-TRY-ORDER.json`, `workshop:test-evidence/plan81-P79-MODELS-TRY-ORDER-try2.json` (+ .png).
 
 ## Closed 2026-10-03 (plan 81 paperwork 5, moved from Verify)
 
 _Copied line for line from the roadmap's Verify entry, nothing reworded, with the closing note added at the end._
 
 - ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30: slot row, transcript, presets, Ask bar.
-  Passed on the Deck: 05b, 15d, and 06c (fourth try, 2026-09-23; "Reply ready" now shows within a second, fixed in `73be15f`). **05a's busy half, 06a and 06b, which failed 2026-09-18, passed on the Deck 2026-10-03 (plan 81, build `afd2f444`):** with Ask running in one chat and RB to its neighbour, the neighbour showed its own content with its Ask button greyed (busy); the writing chat's dot was a hollow cyan ring with a cyan spark beside its ghost; when it finished while away the dot turned solid green, and LB back cleared it. Evidence `docs/test-evidence/plan81-CHAT-SLOTS-V3-05a-busyhalf.json`, `plan81-CHAT-SLOTS-V3-06a.json` (+ .png), `plan81-CHAT-SLOTS-V3-06b.json`.
+  Passed on the Deck: 05b, 15d, and 06c (fourth try, 2026-09-23; "Reply ready" now shows within a second, fixed in `73be15f`). **05a's busy half, 06a and 06b, which failed 2026-09-18, passed on the Deck 2026-10-03 (plan 81, build `afd2f444`):** with Ask running in one chat and RB to its neighbour, the neighbour showed its own content with its Ask button greyed (busy); the writing chat's dot was a hollow cyan ring with a cyan spark beside its ghost; when it finished while away the dot turned solid green, and LB back cleared it. Evidence `workshop:test-evidence/plan81-CHAT-SLOTS-V3-05a-busyhalf.json`, `plan81-CHAT-SLOTS-V3-06a.json` (+ .png), `plan81-CHAT-SLOTS-V3-06b.json`.
   Nothing else on this entry's own list is owed. One point was judged from the screenshot only: that the spark sits outside the ghost's fade. The bug behind the failures has been on the watch list since 2026-09-29 (it did not reproduce in two clean sessions); it did not show on 2026-10-03 either.
   [Detail](#moved-from-the-roadmap-2026-09-02) · [More](../roadmap-details.md#named-chat-slots).
-  **Closed 2026-10-03 (plan 81 paperwork 5):** every row on the entry's own list has passed on the Deck: 05b, 06c and 15d earlier, and 05a's busy half, 06a and 06b on 2026-10-03 (build `afd2f444`). The testing row is closed in testing.md (moved to archive/testing-closed-2026.md) and the watch-list sighting was closed the same day. One question stays open and is on the roadmap's Done line: which reading of the other chat's Ask button is right, ready or busy (no decision recorded). Evidence `docs/test-evidence/plan81-CHAT-SLOTS-V3-05a-busyhalf.json`, `plan81-CHAT-SLOTS-V3-06a.json` (+ .png), `plan81-CHAT-SLOTS-V3-06b.json`.
+  **Closed 2026-10-03 (plan 81 paperwork 5):** every row on the entry's own list has passed on the Deck: 05b, 06c and 15d earlier, and 05a's busy half, 06a and 06b on 2026-10-03 (build `afd2f444`). The testing row is closed in testing.md (moved to archive/testing-closed-2026.md) and the watch-list sighting was closed the same day. One question stays open and is on the roadmap's Done line: which reading of the other chat's Ask button is right, ready or busy (no decision recorded). Evidence `workshop:test-evidence/plan81-CHAT-SLOTS-V3-05a-busyhalf.json`, `plan81-CHAT-SLOTS-V3-06a.json` (+ .png), `plan81-CHAT-SLOTS-V3-06b.json`.
 
 ## Closed 2026-10-09 (plan 84, moved from Verify)
 
@@ -1755,9 +1755,9 @@ _Copied line for line from the roadmap's Verify entry, nothing reworded, with th
 
 - ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab
   named** — **VERIFY, landed 2026-09-17.** Six equal cells with one icon each, only the current tab named.
-  **Deck run 2026-09-18:** rows 01, 02, 04, 05 and 06 pass; **TAB-STRIP-2A-03** waits on the maintainer's own look. Row 07 (the chat row's dots under the strip) was settled by the maintainer's 2026-09-26 call, "keep the dots, make them line up exactly"; fixed in `e3e849bd` and closed 2026-09-27, the Deck's own screen included (`docs/test-evidence/plan72-F5-DOTS-rowlit-deckscreen.json`). No pick is owed.
+  **Deck run 2026-09-18:** rows 01, 02, 04, 05 and 06 pass; **TAB-STRIP-2A-03** waits on the maintainer's own look. Row 07 (the chat row's dots under the strip) was settled by the maintainer's 2026-09-26 call, "keep the dots, make them line up exactly"; fixed in `e3e849bd` and closed 2026-09-27, the Deck's own screen included (`workshop:test-evidence/plan72-F5-DOTS-rowlit-deckscreen.json`). No pick is owed.
   The free-play sweep's streaming half closed 2026-09-23. [Detail](../roadmap-details.md#the-open-tab-strip-redrawn-six-equal-cells-one-icon-family-only-the-current-tab-named) · [Tab icon](../roadmap-details.md#replace-the-bonsai-tab-icon).
-  **Closed 2026-10-09 (plan 84, docs sweep):** replaced by plan 84 step 4. The open tab strip no longer exists, so there is nothing left to look at: row TAB-STRIP-2A-03 (the maintainer's look) and row TAB-STRIP-2A-07 (the dots; already settled and fixed 2026-09-27) are replaced in testing-manual.md, and rows 01, 02, 04, 05 and 06 had passed on the Deck 2026-09-18. The new bar is checked in rows P84-TABS-01 (passed) and P84-TABS-02 (the touch check, owed). Evidence `docs/test-evidence/plan84-STEPS4-5-7-DECK.json`.
+  **Closed 2026-10-09 (plan 84, docs sweep):** replaced by plan 84 step 4. The open tab strip no longer exists, so there is nothing left to look at: row TAB-STRIP-2A-03 (the maintainer's look) and row TAB-STRIP-2A-07 (the dots; already settled and fixed 2026-09-27) are replaced in testing-manual.md, and rows 01, 02, 04, 05 and 06 had passed on the Deck 2026-09-18. The new bar is checked in rows P84-TABS-01 (passed) and P84-TABS-02 (the touch check, owed). Evidence `workshop:test-evidence/plan84-STEPS4-5-7-DECK.json`.
 
 ## Closed 2026-10-12 (plan 92, moved from Verify)
 
@@ -1765,16 +1765,16 @@ _Copied line for line from the roadmap's Verify entry, nothing reworded, with th
 
 - ★★★ `[ollama]` `[ui]` **The AI models box: filters in a column beside the list** — **VERIFY, built 2026-10-12 ([plan 91](planning/91-models-filter-column-and-denser-tabs.md) under [plan 92](planning/92-feature-night-search-notes-models-tabs.md); `ea50e4f4`, `4e668a54`; [D129](audit/maintainer-decisions-locked.md#d129--locked-2026-10-12-raised-2026-10-12--plans-90-to-92-the-search-tab-your-notes-the-models-box-column-and-the-denser-tabs-the-calls)). Design picked on the mock-up board 2026-10-10 (option A of round 2), the column alone (the maintainer, 2026-10-11).**
   The filters sit in a column beside the list, with "N models match" and Clear at its top and a count beside each choice; Right and Left move between the column and the list; Done and B no longer lose the filter choice. The three chips from the old Filters row are at the bottom of the column; the list's Date column is gone. The AI models screen also no longer redraws itself for as long as it is open (`ea50e4f4`, found while building).
-  **Deck 2026-10-12 (plan 92 block 4a, build `b6d8e9a6`, the monitor):** passed: width (Date column gone, model name column 118.6 px, was 124.3; row P91-MODELS-WIDTH), filters (P91-MODELS-COLUMN-FILTERS) and Done keeps them (P91-MODELS-DONE-KEEPS). **Failed:** the walk (P91-MODELS-COLUMN-WALK): the greyed licence row takes the ring, Down from Advanced stops on the Refresh button, Up from Clear skips it. A second round is owed. Evidence `docs/test-evidence/plan92-P91-MODELS-COLUMN-WALK.json`, `-COLUMN-FILTERS.json`, `-DONE-KEEPS.json`, `-WIDTH.json`.
+  **Deck 2026-10-12 (plan 92 block 4a, build `b6d8e9a6`, the monitor):** passed: width (Date column gone, model name column 118.6 px, was 124.3; row P91-MODELS-WIDTH), filters (P91-MODELS-COLUMN-FILTERS) and Done keeps them (P91-MODELS-DONE-KEEPS). **Failed:** the walk (P91-MODELS-COLUMN-WALK): the greyed licence row takes the ring, Down from Advanced stops on the Refresh button, Up from Clear skips it. A second round is owed. Evidence `workshop:test-evidence/plan92-P91-MODELS-COLUMN-WALK.json`, `-COLUMN-FILTERS.json`, `-DONE-KEEPS.json`, `-WIDTH.json`.
   Not chosen: "Help me choose…" (three questions that fill the column in), and the column asking those questions instead of showing filter names. [Mock-up board, tab 2](https://claude.ai/artifact/XyZfUSPGRZdm2P3mTGV9tR) · [notes](demos/mockup-board/README.md).
-  **Closed 2026-10-12, passed on the Deck (plan 92, second round, build `3115f3de`; row P91-MODELS-COLUMN-WALK).** The second round (`172d013b`, `5b48a189`) took the greyed licence row out of the walk and made Down and Up take the same path through Advanced, Refresh and Clear: 29 stops, all visible, 0 dead presses, 0 cycles, the ticks as at the start. The "Suggested models" chips and the counts of 3 the first Deck pass asked about are not faults (the Deck's one installed model already covers every use; exactly three essentials models exist). Evidence `docs/test-evidence/plan92-P91-MODELS-COLUMN-WALK-try2.json`.
+  **Closed 2026-10-12, passed on the Deck (plan 92, second round, build `3115f3de`; row P91-MODELS-COLUMN-WALK).** The second round (`172d013b`, `5b48a189`) took the greyed licence row out of the walk and made Down and Up take the same path through Advanced, Refresh and Clear: 29 stops, all visible, 0 dead presses, 0 cycles, the ticks as at the start. The "Suggested models" chips and the counts of 3 the first Deck pass asked about are not faults (the Deck's one installed model already covers every use; exactly three essentials models exist). Evidence `workshop:test-evidence/plan92-P91-MODELS-COLUMN-WALK-try2.json`.
 
 ## Closed 2026-10-14 (plan 93 docs sweep 4, moved from Verify)
 
 ### Terse mode: Speed answers in three lines (closed 2026-10-14)
 
 - ★★★ `[reply]` **Terse mode: Speed answers in three lines** — **VERIFY, built 2026-10-14 (plan 93, `9c12ccce`, `223d6abb`, `a21ad0e1`); the old switch passed on the Deck 2026-10-08 (plan 83, row P83-J4-TERSE-TOGGLE).**
-  Terse is now the first stop of the Reply style slider (Terse, Caveman, Balanced, Detailed) and applies in every Ask mode; the separate switch is gone; a saved Terse on loads as the Terse stop. Five Speed questions with Terse on gave one line each, 17 to 36 words (`docs/test-evidence/plan93-M11-TERSE-LINES.json`).
+  Terse is now the first stop of the Reply style slider (Terse, Caveman, Balanced, Detailed) and applies in every Ask mode; the separate switch is gone; a saved Terse on loads as the Terse stop. Five Speed questions with Terse on gave one line each, 17 to 36 words (`workshop:test-evidence/plan93-M11-TERSE-LINES.json`).
   Owes row **P93-B13-TERSE-SLIDER** on the Deck: four stops, one per press, no separate switch, and a Speed, Strategy and Expert answer each at most three lines with a menu under it. The earlier built notes, the three-run answer test and the still-open points (a) to (f), word for word: [roadmap-details.md](../roadmap-details.md#plan-93-notes-moved-from-the-roadmap-2026-10-14-docs-sweep-3).
 
-**Closed 2026-10-14 (plan 93 Deck block D2, build `0ef34f82`, row P93-B13-TERSE-SLIDER):** passed on the Deck. The Reply style slider has four stops in the order Terse, Caveman, Balanced, Detailed, no separate Terse switch, one stop per press both ways, the ring on the knob, both ends hold, and Down lands on the Thinking buttons. With Terse on, a Speed, a Strategy and an Expert answer were each three lines with a menu of choices under it. Evidence `docs/test-evidence/plan93-P93-B13-TERSE-SLIDER.json`. The earlier still-open points (a) to (f) are not closed by this row; they stay in [roadmap-details.md](../roadmap-details.md#plan-93-notes-moved-from-the-roadmap-2026-10-14-docs-sweep-3).
+**Closed 2026-10-14 (plan 93 Deck block D2, build `0ef34f82`, row P93-B13-TERSE-SLIDER):** passed on the Deck. The Reply style slider has four stops in the order Terse, Caveman, Balanced, Detailed, no separate Terse switch, one stop per press both ways, the ring on the knob, both ends hold, and Down lands on the Thinking buttons. With Terse on, a Speed, a Strategy and an Expert answer were each three lines with a menu of choices under it. Evidence `workshop:test-evidence/plan93-P93-B13-TERSE-SLIDER.json`. The earlier still-open points (a) to (f) are not closed by this row; they stay in [roadmap-details.md](../roadmap-details.md#plan-93-notes-moved-from-the-roadmap-2026-10-14-docs-sweep-3).

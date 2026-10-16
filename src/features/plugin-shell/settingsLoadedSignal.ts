@@ -6,7 +6,7 @@
  * this mount) so they can wait for it, without index.tsx threading a value down to reach them.
  * OllamaWhereAiRunsSection.tsx is the one that needed this: its automatic connection check has to
  * wait for real settings, or it probes a leftover default host and logs a failure it caused
- * itself (docs/test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json).
+ * itself (workshop:test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json).
  *
  * Used for: usePluginSettings.ts writes it, the same moment its own `settingsLoaded` state turns
  * true. useSettingsLoadedFlag (src/hooks/useSettingsLoadedFlag.ts) reads it.

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { PULL_MODEL_CATALOG, comparePullModelEntriesStretchOrder } from "./pullModelCatalog";
 
-// Sept 2026 bake-off additions to the Expert (large) group (docs/planning/41-deck-model-survey.md,
+// Sept 2026 bake-off additions to the Expert (large) group (workshop:planning/41-deck-model-survey.md,
 // D73): the models that beat today's Gemma 4 on the answer test, now offered for download.
 describe("PULL_MODEL_CATALOG stretch (Expert large) additions", () => {
   const byTag = (tag: string) => PULL_MODEL_CATALOG.find((e) => e.tag === tag);
@@ -42,7 +42,7 @@ describe("PULL_MODEL_CATALOG stretch (Expert large) additions", () => {
 
 describe("comparePullModelEntriesStretchOrder", () => {
   it("puts the five bake-off names first, in the locked order, ahead of the older stretch picks", () => {
-    // Locked order (docs/planning/41-deck-model-survey.md § 9, D73): the models that beat
+    // Locked order (workshop:planning/41-deck-model-survey.md § 9, D73): the models that beat
     // today's Gemma 4 on the September 2026 answer test, in the maintainer's own ranking.
     // Anything else in the group (an older stretch pick) falls after it, newest first —
     // this is the comparator PullModelsModal.tsx uses to sort the Expert (large) group.

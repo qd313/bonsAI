@@ -6,7 +6,7 @@
  * order (the maintainer's rule, D120 item 6): the next section, this section's words last to first, then
  * its box. Before this file, Up skipped every word: with the ring on a section, the word finder never
  * counts that section's own words as before the ring (the Deck, 2026-10-01,
- * docs/test-evidence/plan78-QA-FREE-PLAY-01-GAME-try3.json: three words, one landing, two scrolls).
+ * workshop:test-evidence/plan78-QA-FREE-PLAY-01-GAME-try3.json: three words, one landing, two scrolls).
  *
  * Used for: answerBubbleNavigation.ts, whose Up press (`handleAnswerBubbleMoveUp`) tries
  * `wordStepUp()` first and steps into the section above through `landGoingUpInto()`, and whose entry

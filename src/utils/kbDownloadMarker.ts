@@ -8,7 +8,7 @@
  * began hears too). That second half is plan 76 lane 2 round 3: with internet downloads off, the
  * download notice saves the permission first and says yes only then, after the rebuild; the copy on
  * screen had read "Not installed" and never heard, and showed it for about a minute
- * (docs/test-evidence/plan76-P76-KB-BOX-RING-RETURN.json).
+ * (workshop:test-evidence/plan76-P76-KB-BOX-RING-RETURN.json).
  *
  * Used for: KnowledgeBaseSection.tsx.
  */

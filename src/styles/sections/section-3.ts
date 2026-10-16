@@ -70,7 +70,7 @@ export function buildSection3Section(): string {
         /*
           WARNING: every [class*="PanelSection"] / [class*="PanelSectionRow"] selector in this file
           matches NOTHING on the shipping Deck build. Measured 2026-08-16 with
-          scripts/probe_deck_ask_row_width.py: 0 matches inside the QAM, because Steam hashes those
+          workshop:scripts/probe_deck_ask_row_width.py: 0 matches inside the QAM, because Steam hashes those
           class names (the PanelSection wrapping Main's rows is "_3gY0aBuNR8_NPTpXIYfkby").
           "_TabContentsScroll" survives as a literal, which is why only that reset actually applies.
 

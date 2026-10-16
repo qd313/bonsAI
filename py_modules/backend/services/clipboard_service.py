@@ -13,7 +13,7 @@ in a bounded amount of time, with a plain success-or-error result either caller 
 on screen.
 Does not: Work if the two helper scripts are missing from disk. Retry a failed write --
 one attempt per call, because a write only reaches this file after the browser's own
-copy-and-paste has already failed once (see docs/archive/clipboard-spike-2026-08-28.md).
+copy-and-paste has already failed once (see workshop:archive/clipboard-spike-2026-08-28.md).
 """
 
 from __future__ import annotations

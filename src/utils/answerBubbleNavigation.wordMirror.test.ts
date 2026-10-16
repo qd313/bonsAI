@@ -2,7 +2,7 @@
  * Title: Underlined game words are stops both ways: a walk Down and a walk Up land on the same ones
  *
  * Purpose: Pin plan 79 helper AC, bug 1, from the Deck run of 2026-10-01 with Deep Rock Galactic:
- * Survivor (docs/test-evidence/plan78-QA-FREE-PLAY-01-GAME-try3.json). Walking Down, each underlined
+ * Survivor (workshop:test-evidence/plan78-QA-FREE-PLAY-01-GAME-try3.json). Walking Down, each underlined
  * word in the answer was a stop of its own; walking Up, the second section (three words) took one
  * landing and two presses that only scrolled, and the first section the same: not one word was a stop.
  * The maintainer's rule (D120 item 6) is that Up and Down visit the same stops, in opposite order.

@@ -1,6 +1,6 @@
 """A new question about a different game must not be handed the last answer to copy (plan 78, helper I).
 
-Seen on the Deck 2026-09-27 (docs/test-evidence/plan72-Z-FREEPLAY.json, finding 12) and measured
+Seen on the Deck 2026-09-27 (workshop:test-evidence/plan72-Z-FREEPLAY.json, finding 12) and measured
 again on the PC's copy of the Deck's model: after a Doom answer, an answer about a different game's
 boss came back with 49 words of the Doom answer word for word. The chat memory put the earlier
 answer's opening 400 characters in front of the new question, under a heading that told the model

@@ -4,7 +4,7 @@ Purpose: Pin the order inside run_rag_corpus_download: the caller's on_installed
 before the shared state reads phase "done".
 Used for: rag_corpus_download_service.run_rag_corpus_download and main.py's
 start_rag_corpus_download, which passes the settings save in as on_installed.
-Solves: On the Deck (docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD.json) the Knowledge base
+Solves: On the Deck (workshop:test-evidence/plan64-TWO-TAPS-DOWNLOAD.json) the Knowledge base
 section read "Not installed" for a minute after an SD-card download finished. The screen stops
 polling as soon as it reads "done" and checks "installed" once, from settings; the path was
 saved only after "done" was already visible, so that one check found nothing.

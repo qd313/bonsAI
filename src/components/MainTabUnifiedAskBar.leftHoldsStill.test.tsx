@@ -2,7 +2,7 @@
  * Title: The strip's ends hold still: Left on the paperclip, Right on the small Ask
  * Purpose: Pin the roadmap fix for "Left from the Ask button, and from the paperclip, hands the
  *          highlight to Steam's Quick Access rail" (measured 2026-09-15 evening,
- *          docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json steps 2 and 3 and
+ *          workshop:test-evidence/plan55-trap-run3-new-chat-with-live-turn.json steps 2 and 3 and
  *          plan55-trap-run5-empty-chat-session-row-hades-running.json steps 3 and 4). Both
  *          buttons were the leftmost stop in their own row and had no sibling further left, so
  *          nothing ever claimed Left -- Steam's own "past the edge" nav ran and threw the ring

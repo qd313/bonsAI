@@ -1,6 +1,6 @@
 /**
  * Title: Opening Show details brings the details into view above the dock
- * Purpose: Pin the fix for plan 70 flow 4.2 (docs/test-evidence/plan70-F4-SHOW-DETAILS.json and
+ * Purpose: Pin the fix for plan 70 flow 4.2 (workshop:test-evidence/plan70-F4-SHOW-DETAILS.json and
  *          plan70-F4-SHOW-DETAILS-opened-behind-dock.png): A on "Show details" opened the details
  *          under the notes block with their tab row at y 617, behind the dock (top y 600), and the
  *          view did not move, so the only visible change was the words turning into "Hide details".

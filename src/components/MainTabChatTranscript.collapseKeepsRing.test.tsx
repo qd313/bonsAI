@@ -9,7 +9,7 @@
  *         `.bonsai-chat-turn-row-body` stop. Collapsing drops Retry, which changes the header
  *         from two child stops to one and unmounts whichever stop held the ring — Steam had
  *         nothing left to fall back to (seen 2026-09-06 while checking the corner icons;
- *         docs/test-evidence/press-question-not-retry.json: press routed, focus moved the
+ *         workshop:test-evidence/press-question-not-retry.json: press routed, focus moved the
  *         question -> "nothing"). The header's OUTER element keeps the same key across that
  *         change, so this hands the ring back to it once the turn collapses.
  * Does not: Prove the fix on-device. The Deck check this owes: open the newest question, press A

@@ -1,7 +1,7 @@
 /**
  * Title: Down leaves the answer in one press from a short last section
  *
- * Purpose: Pin plan 78 helper D, from two Deck runs (docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-R2.json
+ * Purpose: Pin plan 78 helper D, from two Deck runs (workshop:test-evidence/plan77-P77-WALK-COVERS-MIRROR-R2.json
  * and plan77-P77-FINAL-SMOKE.json). Walking Down, the answer's last section (60 px in one run, 90 px in the
  * other, both shorter than the 202 px band) landed with its bottom on the dock, and the next press only
  * scrolled the panel 80 px with the ring left on it; the press after that left the answer.

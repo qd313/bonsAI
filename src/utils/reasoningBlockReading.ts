@@ -11,7 +11,7 @@
  *
  * Solves: one Down from the Hide reasoning line used to go straight into the answer, and the panel
  * moved 555 px in one press with the ring never on any of the reasoning (the Deck, plan 82,
- * docs/test-evidence/plan82-M5-REASONING-SCROLL.json); Up did the same backwards.
+ * workshop:test-evidence/plan82-M5-REASONING-SCROLL.json); Up did the same backwards.
  *
  * Does not: decide what Down does after the block (the transcript passes that in: into the answer),
  * nor touch the answer's own walk (answerBubbleNavigation.ts). It reuses that walk's geometry helpers

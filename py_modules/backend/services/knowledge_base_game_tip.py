@@ -206,7 +206,7 @@ def _reroute_to_game_tip_if_it_fits(
     already called the question troubleshooting -- and Strategy mode locks the domain before
     the question is even read, while neither the phrase gate nor the topic router recognised
     two of the three real Deck questions this was measured against
-    (docs/test-evidence/plan70-R-R4-try2.json): "the text on screen looks blurry" matches no
+    (workshop:test-evidence/plan70-R-R4-try2.json): "the text on screen looks blurry" matches no
     gamescope rule without the word "scaling" or "resolution", and "what launch options should
     I use" matches no rule at all. The tips sat in the installed library and were never
     searched.

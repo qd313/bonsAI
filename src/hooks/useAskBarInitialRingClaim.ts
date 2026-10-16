@@ -9,7 +9,7 @@
  *
  * Solves: "Opening the panel leaves nothing highlighted" -- measured
  * landing on Decky's own back arrow above the plugin rather than in it
- * (docs/test-evidence/round35-trap-attempt-1-after-b-reopen.json). AGENTS.md
+ * (workshop:test-evidence/round35-trap-attempt-1-after-b-reopen.json). AGENTS.md
  * calls this normal Steam behaviour and not ours to fix; the maintainer
  * asked for an attempt anyway, on the condition that it can never steal the
  * ring from something that already has it.

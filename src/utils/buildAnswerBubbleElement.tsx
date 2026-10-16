@@ -479,7 +479,7 @@ export function buildAnswerBubbleElement(
    * was hidden (while an answer streams) and a fragment of bubble + Copy once it showed, so at the
    * finish the element at this position changed type and React rebuilt the whole bubble: every
    * section, including the one holding Steam's ring, was a new element, the ring vanished and the
-   * view fell to the end (Deck, docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json). With one
+   * view fell to the end (Deck, workshop:test-evidence/plan64-STREAM-WALK-REC-01-try3.json). With one
    * wrapper shape the bubble keeps its identity, and its sections keep theirs (keyed by position, buildAnswerSections.tsx).
    *
    * Copy sits just under the answer, tucked to its bottom right — a SIBLING of the bubble, not a

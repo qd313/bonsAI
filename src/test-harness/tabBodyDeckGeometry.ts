@@ -2,13 +2,13 @@
  * Title: The five plain tabs' controls, as the Deck measured them
  * Purpose: Test data for the tab-body walk tests (tabBodyWalk.tsx): where every control sat in each tab,
  *          measured by the controller rig's Down walk on 2026-10-09 (plan 87, block M4), Settings again on
- *          2026-10-11 (plan 89, M1; docs/test-evidence/plan89-M1-TAB-WALK.json).
+ *          2026-10-11 (plan 89, M1; workshop:test-evidence/plan89-M1-TAB-WALK.json).
  * Used for: TabBodyFocusRoot.walk.test.tsx.
  * Solves: A walk test over invented spacing passes on any plan; these gaps (up to 405 px between two
  *         stops on Developer, 306 on Settings) are the ones that made Steam jump half a screen.
  * Does not: Describe the controls' look. Each stop is [top, height, name, shape?]; `top` is in the tab body's own
  *           coordinates (0 is the top of the body), `contentHeight` is the pane's whole scroll height at the
- *           time (the heading sat at 0.8, 19.5 high). Source: docs/test-evidence/plan87-M4-OTHER-TABS.json and
+ *           time (the heading sat at 0.8, 19.5 high). Source: workshop:test-evidence/plan87-M4-OTHER-TABS.json and
  *           runs/plan87-M4-{ollama,settings,permissions,developer,about}.json (rect.y + scrollTop - 24).
  */
 /**

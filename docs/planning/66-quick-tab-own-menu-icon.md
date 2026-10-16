@@ -3,7 +3,7 @@
 **Status:** written 2026-09-23. All four questions in section 7 answered the same day. Nothing built,
 nothing tried on the Deck yet. Step 1 is next.
 **Replaces:** plan 11, the old study of this item, now in
-[archive/11-native-qam-tile-feasibility.md](../archive/11-native-qam-tile-feasibility.md). That study said
+[archive/11-native-qam-tile-feasibility.md](../../../bonsAI-workshop/archive/11-native-qam-tile-feasibility.md). That study said
 the icon could only come from Decky's own team, and they had turned it down. That is no longer true.
 **Roadmap entry:** **bonsAI's own icon in the Quick Access Menu** — now ★★★, was ★★★★★★.
 **Stars and models:** ★★★ means Opus xhigh plans and lands. Step 1 is a Deck measurement, so no

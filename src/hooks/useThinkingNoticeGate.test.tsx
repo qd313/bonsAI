@@ -7,7 +7,7 @@
  *          ring is handed to the real modal return-focus registry rather than a direct element
  *          reference; and the level chosen survives Decky's remount, not just the moment "Show
  *          thinking" is pressed.
- * Used for: plan 57 step 2 (lane B) and the 2026-09-17 device fix (docs/test-evidence/
+ * Used for: plan 57 step 2 (lane B) and the 2026-09-17 device fix (workshop:test-evidence/
  *           plan57-REASONING-07.json) for two bugs found on the Deck: the ring landing on the tab
  *           strip instead of the row after either button, and Thinking silently reading Off again
  *           after the first "Show thinking" accept.

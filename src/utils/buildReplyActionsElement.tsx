@@ -457,7 +457,7 @@ export function buildReplyActionsElement(
   const thumbsRowNav: SteamNavHolder = { current: null };
   thumbsRowNavByKey.set(replyKey, thumbsRowNav);
   /*
-   * Plan 70 flow 4.1 (docs/test-evidence/plan70-F4-THUMBS-UP.json, 3 of 3): Helpful swaps both
+   * Plan 70 flow 4.1 (workshop:test-evidence/plan70-F4-THUMBS-UP.json, 3 of 3): Helpful swaps both
    * thumbs for "Saved on this Deck", so the button the ring was on is gone and nothing holds the
    * ring. Once the pressed button has been replaced -- and only if the ring was on it and nothing
    * else has it now -- hand the ring down to the next stop (Show details, else what follows it): the

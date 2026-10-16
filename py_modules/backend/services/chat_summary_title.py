@@ -35,7 +35,7 @@ from typing import Optional
 MAX_SUGGESTED_TITLE_CHARS = 48
 MAX_SUGGESTED_TITLE_WORDS = 8
 
-# Wording chosen in plan 79 helper H's desk test (docs/test-evidence/plan79-P79-H-TITLE-WORDING.json).
+# Wording chosen in plan 79 helper H's desk test (workshop:test-evidence/plan79-P79-H-TITLE-WORDING.json).
 # Do not change it without re-running that test on the Deck's model.
 TITLE_INSTRUCTION = (
     "This chat is currently called \"{title}\". After the notes, add one last line that starts with "

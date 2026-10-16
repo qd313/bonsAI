@@ -264,7 +264,7 @@ class RerouteToTheTipSheetLeavesKbDomainStaleTests(unittest.TestCase):
     which is exactly `_thin()`'s own base shape: strategy mode, strategy domain, no keyword
     support (the forced tip card is fetched fresh rather than kept in the ranked list), a
     meaning score under the ceiling. Measured on the Deck 2026-09-26
-    (docs/test-evidence/plan70-R4-try3.json): Deep Rock Galactic: Survivor's own Render Scale
+    (workshop:test-evidence/plan70-R4-try3.json): Deep Rock Galactic: Survivor's own Render Scale
     tip attached and the answer used it, and this line still printed underneath it."""
 
     def test_a_rerouted_tip_turn_does_not_show_the_notice(self):
@@ -289,7 +289,7 @@ class GameNamedOnlyInTheQuestionTests(unittest.TestCase):
     """HONESTY-TEXT-GAME-01 (plan 56 lane J): the real shape of the device failure on
     2026-09-15 -- three Black Mesa cards attached to "black mesa how do i tame a horse", none of
     them about a horse, with a nonzero keyword score because every one of the game's own cards
-    repeats "Black Mesa" in its title. See docs/test-evidence/plan55-HONESTY-TEXT-GAME-01.json
+    repeats "Black Mesa" in its title. See workshop:test-evidence/plan55-HONESTY-TEXT-GAME-01.json
     for the device run and its attached card titles, copied below.
     """
 
@@ -522,7 +522,7 @@ class NoteTextAlsoCountsAsRealSupportTests(unittest.TestCase):
 
     def test_a_genuine_wrong_subject_case_still_shows_the_notice(self):
         # The guard against over-reach: a real device reply that SHOULD keep this line
-        # (docs/test-evidence/plan58p1-QA-NOTES-BLOCK-02.json). "How do I beat the boss at the
+        # (workshop:test-evidence/plan58p1-QA-NOTES-BLOCK-02.json). "How do I beat the boss at the
         # end of the first area in Hades?" attached the wrong notes (Temple of Styx, Theseus and
         # Asterius) and the reply named the wrong boss. Theseus and Asterius' own card happens to
         # say "...killing Asterius first...", which would have wrongly counted as a match on the

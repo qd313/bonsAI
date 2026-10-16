@@ -26,12 +26,12 @@ Parked on purpose, not dropped. One line each, with what unshelves it; the full 
 - ★ `[layout]` `[watching]` **The "What went wrong?" block once ended 14 pixels under the dock** — moved to the watch list 2026-09-29; seen once, not reproduced. Unshelves on a new sighting.
 - ★ `[reply]` `[focus]` `[watching]` **Two more sightings, 2026-09-26 (the chip ladder and two wrong answers)** — moved to the watch list 2026-09-29; the chip ladder steps one chip per press both ways, and the two wrong answers were not reproduced. Unshelves on a new sighting.
 - ★ `[focus]` `[watching]` **A Down press left a long answer section 22% visible behind the tab bar, and a Down in the chip ladder left it 67% visible behind the Ask bar's icon** — moved to the watch list 2026-09-30; each seen once in plan 77 block 4 and not reproduced on purpose; neither is a known false alarm. Unshelves on a new sighting.
-- ★ `[ollama]` `[focus]` `[watching]` **In the AI models Filters panel, Down from "Also try open-weight models" skipped "Any installed model"** — seen once, 2026-10-01 (plan 78, Deck block 3a; evidence `docs/test-evidence/plan78-P78-ORDER-PRUNE-try2.json`). Unshelves on a new sighting.
-- ★ `[focus]` `[watching]` **Down is dead from the last chip in the Show details chip ladder** — seen once, 2026-10-01 (plan 78, Deck block 3a; evidence `docs/test-evidence/plan78-DOC-SWEEP-01.json`). Unshelves on a new sighting.
-- ★ `[focus]` `[watching]` **After the screenshot picker closes, nothing holds the highlight until the next press** — seen once, 2026-10-01 (plan 78, Deck block 3a; evidence `docs/test-evidence/plan78-DOC-SWEEP-01.json`). Unshelves on a new sighting.
-- ★ `[reply]` `[watching]` **Strategy choice labels stayed English with the reply language set to Japanese** — seen once, on two tries, 2026-10-01 (plan 78, Deck block 3a; evidence `docs/test-evidence/plan78-LANG-03.json`). Unshelves on a new sighting.
-- ★ `[focus]` `[watching]` **With a game running, the dock's top measured the same as with none** — seen once, 2026-10-01 (plan 78, Deck block 3b): y 290 both ways, where the test setup had assumed about 262 with a game. Evidence `docs/test-evidence/plan78-QA-FREE-PLAY-01-GAME-try3.json`. Unshelves on a new sighting.
-- ★ `[platform]` `[watching]` **After a deploy, opening the plugin with the rig's own call failed three times before it worked** — seen once, 2026-10-01 (plan 78, Deck block 3b): two "could not reach CEF debugger" reads right after the deploy, then the QAM chord was sent but no pane appeared once. A tool note (also in [mcp-setup.md](mcp-setup.md)). Evidence `docs/test-evidence/plan78-P78-TALL-SECTION-LOOP-AFTER.json`. Unshelves on a new sighting.
+- ★ `[ollama]` `[focus]` `[watching]` **In the AI models Filters panel, Down from "Also try open-weight models" skipped "Any installed model"** — seen once, 2026-10-01 (plan 78, Deck block 3a; evidence `workshop:test-evidence/plan78-P78-ORDER-PRUNE-try2.json`). Unshelves on a new sighting.
+- ★ `[focus]` `[watching]` **Down is dead from the last chip in the Show details chip ladder** — seen once, 2026-10-01 (plan 78, Deck block 3a; evidence `workshop:test-evidence/plan78-DOC-SWEEP-01.json`). Unshelves on a new sighting.
+- ★ `[focus]` `[watching]` **After the screenshot picker closes, nothing holds the highlight until the next press** — seen once, 2026-10-01 (plan 78, Deck block 3a; evidence `workshop:test-evidence/plan78-DOC-SWEEP-01.json`). Unshelves on a new sighting.
+- ★ `[reply]` `[watching]` **Strategy choice labels stayed English with the reply language set to Japanese** — seen once, on two tries, 2026-10-01 (plan 78, Deck block 3a; evidence `workshop:test-evidence/plan78-LANG-03.json`). Unshelves on a new sighting.
+- ★ `[focus]` `[watching]` **With a game running, the dock's top measured the same as with none** — seen once, 2026-10-01 (plan 78, Deck block 3b): y 290 both ways, where the test setup had assumed about 262 with a game. Evidence `workshop:test-evidence/plan78-QA-FREE-PLAY-01-GAME-try3.json`. Unshelves on a new sighting.
+- ★ `[platform]` `[watching]` **After a deploy, opening the plugin with the rig's own call failed three times before it worked** — seen once, 2026-10-01 (plan 78, Deck block 3b): two "could not reach CEF debugger" reads right after the deploy, then the QAM chord was sent but no pane appeared once. A tool note (also in [mcp-setup.md](mcp-setup.md)). Evidence `workshop:test-evidence/plan78-P78-TALL-SECTION-LOOP-AFTER.json`. Unshelves on a new sighting.
 - ★★ `[ui]` **Glance view: the answer alone, in big text** — shelved 2026-09-12: too much UI change, and not
   ready for it yet. Unshelves on the maintainer's word; the mockup is kept.
 - ★★ `[chat]` `[watching]` **A chat that is still writing does not look busy from another chat** — moved to the watch list 2026-09-29; seen three times, then not reproduced in two clean sessions. Unshelves on a new sighting.
@@ -73,8 +73,8 @@ Features at its star position and drop its line from the roadmap's Shelved list.
   we're not ready for it yet, in the maintainer's own words.** Opening the menu from the popup would have shown only the
   answer, large, with the chips, the question box and the tab bar out of the way, so a person opens, reads and closes in a
   couple of seconds; B would return to the full panel. The mockup and the press list are kept in
-  [plan 52 § 6](../planning/52-frame-features-second-look.md#6-glance-view-the-brief-and-the-mockup) and the design handoff
-  folder, for when it comes back. [Plan](../planning/49-steam-frame-features.md) ·
+  [plan 52 § 6](../../../bonsAI-workshop/planning/52-frame-features-second-look.md#6-glance-view-the-brief-and-the-mockup) and the design handoff
+  folder, for when it comes back. [Plan](../../../bonsAI-workshop/planning/49-steam-frame-features.md) ·
   [Drawing](https://claude.ai/code/artifact/c48fb3e2-38ef-4c91-997c-c515353eec96).*
 
 - ★★★ `[KB]` `[shelved]` **KB download Cancel, the Deck check** *— **VERIFY, shelved 2026-09-19 (D113).** The
@@ -86,18 +86,18 @@ Features at its star position and drop its line from the roadmap's Shelved list.
   bundled character would get a voice invented once on the maintainer's PC with OmniVoice, shipped as a five to ten second clip and
   read on the device by a small copying model. Shelved because a voice is not covered by fair use, every character here is voiced by a
   real actor, and "free" is not a defence under the newer AI-voice laws. Unshelving needs the character sweep, a legal check, and the
-  open licence call. [Memo](../planning/42-read-aloud-feasibility.md).*
+  open licence call. [Memo](../../../bonsAI-workshop/planning/42-read-aloud-feasibility.md).*
 
 - ★★★ `[voice]` `[shelved]` **Trained voices for the bundled characters** *— **OPEN, shelved with the clip route 2026-09-08 (D74).** The fallback
   if the copying model is too slow beside a game: a small trained voice file per character, about 60 MB, made once on the maintainer's
   PC from OmniVoice speech and downloaded on demand; the fastest way to read. Same legal gate as the clip route, plus the plugin
-  hosting its own voice files for the first time. [Memo](../planning/42-read-aloud-feasibility.md).*
+  hosting its own voice files for the first time. [Memo](../../../bonsAI-workshop/planning/42-read-aloud-feasibility.md).*
 
 - ★★★★ `[voice]` `[shelved]` **A voice for a custom character** *— **OPEN, shelved with the bundled voices 2026-09-08 (D74).** Type a name, press
   **Generate voice**, wait minutes once while the device invents a voice; from then on the small copying model reads that character in
   it. Needs OmniVoice on the device as an optional download of about one gigabyte, with the warning "minutes on a Steam Deck, seconds
   on a stronger machine"; no LAN server. Phase 0 is a half-day Deck test of the port. Waits on the same legal gate as the bundled
-  voices. [Memo](../planning/42-read-aloud-feasibility.md).*
+  voices. [Memo](../../../bonsAI-workshop/planning/42-read-aloud-feasibility.md).*
 
 - ★★★★★ `[platform]` `[shelved]` **Global quick-launch macro** *— **VERIFY, shelved 2026-09-19 (D113): the
   maintainer said drop it.** Guide-chord docs live in [troubleshooting.md](../troubleshooting.md) § 5; the
@@ -113,11 +113,11 @@ Features at its star position and drop its line from the roadmap's Shelved list.
   Red Dead ending reply with a real hidden block on screen: **Down left it normally**, straight onto the branch picker's first
   button, and every stop on the walk was fully visible. So the hidden state does not trap on its own. Most likely the same
   underlying fault as the stuck panel below — both are a hop that dies only sometimes — and best closed with it rather than
-  chased separately. Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`. **Next thing to try
+  chased separately. Evidence `workshop:test-evidence/round35-spoiler-block-down-and-up.json`. **Next thing to try
   (2026-09-18):** the panel-trap entry below now has a known trigger, opening and closing Steam's own on-screen
   keyboard on the question box — worth trying on this hidden-block case too.
   **2026-09-28 (plan 76):** reproduced in a milder form. Each cover took one extra Down (the first did nothing, and the cover then
-  sat 67% behind the tab bar), 2 of 2 runs; Up had none. Handed to lane 3. Evidence `docs/test-evidence/plan76-S1.json`.
+  sat 67% behind the tab bar), 2 of 2 runs; Up had none. Handed to lane 3. Evidence `workshop:test-evidence/plan76-S1.json`.
   **2026-09-28 (plan 76 lane 3, `3576846c`):** the milder form seen that night (each cover took one extra Down) has its cause
   found and fixed: a "this cover was already offered" flag was reset on every redraw. Checked by row **P76-WALK-COVERS**.
   Kept here, not moved to Verify: the original never-moves form was never reproduced, so it is not fully explained.
@@ -125,49 +125,49 @@ Features at its star position and drop its line from the roadmap's Shelved list.
   **Moved to the watch list 2026-09-29 (the maintainer's call, plan 77):** one-off sighting, kept as it was. Unshelves on a new sighting.
 
 - ★ `[focus]` `[watching]` `[shelved]` **Down from the chat row once skipped the whole answer, after returning from Settings** — **OPEN, seen once
-  2026-09-27 (plan 72).** Evidence `docs/test-evidence/plan72-F-ROW.json` (notes).
-  **2026-09-28 (plan 76):** not reproduced, 6 tries by two routes. Evidence `docs/test-evidence/plan76-S8.json`.
+  2026-09-27 (plan 72).** Evidence `workshop:test-evidence/plan72-F-ROW.json` (notes).
+  **2026-09-28 (plan 76):** not reproduced, 6 tries by two routes. Evidence `workshop:test-evidence/plan76-S8.json`.
   **Moved to the watch list 2026-09-29 (the maintainer's call, plan 77):** one-off sighting, kept as it was. Unshelves on a new sighting.
 
 - ★ `[focus]` `[watching]` `[shelved]` **In carousel style, Down can land on a chip slid mostly off screen** — **OPEN, sighting
   only — 3 measured re-tries did not reproduce it.** [Detail](roadmap-details.md#flow-2b-bugs).
-  **2026-09-28 (plan 76):** not reproduced, 4 tries. Evidence `docs/test-evidence/plan76-S2.json`.
+  **2026-09-28 (plan 76):** not reproduced, 4 tries. Evidence `workshop:test-evidence/plan76-S2.json`.
   **Moved to the watch list 2026-09-29 (the maintainer's call, plan 77):** one-off sighting, kept as it was. Unshelves on a new sighting.
 
 - ★ `[focus]` `[watching]` `[shelved]` **Three more one-off focus sightings from free play, 2026-09-26.**
   [Detail](roadmap-details.md#flow-2b-bugs).
   **2026-09-28 (plan 76):** the accent-level one reproduced: after choosing an accent level nothing held the ring, and the first LB
-  landed on "Show Developer tab" and did not switch tabs (`docs/test-evidence/plan76-S3C.json`); going to a fix this session. The
-  folded-turn one did not reproduce (`docs/test-evidence/plan76-S3A.json`).
+  landed on "Show Developer tab" and did not switch tabs (`workshop:test-evidence/plan76-S3C.json`); going to a fix this session. The
+  folded-turn one did not reproduce (`workshop:test-evidence/plan76-S3A.json`).
   **2026-09-29 (`1785aaaf`):** the accent-level one is fixed and proven on the Deck (row P76-ACCENT-RING, evidence
-  `docs/test-evidence/plan76-P76-ACCENT-RING.json`). The other two stay open.
+  `workshop:test-evidence/plan76-P76-ACCENT-RING.json`). The other two stay open.
   **Moved to the watch list 2026-09-29 (the maintainer's call, plan 77):** one-off sighting, kept as it was. Unshelves on a new sighting.
 
 - ★ `[focus]` `[watching]` `[shelved]` **With details open, Down from "N earlier" jumps straight to the notes block** — **OPEN,
   found 2026-09-26 (plan 70, flow L6).** It skips over the newest turn's own Retry, question, answer and
   Hide details on the way down. [Detail](roadmap-details.md#flow-l6-findings).
-  **2026-09-28 (plan 76, build `39c17312`):** not reproduced. With one turn drawn under "87 earlier", Down visited Retry, the question, the answer parts, the branch buttons, Helpful, Hide details and the tabs in order. Evidence `docs/test-evidence/plan76-P76-M-NEARLIER-DETAILS.json`.
+  **2026-09-28 (plan 76, build `39c17312`):** not reproduced. With one turn drawn under "87 earlier", Down visited Retry, the question, the answer parts, the branch buttons, Helpful, Hide details and the tabs in order. Evidence `workshop:test-evidence/plan76-P76-M-NEARLIER-DETAILS.json`.
   **Moved to the watch list 2026-09-29 (the maintainer's call, plan 77):** one-off sighting, kept as it was. Unshelves on a new sighting.
 
 - ★ `[layout]` `[watching]` `[shelved]` **A thin strip of the answer shows through below the game-context line at the bottom of the
   Main panel** — **OPEN, found on the Deck 2026-09-23.** Visible in
-  `docs/test-evidence/plan64-BYEYE-01-chat-row.png`, between the dock and Steam's own bottom bar.
+  `workshop:test-evidence/plan64-BYEYE-01-chat-row.png`, between the dock and Steam's own bottom bar.
   **Sighting, 2026-09-23:** seen again under the "Context: no active game detected" line. Evidence
-  `docs/test-evidence/plan64-BUSY-DOT-01-back_on_first_chat_22-20-07.png`.
-  **Not reproduced 2026-09-27 (plan 72):** not seen with text behind the dock, `docs/test-evidence/plan72-A8-BOTTOM-STRIP-READING.json`.
-  **2026-09-28 (plan 76):** not reproduced on the Deck's own screen. Evidence `docs/test-evidence/plan76-S6.json`.
+  `workshop:test-evidence/plan64-BUSY-DOT-01-back_on_first_chat_22-20-07.png`.
+  **Not reproduced 2026-09-27 (plan 72):** not seen with text behind the dock, `workshop:test-evidence/plan72-A8-BOTTOM-STRIP-READING.json`.
+  **2026-09-28 (plan 76):** not reproduced on the Deck's own screen. Evidence `workshop:test-evidence/plan76-S6.json`.
   **Moved to the watch list 2026-09-29 (the maintainer's call, plan 77):** one-off sighting, kept as it was. Unshelves on a new sighting.
 
 - ★ `[layout]` `[watching]` `[shelved]` **The "What went wrong?" block once ended 14 pixels under the dock** — **OPEN, seen once 2026-09-27
-  (plan 72, free play).** It passed in the planned check. Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`.
-  **2026-09-28 (plan 76):** not reproduced; the block ended 13 px above the dock. Evidence `docs/test-evidence/plan76-S7.json`.
+  (plan 72, free play).** It passed in the planned check. Evidence `workshop:test-evidence/plan72-Z-FREEPLAY.json`.
+  **2026-09-28 (plan 76):** not reproduced; the block ended 13 px above the dock. Evidence `workshop:test-evidence/plan76-S7.json`.
   **Moved to the watch list 2026-09-29 (the maintainer's call, plan 77):** one-off sighting, kept as it was. Unshelves on a new sighting.
 
 - ★ `[reply]` `[focus]` `[watching]` `[shelved]` **Two more sightings, 2026-09-26, not reproduced on purpose yet:** the chip ladder
   only lets Up leave one chip at a time (and once Down stuck on it, flow L7); two confidently wrong answers.
   [Detail](roadmap-details.md#l3-and-2d-findings).
   **2026-09-28 (plan 76), the chip ladder one measured:** the ladder steps one chip per press both ways, 7 Ups for 7 chips, no dead
-  press. Whether one chip per press is wrong is the maintainer's call. Evidence `docs/test-evidence/plan76-S4.json`.
+  press. Whether one chip per press is wrong is the maintainer's call. Evidence `workshop:test-evidence/plan76-S4.json`.
   **Moved to the watch list 2026-09-29 (the maintainer's call, plan 77):** one-off sighting, kept as it was. Unshelves on a new sighting.
 
 - ★★ `[chat]` `[watching]` `[shelved]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
@@ -183,7 +183,7 @@ Features at its star position and drop its line from the roadmap's Shelved list.
 - ★★ `[chat]` `[focus]` `[watching]` `[shelved]` **A chat opened with RB while a game runs is drawn as history, and Down dies on its
   question line** — **OPEN, found 2026-09-26 (plan 70, flow L7).** Closing and reopening the panel fixes it.
   [Detail](roadmap-details.md#flow-l7-findings).
-  **Not reproduced 2026-09-27 (plan 72):** walked cleanly, `docs/test-evidence/plan72-A7-GAME-ii.json`.
+  **Not reproduced 2026-09-27 (plan 72):** walked cleanly, `workshop:test-evidence/plan72-A7-GAME-ii.json`.
   **Not seen again 2026-09-27:** in none of plan 72's seven Deck blocks (plan 72 § 7).
   **The maintainer's call, 2026-09-27:** named in the 0.6.0 release notes (plan 72 § 8); watched, not chased.
   **Moved to the watch list 2026-09-29 (the maintainer's call, plan 77):** one-off sighting, kept as it was. Unshelves on a new sighting.
@@ -191,8 +191,8 @@ Features at its star position and drop its line from the roadmap's Shelved list.
 - ★★ `[focus]` `[watching]` `[shelved]` **Walking Down while an answer is still arriving loses the ring** — **OPEN, found 2026-09-27
   (plan 70, flow L10).** It sticks on the first, half-visible answer part, then nothing has focus; fine on a
   finished answer. [Detail](roadmap-details.md#flow-l10-findings).
-  **Not reproduced 2026-09-27 (plan 72):** the ring was never lost, `docs/test-evidence/plan72-A5-DOWN-WHILE-ARRIVING.json`.
-  **2026-09-28 (plan 76):** not reproduced again, 2 tries. Evidence `docs/test-evidence/plan76-S9.json`.
+  **Not reproduced 2026-09-27 (plan 72):** the ring was never lost, `workshop:test-evidence/plan72-A5-DOWN-WHILE-ARRIVING.json`.
+  **2026-09-28 (plan 76):** not reproduced again, 2 tries. Evidence `workshop:test-evidence/plan76-S9.json`.
   **Moved to the watch list 2026-09-29 (the maintainer's call, plan 77):** one-off sighting, kept as it was. Unshelves on a new sighting.
 
 - ★★ `[ollama]` `[focus]` `[watching]` `[shelved]` **A tap outside the AI models screen started the queued downloads and left the
@@ -208,7 +208,7 @@ Features at its star position and drop its line from the roadmap's Shelved list.
   loader restart clears it; closing and reopening Quick Access cleared one flow-R occurrence too, this
   time from a chip filling the question box. Still sighted 2026-09-26; a careful reading the same night
   did not reproduce the chip route (0 of 6). [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
-  **Not reproduced 2026-09-27 (plan 72):** 0 of 3 with the keyboard trigger, `docs/test-evidence/plan72-A1-STUCK-KEYBOARD-try1.json` (and try2, try3).
+  **Not reproduced 2026-09-27 (plan 72):** 0 of 3 with the keyboard trigger, `workshop:test-evidence/plan72-A1-STUCK-KEYBOARD-try1.json` (and try2, try3).
   **Not seen again 2026-09-27:** in none of plan 72's seven Deck blocks (plan 72 § 7).
   **The maintainer's call, 2026-09-27:** named in the 0.6.0 release notes (plan 72 § 8); watched, not chased.
   **2026-09-28 (plan 76):** the Fallout 4 entry (now in Verify) has a new sighting of the same family, with a likely trigger.
@@ -218,4 +218,4 @@ Features at its star position and drop its line from the roadmap's Shelved list.
   **2026-09-29 (plan 77):** the long play test was clean (24 of 24 reopens); still watched.
   **Moved to the watch list 2026-09-29 (the maintainer's call, plan 77):** one-off sighting, kept as it was. Unshelves on a new sighting.
 
-- ★ `[focus]` `[watching]` `[shelved]` **A Down press left a long answer section 22% visible behind the tab bar, and a Down in the chip ladder left it 67% visible behind the Ask bar's icon** *— **OPEN, seen once each 2026-09-30 (plan 77, Deck block 4, build `7d84ee3b`).** During the free-play walk, one Down press stalled twice on a long answer section that sat 22% visible behind the tab bar, then moved on with the next Down; and the first Down in the chip ladder left it 67% visible, covered by the Ask bar's corner icon. Neither is one of the two known false alarms. Not reproduced on purpose. Evidence `docs/test-evidence/plan77-QA-FREE-PLAY-01.json`.* Moved to the watch list 2026-09-30 (the maintainer's call, plan 77): unshelves on a new sighting.
+- ★ `[focus]` `[watching]` `[shelved]` **A Down press left a long answer section 22% visible behind the tab bar, and a Down in the chip ladder left it 67% visible behind the Ask bar's icon** *— **OPEN, seen once each 2026-09-30 (plan 77, Deck block 4, build `7d84ee3b`).** During the free-play walk, one Down press stalled twice on a long answer section that sat 22% visible behind the tab bar, then moved on with the next Down; and the first Down in the chip ladder left it 67% visible, covered by the Ask bar's corner icon. Neither is one of the two known false alarms. Not reproduced on purpose. Evidence `workshop:test-evidence/plan77-QA-FREE-PLAY-01.json`.* Moved to the watch list 2026-09-30 (the maintainer's call, plan 77): unshelves on a new sighting.

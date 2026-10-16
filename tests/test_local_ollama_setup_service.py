@@ -72,7 +72,7 @@ class LocalOllamaSetupServiceTests(unittest.TestCase):
         self.assertEqual(tags, ["qwen2.5:1.5b", "llava:7b"])
 
     def test_list_installed_ollama_tag_sizes_parses_the_real_shape(self):
-        # docs/test-evidence/plan70-ROUTING-MERGE-SIZE-01.json: nomic-embed-text (the meaning-
+        # workshop:test-evidence/plan70-ROUTING-MERGE-SIZE-01.json: nomic-embed-text (the meaning-
         # search model, installed outside the curated catalog) showed "?" for its size and the
         # header undercounted the total, because the only size lookup asked registry.ollama.ai,
         # which does not answer for this tag. Ollama's own /api/tags already reports a `size` in

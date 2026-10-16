@@ -1,7 +1,7 @@
 /**
  * Title: Walking Show details' chips puts the ring on one chip at a time
  * Purpose: Pin the fix for the roadmap bug "Moving through the Show details chips puts the ring on
- *          the whole block, not the chip, and it jumps" (plan 79, docs/test-evidence/
+ *          the whole block, not the chip, and it jumps" (plan 79, workshop:test-evidence/
  *          plan79-P79-M3-DETAILS-RING.json): on the Deck, every press in the ladder put Steam's
  *          focus on the whole ladder, a box 290 wide and 169 to 337 tall that changed size on every
  *          press and reached down behind the question box, never on the 28 px chip.

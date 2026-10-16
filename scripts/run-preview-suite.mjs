@@ -6,7 +6,7 @@
  * Usage:
  *   node scripts/run-preview-suite.mjs [--write] [--evidence] [--tier=preGate|tier0|tier1Core|...] [--filter=SMOKE-A]
  *
- * Evidence: docs/test-evidence/<batch>/<date>-<sha>/<scenario-id>/
+ * Evidence: workshop:test-evidence/<batch>/<date>-<sha>/<scenario-id>/
  * Tier batches: tests/preview-suite/tier-manifest.json
  */
 import fs from "fs";

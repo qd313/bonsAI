@@ -7,7 +7,7 @@
  * Does not: prove how it looks on the Deck.
  *
  * Where the fixtures come from: the 250 ms samples of the live line taken on the Deck on
- * 2026-09-27 (docs/test-evidence/plan72-F-THINK.json, "distinctLiveLines" and "oddities"; the raw
+ * 2026-09-27 (workshop:test-evidence/plan72-F-THINK.json, "distinctLiveLines" and "oddities"; the raw
  * samples were kept in the session's scratch folder). Those samples are what the screen drew, i.e.
  * after the first clean-up: its "•" was the model's "*   " and bold stars were already gone. The
  * fixtures put the model's "*   " back; every word is the Deck's.

@@ -561,7 +561,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    * answer arrives the block goes, because the answer needs the room: the visible chat above the
    * question box is small on the built-in screen (with the question header and a 50px block at
    * its top, about 61px were left for the answer -- measured 2026-09-17,
-   * docs/test-evidence/plan57-M-fold-row-and-live-block.json).
+   * workshop:test-evidence/plan57-M-fold-row-and-live-block.json).
    */
   const showLiveReasoningBlock =
     expandedTurnKey === "live" && isAsking && hasLiveReasoning && !showLiveResponse;
@@ -674,7 +674,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    * map above. That takes whatever stop held the ring with it: nothing on screen carries Steam's
    * ring class afterwards, and useStreamScrollPin's own delivery pass — which would otherwise bring
    * a surviving ring back into view — finds no ring to move and drags the pane to the very end
-   * instead. Measured on device 2026-09-23 (docs/test-evidence/plan64-STREAM-WALK-REC-01.json,
+   * instead. Measured on device 2026-09-23 (workshop:test-evidence/plan64-STREAM-WALK-REC-01.json,
    * try 2): ring on a live answer stop, answer finishes, "no focus event recorded", scrollTop jumps
    * to 1333 of 1333.
    *
@@ -689,7 +689,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    * it already was.
    *
    * The first version (97cde97) only restored on the live -> archived edge and failed on the Deck
-   * (docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json): the stop was destroyed one step
+   * (workshop:test-evidence/plan64-STREAM-WALK-REC-01-try3.json): the stop was destroyed one step
    * earlier, when the finished answer re-rendered its sections under new keys inside the still-live
    * bubble, so by the archive edge the recorded position already read "no ring". Section keys are
    * now positional (buildAnswerSections.tsx), so that step keeps the element;

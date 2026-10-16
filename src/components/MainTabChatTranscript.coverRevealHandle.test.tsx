@@ -1,7 +1,7 @@
 /**
  * Title: A on the section around a hidden cover opens the cover, through the cover's own handle
  * Purpose: Pin plan 76 lane 3, bug 2's second half. A section's own A did nothing, so a ring that
- *          landed on the section instead of the cover inside it (docs/test-evidence/
+ *          landed on the section instead of the cover inside it (workshop:test-evidence/
  *          plan76-P76-M-COVER-ONLY.json) could not open the cover. The cover now hands the
  *          registry the same "open me" its own A calls, and A on the section uses it.
  * Used for: MainTabBonsaiAiMarkdownChunk.tsx (BonsaiSpoilerFence), spoilerFenceRegistry.ts

@@ -1,7 +1,7 @@
 /**
  * Title: The model list's rows never hide behind its column-header row, going down or back up
  *
- * Purpose: Pins the Deck bug found 2026-10-02 (docs/test-evidence/plan79-P79-M9-MODELS-BOX-TOP.json):
+ * Purpose: Pins the Deck bug found 2026-10-02 (workshop:test-evidence/plan79-P79-M9-MODELS-BOX-TOP.json):
  * in the AI models box, walking Down to the bottom and back Up left the list scrolled 41 px, so the
  * first model's row had 16 of its 35 px behind the sticky "PULL MODEL SIZE ..." header row. The
  * browser's scroll-into-view treats the sticky header as free space, so a row just under it counts as

@@ -1,6 +1,6 @@
 /**
  * Title: The floating Open all button never covers a row's words or arrow (plan 93, the Deck's own boxes)
- * Purpose: Replay the Deck measurement of 2026-10-13 (docs/test-evidence/plan93-P93-M2-OPEN-ALL.json, the Deck's
+ * Purpose: Replay the Deck measurement of 2026-10-13 (workshop:test-evidence/plan93-P93-M2-OPEN-ALL.json, the Deck's
  *          own screen: the pane 24..454, 430 tall; the column 48..348): with every section open and the pane
  *          scrolled to 419, the button (74 x 28, 8 px above the pane's bottom, 10 in from the right) sat over
  *          56 x 14 px of the Connection tuning line's summary and 10 x 14 px of its arrow. With the stylesheet as it

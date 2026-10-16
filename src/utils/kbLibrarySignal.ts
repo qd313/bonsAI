@@ -5,7 +5,7 @@
  * Ollama tab before it finishes. The copy of the section that pressed the button is then gone, and what it does
  * with the answer (move "Use local knowledge base", read the status again) reaches nothing on screen. On the
  * Deck the switch read "on" after Remove and "off" after Download, although the back end had saved the other
- * way each time (docs/test-evidence/plan93-P90-SEARCH-KB.json, plan93-P93-K1-KB-SWITCH.json, -try2.json).
+ * way each time (workshop:test-evidence/plan93-P90-SEARCH-KB.json, plan93-P93-K1-KB-SWITCH.json, -try2.json).
  * This holds a note at module level: a copy that is mounted hears the change at once, and a copy that mounts
  * later hears it the moment it mounts, for ten minutes after.
  *

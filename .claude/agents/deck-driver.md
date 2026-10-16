@@ -33,7 +33,7 @@ save evidence, and report. The checkout path, the scratch folder and the runbook
 2. **Every Deck command has exactly this shape:** `ssh deck@192.168.86.52 '<command>'`. Nothing goes
    between `ssh` and the address: no options, no `-o`, no `-t`. Any other shape stops at a permission
    prompt nobody is there to answer.
-3. **Evidence files:** list `docs/test-evidence/` first. Name each file `plan<NN>-<ROW-ID>.json`, with the
+3. **Evidence files:** list `workshop:test-evidence/` first. Name each file `plan<NN>-<ROW-ID>.json`, with the
    plan number your task gives, or with a suffix such as `-try2` if that name exists. **Never overwrite a
    file. One file per check**, not one per block. Screenshots go beside it with the same stem. Every file
    uses these field names, so the next reader does not have to guess: `row`, `build_commit`,

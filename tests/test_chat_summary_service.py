@@ -1,6 +1,6 @@
 """Unit tests for chat_summary_service.
 
-Uses the real summaries captured on the Deck (docs/test-evidence/plan68-GATE-01.json, copied into
+Uses the real summaries captured on the Deck (workshop:test-evidence/plan68-GATE-01.json, copied into
 tests/fixtures/plan68_real_summaries.json) as the faked model output wherever a written summary's
 exact text matters, rather than invented text (lessons-learned.md section 2: test the shape the
 system really produces).
@@ -37,7 +37,7 @@ FIXTURE_PATH = os.path.join(
 )
 
 # A Hollow Knight -style hidden spoiler, matching the shape of the real "wheatley fight" chat's
-# own Hollow Knight spoiler block noted in docs/test-evidence/plan68-GATE-01.json (its raw text
+# own Hollow Knight spoiler block noted in workshop:test-evidence/plan68-GATE-01.json (its raw text
 # was not captured in the evidence, only that a spoiler was present -- built here to prove the
 # same guarantee ``chat_memory_service`` already proves for the ordinary memory).
 HOLLOW_KNIGHT_SPOILER_ANSWER = (

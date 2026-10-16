@@ -2,7 +2,7 @@
 
 Purpose: Pin the one log line that makes the plugin log and the answer on screen tell the same
 story. On the Deck 2026-10-08 the budget line said "attached 1042 chars" while the answer ended
-"No close match in my notes" and no notes block showed (docs/test-evidence/
+"No close match in my notes" and no notes block showed (workshop:test-evidence/
 plan83-NOTES-BLOCK-04-game.json). Both were true: real notes were attached (that number is the
 notes text, plus any Proton log, not the rules or cards), the match was thin, and the answer used
 none of them. The new line names the notes and says which line, if any, was added.

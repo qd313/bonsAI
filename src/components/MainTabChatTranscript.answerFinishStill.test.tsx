@@ -8,7 +8,7 @@
  *   closed is never drawn again -- not by later words, and not at the finish.
  * Used for: MainTabChatTranscript.tsx, buildAnswerBubbleElement.tsx, buildAnswerSections.tsx and
  *   the cut in splitResponseIntoChunks.ts (cutAnswerSections).
- * Solves: The Deck measurement of 2026-10-13 (docs/test-evidence/plan93-M4-ANSWER-FINISH.json): a
+ * Solves: The Deck measurement of 2026-10-13 (workshop:test-evidence/plan93-M4-ANSWER-FINISH.json): a
  *   seven-section answer was one block while it wrote and was cut into sections at the finish, so
  *   every section was drawn again at that moment.
  * Does not: Measure frame rate or the scroll position on the Deck; the Deck check does.

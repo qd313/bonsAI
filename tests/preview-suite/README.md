@@ -19,7 +19,7 @@ pnpm run test:preview -- --tier=tier0 --filter=SMOKE-A --evidence --write
 # Preview panel required for tier0+ (C/D buckets): Decky: Open Preview
 ```
 
-Evidence lands in `docs/test-evidence/<batch>/<date>-<sha>/<scenario-id>/`.
+Evidence lands in `workshop:test-evidence/<batch>/<date>-<sha>/<scenario-id>/`.
 
 **Doc writeback (`--write`):** PASS → [testing-results-2026.md](../../docs/archive/testing-results-2026.md); FAIL → [testing-failures-2026.md](../../docs/archive/testing-failures-2026.md); progress → [testing-manual.md](../../docs/testing-manual.md). Rows dedupe by scenario ID.
 

@@ -5,11 +5,11 @@
  * 39c17312, the Deck's own screen: the visible band runs from y 88 to the dock at y 290, and a press
  * that only scrolls moves the panel 80 px):
  *
- * - docs/test-evidence/plan76-P76-M-GLOSSARY-STICK.json: Down onto an underlined game word, then
+ * - workshop:test-evidence/plan76-P76-M-GLOSSARY-STICK.json: Down onto an underlined game word, then
  *   five presses that only scrolled with the ring still on the word, 300 px above the screen.
- * - docs/test-evidence/plan76-P76-M-COVER-SCROLL.json: a press that only scrolled left the ring on a
+ * - workshop:test-evidence/plan76-P76-M-COVER-SCROLL.json: a press that only scrolled left the ring on a
  *   cover with a third of it cut off at the top.
- * - docs/test-evidence/plan76-S1.json: each cover cost one extra Down that seemed to do nothing,
+ * - workshop:test-evidence/plan76-S1.json: each cover cost one extra Down that seemed to do nothing,
  *   with the cover 67% behind the tab bar while the ring sat on it.
  *
  * The rule under test: after a press that scrolls, the ring is never left on a cover, a revealed
@@ -198,7 +198,7 @@ describe("Down with the ring on a cover", () => {
   });
 
   /*
-   * docs/test-evidence/plan76-S1.json: the first Down after landing on each cover did nothing a
+   * workshop:test-evidence/plan76-S1.json: the first Down after landing on each cover did nothing a
    * person could see, and the second left it (2 of 2 runs, both covers), with the cover 67% behind
    * the tab bar at the dead press. Whatever the cover's height on screen, a Down whose next stop is
    * off screen must either move the ring or visibly scroll the panel, and leave the ring on something

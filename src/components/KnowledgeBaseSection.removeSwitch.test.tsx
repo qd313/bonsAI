@@ -1,7 +1,7 @@
 /**
  * Title: Removing the library turns "Use local knowledge base" off on the screen that is there afterwards
  *
- * Purpose: Pin plan 93 block C part 2 (docs/test-evidence/plan93-P90-SEARCH-KB.json). The Remove box says
+ * Purpose: Pin plan 93 block C part 2 (workshop:test-evidence/plan93-P90-SEARCH-KB.json). The Remove box says
  * Remove turns the switch off, and the back end does write it off in settings.json, but on the Deck the
  * switch read "on" before and after. Closing the box rebuilds the Ollama tab (lessons-learned.md,
  * 'Closing a Decky popup rebuilds the tab behind it'), and the delete takes a few seconds, so the answer

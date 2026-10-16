@@ -76,7 +76,7 @@ export function focusDownFromReplyUtilityRowOrPermHint(liveSlot: HTMLElement | n
  * Roadmap: "Left on the collapsed-history row throws the highlight out of the plugin". With the
  * ring on the "N earlier" pill, nothing claimed Left, so Steam's own "past the edge" navigation ran
  * and handed the ring to the Quick Access rail (measured twice,
- * docs/test-evidence/round35-BUG-left-from-earlier-pill-leaves-plugin.json and the retry file next
+ * workshop:test-evidence/round35-BUG-left-from-earlier-pill-leaves-plugin.json and the retry file next
  * to it). There is no sibling to the pill's own left, so Left simply holds still — the same shape
  * given to the Ollama sliders for the identical escape (DeckFocusSlider.tsx, 2026-09-04): claim the
  * move on `onMoveLeft` itself, the handler Steam actually invokes, with the `onButtonDown` twin
@@ -137,7 +137,7 @@ export function takeEarlierLine(): boolean {
  * The "N earlier" pill's moves: Left holds still (above) and Down goes to the question below it
  * (plan 79). `nextTurnId` is the turn drawn right under the pill. Left alone, Steam entered that
  * turn's row on its first control, which is Retry, so Down stopped on Retry before the question
- * (docs/test-evidence/plan79-P79-M8-EARLIER-RETRY.json). The transfer goes onto the question text;
+ * (workshop:test-evidence/plan79-P79-M8-EARLIER-RETRY.json). The transfer goes onto the question text;
  * a next turn without Retry has no such stop, the call reports false and Down stays Steam's own.
  */
 export function earlierPillNavHandlers(
@@ -246,7 +246,7 @@ export function firstArchivedHeaderMoveUp(turnIndex: number): (() => boolean) | 
 /**
  * The troubleshooting hint row's own moves: [Open Permissions] [Dismiss] side by side.
  *
- * Plan 70, PERMS-CLEAN-06 (docs/test-evidence/plan70-PERMS-CLEAN-05-06.json): Right from Open
+ * Plan 70, PERMS-CLEAN-06 (workshop:test-evidence/plan70-PERMS-CLEAN-05-06.json): Right from Open
  * Permissions did nothing, twice, so Dismiss was visible but out of reach. The row's
  * `flow-children="horizontal"` hint alone does not make Steam walk a row sideways, the same finding
  * as the chip row (presetRowNav.ts, 2026-09-01), so Left and Right are claimed here and move between

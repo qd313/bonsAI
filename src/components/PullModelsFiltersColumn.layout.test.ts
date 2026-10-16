@@ -6,7 +6,7 @@
  * the browser does (fixed tracks first, then each `minmax(min, fr)` track takes its share, and a track
  * whose share is under its minimum is held at the minimum), from the numbers the stylesheet itself uses,
  * and checks the Deck check's line: the Model column no more than 10 per cent narrower than the 124.3 it
- * was on the Deck before the column (plan 92, M-A: docs/test-evidence/plan92-P92-M-MODELS-BOX.json).
+ * was on the Deck before the column (plan 92, M-A: workshop:test-evidence/plan92-P92-M-MODELS-BOX.json).
  *
  * jsdom has no layout, so the arithmetic is the closest a test gets (docs/lessons-learned.md § 5); the
  * Deck measures the rest (P91-MODELS-WIDTH).

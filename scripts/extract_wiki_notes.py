@@ -3,7 +3,7 @@
 Title: Wiki note reader (maintainer tool)
 Purpose: Turn one fetched wiki page into note-shaped records by cutting the page's own
          tactics/use section to length, with no word changed and no sentence added. This is
-         the D111 "trim only" rule (docs/archive/58-phase-1-notes-shown-and-wiki-extracts.md
+         the D111 "trim only" rule (workshop:archive/58-phase-1-notes-shown-and-wiki-extracts.md
          Section 8, item 2): an AI may never write a sentence into a wiki note. It may only cut.
 Used for: Reading a sample page per wiki for the maintainer before any note enters
           data/kb/strategy_seed.json (that file is never written by this script -- it prints).
@@ -90,7 +90,7 @@ FALLBACK_SECTION_HEADING = "overview"
 
 # Per-wiki heading preferences, tried BEFORE the general list above. Keyed by the exact host
 # from the page's own fetched source_url (never guessed at, never a filename). Seeded from
-# five real pages per wiki -- see docs/test-evidence/plan58p1-B-samples.md for the pages that
+# five real pages per wiki -- see workshop:test-evidence/plan58p1-B-samples.md for the pages that
 # grounded each one. Only one of the five sampled wikis (hollowknight.wiki) keeps tactics
 # under a heading already on the general list; the other four are why this table exists.
 HOST_HEADING_PREFERENCE: dict[str, list[str]] = {
@@ -1081,7 +1081,7 @@ def build_note(
         # gap ATTR-5.2 exists for (docs/knowledge-base.md, "Source attribution": "Read the
         # licence from the snapshot, not from the archive.org item"). Where the version was
         # already established from other evidence (an archived siteinfo, or a footer read by
-        # hand -- see docs/archive/15-corpus-licensing-attribution-plan.md), pass it here
+        # hand -- see workshop:archive/15-corpus-licensing-attribution-plan.md), pass it here
         # rather than trusting today's live read to repeat it. Still checked against the
         # allow-list below, so a wrong override cannot slip through.
         licence = licence_override

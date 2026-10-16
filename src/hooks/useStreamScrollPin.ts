@@ -168,7 +168,7 @@ export function useStreamScrollPin(
    * height changed -- a new line, not every letter -- so reading the tail's position there is
    * free. Following from the commit instead, on every step of the reveal, read positions in the
    * middle of React's commit and forced the whole panel to be laid out early each time: profiled on
-   * the Deck 2026-09-24 with a game running (scripts/probe_deck_cpu_profile.py --callers
+   * the Deck 2026-09-24 with a game running (workshop:scripts/probe_deck_cpu_profile.py --callers
    * getBoundingClientRect), those reads were the largest single cost while answer text appeared.
    * It also used to be rebuilt on every commit and to defer each pass to the next frame, by which
    * time React had changed the page again. Declared before the follow effect, so on the commit

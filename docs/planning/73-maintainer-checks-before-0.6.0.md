@@ -1,8 +1,8 @@
 # 73 — Your checks before 0.6.0 ships
 
-Written 2026-09-27, at the end of the release bug session ([plan 72](72-release-bug-session.md)). The
+Written 2026-09-27, at the end of the release bug session ([plan 72](../../../bonsAI-workshop/planning/72-release-bug-session.md)). The
 maintainer asked: "Write this to a separate plan for me the maintainer to do before we ship 0.6". This is
-that plan. It is part of the re-launch, [plan 71](71-merge-experimental-into-main.md).
+that plan. It is part of the re-launch, [plan 71](../../../bonsAI-workshop/planning/71-merge-experimental-into-main.md).
 
 **Status: waiting on the maintainer. None of the four checks has been done yet.**
 

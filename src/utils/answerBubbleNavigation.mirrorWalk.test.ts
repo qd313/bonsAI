@@ -2,7 +2,7 @@
  * Title: A whole answer walked Down and then Up: same stops, every one fully on screen
  *
  * Purpose: Pin plan 77 helper E, bug 2, from a Deck run of build 4af8e7a1 on 2026-09-29 (plan 76,
- * block 3, docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01-try2.json): a section's box was a stop Down
+ * block 3, workshop:test-evidence/plan76-REPLY-STOPS-MIRROR-01-try2.json): a section's box was a stop Down
  * visited after a scroll and Up skipped. The maintainer's call (2026-09-29) is that Up stops on it
  * too, so a walk Down and a walk Up visit exactly the same stops.
  *

@@ -3,7 +3,7 @@
 **Status:** `NOT STARTED` — discovery locked 2026-08-09 (maintainer chat).
 **Overall effort:** ★★★★ (matches [roadmap.md](../roadmap.md) Backlog § Knowledge base).
 **Roadmap:** [KB online / versus strategy content](../roadmap-kb.md) · related [KB visual maps](../roadmap-kb.md) (later wave in this plan).
-**Adjacent:** [knowledge-base.md](../knowledge-base.md) · [15-corpus-licensing-attribution-plan.md](../archive/15-corpus-licensing-attribution-plan.md) · [spoiler-constitution.md](spoiler-constitution.md) · [rag-eval-query-style.md](../audit/rag-eval-query-style.md) · eval fixture `tests/fixtures/kb_eval_v2.json`.
+**Adjacent:** [knowledge-base.md](../knowledge-base.md) · [15-corpus-licensing-attribution-plan.md](../../../bonsAI-workshop/archive/15-corpus-licensing-attribution-plan.md) · [spoiler-constitution.md](spoiler-constitution.md) · [rag-eval-query-style.md](../../../bonsAI-workshop/audit/rag-eval-query-style.md) · eval fixture `tests/fixtures/kb_eval_v2.json`.
 
 ## How to use this file
 
@@ -78,7 +78,7 @@ title; optional visual map attach once callouts exist.
 ### Side handling A — product note
 
 Paired survivor/infected (or T/CT) **wordings** still belong in the eval set
-([rag-eval-query-style.md](../audit/rag-eval-query-style.md) § 7). Each wording
+([rag-eval-query-style.md](../../../bonsAI-workshop/audit/rag-eval-query-style.md) § 7). Each wording
 targets its **own** card. High accent / character voice will **not** systematically
 weave “what the other side wants” from the corpus; that beat stays a future
 prompt/character pass if desired.
@@ -187,7 +187,7 @@ for the existing versus-oriented L4D2 eval rows before treating this stage done.
     infected card).
   - **Accept:** Signed rows meet the project’s current top-k expectation for
     seed eval (document the command/result in
-    `docs/archive/research/` if numbers move).
+    `workshop:archive/research/` if numbers move).
   - **Verify:** project eval script / unittest used for PR2, scoped to L4D2
     versus ids.
 
@@ -269,7 +269,7 @@ maps** row as the maps half of this feature (prelim → executable here).
     callout card references a map id, and reply UX (inline image vs chip →
     expand). Plain-language options + recommendation; **maintainer picks**.
   - **Accept:** Written spike section appended below or in
-    `docs/archive/spikes/` with a single chosen option.
+    `workshop:archive/spikes/` with a single chosen option.
   - **Verify:** maintainer sign-off on the option.
 
 - [ ] **OV-5.2 — Schema / package hook**

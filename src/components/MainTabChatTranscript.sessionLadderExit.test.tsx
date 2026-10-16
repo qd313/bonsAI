@@ -2,7 +2,7 @@
  * Title: Down off the last chip of the Session tab's chip ladder moves on
  * Purpose: Pin the fix for the roadmap bug "In Show details' Session tab, Down from the last chip of
  *          the chip ladder does not move the ring" (plan 70 flow L6; measured again in plan 72 free
- *          play, docs/test-evidence/plan72-Z-FREEPLAY.json finding 1: seven Downs and a Right left
+ *          play, workshop:test-evidence/plan72-Z-FREEPLAY.json finding 1: seven Downs and a Right left
  *          the ring on "Chip 6 of 6", with the question box unreachable except by B).
  * Used for: buildDetailsPanelElement.tsx and SessionContextStrip.tsx, rendered for real inside
  *           MainTabChatTranscript.

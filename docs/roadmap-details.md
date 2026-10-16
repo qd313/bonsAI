@@ -84,8 +84,8 @@ several panel reopens.
 `round34-BUG-down-walk-strategy-mode-control.json` (trapped, other Ask mode),
 `round34-BUG-empty-chat-input-trap.json` (trapped, empty chat), then
 `round34-BUG-down-walk-after-loader-restart.json` and `round34-BUG-input-to-ask-final-check.json` (both clean after the
-restart). All under `docs/test-evidence/`. Also `docs/test-evidence/round35-trap-*.json` and
-[plan 35](archive/35-bugfix-session.md) § 7.
+restart). All under `workshop:test-evidence/`. Also `workshop:test-evidence/round35-trap-*.json` and
+[plan 35](../../bonsAI-workshop/archive/35-bugfix-session.md) § 7.
 
 **Reproduced on demand 2026-09-15, which the entry had been waiting for.** It happened twice in one
 sitting, both times within seconds of starting a brand new, empty chat while the panel was showing a
@@ -95,7 +95,7 @@ the Ask button were all on screen and none could be reached. Emptying the box fi
 it is not the text. Restarting the plugin cleared it both times. Three walks in the same sitting where
 that row was absent, or the chat already had a reply in it, all reached the Ask button normally. That is
 five observations, not proof of a cause, but it is a recipe to try. Evidence
-`docs/test-evidence/plan48-BUG-ask-input-ring-trap-2026-09-15.json`.
+`workshop:test-evidence/plan48-BUG-ask-input-ring-trap-2026-09-15.json`.
 
 **Found again 2026-09-18 with a game running, and the trigger is now known.** Pressing A on the question box
 opens Steam's own on-screen keyboard; once B closes it, Down and Right out of the box stop moving the
@@ -105,7 +105,7 @@ panel reopens and one full close-and-reopen of the whole Quick Access Menu on Ha
 brand-new chat with Hades running; by the time Portal 2 was running it had cleared on its own, with no
 restart needed. Three tries of the 15 September new-chat recipe the same night came back clean, so opening
 the keyboard, not starting a new chat, looks like the real trigger. Evidence
-`docs/test-evidence/plan61-ASKBAR-FOCUS-TRAP-01.json` (the sighting), `docs/test-evidence/plan61-focustrap-try2.json`
+`workshop:test-evidence/plan61-ASKBAR-FOCUS-TRAP-01.json` (the sighting), `workshop:test-evidence/plan61-focustrap-try2.json`
 and `-try3.json` (the clean tries).
 
 **A second sighting, later the same night, reached a different way, with a working fix found.** This time
@@ -119,7 +119,7 @@ agreement but Down was still dead; closing and reopening just the plugin panel l
 ring stalling partway through an old reply, instead of a clean fix; **closing the whole Quick Access Menu and
 reopening it did clear it**, restoring a normal walk from the top of the panel down through the chips to the
 question box and the Ask button. On a controller alone, a person stuck like this can press the Steam button,
-close the Quick Access Menu, and reopen it. Evidence `docs/test-evidence/plan61-ASKBAR-FOCUS-TRAP-02.json`.
+close the Quick Access Menu, and reopen it. Evidence `workshop:test-evidence/plan61-ASKBAR-FOCUS-TRAP-02.json`.
 
 **Later still the same night, with a game running throughout, the freeze stopped being occasional.** Across
 the rest of the games block it reproduced on nearly every attempt to send a question, and reopening the whole
@@ -144,7 +144,7 @@ A related shape seen the same session: walking Up from the question box with a g
 
 the ring on "Save chat to Desktop" while it read 0% visible, fully covered by the dock, and Up did
 nothing further — also cleared only by closing and reopening the panel. Evidence
-`docs/test-evidence/plan70-R-R3-try2.json` (+ two screenshots).
+`workshop:test-evidence/plan70-R-R3-try2.json` (+ two screenshots).
 
 **F2 looked at the code and found no clear cause (2026-09-26); the hidden "Save chat" shape was a
 separate fault, fixed in `12ee3dfb`.** F2 listed the Deck readings that would settle the chip route
@@ -156,7 +156,7 @@ stayed on the chip and the page's own focus agreed, no on-screen keyboard opened
 went to the question box and Right to the mode button. No press reached the box itself on A — Steam
 delivers every press as a button event, never as a key or direction event. So the chip route alone does
 not trap with nothing running. The same symptom did appear that night over Fallout 4 with no chip pressed
-at all (its own entry now). Evidence `docs/test-evidence/plan70-CHIP-TRAP-reading.json` (+ screenshots).
+at all (its own entry now). Evidence `workshop:test-evidence/plan70-CHIP-TRAP-reading.json` (+ screenshots).
 
 ## Terse mode (Speed answers in three lines)
 
@@ -269,10 +269,10 @@ row 07 (reduced motion), both on the maintainer's own page; and a look at the he
 on screen during this run. Italics were tried earlier for the label and turned down.
 
 **Since then (2026-10-02):** row 09 passed on the Deck. The dot stayed still while a long label scrolled
-(`docs/test-evidence/plan79-CHIP-BUTTON-09.json`). Row 07 passed in all three styles. The roadmap entry has the
+(`workshop:test-evidence/plan79-CHIP-BUTTON-09.json`). Row 07 passed in all three styles. The roadmap entry has the
 current state.
 
-[Plan](archive/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
+[Plan](../../bonsAI-workshop/archive/60-chip-button-restyle.md) · evidence `workshop:test-evidence/plan60-QA-chip-button.json`.
 
 ## Shipped, QA owed — why each was built this way
 
@@ -307,9 +307,9 @@ Only one note from this heading is still open. The rest is in [archive/roadmap-t
   - **Depends on:** Mode selector (shipped).
 
 - ★★★★ **Connection doctor** (guided first-Ask repair — candidate)
-  - **Status:** Accepted 2026-09-05 (D64) as one feature with the snapshot folded in. Planned in [39-connection-doctor.md](planning/39-connection-doctor.md).
+  - **Status:** Accepted 2026-09-05 (D64) as one feature with the snapshot folded in. Planned in [39-connection-doctor.md](../../bonsAI-workshop/planning/39-connection-doctor.md).
   - **Goal:** **Fix this** on Ask failure walks probes → one next action with Ollama-tab deep link.
-  - **Source:** [13-roadmap-feature-ideas.md](archive/13-roadmap-feature-ideas.md) § B3.
+  - **Source:** [13-roadmap-feature-ideas.md](../../bonsAI-workshop/archive/13-roadmap-feature-ideas.md) § B3.
 - ★★★★ **LAN custom model pull** (remote host — decision review)
   - **Goal:** LAN Ask host: add/pull models not in catalog. Blocked until a way is chosen (the four ways are below). **A choice among them is still owed.**
   - **The four ways, as first written down in `67b2b3f7`:**
@@ -329,11 +329,11 @@ Only one note from this heading is still open. The rest is in [archive/roadmap-t
   - **GitHub:** [bonsAI Issues](https://github.com/qd313/bonsAI/issues) — issue TBD.
   - **Goal:** Read-only diagnostics dump to Desktop; Magic Ask `bonsai:diagnostics`.
   - **Folded 2026-09-05 (D64):** into **Connection doctor** as its **Save a report** button and typed command. The roadmap entry is
-    retired; this note is what remains of it. [39-connection-doctor.md](planning/39-connection-doctor.md).
+    retired; this note is what remains of it. [39-connection-doctor.md](../../bonsAI-workshop/planning/39-connection-doctor.md).
 - ★★★★★ **Local reply TTS** (Phase 1–2 character voice)
   - **GitHub:** [bonsAI Issues](https://github.com/qd313/bonsAI/issues) — issue TBD.
   - **Goal:** Phase 1 offline TTS play/stop; Phase 2 character-aligned read-aloud (legal gate).
-  - **Memo 2026-09-05:** [42-read-aloud-feasibility.md](planning/42-read-aloud-feasibility.md). SteamOS ships a voice since 3.7.13;
+  - **Memo 2026-09-05:** [42-read-aloud-feasibility.md](../../bonsAI-workshop/planning/42-read-aloud-feasibility.md). SteamOS ships a voice since 3.7.13;
     the natural voice is the sherpa-onnx runner (Apache 2.0, 28 MB) plus one Piper voice (63 MB); playback goes out through the
     background program the way the microphone comes in. The legal gate is one rule: stock voices only, never a real person's voice.
     Calls open as D74, including a split into Phase 1 (three stars) and Phase 2 (two stars).
@@ -346,9 +346,9 @@ Only one note from this heading is still open. The rest is in [archive/roadmap-t
   - **GitHub:** [bonsAI Issues](https://github.com/qd313/bonsAI/issues) — issue TBD.
   - **Goal:** Rank installed models by measured speed/completion; offer as try order (with confirmation).
   - **Depends on:** shipped routing pickers; overlaps **Dynamic keep-alive** measurements.
-  - **Source:** [13-roadmap-feature-ideas.md](archive/13-roadmap-feature-ideas.md) § C1.
+  - **Source:** [13-roadmap-feature-ideas.md](../../bonsAI-workshop/archive/13-roadmap-feature-ideas.md) § C1.
   - **Descoped 2026-09-06 (D75, open):** the gate in § C1 asked whether timings hold still before ranking on them. Nobody ran
-    it; the plan takes the descope now: [43-model-speed-readout.md](planning/43-model-speed-readout.md) shows each model's last
+    it; the plan takes the descope now: [43-model-speed-readout.md](../../bonsAI-workshop/planning/43-model-speed-readout.md) shows each model's last
     timing on this Deck, keeps a ten-entry record per model with the running game, and adds a one-press timing button. The
     record answers the gate over weeks of ordinary use; if timings hold still under "no game, Speed, thinking off", the ranking
     becomes a small feature on top. Retiring this line is call 5 of D75.
@@ -405,7 +405,7 @@ Only one note from this heading is still open. The rest is in [archive/roadmap-t
 ## Platform / upstream items, as filed
 
 - ★★★★ **Llama.cpp provider spike** (Deck perf / replacement eval)
-  - **Goal:** Research-only go/no-go vs Deck-local Ollama. Deliverable: `docs/archive/spikes/llama-cpp-provider-eval.md`. Prior: [llama-cpp-provider.md](archive/spikes/llama-cpp-provider.md).
+  - **Goal:** Research-only go/no-go vs Deck-local Ollama. Deliverable: `workshop:archive/spikes/llama-cpp-provider-eval.md`. Prior: [llama-cpp-provider.md](../../bonsAI-workshop/archive/spikes/llama-cpp-provider.md).
 - ★★★★ **Steam Input layout parse** (VDF → AI context)
   - **Goal:** Parse controller VDF configs for actionable control context.
   - **Not in scope:** editing/writing controller configs.
@@ -414,13 +414,13 @@ Only one note from this heading is still open. The rest is in [archive/roadmap-t
 
 - ★★★★★ **Controller macro test rig + live view** (real gamepad input; DPS-owned)
   - **GitHub:** [bonsAI Issues](https://github.com/qd313/bonsAI/issues) — issue TBD.
-  - **Goal:** Close the last missing capability for unattended on-Deck QA — [01-qa-automation-plan.md](archive/01-qa-automation-plan.md) **F1**, "there is no input injection on the Deck." A bridge board the Deck sees as a real controller (wired USB on the dock by default, Bluetooth for handheld-geometry runs, both from day one), a macro runner whose steps are gated on real UI state (`gpfocus` markers, never `activeElement` — the P1-5 lesson), and one PipeWire pipeline teeing the QA `.mkv` to file **and** a live analyzer stream for a single encoder's APU cost.
+  - **Goal:** Close the last missing capability for unattended on-Deck QA — [01-qa-automation-plan.md](../../bonsAI-workshop/archive/01-qa-automation-plan.md) **F1**, "there is no input injection on the Deck." A bridge board the Deck sees as a real controller (wired USB on the dock by default, Bluetooth for handheld-geometry runs, both from day one), a macro runner whose steps are gated on real UI state (`gpfocus` markers, never `activeElement` — the P1-5 lesson), and one PipeWire pipeline teeing the QA `.mkv` to file **and** a live analyzer stream for a single encoder's APU cost.
   - **Status, 2026-09-24:** built and in daily use; now ★★★★ on the roadmap and the maintainer's priority 1.
     The board, the press, chord and walk tools and the stop switch all exist. What is left: a recording that is
     also a live view (S3), checking the highlight from the video (S4), handheld runs over Bluetooth, and the
     nightly unattended run (P4). P4 needs the saved-walk replay fixed first. The full account is at the top of
     [plan 19](planning/19-controller-macro-test-rig.md).
-  - **This is one track of five.** The program plan — including the two tracks that need no hardware and should land first (CI gate, static focus checks, both above) — is [21-ai-owned-testing-program.md](planning/21-ai-owned-testing-program.md), with effort, milestones and the autonomy boundaries.
+  - **This is one track of five.** The program plan — including the two tracks that need no hardware and should land first (CI gate, static focus checks, both above) — is [21-ai-owned-testing-program.md](../../bonsAI-workshop/planning/21-ai-owned-testing-program.md), with effort, milestones and the autonomy boundaries.
   - **Owner split:** primitives (`deck_pad*`, `deck_macroRun`, `deck_stream*`, extension kill switch + always-visible agent-control status) land upstream in decky-plugin-studio per [AGENTS.md](../AGENTS.md); bonsAI keeps only its macro files and CDP assertions (`tests/macros/`). Answers findings-log **P1-5**; retires DPS's "Deck UI cannot be automated in v1" note.
   - **V1 acceptance:** one unattended golden-path smoke — QAM chord → bonsAI tab → question via the existing injector → real A-press on Ask → reply-finished signal → recording, step log and plugin log land on the PC, no human touch after invocation.
   - **Safety (locked):** QAM-open interlock (presses halt if the overlay closes), neutral-on-silence firmware watchdog, extension kill switch; dev tooling only, never shipped inside the plugin.
@@ -435,33 +435,33 @@ Only one note from this heading is still open. The rest is in [archive/roadmap-t
   - **GitHub:** [bonsAI Issues](https://github.com/qd313/bonsAI/issues) — issue TBD.
   - **Goal:** Opt-in always-on local wake **bonsAI** → STT → quiet Ask.
   - **Depends on:** Whisper voice Ask; Reply ready toast; Voice STT session daemon (shipped).
-  - **Feasibility:** [10-wake-word-listening-feasibility.md](planning/10-wake-word-listening-feasibility.md).
+  - **Feasibility:** [10-wake-word-listening-feasibility.md](../../bonsAI-workshop/planning/10-wake-word-listening-feasibility.md).
 - ★★★★★★ **Deep mod AI hints** (install paths + compatdata)
   - **GitHub:** [bonsAI Issues](https://github.com/qd313/bonsAI/issues) — issue TBD.
-  - **Goal:** Detect mod frameworks/files; mod-aware AI guidance. [12-deep-mod-ai-hints-feasibility.md](planning/12-deep-mod-ai-hints-feasibility.md).
+  - **Goal:** Detect mod frameworks/files; mod-aware AI guidance. [12-deep-mod-ai-hints-feasibility.md](../../bonsAI-workshop/planning/12-deep-mod-ai-hints-feasibility.md).
 - ★★★★★★ **In-game answer surface** (no-QAM reply; overlay research)
   - **GitHub:** [bonsAI Issues](https://github.com/qd313/bonsAI/issues) — issue TBD.
   - **Goal:** Read answer without leaving game. Full overlay upstream-gated; unblocked slice: toast carries ~2 lines (suppress Strategy/fenced replies).
-  - **Source:** [13-roadmap-feature-ideas.md](archive/13-roadmap-feature-ideas.md) § C3.
+  - **Source:** [13-roadmap-feature-ideas.md](../../bonsAI-workshop/archive/13-roadmap-feature-ideas.md) § C3.
   - **Reframed 2026-09-08:** the same surface is open in a headset, because SteamVR lets a separate program on the PC draw a panel over
     any game. The headset shapes (a notification card, a wrist panel, a note pinned in space, the full floating panel) are planned in
-    [49-steam-frame-features.md](planning/49-steam-frame-features.md).
+    [49-steam-frame-features.md](../../bonsAI-workshop/planning/49-steam-frame-features.md).
 - ★★★ **bonsAI's own icon in the Quick Access Menu** (was ★★★★★★ "Native QAM shortcut tile")
   - **GitHub:** [bonsAI Issues](https://github.com/qd313/bonsAI/issues) — issue TBD.
   - **Goal:** bonsAI on its own icon in the menu, two stops instead of three.
   - **Re-planned 2026-09-23:** the separate free plugin [Quick Tab](https://github.com/moi952/decky-quick-tab) already
     does the pinning. bonsAI's share is a Deck test and a few fixes. [Plan 66](planning/66-quick-tab-own-menu-icon.md).
-  - **Old study:** [archive/11-native-qam-tile-feasibility.md](archive/11-native-qam-tile-feasibility.md), kept for its
+  - **Old study:** [archive/11-native-qam-tile-feasibility.md](../../bonsAI-workshop/archive/11-native-qam-tile-feasibility.md), kept for its
     section on running bonsAI outside Decky.
 - ★★★★★★ **Remote Play diagnostics layer** (streaming host/client)
   - **GitHub:** [bonsAI Issues](https://github.com/qd313/bonsAI/issues) — issue TBD.
   - **Goal:** Streamed gameplay answers weight encode latency and host-vs-client fixes.
-  - **Related:** noted (not folded) in [09-steam-frame-companion-feasibility.md](archive/09-steam-frame-companion-feasibility.md) § B8.
+  - **Related:** noted (not folded) in [09-steam-frame-companion-feasibility.md](../../bonsAI-workshop/archive/09-steam-frame-companion-feasibility.md) § B8.
 - ★★★★★★ **Steam Frame companion UX** (VR / LAN Deck)
   - **GitHub:** [bonsAI Issues](https://github.com/qd313/bonsAI/issues) — issue TBD.
-  - **Goal:** Research-first companion workflows for Steam Frame. [09-steam-frame-companion-feasibility.md](archive/09-steam-frame-companion-feasibility.md).
-  - **Planned 2026-09-08:** nine entries in [49-steam-frame-features.md](planning/49-steam-frame-features.md), each marked with whether a
-    PC running SteamVR can test it before the Frame ships; PC setup steps in [50-steamvr-pc-setup.md](planning/50-steamvr-pc-setup.md).
+  - **Goal:** Research-first companion workflows for Steam Frame. [09-steam-frame-companion-feasibility.md](../../bonsAI-workshop/archive/09-steam-frame-companion-feasibility.md).
+  - **Planned 2026-09-08:** nine entries in [49-steam-frame-features.md](../../bonsAI-workshop/planning/49-steam-frame-features.md), each marked with whether a
+    PC running SteamVR can test it before the Frame ships; PC setup steps in [50-steamvr-pc-setup.md](../../bonsAI-workshop/planning/50-steamvr-pc-setup.md).
     Still owed from the study: the four Frame tips rewritten, one README line, and the re-rate to ★★.
 
 ## A tap outside the AI models screen started the queued downloads and left the D-pad stuck in the Ollama tab
@@ -489,10 +489,10 @@ Only one note from this heading is still open. The rest is in [archive/roadmap-t
   **The count that decided it ran 2026-09-12:** 2 of 10 answers already opened with a sentence that stands alone, and 0 of 10
   gave anything away. By the rule the maintainer locked (D97 call 4), that poor score means build it — then they read the
   count and said not yet. **When the go comes, the first step is still to count the 2026-09-07 answer-first run the same
-  way**, because that run may already be the change. Stars stay at two. [Plan](planning/49-steam-frame-features.md) ·
-  [Second look § 2](planning/52-frame-features-second-look.md#2-headline-first-the-weakest-one-and-what-to-do-instead) ·
-  [Bench findings § 4](planning/53-steamvr-bench-findings.md#4-the-headline-first-count-run-the-same-morning) ·
-  [The count, sentence by sentence](planning/assets/53-headline-count-2026-09-12.md).
+  way**, because that run may already be the change. Stars stay at two. [Plan](../../bonsAI-workshop/planning/49-steam-frame-features.md) ·
+  [Second look § 2](../../bonsAI-workshop/planning/52-frame-features-second-look.md#2-headline-first-the-weakest-one-and-what-to-do-instead) ·
+  [Bench findings § 4](../../bonsAI-workshop/planning/53-steamvr-bench-findings.md#4-the-headline-first-count-run-the-same-morning) ·
+  [The count, sentence by sentence](../../bonsAI-workshop/planning/assets/53-headline-count-2026-09-12.md).
 
 ## Give the reclaimed height to the transcript
 
@@ -503,10 +503,10 @@ Only one note from this heading is still open. The rest is in [archive/roadmap-t
   rows take 311 of the 454 pixels before any chat: Steam's header (64), the tab bar plus its reserve (24), the chat slot
   row (54), a 12-pixel gap, and the dock (157). Getting more chat on this screen means shrinking or hiding one of those
   rows, which is a design call for the maintainer, not a fix. External-monitor record:
-  [archive/30-collapsing-tab-bar.md](archive/30-collapsing-tab-bar.md) § 8 ·
-  [plan 56 block 0](archive/56-feature-session-four.md#block-0--hygiene-and-three-measurements-the-session-alone-about-forty-minutes).
+  [archive/30-collapsing-tab-bar.md](../../bonsAI-workshop/archive/30-collapsing-tab-bar.md) § 8 ·
+  [plan 56 block 0](../../bonsAI-workshop/archive/56-feature-session-four.md#block-0--hygiene-and-three-measurements-the-session-alone-about-forty-minutes).
 
-**The design call, 2026-10-08 ([D126](audit/maintainer-decisions-locked.md), [plan 84](planning/84-more-room-for-the-answer.md)).**
+**The design call, 2026-10-08 ([D126](audit/maintainer-decisions-locked.md), [plan 84](../../bonsAI-workshop/planning/84-more-room-for-the-answer.md)).**
 Re-measured that day: Steam's empty strip 14, Decky's title bar 34, Decky's gap 16, the tab bar 24, the ask area 162, the
 answer 204 (the saved-chats row now scrolls away with the chat). The maintainer picked, over seven mockup rounds, the tab
 bar in the empty strip, the chat's name in Decky's title bar, the ask area folded into the box, and Read aloud in the
@@ -514,11 +514,11 @@ answer's corner: 297 points for the answer. Every option drawn is in [the drawin
 
 **Status wording moved here from the roadmap entry on 2026-10-09 (docs sweep after plan 84), to keep the entry at five lines. Nothing was removed.** The entry read, word for word, until then:
 
-- ★★★★ `[layout]` `[tabs]` **Give the reclaimed height to the transcript** — **OPEN, planned 2026-10-08 ([plan 84](planning/84-more-room-for-the-answer.md), calls in [D126](audit/maintainer-decisions-locked.md#d126--locked-2026-10-08-raised-2026-10-08--plan-84-more-room-for-the-answer-the-calls-from-seven-mockup-rounds)). Step 1, three Deck tests, passed the same night ([evidence](test-evidence/plan84-STEP1-DECK-TESTS.json)). Steps 2 and 3 (the ask area folds, Read aloud into the answer's corner) built and passed on the Deck's own screen that night too: the answer has 259 points now ([evidence](test-evidence/plan84-STEPS2-3-DECK.json)). Steps 4, 5 and 7 (the new tab bar, the chat's name with L2/R2 and the chats menu, the version in About) built and passed on the Deck the same night, with one bug sent on to step 6 ([evidence](test-evidence/plan84-STEPS4-5-7-DECK.json)); steps 6, 8 and 9 are not done.**
+- ★★★★ `[layout]` `[tabs]` **Give the reclaimed height to the transcript** — **OPEN, planned 2026-10-08 ([plan 84](../../bonsAI-workshop/planning/84-more-room-for-the-answer.md), calls in [D126](audit/maintainer-decisions-locked.md#d126--locked-2026-10-08-raised-2026-10-08--plan-84-more-room-for-the-answer-the-calls-from-seven-mockup-rounds)). Step 1, three Deck tests, passed the same night ([evidence](../../bonsAI-workshop/test-evidence/plan84-STEP1-DECK-TESTS.json)). Steps 2 and 3 (the ask area folds, Read aloud into the answer's corner) built and passed on the Deck's own screen that night too: the answer has 259 points now ([evidence](../../bonsAI-workshop/test-evidence/plan84-STEPS2-3-DECK.json)). Steps 4, 5 and 7 (the new tab bar, the chat's name with L2/R2 and the chats menu, the version in About) built and passed on the Deck the same night, with one bug sent on to step 6 ([evidence](../../bonsAI-workshop/test-evidence/plan84-STEPS4-5-7-DECK.json)); steps 6, 8 and 9 are not done.**
   On the Deck's own screen the answer gets 204 of the panel's 454 points. Picked over seven mockup rounds: the tab bar moves into the empty strip at the top, the chat's name goes in Decky's title bar, the ASK button and the context line fold into the question box, and Read aloud moves into the answer's corner.
   The answer then gets 297 points, about twice the words of a long answer on screen. [Drawing](https://claude.ai/artifact/EoRoxs11bVjfyBZ28tkM5P) · [Detail](roadmap-details.md#give-the-reclaimed-height-to-the-transcript).
 
-**Where the build stood on 2026-10-09 ([plan 84](planning/84-more-room-for-the-answer.md) § 10).** Steps 2 and 3 (2026-10-08): the ask area measured 107 points (was 162) and the answer 259 ([evidence](test-evidence/plan84-STEPS2-3-DECK.json)). Steps 4, 5 and 7 (2026-10-08/09): the new tab bar, the chat's name with L2 and R2 and the chats menu, the version on the About tab ([evidence](test-evidence/plan84-STEPS4-5-7-DECK.json)). Step 6 (2026-10-09): the tab bar moved into the strip at the top, the other tabs lost their back arrow and name, and the answer measured 295 points ([evidence](test-evidence/plan84-STEP6-DECK.json)). The maintainer's question from the name helper, a Features entry of its own: should New chat warn when there are already eight chats.
+**Where the build stood on 2026-10-09 ([plan 84](../../bonsAI-workshop/planning/84-more-room-for-the-answer.md) § 10).** Steps 2 and 3 (2026-10-08): the ask area measured 107 points (was 162) and the answer 259 ([evidence](../../bonsAI-workshop/test-evidence/plan84-STEPS2-3-DECK.json)). Steps 4, 5 and 7 (2026-10-08/09): the new tab bar, the chat's name with L2 and R2 and the chats menu, the version on the About tab ([evidence](../../bonsAI-workshop/test-evidence/plan84-STEPS4-5-7-DECK.json)). Step 6 (2026-10-09): the tab bar moved into the strip at the top, the other tabs lost their back arrow and name, and the answer measured 295 points ([evidence](../../bonsAI-workshop/test-evidence/plan84-STEP6-DECK.json)). The maintainer's question from the name helper, a Features entry of its own: should New chat warn when there are already eight chats.
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
@@ -534,9 +534,9 @@ answer's corner: 297 points for the answer. Every option drawn is in [the drawin
   running SteamVR scene, with no plugin code at all, drawn entirely through SteamVR's own door. The in-headset menu is confirmed
   to be a web page, the same way the Deck's menu is. **Two things still unknown:** pointing at the panel, because the pretend
   headset has no controllers and a real one is needed; and whether the small notification card SteamVR accepted actually drew on
-  screen. [Plan](planning/49-steam-frame-features.md) · [PC setup](planning/50-steamvr-pc-setup.md) ·
-  [The anti-cheat rule in full](planning/52-frame-features-second-look.md#4-the-floating-panel-and-anti-cheat) ·
-  [Bench findings](planning/53-steamvr-bench-findings.md) · [The picture](planning/assets/53-panel-in-headset-2026-09-12.jpg).
+  screen. [Plan](../../bonsAI-workshop/planning/49-steam-frame-features.md) · [PC setup](../../bonsAI-workshop/planning/50-steamvr-pc-setup.md) ·
+  [The anti-cheat rule in full](../../bonsAI-workshop/planning/52-frame-features-second-look.md#4-the-floating-panel-and-anti-cheat) ·
+  [Bench findings](../../bonsAI-workshop/planning/53-steamvr-bench-findings.md) · [The picture](../../bonsAI-workshop/planning/assets/53-panel-in-headset-2026-09-12.jpg).
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
@@ -553,9 +553,9 @@ answer's corner: 297 points for the answer. Every option drawn is in [the drawin
   all came back with a working answer, and it reached Ollama on that PC. So "run the same Python side on the PC too" is a
   priced decision rather than a guess. What is missing: a small starter program, a way for a panel to reach it on the same
   machine, and PC-shaped answers for which game is running, the speaker, and the screenshot folder. llama.cpp stays closed.
-  [Plan](planning/49-steam-frame-features.md) ·
-  [Second look § 5](planning/52-frame-features-second-look.md#5-the-second-way-to-run-the-gap-plan-49-underplayed) ·
-  [Bench findings § 3](planning/53-steamvr-bench-findings.md#3-the-plugins-python-side-on-this-pc-it-runs).
+  [Plan](../../bonsAI-workshop/planning/49-steam-frame-features.md) ·
+  [Second look § 5](../../bonsAI-workshop/planning/52-frame-features-second-look.md#5-the-second-way-to-run-the-gap-plan-49-underplayed) ·
+  [Bench findings § 3](../../bonsAI-workshop/planning/53-steamvr-bench-findings.md#3-the-plugins-python-side-on-this-pc-it-runs).
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
@@ -582,18 +582,18 @@ limit (word for word):**
   screen" was only written while the panel was open and was never cleared once it closed, so a reply that
   finished in the background read as already seen. **06c tried a fourth time on the Deck 2026-09-23 (flow
   E), PASS:** with the menu closed by four B presses, "Reply ready — Tap to open" appeared within 1 second
-  of the answer finishing. Evidence `docs/test-evidence/plan64-CHAT-SLOTS-V3-06c-try4.json` (+ two
+  of the answer finishing. Evidence `workshop:test-evidence/plan64-CHAT-SLOTS-V3-06c-try4.json` (+ two
   screenshots). [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02) · [More](roadmap-details.md#named-chat-slots).
 
 - ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row, transcript, presets,
   Ask bar. Most rows pass on device. **05b passed on the Deck 2026-09-18:** returning to the chat still writing
   showed the question and the partial text at once, nothing missing. Evidence
-  `docs/test-evidence/plan61-CHAT-SLOTS-V3-05b.json`. **05a's ask-bar-reads-busy half, 06a and 06b failed on the
+  `workshop:test-evidence/plan61-CHAT-SLOTS-V3-05b.json`. **05a's ask-bar-reads-busy half, 06a and 06b failed on the
   Deck 2026-09-18** — see the new "chat that is still writing does not look busy" bug above. Owed: **06c** (not
   attempted 2026-09-18) and **15d** (a recording made 2026-09-18 for the maintainer's own glance).
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
   **CHAT-SLOTS-V2-01 passed on the Deck 2026-09-17:** Down twice from the tab strip reaches the chat text, and Up retraces
-  the same path. Evidence `docs/test-evidence/plan57-QA-CHAT-SLOTS-V2-01.json`.
+  the same path. Evidence `workshop:test-evidence/plan57-QA-CHAT-SLOTS-V2-01.json`.
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
@@ -604,7 +604,7 @@ fell from 60 to 4 frames a second (250 ms for a frame, read off Steam's own over
 being written, with both the answering model and the note-search model loaded at once. Memory stayed
 above the line: at least 1,821 MB was still free out of 14,804 with the game and both models loaded
 together. Measured at the title screen, not during a mission, so a real level may cost more. Evidence
-`docs/test-evidence/plan70-FLOW0-MEMORY.json` (+ `-game.png`, `-answer.png`).
+`workshop:test-evidence/plan70-FLOW0-MEMORY.json` (+ `-game.png`, `-answer.png`).
 
 **Whether two models loaded causes trouble with a game running: measured 2026-09-26, same evidence.**
 1.8 GB was still free with the game at its title screen and both models loaded, so under D112's rule
@@ -622,7 +622,7 @@ fixes and Deck passes, are in [archive/roadmap-trimmed-2026-10-roadmap-details.m
 **In carousel style, Down from "Save chat to Desktop" can land on a chip slid mostly off screen.** Found
 on the Deck 2026-09-26 (plan 70, flow 2b.9). The ring landed on a chip showing only about 4% of itself at
 the left edge, with the fully visible chip beside it holding no ring; Right moved the ring onto the
-visible chip. Evidence `docs/test-evidence/plan70-PRESET-ONE-LINE-03.json` (+ screenshot). **Not fixed
+visible chip. Evidence `workshop:test-evidence/plan70-PRESET-ONE-LINE-03.json` (+ screenshot). **Not fixed
 this wave — helper F2's guess:** Steam may be ignoring a chip's own change to "focusable" after it first
 appears on screen. Needs one more Deck reading (flow L4.2) before a fix is attempted.
 
@@ -632,7 +632,7 @@ to another tab and back — in all three tries the ring, the page's own active e
 carousel slot were all the same chip, and that chip sat fully inside the visible strip, whether the
 carousel had moved on its own or not. The afternoon sighting may need a different way of making the row
 appear (right after an answer finishes, or a first open) rather than a tab switch. Evidence
-`docs/test-evidence/plan70-L4-CAROUSEL-READING.json` (+ screenshots).
+`workshop:test-evidence/plan70-L4-CAROUSEL-READING.json` (+ screenshots).
 
 **Three more one-off focus sightings from free play, 2026-09-26 (plan 70, flow 2b/2e), not yet reproduced
 on purpose:** the newest answer's turn folded shut by itself after switching tabs and back; after
@@ -666,7 +666,7 @@ says does not count as a real difference on its own.
 **Next step, not yet built:** open the plugin after deploying, and start each saved walk from its own
 starting screen — each walk file already says which screen that is — before replaying it. Once that is
 in place, a real overnight run can put this row on the schedule. Evidence
-`docs/test-evidence/overnight-2026-09-26-200443.md` (+ `.json`).
+`workshop:test-evidence/overnight-2026-09-26-200443.md` (+ `.json`).
 
 ## Flow L10 findings
 
@@ -677,7 +677,7 @@ which later closed, is in [archive/roadmap-trimmed-2026-10-roadmap-details.md](a
 Retry, question, Show reasoning, then the first answer part, partly off screen; three Downs do nothing,
 then nothing has focus. The same walk on the finished answer is fine. Not yet known whether the
 piece-by-piece drawing is involved; worth checking with it switched off. Evidence
-`docs/test-evidence/plan70-FPS-pieces.json`.
+`workshop:test-evidence/plan70-FPS-pieces.json`.
 
 ## What bonsAI costs a running game
 
@@ -691,19 +691,19 @@ Older dated notes moved here from the roadmap entry on 2026-09-30 (docs sweep 5,
   profile mid-answer. [Detail](roadmap-details.md#flow-l10-findings).
 
   **2026-09-29 (plan 76, block 3):** with Deep Rock Galactic: Survivor on its title screen, the panel's median while an answer arrived was
-  84.5 frames a second (thinking 90, idle 87.5). Evidence `docs/test-evidence/plan76-SCR-10-try2.json`.
+  84.5 frames a second (thinking 90, idle 87.5). Evidence `workshop:test-evidence/plan76-SCR-10-try2.json`.
   **2026-10-02 (plan 79):** in a live mission, stopped on a level-up menu, the panel held about 69 frames a second while answers
-  arrived, and the game 43 to 44 against 45 idle. Not yet tried in a real fight. Evidence `docs/test-evidence/plan79-SCR-10-MISSION.json`.
+  arrived, and the game 43 to 44 against 45 idle. Not yet tried in a real fight. Evidence `workshop:test-evidence/plan79-SCR-10-MISSION.json`.
 
 ## A Strategy checklist that arrives while the panel is closed never shows, and after any reopen a refine chip sends its follow-up in Speed mode
 
 Older dated note moved here from the roadmap entry on 2026-10-01 (docs sweep 9, plan 78), to bring the roadmap under its size limit. Nothing was removed.
 
-  **2026-10-01 (plan 78, Deck block 1, build `57586da0`, row P78-REOPEN-CHECKLIST), UNCLEAR:** neither question produced a checklist, because the AI is only asked for a checklist on the follow-up turn after a choice button is pressed, so the row's route could not show the case. The route is corrected in the row (ask, press the first choice button, close Quick Access at once, reopen); the re-run is owed. Evidence `docs/test-evidence/plan78-P78-REOPEN-CHECKLIST-try2.json`.
+  **2026-10-01 (plan 78, Deck block 1, build `57586da0`, row P78-REOPEN-CHECKLIST), UNCLEAR:** neither question produced a checklist, because the AI is only asked for a checklist on the follow-up turn after a choice button is pressed, so the row's route could not show the case. The route is corrected in the row (ask, press the first choice button, close Quick Access at once, reopen); the re-run is owed. Evidence `workshop:test-evidence/plan78-P78-REOPEN-CHECKLIST-try2.json`.
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
-  **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`, row P78-REOPEN-CHECKLIST), partly passed:** on two tries by the corrected route the AI wrote no checklist at all (the saved turns hold none), so the reopen proved nothing; the checklist half could not be produced in four tries over two blocks and rests on its unit tests. The follow-up's mode passed: the "Not really" then "Too long" follow-up went out in Strategy mode (log line "ask_strategy: branch fence requested in prompt=True (mode=strategy, app_id=2321470)"). On the maintainer's list (plan 78 question 9). Evidence `docs/test-evidence/plan78-P78-REOPEN-CHECKLIST-try3.json`. Older note: [roadmap-details.md](roadmap-details.md#a-strategy-checklist-that-arrives-while-the-panel-is-closed-never-shows-and-after-any-reopen-a-refine-chip-sends-its-follow-up-in-speed-mode).
+  **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`, row P78-REOPEN-CHECKLIST), partly passed:** on two tries by the corrected route the AI wrote no checklist at all (the saved turns hold none), so the reopen proved nothing; the checklist half could not be produced in four tries over two blocks and rests on its unit tests. The follow-up's mode passed: the "Not really" then "Too long" follow-up went out in Strategy mode (log line "ask_strategy: branch fence requested in prompt=True (mode=strategy, app_id=2321470)"). On the maintainer's list (plan 78 question 9). Evidence `workshop:test-evidence/plan78-P78-REOPEN-CHECKLIST-try3.json`. Older note: [roadmap-details.md](roadmap-details.md#a-strategy-checklist-that-arrives-while-the-panel-is-closed-never-shows-and-after-any-reopen-a-refine-chip-sends-its-follow-up-in-speed-mode).
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
@@ -713,19 +713,19 @@ Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep t
 
 **Deck row P78-REOPEN-CHECKLIST, 2026-10-01, partly passed:** the follow-up's mode passed; the checklist half could not be produced in four tries. Full note: [roadmap-details.md](roadmap-details.md#a-strategy-checklist-that-arrives-while-the-panel-is-closed-never-shows-and-after-any-reopen-a-refine-chip-sends-its-follow-up-in-speed-mode).
 
-**2026-10-03 (plan 81, build `afd2f444`), passed on a PREPARED answer from a stand-in AI:** the reopened panel drew the checklist and the refine follow-up went out in Strategy mode. The checklist is stored in its own session file, not in the turn's text (the row's wording assumed the turn). The four failed tries likely came from the choice-button bug, fixed in `83bec1ad` and now passed on the Deck (Done); one more try with the real AI is still owed. Evidence `docs/test-evidence/plan81-P78-REOPEN-CHECKLIST.json`.
+**2026-10-03 (plan 81, build `afd2f444`), passed on a PREPARED answer from a stand-in AI:** the reopened panel drew the checklist and the refine follow-up went out in Strategy mode. The checklist is stored in its own session file, not in the turn's text (the row's wording assumed the turn). The four failed tries likely came from the choice-button bug, fixed in `83bec1ad` and now passed on the Deck (Done); one more try with the real AI is still owed. Evidence `workshop:test-evidence/plan81-P78-REOPEN-CHECKLIST.json`.
 
 ## A faded ghost of the tab bar is left drawn over the chip row after touching the screen
 
 Older dated notes moved here from the roadmap entry on 2026-10-01 (docs sweep 14, plan 78), to bring the roadmap under its size limit. Nothing was removed.
 
-  **2026-09-28 (plan 76, build `39c17312`):** not reproduced with the D-pad. 66 samples over 15 s after Show details → Session and one D-pad press, exactly one tab bar drawn each time. The touch half still needs a person. Evidence `docs/test-evidence/plan76-P76-M-TABBAR-GHOST.json`.
+  **2026-09-28 (plan 76, build `39c17312`):** not reproduced with the D-pad. 66 samples over 15 s after Show details → Session and one D-pad press, exactly one tab bar drawn each time. The touch half still needs a person. Evidence `workshop:test-evidence/plan76-P76-M-TABBAR-GHOST.json`.
 
 ## The chat summary reads oddly in places
 
 Older dated note moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the entry at five lines. Nothing was removed.
 
-  **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`), partly passed:** the Sum up button could not be pressed (greyed out: the one test chat had already summed itself up), so the two cards the chat made by itself that morning were read. No "Games:" line names a non-game. One card still has a line that says nothing ("Stuck on: No specific current sticking point mentioned, ..."), the kind the fix leaves on purpose because something follows the empty phrase. **Still owed:** "a chat opened in a game shows that game first" needs a test chat opened in a game. Evidence `docs/test-evidence/plan78-P78-SUMUP-WORDING.json`.
+  **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`), partly passed:** the Sum up button could not be pressed (greyed out: the one test chat had already summed itself up), so the two cards the chat made by itself that morning were read. No "Games:" line names a non-game. One card still has a line that says nothing ("Stuck on: No specific current sticking point mentioned, ..."), the kind the fix leaves on purpose because something follows the empty phrase. **Still owed:** "a chat opened in a game shows that game first" needs a test chat opened in a game. Evidence `workshop:test-evidence/plan78-P78-SUMUP-WORDING.json`.
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
@@ -735,7 +735,7 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
-  **2026-10-01 (build `f0a4f2c4`), UNCLEAR:** not run. The only reset for the help flag, "Clear all plugin data", is not allowed in a test, so the fix rests on its unit tests and on the maintainer's first-install check (after opening the quick start and closing it, the help chip is gone and the suggestion chips are back). Evidence `docs/test-evidence/plan78-P78-HELP-CHIP-DISMISS.json`.
+  **2026-10-01 (build `f0a4f2c4`), UNCLEAR:** not run. The only reset for the help flag, "Clear all plugin data", is not allowed in a test, so the fix rests on its unit tests and on the maintainer's first-install check (after opening the quick start and closing it, the help chip is gone and the suggestion chips are back). Evidence `workshop:test-evidence/plan78-P78-HELP-CHIP-DISMISS.json`.
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
@@ -743,25 +743,25 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep
 
 Moved here from the roadmap entry on 2026-10-10 (docs sweep, plan 87 batch 2), to keep the entry to five lines. Nothing was removed.
 
-  **2026-10-01, UNCLEAR:** not run on the Deck; owed on a fresh install or "Clear all plugin data". Deck row **P78-HELP-CHIP-DISMISS**; evidence `docs/test-evidence/plan78-P78-HELP-CHIP-DISMISS.json`, finding `docs/test-evidence/plan78-PRESET-ONE-LINE-02.json`.
-  **2026-10-03 (plan 81, build `afd2f444`), COULD NOT RUN again:** the stored flag came back to "1" by itself after Steam's web helper was restarted, so no help chip showed. It stays with the maintainer's first-install check (`docs/test-evidence/plan81-P78-HELP-CHIP-DISMISS.json`).
-  **2026-10-09 (plan 87 stand-in S1, this PC, not the Deck), UNCLEAR:** after "Clear all plugin data" the Main tab showed exactly one chip, "How to use bonsAI", and a "bonsAI - Beta Notice" box took the ring first (Got it closed it); but the D-pad could not reach the help chip at all on the stand-in (Up from the question box went to the tab bar), so the quick-start half could not run. The unreachable chip is being looked at in a separate fix (it may be Windows-only). Evidence `docs/test-evidence/plan87-S-S1-HELP-CHIP.json` (setup `plan87-S-S0-SETUP.json` passed). Still owed.
+  **2026-10-01, UNCLEAR:** not run on the Deck; owed on a fresh install or "Clear all plugin data". Deck row **P78-HELP-CHIP-DISMISS**; evidence `workshop:test-evidence/plan78-P78-HELP-CHIP-DISMISS.json`, finding `workshop:test-evidence/plan78-PRESET-ONE-LINE-02.json`.
+  **2026-10-03 (plan 81, build `afd2f444`), COULD NOT RUN again:** the stored flag came back to "1" by itself after Steam's web helper was restarted, so no help chip showed. It stays with the maintainer's first-install check (`workshop:test-evidence/plan81-P78-HELP-CHIP-DISMISS.json`).
+  **2026-10-09 (plan 87 stand-in S1, this PC, not the Deck), UNCLEAR:** after "Clear all plugin data" the Main tab showed exactly one chip, "How to use bonsAI", and a "bonsAI - Beta Notice" box took the ring first (Got it closed it); but the D-pad could not reach the help chip at all on the stand-in (Up from the question box went to the tab bar), so the quick-start half could not run. The unreachable chip is being looked at in a separate fix (it may be Windows-only). Evidence `workshop:test-evidence/plan87-S-S1-HELP-CHIP.json` (setup `plan87-S-S0-SETUP.json` passed). Still owed.
 
 ## A press that never opens its box (parental lock on) can leave a stale "return the ring here" note behind
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
-  **2026-09-29 (plan 77 block 2, row P77-OLLAMA-NOBOX-NOTE):** the box half PASSED: the Update, Tier 1 and Tier 2 boxes open on "Not now" and B returns the ring. The parental-lock half **still owed**: it needs Steam Family View with a PIN, so it is on the maintainer's checks page; the no-box half rests on unit tests. Evidence `docs/test-evidence/plan77-BLOCK2-CHATS-BACKEND.json`.
+  **2026-09-29 (plan 77 block 2, row P77-OLLAMA-NOBOX-NOTE):** the box half PASSED: the Update, Tier 1 and Tier 2 boxes open on "Not now" and B returns the ring. The parental-lock half **still owed**: it needs Steam Family View with a PIN, so it is on the maintainer's checks page; the no-box half rests on unit tests. Evidence `workshop:test-evidence/plan77-BLOCK2-CHATS-BACKEND.json`.
 
 ## The walk check calls a stop hidden when a corner icon merely overlaps its box
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
-  **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`):** compared by the text's own line box, the answer's last line overlapped the Copy icon by 7 by 3 px. Evidence `docs/test-evidence/plan78-QA-FREE-PLAY-01-NOGAME.json`.
+  **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`):** compared by the text's own line box, the answer's last line overlapped the Copy icon by 7 by 3 px. Evidence `workshop:test-evidence/plan78-QA-FREE-PLAY-01-NOGAME.json`.
 
   **2026-10-03 (plan 81):** fixed in the Deck tools project (commit `cde1c0e`, not pushed): the walk check now judges a control with words by where its words are. It takes effect after the tool server restarts. Entry moved to Verify; row **P81-WALK-READS-WORDS**.
 
-  **2026-10-07 (plan 82, Deck block 2, build `60b8c57f`), passed on the Deck:** the question row and the answer sections read 100% visible; the old false alarm did not appear. Entry moved to Done and the archive. Evidence `docs/test-evidence/plan82-P81-WALK-READS-WORDS.json`.
+  **2026-10-07 (plan 82, Deck block 2, build `60b8c57f`), passed on the Deck:** the question row and the answer sections read 100% visible; the old false alarm did not appear. Entry moved to Done and the archive. Evidence `workshop:test-evidence/plan82-P81-WALK-READS-WORDS.json`.
 
 ## With Voice replies on "When I asked by voice", a spoken question's answer may not read itself aloud
 
@@ -779,19 +779,19 @@ Older dated notes moved here from the roadmap entry on 2026-10-03 (plan 81 paper
 
 Moved here word for word on 2026-10-12 (plan 89 docs sweep, pass 4), to keep the entry to five lines:
 
-**2026-10-11 (plan 89, `1f666dba`):** the lever is built (the maintainer's call 8). With a game running and the AI on this Deck, every request now asks Ollama to keep the model about a minute (`keep_alive` 1m) instead of the Unload delay; the log says which value was used. Tests `tests/test_ollama_keep_alive_rule.py`. **Deck 2026-10-11 (plan 89 block 5, build `9b4d0503`): the lever is in place and passed** (row P89-KEEPALIVE-GAME): with no game the model stayed loaded past 150 s (the Unload delay on this Deck is 15 minutes; the log says `keep_alive 15m`); with Deep Rock Galactic: Survivor running the model left memory about 65 s after the answer (log `keep_alive 1m: game running, AI on this Deck (setting 15m)`), with 2,402 to 2,478 MB available while it was loaded (`docs/test-evidence/plan89-P89-KEEPALIVE-GAME-half1.json`, `-half2.json`). Owed: the reproduction try of the freeze. The freeze itself is not marked fixed. Older notes, including the two later runs that did not reproduce it (plan 81, Deck block 6, evidence `docs/test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`), are in [roadmap-details.md](roadmap-details.md#steams-screen-froze-after-an-answer-with-a-game-running-and-the-decks-own-ai); the hunt itself is in the [audit note](audit/plan81-freeze-after-answer.md).
+**2026-10-11 (plan 89, `1f666dba`):** the lever is built (the maintainer's call 8). With a game running and the AI on this Deck, every request now asks Ollama to keep the model about a minute (`keep_alive` 1m) instead of the Unload delay; the log says which value was used. Tests `tests/test_ollama_keep_alive_rule.py`. **Deck 2026-10-11 (plan 89 block 5, build `9b4d0503`): the lever is in place and passed** (row P89-KEEPALIVE-GAME): with no game the model stayed loaded past 150 s (the Unload delay on this Deck is 15 minutes; the log says `keep_alive 15m`); with Deep Rock Galactic: Survivor running the model left memory about 65 s after the answer (log `keep_alive 1m: game running, AI on this Deck (setting 15m)`), with 2,402 to 2,478 MB available while it was loaded (`workshop:test-evidence/plan89-P89-KEEPALIVE-GAME-half1.json`, `-half2.json`). Owed: the reproduction try of the freeze. The freeze itself is not marked fixed. Older notes, including the two later runs that did not reproduce it (plan 81, Deck block 6, evidence `workshop:test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`), are in [roadmap-details.md](roadmap-details.md#steams-screen-froze-after-an-answer-with-a-game-running-and-the-decks-own-ai); the hunt itself is in the [audit note](../../bonsAI-workshop/audit/plan81-freeze-after-answer.md).
 
-  **2026-10-03, hunt written up: [audit note](audit/plan81-freeze-after-answer.md).** The Deck's own AI log shows the model was already loaded when the question was asked and sat idle after the answer, so a cold load does not explain it (a cold load costs about 5.8 GB). The note's best guess, about 60 percent sure, is that the memory went to Steam's own page processes after the answer; which program grew is not known. The same steps after a restart, with 9 GB free, did not freeze (`docs/test-evidence/plan81-DRG-01c-try2.json`). The freeze is measured again at the very end of the session.
+  **2026-10-03, hunt written up: [audit note](../../bonsAI-workshop/audit/plan81-freeze-after-answer.md).** The Deck's own AI log shows the model was already loaded when the question was asked and sat idle after the answer, so a cold load does not explain it (a cold load costs about 5.8 GB). The note's best guess, about 60 percent sure, is that the memory went to Steam's own page processes after the answer; which program grew is not known. The same steps after a restart, with 9 GB free, did not freeze (`workshop:test-evidence/plan81-DRG-01c-try2.json`). The freeze is measured again at the very end of the session.
 
-  **2026-10-03, memory measured again (plan 81, Deck block 3b, build `9e68bce1`):** with the Deck's AI unloaded before the game started, 8.2 to 8.7 GB were free with the game up; with the AI loaded and the game running, 2.4 to 3.2 GB (lowest 2372 MB in the 5-second log, never under 1500 MB); no freeze in that block. The log has a gap of about two minutes around the first answer. Evidence `docs/test-evidence/plan81-P81-B3B-GAME-MEMORY.json`.
+  **2026-10-03, memory measured again (plan 81, Deck block 3b, build `9e68bce1`):** with the Deck's AI unloaded before the game started, 8.2 to 8.7 GB were free with the game up; with the AI loaded and the game running, 2.4 to 3.2 GB (lowest 2372 MB in the 5-second log, never under 1500 MB); no freeze in that block. The log has a gap of about two minutes around the first answer. Evidence `workshop:test-evidence/plan81-P81-B3B-GAME-MEMORY.json`.
 
-  **2026-10-03 (plan 81, Deck block 4b, build `7e963807`), memory with the game:** with the Deck's AI unloaded before the game started (and the small search model too, to get over the 8,000 MB line), 8.3 GB were free with the game up. One question asked then took the lowest free memory to 1,623 MB (about 1.8 GB while the AI stayed loaded), above the 1,500 MB stop line; block 3b's lowest was 2,372 MB. One more question in the same state would not have been safe, so only one was asked. Evidence `docs/test-evidence/plan81-P81-B4B-GAME-MEMORY.json`.
+  **2026-10-03 (plan 81, Deck block 4b, build `7e963807`), memory with the game:** with the Deck's AI unloaded before the game started (and the small search model too, to get over the 8,000 MB line), 8.3 GB were free with the game up. One question asked then took the lowest free memory to 1,623 MB (about 1.8 GB while the AI stayed loaded), above the 1,500 MB stop line; block 3b's lowest was 2,372 MB. One more question in the same state would not have been safe, so only one was asked. Evidence `workshop:test-evidence/plan81-P81-B4B-GAME-MEMORY.json`.
 
-  **2026-10-03 (plan 81, Deck block 6, build `7e963807`): the two runs.** The AI was already loaded and warm, so the runbook's first short question was skipped. Run A (no page watcher): 2,529 MB free before the question, lowest 2,312 MB, 2,419 MB at 12 minutes; the answer finished about two minutes in; every read of Steam's page answered in 55 to 270 ms and the game was exited cleanly afterwards. Run B (a watcher reading the panel every 200 ms): 2,319 MB free before the question, lowest 2,089 MB; Steam's page process rose to 972 MB around the answer and fell back to 667 MB, and swap use rose from 140 to 214 MB and stayed there; every read answered in 55 to 280 ms. The game stayed flat (about 1.2 GB) and the AI's server flat (about 0.3 to 0.4 GB) in both. The Quick Access panel closed itself about four minutes after the answer in both runs, after which the page was throttled, so the watcher ran at full speed for only about 5.5 of the 12 minutes. A watcher kept at full speed for the whole time, and the original starting point of about 2.0 GB free, were not tried. Evidence `docs/test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`; the hunt is in the [audit note](audit/plan81-freeze-after-answer.md).
+  **2026-10-03 (plan 81, Deck block 6, build `7e963807`): the two runs.** The AI was already loaded and warm, so the runbook's first short question was skipped. Run A (no page watcher): 2,529 MB free before the question, lowest 2,312 MB, 2,419 MB at 12 minutes; the answer finished about two minutes in; every read of Steam's page answered in 55 to 270 ms and the game was exited cleanly afterwards. Run B (a watcher reading the panel every 200 ms): 2,319 MB free before the question, lowest 2,089 MB; Steam's page process rose to 972 MB around the answer and fell back to 667 MB, and swap use rose from 140 to 214 MB and stayed there; every read answered in 55 to 280 ms. The game stayed flat (about 1.2 GB) and the AI's server flat (about 0.3 to 0.4 GB) in both. The Quick Access panel closed itself about four minutes after the answer in both runs, after which the page was throttled, so the watcher ran at full speed for only about 5.5 of the 12 minutes. A watcher kept at full speed for the whole time, and the original starting point of about 2.0 GB free, were not tried. Evidence `workshop:test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`; the hunt is in the [audit note](../../bonsAI-workshop/audit/plan81-freeze-after-answer.md).
 
 Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
 
-**2026-10-03 (plan 81, Deck block 6, build `7e963807`): not reproduced in two runs.** The same low-memory state as the freeze (about 2.3 to 2.5 GB free, the AI loaded, Deep Rock running), once with nothing else on the page and once with a page watcher reading every 200 ms: Steam answered every read for 12 minutes, no freeze. Only Steam's own page process grew (556 to 705 MB, peak 972 MB); the game and the AI stayed flat. The original freeze started from about 2.0 GB free, which these runs did not reach, and the watcher ran at full speed for only about 5.5 of the 12 minutes. Evidence `docs/test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`.
+**2026-10-03 (plan 81, Deck block 6, build `7e963807`): not reproduced in two runs.** The same low-memory state as the freeze (about 2.3 to 2.5 GB free, the AI loaded, Deep Rock running), once with nothing else on the page and once with a page watcher reading every 200 ms: Steam answered every read for 12 minutes, no freeze. Only Steam's own page process grew (556 to 705 MB, peak 972 MB); the game and the AI stayed flat. The original freeze started from about 2.0 GB free, which these runs did not reach, and the watcher ran at full speed for only about 5.5 of the 12 minutes. Evidence `workshop:test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`.
 
 ## Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted
 
@@ -799,7 +799,7 @@ Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep t
 
 In block 3d a reload during a game's start was also followed by the game's window never coming to the front (twice: Deep Rock Galactic: Survivor, Half-Life 2). Related: the entry above about the Home screen in front of a game.
 
-**2026-10-03 (plan 81, Deck block 6, build `7e963807`):** a developer reload with a game running did not freeze Steam in either try, so the 2026-10-01 freeze was not reproduced. With plenty of memory the Decky tab was missing for about 1 min 40 s until Quick Access was closed and reopened; with the AI loaded and 2.4 to 3.4 GB free the plugin was back in about 45 s. The maintainer's call on marking it accepted is open (plan 81, question 3). Evidence `docs/test-evidence/plan81-P81-RELOAD-LOOK.json`.
+**2026-10-03 (plan 81, Deck block 6, build `7e963807`):** a developer reload with a game running did not freeze Steam in either try, so the 2026-10-01 freeze was not reproduced. With plenty of memory the Decky tab was missing for about 1 min 40 s until Quick Access was closed and reopened; with the AI loaded and 2.4 to 3.4 GB free the plugin was back in about 45 s. The maintainer's call on marking it accepted is open (plan 81, question 3). Evidence `workshop:test-evidence/plan81-P81-RELOAD-LOOK.json`.
 
 ## While reading an answer, the Show details line takes the suggestion chip's place above the question box
 
@@ -807,7 +807,7 @@ Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep t
 
 **Deck 2026-10-02 (build `c98f749e`):** the slot's wording, the chip's return, B closing details with the ring staying, and Up from the slot or a chip pass. **Still owed:** reaching the slot's line from the question box and pressing A on it (needs a right-stick scroll, the maintainer's hand check, checks page, Friday check 4), and the closed line landing 8 px inside the top.
 
-Row **P79-SHOW-DETAILS-SLOT**. Evidence `docs/test-evidence/plan79-P79-DETAILS-SLOT.json`.
+Row **P79-SHOW-DETAILS-SLOT**. Evidence `workshop:test-evidence/plan79-P79-DETAILS-SLOT.json`.
 
 ## The open reasoning block does not scroll in steps like the answer; one Down jumps past the whole of it
 
@@ -815,23 +815,23 @@ Moved here from the roadmap entry on 2026-10-07 (plan 82 paperwork 6), when the 
 
 What the fix was built to do (it was in Verify as "fixed 2026-10-07, `8e15cca2`, Opus helper"): With Show reasoning open, Down now pages through the reasoning about a screen at a time with the ring on the block, instead of jumping straight to the answer; once the block's end is on screen the next Down goes into the answer; Up does the same in reverse and lands on the line; B on the block closes it with the ring back on the line; a short block is one stop each way. The first commit (`28e23f90`) only draws the line and the block from one builder (no change a player sees); the third (`1323f7a3`) stops a quick second press inside the dock lift's 0.9 s window from throwing a long block to its end.
 
-Before the fix (Deck 2026-10-07, plan 82, Deck block 1): Before the fix (Deck 2026-10-07, plan 82, Deck block 1): the open block is 818 px tall and one Down from the line moved the pane 555 px, almost the whole block. Evidence `docs/test-evidence/plan82-M5-REASONING-SCROLL.json` and `.png`; the maintainer's recording `docs/test-evidence/maintainer-2026-10-06-reasoning-scroll-recording.png`. **Unproven on the Deck:** the ring on the block is Steam's own default ring (no plugin style yet); if it is hard to see, a style rule is owed.
+Before the fix (Deck 2026-10-07, plan 82, Deck block 1): Before the fix (Deck 2026-10-07, plan 82, Deck block 1): the open block is 818 px tall and one Down from the line moved the pane 555 px, almost the whole block. Evidence `workshop:test-evidence/plan82-M5-REASONING-SCROLL.json` and `.png`; the maintainer's recording `workshop:test-evidence/maintainer-2026-10-06-reasoning-scroll-recording.png`. **Unproven on the Deck:** the ring on the block is Steam's own default ring (no plugin style yet); if it is hard to see, a style rule is owed.
 
-Owed on the Deck: row **P82-REASONING-BLOCK-PAGES** in [testing.md](testing.md); skipped in Deck block 3b because its commits were not on the branch yet (`docs/test-evidence/plan82-BLOCK3B-HANDOVER.json`). Tests: `src/utils/buildReasoningFoldElement.walk.test.tsx` (37 of 39 cases fail without the fix), `src/components/MainTabChatTranscript.reasoningBlockStop.test.tsx`.
+Owed on the Deck: row **P82-REASONING-BLOCK-PAGES** in [testing.md](testing.md); skipped in Deck block 3b because its commits were not on the branch yet (`workshop:test-evidence/plan82-BLOCK3B-HANDOVER.json`). Tests: `src/utils/buildReasoningFoldElement.walk.test.tsx` (37 of 39 cases fail without the fix), `src/components/MainTabChatTranscript.reasoningBlockStop.test.tsx`.
 
-**Closed 2026-10-07 (plan 82 paperwork 7):** the Deck check above is done. The first round failed in block 4 (build `efd4258b`); the second round (`ce8ace71`, landed `6b5d5f49`) passed in block 5. Done line in the roadmap; full entry in [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md). Evidence `docs/test-evidence/plan82-P82-REASONING-BLOCK-PAGES-try2.json`.
+**Closed 2026-10-07 (plan 82 paperwork 7):** the Deck check above is done. The first round failed in block 4 (build `efd4258b`); the second round (`ce8ace71`, landed `6b5d5f49`) passed in block 5. Done line in the roadmap; full entry in [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md). Evidence `workshop:test-evidence/plan82-P82-REASONING-BLOCK-PAGES-try2.json`.
 
 ## The mic stops after about 3 or 4 seconds of speech
 
 Older notes moved here from the roadmap entry on 2026-10-11 (plan 89 docs sweep pass 2), when the entry moved to Verify. Nothing was removed. The heading the entry carried before: **OPEN again 2026-10-10 (reopened from Done): with a real voice on tiny.en it still stops after 3 or 4 seconds. First found by the maintainer 2026-10-09 on the Deck.**
 
-The loudness-gate fix (`d73f9f5a`) made a recorded ten-second sentence come through whole on tiny.en, but only through a pretend microphone (row P87-VOICE-QUIET-SENTENCE, passed on the Deck 2026-10-10; evidence `docs/test-evidence/plan87-P87-VOICE-QUIET-SENTENCE.json`). A real voice still stops early on tiny.en. On base.en the maintainer did not see the early stop.
+The loudness-gate fix (`d73f9f5a`) made a recorded ten-second sentence come through whole on tiny.en, but only through a pretend microphone (row P87-VOICE-QUIET-SENTENCE, passed on the Deck 2026-10-10; evidence `workshop:test-evidence/plan87-P87-VOICE-QUIET-SENTENCE.json`). A real voice still stops early on tiny.en. On base.en the maintainer did not see the early stop.
 
 Cause of the stop that remains: not known. Related: the repeat bug and the entry about making base.en the default speech model (both Done 2026-10-11, plan 88). Earlier record: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
 
-**2026-10-10 evening (Deck, build `532761e2`, a recorded voice, no game):** not reproduced on either model: recorded 15- and 21-second questions grew to the end on tiny.en and on base.en (`docs/test-evidence/v1010-VOICE-TINY-NOGAME.json`, `docs/test-evidence/v1010-VOICE-BASE-NOGAME.json`). Stays OPEN: it was seen with a real voice only, so a real voice is the check.
+**2026-10-10 evening (Deck, build `532761e2`, a recorded voice, no game):** not reproduced on either model: recorded 15- and 21-second questions grew to the end on tiny.en and on base.en (`workshop:test-evidence/v1010-VOICE-TINY-NOGAME.json`, `workshop:test-evidence/v1010-VOICE-BASE-NOGAME.json`). Stays OPEN: it was seen with a real voice only, so a real voice is the check.
 
-**2026-10-11 (plan 88, build `68317980`):** not seen with a recorded voice on the new build: 15- and 21-second questions grew to the end and the live text never went empty (`docs/test-evidence/p88-VOICE-WHOLE-NOGAME.json`). A guess from reading the code, not tested: the screen writes "what the mic wrote" before the box's text, and if Steam does not batch those two updates, the rule "the box was emptied, so dictation is over" can fire on the first words. Plan 88 does not touch this. Owed: the maintainer's real voice.
+**2026-10-11 (plan 88, build `68317980`):** not seen with a recorded voice on the new build: 15- and 21-second questions grew to the end and the live text never went empty (`workshop:test-evidence/p88-VOICE-WHOLE-NOGAME.json`). A guess from reading the code, not tested: the screen writes "what the mic wrote" before the box's text, and if Steam does not batch those two updates, the rule "the box was emptied, so dictation is over" can fire on the first words. Plan 88 does not touch this. Owed: the maintainer's real voice.
 
 ## Merge the unlanded work left in thirteen old helper copies into experimental
 
@@ -872,7 +872,7 @@ Cause of the stop that remains: not known. Related: the repeat bug and the entry
   - 51a021273 Stop repeating the neighbouring follow-up test file's own setup
   - 77a588ad7 Merge branch 'experimental' into refactor/p70-k
 - **p77h** (`refactor/p77h`)
-  - Untracked file: docs/archive/research/kb-answer-eval-2026-09-29-p77h-cases.md
+  - Untracked file: workshop:archive/research/kb-answer-eval-2026-09-29-p77h-cases.md
 - **p81frev** (`refactor/p81frev`)
   - d8671410 Revert "Reword the AI's instructions so none of them shows the hidden-block label in the odd one-word shape"
 
@@ -881,22 +881,22 @@ Cause of the stop that remains: not known. Related: the repeat bug and the entry
 Older notes, word for word, from the entry's open form (moved here 2026-10-11, plan 89 docs sweep pass 3).
 
   After the plan 87 fix (the entry "Walking some of the other tabs with the D-pad scrolls the tab a long way at each step", now in Done) the maintainer finds it better but not right. Wanted: the page does not scroll at every press; it moves only when the ring nears the edge, by a moderate amount, never a sudden page-sized jump because the end of the page was reached.
-  The maintainer also wants a smooth glide instead of the current judder. Checked on the Deck's own screen; the monitor runs passed (`docs/test-evidence/plan87-P87-B10-TAB-SCROLL-try3.json`).
-  **2026-10-11 (plan 89 Deck block 1, a measurement, build `f561c0e5`):** Settings Down moved the page on 12 of 16 presses and Up on 13 of 14; Developer Down on 15 of 18 and Up on 13 of 16. Evidence `docs/test-evidence/plan89-M1-TAB-WALK.json`.
+  The maintainer also wants a smooth glide instead of the current judder. Checked on the Deck's own screen; the monitor runs passed (`workshop:test-evidence/plan87-P87-B10-TAB-SCROLL-try3.json`).
+  **2026-10-11 (plan 89 Deck block 1, a measurement, build `f561c0e5`):** Settings Down moved the page on 12 of 16 presses and Up on 13 of 14; Developer Down on 15 of 18 and Up on 13 of 16. Evidence `workshop:test-evidence/plan89-M1-TAB-WALK.json`.
 
 ## On the Settings tab, Left or Right on the Text size choices scrolls the page down
 
 Older notes, word for word, from the entry's open form (moved here 2026-10-11, plan 89 docs sweep pass 3).
 
   With the ring on Text size, pressing Left or Right to change the choice also scrolls the tab down. The maintainer called it "very strange behavior". Cause not known. Related: the Text size row (Done, row P87-F6-TEXT-SIZE) and the entry below about the page moving at every press.
-  **2026-10-11 (plan 89 Deck block 1, a measurement, build `f561c0e5`):** Left or Right moved the page 100.8, 81.2 and 64.1 px on three presses, while the row stayed on its line. Evidence `docs/test-evidence/plan89-M1-TAB-WALK.json`.
+  **2026-10-11 (plan 89 Deck block 1, a measurement, build `f561c0e5`):** Left or Right moved the page 100.8, 81.2 and 64.1 px on three presses, while the row stayed on its line. Evidence `workshop:test-evidence/plan89-M1-TAB-WALK.json`.
 
 ## The ring can vanish on the Search tab after closing a game note when a new word arrives
 
 Older open-form text, word for word (moved here 2026-10-14, plan 93 docs sweep, when the entry went to Verify).
 
 - ★ `[tabs]` **The ring can vanish on the Search tab after closing a game note when a new word arrives** — **OPEN, seen once on the Deck 2026-10-12 (plan 92, block 3); a sighting, not yet checked.**
-  One press of Up brought the ring back. Lane N3c names a likely cause: a move onto a stop that is drawn in the same moment falls back to a plain focus that Steam's ring does not follow (`src/features/search-tab/SearchTab.tsx` about line 189, and `hop` in `useSearchNav.ts`). Needs a Deck reading first. The Search tab evidence files (`docs/test-evidence/plan92-P90-SEARCH-TAB-WALK.json`, `-KB.json`) do not hold the sighting.
+  One press of Up brought the ring back. Lane N3c names a likely cause: a move onto a stop that is drawn in the same moment falls back to a plain focus that Steam's ring does not follow (`src/features/search-tab/SearchTab.tsx` about line 189, and `hop` in `useSearchNav.ts`). Needs a Deck reading first. The Search tab evidence files (`workshop:test-evidence/plan92-P90-SEARCH-TAB-WALK.json`, `-KB.json`) do not hold the sighting.
 
 ## Some settings text ignores the Text size choice (Permissions tab and others)
 
@@ -905,7 +905,7 @@ Both open entries, word for word (moved here 2026-10-14, plan 93 docs sweep, whe
 - ★★ `[ui]` **Some settings text ignores the Text size choice (Permissions tab and others)** — **OPEN, reported 2026-10-13 by the maintainer.**
   The Permissions tab's text, and text in other tabs, does not follow the Text size setting. Needs a sweep of every tab. Related: "Text size does not reach Steam's own controls" above.
 - ★ `[ui]` **Text size does not reach Steam's own controls** — **OPEN, found 2026-10-11 (plan 89 Deck block 3c); the maintainer's call whether that is acceptable.**
-  The toggle labels (for example "Remember what I typed") stay 16 px, and Steam's own confirm popups (for example "Clear session cache?") stay 22 and 16 px, at Small, Normal and Large. The plugin never targets Steam's own classes by name, so the words the plugin draws follow the setting and these do not. Evidence `docs/test-evidence/plan89-P89-TEXT-SIZE-EVERYWHERE.json`.
+  The toggle labels (for example "Remember what I typed") stay 16 px, and Steam's own confirm popups (for example "Clear session cache?") stay 22 and 16 px, at Small, Normal and Large. The plugin never targets Steam's own classes by name, so the words the plugin draws follow the setting and these do not. Evidence `workshop:test-evidence/plan89-P89-TEXT-SIZE-EVERYWHERE.json`.
 
 ## Plan 93 notes moved from the roadmap (2026-10-14, docs sweep 3)
 
@@ -913,37 +913,37 @@ Open entries and older dated notes, word for word, moved here when their entries
 
 **Terse mode: Speed answers in three lines:**
 
-- ★★★ `[reply]` **Terse mode: Speed answers in three lines** — **PARTIAL, the switch passed on the Deck 2026-10-08 (plan 83, row P83-J4-TERSE-TOGGLE, evidence `docs/test-evidence/plan83-P83-J4-TERSE-TOGGLE.json`); the answer test ran three times that night and the length cap holds on most answers, not all.**
-  Built: a "Terse mode" switch on the Ollama tab under the Reply style slider, off by default. With it on, a Speed answer is asked to keep to three lines and end with a menu of choices, first answers and follow-ups alike; Strategy, Expert and Speed with it off are as before. Answer test, ten questions with Deep Rock Galactic: Survivor running (plan 83 overnight, 2026-10-08): run 1 (build `0d3af3de`) 10 of 10 within three lines, choice buttons on 4 of 10, three menus shown as raw text; run 2 (`2ccf4075`) 9 of 10 within three lines, buttons on 1 of 10, nine menus shown in a code box; run 3 (`21f62344`) **buttons on 10 of 10 and no raw menu text**, but **7 of 10 within three lines** (8 needed; the three misses ran 4 lines). Cause of the missing buttons: the AI spelled the menu's fence name with an underscore, which the plugin did not read; `21f62344` reads either spelling. Across the three runs 26 of 30 answers fit. Evidence `docs/test-evidence/plan83-P83N-TERSE-01.json`, `P83N-TERSE-01-AFTER-FIX.json`, `P83N-TERSE-01-FIX2.json`. [Detail](roadmap-details.md#terse-mode-speed-answers-in-three-lines).
-  **Still owed:** (a) the maintainer's call on the length result: TERSE-01 as written (8 of 10 in one run) passed on length in 2 of 3 runs and failed in 1, so it is not marked passed; (b) the stacked full-width buttons (screen work, needs a Deck measurement first); (c) a menu press sends a follow-up saying "I'm at: <label>" and asking for an "If you want to cheat" section, which the terse wording has to talk the AI out of; (d) in the endless terse loop each menu press stores the whole previous composed question as "Earlier I asked", so the question grows with every press (the question is stored in `src/hooks/useBonsaiAskOrchestration.ts`, about line 776, and quoted back in `src/hooks/useStrategyBranchActions.ts`, about line 113); (e) with Terse on, the AI often repeats a menu from an earlier answer ("Which weapon should I focus on first?" under unrelated questions, `docs/test-evidence/plan83-P83N-TERSE-01-AFTER-FIX.json`); (f) the maintainer's call on whether to keep the reader for a menu written as bare JSON with no fence (`2ccf4075`, tested): that case was never actually seen, it rested on run 1 being misread.
-  **2026-10-13 (plan 93):** the maintainer's call: Terse becomes the first stop of the Reply style slider (Terse, Caveman, Balanced, Detailed) and applies in every Ask mode; the separate switch goes (planned in plan 93). Five Speed questions with Terse on gave one line each, 17 to 36 words; see the closed bug "Terse mode does not seem to shorten answers" in Done. Evidence `docs/test-evidence/plan93-M11-TERSE-LINES.json`.
+- ★★★ `[reply]` **Terse mode: Speed answers in three lines** — **PARTIAL, the switch passed on the Deck 2026-10-08 (plan 83, row P83-J4-TERSE-TOGGLE, evidence `workshop:test-evidence/plan83-P83-J4-TERSE-TOGGLE.json`); the answer test ran three times that night and the length cap holds on most answers, not all.**
+  Built: a "Terse mode" switch on the Ollama tab under the Reply style slider, off by default. With it on, a Speed answer is asked to keep to three lines and end with a menu of choices, first answers and follow-ups alike; Strategy, Expert and Speed with it off are as before. Answer test, ten questions with Deep Rock Galactic: Survivor running (plan 83 overnight, 2026-10-08): run 1 (build `0d3af3de`) 10 of 10 within three lines, choice buttons on 4 of 10, three menus shown as raw text; run 2 (`2ccf4075`) 9 of 10 within three lines, buttons on 1 of 10, nine menus shown in a code box; run 3 (`21f62344`) **buttons on 10 of 10 and no raw menu text**, but **7 of 10 within three lines** (8 needed; the three misses ran 4 lines). Cause of the missing buttons: the AI spelled the menu's fence name with an underscore, which the plugin did not read; `21f62344` reads either spelling. Across the three runs 26 of 30 answers fit. Evidence `workshop:test-evidence/plan83-P83N-TERSE-01.json`, `P83N-TERSE-01-AFTER-FIX.json`, `P83N-TERSE-01-FIX2.json`. [Detail](roadmap-details.md#terse-mode-speed-answers-in-three-lines).
+  **Still owed:** (a) the maintainer's call on the length result: TERSE-01 as written (8 of 10 in one run) passed on length in 2 of 3 runs and failed in 1, so it is not marked passed; (b) the stacked full-width buttons (screen work, needs a Deck measurement first); (c) a menu press sends a follow-up saying "I'm at: <label>" and asking for an "If you want to cheat" section, which the terse wording has to talk the AI out of; (d) in the endless terse loop each menu press stores the whole previous composed question as "Earlier I asked", so the question grows with every press (the question is stored in `src/hooks/useBonsaiAskOrchestration.ts`, about line 776, and quoted back in `src/hooks/useStrategyBranchActions.ts`, about line 113); (e) with Terse on, the AI often repeats a menu from an earlier answer ("Which weapon should I focus on first?" under unrelated questions, `workshop:test-evidence/plan83-P83N-TERSE-01-AFTER-FIX.json`); (f) the maintainer's call on whether to keep the reader for a menu written as bare JSON with no fence (`2ccf4075`, tested): that case was never actually seen, it rested on run 1 being misread.
+  **2026-10-13 (plan 93):** the maintainer's call: Terse becomes the first stop of the Reply style slider (Terse, Caveman, Balanced, Detailed) and applies in every Ask mode; the separate switch goes (planned in plan 93). Five Speed questions with Terse on gave one line each, 17 to 36 words; see the closed bug "Terse mode does not seem to shorten answers" in Done. Evidence `workshop:test-evidence/plan93-M11-TERSE-LINES.json`.
 
 **Confirm pop-ups show extra buttons, and are not in the SteamOS style (open entry, word for word):**
 
 - ★★ `[ui]` **Confirm pop-ups show extra buttons, and are not in the SteamOS style** — **OPEN, reported 2026-10-13 by the maintainer.**
   Clear cache, Clear data and "Turn on internet downloads" each show more than two choices. They should show only the action and Cancel.
   Check every pop-up in the app for the same extra choice. Every pop-up should look like a normal Steam settings pop-up (the delete-chat one is the model).
-  **2026-10-13 (plan 93):** Clear cache, Clear all plugin data and Remove knowledge base each show three buttons, the ring on the safe one; Delete chat shows two. "Update AI & models" showed no box at all with internet downloads on and the site already accepted; the maintainer's call (2026-10-13): that stays as it is. Evidence `docs/test-evidence/plan93-P93-M9-CONFIRM-BOXES.json`.
+  **2026-10-13 (plan 93):** Clear cache, Clear all plugin data and Remove knowledge base each show three buttons, the ring on the safe one; Delete chat shows two. "Update AI & models" showed no box at all with internet downloads on and the site already accepted; the maintainer's call (2026-10-13): that stays as it is. Evidence `workshop:test-evidence/plan93-P93-M9-CONFIRM-BOXES.json`.
 
 **Open all is reached with Right, not Down (open entry, word for word):**
 
 - ★★ `[focus]` `[tabs]` **Open all is reached with Right, not Down, and the floating Open all button clashes with the tabs** — **OPEN, reported 2026-10-13 by the maintainer.**
   D-pad Down should reach Open all; today it takes Right. The floating Open all button also overlaps the tab layout.
   Likely one cause; look at both together.
-  **2026-10-13 (plan 93):** with every section closed, the button is reached by Right only, Down holds still, and the button covers nothing. With sections open and the tab scrolled, the fixed button covers 56 x 14 px of the Connection tuning row's summary text and its 10 x 14 px arrow, and does not move with the scroll. Evidence `docs/test-evidence/plan93-P93-M2-OPEN-ALL.json`, `plan93-M2-OPEN-ALL-scrolled.png`.
+  **2026-10-13 (plan 93):** with every section closed, the button is reached by Right only, Down holds still, and the button covers nothing. With sections open and the tab scrolled, the fixed button covers 56 x 14 px of the Connection tuning row's summary text and its 10 x 14 px arrow, and does not move with the scroll. Evidence `workshop:test-evidence/plan93-P93-M2-OPEN-ALL.json`, `plan93-M2-OPEN-ALL-scrolled.png`.
 
 **When an answer finishes streaming, the screen flickers and then jumps to the end (open entry, word for word):**
 
 - ★★★ `[reply]` **When an answer finishes streaming, the screen flickers and then jumps to the end** — **OPEN, reported 2026-10-13 by the maintainer.**
   After the answer lands, the screen flickers and then scrolls to the end in one jump. It should scroll smoothly and follow the end of the answer as it arrives.
-  **2026-10-13 (plan 93):** measured, a fail: through a 50-second answer (1,316 px tall in a 402 px box) the page stayed at the top and never followed it; about a quarter of a second after the finish it jumped to the end, about 1,265 px, in one step. The maintainer's call (2026-10-13): fixed by building the Features entry "A long answer is cut into sections while it writes" (planned in plan 93); following the end smoothly while it writes is a separate, later piece. Evidence `docs/test-evidence/plan93-M4-ANSWER-FINISH.json`.
+  **2026-10-13 (plan 93):** measured, a fail: through a 50-second answer (1,316 px tall in a 402 px box) the page stayed at the top and never followed it; about a quarter of a second after the finish it jumped to the end, about 1,265 px, in one step. The maintainer's call (2026-10-13): fixed by building the Features entry "A long answer is cut into sections while it writes" (planned in plan 93); following the end smoothly while it writes is a separate, later piece. Evidence `workshop:test-evidence/plan93-M4-ANSWER-FINISH.json`.
 
 **A long answer is cut into sections while it writes (entry before the 2026-10-14 rewrite, word for word):**
 
 - ★★ `[reply]` **A long answer is cut into sections while it writes, so nothing changes when it finishes** — **OPEN, decided on the mock-up board 2026-10-10 (option A of round 2); carried over 2026-09-24 from plan 05.**
   Today a long answer arrives as one block; when it finishes it is cut into sections, the Helpful and Not really buttons pop in, and the view jumps to the top and back.
   Picked: each section closes as soon as it is full, so the answer never changes at the finish. Then only the buttons and Show details fade in under it; the view does not move and the ring stays where it was. The maintainer: better, especially when the D-pad moves while the answer writes.
-  Not chosen: keeping today's rebuild and making it gentler. Touches [plan 69](planning/69-streamed-answers-scramble.md). [P6](archive/05-token-streaming-review.md) · [Mock-up board, tab 3](https://claude.ai/artifact/XyZfUSPGRZdm2P3mTGV9tR) · [notes](demos/mockup-board/README.md).
+  Not chosen: keeping today's rebuild and making it gentler. Touches [plan 69](../../bonsAI-workshop/planning/69-streamed-answers-scramble.md). [P6](../../bonsAI-workshop/archive/05-token-streaming-review.md) · [Mock-up board, tab 3](https://claude.ai/artifact/XyZfUSPGRZdm2P3mTGV9tR) · [notes](demos/mockup-board/README.md).
 
 **Hand-written D-pad moves on some Ollama-tab buttons never run (open entry, word for word):**
 

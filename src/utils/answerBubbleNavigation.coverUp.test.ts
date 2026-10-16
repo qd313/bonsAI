@@ -2,7 +2,7 @@
  * Title: Up reaches a spoiler cover the way Down does
  *
  * Purpose: Pin plan 74 lane 3, bug 6 (roadmap, ★★: "Reaching a spoiler cover by Up lands the ring
- * beside it, and A does nothing"; docs/test-evidence/plan70-SPOILER-CREDITS-01.json). Down already
+ * beside it, and A does nothing"; workshop:test-evidence/plan70-SPOILER-CREDITS-01.json). Down already
  * parks on a still-hidden cover before walking on; Up had no such step, so it landed on the section
  * around the cover, where A does nothing. Now Up into a section that holds a hidden cover -- from the
  * section below, or into the answer from the row under it -- lands on the cover, and Up from a
@@ -164,7 +164,7 @@ describe("Up onto a spoiler cover", () => {
 });
 
 /*
- * The Deck's shape (docs/test-evidence/plan74-P74-COVER-UP.json): the first section is a hidden cover
+ * The Deck's shape (workshop:test-evidence/plan74-P74-COVER-UP.json): the first section is a hidden cover
  * at its top plus one paragraph (131 tall, cover 55 tall 8 below its top), the second is four
  * paragraphs in one tall section (327) that Up scrolls inside, 80 px a press, before leaving. Going
  * Up, a section comes into view from its bottom, so its cover is the last part of it to appear:

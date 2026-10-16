@@ -1,7 +1,7 @@
 /**
  * Title: After Remove, the switch reads off when its value comes from the plugin's settings hook
  *
- * Purpose: Pin plan 93 block C part 2, round 2 (docs/test-evidence/plan93-P93-K1-KB-SWITCH.json). The first
+ * Purpose: Pin plan 93 block C part 2, round 2 (workshop:test-evidence/plan93-P93-K1-KB-SWITCH.json). The first
  * fix told the section on screen, and the Deck still showed the switch ON for 30 s and after leaving the tab,
  * while settings.json said off. The switch does not live in the section: it is read from the settings hook
  * above the tab, and a box rebuilds that hook too. The hook that comes back is filled from the note taken as

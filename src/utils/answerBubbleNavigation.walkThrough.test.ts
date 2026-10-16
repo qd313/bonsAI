@@ -4,7 +4,7 @@
  * Purpose: Pin plan 76 lane 3, round two. The first version of the ring-follows-the-scroll step
  * (commit 6f68e721) passed on the Deck for words but looped for covers: on the Soul Sanctum answer
  * Down went cover 1, cover 1, section 1's box, cover 1, box, cover 1... and never reached section 2,
- * the menu or Helpful (docs/test-evidence/plan76-P76-WALK-COVERS.json, runs/
+ * the menu or Helpful (workshop:test-evidence/plan76-P76-WALK-COVERS.json, runs/
  * plan76-P76-WALK-COVERS-down.json). Steam glided the panel after the ring moved to the box, which
  * brought the cover back into view, and the step's memory of the cover it had left was tied to the
  * cover being cut off, so it was forgotten, and the cover, which sits inside the box, counted as

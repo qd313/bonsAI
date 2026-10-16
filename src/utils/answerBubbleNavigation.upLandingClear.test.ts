@@ -2,7 +2,7 @@
  * Title: A box Up lands on, coming into an answer from below, stays clear of the dock after Steam's glide
  *
  * Purpose: Pin plan 79 helper AC round 2, from the Deck (build 49fc8894,
- * docs/test-evidence/plan79-P79-UP-MIRRORS-DOWN-NEWEST-CLOSED.json and
+ * workshop:test-evidence/plan79-P79-UP-MIRRORS-DOWN-NEWEST-CLOSED.json and
  * screenshots/DeckCapture_20261002_174703_auto.png): walking Up into an older open answer from its Read
  * aloud row, the last section ("You gotta punish...", 30 px) took the ring 0% visible, at y 336 to 366
  * behind the question box, and the next Up left the section above it 67% behind the dock. Walking Down

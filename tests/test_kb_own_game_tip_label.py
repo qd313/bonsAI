@@ -1,6 +1,6 @@
 """A game's own Deck tip is credited as that game's tip, not as a shared one (plan 72 lane 6).
 
-Found on the Deck by plan 70 (docs/test-evidence/plan70-R4-try5.json, plan70-R4-try6.json):
+Found on the Deck by plan 70 (workshop:test-evidence/plan70-R4-try5.json, plan70-R4-try6.json):
 Show details credited Deep Rock Galactic: Survivor's Render Scale tip and Fallout 4's F4SE tip
 as "Shared troubleshooting — <topic>", and the notes block over them read "From the shared Deck
 tips". Every tip card was given one fixed game title where tip rows become cards, whatever the

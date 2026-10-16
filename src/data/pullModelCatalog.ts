@@ -34,7 +34,7 @@
  * with — `comparePullModelEntriesNewestFirst` for every group except stretch,
  * and `comparePullModelEntriesStretchOrder` for the stretch ("Expert (large)")
  * group alone, which orders its five bake-off candidates by a fixed ranking
- * (docs/planning/41-deck-model-survey.md § 9) instead of by release date, with
+ * (workshop:planning/41-deck-model-survey.md § 9) instead of by release date, with
  * anything else in that group falling back to newest-first after them; (5) a
  * handful of small formatting helpers for the screen (star rating, size, tag
  * list, short date).
@@ -445,7 +445,7 @@ export function comparePullModelEntriesNewestFirst(a: PullModelEntry, b: PullMod
 /**
  * Locked order for the Expert (large) group, strongest first: the models that beat
  * today's Gemma 4 on the September 2026 answer test, in the maintainer's own bake-off
- * ranking (docs/planning/41-deck-model-survey.md § 9, D73).
+ * ranking (workshop:planning/41-deck-model-survey.md § 9, D73).
  */
 const PULL_MODEL_STRETCH_BAKEOFF_ORDER: readonly string[] = [
   "gemma4:12b-it-qat", "qwen3.5:9b", "granite4.2:8b", "gemma4:e4b-it-qat", "lfm2.5:8b",

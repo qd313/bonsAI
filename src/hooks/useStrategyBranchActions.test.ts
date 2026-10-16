@@ -1,7 +1,7 @@
 /**
  * Title: A branch pick sends its follow-up without putting it in the question box
  * Purpose: Pin the second half of KB-FOLLOWUP-QUOTE-02 (plan 76 Deck run,
- *          docs/test-evidence/plan76-KB-FOLLOWUP-QUOTE-02.json): for one sample after a branch pick the
+ *          workshop:test-evidence/plan76-KB-FOLLOWUP-QUOTE-02.json): for one sample after a branch pick the
  *          question box itself showed the composed "[Strategy follow-up] I'm at: ..." prompt the model
  *          is sent. The prompt goes straight to the Ask as its override; the box was never needed.
  * Used for: useStrategyBranchActions.ts.

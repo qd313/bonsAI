@@ -11,7 +11,7 @@ by the Session tab's own *Sum up this chat* button, which runs the exact same ca
 demand instead of waiting for the next question.
 Solves: without this, a chat someone kept using for an hour would quietly answer follow-ups
 as if the last ten minutes were all that ever happened, with nothing on screen explaining
-why. Measured on the Deck (docs/test-evidence/plan68-GATE-01.json): worst case with a game
+why. Measured on the Deck (workshop:test-evidence/plan68-GATE-01.json): worst case with a game
 running and a cold model, 39.6 seconds -- well inside the 120-second limit this file holds
 the call to.
 Does not: build the chat's own word-for-word memory that goes in front of an ordinary
@@ -82,7 +82,7 @@ from backend.services.token_accounting_service import estimate_tokens_from_chars
 
 logger = decky.logger
 
-# Measured on the Deck 2026-09-25 (docs/test-evidence/plan68-GATE-01.json): the worst run with a
+# Measured on the Deck 2026-09-25 (workshop:test-evidence/plan68-GATE-01.json): the worst run with a
 # game running and a cold model start took 39.6 seconds. Plan 68 section 8 question 2's default:
 # three times the worst measured, never under 60 -- 120 comfortably covers a slower Deck.
 SUMMARY_TIME_LIMIT_SECONDS = 120
@@ -93,7 +93,7 @@ SUMMARY_TIME_LIMIT_SECONDS = 120
 # a memory for this model this session. See ``last_memory_allowance_tokens`` below.
 DEFAULT_MEMORY_ALLOWANCE_TOKENS = 2000
 
-# Wording fixed in plan 68's step 0 desk test (docs/planning/68-chat-sums-itself-up.md Appendix A):
+# Wording fixed in plan 68's step 0 desk test (workshop:planning/68-chat-sums-itself-up.md Appendix A):
 # an earlier draft that asked for "one fact per line" made the model list every question asked and
 # ran into the 400-token cap (47 seconds). This wording reliably stops itself at 50-85 words. Do
 # not change it without re-running the desk test.

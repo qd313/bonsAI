@@ -445,7 +445,7 @@ def _question_without_typed_game_name(
     name, above the one that holds the real answer: "black mesa how do i get across the
     electrified water" listed "Starting out in Black Mesa" and the opening tram ride ahead of
     "Crossing the electrified waste pools"; "in black mesa how do I tame a horse" matched three
-    notes on "black mesa" alone (docs/test-evidence/plan64-BLACKMESA-WATER.json,
+    notes on "black mesa" alone (workshop:test-evidence/plan64-BLACKMESA-WATER.json,
     plan70-NO-CLOSE-MATCH-HK-02.json). Taking the name out is not the rejected idea of ranking
     generic notes lower: nothing is ranked down, a word that carried no information is dropped.
 

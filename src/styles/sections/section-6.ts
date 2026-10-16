@@ -667,7 +667,7 @@ ${buildReplyRatingChoicesSection()}
           border-color: rgba(156, 231, 255, 0.4);
         }
         /*
-         * Plan 68, as drawn (docs/planning/assets/68-chat-sums-itself-up.html). *Sum up this chat*
+         * Plan 68, as drawn (workshop:planning/assets/68-chat-sums-itself-up.html). *Sum up this chat*
          * takes Clear's own quiet full-width look, moved to the top of the Session tab; greyed out
          * it is still a D-pad stop (measured 2026-09-16), so it keeps the white ring.
          */

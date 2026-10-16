@@ -106,7 +106,7 @@ describe("OllamaWhereAiRunsSection startup-entry toggle", () => {
  * the network address placeholder, failed, and logged "test_ollama_connection failed
  * (non-loopback)" -- even though Ollama was answering normally on this Deck the whole time
  * (plugin log 2026-09-23 22:43:06, "Name or service not known"; flow H, plan 64,
- * docs/test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json). The fix: wait for settingsLoadedSignal.ts's
+ * workshop:test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json). The fix: wait for settingsLoadedSignal.ts's
  * flag before ever probing, so the one automatic check always uses the real, final values.
  */
 describe("OllamaWhereAiRunsSection automatic connection check", () => {

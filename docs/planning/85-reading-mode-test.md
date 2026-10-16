@@ -1,6 +1,6 @@
 # 85 — Reading mode: a test to find out
 
-Written 2026-10-09 by the session that built [plan 84](84-more-room-for-the-answer.md), as that plan's step 9. Plan 84
+Written 2026-10-09 by the session that built [plan 84](../../../bonsAI-workshop/planning/84-more-room-for-the-answer.md), as that plan's step 9. Plan 84
 said reading mode gets **its own short plan once the build is in**. The build is in. Nothing here is built, and nothing
 is decided yet: this plan says what a test would have to find out, and what the maintainer has to choose first.
 
@@ -19,7 +19,7 @@ again; an arrow beside the mic folds it back.
 
 Plan 84 already moved the tab bar into Steam's empty strip, put the chat's name in Decky's bar, and taught bonsAI to
 reshape Decky's bar per tab and put it back exactly when bonsAI closes (checked on the Deck 2026-10-09:
-[evidence](../test-evidence/plan84-STEP6-DECK.json)). Hiding Decky's bar and bonsAI's own rows is now a small step
+[evidence](../../../bonsAI-workshop/test-evidence/plan84-STEP6-DECK.json)). Hiding Decky's bar and bonsAI's own rows is now a small step
 from what exists, where in September it was the hardest part. On the Deck's own screen the answer has 295 of the
 panel's 454 points today. Reading mode would give it most of the rest.
 

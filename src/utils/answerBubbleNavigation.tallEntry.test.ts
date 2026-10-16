@@ -2,7 +2,7 @@
  * Title: Going Up into a section taller than the band shows its bottom edge
  *
  * Purpose: Pin plan 77 helper E, round two, bug 2, from the Deck run of build bce7d0fd with a game
- * running (docs/test-evidence/plan77-BLOCK2-GAME.json): the band was y 124 to 330 (206 px) and the
+ * running (workshop:test-evidence/plan77-BLOCK2-GAME.json): the band was y 124 to 330 (206 px) and the
  * answer had one 348 px section. Going Up into it from below it landed at y 66 to 414: the top 58 px
  * under the header AND the bottom 84 px under the dock, so neither edge showed and the rig read it 33%
  * visible behind the question box. Now the walk shows its bottom edge just above the dock, to read the

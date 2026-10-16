@@ -20,7 +20,7 @@ export type SteamInputLexiconEntry = {
   breadcrumb: string[];
   /**
    * React Router path template for Navigation.Navigate; `{appId}` is replaced for per-game entries.
-   * Leave unset until verified via CEF (see docs/archive/research/steam-input-research.md); when set, attempted before steam URL.
+   * Leave unset until verified via CEF (see workshop:archive/research/steam-input-research.md); when set, attempted before steam URL.
    */
   primaryPathTemplate?: string;
   /** steam:// template; `{appId}` replaced for per-game entries. */

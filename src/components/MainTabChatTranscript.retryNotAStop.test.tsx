@@ -1,7 +1,7 @@
 /**
  * Title: Up and Down never land on the question's Retry button; only Left from the question does
  * Purpose: Pin roadmap Bug "Down from the N earlier pill stops on the question's Retry button before
- *          the question itself". Measured on the Deck (docs/test-evidence/plan79-P79-M8-EARLIER-RETRY.json):
+ *          the question itself". Measured on the Deck (workshop:test-evidence/plan79-P79-M8-EARLIER-RETRY.json):
  *          Down from the pill landed on Retry first and then on the question, and Up from the question
  *          landed on Retry on the way back. The maintainer's rule: Retry is reached by Left from the
  *          question bubble, and by nothing else; Right comes back.

@@ -1,6 +1,6 @@
 /**
  * Title: Rating a reply keeps the ring on the row
- * Purpose: Pin the fix for plan 70 flow 4.1 (docs/test-evidence/plan70-F4-THUMBS-UP.json, 3 of 3):
+ * Purpose: Pin the fix for plan 70 flow 4.1 (workshop:test-evidence/plan70-F4-THUMBS-UP.json, 3 of 3):
  *          pressing Helpful swaps both thumbs for the words "Saved on this Deck", the button the
  *          ring was on no longer exists, and nothing holds the ring. The next Down or Left found the
  *          speaker; B went to the tab bar. (Plan 84 step 3: the speaker has moved to the answer's

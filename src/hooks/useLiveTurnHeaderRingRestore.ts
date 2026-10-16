@@ -11,7 +11,7 @@
  * Used for: MainTabChatTranscript.tsx, beside its answer-section restore (liveAnswerRingStopRef),
  * which covers the answer's own sections and nothing above them.
  *
- * Solves: docs/test-evidence/plan70-QA-FREE-PLAY-01.json: ring on the live question's Retry while
+ * Solves: workshop:test-evidence/plan70-QA-FREE-PLAY-01.json: ring on the live question's Retry while
  * the answer arrived; in 3 of 4 tries nothing held the ring after the finish, and within about 3 s
  * the view slid to the end of the answer (useStreamScrollPin delivers the end when it finds no ring
  * in the transcript), leaving Retry 196-356 px above the pane.

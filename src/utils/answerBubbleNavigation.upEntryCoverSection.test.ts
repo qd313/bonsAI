@@ -1,7 +1,7 @@
 /**
  * Title: Up from the rating row onto a last section that holds a spoiler cover ends clear of the dock
  *
- * Purpose: Pin plan 93's free-play finding (docs/test-evidence/plan93-QA-FREE-PLAY-01-before.json and its
+ * Purpose: Pin plan 93's free-play finding (workshop:test-evidence/plan93-QA-FREE-PLAY-01-before.json and its
  * picture): on the Deck's own screen, Down to "Mark reply helpful" and Up once put the ring on the answer's
  * last section (109 px, a spoiler cover at its top and a paragraph under it) at y 240 to 349 with the dock
  * at 330: its last line wholly under the dock, the one before cut by 5 px.

@@ -1,6 +1,6 @@
 """A boss answer must not produce a power suggestion (plan 78, helper I, sighting 3).
 
-Seen on the Deck 2026-09-27 (docs/test-evidence/plan72-Z-FREEPLAY.json, finding 12): the log read
+Seen on the Deck 2026-09-27 (workshop:test-evidence/plan72-Z-FREEPLAY.json, finding 12): the log read
 ``ask_game_ai: parsed TDP recommendation (suggestion-only): {'tdp_watts': 10, 'gpu_clock_mhz': 1200}``
 for a Hollow Knight boss answer. The prompt for Speed and Expert teaches the model the block's
 shape on EVERY question, and the small model sometimes copies it onto an answer that has nothing

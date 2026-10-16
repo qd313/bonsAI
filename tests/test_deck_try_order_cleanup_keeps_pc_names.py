@@ -170,7 +170,7 @@ class DeckCleanupKeepsPcNamesTests(PluginSettingsFileMixin, unittest.IsolatedAsy
         self.assertEqual(self._read_settings()["text_model_routing_order"], ["gemma4:e2b-it-qat"])
 
     # --- The AI models box: Remove, then the refresh it runs right after, both with the typed address ---
-    # The Deck check of plan 81 (docs/test-evidence/plan81-P81-REMOVE-KEEPS-PC-PLACE.json): the PC was
+    # The Deck check of plan 81 (workshop:test-evidence/plan81-P81-REMOVE-KEEPS-PC-PLACE.json): the PC was
     # typed on the Ollama tab only (no saved host), the removal kept the name, the refresh dropped it.
 
     async def _box_removes(self, tag: str, pc_ip: str) -> None:

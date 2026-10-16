@@ -9,8 +9,8 @@
 // Code does -- reading its command, args and env from this repo's .mcp.json
 // at run time, never a hard-coded copy -- then calls, in order:
 // deck_holdAwake, deck_deploy, and deck_replayChecks once per saved walk
-// under checks/. Then runs `python scripts/verify.py --quick` on this PC.
-// Writes one report (a .json and a matching .md) under docs/test-evidence/.
+// under workshop:checks/. Then runs `python scripts/verify.py --quick` on this PC.
+// Writes one report (a .json and a matching .md) under workshop:test-evidence/.
 //
 // Never touches the real Deck itself in a test: see
 // scripts/deck_overnight_run.test.mjs, which runs this against a fake stand-in

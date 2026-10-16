@@ -1,7 +1,7 @@
 /**
  * Title: Down into a section whose spoiler cover sits deep inside it reads the section first
  *
- * Purpose: Pin plan 78 helper D, round five, from the Deck (docs/test-evidence/
+ * Purpose: Pin plan 78 helper D, round five, from the Deck (workshop:test-evidence/
  * plan78-P78-TALL-SECTION-LOOP-BEFORE.json and plan78-QA-FREE-PLAY-01-NOGAME-try2.json): on two answers
  * whose first section is taller than the band (446 and 416 px) with a cover 383 and 353 px down, Down from
  * the reasoning line landed on the cover (229 to 284, scrollTop 448 and 418). The section's opening text was

@@ -1030,7 +1030,7 @@ class _QuestionCapturingFakePlugin(_FakePlugin):
 class QuestionForDisplayNeverLeaksTheModelBoundTextTests(unittest.IsolatedAsyncioTestCase):
     """Plan 70 helper K regression: from the third question in a chat, the live "Model's warming
     up for…" line quoted game_ai_request.py's own reminder text ahead of a bare follow-up
-    (docs/test-evidence/plan70-QA-FREE-PLAY-01.json), because every phase-key publish here read
+    (workshop:test-evidence/plan70-QA-FREE-PLAY-01.json), because every phase-key publish here read
     ``question`` -- what actually reaches the model -- rather than the person's own words.
     ``question_for_display``, when a caller gives one, is what every phase-key publish and the
     live spoiler cover now read instead; ``question`` itself is untouched, since the model still

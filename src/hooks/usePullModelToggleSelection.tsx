@@ -67,7 +67,7 @@ export function usePullModelToggleSelection(a: UsePullModelToggleSelectionArgs):
       // path instead of just toggling this one row -- the same mechanism already found and fixed
       // once in this codebase (ModelRoutingOrderModal.tsx, PICKER-REORDER-02, 2026-09-04), and the
       // likely cause of the very first model ticked in a fresh picker downloading immediately with
-      // no Pull selected press (one sighting 2026-09-19, docs/test-evidence/plan61-PULL-MISSING-
+      // no Pull selected press (one sighting 2026-09-19, workshop:test-evidence/plan61-PULL-MISSING-
       // NAME-01.json).
       ev?.preventDefault?.();
       if (isTagInstalled(entry.tag, installedTags)) {

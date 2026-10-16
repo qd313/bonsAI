@@ -198,7 +198,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
 
   def test_per_game_tip_reroutes_a_speed_mode_question_the_topic_router_misses(self):
     """Plan 70 helper E2. Measured on the Deck 2026-09-26
-    (docs/test-evidence/plan70-R-R4-try2.json): "the text on screen looks blurry" never
+    (workshop:test-evidence/plan70-R-R4-try2.json): "the text on screen looks blurry" never
     reaches Deep Rock Galactic: Survivor's own Render Scale tip, because Speed mode is not a
     declared-game Ask and neither the phrase gate nor the topic router recognise the word
     "blurry" alone -- so `should_retrieve_knowledge` hands this turn domain="strategy",

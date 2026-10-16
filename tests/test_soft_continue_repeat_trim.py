@@ -1,7 +1,7 @@
 """A long answer cut by its length limit, then continued: text the model writes again is kept once.
 
 Found 2026-10-08 on the Deck (plan 83, row P81-CONTINUE-ONE-MARK, evidence
-docs/test-evidence/plan83-P81-CONTINUE-ONE-MARK.json): with the Strategy limit at 340, a guide was
+workshop:test-evidence/plan83-P81-CONTINUE-ONE-MARK.json): with the Strategy limit at 340, a guide was
 continued twice and its saved text (4067 characters in 4 pieces) held the same paragraphs twice, the
 third piece repeating a long stretch of the second word for word and the fourth repeating it again;
 a second answer repeated one sentence at its one join, the sentence cut at the end of piece 1 and

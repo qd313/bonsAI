@@ -288,7 +288,7 @@ class KnownEntityGazetteerTests(unittest.TestCase):
         )
 
     def test_game_name_stripping_stops_the_final_fight_question_naming_a_wrong_boss(self):
-        """Follow-up measured on the Deck 2026-09-26 (docs/test-evidence/plan70-L1-8-HELPER-M.json):
+        """Follow-up measured on the Deck 2026-09-26 (workshop:test-evidence/plan70-L1-8-HELPER-M.json):
         excluding "Starting out in Hollow Knight" was not the whole fix. The exact same worked
         question then recorded "False Knight" instead -- still wrong, since the question is about
         the final fight, which has no note in the corpus. The word "knight" in the game's own

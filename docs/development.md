@@ -68,7 +68,7 @@ agents work in this repo.
 
 IDE agents use the in-repo **bonsai-mcp** knowledge server plus **Decky Plugin Studio** for deploy/preview. See [mcp-setup.md](mcp-setup.md) and [AGENTS.md](../AGENTS.md). DPS itself lives in [qd313/decky-plugin-studio](https://github.com/qd313/decky-plugin-studio) — document issues and sync any DPS-related changes there (see mcp-setup § Decky Plugin Studio).
 
-**Maintainer architecture docs:** [archive/voice-input-follow-up.md](archive/voice-input-follow-up.md) (Whisper STT), [knowledge-base.md](knowledge-base.md) (offline RAG). **Code clarity:** [code-clarity.md](code-clarity.md) (file headers, Ask path map), [glossary.md](glossary.md) (acronyms).
+**Maintainer architecture docs:** [archive/voice-input-follow-up.md](../../bonsAI-workshop/archive/voice-input-follow-up.md) (Whisper STT), [knowledge-base.md](knowledge-base.md) (offline RAG). **Code clarity:** [code-clarity.md](code-clarity.md) (file headers, Ask path map), [glossary.md](glossary.md) (acronyms).
 
 ```bash
 pnpm run mcp:install
@@ -150,7 +150,7 @@ Windows equivalent: `.\scripts\build.ps1` (remote deploy only; loads `.env`). Wa
 
 - Workflow: `bonsai.workflow.get` id=`deck-dev-loop` — build/deploy, BPM vs Gaming Mode, screenshots, optional log tunnel.
 - Screenshots: `bonsai.workflow.get` id=`screenshot-ingest`.
-- Visibility workflow (historical): [archive/spikes/cursor-deck-visibility.md](archive/spikes/cursor-deck-visibility.md).
+- Visibility workflow (historical): [archive/spikes/cursor-deck-visibility.md](../../bonsAI-workshop/archive/spikes/cursor-deck-visibility.md).
 
 ### Headless Decky harness (Vitest)
 
@@ -158,7 +158,7 @@ Frontend tests use a fake `@decky/api` registry under `src/test-harness/` (jsdom
 
 ## Test bonsAI after deploy (two tracks)
 
-Decky injects into Steam's **gamepadui** layer — the same React/CEF surface as **Gaming Mode** and **Big Picture Mode (BPM)**. The classic Desktop Steam window does **not** load QAM or Decky. See [archive/research/steam-input-research.md](archive/research/steam-input-research.md) § "Game Mode / Big Picture".
+Decky injects into Steam's **gamepadui** layer — the same React/CEF surface as **Gaming Mode** and **Big Picture Mode (BPM)**. The classic Desktop Steam window does **not** load QAM or Decky. See [archive/research/steam-input-research.md](../../bonsAI-workshop/archive/research/steam-input-research.md) § "Game Mode / Big Picture".
 
 ### Track A — Fast loop (recommended; stay in Desktop Mode)
 
@@ -277,7 +277,7 @@ Decky loads `py_modules` on `sys.path`; keep the `backend` package name for impo
 
 ### Deep-dive pointers (preserved for agents and contributors)
 
-- **Unified input refactor (complete):** [archive/refactor/refactor-specialist-sweep.md § Unified input refactor](archive/refactor/refactor-specialist-sweep.md#unified-input-refactor-completed) — [`useUnifiedInputSurface.ts`](../src/features/unified-input/useUnifiedInputSurface.ts), [`MainTab.tsx`](../src/components/MainTab.tsx).
+- **Unified input refactor (complete):** [archive/refactor/refactor-specialist-sweep.md § Unified input refactor](../../bonsAI-workshop/archive/refactor/refactor-specialist-sweep.md#unified-input-refactor-completed) — [`useUnifiedInputSurface.ts`](../src/features/unified-input/useUnifiedInputSurface.ts), [`MainTab.tsx`](../src/components/MainTab.tsx).
 - **AI character roleplay:** [`characterCatalog.ts`](../src/data/characterCatalog.ts), [`CharacterPickerModal.tsx`](../src/components/CharacterPickerModal.tsx), [`ai_character_service.py`](../py_modules/backend/services/ai_character_service.py).
 - **Input sanitizer:** [`inputSanitizerCommands.ts`](../src/data/inputSanitizerCommands.ts) (must match Python); `input_sanitizer_user_disabled` in settings.
 - **Input transparency:** RPC `get_input_transparency`; optional Desktop trace via `desktop_note_service.py`.
@@ -363,8 +363,8 @@ Prioritize refactors and reviews by **change risk** — large surfaces, branchin
 | Priority | Hotspot | Why it hurts change | Automated test signal | Suggested next extraction / mitigation |
 |----------|---------|---------------------|------------------------|----------------------------------------|
 | 1 | `src/index.tsx` | Single file mixes layout, CSS, RPC, tab assembly, and **large Settings JSX**; any edit can ripple focus/CSS/RPC. | **Smoke + wiring** since 2026-08-02 — [`src/index.test.tsx`](../src/index.test.tsx) mounts the real tree and checks the Decky contract, settings wiring and tab set; it does **not** cover focus order or layout. | **After Settings UX trim:** extract **Settings** subtree to e.g. `src/components/SettingsTabPanel.tsx` (props in, no new persistence keys); then consider smaller hooks for repeated RPC patterns. |
-| 2 | `main.py` | Many RPC branches; easy to break one handler while fixing another; logging/error shapes affect UI. | **Partial** — services are unit-tested; `main.py` itself has **no** dedicated `test_main.py`; regressions surface in integration/manual. | Prefer **new logic in services** with tests; keep `main.py` thin wrappers; when touching errors, align with [archive/reports/security-audit-report.md](archive/reports/security-audit-report.md) (user-safe messages). |
-| 3 | `src/components/MainTab.tsx` | Long controller-first UI; focus graph and measurement logic intertwined. | **Partial** — unified-input phases extracted helpers; Vitest on data/utils, not full MainTab mount. | Further extractions only when needed; follow [archive/refactor/refactor-specialist-sweep.md § Unified input](archive/refactor/refactor-specialist-sweep.md#unified-input-refactor-completed); for **new** controls use [focus-graph-patterns](../packages/bonsai-mcp/knowledge/architecture/focus-graph-patterns.md); always device-check D-pad + overlay after edits. |
+| 2 | `main.py` | Many RPC branches; easy to break one handler while fixing another; logging/error shapes affect UI. | **Partial** — services are unit-tested; `main.py` itself has **no** dedicated `test_main.py`; regressions surface in integration/manual. | Prefer **new logic in services** with tests; keep `main.py` thin wrappers; when touching errors, align with [archive/reports/security-audit-report.md](../../bonsAI-workshop/archive/reports/security-audit-report.md) (user-safe messages). |
+| 3 | `src/components/MainTab.tsx` | Long controller-first UI; focus graph and measurement logic intertwined. | **Partial** — unified-input phases extracted helpers; Vitest on data/utils, not full MainTab mount. | Further extractions only when needed; follow [archive/refactor/refactor-specialist-sweep.md § Unified input](../../bonsAI-workshop/archive/refactor/refactor-specialist-sweep.md#unified-input-refactor-completed); for **new** controls use [focus-graph-patterns](../packages/bonsai-mcp/knowledge/architecture/focus-graph-patterns.md); always device-check D-pad + overlay after edits. |
 | 4 | `backend/services/ollama_service.py` | Prompt and transport changes affect every Ask; HTTP error paths touch disclosure. | **Good** — [`tests/test_ollama_service.py`](../tests/test_ollama_service.py). | Keep behavioral changes paired with test updates; redact user-facing error bodies per security audit. |
 | 5 | `backend/services/settings_service.py` | Schema merge bugs affect entire plugin. | **Good** — [`tests/test_settings_service.py`](../tests/test_settings_service.py). | Add tests for any new keys; avoid silent defaults that bypass capability gating. |
 | 6 | `backend/services/desktop_note_service.py` | Filesystem paths and consent boundaries. | **Good** — [`tests/test_desktop_note_service.py`](../tests/test_desktop_note_service.py). | Keep path logic in service; gate in `main.py` + capabilities. |

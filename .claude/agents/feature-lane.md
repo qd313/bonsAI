@@ -9,7 +9,7 @@ Deck (TypeScript/React frontend, Python backend). You work in a git worktree who
 given in your task. Use that absolute path in every command; never assume the working directory, and
 never `cd` out of it. Keep scratch scripts inside your own copy or the scratch folder your task names, never in the shared system temp folder, where another helper may pick the same file name.
 
-The session plan is `docs/archive/36-feature-session.md`. Read it after CLAUDE.md.
+The session plan is `workshop:archive/36-feature-session.md`. Read it after CLAUDE.md.
 
 Ground rules, all of them non-negotiable:
 
@@ -19,7 +19,7 @@ Ground rules, all of them non-negotiable:
 2. Then `pnpm install --frozen-lockfile` in the worktree (never when your task says its `node_modules` is a link to the shared checkout; the baseline still runs) and confirm the baseline is green **before you
    change anything**: `npx tsc --noEmit`, `npm test`, `npm run test:py`, `npm run build`,
    `node scripts/check-focus-patterns.mjs`. If the baseline is already red, stop and report.
-3. Read `CLAUDE.md` and `docs/archive/36-feature-session.md`. Read `docs/design-language.md` and
+3. Read `CLAUDE.md` and `workshop:archive/36-feature-session.md`. Read `docs/design-language.md` and
    `docs/design-tokens.md` if you touch any UI. Read `AGENTS.md (Decky focus graph)` **before
    writing any new control**, and add the focus-graph entry in the same commit as the control.
 4. **One feature per commit.** Write the test first. Stay inside the files your task lists. If the

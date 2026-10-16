@@ -11,7 +11,7 @@ import type React from "react";
  * User-visible UI scale profiles. Immersive is dev-only until Steam Frame ships. Desktop is kept
  * only so an old saved settings file still parses — `normalizeUiScaleProfileId` redirects it to
  * Handheld and nothing in the running plugin can select or display it any more. Measured
- * 2026-09-20 (docs/test-evidence/plan62-UI-SIZE-outside-handheld.json): Desktop and Handheld both
+ * 2026-09-20 (workshop:test-evidence/plan62-UI-SIZE-outside-handheld.json): Desktop and Handheld both
  * multiplied by the same 1, so keeping it as a separate choice offered nothing a person could see.
  */
 export type UiScaleProfileId = "handheld" | "desktop" | "couch" | "immersive";

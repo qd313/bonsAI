@@ -156,13 +156,13 @@ describe("carousel track width reads the one-suggestion-chip override (section 4
 describe("room under the suggestion chips (section 4 CSS)", () => {
   const css = buildSection4Section();
 
-  // Measured on the Deck 2026-09-17 (docs/test-evidence/plan60-measure-before.json): the chips had
+  // Measured on the Deck 2026-09-17 (workshop:test-evidence/plan60-measure-before.json): the chips had
   // no room under them at all in three of the four animation modes, so the chip's soft shadow was
   // cut off and the chips touched the question box. These pin the numbers that fixed it, because
   // nothing in jsdom can measure a shadow (design-language.md rule 6).
 
   /*
-   * Plan 72 (docs/test-evidence/plan72-P-CHIP-GAP-handheld.json, and -couch): the chip sat 8px above
+   * Plan 72 (workshop:test-evidence/plan72-P-CHIP-GAP-handheld.json, and -couch): the chip sat 8px above
    * the question box while the box sat 2px above the Ask bar. The maintainer wants the two gaps
    * equal, with the chip moving down to the box. The chip keeps its 5px of shadow room, and the
    * row hands back what the gap does not use, so the question box overlaps the tail of the shadow.

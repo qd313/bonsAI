@@ -10,19 +10,19 @@ Prepared prompts for a future AI planning session. Each section has a short summ
 
 | Q# | Topic | Answer |
 |----|-------|--------|
-| 1 | Automating Device QA and prompt testing | [01-qa-automation-plan.md](01-qa-automation-plan.md) |
-| 2 | ~~README.md redo~~ *(partial — only the install-URL fix landed)* | [02-readme-redesign-plan.md](02-readme-redesign-plan.md) · commit `44da1ff` |
-| 3 | LB/RB tab switch flicker when scrolled | [03-lbrb-tab-flicker.md](03-lbrb-tab-flicker.md) |
-| 4 | ~~Strategy spoiler false-positive~~ *(partial — fixes 1+2+4 landed 2026-08-07; on-Deck verification of STRAT-SPOIL-DRG-01 still open)* | [04-strategy-spoiler-false-positive.md](04-strategy-spoiler-false-positive.md) §7 · [spoiler-constitution.md](../planning/spoiler-constitution.md) · commits `4bb9ce0`, `f84c6e3`, `a68113d`, `25ff648`, `fe65175`, `87fde2b`, `c74e07e` |
-| 5 | ~~Token streaming evaluation~~ *(partial — Phase A/B UX fixes landed 2026-08-07; Developer-tab flag not graduated)* | [05-token-streaming-review.md](05-token-streaming-review.md) §3.1–3.2 · commits `b0b1bbe`–`db4858a` (Phase A), `8237534`–`30ca6f9` (Phase B) |
-| 6 | Thinking blurbs evaluation | [06-thinking-blurbs-review.md](06-thinking-blurbs-review.md) |
-| 7 | Named chat slots | [07-named-chat-slots-postmortem.md](07-named-chat-slots-postmortem.md) |
-| 8 | Kids master lock feasibility | [08-kids-master-lock-feasibility.md](08-kids-master-lock-feasibility.md) → ship plan [14-kids-master-lock-implementation-plan.md](14-kids-master-lock-implementation-plan.md) |
-| 9 | Steam Frame companion UX feasibility | [09-steam-frame-companion-feasibility.md](09-steam-frame-companion-feasibility.md) |
-| 10 | Wake-word listening feasibility and cost | [10-wake-word-listening-feasibility.md](../planning/10-wake-word-listening-feasibility.md) |
-| 11 | Native QAM shortcut tile / decouple from Decky | [11-native-qam-tile-feasibility.md](11-native-qam-tile-feasibility.md) |
-| 12 | Deep mod AI hints feasibility | [12-deep-mod-ai-hints-feasibility.md](../planning/12-deep-mod-ai-hints-feasibility.md) |
-| 13 | ~~Feature ideas for roadmap.md (star-rated)~~ *(partial — 4 of 9 stubs added to roadmap; 2 shipped in code)* | [13-roadmap-feature-ideas.md](13-roadmap-feature-ideas.md) · results [roadmap-completed.md](../archive/roadmap-completed.md) · commits `ab90b30`, `b5093d2`, `3ecd9d0`, `60b6d14` |
+| 1 | Automating Device QA and prompt testing | [01-qa-automation-plan.md](../../../bonsAI-workshop/archive/01-qa-automation-plan.md) |
+| 2 | ~~README.md redo~~ *(partial — only the install-URL fix landed)* | [02-readme-redesign-plan.md](../../../bonsAI-workshop/archive/02-readme-redesign-plan.md) · commit `44da1ff` |
+| 3 | LB/RB tab switch flicker when scrolled | [03-lbrb-tab-flicker.md](../../../bonsAI-workshop/archive/03-lbrb-tab-flicker.md) |
+| 4 | ~~Strategy spoiler false-positive~~ *(partial — fixes 1+2+4 landed 2026-08-07; on-Deck verification of STRAT-SPOIL-DRG-01 still open)* | [04-strategy-spoiler-false-positive.md](../../../bonsAI-workshop/archive/04-strategy-spoiler-false-positive.md) §7 · [spoiler-constitution.md](../planning/spoiler-constitution.md) · commits `4bb9ce0`, `f84c6e3`, `a68113d`, `25ff648`, `fe65175`, `87fde2b`, `c74e07e` |
+| 5 | ~~Token streaming evaluation~~ *(partial — Phase A/B UX fixes landed 2026-08-07; Developer-tab flag not graduated)* | [05-token-streaming-review.md](../../../bonsAI-workshop/archive/05-token-streaming-review.md) §3.1–3.2 · commits `b0b1bbe`–`db4858a` (Phase A), `8237534`–`30ca6f9` (Phase B) |
+| 6 | Thinking blurbs evaluation | [06-thinking-blurbs-review.md](../../../bonsAI-workshop/archive/06-thinking-blurbs-review.md) |
+| 7 | Named chat slots | [07-named-chat-slots-postmortem.md](../../../bonsAI-workshop/archive/07-named-chat-slots-postmortem.md) |
+| 8 | Kids master lock feasibility | [08-kids-master-lock-feasibility.md](../../../bonsAI-workshop/archive/08-kids-master-lock-feasibility.md) → ship plan [14-kids-master-lock-implementation-plan.md](../../../bonsAI-workshop/archive/14-kids-master-lock-implementation-plan.md) |
+| 9 | Steam Frame companion UX feasibility | [09-steam-frame-companion-feasibility.md](../../../bonsAI-workshop/archive/09-steam-frame-companion-feasibility.md) |
+| 10 | Wake-word listening feasibility and cost | [10-wake-word-listening-feasibility.md](../../../bonsAI-workshop/planning/10-wake-word-listening-feasibility.md) |
+| 11 | Native QAM shortcut tile / decouple from Decky | [11-native-qam-tile-feasibility.md](../../../bonsAI-workshop/archive/11-native-qam-tile-feasibility.md) |
+| 12 | Deep mod AI hints feasibility | [12-deep-mod-ai-hints-feasibility.md](../../../bonsAI-workshop/planning/12-deep-mod-ai-hints-feasibility.md) |
+| 13 | ~~Feature ideas for roadmap.md (star-rated)~~ *(partial — 4 of 9 stubs added to roadmap; 2 shipped in code)* | [13-roadmap-feature-ideas.md](../../../bonsAI-workshop/archive/13-roadmap-feature-ideas.md) · results [roadmap-completed.md](../archive/roadmap-completed.md) · commits `ab90b30`, `b5093d2`, `3ecd9d0`, `60b6d14` |
 
 ---
 
@@ -85,7 +85,7 @@ You want the repo-root **README.md** rewritten so a **Steam Deck owner with no O
 
 **Known problems in the current README (verified against code/docs):**
 
-- ~~**Conflicting install URLs**~~ — **Resolved 2026-08-14.** `cantcurecancer` was this account's former GitHub username, not a second repo; it's now unregistered and was a live risk (see [02-readme-redesign-plan.md § Canonical repo](02-readme-redesign-plan.md#canonical-repo--resolved-2026-08-14-f3)). `qd313/bonsAI` is canonical everywhere.
+- ~~**Conflicting install URLs**~~ — **Resolved 2026-08-14.** `cantcurecancer` was this account's former GitHub username, not a second repo; it's now unregistered and was a live risk (see [02-readme-redesign-plan.md § Canonical repo](../../../bonsAI-workshop/archive/02-readme-redesign-plan.md#canonical-repo--resolved-2026-08-14-f3)). `qd313/bonsAI` is canonical everywhere.
 - **Stale permissions/power copy** — beta disclaimer and body text still describe **Adjust power limits** / TDP apply via Permissions; removed 2026-07-30 (TDP is suggestion-only per `docs/glossary.md`).
 - **Text-heavy, low visual guidance** — install steps are numbered prose only; no per-step images for Decky install URL, Ollama tab, or first Ask.
 - **Power-user content inline** — model-policy tables, sanitization deep dives, and contributor build notes mixed with first-run setup; should mostly link to `troubleshooting.md` instead.
@@ -97,7 +97,7 @@ You want the repo-root **README.md** rewritten so a **Steam Deck owner with no O
 
 > **Topic:** README.md redesign — visual install guide, casual Deck-owner audience, power-user doc funnel.
 >
-> **Context:** `README.md` is the public face of bonsAI (Decky Loader plugin, self-hosted Ollama, v0.5.0 in `plugin.json`). `docs/DOCUMENTATION_INDEX.md` positions it as the **primary install entry**; `docs/troubleshooting.md` explicitly defers first-time setup to README and owns edge cases. In-plugin help uses `src/data/pluginQuickStartInstructions.tsx` — separate shorter copy that should stay in sync. Current visuals: single `assets/readme-hero.png`; no install GIFs in repo. Maintainer can capture Deck UI via `screenshot-deck` scripts and `record-deck` (v1 spike in `docs/archive/spikes/deck-screen-recording.md`).
+> **Context:** `README.md` is the public face of bonsAI (Decky Loader plugin, self-hosted Ollama, v0.5.0 in `plugin.json`). `docs/DOCUMENTATION_INDEX.md` positions it as the **primary install entry**; `docs/troubleshooting.md` explicitly defers first-time setup to README and owns edge cases. In-plugin help uses `src/data/pluginQuickStartInstructions.tsx` — separate shorter copy that should stay in sync. Current visuals: single `assets/readme-hero.png`; no install GIFs in repo. Maintainer can capture Deck UI via `screenshot-deck` scripts and `record-deck` (v1 spike in `workshop:archive/spikes/deck-screen-recording.md`).
 >
 > **Primary reader:** Someone who **owns a Steam Deck**, has heard of Decky, and wants to **install bonsAI and send one Ask** — may not know Ollama, LAN, or QAM yet. README should teach the minimum inline; everything harder links out.
 >
@@ -192,7 +192,7 @@ In **Strategy mode**, the model sometimes wraps **routine boss/enemy tactics** i
 
 **Your questions:** What is best practice here? Can bonsAI **confidently** eliminate false positives, or only reduce them?
 
-**Related planned work (not shipped):** **Spoiler confidence chip** (transparency estimate only), **user-adjustable spoiler fencing**, **unfenced spoiler feedback** thumb, **Spoiler constitution** (★★★★) — see `docs/roadmap.md` Planned and [spoiler-constitution.md](../planning/spoiler-constitution.md). Phase 4 KB track (**S1**) also calls for unfenced replies when the user named the entity. **Recon + maintainer decisions:** [04-strategy-spoiler-false-positive.md](04-strategy-spoiler-false-positive.md) §7.
+**Related planned work (not shipped):** **Spoiler confidence chip** (transparency estimate only), **user-adjustable spoiler fencing**, **unfenced spoiler feedback** thumb, **Spoiler constitution** (★★★★) — see `docs/roadmap.md` Planned and [spoiler-constitution.md](../planning/spoiler-constitution.md). Phase 4 KB track (**S1**) also calls for unfenced replies when the user named the entity. **Recon + maintainer decisions:** [04-strategy-spoiler-false-positive.md](../../../bonsAI-workshop/archive/04-strategy-spoiler-false-positive.md) §7.
 
 ### Prompt for planning agent
 
@@ -425,7 +425,7 @@ You want **research-only** feasibility for **Steam Frame companion UX** — how 
 
 - **LAN Ollama** — Ask from Deck/PC on the same network (`Ollama` tab, mDNS); a companion device could use the same pattern.
 - **UI scale “Immersive” profile** — dev-only placeholder for large close-range displays (`uiScaleProfile.ts`: `SHOW_IMMERSIVE_UI_SCALE = false`; comment: “Steam Frame proxy”).
-- **KB compat stubs** — thin `steam_frame` tips in shared troubleshooting corpus (`scripts/archive/gen_compat_patterns.py`: companion Deck/phone on LAN; comfort; wrong display target; “research-phase — verify Valve docs”).
+- **KB compat stubs** — thin `steam_frame` tips in shared troubleshooting corpus (`workshop:scripts/archive/gen_compat_patterns.py`: companion Deck/phone on LAN; comfort; wrong display target; “research-phase — verify Valve docs”).
 - **Decky QAM plugin** — bonsAI runs in Steam’s **gamepadui** layer on Deck/BPM; **no Frame-specific runtime or APIs** in `src/` today.
 
 **Core unknowns:** What is Steam Frame’s software stack, companion-app story, and whether Decky/plugins can run on Frame, on a paired Deck, or only via a separate browser/CEF surface.
@@ -441,7 +441,7 @@ You want **research-only** feasibility for **Steam Frame companion UX** — how 
 > 2. **Companion workflows:** Sketch 2–3 user stories, e.g. (A) HMD in-game + **Deck on LAN** open to bonsAI QAM for strategy Ask, (B) phone/tablet web UI (if any), (C) voice-only hands-free via wake-word on Deck. Which fit bonsAI’s **existing** architecture vs need new surfaces?
 > 3. **Technical dependencies:** Decky on companion device, LAN `http://<PC>:11434`, screenshot attach from VR (likely hard), Remote Play / streaming context (tie to separate roadmap item), UI scale Immersive profile, compat KB tips. Blockers ranked.
 > 4. **UX / safety disclaimers:** Comfort, motion sickness, framerate, wrong-display mirroring — what copy belongs in README, Ask replies, or KB tips (align with existing stub lines in `gen_compat_patterns.py`).
-> 5. **Phased recommendation:** Research spike deliverable (`docs/archive/spikes/steam-frame-companion.md`?), minimum v1 (docs + compat tips only?) vs medium (Immersive UI scale QA) vs long (dedicated companion mode). ★ effort per phase.
+> 5. **Phased recommendation:** Research spike deliverable (`workshop:archive/spikes/steam-frame-companion.md`?), minimum v1 (docs + compat tips only?) vs medium (Immersive UI scale QA) vs long (dedicated companion mode). ★ effort per phase.
 > 6. **Go/no-go:** Is this a bonsAI product fit, or better left to generic LAN Ollama + Deck docs without Frame-specific work?
 >
 > **Deliverable:** Feasibility memo outline, recommended v1 scope (likely docs/KB + disclaimers per roadmap), dependency list, and explicit **out of scope** for Frame v1 (overlay, native Frame app).
@@ -465,7 +465,7 @@ You want **research-only** feasibility and **Deck cost** (CPU, battery, thermal,
 
 **What exists today:**
 
-- **Push-to-talk mic** — user holds/taps mic; `voice_transcription_service.py` captures PCM, RMS gate, rolling window decode via `whisper-server` or CLI fallback. **4 whisper threads** while recording; known game CPU contention (`docs/archive/voice-input-follow-up.md`).
+- **Push-to-talk mic** — user holds/taps mic; `voice_transcription_service.py` captures PCM, RMS gate, rolling window decode via `whisper-server` or CLI fallback. **4 whisper threads** while recording; known game CPU contention (`workshop:archive/voice-input-follow-up.md`).
 - **No wake-word detector** — `voice_transcription_service.py` and `voice_whisper_daemon.py` explicitly say wake-word is **not** implemented; daemon comment: “future wake-word STT.”
 - **Background Ask + toast** — completed Ask can notify via **Reply ready** when QAM is closed (`bonsaiReplyReadyToast.ts`).
 
@@ -579,7 +579,7 @@ You want **research-only** feasibility for **Deep mod AI hints** — bonsAI dete
 > 5. **Risks:** Support load from wrong mod advice, scan performance on Deck during gameplay, legal (Nexus/Workshop ToS for automated reads). Minimum viable v1 that is **net trust-positive**.
 > 6. **Dependencies & sequencing:** What must ship first (Web permission for live mod patch notes? RAG corpus? Steam Input parse?)? Realistic ★★★★★★ timeline vs descope to ★★ doc-only mod tips in compat KB.
 >
-> **Deliverable:** Feasibility memo outline (`docs/archive/spikes/deep-mod-ai-hints.md`), recommended v1 scope (likely tier A or D only), permission/capability spec sketch, exemplar detection table for 5 games, and **go/no-go** with explicit “bonsAI will not claim X” list for README/troubleshooting.
+> **Deliverable:** Feasibility memo outline (`workshop:archive/spikes/deep-mod-ai-hints.md`), recommended v1 scope (likely tier A or D only), permission/capability spec sketch, exemplar detection table for 5 games, and **go/no-go** with explicit “bonsAI will not claim X” list for README/troubleshooting.
 >
 > **Out of scope:** Implementing scanner or UI; downloading/installing mods; editing game files or launch options; VAC ban automation; full “port configuration manager” unless research proves it belongs in the same epic.
 

@@ -87,7 +87,7 @@ describe("no standalone Policy section, and no section-button row, any more", ()
   it('initialSection "policy" lands on Browse, the same as "browse" -- not a missing section', () => {
     // It once forced the old Filters panel open with the ring on the first licence row: measured on
     // the Deck 3 of 3 tries through "Manage AI models...", never through "Browse models..."
-    // (docs/test-evidence/plan70-RING-ON-FILTER-2c1.json), one A press away from changing the
+    // (workshop:test-evidence/plan70-RING-ON-FILTER-2c1.json), one A press away from changing the
     // licence filter with nothing pressed to put the ring there. Since plan 91 the filters are a
     // column that is always on screen, so there is no panel to open and no prop to ask for one.
     render(<OllamaModelsHubModal {...buildProps({ initialSection: "policy" })} />);

@@ -1,7 +1,7 @@
 /**
  * Title: The last scroll through a section stops at its end, not a whole press past it
  *
- * Purpose: Pin plan 78 helper D, round five, item (a), from the Deck (docs/test-evidence/
+ * Purpose: Pin plan 78 helper D, round five, item (a), from the Deck (workshop:test-evidence/
  * plan78-QA-FREE-PLAY-01-NOGAME-try2.json, answer A): a 210 px section, 8 px taller than the 202 px band,
  * landed at y 88 to 298, and the next Down scrolled a whole 80 px press to 8 to 218, its bottom 72 px above
  * the dock and its top 80 px under the header, to show the last 8 px. Now a scroll press inside a section

@@ -24,7 +24,7 @@ const CLEARANCE_PAD_PX = 6;
 
 /**
  * Steam's own scroll-padding-bottom on the Quick Access pane: `scrollIntoView({ block: "end" })` already lands
- * an element this far above the pane's bottom edge. Measured 2026-10-01 (docs/test-evidence/
+ * an element this far above the pane's bottom edge. Measured 2026-10-01 (workshop:test-evidence/
  * plan78-P78-DOWN-SHORT-SECTION.json) and again 2026-10-03 with and without a game running
  * (plan81-P81-M-K2K3-NOGAME.json, plan81-P81-M-K2K3-GAME.json): with the scroll margin below at the covered
  * strip plus 6, the element ended 86 px above the dock, 80 px of it Steam's. The margin leaves these 80 out.
@@ -94,7 +94,7 @@ export function liftAboveDock(el: HTMLElement): boolean {
    * 0, 80, 164 or 300px all parked the pane at the same scrollTop, the section's bottom 77px
    * behind the dock, and every later pass asked for that same place again.
    *
-   * That is no longer what the Deck does. Measured 2026-10-01 (docs/test-evidence/
+   * That is no longer what the Deck does. Measured 2026-10-01 (workshop:test-evidence/
    * plan78-P78-DOWN-SHORT-SECTION.json): the request moves the pane, inside the answer and out,
    * and overshoots. Steam's pane carries scroll-padding-bottom: 80px, so "end" lands 80px above the
    * pane's bottom, and the scroll-margin set above (the covered strip plus the pad) lands it the

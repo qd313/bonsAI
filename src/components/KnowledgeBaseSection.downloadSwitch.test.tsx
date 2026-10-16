@@ -1,7 +1,7 @@
 /**
  * Title: After a library download finishes, "Use local knowledge base" reads on, as the file does
  *
- * Purpose: Pin plan 93 block C part 2, round 3 (docs/test-evidence/plan93-P93-K1-KB-SWITCH-try2.json). On the
+ * Purpose: Pin plan 93 block C part 2, round 3 (workshop:test-evidence/plan93-P93-K1-KB-SWITCH-try2.json). On the
  * Deck, after Remove and then Download, the back end saved the switch on, but the screen still read OFF, also
  * after leaving the tab and returning, until a Text size change a minute later. The mirror of the Remove
  * fix: the switch is read from the settings hook, the box that picks the place rebuilds the screen and the

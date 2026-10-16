@@ -134,7 +134,7 @@ export function elementIsWhollyInBandOf(el: HTMLElement, scroll: HTMLElement): b
  * Input: the landed section and its scroll container. Output: true when the panel moved.
  *
  * The walk's contract is that every stop the ring lands on is wholly visible, or, when it is taller
- * than the readable band, has its top edge visible (docs/test-evidence/plan76-P76-WALK-COVERS-try2.json:
+ * than the readable band, has its top edge visible (workshop:test-evidence/plan76-P76-WALK-COVERS-try2.json:
  * the ring sat on a box 67% on screen, its top third, where its cover is, under the tab header).
  * `revealBelowDock` only ever scrolls the other way, for the dock. Here: a top cut off by the header
  * is brought to just under it (section a screen tall or not); else a bottom cut off by the dock, on a
@@ -184,7 +184,7 @@ export function showTallSectionTop(section: HTMLElement, scroll: HTMLElement): b
  * starts below the dock, no more than a screen away. Scroll so the next section's top sits just under
  * the header, so the press that follows can land on it. Before this the press only scrolled 80 px and
  * left the ring on the read section, top under the header, one press later than Up would have been
- * (docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-FREEPLAY.json). A section still running past the
+ * (workshop:test-evidence/plan77-P77-WALK-COVERS-MIRROR-FREEPLAY.json). A section still running past the
  * dock is not "read": its scroll-only presses are the reading design. Only moves the panel, and only
  * towards a later stop, so it cannot bounce.
  */
@@ -221,7 +221,7 @@ export function hopToSectionAbove(current: HTMLElement, prev: HTMLElement, scrol
  * A section taller than the band, entered going Up from below: show its BOTTOM edge just above the
  * dock, so it is read from its end, upward. Landing on it left it wherever the panel was, which on the
  * Deck was top 58 px under the header and bottom 84 px under the dock, so neither edge showed
- * (docs/test-evidence/plan77-BLOCK2-GAME.json). `revealBelowDock` cannot help, it never scrolls past the
+ * (workshop:test-evidence/plan77-BLOCK2-GAME.json). `revealBelowDock` cannot help, it never scrolls past the
  * section's own top; this does, because for a tall section the top is not what the walk reads first.
  * Nothing moves for a section that fits the band, or whose bottom edge is already at the dock (within 4 px).
  * An end above the dock is brought down to it, so a section the panel stood just past does not land with a

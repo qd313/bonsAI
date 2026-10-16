@@ -31,7 +31,7 @@ from typing import Any, Optional
 # a no-game turn that read "Where are you at in THIS GAME? A. <a place early in THIS game>
 # B. <a place later in THIS game>", the prompt's own placeholder text copied verbatim; see
 # ollama_prompts.py's bonsai-strategy-branches worked example and
-# docs/test-evidence/plan58p1-QA-NOTES-BLOCK-03.json). These are the example's exact words
+# workshop:test-evidence/plan58p1-QA-NOTES-BLOCK-03.json). These are the example's exact words
 # (old and current), kept lower-case for a case-insensitive match.
 _WORKED_EXAMPLE_OPTION_LABELS_HL2 = {
     "just arrived at the train station",

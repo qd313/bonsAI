@@ -1,6 +1,6 @@
 // The first slice of the overnight test run (plan 70, row 13 / helper N):
 // keep the Deck awake, deploy the newest build, replay every saved walk
-// under checks/, run the quick check on this PC, and write one plain-words
+// under workshop:checks/, run the quick check on this PC, and write one plain-words
 // report. See scripts/deck_overnight_run.mjs for the command line wrapper.
 import fs from "node:fs";
 import path from "node:path";

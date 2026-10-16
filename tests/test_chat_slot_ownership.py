@@ -280,7 +280,7 @@ class ChatSlotOwnershipTests(unittest.IsolatedAsyncioTestCase):
         of a local command (here bonsai:vac-check with ban lookup off) carried no chat_slot_id, so
         the screen's one status read on a Quick Access reopen could not tell it belonged to another
         chat and painted it -- and the ban-lookup row under it -- into whichever chat was open
-        (docs/test-evidence/plan70-L6-AFTER-DISMISS.json). An ordinary Ask's status already names it.
+        (workshop:test-evidence/plan70-L6-AFTER-DISMISS.json). An ordinary Ask's status already names it.
         """
         sid = create_slot(self.tmp)["id"]
         with patch.object(Plugin, "load_settings", return_value={}):

@@ -4,7 +4,7 @@
  *          question row (its Retry icon or its text) while the answer is written is destroyed with
  *          the whole "live" turn when the slot reload archives it, and nothing puts it back.
  * Used for: useLiveTurnHeaderRingRestore (src/hooks) as MainTabChatTranscript calls it.
- * Solves: On the Deck (docs/test-evidence/plan70-QA-FREE-PLAY-01.json, 3 of 4 tries) no element
+ * Solves: On the Deck (workshop:test-evidence/plan70-QA-FREE-PLAY-01.json, 3 of 4 tries) no element
  *         held the ring after the finish, and within about 3 s the view slid to the end of the
  *         answer, leaving the Retry icon 196-356 px above the pane. The answer-section restore
  *         beside it (streamFinishKeepsRing.test.tsx) only ever covered the answer's own sections.

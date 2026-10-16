@@ -308,12 +308,12 @@ export function focusFirstAnswerChunk(answerKey: string): boolean {
    * there is no section list yet to compare it against). Grabbing ANY spoiler in the bubble
    * regardless of position — the previous rule — skipped every paragraph ahead of a spoiler that
    * rendered as a LATER section: measured on device 2026-09-05
-   * (docs/test-evidence/round35-spoiler-block-down-and-up.json), Down from the question went
+   * (workshop:test-evidence/round35-spoiler-block-down-and-up.json), Down from the question went
    * straight to a hidden spoiler block and never stopped on either paragraph before it. A spoiler
    * further down is still reached in its own turn, by the ordinary per-press walk in
    * handleAnswerBubbleMoveDown below. And only when it is at the head of that section (`isCoverAtHead`):
    * a cover 383 px into a 446 px section took the ring straight from the line above, its opening never on
-   * screen (docs/test-evidence/plan78-P78-TALL-SECTION-LOOP-BEFORE.json). The section is entered instead
+   * screen (workshop:test-evidence/plan78-P78-TALL-SECTION-LOOP-BEFORE.json). The section is entered instead
    * and read down to it.
    */
   const scroll = findScrollablePanel(el);
@@ -333,7 +333,7 @@ export function focusFirstAnswerChunk(answerKey: string): boolean {
      * than the band keeps its top edge). Left where it was, mostly behind the dock, the section was
      * placed by the plugin's lift off the dock, whose scroll ends 86 px above the dock: on the Deck a
      * 180 px first section landed at y 24 to 204, its top 64 px above the panel
-     * (docs/test-evidence/plan78-P78-DOWN-SHORT-SECTION.json). Coming in from below already does this.
+     * (workshop:test-evidence/plan78-P78-DOWN-SHORT-SECTION.json). Coming in from below already does this.
      */
     if (scroll) {
       revealBelowDock(first, scroll);
@@ -456,7 +456,7 @@ export function resolveAnswerBubbleEl(
  * A cover, a revealed cover's "tap to hide" line and an underlined game word are stops the ring can
  * sit on INSIDE a section, and they are small. When a press has nothing to step to and scrolls the
  * panel instead, the ring stays where it is while its stop slides away under it. The Deck measured it
- * both ways (docs/test-evidence/plan76-P76-M-GLOSSARY-STICK.json, plan76-P76-M-COVER-SCROLL.json): on
+ * both ways (workshop:test-evidence/plan76-P76-M-GLOSSARY-STICK.json, plan76-P76-M-COVER-SCROLL.json): on
  * a word five presses in a row scrolled it 300 px above the screen with the ring still on it, and a
  * cover was left with a third of it cut off at the top.
  *
@@ -481,7 +481,7 @@ export function resolveAnswerBubbleEl(
  * section around a cover the ring has been on (or was moved off by a scroll) does not count that
  * cover, or any stop before it, as still ahead.
  *
- * Without this the first version looped on the Deck (docs/test-evidence/plan76-P76-WALK-COVERS.json):
+ * Without this the first version looped on the Deck (workshop:test-evidence/plan76-P76-WALK-COVERS.json):
  * the ring went from cover 1 to its section, Steam then glided the panel so the cover was fully on
  * screen again, and a rule that only remembered the cover while it was cut off forgot it; the cover,
  * which sits inside its section, counted as ahead of the section, so Down landed on it again, the
@@ -543,7 +543,7 @@ function keepRingOnScreen(
     boxLandedIn = section;
     /*
      * The ring is now on a box whose top, where the cover or word sits, the scroll has just carried
-     * under the tab header (the Deck, docs/test-evidence/plan76-P76-WALK-COVERS-try2.json: 67% of the
+     * under the tab header (the Deck, workshop:test-evidence/plan76-P76-WALK-COVERS-try2.json: 67% of the
      * box showing). Bring the box's top back into the band, when the stop the ring left sits in the
      * first screenful of the box (a cover at the head of a section). That un-cuts the small stop, which
      * is fine: `walkAnchor` remembers it, so it is not offered again. Steam's own glide, if it comes,
@@ -561,7 +561,7 @@ function keepRingOnScreen(
  * A on a section that holds a cover the ring never landed on: open the first hidden cover inside it
  * that is on screen, the way A on the cover itself does (plan 76 lane 3). A section's own A used to
  * do nothing there. Walking Down onto a cover-only section landed on the section, not the cover
- * (docs/test-evidence/plan74-REPLY-STOPS-MIRROR-01-r2.json), and A on it left the cover hidden; the
+ * (workshop:test-evidence/plan74-REPLY-STOPS-MIRROR-01-r2.json), and A on it left the cover hidden; the
  * walk now lands on the cover itself, and this keeps the section a fair place to press A from too.
  * Calls the cover's own reveal, which also hands the ring to its "tap to hide" line, exactly as A on
  * the cover does.

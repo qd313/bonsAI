@@ -3,7 +3,7 @@
  * Purpose: Pin that reopening Quick Access asks the panel's own window for the browser's focus when
  *          it came back without it, and does nothing at all when it came back with it.
  * Used for: useAskBarInitialRingClaim's reopen half.
- * Solves: Plan 76, measured on the Deck 2026-09-29 (docs/test-evidence/plan76-P76-TRAP-SPLIT.json).
+ * Solves: Plan 76, measured on the Deck 2026-09-29 (workshop:test-evidence/plan76-P76-TRAP-SPLIT.json).
  *         The plugin stays mounted while Quick Access is closed, so the mount-time claim never runs
  *         on a reopen. Over a running game, three reopens of six came back with
  *         `document.hasFocus()` false; each of those split Steam's ring from the page's focus on a

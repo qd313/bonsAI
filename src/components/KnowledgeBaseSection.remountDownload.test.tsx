@@ -3,7 +3,7 @@
  *
  * Purpose: Pin plan 76 lane 2 round 3, bug 3 (roadmap: 'After reinstalling the library, its status
  * reads "Not installed" for about a minute, then shows a leftover "100% Downloading... Cancel" row';
- * docs/test-evidence/plan76-P76-KB-BOX-RING-RETURN.json). With internet downloads off, the download
+ * workshop:test-evidence/plan76-P76-KB-BOX-RING-RETURN.json). With internet downloads off, the download
  * notice first saves the permission and only then says yes -- and closing its box rebuilds the Ollama
  * tab before that. The download therefore started in the copy of the section that was already gone;
  * the new copy had read "Not installed" a moment earlier and had nothing telling it a download began,

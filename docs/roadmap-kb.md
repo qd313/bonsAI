@@ -15,7 +15,7 @@ Architecture: [knowledge-base.md](knowledge-base.md). The agreed answer-quality 
 notes, 164 Deck tips (published 2026-09-27, checked on the Deck, its copy matching byte for byte). Search puts the right
 note in the top three 85.3 times in a hundred on questions nobody tuned against, measured 2026-09-18 on the older library.
 The Deck's own model keeps the note's facts 79.5 times in a hundred with the answer-first shape that shipped (2026-09-07). Do not compare either with figures from before wave
-three: both checks had faults. [Wave three's report](archive/48-kb-wave-three-session.md). More detail:
+three: both checks had faults. [Wave three's report](../../bonsAI-workshop/archive/48-kb-wave-three-session.md). More detail:
 [blind questions](roadmap-kb-details.md#blind-questions-done), [the three new games](roadmap-kb-details.md#three-new-games-and-their-notes).
 
 **Still short:** getting to the troubleshooting tips. Of 24 fresh plain sentences, 6 reached a tip before the tip rewrite
@@ -23,8 +23,8 @@ and 8 after.
 
 **The one-second wait on every question is explained.** The Deck holds one model in memory at a time, so the answering
 model and the note-search model push each other out. With the limit raised to two, a search after an answer dropped from
-732 to 24 thousandths of a second (2026-09-12, `docs/test-evidence/plan48-R6-deck-model-eviction.json`). The maintainer's
-Deck runs with two models kept loaded since 2026-09-23 (`docs/test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`); the
+732 to 24 thousandths of a second (2026-09-12, `workshop:test-evidence/plan48-R6-deck-model-eviction.json`). The maintainer's
+Deck runs with two models kept loaded since 2026-09-23 (`workshop:test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`); the
 drift from August to September is still open. Two models beside a running game was measured 2026-09-26 and the safety
 check stays unbuilt: [detail](roadmap-details.md#cost-to-a-running-game-second-sighting).
 
@@ -50,8 +50,8 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   fit" floor now exists, but the held fix has not been re-measured with it. Overlaps the entry of the same subject in
   Next. [Detail](roadmap-kb-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips)
 - ★★ `[KB]` **Questions with no real answer in the notes can still get notes about the wrong subject (Portal 2 house buying, a Hades boss that does not exist)** — **OPEN, found 2026-09-07, seen again 2026-09-26; not retried on 2026-10-03.**
-  The Black Mesa horse question is fixed: it shows the "No close match" line since `2abaa0ae` (passed on the Deck 2026-10-03, `docs/test-evidence/plan81-P81-KB-NOTES-FIRST.json`). A Portal 2 house-buying question and a Hades boss that does not exist can still bring up notes about something else, and the reply follows them. Catching these in general still costs twenty or more right answers elsewhere.
-  **2026-10-14 (plan 93 Deck block D3, Deep Rock Galactic: Survivor running, Strategy mode):** "How do I buy a house in this game" attached 3 notes (Gold, Nitra, Mining and the run timer) and drew a "From the notes" block (Gold), with no "No close match" line; the AI read "buy" as the in-game Gold shop. Evidence `docs/test-evidence/plan93-NOTES-BLOCK-04-game-strategy-D3.json`.
+  The Black Mesa horse question is fixed: it shows the "No close match" line since `2abaa0ae` (passed on the Deck 2026-10-03, `workshop:test-evidence/plan81-P81-KB-NOTES-FIRST.json`). A Portal 2 house-buying question and a Hades boss that does not exist can still bring up notes about something else, and the reply follows them. Catching these in general still costs twenty or more right answers elsewhere.
+  **2026-10-14 (plan 93 Deck block D3, Deep Rock Galactic: Survivor running, Strategy mode):** "How do I buy a house in this game" attached 3 notes (Gold, Nitra, Mining and the run timer) and drew a "From the notes" block (Gold), with no "No close match" line; the AI read "buy" as the in-game Gold shop. Evidence `workshop:test-evidence/plan93-NOTES-BLOCK-04-game-strategy-D3.json`.
   [Detail](roadmap-kb-details.md#wrong-subject-notes)
 - ★★ `[KB]` **Unrelated questions can still get a game card stapled on** — **ACCEPTED 2026-08-27.** With a game running,
   "thank you very much" still attached a card on the Deck on 2026-08-23. Raising the word floor costs real matches and the
@@ -69,17 +69,17 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   2026-09-15, unit-tested.** A game known only by name now opens its box, and naming the boss up front keeps the answer in
   plain text. Passed on the Deck: name-first (STRAT-SPOIL-FIRST-01, 2026-09-18), knowledge base off (DRG-01b, 2026-09-23) and library absent (DRG-01c, 2026-10-03; the AI wrote no hidden block, so a cover was not tested directly).
   **Still owed:** STRAT-SPOIL-NAME-01 could not run four times, last 2026-10-02: none of its games is on Recent Games. It needs the maintainer to start one of the four games once by hand so it shows there (no prepared setup can do that); it is on the checks page.
-  Evidence `docs/test-evidence/plan79-STRAT-SPOIL-NAME-01.json`. [Detail](roadmap-kb-details.md#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions)
+  Evidence `workshop:test-evidence/plan79-STRAT-SPOIL-NAME-01.json`. [Detail](roadmap-kb-details.md#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions)
 - ★★ `[KB]` **The note's own words under the reply** — **VERIFY, fixed and re-run 2026-09-19 and 2026-09-26.** Most
-  Most rows passed on the Deck and are closed: 01, 02, 03, 05, 06 and TEN-GAMES-01; 04's "no block" half passed 2026-10-03 (`docs/test-evidence/plan81-NOTES-BLOCK-04.json`) and again with a game running 2026-10-14. **Still owed:** 04's "Not in my notes" line half (in Strategy or Expert), NOTES-BLOCK-07 and NOTES-BLOCK-LADDER. Rows in [testing-manual.md](testing-manual.md). Older notes, word for word: [roadmap-kb-details.md](roadmap-kb-details.md#the-notes-own-words-under-the-reply).
-  **2026-10-14 (plan 93 Deck block D3, Strategy mode, game running, two questions):** the line half is UNCLEAR. A made-up boss ("Who is the final boss called Zorblax") showed the "No close match" line and no notes block: PASS. "How do I buy a house in this game" drew a "From the notes" block and no line: FAIL, the known wrong-subject-notes entry above. Evidence `docs/test-evidence/plan93-NOTES-BLOCK-04-game-strategy-D3.json`.
-  **2026-10-14 (plan 93 Deck block C part 2, Deep Rock Galactic: Survivor running, Speed mode, two questions):** no notes block under either answer (the block half passes). The "Not in my notes" line did not show under either; the back end logged "no footer line added". That line shows only in Strategy and Expert by design (`py_modules/backend/services/kb_not_in_notes_notice.py`), so the line half is still owed in Strategy or Expert. The evidence file marks the line half FAIL and only names Speed as a possible cause. Evidence `docs/test-evidence/plan93-NOTES-BLOCK-04-game.json`.
+  Most rows passed on the Deck and are closed: 01, 02, 03, 05, 06 and TEN-GAMES-01; 04's "no block" half passed 2026-10-03 (`workshop:test-evidence/plan81-NOTES-BLOCK-04.json`) and again with a game running 2026-10-14. **Still owed:** 04's "Not in my notes" line half (in Strategy or Expert), NOTES-BLOCK-07 and NOTES-BLOCK-LADDER. Rows in [testing-manual.md](testing-manual.md). Older notes, word for word: [roadmap-kb-details.md](roadmap-kb-details.md#the-notes-own-words-under-the-reply).
+  **2026-10-14 (plan 93 Deck block D3, Strategy mode, game running, two questions):** the line half is UNCLEAR. A made-up boss ("Who is the final boss called Zorblax") showed the "No close match" line and no notes block: PASS. "How do I buy a house in this game" drew a "From the notes" block and no line: FAIL, the known wrong-subject-notes entry above. Evidence `workshop:test-evidence/plan93-NOTES-BLOCK-04-game-strategy-D3.json`.
+  **2026-10-14 (plan 93 Deck block C part 2, Deep Rock Galactic: Survivor running, Speed mode, two questions):** no notes block under either answer (the block half passes). The "Not in my notes" line did not show under either; the back end logged "no footer line added". That line shows only in Strategy and Expert by design (`py_modules/backend/services/kb_not_in_notes_notice.py`), so the line half is still owed in Strategy or Expert. The evidence file marks the line half FAIL and only names Speed as a possible cause. Evidence `workshop:test-evidence/plan93-NOTES-BLOCK-04-game.json`.
 
 ## Next
 
 - ★ `[KB]` **Measure answers with the character voice on** — **OPEN, switch built.** The answer test can run with the
   character voice on (since 2026-09-06). No run with it on has been saved. One run is owed. Plan 48 planned it but its
-  report ([48](archive/48-kb-wave-three-session.md) § 7) has no voice results.
+  report ([48](../../bonsAI-workshop/archive/48-kb-wave-three-session.md) § 7) has no voice results.
 - ★ `[KB]` **Retire the Developer tab's "Install seed knowledge base" button** — **OPEN, an idea from the maintainer
   2026-10-02.** It was a stand-in from before the library was published, and its text still says the public download "is
   not live yet". Several Deck focus walks use it as the first stop on the tab, so check those first.

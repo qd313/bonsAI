@@ -224,9 +224,9 @@ _NO_KEYWORD_SUPPORT = 0.0
 # Titles alone under-count a real match. A Hollow Knight question that describes a boss instead
 # of naming it -- "the boss past the crystal spike area" -- shares no word with the title "Broken
 # Vessel", so the check above threw the real match away and printed this line under a reply that
-# plainly used that note (docs/test-evidence/plan64-NO-CLOSE-MATCH-HK.json; the same shape hit a
+# plainly used that note (workshop:test-evidence/plan64-NO-CLOSE-MATCH-HK.json; the same shape hit a
 # Half-Life 2 walkthrough reply built on three attached chapter notes,
-# docs/test-evidence/plan64-BUSY-DOT-01.json). The note's own text usually has the word the
+# workshop:test-evidence/plan64-BUSY-DOT-01.json). The note's own text usually has the word the
 # title does not: Broken Vessel's card reads "...far west in the Ancient Basin past a gap that
 # needs the Crystal Heart..." -- "past" and "crystal" are right there.
 #
@@ -242,7 +242,7 @@ _QUESTION_FILLER_WORDS = frozenset(
         "should", "with", "about", "from", "into", "get", "got", "out", "up", "down", "will",
         "so", "if", "then", "there", "am", "be", "been", "being",
         # Ordinal/position words, added with the note-text check below. A real device reply
-        # (docs/test-evidence/plan58p1-QA-NOTES-BLOCK-02.json, "How do I beat the boss at the
+        # (workshop:test-evidence/plan58p1-QA-NOTES-BLOCK-02.json, "How do I beat the boss at the
         # end of the first area in Hades?") shows why: the wrong Hades notes attached (Temple of
         # Styx, Theseus and Asterius) and the reply named the wrong boss -- a genuine "no close
         # match" case the line must keep catching. Their card text happens to say "...killing
@@ -337,7 +337,7 @@ def should_show_no_close_match_notice(
     though `should_retrieve_knowledge` had already locked `kb_domain` to "strategy" before the
     reroute ran -- `kb_domain` is never updated afterward, so it still reads "strategy" for a
     turn the tip sheet actually answered. Measured on the Deck 2026-09-26
-    (docs/test-evidence/plan70-R4-try3.json): Deep Rock Galactic: Survivor's own Render Scale
+    (workshop:test-evidence/plan70-R4-try3.json): Deep Rock Galactic: Survivor's own Render Scale
     tip attached and the answer used it, and this line still printed "No close match in my
     notes" underneath it, judging a tip-sheet turn by the notes' own floor. See
     `_COMPAT_TIPS_RESOLUTION`'s module comment for why `kb_notes` is the reliable signal here --
@@ -406,7 +406,7 @@ def should_show_no_close_match_notice(
     # note's own text, and the keyword half never ranked these notes either. The meaning score is
     # then the only thing that ever supported them, and it is not trusted past its ceiling. It
     # was 0.6508 against 0.65 for "in black mesa how do I tame a horse": three Black Mesa notes
-    # about nothing the question asked, no line on the Deck (docs/test-evidence/
+    # about nothing the question asked, no line on the Deck (workshop:test-evidence/
     # plan70-NO-CLOSE-MATCH-HK-02.json). The 0.65 ceiling itself is not moved.
     #
     # Measured 2026-10-03 on the PC: 287 fixture questions that have a recorded right note

@@ -4,7 +4,7 @@
  *          survives the panel being rebuilt and does not carry over to a different chat.
  * Used for: MainTabChatTranscript.tsx's troubleshooting hint.
  * Solves: The dismissal was component state: every Quick Access close and reopen rebuilds the
- *         panel and brought the hint back (docs/test-evidence/plan70-L6-AFTER-DISMISS.json), and
+ *         panel and brought the hint back (workshop:test-evidence/plan70-L6-AFTER-DISMISS.json), and
  *         one press hid it in every chat.
  * Does not: Write anything to disk or into a chat's saved file, so older saved chats load exactly
  *           as before. Module scope outlives a panel rebuild, like KnowledgeBaseSection's

@@ -167,7 +167,7 @@ class NeutralizeProtectedNamesInBranchMenuTests(unittest.TestCase):
     name inside it needs substitution instead. Measured live on the Deck
     (NO-CLOSE-MATCH-HK-02): the menu's own question read "Are you currently struggling with
     the Soul Master's movement or damage output?" in plain view, on a question that never
-    named him. Screenshot: docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02-menu-names-boss.png.
+    named him. Screenshot: workshop:test-evidence/plan70-NO-CLOSE-MATCH-HK-02-menu-names-boss.png.
     """
 
     def test_the_real_captured_question_line_is_neutralized(self):
@@ -245,7 +245,7 @@ class NeutralizeProtectedNamesInBranchMenuTests(unittest.TestCase):
 class StrategyOpeningHasNothingQuotableTests(unittest.TestCase):
     """The default Strategy policy once said "Coaching is spoiler-minimized by default; say so
     briefly in your opening." The model spoke it back: a Hollow Knight answer opened "Strategy
-    guide mode active. I will keep the coaching spoiler-minimized." (docs/test-evidence/
+    guide mode active. I will keep the coaching spoiler-minimized." (workshop:test-evidence/
     plan70-FOLLOWUP-BOSS-01.json, side_observations). The maintainer's call 2026-09-26: soften it.
     The steer stays (tell the player early you are keeping spoilers out), the machine wording goes,
     and every protection rule around it stays word for word."""

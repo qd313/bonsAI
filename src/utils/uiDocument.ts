@@ -121,7 +121,7 @@ export function uiGamepadFocusElement(): HTMLElement | null {
  * `refocusPanelWindowIfLost` in navFocusRegistry.ts for the one caller that acts on it.
  *
  * Why it matters, measured on the Deck 2026-09-29 with a game running
- * (docs/test-evidence/plan76-P76-TRAP-SPLIT.json): Quick Access sometimes reopens with Steam's
+ * (workshop:test-evidence/plan76-P76-TRAP-SPLIT.json): Quick Access sometimes reopens with Steam's
  * active window still the main one and the panel's `hasFocus()` false. Six reopens: all three that
  * read false split Steam's ring from `activeElement` later, none of the three that read true did.
  * Every press that split was one of the plugin's own plain `focus()` hops (Down and Right from the

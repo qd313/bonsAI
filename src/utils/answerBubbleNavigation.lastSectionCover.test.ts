@@ -1,7 +1,7 @@
 /**
  * Title: Up into an answer from below, when its last section opens with a hidden cover
  *
- * Purpose: Pin a Deck sighting of plan 79 (docs/test-evidence/plan79-QA-FREE-PLAY-01-NOGAME-b3a.json and
+ * Purpose: Pin a Deck sighting of plan 79 (workshop:test-evidence/plan79-QA-FREE-PLAY-01-NOGAME-b3a.json and
  * plan79-QA-FREE-PLAY-01-GAME-b3a.json, build 6e297645): in an answer with two "Spoiler" covers, the
  * last section, a cover with text under it, was a stop walking Down (cover 2, then that section's box)
  * but skipped walking Up: Up from choice A went straight to cover 2. The maintainer's rule (D120 item 6)

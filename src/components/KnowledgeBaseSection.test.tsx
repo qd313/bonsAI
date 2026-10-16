@@ -135,7 +135,7 @@ describe("KnowledgeBaseSection cancel", () => {
  * Closing the storage picker is a Decky modal close, which remounts the tab's content. The download
  * ran on, but the remounted section had forgotten it: no poll, one status read taken before the
  * install finished, and "Not installed" for 37 s and more on the Deck
- * (docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD-try2.json). A remount is simulated here by unmounting
+ * (workshop:test-evidence/plan64-TWO-TAPS-DOWNLOAD-try2.json). A remount is simulated here by unmounting
  * the section and rendering a fresh one while the download is still "running".
  */
 describe("KnowledgeBaseSection after the tab is rebuilt mid-download", () => {

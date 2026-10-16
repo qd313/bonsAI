@@ -73,7 +73,7 @@ describe("the space under the question while a thinking model works", () => {
     expect(container.querySelector(".bonsai-chat-reasoning-live")).toBeNull();
   });
 
-  /* Two real step headings from the Deck (docs/test-evidence/plan72-F3-THINK.json), with a note under the second. */
+  /* Two real step headings from the Deck (workshop:test-evidence/plan72-F3-THINK.json), with a note under the second. */
   const TWO_STEPS =
     "1.  **Analyze the Request:** The user is stuck on the Hollow Knight Mantis boss fight.\n" +
     "2.  **Identify Game/Context:** The game is Hollow Knight. [hidden]\n" +

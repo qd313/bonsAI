@@ -259,7 +259,7 @@ def _strategy_spoiler_policy_block(
     # including the ones due on ending questions (0 of 9). Replacing both sentences with one
     # plain "do not fence" line on those turns cut misfires to 3 of 96 while the ending questions
     # kept their fences (8 of 9). Story titles with no named entity are unchanged.
-    # docs/archive/research/kb-answer-eval-2026-09-02-fence-subtractive.md
+    # workshop:archive/research/kb-answer-eval-2026-09-02-fence-subtractive.md
     if title_low_risk:
         fence_rules = (
             "Do not use ```bonsai-spoiler fences in this reply: nothing about this title's bosses, "
@@ -287,7 +287,7 @@ def _strategy_spoiler_policy_block(
     # The opening steer is worded so there is nothing machine-like to repeat. It once read
     # "Coaching is spoiler-minimized by default; say so briefly in your opening." and the model
     # said it back to the player ("Strategy guide mode active. I will keep the coaching
-    # spoiler-minimized." -- docs/test-evidence/plan70-FOLLOWUP-BOSS-01.json). Only this sentence
+    # spoiler-minimized." -- workshop:test-evidence/plan70-FOLLOWUP-BOSS-01.json). Only this sentence
     # changed; the avoid list and the fence rules below are untouched.
     return (
         "STRATEGY SPOILER POLICY (default): Keep your coaching as free of spoilers as you can. "

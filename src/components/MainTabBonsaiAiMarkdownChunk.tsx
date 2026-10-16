@@ -642,7 +642,7 @@ export const MainTabBonsaiAiMarkdownChunk = memo(function MainTabBonsaiAiMarkdow
    * spoiler cover with: a new set makes React throw the drawn answer away and draw it fresh, and a
    * fresh cover is hidden again. The caller's callback follows the Ask function, which is rebuilt on
    * every keystroke in the question box, so an opened cover used to close itself about two seconds
-   * after a question was typed (docs/test-evidence/plan76-P76-M-COVER-RECLOSE.json). Only whether a
+   * after a question was typed (workshop:test-evidence/plan76-P76-M-COVER-RECLOSE.json). Only whether a
    * callback exists can change what is drawn, so only that is a dependency.
    */
   const explainFurtherRef = useRef(props.onDrgGlossaryExplainFurther);

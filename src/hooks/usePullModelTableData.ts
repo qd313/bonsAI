@@ -109,7 +109,7 @@ export function usePullModelTableData(a: UsePullModelTableDataArgs): PullModelTa
       // stretch (Expert large) included -- it used to be dropped here too, through a
       // second "daily driver" check that excluded it in both toggle states, so the
       // Expert group could never be shown at all (found while wiring its bake-off order,
-      // docs/planning/41-deck-model-survey.md § 9, D73).
+      // workshop:planning/41-deck-model-survey.md § 9, D73).
       //
       // A model already on this Deck always keeps its row, though: Essentials only is about what
       // to download, and hiding an installed model left no star to use it for Ask and no Remove
@@ -149,7 +149,7 @@ export function usePullModelTableData(a: UsePullModelTableDataArgs): PullModelTa
     }
     for (const g of PULL_MODEL_GROUP_ORDER) {
       // Expert (large) sorts by the bake-off's own ranking, strongest first, instead of
-      // newest-first like every other group (docs/planning/41-deck-model-survey.md § 9).
+      // newest-first like every other group (workshop:planning/41-deck-model-survey.md § 9).
       const cmp = g === "stretch" ? comparePullModelEntriesStretchOrder : comparePullModelEntriesNewestFirst;
       map.get(g)?.sort(cmp);
     }

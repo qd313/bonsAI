@@ -32,7 +32,7 @@
  *     phrasing and hand-copied rules for choosing between them. That was removed after the
  *     wording it guessed sometimes disagreed with the back end's own separate guess about the
  *     same question, which could change the line's wording partway through a single reply. See
- *     `docs/archive/06-thinking-blurbs-review.md` for the full account.
+ *     `workshop:archive/06-thinking-blurbs-review.md` for the full account.
  */
 
 /**

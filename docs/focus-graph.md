@@ -345,7 +345,7 @@ were.
   current, never on the ring or a tap, and the bar clips everything inside it to its own 20 points, so nothing
   of it can be left over the chip row (TAB-BAR-GHOST-01).
 - **Device rows:** P84-TABS-01 and the LB/RB half of P84-HINTS-01 passed on the Deck's own screen 2026-10-08
-  ([evidence](test-evidence/plan84-STEPS4-5-7-DECK.json)); P84-TABS-02, the touch check, is owed (needs a person).
+  ([evidence](../../bonsAI-workshop/test-evidence/plan84-STEPS4-5-7-DECK.json)); P84-TABS-02, the touch check, is owed (needs a person).
   Rows in [testing-manual.md](testing-manual.md), section PLAN-84.
 
 ### The chat's name and the chats menu (plan 84 step 5)

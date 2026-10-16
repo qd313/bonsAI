@@ -1741,7 +1741,7 @@ describe("ollamaContext on mount (CHIP-ROTATION-01)", () => {
 /*
  * PLAN76-L6: reopening the panel with a game running drew the right name, then about 0.1 s later
  * "Context: no active game detected", then the right name again ~1.8 s after (the next 2 s poll) —
- * measured 4 of 4 on the Deck (docs/test-evidence/plan76-S5.json). The mount-time restore reads the
+ * measured 4 of 4 on the Deck (workshop:test-evidence/plan76-S5.json). The mount-time restore reads the
  * back end's last status once; when the last question was asked with no game running, that status
  * says "none" and used to overwrite the live game. The order below is the Deck's own: mount with a
  * game running, then the status read lands.

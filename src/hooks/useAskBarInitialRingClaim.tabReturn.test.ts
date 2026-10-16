@@ -6,7 +6,7 @@
  *          the Deck check looks at: the ring is on a non-plugin element and the transfer to the
  *          question box is (or is not) requested.
  * Used for: useAskBarInitialRingClaim's tab-return half.
- * Solves: Plan 81, measured on the Deck 2026-10-03 (docs/test-evidence/plan81-P81-LOOK-QAM-TAB-SWITCH.json):
+ * Solves: Plan 81, measured on the Deck 2026-10-03 (workshop:test-evidence/plan81-P81-LOOK-QAM-TAB-SWITCH.json):
  *         six tab switches away and back, six times the ring came back on Decky's back arrow. A tab
  *         switch fires no visibility event (the panel's page stays visible; the plugin's pane just
  *         goes to width 0 and back), so the plugin never tried to claim the ring.

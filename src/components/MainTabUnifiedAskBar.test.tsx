@@ -126,7 +126,7 @@ describe("Ask button press -> where the ring goes next", () => {
 });
 
 /**
- * On a fresh panel open, nothing owns Steam's ring at all (docs/test-evidence/
+ * On a fresh panel open, nothing owns Steam's ring at all (workshop:test-evidence/
  * round35-trap-attempt-1-after-b-reopen.json). The Ask bar tries to claim the question box for it,
  * but only once Decky populates the box's own nav node, and only while nothing else has grabbed the
  * ring meanwhile -- see the mount effect's own doc comment in MainTabUnifiedAskBar.tsx.

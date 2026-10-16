@@ -4,7 +4,7 @@
  * Purpose: Pin plan 74 lane 3, bug 4 (roadmap: "Up from Ask lands on the mic one time and on the
  * paperclip another") in its plan 84 shape. Ask set no Up of its own, so Steam's own step carried the
  * ring into the row of icons along the box's bottom edge, re-entering it on whichever icon was used
- * last (docs/test-evidence/plan64-ASKBAR-DOWN-TO-STOP-01.json). Since plan 84 step 2 Ask is itself in
+ * last (workshop:test-evidence/plan64-ASKBAR-DOWN-TO-STOP-01.json). Since plan 84 step 2 Ask is itself in
  * that row, the small button at its right end, and Down from the box lands on it; so Up from Ask, and
  * from every other stop of the strip's right-hand group, is Down reversed: the question box, by
  * Steam's own transfer (docs/focus-graph.md, "The ask box's strip").

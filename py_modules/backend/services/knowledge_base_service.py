@@ -677,7 +677,7 @@ def _vector_recall_sections(
 # Locked 2026-08-09 by PR2 bake-off on the deepened 119-section / 124-tip seed against
 # kb_eval_v2 (140 labeled rows; tune 104 / holdout 36). Holdout top-3 could not separate RRF
 # from keyword (overlapping CIs). Equal weights stay; do not "tune" from a later peek at
-# holdout. Report: docs/archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md
+# holdout. Report: workshop:archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md
 RRF_K = 60
 RRF_W_FTS = 1.0
 RRF_W_VEC = 1.0
@@ -688,7 +688,7 @@ RRF_W_VEC = 1.0
 # Found on the Deck: Black Mesa "how do i cross the electrified water" attaches and uses the
 # right card (Crossing the electrified waste pools), but two generic notes ("Starting out in
 # Black Mesa", "The opening tram ride and where it leads") are listed ahead of it and the shown
-# block names the generic one first (docs/test-evidence/plan64-BLACKMESA-WATER.json). Nothing in
+# block names the generic one first (workshop:test-evidence/plan64-BLACKMESA-WATER.json). Nothing in
 # the fusion above ranks a generic note any differently from a specific one today.
 #
 # Mutated directly the same way `RRF_W_FTS` / `RRF_W_VEC` above are, by a throwaway measurement

@@ -64,7 +64,7 @@ Cost: <low|medium|high and short effort note>
 If there are no confirmed findings, output exactly `No issues found` — nothing else.
 
 **Mandatory deliverable:** write the complete report to
-`docs/archive/reports/foss-advocate-report.md` (create it if missing, otherwise replace its body).
+`workshop:archive/reports/foss-advocate-report.md` (create it if missing, otherwise replace its body).
 Use the same finding-block structure, a blank line between findings. If there are no confirmed
 findings, the file must contain exactly `No issues found`. A single title line plus one optional
 subtitle line may go before findings when issues exist. In chat, a short pointer to the file is

@@ -1,7 +1,7 @@
 /**
  * Title: Down from an opened older answer reaches the newer turns below it, as Up does
  *
- * Purpose: Pin plan 93's Deck finding (docs/test-evidence/plan93-P93-O4-MIRROR.json): with an older turn
+ * Purpose: Pin plan 93's Deck finding (workshop:test-evidence/plan93-P93-O4-MIRROR.json): with an older turn
  * opened from the "N earlier" list and newer turns drawn below it, Down from the answer's "Show details"
  * line jumped straight to the chip slot above the question box, past the "Today" day line and the newer
  * question; Up from the slot stopped on both. Down now visits what is drawn below the turn first.

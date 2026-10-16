@@ -72,7 +72,7 @@ class DemotionOrderingTests(unittest.TestCase):
     """`_fuse_cards_by_rrf` itself, switch on vs off, question asking to start or not."""
 
     def _cards(self) -> list[KnowledgeCard]:
-        # Real shape, echoing docs/test-evidence/plan64-BLACKMESA-WATER.json: the generic note
+        # Real shape, echoing workshop:test-evidence/plan64-BLACKMESA-WATER.json: the generic note
         # is the best keyword hit (it repeats the game's own name), the specific note that
         # actually answers the question is a weaker keyword match and is listed last.
         return [

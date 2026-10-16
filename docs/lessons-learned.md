@@ -238,7 +238,7 @@ last line clears the Copy icon with only its line spacing touching it. Two bug e
 this and withdrawn the same night, and the question-row entry had already been opened and closed once
 before on the same reading. Before filing anything about either of these, ask the page where the TEXT
 is -- take the element's own text range rectangles and compare those against the icon -- rather than
-trusting the percentage. Evidence: `docs/test-evidence/plan63-CORNER-ICON-COVERAGE-01.json`.
+trusting the percentage. Evidence: `workshop:test-evidence/plan63-CORNER-ICON-COVERAGE-01.json`.
 Fixed in the Deck tools project (`cde1c0e`), pending a Deck walk after the tool server restarts.
 
 **A question can be put to the Deck without the pinned sentences and without thumb-typing.** Proved
@@ -252,14 +252,14 @@ skipped a path this repo already had. Before recording a check as blocked on sen
 try this. Two traps its own header records: the flags must sit INSIDE the quoted remote command, or
 a multi-word question silently keeps only its first word and the script still prints VERIFIED; and an
 apostrophe cannot survive the outer quotes. Evidence:
-`docs/test-evidence/plan63-ASK-WITHOUT-PINNED-CHIPS.json`.
+`workshop:test-evidence/plan63-ASK-WITHOUT-PINNED-CHIPS.json`.
 
 **Repeating a question on the Deck measures nothing.** The answer cache serves an identical question
 back word for word, no new work done. Measured 2026-09-22: the same Hollow Knight question took 27
 seconds the first time and 1 second the second, and came back exactly the same both times. Any check
 that counts how often something happens — a spoiler cover missing, a wrong note attaching — must
 either vary the wording between tries or clear the cache first, or the count is really just one
-result read back several times. Evidence `docs/test-evidence/plan63-SPOILER-UNNAMED-BOSS.json`.
+result read back several times. Evidence `workshop:test-evidence/plan63-SPOILER-UNNAMED-BOSS.json`.
 
 **Read what the AI actually wrote, not only the screen, before building a fix on it.** On 2026-10-08 a driver saw a
 menu's JSON in a code box and reported "bare JSON with no fence"; a fix for that case was built and landed. The
@@ -314,7 +314,7 @@ memory, such as a knowledge-base download still in progress, is thrown away with
 never restarted — the new tab reads status once, before the download finishes, and never again.
 Found 2026-09-23 after a first fix (checking settings a different way) still failed on the Deck; the
 real cause was the picker's close rebuilding the whole tab. Fixed in `ba0bb0d`. Evidence
-`docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD-try2.json`, `docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD-try3.json`.
+`workshop:test-evidence/plan64-TWO-TAPS-DOWNLOAD-try2.json`, `workshop:test-evidence/plan64-TWO-TAPS-DOWNLOAD-try3.json`.
 
 **A component that changes what kind of element it returns rebuilds everything inside it, and
 Steam's own highlight goes with it.** An answer bubble drew itself bare while still being written,
@@ -323,14 +323,14 @@ the bubble changed shape underneath the D-pad ring and was rebuilt from scratch,
 it. A first fix that only changed how sections were tracked passed its own tests and still failed on
 the Deck, because the real cause was one layer up: the wrapping itself, not what was inside it. Fixed
 in `64b34a8`, keeping the same element shape throughout. Evidence
-`docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json`, `docs/test-evidence/plan64-STREAM-WALK-REC-01-try4-run2.json`.
+`workshop:test-evidence/plan64-STREAM-WALK-REC-01-try3.json`, `workshop:test-evidence/plan64-STREAM-WALK-REC-01-try4-run2.json`.
 
 **Steam's own scroll area keeps 116 pixels clear at its own top, and a plain "scroll to the top"
 request honours that reserved space instead of ignoring it.** A fix that asked the page to scroll a
 block's header to the very top of the pane kept landing the header 116 pixels down, looking like the
 request had failed, when it was actually succeeding at the wrong target. Asking the pane directly for
 the header's own top, ignoring the reserved space, fixed it. Fixed in `d305863`. Evidence
-`docs/test-evidence/plan64-NOTES-OPEN-SCROLL-try2-run2.json`.
+`workshop:test-evidence/plan64-NOTES-OPEN-SCROLL-try2-run2.json`.
 
 **A warm-up must load the model with the exact same settings the real question will ask for, or the
 model loads a second time anyway.** Warming a model at boot saved no time at all — cold and warm
@@ -338,14 +338,14 @@ answers both took about 9.8 seconds to first words — because the warm-up asked
 default memory room (4,096 tokens) while the first real question always asks for more (16,384), so
 the server reloaded the model the moment the question arrived. Fixed by having the warm-up ask for
 the same room Ask will ask for. Fixed in `a224fb6`. Evidence
-`docs/test-evidence/plan64-PRELOAD-01-try3-timing.json`, `docs/test-evidence/plan64-PRELOAD-01-try4.json`.
+`workshop:test-evidence/plan64-PRELOAD-01-try3-timing.json`, `workshop:test-evidence/plan64-PRELOAD-01-try4.json`.
 
 **What costs frames while an answer streams is how often and how much of the panel changes, not which
 animations are running.** Measured on the Deck 2026-09-25: the live thinking box changing 6 to 7 times a
 second cost nothing, holding 59 to 60 frames a second the whole time, while the answer's own text moving
 on every single frame held the panel near 20. Slowing the model down, and giving the chat its own
 rendering layer, both changed nothing either. Before blaming an animation for a slow panel, measure how
-often the thing actually redraws. Evidence `docs/test-evidence/plan69-answer-frame-rate-2026-09-25.json`.
+often the thing actually redraws. Evidence `workshop:test-evidence/plan69-answer-frame-rate-2026-09-25.json`.
 
 **Two timers that both touch the screen, even on the same schedule, cost twice the redraws of one.** The
 streamed-answer scramble's own reshuffle timer and the text reveal's own step ran on separate clocks at
@@ -357,7 +357,7 @@ Fixed in `bb8d7e5b`.
 rate swings by about 5 frames a second on its own, so timing two different answers is not a fair
 comparison. Split one answer into alternating 2.5-second segments, one setting per segment, and compare
 segment to segment; that is how the plan 69 frame-rate numbers were measured. Evidence
-`docs/test-evidence/plan69-answer-frame-rate-2026-09-25.json`.
+`workshop:test-evidence/plan69-answer-frame-rate-2026-09-25.json`.
 
 **A performance trace of the Quick Access page is really a trace of all of Steam.** Every one of Steam's
 own windows shares one rendering thread, so a CPU profile taken while the plugin panel is open also
@@ -411,20 +411,20 @@ backup path, what the earlier driver learned), not to the same one.
 saw 1.00 through 32 word changes, while the wrapper box around the button was fading as designed. Before filing a
 "never changes" finding from a computed style, read the element that carries the style, or walk the ancestors too.
 The fade now sits on the button itself so the check can read it (plan 82, `8d1523d4`). Evidence
-`docs/test-evidence/plan82-P79-LONG-CHIPS-NOGAME.json`, then `plan82-P82-FADE-ON-BUTTON.json`.
+`workshop:test-evidence/plan82-P79-LONG-CHIPS-NOGAME.json`, then `plan82-P82-FADE-ON-BUTTON.json`.
 
 **Steam's own focus ring is placed when an element takes focus and is not re-measured when that element
 moves.** A slider knob stepped with the D-pad left Steam's grey frame one step behind it, and the page's own
 rectangles said the ring element had moved with the knob: the numbers and the picture disagreed, and the picture is
 what a person sees. For anything that moves while focused, switch Steam's ring off on it (`noFocusRing`) and draw
 the plugin's own ring on the moving element (plan 82, `f6c96e43`). Evidence
-`docs/test-evidence/plan82-M3-SLIDER-RING.json` and its screenshots, then `plan82-P82-SLIDER-RING-ON-KNOB.json`.
+`workshop:test-evidence/plan82-M3-SLIDER-RING.json` and its screenshots, then `plan82-P82-SLIDER-RING-ON-KNOB.json`.
 
 **A "come back here" flag kept inside a component does not survive a Decky popup.** Closing the popup rebuilds
 the tab (the lesson above), so the chat row's "return the ring to Save" memory was gone by the time the ring came
 back, and it landed on Delete on the Deck while every unit test passed, because no test rebuilt the row. Keep such a
 flag outside the component (a small module-level file, taken once) and write the test so it unmounts and remounts
-between the open and the return (plan 82, `7d0a7be5`). Evidence `docs/test-evidence/plan82-P82-CHAT-ROW-NO-NAME-STOP.json`
+between the open and the return (plan 82, `7d0a7be5`). Evidence `workshop:test-evidence/plan82-P82-CHAT-ROW-NO-NAME-STOP.json`
 and `-try2.json`.
 
 **A press inside the dock-lift's late window can throw a tall stop to its end.** The lift that clears a focused
@@ -450,7 +450,7 @@ geometry can pass while the Deck's press dies.** The About tab's three link butt
 inside a plain container; every test walked Down from GitHub to the next button, and on the Deck Down from GitHub did
 nothing (plan 92, 2026-10-12). The fix declared the block a row and the buttons a column (`flow-children`). Model the
 flow in walk tests (`steamStep` in `src/test-harness/aboutDeckyUi.tsx`), or give every stop handlers for all four
-directions so nothing depends on it, as the Search tab does. Evidence `docs/test-evidence/plan92-P91-ABOUT-ROWS.json`,
+directions so nothing depends on it, as the Search tab does. Evidence `workshop:test-evidence/plan92-P91-ABOUT-ROWS.json`,
 then `-try2.json`.
 
 **A Decky text field's ref is Steam's component, not the input, and a move handler that throws hands the press back

@@ -128,7 +128,7 @@ _KB_CARD_NAME_RE = re.compile(r"\[(?:[^\]/]+/\s*[^:\]]+|Tip)\s*:\s*([^\]]+)\]", 
 # final boss's name ("Hollow Knight") match this card instead of the boss: the question naturally
 # says "Hollow Knight" (it has to, to name the game at all), and the shortened-name fallback below
 # was reading that as "the player typed the card's trailing words" rather than "the player named
-# the game". Found 2026-09-25, docs/test-evidence/plan70-SPOILER-RISK-CHIP-01.json.
+# the game". Found 2026-09-25, workshop:test-evidence/plan70-SPOILER-RISK-CHIP-01.json.
 _STARTING_OUT_NAME_PREFIX = "starting out in"
 
 
@@ -199,7 +199,7 @@ def _strip_game_name(haystack: str, game_name: str) -> str:
     to expose it (see ``_is_generic_starting_out_title``, added first and kept -- belt and
     braces, since a future card kind could end in the game's name too).
 
-    Found on the Deck 2026-09-26 (docs/test-evidence/plan70-L1-8-HELPER-M.json): with the
+    Found on the Deck 2026-09-26 (workshop:test-evidence/plan70-L1-8-HELPER-M.json): with the
     starting_out card excluded, "in hollow knight how should i prepare for the fight against the
     hollow knight at the end" still matched a *different* wrong card, "False Knight" -- the word
     "knight" in the game's own name "Hollow Knight" was enough to satisfy that card's own

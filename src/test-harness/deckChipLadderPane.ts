@@ -13,7 +13,7 @@
  *           models the same three rules the answer walks run under. A smooth scroll request lands at once,
  *           and is counted in `smoothScrolls`.
  *
- * Numbers by default are the monitor run of 2026-10-09 (docs/test-evidence/plan87-M3-CHIPS.json): page 766
+ * Numbers by default are the monitor run of 2026-10-09 (workshop:test-evidence/plan87-M3-CHIPS.json): page 766
  * tall, the dock's suggestion row at 658.4, the ladder's content 108.9 px above the pane's end.
  *
  * Whatever is drawn directly before the ladder (the test's "This answer | Session" toggle) is laid out where

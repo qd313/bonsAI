@@ -2362,7 +2362,7 @@ class OllamaServiceTests(unittest.TestCase):
 
 
 # Plan 57: real Ollama chunks captured on the PC 2026-09-17 with thinking on (gemma4:e2b-it-qat,
-# docs/test-evidence/plan57-desk-low-q1.jsonl and plan57-desk-low-q3.jsonl -- summarised in
+# workshop:test-evidence/plan57-desk-low-q1.jsonl and plan57-desk-low-q3.jsonl -- summarised in
 # plan57-desk-summary.json). Each line below is one chunk's own ``raw`` field, copied verbatim; a
 # short real prefix/suffix stands in for the full capture (466 and 1,401 lines respectively) so
 # these tests stay fast. Where a test needs an order the real capture never produced (a thinking

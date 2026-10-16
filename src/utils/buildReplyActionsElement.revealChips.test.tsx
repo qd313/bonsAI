@@ -1,7 +1,7 @@
 /**
  * Title: The "What went wrong?" chips come out from behind the dock when they appear
  * Purpose: Pin the fix for what the Deck showed on 2026-09-27
- *          (docs/test-evidence/plan72-A5b-BEFORE-SAVEROW-CHIPS.json): after A on "Not really", the
+ *          (workshop:test-evidence/plan72-A5b-BEFORE-SAVEROW-CHIPS.json): after A on "Not really", the
  *          chips appeared but the page did not scroll; with the ring on the first chip, the other
  *          four (y 589.8 to 701.8) sat behind the dock (top 599.6).
  * Used for: buildReplyActionsElement.tsx, using chatPanelScroll.ts's revealBelowKeepingAsItSettles

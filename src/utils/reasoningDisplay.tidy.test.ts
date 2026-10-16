@@ -9,13 +9,13 @@
  * Does not: prove anything about how the block looks; the transcript's own tests do that.
  *
  * Where the fixtures come from. Every line's words are copied from a Deck read:
- *   - CHECKLIST_SCREENSHOT: docs/test-evidence/plan70-THINKING-CHECKLIST.png (the maintainer's own
+ *   - CHECKLIST_SCREENSHOT: workshop:test-evidence/plan70-THINKING-CHECKLIST.png (the maintainer's own
  *     screenshot), line for line.
- *   - OPEN_WORLD and PARRYING: the live-line reads in docs/test-evidence/plan64-GHOST-QUESTION-01.json.
+ *   - OPEN_WORLD and PARRYING: the live-line reads in workshop:test-evidence/plan64-GHOST-QUESTION-01.json.
  *     Those reads were taken with textContent, which loses line breaks, so the breaks and the
  *     "1.  " / "    *   " indents are put back in the layout the screenshot above and the saved
- *     thinking in docs/test-evidence/plan57-desk-summary.json show ("Thinking Process:\n\n1.  **...").
- *   - NOTE_TITLE: the backtick-quoted note title in docs/test-evidence/plan70-THINKING-SPOILER-01-try2.json.
+ *     thinking in workshop:test-evidence/plan57-desk-summary.json show ("Thinking Process:\n\n1.  **...").
+ *   - NOTE_TITLE: the backtick-quoted note title in workshop:test-evidence/plan70-THINKING-SPOILER-01-try2.json.
  */
 import { describe, expect, it } from "vitest";
 import { tidyReasoningText } from "./reasoningDisplay";

@@ -5,7 +5,7 @@
  * (`PullModelsFiltersColumn.tsx`: Clear, every licence, Good for and Show row, the custom-tag chip and
  * field, the starter set and the Suggested chips), plus every catalog row's select/pin star and delete X.
  *
- * Solves: found on the Deck 2026-09-21 (docs/test-evidence/plan62-MODELS-FILTERS-01-A-closes-
+ * Solves: found on the Deck 2026-09-21 (workshop:test-evidence/plan62-MODELS-FILTERS-01-A-closes-
  * screen.json) -- this screen is built as a `ConfirmModal` with its own OK. Every control here only
  * wired `onClick` with `ev.stopPropagation()`, which stops a mouse click but does nothing to a
  * gamepad A press: Steam delivers A through `onOKButton`/`onActivate`, not a DOM click, so an A

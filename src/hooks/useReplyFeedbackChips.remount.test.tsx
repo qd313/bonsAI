@@ -1,6 +1,6 @@
 /**
  * Title: A rated reply stays rated when the panel is closed and opened again
- * Purpose: Pin the fix for plan 72 flow F (docs/test-evidence/plan72-F-ROW.json, "sideEffect"):
+ * Purpose: Pin the fix for plan 72 flow F (workshop:test-evidence/plan72-F-ROW.json, "sideEffect"):
  *          Not helpful was pressed, the "What went wrong?" chips showed, then the chat row's save
  *          icon opened Steam's save window, which closes and reopens the side panel. The panel
  *          came back with the chips gone and the thumbs live again, because the rating lived only

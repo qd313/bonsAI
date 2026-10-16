@@ -6,7 +6,7 @@
  * Used for: the onOKButton (A button) and onClick (tap) paths on each row in
  *           MainTabAskModeMenuPopover.tsx.
  * Solves: measured on device 2026-09-16, twice -- picking Speed and picking Strategy both left the
- *         ring on nothing after the menu closed (docs/test-evidence/plan56-BUG-askmode-menu-drop-
+ *         ring on nothing after the menu closed (workshop:test-evidence/plan56-BUG-askmode-menu-drop-
  *         speed.json and -strategy.json). The menu unmounts on close, so whatever used to own the
  *         ring is gone; the cancel path already hands it back to the mode chip, the two choose
  *         paths did not.

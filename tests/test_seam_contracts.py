@@ -14,7 +14,7 @@ contract other files depend on: update this file in the same commit, on purpose,
 say so in the commit message.
 
 What is NOT pinned here, deliberately: names only a test imports. Those are recorded in
-docs/audit/refactor-round-two/phase4-seams.md so a split knows they exist, but pinning
+workshop:audit/refactor-round-two/phase4-seams.md so a split knows they exist, but pinning
 them would make rewriting a test look like breaking a contract.
 """
 

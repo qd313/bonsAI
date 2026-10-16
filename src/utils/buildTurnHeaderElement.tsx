@@ -127,7 +127,7 @@ function questionTextNav(turnId: string): SteamNavHolder {
 /**
  * Put the ring on this turn's question text. Plain `focus()`: the Show reasoning line and the
  * question are both in the turn's own column, the same hop the line already makes onto Retry,
- * which the Deck measured landing (docs/test-evidence/plan72-A4-UP-FAMILY-a.json).
+ * which the Deck measured landing (workshop:test-evidence/plan72-A4-UP-FAMILY-a.json).
  */
 export function focusOpenQuestionText(turnId: string): boolean {
   const el = questionTextByTurn.get(turnId);
@@ -145,7 +145,7 @@ export function focusOpenQuestionText(turnId: string): boolean {
  *
  * Steam enters a row on its first control, and in a question with Retry that is Retry: Down from the
  * "N earlier" pill, or from the closed question above, landed on Retry before the question itself
- * (docs/test-evidence/plan79-P79-M8-EARLIER-RETRY.json). So whoever sits above takes Steam's own
+ * (workshop:test-evidence/plan79-P79-M8-EARLIER-RETRY.json). So whoever sits above takes Steam's own
  * transfer onto the text's nav node instead, the one move that carries the ring across containers
  * (AGENTS.md, "The Steam Deck focus graph"). A turn without Retry registers no text stop, so this
  * reports false there and the caller's press stays Steam's.

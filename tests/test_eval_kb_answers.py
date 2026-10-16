@@ -241,7 +241,7 @@ class EvalKbAnswersHarnessTests(unittest.TestCase):
     # The old check passed a must_mention alternative only when it appeared as an exact phrase in
     # the reply, so a right answer in different words was scored as a missing fact. These four
     # pairs are the ones the roadmap bug named; the fifth uses the real reply text recorded in
-    # docs/archive/research/kb-answer-eval-2026-09-07-after-wave2.md for case A-TTYD-01, which
+    # workshop:archive/research/kb-answer-eval-2026-09-07-after-wave2.md for case A-TTYD-01, which
     # failed both fact groups under the old check ("missing facts: `eats the audience`, `cricket`")
     # even though it plainly states both facts, just in different words.
 
@@ -296,7 +296,7 @@ class EvalKbAnswersHarnessTests(unittest.TestCase):
     # --- plan 48 lane A, commit 2: negation-aware contradiction check (D86/D88) ----------------
     #
     # The old check only caught a contradiction that used one of a fixed list of exact sentences.
-    # The Pikmin 2 reply recorded in docs/archive/research/kb-answer-eval-2026-09-07-after-wave2.md
+    # The Pikmin 2 reply recorded in workshop:archive/research/kb-answer-eval-2026-09-07-after-wave2.md
     # for case A-PIK2-02 said "yes, there is still a day limit" -- a plain contradiction of the
     # note, which the old check missed because the fixture's sentence was "there's a day limit"
     # (a different contraction) and "you have a limited number of days" (different words again).
@@ -318,7 +318,7 @@ class EvalKbAnswersHarnessTests(unittest.TestCase):
         self.assertFalse(self.mod.claim_group_hit(reply, ["there is a day limit"]))
 
     def test_claim_group_hit_known_miss_not_only_is_there_a_day_limit(self):
-        # Named in plan 48 (docs/archive/48-kb-wave-three-session.md, section 10) as a phrasing a
+        # Named in plan 48 (workshop:archive/48-kb-wave-three-session.md, section 10) as a phrasing a
         # negation-aware check on a fixed lookback can be fooled by: "not" sits just before "there"
         # here, so it reads as a negation of the claim even though "not only" does not actually
         # deny that a day limit exists -- the opposite of what the sentence means. Documented as a

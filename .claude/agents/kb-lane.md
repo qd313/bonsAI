@@ -35,7 +35,7 @@ Ground rules, all of them non-negotiable:
    is missing, build your own with
    `python scripts/build_rag_db.py --seed --out build/knowledge-base` (Ollama must be running or every
    meaning-search number is wrong). The folder is git-ignored; never commit it.
-7. **Never commit an eval report.** Both eval scripts write into `docs/archive/research/`. Those files
+7. **Never commit an eval report.** Both eval scripts write into `workshop:archive/research/`. Those files
    are the session owner's to make on the landed branch. Delete yours or leave them untracked, and
    paste the numbers into your report instead.
 8. **Never hand-edit anything under `packages/bonsai-mcp/knowledge/architecture/`.** The pre-commit

@@ -1,7 +1,7 @@
 /**
  * Title: After B on the "Remove <model> from the Deck?" box the ring is back on that row's Remove control
  *
- * Purpose: Pins plan 93 round 2 (docs/test-evidence/plan93-P93-M9-CONFIRM-BOXES-after.json, Deck build
+ * Purpose: Pins plan 93 round 2 (workshop:test-evidence/plan93-P93-M9-CONFIRM-BOXES-after.json, Deck build
  * 0ef34f82): in the AI models screen, B (or Cancel) on the Remove box left the ring on the next row's
  * pull tick box instead of on the Remove control that opened it, twice. The real screen is drawn with
  * installed models, a row's Remove control is pressed, Steam is stood in for by putting the ring on the

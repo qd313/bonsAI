@@ -178,7 +178,7 @@ describe("focusUnifiedTextField", () => {
 
 /**
  * The Ask button greys out while a question is in flight, but a greyed control that still takes
- * the D-pad's highlight does nothing useful when it lands there (docs/test-evidence/
+ * the D-pad's highlight does nothing useful when it lands there (workshop:test-evidence/
  * round35-CHECK-stop-press.json: Down from the question box landed the ring on it, then a second
  * Down lost the ring entirely). Down from the question box must step over it instead.
  */

@@ -9,7 +9,7 @@ on refresh.
 
 Solves: nomic-embed-text (the meaning-search model plan 70's own knowledge base installs, outside
 the curated catalog) showed "?" for its size, and the header undercounted the installed total, on
-the Deck (docs/test-evidence/plan70-ROUTING-MERGE-SIZE-01.json). The only size lookup asked
+the Deck (workshop:test-evidence/plan70-ROUTING-MERGE-SIZE-01.json). The only size lookup asked
 registry.ollama.ai for every requested tag, installed or not, and the registry does not answer
 for this one -- so it fell through to no size at all, even though Ollama's own /api/tags already
 reports it (274 MB). The registry is still the right place to ask "how big would this be if I
@@ -60,7 +60,7 @@ class FetchOllamaCatalogMetadataLocalSizesTests(PluginSettingsFileMixin, unittes
         self.addCleanup(downloads.stop)
 
     async def test_an_installed_tag_gets_its_size_from_local_api_tags_not_the_registry(self) -> None:
-        # The real /api/tags shape reported on the Deck (docs/test-evidence/
+        # The real /api/tags shape reported on the Deck (workshop:test-evidence/
         # plan70-ROUTING-MERGE-SIZE-01.json): nomic-embed-text:latest, about 274 MB.
         local_sizes = patch.object(
             main.ollama_local_setup_rpc,

@@ -572,7 +572,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
               /*
                * Roadmap: "Left from the Ask button, and from the paperclip, hands the highlight
                * to Steam's Quick Access rail" (measured 2026-09-15 evening,
-               * docs/test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json
+               * workshop:test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json
                * steps 3 and 4). The paperclip is the leftmost stop in this row and has no sibling
                * further left, so nothing ever claimed Left -- Steam's own "past the edge" nav ran
                * and handed the ring out of the plugin entirely. Same shape, same fix as the

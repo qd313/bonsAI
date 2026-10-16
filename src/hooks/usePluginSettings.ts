@@ -375,7 +375,7 @@ export function usePluginSettings() {
    * AI character, UI scale): what changed on screen since the last confirmed disk state, plus the
    * popup's own patch. Same rule as the automatic save below, for the same reason — a full copy
    * writes this screen's stale belief about fields the back end changed on its own. Measured on
-   * the Deck (docs/test-evidence/plan64-ROUTING-MERGE-01-top.json): Done on the AI models screen
+   * the Deck (workshop:test-evidence/plan64-ROUTING-MERGE-01-top.json): Done on the AI models screen
    * wrote the knowledge base location back to the folder a download had just replaced, and the
    * tab offered to download the library again.
    */

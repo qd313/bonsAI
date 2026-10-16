@@ -119,7 +119,7 @@ Legend: ✅ done / fixed this session · ❌ blocked, or a bug found this sessio
   survive **90.9%** (90/99), no contradictions (9/9), branch menu **97.0%** (64/66), fence present
   when due 9/9, expected card attached 99/99. So the fence is the largest answer-side defect and it
   is now a number the W4/W6 prompt work can move.
-  [archive/research/kb-answer-eval-2026-09-02-baseline.md](../archive/research/kb-answer-eval-2026-09-02-baseline.md).
+  [archive/research/kb-answer-eval-2026-09-02-baseline.md](../../../bonsAI-workshop/archive/research/kb-answer-eval-2026-09-02-baseline.md).
 - ❌ **Pressing *Update knowledge base* on the Deck through the bridge started no download.** The
   focus ring was read on the button (visible, y=640) and A was pressed at 05:10Z; ten minutes
   later the SD-card manifest and `settings.json` still read `2026.08.22` and the plugin log has no
@@ -422,7 +422,7 @@ measures is what the Deck does, apart from the GPU.
   22 Strategy, 8 Expert, 7 Speed; three story-beat questions that *should* fence; two comparison
   cards; two EmuDeck titles resolved by name. Must-mention terms are copied from the cards.
   Synonym calibration after a run is allowed and dated in the case note; nothing else is.
-- Output: `docs/archive/research/kb-answer-eval-<date>-<label>.md` (summary, per-case table,
+- Output: `workshop:archive/research/kb-answer-eval-<date>-<label>.md` (summary, per-case table,
   failures, one reply per case) and `build/kb-answer-eval/<same>.json` (every reply, every check,
   the first sample's full system prompt, `payload_bytes`, `prompt_eval`).
 - Cost: **1.4 s per answer** on the maintainer PC, **2.6 minutes** for the whole fixture. Cheap

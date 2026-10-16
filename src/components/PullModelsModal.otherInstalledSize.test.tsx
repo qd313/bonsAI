@@ -2,7 +2,7 @@
  * Title: An installed model outside the curated catalog gets its real size
  *
  * Covers: docs/roadmap.md "The remove box and the models list undercount a big model's size"
- * (evidence docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json). Removing a 17 GB model
+ * (evidence workshop:test-evidence/plan64-ROUTING-MERGE-01-top-try2.json). Removing a 17 GB model
  * (gemma3:27b, not in the bundled/overlay catalog) showed "< 0.1 GB" in the confirm box, and the
  * header's own "Installed N · X GB" total did not count it either.
  *

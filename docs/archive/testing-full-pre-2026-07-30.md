@@ -28,7 +28,7 @@ Run from repo root (Windows or Linux shell as appropriate):
 | Frontend unit tests | `pnpm test` | Any `src/` change (includes Vitest headless Decky harness under `src/test-harness/`) |
 | Backend unit tests | `pnpm run test:py` | Any `main.py`, `py_modules/backend/`, `refactor_helpers.py`, or `tests/` change |
 | Bundle | `pnpm run build` | Any `src/` or build config change |
-| Preview suite | `pnpm run test:preview:tier -- --tier=<batch> --write` | Tier QA batches; requires **Decky: Open Preview** for C/D buckets; evidence ΓåÆ `docs/test-evidence/` |
+| Preview suite | `pnpm run test:preview:tier -- --tier=<batch> --write` | Tier QA batches; requires **Decky: Open Preview** for C/D buckets; evidence ΓåÆ `workshop:test-evidence/` |
 | Deck deploy build | `.\scripts\build.ps1` or `./scripts/build.sh` | Any `src/`, `main.py`, `plugin.json`, or Deck-facing asset change |
 | Plugin zip CI | Run **Build plugin zip** in Actions (or `bash scripts/verify-decky-plugin-zip.sh` on a local `out/*.zip`) | Changes to [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) or [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh) |
 
@@ -765,7 +765,7 @@ Deck-only (mic + PipeWire capture). Preview harness stubs RPCs but cannot valida
 - [ ] **VOICE-06** Session daemon latency ΓÇö interim text appears faster than Tier 1 cold `whisper-cli` spawn (~0.5ΓÇô1.5 s win per pass after first decode); no extra CPU stutter vs prior build in Gaming Mode QAM
 - [ ] **VOICE-07** Stop mic, revoke microphone permission, plugin unload, or **Clear all data** while recording ΓÇö no orphan `whisper-server` on `127.0.0.1:18765` (`pgrep whisper-server` / PID file cleared)
 
-Maintainer: digest bump + Tier 2 options ΓÇö [voice-input-follow-up.md](voice-input-follow-up.md).
+Maintainer: digest bump + Tier 2 options ΓÇö [voice-input-follow-up.md](../../../bonsAI-workshop/archive/voice-input-follow-up.md).
 
 ## Tier 2 ΓÇö Open-weight pull (Tier 1 policy)
 

@@ -1,7 +1,7 @@
 /**
  * Title: Down and Up read one box at a time, with no press that only scrolls when the stop is already read
  *
- * Purpose: Pin plan 77 helper E, round two, from the Deck run of build bce7d0fd (docs/test-evidence/
+ * Purpose: Pin plan 77 helper E, round two, from the Deck run of build bce7d0fd (workshop:test-evidence/
  * plan77-P77-WALK-COVERS-MIRROR-FREEPLAY.json and plan77-BLOCK2-GAME.json):
  *
  * Going Down, box 1 (146 px tall, so it fits the 206 px band) landed with its bottom at the dock.

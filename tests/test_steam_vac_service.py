@@ -94,7 +94,7 @@ class SteamVacServiceTests(unittest.TestCase):
     def test_format_report_rows_render_without_gfm_table_syntax(self):
         # The Deck's answer renderer (react-markdown, MainTabBonsaiAiMarkdownChunk.tsx) has no
         # remark-gfm plugin loaded, so a GFM pipe table is never parsed as a table -- it comes
-        # out as one run-on paragraph of literal pipes and dashes (docs/test-evidence/
+        # out as one run-on paragraph of literal pipes and dashes (workshop:test-evidence/
         # plan64-VAC-03-06.json: "the reply has 0 table elements... reads as a run of pipes").
         # A fix here has to stop emitting that syntax, not add a table the renderer cannot draw.
         rows = [

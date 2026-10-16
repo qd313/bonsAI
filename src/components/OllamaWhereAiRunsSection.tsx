@@ -405,7 +405,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   // back, while ollamaLocalOnDeck and ollamaIp still read this render's opening defaults rather
   // than what is actually saved. Probing then went to the wrong host and logged a failure it
   // caused itself, even though Ollama was answering normally the whole time
-  // (docs/test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json). Once settings do land, this effect
+  // (workshop:test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json). Once settings do land, this effect
   // re-runs from the settingsLoaded dependency and probes exactly once, for the real values.
   useEffect(() => {
     if (!settingsLoaded) return;

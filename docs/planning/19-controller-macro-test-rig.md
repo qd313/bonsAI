@@ -8,9 +8,9 @@ not. Recon and design only — **no implementation**. Effort uses the roadmap GT
 Until today the roadmap still said "board ordered, next: spikes S1 to S3". That was a month out of
 date:
 - **S1 and S2 are done.** The board is plugged into the Deck and read on the PC's COM7
-  (`deck_status` reports `bridgeReady: true`; see `docs/test-evidence/plan65-DEPLOY.json`). Its
+  (`deck_status` reports `bridgeReady: true`; see `workshop:test-evidence/plan65-DEPLOY.json`). Its
   button map was measured and fixed on 2026-08-25
-  ([archive/22-xinput-near-miss-and-button-map.md](../archive/22-xinput-near-miss-and-button-map.md)).
+  ([archive/22-xinput-near-miss-and-button-map.md](../../../bonsAI-workshop/archive/22-xinput-near-miss-and-button-map.md)).
   The Guide chord opens the Quick Access Menu from it.
 - **P1 is done except the stream.** Pressing, chords, walks, sequences and a stop switch exist as
   `deck_pressButton`, `deck_pressChord`, `deck_walkTo`, `deck_runSequence`, `deck_stopAutomation` and
@@ -38,8 +38,8 @@ are verified against real UI state, and one capture pipeline that yields the QA 
 live analyzer stream at the same time — closing the last missing capability for unattended
 on-Deck QA.
 
-Sources: [01-qa-automation-plan.md](../archive/01-qa-automation-plan.md) (findings F1–F7),
-[02-dps-upstream-findings.md](02-dps-upstream-findings.md) + the
+Sources: [01-qa-automation-plan.md](../../../bonsAI-workshop/archive/01-qa-automation-plan.md) (findings F1–F7),
+[02-dps-upstream-findings.md](../../../bonsAI-workshop/planning/02-dps-upstream-findings.md) + the
 [mcp-setup.md findings log](../mcp-setup.md#dps-findings-log-bonsai) (P1-5),
 [deck_send_ask.py](../../scripts/deck_send_ask.py), [record-deck.sh](../../scripts/record-deck.sh),
 [troubleshooting.md](../troubleshooting.md) § 5, and the DPS repo at `qd313/decky-plugin-studio`
@@ -56,7 +56,7 @@ stage:
 | Stage | State | Evidence |
 |---|---|---|
 | Deploy a build to the Deck | **Working** — hash-verified deploy | `build.ps1` / `build.sh dev` |
-| Press buttons / navigate menus | **Missing entirely** | F1 in [01-qa-automation-plan.md](../archive/01-qa-automation-plan.md) § 0: no input injection of any kind on the Deck |
+| Press buttons / navigate menus | **Missing entirely** | F1 in [01-qa-automation-plan.md](../../../bonsAI-workshop/archive/01-qa-automation-plan.md) § 0: no input injection of any kind on the Deck |
 | Type an exact question | **Working** | [deck_send_ask.py](../../scripts/deck_send_ask.py) writes the Ask field over CEF remote debugging (CDP, `127.0.0.1:8080`) and verifies the write; deliberately does not press Ask |
 | Select a specific test chip | **Blocked twice** | Frozen test chips not built (roadmap Backlog ★★★; standing agreement in CLAUDE.md § Testing on the Deck); carousel cannot be walked backwards (roadmap § Bugs) |
 | Press Ask / wait for reply | Nothing presses Ask; done-signals exist unwired | `get_background_game_ai_status` (`main.py:2729`), plugin log over SSH (F4), per-Ask trace file (F5) |
@@ -208,7 +208,7 @@ skeleton with different middles.
 | P1 | DPS primitives: serial bridge, `deck_pad*`, `deck_macroRun` (blind steps + `state` verify), `deck_stream*`, extension status + kill switch | Tools callable from a bonsAI session; kill switch provably neutralizes mid-press |
 | P2 | bonsAI integration: golden-path smoke macro + CDP assertions + reply-finished signal | **L9 acceptance:** unattended smoke passes end to end |
 | P3 | `focus-visual` checks; handheld BLE geometry runs; chip-select macros (after Frozen test chips); first real rows — KB-ROUTER-01's four sentences, tab-tour smokes | A real testing.md row moves on rig evidence |
-| P4 | Streaming-row repeatable runs (with the timestamp instrumentation), nightly-loop hookup per [01-qa-automation-plan.md](../archive/01-qa-automation-plan.md) A5 | The QA plan's "must be manual" column visibly shrinks |
+| P4 | Streaming-row repeatable runs (with the timestamp instrumentation), nightly-loop hookup per [01-qa-automation-plan.md](../../../bonsAI-workshop/archive/01-qa-automation-plan.md) A5 | The QA plan's "must be manual" column visibly shrinks |
 
 Per CLAUDE.md, implementation commits update `docs/roadmap.md` and `docs/testing.md` (new rig
 rows) in the same change sets.

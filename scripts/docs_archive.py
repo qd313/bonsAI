@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Title: docs_archive
 
-Purpose: read docs/archive/INDEX.md and tell a person which archived files have passed
+Purpose: read workshop:archive/INDEX.md and tell a person which archived files have passed
          their delete-after date.
 Used for: plan 51 (refactor round two), the archiving pass that moved finished, replaced,
-          and abandoned write-ups and scripts into docs/archive/ and scripts/archive/ on
+          and abandoned write-ups and scripts into workshop:archive/ and workshop:scripts/archive/ on
           2026-09-13. Only the abandoned ones carry a delete-after date; this script is how
           someone checks, later, whether that date has arrived.
 Solves: nobody wants to reread the whole index by eye every so often just to see if a date
@@ -16,7 +16,7 @@ Does not: delete a file, move a file, or change the index in any way. It only pr
 Commands:
   docs_archive.py list-overdue [--index PATH] [--as-of YYYY-MM-DD]
       Print every row in the index whose delete-after date is today or earlier.
-      --index defaults to docs/archive/INDEX.md next to the repo root this script sits in.
+      --index defaults to workshop:archive/INDEX.md next to the repo root this script sits in.
       --as-of defaults to today; pass a date to check against a different day.
 """
 import argparse

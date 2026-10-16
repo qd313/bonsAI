@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Title: Docs and scripts inventory
 
-Purpose: Lists every project document under docs/ (skipping docs/archive/, since
+Purpose: Lists every project document under docs/ (skipping workshop:archive/, since
 those are already put away) and every file under scripts/, and pulls together the
 facts a person needs to decide whether to keep, put away, or throw out each one:
 how big it is, what it is called, when it was last touched, how many other tracked

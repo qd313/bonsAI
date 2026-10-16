@@ -30,18 +30,18 @@ press, then every direction. Run 3: a question asked first so the row carried a 
 Run 4: the same, plus the box filled from a chip. Run 5: an empty new chat with the row still showing one
 turn, after the plugin was reopened with Hades running. Every Down, Left and Right from the box moved where
 it should, every time. Evidence
-`docs/test-evidence/plan55-trap-run1-walk-after-new-chat.json`,
-`docs/test-evidence/plan55-trap-run2-chip-fill-then-dpad.json`,
-`docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json`,
-`docs/test-evidence/plan55-trap-run4-chip-fill-with-live-turn-row.json`,
-`docs/test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json`.
+`workshop:test-evidence/plan55-trap-run1-walk-after-new-chat.json`,
+`workshop:test-evidence/plan55-trap-run2-chip-fill-then-dpad.json`,
+`workshop:test-evidence/plan55-trap-run3-new-chat-with-live-turn.json`,
+`workshop:test-evidence/plan55-trap-run4-chip-fill-with-live-turn-row.json`,
+`workshop:test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json`.
 
 **One more clean run 2026-09-18, build `0589565`, on the same 2026-09-15 recipe:** Down reached Ask and Up
-climbed back out, no trap. Evidence `docs/test-evidence/plan61-focustrap-try1.json`.
+climbed back out, no trap. Evidence `workshop:test-evidence/plan61-focustrap-try1.json`.
 
 **One more clean try 2026-09-18, after exiting Sifu, on the 15 September new-chat recipe:** Down and Right
 both moved cleanly out of the question box; Left simply had nothing next to it. No trap this time. Evidence
-`docs/test-evidence/plan61-focustrap-try5.json`.
+`workshop:test-evidence/plan61-focustrap-try5.json`.
 
 **More history, moved from the roadmap 2026-09-21:**
 
@@ -65,7 +65,7 @@ both moved cleanly out of the question box; Left simply had nothing next to it. 
   [detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
   **One more try 2026-09-18, later in the same night:** with Hades still running, one question sent with the
   usual workaround went through cleanly and did not trap — a sample of one, so the "nearly every send" reading
-  from earlier tonight still stands. Evidence `docs/test-evidence/plan61-ASKBAR-FOCUS-TRAP-03-tally.json`.
+  from earlier tonight still stands. Evidence `workshop:test-evidence/plan61-ASKBAR-FOCUS-TRAP-03-tally.json`.
   **Not seen at all on 2026-09-19:** about ten questions were sent with Hollow Knight, Half-Life 2, Hades and
   Black Mesa running in turn, and the trap never happened once. The one thing done differently from the
   night before is that the plugin was reloaded after every settings edit tonight (see the pinned-chip entry
@@ -82,7 +82,7 @@ both moved cleanly out of the question box; Left simply had nothing next to it. 
 empty question box (its last known trigger), the on-screen keyboard opened, B closed it, and Down, Right,
 Up and Down all moved the ring normally afterward. **Stays open** — one clean build does not close a fault
 that has come and gone before; the maintainer's call. Evidence
-`docs/test-evidence/plan64-STUCK-PANEL-01.json` (+ screenshots).
+`workshop:test-evidence/plan64-STUCK-PANEL-01.json` (+ screenshots).
 **Not reproduced 2026-09-26 (plan 70, flow 4.3), 3 tries.** A on the empty question box on purpose (the
 runbook's one allowed exception), then a run of D-pad presses. In try 1, a B pressed about 1.4 seconds
 after the A did not close the on-screen keyboard — all four D-pad presses that followed moved the
@@ -91,7 +91,7 @@ all six presses; a second B did close it, and every press afterward moved normal
 B pressed about 20 seconds after the A, one B closed the keyboard and the D-pad was alive throughout,
 including a full 13-press walk up to the tab bar and 14 back down with nothing stopping partway. No
 recovery step (no Quick Access Menu close, no reload) was needed in any of the three. Evidence
-`docs/test-evidence/plan70-F4-STUCK-PANEL.json` (+ screenshots).
+`workshop:test-evidence/plan70-F4-STUCK-PANEL.json` (+ screenshots).
 
 not be reached. Closing and reopening Quick Access cleared it and emptied the box. Being fixed (helper
 F2). A related shape seen the same session: walking Up from the question box with a game running landed
@@ -166,7 +166,7 @@ gap between growths 0.66 seconds, the largest single jump 103 characters. With i
 seconds, 0 to 2,380 characters, every read grew, the only pause over 1.5 seconds (5.1 s) came after the
 text had already finished, during the final tidy-up. Neither answer ran the full 60 seconds the runbook
 asked for, but the numbers measured — no gap over 1.5 seconds while writing, no jump over 115 characters
-— are clean. Evidence `docs/test-evidence/plan70-L5-FLOW3-DRG.json`.
+— are clean. Evidence `workshop:test-evidence/plan70-L5-FLOW3-DRG.json`.
 
 ### Trimmed from "Ask / reply items with short entries, as filed"
 
@@ -243,14 +243,14 @@ Deck check. [Plan](archive/51-refactor-round-two.md).
   Vessel and gave its tactics in plain text with no cover; asked about "the boss at the end of the first area"
   in Hades, the reply named Theseus and Asterius the same way. Two games, both builds, the same shape. The
   plan 54 rows still marked owed (STRAT-SPOIL-NAME-01) would fail on this evidence. Evidence
-  `docs/test-evidence/plan58p1-M-hk-boss-before.json`, `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-02.json`.
+  `workshop:test-evidence/plan58p1-M-hk-boss-before.json`, `workshop:test-evidence/plan58p1-QA-NOTES-BLOCK-02.json`.
   **Seen again 2026-09-18 with Hades actually running and streaming on:** the same question, asked without
   naming a boss, still came back in plain text with no cover at any point. So the game being detected and
   running does not close the box either — this is not only a nothing-running gap. Evidence
-  `docs/test-evidence/plan61-HADES-UNNAMED-STREAM-01-retry2.json`, `docs/test-evidence/plan61-HADES-UNNAMED-01-retry2.json`.
+  `workshop:test-evidence/plan61-HADES-UNNAMED-STREAM-01-retry2.json`, `workshop:test-evidence/plan61-HADES-UNNAMED-01-retry2.json`.
   **Sighting, 2026-09-19, Hollow Knight:** the same kind of question ("what is waiting at the end of the
   game") came back this time WITH its cover in place. Not closing this entry on one clean sighting, but
-  worth recording. Evidence `docs/test-evidence/plan61-REPLY-STOPS-MIRROR-01-retry2.json`.
+  worth recording. Evidence `workshop:test-evidence/plan61-REPLY-STOPS-MIRROR-01-retry2.json`.
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
@@ -262,13 +262,13 @@ still came back with no cover. Still reproduced 2026-09-22, uncovered in the fir
 measurement warning, not a fix: repeating the identical question came back cached, 1 second against
 the first run's 27, word for word the same — a warning about the counts already taken, not proof
 they were wrong, since counting by repeating a question counts nothing. Evidence
-`docs/test-evidence/plan63-SPOILER-UNNAMED-BOSS.json`. Reproduced again 2026-09-23 with fresh
+`workshop:test-evidence/plan63-SPOILER-UNNAMED-BOSS.json`. Reproduced again 2026-09-23 with fresh
 wording, Hollow Knight, game running: asking about the boss behind the crystal spike area attached
 the Soul Master's own note and Show details read "Spoiler risk: med," yet no spoiler cover appeared
 at any of 83 reads taken while the reply streamed in. The reply named "the Soul Master" outright and
 gave away its fake death and second round in plain text. The SPOILER-REVEAL reachability check
 stayed owed for a different reason: with no cover ever appearing, there was no hidden block to walk
-to and reach. Evidence `docs/test-evidence/plan64-SPOILER-REVEAL-reachability.json`.
+to and reach. Evidence `workshop:test-evidence/plan64-SPOILER-REVEAL-reachability.json`.
 
 **Fixed 2026-09-26 (plan 70, helper A), commits `d4b3062e`, `d41b47c7`, `301abc56`, `147cf5fa`.**
 `d4b3062e` works out, once per turn, whether a cover is owed and which names it protects
@@ -291,7 +291,7 @@ regression — 1 run in 5 named the boss and was covered.
 
 **SPOILER-REVEAL reachability itself passed on the Deck 2026-09-26** (plan 70, flow L1), closed: once
 a finished answer had a cover on screen, the cover took the ring one D-pad press at a time and A
-opened it. Evidence `docs/test-evidence/plan70-SPOILER-REVEAL-reach.json`.
+opened it. Evidence `workshop:test-evidence/plan70-SPOILER-REVEAL-reach.json`.
 
 **FAILED live on the Deck 2026-09-26 (plan 70, flow L1), being fixed (helper A).** The fix above covers
 every *finished* answer correctly: in the same session, Hollow Knight and Hades both named the right
@@ -299,7 +299,7 @@ things and were covered, and Deep Rock never covered (nothing to cover). But not
 Hollow Knight answer showed "The Soul Master fight is all about timing his movements" plus raw
 `` ```bonsai-spoiler `` marker text in plain sight for about 4.7 seconds, when the model opened its own
 fence mid-line, before the finished cover formed correctly. Row **SPOILER-COVER-01** in
-[testing.md](testing.md), evidence `docs/test-evidence/plan70-SPOILER-COVER-01.json` (+ screenshots).
+[testing.md](testing.md), evidence `workshop:test-evidence/plan70-SPOILER-COVER-01.json` (+ screenshots).
 **Known gap, still open:** a spoiler that never uses a note's own name (a paraphrase) is not caught.
 
 **Fixed 2026-09-26 (plan 70, helper A, commit `59bb4dd6`).** Cause: the model sometimes writes its own
@@ -324,7 +324,7 @@ the end of the answer showed raw "```bonsai-spoiler" for about 3.3 s before its 
 from below while he conjures orbs…") streamed in plain for a few more seconds. Pattern: a spoiler fence
 placed at the very start of the answer (or a second one near the end) streams its own content uncovered
 until the whole answer finishes, even with the line-start fix in place. Evidence
-`docs/test-evidence/plan70-SPOILER-COVER-01-try2.json` (+ screenshot).
+`workshop:test-evidence/plan70-SPOILER-COVER-01-try2.json` (+ screenshot).
 
 **Cause found and fixed 2026-09-26 (plan 70, helper A2, four commits, 15:37-15:50).** The leak was on the
 screen, not the back end. Proof first: the two answers the Deck saved were rebuilt and replayed through
@@ -394,7 +394,7 @@ underneath. Same open question, not a new one; the maintainer's call above alrea
 **Re-confirmed again 2026-09-26 (plan 70, flow L6):** the same Hollow Knight described-boss question,
 watched every 250 ms across 184 reads over about 45 seconds while the cover was still arriving: no notes
 block appeared at any point, though the saved turn does list the attached note once it finishes; the
-protected name never showed anywhere on screen. Evidence `docs/test-evidence/plan70-L6-NOTES-ARRIVING.json`.
+protected name never showed anywhere on screen. Evidence `workshop:test-evidence/plan70-L6-NOTES-ARRIVING.json`.
 
 **The model's own thinking can leak the same way, fixed 2026-09-26 (plan 70, helper A, commit
 `4b975316`).** Measured live on the Deck (THINKING-SPOILER-01): the live thinking line, and the saved
@@ -415,7 +415,7 @@ line shows the model's own rule checklist" idea instead:** single inline backtic
 tag (like `` `<bonsai-status>` ``) or a note title showed in the live thinking and the opened reasoning in
 3 of 6 tries. These are not a spoiler fence and name nothing protected — the model is quoting its own
 instructions back at itself, the same family of "thinking shows its own rule checklist" already on the
-roadmap, not a new spoiler leak. Evidence `docs/test-evidence/plan70-THINKING-SPOILER-01-try2.json`.
+roadmap, not a new spoiler leak. Evidence `workshop:test-evidence/plan70-THINKING-SPOILER-01-try2.json`.
 
 **A third leak found 2026-09-26 (plan 70, flow L2): the suggestion menu itself can name a protected
 boss.** Beside the live-text and thinking leaks above, the branch menu's own question line under a
@@ -424,7 +424,7 @@ output?" in plain view, fully visible, not inside any spoiler element — even t
 question never named the boss. The menu's question and its buttons are drawn straight from the model's
 own words and never ran through the spoiler cover, because fencing a button would just print backticks
 on it instead of hiding anything. Screenshot `plan70-NO-CLOSE-MATCH-HK-02-menu-names-boss.png`. Evidence
-`docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`.
+`workshop:test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`.
 
 **Fixed 2026-09-26 (plan 70, helper A, commit `7c93d5e8`).** When a cover is owed this turn, a protected
 name inside the menu's question or any button's own label is swapped for a neutral phrase ("this boss",
@@ -456,7 +456,7 @@ opened, never the name while it was still hidden. Read aloud said "A spoiler is 
 plain sentences that followed, never the name. **Control, to confirm nothing over-hides:** the same
 question with the boss named outright ("how do I beat soul master") answered in plain text throughout,
 no cover, notes block titled with the real name from the moment it appeared. Evidence
-`docs/test-evidence/plan70-L5-SPOILER-COVER-01.json` (+ screenshots).
+`workshop:test-evidence/plan70-L5-SPOILER-COVER-01.json` (+ screenshots).
 
 **The four-round story, in order:** (1) the safety net itself, built to cover any protected name a
 finished answer used that the question did not type — right on finished answers from the start, but not
@@ -482,14 +482,14 @@ left across two fresh, real questions, in every place a name could have leaked. 
   2026-09-18:** the D-pad walk from Ask to Clear cache took about 48 seconds and the reply finished in 43, so
   Clear landed on an already-finished answer, not a mid-answer one. Next try: switch tabs with the shoulder
   button and use a slower Deep-thinking question. Evidence
-  `docs/test-evidence/plan61-CLEAR-CACHE-01-midanswer.json`. **Tried again on the Deck 2026-09-18, still
+  `workshop:test-evidence/plan61-CLEAR-CACHE-01-midanswer.json`. **Tried again on the Deck 2026-09-18, still
   BLOCKED:** using the shoulder button to switch tabs got to Clear cache in 63 seconds, but the reply (a
   slower, high-thinking question) had already finished at about 50 seconds, so Clear again landed on a
   finished answer, not one still being written. Clear itself worked cleanly: an empty transcript, and a fresh
   question started a clean session. Two tries tonight, both too slow to catch a reply mid-write. What is
   needed next is a reply that takes longer than about 70 seconds — a running game, or the sixty-tip question
   from SOFT-PREDICT-01 — or the maintainer's word to close this half as covered by its unit test instead.
-  Evidence `docs/test-evidence/plan61-CLEAR-CACHE-01-midanswer-retry.json`.
+  Evidence `workshop:test-evidence/plan61-CLEAR-CACHE-01-midanswer-retry.json`.
   [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
@@ -499,13 +499,13 @@ left across two fresh, real questions, in every place a name could have leaked. 
 - ★★★ `[reply]` **Soft reply-length cap and thinking budget** — **VERIFY.** Shipped 2026-08-10. **01, 02 and 03 all pass:**
   02's empty continue stops quietly (automated); **01 and 03 confirmed on the Deck 2026-09-17** — a long five-part reply
   read with no seam and the `Continuing…` cue never showed live or saved (01); stopping partway kept the partial text
-  with a `Stopped — partial answer kept.` notice (03). Evidence `docs/test-evidence/plan57-QA-SOFT-PREDICT-01.json`,
-  `docs/test-evidence/plan57-QA-SOFT-PREDICT-03.json`. **SOFT-PREDICT-05 passed on the Deck 2026-09-18:** run on
+  with a `Stopped — partial answer kept.` notice (03). Evidence `workshop:test-evidence/plan57-QA-SOFT-PREDICT-01.json`,
+  `workshop:test-evidence/plan57-QA-SOFT-PREDICT-03.json`. **SOFT-PREDICT-05 passed on the Deck 2026-09-18:** run on
   gemma4:e2b-it-qat (the Deck's real thinking-capable model; no other thinking model is installed) with Thinking
-  Off, a full visible reply came back, no empty reply. Evidence `docs/test-evidence/plan61-SOFT-PREDICT-05.json`.
+  Off, a full visible reply came back, no empty reply. Evidence `workshop:test-evidence/plan61-SOFT-PREDICT-05.json`.
   Left: **SOFT-PREDICT-04** (a continue mid-menu in Strategy) — **tried 2026-09-18, blocked:** the long Hades
   walkthrough question came back as a short spoiler-careful refusal, so no reply reached the length wall.
-  Evidence `docs/test-evidence/plan61-SOFT-PREDICT-04.json`.
+  Evidence `workshop:test-evidence/plan61-SOFT-PREDICT-04.json`.
   [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
@@ -520,7 +520,7 @@ the log showed the answer finishing; the whole answer was there on switching bac
 switch happened only about 5 seconds after the first words appeared, a shorter window than earlier
 sightings, and the app log itself wrote nothing new in the seconds around the switch. **Stays open** —
 seen three times before, so one clean try is not enough to close it; the maintainer's call. Evidence
-`docs/test-evidence/plan64-BUSY-DOT-01.json` (+ screenshots).
+`workshop:test-evidence/plan64-BUSY-DOT-01.json` (+ screenshots).
 
 ### Trimmed from "The open tab strip redrawn: six equal cells, one icon family, only the current tab named"
 
@@ -545,14 +545,14 @@ the short summary and the decision.
 graphics-chip error ("ErrorDeviceLost") and wrote a crash dump. Ollama recovered on its own and later
 questions worked. **Crashed again 2026-09-23, 2 of 2 with the same 2.6 MB PNG:** the same graphics-chip
 error, the same "incomplete stream" message after about 14 seconds, and Ollama answering again about 10
-seconds later. Evidence `docs/test-evidence/plan64-THINKING-05.json`,
-`docs/test-evidence/plan64-SCREENSHOT-CRASH-try2.json`.
+seconds later. Evidence `workshop:test-evidence/plan64-THINKING-05.json`,
+`workshop:test-evidence/plan64-SCREENSHOT-CRASH-try2.json`.
 
 **Cause found 2026-09-23.** A smaller picture (a 1280×800 JPG, 177 KB) answered normally in 49.7 seconds
 with a correct description of the screen; the crashing file is a 1920×1080 PNG at 2.6 MB. bonsAI only
 shrinks a picture before sending it when the Pillow image library is present, and Pillow is not installed
 on the Deck, so the full-size file goes to the model untouched. Evidence
-`docs/test-evidence/plan64-SCREENSHOT-CRASH-small.json` (+ `.png`).
+`workshop:test-evidence/plan64-SCREENSHOT-CRASH-small.json` (+ `.png`).
 
 **Three ways to fix it were put to the maintainer:** ship the image library with the plugin, shrink
 pictures some other way, or refuse pictures over a size limit with a message. A measured comparison backed
@@ -589,7 +589,7 @@ in 38.9 seconds, nothing in the Deck's own log about a graphics-chip error, and 
 sent measured 107,526 bytes against 3,667,775 bytes for the same file before the fix — 34 times
 smaller. The row's own wording asked for a log line as well, but the shrink writes nothing when it
 succeeds, so the row was reworded to judge by the size of the request sent instead. Evidence
-`docs/test-evidence/plan70-SCREENSHOT-BIG-L2-1b.json`.
+`workshop:test-evidence/plan70-SCREENSHOT-BIG-L2-1b.json`.
 
 ## Opening "N earlier" floods a long chat with rows
 
@@ -636,7 +636,7 @@ nothing else to weigh still landed on "med" — troubleshooting questions now sk
 a "Starting out" note could be picked as the named entity, since its title ends in the game's own name —
 such notes are now skipped when matching. Both halves fixed 2026-09-26 (plan 70, helper M, `804bd004` +
 `f14de761`). **Not fixed:** a game's own name can still count as naming a note in general. Evidence
-`docs/test-evidence/plan70-SPOILER-RISK-CHIP-01.json`.
+`workshop:test-evidence/plan70-SPOILER-RISK-CHIP-01.json`.
 
 **Partly re-checked on the Deck 2026-09-26 (plan 70, flow L2, helper M).** A "my game is crashing"
 troubleshooting question now reads "low", as the fix intends. But "my deck fan gets very loud while
@@ -644,7 +644,7 @@ idle" still reads "med" — the word list this fix skips the bump for does not c
 question with no crash-shaped word in it. The named-entity half: a final Hollow Knight boss fight with
 no note of its own no longer names "Starting out in Hollow Knight" (the fix working), but now names
 "False Knight" instead — a different wrong boss, since there is still no note for this fight. Evidence
-`docs/test-evidence/plan70-L1-8-HELPER-M.json`.
+`workshop:test-evidence/plan70-L1-8-HELPER-M.json`.
 
 **Both gaps closed 2026-09-26 (plan 70, helper M).** **Named entity, commit `679452e5`:** excluding the
 one onboarding note was not the whole fix — Hollow Knight is both the game's own name and its final
@@ -659,7 +659,7 @@ it to the shared tip sheet), but still read "med" because the troubleshooting ch
 list that question does not match. This turn's own routing decision is now read alongside the word list,
 not instead of it — either one being true counts as troubleshooting. Both evidence questions from the
 same Deck pass now read "low". **Re-checked on the Deck 2026-09-26 on build `8c4e0e4f`: both PASS** —
-`docs/test-evidence/plan70-L3-3-NAMED-ENTITY.json`, `docs/test-evidence/plan70-L3-3-SPOILER-BAND.json`. Closed 2026-09-28.
+`workshop:test-evidence/plan70-L3-3-NAMED-ENTITY.json`, `workshop:test-evidence/plan70-L3-3-SPOILER-BAND.json`. Closed 2026-09-28.
 
 ## Model size fix and re-check
 
@@ -673,7 +673,7 @@ question for "how big would this be to pull." **Deck re-check owed:** with the n
 any model outside the built-in list) installed, its size must show a real number, not "?", and must stay
 after live sizes load; the header must count it. Row **ROUTING-MERGE-SIZE-02**, replacing
 **ROUTING-MERGE-SIZE-01** (the Deck result that found this, evidence
-`docs/test-evidence/plan70-ROUTING-MERGE-SIZE-01.json`).
+`workshop:test-evidence/plan70-ROUTING-MERGE-SIZE-01.json`).
 
 **Passed on the Deck 2026-09-26 (plan 70, flow L3), closed.** Across four opens of the AI models screen,
 the header always started at "Installed 2 · 4.3 GB" (offline sizes), then settled on "Live catalog ·
@@ -682,7 +682,7 @@ the header total "4.3 GB", matching Ollama's own reported sizes (4.04 + 0.26 GiB
 Small note, kept open as its own tiny item rather than reopening this bug: for the first ~2 seconds of
 every open, before live sizes arrive, the note-search model still shows "?" under "Offline sizes"; the
 owner judged that short a gap does not count against the row. Evidence
-`docs/test-evidence/plan70-ROUTING-MERGE-SIZE-02.json` (+ screenshot).
+`workshop:test-evidence/plan70-ROUTING-MERGE-SIZE-02.json` (+ screenshot).
 
 ## Filters panel focus bugs
 
@@ -692,14 +692,14 @@ Long version of two roadmap entries. Moved here 2026-09-26 to keep the roadmap u
 2026-09-24: once, Manage AI models… opened with its Filters panel already open and the ring already on
 "Open source only (recommended)"; separately, the ring landed one press away from changing a licence
 filter — both times with nothing pressed to put it there. Evidence
-`docs/test-evidence/plan64-PRELOAD-01-try3.json` (+ screenshot `plan64-PRELOAD-01-try3-filters-open.png`).
+`workshop:test-evidence/plan64-PRELOAD-01-try3.json` (+ screenshot `plan64-PRELOAD-01-try3-filters-open.png`).
 Planned in plan 70.
 
 **Measured 2026-09-26 (plan 70, flow L2 + 2c), a reliable trigger found.** Opening through "Manage AI
 models…" reproduces it every time (3 of 3) — the screen opens with the Filters panel already open and
 the ring on "Open source only (recommended)". Opening through "Browse models…" never does (0 of 13),
 whatever way the screen was last closed. Both buttons open the same screen; the difference is which
-button opened it. Evidence `docs/test-evidence/plan70-RING-ON-FILTER-2c1.json`
+button opened it. Evidence `workshop:test-evidence/plan70-RING-ON-FILTER-2c1.json`
 (+ screenshot `plan70-RING-ON-FILTER-manage-open1.png`).
 
 **Fixed 2026-09-26 (plan 70, helper I, commit `3ac00226`).** The two buttons open the same screen
@@ -713,7 +713,7 @@ it before anything was pressed). **Deck re-check owed:** row **RING-ON-FILTER-2c
 **Passed on the Deck 2026-09-26 (plan 70, flow L3), closed.** Three opens through "Manage AI models…"
 and one through "Browse models…" all landed on "Advanced ›" with the Filters panel closed and nothing on
 screen changed underneath (the same "2 on" filters read the same before and after). Evidence
-`docs/test-evidence/plan70-RING-ON-FILTER-2c2.json`.
+`workshop:test-evidence/plan70-RING-ON-FILTER-2c2.json`.
 
 **Note on B, 2026-09-26:** with the Filters panel open, B does two different things depending on where
 the ring is — on the Filters button, B closes the whole screen; inside the panel, B only folds the panel
@@ -726,7 +726,7 @@ Filters panel open.** Found on the Deck 2026-09-26 (plan 70, flow L2), being fix
 and goes no further, even though Done is visible on screen the whole time; the third licence choice
 ("Any installed model") is never reached either direction. Walking Up out of the open panel folds it
 shut by itself, as a side effect. With the panel closed, the same walk reaches Done and back with
-nothing skipped. Evidence `docs/test-evidence/plan70-HUB-EDGE-01.json` (+ screenshot
+nothing skipped. Evidence `workshop:test-evidence/plan70-HUB-EDGE-01.json` (+ screenshot
 `plan70-HUB-EDGE-01-panel-folded-after-up.png`).
 
 **Fixed 2026-09-26 (plan 70, helper I, commit `6355eb9a`).** "Close filters" is the panel's own last
@@ -744,8 +744,8 @@ of stalling at "Close filters".
 28 presses reached Done cleanly (no longer stuck on "Close filters"), every stop visible, and walking
 back Up returned to the top with no cycling; the model rows themselves are still not on the path while
 the panel stays open, which the row does not require. Walking Up out of the panel still folds it shut by
-itself, unchanged. Saved walk `checks/plan70-HUB-EDGE-02.json`, evidence
-`docs/test-evidence/plan70-HUB-EDGE-02.json`.
+itself, unchanged. Saved walk `workshop:checks/plan70-HUB-EDGE-02.json`, evidence
+`workshop:test-evidence/plan70-HUB-EDGE-02.json`.
 
 ### Trimmed from "Flow 2b bugs"
 
@@ -756,18 +756,18 @@ with the details panel both closed and open, going down visits the question row 
 but going up skips both and stops instead on Attach screenshot and Choose AI character; everything else
 matches. A 22-line answer section shows only a third of itself on landing because the question box
 covers it — expected for a section taller than the screen, not a new fault. Row
-**REPLY-STOPS-MIRROR-01**. Evidence `docs/test-evidence/plan64-REPLY-STOPS-MIRROR-01.json`.
+**REPLY-STOPS-MIRROR-01**. Evidence `workshop:test-evidence/plan64-REPLY-STOPS-MIRROR-01.json`.
 
 **Sighting 2026-09-26 (plan 70):** a branch menu's two buttons were reachable walking Down from above,
-but walking Up from below skipped both. Evidence `docs/test-evidence/plan70-CHAT-HEADER-CAPTION-01.json`.
+but walking Up from below skipped both. Evidence `workshop:test-evidence/plan70-CHAT-HEADER-CAPTION-01.json`.
 
 **Sighting again, 2026-09-26 (flow L1):** walking Up, the question row was skipped, same as before.
 
 **Confirmed 2026-09-26 (plan 70, flow 2b), same shape as the branch menu above:** Up from Helpful skips
 the branch picker between the answer and the Helpful row, straight to the last answer section (seen 4
 times); Down from the Copy icon also skips the same picker, straight to Helpful (seen 3 times). The
-picker is reached only walking Down from above it. Evidence `docs/test-evidence/plan70-REPLY-DOWN-01.json`,
-`docs/test-evidence/plan70-MICRO-reply-actions.json`.
+picker is reached only walking Down from above it. Evidence `workshop:test-evidence/plan70-REPLY-DOWN-01.json`,
+`workshop:test-evidence/plan70-MICRO-reply-actions.json`.
 
 **Seen again 2026-09-26 (plan 70, flow L5.4), same shape:** Up from Helpful skipped both the answer body
 and the branch menu on the way back up.
@@ -777,7 +777,7 @@ and the branch menu on the way back up.
 tries, nobody held the ring once the answer finished, and within about 3 seconds the view slid to the end
 of the reply, leaving the control 196 to 356 px above what was visible. A Down pressed within about half
 a second of the finish still kept the ring in place. Row **QA-FREE-PLAY-01** in
-[testing-manual.md](testing-manual.md), evidence `docs/test-evidence/plan70-QA-FREE-PLAY-01.json`
+[testing-manual.md](testing-manual.md), evidence `workshop:test-evidence/plan70-QA-FREE-PLAY-01.json`
 (+ screenshots).
 
 **Fixed 2026-09-26 (helper F2, commit `f87a962c`), not a regression.** The 2026-09-23 fixes (keeping the
@@ -795,14 +795,14 @@ the ring sits on the question's Retry or text — confirming the ring now stays 
 on Retry and three on the question text. In all six the ring never left its control from the moment it
 was placed until 5 seconds after the answer finished — 0 focus changes, 0 empty-focus reads — and the
 view stayed at the top with 155 to 704 px of answer still below. Saved walk
-`checks/plan70-L4-QA-FREE-PLAY-01.json`. Evidence `docs/test-evidence/plan70-L4-QA-FREE-PLAY-01.json`
+`workshop:checks/plan70-L4-QA-FREE-PLAY-01.json`. Evidence `workshop:test-evidence/plan70-L4-QA-FREE-PLAY-01.json`
 (+ screenshots).
 
 **A preset chip loses the ring when its question changes underneath it.** Found on the Deck 2026-09-26
 (plan 70, flow 2b.9), being fixed (helper F2). In the fade and static chip styles, when the single chip
 swaps to a new question while it holds the ring, the ring is lost outright — nothing on the panel is
 focused afterward. The decode style and the two-chip layout do not have this problem; the chip keeps the
-ring through the swap there. Evidence `docs/test-evidence/plan70-PRESET-ONE-LINE-03.json` (+ screenshots).
+ring through the swap there. Evidence `workshop:test-evidence/plan70-PRESET-ONE-LINE-03.json` (+ screenshots).
 
 **Fixed 2026-09-26 (helper F2, commit `42d6eb48`).** Decode style keeps one button per slot and only
 changes its words; fade and static instead keyed the button by its own question text, so every swap
@@ -821,14 +821,14 @@ full 22 seconds with its question unchanged; moving on to the box, the chip chan
 about a second and then held that question for 44 more seconds with no further change — reported as seen,
 not a fail. Static: the ring stayed on the chip through the full 22 seconds, including the moment its
 words changed at 9.1 seconds, and was still on it 25 seconds later after a second change. Evidence
-`docs/test-evidence/plan70-L4-PRESET-ONE-LINE-03.json` (+ screenshots).
+`workshop:test-evidence/plan70-L4-PRESET-ONE-LINE-03.json` (+ screenshots).
 
 **The decode chip's typing caret is pale, not the accent green.** FAILED on the Deck 2026-09-26 (plan 70,
 flow 2b.10), not fixed this wave. The caret is there and moves left to right correctly; its colour
 measures about RGB 214,228,236, a pale white-blue the same as the settled letters, not the "green" the
 answer-scramble colour setting names. A design check for the maintainer's own eye too, not only the
 measurement. Row **PRESET-STREAM-ANIM-01** in [testing-manual.md](testing-manual.md), evidence
-`docs/test-evidence/plan70-PRESET-STREAM-ANIM-01.json`.
+`workshop:test-evidence/plan70-PRESET-STREAM-ANIM-01.json`.
 
 **From the third question on, the waiting line quotes the follow-up reminder instead of the person's
 question.** Found on the Deck 2026-09-26 (plan 70, flow 2b.1), being fixed (helper K), a regression from
@@ -836,7 +836,7 @@ today's follow-up fix. The line is meant to read "Model's warming up for '<the q
 from the third question in a chat onward it instead read "Model's warming up for 'FOLLOW-UP CONTEXT (a
 system reminder, not something the…'" — the hidden reminder text the follow-up fix now sends the model,
 not what the player typed. The second question in the same chat still showed the question correctly.
-Evidence `docs/test-evidence/plan70-QA-FREE-PLAY-01.json`.
+Evidence `workshop:test-evidence/plan70-QA-FREE-PLAY-01.json`.
 
 **Fixed 2026-09-26 (helper K, commit `5fe0800a`).** The model still gets the reminder it needs — only
 what gets shown back to a person changed. The saved `text_after_sanitizer` field (feeding Show details
@@ -852,14 +852,14 @@ watched every 200 ms from before the press to after the answer finished — 0 of
 CONTEXT" or "system reminder" anywhere on the panel; every waiting line quoted the person's own words.
 Side note: from the second question on, the model's raw "Thinking Process" notes show in the live
 thinking area — not part of this check, folded into the thinking-checklist idea instead. Evidence
-`docs/test-evidence/plan70-L4-WAITING-LINE-01.json`.
+`workshop:test-evidence/plan70-L4-WAITING-LINE-01.json`.
 
 **D-pad Left on the chat row leaves the plugin for Steam's side rail.** Found and measured on the Deck
 2026-09-26 (plan 70, flow 2b.12). From the first chat, a middle one, or the [+] button, Left moves the
 ring off the chat row entirely, onto Steam's own Quick Access side rail (the Decky icon) — from a middle
 chat, B there closes the whole Quick Access menu instead of the plugin. Right always brings the ring back
 to the chat row. Expected: Left/Right move along the row itself, the same as LB/RB already do (which
-slide the row's own chats and keep the ring). Evidence `docs/test-evidence/plan70-CHAT-ROW-LEFT-01.json`.
+slide the row's own chats and keep the ring). Evidence `workshop:test-evidence/plan70-CHAT-ROW-LEFT-01.json`.
 
 ## L3 and 2d findings
 
@@ -872,7 +872,7 @@ question showed the hint with its "Open Permissions" and "Dismiss" buttons, but 
 reached: Right from "Open Permissions" did nothing, tried twice, and Up/Down from elsewhere skip the hint
 row entirely — only Down from Show details reaches "Open Permissions" itself. Walking Up from the
 suggestion chip also skips "Open Permissions"; the same fix should cover both. Row **PERMS-CLEAN-06**.
-Evidence `docs/test-evidence/plan70-PERMS-CLEAN-05-06.json` (+ screenshot
+Evidence `workshop:test-evidence/plan70-PERMS-CLEAN-05-06.json` (+ screenshot
 `-hint-dismiss-unreachable.png`).
 
 **Fixed 2026-09-26 (helper F2, commit `59d3d1c0`).** The hint row relied on `flow-children="horizontal"`
@@ -892,12 +892,12 @@ order; Down from the button goes back to the chips. Deck re-check owed alongside
 suggestion chip, then "Save chat to Desktop" fully visible above the dock, then "Show details" of the
 newest answer; Down walked back the same way. A on "Save chat to Desktop" opened its save dialog with the
 ring on the name box; B closed it and returned the ring to the button. Evidence
-`docs/test-evidence/plan70-L6-SAVE-CHAT-CHIPS.json`.
+`workshop:test-evidence/plan70-L6-SAVE-CHAT-CHIPS.json`.
 **Passed on the Deck 2026-09-26 (plan 70, flow L5.2), closed:** walking Up from the question box reached
 the suggestion chip, then the ban-lookup row's "Open Permissions", then the hint's own "Open Permissions",
 then Right to "Dismiss" and back; every stop fully visible. A on Dismiss removed the hint. **New, small:**
 after Dismiss, nothing holds the ring until the next press. Evidence
-`docs/test-evidence/plan70-L5-PERMS-CLEAN-06.json` (+ screenshot).
+`workshop:test-evidence/plan70-L5-PERMS-CLEAN-06.json` (+ screenshot).
 
 **Fixed 2026-09-26 (helper F2, commit `6116f33c`).** Dismiss removes the whole hint, the button the ring
 was on included, and nothing handed the ring on — the same shape as the Helpful fix above. The ring now
@@ -909,7 +909,7 @@ ban-lookup row on screen. With the ban-lookup row present, A on Dismiss left the
 "Open Permissions". With only the hint on screen (a fresh chat, no ban-lookup row), A on Dismiss left the
 ring on "Save chat to Desktop". Both fully visible. **New, small, seen along the way:** a dismissed hint
 stays hidden only until Quick Access is closed and reopened — it then comes back, and the ban-lookup row
-can reappear in a different chat too. Evidence `docs/test-evidence/plan70-L6-AFTER-DISMISS.json`.
+can reappear in a different chat too. Evidence `workshop:test-evidence/plan70-L6-AFTER-DISMISS.json`.
 
 **A screen test that opens the Filters panel failed once under load, passed alone.** Found 2026-09-26,
 `PullModelsModal.filtersPanel.test.tsx`, timing-sensitive like read-aloud's. **Kept failing 2026-09-26,**
@@ -928,11 +928,11 @@ there in the first place.
 **Passed on the Deck 2026-09-26 (plan 70, flow L6), closed:** opening the Filters panel put the ring on
 its first row 6 of 6 times, closing it with Up or with B both returned the ring to the Filters button 3 of
 3 times each, and opening/closing "Type a name" worked 5 of 5 times — every stop visible. Evidence
-`docs/test-evidence/plan70-L6-FILTERS-PANEL.json`.
+`workshop:test-evidence/plan70-L6-FILTERS-PANEL.json`.
 
 **Older answers lose their "Was this helpful?" row after switching chats, leaving just the speaker icon.**
 First sighted on the Deck 2026-09-26 (plan 70, flow 2d.7) while checking Read aloud on an answer from
-before a plugin reload. Evidence `docs/test-evidence/plan70-READ-ALOUD-02-06.json`. **Seen again 2026-09-26
+before a plugin reload. Evidence `workshop:test-evidence/plan70-READ-ALOUD-02-06.json`. **Seen again 2026-09-26
 (plan 70, flow 4), this time after switching between two test chats rather than a reload** — an older
 answer's Helpful row and its "Save chat to Desktop" button were both gone, the same shape twice now.
 Filed as an open bug rather than a one-off sighting. Not yet measured closely enough to fix.
@@ -940,28 +940,28 @@ Filed as an open bug rather than a one-off sighting. Not yet measured closely en
 **Seen a third time 2026-09-26 (plan 70, flow L6):** "Save chat to Desktop" only draws when this
 session has a last answer, so after switching chats it was gone (0 buttons) until a fresh question was
 asked in that chat. Same shape again, still not measured closely enough to fix. Evidence
-`docs/test-evidence/plan70-L6-SAVE-CHAT-CHIPS.json`.
+`workshop:test-evidence/plan70-L6-SAVE-CHAT-CHIPS.json`.
 
 **In Show details, the chip ladder only lets Up leave one chip at a time.** Sighted on the Deck
 2026-09-26 (plan 70, flow L3/2d). Not yet reproduced on purpose; worth checking against the chip-ladder
 bugs already on the roadmap (the ones about the chip row and its counter sitting above the visible area).
 **Sighting 2026-09-26 (plan 70, flow L7):** walking Down from an opened notes block, the ring stopped on
 this row of small labels and two more Down presses did nothing; closing and reopening the panel cleared
-it. Evidence `docs/test-evidence/plan70-R4-try4.json`.
+it. Evidence `workshop:test-evidence/plan70-R4-try4.json`.
 
 **Two confidently wrong answers, 2026-09-26.** Not yet reproduced on purpose. A Hades question answered
 about "heat management", a mechanic Hades does not have. Separately, asked in Hollow Knight which boss
 "waits past the crystal spike area", the model said it had no information on a boss with that name —
 reading the description as if it were meant to be a literal title, when the very same area is correctly
 answered (naming Soul Master) when asked a different way in the same session. Evidence
-`docs/test-evidence/plan70-SPOILER-COVER-01-try2.json`.
+`workshop:test-evidence/plan70-SPOILER-COVER-01-try2.json`.
 
 **Picking a branch menu choice shows the model's own internal tag instead of plain words.** Found
 2026-09-26 (plan 70, flow L5.4), being fixed (helper K). While the model warmed up after picking "Just
 starting the campaign" under a Deep Rock Galactic: Survivor answer, the waiting line read: Waking the
 model up for "[Strategy follow-up] I'm at: Just starting the campaign" in Deep Rock Galactic: Survivor… —
 the internal "[Strategy follow-up]" tag shows to the person instead of the friendly "I'm at: …" wording
-used elsewhere. Evidence `docs/test-evidence/plan70-L5-FLOW3-DRG.json`.
+used elsewhere. Evidence `workshop:test-evidence/plan70-L5-FLOW3-DRG.json`.
 
 **Fixed 2026-09-26 (helper K, commit `2e13421d`).** The plugin's accept step already works out the
 friendly "I'm at: …" caption once, to save on the chat turn; it now hands that same value down to the
@@ -992,14 +992,14 @@ and the view did not scroll to bring it up (scrollTop unchanged). So on screen, 
 the divider's words switching from "Show details" to "Hide details"; the details themselves stayed out of
 sight. Walking Down from "Hide details" reached the notes block and scrolled the view up 90 px, bringing
 the tab row back into view. This is very likely the original sighting: a press that worked but looked like
-it did nothing. Evidence `docs/test-evidence/plan70-F4-SHOW-DETAILS.json` (+ screenshot
+it did nothing. Evidence `workshop:test-evidence/plan70-F4-SHOW-DETAILS.json` (+ screenshot
 `plan70-F4-SHOW-DETAILS-opened-behind-dock.png`).
 
 **Fixed 2026-09-26 (helper F2, commit `bb36e334`).** Opening the details now scrolls them clear of the
 dock, once per opening, instead of leaving them out of sight behind it. **Passed on the Deck 2026-09-26
 (plan 70, flow L6), closed:** three fresh tries, including one right after switching between two chats,
 each time the tab row and "Hide details" landed fully above the dock with no jump when walking Right onto
-the tab row. Evidence `docs/test-evidence/plan70-L6-SHOW-DETAILS.json`.
+the tab row. Evidence `workshop:test-evidence/plan70-L6-SHOW-DETAILS.json`.
 
 **After pressing thumbs up on a reply, nothing holds the D-pad ring.** OPEN, found by the plan 65 Deck
 check 2026-09-24.
@@ -1011,14 +1011,14 @@ really buttons are gone, replaced by the words "Saved on this Deck", so the cont
 longer exists. The next press does not recover from where it left off: Down or Left lands the ring on the
 small "Read aloud" speaker icon at the right of the same row; B lands the ring on the tab bar at the top
 (the panel itself stays open). The plugin's own log shows nothing about this — no error, no feedback line.
-Evidence `docs/test-evidence/plan70-F4-THUMBS-UP.json`.
+Evidence `workshop:test-evidence/plan70-F4-THUMBS-UP.json`.
 
 **Fixed 2026-09-26 (helper F2, commit `34bd9315`).** The ring now moves to the "Read aloud" speaker icon
 in the same row once the thumbs are replaced, using Steam's own transfer rather than being left behind.
 **Passed on the Deck 2026-09-26 (plan 70, flow L6), closed:** three fresh finished answers, each time the
 ring landed on the speaker icon after Helpful; pressing "Not really" instead correctly kept the ring on
 its own greyed button and Down reached the "What went wrong?" chips underneath. Evidence
-`docs/test-evidence/plan70-L6-THUMBS-UP.json`.
+`workshop:test-evidence/plan70-L6-THUMBS-UP.json`.
 
 ## Branch menu template leak
 
@@ -1035,7 +1035,7 @@ brackets and no leftover template wording anywhere, including the follow-up turn
 one clean run, not proof by itself — the unit tests already landed are the proof — but it is the Deck check
 this row was waiting on. Note for the maintainer, not a bug: the biome menu's option B, "Another specific
 biome (e.g., Caves, etc.)", reads like filler, though it is not the old template text. Evidence
-`docs/test-evidence/plan70-L5-FLOW3-DRG.json`.
+`workshop:test-evidence/plan70-L5-FLOW3-DRG.json`.
 
 ### Trimmed from "Flow L6 findings"
 
@@ -1045,7 +1045,7 @@ Deck pass (2026-09-26, build `532b76f8`). Moved here to keep the roadmap under i
 Sighted while re-checking the Show-details scroll fix: three presses of Down on "Chip 7 of 7" left the
 ring exactly where it was. Up still works normally, stepping the ladder back from 7 to 1 before leaving
 it. Not yet reproduced on purpose or measured further. Evidence
-`docs/test-evidence/plan70-L6-SHOW-DETAILS.json`.
+`workshop:test-evidence/plan70-L6-SHOW-DETAILS.json`.
 
 **B on the notes block sends the ring to the tab bar and leaves Show details open.** Sighted during free
 play: pressing B while the ring was on the notes block moved it to the tab bar at the top of the panel,
@@ -1055,7 +1055,7 @@ purpose or measured further.
 **A typed command shows up later as a suggestion chip.** Sighted during the Half-Life 2 chip watch: the
 text `bonsai:vac-check`, typed as a command earlier in the same session, later rotated through as one of
 the suggestion chips, indistinguishable from an ordinary question. Evidence
-`docs/test-evidence/plan70-L6-CHIP-ROTATION-01.json`.
+`workshop:test-evidence/plan70-L6-CHIP-ROTATION-01.json`.
 
 **The Context line briefly read "no active game" right after reopening the panel over Half-Life 2.**
 Sighted once during the chip watch, while closing and reopening Quick Access with the game still running;
@@ -1065,7 +1065,7 @@ the line then read the game's name correctly again. Not reproduced on purpose.
 detected" for under a second before correcting to "active game Brotato"; separately, launching Deep Rock
 Galactic: Survivor right after Brotato read "active game Brotato" (the previous game) for about a second
 before correcting itself. Still not reproduced on purpose. Evidence
-`docs/test-evidence/plan70-R-R3-try2.json`, `plan70-R-R4-try2.json`.
+`workshop:test-evidence/plan70-R-R3-try2.json`, `plan70-R-R4-try2.json`.
 
 **PHASE4-CHIPS-01 and CHIP-ROTATION-01, with Half-Life 2 running: FAIL.** Watched about 420 seconds
 across three panel-open sessions plus a 150-second wait, 15 different chip labels in all. Only one of
@@ -1075,7 +1075,7 @@ So the corpus guarantee ("at least one of the running game's own chips always sh
 the chips never rotated to a second Half-Life 2 suggestion. Labels themselves fit their chip correctly, no
 overflow. The maintainer's one-chip setting was on for this run, which leaves only one slot for the
 guarantee to use — may explain both results; not re-tried with more chips on screen. Evidence
-`docs/test-evidence/plan70-L6-PHASE4-CHIPS-01.json`, `docs/test-evidence/plan70-L6-CHIP-ROTATION-01.json`.
+`workshop:test-evidence/plan70-L6-PHASE4-CHIPS-01.json`, `workshop:test-evidence/plan70-L6-CHIP-ROTATION-01.json`.
 
 **KB-FOLLOWUP-QUOTE-02, re-checked: UNCLEAR.** The waiting line and the turn header both read the
 friendly "I'm at: …" wording, and Show details' own "This answer" tab does too — all as fixed. But Show
@@ -1085,23 +1085,23 @@ turn, alongside a second, clean copy of it. The model's own live reasoning also 
 ("Must *not* repeat the branch fence if the user starts with `[Strategy follow-up]`") — not as a leak of
 the person's own words, but the same tag, readable. Whether the Session tab and the reasoning quote count
 as "Show details on that turn" for this row is the maintainer's call. Evidence
-`docs/test-evidence/plan70-L6-BRANCH-WAIT.json` (+ two screenshots).
+`workshop:test-evidence/plan70-L6-BRANCH-WAIT.json` (+ two screenshots).
 
 **PRESET-ONE-LINE-04, decode half, with Half-Life 2 running: PASS.** Four eight-second windows of frame
 timing while a chip both churned its decode animation and scrolled a long label: 60.0, 59.8, 59.8 and 60.0
 frames a second, worst single gap 50 ms, no gap over that. Evidence
-`docs/test-evidence/plan70-L6-PRESET-ONE-LINE-04.json`.
+`workshop:test-evidence/plan70-L6-PRESET-ONE-LINE-04.json`.
 
 **CHIP-BUTTON-09, with Half-Life 2 running: PASS for the dot itself.** The Tip chip's small square dot
 showed on every one of 9 reads it was on screen, 7×7 px, the character's own colour, before the label,
 with no "Tip" word drawn — matching the design. Its "stays put while a long label scrolls" half could not
 be seen: the only Tip label offered ("How do I beat Strider?") was short and never scrolled. Evidence
-`docs/test-evidence/plan70-L6-CHIP-BUTTON-09.json` (+ screenshot).
+`workshop:test-evidence/plan70-L6-CHIP-BUTTON-09.json` (+ screenshot).
 
 **Reduced-motion box (b), re-tried with Half-Life 2 running: still UNCLEAR.** With reduced motion on,
 about 210 seconds of watching (188 reads) found no crawling label and no scrambled letters — the pass
 half holds — but every label seen fit its chip exactly, so the "cut off with an ellipsis" half still has
-nothing to prove it on. Evidence `docs/test-evidence/plan70-L6-REDUCED-MOTION-B.json`.
+nothing to prove it on. Evidence `workshop:test-evidence/plan70-L6-REDUCED-MOTION-B.json`.
 
 ## A read-aloud timing test fails now and then when the PC is busy
 
@@ -1115,31 +1115,31 @@ load alongside it: 20 passes, 0 failures.
 
 **Fixed 2026-09-26 (plan 70, helper I).** Remove now only greys out while a request is actually in
 flight, instead of staying disabled forever after a model's first answer. Evidence
-`docs/test-evidence/plan64-PRELOAD-01-try3-timing.json`.
+`workshop:test-evidence/plan64-PRELOAD-01-try3-timing.json`.
 
 ## The plugin log writes one false "non-loopback" connection failure right at start-up
 
 **Fixed 2026-09-26 (plan 70, helper I).** The Ollama tab's first connection check ran before settings
 finished loading, using the still-default, often-wrong host. It now waits for settings to finish loading
-first. Evidence `docs/test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json`.
+first. Evidence `workshop:test-evidence/plan64-OLLAMA-TAB-AFTER-RELOAD.json`.
 
 ## The Steam ban lookup's report shows as raw text, not a table
 
 **Fixed 2026-09-26 (plan 70, helper I).** The ban report was built as a markdown table, which the Deck's
 own renderer cannot draw, so it showed up as one run-on line of pipe and dash characters. Each account's
-facts are now written as a plain bullet line instead. Evidence `docs/test-evidence/plan64-VAC-03-06.json`.
+facts are now written as a plain bullet line instead. Evidence `workshop:test-evidence/plan64-VAC-03-06.json`.
 
 **Could not run on the Deck 2026-09-26 (plan 70, flow L1):** no Steam Web API key is saved on the Deck,
 and the runbook forbids setting one by hand — the one try got the plain "no key saved" message, not a
 report to read. Needs the maintainer's own key; on their own checklist. Evidence
-`docs/test-evidence/plan70-VAC-03-07.json`.
+`workshop:test-evidence/plan70-VAC-03-07.json`.
 
 **Passed on the Deck 2026-09-27 (plan 70, flow L8), with the maintainer's own key.** The key was saved
 into the plugin's settings on the Deck from the maintainer's private file, which git ignores; it appears in
 no log and no chat file (checked without printing it). A real Steam report came back in under 2 seconds,
 the account as one plain bullet line: no pipes, no runs of dashes, no table. The one long dash between the
 account number and "VAC:" is ordinary punctuation, not a table row — the session's reading of the row's
-"no dash characters". Evidence `docs/test-evidence/plan70-VAC-03-07-try2.json` (+ `.png`).
+"no dash characters". Evidence `workshop:test-evidence/plan70-VAC-03-07-try2.json` (+ `.png`).
 
 ### Trimmed from "Flow L10 findings"
 
@@ -1157,30 +1157,30 @@ hollowknight.wiki · CC-BY-SA-3.0", updating live. The Hornet question, meant as
 sources: a second boss it never named (the Watcher Knights) came attached behind "Boss note (spoiler) (+1
 more)" — the rule working as the maintainer set it, not a fail. Left as is: the Developer tab's raw data
 still names the note, only with desktop verbose logging on. Evidence
-`docs/test-evidence/plan70-SPOILER-CREDITS-01.json` (+ 3 screenshots).
+`workshop:test-evidence/plan70-SPOILER-CREDITS-01.json` (+ 3 screenshots).
 
 **The meaning-search hint clears by itself, and "Update knowledge base" says what it did (helper U,
 `6885d5d7`, `03c8e25d`, `2644d5df`, `7c924310`) — passed on the Deck.** The flow-L9 run of R.5 found both
 problems: the "Pull nomic-embed-text" hint stayed on the open Ollama tab after the model landed, and
-Update showed and logged nothing (`docs/test-evidence/plan70-R5.json`). After the fixes: Update reads
+Update showed and logged nothing (`workshop:test-evidence/plan70-R5.json`). After the fixes: Update reads
 "Checking for a newer version…" then "Already up to date (version 2026.09.26)." in 0.4 seconds, writes one
 log line per press, and the ring stays on Update; the hint was gone 0.7 seconds after the download's
 "success" line, and the next question read "Keyword + meaning". Update now waits as long as the back
-end's check can take and never says "failed" early. Evidence `docs/test-evidence/plan70-KB-UPDATE-HINT.json`
-(+ 4 screenshots); saved walk `checks/plan70-KB-UPDATE-row-walk.json`.
+end's check can take and never says "failed" early. Evidence `workshop:test-evidence/plan70-KB-UPDATE-HINT.json`
+(+ 4 screenshots); saved walk `workshop:checks/plan70-KB-UPDATE-row-walk.json`.
 
 **The frame rate with a game running — partial.** The maintainer's target is at least 30 frames a second
 in the panel while an answer arrives with a game running. Every number below is from Deep Rock Galactic:
 Survivor on the Deck.
 - **Before (flow L8):** thinking about 34–36, answer arriving about 11, whatever the decode effect was set
   to; the processor 96–98% busy; the game itself fell from 60 to 14–17 while answers arrived. With nothing
-  running: 60 with the decode effect off, 48.6 with it on. Evidence `docs/test-evidence/plan70-FPS-baseline.json`.
+  running: 60 with the decode effect off, 48.6 with it on. Evidence `workshop:test-evidence/plan70-FPS-baseline.json`.
 - **Round one (helper S, `75c32ace`, `a0584bd2`, `f52e6822`, `49622e21`, flow L9):** with a game running,
   the answer's text updates about 4 times a second in small groups of words, and the small animations hold
   still during a question. Three long answers: answer-arriving medians 30.5, 31.4 and 26.0, pooled 30.2;
   thinking about 57. Each answer started near 37–40 and sank to 21–28 past about 1,200 letters. With
   nothing running: 58.5 decode off, 50.1 decode on — row **GAME-LIGHT-02** passes. Evidence
-  `docs/test-evidence/plan70-FPS-after.json`, `plan70-FPS-after-partial.json`.
+  `workshop:test-evidence/plan70-FPS-after.json`, `plan70-FPS-after-partial.json`.
 - **Round two (helper S, `521a090a`, `7ead9b06`, `453635d9`, flow L10):** an arriving answer is drawn piece
   by piece, so finished paragraphs are never redrawn. On the PC one update got cheaper at every length; on
   the Deck, drawing whole against drawing in pieces past 1,200 letters showed no clear gain (42.8|36.1,
@@ -1196,24 +1196,24 @@ Survivor on the Deck.
   at about 4 updates a second the end of the line flickers then settles, and the text sometimes shrinks by
   1–5 letters for a moment. Row **GAME-LIGHT-03** passes, reworded to "the decode effect plays".
 - **Formatting while arriving** matches the finished answer, within 2 pixels at the finish.
-- **Next step:** a processor profile on the Deck taken mid-answer (`scripts/probe_deck_cpu_profile.py`), to
-  see where the time goes before a third round. Evidence for L10: `docs/test-evidence/plan70-FPS-pieces.json`
+- **Next step:** a processor profile on the Deck taken mid-answer (`workshop:scripts/probe_deck_cpu_profile.py`), to
+  see where the time goes before a third round. Evidence for L10: `workshop:test-evidence/plan70-FPS-pieces.json`
   (+ 4 screenshots).
 
 **New, open: with nothing running, the decode effect slows long answers (★★).** On a 2,945-letter answer,
 about 37 frames a second with the decode effect on, falling from 45 at the start to about 30 near the end,
 against about 50 measured on 1,100–1,500-letter answers. With it off, 58.2, easing to about 54 past 2,100
 letters. Not yet known whether this is new or always so on long answers. Evidence
-`docs/test-evidence/plan70-FPS-pieces.json`.
+`workshop:test-evidence/plan70-FPS-pieces.json`.
 
 **New, open: Up from "Save chat to Desktop" jumps to the top of the turn (★★).** It lands on "Retry same
 prompt", skipping the answer, Show details and the notes block, on both answers tried; Down from the top
 reaches everything. Seen again in flow L10 from the question box, skipping Show details and the branch
-choices. Evidence `docs/test-evidence/plan70-SPOILER-CREDITS-01.json`.
+choices. Evidence `workshop:test-evidence/plan70-SPOILER-CREDITS-01.json`.
 
 **New, open: reaching a spoiler cover by Up lands the ring on the section around it, and A does nothing
 (★★).** Coming Down from "Show reasoning" lands on the cover itself, and A opens it. Evidence
-`docs/test-evidence/plan70-SPOILER-CREDITS-01.json`.
+`workshop:test-evidence/plan70-SPOILER-CREDITS-01.json`.
 
 **New, open, small (★), found by helper S while working, not fixed:** the suggestion chips keep rotating
 and animating every 5.8 seconds while a question is answered; with thinking off, the waiting spinner can
@@ -1226,7 +1226,7 @@ live spoiler cover over all of it each time, a share of the AI's processor time 
 
 **New, open, small (★):** after removing the meaning-search model with the Ollama tab open, its hint does
 not appear until the tab is reopened (it checks only when the tab opens); and when the Pull button
-disappears, nothing holds the ring until the next press. Evidence `docs/test-evidence/plan70-KB-UPDATE-HINT.json`.
+disappears, nothing holds the ring until the next press. Evidence `workshop:test-evidence/plan70-KB-UPDATE-HINT.json`.
 
 **New, open, optional (★ [KB], helper Q):** when a tip was found but cut for lack of room, "Not in my
 notes" can still show on a covered game in Strategy or Expert, although the notes were never searched.
@@ -1241,15 +1241,15 @@ Access panel; the model sometimes refuses long questions, especially ones with t
 
 Older dated notes moved here from the roadmap entry on 2026-09-30 (docs sweep 1, plan 78). Nothing was removed; the one change is that the call the second note says was awaited is now marked as answered.
 
-**2026-09-30 (plan 77 block 3, build `ec557922`, row P77-SPOILER-OTHER-GAME):** FAILED on the Deck: three Hollow Knight questions with Deep Rock Galactic: Survivor running each came back with 0 covers; the control question stayed plain. No spoiler-profile log line appeared, so the other game's profile does not seem to be picked up. Back to fixing (helper J round 2). Evidence `docs/test-evidence/plan77-P77-SPOILER-OTHER-GAME.json`.
+**2026-09-30 (plan 77 block 3, build `ec557922`, row P77-SPOILER-OTHER-GAME):** FAILED on the Deck: three Hollow Knight questions with Deep Rock Galactic: Survivor running each came back with 0 covers; the control question stayed plain. No spoiler-profile log line appeared, so the other game's profile does not seem to be picked up. Back to fixing (helper J round 2). Evidence `workshop:test-evidence/plan77-P77-SPOILER-OTHER-GAME.json`.
 
 **2026-09-30 (plan 77 helper J round 2):** the landed change judges the turn as the story game, but that is not enough: the covers come from the notes, and the locked rule D19 makes the running game pick the notes, so a Hollow Knight question with Deep Rock running gets Deep Rock notes and no boss names to hide. Row P77-SPOILER-OTHER-GAME stays FAILED. **The maintainer answered on 2026-09-30 (D121 item 1, option (a)):** an exception to D19 for a no-story game running and a protected story game named. A proposed known-issue line is in plan 72 § 8.
 
 **Entry text as it stood before the fix landed (moved here 2026-09-30, docs sweep 3, plan 78; nothing removed):**
 
-  "How do I beat the boss in the Soul Sanctum in Hollow Knight, quick tips please" with Deep Rock Galactic: Survivor running came back with 0 covers, where with no game running it gets covers. Evidence `docs/test-evidence/plan77-BLOCK2-GAME.json`.
+  "How do I beat the boss in the Soul Sanctum in Hollow Knight, quick tips please" with Deep Rock Galactic: Survivor running came back with 0 covers, where with no game running it gets covers. Evidence `workshop:test-evidence/plan77-BLOCK2-GAME.json`.
   Cause: the running game's spoiler rules decided the whole turn; Deep Rock Galactic: Survivor is a no-story game, so a Hollow Knight boss answer was told to use no covers and the screen opened any it drew. Now, when a no-story game runs and the question names a story game from the protected list, the turn is judged as that story game (it only adds caution; "spoilers are okay" still opens everything). Limit: the game's name must appear whole in the question.
-  **2026-09-30 (the maintainer's call, D121 item 1):** option (a) chosen. When a no-story game runs and the question names a game on the protected story list, the named game picks the notes for that one question; a bare follow-up that names no game goes back to the running game's notes. The fix is owed (plan 78 helper A); row **P77-SPOILER-OTHER-GAME** (FAILED on the Deck 2026-09-30) is the check. Evidence `docs/test-evidence/plan77-P77-SPOILER-OTHER-GAME.json`. Older notes: [roadmap-details.md](roadmap-details.md#a-story-game-named-while-a-no-story-game-runs-lost-its-spoiler-covers).
+  **2026-09-30 (the maintainer's call, D121 item 1):** option (a) chosen. When a no-story game runs and the question names a game on the protected story list, the named game picks the notes for that one question; a bare follow-up that names no game goes back to the running game's notes. The fix is owed (plan 78 helper A); row **P77-SPOILER-OTHER-GAME** (FAILED on the Deck 2026-09-30) is the check. Evidence `workshop:test-evidence/plan77-P77-SPOILER-OTHER-GAME.json`. Older notes: [roadmap-details.md](roadmap-details.md#a-story-game-named-while-a-no-story-game-runs-lost-its-spoiler-covers).
 
 ## Down takes an extra press that only scrolls before reaching a section below the dock
 
@@ -1257,11 +1257,11 @@ Older dated notes moved here from the roadmap entry on 2026-09-30 (docs sweep 3,
 
 Entry heading as it stood: ★ `[focus]` **Down takes an extra press that only scrolls before reaching a section below the dock** — **PARTIAL, two of three extra presses fixed 2026-09-30 (plan 77 helper E round 2, `fb3cfb2d`, `05b59434`). Was OPEN, found 2026-09-29 (plan 77, Deck block 2).**
 
-  On a Soul Sanctum answer with no game running, 3 extra Down presses (one per section) only scrolled the panel by 80 px and left the ring on the same box, whose top then sat 8 to 20 px under the header. Evidence `docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-FREEPLAY.json`.
+  On a Soul Sanctum answer with no game running, 3 extra Down presses (one per section) only scrolled the panel by 80 px and left the ring on the same box, whose top then sat 8 to 20 px under the header. Evidence `workshop:test-evidence/plan77-P77-WALK-COVERS-MIRROR-FREEPLAY.json`.
   Down (and Up, mirrored) now lands on the next section in one press when the one it leaves is fully read.
-  **2026-09-30 (plan 77 block 3, build `ec557922`):** two of the three extra presses are gone; one remains, on a short last section (60 px) before the non-answer rows. Down landed on it twice, the second press only scrolling by 80 px. Evidence `docs/test-evidence/plan77-P77-WALK-COVERS-MIRROR-R2.json`.
+  **2026-09-30 (plan 77 block 3, build `ec557922`):** two of the three extra presses are gone; one remains, on a short last section (60 px) before the non-answer rows. Down landed on it twice, the second press only scrolling by 80 px. Evidence `workshop:test-evidence/plan77-P77-WALK-COVERS-MIRROR-R2.json`.
   **2026-09-30 (final smoke, build `2f72d658`):** seen again on a 90 px second section; every landing was inside the band and Up
-  mirrored Down otherwise. After the release. Evidence `docs/test-evidence/plan77-P77-FINAL-SMOKE.json`.
+  mirrored Down otherwise. After the release. Evidence `workshop:test-evidence/plan77-P77-FINAL-SMOKE.json`.
 
 **2026-09-30 (plan 78 helper D, `84cc0029`, `60592390`):** cause found. The walk asked whether the whole answer box was read, and the box has a 9 px frame (8 px of padding and a 1 px border) under its last section, so a last section sitting on the dock still had frame hidden and the next press only scrolled. The test setup had no frame, which is why last night's tests passed. The second commit fixes the same wasted press on a spoiler cover that has only its own 8 px margin after it. Row P78-DOWN-SHORT-SECTION is the Deck check.
 
@@ -1273,9 +1273,9 @@ Cause and measurement notes moved here from the roadmap entry on 2026-09-30 (doc
 
 **Older notes moved here from the roadmap entry on 2026-10-01 (docs sweep 7, plan 78), to make room for the block 2 result. Nothing was removed.**
 
-Deck check owed: row **P78-BORROWED-WORDING**. Unit tests: `tests/test_chat_memory_borrowed_wording.py` (12), `tests/test_tdp_suggestion_needs_power_talk.py` (6). No Deck run of the fix yet. Evidence for the sightings `docs/test-evidence/plan72-Z-FREEPLAY.json`.
+Deck check owed: row **P78-BORROWED-WORDING**. Unit tests: `tests/test_chat_memory_borrowed_wording.py` (12), `tests/test_tdp_suggestion_needs_power_talk.py` (6). No Deck run of the fix yet. Evidence for the sightings `workshop:test-evidence/plan72-Z-FREEPLAY.json`.
 
-**New sighting, 2026-10-01 (plan 78, Deck block 1, in the spoiler check, question 4):** a Deep Rock answer carried Hollow Knight wording ("soul orbs") from the earlier answers in the same chat. The fix only looked at a game named in the question, and that question named none. A further commit is owed (plan 78 helper I): the running game also counts as the new question's game. Evidence `docs/test-evidence/plan78-P77-SPOILER-OTHER-GAME-try2.json`.
+**New sighting, 2026-10-01 (plan 78, Deck block 1, in the spoiler check, question 4):** a Deep Rock answer carried Hollow Knight wording ("soul orbs") from the earlier answers in the same chat. The fix only looked at a game named in the question, and that question named none. A further commit is owed (plan 78 helper I): the running game also counts as the new question's game. Evidence `workshop:test-evidence/plan78-P77-SPOILER-OTHER-GAME-try2.json`.
 
 ## Plan 79 measurements of the maintainer's 2026-10-02 bugs
 
@@ -1292,17 +1292,17 @@ Full wording of the measurements whose short form sits on the roadmap Bugs entri
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
-  **2026-09-30 (plan 77 block 4, build `7d84ee3b`, row P77-CUT-MENU-TEXT), UNCLEAR:** at a 300-token limit both long questions were cut twice and continued; no fence text or JSON in 248 reads; the screen and the saved chat agree letter for letter. But the model never reached its choice menu before the wall, so the exact case was not produced. Unit tests are the proof so far. Evidence `docs/test-evidence/plan77-P77-CUT-MENU-TEXT.json`.
+  **2026-09-30 (plan 77 block 4, build `7d84ee3b`, row P77-CUT-MENU-TEXT), UNCLEAR:** at a 300-token limit both long questions were cut twice and continued; no fence text or JSON in 248 reads; the screen and the saved chat agree letter for letter. But the model never reached its choice menu before the wall, so the exact case was not produced. Unit tests are the proof so far. Evidence `workshop:test-evidence/plan77-P77-CUT-MENU-TEXT.json`.
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
-  **2026-10-01 (plan 78, Deck block 3c, build `24cbbd6b`), UNCLEAR, second session running:** four questions (two at a limit of 300, two at 340) never produced the case: no "dropped a choice fence" log line. The screen checks held on all 897 reads but prove nothing without the case. The edit to the installed copy was put back. Unit tests are the proof so far. Evidence `docs/test-evidence/plan78-P77-CUT-MENU-TEXT.json`.
+  **2026-10-01 (plan 78, Deck block 3c, build `24cbbd6b`), UNCLEAR, second session running:** four questions (two at a limit of 300, two at 340) never produced the case: no "dropped a choice fence" log line. The screen checks held on all 897 reads but prove nothing without the case. The edit to the installed copy was put back. Unit tests are the proof so far. Evidence `workshop:test-evidence/plan78-P77-CUT-MENU-TEXT.json`.
 
 ## The game's own chip never came back, and the chips turned over too slowly
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
-  **2026-10-01 (plan 78, Deck block 1, build `57586da0`): both Deck rows passed.** One chip: 9.53 chips a minute (asked 8 to 10.5); two chips: 11.16 a minute with the closest two changes 2.49 s apart (asked: none within 2.3 s); a chip under the highlight ring did not change in 42.5 s. The game's own chips were 0.53 to 0.55 of all shown in all four styles, and two general chips never came back to back. With two chips (fade), in 46 of 430 one-second reads only the general chip was fully visible, because the game's chip was part-way through its fade; the session's ruling is that this passes, since the spot always holds one of the game's chips, and it is noted for the maintainer's own look. Evidence `docs/test-evidence/plan78-P78-TIP-CHIP-try2.json`, `docs/test-evidence/plan78-P78-CHIP-PACE-try2.json`.
+  **2026-10-01 (plan 78, Deck block 1, build `57586da0`): both Deck rows passed.** One chip: 9.53 chips a minute (asked 8 to 10.5); two chips: 11.16 a minute with the closest two changes 2.49 s apart (asked: none within 2.3 s); a chip under the highlight ring did not change in 42.5 s. The game's own chips were 0.53 to 0.55 of all shown in all four styles, and two general chips never came back to back. With two chips (fade), in 46 of 430 one-second reads only the general chip was fully visible, because the game's chip was part-way through its fade; the session's ruling is that this passes, since the spot always holds one of the game's chips, and it is noted for the maintainer's own look. Evidence `workshop:test-evidence/plan78-P78-TIP-CHIP-try2.json`, `workshop:test-evidence/plan78-P78-CHIP-PACE-try2.json`.
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
@@ -1311,7 +1311,7 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep
 
 ### Trimmed from "After the quick start is opened and closed, the help chip stayed and the suggestion chips never took the row"
 
-  **2026-10-01, 12:52 to 13:00 (build `f0a4f2c4`), UNCLEAR:** not run. On a Deck that has seen the quick start, removing the flag left an ordinary suggestion chip, and after a plugin reload the flag read "1" again; the only reset, "Clear all plugin data", is not allowed. The fix rests on its unit tests and on the maintainer's first-install check (after opening the quick start and closing it, the help chip is gone and the suggestion chips are back). Evidence `docs/test-evidence/plan78-P78-HELP-CHIP-DISMISS.json`.
+  **2026-10-01, 12:52 to 13:00 (build `f0a4f2c4`), UNCLEAR:** not run. On a Deck that has seen the quick start, removing the flag left an ordinary suggestion chip, and after a plugin reload the flag read "1" again; the only reset, "Clear all plugin data", is not allowed. The fix rests on its unit tests and on the maintainer's first-install check (after opening the quick start and closing it, the help chip is gone and the suggestion chips are back). Evidence `workshop:test-evidence/plan78-P78-HELP-CHIP-DISMISS.json`.
 
 ### Trimmed from "Roadmap clean-up task: trim this file (done 2026-09-15)"
 
@@ -1339,6 +1339,6 @@ than it saves in tokens. The bigger wins are now in the other four files, each w
 _The entry's first wording and cause, from before the 2026-10-02 fix. It was titled "Underlined game words are stops walking Down but are skipped walking Up"._
 
 `[focus]` **Underlined game words are stops walking Down but are skipped walking Up** — **OPEN, seen 2026-10-01 on the Deck with Deep Rock Galactic: Survivor running (plan 78, Deck block 3b).**
-  A section with three underlined words took one landing and two scrolls going Up, so Up is not the mirror of Down there; the maintainer's rule (D120 item 6) is that both directions visit the same stops. Evidence `docs/test-evidence/plan78-QA-FREE-PLAY-01-GAME-try3.json`.
+  A section with three underlined words took one landing and two scrolls going Up, so Up is not the mirror of Down there; the maintainer's rule (D120 item 6) is that both directions visit the same stops. Evidence `workshop:test-evidence/plan78-QA-FREE-PLAY-01-GAME-try3.json`.
   Cause (the helper's read, 2026-10-01): with the ring on a section the word finder never counts words inside that section as before the ring going Up. A fix needs a change in the word finder, an Up-side memory of the last word passed (the mirror of Down's), and room in the navigation file, which is at 397 of its 400 lines. After the release.
 

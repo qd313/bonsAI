@@ -5,7 +5,7 @@ save data, a Wine/Proton prefix, or compatdata, without a backup step anywhere i
 reply.
 Used for: Post-generation safety pass in run_game_ai_request (game_ai_request.py), run once
 the full reply text is available.
-Solves: docs/planning/12-deep-mod-ai-hints-feasibility.md Section 5.3 -- there was no
+Solves: workshop:planning/12-deep-mod-ai-hints-feasibility.md Section 5.3 -- there was no
 output-side check on destructive advice. The only existing mitigation is a prompt instruction
 at ollama_prompts.py:926 ("Auto-clarity: for irreversible or destructive warnings..."), which is
 input-side only: a model that ignores it produces unflagged destructive advice.
@@ -108,7 +108,7 @@ def check_destructive_advice(response_text: str) -> dict[str, Any]:
     """Flag a reply that advises deleting save data / a Proton or Wine prefix / compatdata
     without also mentioning a backup step anywhere in the same reply.
 
-    Per docs/planning/12-deep-mod-ai-hints-feasibility.md Section 5.1, the prompt already
+    Per workshop:planning/12-deep-mod-ai-hints-feasibility.md Section 5.1, the prompt already
     tells the model to give a backup step first when handing out this kind of advice. This is
     the check on whether it actually did -- a model can ignore a prompt instruction; it cannot
     un-flag this.

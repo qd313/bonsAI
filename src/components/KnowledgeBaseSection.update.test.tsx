@@ -1,7 +1,7 @@
 /**
  * Behavior tests for "Update knowledge base" saying what it did.
  *
- * On the Deck (docs/test-evidence/plan70-R5.json) pressing Update twice showed nothing on
+ * On the Deck (workshop:test-evidence/plan70-R5.json) pressing Update twice showed nothing on
  * screen, so there was no way to tell whether it had checked at all. These pin the fix: the
  * row's own status text says "Checking…" while it checks, then the outcome — already up to
  * date with the version, a newer version downloading, or a plain error — with no new button.

@@ -5,7 +5,7 @@
  *          navigation carries the D-pad ring out to the Quick Access rail.
  * Used for: MainTabChatTranscript.tsx's earlierPillLeftNavHandlers(), wired onto the
  *           "N earlier" row's Focusable alongside its existing onActivate/onOKButton.
- * Solves: Confirmed twice on device (docs/test-evidence/round35-BUG-left-from-earlier-pill-
+ * Solves: Confirmed twice on device (workshop:test-evidence/round35-BUG-left-from-earlier-pill-
  *         leaves-plugin.json and the retry file next to it): with the ring on the pill, Left
  *         handed it to Steam's Quick Access rail because nothing on the row consumed the press.
  *         Same shape as the Ollama sliders fixed 2026-09-04 (DeckFocusSlider.tsx) — claim the

@@ -3,7 +3,7 @@
  *
  * Purpose: While the Main tab is showing, the Y button opens the Search tab, with the ring on its find box,
  * wherever the ring is on the panel: the question box, a suggestion chip, the chat's name in Decky's bar, an
- * answer. Measured on the Deck (plan 92, M-Y, docs/test-evidence/plan92-P92-M-Y.json): a Y press reaches the plugin
+ * answer. Measured on the Deck (plan 92, M-Y, workshop:test-evidence/plan92-P92-M-Y.json): a Y press reaches the plugin
  * as button 4 at the panel's own document, with the ring on the question box, a chip, the tab bar and an answer's
  * first stop, and Steam does nothing with it (no menu, no keyboard, the ring does not move).
  *

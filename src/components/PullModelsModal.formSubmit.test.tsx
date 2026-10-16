@@ -2,7 +2,7 @@
  * Title: Ticking a model does not submit the enclosing Pull/Done form
  *
  * Purpose: Pins the fix for the "first tick downloads immediately" bug (one sighting 2026-09-19,
- * docs/test-evidence/plan61-PULL-MISSING-NAME-01.json's own notes: "selecting the very first
+ * workshop:test-evidence/plan61-PULL-MISSING-NAME-01.json's own notes: "selecting the very first
  * catalog model in a fresh picker session ... downloaded it immediately with no Pull selected
  * press and no confirmation, unlike every later selection in the same session which correctly
  * just queued").

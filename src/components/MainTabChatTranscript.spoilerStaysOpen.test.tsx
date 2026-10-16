@@ -1,7 +1,7 @@
 /**
  * Title: An opened spoiler cover stays open while the question box changes
  * Purpose: Pin plan 76 lane 3, bug 3 (roadmap "An opened spoiler cover closed again by itself";
- *          docs/test-evidence/plan76-P76-M-COVER-RECLOSE.json). On the Deck an opened cover went
+ *          workshop:test-evidence/plan76-P76-M-COVER-RECLOSE.json). On the Deck an opened cover went
  *          back to hidden within about two seconds of a question being put in the question box,
  *          and never with the D-pad moves or with time alone.
  * Used for: MainTabChatTranscript.tsx (onDrgGlossaryExplainFurther) and

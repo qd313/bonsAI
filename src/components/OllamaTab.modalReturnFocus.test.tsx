@@ -7,7 +7,7 @@
  *          the AI models box), so the tab's list of return-focus ids shrank from three to one.
  * Used for: plan 55 bug B2 -- closing the try-order picker put the ring on the Ollama tab's outer
  *           frame instead of back on the button that opened it -- and the 2026-09-17 device
- *           finding for the Thinking row's notice (docs/test-evidence/plan57-REASONING-07.json):
+ *           finding for the Thinking row's notice (workshop:test-evidence/plan57-REASONING-07.json):
  *           the same defect, one level up, in useThinkingNoticeGate.tsx -- it kept a direct
  *           reference to the pressed button instead of registering with this registry, so the
  *           reference was already detached by the time Decky's remount happened and the ring

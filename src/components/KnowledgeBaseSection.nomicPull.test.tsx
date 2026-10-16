@@ -113,7 +113,7 @@ describe("KnowledgeBaseSection nomic-embed-text pull", () => {
   }, 15000);
 
   it("clears the hint when the model lands even if the section was remounted mid-pull", async () => {
-    // Measured on the Deck (docs/test-evidence/plan70-R5.json): the offer's Download closes a
+    // Measured on the Deck (workshop:test-evidence/plan70-R5.json): the offer's Download closes a
     // Decky modal, which remounts this section. The new copy had no idea a pull was running,
     // read "missing" once on mount and never looked again, so "Pull nomic-embed-text" stayed
     // on the open tab for over a minute after nomic-embed-text:latest had landed.
@@ -218,7 +218,7 @@ describe("KnowledgeBaseSection re-checks the meaning-search model while the tab 
   });
 
   it("shows the hint once the model is removed, without leaving the tab", async () => {
-    // Measured on the Deck (docs/test-evidence/plan70-KB-UPDATE-HINT.json): nomic-embed-text was
+    // Measured on the Deck (workshop:test-evidence/plan70-KB-UPDATE-HINT.json): nomic-embed-text was
     // removed with the Ollama tab open, and the hint did not show within 60 s -- only after
     // leaving the tab and coming back, because status was read on open and never again.
     renderInstalled({ embed_model_available: true });

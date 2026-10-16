@@ -39,7 +39,7 @@ vi.mock("@decky/ui", async () => {
   return { ...stubs, Focusable: CapturingFocusable };
 });
 
-/* The chips, widths and details boxes of docs/test-evidence/plan87-M3-CHIPS.json. */
+/* The chips, widths and details boxes of workshop:test-evidence/plan87-M3-CHIPS.json. */
 const DECK_CHIPS: Array<[label: string, width: number, box: number]> = [
   ["Knowledge base", 143.7, 55.4],
   ["KB: 13 sections", 92.9, 55.4],

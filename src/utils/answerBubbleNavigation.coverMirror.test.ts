@@ -3,7 +3,7 @@
  *
  * Purpose: Pin plan 76 lane 3, bug 2 (roadmap: "Walking Down onto a section that holds only a
  * spoiler cover lands on the section's outer box, and A there does nothing" and the last stop of
- * "Walking down a reply and walking back up visit different stops"; docs/test-evidence/
+ * "Walking down a reply and walking back up visit different stops"; workshop:test-evidence/
  * plan76-P76-M-COVER-ONLY.json and plan74-REPLY-STOPS-MIRROR-01-r2.json). Down landed on the box
  * around a cover where Up landed on the cover, and every one of those runs began with a walk Up:
  * a flag set when the ring first landed on a cover made every later walk Down skip it.
@@ -115,7 +115,7 @@ describe("Down and Up visit the same stops", () => {
 });
 
 /*
- * docs/test-evidence/plan76-S1.json: on the Deck the first Down after landing on each cover did
+ * workshop:test-evidence/plan76-S1.json: on the Deck the first Down after landing on each cover did
  * nothing a person could see, and the second left it (2 of 2 runs, both covers). The cover registers
  * itself through an inline ref, which runs again on every render, and each run reset its "already
  * offered" flag: the next Down offered the cover the ring was already on, focused it again, and
@@ -173,7 +173,7 @@ describe("A on a section that holds a hidden cover", () => {
  * Plan 77: a section with text after its cover has a box stop of its own, and Down and Up agree on it
  * whatever the panel is doing: Down goes cover, box, next section; Up goes next section, box, cover.
  * (Until then Down stopped on the box only when a scroll happened to cut the cover off, and Up never
- * did: docs/test-evidence/plan76-REPLY-STOPS-MIRROR-01-try2.json.) Everything is on screen at once
+ * did: workshop:test-evidence/plan76-REPLY-STOPS-MIRROR-01-try2.json.) Everything is on screen at once
  * here, so the panel plays no part.
  */
 describe("A section with text after its cover has a box stop, both ways", () => {

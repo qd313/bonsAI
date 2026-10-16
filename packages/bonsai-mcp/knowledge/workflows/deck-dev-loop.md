@@ -97,7 +97,7 @@ For motion/focus repros or multi-step UI flows:
 2. `.\scripts\record-deck.ps1 -Seconds 20` or `./scripts/record-deck.sh --seconds 20` (prefer `game` mode in Gaming Mode).
 3. Clips land in `recordings/DeckRecord_*.mkv` — confirm bonsAI chrome is readable in the video.
 
-See [docs/archive/spikes/deck-screen-recording.md](../../../../docs/archive/spikes/deck-screen-recording.md). On-Deck: `bonsai-record --seconds 20` after `-InstallDeckHelper`.
+See [workshop:archive/spikes/deck-screen-recording.md](../../../../../bonsAI-workshop/archive/spikes/deck-screen-recording.md). On-Deck: `bonsai-record --seconds 20` after `-InstallDeckHelper`.
 
 ## Optional debug log tunnel
 
@@ -126,7 +126,7 @@ git push origin vX.Y.Z   # triggers CI plugin zip
 
 ## Related docs
 
-- [docs/archive/spikes/cursor-deck-visibility.md](../../../../docs/archive/spikes/cursor-deck-visibility.md)
+- [workshop:archive/spikes/cursor-deck-visibility.md](../../../../../bonsAI-workshop/archive/spikes/cursor-deck-visibility.md)
 - [docs/development.md](../../../../docs/development.md)
 - [docs/testing.md](../../../../docs/testing.md)
 - `bonsai://workflow/screenshot-ingest` (screenshot ingest workflow)

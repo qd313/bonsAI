@@ -15,7 +15,7 @@
  * transcript, which is at its size limit. And it stops the measuring from costing the panel its
  * frame rate: the ref builder hands React a new function on every render, so React calls it on
  * every render, and reading scrollHeight makes the browser lay the whole panel out again right
- * there. Profiled on the Deck 2026-09-24 with a game running (scripts/probe_deck_cpu_profile.py),
+ * there. Profiled on the Deck 2026-09-24 with a game running (workshop:scripts/probe_deck_cpu_profile.py),
  * that one function was 9.9 s of the page's 28.5 s of script time while an answer streamed --
  * the largest single cost in the panel, for a title that had not changed. So a title is measured
  * again only when its element or its text changed, or when a second has passed since the last

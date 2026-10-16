@@ -296,7 +296,7 @@ The QAM column is roughly **400 × 800**. Design against that, not the Deck's 12
 only `showModal()` content escapes the column.
 
 > **Disputed by measurement, 2026-08-16.** On a Deck output at 1080p (`devicePixelRatio` 1.28, UI
-> scale profile `desktop`), [scripts/probe_deck_ask_row_width.py](../scripts/probe_deck_ask_row_width.py)
+> scale profile `desktop`), [workshop:scripts/probe_deck_ask_row_width.py](../../bonsAI-workshop/scripts/probe_deck_ask_row_width.py)
 > reports `.bonsai-scope` at **300 × 752** and the `_TabContentsScroll` body at **300 × 667** — not
 > 400 × 800. **Settled for the Deck's own screen, 2026-10-09 (plan 84): the column is 300 × 454 points** (1.5 screen pixels per point; see design-language.md), so 300 wide holds on handheld too; the 400 figure was never right. The
 > difference is not cosmetic: designing against 400 when the column is 300 makes every layout 25%

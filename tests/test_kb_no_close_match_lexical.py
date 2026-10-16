@@ -3,7 +3,7 @@
 Purpose: Pin the Deck-visible result for the wrong-subject control question: "in black mesa how do
 I tame a horse" attaches three Black Mesa notes, none of which mentions a horse or taming, and the
 meaning score of 0.6508 sits a hair over the 0.65 ceiling -- so the line did not show on the Deck
-(docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json). It now shows.
+(workshop:test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json). It now shows.
 Used for: kb_not_in_notes_notice.py `should_show_no_close_match_notice` and its turn wrapper.
 Solves: docs/roadmap-kb.md Bugs, "Questions with no real answer in the notes still get notes
 about the wrong subject" (the line half of it).

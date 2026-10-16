@@ -5,7 +5,7 @@ and downloading, a newer version found but the download refused to start, and th
 itself failing. Each returns an ``outcome`` the screen can show, and each writes exactly
 one plugin-log line naming the installed version, the newest version and the outcome.
 Used for: backend/services/rag_corpus_rpc.update_rag_corpus.
-Solves: On the Deck (docs/test-evidence/plan70-R5.json) pressing Update twice showed
+Solves: On the Deck (workshop:test-evidence/plan70-R5.json) pressing Update twice showed
 nothing and logged nothing, so nobody could tell whether it had checked at all.
 Does not: Touch the network or the disk; the manifest fetch and the download are faked.
 """

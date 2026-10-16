@@ -4,7 +4,7 @@
 
 > **Moved from** [roadmap.md](../roadmap.md) **2026-08-04.** Full decision record for D1–D15, execution order, and cleanup candidates. Active index: [roadmap.md](../roadmap.md). Reorg commit: `ba2e5c5` (`git show ba2e5c5`).
 
-Evidence lives in this audit folder — especially [05-plan.md](../archive/05-plan.md).
+Evidence lives in this audit folder — especially [05-plan.md](../../../bonsAI-workshop/archive/05-plan.md).
 
 ---
 
@@ -35,7 +35,7 @@ D1–D31 is locked; **D19 is superseded by D20** (below), and **D31 renumbers th
 D19b**. See the table below for D1–D15 and the sections below for D16, D17, D19–D31.
 
 **Session handoff for the 2026-08-18 to 2026-08-21 RAG work:**
-[session-handoff-2026-08-21.md](../archive/session-handoff-2026-08-21.md) — what shipped, what the numbers
+[session-handoff-2026-08-21.md](../../../bonsAI-workshop/archive/session-handoff-2026-08-21.md) — what shipped, what the numbers
 are now, and what is still owed.
 
 > **Numbering collision, flagged 2026-08-18 and resolved by [D31](maintainer-decisions-archive.md#d31--which-of-the-two-d19s-keeps-the-number)
@@ -66,7 +66,7 @@ The first measurement against the blind holdout rows says that equal vote is cos
 | holdout (n=92) | 51.1 / 70.7 | **64.1 / 83.7** | 56.5 / 79.3 |
 
 *(top-1 / top-3. Run of record:
-[../archive/research/kb-embed-bakeoff-2026-08-29-arms.md](../archive/research/kb-embed-bakeoff-2026-08-29-arms.md))*
+[../archive/research/kb-embed-bakeoff-2026-08-29-arms.md](../../../bonsAI-workshop/archive/research/kb-embed-bakeoff-2026-08-29-arms.md))*
 
 **On the blind rows the meaning half alone beats the shipping blend by 7.6 points of top-1.** The
 reason is legible: the blind questions share no wording with their card by construction, so the
@@ -97,7 +97,7 @@ touching a weight:
 
 1. **51 blind rows added to `tune`** (`V2-BLINDT-01`…`51`), 2026-08-29 — the split had **zero**
    before, which is the whole reason it could not see the defect. Labelled tune 117 → 168. Method
-   and disclosures: [kb-blind-tune-rows-2026-08-29.md](../archive/kb-blind-tune-rows-2026-08-29.md). **Every
+   and disclosures: [kb-blind-tune-rows-2026-08-29.md](../../../bonsAI-workshop/archive/kb-blind-tune-rows-2026-08-29.md). **Every
    tune figure in the table above is superseded by this (R4)**; holdout is untouched.
 2. **A weight sweep on `tune` only** — measuring whether any keyword/vector ratio looks better than
    equal, which is the legal move under the lock. Result to be recorded here.
@@ -125,7 +125,7 @@ are named `Stygian Blade`, `Eternal Spear` and so on. Before the split, one card
 
 **What must not be done:** rewording the Blade card to say *"easiest"*, or renaming `Weapon aspects`
 to dodge the match. Both are fitting the corpus to a test question, and this repo has already
-recorded that failure mode once ([00-phase0.md](../archive/00-phase0.md)).
+recorded that failure mode once ([00-phase0.md](../../../bonsAI-workshop/archive/00-phase0.md)).
 
 **The real question:** should a card whose name is a *category* sit in the same pool as cards that
 are *instances* of that category? Options:
@@ -144,7 +144,7 @@ ships, and the tooling does not currently write per-case results for the fusion 
 
 ### D74 — PARTLY LOCKED 2026-09-05 (raised the same day) — Reading answers aloud: five calls locked, one open
 
-Raised by the feasibility memo [planning/42-read-aloud-feasibility.md](../planning/42-read-aloud-feasibility.md),
+Raised by the feasibility memo [planning/42-read-aloud-feasibility.md](../../../bonsAI-workshop/planning/42-read-aloud-feasibility.md),
 the fourth of the six features planned one at a time on 2026-09-05. What the memo found, in one breath: the Deck
 has had a voice of its own since SteamOS 3.7.13 (June 2025, added for Steam's screen reader); the plugin's
 microphone code already knows how to reach the Deck's sound system from the background program; a natural
@@ -308,7 +308,7 @@ them. Roadmap: the three character-voice entries marked shelved with the reason;
 
 ### D75 — OPEN (raised 2026-09-06) — The model speed readout: six calls before anything is built
 
-Raised by [planning/43-model-speed-readout.md](../planning/43-model-speed-readout.md), the fifth of the six
+Raised by [planning/43-model-speed-readout.md](../../../bonsAI-workshop/planning/43-model-speed-readout.md), the fifth of the six
 features planned one at a time. The five-star benchmark's own gate said to descope to a one-shot readout if
 timings do not hold still; nobody ran the gate; the plan takes the descope now and lets the readout's record
 answer the gate over time.
@@ -625,10 +625,10 @@ commits behind, and a rule review that cost 130,000 tokens.
 
 ### D97 — LOCKED 2026-09-12 (raised 2026-09-11) — The Frame features: four calls, the tips go, the voice shape and the anti-cheat rule
 
-**Raised** by the maintainer's read of [planning/49-steam-frame-features.md](../planning/49-steam-frame-features.md)
+**Raised** by the maintainer's read of [planning/49-steam-frame-features.md](../../../bonsAI-workshop/planning/49-steam-frame-features.md)
 on 2026-09-11. The plan listed four calls in its § 5 that were never filed. This entry files them, records the
 three instructions the maintainer gave in the same chat, and points to the deeper look in
-[planning/52-frame-features-second-look.md](../planning/52-frame-features-second-look.md).
+[planning/52-frame-features-second-look.md](../../../bonsAI-workshop/planning/52-frame-features-second-look.md).
 
 #### Locked 2026-09-11
 
@@ -688,7 +688,7 @@ when it comes back.
 ### D98 — LOCKED 2026-09-12 — Follow-up questions: tell the model the subject, and call it a partial fix
 
 **Raised** by the device check on 2026-09-07 that closed out wave three's follow-up work
-([../archive/48-kb-wave-three-session.md](../archive/48-kb-wave-three-session.md) § 8, row W3-R4).
+([../archive/48-kb-wave-three-session.md](../../../bonsAI-workshop/archive/48-kb-wave-three-session.md) § 8, row W3-R4).
 Evidence `runs/plan48-R4-followup-memory.json`. This entry needs the maintainer's answer before the
 second half can be built; nothing is being built in the meantime.
 
@@ -827,7 +827,7 @@ words: *"i approve your recommendation"*.
 
 ### D99 — LOCKED 2026-09-12 — After the Frame bench: two "not yet", reading aloud goes with a three-way setting, and a Clear button in the session context strip
 
-**Raised** by the recap of the SteamVR bench ([planning/53-steamvr-bench-findings.md](../planning/53-steamvr-bench-findings.md))
+**Raised** by the recap of the SteamVR bench ([planning/53-steamvr-bench-findings.md](../../../bonsAI-workshop/planning/53-steamvr-bench-findings.md))
 on 2026-09-12, which put three things in front of the maintainer. Their answers, in their own words: *"1. not yet 2. not yet
 either 3. yes, add this to the feature: a slider for default voice replies: off by default, only when the user uses voice for a
 question, always. Also add a feature to roadmap: clear session context button in the session context strip."*
@@ -1024,7 +1024,7 @@ the rows that have sat unticked since August plus the two new ones in plan 54. A
 
 ### D104 — LOCKED 2026-09-15 — The third bug-fixing session: what is in, what waits, and the Deck pass that follows
 
-Eleven calls from [plan 55](../archive/55-bugfix-session-three.md), ten answered, one still open.
+Eleven calls from [plan 55](../../../bonsAI-workshop/archive/55-bugfix-session-three.md), ten answered, one still open.
 The session does not start until the maintainer says go. It runs in a fresh session on **Fable 5.1 at
 extra-high effort, by the maintainer's choice**, with Sonnet 5 lanes at high. The routing table asks
 for Opus here, since nothing in the session is above three stars; the maintainer knows that and chose
@@ -1074,7 +1074,7 @@ finished, and the pass needs the Deck to itself.
 
 ### D105 — LOCKED 2026-09-15 — The fourth feature session: two features drawn instead of built, the Spy's reveal, the lighter Clear, and the wipe
 
-Eight calls from [plan 56](../archive/56-feature-session-four.md), all answered the same evening.
+Eight calls from [plan 56](../../../bonsAI-workshop/archive/56-feature-session-four.md), all answered the same evening.
 The session does not start until the maintainer says go. It runs on **Fable 5.1 at extra-high
 effort, by the maintainer's choice**, with Sonnet 5 lanes at high, five at most at once, the same
 shape as plan 55. With the five-star entry dropped (below), nothing left in the session is above three
@@ -1146,7 +1146,7 @@ Spy trick.
 
 ### D106 — LOCKED 2026-09-16 — After the fourth feature session: the plain reasoning fold first, the session as a tab, the card's six rows, a Read aloud button, and one call left open
 
-The maintainer's answers to the session's closing report ([plan 56](../archive/56-feature-session-four.md)
+The maintainer's answers to the session's closing report ([plan 56](../../../bonsAI-workshop/archive/56-feature-session-four.md)
 § 10, entry 4), given in chat on 2026-09-16 with the mockup page open
 (https://claude.ai/artifact/2De58qirE34754PEZVPmdb). Six items; five are calls, one is a question the
 maintainer chose to leave open on purpose.
@@ -1195,7 +1195,7 @@ with the plain fold, plus a new entry for the voiced fold; the session-fold entr
 note record option B and the one Clear detail; the settings-card entry records the six-row call and the
 open words-after-jump question; a new entry holds the Read aloud button. The three advice-first replies
 the maintainer asked to read are written out in full in
-`docs/test-evidence/plan56-KB-ANSWER-03-three-replies.md`, copied from the saved chats in the pre-wipe
+`workshop:test-evidence/plan56-KB-ANSWER-03-three-replies.md`, copied from the saved chats in the pre-wipe
 backup; that read is still theirs to give.
 
 ### D107 — LOCKED 2026-09-16 — Third round: the three replies read well, the card's words stay cleared, the honesty line seen on screen, and five new entries from the maintainer's own hour with the AI models screen
@@ -1206,7 +1206,7 @@ Deck back the way the wipe found it: Ollama installed on the Deck again with gem
 nomic-embed-text, and the knowledge base downloaded again.
 
 **1. The three advice-first replies read as advice-first.** The maintainer read all three (written
-out in full in `docs/test-evidence/plan56-KB-ANSWER-03-three-replies.md`) and said they look good.
+out in full in `workshop:test-evidence/plan56-KB-ANSWER-03-three-replies.md`) and said they look good.
 That closes the read the row had waited for since 12 September. The roadmap entry moves to Done.
 
 **2. The settings card keeps working the way it does today.** The box is empty when a person comes
@@ -1221,7 +1221,7 @@ owed" as "every check passed" is how the card reached Done with two checks missi
 afternoon on the plan 56 build, with nothing running: *black mesa how do i tame a horse* ends with
 "— No close match in my notes, this answer leans on the model's own knowledge." and *how do i beat the
 gonarch in black mesa* ends with the note's advice and the follow-up menu, no line. Lane K's fix is
-confirmed on the device (`docs/test-evidence/plan56-HONESTY-LINE-03-on-screen.json`). The horse reply
+confirmed on the device (`workshop:test-evidence/plan56-HONESTY-LINE-03-on-screen.json`). The horse reply
 took 151 seconds on the Deck's own model, and the footnote under it reads "150.8s (>60s): prefer GPU
 for Ollama, not CPU" in full, so the "blank names" note plan 56 logged from a page read was the reader
 splitting the bold words, not the plugin. That note closes as not a bug.
@@ -1268,7 +1268,7 @@ advice-first read and the honesty line close.
 
 ### D108 — LOCKED 2026-09-16 (raised 2026-09-16) — Building the reasoning display: five small calls before the build session
 
-Raised from [plan 57](../archive/57-reasoning-display-build.md) § 7, the build plan for the plain
+Raised from [plan 57](../../../bonsAI-workshop/archive/57-reasoning-display-build.md) § 7, the build plan for the plain
 first version of the reasoning display (the shape is already locked: D70, D71, D106). The plan had
 six open items with defaults. The maintainer closed the first the same day: the Deck has its Ollama
 and its models back after the plan 56 wipe, so the Deck rows can run on the Deck's own model. One
@@ -1361,9 +1361,9 @@ entry is unchanged (still ready to build, calls locked).
 
 ### D109 — LOCKED 2026-09-16 (raised 2026-09-16) — The open tab strip redesign (Claude Design board 2a): approve the drawing, and three small calls
 
-Raised from [plan 59](../archive/59-tab-strip-redesign-build.md), the build plan for the design
+Raised from [plan 59](../../../bonsAI-workshop/archive/59-tab-strip-redesign-build.md), the build plan for the design
 Claude Design handed back on 16 September, answering the brief of 14 September
-([design/handoffs/tab-bar-open-strip/](../design/handoffs/tab-bar-open-strip/)). The returned files
+([design/handoffs/tab-bar-open-strip/](../../../bonsAI-workshop/design/handoffs/tab-bar-open-strip)). The returned files
 are in that folder under `return-2026-09-16/`. Board 2a is the one the design says to build: six
 equal cells, every icon the same 22px size, only the current tab's name shown under its icon in
 small capitals, a soft fill on the lit cell with no box, LB and RB as pills, a solid bar with a
@@ -1443,9 +1443,9 @@ other character.**
 
 ### D110 — LOCKED 2026-09-16 (raised 2026-09-16) — The suggestion chips as real buttons (Claude Design board B): six calls before the build
 
-Raised from [plan 60](../archive/60-chip-button-restyle.md), the build plan for the design Claude
+Raised from [plan 60](../../../bonsAI-workshop/archive/60-chip-button-restyle.md), the build plan for the design Claude
 Design handed back on 16 September, answering the brief of 14 September
-([design/handoffs/preset-chips/](../design/handoffs/preset-chips/)). The returned files are in that
+([design/handoffs/preset-chips/](../../../bonsAI-workshop/design/handoffs/preset-chips)). The returned files are in that
 folder under `return-2026-09-16/`. Board B, "a real button", is the locked direction, with the
 toned-down accent from board A: a top-lit, bottom-dark chip with a hairline on its top edge and a
 soft shadow beneath, the two chips 6 pixels apart instead of 4, the character colour on the badges
@@ -1481,7 +1481,7 @@ all six the same day; nothing is built, and the build runs in a later session.
    as the `[beta]` tag.
 
 **Measured on the Deck 2026-09-17, before the build, and two of the calls above rest on a wrong
-premise** (evidence `docs/test-evidence/plan60-measure-before.json`; plan 60 § 10). First, the gap in
+premise** (evidence `workshop:test-evidence/plan60-measure-before.json`; plan 60 § 10). First, the gap in
 item 3: in decode, static and carousel mode the chip row sits directly on the question box today,
 0 pixels, not 12; only fade mode has the 12. The maintainer's Deck is in decode mode, which is the
 gap they were seeing. The build gives every mode 8 pixels under the chips (5 taken by the shadow, 3
@@ -1496,7 +1496,7 @@ under the maintainer's "build now"; either can be reversed from the device eveni
 
 ### D111 — LOCKED 2026-09-17 (raised 2026-09-17) — 58 phase 1: the note's own words on screen, and wiki notes taken without rewriting — nine calls before the build
 
-Raised from [the phase 1 plan](../archive/58-phase-1-notes-shown-and-wiki-extracts.md), written the
+Raised from [the phase 1 plan](../../../bonsAI-workshop/archive/58-phase-1-notes-shown-and-wiki-extracts.md), written the
 same day after a read of the knowledge base against the production RAG lessons. The maintainer
 answered all nine the same day; nothing is built.
 
@@ -1532,7 +1532,7 @@ answered all nine the same day; nothing is built.
 
 ### D113 — LOCKED 2026-09-19 (raised 2026-09-18) — Plan 61 automated verification session: the thirteen questions
 
-Raised from [the plan 61 session](../archive/61-automated-verification-session.md) § 8, written before the
+Raised from [the plan 61 session](../../../bonsAI-workshop/archive/61-automated-verification-session.md) § 8, written before the
 device work began. The maintainer answered all thirteen on 2026-09-19. D112 is left to the 58 phase 2 plan
 and is not written here.
 
@@ -1590,7 +1590,7 @@ What each answer does to the roadmap:
 
 Raised from [the drawing board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq), which drew all four
 features at the Deck's own sizes before anything was chosen, and from
-[the plan](../archive/62-feature-session-five.md) § 8. The maintainer picked four shapes on 2026-09-20 and
+[the plan](../../../bonsAI-workshop/archive/62-feature-session-five.md) § 8. The maintainer picked four shapes on 2026-09-20 and
 answered the three remaining calls the same day. Nothing was built first.
 
 1. **The game a chat belongs to.** Chosen: **the name shows only while the ring is on the row.** The empty
@@ -1661,7 +1661,7 @@ runs before a commit being red on a clean tree, found while writing the plan.
 
 ### D115 — LOCKED 2026-09-21 (raised 2026-09-21) — Plan 63 bug-fixing session: the ten calls before block 0
 
-Raised from [the plan 63 session](../archive/63-bugfix-session-four.md) § 2, written before the session
+Raised from [the plan 63 session](../../../bonsAI-workshop/archive/63-bugfix-session-four.md) § 2, written before the session
 began. The maintainer answered all ten on 2026-09-21.
 
 1. **The failing pre-commit check.** Trim the three documents back under their limits. Not a new baseline,
@@ -1693,7 +1693,7 @@ What these answers do to the roadmap:
 
 ### D116 — LOCKED 2026-09-23 (raised 2026-09-23) — Plan 64 big verification session: the ten calls before flow 0
 
-Raised from [the plan 64 session plan](../archive/64-big-verification-session.md) § 10, written before the
+Raised from [the plan 64 session plan](../../../bonsAI-workshop/archive/64-big-verification-session.md) § 10, written before the
 session began. The maintainer answered all ten on 2026-09-23, the first four while the plan was being
 written and the other six just after.
 
@@ -1728,7 +1728,7 @@ What these answers do to the roadmap:
 
 ### D117 — LOCKED 2026-09-24 (raised 2026-09-23) — Plan 65 trim and split: the seven calls before go, and the calls made during the night
 
-Raised from [plan 65](../archive/65-trim-docs-split-long-files.md) § 9, written before the session began
+Raised from [plan 65](../../../bonsAI-workshop/archive/65-trim-docs-split-long-files.md) § 9, written before the session began
 (while plan 64 was still running on the Deck). The maintainer answered all seven the same day,
 2026-09-23, before "go".
 
@@ -1767,7 +1767,7 @@ The calls made during the night, not raised in advance:
 
 ### D118 — LOCKED 2026-09-24 (raised 2026-09-24) — Plan 68 the chat sums itself up: the calls from discovery
 
-Raised during a discovery session on 2026-09-24, before [plan 68](../planning/68-chat-sums-itself-up.md)
+Raised during a discovery session on 2026-09-24, before [plan 68](../../../bonsAI-workshop/planning/68-chat-sums-itself-up.md)
 was written. The five calls of 2026-09-20 in the roadmap entry still stand (the summary goes into the next
 question; it is written right before the next question, only when the chat outgrows its room; Compact
 replaces Clear; the spoiler standing goes with the summary; the summary shows in the Session tab under the
@@ -1843,7 +1843,7 @@ spoiler chance rating becomes a separate, later piece.
 
 ### D119 — LOCKED 2026-09-24 (raised 2026-09-24) — Plan 69 streamed answers scramble into place: the calls from discovery
 
-Raised during a discovery session on 2026-09-24, before [plan 69](../planning/69-streamed-answers-scramble.md)
+Raised during a discovery session on 2026-09-24, before [plan 69](../../../bonsAI-workshop/planning/69-streamed-answers-scramble.md)
 was written. Every choice was tried on the working [mockup](https://claude.ai/artifact/Vr8xPftAhcUK4bQf9AYUo4)
 at the Deck's true size before it was picked. Calls marked *proposed* were put forward during discovery and
 accepted with "go with your leans".
@@ -1851,7 +1851,7 @@ accepted with "go with your leans".
 **Measured first, at the maintainer's request (Deck, not a fast PC).** The Deck's model writes evenly (a
 piece every 50 ms with a game running), but the plugin passes text on only in 4 KB lumps, about every
 1.5 to 2 seconds with a game. The panel draws 8 to 40 frames a second while answer text appears with a game
-running. Evidence: [scramble-stream-timing-2026-09-24.json](../test-evidence/scramble-stream-timing-2026-09-24.json).
+running. Evidence: [scramble-stream-timing-2026-09-24.json](../../../bonsAI-workshop/test-evidence/scramble-stream-timing-2026-09-24.json).
 
 **What it does**
 
@@ -1897,7 +1897,7 @@ first step.
 ### D112 — LOCKED 2026-09-25 (raised 2026-09-25) — Plan 70, knowledge-base wave four with an automated Deck test wave: the twelve calls before go
 
 The number was kept for 58 phase 2's answers on 2026-09-16. That plan went stale before it ran and was
-replaced by [plan 70](../archive/70-kb-wave-four-and-deck-test-wave.md), so its answers take the number here,
+replaced by [plan 70](../../../bonsAI-workshop/archive/70-kb-wave-four-and-deck-test-wave.md), so its answers take the number here,
 after D119. The maintainer answered all twelve on 2026-09-25, in three rounds, before "go".
 
 1. **Fitting around plan 68, which was building in parallel:** start now and share. Leave its files alone until
@@ -1966,7 +1966,7 @@ demote is marked drawn and planned only; the controller rig entry gains the two 
 
 ### D120 — LOCKED 2026-09-29 (raised 2026-09-29) — Plan 77, the last bug session before Friday: the eight calls
 
-Made by the maintainer on 2026-09-29, before [plan 77](../planning/77-release-wave-four.md) started. The plan's
+Made by the maintainer on 2026-09-29, before [plan 77](../../../bonsAI-workshop/planning/77-release-wave-four.md) started. The plan's
 own section, "The maintainer's calls, 2026-09-29", has the same list.
 
 1. **Pulled in from after the release:** the three security fixes (the size limit on Ollama replies, the https
@@ -1986,7 +1986,7 @@ own section, "The maintainer's calls, 2026-09-29", has the same list.
 
 ### D121 — LOCKED 2026-09-30 (raised 2026-09-30) — Plan 78, a wider bug session and an unattended Deck pass: the eleven calls
 
-Made by the maintainer on 2026-09-30, before and at the start of [plan 78](../planning/78-release-wave-five.md).
+Made by the maintainer on 2026-09-30, before and at the start of [plan 78](../../../bonsAI-workshop/planning/78-release-wave-five.md).
 The plan's own section, "Your calls for this session", has the same list.
 
 1. **Spoilers when asking about another game while one runs: option (a).** When a no-story game is running and
@@ -2016,7 +2016,7 @@ The plan's own section, "Your calls for this session", has the same list.
 
 ### D122 — LOCKED 2026-10-02 (raised 2026-10-02) — Plan 79, the last session before 0.6.0: the ten calls
 
-Made by the maintainer on 2026-10-02, while [plan 79](../planning/79-release-wave-six.md) was planned. The plan's
+Made by the maintainer on 2026-10-02, while [plan 79](../../../bonsAI-workshop/planning/79-release-wave-six.md) was planned. The plan's
 own section, "Your calls for this session", has the same list.
 
 1. **Fifteen helpers at once** for this session. The house limit was ten.
@@ -2066,7 +2066,7 @@ roadmap as its own feature, search in bonsAI, not built this session.
 
 ### D123 — LOCKED 2026-10-03 (raised 2026-10-03) — Plan 80, check the roadmap and tidy it: the ten calls
 
-Made by the maintainer on 2026-10-03, while [plan 80](../planning/80-roadmap-check-and-tidy.md) was planned. The
+Made by the maintainer on 2026-10-03, while [plan 80](../../../bonsAI-workshop/planning/80-roadmap-check-and-tidy.md) was planned. The
 plan's own section, "The maintainer's calls", has the same list.
 
 1. **How deep the check goes.** Each entry is checked against the decisions list, the test documents, the evidence
@@ -2097,7 +2097,7 @@ something major.
 
 ### D124 — LOCKED 2026-10-03 (raised 2026-10-03) — Plan 81, the final bug session before 0.6.0: the ten calls
 
-Made by the maintainer on 2026-10-03, while [plan 81](../planning/81-final-bug-session.md) was planned. The plan's
+Made by the maintainer on 2026-10-03, while [plan 81](../../../bonsAI-workshop/planning/81-final-bug-session.md) was planned. The plan's
 own section, "Your calls for this session", has the same list.
 
 1. **Scope: everything, each fix gated.** Every bug on the list is in, the risky ones included, although none of
@@ -2128,7 +2128,7 @@ own section, "Your calls for this session", has the same list.
 ### D125 — LOCKED 2026-10-06 (raised 2026-10-06) — Plan 82, the bug list and the Verify list cleaned up overnight: the five calls
 
 Made by the maintainer on 2026-10-06, late evening, in two lines of chat before going to bed, while
-[plan 82](../planning/82-bug-and-verify-cleanup.md) was started. The plan's own section, "The maintainer's calls",
+[plan 82](../../../bonsAI-workshop/planning/82-bug-and-verify-cleanup.md) was started. The plan's own section, "The maintainer's calls",
 has the same list.
 
 1. **Scope: the Bugs list and the Verify list, both.** Everything a session or the rig can do is in. What only the
@@ -2150,7 +2150,7 @@ Made by the maintainer on 2026-10-08, evening, one round at a time against a dra
 (https://claude.ai/artifact/EoRoxs11bVjfyBZ28tkM5P, copy in
 [planning/assets/84-vertical-room.html](../planning/assets/84-vertical-room.html)). It started from a screenshot with
 Decky's title bar boxed in red: "is there any way we can hide this part?". The build plan is
-[plan 84](../planning/84-more-room-for-the-answer.md); its § 3 has the same list.
+[plan 84](../../../bonsAI-workshop/planning/84-more-room-for-the-answer.md); its § 3 has the same list.
 
 1. **Design for the Deck's own screen first** (300 by 454), then check the TV.
 2. **The tab bar moves up into the empty strip above it**: Steam's 14-point top margin plus the 6 points at the top of
@@ -2186,7 +2186,7 @@ arrow as a corner button (X2) and slimmer corner buttons (X3).
 ### D127 — LOCKED 2026-10-09 (raised 2026-10-09) — Plan 87, six features, every bug the rig can reach, and the checks on two machines: the seventeen calls
 
 Made by the maintainer on 2026-10-09, late evening, answering a numbered list in chat before going to bed, while
-[plan 87](../planning/87-features-bugs-and-two-test-machines.md) was written. The plan's own § 2 has the same list
+[plan 87](../../../bonsAI-workshop/planning/87-features-bugs-and-two-test-machines.md) was written. The plan's own § 2 has the same list
 with the three defaults the planning session took where an answer left room.
 
 1. **Scope:** every bug a session or the rig can act on, the one open knowledge-base bug included, the six features
@@ -2228,7 +2228,7 @@ alone (D124 call 2), and the cut choice menu waits for a hand check (D123).
 ### D128 — LOCKED 2026-10-11 (raised 2026-10-11) — Plan 89, the bug list and the Verify list as close to empty as they can get: the fifteen calls
 
 Made by the maintainer on 2026-10-11, early evening, answering a numbered list in chat while
-[plan 89](../planning/89-bugs-to-zero-and-verify-sweep.md) was written. The plan's own § 2 carries the same list.
+[plan 89](../../../bonsAI-workshop/planning/89-bugs-to-zero-and-verify-sweep.md) was written. The plan's own § 2 carries the same list.
 
 1. **Who runs it:** the planning was done on Fable 5.1; a separate Opus 5.5 extra-high chat runs the plan.
 2. **The two reload-under-a-game entries** stay in Bugs, untouched.
@@ -2272,8 +2272,8 @@ Made by the maintainer on 2026-10-11, early evening, answering a numbered list i
 ### D129 — LOCKED 2026-10-12 (raised 2026-10-12) — Plans 90 to 92, the Search tab, your notes, the models box column and the denser tabs: the calls
 
 Made by the maintainer on 2026-10-12, in two rounds of chat answers, while
-[plan 90](../planning/90-search-tab-and-your-notes.md), [plan 91](../planning/91-models-filter-column-and-denser-tabs.md)
-and [plan 92](../planning/92-feature-night-search-notes-models-tabs.md) were written in a cloud session on the GitHub
+[plan 90](../../../bonsAI-workshop/planning/90-search-tab-and-your-notes.md), [plan 91](../../../bonsAI-workshop/planning/91-models-filter-column-and-denser-tabs.md)
+and [plan 92](../../../bonsAI-workshop/planning/92-feature-night-search-notes-models-tabs.md) were written in a cloud session on the GitHub
 copy of `experimental` (`32f48643`), while plan 89's night was still running on the maintainer's PC. Plan 92 § 2
 carries the same list.
 
@@ -2309,7 +2309,7 @@ with seven tabs the bar's side icons shrink one step; the help strip may cover l
 ### D130 — PARTLY LOCKED 2026-10-13 (raised 2026-10-13) — Plan 93, the bug list and the Verify list toward zero: the first calls
 
 Made by the maintainer on 2026-10-13 in the evening, in chat, after reading
-[plan 93](../planning/93-bugs-and-verify-toward-zero.md) as drafted on Fable 5.1 at `c7c85259`. Plan 93 § 2a carries
+[plan 93](../../../bonsAI-workshop/planning/93-bugs-and-verify-toward-zero.md) as drafted on Fable 5.1 at `c7c85259`. Plan 93 § 2a carries
 the same list; its § 15 marks which questions are still open.
 
 1. **When:** the preliminary Deck checks tonight, from the planning chat, before the usage meter runs out (the week

@@ -11,7 +11,7 @@
  *           MainTabUnifiedAskBar.tsx draws in the line of text.
  * Does not: Measure where anything lands — jsdom has no layout engine (design-language.md rule 6).
  *           These read the generated CSS text, as section-4.test.ts and section-6.test.ts do. The
- *           position itself is checked on the Deck with scripts/probe_deck_ask_caret.py.
+ *           position itself is checked on the Deck with workshop:scripts/probe_deck_ask_caret.py.
  */
 import { describe, expect, it } from "vitest";
 import { buildSection5Section } from "./section-5";

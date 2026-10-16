@@ -7,7 +7,7 @@ no longer matches three notes on the words "black mesa" alone.
 Used for: knowledge_base_search.py `_question_without_typed_game_name`, used by `_search_sections`.
 Solves: docs/roadmap-kb.md Bugs, "Black Mesa's electrified-water question names two unrelated
 early-game notes" and the Black Mesa horse half of "Questions with no real answer in the notes
-still get notes about the wrong subject" (docs/test-evidence/plan64-BLACKMESA-WATER.json,
+still get notes about the wrong subject" (workshop:test-evidence/plan64-BLACKMESA-WATER.json,
 plan70-NO-CLOSE-MATCH-HK-02.json).
 Does not: Cover meaning search (no vectors are built here) or the "no close match" line.
 """

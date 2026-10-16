@@ -2,7 +2,7 @@
  * Title: Down from the question box lands on the small Ask button in the strip under it
  *
  * Purpose: Pin plan 84 step 2's route (docs/focus-graph.md, "The ask box's strip"). The maintainer's
- * rule of 2026-10-06 (docs/test-evidence/maintainer-2026-10-06-question-box-down.png) was that Down
+ * rule of 2026-10-06 (workshop:test-evidence/maintainer-2026-10-06-question-box-down.png) was that Down
  * from the question box lands on the row under it and skips nothing; it then went to the mode button,
  * because the big Ask button sat below that row. Since plan 84 the small Ask button is in that row, so
  * Down lands on it (Down then A sends), on Stop while an answer is arriving, and Up from the strip

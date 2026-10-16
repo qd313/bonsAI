@@ -108,7 +108,7 @@ export function buildSection1Section(): string {
           Plan 30 W6 (2026-09-02): everything that used to style Steam's tab strip here — the leaf
           box, the icon shells and sizes, the dim and bright rings, the icon drop-shadows and the
           [data-bonsai-active-tab] marker — was deleted. Steam's header is display:none (the rule
-          above), so none of it could paint, and docs/audit/decky-tab-strip-classes.md had already
+          above), so none of it could paint, and workshop:audit/decky-tab-strip-classes.md had already
           recorded the .Active-keyed ring blocks as dead since 2026-08-04. The strip's job moved to
           TabIndicatorBar + styles/sections/tabIndicatorBar.ts. data-bonsai-active-tab stays on the
           tabs root: nothing styles on it any more, but the on-Deck rows read it as the probe of

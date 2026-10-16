@@ -6,7 +6,7 @@
 #   pnpm test:py       (unittest, 834 tests)
 #   pnpm test:focus    (Track B static focus checks, ratcheted to a baseline)
 #
-# Plan: docs/planning/21-ai-owned-testing-program.md § 3, Track A.
+# Plan: workshop:planning/21-ai-owned-testing-program.md § 3, Track A.
 # Milestone M1 ("CI rejects a pull request because a test failed") is reached
 # when ADVISORY below flips to "false".
 #

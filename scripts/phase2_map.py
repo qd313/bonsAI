@@ -9,7 +9,7 @@ how far one setting is spread, and which files are both big and depended on by
 many others.
 
 Used for: `python scripts/phase2_map.py` writes one JSON file per list plus a
-short summary under docs/audit/refactor-round-two/phase2/. `--only <name>` runs a
+short summary under workshop:audit/refactor-round-two/phase2/. `--only <name>` runs a
 single list. `--out <dir>` writes somewhere else. The summary is what a person or
 a model reads; the JSON files hold the detail behind every number in it.
 

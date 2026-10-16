@@ -132,7 +132,7 @@ async def run_ask_ollama(
     ``question`` itself when a caller does not pass it, so nothing breaks for a test or script
     that predates this. Every progress line and live safety check below that quotes "the
     question" for a person to read uses this, never ``question`` -- caught on the Deck
-    (docs/test-evidence/plan70-QA-FREE-PLAY-01.json) reading the reminder's own opening words back
+    (workshop:test-evidence/plan70-QA-FREE-PLAY-01.json) reading the reminder's own opening words back
     on the "Model's warming up for…" line from the third question in a chat onward.
     """
     display_question = question_for_display.strip() or question

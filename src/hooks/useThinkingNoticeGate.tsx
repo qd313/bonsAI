@@ -25,7 +25,7 @@
  * already owns. This file only decides whether to show the popup before a
  * change lands, and remembers that it has been shown.
  *
- * Two device bugs fixed here (measured 2026-09-17, docs/test-evidence/plan57-REASONING-07.json):
+ * Two device bugs fixed here (measured 2026-09-17, workshop:test-evidence/plan57-REASONING-07.json):
  *
  * (a) The D-pad ring used to be sent back with a plain `focusBackOnto(sourceEl)` -- a direct
  *     reference to the pressed button, kept across the popup's lifetime. Decky remounts the

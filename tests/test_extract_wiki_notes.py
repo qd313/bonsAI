@@ -6,11 +6,11 @@ section finding, table/infobox-to-labelled-line conversion, whole-sentence lengt
 the licence allow-list gate, and the verbatim guarantee itself.
 Used for: scripts/extract_wiki_notes.py.
 Solves: Every wiki note shipped before this phase was an AI rewrite, not the wiki's own
-words -- see docs/archive/58-phase-1-notes-shown-and-wiki-extracts.md Section 1. This is the
+words -- see workshop:archive/58-phase-1-notes-shown-and-wiki-extracts.md Section 1. This is the
 test suite for the reader that replaces that rewrite step.
 Does not: Hit the network -- every fixture here is a short, hand-written page. The five real
 samples for the maintainer are generated separately and written to
-docs/test-evidence/plan58p1-B-samples.md, not exercised as an automated test.
+workshop:test-evidence/plan58p1-B-samples.md, not exercised as an automated test.
 """
 
 from __future__ import annotations
@@ -103,7 +103,7 @@ class SelectSectionHostPreferenceTests(unittest.TestCase):
     matched anything, and the reader fell back to "first section with real words" -- right
     for Hollow Knight wiki, wrong often enough elsewhere that each of the other four wikis
     gets its own ordered preference, seeded from real pages (see
-    docs/test-evidence/plan58p1-B-samples.md)."""
+    workshop:test-evidence/plan58p1-B-samples.md)."""
 
     def test_gta_prefers_mission_over_the_general_list(self):
         text = (

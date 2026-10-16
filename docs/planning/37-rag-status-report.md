@@ -111,10 +111,10 @@ maintainer read this table and took the change on 2026-09-07; it shipped the sam
 
 **Which table is which.** Both tables come from 2026-09-07 runs of the same 61 questions, three runs each,
 with the corrected checks, on the 293-note library of that day. The table above is the run of the
-tactics-first shape that shipped (`docs/archive/research/kb-answer-eval-2026-09-07-ANSWERFIRST.md`). The
+tactics-first shape that shipped (`workshop:archive/research/kb-answer-eval-2026-09-07-ANSWERFIRST.md`). The
 roadmap's knowledge-base file quotes the other run, of the shape it replaced: 76.6 facts kept, 94.4 never
 contradicts, 100 a note attached, 98.6 menu when due, 60.7 clean on all three runs
-(`docs/archive/research/kb-answer-eval-2026-09-07-CLEANBREAK-after.md`). The two are not errors; they are
+(`workshop:archive/research/kb-answer-eval-2026-09-07-CLEANBREAK-after.md`). The two are not errors; they are
 two shapes measured side by side. Neither was re-measured on the 2026-09-26 library.
 
 **Search.** Right note in the top three, on the held-back questions nobody tuned against (177 rows):
@@ -175,7 +175,7 @@ library stale until it re-downloads. **Published 2026-09-27 and checked on the D
   taming, Portal 2 house buying and a Hades boss that does not exist all still attach a note. The "no close
   match" line is meant to warn, but on the Deck on 2026-09-26 it did not show for the horse question (it sat on
   the cut-off), so "three of the four carry the line" is not shown on the device. Evidence
-  `docs/test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`.
+  `workshop:test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json`.
 - ★★ **A symptom-only troubleshooting question reaches no tips.** Held back on 2026-09-06; the tips were
   rewritten and a "none of these fit" floor exists, but the held fix has not been re-measured with it.
 - ★★ **Unrelated questions can still get a game card stapled on.** Accepted 2026-08-27; no Deck re-run since the
@@ -289,7 +289,7 @@ them straight; what remains is coverage, follow-up memory, and the things the te
 
 ## 6. What is blocking, in one list
 
-1. **Wave four now waits on [58 phase 1](../archive/58-phase-1-notes-shown-and-wiki-extracts.md).** Two fixes have
+1. **Wave four now waits on [58 phase 1](../../../bonsAI-workshop/archive/58-phase-1-notes-shown-and-wiki-extracts.md).** Two fixes have
    to land first: showing a note's own words under a reply instead of the model's rewrite of it, and
    reading a wiki's own sentences into notes with no AI rewrite. Both phases are waiting on the
    maintainer's answers before either can start. Started 2026-09-17: the drawings, the blind questions
@@ -304,7 +304,7 @@ them straight; what remains is coverage, follow-up memory, and the things the te
    upward walk and the ladder walk both now pass on the Deck, and the reason the block sometimes
    arrived late is found, fixed on the branch, and confirmed passing on the Deck too; what is left
    is the read-aloud row and the maintainer's publish call on the library. Wave four (phase 2) can
-   start. **Update 2026-09-25:** wave four is now [plan 70](../archive/70-kb-wave-four-and-deck-test-wave.md), with
+   start. **Update 2026-09-25:** wave four is now [plan 70](../../../bonsAI-workshop/archive/70-kb-wave-four-and-deck-test-wave.md), with
    the maintainer's answers locked as D112: three new games (Brotato, Palworld and Skyrim), the
    starting-out notes, the per-game Deck tips, one release the session may publish once its Deck check
    passes, a spoiler safety net that hides the sentences naming the protected thing, and the thumbs-down
@@ -372,10 +372,10 @@ carrying the same stars they carry here.
 - [30-kb-answer-quality-plan.md](30-kb-answer-quality-plan.md) — the answer-quality plan and its checklist
 - [28-phase5-corpus-depth.md](28-phase5-corpus-depth.md), [18-phase4-track3-per-game-compat-tips.md](18-phase4-track3-per-game-compat-tips.md), [17-kb-online-versus-strategy-content.md](17-kb-online-versus-strategy-content.md)
 - [maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md) — D27, D38, D40b, D41, D45–D54, D65–D69
-- [kb-embed-bakeoff-2026-09-06-arms.md](../archive/research/kb-embed-bakeoff-2026-09-06-arms.md) — latest search numbers, on all 266 cards
-- [kb-answer-eval-2026-09-06-before-wave1.md](../archive/research/kb-answer-eval-2026-09-06-before-wave1.md) and [kb-answer-eval-2026-09-06-after-wave1-landed.md](../archive/research/kb-answer-eval-2026-09-06-after-wave1-landed.md) — answer numbers either side of the prompt work
-- [46-kb-wave-one-session.md](../archive/46-kb-wave-one-session.md) — the wave that produced everything dated 6 September, with its progress log
-- [../archive/47-kb-wave-two-session.md](../archive/47-kb-wave-two-session.md) — wave two, landed: the 27 gap-filling notes, the troubleshooting path widened, two bugs fixed, the index guarantee shipped, the "not in my notes" line, and the `2026.09.07` release
+- [kb-embed-bakeoff-2026-09-06-arms.md](../../../bonsAI-workshop/archive/research/kb-embed-bakeoff-2026-09-06-arms.md) — latest search numbers, on all 266 cards
+- [kb-answer-eval-2026-09-06-before-wave1.md](../../../bonsAI-workshop/archive/research/kb-answer-eval-2026-09-06-before-wave1.md) and [kb-answer-eval-2026-09-06-after-wave1-landed.md](../../../bonsAI-workshop/archive/research/kb-answer-eval-2026-09-06-after-wave1-landed.md) — answer numbers either side of the prompt work
+- [46-kb-wave-one-session.md](../../../bonsAI-workshop/archive/46-kb-wave-one-session.md) — the wave that produced everything dated 6 September, with its progress log
+- [../archive/47-kb-wave-two-session.md](../../../bonsAI-workshop/archive/47-kb-wave-two-session.md) — wave two, landed: the 27 gap-filling notes, the troubleshooting path widened, two bugs fixed, the index guarantee shipped, the "not in my notes" line, and the `2026.09.07` release
 - `runs/plan46-*.json` — the device evidence behind the 6 September Deck readings
-- [../archive/34-feature-verification-round.md](../archive/34-feature-verification-round.md), [../archive/35-bugfix-session.md](../archive/35-bugfix-session.md), [36-feature-session.md](../archive/36-feature-session.md) — this week's Deck findings and who owns which files
+- [../archive/34-feature-verification-round.md](../../../bonsAI-workshop/archive/34-feature-verification-round.md), [../archive/35-bugfix-session.md](../../../bonsAI-workshop/archive/35-bugfix-session.md), [36-feature-session.md](../../../bonsAI-workshop/archive/36-feature-session.md) — this week's Deck findings and who owns which files
 - `data/kb/strategy_seed.json`, `tests/fixtures/kb_eval_v2.json`, `tests/fixtures/kb_answer_eval.json` — counted directly

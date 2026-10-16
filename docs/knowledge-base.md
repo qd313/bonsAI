@@ -173,7 +173,7 @@ rules and is discharged in the separately downloaded corpus package (not the plu
 | Zip guard | `scripts/plugin_zip_corpus_guard.py` (via `verify-decky-plugin-zip.sh`) fails release if `corpus.db` / related files are bundled |
 
 Plan (all executable stages done 2026-08-09):
-[15-corpus-licensing-attribution-plan.md](archive/15-corpus-licensing-attribution-plan.md).
+[15-corpus-licensing-attribution-plan.md](../../bonsAI-workshop/archive/15-corpus-licensing-attribution-plan.md).
 **D20** (2026-08-14, supersedes D19b): the published corpus ships as one **CC BY-SA 4.0** work,
 including ShareAlike sources; only GFDL and NonCommercial sources are excluded (they don't mix
 with CC BY-SA). Per-card `source_license` stays authoritative for individual reuse.
@@ -221,7 +221,7 @@ On-Deck: reply credit → **KB-ATTRIB-01**; published corpus file beside DB → 
 | Transparency | Reuse Phase 2 chip labels; Show details bullet **Source: shared troubleshooting tips** |
 | Nomic UI | **One** Ollama-tab soft hint (covers hybrid generally — Strategy + troubleshooting) |
 | Authoring (PC) | **`qwen3.6:27b`** for drafting cards/tips (`ollama pull qwen3.6:27b`) |
-| Embeddings | **`nomic-embed-text`** only — do not swap without full re-bake. Bake-off (2026-07-31): [kb-embed-bakeoff-2026-07-31.md](archive/research/kb-embed-bakeoff-2026-07-31.md) — keep nomic; no FOSS alternative cleared ≥5 pt margin; keyword baseline beat hybrid on seed eval.
+| Embeddings | **`nomic-embed-text`** only — do not swap without full re-bake. Bake-off (2026-07-31): [kb-embed-bakeoff-2026-07-31.md](../../bonsAI-workshop/archive/research/kb-embed-bakeoff-2026-07-31.md) — keep nomic; no FOSS alternative cleared ≥5 pt margin; keyword baseline beat hybrid on seed eval.
 | Public publish | **Phase 6** — not a Phase 3 exit gate |
 | Done when | Code + Dev-tab/seed + smoke QA + labeled eval set (~20–30 queries) |
 
@@ -375,7 +375,7 @@ on device (**KB-SMOKE-01**).
 
 **Prior scope (kept):** optional **sqlite-vss / ANN**; optional **auto-pull `nomic-embed-text`** with explicit consent UX (never silent pull).
 
-**Intent / paraphrase / cross-lingual (locked 2026-07-31):** Goal = best KB hit for the user’s **intended** question (not only exact wording), while exact tokens like `proton` stay a **heavy** signal. Bake-off: [kb-embed-bakeoff-2026-07-31.md](archive/research/kb-embed-bakeoff-2026-07-31.md) — keep **`nomic-embed-text`**; FTS-only re-rank can underperform keyword; do **not** swap embeds to fix intent.
+**Intent / paraphrase / cross-lingual (locked 2026-07-31):** Goal = best KB hit for the user’s **intended** question (not only exact wording), while exact tokens like `proton` stay a **heavy** signal. Bake-off: [kb-embed-bakeoff-2026-07-31.md](../../bonsAI-workshop/archive/research/kb-embed-bakeoff-2026-07-31.md) — keep **`nomic-embed-text`**; FTS-only re-rank can underperform keyword; do **not** swap embeds to fix intent.
 
 | Topic | Lock |
 |-------|------|
@@ -415,8 +415,8 @@ on device (**KB-SMOKE-01**).
 **Not** a thin redefinition of Phase 6 publish — Phase 6 ships the matured 11 first.
 
 The first study of sources that cover many games under one licence is at
-[kb-catalog-sources-2026-09.md](archive/research/kb-catalog-sources-2026-09.md) (2026-09-17), and the
-first step is planned as [58 phase 1](archive/58-phase-1-notes-shown-and-wiki-extracts.md).
+[kb-catalog-sources-2026-09.md](../../bonsAI-workshop/archive/research/kb-catalog-sources-2026-09.md) (2026-09-17), and the
+first step is planned as [58 phase 1](../../bonsAI-workshop/archive/58-phase-1-notes-shown-and-wiki-extracts.md).
 
 ### Transparency retrieval labels
 
@@ -469,9 +469,9 @@ corpus content with no way to reach it fails rather than ships.
 
 ## Retrieval quality remediation (PR1, 2026-08-05)
 
-Plan: [rag-retrieval-quality-remediation-implementation-plan.md](archive/rag-retrieval-quality-remediation-implementation-plan.md).
+Plan: [rag-retrieval-quality-remediation-implementation-plan.md](../../bonsAI-workshop/archive/rag-retrieval-quality-remediation-implementation-plan.md).
 PR1 (Stages 1–5) and **PR2 (Stage 6 + D16) are closed 2026-08-09** — see
-[archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md](archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md).
+[archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md](../../bonsAI-workshop/archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md).
 Equal RRF weights and a loose BM25 floor are locked; holdout could not separate keyword from RRF.
 
 ### What changed
@@ -502,7 +502,7 @@ The builder now embeds in batches of 16 with progress, clears the vector table o
 
 ### Constants (locked PR2, 2026-08-09)
 
-`RRF_K=60`, `RRF_W_FTS=1.0`, `RRF_W_VEC=1.0`, `BM25_RELEVANCE_FLOOR=1.0` in `knowledge_base_service.py`. Holdout top-3 could not separate RRF from keyword on the deepened seed (overlapping CIs); equal weights stay. The floor remains loose: off-topic Asks score ≤ 0.75 and genuine hits score well above 1.0. Report: [kb-retrieval-pr2-bakeoff-2026-08-09.md](archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md).
+`RRF_K=60`, `RRF_W_FTS=1.0`, `RRF_W_VEC=1.0`, `BM25_RELEVANCE_FLOOR=1.0` in `knowledge_base_service.py`. Holdout top-3 could not separate RRF from keyword on the deepened seed (overlapping CIs); equal weights stay. The floor remains loose: off-topic Asks score ≤ 0.75 and genuine hits score well above 1.0. Report: [kb-retrieval-pr2-bakeoff-2026-08-09.md](../../bonsAI-workshop/archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md).
 
 ### One deviation from the plan's formula
 
@@ -562,7 +562,7 @@ hits.
 
 **Effect** on `kb_eval_v2` (98 labeled strategy rows, paired, one query embedding per case):
 top-3 **95.9% → 100.0%**, top-1 unchanged, **zero** regressions. Full measurement:
-[audit/rag-vector-recall-floor-2026-08-18.md](archive/rag-vector-recall-floor-2026-08-18.md).
+[audit/rag-vector-recall-floor-2026-08-18.md](../../bonsAI-workshop/archive/rag-vector-recall-floor-2026-08-18.md).
 On-Deck QA owed: **KB-RECALL-01**.
 
 ## Time budget for a game question (2026-09-07)
@@ -578,7 +578,7 @@ means); it prints pass or over-budget against the first-word number, timed by ha
 **Searching the notes.** In Strategy or Expert mode, where the meaning search runs, this has been
 measured twice on the Deck, both times with Deep Rock Galactic: Survivor running and the same
 three questions: 1078.87, 1094.34 and 1090.17 milliseconds one evening
-(`docs/archive/34-feature-verification-round.md`, backed by
+(`workshop:archive/34-feature-verification-round.md`, backed by
 `runs/round34-drg-q1-open-show-details.json`, `runs/round34-drg-q2-open-show-details.json` and
 `runs/round34-drg-q3-to-details.json`), then 1103.03, 1230.22 and 1193.75 milliseconds the next
 (`runs/plan46-R2-strategy-half.json`). A person feels this as roughly a one-second beat before an
@@ -632,7 +632,7 @@ its verdict once someone times one by hand.
 
 ## Related docs
 
-- [archive/research/rag-sources-research.md](archive/research/rag-sources-research.md) — source research (superseded for runtime by this doc)
+- [archive/research/rag-sources-research.md](../../bonsAI-workshop/archive/research/rag-sources-research.md) — source research (superseded for runtime by this doc)
 - [development.md](development.md) — contributor index
 - [troubleshooting.md](troubleshooting.md) — download, storage, update, removal
 - [roadmap.md](roadmap.md) — Phase 4–8 Planned rows (Phase 7 optional paths), Spoiler confidence chip, KB visual maps

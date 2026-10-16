@@ -5,7 +5,7 @@
  *          tab bar later, or a Main tab rebuilt by a tab switch, is left alone. Tests sit at the
  *          level the Deck check looks at: the ring after an open.
  * Used for: useAskBarInitialRingClaim and askBarRingWatch.
- * Solves: Plan 81, measured on the Deck 2026-10-03 (docs/test-evidence/plan81-P81-TAB-SWITCH-RING-reopen.json):
+ * Solves: Plan 81, measured on the Deck 2026-10-03 (workshop:test-evidence/plan81-P81-TAB-SWITCH-RING-reopen.json):
  *         three fresh close-and-opens, three times the ring sat on the plugin's tab bar (y 48 to 64)
  *         and stayed there. The tab bar is a plugin control, so the one-time claim at mount, which
  *         yields to any owner, left it there.

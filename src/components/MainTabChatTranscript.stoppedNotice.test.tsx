@@ -188,7 +188,7 @@ describe("stopped turn — notice and reply actions restored on the archived tur
 
   /*
    * Roadmap "After Stop or Helpful, Read aloud sits alone above a blank gap" (plan 72 free play,
-   * docs/test-evidence/plan72-Z-FREEPLAY.json finding 9, screenshots/plan72/Z-after-stop.png): after
+   * workshop:test-evidence/plan72-Z-FREEPLAY.json finding 9, screenshots/plan72/Z-after-stop.png): after
    * a stop that kept nothing, the reply is the back end's own "Request cancelled." -- no thumbs, no
    * Retry, by the rule above -- yet the speaker still drew, alone at the right of an empty row, and
    * would have read the words "Request cancelled." aloud. Nothing readable was kept, so there is

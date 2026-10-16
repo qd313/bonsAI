@@ -32,7 +32,7 @@ measured on device.
 ## The space we are designing for
 
 Measured on device 2026-08-16 with
-[scripts/probe_deck_ask_row_width.py](../scripts/probe_deck_ask_row_width.py), Deck output at
+[workshop:scripts/probe_deck_ask_row_width.py](../../bonsAI-workshop/scripts/probe_deck_ask_row_width.py), Deck output at
 1080p (`devicePixelRatio` 1.28, UI scale profile `desktop`, `--bonsai-ui-scale: 1`):
 
 | Surface | CSS px | Notes |
@@ -47,8 +47,8 @@ about.
 **The Deck's own screen (added 2026-10-09, plan 84).** The table above is the 1080p TV. The Deck's
 screen is smaller, and it is the screen the layout is designed for first. Measured on the Deck itself
 in the plan 84 Deck runs (2026-10-08 and 2026-10-09; evidence in
-[plan84-STEP6-DECK.json](test-evidence/plan84-STEP6-DECK.json) and
-[plan84-STEPS2-3-DECK.json](test-evidence/plan84-STEPS2-3-DECK.json)): the screen is 1280 × 800
+[plan84-STEP6-DECK.json](../../bonsAI-workshop/test-evidence/plan84-STEP6-DECK.json) and
+[plan84-STEPS2-3-DECK.json](../../bonsAI-workshop/test-evidence/plan84-STEPS2-3-DECK.json)): the screen is 1280 × 800
 pixels, and the Quick Access page is 854 × 454 points, at **1.5 screen pixels per point**.
 
 | Surface | Points | Notes |
@@ -216,7 +216,7 @@ whose `document` contains none of our markup — so `bonsaiDebugLog` cannot see 
 the QuickAccess target is the only honest instrument.
 
 ```bash
-ssh deck@<DECK_IP> 'python3 -' < scripts/probe_deck_ask_row_width.py
+ssh deck@<DECK_IP> 'python3 -' < workshop:scripts/probe_deck_ask_row_width.py
 ```
 
 Read **V0** for ancestor insets and **V1** for the row-vs-column gap; `--watch` catches geometry that

@@ -482,7 +482,7 @@ async def fetch_ollama_catalog_metadata(self, tags: Any = None, pc_ip: str = "")
     A tag outside the curated catalog (nomic-embed-text, the meaning-search model plan 70's own
     knowledge base installs) has no bundled size to fall back on, and the registry does not
     answer for it either -- so asking there left it with no size at all: "?" in the models list,
-    and undercounted in the header's own total (docs/test-evidence/plan70-ROUTING-MERGE-SIZE-01.json).
+    and undercounted in the header's own total (workshop:test-evidence/plan70-ROUTING-MERGE-SIZE-01.json).
     Ollama's own ``GET /api/tags`` already reports the real size of everything installed.
     """
     ok_gate, gate_out = await _require_local_ollama_on_deck(self)

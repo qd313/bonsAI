@@ -2,7 +2,7 @@
  * Title: Down and Up through an answer whose spoiler covers sit at the top of their sections
  *
  * Purpose: Pin plan 93's bug "Going Down and going Up through an answer stop on different parts"
- * (docs/test-evidence/plan93-M6-UP-SKIPS-PARAGRAPH.json). On the Deck, Down went from the cover at the
+ * (workshop:test-evidence/plan93-M6-UP-SKIPS-PARAGRAPH.json). On the Deck, Down went from the cover at the
  * top of section 5 straight to the cover in section 6, and section 5 itself (141 px, well inside the
  * screen) was never a stop going Down; Up stopped on it. The next section's cover was already on
  * screen, and "a hidden cover on screen and ahead of the ring" came before "the section's own box after

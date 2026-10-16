@@ -219,7 +219,7 @@ async def run_game_ai_request(
     plain sanitized text (``question_for_retrieval``) everywhere a person-facing quote is built --
     the live progress line and the saved "text_after_sanitizer" field -- so neither shows internal
     plumbing a bare follow-up's own reminder wasn't the only way to trigger (caught on the Deck,
-    docs/test-evidence/plan70-L5-FLOW3-DRG.json, right after picking a branch from the suggestion
+    workshop:test-evidence/plan70-L5-FLOW3-DRG.json, right after picking a branch from the suggestion
     menu). Blank when the caller has nothing better than the sanitized text, which is the same as
     not passing it at all.
 
@@ -1048,7 +1048,7 @@ async def run_game_ai_request(
             # after the sanitizer", read back on Show details, the saved turn header and
             # desktop_note_service -- never the text a reply_followup chip header or finish 3's
             # own reminder later added on top for the model's benefit (plan 70 helper K; caught on
-            # the Deck, docs/test-evidence/plan70-QA-FREE-PLAY-01.json and -L5-FLOW3-DRG.json).
+            # the Deck, workshop:test-evidence/plan70-QA-FREE-PLAY-01.json and -L5-FLOW3-DRG.json).
             text_after_sanitizer=effective_display_question,
             ollama_result={
                 **ollama_result,

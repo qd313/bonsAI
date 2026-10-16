@@ -488,7 +488,7 @@ def list_installed_ollama_tag_sizes(base_http: str, timeout_seconds: float = 5.0
     curated catalog (nomic-embed-text, the meaning-search model that plan 70's own knowledge base
     installs) has no entry in the bundled catalog to fall back on, and registry.ollama.ai does not
     answer for it either, so asking there left its size unknown ("?", and undercounted in the
-    header total -- docs/test-evidence/plan70-ROUTING-MERGE-SIZE-01.json). This is the same
+    header total -- workshop:test-evidence/plan70-ROUTING-MERGE-SIZE-01.json). This is the same
     request list_installed_ollama_tags already makes; a sibling function rather than changing
     that one's return shape, since many callers already depend on it returning a plain list of
     names.

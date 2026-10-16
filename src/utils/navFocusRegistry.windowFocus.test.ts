@@ -4,7 +4,7 @@
  *          only when the panel is on screen without it.
  * Used for: navFocusRegistry's `takeNavFocus` and `refocusPanelWindowIfLost`.
  * Solves: Plan 76, measured on the Deck 2026-09-29 with a game running
- *         (docs/test-evidence/plan76-P76-TRAP-SPLIT.json, plan76-P76-TRAP-REPRO.json). When Quick
+ *         (workshop:test-evidence/plan76-P76-TRAP-SPLIT.json, plan76-P76-TRAP-REPRO.json). When Quick
  *         Access reopened without the browser's focus on the panel (`document.hasFocus()` false),
  *         the plugin's own plain `focus()` hops moved the page's focus while Steam's ring stayed
  *         behind, press after press, until the game was closed. Steam's own transfer was the one

@@ -26,7 +26,7 @@ class ModelPolicyTests(unittest.TestCase):
         self.assertEqual(classify_ollama_model_name("internvl3.5:38b"), "open_weight")
 
     def test_classify_gemma4_foss(self):
-        """Sept 2026 licence-list catch-up (docs/planning/41-deck-model-survey.md, D73):
+        """Sept 2026 licence-list catch-up (workshop:planning/41-deck-model-survey.md, D73):
         Gemma 4 moved to Apache 2.0 in April 2026, so only this generation reads as
         open-source -- gemma, gemma2 and gemma3 stay open-weight above."""
         self.assertEqual(classify_ollama_model_name("gemma4:e2b-it-qat"), "foss")

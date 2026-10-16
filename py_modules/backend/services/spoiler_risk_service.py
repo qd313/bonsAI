@@ -129,7 +129,7 @@ def build_spoiler_risk_signals(
         # on that bump in compute_heuristic_spoiler_risk_score. The word list alone missed a
         # real one: "my deck fan gets very loud while sitting idle" got a troubleshooting tip
         # attached (kb_domain == "compat") but names no listed crash/Proton/stutter keyword, so
-        # it still read "med" on the Deck (docs/test-evidence/plan70-L1-8-HELPER-M.json). This
+        # it still read "med" on the Deck (workshop:test-evidence/plan70-L1-8-HELPER-M.json). This
         # turn's own KB routing already decided the question is a troubleshooting one whenever
         # it routed to the shared tip sheet, whatever words it used to get there, so that
         # decision counts here too -- it is a stronger, wording-independent signal, not a

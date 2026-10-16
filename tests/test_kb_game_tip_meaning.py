@@ -1,6 +1,6 @@
 """A game's own tip is found by what the question means, not only by its words (plan 81, lane G).
 
-Found on the Deck by plan 70 (docs/test-evidence/plan70-R4-try5.json, plan72-F3-TIP.json): with
+Found on the Deck by plan 70 (workshop:test-evidence/plan70-R4-try5.json, plan72-F3-TIP.json): with
 Deep Rock Galactic: Survivor running, "the text looks blurry" attached that game's Render Scale
 tip, but "the words on screen look blurry" did not -- the tip search read words only, and the
 second sentence shares only one word ("blurry") with the tip's own text, which scores 2.0 against

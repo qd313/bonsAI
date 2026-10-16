@@ -1,7 +1,7 @@
 /**
  * Title: The back arrow keeps one size, and a long name spills to the right (plan 87 B7)
  * Purpose: Pin the Deck check for B7 at the level it looks at. Measured on the Deck 2026-10-09
- *          (docs/test-evidence/plan87-M1-BACK-BUTTON.json): Decky's back button was 40 points wide with a
+ *          (workshop:test-evidence/plan87-M1-BACK-BUTTON.json): Decky's back button was 40 points wide with a
  *          14-letter chat name and 32 to 33.5 with names of 51 to 60 letters, because the bar is a flex
  *          row and the long name's wide natural size squeezed the arrow. The wanted drawing: the arrow is
  *          one size whatever the name, and a long name uses the empty space on its right (the picture

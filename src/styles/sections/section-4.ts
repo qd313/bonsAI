@@ -33,7 +33,7 @@
  * What changed on 2026-09-17 (plan 60), and why, since three rules below
  * only make sense together:
  *
- * A measurement on the Deck (docs/test-evidence/plan60-measure-before.json)
+ * A measurement on the Deck (workshop:test-evidence/plan60-measure-before.json)
  * found two things nobody had realised.
  *
  * 1. The chips had no room under them at all — the bottom of a chip and
@@ -132,7 +132,7 @@ export function buildSection4Section(): string {
         /*
           Reach the PanelSection by structure, because its name cannot be matched on this build.
 
-          Measured on device 2026-08-16 (scripts/probe_deck_ask_row_width.py): inside the QAM,
+          Measured on device 2026-08-16 (workshop:scripts/probe_deck_ask_row_width.py): inside the QAM,
           \`[class*="PanelSection"]\` matches **0 elements** and \`.decky-qam-scope\` does not exist —
           Steam ships hashed class names here (the PanelSection wrapping our rows is
           \`_3gY0aBuNR8_NPTpXIYfkby\`), so every section-3 rule keyed on those names is inert. Only

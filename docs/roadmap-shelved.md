@@ -14,16 +14,16 @@ Long notes for knowledge-base items are in [roadmap-kb-details.md](roadmap-kb-de
 - ★ `[platform]` **In-IDE preview never gets past its loading screen** — **shelved 2026-09-11.** On the maintainer's
   machine the preview stops on "Loading plugin preview". It takes commands but never answers, and it made no screenshot.
   Not a gate for anything: the Deck is the gate.
-  [Decision D93](audit/maintainer-decisions-locked.md#d93--locked-2026-09-11--the-deck-is-the-gate-the-preview-is-shelved-device-checks-are-queued) · [Plan 51](archive/51-refactor-round-two.md).
+  [Decision D93](audit/maintainer-decisions-locked.md#d93--locked-2026-09-11--the-deck-is-the-gate-the-preview-is-shelved-device-checks-are-queued) · [Plan 51](../../bonsAI-workshop/archive/51-refactor-round-two.md).
   Unshelves when: the preview loads the plugin on the maintainer's machine.
 
-- ★ `[ui]` **Picking a setting from the settings card opens the right Steam settings page but does not scroll to that setting** — **shelved 2026-10-10, a limit of Steam the maintainer accepted.** A on "Enable GPU Crash Report Collection" opened Steam's System page at the top, with the toggle about 320 px below the screen edge (found 2026-10-08 on the Deck, plan 83; evidence `docs/test-evidence/plan83-P83-J1-SETTINGS-CARD.json`). Steam's link and route calls take only a page name; the Decky libraries and the web show no way to open at, or scroll to, one setting, and a read-only probe of Steam's own page found no settings route or deep-link reader (plan 87 B6, 2026-10-09; evidence `docs/test-evidence/plan87-B6-SETTINGS-PROBE.json`); nothing was built (the maintainer's call 9, plan 87). The maintainer's call 2026-10-10 (checks page): fine as long as it opens the right page. The wrong-page bug (A on "Enable Wi-Fi" opens System, not Internet) is separate and stays in the roadmap's Bugs.
+- ★ `[ui]` **Picking a setting from the settings card opens the right Steam settings page but does not scroll to that setting** — **shelved 2026-10-10, a limit of Steam the maintainer accepted.** A on "Enable GPU Crash Report Collection" opened Steam's System page at the top, with the toggle about 320 px below the screen edge (found 2026-10-08 on the Deck, plan 83; evidence `workshop:test-evidence/plan83-P83-J1-SETTINGS-CARD.json`). Steam's link and route calls take only a page name; the Decky libraries and the web show no way to open at, or scroll to, one setting, and a read-only probe of Steam's own page found no settings route or deep-link reader (plan 87 B6, 2026-10-09; evidence `workshop:test-evidence/plan87-B6-SETTINGS-PROBE.json`); nothing was built (the maintainer's call 9, plan 87). The maintainer's call 2026-10-10 (checks page): fine as long as it opens the right page. The wrong-page bug (A on "Enable Wi-Fi" opens System, not Internet) is separate and stays in the roadmap's Bugs.
   Unshelves when: Steam offers a way to open a settings page at one setting.
 
 - ★★ `[ui]` **Glance view: the answer alone, in big text** — **shelved 2026-09-12.** From the popup, the menu would show
   only the answer, large, with the chips, question box and tab bar out of the way. Open, read, close in a couple of
   seconds; B returns to the full panel. The maintainer shelved it: too much UI change, not ready.
-  [Decision D97](audit/maintainer-decisions-locked.md#d97--locked-2026-09-12-raised-2026-09-11--the-frame-features-four-calls-the-tips-go-the-voice-shape-and-the-anti-cheat-rule) · [Mockup and press list](planning/52-frame-features-second-look.md#6-glance-view-the-brief-and-the-mockup) · [Drawing](https://claude.ai/code/artifact/c48fb3e2-38ef-4c91-997c-c515353eec96).
+  [Decision D97](audit/maintainer-decisions-locked.md#d97--locked-2026-09-12-raised-2026-09-11--the-frame-features-four-calls-the-tips-go-the-voice-shape-and-the-anti-cheat-rule) · [Mockup and press list](../../bonsAI-workshop/planning/52-frame-features-second-look.md#6-glance-view-the-brief-and-the-mockup) · [Drawing](https://claude.ai/code/artifact/c48fb3e2-38ef-4c91-997c-c515353eec96).
   Unshelves when: the maintainer says so.
 
 - ★★★ `[KB]` **KB download Cancel, the Deck check** — **shelved 2026-09-19.** The Cancel button stays; the maintainer said
@@ -35,14 +35,14 @@ Long notes for knowledge-base items are in [roadmap-kb-details.md](roadmap-kb-de
 - ★★★ `[voice]` **Trained voices for the bundled characters** — **shelved with the clip route 2026-09-08.** The fallback if
   the copying model is too slow beside a game: a small trained voice file per character, about 60 MB, made once on the
   maintainer's PC and downloaded on demand. The fastest way to read. It also means the plugin hosts its own voice files
-  for the first time. [Decision D74](audit/maintainer-decisions-locked.md#d74--partly-locked-2026-09-05-raised-the-same-day--reading-answers-aloud-five-calls-locked-one-open) · [Memo](planning/42-read-aloud-feasibility.md).
+  for the first time. [Decision D74](audit/maintainer-decisions-locked.md#d74--partly-locked-2026-09-05-raised-the-same-day--reading-answers-aloud-five-calls-locked-one-open) · [Memo](../../bonsAI-workshop/planning/42-read-aloud-feasibility.md).
   Unshelves when: the same gates as "Voices for the bundled characters" are met, and the maintainer agrees the plugin
   may host voice files.
 
 - ★★★ `[voice]` **Voices for the bundled characters** — **shelved 2026-09-08.** Each character would get a voice invented
   once on the maintainer's PC and shipped as a five to ten second clip, read on the device by a small copying model.
   Shelved because a voice is not covered by fair use, every character is voiced by a real actor, and "free" is no defence
-  under the newer AI-voice laws. [Decision D74](audit/maintainer-decisions-locked.md#d74--partly-locked-2026-09-05-raised-the-same-day--reading-answers-aloud-five-calls-locked-one-open) · [Memo](planning/42-read-aloud-feasibility.md).
+  under the newer AI-voice laws. [Decision D74](audit/maintainer-decisions-locked.md#d74--partly-locked-2026-09-05-raised-the-same-day--reading-answers-aloud-five-calls-locked-one-open) · [Memo](../../bonsAI-workshop/planning/42-read-aloud-feasibility.md).
   Unshelves when: the character sweep ("Which bundled characters copy a real person", in Features) is done, a person
   qualified to give one has done a legal check, and the open licence call (D74 call 11) is answered.
 
@@ -50,7 +50,7 @@ Long notes for knowledge-base items are in [roadmap-kb-details.md](roadmap-kb-de
   **Generate voice**, wait minutes once while the device invents a voice. After that the small copying model reads that
   character in it. Needs an optional download of about one gigabyte, with the warning "minutes on a Steam Deck, seconds
   on a stronger machine". No LAN server. Phase 0 is a half-day Deck test of the port.
-  [Decision D74](audit/maintainer-decisions-locked.md#d74--partly-locked-2026-09-05-raised-the-same-day--reading-answers-aloud-five-calls-locked-one-open) · [Memo](planning/42-read-aloud-feasibility.md).
+  [Decision D74](audit/maintainer-decisions-locked.md#d74--partly-locked-2026-09-05-raised-the-same-day--reading-answers-aloud-five-calls-locked-one-open) · [Memo](../../bonsAI-workshop/planning/42-read-aloud-feasibility.md).
   Unshelves when: the same legal gate as the bundled voices is passed.
 
 - ★★★★★ `[platform]` **Global quick-launch macro** — **shelved 2026-09-19.** The maintainer said drop it. It never ran on
@@ -64,38 +64,38 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
 
 - ★ `[focus]` `[watching]` **A Down press left a long answer section 22% visible behind the tab bar, and a Down in the chip
   ladder left it 67% visible behind the Ask bar's icon** — each seen once, 2026-09-30, not reproduced on purpose.
-  Evidence `docs/test-evidence/plan77-QA-FREE-PLAY-01.json`.
+  Evidence `workshop:test-evidence/plan77-QA-FREE-PLAY-01.json`.
   Unshelves when: a new sighting.
 
-- ★ `[focus]` `[watching]` **After a tab switch onto About or Search, Steam puts the ring inside the tab, not on the tab bar** — seen on the Deck's own screen 2026-10-12 (plan 92 second night, blocks B and C), recorded as a quirk, not yet judged a bug. On About the ring started on the Reply language dropdown (one Up reached the bar); on Search the Up presses of P90-SEARCH-B started from "Clear the search" right after the switch. A tab's walk is not affected. Seen again on Main and Permissions after an LB or RB switch (the ring on a chip, and on a toggle); the session owner's call is that this is Steam's normal behaviour for any shoulder switch, not a fault. Evidence `docs/test-evidence/plan92-P92-ABOUT-AFTER.json`, `docs/test-evidence/plan92-P90-SEARCH-B.json`, `docs/test-evidence/plan92-P92-FOLD-SWITCH-try2.json`.
+- ★ `[focus]` `[watching]` **After a tab switch onto About or Search, Steam puts the ring inside the tab, not on the tab bar** — seen on the Deck's own screen 2026-10-12 (plan 92 second night, blocks B and C), recorded as a quirk, not yet judged a bug. On About the ring started on the Reply language dropdown (one Up reached the bar); on Search the Up presses of P90-SEARCH-B started from "Clear the search" right after the switch. A tab's walk is not affected. Seen again on Main and Permissions after an LB or RB switch (the ring on a chip, and on a toggle); the session owner's call is that this is Steam's normal behaviour for any shoulder switch, not a fault. Evidence `workshop:test-evidence/plan92-P92-ABOUT-AFTER.json`, `workshop:test-evidence/plan92-P90-SEARCH-B.json`, `workshop:test-evidence/plan92-P92-FOLD-SWITCH-try2.json`.
   Unshelves when: a new sighting, or the maintainer wants the ring on the bar after every switch.
 
-- ★ `[focus]` `[watching]` **In the AI models box, the first Left on Advanced right after the box opened did nothing** — seen once, 2026-10-12 (plan 92 second night, build `b8d9575f`); every later Left from Advanced worked. Possibly the first press after the box opens is lost. Evidence `docs/test-evidence/plan92-P92-MODELS-BESIDE-try2.json`.
+- ★ `[focus]` `[watching]` **In the AI models box, the first Left on Advanced right after the box opened did nothing** — seen once, 2026-10-12 (plan 92 second night, build `b8d9575f`); every later Left from Advanced worked. Possibly the first press after the box opens is lost. Evidence `workshop:test-evidence/plan92-P92-MODELS-BESIDE-try2.json`.
   Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **After the screenshot picker closes, nothing holds the highlight until the next press** — seen
-  once, 2026-10-01 (plan 78, block 3a). Evidence `docs/test-evidence/plan78-DOC-SWEEP-01.json`.
+  once, 2026-10-01 (plan 78, block 3a). Evidence `workshop:test-evidence/plan78-DOC-SWEEP-01.json`.
   Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **Down does not move the ring off an unrevealed spoiler block** — seen once, 2026-09-04, never
   reproduced. The milder form (each cover took one extra Down) is fixed and passed on the Deck: row P76-WALK-COVERS.
-  Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`.
+  Evidence `workshop:test-evidence/round35-spoiler-block-down-and-up.json`.
   Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **Down from the chat row once skipped the whole answer, after returning from Settings** — seen
-  once, 2026-09-27; not reproduced in six tries. Evidence `docs/test-evidence/plan72-F-ROW.json`, `docs/test-evidence/plan76-S8.json`.
+  once, 2026-09-27; not reproduced in six tries. Evidence `workshop:test-evidence/plan72-F-ROW.json`, `workshop:test-evidence/plan76-S8.json`.
   Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **Down is dead from the last chip in the Show details chip ladder** — seen once, 2026-10-01
-  (plan 78, Deck block 3a). Evidence `docs/test-evidence/plan78-DOC-SWEEP-01.json`.
+  (plan 78, Deck block 3a). Evidence `workshop:test-evidence/plan78-DOC-SWEEP-01.json`.
   Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **In carousel style, Down can land on a chip slid mostly off screen** — one sighting; seven tries
-  since did not reproduce it. Evidence `docs/test-evidence/plan76-S2.json`. [Detail](roadmap-details.md#flow-2b-bugs).
+  since did not reproduce it. Evidence `workshop:test-evidence/plan76-S2.json`. [Detail](roadmap-details.md#flow-2b-bugs).
   Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **LB and RB do nothing while the ring is on Decky's back arrow** — seen once, 2026-10-03 (plan 81, Deck block 6). No evidence file.
-  **2026-10-09 (plan 84 step 6):** the chat's name now shares Decky's row with the arrow. On the Deck's own screen LB on the chat's name switched tabs (it went to About and put the ring on the tab bar). The arrow itself was not re-checked, so this stays on the watch list. Evidence `docs/test-evidence/plan84-STEP6-DECK.json` (row P84-RING-01).
+  **2026-10-09 (plan 84 step 6):** the chat's name now shares Decky's row with the arrow. On the Deck's own screen LB on the chat's name switched tabs (it went to About and put the ring on the tab bar). The arrow itself was not re-checked, so this stays on the watch list. Evidence `workshop:test-evidence/plan84-STEP6-DECK.json` (row P84-RING-01).
   Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **Three more one-off focus sightings from free play, 2026-09-26** — the accent-level one is
@@ -104,11 +104,11 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Unshelves when: a new sighting.
 
 - ★ `[focus]` `[watching]` **With details open, Down from "N earlier" jumps straight to the notes block** — seen once,
-  2026-09-26. Not reproduced: it visited every stop in order. Evidence `docs/test-evidence/plan76-P76-M-NEARLIER-DETAILS.json`.
+  2026-09-26. Not reproduced: it visited every stop in order. Evidence `workshop:test-evidence/plan76-P76-M-NEARLIER-DETAILS.json`.
   Unshelves when: a new sighting.
 
 - ★ `[KB]` `[watching]` **A note titled "Steam_frame (From the shared Deck tips)" came with a Zhukov overclocks question and looks off-topic** — seen once,
-  2026-10-03, block 3b (plan 81). Evidence `docs/test-evidence/plan81-P81-LIFT-6PX-game.json`.
+  2026-10-03, block 3b (plan 81). Evidence `workshop:test-evidence/plan81-P81-LIFT-6PX-game.json`.
   Unshelves when: a new sighting.
 
 - ★ `[KB]` `[watching]` **With a game running, the meaning search once read about a second** — seen once, 1,070 ms on
@@ -116,28 +116,28 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Unshelves when: a new sighting.
 
 - ★ `[layout]` `[watching]` **A thin strip of the answer shows through below the game-context line at the bottom of the Main panel**
-  — seen twice, 2026-09-23 (picture `docs/test-evidence/plan64-BYEYE-01-chat-row.png`); not seen since
+  — seen twice, 2026-09-23 (picture `workshop:test-evidence/plan64-BYEYE-01-chat-row.png`); not seen since
   (`plan72-A8-BOTTOM-STRIP-READING.json`, `plan76-S6.json`).
   Unshelves when: a new sighting.
 
 - ★ `[layout]` `[watching]` **The "What went wrong?" block once ended 14 pixels under the dock** — seen once, 2026-09-27;
-  on 2026-09-28 it ended 13 px above the dock. Evidence `docs/test-evidence/plan72-Z-FREEPLAY.json`, `docs/test-evidence/plan76-S7.json`.
+  on 2026-09-28 it ended 13 px above the dock. Evidence `workshop:test-evidence/plan72-Z-FREEPLAY.json`, `workshop:test-evidence/plan76-S7.json`.
   Unshelves when: a new sighting.
 
 - ★ `[ollama]` `[focus]` `[watching]` **In the AI models Filters panel, Down from "Also try open-weight models" skipped "Any installed model"** —
-  seen once, 2026-10-01 (plan 78, Deck block 3a). Evidence `docs/test-evidence/plan78-P78-ORDER-PRUNE-try2.json`.
+  seen once, 2026-10-01 (plan 78, Deck block 3a). Evidence `workshop:test-evidence/plan78-P78-ORDER-PRUNE-try2.json`.
   Unshelves when: a new sighting.
 
 - ★ `[ollama]` `[watching]` **The saved text try order stops at 16 names** — seen once, 2026-10-03 (plan 81, block 4a): moving a model up in the
   AI models box dropped the 16th name (gemma3:4b) off the end of the saved list. Whether the cap is meant is open; no decision recorded.
-  Evidence `docs/test-evidence/plan81-P81-REMOVE-KEEPS-PC-PLACE-try2.json`.
+  Evidence `workshop:test-evidence/plan81-P81-REMOVE-KEEPS-PC-PLACE-try2.json`.
   Unshelves when: a new sighting.
 
 - ★ `[platform]` `[watching]` **A plugin reload while a game is running can put Steam's Home screen in front of the game** — **shelved as watched 2026-10-16 (D131 call 4).** [Full notes](archive/roadmap-trimmed-2026-10-roadmap.md#plan-93-note-shelved-reload-puts-home-in-front).
   Unshelves when: a new sighting.
 
 - ★ `[reply]` `[watching]` **Strategy choice labels stayed English with the reply language set to Japanese** — seen on both
-  Strategy tries, 2026-10-01 (plan 78, block 3a); the Speed reply was Japanese. Evidence `docs/test-evidence/plan78-LANG-03.json`.
+  Strategy tries, 2026-10-01 (plan 78, block 3a); the Speed reply was Japanese. Evidence `workshop:test-evidence/plan78-LANG-03.json`.
   Unshelves when: a new sighting.
 
 - ★ `[reply]` `[focus]` `[watching]` **Two more sightings, 2026-09-26 (the chip ladder and two wrong answers)** — the chip
@@ -148,20 +148,20 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
 - ★ `[reply]` `[watching]` **While an answer arrives, the start of a sentence that ends up behind a spoiler cover can be read for about a second** — **shelved as watched 2026-10-16 (D131 call 4).** [Full notes](archive/roadmap-trimmed-2026-10-roadmap.md#plan-93-note-shelved-spoiler-sentence-readable).
   Unshelves when: a new sighting.
 
-- ★ `[tabs]` `[watching]` **After a tab change the ring is often on no control, so LB, RB, LT and RT do nothing until a D-pad press** — seen once, 2026-10-10 (plan 87 Deck block 3, build `d96ed0bf`): two RB presses 1.4 s apart gave one tab change. Not reproduced in block 4 (`8608954d`): the ring was on a control after 14 of 14 tab changes, read at 0.5 s and 1.5 s. Evidence `docs/test-evidence/plan87-P87-F4-TAB-ORDER.json`, `plan87-P87-TAB-CHANGE-RING.json`.
+- ★ `[tabs]` `[watching]` **After a tab change the ring is often on no control, so LB, RB, LT and RT do nothing until a D-pad press** — seen once, 2026-10-10 (plan 87 Deck block 3, build `d96ed0bf`): two RB presses 1.4 s apart gave one tab change. Not reproduced in block 4 (`8608954d`): the ring was on a control after 14 of 14 tab changes, read at 0.5 s and 1.5 s. Evidence `workshop:test-evidence/plan87-P87-F4-TAB-ORDER.json`, `plan87-P87-TAB-CHANGE-RING.json`.
   Unshelves when: a new sighting.
 
 - ★★ `[chat]` `[focus]` `[watching]` **A chat opened with RB while a game runs is drawn as history, and Down dies on its question line** —
   seen once, 2026-09-26. Closing and reopening the panel fixes it. Not reproduced since; named in the 0.6.0 release notes.
-  Evidence `docs/test-evidence/plan72-A7-GAME-ii.json`.
+  Evidence `workshop:test-evidence/plan72-A7-GAME-ii.json`.
   Unshelves when: a new sighting.
 
-- ★★ `[chips]` `[ui]` `[watching]` **A chip at the edge of the sliding strip reads one third visible to the walk check** — seen on the Deck 2026-10-07 (plan 82, Deck block 4, build `efd4258b`), with and without a game. The strip cuts the chip's words at its edges, so a person sees a clipped chip. Whether that is the design (a strip that slides) or a clipped label is the maintainer's call (plan 82, question 7). Evidence `docs/test-evidence/plan82-P82-MAIN-WALK-NOGAME.json`, `docs/test-evidence/plan82-P82-MAIN-WALK-GAME.json`, `docs/test-evidence/plan82-P82-MAIN-WALK-NOGAME-chip.png`.
+- ★★ `[chips]` `[ui]` `[watching]` **A chip at the edge of the sliding strip reads one third visible to the walk check** — seen on the Deck 2026-10-07 (plan 82, Deck block 4, build `efd4258b`), with and without a game. The strip cuts the chip's words at its edges, so a person sees a clipped chip. Whether that is the design (a strip that slides) or a clipped label is the maintainer's call (plan 82, question 7). Evidence `workshop:test-evidence/plan82-P82-MAIN-WALK-NOGAME.json`, `workshop:test-evidence/plan82-P82-MAIN-WALK-GAME.json`, `workshop:test-evidence/plan82-P82-MAIN-WALK-NOGAME-chip.png`.
   Unshelves when: the maintainer calls it a clipped label, or a new sighting of a chip cut mid-word.
 
 - ★★ `[focus]` `[watching]` **Walking Down while an answer is still arriving loses the ring** — seen once, 2026-09-27
   (it stuck on the first half-visible answer part, then nothing had focus). Not reproduced in three tries. Evidence
-  `docs/test-evidence/plan72-A5-DOWN-WHILE-ARRIVING.json`, `docs/test-evidence/plan76-S9.json`.
+  `workshop:test-evidence/plan72-A5-DOWN-WHILE-ARRIVING.json`, `workshop:test-evidence/plan76-S9.json`.
   Unshelves when: a new sighting.
 
 - ★★ `[ollama]` `[focus]` `[watching]` **A tap outside the AI models screen started the queued downloads and left the D-pad stuck in the Ollama tab** —
@@ -178,7 +178,7 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
 - ★★★ `[focus]` `[watching]` **The panel can get into a state where pressing Down stops half way and the Ask button is out of reach** —
   first seen 2026-09-05; usually only a full loader restart cleared it. Likely the same family as the reopen-over-a-game
   fix, which passed 6 of 6 (row P76-TRAP-FIX, done 2026-09-29). A long play test with a game was clean, 24 of 24
-  (`docs/test-evidence/plan77-P77-TRAP-LONG.json`). Not proven the same fault; named in the 0.6.0 release notes.
+  (`workshop:test-evidence/plan77-P77-TRAP-LONG.json`). Not proven the same fault; named in the 0.6.0 release notes.
   [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
   Unshelves when: a new sighting.
 
@@ -186,24 +186,24 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Unshelves when: a new sighting.
 
 - ★ `[platform]` `[watching]` **Decky's own settings page shows empty while a game is running** — seen twice, 2026-10-03 (plan 81, Deck block 6): only the status bar and the button hints, no control to focus, and B returned to the game. Not bonsAI's page.
-  Evidence `docs/test-evidence/plan81-P81-RELOAD-LOOK.json`.
+  Evidence `workshop:test-evidence/plan81-P81-RELOAD-LOOK.json`.
   Unshelves when: a new sighting.
 
 - ★ `[platform]` `[watching]` **The Quick Access panel closes itself about four minutes after an answer with a game running** — seen in both runs of 2026-10-03 (plan 81, Deck block 6), with no hands on the Deck; the screensaver page appeared.
-  Evidence `docs/test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`.
+  Evidence `workshop:test-evidence/plan81-P81-FREEZE-AFTER-ANSWER.json`.
   Unshelves when: a new sighting.
 
-- ★ `[focus]` `[watching]` **The first suggestion chip reads 33 to 67 percent visible to the probe while its words churn** — seen once, 2026-10-10 (plan 87 Deck block 6b). Evidence `docs/test-evidence/plan87-P87-SMOKE-FINAL.json`.
-  **Seen again 2026-10-12 (plan 92):** on Main the first Up from the question box lands on a chip the rig reads as only partly visible: 33 percent (`docs/test-evidence/plan92-P92-ICONS-AFTER-try2.json`), 56 and 67 percent (`docs/test-evidence/plan92-QA-FREE-PLAY-01-baseline.json`, `plan92-QA-FREE-PLAY-01-n2.json`; "wording changes every run"). Covered by the Quick Access rail and clipped by the chip carousel, per the first file.
+- ★ `[focus]` `[watching]` **The first suggestion chip reads 33 to 67 percent visible to the probe while its words churn** — seen once, 2026-10-10 (plan 87 Deck block 6b). Evidence `workshop:test-evidence/plan87-P87-SMOKE-FINAL.json`.
+  **Seen again 2026-10-12 (plan 92):** on Main the first Up from the question box lands on a chip the rig reads as only partly visible: 33 percent (`workshop:test-evidence/plan92-P92-ICONS-AFTER-try2.json`), 56 and 67 percent (`workshop:test-evidence/plan92-QA-FREE-PLAY-01-baseline.json`, `plan92-QA-FREE-PLAY-01-n2.json`; "wording changes every run"). Covered by the Quick Access rail and clipped by the chip carousel, per the first file.
   Unshelves when: a new sighting.
 
-- ★ `[focus]` `[watching]` **In the AI models window, B did not close it; only Done did** — seen once, 2026-10-10 (plan 87 Deck block 6b). Evidence `docs/test-evidence/plan87-P87-DECK-RESTORED.json`.
+- ★ `[focus]` `[watching]` **In the AI models window, B did not close it; only Done did** — seen once, 2026-10-10 (plan 87 Deck block 6b). Evidence `workshop:test-evidence/plan87-P87-DECK-RESTORED.json`.
   Unshelves when: a new sighting.
 
-- ★ `[focus]` `[watching]` **A fresh answer shows two "Show details" stops, the answer's own and the slot's** — seen once, 2026-10-10 (plan 87 Deck block 6b). Evidence `docs/test-evidence/plan87-P87-SAVED-WALKS.json`.
+- ★ `[focus]` `[watching]` **A fresh answer shows two "Show details" stops, the answer's own and the slot's** — seen once, 2026-10-10 (plan 87 Deck block 6b). Evidence `workshop:test-evidence/plan87-P87-SAVED-WALKS.json`.
   Unshelves when: a new sighting.
 
 - ★ `[platform]` `[watching]` **After a deploy, opening the plugin with the rig's own call failed three times before it
   worked** — seen once, 2026-10-01 (plan 78, block 3b). A tool note, also in [mcp-setup.md](mcp-setup.md).
-  Evidence `docs/test-evidence/plan78-P78-TALL-SECTION-LOOP-AFTER.json`.
+  Evidence `workshop:test-evidence/plan78-P78-TALL-SECTION-LOOP-AFTER.json`.
   Unshelves when: a new sighting.

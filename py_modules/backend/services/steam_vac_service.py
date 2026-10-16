@@ -237,7 +237,7 @@ def format_vac_report_markdown(
     # A GFM pipe table, not plain bullets: the Deck's answer renderer
     # (MainTabBonsaiAiMarkdownChunk.tsx) is react-markdown with no remark-gfm plugin loaded, so
     # table syntax was never parsed as a table -- it came out as one run-on line of literal pipes
-    # and dashes (docs/test-evidence/plan64-VAC-03-06.json: "the reply has 0 table elements...
+    # and dashes (workshop:test-evidence/plan64-VAC-03-06.json: "the reply has 0 table elements...
     # reads as a run of pipes on the Deck"). A bullet per account is plain CommonMark, which that
     # renderer already draws correctly.
     for pl in rows:

@@ -1,7 +1,7 @@
 /**
  * Title: Down into an answer from the line above lands its first section wholly on screen
  *
- * Purpose: Pin plan 78 helper D, round two, from the Deck (docs/test-evidence/plan78-P78-DOWN-SHORT-SECTION.json,
+ * Purpose: Pin plan 78 helper D, round two, from the Deck (workshop:test-evidence/plan78-P78-DOWN-SHORT-SECTION.json,
  * walk 2): on a Mantis Lords answer whose first section is 180 px with no spoiler cover, Down from the
  * reasoning line (y 249 to 263, panel at 0) put the ring on that section at y 24 to 204 with the panel at
  * 256: its top 64 px above the panel's top at y 88, read as 67% visible. The same section entered from below

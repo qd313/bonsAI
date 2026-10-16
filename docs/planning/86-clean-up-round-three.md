@@ -7,16 +7,16 @@ maintainer. The plan is written so it can wait: on the day it starts, step 0 che
 **Status:** STARTED 2026-10-16 with steps 0 and 1 (one Opus chat). The freshness check found only small changes (§ 5,
 "Freshness check, 2026-10-16"); the maintainer's go-day calls are 13 to 16 in § 4. Progress is in § 12.
 
-**When it starts (the maintainer's call, 2026-10-11):** after [plan 89](89-bugs-to-zero-and-verify-sweep.md) has
-finished, and after [plan 92](92-feature-night-search-notes-models-tabs.md) has built plans 90 and 91. Never alongside
+**When it starts (the maintainer's call, 2026-10-11):** after [plan 89](../../../bonsAI-workshop/planning/89-bugs-to-zero-and-verify-sweep.md) has
+finished, and after [plan 92](../../../bonsAI-workshop/planning/92-feature-night-search-notes-models-tabs.md) has built plans 90 and 91. Never alongside
 another session.
 
 **Written against:** `experimental` at `efecab1` (2026-10-10). Every number below was measured on that commit.
 
 Read first: [CLAUDE.md](../../CLAUDE.md); [AGENTS.md](../../AGENTS.md), the focus-graph section and "Which model does
 which work"; [docs/lessons-learned.md](../lessons-learned.md); the last clean-up's
-[postmortem](../audit/refactor-round-two/postmortem.md) and [ledger](../audit/refactor-round-two/ledger.md); and the
-Haiku trial's results, [plan 83](83-haiku-5-5-trial.md) § 8 and § 10.
+[postmortem](../../../bonsAI-workshop/audit/refactor-round-two/postmortem.md) and [ledger](../../../bonsAI-workshop/audit/refactor-round-two/ledger.md); and the
+Haiku trial's results, [plan 83](../../../bonsAI-workshop/planning/83-haiku-5-5-trial.md) § 8 and § 10.
 
 **One sentence:** cut the repo from 3,638 files and 289 MB to about 1,200 files and 25 MB, remove five features the
 maintainer chose, move the glossary words into the knowledge library, give every feature its own folder, merge the
@@ -352,8 +352,8 @@ The riskiest step, so it comes last. The safe wins land first.
 
 ## 7. Who does what: models, effort, and how many at once
 
-Based on the maintainer's own trials: Sonnet 5.5 in [plan 75](75-sonnet-5-5-trial.md), and Haiku 5.5 in
-[plan 83](83-haiku-5-5-trial.md), which ran 20 helpers at once.
+Based on the maintainer's own trials: Sonnet 5.5 in [plan 75](../../../bonsAI-workshop/planning/75-sonnet-5-5-trial.md), and Haiku 5.5 in
+[plan 83](../../../bonsAI-workshop/planning/83-haiku-5-5-trial.md), which ran 20 helpers at once.
 
 | Work | Model and effort | At once | Why |
 |---|---|---|---|
@@ -423,7 +423,7 @@ size is step 2: reading every file on Haiku costs less than one Sonnet helper on
 
 ## 10. Lessons from the last clean-up, applied
 
-From its [postmortem](../audit/refactor-round-two/postmortem.md):
+From its [postmortem](../../../bonsAI-workshop/audit/refactor-round-two/postmortem.md):
 
 - **Scripts do the mechanical work; models only judge.** Its two cheapest phases did the most deleting.
 - **Every helper gets exact files, never categories.**
@@ -441,7 +441,7 @@ From its [postmortem](../audit/refactor-round-two/postmortem.md):
     `data/pull-model-catalog-overlay.json`, `tests/test_pull_model_catalog_*.py`. Careful:
     `src/hooks/usePullModelCatalogRefresh.ts` also learns which models are installed and their sizes; that part stays.
   - Read aloud: `voice_read_aloud_service.py`, `useReadAloud.ts`, `useReadAloudAutoStop.ts`,
-    `useVoiceAskWithReadAloud.ts` (shared with voice input), the speaker button, `scripts/probe_deck_read_aloud.py`.
+    `useVoiceAskWithReadAloud.ts` (shared with voice input), the speaker button, `workshop:scripts/probe_deck_read_aloud.py`.
     About 13 own files and 3,000 lines with tests; mentioned in about 23 more.
   - UI scale: `src/context/UiScaleContext.tsx`, `src/data/uiScaleProfile.ts`, `useUiScaleProfile.ts`, `uiScalePx.ts`,
     `uiScaleScopeBridge.ts`, the two Settings sections. About 209 call sites in 31 files.
@@ -464,7 +464,7 @@ From its [postmortem](../audit/refactor-round-two/postmortem.md):
   seconds; `npm run test:py` about 21 seconds. All green on `efecab1`.
 - **The size snapshot** behind § 3 came from `git ls-files` on `efecab1`: plugin 519 files (screen side 71,673 lines,
   back end 38,334); tests 568 files (63,744 and 43,593 lines); scripts 100 files (27,172 lines); 380 pictures and
-  recordings (252.5 MB); 1,890 files under `docs/test-evidence/` (248 MB).
+  recordings (252.5 MB); 1,890 files under `workshop:test-evidence/` (248 MB).
 
 ## 12. Progress log
 

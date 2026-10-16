@@ -1,7 +1,7 @@
 /**
  * Title: The corner icons' focus ring shows whole inside the question box
  *
- * Purpose: Pin the plan 72 fix for docs/test-evidence/plan72-P-MIC-RING-handheld.json: the white
+ * Purpose: Pin the plan 72 fix for workshop:test-evidence/plan72-P-MIC-RING-handheld.json: the white
  * focus ring on the Voice input button was cut off on the right and at the bottom, because the
  * question box clips everything outside itself and the button sat 0 px from its right edge (a 2 px
  * nudge pushed it there) and 0 px from its bottom. The paperclip and the mode chip were cut at the

@@ -85,7 +85,7 @@ export type OllamaModelsHubModalProps = {
 /**
  * The tallest the scrolling body may be and still leave the dialog's own title, Done and Cancel
  * on screen. Measured on the Deck's own screen 2026-09-23
- * (docs/test-evidence/plan64-MODELS-LIST-CAP-01-try2.json): the page is 534px tall, Steam's top
+ * (workshop:test-evidence/plan64-MODELS-LIST-CAP-01-try2.json): the page is 534px tall, Steam's top
  * and bottom bars take 40 and 42, the dialog sits 24 below the top bar, and its own padding,
  * title, gaps and 56px footer take 156 -- 262 in all, which leaves 272 for this box. The old cap,
  * 72vh (384px there), pushed Done 46px below the visible edge whenever the long list showed.
@@ -140,7 +140,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
   // licence pick" shortcut), but measured on the Deck that left the ring one press away from
   // changing the licence filter with nothing pressed to put it there, reproducing 3 of 3 tries
   // through "Manage AI models..." and never through "Browse models..." even though both open the
-  // same screen (docs/test-evidence/plan70-RING-ON-FILTER-2c1.json). Both routes now open the
+  // same screen (workshop:test-evidence/plan70-RING-ON-FILTER-2c1.json). Both routes now open the
   // same way, ring on "Advanced ›". Since plan 91 there is no panel: the filters are a column
   // that is always on screen, so nothing is left to open.
   useEffect(() => {
@@ -213,7 +213,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
   /*
    * A typed-name pull closes this screen by itself (PullModelsModal's onPullAccepted), without
    * Done. That close used to drop the licence + Advanced draft: measured on the Deck
-   * (docs/test-evidence/plan64-ROUTING-MERGE-01-top.json), "Allow high-VRAM models in routing"
+   * (workshop:test-evidence/plan64-ROUTING-MERGE-01-top.json), "Allow high-VRAM models in routing"
    * was turned on, the typed Pull closed the screen, and the switch read off again on reopening --
    * the one pull the switch was meant for merged into the try order without it. A pending draft
    * is now saved before that close, the same save Done makes.

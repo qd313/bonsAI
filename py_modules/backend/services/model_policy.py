@@ -132,10 +132,10 @@ def classify_ollama_model_name(name: str) -> ModelSourceClass:
         "phi3",
         "tinyllama",
         "openchat",
-        # Gemma 4 moved to Apache 2.0 in April 2026 (docs/planning/41-deck-model-survey.md);
+        # Gemma 4 moved to Apache 2.0 in April 2026 (workshop:planning/41-deck-model-survey.md);
         # only this generation -- gemma, gemma2 and gemma3 stay open-weight below.
         "gemma4",
-        # Granite 4.2 ships under Apache 2.0 (data/model_bakeoff/roster.json).
+        # Granite 4.2 ships under Apache 2.0 (workshop:data/model_bakeoff/roster.json).
         "granite",
         # gpt-oss is Apache 2.0 at both sizes (ollama.com/library/gpt-oss, openai/gpt-oss-20b card).
         "gpt-oss",
@@ -168,7 +168,7 @@ def classify_ollama_model_name(name: str) -> ModelSourceClass:
         "vicuna",
         "orca-mini",
         # Liquid's LFM models: weights published under the LFM Open License, not an
-        # OSI-approved licence (data/model_bakeoff/roster.json).
+        # OSI-approved licence (workshop:data/model_bakeoff/roster.json).
         "lfm",
         "liquid",
     )

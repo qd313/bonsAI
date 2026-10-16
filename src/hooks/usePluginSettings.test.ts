@@ -281,7 +281,7 @@ describe("usePluginSettings", () => {
   });
 
   /*
-   * Measured on the Deck (docs/test-evidence/plan64-ROUTING-MERGE-01-top.json): a knowledge base
+   * Measured on the Deck (workshop:test-evidence/plan64-ROUTING-MERGE-01-top.json): a knowledge base
    * download finished in the background and the back end saved its new SD-card location; then
    * Done on the AI models screen sent the screen's whole settings copy, which still held the old
    * internal location, and wrote it back over the new one. The tab then offered to download the

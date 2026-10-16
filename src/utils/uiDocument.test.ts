@@ -274,7 +274,7 @@ describe("uiDocument", () => {
   });
 
   /*
-   * Plan 76, measured on the Deck 2026-09-29 (docs/test-evidence/plan76-P76-TRAP-SPLIT.json): with a
+   * Plan 76, measured on the Deck 2026-09-29 (workshop:test-evidence/plan76-P76-TRAP-SPLIT.json): with a
    * game running, Quick Access sometimes reopens without the browser's focus on the panel's own
    * window, `document.hasFocus()` false. Every reopen that read false split Steam's ring from the
    * page's own focus on a later press; every one that read true never did. This helper is the read

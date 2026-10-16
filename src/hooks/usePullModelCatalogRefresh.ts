@@ -89,7 +89,7 @@ export function usePullModelCatalogRefresh(a: UsePullModelCatalogRefreshArgs): P
         // installed outside the curated catalog (typed by hand, or pulled from an old overlay
         // entry that has since been removed) still needs a real size, or the confirm-to-remove
         // box and the header's own total both undercount it as 0 -- "< 0.1 GB" for a 17 GB model,
-        // seen on the Deck (docs/test-evidence/plan64-ROUTING-MERGE-01-top-try2.json). Sequencing
+        // seen on the Deck (workshop:test-evidence/plan64-ROUTING-MERGE-01-top-try2.json). Sequencing
         // these two RPCs (instead of Promise.all) is the cost of asking for the right tags.
         const connRes = await callDeckyWithTimeout<[string, number], ConnectionTestResult>(
           "test_ollama_connection",

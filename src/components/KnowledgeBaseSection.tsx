@@ -192,7 +192,7 @@ const KB_ACTION_ROW_MIN_HEIGHT = 44;
  * A download outlives the component that started it. Closing the storage picker is a Decky modal
  * close, which remounts the tab's content: `downloadBusy`, and the poll it drives, died with the old
  * instance while the download ran on, and the new instance's one mount-time status read came before
- * the download finished. Measured on the Deck (docs/test-evidence/plan64-TWO-TAPS-DOWNLOAD-try2.json):
+ * the download finished. Measured on the Deck (workshop:test-evidence/plan64-TWO-TAPS-DOWNLOAD-try2.json):
  * the section read "Not installed" for 37 s and more after the library was installed and saved, and
  * only a second modal (another remount) brought it back. This marker lives at module scope so a
  * remounted section picks the poll back up; it clears when a poll sees the download end.
@@ -213,7 +213,7 @@ let kbInstallNomicOfferPending = false;
  * The meaning-search model's pull outlives this section for the same reason a download does: the
  * offer's Download closes a Decky modal, which remounts the section. The new copy read "missing"
  * once on mount and never looked again, so the hint stayed on the open tab for over a minute after
- * the model landed (docs/test-evidence/plan70-R5.json). Module scope lets a remounted copy keep
+ * the model landed (workshop:test-evidence/plan70-R5.json). Module scope lets a remounted copy keep
  * polling; cleared when a poll sees the model, or after the window so a failed pull cannot poll
  * forever.
  */

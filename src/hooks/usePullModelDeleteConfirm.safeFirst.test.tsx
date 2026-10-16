@@ -1,7 +1,7 @@
 /**
  * Title: "Remove <model> from the Deck?" opens on the safe choice
  *
- * Purpose: Pin plan 76 lane 2 round 3, bug 1 (docs/test-evidence/plan76-P76-NOMIC-REMOVE-HINT.json)
+ * Purpose: Pin plan 76 lane 2 round 3, bug 1 (workshop:test-evidence/plan76-P76-NOMIC-REMOVE-HINT.json)
  * and plan 93. Steam puts the ring on the first button of a box, and this box had "Remove model" there,
  * so one A press removed an installed model (a download to get back). It then showed three buttons
  * (Not now / Remove model / Cancel); it is now the shared two-button box, drawn and read off the page:

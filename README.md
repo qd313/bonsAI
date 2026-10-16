@@ -40,7 +40,7 @@ bonsAI is free and open source. You start it up yourself on your hardware, no da
 - **No account, no cloud service, nothing collected.**
 - **Every line of code is here to read.**
 
-<!-- This list matches the 0.6.0 security review (docs/audit/security-review-0.6.0.md, 2026-09-28).
+<!-- This list matches the 0.6.0 security review (workshop:audit/security-review-0.6.0.md, 2026-09-28).
      Anything new that reaches the internet must be added here. -->
 **What does reach the internet**, so you can check the claim instead of trusting it:
 

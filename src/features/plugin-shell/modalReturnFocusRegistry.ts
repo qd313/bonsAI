@@ -45,7 +45,7 @@ export type ModalReturnFocusId =
   /**
    * Where AI runs' "Update AI & models" / "Install Ollama" button, whose box is the download
    * notice (plan 74 lane 3). On the Deck the ring went to the Ollama tab bar once that box closed
-   * (docs/test-evidence/plan72-F3-DL.json, ringAfterBoxClosed).
+   * (workshop:test-evidence/plan72-F3-DL.json, ringAfterBoxClosed).
    */
   | "ollama-local-setup"
   /**

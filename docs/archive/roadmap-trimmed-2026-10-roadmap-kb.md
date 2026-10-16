@@ -83,7 +83,7 @@ evening ran the same evening, once the Deck was free.
    pushing each other out. A search right after an answer measured 732 thousandths of a second; with
    the limit raised to two, tried safely on a spare copy of the setting that never touched the
    maintainer's own, it dropped to 24. Measured 2026-09-12. Evidence
-   `docs/test-evidence/plan48-R6-deck-model-eviction.json`.
+   `workshop:test-evidence/plan48-R6-deck-model-eviction.json`.
 5. **Which of those two settings the maintainer's Deck is actually running: answered 2026-09-23.** The two
    starting paths were made to agree (`fae4a53`). Read on the Deck from three places at once — the running
    Ollama process, the auto-start file, and the Ollama tab's own switch — all three now say "keep two
@@ -91,7 +91,7 @@ evening ran the same evening, once the Deck was free.
    every one of four reads across three questions, with no load or unload logged in between. Still open:
    the drift from August to September. **Whether two models cause trouble with a game running: measured
    2026-09-26**, safety check stays unbuilt. [Detail](roadmap-details.md#cost-to-a-running-game-second-sighting).
-   Evidence `docs/test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`.
+   Evidence `workshop:test-evidence/plan64-FOLLOWUP-MEMORY-EVICTION.json`.
 6. **58 phase 1: finished.** [The plan](archive/58-phase-1-notes-shown-and-wiki-extracts.md)
    shows the note's own words under a reply and reads a wiki's own sentences into notes with no AI
    rewrite; it is done and archived. What is still owed on the Deck is in "The note's own words under the
@@ -107,7 +107,7 @@ The five optional August rows were not run, and New Vegas still is not installed
 **A library point release went out 2026-09-07** carrying the corrected Black Mesa water note and nothing else — 293
 notes, 156 tips, 25 games, unchanged. Installed on the Deck and checked: asked about the flooded rooms, the reply now
 says the current is constant, says not to try to time it, and points at the wall switch that cuts the power. The old
-advice to wait for a gap is gone. Evidence `docs/test-evidence/plan48-R5-blackmesa-corrected-note.json`.
+advice to wait for a gap is gone. Evidence `workshop:test-evidence/plan48-R5-blackmesa-corrected-note.json`.
 
 
 ## Calls waiting on you
@@ -166,7 +166,7 @@ ones from this month are D81 to D88.
   boss up front keeps the answer in plain text. **DRG-01b passed on the Deck 2026-09-23:** the boss tactics
   came back in plain text with no cover, as expected. **Still owed:** STRAT-SPOIL-NAME-01, blocked since its
   game cannot be launched. [Detail](roadmap-details.md#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions).
-  **2026-09-30 (plan 77 block 3, row STRAT-SPOIL-NAME-01):** could not run: none of Doom 64, Super Mario 64, Mario Kart 64 or Pikmin 2 is on Recent Games. Evidence `docs/test-evidence/plan77-STRAT-SPOIL-NAME-01.json`.
+  **2026-09-30 (plan 77 block 3, row STRAT-SPOIL-NAME-01):** could not run: none of Doom 64, Super Mario 64, Mario Kart 64 or Pikmin 2 is on Recent Games. Evidence `workshop:test-evidence/plan77-STRAT-SPOIL-NAME-01.json`.
 - ★★ `[KB]` **The note's own words under the reply** — **VERIFY, third run 2026-09-19.** Header, open-scroll
   and live timing all pass; the upward walk lands cleanly on the block's header and the ladder walk holds up
   — the only stop still missing is the chip ladder inside the open block. Why the tip and

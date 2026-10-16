@@ -49,7 +49,7 @@
  * DO NOT REDRAW THE SVG PATH DATA. Every coordinate in every prop branch is
  * the approved design, ported verbatim from the prototype — several props
  * went through multiple review rounds to get there. Source bundle:
- * docs/design/handoffs/ai-character-avatars/ (README.md plus the .dc.html
+ * workshop:design/handoffs/ai-character-avatars/ (README.md plus the .dc.html
  * prototype, turn 5a).
  */
 import React from "react";

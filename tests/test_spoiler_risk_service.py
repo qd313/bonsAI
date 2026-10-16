@@ -128,7 +128,7 @@ class SpoilerRiskServiceTests(unittest.TestCase):
         self.assertEqual(band, "low")
 
     def test_a_troubleshooting_tip_routes_low_even_off_the_word_list(self):
-        """Follow-up measured on the Deck (docs/test-evidence/plan70-L1-8-HELPER-M.json): "my
+        """Follow-up measured on the Deck (workshop:test-evidence/plan70-L1-8-HELPER-M.json): "my
         deck fan gets very loud while sitting idle on the home screen" got a troubleshooting tip
         attached (this turn's own KB routing sent it to the shared tip sheet, kb_domain
         "compat") but names none of the word list's crash/Proton/stutter/black-screen words, so

@@ -5,11 +5,11 @@
  *          does, that LB and RB light only with the ring on the bar, that Steam's own header is
  *          hidden by a rule scoped to our own markup with no build-hashed class in it, and that
  *          nothing of the bar can ever be left drawn over the chip row (plan 84 step 4).
- * Used for: plan 30 W3 (docs/archive/30-collapsing-tab-bar.md § 5); plan 84 step 4, rows
+ * Used for: plan 30 W3 (workshop:archive/30-collapsing-tab-bar.md § 5); plan 84 step 4, rows
  *           P84-TABS-01, P84-TABS-02, the LB/RB half of P84-HINTS-01, and TAB-BAR-GHOST-01.
  *           Where things sit on the 300-point bar is TabIndicatorBar.layout.test.tsx.
  * Solves: The ways this can rot silently — a hiding selector that quietly grows a Steam hash and
- *         stops matching after a client update (docs/audit/decky-tab-strip-classes.md is the prior
+ *         stops matching after a client update (workshop:audit/decky-tab-strip-classes.md is the prior
  *         art for that failure), and the faded ghost of the old drop-down strip, left over the chip
  *         row after touching the screen because its fade could freeze while a game ran.
  * Does not: Measure heights or where the ring lands on the Deck; jsdom has no layout and no gamepad.

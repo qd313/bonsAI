@@ -120,9 +120,9 @@ describe("SettingsTab modal return focus", () => {
 
 /*
  * Roadmap "Settings' "Clear cache..." sits 16 pixels left of the other buttons" (plan 72 free play,
- * docs/test-evidence/plan72-Z-FREEPLAY.json finding 14): on the Deck Clear cache... started at the
+ * workshop:test-evidence/plan72-Z-FREEPLAY.json finding 14): on the Deck Clear cache... started at the
  * column's own left edge while every other Settings button sat inside one of Steam's panel sections,
- * which pads its rows 16 on each side (measured 15.99 by scripts/probe_deck_ask_row_width.py). The
+ * which pads its rows 16 on each side (measured 15.99 by workshop:scripts/probe_deck_ask_row_width.py). The
  * row used to sit outside any section and padded the 16 in by hand. Folded (plan 92 T1) it sits inside
  * the Data section's own panel row like every other control, so Steam's inset applies and the row adds
  * none of its own. jsdom cannot measure where it lands, so this pins what the code does.

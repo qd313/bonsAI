@@ -26,7 +26,7 @@ import type { TurnReasoning } from "../types/bonsaiUi";
  * The model's own thinking is written for itself, in markdown, and a large part of it is our own
  * instructions read back: a "Determine Constraints" step listing every "Must ..." rule, an output
  * format step, and a closing "Status line? Yes." checklist. Measured on the Deck (plan 70 and the
- * maintainer's screenshot docs/test-evidence/plan70-THINKING-CHECKLIST.png), that is what filled
+ * maintainer's screenshot workshop:test-evidence/plan70-THINKING-CHECKLIST.png), that is what filled
  * the live line on every answer. The shapes below are the ones the model really writes; the tests
  * beside this file use its own words.
  */
@@ -48,7 +48,7 @@ const RESTATED_RULE_RE = /^must\b/i;
 /**
  * A setup line: "Mode: Strategy Guide mode (active).", "Voice: Ali G (...)", "Constraint (Content):
  * Must lead with tactics, ..." -- the model listing how it was told to answer (plan 72 Deck check,
- * docs/test-evidence/plan72-F-THINK.json). A line keyed on anything else ("Game:", "Boss:") stays.
+ * workshop:test-evidence/plan72-F-THINK.json). A line keyed on anything else ("Game:", "Boss:") stays.
  */
 const SETUP_LINE_RE = /^(?:mode|voice|persona|character|tone|constraints?)\b[^:\n]{0,40}:/i;
 /** The heading the model puts on top of its own notes. */
@@ -115,7 +115,7 @@ export type LiveStepLine = { text: string; done: boolean };
  * The maintainer's option B, 2026-09-27: the live line shows the model's step titles only. Every
  * line-by-line clean-up before it still let something through on the Deck -- new rule-shaped
  * lines, and a game note quoted word for word, reward included, that the answer itself would put
- * behind a spoiler cover (docs/test-evidence/plan72-F3-THINK.json). A step title is short, is
+ * behind a spoiler cover (workshop:test-evidence/plan72-F3-THINK.json). A step title is short, is
  * written by the model about its own work, and never holds a note.
  *
  * A step heading starts a line with its number and is whole: bold with both pairs of stars

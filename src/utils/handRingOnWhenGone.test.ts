@@ -1,6 +1,6 @@
 /**
  * Title: A control that removes itself hands the ring on
- * Purpose: Pin the fix for plan 70 flow L5.2 (docs/test-evidence/plan70-L5-PERMS-CLEAN-06.json):
+ * Purpose: Pin the fix for plan 70 flow L5.2 (workshop:test-evidence/plan70-L5-PERMS-CLEAN-06.json):
  *          A on the troubleshooting hint's Dismiss removed the hint, and nothing held the ring
  *          afterwards; the next Down placed it on the ban-lookup row. The shared helper is the same
  *          one Helpful uses (buildReplyActionsElement.tsx).

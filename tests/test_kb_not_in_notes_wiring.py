@@ -386,7 +386,7 @@ class RerouteToTheTipSheetWiringTests(unittest.TestCase):
     knowledge_base_service.py), and that value is never revisited even when
     `_reroute_to_game_tip_if_it_fits` later sends the turn to the tip sheet instead -- so a
     turn the tip sheet actually answered still carries `kb_domain == "strategy"` all the way to
-    this notice. Measured on the Deck 2026-09-26 (docs/test-evidence/plan70-R4-try3.json): Deep
+    this notice. Measured on the Deck 2026-09-26 (workshop:test-evidence/plan70-R4-try3.json): Deep
     Rock Galactic: Survivor's own Render Scale tip attached and the reply used it, and the reply
     still ended with "No close match in my notes" underneath it."""
 
@@ -475,7 +475,7 @@ def _resolved_to_black_mesa_with_no_game_running(test_fn):
 
 class GameNamedOnlyInTheQuestionWiringTests(unittest.TestCase):
     """HONESTY-TEXT-GAME-01 (plan 56 lane J), end to end: nothing running, the game named only
-    in the question. See docs/test-evidence/plan55-HONESTY-TEXT-GAME-01.json for the device run
+    in the question. See workshop:test-evidence/plan55-HONESTY-TEXT-GAME-01.json for the device run
     this reproduces.
     """
 

@@ -7,7 +7,7 @@
  *          the stop holding the ring is destroyed with it.
  * Used for: MainTabChatTranscript.tsx's live -> archived restore effect (the useLayoutEffect pair
  *           keyed on `showLiveTurn`) and answerBubbleNavigation.ts's `focusAnswerChunkAtIndex`.
- * Solves: On the Deck (docs/test-evidence/plan64-STREAM-WALK-REC-01.json, try 2), the ring sat on a
+ * Solves: On the Deck (workshop:test-evidence/plan64-STREAM-WALK-REC-01.json, try 2), the ring sat on a
  *         live answer's second section; the answer finished; no element anywhere carried Steam's
  *         ring class afterwards, and the pane jumped to its very end (scrollTop 1333 of 1333)
  *         instead of holding the same section of the now-archived answer in view.
@@ -153,7 +153,7 @@ describe("the ring survives an answer finishing while it is being walked", () =>
   });
 
   /*
-   * The Deck's actual shape (docs/test-evidence/plan64-STREAM-WALK-REC-01-try3.json): while the
+   * The Deck's actual shape (workshop:test-evidence/plan64-STREAM-WALK-REC-01-try3.json): while the
    * answer is written it shows ONE section (the live tail), the ring sits on it, and at the finish
    * the same live bubble re-renders as finished chunks -- three of them -- before the slot reload
    * archives the turn. The first fix waited for the archive edge alone and the ring was already

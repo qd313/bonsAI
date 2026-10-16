@@ -1,7 +1,7 @@
 /**
  * Title: Walking Up under a finished answer visits every row Down visits
  * Purpose: Pin plan 72's "Up under an answer skips whole rows of controls". Measured on the Deck
- *          before the fix (docs/test-evidence/plan72-A4-UP-FAMILY-a.json and -d.json): going Up,
+ *          before the fix (workshop:test-evidence/plan72-A4-UP-FAMILY-a.json and -d.json): going Up,
  *          Show details jumped straight to Read aloud past the "What went wrong?" chips, Read aloud
  *          jumped into the answer past the choice buttons, and Show reasoning jumped to Retry past
  *          the question's own text. Going Down visited all of them.

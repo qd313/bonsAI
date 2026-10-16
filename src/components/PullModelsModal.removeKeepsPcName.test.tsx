@@ -1,7 +1,7 @@
 /**
  * Title: Removing a model through the AI models box asks the screen's PC about it, twice
  *
- * Purpose: Pins the sequence the Deck ran in plan 81 (docs/test-evidence/plan81-P81-REMOVE-KEEPS-PC-PLACE.json).
+ * Purpose: Pins the sequence the Deck ran in plan 81 (workshop:test-evidence/plan81-P81-REMOVE-KEEPS-PC-PLACE.json).
  * The PC address was typed and tested on the Ollama tab, then "Run AI on this Deck" was switched back
  * on, so the address lives only in the screen's own storage. A row's "Remove from Deck" then "Remove
  * model" sends `delete_ollama_model`, and the box refreshes its list right after. Both calls must carry

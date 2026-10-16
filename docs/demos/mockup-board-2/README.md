@@ -79,7 +79,7 @@ descriptions wrap word for word as in the Deck screenshot.
   top bar 40, side menu 48 wide, button bar 40, in the panel's own pixels.
 - **Chips:** the plugin's code on 2026-10-11 (`ContextChipLadder.tsx`, `ChipExpandedBody.tsx`, the
   `section-6.ts` styles).
-- **Other tabs:** the tab components and the plan 87 measurements (`docs/test-evidence/plan87-M4-OTHER-TABS.json`).
+- **Other tabs:** the tab components and the plan 87 measurements (`workshop:test-evidence/plan87-M4-OTHER-TABS.json`).
   State drawn: the AI runs on this Deck, the Developer tab is on, the knowledge base is installed,
   scramble is off.
 - **How close today's drawing is to the Deck** (whole tab, top to bottom): within about 2% for

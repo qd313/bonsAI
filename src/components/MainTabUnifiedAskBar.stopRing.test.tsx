@@ -1,7 +1,7 @@
 /**
  * Title: Stop and the X hand the ring to the question box, never to the microphone
  *
- * Purpose: Pin the plan 72 fix for docs/test-evidence/plan72-A2-STOP-RING-try1..3.json: Stop and
+ * Purpose: Pin the plan 72 fix for workshop:test-evidence/plan72-A2-STOP-RING-try1..3.json: Stop and
  * Voice input are the same corner button, so when an answer was stopped the ring stayed on that one
  * element as it turned back into "Voice input", and the next A turned the microphone on (3 tries of
  * 3 on the Deck). Stop now hands the ring to the question box through Steam's own transfer, the same

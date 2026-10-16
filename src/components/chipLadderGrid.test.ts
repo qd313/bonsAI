@@ -1,7 +1,7 @@
 /**
  * Title: Show details chips: packing into rows, and where each press goes
  * Purpose: Pin the two rules of the chip grid (plan 87 F3) on the numbers the Deck measured on 2026-10-09
- *          (docs/test-evidence/plan87-M3-CHIPS.json): eight chips 143.7, 92.9, 102.9, 120.2, 205.7, 94.6,
+ *          (workshop:test-evidence/plan87-M3-CHIPS.json): eight chips 143.7, 92.9, 102.9, 120.2, 205.7, 94.6,
  *          150 and 102.1 px wide in a 300 px column.
  * Used for: chipLadderGrid.ts.
  * Does not: Render the ladder or walk it with Steam's scroll; ContextChipLadder.gridWalk.test.tsx does.

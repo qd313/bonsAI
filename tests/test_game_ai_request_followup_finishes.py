@@ -252,7 +252,7 @@ class SendPrevQaSwitchWiringTests(_SwitchTestCase):
 
 
 class SavedQuestionNeverLeaksTheReminderTests(_SwitchTestCase):
-    """The other half of the QA regression (docs/test-evidence/plan70-QA-FREE-PLAY-01.json): the
+    """The other half of the QA regression (workshop:test-evidence/plan70-QA-FREE-PLAY-01.json): the
     saved "text_after_sanitizer" field -- Show details and the desktop trace log's source for
     what the person asked -- must also read the person's own words, never finish 3's reminder
     text spliced ahead of it for the model. Runs the real two-turn follow-up through the real
@@ -293,7 +293,7 @@ class BranchPickDisplayQuestionTests(_SwitchTestCase):
     """The same leak, a second way to trigger it: picking a branch from the suggestion menu
     sends the model "[Strategy follow-up] I'm at: …", but the live progress line and Show
     details must show the friendly "I'm at: …" the saved turn header already does -- caught on
-    the Deck, docs/test-evidence/plan70-L5-FLOW3-DRG.json. main.py's accept step already has that
+    the Deck, workshop:test-evidence/plan70-L5-FLOW3-DRG.json. main.py's accept step already has that
     friendly text on hand (the same one it saves) and now hands it down as
     run_game_ai_request's own ``question_for_display`` argument -- a single self-contained turn,
     not a two-turn follow-up, so this calls run_game_ai_request directly rather than through the

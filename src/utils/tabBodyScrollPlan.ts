@@ -5,11 +5,11 @@
  *          that puts the control back in view with room ahead, so Steam's own scroll-on-focus has nothing to do.
  * Used for: useTabBodyFocusScroll (Ollama, Settings, Permissions, Developer and About tabs).
  * Solves: Two rounds of history. Plan 87: Steam alone moved the pane half a screen at some presses (329 px of a
- *         741 px pane going Down; docs/test-evidence/plan87-M4-OTHER-TABS.json), because a control wholly
+ *         741 px pane going Down; workshop:test-evidence/plan87-M4-OTHER-TABS.json), because a control wholly
  *         outside its band (116 px clear at the pane's top, 80 at its bottom) is put in the middle. Plan 87's
  *         answer moved the pane itself, a little at EVERY landing, spreading each gap ahead over the presses
  *         before it, and sent the last control to the pane's very bottom. Plan 89 measured what that felt like
- *         (docs/test-evidence/plan89-M1-TAB-WALK.json): Settings moved at 12 of 16 Down presses and 13 of 14 Up,
+ *         (workshop:test-evidence/plan89-M1-TAB-WALK.json): Settings moved at 12 of 16 Down presses and 13 of 14 Up,
  *         Developer at 15 of 18 and 13 of 16 (up to 216 px), and Left or Right inside the Text size row, which
  *         stays on one line, still scrolled 100.8, 81.2 and 64.1 px, because the spreading looked ahead even
  *         when the ring had not moved down at all.

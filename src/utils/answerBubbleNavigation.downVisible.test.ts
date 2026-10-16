@@ -2,7 +2,7 @@
  * Title: A walk Down an answer with covers lands only on stops that are fully on screen
  *
  * Purpose: Pin plan 77 helper E, bug 1, from two Deck runs of build 4af8e7a1 on 2026-09-29 (plan 76,
- * block 3; docs/test-evidence/plan76-P76-WALK-COVERS-try2.json and plan76-QA-FREE-PLAY-01-try2.json):
+ * block 3; workshop:test-evidence/plan76-P76-WALK-COVERS-try2.json and plan76-QA-FREE-PLAY-01-try2.json):
  * after a Down press that scrolled past cover 1, the ring sat on section 1's box with the top third of
  * it, where the cover is, under the tab header (67% visible; with a game running, also partly under
  * the dock's action row).

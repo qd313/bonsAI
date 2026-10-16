@@ -56,7 +56,7 @@ pnpm run test:preview:tier -- --tier=tier0 --evidence
 
 After each batch:
 
-1. Read `docs/test-evidence/<batch>/<date>-<sha>/batch-summary.json`
+1. Read `workshop:test-evidence/<batch>/<date>-<sha>/batch-summary.json`
 2. Review FAIL rows in [testing.md](../../../../docs/testing.md#failures-and-retries)
 3. Update [testing.md](../../../../docs/testing.md) progress tracker (auto via `--write`)
 4. **Do not proceed** to next tier if core smokes FAIL without triage

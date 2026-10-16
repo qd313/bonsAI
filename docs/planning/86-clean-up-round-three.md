@@ -1,8 +1,11 @@
 # 86 — Clean-up round three: a smaller repo, simpler wiring, a folder per feature
 
 Written 2026-10-10 by the planning session, after a survey of the whole repo and four rounds of questions with the
-maintainer. **Nothing here is built yet.** The plan is written so it can wait: on the day it starts, step 0 checks it
-against the code as it is then (§ 5).
+maintainer. The plan is written so it can wait: on the day it starts, step 0 checks it against the code as it is then
+(§ 5).
+
+**Status:** STARTED 2026-10-16 with steps 0 and 1 (one Opus chat). The freshness check found only small changes (§ 5,
+"Freshness check, 2026-10-16"); the maintainer's go-day calls are 13 to 16 in § 4. Progress is in § 12.
 
 **When it starts (the maintainer's call, 2026-10-11):** after [plan 89](89-bugs-to-zero-and-verify-sweep.md) has
 finished, and after [plan 92](92-feature-night-search-notes-models-tabs.md) has built plans 90 and 91. Never alongside
@@ -97,6 +100,16 @@ the code is to change.
 12. Accepted defaults: the five-star "show who you're playing against" idea moves to the shelved list; the glossary
     move carries today's two words only.
 
+**The go-day calls (2026-10-16, before step 0; [D132](../audit/maintainer-decisions-locked.md)):**
+
+13. **The Steam ban lookup is removed completely** in step 3, as call 2 says. The plan 93 report's answer of the same
+    morning ("hide it for now, the code stays") is replaced by this; the hiding was never built.
+14. **The two Hollow Knight wording swaps are saved for later**, as patch files in the workshop (step 0 item 3).
+15. **The session creates the workshop repo:** private, named `bonsAI-workshop`, under the maintainer's GitHub account,
+    kept in a folder next to this repo.
+16. **Push both repos at the end of steps 0 and 1**, once every check passes. The push guard stays on for the session,
+    so the session hands the maintainer the push commands.
+
 **One change the planning session made after call 5:** the knowledge-library build tools stay in this repo, in their
 own folder, instead of moving to the workshop. They share code with the plugin's back end (the library's layout, and
 how text is prepared for search), so splitting them across two repos would make every library change a two-repo
@@ -137,6 +150,45 @@ change. Their research results and big output files still move.
   - **Update 2026-10-12 (plan 92 bookkeeping):** plan 91's denser tabs have started. The Ollama tab is already folded (plan 92, `5377006b` to `5ea2a26b`) and the About tab is rebuilt (`5d67f9d9`); the Settings tab (and Developer) will change on a second night. Plan 86's Settings-tab steps need a re-check against that layout before it starts.
   - Expected cost of the freshness check after plan 89: about an hour, mostly in step 3's UI-scale brief. The plan is
     not stale.
+
+### Freshness check, 2026-10-16 (step 0 item 1)
+
+Run on `experimental` at `adddc2a7`: 329 commits since `efecab1`, from plans 87 to 93. **Verdict: small changes only;
+carry on.** No new D-pad helper (still the eight in § 11), and no new feature built on a removal.
+
+- **UI scale:** its sizes are now used in 36 files (253 uses), up from 32 (215). The four new files are the Search
+  tab's back line and styles, the notes' styles, and the Text size test. The Settings and Developer tabs are folded
+  (plan 91, built by plan 92), so the UI scale section sits inside a folded section with its longer text in the strip.
+  Step 3's brief starts from that layout and from Text size's one number on the root.
+- **Read aloud:** one new code file mentions it (the chat-slot back-end calls), plus a voice test. Voice input changed
+  under plan 88 (one full read at Stop), in code read aloud shares; step 3's split starts from that.
+- **The ban lookup and its key:** seven new code files name them, all from the folded Developer tab and the local
+  command handlers.
+- **The weekly refresh:** the models box's Refresh button is already gone (`9679d7d7`); the on-open catalog call stays.
+  Step 3 keeps that call and the installed-models part, as planned.
+- **The glossary:** untouched since `efecab1`.
+- **Settings plumbing:** touched by 9 commits; the main screen by 10. Both are re-listed in step 2 anyway.
+- **The numbers in § 3, measured again:**
+
+| | On `efecab1` | On `adddc2a7` |
+|---|---|---|
+| Files in the repo | 3,638 | 4,332 |
+| Size of the files | 289 MB | 358 MB |
+| Test evidence | 1,890 files, 248 MB | 2,263 files, 312 MB |
+| Pictures and recordings | 380, 252.5 MB | 489, 303.6 MB |
+| Screen code / back end (lines, no tests) | 71,673 / 38,334 | 83,012 / 40,603 |
+| Screen tests / back-end tests (lines) | 63,744 / 43,593 | 78,574 / 48,142 |
+| Scripts | 100 files, 27,172 lines | 104 files, 27,292 lines |
+| The saved history on disk | — | 462 MB |
+
+  What this means for § 3's "expected after": the plugin's own code grew about 13,600 lines (mostly the Search tab,
+  notes and the denser tabs), so after the removals expect about 113,000 to 117,000 lines, not 101,000 to 104,000. The
+  repo's size after step 1 is nearer 25 to 35 MB than 20 to 25: the README's pictures alone are 11.6 MB. Step 1 measures
+  it again once the moves are done.
+- **Also found:** this plan's own change of 2026-10-11 (step 0 item 3, the start order) sat unmerged on the readiness
+  chat's branch; it landed first, as `b7748b37`. Besides the 13 old copies, 48 copies from plans 92 and 93 sit on the PC;
+  every commit in them is on `experimental` by title, and the one uncommitted edit (a tidy-up in the Search tab's calls)
+  had already landed the same way.
 
 ## 6. The steps
 
@@ -416,4 +468,6 @@ From its [postmortem](../audit/refactor-round-two/postmortem.md):
 
 ## 12. Progress log
 
-Empty until step 0 runs.
+- **2026-10-16, about 13:00:** readiness check, then the maintainer's go and calls 13 to 16. The 2026-10-11 plan change
+  landed (`b7748b37`). Freshness check done (§ 5): small changes only. The freeze starts now: no other sessions and no
+  new features until this plan says otherwise. Budget at go: 3 % of the five-hour window, 20 % of the week.

@@ -2365,3 +2365,12 @@ the same list; its § 15 marks which questions are still open.
 8. **Up from the answer bubble keeps "Up scrolls first";** the bug closes as designed (answered after a plain re-ask).
 9. **The "(QA)" and "(dev QA)" tags come off the Developer tab's labels** (done the same day).
 10. **The ban lookup is hidden for now, not removed:** the command, the key field and the permission stop showing, the stored key is cleared, the code stays.
+
+### D132 — LOCKED 2026-10-16 (raised 2026-10-16) — Plan 86 go day: the four calls before step 0
+
+Asked by the readiness check on the morning plan 86 started ([plan 86 § 4](../planning/86-clean-up-round-three.md), calls 13 to 16).
+
+1. **The Steam ban lookup is removed completely** in plan 86 step 3, as plan 86's call 2 says. This replaces call 10 of D131 ("hidden for now, the code stays"), which was answered the same morning and never built.
+2. **The two Hollow Knight wording swaps are saved for later** as patch files in the workshop repo, neither landed nor dropped.
+3. **The session creates the workshop repo:** private, `bonsAI-workshop`, under the maintainer's GitHub account, in a folder next to this repo.
+4. **Both repos are pushed at the end of plan 86 steps 0 and 1**, once every check passes. The push guard stays on; the session hands over the push commands.

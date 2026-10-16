@@ -12,7 +12,7 @@
  * these derivations through the render body, and keeps each step's own dependency list next to it.
  *
  * Does not: decide the filters themselves (the filters column and its state stay in the screen) or
- * fetch the catalog (usePullModelCatalog does that). This only reshapes what it is handed.
+ * choose the catalog (the built-in list in data/pullModelCatalog.ts). This only reshapes what it is handed.
  *
  * Caution: Lifted out of PullModelsModal.tsx with the order of its own hooks unchanged, because
  * React only tolerates a fixed hook order. It is called from exactly the position the block used

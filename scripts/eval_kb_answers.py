@@ -91,12 +91,15 @@ from backend.services.ai_character_service import VALID_PRESET_IDS  # noqa: E402
 from backend.services.ollama_prompts import FOLLOWUP_SUBJECT_NOTE_TEMPLATE  # noqa: E402
 from backend.services.ollama_service import estimate_prompt_tokens  # noqa: E402
 
+# Reports are saved in the workshop repo, not in this one (scripts/lib/workshop.py says where it is).
+sys.path.insert(0, str(ROOT / "scripts" / "lib"))
+import workshop  # noqa: E402
+
 DEFAULT_OLLAMA = "http://127.0.0.1:11434"
 DEFAULT_MODEL = "gemma4:e2b-it-qat"  # what the Deck loads (measured 2026-09-01)
 DEFAULT_CORPUS = ROOT / "build" / "knowledge-base"
 DEFAULT_FIXTURE = ROOT / "tests" / "fixtures" / "kb_answer_eval.json"
 DEFAULT_WORK_DIR = ROOT / "build" / "kb-answer-eval" / "work"
-REPORT_DIR = ROOT / "docs" / "archive" / "research"
 JSON_DIR = ROOT / "build" / "kb-answer-eval"
 
 SPOILER_FENCE_RE = re.compile(r"```\s*bonsai-spoiler", re.I)
@@ -1571,6 +1574,14 @@ def main() -> int:
     )
     args = parser.parse_args()
 
+    # Find the workshop before a long run starts, not after it has finished.
+    if args.write_report:
+        try:
+            workshop.research_dir(ROOT)
+        except workshop.WorkshopNotFound as exc:
+            print(str(exc), file=sys.stderr)
+            return 1
+
     try:
         sys.stdout.reconfigure(encoding="utf-8")  # Windows console
     except Exception:
@@ -1819,7 +1830,7 @@ def main() -> int:
             "window_warnings": f"{warned}/{warn_of}",
             "prompt_tokens_mean": prompt_tokens_mean,
         }
-        report_path = REPORT_DIR / f"kb-answer-eval-{stamp}{suffix}.md"
+        report_path = workshop.research_dir(ROOT) / f"kb-answer-eval-{stamp}{suffix}.md"
         write_report(report_path, cases=cases, samples=samples, summary=summary, meta=meta)
         JSON_DIR.mkdir(parents=True, exist_ok=True)
         json_path = JSON_DIR / f"kb-answer-eval-{stamp}{suffix}.json"

@@ -11,12 +11,17 @@ Solves: Two copies of the same lookup (one per language) drifting apart, or a sc
 Does not: Touch the real workshop or the real .env of the repo.
 """
 
+import contextlib
 import importlib.util
+import io
+import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -102,6 +107,57 @@ class WorkshopLookupTests(unittest.TestCase):
         self.assertEqual(workshop.evidence_dir(self.repo, {}), root / "test-evidence")
         self.assertEqual(workshop.walks_dir(self.repo, {}), root / "checks")
         self.assertEqual(workshop.research_dir(self.repo, {}), root / "archive" / "research")
+
+
+def _load_script(name):
+    spec = importlib.util.spec_from_file_location(name, REPO_ROOT / "scripts" / f"{name}.py")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module  # @dataclass resolves annotations through sys.modules
+    try:
+        spec.loader.exec_module(module)
+    except Exception:
+        sys.modules.pop(spec.name, None)
+        raise
+    return module
+
+
+class EvalScriptsNeedTheWorkshopTests(unittest.TestCase):
+    """The two eval scripts save their reports in the workshop, and say so before a long run starts."""
+
+    def setUp(self):
+        sys.path.insert(0, str(REPO_ROOT / "py_modules"))
+        self.addCleanup(sys.path.remove, str(REPO_ROOT / "py_modules"))
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.nowhere = str(Path(self._tmp.name).resolve() / "no-such-workshop")
+
+    def test_answer_eval_stops_at_the_start_when_the_workshop_is_missing(self):
+        mod = _load_script("eval_kb_answers")
+        self.addCleanup(sys.modules.pop, "eval_kb_answers", None)
+        err = io.StringIO()
+        with mock.patch.dict(os.environ, {"BONSAI_WORKSHOP": self.nowhere}),                 mock.patch.object(sys, "argv", ["eval_kb_answers.py"]),                 contextlib.redirect_stderr(err):
+            code = mod.main()
+        self.assertEqual(code, 1)
+        self.assertIn("the workshop repo was not found at", err.getvalue())
+        self.assertIn(self.nowhere, err.getvalue())
+
+    def test_answer_eval_report_goes_to_the_workshop_research_folder(self):
+        mod = _load_script("eval_kb_answers")
+        self.addCleanup(sys.modules.pop, "eval_kb_answers", None)
+        self.assertFalse(hasattr(mod, "REPORT_DIR"), "the old in-repo report folder must be gone")
+        root = Path(self._tmp.name).resolve() / "ws"
+        (root).mkdir()
+        with mock.patch.dict(os.environ, {"BONSAI_WORKSHOP": str(root)}):
+            self.assertEqual(mod.workshop.research_dir(mod.ROOT), root / "archive" / "research")
+
+    def test_bakeoff_stops_before_any_work_when_the_workshop_is_missing(self):
+        mod = _load_script("eval_kb_embed_models")
+        self.addCleanup(sys.modules.pop, "eval_kb_embed_models", None)
+        with mock.patch.dict(os.environ, {"BONSAI_WORKSHOP": self.nowhere}):
+            with self.assertRaises(mod.workshop.WorkshopNotFound):
+                mod.run_bakeoff(
+                    ollama_base="http://127.0.0.1:1", out_dir=Path(self._tmp.name), models=[], write_report=True
+                )
 
 
 class WorkshopNodeTwinTests(unittest.TestCase):

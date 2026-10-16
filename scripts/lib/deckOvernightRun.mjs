@@ -1,11 +1,12 @@
 // The first slice of the overnight test run (plan 70, row 13 / helper N):
 // keep the Deck awake, deploy the newest build, replay every saved walk
-// under workshop:checks/, run the quick check on this PC, and write one plain-words
+// under the workshop's checks/ folder, run the quick check on this PC, and write one plain-words
 // report. See scripts/deck_overnight_run.mjs for the command line wrapper.
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { McpStdioClient } from "./mcpStdioClient.mjs";
+import { walksDir } from "./workshop.mjs";
 
 const REQUIRED_TOOLS = ["deck_holdAwake", "deck_deploy", "deck_replayChecks"];
 
@@ -178,7 +179,7 @@ export function buildReport({ startedAt, finishedAt, mcpConfig, steps, quickChec
   lines.push("");
   lines.push(`## The saved walks (${matched} matched, ${differed} showed differences, ${couldNotRun} could not run)`);
   if (steps.replays.length === 0) {
-    lines.push("No saved walks were found under `checks/`.");
+    lines.push("No saved walks were found in the workshop's `checks/` folder.");
   } else {
     for (const r of steps.replays) lines.push(describeReplayLine(r));
   }
@@ -224,7 +225,7 @@ export async function runOvernightSlice(options) {
   const {
     mcpConfig,
     repoRoot,
-    checksDir = path.join(repoRoot, "checks"),
+    checksDir = walksDir({ repoRoot }),
     holdAwakeMinutes = 120,
     holdAwakeNote = "bonsai overnight test run (plan 70)",
     pythonCommand = "python",

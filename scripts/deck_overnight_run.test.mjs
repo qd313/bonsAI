@@ -311,7 +311,8 @@ test("runOvernightSlice still runs the quick check and writes a full report when
 
 test("--dry-run lists every planned call and starts nothing", async () => {
   const dir = makeTempDir("bonsai-dryrun-");
-  const checksDir = path.join(dir, "checks");
+  const workshop = makeTempDir("bonsai-dryrun-workshop-");
+  const checksDir = path.join(workshop, "checks");
   fs.mkdirSync(checksDir);
   fs.writeFileSync(path.join(checksDir, "walkA.json"), "{}");
   fs.writeFileSync(path.join(checksDir, "walkB.json"), "{}");
@@ -334,7 +335,7 @@ test("--dry-run lists every planned call and starts nothing", async () => {
   const originalLog = console.log;
   console.log = (...args) => logged.push(args.join(" "));
   try {
-    const code = await runCli(["--dry-run"], { repoRoot: dir });
+    const code = await runCli(["--dry-run"], { repoRoot: dir, env: { BONSAI_WORKSHOP: workshop } });
     assert.equal(code, 0);
   } finally {
     console.log = originalLog;
@@ -342,12 +343,41 @@ test("--dry-run lists every planned call and starts nothing", async () => {
 
   const output = logged.join("\n");
   assert.match(output, /Dry run/);
+  assert.ok(output.includes(path.join(workshop, "test-evidence")), "the report is planned for the workshop's test-evidence folder");
   assert.match(output, /walkA/);
   assert.match(output, /walkB/);
   assert.match(output, /deck_holdAwake/);
   assert.match(output, /deck_deploy/);
   assert.match(output, /verify\.py --quick/);
   assert.equal(fs.existsSync(sentinelPath), false, "dry run must never start the configured command");
+});
+
+test("with no workshop folder the run stops with the one plain sentence and starts nothing", async () => {
+  const dir = makeTempDir("bonsai-noworkshop-");
+  const sentinelPath = path.join(dir, "sentinel.txt");
+  fs.writeFileSync(
+    path.join(dir, ".mcp.json"),
+    JSON.stringify({
+      mcpServers: {
+        "decky-plugin-studio": {
+          command: process.execPath,
+          args: ["-e", `require('fs').writeFileSync(${JSON.stringify(sentinelPath)}, 'ran')`],
+          env: {},
+        },
+      },
+    })
+  );
+  const errors = [];
+  const originalError = console.error;
+  console.error = (...args) => errors.push(args.join(" "));
+  try {
+    const code = await runCli([], { repoRoot: dir, env: { BONSAI_WORKSHOP: path.join(dir, "no-such-workshop") } });
+    assert.equal(code, 1);
+  } finally {
+    console.error = originalError;
+  }
+  assert.match(errors.join("\n"), /the workshop repo was not found at .*set BONSAI_WORKSHOP in \.env/);
+  assert.equal(fs.existsSync(sentinelPath), false, "nothing may be started when the workshop is missing");
 });
 
 test("the CLI script itself runs standalone (smoke test via node --check)", () => {

@@ -9,8 +9,9 @@
 // Code does -- reading its command, args and env from this repo's .mcp.json
 // at run time, never a hard-coded copy -- then calls, in order:
 // deck_holdAwake, deck_deploy, and deck_replayChecks once per saved walk
-// under workshop:checks/. Then runs `python scripts/verify.py --quick` on this PC.
-// Writes one report (a .json and a matching .md) under workshop:test-evidence/.
+// under the workshop's checks/ folder. Then runs `python scripts/verify.py --quick` on this PC.
+// Writes one report (a .json and a matching .md) under the workshop's test-evidence/ folder.
+// Where the workshop sits is the BONSAI_WORKSHOP setting (scripts/lib/workshop.mjs).
 //
 // Never touches the real Deck itself in a test: see
 // scripts/deck_overnight_run.test.mjs, which runs this against a fake stand-in
@@ -24,6 +25,7 @@ import {
   writeReport,
   formatTimestampLabel,
 } from "./lib/deckOvernightRun.mjs";
+import { walksDir, evidenceDir, WorkshopNotFoundError } from "./lib/workshop.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -48,12 +50,22 @@ function printDryRun({ mcpConfig, checksDir, reportDir }) {
   console.log(`  6. write one report under ${reportDir}`);
 }
 
-export async function main(argv, { repoRoot = REPO_ROOT } = {}) {
+export async function main(argv, { repoRoot = REPO_ROOT, env = process.env } = {}) {
   const dryRun = argv.includes("--dry-run");
   const mcpJsonPath = path.join(repoRoot, ".mcp.json");
   const mcpConfig = readMcpServerConfig(mcpJsonPath, MCP_SERVER_NAME);
-  const checksDir = path.join(repoRoot, "checks");
-  const reportDir = path.join(repoRoot, "docs", "test-evidence");
+  let checksDir;
+  let reportDir;
+  try {
+    checksDir = walksDir({ repoRoot, env });
+    reportDir = evidenceDir({ repoRoot, env });
+  } catch (err) {
+    if (err instanceof WorkshopNotFoundError) {
+      console.error(err.message);
+      return 1;
+    }
+    throw err;
+  }
 
   if (dryRun) {
     printDryRun({ mcpConfig, checksDir, reportDir });

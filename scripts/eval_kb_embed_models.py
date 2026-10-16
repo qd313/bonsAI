@@ -75,6 +75,12 @@ if str(REPO_ROOT) not in sys.path:
 if str(PY_MODULES) not in sys.path:
     sys.path.insert(0, str(PY_MODULES))
 
+# Reports are saved in the workshop repo, not in this one (scripts/lib/workshop.py says where it is).
+_WORKSHOP_LIB = str(REPO_ROOT / "scripts" / "lib")
+if _WORKSHOP_LIB not in sys.path:
+    sys.path.insert(0, _WORKSHOP_LIB)
+import workshop  # noqa: E402
+
 from backend.services.knowledge_base_service import (  # noqa: E402
     HYBRID_FTS_SHORTLIST_K,
     KnowledgeCard,
@@ -1690,6 +1696,8 @@ def run_bakeoff(
     arms_only: bool = False,
     force_rebuild: bool = False,
 ) -> dict[str, Any]:
+    # Find the workshop before the long run starts, not after it has finished.
+    research_dir = workshop.research_dir(REPO_ROOT)
     db_path = _ensure_seed_db(out_dir, ollama_base=ollama_base, force_rebuild=force_rebuild)
     conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
     conn.row_factory = sqlite3.Row
@@ -1834,9 +1842,7 @@ def run_bakeoff(
     # An arms-only run is a partial. Naming it like the full bake-off leaves a dated file in
     # the research folder that reads as the real thing and is missing the model sweep.
     suffix = "-arms" if arms_only else ""
-    json_path = (
-        REPO_ROOT / "docs" / "archive" / "research" / f"kb-embed-bakeoff-{today}{suffix}.json"
-    )
+    json_path = research_dir / f"kb-embed-bakeoff-{today}{suffix}.json"
 
     corpus_manifest = _read_corpus_manifest(out_dir)
     payload: dict[str, Any] = {
@@ -1855,16 +1861,14 @@ def run_bakeoff(
         "spanish_probe": spanish_probe,
         "winner": winner,
         "recommendation": recommendation,
-        "json_path": str(json_path.relative_to(REPO_ROOT)).replace("\\", "/"),
+        "json_path": "workshop:" + json_path.relative_to(research_dir.parents[1]).as_posix(),
     }
 
     json_path.parent.mkdir(parents=True, exist_ok=True)
     json_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
     if write_report:
-        report_path = (
-            REPO_ROOT / "docs" / "archive" / "research" / f"kb-embed-bakeoff-{today}{suffix}.md"
-        )
+        report_path = research_dir / f"kb-embed-bakeoff-{today}{suffix}.md"
         _write_report(report_path, payload=payload, recommendation=recommendation, winner=winner)
         print(f"Wrote {report_path}", file=sys.stderr)
 
@@ -1987,7 +1991,7 @@ def main() -> int:
     except EmbedError as exc:
         print(f"embed error: {exc}", file=sys.stderr)
         return 1
-    except StaleCorpusUnrebuildableError as exc:
+    except (StaleCorpusUnrebuildableError, workshop.WorkshopNotFound) as exc:
         print(str(exc), file=sys.stderr)
         return 1
     except subprocess.CalledProcessError as exc:

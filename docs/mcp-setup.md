@@ -213,24 +213,22 @@ Edit `claude_desktop_config.json`:
 
 All knowledge files are plain markdown under `packages/bonsai-mcp/knowledge/` and remain readable in git without MCP.
 
-Regenerate architecture JSON after RPC or structure changes (`main.py`, `src/`, `tests/preview-suite/`, `.env.example`):
+The architecture maps (`rpc-map.json`, `hotspots.json`, `import-graph.json`, `test-inventory.json`, `preview-tiers.json`, `env-vars.json`, `py-import-graph.json` under `packages/bonsai-mcp/knowledge/architecture/`) are **not saved in the repo**. The tool server builds them when it starts, and `scripts/ratchet.py` builds the ones it reads (through `scripts/architecture_maps.py`), so each is always current. To build them by hand: `pnpm run mcp:generate` and `python scripts/py_import_graph.py`. The code map is `python scripts/code_map.py`, which writes `docs/code-map.md` (also not saved). The two hand-written `.md` files in that folder are saved as usual.
 
-```bash
-pnpm run mcp:generate
-pnpm run mcp:validate
-```
-
-Commit any changes under `packages/bonsai-mcp/knowledge/architecture/` in the **same** change set. CI workflow `validate-mcp.yml` fails the push/PR when those snapshots are stale.
+One generated file **is** saved: `src/types/rpcMethods.ts`, the list of back-end method names the screen code is held to (a fresh clone needs it to type-check). It changes only when a method is added to or removed from `main.py`. CI workflow `validate-mcp.yml` fails the push/PR when it is stale.
 
 ### Prevent stale CI failures locally
 
 **Git hooks (recommended):** `pnpm run mcp:install-hooks` (also runs via `pnpm install` / `prepare`).  
-- **pre-commit** regenerates and stages `packages/bonsai-mcp/knowledge/architecture/*.json` automatically.  
-- **pre-push** runs `mcp:validate` and blocks the push if snapshots are still stale.
+- **pre-commit** rewrites and stages `src/types/rpcMethods.ts` automatically (the only generated file saved in the repo).  
+- **pre-push** runs `mcp:validate` and blocks the push if `src/types/rpcMethods.ts` is stale.
 
 Manual check:
 
 ```bash
-pnpm run mcp:generate
 pnpm run mcp:validate
 ```
+
+To rewrite the file by hand: `node packages/bonsai-mcp/scripts/generate-architecture.mjs --types-only`.
+
+After `npm run mcp:build`, `npm run smoke --prefix packages/bonsai-mcp` starts the built server with every map deleted and checks the architecture answers have content (and that a failing map builder does not stop the server).

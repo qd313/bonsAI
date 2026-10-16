@@ -97,13 +97,16 @@ thing to do.
 
 ## Generated files
 
-Three files are written from scratch on every commit, so a header typed into them disappears:
+Two files are written from scratch on every commit, so a header typed into them disappears:
 
 | File | Its header lives in |
 |---|---|
 | [`src/pluginVersion.ts`](../src/pluginVersion.ts) | [`scripts/sync-version-from-plugin.mjs`](../scripts/sync-version-from-plugin.mjs) |
 | [`src/types/rpcMethods.ts`](../src/types/rpcMethods.ts) | [`packages/bonsai-mcp/scripts/generate-architecture.mjs`](../packages/bonsai-mcp/scripts/generate-architecture.mjs) |
-| [`docs/code-map.md`](code-map.md) | [`scripts/code_map.py`](../scripts/code_map.py) |
+
+`docs/code-map.md` (one line per file, from these headers) is a generated file too, but it is not saved in
+the repo: `python scripts/code_map.py` writes it when you want it. Its header lives in
+[`scripts/code_map.py`](../scripts/code_map.py).
 
 This is worth knowing before you spend an afternoon on one: the header checker went on reporting
 `pluginVersion.ts` as undescribed however many times somebody described it.

@@ -22,7 +22,7 @@ BONSAI_REPO_ROOT=/path/to/bonsAI node dist/index.js
 | `knowledge/policies/` | Git, deploy, focus, permissions, planning rules |
 | `knowledge/workflows/` | Deck dev loop, tier QA, preview, screenshot ingest |
 | `knowledge/personas/` | Specialist agent system prompts |
-| `knowledge/architecture/` | Generated RPC map, module map, test inventory |
+| `knowledge/architecture/` | Two hand-written maps (`focus-graph-patterns.md`, `platform-contract.md`). The RPC map, module map, test inventory and the rest are JSON files built when the server starts; they are not saved in the repo |
 
 ## Tools
 
@@ -43,12 +43,13 @@ BONSAI_REPO_ROOT=/path/to/bonsAI node dist/index.js
 ## Scripts
 
 ```bash
-npm run generate   # regenerate knowledge/architecture/*.json
-npm run validate   # frontmatter + freshness (same gate as CI validate-mcp)
+npm run generate   # build knowledge/architecture/*.json by hand (the server builds them itself at start-up)
+npm run validate   # frontmatter + src/types/rpcMethods.ts freshness (same gate as CI validate-mcp)
+npm run smoke      # after npm run build: start the server with no maps on disk and check its answers
 ```
 
 From repo root: `pnpm run mcp:generate`, `pnpm run mcp:validate`, `pnpm run mcp:build`.
 
-After changing `main.py` / `src/` / preview suite / `.env.example`, regenerate and commit architecture JSON in the same change set (see [docs/mcp-setup.md](../../docs/mcp-setup.md)).
+The architecture JSON is not saved in the repo, so there is nothing to regenerate or commit after changing `main.py` / `src/`. The one generated file that is saved, `src/types/rpcMethods.ts`, is rewritten by the commit hook (see [docs/mcp-setup.md](../../docs/mcp-setup.md)).
 
 See [docs/mcp-setup.md](../../docs/mcp-setup.md) for IDE configuration.

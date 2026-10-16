@@ -2374,3 +2374,20 @@ Asked by the readiness check on the morning plan 86 started ([plan 86 § 4](../p
 2. **The two Hollow Knight wording swaps are saved for later** as patch files in the workshop repo, neither landed nor dropped.
 3. **The session creates the workshop repo:** private, `bonsAI-workshop`, under the maintainer's GitHub account, in a folder next to this repo.
 4. **Both repos are pushed at the end of plan 86 steps 0 and 1**, once every check passes. The push guard stays on; the session hands over the push commands.
+
+### D133 — OPEN (raised 2026-10-16) — Plan 86 step 2: approve the cut lists and the folder map, and twelve smaller calls
+
+Asked by plan 86 step 2 ([the lists](clean-up-round-three/README.md#step-2-every-file-read-and-the-lists-the-next-steps-work-from)). Calls 1 and 2 are needed before step 3; the rest have a proposed default the session follows unless the maintainer says otherwise, and say which step needs them.
+
+1. **Approve the five cut lists and the glossary move**, including three places the code said something the plan did not expect: the weekly refresh takes the models box's on-open catalog call with it (they are one download; the installed-models and sizes lookup stays); UI scale's box sizes become plain numbers and only letter sizes follow Text size (nothing a player sees changes); `.decky/preview.json` stays (the Deck tool reads it).
+2. **Approve the folder map**: the answer feature as one folder with eight sub-folders; the three chat folders as one `chats` folder; `ask/bar` and `ask/flow`; the AI models box in `models/pull-box`; `folded-tabs` stays; data files go to their feature's folder; `src/shared/` for shared code (`dpad`, `i18n`, `icons`, `text-size`); the back end in 14 packages plus `knowledge`, `notes` and `search`; Python tests stay flat in `tests/`; the knowledge-library scripts in `scripts/kb/`.
+3. **Clear the saved Steam key from the settings file once** (step 3). Default: yes. Ignoring the key on load leaves it on disk until some other setting is saved.
+4. **The "Use local knowledge base" switch also turns the glossary chips off** (step 3). Default: yes.
+5. **The AI models box's header after "Live catalog" goes** (step 3). Default: only "Live sizes" / "Offline sizes".
+6. **Delete `data/pull-model-catalog-overlay.json` from `main`** (step 3). Default: yes; older installs then show "Offline catalog", nothing breaks.
+7. **Retire the outside Deck tool's preview workflow note (`decky-preview.md`) with the preview tool** (step 3). Default: yes.
+8. **A release-notes line for anyone who had picked a UI scale other than Handheld** (they go back to the normal size; step 3). Default: one line.
+9. **Two dead pieces found that are not on the removal list** (no player change either way): the AI characters' pixel-art avatars that no screen draws (about 1,170 lines), and the knowledge-pack manager with no screen (four hook actions and four back-end calls). Default: leave both for a later dead-code entry on the roadmap; plan 86 keeps to its five removals.
+10. **The D-pad merge in step 6b covers ten helpers, not eight**: two near-copies of the eight were written after the plan (`injectChipNav.ts`, `pullModelsRemoveReturn.ts`); about 25 other places that remember one stop stay as they are. Plan 86 § 5 says a ninth helper means asking. Default: ten. Needed before step 6b.
+11. **The rule-checking scripts to retire** (step 7, which already says to ask): about 18 scripts and 4,800 lines are proposed in [scripts-and-tools.md](clean-up-round-three/scripts-and-tools.md); the size ratchet also holds the size ceilings on AGENTS.md, CLAUDE.md, the roadmap and the testing documents, so those ceilings move to another check before it goes. Default: decide at step 7.
+12. **Two small wording finds for the roadmap, not this plan**: the starter set's download size reads "about 4.6 GB" in one place and "about 4.5 GiB" in the box before it; AGENTS.md says Steam's focus transfer is called directly only inside the shared helper, but 17 screen files call it. Default: roadmap and bookkeeper.

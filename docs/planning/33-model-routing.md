@@ -324,6 +324,16 @@ else stays. Log each run below: the fix, the score or Deck result, the cost, and
 | 2026-10-11 | Plan 89 H1, the wake-word study's silence constant (`92ed1d63`) | Landed first time; docs only; one Python test failed once under load and passed on re-run | not recorded | No |
 | 2026-10-11 | Plan 89 H2, the status-check stop (`32f48643`) | Landed first time; it twice ended its turn while its checks ran in the background and needed a one-line nudge to run them in the foreground | not recorded | No (a one-line nudge from the session owner) |
 | 2026-10-12 | Plan 92 cleanup: four tidy-ups (three leftover comments, the ratchet list, the Tier 2 sentence, two docs' sentences) | **Failed**: it ended its turn four times while its own checks ran in the background and committed nothing, even after two messages telling it to run them in the foreground; stopped. Sonnet 5.5 medium then did all four in one go (four commits, every check green) | about 98,000 tokens and 10 minutes wasted | Yes (Sonnet medium took the whole job) |
+| 2026-10-16 | Plan 86 step 2: 93 readers (`cleanup-reader`), 1 to 20 files each, one record of facts per file, 1,498 records | Every record checked mechanically, 162 by hand (about one in ten): 7 wrong, 3 of them in a way that mattered (below); the Sonnet reviewers found about 70 wrong or incomplete in about 640 they checked, mostly in the "what a removal cuts" and "who uses it" fields; purpose, feature and folder held up | about 160,000 tokens a reader (the plan aimed under 100,000); about 40 points of a five-hour window for all 93 | No: the Sonnet reviewers wrote the lists from the code, with the records as the start |
+
+Plan 86 step 2's misses, every one ([the spot-check log](../../../bonsAI-workshop/audit/clean-up-round-three/step-2/reading/spotchecks.md)):
+three files got no record at all (two of them the glossary chip's tests; one extra reader did them); a D-pad test over a
+glossary word marked for deletion although the chips stay (the brief listed the glossary among the removals without
+saying "touch, not delete"); a storage-key file said to be imported by a hook that writes the same keys out again; a test
+name and two comments naming read aloud marked "no removal"; and three citations that do not resolve (a shortened file
+name, `py_modules/backend/main.py` for `main.py`, a line past the end of a file). What the run says about Haiku for this
+job: good at facts it read, weaker at "unused", "written twice" and line ranges, and it runs long on big files and
+repo-wide searches. Hand it reading with a mechanical check behind it, not lists anyone acts on directly.
 
 ### 4e. Screen-work helpers, plan 84 (2026-10-08)
 

@@ -5,7 +5,8 @@ maintainer. The plan is written so it can wait: on the day it starts, step 0 che
 (§ 5).
 
 **Status:** STARTED 2026-10-16 with steps 0 and 1 (one Opus chat). The freshness check found only small changes (§ 5,
-"Freshness check, 2026-10-16"); the maintainer's go-day calls are 13 to 16 in § 4. Progress is in § 12.
+"Freshness check, 2026-10-16"); the maintainer's go-day calls are 13 to 16 in § 4. Step 2 (read every file) finished the
+same day; step 3 waits for the maintainer's yes to the cut lists and the folder map (D133). Progress is in § 12.
 
 **When it starts (the maintainer's call, 2026-10-11):** after [plan 89](../../../bonsAI-workshop/planning/89-bugs-to-zero-and-verify-sweep.md) has
 finished, and after [plan 92](../../../bonsAI-workshop/planning/92-feature-night-search-notes-models-tabs.md) has built plans 90 and 91. Never alongside
@@ -132,8 +133,9 @@ change. Their research results and big output files still move.
 - **Known changes since `efecab1`, from plan 89 (the bug night of 2026-10-11), so step 0 does not have to find them:**
   - **Text size now scales every word on every tab** through one number on the plugin's root (the maintainer's pick,
     option B). Step 3's UI-scale removal must keep that number: a scaled size becomes a plain number **times the text
-    scale**, not a plain number. The sentence in § 2 saying the UI-scale removal closes the "UI scale twice" bug is
-    stale: that bug closes in plan 89.
+    scale**, not a plain number. (**Corrected by step 2:** that holds for letter sizes only. Box sizes were never
+    multiplied by the text scale, so they become plain numbers; see the UI scale cut list.) The sentence in § 2
+    saying the UI-scale removal closes the "UI scale twice" bug is stale: that bug closes in plan 89.
   - **The Settings, Ollama, Permissions, Developer and About tabs scroll differently under the D-pad** (the scroll
     helper and its plan changed; focus work). Step 6b's measurements start from the new behaviour.
   - **The Deck's AI may leave memory sooner while a game runs** (a back-end rule, possibly one new setting), so 6a's
@@ -544,3 +546,29 @@ From its [postmortem](../../../bonsAI-workshop/audit/refactor-round-two/postmort
   stays on, so the maintainer runs the two pushes (both repos). **Next: step 2** (read every file), its own session.
   Before it: raise "Dynamic workflow size" if step 2 runs as a workflow; calibrate the usage guard once with
   `python .claude/hooks/spawn-line.py --calibrate <percent>` late in a five-hour window.
+- **2026-10-16, step 2, read every file** (one Opus 5.5 chat, extra-high, on `b5ce2768`; the maintainer confirmed both
+  pushes and the freeze first). Nothing in the plugin changed. The lists are in
+  [audit/clean-up-round-three](../audit/clean-up-round-three/README.md#step-2-every-file-read-and-the-lists-the-next-steps-work-from):
+  five cut lists, the glossary move, five folder maps (`.md` plus a `.tsv` the move tools read), the scripts and tools
+  verdicts, and the untangling targets.
+  - **How:** a script with no AI wrote the facts for all 1,498 code files; 93 Haiku 5.5 high readers (92 batches of 1 to
+    20 files, plus one for 3 files the first readers skipped) wrote one record per file; the session checked 162 records
+    by hand (about one in ten) and every record mechanically; eight Sonnet 5.5 high reviewers wrote the lists from the
+    code, checking about 640 records and finding about 70 wrong or incomplete. Haiku's misses are logged in plan 33 § 4d.
+  - **The code differed from the plan in three places** (each in D133 call 1): the weekly refresh and the models box's
+    on-open catalog call are one download, so the call goes too (the installed-models and sizes lookup stays); UI
+    scale's box sizes become plain numbers and only letter sizes follow Text size (the § 5 sentence is corrected);
+    `.decky/preview.json` stays, because the Deck tool reads it.
+  - **The folder map:** 916 files move, 503 stay, 74 go with a removal, 5 go to the workshop; checked as one set (every
+    code file once, no two on one path, case-blind). The session renamed the shared D-pad folder to `src/shared/dpad/`
+    (the D-pad pattern check treats any path with "focus" in it as D-pad code) and settled 21 rows between the maps.
+  - **Found for later steps:** about 11 tests and scripts find files by counting folders or by paths built from pieces,
+    so step 4 needs a small "folder-proof" commit first; `scripts/verify-decky-plugin-zip.sh` counts files in the old
+    `services/` folder; the D-pad merge is ten helpers, not eight (two near-copies written since); a new setting is
+    written by hand in about 12 places, not 8; the main screen hands its tabs 218 things (210 after the removals); the
+    size ratchet also holds the documents' size ceilings, so step 7 must move those before retiring it.
+  - **Budget:** the five-hour window went from 12 % to 78 % (the readers about 40 points, the reviewers about 25), the
+    week from 22 % to 31 %. Readers averaged about 160,000 tokens each, over the 100,000 the plan aimed for (big files
+    and repo-wide searches); no reader was stopped for it. The working files (facts, records, checks, the spot-check log)
+    are in `workshop:audit/clean-up-round-three/step-2/`.
+  - **Next:** the maintainer answers D133 (calls 1 and 2 before step 3). Nothing pushed.

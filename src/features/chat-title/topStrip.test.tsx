@@ -53,7 +53,7 @@ function BonsaiRoot({ startTab }: { startTab: string }) {
   const [tab, setTab] = useState(startTab);
   const scopeRef = useRef<HTMLDivElement | null>(null);
   const exitDown = useCallback(() => tabBarExitDownFor(tab), [tab]);
-  const barInStrip = useTopStripTabBar({ tab, tabIds: TABS, selectTab: setTab, exitDown, generation: 0 });
+  const barInStrip = useTopStripTabBar({ tab, tabIds: TABS, selectTab: setTab, exitDown });
   useTabStripBodyOffset(scopeRef);
   return (
     <div

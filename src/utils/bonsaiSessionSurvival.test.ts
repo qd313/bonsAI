@@ -64,8 +64,6 @@ function minimalSnapshot(overrides: Partial<BonsaiSessionSurvivalSnapshot> = {})
       tabResumeMode: "resume",
       namedOllamaHosts: [],
       voiceSttModel: "tiny.en",
-      uiScaleAutoEnabled: true,
-      uiScaleManualProfile: "handheld",
       useLocalKnowledgeBase: false,
       ragHybridRetrievalEnabled: true,
       ragCorpusPath: "",

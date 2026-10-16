@@ -64,7 +64,6 @@ import {
   normalizeModelPolicyTier,
   type ModelPolicyTierId,
 } from "./modelPolicy";
-import { normalizeUiScaleProfileId } from "./uiScaleProfile";
 import {
   DEFAULT_AI_CHARACTER_CUSTOM_TEXT,
   DEFAULT_AI_CHARACTER_PRESET_ID,
@@ -443,9 +442,7 @@ function normalizeModelRoutingOrder(raw: unknown): string[] {
 // deliberately absent — see the functions above and `normalizeSettings` below.
 //
 // A few rows delegate to a named function rather than a kind, because the rule's option list
-// or feature gate lives in that field's own module. `ui_scale_manual_profile` is the important
-// one: `normalizeUiScaleProfileId` also applies the `SHOW_IMMERSIVE_UI_SCALE` gate, which is a
-// deliberate TS-only behavior and the documented exception to TS/Python parity.
+// lives in that field's own module.
 const SIMPLE_FIELDS = {
   // Developer and Desktop logging opt-ins.
   desktop_debug_note_auto_save: boolDefaultFalse,
@@ -489,9 +486,7 @@ const SIMPLE_FIELDS = {
   model_allow_high_vram_fallbacks: boolDefaultFalse,
   // Presentation, defaulting on: only an explicit `false` turns these off.
   strategy_spoiler_masking_enabled: boolDefaultTrue,
-  ui_scale_auto_enabled: boolDefaultTrue,
   strategy_spoiler_auto_reveal_after_consent: boolDefaultFalse,
-  ui_scale_manual_profile: normalizeUiScaleProfileId,
   // Character.
   ai_character_enabled: boolDefaultFalse,
   ai_character_random: boolDefaultTrue,
@@ -560,10 +555,6 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
 
   return {
     ...simple,
-    // 0.6.0 (plan 72): the UI scale section is Developer-tab only, so without it the size is the
-    // default whatever an older settings file saved. TS-only, like SHOW_IMMERSIVE_UI_SCALE: the
-    // back end never reads these two.
-    ...(showDeveloperTab ? {} : { ui_scale_auto_enabled: true, ui_scale_manual_profile: "handheld" as const }),
     // Clamped as a pair — the warning must land below the timeout.
     latency_warning_seconds: latencyTimeout.latency_warning_seconds,
     request_timeout_seconds: latencyTimeout.request_timeout_seconds,

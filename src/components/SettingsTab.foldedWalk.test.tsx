@@ -89,7 +89,7 @@ describe("the folded Settings tab, every section closed", () => {
     it(`Developer tab ${showDeveloperTab ? "on" : "off"}: Down from the tab bar walks the section lines once each, then the Open all button, and holds; Up walks every line back`, () => {
       closeAllSettingsSections();
       const w = walk(DECK_PANE, "centerIfHidden", { showDeveloperTab });
-      const titles = SETTINGS_SECTIONS.filter((s) => showDeveloperTab || s.id !== "uiscale").map((s) => s.title);
+      const titles = SETTINGS_SECTIONS.map((s) => s.title);
       const down = [w.enter(), ...w.walk("down")];
       expect(names(down).map(sectionName)).toEqual([...titles, "Open all"]);
       expect(names(down)[titles.length]).toBe("Open all sections");
@@ -111,9 +111,6 @@ describe("the folded Settings tab, every section closed", () => {
 
 describe("the folded Settings tab, every section open", () => {
   const expectedOrder = [
-    /^UI scale/,
-    "Adjust UI automatically",
-    "Apply UI scale",
     /^Screenshot quality/,
     "Set screenshot quality to Save memory",
     /^Text size/,
@@ -156,7 +153,7 @@ describe("the folded Settings tab, every section open", () => {
         expect(repeats(up), names(up).join(" | ")).toBe(0);
         /* Up from the button: the line of the section the ring came from. */
         expect(up[0]!.name).toMatch(/^Data section/);
-        expect(up[up.length - 1]!.name).toMatch(/^UI scale/);
+        expect(up[up.length - 1]!.name).toMatch(/^Screenshot quality/);
         checkLandings(up, viewport, `${steam} up`);
         w.unmount();
       });
@@ -182,13 +179,12 @@ describe("the folded Settings tab, every section open", () => {
     });
   }
 
-  it("with the Developer tab off the walk is the same without UI scale, and with the character off it skips the picker and the accent row", () => {
+  it("with the character off the walk skips the picker and the accent row", () => {
     openAllSettingsSections();
     const w = walk(DECK_PANE, "nearest", { showDeveloperTab: false, aiCharacterEnabled: false });
     const down = [w.enter(), ...w.walk("down")];
     const got = names(down);
     expect(repeats(down), got.join(" | ")).toBe(0);
-    expect(got.some((n) => /^UI scale/.test(n) || n === "Apply UI scale")).toBe(false);
     expect(got.some((n) => /^Character$|^Accent intensity/.test(n))).toBe(false);
     expect(got.slice(-4)).toEqual([expect.stringMatching(/^Data/), "Show Developer tab", "Clear cache...", "Close all sections"]);
     w.unmount();
@@ -219,7 +215,6 @@ describe("the folded Settings tab, every section open", () => {
     expect(seen.get("Show Developer tab")).toBe(`Show Developer tab${SETTINGS_ROW_HELP.developerTab}`);
     expect(seen.get("Set text size to Small")).toBe(`Text size${SETTINGS_ROW_HELP.textSize}`);
     expect(seen.get("Set screenshot quality to Save memory")).toBe(`Screenshot quality${SETTINGS_ROW_HELP.screenshot}`);
-    expect(seen.get("Adjust UI automatically")).toMatch(/^Adjust UI automatically.*Active: Handheld/);
     expect(seen.get("Clear cache...")).toBe("");
     for (const [name, text] of seen) if (/ section(:|$)/.test(name)) expect(text, name).toBe("");
     w.unmount();
@@ -241,7 +236,7 @@ describe("the floating Open all button on the Settings tab", () => {
     });
     expect(steamRingHolder()).toBe(button);
     act(() => button.click());
-    expect(w.container.querySelectorAll('.bonsai-fold-line[data-open="true"]')).toHaveLength(settingsSectionIds(true).length);
+    expect(w.container.querySelectorAll('.bonsai-fold-line[data-open="true"]')).toHaveLength(settingsSectionIds().length);
     expect(button.textContent).toContain("Close all");
     expect(steamRingHolder()).toBe(button);
     act(() => {

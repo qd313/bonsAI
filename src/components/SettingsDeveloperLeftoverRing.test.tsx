@@ -3,12 +3,12 @@
  *
  * Purpose: Pin roadmap "Focus ring styling is inconsistent". The second Deck walk
  *          (plan81-P81-RING-WALK-SETTINGS-DEV.json) found two controls still without the plugin's
- *          ring: "Apply UI scale" showed the browser's default outline, and "Jump to Steam Input"
- *          showed no outline at all. Both are plain Steam controls with no ring class. The same
- *          holes were found on their neighbours: Reset to automatic, the Developer tab's other
+ *          ring: "Apply UI scale" (gone since plan 86) showed the browser's default outline, and
+ *          "Jump to Steam Input" showed no outline at all. Both are plain Steam controls with no
+ *          ring class. The same holes were found on their neighbours: the Developer tab's other
  *          Steam button rows, the saved-host buttons, Back on Permissions, and the Open-in-Settings
  *          jump buttons. Every one now draws the same 2px white ring.
- * Used for: Apply UI scale, Reset to automatic, the four Developer ButtonItem rows, the saved
+ * Used for: the four Developer ButtonItem rows, the saved
  *          Ollama host buttons, the Permissions Back button.
  * How it works: the real tab with the plugin's real stylesheet inside `.bonsai-scope`. Steam's
  *          `gpfocus` class is put on the control (and, for a Steam button row, on the row around it
@@ -24,8 +24,7 @@ import { AboutTab } from "./AboutTab";
 import { DeveloperTab } from "./DeveloperTab";
 import { OllamaSavedHostsRows } from "./OllamaSavedHostsRows";
 import { PermissionsTab } from "./PermissionsTab";
-import { SettingsTab } from "./SettingsTab";
-import { developerProps, outlines, settingsProps } from "./ringTestProps";
+import { developerProps, outlines } from "./ringTestProps";
 import { buildBonsaiScopeStylesheet } from "../styles/bonsaiScopeStylesheet";
 import { setAllSections } from "../features/folded-tabs/foldedTabsStore";
 import { DEVELOPER_FOLD_TAB, DEVELOPER_SECTIONS } from "../features/folded-tabs/developerTabFolds";
@@ -84,21 +83,6 @@ describe("the last Steam buttons on the four tabs draw the white ring", () => {
     document.head.appendChild(sheet);
   });
   afterAll(() => sheet.remove());
-
-  it("Apply UI scale and Reset to automatic show the ring when Steam marks them", () => {
-    const props = { ...settingsProps(), showDeveloperTab: true, uiScaleAutoEnabled: false, uiScaleManualProfile: "handheld" as const };
-    const { container } = render(
-      <div className="bonsai-scope">
-        <SettingsTab {...props} />
-      </div>,
-    );
-    for (const re of [/^Apply UI scale$/, /^Reset to automatic$/]) {
-      const button = byText(container, re);
-      const [ring] = outlines([button], button);
-      expect(isWhiteRing(ring!), `${re}: ${ring}`).toBe(true);
-      expect(outlines([button], null)[0], `${re}: no ring when not focused`).toBe("");
-    }
-  });
 
   it("each Developer Steam button row shows one ring, whether Steam marks the row or the button", () => {
     const { container } = render(

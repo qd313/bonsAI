@@ -42,15 +42,13 @@ export type UseTopStripTabBarArgs = {
   selectTab: (id: string) => void;
   /** Down from the bar into the tab showing. */
   exitDown: () => boolean;
-  /** bonsAI's UI-size generation: an Apply rebuilds the tabs, and the height lock re-measures. */
-  generation: number;
 };
 
 /**
  * In: the tab bar's data. Out: true while the bar is drawn in Steam's strip (by the title view), so the
  * caller draws it in bonsAI's box only when this is false.
  */
-export function useTopStripTabBar({ tab, tabIds, selectTab, exitDown, generation }: UseTopStripTabBarArgs): boolean {
+export function useTopStripTabBar({ tab, tabIds, selectTab, exitDown }: UseTopStripTabBarArgs): boolean {
   const owner = useRef({}).current;
   /* Layout effects, so the title view knows the tab before the first paint (it hides Decky's arrow off Main). */
   useLayoutEffect(() => setChatTitleTab(tab), [tab]);
@@ -58,6 +56,6 @@ export function useTopStripTabBar({ tab, tabIds, selectTab, exitDown, generation
   useLayoutEffect(() => () => clearTabBar(owner), [owner]);
   /* bonsAI's box is drawn now: if the title view came first, Decky's bar can be reshaped at last. */
   useLayoutEffect(() => syncDeckyHeaderShape(tab), []); // eslint-disable-line react-hooks/exhaustive-deps -- once, on mounting
-  useEffect(() => notifyDeckyHeaderChanged(), [generation]);
+  useEffect(() => notifyDeckyHeaderChanged(), []); // eslint-disable-line react-hooks/exhaustive-deps -- once, on mounting
   return useTopStripActive();
 }

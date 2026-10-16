@@ -53,7 +53,7 @@
  * "clear everything" actions moved to features/plugin-shell/useSessionResetActions.tsx; the
  * post-remount session restore moved to
  * features/plugin-shell/useSessionRestoreAfterRemount.ts; the chat-slot activity refs moved to
- * features/plugin-shell/useChatSlotActivityState.ts; the accent/UI-scale scope style moved to
+ * features/plugin-shell/useChatSlotActivityState.ts; the accent and Text size scope style moved to
  * features/plugin-shell/useBonsaiScopeStyle.ts; voice input plus its Ask glue moved to
  * features/voice/useVoiceAskWithReadAloud.ts; the two Developer-tab actions moved to
  * features/plugin-shell/useDeveloperToolActions.ts; the slow-warning timer and the unified-input
@@ -66,7 +66,7 @@
  *
  * How it works:
  * 1. Load every hook Content depends on: settings, the one-time disclaimer
- *    and local-AI warning pop-ups, kids-lock, UI scale, chat slots, intent
+ *    and local-AI warning pop-ups, kids-lock, chat slots, intent
  *    packs, voice input, and, centrally, useBonsaiAskOrchestration for the
  *    whole Ask flow.
  * 2. Track the handful of pieces of state that belong to Content itself
@@ -101,11 +101,11 @@
  *   render and produce an update loop.
  */
 import React, { useCallback, useState, useMemo, useEffect, useLayoutEffect, useRef } from "react";
-import { definePlugin, toaster, useQuickAccessVisible } from "@decky/api";
+import { definePlugin, useQuickAccessVisible } from "@decky/api";
 import { Tabs } from "@decky/ui";
 
 import { buildInitialSessionSnapshot } from "./features/plugin-shell/initialSessionSnapshot";
-import { DEFAULT_LATENCY_WARNING_SECONDS, type BonsaiSettings } from "./data/bonsaiSettingsSchema";
+import { DEFAULT_LATENCY_WARNING_SECONDS } from "./data/bonsaiSettingsSchema";
 import { setFrozenTestChips } from "./data/presets";
 import { BonsaiPluginShell } from "./components/BonsaiPluginShell";
 import { BonsaiDebugOverlay } from "./components/BonsaiDebugOverlay";
@@ -136,13 +136,9 @@ import { usePermissionsTabPayload } from "./features/plugin-shell/tabs/usePermis
 import { useSettingsTabPayload } from "./features/plugin-shell/tabs/useSettingsTabPayload";
 import { useOllamaTabPayload } from "./features/plugin-shell/tabs/useOllamaTabPayload";
 import { useMainTabPayload } from "./features/plugin-shell/tabs/useMainTabPayload";
-import { useUiScaleProfile } from "./hooks/useUiScaleProfile";
 import { useQamPanelHeightGuard } from "./hooks/useQamPanelHeightGuard";
 import { useQamPanelSideBleed } from "./hooks/useQamPanelSideBleed";
 import { useTabStripBodyOffset } from "./hooks/useTabStripBodyOffset";
-import { UiScaleProvider } from "./context/UiScaleContext";
-import { normalizeUiScaleProfileId, type UiScaleProfileId } from "./data/uiScaleProfile";
-import { callDeckyWithTimeout } from "./utils/deckyCall";
 import { usePluginSettings } from "./hooks/usePluginSettings";
 import type { StreamScrambleSettings } from "./features/stream-scramble/streamScrambleContext";
 import { useReplyLanguage } from "./hooks/useReplyLanguage";
@@ -256,7 +252,6 @@ const Content: React.FC = () => {
     askBarHostRef,
     unifiedInputSurfacePx,
     usesNativeMultilineField,
-    remeasureUnifiedInputSurface,
   } = useUnifiedInputSurface(currentTab, unifiedInput);
 
   const {
@@ -349,10 +344,6 @@ const Content: React.FC = () => {
     setNamedOllamaHosts,
     voiceSttModel,
     setVoiceSttModel,
-    uiScaleAutoEnabled,
-    setUiScaleAutoEnabled,
-    uiScaleManualProfile,
-    setUiScaleManualProfile,
     useLocalKnowledgeBase,
     setUseLocalKnowledgeBase,
     ragHybridRetrievalEnabled,
@@ -420,16 +411,6 @@ const Content: React.FC = () => {
     getIsAsking: () => isAskingRef.current,
     mediaLibraryAccess: gatedCapabilities.media_library_access,
     filesystemWrite: gatedCapabilities.filesystem_write,
-  });
-
-  const [uiScaleApplyToken, setUiScaleApplyToken] = useState(0);
-  const uiScale = useUiScaleProfile({
-    scopeRef: bonsaiScopeRef,
-    autoEnabled: uiScaleAutoEnabled,
-    manualProfile: uiScaleManualProfile,
-    settingsLoaded,
-    applyToken: uiScaleApplyToken,
-    onRemeasure: remeasureUnifiedInputSurface,
   });
 
   useQamPanelHeightGuard(bonsaiScopeRef);
@@ -604,19 +585,16 @@ const Content: React.FC = () => {
     [latencyTimeoutsCustomEnabled, latencyWarningSeconds]
   );
 
-  /* The Text size step, in its own variable beside the UI scale: every font size reads it. It goes into the
-     style handed to useBonsaiScopeStyle, which publishes the merged style for popups, so a popup's words
-     follow the setting too. */
-  const uiScaleAndTextStyle = useMemo(
-    () => withTextScale(uiScale.scopeStyle, chatTextSize),
-    [uiScale.scopeStyle, chatTextSize],
-  );
+  /* The Text size step, in its own variable: every font size reads it. It goes into the style handed to
+     useBonsaiScopeStyle, which publishes the merged style for popups, so a popup's words follow the
+     setting too. */
+  const textScaleStyle = useMemo(() => withTextScale({}, chatTextSize), [chatTextSize]);
   const bonsaiScopeStyle = useBonsaiScopeStyle({
     aiCharacterEnabled,
     aiCharacterRandom,
     aiCharacterPresetId,
     aiCharacterCustomText,
-    uiScaleScopeStyle: uiScaleAndTextStyle,
+    textScaleStyle,
   });
   /* The chat's name in Decky's bar is drawn outside this box (plan 84 step 5): it learns the
      character's lit colour (the tab bar's own) through its store, not through props; the tab showing
@@ -644,31 +622,6 @@ const Content: React.FC = () => {
   const goToOllamaTab = useCallback(() => {
     setCurrentTab("ollama");
   }, []);
-
-  const onApplyUiScale = useCallback(
-    async (autoEnabled: boolean, manualProfile: UiScaleProfileId) => {
-      const normalized = normalizeUiScaleProfileId(manualProfile);
-      setUiScaleAutoEnabled(autoEnabled);
-      setUiScaleManualProfile(normalized);
-      await pauseDebouncedSettingsSave();
-      const saved = await callDeckyWithTimeout<[Partial<BonsaiSettings>], BonsaiSettings>("save_settings", [
-        buildChangedSettingsPayload({
-          ui_scale_auto_enabled: autoEnabled,
-          ui_scale_manual_profile: normalized,
-        }),
-      ]);
-      hydrateFromSettings(saved);
-      setUiScaleApplyToken((t) => t + 1);
-      toaster.toast({ title: "UI scale applied", body: "Plugin layout updated.", duration: 2800 });
-    },
-    [
-      buildChangedSettingsPayload,
-      hydrateFromSettings,
-      pauseDebouncedSettingsSave,
-      setUiScaleAutoEnabled,
-      setUiScaleManualProfile,
-    ],
-  );
 
   /* Changed fields plus the patch, never a full copy: see buildChangedSettingsPayload. */
   const buildSettingsPayload = buildChangedSettingsPayload;
@@ -992,10 +945,6 @@ const Content: React.FC = () => {
     setVoiceSttModel,
     microphoneAccessEnabled: gatedCapabilities.microphone_access,
     onJumpToPermission: jumpToPermission,
-    uiScaleAutoEnabled,
-    uiScaleManualProfile,
-    appliedUiScaleProfileId: uiScale.appliedProfileId,
-    onApplyUiScale,
     onOpenCharacterPicker: openCharacterPickerModal,
     onBeforeDeckyModal: captureSessionBeforeModal,
     onCompleteDeckyModalClose: finalizeShowModalAndRestoreActiveTab,
@@ -1207,7 +1156,6 @@ const Content: React.FC = () => {
     tabIds: tabBarIds,
     selectTab,
     exitDown: tabBarExitDown,
-    generation: uiScale.generation,
   });
   /**
    * B inside a tab body. Steam's `Tabs` would focus its own header — hidden now, so that is the
@@ -1224,51 +1172,42 @@ const Content: React.FC = () => {
 
   return (
     <BonsaiPluginShell scopeRef={bonsaiScopeRef} scopeStyle={bonsaiScopeStyle}>
-      <UiScaleProvider
-        value={{
-          profileId: uiScale.appliedProfileId,
-          scopeStyle: uiScale.scopeStyle,
-          generation: uiScale.generation,
-          requestApply: () => setUiScaleApplyToken((t) => t + 1),
-        }}
-      >
-        <BonsaiDebugOverlay enabled={showOnscreenDebugHud} />
-        {/*
-          data-bonsai-active-tab drives the persistent active-tab marker in section-1.ts.
-          Measured on device 2026-08-04: SteamOS does not put `.Active` on these tab buttons, it
-          uses a build-hashed class, so the marker cannot be keyed on Steam's own classes. This
-          attribute is the only thing that changes on a tab switch — DECKY_TAB_TITLES stays
-          referentially identical, so the strip itself does not re-render.
-        */}
-        {/*
-          The tab bar (plan 30) and the tabs root share one keyed fragment so a UI-scale
-          Apply remounts both together, and the bar comes before the root so the scope's flex column
-          puts it on top; Steam's own header inside the root is hidden by section-1.ts.
-        */}
-        <React.Fragment key={`bonsai-tabs-gen-${uiScale.generation}`}>
-          {barInStrip ? null : (
-            <TabIndicatorBar
-              tabIds={tabBarIds}
-              currentTab={currentTab}
-              selectTab={selectTab}
-              exitDown={tabBarExitDown}
-            />
-          )}
-          <HiddenTabHeaderTrap />
-          <div className="bonsai-decky-tabs-root" data-bonsai-active-tab={currentTab}>
-            <Tabs
-              activeTab={currentTab}
-              onShowTab={onTabsShowTab}
-              tabs={deckyTabs}
-              {...({
-                autoFocusContents: false,
-                cancelSkipTabHeader: true,
-                onCancelFromTabHeader,
-              } as Record<string, unknown>)}
-            />
-          </div>
-        </React.Fragment>
-      </UiScaleProvider>
+      <BonsaiDebugOverlay enabled={showOnscreenDebugHud} />
+      {/*
+        data-bonsai-active-tab drives the persistent active-tab marker in section-1.ts.
+        Measured on device 2026-08-04: SteamOS does not put `.Active` on these tab buttons, it
+        uses a build-hashed class, so the marker cannot be keyed on Steam's own classes. This
+        attribute is the only thing that changes on a tab switch — DECKY_TAB_TITLES stays
+        referentially identical, so the strip itself does not re-render.
+      */}
+      {/*
+        The tab bar (plan 30) and the tabs root share one fragment, and the bar comes before the
+        root so the scope's flex column puts it on top; Steam's own header inside the root is hidden
+        by section-1.ts.
+      */}
+      <React.Fragment>
+        {barInStrip ? null : (
+          <TabIndicatorBar
+            tabIds={tabBarIds}
+            currentTab={currentTab}
+            selectTab={selectTab}
+            exitDown={tabBarExitDown}
+          />
+        )}
+        <HiddenTabHeaderTrap />
+        <div className="bonsai-decky-tabs-root" data-bonsai-active-tab={currentTab}>
+          <Tabs
+            activeTab={currentTab}
+            onShowTab={onTabsShowTab}
+            tabs={deckyTabs}
+            {...({
+              autoFocusContents: false,
+              cancelSkipTabHeader: true,
+              onCancelFromTabHeader,
+            } as Record<string, unknown>)}
+          />
+        </div>
+      </React.Fragment>
     </BonsaiPluginShell>
   );
 };

@@ -163,8 +163,6 @@ const SETTINGS_FIELD_BACKEND_KEY: Record<keyof BonsaiSettingsSnapshotInput, keyo
   tabResumeMode: "tab_resume_mode",
   namedOllamaHosts: "named_ollama_hosts",
   voiceSttModel: "voice_stt_model",
-  uiScaleAutoEnabled: "ui_scale_auto_enabled",
-  uiScaleManualProfile: "ui_scale_manual_profile",
   useLocalKnowledgeBase: "use_local_knowledge_base",
   ragHybridRetrievalEnabled: "rag_hybrid_retrieval_enabled",
   ragCorpusPath: "rag_corpus_path",
@@ -370,7 +368,7 @@ export function usePluginSettings() {
 
   /**
    * The payload for a save a popup makes itself (the AI models screen's Done, the try order, the
-   * AI character, UI scale): what changed on screen since the last confirmed disk state, plus the
+   * AI character): what changed on screen since the last confirmed disk state, plus the
    * popup's own patch. Same rule as the automatic save below, for the same reason — a full copy
    * writes this screen's stale belief about fields the back end changed on its own. Measured on
    * the Deck (workshop:test-evidence/plan64-ROUTING-MERGE-01-top.json): Done on the AI models screen

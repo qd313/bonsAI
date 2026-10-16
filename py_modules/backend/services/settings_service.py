@@ -85,9 +85,6 @@ from backend.services.model_policy import reconcile_model_policy_tier
 from backend.services.reply_language_service import sanitize_reply_language
 from backend.services.voice_transcription_service import sanitize_voice_stt_model
 
-UI_SCALE_PROFILE_IDS = frozenset({"handheld", "desktop", "couch", "immersive"})
-DEFAULT_UI_SCALE_MANUAL_PROFILE = "handheld"
-
 
 # --- field kinds -------------------------------------------------------------
 # Most settings are one of a handful of boring shapes. These build the coercer for a
@@ -478,11 +475,7 @@ _SIMPLE_FIELDS: dict[str, Any] = {
     "model_allow_high_vram_fallbacks": _bool_default_false,
     # Presentation, defaulting on: only an explicit ``False`` turns these off.
     "strategy_spoiler_masking_enabled": _bool_default_true,
-    "ui_scale_auto_enabled": _bool_default_true,
     "strategy_spoiler_auto_reveal_after_consent": _bool_default_false,
-    "ui_scale_manual_profile": _enum(
-        UI_SCALE_PROFILE_IDS, DEFAULT_UI_SCALE_MANUAL_PROFILE, strip=True, lower=True
-    ),
     # Knowledge base.
     "use_local_knowledge_base": _bool_default_false,
     # Kill-switch for the vector half of retrieval. Defaults on: only an explicit ``False``

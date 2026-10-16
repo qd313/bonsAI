@@ -63,10 +63,6 @@ function buildProps(shell: ReturnType<typeof useBonsaiPluginShell>, clearAll: ()
     voiceSttModel: "tiny.en",
     setVoiceSttModel: () => {},
     microphoneAccessEnabled: false,
-    uiScaleAutoEnabled: true,
-    uiScaleManualProfile: "handheld",
-    appliedUiScaleProfileId: "handheld",
-    onApplyUiScale: () => {},
     onOpenCharacterPicker: () => {},
     // The two the plugin's own index.tsx hands the Settings tab.
     onBeforeDeckyModal: shell.captureSessionBeforeModal,

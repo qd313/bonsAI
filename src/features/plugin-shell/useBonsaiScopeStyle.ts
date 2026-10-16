@@ -1,8 +1,8 @@
 /**
- * Title: The panel's accent + UI-scale style
+ * Title: The panel's accent + Text size style
  *
- * Purpose: Turns the AI character settings into an accent color, merges it with the UI-scale
- * profile's own style, and publishes the merged style for other scopes (a Decky modal, for
+ * Purpose: Turns the AI character settings into an accent color, merges it with the Text size
+ * step's style, and publishes the merged style for other scopes (a Decky modal, for
  * instance) to read.
  *
  * Used for: `index.tsx`, on `BonsaiPluginShell`'s `scopeStyle` prop.
@@ -11,7 +11,7 @@
  * because only the final merged style is needed anywhere else.
  *
  * Does not: Decide what accent a character preset maps to (`characterUiAccent.ts` does that),
- * or what the UI-scale profile's own style is (`useUiScaleProfile` does that).
+ * or what the Text size step's own style is (`withTextScale` does that).
  */
 import { useEffect, useMemo } from "react";
 
@@ -26,11 +26,11 @@ export type UseBonsaiScopeStyleArgs = {
   aiCharacterRandom: boolean;
   aiCharacterPresetId: string;
   aiCharacterCustomText: string;
-  uiScaleScopeStyle: React.CSSProperties;
+  textScaleStyle: React.CSSProperties;
 };
 
 /*
- * In: the four AI-character settings that decide the accent, and the UI-scale profile's own
+ * In: the four AI-character settings that decide the accent, and the Text size step's own
  * style to merge over it.
  * Out: the merged style, also published for any other scope to read.
  * What can go wrong: the publish effect must stay paired with the memo that feeds it — a scope
@@ -41,7 +41,7 @@ export function useBonsaiScopeStyle({
   aiCharacterRandom,
   aiCharacterPresetId,
   aiCharacterCustomText,
-  uiScaleScopeStyle,
+  textScaleStyle,
 }: UseBonsaiScopeStyleArgs): React.CSSProperties {
   const uiAccent = useMemo(
     () =>
@@ -55,8 +55,8 @@ export function useBonsaiScopeStyle({
   );
   const bonsaiScopeAccentStyle = useMemo(() => buildBonsaiScopeAccentInlineStyle(uiAccent), [uiAccent]);
   const bonsaiScopeStyle = useMemo(
-    () => ({ ...bonsaiScopeAccentStyle, ...uiScaleScopeStyle }),
-    [bonsaiScopeAccentStyle, uiScaleScopeStyle],
+    () => ({ ...bonsaiScopeAccentStyle, ...textScaleStyle }),
+    [bonsaiScopeAccentStyle, textScaleStyle],
   );
 
   useEffect(() => {

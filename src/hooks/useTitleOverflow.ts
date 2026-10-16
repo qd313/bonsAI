@@ -19,7 +19,7 @@
  * that one function was 9.9 s of the page's 28.5 s of script time while an answer streamed --
  * the largest single cost in the panel, for a title that had not changed. So a title is measured
  * again only when its element or its text changed, or when a second has passed since the last
- * look, which still catches a change in layout (a late-loading font, the UI scale) soon after.
+ * look, which still catches a change in layout (a late-loading font, the Text size setting) soon after.
  *
  * Does not: Draw the fade -- buildTurnHeaderElement does that from `titleOverflowing`.
  */

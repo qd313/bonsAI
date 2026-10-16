@@ -80,8 +80,6 @@ function minimalSurvivalSnapshot(
       tabResumeMode: "resume",
       namedOllamaHosts: [],
       voiceSttModel: "tiny.en",
-      uiScaleAutoEnabled: true,
-      uiScaleManualProfile: "handheld",
       useLocalKnowledgeBase: false,
       ragHybridRetrievalEnabled: true,
       ragCorpusPath: "",

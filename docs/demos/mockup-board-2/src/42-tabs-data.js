@@ -45,9 +45,6 @@ const TAB_DATA = {
   ] },
 
   Settings: { icon: 2, measured: 2133, items: [
-    sec("UI scale"),
-    tog("Adjust UI automatically", "Applies Handheld sizing on its own — this panel is always narrow, so automatic never picks Couch.", true, { pre: "Two real sizes: Handheld for the Deck's own screen, Couch for TV distance. Active: <b class=cy>Handheld (1.00×)</b>. Also check Steam Settings → Accessibility → UI Scale." }),
-    sbtn("Apply UI scale"),
     sec("Screenshot quality"),
     choice("Screenshot quality", ["Save memory", "Balanced", "Best detail"], 0, { desc: "For vision questions — lower quality uses less memory.", how: "above", tall: true }),
     sec("Text size"),

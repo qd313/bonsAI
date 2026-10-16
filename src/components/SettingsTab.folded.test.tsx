@@ -33,7 +33,6 @@ import {
   SETTINGS_SECTIONS,
   accentIntensityHelp,
   settingsSectionIds,
-  uiScaleAutoHelp,
 } from "../features/folded-tabs/settingsTabFolds";
 import { peekModalReturnFocus, resetModalReturnFocusRegistry } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { resetNavFocusRegistry } from "../utils/navFocusRegistry";
@@ -63,15 +62,6 @@ describe("the Settings tab with every section closed", () => {
     expect(container.querySelectorAll("[data-bonsai-help-label]")).toHaveLength(0);
     /* The only buttons on the tab are the floating Open all button's. */
     expect(Array.from(container.querySelectorAll("button")).map((b) => b.textContent)).toEqual(["⊞Open all"]);
-  });
-
-  it("draws UI scale only while the Developer tab is on", () => {
-    closeAllSettingsSections();
-    const off = render(<SettingsTab {...props({ showDeveloperTab: false })} />);
-    expect(lines(off.container).map((l) => l.dataset.bonsaiFoldLine)).toEqual(settingsSectionIds(false));
-    off.unmount();
-    const on = render(<SettingsTab {...props({ showDeveloperTab: true })} />);
-    expect(lines(on.container)[0]?.dataset.bonsaiFoldLine).toBe("uiscale");
   });
 
   it("shows each section's current values in its line", () => {
@@ -106,7 +96,6 @@ describe("the Settings tab with every section open: one line per setting, longer
 
   it("carries every row's words for the strip, word for word", () => {
     const { container } = render(<SettingsTab {...props({ showDeveloperTab: true, aiCharacterEnabled: true })} />);
-    expect(helpOf(container, "Adjust UI automatically")).toBe(uiScaleAutoHelp("Handheld", "1.00"));
     expect(helpOf(container, "Screenshot quality")).toBe(SETTINGS_ROW_HELP.screenshot);
     expect(helpOf(container, "Text size")).toBe(SETTINGS_ROW_HELP.textSize);
     expect(helpOf(container, "Remember what I typed")).toBe(SETTINGS_ROW_HELP.remember);
@@ -136,13 +125,6 @@ describe("the Settings tab with every section open: one line per setting, longer
     expect(container.querySelector(".bonsai-prose")).toBeNull();
   });
 
-  it("names the size in use in the UI scale words", () => {
-    const { container } = render(
-      <SettingsTab {...props({ showDeveloperTab: true, appliedUiScaleProfileId: "couch" })} />,
-    );
-    expect(helpOf(container, "Adjust UI automatically")).toMatch(/Active: Couch \(\d\.\d\d×\)\./);
-  });
-
   it("still opens the character picker's popup, remembering the button for the ring's return", () => {
     const onOpen = vi.fn();
     const { container } = render(<SettingsTab {...props({ aiCharacterEnabled: true, onOpenCharacterPicker: onOpen })} />);
@@ -169,7 +151,7 @@ describe("the Settings tab's moves out of a section", () => {
 
   it("Up from each section's first row goes to its line, Down from its last to the next line (the rows that are one control each)", () => {
     const { container } = render(<SettingsTab {...props({ showDeveloperTab: true })} />);
-    const ids = settingsSectionIds(true);
+    const ids = settingsSectionIds();
     const firstControl = (label: string): SteamEl => {
       const row = rowFor(container, label)!;
       return (row.querySelector('[data-decky-ui="ToggleField"], [flow-children="horizontal"]') ?? row) as SteamEl;
@@ -218,7 +200,7 @@ describe("the Settings tab's moves out of a section", () => {
     act(() => putSteamRingOn(line("screenshot")));
     act(() => void line("screenshot").__nav?.onMoveDown?.());
     expect(steamRingHolder()).toBe(line("textsize"));
-    act(() => toggleSection(SETTINGS_FOLD_TAB, settingsSectionIds(false), "textsize"));
+    act(() => toggleSection(SETTINGS_FOLD_TAB, settingsSectionIds(), "textsize"));
     act(() => putSteamRingOn(line("textsize")));
     act(() => void line("textsize").__nav?.onMoveDown?.());
     /* Into an open section the tab hops with its own focus (focusInTabBody), onto the row's first button. */

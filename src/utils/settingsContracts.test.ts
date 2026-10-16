@@ -37,51 +37,17 @@ describe("settings contracts", () => {
 
 
   it("normalizeSettings: a settings file saved with removed settings (voice replies, UI scale) still loads and the old keys are not carried", () => {
-    const loaded = normalizeSettings({ voice_reply_mode: "always", latency_warning_seconds: 20 });
+    const loaded = normalizeSettings({
+      voice_reply_mode: "always",
+      ui_scale_auto_enabled: false,
+      ui_scale_manual_profile: "couch",
+      latency_warning_seconds: 20,
+    } as never);
     expect(loaded.latency_warning_seconds).toBe(20);
     expect("voice_reply_mode" in loaded).toBe(false);
+    expect("ui_scale_auto_enabled" in loaded).toBe(false);
+    expect("ui_scale_manual_profile" in loaded).toBe(false);
     expect(loaded.chat_text_size).toBe(normalizeSettings({}).chat_text_size);
-  });
-
-  it("normalizeSettings: ui scale defaults and manual profile", () => {
-    const defaults = normalizeSettings({});
-    expect(defaults.ui_scale_auto_enabled).toBe(true);
-    expect(defaults.ui_scale_manual_profile).toBe("handheld");
-    const manual = normalizeSettings({
-      show_developer_tab: true,
-      ui_scale_auto_enabled: false,
-      ui_scale_manual_profile: "couch",
-    });
-    expect(manual.ui_scale_auto_enabled).toBe(false);
-    expect(manual.ui_scale_manual_profile).toBe("couch");
-  });
-
-  /**
-   * 0.6.0 (plan 72): the UI scale section shows only with the Developer tab on, so a player without
-   * it must get the default size even when an older settings file saved Couch or auto off.
-   */
-  it("normalizeSettings: without the Developer tab, a saved manual UI scale loads as the default", () => {
-    const loaded = normalizeSettings({
-      show_developer_tab: false,
-      ui_scale_auto_enabled: false,
-      ui_scale_manual_profile: "couch",
-    });
-    expect(loaded.ui_scale_auto_enabled).toBe(true);
-    expect(loaded.ui_scale_manual_profile).toBe("handheld");
-    // The legacy name for the Developer tab switch counts the same.
-    const legacy = normalizeSettings({ show_debug_tab: true, ui_scale_manual_profile: "couch" } as never);
-    expect(legacy.ui_scale_manual_profile).toBe("couch");
-  });
-
-  /**
-   * Desktop was cut from the UI-scale picker 2026-09-21 (it multiplied by the same 1 as Handheld,
-   * so it was a choice that changed nothing). Someone whose settings.json still says "desktop" from
-   * before that must still load cleanly, through the same normalizeSettings() path the real loader
-   * uses, not a broken or empty setting.
-   */
-  it("normalizeSettings: a settings file saved with the retired 'desktop' UI scale still loads", () => {
-    const loaded = normalizeSettings({ ui_scale_manual_profile: "desktop" });
-    expect(loaded.ui_scale_manual_profile).toBe("handheld");
   });
 
   /**
@@ -391,8 +357,6 @@ describe("settings contracts", () => {
       tabResumeMode: "resume",
       namedOllamaHosts: [],
       voiceSttModel: "tiny.en",
-      uiScaleAutoEnabled: true,
-      uiScaleManualProfile: "handheld",
       useLocalKnowledgeBase: false,
       ragHybridRetrievalEnabled: true,
       ragCorpusPath: "",
@@ -460,8 +424,6 @@ describe("settings contracts", () => {
       tabResumeMode: "resume" as const,
       namedOllamaHosts: [],
       voiceSttModel: "tiny.en" as const,
-      uiScaleAutoEnabled: true,
-      uiScaleManualProfile: "handheld" as const,
       useLocalKnowledgeBase: false,
       ragHybridRetrievalEnabled: true,
       ragCorpusPath: "",
@@ -611,8 +573,6 @@ describe("settings contracts", () => {
       tabResumeMode: normalized.tab_resume_mode,
       namedOllamaHosts: normalized.named_ollama_hosts,
       voiceSttModel: normalized.voice_stt_model,
-      uiScaleAutoEnabled: normalized.ui_scale_auto_enabled,
-      uiScaleManualProfile: normalized.ui_scale_manual_profile,
       useLocalKnowledgeBase: normalized.use_local_knowledge_base,
       ragHybridRetrievalEnabled: normalized.rag_hybrid_retrieval_enabled,
       ragCorpusPath: normalized.rag_corpus_path,

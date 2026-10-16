@@ -1,17 +1,17 @@
 /**
  * Title: Settings tab
  *
- * Purpose: The Settings tab — screen size, whether the Ask bar remembers
+ * Purpose: The Settings tab — screenshot quality, text size, whether the Ask bar remembers
  * what you typed, story spoiler masking, how many suggestion chips show,
  * voice input settings, the AI's voice & personality
  * picker, whether the Developer tab is visible, and two buttons for
  * clearing cached data or wiping everything back to a fresh install.
  * Nothing about talking to Ollama lives here — that is the whole Ollama tab.
  *
- * Folded (plan 91 § 2b, plan 92 T1): each of the ten sections is one line (FoldedSection) showing a summary
+ * Folded (plan 91 § 2b, plan 92 T1): each of the nine sections is one line (FoldedSection) showing a summary
  * of its values; A opens or closes it, several can be open at once. Inside, one line per setting; a row's
  * longer text shows in the help strip at the bottom of the panel while the ring is on it; the floating
- * Open all button opens or closes every section. UI scale is a section only while the Developer tab is on.
+ * Open all button opens or closes every section.
  *
  * Used for: The Settings tab in index.tsx.
  *
@@ -25,9 +25,6 @@
  * How it works:
  *
  *     ┌─ Settings tab ─────────────────────────────────────┐
- *     │ UI scale               <- Developer tab on only; its  │
- *     │                           own file, see               │
- *     │                           SettingsTabUiScaleSection   │
  *     │ Screenshot quality     <- Save memory / Balanced /    │
  *     │                           Best detail                 │
  *     │ Text size              <- Small / Normal / Large,     │
@@ -64,13 +61,11 @@ import {
 import type { AiCharacterAccentIntensityId } from "../data/aiCharacterAccentIntensity";
 import { VoiceInputSettingsSection } from "./VoiceInputSettingsSection";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
-import { SettingsTabUiScaleSection } from "./SettingsTabUiScaleSection";
 import { SettingsTabChatTextSizeRow, type ChatTextSizeSetting } from "./SettingsTabChatTextSizeRow";
 import { SettingsTabChoiceRow } from "./SettingsTabChoiceRow";
 import { SettingsTabCharacterSection } from "./SettingsTabCharacterSection";
 import { SettingsTabDataSection } from "./SettingsTabDataSection";
 import { useSettingsTabFocus } from "./useSettingsTabFocus";
-import type { UiScaleProfileId } from "../data/uiScaleProfile";
 import type { VoiceSttModelId } from "../data/bonsaiSettingsSchema";
 import { chainIds, FoldedColumn, FoldedSection, foldLineBelow, takeFoldLine } from "../features/folded-tabs/FoldedSection";
 import { FoldAllButton } from "../features/folded-tabs/FoldAllButton";
@@ -118,10 +113,6 @@ export type SettingsTabProps = {
   microphoneAccessEnabled: boolean;
   onJumpToPermission?: (capability: BonsaiCapabilityKey) => void;
 
-  uiScaleAutoEnabled: boolean;
-  uiScaleManualProfile: UiScaleProfileId;
-  appliedUiScaleProfileId: UiScaleProfileId;
-  onApplyUiScale: (autoEnabled: boolean, manualProfile: UiScaleProfileId) => void | Promise<void>;
 
   onOpenCharacterPicker: () => void;
   onBeforeDeckyModal: () => void;
@@ -166,19 +157,14 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   setVoiceSttModel,
   microphoneAccessEnabled,
   onJumpToPermission,
-  uiScaleAutoEnabled,
-  uiScaleManualProfile,
-  appliedUiScaleProfileId,
-  onApplyUiScale,
   onOpenCharacterPicker,
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
   onResetSession,
   onClearAllPluginData,
 }) => {
-  const { chain, bodyRef } = useSettingsTabFocus(showDeveloperTab);
+  const { chain, bodyRef } = useSettingsTabFocus();
   const summaries = settingsSectionSummaries({
-    uiScaleAutoEnabled,
     screenshotAttachmentPreset,
     chatTextSize: chatTextSizeSetting.value,
     rememberTyped: unifiedInputPersistenceMode === "persist_all",
@@ -211,22 +197,6 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
       data-bonsai-tab-panel="settings"
     >
       <FoldedColumn>
-        {/* 0.6.0 (plan 72): Developer tab only, so no player lands on it. The size itself is held at
-            the default on load while the Developer tab is off (normalizeSettings). */}
-        {showDeveloperTab
-          ? fold(
-              "uiscale",
-              <SettingsTabUiScaleSection
-                uiScaleAutoEnabled={uiScaleAutoEnabled}
-                uiScaleManualProfile={uiScaleManualProfile}
-                appliedProfileId={appliedUiScaleProfileId}
-                onApply={onApplyUiScale}
-                onMoveUpFromFirst={up("uiscale")}
-                onMoveDownFromApply={down("uiscale")}
-              />,
-            )
-          : null}
-
         {fold(
           "screenshot",
           <PanelSection>

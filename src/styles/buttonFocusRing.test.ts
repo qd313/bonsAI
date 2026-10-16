@@ -126,7 +126,6 @@ describe("buttons that paint their own fill still show the D-pad ring", () => {
 /** The files that draw the Settings, Developer, Ollama and Permissions tabs' buttons. */
 const TAB_FILES = [
   "components/SettingsTab.tsx",
-  "components/SettingsTabUiScaleSection.tsx",
   "components/DeveloperTab.tsx",
   "components/AboutTab.tsx",
   "components/PermissionsTab.tsx",

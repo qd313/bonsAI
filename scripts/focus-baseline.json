@@ -1,6 +1,6 @@
 {
   "note": "Known focus-pattern violations, per file per rule. The check fails only when a count goes UP. Regenerate with: node scripts/check-focus-patterns.mjs --update",
-  "total": 80,
+  "total": 79,
   "counts": {
     "src/components/AskStripSendButtons.tsx": {
       "move-props-on-button": 2
@@ -39,9 +39,6 @@
       "page-search": 1
     },
     "src/components/SettingsTabConnectionTimeoutSlider.tsx": {
-      "page-search": 1
-    },
-    "src/components/SettingsTabUiScaleSection.tsx": {
       "page-search": 1
     },
     "src/features/plugin-shell/modalReturnFocusRegistry.ts": {

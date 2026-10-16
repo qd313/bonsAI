@@ -52,7 +52,7 @@ function focusStop(host: HTMLElement | null | undefined, last: boolean): boolean
 }
 
 /** The tab's section chain, and the ref each section body registers itself with. */
-export function useSettingsTabFocus(showDeveloperTab: boolean) {
+export function useSettingsTabFocus() {
   const hosts = useRef(new Map<string, HTMLElement>());
   const refs = useRef(new Map<string, (el: HTMLElement | null) => void>());
 
@@ -71,12 +71,12 @@ export function useSettingsTabFocus(showDeveloperTab: boolean) {
 
   const chain = useMemo<FoldChainSection[]>(
     () =>
-      settingsSectionIds(showDeveloperTab).map((id) => ({
+      settingsSectionIds().map((id) => ({
         id,
         enterFromTop: () => focusStop(hosts.current.get(id), false),
         enterFromBottom: () => focusStop(hosts.current.get(id), !FIRST_BUTTON_BOTH_WAYS.has(id)),
       })),
-    [showDeveloperTab],
+    [],
   );
 
   return { chain, bodyRef };

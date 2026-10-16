@@ -2,7 +2,7 @@
  * Title: What draws the Settings tab
  *
  * Purpose: Runs while a person has the Settings tab open — screenshot
- * behavior, the AI's on-screen character, UI scale, and
+ * behavior, the AI's on-screen character, and
  * more. It builds that screen from the current settings it is handed.
  *
  * Used for: The tab bar's always-present Settings tab.
@@ -48,10 +48,6 @@ export function useSettingsTabPayload({
   voiceSttModel,
   setVoiceSttModel,
   microphoneAccessEnabled,
-  uiScaleAutoEnabled,
-  uiScaleManualProfile,
-  appliedUiScaleProfileId,
-  onApplyUiScale,
   onOpenCharacterPicker,
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
@@ -85,10 +81,6 @@ export function useSettingsTabPayload({
         voiceSttModel={voiceSttModel}
         setVoiceSttModel={setVoiceSttModel}
         microphoneAccessEnabled={microphoneAccessEnabled}
-        uiScaleAutoEnabled={uiScaleAutoEnabled}
-        uiScaleManualProfile={uiScaleManualProfile}
-        appliedUiScaleProfileId={appliedUiScaleProfileId}
-        onApplyUiScale={onApplyUiScale}
         onOpenCharacterPicker={onOpenCharacterPicker}
         onBeforeDeckyModal={onBeforeDeckyModal}
         onCompleteDeckyModalClose={onCompleteDeckyModalClose}
@@ -111,10 +103,6 @@ export function useSettingsTabPayload({
       showDeveloperTab,
       strategySpoilerMaskingEnabled,
       voiceSttModel,
-      uiScaleAutoEnabled,
-      uiScaleManualProfile,
-      appliedUiScaleProfileId,
-      onApplyUiScale,
       microphoneAccessEnabled,
       onBeforeDeckyModal,
       onCompleteDeckyModalClose,

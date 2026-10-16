@@ -10,7 +10,7 @@
  * used to sit above the buttons ride on the row for the help strip at the bottom of the panel.
  *
  * Solves: Plan 87 call 3, widened by plan 89. A person who finds the words too small (or too big) on the
- * Deck's panel gets one plain row to fix it, with no connection to the hidden UI scale section.
+ * Deck's panel gets one plain row to fix it.
  *
  * Does not: Scale anything. The size is written to `--bonsai-text-scale` on the plugin's root
  * (src/data/chatTextSize.ts) and every font size in the plugin reads it (src/styles/sections/textPx.ts).

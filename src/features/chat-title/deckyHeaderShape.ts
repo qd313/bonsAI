@@ -103,7 +103,7 @@ export function deckyPageWhileReshaped(): HTMLElement | null {
   return applied?.parts.page ?? null;
 }
 
-/** Tell the listeners the header may have changed size (a UI-size Apply rebuilt bonsAI's tabs). */
+/** Tell the listeners the header may have changed size (bonsAI's tabs mounted). */
 export function notifyDeckyHeaderChanged(): void {
   if (applied) notify();
 }

@@ -2,7 +2,7 @@
  * Title: The plain tabs hop between controls through focusInTabBody (plan 87, B10)
  * Purpose: Keep the controls the Ollama and Settings tabs focus by hand off a plain `el.focus()`, which the
  *          browser scrolls for before its focus event (the 310 to 372 px Up jumps of the second Deck walk).
- * Used for: OllamaTab, OllamaWhereAiRunsSection, KnowledgeBaseSection, SettingsTab, SettingsTabUiScaleSection,
+ * Used for: OllamaTab, OllamaWhereAiRunsSection, KnowledgeBaseSection, SettingsTab,
  *           SettingsTabConnectionTimeoutSlider.
  * Does not: Cover popovers and modals opened from the tabs, which are not in the tab body's pane.
  */
@@ -15,7 +15,6 @@ const FILES = [
   "OllamaWhereAiRunsSection.tsx",
   "KnowledgeBaseSection.tsx",
   "SettingsTab.tsx",
-  "SettingsTabUiScaleSection.tsx",
   "SettingsTabConnectionTimeoutSlider.tsx",
 ];
 

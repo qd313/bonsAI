@@ -102,7 +102,7 @@ describe("useHiddenTabHeaderTrap", () => {
 
   it("bounces when a fresh hidden tab button is inserted already holding gpfocus", async () => {
     // A QAM chord close/reopen does not remount this component (TabIndicatorBar and the tabs root
-    // share one fragment key that only changes on a UI-scale Apply), so the effect stays attached
+    // share one fragment, which is never rebuilt on purpose), so the effect stays attached
     // the whole time -- but Steam's own header can still rebuild its child nodes, and a node born
     // with `gpfocus` already set produces a childList record, never an attributes one.
     render(<Host />);

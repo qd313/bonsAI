@@ -154,8 +154,8 @@ describe("useUnifiedInputSurface wrap/font/width mirroring", () => {
   });
 
   /**
-   * Measured on device 2026-09-20, with the plugin's own UI size setting turned up to its "Couch"
-   * step: the typed-text mirror was 298.44px wide inside a 274.46px box, so it stuck 23px past the
+   * Measured on device 2026-09-20, with the plugin's own UI size setting (since removed) turned up to its
+   * "Couch" step: the typed-text mirror was 298.44px wide inside a 274.46px box, so it stuck 23px past the
    * right edge of the plugin's 300px column and the end of a typed line sat outside the panel. The
    * real field measured 274.46px at the time, so the mirror was not following it — the width had
    * been written in an earlier frame, while the field still filled the whole host, and no later

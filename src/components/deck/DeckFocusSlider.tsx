@@ -2,7 +2,7 @@
  * Title: Deck focus slider
  *
  * Purpose: The slider control drawn on several rows in Settings and the
- * Ollama tab — UI scale, how long to keep the model warm, how long to wait
+ * Ollama tab — how long to keep the model warm, how long to wait
  * for a reply before giving up, how detailed replies should be. It draws a
  * horizontal track with a fill bar and, sometimes, tick marks, plus one
  * round thumb: drag it with a finger or mouse, or grab it with the D-pad and
@@ -10,7 +10,7 @@
  * math, the thumb's look, and how D-pad stepping works, so every slider row
  * in the plugin drags and steps the same way.
  *
- * Used for: Settings and Ollama sliders (UI scale, keep-alive, reply
+ * Used for: Settings and Ollama sliders (keep-alive, reply
  * verbosity, connection timeout) — any row that needs a drag-or-step number
  * picker.
  *

@@ -83,8 +83,6 @@ export function toBonsaiSettingsPayload(
     named_ollama_hosts: input.namedOllamaHosts,
     dev_frozen_test_chips: input.devFrozenTestChips,
     voice_stt_model: input.voiceSttModel,
-    ui_scale_auto_enabled: input.uiScaleAutoEnabled,
-    ui_scale_manual_profile: input.uiScaleManualProfile,
     use_local_knowledge_base: input.useLocalKnowledgeBase,
     rag_hybrid_retrieval_enabled: input.ragHybridRetrievalEnabled,
     rag_corpus_path: input.ragCorpusPath,

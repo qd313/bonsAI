@@ -9,8 +9,8 @@
  * Used for: The plugin's own tab bar (plan 30, week 4; kept by plan 84 step 4). Drawn as
  * `HiddenTabHeaderTrap` next to the tabs root it watches (index.tsx), not inside the bar: plan 84
  * step 6 can draw the bar in Decky's title bar, outside bonsAI's box, and the trap must still come
- * and go with the tabs root (a UI-size Apply rebuilds that root, and an observer on the old one
- * would watch nothing).
+ * and go with the tabs root (if that root is ever rebuilt, an observer on the old one would watch
+ * nothing).
  *
  * Solves: Steam's own tab-header component keeps its buttons reachable by
  * the ring even while they are hidden from view — measured on the Deck on
@@ -33,8 +33,9 @@
  *   built header can arrive already holding the ring, before this file's
  *   own watcher has even attached.
  * - The tab bar and its container share one identity that only changes
- *   when Settings' Apply changes the UI scale (verified by reading
- *   index.tsx around line 1537, not measured directly on device), so
+ *   when the tabs are rebuilt on purpose (the UI scale Apply, which no longer
+ *   exists, was the only thing that did; verified by reading index.tsx, not
+ *   measured directly on device), so
  *   closing and reopening the Quick Access Menu does not rebuild either
  *   one, and this file's watcher stays attached the whole time. The
  *   leading idea, not yet confirmed on device, is that Steam's own

@@ -38,11 +38,11 @@ import { putSteamRingOn, type SteamEl } from "../../test-harness/steamRing";
 const TABS: BonsaiTabId[] = ["main", "ollama", "settings", "permissions", "about"];
 
 /** bonsAI's root, reduced to what the height lock and the tab bar need, wired as index.tsx wires them. */
-function BonsaiRoot({ generation }: { generation: number }) {
+function BonsaiRoot() {
   const [tab, setTab] = useState("main");
   const scopeRef = useRef<HTMLDivElement | null>(null);
   const exitDown = useCallback(() => tabBarExitDownFor(tab), [tab]);
-  const barInStrip = useTopStripTabBar({ tab, tabIds: TABS, selectTab: setTab, exitDown, generation });
+  const barInStrip = useTopStripTabBar({ tab, tabIds: TABS, selectTab: setTab, exitDown });
   useQamPanelHeightGuard(scopeRef);
   return (
     <div className="bonsai-scope" ref={scopeRef}>
@@ -54,10 +54,10 @@ function BonsaiRoot({ generation }: { generation: number }) {
   );
 }
 
-function Page({ open = true, generation = 0 }: { open?: boolean; generation?: number }) {
+function Page({ open = true }: { open?: boolean }) {
   return (
     <DeckyQuickAccessPage title={open ? <ChatTitleView /> : <span>Decky</span>}>
-      {open ? <BonsaiRoot generation={generation} /> : null}
+      {open ? <BonsaiRoot /> : null}
     </DeckyQuickAccessPage>
   );
 }
@@ -117,13 +117,6 @@ describe("the panel reaches the bottom of the screen with the bar in Steam's str
     expect(scopeTop()).toBe(52);
     expect(panelBottom()).toBe(454);
     expect(q(".bonsai-scope").getBoundingClientRect().height).toBe(402);
-  });
-
-  it("a UI-size Apply (a new generation) re-measures too", () => {
-    const view = render(<Page generation={0} />);
-    q(".bonsai-scope").style.setProperty("--bonsai-qam-lock-height", "300px");
-    view.rerender(<Page generation={1} />);
-    expect(panelBottom()).toBe(454);
   });
 
   it("never writes to Steam's shared container, with the lock re-measuring through open, every tab and close", () => {

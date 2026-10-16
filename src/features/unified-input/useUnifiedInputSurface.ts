@@ -40,7 +40,6 @@ import {
   UNIFIED_TEXT_OVERLAY_FALLBACK_WHITE_SPACE,
 } from "./constants";
 import { TEXT_SCALE_VAR } from "../../data/chatTextSize";
-import { readUiScaleFromElement } from "../../data/uiScaleProfile";
 
 /** The Text size step written on the plugin's root (1 when none is set). */
 function readTextScaleFromElement(el: HTMLElement | null | undefined): number {
@@ -55,9 +54,9 @@ function readTextScaleFromElement(el: HTMLElement | null | undefined): number {
  * moves the letters, never the box). Count the lines, then price each at the Normal line height. At
  * Normal this returns the browser's own number, so today's box does not move.
  */
-function mirrorHeightAtNormalText(rawPx: number, textScale: number, uiScale: number): number {
+function mirrorHeightAtNormalText(rawPx: number, textScale: number): number {
   if (rawPx <= 0 || textScale === 1) return rawPx;
-  const insetsPx = (UNIFIED_TEXT_INSET_TOP_PX + UNIFIED_TEXT_INSET_BOTTOM_PX) * uiScale;
+  const insetsPx = UNIFIED_TEXT_INSET_TOP_PX + UNIFIED_TEXT_INSET_BOTTOM_PX;
   const normalLinePx = UNIFIED_TEXT_FONT_PX * UNIFIED_TEXT_LINE_HEIGHT;
   const lines = Math.max(1, Math.round((rawPx - insetsPx) / (normalLinePx * textScale)));
   return Math.round(insetsPx + lines * normalLinePx);
@@ -113,8 +112,8 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
     /*
      * Never let the mirror end up wider than the box it is positioned inside.
      *
-     * Measured on device 2026-09-20 while testing the plugin's own UI size setting at its "Couch"
-     * step: the typed-text mirror came out 298.44px wide inside a 274.46px box, so it hung 23px
+     * Measured on device 2026-09-20 while testing the plugin's own UI size setting (since removed) at
+     * its "Couch" step: the typed-text mirror came out 298.44px wide inside a 274.46px box, so it hung 23px
      * past the right edge of the plugin's 300px column and the end of a typed line sat outside the
      * panel. The real field was fine at 274.46px. The bad width had been written during an earlier
      * frame, before the avatar slot laid out, when the field briefly filled the whole 300px host —
@@ -160,19 +159,11 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
       "--bonsai-unified-field-font-family",
       fieldStyle?.fontFamily || UNIFIED_TEXT_OVERLAY_FALLBACK_FONT_FAMILY,
     );
-    const uiScale = readUiScaleFromElement(bonsaiScopeRef.current);
-    const sh = mirrorHeightAtNormalText(
-      measure.scrollHeight,
-      readTextScaleFromElement(bonsaiScopeRef.current),
-      uiScale,
-    );
-    const bodyMinPx = UNIFIED_TEXT_BODY_MIN_PX * uiScale;
-    const bodyMaxPx = UNIFIED_TEXT_BODY_MAX_PX * uiScale;
-    const expandAheadPx = Math.ceil(UNIFIED_TEXT_FONT_PX * uiScale * 1.2);
-    const heightPadPx = UNIFIED_INPUT_HEIGHT_PAD_PX * uiScale;
+    const sh = mirrorHeightAtNormalText(measure.scrollHeight, readTextScaleFromElement(bonsaiScopeRef.current));
+    const expandAheadPx = Math.ceil(UNIFIED_TEXT_FONT_PX * 1.2);
     const nextPx = Math.min(
-      bodyMaxPx,
-      Math.max(bodyMinPx, sh + heightPadPx + expandAheadPx),
+      UNIFIED_TEXT_BODY_MAX_PX,
+      Math.max(UNIFIED_TEXT_BODY_MIN_PX, sh + UNIFIED_INPUT_HEIGHT_PAD_PX + expandAheadPx),
     );
     setUnifiedInputSurfacePx(nextPx);
     /*

@@ -46,9 +46,7 @@ import {
   DEFAULT_MODEL_POLICY_TIER,
   type ModelPolicyTierId,
 } from "./modelPolicy";
-import { type UiScaleProfileId } from "./uiScaleProfile";
 
-export type { UiScaleProfileId };
 export type { AskModeId };
 export type { OllamaKeepAliveDuration };
 export type { ReplyVerbosityId };
@@ -196,10 +194,6 @@ export type BonsaiSettings = {
   dev_frozen_test_chips: string[];
   /** Local whisper.cpp model for voice Ask (base.en default: it keeps up on the Deck and repeats fewer words than tiny.en). */
   voice_stt_model: VoiceSttModelId;
-  /** When true, UI scale profile is chosen automatically from QAM viewport + display heuristics. */
-  ui_scale_auto_enabled: boolean;
-  /** Manual snap profile when ``ui_scale_auto_enabled`` is false. */
-  ui_scale_manual_profile: UiScaleProfileId;
   /** When true, inject retrieved offline strategy/compat cards into Strategy/troubleshooting Asks. */
   use_local_knowledge_base: boolean;
   /**
@@ -264,8 +258,6 @@ export type BonsaiSettingsSnapshotInput = {
   namedOllamaHosts: NamedOllamaHost[];
   devFrozenTestChips: string[];
   voiceSttModel: VoiceSttModelId;
-  uiScaleAutoEnabled: boolean;
-  uiScaleManualProfile: UiScaleProfileId;
   useLocalKnowledgeBase: boolean;
   ragHybridRetrievalEnabled: boolean;
   ragCorpusPath: string;

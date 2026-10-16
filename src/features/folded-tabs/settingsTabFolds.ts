@@ -1,8 +1,8 @@
 /**
  * Title: The Settings tab's folded sections: their names, their summaries, and the rows' longer text
  *
- * Purpose: What the folded Settings tab (plan 91 § 2b, § 3c; plan 92 T1) says about itself: the nine
- * sections in order (UI scale, Screenshot quality, Text size, Remember what I typed, Story spoilers,
+ * Purpose: What the folded Settings tab (plan 91 § 2b, § 3c; plan 92 T1) says about itself: the eight
+ * sections in order (Screenshot quality, Text size, Remember what I typed, Story spoilers,
  * Suggestion chips, Voice input, AI voice & personality, Data), each one's summary line
  * from the current settings, and the longer text of each row that the help strip shows, word for word
  * as the tab used to print it under or above the row.
@@ -16,9 +16,6 @@
  * file was written (the Text size row, plan 89), the code's words are the ones kept here.
  *
  * Does not: Draw anything or wire the D-pad (SettingsTab.tsx and useSettingsTabFocus.ts do).
- *
- * Gotchas: UI scale is only a section while the Developer tab is on (plan 72), so the tab's section
- * list is `settingsSectionIds(showDeveloperTab)`, not the whole constant.
  */
 import {
   AI_CHARACTER_ACCENT_INTENSITY_OPTIONS,
@@ -35,7 +32,6 @@ import { summarizeSection } from "./sectionSummary";
 export const SETTINGS_FOLD_TAB = "settings";
 
 export const SETTINGS_SECTIONS = [
-  { id: "uiscale", title: "UI scale" },
   { id: "screenshot", title: "Screenshot quality" },
   { id: "textsize", title: "Text size" },
   { id: "remember", title: "Remember what I typed" },
@@ -48,9 +44,9 @@ export const SETTINGS_SECTIONS = [
 
 export type SettingsSectionId = (typeof SETTINGS_SECTIONS)[number]["id"];
 
-/** The sections a tab draws, in order: UI scale only while the Developer tab is on (plan 72). */
-export function settingsSectionIds(showDeveloperTab: boolean): SettingsSectionId[] {
-  return SETTINGS_SECTIONS.map((s) => s.id).filter((id) => showDeveloperTab || id !== "uiscale");
+/** The sections a tab draws, in order. */
+export function settingsSectionIds(): SettingsSectionId[] {
+  return SETTINGS_SECTIONS.map((s) => s.id);
 }
 
 export const SCREENSHOT_PRESET_LABEL: Record<ScreenshotAttachmentPreset, string> = {
@@ -77,7 +73,6 @@ export const VOICE_STT_MODEL_FULL_LABEL: Record<VoiceSttModelId, string> = {
 
 /** The rows' longer text, as the tab printed it before it folded. */
 export const SETTINGS_ROW_HELP = {
-  uiScaleAuto: "Applies Handheld sizing on its own — this panel is always narrow, so automatic never picks Couch.",
   screenshot: "For vision questions — lower quality uses less memory.",
   textSize:
     "How big the words are, everywhere in bonsAI: the tabs, the chat, the chips, the question box and Settings. Rows keep their height, so a long chat name is cut off sooner on Large.",
@@ -91,17 +86,6 @@ export const SETTINGS_ROW_HELP = {
   developerTab: "Adds a Developer tab with logs, exports, and advanced tuning. Default off.",
 } as const;
 
-/**
- * The UI scale switch's strip text: the line that sat above the switch (with the size in use now), then the
- * description Steam drew under it.
- */
-export function uiScaleAutoHelp(appliedLabel: string, appliedMultiplier: string): string {
-  return (
-    `Two real sizes: Handheld for the Deck's own screen, Couch for TV distance. Active: ${appliedLabel} (${appliedMultiplier}×). ` +
-    `Also check Steam Settings → Accessibility → UI Scale. ${SETTINGS_ROW_HELP.uiScaleAuto}`
-  );
-}
-
 /** The accent row's strip text: the level in use, then the pointer to the menu. */
 export function accentIntensityHelp(id: AiCharacterAccentIntensityId): string {
   const short = AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.find((o) => o.id === id)?.shortLabel ?? "";
@@ -109,7 +93,6 @@ export function accentIntensityHelp(id: AiCharacterAccentIntensityId): string {
 }
 
 export interface SettingsFoldValues {
-  uiScaleAutoEnabled: boolean;
   screenshotAttachmentPreset: ScreenshotAttachmentPreset;
   chatTextSize: ChatTextSize;
   rememberTyped: boolean;
@@ -123,7 +106,6 @@ export interface SettingsFoldValues {
 /** Each section's summary line, from the tab's current settings. */
 export function settingsSectionSummaries(v: SettingsFoldValues): Record<SettingsSectionId, string> {
   return {
-    uiscale: summarizeSection("UI scale", [{ kind: "switch", label: "Adjust UI automatically", on: v.uiScaleAutoEnabled }]),
     screenshot: summarizeSection("Screenshot quality", [
       { kind: "choice", label: "Screenshot quality", value: SCREENSHOT_PRESET_LABEL[v.screenshotAttachmentPreset] },
     ]),

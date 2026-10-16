@@ -674,8 +674,13 @@ class SettingsServiceTests(unittest.TestCase):
     def test_a_file_saved_with_removed_settings_still_loads_and_the_old_keys_are_dropped(self):
         """A settings file written before a setting was removed still loads: no error, the old value is ignored and never written back."""
         logger = _Logger()
-        removed_keys = ("voice_reply_mode",)
-        old_file = {"voice_reply_mode": "always", "latency_warning_seconds": 20}
+        removed_keys = ("voice_reply_mode", "ui_scale_auto_enabled", "ui_scale_manual_profile")
+        old_file = {
+            "voice_reply_mode": "always",
+            "ui_scale_auto_enabled": False,
+            "ui_scale_manual_profile": "couch",
+            "latency_warning_seconds": 20,
+        }
 
         sanitized = _sanitize_with_defaults(dict(old_file))
         self.assertEqual(sanitized["latency_warning_seconds"], 20)
@@ -707,35 +712,6 @@ class SettingsServiceTests(unittest.TestCase):
                 self.assertNotIn(key, persisted)
                 self.assertNotIn(key, on_disk)
                 self.assertNotIn(key, reloaded)
-
-    def test_ui_scale_settings_defaults_and_sanitize(self):
-        logger = _Logger()
-
-        def sanitize_fn(data):
-            return sanitize_settings(
-                data=data,
-                default_latency_warning_seconds=15,
-                default_request_timeout_seconds=120,
-                min_latency_warning_seconds=5,
-                max_latency_warning_seconds=300,
-                min_request_timeout_seconds=10,
-                max_request_timeout_seconds=300,
-                valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
-                default_persistence_mode="persist_all",
-                valid_ask_modes={"speed", "strategy", "expert"},
-                default_ask_mode="speed",
-            )
-
-        baseline = sanitize_fn({})
-        self.assertTrue(baseline["ui_scale_auto_enabled"])
-        self.assertEqual(baseline["ui_scale_manual_profile"], "handheld")
-
-        manual = sanitize_fn(
-            {"ui_scale_auto_enabled": False, "ui_scale_manual_profile": "couch", "bogus": 1}
-        )
-        self.assertFalse(manual["ui_scale_auto_enabled"])
-        self.assertEqual(manual["ui_scale_manual_profile"], "couch")
-        self.assertEqual(sanitize_fn({"ui_scale_manual_profile": "invalid"})["ui_scale_manual_profile"], "handheld")
 
     def test_knowledge_base_settings_defaults(self):
         def sanitize_fn(data):

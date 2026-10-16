@@ -1,7 +1,7 @@
 /**
  * Title: The Settings tab's folded sections: names, summaries and strip words
- * Purpose: Pin plan 91 § 3c / plan 92 T1's first piece: the ten Settings sections in order (UI scale only while
- *          the Developer tab is on), each section's one-line summary against the density board's own drawing
+ * Purpose: Pin plan 91 § 3c / plan 92 T1's first piece: the nine Settings sections in order,
+ *          each section's one-line summary against the density board's own drawing
  *          (docs/demos/mockup-board-2/src/44-tabs.js, `sectionSummary`, fed the state 42-tabs-data.js draws),
  *          and every row's longer text word for word against that data file.
  * Used for: settingsTabFolds.ts.
@@ -16,18 +16,15 @@ import {
   SETTINGS_ROW_HELP,
   SETTINGS_SECTIONS,
   accentIntensityHelp,
-  settingsSectionIds,
   settingsSectionSummaries,
-  uiScaleAutoHelp,
   type SettingsFoldValues,
 } from "./settingsTabFolds";
 
 const DRAWING_STATE = join(process.cwd(), "docs", "demos", "mockup-board-2", "src", "42-tabs-data.js");
 const drawn = readFileSync(DRAWING_STATE, "utf8");
 
-/** The state the drawing's Settings tab is in: auto on, Save memory, Normal, remember off, spoilers on, chip off, base.en, character on, Developer on. */
+/** The state the drawing's Settings tab is in: Save memory, Normal, remember off, spoilers on, chip off, base.en, character on, Developer on. */
 const DRAWN: SettingsFoldValues = {
-  uiScaleAutoEnabled: true,
   screenshotAttachmentPreset: "low",
   chatTextSize: "normal",
   rememberTyped: false,
@@ -45,10 +42,9 @@ describe("the Settings tab's sections", () => {
 
   it("are the drawing's sections, in the drawing's order, under the drawing's names", () => {
     const names = Array.from(drawn.matchAll(/sec\("([^"]+)"\)/g)).map((m) => m[1]!);
-    const settingsStart = names.indexOf("UI scale");
+    const settingsStart = names.indexOf("Screenshot quality");
     expect(names.slice(settingsStart, settingsStart + SETTINGS_SECTIONS.length)).toEqual(SETTINGS_SECTIONS.map((s) => s.title));
     expect(SETTINGS_SECTIONS.map((s) => s.id)).toEqual([
-      "uiscale",
       "screenshot",
       "textsize",
       "remember",
@@ -59,19 +55,11 @@ describe("the Settings tab's sections", () => {
       "data",
     ]);
   });
-
-  it("leave UI scale out while the Developer tab is off", () => {
-    expect(settingsSectionIds(false)).not.toContain("uiscale");
-    expect(settingsSectionIds(false)).toHaveLength(8);
-    expect(settingsSectionIds(true)[0]).toBe("uiscale");
-    expect(settingsSectionIds(true)).toHaveLength(9);
-  });
 });
 
 describe("the Settings tab's summaries, by the drawing's rule", () => {
   it("read exactly as the drawing's sectionSummary reads them in the state it draws", () => {
     expect(settingsSectionSummaries(DRAWN)).toEqual({
-      uiscale: "Adjust UI automatically on",
       screenshot: "Save memory",
       textsize: "Normal",
       remember: "off",
@@ -85,7 +73,6 @@ describe("the Settings tab's summaries, by the drawing's rule", () => {
 
   it("follow each setting: a choice shows its pick, a lone switch shows on or off, the section's own name is dropped", () => {
     const flipped = settingsSectionSummaries({
-      uiScaleAutoEnabled: false,
       screenshotAttachmentPreset: "max",
       chatTextSize: "large",
       rememberTyped: true,
@@ -96,7 +83,6 @@ describe("the Settings tab's summaries, by the drawing's rule", () => {
       showDeveloperTab: false,
     });
     expect(flipped).toEqual({
-      uiscale: "Adjust UI automatically off",
       screenshot: "Best detail",
       textsize: "Large",
       remember: "on",
@@ -112,7 +98,6 @@ describe("the Settings tab's summaries, by the drawing's rule", () => {
 describe("the Settings tab's strip words", () => {
   it("are the drawing's words, row by row, except the Text size row, which keeps the words plan 89 gave it", () => {
     const fromDrawing: Array<[string, string]> = [
-      ["UI scale switch", SETTINGS_ROW_HELP.uiScaleAuto],
       ["Screenshot quality", SETTINGS_ROW_HELP.screenshot],
       ["Remember what I typed", SETTINGS_ROW_HELP.remember],
       ["Story spoilers", SETTINGS_ROW_HELP.spoilers],
@@ -122,15 +107,6 @@ describe("the Settings tab's strip words", () => {
       ["Show Developer tab", SETTINGS_ROW_HELP.developerTab],
     ];
     for (const [row, words] of fromDrawing) expect(drawn, row).toContain(words);
-  });
-
-  it("put the UI scale line (with the size in use) before the switch's own description, as the drawing joins them", () => {
-    expect(drawn).toContain("Two real sizes: Handheld for the Deck's own screen, Couch for TV distance. Active:");
-    expect(drawn).toContain("Also check Steam Settings → Accessibility → UI Scale.");
-    expect(uiScaleAutoHelp("Handheld", "1.00")).toBe(
-      "Two real sizes: Handheld for the Deck's own screen, Couch for TV distance. Active: Handheld (1.00×). " +
-        "Also check Steam Settings → Accessibility → UI Scale. Applies Handheld sizing on its own — this panel is always narrow, so automatic never picks Couch.",
-    );
   });
 
   it("keep the Text size words the row has had since plan 89 (the drawing's copy is older)", () => {

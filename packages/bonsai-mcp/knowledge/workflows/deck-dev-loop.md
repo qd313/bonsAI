@@ -64,7 +64,7 @@ When adding Settings/QAM toggles, buttons, sliders, or chip rows:
 3. On-Deck QA: [testing.md](../../../../docs/testing.md) **FOCUS-GRAPH-01…05** + feature-specific row (e.g. UI-SCALE-05).
 4. Policy gate: `bonsai://policy/decky-ui-focus` § **New controls & settings rows**.
 
-**Focus bugs:** main agent runs the checklist in `.cursor/rules/decky-focus-graph.mdc` (screenshots → name graph → one evidence-backed fix). Task **master-debugger** only for a real debug loop (still broken after that, or instrumentation/log proof). Preview mocks do **not** validate Deck focus graphs — deploy + on-Deck pass required.
+**Focus bugs:** main agent runs the checklist in `.cursor/rules/decky-focus-graph.mdc` (screenshots → name graph → one evidence-backed fix). Task **master-debugger** only for a real debug loop (still broken after that, or instrumentation/log proof). Only the device validates Deck focus graphs — deploy + on-Deck pass required.
 
 ## Automated gates (before handoff)
 

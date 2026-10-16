@@ -191,11 +191,10 @@ Edit `claude_desktop_config.json`:
 | Tool | When |
 |------|------|
 | `bonsai.session.bootstrap` | Start of session — policy ids + fetch hints (not full bodies) |
-| `bonsai.workflow.get` | Deck dev loop, tier QA, preview, screenshots |
+| `bonsai.workflow.get` | Deck dev loop, screenshots |
 | `bonsai.policy.get` / `bonsai.policy.list` | Specific policy slices |
 | `bonsai.docs.search` / `bonsai.docs.get` | Search or read `docs/` |
 | `bonsai.arch.rpcMap` / `bonsai.arch.hotspots` | Codebase context |
-| `bonsai.arch.previewTiers` | Preview-suite tiers and the scenarios in each |
 | `bonsai.report.archive` | Append subagent findings |
 
 ## Key prompts
@@ -213,7 +212,7 @@ Edit `claude_desktop_config.json`:
 
 All knowledge files are plain markdown under `packages/bonsai-mcp/knowledge/` and remain readable in git without MCP.
 
-The architecture maps (`rpc-map.json`, `hotspots.json`, `import-graph.json`, `test-inventory.json`, `preview-tiers.json`, `env-vars.json`, `py-import-graph.json` under `packages/bonsai-mcp/knowledge/architecture/`) are **not saved in the repo**. The tool server builds them when it starts, and `scripts/ratchet.py` builds the ones it reads (through `scripts/architecture_maps.py`), so each is always current. To build them by hand: `pnpm run mcp:generate` and `python scripts/py_import_graph.py`. The code map is `python scripts/code_map.py`, which writes `docs/code-map.md` (also not saved). The two hand-written `.md` files in that folder are saved as usual.
+The architecture maps (`rpc-map.json`, `hotspots.json`, `import-graph.json`, `test-inventory.json`, `env-vars.json`, `py-import-graph.json` under `packages/bonsai-mcp/knowledge/architecture/`) are **not saved in the repo**. The tool server builds them when it starts, and `scripts/ratchet.py` builds the ones it reads (through `scripts/architecture_maps.py`), so each is always current. To build them by hand: `pnpm run mcp:generate` and `python scripts/py_import_graph.py`. The code map is `python scripts/code_map.py`, which writes `docs/code-map.md` (also not saved). The two hand-written `.md` files in that folder are saved as usual.
 
 One generated file **is** saved: `src/types/rpcMethods.ts`, the list of back-end method names the screen code is held to (a fresh clone needs it to type-check). It changes only when a method is added to or removed from `main.py`. CI workflow `validate-mcp.yml` fails the push/PR when it is stale.
 

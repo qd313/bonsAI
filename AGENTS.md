@@ -392,5 +392,4 @@ The two personas that review code live in [docs/agents/](docs/agents/) as plain 
 read the same whether a person opens them, Claude runs them as an agent, or another tool calls the
 matching prompt.
 
-**The in-panel preview is shelved, and plan 86 removes it.** It never got past its loading screen,
-and it cannot check Deck focus behaviour in any case. Use the device.
+**The in-panel preview test tool was removed in plan 86. The Deck is the check.**

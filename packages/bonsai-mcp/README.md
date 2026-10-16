@@ -20,7 +20,7 @@ BONSAI_REPO_ROOT=/path/to/bonsAI node dist/index.js
 | Path | Content |
 |------|---------|
 | `knowledge/policies/` | Git, deploy, focus, permissions, planning rules |
-| `knowledge/workflows/` | Deck dev loop, tier QA, preview, screenshot ingest |
+| `knowledge/workflows/` | Deck dev loop, screenshot ingest |
 | `knowledge/personas/` | Specialist agent system prompts |
 | `knowledge/architecture/` | Two hand-written maps (`focus-graph-patterns.md`, `platform-contract.md`). The RPC map, module map, test inventory and the rest are JSON files built when the server starts; they are not saved in the repo |
 
@@ -30,7 +30,7 @@ BONSAI_REPO_ROOT=/path/to/bonsAI node dist/index.js
 - `bonsai.policy.list` / `bonsai.policy.get`
 - `bonsai.workflow.get`
 - `bonsai.docs.search` / `bonsai.docs.get`
-- `bonsai.arch.rpcMap` / `bonsai.arch.hotspots` / `bonsai.arch.previewTiers`
+- `bonsai.arch.rpcMap` / `bonsai.arch.hotspots`
 - `bonsai.report.archive`
 
 ## Prompts

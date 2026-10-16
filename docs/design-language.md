@@ -211,7 +211,7 @@ candidates need opposite fixes. Three passes of careful reasoning from screensho
 about 3px and produced one change that did nothing at all; one probe run found the cause outright.
 
 Layout on this surface is not inspectable any other way. jsdom has no layout engine, so vitest can
-never assert it. The preview suite does not cover row geometry. Plugin JS runs in `SharedJSContext`,
+never assert it. Plugin JS runs in `SharedJSContext`,
 whose `document` contains none of our markup — so `bonsaiDebugLog` cannot see it either. CDP against
 the QuickAccess target is the only honest instrument.
 

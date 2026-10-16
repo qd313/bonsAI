@@ -191,7 +191,6 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   const [localSetupStatus, setLocalSetupStatus] = useState<LocalOllamaSetupStatus | null>(null);
   const localSetupBusy = localSetupStatus?.phase === "running";
   const setupAutoTestRanRef = useRef(false);
-  const lastCompletedSetupProfileRef = useRef<string>("");
   const onTestConnectionRef = useRef<(opts?: { quiet?: boolean }) => Promise<void>>(async () => {});
   /*
    * Which mode -- Ollama on this Deck (true) or on the network (false) -- the automatic probe last
@@ -437,7 +436,6 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     setLocalSetupStatus,
     localSetupBusy,
     setupAutoTestRanRef,
-    lastCompletedSetupProfileRef,
     onBeforeDeckyModal,
     onCompleteDeckyModalClose,
     onTestConnectionRef,

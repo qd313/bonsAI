@@ -69,7 +69,6 @@ export function useLocalOllamaSetupFlow({
   setLocalSetupStatus,
   localSetupBusy,
   setupAutoTestRanRef,
-  lastCompletedSetupProfileRef,
   onTestConnectionRef,
 }: {
   ollamaLocalOnDeck: boolean;
@@ -77,7 +76,6 @@ export function useLocalOllamaSetupFlow({
   setLocalSetupStatus: (v: LocalOllamaSetupStatus | null) => void;
   localSetupBusy: boolean;
   setupAutoTestRanRef: MutableRefObject<boolean>;
-  lastCompletedSetupProfileRef: MutableRefObject<string>;
   /** No longer used here: the setup box is the download notice, which takes the shell's own box hooks. */
   onBeforeDeckyModal: () => void;
   /** No longer used here, as above. */
@@ -156,7 +154,6 @@ export function useLocalOllamaSetupFlow({
         }
         setRefusal("");
         setupAutoTestRanRef.current = false;
-        lastCompletedSetupProfileRef.current = chosen;
         startLocalOllamaSetup(chosen, setLocalSetupStatus, setRefusal);
       })();
     },

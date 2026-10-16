@@ -41,7 +41,6 @@ function flow(setStatus: (s: LocalOllamaSetupStatus | null) => void = () => {}) 
       setLocalSetupStatus: setStatus,
       localSetupBusy: false,
       setupAutoTestRanRef: { current: false },
-      lastCompletedSetupProfileRef: { current: "" },
       onBeforeDeckyModal: () => {},
       onCompleteDeckyModalClose: (close) => close(),
       onTestConnectionRef: { current: async () => {} },

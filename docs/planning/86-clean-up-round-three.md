@@ -529,3 +529,18 @@ From its [postmortem](../../../bonsAI-workshop/audit/refactor-round-two/postmort
     `scripts/ratchet.json`). Step 3's read-aloud removal shrinks it again.
   - **The landing script kept one map** on a clash (`test-inventory.json`); a follow-up commit stopped tracking it.
     The updated landing script handles that clash now.
+- **2026-10-16, step 1 item 5, evidence writers** (a Sonnet 5.5 high helper, landed `028db628`): one setting,
+  `BONSAI_WORKSHOP` (the environment, then `.env`, then the folder `bonsAI-workshop` next to the repo; a helper copy
+  counts as its main checkout), read through `scripts/lib/workshop.py` and `.mjs`. The overnight Deck run reads saved
+  walks from and writes its report to the workshop; both knowledge-library eval scripts write their reports there and
+  stop at the start when it is missing. The Deck helper saves evidence to the workshop by absolute path and passes
+  `checksDir` to every saved-walk call (the Deck tool's own default still points into the repo: worth raising
+  upstream); the bookkeeper cites `workshop:test-evidence/<name>` after checking the file exists. Local screenshots
+  and recordings still go to the repo's ignored scratch folders.
+- **2026-10-16, end of steps 0 and 1** (tip `86589cf3`, 26 commits since `adddc2a7`): every check green, the full
+  test sets last run at the final landing. The repo is **1,693 files and 31.7 MB** (from 4,332 and 358 MB this
+  morning); documents 36,183 lines (from 109,484); scripts 92 files and 25,304 lines. The workshop holds 2,671 files.
+  Budget: 5 % of the five-hour window used since its 13:20 reset, 22 % of the week. **Nothing pushed:** the push guard
+  stays on, so the maintainer runs the two pushes (both repos). **Next: step 2** (read every file), its own session.
+  Before it: raise "Dynamic workflow size" if step 2 runs as a workflow; calibrate the usage guard once with
+  `python .claude/hooks/spawn-line.py --calibrate <percent>` late in a five-hour window.

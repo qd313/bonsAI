@@ -6,7 +6,7 @@
  * Solves: Each builder's own suite proves its piece; nothing proved the pieces still add up to one
  *   reply, in the right order, with the button row actually gone.
  * Does not: Prove anything about geometry or D-pad focus. The test runner has no layout engine and
- *   the preview suite does not validate focus graphs — that is the device rows' job.
+ *   the Deck tool's preview does not validate focus graphs — that is the device rows' job.
  */
 import { isGreyedDeckyButton } from "../test-harness/fakeDeckyUi";
 import { describe, expect, it, vi } from "vitest";

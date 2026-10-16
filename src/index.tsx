@@ -51,7 +51,6 @@
  * Split note (plan 65): the empty starting snapshot moved to
  * features/plugin-shell/initialSessionSnapshot.ts; the two "clear the session" /
  * "clear everything" actions moved to features/plugin-shell/useSessionResetActions.tsx; the
- * preview test hook registration moved to preview/useDeckyPreviewTestHookRegistration.ts; the
  * post-remount session restore moved to
  * features/plugin-shell/useSessionRestoreAfterRemount.ts; the chat-slot activity refs moved to
  * features/plugin-shell/useChatSlotActivityState.ts; the accent/UI-scale scope style moved to
@@ -164,7 +163,6 @@ import { usePluginHelpModal } from "./features/plugin-shell/usePluginHelpModal";
 import { useBonsaiAskOrchestration } from "./hooks/useBonsaiAskOrchestration";
 import { useChatSlots } from "./hooks/useChatSlots";
 import { useDisclaimerAndLocalRuntimeGates } from "./hooks/useDisclaimerAndLocalRuntimeGates";
-import { useDeckyPreviewTestHookRegistration } from "./preview/useDeckyPreviewTestHookRegistration";
 import { useSessionResetActions } from "./features/plugin-shell/useSessionResetActions";
 import { useSessionRestoreAfterRemount } from "./features/plugin-shell/useSessionRestoreAfterRemount";
 import { useChatSlotActivityState } from "./features/plugin-shell/useChatSlotActivityState";
@@ -728,24 +726,6 @@ const Content: React.FC = () => {
     onBeforeDeckyModal: captureSessionBeforeModal,
     onCompleteDeckyModalClose,
     saveSettingsNow: () => void persistChangedSettingsNow(),
-  });
-
-  useDeckyPreviewTestHookRegistration({
-    currentTab,
-    setCurrentTab,
-    unifiedInput,
-    setUnifiedInput,
-    askMode,
-    isAsking,
-    ollamaResponse,
-    lastExchange,
-    capabilities,
-    lastTransparency,
-    onAskOllama,
-    setSelectedAttachment,
-    restoreSessionSnapshot,
-    sessionSnapshotRef,
-    showDisclaimerModalAgain,
   });
 
   const { openModelPolicyReadme, onOpenControllerSettingsForShortcut } = useExternalNavigationActions();

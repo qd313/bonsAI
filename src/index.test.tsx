@@ -131,11 +131,11 @@ describe("plugin root", () => {
       expect(ids[1]).toBe("main");
     });
 
-    // The preview suite scopes its DOM snapshots to one tab panel, because a snapshot of
+    // The Deck tool's DOM snapshots scope to one tab panel, because a snapshot of
     // `.bonsai-scope` is 8000 characters of the stylesheet BonsaiPluginShell injects as its
     // first child and never reaches rendered markup. These anchors are the only thing making
     // that scoping possible, and nothing else in the product reads them — so without a test
-    // they are invisible to every gate and a tidy-up would silently re-break the suite.
+    // they are invisible to every gate and a tidy-up would silently re-break those snapshots.
     // See docs/testing.md § Preview-suite evidence invalidated (D1).
     it("gives the rendered tab panel a snapshot anchor matching its tab id", async () => {
       const plugin = await freshPlugin();

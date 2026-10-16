@@ -387,7 +387,7 @@ def metric_duplicate_lines_app():
 
 def metric_duplicate_lines_be_tests():
     # "Back-end tests" = the Python test files. tests/ also holds JSON fixtures
-    # (the saved preview-suite runs), and repeated blocks in those are data, not
+    # (saved test-run results), and repeated blocks in those are data, not
     # code anybody would hand-edit. Counting them read 2286 where the Python is 2076.
     return _run_jscpd([ROOT / "tests"], "**/*.json")
 

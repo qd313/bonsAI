@@ -64,7 +64,7 @@ SEARCH_SKIP_DIRS = {
 
 # Places that call front-end code by name at runtime rather than importing it.
 # An export only referenced from here is not dead -- deleting it breaks a test
-# run or a preview session, which no import graph can see.
+# run, which no import graph can see.
 HARNESS_DIRS = ("src/test-harness", "tests", "scripts", "packages/bonsai-mcp")
 
 # Methods on the Plugin class that Decky Loader itself calls. They have no caller
@@ -241,8 +241,8 @@ def list_unused_exports() -> dict:
     # Test files that live next to the code they test count as harness too.
     for f in _searchable_files((".test.ts", ".test.tsx")):
         harness_files.append(f)
-    # Everything that could import a frontend name: app code, tests, the harness,
-    # the preview code and the tooling. A name only a test imports still needs its
+    # Everything that could import a frontend name: app code, tests, the harness
+    # and the tooling. A name only a test imports still needs its
     # export, so the outward check cannot be limited to app code.
     app_files = list(ratchet.fe_app_files()) + harness_files
 

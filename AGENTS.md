@@ -141,7 +141,7 @@ Full patterns:
 
 - **Design a new Settings or panel row as an explicit focus graph in the section's parent**: list
   every stop, wire the move handlers on the element that owns focus, and check it on the device.
-  Copy the UI-scale section, the Ollama tab, or the pull-models dialog.
+  Copy the Ollama tab or the pull-models dialog.
   - **The common case is an exception: a plain toggle added to a section that already has some needs
     no focus wiring at all.** It inherits the section's chain. The rule above is about a *new focus
     owner* — a new section, a slider, a row of buttons, or anything that must hand focus to a

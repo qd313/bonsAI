@@ -98,8 +98,7 @@ Remember what I typed (toggle)
 - **Moves:** Left and Right are not written by hand: the row and its buttons carry no `onMoveLeft` /
   `onMoveRight`, so Steam's own walk decides them and no sideways press can be swallowed. Since the Settings tab
   folded (plan 92 T1, the last section of this file) the row carries `onMoveUp` / `onMoveDown` only, to go to its
-  section's line and the next line; the old hand-written link from the UI scale Apply button to the Screenshot
-  quality row is gone with the fold.
+  section's line and the next line; the old hand-written links into it are gone with the fold.
 - **A** (`onClick`) saves the choice. The saved one is drawn with the lighter fill and `aria-pressed`; the
   words everywhere in the plugin change size at once, nothing reloads, and the ring stays on the button that was pressed.
 - **Test:** `SettingsTab.textSizeWalk.test.tsx` lists the tab's stops with the row in it (Developer tab off and
@@ -1263,8 +1262,7 @@ first and last controls is `useSettingsTabFocus.ts`.
 ```
 tab bar
    | Down                                 ^ Up (from the first line)
-[ UI SCALE   Adjust UI automatically on                ▸ ]  (Developer tab on only)     --Right--> [ ⊞ Open all ]
-[ SCREENSHOT QUALITY   Save memory                     ▸ ]
+[ SCREENSHOT QUALITY   Save memory                     ▸ ]  --Right--> [ ⊞ Open all ]
 [ TEXT SIZE   Normal                                   ▸ ]
 [ REMEMBER WHAT I TYPED   off                          ▸ ]
 [ STORY SPOILERS (STRATEGY MODE)   Hide spoilers … on  ▸ ]
@@ -1282,8 +1280,7 @@ tab bar
 - **Stops:** the section lines; in an open section, one per control: each switch; ONE stop for a row of buttons
   side by side (Screenshot quality, Text size, the two speech models, the two Clear buttons: Left
   and Right walk them, Down and Up leave the row); the character picker button; the Accent intensity control; the
-  voice install button (and the Open Permissions button above the models while the microphone is off); in UI
-  scale, the switch, the manual slider's bridge and Reset (only while automatic is off) and Apply; and the
+  voice install button (and the Open Permissions button above the models while the microphone is off); and the
   floating button. The paragraphs, the voice engine's status lines and the summaries are not stops.
 - **Moves, handed in by the tab** (`SettingsTab.tsx`): Up from a section's first control goes to its line
   (`takeFoldLine`, Steam's own transfer onto the line's registered nav node); Down from its last goes to the next
@@ -1303,13 +1300,10 @@ tab bar
   (`character-picker-settings`) before it opens its popup; Clear cache... and Clear all data... remember
   themselves and open Steam confirm boxes; the Accent intensity menu is the same inline menu as before, now under
   a full-width row, and its open state still survives a rebuild of the tab.
-- **A slider's ring stays on its knob** (the UI scale slider is the same `SettingsTabUiScaleSlider`; plan 82).
 - **Greyed buttons:** a greyed Decky button still takes the ring on the Deck, so no hop asks a button whether it
-  is disabled. Apply is greyed while it runs; the UI scale section keeps that state itself and declines the hop
-  to Apply by it (`SettingsTabUiScaleSection.greyedApply.test.tsx`, with a Button stand-in that takes focus when
-  greyed). The old Up from Screenshot quality to Apply is gone: the first control of a section goes to its line.
+  is disabled. The first control of a section goes to its line.
 - **Class names and attributes a Deck driver can find:** the lines `.bonsai-fold-line`
-  (`[data-bonsai-fold-line="uiscale|screenshot|textsize|remember|spoilers|chips|voiceinput|character|data"]`,
+  (`[data-bonsai-fold-line="screenshot|textsize|remember|spoilers|chips|voiceinput|character|data"]`,
   `[data-open]`); the rows `.bonsai-dense-row` (`[data-bonsai-help-label="<row name>"]`, `[data-bonsai-help]`
   its strip words); the Text size row `[data-bonsai-chat-text-size-row="true"]`; the picker
   `button.bonsai-ai-character-picker-open`; the accent control `button.bonsai-accent-intensity-trigger`; the Clear
@@ -1318,7 +1312,6 @@ tab bar
 - **Tests:** `settingsTabFolds.test.ts` (sections, summaries and strip words against the drawing),
   `SettingsTab.folded.test.tsx` (closed and open, the rows' words, the popups, the moves out of a section),
   `SettingsTab.foldedWalk.test.tsx` (the bounded Down and Up walks, closed and open, three scroll rules, two panes,
-  the strip, the button's exits), `SettingsTabUiScaleSection.greyedApply.test.tsx`. Device checks (block B): the
+  the strip, the button's exits). Device checks (block B): the
   closed tab under 1.5 screens; a Down walk with every section open with no dead press and no stop twice; the
-  strip on three rows; Text size's Left and Right move the page 0 points; the UI scale section folded like the
-  rest.
+  strip on three rows; Text size's Left and Right move the page 0 points.

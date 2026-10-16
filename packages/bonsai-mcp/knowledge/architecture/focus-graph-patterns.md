@@ -22,8 +22,7 @@ Policy (always applied): `bonsai://policy/decky-ui-focus` — especially **New c
 
 | Reference | What it demonstrates |
 |-----------|----------------------|
-| `src/components/SettingsTabUiScaleSection.tsx` | Toggle → slider bridge → Reset → Apply; cross-section hooks to screenshot row |
-| `src/components/SettingsTab.tsx` | `focusScreenshotQualityRow`, `focusUiScaleApplyButton`, `applyButtonRef` |
+| `src/components/SettingsTab.tsx` | The folded Settings tab: section lines, `takeFoldLine`, `foldLineBelow` |
 | `src/components/OllamaTab.tsx` | `focusOllamaKeepAliveThumb`, `focusLatencyWarningThumb`, `onMoveDownFromThumb` |
 | `src/components/PullModelsModal.tsx` | Horizontal chip row + vertical exits via `Button` `onMove*` spreads |
 | `src/components/CharacterPickerModal.tsx` | `ToggleField` `onMoveDown` / `onMoveRight` to list and footer |
@@ -40,8 +39,6 @@ Policy (always applied): `bonsai://policy/decky-ui-focus` — especially **New c
 2. Handles **vertical** nav: `onMoveUp` / `onMoveDown` to siblings
 3. Handles **horizontal** nav on the **bridge** (same focus owner): `onMoveLeft`, `onMoveRight`, `onButtonDown` → step state
 4. Drives thumb **visuals** via `thumbFocusedExternal` / `thumbEditingExternal` on `DeckFocusSlider`
-
-Canonical: `SettingsTabUiScaleSection.tsx` (`bonsai-ui-scale-slider-focus-bridge`).
 
 **Alternative (no bridge):** parent-only refs + programmatic focus to thumb when the thumb is a proven focus peer (e.g. `OllamaTab` → `focusOllamaKeepAliveThumb` from connection timeout `onMoveDownFromThumb`). Still wire the **section** graph explicitly.
 

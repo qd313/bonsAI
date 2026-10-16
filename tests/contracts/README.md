@@ -51,22 +51,6 @@ combination. D13 resolved one setting the other way —
 TypeScript already did on both its normalize and save paths, because reading the deprecated key
 independently produces a self-contradictory payload.
 
-### Known exception, deliberately not in the fixture
-
-`ui_scale_manual_profile` with value `"immersive"`. TypeScript downgrades it to `handheld`
-because `SHOW_IMMERSIVE_UI_SCALE` is `false` in
-[uiScaleProfile.ts](../../src/data/uiScaleProfile.ts); Python accepts it. That is a feature
-gate working as intended, not drift — the UI never offers the profile, so it cannot produce
-the value. **Add a case for it when that flag flips to `true`**, at which point the two sides
-should agree.
-
-Second one: with `show_developer_tab` off, TypeScript loads `ui_scale_auto_enabled: true` and `ui_scale_manual_profile: "handheld"` whatever was saved, because the UI scale section is Developer-tab only since 0.6.0 (plan 72, [bonsaiSettingsNormalizers.ts](../../src/data/bonsaiSettingsNormalizers.ts)); Python keeps the saved values and never reads them.
-
-Related trap worth knowing: `ui_scale_manual_profile: " Handheld "` *does* match across both
-languages, but only because each lands on `handheld` by a different route — one by trimming
-and lowercasing, the other by falling back to the default. Agreement by coincidence is not
-agreement, so do not read that case as evidence the rules match.
-
 ## `spoiler-title-profiles.json`
 
 The built-in spoiler sensitivity tables from the constitution runtime — which AppIDs are

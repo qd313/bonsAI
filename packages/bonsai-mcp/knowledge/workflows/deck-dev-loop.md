@@ -61,7 +61,7 @@ When adding Settings/QAM toggles, buttons, sliders, or chip rows:
 
 1. Design the **section-level focus graph** before coding UI polish — see `bonsai://architecture/focus-graph-patterns`.
 2. For `DeckFocusSlider`: add a parent **Focusable bridge** (or Ollama-style parent refs); never rely on thumb-only props.
-3. On-Deck QA: [testing.md](../../../../docs/testing.md) **FOCUS-GRAPH-01…05** + feature-specific row (e.g. UI-SCALE-05).
+3. On-Deck QA: [testing.md](../../../../docs/testing.md) **FOCUS-GRAPH-01…05** + the feature's own row.
 4. Policy gate: `bonsai://policy/decky-ui-focus` § **New controls & settings rows**.
 
 **Focus bugs:** main agent runs the checklist in `.cursor/rules/decky-focus-graph.mdc` (screenshots → name graph → one evidence-backed fix). Task **master-debugger** only for a real debug loop (still broken after that, or instrumentation/log proof). Only the device validates Deck focus graphs — deploy + on-Deck pass required.

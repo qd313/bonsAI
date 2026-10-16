@@ -33,7 +33,7 @@ measured on device.
 
 Measured on device 2026-08-16 with
 [workshop:scripts/probe_deck_ask_row_width.py](../../bonsAI-workshop/scripts/probe_deck_ask_row_width.py), Deck output at
-1080p (`devicePixelRatio` 1.28, UI scale profile `desktop`, `--bonsai-ui-scale: 1`):
+1080p (`devicePixelRatio` 1.28):
 
 | Surface | CSS px | Notes |
 |---|---|---|

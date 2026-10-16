@@ -29,7 +29,6 @@ adding a surface; read this one while building it.
 - [The inline popover idiom](#the-inline-popover-idiom)
 - [Focus rings](#focus-rings)
 - [Type scale](#type-scale)
-- [UI scale](#ui-scale)
 - [Layout constants](#layout-constants)
   - [The tab bar](#the-tab-bar)
   - [The chat's name row](#the-chats-name-row)
@@ -50,7 +49,7 @@ string, assembled at runtime and injected into one `<style>` tag.
   they are overriding Steam's own CSS inside its UI, not authoring in a clean document.
 - Content rendered through Decky `showModal()` escapes `.bonsai-scope`, so it must be
   wrapped in [BonsaiModalScope](../src/components/BonsaiModalScope.tsx), which re-injects
-  a portal stylesheet and the UI-scale bridge.
+  a portal stylesheet.
 
 Consequence for anyone adding UI: **a new class needs a rule added to a section file**,
 and modal content needs `BonsaiModalScope` or it renders unstyled.
@@ -240,7 +239,7 @@ Two standing prohibitions, both recorded as reverts in the source:
 **Every size in this table is a Normal size.** Settings > Text size (Small 0.9, Normal 1, Large 1.15) multiplies
 every font size in the plugin, on every tab and in every popup: a size is written
 `textPx(n)` ([textPx.ts](../src/styles/sections/textPx.ts), `calc(${n}px * var(--bonsai-text-scale, 1))`),
-or `uiTextPx(n)` when it also follows the UI scale; inline `fontSize` values go through `textPx` the same way.
+inline `fontSize` values go through `textPx` the same way.
 The step is a variable of its own, written on the plugin's box, in the style popups read, and on the chat's
 name and tab bar in Decky's bar (they sit outside the box). Rows keep their heights: only the letters grow, so
 a fixed-height row cuts a long line off sooner on Large. Left alone on purpose: the LB and RB marks in the tab
@@ -254,25 +253,6 @@ by hand.
 
 `UNIFIED_TEXT_FONT_PX` and `UNIFIED_TEXT_LINE_HEIGHT` must match the `TextField` **and**
 the measure/overlay nodes, or the fake caret drifts from the painted text.
-
----
-
-## UI scale
-
-`uiScalePx(n)` ([uiScalePx.ts](../src/styles/sections/uiScalePx.ts)) emits
-`calc(${n}px * var(--bonsai-ui-scale, 1))`. Use it for any px token in a section file that
-should track the user's scale profile; raw px is correct only for things that must not
-scale (hairlines, the icon strip).
-
-| Profile | Multiplier | Classified when |
-|---|---|---|
-| Handheld | `1` | viewport < 600px (`HANDHELD_VIEWPORT_MAX_PX`) |
-| Desktop | `1` | between the two thresholds |
-| Couch | `1.18` | viewport ≥ 960px (`EXTERNAL_COUCH_VIEWPORT_MIN_PX`) |
-| Immersive | `1.22` | dev-only — `SHOW_IMMERSIVE_UI_SCALE` is `false` |
-
-Immersive is capped at `1.28` (`UI_SCALE_IMMERSIVE_MAX_MULTIPLIER`) and is not reachable in
-shipped builds.
 
 ---
 
@@ -295,8 +275,7 @@ All from [unified-input/constants.ts](../src/features/unified-input/constants.ts
 The QAM column is roughly **400 × 800**. Design against that, not the Deck's 1280×800 screen —
 only `showModal()` content escapes the column.
 
-> **Disputed by measurement, 2026-08-16.** On a Deck output at 1080p (`devicePixelRatio` 1.28, UI
-> scale profile `desktop`), [workshop:scripts/probe_deck_ask_row_width.py](../../bonsAI-workshop/scripts/probe_deck_ask_row_width.py)
+> **Disputed by measurement, 2026-08-16.** On a Deck output at 1080p (`devicePixelRatio` 1.28), [workshop:scripts/probe_deck_ask_row_width.py](../../bonsAI-workshop/scripts/probe_deck_ask_row_width.py)
 > reports `.bonsai-scope` at **300 × 752** and the `_TabContentsScroll` body at **300 × 667** — not
 > 400 × 800. **Settled for the Deck's own screen, 2026-10-09 (plan 84): the column is 300 × 454 points** (1.5 screen pixels per point; see design-language.md), so 300 wide holds on handheld too; the 400 figure was never right. The
 > difference is not cosmetic: designing against 400 when the column is 300 makes every layout 25%

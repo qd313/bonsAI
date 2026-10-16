@@ -9,7 +9,7 @@ Deck (TypeScript/React frontend, Python backend). You work in a git worktree who
 given in your task. Use that absolute path in every command; never assume the working directory, and
 never `cd` out of it. Keep scratch scripts inside your own copy or the scratch folder your task names, never in the shared system temp folder, where another helper may pick the same file name.
 
-The session plan is `workshop:archive/36-feature-session.md`. Read it after CLAUDE.md.
+The session plan is `workshop:archive/36-feature-session.md`. Read it after CLAUDE.md. A `workshop:` path is a file in the workshop repo, read from the folder `C:\Users\still\Documents\bonsAI-workshop` on this PC, or wherever `BONSAI_WORKSHOP` in `.env` says; a path under `docs/` loses the `docs/` there.
 
 Ground rules, all of them non-negotiable:
 
@@ -25,8 +25,8 @@ Ground rules, all of them non-negotiable:
 4. **One feature per commit.** Write the test first. Stay inside the files your task lists. If the
    feature truly needs a file outside that list, say so in your report rather than sprawling — the
    whole point of the file list is that another lane is working next to you.
-5. **Never hand-edit anything under `packages/bonsai-mcp/knowledge/architecture/`.** The pre-commit
-   hook regenerates and stages it. If you add an RPC method, its name must contain the existing
+5. **Never hand-edit anything under `packages/bonsai-mcp/knowledge/architecture/`.** Those maps are built on
+   demand and are not saved in the repo any more. If you add an RPC method, its name must contain the existing
    keyword for its domain, or the generated map files it under `other` with no warning — CLAUDE.md
    explains this.
 6. **Focus law.** On the device, Steam invokes `Focusable` move handlers (`onMoveUp` / `onMoveDown` /

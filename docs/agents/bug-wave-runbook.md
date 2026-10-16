@@ -66,7 +66,7 @@ never back to back without re-reading the second against the first.
 1. Read the helper's whole change. Ask: does a test fail without the fix **at the level the Deck check looks
    at**? For a D-pad change: can the walk loop? For a label: search for the old words again.
 2. `scripts/land_lane.sh <branch> <tip> <scratch folder>`, in the background. It picks the commits one by one,
-   regenerates the generated files, and runs the five checks and the wider quick check. Read its log.
+   regenerates `src/types/rpcMethods.ts` (the one generated file still saved; the architecture maps are built on demand), and runs the five checks and the wider quick check. Read its log.
 3. A real clash stops the script with the pick left open. Resolve it by hand, continue, run the script again.
 4. Hand the bookkeeper the result list, then start the next helper in the freed slot.
 
@@ -104,7 +104,10 @@ five-second fix on their side.
 
 After every landing, a fixed bug moves from Bugs to Verify, naming the check it owes. After every Deck pass, a
 pass moves to Done with its evidence file and a failure goes back to Bugs with what was seen, the testing
-documents in the same commit. Result lists are copied from the evidence file's own words. The session
+documents in the same commit. Result lists are copied from the evidence file's own words. Evidence files and saved Deck walks are written to the workshop repo, not to bonsAI: `test-evidence/` and
+`checks/` in the folder the `BONSAI_WORKSHOP` setting names (default: `bonsAI-workshop` next to the bonsAI
+folder; `C:\Users\still\Documents\bonsAI-workshop` on this PC). A pass cites its file as `workshop:test-evidence/<name>`,
+and the bookkeeper confirms the file exists there first. The session
 spot-checks each bookkeeper commit against the evidence. The plan's log gets a few lines after every landing
 and every Deck block, and is committed, so a look from a phone shows where things stand.
 

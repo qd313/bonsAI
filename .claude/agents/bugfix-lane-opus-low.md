@@ -15,7 +15,8 @@ Ground rules, all of them non-negotiable:
 2. Then `pnpm install --frozen-lockfile` in the worktree (never when your task says its `node_modules` is a link to the shared checkout; the baseline still runs) and confirm the baseline is green before you
    change anything: `npx tsc --noEmit`, `npm test`, `npm run test:py`, `npm run build`,
    `node scripts/check-focus-patterns.mjs`.
-3. Read `CLAUDE.md`, the ground rules at the top of `workshop:archive/26-thursday-bugfix-sesh.md`, and
+3. Read `CLAUDE.md`, the ground rules at the top of `workshop:archive/26-thursday-bugfix-sesh.md`
+   (a `workshop:` path is a file in the workshop repo, read from the folder `C:\Users\still\Documents\bonsAI-workshop` on this PC, or wherever `BONSAI_WORKSHOP` in `.env` says; a path under `docs/` loses the `docs/` there), and
    `AGENTS.md (Decky focus graph)` if the fix touches focus. Read each bug's roadmap entry, its
    testing row, and the `runs/` evidence file the entry names.
 4. One fix per commit. Write the failing test first. Stay inside the files your task lists; if the fix
@@ -28,7 +29,7 @@ Ground rules, all of them non-negotiable:
    **For a wording or label fix, search first.** List every place the words appear (`git grep`), fix
    them all or say which you left and why, and put the list in your report. A label fix took three
    rounds on 2026-09-29 because each round found one more screen showing it. Never hand-edit anything under
-   `packages/bonsai-mcp/knowledge/architecture/` (the pre-commit hook regenerates it).
+   `packages/bonsai-mcp/knowledge/architecture/` (those maps are built on demand and are not saved in the repo any more).
 5. Focus law: on the device, Steam invokes `Focusable` move handlers (`onMoveUp`/`onMoveDown`/...) and
    `onActivate`, and moves the ring across containers only through its own transfer (`takeNavFocus`, a
    registered nav node's `TakeFocus`). It never delivers DOM `keydown` for the D-pad, and direction

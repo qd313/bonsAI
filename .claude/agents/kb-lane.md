@@ -35,11 +35,12 @@ Ground rules, all of them non-negotiable:
    is missing, build your own with
    `python scripts/build_rag_db.py --seed --out build/knowledge-base` (Ollama must be running or every
    meaning-search number is wrong). The folder is git-ignored; never commit it.
-7. **Never commit an eval report.** Both eval scripts write into `workshop:archive/research/`. Those files
+7. **Never commit an eval report to bonsAI.** Both eval scripts now write into the workshop's `archive/research/`
+   folder (`C:\Users\still\Documents\bonsAI-workshop\archive\research\` on this PC, or wherever `BONSAI_WORKSHOP` says). Those files
    are the session owner's to make on the landed branch. Delete yours or leave them untracked, and
    paste the numbers into your report instead.
-8. **Never hand-edit anything under `packages/bonsai-mcp/knowledge/architecture/`.** The pre-commit
-   hook regenerates and stages it. If you add an RPC method, its name must contain the existing
+8. **Never hand-edit anything under `packages/bonsai-mcp/knowledge/architecture/`.** Those maps are built on
+   demand and are not saved in the repo any more. If you add an RPC method, its name must contain the existing
    keyword for its domain, or the generated map files it under `other` with no warning — CLAUDE.md
    explains this.
 9. **You do not touch any roadmap file (`docs/roadmap.md`, `docs/roadmap-details.md`, `docs/roadmap-kb.md`,

@@ -33,7 +33,9 @@ save evidence, and report. The checkout path, the scratch folder and the runbook
 2. **Every Deck command has exactly this shape:** `ssh deck@192.168.86.52 '<command>'`. Nothing goes
    between `ssh` and the address: no options, no `-o`, no `-t`. Any other shape stops at a permission
    prompt nobody is there to answer.
-3. **Evidence files:** list `workshop:test-evidence/` first. Name each file `plan<NN>-<ROW-ID>.json`, with the
+3. **Evidence files** are written to the workshop's `test-evidence/` folder, by absolute path, never into the
+   bonsAI repo. The workshop is the folder the `BONSAI_WORKSHOP` setting names (`.env.example` explains it); on
+   this PC that is `C:\Users\still\Documents\bonsAI-workshop\test-evidence\`. List that folder first. Name each file `plan<NN>-<ROW-ID>.json`, with the
    plan number your task gives, or with a suffix such as `-try2` if that name exists. **Never overwrite a
    file. One file per check**, not one per block. Screenshots go beside it with the same stem. Every file
    uses these field names, so the next reader does not have to guess: `row`, `build_commit`,
@@ -114,7 +116,10 @@ listed): `deck_readFocus`, `deck_readPage`, `deck_pressButton`, `deck_runSequenc
 `deck_sweep`, `deck_assertFocusMove`, `deck_captureScreenshot`, `deck_record`, `deck_openPlugin`,
 `deck_reloadPlugin`, `deck_holdAwake`, `deck_launchGame`, `deck_exitGame`, `deck_saveCheck`,
 `deck_replayChecks`, `deck_readPluginLog`, `deck_status`. **Save every walk that passes with
-`deck_saveCheck`**, named after its row, so later builds can replay it.
+`deck_saveCheck`**, named after its row, so later builds can replay it. Saved walks live in the workshop's
+`checks/` folder (`C:\Users\still\Documents\bonsAI-workshop\checks\` on this PC): pass `checksDir` set to that folder on every
+`deck_saveCheck` and `deck_replayChecks` call. The Deck tool's own default is `<workspace>/checks`, which no
+longer exists in this repo, so a call without `checksDir` saves into or replays from the wrong place.
 
 The repo also has `scripts/probe_deck_*.py` scripts that read the page over the same debug connection.
 They are run the same way as the send-question script, piped into `python3 -` on the Deck.

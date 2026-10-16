@@ -1,6 +1,6 @@
 # bonsAI testing — automated (agents / CI)
 
-Commands and suites that can run **without** a human on the Steam Deck. Preview tiers need **Decky: Open Preview** in the IDE but still belong here (agent-driven).
+Commands and suites that can run **without** a human on the Steam Deck.
 
 Hub: [testing.md](testing.md). On-Deck: [testing-manual.md](testing-manual.md).
 
@@ -16,17 +16,8 @@ Run from repo root. Skip with **N/A** in the PR when a step does not apply (e.g.
 | Frontend unit tests | `pnpm test` | Any `src/` change (includes Vitest Decky harness under `src/test-harness/`) |
 | Backend unit tests | `pnpm run test:py` | Any `main.py`, `py_modules/backend/`, or `tests/` change |
 | Bundle | `pnpm run build` | Any `src/` or build config change |
-| Preview suite | `pnpm run test:preview:tier -- --tier=<batch> --write` | Tier QA batches; evidence → `workshop:test-evidence/` (keeps the 3 newest runs per batch, never deletes a doc-cited run — see [testing.md § Evidence retention](testing.md#evidence-retention)) |
 | Deck deploy build | `.\scripts\build.ps1` or `./scripts/build.sh` | Any `src/`, `main.py`, `plugin.json`, or Deck-facing asset change |
 | Plugin zip CI | **Build plugin zip** in Actions (or `bash scripts/verify-decky-plugin-zip.sh` on `out/*.zip`) | Workflow / zip script changes |
-
-Single preview filter:
-
-```bash
-pnpm run test:preview -- --filter=SMOKE-A
-```
-
-Workflow: MCP `bonsai.workflow.get` id=`tier-qa`. Deck-only E-bucket: `tests/preview-suite/deck-only-e-bucket.json`.
 
 ---
 
@@ -53,21 +44,6 @@ Extend gates when these paths change; prefer the narrowest tests first.
 | Stream / thinking tags | `test_bonsai_stream_tags`, stream Vitest | STREAM / THINKING rows |
 
 Hotspots: [development.md](development.md#change-risk-hotspots) or MCP `bonsai.arch.hotspots`.
-
----
-
-## Preview suite tiers
-
-| Batch | Intent |
-|-------|--------|
-| `tier0` / preGate | Golden path, perms, sanitizer, VAC capability-off, unit sandboxes |
-| `tier1Core` / `tier1Boundaries` | Strategy, TDP, background Ask, clamp matrix |
-| `tier2` / `tier2Deep` | Streaming, VAC matrix, character, mDNS, desktop notes |
-| `deckOnly` | Skipped or device-only E-bucket |
-
-Evidence writeback upserts PASS into historical results; FAIL → [archive/testing-failures-2026.md](archive/testing-failures-2026.md) (maintainer consolidates). Artifacts under [test-evidence/](../../bonsAI-workshop/test-evidence).
-
-**Retention:** Keep latest useful golden snapshot per tier (see [testing.md](testing.md) evidence links). Orphan SHA folders with no live links may be deleted.
 
 ---
 

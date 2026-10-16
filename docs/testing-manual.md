@@ -42,7 +42,6 @@ Historical full checklist (pre–2026-07-30 split): [archive/testing-full-pre-20
   - [SMOKE-H — Background Ask reopen (P1)](#smoke-h--background-ask-reopen-p1)
   - [Tier 1 extras](#tier-1-extras)
 - [Tier 2 — Opt-in (run when touching related code or before RC)](#tier-2--opt-in-run-when-touching-related-code-or-before-rc)
-  - [VAC / `bonsai:vac-check`](#vac--bonsaivac-check)
   - [Open regression IDs (bugs / recent ships)](#open-regression-ids-bugs--recent-ships)
   - [CHAT-SLOTS-V2 — Named chat slots (P0)](#chat-slots-v2--named-chat-slots-p0)
   - [CHAT-SLOTS-V3 — Named chat slots redesign (P0)](#chat-slots-v3--named-chat-slots-redesign-p0)
@@ -191,9 +190,9 @@ Policy: `bonsai://policy/decky-ui-focus`. Patterns: `bonsai://architecture/focus
 - [ ] **FOCUS-GRAPH-02** D-pad Up/Down reaches each stop (no skips)
 - [ ] **FOCUS-GRAPH-03** Sliders / horizontal groups: Left/Right on the **focus owner** (bridge if needed)
 - [ ] **FOCUS-GRAPH-04** Cross-section links via parent refs
-- [ ] **FOCUS-GRAPH-05** Coverage note in [testing.md](testing.md) (template: **UI-SCALE-05**)
+- [ ] **FOCUS-GRAPH-05** Coverage note in [testing.md](testing.md) (template: any earlier control's coverage note)
 
-References: `SettingsTabUiScaleSection.tsx`, `OllamaTab.tsx`, `PullModelsModal.tsx`. **The reasoning display's fold
+References: `OllamaTab.tsx`, `PullModelsModal.tsx`. **The reasoning display's fold
 row** (`show-reasoning`, a new stop between Retry and the answer, plan 57) adds: `MainTabChatTranscript.tsx`,
 `replyStopRegistry.ts`, `liveTurnFocusGraph.ts`. **PASS (Deck) 2026-09-17, bundle `af52c0aa`:** the fold row
 sits cleanly in the D-pad path — reachable from the question and the answer on both sides, always above the
@@ -320,7 +319,7 @@ see REASONING-02. Evidence `workshop:test-evidence/plan57-FOCUS-GRAPH-01.json`.
 |----|------|------|-------|--------|
 | **SMOKE-A** | Golden path | 0 | S0, BPM | Shell, tabs, Ask, connection, D-pad chunks, presets |
 | **SMOKE-C** | Permission gate | 0 | S0 | Capability blocked-action toast |
-| **SMOKE-F** | Deterministic commands | 0 | S0, no model | Sanitizer, shortcut-setup, vac-check off |
+| **SMOKE-F** | Deterministic commands | 0 | S0, no model | Sanitizer, shortcut-setup |
 | **SMOKE-B** | TDP apply 8W — retired 2026-09-03, D57 #6: TDP apply was removed 2026-07-30 | — | — | — |
 | **SMOKE-E** | Strategy one-shot | 1 | S1 | Mode, spoilers, Spoilers OK Tap-to-reveal PASS (Deck) 2026-09-04. |
 | **SMOKE-D** | Frozen carousel triple | 1 | S1 | Presets troubleshooting — **verified** |
@@ -365,7 +364,6 @@ History (the 2026-09-03 block and the two earlier FAIL runs this fix replaced):
 | `steam_logs_read` | Troubleshooting Ask hint on Main | Read game & screenshot context |
 | `filesystem_write` | Save note to Desktop / Developer app-log row | Save files to Desktop |
 | `microphone_access` | Ask bar mic / Settings → Voice install | Voice input (microphone) |
-| `steam_web_api` | `bonsai:vac-check` reply banner | Steam ban lookup |
 
 All checks in this block passed on the Deck and moved to [testing-manual-closed-2026.md](archive/testing-manual-closed-2026.md).
 
@@ -506,7 +504,6 @@ All checks in this block passed on the Deck and moved to [testing-manual-closed-
 
 | Block | Checklist |
 |-------|-----------|
-| **VAC matrix** | VAC-02…06 below (preview PASS; on-Deck still in QA backlog) |
 | **Proton logs** | PROTON-LOG-01…03 — auto-attach when **Read game & screenshot context** is on (troubleshooting Ask + AppID) |
 | **Permissions cleanup** | PERMS-CLEAN-01…06 — About/Steam links no gate; no Open web links / Adjust power limits toggles; no journal / intent-pack / Response verification UI; troubleshoot hint dismissible |
 | **Token streaming** | STREAM-01…05 spot; Strategy spoiler stream if flag on. **After Phase A (2026-08-07):** re-run STREAM-01/02 (P2/P3 changed the flag-off path), and STOP-PARTIAL-01 with real streamed text — Stop must keep the drafted answer under a *"Stopped — partial answer kept."* line, and must return the question to the ask field when nothing readable had arrived |
@@ -517,17 +514,10 @@ All checks in this block passed on the Deck and moved to [testing-manual-closed-
 | **Character / Pyro** | One preset Ask; Pyro easter egg if touching character |
 | **mDNS / Desktop notes / Model policy** | Spot when those paths change |
 | **Voice STT** | VOICE-01…07 (mic required) |
-| **UI scale** | UI-SCALE-01…05 on handheld / dock / TV |
 | **Context ladder / micro-actions** | CONTEXT-LADDER-01…03; MICRO-01…05 (open bugs) |
 | **D-pad scroll / tabs** | D-PAD-SCROLL-02 (choppy Strategy scroll bug); TAB-SWITCH-01 (LB/RB strip shuffle) |
 | **Data clear** | DATA-CLEAR-01 (permissions/settings wipe survives reopen) |
 | **Reply language** | LANG-01…03 (**LANG-01** Follow system on load — passed (Deck) 2026-09-26; **LANG-02** About tab Down order — passed (Deck) 2026-10-01, `workshop:test-evidence/plan78-LANG-02.json`; **LANG-03** Japanese reply — partial (Deck) 2026-10-01: the Speed reply passed, the Strategy choice labels stayed English, still owed, `workshop:test-evidence/plan78-LANG-03.json`) |
-
-### VAC / `bonsai:vac-check`
-
-All checks in this block passed on the Deck and moved to [testing-manual-closed-2026.md](archive/testing-manual-closed-2026.md).
-VAC-03 to 06 passed 2026-09-23 but were left unticked here until 2026-09-24.
-
 
 ### Open regression IDs (bugs / recent ships)
 
@@ -761,7 +751,6 @@ Rows 01, 02, 03, 05, 06 and TEN-GAMES-01 passed on the Deck and moved to
 | Row | Scenario | Pass | Status |
 |---|---|---|---|
 | **NOTES-BLOCK-04** | A covered game running. Ask something the notes cannot answer. | No block appears anywhere under the reply; the honesty line about the model's own knowledge shows instead. The two never appear together on one reply. | **PARTIAL (Deck) 2026-10-03: the "no block" half passed; the honesty-line half is still owed (2026-10-08, game running: UNCLEAR, below).** **2026-10-14 (plan 93 Deck block D3, build `8ff99a0a`, Deep Rock Galactic: Survivor running, Strategy mode, the Deck's own AI): the line half is UNCLEAR, one question passed and one failed, so it stays owed.** "Who is the final boss called Zorblax" (a made-up boss) showed the "No close match in my notes, this answer leans on the model's own knowledge" line and no "From the notes" block: PASS. "How do I buy a house in this game" attached 3 notes (Gold, Nitra, Mining and the run timer), showed a "From the notes" block (Gold) and no "No close match" line: FAIL; the AI read "buy" as the in-game Gold shop. That miss is the known wrong-subject-notes entry in [roadmap-kb.md](roadmap-kb.md); whether the Gold match is fair is the owner's call. Evidence `workshop:test-evidence/plan93-NOTES-BLOCK-04-game-strategy-D3.json`. **2026-10-14 (plan 93 Deck block C part 2, Deep Rock Galactic: Survivor running, Speed mode, two questions, the Deck's own AI):** no notes block under either answer (the block half passes); the "Not in my notes" line did not show and the back end logged "no footer line added" both times. That line shows only in Strategy and Expert by design (`kb_not_in_notes_notice.py`), so the line half is **still owed in Strategy or Expert**; the evidence file marks it FAIL and only names Speed as a possible cause. Evidence `workshop:test-evidence/plan93-NOTES-BLOCK-04-game.json`. **2026-10-08 (plan 83 overnight, build `0d3af3de`, Deep Rock Galactic: Survivor running, Strategy mode), UNCLEAR, still owed:** neither of the two tries produced a reply with nothing attached (notes of 1042 and 1242 characters were attached), so the case under test never arose. Try 1 also showed the "No close match" line and no notes block while the log said 1042 characters were attached (filed in roadmap-kb Bugs). Evidence `workshop:test-evidence/plan83-NOTES-BLOCK-04-game.json`. **2026-10-03 (plan 81, build `afd2f444`, no game running, Strategy mode):** a question about a game the library does not know ("How do I tame a wolf in Valheim?", in a chat whose own game is Deep Rock Galactic: Survivor) attached nothing (0 chars of notes) and no notes block showed under the reply. Neither the "Not in my notes" line nor the "No close match" line showed, so the honesty line shown instead is not covered by this question. Evidence `workshop:test-evidence/plan81-NOTES-BLOCK-04.json`. **Earlier, NOT RUNNABLE (Deck) 2026-09-18:** no question could be found that attaches nothing for a covered game, so the "never together" case could not be shown — every attempt still attached three notes. What did happen: the block and the "no close match" honesty line appeared together, and the line read wrong, since the reply's facts came from one of the attached notes. Evidence `workshop:test-evidence/plan58p1-QA-NOTES-BLOCK-04.json` **2026-10-10 (plan 87 K1, `4deec915`, `0ce3bbd0`):** a fix landed so the "No close match" line is taken off an answer that used a note (tests only so far); the covered-game-running half is still owed on the Deck, together with row P87-K1-LINE-AND-BLOCK in testing.md. **2026-10-10 (plan 87 Deck blocks 5 and 5b, `8608954d`, game running):** row P87-K1-LINE-AND-BLOCK passed for 2 of its 3 asks (the notes block showed with no "No close match" line; `workshop:test-evidence/plan87-P87-K1-LINE-AND-BLOCK.json`, `plan87-P87-K1-LINE-AND-BLOCK-try2.json`). This row's own covered-game-running half is not marked closed by that result and stays owed. |
-| **NOTES-BLOCK-07** | Voice replies turned on. Ask a question that attaches a note or a tip and let it read itself aloud in full. Separately, walk Down onto the block's header (ring visible on the header, checked against the dock) and press A. | Whatever the answer says, the block's own words are never spoken by read aloud; the header still opens normally on its own press. | ⏳ still owed — **not run 2026-09-18.** This one needs a person listening to confirm the block is never read aloud, which the automated run could not check. |
 | **NOTES-BLOCK-LADDER** | A covered game running or named. Ask a question, open the block, and check whether its own chip ladder (if it has one) can be reached with the D-pad. | The ladder inside the open block takes Left/Right the same way the details panel's own ladder does. | ⏳ **UNCLEAR (Deck) 2026-09-23** — this reply's block held three shared Deck tips and no chip ladder at all, so the question could not be asked of it; Down from the open block instead went to "Save chat to Desktop". Side finding, filed as its own bug: opening the block does not scroll it into view, so most of its words sit behind the chip and the question box. Evidence `workshop:test-evidence/plan64-NOTES-BLOCK-LADDER.json` (+ `.png`). **Tried again 2026-09-26 (plan 70), still UNCLEAR:** two different multi-note blocks (Half-Life 2, "Antlions (+1 more)" and "Strider (+1 more)") both opened to plain text with no chip ladder at all, so the row's own question still cannot be asked. One block was fully on screen this time, so the earlier scroll finding did not repeat. The session suggests retiring this row's chip half, since blocks carry no chips by design now — maintainer's call. Evidence `workshop:test-evidence/plan70-NOTES-BLOCK-LADDER.json` (+ `.png`). |
 
 ## Tier 3 — Heavy manual
@@ -806,8 +795,8 @@ Rows 01, 02, 03, 05, 06 and TEN-GAMES-01 passed on the Deck and moved to
 
 | Tier | Status | Last run | Notes |
 |------|--------|----------|-------|
-| 0 | Preview Pass — **DOM/focus asserts invalidated 2026-08-08** | 2026-05-26 / 9e20a82 | Re-baseline pending. The RPC and shell steps stand; the DOM, focus-path and screenshot evidence does not — see [testing.md § Preview-suite evidence invalidated](testing.md#preview-suite-evidence-invalidated-2026-08-08). **SMOKE-A's PASS was purely vacuous.** Formal on-Deck Pass → QA backlog |
-| 1 | Preview Pass — **DOM/focus asserts invalidated 2026-08-08** | 2026-05-26 / 9e20a82 | Re-baseline pending; same scope as Tier 0 above |
+| 0 | Preview Pass (the preview suite was removed 2026-10-16) — **DOM/focus asserts invalidated 2026-08-08** | 2026-05-26 / 9e20a82 | Re-baseline pending. The RPC and shell steps stand; the DOM, focus-path and screenshot evidence does not — see [testing.md § Preview-suite evidence invalidated](testing.md#preview-suite-evidence-invalidated-2026-08-08). **SMOKE-A's PASS was purely vacuous.** Formal on-Deck Pass → QA backlog |
+| 1 | Preview Pass (the preview suite was removed 2026-10-16) — **DOM/focus asserts invalidated 2026-08-08** | 2026-05-26 / 9e20a82 | Re-baseline pending; same scope as Tier 0 above |
 | 2 | Partial | 2026-06-09 / a9237e4 | |
 | 3 | Open | | QAMP matrix deferred |
 | 4 | Deferred | | Clean install before tag |

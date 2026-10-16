@@ -133,3 +133,10 @@ need a small "folder-proof" commit before the moves.
   Every list above was written from the code, with the records as the starting point.
 - **The working files** (the script and its facts, the reader kit, every record, the checks and the spot-check log)
   are kept in the workshop: `workshop:audit/clean-up-round-three/step-2/`.
+
+## Step 3: the test names that went and came
+
+Step 3 (the five removals and the glossary move, 2026-10-16) changed test names on purpose. Every one is in
+[step-3-test-name-changes.txt](step-3-test-name-changes.txt): 289 names went and 80 came, between `8553cc99` and
+`fd56e160`, each named by a step 3 helper's own list or, for one contract case, by the ban lookup's cut list. Step 5
+compares the names after merging against the starting point above minus the "went" lines, plus the "came" lines.

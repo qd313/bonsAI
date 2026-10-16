@@ -44,6 +44,8 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   ([D62](audit/maintainer-decisions-archive.md#d62--locked-2026-09-05-raised-2026-09-05--the-second-bug-fixing-session-four-calls-before-go)
   item 2). A stray word match can attach a wrong tip. A fix would run the meaning search only when the word hits are thin;
   that needs a cut-off picked and measured. [Detail](roadmap-kb-details.md#speed-mode-tip-gap)
+- ★★ `[KB]` **A note from another game ("Hollow Bough") was cited on a Deep Rock Galactic: Survivor question asked with no game running** — **OPEN, found 2026-10-16 (plan 86 step 3 Deck block, build `cf724c9f`).**
+  The long answer to a first-loadout question ended with a source line naming a Hollow Bough note. Not part of the check that found it, so not yet looked into. Evidence `workshop:test-evidence/plan86-B4-LONG-ANSWER-WALK.json`.
 - ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held back
   2026-09-06 (D81).** "The game drops me back to the library" reaches no crash tip, because the tip search needs a topic
   word. The held fix (a meaning search) attached wrong tips, six measured. The tips were rewritten and a "none of these
@@ -71,7 +73,7 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   **Still owed:** STRAT-SPOIL-NAME-01 could not run four times, last 2026-10-02: none of its games is on Recent Games. It needs the maintainer to start one of the four games once by hand so it shows there (no prepared setup can do that); it is on the checks page.
   Evidence `workshop:test-evidence/plan79-STRAT-SPOIL-NAME-01.json`. [Detail](roadmap-kb-details.md#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions)
 - ★★ `[KB]` **The note's own words under the reply** — **VERIFY, fixed and re-run 2026-09-19 and 2026-09-26.** Most
-  Most rows passed on the Deck and are closed: 01, 02, 03, 05, 06 and TEN-GAMES-01; 04's "no block" half passed 2026-10-03 (`workshop:test-evidence/plan81-NOTES-BLOCK-04.json`) and again with a game running 2026-10-14. **Still owed:** 04's "Not in my notes" line half (in Strategy or Expert), NOTES-BLOCK-07 and NOTES-BLOCK-LADDER. Rows in [testing-manual.md](testing-manual.md). Older notes, word for word: [roadmap-kb-details.md](roadmap-kb-details.md#the-notes-own-words-under-the-reply).
+  Most rows passed on the Deck and are closed: 01, 02, 03, 05, 06 and TEN-GAMES-01; 04's "no block" half passed 2026-10-03 (`workshop:test-evidence/plan81-NOTES-BLOCK-04.json`) and again with a game running 2026-10-14. **Still owed:** 04's "Not in my notes" line half (in Strategy or Expert) and NOTES-BLOCK-LADDER (NOTES-BLOCK-07 was retired 2026-10-16: it checked Read aloud, removed in plan 86 step 3). Rows in [testing-manual.md](testing-manual.md). Older notes, word for word: [roadmap-kb-details.md](roadmap-kb-details.md#the-notes-own-words-under-the-reply).
   **2026-10-14 (plan 93 Deck block D3, Strategy mode, game running, two questions):** the line half is UNCLEAR. A made-up boss ("Who is the final boss called Zorblax") showed the "No close match" line and no notes block: PASS. "How do I buy a house in this game" drew a "From the notes" block and no line: FAIL, the known wrong-subject-notes entry above. Evidence `workshop:test-evidence/plan93-NOTES-BLOCK-04-game-strategy-D3.json`.
   **2026-10-14 (plan 93 Deck block C part 2, Deep Rock Galactic: Survivor running, Speed mode, two questions):** no notes block under either answer (the block half passes). The "Not in my notes" line did not show under either; the back end logged "no footer line added". That line shows only in Strategy and Expert by design (`py_modules/backend/services/kb_not_in_notes_notice.py`), so the line half is still owed in Strategy or Expert. The evidence file marks the line half FAIL and only names Speed as a possible cause. Evidence `workshop:test-evidence/plan93-NOTES-BLOCK-04-game.json`.
 
@@ -83,6 +85,8 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 - ★ `[KB]` **Retire the Developer tab's "Install seed knowledge base" button** — **OPEN, an idea from the maintainer
   2026-10-02.** It was a stand-in from before the library was published, and its text still says the public download "is
   not live yet". Several Deck focus walks use it as the first stop on the tab, so check those first.
+- ★★ `[KB]` **Glossary words for every game** — **OPEN, filed 2026-10-16 (plan 86 step 3).**
+  The underlined words ("kiting", "overclock" for Deep Rock Galactic: Survivor) now come from the knowledge library's new `glossary_terms` table (`447fc2af`, `cf724c9f`). Words for other games need only new rows in `data/kb/glossary_terms.json` and a library rebuild, no code. The builder refuses a row for a game the library does not hold. [Design](audit/clean-up-round-three/glossary-move.md)
 - ★★ `[KB]` **The eval cannot yet prove the meaning search rescues many questions** — **OPEN, one measurement owed.** The
   questions the word search cannot answer at all numbered 3 when last counted, before 36 more blind rows landed. Re-count
   on the next search run. No code needed.

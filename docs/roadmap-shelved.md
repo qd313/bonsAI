@@ -11,11 +11,6 @@ Long notes for knowledge-base items are in [roadmap-kb-details.md](roadmap-kb-de
 
 ## Parked on purpose
 
-- ★ `[platform]` **In-IDE preview never gets past its loading screen** — **shelved 2026-09-11.** On the maintainer's
-  machine the preview stops on "Loading plugin preview". It takes commands but never answers, and it made no screenshot.
-  Not a gate for anything: the Deck is the gate.
-  [Decision D93](audit/maintainer-decisions-locked.md#d93--locked-2026-09-11--the-deck-is-the-gate-the-preview-is-shelved-device-checks-are-queued) · [Plan 51](../../bonsAI-workshop/archive/51-refactor-round-two.md).
-  Unshelves when: the preview loads the plugin on the maintainer's machine.
 
 - ★ `[ui]` **Picking a setting from the settings card opens the right Steam settings page but does not scroll to that setting** — **shelved 2026-10-10, a limit of Steam the maintainer accepted.** A on "Enable GPU Crash Report Collection" opened Steam's System page at the top, with the toggle about 320 px below the screen edge (found 2026-10-08 on the Deck, plan 83; evidence `workshop:test-evidence/plan83-P83-J1-SETTINGS-CARD.json`). Steam's link and route calls take only a page name; the Decky libraries and the web show no way to open at, or scroll to, one setting, and a read-only probe of Steam's own page found no settings route or deep-link reader (plan 87 B6, 2026-10-09; evidence `workshop:test-evidence/plan87-B6-SETTINGS-PROBE.json`); nothing was built (the maintainer's call 9, plan 87). The maintainer's call 2026-10-10 (checks page): fine as long as it opens the right page. The wrong-page bug (A on "Enable Wi-Fi" opens System, not Internet) is separate and stays in the roadmap's Bugs.
   Unshelves when: Steam offers a way to open a settings page at one setting.
@@ -32,26 +27,11 @@ Long notes for knowledge-base items are in [roadmap-kb-details.md](roadmap-kb-de
   Row [KB-CANCEL-01](testing.md) · [Decision D113](audit/maintainer-decisions-locked.md#d113--locked-2026-09-19-raised-2026-09-18--plan-61-automated-verification-session-the-thirteen-questions).
   Unshelves when: a throttle or a slower test copy of the download exists.
 
-- ★★★ `[voice]` **Trained voices for the bundled characters** — **shelved with the clip route 2026-09-08.** The fallback if
-  the copying model is too slow beside a game: a small trained voice file per character, about 60 MB, made once on the
-  maintainer's PC and downloaded on demand. The fastest way to read. It also means the plugin hosts its own voice files
-  for the first time. [Decision D74](audit/maintainer-decisions-locked.md#d74--partly-locked-2026-09-05-raised-the-same-day--reading-answers-aloud-five-calls-locked-one-open) · [Memo](../../bonsAI-workshop/planning/42-read-aloud-feasibility.md).
-  Unshelves when: the same gates as "Voices for the bundled characters" are met, and the maintainer agrees the plugin
-  may host voice files.
 
-- ★★★ `[voice]` **Voices for the bundled characters** — **shelved 2026-09-08.** Each character would get a voice invented
-  once on the maintainer's PC and shipped as a five to ten second clip, read on the device by a small copying model.
-  Shelved because a voice is not covered by fair use, every character is voiced by a real actor, and "free" is no defence
-  under the newer AI-voice laws. [Decision D74](audit/maintainer-decisions-locked.md#d74--partly-locked-2026-09-05-raised-the-same-day--reading-answers-aloud-five-calls-locked-one-open) · [Memo](../../bonsAI-workshop/planning/42-read-aloud-feasibility.md).
-  Unshelves when: the character sweep ("Which bundled characters copy a real person", in Features) is done, a person
-  qualified to give one has done a legal check, and the open licence call (D74 call 11) is answered.
 
-- ★★★★ `[voice]` **A voice for a custom character** — **shelved with the bundled voices 2026-09-08.** Type a name, press
-  **Generate voice**, wait minutes once while the device invents a voice. After that the small copying model reads that
-  character in it. Needs an optional download of about one gigabyte, with the warning "minutes on a Steam Deck, seconds
-  on a stronger machine". No LAN server. Phase 0 is a half-day Deck test of the port.
-  [Decision D74](audit/maintainer-decisions-locked.md#d74--partly-locked-2026-09-05-raised-the-same-day--reading-answers-aloud-five-calls-locked-one-open) · [Memo](../../bonsAI-workshop/planning/42-read-aloud-feasibility.md).
-  Unshelves when: the same legal gate as the bundled voices is passed.
+
+- ★★★★★ `[perms]` `[shelved]` **VAC Phase 2: opponent IDs** *— **shelved 2026-10-16.** Show who you are playing against so you can check their ban record, when the game's data allows it. The Steam ban lookup it stood on was removed in plan 86 step 3 (`357e5b55`), so the idea has nothing to build on. Moved here by the maintainer's call ([plan 86 § 4 call 12](planning/86-clean-up-round-three.md)).*
+  Unshelves when: the maintainer wants a ban lookup back.
 
 - ★★★★★ `[platform]` **Global quick-launch macro** — **shelved 2026-09-19.** The maintainer said drop it. It never ran on
   real hardware. The Guide-chord notes stay in [troubleshooting.md](troubleshooting.md) § 5.
@@ -135,6 +115,9 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
 
 - ★ `[platform]` `[watching]` **A plugin reload while a game is running can put Steam's Home screen in front of the game** — **shelved as watched 2026-10-16 (D131 call 4).** [Full notes](archive/roadmap-trimmed-2026-10-roadmap.md#plan-93-note-shelved-reload-puts-home-in-front).
   Unshelves when: a new sighting.
+
+- ★ `[QA]` `[watching]` **The Ollama tab's "Install Ollama" box test failed once during a full run under load** — seen once, 2026-10-16 (plan 86 step 3, at the UI scale landing), and it passed on the retry. 20 reruns (8 alone, 12 at once) all passed. Test: `src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx`.
+  Unshelves when: a new failure.
 
 - ★ `[reply]` `[watching]` **Strategy choice labels stayed English with the reply language set to Japanese** — seen on both
   Strategy tries, 2026-10-01 (plan 78, block 3a); the Speed reply was Japanese. Evidence `workshop:test-evidence/plan78-LANG-03.json`.

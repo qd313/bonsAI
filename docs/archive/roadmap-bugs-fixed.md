@@ -3557,3 +3557,82 @@ _Moved out of [roadmap.md](../roadmap.md) on 2026-10-16, copied line for line fr
   Each copy lives at `.claude/worktrees/<name>` on branch `refactor/<name>`. The full list, copy by copy: [roadmap-details.md](roadmap-details-closed.md#merge-the-unlanded-work-left-in-thirteen-old-helper-copies-into-experimental).
 
 **Closed 2026-10-16 (plan 86 step 0, commit `719aac71`):** nothing needed landing. Every leftover commit was checked by content and was already in under another title: the five games' notes, Skyrim's notes and fact-checks, Skyrim's spoiler caution, the shared tip's credit-line fix, the preset-chip and voice tidy-ups, the follow-up test setup, and the carried-subject step. Two were dropped with reasons: the stale settings-snapshot move (plan 86 step 6a replaces it) and plan 81's revert copy (a measuring copy, never meant to land). The two Hollow Knight wording swaps are saved for later as patch files in the workshop repo's `held-back/` folder ([D132](../audit/maintainer-decisions-locked.md#d132--locked-2026-10-16-raised-2026-10-16--plan-86-go-day-the-four-calls-before-step-0) call 2). Two loose files went to the workshop. All 62 old copies were removed on 2026-10-16; their branches were kept. Evidence: [plan 86 § 12](../planning/86-clean-up-round-three.md), the entry "step 0 item 3, the 13 old copies", and commit `719aac71`.
+
+## Plan 86 step 3 (2026-10-16)
+
+_Moved out of [roadmap.md](../roadmap.md) and [roadmap-shelved.md](../roadmap-shelved.md) on 2026-10-16, copied line for line, with the closing line added at the end of each._
+
+### The Steam Web API key is stored in plain text in the plugin's settings file, and a Deck driver printed it once into a session's tool output on 2026-10-11 (closed 2026-10-16)
+
+- ★ `[security]` **The Steam Web API key is stored in plain text in the plugin's settings file, and a Deck driver printed it once into a session's tool output on 2026-10-11** — **OPEN, found 2026-10-11 (plan 89).**
+  The key sits in the plugin's settings file as plain text. During the Deck night a driver printed the file's values into a session's tool output once. No evidence file holds the key. The maintainer was told and may make a new key. Not decided: whether the key should be stored some other way.
+  **2026-10-16:** closes when plan 86 step 3 removes the Steam ban lookup and the stored key (call 1 of [D132](../audit/maintainer-decisions-locked.md#d132--locked-2026-10-16-raised-2026-10-16--plan-86-go-day-the-four-calls-before-step-0), which replaced call 7 of [D131](../audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page)); see the Features entry "Retire the Steam ban lookup".
+
+**Closed 2026-10-16 (plan 86 step 3, `357e5b55`):** the ban lookup, its Developer key field and its Permissions switch were removed, and the saved key is taken out of the settings file on the first load of the new version. Passed on the Deck's own screen (build `cf724c9f`): `workshop:test-evidence/plan86-B0-KEYS-FIRST-LOAD.json`.
+
+### Retire the Steam ban lookup (closed 2026-10-16)
+
+- ★★ `[perms]` **Retire the Steam ban lookup** — **OPEN, called 2026-10-16: removed completely in plan 86 step 3 ([D132](../audit/maintainer-decisions-locked.md#d132--locked-2026-10-16-raised-2026-10-16--plan-86-go-day-the-four-calls-before-step-0) call 1).**
+  The ban lookup, its `bonsai:vac-check` command, its Developer → Integrations key field, its permission switch and the stored Steam Web API key are all taken out, not just hidden. This replaces the "hide it for now" call ([D131](../audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page) call 10), which was never built. It stays open until plan 86 step 3 lands. Removing the stored key closes the plain-text key bug in Bugs. Not touched here: VAC Phase 2 (opponent IDs) further down, which plan 86 step 3 moves to the shelved list.
+
+**Closed 2026-10-16 (plan 86 step 3, `357e5b55`):** the lookup, its command, its Developer key field and its Permissions switch are removed. Evidence: `workshop:test-evidence/plan86-B2-PERMISSIONS.json`, `workshop:test-evidence/plan86-B1-DEVELOPER.json`, `workshop:test-evidence/plan86-B3-VAC-COMMAND.json`, `workshop:test-evidence/plan86-B3-PERMISSION-HINT.json`. The chip half of P86-BAN-GONE-01 is still owed.
+
+### Full-quality reading from a LAN PC (retired 2026-10-16)
+
+- ★★★ `[voice]` **Full-quality reading from a LAN PC** — **OPEN, deliberately not built 2026-09-08 ([D74](../audit/maintainer-decisions-locked.md#d74--partly-locked-2026-09-05-raised-the-same-day--reading-answers-aloud-five-calls-locked-one-open)); reopened only if the local port fails its Deck test.**
+  A speech server on a PC in the house would read answers in the full character voice, far faster than real time. Never the default: not offline.
+  Dropped on purpose: a second program on the person's PC with its own heavy install and an address to paste into Settings. The entry stays so the reason is on record. [Memo](../../../bonsAI-workshop/planning/42-read-aloud-feasibility.md).
+
+**Retired 2026-10-16:** Read aloud was removed in plan 86 step 3 (`8bcf0160`, `181c30ef`).
+
+### With Voice replies on "When I asked by voice", a spoken question's answer may not read itself aloud (retired 2026-10-16)
+
+- ★★ `[voice]` **With Voice replies on "When I asked by voice", a spoken question's answer may not read itself aloud** — **VERIFY, fixed 2026-09-30 (plan 78 helper M, `c3a1f16a`, `27a450ed`). Was OPEN, found 2026-09-30 by reading the code (plan 78 helper G), not seen on the Deck.**
+  The note "this came from the mic" is now written the moment Ask is pressed, so a spoken question's answer reads itself. Proven by tests that failed before the fix (`src/features/voice/useVoiceAskWithReadAloud.test.tsx`, 6 tests; 2 more in `src/hooks/useReadAloud.test.ts`). "Always" and "Off" were never affected.
+  Limits: a retry of a spoken question counts as typed and is not read. The first-moments finding (`27a450ed`) rests on its unit test only. Full text: [roadmap-details.md](../roadmap-details.md#with-voice-replies-on-when-i-asked-by-voice-a-spoken-questions-answer-may-not-read-itself-aloud).
+  Deck check owed, and it is the maintainer's, with a real voice: row **READ-ALOUD-05** (could not run 2026-10-03: the Deck's microphone path delivered silence; `workshop:test-evidence/plan81-READ-ALOUD-05.json`). Evidence for the finding `workshop:test-evidence/plan78-G-after-answer-readthrough.md` (findings 4 to 6).
+
+**Retired 2026-10-16:** Read aloud and the Voice replies setting were removed in plan 86 step 3 (`8bcf0160`, `181c30ef`).
+
+### In-IDE preview never gets past its loading screen (retired 2026-10-16)
+
+- ★ `[platform]` **In-IDE preview never gets past its loading screen** — **shelved 2026-09-11.** On the maintainer's
+  machine the preview stops on "Loading plugin preview". It takes commands but never answers, and it made no screenshot.
+  Not a gate for anything: the Deck is the gate.
+  [Decision D93](../audit/maintainer-decisions-locked.md#d93--locked-2026-09-11--the-deck-is-the-gate-the-preview-is-shelved-device-checks-are-queued) · [Plan 51](../../../bonsAI-workshop/archive/51-refactor-round-two.md).
+  Unshelves when: the preview loads the plugin on the maintainer's machine.
+
+**Retired 2026-10-16:** the preview test tool was removed in plan 86 step 3 (`ebd791d0`, `044bedc3`, `ca436256`); a copy is in `workshop:held-back/preview-tool/`.
+
+### Trained voices for the bundled characters (retired 2026-10-16)
+
+- ★★★ `[voice]` **Trained voices for the bundled characters** — **shelved with the clip route 2026-09-08.** The fallback if
+  the copying model is too slow beside a game: a small trained voice file per character, about 60 MB, made once on the
+  maintainer's PC and downloaded on demand. The fastest way to read. It also means the plugin hosts its own voice files
+  for the first time. [Decision D74](../audit/maintainer-decisions-locked.md#d74--partly-locked-2026-09-05-raised-the-same-day--reading-answers-aloud-five-calls-locked-one-open) · [Memo](../../../bonsAI-workshop/planning/42-read-aloud-feasibility.md).
+  Unshelves when: the same gates as "Voices for the bundled characters" are met, and the maintainer agrees the plugin
+  may host voice files.
+
+**Retired 2026-10-16:** Read aloud was removed in plan 86 step 3 (`8bcf0160`, `181c30ef`), so no voice is needed.
+
+### Voices for the bundled characters (retired 2026-10-16)
+
+- ★★★ `[voice]` **Voices for the bundled characters** — **shelved 2026-09-08.** Each character would get a voice invented
+  once on the maintainer's PC and shipped as a five to ten second clip, read on the device by a small copying model.
+  Shelved because a voice is not covered by fair use, every character is voiced by a real actor, and "free" is no defence
+  under the newer AI-voice laws. [Decision D74](../audit/maintainer-decisions-locked.md#d74--partly-locked-2026-09-05-raised-the-same-day--reading-answers-aloud-five-calls-locked-one-open) · [Memo](../../../bonsAI-workshop/planning/42-read-aloud-feasibility.md).
+  Unshelves when: the character sweep ("Which bundled characters copy a real person", in Features) is done, a person
+  qualified to give one has done a legal check, and the open licence call (D74 call 11) is answered.
+
+**Retired 2026-10-16:** Read aloud was removed in plan 86 step 3 (`8bcf0160`, `181c30ef`), so no voice is needed.
+
+### A voice for a custom character (retired 2026-10-16)
+
+- ★★★★ `[voice]` **A voice for a custom character** — **shelved with the bundled voices 2026-09-08.** Type a name, press
+  **Generate voice**, wait minutes once while the device invents a voice. After that the small copying model reads that
+  character in it. Needs an optional download of about one gigabyte, with the warning "minutes on a Steam Deck, seconds
+  on a stronger machine". No LAN server. Phase 0 is a half-day Deck test of the port.
+  [Decision D74](../audit/maintainer-decisions-locked.md#d74--partly-locked-2026-09-05-raised-the-same-day--reading-answers-aloud-five-calls-locked-one-open) · [Memo](../../../bonsAI-workshop/planning/42-read-aloud-feasibility.md).
+  Unshelves when: the same legal gate as the bundled voices is passed.
+
+**Retired 2026-10-16:** Read aloud was removed in plan 86 step 3 (`8bcf0160`, `181c30ef`), so no voice is needed.

@@ -723,7 +723,7 @@ awake") before blaming the tool.
 **The worktree helper's prune never sees a lane landed by cherry-pick or squash.** Its "merged" test asks
 whether the copy's branch tip is an ancestor of the main branch, and landing sessions never merge a lane
 that way, so on 2026-10-06 it offered to remove 3 of 142 copies. Patch matching (`git cherry`) is no
-better here: the commit hook regenerates the architecture snapshot and the build stamp on every landing,
+better here: the commit hook regenerated the architecture snapshot (until plan 86) and the build stamp on every landing,
 so the landed patch differs from the lane's. What told them apart was the commit title: a leftover
 commit whose title is in the main branch's log has landed. That cleared 127 copies and kept 15 with real
 work. When judging whether a copy is dirty, ignore the build stamp, the code map, the architecture

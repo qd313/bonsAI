@@ -68,10 +68,11 @@ Decky Loader imports directly.
 | `main.py` | The class Decky loads. Every method the screen can call lives here |
 | `py_modules/backend/services/` | The bulk of the back-end logic |
 | `tests/` | Python tests |
-| `packages/bonsai-mcp/` | An in-repo tool server, plus generated snapshots of the architecture |
+| `packages/bonsai-mcp/` | An in-repo tool server; it builds the architecture maps when it starts |
 | `scripts/` | Build, deploy, device capture, knowledge-base tooling |
-| `docs/code-map.md` | Generated. Every file's title and purpose in one place — read this instead of counting files by hand |
-| `docs/audit/` | Findings from past investigations. Read before working anything out again |
+| `docs/code-map.md` | Not saved; `python scripts/code_map.py` writes it. Every file's title and purpose in one place |
+| `docs/audit/` | The maintainer's decisions and open audits |
+| `../bonsAI-workshop/` | The private workshop repo: test evidence, saved Deck walks, finished plans and audits. `workshop:x` names its file `x` |
 
 **Where each side starts.** The screen side starts at `src/index.tsx`, which wires up the tabs, the
 styles and the calls to the back end; it is a composition root, not a god file. The back end starts
@@ -94,8 +95,7 @@ This is the only channel between them. There is no HTTP server in the middle.
    justification in a comment.
 4. **A method the screen can call is any public `async def` indented four spaces inside
    `class Plugin`.** There is no decorator and no registry — the indentation *is* the contract.
-5. `packages/bonsai-mcp/knowledge/architecture/rpc-map.json` lists every one of them. It is
-   generated. Never edit it by hand.
+5. `rpc-map.json` (built by the tool server, or `npm run mcp:generate`) lists every one of them.
 6. **That generated map sorts methods by matching words in the name, so the name you choose decides
    where it is filed.** A knowledge-base method named `get_knowledge_base_*` lands under "other",
    away from its siblings, with no warning and no failure. Match the word the domain already uses.
@@ -221,8 +221,8 @@ npm test                 # screen-side tests
 npm run test:py          # Python tests
 npx tsc --noEmit         # type check (the build does not type-check)
 npm run build            # bundle to dist/index.js
-npm run mcp:generate     # regenerate the architecture snapshots
-npm run mcp:validate     # fails if the snapshots differ from what is committed
+npm run mcp:generate     # build the architecture maps (never saved)
+npm run mcp:validate     # fails if src/types/rpcMethods.ts is stale
 python scripts/verify.py --quick    # the gate to run before every commit
 python scripts/verify.py --full     # everything above, for a merge
 ```
@@ -300,17 +300,15 @@ A documents-only change needs no matching code change. The reverse is not true.
   which element is at fault. The values live in [docs/design-tokens.md](docs/design-tokens.md).
 - **Keep the names of back-end methods stable.** Renaming one is a breaking change across two
   languages with no compiler to catch it.
-- **Generated files are not editable.** The JSON snapshots under
-  `packages/bonsai-mcp/knowledge/architecture/` are rewritten and staged by the pre-commit hook on
-  every commit. Change the generator instead. Three other files are rewritten on every commit too,
-  so a comment typed into one vanishes; they are listed in
-  [docs/code-clarity.md](docs/code-clarity.md).
+- **Generated files are not editable.** The architecture maps are built when needed and never
+  saved; `src/types/rpcMethods.ts` and the build stamp are rewritten on every commit, so a comment
+  typed into one vanishes ([details](docs/code-clarity.md)). Change the generator instead.
 - **The contents list at the top of each major document is written by a script.** After adding,
   renaming or removing a heading in one of them, run `python scripts/docs_toc.py`; never edit the
   list by hand. `verify.py --quick` fails while a list is out of date. The documents it covers are
   listed at the top of that script.
-- **`import-graph.json` answers "who imports this?"** — the full both-ways list for every file on
-  the screen side, plus cycles and orphans. Check it before moving anything; it is more reliable
+- **`import-graph.json` answers "who imports this?"** (`npm run mcp:generate` builds it) — the full
+  both-ways list for every file on the screen side, plus cycles and orphans. Check it before moving anything; it is more reliable
   than a text search, which misses imports written at a different relative depth. `hotspots.json` is
   a size ranking, not a dependency map.
 - **One change per commit**, behaviour preserved, tests green in between. Never mix moving code with

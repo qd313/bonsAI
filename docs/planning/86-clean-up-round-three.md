@@ -599,3 +599,17 @@ From its [postmortem](../../../bonsAI-workshop/audit/refactor-round-two/postmort
   - **Landed 4, read aloud** (`8bcf0160`, `181c30ef`, 22:46 UTC, every check green): 161 tests deleted (127 screen, 34
     back end), 5 renamed, 2 added; 64 back-end methods. Voice input's glue was traced by the helper and its tests pass
     unchanged: Ask pressed while the mic listens still waits for the final text.
+  - **Landed 5, UI scale** (`4c8e726c`..`435dfac3`, 22:54 UTC, every check green): 220 box sizes in code became plain
+    pixels, letter sizes keep following Text size; the helper built 14 stylesheets before and after and every one is
+    identical once `calc(Npx * ui-scale)` reads `Npx`. 36 tests deleted, 5 renamed. The screen tests failed once at
+    this landing (the Ollama tab's "Install Ollama" box test, `OllamaWhereAiRunsSection.starterOffer.test.tsx`) and
+    passed on the retry; 20 more runs, 8 alone and 12 at once, all passed. Put on the roadmap to watch.
+  - **Landed 6, the glossary move** (`447fc2af`, `cf724c9f`, 23:00 UTC, every check green): the library's new
+    `glossary_terms` table and the new call; 65 back-end methods. The helper's commits 2 to 4 folded into one (the
+    call had no caller until the screen used it). The seed library rebuilt with the two rows.
+  - **Documents** (`fd56e160` and the five before it, 23:06 UTC): the guides, the focus graph, the design notes, the
+    tool server's notes and AGENTS.md (which only shrank) describe the plugin without the five features.
+  - **The full sets at the end** (`fd56e160`): 4,651 screen tests and 2,948 back-end tests, all passing; 65 back-end
+    methods; the built plugin 3,277,158 bytes (from 3,378,277). **Test names:** against the names at `8553cc99`,
+    289 went and 80 are new; every one is named by a helper's list except one, the contract case "api key rejects a
+    non-string", which the ban lookup's cut list names (the case in `settings-hostile-inputs.json`).

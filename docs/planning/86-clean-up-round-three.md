@@ -6,7 +6,7 @@ maintainer. The plan is written so it can wait: on the day it starts, step 0 che
 
 **Status:** STARTED 2026-10-16 with steps 0 and 1 (one Opus chat). The freshness check found only small changes (§ 5,
 "Freshness check, 2026-10-16"); the maintainer's go-day calls are 13 to 16 in § 4. Step 2 (read every file) finished the
-same day; step 3 waits for the maintainer's yes to the cut lists and the folder map (D133). Progress is in § 12.
+same day, and the maintainer approved its cut lists and folder map (D133). Step 3 is next. Progress is in § 12.
 
 **When it starts (the maintainer's call, 2026-10-11):** after [plan 89](../../../bonsAI-workshop/planning/89-bugs-to-zero-and-verify-sweep.md) has
 finished, and after [plan 92](../../../bonsAI-workshop/planning/92-feature-night-search-notes-models-tabs.md) has built plans 90 and 91. Never alongside
@@ -572,3 +572,6 @@ From its [postmortem](../../../bonsAI-workshop/audit/refactor-round-two/postmort
     and repo-wide searches); no reader was stopped for it. The working files (facts, records, checks, the spot-check log)
     are in `workshop:audit/clean-up-round-three/step-2/`.
   - **Next:** the maintainer answers D133 (calls 1 and 2 before step 3). Nothing pushed.
+- **2026-10-16, evening: D133 answered.** The maintainer approved the five cut lists, the glossary move and the folder
+  map (calls 1 and 2), and the defaults for calls 3 to 12. **Next: step 3** (remove five features, move the glossary
+  words), its own session and a Deck block, working from the cut lists. Nothing pushed.

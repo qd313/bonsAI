@@ -2375,9 +2375,11 @@ Asked by the readiness check on the morning plan 86 started ([plan 86 § 4](../p
 3. **The session creates the workshop repo:** private, `bonsAI-workshop`, under the maintainer's GitHub account, in a folder next to this repo.
 4. **Both repos are pushed at the end of plan 86 steps 0 and 1**, once every check passes. The push guard stays on; the session hands over the push commands.
 
-### D133 — OPEN (raised 2026-10-16) — Plan 86 step 2: approve the cut lists and the folder map, and twelve smaller calls
+### D133 — LOCKED 2026-10-16 (raised 2026-10-16) — Plan 86 step 2: approve the cut lists and the folder map, and twelve smaller calls
 
 Asked by plan 86 step 2 ([the lists](clean-up-round-three/README.md#step-2-every-file-read-and-the-lists-the-next-steps-work-from)). Calls 1 and 2 are needed before step 3; the rest have a proposed default the session follows unless the maintainer says otherwise, and say which step needs them.
+
+**Answered 2026-10-16, the same evening, in the step 2 chat:** the maintainer approved the five cut lists, the glossary move and the folder map (calls 1 and 2), and the defaults for calls 3 to 12, all as written below.
 
 1. **Approve the five cut lists and the glossary move**, including three places the code said something the plan did not expect: the weekly refresh takes the models box's on-open catalog call with it (they are one download; the installed-models and sizes lookup stays); UI scale's box sizes become plain numbers and only letter sizes follow Text size (nothing a player sees changes); `.decky/preview.json` stays (the Deck tool reads it).
 2. **Approve the folder map**: the answer feature as one folder with eight sub-folders; the three chat folders as one `chats` folder; `ask/bar` and `ask/flow`; the AI models box in `models/pull-box`; `folded-tabs` stays; data files go to their feature's folder; `src/shared/` for shared code (`dpad`, `i18n`, `icons`, `text-size`); the back end in 14 packages plus `knowledge`, `notes` and `search`; Python tests stay flat in `tests/`; the knowledge-library scripts in `scripts/kb/`.

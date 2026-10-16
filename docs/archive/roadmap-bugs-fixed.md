@@ -3507,3 +3507,33 @@ _Moved out of [roadmap.md](../roadmap.md) on 2026-10-14 (plan 93 stand-in sweep)
   **Fixed 2026-10-14 (plan 93):** a fresh install starts with the switch on and shows the Local runtime (beta) notice once on its first open; a saved "off" stays off. Owes row **P93-B1-WIPE-DEFAULT** on the Deck (on the stand-in, after Clear all plugin data).
 
 **Closed 2026-10-14 (plan 93 block S1, the stand-in, this PC, build `7888115e`):** passed on the stand-in (this PC), the plan's machine for a wipe, row P93-B1-WIPE-DEFAULT. Run AI on this Deck read off before Clear all plugin data and on after it, with no press of mine on it. Evidence `docs/test-evidence/plan93-P93-B1-WIPE-DEFAULT-standin.json`.
+
+## Plan 93 report answers (D131, 2026-10-16)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-10-16, copied line for line from the Bugs and Verify entries, with the closing line added at the end of each._
+
+### In the chats menu, Down skips the Rename chat and Save to Desktop note rows (closed 2026-10-16)
+
+- ★ `[focus]` **In the chats menu, Down skips the Rename chat and Save to Desktop note rows** — **OPEN, seen 2026-10-11 by the Deck driver (plan 89); a sighting, not yet checked.**
+  Going Down the menu the ring went New chat, Sum up this chat, Delete chat: the Rename chat and Save to Desktop note rows were not visited. Not known whether they are meant to be left out. Seen by the driver, no evidence file.
+
+**Closed 2026-10-16:** designed. The maintainer keeps the two-column grid ([D131](audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page) call 6).
+
+### On the Settings tab, Left or Right on the Text size choices scrolls the page down (closed 2026-10-16)
+
+- ★★ `[focus]` **On the Settings tab, Left or Right on the Text size choices scrolls the page down** — **VERIFY, fixed 2026-10-11 (plan 89, `4cd82df5`, `9b4d0503`, with the walk fix above). Was OPEN, found by the maintainer 2026-10-10 on the Deck's own screen (checks page).**
+  The same change keeps the page still while the control is in Steam's comfortable band. Before the fix, Left or Right moved the page 100.8, 81.2 and 64.1 px on three presses (`docs/test-evidence/plan89-M1-TAB-WALK.json`).
+  **Deck 2026-10-11 (plan 89 block 3b, build `9b4d0503`, the monitor):** Left, Right, Right, Left on Text size moved the page 0 px each, and the choice ended on Small, where it started. Row **P89-TAB-WALK**; evidence `docs/test-evidence/plan89-P89-TAB-WALK.json`. **Still owed: the maintainer's look on the Deck's own screen.** Older notes: [roadmap-details.md](roadmap-details.md#on-the-settings-tab-left-or-right-on-the-text-size-choices-scrolls-the-page-down).
+  **Deck 2026-10-14 (plan 93 Deck block C part 1, the Deck's own screen, row P89-TAB-WALK):** Settings and Developer, 26 presses each way: the largest move was 138 px against a limit of 227, no jump at the end, no creep, and Left and Right on Text size moved the page 0 px. The section lines read 92 percent visible, the rig's known false alarm (its own Bugs entry; the files mark visibility UNCLEAR). Evidence `docs/test-evidence/plan93-P89-TAB-WALK-OWN-SCREEN-SETTINGS.json`, `-DEVELOPER.json`. **Still owed: the maintainer's word** (plan 93 question 14b).
+
+**Closed 2026-10-16:** passed on the Deck's own screen, row P89-TAB-WALK, `docs/test-evidence/plan93-P89-TAB-WALK-OWN-SCREEN-SETTINGS.json`, plus [D131](audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page) call 5.
+
+### Walking Settings and Developer with the D-pad: the page moves at every press, then jumps at the end (closed 2026-10-16)
+
+- ★★ `[focus]` **Walking Settings and Developer with the D-pad: the page moves at every press, then jumps at the end** — **VERIFY, fixed 2026-10-11 (plan 89, `4cd82df5`, `9b4d0503`). Was OPEN, found by the maintainer 2026-10-10 on the Deck's own screen (checks page).**
+  The page now stays still while the control is in Steam's comfortable band and turns by one step, under half the pane, when it leaves it; there is no jump at the end. Tests: `src/features/plugin-shell/TabBodyFocusRoot.walk.test.tsx`, describe "the page turns only near the edge (plan 89, M1)".
+  **Deck 2026-10-11 (plan 89 block 3b, build `9b4d0503`, the monitor):** the page moved on 4 of 14 presses going down Settings and 4 of 14 going up (inside the one-in-three line); Developer 6 of 16 down (one over the line) and 7 of 16 up; largest move 363 px against half the pane, 370; no jump at the end; every stop visible; no creep. Developer's page is 1,875 px longer than the window, so steps under half a screen need at least 6 moves: the session counted it as working as designed, and the maintainer's call 20 ([D128](audit/maintainer-decisions-locked.md#d128--locked-2026-10-11-raised-2026-10-11--plan-89-the-bug-list-and-the-verify-list-as-close-to-empty-as-they-can-get-the-fifteen-calls)) says the page moving on every second press is fine. Row **P89-TAB-WALK**; evidence `docs/test-evidence/plan89-P89-TAB-WALK.json`.
+  **Still owed: only the maintainer's look on the Deck's own screen** (the monitor was live all night). The maintainer's wish for a smooth glide is not measured. Older notes, word for word: [roadmap-details.md](roadmap-details.md#walking-settings-and-developer-with-the-d-pad-the-page-moves-at-every-press-then-jumps-at-the-end).
+  **Deck 2026-10-14 (plan 93 Deck block C part 1, the Deck's own screen, row P89-TAB-WALK):** Settings and Developer, 26 presses each way: the largest move was 138 px against a limit of 227, no jump at the end, no creep. The section lines read 92 percent visible, the rig's known false alarm (its own Bugs entry; the files mark visibility UNCLEAR). Evidence `docs/test-evidence/plan93-P89-TAB-WALK-OWN-SCREEN-SETTINGS.json`, `-DEVELOPER.json`. **Still owed: the maintainer's word** (plan 93 question 14b).
+
+**Closed 2026-10-16:** passed on the Deck's own screen, row P89-TAB-WALK, `docs/test-evidence/plan93-P89-TAB-WALK-OWN-SCREEN-SETTINGS.json` and `docs/test-evidence/plan93-P89-TAB-WALK-OWN-SCREEN-DEVELOPER.json`, plus [D131](audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page) call 5.

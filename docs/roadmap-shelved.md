@@ -133,6 +133,9 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   Evidence `docs/test-evidence/plan81-P81-REMOVE-KEEPS-PC-PLACE-try2.json`.
   Unshelves when: a new sighting.
 
+- ★ `[platform]` `[watching]` **A plugin reload while a game is running can put Steam's Home screen in front of the game** — **shelved as watched 2026-10-16 (D131 call 4).** [Full notes](archive/roadmap-trimmed-2026-10-roadmap.md#plan-93-note-shelved-reload-puts-home-in-front).
+  Unshelves when: a new sighting.
+
 - ★ `[reply]` `[watching]` **Strategy choice labels stayed English with the reply language set to Japanese** — seen on both
   Strategy tries, 2026-10-01 (plan 78, block 3a); the Speed reply was Japanese. Evidence `docs/test-evidence/plan78-LANG-03.json`.
   Unshelves when: a new sighting.
@@ -140,6 +143,9 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
 - ★ `[reply]` `[focus]` `[watching]` **Two more sightings, 2026-09-26 (the chip ladder and two wrong answers)** — the chip
   ladder steps one chip per press both ways (7 Ups for 7 chips, `plan76-S4.json`). Whether one chip per press is right is
   the maintainer's call: no decision recorded. The two wrong answers did not reproduce.
+  Unshelves when: a new sighting.
+
+- ★ `[reply]` `[watching]` **While an answer arrives, the start of a sentence that ends up behind a spoiler cover can be read for about a second** — **shelved as watched 2026-10-16 (D131 call 4).** [Full notes](archive/roadmap-trimmed-2026-10-roadmap.md#plan-93-note-shelved-spoiler-sentence-readable).
   Unshelves when: a new sighting.
 
 - ★ `[tabs]` `[watching]` **After a tab change the ring is often on no control, so LB, RB, LT and RT do nothing until a D-pad press** — seen once, 2026-10-10 (plan 87 Deck block 3, build `d96ed0bf`): two RB presses 1.4 s apart gave one tab change. Not reproduced in block 4 (`8608954d`): the ring was on a control after 14 of 14 tab changes, read at 0.5 s and 1.5 s. Evidence `docs/test-evidence/plan87-P87-F4-TAB-ORDER.json`, `plan87-P87-TAB-CHANGE-RING.json`.
@@ -163,11 +169,20 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
   empty download queue. [Detail](roadmap-details.md#a-tap-outside-the-ai-models-screen-started-the-queued-downloads-and-left-the-d-pad-stuck-in-the-ollama-tab).
   Unshelves when: a new sighting.
 
+- ★★ `[platform]` `[watching]` **Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted** — **shelved as watched 2026-10-16 (D131 call 4).** [Full notes](archive/roadmap-trimmed-2026-10-roadmap.md#plan-93-note-shelved-reload-with-heavy-game).
+  Unshelves when: a new sighting.
+
+- ★★ `[platform]` `[watching]` **The Deck's screen froze when Steam's screensaver started (no game, plugin idle)** — **shelved as watched 2026-10-16 (D131 call 4).** [Full notes](archive/roadmap-trimmed-2026-10-roadmap.md#plan-93-note-shelved-screensaver-freeze).
+  Unshelves when: a new sighting.
+
 - ★★★ `[focus]` `[watching]` **The panel can get into a state where pressing Down stops half way and the Ask button is out of reach** —
   first seen 2026-09-05; usually only a full loader restart cleared it. Likely the same family as the reopen-over-a-game
   fix, which passed 6 of 6 (row P76-TRAP-FIX, done 2026-09-29). A long play test with a game was clean, 24 of 24
   (`docs/test-evidence/plan77-P77-TRAP-LONG.json`). Not proven the same fault; named in the 0.6.0 release notes.
   [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
+  Unshelves when: a new sighting.
+
+- ★★★ `[platform]` `[watching]` **Steam's screen froze after an answer with a game running and the Deck's own AI** — **shelved as watched 2026-10-16 (D131 call 4).** [Full notes](archive/roadmap-trimmed-2026-10-roadmap.md#plan-93-note-shelved-freeze-after-answer).
   Unshelves when: a new sighting.
 
 - ★ `[platform]` `[watching]` **Decky's own settings page shows empty while a game is running** — seen twice, 2026-10-03 (plan 81, Deck block 6): only the status bar and the button hints, no control to focus, and B returned to the game. Not bonsAI's page.

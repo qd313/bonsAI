@@ -788,3 +788,43 @@ Cut word for word from the two `[QA]` rig entries in the roadmap's Bugs list (th
 Cut word for word from the roadmap's Search in bonsAI entry (2026-10-12 docs sweep):
 
   **Built so far 2026-10-12 (plan 92):** the tab's first half (`5e6f5af0`, `c254579f`, `1e8e4a2d`, `b6d8e9a6`) and the game-notes search (`64287145`). The Steam settings search moved here from the Main tab: the card above the question box is gone. Y was measured free on the Main tab (`docs/test-evidence/plan92-P92-M-Y.json`). **Passed on the Deck tonight:** seven tabs fit the bar (P92-M-TAB-BAR-SEVEN), the word buttons and Clear (P90-SEARCH-WORDS), the game row (P90-SEARCH-GAMES), a Steam page opens from the tab and Main has no settings card (P90-SEARCH-SETTINGS), the game notes with the library installed (P90-SEARCH-KB), and the tab walk after the second round, 14 of 14 presses as designed and the plain note titles reading "An item note" (P90-SEARCH-TAB-WALK, `docs/test-evidence/plan92-P90-SEARCH-TAB-WALK-try2.json`). Other evidence `docs/test-evidence/plan92-P92-M-TAB-BAR-SEVEN.json`, `P90-SEARCH-WORDS.json`, `-GAMES.json`, `-SETTINGS.json`, `-KB.json`. **Owed:** the notes library removed and installed again (P90-SEARCH-KB); the 24 Steam settings pages re-run from this tab (P90-SEARCH-SETTINGS); the jump into a chat, the way back and Y (plan 90 lane N3b), second night.
+
+## Plan 93 note: shelved reload puts Home in front
+
+Cut word for word from the Bugs entry when the maintainer shelved it as watched (2026-10-16, D131 call 4):
+
+- ★ `[platform]` `[watching]` **A plugin reload while a game is running can put Steam's Home screen in front of the game** — **shelved as watched 2026-10-16 ([D131](audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page) call 4).** Was OPEN, found 2026-09-28 (plan 75). Developer-only: a player has no route to it (2026-10-03).
+  Older notes and evidence, word for word: [roadmap-details.md](roadmap-details.md#a-plugin-reload-while-a-game-is-running-can-put-steams-home-screen-in-front-of-the-game).
+  Unshelves when: a new sighting.
+
+## Plan 93 note: shelved spoiler sentence readable
+
+Cut word for word from the Bugs entry when the maintainer shelved it as watched (2026-10-16, D131 call 4):
+
+- ★ `[reply]` `[watching]` **While an answer arrives, the start of a sentence that ends up behind a spoiler cover can be read for about a second** — **shelved as watched 2026-10-16 ([D131](audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page) call 4).** Was OPEN, seen 2026-10-01 on the Deck (plan 78, Deck block 3a), a note. Not built for 0.6.0 ([D124](audit/maintainer-decisions-locked.md#d124--locked-2026-10-03-raised-2026-10-03--plan-81-the-final-bug-session-before-060-the-ten-calls) call 8); accepting it was a call (plan 81 question 1).
+  Older notes and evidence, word for word: [roadmap-details.md](roadmap-details.md#while-an-answer-arrives-the-start-of-a-sentence-that-ends-up-behind-a-spoiler-cover-can-be-read-for-about-a-second).
+  Unshelves when: a new sighting.
+
+## Plan 93 note: shelved reload with heavy game
+
+Cut word for word from the Bugs entry when the maintainer shelved it as watched (2026-10-16, D131 call 4):
+
+- ★★ `[platform]` `[watching]` **Reloading the plugin while a heavy game is running can leave Steam's interface gone until the Deck is restarted** — **shelved as watched 2026-10-16 ([D131](audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page) call 4).** Was OPEN, seen once, 2026-10-01 12:29 (plan 78, Deck block 3e). Developer-only: a player has no route to it (2026-10-03).
+  Older notes and evidence, word for word: [roadmap-details.md](roadmap-details.md#reloading-the-plugin-while-a-heavy-game-is-running-can-leave-steams-interface-gone-until-the-deck-is-restarted).
+  Unshelves when: a new sighting.
+
+## Plan 93 note: shelved screensaver freeze
+
+Cut word for word from the Bugs entry when the maintainer shelved it as watched (2026-10-16, D131 call 4):
+
+- ★★ `[platform]` `[watching]` **The Deck's screen froze when Steam's screensaver started (no game, plugin idle)** — **shelved as watched 2026-10-16 ([D131](audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page) call 4).** Was OPEN, seen once, 2026-10-11 22:17 (plan 89); likely Steam's own.
+  Older notes and evidence, word for word: [roadmap-details.md](roadmap-details.md#the-decks-screen-froze-when-steams-screensaver-started-no-game-plugin-idle).
+  Unshelves when: a new sighting.
+
+## Plan 93 note: shelved freeze after answer
+
+Cut word for word from the Bugs entry when the maintainer shelved it as watched (2026-10-16, D131 call 4):
+
+- ★★★ `[platform]` `[watching]` **Steam's screen froze after an answer with a game running and the Deck's own AI** — **shelved as watched 2026-10-16 ([D131](audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page) call 4).** Was OPEN, seen once on the Deck 2026-10-03 (plan 81, build `afd2f444`); not reproduced in two later runs.
+  Older notes and evidence, word for word: [roadmap-details.md](roadmap-details.md#steams-screen-froze-after-an-answer-with-a-game-running-and-the-decks-own-ai).
+  Unshelves when: a new sighting.

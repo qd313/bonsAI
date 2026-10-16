@@ -97,7 +97,7 @@ recordings/
 # v0 UI drafts (reference only; not part of the Decky bundle)
 src/v0-drafts/
 
-# Deck walk evidence written by the plugin-studio tools; keep what a testing row cites in docs/test-evidence instead
+# Deck walk evidence written by the plugin-studio tools; keep what a testing row cites in the workshop's test-evidence folder (workshop:test-evidence/) instead
 runs/
 
 # Shared "who is driving the Deck right now" queue (scripts/deck_queue.py) — local coordination state, not plugin content

@@ -588,5 +588,14 @@ From its [postmortem](../../../bonsAI-workshop/audit/refactor-round-two/postmort
   - **Landed 2, the weekly refresh** (`5283c0b3`..`3970a4b0`, 22:29 UTC, every check green): 11 tests deleted, as
     listed; 67 back-end methods. The helper's back-end and screen commits were folded into one, because either alone
     fails a check (a call to a method that is gone, or a method nobody calls); a stale comment fixed after it.
-  - **Deck, block A:** build `ca436256` deployed 22:22; a Deck helper records the size and spacing of every part of
-    the panel on every tab, so the UI scale removal can be compared number by number afterwards.
+  - **Deck, block A** (build `ca436256` deployed 22:22; 20 of 20 rows passed): the size and spacing of every part of
+    the panel recorded on every tab, at Small and Large text, so the UI scale removal can be compared number by number
+    afterwards (`workshop:test-evidence/plan86-A1-MAIN-IDLE.json` to `plan86-A12-UI-SCALE-SECTION.json`, setup rows
+    `plan86-S0-*.json`). The Deck's real settings file still held all four removed keys, so the "old settings file"
+    checks need no hand edit.
+  - **Landed 3, the ban lookup** (`357e5b55`, 22:42 UTC, every check green): 40 tests deleted, 13 renamed, 3 added (the
+    key scrub's test among them). The helper's three commits folded into one: the shared contract files are read by
+    both sides, so any split leaves a red contract test.
+  - **Landed 4, read aloud** (`8bcf0160`, `181c30ef`, 22:46 UTC, every check green): 161 tests deleted (127 screen, 34
+    back end), 5 renamed, 2 added; 64 back-end methods. Voice input's glue was traced by the helper and its tests pass
+    unchanged: Ask pressed while the mic listens still waits for the final text.

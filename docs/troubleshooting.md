@@ -130,7 +130,7 @@ If Windows still falls back to CPU after FIX A:
 
 ## 1a. Permissions tab (blocked actions)
 
-**Feature:** The **Permissions** tab (lock icon) opens with: "Everything here starts off until you turn it on. AI questions to a PC on your home network are not blocked by these switches." Its switches cover: saving notes to Desktop, attaching Steam screenshots and auto-attaching Proton/game logs on troubleshooting Asks (**Read game & screenshot context**), **voice input (microphone)**, and Steam ban lookup. Docs, GitHub, and Steam settings / Steam Input jumps always open when you tap them — no permission toggle. TDP/GPU clock suggestions from Ask are **read-only** (apply them yourself in Steam Performance if you choose).
+**Feature:** The **Permissions** tab (lock icon) opens with: "Everything here starts off until you turn it on. AI questions to a PC on your home network are not blocked by these switches." Its switches cover: saving notes to Desktop, attaching Steam screenshots and auto-attaching Proton/game logs on troubleshooting Asks (**Read game & screenshot context**), and **voice input (microphone)**. Docs, GitHub, and Steam settings / Steam Input jumps always open when you tap them — no permission toggle. TDP/GPU clock suggestions from Ask are **read-only** (apply them yourself in Steam Performance if you choose).
 
 **Symptom:** Toasts like “Permission required” or backend errors mentioning Permissions when you try those actions.
 
@@ -138,13 +138,13 @@ If Windows still falls back to CPU after FIX A:
 
 **Troubleshooting hint:** If an Ask looks like Proton/compat troubleshooting and **Read game & screenshot context** is off, Main shows a dismissible hint suggesting you enable it. The plugin never auto-enables that permission.
 
-**Note:** If you upgraded from an older `settings.json` that had no `capabilities` block, the plugin enables most scopes until you save settings from the Permissions tab (grandfather behavior). **Voice input (microphone)** and **Steam ban lookup** stay **off** until you enable them explicitly. Legacy **Open web links** / **Adjust power limits** toggles are ignored (removed).
+**Note:** If you upgraded from an older `settings.json` that had no `capabilities` block, the plugin enables most scopes until you save settings from the Permissions tab (grandfather behavior). **Voice input (microphone)** stays **off** until you enable them explicitly. Legacy **Open web links** / **Adjust power limits** toggles are ignored (removed).
 
 ### Permissions greyed out (Kids master lock)
 
 **Symptom:** Every Permissions switch is off and greyed out; a yellow **Parental controls active** banner explains why.
 
-**Cause:** Steam reports that parental controls are **locked** on the signed-in account (Family View or Steam Families). bonsAI forces high-impact permissions off for that session — file writes, screenshots/game logs, microphone, Steam ban lookups. Ask with local/LAN Ollama and the offline knowledge base still work.
+**Cause:** Steam reports that parental controls are **locked** on the signed-in account (Family View or Steam Families). bonsAI forces high-impact permissions off for that session — file writes, screenshots/game logs, microphone. Ask with local/LAN Ollama and the offline knowledge base still work.
 
 **Fix:** Unlock parental controls in **Steam** (not in bonsAI). There is no bonsAI PIN. When Steam reports unlocked, the switches return to your saved settings by themselves.
 

@@ -267,12 +267,11 @@ permission that's off, bonsAI says so and offers a button that jumps here.
 | **Save files to Desktop** | Saving chats, notes and logs to a `bonsAI_logs` folder on the Desktop |
 | **Voice input (microphone)** | Using the mic button |
 | **Internet downloads** | Installing Ollama, AI models, the knowledge library and the voice engine. bonsAI tells you where each download comes from before it starts |
-| **Steam ban lookup** | Checking Steam accounts you name for public ban flags: type `bonsai:vac-check` followed by profile links or Steam IDs. It doesn't look up your recent players. Needs your own Steam Web API key, which goes on the hidden Developer tab: switch on **Settings → Data → Show Developer tab**, then **Developer → Integrations** |
 
 ## The parental lock
 
 When Steam reports that parental controls are on, bonsAI switches off its higher-impact permissions —
-saving files, screenshots and game logs, the microphone, the ban lookup and downloads — and greys them out.
+saving files, screenshots and game logs, the microphone and downloads — and greys them out.
 
 Be clear about what that doesn't do:
 

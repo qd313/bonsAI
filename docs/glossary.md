@@ -20,4 +20,3 @@ Short definitions for terms used in file headers and maintainer docs. Expand on 
 | **RPC** | Remote procedure call — React `call()` → Python `Plugin` methods in `main.py`. |
 | **Strategy** | Ask mode for level/boss coaching with branches and checklist UI. |
 | **TDP** | Thermal Design Power — Deck wattage cap. bonsAI reads it and suggests values; it does not change it. |
-| **VAC** | Valve Anti-Cheat — `bonsai:vac-check` local command for game safety hints. |

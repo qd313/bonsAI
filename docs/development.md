@@ -266,7 +266,6 @@ Build output: [`dist/index.js`](../dist/index.js) (referenced by [`plugin.json`]
 | `tdp_service.py` | TDP/sysfs read/write |
 | `desktop_note_service.py` | Desktop note and verbose Ask trace append |
 | `capabilities.py` | Permission capability checks |
-| `steam_vac_service.py` / `vac_check_commands.py` | Steam ban lookup |
 | `shortcut_setup_commands.py` | Guide-chord setup guidance |
 | `plugin_data_reset.py` | Reset plugin persisted data |
 | `strategy_guide_parse.py` | Strategy-mode response parsing |

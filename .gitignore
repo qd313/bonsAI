@@ -88,9 +88,6 @@ cli/decky
 screenshots/*
 !screenshots/README.md
 
-# Preview suite run artifacts (JUnit-style JSON reports)
-tests/preview-results/
-
 # Local Deck screen recordings (captured by scripts/record-deck.ps1 / record-deck.sh)
 recordings/
 

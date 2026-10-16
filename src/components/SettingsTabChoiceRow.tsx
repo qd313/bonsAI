@@ -1,14 +1,14 @@
 /**
  * Title: Settings tab -- a row of choice buttons, one line
  *
- * Purpose: The row Screenshot quality, Text size and Voice replies share (plan 91 § 2b, plan 92 T1): the
+ * Purpose: The row Screenshot quality and Text size share (plan 91 § 2b, plan 92 T1): the
  * choices drawn as buttons side by side, the saved one lighter and marked `aria-pressed`, and nothing
  * else. The words that used to sit above the buttons ride on the row for the help strip at the bottom of
  * the panel (DenseRow), so the row is one line tall.
  *
- * Used for: SettingsTab (Screenshot quality, Voice replies), SettingsTabChatTextSizeRow (Text size).
+ * Used for: SettingsTab (Screenshot quality), SettingsTabChatTextSizeRow (Text size).
  *
- * Solves: Three rows built the same way, written once, with the same look and the same D-pad shape: one
+ * Solves: Rows built the same way, written once, with the same look and the same D-pad shape: one
  * `Focusable` with `flow-children="horizontal"` holding the buttons, so Steam's own Left and Right walk
  * them and no press is swallowed; the tab hands Up (to the section's line) and Down (to the next line)
  * in through `nav`.

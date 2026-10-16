@@ -2,7 +2,7 @@
  * Title: Settings tab -- Text size row
  *
  * Purpose: The "Text size" choice in Settings: Small, Normal or Large, drawn as three buttons side
- * by side, the same shape as Screenshot quality and Voice replies. It sets how big the words are
+ * by side, the same shape as Screenshot quality. It sets how big the words are
  * everywhere in bonsAI: the tab bar, the chat's name, the chat itself, the chips, the question box and
  * every other tab (plan 89). Steam's own controls, whose size Steam sets, may not follow.
  *

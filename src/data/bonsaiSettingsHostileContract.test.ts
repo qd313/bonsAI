@@ -4,7 +4,7 @@
  * Used for: Catching TS/Python settings drift on non-default values.
  * Solves: settings-defaults.json only pins the fresh-install payload, so it could not see the
  *         five settings D13 found disagreeing once the value was not the default.
- * Does not: Cover the deliberate SHOW_IMMERSIVE_UI_SCALE gate — see tests/contracts/README.md.
+ * Does not: Cover a setting only one of the two languages reads.
  *
  * Python half is tests/test_settings_hostile_contract.py.
  */

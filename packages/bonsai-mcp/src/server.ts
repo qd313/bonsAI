@@ -12,6 +12,7 @@ import {
   readKnowledgeByUri,
   searchKnowledge,
 } from "./knowledge.js";
+import { buildArchitectureMaps, mapMissingMessage } from "./architectureMaps.js";
 import { knowledgeDir, resolveRepoRoot, subagentReportsPath } from "./paths.js";
 
 const DECKY_STUDIO_TOOLS = [
@@ -223,7 +224,7 @@ export function createServer(): McpServer {
       const file = path.join(knowledgeDir(), "architecture", "rpc-map.json");
       if (!fs.existsSync(file)) {
         return {
-          content: [{ type: "text" as const, text: "rpc-map.json not generated. Run: pnpm run mcp:generate" }],
+          content: [{ type: "text" as const, text: mapMissingMessage("rpc-map.json") }],
           isError: true,
         };
       }
@@ -256,7 +257,9 @@ export function createServer(): McpServer {
       if (fs.existsSync(testInv)) {
         parts.push("\n## test-inventory.json\n\n```json\n" + fs.readFileSync(testInv, "utf8") + "\n```");
       }
-      return { content: [{ type: "text" as const, text: parts.join("\n") || "Run pnpm run mcp:generate" }] };
+      if (!fs.existsSync(moduleMap)) parts.push("\n" + mapMissingMessage("hotspots.json"));
+      if (!fs.existsSync(testInv)) parts.push("\n" + mapMissingMessage("test-inventory.json"));
+      return { content: [{ type: "text" as const, text: parts.join("\n") }] };
     },
   );
 
@@ -268,7 +271,7 @@ export function createServer(): McpServer {
       const file = path.join(knowledgeDir(), "architecture", "preview-tiers.json");
       if (!fs.existsSync(file)) {
         return {
-          content: [{ type: "text" as const, text: "preview-tiers.json not generated. Run: pnpm run mcp:generate" }],
+          content: [{ type: "text" as const, text: mapMissingMessage("preview-tiers.json") }],
           isError: true,
         };
       }
@@ -321,7 +324,10 @@ export function createServer(): McpServer {
 }
 
 export async function runServer(): Promise<void> {
-  resolveRepoRoot(); // fail fast
+  const repoRoot = resolveRepoRoot(); // fail fast
+  // Build the architecture maps before answering anything. A failed builder is reported by the
+  // tools that need its map; it does not stop the server.
+  await buildArchitectureMaps(repoRoot);
   const server = createServer();
   const transport = new StdioServerTransport();
   await server.connect(transport);

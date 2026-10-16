@@ -8,9 +8,9 @@
     "bonsai-mcp": "dist/index.js"
   },
   "scripts": {
-    "prebuild": "node scripts/generate-architecture.mjs",
     "build": "tsc",
     "start": "node dist/index.js",
+    "smoke": "node scripts/smoke-architecture.mjs",
     "generate": "node scripts/generate-architecture.mjs",
     "validate": "node scripts/validate-knowledge.mjs --check-generated"
   },

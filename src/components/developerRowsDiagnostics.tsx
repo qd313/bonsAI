@@ -1,5 +1,5 @@
 /**
- * Title: The Developer tab's Knowledge base (dev QA) and Diagnostics rows
+ * Title: The Developer tab's Knowledge base and Diagnostics rows
  *
  * Purpose: The rows of the first two Developer sections as lists for SectionRows: the seed install button and
  * the hybrid retrieval switch; the debug HUD and warm-the-model switches, the Steam Input jump, the Clear

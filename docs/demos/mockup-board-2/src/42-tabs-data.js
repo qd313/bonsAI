@@ -84,7 +84,7 @@ const TAB_DATA = {
   ] },
 
   Developer: { icon: 4, measured: 2820, items: [
-    sec("Knowledge base (dev QA)"),
+    sec("Knowledge base"),
     sbtn("Install seed knowledge base", { desc: "Public HF/GitHub download is not live yet. <b>build.ps1</b> copies a seed corpus (DRG Survivor + OoT alias sample) to the Deck. Install it into <code>~/.bonsai/rag</code> for Phase 1 testing. Hybrid retrieval also needs vectorized seed + <b>nomic-embed-text</b> on your Ask Ollama host.", how: "above" }),
     tog("Hybrid retrieval (meaning search)", "On, the knowledge base ranks cards by keyword match and meaning together. Off, it uses keyword match only — cards still attach, and Show details says Keyword search (hybrid disabled). Turn it off to tell a retrieval problem apart from an embedding one.", true),
     sec("Diagnostics"),
@@ -104,8 +104,8 @@ const TAB_DATA = {
       'Default events plus RPC details, setup log lines, and frontend errors. Writes <span class="cy">bonsai-app-YYYY-MM-DD.log</span> under Desktop/bonsAI_logs/.'] }),
     tog("Auto-save chat to Desktop notes", "Append Q+A to Desktop/bonsAI_logs/bonsai-chat-YYYY-MM-DD.md (UTC). Needs Save files to Desktop.", false),
     tog("Verbose Ask logging to Desktop notes", "Full Ollama trace to bonsai-ask-trace-*.md under Desktop/bonsAI_logs. Can be large/sensitive.", false),
-    tog("Force session RAG chips (QA)", "Always fill preset carousel slots from the knowledge base instead of a 30% chance each, and reseed the chips immediately. For verifying SESSION-RAG-CHIPS-01 without waiting on the roll. Needs Use local knowledge base on and a covered game running.", false,
-      { post: "<b>Frozen test chips (QA)</b><br>None pinned — the carousel is sampling normally. A pinned batch replaces the carousel with exact questions in order and stops it reseeding, so a QA row is one press per case instead of typing the sentence. Set the list from the host while preparing a run." }),
+    tog("Force session RAG chips", "Always fill preset carousel slots from the knowledge base instead of a 30% chance each, and reseed the chips immediately. For verifying SESSION-RAG-CHIPS-01 without waiting on the roll. Needs Use local knowledge base on and a covered game running.", false,
+      { post: "<b>Frozen test chips</b><br>None pinned — the carousel is sampling normally. A pinned batch replaces the carousel with exact questions in order and stops it reseeding, so a QA row is one press per case instead of typing the sentence. Set the list from the host while preparing a run." }),
     sec("Animations"),
     choice("Preset suggestions", ["fade", "carousel", "static", "decode"], 0, { cyan: true, titled: true, small: true }),
     tog("Scramble animation", "New answer text scrambles through symbols for a moment before it settles into letters, like the decode chips. Off by default.", false),

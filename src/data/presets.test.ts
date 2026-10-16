@@ -111,7 +111,7 @@ describe("presets", () => {
   });
 });
 
-describe("frozen test chips (QA)", () => {
+describe("frozen test chips", () => {
   afterEach(() => setFrozenTestChips([]));
 
   const BATCH = [

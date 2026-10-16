@@ -1207,14 +1207,14 @@ the Show reasoning line when this turn has one, else the answer's first section
 ### The Developer tab, folded (plan 91 § 2b, plan 92 lane T2)
 
 The same pieces as the Ollama tab (`src/features/folded-tabs/`, the section above); only the sections and the rows are the Developer tab's. Six sections, in
-order: Knowledge base (dev QA) (drawn only when a seed install was passed in), Diagnostics, Navigation, Logging & exports,
+order: Knowledge base (drawn only when a seed install was passed in), Diagnostics, Navigation, Logging & exports,
 Animations, Integrations. Each section folds to one line with a summary (`developerTabFolds.ts`, `summarizeSection`); a first visit
 has every section closed, and the tab test sets the open state with the store's own functions.
 
 ```
 tab bar
    | Down                          ^ Up (from the first line)
-[ KNOWLEDGE BASE (DEV QA)   Hybrid retrieval (meaning search) on   ▸ ]  --Right-->  [ ⊞ Open all ]
+[ KNOWLEDGE BASE   Hybrid retrieval (meaning search) on   ▸ ]  --Right-->  [ ⊞ Open all ]
 [ DIAGNOSTICS   On-screen debug HUD off · Warm the Ask model at boot off   ▾ ]
    | Down (open: into the first stop)        <-- Up from the first stop comes back to this line
    [ On-screen debug HUD ] [ Warm the Ask model at boot ] [ Jump to Steam Input ] [ Clear (N) ]
@@ -1223,7 +1223,7 @@ tab bar
 [ NAVIGATION   Tab to open on (D15): B · Resume   ▸ ]
 [ LOGGING & EXPORTS   App activity logging to Desktop: Off · 0 of 3 on   ▸ ]
    [ App activity logging (3 buttons) ] [ Open Permissions: only while Save files to Desktop is off ] [ Auto-save ]
-   [ Verbose Ask logging ] [ Force session RAG chips ] [ Frozen test chips (QA): a read-only stop ] [ Clear frozen test chips ]
+   [ Verbose Ask logging ] [ Force session RAG chips ] [ Frozen test chips: a read-only stop ] [ Clear frozen test chips ]
 [ ANIMATIONS   Preset suggestions: fade · Scramble animation off   ▸ ]
    [ Preset suggestions (4 buttons) ] [ Scramble animation ] and, only while it is on: [ How letters settle ]
    [ How long each letter scrambles (settle style only) ] [ Scrambled letter colour ]

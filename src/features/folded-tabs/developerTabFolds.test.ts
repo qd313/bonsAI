@@ -54,7 +54,7 @@ const stripTags = (s: string) => s.replace(/<br>/g, " ").replace(/<[^>]+>/g, "")
 describe("the Developer tab's section list", () => {
   it("names the six sections in the drawing's order", () => {
     expect(DEVELOPER_SECTIONS.map((s) => s.title)).toEqual([
-      "Knowledge base (dev QA)",
+      "Knowledge base",
       "Diagnostics",
       "Navigation",
       "Logging & exports",

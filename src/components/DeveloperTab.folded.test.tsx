@@ -75,7 +75,7 @@ describe("the folded Developer tab, every section closed", () => {
   it("is six one-line sections, each with its summary, and no row drawn", () => {
     const { container } = render(<DeveloperTab {...props()} />);
     expect(lines(container).map((l) => [lineName(l), lineSummary(l)])).toEqual([
-      ["Knowledge base (dev QA)", "Hybrid retrieval (meaning search) on"],
+      ["Knowledge base", "Hybrid retrieval (meaning search) on"],
       ["Diagnostics", "On-screen debug HUD off · Warm the Ask model at boot off"],
       ["Navigation", "Tab to open on: B · Resume"],
       ["Logging & exports", "App activity logging to Desktop: Off · 0 of 3 on"],

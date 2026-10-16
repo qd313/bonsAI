@@ -28,7 +28,7 @@
  *
  * How it works:
  *
- *     Knowledge base (dev QA)  <- only when a seed-install callback was passed in
+ *     Knowledge base  <- only when a seed-install callback was passed in
  *     Diagnostics              <- HUD toggle, warm-at-boot, Steam Input jump, captured errors, loaded models
  *     Navigation               <- which tab reopens the plugin
  *     Logging & exports        <- Desktop log level, auto-save chat, verbose Ask log, QA session-RAG

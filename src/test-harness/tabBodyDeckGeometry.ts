@@ -89,7 +89,7 @@ export const TAB_GEOMETRY: Record<"ollama" | "settings" | "permissions" | "devel
       [1298, 36, "Off: No app activity log file on D"],
       [1344, 22, "Auto-save chat to Desktop notes"],
       [1472, 22, "Verbose Ask logging to Desktop not"],
-      [1584, 22, "Force session RAG chips (QA)"],
+      [1584, 22, "Force session RAG chips"],
       [1989, 32, "Preset animation: fade"],
       [2031, 22, "Scramble animation"],
       [2191, 32, "Settle"],

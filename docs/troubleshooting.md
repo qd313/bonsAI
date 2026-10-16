@@ -182,7 +182,7 @@ reports `"schema_version": 3` and `"embedding_variant": "nomic-prefixed-v1"`.
 **Show details says "Keyword search (hybrid disabled)".** That is a setting, not a fault — the
 Developer-tab hybrid kill-switch is off. Deliberately worded differently from *embed
 unavailable* so it does not send you looking for a broken Ollama install. Turn it back on
-under Developer → **Knowledge base (dev QA)** → *Hybrid retrieval (meaning search)*. Cards
+under Developer → **Knowledge base** → *Hybrid retrieval (meaning search)*. Cards
 still attach while it is off; only the meaning half of the ranking stops. The switch is
 checked **before** the corpus-format gate, so an off switch reports itself even on a corpus
 that could not have run hybrid anyway.

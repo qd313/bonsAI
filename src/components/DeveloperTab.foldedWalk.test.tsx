@@ -179,11 +179,11 @@ describe("the folded Developer tab, every section open", () => {
         const down = [w.enter(), ...w.walk("down", 80)];
         expect(repeats(down), names(down).join(" | ")).toBe(0);
         const order = names(down);
-        expect(order[0]).toMatch(/^Knowledge base \(dev QA\)/);
+        expect(order[0]).toMatch(/^Knowledge base section/);
         /* A control of every section, the captured errors included, in order. */
         const at = (name: string | RegExp) => order.findIndex((n) => (typeof name === "string" ? n === name : name.test(n)));
         const expectedOrder = [
-          /^Knowledge base \(dev QA\)/,
+          /^Knowledge base section/,
           "Install seed knowledge base",
           "Hybrid retrieval (meaning search)",
           /^Diagnostics/,
@@ -200,8 +200,8 @@ describe("the folded Developer tab, every section open", () => {
           "Open Permissions",
           "Auto-save chat to Desktop notes",
           "Verbose Ask logging to Desktop notes",
-          "Force session RAG chips (QA)",
-          "Frozen test chips (QA)",
+          "Force session RAG chips",
+          "Frozen test chips",
           "Clear frozen test chips",
           /^Animations/,
           "Preset animation: fade",
@@ -222,7 +222,7 @@ describe("the folded Developer tab, every section open", () => {
         expect(repeats(up), names(up).join(" | ")).toBe(0);
         /* Up from the button: the line of the section the ring came from. */
         expect(up[0]!.name).toMatch(/^Integrations section/);
-        expect(up[up.length - 1]!.name).toMatch(/^Knowledge base \(dev QA\)/);
+        expect(up[up.length - 1]!.name).toMatch(/^Knowledge base section/);
         checkLandings(up, viewport, `${steam} up`);
         w.unmount();
       });
@@ -254,7 +254,7 @@ describe("the folded Developer tab, every section open", () => {
     const w = walk(MONITOR_PANE, "nearest", { capturedErrors: ["boom one", "boom two", "boom three"] });
     const down = [w.enter(), ...w.walk("down")];
     expect(names(down).map((n) => n.split(" section")[0])).toEqual([
-      "Knowledge base (dev QA)",
+      "Knowledge base",
       "Diagnostics",
       "On-screen debug HUD",
       "Warm the Ask model at boot",
@@ -279,7 +279,7 @@ describe("the folded Developer tab, every section open", () => {
     for (const l of [w.enter(), ...w.walk("down", 80)]) seen.set(l.name, l.stripText);
     expect(seen.get("Warm the Ask model at boot")).toMatch(/^Warm the Ask model at bootLoads the default Ask model into memory/);
     expect(seen.get("Install seed knowledge base")).toMatch(/Public HF\/GitHub download is not live yet\./);
-    expect(seen.get("Frozen test chips (QA)")).toMatch(/^Frozen test chips \(QA\)2 pinned\. The carousel is showing these/);
+    expect(seen.get("Frozen test chips")).toMatch(/^Frozen test chips2 pinned\. The carousel is showing these/);
     expect(seen.get("Steam Web API key")).toBe(
       "Steam Web API keyFor the bonsai:vac-check command. Enable Steam ban lookup in Permissions. Stored on this device.",
     );

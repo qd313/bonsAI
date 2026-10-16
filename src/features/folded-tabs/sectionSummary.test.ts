@@ -61,7 +61,7 @@ describe("a folded section's summary, as the drawing writes it", () => {
         { kind: "choice", label: "App activity logging to Desktop", value: "Off" },
         { kind: "switch", label: "Auto-save chat to Desktop notes", on: false },
         { kind: "switch", label: "Verbose Ask logging to Desktop notes", on: true },
-        { kind: "switch", label: "Force session RAG chips (QA)", on: false },
+        { kind: "switch", label: "Force session RAG chips", on: false },
       ]),
     ).toBe("App activity logging to Desktop: Off · 1 of 3 on");
   });

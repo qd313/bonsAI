@@ -2,7 +2,7 @@
  * Title: The Developer tab's folded sections: their names, their summaries, and the rows' longer text
  *
  * Purpose: What the folded Developer tab (plan 91 § 2b, plan 92 lane T2) says about itself: the six
- * sections in order (Knowledge base (dev QA), Diagnostics, Navigation, Logging & exports, Animations,
+ * sections in order (Knowledge base, Diagnostics, Navigation, Logging & exports, Animations,
  * Integrations), each one's summary line from the current settings, the labels the tab's choice rows
  * show, and the longer text of each row that the strip shows, word for word as the tab used to print it
  * under or above the row (the density board's data file, docs/demos/mockup-board-2/src/42-tabs-data.js,
@@ -30,7 +30,7 @@ import { summarizeSection, type SummaryRow } from "./sectionSummary";
 export const DEVELOPER_FOLD_TAB = "developer";
 
 export const DEVELOPER_SECTIONS = [
-  { id: "kb", title: "Knowledge base (dev QA)" },
+  { id: "kb", title: "Knowledge base" },
   { id: "diagnostics", title: "Diagnostics" },
   { id: "navigation", title: "Navigation" },
   { id: "logging", title: "Logging & exports" },
@@ -110,8 +110,8 @@ export const DEVELOPER_ROW_LABELS = {
   appLog: "App activity logging to Desktop",
   autoSave: "Auto-save chat to Desktop notes",
   verbose: "Verbose Ask logging to Desktop notes",
-  forceChips: "Force session RAG chips (QA)",
-  frozenChips: "Frozen test chips (QA)",
+  forceChips: "Force session RAG chips",
+  frozenChips: "Frozen test chips",
   presetAnimation: "Preset suggestions",
   scramble: "Scramble animation",
   howLettersSettle: "How letters settle",

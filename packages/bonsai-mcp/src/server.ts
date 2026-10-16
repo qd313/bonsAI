@@ -264,22 +264,6 @@ export function createServer(): McpServer {
   );
 
   server.tool(
-    "bonsai.arch.previewTiers",
-    "Return preview suite tier manifest",
-    {},
-    async () => {
-      const file = path.join(knowledgeDir(), "architecture", "preview-tiers.json");
-      if (!fs.existsSync(file)) {
-        return {
-          content: [{ type: "text" as const, text: mapMissingMessage("preview-tiers.json") }],
-          isError: true,
-        };
-      }
-      return { content: [{ type: "text" as const, text: fs.readFileSync(file, "utf8") }] };
-    },
-  );
-
-  server.tool(
     "bonsai.report.archive",
     "Append a structured entry to docs/audit/subagent-reports.md",
     {

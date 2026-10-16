@@ -305,12 +305,6 @@ function generateTestInventory() {
   };
 }
 
-function generatePreviewTiers() {
-  const manifest = path.join(REPO_ROOT, "tests", "preview-suite", "tier-manifest.json");
-  const data = JSON.parse(fs.readFileSync(manifest, "utf8"));
-  return data;
-}
-
 function generateEnvVars() {
   const example = fs.readFileSync(path.join(REPO_ROOT, ".env.example"), "utf8");
   const vars = [];
@@ -413,6 +407,5 @@ if (!typesOnly) {
   writeJson("hotspots.json", generateHotspots());
   writeJson("import-graph.json", generateImportGraph());
   writeJson("test-inventory.json", generateTestInventory());
-  writeJson("preview-tiers.json", generatePreviewTiers());
   writeJson("env-vars.json", generateEnvVars());
 }

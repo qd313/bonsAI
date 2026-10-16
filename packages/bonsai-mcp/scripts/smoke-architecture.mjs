@@ -31,7 +31,6 @@ const MAPS = [
   "hotspots.json",
   "import-graph.json",
   "test-inventory.json",
-  "preview-tiers.json",
   "env-vars.json",
   "py-import-graph.json",
 ];
@@ -53,7 +52,7 @@ async function askServer(repoRoot) {
   await client.connect(transport);
   try {
     const out = {};
-    for (const tool of ["bonsai.arch.rpcMap", "bonsai.arch.hotspots", "bonsai.arch.previewTiers"]) {
+    for (const tool of ["bonsai.arch.rpcMap", "bonsai.arch.hotspots"]) {
       const res = await client.callTool({ name: tool, arguments: {} });
       out[tool] = { text: res.content.map((c) => c.text ?? "").join("\n"), isError: Boolean(res.isError) };
     }
@@ -76,8 +75,6 @@ function parseOrNull(text) {
 const rpc = parseOrNull(real["bonsai.arch.rpcMap"].text);
 check(Boolean(rpc) && rpc.methods.length > 10, `rpc map has content (${rpc ? rpc.methods.length : 0} methods)`);
 check(real["bonsai.arch.hotspots"].text.includes("## hotspots.json") && real["bonsai.arch.hotspots"].text.includes("## test-inventory.json"), "hotspots answer carries hotspots and the test inventory");
-const tiers = parseOrNull(real["bonsai.arch.previewTiers"].text);
-check(Boolean(tiers) && Object.keys(tiers).length > 0, "preview tiers has content");
 for (const name of MAPS) check(fs.existsSync(path.join(ARCH, name)), `${name} was written at start-up`);
 
 // Run 2: a stand-in repo whose map builder always fails.

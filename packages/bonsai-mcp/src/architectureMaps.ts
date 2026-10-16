@@ -1,13 +1,13 @@
 /**
  * Title: Architecture maps, built when the tool server starts
  *
- * Purpose: The tool server answers questions about the code from six small JSON maps
+ * Purpose: The tool server answers questions about the code from five small JSON maps
  * (which back-end methods exist, which files are biggest, how files import each other,
- * which tests exist, which preview tiers there are, which settings variables are read) plus
+ * which tests exist, which settings variables are read) plus
  * one for the back end's own imports. They are no longer saved in the repo. This file runs
  * the two programs that write them, once, before the server starts answering, so every answer
  * comes from the code as it is right now.
- * Used for: runServer in server.ts, and the three architecture tools there, which ask here
+ * Used for: runServer in server.ts, and the architecture tools there, which ask here
  * why a map is missing when its file is not on disk.
  * Solves: Saved maps went stale between commits, and every helper working in its own copy of
  * the repo collided on them at every landing.

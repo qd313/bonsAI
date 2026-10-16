@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Title: Build the architecture maps when a check needs them
 
-Purpose: Six small JSON files describe the code from the outside: which back-end
+Purpose: Five small JSON files describe the code from the outside: which back-end
 methods exist, which files are biggest, how the front-end and back-end files import
-each other, which tests exist, which preview tiers there are, which settings
-variables the code reads. They are no longer saved in the repo. This file builds
+each other, which tests exist, which settings variables the code reads. They are no longer saved in the repo. This file builds
 them in the folder it sits in, on demand, so a check can ask for them and always
 gets files that match the code as it is right now.
 Used for: scripts/ratchet.py (the import-cycle counts and the front-end/back-end
@@ -35,13 +34,12 @@ ARCH_DIR = ROOT / "packages" / "bonsai-mcp" / "knowledge" / "architecture"
 GENERATOR_JS = ROOT / "packages" / "bonsai-mcp" / "scripts" / "generate-architecture.mjs"
 PY_GRAPH_SCRIPT = ROOT / "scripts" / "py_import_graph.py"
 
-# The six maps the JavaScript generator writes, plus the one the Python script writes.
+# The five maps the JavaScript generator writes, plus the one the Python script writes.
 MAP_FILES = (
     "rpc-map.json",
     "hotspots.json",
     "import-graph.json",
     "test-inventory.json",
-    "preview-tiers.json",
     "env-vars.json",
     "py-import-graph.json",
 )

@@ -17,7 +17,6 @@ import asyncio
 import contextlib
 import re
 import unittest
-from pathlib import Path
 from unittest import mock
 from unittest.mock import patch
 
@@ -27,6 +26,7 @@ install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
 from plugin_settings_file_harness import PluginSettingsFileMixin  # noqa: E402
+from src_paths import find_src_file  # noqa: E402
 
 from backend.ollama_routing import TIER1_ESSENTIALS_PULL_TAGS, setup_recommended_pull_tags  # noqa: E402
 from backend.services import local_ollama_setup_service as setup  # noqa: E402
@@ -36,7 +36,6 @@ from backend.services import starter_speech_models as speech_models  # noqa: E40
 from backend.services import voice_model_download_service as voice_models  # noqa: E402
 
 S = "backend.services.local_ollama_setup_service"
-ROOT = Path(__file__).resolve().parent.parent
 LOGGER = type("L", (), {"info": lambda *a, **k: None, "exception": lambda *a, **k: None})()
 
 
@@ -46,7 +45,7 @@ class TheSetIsNamedOnBothSides(unittest.TestCase):
         self.assertEqual(setup_recommended_pull_tags("tier1_essentials"), list(TIER1_ESSENTIALS_PULL_TAGS))
 
     def test_the_screen_names_the_same_note_search_model_and_speech_models(self):
-        text = (ROOT / "src" / "data" / "deckEssentialsTags.ts").read_text(encoding="utf-8")
+        text = find_src_file("deckEssentialsTags.ts").read_text(encoding="utf-8")
         note = re.search(r'STARTER_NOTE_SEARCH_TAG = "([^"]+)"', text)
         speech = re.search(r"STARTER_SPEECH_MODELS: readonly string\[\] = \[([^\]]*)\]", text)
         self.assertIsNotNone(note)

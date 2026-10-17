@@ -14,16 +14,14 @@ from __future__ import annotations
 
 import re
 import unittest
-from pathlib import Path
 
 from backend.services import rag_corpus_download_service as svc
-
-ROOT = Path(__file__).resolve().parents[1]
+from src_paths import find_src_file
 
 
 class RagUpdateDeadlineTests(unittest.TestCase):
     def test_screen_deadline_exceeds_back_end_worst_case(self) -> None:
-        src = (ROOT / "src" / "components" / "KnowledgeBaseSection.tsx").read_text(encoding="utf-8")
+        src = find_src_file("KnowledgeBaseSection.tsx").read_text(encoding="utf-8")
         m = re.search(r"RAG_UPDATE_RPC_TIMEOUT_MS\s*=\s*([\d_]+)", src)
         self.assertIsNotNone(m, "RAG_UPDATE_RPC_TIMEOUT_MS not found in KnowledgeBaseSection.tsx")
         screen_ms = int(m.group(1).replace("_", ""))

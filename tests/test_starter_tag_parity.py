@@ -22,20 +22,21 @@ from backend.ollama_routing import (
     default_vision_routing_seed,
     no_installed_routing_models_message,
 )
+from src_paths import find_src_file
 
 ROOT = Path(__file__).resolve().parent.parent
 STARTER = "gemma4:e2b-it-qat"
 
 
 def _screen_starter_tag() -> str:
-    text = (ROOT / "src" / "data" / "deckEssentialsTags.ts").read_text(encoding="utf-8")
+    text = find_src_file("deckEssentialsTags.ts").read_text(encoding="utf-8")
     match = re.search(r'export const TIER1_ESSENTIALS_TAG = "([^"]+)"', text)
     assert match, "TIER1_ESSENTIALS_TAG not found in deckEssentialsTags.ts"
     return match.group(1)
 
 
 def _screen_seed_first(name: str) -> str:
-    text = (ROOT / "src" / "utils" / "modelRoutingOrder.ts").read_text(encoding="utf-8")
+    text = find_src_file("modelRoutingOrder.ts").read_text(encoding="utf-8")
     match = re.search(rf"const {name}: readonly string\[\] = \[\s*\"([^\"]+)\"", text)
     assert match, f"{name} not found in modelRoutingOrder.ts"
     return match.group(1)
@@ -57,7 +58,7 @@ class TestStarterTagParity(unittest.TestCase):
         self.assertEqual(_screen_seed_first("DEFAULT_VISION_ROUTING_SEED"), STARTER)
 
     def test_the_two_seeds_list_the_same_models_in_the_same_order(self):
-        text = (ROOT / "src" / "utils" / "modelRoutingOrder.ts").read_text(encoding="utf-8")
+        text = find_src_file("modelRoutingOrder.ts").read_text(encoding="utf-8")
         for name, py_seed in (
             ("DEFAULT_TEXT_ROUTING_SEED", default_text_routing_seed()),
             ("DEFAULT_VISION_ROUTING_SEED", default_vision_routing_seed()),

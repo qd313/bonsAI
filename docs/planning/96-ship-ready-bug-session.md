@@ -31,6 +31,7 @@ start), reproduce or close the three three-star focus bugs, and get the maintain
    notice, drawn like the Ollama tab's "Where the AI runs" section. **Mock-up for the maintainer's tweaks before any
    build:** https://claude.ai/artifact/MeKFsSuicspFFSP1y98Yxi (open it in a web browser signed in to claude.ai so the
    picks and comments save; two options drawn at the Deck's real size, option A is the spec).
+   **Chosen 2026-10-17 evening, in chat: option A.** Tweaks, if any, still come from the page's comments.
 2. **"Update AI & models" re-downloading Ollama on every press is by design**, as long as the Internet downloads
    permission is on. Close that roadmap entry as not a bug (one check: the button must do nothing with downloads off).
 3. **The Search tab finds bonsAI's own settings** as well as Steam's ("mic" finds Voice input).
@@ -90,7 +91,7 @@ in the workshop's `test-evidence` folder.
 
 | # | Stars, tag | Today | Next step | Who |
 |---|---|---|---|---|
-| R1 | ★★★ focus, tabs | After a Steam pop-up (the About language list) or Steam's browser, Down from an open Settings section's line stops moving the ring while the page's own focus moves; a Quick Access close and reopen does not clear it; a plugin reload does (plan 94 blocks 6 and 7) | The driver reproduces it three times with that exact trigger (About → language list → pick nothing → Settings → open Data → Down) and three times without the trigger. With the trigger in hand, Opus xhigh reads where Steam's ring and the page's focus part ways | Opus xhigh after the measurement |
+| R1 | ★★★ focus, tabs | After a Steam pop-up (the About language list) or Steam's browser, Down from an open Settings section's line stops moving the ring while the page's own focus moves; a Quick Access close and reopen does not clear it; a plugin reload does (plan 94 blocks 6 and 7). **Seen four more times the same evening by the README filming chat** (2026-10-17): Down stops after a Steam box or a menu close, the page reports it has no focus each time, only a plugin reload clears it. The maintainer wants a root-cause dig; it may get its own chat before this session | The driver reproduces it three times with that exact trigger (About → language list → pick nothing → Settings → open Data → Down) and three times without the trigger. With the trigger in hand, Opus xhigh reads where Steam's ring and the page's focus part ways | Opus xhigh after the measurement |
 | R2 | ★★★ focus | After a stopped answer, Down loops between the question, the answer and Retry (plan 86); plan 94 could not reproduce it with a stopped answer that had a notes card under it | The driver stops an answer with the knowledge library OFF (no notes card) and with Show details absent, twice. If it loops: Opus xhigh fixes the Down chain (the entry names the helper). If not: close the entry as not reproduced on two builds | Opus xhigh |
 | R3 | ★★★ chips, focus | "Preset chips cannot always be reached near the end of an answer" and "the ring goes wrong after sections are opened (b)" both need the maintainer's exact presses; six rounds each found nothing | Ask once more, on the hand-check page's comment box. Without steps by the session's end, they go into the README's known-problems list with "reload the plugin" as the cure | the maintainer |
 

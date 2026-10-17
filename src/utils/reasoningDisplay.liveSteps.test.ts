@@ -14,13 +14,13 @@
  * screen received; feeding them in order is what the screen does poll by poll.
  */
 import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
+import { findSrcFile } from "../test-harness/repoPaths";
 import { liveStepLines, mergeLiveSteps, type LiveStep } from "./reasoningDisplay";
 
 // Read rather than import, as kbNoteUsedByAnswer.test.ts does: no resolveJsonModule needed.
 const SAMPLES = (
-  JSON.parse(readFileSync(resolve(__dirname, "reasoningDisplay.liveSteps.fixtures.json"), "utf-8")) as {
+  JSON.parse(readFileSync(findSrcFile("reasoningDisplay.liveSteps.fixtures.json"), "utf-8")) as {
     distinctSamples: string[];
   }
 ).distinctSamples;

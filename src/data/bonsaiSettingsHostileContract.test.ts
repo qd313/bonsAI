@@ -12,11 +12,12 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
+import { repoRoot } from "../test-harness/repoPaths";
 import { normalizeSettings } from "./bonsaiSettingsNormalizers";
 
 type Case = { name: string; input: Record<string, unknown>; expected: Record<string, unknown> };
 
-const CONTRACT_PATH = resolve(__dirname, "../../tests/contracts/settings-hostile-inputs.json");
+const CONTRACT_PATH = resolve(repoRoot(), "tests", "contracts", "settings-hostile-inputs.json");
 const cases = JSON.parse(readFileSync(CONTRACT_PATH, "utf-8")) as Case[];
 
 describe("settings hostile-input contract", () => {

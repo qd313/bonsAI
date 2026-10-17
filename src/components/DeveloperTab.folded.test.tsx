@@ -15,6 +15,7 @@ import path from "node:path";
 import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { repoRoot } from "../test-harness/repoPaths";
 import { DeveloperTab, type DeveloperTabProps } from "./DeveloperTab";
 import { STREAM_SCRAMBLE_OFF } from "../features/stream-scramble/streamScrambleContext";
 import { resetFoldedTabsForTests, setAllSections, toggleSection } from "../features/folded-tabs/foldedTabsStore";
@@ -112,7 +113,7 @@ describe("the folded Developer tab, every section open: one line per setting, th
 
   it("every row's words are the board's, word for word", () => {
     const { container } = render(<DeveloperTab {...props()} />);
-    const file = path.resolve(__dirname, "../../docs/demos/mockup-board-2/src/42-tabs-data.js");
+    const file = path.join(repoRoot(), "docs", "demos", "mockup-board-2", "src", "42-tabs-data.js");
     const data = new Function(`${fs.readFileSync(file, "utf8")}; return TAB_DATA;`)() as Record<
       string,
       { items: { t: string; label: string; desc?: string; descs?: string[]; sel?: number }[] }

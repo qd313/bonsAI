@@ -41,12 +41,13 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { callNav } from "../test-harness/aboutDeckyUi";
+import { findFirstSrcFile, repoRoot } from "../test-harness/repoPaths";
 import { AboutTab } from "./AboutTab";
 import { PLUGIN_VERSION } from "../pluginVersion";
 import { buildBonsaiScopeStylesheet } from "../styles/bonsaiScopeStylesheet";
 import { SETTINGS_GLASS_BTN } from "../styles/settingsGlassButton";
 
-const BOARD = join(__dirname, "../../docs/demos/mockup-board-2/src");
+const BOARD = join(repoRoot(), "docs", "demos", "mockup-board-2", "src");
 const dataText = readFileSync(join(BOARD, "42-tabs-data.js"), "utf8");
 /** The About tab's rows as the drawing's data file lists them. */
 const aboutData = dataText.slice(dataText.indexOf("About: { icon"));
@@ -228,7 +229,7 @@ describe("About tab: the link buttons wear the floating Open all button's colour
   });
 
   it("does not keep a second copy of the colours: the About styles take them from the shared button file", () => {
-    const source = readFileSync(join(__dirname, "../styles/sections/aboutTab.ts"), "utf8");
+    const source = readFileSync(findFirstSrcFile(["aboutTabStyles.ts", "aboutTab.ts"]), "utf8");
     expect(source).not.toContain("#e8eef5");
     expect(source).not.toContain("rgba(255,255,255,0.16)");
   });

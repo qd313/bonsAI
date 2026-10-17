@@ -13,6 +13,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
+import { repoRoot } from "../test-harness/repoPaths";
 import {
   LOW_NARRATIVE_APP_IDS,
   PROTECT_PROGRESSION_APP_IDS,
@@ -23,7 +24,7 @@ import {
 
 // Read rather than import: keeps the fixture outside src/ (it is shared with the Python
 // suite) without needing a tsconfig path mapping or resolveJsonModule.
-const CONTRACT_PATH = resolve(__dirname, "../../tests/contracts/spoiler-title-profiles.json");
+const CONTRACT_PATH = resolve(repoRoot(), "tests", "contracts", "spoiler-title-profiles.json");
 const contract = JSON.parse(readFileSync(CONTRACT_PATH, "utf-8")) as {
   low_narrative_app_ids: string[];
   protect_progression_app_ids: string[];

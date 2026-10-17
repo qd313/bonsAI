@@ -26,18 +26,19 @@
  * each file is fixed and cannot quietly grow back.
  */
 import { readFileSync, readdirSync, statSync } from "node:fs";
-import { join, relative, sep } from "node:path";
+import { basename, join } from "node:path";
 import ts from "typescript";
 import { describe, expect, it } from "vitest";
 
+import { findSrcFiles, repoRoot } from "../test-harness/repoPaths";
 import { buildBonsaiScopeStylesheet } from "./bonsaiScopeStylesheet";
 import { FOCUS_RING_BTN_CLASS, FOCUS_RING_ITEM_HOST_CLASS } from "./settingsGlassButton";
 
-const SRC = join(__dirname, "..");
+const SRC = join(repoRoot(), "src");
 
-/** Files with buttons still painting their own fill with no ring class: count, and why left. */
+/** Files (by base name) with buttons still painting their own fill with no ring class: count, and why left. */
 const KNOWN: Record<string, { count: number; why: string }> = {
-  "components/CharacterPickerModal.tsx": {
+  "CharacterPickerModal.tsx": {
     count: 1,
     why: "picker tiles; ringed by the `.bonsai-ai-char-grid-col button.gpfocus` ancestor rule (the Playing suggestion row sits outside that grid and carries the ring class)",
   },
@@ -91,7 +92,7 @@ function buttonsWithoutRing(rings: Set<string>): Offender[] {
           const ringed = words.includes("FOCUS_RING_BTN_CLASS") || words.some((w) => rings.has(w));
           if (paintsFill && !ringed) {
             const line = sf.getLineAndCharacterOfPosition(node.getStart(sf)).line + 1;
-            found.push({ file: relative(SRC, path).split(sep).join("/"), line });
+            found.push({ file: basename(path), line });
           }
         }
       }
@@ -124,23 +125,24 @@ describe("buttons that paint their own fill still show the D-pad ring", () => {
 });
 
 /** The files that draw the Settings, Developer, Ollama and Permissions tabs' buttons. */
-const TAB_FILES = [
-  "components/SettingsTab.tsx",
-  "components/DeveloperTab.tsx",
-  "components/AboutTab.tsx",
-  "components/PermissionsTab.tsx",
-  "components/PermissionDenyAction.tsx",
-  "components/OllamaSavedHostsRows.tsx",
-  "components/OllamaWhereAiRunsSection.tsx",
-  "components/VoiceInputSettingsSection.tsx",
-  "components/KnowledgeBaseSection.tsx",
-];
+const TAB_FILES = findSrcFiles([
+  "SettingsTab.tsx",
+  "DeveloperTab.tsx",
+  "AboutTab.tsx",
+  "PermissionsTab.tsx",
+  "PermissionDenyAction.tsx",
+  "OllamaSavedHostsRows.tsx",
+  "OllamaWhereAiRunsSection.tsx",
+  "VoiceInputSettingsSection.tsx",
+  "KnowledgeBaseSection.tsx",
+]);
 
 /** Buttons in TAB_FILES with no ring class, and Steam button rows outside the ring host div. */
 function unringedTabButtons(rings: Set<string>): string[] {
   const found: string[] = [];
   for (const file of TAB_FILES) {
-    const path = join(SRC, file);
+    const path = file;
+    const name = basename(file);
     const text = readFileSync(path, "utf8");
     const sf = ts.createSourceFile(path, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
     const classOf = (node: ts.JsxOpeningElement | ts.JsxSelfClosingElement): string => {
@@ -158,13 +160,13 @@ function unringedTabButtons(rings: Set<string>): string[] {
         if (tag === "Button" || tag === "DialogButton") {
           const words: string[] = classOf(node).match(/[\w-]+/g) ?? [];
           const ringed = words.includes("FOCUS_RING_BTN_CLASS") || words.some((w) => rings.has(w));
-          if (!ringed) found.push(`${file}:${line} ${tag}`);
+          if (!ringed) found.push(`${name}:${line} ${tag}`);
         } else if (tag === "ButtonItem") {
           let hosted = false;
           for (let up: ts.Node | undefined = node.parent?.parent; up; up = up.parent) {
             if (ts.isJsxElement(up) && classOf(up.openingElement).includes("FOCUS_RING_ITEM_HOST_CLASS")) hosted = true;
           }
-          if (!hosted) found.push(`${file}:${line} ButtonItem outside ${FOCUS_RING_ITEM_HOST_CLASS}`);
+          if (!hosted) found.push(`${name}:${line} ButtonItem outside ${FOCUS_RING_ITEM_HOST_CLASS}`);
         }
       }
       ts.forEachChild(node, visit);

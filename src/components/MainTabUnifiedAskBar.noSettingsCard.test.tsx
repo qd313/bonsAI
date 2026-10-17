@@ -9,12 +9,13 @@
  * Does not: Cover the Search tab; see src/features/search-tab.
  */
 import { readdirSync, readFileSync } from "node:fs";
-import { join, relative, resolve, sep } from "node:path";
+import { basename, join, relative, sep } from "node:path";
 import { render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
 
+import { repoRoot } from "../test-harness/repoPaths";
 import { MainTabUnifiedAskBar, type MainTabUnifiedAskBarProps } from "./MainTabUnifiedAskBar";
 
 function buildProps(overrides: Record<string, unknown> = {}): MainTabUnifiedAskBarProps {
@@ -68,7 +69,7 @@ describe("the Main tab's question box", () => {
   });
 });
 
-const SRC = resolve(__dirname, "..");
+const SRC = join(repoRoot(), "src");
 
 function sourceFiles(dir: string, out: string[] = []): string[] {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -88,7 +89,7 @@ describe("the card is gone from the source", () => {
         .split(/\r?\n/)
         .forEach((line, i) => {
           if (/^\s*(\*|\/\/)/.test(line)) return;
-          if (/persist_search_only/.test(line) && rel !== "data/bonsaiSettingsNormalizers.ts") left.push(`${rel}:${i + 1}: ${line.trim()}`);
+          if (/persist_search_only/.test(line) && basename(file) !== "bonsaiSettingsNormalizers.ts") left.push(`${rel}:${i + 1}: ${line.trim()}`);
           if (/bonsai-settings-results-card|useAskBarSettingsCard|shouldHideSettingsResultsCard|settingsCardRowsThatFit|SETTINGS_CARD_|"settings-results-card"/.test(line)) left.push(`${rel}:${i + 1}: ${line.trim()}`);
         });
     }

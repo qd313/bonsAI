@@ -11,15 +11,20 @@
  *           reason, and each is a decision someone made, not an oversight.
  */
 import { readdirSync, readFileSync } from "node:fs";
-import { join, relative, resolve } from "node:path";
+import { basename, join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
 
-const SRC = resolve(__dirname, "..");
+import { findFirstSrcFile, repoRoot } from "../test-harness/repoPaths";
 
-/** Plain on purpose: the file (from src/), the one kind of line allowed there, and why. */
-const PLAIN_ON_PURPOSE: Array<{ file: string; line: RegExp; why: string }> = [
-  { file: "components/CharacterRoleplayEmoticon.tsx", line: /fontSize/, why: "the roleplay character's emoticon is drawn art sized to its own box, like an icon" },
-  { file: "styles/sections/tabIndicatorBar.ts", line: /TAB_BAR_SHOULDER_MARK_PX/, why: "LB and RB: button marks in a fixed-width box, like icons" },
+const SRC = join(repoRoot(), "src");
+
+/**
+ * Plain on purpose: the file's base name (a list when the file changes name, first found wins), the one
+ * kind of line allowed there, and why.
+ */
+const PLAIN_ON_PURPOSE: Array<{ files: string[]; line: RegExp; why: string }> = [
+  { files: ["CharacterRoleplayEmoticon.tsx"], line: /fontSize/, why: "the roleplay character's emoticon is drawn art sized to its own box, like an icon" },
+  { files: ["tabIndicatorBarStyles.ts", "tabIndicatorBar.ts"], line: /TAB_BAR_SHOULDER_MARK_PX/, why: "LB and RB: button marks in a fixed-width box, like icons" },
 ];
 
 function sourceFiles(dir: string, out: string[] = []): string[] {
@@ -48,7 +53,7 @@ describe("every font size in the source follows the Text size setting", () => {
         .split(/\r?\n/)
         .forEach((line, i) => {
           if (/^\s*(\*|\/\/)/.test(line)) return; // comments
-          if (PLAIN_ON_PURPOSE.some((p) => p.file === rel && p.line.test(line))) return;
+          if (PLAIN_ON_PURPOSE.some((p) => p.files.includes(basename(file)) && p.line.test(line))) return;
           if (/\bfontSize\s*:/.test(line) && !/textPx\(/.test(line)) loose.push(`${rel}:${i + 1}: ${line.trim()}`);
           if (/\bfont-size\s*:/.test(line) && !/textPx\(|calc\(1em \* var\(|:\s*(inherit|[\d.]+em)\b/.test(line)) {
             loose.push(`${rel}:${i + 1}: ${line.trim()}`);
@@ -59,9 +64,9 @@ describe("every font size in the source follows the Text size setting", () => {
   });
 
   it("keeps the plain-on-purpose list honest: each file named in it still has a plain size", () => {
-    for (const { file, line } of PLAIN_ON_PURPOSE) {
-      const lines = readFileSync(join(SRC, file), "utf8").split(/\r?\n/);
-      expect(lines.some((l) => line.test(l) && /font-?[sS]ize/.test(l)), file).toBe(true);
+    for (const { files, line } of PLAIN_ON_PURPOSE) {
+      const lines = readFileSync(findFirstSrcFile(files), "utf8").split(/\r?\n/);
+      expect(lines.some((l) => line.test(l) && /font-?[sS]ize/.test(l)), files[0]).toBe(true);
     }
   });
 });

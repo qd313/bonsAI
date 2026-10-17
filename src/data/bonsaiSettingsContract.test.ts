@@ -13,11 +13,12 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
+import { repoRoot } from "../test-harness/repoPaths";
 import { normalizeSettings } from "./bonsaiSettingsNormalizers";
 
 // Read rather than import: keeps the fixture outside src/ (it is shared with the Python
 // suite) without needing a tsconfig path mapping or resolveJsonModule.
-const CONTRACT_PATH = resolve(__dirname, "../../tests/contracts/settings-defaults.json");
+const CONTRACT_PATH = resolve(repoRoot(), "tests", "contracts", "settings-defaults.json");
 const contract = JSON.parse(readFileSync(CONTRACT_PATH, "utf-8")) as Record<string, unknown>;
 
 describe("settings defaults contract", () => {

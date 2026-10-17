@@ -11,8 +11,8 @@
  *           where the words came from.
  */
 import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
+import { findSrcFile } from "../test-harness/repoPaths";
 import { countedWords, kbNotesUsedByAnswer } from "./kbNoteUsedByAnswer";
 import type { KbAttachedNote } from "./inputTransparency";
 
@@ -20,7 +20,7 @@ type Case = { source: string; why: string; question: string; answer: string; not
 
 // Read rather than import, as bonsaiSettingsContract.test.ts does: no resolveJsonModule needed.
 const fixtures = JSON.parse(
-  readFileSync(resolve(__dirname, "kbNoteUsedByAnswer.fixtures.json"), "utf-8")
+  readFileSync(findSrcFile("kbNoteUsedByAnswer.fixtures.json"), "utf-8")
 ) as Case[];
 
 function usedNames(c: Case): string[] {

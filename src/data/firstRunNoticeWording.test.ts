@@ -4,12 +4,13 @@
  * and the local-runtime notice must name the real tab and section.
  */
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
-const read = (rel: string) => readFileSync(join(__dirname, "..", rel), "utf-8");
-const gates = read("hooks/useDisclaimerAndLocalRuntimeGates.tsx");
-const quickStart = read("data/pluginQuickStartInstructions.tsx");
+import { findSrcFile } from "../test-harness/repoPaths";
+
+const read = (name: string) => readFileSync(findSrcFile(name), "utf-8");
+const gates = read("useDisclaimerAndLocalRuntimeGates.tsx");
+const quickStart = read("pluginQuickStartInstructions.tsx");
 
 describe("first-run notice wording", () => {
   it("never claims bonsAI changes hardware settings", () => {

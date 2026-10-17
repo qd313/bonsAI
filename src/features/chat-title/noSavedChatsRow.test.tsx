@@ -14,9 +14,10 @@ import { cleanup, render } from "@testing-library/react";
 
 vi.mock("@decky/ui", async () => import("../../test-harness/fakeDeckyUi"));
 
+import { repoRoot } from "../../test-harness/repoPaths";
 import { MainTabHarness, newMainTabCalls } from "./chatTitleTestFixtures";
 
-const SRC = join(__dirname, "..", "..");
+const SRC = join(repoRoot(), "src");
 
 function sourceFiles(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {

@@ -13,10 +13,10 @@
  *           on the page.
  */
 import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { render } from "@testing-library/react";
 
+import { findSrcFile } from "../test-harness/repoPaths";
 import { MainTabChatTranscript } from "./MainTabChatTranscript";
 import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
@@ -27,7 +27,7 @@ vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
 type Case = { why: string; question: string; answer: string; notes: Partial<KbAttachedNote>[] };
 
 const fixtures = JSON.parse(
-  readFileSync(resolve(__dirname, "../utils/kbNoteUsedByAnswer.fixtures.json"), "utf-8")
+  readFileSync(findSrcFile("kbNoteUsedByAnswer.fixtures.json"), "utf-8")
 ) as Case[];
 
 const LINE = "No close match in my notes";

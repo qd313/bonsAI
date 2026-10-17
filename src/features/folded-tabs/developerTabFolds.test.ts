@@ -12,6 +12,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
+import { repoRoot } from "../../test-harness/repoPaths";
 import {
   DEVELOPER_ROW_HELP,
   DEVELOPER_ROW_LABELS,
@@ -42,7 +43,7 @@ type BoardItem = { t: string; label: string; desc?: string; descs?: string[]; se
 
 /** The board's data file, evaluated: its Developer rows, as the code had them on 2026-10-11. */
 function boardDeveloperItems(): BoardItem[] {
-  const file = path.resolve(__dirname, "../../../docs/demos/mockup-board-2/src/42-tabs-data.js");
+  const file = path.join(repoRoot(), "docs", "demos", "mockup-board-2", "src", "42-tabs-data.js");
   const data = new Function(`${fs.readFileSync(file, "utf8")}; return TAB_DATA;`)() as Record<string, { items: BoardItem[] }>;
   /* The drawing still carries the decision number in one label; the tab does not show it. */
   return data.Developer!.items.map((i) => ({ ...i, label: i.label?.replace(/ \(D\d+\)/, "") }));

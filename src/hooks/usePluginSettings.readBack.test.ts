@@ -24,10 +24,11 @@ import { act, renderHook, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { call } from "@decky/api";
 import { usePluginSettings } from "./usePluginSettings";
+import { repoRoot } from "../test-harness/repoPaths";
 import { dispatchFakeRpc, getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../test-harness/fakeDeckyRpc";
 
 const CONTRACT = JSON.parse(
-  readFileSync(resolve(__dirname, "../../tests/contracts/settings-defaults.json"), "utf8"),
+  readFileSync(resolve(repoRoot(), "tests", "contracts", "settings-defaults.json"), "utf8"),
 ) as Record<string, unknown>;
 
 /**

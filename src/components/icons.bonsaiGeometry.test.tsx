@@ -15,6 +15,7 @@ import fs from "fs";
 import path from "path";
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { repoRoot } from "../test-harness/repoPaths";
 import { BonsaiLogoIcon, BonsaiSvgIcon, BonsaiTreeTabIcon } from "./icons";
 
 /** Documented corrected path: pot/trunk shifted 0.5 left so rim/base center aligns with canopy. */
@@ -34,7 +35,7 @@ describe("bonsai icon trunk/pot geometry", () => {
 
 const productionLogoAssetD = (() => {
   const svgSource = fs.readFileSync(
-    path.join(__dirname, "..", "assets", "icons", "bonsai-logo.svg"),
+    path.join(repoRoot(), "src", "assets", "icons", "bonsai-logo.svg"),
     "utf-8",
   );
   const assetPathMatch = svgSource.match(/<path\s[^>]*\bd="([^"]*)"/);

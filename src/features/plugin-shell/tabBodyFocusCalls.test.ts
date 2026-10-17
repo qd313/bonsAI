@@ -7,8 +7,9 @@
  * Does not: Cover popovers and modals opened from the tabs, which are not in the tab body's pane.
  */
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+
+import { findSrcFile } from "../../test-harness/repoPaths";
 
 const FILES = [
   "OllamaTab.tsx",
@@ -21,7 +22,7 @@ const FILES = [
 describe("focus calls in the plain tabs", () => {
   for (const file of FILES) {
     it(`${file} has no plain .focus() call`, () => {
-      const code = readFileSync(join(process.cwd(), "src", "components", file), "utf8")
+      const code = readFileSync(findSrcFile(file), "utf8")
         .split("\n")
         .filter((line) => !/^\s*(\/\/|\/?\*)/.test(line));
       expect(code.filter((line) => /\.focus\(/.test(line) && !/focusInTabBody/.test(line))).toEqual([]);

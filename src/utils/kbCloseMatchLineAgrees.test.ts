@@ -7,14 +7,14 @@
  * Does not: Render anything; MainTabChatTranscript.closeMatchLine.test.tsx does that.
  */
 import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
+import { findSrcFile } from "../test-harness/repoPaths";
 import { answerWithoutContradictedCloseMatchLine } from "./kbCloseMatchLineAgrees";
 import type { KbAttachedNote } from "./inputTransparency";
 
 type Case = { why: string; question: string; answer: string; notes: Partial<KbAttachedNote>[] };
 const fixtures = JSON.parse(
-  readFileSync(resolve(__dirname, "kbNoteUsedByAnswer.fixtures.json"), "utf-8")
+  readFileSync(findSrcFile("kbNoteUsedByAnswer.fixtures.json"), "utf-8")
 ) as Case[];
 const byWhy = (start: string) => fixtures.find((c) => c.why.startsWith(start))!;
 const LINE = "No close match in my notes";

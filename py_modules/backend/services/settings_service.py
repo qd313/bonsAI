@@ -80,7 +80,7 @@ from backend.services.ai_character_service import (
     sanitize_ai_character_preset_id,
     sanitize_ai_character_random,
 )
-from backend.services.capabilities import legacy_grandfather_capabilities, sanitize_capabilities
+from backend.core.capabilities import legacy_grandfather_capabilities, sanitize_capabilities
 from backend.services.model_policy import reconcile_model_policy_tier
 from backend.services.reply_language_service import sanitize_reply_language
 from backend.services.voice_transcription_service import sanitize_voice_stt_model

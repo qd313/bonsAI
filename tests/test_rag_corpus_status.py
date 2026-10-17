@@ -10,7 +10,7 @@ Does not: Test downloading or installing -- that is the download service's own j
 
 import unittest
 
-from backend.constants import DEFAULT_OLLAMA_PCIP
+from backend.core.constants import DEFAULT_OLLAMA_PCIP
 from backend.services.rag_corpus_status import (
     StatusTools,
     build_rag_corpus_status,

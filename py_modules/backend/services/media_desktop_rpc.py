@@ -24,7 +24,7 @@ import asyncio
 import os
 from typing import Any
 
-from backend.services.capabilities import capability_enabled
+from backend.core.capabilities import capability_enabled
 from backend.services.desktop_note_service import (
     append_app_log_sync,
     append_desktop_chat_event_sync,
@@ -239,7 +239,7 @@ async def take_steam_screenshot(self, app_id: str = ""):
     """Close-QAM flow: capture game into Steam screenshots (not auto-attached to Ask)."""
     try:
         settings = await self.load_settings()
-        from backend.services.capabilities import capability_enabled
+        from backend.core.capabilities import capability_enabled
 
         if not (
             capability_enabled(settings, "media_library_access")

@@ -47,7 +47,7 @@ Gotchas:
 
 from typing import Any, Collection
 
-from backend.constants import OLLAMA_TAB_WHERE_AI_RUNS
+from backend.core.constants import OLLAMA_TAB_WHERE_AI_RUNS
 
 
 def _dedupe_preserve_order(tags: list[str]) -> list[str]:

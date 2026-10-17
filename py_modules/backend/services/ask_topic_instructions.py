@@ -25,7 +25,7 @@ import re
 from typing import Optional
 
 from backend.tdp_intent import is_current_tdp_read_intent
-from backend.constants import (
+from backend.core.constants import (
     DEFAULT_OLLAMA_BASE_URL,
     OLLAMA_TAB_WHERE_AI_RUNS,
 )

@@ -26,7 +26,7 @@ from __future__ import annotations
 import os
 from typing import Any, Optional, Tuple
 
-from backend.services.capabilities import capability_enabled
+from backend.core.capabilities import capability_enabled
 from backend.services.settings_service import sanitize_ask_mode
 from backend.services.strategy_checklist_session_service import normalize_ask_checklist_state
 

@@ -25,7 +25,7 @@ install_pwd_stub()
 from plugin_settings_file_harness import PluginSettingsFileMixin  # noqa: E402
 
 import main  # noqa: E402
-from backend.services import capabilities  # noqa: E402
+from backend.core import capabilities  # noqa: E402
 from backend.services import ollama_local_setup_rpc as setup_rpc  # noqa: E402
 from backend.services import rag_corpus_rpc  # noqa: E402
 

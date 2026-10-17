@@ -15,7 +15,7 @@ from unittest.mock import patch
 
 from test_ollama_ask_service import _FakePlugin  # also installs the decky and pwd stand-ins
 
-from backend.services import capabilities
+from backend.core import capabilities
 from backend.services.ollama_ask_service import run_ask_ollama
 
 SHOT = [{"path": "/home/deck/shot.png", "name": "shot.png"}]

@@ -22,7 +22,7 @@ ollama_connectivity for whether an address is this same machine.
 from typing import Tuple
 from urllib.parse import urlparse
 
-from backend.constants import DEFAULT_OLLAMA_HOST, DEFAULT_OLLAMA_PORT
+from backend.core.constants import DEFAULT_OLLAMA_HOST, DEFAULT_OLLAMA_PORT
 
 
 HTTPS_NOT_SUPPORTED_MESSAGE = (

@@ -23,7 +23,7 @@ and calls that service.
 import asyncio
 from typing import Any
 
-from backend.services.async_task_lifecycle import cancel_and_await
+from backend.core.async_task_lifecycle import cancel_and_await
 from backend.services.chat_slot_service import (
     MAX_CHAT_SLOTS,
     ChatLimitReached,

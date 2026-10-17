@@ -64,7 +64,7 @@ turned out to be broken, and all four wrote worse for a day before anybody spoke
 
 **Drawings are welcome** where a shape is easier seen than read — an order of checks, what sits
 inside what on screen, the two routes a request can take.
-[`capabilities.py`](../py_modules/backend/services/capabilities.py) draws the order its checks
+[`capabilities.py`](../py_modules/backend/core/capabilities.py) draws the order its checks
 happen in; [`buildAnswerBubbleElement.tsx`](../src/utils/buildAnswerBubbleElement.tsx) draws the
 reply bubble. Do not add one for its own sake.
 

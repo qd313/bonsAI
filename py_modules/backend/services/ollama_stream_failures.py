@@ -19,7 +19,7 @@ function returns a fresh dict each time, so a caller can add keys to it without 
 import socket
 from typing import Any
 
-from backend.constants import OLLAMA_TAB_WHERE_AI_RUNS
+from backend.core.constants import OLLAMA_TAB_WHERE_AI_RUNS
 
 
 def cancelled_reply() -> dict:

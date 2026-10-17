@@ -26,7 +26,7 @@ import urllib.error
 import urllib.request
 from typing import Any
 
-from backend.tls_ca_fallback import urlopen_with_ca_fallback
+from backend.core.tls_ca_fallback import urlopen_with_ca_fallback
 
 OLLAMA_TAG_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{0,63}(:[a-z0-9._-]{1,32})?$")
 REGISTRY_HOST = "registry.ollama.ai"

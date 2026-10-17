@@ -38,7 +38,7 @@ import os
 import time
 from typing import Any
 
-from backend.services.async_background_job import (
+from backend.core.async_background_job import (
     make_local_ollama_setup_hooks,
     new_asyncio_cancel_event,
 )
@@ -67,7 +67,7 @@ from backend.services.ollama_try_order_prune import prune_saved_orders_to_instal
 from backend.services import ollama_pull_resume_service as pull_resume
 from backend.services.ollama_embed_service import forget_embed_availability_after_pull
 from backend.services.starter_speech_models import download_speech_models
-from backend.services.capabilities import capability_enabled, downloads_off_refusal
+from backend.core.capabilities import capability_enabled, downloads_off_refusal
 
 import decky
 

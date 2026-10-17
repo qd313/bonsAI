@@ -23,11 +23,11 @@ code call it directly too; only the RPC-facing calls to it moved here.
 import asyncio
 from typing import Any
 
-from backend.services.async_background_job import (
+from backend.core.async_background_job import (
     make_state_updating_on_stage,
     new_threading_cancel_event,
 )
-from backend.services.capabilities import capability_enabled, downloads_off_refusal
+from backend.core.capabilities import capability_enabled, downloads_off_refusal
 from backend.services.transparency_service import build_voice_transcribe_snapshot
 from backend.services.voice_model_download_service import (
     VALID_VOICE_STT_MODELS,

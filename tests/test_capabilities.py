@@ -1,6 +1,6 @@
 import unittest
 
-from backend.services.capabilities import (
+from backend.core.capabilities import (
     CAPABILITY_KEYS,
     capability_enabled,
     kids_lock_active,

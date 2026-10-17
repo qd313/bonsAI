@@ -25,8 +25,8 @@ import asyncio
 import os
 from typing import Any
 
-from backend.services.async_background_job import new_asyncio_cancel_event
-from backend.services.capabilities import capability_enabled, downloads_off_refusal
+from backend.core.async_background_job import new_asyncio_cancel_event
+from backend.core.capabilities import capability_enabled, downloads_off_refusal
 from backend.services.knowledge_base_schema import (
     default_corpus_dir_internal,
     resolve_corpus_db_path,

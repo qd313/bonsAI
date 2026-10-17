@@ -62,7 +62,7 @@ from backend.services.knowledge_base_schema import (
     write_manifest,
 )
 from backend.services.knowledge_base_service import close_connection
-from backend.tls_ca_fallback import urlopen_with_ca_fallback
+from backend.core.tls_ca_fallback import urlopen_with_ca_fallback
 
 MAX_LOG_TAIL_LINES = 80
 

@@ -110,7 +110,7 @@ from backend.services.ollama_service import (
     preload_ask_model_sync,
     spawn_ollama_stop_thread,
 )
-from backend.services.async_task_lifecycle import cancel_and_await
+from backend.core.async_task_lifecycle import cancel_and_await
 from backend.services.background_request_state import (
     OMIT as _OMIT_SHORTCUT_SETUP_FIELD,
     OMIT as _UNSET_REASONING_FIELD,
@@ -156,7 +156,7 @@ from backend.services.settings_service import (
     sanitize_unified_input_persistence_mode,
     save_settings as save_settings_to_disk,
 )
-from backend.services.capabilities import (
+from backend.core.capabilities import (
     capability_enabled,
     kids_lock_active,
     set_kids_lock_active,
@@ -217,7 +217,7 @@ from backend.services.voice_transcription_service import (
 from backend.services import voice_rpc
 from backend.services.rag_corpus_download_service import new_rag_corpus_download_state
 from backend.services import rag_corpus_rpc
-from backend.constants import DEFAULT_OLLAMA_PCIP
+from backend.core.constants import DEFAULT_OLLAMA_PCIP
 from backend.ollama_urls import (
     HTTPS_NOT_SUPPORTED_MESSAGE,
     build_ollama_chat_url,

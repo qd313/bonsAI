@@ -93,7 +93,7 @@ from typing import Any, Optional
 
 import decky
 
-from backend.services.capabilities import capability_enabled
+from backend.core.capabilities import capability_enabled
 from backend.services.ai_character_service import (
     build_roleplay_system_suffix_meta,
     spy_lying_mode_active,

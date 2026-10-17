@@ -23,7 +23,7 @@ import logging
 from dataclasses import dataclass
 from typing import Any, Callable, Optional
 
-from backend.constants import DEFAULT_OLLAMA_PCIP
+from backend.core.constants import DEFAULT_OLLAMA_PCIP
 from backend.services.knowledge_base_schema import (
     corpus_manifest_path,
     default_corpus_dir_internal,

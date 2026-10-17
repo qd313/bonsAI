@@ -1,4 +1,4 @@
-"""Unit tests for cancel_and_await (backend.services.async_task_lifecycle).
+"""Unit tests for cancel_and_await (backend.core.async_task_lifecycle).
 
 Five teardown sites in main.py hand-wrote this: plugin unload (local Ollama setup, voice install)
 and Clear-all-plugin-data (background Ask, local Ollama setup, voice install). The behavior that
@@ -9,7 +9,7 @@ cancelled coroutine is still running its cleanup.
 import asyncio
 import unittest
 
-from backend.services.async_task_lifecycle import cancel_and_await
+from backend.core.async_task_lifecycle import cancel_and_await
 
 
 class TestCancelAndAwait(unittest.IsolatedAsyncioTestCase):

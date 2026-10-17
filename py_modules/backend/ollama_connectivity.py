@@ -22,7 +22,7 @@ import shutil
 from typing import Optional
 from urllib.parse import urlparse
 
-from backend.constants import (
+from backend.core.constants import (
     DECK_OLLAMA_CLI_PATH,
     DEFAULT_OLLAMA_PCIP,
     LOOPBACK_HOSTNAMES,

@@ -18,7 +18,7 @@ import urllib.error
 import urllib.request
 from unittest import mock
 
-from backend.tls_ca_fallback import urlopen_with_ca_fallback
+from backend.core.tls_ca_fallback import urlopen_with_ca_fallback
 
 
 def _cert_url_error() -> urllib.error.URLError:
@@ -33,7 +33,7 @@ class UrlopenWithCaFallbackTests(unittest.TestCase):
     def test_returns_result_directly_when_default_context_works(self):
         req = urllib.request.Request("https://example.com/x")
         sentinel = object()
-        with mock.patch("backend.tls_ca_fallback.urllib.request.urlopen", return_value=sentinel) as m:
+        with mock.patch("backend.core.tls_ca_fallback.urllib.request.urlopen", return_value=sentinel) as m:
             result = urlopen_with_ca_fallback(req, timeout=5)
         self.assertIs(result, sentinel)
         m.assert_called_once_with(req, timeout=5)
@@ -53,12 +53,12 @@ class UrlopenWithCaFallbackTests(unittest.TestCase):
             return sentinel
 
         with mock.patch(
-            "backend.tls_ca_fallback.urllib.request.urlopen", side_effect=_urlopen
+            "backend.core.tls_ca_fallback.urllib.request.urlopen", side_effect=_urlopen
         ), mock.patch(
-            "backend.tls_ca_fallback.os.path.isfile",
+            "backend.core.tls_ca_fallback.os.path.isfile",
             side_effect=lambda p: p == "/etc/ssl/certs/ca-certificates.crt",
         ), mock.patch(
-            "backend.tls_ca_fallback.ssl.create_default_context", return_value=fake_ctx
+            "backend.core.tls_ca_fallback.ssl.create_default_context", return_value=fake_ctx
         ) as m_ctx:
             result = urlopen_with_ca_fallback(req, timeout=5)
 
@@ -79,9 +79,9 @@ class UrlopenWithCaFallbackTests(unittest.TestCase):
             return sentinel
 
         with mock.patch(
-            "backend.tls_ca_fallback.urllib.request.urlopen", side_effect=_urlopen
-        ), mock.patch("backend.tls_ca_fallback.os.path.isfile", return_value=True), mock.patch(
-            "backend.tls_ca_fallback.ssl.create_default_context", return_value=object()
+            "backend.core.tls_ca_fallback.urllib.request.urlopen", side_effect=_urlopen
+        ), mock.patch("backend.core.tls_ca_fallback.os.path.isfile", return_value=True), mock.patch(
+            "backend.core.tls_ca_fallback.ssl.create_default_context", return_value=object()
         ):
             result = urlopen_with_ca_fallback(req, timeout=5)
         self.assertIs(result, sentinel)
@@ -100,9 +100,9 @@ class UrlopenWithCaFallbackTests(unittest.TestCase):
             return object()
 
         with mock.patch(
-            "backend.tls_ca_fallback.urllib.request.urlopen", side_effect=_urlopen
-        ), mock.patch("backend.tls_ca_fallback.os.path.isfile", side_effect=_isfile), mock.patch(
-            "backend.tls_ca_fallback.ssl.create_default_context", return_value=object()
+            "backend.core.tls_ca_fallback.urllib.request.urlopen", side_effect=_urlopen
+        ), mock.patch("backend.core.tls_ca_fallback.os.path.isfile", side_effect=_isfile), mock.patch(
+            "backend.core.tls_ca_fallback.ssl.create_default_context", return_value=object()
         ):
             urlopen_with_ca_fallback(req, timeout=5)
 
@@ -115,8 +115,8 @@ class UrlopenWithCaFallbackTests(unittest.TestCase):
     def test_reraises_original_error_when_no_fallback_cafile_exists(self):
         req = urllib.request.Request("https://example.com/x")
         with mock.patch(
-            "backend.tls_ca_fallback.urllib.request.urlopen", side_effect=_cert_url_error()
-        ), mock.patch("backend.tls_ca_fallback.os.path.isfile", return_value=False):
+            "backend.core.tls_ca_fallback.urllib.request.urlopen", side_effect=_cert_url_error()
+        ), mock.patch("backend.core.tls_ca_fallback.os.path.isfile", return_value=False):
             with self.assertRaises(urllib.error.URLError):
                 urlopen_with_ca_fallback(req, timeout=5)
 
@@ -138,9 +138,9 @@ class UrlopenWithCaFallbackTests(unittest.TestCase):
             return sentinel
 
         with mock.patch(
-            "backend.tls_ca_fallback.urllib.request.urlopen", side_effect=_urlopen
-        ), mock.patch("backend.tls_ca_fallback.os.path.isfile", return_value=True), mock.patch(
-            "backend.tls_ca_fallback.ssl.create_default_context", side_effect=_create_ctx
+            "backend.core.tls_ca_fallback.urllib.request.urlopen", side_effect=_urlopen
+        ), mock.patch("backend.core.tls_ca_fallback.os.path.isfile", return_value=True), mock.patch(
+            "backend.core.tls_ca_fallback.ssl.create_default_context", side_effect=_create_ctx
         ):
             result = urlopen_with_ca_fallback(req, timeout=5)
         self.assertIs(result, sentinel)
@@ -150,7 +150,7 @@ class UrlopenWithCaFallbackTests(unittest.TestCase):
         trigger the fallback (and must not be swallowed as if it were a cert problem)."""
         req = urllib.request.Request("https://example.com/x")
         with mock.patch(
-            "backend.tls_ca_fallback.urllib.request.urlopen",
+            "backend.core.tls_ca_fallback.urllib.request.urlopen",
             side_effect=urllib.error.URLError(ConnectionRefusedError("connection refused")),
         ) as m:
             with self.assertRaises(urllib.error.URLError):
@@ -160,7 +160,7 @@ class UrlopenWithCaFallbackTests(unittest.TestCase):
     def test_other_exception_types_are_not_caught(self):
         req = urllib.request.Request("https://example.com/x")
         with mock.patch(
-            "backend.tls_ca_fallback.urllib.request.urlopen", side_effect=ValueError("bad url")
+            "backend.core.tls_ca_fallback.urllib.request.urlopen", side_effect=ValueError("bad url")
         ):
             with self.assertRaises(ValueError):
                 urlopen_with_ca_fallback(req, timeout=5)

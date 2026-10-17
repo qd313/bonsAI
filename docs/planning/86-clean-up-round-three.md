@@ -636,4 +636,8 @@ From its [postmortem](../../../bonsAI-workshop/audit/refactor-round-two/postmort
     and the technical summary.
   - **Budget:** the five-hour window was at 91 % at go and reset at 22:20; the new window ended at 31 %. The week went
     from 33 % to 38 %.
+  - **After the maintainer's "do all that":** the library was rebuilt at the final code (version 2026.10.17) and passed
+    the publish check, but this chat's safety check refused to publish it, to post the Deck-tool issue, or to push; the
+    maintainer has each as one command (the step 3 report page and `step-3-summary.md`). One finding was withdrawn the
+    same night (see "Found, older than step 3" above). Publish it before the next plugin release: with the 2026-09-26 library the new plugin underlines no words.
     Nothing pushed. **Next: step 4** (a folder per feature), its own session.

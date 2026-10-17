@@ -102,11 +102,8 @@ const MODULE_ROLES = {
 // generateImportGraph for that.
 function generateHotspots() {
   const srcFiles = walkDir(path.join(REPO_ROOT, "src"), path.join(REPO_ROOT, "src"));
-  const pyServices = walkDir(
-    path.join(REPO_ROOT, "py_modules", "backend", "services"),
-    REPO_ROOT,
-    [".py"],
-  );
+  // Every package under py_modules/backend, not one named folder: the back end is split into packages.
+  const pyBackend = walkDir(path.join(REPO_ROOT, "py_modules", "backend"), REPO_ROOT, [".py"]);
   const topLevel = ["main.py", "refactor_helpers.py"]
     .filter((f) => fs.existsSync(path.join(REPO_ROOT, f)))
     .map((f) => ({
@@ -115,7 +112,7 @@ function generateHotspots() {
       role: MODULE_ROLES[f] ?? "",
     }));
 
-  const hotspots = [...topLevel, ...srcFiles.filter((f) => f.lines > 200), ...pyServices]
+  const hotspots = [...topLevel, ...srcFiles.filter((f) => f.lines > 200), ...pyBackend]
     .sort((a, b) => b.lines - a.lines || a.path.localeCompare(b.path))
     .slice(0, 40)
     .map((f) => ({

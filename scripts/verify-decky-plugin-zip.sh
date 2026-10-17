@@ -62,10 +62,10 @@ for spot in \
 done
 
 shopt -s nullglob
-py_services=( "$ROOT"/py_modules/backend/services/*.py )
+py_backend_files=( "$ROOT"/py_modules/backend/*/*.py )
 shopt -u nullglob
-if [[ ${#py_services[@]} -lt 3 ]]; then
-    echo "verify-decky-plugin-zip: expected multiple py_modules/backend/services/*.py, found ${#py_services[@]}" >&2
+if [[ ${#py_backend_files[@]} -lt 3 ]]; then
+    echo "verify-decky-plugin-zip: expected multiple py_modules/backend/*/*.py (any package folder), found ${#py_backend_files[@]}" >&2
     exit 1
 fi
 

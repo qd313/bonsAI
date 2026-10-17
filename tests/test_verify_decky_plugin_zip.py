@@ -84,6 +84,19 @@ class VerifyDeckyPluginZipTests(unittest.TestCase):
                 self.assertNotEqual(proc.returncode, 0, proc.stdout)
                 self.assertIn(rel, proc.stderr)
 
+    def test_too_few_back_end_python_files_is_refused(self) -> None:
+        files = {k: v for k, v in COMPLETE.items() if k != "py_modules/backend/services/__init__.py"}
+        proc = self._run(files)
+        self.assertNotEqual(proc.returncode, 0, proc.stdout)
+        self.assertIn("found 2", proc.stderr)
+
+    def test_back_end_python_files_count_in_any_package_folder(self) -> None:
+        # The back end is being split into packages: the count must not depend on one folder's name.
+        files = {k: v for k, v in COMPLETE.items() if k != "py_modules/backend/services/__init__.py"}
+        files["py_modules/backend/another_package/helper.py"] = ""
+        proc = self._run(files)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+
     def test_a_program_in_bin_is_refused(self) -> None:
         for rel in ("bin/whisper-cli", "bin/main", "bin/sub/thing.so"):
             with self.subTest(extra=rel):

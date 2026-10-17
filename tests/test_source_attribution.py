@@ -97,13 +97,9 @@ class CorpusLicensingRuleTests(unittest.TestCase):
 
     def test_third_party_licences_in_seed_include_a_version(self):
         """ATTR-5.2 at the seed: bare 'CC BY-SA' must not land in strategy_seed.json."""
-        import importlib.util
+        from script_loader import load_script
 
-        path = Path(__file__).resolve().parent.parent / "scripts" / "build_rag_db.py"
-        spec = importlib.util.spec_from_file_location("build_rag_db", path)
-        assert spec and spec.loader
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
+        mod = load_script("build_rag_db")
 
         rows = _rows(DATA / "strategy_seed.json", "sections")
         bare = [

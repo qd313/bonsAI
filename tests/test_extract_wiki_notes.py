@@ -15,29 +15,23 @@ workshop:test-evidence/plan58p1-B-samples.md, not exercised as an automated test
 
 from __future__ import annotations
 
-import importlib.util
 import io
 import json
-import sys
 import tempfile
 import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
 
+from script_loader import load_script
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _load_module():
-    path = REPO_ROOT / "scripts" / "extract_wiki_notes.py"
-    spec = importlib.util.spec_from_file_location("extract_wiki_notes", path)
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
     # dataclass, with `from __future__ import annotations` in the module under test, resolves
     # its string annotations through sys.modules[cls.__module__] -- it must exist there before
-    # exec_module runs the class bodies, or Python 3.12 raises on the very first @dataclass.
-    sys.modules[spec.name] = mod
-    spec.loader.exec_module(mod)
-    return mod
+    # the class bodies run, or Python 3.12 raises on the very first @dataclass.
+    return load_script("extract_wiki_notes", register=True)
 
 
 m = _load_module()

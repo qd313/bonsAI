@@ -23,6 +23,8 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
+from script_loader import load_script
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -110,15 +112,7 @@ class WorkshopLookupTests(unittest.TestCase):
 
 
 def _load_script(name):
-    spec = importlib.util.spec_from_file_location(name, REPO_ROOT / "scripts" / f"{name}.py")
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module  # @dataclass resolves annotations through sys.modules
-    try:
-        spec.loader.exec_module(module)
-    except Exception:
-        sys.modules.pop(spec.name, None)
-        raise
-    return module
+    return load_script(name, register=True)  # registered: @dataclass resolves annotations through sys.modules
 
 
 class EvalScriptsNeedTheWorkshopTests(unittest.TestCase):

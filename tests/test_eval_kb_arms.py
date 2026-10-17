@@ -12,7 +12,6 @@ Does not: Run any embedding or touch Ollama — every test here is pure scoring 
 """
 
 import contextlib
-import importlib.util
 import io
 import json
 import os
@@ -23,22 +22,14 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
+from script_loader import load_script
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 def _load_eval_module():
-    spec = importlib.util.spec_from_file_location(
-        "eval_kb_embed_models", REPO_ROOT / "scripts" / "eval_kb_embed_models.py"
-    )
-    module = importlib.util.module_from_spec(spec)
-    # @dataclass resolves annotations through sys.modules, so register before executing.
-    sys.modules[spec.name] = module
-    try:
-        spec.loader.exec_module(module)
-    except Exception:  # pragma: no cover - a load failure must not leave a stub behind
-        sys.modules.pop(spec.name, None)
-        raise
-    return module
+    # @dataclass resolves annotations through sys.modules, so the module is registered before it runs.
+    return load_script("eval_kb_embed_models", register=True)
 
 
 class EvalArmsTests(unittest.TestCase):

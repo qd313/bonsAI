@@ -14,23 +14,17 @@ Does not: Hit the network. _get_json is monkeypatched with a canned payload.
 
 from __future__ import annotations
 
-import importlib.util
-import sys
 import unittest
 from pathlib import Path
 from unittest import mock
+
+from script_loader import load_script
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _load_fetcher():
-    path = REPO_ROOT / "scripts" / "fetch_wiki_dump_pages.py"
-    spec = importlib.util.spec_from_file_location("fetch_wiki_dump_pages", path)
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = mod
-    spec.loader.exec_module(mod)
-    return mod
+    return load_script("fetch_wiki_dump_pages", register=True)
 
 
 fetcher = _load_fetcher()

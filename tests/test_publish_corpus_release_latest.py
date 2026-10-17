@@ -15,16 +15,14 @@ Does not: Call GitHub or `gh` for real. It records the command the script would 
 from __future__ import annotations
 
 import subprocess
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "scripts"))
+from script_loader import load_script
 
-import publish_corpus  # noqa: E402
+publish_corpus = load_script("publish_corpus", register=True)
 
 
 class PublishCorpusReleaseNotLatestTests(unittest.TestCase):

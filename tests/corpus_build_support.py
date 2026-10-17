@@ -27,6 +27,8 @@ import sys
 import unittest
 from pathlib import Path
 
+from script_loader import find_script
+
 # The exact refusal the corpus build raises when cards have no meaning-search
 # vector. Matched on this phrase rather than the whole sentence because the
 # counts in it change with the corpus; matched on something rather than bare
@@ -66,7 +68,7 @@ def run_seed_build_or_skip(repo_root: Path, out_dir: Path) -> None:
     real break is never swallowed along with the output.
     """
     result = subprocess.run(
-        [sys.executable, str(repo_root / "scripts" / "build_rag_db.py"),
+        [sys.executable, str(find_script("build_rag_db")),
          "--seed", "--out", str(out_dir)],
         cwd=str(repo_root),
         capture_output=True,

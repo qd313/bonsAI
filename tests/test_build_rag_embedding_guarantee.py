@@ -14,7 +14,6 @@ Does not: Change what "usable" means for a corpus already on a Deck (see
 
 from __future__ import annotations
 
-import importlib.util
 import json
 import tempfile
 import unittest
@@ -22,17 +21,11 @@ from pathlib import Path
 
 from rag_corpus_seed_fixtures import compat_payload as _compat_payload
 from rag_corpus_seed_fixtures import seed_payload as _seed_payload
-
-REPO_ROOT = Path(__file__).resolve().parents[1]
+from script_loader import load_script
 
 
 def _load_build_rag_db():
-    path = REPO_ROOT / "scripts" / "build_rag_db.py"
-    spec = importlib.util.spec_from_file_location("build_rag_db_embed_guarantee", path)
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+    return load_script("build_rag_db", "build_rag_db_embed_guarantee")
 
 
 class _GuaranteeTestBase(unittest.TestCase):

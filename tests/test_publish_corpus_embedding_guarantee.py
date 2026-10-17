@@ -13,7 +13,6 @@ Does not: Judge a manifest built before build_rag_db.py recorded the total-count
 
 from __future__ import annotations
 
-import importlib.util
 import json
 import tempfile
 import unittest
@@ -21,17 +20,11 @@ from pathlib import Path
 
 from rag_corpus_seed_fixtures import compat_payload as _compat_payload
 from rag_corpus_seed_fixtures import seed_payload as _seed_payload
-
-REPO_ROOT = Path(__file__).resolve().parents[1]
+from script_loader import load_script
 
 
 def _load_module(filename: str, name: str):
-    path = REPO_ROOT / "scripts" / filename
-    spec = importlib.util.spec_from_file_location(name, path)
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+    return load_script(filename, name)
 
 
 class PublishCorpusShortIndexTests(unittest.TestCase):

@@ -12,7 +12,6 @@ from __future__ import annotations
 
 import contextlib
 import hashlib
-import importlib.util
 import io
 import sqlite3
 import tempfile
@@ -28,18 +27,13 @@ from backend.services.rag_corpus_download_service import (
     install_corpus_from_manifest,
 )
 from corpus_build_support import build_corpus_or_skip
+from script_loader import load_script
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PATH = "backend.services.rag_corpus_download_service"
 
 
 def _load_build_rag_db():
-    path = REPO_ROOT / "scripts" / "build_rag_db.py"
-    spec = importlib.util.spec_from_file_location("build_rag_db", path)
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+    return load_script("build_rag_db")
 
 
 class _FakeHTTPResponse:

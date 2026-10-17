@@ -14,21 +14,17 @@ Does not: Hit the network. Feeds static HTML straight to the parser, offline.
 
 from __future__ import annotations
 
-import importlib.util
 import unittest
 from pathlib import Path
 from unittest import mock
+
+from script_loader import load_script
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _load_fetcher():
-    path = REPO_ROOT / "scripts" / "fetch_wiki_live_pages.py"
-    spec = importlib.util.spec_from_file_location("fetch_wiki_live_pages", path)
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+    return load_script("fetch_wiki_live_pages")
 
 
 fetcher = _load_fetcher()

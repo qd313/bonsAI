@@ -12,7 +12,6 @@ Does not: Run the real Ask pipeline or touch Ollama — every test here is pure 
 """
 
 import asyncio
-import importlib.util
 import json
 import os
 import sys
@@ -22,22 +21,14 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+from script_loader import load_script
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "py_modules"))
 
 
 def _load_eval_module():
-    spec = importlib.util.spec_from_file_location(
-        "eval_kb_answers", REPO_ROOT / "scripts" / "eval_kb_answers.py"
-    )
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module
-    try:
-        spec.loader.exec_module(module)
-    except Exception:  # pragma: no cover - a load failure must not leave a stub behind
-        sys.modules.pop(spec.name, None)
-        raise
-    return module
+    return load_script("eval_kb_answers", register=True)
 
 
 class EvalKbAnswersHarnessTests(unittest.TestCase):

@@ -86,24 +86,14 @@ class OllamaEmbedServiceTests(unittest.TestCase):
         production applied neither; the 2026-07-31 bake-off therefore measured a
         configuration that was never shipped.
         """
-        import importlib.util
         import sys
-        from pathlib import Path
 
-        spec = importlib.util.spec_from_file_location(
-            "eval_kb_embed_models",
-            Path(__file__).resolve().parents[1] / "scripts" / "eval_kb_embed_models.py",
-        )
-        module = importlib.util.module_from_spec(spec)
+        from script_loader import load_script
+
         # @dataclass resolves annotations through sys.modules, so the module has to be
         # registered before it is executed, not after.
-        sys.modules[spec.name] = module
-        try:
-            spec.loader.exec_module(module)
-        except Exception:  # pragma: no cover - keeps a load failure from leaking a stub
-            sys.modules.pop(spec.name, None)
-            raise
-        self.addCleanup(sys.modules.pop, spec.name, None)
+        module = load_script("eval_kb_embed_models", register=True)
+        self.addCleanup(sys.modules.pop, "eval_kb_embed_models", None)
 
         for model in (DEFAULT_EMBEDDING_MODEL, "bge-m3", "snowflake-arctic-embed2"):
             self.assertEqual(

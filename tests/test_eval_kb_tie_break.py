@@ -15,9 +15,10 @@ Does not: Run the measurement itself (needs a corpus and Ollama) or touch
 
 from __future__ import annotations
 
-import importlib.util
 import unittest
 from pathlib import Path
+
+from script_loader import load_script
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PY_MODULES = REPO_ROOT / "py_modules"
@@ -30,16 +31,10 @@ def _load_eval_module():
         sys.path.insert(0, str(PY_MODULES))
     if str(REPO_ROOT) not in sys.path:
         sys.path.insert(0, str(REPO_ROOT))
-    path = REPO_ROOT / "scripts" / "eval_kb_embed_models.py"
-    spec = importlib.util.spec_from_file_location("eval_kb_embed_models_tie_break_test", path)
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
     # The module's dataclasses use `from __future__ import annotations` (string annotations),
     # and dataclass processing on 3.12 resolves those by looking the module up in
-    # sys.modules[cls.__module__] -- it must already be registered before exec_module runs.
-    sys.modules[spec.name] = mod
-    spec.loader.exec_module(mod)
-    return mod
+    # sys.modules[cls.__module__] -- it must already be registered before it runs.
+    return load_script("eval_kb_embed_models", "eval_kb_embed_models_tie_break_test", register=True)
 
 
 class TieBreakWeightsTests(unittest.TestCase):

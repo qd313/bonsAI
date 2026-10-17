@@ -12,27 +12,18 @@ Does not: Call Ollama, read a real corpus, or touch the network — every case h
           verdict functions a plain number and reads back a string.
 """
 
-import importlib.util
 import sys
 import unittest
 from pathlib import Path
+
+from script_loader import load_script
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "py_modules"))
 
 
 def _load_probe_module():
-    spec = importlib.util.spec_from_file_location(
-        "probe_deck_kb_retrieval", REPO_ROOT / "scripts" / "probe_deck_kb_retrieval.py"
-    )
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module
-    try:
-        spec.loader.exec_module(module)
-    except Exception:  # pragma: no cover - a load failure must not leave a stub behind
-        sys.modules.pop(spec.name, None)
-        raise
-    return module
+    return load_script("probe_deck_kb_retrieval", register=True)
 
 
 class SearchTimeVerdictTests(unittest.TestCase):

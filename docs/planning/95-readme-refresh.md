@@ -397,6 +397,10 @@ out of the panel: a Steam modal (Delete chat, Your notes, which-chat-to-delete) 
    So the box always takes focus away, but focus does not always come back. Not reproducible on
    demand yet.
 
+9. 21:55 UTC, monitor (1920x1080): the plugin's own "Close menu & take screenshot", then reopening Quick Access by
+   chord: hasFocus() false, Steam's ring on the question box while activeElement was Ask (split), Down and Left dead.
+   The same steps on the Deck screen at 20:47 UTC read true and worked, so not every time, but the cheapest trigger seen.
+
 ### Code reading (no changes made)
 - Down inside an answer, from Hide details, from the notes line etc. is handled by the plugin's own
   code (answerBubbleNavigation.handleAnswerBubbleMoveDown and friends), which moves the ring with a

@@ -46,7 +46,12 @@ SCREENS = {
         # blacked out in the time ranges --card names.
         "card": (1138, 24, 142, 172),
     },
-    # monitor: filled in from the first monitor master (plan 95 step 4).
+    # monitor: 1920x1080, measured 2026-10-17 from a screenshot of today's build over a running game.
+    "monitor": {
+        "panel": (1536, 48, 384, 986),
+        "avatar": (1840, 0, 80, 46),
+        "card": (1630, 30, 200, 235),
+    },
 }
 
 SHAPES = ("full.mp4", "full.gif", "panel.gif", "panel.mp4")

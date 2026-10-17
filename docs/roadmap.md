@@ -57,8 +57,6 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
 
 ## Bugs
 
-- ★ `[docs]` **The guide says to type "brightness" into the question box to find a Steam setting, but nothing is offered there** — **OPEN, found 2026-10-17 (plan 94 block 4, build `e9b50cc8`).**
-  On this build the finder is on the Search tab only. The README chat owns the guide: fix the line, or let the Main box offer the setting too. Evidence `workshop:test-evidence/plan94-P94-FIND-SETTING.json`.
 - ★ `[docs]` **Two wording finds: the starter set's download size, and a rule in AGENTS.md about Steam's focus transfer** — **OPEN, found 2026-10-16 (plan 86 step 2, D133 call 12 [D133](audit/maintainer-decisions-locked.md#d133--locked-2026-10-16-raised-2026-10-16--plan-86-step-2-approve-the-cut-lists-and-the-folder-map-and-twelve-smaller-calls)).**
   The starter set's size reads "about 4.6 GB" in one place and "about 4.5 GiB" in the box before it: pick one. AGENTS.md says Steam's focus transfer is called directly only inside the shared helper, but 17 screen files call it: fix the sentence or the code. No player change either way.
 - ★ `[focus]` **After Dismiss on the mic hint, the ring sits on nothing** — **OPEN, found 2026-10-17 (plan 94 block 5, build `e9b50cc8`).**
@@ -98,6 +96,10 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
   **Call 2026-10-16:** a helper changes how the letter scramble draws a paragraph gap; the Deck then measures that the 6 to 27 px shrinks are gone.
 - ★ `[reply]` **Maintainer's call: the glossary words are not underlined when the game is named but not running** — **OPEN, found 2026-10-17 (plan 94 block 7, build `e9b50cc8`).**
   With no game running, a question that names Deep Rock Galactic: Survivor got no underlined words (the glossary follows the running game only). Evidence `workshop:test-evidence/plan94-P94-GLOSSARY-NOGAME.json`.
+- ★ `[ui]` **The AI models window says "LICENCE" (British spelling)** — **OPEN, found 2026-10-17 (plan 95 filming, build `e9b50cc8`).**
+  The README is now in US spelling ("License"), at the maintainer's call; the window's filter heading still reads LICENCE, and the guide says "licence labels". Maintainer's call whether the plugin's own words follow.
+- ★ `[ui]` **The Strategy checklist says progress lasts "until you reset session cache", and there is no such button** — **OPEN, found 2026-10-17 (plan 95, reading the code).**
+  What really clears the ticks: a new Strategy question that is not a choice press, leaving Strategy mode, or Clear all data. Say that instead.
 - ★ `[ui]` **On the About tab the "Bugs & Feature Requests" link is clipped (67 % visible) and "Support my Steam Sale habit" is never a Down stop** — **OPEN, found 2026-10-17 (plan 94 block 1, build `e9b50cc8`).**
   Evidence `workshop:test-evidence/plan94-P94-TABS-WALK.json`.
 - ★ `[ui]` **After the Ollama install, "The local AI isn't installed on this Deck yet." stays on screen** — **OPEN, found 2026-10-17 (plan 94 block 2, build `e9b50cc8`).**
@@ -133,12 +135,15 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
   Down from an open word goes to the next word and closes the box; Right goes to Copy. It fires only on A on the word. It sends "Explain: overclock" (the answer still named the game). Evidence `workshop:test-evidence/plan94-P94-GLOSSARY.json`.
 - ★★ `[focus]` **"Attach recent screenshot" opens a grid of screenshots the controller cannot enter** — **OPEN, found 2026-10-17 (plan 94 block 8, build `e9b50cc8`).**
   After A on the menu item nothing has focus, and presses move the ring across chat controls hidden behind the grid. B once leaves the grid open; B twice closes the plugin. Evidence `workshop:test-evidence/plan94-P94-SCREENSHOT-try2.json`.
+  **2026-10-17 (plan 95 filming, Deck screen and monitor, build `e9b50cc8`):** reached by the D-pad: after A on the item nothing has focus, but Down from **Ask** goes to the grid's Back button and then the newest picture, and A attaches it. The first presses still wander the chat behind the grid, which a player would not expect.
 - ★★ `[ollama]` **The first answer after install takes about two minutes to start, and nothing on screen says so** — **OPEN, found 2026-10-17 (plan 94 block 4, build `e9b50cc8`).**
   First word at 100 to 120 s (124 s in all) with only "Still going..." lines, because the model loads cold; later answers took 10 to 25 s. Maintainer's call: warm the model after install, or say so on screen. Evidence `workshop:test-evidence/plan94-P94-SPEED.json`.
 - ★★ `[ollama]` **The first Thinking pick is lost behind its notice** — **OPEN, found 2026-10-17 (plan 94 block 2, build `e9b50cc8`).**
   The first pick shows "Thinking shows on screen as it happens... Show it?"; after "Show thinking" the screen read Brief but the file stayed off, and the pick was gone after close and reopen. The second pick saved. Evidence `workshop:test-evidence/plan94-P94-REPLY-STYLE.json`.
 - ★★ `[reply]` **A ticked Strategy checklist step is lost when the panel is closed and reopened** — **OPEN, found 2026-10-17 (plan 94 block 5, build `e9b50cc8`).**
   The saved list file is emptied at reopen (twice, no game running). Maintainer's call whether a list with no game is meant to be kept. Evidence `workshop:test-evidence/plan94-P94-STRATEGY-try2.json`.
+- ★★ `[reply]` `[ui]` **The Strategy checklist uses on/off switches; it should use checkboxes** — **OPEN, the maintainer's call 2026-10-17 (plan 95 filming).**
+  A switch reads as a setting turned on or off; checklist steps are a list you tick off, several at once, which is what a checkbox says. Keep A to tick or untick and the same ring path; a ticked step should look done. One Deck walk after the swap (the list sits inside an answer). The README's "Where are you at?" clip and the end of its long Main-tab video show the switches: re-film after.
 - ★★ `[reply]` **Expert mode gave a shorter answer than Speed and ignored half of a two-part question** — **OPEN, found 2026-10-17 (plan 94 block 4, build `e9b50cc8`).**
   454 against 751 characters. One sample. Evidence `workshop:test-evidence/plan94-P94-EXPERT.json`, `workshop:test-evidence/plan94-P94-SPEED.json`.
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** — **OPEN, failed by hand 2026-09-23 (build `a224fb6`).**
@@ -159,6 +164,9 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
 - ★★★ `[focus]` **After a stopped answer, Down goes round a three-stop loop and never reaches the Ask box** — **OPEN, found 2026-10-16 (plan 86 step 3 Deck block, build `cf724c9f`); a D-pad trap with a way out.**
   The loop is the question row, the answer text and Retry. Seen twice, with and without a game. Right onto Copy, then Down twice, gets out; after a fresh complete answer the loop is gone. Reading of the code: the answer's Down chain ends in `focusDownFromLiveAnswerBubble` → `focusReplyUtilityRow` (`src/utils/liveTurnFocusGraph.ts`), which tries the turn's Retry before Copy, and a stopped turn has no Helpful or Show details to stop on first. Nothing there changed in step 3, so it is older. Same shape as the September loop fixed for restored turns. Evidence `workshop:test-evidence/plan86-FINDING-STOPPED-ANSWER-DOWN-LOOP.json`.
   **2026-10-17 (plan 94 block 4, Deck, build `e9b50cc8`): NOT reproduced.** A stopped answer (2,266 characters kept, "Stopped - partial answer kept") with a notes card under it: Down went Show details, the notes card, the dock's Show details, the question box, then Ask; Retry kept the stopped turn and wrote a new one. No loop. Not a fix; the case may need an answer without that card. Evidence `workshop:test-evidence/plan94-P94-STOP-RETRY.json`.
+- ★★★ `[focus]` **After a Steam box, or the menu closing, Down stops moving the ring until the plugin is reloaded** — **OPEN, seen five times 2026-10-17 by the README filming (plan 95), after the plan 94 sighting below.**
+  Up keeps working; Down is dead from the question box, an answer, "Hide details" or the notes line. Triggers seen: Delete chat's box, the Your notes box, Close menu & take screenshot then reopening, Steam's settings. In every stuck reading the panel page had no focus (`document.hasFocus()` false; true in every working one), and `window.focus()` could not give it back, so the plan 76 refocus guard cannot work there. Not every time.
+  Every reading and the next steps: [plan 95 § 13](planning/95-readme-refresh.md#13-appendix-the-d-pad-freeze-readings-from-filming-2026-10-17). Same root cause likely as the Settings case in the entry below. Planned in [plan 96](planning/96-ship-ready-bug-session.md) row R1.
 - ★★★ `[focus]` `[tabs]` **Tab sections: the D-pad ring goes wrong after sections are opened (Terse mode unreachable, details line fires on press)** — **PARTIAL: part (a) fixed 2026-10-14 (plan 93, `f60ce2b5`) and passed on the Deck 2026-10-14 (row P93-B15-HELP-LINE, in Done); parts (b) and (c) OPEN, root cause not known yet, reported 2026-10-13 by the maintainer.**
   (b) After opening some sections and walking with the D-pad, Terse mode could not take the ring.
   (c) The maintainer suspects the details text that lengthens a setting throws the ring off. An alternative: keep the sections but show all the details text when a section is opened. Find the root cause before changing the design again.
@@ -200,6 +208,8 @@ replace it with a specific issue when one exists.
 - ★★ `[chat]` **First-run ghost "New chat" label at the create position** — **OPEN, parked by decision.** The create position is the
   literal `[+]` (re-confirmed on board 8f; no decision heading of its own). Reopen that decision before building it.
   [Detail](roadmap-details.md#first-run-ghost-new-chat-label).
+- ★★ `[chips]` `[layout]` **Maintainer's ask: the suggestion chips change too fast and their text is too big** — **OPEN, asked 2026-10-17 (plan 95 filming).**
+  The row feels busy: slow the changes down (today a chip stays 4 to 9 s, or 6 to 14 s at the slower pace, and fades over about 1 s). A chip whose question is too long to fit scrolls its text: that scroll should play through at least once before the row moves on (the maintainer, 2026-10-17; reading to confirm). Make the chip text smaller (12 points today) so more of a question fits without scrolling, and if that leaves empty space above and below the words, make the chips shorter too. Layout change: measure on the Deck before and after, and run the free-play sweep. Planned in [plan 96](planning/96-ship-ready-bug-session.md) row F22.
 - ★★ `[chips]` **The four chip styles still differ in small ways, and share no drawing code** — **OPEN, held until after the release ([D121](audit/maintainer-decisions-locked.md#d121--locked-2026-09-30-raised-2026-09-30--plan-78-a-wider-bug-session-and-an-unattended-deck-pass-the-eleven-calls) call 10).**
   Folding them into one shared engine is a reshaping of code, so it waits. The rules for which chip comes next and how long it stays were already made the same in plan 78.
   What else differs (restart after an answer, wait after the highlight leaves, recent chips avoided, how each first appears) has not been re-checked against the code since.
@@ -422,6 +432,10 @@ Parked work and watched sightings: [roadmap-shelved.md](roadmap-shelved.md).
 Everything closed since v0.5.0 (2026-07-15), one line each. Full record: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
 
 The Closed blocks from 2026-10-02 to 2026-10-07 (plans 79 to 82) were moved to [the archive](archive/roadmap-done-v0.5.0.md#done-for-v060) on 2026-10-07, and those from 2026-10-08 to plan 87's Deck blocks 4 and 5 (2026-10-10) on 2026-10-11, to keep this file under its size limit, newest first, copied line for line. Every entry in them is closed, so none stays here. The plan 88 and plan 87 blocks (2026-10-10 and 2026-10-11) were moved to the same archive on 2026-10-12 (plan 92 docs sweep), copied line for line. The block of 2026-10-11 for the maintainer's calls 5, 6 and 7 of D128 and the install link was moved there on 2026-10-14 (plan 93 docs sweep), copied line for line. The three blocks of plan 89's Deck blocks (2026-10-11) were moved there on 2026-10-14 (plan 93 docs sweep 2), copied line for line. The five blocks of plan 92 (2026-10-12) were moved there on 2026-10-14 (plan 93 docs sweep 3), copied line for line. Every block from 2026-10-13 to 2026-10-16 (plan 93, plan 86 steps 0 and 3, the plan 93 report answers) was moved there on 2026-10-17 (plan 94 docs sweep), copied line for line.
+
+**Closed 2026-10-17 (plan 95, the README chat):**
+
+- ★ `[docs]` **The guide said to type "brightness" into the question box to find a Steam setting** — **DONE 2026-10-17 (commit `a86801b0`).** The guide now points at the Search tab, and its saved-chats passage says LT and RT switch chats on Main (the old row and its "pencil" were gone). Docs only, no Deck check owed.
 
 **Closed 2026-10-17 (plan 94, the fresh-install walk on the Deck, build `e9b50cc8`, the Deck's own screen):**
 

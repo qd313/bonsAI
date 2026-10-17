@@ -72,7 +72,7 @@ question. Pick a mode on the question box: **Speed** for a quick reply, **Strate
 like a strategy guide, **Expert** for the most effort and detail. Switch on **Thinking** and you can
 watch the steps while it works. The answer streams in as it's written.
 
-<!-- VIDEO: upload recordings/readme-cuts/ask-about-your-game-deck-full.mp4 (or -monitor-full.mp4). Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<!-- VIDEO: upload recordings/readme-cuts/ask-about-your-game-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
 <img src="assets/readme/ask-about-your-game.png" alt="A new chat, the three modes, a question about the level, the thinking steps, the answer streaming in, Show reasoning, a kept note and a branch pick" width="560">
 
 *A new chat, the three modes, a question, the thinking steps, the answer streaming in, Show
@@ -109,7 +109,7 @@ Say something worth keeping, like "I do not want spoilers for later biomes", and
 the answer offers to keep it, for this game or for every game. Later answers say **Read 1 of your
 notes**; press that line to see your notes, switch one off or remove it.
 
-<!-- VIDEO: upload recordings/readme-cuts/your-notes-deck-full.mp4 (or -monitor-full.mp4). Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<!-- VIDEO: upload recordings/readme-cuts/your-notes-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
 <img src="assets/readme/your-notes.png" alt="Keeping a note from a question, a later answer that read it, then the Your notes box" width="560">
 
 *Filmed in real time, with the AI on a PC on the home network.*
@@ -162,7 +162,7 @@ Press the paperclip on the question box and pick **Close menu & take screenshot*
 again, press the paperclip, pick **Attach recent screenshot**, choose the picture and ask. This
 needs a model that can see pictures; the starter model can.
 
-<!-- VIDEO: upload recordings/readme-cuts/ask-about-a-screenshot-deck-full.mp4 (or -monitor-full.mp4). Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<!-- VIDEO: upload recordings/readme-cuts/ask-about-a-screenshot-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
 <img src="assets/readme/ask-about-a-screenshot.png" alt="Taking a screenshot from the paperclip menu and asking what is on screen" width="560">
 
 *Filmed in real time, with the AI on a PC on the home network.*
@@ -176,7 +176,7 @@ needs a model that can see pictures; the starter model can.
 One find box looks through your chats, the game notes, your own notes and even Steam's own settings. Type
 "brightness" and jump straight to that Steam setting.
 
-<!-- VIDEO: upload recordings/readme-cuts/search-deck-full.mp4 (or -monitor-full.mp4). Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<!-- VIDEO: upload recordings/readme-cuts/search-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
 <img src="assets/readme/search.png" alt="The Search tab: dreadnought finds chats and notes, brightness finds Steam settings and opens one" width="560">
 
 *Filmed in real time.*
@@ -190,7 +190,7 @@ One find box looks through your chats, the game notes, your own notes and even S
 The answer keeps going in the background. The **Reply ready** popup shows its first lines, and the
 full answer waits in the chat.
 
-<!-- VIDEO: upload recordings/readme-cuts/reply-ready-deck-full.mp4 (or -monitor-full.mp4). Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<!-- VIDEO: upload recordings/readme-cuts/reply-ready-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
 <img src="assets/readme/reply-ready.png" alt="Closing the menu while bonsAI answers, then the Reply ready popup arriving" width="560">
 
 *Filmed in real time, with the AI on a PC on the home network.*
@@ -205,7 +205,7 @@ At ten, **New chat** asks which chat to delete first, and nothing is deleted wit
 chat** box. When a chat gets long, bonsAI sums up the older part so it isn't forgotten, and you can
 ask it to sum up at any time.
 
-<!-- VIDEO: upload recordings/readme-cuts/saved-chats-deck-full.mp4 (or -monitor-full.mp4). Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<!-- VIDEO: upload recordings/readme-cuts/saved-chats-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
 <img src="assets/readme/saved-chats.png" alt="Flipping between saved chats, Sum up this chat, and New chat asking which chat to delete" width="560">
 
 *Filmed in real time, with the AI on a PC on the home network.*

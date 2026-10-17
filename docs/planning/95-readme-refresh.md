@@ -1,8 +1,8 @@
 # Plan 95: README refresh, with new real-time recordings
 
 **Status: IN PROGRESS. The maintainer said go on 2026-10-17. Both screens are filmed and cut (§ 12); the
-Deck-screen set is in the README. Left: the maintainer picks the default screen, uploads six video
-files, and pushes.**
+Deck-screen set is in the README, the maintainer's pick. Left: the maintainer uploads six video files
+and pushes; then the page is checked on github.com.**
 
 Written 2026-10-17. The maintainer asked for the README to be redone: new words, new clips of every
 feature, filmed in real time on both of the Deck's screens, and a layout they choose from drawings
@@ -350,8 +350,9 @@ clip except the wiki-notes clip (AI on the Deck, 25 s answer, real time). Master
 clips plus six stills; the Permissions tab fits one picture there). Masters `<clip>-monitor.mkv`, cuts
 `<clip>-monitor-*` beside the Deck ones. Every video file is under 10 MB (largest 6.5 MB, the long
 Main-tab video at 1:32). The screenshot clip includes one extra menu close and reopen, because the
-D-pad freeze hit right after the screenshot (§ 13, readings 12 and 13). **The maintainer picks which
-screen the README shows**; swapping is a copy of the other set's files into `assets/readme/`.
+D-pad freeze hit right after the screenshot (§ 13, readings 12 and 13). **The maintainer picked the Deck's own screen
+for the README on 2026-10-17**; the monitor set stays in `recordings/` in case that changes (swapping
+is a copy of its files into `assets/readme/`).
 
 **Second opinion (Fable, 2026-10-17):** checked the README against § 11 and the code. Fixed from it:
 the fold sides now alternate, the upload notes name the real files, "Ask" capitalized, the starter set

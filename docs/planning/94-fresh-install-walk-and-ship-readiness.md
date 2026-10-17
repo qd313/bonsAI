@@ -243,6 +243,11 @@ In the order it pays to do them.
 
 ## 7a. After the walk: what is left before shipping (2026-10-17 evening)
 
+**Moved to its own plan the same evening:** [plan 96](96-ship-ready-bug-session.md) holds every item below as a row with
+its owner and Deck row, the maintainer's calls of 2026-10-17 (Run AI on this Deck starts on, with a new first-run popup;
+the Update button's re-download is by design; the Search tab finds bonsAI's settings), the first-run popup mock-up and
+the hand-check page. The list below is the record of that evening.
+
 Items 1 to 3 of § 7 are done (setup-dev, the choices, the library published: 2026.10.17 arrived on the Deck). The rest,
 re-sorted by what a new player on the stable channel would hit first:
 

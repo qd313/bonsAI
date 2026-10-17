@@ -108,7 +108,7 @@ deck_remote_parse_record_result() {
   REC_PLUGIN_UI="no"
   if [ -f "$file" ]; then
     local line
-    line=$(grep '---RECORD_RESULT---' "$file" | tail -1)
+    line=$(grep -e '---RECORD_RESULT---' "$file" | tail -1)
     if [ -n "$line" ]; then
       REC_MODE=$(echo "$line" | sed -n 's/.*mode=\([^ ]*\).*/\1/p')
       REC_METHOD=$(echo "$line" | sed -n 's/.*method=\([^ ]*\).*/\1/p')

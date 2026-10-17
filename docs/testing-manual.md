@@ -25,6 +25,7 @@ Historical full checklist (pre–2026-07-30 split): [archive/testing-full-pre-20
 
 - [Tags](#tags)
 - [Test title pool](#test-title-pool)
+- [Standing row: the look check](#standing-row-the-look-check)
 - [Standing row: the free-play sweep](#standing-row-the-free-play-sweep)
 - [Focus graph (mandatory before shipping new controls)](#focus-graph-mandatory-before-shipping-new-controls)
 - [Cross-cutting smokes](#cross-cutting-smokes)
@@ -84,6 +85,24 @@ does not need a different library every week.
 reason it is in the pool — it is here to exercise the unclassified path a real library mostly hits.
 It is a linear story campaign, so if a QA pass shows the `unknown` default is too loose for
 story-shaped titles, that is a finding about the default, not a reason to special-case this AppID.
+
+---
+
+## Standing row: the look check
+
+**QA-LOOK-01** — run with every Deck block that changes anything on screen, on each tab the change
+touches, on the Deck's own screen and the monitor. Standing rule from the maintainer 2026-10-17, after
+they found by eye, in one evening, white buttons, buttons pressed against the panel edge, a link too
+small for its words and a spinner that no longer turned, on screens sessions had walked and
+screenshotted many times.
+
+1. Open the tab, then run `ssh deck@<ip> 'python3 - --json' < scripts/probe_deck_ui_look.py`. It
+   presses nothing. It lists words that do not fit their button, a light button among dark ones, a
+   control pressed against the panel edge, a lone wide button with lopsided gaps, and a spinner that
+   is drawn but not turning. Exit code 1 means something was found; save the output in the evidence.
+2. Take one screenshot of the tab and look at it as a person would: alignment, spacing, colors, and
+   anything that looks unlike the rest of the plugin. The script cannot judge taste.
+3. A finding is fixed or filed as a bug before the change is called verified.
 
 ---
 

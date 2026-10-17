@@ -132,7 +132,7 @@ give the story away — a boss's name, a twist, an ending — is covered. Press 
 it.
 
 Covers stay closed in **Show details**, in the thinking steps, and in the "where are you at?" choices.
-Copying an answer or reading it aloud leaves covered parts out.
+Copying an answer leaves covered parts out.
 
 Spoiler hiding does its best and will sometimes miss.
 

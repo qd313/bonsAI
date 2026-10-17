@@ -8,6 +8,14 @@ Strikeout titles match the original roadmap bug list. Items awaiting on-Deck QA 
 
 ---
 
+## Moved from the roadmap 2026-10-17
+
+### The guide said to type "brightness" into the question box (closed 2026-10-17)
+
+★ `[docs]`. Found 2026-10-17 by the plan 94 fresh-install walk (block 4, build `e9b50cc8`): on this build the setting finder is on the Search tab only, so the guide's line sent a new player to the wrong box. Evidence `workshop:test-evidence/plan94-P94-FIND-SETTING.json`.
+
+Fixed 2026-10-17 by the README chat (plan 95, commit `a86801b0`): the guide's "Search" paragraph now names the Search tab and what it finds (chats, game notes, your own notes, Steam settings). The same commit fixed the guide's saved-chats passage, which still described a chat row with shoulder-button switching and a pencil icon: LT and RT now switch chats on Main and the + starts one. Docs only; no Deck check owed.
+
 ## Moved from the roadmap 2026-09-21
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-21 during plan 63 block 0 — copied line for line from

@@ -1,7 +1,8 @@
 # Plan 95: README refresh, with new real-time recordings
 
-**Status: IN PROGRESS. The maintainer said go on 2026-10-17. The Deck's own screen set is filmed, cut
-and in the README (§ 12). Left: the monitor set, the hand uploads of six video files, the push.**
+**Status: IN PROGRESS. The maintainer said go on 2026-10-17. Both screens are filmed and cut (§ 12); the
+Deck-screen set is in the README. Left: the maintainer picks the default screen, uploads six video
+files, and pushes.**
 
 Written 2026-10-17. The maintainer asked for the README to be redone: new words, new clips of every
 feature, filmed in real time on both of the Deck's screens, and a layout they choose from drawings
@@ -304,6 +305,8 @@ if the session brings them up (§ 6.1).
 
 ## 11. What the README becomes
 
+**What was built differs in two places (see § 12):** six sections use video files, not three (Your own notes and Saved chats too), and in those folds the clip sits under the words with the caption under the clip, because GitHub draws an uploaded video as a player only on its own line, not inside a side-by-side table.
+
 In one list, so the build is a copy of this and the board:
 
 - **Top:** `# bonsAI`, a badge row (release, license, where it runs), the one-liner in bold, the
@@ -342,6 +345,19 @@ clip except the wiki-notes clip (AI on the Deck, 25 s answer, real time). Master
 | Saved chats | video | saved-chats-deck-full.mp4, 5.3 MB | triggers flip chats; Sum up; the which-to-delete box |
 | Talk instead of typing | plugin GIF | — | a Windows computer voice played into a pretend microphone; the real voice is still owed |
 | See how it answered | plugin GIF | — | |
+
+**Monitor set, filmed 2026-10-17 21:43 to 22:40 UTC** (1920x1080, same game and build, the same eleven
+clips plus six stills; the Permissions tab fits one picture there). Masters `<clip>-monitor.mkv`, cuts
+`<clip>-monitor-*` beside the Deck ones. Every video file is under 10 MB (largest 6.5 MB, the long
+Main-tab video at 1:32). The screenshot clip includes one extra menu close and reopen, because the
+D-pad freeze hit right after the screenshot (§ 13, readings 12 and 13). **The maintainer picks which
+screen the README shows**; swapping is a copy of the other set's files into `assets/readme/`.
+
+**Second opinion (Fable, 2026-10-17):** checked the README against § 11 and the code. Fixed from it:
+the fold sides now alternate, the upload notes name the real files, "Ask" capitalized, the starter set
+is 4.6 GB, the Run AI switch is already on, the Search fold names your own notes, one comma before
+"and". Kept: the privacy line's GitHub hop (the 0.6.0 security review says ollama.com hands the
+program download to GitHub).
 
 **Found while filming:**
 - The Steam avatar is not avoided by a running game: it sits in the Quick Access Menu's top bar, and
@@ -400,6 +416,11 @@ out of the panel: a Steam modal (Delete chat, Your notes, which-chat-to-delete) 
 9. 21:55 UTC, monitor (1920x1080): the plugin's own "Close menu & take screenshot", then reopening Quick Access by
    chord: hasFocus() false, Steam's ring on the question box while activeElement was Ask (split), Down and Left dead.
    The same steps on the Deck screen at 20:47 UTC read true and worked, so not every time, but the cheapest trigger seen.
+
+10. 22:05 UTC, monitor: straight after exit game, plugin reload, relaunch and opening the plugin over the game (chord, then Decky list, A): hasFocus() false at once, Down and Left dead. No Steam box involved.
+11. 22:08 UTC: the B, B, open-plugin route did not clear item 10; three plain menu close-and-reopens (chord twice, 2.5 s apart) did: hasFocus() true each time and Down moved.
+12. 22:35 UTC, monitor: "Close menu & take screenshot" then the reopen chord, hasFocus() false 2 s later. With 21:55 that is 2 of the last 3 tries of this exact step on the monitor (the 22:30 try read true later).
+13. 22:37 UTC, monitor: the same step a third time, hasFocus() false; one more close-and-reopen cleared it. 3 of the last 4 tries of this step on the monitor.
 
 ### Code reading (no changes made)
 - Down inside an answer, from Hide details, from the notes line etc. is handled by the plugin's own

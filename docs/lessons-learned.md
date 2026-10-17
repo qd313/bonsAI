@@ -222,6 +222,15 @@ panel animations, so a frozen panel may just be a dark screen. The activity log 
 read the model server's own system log instead. Voice input can be tested without a microphone
 attached.
 
+**Look at the screen, not only the walk: the maintainer kept catching what every check passed.** On
+2026-10-17, while the README was filmed, they found by eye white buttons in "Where AI runs", "Test
+connection" and an About link pressed against the panel's right edge, a link too small for its words,
+a spinner that no longer turned, and a checklist drawn as on/off switches. Every one sat on a screen
+earlier sessions had walked with the rig and screenshotted, sometimes many times. The walk checks where
+the ring goes; nobody checked how the page looked. The rule now: every screen-side change runs the look
+check (row QA-LOOK-01, `scripts/probe_deck_ui_look.py`) on each tab it touches, on both screens, and a
+session looks at one screenshot per tab as a person would before calling the change done.
+
 **Assert what is visible, not what has focus.** A walk through the controls can report every step
 passing while the control it landed on is hidden behind the dock at the bottom of the screen. Check
 the control's position against where the dock starts, not just whether it has focus. And script at

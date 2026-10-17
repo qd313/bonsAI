@@ -48,8 +48,8 @@ mid-game, ask how to beat a boss or why the game stutters and keep playing.
      Anything new that reaches the internet must be added here. -->
 **What does reach the internet**, so you can check the claim instead of trusting it:
 
-- **Installing Ollama** (the program that runs the AI) **and its models**: from **ollama.com**, and
-  **GitHub** for the program itself.
+- **Installing Ollama** (the program that runs the AI) **and its models**: from **ollama.com**, which
+  hands the program itself over from **GitHub**.
 - **The knowledge library**: from **Hugging Face**, with **GitHub** as backup.
 - **Voice input**: the speech engine from **GitHub**, the tools to build it from **Ubuntu's servers**
   and the speech model from **Hugging Face**.
@@ -72,7 +72,7 @@ question. Pick a mode on the question box: **Speed** for a quick reply, **Strate
 like a strategy guide, **Expert** for the most effort and detail. Switch on **Thinking** and you can
 watch the steps while it works. The answer streams in as it's written.
 
-<!-- VIDEO: ask-about-your-game-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<!-- VIDEO: upload recordings/readme-cuts/ask-about-your-game-deck-full.mp4 (or -monitor-full.mp4). Replace the next line with the link github.com gives when the file is dropped into the editor. -->
 <img src="assets/readme/ask-about-your-game.png" alt="A new chat, the three modes, a question about the level, the thinking steps, the answer streaming in, Show reasoning, a kept note and a branch pick" width="560">
 
 *A new chat, the three modes, a question, the thinking steps, the answer streaming in, Show
@@ -109,7 +109,7 @@ Say something worth keeping, like "I do not want spoilers for later biomes", and
 the answer offers to keep it, for this game or for every game. Later answers say **Read 1 of your
 notes**; press that line to see your notes, switch one off or remove it.
 
-<!-- VIDEO: your-notes-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<!-- VIDEO: upload recordings/readme-cuts/your-notes-deck-full.mp4 (or -monitor-full.mp4). Replace the next line with the link github.com gives when the file is dropped into the editor. -->
 <img src="assets/readme/your-notes.png" alt="Keeping a note from a question, a later answer that read it, then the Your notes box" width="560">
 
 *Filmed in real time, with the AI on a PC on the home network.*
@@ -122,7 +122,6 @@ notes**; press that line to see your notes, switch one off or remove it.
 
 <table>
 <tr>
-<td width="360"><img src="assets/readme/spoiler.gif" alt="A spoiler in a Strategy answer, covered until it is opened" width="360"></td>
 <td>
 
 Press **A** on a cover to open it. This works on a best-effort basis and can miss things.
@@ -130,6 +129,7 @@ Press **A** on a cover to open it. This works on a best-effort basis and can mis
 *Filmed in real time, with the AI on a PC on the home network.*
 
 </td>
+<td width="360"><img src="assets/readme/spoiler.gif" alt="A spoiler in a Strategy answer, covered until it is opened" width="360"></td>
 </tr>
 </table>
 
@@ -141,6 +141,7 @@ Press **A** on a cover to open it. This works on a best-effort basis and can mis
 
 <table>
 <tr>
+<td width="360"><img src="assets/readme/strategy-checklist.gif" alt="Picking where you are in the game, then ticking off a step in the checklist" width="360"></td>
 <td>
 
 Tick off steps as you go. Your progress is saved on the Deck, for each game.
@@ -148,7 +149,6 @@ Tick off steps as you go. Your progress is saved on the Deck, for each game.
 *Filmed in real time, with the AI on a PC on the home network.*
 
 </td>
-<td width="360"><img src="assets/readme/strategy-checklist.gif" alt="Picking where you are in the game, then ticking off a step in the checklist" width="360"></td>
 </tr>
 </table>
 
@@ -162,7 +162,7 @@ Press the paperclip on the question box and pick **Close menu & take screenshot*
 again, press the paperclip, pick **Attach recent screenshot**, choose the picture and ask. This
 needs a model that can see pictures; the starter model can.
 
-<!-- VIDEO: ask-about-a-screenshot-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<!-- VIDEO: upload recordings/readme-cuts/ask-about-a-screenshot-deck-full.mp4 (or -monitor-full.mp4). Replace the next line with the link github.com gives when the file is dropped into the editor. -->
 <img src="assets/readme/ask-about-a-screenshot.png" alt="Taking a screenshot from the paperclip menu and asking what is on screen" width="560">
 
 *Filmed in real time, with the AI on a PC on the home network.*
@@ -173,10 +173,10 @@ needs a model that can see pictures; the starter model can.
 <summary><b>Search your chats, settings and notes</b>: a Search tab to the left of Main finds things without any AI.</summary>
 <br>
 
-One find box looks through your chats, the game notes and even Steam's own settings. Type
+One find box looks through your chats, the game notes, your own notes and even Steam's own settings. Type
 "brightness" and jump straight to that Steam setting.
 
-<!-- VIDEO: search-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<!-- VIDEO: upload recordings/readme-cuts/search-deck-full.mp4 (or -monitor-full.mp4). Replace the next line with the link github.com gives when the file is dropped into the editor. -->
 <img src="assets/readme/search.png" alt="The Search tab: dreadnought finds chats and notes, brightness finds Steam settings and opens one" width="560">
 
 *Filmed in real time.*
@@ -190,7 +190,7 @@ One find box looks through your chats, the game notes and even Steam's own setti
 The answer keeps going in the background. The **Reply ready** popup shows its first lines, and the
 full answer waits in the chat.
 
-<!-- VIDEO: reply-ready-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<!-- VIDEO: upload recordings/readme-cuts/reply-ready-deck-full.mp4 (or -monitor-full.mp4). Replace the next line with the link github.com gives when the file is dropped into the editor. -->
 <img src="assets/readme/reply-ready.png" alt="Closing the menu while bonsAI answers, then the Reply ready popup arriving" width="560">
 
 *Filmed in real time, with the AI on a PC on the home network.*
@@ -205,7 +205,7 @@ At ten, **New chat** asks which chat to delete first, and nothing is deleted wit
 chat** box. When a chat gets long, bonsAI sums up the older part so it isn't forgotten, and you can
 ask it to sum up at any time.
 
-<!-- VIDEO: saved-chats-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<!-- VIDEO: upload recordings/readme-cuts/saved-chats-deck-full.mp4 (or -monitor-full.mp4). Replace the next line with the link github.com gives when the file is dropped into the editor. -->
 <img src="assets/readme/saved-chats.png" alt="Flipping between saved chats, Sum up this chat, and New chat asking which chat to delete" width="560">
 
 *Filmed in real time, with the AI on a PC on the home network.*
@@ -257,7 +257,7 @@ There's more: characters that change the tone of replies and a choice of AI mode
 ## Before you start
 
 > [!WARNING]
-> - **AI answers can be wrong.** Treat them as suggestions, and check anything that matters.
+> - **AI answers can be wrong.** Treat them as suggestions and check anything that matters.
 > - **Running the AI on the Deck slows your game down**, because they share the same chip. A PC on
 >   your home network is much faster.
 > - **This is a new release.** A few problems are known; see
@@ -269,7 +269,7 @@ There's more: characters that change the tone of replies and a choice of AI mode
   Decky is a free add-on that lets plugins like bonsAI into the Quick Access Menu.
 - Somewhere to run the AI: the Deck itself, or a PC on your home network. bonsAI installs the
   program it needs, **Ollama**, on the Deck for you.
-- About 4 GB free on the Deck for the first AI model, if it runs on the Deck.
+- About 5 GB free on the Deck for the starter set, if the AI runs on the Deck.
 
 ## Install
 
@@ -299,18 +299,18 @@ install, so nothing downloads without your say-so.
 
 Open the **Ollama** tab. Pick one:
 
-- **On the Deck** (works anywhere, slower in games): switch on **Run AI on this Deck**, then press
-  **Install Ollama**. When it asks whether to add the starter set too, say yes. It brings the
+- **On the Deck** (works anywhere, slower in games): make sure **Run AI on this Deck** is on, then
+  press **Install Ollama**. When it asks whether to add the starter set too, say yes. It brings the
   answer model (gemma4:e2b-it-qat), the note-search model (nomic-embed-text) and the speech models
-  tiny.en and base.en, about 4.5 GB in all.
+  tiny.en and base.en, about 4.6 GB in all.
 - **On a PC on your home network** (much faster): install [Ollama](https://ollama.com/download) on
   the PC and download a model there. Then type the PC's address into **PC address** on the Deck,
-  something like `http://192.168.1.20:11434`, and press **Test connection**. The
+  something like `192.168.1.20` (bonsAI adds Ollama's usual port), and press **Test connection**. The
   [guide](docs/guide.md#running-the-ai-on-a-pc) shows how to let the PC accept the connection.
 
 ### 4. Ask something
 
-Open the **Main** tab, pick a suggestion chip or type a question and press **ask**.
+Open the **Main** tab, pick a suggestion chip or type a question and press **Ask**.
 
 **Optional:** for notes from game wikis, open **Ollama → Knowledge base (offline)**, switch on
 **Use local knowledge base** and press **Download knowledge base**.

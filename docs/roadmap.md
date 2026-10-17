@@ -96,6 +96,10 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
   **Call 2026-10-16:** a helper changes how the letter scramble draws a paragraph gap; the Deck then measures that the 6 to 27 px shrinks are gone.
 - ★ `[reply]` **Maintainer's call: the glossary words are not underlined when the game is named but not running** — **OPEN, found 2026-10-17 (plan 94 block 7, build `e9b50cc8`).**
   With no game running, a question that names Deep Rock Galactic: Survivor got no underlined words (the glossary follows the running game only). Evidence `workshop:test-evidence/plan94-P94-GLOSSARY-NOGAME.json`.
+- ★ `[ui]` **With the AI on a PC, two buttons in "Where AI runs" have a white background unlike every other button in the plugin** — **OPEN, reported 2026-10-17 by the maintainer (plan 95 filming).**
+  The saved-address button ("PC") and "Save current PC address as quick host" on the Ollama tab draw white; make them match the plugin's other buttons. Seen in the README pictures of that section, both screens.
+- ★ `[ui]` **The thinking line's spinner no longer turns: it sits as a still three-quarter circle** — **OPEN, reported 2026-10-17 by the maintainer (plan 95 filming).**
+  Shown while an answer is being thought about ("Thinking...", "Still thinking..."). Check whether its animation is still attached, and whether the reduced-motion setting is involved.
 - ★ `[ui]` **The AI models window says "LICENCE" (British spelling)** — **OPEN, found 2026-10-17 (plan 95 filming, build `e9b50cc8`).**
   The README is now in US spelling ("License"), at the maintainer's call; the window's filter heading still reads LICENCE, and the guide says "licence labels". Maintainer's call whether the plugin's own words follow.
 - ★ `[ui]` **The Strategy checklist says progress lasts "until you reset session cache", and there is no such button** — **OPEN, found 2026-10-17 (plan 95, reading the code).**

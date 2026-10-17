@@ -3636,3 +3636,13 @@ _Moved out of [roadmap.md](../roadmap.md) and [roadmap-shelved.md](../roadmap-sh
   Unshelves when: the same legal gate as the bundled voices is passed.
 
 **Retired 2026-10-16:** Read aloud was removed in plan 86 step 3 (`8bcf0160`, `181c30ef`), so no voice is needed.
+
+### Plan 86 step 3: five features and a developer tool taken out, the glossary words moved into the knowledge library (closed 2026-10-16)
+
+- ★★ `[repo]` **Plan 86 step 3: five features and a developer tool taken out, the glossary words moved into the knowledge library** — **VERIFY, landed 2026-10-16 (build `cf724c9f`, every check green at each landing). The first half of the Deck block passed on the Deck's own screen; the second half is owed.**
+  Gone: the in-panel preview test tool (a developer tool) · the weekly model-list download · the Steam ban lookup · Read aloud and Voice replies · the UI scale setting. "kiting" and "overclock" now come from the knowledge library, so a library without the new table shows plain words. Calls: [D133](../audit/maintainer-decisions-locked.md#d133--locked-2026-10-16-raised-2026-10-16--plan-86-step-2-approve-the-cut-lists-and-the-folder-map-and-twelve-smaller-calls) and plan 86 § 4 call 12.
+  Passed: Settings has 8 sections, Permissions 4 switches (each off and on, kept after reopening), Developer 5; the models box reads "Live sizes" and downloads no list; no speaker in an answer, nothing speaks, the long-answer walk is clean; the settings file holds no Steam key after the first load. Sizes: the one real change is the answer's bottom space (25 px to none, the speaker's band), so UI scale removal changed no size (the session's reading; the evidence file says UNCLEAR). Evidence `workshop:test-evidence/plan86-B1-COMPARE.json` and the other `plan86-B*` files named on the rows.
+  **Still owed (plan 86 step 3 Deck block, second half):** voice input start to finish (**P86-VOICE-01**), the glossary words with, without and with an older library, the switch off and another game (**P86-GLOSSARY-01**), the free-play sweep (**P86-FREEPLAY-01**), the removed settings keys after a saved change (**P86-KEYS-01**), and the chip half of the ban lookup check (**P86-BAN-GONE-01**). Rows in [testing.md](../testing.md).
+  Test names that went and came, for step 5's comparison: [step-3-test-name-changes.txt](../audit/clean-up-round-three/step-3-test-name-changes.txt) (289 went, 80 came).
+
+**Closed 2026-10-16 (plan 86 step 3):** the second half of the Deck block passed on the Deck's own screen (build `cf724c9f`): voice input, the glossary words, the free-play sweep and the removed settings keys. Evidence is named in the roadmap's Done line. The chip half of P86-BAN-GONE-01 is still owed.

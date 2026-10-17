@@ -1,7 +1,7 @@
 # Plan 95: README refresh, with new real-time recordings
 
-**Status: DRAFT. The maintainer answered the ten questions and picked on the board on 2026-10-17
-(§ 2 and § 10). A second round is drawn for three spots. Nothing is built until they say "go".**
+**Status: IN PROGRESS. The maintainer said go on 2026-10-17. The Deck's own screen set is filmed, cut
+and in the README (§ 12). Left: the monitor set, the hand uploads of six video files, the push.**
 
 Written 2026-10-17. The maintainer asked for the README to be redone: new words, new clips of every
 feature, filmed in real time on both of the Deck's screens, and a layout they choose from drawings
@@ -321,3 +321,46 @@ In one list, so the build is a copy of this and the board:
   step and the Where AI runs picture under step 3.
 - **Getting help, Help build it, License, Buy me a beer** as today, US spelling.
 - US spelling throughout, no comma before "and" in lists, no "sped up" anywhere.
+
+## 12. Progress, 2026-10-17 evening (Deck's own screen)
+
+**Filmed** on the Deck's own screen, with Deep Rock Galactic: Survivor running and today's build,
+between 19:33 and 21:00 UTC with the Deck handed over by the stability chat. AI on the PC for every
+clip except the wiki-notes clip (AI on the Deck, 25 s answer, real time). Masters are in
+`recordings/` as `<clip>-deck.mkv`; every cut is in `recordings/readme-cuts/` (four shapes each).
+
+| Section | In the README as | Video file to upload | Notes |
+|---|---|---|---|
+| Ask about the game | video (still until uploaded) | ask-about-your-game-deck-full.mp4, 7.1 MB, 1:40 | new chat, Speed → Expert → Strategy, live thinking, decode effect, Keep, Show reasoning, branch pick, a ticked step |
+| Notes from the wiki | plugin GIF | — | AI on the Deck itself |
+| Your own notes | video | your-notes-deck-full.mp4, 3.7 MB | the notes box opens over the whole screen |
+| Spoilers | plugin GIF | — | a Hollow Knight ending question: this game is low spoiler risk, so no covers come for it |
+| "Where are you at?" | plugin GIF | — | cut from the long video, 1:02 to 1:39 |
+| Ask about a screenshot | video | ask-about-a-screenshot-deck-full.mp4, 4.7 MB | take, reopen, Attach recent screenshot, pick, ask |
+| Search | video | search-deck-full.mp4, 1.7 MB | ends on Steam's Display settings |
+| Close the menu | video | reply-ready-deck-full.mp4, 2.0 MB | |
+| Saved chats | video | saved-chats-deck-full.mp4, 5.3 MB | triggers flip chats; Sum up; the which-to-delete box |
+| Talk instead of typing | plugin GIF | — | a Windows computer voice played into a pretend microphone; the real voice is still owed |
+| See how it answered | plugin GIF | — | |
+
+**Found while filming:**
+- The Steam avatar is not avoided by a running game: it sits in the Quick Access Menu's top bar, and
+  this game's title screen draws a large avatar card with the profile name whenever the menu is shut
+  (also behind Steam's boxes). The cut script blacks out the top-bar avatar always and the card in the
+  menu-closed stretches (`--card`), found by a check on the menu's side rail.
+- Saved chats flip with the triggers (LT/RT), not the shoulder buttons; the README now says so.
+- "Close menu & take screenshot" saves the picture and closes the menu; the picture is then attached
+  from Attach recent screenshot. The README now says so.
+- The AI models window heading says "LICENCE" (British spelling) while the README is now US.
+- Friends' "now playing" pop-ups can land in a clip; none did in the kept takes.
+- **The D-pad freeze** (Down stops moving, Up keeps working, until a plugin reload) hit four times.
+  Every stuck reading had the panel page without focus (`document.hasFocus()` false), every working
+  reading had it true, and `window.focus()` could not restore it. Steam's boxes always take that
+  focus away; sometimes it never comes back. The plugin's own Down moves are plain `focus()` hops,
+  which Steam's ring does not follow without page focus (plan 76's finding). Evidence and the next
+  steps are in `recordings/dpad-freeze-notes.md` (not stored in git; copy it into the bug entry).
+
+**Deck put back** at 21:05 UTC: settings folder restored from the hand-over backup, performance
+overlay back to 3, pretend microphone removed, game closed, keep-awake released. Left on the Deck for
+the maintainer: `~/p95-settings-backup-1525` and `~/p95-settings-used-1702` (about 220 MB each) and
+a few test screenshots in Steam's screenshot folder.

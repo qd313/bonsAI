@@ -1,140 +1,267 @@
 # bonsAI
 
+[![Latest release](https://img.shields.io/github/v/release/qd313/bonsAI?label=release)](https://github.com/qd313/bonsAI/releases/latest)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+![Runs on your own Deck or PC](https://img.shields.io/badge/runs-on%20your%20own%20Deck%20or%20PC-2ea44f)
+
 **A helper for your Steam Deck that answers questions about your games, using an AI that runs on
 your own Deck or your own PC.**
 
-bonsAI lives in the Deck's **Quick Access Menu** — the panel the **`...`** button opens. Press it
-mid-game, ask how to beat a boss or why the game stutters, and keep playing.
+bonsAI lives in the Deck's **Quick Access Menu**, the panel the **`...`** button opens. Press it
+mid-game, ask how to beat a boss or why the game stutters and keep playing.
 
-![bonsAI open beside Deep Rock Galactic: Survivor on a Steam Deck, answering a question about the game](assets/readme/hero.png)
+<p align="center">
+  <img src="assets/readme/top-answer.png" alt="bonsAI's Main tab on a Steam Deck, answering a question about the game" width="300">
+  &nbsp;
+  <img src="assets/readme/top-details.png" alt="Show details under an answer: the model that wrote it and the notes it used" width="300">
+</p>
 
 <!-- toc: written by scripts/docs_toc.py; do not hand-edit -->
 **Contents**
 
 - [Free, open and yours](#free-open-and-yours)
 - [What it does](#what-it-does)
-  - [Ask about the game you're playing](#ask-about-the-game-youre-playing)
-  - [Notes from the game's wiki](#notes-from-the-games-wiki)
-  - [Spoilers stay hidden until you ask](#spoilers-stay-hidden-until-you-ask)
-  - ["Where are you at?"](#where-are-you-at)
-  - [Ask about a screenshot](#ask-about-a-screenshot)
-  - [Find a Steam setting by typing](#find-a-steam-setting-by-typing)
-  - [Close the menu, keep playing](#close-the-menu-keep-playing)
-  - [Saved chats](#saved-chats)
-  - [Talk instead of typing](#talk-instead-of-typing)
-  - [See how it answered](#see-how-it-answered)
 - [Before you start](#before-you-start)
 - [What you need](#what-you-need)
 - [Install](#install)
+  - [1. Add bonsAI to Decky](#1-add-bonsai-to-decky)
+  - [2. Allow downloads](#2-allow-downloads)
+  - [3. Choose where the AI runs](#3-choose-where-the-ai-runs)
+  - [4. Ask something](#4-ask-something)
 - [Getting help](#getting-help)
 - [Help build it](#help-build-it)
-- [Licence](#licence)
+- [License](#license)
 - [Buy me a beer](#buy-me-a-beer)
 <!-- /toc -->
 
 ## Free, open and yours
 
-bonsAI is free and open source. You start it up yourself on your hardware, no data centers and no paid API. 
-
-- **Your questions stay on your hardware** — on your Deck, on your own PC, or wherever you point it.
-- **No account, no cloud service, nothing collected.**
-- **Every line of code is here to read.**
+> [!NOTE]
+> bonsAI is free and open source. It runs on your own hardware, your privacy stays yours. No paid
+> API, no data centers.
+>
+> - **Your questions stay on your hardware**, on your Deck, on your own PC or wherever you point it.
+> - **No account, no cloud service, nothing collected.**
+> - **Every line of code is here to read.**
 
 <!-- This list matches the 0.6.0 security review (workshop:audit/security-review-0.6.0.md, 2026-09-28).
      Anything new that reaches the internet must be added here. -->
 **What does reach the internet**, so you can check the claim instead of trusting it:
 
-- **Installing Ollama** (the program that runs the AI) — from ollama.com and GitHub.
-- **Downloading AI models** — from Ollama's own model library.
-- **The knowledge library** — from Hugging Face, or GitHub if Hugging Face is down.
-- **Voice input** — the speech engine from GitHub, the tools to build it from Ubuntu's servers, and
-  the speech model from Hugging Face.
+- **Installing Ollama** (the program that runs the AI) **and its models**: from **ollama.com**, and
+  **GitHub** for the program itself.
+- **The knowledge library**: from **Hugging Face**, with **GitHub** as backup.
+- **Voice input**: the speech engine from **GitHub**, the tools to build it from **Ubuntu's servers**
+  and the speech model from **Hugging Face**.
 
 Nothing downloads until you switch on **Internet downloads** on the Permissions tab, and bonsAI
 tells you where each download comes from before it starts. Links inside answers open only when you
-tap them. The recommended-models list no longer refreshes itself, and the Steam ban lookup is gone.
+tap them.
 
 ## What it does
 
-### Ask about the game you're playing
+Every clip is filmed on a Steam Deck in real time. Most use an AI running on a PC on
+the home network; the wiki-notes clip uses the AI on the Deck itself.
 
-![Asking about the running game: bonsAI thinks, answers, and credits its note](assets/readme/ask-about-your-game.gif)
+<details open>
+<summary><b>Ask about the game you're playing</b>: bonsAI knows which game is running. Ask about a boss, a level or a puzzle.</summary>
+<br>
 
-*Filmed on a Steam Deck with the AI running on the Deck itself, during a game. ~~The thinking part is sped up; it took about a minute.~~*
+Open the menu mid-game and type, or pick a suggestion chip; the game's name goes in with your
+question. Pick a mode on the question box: **Speed** for a quick reply, **Strategy** for coaching
+like a strategy guide, **Expert** for the most effort and detail. Switch on **Thinking** and you can
+watch the steps while it works. The answer streams in as it's written.
 
-bonsAI knows which game is running, ask "how do I beat this boss?". Pick different modes: **Speed** for a quick reply, **Strategy** for stategy-guide like game coaching, **Expert** for
-max effort and detail. ~~Suggestion chips above the question box give you a question to start with.~~
+<!-- VIDEO: ask-about-your-game-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<img src="assets/readme/ask-about-your-game.png" alt="A new chat, the three modes, a question about the level, the thinking steps, the answer streaming in, Show reasoning, a kept note and a branch pick" width="560">
 
-### Notes from the game's wiki
+*A new chat, the three modes, a question, the thinking steps, the answer streaming in, Show
+reasoning, a kept note and a branch pick. Filmed in real time, with the AI on a PC on the home
+network.*
 
-An optional **knowledge library** of notes from community wikis — 38 games so far. You download it
-once, then it works offline. When an answer uses a note, it says where the note came from.
+</details>
 
-### Spoilers stay hidden until you ask
+<details>
+<summary><b>Notes from the game's wiki</b>: answers can use notes from community wikis, 38 games so far, and it works offline.</summary>
+<br>
 
-![A spoiler in a Strategy answer, hidden until it is opened](assets/readme/spoiler.gif)
+<table>
+<tr>
+<td width="360"><img src="assets/readme/wiki-notes.gif" alt="A Speed answer from the AI on the Deck that uses a wiki note, then the note opening under the answer" width="360"></td>
+<td>
 
-In Strategy mode, anything that is detected as a spoiler is covered. Tap to uncover if you want
-to know. This works on a best-effort basis and can miss things.
+The knowledge library is a one-time download. When an answer uses a note, it says where the note
+came from, and you can open the note under the answer.
 
-### "Where are you at?"
+*Filmed in real time, with the AI running on the Deck itself.*
 
-![Picking where you are in the game, then ticking off steps in the checklist (the wait is sped up)](assets/readme/strategy-checklist.gif)
+</td>
+</tr>
+</table>
 
-Strategy can ask where you are in the game, then gives you a checklist of steps you can tick off.
-It remembers your progress for each game. (Stored locally?)
+</details>
 
-### Ask about a screenshot
+<details>
+<summary><b>Your own notes</b>: tell bonsAI what matters to you and it remembers.</summary>
+<br>
 
-![Taking a screenshot and asking bonsAI what is on screen (sped up)](assets/readme/ask-about-a-screenshot.gif)
+Say something worth keeping, like "I do not want spoilers for later biomes", and a small card under
+the answer offers to keep it, for this game or for every game. Later answers say **Read 1 of your
+notes**; press that line to see your notes, switch one off or remove it.
 
-Take a screenshot and ask about what's on screen — a puzzle, a menu, an error message.
+<!-- VIDEO: your-notes-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<img src="assets/readme/your-notes.png" alt="Keeping a note from a question, a later answer that read it, then the Your notes box" width="560">
 
-### Find a Steam setting by typing
+*Filmed in real time, with the AI on a PC on the home network.*
 
-![Typing "brightness" lists the matching Steam settings](assets/readme/find-a-setting.gif)
+</details>
 
-Type a few words, like "brightness", and jump straight to that Steam setting. This works without
-any AI model at all.
+<details>
+<summary><b>Spoilers stay hidden until you ask</b>: in Strategy mode, anything that looks like a spoiler is covered.</summary>
+<br>
 
-### Close the menu, keep playing
+<table>
+<tr>
+<td width="360"><img src="assets/readme/spoiler.gif" alt="A spoiler in a Strategy answer, covered until it is opened" width="360"></td>
+<td>
 
-![Closing the menu while bonsAI answers, then the reply popup arriving (sped up)](assets/readme/reply-ready.gif)
+Press **A** on a cover to open it. This works on a best-effort basis and can miss things.
 
-Close the menu while an answer is being written. A popup tells you when it's ready.
+*Filmed in real time, with the AI on a PC on the home network.*
 
-### Saved chats
+</td>
+</tr>
+</table>
 
-![Switching between saved chats with the shoulder button](assets/readme/switch-chats.gif)
+</details>
 
-Keep up to ten chats and flip between them with the shoulder buttons. At ten, **New chat** asks which
-chat to delete first, and nothing is deleted without the **Delete chat** box. When a chat gets long,
-bonsAI summarizes the older part so it isn't forgotten, and you can ask it to sum up at any time.
+<details>
+<summary><b>"Where are you at?"</b>: Strategy can ask where you are in the game, then gives you a checklist of steps.</summary>
+<br>
 
-![Sum up this chat: bonsAI writes a short card of what it remembers](assets/readme/sum-up-chat.gif)
+<table>
+<tr>
+<td>
 
-### Talk instead of typing
+Tick off steps as you go. Your progress is saved on the Deck, for each game.
 
-Press the mic button and talk. Your speech is turned into text on the Deck itself, and the
-recording is deleted as soon as that's done. Words appear as you talk, and when you stop, bonsAI tidies the text with one
-more pass over the whole recording (a couple of seconds).
+*Filmed in real time, with the AI on a PC on the home network.*
 
-### See how it answered
+</td>
+<td width="360"><img src="assets/readme/strategy-checklist.gif" alt="Picking where you are in the game, then ticking off a step in the checklist" width="360"></td>
+</tr>
+</table>
 
-![Opening Show details under an answer](assets/readme/show-details.gif)
+</details>
 
-**Show details** under any answer shows which model wrote it and which notes it used.
+<details>
+<summary><b>Ask about a screenshot</b>: take a screenshot and ask what's on screen, like a puzzle, a menu or an error message.</summary>
+<br>
 
-There's more: performance and battery tips with numbers you can set (???), characters that change the
-tone of replies, and a choice of AI models. The **[user guide](docs/guide.md)** covers everything.
+Press the paperclip on the question box and pick **Close menu & take screenshot**. Open the menu
+again, press the paperclip, pick **Attach recent screenshot**, choose the picture and ask. This
+needs a model that can see pictures; the starter model can.
+
+<!-- VIDEO: ask-about-a-screenshot-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<img src="assets/readme/ask-about-a-screenshot.png" alt="Taking a screenshot from the paperclip menu and asking what is on screen" width="560">
+
+*Filmed in real time, with the AI on a PC on the home network.*
+
+</details>
+
+<details>
+<summary><b>Search your chats, settings and notes</b>: a Search tab to the left of Main finds things without any AI.</summary>
+<br>
+
+One find box looks through your chats, the game notes and even Steam's own settings. Type
+"brightness" and jump straight to that Steam setting.
+
+<!-- VIDEO: search-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<img src="assets/readme/search.png" alt="The Search tab: dreadnought finds chats and notes, brightness finds Steam settings and opens one" width="560">
+
+*Filmed in real time.*
+
+</details>
+
+<details>
+<summary><b>Close the menu, keep playing</b>: close the menu while an answer is being written, and a popup tells you when it's ready.</summary>
+<br>
+
+The answer keeps going in the background. The **Reply ready** popup shows its first lines, and the
+full answer waits in the chat.
+
+<!-- VIDEO: reply-ready-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<img src="assets/readme/reply-ready.png" alt="Closing the menu while bonsAI answers, then the Reply ready popup arriving" width="560">
+
+*Filmed in real time, with the AI on a PC on the home network.*
+
+</details>
+
+<details>
+<summary><b>Saved chats</b>: keep up to ten chats and flip between them with the triggers.</summary>
+<br>
+
+At ten, **New chat** asks which chat to delete first, and nothing is deleted without the **Delete
+chat** box. When a chat gets long, bonsAI sums up the older part so it isn't forgotten, and you can
+ask it to sum up at any time.
+
+<!-- VIDEO: saved-chats-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
+<img src="assets/readme/saved-chats.png" alt="Flipping between saved chats, Sum up this chat, and New chat asking which chat to delete" width="560">
+
+*Filmed in real time, with the AI on a PC on the home network.*
+
+</details>
+
+<details>
+<summary><b>Talk instead of typing</b>: press the mic button and talk. Your speech becomes text on the Deck itself.</summary>
+<br>
+
+<table>
+<tr>
+<td>
+
+Words appear as you talk. When you stop, bonsAI reads the whole recording once more and tidies the
+text, which takes a couple of seconds. The recording is deleted as soon as that's done.
+
+*Filmed in real time, with a computer voice played into the Deck.*
+
+</td>
+<td width="360"><img src="assets/readme/talk.gif" alt="Pressing the mic button, the first word appearing, then the tidied text after Stop" width="360"></td>
+</tr>
+</table>
+
+</details>
+
+<details>
+<summary><b>See how it answered</b>: Show details under any answer shows which model wrote it and which notes it used.</summary>
+<br>
+
+<table>
+<tr>
+<td width="360"><img src="assets/readme/show-details.gif" alt="Opening Show details under an answer, then the Session tab" width="360"></td>
+<td>
+
+The **Session** tab inside it holds the chat's history and the **Sum up this chat** button.
+
+*Filmed in real time, with the AI on a PC on the home network.*
+
+</td>
+</tr>
+</table>
+
+</details>
+
+There's more: characters that change the tone of replies and a choice of AI models. The
+**[user guide](docs/guide.md)** covers everything.
 
 ## Before you start
 
-- **AI answers can be wrong.** Treat them as suggestions, and check anything that matters.
-- **Running the AI on the Deck slows your game down**, because they share the same chip. A PC on
-  your home network is much faster.
-- **This is a new release.** A few problems are known — see
-  [known problems](docs/guide.md#known-problems).
+> [!WARNING]
+> - **AI answers can be wrong.** Treat them as suggestions, and check anything that matters.
+> - **Running the AI on the Deck slows your game down**, because they share the same chip. A PC on
+>   your home network is much faster.
+> - **This is a new release.** A few problems are known; see
+>   [known problems](docs/guide.md#known-problems).
 
 ## What you need
 
@@ -149,7 +276,7 @@ tone of replies, and a choice of AI models. The **[user guide](docs/guide.md)** 
 bonsAI isn't in Decky's plugin store, because the store doesn't accept plugins built on an AI
 model. You install it from this page instead. It takes a few minutes.
 
-**1. Add bonsAI to Decky**
+### 1. Add bonsAI to Decky
 
 1. Press **`...`**, open **Decky** (the plug icon), then the **gear** for Decky's settings.
 2. Under **General**, switch on **Developer mode**. A **Developer** section appears.
@@ -161,12 +288,12 @@ model. You install it from this page instead. It takes a few minutes.
 
 4. bonsAI now shows in the Decky list. Open it.
 
-**2. Allow downloads**
+### 2. Allow downloads
 
 Open the **Permissions** tab and switch on **Internet downloads**. Everything is off on a fresh
 install, so nothing downloads without your say-so.
 
-**3. Choose where the AI runs**
+### 3. Choose where the AI runs
 
 <img src="assets/readme/where-ai-runs.png" alt="The Where AI runs section of the Ollama tab" width="300">
 
@@ -177,13 +304,13 @@ Open the **Ollama** tab. Pick one:
   answer model (gemma4:e2b-it-qat), the note-search model (nomic-embed-text) and the speech models
   tiny.en and base.en, about 4.5 GB in all.
 - **On a PC on your home network** (much faster): install [Ollama](https://ollama.com/download) on
-  the PC and download a model there. Then type the PC's address into **PC address** on the Deck —
-  something like `http://192.168.1.20:11434` — and press **Test connection**. The
+  the PC and download a model there. Then type the PC's address into **PC address** on the Deck,
+  something like `http://192.168.1.20:11434`, and press **Test connection**. The
   [guide](docs/guide.md#running-the-ai-on-a-pc) shows how to let the PC accept the connection.
 
-**4. Ask something**
+### 4. Ask something
 
-Open the **Main** tab, pick a suggestion chip or type a question, and press **ask**.
+Open the **Main** tab, pick a suggestion chip or type a question and press **ask**.
 
 **Optional:** for notes from game wikis, open **Ollama → Knowledge base (offline)**, switch on
 **Use local knowledge base** and press **Download knowledge base**.
@@ -200,18 +327,18 @@ Open the **Main** tab, pick a suggestion chip or type a question, and press **as
 
 Want to help, or build it yourself? Start with the [development guide](docs/development.md).
 
-## Licence
+## License
 
 - **The code** is [Apache-2.0](LICENSE). A little of it comes from the Decky plugin template, under
-  its own BSD licence; [NOTICE](NOTICE) has the details.
+  its own BSD license; [NOTICE](NOTICE) has the details.
 - **The game notes** and the **knowledge library** are CC BY-SA 4.0. Many notes are reworded from fan
-  wikis, and each keeps a link to its source and that wiki's licence; see
+  wikis, and each keeps a link to its source and that wiki's license; see
   [data/kb/NOTICE.md](data/kb/NOTICE.md).
-- **Other people's code** that bonsAI uses keeps its own licence. The download carries all of them in
+- **Other people's code** that bonsAI uses keeps its own license. The download carries all of them in
   `dist/THIRD-PARTY-LICENSES.txt`.
 
 ## Buy me a beer
 
-Supporting my Steam sale habit — scan or tap:
+Supporting my Steam sale habit. Scan or tap:
 
 [![Donate via PayPal](assets/qrcode.png)](https://paypal.me/quentind313)

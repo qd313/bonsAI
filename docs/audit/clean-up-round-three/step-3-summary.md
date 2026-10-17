@@ -150,7 +150,6 @@ on every tab, at Small and Large text.
   tonight).
 - Some stops on Settings, Developer and Main read 83 to 92 % visible during a walk, clipped by the header strip
   under the chat name.
-- A note from another game was cited on a Deep Rock Galactic: Survivor question asked with no game running.
 - After the voice engine installed, the open Voice input section kept saying "not installed" until the tab was
   left and re-entered.
 - The library update offered the published 2026.09.26 as "newer" than the seed's 2026.10.16 (it treats any different

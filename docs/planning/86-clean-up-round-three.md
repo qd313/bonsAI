@@ -625,8 +625,9 @@ From its [postmortem](../../../bonsAI-workshop/audit/refactor-round-two/postmort
   - **Found, older than step 3** (on the roadmap): after a stopped answer, Down loops between the question, the answer
     and Retry (the answer's Down falls back to a helper that tries Retry first; unchanged tonight); Down from "Open
     Permissions" on the troubleshooting hint lands on "Dismiss"; some stops read 83 to 92 % visible under the header
-    strip; a note from another game cited on a Deep Rock Galactic: Survivor question; the Voice input section not
-    refreshing after the engine installs; the library update treating any different version as newer.
+    strip; the Voice input section not refreshing after the engine installs; the library update treating any
+    different version as newer. One finding was withdrawn the same night: "Hollow Bough", read on the Deck as a note
+    from another game, is one of Deep Rock Galactic: Survivor's own notes (the library's note list shows it).
   - **Also done:** rows in the step 4 folder map for the nine files the glossary move added (`74dd3067`); the list of
     test names that went and came for step 5 (`788c901e`); the paperwork (`697d1e82` and the round after it).
   - **The summaries** the maintainer asks for are in

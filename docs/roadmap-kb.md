@@ -44,8 +44,6 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   ([D62](audit/maintainer-decisions-archive.md#d62--locked-2026-09-05-raised-2026-09-05--the-second-bug-fixing-session-four-calls-before-go)
   item 2). A stray word match can attach a wrong tip. A fix would run the meaning search only when the word hits are thin;
   that needs a cut-off picked and measured. [Detail](roadmap-kb-details.md#speed-mode-tip-gap)
-- ★★ `[KB]` **A note from another game ("Hollow Bough") was cited on a Deep Rock Galactic: Survivor question asked with no game running** — **OPEN, found 2026-10-16 (plan 86 step 3 Deck block, build `cf724c9f`).**
-  The long answer to a first-loadout question ended with a source line naming a Hollow Bough note. Not part of the check that found it, so not yet looked into. Evidence `workshop:test-evidence/plan86-B4-LONG-ANSWER-WALK.json`.
 - ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held back
   2026-09-06 (D81).** "The game drops me back to the library" reaches no crash tip, because the tip search needs a topic
   word. The held fix (a meaning search) attached wrong tips, six measured. The tips were rewritten and a "none of these

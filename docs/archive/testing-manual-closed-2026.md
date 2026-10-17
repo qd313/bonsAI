@@ -679,3 +679,23 @@ Two Search tab boxes closed on the Deck 2026-10-14 (plan 93 Deck block C, the De
 Copied from [testing-manual.md](../testing-manual.md) when the feature it checked was removed. It was never run to a close.
 
 - [x] **NOTES-BLOCK-07** Voice replies turned on. Ask a question that attaches a note or a tip and let it read itself aloud in full. Separately, walk Down onto the block's header (ring visible on the header, checked against the dock) and press A. Pass: Whatever the answer says, the block's own words are never spoken by read aloud; the header still opens normally on its own press. Was: ⏳ still owed — **not run 2026-09-18.** This one needs a person listening to confirm the block is never read aloud, which the automated run could not check. **RETIRED 2026-10-16: Read aloud and the Voice replies setting were removed in plan 86 step 3 (`8bcf0160`, `181c30ef`).**
+
+## Plan 94 docs sweep (2026-10-17)
+
+One box closed on the Deck 2026-10-17 (plan 94 block 1b), copied from [testing-manual.md](../testing-manual.md) with the closing result added at the front.
+
+- [x] **PRESET-ONE-LINE-02** (the row matches the decision) — **PASS (Deck) 2026-10-17 (plan 94 block 1b, build `e9b50cc8`, a real first run on the Deck's own screen): the help-chip half passed; closing the quick start with "Got it" was not run (it cannot be reopened once the chip is gone). Evidence `workshop:test-evidence/plan94-P94-HELP-CHIP-try2.json`. Older status: geometry PASSED on device 2026-09-01; the help-chip half was owed** (the help chip was already dismissed on that device, so it was never exercised). One row, **two chips side by side**, each half the width less a 4px gap,
+  **30px** tall, radius 4; a label longer than its chip scrolls sideways inside it with a soft fade at the edges, and short labels do
+  not move. **Read the geometry from the live page** (`getBoundingClientRect` on the two `.bonsai-preset-glass` buttons and their
+  `.bonsai-preset-chip-text` children), not from a screenshot, and **record the button's computed side padding** — it is the one
+  number the width research in [archive/29-preset-row-three-thirds-plan.md § 3b](../../bonsAI-workshop/archive/29-preset-row-three-thirds-plan.md) could
+  not know, and it decides whether "~20 characters at a glance" is really 18 or 23. Write the numbers back into that plan.
+  **PASS on device 2026-09-01, read from the live page:** two chips **148 × 30 px** with a **4 px** gap on the 300 px column
+  (x=48, w=300), radius 4, side padding **8 px** (now set by the plugin, so the label room is known by construction), label room
+  **130.4 px** ≈ 20 characters; Steam's Marquee mounted on every label, **animating only the visible overflowing one** (`--duration`
+  = text width ÷ 25 px/s, 12.4 s for a 56-character prompt) and idle on short labels; the **Test** badge pinned at the left (23 px);
+  dock 157 px and reading area 458 px (one-chip row: 161 / 455). The help-chip half was not exercised (the help chip was already
+  dismissed on this device). History: **FAIL 2026-08-31** (one chip, filed by the maintainer on sight); rebuilt at the desk
+  2026-09-01 as two across (D43, the drawing's three chips would have left ~12 characters each). Also check: the help chip, when
+  showing, is the entire row and no suggestion chip is beside it; once dismissed, the two chips take the row.
+  **Tried 2026-10-01 (plan 78, Deck block 3e, build `9feef02e`), help-chip half, with no game running and the one-chip setting on:** before dismissal **PASS** — the help chip is the whole row, 300 by 30 px, with no suggestion chip beside it. After dismissal **UNCLEAR** — opening the quick start set the stored flag at once, but after Cancel, and again after "Got it", the help chip was still shown, so the one 300 px suggestion chip was never reached; the stored flag also read empty after a plugin reload. Filed as a bug (roadmap Bugs) with row **P78-HELP-CHIP-DISMISS** (testing.md). Evidence `workshop:test-evidence/plan78-PRESET-ONE-LINE-02.json`. The after-dismissal half stays owed. **Tried again 2026-10-03 (plan 81, build `afd2f444`), COULD NOT RUN:** the stored key read "1" again by itself after Steam's web helper was restarted, so no help chip came back. Evidence `workshop:test-evidence/plan81-P78-HELP-CHIP-DISMISS.json`.

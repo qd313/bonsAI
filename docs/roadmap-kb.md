@@ -55,6 +55,7 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
   [Detail](roadmap-kb-details.md#wrong-subject-notes)
 - ★★ `[KB]` **The knowledge library update treats any different version as newer, and installs onto the Deck's own drive without asking where** — **OPEN, found 2026-10-16 (plan 86 step 3 Deck block).**
   It offered 2026.09.26 as an update over the seed's 2026.10.16. The library had been on the SD card; the update put the same files, byte for byte, on the Deck's own drive. The maintainer said to leave it there tonight. Evidence `workshop:test-evidence/plan86-B6-RESTORE.json`.
+  **2026-10-17 (plan 94 block 3, Deck, build `e9b50cc8`):** the first download now asks where to put the library (Not now / Internal storage / SD card) before the download box. The "different version offered as newer" half was not tested (a fresh install has no older version). Evidence `workshop:test-evidence/plan94-P94-KB-DOWNLOAD.json`.
 - ★★ `[KB]` **Unrelated questions can still get a game card stapled on** — **ACCEPTED 2026-08-27.** With a game running,
   "thank you very much" still attached a card on the Deck on 2026-08-23. Raising the word floor costs real matches and the
   model mostly ignores a card that does not fit. Later floors (2026-09) may have cured some phrases; no Deck re-run since.

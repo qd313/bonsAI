@@ -56,6 +56,7 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [The ring can vanish on the Search tab after closing a game note when a new word arrives](#the-ring-can-vanish-on-the-search-tab-after-closing-a-game-note-when-a-new-word-arrives)
 - [Some settings text ignores the Text size choice (Permissions tab and others)](#some-settings-text-ignores-the-text-size-choice-permissions-tab-and-others)
 - [Plan 93 notes moved from the roadmap (2026-10-14, docs sweep 3)](#plan-93-notes-moved-from-the-roadmap-2026-10-14-docs-sweep-3)
+- [Plan 94 notes moved from the roadmap (2026-10-17)](#plan-94-notes-moved-from-the-roadmap-2026-10-17)
 <!-- /toc -->
 
 ## The panel stops half way down and the Ask button is out of reach
@@ -905,3 +906,9 @@ Open entries and older dated notes, word for word, moved here when their entries
 
 - ★ `[focus]` **Hand-written D-pad moves on some Ollama-tab buttons never run** — **OPEN, found 2026-10-12 by plan 92 lane T0.**
   In the Ollama tab's "where the AI runs" and knowledge-base sections (`OllamaWhereAiRunsSection.tsx`, `KnowledgeBaseSection.tsx`) several hand-written D-pad moves are spread onto Decky Buttons, which never pass move handlers on (for example Test connection's Down, and the knowledge base's Download and Remove). Steam's own move does the work today, so a person notices nothing. The focus-pattern checker misses handlers passed this way.
+
+## Plan 94 notes moved from the roadmap (2026-10-17)
+
+**Tab sections: the D-pad ring goes wrong after sections are opened (older note, word for word):**
+
+  **2026-10-13 (plan 93):** (b) not reproduced: with every section open, the Ollama tab walks 19 stops down and the same 19 up, Terse mode a stop both ways; Settings walks 23 stops each way, clean. (b) waits for the maintainer's exact steps. Evidence `workshop:test-evidence/plan93-P93-M1-FOLDED-RING-OLLAMA.json`, `-SETTINGS.json`.

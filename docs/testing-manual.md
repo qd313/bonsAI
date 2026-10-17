@@ -136,6 +136,8 @@ every stop was visible or one of the two known corner-icon alarms, except one: a
 on the section's box with 67% of it, cover included, under the tab header. Filed as a small bug on the roadmap. Not done: a second carousel
 position, the whole-chat walk, the touch half (needs a person). The row stays open. Evidence `workshop:test-evidence/plan76-QA-FREE-PLAY-01-try2.json`.
 
+**2026-10-17 (plan 94 block 7, build `e9b50cc8`, the Deck's own screen, Deep Rock Galactic: Survivor running): the sweep with the game PASSED.** Two walks, each after a fresh answer (23 and 25 presses, down to the end and back): no dead press, nothing behind the dock, every stop 100 % visible except the chat name row at 83 %. Down from Copy landed on Helpful (no Tip chip was under those answers). Evidence `workshop:test-evidence/plan94-P94-FREE-PLAY-GAME.json`.
+
 **2026-10-14 (plan 93 Deck block D3, build `8ff99a0a`, the Deck's own screen, Deep Rock Galactic: Survivor running, Strategy mode): the half with a game running, no loop and no dead press, UNCLEAR on visibility, still open.** One sweep of 28 presses down and back (no A): 25 stops, 13 distinct controls, 0 loops, 0 press retries, each leg ended by a stall at its end, and it reached Ask. 23 of 25 stops read 100 percent visible; the chat title row read 83 percent both times (covered by a panel box and clipped by the tab strip), the same reading as the run without a game (the rig's known false alarm); the words of the row were not measured. Two stops had no name (the answer text section and the question box). The touch-screen half needs a person and was not run, so the row stays open. Evidence `workshop:test-evidence/plan93-QA-FREE-PLAY-01-game-D3.json`.
 
 **2026-10-14 (plan 93, Deck blocks C and D1, the Deck's own screen, no game): the "before" and "after" for today's Main-tab fixes, UNCLEAR on visibility, still open.** Before (block C, `workshop:test-evidence/plan93-QA-FREE-PLAY-01-before.json`): going Up from "Mark reply helpful" the answer's last section sat with its last lines under the dock (box 240 to 349, dock top 330, 80 percent visible). After (build `0ef34f82`, a sweep of 54 presses: 51 stops, 27 distinct controls, `workshop:test-evidence/plan93-QA-FREE-PLAY-01-after.json`, stop list `-after-sweep.json`): 0 loops, no dead press in the middle of either leg, every stop from the tab bar down to Ask and back reached, and the last section reads 100 percent visible on the way up. Seven stops read 83 percent visible (one sample point each): the chat-name row twice and one-line history rows; no text hidden under the dock found, but the tool cannot say whether a person loses anything, and this run walked an older opened turn without rating buttons, so it is not the same picture as the before run. The touch-screen half needs a person and was not run, so the row stays open.
@@ -574,25 +576,10 @@ everything below assumes it passes. Plan:
 Decky's back arrow and the "Your chats" menu took over (rows P84-NAME-02 and P84-MENU-01 in
 [PLAN-84](#plan-84--more-room-for-the-answer-plan-84) below). Every CHAT-SLOTS-V3 row had already passed on the Deck while the row existed and
 sits in [testing-manual-closed-2026.md](archive/testing-manual-closed-2026.md), so none is left open here to replace. The two
-rows below, PRESET-ONE-LINE-02 and PRESET-ONE-LINE-04, test the suggestion chips, not the saved-chats row, and stand.
+row below, PRESET-ONE-LINE-04, tests the suggestion chips, not the saved-chats row, and stands. PRESET-ONE-LINE-02 passed on the Deck 2026-10-17 and moved to [the closed archive](archive/testing-manual-closed-2026.md#plan-94-docs-sweep-2026-10-17).
 
 
 
-- [ ] **PRESET-ONE-LINE-02** (the row matches the decision) — **geometry PASSED on device 2026-09-01; the help-chip half is still owed** (the help chip was already dismissed on that device, so it was never exercised). One row, **two chips side by side**, each half the width less a 4px gap,
-  **30px** tall, radius 4; a label longer than its chip scrolls sideways inside it with a soft fade at the edges, and short labels do
-  not move. **Read the geometry from the live page** (`getBoundingClientRect` on the two `.bonsai-preset-glass` buttons and their
-  `.bonsai-preset-chip-text` children), not from a screenshot, and **record the button's computed side padding** — it is the one
-  number the width research in [archive/29-preset-row-three-thirds-plan.md § 3b](../../bonsAI-workshop/archive/29-preset-row-three-thirds-plan.md) could
-  not know, and it decides whether "~20 characters at a glance" is really 18 or 23. Write the numbers back into that plan.
-  **PASS on device 2026-09-01, read from the live page:** two chips **148 × 30 px** with a **4 px** gap on the 300 px column
-  (x=48, w=300), radius 4, side padding **8 px** (now set by the plugin, so the label room is known by construction), label room
-  **130.4 px** ≈ 20 characters; Steam's Marquee mounted on every label, **animating only the visible overflowing one** (`--duration`
-  = text width ÷ 25 px/s, 12.4 s for a 56-character prompt) and idle on short labels; the **Test** badge pinned at the left (23 px);
-  dock 157 px and reading area 458 px (one-chip row: 161 / 455). The help-chip half was not exercised (the help chip was already
-  dismissed on this device). History: **FAIL 2026-08-31** (one chip, filed by the maintainer on sight); rebuilt at the desk
-  2026-09-01 as two across (D43, the drawing's three chips would have left ~12 characters each). Also check: the help chip, when
-  showing, is the entire row and no suggestion chip is beside it; once dismissed, the two chips take the row.
-  **Tried 2026-10-01 (plan 78, Deck block 3e, build `9feef02e`), help-chip half, with no game running and the one-chip setting on:** before dismissal **PASS** — the help chip is the whole row, 300 by 30 px, with no suggestion chip beside it. After dismissal **UNCLEAR** — opening the quick start set the stored flag at once, but after Cancel, and again after "Got it", the help chip was still shown, so the one 300 px suggestion chip was never reached; the stored flag also read empty after a plugin reload. Filed as a bug (roadmap Bugs) with row **P78-HELP-CHIP-DISMISS** (testing.md). Evidence `workshop:test-evidence/plan78-PRESET-ONE-LINE-02.json`. The after-dismissal half stays owed. **Tried again 2026-10-03 (plan 81, build `afd2f444`), COULD NOT RUN:** the stored key read "1" again by itself after Steam's web helper was restarted, so no help chip came back. Evidence `workshop:test-evidence/plan81-P78-HELP-CHIP-DISMISS.json`.
 - [ ] **PRESET-ONE-LINE-04** (the scrolling is calm and cheap) With the knowledge base on and a covered game running (Half-Life 2 has
   the longest label, 59 characters): both labels crawl slowly with a fade at the edges, the **Tip** badge stays pinned at the left
   while the text scrolls, and a chip does not rotate away before its label has scrolled through once. Judge the speed by eye — "slow
@@ -773,7 +760,7 @@ Rows 01, 02, 03, 05, 06 and TEN-GAMES-01 passed on the Deck and moved to
 
 | Date | Git SHA / tag | Result | SteamOS / Decky | Ollama host | Notes |
 |------|---------------|--------|----------------|-------------|-------|
-| | | | | | |
+| 2026-10-17 | `e9b50cc8` (deployed from this PC, not the release zip) | **PASS with two caveats:** the first answer starts only after about two minutes while the model loads cold, and nothing on screen says so | SteamOS 3.8.28 stable / Decky 3.2.10 stable | Ollama 0.40.6 on the Deck, installed by the plugin | Plan 94, a true first install (Clear all data, Ollama and its models moved aside): two notices, Permissions, Install Ollama with the starter set, one question. Evidence `workshop:test-evidence/plan94-P94-INSTALL-OLLAMA.json`, `workshop:test-evidence/plan94-P94-STARTER-SET.json`, `workshop:test-evidence/plan94-P94-SPEED.json`. The re-run from the release zip is owed on release day. |
 
 ---
 
@@ -799,7 +786,7 @@ Rows 01, 02, 03, 05, 06 and TEN-GAMES-01 passed on the Deck and moved to
 | 1 | Preview Pass (the preview suite was removed 2026-10-16) — **DOM/focus asserts invalidated 2026-08-08** | 2026-05-26 / 9e20a82 | Re-baseline pending; same scope as Tier 0 above |
 | 2 | Partial | 2026-06-09 / a9237e4 | |
 | 3 | Open | | QAMP matrix deferred |
-| 4 | Deferred | | Clean install before tag |
+| 4 | Partial | 2026-10-17 / e9b50cc8 | First row PASSED on the Deck (plan 94); re-run from the release zip owed before the tag |
 
 ---
 

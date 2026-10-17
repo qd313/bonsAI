@@ -357,10 +357,62 @@ clip except the wiki-notes clip (AI on the Deck, 25 s answer, real time). Master
   Every stuck reading had the panel page without focus (`document.hasFocus()` false), every working
   reading had it true, and `window.focus()` could not restore it. Steam's boxes always take that
   focus away; sometimes it never comes back. The plugin's own Down moves are plain `focus()` hops,
-  which Steam's ring does not follow without page focus (plan 76's finding). Evidence and the next
-  steps are in `recordings/dpad-freeze-notes.md` (not stored in git; copy it into the bug entry).
+  which Steam's ring does not follow without page focus (plan 76's finding). Every reading and
+  the next steps are in § 13.
 
 **Deck put back** at 21:05 UTC: settings folder restored from the hand-over backup, performance
 overlay back to 3, pretend microphone removed, game closed, keep-awake released. Left on the Deck for
 the maintainer: `~/p95-settings-backup-1525` and `~/p95-settings-used-1702` (about 220 MB each) and
 a few test screenshots in Steam's screenshot folder.
+
+## 13. Appendix: the D-pad freeze readings from filming (2026-10-17)
+
+
+Every reading taken with the plugin open on the Main tab, ring read from Steam's own focus marker.
+
+1. After the "Delete chat?" Steam box (Delete pressed), DOWN from the answer bubble stopped moving.
+   Closing and reopening the Quick Access Menu (two GUIDE+A chords) cleared it the first time.
+2. Second time after the same box: DOWN stuck on the question box; LEFT/RIGHT also dead.
+   Tab away and back (RB, LB): still stuck. QAM close/reopen: still stuck.
+   B (back to Decky's list) then A (open bonsAI): ring moved again, but DOWN stuck later on the
+   last answer's bubble ("Nitra is the resource...") - UP worked, DOWN did nothing.
+   Only a plugin reload (game closed first) cleared it for good.
+3. After "Your notes" Steam box and after the menu was closed/reopened by chord (reply-ready clip):
+   DOWN stuck on "Read 5 of your notes" line. B/A reopen did not help. Reload fixed it.
+4. Live reading at 20:43 UTC, after the "You have 10 chats" box, Search tab -> Steam Settings ->
+   back -> reopen: DOWN from "Hide details" does not move; UP and RIGHT do.
+   document.hasFocus() = false, visibilityState = visible, activeElement == the ring's element.
+5. hasFocus() read false every time it was checked during a stuck spell (3 checks).
+   Not checked while things worked, so whether false is the cause or always the case is open.
+
+Pattern so far: the freeze is DOWN-only (UP keeps working) and starts after something takes focus
+out of the panel: a Steam modal (Delete chat, Your notes, which-chat-to-delete) or the QAM closing.
+6. 20:45 UTC, same spell: window.focus() on the panel page leaves hasFocus() false (before false,
+   after false). So the existing refocus fix (refocusPanelWindowIfLost -> win.focus(), from plan 76)
+   cannot restore focus in this state. DOWN from "Mark reply helpful" moved to "Hide details";
+   DOWN from "Hide details" then did nothing. The plugin's back-end log shows nothing at all.
+7. Fresh reload, ring working: hasFocus() true before and after a few presses (20:52 UTC).
+8. 21:03 UTC repro attempts, fresh reload: closing the AI models window with B -> hasFocus true.
+   Delete chat box open -> hasFocus false; after Delete -> true again, Down fine all the way to Ask.
+   So the box always takes focus away, but focus does not always come back. Not reproducible on
+   demand yet.
+
+### Code reading (no changes made)
+- Down inside an answer, from Hide details, from the notes line etc. is handled by the plugin's own
+  code (answerBubbleNavigation.handleAnswerBubbleMoveDown and friends), which moves the ring with a
+  plain element.focus() hop. Plan 76 measured that such hops leave Steam's ring behind whenever the
+  panel page lacks focus; Steam's own moves and takeNavFocus transfers do not split.
+- The plan-76 guard calls refocusPanelWindowIfLost() -> window.focus() first. Reading 6 shows
+  window.focus() does nothing in the stuck state, so the guard cannot work there.
+- That explains "Down dead, Up fine": Up at those stops is Steam's own move; Down is the plugin's hop.
+
+### Likely root cause (to prove)
+Steam takes window focus for its own boxes (and when the menu closes); afterwards the Quick Access
+page sometimes never gets it back, and window.focus() cannot pull it back. From then on every
+plugin-made Down hop moves the page's focus but not Steam's ring, until a reload.
+
+### What a fix session needs
+1. A dependable repro (count how often hasFocus stays false after each kind of Steam box / menu close).
+2. Log each Down handler's result and hasFocus into the plugin log, so a freeze is visible after the fact.
+3. Try making those hops go through Steam's own focus transfer (TakeFocus / takeNavFocus) instead of
+   plain focus(), which plan 76 found stays in step even without page focus; prove on the Deck.

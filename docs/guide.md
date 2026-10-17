@@ -82,8 +82,9 @@ quality** trades memory for detail: **Save memory** (the default), **Balanced** 
 can set yourself in the Deck's Performance menu — a power limit in watts, a frame cap, a refresh
 rate. bonsAI never changes these for you.
 
-**Find a setting:** type a few words, like "brightness", and bonsAI offers the
-matching Steam setting. Pick it to jump straight there. No AI is needed for this.
+**Search:** the **Search** tab, to the left of Main, has one find box for your chats, the game notes,
+your own notes and Steam's own settings. Type a few words, like "brightness", and pick a Steam setting
+to jump straight there. No AI is needed for this.
 
 **While it answers:** the words appear as they're written. You can stop an answer partway. If you
 close the menu, the answer keeps going, and a **Reply ready** popup shows its first lines when it's
@@ -137,12 +138,12 @@ Spoiler hiding does its best and will sometimes miss.
 
 ## Saved chats
 
-The row at the top of **Main** holds up to ten chats. They're kept for you automatically. At ten,
-**New chat** asks which chat to delete, and nothing is deleted until you confirm in the **Delete chat**
-box. Cancel, or B, keeps all ten. Move along the row to switch chats, or use the shoulder buttons
-while the row is selected.
+The open chat's name sits at the top of **Main**, with "chat 2 of 5" under it. bonsAI keeps up to ten
+chats for you automatically. Press **LT** or **RT** on the Main tab to step through them, or press the
+name to see them all. At ten, **New chat** asks which chat to delete, and nothing is deleted until you
+confirm in the **Delete chat** box. Cancel, or B, keeps all ten.
 
-- The **pencil** starts a new chat.
+- The **+** beside the name starts a new chat.
 - Chats name themselves after your first question. You can rename one.
 - The **save** icon copies a chat to a file on your Desktop. It needs the **Save files to Desktop**
   permission.

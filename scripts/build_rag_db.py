@@ -27,7 +27,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+# The repo root is the nearest folder above this file that holds main.py (not a count of folders, so the
+# script can move to a deeper folder without this line changing).
+REPO_ROOT = next(p for p in Path(__file__).resolve().parents if (p / "main.py").is_file())
 PY_MODULES = REPO_ROOT / "py_modules"
 KB_DATA_DIR = REPO_ROOT / "data" / "kb"
 if str(PY_MODULES) not in sys.path:

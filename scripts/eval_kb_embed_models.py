@@ -42,7 +42,8 @@ from datetime import date
 from pathlib import Path
 from typing import Any, Literal
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+# Nearest folder above this file that holds main.py: no count of folders to break when the script moves.
+REPO_ROOT = next(p for p in Path(__file__).resolve().parents if (p / "main.py").is_file())
 PY_MODULES = REPO_ROOT / "py_modules"
 FIXTURES = REPO_ROOT / "tests" / "fixtures"
 # Under build/, not dist/: `npm run build` clears dist/ and would delete the eval corpus.
@@ -269,12 +270,13 @@ def _load_fixture(path: Path, suite: str) -> list[QueryCase]:
 CORPUS_STALE_CHECK_RELPATHS = (
     Path("data") / "kb" / "strategy_seed.json",
     Path("data") / "kb" / "compat_patterns.json",
-    Path("scripts") / "build_rag_db.py",
 )
+# The builder sits next to this script, so it is found by name beside __file__, not by a folder path.
+BUILDER_SCRIPT = Path(__file__).resolve().parent / "build_rag_db.py"
 
 
 def _default_stale_check_paths() -> list[Path]:
-    return [REPO_ROOT / rel for rel in CORPUS_STALE_CHECK_RELPATHS]
+    return [*(REPO_ROOT / rel for rel in CORPUS_STALE_CHECK_RELPATHS), BUILDER_SCRIPT]
 
 
 def _corpus_is_stale(db_mtime: float, input_mtimes: list[float]) -> bool:
@@ -347,7 +349,7 @@ def _ensure_seed_db(
     subprocess.run(
         [
             sys.executable,
-            str(REPO_ROOT / "scripts" / "build_rag_db.py"),
+            str(BUILDER_SCRIPT),
             "--seed",
             "--out",
             str(out_dir),

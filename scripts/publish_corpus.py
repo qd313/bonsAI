@@ -43,7 +43,8 @@ import zlib
 from pathlib import Path
 from typing import Any
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+# Nearest folder above this file that holds main.py: no count of folders to break when the script moves.
+REPO_ROOT = next(p for p in Path(__file__).resolve().parents if (p / "main.py").is_file())
 PY_MODULES = REPO_ROOT / "py_modules"
 if str(PY_MODULES) not in sys.path:
     sys.path.insert(0, str(PY_MODULES))
@@ -72,7 +73,7 @@ ALLOWED_SOURCE_LICENSES = frozenset(
 def _load_build_rag_db():
     """Reuse licence_string_includes_version rather than re-implement it (same pattern the
     test suite already uses for this module — see tests/test_build_rag_attributions.py)."""
-    path = REPO_ROOT / "scripts" / "build_rag_db.py"
+    path = Path(__file__).resolve().parent / "build_rag_db.py"  # its neighbour, found by name
     spec = importlib.util.spec_from_file_location("build_rag_db", path)
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)

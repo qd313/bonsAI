@@ -77,7 +77,8 @@ from datetime import date
 from pathlib import Path
 from typing import Any, Callable, Optional
 
-ROOT = Path(__file__).resolve().parents[1]
+# Nearest folder above this file that holds main.py: no count of folders to break when the script moves.
+ROOT = next(p for p in Path(__file__).resolve().parents if (p / "main.py").is_file())
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "py_modules"))
 

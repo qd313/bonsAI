@@ -43,7 +43,8 @@ import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+# Nearest folder above this file that holds main.py: no count of folders to break when the script moves.
+REPO_ROOT = next(p for p in Path(__file__).resolve().parents if (p / "main.py").is_file())
 
 # ---------------------------------------------------------------------------------------
 # The nine fields a strategy_seed.json row carries (data/kb/strategy_seed.json). section_id
@@ -144,12 +145,12 @@ _CATEGORY_TYPE_KEYWORDS: list[tuple[str, tuple[str, ...]]] = [
 
 def _load_allowed_licences() -> frozenset[str]:
     """Read the publish gate's own allow-list rather than copy it (rule 8's spirit: one
-    place decides). publish_corpus.py imports py_modules/backend/services at module load,
-    so that folder has to be on sys.path first, same as publish_corpus.py does for itself."""
+    place decides). publish_corpus.py imports the back end (py_modules/backend) at module load,
+    so py_modules has to be on sys.path first, same as publish_corpus.py does for itself."""
     py_modules = REPO_ROOT / "py_modules"
     if str(py_modules) not in sys.path:
         sys.path.insert(0, str(py_modules))
-    path = REPO_ROOT / "scripts" / "publish_corpus.py"
+    path = Path(__file__).resolve().parent / "publish_corpus.py"  # its neighbour, found by name
     spec = importlib.util.spec_from_file_location("publish_corpus_for_wiki_reader", path)
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)

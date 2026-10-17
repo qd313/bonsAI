@@ -16,7 +16,7 @@ the stand-in pictures; those stills are not stored in git either.
 
 ## The tabs
 
-Every tab is decided as of 2026-10-17 evening. The plan (workshop planning 95) § 11 lists what the README becomes. Next is the "go" and then the build.
+Every tab is decided as of 2026-10-17 evening. The plan ([docs/planning/95-readme-refresh.md](../../planning/95-readme-refresh.md)) § 11 lists what the README becomes. Next is the "go" and then the build.
 
 | Tab | What it decides | Status |
 |---|---|---|

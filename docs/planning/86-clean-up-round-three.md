@@ -613,3 +613,26 @@ From its [postmortem](../../../bonsAI-workshop/audit/refactor-round-two/postmort
     methods; the built plugin 3,277,158 bytes (from 3,378,277). **Test names:** against the names at `8553cc99`,
     289 went and 80 are new; every one is named by a helper's list except one, the contract case "api key rejects a
     non-string", which the ban lookup's cut list names (the case in `settings-hostile-inputs.json`).
+- **2026-10-17, about 00:30 UTC: step 3 finished.** The Deck block (build `cf724c9f`, the Deck's own screen, four
+  Deck helpers one after another, evidence `workshop:test-evidence/plan86-B*.json`) passed every row the step asks for:
+  the Settings, Permissions and Developer tabs; voice input from start to finish; the models box; the glossary words
+  with the rebuilt library, without one, with the older published one, with the switch off and in another game; the
+  answer's D-pad walk; the free-play sweep with and without a game; and the size record, where every style value
+  matched the record taken before the changes except the answer box's bottom padding (the read-aloud speaker's band,
+  removed with it on purpose). Two maintainer calls on the night: install the Deck's missing speech program through the
+  plugin's own button so voice could be checked (it was missing before tonight's build), and leave the restored
+  library on the Deck's own drive (the plugin's update put it there, not on the SD card it came from).
+  - **Found, older than step 3** (on the roadmap): after a stopped answer, Down loops between the question, the answer
+    and Retry (the answer's Down falls back to a helper that tries Retry first; unchanged tonight); Down from "Open
+    Permissions" on the troubleshooting hint lands on "Dismiss"; some stops read 83 to 92 % visible under the header
+    strip; a note from another game cited on a Deep Rock Galactic: Survivor question; the Voice input section not
+    refreshing after the engine installs; the library update treating any different version as newer.
+  - **Also done:** rows in the step 4 folder map for the nine files the glossary move added (`74dd3067`); the list of
+    test names that went and came for step 5 (`788c901e`); the paperwork (`697d1e82` and the round after it).
+  - **The summaries** the maintainer asks for are in
+    [audit/clean-up-round-three/step-3-summary.md](../audit/clean-up-round-three/step-3-summary.md): what changed in plain
+    words, what the maintainer needs to do (publish the rebuilt library, post the Deck-tool issue, push both repos),
+    and the technical summary.
+  - **Budget:** the five-hour window was at 91 % at go and reset at 22:20; the new window ended at 31 %. The week went
+    from 33 % to 38 %.
+    Nothing pushed. **Next: step 4** (a folder per feature), its own session.

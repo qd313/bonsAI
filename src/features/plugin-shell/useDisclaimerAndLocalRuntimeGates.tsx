@@ -1,39 +1,43 @@
 /**
- * Title: The two one-time warnings — beta notice and running AI on the Deck itself
+ * Title: The two one-time first-run popups — the beta notice, then where the AI runs
  *
- * Purpose: Shows two popups, each only until the person has clicked past
- * it once. The first, on the very first time the plugin is opened, says
- * this is beta software and that AI suggestions should be checked before
- * being trusted. The second appears the first time someone turns on
- * running the AI on the Deck's own hardware rather than a separate
- * computer, and warns that a game already using a lot of the Deck's memory
- * and graphics power could crash or misbehave while the AI is also
- * running. Both are remembered in the browser's local storage, so once
- * clicked past they do not come back.
+ * Purpose: Shows two popups, each only until the person has gone past it once. The first, on the very
+ * first time the plugin is opened, says this is beta software and that AI suggestions should be checked
+ * before being trusted. The second, right after it and before the help chip, asks where the AI should
+ * run: on this Deck or on a PC on the home network (FirstRunWhereAiRunsModal.tsx; plan 96 N1). It
+ * replaced the old "Local runtime (beta)" notice, whose warning (the game slows while the AI answers) is
+ * now the help line under that popup's first switch. Both are remembered in the browser's local storage,
+ * so once gone past they do not come back.
  *
  * A Decky uninstall and reinstall wipes the plugin's saved settings but not Steam's browser
  * storage, so those "already seen" flags can outlive the plugin. When the back end reports a start
  * with no settings file (a first run), this clears the plugin's own browser flags once, before it
- * decides what to show, so a wiped Deck gets both notices and the help chip again.
+ * decides what to show, so a wiped Deck gets both popups and the help chip again.
  *
- * Used for: index.tsx, on first mount and whenever the on-Deck AI setting
- * is turned on.
+ * Used for: index.tsx, on first mount and again once the saved settings have loaded.
  *
- * Solves: The person should see and accept both warnings once, and never
- * be shown them again after that — and the second one should not appear
- * before the first has been accepted, so the two do not race each other.
+ * Solves: The person should see and accept both popups once, and never be shown them again after that —
+ * and the second one should not appear before the first has been accepted, so the two do not race.
+ * Anything the person changed that is still waiting for its automatic save is saved before the popup
+ * opens, because opening it closes Quick Access and throws that waiting save away.
  *
- * Does not: Turn anything off by itself. This file only shows the warnings
- * and remembers that they were seen; it is the Permissions tab and the
- * back end's own checks that actually stop an action needing a permission
- * from running when that permission is off.
+ * Does not: Turn anything off by itself, or change a setting unless the person changes it in the popup
+ * (which saves it at once). The popup is shown only when the screen hands in the settings it needs
+ * (`whereAiRuns`). Two names are historic and kept because the reset code in useSessionResetActions.tsx
+ * still holds them: `localRuntimeBetaPromptIssuedRef` now means "the where-the-AI-runs popup was opened
+ * this load", and `ollamaLocalOnDeckPrevRef` is reset but no longer read.
  */
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { showModal, ConfirmModal } from "@decky/ui";
 import { clearBonsaiBrowserStorage } from "../settings/clearBonsaiBrowserStorage";
+import type { BonsaiSettings } from "../settings/bonsaiSettingsSchema";
+import {
+  FirstRunWhereAiRunsModal,
+  type FirstRunWhereAiRunsHost,
+} from "../ai-connection/first-run/FirstRunWhereAiRunsModal";
+import { FIRST_RUN_WHERE_AI_RUNS_SEEN_STORAGE_KEY } from "../../shared/storageKeys";
 
 const DISCLAIMER_STORAGE_KEY = "bonsai:disclaimer-accepted";
-const LOCAL_RUNTIME_BETA_DISMISSED_STORAGE_KEY = "bonsai:local-runtime-beta-dismissed-v1";
 /** The Thinking row's own one-time notice (plan 57 step 2) -- see useThinkingNoticeGate.tsx. */
 export const THINKING_NOTICE_STORAGE_KEY = "bonsai:thinking-notice-accepted-v1";
 const GITHUB_ISSUES_URL = "https://github.com/qd313/bonsAI/issues";
@@ -42,18 +46,6 @@ export type DeckyModalSurvivalHooks = {
   onBeforeDeckyModal: () => void;
   onCompleteDeckyModalClose: (close: () => void) => void;
 };
-
-/**
- * The one-time notice when Run AI on this Deck is turned on (plan 93 lane B9: no more than 40 words).
- * It names no model: the starter set is described where it is offered, on the Ollama tab.
- */
-export function localRuntimeBetaNoticeDescription(): string {
-  return (
-    "AI runs on this Deck. A PC on your home network is usually much faster. " +
-    "Heavy AI during a game can crash it: use at your own risk. " +
-    "To stop, turn off Run AI on this Deck (Ollama tab)."
-  );
-}
 
 /** Shared copy for the global beta banner (first run and replay after clearing plugin data); plan 93 lane B9: no more than 40 words. */
 const BONSAI_BETA_NOTICE_DESCRIPTION =
@@ -78,17 +70,17 @@ function markDisclaimerAccepted(): void {
   }
 }
 
-function hasDismissedLocalRuntimeBeta(): boolean {
+function hasSeenWhereAiRuns(): boolean {
   try {
-    return window.localStorage.getItem(LOCAL_RUNTIME_BETA_DISMISSED_STORAGE_KEY) === "1";
+    return window.localStorage.getItem(FIRST_RUN_WHERE_AI_RUNS_SEEN_STORAGE_KEY) === "1";
   } catch {
     return false;
   }
 }
 
-function markLocalRuntimeBetaDismissed(): void {
+function markWhereAiRunsSeen(): void {
   try {
-    window.localStorage.setItem(LOCAL_RUNTIME_BETA_DISMISSED_STORAGE_KEY, "1");
+    window.localStorage.setItem(FIRST_RUN_WHERE_AI_RUNS_SEEN_STORAGE_KEY, "1");
   } catch {
     /* ignore */
   }
@@ -103,20 +95,29 @@ export type DisclaimerGateApi = {
   localRuntimeBetaPromptIssuedRef: React.MutableRefObject<boolean>;
 };
 
+/** What the screen hands the gate so the where-the-AI-runs popup can show and change the settings it names. */
+export type WhereAiRunsGateHost = Pick<
+  FirstRunWhereAiRunsHost,
+  "ollamaLocalAutostart" | "ollamaIp" | "setOllamaLocalOnDeck" | "setOllamaLocalAutostart" | "setOllamaIp" | "persistOllamaIp"
+>;
+
 /**
- * First-run beta disclaimer and one-time “Ollama on Deck” warning.
- * Couples to ``disclaimerAckVersion`` so the local-runtime gate does not race ahead of disclaimer acceptance.
+ * First-run beta disclaimer, then the one-time "Where should the AI run?" popup.
+ * Couples to ``disclaimerAckVersion`` so the popup does not race ahead of disclaimer acceptance.
  */
 export function useDisclaimerAndLocalRuntimeGates(
   settingsLoaded: boolean,
   ollamaLocalOnDeck: boolean,
   modalHooks?: DeckyModalSurvivalHooks & {
     /**
-     * Writes the settings that changed to disk right now. The local-runtime notice closes Quick
-     * Access as it opens, which throws away the automatic save still waiting on its 400 ms timer,
-     * so the switch that opened the notice would never be saved (Deck 2026-09-30).
+     * Writes settings to disk right now. Called with no patch before the popup opens: opening it closes
+     * Quick Access, which throws away the automatic save still waiting on its 400 ms timer (Deck
+     * 2026-09-30). Called with a patch by the popup each time the person changes a switch or the address,
+     * so the change is on disk before the popup can close and rebuild the screen.
      */
-    saveSettingsNow?: () => void;
+    saveSettingsNow?: (patch?: Partial<BonsaiSettings>) => void;
+    /** The settings the where-the-AI-runs popup shows and changes; left out, that popup is not shown. */
+    whereAiRuns?: WhereAiRunsGateHost;
     /**
      * What the back end said about this start: true when it found no settings file, null while the
      * answer is still on its way (nothing is decided until it arrives), false otherwise. Left out,
@@ -130,6 +131,8 @@ export function useDisclaimerAndLocalRuntimeGates(
   const [disclaimerAckVersion, setDisclaimerAckVersion] = useState(0);
   const ollamaLocalOnDeckPrevRef = useRef<boolean | null>(null);
   const localRuntimeBetaPromptIssuedRef = useRef(false);
+  const ollamaLocalOnDeckRef = useRef(ollamaLocalOnDeck);
+  ollamaLocalOnDeckRef.current = ollamaLocalOnDeck;
   const modalHooksRef = useRef(modalHooks);
   useEffect(() => {
     modalHooksRef.current = modalHooks;
@@ -196,36 +199,35 @@ export function useDisclaimerAndLocalRuntimeGates(
     if (!settingsLoaded) return;
     if (!settleFirstRun()) return;
     if (!hasAcceptedDisclaimer()) return;
-
-    const prevDeck = ollamaLocalOnDeckPrevRef.current;
-    ollamaLocalOnDeckPrevRef.current = ollamaLocalOnDeck;
-
-    // The switch now starts on (plan 93), so a fresh install never flips it. The first look at the
-    // loaded settings counts too: switch on and notice never seen -> show it once.
-    const firstLookWithSwitchOn = prevDeck === null && ollamaLocalOnDeck;
-    const userTurnedLocalOn = prevDeck === false && ollamaLocalOnDeck;
-
-    if (!userTurnedLocalOn && !firstLookWithSwitchOn) return;
-    if (hasDismissedLocalRuntimeBeta()) return;
+    if (hasSeenWhereAiRuns()) return;
     if (localRuntimeBetaPromptIssuedRef.current) return;
+    const hooks = modalHooksRef.current;
+    const whereAiRuns = hooks?.whereAiRuns;
+    if (!hooks || !whereAiRuns) return;
 
     localRuntimeBetaPromptIssuedRef.current = true;
-    modalHooksRef.current?.saveSettingsNow?.();
-    modalHooksRef.current?.onBeforeDeckyModal();
+    // Shown once, whatever the person does in it: marked now so a rebuilt screen cannot ask again.
+    markWhereAiRunsSeen();
+    hooks.saveSettingsNow?.();
+    hooks.onBeforeDeckyModal();
+    let closed = false;
     const handle = showModal(
-      <ConfirmModal
-        strTitle="bonsAI - Local runtime (beta)"
-        strDescription={localRuntimeBetaNoticeDescription()}
-        strOKButtonText="Got it"
-        bAlertDialog={true}
-        onOK={() => {
-          markLocalRuntimeBetaDismissed();
-          localRuntimeBetaPromptIssuedRef.current = false;
-          modalHooksRef.current?.onCompleteDeckyModalClose(() => handle.Close());
+      <FirstRunWhereAiRunsModal
+        host={{
+          ...whereAiRuns,
+          ollamaLocalOnDeck: ollamaLocalOnDeckRef.current,
+          saveSettingsNow: (patch) => hooks.saveSettingsNow?.(patch),
+          onBeforeDeckyModal: hooks.onBeforeDeckyModal,
+          onCompleteDeckyModalClose: hooks.onCompleteDeckyModalClose,
+        }}
+        onClose={() => {
+          if (closed) return;
+          closed = true;
+          hooks.onCompleteDeckyModalClose(() => handle.Close());
         }}
       />
     );
-  }, [settingsLoaded, ollamaLocalOnDeck, disclaimerAckVersion, settleFirstRun, firstRun]);
+  }, [settingsLoaded, disclaimerAckVersion, settleFirstRun, firstRun]);
 
   return {
     disclaimerAckVersion,

@@ -43,7 +43,7 @@ vi.mock("../../shared/deckyCall", () => ({
 vi.mock("@decky/api", () => ({ toaster: { toast: () => {} } }));
 
 import { usePullModelSubmitSelected } from "./pull-box/usePullModelSubmitSelected";
-import { localRuntimeBetaNoticeDescription } from "../plugin-shell/useDisclaimerAndLocalRuntimeGates";
+import { FIRST_RUN_POPUP_WORDS } from "../ai-connection/first-run/FirstRunWhereAiRunsModal";
 import { MODEL_POLICY_SETTINGS_INTRO } from "./modelPolicy";
 import { resetFakeDeckyRpc } from "../../test-harness/fakeDeckyRpc";
 
@@ -84,8 +84,8 @@ describe("wording of the install and pull boxes", () => {
     expect(container.textContent).not.toMatch(/FOSS/);
   });
 
-  it("the first-run local AI notice and the Settings intro do not say FOSS", () => {
-    const notice = localRuntimeBetaNoticeDescription();
+  it("the first-run where-the-AI-runs popup and the Settings intro do not say FOSS", () => {
+    const notice = Object.values(FIRST_RUN_POPUP_WORDS).join(" ");
     expect(notice).not.toMatch(/FOSS/);
     expect(notice).not.toContain("Install Tier 1");
     expect(notice).not.toContain("Install Gemma 4");

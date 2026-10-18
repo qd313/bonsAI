@@ -1,67 +1,65 @@
 /**
- * Title: The Local runtime (beta) notice on the first open, now that the switch starts on
+ * Title: The "Where should the AI run?" popup on the first open
  *
- * Purpose: "Run AI on this Deck" is on from the start (plan 93), so a fresh install never flips
- * the switch and the old trigger (a flip from off to on) never fired. The notice now also shows
- * once on the first look at the loaded settings when the switch is on and it has not been seen.
+ * Purpose: After the Beta Notice has been accepted, a person who has never seen the popup is asked
+ * where the AI should run, once, whatever the switch says (it starts on; a saved "off" is asked too, and
+ * the popup shows the real setting). Nothing shows before the settings have loaded, to a person who
+ * has already seen it, or when the screen does not hand the gate the settings the popup needs. The old
+ * "Local runtime (beta)" notice is gone and never shows.
  *
- * Used for: the hook in useDisclaimerAndLocalRuntimeGates.tsx.
+ * Used for: the hook in useDisclaimerAndLocalRuntimeGates.tsx (plan 96, N1).
  *
- * Solves: a fresh install silently running the AI on the Deck without the one-time warning.
+ * Solves: a new player silently running the AI on the Deck without ever being asked.
  *
- * Does not: check the notice's words (the wording tests do).
+ * Does not: check the popup's words or walk its buttons (FirstRunWhereAiRunsModal's own tests do).
  */
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useDisclaimerAndLocalRuntimeGates } from "./useDisclaimerAndLocalRuntimeGates";
+import { gateHooks, popups, runtimeNotices, shown, resetShown } from "./firstRunGateTestKit";
 
-const shown: Array<{ title: string; onOK: () => void }> = [];
-
-vi.mock("@decky/ui", async () => {
-  const stubs = await import("../../test-harness/fakeDeckyUi");
-  return {
-    ...stubs,
-    showModal: (el: { props: { strTitle: string; onOK: () => void } }) => {
-      shown.push({ title: el.props.strTitle, onOK: el.props.onOK });
-      return { Close: () => {} };
-    },
-  };
-});
-
-const hooks = () => ({
-  onBeforeDeckyModal: vi.fn(),
-  onCompleteDeckyModalClose: vi.fn((close: () => void) => close()),
-  saveSettingsNow: vi.fn(),
-});
-const runtimeNotices = () => shown.filter((s) => s.title.includes("Local runtime"));
+vi.mock("@decky/ui", async () => (await import("./firstRunGateTestKit")).deckyUiRecordingModals());
 
 beforeEach(() => {
-  shown.length = 0;
+  resetShown();
   window.localStorage.clear();
   window.localStorage.setItem("bonsai:disclaimer-accepted", "1");
 });
 
-describe("Local runtime (beta) notice on the first open", () => {
-  it("shows once on a fresh install whose switch starts on, and not again on the next open", () => {
-    const first = renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, hooks()));
-    expect(runtimeNotices()).toHaveLength(1);
-    runtimeNotices()[0].onOK();
+describe("the where-the-AI-runs popup on the first open", () => {
+  it("shows once on a first open, and not again on the next open", () => {
+    const first = renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, gateHooks()));
+    expect(popups()).toHaveLength(1);
     first.unmount();
 
     shown.length = 0;
-    renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, hooks()));
-    expect(runtimeNotices()).toHaveLength(0);
+    renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, gateHooks()));
+    expect(popups()).toHaveLength(0);
   });
 
-  it("does not show when the switch is off, or before the settings have loaded", () => {
-    renderHook(() => useDisclaimerAndLocalRuntimeGates(true, false, hooks()));
-    renderHook(() => useDisclaimerAndLocalRuntimeGates(false, true, hooks()));
-    expect(runtimeNotices()).toHaveLength(0);
+  it("is asked when the saved switch is off too, and hands the popup the real setting", () => {
+    renderHook(() => useDisclaimerAndLocalRuntimeGates(true, false, gateHooks()));
+    expect(popups()).toHaveLength(1);
+    expect(popups()[0].host?.ollamaLocalOnDeck).toBe(false);
+  });
+
+  it("waits for the settings to load, and for the screen to hand over the settings it shows", () => {
+    renderHook(() => useDisclaimerAndLocalRuntimeGates(false, true, gateHooks()));
+    renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, gateHooks({ whereAiRuns: undefined })));
+    expect(popups()).toHaveLength(0);
   });
 
   it("does not show to a person who has already seen it", () => {
-    window.localStorage.setItem("bonsai:local-runtime-beta-dismissed-v1", "1");
-    renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, hooks()));
+    window.localStorage.setItem("bonsai:first-run-where-ai-runs-seen-v1", "1");
+    renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, gateHooks()));
+    expect(popups()).toHaveLength(0);
+  });
+
+  it("never shows the old Local runtime (beta) notice, flag set or not", () => {
+    renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, gateHooks()));
+    window.localStorage.removeItem("bonsai:first-run-where-ai-runs-seen-v1");
+    window.localStorage.removeItem("bonsai:local-runtime-beta-dismissed-v1");
+    renderHook(() => useDisclaimerAndLocalRuntimeGates(true, true, gateHooks()));
     expect(runtimeNotices()).toHaveLength(0);
   });
 });

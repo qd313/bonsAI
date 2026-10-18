@@ -37,7 +37,12 @@ export const LAST_TAB_AT_STORAGE_KEY = "bonsai:last-tab-at";
  * the opening tab is picked on the first render, before `load_settings` can answer.
  */
 export const TAB_RESUME_MODE_STORAGE_KEY = "bonsai:tab-resume-mode";
-export const LOCAL_RUNTIME_BETA_DISMISSED_STORAGE_KEY = "bonsai:local-runtime-beta-dismissed-v1";
+/**
+ * The first-run "Where should the AI run?" popup has been shown (plan 96, N1). It replaced the old
+ * "Local runtime (beta)" notice, whose own flag is no longer read or written. `bonsai:`-prefixed so
+ * *Clear all plugin data* and the first-run clear take it with every other flag.
+ */
+export const FIRST_RUN_WHERE_AI_RUNS_SEEN_STORAGE_KEY = "bonsai:first-run-where-ai-runs-seen-v1";
 /**
  * Which saved chat the session is in, so a QAM close/reopen resumes it.
  *

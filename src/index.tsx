@@ -127,7 +127,8 @@ import { TabIndicatorBar } from "./features/plugin-shell/TabIndicatorBar";
 import { HiddenTabHeaderTrap } from "./features/plugin-shell/useHiddenTabHeaderTrap";
 import { TabBodyFocusRoot } from "./features/plugin-shell/TabBodyFocusRoot";
 import { takeNavFocus } from "./shared/dpad/navFocusRegistry";
-import { loadSavedSearchQuery, persistSearchQuery } from "./features/plugin-shell/pluginStorage";
+import { loadSavedSearchQuery, persistSearchQuery, saveIp } from "./features/plugin-shell/pluginStorage";
+import { saveSettingsNowOrPatch } from "./features/ai-connection/first-run/saveSettingsNowOrPatch";
 import { useOllamaConnectionState } from "./features/ai-connection/useOllamaConnectionState";
 import { useDeveloperTabPayload } from "./features/plugin-shell/tabs/useDeveloperTabPayload";
 import { useAboutTabPayload } from "./features/plugin-shell/tabs/useAboutTabPayload";
@@ -668,7 +669,15 @@ const Content: React.FC = () => {
   } = useDisclaimerAndLocalRuntimeGates(settingsLoaded, ollamaLocalOnDeck, {
     onBeforeDeckyModal: captureSessionBeforeModal,
     onCompleteDeckyModalClose,
-    saveSettingsNow: () => void persistChangedSettingsNow(),
+    saveSettingsNow: (patch) => saveSettingsNowOrPatch(patch, persistChangedSettingsNow, buildSettingsPayload),
+    whereAiRuns: {
+      ollamaLocalAutostart,
+      ollamaIp,
+      setOllamaLocalOnDeck,
+      setOllamaLocalAutostart,
+      setOllamaIp,
+      persistOllamaIp: saveIp,
+    },
     firstRun: settingsFirstRun,
     onFirstRunFlagsCleared: resetPluginHelpDismissed,
   });

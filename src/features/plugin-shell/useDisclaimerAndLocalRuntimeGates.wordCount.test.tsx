@@ -2,12 +2,13 @@
  * Title: The two one-time notices stay short
  *
  * Purpose: Plan 93 lane B9 (the maintainer, 2026-10-13: every warning should be much shorter). Opens
- * the first-run beta notice and the Local runtime (beta) notice through the real hook, renders the
- * box the way Steam would show it, and counts the words a person reads. Each is at most 40 words,
- * keeps its safety line ("use at your own risk" and the crash-with-a-game warning), the bug-report
- * address, and names no model or old size.
+ * the first-run beta notice through the real hook, renders the box the way Steam would show it, and
+ * counts the words a person reads: at most 40, with its safety line ("use at your own risk" and the
+ * crash-with-a-game warning) and the bug-report address. (The Local runtime (beta) notice that used to
+ * be checked here is gone, replaced by the where-the-AI-runs popup, plan 96 N1; its warning is the help
+ * line under the popup's first switch, checked in FirstRunWhereAiRunsModal.test.tsx.)
  */
-import { act, render, renderHook } from "@testing-library/react";
+import { render, renderHook } from "@testing-library/react";
 import type { ReactElement } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -53,25 +54,5 @@ describe("first-run beta notice wording", () => {
     expect(text).toMatch(/use at your own risk/i);
     expect(text).toMatch(/crash a game/i);
     expect(text).toContain("https://github.com/qd313/bonsAI/issues");
-  });
-});
-
-describe("Local runtime (beta) notice wording", () => {
-  it("is at most 40 words, keeps the risk line and the way off, and names no model or old size", () => {
-    window.localStorage.setItem("bonsai:disclaimer-accepted", "1");
-    const { rerender } = renderHook(
-      ({ on }) => useDisclaimerAndLocalRuntimeGates(true, on, noopHooks),
-      { initialProps: { on: false } },
-    );
-    act(() => rerender({ on: true }));
-    expect(hoisted.boxes).toHaveLength(1);
-    const text = drawnWords(hoisted.boxes[0]);
-    expect(count(text)).toBeLessThanOrEqual(40);
-    expect(text).toMatch(/use at your own risk/i);
-    expect(text).toMatch(/crash/i);
-    expect(text).toMatch(/home network/i);
-    expect(text).toMatch(/Run AI on this Deck/);
-    expect(text).toMatch(/Ollama tab/);
-    expect(text).not.toMatch(/qwen|gemma|GiB/i);
   });
 });

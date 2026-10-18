@@ -284,6 +284,19 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     if (!elementHasGamepadFocus(el)) focusInTabBody(el);
     return true;
   }, []);
+  /* The connection row's Steam nodes, so a move onto Test connection (Down from the address, Left from Find LAN) is a transfer. */
+  const testRowNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
+  const takeTestConnection = useCallback((): boolean => {
+    const el = connectionTestBtnRef?.current;
+    if (!el) return false;
+    try {
+      testRowNavRef.current?.TakeFocus?.(true);
+    } catch {
+      /* the check below decides */
+    }
+    if (!elementHasGamepadFocus(el)) focusInTabBody(el);
+    return true;
+  }, [connectionTestBtnRef]);
   const focusBrowseModelsBtn = useCallback(
     (): boolean => focusChainBtn(browseModelsBtnRef, localSetupBusy),
     [focusChainBtn, localSetupBusy],
@@ -301,6 +314,24 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     onMoveDownFromConnectionRow?.();
     return true;
   }, [focusConnectionTestBtn, onMoveDownFromConnectionRow]);
+
+  /**
+   * Down from the PC address box: Test connection (the first stop of the row), else Find LAN when Test is
+   * greyed, else on to the next section. Steam's own geometry skipped both (Deck 2026-10-18, plan 96).
+   */
+  const handleMoveDownFromAddress = useCallback((): boolean => {
+    if (!testConnectionGreyed && takeTestConnection()) return true;
+    if (findLanShown && takeFindLan()) return true;
+    onMoveDownFromConnectionRow?.();
+    return true;
+  }, [findLanShown, onMoveDownFromConnectionRow, takeFindLan, takeTestConnection, testConnectionGreyed]);
+
+  /** Right from Test connection: Find LAN. Left from Find LAN: Test connection. */
+  const handleMoveRightFromTest = useCallback((): boolean => (findLanShown ? takeFindLan() : false), [findLanShown, takeFindLan]);
+  const handleMoveLeftFromFindLan = useCallback(
+    (): boolean => (testConnectionGreyed ? false : takeTestConnection()),
+    [takeTestConnection, testConnectionGreyed],
+  );
 
   /**
    * Local Deck setup vertical chain: toggle → Start-at-boot toggle → Install/Update → Browse → Test.
@@ -744,6 +775,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                     label=""
                     value={ollamaIp}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => onOllamaIpChange(e.target.value)}
+                    {...({ onMoveDown: handleMoveDownFromAddress } as Record<string, unknown>)}
                     style={{
                       width: "100%",
                       minWidth: 0,
@@ -776,6 +808,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
               {/* A Decky Button never passes move handlers on, so Steam's moves are caught on this wrapper. */}
               <Focusable
                 {...focusableMoves(() => handleMoveUpFromConnection(), onMoveDownFromConnectionRow)}
+                {...({ onMoveRight: handleMoveRightFromTest, navRef: testRowNavRef } as Record<string, unknown>)}
                 /* Folded (plan 91): beside the address on this Deck too, not on a line of its own. */
                 style={{ display: "flex", flex: "0 0 auto", alignSelf: "flex-end" }}
               >
@@ -809,7 +842,8 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                 /* Its own Focusable, so Steam has a node to hand the ring back to when its box closes. */
                 <Focusable
                   style={{ display: "flex", flex: "0 0 auto", alignSelf: "flex-end" }}
-                  {...({ navRef: findLanNavRef } as Record<string, unknown>)}
+                  {...focusableMoves(() => handleMoveUpFromConnection(), onMoveDownFromConnectionRow)}
+                  {...({ onMoveLeft: handleMoveLeftFromFindLan, navRef: findLanNavRef } as Record<string, unknown>)}
                 >
                 <Button
                   className={FOCUS_RING_BTN_CLASS}

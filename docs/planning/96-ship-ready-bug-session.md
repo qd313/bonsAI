@@ -201,3 +201,12 @@ at landing; `verify.py --full` gated on its exit code before the final push.
   guard failed, so nothing was lost. Build `a29f9eb0` deployed to the Deck; block D (one check per fix, runbook
   [assets/96-runbook-block-D.md](assets/96-runbook-block-D.md)) started with a fresh driver; the bookkeeper's sweep runs beside it;
   the first-run popup lane (N1) is building.
+- **04:55 UTC, the bookkeeper's sweep landed (`2d3826ec`):** 21 fixes moved to the Deck-check list with their rows, N2 and N3
+  recorded, F7 and F12 closed as by design, R2 closed as not reproduced on two builds, the two maintainer calls closed, F24 and R1
+  left open with the night's notes; the roadmap trimmed back under its ceiling (97 KB; the testing file is at 163 of 165 KB).
+- **05:05 UTC, the first-run popup landed (`5da13f81`, lane N1, two commits plus the advisor's one note: the ring's return after
+  the download box goes through the popup's own transfer).** The popup replaces the old Local runtime notice; Find LAN inside it
+  shows with the Developer tab only, as on the tab; switches save the moment they are touched; a player upgrading with the old
+  notice already seen will see the popup once. Block E (runbook [assets/96-runbook-block-E.md](assets/96-runbook-block-E.md))
+  runs it as the screen's first run with the settings file removed, so the Deck's Ollama is not wiped; the true Clear-all-data run
+  is release day's clean-install row.

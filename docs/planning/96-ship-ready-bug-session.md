@@ -194,3 +194,10 @@ at landing; `verify.py --full` gated on its exit code before the final push.
   missing from the rail and opening failed twice (the known rig entry); seven screenshots appeared in Steam's folder around the
   menu chords (unexplained). Landed meanwhile: strategy (with a ring-class fix, `4a22a85e`), N3, models, N2; the session's five
   focus fixes and F8 land next, then the chip size and Ask pill. The first-run popup lane (N1) starts now.
+- **04:30 UTC, everything landed and deployed.** The focus fixes, F8 and the chip size landed; three landings tripped guards on
+  the way (the Ask service's size guard, a button without the ring class, copy-pasted test lines, then a text-size test pinning
+  the chip at 12 px), each fixed in its own small commit (`75db8faf`, `4a22a85e`, `e67c6196`, `ee45d6ad`). Two landings ran at the
+  same time once by a scripting slip (the focus branch and F8); both sets of gates ran on the combined tree and only the copy-paste
+  guard failed, so nothing was lost. Build `a29f9eb0` deployed to the Deck; block D (one check per fix, runbook
+  [assets/96-runbook-block-D.md](assets/96-runbook-block-D.md)) started with a fresh driver; the bookkeeper's sweep runs beside it;
+  the first-run popup lane (N1) is building.

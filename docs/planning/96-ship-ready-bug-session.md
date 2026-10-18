@@ -5,7 +5,7 @@ separate plan, along with other bugs that should be sorted out in order for us t
 another chat." Everything here comes from [plan 94](94-fresh-install-walk-and-ship-readiness.md) (its § 7a, § 8 and § 9) and
 the roadmap as filed that night.
 
-**Status:** WRITTEN, not started. The maintainer's calls are in § 2. The first-run popup waits for the maintainer's tweaks
+**Status:** RUNNING since 2026-10-18 02:30 UTC (see § 8). The maintainer's calls are in § 2. The first-run popup waits for the maintainer's tweaks
 on the mock-up page (§ 4, N1). The hand checks (§ 5) can run any time the Deck is free, before or during this session.
 
 **Who runs it:** an Opus xhigh chat orchestrates and lands (AGENTS.md, "Which model does which work"); Sonnet 5.5 high
@@ -155,3 +155,15 @@ at landing; `verify.py --full` gated on its exit code before the final push.
 ## 8. Progress log
 
 - **2026-10-17:** written. The mock-up and the hand-check page published (§ 2 and § 5). Nothing started.
+- **2026-10-18 02:30 UTC (the maintainer's evening of the 17th):** started, on Fable at high by the maintainer's choice (the plan says Opus
+  xhigh). The baseline full check passed on tip `613cc60c`. Thirteen lane copies cut; ten Sonnet lanes started at 02:56, two more
+  as slots freed (F3 upgraded to Sonnet high: the save-before-notice shape needed a choice; the models lane). Held: F24 (the
+  spinner is held still on purpose while a game runs, plan 70; the maintainer's call), F7 and F8 (the Deck measures first).
+  The session does F5, F6, F11, F16 and F25 itself in its own copy from the plan 94 and plan 86 measurements. The Deck did not
+  answer at the start and answered again by 03:05 UTC; no other chat held it. The hand-check page had no answers yet; the
+  mock-up page shows option A liked, no comments.
+- **03:00 to 03:30 UTC:** every lane reported. Four things turned out to be by design and went to the maintainer as calls: the
+  still spinner (plan 70's frame-rate measure with a game), the stopped answer's greyed rating buttons being stepped over (plan 56)
+  and the reasons' second column reached by Right, the Steam Sale link beside the column reached by Right (plan 92), and the
+  Update button's Failed line after Cancel (the 2026-10-10 call; only Install's path was wrong). Landings run one by one with the
+  gates: F9 (`4fb2f8ec`), the install words and Cancel (`091b1b6f`), the chip pace (`345c8cc7`), then the rest in order.

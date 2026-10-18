@@ -5,9 +5,9 @@
  * this Deck (the switch starts on) or on a PC on the home network. It is the Ollama tab's "Where the AI
  * runs" section drawn as a popup. With the switch on it offers the Start-with-the-Deck switch, the real
  * state of the local Ollama setup and Install Ollama (the same notice-then-run flow as the tab, shown
- * right here); with it off it offers the PC address, Test connection and, only with the Developer tab on,
- * Find LAN. "Not now" is the first button and holds the ring when the popup opens; it, and B, close the
- * popup and leave everything as it is.
+ * right here); with it off it offers the PC address with Find LAN beside it, and Test connection. "Not now"
+ * is the first button and holds the ring when the popup opens; it, and B, close the popup and leave
+ * everything as it is.
  *
  * Used for: useDisclaimerAndLocalRuntimeGates.tsx, which opens it once after the Beta Notice.
  *
@@ -34,7 +34,6 @@ import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../../shared/deck
 import { registerModalReturnFocusOwner } from "../../../shared/dpad/modalReturnFocusRegistry";
 import { textPx } from "../../../styles/textPx";
 import type { BonsaiSettings, BonsaiSettingsSnapshotInput } from "../../settings/bonsaiSettingsSchema";
-import { useDeveloperTabShown } from "../../settings/developerTabSignal";
 import {
   captureBonsaiSessionForModal,
   patchPendingSessionSettingsSnapshot,
@@ -123,7 +122,7 @@ export function FirstRunWhereAiRunsModal({ host, onClose }: FirstRunWhereAiRunsM
   const [mdnsDiscovering, setMdnsDiscovering] = useState(false);
   const [mdnsHosts, setMdnsHosts] = useState<MdnsOllamaHost[]>([]);
   const [mdnsMessage, setMdnsMessage] = useState<string | null>(null);
-  const findLanShown = useDeveloperTabShown() && !onDeck;
+  const findLanShown = !onDeck;
   const setupBusy = setupStatus?.phase === "running";
   const nav = useFirstRunPopupNav();
   const probeSeq = useRef(0);
@@ -204,7 +203,7 @@ export function FirstRunWhereAiRunsModal({ host, onClose }: FirstRunWhereAiRunsM
     onBeforeDeckyModal: host.onBeforeDeckyModal,
     onCompleteDeckyModalClose: host.onCompleteDeckyModalClose,
   });
-  // Find LAN (Developer tab only): the first PC it finds has its address filled in.
+  // Find LAN: the first PC it finds has its address filled in.
   useEffect(() => {
     const first = mdnsHosts[0];
     if (first) changeIp(first.host);

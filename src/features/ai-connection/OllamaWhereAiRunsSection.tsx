@@ -33,7 +33,7 @@
  *     │  — if Run-on-Deck is OFF —                            │
  *     │ Saved Ollama hosts (LAN)  <- quick-pick buttons      │
  *     │ Save current PC address as quick host                │
- *     │ PC address [______]  [Test connection] [Find LAN]    │
+ *     │ PC address [______]  [Test connection] [Find LAN]    │   (Find LAN: everyone)
  *     │ This Deck's IP: …                                    │
  *     │ Found on LAN (mDNS)  <- Use / Save per host          │
  *     │ Connected · Ollama vX · N models  /  Unreachable     │
@@ -53,8 +53,8 @@
  *    error, a separate effect runs the connection test again automatically
  *    and, if this was an update, refreshes the model catalog.
  * 4. runMdnsDiscovery() searches the local network for other Ollama
- *    services advertised over mDNS/Bonjour — only offered when Ask is not
- *    already pointed at this Deck.
+ *    services advertised over mDNS/Bonjour — offered to everyone, but only
+ *    when Ask is not already pointed at this Deck.
  * 5. Any host found this way, or a manually typed PC address, can be saved
  *    as one of a short list of named quick-pick buttons (namedOllamaHosts)
  *    so an address used before never needs retyping.
@@ -105,7 +105,6 @@ import { OllamaSavedHostsRows } from "./OllamaSavedHostsRows";
 import { OllamaSetupStatusLine } from "./OllamaSetupStatusLine";
 import { useOllamaLocalAutostart } from "./useOllamaLocalAutostart";
 import { useMdnsOllamaDiscovery } from "./useMdnsOllamaDiscovery";
-import { useDeveloperTabShown } from "../settings/developerTabSignal";
 import { useLocalOllamaSetupFlow } from "./useLocalOllamaSetupFlow";
 import { useSettingsLoadedFlag } from "../settings/useSettingsLoadedFlag";
 import { isHttpsOllamaAddress, OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE } from "./ollamaAddress";
@@ -174,8 +173,9 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   // Not a prop -- see settingsLoadedSignal.ts for why the automatic connection check below
   // needs this without index.tsx threading a value down through the tab's own payload hook.
   const settingsLoaded = useSettingsLoadedFlag();
-  // 0.6.0 (plan 72): Find LAN and its results are Developer-tab only (half-built; see developerTabSignal.ts).
-  const findLanShown = useDeveloperTabShown() && !ollamaLocalOnDeck;
+  // Find LAN, its found-hosts list and its message: for everyone whenever the AI runs on a PC (plan 96,
+  // the maintainer 2026-10-18; plan 72 had held it back to the Developer tab for 0.6.0).
+  const findLanShown = !ollamaLocalOnDeck;
   const [deckIp, setDeckIp] = useState<string>("...");
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus | null>(
     () => peekOllamaTabLocalPending()?.connectionStatus ?? null

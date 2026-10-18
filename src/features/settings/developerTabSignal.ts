@@ -1,14 +1,14 @@
 /**
  * Title: Whether the Developer tab is turned on — read without a new prop
  *
- * Purpose: 0.6.0 (plan 72) shows a few half-built controls only when the Developer tab is on.
- * Find LAN on the Ollama tab is one, and the Ollama tab's section sits several files below
- * usePluginSettings with no prop carrying this value. Same shape and same reason as
+ * Purpose: A control that should show only when the Developer tab is on, and sits several files below
+ * usePluginSettings with no prop carrying this value, reads it from here. (Find LAN was the first; it now
+ * shows for everyone, so nothing reads this at the moment.) Same shape and same reason as
  * settingsLoadedSignal.ts: threading a new value through index.tsx and the tab's payload hook
  * raises the shell-seam count, which is only supposed to shrink.
  *
  * Used for: usePluginSettings.ts writes it whenever its own showDeveloperTab value changes;
- * OllamaWhereAiRunsSection.tsx reads it through useDeveloperTabShown.
+ * a screen that needs it reads it through useDeveloperTabShown.
  *
  * Does not: replace the showDeveloperTab setting. Anywhere that already receives it as a prop
  * (the Settings tab, the Developer tab) should keep using the prop.

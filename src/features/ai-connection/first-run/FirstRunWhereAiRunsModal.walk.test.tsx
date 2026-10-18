@@ -23,7 +23,6 @@ vi.mock("@decky/ui", async () => (await import("./firstRunPopupTestKit")).deckyU
 import { FirstRunWhereAiRunsModal } from "./FirstRunWhereAiRunsModal";
 import { popupHost, press, resetBoxes, ringName } from "./firstRunPopupTestKit";
 import { resetFakeDeckyRpc, setRpcHandler } from "../../../test-harness/fakeDeckyRpc";
-import { publishDeveloperTabShown, resetDeveloperTabSignalForTests } from "../../settings/developerTabSignal";
 import { markSettingsLoaded, resetSettingsLoadedSignalForTests } from "../../settings/settingsLoadedSignal";
 
 const NOT_NOW = "Not now: set up the AI later on the Ollama tab";
@@ -51,7 +50,6 @@ function step(key: Parameters<typeof press>[0]): { answer: boolean | undefined; 
 beforeEach(() => {
   resetFakeDeckyRpc();
   resetBoxes();
-  resetDeveloperTabSignalForTests();
   resetSettingsLoadedSignalForTests();
   markSettingsLoaded();
   setRpcHandler("test_ollama_connection", () => ({ reachable: false, error: "Connection refused" }));
@@ -116,15 +114,7 @@ describe("the popup's walk, switch off", () => {
     expect(step("onMoveUp").at).toBe(FIELD);
   });
 
-  it("holds Left and Right on the field when there is no Find LAN", async () => {
-    await mount(false);
-    step("onMoveUp");
-    expect(step("onMoveLeft")).toEqual({ answer: true, at: FIELD });
-    expect(step("onMoveRight")).toEqual({ answer: true, at: FIELD });
-  });
-
-  it("with Find LAN shown, Right from the field reaches it and Left comes back; it holds at its end", async () => {
-    act(() => publishDeveloperTabShown(true));
+  it("Right from the field reaches Find LAN (shown for everyone) and Left comes back; it holds at its end", async () => {
     await mount(false);
     step("onMoveUp");
     expect(step("onMoveRight").at).toBe(FIND);

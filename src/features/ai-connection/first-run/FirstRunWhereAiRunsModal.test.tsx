@@ -5,7 +5,7 @@
  * two switches and their help lines, the install note, the PC address and its hint), the ring starting on
  * Not now, a switch changed inside the popup being saved before it can close, Not now and B leaving
  * everything as it was, Test connection showing its result line inside the popup, Install Ollama opening
- * the download notice, and Find LAN showing only with the Developer tab on.
+ * the download notice, and Find LAN showing for everyone beside the address (not with the AI on this Deck).
  *
  * Used for: FirstRunWhereAiRunsModal.tsx and its parts (plan 96, N1).
  *
@@ -23,7 +23,6 @@ import { OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE } from "../ollamaAddress";
 import { FIRST_RUN_POPUP_WORDS, FirstRunWhereAiRunsModal } from "./FirstRunWhereAiRunsModal";
 import { boxes, popupHost, pressB, resetBoxes, ringName } from "./firstRunPopupTestKit";
 import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../../../test-harness/fakeDeckyRpc";
-import { publishDeveloperTabShown, resetDeveloperTabSignalForTests } from "../../settings/developerTabSignal";
 import { markSettingsLoaded, resetSettingsLoadedSignalForTests } from "../../settings/settingsLoadedSignal";
 
 const NOT_NOW = "Not now";
@@ -40,7 +39,6 @@ const pressButton = (name: string) => fireEvent.click(screen.getByLabelText(name
 beforeEach(() => {
   resetFakeDeckyRpc();
   resetBoxes();
-  resetDeveloperTabSignalForTests();
   resetSettingsLoadedSignalForTests();
   markSettingsLoaded();
   window.localStorage.clear();
@@ -87,14 +85,42 @@ describe("what the popup says", () => {
     expect(screen.queryByRole("switch", { name: "Start the AI with the Deck" })).toBeNull();
     expect(screen.getByText("Test connection")).toBeTruthy();
     expect(screen.queryByText("Install Ollama")).toBeNull();
+  });
+
+  it("shows Find LAN beside the address for everyone, with the Developer tab off", () => {
+    open(popupHost({ ollamaLocalOnDeck: false }));
+    expect(screen.getByText("Find LAN")).toBeTruthy();
+    const field = addressBox();
+    const button = screen.getByLabelText("Find Ollama on LAN via mDNS");
+    // After the address field in the same row.
+    expect(field.compareDocumentPosition(button) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("hides Find LAN while the AI runs on this Deck", () => {
+    open(popupHost({ ollamaLocalOnDeck: true }));
     expect(screen.queryByText("Find LAN")).toBeNull();
   });
 
-  it("shows Find LAN beside the address only while the Developer tab is on", () => {
+  it("Find LAN asks first, searches, and fills the address with the PC it found", async () => {
+    setRpcHandler("discover_mdns_ollama_hosts", () => ({
+      ok: true,
+      hosts: [{ label: "gaming-pc", host: "192.168.1.77:11434", port: 11434, verified: true }],
+    }));
     open(popupHost({ ollamaLocalOnDeck: false }));
-    expect(screen.queryByText("Find LAN")).toBeNull();
-    act(() => publishDeveloperTabShown(true));
-    expect(screen.getByText("Find LAN")).toBeTruthy();
+    pressButton("Find Ollama on LAN via mDNS");
+    await waitFor(() => expect(boxes).toHaveLength(1));
+    expect(getRpcCallLog().some((c) => c.method === "discover_mdns_ollama_hosts")).toBe(false);
+    act(() => (boxes[0].props as { onOK: () => void }).onOK());
+    await waitFor(() => expect(addressBox().value).toBe("192.168.1.77:11434"));
+  });
+
+  it("Find LAN says so when nothing is found", async () => {
+    setRpcHandler("discover_mdns_ollama_hosts", () => ({ ok: true, hosts: [], hint: "No Ollama services found here." }));
+    open(popupHost({ ollamaLocalOnDeck: false }));
+    pressButton("Find Ollama on LAN via mDNS");
+    await waitFor(() => expect(boxes).toHaveLength(1));
+    act(() => (boxes[0].props as { onOK: () => void }).onOK());
+    await waitFor(() => expect(text()).toContain("No Ollama services found here."));
   });
 });
 

@@ -21,7 +21,7 @@ shape, takes the lock, and calls that service.
 import asyncio
 from typing import Any
 
-from backend.services.strategy_checklist_session_service import (
+from backend.strategy.strategy_checklist_session_service import (
     clear_session_entry,
     get_session_entry,
     rpc_entry_to_store_payload,

@@ -29,7 +29,7 @@ from backend.services.ollama_prompts import (  # noqa: E402
     build_system_prompt,
     extract_question_snippet_for_prompt,
 )
-from backend.services.strategy_guide_parse import (  # noqa: E402
+from backend.strategy.strategy_guide_parse import (  # noqa: E402
     STRATEGY_FOLLOWUP_PREFIX,
     is_strategy_followup_question,
 )

@@ -14,7 +14,7 @@ the ones models are known to write; see the roadmap entry.
 
 import unittest
 
-from backend.services.strategy_guide_parse import extract_strategy_guide_branches
+from backend.strategy.strategy_guide_parse import extract_strategy_guide_branches
 
 
 def _branches(payload: str):

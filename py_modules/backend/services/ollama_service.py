@@ -156,7 +156,7 @@ from backend.services.ollama_ask_budgets import (
     resolve_ask_token_budgets,
     strip_soft_continue_cue,
 )
-from backend.services.strategy_guide_parse import (
+from backend.strategy.strategy_guide_parse import (
     extract_strategy_guide_branches,
     extract_strategy_checklist,
     drop_unclosed_strategy_fence,

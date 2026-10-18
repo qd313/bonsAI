@@ -22,7 +22,7 @@ reads and writes them through the settings service.
 Where the RPC bodies moved to (plan 65 split; the class still keeps every
 method, just as a one-line hand-off): the settings-search-pack buttons are in
 `backend/services/intent_pack_rpc.py`; the Strategy checklist's read/save/
-clear are in `backend/services/strategy_checklist_rpc.py`; the saved-chat
+clear are in `backend/strategy/strategy_checklist_rpc.py`; the saved-chat
 list/open/create/delete/rename buttons are in
 `backend/services/chat_slot_rpc.py`; the notes the person asked bonsAI to remember
 (list/save/delete) are in `backend/services/user_notes_rpc.py`; the knowledge base's download/update/
@@ -120,7 +120,7 @@ from backend.services.background_request_state import (
     pending_background_state,
 )
 from backend.services.plugin_data_reset import reset_plugin_disk_and_defaults
-from backend.services.strategy_checklist_session_service import (
+from backend.strategy.strategy_checklist_session_service import (
     clear_session_entry,
     load_session_store,
     normalize_ask_checklist_state,
@@ -128,7 +128,7 @@ from backend.services.strategy_checklist_session_service import (
     save_session_store,
     session_path,
 )
-from backend.services import strategy_checklist_rpc
+from backend.strategy import strategy_checklist_rpc
 from backend.services.local_ollama_teardown_service import (
     should_teardown_local_ollama_on_clear,
     teardown_local_ollama_for_plugin_reset,

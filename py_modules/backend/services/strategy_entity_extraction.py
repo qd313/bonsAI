@@ -23,7 +23,7 @@ as an input.
 
 import re
 
-from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
+from backend.strategy.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
 
 # A real entity name is short. Anything longer is a sentence that happened to follow a verb.
 _ENTITY_MAX_TOKENS = 4

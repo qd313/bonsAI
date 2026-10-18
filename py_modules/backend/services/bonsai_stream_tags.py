@@ -85,7 +85,7 @@ from backend.services.ollama_prompts import (
     user_asks_ollama_bonsai_host_or_latency,
     user_wants_power_or_performance_topic,
 )
-from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
+from backend.strategy.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
 from backend.power.tdp_intent import is_current_tdp_read_intent
 
 AskThinkingPhase = Literal[

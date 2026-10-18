@@ -129,7 +129,7 @@ from backend.services.response_verify import (
     verify_ollama_response,
 )
 from backend.characters.spy_confession_service import parse_spy_lies_tag
-from backend.services.strategy_guide_parse import is_strategy_followup_question
+from backend.strategy.strategy_guide_parse import is_strategy_followup_question
 from backend.services.strategy_spoiler_policy import (
     neutralize_protected_names_in_branch_menu,
     resolve_turn_spoiler_protected_names,

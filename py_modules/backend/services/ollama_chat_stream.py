@@ -60,7 +60,7 @@ from backend.services.ollama_stream_failures import (
     url_error_reply,
 )
 from backend.services.soft_continue_repeat_trim import join_continued_piece
-from backend.services.strategy_guide_parse import hide_incomplete_strategy_branch_fence
+from backend.strategy.strategy_guide_parse import hide_incomplete_strategy_branch_fence
 from backend.services.token_accounting_service import known_window_tokens, resolve_window_tokens
 from backend.services.ollama_window_fit import (
     MIN_VISIBLE_NUM_PREDICT,

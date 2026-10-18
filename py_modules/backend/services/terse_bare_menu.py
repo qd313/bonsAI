@@ -42,7 +42,7 @@ import json
 import re
 from typing import Any
 
-from backend.services.strategy_guide_parse import (
+from backend.strategy.strategy_guide_parse import (
     _QUESTION_KEYS,
     _normalize_branch_payload,
     _parse_strategy_json_blob,

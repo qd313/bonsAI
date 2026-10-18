@@ -91,7 +91,7 @@ import re
 from typing import Callable, Optional, Sequence
 
 from backend.power.tdp_intent import is_current_tdp_read_intent
-from backend.services.strategy_guide_parse import (
+from backend.strategy.strategy_guide_parse import (
     format_strategy_checklist_state_block,
     is_strategy_followup_question,
 )

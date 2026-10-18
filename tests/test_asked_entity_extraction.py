@@ -21,7 +21,7 @@ from backend.services.ollama_prompts import (
     extract_strategy_asked_entity,
     kb_card_names,
 )
-from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
+from backend.strategy.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
 
 FIXTURE = Path(__file__).resolve().parent / "fixtures" / "kb_eval_v2.json"
 

@@ -35,7 +35,7 @@ from typing import Any, Callable, NamedTuple, Optional, Sequence
 from backend.ollama_reply_limits import read_json_capped
 # Moved to its own file to keep this one a manageable size; imported back so callers and tests
 # that reach it through this module keep working unchanged.
-from backend.services.branch_menu_example_guard import (  # noqa: F401
+from backend.strategy.branch_menu_example_guard import (  # noqa: F401
     drop_branch_menu_copying_the_worked_example,
 )
 from backend.services.strategy_spoiler_policy import (

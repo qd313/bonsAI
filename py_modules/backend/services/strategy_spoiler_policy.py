@@ -29,7 +29,7 @@ from typing import Any, Iterable, Optional, Sequence
 
 from backend.services.spoiler_empty_label_marks import repair_empty_label_marks
 from backend.services.spoiler_title_profiles import title_profile_is_low_narrative
-from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
+from backend.strategy.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
 
 # Plan 70 helper A (D112 #7, the spoiler safety net): a name is "named" in the question the
 # same tolerant way strategy_entity_extraction.py's own known-entity matcher already treats a

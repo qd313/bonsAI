@@ -54,7 +54,7 @@ def terse_reply_applies(reply_verbosity: object) -> bool:
 
 
 from backend.services.reply_language_service import language_display_name
-from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
+from backend.strategy.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
 
 
 def build_reply_language_block(reply_language: str) -> str:

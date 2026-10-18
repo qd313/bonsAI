@@ -1,6 +1,6 @@
 import unittest
 
-from backend.services.strategy_guide_parse import (
+from backend.strategy.strategy_guide_parse import (
     STRATEGY_FOLLOWUP_PREFIX,
     drop_unclosed_strategy_fence,
     extract_strategy_guide_branches,
@@ -186,7 +186,7 @@ class StrategyGuideParseTests(unittest.TestCase):
 # Strategy checklist tests
 
     def test_extract_checklist_strips_valid_fence(self):
-        from backend.services.strategy_guide_parse import extract_strategy_checklist
+        from backend.strategy.strategy_guide_parse import extract_strategy_checklist
 
         raw = (
             "Step one: equip boots.\n\n"
@@ -203,7 +203,7 @@ class StrategyGuideParseTests(unittest.TestCase):
         self.assertIn("cheat", visible)
 
     def test_extract_checklist_malformed_returns_original(self):
-        from backend.services.strategy_guide_parse import extract_strategy_checklist
+        from backend.strategy.strategy_guide_parse import extract_strategy_checklist
 
         raw = "text ```bonsai-strategy-checklist\nbad\n```"
         visible, payload = extract_strategy_checklist(raw)
@@ -211,7 +211,7 @@ class StrategyGuideParseTests(unittest.TestCase):
         self.assertEqual(visible, raw)
 
     def test_format_strategy_checklist_state_block(self):
-        from backend.services.strategy_guide_parse import format_strategy_checklist_state_block
+        from backend.strategy.strategy_guide_parse import format_strategy_checklist_state_block
 
         block = format_strategy_checklist_state_block(
             {

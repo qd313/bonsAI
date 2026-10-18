@@ -28,7 +28,7 @@ from typing import Any, Optional, Tuple
 
 from backend.core.capabilities import capability_enabled
 from backend.services.settings_service import sanitize_ask_mode
-from backend.services.strategy_checklist_session_service import normalize_ask_checklist_state
+from backend.strategy.strategy_checklist_session_service import normalize_ask_checklist_state
 
 # The three ways of asking. Kept here rather than on the plugin class because services
 # need it and a service reaching back into the entry point is the thing this refactor is

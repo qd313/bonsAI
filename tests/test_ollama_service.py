@@ -1088,7 +1088,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertLess(i_mode, i_deck)
 
     def test_build_system_prompt_strategy_followup_turn(self):
-        from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
+        from backend.strategy.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
 
         def lookup_app_name(_app_id: str) -> str:
             return ""
@@ -1117,7 +1117,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertNotIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
 
     def test_build_system_prompt_strategy_followup_includes_checklist_state(self):
-        from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
+        from backend.strategy.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
 
         def lookup_app_name(_app_id: str) -> str:
             return ""
@@ -1170,7 +1170,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertLess(i_first_json, i_hw)
 
     def test_build_system_prompt_strategy_followup_includes_tdp_when_power_asked(self):
-        from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
+        from backend.strategy.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
 
         def lookup_app_name(_app_id: str) -> str:
             return ""

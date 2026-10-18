@@ -40,7 +40,7 @@ from __future__ import annotations
 import re
 from typing import Any, Literal
 
-from backend.services.strategy_guide_parse import is_strategy_followup_question
+from backend.strategy.strategy_guide_parse import is_strategy_followup_question
 
 SpoilerTitleProfile = Literal["low_narrative", "protect_progression", "unknown"]
 

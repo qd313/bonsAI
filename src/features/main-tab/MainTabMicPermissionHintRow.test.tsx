@@ -148,6 +148,25 @@ describe("the mic hint row, as drawn", () => {
     expect(onDismiss).toHaveBeenCalledTimes(1);
   });
 
+  it("draws each button inside its own Focusable wrapper, so Steam's moves between them reach the row's handlers", () => {
+    // plan96-P96-F11-HINT-RING.json: "Down from Open Permissions reached Dismiss on the Deck" with the handlers
+    // on the row alone; a move between two stops in one container is Steam's own. One wrapper per button.
+    const { container } = render(<MainTabMicPermissionHintRow onNavigateToPermissions={vi.fn()} onDismiss={vi.fn()} />);
+    const wraps = container.querySelectorAll<HTMLElement>(".bonsai-mic-perm-hint-btn-wrap");
+    expect(wraps).toHaveLength(2);
+    expect(wraps[0].querySelectorAll("button")).toHaveLength(1);
+    expect(wraps[0].textContent).toBe("Open Permissions");
+    expect(wraps[1].querySelectorAll("button")).toHaveLength(1);
+    expect(wraps[1].textContent).toBe("Dismiss");
+  });
+
+  it("draws one wrapper, around Open Permissions alone, when there is no Dismiss action", () => {
+    const { container } = render(<MainTabMicPermissionHintRow onNavigateToPermissions={vi.fn()} />);
+    const wraps = container.querySelectorAll<HTMLElement>(".bonsai-mic-perm-hint-btn-wrap");
+    expect(wraps).toHaveLength(1);
+    expect(wraps[0].textContent).toBe("Open Permissions");
+  });
+
   it("draws no Dismiss button when it has no dismiss action", () => {
     render(<MainTabMicPermissionHintRow onNavigateToPermissions={vi.fn()} />);
     expect(screen.getByText("Open Permissions")).toBeTruthy();

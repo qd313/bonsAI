@@ -96,6 +96,30 @@ export function MainTabMicPermissionHintRow({ fullBleedRowStyle, onNavigateToPer
       buttonEls.current[i] = el;
     }),
   ).current;
+  /*
+   * Each button sits in its own Focusable with all four moves (the About links' shape): on the Deck, Down
+   * from Open Permissions still reached Dismiss with the handlers on the row alone, because a move between
+   * two stops inside one container is Steam's own and the row's handler never ran (plan 96 block D,
+   * workshop:test-evidence/plan96-P96-F11-HINT-RING.json). Here Down and the outer ends hold still, Up goes
+   * to the question box, and Left/Right step between the two buttons.
+   */
+  const stepTo = (to: number) => (): boolean => {
+    const dst = buttonEls.current[to];
+    if (dst?.isConnected) {
+      try {
+        dst.focus();
+      } catch {
+        /* holds still */
+      }
+    }
+    return true;
+  };
+  const wrapNav = (i: number): Record<string, unknown> => ({
+    onMoveUp: () => takeQuestionBox() || true,
+    onMoveDown: () => true,
+    onMoveLeft: i === 1 ? stepTo(0) : () => true,
+    onMoveRight: i === 0 ? stepTo(1) : () => true,
+  });
 
   return (
     <Focusable
@@ -117,25 +141,29 @@ export function MainTabMicPermissionHintRow({ fullBleedRowStyle, onNavigateToPer
       >
         <div>{PERMISSION_DENY_MESSAGES.microphone_access}</div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          <Button
-            focusable
-            ref={buttonRefs[0]}
-            className={FOCUS_RING_BTN_CLASS}
-            onClick={() => onNavigateToPermissions("microphone_access")}
-            style={{ fontSize: textPx(11), padding: "4px 10px", minHeight: 34 }}
-          >
-            Open Permissions
-          </Button>
-          {onDismiss ? (
+          <Focusable className="bonsai-mic-perm-hint-btn-wrap" {...(wrapNav(0) as Record<string, unknown>)}>
             <Button
               focusable
-              ref={buttonRefs[1]}
+              ref={buttonRefs[0]}
               className={FOCUS_RING_BTN_CLASS}
-              onClick={() => dismissMicHintKeepingRing(buttonEls, onDismiss)}
+              onClick={() => onNavigateToPermissions("microphone_access")}
               style={{ fontSize: textPx(11), padding: "4px 10px", minHeight: 34 }}
             >
-              Dismiss
+              Open Permissions
             </Button>
+          </Focusable>
+          {onDismiss ? (
+            <Focusable className="bonsai-mic-perm-hint-btn-wrap" {...(wrapNav(1) as Record<string, unknown>)}>
+              <Button
+                focusable
+                ref={buttonRefs[1]}
+                className={FOCUS_RING_BTN_CLASS}
+                onClick={() => dismissMicHintKeepingRing(buttonEls, onDismiss)}
+                style={{ fontSize: textPx(11), padding: "4px 10px", minHeight: 34 }}
+              >
+                Dismiss
+              </Button>
+            </Focusable>
           ) : null}
         </div>
       </div>

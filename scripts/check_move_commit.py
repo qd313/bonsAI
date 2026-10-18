@@ -38,7 +38,9 @@ How it works:
    and new file are read with `ast` and compared as sets of full module names, with the old
    names run through the move table; passing import statements are blanked.
 5. Everywhere, an old or new repo path of a moved file, an old or new Python dotted module name
-   of a moved file, and (for a rename) the old or new base file name are blanked.
+   of a moved file, the two shorter back-end forms of those repo paths (`backend/...`, and
+   `services/...` relative to `py_modules/backend/`), and (for a rename) the old or new base
+   file name are blanked.
 6. The two blanked texts must be equal. If not, the differing lines are printed.
 7. Files the commit did not touch are read too, when their text could name a moved file
    (found with `git grep` for the moved files' names): an importer nobody updated has the same
@@ -287,6 +289,12 @@ class MoveTable:
             if os.path.basename(old) != os.path.basename(new):
                 bases.update((os.path.basename(old), os.path.basename(new)))
         self.bases = sorted(bases, key=len, reverse=True)
+        # The two shorter written forms of a back-end path (the back-end mover rewrites both).
+        shorts = set()
+        for p in self.paths:
+            if p.startswith("py_modules/backend/"):
+                shorts.update((p[len("py_modules/") :], p[len("py_modules/backend/") :]))
+        self.short_paths = sorted(shorts, key=len, reverse=True)
 
     def map_file(self, path: str) -> str:
         return self.files.get(path, path)
@@ -301,6 +309,8 @@ class MoveTable:
         out = []
         if self.paths:
             out.append(re.compile(r"(?<![\w@-])(?<![\w@-]/)(?:" + "|".join(map(re.escape, self.paths)) + r")(?![\w-])"))
+        if self.short_paths:
+            out.append(re.compile(r"(?<![\w@-])(?<![\w@-]/)(?:" + "|".join(map(re.escape, self.short_paths)) + r")(?![\w-])"))
         names = list(self.dotted) + list(self.dotted.values())
         if names:
             names.sort(key=len, reverse=True)

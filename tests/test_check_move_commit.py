@@ -138,6 +138,29 @@ class PythonMoveTests(unittest.TestCase):
         code, out = self.box.check()
         self.assertEqual(code, 0, out)
 
+    def test_a_comment_in_the_short_backend_form_may_follow_the_move(self):
+        self.box.write("py_modules/backend/services/note.py", "# see backend/services/foo.py and services/foo.py\n")
+        self.box.commit("add note")
+        do_python_move(self.box)
+        self.box.edit(
+            "py_modules/backend/services/note.py",
+            "# see backend/services/foo.py and services/foo.py",
+            "# see backend/services/sub/foo.py and services/sub/foo.py",
+        )
+        self.box.commit("move foo")
+        code, out = self.box.check()
+        self.assertEqual(code, 0, out)
+
+    def test_a_short_form_pointing_at_the_wrong_folder_fails(self):
+        self.box.write("py_modules/backend/services/note.py", "# see backend/services/foo.py\n")
+        self.box.commit("add note")
+        do_python_move(self.box)
+        self.box.edit("py_modules/backend/services/note.py", "backend/services/foo.py", "backend/other/foo.py")
+        self.box.commit("move foo")
+        code, out = self.box.check()
+        self.assertEqual(code, 1, out)
+        self.assertIn("note.py", out)
+
     def test_one_changed_character_in_the_moved_file_fails(self):
         do_python_move(self.box)
         self.box.edit("py_modules/backend/services/sub/foo.py", "+ helper()", "+ helper() + 1")

@@ -210,3 +210,16 @@ at landing; `verify.py --full` gated on its exit code before the final push.
   notice already seen will see the popup once. Block E (runbook [assets/96-runbook-block-E.md](assets/96-runbook-block-E.md))
   runs it as the screen's first run with the settings file removed, so the Deck's Ollama is not wiped; the true Clear-all-data run
   is release day's clean-install row.
+- **05:20 UTC, Deck block D done** (build `a29f9eb0`, evidence `plan96-P96-*`, handover [assets/96-handover-D.md](assets/96-handover-D.md)).
+  **PASS:** the loading line (about 9.5 s after Ask, first word at 11 to 13 s), the picker's steps (ring on the newest picture, B
+  closes it only), F19 checkboxes, F20's note, F3 (once the notice opens the pick sticks), F15 (38 games), F16, F18 (the one Qwen row
+  listed), F21, F23, F26, N2, N3 (the Beta Notice came back), the look check clean on six tabs, the Main sweep. **FAIL, fixed in a
+  second round the same hour:** F11 (Down from Open Permissions still reached Dismiss: a move between two stops inside one container
+  is Steam's own, so each button now sits in its own Focusable), F6 (a stop inside the box's portal took the ring but no A or B
+  reached it and the ring was stuck until a reload: the stop is gone, A on the word asks and the box says so), F1 (the row never
+  drew because the failed turn is reloaded as the newest archived turn: the row now follows that turn too), F4 (the steps could not
+  be reached: the chain's plain focus moved only the page's focus; the steps carry nav nodes now), F25 (the Ask pill's 56-in-51 is
+  the letter-spacing after the last letter with the words whole: the check now asks whether the words really spill). **Not run:**
+  F9, F10, F13 need a Deck without the engine or Ollama (release day's clean install). **New finding:** asking about an attached
+  picture answered "incomplete stream" twice with the Deck's AI (`plan96-P96-F5-PICKER.json`), for the roadmap. The two-chip row
+  changes every 4 to 9 s (each chip holds 9 s or more, the two spots alternate): the maintainer's eye decides.

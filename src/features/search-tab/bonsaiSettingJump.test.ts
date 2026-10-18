@@ -25,7 +25,7 @@ import {
 } from "./bonsaiSettingJump";
 import { BONSAI_SETTINGS_INDEX, type BonsaiSettingEntry } from "./bonsaiSettingsIndex";
 import { bonsaiSettingRowNav } from "./bonsaiSettingRowNav";
-import { peekSearchArrival, registerSearchTabSwitch, resetSearchJump } from "./searchJumpStore";
+import { leaveSearchTab, noteTabBeforeSearch, openSearchTab, peekSearchArrival, registerSearchTabSwitch, resetSearchJump } from "./searchJumpStore";
 import { readSearchSaved, resetSearchSaved } from "./searchTabStore";
 
 const entry = (label: string): BonsaiSettingEntry => BONSAI_SETTINGS_INDEX.find((e) => e.label === label)!;
@@ -182,6 +182,30 @@ describe("the way back", () => {
   it("does nothing when no jump is live", () => {
     expect(backFromBonsaiSettingJump()).toBe(false);
     expect(tabs).toEqual([]);
+  });
+});
+
+describe("B on the Search tab after the way back", () => {
+  /* The plugin root notes "the tab before Search" every time Search is shown: after the way back that is the setting's tab. */
+  it("still goes to the tab the person first came from, not to the setting's tab", () => {
+    noteTabBeforeSearch("main");
+    startBonsaiSettingJump(entry("Voice input"), CTX);
+    backFromBonsaiSettingJump();
+    noteTabBeforeSearch("settings");
+    tabs.length = 0;
+    leaveSearchTab();
+    expect(tabs).toEqual(["main"]);
+  });
+
+  it("notes the tab before Search as usual the next time Search is opened another way", () => {
+    noteTabBeforeSearch("main");
+    startBonsaiSettingJump(entry("Voice input"), CTX);
+    backFromBonsaiSettingJump();
+    openSearchTab();
+    noteTabBeforeSearch("about");
+    tabs.length = 0;
+    leaveSearchTab();
+    expect(tabs).toEqual(["about"]);
   });
 });
 

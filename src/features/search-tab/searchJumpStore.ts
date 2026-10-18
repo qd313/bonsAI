@@ -50,9 +50,11 @@ type State = {
   jump: SearchJump | null;
   cameFrom: string | null;
   arrival: SearchArrival;
+  /** Set by the way back from a bonsAI setting: the next "the tab before Search" note is the setting's tab, and is ignored once. */
+  keepCameFrom: boolean;
 };
 
-const EMPTY: State = { jump: null, cameFrom: null, arrival: null };
+const EMPTY: State = { jump: null, cameFrom: null, arrival: null, keepCameFrom: false };
 let state: State = { ...EMPTY };
 const listeners = new Set<() => void>();
 let switchTab: ((tabId: string) => void) | null = null;
@@ -142,7 +144,7 @@ export function backToSearch(): boolean {
 export function returnToSearchTab(args: { word: string; game: string | null; matchKey: string }): boolean {
   if (!switchTab) return false;
   writeSearchSaved({ typed: args.word, game: args.game, openNote: null, returnKey: null });
-  set({ arrival: { key: args.matchKey } });
+  set({ arrival: { key: args.matchKey }, keepCameFrom: true });
   switchTab("search");
   return true;
 }
@@ -150,7 +152,7 @@ export function returnToSearchTab(args: { word: string; game: string | null; mat
 /** Y on the Main tab: open the Search tab with the ring on its find box. False when no tab switch is registered. */
 export function openSearchTab(): boolean {
   if (!switchTab) return false;
-  set({ arrival: "find" });
+  set({ arrival: "find", keepCameFrom: false });
   switchTab("search");
   return true;
 }
@@ -167,6 +169,11 @@ export function clearSearchArrival(): void {
 
 /** The tab the person was on before the Search tab, noted by the plugin root each time Search opens. */
 export function noteTabBeforeSearch(tabId: string | null): void {
+  /* Coming back from one of bonsAI's settings, the tab before Search is that setting's tab: B on Search still goes where it did before the jump. */
+  if (state.keepCameFrom) {
+    state = { ...state, keepCameFrom: false };
+    return;
+  }
   state = { ...state, cameFrom: tabId };
 }
 

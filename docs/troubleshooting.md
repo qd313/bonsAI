@@ -167,7 +167,7 @@ with the other's queries returns plausible-looking nonsense, so the plugin refus
 back to keyword rather than degrading silently. **There is no migration — rebuild:**
 
 ```bash
-python scripts/build_rag_db.py --seed --out build/knowledge-base
+python scripts/kb/build_rag_db.py --seed --out build/knowledge-base
 ```
 
 then reinstall via Developer tab → **Install seed knowledge base**. Retrieval keeps working in
@@ -191,11 +191,11 @@ are unaffected: they still route by running game and Ask mode. If a troubleshoot
 attaches nothing, the tips exist but nothing scored above the relevance floor — try naming the
 component ("SD card", "controller layout", "remote play") rather than only the symptom.
 
-**Troubleshooting hybrid (Phase 3 — shipped 2026-07-29):** The same hybrid path runs on **troubleshooting** Asks over the shared `compat_patterns` tip sheet (~124 maintainer tips in the Dev-tab seed). Show details adds **Source: shared troubleshooting tips** when compat tips attach. Rebuild the seed corpus after pulling (`python scripts/build_rag_db.py --seed --out build/knowledge-base`) and reinstall via Developer tab. See [knowledge-base.md](knowledge-base.md) § Phasing.
+**Troubleshooting hybrid (Phase 3 — shipped 2026-07-29):** The same hybrid path runs on **troubleshooting** Asks over the shared `compat_patterns` tip sheet (~124 maintainer tips in the Dev-tab seed). Show details adds **Source: shared troubleshooting tips** when compat tips attach. Rebuild the seed corpus after pulling (`python scripts/kb/build_rag_db.py --seed --out build/knowledge-base`) and reinstall via Developer tab. See [knowledge-base.md](knowledge-base.md) § Phasing.
 
 **SD card:** When a microSD is mounted under `/run/media/deck/…`, the download picker offers **Download to SD card** (install path `{mount}/.bonsai/rag`). Internal default remains `~/.bonsai/rag`.
 
-**Download fails / manifest error:** The plugin fetches `corpus-manifest.json` from Hugging Face (primary) and a GitHub Releases mirror. If both are unreachable (401/404), download stops with a manifest error — the maintainer must publish the corpus and manifest first (`scripts/build_rag_db.py`). For local QA without network, use Developer tab **Install seed knowledge base** (or `install_rag_corpus_local` RPC) with a built `build/knowledge-base` folder.
+**Download fails / manifest error:** The plugin fetches `corpus-manifest.json` from Hugging Face (primary) and a GitHub Releases mirror. If both are unreachable (401/404), download stops with a manifest error — the maintainer must publish the corpus and manifest first (`scripts/kb/build_rag_db.py`). For local QA without network, use Developer tab **Install seed knowledge base** (or `install_rag_corpus_local` RPC) with a built `build/knowledge-base` folder.
 
 **Clear all plugin data** (Settings) also removes the installed corpus when `rag_corpus_path` is set.
 

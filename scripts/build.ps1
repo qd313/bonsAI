@@ -72,7 +72,7 @@ pnpm run build
 Assert-LastExit "pnpm run build"
 
 Write-Host "Building seed knowledge base for Deck QA..."
-python scripts/build_rag_db.py --seed --out build/knowledge-base-seed
+python scripts/kb/build_rag_db.py --seed --out build/knowledge-base-seed
 Assert-LastExit "Seed knowledge base build"
 
 Write-Host "Uploading to temporary Deck directory..."

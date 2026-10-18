@@ -14,10 +14,10 @@ Solves: A card that cites a wiki must carry source_url, source_license and crawl
 Does not: Run on device or at plugin build time. Nothing under py_modules/ imports it. It
           does not follow links, fetch images, or write anything into the seed.
 
-    python scripts/fetch_wiki_live_pages.py --api https://combineoverwiki.net/api.php \
+    python scripts/kb/fetch_wiki_live_pages.py --api https://combineoverwiki.net/api.php \
         --titles "Gonarch|Nihilanth" --out build/wiki-live/combineoverwiki
 
-    python scripts/fetch_wiki_live_pages.py --api https://doomwiki.org/w/api.php --search "marauder"
+    python scripts/kb/fetch_wiki_live_pages.py --api https://doomwiki.org/w/api.php --search "marauder"
 
 A wiki that refuses the page-render call (Palworld's own wiki, palworld.wiki.gg, answers HTTP 403)
 is read from its plain page instead -- the same revision, article box only -- and the run prints a
@@ -29,7 +29,7 @@ exist are listed at the end and in the manifest as missing; the exit code stays 
 batch with one bad title still yields the other pages.
 
 Table header cells and Fandom portable-infobox labels come through marked "!! ", and their
-data cells / values "|| " -- scripts/extract_wiki_notes.py reads those two markers to build a
+data cells / values "|| " -- scripts/kb/extract_wiki_notes.py reads those two markers to build a
 labelled "Label: value" line without guessing which cell was which.
 """
 
@@ -64,7 +64,7 @@ _SKIP_CLASS = re.compile(
 _BLOCK_TAGS = {"p", "div", "section", "article", "aside", "br", "tr", "ul", "ol", "dl", "blockquote", "pre"}
 _HEADING = re.compile(r"h([1-6])")
 
-# scripts/extract_wiki_notes.py needs to tell a table's header cells from its data cells to
+# scripts/kb/extract_wiki_notes.py needs to tell a table's header cells from its data cells to
 # build a labelled "Label: value" line, and needs the same for Fandom's div-based portable
 # infobox (its facts are not a <table> at all -- see _INFOBOX_LABEL_CLASS below). Both kinds
 # of label get the same "!! " marker and both kinds of value get "|| ", mirroring wikitext's
@@ -222,7 +222,7 @@ def resolve_page(api: str, title: str) -> dict | None:
 
     Categories never appear in the rendered text render_page() produces -- MediaWiki puts
     them in the page footer's "catlinks" box, which _SKIP_CLASS already drops as furniture
-    on purpose. scripts/extract_wiki_notes.py reads a page's own categories (boss, enemy,
+    on purpose. scripts/kb/extract_wiki_notes.py reads a page's own categories (boss, enemy,
     item, ...) to guess its section_type before falling back to guessing from body words, so
     they have to come from here instead.
     """

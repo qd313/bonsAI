@@ -156,7 +156,7 @@ class PerChatMemoryTests(unittest.TestCase):
         self.assertEqual(self._recall_hades(chat_id="chat-b"), "Theseus")
 
     def test_the_no_chat_entry_still_works_two_calls_in_a_row(self):
-        """scripts/eval_kb_answers.py relies on this: two calls with no chat_id at all remember
+        """scripts/kb/eval_kb_answers.py relies on this: two calls with no chat_id at all remember
         each other, the same as passing chat_id="" explicitly."""
         self._remember_hades("Megara")
         self.assertEqual(self._recall_hades(), "Megara")

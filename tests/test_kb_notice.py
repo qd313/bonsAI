@@ -6,7 +6,7 @@ Purpose: Every licence and every wiki named by data/kb/strategy_seed.json must a
 Used for: data/kb/NOTICE.md (plan 74, lane 1, fix 3).
 Solves: The notes are adapted from CC BY-SA / CC BY wikis; those licences need the source and
     licence named. The repo said nothing about them outside the published library.
-Does not: Check the published library's ATTRIBUTIONS.md (scripts/publish_corpus.py builds it).
+Does not: Check the published library's ATTRIBUTIONS.md (scripts/kb/publish_corpus.py builds it).
 """
 
 from __future__ import annotations

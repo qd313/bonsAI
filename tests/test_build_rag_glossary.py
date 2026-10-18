@@ -4,7 +4,7 @@ Purpose: Pin how data/kb/glossary_terms.json becomes the glossary_terms table: e
 under its game, a bad row stops the build with a plain reason, the manifest counts the words, the
 same input builds the same bytes, and the file that ships holds the two Deep Rock Galactic:
 Survivor words with their exact text.
-Used for: scripts/build_rag_db.py's _seed_glossary_terms, build_corpus and the glossary_terms
+Used for: scripts/kb/build_rag_db.py's _seed_glossary_terms, build_corpus and the glossary_terms
 table in knowledge_base_schema.CREATE_SCHEMA_SQL.
 Solves: A word filed under the wrong game, a repeated spelling the screen would silently drop, or
 a definition that drifted unseen would all ship in the published library with no other symptom.

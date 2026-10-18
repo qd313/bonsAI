@@ -27,7 +27,7 @@ rows that got a WRONG note would be warned about (the win).
 
 Run on the maintainer PC with Ollama up and a built corpus:
 
-    python scripts/build_rag_db.py --seed --out ./build/knowledge-base
+    python scripts/kb/build_rag_db.py --seed --out ./build/knowledge-base
     python scripts/measure_kb_thin_match.py --json runs/plan48-thin-match.json
 """
 from __future__ import annotations

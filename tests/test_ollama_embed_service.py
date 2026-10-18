@@ -53,7 +53,7 @@ class OllamaEmbedServiceTests(unittest.TestCase):
 
     # --- Task prefixes ---
     #
-    # These pair with the document prefix baked by scripts/build_rag_db.py. A change on one
+    # These pair with the document prefix baked by scripts/kb/build_rag_db.py. A change on one
     # side without the other silently searches one vector space with the other's queries,
     # which is why EMBEDDING_VARIANT exists and why the eval imports these helpers.
 
@@ -82,7 +82,7 @@ class OllamaEmbedServiceTests(unittest.TestCase):
     def test_eval_and_runtime_apply_the_same_prefixes(self):
         """The eval must not re-implement prefixing — that divergence is the bug being fixed.
 
-        scripts/eval_kb_embed_models.py kept private copies of these, applied them, and
+        scripts/kb/eval_kb_embed_models.py kept private copies of these, applied them, and
         production applied neither; the 2026-07-31 bake-off therefore measured a
         configuration that was never shipped.
         """

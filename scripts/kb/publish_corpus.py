@@ -13,8 +13,8 @@ huggingface_hub — the corpus is under 1 MB, far below the LFS threshold, so pl
 `gh` cover both hosts without a build-time dependency.
 
 Usage:
-  python scripts/publish_corpus.py --build-dir build/knowledge-base --check
-  python scripts/publish_corpus.py --build-dir build/knowledge-base \\
+  python scripts/kb/publish_corpus.py --build-dir build/knowledge-base --check
+  python scripts/kb/publish_corpus.py --build-dir build/knowledge-base \\
       --hf-clone-dir ../bonsai-knowledge-base --push-hf --push-github
 
 --check (or omitting both --push-* flags) only validates; nothing leaves the machine.

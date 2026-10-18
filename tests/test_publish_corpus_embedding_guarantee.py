@@ -1,8 +1,8 @@
 """Title: Publish check refuses a corpus with a short meaning index
 
-Purpose: Pin that `python scripts/publish_corpus.py --check` refuses to pass a build whose
+Purpose: Pin that `python scripts/kb/publish_corpus.py --check` refuses to pass a build whose
 baked vector count is short of its note (or tip) count, not just a build with zero vectors.
-Used for: scripts/publish_corpus.py validate_build.
+Used for: scripts/kb/publish_corpus.py validate_build.
 Solves: Before this, the publish gate only checked embedding_section_count /
   embedding_compat_count against zero, so a build that indexed some but not all cards (the
   --allow-missing-embeddings escape hatch, or a hand-edited manifest) sailed through the one

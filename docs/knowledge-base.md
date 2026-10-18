@@ -91,7 +91,7 @@ flowchart TD
 ## Maintainer build pipeline
 
 ```bash
-python scripts/build_rag_db.py --seed --out ./build/knowledge-base
+python scripts/kb/build_rag_db.py --seed --out ./build/knowledge-base
 ```
 
 - **Never commit** the corpus to git.
@@ -109,7 +109,7 @@ Default install path: `~/.bonsai/rag/` containing:
 - `corpus.db` — read-only SQLite (FTS5 external content over sections)
 - `corpus-manifest.json` — version, chunk SHA-256, HF/GitHub URLs
 
-**Tap-to-define words (`glossary_terms` table).** The underlined words in an answer ("kiting", "overclock" for Deep Rock Galactic: Survivor) come from the library, not from the plugin's code. The table has one row per word per game: the game (its id, and so its title), the word, its other forms, a short peek and the full text. The source is `data/kb/glossary_terms.json`, written into the table by `scripts/build_rag_db.py`. The plugin reads it through `get_rag_corpus_glossary`. A library built before the table existed has none, and then the plugin simply shows no underlined words, with no error. Turning "Use local knowledge base" off also turns the words off. To add words for another game, add rows to the source file and rebuild the library; no plugin change is needed.
+**Tap-to-define words (`glossary_terms` table).** The underlined words in an answer ("kiting", "overclock" for Deep Rock Galactic: Survivor) come from the library, not from the plugin's code. The table has one row per word per game: the game (its id, and so its title), the word, its other forms, a short peek and the full text. The source is `data/kb/glossary_terms.json`, written into the table by `scripts/kb/build_rag_db.py`. The plugin reads it through `get_rag_corpus_glossary`. A library built before the table existed has none, and then the plugin simply shows no underlined words, with no error. Turning "Use local knowledge base" off also turns the words off. To add words for another game, add rows to the source file and rebuild the library; no plugin change is needed.
 
 Settings: `rag_corpus_path`, `rag_corpus_version`, `use_local_knowledge_base`.
 
@@ -155,7 +155,7 @@ report the **oldest** capture in the group rather than the newest.
 **Read the licence from the snapshot, not from the archive.org item.** The two disagree.
 `wiki-hadesfandomcom` advertises `licenseurl` CC BY-SA 3.0 at the item level while its own
 `dumpMeta/siteinfo.json` says **CC BY-NC-SA 3.0** — NonCommercial, which this corpus cannot
-carry. [scripts/fetch_wiki_dump_pages.py](../scripts/fetch_wiki_dump_pages.py) prints both and
+carry. [scripts/kb/fetch_wiki_dump_pages.py](../scripts/kb/fetch_wiki_dump_pages.py) prints both and
 prefers the snapshot.
 
 Two UI constraints, both measured rather than assumed:
@@ -304,7 +304,7 @@ On-Deck: reply credit → **KB-ATTRIB-01**; published corpus file beside DB → 
 
 **Status:** **Shipped 2026-08-14** — the locks below were implemented, not deferred. Both channels
 are live: HF dataset `qd313/bonsai-knowledge-base` (primary) and GitHub release `knowledge-base-v1`
-(mirror). Publish path is `scripts/publish_corpus.py --push-hf --push-github`. It shipped ahead of a
+(mirror). Publish path is `scripts/kb/publish_corpus.py --push-hf --push-github`. It shipped ahead of a
 formal Phase 5 exit: the 13-title / 117-section corpus came out of the remediation PR2 seed
 deepening rather than a separate Phase 5 pass.
 
@@ -497,7 +497,7 @@ Equal RRF weights and a loose BM25 floor are locked; holdout could not separate 
 Schema v3 changes what the baked vectors *mean*, not just the file layout. A v2 corpus has the same model and the same dimension, so only the manifest can tell them apart — and there is **no migration** (Decision 6). Existing corpora keep working in keyword mode and report **Keyword search (embed unavailable)** until rebuilt:
 
 ```bash
-python scripts/build_rag_db.py --seed --out ./build/knowledge-base
+python scripts/kb/build_rag_db.py --seed --out ./build/knowledge-base
 ```
 
 The builder now embeds in batches of 16 with progress, clears the vector table only after the host answers (a failure no longer wipes existing vectors), and checkpoints + `VACUUM`s so the shipped `corpus.db` is a single self-contained file. The Deck opens it `?mode=ro&immutable=1`.
@@ -573,7 +573,7 @@ Nobody had ever written down how long a game question is allowed to take. So whe
 it only got noticed because one QA row happened to have a number written next to it to compare
 against. This section writes two numbers down, with a game running: how long it takes to search
 the notes, and how long until the first word of an answer appears — so the next slowdown fails a
-check instead of being caught by luck. `scripts/probe_deck_kb_retrieval.py` prints pass, over
+check instead of being caught by luck. `scripts/kb/probe_deck_kb_retrieval.py` prints pass, over
 budget, or not verified against the search-time number (see below for what that third state
 means); it prints pass or over-budget against the first-word number, timed by hand.
 
@@ -611,7 +611,7 @@ reading was taken in. A real question always has the chat model finish answering
 question right before the notes are searched for this one; the probe never asked the chat model
 anything, so its reading skipped whatever that leaves behind. **The fix is not a fresh process per
 reading** — the same evidence file shows two separate probe runs both reading fast, so a fresh
-process was never the difference. Instead, `scripts/probe_deck_kb_retrieval.py --with-chat-before-search`
+process was never the difference. Instead, `scripts/kb/probe_deck_kb_retrieval.py --with-chat-before-search`
 now runs one short, throwaway reply from the chat model — the one named first in the Deck's own
 saved model order — immediately before it times the search, so the reading pays the same cost a
 real question does. That costs real time and memory on the Deck, so it is off by default. **A

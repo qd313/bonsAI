@@ -3,7 +3,7 @@
 Purpose: D29 added an optional per-game field to compat_patterns.json. This pins that
 _seed_compat_patterns carries it into the built database -- null for a shared tip (every
 row before this change, and most rows after it), the given value for a per-game one.
-Used for: scripts/build_rag_db.py's _seed_compat_patterns.
+Used for: scripts/kb/build_rag_db.py's _seed_compat_patterns.
 Solves: A column added to the schema but never wired into the seeder ships a corpus.db
 whose per-game tips are indistinguishable from shared ones -- the bug this schema change
 exists to fix, quietly not actually fixed.

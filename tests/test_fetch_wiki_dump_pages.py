@@ -1,7 +1,7 @@
 """Title: WikiTeam dump page extractor -- server and article path
 
 Purpose: Pin that snapshot_licence() and licence_from_archive() also carry the wiki's own
-"server" and "articlepath" out of its siteinfo, added so scripts/extract_wiki_notes.py can
+"server" and "articlepath" out of its siteinfo, added so scripts/kb/extract_wiki_notes.py can
 rebuild a dump page's real URL instead of guessing "/wiki/Title".
 Used for: fetch_wiki_dump_pages.py.
 Solves: A real run against the strategywiki.org archive.org dump built the URL

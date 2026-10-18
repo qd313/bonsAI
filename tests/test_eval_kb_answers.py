@@ -4,7 +4,7 @@ Title: KB answer eval harness tests
 Purpose: Pin the harness plumbing added for the prompt-diet lane (plan 46, Lane C) that does not
          need a live Ollama: prompt-length reporting, the settings the harness writes for a voice
          or thinking-effort run, the kb-placement wrapper, and the two window-warning columns.
-Used for: scripts/eval_kb_answers.py.
+Used for: scripts/kb/eval_kb_answers.py.
 Solves: The harness itself has no test coverage, so a flag that silently no-ops (e.g. --voice not
         reaching settings.json) would only be caught by a maintainer reading a report and wondering
         why nothing changed.

@@ -1,7 +1,7 @@
 """Title: Live wiki page fetcher -- table and infobox markers
 
 Purpose: Pin the "!! label" / "|| value" markers _TextExtractor emits for table header/data
-cells and for Fandom's div-based portable infobox, added for scripts/extract_wiki_notes.py
+cells and for Fandom's div-based portable infobox, added for scripts/kb/extract_wiki_notes.py
 to read (plan 58 phase 1, "Lane B, in words": "Info boxes and tab boxes are read, not
 skipped... A table row becomes one labelled line").
 Used for: fetch_wiki_live_pages.py's _TextExtractor.
@@ -111,7 +111,7 @@ class FigureIsFurnitureTests(unittest.TestCase):
 
 
 class ResolvePageCategoriesTests(unittest.TestCase):
-    """scripts/extract_wiki_notes.py's guess_section_type prefers a page's own categories
+    """scripts/kb/extract_wiki_notes.py's guess_section_type prefers a page's own categories
     over a guess from body words -- categories never appear in the rendered text (MediaWiki
     puts them in the footer's "catlinks" box, which _SKIP_CLASS already drops), so
     resolve_page has to ask the API for them directly."""

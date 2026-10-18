@@ -294,7 +294,7 @@ _KB_BLOCK_HEADER = "--- Local knowledge base (bonsAI; offline corpus; may be tru
 # re-measuring. In particular, "This reminder alone is not the user naming {subject} themselves"
 # is the one line stopping a remembered subject (which is sometimes just the top attached note's
 # own title, never anything the person typed) from ever unfencing that subject's spoilers on its
-# own. Public (no leading underscore) so scripts/eval_kb_answers.py imports this exact constant
+# own. Public (no leading underscore) so scripts/kb/eval_kb_answers.py imports this exact constant
 # to keep measuring the shape that shipped, instead of keeping a hand-copied duplicate that could
 # quietly drift from it.
 FOLLOWUP_SUBJECT_NOTE_TEMPLATE = (

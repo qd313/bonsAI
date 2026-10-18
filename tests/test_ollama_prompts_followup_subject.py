@@ -76,7 +76,7 @@ class BuildSystemPromptFollowupSubjectTests(unittest.TestCase):
         text = self._build(followup_subject="Glyphid Dreadnought", early_context_suffix="")
         self.assertNotIn("FOLLOW-UP CONTEXT", text)
 
-    # The word-count side effect (87 -> 44) is measured by scripts/eval_kb_answers.py against a
+    # The word-count side effect (87 -> 44) is measured by scripts/kb/eval_kb_answers.py against a
     # live model; nothing here asserts it, since this suite only proves the prompt text is right.
 
 

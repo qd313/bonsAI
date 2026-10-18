@@ -49,7 +49,7 @@ _lock = threading.Lock()
 
 
 # Plan 70 helper K: two ways of finishing "a follow-up still names the wrong boss", both measured
-# by scripts/eval_kb_answers.py against the fixture's follow-up pairs, three runs each, every
+# by scripts/kb/eval_kb_answers.py against the fixture's follow-up pairs, three runs each, every
 # reply read by hand. The maintainer picked finish 3 (send the previous question and a short
 # answer along with the follow-up): it named the right boss more than five times as often as
 # today's code and almost never made the model stop and ask "which boss do you mean?", the

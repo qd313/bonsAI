@@ -11,7 +11,7 @@ Purpose: Measure what the Deck's own model writes FROM the cards, not whether th
 Used for: docs/testing.md row KB-ANSWER-01; the before/after gate for every prompt change in
           docs/planning/30-kb-answer-quality-plan.md (W4 prompt diet, W6 spoiler tiers, D54).
 Solves: The search half of the knowledge base is measured to the decimal
-        (scripts/eval_kb_embed_models.py); the answer half had one on-Deck data point. Every
+        (scripts/kb/eval_kb_embed_models.py); the answer half had one on-Deck data point. Every
         prompt edit so far shipped on feel.
 Does not: Judge with a second model, touch the Deck, or write settings anywhere except its own
           work directory. Sampling is stochastic at the shipped temperature, so it runs each case
@@ -49,14 +49,14 @@ this flag only sets the matching environment variable for the process, the same 
 would to try one on the Deck.
 
 Usage:
-  python scripts/eval_kb_answers.py                          # every case, 3 samples, baseline prompt
-  python scripts/eval_kb_answers.py --only A-DRG-01 --samples 1
-  python scripts/eval_kb_answers.py --label after-w4         # report suffix for a before/after pair
-  python scripts/eval_kb_answers.py --no-write-report        # console only
-  python scripts/eval_kb_answers.py --pairs --followup-shape no_subject_note --samples 3
+  python scripts/kb/eval_kb_answers.py                          # every case, 3 samples, baseline prompt
+  python scripts/kb/eval_kb_answers.py --only A-DRG-01 --samples 1
+  python scripts/kb/eval_kb_answers.py --label after-w4         # report suffix for a before/after pair
+  python scripts/kb/eval_kb_answers.py --no-write-report        # console only
+  python scripts/kb/eval_kb_answers.py --pairs --followup-shape no_subject_note --samples 3
 
 Needs: Ollama on this PC with the Deck's chat model and ``nomic-embed-text`` pulled, and a built
-corpus at --corpus (``python scripts/build_rag_db.py --seed --out ./build/knowledge-base``).
+corpus at --corpus (``python scripts/kb/build_rag_db.py --seed --out ./build/knowledge-base``).
 """
 from __future__ import annotations
 
@@ -1380,7 +1380,7 @@ def write_report(
     lines.append("")
     lines.append(
         "What the Deck's model writes **from** the cards, scored without a judge model. "
-        "Run by `scripts/eval_kb_answers.py`; the fixture is `tests/fixtures/kb_answer_eval.json` "
+        "Run by `scripts/kb/eval_kb_answers.py`; the fixture is `tests/fixtures/kb_answer_eval.json` "
         "(decision D45, plan 30 W1). Rates are over samples at the shipped temperature, so one run "
         "moving a point or two is noise; a check moving ten points is a finding."
     )
@@ -1592,7 +1592,7 @@ def main() -> int:
     db = corpus_dir / "corpus.db"
     manifest_path = corpus_dir / "corpus-manifest.json"
     if not db.is_file() or not manifest_path.is_file():
-        print(f"no corpus at {corpus_dir}; build one with: python scripts/build_rag_db.py --seed --out {corpus_dir}", file=sys.stderr)
+        print(f"no corpus at {corpus_dir}; build one with: python scripts/kb/build_rag_db.py --seed --out {corpus_dir}", file=sys.stderr)
         return 2
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     corpus_version = str(manifest.get("version") or "?")

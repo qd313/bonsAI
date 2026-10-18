@@ -2,7 +2,7 @@
 
 Purpose: Pin the guarantee that a note or tip cannot reach a device with no meaning-search
 vector unless the maintainer explicitly says so.
-Used for: scripts/build_rag_db.py build_corpus / _populate_vectors_for_table.
+Used for: scripts/kb/build_rag_db.py build_corpus / _populate_vectors_for_table.
 Solves: build_rag_db.py:559-633 only printed a warning in three cases that each let an
   unindexed row ship silently — the embedding model missing from the build machine (every row
   unindexed), a run stopping partway through ("partially populated, re-run the build", exit 0

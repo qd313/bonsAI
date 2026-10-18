@@ -16,7 +16,7 @@ Does not: Change any threshold, edit the service, write a report into docs/, or 
 
 Run on the maintainer PC with Ollama up and a built corpus:
 
-    python scripts/build_rag_db.py --seed --out ./build/knowledge-base
+    python scripts/kb/build_rag_db.py --seed --out ./build/knowledge-base
     python scripts/measure_kb_floor_holdout.py
     python scripts/measure_kb_floor_holdout.py --json runs/plan48-floor-after.json --label after
 """

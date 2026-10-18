@@ -4,7 +4,7 @@ Title: Deck knowledge-base retrieval probe — time budget tests
 Purpose: Pin the pass / over-budget verdict the probe prints for the two timings written down in
          docs/knowledge-base.md, "Time budget for a game question": how long the meaning search
          takes, and how long until the first word of an answer appears, both with a game running.
-Used for: scripts/probe_deck_kb_retrieval.py.
+Used for: scripts/kb/probe_deck_kb_retrieval.py.
 Solves: Before this, a slowdown in either number only got caught when a QA row happened to record
         one to compare against. These tests pin the verdict function itself, so the numbers in
         the doc and the numbers the probe checks against cannot quietly drift apart.

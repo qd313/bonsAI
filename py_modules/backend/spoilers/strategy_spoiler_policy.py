@@ -251,7 +251,7 @@ def _strategy_spoiler_policy_block(
             f"{low_risk}\n"
         )
     # The fence-format sentences are subtractive too. Measured 2026-09-02 with
-    # scripts/eval_kb_answers.py (Deck model on the PC, 37 cases x 3 samples, two runs each):
+    # scripts/kb/eval_kb_answers.py (Deck model on the PC, 37 cases x 3 samples, two runs each):
     # with the two sentences below in place, 28 of 96 low-risk / named-entity samples carried a
     # fence around a harmless opening line ("This guide focuses on general tactics against the
     # Tank.") even though the addendum says not to. The placement rule reads, to a 2B model, as

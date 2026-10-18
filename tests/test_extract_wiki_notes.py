@@ -1,10 +1,10 @@
 """Title: Wiki note reader
 
-Purpose: Pin scripts/extract_wiki_notes.py's "trim only" guarantee (D111, plan 58 phase 1
+Purpose: Pin scripts/kb/extract_wiki_notes.py's "trim only" guarantee (D111, plan 58 phase 1
 Section 8 item 2): an AI may never write a sentence into a wiki note, only cut. Covers
 section finding, table/infobox-to-labelled-line conversion, whole-sentence length trimming,
 the licence allow-list gate, and the verbatim guarantee itself.
-Used for: scripts/extract_wiki_notes.py.
+Used for: scripts/kb/extract_wiki_notes.py.
 Solves: Every wiki note shipped before this phase was an AI rewrite, not the wiki's own
 words -- see workshop:archive/58-phase-1-notes-shown-and-wiki-extracts.md Section 1. This is the
 test suite for the reader that replaces that rewrite step.

@@ -121,7 +121,7 @@ _KB_CARD_NAME_RE = re.compile(r"\[(?:[^\]/]+/\s*[^:\]]+|Tip)\s*:\s*([^\]]+)\]", 
 
 # Guessed from the name only, the same way knowledge_base_service._is_starting_out_card guesses
 # it -- every "Starting out in <game>" card is named exactly this way (data/kb/strategy_seed.json,
-# and enforced at build time by scripts/build_rag_db.py's mistyped_starting_out_rows check).
+# and enforced at build time by scripts/kb/build_rag_db.py's mistyped_starting_out_rows check).
 # Excluded from the gazetteer match entirely: naming a game names the game, not one of its notes,
 # and this generic card's whole title is built by appending the game's own name -- the one title
 # in the corpus guaranteed to end in exactly that. That is what let a game whose name is also its

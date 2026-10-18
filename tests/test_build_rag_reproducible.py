@@ -1,7 +1,7 @@
 """Title: Corpus build determinism
 
 Purpose: Pin that a corpus rebuild is byte-reproducible — no build clock reaches the DB.
-Used for: scripts/build_rag_db.py _seed_strategy_corpus crawled_at handling.
+Used for: scripts/kb/build_rag_db.py _seed_strategy_corpus crawled_at handling.
 Solves: `crawled = _utc_now()` stamped build time into the 58 maintainer-authored rows, so
   every rebuild produced a different db_sha256 (three builds on 2026-08-14 gave 758505 /
   758506 / 758507 bytes) and the published manifest hash could not attest provenance.

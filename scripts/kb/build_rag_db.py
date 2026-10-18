@@ -5,8 +5,8 @@ Creates SQLite + FTS5 (+ optional vector placeholders), compresses for distribut
 and emits corpus-manifest.json + ATTRIBUTIONS.md. Corpus is never committed to git.
 
 Usage:
-  python scripts/build_rag_db.py --seed --out ./build/knowledge-base
-  python scripts/build_rag_db.py --out ./build/knowledge-base   # scaffold only (no crawl in v1)
+  python scripts/kb/build_rag_db.py --seed --out ./build/knowledge-base
+  python scripts/kb/build_rag_db.py --out ./build/knowledge-base   # scaffold only (no crawl in v1)
 
 Output goes under ``build/``, not ``dist/``: ``npm run build`` clears ``dist/``, so a corpus
 built there was deleted by the next plugin build with no warning.

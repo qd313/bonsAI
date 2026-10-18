@@ -22,7 +22,7 @@ whichever card happens to repeat "the" the most.
 
 Does not: Blend the keyword ranking with the meaning-search ranking -- the
 fusion function stays in knowledge_base_service.py because
-scripts/eval_kb_embed_models.py's weight sweep mutates its RRF_W_FTS /
+scripts/kb/eval_kb_embed_models.py's weight sweep mutates its RRF_W_FTS /
 RRF_W_VEC constants directly on that module, and moving the function away
 from them would leave the sweep changing numbers nothing reads any more.
 Also does not decide whether the meaning-search half runs at all, or judge

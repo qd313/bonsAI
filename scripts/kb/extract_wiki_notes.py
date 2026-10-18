@@ -15,10 +15,10 @@ Does not: Fetch pages (see fetch_wiki_live_pages.py / fetch_wiki_dump_pages.py, 
           script reads the output of), pick which pages or games matter, write into the seed,
           or run at plugin build/runtime. Nothing under py_modules/ imports it.
 
-    python scripts/extract_wiki_notes.py --page build/wiki-live/hollowknightwiki/hornet.txt \\
+    python scripts/kb/extract_wiki_notes.py --page build/wiki-live/hollowknightwiki/hornet.txt \\
         --game-id 12
 
-    python scripts/extract_wiki_notes.py --page build/dumps/some-dump/Some_Page.wikitext \\
+    python scripts/kb/extract_wiki_notes.py --page build/dumps/some-dump/Some_Page.wikitext \\
         --game-id 12 --section-type boss
 
 Prints one JSON note record (the nine strategy_seed.json fields) and one sidecar record
@@ -1097,7 +1097,7 @@ def build_note(
     if licence not in allowed_licences:
         raise SystemExit(
             f"refusing {page_path.name}: licence {licence!r} is not on the publish allow-list "
-            f"({sorted(allowed_licences)}); scripts/publish_corpus.py would refuse this too"
+            f"({sorted(allowed_licences)}); scripts/kb/publish_corpus.py would refuse this too"
         )
 
     headings = extract_headings(body)

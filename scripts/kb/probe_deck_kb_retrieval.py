@@ -20,9 +20,9 @@ Does not: Write to settings or touch the corpus. Read-only apart from the embedd
 
 Run from the maintainer PC with the Deck online:
 
-    ssh deck@$DECK_IP 'python3 -' < scripts/probe_deck_kb_retrieval.py
+    ssh deck@$DECK_IP 'python3 -' < scripts/kb/probe_deck_kb_retrieval.py
     ssh deck@$DECK_IP 'python3 - --app-id 620 --app-name "Portal 2" --question "how do gels work"' \
-        < scripts/probe_deck_kb_retrieval.py
+        < scripts/kb/probe_deck_kb_retrieval.py
 
 `--pool` additionally prints the FTS candidate pool at floor 0.0, which is what distinguishes
 "the corpus has nothing to say" from "BM25 could not find what is sitting right there".

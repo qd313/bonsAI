@@ -378,7 +378,7 @@ def _classify_backend_name(name: str, rel_file: str, line: int,
 
     # The dead-code tool is only pointed at main.py and py_modules, so a name a
     # helper script imports looks unused to it. CORPUS_SCHEMA_VERSION was reported
-    # dead on 2026-09-13 and is imported by scripts/build_rag_db.py, which writes it
+    # dead on 2026-09-13 and is imported by scripts/kb/build_rag_db.py, which writes it
     # into every corpus it builds. Deleting it would have broken corpus building.
     in_scripts = [f for f in _files_mentioning(name, script_files) if f != rel_file]
     if in_scripts:

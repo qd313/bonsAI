@@ -124,7 +124,7 @@ async def run_ask_ollama(
 
     ``chat`` (plan 68) is the whole chat this question belongs to -- its turns, its own summary
     and its id -- read once by the caller (``game_ai_request.py``) via ``Plugin.chat_for_request``.
-    ``chat_turns`` alone still works for a caller with no chat id to give (``scripts/eval_kb_answers.py``);
+    ``chat_turns`` alone still works for a caller with no chat id to give (``scripts/kb/eval_kb_answers.py``);
     when both are given, ``chat`` wins.
 
     ``question_for_display`` (plan 70 helper K): the person's own words, exactly as the sanitizer

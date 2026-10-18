@@ -21,9 +21,9 @@ Two honesty rules are enforced in code rather than left to the reader:
   tuning cannot be driven by traffic production never routes (R2).
 
 Usage:
-  python scripts/eval_kb_embed_models.py
-  python scripts/eval_kb_embed_models.py --ollama http://127.0.0.1:11434 --write-report
-  python scripts/eval_kb_embed_models.py --arms-only     # skip the 6-model sweep
+  python scripts/kb/eval_kb_embed_models.py
+  python scripts/kb/eval_kb_embed_models.py --ollama http://127.0.0.1:11434 --write-report
+  python scripts/kb/eval_kb_embed_models.py --arms-only     # skip the 6-model sweep
 """
 
 from __future__ import annotations
@@ -1505,7 +1505,7 @@ def _write_report(
         f"- Keyword-only baseline: **{payload['keyword_baseline']['top1_pct']}%** top-1 / **{payload['keyword_baseline']['top3_pct']}%** top-3.",
         f"- Best hybrid prompted top-3: {_best_prompted_line(payload)}",
         f"- Holdout arm verdict: {(payload.get('arms') or {}).get('verdict', 'not run')}",
-        "- Re-run: `python scripts/eval_kb_embed_models.py --write-report`",
+        "- Re-run: `python scripts/kb/eval_kb_embed_models.py --write-report`",
         "",
         "## English aggregate (kb_eval_v2, labeled rows)",
         "",

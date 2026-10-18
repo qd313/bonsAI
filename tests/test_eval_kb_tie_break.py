@@ -1,6 +1,6 @@
 """Title: Tie-break weight rule for the knowledge-base search measurement
 
-Purpose: Pin the decision rule behind scripts/eval_kb_embed_models.py's --tie-break variant —
+Purpose: Pin the decision rule behind scripts/kb/eval_kb_embed_models.py's --tie-break variant —
 a measurement-only prototype, never shipped.
 Used for: eval_kb_embed_models.py _tie_break_weights, the pure function _run_tie_break_arm
   calls to pick (RRF_W_FTS, RRF_W_VEC) per query.

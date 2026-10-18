@@ -1,7 +1,7 @@
 """
 Title: Eval harness arm-comparison tests
 Purpose: Pin the honesty rules the KB retrieval bake-off enforces in code.
-Used for: scripts/eval_kb_embed_models.py — splits, bootstrap CIs, the non-overlap verdict,
+Used for: scripts/kb/eval_kb_embed_models.py — splits, bootstrap CIs, the non-overlap verdict,
           the live gate-reachability check (R2), and whether the eval's saved library copy
           is fresh enough to trust.
 Solves: The eval is what decides whether fusion ships. A verdict that rounds an overlap up to

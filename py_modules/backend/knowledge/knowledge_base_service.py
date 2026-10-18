@@ -670,7 +670,7 @@ def _vector_recall_sections(
     return [_section_row_to_card(row) for _, _, row in scored[:top_k]], vectors_by_id
 
 
-# --- Fusion constants (RRF_W_FTS / RRF_W_VEC are mutated directly by scripts/eval_kb_embed_models.py's
+# --- Fusion constants (RRF_W_FTS / RRF_W_VEC are mutated directly by scripts/kb/eval_kb_embed_models.py's
 # weight sweep, which is why _fuse_cards_by_rrf stays in this module rather than moving with
 # the rest of the keyword search to knowledge_base_search.py -- see that script's own note.)
 #

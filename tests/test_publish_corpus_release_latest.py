@@ -1,9 +1,9 @@
 """Title: Knowledge library release is never marked "latest" on GitHub
 
-Purpose: Pin that `scripts/publish_corpus.py --push-github` creates the knowledge library's
+Purpose: Pin that `scripts/kb/publish_corpus.py --push-github` creates the knowledge library's
 GitHub release with `--latest=false`, so the library can never take the "latest" spot that
 the plugin's own release needs (the README install link asks GitHub for the latest release).
-Used for: scripts/publish_corpus.py push_to_github (the `gh release create` call).
+Used for: scripts/kb/publish_corpus.py push_to_github (the `gh release create` call).
 Solves: The library's release was created with no latest flag, so GitHub counted it as the
   newest release. The README install link then pointed at a release with no plugin zip and
   new users got "not found".

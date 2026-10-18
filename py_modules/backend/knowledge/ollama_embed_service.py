@@ -33,7 +33,7 @@ class OllamaEmbedError(Exception):
 # the space unless each carries its task prefix. Omitting them is not a small quality loss —
 # it is measuring a configuration the model was not trained for.
 #
-# This module is the ONLY owner of prefix logic. scripts/eval_kb_embed_models.py imports these
+# This module is the ONLY owner of prefix logic. scripts/kb/eval_kb_embed_models.py imports these
 # rather than keeping its own copies: the eval applying prefixes while production did not is
 # exactly how the 2026-07-31 bake-off ended up measuring something that was never shipped.
 # Branching is by model family so the eval can sweep non-nomic models through one code path.

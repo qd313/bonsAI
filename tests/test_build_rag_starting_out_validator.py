@@ -6,7 +6,7 @@ from `mechanic` to `starting_out`. Two other helpers are writing brand-new "Star
 replaces) because their brief was written first. This is the check that catches a row left
 that way before it ever reaches a build, rather than shipping a chip and a rescue phrase
 that quietly miss it.
-Used for: scripts/build_rag_db.py's `mistyped_starting_out_rows()`, called from
+Used for: scripts/kb/build_rag_db.py's `mistyped_starting_out_rows()`, called from
 `_seed_strategy_corpus` right before the seed's sections are inserted.
 Solves: A silent mismatch here has no other symptom -- the row still searches and answers
 fine by keyword, it just never gets the "How do I get started" chip or the "where do I

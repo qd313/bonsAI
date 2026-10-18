@@ -15,10 +15,10 @@ Does not: Run at plugin build time or on device. Nothing under py_modules/ impor
 Needs the `zstandard` package for .zst dumps and 7-Zip on PATH for .7z dumps. Both are
 maintainer-host tools; neither is a plugin runtime dependency.
 
-    python scripts/fetch_wiki_dump_pages.py --dump wiki-cyberpunk.fandom.com-20260618 \
+    python scripts/kb/fetch_wiki_dump_pages.py --dump wiki-cyberpunk.fandom.com-20260618 \
         --list-titles --out build/dumps
 
-    python scripts/fetch_wiki_dump_pages.py --dump wiki-cyberpunk.fandom.com-20260618 \
+    python scripts/kb/fetch_wiki_dump_pages.py --dump wiki-cyberpunk.fandom.com-20260618 \
         --titles "Adam Smasher|Sandevistan" --out build/dumps
 """
 
@@ -79,7 +79,7 @@ def snapshot_licence(identifier: str, files: list[dict]) -> dict:
         "rightsinfo": query.get("rightsinfo", {}),
         "sitename": general.get("sitename", ""),
         "generator": general.get("generator", ""),
-        # scripts/extract_wiki_notes.py needs these to rebuild a page's own URL -- guessing
+        # scripts/kb/extract_wiki_notes.py needs these to rebuild a page's own URL -- guessing
         # "/wiki/Title" off the API path is wrong often enough to matter (hollowknight.wiki's
         # own articlepath is "/w/$1", not "/wiki/$1"; strategywiki.org's api.php lives under
         # "/w/api.php", which is not its article root either).

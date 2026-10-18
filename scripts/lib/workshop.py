@@ -8,7 +8,7 @@ Purpose: The history of the plugin (every Deck check's evidence, the saved Deck 
     and finally the folder named bonsAI-workshop that sits next to the repo folder. When a script runs
     from one of the repo's own working copies (under .claude/worktrees), "the repo folder" means the main
     checkout those copies hang off, so every copy finds the same workshop.
-Used for: scripts/eval_kb_answers.py and scripts/eval_kb_embed_models.py (their reports). The same
+Used for: scripts/kb/eval_kb_answers.py and scripts/kb/eval_kb_embed_models.py (their reports). The same
     answer in JavaScript is scripts/lib/workshop.mjs, used by the overnight Deck run.
 Solves: Evidence files used to be written under docs/ in this repo. Now that they live in the workshop,
     each script would otherwise carry its own copy of "where is the workshop", and they would drift.

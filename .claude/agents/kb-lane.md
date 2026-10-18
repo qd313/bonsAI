@@ -33,7 +33,7 @@ Ground rules, all of them non-negotiable:
    its readings.
 6. **A built corpus has been copied into your worktree at `build/knowledge-base`.** Use it. Only if it
    is missing, build your own with
-   `python scripts/build_rag_db.py --seed --out build/knowledge-base` (Ollama must be running or every
+   `python scripts/kb/build_rag_db.py --seed --out build/knowledge-base` (Ollama must be running or every
    meaning-search number is wrong). The folder is git-ignored; never commit it.
 7. **Never commit an eval report to bonsAI.** Both eval scripts now write into the workshop's `archive/research/`
    folder (`C:\Users\still\Documents\bonsAI-workshop\archive\research\` on this PC, or wherever `BONSAI_WORKSHOP` says). Those files

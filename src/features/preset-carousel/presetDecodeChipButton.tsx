@@ -86,7 +86,7 @@ export function DecodePresetChipButton(props: {
       style={{
         width: "100%",
         minHeight: PRESET_CHIP_HEIGHT_PX,
-        fontSize: textPx(12),
+        fontSize: textPx(11),
         // Same normal chip-text colour PresetChipButton uses below (never the accent): the label
         // used to be tinted `--bonsai-ui-accent-toned` by a CSS rule in section-4.ts, which made a
         // decode chip's words read in the same colour family as its Tip dot -- the dot is the only

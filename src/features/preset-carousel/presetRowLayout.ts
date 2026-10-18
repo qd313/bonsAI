@@ -34,7 +34,7 @@ export function effectivePresetVisibleSlots(singleChip: boolean): number {
   return singleChip ? 1 : PRESET_VISIBLE_SLOTS;
 }
 /** Chip height, per the drawing (was 34 when the row was one chip). */
-export const PRESET_CHIP_HEIGHT_PX = 30;
+export const PRESET_CHIP_HEIGHT_PX = 26;
 /** Space between the chips. From the design boards of 2026-09-16 (plan 60, board B): widened from
  * 4 so the two chips stop reading as one slab. */
 export const PRESET_CHIP_GAP_PX = 6;

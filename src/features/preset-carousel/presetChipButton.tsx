@@ -278,7 +278,7 @@ export function PresetChipButton(props: {
       style={{
         width: "100%",
         minHeight: PRESET_CHIP_HEIGHT_PX,
-        fontSize: textPx(12),
+        fontSize: textPx(11),
         color: dimmed ? "#8fa3b8" : "#c4d3e2",
         opacity: fade ? fade.opacity : dimmed ? 0.55 : 1,
         transform: dimmed ? "scale(0.96)" : "scale(1)",

@@ -223,7 +223,7 @@ export function MainTabPresetRow({
             style={{
               width: "100%",
               minHeight: PRESET_CHIP_HEIGHT_PX,
-              fontSize: textPx(12),
+              fontSize: textPx(11),
             }}
             aria-label="How to use bonsAI — open quick start"
           >
@@ -258,7 +258,7 @@ export function MainTabPresetRow({
             style={{
               width: "100%",
               minHeight: PRESET_CHIP_HEIGHT_PX,
-              fontSize: textPx(12),
+              fontSize: textPx(11),
               color: "#c4d3e2",
             }}
             aria-label="Agent suggestion"

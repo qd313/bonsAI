@@ -248,6 +248,18 @@ at landing; `verify.py --full` gated on its exit code before the final push.
   launch is now the strongest suspect, for the R1 entry). After A sends the Explain further question the ring is on nothing (a new
   ★ entry). The full check passed on the tip (exit code 0). **Not pushed.**
 
+- **2026-10-18 17:20 to 19:10 UTC, the maintainer's afternoon.** The hand checks came in (§ 5: the real mic passes, the language
+  pick and the picture answer are real bugs, the ghost strip has a picture, the right stick does not scroll, rename passes on the
+  Deck but Steam's keyboard never appears with an external controller). Their calls (§ 9e, each answered): the spinner turns again
+  with a game (`8a06456e`), a long chip shows its words twice (`57829f6c`), Find LAN shows for everyone beside the address
+  (`46e24b39`), and every confirm box now has the action on the left in the Got it look and Cancel on the right with the ring on it
+  (`5d3a846b` to `24f5c300`; one header-note clash with Find LAN merged by hand, four Find LAN tests followed, `7e070e42`). Scoped,
+  not fixed, as asked: the picture answer (pictures under 500 KB go out at full size and the Deck's graphics memory gives out;
+  docs/audit/plan96-scope-screenshot-answer.md), the language pick (Steam's list is the one box opened without noting the screen
+  first; plan96-scope-reply-language.md), and the ghost strip (Steam's own tab row, hidden by a rule from 2 September that fails
+  when Steam rebuilds its row after a pop-up or a touch; every sighting had a game running; plan96-scope-ghost-tab-bar.md). Build
+  `24f5c300` deployed 19:05; block F (runbook [assets/96-runbook-block-F.md](assets/96-runbook-block-F.md)) checks the four changes.
+
 ## 9. Report (2026-10-18, written by the session that ran it)
 
 ### 9a. What you must do next

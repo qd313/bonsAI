@@ -2,7 +2,7 @@
 
 import unittest
 
-from backend.services.input_sanitizer_service import (
+from backend.commands.input_sanitizer_service import (
     COMMAND_DISABLE_SANITIZE,
     COMMAND_ENABLE_SANITIZE,
     apply_input_sanitizer_lane,

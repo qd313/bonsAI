@@ -166,12 +166,12 @@ from backend.services.desktop_note_service import (
     append_desktop_ask_transparency_sync,
 )
 from backend.media import media_desktop_rpc
-from backend.services.input_sanitizer_service import (
+from backend.commands.input_sanitizer_service import (
     apply_input_sanitizer_lane,
     classify_sanitizer_command,
 )
-from backend.services.ask_local_commands import detect_local_ask_commands
-from backend.services import ask_local_command_handlers
+from backend.commands.ask_local_commands import detect_local_ask_commands
+from backend.commands import ask_local_command_handlers
 from backend.media.screenshot_media import (
     MAX_ATTACHMENT_FILE_BYTES,
     MAX_ATTACHMENT_INLINE_BYTES,

@@ -20,7 +20,7 @@
  */
 import { INPUT_SANITIZER_COMMAND_DISABLE, INPUT_SANITIZER_COMMAND_ENABLE } from "../data/inputSanitizerCommands";
 
-/** Match ``backend/services/shortcut_setup_commands.py`` slash handling. */
+/** Match ``backend/commands/shortcut_setup_commands.py`` slash handling. */
 function normalizeAskWithOptionalLeadingSlash(text: string): string {
   let s = (text || "").trim().toLowerCase();
   if (s.startsWith("/")) {

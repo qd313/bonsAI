@@ -11,7 +11,7 @@ from unittest.mock import patch
 from user_notes_plugin_harness import PluginOnATempFolder
 
 from backend.services import chat_slot_service  # noqa: E402
-from backend.services.ask_local_commands import detect_local_ask_commands  # noqa: E402
+from backend.commands.ask_local_commands import detect_local_ask_commands  # noqa: E402
 from backend.answer.transparency_service import build_immediate_command_snapshot  # noqa: E402
 from backend.services.user_note_commands import parse_note_command  # noqa: E402
 from main import Plugin  # noqa: E402
@@ -94,7 +94,7 @@ class AnswersWithoutTheAiTests(PluginOnATempFolder):
     async def test_background_with_nothing_running_the_game_is_the_chats_own(self):
         slot = chat_slot_service.create_slot(self.tmp, first_question="Mantis Lords?", app_name="Hollow Knight")
         with patch(
-            "backend.services.ask_local_command_handlers.resolve_title_from_question",
+            "backend.commands.ask_local_command_handlers.resolve_title_from_question",
             side_effect=lambda _settings, text: "Hollow Knight" if "Hollow Knight" in text else "",
         ):
             started, status = await self._background(REMEMBER, slot_id=slot["id"])

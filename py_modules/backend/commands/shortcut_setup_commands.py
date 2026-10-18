@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import Literal, Optional
 
-from backend.services.ask_command_text import normalize_ask_command_input
+from backend.commands.ask_command_text import normalize_ask_command_input
 
 # Match sanitizer: trim + casefold, plus one optional leading / (e.g. paste from chat)
 COMMAND_SHORTCUT_DECK = "bonsai:shortcut-setup-deck"

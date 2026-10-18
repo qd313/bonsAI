@@ -21,11 +21,11 @@ import decky
 
 from backend.services.chat_own_game_title import text_resolved_title_for_turn
 from backend.services.chat_slot_service import load_slot as chat_load_slot
-from backend.services.input_sanitizer_service import (
+from backend.commands.input_sanitizer_service import (
     classify_sanitizer_command,
     confirmation_message_for_command,
 )
-from backend.services.shortcut_setup_commands import (
+from backend.commands.shortcut_setup_commands import (
     classify_shortcut_setup_command,
     response_message_for_shortcut,
 )

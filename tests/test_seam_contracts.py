@@ -105,11 +105,11 @@ FROZEN: dict[str, dict[str, str | None]] = {
         "get_whisper_engine": "() -> \"'WhisperEngine'\"",
     },
     # ask command text rules
-    "backend.services.ask_command_text": {
+    "backend.commands.ask_command_text": {
         "normalize_ask_command_input": "(text: 'str', *, allow_leading_slash: 'bool' = False) -> 'str'",
     },
     # local ask commands
-    "backend.services.ask_local_commands": {
+    "backend.commands.ask_local_commands": {
         "detect_local_ask_commands": "(text: 'str') -> 'LocalAskCommandKinds'",
     },
 }
@@ -151,10 +151,10 @@ class SeamContractTests(unittest.TestCase):
         files below must not import the files that import them, or the loop is back.
         """
         leaves = {
-            "backend.services.ask_command_text": (
-                "backend.services.ask_local_commands",
-                "backend.services.input_sanitizer_service",
-                "backend.services.shortcut_setup_commands",
+            "backend.commands.ask_command_text": (
+                "backend.commands.ask_local_commands",
+                "backend.commands.input_sanitizer_service",
+                "backend.commands.shortcut_setup_commands",
             ),
             "backend.voice.voice_whisper_runtime": (
                 "backend.voice.voice_transcription_service",

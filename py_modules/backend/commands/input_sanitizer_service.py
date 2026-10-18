@@ -22,7 +22,7 @@ import unicodedata
 from dataclasses import dataclass, field
 from typing import Literal, Optional
 
-from backend.services.ask_command_text import normalize_ask_command_input
+from backend.commands.ask_command_text import normalize_ask_command_input
 
 # Documented in README / docs; match is trim + casefold, exact equality.
 COMMAND_DISABLE_SANITIZE = "bonsai:disable-sanitize"

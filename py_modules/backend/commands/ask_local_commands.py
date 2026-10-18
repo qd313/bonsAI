@@ -12,8 +12,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from backend.services.input_sanitizer_service import classify_sanitizer_command
-from backend.services.shortcut_setup_commands import classify_shortcut_setup_command
+from backend.commands.input_sanitizer_service import classify_sanitizer_command
+from backend.commands.shortcut_setup_commands import classify_shortcut_setup_command
 from backend.services.user_note_commands import parse_note_command
 
 

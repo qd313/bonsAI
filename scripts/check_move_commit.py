@@ -19,8 +19,9 @@ function body got one character different, would pass every test that does not c
 Does not: Judge whether a move was a good idea, or run any test. It does not follow a Python
 module that is named only by a bare file name (a script found through `sys.path`), and it
 cannot pair a rename that git itself cannot pair (a tiny file whose lines almost all changed
-shows up as a delete plus an add, and fails). Files a generator writes (listed in
-scripts/move_tools_config.json) are skipped. Merge commits are skipped in a range.
+shows up as a delete plus an add, and fails). The one added file it allows is an `__init__.py`
+whose code is empty (a docstring and comments only), the package marker a move into a new
+folder needs. Files a generator writes (listed in scripts/move_tools_config.json) are skipped. Merge commits are skipped in a range.
 
 How it works:
 1. `git diff-tree` lists the changes of one commit with renames paired (low similarity
@@ -561,6 +562,17 @@ def stale_importers(repo, rev, changes, table, old_tree, new_tree, is_generated,
     return problems
 
 
+def is_code_free_package_marker(path: str, blob: bytes) -> bool:
+    """True for an added `__init__.py` that holds no code: nothing but a docstring and comments."""
+    if os.path.basename(path) != "__init__.py":
+        return False
+    try:
+        body = ast.parse(blob.decode("utf8")).body
+    except (SyntaxError, UnicodeDecodeError, ValueError):
+        return False
+    return not body or (len(body) == 1 and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant) and isinstance(body[0].value.value, str))
+
+
 def check_commit(repo: Repo, rev: str, config: dict) -> tuple[list[str], list[str]]:
     generated = [glob_to_regex(g) for g in config["generated"]]
     is_generated = lambda p: any(g.match(p) for g in generated)  # noqa: E731
@@ -570,6 +582,11 @@ def check_commit(repo: Repo, rev: str, config: dict) -> tuple[list[str], list[st
 
     changes = [c for c in all_changes if not (is_generated(c.old) or is_generated(c.new))]
     changes = pair_by_base_name(changes)
+    added = [c for c in changes if c.status == "A" and os.path.basename(c.new) == "__init__.py"]
+    if added:
+        markers = repo.blobs([c.new_oid for c in added])
+        free = {id(c) for c in added if is_code_free_package_marker(c.new, markers[c.new_oid])}
+        changes = [c for c in changes if id(c) not in free]
     renames = [(c.old, c.new) for c in changes if c.status == "R" and c.old != c.new]
     for c in changes:
         if c.status == "A":

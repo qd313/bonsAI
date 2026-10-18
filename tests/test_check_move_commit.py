@@ -214,6 +214,21 @@ class WholeCommitTests(unittest.TestCase):
         self.assertEqual(code, 1, out)
         self.assertIn("ADDED", out)
 
+    def test_a_move_may_add_a_code_free_package_marker(self):
+        do_python_move(self.box)
+        self.box.write("py_modules/backend/services/sub/__init__.py", '"""Title: sub package\n\nPurpose: marks the folder."""\n# a comment\n')
+        self.box.commit("move foo and add the package marker")
+        code, out = self.box.check()
+        self.assertEqual(code, 0, out)
+
+    def test_an_added_package_marker_holding_code_fails(self):
+        do_python_move(self.box)
+        self.box.write("py_modules/backend/services/sub/__init__.py", '"""Marks the folder."""\nX = 1\n')
+        self.box.commit("move foo and add a marker with code")
+        code, out = self.box.check()
+        self.assertEqual(code, 1, out)
+        self.assertIn("ADDED", out)
+
     def test_a_file_deleted_with_no_partner_fails(self):
         do_python_move(self.box)
         self.box.git("rm", "-q", "-f", "docs/note.md")

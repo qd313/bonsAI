@@ -15,5 +15,7 @@ export function composeDrgGlossaryExplainFurtherQuestion(term: DrgGlossaryTerm):
 }
 
 export function drgGlossaryExplainFurtherThreadDisplay(term: DrgGlossaryTerm): string {
-  return `Explain: ${term.term}`;
+  // The label a person sees in the chat names the game too, like the question it stands for (plan 96 F6).
+  const game = term.gameTitle.trim();
+  return game ? `Explain: ${term.term} (${game})` : `Explain: ${term.term}`;
 }

@@ -78,6 +78,35 @@ describe("DrgGlossaryTermChip", () => {
     expect(question).toContain("Deep Rock Galactic: Survivor");
   });
 
+  it("sits the Explain further button inside its own focus stop, so the D-pad can reach it", () => {
+    // Plan 96 F6 (workshop:test-evidence/plan94-P94-GLOSSARY.json): the button was a plain button the Deck
+    // could not reach. The stop is a Focusable of its own around it; Down from the word hands the ring there
+    // (the hand-off itself is Steam's and needs the device).
+    const { container } = render(<DrgGlossaryTermChip term={kitingTerm} matchedText="kiting" />);
+    fireEvent.click(container.querySelector(".bonsai-drg-glossary-term-text")!);
+    fireEvent.click(container.querySelector(".bonsai-drg-glossary-term-text")!);
+    const button = document.querySelector(".bonsai-drg-glossary-explain-further") as HTMLElement;
+    expect(button).toBeTruthy();
+    expect(button.closest(".bonsai-drg-glossary-explain-stop")).not.toBeNull();
+  });
+
+  it("two clicks on Explain further in a row send one question, not two", () => {
+    // Steam's A and a synthetic click can both arrive before the box has closed; the fired guard keeps it to one.
+    const onExplainFurther = vi.fn();
+    const { container } = render(
+      <DrgGlossaryTermChip term={kitingTerm} matchedText="kiting" onExplainFurther={onExplainFurther} />
+    );
+    fireEvent.click(container.querySelector(".bonsai-drg-glossary-term-text")!);
+    fireEvent.click(container.querySelector(".bonsai-drg-glossary-term-text")!);
+    const button = document.querySelector(".bonsai-drg-glossary-explain-further") as HTMLElement;
+    // One act around both clicks: the box has not re-drawn between them, as when the two presses land together.
+    act(() => {
+      fireEvent.click(button);
+      fireEvent.click(button);
+    });
+    expect(onExplainFurther).toHaveBeenCalledTimes(1);
+  });
+
   it("closes the tooltip after explain-further is used", () => {
     const { container } = render(
       <DrgGlossaryTermChip term={kitingTerm} matchedText="kiting" onExplainFurther={vi.fn()} />

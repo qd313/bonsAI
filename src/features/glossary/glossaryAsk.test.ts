@@ -24,7 +24,11 @@ describe("composeDrgGlossaryExplainFurtherQuestion", () => {
 });
 
 describe("drgGlossaryExplainFurtherThreadDisplay", () => {
-  it("is a short label naming the term", () => {
-    expect(drgGlossaryExplainFurtherThreadDisplay(kitingTerm)).toBe("Explain: kiting");
+  it("is a short label naming the term and, in brackets, the game", () => {
+    expect(drgGlossaryExplainFurtherThreadDisplay(kitingTerm)).toBe("Explain: kiting (Deep Rock Galactic: Survivor)");
+  });
+
+  it("leaves the brackets out when the library gave no title", () => {
+    expect(drgGlossaryExplainFurtherThreadDisplay({ ...kitingTerm, gameTitle: "" })).toBe("Explain: kiting");
   });
 });

@@ -27,8 +27,8 @@ from backend.prompts.answer_depth_blocks import (  # noqa: E402
     MULTI_PART_BLOCK,
     is_multi_part_question,
 )
-from backend.prompts.ollama_prompts import build_system_prompt  # noqa: E402
 from main import Plugin  # noqa: E402
+from test_terse_mode_prompt import _prompt  # noqa: E402  (the shared prompt builder)
 
 DEPTH_MARK = "EXPERT ANSWER DEPTH"
 PARTS_MARK = "MORE THAN ONE QUESTION"
@@ -55,20 +55,6 @@ ONE_PART = (
     "what is rock and roll",
     "How do I beat Megaera and then move on to the next boss",
 )
-
-
-def _prompt(question, *, ask_mode="speed", **kwargs):
-    return build_system_prompt(
-        question=question,
-        app_id="",
-        app_name="",
-        normalized_attachments=[],
-        prepared_images=[],
-        lookup_app_name=lambda _a: "",
-        lookup_screenshot_vdf_metadata=lambda _p: {},
-        ask_mode=ask_mode,
-        **kwargs,
-    )
 
 
 class WhatCountsAsTwoParts(unittest.TestCase):
@@ -154,10 +140,6 @@ class TheRealAskPath(unittest.IsolatedAsyncioTestCase):
     """Built through Plugin.ask_ollama, the function a real Ask goes through, with only the network faked."""
 
     async def asyncSetUp(self):
-        self.tmp = tempfile.mkdtemp()
-        patcher = patch.object(Plugin, "_chat_slots_settings_dir", return_value=self.tmp)
-        patcher.start()
-        self.addCleanup(patcher.stop)
         self.plugin = Plugin()
         self.sent: list[str] = []
 
@@ -167,6 +149,8 @@ class TheRealAskPath(unittest.IsolatedAsyncioTestCase):
 
     async def _ask(self, question, ask_mode):
         with (
+            tempfile.TemporaryDirectory() as tmp,
+            patch.object(Plugin, "_chat_slots_settings_dir", return_value=tmp),
             patch.object(Plugin, "load_settings", return_value={}),
             patch("backend.ask.ollama_ask_service.list_installed_ollama_tags", return_value=["qwen3:4b"]),
             patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),

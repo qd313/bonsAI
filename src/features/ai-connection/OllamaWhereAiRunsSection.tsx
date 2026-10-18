@@ -270,6 +270,20 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     const update = installUpdateBtnRef.current;
     if (!elementHasGamepadFocus(update)) focusInstallUpdateBtn();
   });
+  /* Find LAN's own Steam node: after its box closes the ring comes back through Steam's transfer, then a plain focus if that did not land it. */
+  const findLanNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
+  const findLanBtnRef = useRef<HTMLButtonElement | null>(null);
+  const takeFindLan = useCallback((): boolean => {
+    try {
+      findLanNavRef.current?.TakeFocus?.(true);
+    } catch {
+      /* the check below decides */
+    }
+    const el = findLanBtnRef.current;
+    if (!el) return false;
+    if (!elementHasGamepadFocus(el)) focusInTabBody(el);
+    return true;
+  }, []);
   const focusBrowseModelsBtn = useCallback(
     (): boolean => focusChainBtn(browseModelsBtnRef, localSetupBusy),
     [focusChainBtn, localSetupBusy],
@@ -432,6 +446,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     onCompleteDeckyModalClose,
     // A search outlives this copy of the tab: the box closing rebuilds it (plan 96, Deck 2026-10-18).
     store: tabMdnsDiscovery,
+    returnFocusId: "ollama-find-lan",
   });
 
   const { formatLocalSetupStageLine, cancelLocalSetup, runLocalSetupInPlace } = useLocalOllamaSetupFlow({
@@ -791,8 +806,18 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
               </Button>
               </Focusable>
               {findLanShown ? (
+                /* Its own Focusable, so Steam has a node to hand the ring back to when its box closes. */
+                <Focusable
+                  style={{ display: "flex", flex: "0 0 auto", alignSelf: "flex-end" }}
+                  {...({ navRef: findLanNavRef } as Record<string, unknown>)}
+                >
                 <Button
                   className={FOCUS_RING_BTN_CLASS}
+                  ref={(el) => {
+                    findLanBtnRef.current = el as HTMLButtonElement | null;
+                    // Its box (Search / Cancel) rebuilds this tab on close; the ring comes back here.
+                    registerModalReturnFocusOwner("ollama-find-lan", el as HTMLElement | null, takeFindLan);
+                  }}
                   onClick={openMdnsDiscoveryConfirm}
                   disabled={mdnsDiscovering || connectionTesting || localSetupBusy}
                   style={{
@@ -815,6 +840,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                 >
                   {mdnsDiscovering ? "…" : "Find LAN"}
                 </Button>
+                </Focusable>
               ) : null}
             </Focusable>
             {!ollamaLocalOnDeck ? (

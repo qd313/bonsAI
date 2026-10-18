@@ -49,6 +49,11 @@ export type ModalReturnFocusId =
    */
   | "ollama-local-setup"
   /**
+   * The Ollama tab's Find LAN button, for its ask-first box (plan 96). B on the box put the ring on the tab
+   * bar while the other boxes gave it back to their opener (workshop:test-evidence/plan96-P96-CANCEL-RIGHT.json).
+   */
+  | "ollama-find-lan"
+  /**
    * The Knowledge base section's two buttons whose boxes rebuild the tab on close (plan 76 lane 2):
    * the Download / Update button (its "Choose download location" box; also where the ring goes once
    * Remove has removed the library, since the Remove button is gone by then) and Remove itself.

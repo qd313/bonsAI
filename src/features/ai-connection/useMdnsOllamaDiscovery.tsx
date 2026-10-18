@@ -37,6 +37,7 @@ import {
 } from "./OllamaWhereAiRunsSection.constants";
 import { textPx } from "../../styles/textPx";
 import { createMdnsDiscoveryStore, type MdnsDiscoveryStore } from "./mdnsDiscoveryStore";
+import { rememberModalReturnFocus, type ModalReturnFocusId } from "../../shared/dpad/modalReturnFocusRegistry";
 
 /**
  * Search, and the confirm dialog that starts it. Every hook below must keep its position —
@@ -52,6 +53,7 @@ export function useMdnsOllamaDiscovery({
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
   store,
+  returnFocusId,
 }: {
   mdnsDiscovering: boolean;
   setMdnsDiscovering: (v: boolean) => void;
@@ -63,6 +65,8 @@ export function useMdnsOllamaDiscovery({
   onCompleteDeckyModalClose: (close: () => void) => void;
   /** Where the search is recorded; the panel passes the shared one, anything else gets a private one. */
   store?: MdnsDiscoveryStore;
+  /** The button that opens the box, when it signed up to get the ring back after the box closes. */
+  returnFocusId?: ModalReturnFocusId;
 }) {
   const ownStore = useRef<MdnsDiscoveryStore | null>(null);
   const searchStore = store ?? (ownStore.current ??= createMdnsDiscoveryStore());
@@ -105,6 +109,8 @@ export function useMdnsOllamaDiscovery({
 
   const openMdnsDiscoveryConfirm = useCallback(() => {
     if (ollamaLocalOnDeck || mdnsDiscovering || localSetupBusy) return;
+    // Closing the box rebuilds the tab; the shell hands the ring back to this button (B or Search alike).
+    if (returnFocusId) rememberModalReturnFocus(returnFocusId);
     onBeforeDeckyModal();
     const handle = showModal(
       <TwoButtonConfirmModal
@@ -129,6 +135,7 @@ export function useMdnsOllamaDiscovery({
     ollamaLocalOnDeck,
     onBeforeDeckyModal,
     onCompleteDeckyModalClose,
+    returnFocusId,
     runMdnsDiscovery,
   ]);
 

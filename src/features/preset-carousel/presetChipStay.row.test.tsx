@@ -21,6 +21,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MainTabPresetAnimatedChips } from "./MainTabPresetAnimatedChips";
 import { setFrozenTestChips, type PresetPrompt } from "./presets";
 import { PRESET_CHIP_END_PAUSE_MS, presetHoldMs } from "./presetRowLayout";
+import { presetPace } from "./presetPace";
 import { slotStaggerMs } from "./presetChipShared";
 
 /** Wider than the row's own estimate (6.45), as real words are on the Deck. */
@@ -178,6 +179,52 @@ describe("a long chip leaves one pause after its words stop", () => {
     act(() => vi.advanceTimersByTime(600));
     expect(words()?.textContent).not.toBe(held);
   });
+
+  /*
+   * Plan 96 F22 (the maintainer: chips change too fast): a long chip is never replaced before its
+   * whole scroll has played, whatever the row's pace says. Measured from the moment the chip first
+   * shows its words (delay + crawl + end pause), and with a scroll far longer than the most the
+   * pace gives (18 s with two chips, 12 s with one).
+   */
+  const overflowScrollMs = (chars: number, roomPx: number) =>
+    1500 + (((chars * REAL_PX_PER_CHAR - roomPx) / 20) * 1000) + PRESET_CHIP_END_PAUSE_MS;
+
+  for (const [label, single, room] of [["one chip", true, 284], ["two chips", false, 131]] as const) {
+    it(`${label}: a chip whose scroll is longer than the pace's longest hold stays through all of it`, () => {
+      restore = standInForLayout(room);
+      const long = "q".repeat(99);
+      setFrozenTestChips([long, long.replace(/q/g, "r"), long.replace(/q/g, "s")]);
+      const view = render(
+        <MainTabPresetAnimatedChips
+          seeds={[long, "r".repeat(99), "s".repeat(99)].map(seed)}
+          setUnifiedInput={vi.fn()}
+          animationMode="fade"
+          presetSingleChip={single}
+        />,
+      );
+      const first = () => view.container.querySelector<HTMLElement>(".bonsai-preset-carousel-slot");
+      const wordsOf = () => first()?.querySelector<HTMLElement>(".bonsai-preset-chip-text-run")?.textContent ?? null;
+      const opacity = () => first()?.querySelector<HTMLElement>("button")?.style.opacity ?? "0";
+      let shownAt: number | null = null;
+      let shownText: string | null = null;
+      let left: number | null = null;
+      for (let t = 0; t < 120_000 && left === null; t += 50) {
+        act(() => vi.advanceTimersByTime(50));
+        const text = wordsOf();
+        if (shownAt === null && text) {
+          shownAt = t;
+          shownText = text;
+        }
+        if (shownAt !== null && opacity() === "0" && t - shownAt > 2_000) left = t;
+        else if (shownAt !== null && text !== shownText) left = t;
+      }
+      expect(shownAt).not.toBeNull();
+      expect(left).not.toBeNull();
+      const needed = overflowScrollMs(99, room);
+      expect(needed).toBeGreaterThan(presetPace(single ? 1 : 2).maxHoldMs);
+      expect(left! - shownAt!).toBeGreaterThanOrEqual(needed - 100);
+    });
+  }
 
   it("a chip whose words fit keeps the stay time it always had", () => {
     restore = standInForLayout(284);

@@ -8,7 +8,7 @@
  *          tab bar's LB and RB marks, which keep their size on purpose.
  * Used for: plan 89 S1, the Deck check "on Large the chip, the question box and a Settings label all
  *           measure bigger than on Normal".
- * Solves: The sizes written inline (a chip's 12, a label's 11) can only be seen on a rendered element;
+ * Solves: The sizes written inline (a chip's 11, a label's 11) can only be seen on a rendered element;
  *         a stylesheet test cannot tell that one of them was left at a plain number.
  * Does not: Lay anything out, or check row heights (jsdom has none). That a row keeps its height is by
  *           construction (no height is touched) and a Deck check.
@@ -116,8 +116,9 @@ afterEach(cleanup);
 describe("Text size on the chips, the question box and the Settings row", () => {
   const normal = readSurfaces("normal");
 
-  it("reads Normal as today's sizes: chip 12, question box 12, the row's buttons 12 (its words moved to the help strip)", () => {
-    expect(normal).toEqual({ chip: 12, questionBox: 12, rowButton: 12 });
+  // Plan 96 F22 (the maintainer's ask: smaller chip words); measured on the Deck: workshop:test-evidence/plan96-P96-F22-CHIP-MEASURE.json
+  it("reads Normal as today's sizes: chip 11, question box 12, the row's buttons 12 (its words moved to the help strip)", () => {
+    expect(normal).toEqual({ chip: 11, questionBox: 12, rowButton: 12 });
   });
 
   it("makes each one bigger on Large and smaller on Small, by exactly the step", () => {

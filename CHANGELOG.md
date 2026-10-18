@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 **Contents**
 
 - [\[Unreleased\]](#unreleased)
+  - [Plan 86 step 4 (2026-10-17)](#plan-86-step-4-2026-10-17)
   - [Plan 86 step 3 (2026-10-16)](#plan-86-step-3-2026-10-16)
   - [Plan 93 (2026-10-14)](#plan-93-2026-10-14)
   - [Plan 92 (2026-10-12)](#plan-92-2026-10-12)
@@ -80,6 +81,14 @@ All notable changes to this project are documented in this file.
 <!-- /toc -->
 
 ## [Unreleased]
+
+### Plan 86 step 4 (2026-10-17)
+
+No change a player can see. Every file now sits in a folder named for its feature. Checked at `a1b00906`: the full gate passed (PASS, 224.6 seconds, exit code 0: the type check, every screen test, every back-end test, the headers, ratchet, growth and closed-rows checks, the production build and the tool-server map check). Deck check at `a1b00906` on the live screen (the monitor, 855 x 766; evidence `workshop:test-evidence/plan86-S4-*.json`): PASS. The back-end log has no error after the move. All seven tabs open and draw every section and row (Ollama 5 sections, Settings 8, Permissions 4 switches, Developer 5, About its version and links; the Developer tab switched on and off). One question was answered in 26 s, with Show details naming gemma4:e2b-it-qat and the note "Charms and notches". The free-play sweeps on all seven tabs had no dead press, no loop and nothing behind the dock; the partly hidden stops are the known ones (section lines at 92 %, the chat name row at 83 %, the About link text). UNCLEAR, and not caused by the move: the saved plan 94 walks could not be replayed like for like (different chat and switch states); on Main one chip read 67 % visible and one answer stop had no label.
+
+- **Changed: a folder per feature.** 920 files moved with the move tools, one area per commit. The back end's `services/` folder (127 files moved out of it and its neighbours) is now one package per feature under `py_modules/backend/` (core, characters, power, strategy, prompts, spoilers, answer, ollama, voice, media, settings, commands, chats, ask, knowledge, notes, search). The screen's files sit in one folder per feature under `src/features/`, the knowledge scripts under `scripts/kb/`, and the Deck restart script under `scripts/deck/`. The guides (`AGENTS.md`, `docs/development.md`, the back end's package notes, the tool server's platform contract) describe the new layout. Older entries keep the old paths as written.
+- **Added: three ways to find a file by name instead of by folder depth.** `src/test-harness/repoPaths.ts` (screen tests), `tests/src_paths.py` (Python tests that read a screen file) and `tests/script_loader.py` (tests that load a script). The five knowledge scripts now find the repo root by looking for `main.py`, and each other by name.
+- **Added: four allowances in the move checker** (`scripts/check_move_commit.py`, each with tests): an added `__init__.py` with no code is part of a move; the short path forms the back-end move tool writes are blanked too; the `py_modules.` prefix is mapped; a from-import split over two lines pairs up. With them, 20 of the 21 move commits print ok; the other reports only five folder links in `docs/development.md`, which no tool can rewrite and which were fixed by hand.
 
 ### Plan 86 step 3 (2026-10-16)
 

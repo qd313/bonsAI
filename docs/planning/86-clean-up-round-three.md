@@ -6,7 +6,9 @@ maintainer. The plan is written so it can wait: on the day it starts, step 0 che
 
 **Status:** STARTED 2026-10-16 with steps 0 and 1 (one Opus chat). The freshness check found only small changes (§ 5,
 "Freshness check, 2026-10-16"); the maintainer's go-day calls are 13 to 16 in § 4. Step 2 (read every file) finished the
-same day, and the maintainer approved its cut lists and folder map (D133). Step 3 is next. Progress is in § 12.
+same day, and the maintainer approved its cut lists and folder map (D133). Step 3 (remove five features) DONE 2026-10-17.
+Step 4 (a folder per feature) DONE 2026-10-17 (tip `a1b00906`, Deck check running). Step 5 (merge the tests) is next.
+Progress is in § 12.
 
 **When it starts (the maintainer's call, 2026-10-11):** after [plan 89](../../../bonsAI-workshop/planning/89-bugs-to-zero-and-verify-sweep.md) has
 finished, and after [plan 92](../../../bonsAI-workshop/planning/92-feature-night-search-notes-models-tabs.md) has built plans 90 and 91. Never alongside
@@ -641,3 +643,39 @@ From its [postmortem](../../../bonsAI-workshop/audit/refactor-round-two/postmort
     maintainer has each as one command (the step 3 report page and `step-3-summary.md`). One finding was withdrawn the
     same night (see "Found, older than step 3" above). Publish it before the next plugin release: with the 2026-09-26 library the new plugin underlines no words.
     Nothing pushed. **Next: step 4** (a folder per feature), its own session.
+- **2026-10-17, evening: step 4 done** (one Fable 5.1 chat with the maintainer's go; 26 commits, `bdbb7d3d..a1b00906`).
+  Nothing a player can see changes: every commit is a pure move or a test or tool change.
+  - **Preparation, in landing order** (six commits, Sonnet 5.5 high helpers). `f81655af` and `49ed21cf`: a helper
+    (`src/test-harness/repoPaths.ts`) finds a source file by name, so 18 screen tests no longer depend on folder depth.
+    `b42fd60e`, `273d5104`, `bc9e7e14`, `bdbb7d3d`: Python tests find a screen file by name (`tests/src_paths.py`); the
+    five knowledge scripts find the repo root by searching for `main.py` and each other by name; tests load a script by
+    name (`tests/script_loader.py`); the zip check and the tool server's size ranking stop naming `services/` as a whole.
+  - **The back end** (16 move commits with `scripts/move_backend_file.py`, one per package, by the `cleanup-mover`
+    helper on Haiku 5.5 high): core `bff8567e`, characters `858b0216`, power `afd14960`, strategy `d9363b1e`, prompts
+    `83f0d39f`, spoilers `b1c5c548`, answer `e4dbba42`, ollama `d22a145d`, voice `5b8a6f63`, media `74ec4e9c`, settings
+    `144d1c9f`, commands `2a77d977`, chats `752bd717`, ask `a20eaaea`, knowledge (one file) `ad7390fb`, then the
+    knowledge area (knowledge, notes, search) `2a372c4c`. 127 files moved. The 2,582 back-end tests named from the
+    moved files passed at the end.
+  - **The screen side and scripts** (5 move commits with `scripts/move_screen_file.mjs`, same helper): the eight
+    knowledge scripts into `scripts/kb/` `9c2b43ce`; knowledge, search and notes screen files (49) `c7d8ff2c`; tabs,
+    settings and models (305) `69cf0a03`; ask, answer and chats (430) `8f7be517`; the Deck restart script into
+    `scripts/deck/` (1) `74c96511`. The type check was clean after each screen commit; the moved tests passed: 146,
+    980 and 2,857.
+  - **The move checker** (`scripts/check_move_commit.py`) needed four fixes on the way, each its own commit with tests
+    (Sonnet 5.5 medium; the last on Sonnet high): `6257ee70` an added code-free `__init__.py` is part of a move;
+    `bbfefdea` the short path forms the back-end tool rewrites are blanked too; `441cf2c7` the `py_modules.` prefix is
+    mapped; `daa48326` a from-import split over two lines pairs up. With the finished checker, 20 of the 21 move
+    commits print ok. The 21st, `8f7be517`, reports only the five folder links in `docs/development.md`
+    (`../src/components/` and the like): no tool can rewrite a link to a folder, and `a1b00906` replaced them by hand.
+  - **The guides** (`a1b00906`): AGENTS.md's table and its import sentence, docs/development.md's screen and back-end
+    sections, the back-end package notes and the tool server's platform contract describe the new layout. AGENTS.md was
+    trimmed to stay under its 26 KB ceiling.
+  - **Whole range:** 920 files renamed, 17 added, 349 edited for paths. A search of every tracked file for every old path
+    finds none (history folders, CHANGELOG.md and README.md are left as written on purpose).
+  - **The full gate** (`verify.py --full`) at `a1b00906`: PASS, 224.6 seconds, exit code 0: the type check, every screen
+    test, every back-end test, the headers, ratchet, growth and closed-rows checks, the production build and the
+    tool-server map check.
+  - **The Deck check:** Deck check at `a1b00906` on the live screen (the monitor, 855 x 766; evidence `workshop:test-evidence/plan86-S4-*.json`): PASS. The back-end log has no error after the move. All seven tabs open and draw every section and row (Ollama 5 sections, Settings 8, Permissions 4 switches, Developer 5, About its version and links; the Developer tab switched on and off). One question was answered in 26 s, with Show details naming gemma4:e2b-it-qat and the note "Charms and notches". The free-play sweeps on all seven tabs had no dead press, no loop and nothing behind the dock; the partly hidden stops are the known ones (section lines at 92 %, the chat name row at 83 %, the About link text). UNCLEAR, and not caused by the move: the saved plan 94 walks could not be replayed like for like (different chat and switch states); on Main one chip read 67 % visible and one answer stop had no label.
+  - **Budget:** not read.
+  - **Summary** for the maintainer: [audit/clean-up-round-three/step-4-summary.md](../audit/clean-up-round-three/step-4-summary.md).
+    Nothing pushed. **Next: step 5** (merge the tests), its own session.

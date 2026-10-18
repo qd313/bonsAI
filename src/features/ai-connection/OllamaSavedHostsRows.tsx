@@ -22,7 +22,7 @@ import { toaster } from "@decky/api";
 import { MAX_NAMED_OLLAMA_HOSTS } from "../settings/bonsaiSettingsSchema";
 import type { NamedOllamaHost } from "../settings/bonsaiSettingsSchema";
 import { isHttpsOllamaAddress } from "./ollamaAddress";
-import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
+import { FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN } from "../../styles/settingsGlassButton";
 import { textPx } from "../../styles/textPx";
 
 type OllamaSavedHostsRowsProps = {
@@ -53,7 +53,7 @@ export const OllamaSavedHostsRows: React.FC<OllamaSavedHostsRowsProps> = ({
                 onOllamaIpChange(entry.host);
                 onPersistOllamaIp(entry.host);
               }}
-              style={{ minHeight: 32, fontSize: textPx(11) }}
+              style={{ ...SETTINGS_GLASS_BTN, minHeight: 32, fontSize: textPx(11) }}
             >
               {entry.label}
             </Button>
@@ -80,7 +80,7 @@ export const OllamaSavedHostsRows: React.FC<OllamaSavedHostsRowsProps> = ({
           });
           toaster.toast({ title: "Host saved", body: label, duration: 2500 });
         }}
-        style={{ width: "100%", minHeight: 34 }}
+        style={{ ...SETTINGS_GLASS_BTN, width: "100%", minHeight: 34 }}
       >
         Save current PC address as quick host
       </Button>

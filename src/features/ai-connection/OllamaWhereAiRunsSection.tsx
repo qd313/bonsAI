@@ -121,7 +121,7 @@ import {
   LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS,
   LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
 } from "./OllamaWhereAiRunsSection.constants";
-import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
+import { FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN } from "../../styles/settingsGlassButton";
 import { useHandRingOnGone } from "../../shared/dpad/useHandRingOnGone";
 import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
 import { focusInTabBody } from "../../shared/dpad/useTabBodyFocusScroll";
@@ -851,7 +851,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                         duration: 2500,
                       });
                     }}
-                    style={{ minHeight: 32, fontSize: textPx(11), flex: "1 1 auto" }}
+                    style={{ ...SETTINGS_GLASS_BTN, minHeight: 32, fontSize: textPx(11), flex: "1 1 auto" }}
                   >
                     Use {entry.label}
                     {entry.verified ? " ✓" : ""}
@@ -872,7 +872,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                       onPersistOllamaIp(host);
                       toaster.toast({ title: "Host saved", body: label, duration: 2500 });
                     }}
-                    style={{ minHeight: 32, fontSize: textPx(10) }}
+                    style={{ ...SETTINGS_GLASS_BTN, minHeight: 32, fontSize: textPx(10) }}
                   >
                     Save
                   </Button>

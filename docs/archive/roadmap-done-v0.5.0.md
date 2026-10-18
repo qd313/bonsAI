@@ -2076,3 +2076,15 @@ Every Done block from 2026-10-13 to 2026-10-16, copied line for line, nothing re
 **Closed 2026-10-13 (plan 93, Deck block B1, build matching the repo; the Deck's own screen, page window 854 x 454):**
 
 - ★★ `[reply]` **Terse mode does not seem to shorten answers** — **DONE 2026-10-13, closed on the measurement and the maintainer's call (row P93-M11-TERSE-LINES).** Five Speed questions with Terse on each gave one line of text, 17 to 36 words (3 to 4 lines on the Deck's panel); the length rule works. Terse in Strategy and Expert too is the Features change in the Terse mode entry. Evidence `workshop:test-evidence/plan93-M11-TERSE-LINES.json`.
+
+## Moved from roadmap.md 2026-10-18 (plan 96 docs sweep)
+
+The Done blocks of 2026-10-17 (plan 95 and plan 94), copied line for line, to keep the roadmap under its size limit.
+
+**Closed 2026-10-17 (plan 95, the README chat):**
+
+- ★ `[docs]` **The guide said to type "brightness" into the question box to find a Steam setting** — **DONE 2026-10-17 (commit `a86801b0`).** The guide now points at the Search tab, and its saved-chats passage says LT and RT switch chats on Main (it also described a chat row with a pencil icon that no longer exists). Docs only, no Deck check owed. Full entry: [archive](archive/roadmap-bugs-fixed.md#the-guide-said-to-type-brightness-into-the-question-box-closed-2026-10-17).
+
+**Closed 2026-10-17 (plan 94, the fresh-install walk on the Deck, build `e9b50cc8`, the Deck's own screen):**
+
+- ★★ `[chips]` **After the quick start is opened and closed, the help chip stayed and the suggestion chips never took the row** — **DONE 2026-10-17, passed on the Deck (row P78-HELP-CHIP-DISMISS, plan 94 block 1b).** On a real first run, A on "How to use bonsAI" opened "Using bonsAI" (163 words), B closed it, two ordinary chips took the row and stayed after close and reopen. Closing with "Got it" was not run, since the quick start cannot be reopened once the chip is gone; the maintainer's call whether that is intended. Evidence `workshop:test-evidence/plan94-P94-HELP-CHIP-try2.json`. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-94-the-fresh-install-walk-closed-2026-10-17).

@@ -57,6 +57,7 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [Some settings text ignores the Text size choice (Permissions tab and others)](#some-settings-text-ignores-the-text-size-choice-permissions-tab-and-others)
 - [Plan 93 notes moved from the roadmap (2026-10-14, docs sweep 3)](#plan-93-notes-moved-from-the-roadmap-2026-10-14-docs-sweep-3)
 - [Plan 94 notes moved from the roadmap (2026-10-17)](#plan-94-notes-moved-from-the-roadmap-2026-10-17)
+- [Plan 96 notes moved from the roadmap (2026-10-18)](#plan-96-notes-moved-from-the-roadmap-2026-10-18)
 <!-- /toc -->
 
 ## The panel stops half way down and the Ask button is out of reach
@@ -912,3 +913,19 @@ Open entries and older dated notes, word for word, moved here when their entries
 **Tab sections: the D-pad ring goes wrong after sections are opened (older note, word for word):**
 
   **2026-10-13 (plan 93):** (b) not reproduced: with every section open, the Ollama tab walks 19 stops down and the same 19 up, Terse mode a stop both ways; Settings walks 23 stops each way, clean. (b) waits for the maintainer's exact steps. Evidence `workshop:test-evidence/plan93-P93-M1-FOLDED-RING-OLLAMA.json`, `-SETTINGS.json`.
+
+## Plan 96 notes moved from the roadmap (2026-10-18)
+
+Older dated notes moved here, word for word, to keep the roadmap under its size limit.
+
+**qwen2.5vl should not be the model downloaded first (older note):**
+
+  **Deck 2026-10-14 (plan 93 Deck block D3, build `8ff99a0a`):** the starter-set box and run passed (row P93-B3-STARTER-DECK: gemma and nomic skipped as already there, tiny.en and base.en downloaded, `workshop:test-evidence/plan93-P93-B3-STARTER-DECK-D3.json`), and under "Open source only" neither qwen2.5vl:3b nor qwen2.5:3b is offered while gemma4:e2b-it-qat is (row P93-B3-POLICY, `plan93-P93-B3-POLICY-D3.json`; the screen has no word "Automatic" for the try orders, UNCLEAR). The run re-ran the Ollama installer although Ollama was in ~/.local/bin (`511a61fb`) and the button stayed on the open screen after the run (`08f67393`); **both fixes owe a re-check on the Deck** (row P93-B3-STARTER-DECK). **Stand-in 2026-10-14 (plan 93 block S1, this PC, build `7888115e`, Steam offline), passed on the stand-in (this PC), the plan's machine for a wipe:** row P93-B3-FIRST-RUN: after Clear all plugin data the first-run notice was 36 words with one button, the Local runtime (beta) notice came once at 39 words naming no model and did not return after close and reopen, and the starter-set box (reached from the AI models screen) named gemma4:e2b-it-qat, nomic-embed-text, tiny.en and base.en, about 4.5 GiB, never qwen2.5vl, Cancel first (`workshop:test-evidence/plan93-P93-B3-FIRST-RUN-standin.json`). Row P93-B3-POLICY on the stand-in: neither qwen2.5vl:3b nor qwen2.5:3b listed, gemma4:e2b-it-qat first under Deck essentials (`plan93-P93-B3-POLICY-standin.json`; a stand-in pass, not a Deck pass). **Stays in Verify only for the Deck re-check of the installer and button fixes (`511a61fb`, `08f67393`).**
+
+**While reading an answer, the Show details line takes the suggestion chip's place above the question box (older note):**
+
+  **2026-10-06, the maintainer by hand:** both lines were on screen at once (the slot's copy and the answer's own line under the rating buttons), and the maintainer's rule is that the answer's own line goes away while the slot holds it, with a smooth change on scroll. Filed as its own ★★ bug ("Both Show details lines show at once", now in Verify → Bugs): **2026-10-07 (plan 82, `8bfe1802`) fixed**, the answer's own line now fades out while the slot holds the copy; row **P82-ONE-DETAILS-LINE** passed on the Deck 2026-10-07 (block 3b, build `e34b0d57`; the bug is now in Done). The right-stick hand check (steps 3 and 4) is still owed.
+
+**After pressing Stop on the mic, the next mic press does not work (older note):**
+
+  **2026-10-10 evening (build `532761e2`, a recorded voice, no game):** not reproduced. On base.en, Stop then the mic about 18 s later started a new recording and added words (`workshop:test-evidence/v1010-VOICE-BASE-NOGAME.json`); on tiny.en, about 3 s later, the same (`workshop:test-evidence/v1010-VOICE-TINY-NOGAME.json`).

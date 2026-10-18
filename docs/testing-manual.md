@@ -104,6 +104,8 @@ screenshotted many times.
    anything that looks unlike the rest of the plugin. The script cannot judge taste.
 3. A finding is fixed or filed as a bug before the change is called verified.
 
+**2026-10-18 (plan 96, block M, the Deck's own screen, build `a1b00906`, before the fixes of that night):** Settings, Permissions, Search, Developer (every section closed) and Ollama found nothing. About found one thing: Steam's own language dropdown reads as a light button (Steam's control, not the plugin's). Main found 14 things, all the transcript's own rows, the chips and the Ask pill (the Ask pill is fixed; the chips and the transcript's own rows are now exempt). Evidence `workshop:test-evidence/plan96-QA-LOOK-Main.json`, `plan96-QA-LOOK-Settings.json`, `plan96-QA-LOOK-Permissions.json`, `plan96-QA-LOOK-Search.json`, `plan96-QA-LOOK-Developer.json`, `plan96-QA-LOOK-Ollama.json`, `plan96-QA-LOOK-About.json`. **Still owed:** the run on every tab on the new build (plan 96 block D), with the Developer tab's sections open.
+
 ---
 
 ## Standing row: the free-play sweep

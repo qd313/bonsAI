@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 **Contents**
 
 - [\[Unreleased\]](#unreleased)
+  - [Plan 96 (2026-10-18)](#plan-96-2026-10-18)
   - [Plan 86 step 4 (2026-10-17)](#plan-86-step-4-2026-10-17)
   - [Plan 86 step 3 (2026-10-16)](#plan-86-step-3-2026-10-16)
   - [Plan 93 (2026-10-14)](#plan-93-2026-10-14)
@@ -81,6 +82,35 @@ All notable changes to this project are documented in this file.
 <!-- /toc -->
 
 ## [Unreleased]
+
+### Plan 96 (2026-10-18)
+
+Fixes from the fresh-install walk of 2026-10-17 and the maintainer's asks that evening, landed on `experimental` (tip `a29f9eb0`). The Deck checks for every line below run in plan 96's Deck block D; until a line says "Passed on the Deck", it owes its check.
+
+- **Fixed: asking a question before any AI is installed now says "The AI is not set up on this Deck yet" and offers a button to the Ollama tab.** It used to blame the Model policy tier. Owes its Deck check (row P96-F1-NO-AI).
+- **Fixed: the first answer after an install no longer waits about two minutes in silence.** The AI is loaded once in the background when an install or the starter set finishes, and when the first word is slow the status line reads "Loading the AI. The first time takes a minute or two." Owes its Deck check (row P96-F2-COLD-START).
+- **Fixed: the first Thinking pick is kept.** It was lost behind its notice; now it is saved when you press "Show thinking". Owes its Deck check (row P96-F3-THINKING).
+- **Fixed: a ticked Strategy step stays ticked after you close and reopen the panel.** It is one shared list when no game runs, not one list per chat. Owes its Deck check (row P96-F4-TICK).
+- **Changed: the Strategy checklist uses checkboxes, not on/off switches.** A still ticks and unticks. Owes its Deck check (row P96-F19-CHECKBOXES).
+- **Fixed: the Strategy checklist note names only what really clears the ticks:** a new Strategy question, leaving Strategy mode, Clear cache or Clear all data. Owes its Deck check (row P96-F20-CHECKLIST-NOTE).
+- **Fixed: the screenshot picker can be used with the controller.** The ring lands on the newest picture, and B closes the picker only. Owes its Deck check (row P96-F5-PICKER).
+- **Fixed: Down from an open glossary word reaches "Explain further", and the question it sends names the game.** Owes its Deck check (row P96-F6-EXPLAIN).
+- **Fixed: Expert mode now has its own depth rule, and every mode answers each part of a two-part question in turn.** Before the fix, ten two-part Hades questions on the Deck gave Expert a median of 511 characters against Speed's 551. Owes its Deck check, a second try (row P96-F8-EXPERT).
+- **Fixed: after the voice engine installs, the Voice input section reads ready without leaving the tab.** Owes its Deck check (row P96-F9-VOICE-REFRESH).
+- **Fixed: Cancel on Install Ollama's "Turn on internet downloads?" box leaves the line as it was** instead of reading "Failed". The Update button's line after Cancel is unchanged, by the maintainer's earlier call. Owes its Deck check (row P96-F10-CANCEL).
+- **Fixed: on the mic hint, Open Permissions and Dismiss sit side by side, Down no longer lands on Dismiss, and Dismiss hands the ring to the question box.** Owes its Deck check (row P96-F11-HINT-RING).
+- **Fixed: the Ollama install box names ollama.com and tells the truth about Cancel, and "The local AI isn't installed on this Deck yet." goes when the install finishes.** Owes its Deck check (row P96-F13-INSTALL-WORDS).
+- **Fixed: pressing A on the greyed "Sum up this chat" shows why:** "Available once the chat is longer than the AI's memory." Owes its Deck check (row P96-F14-SUM-UP).
+- **Changed: the knowledge library line says how many games it holds.** Owes its Deck check (row P96-F15-KB-COUNT).
+- **Fixed: a long link label on the About tab wraps to two lines instead of being cut.** Owes its Deck check (row P96-F16-ABOUT-LINKS).
+- **Fixed: every model row that is not open source shows a pill saying why** (the two Qwen 2.5 rows had none a person could read). Owes its Deck check (row P96-F18-PILLS).
+- **Changed: the AI models window says "License", the US spelling.** Wording only, no Deck row.
+- **Changed: suggestion chips change more slowly and are smaller.** One chip stays 6 to 12 s, two chips 9 to 18 s, fades take 1.2 s; the words are 11 px and the chips 26 px tall. Owes its Deck check and the maintainer's eye (row P96-F22-CHIP-PACE-SIZE).
+- **Fixed: the saved PC address buttons and the found-on-network buttons use the frosted button look** instead of a white background. Owes its Deck check (row P96-F23-HOST-BUTTONS).
+- **Fixed: buttons that were lopsided or too small for their words.** The Developer tab's rows have the same side gap as Settings, About's long link wraps, and the Ask pill is never narrower than its word and arrow. The look check now skips full-bleed rows and the chat's own rows. Owes its Deck check on the new build (rows QA-LOOK-01 and P96-F25-ASK-PILL).
+- **Changed: the PC address box says a bare address is enough** (the port is added). Owes its Deck check (row P96-F26-BARE-ADDRESS).
+- **Added: the Search tab finds bonsAI's own settings** (Text size, Voice input, Clear cache, Clear all data, the four Permissions switches, Story spoilers and more) in a "bonsAI settings" group above Steam's. A opens the tab and section and lands the ring on the row; B returns to Search. Owes its Deck check (row P96-N2-SEARCH-OWN).
+- **Fixed: a Decky wipe now counts as a fresh start.** When the back end starts with no settings file, the screen clears its own stale "already seen" flags once, so the beta notice and the help chip show again. Owes its Deck check (row P96-N3-FRESH-START).
 
 ### Plan 86 step 4 (2026-10-17)
 

@@ -87,9 +87,9 @@ export function usePullModelTier2Confirm(a: UsePullModelTier2ConfirmArgs): PullM
               <div style={{ marginBottom: 8 }}>
                 <span style={{ color: "#9ce7ff" }}>{entry.tag}</span> is open-weight, so{" "}
                 <strong>Tier 1 (open-source only)</strong> will not use it for Ask. Enable <strong>Tier 2</strong> to allow
-                it. Its licence may limit use or sharing.
+                it. Its license may limit use or sharing.
               </div>
-              <div style={{ color: "#c5d4e3" }}>Change this later in Ollama → AI models → Licence.</div>
+              <div style={{ color: "#c5d4e3" }}>Change this later in Ollama → AI models → License.</div>
             </div>
           }
           /*

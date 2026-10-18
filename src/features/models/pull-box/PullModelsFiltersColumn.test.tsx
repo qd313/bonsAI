@@ -250,7 +250,7 @@ describe("the column beside the list", () => {
     expect(container.textContent).not.toContain("Filters ·");
 
     const titles = Array.from(column(container).querySelectorAll(".bonsai-pullmodels-filtercol-title")).map((t) => t.textContent);
-    expect(titles.slice(0, 3)).toEqual(["Licence", "Good for", "Show"]);
+    expect(titles.slice(0, 3)).toEqual(["License", "Good for", "Show"]);
     const labels = Array.from(column(container).querySelectorAll(".bonsai-pullmodels-filtercol-label")).map((l) => l.textContent);
     expect(labels).toEqual([
       "Open source only (recommended)",

@@ -80,7 +80,7 @@ describe("wording of the install and pull boxes", () => {
     await act(() => hook.onPullSelected());
     expect(hoisted.pullBox).not.toBeNull();
     const { container } = render(<div>{hoisted.pullBox!.body}</div>);
-    expect(container.textContent).toContain("open-source licence");
+    expect(container.textContent).toContain("open-source license");
     expect(container.textContent).not.toMatch(/FOSS/);
   });
 

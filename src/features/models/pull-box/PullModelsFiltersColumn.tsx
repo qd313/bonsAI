@@ -3,13 +3,13 @@
  *
  * Purpose: The filters, always on screen in a column to the left of the model list (plan 91 § 2a, the
  * mock-up board's tab 2, round 2, option A). From the top: "7 models match" and Clear, then the three
- * groups in the order people use them (LICENCE, GOOD FOR with a count beside each choice, SHOW), then
+ * groups in the order people use them (LICENSE, GOOD FOR with a count beside each choice, SHOW), then
  * the three chips that used to live on the old Filters row: "Type a name", "Install the starter set"
  * while the starter model is missing, and the Suggested models. A on a row ticks it and the list
  * changes at once.
  *
  *     [ 7 models match            Clear ]   <- the first stop
- *     LICENCE   (•) Open source only            Up from Clear -> Advanced
+ *     LICENSE   (•) Open source only            Up from Clear -> Advanced
  *               ( ) Also try open-weight models
  *               ( ) Any installed model         (greyed until unlocked, and skipped, Left included)
  *     GOOD FOR  [ ] Speed               5       Right from any stop -> the nearest stop on the right

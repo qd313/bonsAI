@@ -160,8 +160,8 @@ export function usePullModelSubmitSelected(a: UsePullModelSubmitSelectedArgs): P
               <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>
                 <div>
                   Your queue has open-weight models: <span style={{ color: "#9ce7ff" }}>{tagList}</span>.{" "}
-                  <strong>Tier 1 (open-source licences only)</strong> will not use them for Ask. Enable{" "}
-                  <strong>Tier 2</strong> to allow them. Their licences may limit use or sharing.
+                  <strong>Tier 1 (open-source licenses only)</strong> will not use them for Ask. Enable{" "}
+                  <strong>Tier 2</strong> to allow them. Their licenses may limit use or sharing.
                 </div>
               </div>
             }

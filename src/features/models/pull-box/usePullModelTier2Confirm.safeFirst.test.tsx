@@ -62,7 +62,7 @@ describe('"Enable Tier 2 for this model?"', () => {
 
   it("points to where the licence can be changed today: the AI models button and its Licence list, not the removed Manage AI models and Policy", () => {
     const { box } = openBox();
-    expect(box.text).toContain("Change this later in Ollama → AI models → Licence.");
+    expect(box.text).toContain("Change this later in Ollama → AI models → License.");
     expect(box.text).not.toContain("Manage AI models");
   });
 

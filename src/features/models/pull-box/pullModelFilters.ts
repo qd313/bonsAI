@@ -138,7 +138,7 @@ export function filterPanelRowKey(row: FilterPanelRow): string {
 
 /** The drawing's words for the three groups (plan 91 § 2a): Licence, Good for, Show. */
 export function filterPanelRowGroupHeading(row: FilterPanelRow): string {
-  if (row.kind === "licence") return "Licence";
+  if (row.kind === "licence") return "License";
   if (row.kind === "mode") return "Good for";
   return "Show";
 }

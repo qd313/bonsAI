@@ -123,6 +123,6 @@ describe('"Enable Tier 2 for this model?" (one model ticked)', () => {
     expect(text.split(/\s+/).filter(Boolean).length).toBeLessThanOrEqual(40);
     expect(text).toContain("will not use it for Ask");
     expect(text).toContain("may limit use or sharing");
-    expect(text).toContain("Ollama → AI models → Licence");
+    expect(text).toContain("Ollama → AI models → License");
   });
 });

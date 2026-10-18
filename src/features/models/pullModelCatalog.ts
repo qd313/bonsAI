@@ -128,7 +128,7 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     tags: ["chat", "vision", "ocr", "strategy"],
     rating: 6,
     blurb:
-      "Small chat, screenshots, OCR, and Strategy mode in one pull. Not open source: Qwen's own card gives the 3B size the Qwen Research licence (research use only), so it needs the open-weight setting.",
+      "Small chat, screenshots, OCR, and Strategy mode in one pull. Not open source: Qwen's own card gives the 3B size the Qwen Research license (research use only), so it needs the open-weight setting.",
   },
   {
     tag: "qwen3.5:4b",
@@ -249,7 +249,7 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     group: "smallest",
     tags: ["chat"],
     rating: 5,
-    blurb: "Fast text-only fallback. Not open source: Qwen's own card gives the 3B size the Qwen Research licence, so it needs the open-weight setting.",
+    blurb: "Fast text-only fallback. Not open source: Qwen's own card gives the 3B size the Qwen Research license, so it needs the open-weight setting.",
   },
   {
     tag: "qwen2.5:1.5b",

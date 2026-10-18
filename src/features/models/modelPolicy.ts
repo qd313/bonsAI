@@ -68,4 +68,4 @@ export const MODEL_POLICY_TIER_LABELS_PLAIN: Record<ModelPolicyTierId, string> =
 
 /** Short Settings helper: what changes vs staying on Tier 1. */
 export const MODEL_POLICY_SETTINGS_INTRO =
-  "Tier 1 (default) only uses models with an open-source licence (Apache 2.0 or MIT). Tier 2 adds open-weight models, whose licence is the maker's own; Tier 3 can include other and unrecognised models when unlocked. Only changes which models the plugin tries—your host still decides what is installed.";
+  "Tier 1 (default) only uses models with an open-source license (Apache 2.0 or MIT). Tier 2 adds open-weight models, whose license is the maker's own; Tier 3 can include other and unrecognised models when unlocked. Only changes which models the plugin tries—your host still decides what is installed.";

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import sys
 import tempfile
@@ -18,6 +19,14 @@ for _path in (str(REPO_ROOT), str(REPO_ROOT / "py_modules")):
     if _path not in sys.path:
         sys.path.insert(0, _path)
 
+from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub  # noqa: E402
+
+install_fcntl_and_decky_stubs()
+install_pwd_stub()
+
+from plugin_settings_file_harness import PluginSettingsFileMixin  # noqa: E402
+
+from backend.ollama import ollama_local_setup_rpc as setup_rpc  # noqa: E402
 from backend.ollama.local_ollama_setup_service import (  # noqa: E402
     _bash_exe,
     _env_for_host_system_tools,
@@ -162,6 +171,87 @@ class LocalOllamaSetupServiceTests(unittest.TestCase):
         ):
             direct = setup._linux_ollama_gpu_env_defaults()
         self.assertNotIn("OLLAMA_MAX_LOADED_MODELS", direct)
+
+
+class _InlineThread:
+    """Stands in for ``threading.Thread``: ``start()`` runs the target right there."""
+
+    def __init__(self, target=None, args=(), kwargs=None, daemon=None, name=None) -> None:
+        self._target, self._args, self._kwargs = target, args, kwargs or {}
+
+    def start(self) -> None:
+        self._target(*self._args, **self._kwargs)
+
+
+class _Reply:
+    def __init__(self, payload: bytes) -> None:
+        self._payload = payload
+
+    def read(self, _n: int = -1) -> bytes:
+        return self._payload
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_exc) -> bool:
+        return False
+
+
+class AFinishedSetupWarmsTheModelOnce(PluginSettingsFileMixin, unittest.IsolatedAsyncioTestCase):
+    """Plan 96 F2, at the level the person feels it: the starter set finishes, and the model Ask
+    will use is loaded in the background, so the first question is not the one that pays for it.
+    (Deck, plan 94 block 4: first word 95 to 120 s after the press, on a fresh install.)"""
+
+    STARTER_TAGS = json.dumps(
+        {"models": [{"name": "gemma4:e2b-it-qat", "details": {"parameter_size": "4.6B"}}]}
+    ).encode("utf-8")
+
+    async def asyncSetUp(self) -> None:
+        self.start_plugin_with_settings_file()
+        for target, kwargs in (
+            ("backend.ollama.ollama_preload_service.threading.Thread", {"new": _InlineThread}),
+            ("backend.ollama.ollama_preload_service.choose_window_tokens", {"return_value": 16384}),
+        ):
+            started = patch(target, **kwargs)
+            started.start()
+            self.addCleanup(started.stop)
+
+    async def _run_setup(self, ending: str, *, on_deck: bool = True):
+        self._write_settings(
+            {"ollama_local_on_deck": on_deck, "capabilities": {"internet_downloads": True}}
+        )
+
+        async def fake_setup(**kwargs) -> None:
+            kwargs["state"].update({"phase": ending, "done": True})
+
+        with (
+            patch.object(setup_rpc, "run_local_setup", side_effect=fake_setup),
+            patch("backend.ollama.ollama_preload_service.urllib.request.urlopen") as urlopen,
+        ):
+            urlopen.side_effect = [_Reply(self.STARTER_TAGS), _Reply(b"{}")]
+            out = await self.plugin.start_local_ollama_setup({"profile": "tier1_essentials"})
+            if out["accepted"]:
+                await self.plugin._local_ollama_setup_task
+        return urlopen
+
+    async def test_the_starter_set_finishing_loads_the_starter_model_once_with_the_ask_room(self):
+        urlopen = await self._run_setup("done")
+        self.assertEqual(urlopen.call_count, 2)  # the model list, then one warm request
+        warm = urlopen.call_args_list[1].args[0]
+        self.assertTrue(warm.full_url.endswith("/api/generate"))
+        sent = json.loads(warm.data.decode("utf-8"))
+        self.assertEqual(sent["model"], "gemma4:e2b-it-qat")  # 4.6B: over the old 3B boot cap
+        self.assertEqual(sent["options"], {"num_ctx": 16384})
+
+    async def test_a_failed_or_cancelled_setup_loads_nothing(self):
+        for ending in ("failed", "cancelled"):
+            urlopen = await self._run_setup(ending)
+            urlopen.assert_not_called()
+
+    async def test_with_the_ai_on_a_pc_nothing_is_loaded(self):
+        # The install refuses to start at all when the AI runs on a PC; nothing may load either way.
+        urlopen = await self._run_setup("done", on_deck=False)
+        urlopen.assert_not_called()
 
 
 if __name__ == "__main__":

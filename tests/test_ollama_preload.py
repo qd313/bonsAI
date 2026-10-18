@@ -17,6 +17,7 @@ from backend.ask.ollama_service import (
     pick_preload_model,
     preload_ask_model_sync,
 )
+from backend.ollama.ollama_preload_service import warm_after_setup
 
 
 class _Logger:
@@ -281,6 +282,126 @@ class PreloadAskModelSyncTests(unittest.TestCase):
         mock_urlopen.return_value = _Resp(b"not json")
 
         preload_ask_model_sync("http://127.0.0.1:11434", _Logger())
+
+
+class WarmAfterSetupTests(unittest.TestCase):
+    """Plan 96 F2: after a finished install, the model is loaded once in the background.
+
+    Deck, plan 94 block 4 (build e9b50cc8): the first question after a fresh install waited 100
+    to 120 s for its first word because the model loaded cold. The boot warm-up never helped
+    here: it is off by default, and it skips any model over 3B while the starter model is 4.6B.
+    """
+
+    STARTER = [{"name": "gemma4:e2b-it-qat", "details": {"parameter_size": "4.6B"}}]
+
+    def setUp(self) -> None:
+        window = patch(
+            "backend.ollama.ollama_preload_service.choose_window_tokens", return_value=16384
+        )
+        self.window = window.start()
+        self.addCleanup(window.stop)
+        # Run the "background" thread on the spot, so the test sees what it would have sent.
+        thread = patch("backend.ollama.ollama_preload_service.threading.Thread", _InlineThread)
+        thread.start()
+        self.addCleanup(thread.stop)
+
+    def _tags(self) -> bytes:
+        return json.dumps({"models": self.STARTER}).encode("utf-8")
+
+    def test_the_size_cap_can_be_switched_off_for_one_pick(self) -> None:
+        self.assertIsNone(pick_preload_model(self.STARTER, ["gemma4:e2b-it-qat"]))
+        self.assertEqual(
+            pick_preload_model(self.STARTER, ["gemma4:e2b-it-qat"], size_cap=None),
+            "gemma4:e2b-it-qat",
+        )
+
+    def test_without_the_cap_an_embedding_model_is_still_never_warmed(self) -> None:
+        models = [{"name": "nomic-embed-text:latest", "details": {"parameter_size": "137M"}}]
+        self.assertIsNone(pick_preload_model(models, None, size_cap=None))
+
+    @patch("backend.ollama.ollama_preload_service.urllib.request.urlopen")
+    def test_a_finished_setup_warms_the_starter_model_once_with_the_ask_room(
+        self, mock_urlopen: MagicMock
+    ) -> None:
+        mock_urlopen.side_effect = [_Resp(self._tags()), _Resp(b"{}")]
+
+        started = warm_after_setup(
+            {"phase": "done", "profile": "tier1_essentials"},
+            {"ollama_local_on_deck": True},
+            _Logger(),
+            "http://127.0.0.1:11434",
+        )
+
+        self.assertTrue(started)
+        self.assertEqual(mock_urlopen.call_count, 2)  # one list of models, one warm request
+        gen_req = mock_urlopen.call_args_list[1].args[0]
+        self.assertIn("/api/generate", gen_req.full_url)
+        sent = json.loads(gen_req.data.decode("utf-8"))
+        self.assertEqual(sent["model"], "gemma4:e2b-it-qat")
+        self.assertEqual(sent["prompt"], "")
+        self.assertEqual(sent["options"], {"num_ctx": 16384})
+        # A cold load of the starter model took about 100 s on the Deck; the warm request must wait
+        # that long or it hangs up on the load it started.
+        self.assertGreaterEqual(mock_urlopen.call_args_list[1].kwargs["timeout"], 180)
+
+    @patch("backend.ollama.ollama_preload_service.urllib.request.urlopen")
+    def test_a_failed_or_cancelled_setup_warms_nothing(self, mock_urlopen: MagicMock) -> None:
+        for phase in ("failed", "cancelled", "running", ""):
+            started = warm_after_setup(
+                {"phase": phase, "profile": "tier1_essentials"},
+                {"ollama_local_on_deck": True},
+                _Logger(),
+                "http://127.0.0.1:11434",
+            )
+            self.assertFalse(started, phase)
+        mock_urlopen.assert_not_called()
+
+    @patch("backend.ollama.ollama_preload_service.urllib.request.urlopen")
+    def test_with_the_ai_on_a_pc_nothing_is_warmed(self, mock_urlopen: MagicMock) -> None:
+        started = warm_after_setup(
+            {"phase": "done", "profile": "tier1_essentials"},
+            {"ollama_local_on_deck": False},
+            _Logger(),
+            "http://127.0.0.1:11434",
+        )
+        self.assertFalse(started)
+        mock_urlopen.assert_not_called()
+
+    @patch("backend.ollama.ollama_preload_service.urllib.request.urlopen")
+    def test_a_setup_that_installed_no_model_sends_no_warm_request(
+        self, mock_urlopen: MagicMock
+    ) -> None:
+        """Install Ollama with nothing pulled yet: the program is installed, no model exists."""
+        mock_urlopen.return_value = _Resp(json.dumps({"models": []}).encode("utf-8"))
+        warm_after_setup(
+            {"phase": "done", "profile": "update_installed"},
+            {"ollama_local_on_deck": True},
+            _Logger(),
+            "http://127.0.0.1:11434",
+        )
+        self.assertEqual(mock_urlopen.call_count, 1)  # only the list of models
+
+    @patch("backend.ollama.ollama_preload_service.urllib.request.urlopen")
+    def test_a_warm_up_that_fails_never_raises_into_the_setup(self, mock_urlopen: MagicMock) -> None:
+        mock_urlopen.side_effect = urllib.error.URLError("connection refused")
+        self.assertTrue(
+            warm_after_setup(
+                {"phase": "done", "profile": "tier1_essentials"},
+                {"ollama_local_on_deck": True},
+                _Logger(),
+                "http://127.0.0.1:11434",
+            )
+        )
+
+
+class _InlineThread:
+    """Stands in for ``threading.Thread``: ``start()`` runs the target right there."""
+
+    def __init__(self, target=None, args=(), kwargs=None, daemon=None, name=None) -> None:
+        self._target, self._args, self._kwargs = target, args, kwargs or {}
+
+    def start(self) -> None:
+        self._target(*self._args, **self._kwargs)
 
 
 if __name__ == "__main__":

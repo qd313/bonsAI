@@ -4,7 +4,8 @@ Purpose: At startup, before anyone has asked anything, this quietly loads one sm
 already-installed model into Ollama's memory -- the same model Ask would actually reach for --
 so the very first question of a session is not the one that pays to load a model from disk.
 
-Used for: `preload_ask_model_sync()` is called once at boot. `pick_preload_model()` is the
+Used for: `preload_ask_model_sync()` is called once at boot, and once more -- through
+`warm_after_setup()` -- when the install or the starter set has just finished. `pick_preload_model()` is the
 decision it is built on -- which installed model is both small enough and the one Ask would
 actually pick -- and is exported on its own so that decision can be tested without a network.
 
@@ -12,13 +13,14 @@ Solves: A boot-time warm that picks the wrong model is worse than no warm at all
 memory loading something no question will touch and leaves the first real question exactly as
 slow as before. This file keeps "which model" tied to Ask's own routing order.
 
-Does not: Retry or poll. It runs once, at boot, and a missing host, no eligible model, or the
+Does not: Retry or poll. It runs once per call (at boot, or after a setup), and a missing host, no eligible model, or the
 host declining the warm request are all silent no-ops on purpose -- this is a startup nicety,
 never something the plugin should surface as broken.
 """
 
 import json
 import re
+import threading
 import urllib.request
 from typing import Any, Optional
 
@@ -29,6 +31,10 @@ from backend.ollama.token_accounting_service import choose_window_tokens
 # Boot-time preload (roadmap: Speed-mode VRAM preload, developer switch first) only ever warms a
 # model at or under this size, so the switch can never accidentally load a big model at startup.
 PRELOAD_MAX_PARAMETER_BILLIONS = 3.0
+
+# A cold load of the 4.6B starter model took 95 to 120 s on the Deck (plan 94 block 4). The warm
+# request after a setup must wait for it: hanging up part-way can stop the load it started.
+WARM_AFTER_SETUP_TIMEOUT_SECONDS = 300.0
 
 
 def parse_parameter_size_billions(raw: Any) -> Optional[float]:
@@ -66,7 +72,12 @@ def _installed_sizes(tags_models: Any) -> "dict[str, Optional[float]]":
     return out
 
 
-def pick_preload_model(tags_models: Any, try_order: Any = None) -> Optional[str]:
+def pick_preload_model(
+    tags_models: Any,
+    try_order: Any = None,
+    *,
+    size_cap: Optional[float] = PRELOAD_MAX_PARAMETER_BILLIONS,
+) -> Optional[str]:
     """The model Ask will actually reach for, when it is small enough to be worth warming.
 
     **The try order decides which model; the size cap only decides whether to bother.** Warming
@@ -85,15 +96,20 @@ def pick_preload_model(tags_models: Any, try_order: Any = None) -> Optional[str]
     embedding models: they are small enough to pass any cap and can never answer a question, so
     on this Deck the 137M ``nomic-embed-text`` would otherwise have been a candidate.
 
-    A model whose size Ollama did not report is skipped rather than guessed at.
+    A model whose size Ollama did not report is skipped rather than guessed at -- unless
+    ``size_cap`` is ``None``, which is the one-off "warm whatever Ask will pick, however big" used
+    right after a setup (plan 96 F2): the starter model is 4.6B, over the boot-time cap, and it is
+    exactly the model the first question will reach for. An embedding model is still never warmed.
     """
     sizes = _installed_sizes(tags_models)
     if not sizes:
         return None
 
     def small_enough(name: str) -> bool:
+        if size_cap is None:
+            return "embed" not in name.lower()
         size_b = sizes.get(name)
-        return size_b is not None and size_b <= PRELOAD_MAX_PARAMETER_BILLIONS
+        return size_b is not None and size_b <= size_cap
 
     if isinstance(try_order, list):
         for wanted in try_order:
@@ -117,6 +133,7 @@ def preload_ask_model_sync(
     *,
     timeout_seconds: float = 20.0,
     settings: Any = None,
+    ignore_size_cap: bool = False,
 ) -> None:
     """Best-effort warm of a small installed model into Ollama's memory, once, at boot.
 
@@ -149,7 +166,9 @@ def preload_ask_model_sync(
                 if isinstance(e, dict)
             ]
             try_order = resolve_routing_order(False, settings, [t for t in installed if t])
-        model = pick_preload_model(models_list, try_order)
+        model = pick_preload_model(
+            models_list, try_order, size_cap=None if ignore_size_cap else PRELOAD_MAX_PARAMETER_BILLIONS
+        )
         if not model:
             logger.info("preload_ask_model: no eligible small model installed, skipping")
             return
@@ -174,3 +193,40 @@ def preload_ask_model_sync(
         logger.info("preload_ask_model: warmed %s", model)
     except Exception as exc:
         logger.info("preload_ask_model: skipped (%s)", exc)
+
+
+def warm_after_setup(
+    state: Any,
+    settings: Any,
+    logger: Any,
+    base_http: str,
+) -> bool:
+    """After a finished install or starter set, load the model Ask will pick, in the background.
+
+    Deck, plan 94 block 4: the first question after a fresh install waited 95 to 120 s for its
+    first word, because the model loaded cold at that moment. Loading it once here, while the
+    person is still reading "done", moves that wait out of the first question.
+
+    Returns whether a warm-up was started, so the caller and the tests can tell. It starts at most
+    one, on its own thread, and returns at once: the setup's "done" is never held back, and a
+    warm-up that fails is a quiet no-op (``preload_ask_model_sync`` never raises). It starts
+    nothing unless the run ended ``done`` -- not failed, cancelled or still running -- and the AI
+    runs on this Deck. It ignores the boot-time 3B size cap, because the starter model is 4.6B;
+    an install with no model pulled yet finds nothing to warm and sends no warm request.
+    """
+    if not isinstance(state, dict) or state.get("phase") != "done":
+        return False
+    if not isinstance(settings, dict) or settings.get("ollama_local_on_deck") is not True:
+        return False
+    threading.Thread(
+        target=preload_ask_model_sync,
+        args=(base_http, logger),
+        kwargs={
+            "timeout_seconds": WARM_AFTER_SETUP_TIMEOUT_SECONDS,
+            "settings": settings,
+            "ignore_size_cap": True,
+        },
+        daemon=True,
+        name="bonsai-warm-after-setup",
+    ).start()
+    return True

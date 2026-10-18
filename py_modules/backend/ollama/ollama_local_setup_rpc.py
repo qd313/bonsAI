@@ -20,6 +20,8 @@ How it works:
    with the AI on a PC they refuse, because pulling and removing act on the Deck's own Ollama.
 2. A pull runs in one background task with one lock; progress is read back through
    get_local_ollama_setup_status, and a finished pull merges its tags into the saved try orders.
+   A setup that ends "done" also starts one background warm-up of the model Ask will pick
+   (`warm_after_setup`), so the first question after an install is not the one that loads it.
 3. Removing a model runs `ollama rm`, then takes the name out of both saved try orders unless a
    saved PC still has the same model (`ollama_pc_models.ask_known_pcs`); a known PC that does not answer keeps it.
 4. Reading the Deck's installed models (fetch_ollama_catalog_metadata) also drops saved try-order
@@ -55,6 +57,7 @@ from backend.ollama.ollama_catalog_service import (
     is_valid_ollama_pull_tag,
     normalize_ollama_pull_tags,
 )
+from backend.ollama.ollama_preload_service import warm_after_setup
 from backend.ollama.ollama_routing import (
     is_embedding_only_tag,
     is_valid_setup_pull_profile,
@@ -164,6 +167,13 @@ async def start_local_ollama_setup(self, data: Any = None):
                     on_verbose_line=on_verbose_line,
                     **starter_kwargs,
                 )
+                # Plan 96 F2: "done" is already on screen. Now load the model Ask will pick, in the
+                # background, so the first question does not pay a two-minute cold load. Fresh
+                # settings: the run may have changed the try order. Never raises, never waits.
+                try:
+                    warm_after_setup(self._local_ollama_setup_state, await self.load_settings(), logger, DEFAULT_BASE)
+                except Exception:
+                    pass
             finally:
                 # Ended (done, failed or cancelled): forget it. A plugin reload ends it too, and
                 # keeps the note, so the download starts again on load.

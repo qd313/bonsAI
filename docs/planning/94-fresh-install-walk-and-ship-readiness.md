@@ -379,7 +379,7 @@ the "Remov"+"e" split at Large text.
   Reply ready (a toast with the answer's first line about 15 s after Ask on Steam's home; the full answer on reopen);
   the performance question (7 W and 60 FPS suggested, nothing applied, the cap still 15 W); Clear cache (under Settings →
   Data; asks first; settings and the saved chat stay). Chats: new, switch and delete PASS (Delete asks first, Cancel
-  first); rename COULD NOT RUN (Steam's own keyboard dialog; the maintainer's hand). UNCLEAR: Strategy (the AI asked
+  first); rename COULD NOT RUN (Steam's own keyboard dialog; the maintainer's hand; passed by hand 2026-10-18 on the Deck itself, see plan 96 § 5). UNCLEAR: Strategy (the AI asked
   "Where are you at in Hades?" with two choice buttons three times; the driver answered by typing instead of pressing a
   choice, so no checklist was reached: retried in block 5); Expert (finished cleanly, names the model and the Hades
   notes, but 454 characters, shorter than Speed, and answered only half the question); Sum up (greyed after 8 answers

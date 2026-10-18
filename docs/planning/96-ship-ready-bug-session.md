@@ -127,6 +127,17 @@ before N1 is built (check 6, and the mock-up picks); before the README's known-p
 A Fail becomes a roadmap entry with the maintainer's words as the description; a Pass closes the rows it settles,
 by the bookkeeper, naming the page as the evidence.
 
+**Results (the maintainer's answers on the page, 2026-10-18, about 17:20 to 17:40 UTC, the Deck's own screen; the bookkeeper wrote them into the roadmap and the test documents):**
+
+1. Reply-language pick by hand: **FAIL**, "just flips back to Follow system". The ★★ language entry stays in Bugs, now confirmed by hand.
+2. Rename a chat: **PASS on the Deck itself** (the keyboard pops up, the rename works). With an external controller the keyboard never shows, even with Steam + X: a new ★ `[platform]` Bugs entry, a candidate for the README's known-problems list.
+3. Screenshot by touch: the attach by touch **works** (so the touch half of F5 passes); the answer **FAILED** with "incomplete stream" (`workshop:test-evidence/plan96-HAND-screenshot-by-touch.png`); the ★★ `[ask]` entry is confirmed by hand.
+4. Real microphone, three questions: **PASS**, "looks good" (`workshop:test-evidence/plan96-HAND-real-mic.png`). Closed to Done: the ★★★ mic entry, the Stop-then-mic entry and the doubled-words entry, with their rows and the real-voice halves of plans 88 and 94.
+5. Parental lock: **SKIP**, a child-account profile has to be made first. The Kids lock rows stay owed.
+6. First-run wording: **no verdict yet**, the maintainer could not find the pictures (sent since). Stays owed, with the picture paths in the row.
+7. Ghost tab bar after a touch: **FAIL** (`workshop:test-evidence/plan96-HAND-ghost-tab-bar.png`). A second strip over the chat, read as Steam's own bumper hint stuck; unproven. Rows TAB-BAR-GHOST-01 and P84-TABS-02 failed.
+8. Show details slot by right stick: **FAIL as a premise**, "the right stick does not scroll". The owed half of the slot entry closes as cannot be done; the chips-near-end entry keeps waiting for the exact presses, a touch scroll now the remaining suspect.
+
 ## 6. Release day, after this session (plan 71)
 
 1. The version to 0.6.0 (plugin.json; the sync script carries it), the changelog's Unreleased block dated.

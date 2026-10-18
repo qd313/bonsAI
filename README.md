@@ -85,19 +85,14 @@ network.*
 <summary><h3>Notes from the game's wiki</h3><br>Answers can use notes from community wikis, 38 games so far, and it works offline.</summary>
 <br>
 
-<table>
-<tr>
-<td width="360"><img src="assets/readme/wiki-notes.gif" alt="A Speed answer from the AI on the Deck that uses a wiki note, then the note opening under the answer" width="360"></td>
-<td>
+<img align="left" hspace="12" src="assets/readme/wiki-notes.gif" alt="A Speed answer from the AI on the Deck that uses a wiki note, then the note opening under the answer" width="360">
 
 The knowledge library is a one-time download. When an answer uses a note, it says where the note
 came from, and you can open the note under the answer.
 
 *Filmed in real time, with the AI running on the Deck itself.*
 
-</td>
-</tr>
-</table>
+<br clear="left">
 
 </details>
 
@@ -120,18 +115,13 @@ notes**; press that line to see your notes, switch one off or remove it.
 <summary><h3>Spoilers stay hidden until you ask</h3><br>In Strategy mode, anything that looks like a spoiler is covered.</summary>
 <br>
 
-<table>
-<tr>
-<td>
+<img align="right" hspace="12" src="assets/readme/spoiler.gif" alt="A spoiler in a Strategy answer, covered until it is opened" width="360">
 
 Press **A** on a cover to open it. This works on a best-effort basis and can miss things.
 
 *Filmed in real time, with the AI on a PC on the home network.*
 
-</td>
-<td width="360"><img src="assets/readme/spoiler.gif" alt="A spoiler in a Strategy answer, covered until it is opened" width="360"></td>
-</tr>
-</table>
+<br clear="right">
 
 </details>
 
@@ -139,18 +129,13 @@ Press **A** on a cover to open it. This works on a best-effort basis and can mis
 <summary><h3>"Where are you at?"</h3><br>Strategy can ask where you are in the game, then gives you a checklist of steps.</summary>
 <br>
 
-<table>
-<tr>
-<td width="360"><img src="assets/readme/strategy-checklist.gif" alt="Picking where you are in the game, then ticking off a step in the checklist" width="360"></td>
-<td>
+<img align="left" hspace="12" src="assets/readme/strategy-checklist.gif" alt="Picking where you are in the game, then ticking off a step in the checklist" width="360">
 
 Tick off steps as you go. Your progress is saved on the Deck, for each game.
 
 *Filmed in real time, with the AI on a PC on the home network.*
 
-</td>
-</tr>
-</table>
+<br clear="left">
 
 </details>
 
@@ -216,19 +201,14 @@ ask it to sum up at any time.
 <summary><h3>Talk instead of typing</h3><br>Press the mic button and talk. Your speech becomes text on the Deck itself.</summary>
 <br>
 
-<table>
-<tr>
-<td>
+<img align="right" hspace="12" src="assets/readme/talk.gif" alt="Pressing the mic button, the first word appearing, then the tidied text after Stop" width="360">
 
 Words appear as you talk. When you stop, bonsAI reads the whole recording once more and tidies the
 text, which takes a couple of seconds. The recording is deleted as soon as that's done.
 
 *Filmed in real time, with a computer voice played into the Deck.*
 
-</td>
-<td width="360"><img src="assets/readme/talk.gif" alt="Pressing the mic button, the first word appearing, then the tidied text after Stop" width="360"></td>
-</tr>
-</table>
+<br clear="right">
 
 </details>
 
@@ -236,18 +216,13 @@ text, which takes a couple of seconds. The recording is deleted as soon as that'
 <summary><h3>See how it answered</h3><br>Show details under any answer shows which model wrote it and which notes it used.</summary>
 <br>
 
-<table>
-<tr>
-<td width="360"><img src="assets/readme/show-details.gif" alt="Opening Show details under an answer, then the Session tab" width="360"></td>
-<td>
+<img align="left" hspace="12" src="assets/readme/show-details.gif" alt="Opening Show details under an answer, then the Session tab" width="360">
 
 The **Session** tab inside it holds the chat's history and the **Sum up this chat** button.
 
 *Filmed in real time, with the AI on a PC on the home network.*
 
-</td>
-</tr>
-</table>
+<br clear="left">
 
 </details>
 

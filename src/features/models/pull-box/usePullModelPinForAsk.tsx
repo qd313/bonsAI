@@ -22,8 +22,8 @@
 import { useCallback, type Dispatch, type SetStateAction } from "react";
 import { toaster } from "@decky/api";
 import type { PullModelEntry } from "../pullModelCatalog";
-import { patchPendingSessionSettingsSnapshot } from "../../../utils/bonsaiSessionSurvival";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../../utils/deckyCall";
+import { patchPendingSessionSettingsSnapshot } from "../../plugin-shell/bonsaiSessionSurvival";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../../shared/deckyCall";
 import type { PullModelsRoutingOrderSettings } from "./PullModelsModal.types";
 
 export type UsePullModelPinForAskArgs = {

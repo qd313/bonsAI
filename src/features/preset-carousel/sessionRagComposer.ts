@@ -21,8 +21,8 @@
  * Does not: Ask the back end for the candidate chips in the first place —
  * see the helper that fetches them for that.
  */
-import type { AskModeId } from "../../data/askMode";
-import type { PresetPrompt } from "../../data/presets";
+import type { AskModeId } from "../ask/bar/askMode";
+import type { PresetPrompt } from "./presets";
 import { PRESET_VISIBLE_SLOTS } from "./presetRowLayout";
 
 /** Default per-slot probability of substituting a RAG candidate when available. */

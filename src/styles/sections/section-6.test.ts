@@ -16,7 +16,7 @@
  */
 import { describe, expect, it } from "vitest";
 import { buildSection6Section } from "./section-6";
-import { UNIFIED_TEXT_FONT_PX } from "../../features/unified-input/constants";
+import { UNIFIED_TEXT_FONT_PX } from "../../shared/constants";
 
 describe("copy icon room reserved below a trailing code box (section 6 CSS)", () => {
   const css = buildSection6Section();

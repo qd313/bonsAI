@@ -22,7 +22,7 @@
  * the same move the row's own Left and Right make; when the ring has strayed outside the list the caller's
  * `enterList` (Steam's own transfer) runs first.
  */
-import { elementHasGamepadFocus } from "../../../utils/uiDocument";
+import { elementHasGamepadFocus } from "../../../shared/dpad/uiDocument";
 
 const controls = new Map<string, HTMLElement>();
 let pendingTag: string | null = null;

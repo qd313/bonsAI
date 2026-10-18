@@ -205,7 +205,7 @@ def _unit_mentions_protected_name(unit: str, names: Sequence[str]) -> bool:
     return any(_protected_name_pattern(n).search(low) for n in names)
 
 
-# Fences are read the way the panel reads them (src/utils/markdownFenceReader.ts, ``stepFence``):
+# Fences are read the way the panel reads them (src/features/answer/markdown/markdownFenceReader.ts, ``stepFence``):
 # a line starting with three or more backticks OR tildes opens one; only a line holding nothing
 # but the same mark, at least as long as the opener, closes it (quote marks and indent in front
 # of a closer are ignored); every other line, another kind of marker included, is the block's own

@@ -65,7 +65,7 @@ turned out to be broken, and all four wrote worse for a day before anybody spoke
 **Drawings are welcome** where a shape is easier seen than read — an order of checks, what sits
 inside what on screen, the two routes a request can take.
 [`capabilities.py`](../py_modules/backend/core/capabilities.py) draws the order its checks
-happen in; [`buildAnswerBubbleElement.tsx`](../src/utils/buildAnswerBubbleElement.tsx) draws the
+happen in; [`buildAnswerBubbleElement.tsx`](../src/features/answer/bubble/buildAnswerBubbleElement.tsx) draws the
 reply bubble. Do not add one for its own sake.
 
 **Check every claim before you write it.** A header that confidently states something false is
@@ -130,20 +130,20 @@ Walk this to trace a question from the Main tab to the AI and back — about ten
 
 | Step | File | What it does |
 |------|------|------|
-| 1 | [`MainTab.tsx`](../src/components/MainTab.tsx) | Lays out the chip row, the Ask bar, the screenshot browser and the chat. |
-| 2 | [`MainTabUnifiedAskBar.tsx`](../src/components/MainTabUnifiedAskBar.tsx) | The Ask box itself: the mode menu, send and cancel, the attachment row. |
+| 1 | [`MainTab.tsx`](../src/features/main-tab/MainTab.tsx) | Lays out the chip row, the Ask bar, the screenshot browser and the chat. |
+| 2 | [`MainTabUnifiedAskBar.tsx`](../src/features/ask/bar/MainTabUnifiedAskBar.tsx) | The Ask box itself: the mode menu, send and cancel, the attachment row. |
 | 3 | [`index.tsx`](../src/index.tsx) | Hands the Ask machinery down into the Main tab. |
-| 4 | [`useBonsaiAskOrchestration.ts`](../src/hooks/useBonsaiAskOrchestration.ts) | Sending, waiting, the chat thread, strategy branches, revealing the reply as it arrives, restoring a session. |
-| 4b | [`useStrategyChecklistSession.ts`](../src/hooks/useStrategyChecklistSession.ts) | Keeps the per-game strategy checklist in step with the disk. |
-| 5 | [`useBackgroundGameAi.ts`](../src/hooks/useBackgroundGameAi.ts) | Asks "is it finished yet" over and over until it is. |
-| 6 | [`deckyCall.ts`](../src/utils/deckyCall.ts) | Sends a request to the back end and gives up if it hangs. |
+| 4 | [`useBonsaiAskOrchestration.ts`](../src/features/ask/flow/useBonsaiAskOrchestration.ts) | Sending, waiting, the chat thread, strategy branches, revealing the reply as it arrives, restoring a session. |
+| 4b | [`useStrategyChecklistSession.ts`](../src/features/strategy/useStrategyChecklistSession.ts) | Keeps the per-game strategy checklist in step with the disk. |
+| 5 | [`useBackgroundGameAi.ts`](../src/features/ask/flow/useBackgroundGameAi.ts) | Asks "is it finished yet" over and over until it is. |
+| 6 | [`deckyCall.ts`](../src/shared/deckyCall.ts) | Sends a request to the back end and gives up if it hangs. |
 | 7 | [`main.py`](../main.py) | The back end's front door: start a question, ask how it is going, stop it. |
 | 8 | [`game_ai_request.py`](../py_modules/backend/ask/game_ai_request.py) | Builds the question: what game is running, the knowledge base, the safety check, then the AI. |
 | 9 | [`ollama_ask_service.py`](../py_modules/backend/ask/ollama_ask_service.py) | Actually talks to the AI. |
-| 10 | [`MainTabChatTranscript.tsx`](../src/components/MainTabChatTranscript.tsx) | Draws the reply, the buttons under it, and the strategy parts. |
+| 10 | [`MainTabChatTranscript.tsx`](../src/features/answer/transcript/MainTabChatTranscript.tsx) | Draws the reply, the buttons under it, and the strategy parts. |
 
-**Moving focus with the D-pad:** [`replyStopRegistry.ts`](../src/utils/replyStopRegistry.ts),
-[`liveTurnFocusGraph.ts`](../src/utils/liveTurnFocusGraph.ts). Never move focus by hand — the
+**Moving focus with the D-pad:** [`replyStopRegistry.ts`](../src/shared/dpad/replyStopRegistry.ts),
+[`liveTurnFocusGraph.ts`](../src/shared/dpad/liveTurnFocusGraph.ts). Never move focus by hand — the
 browser's idea of what is focused then disagrees with Steam's own highlight ring, and this project
 has lost three separate fixes to that trap. The rule in full is in [AGENTS.md](../AGENTS.md).
 

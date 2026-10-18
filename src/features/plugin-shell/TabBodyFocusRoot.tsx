@@ -17,7 +17,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { Focusable } from "@decky/ui";
 
-import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
+import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../../shared/dpad/navFocusRegistry";
 import type { BonsaiTabId } from "./tabTitles";
 import { useTabBodyFocusScroll } from "../../shared/dpad/useTabBodyFocusScroll";
 

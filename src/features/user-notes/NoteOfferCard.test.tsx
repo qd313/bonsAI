@@ -27,7 +27,7 @@ vi.mock("@decky/ui", async () => {
     },
   };
 });
-vi.mock("../../utils/deckyCall", () => ({ callDeckyWithTimeout: hoisted.call }));
+vi.mock("../../shared/deckyCall", () => ({ callDeckyWithTimeout: hoisted.call }));
 
 import { NoteOfferCard } from "./NoteOfferCard";
 import { NoteEditModal } from "./NoteEditModal";
@@ -40,8 +40,8 @@ import {
   simulateScreenReload,
 } from "./userNotesStore";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
-import { REPLY_STOP_ORDER, registerReplyStop } from "../../utils/replyStopRegistry";
-import { resetUiDocument } from "../../utils/uiDocument";
+import { REPLY_STOP_ORDER, registerReplyStop } from "../../shared/dpad/replyStopRegistry";
+import { resetUiDocument } from "../../shared/dpad/uiDocument";
 
 const OFFER = { text: "I'm doing a Steel Soul run.", app_id: "", game_title: "Hollow Knight" };
 const KEPT_NOTE = { id: "n-1", text: OFFER.text, app_id: "", game_title: "Hollow Knight", on: true, created_at: "x", source_turn_id: "turn-1" };

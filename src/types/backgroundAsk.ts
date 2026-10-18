@@ -31,7 +31,7 @@ import type {
   StrategyChecklistPayload,
   TurnReasoning,
 } from "./bonsaiUi";
-import type { KbAttachedNote, TransparencySnapshot } from "../utils/inputTransparency";
+import type { KbAttachedNote, TransparencySnapshot } from "./inputTransparency";
 
 /** Shortcut-setup keyword replies surface this so the UI can deep-link Controller settings. */
 type ShortcutSetupKind = "deck" | "stadia";
@@ -205,7 +205,7 @@ export type LastExchangeSnapshot = {
   model?: string | null;
   attachments?: AskAttachmentSnapshot[];
   spoilerConsentEffective?: boolean;
-  askMode?: import("../data/askMode").AskModeId;
+  askMode?: import("../features/ask/bar/askMode").AskModeId;
   /** The game this exchange was asked against, for a title reachable only by name (plan 54 gap 1). */
   appName?: string;
   /** The thing the backend worked out this question named (plan 54 gap 2). */
@@ -273,13 +273,13 @@ export type PendingArchiveTurn = {
 };
 
 export type ReplyFollowUpPending = {
-  chipId: import("../data/replyMicroActions").ReplyMicroActionId;
+  chipId: import("../features/answer/reply-actions/replyMicroActions").ReplyMicroActionId;
   parentQuestion: string;
   parentAnswer: string;
   preferredModel: string | null;
   attachments: AskAttachmentSnapshot[];
   spoilerConsentEffective: boolean;
-  askMode: import("../data/askMode").AskModeId;
+  askMode: import("../features/ask/bar/askMode").AskModeId;
 };
 
 export type AppendDesktopChatEventPayload = {

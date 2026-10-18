@@ -457,7 +457,7 @@ Your chats
 
 The plugin keeps ten chats. With fewer than ten, New chat in the chats menu makes a chat at once, as before. At
 ten, it opens **a picker in a box of its own** (`ChatSlotPickerModal.tsx`, opened through `showModal` the way the
-rename and delete boxes are), and nothing is made or deleted yet. Code: `src/features/chat-slots/useStartNewChat.tsx`
+rename and delete boxes are), and nothing is made or deleted yet. Code: `src/features/chats/slots/useStartNewChat.tsx`
 (the one function every "start a new chat" goes through; the + beside the chat's name, plan 87 F5, calls it too),
 `ChatSlotPickerModal.tsx`, `useChatSlotDeleteConfirm.tsx`. The back end refuses a create at ten (`chat_limit`), so
 no path can delete a chat to make room.

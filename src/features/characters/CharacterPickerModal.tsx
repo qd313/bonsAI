@@ -94,7 +94,7 @@ import {
 import {
   resolveRunningGameCharacterSuggestions,
   type RunningGameCharacterSuggestions,
-} from "../../utils/runningGameCharacterSuggestions";
+} from "./runningGameCharacterSuggestions";
 import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
 import { BonsaiModalScope } from "../../shared/BonsaiModalScope";
 import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";

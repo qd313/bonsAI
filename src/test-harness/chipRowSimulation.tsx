@@ -10,8 +10,8 @@
  */
 import { act, render } from "@testing-library/react";
 import { vi } from "vitest";
-import { MainTabPresetAnimatedChips } from "../components/MainTabPresetAnimatedChips";
-import type { PresetPrompt } from "../data/presets";
+import { MainTabPresetAnimatedChips } from "../features/preset-carousel/MainTabPresetAnimatedChips";
+import type { PresetPrompt } from "../features/preset-carousel/presets";
 import { setSessionRagCarouselCandidates } from "../features/preset-carousel/composePresetSeedsWithSessionRag";
 import type { SessionRagChipCandidate } from "../features/preset-carousel/sessionRagComposer";
 

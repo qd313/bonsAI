@@ -7,7 +7,7 @@
  * (MainTabPresetAnimatedChipsProps).
  *
  * Used for: MainTabPresetAnimatedChipsInner (fade/static), MainTabPresetDecodeSlots and
- * MainTabPresetSidewaysCarousel, all in src/components/MainTabPresetAnimatedChips.tsx.
+ * MainTabPresetSidewaysCarousel, all in src/features/preset-carousel/MainTabPresetAnimatedChips.tsx.
  *
  * Solves: Keeps the per-slot stagger and the "always exactly three seeds" contract in one place, so the four animation
  * modes cannot quietly drift apart on either. The prop type lives here too (not in the component
@@ -18,8 +18,8 @@
  * Does not: Decide which animation mode is active, or draw anything.
  */
 import type React from "react";
-import { getRandomPresets, type PresetPrompt, type PresetSamplerOptions } from "../../data/presets";
-import type { AskModeId } from "../../data/askMode";
+import { getRandomPresets, type PresetPrompt, type PresetSamplerOptions } from "./presets";
+import type { AskModeId } from "../ask/bar/askMode";
 
 /* Fade lengths are in presetPace.ts: one set for one chip showing, one for two. */
 /** Stagger each slot's first appearance so the chips never move in lockstep. */

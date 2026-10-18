@@ -16,7 +16,7 @@
  * no starter-set run is ever seen (a refused start) it gives up after a short while and calls back with nothing.
  */
 import { useCallback, useEffect, useRef } from "react";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../utils/deckyCall";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../shared/deckyCall";
 
 const STARTER_RUN_POLL_MS = 1500;
 const GIVE_UP_WITHOUT_A_RUN_LOOKS = 10;

@@ -5,7 +5,7 @@
  * Shell" reveal where each chip's text scrambles into place, letter by letter, behind a blinking
  * caret. The chip button it draws is DecodePresetChipButton, in presetDecodeChipButton.tsx.
  *
- * Used for: MainTabPresetAnimatedChipsInner in src/components/MainTabPresetAnimatedChips.tsx,
+ * Used for: MainTabPresetAnimatedChipsInner in src/features/preset-carousel/MainTabPresetAnimatedChips.tsx,
  * when the chip-animation setting is "decode".
  *
  * Solves: Runs the reveal on a single shared requestAnimationFrame loop, writing straight to each
@@ -20,7 +20,7 @@
  * file, to render decode mode).
  */
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { PresetPrompt } from "../../data/presets";
+import type { PresetPrompt } from "./presets";
 import { DecodePresetChipButton, type DecodeLabelNodes, type DecodeLabelRefs, type DecodeLabelPart } from "./presetDecodeChipButton";
 import { PresetRowFocusRoot, usePresetRowNav } from "./presetRowFocusNav";
 import { effectivePresetVisibleSlots, presetTurnMs } from "./presetRowLayout";

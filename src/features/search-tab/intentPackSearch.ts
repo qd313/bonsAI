@@ -17,7 +17,7 @@
  * import and export them. This file only searches with whatever pack it is handed.
  */
 
-import { SETTINGS_SEARCH_MIN_QUERY_LENGTH } from "../unified-input/constants";
+import { SETTINGS_SEARCH_MIN_QUERY_LENGTH } from "../../shared/constants";
 
 type IntentPackEntry = {
   target: string;

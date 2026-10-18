@@ -15,7 +15,7 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { registerNavFocus, resetNavFocusRegistry } from "../../utils/navFocusRegistry";
+import { registerNavFocus, resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
 
 import { scheduleFoldedTabArrival } from "./foldedTabArrival";
 import { notePersonPress } from "./foldedTabsStore";

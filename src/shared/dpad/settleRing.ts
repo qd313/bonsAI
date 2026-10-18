@@ -17,7 +17,7 @@
  * tab going away, ends the looking at once; so does the ring being on the row. Never retries on a timer after
  * the last look.
  */
-import { getUiDocument } from "../../utils/uiDocument";
+import { getUiDocument } from "./uiDocument";
 
 /** When to look, in milliseconds after the first transfer. */
 const SETTLE_CHECKS_MS = [150, 450, 1000, 2000];

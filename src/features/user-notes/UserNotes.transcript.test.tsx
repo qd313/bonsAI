@@ -18,13 +18,13 @@ vi.mock("@decky/ui", async () => {
   return { ...stubs, Focusable: SteamRingFocusable, showModal: () => ({ Close: () => undefined }) };
 });
 
-import { MainTabChatTranscript } from "../../components/MainTabChatTranscript";
-import type { MainTabChatTranscriptProps } from "../../components/MainTabChatTranscript";
+import { MainTabChatTranscript } from "../answer/transcript/MainTabChatTranscript";
+import type { MainTabChatTranscriptProps } from "../answer/transcript/MainTabChatTranscript";
 import type { AskThreadCollapsedTurn } from "../../types/bonsaiUi";
-import type { TransparencySnapshot } from "../../utils/inputTransparency";
+import type { TransparencySnapshot } from "../../types/inputTransparency";
 import { receiveStatusOffer, resetUserNotesStore } from "./userNotesStore";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
-import { resetUiDocument } from "../../utils/uiDocument";
+import { resetUiDocument } from "../../shared/dpad/uiDocument";
 
 const QUESTION = "I am doing a Steel Soul run, how do I beat the mantis lords";
 const ANSWER = "Learn the first lord's three moves before you swing.";

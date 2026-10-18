@@ -19,8 +19,8 @@
 import { useRef } from "react";
 import { Focusable } from "@decky/ui";
 
-import { isDeckDirectionLeftEvent, isDeckDirectionRightEvent, isDownDeckButtonEvent, isUpDeckButtonEvent } from "../../utils/focusNavigation";
-import { takeAboveTheChat } from "../../utils/chatTranscriptNavHelpers";
+import { isDeckDirectionLeftEvent, isDeckDirectionRightEvent, isDownDeckButtonEvent, isUpDeckButtonEvent } from "../../shared/dpad/focusNavigation";
+import { takeAboveTheChat } from "../../shared/dpad/chatTranscriptNavHelpers";
 import { textPx } from "../../styles/textPx";
 import { registerBackLineEl, searchBackNav } from "./searchJumpStore";
 

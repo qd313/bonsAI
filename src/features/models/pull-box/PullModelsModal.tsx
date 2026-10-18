@@ -147,7 +147,7 @@ import {
 import type { PullModelsModalProps } from "./PullModelsModal.types";
 export type { PullModelsFooterState, PullModelsModalProps } from "./PullModelsModal.types";
 import { findUnavailableRegistryTags, formatModesShort, isTagInstalled, resolveRowSizeGb } from "./pullModelFilters";
-import type { NavRefHolder } from "../../../utils/navFocusRegistry";
+import type { NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 export { findUnavailableRegistryTags };
 
 // "New" badge history (when each tag was first seen installed) — the record math and the

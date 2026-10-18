@@ -19,8 +19,8 @@ const api = vi.hoisted(() => ({
 const looks = vi.hoisted(() => ({ count: 0 }));
 vi.mock("./searchApi", () => api);
 vi.mock("@decky/ui", async () => (await import("./searchTabTestKit")).deckyUiForSearch());
-vi.mock("../../utils/uiDocument", async (orig) => {
-  const real = await orig<typeof import("../../utils/uiDocument")>();
+vi.mock("../../shared/dpad/uiDocument", async (orig) => {
+  const real = await orig<typeof import("../../shared/dpad/uiDocument")>();
   return {
     ...real,
     uiGamepadFocusElement: () => {

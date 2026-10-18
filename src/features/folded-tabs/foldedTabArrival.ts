@@ -29,9 +29,9 @@
  * a moment later, and then lets go so a person scrolling is never fought. The ring is looked at once more at
  * 250 ms.
  */
-import { findTabContentsScroll } from "../../utils/chatPanelScroll";
-import { getUiDocument } from "../../utils/uiDocument";
-import { takeNavFocus } from "../../utils/navFocusRegistry";
+import { findTabContentsScroll } from "../../shared/dpad/chatPanelScroll";
+import { getUiDocument } from "../../shared/dpad/uiDocument";
+import { takeNavFocus } from "../../shared/dpad/navFocusRegistry";
 import { takeFoldLine } from "./FoldedSection";
 import { personPressCount } from "./foldedTabsStore";
 

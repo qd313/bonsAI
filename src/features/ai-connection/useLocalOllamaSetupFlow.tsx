@@ -34,14 +34,14 @@
  */
 import { useCallback, useEffect, useRef, type MutableRefObject, type RefObject } from "react";
 import { toaster } from "@decky/api";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../utils/deckyCall";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../shared/deckyCall";
 import type { LocalOllamaSetupStatus } from "./OllamaWhereAiRunsSection.types";
 import {
   LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
   LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
 } from "./OllamaWhereAiRunsSection.constants";
 import { startLocalOllamaSetup, starterSetBoxBody, starterSetNotices } from "../models/localOllamaStarterSet";
-import { rememberReturnWhileBoxOpens } from "../../utils/rememberReturnWhileBoxOpens";
+import { rememberReturnWhileBoxOpens } from "../downloads/rememberReturnWhileBoxOpens";
 import type { ModalReturnFocusId } from "../../shared/dpad/modalReturnFocusRegistry";
 import {
   confirmDownload,

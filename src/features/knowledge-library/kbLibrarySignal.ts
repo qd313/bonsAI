@@ -21,7 +21,7 @@
  * Does not: Delete, download or save anything; the back end already writes the setting (off on remove, on
  * when an install lands). This only tells the screen.
  */
-import { patchPendingSessionSettingsSnapshot } from "../../utils/bonsaiSessionSurvival";
+import { patchPendingSessionSettingsSnapshot } from "../plugin-shell/bonsaiSessionSurvival";
 
 const HEARD_WINDOW_MS = 10 * 60 * 1000;
 

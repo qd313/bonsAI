@@ -96,7 +96,7 @@ describe("Clear all plugin data brings the help chip back", () => {
     window.localStorage.clear();
     vi.resetModules();
     const { usePluginHelpModal } = await import("./features/about/usePluginHelpModal");
-    const survival = await import("./utils/bonsaiSessionSurvival");
+    const survival = await import("./features/plugin-shell/bonsaiSessionSurvival");
     const { buildInitialSessionSnapshot } = await import("./features/plugin-shell/initialSessionSnapshot");
     const args = {
       currentTab: "main",

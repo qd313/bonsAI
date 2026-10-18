@@ -86,7 +86,7 @@ match what the loader does.
 This is the only channel between them. There is no HTTP server in the middle.
 
 1. The screen calls `call<Args, Result>("method_name", ...args)` from `@decky/api`.
-2. **Use `callDeckyWithTimeout()`** from [src/utils/deckyCall.ts](src/utils/deckyCall.ts) instead. It
+2. **Use `callDeckyWithTimeout()`** from [src/shared/deckyCall.ts](src/shared/deckyCall.ts) instead. It
    adds a 15-second deadline and tidies up error payloads. A bare `call()` can hang the panel
    forever. Watch the argument style: `call()` spreads its arguments, the wrapper takes an **array**.
 3. Four places deliberately use the bare `call()`, each with a comment saying why: clearing plugin
@@ -153,19 +153,19 @@ Full patterns:
   or class lookup, no checking `document.activeElement` to confirm a move worked. Under Decky the
   global `document` is **the wrong document**: plugin code runs in a context whose document is a
   14-element shell, while the panel renders into a different one. Use a ref, the registry, or the
-  helpers in [uiDocument.ts](src/utils/uiDocument.ts).
+  helpers in [uiDocument.ts](src/shared/dpad/uiDocument.ts).
 - **A DOM `focus()` does not move Steam's own focus ring between containers.** It sets the active
   element while Steam's ring stays behind and then clears, so presses keep going to the container
   you were trying to leave — and any helper that checks the active element will report a move that
   never happened. Inside one container a plain `focus()` is fine. To leave a container, use the
   register, unregister and take functions in
-  [navFocusRegistry.ts](src/utils/navFocusRegistry.ts), which add a null check and a real
+  [navFocusRegistry.ts](src/shared/dpad/navFocusRegistry.ts), which add a null check and a real
   did-it-work check around the underlying Steam call. The only direct call left in the whole front
   end is inside the registry itself.
 - **Know which handler actually fires before wiring one.** The move-up and move-down handlers are
   props on Steam's focusable wrapper: they do nothing on a Decky button, which does not forward
   them. The button-down handler fires on both, for **every** button, so read which button it was
-  through the helpers in [focusNavigation.ts](src/utils/focusNavigation.ts) — never by turning the
+  through the helpers in [focusNavigation.ts](src/shared/dpad/focusNavigation.ts) — never by turning the
   event into a string. A button-down handler that changes state without checking which button came
   in will fire on a D-pad press: three controls toggled themselves that way. Checking for keyboard
   Up and Down is dead code here — a D-pad press sends no keyboard events at all, measured on the

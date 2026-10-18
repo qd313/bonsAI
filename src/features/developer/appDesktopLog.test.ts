@@ -4,7 +4,7 @@ const { callDeckyWithTimeout } = vi.hoisted(() => ({
   callDeckyWithTimeout: vi.fn().mockResolvedValue({ success: true }),
 }));
 
-vi.mock("../../utils/deckyCall", () => ({
+vi.mock("../../shared/deckyCall", () => ({
   callDeckyWithTimeout,
   DECKY_RPC_TIMEOUT_MS: 15000,
 }));

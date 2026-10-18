@@ -17,9 +17,9 @@
 import { useEffect, useRef } from "react";
 
 import { persistSearchQuery } from "../../plugin-shell/pluginStorage";
-import { shouldClearUnifiedInputForPersistenceMode } from "../../../utils/unifiedInputPersistenceMode";
+import { shouldClearUnifiedInputForPersistenceMode } from "./unifiedInputPersistenceMode";
 import type { UnifiedInputPersistenceMode } from "../../settings/bonsaiSettingsSchema";
-import type { useBonsaiAskOrchestration } from "../../../hooks/useBonsaiAskOrchestration";
+import type { useBonsaiAskOrchestration } from "../flow/useBonsaiAskOrchestration";
 
 type AskOrchestration = ReturnType<typeof useBonsaiAskOrchestration>;
 

@@ -23,7 +23,7 @@ vi.mock("@decky/ui", async () => {
     },
   };
 });
-vi.mock("../../utils/deckyCall", () => ({
+vi.mock("../../shared/deckyCall", () => ({
   callDeckyWithTimeout: async () => ({ hosts: [] }),
   formatDeckyRpcError: String,
 }));

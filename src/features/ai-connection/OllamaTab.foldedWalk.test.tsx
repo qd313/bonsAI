@@ -32,13 +32,13 @@ vi.mock("@decky/ui", async () => {
 import { OllamaTab, type OllamaTabProps } from "./OllamaTab";
 import { resetFoldedTabsForTests, setAllSections, toggleSection } from "../folded-tabs/foldedTabsStore";
 import { OLLAMA_FOLD_TAB, OLLAMA_SECTIONS } from "./ollamaTabFolds";
-import { resetNavFocusRegistry } from "../../utils/navFocusRegistry";
+import { resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
 import { stripHeightFor } from "../folded-tabs/foldedTabs";
 import { walkFoldedTab, type FoldedLanding } from "../../test-harness/foldedTabWalk";
 import { paintedFrom, worstFoldAllCover } from "../../test-harness/foldAllCover";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
 import type { SteamFocusScroll } from "../../test-harness/tabBodyWalk";
-import type { ReplyVerbosityId } from "../../data/replyVerbosity";
+import type { ReplyVerbosityId } from "../settings/replyVerbosity";
 
 const noop = () => {};
 const DECK_PANE = 430;

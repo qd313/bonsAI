@@ -29,7 +29,7 @@
  */
 import { useCallback, useEffect } from "react";
 import { toaster } from "@decky/api";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../utils/deckyCall";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../shared/deckyCall";
 import type { OllamaLocalAutostartStatus } from "./OllamaWhereAiRunsSection.types";
 
 /**

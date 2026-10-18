@@ -5,10 +5,10 @@
     "main.py": {
       "limit": 1710
     },
-    "src/components/MainTabChatTranscript.tsx": {
+    "src/features/answer/transcript/MainTabChatTranscript.tsx": {
       "limit": 1104
     },
-    "src/components/MainTabUnifiedAskBar.tsx": {
+    "src/features/ask/bar/MainTabUnifiedAskBar.tsx": {
       "limit": 1131,
       "reason": "plan 74 lane 3: Up from Ask goes to the question box instead of whichever icon was used last (the mic one time, the paperclip another). Three lines here (a class name, the row's handler, one name from the hook); the handler and its explanation live in useMainTabAskBarFocus.ts with the box's own Down.",
       "date": "2026-09-28"
@@ -24,7 +24,7 @@
     "src/features/characters/characterPlaceholderEmoticonGrids.ts": {
       "limit": 993
     },
-    "src/hooks/useBonsaiAskOrchestration.ts": {
+    "src/features/ask/flow/useBonsaiAskOrchestration.ts": {
       "limit": 1061
     },
     "src/index.tsx": {

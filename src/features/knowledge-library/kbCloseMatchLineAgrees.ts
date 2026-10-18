@@ -26,7 +26,7 @@
  *    line) out of the answer, and trim the blank space it leaves behind.
  */
 import { kbNotesUsedByAnswer } from "./kbNoteUsedByAnswer";
-import type { KbAttachedNote } from "../../utils/inputTransparency";
+import type { KbAttachedNote } from "../../types/inputTransparency";
 
 /** The footer as kb_not_in_notes_notice.py writes it: blank line, a lone dash, the italic line. */
 const CLOSE_MATCH_FOOTER_RE = /\s*\n\s*—\s*\n\s*\*No close match in my notes,[^\n]*\*[ \t]*/g;

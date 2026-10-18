@@ -22,10 +22,10 @@
  */
 import { useEffect, useRef } from "react";
 
-import { getChatTitleState } from "../chat-title/chatTitleStore";
+import { getChatTitleState } from "../chats/title/chatTitleStore";
 import { peekModalReturnFocus } from "../../shared/dpad/modalReturnFocusRegistry";
-import { isOptionsDeckButtonEvent } from "../../utils/focusNavigation";
-import { getUiDocument } from "../../utils/uiDocument";
+import { isOptionsDeckButtonEvent } from "../../shared/dpad/focusNavigation";
+import { getUiDocument } from "../../shared/dpad/uiDocument";
 import { openSearchTab } from "./searchJumpStore";
 
 /**

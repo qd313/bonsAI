@@ -89,7 +89,7 @@ import {
 } from "@decky/ui";
 import { toaster } from "@decky/api";
 import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP, MAX_NAMED_OLLAMA_HOSTS } from "../settings/bonsaiSettingsSchema";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../utils/deckyCall";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../shared/deckyCall";
 import {
   consumeOllamaTabLocalPending,
   peekOllamaTabLocalPending,
@@ -122,8 +122,8 @@ import {
   LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED,
 } from "./OllamaWhereAiRunsSection.constants";
 import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
-import { useHandRingOnGone } from "../../hooks/useHandRingOnGone";
-import { elementHasGamepadFocus } from "../../utils/uiDocument";
+import { useHandRingOnGone } from "../../shared/dpad/useHandRingOnGone";
+import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
 import { focusInTabBody } from "../../shared/dpad/useTabBodyFocusScroll";
 import { textPx } from "../../styles/textPx";
 import { DenseSwitchRow } from "../folded-tabs/DenseRow";

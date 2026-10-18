@@ -136,7 +136,7 @@ row in the column.
 
 Worked example, the same input card: the host is `width: 100%` and reaches x=48…348, while the field
 inside keeps `UNIFIED_TEXT_INSET_LEFT_PX` / `..._RIGHT_PX` = **8px**
-([constants.ts:26-28](../src/features/unified-input/constants.ts)). The card is flush; the typed
+([constants.ts:26-28](../src/shared/constants.ts)). The card is flush; the typed
 text is not jammed against the panel.
 
 **Corollary:** when a row looks too tight after going full-bleed, add padding *inside* it. Never
@@ -172,7 +172,7 @@ everything else*, which is what made the Ask bar the last visible offender in pa
 
 Both vars and both tuning constants (`ASK_BAR_ROW_WIDTH_EXTRA_PX`, `ASK_BAR_LAYOUT_SHIFT_RIGHT_PX`)
 are gone. What survives in
-[useUnifiedInputSurface.ts](../src/features/unified-input/useUnifiedInputSurface.ts) is the one
+[useUnifiedInputSurface.ts](../src/features/ask/bar/useUnifiedInputSurface.ts) is the one
 measurement CSS genuinely cannot do: where the native field's text origin is painted, so the fake
 caret overlay can sit on it.
 

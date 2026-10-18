@@ -13,11 +13,11 @@ import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useBonsaiPluginShell } from "./useBonsaiPluginShell";
-import { registerNavFocus, resetNavFocusRegistry } from "../../utils/navFocusRegistry";
+import { registerNavFocus, resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
 import { isSectionOpen, resetFoldedTabsForTests, toggleSection } from "../folded-tabs/foldedTabsStore";
 import { OLLAMA_FOLD_TAB, OLLAMA_SECTIONS } from "../ai-connection/ollamaTabFolds";
 import { saveLastTab } from "./pluginStorage";
-import type { BonsaiSessionSurvivalSnapshot } from "../../utils/bonsaiSessionSurvival";
+import type { BonsaiSessionSurvivalSnapshot } from "./bonsaiSessionSurvival";
 
 const IDS = OLLAMA_SECTIONS.map((s) => s.id);
 const emptySnapshot = () => ({ currentTab: "ollama", unifiedInput: "" }) as unknown as BonsaiSessionSurvivalSnapshot;

@@ -18,8 +18,8 @@
  */
 import { act, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { MainTabPresetAnimatedChips } from "../../components/MainTabPresetAnimatedChips";
-import { setFrozenTestChips, type PresetPrompt } from "../../data/presets";
+import { MainTabPresetAnimatedChips } from "./MainTabPresetAnimatedChips";
+import { setFrozenTestChips, type PresetPrompt } from "./presets";
 import { PRESET_CHIP_END_PAUSE_MS, presetHoldMs } from "./presetRowLayout";
 import { slotStaggerMs } from "./presetChipShared";
 

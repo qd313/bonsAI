@@ -28,7 +28,7 @@ import { scaledSteamWords } from "../../shared/text-size/scaledSteamWords";
 import type { ReplyLanguageId } from "../../shared/i18n/replyLanguage";
 import type { UiStringKey } from "../../shared/i18n/keys";
 import { PLUGIN_VERSION } from "../../pluginVersion";
-import { takeNavFocus } from "../../utils/navFocusRegistry";
+import { takeNavFocus } from "../../shared/dpad/navFocusRegistry";
 
 type Props = {
   githubRepoUrl: string;

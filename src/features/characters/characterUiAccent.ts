@@ -9,7 +9,7 @@
 import type { CSSProperties } from "react";
 import type { BonsaiSettings } from "../settings/bonsaiSettingsSchema";
 import { isValidPresetId } from "./characterCatalog";
-import { BONSAI_FOREST_GREEN, TAB_BAR_STRIP_BG_HEX } from "../unified-input/constants";
+import { BONSAI_FOREST_GREEN, TAB_BAR_STRIP_BG_HEX } from "../../shared/constants";
 
 /** Default forest main for accent fallbacks and chat bubble theming when no catalog accent applies. */
 const BONSAI_UI_ACCENT_MAIN_FALLBACK = BONSAI_FOREST_GREEN;

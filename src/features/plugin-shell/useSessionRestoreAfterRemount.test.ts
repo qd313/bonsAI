@@ -11,11 +11,11 @@
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useChatSlots } from "../../hooks/useChatSlots";
+import { useChatSlots } from "../chats/slots/useChatSlots";
 import { useSessionRestoreAfterRemount } from "./useSessionRestoreAfterRemount";
 import { loadActiveChatSlotId, saveActiveChatSlotId } from "./pluginStorage";
 
-vi.mock("../../utils/chatSlotsApi", () => ({
+vi.mock("../chats/slots/chatSlotsApi", () => ({
   listChatSlots: vi.fn(async () => []),
   getChatSlot: vi.fn(async () => null),
   createChatSlot: vi.fn(async () => ({ id: "fresh-chat", label: "New chat", created_at: 0, updated_at: 0, turns: [] })),
@@ -24,17 +24,17 @@ vi.mock("../../utils/chatSlotsApi", () => ({
   keepChatTitle: vi.fn(async () => true),
 }));
 /* A plain mount: no snapshot left behind by a Decky modal closing. */
-vi.mock("../../utils/bonsaiSessionSurvival", () => ({
+vi.mock("./bonsaiSessionSurvival", () => ({
   clearBonsaiSessionSurvival: vi.fn(),
   consumeBonsaiSessionAfterRemount: vi.fn(() => null),
   finalizeSessionRestoreAfterRemount: vi.fn(),
   shouldIgnoreRestoredSettingsSnapshot: vi.fn(() => false),
   patchPendingSessionActiveSlot: vi.fn(),
 }));
-vi.mock("../../utils/bonsaiReplySurface", () => ({ consumePendingFocusMainTab: vi.fn(() => false) }));
+vi.mock("../answer/notices/bonsaiReplySurface", () => ({ consumePendingFocusMainTab: vi.fn(() => false) }));
 vi.mock("../developer/bonsaiDebugIngest", () => ({ bonsaiDebugLog: vi.fn() }));
 
-import * as chatSlotsApi from "../../utils/chatSlotsApi";
+import * as chatSlotsApi from "../chats/slots/chatSlotsApi";
 
 const savedChat = (id: string) => ({ id, label: "Old chat", created_at: 1, updated_at: 1, turns: [] });
 

@@ -43,7 +43,7 @@
  * button still takes the ring), or remember anything after the box closes.
  */
 import { useRef, type MutableRefObject } from "react";
-import type { NavRefHolder } from "../../../utils/navFocusRegistry";
+import type { NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 import { handRingTo } from "./pullModelsBoxMemory";
 
 type BesideCandidate<K> = { key: K; y: number };

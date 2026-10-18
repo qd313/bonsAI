@@ -9,8 +9,8 @@
  * Does not: Pin QAM host height — see useQamPanelHeightGuard.
  */
 import { useLayoutEffect } from "react";
-import { TAB_STRIP_BODY_GAP_PX } from "../unified-input/constants";
-import { subscribeDeckyHeader, topStripActive } from "../chat-title/deckyHeaderShape";
+import { TAB_STRIP_BODY_GAP_PX } from "../../shared/constants";
+import { subscribeDeckyHeader, topStripActive } from "../chats/title/deckyHeaderShape";
 import { syncTabBodyViewportHeight } from "./tabBodyViewport";
 
 const CRUSHED_SCOPE_MAX_PX = 160;

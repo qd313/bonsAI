@@ -8,7 +8,7 @@
  * Used for: Only the focus-ring tests under src/components.
  * Does not: Render anything or assert anything itself.
  */
-import { STREAM_SCRAMBLE_OFF } from "../features/stream-scramble/streamScrambleContext";
+import { STREAM_SCRAMBLE_OFF } from "../features/answer/stream/streamScrambleContext";
 import type { DeveloperTabProps } from "../features/developer/DeveloperTab";
 import type { SettingsTabProps } from "../features/settings/SettingsTab";
 

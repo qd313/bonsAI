@@ -12,8 +12,8 @@
  * Does not: decide whether to save. The caller checks the two switches and whether the answer was
  * already saved.
  */
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../utils/deckyCall";
-import { markResponseAutosaved } from "../../utils/desktopChatAutosave";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../shared/deckyCall";
+import { markResponseAutosaved } from "../user-notes/desktopChatAutosave";
 import type { AppendDesktopChatEventPayload, AppendDesktopNoteResult } from "../../types/backgroundAsk";
 
 export function saveReplyToDesktopNote(rid: number, answer: string, question: string): void {

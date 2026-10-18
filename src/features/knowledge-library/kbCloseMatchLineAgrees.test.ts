@@ -10,7 +10,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { findSrcFile } from "../../test-harness/repoPaths";
 import { answerWithoutContradictedCloseMatchLine } from "./kbCloseMatchLineAgrees";
-import type { KbAttachedNote } from "../../utils/inputTransparency";
+import type { KbAttachedNote } from "../../types/inputTransparency";
 
 type Case = { why: string; question: string; answer: string; notes: Partial<KbAttachedNote>[] };
 const fixtures = JSON.parse(

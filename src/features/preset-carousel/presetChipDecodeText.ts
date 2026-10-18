@@ -6,7 +6,7 @@
  * label should show right now from a lock boundary and a churn buffer.
  *
  * Used for: MainTabPresetDecodeSlots (the decode-mode chip row) in
- * src/components/MainTabPresetAnimatedChips.tsx, which owns the rAF loop and the timers; this
+ * src/features/preset-carousel/MainTabPresetAnimatedChips.tsx, which owns the rAF loop and the timers; this
  * file only computes strings and durations, never a timer or a DOM write.
  *
  * Solves: Keeps the "what does the label show at revealedCount N" question testable on its own
@@ -15,7 +15,7 @@
  * Does not: Read or write the DOM, schedule anything, or know about React. `composeDecodeText` and
  * `composeDecodeParts` are plain functions of their four arguments.
  */
-import type { PresetPrompt } from "../../data/presets";
+import type { PresetPrompt } from "./presets";
 import { presetHoldMs, presetTurnMs } from "./presetRowLayout";
 
 /** Milliseconds between locked characters in decode mode (must feel close to live answer streaming). */

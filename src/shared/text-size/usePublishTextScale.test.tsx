@@ -14,7 +14,7 @@ import { cleanup, render, renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { TEXT_SCALE, TEXT_SCALE_VAR } from "./chatTextSize";
-import { getChatTitleState, resetChatTitleStore } from "../../features/chat-title/chatTitleStore";
+import { getChatTitleState, resetChatTitleStore } from "../../features/chats/title/chatTitleStore";
 import { textPx } from "../../styles/textPx";
 import { makeFontSizeReader } from "../../test-harness/settledFontSize";
 import { usePublishTextScale } from "./usePublishTextScale";

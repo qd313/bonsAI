@@ -18,15 +18,15 @@
  */
 import React from "react";
 import { Focusable } from "@decky/ui";
-import { elementHasGamepadFocus } from "../../utils/uiDocument";
-import { focusPerTurnRow } from "../../utils/focusPerTurnRow";
-import { isDeckDirectionDownEvent, isDeckDirectionUpEvent } from "../../utils/focusNavigation";
-import { focusUpFromBelowContextChipLadder, queryLiveTurnSlot } from "../../utils/liveTurnFocusGraph";
-import type { ChatSlotTurnTransparency, KbAttachedNote, TransparencySnapshot } from "../../utils/inputTransparency";
-import { anySpoilerFenceOpen } from "../../components/MainTabBonsaiAiMarkdownChunk";
+import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
+import { focusPerTurnRow } from "../../shared/dpad/focusPerTurnRow";
+import { isDeckDirectionDownEvent, isDeckDirectionUpEvent } from "../../shared/dpad/focusNavigation";
+import { focusUpFromBelowContextChipLadder, queryLiveTurnSlot } from "../../shared/dpad/liveTurnFocusGraph";
+import type { ChatSlotTurnTransparency, KbAttachedNote, TransparencySnapshot } from "../../types/inputTransparency";
+import { anySpoilerFenceOpen } from "../answer/markdown/MainTabBonsaiAiMarkdownChunk";
 import { kbNotesUsedByAnswer } from "./kbNoteUsedByAnswer";
-import { BONSAI_CHAT_AI_MAX_WIDTH_CSS } from "../unified-input/constants";
-import { CREDITS_SHOWN, type CreditsView } from "../../utils/contextChipsFromSnapshot";
+import { BONSAI_CHAT_AI_MAX_WIDTH_CSS } from "../../shared/constants";
+import { CREDITS_SHOWN, type CreditsView } from "../answer/details/contextChipsFromSnapshot";
 import { textPx } from "../../styles/textPx";
 
 /**

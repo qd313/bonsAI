@@ -21,8 +21,8 @@
  */
 import { useCallback, useEffect, useRef } from "react";
 
-import { takeHolderFocus } from "../../utils/chatTranscriptNavHelpers";
-import { takeNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
+import { takeHolderFocus } from "../../shared/dpad/chatTranscriptNavHelpers";
+import { takeNavFocus, type NavRefHolder } from "../../shared/dpad/navFocusRegistry";
 import { searchMove, type SearchDirection, type SearchStopAt } from "./searchNav";
 
 /** How many frames a move waits for a stop that was drawn in the same moment to get its nav node (about 130 ms). */

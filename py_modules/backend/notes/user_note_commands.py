@@ -9,7 +9,7 @@ Used for: ``ask_local_commands.py`` (is this line a note command) and
 ``ask_local_command_handlers.py`` (build the reply and the offer).
 
 Solves: Gives the "remember …" prefix one definition for the back end. The screen keeps a mirror of
-it (``src/utils/localOnlyAskCommands.ts``) only so an empty Ollama address does not block the line.
+it (``src/features/ask/flow/localOnlyAskCommands.ts``) only so an empty Ollama address does not block the line.
 
 Does not: Save anything (the card's Keep button does), decide the note's game, or shape the note's
 text (``user_note_offer.py`` does).

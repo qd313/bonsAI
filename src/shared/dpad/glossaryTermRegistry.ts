@@ -40,7 +40,7 @@
  *     `tabindex` already on the chip, and it checks whether the move actually worked by asking the
  *     chip's own page for its focused element, not the browser's ordinary global one.
  */
-import { elementHasFocus, rememberUiDocument, uiGamepadFocusElement } from "../../utils/uiDocument";
+import { elementHasFocus, rememberUiDocument, uiGamepadFocusElement } from "./uiDocument";
 
 const chips = new Map<string, HTMLElement>();
 

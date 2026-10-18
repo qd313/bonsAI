@@ -19,8 +19,8 @@
  * Does not: Switch a chat or a tab itself (the callbacks registered here do), move the ring, or persist
  * anything to disk; it lives as long as the plugin does.
  */
-import { takeHolderFocus } from "../../utils/chatTranscriptNavHelpers";
-import type { NavRefHolder } from "../../utils/navFocusRegistry";
+import { takeHolderFocus } from "../../shared/dpad/chatTranscriptNavHelpers";
+import type { NavRefHolder } from "../../shared/dpad/navFocusRegistry";
 import { writeSearchSaved } from "./searchTabStore";
 
 /** How long a jump waits for its chat to load before it gives up putting the chat on the question. */

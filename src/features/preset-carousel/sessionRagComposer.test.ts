@@ -2,8 +2,8 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
   composePresetSeedsWithSessionRag,
 } from "./composePresetSeedsWithSessionRag";
-import { setFrozenTestChips } from "../../data/presets";
-import type { PresetPrompt } from "../../data/presets";
+import { setFrozenTestChips } from "./presets";
+import type { PresetPrompt } from "./presets";
 import {
   composeSessionPresets,
   SESSION_RAG_CHIP_PROBABILITY,

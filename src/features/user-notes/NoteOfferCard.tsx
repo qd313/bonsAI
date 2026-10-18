@@ -48,9 +48,9 @@ import {
   isDeckDirectionLeftEvent,
   isDeckDirectionRightEvent,
   isDeckDirectionUpEvent,
-} from "../../utils/focusNavigation";
-import { focusRegisteredReplyStop, registerReplyStop, replyStopNavRef } from "../../utils/replyStopRegistry";
-import { uiGamepadFocusElement, elementHasFocus, elementHasGamepadFocus, getUiDocument } from "../../utils/uiDocument";
+} from "../../shared/dpad/focusNavigation";
+import { focusRegisteredReplyStop, registerReplyStop, replyStopNavRef } from "../../shared/dpad/replyStopRegistry";
+import { uiGamepadFocusElement, elementHasFocus, elementHasGamepadFocus, getUiDocument } from "../../shared/dpad/uiDocument";
 
 type NavHolder = { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null | undefined };
 type Moves = { up: () => boolean; down: () => boolean; left: () => boolean; right: () => boolean };

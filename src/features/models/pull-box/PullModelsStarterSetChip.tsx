@@ -29,10 +29,10 @@
  */
 import { useEffect, useState } from "react";
 import { Button } from "@decky/ui";
-import { useHandRingOnGone } from "../../../hooks/useHandRingOnGone";
+import { useHandRingOnGone } from "../../../shared/dpad/useHandRingOnGone";
 import { useStarterSetRunWatch } from "../useStarterSetRunWatch";
-import { STARTER_NOTE_SEARCH_TAG, STARTER_SPEECH_MODELS, TIER1_ESSENTIALS_TAG } from "../../../data/deckEssentialsTags";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../../utils/deckyCall";
+import { STARTER_NOTE_SEARCH_TAG, STARTER_SPEECH_MODELS, TIER1_ESSENTIALS_TAG } from "../deckEssentialsTags";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../../shared/deckyCall";
 import { isTagInstalled } from "./pullModelFilters";
 import { askThenInstallStarterSet, STARTER_SET_BUTTON_LABEL } from "../localOllamaStarterSet";
 

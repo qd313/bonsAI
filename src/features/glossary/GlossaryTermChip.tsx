@@ -35,7 +35,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Focusable } from "@decky/ui";
 
-import { getUiDocument } from "../../utils/uiDocument";
+import { getUiDocument } from "../../shared/dpad/uiDocument";
 
 import type { DrgGlossaryTerm } from "./glossaryStore";
 import {
@@ -45,9 +45,9 @@ import {
   isDeckDirectionRightEvent,
   isDeckDirectionUpEvent,
   isOkDeckButtonEvent,
-} from "../../utils/focusNavigation";
+} from "../../shared/dpad/focusNavigation";
 import { registerDrgGlossaryTermChip } from "../../shared/dpad/glossaryTermRegistry";
-import { findTabContentsScroll, readableBottomOf } from "../../utils/chatPanelScroll";
+import { findTabContentsScroll, readableBottomOf } from "../../shared/dpad/chatPanelScroll";
 import {
   placeGlossaryTooltip,
   type GlossaryTooltipPlacement,

@@ -14,7 +14,7 @@
  * occupied — see tests/test_ask_hook_order.py's `hook_sequence` for why that position matters.
  */
 import { useEffect, useRef, type MutableRefObject } from "react";
-import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../../../utils/navFocusRegistry";
+import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 
 export interface PermHintNavTargets {
   troubleshootHintNavRef: MutableRefObject<NavRefHolder["current"]>;

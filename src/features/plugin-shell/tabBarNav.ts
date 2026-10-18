@@ -22,7 +22,7 @@
  * itself. For Down, it calls a handover function the caller supplies, the
  * same way presetRowNav.ts hands a ring off elsewhere.
  */
-import { isBumperLeftDeckEvent, isBumperRightDeckEvent } from "../../utils/focusNavigation";
+import { isBumperLeftDeckEvent, isBumperRightDeckEvent } from "../../shared/dpad/focusNavigation";
 
 export type TabBarNavHandlers = {
   onMoveLeft: () => boolean;

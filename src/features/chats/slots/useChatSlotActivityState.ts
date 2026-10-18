@@ -19,7 +19,7 @@
 import { useCallback, useRef, useState } from "react";
 
 import { loadActiveChatSlotId } from "../../plugin-shell/pluginStorage";
-import { peekBonsaiSessionPendingRestore } from "../../../utils/bonsaiSessionSurvival";
+import { peekBonsaiSessionPendingRestore } from "../../plugin-shell/bonsaiSessionSurvival";
 
 export type ChatSlotActivityState = {
   activeSlotIdRef: React.MutableRefObject<string | null>;

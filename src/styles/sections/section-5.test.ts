@@ -18,7 +18,7 @@ import { buildSection5Section } from "./section-5";
 import {
   UNIFIED_CARET_GAP_PX,
   UNIFIED_CARET_WIDTH_PX,
-} from "../../features/unified-input/constants";
+} from "../../shared/constants";
 
 function ruleBody(css: string, selector: string): string {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

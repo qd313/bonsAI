@@ -19,7 +19,7 @@
  * Does not: Know about timing (see presetPace.ts), pinned test batches (the callers check those first
  * and a pinned batch always wins), or drawing. The random source is a parameter so tests are exact.
  */
-import type { PresetPrompt } from "../../data/presets";
+import type { PresetPrompt } from "./presets";
 import { isGameCandidate, type SessionRagChipCandidate, toPresetPrompt } from "./sessionRagComposer";
 
 /** After a game chip, the chance the next chip is one of the game's again. The maintainer's to tune. */

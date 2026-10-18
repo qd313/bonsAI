@@ -14,7 +14,7 @@
  *
  * Does not: Hold any state (userNotesStore.ts does) or draw anything.
  */
-import { callDeckyWithTimeout } from "../../utils/deckyCall";
+import { callDeckyWithTimeout } from "../../shared/deckyCall";
 import type { NoteOffer } from "../../types/backgroundAsk";
 import type { UserNote } from "../search-tab/searchTypes";
 

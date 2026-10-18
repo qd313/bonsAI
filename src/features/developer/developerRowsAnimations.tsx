@@ -27,7 +27,7 @@ import {
   STREAM_SCRAMBLE_STYLE_OPTIONS,
   type PresetChipAnimation,
 } from "../settings/bonsaiSettingsSchema";
-import type { StreamScrambleSettings } from "../stream-scramble/streamScrambleContext";
+import type { StreamScrambleSettings } from "../answer/stream/streamScrambleContext";
 import { DeveloperOptionRow } from "./DeveloperOptionRow";
 import type { DevRow } from "./developerRows";
 import { DevSwitchRow } from "./developerRowsDiagnostics";

@@ -27,7 +27,7 @@ import {
   resetPermissionJumpRegistry,
   restorePermissionJumpFocusWithRetry,
 } from "./permissionJumpRegistry";
-import { resetNavFocusRegistry } from "../../utils/navFocusRegistry";
+import { resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
 
 /** Stands in for whatever Steam populates a `navRef.current` with once a Focusable mounts. */
 function fakeNavHolder(result = true) {

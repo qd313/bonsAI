@@ -57,7 +57,7 @@ import { PullModelsModal, type PullModelsFooterState } from "./pull-box/PullMode
 import { BonsaiModalScope } from "../../shared/BonsaiModalScope";
 import { peekModalReturnFocus, rememberModalReturnFocus } from "../../shared/dpad/modalReturnFocusRegistry";
 import type { TryOrderHost } from "./useTryOrderPlaces";
-import type { NavRefHolder } from "../../utils/navFocusRegistry";
+import type { NavRefHolder } from "../../shared/dpad/navFocusRegistry";
 import { handRingTo } from "./pull-box/pullModelsBoxMemory";
 
 export type OllamaModelsHubSection = "policy" | "browse" | "advanced";

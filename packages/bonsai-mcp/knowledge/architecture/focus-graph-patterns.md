@@ -27,7 +27,7 @@ Policy (always applied): `bonsai://policy/decky-ui-focus` — especially **New c
 | `src/features/models/pull-box/PullModelsModal.tsx` | Horizontal chip row + vertical exits via `Button` `onMove*` spreads |
 | `src/features/characters/CharacterPickerModal.tsx` | `ToggleField` `onMoveDown` / `onMoveRight` to list and footer |
 
-**Helpers:** `focusInHost(host)` — query `[tabindex], button` inside a wrapper ref; `getFocusableWithin` in `src/utils/focusNavigation.ts`.
+**Helpers:** `focusInHost(host)` — query `[tabindex], button` inside a wrapper ref; `getFocusableWithin` in `src/shared/dpad/focusNavigation.ts`.
 
 ## Pattern B — Slider / composite widget (document-flow bridge)
 
@@ -56,7 +56,7 @@ When two horizontal rows must preserve **columns** under D-pad (Helpful↔Retry,
 2. Wire `onMoveUp` / `onMoveDown` on each cell to focus the **registered** sibling owner
 3. Return **`true`** when the target is registered (claim the move) — returning `false` re-enters Steam spatial nav and produces diagonals
 
-Canonical: `src/utils/buildReplyActionsElement.tsx`, `src/utils/replyStopRegistry.ts`. On-Deck QA: **MICRO-05**.
+Canonical: `src/features/answer/reply-actions/buildReplyActionsElement.tsx`, `src/shared/dpad/replyStopRegistry.ts`. On-Deck QA: **MICRO-05**.
 
 ## Pattern E — Stops outside bonsAI's own container (plan 84)
 

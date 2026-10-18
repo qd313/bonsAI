@@ -137,7 +137,7 @@ export function wordsOf(node: unknown): string {
  * itself, so Text size reaches them). The generic stub would print such a node as `[object Object]` in
  * the `label` and `description` attributes that tests look a switch up by, so those two attributes carry
  * the plain words. A test that wants the element itself wraps this stub and reads the props it is
- * handed (src/components/steamWordsScaled.test.tsx does).
+ * handed (src/shared/text-size/steamWordsScaled.test.tsx does).
  */
 const ToggleFieldBase = stub("ToggleField");
 export const ToggleField = React.forwardRef<HTMLDivElement, StubProps>(function ToggleFieldStub(props, ref) {

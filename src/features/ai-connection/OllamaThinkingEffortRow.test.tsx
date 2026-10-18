@@ -13,7 +13,7 @@ import { fireEvent, render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { OllamaThinkingEffortRow } from "./OllamaThinkingEffortRow";
-import { ASK_THINK_EFFORT_DESCRIPTIONS } from "../../data/askThinkEffort";
+import { ASK_THINK_EFFORT_DESCRIPTIONS } from "../settings/askThinkEffort";
 
 describe("OllamaThinkingEffortRow", () => {
   it("draws the four choices", () => {

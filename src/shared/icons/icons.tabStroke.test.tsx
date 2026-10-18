@@ -15,7 +15,7 @@ import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { BugIcon, BonsaiTreeTabIcon, GearIcon, LockIcon, SearchTabIcon } from "./icons";
 import { BonsaiLogoIcon, OllamaTabIcon, AboutTabTitleIcon } from "./icons";
-import { TAB_BAR_CURRENT_ICON_PX, TAB_BAR_SIDE_ICON_PX } from "../../features/unified-input/constants";
+import { TAB_BAR_CURRENT_ICON_PX, TAB_BAR_SIDE_ICON_PX } from "../constants";
 
 const MIN_STROKE = 2.6;
 const MAX_SPREAD = 0.35;

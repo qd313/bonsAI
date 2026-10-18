@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { PresetPrompt } from "../../data/presets";
+import type { PresetPrompt } from "./presets";
 import { chooseNextChip, GAME_CHIP_AGAIN_CHANCE, type NextChipArgs } from "./nextChipRule";
 import type { SessionRagChipCandidate } from "./sessionRagComposer";
 

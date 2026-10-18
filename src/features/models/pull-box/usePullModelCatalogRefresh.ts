@@ -25,7 +25,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, type Dispatc
 import { toaster } from "@decky/api";
 import { PULL_MODEL_CATALOG, bytesToGb } from "../pullModelCatalog";
 import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP } from "../../settings/bonsaiSettingsSchema";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../../utils/deckyCall";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../../shared/deckyCall";
 import { loadSavedIp } from "../../plugin-shell/pluginStorage";
 import { getCatalogTags, isCatalogModelTagInList } from "./mergePullModelCatalog";
 import { normalizeInstalledSet } from "./pullModelFilters";

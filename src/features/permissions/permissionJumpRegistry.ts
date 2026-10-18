@@ -40,7 +40,7 @@ import {
   takeNavFocus,
   type NavFocusId,
   type NavRefHolder,
-} from "../../utils/navFocusRegistry";
+} from "../../shared/dpad/navFocusRegistry";
 
 let pendingReturnTab: string | null = null;
 let pendingFocusTarget: PermissionFocusTargetId | null = null;

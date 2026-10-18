@@ -72,11 +72,11 @@ import { isHttpsOllamaAddress } from "../ai-connection/ollamaAddress";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Focusable, PanelSection, PanelSectionRow, showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../utils/deckyCall";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../shared/deckyCall";
 import { tryMoveUpWithPanelScroll } from "../../shared/dpad/settingsPanelScroll";
-import { elementHasGamepadFocus } from "../../utils/uiDocument";
-import { useHandRingOnGone } from "../../hooks/useHandRingOnGone";
-import { rememberReturnWhileBoxOpens } from "../../utils/rememberReturnWhileBoxOpens";
+import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
+import { useHandRingOnGone } from "../../shared/dpad/useHandRingOnGone";
+import { rememberReturnWhileBoxOpens } from "../downloads/rememberReturnWhileBoxOpens";
 import {
   addKbDownloadListener,
   kbDownloadLikelyInFlight,

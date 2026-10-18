@@ -7,7 +7,7 @@
  * "ran out of chips" edge cue) for whichever chips are showing.
  *
  * Used for: MainTabPresetAnimatedChipsInner, MainTabPresetDecodeSlots and
- * MainTabPresetSidewaysCarousel, all in src/components/MainTabPresetAnimatedChips.tsx.
+ * MainTabPresetSidewaysCarousel, all in src/features/preset-carousel/MainTabPresetAnimatedChips.tsx.
  *
  * Solves: Left/Right move DOM focus between siblings of one container (safe with a plain
  * `focus()`); Down and Up hand the ring across a container boundary, which needs the registered
@@ -21,10 +21,10 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Focusable } from "@decky/ui";
 import { buildChipNavHandlers } from "./presetRowNav";
 import { PRESET_CHIP_BLOCKED_EDGE_FLASH_MS } from "./presetRowLayout";
-import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
-import { focusBottomOfNewestReply } from "../../utils/liveTurnFocusGraph";
-import { takeAboveTheChat } from "../../utils/chatTranscriptNavHelpers";
-import { elementHasGamepadFocus } from "../../utils/uiDocument";
+import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../../shared/dpad/navFocusRegistry";
+import { focusBottomOfNewestReply } from "../../shared/dpad/liveTurnFocusGraph";
+import { takeAboveTheChat } from "../../shared/dpad/chatTranscriptNavHelpers";
+import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
 
 /**
  * The row's focus container, shared by every mode. Steam treats it as one navigation container;

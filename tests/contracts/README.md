@@ -10,7 +10,7 @@ cross-runtime plumbing: neither test shells out to the other toolchain.
 |---|---|---|
 | `settings-defaults.json` | `tests/test_settings_contract.py` | `src/features/settings/bonsaiSettingsContract.test.ts` |
 | `settings-hostile-inputs.json` | `tests/test_settings_hostile_contract.py` | `src/features/settings/bonsaiSettingsHostileContract.test.ts` |
-| `spoiler-title-profiles.json` | `tests/test_spoiler_title_profiles_contract.py` | `src/data/spoilerTitleProfilesContract.test.ts` |
+| `spoiler-title-profiles.json` | `tests/test_spoiler_title_profiles_contract.py` | `src/features/spoilers/spoilerTitleProfilesContract.test.ts` |
 
 ## `settings-defaults.json`
 
@@ -71,7 +71,7 @@ means adding it to both tables *and* the fixture.
 ### Known asymmetry, deliberately not in the fixture
 
 The title-name fallback (`State of Emergency`) is reachable in Python but not in TypeScript:
-[unwrapAskedEntitySpoilerFences.ts](../../src/utils/unwrapAskedEntitySpoilerFences.ts) never
+[unwrapAskedEntitySpoilerFences.ts](../../src/features/spoilers/unwrapAskedEntitySpoilerFences.ts) never
 passes an `app_name`, so at display time only the AppID arm runs. The two `resolve*` functions
 themselves agree — which is what this fixture checks — but the *callers* do not yet. Thread
 `app_name` through the answer bubble and this note goes away.

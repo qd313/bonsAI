@@ -17,7 +17,7 @@
  * only ever runs if a snapshot is asked for before that first render.
  */
 import { IP_DEFAULT } from "../../shared/storageKeys";
-import type { BonsaiSessionSurvivalSnapshot } from "../../utils/bonsaiSessionSurvival";
+import type { BonsaiSessionSurvivalSnapshot } from "./bonsaiSessionSurvival";
 
 /*
  * In: nothing.

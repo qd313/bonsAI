@@ -9,7 +9,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { callDeckyWithTimeout } = vi.hoisted(() => ({ callDeckyWithTimeout: vi.fn() }));
-vi.mock("../../utils/deckyCall", () => ({ callDeckyWithTimeout }));
+vi.mock("../../shared/deckyCall", () => ({ callDeckyWithTimeout }));
 
 import { listChatSlotQuestions, listUserNotes, saveUserNote, searchRagCorpusNotes } from "./searchApi";
 

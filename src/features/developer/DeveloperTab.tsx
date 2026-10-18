@@ -57,9 +57,9 @@
 import React from "react";
 import { toaster } from "@decky/api";
 import type { DesktopAppLogLevel, PresetChipAnimation, TabResumeMode } from "../settings/bonsaiSettingsSchema";
-import { formatDeckyRpcError } from "../../utils/deckyCall";
+import { formatDeckyRpcError } from "../../shared/deckyCall";
 import type { BonsaiCapabilityKey } from "../permissions/permissionDeepLink";
-import type { StreamScrambleSettings } from "../stream-scramble/streamScrambleContext";
+import type { StreamScrambleSettings } from "../answer/stream/streamScrambleContext";
 import { chainIds, FoldedColumn, FoldedSection, foldLineBelow, takeFoldLine } from "../folded-tabs/FoldedSection";
 import { FoldAllButton } from "../folded-tabs/FoldAllButton";
 import { TabHelpStrip } from "../folded-tabs/TabHelpStrip";

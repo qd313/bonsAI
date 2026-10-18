@@ -30,7 +30,7 @@ vi.mock("@decky/ui", async () => {
     },
   };
 });
-vi.mock("../../utils/deckyCall", () => ({ callDeckyWithTimeout: hoisted.call }));
+vi.mock("../../shared/deckyCall", () => ({ callDeckyWithTimeout: hoisted.call }));
 
 import { SHEET_EMPTY, SHEET_REMOVED, SHEET_SAY, UserNotesSheet, openUserNotesSheet } from "./UserNotesSheet";
 import { getUserNotesState, resetUserNotesStore, setNotesModalHooks } from "./userNotesStore";

@@ -264,7 +264,7 @@ def kb_retrieval_detail_label(retrieval_method: str) -> str:
 
 
 # Plan 57: the same four words the Thinking row on the Ollama tab shows
-# (``src/data/askThinkEffort.ts`` on the screen side) -- kept here as a plain copy rather than an
+# (``src/features/settings/askThinkEffort.ts`` on the screen side) -- kept here as a plain copy rather than an
 # import so this backend file does not reach into ``src/``. An effort key this map does not know
 # (or "off") falls back to "Thinking" in ``reasoning_chip_label`` below.
 REASONING_EFFORT_LEVEL_WORDS = {

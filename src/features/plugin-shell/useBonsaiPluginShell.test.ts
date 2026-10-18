@@ -15,7 +15,7 @@ import {
   saveLastTab,
   saveTabResumeMode,
 } from "./pluginStorage";
-import type { BonsaiSessionSurvivalSnapshot } from "../../utils/bonsaiSessionSurvival";
+import type { BonsaiSessionSurvivalSnapshot } from "./bonsaiSessionSurvival";
 
 const emptySnapshot = () => ({ currentTab: "main", unifiedInput: "" }) as unknown as BonsaiSessionSurvivalSnapshot;
 

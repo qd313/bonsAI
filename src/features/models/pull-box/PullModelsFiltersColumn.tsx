@@ -50,7 +50,7 @@ import {
   filterPanelRowLabel,
   type FilterPanelRow,
 } from "./pullModelFilters";
-import type { NavRefHolder } from "../../../utils/navFocusRegistry";
+import type { NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 import { DEFAULT_SESSION_FILTERS, focusAndReveal, type PullModelsSessionFilters } from "./pullModelsBoxMemory";
 import type { FiltersColumnApi } from "./pullModelsBeside";
 import { PullModelsCustomTagEntry } from "./PullModelsCustomTagEntry";

@@ -34,7 +34,7 @@ import {
   registerNavFocus,
   unregisterNavFocus,
   type NavRefHolder,
-} from "../../utils/navFocusRegistry";
+} from "../../shared/dpad/navFocusRegistry";
 import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
 
 export const PAYPAL_SUPPORT_URL = "https://paypal.me/quentind313";

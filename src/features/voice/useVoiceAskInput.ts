@@ -23,8 +23,8 @@
 import { useCallback, useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { call, toaster } from "@decky/api";
 
-import { formatDeckyRpcError } from "../../utils/deckyCall";
-import { useVoiceTranscription, type VoiceStopOutcome } from "../../hooks/useVoiceTranscription";
+import { formatDeckyRpcError } from "../../shared/deckyCall";
+import { useVoiceTranscription, type VoiceStopOutcome } from "./useVoiceTranscription";
 import type { UiStringVars } from "../../shared/i18n/catalog";
 import type { UiStringKey } from "../../shared/i18n/keys";
 

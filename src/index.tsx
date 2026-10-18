@@ -106,7 +106,7 @@ import { Tabs } from "@decky/ui";
 
 import { buildInitialSessionSnapshot } from "./features/plugin-shell/initialSessionSnapshot";
 import { DEFAULT_LATENCY_WARNING_SECONDS } from "./features/settings/bonsaiSettingsSchema";
-import { setFrozenTestChips } from "./data/presets";
+import { setFrozenTestChips } from "./features/preset-carousel/presets";
 import { BonsaiPluginShell } from "./features/plugin-shell/BonsaiPluginShell";
 import { BonsaiDebugOverlay } from "./features/developer/BonsaiDebugOverlay";
 import { activeOllamaRoutingTag } from "./features/models/activeOllamaRoutingTag";
@@ -115,18 +115,18 @@ import {
   getPluginDataClearedGeneration,
   peekBonsaiSessionPendingRestore,
   type BonsaiSessionSurvivalSnapshot,
-} from "./utils/bonsaiSessionSurvival";
-import { consumePendingFocusMainTab, useReplySurfaceVisibility } from "./utils/bonsaiReplySurface";
+} from "./features/plugin-shell/bonsaiSessionSurvival";
+import { consumePendingFocusMainTab, useReplySurfaceVisibility } from "./features/answer/notices/bonsaiReplySurface";
 import {
   BonsaiSvgIcon,
 } from "./shared/icons/icons";
-import { useUnifiedInputSurface } from "./features/unified-input/useUnifiedInputSurface";
+import { useUnifiedInputSurface } from "./features/ask/bar/useUnifiedInputSurface";
 import { PluginErrorBoundary } from "./features/plugin-shell/PluginErrorBoundary";
 import { DECKY_TAB_TITLES, type BonsaiTabId } from "./features/plugin-shell/tabTitles";
 import { TabIndicatorBar } from "./features/plugin-shell/TabIndicatorBar";
 import { HiddenTabHeaderTrap } from "./features/plugin-shell/useHiddenTabHeaderTrap";
 import { TabBodyFocusRoot } from "./features/plugin-shell/TabBodyFocusRoot";
-import { takeNavFocus } from "./utils/navFocusRegistry";
+import { takeNavFocus } from "./shared/dpad/navFocusRegistry";
 import { loadSavedSearchQuery, persistSearchQuery } from "./features/plugin-shell/pluginStorage";
 import { useOllamaConnectionState } from "./features/ai-connection/useOllamaConnectionState";
 import { useDeveloperTabPayload } from "./features/plugin-shell/tabs/useDeveloperTabPayload";
@@ -140,10 +140,10 @@ import { useQamPanelHeightGuard } from "./features/plugin-shell/useQamPanelHeigh
 import { useQamPanelSideBleed } from "./features/plugin-shell/useQamPanelSideBleed";
 import { useTabStripBodyOffset } from "./features/plugin-shell/useTabStripBodyOffset";
 import { usePluginSettings } from "./features/settings/usePluginSettings";
-import type { StreamScrambleSettings } from "./features/stream-scramble/streamScrambleContext";
+import type { StreamScrambleSettings } from "./features/answer/stream/streamScrambleContext";
 import { useReplyLanguage } from "./shared/i18n/useReplyLanguage";
 import { useIntentPacks } from "./features/search-tab/useIntentPacks";
-import { useScreenshotBrowser } from "./hooks/useScreenshotBrowser";
+import { useScreenshotBrowser } from "./features/media/useScreenshotBrowser";
 import { useSteamSettingsSearch } from "./features/search-tab/useSteamSettingsSearch";
 import { useBonsaiPluginShell } from "./features/plugin-shell/useBonsaiPluginShell";
 import { usePermissionJump } from "./features/permissions/usePermissionJump";
@@ -156,8 +156,8 @@ import { useOllamaModelsHubModal } from "./features/models/useOllamaModelsHubMod
 import { useCharacterPickerModal } from "./features/characters/useCharacterPickerModal";
 import { desktopNoteExchangeFor, useDesktopNoteSaveModal } from "./features/user-notes/useDesktopNoteSaveModal";
 import { usePluginHelpModal } from "./features/about/usePluginHelpModal";
-import { useBonsaiAskOrchestration } from "./hooks/useBonsaiAskOrchestration";
-import { useChatSlots } from "./hooks/useChatSlots";
+import { useBonsaiAskOrchestration } from "./features/ask/flow/useBonsaiAskOrchestration";
+import { useChatSlots } from "./features/chats/slots/useChatSlots";
 import { useDisclaimerAndLocalRuntimeGates } from "./features/plugin-shell/useDisclaimerAndLocalRuntimeGates";
 import { useSessionResetActions } from "./features/settings/useSessionResetActions";
 import { useSessionRestoreAfterRemount } from "./features/plugin-shell/useSessionRestoreAfterRemount";
@@ -168,9 +168,9 @@ import { usePublishTextScale } from "./shared/text-size/usePublishTextScale";
 import { useExternalNavigationActions } from "./features/plugin-shell/useExternalNavigationActions";
 import { useAppLogPrefsAndCapturedErrors } from "./features/developer/useAppLogPrefsAndCapturedErrors";
 import { useTabAndModeGuardEffects } from "./features/plugin-shell/useTabAndModeGuardEffects";
-import { ChatTitleView } from "./features/chat-title/ChatTitleView";
-import { setChatTitleLitColor } from "./features/chat-title/chatTitleStore";
-import { tabBarExitDownFor, useTopStripTabBar } from "./features/chat-title/useTopStripTabBar";
+import { ChatTitleView } from "./features/chats/title/ChatTitleView";
+import { setChatTitleLitColor } from "./features/chats/title/chatTitleStore";
+import { tabBarExitDownFor, useTopStripTabBar } from "./features/chats/title/useTopStripTabBar";
 
 /*
  * In: nothing — no props. Every value Content needs, it reads from settings,

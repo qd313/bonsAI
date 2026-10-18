@@ -17,7 +17,7 @@
  * chat (section-6.ts, whose look the slot's line copies).
  */
 import { PRESET_CHIP_HEIGHT_PX } from "../../preset-carousel/presetRowLayout";
-import { TAB_BAR_SWITCH_FADE_MS } from "../../unified-input/constants";
+import { TAB_BAR_SWITCH_FADE_MS } from "../../../shared/constants";
 import { textPx } from "../../../styles/textPx";
 
 /**

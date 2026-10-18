@@ -33,10 +33,10 @@ import { DenseRow, DenseSwitchRow } from "../folded-tabs/DenseRow";
 import { accentIntensityHelp, SETTINGS_ROW_HELP } from "../settings/settingsTabFolds";
 import { registerModalReturnFocusOwner, rememberModalReturnFocus } from "../../shared/dpad/modalReturnFocusRegistry";
 import { focusInTabBody } from "../../shared/dpad/useTabBodyFocusScroll";
-import { ASK_LABEL_COLOR_50 } from "../unified-input/constants";
+import { ASK_LABEL_COLOR_50 } from "../../shared/constants";
 import { FOCUS_RING_BTN_CLASS, FOCUS_RING_INSET_CLASS, FOCUS_RING_WRAP_CLASS } from "../../styles/settingsGlassButton";
 import { textPx } from "../../styles/textPx";
-import { elementHasGamepadFocus } from "../../utils/uiDocument";
+import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
 import {
   consumeSettingsTabLocalPending,
   peekSettingsTabLocalPending,

@@ -15,7 +15,7 @@
  * from fading), or move the ring.
  */
 import { useEffect, useReducer, useRef, type RefObject } from "react";
-import { uiGamepadFocusElement } from "../../utils/uiDocument";
+import { uiGamepadFocusElement } from "../../shared/dpad/uiDocument";
 
 /** Whether Steam's ring is on something inside `host`. */
 function ringIn(host: HTMLElement | null): boolean {

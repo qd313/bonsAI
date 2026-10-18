@@ -41,17 +41,17 @@ import {
   DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
   type AiCharacterAccentIntensityId,
 } from "../characters/aiCharacterAccentIntensity";
-import { ASK_MODE_IDS, type AskModeId } from "../../data/askMode";
+import { ASK_MODE_IDS, type AskModeId } from "../ask/bar/askMode";
 import {
   ASK_THINK_EFFORT_IDS,
   DEFAULT_ASK_THINK_EFFORT,
   type AskThinkEffortId,
-} from "../../data/askThinkEffort";
+} from "./askThinkEffort";
 import {
   DEFAULT_REPLY_VERBOSITY,
   isReplyVerbosityId,
   type ReplyVerbosityId,
-} from "../../data/replyVerbosity";
+} from "./replyVerbosity";
 import { normalizeReplyLanguage } from "../../shared/i18n/replyLanguage";
 import {
   DEFAULT_OLLAMA_KEEP_ALIVE,

@@ -13,7 +13,7 @@
  *
  * Does not: Search or sort anything; searchModel.ts does that.
  */
-import { callDeckyWithTimeout } from "../../utils/deckyCall";
+import { callDeckyWithTimeout } from "../../shared/deckyCall";
 import type { GameNotesResult, SearchChat, UserNote } from "./searchTypes";
 
 type ChatQuestionsRpc = { ok?: boolean; chats?: SearchChat[] };

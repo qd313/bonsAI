@@ -22,8 +22,8 @@
  * all, try the section's own `focusPrev` chain; and only if none of those apply, move the
  * highlight to the currently active tab title in the LB/RB strip.
  */
-import { findScrollablePanel, tryScrollPanelFromAnchor } from "../../utils/chatPanelScroll";
-import { getUiDocument } from "../../utils/uiDocument";
+import { findScrollablePanel, tryScrollPanelFromAnchor } from "./chatPanelScroll";
+import { getUiDocument } from "./uiDocument";
 
 /** Snap the tab scroll container to the top (reveals content directly under the LB/RB strip). */
 function tryScrollPanelToTop(anchor: HTMLElement | null): boolean {

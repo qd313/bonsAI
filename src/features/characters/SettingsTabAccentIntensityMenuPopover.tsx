@@ -7,7 +7,7 @@
  */
 import React, { useLayoutEffect, useRef } from "react";
 import { Focusable } from "@decky/ui";
-import { useHandRingOnGone } from "../../hooks/useHandRingOnGone";
+import { useHandRingOnGone } from "../../shared/dpad/useHandRingOnGone";
 import {
   ASK_LABEL_COLOR,
   DECK_MENU_FONT_PX,
@@ -15,7 +15,7 @@ import {
   DECK_MENU_PANEL_BG,
   DECK_MENU_ROW_PAD_Y_PX,
   DECK_MENU_ROW_SELECTED_BG,
-} from "../unified-input/constants";
+} from "../../shared/constants";
 import {
   AI_CHARACTER_ACCENT_INTENSITY_OPTIONS,
   type AiCharacterAccentIntensityId,

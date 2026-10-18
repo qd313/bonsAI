@@ -15,7 +15,7 @@
  * chat-slot data shapes for that. These are the shapes used while a
  * conversation is actively on screen.
  */
-import type { ChatSlotTurnTransparency, TransparencySnapshot } from "../utils/inputTransparency";
+import type { ChatSlotTurnTransparency, TransparencySnapshot } from "./inputTransparency";
 
 export type AppliedResult = {
   tdp_watts: number | null;

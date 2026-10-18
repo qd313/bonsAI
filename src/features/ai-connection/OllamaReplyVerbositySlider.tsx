@@ -12,7 +12,7 @@ import {
   REPLY_VERBOSITY_ORDER,
   replyVerbosityAtIndex,
   type ReplyVerbosityId,
-} from "../../data/replyVerbosity";
+} from "../settings/replyVerbosity";
 import {
   DeckFocusSlider,
   type DeckSliderThumbVisualState,

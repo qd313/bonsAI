@@ -31,7 +31,7 @@
 import React, { useEffect, useRef, useSyncExternalStore } from "react";
 import { Focusable } from "@decky/ui";
 
-import { registerNavFocus, takeNavFocus, unregisterNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
+import { registerNavFocus, takeNavFocus, unregisterNavFocus, type NavRefHolder } from "../../shared/dpad/navFocusRegistry";
 import {
   foldedTabsVersion,
   isSectionOpen,

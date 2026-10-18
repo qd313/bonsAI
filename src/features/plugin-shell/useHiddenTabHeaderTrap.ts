@@ -77,8 +77,8 @@
 import { useEffect } from "react";
 
 import { bonsaiDebugLog } from "../developer/bonsaiDebugIngest";
-import { takeNavFocus } from "../../utils/navFocusRegistry";
-import { getUiDocument } from "../../utils/uiDocument";
+import { takeNavFocus } from "../../shared/dpad/navFocusRegistry";
+import { getUiDocument } from "../../shared/dpad/uiDocument";
 
 /**
  * Stands in for `instanceof Element`, which is false for a node from a different realm than this

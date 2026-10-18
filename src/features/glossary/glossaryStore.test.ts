@@ -3,9 +3,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { addKbLibraryListener, announceKbLibraryChange, resetKbLibrarySignalForTests } from "../knowledge-library/kbLibrarySignal";
 import { ensureGlossaryLoaded, resetGlossaryStore, useGlossaryTerms } from "./glossaryStore";
-import { callDeckyWithTimeout } from "../../utils/deckyCall";
+import { callDeckyWithTimeout } from "../../shared/deckyCall";
 
-vi.mock("../../utils/deckyCall", () => ({ callDeckyWithTimeout: vi.fn() }));
+vi.mock("../../shared/deckyCall", () => ({ callDeckyWithTimeout: vi.fn() }));
 
 const rpc = vi.mocked(callDeckyWithTimeout);
 

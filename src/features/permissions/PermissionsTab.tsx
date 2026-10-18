@@ -41,7 +41,7 @@ import {
   unregisterPermissionRowNavFocus,
   restorePermissionJumpFocusWithRetry,
 } from "./permissionJumpRegistry";
-import type { NavRefHolder } from "../../utils/navFocusRegistry";
+import type { NavRefHolder } from "../../shared/dpad/navFocusRegistry";
 import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
 import { textPx } from "../../styles/textPx";
 import { scaledSteamWords } from "../../shared/text-size/scaledSteamWords";

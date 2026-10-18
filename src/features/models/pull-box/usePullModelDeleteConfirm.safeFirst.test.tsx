@@ -29,7 +29,7 @@ vi.mock("@decky/ui", async () => ({
 }));
 vi.mock("../../plugin-shell/pluginStorage", () => ({ loadSavedIp: () => hoisted.savedIp }));
 vi.mock("@decky/api", () => ({ toaster: { toast: () => {} } }));
-vi.mock("../../../utils/deckyCall", () => ({
+vi.mock("../../../shared/deckyCall", () => ({
   DECKY_RPC_TIMEOUT_MS: 1000,
   formatDeckyRpcError: String,
   callDeckyWithTimeout: async (method: string, args: unknown[]) => {

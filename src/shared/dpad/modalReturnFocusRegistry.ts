@@ -24,7 +24,7 @@
  * button that opened a popup is not on screen by the time the popup
  * closes, focus is simply left where it is — nothing else happens.
  */
-import { elementHasGamepadFocus } from "../../utils/uiDocument";
+import { elementHasGamepadFocus } from "./uiDocument";
 
 /** One id per control that can open a modal. Two entry points to the same modal need two ids. */
 export type ModalReturnFocusId =

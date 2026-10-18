@@ -2,11 +2,11 @@
 
 Purpose: Assert the built-in profile tables and resolution rules match the shared fixture.
 Used for: Catching a title added to one language and forgotten in the other.
-Solves: spoiler_title_profiles.py and src/data/spoilerTitleProfiles.ts hold the same ten
+Solves: spoiler_title_profiles.py and src/features/spoilers/spoilerTitleProfiles.ts hold the same ten
         AppIDs with nothing but a "keep in sync" comment enforcing agreement.
 Does not: Cover prompt policy or display unwrap — only the profile a title resolves to.
 
-The TypeScript half is src/data/spoilerTitleProfilesContract.test.ts. Neither test shells out
+The TypeScript half is src/features/spoilers/spoilerTitleProfilesContract.test.ts. Neither test shells out
 to the other toolchain; both read the same JSON. See tests/contracts/README.md.
 """
 

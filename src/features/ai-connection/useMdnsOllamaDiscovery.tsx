@@ -26,7 +26,7 @@
  */
 import { useCallback } from "react";
 import { showModal, ConfirmModal } from "@decky/ui";
-import { callDeckyWithTimeout, formatDeckyRpcError } from "../../utils/deckyCall";
+import { callDeckyWithTimeout, formatDeckyRpcError } from "../../shared/deckyCall";
 import type { MdnsOllamaHost, MdnsDiscoveryResult } from "./OllamaWhereAiRunsSection.types";
 import {
   MDNS_DISCOVERY_TIMEOUT_SECONDS,

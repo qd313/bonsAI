@@ -1,11 +1,11 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { callDeckyWithTimeout } from "../../utils/deckyCall";
+import { callDeckyWithTimeout } from "../../shared/deckyCall";
 import type { SteamParentalSnapshot } from "./steamParental";
 import { effectiveCapabilities, useKidsLock } from "./useKidsLock";
 
-vi.mock("../../utils/deckyCall", () => ({
+vi.mock("../../shared/deckyCall", () => ({
   callDeckyWithTimeout: vi.fn(async () => ({ ok: true })),
 }));
 

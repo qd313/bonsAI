@@ -32,7 +32,7 @@
  * watcher with null.
  */
 import { useEffect, type RefObject } from "react";
-import { findTabContentsScroll, panelScrollMax } from "../../utils/chatPanelScroll";
+import { findTabContentsScroll, panelScrollMax } from "./chatPanelScroll";
 import { planTabBodyScroll, type PlanBox } from "./tabBodyScrollPlan";
 
 /**

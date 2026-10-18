@@ -36,7 +36,7 @@
 import { useCallback, useRef, type ReactNode, type RefCallback } from "react";
 import { Button, Focusable, showModal } from "@decky/ui";
 import type { TableSection } from "./PullModelsModal.types";
-import type { NavRefHolder } from "../../../utils/navFocusRegistry";
+import type { NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 import { CancelFirstConfirmModal } from "../../../shared/CancelFirstConfirmModal";
 import { handRingTo } from "./pullModelsBoxMemory";
 import { PullModelsPcRow } from "./PullModelsPcRow";

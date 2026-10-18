@@ -102,7 +102,7 @@ const MOVE_PROP = /^onMove(Up|Down|Left|Right)$/;
 const RING_QUESTION_CALLS = new Set(["uiActiveElement"]);
 
 /** The accessor's own home, where reading activeElement is the point. */
-const RING_QUESTION_EXEMPT = new Set(["src/utils/uiDocument.ts"]);
+const RING_QUESTION_EXEMPT = new Set(["src/shared/dpad/uiDocument.ts"]);
 
 /**
  * KeyboardEvent-shaped Up/Down predicates. These exist to interpret DOM keyboard
@@ -121,7 +121,7 @@ const RING_QUESTION_EXEMPT = new Set(["src/utils/uiDocument.ts"]);
 const KEYDOWN_DPAD_CALLS = new Set(["isDownNavigationEvent", "isUpNavigationEvent"]);
 
 /** The predicates' own home. */
-const KEYDOWN_DPAD_EXEMPT = new Set(["src/utils/focusNavigation.ts"]);
+const KEYDOWN_DPAD_EXEMPT = new Set(["src/shared/dpad/focusNavigation.ts"]);
 
 const RULES = {
   "page-search": {

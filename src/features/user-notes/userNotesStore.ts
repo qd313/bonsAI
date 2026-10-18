@@ -21,7 +21,7 @@ import { useSyncExternalStore } from "react";
 
 import { NOTE_OFFERS_HANDLED_STORAGE_KEY } from "../../shared/storageKeys";
 import type { BackgroundRequestStatus, NoteOffer } from "../../types/backgroundAsk";
-import { getUiDocument } from "../../utils/uiDocument";
+import { getUiDocument } from "../../shared/dpad/uiDocument";
 
 type OfferScope = "game" | "every";
 type OfferPhase = "offered" | "kept";

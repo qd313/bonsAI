@@ -20,7 +20,7 @@ vi.mock("@decky/ui", async () => {
 
 import { FoldedSection, foldAllNavId, foldLineBelow, type FoldChainSection } from "./FoldedSection";
 import { foldSectionToReturnTo, personPressCount, resetFoldedTabsForTests, toggleSection } from "./foldedTabsStore";
-import { registerNavFocus, resetNavFocusRegistry, unregisterNavFocus } from "../../utils/navFocusRegistry";
+import { registerNavFocus, resetNavFocusRegistry, unregisterNavFocus } from "../../shared/dpad/navFocusRegistry";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
 
 const TAB = "test-tab";

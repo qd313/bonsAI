@@ -9,7 +9,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { DeveloperTab, type DeveloperTabProps } from "./DeveloperTab";
-import { STREAM_SCRAMBLE_OFF } from "../stream-scramble/streamScrambleContext";
+import { STREAM_SCRAMBLE_OFF } from "../answer/stream/streamScrambleContext";
 import { setAllSections } from "../folded-tabs/foldedTabsStore";
 import { DEVELOPER_FOLD_TAB, DEVELOPER_SECTIONS } from "./developerTabFolds";
 

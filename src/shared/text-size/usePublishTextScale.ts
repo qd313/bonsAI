@@ -21,7 +21,7 @@ import { useEffect } from "react";
 
 import { TEXT_SCALE_VAR, textScaleValue } from "./chatTextSize";
 import type { ChatTextSize } from "../../features/settings/bonsaiSettingsSchema";
-import { setChatTitleTextScale } from "../../features/chat-title/chatTitleStore";
+import { setChatTitleTextScale } from "../../features/chats/title/chatTitleStore";
 
 export function usePublishTextScale(size: ChatTextSize): void {
   const value = textScaleValue(size);

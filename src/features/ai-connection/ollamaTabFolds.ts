@@ -15,10 +15,10 @@
  *
  * Does not: Draw anything or wire the D-pad (OllamaTab.tsx does).
  */
-import { ASK_THINK_EFFORT_LABELS, type AskThinkEffortId } from "../../data/askThinkEffort";
+import { ASK_THINK_EFFORT_LABELS, type AskThinkEffortId } from "../settings/askThinkEffort";
 import { OLLAMA_KEEP_ALIVE_CHIP_LABEL } from "./ollamaKeepAlive";
 import type { OllamaKeepAliveDuration } from "../settings/bonsaiSettingsSchema";
-import { REPLY_VERBOSITY_LABELS, type ReplyVerbosityId } from "../../data/replyVerbosity";
+import { REPLY_VERBOSITY_LABELS, type ReplyVerbosityId } from "../settings/replyVerbosity";
 import { summarizeSection } from "../folded-tabs/sectionSummary";
 
 /** The Ollama tab's id, as its TabBodyFocusRoot and the fold store know it. */

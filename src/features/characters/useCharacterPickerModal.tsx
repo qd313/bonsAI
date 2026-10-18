@@ -18,13 +18,13 @@ import { showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
 
 import { CharacterPickerModal } from "./CharacterPickerModal";
-import { callDeckyWithTimeout, formatDeckyRpcError } from "../../utils/deckyCall";
+import { callDeckyWithTimeout, formatDeckyRpcError } from "../../shared/deckyCall";
 import {
   normalizeAiCharacterCustomText,
   normalizeAiCharacterPresetId,
 } from "../settings/bonsaiSettingsNormalizers";
 import type { BonsaiSettings } from "../settings/bonsaiSettingsSchema";
-import { patchPendingSessionSettingsSnapshot } from "../../utils/bonsaiSessionSurvival";
+import { patchPendingSessionSettingsSnapshot } from "../plugin-shell/bonsaiSessionSurvival";
 
 export type UseCharacterPickerModalArgs = {
   aiCharacterRandom: boolean;

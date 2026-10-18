@@ -36,7 +36,7 @@ import {
   VOICE_STT_MODEL_FULL_LABEL,
   VOICE_STT_MODEL_SHORT_LABEL,
 } from "../settings/settingsTabFolds";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../utils/deckyCall";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../shared/deckyCall";
 import { PermissionDenyAction } from "../permissions/PermissionDenyAction";
 import type { BonsaiCapabilityKey } from "../permissions/permissionDeepLink";
 import { confirmDownload } from "../downloads/downloadNotice";

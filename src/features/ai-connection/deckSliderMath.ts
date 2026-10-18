@@ -5,7 +5,7 @@
  * Solves: Consistent D-pad left/right stepping and track percentage math across slider UIs.
  * Does not: Render sliders — see DeckFocusSlider and section parent focus graphs.
  */
-import { isLeftNavigationKey, isRightNavigationKey } from "../../utils/focusNavigation";
+import { isLeftNavigationKey, isRightNavigationKey } from "../../shared/dpad/focusNavigation";
 
 export function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));

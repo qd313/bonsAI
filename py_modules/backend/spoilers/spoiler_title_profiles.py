@@ -12,7 +12,7 @@ launched through a Steam shortcut has no Steam game ID at all.
 Used for: deciding, before a reply is even written, how cautious the AI's
 instructions and the spoiler-risk guess (see spoiler_risk_service) should be
 for the specific game being asked about. The same two lists are kept in step
-with the settings screen's own copy (src/data/spoilerTitleProfiles.ts), so a
+with the settings screen's own copy (src/features/spoilers/spoilerTitleProfiles.ts), so a
 game is treated the same in both places.
 Solves: without a per-game list, every game would get the same one-size-
 fits-all level of caution -- either annoyingly over-careful about games that

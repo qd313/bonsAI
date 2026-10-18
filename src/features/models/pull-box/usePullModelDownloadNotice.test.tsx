@@ -24,7 +24,7 @@ vi.mock("../../downloads/downloadNotice", () => ({
     return hoisted.answer;
   },
 }));
-vi.mock("../../../utils/deckyCall", () => ({
+vi.mock("../../../shared/deckyCall", () => ({
   DECKY_RPC_TIMEOUT_MS: 1000,
   formatDeckyRpcError: String,
   callDeckyWithTimeout: async (method: string) => {

@@ -21,13 +21,13 @@ import {
   handleAnswerBubbleMoveDown,
   handleAnswerBubbleMoveUp,
   handleUpFromSpoilerCover,
-} from "../utils/answerBubbleNavigation";
-import { registerAnswerStop, resetAnswerStopRegistry } from "../utils/answerStopRegistry";
-import { registerAnswerBubbleEl } from "../utils/answerBubbleElRegistry";
-import { registerSpoilerFence, resetSpoilerFenceRegistry } from "../utils/spoilerFenceRegistry";
+} from "../features/answer/bubble/answerBubbleNavigation";
+import { registerAnswerStop, resetAnswerStopRegistry } from "../shared/dpad/answerStopRegistry";
+import { registerAnswerBubbleEl } from "../shared/dpad/answerBubbleElRegistry";
+import { registerSpoilerFence, resetSpoilerFenceRegistry } from "../shared/dpad/spoilerFenceRegistry";
 import { registerDrgGlossaryTermChip, resetDrgGlossaryTermRegistry } from "../shared/dpad/glossaryTermRegistry";
-import { resetUiDocument } from "../utils/uiDocument";
-import { liftForFocus } from "../hooks/useDockClearanceOnFocus";
+import { resetUiDocument } from "../shared/dpad/uiDocument";
+import { liftForFocus } from "../shared/dpad/useDockClearanceOnFocus";
 
 const KEY = "turn-1";
 const ref = { current: 0 };

@@ -21,7 +21,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 CONTRACT = REPO / "tests/contracts/ask-hook-order.json"
-MAIN = "src/hooks/useBonsaiAskOrchestration.ts"
+MAIN = "src/features/ask/flow/useBonsaiAskOrchestration.ts"
 MAIN_FN = "export function useBonsaiAskOrchestration("
 
 # The type argument between the hook name and the bracket -- useRef<string | undefined>( --

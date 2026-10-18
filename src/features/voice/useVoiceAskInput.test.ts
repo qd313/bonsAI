@@ -5,13 +5,13 @@ import { describe, expect, it, vi } from "vitest";
 
 import { useVoiceAskInput } from "./useVoiceAskInput";
 import { getRpcCallLog, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
-import { useVoiceTranscription } from "../../hooks/useVoiceTranscription";
+import { useVoiceTranscription } from "./useVoiceTranscription";
 
 // Spies on the real hook (still calling through to it) so a test can reach into the exact
 // field-writer callback useVoiceAskInput hands it — the only way to drive that callback with a
 // functional SetStateAction, which every real transcription update in this codebase never does.
-vi.mock("../../hooks/useVoiceTranscription", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("../../hooks/useVoiceTranscription")>();
+vi.mock("./useVoiceTranscription", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./useVoiceTranscription")>();
   return {
     ...actual,
     useVoiceTranscription: vi.fn(actual.useVoiceTranscription),

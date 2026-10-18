@@ -11,7 +11,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { BonsaiPluginShell } from "./BonsaiPluginShell";
-import { getUiDocument, resetUiDocument } from "../../utils/uiDocument";
+import { getUiDocument, resetUiDocument } from "../../shared/dpad/uiDocument";
 
 let uiDoc: Document;
 let container: HTMLDivElement;

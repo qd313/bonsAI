@@ -25,7 +25,7 @@ import {
   captureBonsaiSessionForModal,
   peekBonsaiSessionPendingRestore,
   type BonsaiSessionSurvivalSnapshot,
-} from "../../utils/bonsaiSessionSurvival";
+} from "./bonsaiSessionSurvival";
 import { bonsaiDebugLog, bumpContentMountCount } from "../developer/bonsaiDebugIngest";
 import {
   captureSettingsTabLocalSnapshot,

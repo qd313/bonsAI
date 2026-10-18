@@ -13,7 +13,7 @@
  *
  * Does not: Know which tabs there are or which one is showing; the bar that registers does.
  */
-import { isBumperLeftDeckEvent, isBumperRightDeckEvent } from "../../utils/focusNavigation";
+import { isBumperLeftDeckEvent, isBumperRightDeckEvent } from "./focusNavigation";
 
 /** Switch to the tab one place before (-1) or after (1) the one showing, wrapping at the ends. */
 export type ShoulderStep = (direction: -1 | 1) => void;

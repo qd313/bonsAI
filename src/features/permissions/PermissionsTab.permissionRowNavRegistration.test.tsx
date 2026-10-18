@@ -21,7 +21,7 @@ import { useState } from "react";
 
 import { PermissionsTab } from "./PermissionsTab";
 import type { BonsaiCapabilities } from "../settings/bonsaiSettingsSchema";
-import * as navFocusRegistry from "../../utils/navFocusRegistry";
+import * as navFocusRegistry from "../../shared/dpad/navFocusRegistry";
 
 const ALL_ON: BonsaiCapabilities = {
   filesystem_write: true,

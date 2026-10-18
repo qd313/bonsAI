@@ -8,7 +8,7 @@
  * Does not: Move the focus or touch the history; it only names the chip to append and the updated
  *           round of the game's chips already shown.
  */
-import type { PresetPrompt } from "../../data/presets";
+import type { PresetPrompt } from "./presets";
 import { getSessionRagCarouselCandidates, pickNextChipWithSessionRag } from "./composePresetSeedsWithSessionRag";
 import { isGameCandidate } from "./sessionRagComposer";
 

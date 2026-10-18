@@ -12,7 +12,7 @@
  * Does not: Measure tab strip reserve — see useTabStripBodyOffset and tabBodyViewport.
  */
 import { useLayoutEffect, useRef } from "react";
-import { deckyPageWhileReshaped, subscribeDeckyHeader } from "../chat-title/deckyHeaderShape";
+import { deckyPageWhileReshaped, subscribeDeckyHeader } from "../chats/title/deckyHeaderShape";
 import { syncTabBodyViewportHeight } from "./tabBodyViewport";
 
 const QAM_HOST_MIN_PX = 320;

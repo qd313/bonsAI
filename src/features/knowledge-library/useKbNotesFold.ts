@@ -13,7 +13,7 @@
  * occupied — see tests/test_ask_hook_order.py's `hook_sequence` for why that position matters.
  */
 import { useEffect, useRef, useState, type MutableRefObject } from "react";
-import { scrollElementTopToPaneTop } from "../../utils/chatPanelScroll";
+import { scrollElementTopToPaneTop } from "../../shared/dpad/chatPanelScroll";
 
 /*
  * The "From the notes" block (plan 58 phase 1), under a reply that used a note from the

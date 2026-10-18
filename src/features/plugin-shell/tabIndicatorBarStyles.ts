@@ -39,7 +39,7 @@ import {
   TAB_BAR_SIDE_ICON_GAP_PX,
   TAB_BAR_SIDE_ICON_PX,
   TAB_STRIP_BODY_GAP_PX,
-} from "../unified-input/constants";
+} from "../../shared/constants";
 import { textPx } from "../../styles/textPx";
 
 /** The dim colour of the LB and RB marks, the same grey-blue family as the other hint pills. */

@@ -14,13 +14,13 @@
  */
 import React from "react";
 import { Button } from "@decky/ui";
-import type { AskModeId } from "../../data/askMode";
-import type { PresetPrompt } from "../../data/presets";
+import type { AskModeId } from "../ask/bar/askMode";
+import type { PresetPrompt } from "./presets";
 import { PresetChipLeadingBadges, PresetChipText } from "./presetChipButton";
 import { PRESET_CHIP_HEIGHT_PX } from "./presetRowLayout";
 import type { DecodeTextParts } from "./presetChipDecodeText";
 import type { ChipScrollListener } from "./presetChipStay";
-import { joinPresetWithRunningGame } from "../../utils/joinPresetWithRunningGame";
+import { joinPresetWithRunningGame } from "./joinPresetWithRunningGame";
 import { textPx } from "../../styles/textPx";
 
 /**

@@ -33,7 +33,7 @@ import { SettingsTab, type SettingsTabProps } from "./SettingsTab";
 import { settingsProps } from "../../test-harness/ringTestProps";
 import { closeAllSettingsSections, openAllSettingsSections } from "../../test-harness/settingsFoldOpen";
 import { SETTINGS_FOLD_TAB, SETTINGS_SECTIONS, SETTINGS_ROW_HELP, settingsSectionIds } from "./settingsTabFolds";
-import { resetNavFocusRegistry } from "../../utils/navFocusRegistry";
+import { resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
 import { stripHeightFor } from "../folded-tabs/foldedTabs";
 import { walkFoldedTab, type FoldedLanding } from "../../test-harness/foldedTabWalk";
 import { paintedFrom, worstFoldAllCover } from "../../test-harness/foldAllCover";

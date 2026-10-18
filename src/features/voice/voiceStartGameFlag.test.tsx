@@ -13,7 +13,7 @@ import { act, renderHook } from "@testing-library/react";
 import { Router } from "@decky/ui";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useVoiceTranscription } from "../../hooks/useVoiceTranscription";
+import { useVoiceTranscription } from "./useVoiceTranscription";
 import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
 
 vi.mock("@decky/ui", async () => {

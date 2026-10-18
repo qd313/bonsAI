@@ -28,7 +28,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import type { BonsaiCapabilities } from "../settings/bonsaiSettingsSchema";
-import { callDeckyWithTimeout } from "../../utils/deckyCall";
+import { callDeckyWithTimeout } from "../../shared/deckyCall";
 import { subscribeSteamParental } from "./steamParental";
 
 const DENIED_CAPABILITIES: BonsaiCapabilities = {

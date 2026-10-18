@@ -7,7 +7,7 @@
  *         screen as the row slides left and right.
  * Does not: Fetch RAG candidates — see sessionRagComposer and sessionRagChipCandidates.
  */
-import { getFrozenTestChips, nextFrozenPresetAfter, type PresetPrompt } from "../../data/presets";
+import { getFrozenTestChips, nextFrozenPresetAfter, type PresetPrompt } from "./presets";
 import { PRESET_VISIBLE_SLOTS } from "./presetRowLayout";
 
 /** CSS slide transition duration on the track (ms). */

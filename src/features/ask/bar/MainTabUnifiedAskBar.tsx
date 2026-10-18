@@ -1,0 +1,1013 @@
+/**
+ * Title: The Ask bar
+ *
+ * Purpose: The box a person types their question into, and every button
+ * along its bottom strip: the paperclip that attaches a screenshot, the tag
+ * naming the game bonsAI thinks is running (AskStripGameTag.tsx, a label, not
+ * a button), the button that picks which AI mode to ask in, the microphone
+ * (which turns into a Stop button while a recording or an answer is running),
+ * the X that empties the box (only while it has words) and the small Ask
+ * button at the strip's right end (both AskStripSendButtons.tsx). Since plan
+ * 84 step 2 the strip holds what used to be two rows under the box: the big
+ * Ask button and the "Context: ..." line.
+ * This file also draws the two small menus those buttons open, and the
+ * preview strip that shows an attached screenshot with a way to remove it.
+ *
+ *     ┌─ input host ─────────────────────────────────────────┐
+ *     │ [avatar]  the question box (multi-line)              │
+ *     │           ...........................................│
+ *     │ [clip] (game) ...... [mode ▾] [mic/stop] [x] [Ask →] │  <- bottom strip
+ *     └──────────────────────────────────────────────────────┘
+ *        (the attach menu opens under the paperclip;
+ *         the mode menu opens under [mode ▾]; [x] only with words)
+ *
+ *     (attached screenshot, only while one is attached)
+ *     [ thumbnail + name ......................... ] [ x ]
+ *
+ * Typing here only asks the AI. The card of matching Steam settings that used to
+ * pop up above the box while a setting's name was typed moved to the Search tab
+ * (plan 92).
+ *
+ * Used for: MainTab, as the Ask bar sitting in the dock at the bottom of the
+ * screen.
+ *
+ * Solves: One D-pad-safe home for the whole bar and its two popover menus,
+ * so opening one menu closes the other, and every button's Up, Down, Left
+ * and Right hand-offs live in one place instead of scattered across files.
+ *
+ * Does not: Submit the question or track whether one is already running —
+ * onAskOllama and isAsking are both handed in by the caller. Does not decide
+ * where each button's focus jump actually lands — see useMainTabAskBarFocus
+ * for that.
+ *
+ * How it works:
+ * 1. Work out whether the AI-character avatar shows at all, and whether the
+ *    Ask button should look "ready" (there is text typed, and nothing is
+ *    currently being asked).
+ * 2. Get every focus-jump function this bar needs from
+ *    useMainTabAskBarFocus(), and hand the "focus the question box" one back
+ *    up to MainTab through onFocusHandlersReady once it exists.
+ * 3. Register the question box's own Steam navigation handle, so a hop into
+ *    it from outside the bar can use Steam's own transfer instead of a plain
+ *    focus() call — see the Gotchas below for why that matters.
+ * 4. Build the two menu-toggle functions, one for the mode menu and one for
+ *    the attach menu. Each closes the other menu first, and each guards
+ *    against running twice for a single press.
+ * 5. Assemble the question box itself: the visible field, a hidden "measure"
+ *    copy used to size it, and, on the Deck skins that cannot show a real
+ *    multiline field, a text overlay that mirrors what the field holds.
+ *    Enter submits the question.
+ * 6. Render everything top to bottom, matching the drawing above: the input
+ *    host with its strip, the two popovers anchored to their buttons, a status row for a screenshot
+ *    capture or a media error, and the attached-screenshot preview when there
+ *    is one. Every D-pad route in the strip is written down in
+ *    docs/focus-graph.md, "The ask box's strip (plan 84)".
+ *
+ * Gotchas:
+ * - Every focus hand-off that crosses from one button or menu into another
+ *   asks Steam for its own transfer (the navRef pattern, or takeNavFocus
+ *   inside useMainTabAskBarFocus) rather than calling focus() directly. A
+ *   plain focus() only moves the browser's own idea of what is focused, and
+ *   this repo has lost fixes to Steam's ring disagreeing with that before.
+ *   `navRef` itself is a real Steam Focusable prop that Decky's own types do
+ *   not list, which is why it and the onMove* handlers ride in through an
+ *   `as Record<string, unknown>` cast rather than a typed prop.
+ * - Opening the mode menu or the attach menu adds a class to the nearest
+ *   `.bonsai-scope` ancestor rather than something local to this file, since
+ *   the menu itself renders as a popover that needs to sit above other Main
+ *   tab content, not just above this bar.
+ *
+ * Split out: the prop type and its one helper live in
+ * MainTabUnifiedAskBar.types.ts now (re-exported below, so nothing that
+ * imports them from here needs to change).
+ */
+import React, { useEffect, useRef, useState } from "react";
+import { PanelSectionRow, TextField, Button, Focusable } from "@decky/ui";
+import {
+  UNIFIED_INPUT_ICON_STRIP_PX,
+  UNIFIED_TEXT_BODY_MAX_PX,
+  UNIFIED_TEXT_FONT_PX,
+  UNIFIED_TEXT_LINE_HEIGHT,
+  UNIFIED_TEXT_OVERLAY_BOTTOM_GAP_PX,
+} from "../../../shared/constants";
+import {
+  getFocusableWithin,
+  isDeckDirectionLeftEvent,
+  isLeftNavigationEvent,
+  isRightNavigationEvent,
+} from "../../../shared/dpad/focusNavigation";
+import { uiActiveElement } from "../../../shared/dpad/uiDocument";
+import { formatBytes, toFileUri } from "../../media/mediaFormat";
+import {
+  screenshotMediaErrorCapability,
+  type MainTabUnifiedAskBarProps,
+} from "./MainTabUnifiedAskBar.types";
+import {
+  AskMicIcon,
+  AskStopIcon,
+  AttachMediaIcon,
+  ClearIcon,
+  ImageAttachmentIcon,
+} from "../../../shared/icons/icons";
+import { CharacterRoleplayEmoticon } from "../../characters/CharacterRoleplayEmoticon";
+import { AskStripGameTag } from "./AskStripGameTag";
+import { AskStripSendButtons, focusOwnRef } from "./AskStripSendButtons";
+import {
+  ASK_MODE_ACCENT,
+  ASK_MODE_ACCENT_BREATHE_HIGH,
+  ASK_MODE_ACCENT_BREATHE_LOW,
+  ASK_MODE_ACCENT_GLOW_HIGH,
+  ASK_MODE_ACCENT_GLOW_LOW,
+  ASK_MODE_FILL,
+  ASK_MODE_LABELS,
+} from "./askMode";
+import { MainTabAskModeMenuPopover } from "./MainTabAskModeMenuPopover";
+import { MainTabAttachMenuPopover } from "./MainTabAttachMenuPopover";
+import { PermissionDenyAction } from "../../permissions/PermissionDenyAction";
+import { useMainTabAskBarFocus } from "./useMainTabAskBarFocus";
+import { useAskBarMenuToggles } from "./useAskBarMenuToggles";
+import { useAskBarInitialRingClaim } from "./useAskBarInitialRingClaim";
+import { useAskBarPressHandlers } from "./useAskBarPressHandlers";
+import {
+  registerNavFocus,
+  takeNavFocus,
+  unregisterNavFocus,
+  type NavRefHolder,
+} from "../../../shared/dpad/navFocusRegistry";
+import { textPx } from "../../../styles/textPx";
+import { ASK_MODE_HINTS } from "./askModeHints";
+
+// The prop type lives in MainTabUnifiedAskBar.types.ts now; re-exported here so nothing
+// that imports it from this file (tests included) needs to change.
+export type { MainTabUnifiedAskBarProps };
+
+/*
+ * In: MainTabUnifiedAskBarProps — the question text and its setter, whether
+ * an Ask or a screenshot capture is running, the attached screenshot (if
+ * any), the current AI mode, the settings-search results, and every host ref
+ * and callback the bar and its menus need.
+ * Out: the whole Ask bar, as drawn in the file header above.
+ * What can go wrong: almost nothing is computed here beyond the ready flag
+ * and the two menu-toggle guards — this function mostly arranges props and
+ * local UI state into JSX. A missing optional prop hides the piece that
+ * needed it (no onOpenCharacterPicker means no avatar) rather than breaking
+ * the rest of the bar.
+ *
+ * See the file header's How it works for the full step order; in short:
+ * 1. Work out the avatar and "ready" flags.
+ * 2. Pull in the focus-jump functions and hand one back up to the caller.
+ * 3. Register the question box's own Steam navigation handle.
+ * 4. Build the mode-menu and attach-menu toggle functions.
+ * 5. Assemble the question box's own body (field, measure copy, overlay).
+ * 6. Render the bar, its menus, its status rows, and the settings-search
+ *    results list.
+ */
+export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
+  const {
+    fullBleedRowStyle,
+    presetCarouselHostRef,
+    unifiedInputHostRef,
+    unifiedInputFieldLayerRef,
+    unifiedInputMeasureRef,
+    attachActionHostRef,
+    askBarHostRef,
+    unifiedInputSurfacePx,
+    unifiedInput,
+    usesNativeMultilineField,
+    setIsUnifiedInputFocused,
+    isUnifiedInputFocused,
+    setUnifiedInput,
+    isAsking,
+    ollamaIp,
+    onAskOllama,
+    onOpenScreenshotBrowser,
+    onTakeScreenshot,
+    onCancelAsk,
+    onMicInput,
+    voiceRecording = false,
+    voiceBusy = null,
+    selectedAttachment,
+    setSelectedAttachment,
+    clearUnifiedInput,
+    showSearchClearButton,
+    mediaError,
+    isCapturingScreenshot = false,
+    mediaLibraryEnabled = true,
+    aiCharacterPadClass = false,
+    aiCharacterAvatarPresetId = null,
+    aiCharacterAvatarBadgeLetter = null,
+    onOpenCharacterPicker,
+    aiCharacterDebugLine = null,
+    askMode,
+    onAskModeChange,
+    onFocusHandlersReady,
+    onNavigateToPermissions,
+    ollamaContext,
+  } = props;
+
+  const askModeMenuAnchorRef = useRef<HTMLDivElement | null>(null);
+  const askModeMenuFirstItemRef = useRef<HTMLElement | null>(null);
+  const attachMenuAnchorRef = useRef<HTMLDivElement | null>(null);
+  const attachMenuFirstItemRef = useRef<HTMLElement | null>(null);
+  const [askModeMenuOpen, setAskModeMenuOpen] = useState(false);
+  const [attachMenuOpen, setAttachMenuOpen] = useState(false);
+  const askModeToggleOnceRef = useRef(false);
+  const attachMenuToggleOnceRef = useRef(false);
+
+  const showAiCharacterChrome = Boolean(onOpenCharacterPicker && aiCharacterPadClass);
+  const askLooksReady = unifiedInput.trim().length > 0 && !isAsking;
+  // The mic button is amber while the voice server starts and while Stop reads the recording once more.
+  const voiceStarting = voiceBusy === "starting";
+  const voiceFinishing = voiceBusy === "finishing";
+
+  useEffect(() => {
+    if (unifiedInput.trim() === "" && /\n/.test(unifiedInput)) setUnifiedInput("");
+  }, [unifiedInput, setUnifiedInput]);
+
+  const {
+    focusUnifiedTextField,
+    focusAttachPaperclip,
+    focusAiCharacterAvatar,
+    focusAskPrimary,
+    focusMicOrStop,
+    focusAskModeButton,
+    unifiedInputDeckNavHandlers,
+    avatarDeckNavHandlers,
+  } = useMainTabAskBarFocus(
+    {
+      unifiedInputFieldLayerRef,
+      attachActionHostRef,
+      askBarHostRef,
+      presetCarouselHostRef,
+    },
+    showAiCharacterChrome,
+    isAsking,
+  );
+
+  useEffect(() => {
+    onFocusHandlersReady?.({ focusUnifiedTextField });
+  }, [onFocusHandlersReady, focusUnifiedTextField]);
+
+  // What Ask and Stop do with the ring once pressed lives in useAskBarPressHandlers (src/hooks).
+  const { handleAskPress, handleStopPress } = useAskBarPressHandlers({
+    isAsking, unifiedInput, onAskOllama, onCancelAsk, focusAskPrimary,
+  });
+
+  /*
+   * The strip's right end (plan 84, AskStripSendButtons.tsx). The X's own element, so Right from the mic
+   * or Stop can step onto it; past it Right goes to ASK, and holds still once neither can take the ring.
+   */
+  const clearButtonRef = useRef<HTMLDivElement | null>(null);
+  const rightFromMicOrStop = () => focusOwnRef(clearButtonRef) || focusAskPrimary() || true;
+  /* The X vanishes once the box is empty, so the ring goes to the box (Deck 2026-10-02: nothing owned it). */
+  const onClearPress = () => {
+    clearUnifiedInput();
+    takeNavFocus("unified-input");
+  };
+
+  /*
+   * The text field's own Steam nav node, so a hop from another container (a preset chip's Down,
+   * the help chip, the avatar) can use Steam's transfer instead of a plain `focus()` that only
+   * moves `activeElement` (navFocusRegistry). `navRef` is a real Steam Focusable prop that Decky's
+   * types omit; it rides in through the same cast as the move handlers.
+   */
+  const unifiedInputNavRef = useRef<NavRefHolder["current"]>(null);
+  useEffect(() => {
+    registerNavFocus("unified-input", unifiedInputNavRef);
+    return () => unregisterNavFocus("unified-input", unifiedInputNavRef);
+  }, []);
+
+  // "Opening the panel leaves nothing highlighted": tries a few times to place Steam's ring on
+  // the question box when nothing owns it yet. Lives in useAskBarInitialRingClaim now
+  // (src/hooks) -- see that file for the full story and the Deck evidence behind it.
+  useAskBarInitialRingClaim();
+
+  // The two menus' toggle/close handlers, and the effect that marks the bar's scope while
+  // either is open, live in useAskBarMenuToggles now (src/hooks) -- see that file.
+  const {
+    toggleAskModeMenu,
+    closeAskModeMenu,
+    toggleAttachMenu,
+    closeAttachMenu,
+    onAttachMenuSelect,
+  } = useAskBarMenuToggles({
+    unifiedInputHostRef,
+    askModeMenuOpen,
+    attachMenuOpen,
+    setAskModeMenuOpen,
+    setAttachMenuOpen,
+    askModeToggleOnceRef,
+    attachMenuToggleOnceRef,
+    onTakeScreenshot,
+    onOpenScreenshotBrowser,
+  });
+
+  const unifiedTextFieldBody = (
+    <>
+      {/*
+        No `whiteSpace` / `overflowWrap` here on purpose -- section-5.ts sets both `!important`
+        from `--bonsai-unified-field-*` custom properties that useUnifiedInputSurface.ts copies
+        off the real field's own computed style on every measure pass, so this mirror always
+        wraps exactly the way the field does rather than declaring a guess of its own.
+      */}
+      <div
+        ref={unifiedInputMeasureRef}
+        className="bonsai-unified-input-measure"
+        aria-hidden
+        style={{
+          position: "absolute",
+          visibility: "hidden",
+          pointerEvents: "none",
+          lineHeight: UNIFIED_TEXT_LINE_HEIGHT,
+          fontSize: textPx(UNIFIED_TEXT_FONT_PX),
+        }}
+      >
+        {unifiedInput || "\u00a0"}
+      </div>
+      <TextField
+        label=""
+        value={unifiedInput}
+        spellCheck={false}
+        {...({ multiline: true, rows: 3 } as unknown as Record<string, unknown>)}
+        {...({ placeholder: ASK_MODE_HINTS[askMode] } as Record<string, unknown>)}
+        /* Down lands on the small Ask button in the strip under the box, or Stop while an answer is being
+           written (plan 84, useMainTabAskBarFocus.ts; docs/focus-graph.md, "The ask box's strip"). */
+        {...unifiedInputDeckNavHandlers}
+        {...({ navRef: unifiedInputNavRef } as Record<string, unknown>)}
+        style={{
+          width: "100%",
+          minHeight: unifiedInputSurfacePx,
+          height: unifiedInputSurfacePx,
+          maxHeight: UNIFIED_TEXT_BODY_MAX_PX,
+          overflow: "auto",
+          fontSize: textPx(UNIFIED_TEXT_FONT_PX),
+          lineHeight: UNIFIED_TEXT_LINE_HEIGHT,
+          color: usesNativeMultilineField ? "rgba(236, 244, 252, 0.98)" : "transparent",
+          caretColor: usesNativeMultilineField ? "white" : "transparent",
+        }}
+        onFocus={() => { setIsUnifiedInputFocused(true); }}
+        onBlur={() => { setIsUnifiedInputFocused(false); }}
+        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+          let next = e.target.value;
+          /* Collapse newline-only “empty” values so the caret stays on the first line (native textarea + placeholder). */
+          if (next.trim() === "" && /\n/.test(next)) next = "";
+          setUnifiedInput(next);
+        }}
+        onKeyDown={(ev: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+          /*
+           * ArrowUp/ArrowDown used to slide a row marker through the settings list from
+           * a distance, and Enter used to jump straight to whichever row it landed on -- a shape a
+           * real D-pad press never produces (the focus law: Steam invokes a Focusable's own move
+           * handlers directly, never a DOM keydown, and never delivers a direction press through
+           * onButtonDown either). Deleted with the settings-results card's rewiring into real
+           * Focusable stops (plan 45 step 3 / plan 56 lane E2); the card itself moved to the Search tab
+           * (plan 92), so Enter here only has to keep doing the one thing a physical or on-screen
+           * keyboard's Enter key still means -- submit the question.
+           */
+          if (ev.key === "Enter") {
+            ev.preventDefault();
+            if (!isAsking && unifiedInput.trim() && ollamaIp.trim()) {
+              (ev.currentTarget as HTMLElement).blur();
+              onAskOllama();
+            }
+          }
+        }}
+      />
+      {/*
+        Same as the measure div above: no `whiteSpace` / `overflowWrap` here, section-5.ts sets
+        both from the field's own computed style so this overlay never wraps a line differently
+        than the real field underneath it does.
+      */}
+      {!usesNativeMultilineField && (
+        <div
+          className="bonsai-unified-input-text-overlay"
+          style={{
+            pointerEvents: "none",
+            position: "absolute",
+            bottom: UNIFIED_INPUT_ICON_STRIP_PX + UNIFIED_TEXT_OVERLAY_BOTTOM_GAP_PX,
+            color: isUnifiedInputFocused ? "rgba(248, 250, 252, 0.98)" : "rgba(220, 232, 244, 0.95)",
+            lineHeight: UNIFIED_TEXT_LINE_HEIGHT,
+            fontSize: textPx(UNIFIED_TEXT_FONT_PX),
+          }}
+        >
+          {!unifiedInput.trim() ? (
+            <>
+              {isUnifiedInputFocused && (
+                <span className="bonsai-unified-input-fake-caret bonsai-unified-input-fake-caret--before-hint" aria-hidden />
+              )}
+              <span className="bonsai-unified-input-strategy-placeholder">
+                {ASK_MODE_HINTS[askMode]}
+              </span>
+            </>
+          ) : (
+            <>
+              {unifiedInput}
+              {isUnifiedInputFocused && <span className="bonsai-unified-input-fake-caret" aria-hidden />}
+            </>
+          )}
+        </div>
+      )}
+    </>
+  );
+
+  return (
+    <>
+{/*
+  position: relative, left from when the settings-results card was anchored to it (the card moved to the
+  Search tab, plan 92). Nothing else about the box's own box model changes: this wrapper has no size of
+  its own beyond its one child's, so it never nudges the box.
+*/}
+<div style={{ position: "relative" }}>
+<PanelSectionRow>
+  <div
+    ref={unifiedInputHostRef}
+    className={
+      "bonsai-unified-input-host bonsai-glass-panel bonsai-full-bleed-row" +
+      (aiCharacterPadClass ? " bonsai-unified-input--ai-character" : "") +
+      (isAsking ? " bonsai-unified-input--asking" : "") +
+      (isCapturingScreenshot ? " bonsai-unified-input--capturing" : "") +
+      (askModeMenuOpen ? " bonsai-ask-mode-menu-open" : "") +
+      (attachMenuOpen ? " bonsai-attach-menu-open" : "")
+    }
+    style={{
+      ...fullBleedRowStyle,
+      "--bonsai-ask-mode-accent": ASK_MODE_ACCENT[askMode],
+      "--bonsai-ask-mode-fill": ASK_MODE_FILL[askMode],
+      "--bonsai-ask-breathe-low": ASK_MODE_ACCENT_BREATHE_LOW[askMode],
+      "--bonsai-ask-breathe-high": ASK_MODE_ACCENT_BREATHE_HIGH[askMode],
+      "--bonsai-ask-glow-low": ASK_MODE_ACCENT_GLOW_LOW[askMode],
+      "--bonsai-ask-glow-high": ASK_MODE_ACCENT_GLOW_HIGH[askMode],
+    } as React.CSSProperties}
+  >
+    <div
+      ref={unifiedInputFieldLayerRef}
+      style={{
+        position: "relative",
+        width: "100%",
+        minHeight: unifiedInputSurfacePx + UNIFIED_INPUT_ICON_STRIP_PX,
+        overflow: askModeMenuOpen || attachMenuOpen ? "visible" : undefined,
+      }}
+    >
+      {showAiCharacterChrome ? (
+        <div className="bonsai-unified-input-text-row">
+          <div
+            className="bonsai-ai-character-avatar-slot"
+            onKeyDownCapture={(ev) => {
+              if (!isRightNavigationEvent(ev)) return;
+              if (!(ev.target as HTMLElement).closest?.(".bonsai-ai-character-avatar")) return;
+              ev.preventDefault();
+              ev.stopPropagation();
+              focusUnifiedTextField();
+            }}
+          >
+            {/*
+              avatarDeckNavHandlers never defines its own onMoveUp -- Up out of the avatar is left to
+              Steam's own spatial nav, which reaches the preset chip row sitting above the whole Ask bar.
+            */}
+            <Focusable
+              className="bonsai-ai-character-avatar"
+              aria-label={
+                aiCharacterAvatarBadgeLetter
+                  ? `Choose AI character, ${aiCharacterAvatarBadgeLetter}`
+                  : "Choose AI character"
+              }
+              {...avatarDeckNavHandlers}
+              onClick={() => onOpenCharacterPicker?.()}
+              onActivate={() => {
+                onOpenCharacterPicker?.();
+              }}
+              style={{
+                width: "100%",
+                height: "100%",
+                minWidth: 18,
+                minHeight: 18,
+                margin: 0,
+                padding: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: 4,
+                border: "none",
+                outline: "none",
+                background: "transparent",
+                boxShadow: "none",
+                backdropFilter: "none",
+                boxSizing: "border-box",
+              }}
+            >
+              <CharacterRoleplayEmoticon
+                key={aiCharacterAvatarPresetId ?? "__custom__"}
+                presetId={aiCharacterAvatarPresetId ?? "__custom__"}
+                size={18}
+                badgeLetter={aiCharacterAvatarBadgeLetter}
+                art="prop"
+              />
+            </Focusable>
+            {aiCharacterDebugLine ? (
+              <div
+                className="bonsai-ai-character-debug"
+                style={{
+                  position: "absolute",
+                  left: -5,
+                  top: 16,
+                  zIndex: 6,
+                  maxWidth: "min(100vw - 48px, 280px)",
+                  fontSize: textPx(9),
+                  lineHeight: 1.15,
+                  color: "rgba(160, 220, 180, 0.95)",
+                  wordBreak: "break-word",
+                  pointerEvents: "none",
+                  fontFamily: "monospace",
+                }}
+              >
+                {aiCharacterDebugLine}
+              </div>
+            ) : null}
+          </div>
+          <div className="bonsai-unified-input-text-box">
+            {unifiedTextFieldBody}
+          </div>
+        </div>
+      ) : (
+        unifiedTextFieldBody
+      )}
+      <div
+        ref={attachActionHostRef}
+        className="bonsai-unified-input-bottom-actions"
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: UNIFIED_INPUT_ICON_STRIP_PX,
+          zIndex: 25,
+          margin: 0,
+          padding: 0,
+          boxSizing: "border-box",
+        }}
+      >
+        {/*
+          The strip: its own Steam row inside the box's card. Down from it is left to Steam (nothing sits
+          under the box but an attached screenshot's row); claiming it would dead-end the press there.
+        */}
+        <Focusable
+          className="bonsai-unified-input-actions-row"
+          flow-children="horizontal"
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "nowrap",
+            width: "100%",
+            height: "100%",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            margin: 0,
+            padding: 0,
+          }}
+        >
+          <Button
+            ref={attachMenuAnchorRef}
+            className="bonsai-askbar-target bonsai-unified-input-corner-left"
+            {...({
+              /*
+               * Roadmap: "Left from the Ask button, and from the paperclip, hands the highlight
+               * to Steam's Quick Access rail" (measured 2026-09-15 evening,
+               * workshop:test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json
+               * steps 3 and 4). The paperclip is the leftmost stop in this row and has no sibling
+               * further left, so nothing ever claimed Left -- Steam's own "past the edge" nav ran
+               * and handed the ring out of the plugin entirely. Same shape, same fix as the
+               * collapsed-history pill's Left (earlierPillLeftNavHandlers,
+               * MainTabChatTranscript.tsx): claim the move on onMoveLeft itself, the handler
+               * Steam actually invokes on device, with the onButtonDown twin only for the
+               * string-shaped presses tests and desktop keyboards deliver (focusNavigation.ts).
+               */
+              onMoveLeft: () => true,
+              onButtonDown: (button: unknown) => (isDeckDirectionLeftEvent(button) ? true : false),
+              onMoveRight: () => focusAskModeButton(),
+              ...(showAiCharacterChrome ? { onMoveUp: () => focusAiCharacterAvatar() } : {}),
+              ...(attachMenuOpen
+                ? {
+                    onMoveDown: () => {
+                      attachMenuFirstItemRef.current?.focus();
+                      return true;
+                    },
+                  }
+                : {}),
+              onOKButton: (evt: { stopPropagation: () => void }) => {
+                evt.stopPropagation();
+                toggleAttachMenu();
+              },
+            } as Record<string, unknown>)}
+            onClick={toggleAttachMenu}
+            disabled={isAsking}
+            aria-expanded={attachMenuOpen}
+            aria-haspopup="menu"
+            aria-label="Attach screenshot to Ask"
+            style={{
+              minWidth: 20,
+              width: 20,
+              minHeight: 20,
+              padding: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 0,
+              border: "none",
+              background: "transparent",
+              color: "#dbe6f3",
+              flexShrink: 0,
+              opacity: mediaLibraryEnabled ? 1 : 0.45,
+            }}
+          >
+            <span
+              style={{
+                position: "relative",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <span className="bonsai-askbar-corner-icon">
+                <AttachMediaIcon size={15} />
+              </span>
+              {selectedAttachment && (
+                <span
+                  style={{
+                    position: "absolute",
+                    right: -8,
+                    top: -8,
+                    minWidth: 14,
+                    height: 14,
+                    borderRadius: 999,
+                    background: "#dfeaf6",
+                    color: "#1d2a38",
+                    fontSize: textPx(9),
+                    lineHeight: "14px",
+                    fontWeight: 700,
+                    textAlign: "center",
+                  }}
+                >
+                  1
+                </span>
+              )}
+            </span>
+          </Button>
+          {/* The game tag (plan 84): what the "Context: …" line under the ask area used to say. A label, not a stop. */}
+          <AskStripGameTag context={ollamaContext} />
+          {/*
+            Up from the mode button, the mic or Stop, the X and Ask: back to the box by Steam's transfer,
+            the mirror of the box's Down. On this group, not the buttons: a Decky Button does not forward Up.
+            While a menu is open Up is left to Steam, as Down from the strip used to be.
+          */}
+          <Focusable
+            className="bonsai-unified-input-actions-right"
+            flow-children="horizontal"
+            {...({
+              onMoveUp: () => !askModeMenuOpen && !attachMenuOpen && focusUnifiedTextField(),
+            } as Record<string, unknown>)}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "nowrap",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              gap: 5,
+              flexShrink: 0,
+              margin: 0,
+              padding: 0,
+            }}
+          >
+            <div ref={askModeMenuAnchorRef} style={{ display: "inline-flex", flexShrink: 0, position: "relative" }}>
+            <Button
+              className="bonsai-askbar-target bonsai-ask-mode-trigger"
+              {...({
+                /* The paperclip rests during an answer but would still take the ring (measured on the Deck
+                   2026-10-14): decided by our own state, so the mode button is the strip's left end then. */
+                onMoveLeft: () => (isAsking ? true : focusAttachPaperclip()),
+                onMoveRight: () => focusMicOrStop(),
+                ...(askModeMenuOpen
+                  ? {
+                      onMoveDown: () => {
+                        askModeMenuFirstItemRef.current?.focus();
+                        return true;
+                      },
+                    }
+                  : {}),
+                onOKButton: (evt: { stopPropagation: () => void }) => {
+                  evt.stopPropagation();
+                  toggleAskModeMenu();
+                },
+              } as Record<string, unknown>)}
+              onClick={toggleAskModeMenu}
+              aria-expanded={askModeMenuOpen}
+              aria-haspopup="menu"
+              aria-label={`Inference mode: ${ASK_MODE_LABELS[askMode]}. Open to change.`}
+              style={{
+                minHeight: 20,
+                height: 20,
+                padding: "0 5px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+                fontSize: textPx(10),
+                fontWeight: 600,
+                fontVariant: "small-caps",
+                letterSpacing: 0.15,
+                lineHeight: 1,
+                maxWidth: 76,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                boxSizing: "border-box",
+              }}
+            >
+              {ASK_MODE_LABELS[askMode]}
+            </Button>
+            </div>
+            {isAsking ? (
+              <Button
+                className="bonsai-askbar-target bonsai-unified-input-corner-right"
+                {...({
+                  onMoveLeft: () => focusAskModeButton(),
+                  onMoveRight: rightFromMicOrStop,
+                  onOKButton: (evt: { stopPropagation: () => void }) => {
+                    evt.stopPropagation();
+                    handleStopPress();
+                  },
+                } as Record<string, unknown>)}
+                onClick={handleStopPress}
+                aria-label="Stop generation"
+                style={{
+                  minWidth: 20,
+                  width: 20,
+                  minHeight: 20,
+                  padding: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 0,
+                  border: "none",
+                  background: "transparent",
+                  flexShrink: 0,
+                }}
+              >
+                <span className="bonsai-unified-input-icon">
+                  <AskStopIcon size={20} />
+                </span>
+              </Button>
+            ) : (
+              <Button
+                className={
+                  "bonsai-askbar-target bonsai-unified-input-corner-right" +
+                  (voiceStarting
+                    ? " bonsai-voice-starting"
+                    : voiceFinishing
+                      ? " bonsai-voice-finishing"
+                      : voiceRecording
+                        ? " bonsai-voice-recording-active"
+                        : "")
+                }
+                {...({
+                  onMoveLeft: () => focusAskModeButton(),
+                  onMoveRight: rightFromMicOrStop,
+                  onOKButton: (evt: { stopPropagation: () => void }) => {
+                    evt.stopPropagation();
+                    onMicInput();
+                  },
+                } as Record<string, unknown>)}
+                onClick={onMicInput}
+                aria-label={
+                  voiceStarting
+                    ? "Starting voice input"
+                    : voiceFinishing
+                      ? "Finishing voice input"
+                      : voiceRecording
+                        ? "Stop voice input"
+                        : "Voice input"
+                }
+                style={{
+                  minWidth: 20,
+                  width: 20,
+                  minHeight: 20,
+                  padding: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 0,
+                  border: "none",
+                  background: "transparent",
+                  // Amber while the voice server is still starting or Stop is still reading the recording, red while
+                  // recording, plain at rest.
+                  color: voiceStarting || voiceFinishing ? "#fbbf24" : voiceRecording ? "#f87171" : "#dbe6f3",
+                  flexShrink: 0,
+                }}
+              >
+                <span className="bonsai-unified-input-icon">
+                  {voiceStarting || voiceFinishing || voiceRecording ? <AskStopIcon size={16} /> : <AskMicIcon size={16} />}
+                </span>
+              </Button>
+            )}
+            {/* The X (only with words) and the small Ask at the strip's right end (plan 84). */}
+            <AskStripSendButtons
+              isAsking={isAsking}
+              askLooksReady={askLooksReady}
+              showClear={showSearchClearButton}
+              onAskPress={handleAskPress}
+              onClearPress={onClearPress}
+              askRef={askBarHostRef}
+              clearRef={clearButtonRef}
+              focusMicOrStop={focusMicOrStop}
+              focusAskPrimary={focusAskPrimary}
+            />
+          </Focusable>
+        </Focusable>
+      </div>
+      <MainTabAskModeMenuPopover
+        open={askModeMenuOpen}
+        anchorRef={askModeMenuAnchorRef}
+        hostRef={unifiedInputHostRef as React.RefObject<HTMLElement | null>}
+        firstMenuItemRef={askModeMenuFirstItemRef}
+        selectedId={askMode}
+        onSelect={onAskModeChange}
+        onRequestClose={closeAskModeMenu}
+        onFocusModeChip={focusAskModeButton}
+      />
+      <MainTabAttachMenuPopover
+        open={attachMenuOpen}
+        anchorRef={attachMenuAnchorRef}
+        hostRef={unifiedInputHostRef as React.RefObject<HTMLElement | null>}
+        firstMenuItemRef={attachMenuFirstItemRef}
+        onSelect={onAttachMenuSelect}
+        onRequestClose={closeAttachMenu}
+        onFocusPaperclip={focusAttachPaperclip}
+        takeScreenshotDisabled={isAsking || isCapturingScreenshot || !mediaLibraryEnabled}
+        browseDisabled={isAsking || !mediaLibraryEnabled}
+      />
+    </div>
+  </div>
+</PanelSectionRow>
+</div>
+{(isCapturingScreenshot || mediaError) && (
+  <PanelSectionRow>
+    {isCapturingScreenshot ? (
+      <div
+        className="bonsai-full-bleed-row"
+        role="status"
+        aria-live="polite"
+        style={{
+          ...fullBleedRowStyle,
+          fontSize: textPx(11),
+          lineHeight: 1.4,
+          color: "#9cb0c6",
+        }}
+      >
+        Closing this menu and capturing a game screenshot…
+      </div>
+    ) : mediaError && onNavigateToPermissions ? (
+      <div className="bonsai-full-bleed-row" style={fullBleedRowStyle}>
+        <PermissionDenyAction
+          capability={screenshotMediaErrorCapability(mediaError)}
+          message={mediaError}
+          onJump={onNavigateToPermissions}
+          compact
+        />
+      </div>
+    ) : (
+      <div
+        className="bonsai-full-bleed-row"
+        role="status"
+        aria-live="polite"
+        style={{
+          ...fullBleedRowStyle,
+          fontSize: textPx(11),
+          lineHeight: 1.4,
+          color: "#f09a8d",
+        }}
+      >
+        {mediaError}
+      </div>
+    )}
+  </PanelSectionRow>
+)}
+{selectedAttachment && (
+  <PanelSectionRow>
+    <div
+      className="bonsai-full-bleed-row"
+      onKeyDownCapture={(ev: React.KeyboardEvent<HTMLDivElement>) => {
+        const activeEl = uiActiveElement();
+        const previewActive = Boolean(activeEl?.closest(".bonsai-attachment-preview-target"));
+        const removeActive = Boolean(activeEl?.closest(".bonsai-attachment-remove-target"));
+        if (isRightNavigationEvent(ev) && previewActive) {
+          const removeTarget = getFocusableWithin(".bonsai-attachment-remove-target");
+          if (removeTarget) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            removeTarget.focus();
+          }
+          return;
+        }
+        if (isLeftNavigationEvent(ev) && removeActive) {
+          const previewTarget = getFocusableWithin(".bonsai-attachment-preview-target");
+          if (previewTarget) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            previewTarget.focus();
+          }
+          return;
+        }
+      }}
+      style={{ ...fullBleedRowStyle, display: "flex", flexDirection: "column", gap: 6 }}
+    >
+      <Focusable
+        flow-children="horizontal"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          minHeight: 38,
+          borderRadius: 8,
+          border: "1px solid rgba(150, 187, 223, 0.62)",
+          background: "linear-gradient(180deg, rgba(64, 93, 124, 0.42) 0%, rgba(48, 71, 95, 0.42) 100%)",
+          color: "#e3edf7",
+          padding: "5px 8px",
+        }}
+      >
+        <Button
+          className="bonsai-attachment-preview-target"
+          aria-label={`Attached screenshot ${selectedAttachment.name}`}
+          onClick={onOpenScreenshotBrowser}
+          style={{
+            flex: 1,
+            minWidth: 0,
+            minHeight: 30,
+            padding: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            gap: 8,
+            border: "none",
+            background: "transparent",
+            color: "#e3edf7",
+            boxShadow: "none",
+          }}
+        >
+          <ImageAttachmentIcon size={17} />
+          <img
+            src={selectedAttachment.preview_data_uri || toFileUri(selectedAttachment.path)}
+            alt={selectedAttachment.name}
+            style={{
+              width: 58,
+              height: 34,
+              borderRadius: 4,
+              objectFit: "cover",
+              background: "rgba(255,255,255,0.06)",
+              flexShrink: 0,
+            }}
+          />
+          <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+            <span
+              style={{
+                display: "block",
+                fontSize: textPx(11),
+                color: "#dbe7f3",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {selectedAttachment.name}
+            </span>
+            <span style={{ display: "block", fontSize: textPx(8), color: "#cfdeed", fontWeight: 600, marginTop: 2 }}>
+              {formatBytes(selectedAttachment.size_bytes ?? 0)}
+            </span>
+          </div>
+        </Button>
+        <Button
+          className="bonsai-attachment-remove-target"
+          onClick={() => setSelectedAttachment(null)}
+          aria-label="Remove attachment"
+          style={{
+            minWidth: 36,
+            width: 36,
+            minHeight: 34,
+            padding: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: "none",
+            background: "transparent",
+            color: "#dce8f4",
+            boxShadow: "none",
+            outline: "none",
+          }}
+        >
+          <ClearIcon size={18} />
+        </Button>
+      </Focusable>
+    </div>
+  </PanelSectionRow>
+)}
+    </>
+  );
+}

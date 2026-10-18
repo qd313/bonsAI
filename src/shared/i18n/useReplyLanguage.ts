@@ -20,7 +20,7 @@
  * what the back end has already decided, for the screen's own text.
  */
 import { useCallback, useEffect, useState } from "react";
-import { callDeckyWithTimeout } from "../../utils/deckyCall";
+import { callDeckyWithTimeout } from "../deckyCall";
 import {
   REPLY_LANGUAGE_FOLLOW_SYSTEM,
   type ReplyLanguageId,

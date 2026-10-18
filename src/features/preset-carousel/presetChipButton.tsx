@@ -7,7 +7,7 @@
  * it, the [beta] tag, and the click handler that fills the Ask box.
  *
  * Used for: MainTabPresetAnimatedChipsInner and MainTabPresetSidewaysCarousel, both in
- * src/components/MainTabPresetAnimatedChips.tsx.
+ * src/features/preset-carousel/MainTabPresetAnimatedChips.tsx.
  *
  * Solves: One badge-drawing function (PresetChipLeadingBadges) shared by every label so the "is
  * this chip pinned/note-sourced" check and "does its badge draw" check cannot drift apart again —
@@ -19,8 +19,8 @@
  */
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { Button } from "@decky/ui";
-import type { AskModeId } from "../../data/askMode";
-import type { PresetPrompt } from "../../data/presets";
+import type { AskModeId } from "../ask/bar/askMode";
+import type { PresetPrompt } from "./presets";
 import {
   PRESET_CHIP_HEIGHT_PX,
   PRESET_MARQUEE_FADE_LENGTH,
@@ -28,7 +28,7 @@ import {
 } from "./presetRowLayout";
 import type { ChipScrollListener } from "./presetChipStay";
 import type { SlotFade } from "./presetChipShared";
-import { joinPresetWithRunningGame } from "../../utils/joinPresetWithRunningGame";
+import { joinPresetWithRunningGame } from "./joinPresetWithRunningGame";
 import { textPx } from "../../styles/textPx";
 
 type ScrollPhase = "waiting" | "scrolling" | "end";

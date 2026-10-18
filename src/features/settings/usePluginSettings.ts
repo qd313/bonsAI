@@ -96,14 +96,14 @@
  *   behavioral test that also guards this at runtime.
  */
 import { useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react";
-import { callDeckyWithTimeout } from "../../utils/deckyCall";
-import { getUiDocument } from "../../utils/uiDocument";
+import { callDeckyWithTimeout } from "../../shared/deckyCall";
+import { getUiDocument } from "../../shared/dpad/uiDocument";
 import {
   acknowledgePluginDataClearHandled,
   getPluginDataClearedGeneration,
   shouldIgnoreRestoredSettingsSnapshot,
   takeRestoredSettingsSnapshot,
-} from "../../utils/bonsaiSessionSurvival";
+} from "../plugin-shell/bonsaiSessionSurvival";
 import { type BonsaiSettings, type BonsaiSettingsSnapshotInput } from "./bonsaiSettingsSchema";
 import { normalizeSettings } from "./bonsaiSettingsNormalizers";
 import { diffBonsaiSettingsPayload, toBonsaiSettingsPayload } from "./settingsPayload";

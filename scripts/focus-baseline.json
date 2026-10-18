@@ -2,20 +2,20 @@
   "note": "Known focus-pattern violations, per file per rule. The check fails only when a count goes UP. Regenerate with: node scripts/check-focus-patterns.mjs --update",
   "total": 79,
   "counts": {
-    "src/components/AskStripSendButtons.tsx": {
+    "src/features/ask/bar/AskStripSendButtons.tsx": {
       "move-props-on-button": 2
     },
     "src/features/characters/CharacterPickerModal.tsx": {
       "page-search": 2,
       "move-props-on-button": 2
     },
-    "src/components/MainTabAskModeMenuPopover.tsx": {
+    "src/features/ask/bar/MainTabAskModeMenuPopover.tsx": {
       "move-props-on-button": 1
     },
-    "src/components/MainTabAttachMenuPopover.tsx": {
+    "src/features/ask/bar/MainTabAttachMenuPopover.tsx": {
       "move-props-on-button": 1
     },
-    "src/components/MainTabUnifiedAskBar.tsx": {
+    "src/features/ask/bar/MainTabUnifiedAskBar.tsx": {
       "move-props-on-button": 4,
       "ring-question": 1
     },
@@ -35,7 +35,7 @@
     "src/features/models/pull-box/PullModelsTryOrder.tsx": {
       "move-props-on-button": 1
     },
-    "src/components/SessionContextStrip.tsx": {
+    "src/features/answer/details/SessionContextStrip.tsx": {
       "page-search": 1
     },
     "src/features/ai-connection/SettingsTabConnectionTimeoutSlider.tsx": {
@@ -44,64 +44,64 @@
     "src/shared/dpad/modalReturnFocusRegistry.ts": {
       "page-search": 2
     },
-    "src/hooks/useDockClearanceOnFocus.ts": {
+    "src/shared/dpad/useDockClearanceOnFocus.ts": {
       "page-search": 1
     },
-    "src/hooks/useMainTabAskBarFocus.ts": {
+    "src/features/ask/bar/useMainTabAskBarFocus.ts": {
       "page-search": 8
     },
-    "src/utils/answerBubbleElRegistry.ts": {
+    "src/shared/dpad/answerBubbleElRegistry.ts": {
       "page-search": 1
     },
-    "src/utils/answerBubbleNavigation.ts": {
+    "src/features/answer/bubble/answerBubbleNavigation.ts": {
       "page-search": 7,
       "tabindex-removal": 1
     },
-    "src/utils/answerStopRegistry.ts": {
+    "src/shared/dpad/answerStopRegistry.ts": {
       "tabindex-removal": 1
     },
     "src/shared/dpad/glossaryTermRegistry.ts": {
       "tabindex-removal": 1
     },
-    "src/utils/focusNavigation.ts": {
+    "src/shared/dpad/focusNavigation.ts": {
       "page-search": 3
     },
-    "src/utils/focusPerTurnRow.ts": {
+    "src/shared/dpad/focusPerTurnRow.ts": {
       "page-search": 1,
       "tabindex-removal": 1
     },
-    "src/utils/liveTurnFocusGraph.ts": {
+    "src/shared/dpad/liveTurnFocusGraph.ts": {
       "page-search": 22,
       "tabindex-removal": 1
     },
-    "src/utils/replyStopRegistry.ts": {
+    "src/shared/dpad/replyStopRegistry.ts": {
       "page-search": 3,
       "tabindex-removal": 1
     },
     "src/shared/dpad/settingsPanelScroll.ts": {
       "page-search": 2
     },
-    "src/utils/spoilerFenceRegistry.ts": {
+    "src/shared/dpad/spoilerFenceRegistry.ts": {
       "tabindex-removal": 1
     },
-    "src/utils/uiDocument.ts": {
+    "src/shared/dpad/uiDocument.ts": {
       "page-search": 1
     }
   },
   "reasons": {
-    "src/components/AskStripSendButtons.tsx": {
+    "src/features/ask/bar/AskStripSendButtons.tsx": {
       "move-props-on-button": "Found by the spread check added in plan 93 lane B10 (2026-10-14); the owner of this file decides: remove the dead handler or move it onto a Focusable."
     },
     "src/features/characters/CharacterPickerModal.tsx": {
       "move-props-on-button": "Found by the spread check added in plan 93 lane B10 (2026-10-14); the owner of this file decides: remove the dead handler or move it onto a Focusable."
     },
-    "src/components/MainTabAskModeMenuPopover.tsx": {
+    "src/features/ask/bar/MainTabAskModeMenuPopover.tsx": {
       "move-props-on-button": "Found by the spread check added in plan 93 lane B10 (2026-10-14); the owner of this file decides: remove the dead handler or move it onto a Focusable."
     },
-    "src/components/MainTabAttachMenuPopover.tsx": {
+    "src/features/ask/bar/MainTabAttachMenuPopover.tsx": {
       "move-props-on-button": "Found by the spread check added in plan 93 lane B10 (2026-10-14); the owner of this file decides: remove the dead handler or move it onto a Focusable."
     },
-    "src/components/MainTabUnifiedAskBar.tsx": {
+    "src/features/ask/bar/MainTabUnifiedAskBar.tsx": {
       "move-props-on-button": "Found by the spread check added in plan 93 lane B10 (2026-10-14); the owner of this file decides: remove the dead handler or move it onto a Focusable."
     },
     "src/features/models/OllamaModelsHubModal.tsx": {

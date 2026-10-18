@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 
-import { setFrozenTestChips, type PresetPrompt } from "../../data/presets";
+import { setFrozenTestChips, type PresetPrompt } from "./presets";
 import { nextSlotPreset, startSlotRotation } from "./presetSlotRotation";
 
 const p = (text: string): PresetPrompt => ({ text, category: "test" });

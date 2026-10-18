@@ -29,7 +29,7 @@ import {
   ASK_LABEL_READY_COLOR,
   ASK_READY_STATE_TRANSITION_MS,
   UNIFIED_INPUT_CORNER_RING_ROOM_PX,
-} from "../../features/unified-input/constants";
+} from "../../shared/constants";
 import { textPx } from "../textPx";
 
 /**

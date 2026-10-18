@@ -4,11 +4,11 @@
   "extracted_sub_hooks": [
     {
       "name": "useSuggestedPromptChips",
-      "file": "src/hooks/useSuggestedPromptChips.ts"
+      "file": "src/features/preset-carousel/useSuggestedPromptChips.ts"
     },
     {
       "name": "useReplyFeedbackChips",
-      "file": "src/hooks/useReplyFeedbackChips.ts"
+      "file": "src/features/answer/reply-actions/useReplyFeedbackChips.ts"
     },
     {
       "name": "useOllamaGameContextSync",
@@ -16,19 +16,19 @@
     },
     {
       "name": "useInputTransparencyRefresh",
-      "file": "src/hooks/useInputTransparencyRefresh.ts"
+      "file": "src/features/answer/details/useInputTransparencyRefresh.ts"
     },
     {
       "name": "useAskMountRestore",
-      "file": "src/hooks/useAskMountRestore.ts"
+      "file": "src/features/ask/flow/useAskMountRestore.ts"
     },
     {
       "name": "useStrategyBranchActions",
-      "file": "src/hooks/useStrategyBranchActions.ts"
+      "file": "src/features/strategy/useStrategyBranchActions.ts"
     },
     {
       "name": "useAskSessionSnapshotActions",
-      "file": "src/hooks/useAskSessionSnapshotActions.ts"
+      "file": "src/features/ask/flow/useAskSessionSnapshotActions.ts"
     }
   ],
   "count": 82,

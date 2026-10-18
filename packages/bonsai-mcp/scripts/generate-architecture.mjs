@@ -91,7 +91,7 @@ function walkDir(dir, base = dir, exts = [".ts", ".tsx", ".py"]) {
 
 const MODULE_ROLES = {
   "src/index.tsx": "Plugin root: tabs, scoped CSS, RPC wiring, Settings",
-  "src/components/MainTab.tsx": "Unified ask/search surface, chunks, suggestion UI",
+  "src/features/main-tab/MainTab.tsx": "Unified ask/search surface, chunks, suggestion UI",
   "main.py": "Decky RPC entrypoints and orchestration",
   "refactor_helpers.py": "Model selection, TDP parse helpers, URLs",
   "py_modules/backend/ask/ollama_service.py": "Prompt build, Ollama HTTP, streaming",

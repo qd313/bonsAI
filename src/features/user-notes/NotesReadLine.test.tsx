@@ -30,10 +30,10 @@ import { NotesReadLine, buildNotesReadLine, notesLineLabel, notesReadFromSnapsho
 import { UserNotesSheet } from "./UserNotesSheet";
 import { getUserNotesState, resetUserNotesStore, setNotesModalHooks } from "./userNotesStore";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
-import { useAskBarInitialRingClaim } from "../../hooks/useAskBarInitialRingClaim";
-import { registerNavFocus, resetNavFocusRegistry } from "../../utils/navFocusRegistry";
-import { REPLY_STOP_ORDER, registerReplyStop } from "../../utils/replyStopRegistry";
-import type { ChatSlotTurnTransparency } from "../../utils/inputTransparency";
+import { useAskBarInitialRingClaim } from "../ask/bar/useAskBarInitialRingClaim";
+import { registerNavFocus, resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
+import { REPLY_STOP_ORDER, registerReplyStop } from "../../shared/dpad/replyStopRegistry";
+import type { ChatSlotTurnTransparency } from "../../types/inputTransparency";
 
 const snap = (attached: number, off: number): ChatSlotTurnTransparency =>
   ({

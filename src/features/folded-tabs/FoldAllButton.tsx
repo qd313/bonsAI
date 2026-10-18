@@ -28,7 +28,7 @@
 import React, { useEffect, useRef, useSyncExternalStore } from "react";
 import { Button, Focusable } from "@decky/ui";
 
-import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
+import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../../shared/dpad/navFocusRegistry";
 import { FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN } from "../../styles/settingsGlassButton";
 import { textPx } from "../../styles/textPx";
 import { FOLD_ALL_HEIGHT_PX } from "./foldedTabs";

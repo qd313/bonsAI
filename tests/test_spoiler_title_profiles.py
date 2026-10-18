@@ -78,7 +78,7 @@ class SpoilerTitleProfilesTests(unittest.TestCase):
             missing,
             [],
             "corpus titles with no spoiler profile — add them to spoiler_title_profiles.py, "
-            "its src/data/spoilerTitleProfiles.ts mirror, and "
+            "its src/features/spoilers/spoilerTitleProfiles.ts mirror, and "
             "tests/contracts/spoiler-title-profiles.json: " + ", ".join(missing),
         )
 

@@ -75,7 +75,7 @@
  *    in this file: one of their arms is the same length, and in a tie the
  *    later rule wins.
  */
-import { BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX, DOCK_ROW_GAP_PX, PRESET_CHIP_SHADOW_ROOM_PX } from "../../features/unified-input/constants";
+import { BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX, DOCK_ROW_GAP_PX, PRESET_CHIP_SHADOW_ROOM_PX } from "../../shared/constants";
 import {
   PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
   PRESET_CHIP_GAP_PX,

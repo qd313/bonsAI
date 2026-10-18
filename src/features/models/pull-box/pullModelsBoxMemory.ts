@@ -21,7 +21,7 @@
  */
 import { useCallback, useState } from "react";
 import type { PullModelModeFilterId } from "../pullModelCatalog";
-import { refocusPanelWindowIfLost, type NavRefHolder } from "../../../utils/navFocusRegistry";
+import { refocusPanelWindowIfLost, type NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
 
 /** The Good for and Show picks: everything the column filters by except the licence. */
 export type PullModelsSessionFilters = {

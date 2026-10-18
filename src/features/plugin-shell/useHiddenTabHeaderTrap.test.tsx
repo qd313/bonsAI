@@ -19,8 +19,8 @@ import { JSDOM } from "jsdom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { isElementLike, useHiddenTabHeaderTrap } from "./useHiddenTabHeaderTrap";
-import { registerNavFocus, resetNavFocusRegistry } from "../../utils/navFocusRegistry";
-import { rememberUiDocument, resetUiDocument } from "../../utils/uiDocument";
+import { registerNavFocus, resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
+import { rememberUiDocument, resetUiDocument } from "../../shared/dpad/uiDocument";
 
 function Host() {
   useHiddenTabHeaderTrap();

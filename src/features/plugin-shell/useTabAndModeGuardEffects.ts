@@ -18,7 +18,7 @@ import { useEffect } from "react";
 import { toaster } from "@decky/api";
 
 import type { useBonsaiPluginShell } from "./useBonsaiPluginShell";
-import type { useBonsaiAskOrchestration } from "../../hooks/useBonsaiAskOrchestration";
+import type { useBonsaiAskOrchestration } from "../ask/flow/useBonsaiAskOrchestration";
 
 type PluginShell = ReturnType<typeof useBonsaiPluginShell>;
 type AskOrchestration = ReturnType<typeof useBonsaiAskOrchestration>;

@@ -18,7 +18,7 @@
  * types — that search logic lives in `intentPackSearch`.
  */
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { callDeckyWithTimeout } from "../../utils/deckyCall";
+import { callDeckyWithTimeout } from "../../shared/deckyCall";
 import {
   buildIntentPackSearchIndex,
   type IntentPack,

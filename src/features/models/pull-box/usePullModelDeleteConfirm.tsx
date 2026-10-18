@@ -29,7 +29,7 @@ import { showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
 import { CancelFirstConfirmModal } from "../../../shared/CancelFirstConfirmModal";
 import { formatSizeGb } from "../pullModelCatalog";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../../utils/deckyCall";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../../shared/deckyCall";
 import { clearRemoveReturn, rememberRemoveReturn, restoreRemoveReturn } from "./pullModelsRemoveReturn";
 import { loadSavedIp } from "../../plugin-shell/pluginStorage";
 import { textPx } from "../../../styles/textPx";

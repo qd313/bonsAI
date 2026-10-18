@@ -16,7 +16,7 @@ import {
   nextFrozenPresetAfter,
   type PresetPrompt,
   type PresetSamplerOptions,
-} from "../../data/presets";
+} from "./presets";
 import {
   getSessionRagCarouselCandidates,
   pickNextChipWithSessionRag,

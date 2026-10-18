@@ -18,8 +18,8 @@
  * or offer the second, bigger Gemma 4 model: that one is only reachable through Browse models now.
  */
 import { toaster } from "@decky/api";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../utils/deckyCall";
-import { STARTER_NOTE_SEARCH_TAG, STARTER_SPEECH_MODELS, TIER1_ESSENTIALS_TAG } from "../../data/deckEssentialsTags";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../shared/deckyCall";
+import { STARTER_NOTE_SEARCH_TAG, STARTER_SPEECH_MODELS, TIER1_ESSENTIALS_TAG } from "./deckEssentialsTags";
 import { confirmDownload, DOWNLOADS_OFF_FAILED_LINE, type DownloadNotice } from "../downloads/downloadNotice";
 import { modelPullNotice, SPEECH_MODELS_NOTICE } from "../downloads/downloadSites";
 import type { LocalOllamaSetupStatus } from "../ai-connection/OllamaWhereAiRunsSection.types";

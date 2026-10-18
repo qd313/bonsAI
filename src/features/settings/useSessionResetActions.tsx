@@ -23,22 +23,22 @@
 import { useCallback } from "react";
 import { call, toaster } from "@decky/api";
 
-import { callDeckyWithTimeout, formatDeckyRpcError } from "../../utils/deckyCall";
+import { callDeckyWithTimeout, formatDeckyRpcError } from "../../shared/deckyCall";
 import {
   acknowledgePluginDataClearHandled,
   clearBonsaiSessionSurvival,
   markPluginDataCleared,
-} from "../../utils/bonsaiSessionSurvival";
+} from "../plugin-shell/bonsaiSessionSurvival";
 import { clearBonsaiBrowserStorage } from "./clearBonsaiBrowserStorage";
 import { clearOllamaTabLocalSurvival } from "../ai-connection/ollamaTabLocalSurvival";
 import { clearSettingsTabLocalSurvival } from "./settingsTabLocalSurvival";
 import { IP_DEFAULT } from "../../shared/storageKeys";
 import { persistSearchQuery } from "../plugin-shell/pluginStorage";
-import type { useBonsaiAskOrchestration } from "../../hooks/useBonsaiAskOrchestration";
-import type { useChatSlots } from "../../hooks/useChatSlots";
+import type { useBonsaiAskOrchestration } from "../ask/flow/useBonsaiAskOrchestration";
+import type { useChatSlots } from "../chats/slots/useChatSlots";
 import type { useIntentPacks } from "../search-tab/useIntentPacks";
 import type { useReplyLanguage } from "../../shared/i18n/useReplyLanguage";
-import type { useScreenshotBrowser } from "../../hooks/useScreenshotBrowser";
+import type { useScreenshotBrowser } from "../media/useScreenshotBrowser";
 import type { useDisclaimerAndLocalRuntimeGates } from "../plugin-shell/useDisclaimerAndLocalRuntimeGates";
 import type { usePluginSettings } from "./usePluginSettings";
 import type { OllamaConnectionState } from "../ai-connection/useOllamaConnectionState";

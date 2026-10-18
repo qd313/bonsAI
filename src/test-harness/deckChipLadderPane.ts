@@ -20,7 +20,7 @@
  * the Deck drew the toggle: 28 px tall, its bottom 8.5 px above the ladder's top (plan87-P87-F3-CHIPS-GRID.json:
  * the toggle at 168 to 196 with the grid's top row at 225.3), and Steam glides it like a chip.
  */
-import { liftForFocus } from "../hooks/useDockClearanceOnFocus";
+import { liftForFocus } from "../shared/dpad/useDockClearanceOnFocus";
 import { steamGlide, steamScrollIntoView, type SteamScrollRule } from "./deckAnswerWalk";
 
 /** The caption ("Chip N of M", 14.8 tall) and its 6 px margin above the grid. */

@@ -45,8 +45,8 @@ import { KnowledgeBaseSection } from "../knowledge-library/KnowledgeBaseSection"
 import { SettingsTabConnectionTimeoutSlider } from "./SettingsTabConnectionTimeoutSlider";
 import { SettingsTabOllamaKeepAliveSlider } from "./SettingsTabOllamaKeepAliveSlider";
 import { OllamaReplyVerbositySlider } from "./OllamaReplyVerbositySlider";
-import type { ReplyVerbosityId } from "../../data/replyVerbosity";
-import { ASK_THINK_EFFORT_DESCRIPTIONS, type AskThinkEffortId } from "../../data/askThinkEffort";
+import type { ReplyVerbosityId } from "../settings/replyVerbosity";
+import { ASK_THINK_EFFORT_DESCRIPTIONS, type AskThinkEffortId } from "../settings/askThinkEffort";
 import { OllamaThinkingEffortRow } from "./OllamaThinkingEffortRow";
 import type { NamedOllamaHost } from "../settings/bonsaiSettingsSchema";
 import { FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN } from "../../styles/settingsGlassButton";
@@ -55,7 +55,7 @@ import {
   rememberModalReturnFocus,
 } from "../../shared/dpad/modalReturnFocusRegistry";
 import { useOllamaTabFocus } from "./useOllamaTabFocus";
-import { useThinkingNoticeGate } from "../../hooks/useThinkingNoticeGate";
+import { useThinkingNoticeGate } from "./useThinkingNoticeGate";
 import { textPx } from "../../styles/textPx";
 import { chainIds, FoldedColumn, FoldedSection, foldLineBelow, takeFoldLine } from "../folded-tabs/FoldedSection";
 import { FoldAllButton } from "../folded-tabs/FoldAllButton";

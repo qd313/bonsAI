@@ -32,14 +32,14 @@ vi.mock("@decky/ui", async () => {
   };
 });
 vi.mock("@decky/api", () => ({ toaster: { toast: (t: unknown) => hoisted.toasts.push(t) } }));
-vi.mock("../../utils/deckyCall", () => ({
+vi.mock("../../shared/deckyCall", () => ({
   DECKY_RPC_TIMEOUT_MS: 1000,
   callDeckyWithTimeout: async (method: string, args: unknown[]) => {
     hoisted.calls.push({ method, args });
     return {};
   },
 }));
-vi.mock("../../utils/bonsaiSessionSurvival", () => ({
+vi.mock("../plugin-shell/bonsaiSessionSurvival", () => ({
   patchPendingSessionSettingsSnapshot: (p: unknown) => hoisted.patches.push(p),
 }));
 

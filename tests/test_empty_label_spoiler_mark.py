@@ -1,6 +1,6 @@
 """A hidden-block mark written as the label between two sets of backticks, nothing between them
 ("```bonsai-spoiler```"), used as both the opening and the closing mark -- plan 78, found on the
-Deck. The screen side is in src/utils/emptyLabelSpoilerMark.test.tsx; this is the back end: the
+Deck. The screen side is in src/features/spoilers/emptyLabelSpoilerMark.test.tsx; this is the back end: the
 chat's memory and its summary, and the live coverer that fences named spoilers."""
 
 import unittest

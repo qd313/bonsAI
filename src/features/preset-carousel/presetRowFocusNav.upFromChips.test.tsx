@@ -15,7 +15,7 @@ import { renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { usePresetRowNav } from "./presetRowFocusNav";
-import * as navFocusRegistry from "../../utils/navFocusRegistry";
+import * as navFocusRegistry from "../../shared/dpad/navFocusRegistry";
 
 vi.mock("@decky/ui", async () => import("../../test-harness/fakeDeckyUi"));
 

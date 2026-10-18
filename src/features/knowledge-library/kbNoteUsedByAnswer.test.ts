@@ -14,7 +14,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { findSrcFile } from "../../test-harness/repoPaths";
 import { countedWords, kbNotesUsedByAnswer } from "./kbNoteUsedByAnswer";
-import type { KbAttachedNote } from "../../utils/inputTransparency";
+import type { KbAttachedNote } from "../../types/inputTransparency";
 
 type Case = { source: string; why: string; question: string; answer: string; notes: Partial<KbAttachedNote>[] };
 

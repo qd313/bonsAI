@@ -28,7 +28,7 @@ import { TabBodyFocusRoot, tabBodyNavFocusId } from "../plugin-shell/TabBodyFocu
 import { SearchTab } from "./SearchTab";
 import { resetSearchSaved } from "./searchTabStore";
 import { CHATS, GAME_NOTES, NOTES, pressOn, ringStop } from "./searchTabTestKit";
-import { registerNavFocus, resetNavFocusRegistry, takeNavFocus } from "../../utils/navFocusRegistry";
+import { registerNavFocus, resetNavFocusRegistry, takeNavFocus } from "../../shared/dpad/navFocusRegistry";
 import { MONITOR_PANE_PX, OWN_SCREEN_PANE_PX } from "../../test-harness/tabBodyWalk";
 import { putSteamRingOn, type SteamEl } from "../../test-harness/steamRing";
 

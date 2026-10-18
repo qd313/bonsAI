@@ -38,7 +38,7 @@
  * 5. The footer lines the back end adds under an answer ("No close match in my notes, ...") are
  *    cut off before counting, so their own words cannot match a note.
  */
-import type { KbAttachedNote } from "../../utils/inputTransparency";
+import type { KbAttachedNote } from "../../types/inputTransparency";
 
 const EVERYDAY_WORDS = `a about above after again against all almost also although always among an and another
 any anyone anything are around as at away back be because been before being below best better

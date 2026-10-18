@@ -25,7 +25,7 @@
  */
 import { useSyncExternalStore } from "react";
 
-import { callDeckyWithTimeout } from "../../utils/deckyCall";
+import { callDeckyWithTimeout } from "../../shared/deckyCall";
 import { addKbLibraryListener } from "../knowledge-library/kbLibrarySignal";
 
 export type DrgGlossaryTerm = {

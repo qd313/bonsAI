@@ -4,7 +4,7 @@ Purpose: A small model sometimes writes "```bonsai-spoiler```" (the label betwee
 backticks) as both the opening and the closing mark of a hidden block. Read as ordinary fences that
 is an empty block, twice, and the sentence between the two stays in plain view. This turns each such
 mark into what it stands for: outside a hidden block it opens one, inside it closes it, each on its
-own line. The screen does the same in src/utils/expandOneLineSpoilerFences.ts (plan 78).
+own line. The screen does the same in src/features/spoilers/expandOneLineSpoilerFences.ts (plan 78).
 Used for: strategy_spoiler_policy.move_midline_fence_openers_to_line_start (the live and finished
 spoiler coverers) and chat_memory_service.strip_fenced_blocks (the chat's memory and its summary).
 Solves: The Deck (Speed mode, Hades) saved a reply whose marks were written this way; the page drew

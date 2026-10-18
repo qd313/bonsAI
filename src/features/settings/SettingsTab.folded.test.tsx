@@ -35,7 +35,7 @@ import {
   settingsSectionIds,
 } from "./settingsTabFolds";
 import { peekModalReturnFocus, resetModalReturnFocusRegistry } from "../../shared/dpad/modalReturnFocusRegistry";
-import { resetNavFocusRegistry } from "../../utils/navFocusRegistry";
+import { resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
 
 const props = (o: Partial<SettingsTabProps> = {}): SettingsTabProps => ({ ...settingsProps(), ...o });

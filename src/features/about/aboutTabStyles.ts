@@ -18,7 +18,7 @@
  *
  * Does not: Draw the D-pad ring (the shared ring classes do, scopeBase.ts), and does not touch any other tab.
  */
-import { BONSAI_FOREST_GREEN } from "../unified-input/constants";
+import { BONSAI_FOREST_GREEN } from "../../shared/constants";
 import {
   SETTINGS_GLASS_BTN_BACKGROUND,
   SETTINGS_GLASS_BTN_BORDER,

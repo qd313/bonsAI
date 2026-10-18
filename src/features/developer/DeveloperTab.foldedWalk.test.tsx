@@ -30,10 +30,10 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { DeveloperTab, type DeveloperTabProps } from "./DeveloperTab";
-import { STREAM_SCRAMBLE_OFF } from "../stream-scramble/streamScrambleContext";
+import { STREAM_SCRAMBLE_OFF } from "../answer/stream/streamScrambleContext";
 import { resetFoldedTabsForTests, setAllSections, toggleSection } from "../folded-tabs/foldedTabsStore";
 import { DEVELOPER_FOLD_TAB, DEVELOPER_SECTIONS } from "./developerTabFolds";
-import { resetNavFocusRegistry } from "../../utils/navFocusRegistry";
+import { resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
 import { stripHeightFor } from "../folded-tabs/foldedTabs";
 import { walkFoldedTab, type FoldedLanding } from "../../test-harness/foldedTabWalk";
 import { paintedFrom, worstFoldAllCover } from "../../test-harness/foldAllCover";

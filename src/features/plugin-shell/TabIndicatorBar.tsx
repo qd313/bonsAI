@@ -39,8 +39,8 @@
 import React, { useEffect, useRef } from "react";
 import { Focusable } from "@decky/ui";
 
-import { TAB_BAR_CURRENT_ICON_PX, TAB_BAR_SIDE_ICON_PX } from "../unified-input/constants";
-import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
+import { TAB_BAR_CURRENT_ICON_PX, TAB_BAR_SIDE_ICON_PX } from "../../shared/constants";
+import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../../shared/dpad/navFocusRegistry";
 import { registerModalReturnFocusOwner } from "../../shared/dpad/modalReturnFocusRegistry";
 import { buildTabBarNavHandlers, neighbourTab, tabBarSides } from "./tabBarNav";
 import { registerShoulderSwitch } from "../../shared/dpad/shoulderSwitch";

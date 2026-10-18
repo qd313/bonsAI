@@ -54,7 +54,7 @@ _GAME_CHIP_POOL_SIZE = 10
 _CHIP_SECTION_TYPE_ORDER = ("starting_out", "boss", "dungeon", "encounter", "area", "quest", "enemy", "item")
 
 # Insertion order is the display order for compat chips — see _compat_chip_candidates.
-# Note "deck" is textually identical to a static carousel seed (src/data/presets.ts), so it is
+# Note "deck" is textually identical to a static carousel seed (src/features/preset-carousel/presets.ts), so it is
 # ordered after "proton"; de-duplicating the two lists properly needs the seed list shared
 # across the TS/Python boundary and is tracked separately under roadmap Bugs.
 _COMPAT_CHIP_TEMPLATES: dict[str, str] = {

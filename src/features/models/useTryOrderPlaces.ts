@@ -38,8 +38,8 @@ import { toaster } from "@decky/api";
 
 import type { BonsaiSettings } from "../settings/bonsaiSettingsSchema";
 import { bytesToGb, isEmbeddingOnlyTag } from "./pullModelCatalog";
-import { patchPendingSessionSettingsSnapshot } from "../../utils/bonsaiSessionSurvival";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../utils/deckyCall";
+import { patchPendingSessionSettingsSnapshot } from "../plugin-shell/bonsaiSessionSurvival";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../shared/deckyCall";
 import { buildPickerOrder } from "./modelRoutingOrder";
 
 export type TryOrderKind = "text" | "vision";

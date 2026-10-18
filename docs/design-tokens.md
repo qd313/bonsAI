@@ -59,8 +59,8 @@ and modal content needs `BonsaiModalScope` or it renders unstyled.
 ## Palette
 
 Declared as TypeScript constants in
-[unified-input/constants.ts](../src/features/unified-input/constants.ts) and
-[data/askMode.ts](../src/data/askMode.ts); the rest live inline in the section files.
+[unified-input/constants.ts](../src/shared/constants.ts) and
+[data/askMode.ts](../src/features/ask/bar/askMode.ts); the rest live inline in the section files.
 
 ### Named constants
 
@@ -73,7 +73,7 @@ Declared as TypeScript constants in
 | `DECK_MENU_PANEL_BG` | `rgb(28,36,44)` | Inline popover surface |
 | `DECK_MENU_ROW_SELECTED_BG` | `rgb(40,50,62)` | Selected popover row |
 | `DECK_HIGHLIGHT_CYAN` | `#9ce7ff` | Sliders, links, active controls, section labels |
-| `#f16a5a` | `#f16a5a` | Delete chat in the chats menu ([chatsMenuStyles.ts](../src/features/chat-title/chatsMenuStyles.ts) `__action--danger`), and the Copy icon's error state ([answerBubble.ts](../src/features/answer/bubble/answerBubble.ts)) |
+| `#f16a5a` | `#f16a5a` | Delete chat in the chats menu ([chatsMenuStyles.ts](../src/features/chats/title/chatsMenuStyles.ts) `__action--danger`), and the Copy icon's error state ([answerBubble.ts](../src/features/answer/bubble/answerBubble.ts)) |
 | `#f28b7d` | `#f28b7d` | **Reserved, no consumer** — mock 5c's hover shade for the delete control; 5c's custom modal footer was dropped by board 8d |
 
 ### Character accent scope variables (chips)
@@ -90,8 +90,8 @@ green applies even when no character is chosen, so nothing is ever unset. **Adde
 ### Ask-mode accents
 
 Three modes, each driving six CSS variables on the input host
-([askMode.ts:19-55](../src/data/askMode.ts), consumed at
-[MainTabUnifiedAskBar.tsx:353-358](../src/components/MainTabUnifiedAskBar.tsx)):
+([askMode.ts:19-55](../src/features/ask/bar/askMode.ts), consumed at
+[MainTabUnifiedAskBar.tsx:353-358](../src/features/ask/bar/MainTabUnifiedAskBar.tsx)):
 
 | Mode | Accent | Fill | Breathe low → high | Glow low → high |
 |---|---|---|---|---|
@@ -160,7 +160,7 @@ Right-aligned via `.bonsai-chat-turn-row-header`
 ## The inline popover idiom
 
 Three popovers exist — ask-mode, attach, and any future one. They all follow
-[MainTabAskModeMenuPopover.tsx](../src/components/MainTabAskModeMenuPopover.tsx), which is
+[MainTabAskModeMenuPopover.tsx](../src/features/ask/bar/MainTabAskModeMenuPopover.tsx), which is
 the reference implementation. Four rules, each learned the hard way and commented in place:
 
 1. **Absolute within the host, never portalled to `document.body`** — a body portal does
@@ -258,7 +258,7 @@ the measure/overlay nodes, or the fake caret drifts from the painted text.
 
 ## Layout constants
 
-All from [unified-input/constants.ts](../src/features/unified-input/constants.ts).
+All from [unified-input/constants.ts](../src/shared/constants.ts).
 
 | Constant | Value | Meaning |
 |---|---|---|
@@ -305,7 +305,7 @@ The ring on the bar: the whole bar wears an inset `2px rgba(255,255,255,0.85)` r
 
 ### The chat's name row
 
-Plan 84 step 5. It sits in Decky's title bar beside the back arrow, outside bonsAI's box, so it has its own stylesheet under `.bonsai-chat-title` ([chatTitleStyles.ts](../src/features/chat-title/chatTitleStyles.ts)). Unlike the rest of this file, **it does not follow the UI-size setting** (bonsAI's scale variable is set on bonsAI's box, which this view is outside of; Decky's own bar does not scale either).
+Plan 84 step 5. It sits in Decky's title bar beside the back arrow, outside bonsAI's box, so it has its own stylesheet under `.bonsai-chat-title` ([chatTitleStyles.ts](../src/features/chats/title/chatTitleStyles.ts)). Unlike the rest of this file, **it does not follow the UI-size setting** (bonsAI's scale variable is set on bonsAI's box, which this view is outside of; Decky's own bar does not scale either).
 
 | What | Value | Notes |
 |---|---|---|
@@ -319,7 +319,7 @@ Plan 84 step 5. It sits in Decky's title bar beside the back arrow, outside bons
 
 ### The chats menu
 
-Plan 84 step 5. It drops over the answer from the chat's name, its foot on the ask area's top edge ([chatsMenuStyles.ts](../src/features/chat-title/chatsMenuStyles.ts)). It sits inside bonsAI's box, so it does follow the UI-size setting. It replaced the saved-chats row.
+Plan 84 step 5. It drops over the answer from the chat's name, its foot on the ask area's top edge ([chatsMenuStyles.ts](../src/features/chats/title/chatsMenuStyles.ts)). It sits inside bonsAI's box, so it does follow the UI-size setting. It replaced the saved-chats row.
 
 | What | Value |
 |---|---|
@@ -332,7 +332,7 @@ Plan 84 step 5. It drops over the answer from the chat's name, its foot on the a
 
 ### The question box's strip
 
-Plan 84 step 2. Left to right: paperclip, game tag, mode, mic (Stop while an answer is being written), the X (only while the box has words), the small Ask. The strip is `UNIFIED_INPUT_ICON_STRIP_PX` (29) tall. Styles in [section-8.ts](../src/styles/sections/section-8.ts); the two parts that are not icons are [AskStripGameTag.tsx](../src/components/AskStripGameTag.tsx) and [AskStripSendButtons.tsx](../src/components/AskStripSendButtons.tsx).
+Plan 84 step 2. Left to right: paperclip, game tag, mode, mic (Stop while an answer is being written), the X (only while the box has words), the small Ask. The strip is `UNIFIED_INPUT_ICON_STRIP_PX` (29) tall. Styles in [section-8.ts](../src/styles/sections/section-8.ts); the two parts that are not icons are [AskStripGameTag.tsx](../src/features/ask/bar/AskStripGameTag.tsx) and [AskStripSendButtons.tsx](../src/features/ask/bar/AskStripSendButtons.tsx).
 
 | What | Value |
 |---|---|

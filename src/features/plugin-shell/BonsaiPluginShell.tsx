@@ -31,7 +31,7 @@
 import React from "react";
 
 import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
-import { rememberUiDocument } from "../../utils/uiDocument";
+import { rememberUiDocument } from "../../shared/dpad/uiDocument";
 
 export type BonsaiPluginShellProps = {
   scopeRef: React.RefObject<HTMLDivElement | null>;

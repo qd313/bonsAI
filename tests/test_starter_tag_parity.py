@@ -1,7 +1,7 @@
 """Title: The starter model is the same tag on the screen, in the back end and in the setup script
 
 Purpose: The first model a new Deck downloads is named in several places that no code links:
-the screen's `TIER1_ESSENTIALS_TAG` (src/data/deckEssentialsTags.ts, which the starter-set box and the
+the screen's `TIER1_ESSENTIALS_TAG` (src/features/models/deckEssentialsTags.ts, which the starter-set box and the
 "Install the starter set" button read), the back end's `TIER1_ESSENTIALS_PULL_TAGS` (what the setup run
 really pulls), the two shipped try-order seeds (the TypeScript copy in
 src/features/models/modelRoutingOrder.ts and the Python one in ollama_routing.py, which must agree and list it), and the model list in

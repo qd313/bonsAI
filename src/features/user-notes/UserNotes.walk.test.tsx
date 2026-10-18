@@ -29,11 +29,11 @@ import { WALK_RULES, deckAnswer, resetDeckAnswerWalk, type Box, type SteamScroll
 import { type SteamEl } from "../../test-harness/steamRing";
 import { buildNotesReadLine } from "./NotesReadLine";
 import { receiveStatusOffer, resetUserNotesStore } from "./userNotesStore";
-import { buildReplyActionsElement } from "../../utils/buildReplyActionsElement";
-import { buildTurnHeaderElement } from "../../utils/buildTurnHeaderElement";
-import { focusDownFromLiveAnswerBubble, queryTurnSlot } from "../../utils/liveTurnFocusGraph";
-import { REPLY_STOP_ORDER, registerReplyStop, setReplyStopUnavailable } from "../../utils/replyStopRegistry";
-import type { ChatSlotTurnTransparency } from "../../utils/inputTransparency";
+import { buildReplyActionsElement } from "../answer/reply-actions/buildReplyActionsElement";
+import { buildTurnHeaderElement } from "../answer/transcript/buildTurnHeaderElement";
+import { focusDownFromLiveAnswerBubble, queryTurnSlot } from "../../shared/dpad/liveTurnFocusGraph";
+import { REPLY_STOP_ORDER, registerReplyStop, setReplyStopUnavailable } from "../../shared/dpad/replyStopRegistry";
+import type { ChatSlotTurnTransparency } from "../../types/inputTransparency";
 
 const TURN = "turn-1";
 type Dir = "onMoveUp" | "onMoveDown";

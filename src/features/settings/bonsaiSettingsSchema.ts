@@ -35,10 +35,10 @@ import {
   DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
   type AiCharacterAccentIntensityId,
 } from "../characters/aiCharacterAccentIntensity";
-import type { AskModeId } from "../../data/askMode";
+import type { AskModeId } from "../ask/bar/askMode";
 import { DEFAULT_OLLAMA_KEEP_ALIVE, type OllamaKeepAliveDuration } from "../ai-connection/ollamaKeepAlive";
-import { DEFAULT_REPLY_VERBOSITY, type ReplyVerbosityId } from "../../data/replyVerbosity";
-import { type AskThinkEffortId } from "../../data/askThinkEffort";
+import { DEFAULT_REPLY_VERBOSITY, type ReplyVerbosityId } from "./replyVerbosity";
+import { type AskThinkEffortId } from "./askThinkEffort";
 import { type ReplyLanguageId } from "../../shared/i18n/replyLanguage";
 
 export { type ReplyLanguageId } from "../../shared/i18n/replyLanguage";

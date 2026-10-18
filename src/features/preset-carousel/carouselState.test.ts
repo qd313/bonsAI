@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { setFrozenTestChips, type PresetPrompt } from "../../data/presets";
+import { setFrozenTestChips, type PresetPrompt } from "./presets";
 import {
   advanceCarouselFocus,
   buildInitialCarouselState,

@@ -21,7 +21,7 @@ import { act, render } from "@testing-library/react";
 
 import { TabBodyFocusRoot, tabBodyNavFocusId } from "../features/plugin-shell/TabBodyFocusRoot";
 import type { BonsaiTabId } from "../features/plugin-shell/tabTitles";
-import { takeNavFocus } from "../utils/navFocusRegistry";
+import { takeNavFocus } from "../shared/dpad/navFocusRegistry";
 import { FOLD_ALL_GAP_PX, FOLD_ALL_HEIGHT_PX } from "../features/folded-tabs/foldedTabs";
 import { steamRingHolder, type SteamEl } from "./steamRing";
 import type { SteamFocusScroll } from "./tabBodyWalk";

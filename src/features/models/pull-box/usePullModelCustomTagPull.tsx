@@ -22,7 +22,7 @@
  */
 import { useCallback, type Dispatch, type SetStateAction } from "react";
 import { toaster } from "@decky/api";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../../utils/deckyCall";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../../shared/deckyCall";
 import { isPlausibleOllamaPullTag } from "./mergePullModelCatalog";
 import { confirmDownload } from "../../downloads/downloadNotice";
 import { modelPullNotice } from "../../downloads/downloadSites";

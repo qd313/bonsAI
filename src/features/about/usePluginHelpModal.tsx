@@ -23,7 +23,7 @@ import { showModal } from "@decky/ui";
 
 import { PluginHelpModal } from "./PluginHelpModal";
 import { markPluginHelpDismissedPersist, pluginHelpDismissedFromStorage } from "../plugin-shell/pluginStorage";
-import { patchPendingSessionSurvival, peekBonsaiSessionPendingRestore } from "../../utils/bonsaiSessionSurvival";
+import { patchPendingSessionSurvival, peekBonsaiSessionPendingRestore } from "../plugin-shell/bonsaiSessionSurvival";
 
 /**
  * Survives Decky remounting `Content` while `showModal` is open — the same lifecycle problem

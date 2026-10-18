@@ -28,8 +28,8 @@ import {
   OllamaModelsHubModal,
   type OllamaModelsHubSection,
 } from "./OllamaModelsHubModal";
-import { callDeckyWithTimeout } from "../../utils/deckyCall";
-import { patchPendingSessionSettingsSnapshot } from "../../utils/bonsaiSessionSurvival";
+import { callDeckyWithTimeout } from "../../shared/deckyCall";
+import { patchPendingSessionSettingsSnapshot } from "../plugin-shell/bonsaiSessionSurvival";
 import type { BonsaiSettings } from "../settings/bonsaiSettingsSchema";
 import type { ModelPolicyTierId } from "./modelPolicy";
 import type { TryOrderHost } from "./useTryOrderPlaces";

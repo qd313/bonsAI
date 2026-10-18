@@ -18,7 +18,7 @@
  * anything is sent: the player must have already granted the "write files" permission, and the
  * chosen log level (off, normal, or extra detail) must allow this particular line.
  */
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../utils/deckyCall";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../shared/deckyCall";
 import type { BonsaiCapabilities, DesktopAppLogLevel } from "../settings/bonsaiSettingsSchema";
 export type AppDesktopLogFields = Record<string, string | number | boolean | null>;
 

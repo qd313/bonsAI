@@ -6,7 +6,7 @@
  * showed none, so Left from its name went nowhere. What there is to save is now this session's
  * answer, else the newest loaded turn that has an answer -- the same one question and answer a
  * fresh chat saves. (The row went in plan 84 step 5; the chats menu's Save to Desktop note follows
- * the same rule, pinned in src/features/chat-title/ChatsMenu.test.tsx.)
+ * the same rule, pinned in src/features/chats/title/ChatsMenu.test.tsx.)
  *
  * Does not: Write a file. The save call is recorded, and the popup's own confirm is called directly.
  */
@@ -32,7 +32,7 @@ vi.mock("@decky/ui", async () => {
   };
 });
 vi.mock("@decky/api", () => ({ toaster: { toast: () => undefined } }));
-vi.mock("../../utils/deckyCall", () => ({
+vi.mock("../../shared/deckyCall", () => ({
   callDeckyWithTimeout: async (method: string, args: unknown[]) => {
     hoisted.calls.push({ method, args });
     return { success: true, path: "Desktop/bonsAI_logs/x.md" };

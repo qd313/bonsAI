@@ -25,7 +25,7 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-import { findTabContentsScroll } from "../../utils/chatPanelScroll";
+import { findTabContentsScroll } from "../../shared/dpad/chatPanelScroll";
 import { useHelpStrip, type HelpStripElements } from "./useHelpStrip";
 
 /** bonsAI's own box around Steam's tabs (index.tsx); the dock is drawn inside it, beside the pane. */

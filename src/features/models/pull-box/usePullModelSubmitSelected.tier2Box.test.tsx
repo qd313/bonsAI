@@ -33,7 +33,7 @@ vi.mock("../../downloads/downloadNotice", () => ({
     return false;
   },
 }));
-vi.mock("../../../utils/deckyCall", () => ({
+vi.mock("../../../shared/deckyCall", () => ({
   DECKY_RPC_TIMEOUT_MS: 1000,
   formatDeckyRpcError: String,
   callDeckyWithTimeout: async () => ({ accepted: true }),

@@ -13,7 +13,7 @@
  *           here only sizes a hold time; the fit check that decides whether a label scrolls is made
  *           by Steam's Marquee on the live element.
  */
-import { holdMsForPresetText } from "../../data/presets";
+import { holdMsForPresetText } from "./presets";
 import { presetPace } from "./presetPace";
 
 /**

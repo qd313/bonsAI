@@ -26,7 +26,7 @@
  * Does not: Style the tab strip itself (section-2.ts) or the general
  * width resets for the scroll area underneath (section-3.ts).
  */
-import { BONSAI_PLUGIN_SIDE_PAD_PX } from "../../features/unified-input/constants";
+import { BONSAI_PLUGIN_SIDE_PAD_PX } from "../../shared/constants";
 import { TEXT_SCALE_ROOT_CSS, textPx } from "../textPx";
 
 /**

@@ -20,8 +20,8 @@
  */
 import { useEffect, type Dispatch, type SetStateAction } from "react";
 import { PULL_MODEL_NEW_BADGE_STORAGE_KEY } from "../../../shared/storageKeys";
-import { patchPendingSessionSettingsSnapshot } from "../../../utils/bonsaiSessionSurvival";
-import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../../utils/deckyCall";
+import { patchPendingSessionSettingsSnapshot } from "../../plugin-shell/bonsaiSessionSurvival";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../../shared/deckyCall";
 import { computeUpdatedPullRecord, type PullModelPullRecord } from "./pullModelNewBadge";
 import type { PullModelsRoutingOrderSettings } from "./PullModelsModal.types";
 

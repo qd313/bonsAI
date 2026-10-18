@@ -23,7 +23,7 @@
  * decide which tab is open — only the spacing and wrapping of the body
  * underneath.
  */
-import { BONSAI_PLUGIN_SIDE_PAD_PX } from "../../features/unified-input/constants";
+import { BONSAI_PLUGIN_SIDE_PAD_PX } from "../../shared/constants";
 
 /**
  * In: nothing — every value here is a fixed string or read from a CSS

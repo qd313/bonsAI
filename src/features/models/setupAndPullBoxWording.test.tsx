@@ -1,0 +1,94 @@
+/**
+ * Title: The install and pull boxes describe their models truthfully
+ *
+ * Purpose: Pin plan 77 (licence labels, round 2). The starter-models box (once the Tier 1 install
+ * box) used to call the default model "FOSS" (Qwen's card gives its 3B size the Qwen Research
+ * licence); the "Enable Tier 2 before pulling?" box said Tier 1 keeps to "FOSS-friendly tags".
+ * Plan 79 removed the Tier 1 / Tier 2 install buttons, so their two boxes and the first-run
+ * notice's mention of them are gone. Plan 87 removed the update box too: Update runs in place.
+ */
+import { act, render, renderHook } from "@testing-library/react";
+import type { ReactElement, ReactNode } from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import type { PullModelEntry } from "./pullModelCatalog";
+import { starterSetBoxBody } from "./localOllamaStarterSet";
+
+const hoisted = vi.hoisted(() => ({
+  opts: null as Record<string, unknown> | null,
+  pullBox: null as { body?: ReactNode; title?: string } | null,
+}));
+vi.mock("../downloads/downloadNotice", () => ({
+  confirmDownload: async (_n: unknown, opts?: Record<string, unknown>) => {
+    hoisted.opts = opts ?? null;
+    return false;
+  },
+}));
+vi.mock("@decky/ui", async () => {
+  const stubs = await import("../../test-harness/fakeDeckyUi");
+  return {
+    ...stubs,
+    ConfirmModal: () => null,
+    showModal: (el: ReactElement<{ body?: ReactNode; title?: string }>) => {
+      hoisted.pullBox = el.props;
+      return { Close: () => {}, Update: () => {} };
+    },
+  };
+});
+vi.mock("../../shared/deckyCall", () => ({
+  DECKY_RPC_TIMEOUT_MS: 1000,
+  formatDeckyRpcError: String,
+  callDeckyWithTimeout: async () => ({ accepted: true }),
+}));
+vi.mock("@decky/api", () => ({ toaster: { toast: () => {} } }));
+
+import { usePullModelSubmitSelected } from "./pull-box/usePullModelSubmitSelected";
+import { localRuntimeBetaNoticeDescription } from "../plugin-shell/useDisclaimerAndLocalRuntimeGates";
+import { MODEL_POLICY_SETTINGS_INTRO } from "./modelPolicy";
+import { resetFakeDeckyRpc } from "../../test-harness/fakeDeckyRpc";
+
+beforeEach(() => {
+  hoisted.opts = null;
+  hoisted.pullBox = null;
+  resetFakeDeckyRpc();
+});
+
+describe("wording of the install and pull boxes", () => {
+  it("the starter models box does not call the default model FOSS", () => {
+    const { container } = render(<div>{starterSetBoxBody(true)}</div>);
+    expect(container.textContent).toContain("answer model");
+    expect(container.textContent).not.toMatch(/FOSS/);
+    // Cancel is how a person declines (the "Not now" button is gone); the sentence says what it does.
+    expect(container.textContent).toContain("Cancel or B installs Ollama only, with no models");
+    expect(container.textContent).not.toContain("Not now");
+  });
+
+  it("the Enable Tier 2 pull box explains Tier 1 in plain words", async () => {
+    const catalog = [{ tag: "gemma3:4b", sizeGb: 3.3, licenseClass: "open_weight" }] as unknown as PullModelEntry[];
+    const hook = renderHook(() =>
+      usePullModelSubmitSelected({
+        selectedTags: new Set(["gemma3:4b"]),
+        modelPolicyTier: "open_source_only",
+        mergedCatalog: catalog,
+        onApplyTier2Policy: () => {},
+        completeNestedModalClose: (close) => close(),
+        onPullAccepted: () => {},
+        setPullBusy: () => {},
+        openWeightTierConfirmedRef: { current: new Set() },
+      })
+    ).result.current;
+    await act(() => hook.onPullSelected());
+    expect(hoisted.pullBox).not.toBeNull();
+    const { container } = render(<div>{hoisted.pullBox!.body}</div>);
+    expect(container.textContent).toContain("open-source licence");
+    expect(container.textContent).not.toMatch(/FOSS/);
+  });
+
+  it("the first-run local AI notice and the Settings intro do not say FOSS", () => {
+    const notice = localRuntimeBetaNoticeDescription();
+    expect(notice).not.toMatch(/FOSS/);
+    expect(notice).not.toContain("Install Tier 1");
+    expect(notice).not.toContain("Install Gemma 4");
+    expect(MODEL_POLICY_SETTINGS_INTRO).not.toMatch(/FOSS/);
+  });
+});

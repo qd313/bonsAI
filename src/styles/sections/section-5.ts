@@ -39,7 +39,7 @@ import {
   UNIFIED_TEXT_OVERLAY_FALLBACK_FONT_FAMILY,
   UNIFIED_TEXT_OVERLAY_FALLBACK_OVERFLOW_WRAP,
   UNIFIED_TEXT_OVERLAY_FALLBACK_WHITE_SPACE,
-} from "../../features/unified-input/constants";
+} from "../../shared/constants";
 import { textPx } from "../textPx";
 
 /**

@@ -23,7 +23,7 @@ import {
   reconcileLatencyWarningAndTimeout,
 } from "./bonsaiSettingsNormalizers";
 import { toBonsaiSettingsPayload } from "./settingsPayload";
-import { buildResponseText, formatAppliedTuningBannerText } from "../../utils/appliedTuningText";
+import { buildResponseText, formatAppliedTuningBannerText } from "../power/appliedTuningText";
 
 /** Regression tests for normalization bounds and response formatting behavior. */
 describe("settings contracts", () => {

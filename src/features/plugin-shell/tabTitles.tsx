@@ -31,7 +31,7 @@ import {
   TAB_TITLE_DEBUG_TAB_ICON_PX,
   TAB_TITLE_ICON_PX,
   TAB_TITLE_MAIN_TAB_ICON_PX,
-} from "../unified-input/constants";
+} from "../../shared/constants";
 
 export type BonsaiTabId = "search" | "main" | "ollama" | "settings" | "permissions" | "developer" | "about";
 

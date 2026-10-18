@@ -20,7 +20,7 @@ import {
   PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
   PRESET_VISIBLE_SLOTS,
 } from "../../features/preset-carousel/presetRowLayout";
-import { DOCK_ROW_GAP_PX, PRESET_CHIP_SHADOW_ROOM_PX } from "../../features/unified-input/constants";
+import { DOCK_ROW_GAP_PX, PRESET_CHIP_SHADOW_ROOM_PX } from "../../shared/constants";
 
 describe("chip row out-of-chips edge cue (section 4 CSS)", () => {
   const css = buildSection4Section();

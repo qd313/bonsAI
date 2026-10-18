@@ -25,7 +25,7 @@ import { useCallback, useMemo, useState } from "react";
 
 import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP } from "../settings/bonsaiSettingsSchema";
 import type { DeveloperConnectionStatus } from "../developer/DeveloperTab";
-import { peekBonsaiSessionPendingRestore } from "../../utils/bonsaiSessionSurvival";
+import { peekBonsaiSessionPendingRestore } from "../plugin-shell/bonsaiSessionSurvival";
 import { persistOllamaIpIfRoutingToLan as persistOllamaIpIfRoutingToLanUtil } from "./persistOllamaIp";
 import { loadSavedIp, saveIp } from "../plugin-shell/pluginStorage";
 

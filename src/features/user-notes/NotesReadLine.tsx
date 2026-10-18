@@ -35,18 +35,18 @@ import { Focusable } from "@decky/ui";
 
 import { NotePinIcon } from "./NotePinIcon";
 import { beginSheet, getUserNotesState, sheetReturnDone, useUserNotesState } from "./userNotesStore";
-import { focusFirstAnswerChunk } from "../../utils/answerBubbleNavigation";
-import { focusDeckOwner, focusReplyShowReasoning, queryTurnSlot } from "../../utils/liveTurnFocusGraph";
-import { focusOpenQuestionText } from "../../utils/buildTurnHeaderElement";
+import { focusFirstAnswerChunk } from "../answer/bubble/answerBubbleNavigation";
+import { focusDeckOwner, focusReplyShowReasoning, queryTurnSlot } from "../../shared/dpad/liveTurnFocusGraph";
+import { focusOpenQuestionText } from "../answer/transcript/buildTurnHeaderElement";
 import {
   isDeckDirectionDownEvent,
   isDeckDirectionLeftEvent,
   isDeckDirectionRightEvent,
   isDeckDirectionUpEvent,
-} from "../../utils/focusNavigation";
-import { focusRegisteredReplyStop, registerReplyStop, replyStopNavRef } from "../../utils/replyStopRegistry";
-import { elementHasGamepadFocus } from "../../utils/uiDocument";
-import type { ChatSlotTurnTransparency, TransparencySnapshot } from "../../utils/inputTransparency";
+} from "../../shared/dpad/focusNavigation";
+import { focusRegisteredReplyStop, registerReplyStop, replyStopNavRef } from "../../shared/dpad/replyStopRegistry";
+import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
+import type { ChatSlotTurnTransparency, TransparencySnapshot } from "../../types/inputTransparency";
 import { openUserNotesSheet } from "./UserNotesSheet";
 
 /** How often the ring is put back on the line while the rebuilt tab mounts (the window is in the store). */

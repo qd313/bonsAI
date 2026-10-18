@@ -16,7 +16,7 @@ import {
   clearBonsaiSessionSurvival,
   consumeBonsaiSessionAfterRemount,
   type BonsaiSessionSurvivalSnapshot,
-} from "../../../utils/bonsaiSessionSurvival";
+} from "../../plugin-shell/bonsaiSessionSurvival";
 import { defaultSettingsFixture } from "../../../test-harness/rpcFixtures";
 import { dispatchFakeRpc, getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../../../test-harness/fakeDeckyRpc";
 

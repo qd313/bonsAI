@@ -17,7 +17,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { repoRoot } from "../../test-harness/repoPaths";
 import { DeveloperTab, type DeveloperTabProps } from "./DeveloperTab";
-import { STREAM_SCRAMBLE_OFF } from "../stream-scramble/streamScrambleContext";
+import { STREAM_SCRAMBLE_OFF } from "../answer/stream/streamScrambleContext";
 import { resetFoldedTabsForTests, setAllSections, toggleSection } from "../folded-tabs/foldedTabsStore";
 import { DEVELOPER_FOLD_TAB, DEVELOPER_SECTIONS, DEVELOPER_ROW_HELP, DEVELOPER_ROW_LABELS } from "./developerTabFolds";
 import { HELP_TEXT_ATTR } from "../folded-tabs/useHelpStrip";

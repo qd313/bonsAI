@@ -21,8 +21,8 @@
  * Does not: Move the carousel's own highlight — see carouselState and the
  * Main tab's carousel screen for that.
  */
-import { TEMP_PRESET_CAROUSEL_FROZEN, frozenTestChipsActive } from "../../data/presets";
-import type { PresetPrompt } from "../../data/presets";
+import { TEMP_PRESET_CAROUSEL_FROZEN, frozenTestChipsActive } from "./presets";
+import type { PresetPrompt } from "./presets";
 import { chooseNextChip, type NextChipArgs, type NextChipPick } from "./nextChipRule";
 import { composeSessionPresets, type SessionRagChipCandidate } from "./sessionRagComposer";
 

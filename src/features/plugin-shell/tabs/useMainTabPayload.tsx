@@ -38,7 +38,7 @@
  */
 import React, { useMemo } from "react";
 
-import { MainTab } from "../../../components/MainTab";
+import { MainTab } from "../../main-tab/MainTab";
 import {
   formatAiCharacterSelectionLine,
   resolveMainTabAvatarBadgeLetter,

@@ -21,7 +21,7 @@ import { toaster } from "@decky/api";
 
 import { DesktopNoteSaveModal } from "./DesktopNoteSaveModal";
 import { PermissionDenyAction } from "../permissions/PermissionDenyAction";
-import { callDeckyWithTimeout, formatDeckyRpcError } from "../../utils/deckyCall";
+import { callDeckyWithTimeout, formatDeckyRpcError } from "../../shared/deckyCall";
 import type { BonsaiCapabilityKey } from "../permissions/permissionDeepLink";
 
 type AppendDesktopNoteResult = {

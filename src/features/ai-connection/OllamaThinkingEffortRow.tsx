@@ -23,7 +23,7 @@ import {
   ASK_THINK_EFFORT_IDS,
   ASK_THINK_EFFORT_LABELS,
   type AskThinkEffortId,
-} from "../../data/askThinkEffort";
+} from "../settings/askThinkEffort";
 import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
 import { textPx } from "../../styles/textPx";
 

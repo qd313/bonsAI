@@ -53,7 +53,7 @@
  *    side, and the small dots marking every chat plus the one that
  *    creates a new one.
  */
-import { BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX, BONSAI_CHAT_TRANSCRIPT_TO_SAVE_GAP_PX, UNIFIED_TEXT_FONT_PX } from "../../features/unified-input/constants";
+import { BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX, BONSAI_CHAT_TRANSCRIPT_TO_SAVE_GAP_PX, UNIFIED_TEXT_FONT_PX } from "../../shared/constants";
 import { buildAnswerMarkdownFormattingSection } from "../../features/answer/markdown/answerMarkdownFormatting";
 import { buildQuestionBubbleSection } from "../../features/answer/transcript/questionBubble";
 import { buildAnswerBubbleSection } from "../../features/answer/bubble/answerBubble";

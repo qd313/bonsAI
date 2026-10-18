@@ -22,7 +22,7 @@ import { FoldedSection, chainIds, type FoldChainSection } from "./FoldedSection"
 import { FoldAllButton } from "./FoldAllButton";
 import { resetFoldedTabsForTests } from "./foldedTabsStore";
 import { registerShoulderSwitch, resetShoulderSwitchForTests } from "../../shared/dpad/shoulderSwitch";
-import { resetNavFocusRegistry } from "../../utils/navFocusRegistry";
+import { resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
 import { SETTINGS_GLASS_BTN, FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
 

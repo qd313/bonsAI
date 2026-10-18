@@ -25,7 +25,7 @@ import {
   clearBonsaiSessionSurvival,
   consumeBonsaiSessionAfterRemount,
   finalizeSessionRestoreAfterRemount,
-} from "../utils/bonsaiSessionSurvival";
+} from "../features/plugin-shell/bonsaiSessionSurvival";
 import { ragCorpusStatusFixture, resetFakeDeckyRpc, setRpcHandler } from "./fakeDeckyRpc";
 import { defaultSettingsFixture } from "./rpcFixtures";
 

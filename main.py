@@ -27,7 +27,7 @@ list/open/create/delete/rename buttons are in
 `backend/services/chat_slot_rpc.py`; the notes the person asked bonsAI to remember
 (list/save/delete) are in `backend/services/user_notes_rpc.py`; the knowledge base's download/update/
 remove/chip-candidate/tap-to-define-words buttons are in `backend/services/rag_corpus_rpc.py`;
-the voice-input buttons are in `backend/services/voice_rpc.py`;
+the voice-input buttons are in `backend/voice/voice_rpc.py`;
 screenshots, the Desktop debug/chat/app logs, clipboard and the small
 transparency/feedback/language reads are in `backend/services/media_desktop_rpc.py`;
 installing Ollama on the Deck and pulling/deleting/pricing its models are in
@@ -210,11 +210,11 @@ from backend.ollama.ollama_mdns_discovery_service import (
 from backend.ollama import ollama_local_setup_rpc
 from backend.ollama.ollama_pc_models import prune_after_connection_test
 from backend.ollama import ollama_pull_resume_service
-from backend.services.voice_transcription_service import (
+from backend.voice.voice_transcription_service import (
     VoiceTranscriptionSession,
     new_voice_install_state,
 )
-from backend.services import voice_rpc
+from backend.voice import voice_rpc
 from backend.services.rag_corpus_download_service import new_rag_corpus_download_state
 from backend.services import rag_corpus_rpc
 from backend.core.constants import DEFAULT_OLLAMA_PCIP
@@ -2245,7 +2245,7 @@ class Plugin:
             self._voice_session = None
         if session is not None:
             await asyncio.to_thread(session.force_stop)
-        from backend.services.voice_whisper_daemon import force_whisper_engine_stop
+        from backend.voice.voice_whisper_daemon import force_whisper_engine_stop
 
         await asyncio.to_thread(force_whisper_engine_stop)
 

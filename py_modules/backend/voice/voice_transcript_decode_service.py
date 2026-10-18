@@ -24,7 +24,7 @@ import re
 import subprocess
 import tempfile
 
-from backend.services.voice_whisper_runtime import (
+from backend.voice.voice_whisper_runtime import (
     WHISPER_THREADS,
     _pcm_to_wav_bytes,
     _sanitize_whisper_transcript,

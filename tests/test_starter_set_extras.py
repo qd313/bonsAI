@@ -33,7 +33,7 @@ from backend.ollama import local_ollama_setup_service as setup  # noqa: E402
 from backend.ollama import ollama_local_setup_rpc as setup_rpc  # noqa: E402
 from backend.ollama import starter_set_extras as extras  # noqa: E402
 from backend.ollama import starter_speech_models as speech_models  # noqa: E402
-from backend.services import voice_model_download_service as voice_models  # noqa: E402
+from backend.voice import voice_model_download_service as voice_models  # noqa: E402
 
 S = "backend.ollama.local_ollama_setup_service"
 LOGGER = type("L", (), {"info": lambda *a, **k: None, "exception": lambda *a, **k: None})()
@@ -262,7 +262,7 @@ class VoiceStatusNamesBothSpeechModels(PluginSettingsFileMixin, unittest.Isolate
 
     async def test_status_says_which_speech_models_are_on_disk(self) -> None:
         self._write_settings({})
-        from backend.services import voice_rpc
+        from backend.voice import voice_rpc
 
         with patch.object(voice_rpc, "model_file_complete", side_effect=lambda _r, _d, m: m == "tiny.en"):
             out = await self.plugin.get_voice_engine_status()

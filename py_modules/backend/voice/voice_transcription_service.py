@@ -115,7 +115,7 @@ from collections import deque
 from typing import Any, Callable, Optional
 
 from backend.ollama.local_ollama_setup_service import _env_for_host_system_tools
-from backend.services.voice_engine_build_service import (
+from backend.voice.voice_engine_build_service import (
     VOICE_BIN_CPU_SAFE_MARKER,
     WHISPER_CPP_IMAGE,
     _build_whisper_cli_in_container,
@@ -130,7 +130,7 @@ from backend.services.voice_engine_build_service import (
     _whisper_inference_ok,
     _write_silence_wav,
 )
-from backend.services.voice_model_download_service import (
+from backend.voice.voice_model_download_service import (
     DEFAULT_VOICE_STT_MODEL,
     VALID_VOICE_STT_MODELS,
     VOICE_STT_MODEL_SPECS,
@@ -143,7 +143,7 @@ from backend.services.voice_model_download_service import (
     voice_model_path,
     voice_models_dir,
 )
-from backend.services.voice_audio_capture_service import (
+from backend.voice.voice_audio_capture_service import (
     _discover_session_runtime_dir,
     _parse_proc_environ,
     _pcm_rms,
@@ -152,8 +152,8 @@ from backend.services.voice_audio_capture_service import (
     _runtime_dir_usable,
     env_for_audio_capture,
 )
-from backend.services.voice_level_gate import VoiceLevelGate
-from backend.services.voice_transcript_decode_service import (
+from backend.voice.voice_level_gate import VoiceLevelGate
+from backend.voice.voice_transcript_decode_service import (
     FILLER_MIN_RMS,
     WHISPER_CLI_INFERENCE_ARGS,
     WHISPER_FILLER_WORDS,
@@ -167,7 +167,7 @@ from backend.services.voice_transcript_decode_service import (
     _run_whisper_transcribe,
     _whisper_decode_usable,
 )
-from backend.services.voice_whisper_runtime import (
+from backend.voice.voice_whisper_runtime import (
     CHANNELS,
     SAMPLE_RATE,
     SAMPLE_WIDTH,
@@ -178,7 +178,7 @@ from backend.services.voice_whisper_runtime import (
     whisper_binary_usable,
     whisper_server_binary_usable,
 )
-from backend.services.voice_whisper_daemon import get_whisper_engine
+from backend.voice.voice_whisper_daemon import get_whisper_engine
 
 BYTES_PER_SECOND = SAMPLE_RATE * CHANNELS * SAMPLE_WIDTH
 # The shortest rest between two live passes. A fast pass must not run ten times a second.

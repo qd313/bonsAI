@@ -23,8 +23,8 @@ install_pwd_stub()
 from backend.services import knowledge_base_schema as kb  # noqa: E402
 from backend.ollama import local_ollama_setup_service as setup  # noqa: E402
 from backend.ollama import ollama_catalog_service as catalog  # noqa: E402
-from backend.services import voice_engine_build_service as voice_build  # noqa: E402
-from backend.services import voice_model_download_service as voice_models  # noqa: E402
+from backend.voice import voice_engine_build_service as voice_build  # noqa: E402
+from backend.voice import voice_model_download_service as voice_models  # noqa: E402
 
 SITES_TS = Path(__file__).resolve().parent.parent / "src" / "features" / "downloads" / "downloadSites.ts"
 

@@ -28,8 +28,8 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
-from backend.services import voice_level_gate as gate  # noqa: E402
-from backend.services import voice_transcription_service as vts  # noqa: E402
+from backend.voice import voice_level_gate as gate  # noqa: E402
+from backend.voice import voice_transcription_service as vts  # noqa: E402
 
 BYTES_PER_SECOND = vts.BYTES_PER_SECOND
 SLICE_S = gate.SLICE_BYTES / BYTES_PER_SECOND  # 64 ms

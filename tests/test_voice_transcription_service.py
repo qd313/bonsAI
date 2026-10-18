@@ -7,7 +7,7 @@ import unittest
 from unittest.mock import Mock, patch
 from types import SimpleNamespace
 
-from backend.services.voice_transcription_service import (
+from backend.voice.voice_transcription_service import (
     DEFAULT_VOICE_STT_MODEL,
     VoiceTranscriptionSession,
     _link_versioned_sonames,
@@ -17,7 +17,7 @@ from backend.services.voice_transcription_service import (
     _whisper_decode_usable,
     sanitize_voice_stt_model,
 )
-from backend.services.voice_whisper_runtime import (
+from backend.voice.voice_whisper_runtime import (
     _pcm_to_wav_bytes,
     _sanitize_whisper_transcript,
     resolve_whisper_cli,
@@ -85,7 +85,7 @@ class VoiceTranscriptionServiceTests(unittest.TestCase):
 
     def test_voice_binary_ready_requires_cpu_safe_marker_without_model(self):
         with tempfile.TemporaryDirectory() as plugin_root, tempfile.TemporaryDirectory() as settings_dir:
-            from backend.services.voice_transcription_service import (
+            from backend.voice.voice_transcription_service import (
                 _voice_bin_mark_cpu_safe,
                 _voice_binary_ready_for_inference,
                 voice_bin_dir,
@@ -94,7 +94,7 @@ class VoiceTranscriptionServiceTests(unittest.TestCase):
             dest = voice_whisper_cli_path(plugin_root, settings_dir)
             os.makedirs(os.path.dirname(dest), exist_ok=True)
             with patch(
-                "backend.services.voice_transcription_service.whisper_binary_usable",
+                "backend.voice.voice_transcription_service.whisper_binary_usable",
                 return_value=dest,
             ):
                 self.assertIsNone(_voice_binary_ready_for_inference(plugin_root, settings_dir))

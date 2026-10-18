@@ -16,7 +16,7 @@ deferred to Tier 2 (VOICE-01…07) and no unit test constructed a session.
 import types
 import unittest
 
-from backend.services.voice_transcription_service import (
+from backend.voice.voice_transcription_service import (
     VoiceTranscriptionSession,
     new_voice_transcription_state,
 )

@@ -20,7 +20,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
-from backend.services import voice_model_download_service as svc  # noqa: E402
+from backend.voice import voice_model_download_service as svc  # noqa: E402
 
 # The files already on the maintainer's Deck. A pinned file has to match these so a model that
 # is installed today still passes.

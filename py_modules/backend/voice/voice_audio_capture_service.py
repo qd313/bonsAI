@@ -34,7 +34,7 @@ import subprocess
 from typing import Optional
 
 from backend.ollama.local_ollama_setup_service import _env_for_host_system_tools
-from backend.services.voice_whisper_runtime import CHANNELS, SAMPLE_RATE, SAMPLE_WIDTH
+from backend.voice.voice_whisper_runtime import CHANNELS, SAMPLE_RATE, SAMPLE_WIDTH
 
 
 def _pcm_rms(chunk: bytes) -> float:

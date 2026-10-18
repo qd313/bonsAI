@@ -74,7 +74,7 @@ FROZEN: dict[str, dict[str, str | None]] = {
         "user_wants_power_or_performance_topic": "(question: str) -> bool",
     },
     # whisper runtime basics
-    "backend.services.voice_whisper_runtime": {
+    "backend.voice.voice_whisper_runtime": {
         "CHANNELS": None,  # value
         "SAMPLE_RATE": None,  # value
         "SAMPLE_WIDTH": None,  # value
@@ -89,7 +89,7 @@ FROZEN: dict[str, dict[str, str | None]] = {
         "whisper_server_binary_usable": "(plugin_root: 'str', settings_dir: 'str') -> 'Optional[str]'",
     },
     # voice capture
-    "backend.services.voice_transcription_service": {
+    "backend.voice.voice_transcription_service": {
         "VoiceTranscriptionSession": None,  # class
         "download_voice_model": "(plugin_root: 'str', settings_dir: 'str', model_id: 'str', state: 'dict[str, Any]', cancel_event: 'threading.Event', on_stage: 'Optional[Callable[[str, dict[str, Any]], None]]' = None) -> 'None'",
         "engine_readiness": "(plugin_root: 'str', settings_dir: 'str', model_id: 'str') -> 'dict[str, Any]'",
@@ -100,7 +100,7 @@ FROZEN: dict[str, dict[str, str | None]] = {
         "sanitize_voice_stt_model": "(value: 'Any') -> 'str'",
     },
     # the whisper server
-    "backend.services.voice_whisper_daemon": {
+    "backend.voice.voice_whisper_daemon": {
         "force_whisper_engine_stop": "() -> 'None'",
         "get_whisper_engine": "() -> \"'WhisperEngine'\"",
     },
@@ -156,9 +156,9 @@ class SeamContractTests(unittest.TestCase):
                 "backend.services.input_sanitizer_service",
                 "backend.services.shortcut_setup_commands",
             ),
-            "backend.services.voice_whisper_runtime": (
-                "backend.services.voice_transcription_service",
-                "backend.services.voice_whisper_daemon",
+            "backend.voice.voice_whisper_runtime": (
+                "backend.voice.voice_transcription_service",
+                "backend.voice.voice_whisper_daemon",
             ),
         }
         for leaf, must_not_import in leaves.items():

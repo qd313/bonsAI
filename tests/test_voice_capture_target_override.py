@@ -21,8 +21,8 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
-from backend.services import voice_audio_capture_service as cap  # noqa: E402
-from backend.services import voice_transcription_service as vts  # noqa: E402
+from backend.voice import voice_audio_capture_service as cap  # noqa: E402
+from backend.voice import voice_transcription_service as vts  # noqa: E402
 
 INTERNAL_MIC = "alsa_input.pci-0000_04_00.5-platform-nau8821-max.HiFi__Internal_Mic__source"
 

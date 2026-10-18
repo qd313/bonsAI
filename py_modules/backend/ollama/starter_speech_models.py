@@ -19,7 +19,7 @@ from __future__ import annotations
 import threading
 from typing import Any, Callable
 
-from backend.services import voice_model_download_service as voice_models
+from backend.voice import voice_model_download_service as voice_models
 from backend.ollama.starter_set_extras import STARTER_SPEECH_MODELS, short_reason
 
 

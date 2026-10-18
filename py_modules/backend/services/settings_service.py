@@ -83,7 +83,7 @@ from backend.characters.ai_character_service import (
 from backend.core.capabilities import legacy_grandfather_capabilities, sanitize_capabilities
 from backend.ollama.model_policy import reconcile_model_policy_tier
 from backend.prompts.reply_language_service import sanitize_reply_language
-from backend.services.voice_transcription_service import sanitize_voice_stt_model
+from backend.voice.voice_transcription_service import sanitize_voice_stt_model
 
 
 # --- field kinds -------------------------------------------------------------

@@ -34,8 +34,8 @@ import tempfile
 import wave
 from typing import Optional
 
-from backend.services.voice_transcript_decode_service import WHISPER_CLI_INFERENCE_ARGS
-from backend.services.voice_whisper_runtime import (
+from backend.voice.voice_transcript_decode_service import WHISPER_CLI_INFERENCE_ARGS
+from backend.voice.voice_whisper_runtime import (
     CHANNELS,
     SAMPLE_RATE,
     SAMPLE_WIDTH,

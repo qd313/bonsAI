@@ -40,8 +40,8 @@ from __future__ import annotations
 import math
 from collections import deque
 
-from backend.services.voice_audio_capture_service import _pcm_rms
-from backend.services.voice_whisper_runtime import CHANNELS, SAMPLE_RATE, SAMPLE_WIDTH
+from backend.voice.voice_audio_capture_service import _pcm_rms
+from backend.voice.voice_whisper_runtime import CHANNELS, SAMPLE_RATE, SAMPLE_WIDTH
 
 _BYTES_PER_SECOND = SAMPLE_RATE * CHANNELS * SAMPLE_WIDTH
 

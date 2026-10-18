@@ -35,7 +35,7 @@ if "decky" not in sys.modules:
     )
     sys.modules["decky"] = _decky
 
-from backend.services.voice_transcription_service import new_voice_install_state  # noqa: E402
+from backend.voice.voice_transcription_service import new_voice_install_state  # noqa: E402
 from main import Plugin  # noqa: E402
 
 STALE_STATE = {

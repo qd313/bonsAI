@@ -39,9 +39,9 @@ install_pwd_stub()
 
 from plugin_settings_file_harness import PluginSettingsFileMixin  # noqa: E402
 
-from backend.services import voice_level_gate as gate  # noqa: E402
-from backend.services import voice_rpc  # noqa: E402
-from backend.services import voice_transcription_service as vts  # noqa: E402
+from backend.voice import voice_level_gate as gate  # noqa: E402
+from backend.voice import voice_rpc  # noqa: E402
+from backend.voice import voice_transcription_service as vts  # noqa: E402
 from test_voice_quiet_speaker import Recording as QuietRecording  # noqa: E402
 
 BPS = vts.BYTES_PER_SECOND

@@ -18,7 +18,7 @@ install_pwd_stub()
 
 from plugin_settings_file_harness import PluginSettingsFileMixin  # noqa: E402
 
-from backend.services import voice_rpc  # noqa: E402
+from backend.voice import voice_rpc  # noqa: E402
 
 
 class FakeSession:

@@ -88,8 +88,8 @@ class DownloadsRefusedWhileOff(PluginSettingsFileMixin, unittest.IsolatedAsyncio
             self.assertEqual(out.get("error"), "downloads_off")
 
     async def test_voice_engine(self) -> None:
-        with mock.patch("backend.services.voice_rpc.install_whisper_cli", side_effect=_must_not_run), \
-                mock.patch("backend.services.voice_rpc.download_voice_model", side_effect=_must_not_run):
+        with mock.patch("backend.voice.voice_rpc.install_whisper_cli", side_effect=_must_not_run), \
+                mock.patch("backend.voice.voice_rpc.download_voice_model", side_effect=_must_not_run):
             self.assertRefused(await self.plugin.install_voice_engine("tiny.en"))
 
     async def test_size_lookups_stay_offline(self) -> None:

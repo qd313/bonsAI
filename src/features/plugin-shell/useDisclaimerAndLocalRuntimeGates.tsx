@@ -11,6 +11,11 @@
  * running. Both are remembered in the browser's local storage, so once
  * clicked past they do not come back.
  *
+ * A Decky uninstall and reinstall wipes the plugin's saved settings but not Steam's browser
+ * storage, so those "already seen" flags can outlive the plugin. When the back end reports a start
+ * with no settings file (a first run), this clears the plugin's own browser flags once, before it
+ * decides what to show, so a wiped Deck gets both notices and the help chip again.
+ *
  * Used for: index.tsx, on first mount and whenever the on-Deck AI setting
  * is turned on.
  *
@@ -25,6 +30,7 @@
  */
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { showModal, ConfirmModal } from "@decky/ui";
+import { clearBonsaiBrowserStorage } from "../settings/clearBonsaiBrowserStorage";
 
 const DISCLAIMER_STORAGE_KEY = "bonsai:disclaimer-accepted";
 const LOCAL_RUNTIME_BETA_DISMISSED_STORAGE_KEY = "bonsai:local-runtime-beta-dismissed-v1";
@@ -111,6 +117,14 @@ export function useDisclaimerAndLocalRuntimeGates(
      * so the switch that opened the notice would never be saved (Deck 2026-09-30).
      */
     saveSettingsNow?: () => void;
+    /**
+     * What the back end said about this start: true when it found no settings file, null while the
+     * answer is still on its way (nothing is decided until it arrives), false otherwise. Left out,
+     * the gate behaves as it always did and never clears anything.
+     */
+    firstRun?: boolean | null;
+    /** Called right after the stale browser flags are cleared, so on-screen state can follow (the help chip). */
+    onFirstRunFlagsCleared?: () => void;
   }
 ): DisclaimerGateApi {
   const [disclaimerAckVersion, setDisclaimerAckVersion] = useState(0);
@@ -120,6 +134,26 @@ export function useDisclaimerAndLocalRuntimeGates(
   useEffect(() => {
     modalHooksRef.current = modalHooks;
   }, [modalHooks]);
+  const firstRun = modalHooks?.firstRun;
+  const firstRunHandledRef = useRef(false);
+
+  /**
+   * True once it is safe to decide what to show. On a first run the plugin's own browser flags are
+   * cleared first, once per load: the back end answers true only once per start, but this guard
+   * also keeps a re-render from wiping the flags the person sets by clicking the notices.
+   */
+  const settleFirstRun = useCallback((): boolean => {
+    const answer = modalHooksRef.current?.firstRun;
+    if (answer === null) return false;
+    if (answer === true && !firstRunHandledRef.current) {
+      firstRunHandledRef.current = true;
+      clearBonsaiBrowserStorage();
+      ollamaLocalOnDeckPrevRef.current = null;
+      localRuntimeBetaPromptIssuedRef.current = false;
+      modalHooksRef.current?.onFirstRunFlagsCleared?.();
+    }
+    return true;
+  }, []);
 
   const acknowledgeDisclaimer = useCallback(() => {
     markDisclaimerAccepted();
@@ -152,13 +186,15 @@ export function useDisclaimerAndLocalRuntimeGates(
   }, [acknowledgeDisclaimer, openDisclaimerModal]);
 
   useEffect(() => {
+    if (!settleFirstRun()) return;
     if (!hasAcceptedDisclaimer()) {
       openDisclaimerModal(acknowledgeDisclaimer);
     }
-  }, [acknowledgeDisclaimer, openDisclaimerModal]);
+  }, [acknowledgeDisclaimer, openDisclaimerModal, settleFirstRun, firstRun]);
 
   useEffect(() => {
     if (!settingsLoaded) return;
+    if (!settleFirstRun()) return;
     if (!hasAcceptedDisclaimer()) return;
 
     const prevDeck = ollamaLocalOnDeckPrevRef.current;
@@ -189,7 +225,7 @@ export function useDisclaimerAndLocalRuntimeGates(
         }}
       />
     );
-  }, [settingsLoaded, ollamaLocalOnDeck, disclaimerAckVersion]);
+  }, [settingsLoaded, ollamaLocalOnDeck, disclaimerAckVersion, settleFirstRun, firstRun]);
 
   return {
     disclaimerAckVersion,

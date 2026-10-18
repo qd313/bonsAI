@@ -358,6 +358,7 @@ const Content: React.FC = () => {
     streamScrambleSettleMs,
     setStreamScrambleSettleMs,
     settingsLoaded,
+    settingsFirstRun,
     hydrateFromSettings,
     pauseDebouncedSettingsSave,
     buildChangedSettingsPayload,
@@ -668,6 +669,8 @@ const Content: React.FC = () => {
     onBeforeDeckyModal: captureSessionBeforeModal,
     onCompleteDeckyModalClose,
     saveSettingsNow: () => void persistChangedSettingsNow(),
+    firstRun: settingsFirstRun,
+    onFirstRunFlagsCleared: resetPluginHelpDismissed,
   });
 
   const { openModelPolicyReadme, onOpenControllerSettingsForShortcut } = useExternalNavigationActions();

@@ -7,8 +7,9 @@
  * disclaimer, every one of those browser-storage entries needs to go too. This file is what removes
  * all of them in one pass.
  *
- * Used for: the Settings tab's clear-plugin-data action, and the flow that lets the player see the
- * first-run disclaimer again.
+ * Used for: the Settings tab's clear-plugin-data action, the flow that lets the player see the
+ * first-run disclaimer again, and the first-run gate (useDisclaimerAndLocalRuntimeGates.tsx), which calls
+ * it when the back end starts with no settings file and Steam has kept flags from a wiped install.
  *
  * Solves: gives one place that wipes every browser-storage entry the plugin has ever written, instead
  * of each feature that adds a new entry also having to remember to add its own clean-up.

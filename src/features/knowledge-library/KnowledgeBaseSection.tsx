@@ -118,6 +118,9 @@ type RagCorpusStatus = {
   installed?: boolean;
   corpus_path?: string;
   corpus_version?: string;
+  /** Games and sections in the installed file; absent when the file could not be read. */
+  game_count?: number;
+  section_count?: number;
   use_local_knowledge_base?: boolean;
   embeddings_populated?: boolean;
   embed_model_available?: boolean;
@@ -828,6 +831,9 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
             <>
               <span style={{ color: "#7dcea0", fontWeight: 600 }}>Installed</span>
               {displayedVersion ? ` — version ${displayedVersion}` : null}
+              {typeof status?.game_count === "number" && status.game_count > 0
+                ? `${displayedVersion ? "," : " —"} ${status.game_count} ${status.game_count === 1 ? "game" : "games"}`
+                : null}
               {status?.corpus_path ? (
                 <span style={{ display: "block", marginTop: 4, color: "#8fa0b4" }}>{status.corpus_path}</span>
               ) : null}

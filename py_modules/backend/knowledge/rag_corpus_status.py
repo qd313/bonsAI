@@ -20,6 +20,8 @@ own before the move; it has one now.
 from __future__ import annotations
 
 import logging
+import os
+import sqlite3
 from dataclasses import dataclass
 from typing import Any, Callable, Optional
 
@@ -36,6 +38,39 @@ from backend.knowledge.ollama_embed_service import nomic_embed_available
 logger = logging.getLogger("bonsai")
 
 
+_COUNTS_CACHE: dict[tuple[str, int, int], dict[str, int]] = {}
+
+
+def read_corpus_counts(db_path: str) -> dict[str, int]:
+    """How many games and sections the installed database holds, or {} when it cannot be read.
+
+    Counted straight from the file, once: the answer is kept against the file's size and
+    modified time, so the status call stays quick and a new install is counted afresh.
+    """
+    try:
+        st = os.stat(db_path)
+    except OSError:
+        return {}
+    key = (str(db_path), st.st_mtime_ns, st.st_size)
+    if key in _COUNTS_CACHE:
+        return dict(_COUNTS_CACHE[key])
+    try:
+        uri = "file:" + str(db_path).replace("\\", "/") + "?mode=ro"
+        conn = sqlite3.connect(uri, uri=True)
+        try:
+            counts = {
+                "game_count": int(conn.execute("SELECT COUNT(*) FROM games").fetchone()[0]),
+                "section_count": int(conn.execute("SELECT COUNT(*) FROM sections").fetchone()[0]),
+            }
+        finally:
+            conn.close()
+    except Exception:
+        return {}
+    _COUNTS_CACHE.clear()
+    _COUNTS_CACHE[key] = counts
+    return dict(counts)
+
+
 @dataclass(frozen=True)
 class StatusTools:
     """The outside things this answer needs, so a test can hand it fakes."""
@@ -46,6 +81,7 @@ class StatusTools:
     embed_model_available: Callable[[str], bool] = nomic_embed_available
     storage_options: Callable[[], dict] = list_rag_storage_options
     internal_dir: Callable[[], str] = default_corpus_dir_internal
+    corpus_counts: Callable[[str], dict] = read_corpus_counts
 
 
 def pc_ip_for_status(settings: dict, data: Any) -> str:
@@ -124,9 +160,17 @@ def build_rag_corpus_status(
             pass
         storage_options = _fallback_storage_options(tools.internal_dir)
 
+    counts: dict[str, Any] = {}
+    if db_path:
+        try:
+            counts = dict(tools.corpus_counts(str(db_path)) or {})
+        except Exception:
+            counts = {}
+
     return {
         **dict(download_state or {}),
         "installed": bool(db_path),
+        **{k: counts[k] for k in ("game_count", "section_count") if isinstance(counts.get(k), int)},
         "corpus_path": corpus_path,
         "corpus_version": str(settings.get("rag_corpus_version") or ""),
         "use_local_knowledge_base": settings.get("use_local_knowledge_base") is True,

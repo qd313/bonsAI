@@ -8,6 +8,9 @@ Solves: Which machine gets asked about the meaning-search model, what happens wh
 Does not: Test downloading or installing -- that is the download service's own job.
 """
 
+import os
+import sqlite3
+import tempfile
 import unittest
 
 from backend.core.constants import DEFAULT_OLLAMA_PCIP
@@ -15,6 +18,7 @@ from backend.knowledge.rag_corpus_status import (
     StatusTools,
     build_rag_corpus_status,
     pc_ip_for_status,
+    read_corpus_counts,
 )
 
 STORAGE = {"internal": {"id": "internal", "free_bytes": 100}, "sd_card": None}
@@ -28,6 +32,7 @@ def tools(
     embed_available=True,
     storage_raises=False,
     record=None,
+    counts=None,
 ):
     def load_manifest(_path):
         if manifest_raises:
@@ -51,6 +56,7 @@ def tools(
         embed_model_available=embed,
         storage_options=storage,
         internal_dir=lambda: "/home/deck/.local/share/bonsai",
+        corpus_counts=(lambda _path: counts) if counts is not None else (lambda _path: {}),
     )
 
 
@@ -75,6 +81,50 @@ class WhichMachineGetsAskedTests(unittest.TestCase):
     def test_nothing_to_ask_is_empty_not_an_error(self):
         self.assertEqual(pc_ip_for_status({}, None), "")
         self.assertEqual(pc_ip_for_status({"named_ollama_hosts": "not a list"}, None), "")
+
+
+class LibraryCountTests(unittest.TestCase):
+    """P96-F15: the library line on screen shows how many games the installed file holds."""
+
+    def _db(self, games, sections):
+        d = tempfile.mkdtemp()
+        path = os.path.join(d, "corpus.db")
+        conn = sqlite3.connect(path)
+        conn.execute("CREATE TABLE games (game_id INTEGER PRIMARY KEY, canonical_title TEXT)")
+        conn.execute("CREATE TABLE sections (section_id INTEGER PRIMARY KEY, game_id INTEGER)")
+        for i in range(games):
+            conn.execute("INSERT INTO games (canonical_title) VALUES (?)", (f"g{i}",))
+        for i in range(sections):
+            conn.execute("INSERT INTO sections (game_id) VALUES (1)")
+        conn.commit()
+        conn.close()
+        return path
+
+    def test_a_small_database_reports_its_game_and_section_counts(self):
+        path = self._db(3, 5)
+        self.assertEqual(read_corpus_counts(path), {"game_count": 3, "section_count": 5})
+
+    def test_the_status_carries_the_counts(self):
+        out = build_rag_corpus_status(
+            {}, None, {}, tools(counts={"game_count": 38, "section_count": 414})
+        )
+        self.assertEqual(out["game_count"], 38)
+        self.assertEqual(out["section_count"], 414)
+
+    def test_a_changed_file_is_counted_again(self):
+        path = self._db(2, 2)
+        self.assertEqual(read_corpus_counts(path)["game_count"], 2)
+        conn = sqlite3.connect(path)
+        conn.execute("INSERT INTO games (canonical_title) VALUES ('x')")
+        conn.commit()
+        conn.close()
+        self.assertEqual(read_corpus_counts(path)["game_count"], 3)
+
+    def test_an_unreadable_file_leaves_the_counts_out_instead_of_failing(self):
+        self.assertEqual(read_corpus_counts("/no/such/corpus.db"), {})
+        out = build_rag_corpus_status({}, None, {}, tools(counts={}))
+        self.assertNotIn("game_count", out)
+        self.assertTrue(out["installed"])
 
 
 class StatusAnswerTests(unittest.TestCase):

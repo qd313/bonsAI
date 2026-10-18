@@ -2,9 +2,9 @@
  * Title: The Search tab's matches
  *
  * Purpose: What shows once a word is picked (plan 90 § 2b, the drawing's `.s-count`, `.s-group`, `.s-hit`):
- * the line "N matches for 'word'" with a Clear button, then the matches in four groups in a fixed order,
- * Your chats, Your notes, Settings, Game and help notes. A match shows its words with the picked word lit and
- * a small line under it (the chat's name and the day, the note's game, the setting's place, the game note's
+ * the line "N matches for 'word'" with a Clear button, then the matches in five groups in a fixed order,
+ * Your chats, Your notes, bonsAI settings (bonsAI's own, plan 96), Settings (Steam's), Game and help notes.
+ * A match shows its words with the picked word lit and a small line under it (the chat's name and the day, the note's game, the setting's place, the game note's
  * snippet). A game note whose name does not hold the word is shown by a neutral title and no snippet until A
  * opens it, so a search for a boss does not name another boss.
  *
@@ -15,7 +15,7 @@
  * Does not: Find the matches (searchModel.ts) or decide what A does (the tab passes `press` in each row).
  */
 import React from "react";
-import { FiBook, FiBookmark, FiMessageSquare, FiSettings } from "react-icons/fi";
+import { FiBook, FiBookmark, FiMessageSquare, FiSettings, FiSliders } from "react-icons/fi";
 
 import { highlightParts, matchCountLine } from "./searchModel";
 import { SearchStop } from "./SearchStop";
@@ -36,12 +36,13 @@ export type ResultRow = {
   press: () => void;
 };
 
-export type ResultGroupId = "chats" | "notes" | "settings" | "game";
+export type ResultGroupId = "chats" | "notes" | "bonsai" | "settings" | "game";
 export type ResultGroup = { id: ResultGroupId; label: string; rows: ResultRow[] };
 
 const GROUP_ICON: Record<ResultGroupId, React.ReactElement> = {
   chats: <FiMessageSquare size={11} />,
   notes: <FiBookmark size={11} />,
+  bonsai: <FiSliders size={11} />,
   settings: <FiSettings size={11} />,
   game: <FiBook size={11} />,
 };

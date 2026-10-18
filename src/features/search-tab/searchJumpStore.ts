@@ -85,6 +85,13 @@ export function registerSearchTabSwitch(fn: (tabId: string) => void): () => void
   };
 }
 
+/** Switch to a tab by the shell's own switch (the one a press on the tab bar makes). False when none is registered. */
+export function switchToTab(tabId: string): boolean {
+  if (!switchTab) return false;
+  switchTab(tabId);
+  return true;
+}
+
 /** A on a chat match: remember it, ask the Main tab to put its chat on the question, and the Back line to show. */
 export function startSearchJump(args: { slotId: string; turnId: string; matchKey: string; word: string; game: string | null }): void {
   set({ jump: { ...args, revealPending: true, revealUntil: Date.now() + REVEAL_WAIT_MS }, arrival: null });

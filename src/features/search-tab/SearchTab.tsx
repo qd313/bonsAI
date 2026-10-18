@@ -2,15 +2,16 @@
  * Title: The Search tab
  *
  * Purpose: The tab to the left of Main with a magnifier on it (plan 90 § 2b, drawn as option B of round 2 on
- * the mock-up board): one place to find a word across the person's chats, their own notes, the Steam
- * settings bonsAI can open and the knowledge library's game notes. From the top: a game row (All, then each
- * game the chats mention) that narrows everything to one game, a find box with eight word buttons made from
- * the person's own questions (so the D-pad can pick a word with no typing), then either the matches in four
- * groups once a word is picked, or, before that, every note the person kept with its on/off switch. A on a
- * setting opens it in Steam, as the old card on the Main tab did; A on a game note reads it in its own words;
- * A on a note flips its switch; A on a chat match opens that chat on the question (useSearchJump.ts), and the
- * "Back to where you were" line over that chat brings the person back here with the ring on the same match.
- * B anywhere on the tab goes back to the tab the person came from.
+ * the mock-up board): one place to find a word across the person's chats, their own notes, bonsAI's own
+ * settings, the Steam settings bonsAI can open and the knowledge library's game notes. From the top: a game
+ * row (All, then each game the chats mention) that narrows everything to one game, a find box with eight word
+ * buttons made from the person's own questions (so the D-pad can pick a word with no typing), then either the
+ * matches in five groups once a word is picked, or, before that, every note the person kept with its on/off
+ * switch. A on a Steam setting opens it in Steam, as the old card on the Main tab did; A on one of bonsAI's own
+ * settings goes to it (bonsaiSettingJump.ts); A on a game note reads it in its own words; A on a note flips its
+ * switch; A on a chat match opens that chat on the question (useSearchJump.ts), and the "Back to where you
+ * were" line over that chat brings the person back here with the ring on the same match. B anywhere on the tab
+ * goes back to the tab the person came from.
  *
  * Used for: useSearchTabPayload.tsx, which index.tsx mounts as the first tab.
  *
@@ -23,6 +24,8 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
 
+import { matchBonsaiSettings, bonsaiSettingCrumb } from "./bonsaiSettingsIndex";
+import { startBonsaiSettingJump } from "./bonsaiSettingJump";
 import type { IntentPackSearchIndex } from "./intentPackSearch";
 import { uiGamepadFocusElement } from "../../shared/dpad/uiDocument";
 import { GameNoteSheet } from "./GameNoteSheet";
@@ -84,7 +87,7 @@ export type SearchTabProps = {
  * installed" or a failed call.
  *
  * 1. Holds the typed word, the picked game and the open note (and mirrors them into searchTabStore).
- * 2. Narrows the questions and notes by the game, makes the word buttons, and finds the matches in four groups.
+ * 2. Narrows the questions and notes by the game, makes the word buttons, and finds the matches in five groups.
  * 3. Names the rows top to bottom for the stops (useSearchNav), and moves the ring after a redraw that asked for it.
  */
 export const SearchTab: React.FC<SearchTabProps> = ({ active, isAsking, intentPackIndex, onSettingClick, onOpenChat }) => {
@@ -131,7 +134,7 @@ export const SearchTab: React.FC<SearchTabProps> = ({ active, isAsking, intentPa
   const { notes, toggleNote } = index;
   const jumpTo = useSearchJump({ word, game, onOpenChat });
 
-  /** The matches, in the four groups' fixed order; a group with no match is left out. */
+  /** The matches, in the groups' fixed order (chats, notes, bonsAI settings, Steam settings, game notes); a group with no match is left out. */
   const groups = useMemo<ResultGroup[]>(() => {
     if (!searching) return [];
     let at = 0;
@@ -169,6 +172,24 @@ export const SearchTab: React.FC<SearchTabProps> = ({ active, isAsking, intentPa
           on: n.on,
           press: () => toggleNote(n.id),
         })),
+      });
+    }
+    const own = matchBonsaiSettings(word);
+    if (own.length > 0) {
+      out.push({
+        id: "bonsai",
+        label: "bonsAI settings",
+        rows: own.map((e) => {
+          const key = `bonsai:${e.label}`;
+          return {
+            key,
+            rowName: next(),
+            title: e.label,
+            lit: true,
+            sub: bonsaiSettingCrumb(e),
+            press: () => startBonsaiSettingJump(e, { word, game, matchKey: key }),
+          };
+        }),
       });
     }
     const settings = matchSettings(word, intentPackIndex);

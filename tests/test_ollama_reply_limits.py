@@ -14,7 +14,7 @@ from unittest.mock import MagicMock, patch
 
 from backend.ollama import ollama_reply_limits as limits
 from backend.ollama.ollama_reply_limits import OllamaReplyTooLarge
-from backend.services import (
+from backend.knowledge import (
     ollama_embed_service,
 )
 from backend.ask import (
@@ -184,7 +184,7 @@ class EveryBareReadIsCappedTests(unittest.TestCase):
 
     def test_embed_raises_its_own_error_on_an_endless_reply(self) -> None:
         body = _EndlessBody()
-        with patch("backend.services.ollama_embed_service.urllib.request.urlopen", return_value=body):
+        with patch("backend.knowledge.ollama_embed_service.urllib.request.urlopen", return_value=body):
             with self.assertRaises(ollama_embed_service.OllamaEmbedError):
                 ollama_embed_service.embed_texts("m", ["hello"], base_http="http://x:1")
         self.assertTrue(body.closed)
@@ -192,7 +192,7 @@ class EveryBareReadIsCappedTests(unittest.TestCase):
     def test_embed_error_body_is_read_capped(self) -> None:
         big = io.BytesIO(b"e" * 500_000)
         err = urllib.error.HTTPError("http://x/api/embed", 500, "boom", None, big)  # type: ignore[arg-type]
-        with patch("backend.services.ollama_embed_service.urllib.request.urlopen", side_effect=err):
+        with patch("backend.knowledge.ollama_embed_service.urllib.request.urlopen", side_effect=err):
             with self.assertRaises(ollama_embed_service.OllamaEmbedError) as ctx:
                 ollama_embed_service.embed_texts("m", ["hello"], base_http="http://x:1")
         self.assertIn("HTTP 500", str(ctx.exception))
@@ -201,7 +201,7 @@ class EveryBareReadIsCappedTests(unittest.TestCase):
     def test_embed_still_reads_a_real_batch(self) -> None:
         vecs = [[0.123456789] * 768 for _ in range(200)]
         raw = io.BytesIO(json.dumps({"embeddings": vecs}).encode("utf-8"))
-        with patch("backend.services.ollama_embed_service.urllib.request.urlopen", return_value=raw):
+        with patch("backend.knowledge.ollama_embed_service.urllib.request.urlopen", return_value=raw):
             out = ollama_embed_service.embed_texts("m", ["t"] * 200, base_http="http://x:1")
         self.assertEqual(len(out), 200)
 

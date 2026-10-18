@@ -3,7 +3,7 @@ import unittest
 from unittest import mock
 
 from backend.services.knowledge_base_schema import DEFAULT_EMBEDDING_MODEL
-from backend.services.ollama_embed_service import (
+from backend.knowledge.ollama_embed_service import (
     OllamaEmbedError,
     embed_texts,
     format_embed_document,
@@ -21,21 +21,21 @@ class OllamaEmbedServiceTests(unittest.TestCase):
 
     def test_nomic_embed_available_matches_tag(self):
         with mock.patch(
-            "backend.services.ollama_embed_service.list_installed_ollama_tags",
+            "backend.knowledge.ollama_embed_service.list_installed_ollama_tags",
             return_value=["llama3.2", "nomic-embed-text:latest"],
         ):
             self.assertTrue(nomic_embed_available("127.0.0.1:11434"))
 
     def test_nomic_embed_available_missing(self):
         with mock.patch(
-            "backend.services.ollama_embed_service.list_installed_ollama_tags",
+            "backend.knowledge.ollama_embed_service.list_installed_ollama_tags",
             return_value=["llama3.2"],
         ):
             self.assertFalse(nomic_embed_available("127.0.0.1:11434"))
 
     def test_nomic_embed_available_is_cached_per_host_and_model(self):
         with mock.patch(
-            "backend.services.ollama_embed_service.list_installed_ollama_tags",
+            "backend.knowledge.ollama_embed_service.list_installed_ollama_tags",
             return_value=["nomic-embed-text:latest"],
         ) as tags:
             self.assertTrue(nomic_embed_available("127.0.0.1:11434"))
@@ -45,7 +45,7 @@ class OllamaEmbedServiceTests(unittest.TestCase):
 
     def test_nomic_embed_available_cache_does_not_span_models(self):
         with mock.patch(
-            "backend.services.ollama_embed_service.list_installed_ollama_tags",
+            "backend.knowledge.ollama_embed_service.list_installed_ollama_tags",
             return_value=["nomic-embed-text:latest"],
         ):
             self.assertTrue(nomic_embed_available("127.0.0.1:11434"))

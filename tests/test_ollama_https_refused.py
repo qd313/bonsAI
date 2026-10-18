@@ -130,7 +130,7 @@ class ChatSummaryRefusesHttpsTests(unittest.IsolatedAsyncioTestCase):
 
 class LeafHelpersDoNotCrashOnHttpsTests(unittest.TestCase):
     def test_meaning_search_check_says_no_for_an_https_address(self):
-        from backend.services.ollama_embed_service import nomic_embed_available
+        from backend.knowledge.ollama_embed_service import nomic_embed_available
 
         self.assertFalse(nomic_embed_available("https://192.168.1.50:11434"))
 

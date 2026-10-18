@@ -22,7 +22,7 @@ install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
 from main import Plugin  # noqa: E402
-from backend.services import ollama_embed_service as embed  # noqa: E402
+from backend.knowledge import ollama_embed_service as embed  # noqa: E402
 from backend.ollama import ollama_local_setup_rpc as setup_rpc  # noqa: E402
 
 DECK = "127.0.0.1"

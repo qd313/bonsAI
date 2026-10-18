@@ -120,7 +120,7 @@ from backend.services.knowledge_base_schema import (
     resolve_corpus_db_path,
     unpack_embedding_vector,
 )
-from backend.services.ollama_embed_service import (
+from backend.knowledge.ollama_embed_service import (
     OllamaEmbedError,
     embed_texts,
     format_embed_query,

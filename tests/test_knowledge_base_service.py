@@ -55,7 +55,7 @@ from backend.services.knowledge_base_service import (
 )
 from backend.services.compat_topic_router import match_compat_corpus_topics
 from backend.services.kb_not_in_notes_notice import should_show_no_close_match_notice
-from backend.services.ollama_embed_service import OllamaEmbedError
+from backend.knowledge.ollama_embed_service import OllamaEmbedError
 from corpus_build_support import run_seed_build_or_skip
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

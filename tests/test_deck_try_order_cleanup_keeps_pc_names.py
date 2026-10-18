@@ -25,7 +25,7 @@ install_pwd_stub()
 from plugin_settings_file_harness import PluginSettingsFileMixin  # noqa: E402
 
 import main  # noqa: E402
-from backend.services import ollama_embed_service as embed  # noqa: E402
+from backend.knowledge import ollama_embed_service as embed  # noqa: E402
 from backend.ollama import ollama_pc_models  # noqa: E402
 
 RPC = main.ollama_local_setup_rpc

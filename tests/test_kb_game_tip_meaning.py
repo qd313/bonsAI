@@ -34,7 +34,7 @@ from backend.services.knowledge_base_service import (  # noqa: E402
     close_connection,
     retrieve_knowledge_context,
 )
-from backend.services.ollama_embed_service import (  # noqa: E402
+from backend.knowledge.ollama_embed_service import (  # noqa: E402
     OllamaEmbedError,
     nomic_embed_available,
 )

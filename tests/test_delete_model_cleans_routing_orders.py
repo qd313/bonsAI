@@ -15,7 +15,7 @@ from unittest.mock import AsyncMock, patch
 from plugin_settings_file_harness import PluginSettingsFileMixin
 
 import main
-from backend.services import ollama_embed_service as embed
+from backend.knowledge import ollama_embed_service as embed
 
 
 class DeleteModelCleansRoutingOrdersTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioTestCase):

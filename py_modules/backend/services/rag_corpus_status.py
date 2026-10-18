@@ -31,7 +31,7 @@ from backend.services.knowledge_base_schema import (
     load_manifest_from_path,
     resolve_corpus_db_path,
 )
-from backend.services.ollama_embed_service import nomic_embed_available
+from backend.knowledge.ollama_embed_service import nomic_embed_available
 
 logger = logging.getLogger("bonsai")
 

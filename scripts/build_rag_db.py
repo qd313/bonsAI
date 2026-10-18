@@ -51,7 +51,7 @@ from backend.services.knowledge_base_schema import (  # noqa: E402
     pack_embedding_vector,
     write_manifest,
 )
-from backend.services.ollama_embed_service import format_embed_document  # noqa: E402
+from backend.knowledge.ollama_embed_service import format_embed_document  # noqa: E402
 from backend.answer.transparency_service import build_attribution_entries  # noqa: E402
 
 MAINTAINER_LICENSE = "bonsAI-maintainer"

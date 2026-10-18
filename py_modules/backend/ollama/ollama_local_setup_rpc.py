@@ -65,7 +65,7 @@ from backend.ollama.ollama_routing import (
 from backend.ollama.ollama_pc_models import ask_known_pcs
 from backend.ollama.ollama_try_order_prune import prune_saved_orders_to_installed
 from backend.ollama import ollama_pull_resume_service as pull_resume
-from backend.services.ollama_embed_service import forget_embed_availability_after_pull
+from backend.knowledge.ollama_embed_service import forget_embed_availability_after_pull
 from backend.ollama.starter_speech_models import download_speech_models
 from backend.core.capabilities import capability_enabled, downloads_off_refusal
 

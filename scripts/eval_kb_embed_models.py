@@ -99,7 +99,7 @@ from backend.services.knowledge_base_service import (  # noqa: E402
 from backend.services.knowledge_base_service import (  # noqa: E402
     should_retrieve_knowledge,
 )
-from backend.services.ollama_embed_service import (  # noqa: E402
+from backend.knowledge.ollama_embed_service import (  # noqa: E402
     format_embed_document,
     format_embed_query,
 )

@@ -90,7 +90,7 @@ sys.path.insert(0, str(ROOT / "py_modules"))
 # without ever running main() or install_fake_decky() first.
 from backend.characters.ai_character_service import VALID_PRESET_IDS  # noqa: E402
 from backend.prompts.ollama_prompts import FOLLOWUP_SUBJECT_NOTE_TEMPLATE  # noqa: E402
-from backend.services.ollama_service import estimate_prompt_tokens  # noqa: E402
+from backend.ask.ollama_service import estimate_prompt_tokens  # noqa: E402
 
 # Reports are saved in the workshop repo, not in this one (scripts/lib/workshop.py says where it is).
 sys.path.insert(0, str(ROOT / "scripts" / "lib"))
@@ -1621,7 +1621,7 @@ def main() -> int:
 
     # Imported only now: main.py reads `decky` at import time.
     import main as plugin_main  # noqa: E402
-    from backend.services import game_ai_request as gar  # noqa: E402
+    from backend.ask import game_ai_request as gar  # noqa: E402
     from backend.prompts.ollama_prompts import kb_card_names  # noqa: E402
 
     plugin = plugin_main.Plugin()

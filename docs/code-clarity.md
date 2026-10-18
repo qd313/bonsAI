@@ -138,8 +138,8 @@ Walk this to trace a question from the Main tab to the AI and back — about ten
 | 5 | [`useBackgroundGameAi.ts`](../src/hooks/useBackgroundGameAi.ts) | Asks "is it finished yet" over and over until it is. |
 | 6 | [`deckyCall.ts`](../src/utils/deckyCall.ts) | Sends a request to the back end and gives up if it hangs. |
 | 7 | [`main.py`](../main.py) | The back end's front door: start a question, ask how it is going, stop it. |
-| 8 | [`game_ai_request.py`](../py_modules/backend/services/game_ai_request.py) | Builds the question: what game is running, the knowledge base, the safety check, then the AI. |
-| 9 | [`ollama_ask_service.py`](../py_modules/backend/services/ollama_ask_service.py) | Actually talks to the AI. |
+| 8 | [`game_ai_request.py`](../py_modules/backend/ask/game_ai_request.py) | Builds the question: what game is running, the knowledge base, the safety check, then the AI. |
+| 9 | [`ollama_ask_service.py`](../py_modules/backend/ask/ollama_ask_service.py) | Actually talks to the AI. |
 | 10 | [`MainTabChatTranscript.tsx`](../src/components/MainTabChatTranscript.tsx) | Draws the reply, the buttons under it, and the strategy parts. |
 
 **Moving focus with the D-pad:** [`replyStopRegistry.ts`](../src/utils/replyStopRegistry.ts),

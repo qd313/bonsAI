@@ -15,7 +15,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
-from backend.services import ollama_stop_service as svc  # noqa: E402
+from backend.ask import ollama_stop_service as svc  # noqa: E402
 from main import Plugin  # noqa: E402
 
 LOCAL = "127.0.0.1"

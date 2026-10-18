@@ -22,7 +22,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 install_fcntl_and_decky_stubs()
 
 from backend.services import kb_followup_memory  # noqa: E402
-from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
+from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_service import KnowledgeRetrievalResult  # noqa: E402
 from backend.prompts.ollama_prompts import kb_card_names  # noqa: E402
 
@@ -171,7 +171,7 @@ class FollowupMemorySearchWordsWiringTests(unittest.TestCase):
             sources=[],
         )
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_a_fresh_named_question_keeps_its_own_search_words(self, mock_retrieve):
         mock_retrieve.return_value = self._drg_dreadnought_result()
         plugin = _FakePlugin(self._settings())
@@ -191,7 +191,7 @@ class FollowupMemorySearchWordsWiringTests(unittest.TestCase):
         _, kwargs = mock_retrieve.call_args
         self.assertEqual(kwargs["question"], "how do i beat the dreadnought twins")
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_a_game_change_clears_the_memory(self, mock_retrieve):
         mock_retrieve.return_value = self._drg_dreadnought_result()
         plugin = _FakePlugin(self._settings())
@@ -221,7 +221,7 @@ class FollowupMemorySearchWordsWiringTests(unittest.TestCase):
         _, kwargs = mock_retrieve.call_args
         self.assertEqual(kwargs["question"], "what about its second phase")
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_speed_mode_never_gets_the_augmented_search_words(self, mock_retrieve):
         mock_retrieve.return_value = self._drg_dreadnought_result()
         plugin = _FakePlugin(self._settings())
@@ -277,7 +277,7 @@ class FollowupMemoryPromptSubjectWiringTests(unittest.TestCase):
             sources=[],
         )
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_a_bare_followup_using_memory_carries_the_subject_to_the_prompt_builder(
         self, mock_retrieve
     ):
@@ -293,7 +293,7 @@ class FollowupMemoryPromptSubjectWiringTests(unittest.TestCase):
             plugin.ask_ollama_calls[-1]["followup_subject"], "Glyphid Dreadnought"
         )
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_a_fresh_named_question_carries_no_subject_even_with_one_remembered(
         self, mock_retrieve
     ):
@@ -313,7 +313,7 @@ class FollowupMemoryPromptSubjectWiringTests(unittest.TestCase):
 
         self.assertEqual(plugin.ask_ollama_calls[-1]["followup_subject"], "")
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_speed_mode_never_carries_a_subject_even_with_one_remembered(self, mock_retrieve):
         mock_retrieve.return_value = self._drg_dreadnought_result()
         plugin = _FakePlugin(self._settings())
@@ -327,8 +327,8 @@ class FollowupMemoryPromptSubjectWiringTests(unittest.TestCase):
 
         self.assertEqual(plugin.ask_ollama_calls[-1]["followup_subject"], "")
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_a_troubleshooting_question_never_carries_a_subject(
         self, mock_should_retrieve, mock_retrieve
     ):
@@ -350,7 +350,7 @@ class FollowupMemoryPromptSubjectWiringTests(unittest.TestCase):
 
         self.assertEqual(plugin.ask_ollama_calls[-1]["followup_subject"], "")
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_the_remembered_subject_never_reaches_the_spoiler_consent_kwargs(self, mock_retrieve):
         """The safety half of D98: a remembered subject is sometimes just the top attached
         note's own title, not anything the person typed. If it ever counted as the person naming

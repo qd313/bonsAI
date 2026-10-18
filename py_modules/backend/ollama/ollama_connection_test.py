@@ -26,7 +26,7 @@ from backend.ollama.local_ollama_setup_service import (
     local_ollama_cli_home_ready,
     recover_loopback_ollama_listening,
 )
-from backend.services.ollama_service import probe_ollama_health
+from backend.ask.ollama_service import probe_ollama_health
 
 logger = logging.getLogger("bonsai")
 

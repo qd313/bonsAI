@@ -24,7 +24,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()  # so this file also runs on its own on Windows, not only after another installs it
 
-from backend.services.game_ai_request import _parse_kb_attached_notes, run_game_ai_request  # noqa: E402
+from backend.ask.game_ai_request import _parse_kb_attached_notes, run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_service import (
     _COMPAT_GAME_TITLE,
     KnowledgeCard,
@@ -303,8 +303,8 @@ def _attached_result(
 
 
 class KbAttachedNotesWiringTests(unittest.TestCase):
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_the_finished_result_carries_the_attached_note(self, mock_should, mock_retrieve):
         mock_should.return_value = (True, "strategy")
         mock_retrieve.return_value = _attached_result(_card())
@@ -321,8 +321,8 @@ class KbAttachedNotesWiringTests(unittest.TestCase):
         # see chat_slot_service.py's own tests for the save/reload round trip.
         self.assertEqual(result["transparency"]["kb_attached_notes"], result["kb_attached_notes"])
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_nothing_attached_gives_an_empty_list_not_an_absent_key(self, mock_should, mock_retrieve):
         mock_should.return_value = (True, "strategy")
         mock_retrieve.return_value = KnowledgeRetrievalResult(attached=False)
@@ -334,8 +334,8 @@ class KbAttachedNotesWiringTests(unittest.TestCase):
         self.assertEqual(result["kb_attached_notes"], [])
         self.assertEqual(result["transparency"]["kb_attached_notes"], [])
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_a_card_dropped_by_the_context_budget_is_not_shown_as_attached(
         self, mock_should, mock_retrieve
     ):
@@ -358,8 +358,8 @@ class KbAttachedNotesWiringTests(unittest.TestCase):
 
         self.assertEqual(result["kb_attached_notes"], [])
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_the_live_snapshot_is_written_before_ask_ollama_is_called(
         self, mock_should, mock_retrieve
     ):
@@ -391,8 +391,8 @@ class KbAttachedNotesWiringTests(unittest.TestCase):
         self.assertEqual(len(snapshot_calls[0][1]), 1)
         self.assertEqual(snapshot_calls[0][1][0]["name"], "Broken Vessel")
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_a_compat_turns_tips_reach_the_live_snapshot_before_ask_ollama_too(
         self, mock_should, mock_retrieve
     ):
@@ -443,8 +443,8 @@ class KbAttachedNotesWiringTests(unittest.TestCase):
         self.assertEqual(snapshot_calls[0][1][0]["domain"], "compat")
         self.assertEqual(snapshot_calls[0][1][0]["name"], "proton")
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_no_publish_when_nothing_attached(self, mock_should, mock_retrieve):
         mock_should.return_value = (True, "strategy")
         mock_retrieve.return_value = KnowledgeRetrievalResult(attached=False)
@@ -455,8 +455,8 @@ class KbAttachedNotesWiringTests(unittest.TestCase):
 
         self.assertEqual(plugin._partial_stream_snapshot["kb_attached_notes"], [])
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_a_mismatched_request_id_is_not_written(self, mock_should, mock_retrieve):
         """`_publish_kb_attached_notes_live` must decline once a newer request owns the
         snapshot -- the same guard `_publish_asked_entity` uses in main.py."""
@@ -495,10 +495,10 @@ class NoCloseMatchReadsNoteTextThroughTheRealPathTests(unittest.TestCase):
             ask_mode="strategy",
         )
 
-    @patch("backend.services.game_ai_request.summarize_kb_coverage")
-    @patch("backend.services.game_ai_request.resolve_title_from_question")
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.summarize_kb_coverage")
+    @patch("backend.ask.game_ai_request.resolve_title_from_question")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_a_hollow_knight_shaped_note_no_longer_shows_the_notice(
         self, mock_should, mock_retrieve, mock_resolve_title, mock_coverage
     ):
@@ -534,10 +534,10 @@ class NoCloseMatchReadsNoteTextThroughTheRealPathTests(unittest.TestCase):
 
         self.assertNotIn("No close match in my notes", out["response"])
 
-    @patch("backend.services.game_ai_request.summarize_kb_coverage")
-    @patch("backend.services.game_ai_request.resolve_title_from_question")
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.summarize_kb_coverage")
+    @patch("backend.ask.game_ai_request.resolve_title_from_question")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_without_the_matching_text_the_notice_still_shows(
         self, mock_should, mock_retrieve, mock_resolve_title, mock_coverage
     ):
@@ -578,8 +578,8 @@ class KbSearchAppLogTests(unittest.TestCase):
     def _kb_log_calls(self, plugin) -> list[dict]:
         return [c for c in plugin.app_log_calls if c["category"] == "ask.kb_search"]
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_an_attached_note_is_named_as_both_searched_and_attached(self, mock_should, mock_retrieve):
         mock_should.return_value = (True, "strategy")
         mock_retrieve.return_value = _attached_result(_card())
@@ -599,8 +599,8 @@ class KbSearchAppLogTests(unittest.TestCase):
         self.assertEqual(fields["attached_notes"], "Hollow Knight — Broken Vessel")
         self.assertEqual(fields["starved_by_context_budget"], False)
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_nothing_found_still_logs_a_zero_zero_line(self, mock_should, mock_retrieve):
         """A search that finds nothing is itself a fact worth recording -- confirming a screen
         that reads "no notes for this game" really did run a search and really did find none,
@@ -618,8 +618,8 @@ class KbSearchAppLogTests(unittest.TestCase):
         self.assertEqual(fields["searched_count"], 0)
         self.assertEqual(fields["attached_count"], 0)
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_a_card_dropped_by_the_context_budget_is_searched_but_not_attached(
         self, mock_should, mock_retrieve
     ):
@@ -643,8 +643,8 @@ class KbSearchAppLogTests(unittest.TestCase):
         self.assertEqual(fields["attached_count"], 0)
         self.assertEqual(fields["starved_by_context_budget"], True)
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_no_search_this_turn_means_no_log_line(self, mock_should, mock_retrieve):
         """Speed mode with nothing running never calls retrieval at all -- must not log a search
         that never happened."""
@@ -657,8 +657,8 @@ class KbSearchAppLogTests(unittest.TestCase):
         self.assertEqual(self._kb_log_calls(plugin), [])
         mock_retrieve.assert_not_called()
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_a_plugin_double_with_no_app_log_method_is_not_broken(self, mock_should, mock_retrieve):
         """`hasattr` guards the call the same way the `_publish_thinking_phase_key` calls above
         it do, so a caller that never implements `_maybe_app_log` -- every other test double in
@@ -710,8 +710,8 @@ class NamedEntityGameNameStrippingWiringTests(unittest.TestCase):
     the extractor function directly.
     """
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_the_final_fight_question_names_nothing_not_a_wrong_note(
         self, mock_should, mock_retrieve
     ):
@@ -772,8 +772,8 @@ class SpoilerBandReadsKbDomainWiringTests(unittest.TestCase):
     person actually sees in Show details.
     """
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_a_compat_tip_turn_reads_low_even_off_the_word_list(self, mock_should, mock_retrieve):
         mock_should.return_value = (True, "compat")
         mock_retrieve.return_value = _attached_result(_tip_card(), domain="compat")

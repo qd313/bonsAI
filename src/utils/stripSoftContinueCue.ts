@@ -20,13 +20,13 @@
  *
  * Gotchas:
  *   - This mirrors `strip_soft_continue_cue` in
- *     `py_modules/backend/services/ollama_ask_budgets.py` — the two need to keep agreeing on the
+ *     `py_modules/backend/ask/ollama_ask_budgets.py` — the two need to keep agreeing on the
  *     exact wording of the note and how it gets trimmed.
  */
 
 const SOFT_CONTINUE_CUE = "Continuing…";
 
-/** Mirrors strip_soft_continue_cue in py_modules/backend/services/ollama_ask_budgets.py. */
+/** Mirrors strip_soft_continue_cue in py_modules/backend/ask/ollama_ask_budgets.py. */
 export function stripSoftContinueCue(text: string): string {
   const raw = typeof text === "string" ? text : "";
   if (!raw) {

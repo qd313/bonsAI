@@ -14,7 +14,7 @@ from __future__ import annotations
 from typing import Any, Optional, Union
 
 # Visible reply budgets on the wire as ``options.num_predict`` when thinking is off.
-# Keys MUST match ``VALID_ASK_MODES`` in backend/services/ask_payload.py, which is where
+# Keys MUST match ``VALID_ASK_MODES`` in backend/ask/ask_payload.py, which is where
 # the one definition lives (it was on the Plugin class until 2026-09-14). Nothing enforces
 # that at import time, and a mismatch fails silently: ``normalize_ask_mode`` falls back to
 # "speed", so the mode quietly runs on the Speed cap. This table shipped keyed "deep" --

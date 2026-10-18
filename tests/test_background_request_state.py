@@ -1,4 +1,4 @@
-"""Unit tests for the background-request state shape (backend.services.background_request_state).
+"""Unit tests for the background-request state shape (backend.ask.background_request_state).
 
 The point of this module is that four hand-written copies of one dict became one declaration.
 These tests assert the property that made the duplication a latent bug: **every state carries the
@@ -8,7 +8,7 @@ others fails here rather than on-device.
 
 import unittest
 
-from backend.services.background_request_state import (
+from backend.ask.background_request_state import (
     OMIT,
     completed_local_command_state,
     new_background_state,

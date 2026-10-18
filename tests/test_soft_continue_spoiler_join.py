@@ -22,8 +22,8 @@ from unittest.mock import MagicMock, patch
 from fake_ollama_stream import ndjson_response
 
 from backend.chats import chat_slot_service
-from backend.services.ollama_ask_budgets import reset_thinking_support_cache
-from backend.services.ollama_service import post_ollama_chat
+from backend.ask.ollama_ask_budgets import reset_thinking_support_cache
+from backend.ask.ollama_service import post_ollama_chat
 from backend.answer.response_verify import cover_named_spoilers
 
 F = "`" * 3
@@ -58,7 +58,7 @@ class SavedAnswerAfterACutInsideAHiddenBlockTests(unittest.TestCase):
         pieces = [first, second, *later]
         streams = [_stream(p, "length") for p in pieces[:-1]] + [_stream(pieces[-1], last_done_reason)]
         flushes: list[str] = []
-        with patch("backend.services.ollama_service.urllib.request.urlopen") as urlopen:
+        with patch("backend.ask.ollama_service.urllib.request.urlopen") as urlopen:
             urlopen.side_effect = streams
             out = post_ollama_chat(
                 "http://127.0.0.1:11434/api/chat", "gemma4:e2b-it-qat",

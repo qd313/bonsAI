@@ -23,7 +23,7 @@ install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
 from backend.services import kb_followup_memory  # noqa: E402
-from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
+from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_service import KnowledgeRetrievalResult  # noqa: E402
 from test_game_ai_request_followup_memory import (  # noqa: E402
     _DRG_APP_ID,
@@ -118,7 +118,7 @@ class _SwitchTestCase(unittest.TestCase):
 
 
 class DropRunnerupSwitchWiringTests(_SwitchTestCase):
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_off_by_default_the_sibling_card_still_reaches_the_model(self, mock_retrieve):
         plugin = _FakePlugin(_settings())
         plugin._ollama_result = _ok_result()
@@ -134,7 +134,7 @@ class DropRunnerupSwitchWiringTests(_SwitchTestCase):
         self.assertIn("Dreadnought Twins", attached)
         self.assertIn("Glyphid Dreadnought", attached)
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_on_only_the_subjects_own_card_reaches_the_model(self, mock_retrieve):
         os.environ[kb_followup_memory.DROP_RUNNERUP_ENV] = "1"
         plugin = _FakePlugin(_settings())
@@ -151,7 +151,7 @@ class DropRunnerupSwitchWiringTests(_SwitchTestCase):
         self.assertIn("Glyphid Dreadnought", attached)
         self.assertNotIn("Dreadnought Twins", attached)
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_on_but_not_a_followup_turn_leaves_both_cards(self, mock_retrieve):
         os.environ[kb_followup_memory.DROP_RUNNERUP_ENV] = "1"
         mock_retrieve.return_value = _two_card_result()
@@ -170,7 +170,7 @@ class DropRunnerupSwitchWiringTests(_SwitchTestCase):
 class SendPrevQaSwitchWiringTests(_SwitchTestCase):
     """The maintainer's pick: on by default, so these prove the default rather than an opt-in."""
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_on_by_default_the_previous_question_and_a_trimmed_answer_are_sent(self, mock_retrieve):
         plugin = _FakePlugin(_settings())
         plugin._ollama_result = _ok_result("Break the glowing plates first.")
@@ -187,7 +187,7 @@ class SendPrevQaSwitchWiringTests(_SwitchTestCase):
         self.assertIn("how do i beat the glyphid dreadnought", question_sent)
         self.assertIn("Break the glowing plates first.", question_sent)
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_explicit_zero_turns_it_off(self, mock_retrieve):
         os.environ[kb_followup_memory.SEND_PREV_QA_ENV] = "0"
         plugin = _FakePlugin(_settings())
@@ -209,7 +209,7 @@ class SendPrevQaSwitchWiringTests(_SwitchTestCase):
             ("", ""),
         )
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_on_but_the_first_turn_has_no_previous_answer_to_send(self, mock_retrieve):
         mock_retrieve.return_value = _two_card_result()
         plugin = _FakePlugin(_settings())
@@ -220,7 +220,7 @@ class SendPrevQaSwitchWiringTests(_SwitchTestCase):
         question_sent = plugin.ask_ollama_args[-1][0]
         self.assertNotIn("FOLLOW-UP CONTEXT", question_sent)
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_a_different_game_in_the_same_chat_sends_nothing(self, mock_retrieve):
         """A bare follow-up right after switching games: the game just asked about (Hades) is not
         the one this chat's memory holds a subject for (Deep Rock Galactic: Survivor), so
@@ -261,7 +261,7 @@ class SavedQuestionNeverLeaksTheReminderTests(_SwitchTestCase):
     for real.
     """
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_the_saved_question_and_the_progress_line_both_stay_clean(self, mock_retrieve):
         plugin = _FakePlugin(_settings())
         plugin._ollama_result = _ok_result("Break the glowing plates first.")
@@ -300,7 +300,7 @@ class BranchPickDisplayQuestionTests(_SwitchTestCase):
     ``_run`` helper the wiring tests above share.
     """
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_question_for_display_overrides_the_composed_prompt(self, mock_retrieve):
         mock_retrieve.return_value = KnowledgeRetrievalResult(attached=False)
         plugin = _FakePlugin(_settings())
@@ -336,7 +336,7 @@ class BranchPickDisplayQuestionTests(_SwitchTestCase):
         # The model itself still receives the full composed text, brackets and all.
         self.assertIn("[Strategy follow-up]", plugin.ask_ollama_args[-1][0])
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_with_no_question_for_display_it_falls_back_to_the_sanitized_text(self, mock_retrieve):
         """An ordinary question, or an older caller that predates this argument: unchanged."""
         mock_retrieve.return_value = KnowledgeRetrievalResult(attached=False)

@@ -1,6 +1,6 @@
 """Boot wiring for the Speed-mode VRAM preload (roadmap: developer switch first).
 
-`backend.services.ollama_service.preload_ask_model_sync` is covered on its own in
+`backend.ask.ollama_service.preload_ask_model_sync` is covered on its own in
 `test_ollama_preload.py`. This file covers only the glue in `main.Plugin`: the switch defaults
 off and must change nothing when off, and scheduling the warm-up at boot must never make `_main`
 wait on it -- a slow or unreachable Ollama host must not add time to plugin startup.

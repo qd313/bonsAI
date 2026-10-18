@@ -27,7 +27,7 @@ from backend.prompts.reply_style_blocks import (  # noqa: E402
     build_reply_verbosity_block,
     terse_reply_applies,
 )
-from backend.services.ollama_service import post_ollama_chat  # noqa: E402
+from backend.ask.ollama_service import post_ollama_chat  # noqa: E402
 from fake_ollama_stream import ndjson_response  # noqa: E402
 from main import Plugin  # noqa: E402
 
@@ -279,10 +279,10 @@ class TheRealAskPath(unittest.IsolatedAsyncioTestCase):
     async def _ask(self, question, *, settings, ask_mode="speed", reply="ok"):
         with (
             patch.object(Plugin, "load_settings", return_value=settings),
-            patch("backend.services.ollama_ask_service.list_installed_ollama_tags", return_value=["qwen3:4b"]),
-            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.ask.ollama_ask_service.list_installed_ollama_tags", return_value=["qwen3:4b"]),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch("backend.media.screenshot_media.prepare_attachment_images", return_value=([], [], [])),
-            patch("backend.services.ollama_ask_service.post_ollama_chat", side_effect=self._fake_post(reply)),
+            patch("backend.ask.ollama_ask_service.post_ollama_chat", side_effect=self._fake_post(reply)),
         ):
             return await self.plugin.ask_ollama(question, "127.0.0.1:11434", "", "", ask_mode=ask_mode)
 
@@ -371,7 +371,7 @@ class TheMenuInASpeedReplyReachesTheScreen(unittest.TestCase):
         lines = [json.dumps({"message": {"role": "assistant", "content": p}}) for p in pieces]
         lines.append(json.dumps({"message": {"role": "assistant", "content": ""}, "done": True, "done_reason": "stop"}))
         self.seen = []
-        with patch("backend.services.ollama_service.urllib.request.urlopen", return_value=ndjson_response(lines)):
+        with patch("backend.ask.ollama_service.urllib.request.urlopen", return_value=ndjson_response(lines)):
             return post_ollama_chat(
                 "http://127.0.0.1:11434/api/chat",
                 "gemma4:e2b-it-qat",

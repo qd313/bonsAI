@@ -264,7 +264,7 @@ class WriteChatSummaryTests(unittest.TestCase):
         )
 
     @patch("backend.chats.chat_summary_service._library_title_lookup", _stub_library_lookup)
-    @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
     def test_a_written_summary_keeps_the_real_captured_text(self, mock_urlopen):
         fixture = next(r for r in _load_real_summaries() if r["lang"] == "english")
         turns = _chat(20)
@@ -286,7 +286,7 @@ class WriteChatSummaryTests(unittest.TestCase):
         self.assertEqual(outcome.summary["covers_through_turn_id"], turns[-1]["id"])
         self.assertEqual(outcome.summary["turns_covered"], len(turns))
 
-    @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
     def test_a_spanish_reply_language_keeps_the_spanish_summary(self, mock_urlopen):
         fixture = next(r for r in _load_real_summaries() if r["lang"] == "spanish")
         turns = _chat(6)
@@ -301,7 +301,7 @@ class WriteChatSummaryTests(unittest.TestCase):
         system_text = body["messages"][0]["content"]
         self.assertIn("Spanish", system_text)
 
-    @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
     def test_a_second_summary_carries_the_first_summarys_text_in_the_request(self, mock_urlopen):
         turns = _chat(4)
         previous = {"text": "Player is fighting Wheatley.", "covers_through_turn_id": "a0"}
@@ -315,7 +315,7 @@ class WriteChatSummaryTests(unittest.TestCase):
         self.assertIn("Notes from earlier in this chat:", user_text)
         self.assertIn("Player is fighting Wheatley.", user_text)
 
-    @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
     def test_a_hidden_block_never_reaches_the_request(self, mock_urlopen):
         turns = [
             {"id": "q0", "role": "user", "text": "how do i beat the radiance"},
@@ -331,7 +331,7 @@ class WriteChatSummaryTests(unittest.TestCase):
         self.assertNotIn("vessel that was meant to contain her", body)
         self.assertIn("a hidden note was here", body)
 
-    @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
     def test_a_failed_call_is_reported_as_failed_and_saves_nothing(self, mock_urlopen):
         mock_urlopen.side_effect = OSError("connection refused")
         turns = _chat(2)
@@ -343,7 +343,7 @@ class WriteChatSummaryTests(unittest.TestCase):
         self.assertIsNone(outcome.summary)
 
     @patch("backend.chats.chat_summary_service.SUMMARY_TIME_LIMIT_SECONDS", 0.1)
-    @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
     def test_a_stall_past_the_deadline_is_reported_as_timed_out_not_stopped(self, mock_urlopen):
         mock_urlopen.return_value = _SlowResponse(
             0.4, b'{"message":{"role":"assistant","content":"late"},"done":true}\n'
@@ -356,7 +356,7 @@ class WriteChatSummaryTests(unittest.TestCase):
         self.assertEqual(outcome.status, "timed_out")
         self.assertIsNone(outcome.summary)
 
-    @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
     def test_a_stop_mid_call_is_reported_as_stopped_and_saves_nothing(self, mock_urlopen):
         mock_urlopen.return_value = _StopMidReadResponse(
             self.plugin, b'{"message":{"role":"assistant","content":"partial"},"done":true}\n'
@@ -369,7 +369,7 @@ class WriteChatSummaryTests(unittest.TestCase):
         self.assertEqual(outcome.status, "stopped")
         self.assertIsNone(outcome.summary)
 
-    @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
     def test_a_summary_run_after_an_earlier_stop_does_not_stop_itself(self, mock_urlopen):
         """The stop-flag trap (plan 68 section 1 / section 9): after a Stop, the abort flag stays
         raised until the next call lowers it. A summary that ran first without lowering it itself
@@ -385,7 +385,7 @@ class WriteChatSummaryTests(unittest.TestCase):
 
     # --- plan 78 helper H: the finished summary reads like a note a person would write ---------
 
-    @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
     def test_a_game_line_naming_a_non_game_and_an_empty_stuck_line_do_not_reach_the_card(
         self, mock_urlopen
     ):

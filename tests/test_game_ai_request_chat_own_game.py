@@ -17,7 +17,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 install_fcntl_and_decky_stubs()
 
 from backend.services import kb_followup_memory  # noqa: E402
-from backend.services.game_ai_request import _chat_own_game_title, run_game_ai_request  # noqa: E402
+from backend.ask.game_ai_request import _chat_own_game_title, run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_service import KnowledgeRetrievalResult  # noqa: E402
 
 
@@ -32,7 +32,7 @@ class ChatOwnGameTitleTests(unittest.TestCase):
 
     def setUp(self):
         patcher = patch(
-            "backend.services.game_ai_request.resolve_title_from_question",
+            "backend.ask.game_ai_request.resolve_title_from_question",
             side_effect=_resolves_only_half_life_2,
         )
         self.mock_resolve = patcher.start()
@@ -151,8 +151,8 @@ class RunGameAiRequestChatFallbackWiringTests(unittest.TestCase):
     differs test to test, so that one stays a per-test ``with patch(...)``."""
 
     def setUp(self):
-        should_patcher = patch("backend.services.game_ai_request.should_retrieve_knowledge")
-        retrieve_patcher = patch("backend.services.game_ai_request.retrieve_knowledge_context")
+        should_patcher = patch("backend.ask.game_ai_request.should_retrieve_knowledge")
+        retrieve_patcher = patch("backend.ask.game_ai_request.retrieve_knowledge_context")
         self.mock_should = should_patcher.start()
         self.mock_retrieve = retrieve_patcher.start()
         self.addCleanup(should_patcher.stop)
@@ -167,7 +167,7 @@ class RunGameAiRequestChatFallbackWiringTests(unittest.TestCase):
     def test_nothing_running_and_a_bare_followup_uses_the_chats_own_game(self):
         plugin = _FakePlugin(_settings(), _half_life_2_chat())
         with patch(
-            "backend.services.game_ai_request.resolve_title_from_question",
+            "backend.ask.game_ai_request.resolve_title_from_question",
             side_effect=_resolves_only_half_life_2,
         ):
             _run(plugin, "what about after that")
@@ -176,7 +176,7 @@ class RunGameAiRequestChatFallbackWiringTests(unittest.TestCase):
     def test_a_running_game_wins_over_the_chats_own_game(self):
         plugin = _FakePlugin(_settings(), _half_life_2_chat())
         with patch(
-            "backend.services.game_ai_request.resolve_title_from_question",
+            "backend.ask.game_ai_request.resolve_title_from_question",
             side_effect=_resolves_only_half_life_2,
         ):
             # A different game is actually running -- the chat's own (Half-Life 2) must not win.
@@ -190,7 +190,7 @@ class RunGameAiRequestChatFallbackWiringTests(unittest.TestCase):
             return "Portal 2" if "portal 2" in str(text).lower() else ""
 
         with patch(
-            "backend.services.game_ai_request.resolve_title_from_question", side_effect=_resolve
+            "backend.ask.game_ai_request.resolve_title_from_question", side_effect=_resolve
         ):
             _run(plugin, "how do I beat portal 2's final chamber")
         self.assertEqual(self._resolved_title(), "Portal 2")
@@ -201,9 +201,9 @@ class RunGameAiRequestChatFallbackWiringTests(unittest.TestCase):
         # chat's own game was used as if the question had named nothing.
         plugin = _FakePlugin(_settings(), _half_life_2_chat())
         with patch(
-            "backend.services.game_ai_request.resolve_title_from_question",
+            "backend.ask.game_ai_request.resolve_title_from_question",
             side_effect=_resolves_only_half_life_2,
-        ), patch("backend.services.game_ai_request.logger") as mock_logger:
+        ), patch("backend.ask.game_ai_request.logger") as mock_logger:
             _run(plugin, "what are three good habits for surviving the early nights in Valheim")
         self.assertEqual(self._resolved_title(), "")
         used_chat_game = [
@@ -222,7 +222,7 @@ class RunGameAiRequestChatFallbackWiringTests(unittest.TestCase):
             return "Hollow Knight" if "hollow knight" in str(text).lower() else ""
 
         with patch(
-            "backend.services.game_ai_request.resolve_title_from_question", side_effect=_resolve
+            "backend.ask.game_ai_request.resolve_title_from_question", side_effect=_resolve
         ):
             _run(plugin, "How do I beat the Soul Master in Hollow Knight?")
         self.assertEqual(self._resolved_title(), "Hollow Knight")
@@ -240,7 +240,7 @@ class RunGameAiRequestChatFallbackWiringTests(unittest.TestCase):
         self.addCleanup(kb_followup_memory.forget, "chat-valheim")
         plugin = _FakePlugin(_settings(), chat)
         with patch(
-            "backend.services.game_ai_request.resolve_title_from_question", return_value=""
+            "backend.ask.game_ai_request.resolve_title_from_question", return_value=""
         ):
             _run(plugin, "how do I beat Eikthyr in Valheim")
         self.assertEqual(self._resolved_title(), "Valheim")
@@ -248,7 +248,7 @@ class RunGameAiRequestChatFallbackWiringTests(unittest.TestCase):
     def test_a_bare_followup_that_names_no_game_still_uses_the_chats_own_game(self):
         plugin = _FakePlugin(_settings(), _half_life_2_chat())
         with patch(
-            "backend.services.game_ai_request.resolve_title_from_question",
+            "backend.ask.game_ai_request.resolve_title_from_question",
             side_effect=_resolves_only_half_life_2,
         ):
             _run(plugin, "what about the fourth one, and how do I get there")
@@ -264,7 +264,7 @@ class RunGameAiRequestChatFallbackWiringTests(unittest.TestCase):
         }
         plugin = _FakePlugin(_settings(), empty_chat)
         with patch(
-            "backend.services.game_ai_request.resolve_title_from_question", return_value=""
+            "backend.ask.game_ai_request.resolve_title_from_question", return_value=""
         ):
             _run(plugin, "what should I do next")
         self.assertEqual(self._resolved_title(), "")
@@ -272,9 +272,9 @@ class RunGameAiRequestChatFallbackWiringTests(unittest.TestCase):
     def test_logs_one_line_when_the_fallback_is_used(self):
         plugin = _FakePlugin(_settings(), _half_life_2_chat())
         with patch(
-            "backend.services.game_ai_request.resolve_title_from_question",
+            "backend.ask.game_ai_request.resolve_title_from_question",
             side_effect=_resolves_only_half_life_2,
-        ), patch("backend.services.game_ai_request.logger") as mock_logger:
+        ), patch("backend.ask.game_ai_request.logger") as mock_logger:
             _run(plugin, "what about after that")
 
         matches = [

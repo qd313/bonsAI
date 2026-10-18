@@ -161,7 +161,7 @@ class AbortBusyGateTests(unittest.IsolatedAsyncioTestCase):
         """Plan 68 step 4: every existing Ask must keep reading "ask" once the button's own
         "sum_up" jobs start sharing this same state shape -- proven both at accept (pending) and
         once `_run_background_request`'s terminal write has spread the pending state through."""
-        from backend.services.background_request_state import pending_background_state
+        from backend.ask.background_request_state import pending_background_state
 
         request_id = 71
         pending = pending_background_state(

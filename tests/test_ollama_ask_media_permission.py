@@ -16,7 +16,7 @@ from unittest.mock import patch
 from test_ollama_ask_service import _FakePlugin  # also installs the decky and pwd stand-ins
 
 from backend.core import capabilities
-from backend.services.ollama_ask_service import run_ask_ollama
+from backend.ask.ollama_ask_service import run_ask_ollama
 
 SHOT = [{"path": "/home/deck/shot.png", "name": "shot.png"}]
 
@@ -25,9 +25,9 @@ class MediaPermissionTests(unittest.IsolatedAsyncioTestCase):
     async def _ask(self, plugin: _FakePlugin):
         with (
             patch("backend.media.screenshot_media.prepare_attachment_images") as prep,
-            patch("backend.services.ollama_ask_service.post_ollama_chat") as post,
-            patch("backend.services.ollama_ask_service.list_installed_ollama_tags", return_value=["qwen3:4b"]),
-            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.ask.ollama_ask_service.post_ollama_chat") as post,
+            patch("backend.ask.ollama_ask_service.list_installed_ollama_tags", return_value=["qwen3:4b"]),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
         ):
             prep.return_value = ([], [], [])
             post.return_value = {"success": True, "status": 200, "model": "qwen3:4b", "response": "ok"}

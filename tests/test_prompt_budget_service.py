@@ -1,6 +1,6 @@
 import unittest
 
-from backend.services.prompt_budget_service import (
+from backend.ask.prompt_budget_service import (
     ANSWER_FLOOR_TOKENS,
     CARDS_FLOOR_TOKENS,
     MEMORY_FLOOR_TOKENS,

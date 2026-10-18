@@ -28,7 +28,7 @@ import decky
 
 from backend.ollama.ollama_urls import HTTPS_NOT_SUPPORTED_MESSAGE, is_https_ollama_address, normalize_ollama_base
 from backend.chats import chat_turn_recorder
-from backend.services.background_request_state import pending_background_state
+from backend.ask.background_request_state import pending_background_state
 from backend.chats.chat_slot_service import load_slot as chat_load_slot
 from backend.chats.chat_summary_service import (
     SummaryPlan,
@@ -43,7 +43,7 @@ from backend.ollama.local_ollama_setup_service import (
     probe_ollama_http_ok,
     recover_loopback_ollama_listening,
 )
-from backend.services.ollama_ask_extras import resolve_ask_model_routing
+from backend.ask.ollama_ask_extras import resolve_ask_model_routing
 from backend.prompts.reply_language_service import resolve_effective_reply_language
 from backend.ollama.ollama_keep_alive_rule import effective_keep_alive
 from backend.ollama.token_accounting_service import choose_window_tokens, known_window_tokens

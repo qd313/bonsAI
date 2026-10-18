@@ -28,7 +28,7 @@ install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
 from backend.services import kb_followup_memory  # noqa: E402
-from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
+from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_cards import close_connection  # noqa: E402
 from backend.services.knowledge_base_schema import CORPUS_DB_FILENAME  # noqa: E402
 from backend.prompts.ollama_prompts import kb_card_names  # noqa: E402
@@ -230,7 +230,7 @@ class ButtonUnderAnAnswerKeepsItsGameTests(unittest.TestCase):
     def test_the_log_says_the_answer_above_picked_the_notes(self):
         from unittest.mock import patch
 
-        with patch("backend.services.game_ai_request.logger") as logger:
+        with patch("backend.ask.game_ai_request.logger") as logger:
             self._ask(_BUTTON_NO_QUOTE, self._chat_with_a_hollow_knight_answer(_BUTTON_NO_QUOTE), _HK_REPLY)
         lines = [
             (call.args[0] % call.args[1:]) if len(call.args) > 1 else str(call.args[0])

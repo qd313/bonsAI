@@ -10,7 +10,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
-from backend.services.ollama_ask_budgets import (
+from backend.ask.ollama_ask_budgets import (
     ASK_MAX_SOFT_CONTINUES,
     ASK_VISIBLE_NUM_PREDICT,
     SOFT_CONTINUE_CUE,
@@ -64,7 +64,7 @@ class OllamaAskBudgetsTests(unittest.TestCase):
         in 2026. Nothing checks this at import time, so it is checked here.
         """
         from backend.ollama.ollama_routing import TEXT_MODELS_BY_MODE
-        from backend.services.ask_payload import DEFAULT_ASK_MODE, VALID_ASK_MODES
+        from backend.ask.ask_payload import DEFAULT_ASK_MODE, VALID_ASK_MODES
 
         self.assertEqual(
             set(VALID_ASK_MODES),

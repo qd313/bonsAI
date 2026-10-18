@@ -27,7 +27,7 @@ if "decky" not in sys.modules:
     )
     sys.modules["decky"] = _decky
 
-from backend.services.game_ai_request import _publish_kb_attached_notes_live  # noqa: E402
+from backend.ask.game_ai_request import _publish_kb_attached_notes_live  # noqa: E402
 from main import Plugin  # noqa: E402
 
 

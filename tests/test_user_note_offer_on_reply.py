@@ -12,7 +12,7 @@ from unittest.mock import patch
 
 from user_notes_plugin_harness import PluginOnATempFolder
 
-from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
+from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
 from main import Plugin  # noqa: E402
 from test_user_notes_in_ask import _FakePlugin  # noqa: E402
 
@@ -39,7 +39,7 @@ class OfferOnTheReplyTests(unittest.TestCase):
         )
 
     def test_with_nothing_running_the_game_is_the_title_the_ask_worked_out(self):
-        with patch("backend.services.game_ai_request.resolve_title_from_question", return_value="Hollow Knight"):
+        with patch("backend.ask.game_ai_request.resolve_title_from_question", return_value="Hollow Knight"):
             result = _ask(self.plugin, STEEL_SOUL)
         self.assertEqual(
             result["note_offer"],

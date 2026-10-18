@@ -16,6 +16,8 @@ from backend.ollama import ollama_reply_limits as limits
 from backend.ollama.ollama_reply_limits import OllamaReplyTooLarge
 from backend.services import (
     ollama_embed_service,
+)
+from backend.ask import (
     ollama_stop_service,
 )
 from backend.ollama import (
@@ -27,7 +29,7 @@ from backend.ollama import (
 from backend.answer import (
     response_verify,
 )
-from backend.services.ollama_service import post_ollama_chat
+from backend.ask.ollama_service import post_ollama_chat
 from fake_ollama_stream import ndjson_response
 
 
@@ -235,14 +237,14 @@ class EveryBareReadIsCappedTests(unittest.TestCase):
     def test_unload_error_body_is_read_capped(self) -> None:
         big = io.BytesIO(b"e" * 500_000)
         err = urllib.error.HTTPError("http://x/api/generate", 500, "boom", None, big)  # type: ignore[arg-type]
-        with patch("backend.services.ollama_stop_service.urllib.request.urlopen", side_effect=err):
+        with patch("backend.ask.ollama_stop_service.urllib.request.urlopen", side_effect=err):
             ok = ollama_stop_service.request_ollama_stop_model_via_api("http://x:1", "m", MagicMock(), timeout_seconds=1.0)
         self.assertFalse(ok)
         self.assertLessEqual(big.tell(), limits.MAX_ERROR_BODY_BYTES * 4)
 
 
 def _ask(response, lg=None):
-    with patch("backend.services.ollama_chat_stream.urllib.request.urlopen", return_value=response):
+    with patch("backend.ask.ollama_chat_stream.urllib.request.urlopen", return_value=response):
         return post_ollama_chat(
             "http://127.0.0.1:11434/api/chat",
             "vision:test",
@@ -306,7 +308,7 @@ class StreamedAnswerLimitTests(unittest.TestCase):
     def test_the_error_body_of_a_failed_chat_is_read_capped(self) -> None:
         big = io.BytesIO(b"e" * 500_000)
         err = urllib.error.HTTPError("http://x/api/chat", 500, "boom", None, big)  # type: ignore[arg-type]
-        with patch("backend.services.ollama_chat_stream.urllib.request.urlopen", side_effect=err):
+        with patch("backend.ask.ollama_chat_stream.urllib.request.urlopen", side_effect=err):
             out = post_ollama_chat(
                 "http://127.0.0.1:11434/api/chat",
                 "vision:test",

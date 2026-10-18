@@ -1,7 +1,7 @@
 import asyncio
 import unittest
 
-from backend.services.game_ai_request import run_game_ai_request
+from backend.ask.game_ai_request import run_game_ai_request
 from backend.power.tdp_intent import parse_tdp_recommendation
 
 

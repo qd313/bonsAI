@@ -110,7 +110,7 @@ from backend.ollama.ollama_urls import normalize_ollama_base
 
 from backend.answer.bonsai_stream_tags import extract_bonsai_status
 from backend.answer.soft_continue_spoiler_join import end_cut_answer_cleanly
-from backend.services.ollama_chat_stream import (
+from backend.ask.ollama_chat_stream import (
     OLLAMA_CHAT_READ_CHUNK,
     OLLAMA_DELTA_PARSE_INTERVAL_S,
     REASONING_LIVE_CHARS,
@@ -129,7 +129,7 @@ from backend.ollama.ollama_preload_service import (
     pick_preload_model,
     preload_ask_model_sync,
 )
-from backend.services.ollama_stop_service import (
+from backend.ask.ollama_stop_service import (
     _guess_ollama_cli_paths,
     _is_loopback_ollama_base,
     _ollama_http_base_from_pc_ip_field,
@@ -140,7 +140,7 @@ from backend.services.ollama_stop_service import (
     try_ollama_cli_stop_model,
     try_sigterm_linux_ollama_runner_procs,
 )
-from backend.services.ollama_window_fit import (
+from backend.ask.ollama_window_fit import (
     ASSUMED_CONTEXT_WINDOW_TOKENS,
     MIN_VISIBLE_NUM_PREDICT,
     clamp_num_predict_to_window,
@@ -148,7 +148,7 @@ from backend.services.ollama_window_fit import (
     ollama_base_from_chat_url,
     prompt_window_warning,
 )
-from backend.services.ollama_ask_budgets import (
+from backend.ask.ollama_ask_budgets import (
     SOFT_CONTINUE_CUE,
     SOFT_CONTINUE_USER_MESSAGE,
     mark_model_without_thinking,

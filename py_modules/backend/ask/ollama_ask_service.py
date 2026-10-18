@@ -69,15 +69,15 @@ from backend.ollama.local_ollama_setup_service import (
     recover_loopback_ollama_listening,
 )
 from backend.ollama.model_policy import disclosure_for_model, empty_filter_user_message
-from backend.services.ask_payload import screen_ask_attachments
+from backend.ask.ask_payload import screen_ask_attachments
 from backend.services.knowledge_base_glossary import glossary_for_prompt
 from backend.chats.chat_memory_step import add_chat_memory_to_prompt
-from backend.services.ollama_ask_extras import (
+from backend.ask.ollama_ask_extras import (
     build_ollama_request_extras,
     resolve_ask_model_routing,
     with_pyro_carousel_tip,
 )
-from backend.services.ollama_service import post_ollama_chat
+from backend.ask.ollama_service import post_ollama_chat
 from backend.answer.response_verify import build_live_spoiler_cover
 from backend.ollama.ollama_keep_alive_rule import effective_keep_alive
 from backend.settings.settings_service import sanitize_reply_verbosity

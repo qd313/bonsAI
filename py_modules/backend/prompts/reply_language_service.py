@@ -12,7 +12,7 @@ import os
 import re
 from typing import Optional
 
-from backend.services.proton_troubleshooting_logs import steam_roots_for_home
+from backend.ask.proton_troubleshooting_logs import steam_roots_for_home
 
 REPLY_LANGUAGE_FOLLOW_SYSTEM = "follow_system"
 REPLY_LANGUAGE_ALWAYS_ENGLISH = "en"

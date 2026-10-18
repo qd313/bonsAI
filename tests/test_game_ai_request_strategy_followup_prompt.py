@@ -24,7 +24,7 @@ install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
 from backend.services import kb_followup_memory  # noqa: E402
-from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
+from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.prompts.ollama_prompts import (  # noqa: E402
     build_system_prompt,
     extract_question_snippet_for_prompt,
@@ -107,7 +107,7 @@ class StrategyChoiceButtonGetsTheFollowupInstructionsTests(unittest.TestCase):
     def tearDown(self):
         kb_followup_memory.forget()
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_a_choice_button_with_a_remembered_subject_asks_for_a_checklist_not_a_menu(self, mock_retrieve):
         mock_retrieve.return_value = _two_card_result()
         plugin = _PromptBuildingPlugin(_settings())
@@ -130,7 +130,7 @@ class StrategyChoiceButtonGetsTheFollowupInstructionsTests(unittest.TestCase):
         self.assertIn("bonsai-strategy-checklist", prompt)
         self.assertIn("Do NOT output a ```bonsai-strategy-branches block on this turn.", prompt)
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_the_reminder_still_reaches_the_model_behind_the_persons_words(self, mock_retrieve):
         plugin = _first_turn_done(mock_retrieve)
         _ask(plugin, f"{STRATEGY_FOLLOWUP_PREFIX} I'm at: the second phase\nEarlier I asked: x")
@@ -147,7 +147,7 @@ class StrategyChoiceButtonGetsTheFollowupInstructionsTests(unittest.TestCase):
         # And the model's status-line topic is those words, not the reminder's opening.
         self.assertNotIn('about "FOLLOW-UP CONTEXT', plugin.system_prompts[-1])
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_a_typed_followup_still_gets_its_reminder_in_front(self, mock_retrieve):
         """Only the marker question is re-ordered; an ordinary bare follow-up is as before."""
         plugin = _first_turn_done(mock_retrieve)
@@ -157,7 +157,7 @@ class StrategyChoiceButtonGetsTheFollowupInstructionsTests(unittest.TestCase):
         self.assertTrue(sent.lstrip().startswith("FOLLOW-UP CONTEXT"))
         self.assertTrue(sent.rstrip().endswith("what about its second phase"))
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
     def test_a_typed_followup_names_the_persons_words_as_the_status_line_topic(self, mock_retrieve):
         """Plan 81 N2: the reminder in front must not become the example status line's topic."""
         plugin = _first_turn_done(mock_retrieve)

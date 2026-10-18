@@ -18,7 +18,7 @@ install_fcntl_and_decky_stubs()
 from backend.chats import chat_slot_rpc  # noqa: E402
 from backend.chats.chat_slot_service import append_turn, create_slot, slot_path  # noqa: E402
 
-_OWN_GAME = "backend.services.game_ai_request._chat_own_game_title"
+_OWN_GAME = "backend.ask.game_ai_request._chat_own_game_title"
 
 
 class _FakePlugin:

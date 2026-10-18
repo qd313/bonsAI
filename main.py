@@ -103,7 +103,7 @@ PLUGIN_ROOT = os.path.dirname(os.path.abspath(__file__))
 if PLUGIN_ROOT not in sys.path:
     sys.path.insert(0, PLUGIN_ROOT)
 
-from backend.services.ollama_service import (
+from backend.ask.ollama_service import (
     append_deck_tdp_sysfs_grounding,
     build_system_prompt,
     close_ollama_chat_response,
@@ -111,7 +111,7 @@ from backend.services.ollama_service import (
     spawn_ollama_stop_thread,
 )
 from backend.core.async_task_lifecycle import cancel_and_await
-from backend.services.background_request_state import (
+from backend.ask.background_request_state import (
     OMIT as _OMIT_SHORTCUT_SETUP_FIELD,
     OMIT as _UNSET_REASONING_FIELD,
     completed_local_command_state,
@@ -179,9 +179,9 @@ from backend.media.screenshot_media import (
     lookup_screenshot_vdf_metadata,
     lookup_steam_app_name,
 )
-from backend.services.game_ai_request import run_game_ai_request
+from backend.ask.game_ai_request import run_game_ai_request
 from backend.ollama.network_service import get_deck_ip_async
-from backend.services.ollama_ask_service import run_ask_ollama
+from backend.ask.ollama_ask_service import run_ask_ollama
 from backend.answer.transparency_service import (
     build_immediate_command_snapshot,
     build_sanitizer_block_snapshot,
@@ -191,9 +191,9 @@ from backend.ollama.ollama_connection_test import (
     run_ollama_connection_test,
     summarize_for_log,
 )
-from backend.services import ask_payload
+from backend.ask import ask_payload
 from backend.services import kb_followup_memory
-from backend.services.ask_payload import (
+from backend.ask.ask_payload import (
     coerce_payload_bool,
     parse_ask_payload,
     sanitize_attachments,
@@ -1965,7 +1965,7 @@ class Plugin:
         are all left alone; ``forget_background_game_ai`` owns those. D105, locked 2026-09-15: the
         lighter of two meanings for Clear — only what is carried forward.
 
-        Reading ``py_modules/backend/services/game_ai_request.py`` end to end (done before writing
+        Reading ``py_modules/backend/ask/game_ai_request.py`` end to end (done before writing
         this) turned up exactly two things a question carries into the next one without being
         re-sent by the screen every time:
 

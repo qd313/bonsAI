@@ -74,9 +74,9 @@ from backend.chats.chat_summary_title import (
     title_instruction,
     title_to_second_guess,
 )
-from backend.services.ollama_chat_stream import _stream_ollama_chat_once
-from backend.services.ollama_stop_service import close_ollama_chat_response
-from backend.services.ollama_window_fit import ollama_base_from_chat_url
+from backend.ask.ollama_chat_stream import _stream_ollama_chat_once
+from backend.ask.ollama_stop_service import close_ollama_chat_response
+from backend.ask.ollama_window_fit import ollama_base_from_chat_url
 from backend.prompts.reply_style_blocks import build_reply_language_block
 from backend.ollama.token_accounting_service import estimate_tokens_from_chars
 

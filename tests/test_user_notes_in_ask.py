@@ -15,7 +15,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 install_fcntl_and_decky_stubs()
 
 from backend.chats import chat_slot_service  # noqa: E402
-from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
+from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_service import KnowledgeRetrievalResult  # noqa: E402
 from backend.prompts.ollama_prompts import build_system_prompt  # noqa: E402
 from backend.answer.transparency_service import build_context_chips_manifest  # noqa: E402
@@ -304,7 +304,7 @@ class WholeQuestionTests(unittest.TestCase):
 
     def test_nothing_running_and_the_question_names_the_game_so_its_note_still_goes_in(self):
         """The Deck has no Hollow Knight installed, so the checks ask about it with nothing running."""
-        with patch("backend.services.game_ai_request.resolve_title_from_question", return_value="Hollow Knight"):
+        with patch("backend.ask.game_ai_request.resolve_title_from_question", return_value="Hollow Knight"):
             result = _ask(self.plugin, question="how do I beat the Mantis Lords in Hollow Knight")
         self.assertIn("- I am on a Steel Soul run", self.plugin.sheets[0])
         self.assertNotIn("Hades on Heat 20", self.plugin.sheets[0])
@@ -328,8 +328,8 @@ class WholeQuestionTests(unittest.TestCase):
         found = KnowledgeRetrievalResult(
             attached=True, text_block="--- Local knowledge base ---\nMantis Lords: dodge", sources=[], notes="x",
         )
-        with patch("backend.services.game_ai_request.should_retrieve_knowledge", return_value=(True, "strategy")), \
-                patch("backend.services.game_ai_request.retrieve_knowledge_context", return_value=found):
+        with patch("backend.ask.game_ai_request.should_retrieve_knowledge", return_value=(True, "strategy")), \
+                patch("backend.ask.game_ai_request.retrieve_knowledge_context", return_value=found):
             _ask(self.plugin, app_id=HOLLOW_KNIGHT, app_name="Hollow Knight")
         sheet = self.plugin.sheets[0]
         self.assertLess(sheet.index(HEADING), sheet.index("Mantis Lords: dodge"))

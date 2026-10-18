@@ -22,7 +22,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
-from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
+from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_service import (  # noqa: E402
     KnowledgeCard,
     KnowledgeRetrievalResult,
@@ -111,8 +111,8 @@ class SpoilerCoverWiringTests(unittest.TestCase):
         }
         return plugin
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_a_boss_named_in_the_reply_but_not_the_question_is_covered(
         self, mock_should, mock_retrieve
     ):
@@ -136,8 +136,8 @@ class SpoilerCoverWiringTests(unittest.TestCase):
         # Nothing was silently deleted -- the name is still there, just behind the fence.
         self.assertIn("Soul Master", response)
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_a_boss_the_question_already_named_is_left_in_plain_text(
         self, mock_should, mock_retrieve
     ):
@@ -156,8 +156,8 @@ class SpoilerCoverWiringTests(unittest.TestCase):
         self.assertNotIn("```bonsai-spoiler", response)
         self.assertIn("Soul Master fakes its death partway through the fight.", response)
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_a_low_narrative_title_is_never_covered(self, mock_should, mock_retrieve):
         """Deep Rock Galactic: Survivor (LOW_NARRATIVE_APP_IDS) -- a boss name is routine
         gameplay there, not a story spoiler, so the prompt never asked for a cover at all."""
@@ -192,8 +192,8 @@ class SpoilerCoverWiringTests(unittest.TestCase):
 
         self.assertNotIn("```bonsai-spoiler", result.get("response", ""))
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_consent_turns_the_cover_off(self, mock_should, mock_retrieve):
         plugin = self._wire_soul_master_reply(
             mock_should, mock_retrieve, "Soul Master fakes its death partway through the fight."
@@ -208,8 +208,8 @@ class SpoilerCoverWiringTests(unittest.TestCase):
 
         self.assertNotIn("```bonsai-spoiler", result.get("response", ""))
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_the_models_own_thinking_is_covered_too(self, mock_should, mock_retrieve):
         """D112 #7 leak fix: THINKING-SPOILER-01. The saved reasoning shown in the fold
         afterwards must not name a protected boss either -- the thinking text below is the
@@ -239,8 +239,8 @@ class SpoilerCoverWiringTests(unittest.TestCase):
         self.assertNotIn("Soul Master", result.get("reasoning_text", ""))
         self.assertIn("[hidden]", result.get("reasoning_text", ""))
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_the_branch_menu_is_neutralized_not_fenced(self, mock_should, mock_retrieve):
         """D112 #7's third leak: NO-CLOSE-MATCH-HK-02, measured live on the Deck. The menu's
         own question read "Are you currently struggling with the Soul Master's movement or
@@ -308,8 +308,8 @@ class NotesBlockProtectionTests(unittest.TestCase):
         result = _run(plugin, question, ask_mode="strategy", app_name=app_name)
         return result, plugin._partial_stream_snapshot.get("kb_attached_notes") or []
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_a_described_boss_note_is_marked_live_and_finished(self, mock_should, mock_retrieve):
         result, live = self._run_with(
             mock_should, mock_retrieve,
@@ -319,8 +319,8 @@ class NotesBlockProtectionTests(unittest.TestCase):
         self.assertEqual([n.get("spoiler_protected") for n in live], [True])
         self.assertEqual([n.get("spoiler_protected") for n in result["kb_attached_notes"]], [True])
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_a_boss_the_question_named_is_not_marked(self, mock_should, mock_retrieve):
         result, live = self._run_with(
             mock_should, mock_retrieve, "How do I beat Soul Master?", "Hit him from below."
@@ -328,8 +328,8 @@ class NotesBlockProtectionTests(unittest.TestCase):
         self.assertNotIn("spoiler_protected", live[0])
         self.assertNotIn("spoiler_protected", result["kb_attached_notes"][0])
 
-    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
-    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
     def test_a_low_narrative_title_is_not_marked(self, mock_should, mock_retrieve):
         hive = KnowledgeCard(
             section_id=1, game_id=1, game_title="Deep Rock Galactic: Survivor", section_type="boss",

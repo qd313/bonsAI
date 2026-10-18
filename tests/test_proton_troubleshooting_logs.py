@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from backend.services.proton_troubleshooting_logs import (
+from backend.ask.proton_troubleshooting_logs import (
     collect_proton_troubleshooting_logs,
     path_allowed_for_proton_log,
     read_file_tail_bytes,
@@ -60,7 +60,7 @@ class ProtonTroubleshootingLogsTests(unittest.TestCase):
         newest last."""
         from unittest.mock import patch
 
-        from backend.services import proton_troubleshooting_logs as ptl
+        from backend.ask import proton_troubleshooting_logs as ptl
 
         with tempfile.TemporaryDirectory() as tmp:
             aid = "777"
@@ -96,7 +96,7 @@ class ProtonTroubleshootingLogsTests(unittest.TestCase):
     def test_collect_non_linux_warns(self):
         from unittest.mock import patch
 
-        with patch("backend.services.proton_troubleshooting_logs.sys.platform", "win32"):
+        with patch("backend.ask.proton_troubleshooting_logs.sys.platform", "win32"):
             out = collect_proton_troubleshooting_logs("730")
             self.assertEqual(out["text"], "")
             self.assertEqual(out["sources"], [])

@@ -1,6 +1,6 @@
 """Boot-time Ask model warm-up (roadmap: Speed-mode VRAM preload, developer switch first).
 
-Covers the pure helpers in ``backend.services.ollama_service`` that decide *which* installed
+Covers the pure helpers in ``backend.ask.ollama_service`` that decide *which* installed
 model is small enough to warm and *whether* the warm-up call went out at all. The switch itself
 defaults off; on-boot wiring in ``main.Plugin`` is covered separately.
 """
@@ -11,7 +11,7 @@ import unittest
 import urllib.error
 from unittest.mock import MagicMock, patch
 
-from backend.services.ollama_service import (
+from backend.ask.ollama_service import (
     PRELOAD_MAX_PARAMETER_BILLIONS,
     parse_parameter_size_billions,
     pick_preload_model,
@@ -168,7 +168,7 @@ class PreloadAskModelSyncTests(unittest.TestCase):
         self.addCleanup(window.stop)
 
     @patch("backend.ollama.ollama_preload_service.choose_window_tokens", return_value=16384)
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_warms_with_the_same_room_ask_will_ask_for(
         self, mock_urlopen: MagicMock, mock_window: MagicMock
     ) -> None:
@@ -186,7 +186,7 @@ class PreloadAskModelSyncTests(unittest.TestCase):
         sent_body = json.loads(mock_urlopen.call_args_list[1].args[0].data.decode("utf-8"))
         self.assertEqual(sent_body["options"], {"num_ctx": 16384})
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_warms_the_first_eligible_small_model(self, mock_urlopen: MagicMock) -> None:
         tags_body = json.dumps(
             {
@@ -210,7 +210,7 @@ class PreloadAskModelSyncTests(unittest.TestCase):
         self.assertEqual(sent_body["prompt"], "")
         self.assertNotIn("options", sent_body)  # nothing known about the room: say nothing
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_no_eligible_model_skips_without_a_warm_request(self, mock_urlopen: MagicMock) -> None:
         tags_body = json.dumps(
             {"models": [{"name": "qwen2.5:32b", "details": {"parameter_size": "32B"}}]}
@@ -221,7 +221,7 @@ class PreloadAskModelSyncTests(unittest.TestCase):
 
         self.assertEqual(mock_urlopen.call_count, 1)
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_an_empty_saved_order_still_uses_the_order_ask_would_build(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -254,14 +254,14 @@ class PreloadAskModelSyncTests(unittest.TestCase):
         # Only /api/tags was fetched: no warm request went out at all.
         self.assertEqual(mock_urlopen.call_count, 1)
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_unreachable_host_is_swallowed_silently(self, mock_urlopen: MagicMock) -> None:
         mock_urlopen.side_effect = urllib.error.URLError("connection refused")
 
         # Must not raise -- an unreachable host at boot is exactly the case this has to be quiet about.
         preload_ask_model_sync("http://127.0.0.1:11434", _Logger())
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_vram_pressure_on_the_warm_request_is_swallowed_silently(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -276,7 +276,7 @@ class PreloadAskModelSyncTests(unittest.TestCase):
         # Must not raise -- memory pressure at boot is the headline case in the roadmap entry.
         preload_ask_model_sync("http://127.0.0.1:11434", _Logger())
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_malformed_tags_response_is_swallowed_silently(self, mock_urlopen: MagicMock) -> None:
         mock_urlopen.return_value = _Resp(b"not json")
 

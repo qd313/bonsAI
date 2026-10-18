@@ -76,7 +76,7 @@ async def list_chat_slot_questions(self):
     or unreadable is left out rather than failing the list."""
     # Imported here, not at the top: the Ask flow's module is large, and this file is loaded by
     # every chat call. It is only needed once a question has no game of its own.
-    from backend.services.game_ai_request import _chat_own_game_title
+    from backend.ask.game_ai_request import _chat_own_game_title
 
     settings_dir = self._chat_slots_settings_dir()
 

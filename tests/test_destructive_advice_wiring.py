@@ -19,7 +19,7 @@ if "decky" not in sys.modules:
     )
     sys.modules["decky"] = _decky
 
-from backend.services.game_ai_request import run_game_ai_request
+from backend.ask.game_ai_request import run_game_ai_request
 
 
 class _FakePlugin:

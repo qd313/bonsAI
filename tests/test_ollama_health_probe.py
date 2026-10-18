@@ -1,4 +1,4 @@
-"""Unit tests for the Ollama reachability probe (backend.services.ollama_service).
+"""Unit tests for the Ollama reachability probe (backend.ask.ollama_service).
 
 This transport used to live inline in `main.py`'s `test_ollama_connection` RPC with **no test at
 all**, contradicting `main.py`'s own header ("Does not: Own Ollama HTTP"). The tests here are the
@@ -14,7 +14,7 @@ import time
 import unittest
 from unittest import mock
 
-from backend.services.ollama_service import (
+from backend.ask.ollama_service import (
     _loaded_model_snapshots,
     probe_ollama_health,
     vram_weight_share_pct,

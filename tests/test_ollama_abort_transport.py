@@ -1,4 +1,4 @@
-"""Unit tests for the Stop-button transport helpers (backend.services.ollama_service).
+"""Unit tests for the Stop-button transport helpers (backend.ask.ollama_service).
 
 `abort_background_game_ai` decides *when* to abort — that is plugin-level and stays in main.py.
 These two helpers are *how*: close the live HTTP handle from another thread, and run the after-Stop
@@ -9,8 +9,8 @@ import threading
 import unittest
 from unittest import mock
 
-from backend.services import ollama_stop_service
-from backend.services.ollama_service import close_ollama_chat_response, spawn_ollama_stop_thread
+from backend.ask import ollama_stop_service
+from backend.ask.ollama_service import close_ollama_chat_response, spawn_ollama_stop_thread
 
 
 class RecordingLogger:

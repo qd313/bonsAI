@@ -4,9 +4,9 @@ import unittest
 import urllib.error
 from unittest.mock import MagicMock, patch
 
-from backend.services import ollama_service
+from backend.ask import ollama_service
 from fake_ollama_stream import ndjson_response
-from backend.services.ollama_ask_budgets import (
+from backend.ask.ollama_ask_budgets import (
     ASK_VISIBLE_NUM_PREDICT,
     SOFT_CONTINUE_CUE,
     SOFT_CONTINUE_USER_MESSAGE,
@@ -25,7 +25,7 @@ def _http_error_400(body: str) -> urllib.error.HTTPError:
         hdrs=None,  # type: ignore[arg-type]
         fp=io.BytesIO(body.encode("utf-8")),
     )
-from backend.services.ollama_service import (
+from backend.ask.ollama_service import (
     OLLAMA_DELTA_PARSE_INTERVAL_S,
     append_deck_tdp_sysfs_grounding,
     build_system_prompt,
@@ -49,7 +49,7 @@ from backend.prompts.ollama_prompts import (
 class OllamaServiceTests(unittest.TestCase):
     """Service tests for prompt construction and response formatting contracts."""
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_request_ollama_stop_model_via_api_posts_keep_alive_zero(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -73,7 +73,7 @@ class OllamaServiceTests(unittest.TestCase):
         req_first = mock_urlopen.call_args[0][0]
         self.assertIn("/api/generate", req_first.full_url)
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_streams_ndjson_deltas(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -138,7 +138,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertTrue(any(t == "Hell" and not done for t, done in deltas_seen))
         self.assertEqual(deltas_seen[-1], ("Hello", True))
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_soft_continues_on_done_reason_length(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -190,7 +190,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertEqual(len(cue_partials), 1)
         self.assertEqual(deltas_seen[-1], ("Part one and two", True))
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_empty_continue_stops_quietly(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -229,7 +229,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertEqual(out.get("soft_continue_count"), 1)
         self.assertEqual(mock_urlopen.call_count, 2)
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_caps_soft_continues_at_two(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -272,7 +272,7 @@ class OllamaServiceTests(unittest.TestCase):
             ASK_VISIBLE_NUM_PREDICT["strategy"],
         )
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_strategy_fence_cut_by_the_wall_does_not_swallow_the_continuation(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -325,7 +325,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertEqual(deltas_seen[-1][1], True)
         self.assertIn("Then back off", deltas_seen[-1][0])
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_cancel_mid_continue_clears_cue(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -376,7 +376,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertEqual(deltas_seen[-1], ("Part one", False))
         self.assertNotIn(SOFT_CONTINUE_CUE, deltas_seen[-1][0])
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_stitch_boundary_keeps_fence_hidden(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -440,7 +440,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertIn('"options"', assistant_raw)
         self.assertIn("North", assistant_raw)
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_parses_the_branch_fence_it_hid_from_the_stream(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -512,7 +512,7 @@ class OllamaServiceTests(unittest.TestCase):
         # The status tag is display noise and must not survive into the reply either.
         self.assertNotIn("bonsai-status", response)
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_hides_a_branch_fence_that_does_not_parse(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -561,7 +561,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertNotIn('"question"', response)
         self.assertIn("west path", response)
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_returns_ask_budgets(self, mock_urlopen: MagicMock) -> None:
         """The ask_budgets contract Thinking effort control (Phase 1) will build on."""
         mock_urlopen.return_value = self._ndjson_response(
@@ -594,7 +594,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertEqual(budgets.get("think_effort"), "off")
         self.assertEqual(budgets.get("visible_num_predict"), ASK_VISIBLE_NUM_PREDICT["speed"])
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_sends_think_true_for_low_effort(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -615,7 +615,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertTrue(out.get("success"))
         self.assertFalse(out.get("thinking_unsupported"))
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_falls_back_when_model_cannot_think(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -641,7 +641,7 @@ class OllamaServiceTests(unittest.TestCase):
         # The retry is not a soft continue and must not be counted as one.
         self.assertEqual(out.get("soft_continue_count"), 0)
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_skips_thinking_for_a_known_bad_model(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -664,7 +664,7 @@ class OllamaServiceTests(unittest.TestCase):
         # It fell back before trying, so there is nothing new to tell the user this Ask.
         self.assertFalse(out.get("thinking_unsupported"))
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_does_not_retry_an_unrelated_400(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -749,7 +749,7 @@ class OllamaServiceTests(unittest.TestCase):
         )
         return seen
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_throttles_partial_parses_during_a_burst(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -771,7 +771,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertEqual(len(terminal), 1)
         self.assertEqual(terminal[0][0], "".join(f"tok{i} " for i in range(20)) + "end")
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_parses_again_once_the_interval_elapses(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -838,7 +838,7 @@ class OllamaServiceTests(unittest.TestCase):
 
         return _Rsp()
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_passes_each_piece_on_without_waiting_for_4_kb(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -893,7 +893,7 @@ class OllamaServiceTests(unittest.TestCase):
         )
         self.assertEqual(published[-1][1:], ("".join(pieces).strip(), True))
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_fails_when_stream_eof_without_done(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -1682,7 +1682,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertIn("REPLY VERBOSITY", prompt)
         self.assertNotIn("bonsai-cite", prompt)
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_choose_window_asks_the_server_for_room_instead_of_taking_its_default(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -1736,7 +1736,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertEqual(len(chat_bodies), 1)
         self.assertEqual(chat_bodies[0]["options"]["num_ctx"], PREFERRED_WINDOW_TOKENS)
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_without_choose_window_no_size_is_sent_at_all(self, mock_urlopen: MagicMock) -> None:
         """Saying nothing leaves the server doing exactly what it would have done. Sending a
         size at a server we have not looked at could reload its model for no reason."""
@@ -1760,7 +1760,7 @@ class OllamaServiceTests(unittest.TestCase):
         body = json.loads(mock_urlopen.call_args[0][0].data.decode("utf-8"))
         self.assertNotIn("num_ctx", body["options"])
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_a_soft_continue_asks_for_the_very_same_room(self, mock_urlopen: MagicMock) -> None:
         """A DIFFERENT size makes the server reload the model -- measured 5.7 to 8.1 seconds idle
         and 10 to 16 with a game running. A soft continue is a second request inside one answer,
@@ -1816,7 +1816,7 @@ class OllamaServiceTests(unittest.TestCase):
         Re-measured on the Deck 2026-09-20: the loss is a cliff, not a slope. 4,220 tokens into a
         4,096-token window delivered 2,051 of them, and so did 19,620. The warning has to say
         that, because "over by ~124" reads like a small problem and it is not one."""
-        from backend.services.ollama_service import (
+        from backend.ask.ollama_service import (
             ASSUMED_CONTEXT_WINDOW_TOKENS,
             estimate_prompt_tokens,
             prompt_window_warning,
@@ -1843,7 +1843,7 @@ class OllamaServiceTests(unittest.TestCase):
 
     def test_clamp_num_predict_to_window_leaves_a_fitting_prompt_untouched(self):
         """D46 follow-up: a prompt that already fits gets its num_predict back unchanged."""
-        from backend.services.ollama_service import clamp_num_predict_to_window
+        from backend.ask.ollama_service import clamp_num_predict_to_window
 
         messages = [{"role": "system", "content": "x" * 3500}, {"role": "user", "content": "q"}]
         self.assertEqual(clamp_num_predict_to_window(messages, 800, 0), 800)
@@ -1853,7 +1853,7 @@ class OllamaServiceTests(unittest.TestCase):
         """A ~2,800-token Strategy prompt with thinking medium (visible 1600 + thinking 512 =
         2112) overflows the 4,096 window by 816. The clamp must take that 816 out of the visible
         share only — thinking stays the full 512 the setting promised."""
-        from backend.services.ollama_service import clamp_num_predict_to_window
+        from backend.ask.ollama_service import clamp_num_predict_to_window
 
         messages = [{"role": "system", "content": "x" * int(2800 * 3.5)}]
         clamped = clamp_num_predict_to_window(messages, 1600, 512)
@@ -1862,13 +1862,13 @@ class OllamaServiceTests(unittest.TestCase):
     def test_clamp_num_predict_to_window_never_goes_below_the_visible_floor(self):
         """A prompt so large even the 600-token visible floor cannot make it fit still gets the
         floor — a short reply beats no reply, and the caller's warning still fires."""
-        from backend.services.ollama_service import clamp_num_predict_to_window
+        from backend.ask.ollama_service import clamp_num_predict_to_window
 
         messages = [{"role": "system", "content": "x" * int(4000 * 3.5)}]
         clamped = clamp_num_predict_to_window(messages, 1600, 512)
         self.assertEqual(clamped, 600 + 512)
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_fitting_prompt_sends_unclamped_num_predict(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -1895,7 +1895,7 @@ class OllamaServiceTests(unittest.TestCase):
         clamp_lines = [c for c in logger.warning.call_args_list if "clamping num_predict" in str(c)]
         self.assertEqual(clamp_lines, [])
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_overlong_strategy_prompt_shrinks_visible_keeps_thinking(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -1937,7 +1937,7 @@ class OllamaServiceTests(unittest.TestCase):
         window_lines = [c for c in logger.warning.call_args_list if "exceeds the" in str(c)]
         self.assertEqual(window_lines, [])
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_post_ollama_chat_past_the_floor_sends_floor_and_still_warns(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -2446,7 +2446,7 @@ class OllamaServiceReasoningTests(unittest.TestCase):
             think_effort="low",
         )
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_thinking_then_answer_is_captured_in_the_result(self, mock_urlopen: MagicMock) -> None:
         """The common case: thinking arrives, then the answer, then done."""
         lines = (
@@ -2463,7 +2463,7 @@ class OllamaServiceReasoningTests(unittest.TestCase):
         self.assertIsInstance(out.get("reasoning_seconds"), int)
         self.assertGreaterEqual(out.get("reasoning_seconds"), 1)
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_a_thinking_chunk_after_the_first_answer_chunk_is_appended_without_moving_seconds(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -2484,7 +2484,7 @@ class OllamaServiceReasoningTests(unittest.TestCase):
         self.assertEqual(out.get("reasoning_text"), "Thinking Process:Analyze")
         self.assertEqual(out.get("reasoning_seconds"), 6)
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_thinking_only_no_answer(self, mock_urlopen: MagicMock) -> None:
         """The model spends its whole budget thinking and the stream ends with no answer.
 
@@ -2502,7 +2502,7 @@ class OllamaServiceReasoningTests(unittest.TestCase):
         self.assertEqual(out.get("reasoning_text"), "Thinking Process:")
         self.assertEqual(out.get("reasoning_seconds"), 8)
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_no_thinking_at_all(self, mock_urlopen: MagicMock) -> None:
         """Thinking Off, or a stream whose chunks never carry a ``thinking`` field at all."""
         lines = list(_REAL_CONTENT_CHUNKS_LOW_Q1) + [_REAL_DONE_CHUNK_LOW_Q1_STOP]
@@ -2514,7 +2514,7 @@ class OllamaServiceReasoningTests(unittest.TestCase):
         self.assertIsNone(out.get("reasoning_seconds"))
         self.assertEqual(out.get("reasoning_tokens"), 0)
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_pending_reasoning_partial_is_the_newest_600_characters(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -2545,7 +2545,7 @@ class OllamaServiceReasoningTests(unittest.TestCase):
         self.assertEqual(len(published), 600)
         self.assertEqual(published, _REAL_LONG_THINKING_TEXT_HIGH_Q3[:2705][-600:])
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_cut_off_stream_still_published_reasoning_before_failing(
         self, mock_urlopen: MagicMock
     ) -> None:
@@ -2568,7 +2568,7 @@ class OllamaServiceReasoningTests(unittest.TestCase):
         self.assertTrue(seen, "on_delta was never called before the stream was cut off")
         self.assertEqual(seen[0]["reasoning_partial"], "Thinking")
 
-    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    @patch("backend.ask.ollama_service.urllib.request.urlopen")
     def test_soft_continue_keeps_one_reasoning_buffer_and_one_clock(
         self, mock_urlopen: MagicMock
     ) -> None:

@@ -13,7 +13,7 @@ install_fcntl_and_decky_stubs()
 install_pwd_stub()  # so this file also runs on its own on Windows, not only after another installs it
 
 from backend.services import kb_followup_memory  # noqa: E402
-from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
+from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_chips import StackedContext  # noqa: E402
 from backend.services.knowledge_base_service import KbCoverageSummary, KnowledgeRetrievalResult  # noqa: E402
 
@@ -78,11 +78,11 @@ class NotInNotesWiringTests(unittest.TestCase):
     # Coverage says the corpus has sections for the running game, but retrieval found nothing
     # worth attaching -- this is the "covered game, no match" case the notice exists for.
     @patch(
-        "backend.services.game_ai_request.summarize_kb_coverage",
+        "backend.ask.game_ai_request.summarize_kb_coverage",
         return_value=KbCoverageSummary(status="sections", section_count=4),
     )
     @patch(
-        "backend.services.game_ai_request.retrieve_knowledge_context",
+        "backend.ask.game_ai_request.retrieve_knowledge_context",
         return_value=KnowledgeRetrievalResult(attached=False, unavailable_reason="no_match"),
     )
     def test_covered_game_no_match_appends_the_notice(self, _retrieve, _coverage):
@@ -104,11 +104,11 @@ class NotInNotesWiringTests(unittest.TestCase):
 
     # Same coverage, but this time a note actually attached -- no notice.
     @patch(
-        "backend.services.game_ai_request.summarize_kb_coverage",
+        "backend.ask.game_ai_request.summarize_kb_coverage",
         return_value=KbCoverageSummary(status="sections", section_count=4),
     )
     @patch(
-        "backend.services.game_ai_request.retrieve_knowledge_context",
+        "backend.ask.game_ai_request.retrieve_knowledge_context",
         return_value=KnowledgeRetrievalResult(
             attached=True,
             text_block="Boss note: focus the adds first.",
@@ -130,11 +130,11 @@ class NotInNotesWiringTests(unittest.TestCase):
 
     # Speed never shows the line, even with the two other signals qualifying.
     @patch(
-        "backend.services.game_ai_request.summarize_kb_coverage",
+        "backend.ask.game_ai_request.summarize_kb_coverage",
         return_value=KbCoverageSummary(status="sections", section_count=4),
     )
     @patch(
-        "backend.services.game_ai_request.retrieve_knowledge_context",
+        "backend.ask.game_ai_request.retrieve_knowledge_context",
         return_value=KnowledgeRetrievalResult(attached=False, unavailable_reason="no_match"),
     )
     def test_speed_mode_shows_no_notice(self, _retrieve, _coverage):
@@ -185,11 +185,11 @@ class NoTipLineIsRetiredWiringTests(unittest.TestCase):
     turn where no tip reached the model now gets the reply alone, in any Ask mode."""
 
     @patch(
-        "backend.services.game_ai_request.should_retrieve_knowledge",
+        "backend.ask.game_ai_request.should_retrieve_knowledge",
         return_value=(True, "compat"),
     )
     @patch(
-        "backend.services.game_ai_request.retrieve_knowledge_context",
+        "backend.ask.game_ai_request.retrieve_knowledge_context",
         return_value=KnowledgeRetrievalResult(attached=False, notes="no_hit (keyword)"),
     )
     def test_routed_to_tips_with_nothing_attached_adds_no_line(self, _retrieve, _should_kb):
@@ -214,15 +214,15 @@ class TipSheetTurnShowsNoNotInNotesWiringTests(unittest.TestCase):
     """
 
     @patch(
-        "backend.services.game_ai_request.summarize_kb_coverage",
+        "backend.ask.game_ai_request.summarize_kb_coverage",
         return_value=KbCoverageSummary(status="sections", section_count=4),
     )
     @patch(
-        "backend.services.game_ai_request.should_retrieve_knowledge",
+        "backend.ask.game_ai_request.should_retrieve_knowledge",
         return_value=(True, "compat"),
     )
     @patch(
-        "backend.services.game_ai_request.retrieve_knowledge_context",
+        "backend.ask.game_ai_request.retrieve_knowledge_context",
         return_value=KnowledgeRetrievalResult(attached=False, notes="no_hit (keyword)"),
     )
     def test_a_tip_sheet_turn_shows_no_footer_at_all(self, _retrieve, _should_kb, _coverage):
@@ -252,13 +252,13 @@ class CutForRoomShowsNoNotInNotesWiringTests(unittest.TestCase):
         kb_followup_memory.forget()
         try:
             with patch(
-                "backend.services.game_ai_request.summarize_kb_coverage",
+                "backend.ask.game_ai_request.summarize_kb_coverage",
                 return_value=KbCoverageSummary(status="sections", section_count=4),
             ), patch(
-                "backend.services.game_ai_request.retrieve_knowledge_context",
+                "backend.ask.game_ai_request.retrieve_knowledge_context",
                 return_value=retrieval,
             ), patch(
-                "backend.services.game_ai_request.stack_context_blocks",
+                "backend.ask.game_ai_request.stack_context_blocks",
                 return_value=StackedContext(text="", knowledge_attached=False),
             ):
                 return _run(plugin, ask_mode=ask_mode).get("response", "")
@@ -295,11 +295,11 @@ class NoCloseMatchWiringTests(unittest.TestCase):
     """The third line, end to end through run_game_ai_request."""
 
     @patch(
-        "backend.services.game_ai_request.summarize_kb_coverage",
+        "backend.ask.game_ai_request.summarize_kb_coverage",
         return_value=KbCoverageSummary(status="sections", section_count=4),
     )
     @patch(
-        "backend.services.game_ai_request.retrieve_knowledge_context",
+        "backend.ask.game_ai_request.retrieve_knowledge_context",
         return_value=_attached(best_meaning=0.60, keyword_score=0.0),
     )
     def test_a_thin_note_appends_the_notice(self, _retrieve, _coverage):
@@ -323,11 +323,11 @@ class NoCloseMatchWiringTests(unittest.TestCase):
         )
 
     @patch(
-        "backend.services.game_ai_request.summarize_kb_coverage",
+        "backend.ask.game_ai_request.summarize_kb_coverage",
         return_value=KbCoverageSummary(status="sections", section_count=4),
     )
     @patch(
-        "backend.services.game_ai_request.retrieve_knowledge_context",
+        "backend.ask.game_ai_request.retrieve_knowledge_context",
         return_value=_attached(best_meaning=0.78, keyword_score=0.0),
     )
     def test_a_close_note_appends_nothing(self, _retrieve, _coverage):
@@ -341,11 +341,11 @@ class NoCloseMatchWiringTests(unittest.TestCase):
         self.assertNotIn(_NO_CLOSE_MATCH_TEXT, _run(plugin, ask_mode="strategy").get("response", ""))
 
     @patch(
-        "backend.services.game_ai_request.summarize_kb_coverage",
+        "backend.ask.game_ai_request.summarize_kb_coverage",
         return_value=KbCoverageSummary(status="sections", section_count=4),
     )
     @patch(
-        "backend.services.game_ai_request.retrieve_knowledge_context",
+        "backend.ask.game_ai_request.retrieve_knowledge_context",
         return_value=_attached(best_meaning=0.60, keyword_score=4.5),
     )
     def test_a_note_the_keyword_search_found_appends_nothing(self, _retrieve, _coverage):
@@ -359,11 +359,11 @@ class NoCloseMatchWiringTests(unittest.TestCase):
         self.assertNotIn(_NO_CLOSE_MATCH_TEXT, _run(plugin, ask_mode="strategy").get("response", ""))
 
     @patch(
-        "backend.services.game_ai_request.summarize_kb_coverage",
+        "backend.ask.game_ai_request.summarize_kb_coverage",
         return_value=KbCoverageSummary(status="sections", section_count=4),
     )
     @patch(
-        "backend.services.game_ai_request.retrieve_knowledge_context",
+        "backend.ask.game_ai_request.retrieve_knowledge_context",
         return_value=_attached(best_meaning=None, keyword_score=0.0),
     )
     def test_a_turn_with_no_meaning_score_appends_nothing(self, _retrieve, _coverage):
@@ -391,11 +391,11 @@ class RerouteToTheTipSheetWiringTests(unittest.TestCase):
     still ended with "No close match in my notes" underneath it."""
 
     @patch(
-        "backend.services.game_ai_request.summarize_kb_coverage",
+        "backend.ask.game_ai_request.summarize_kb_coverage",
         return_value=KbCoverageSummary(status="sections", section_count=4),
     )
     @patch(
-        "backend.services.game_ai_request.retrieve_knowledge_context",
+        "backend.ask.game_ai_request.retrieve_knowledge_context",
         return_value=_attached(best_meaning=0.60, keyword_score=0.0, notes="compat_tips"),
     )
     def test_a_rerouted_tip_does_not_get_told_no_close_match(self, _retrieve, _coverage):
@@ -428,10 +428,10 @@ class RerouteToTheTipSheetWiringTests(unittest.TestCase):
         kb_followup_memory.forget()
         try:
             with patch(
-                "backend.services.game_ai_request.summarize_kb_coverage",
+                "backend.ask.game_ai_request.summarize_kb_coverage",
                 return_value=KbCoverageSummary(status="sections", section_count=4),
             ), patch(
-                "backend.services.game_ai_request.retrieve_knowledge_context",
+                "backend.ask.game_ai_request.retrieve_knowledge_context",
                 return_value=retrieval,
             ):
                 _run(plugin, ask_mode="strategy", question="the text looks blurry on my deck")
@@ -463,11 +463,11 @@ def _resolved_to_black_mesa_with_no_game_running(test_fn):
     the words in the question, against the same corpus size lane J's device run had.
     """
     test_fn = patch(
-        "backend.services.game_ai_request.summarize_kb_coverage",
+        "backend.ask.game_ai_request.summarize_kb_coverage",
         return_value=KbCoverageSummary(status="sections", section_count=14),
     )(test_fn)
     test_fn = patch(
-        "backend.services.game_ai_request.resolve_title_from_question",
+        "backend.ask.game_ai_request.resolve_title_from_question",
         return_value="Black Mesa",
     )(test_fn)
     return test_fn
@@ -481,7 +481,7 @@ class GameNamedOnlyInTheQuestionWiringTests(unittest.TestCase):
 
     @_resolved_to_black_mesa_with_no_game_running
     @patch(
-        "backend.services.game_ai_request.retrieve_knowledge_context",
+        "backend.ask.game_ai_request.retrieve_knowledge_context",
         return_value=_black_mesa_retrieval(
             [
                 {"title": "Black Mesa — Starting out in Black Mesa"},
@@ -512,7 +512,7 @@ class GameNamedOnlyInTheQuestionWiringTests(unittest.TestCase):
 
     @_resolved_to_black_mesa_with_no_game_running
     @patch(
-        "backend.services.game_ai_request.retrieve_knowledge_context",
+        "backend.ask.game_ai_request.retrieve_knowledge_context",
         return_value=_black_mesa_retrieval([{"title": "Black Mesa — Gonarch"}]),
     )
     def test_a_real_question_about_the_game_shows_no_line(

@@ -26,7 +26,7 @@ if "decky" not in sys.modules:
     )
     sys.modules["decky"] = _decky
 
-from backend.services.game_ai_request import run_game_ai_request
+from backend.ask.game_ai_request import run_game_ai_request
 from backend.prompts.ollama_prompts import extract_strategy_asked_entity
 from backend.characters.spy_confession_service import SPY_LIES_TAG_CLOSE, SPY_LIES_TAG_OPEN
 
@@ -354,7 +354,7 @@ class StrategyTitleProfileWiringTests(unittest.TestCase):
         plugin._ollama_result = {"success": True, "response": "Pick whichever class you like."}
 
         with patch(
-            "backend.services.game_ai_request.resolve_title_from_question",
+            "backend.ask.game_ai_request.resolve_title_from_question",
             return_value="Deep Rock Galactic: Survivor",
         ):
             _run(plugin, question="drg survivor what class", ask_mode="strategy")
@@ -368,7 +368,7 @@ class StrategyTitleProfileWiringTests(unittest.TestCase):
         plugin._ollama_result = {"success": True, "response": "General advice."}
 
         with patch(
-            "backend.services.game_ai_request.resolve_title_from_question",
+            "backend.ask.game_ai_request.resolve_title_from_question",
             return_value="Fallout: New Vegas",
         ):
             _run(plugin, question="what should I do next", ask_mode="strategy")
@@ -457,7 +457,7 @@ class AnswerCheckerLoggingTests(unittest.TestCase):
             "model": "test-model",
         }
 
-        with patch("backend.services.game_ai_request.logger") as mock_logger:
+        with patch("backend.ask.game_ai_request.logger") as mock_logger:
             result = _run(plugin, question="What should I do next in this game?")
 
         self.assertTrue(result.get("success"))
@@ -475,7 +475,7 @@ class AnswerCheckerLoggingTests(unittest.TestCase):
             "model": "test-model",
         }
 
-        with patch("backend.services.game_ai_request.logger") as mock_logger:
+        with patch("backend.ask.game_ai_request.logger") as mock_logger:
             _run(
                 plugin,
                 question="What should I do next in this game?",

@@ -16,7 +16,7 @@ install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
 from backend.services import kb_followup_memory  # noqa: E402
-from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
+from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.services.kb_attached_notes import kb_choice_log_line  # noqa: E402
 from backend.services.knowledge_base_cards import _omitted_note  # noqa: E402
 from backend.services.knowledge_base_chips import StackedContext  # noqa: E402
@@ -128,24 +128,24 @@ class KbChoiceLogLineWiringTests(unittest.TestCase):
     def _kb_lines(self, *, stacked=None) -> list[str]:
         patches = [
             patch(
-                "backend.services.game_ai_request.summarize_kb_coverage",
+                "backend.ask.game_ai_request.summarize_kb_coverage",
                 return_value=KbCoverageSummary(status="sections", section_count=4),
             ),
             patch(
-                "backend.services.game_ai_request.retrieve_knowledge_context",
+                "backend.ask.game_ai_request.retrieve_knowledge_context",
                 return_value=_two_notes("--- block ---\n[Note: Broken Vessel]\nx"),
             ),
         ]
         if stacked is not None:
             patches.append(
                 patch(
-                    "backend.services.game_ai_request.stack_context_blocks",
+                    "backend.ask.game_ai_request.stack_context_blocks",
                     return_value=stacked,
                 )
             )
         kb_followup_memory.forget()
         try:
-            with patch("backend.services.game_ai_request.logger") as logger:
+            with patch("backend.ask.game_ai_request.logger") as logger:
                 for p in patches:
                     p.start()
                 try:

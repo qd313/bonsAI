@@ -130,7 +130,7 @@ class SummaryRequestAndReplyTests(unittest.TestCase):
         plain = _summary_request_messages(_plan(_turns(2)), "m", "english")[0]["content"]
         self.assertNotIn("TITLE", plain)
 
-    @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
     def test_a_suggestion_rides_in_the_summary_and_never_in_its_text(self, urlopen):
         reply = "Games: Half-Life 2\nStuck on: the helicopter\nTITLE: Half-Life 2 weapons"
         outcome, body = self._write(urlopen, reply, title_offer_for="wheatley fight")
@@ -140,14 +140,14 @@ class SummaryRequestAndReplyTests(unittest.TestCase):
         self.assertNotIn("Half-Life 2 weapons", outcome.summary["text"])
         self.assertIn("wheatley fight", body["messages"][0]["content"])
 
-    @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
     def test_keep_leaves_the_summary_with_no_offer(self, urlopen):
         outcome, _body = self._write(urlopen, "Stuck on: the second boss\nTITLE: KEEP", title_offer_for="Hades keepsakes")
         self.assertEqual(outcome.status, "written")
         self.assertNotIn("suggested_title", outcome.summary)
         self.assertNotIn("TITLE", outcome.summary["text"])
 
-    @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
+    @patch("backend.ask.ollama_chat_stream.urllib.request.urlopen")
     def test_a_chat_not_asked_about_its_title_is_summed_up_exactly_as_before(self, urlopen):
         outcome, body = self._write(urlopen, "Stuck on: the second boss\nTITLE: Something else", title_offer_for="")
         self.assertNotIn("TITLE:", body["messages"][0]["content"])

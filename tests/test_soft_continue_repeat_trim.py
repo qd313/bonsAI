@@ -23,7 +23,7 @@ from unittest.mock import patch
 
 import test_soft_continue_spoiler_join as hidden_block_join_tests
 
-from backend.services.ollama_ask_budgets import reset_thinking_support_cache
+from backend.ask.ollama_ask_budgets import reset_thinking_support_cache
 from backend.answer.soft_continue_repeat_trim import (
     MIN_REPEAT_CHARS,
     join_continued_piece,
@@ -54,7 +54,7 @@ class SavedAnswerAfterAContinuedAnswerRestatesTextTests(unittest.TestCase):
         self.settings_dir = tempfile.mkdtemp(prefix="p87b5-")
         self.addCleanup(shutil.rmtree, self.settings_dir, True)
         # Publish every partial parse, so the screen's updates are all seen.
-        parse_gap = patch("backend.services.ollama_chat_stream.OLLAMA_DELTA_PARSE_INTERVAL_S", 0.0)
+        parse_gap = patch("backend.ask.ollama_chat_stream.OLLAMA_DELTA_PARSE_INTERVAL_S", 0.0)
         parse_gap.start()
         self.addCleanup(parse_gap.stop)
 

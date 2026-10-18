@@ -18,7 +18,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
-from backend.services.game_ai_request import _parse_kb_attached_notes  # noqa: E402
+from backend.ask.game_ai_request import _parse_kb_attached_notes  # noqa: E402
 from backend.services.knowledge_base_service import (  # noqa: E402
     _COMPAT_GAME_TITLE,
     close_connection,

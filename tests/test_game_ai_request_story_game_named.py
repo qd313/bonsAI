@@ -27,7 +27,7 @@ install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
 from backend.services import kb_followup_memory  # noqa: E402
-from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
+from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_cards import close_connection  # noqa: E402
 from backend.services.knowledge_base_schema import (  # noqa: E402
     CORPUS_DB_FILENAME,
@@ -208,7 +208,7 @@ class StoryGameNamedWhileANoStoryGameRunsTests(unittest.TestCase):
 
     def _exception_log_lines(self, question, **kwargs) -> list[str]:
         """The log lines this ask wrote that announce the exception."""
-        with patch("backend.services.game_ai_request.logger") as logger:
+        with patch("backend.ask.game_ai_request.logger") as logger:
             self._ask(question, **kwargs)
         kb_followup_memory.forget()
         written = [

@@ -26,7 +26,7 @@ from backend_module_stubs import install_pwd_stub
 install_pwd_stub()
 
 from backend.characters.ai_character_service import build_roleplay_system_suffix_meta  # noqa: E402
-from backend.services.ollama_ask_service import run_ask_ollama  # noqa: E402
+from backend.ask.ollama_ask_service import run_ask_ollama  # noqa: E402
 
 
 class _FakePlugin:
@@ -144,11 +144,11 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
 
         with (
             patch(
-                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
                 return_value=["gemma4:e2b-it-qat", "gemma4:e2b"],
             ),
             patch(
-                "backend.services.ollama_ask_service.probe_ollama_http_ok",
+                "backend.ask.ollama_ask_service.probe_ollama_http_ok",
                 return_value=True,
             ),
             patch(
@@ -156,7 +156,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
                 return_value=([], [], []),
             ),
             patch(
-                "backend.services.ollama_ask_service.post_ollama_chat",
+                "backend.ask.ollama_ask_service.post_ollama_chat",
                 side_effect=fake_post_ollama_chat,
             ),
         ):
@@ -197,16 +197,16 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
 
         with (
             patch(
-                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
                 return_value=["qwen3:4b"],
             ),
-            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
                 "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(
-                "backend.services.ollama_ask_service.post_ollama_chat",
+                "backend.ask.ollama_ask_service.post_ollama_chat",
                 side_effect=fake_post_ollama_chat,
             ),
         ):
@@ -237,20 +237,20 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
 
         with (
             patch(
-                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
                 return_value=["qwen3:4b"],
             ),
-            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
                 "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(
-                "backend.services.ollama_ask_service.post_ollama_chat",
+                "backend.ask.ollama_ask_service.post_ollama_chat",
                 side_effect=fake_post_ollama_chat,
             ),
             patch(
-                "backend.services.ollama_ask_service.build_roleplay_system_suffix_meta",
+                "backend.ask.ollama_ask_service.build_roleplay_system_suffix_meta",
                 wraps=build_roleplay_system_suffix_meta,
             ) as spy,
         ):
@@ -286,16 +286,16 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
 
         with (
             patch(
-                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
                 return_value=["qwen3:4b"],
             ),
-            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
                 "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([{"image_b64": "abc"}], [], ["one image too large"]),
             ),
             patch(
-                "backend.services.ollama_ask_service.post_ollama_chat",
+                "backend.ask.ollama_ask_service.post_ollama_chat",
                 side_effect=fake_post_ollama_chat,
             ),
         ):
@@ -335,16 +335,16 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
 
         with (
             patch(
-                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
                 return_value=["qwen3:4b"],
             ),
-            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
                 "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(
-                "backend.services.ollama_ask_service.post_ollama_chat",
+                "backend.ask.ollama_ask_service.post_ollama_chat",
                 side_effect=fake_post_ollama_chat,
             ),
         ):
@@ -380,16 +380,16 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
 
         with (
             patch(
-                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
                 return_value=["qwen3:4b"],
             ),
-            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
                 "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(
-                "backend.services.ollama_ask_service.post_ollama_chat",
+                "backend.ask.ollama_ask_service.post_ollama_chat",
                 side_effect=fake_post_ollama_chat,
             ),
         ):
@@ -425,16 +425,16 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
 
         with (
             patch(
-                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
                 return_value=["qwen3:4b"],
             ),
-            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
                 "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(
-                "backend.services.ollama_ask_service.post_ollama_chat",
+                "backend.ask.ollama_ask_service.post_ollama_chat",
                 side_effect=fake_post_ollama_chat,
             ),
         ):
@@ -473,16 +473,16 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
 
         with (
             patch(
-                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
                 return_value=["gemma4:e2b-it-qat", "gemma4:e2b"],
             ),
-            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
                 "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(
-                "backend.services.ollama_ask_service.post_ollama_chat",
+                "backend.ask.ollama_ask_service.post_ollama_chat",
                 side_effect=fake_post_ollama_chat,
             ),
         ):
@@ -501,12 +501,12 @@ class SpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
         stack = ExitStack()
         stack.enter_context(
             patch(
-                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
                 return_value=["qwen3:4b"],
             )
         )
         stack.enter_context(
-            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True)
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True)
         )
         stack.enter_context(
             patch(
@@ -516,7 +516,7 @@ class SpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
         )
         stack.enter_context(
             patch(
-                "backend.services.ollama_ask_service.post_ollama_chat",
+                "backend.ask.ollama_ask_service.post_ollama_chat",
                 side_effect=fake_post_ollama_chat,
             )
         )
@@ -709,12 +709,12 @@ class ThinkingSpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
         stack = ExitStack()
         stack.enter_context(
             patch(
-                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
                 return_value=["qwen3:4b"],
             )
         )
         stack.enter_context(
-            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True)
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True)
         )
         stack.enter_context(
             patch(
@@ -724,7 +724,7 @@ class ThinkingSpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
         )
         stack.enter_context(
             patch(
-                "backend.services.ollama_ask_service.post_ollama_chat",
+                "backend.ask.ollama_ask_service.post_ollama_chat",
                 side_effect=fake_post_ollama_chat,
             )
         )
@@ -834,12 +834,12 @@ class ChatMemoryReachesTheModelTests(unittest.IsolatedAsyncioTestCase):
                     "assistant_raw": "ok"}
 
         with (
-            patch("backend.services.ollama_ask_service.list_installed_ollama_tags",
+            patch("backend.ask.ollama_ask_service.list_installed_ollama_tags",
                   return_value=["qwen3:4b"]),
-            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch("backend.media.screenshot_media.prepare_attachment_images",
                   return_value=([], [], [])),
-            patch("backend.services.ollama_ask_service.post_ollama_chat", side_effect=_fake_post),
+            patch("backend.ask.ollama_ask_service.post_ollama_chat", side_effect=_fake_post),
         ):
             await run_ask_ollama(
                 plugin, "and what about the boots?", "127.0.0.1:11434", "", "",
@@ -897,7 +897,7 @@ class GlossaryReachesThePromptTests(unittest.IsolatedAsyncioTestCase):
 
         with (
             patch.object(_FakePlugin, "_build_system_prompt", _record),
-            patch("backend.services.ollama_ask_service.glossary_for_prompt", return_value=found),
+            patch("backend.ask.ollama_ask_service.glossary_for_prompt", return_value=found),
         ):
             await ChatMemoryReachesTheModelTests._ask_with_chat(self, [])
         return handed
@@ -969,12 +969,12 @@ class ChatSummaryWiringTests(unittest.IsolatedAsyncioTestCase):
             }
 
         with (
-            patch("backend.services.ollama_ask_service.list_installed_ollama_tags",
+            patch("backend.ask.ollama_ask_service.list_installed_ollama_tags",
                   return_value=["qwen3:4b"]),
-            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch("backend.media.screenshot_media.prepare_attachment_images",
                   return_value=([], [], [])),
-            patch("backend.services.ollama_ask_service.post_ollama_chat", side_effect=_fake_post),
+            patch("backend.ask.ollama_ask_service.post_ollama_chat", side_effect=_fake_post),
             patch("backend.chats.chat_summary_service._stream_ollama_chat_once",
                   return_value=summary_stream_result) as summary_mock,
         ):
@@ -1072,16 +1072,16 @@ class QuestionForDisplayNeverLeaksTheModelBoundTextTests(unittest.IsolatedAsynci
     def _patched(fake_post_ollama_chat):
         return (
             patch(
-                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                "backend.ask.ollama_ask_service.list_installed_ollama_tags",
                 return_value=["qwen3:4b"],
             ),
-            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
                 "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(
-                "backend.services.ollama_ask_service.post_ollama_chat",
+                "backend.ask.ollama_ask_service.post_ollama_chat",
                 side_effect=fake_post_ollama_chat,
             ),
         )

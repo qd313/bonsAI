@@ -22,13 +22,13 @@ from test_ollama_ask_service import _FakePlugin  # noqa: E402
 from test_chat_sum_up_job import ChatSlotJobTestCase, _seed_chat  # noqa: E402
 
 from backend.ollama import ollama_keep_alive_rule as rule  # noqa: E402
-from backend.services.ollama_ask_service import run_ask_ollama  # noqa: E402
+from backend.ask.ollama_ask_service import run_ask_ollama  # noqa: E402
 from main import Plugin  # noqa: E402
 
 _REPLY = '{"message":{"role":"assistant","content":"ok"},"done":true}'
 _DECK = "127.0.0.1:11434"
 _PC = "192.168.1.20:11434"
-_URLOPEN = "backend.services.ollama_chat_stream.urllib.request.urlopen"
+_URLOPEN = "backend.ask.ollama_chat_stream.urllib.request.urlopen"
 
 
 class _Captured:
@@ -103,10 +103,10 @@ class AskRequestBodyTests(unittest.IsolatedAsyncioTestCase):
         plugin._settings["ollama_keep_alive"] = setting
         seen = _Captured()
         with (
-            patch("backend.services.ollama_ask_service.list_installed_ollama_tags", return_value=["qwen3:4b"]),
-            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.ask.ollama_ask_service.list_installed_ollama_tags", return_value=["qwen3:4b"]),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch("backend.media.screenshot_media.prepare_attachment_images", return_value=([], [], [])),
-            patch("backend.services.ollama_service.choose_window_tokens", return_value=0),
+            patch("backend.ask.ollama_service.choose_window_tokens", return_value=0),
             patch("backend.chats.chat_memory_step.choose_window_tokens", return_value=0),
             patch(_URLOPEN, side_effect=seen),
         ):
@@ -167,7 +167,7 @@ class AskTellsTheRuleWhetherAGameRunsTests(unittest.TestCase):
 
     def _run(self, app_id: str, app_name: str) -> None:
         from test_destructive_advice_wiring import _FakePlugin as WiringPlugin
-        from backend.services.game_ai_request import run_game_ai_request
+        from backend.ask.game_ai_request import run_game_ai_request
 
         plugin = WiringPlugin({"latency_timeouts_custom_enabled": False, "input_sanitizer_user_disabled": False,
                                "capabilities": {}})

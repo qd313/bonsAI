@@ -118,11 +118,11 @@ from backend.prompts.ollama_prompts import (
     user_consents_strategy_spoilers,
     user_wants_power_or_performance_topic,
 )
-from backend.services.ollama_service import (
+from backend.ask.ollama_service import (
     question_matches_troubleshooting_log_context,
     user_asks_ollama_bonsai_host_or_latency,
 )
-from backend.services.proton_troubleshooting_logs import collect_proton_troubleshooting_logs
+from backend.ask.proton_troubleshooting_logs import collect_proton_troubleshooting_logs
 from backend.answer.response_verify import (
     cover_named_spoilers,
     cover_thinking_text,

@@ -21,7 +21,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
-from backend.services.background_request_state import pending_background_state  # noqa: E402
+from backend.ask.background_request_state import pending_background_state  # noqa: E402
 from backend.chats.chat_slot_service import create_slot, load_slot  # noqa: E402
 from main import Plugin  # noqa: E402
 

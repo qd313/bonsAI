@@ -72,7 +72,7 @@ flowchart TD
 | Retrieval | `py_modules/backend/services/knowledge_base_service.py` | Gate, AppID/alias resolve, FTS5 search, adaptive byte budget, genre/compat fallback |
 | Schema + manifest helpers | `py_modules/backend/services/knowledge_base_schema.py` | SQLite DDL, FTS triggers, `resolve_corpus_db_path`, trust tiers |
 | Downloader | `py_modules/backend/services/rag_corpus_download_service.py` | Manifest fetch, curl download, zlib decompress, SHA-256 verify |
-| Ask splice | `py_modules/backend/services/game_ai_request.py` | `searching_kb` thinking phase; stack KB + Proton into `early_context_suffix` |
+| Ask splice | `py_modules/backend/ask/game_ai_request.py` | `searching_kb` thinking phase; stack KB + Proton into `early_context_suffix` |
 | System prompt | `py_modules/backend/prompts/ollama_prompts.py` | `bonsai-cite` + spoiler instructions when KB block present |
 | Transparency | `py_modules/backend/answer/transparency_service.py` | KB slice (sources, bytes, tier) on last Ask |
 | UI | `src/components/KnowledgeBaseSection.tsx`, `OllamaTab.tsx` | Download/update/**cancel**/remove, toggle, availability indicator. Cancel shares the action row's second slot with Remove and only exists while a download runs — see **KB-CANCEL-01** in [testing.md](testing.md) |

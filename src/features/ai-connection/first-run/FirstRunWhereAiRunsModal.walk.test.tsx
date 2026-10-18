@@ -2,9 +2,10 @@
  * Title: Walking the first-run popup with the D-pad
  *
  * Purpose: Draws the real popup with Steam's ring modelled and presses the D-pad the way Steam calls the
- * move handlers: the ring starts on Not now; Up and Down walk the column (Run AI switch, then the
- * Start-with-the-Deck switch or the PC address row, then the foot); Left and Right move between the two foot
- * buttons and between the address field and Find LAN; every stop answers all four directions (a press that
+ * move handlers: the ring starts on Not now, the right-hand foot button (the action is on the left, plan 96,
+ * 2026-10-18); Up and Down walk the column (Run AI switch, then the Start-with-the-Deck switch or the PC
+ * address row, then the foot, entered on Not now); Left and Right move between the two foot buttons and
+ * between the address field and Find LAN; every stop answers all four directions (a press that
  * goes nowhere returns true, so Steam never steps on by itself); Up from the first switch holds; no stop is
  * visited twice on a walk and every button in the popup is a stop. The Deck row measures the real thing.
  *
@@ -24,6 +25,7 @@ import { FirstRunWhereAiRunsModal } from "./FirstRunWhereAiRunsModal";
 import { popupHost, press, resetBoxes, ringName } from "./firstRunPopupTestKit";
 import { resetFakeDeckyRpc, setRpcHandler } from "../../../test-harness/fakeDeckyRpc";
 import { markSettingsLoaded, resetSettingsLoadedSignalForTests } from "../../settings/settingsLoadedSignal";
+import { rememberModalReturnFocus, restoreModalReturnFocusWithRetry } from "../../../shared/dpad/modalReturnFocusRegistry";
 
 const NOT_NOW = "Not now: set up the AI later on the Ollama tab";
 const INSTALL = "Install Ollama on this Deck";
@@ -66,20 +68,31 @@ describe("the popup's walk, switch on", () => {
     expect(new Set(walk).size).toBe(walk.length);
   });
 
-  it("Left and Right move between the two foot buttons and hold at both ends", async () => {
+  it("Left from Not now reaches the action, Right comes back, and both hold at their ends", async () => {
     await mount(true);
-    expect(step("onMoveLeft")).toEqual({ answer: true, at: NOT_NOW });
-    expect(step("onMoveRight").at).toBe(INSTALL);
-    expect(step("onMoveRight")).toEqual({ answer: true, at: INSTALL });
-    expect(step("onMoveLeft").at).toBe(NOT_NOW);
+    expect(step("onMoveRight")).toEqual({ answer: true, at: NOT_NOW });
+    expect(step("onMoveLeft").at).toBe(INSTALL);
+    expect(step("onMoveLeft")).toEqual({ answer: true, at: INSTALL });
+    expect(step("onMoveRight").at).toBe(NOT_NOW);
   });
 
-  it("Down from the foot holds still, and Up from the second button lands on the switch above, not off the popup", async () => {
+  it("Down from the foot holds still, and Up from the action lands on the switch above, not off the popup", async () => {
     await mount(true);
     expect(step("onMoveDown")).toEqual({ answer: true, at: NOT_NOW });
-    step("onMoveRight");
+    step("onMoveLeft");
     expect(step("onMoveDown")).toEqual({ answer: true, at: INSTALL });
     expect(step("onMoveUp").at).toBe(START);
+  });
+
+  it("after the download notice closes over the popup the ring comes back to the action, the left-hand foot button", async () => {
+    await mount(true);
+    step("onMoveUp");
+    expect(ringName()).toBe(START);
+    rememberModalReturnFocus("ollama-local-setup");
+    act(() => {
+      restoreModalReturnFocusWithRetry();
+    });
+    await waitFor(() => expect(ringName()).toBe(INSTALL));
   });
 
   it("every stop answers all four directions, and the four stops are the two switches and the two buttons", async () => {
@@ -87,7 +100,7 @@ describe("the popup's walk, switch on", () => {
       [RUN, ["onMoveUp", "onMoveUp"]],
       [START, ["onMoveUp"]],
       [NOT_NOW, []],
-      [INSTALL, ["onMoveRight"]],
+      [INSTALL, ["onMoveLeft"]],
     ];
     for (const [name, path] of paths) {
       for (const key of ["onMoveUp", "onMoveDown", "onMoveLeft", "onMoveRight"] as const) {
@@ -109,7 +122,7 @@ describe("the popup's walk, switch off", () => {
     expect([step("onMoveUp").at, step("onMoveUp").at]).toEqual([FIELD, RUN]);
     expect(step("onMoveDown").at).toBe(FIELD);
     expect(step("onMoveDown").at).toBe(NOT_NOW);
-    expect(step("onMoveRight").at).toBe(TEST);
+    expect(step("onMoveLeft").at).toBe(TEST);
     // Up from Test connection goes to the field, the first stop of the row it enters.
     expect(step("onMoveUp").at).toBe(FIELD);
   });

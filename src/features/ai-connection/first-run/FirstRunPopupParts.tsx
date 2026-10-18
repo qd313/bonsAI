@@ -4,7 +4,9 @@
  * Purpose: A switch row and a button, each already a stop of the popup's walk (useFirstRunPopupNav.ts):
  * the switch is Steam's own ToggleField inside a Focusable that carries the stop's nav node and its four
  * move handlers, with the switch's help line under it; the button is a Decky Button inside such a
- * Focusable, pressed by A or by a finger, never twice for one press.
+ * Focusable, pressed by A or by a finger, never twice for one press. A button has one of three looks: the
+ * frosted glass of the plugin's other small buttons (Find LAN), Steam's blue primary button (the look of the
+ * Beta Notice's "Got it", the foot's action) or Steam's plain button (the foot's Not now).
  *
  * Used for: FirstRunWhereAiRunsModal.tsx.
  *
@@ -16,7 +18,7 @@
  * Does not: Decide what a press does or where the ring goes next; the popup passes the action and the stop.
  */
 import React, { useRef, type CSSProperties, type ReactNode } from "react";
-import { Button, Focusable, ToggleField } from "@decky/ui";
+import { Button, DialogButtonPrimary, Focusable, ToggleField } from "@decky/ui";
 
 import { FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN } from "../../../styles/settingsGlassButton";
 import { scaledSteamWords } from "../../../shared/text-size/scaledSteamWords";
@@ -64,10 +66,15 @@ export function PopupSwitch({
 }
 
 const BUTTON_BASE: CSSProperties = { ...SETTINGS_GLASS_BTN, minHeight: 32, height: 32, padding: "0 10px", textAlign: "center", justifyContent: "center", width: "100%" };
-const BUTTON_PRIMARY: CSSProperties = {
-  border: "1px solid rgba(56,189,248,0.55)",
-  background: "linear-gradient(180deg, rgba(56,189,248,0.22) 0%, rgba(14,116,144,0.35) 100%)",
-  color: "#e0f2fe",
+/** The foot's two looks are Steam's own, so only the size and the Text size step are ours. */
+const BUTTON_STEAM: CSSProperties = {
+  minHeight: 32,
+  height: 32,
+  padding: "0 10px",
+  textAlign: "center",
+  justifyContent: "center",
+  width: "100%",
+  fontSize: textPx(13),
 };
 const BUTTON_GREYED: CSSProperties = { opacity: 0.55 };
 
@@ -76,7 +83,7 @@ export function PopupButton({
   stop,
   label,
   ariaLabel,
-  primary = false,
+  look = "glass",
   greyed = false,
   onPress,
   fill = true,
@@ -85,12 +92,16 @@ export function PopupButton({
   stop: SearchStopProps;
   label: ReactNode;
   ariaLabel: string;
-  primary?: boolean;
+  /** "glass" (the default), "primary" (Steam's blue button, the action) or "plain" (Steam's grey button, Not now). */
+  look?: "glass" | "primary" | "plain";
   greyed?: boolean;
   onPress: () => void;
   /** Fill the width of its column (the foot buttons); false keeps the button as wide as its words. */
   fill?: boolean;
-  /** Told the button's element (null when it goes), for a return target the shell can hand the ring back to. */
+  /**
+   * Told the stop's element (the Focusable around the button; null when it goes), for a return target the shell
+   * can hand the ring back to. It is the wrapper, not the button: Steam's primary button may not pass a ref on.
+   */
   buttonRef?: (el: HTMLElement | null) => void;
 }): React.ReactElement {
   const lastOk = useRef(0);
@@ -101,21 +112,28 @@ export function PopupButton({
     if (!greyed) onPress();
   };
   const { ref, ...rest } = stop;
+  const Look = look === "primary" ? DialogButtonPrimary : Button;
   return (
     <Focusable
-      ref={ref}
+      ref={(el: HTMLElement | null) => {
+        ref(el);
+        buttonRef?.(el);
+      }}
       style={fill ? { flex: "1 1 0", minWidth: 0 } : { flex: "0 0 auto" }}
       {...({ ...rest, onOKButton: () => press(true) } as Record<string, unknown>)}
     >
-      <Button
-        ref={(el) => buttonRef?.(el as HTMLElement | null)}
+      <Look
         className={FOCUS_RING_BTN_CLASS}
         onClick={() => press(false)}
         aria-label={ariaLabel}
-        style={{ ...BUTTON_BASE, ...(fill ? null : { width: "auto" }), ...(primary ? BUTTON_PRIMARY : null), ...(greyed ? BUTTON_GREYED : null) }}
+        style={{
+          ...(look === "glass" ? BUTTON_BASE : BUTTON_STEAM),
+          ...(fill ? null : { width: "auto" }),
+          ...(greyed ? BUTTON_GREYED : null),
+        }}
       >
         {label}
-      </Button>
+      </Look>
     </Focusable>
   );
 }

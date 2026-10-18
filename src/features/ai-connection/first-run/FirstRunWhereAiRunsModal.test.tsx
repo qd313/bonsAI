@@ -63,8 +63,25 @@ describe("what the popup says", () => {
       "Install Ollama downloads it and the starter models, about 4.6 GB. You are asked before anything downloads.",
     );
     await waitFor(() => expect(text()).toContain("Local Ollama setup: Not installed"));
-    // Two buttons in the foot, Not now first.
-    const foot = [NOT_NOW, "Install Ollama"].map((w) => screen.getByText(w));
+    // Two buttons in the foot, the action on the left and Not now on the right.
+    const foot = ["Install Ollama", NOT_NOW].map((w) => screen.getByText(w));
+    expect(foot[0].compareDocumentPosition(foot[1]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("draws the action in Steam's blue primary button (the look of Got it) and Not now in the plain one", async () => {
+    open();
+    const action = screen.getByLabelText("Install Ollama on this Deck");
+    const notNow = screen.getByLabelText("Not now: set up the AI later on the Ollama tab");
+    expect(action.getAttribute("data-decky-ui")).toBe("DialogButtonPrimary");
+    expect(notNow.getAttribute("data-decky-ui")).toBe("Button");
+    for (const b of [action, notNow]) {
+      expect(b.getAttribute("style") ?? "").not.toMatch(/background|border|color|rgba?\(|#[0-9a-f]{3}/i);
+    }
+  });
+
+  it("with the switch off the foot reads Test connection on the left and Not now on the right", async () => {
+    open(popupHost({ ollamaLocalOnDeck: false }));
+    const foot = ["Test connection", NOT_NOW].map((w) => screen.getByText(w));
     expect(foot[0].compareDocumentPosition(foot[1]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 

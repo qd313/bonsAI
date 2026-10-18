@@ -5,9 +5,10 @@
  * this Deck (the switch starts on) or on a PC on the home network. It is the Ollama tab's "Where the AI
  * runs" section drawn as a popup. With the switch on it offers the Start-with-the-Deck switch, the real
  * state of the local Ollama setup and Install Ollama (the same notice-then-run flow as the tab, shown
- * right here); with it off it offers the PC address with Find LAN beside it, and Test connection. "Not now"
- * is the first button and holds the ring when the popup opens; it, and B, close the popup and leave
- * everything as it is.
+ * right here); with it off it offers the PC address with Find LAN beside it, and Test connection. The foot is
+ * the action on the left (in Steam's blue primary button, the look of the Beta Notice's "Got it") and "Not now"
+ * on the right; "Not now" holds the ring when the popup opens, and it, and B, close the popup and leave
+ * everything as it is (the maintainer's rule of 2026-10-18: Cancel on the right in every box).
  *
  * Used for: useDisclaimerAndLocalRuntimeGates.tsx, which opens it once after the Beta Notice.
  *
@@ -23,7 +24,7 @@
  * useOllamaLocalAutostart, useMdnsOllamaDiscovery), the connection test the shared plain function.
  *
  * Focus: one column of stops (useFirstRunPopupNav.ts), every one answering all four directions; the foot
- * row is [Not now] [Install Ollama | Update AI & models | Test connection]. See docs/focus-graph.md,
+ * row is [Install Ollama | Update AI & models | Test connection] [Not now]. See docs/focus-graph.md,
  * "The first-run popup (plan 96 N1)".
  */
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -50,7 +51,7 @@ import { useMdnsOllamaDiscovery } from "../useMdnsOllamaDiscovery";
 import { useOllamaLocalAutostart } from "../useOllamaLocalAutostart";
 import { FIRST_RUN_HELP_STYLE, PopupButton, PopupSwitch } from "./FirstRunPopupParts";
 import { probeOllama, probeTarget } from "./ollamaConnectionProbe";
-import { useFirstRunPopupNav } from "./useFirstRunPopupNav";
+import { FOOT_ACTION, FOOT_NOT_NOW, useFirstRunPopupNav } from "./useFirstRunPopupNav";
 
 /** Every word the popup says, in one place, so the wording test and the screen read the same. */
 export const FIRST_RUN_POPUP_WORDS = {
@@ -131,7 +132,7 @@ export function FirstRunWhereAiRunsModal({ host, onClose }: FirstRunWhereAiRunsM
   // After the download box over the popup closes, the ring comes back to the action button through the
   // popup's own Steam transfer, not a plain focus (the advisor's one note before landing, plan 96 N1).
   const setReturnOwner = useCallback(
-    (el: HTMLElement | null) => registerModalReturnFocusOwner("ollama-local-setup", el, () => nav.focusStop("foot", 1)),
+    (el: HTMLElement | null) => registerModalReturnFocusOwner("ollama-local-setup", el, () => nav.focusStop("foot", FOOT_ACTION)),
     [nav],
   );
 
@@ -225,7 +226,7 @@ export function FirstRunWhereAiRunsModal({ host, onClose }: FirstRunWhereAiRunsM
   useEffect(() => {
     let inner = 0;
     const outer = requestAnimationFrame(() => {
-      inner = requestAnimationFrame(() => nav.focusStop("foot", 0));
+      inner = requestAnimationFrame(() => nav.focusStop("foot", FOOT_NOT_NOW));
     });
     return () => {
       cancelAnimationFrame(outer);
@@ -340,19 +341,20 @@ export function FirstRunWhereAiRunsModal({ host, onClose }: FirstRunWhereAiRunsM
           )}
           <div style={{ display: "flex", flexDirection: "row", gap: 8, marginTop: 4 }}>
             <PopupButton
-              stop={nav.stop("foot", 0)}
-              label={setupRan ? FIRST_RUN_POPUP_WORDS.close : FIRST_RUN_POPUP_WORDS.notNow}
-              ariaLabel={setupRan ? "Close this window" : "Not now: set up the AI later on the Ollama tab"}
-              onPress={onClose}
-            />
-            <PopupButton
-              stop={nav.stop("foot", 1)}
+              stop={nav.stop("foot", FOOT_ACTION)}
               label={primaryLabel}
               ariaLabel={onDeck ? "Install Ollama on this Deck" : "Test the connection to the PC"}
-              primary
+              look="primary"
               greyed={onDeck ? setupBusy : testing || !ip.trim()}
               onPress={pressPrimary}
               buttonRef={setReturnOwner}
+            />
+            <PopupButton
+              stop={nav.stop("foot", FOOT_NOT_NOW)}
+              label={setupRan ? FIRST_RUN_POPUP_WORDS.close : FIRST_RUN_POPUP_WORDS.notNow}
+              ariaLabel={setupRan ? "Close this window" : "Not now: set up the AI later on the Ollama tab"}
+              look="plain"
+              onPress={onClose}
             />
           </div>
         </div>

@@ -173,3 +173,15 @@ at landing; `verify.py --full` gated on its exit code before the final push.
   freed the Deck at 03:24; another chat's rig lease ran until 03:31, then block M (setup, Expert against Speed, the chip row and
   the Ask pill measured, the stopped answer with no notes card) started with a fresh driver (runbook
   [assets/96-runbook-block-M.md](assets/96-runbook-block-M.md); block V, the mic and the ring stall, is written and waits).
+- **03:50 UTC, the PC ran out of memory** (a browser process at 16 GB, memory 96 percent committed): a commit and the quick check
+  failed; the maintainer freed it by 03:48 and everything resumed.
+- **04:00 UTC, Deck block M done** (build `a1b00906`, the Deck's own screen, the Deck's AI; evidence `plan96-P96-*`). **F8 FAIL:**
+  ten differently worded two-part Hades questions, Expert's median 511 characters against Speed's 551, first word 31 s against 26 s,
+  both parts answered 3 of 5 (Speed) and 4 of 5 (Expert): a Sonnet high lane now gives Expert its own depth block and every mode a
+  rule to answer each part. **Chips measured:** two-chip row 147 px wide with 129 px for words needing 140 to 232 px (every long
+  chip scrolls); one-chip row 300 wide fits. **Ask pill:** content 56 in 51 by the check, nothing cut by eye (letter-spacing after
+  the last letter): the pill now takes its content's width. **Look check:** Settings, Permissions, Search, Developer and Ollama
+  clean; About's Steam-drawn language dropdown reads as a light button; Main's findings are the transcript's own rows and the
+  chips (to be exempted). **R2:** the stopped answer's Down reached the question box in 3 and 4 presses with no stop twice, with
+  the library off; one try still drew a notes card with the switch off ("From bonsAI's own note": the built-in notes?), a question
+  for the bookkeeper's roadmap note. Block V (the mic, the ring stall's trigger) started with a fresh driver.

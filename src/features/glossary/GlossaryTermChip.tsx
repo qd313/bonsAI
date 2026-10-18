@@ -47,7 +47,6 @@ import {
   isOkDeckButtonEvent,
 } from "../../shared/dpad/focusNavigation";
 import { registerDrgGlossaryTermChip } from "../../shared/dpad/glossaryTermRegistry";
-import { refocusPanelWindowIfLost, type NavRefHolder } from "../../shared/dpad/navFocusRegistry";
 import { findTabContentsScroll, readableBottomOf } from "../../shared/dpad/chatPanelScroll";
 import {
   placeGlossaryTooltip,
@@ -89,23 +88,6 @@ function isAnyDirectionEvent(evt: unknown): boolean {
 }
 
 /**
- * Steam's own transfer onto one nav node, the way takeNavFocus does it for a registered id (and
- * AboutLinks.tsx for its own nodes): the word and its Explain further stop sit in different
- * containers (the box is a portal to the page body), so a plain focus() between them would move
- * the page's focus and leave Steam's ring behind. False when the node is not filled in yet.
- */
-function takeFocusOf(holder: NavRefHolder | undefined): boolean {
-  const node = holder?.current;
-  if (!node || typeof node.TakeFocus !== "function") return false;
-  refocusPanelWindowIfLost();
-  try {
-    return node.TakeFocus(true) !== false;
-  } catch {
-    return false;
-  }
-}
-
-/**
  * The chip itself: the underlined word, plus its popup while open.
  *
  * In: the glossary term to show, the exact text matched in the reply
@@ -124,11 +106,10 @@ function takeFocusOf(holder: NavRefHolder | undefined): boolean {
  * 2. Register this chip's DOM node under a per-mount id, so other code
  *    (the reply stack) can find and clear it without a page-wide search.
  * 3. On the D-pad: A calls activate(), which opens straight to full and,
- *    from full, calls onExplainFurther and closes. B closes the popup; so
- *    does any direction press, except Down from the full box, which hands
- *    Steam's ring to the Explain further stop inside the box (plan 96 F6:
- *    the Deck could not reach that button, plan94-P94-GLOSSARY.json). From
- *    that stop A asks, Up returns to the word, B closes and returns to the word.
+ *    from full, calls onExplainFurther and closes; the full box says so in a
+ *    hint line (plan 96 F6: a separate D-pad stop inside the box, a portal to
+ *    the page body, took Steam's ring but no A or B reached it on the Deck,
+ *    plan96-P96-F6-EXPLAIN.json). B or any direction press closes the popup.
  * 4. On touch: a tap calls onTermTap(), which steps
  *    idle → peek → full → idle one stage at a time, with peek and full
  *    each dismissing themselves on a timer.
@@ -151,14 +132,6 @@ export function DrgGlossaryTermChip(props: DrgGlossaryTermChipProps) {
   /** The chip's own DOM node, for anchoring the portal tooltip to its on-screen position. */
   const chipElRef = useRef<HTMLElement | null>(null);
 
-  /*
-   * Steam fills these in: the word and the Explain further stop as places the ring can be sent to.
-   * `handoffRef` says which way the ring is being handed, so the blur that hand-off causes on the
-   * side it leaves does not close the box under it.
-   */
-  const chipNav = useRef<NavRefHolder>({ current: null });
-  const explainNav = useRef<NavRefHolder>({ current: null });
-  const handoffRef = useRef<"to-explain" | "to-chip" | null>(null);
   /** One Explain further per open box: Steam's A and a synthetic click must not send two questions. */
   const explainFiredRef = useRef(false);
 
@@ -266,21 +239,6 @@ export function DrgGlossaryTermChip(props: DrgGlossaryTermChipProps) {
     setChipState("idle");
   };
 
-  /** From the Explain further stop: close the box and put the ring back on the word (B, or after A). */
-  const closeBackToWord = () => {
-    handoffRef.current = "to-chip";
-    setChipState("idle");
-    if (!takeFocusOf(chipNav.current)) handoffRef.current = null;
-  };
-
-  /** Down from the open full box: hand the ring to the Explain further stop inside it (plan 96 F6). */
-  const downIntoExplain = (): boolean => {
-    if (state !== "full") return false;
-    handoffRef.current = "to-explain";
-    if (takeFocusOf(explainNav.current)) return true;
-    handoffRef.current = null;
-    return false;
-  };
 
   /*
    * The touch path, distinct from `activate` on purpose. A tap wants the short plain-language
@@ -309,24 +267,12 @@ export function DrgGlossaryTermChip(props: DrgGlossaryTermChipProps) {
         chipElRef.current = el;
         registerDrgGlossaryTermChip(idRef.current, el);
       }}
-      {...({
-        navRef: chipNav.current,
-        // Down from the open full box goes to Explain further; otherwise the press is Steam's.
-        onMoveDown: () => downIntoExplain(),
-      } as Record<string, unknown>)}
       onFocus={() => {
-        const back = handoffRef.current;
-        handoffRef.current = null;
         // Gamepad arrival takes over any tap-opened popup: kill its timer, keep what is showing.
         clearDismissTimer();
-        if (back === "to-chip") return; // back from the Explain further stop: no peek over a box just closed
         setState((s) => (s === "idle" ? "peek" : s));
       }}
-      onBlur={() => {
-        // The ring is on its way to the Explain further stop inside the box: keep the box open.
-        if (handoffRef.current === "to-explain") return;
-        setChipState("idle");
-      }}
+      onBlur={() => setChipState("idle")}
       onActivate={activate}
       {...(state !== "idle"
         ? ({
@@ -364,8 +310,6 @@ export function DrgGlossaryTermChip(props: DrgGlossaryTermChipProps) {
           return true;
         }
         if (isAnyDirectionEvent(evt)) {
-          // Down from the full box is the one move that stays inside it (onMoveDown above).
-          if (state === "full" && isDeckDirectionDownEvent(evt)) return false;
           setChipState("idle");
           return false;
         }
@@ -435,37 +379,11 @@ export function DrgGlossaryTermChip(props: DrgGlossaryTermChipProps) {
             <>
               <div>{term.full}</div>
               {/*
-               * The Explain further stop (plan 96 F6). A Focusable of its own, registered as a nav node, so Down
-               * from the word can hand Steam's ring here through Steam's transfer (the box is a portal, another
-               * container). A asks; Up goes back to the word; B closes the box and goes back to the word; Left,
-               * Right and Down hold still. The plain button inside stays the touch target.
+               * Not a D-pad stop: a Focusable here (the box is a portal to the page body) took Steam's ring
+               * but no A or B ever reached it on the Deck and the ring was stuck until a reload
+               * (plan96-P96-F6-EXPLAIN.json). A on the word asks instead, and the hint line says so.
                */}
-              <Focusable
-                className="bonsai-drg-glossary-explain-stop"
-                {...({
-                  navRef: explainNav.current,
-                  onActivate: explainFurther,
-                  onMoveUp: () => {
-                    handoffRef.current = "to-chip";
-                    if (!takeFocusOf(chipNav.current)) handoffRef.current = null;
-                    return true;
-                  },
-                  onMoveDown: () => true,
-                  onMoveLeft: () => true,
-                  onMoveRight: () => true,
-                  onCancelButton: (e: unknown) => {
-                    (e as { preventDefault?: () => void })?.preventDefault?.();
-                    closeBackToWord();
-                  },
-                  onFocus: () => {
-                    handoffRef.current = null;
-                  },
-                  onBlur: () => {
-                    if (handoffRef.current === "to-chip") return;
-                    setChipState("idle");
-                  },
-                } as Record<string, unknown>)}
-                style={{ display: "inline-block", marginTop: 8 }}
+              <span className="bonsai-drg-glossary-explain-stop" style={{ display: "inline-block", marginTop: 8 }}
               >
                 <button
                   type="button"
@@ -488,7 +406,10 @@ export function DrgGlossaryTermChip(props: DrgGlossaryTermChipProps) {
                 >
                   Explain further
                 </button>
-              </Focusable>
+              </span>
+              <div className="bonsai-drg-glossary-hint" style={{ marginTop: 6, fontSize: textPx(9.5), color: "rgba(180, 200, 220, 0.75)" }}>
+                A again: ask the AI to explain further. B: close.
+              </div>
             </>
           )}
           </span>,

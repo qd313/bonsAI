@@ -78,16 +78,35 @@ describe("DrgGlossaryTermChip", () => {
     expect(question).toContain("Deep Rock Galactic: Survivor");
   });
 
-  it("sits the Explain further button inside its own focus stop, so the D-pad can reach it", () => {
-    // Plan 96 F6 (workshop:test-evidence/plan94-P94-GLOSSARY.json): the button was a plain button the Deck
-    // could not reach. The stop is a Focusable of its own around it; Down from the word hands the ring there
-    // (the hand-off itself is Steam's and needs the device).
+  it("keeps the Explain further button in its own plain wrapper, not a D-pad stop of its own", () => {
+    // Plan 96 F6 (workshop:test-evidence/plan96-P96-F6-EXPLAIN.json): a Focusable in the box (a portal to the
+    // page body) took Steam's ring but no A or B reached it on the Deck. The wrapper is now a plain span; the
+    // stand-in would draw a Focusable as a div carrying data-decky-ui, so the span proves it is not one.
     const { container } = render(<DrgGlossaryTermChip term={kitingTerm} matchedText="kiting" />);
     fireEvent.click(container.querySelector(".bonsai-drg-glossary-term-text")!);
     fireEvent.click(container.querySelector(".bonsai-drg-glossary-term-text")!);
     const button = document.querySelector(".bonsai-drg-glossary-explain-further") as HTMLElement;
     expect(button).toBeTruthy();
-    expect(button.closest(".bonsai-drg-glossary-explain-stop")).not.toBeNull();
+    const wrap = button.closest(".bonsai-drg-glossary-explain-stop") as HTMLElement;
+    expect(wrap).not.toBeNull();
+    expect(wrap.tagName).toBe("SPAN");
+    expect(wrap.hasAttribute("data-decky-ui")).toBe(false);
+  });
+
+  it("the full box says what A and B do, since the button is not a stop of its own", () => {
+    // plan96-P96-F6-EXPLAIN.json: "a stop inside the portal took the ring but no A or B reached it".
+    const { container } = render(<DrgGlossaryTermChip term={kitingTerm} matchedText="kiting" />);
+    fireEvent.click(container.querySelector(".bonsai-drg-glossary-term-text")!);
+    expect(document.querySelector(".bonsai-drg-glossary-tooltip")?.textContent).not.toContain("A again");
+    fireEvent.click(container.querySelector(".bonsai-drg-glossary-term-text")!);
+    const hint = document.querySelector(".bonsai-drg-glossary-hint");
+    expect(hint?.textContent).toBe("A again: ask the AI to explain further. B: close.");
+  });
+
+  it("shows no hint line on the short peek", () => {
+    const { container } = render(<DrgGlossaryTermChip term={kitingTerm} matchedText="kiting" />);
+    fireEvent.focus(container.querySelector(".bonsai-drg-glossary-term") as HTMLElement);
+    expect(document.querySelector(".bonsai-drg-glossary-hint")).toBeNull();
   });
 
   it("two clicks on Explain further in a row send one question, not two", () => {

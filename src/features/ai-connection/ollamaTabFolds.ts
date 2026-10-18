@@ -36,6 +36,8 @@ export type OllamaSectionId = (typeof OLLAMA_SECTIONS)[number]["id"];
 
 /** The rows' longer text, as the tab printed it before it folded. */
 export const OLLAMA_ROW_HELP = {
+  pcAddress:
+    "Just the PC's address, for example 192.168.1.20. bonsAI adds Ollama's usual port (11434) when you leave it out.",
   runOnDeck: "Off: use a PC on your home network. On: AI runs on this device.",
   autostart:
     "Starts the local AI when the Deck starts, and lets it keep the answering part and the note-searching part in memory at once — so questions come back about seven tenths of a second sooner.",

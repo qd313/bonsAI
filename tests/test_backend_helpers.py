@@ -32,6 +32,13 @@ class BackendHelperTests(unittest.TestCase):
         self.assertEqual(port, 11500)
         self.assertEqual(base, "http://192.168.1.50:11500")
 
+    def test_normalize_ollama_base_bare_address_gets_usual_port(self):
+        """A bare PC address (no port) gets Ollama's usual port 11434."""
+        host, port, base = normalize_ollama_base("192.168.1.20")
+        self.assertEqual(host, "192.168.1.20")
+        self.assertEqual(port, 11434)
+        self.assertEqual(base, "http://192.168.1.20:11434")
+
     def test_build_ollama_chat_url(self):
         """Confirm chat URL builder appends the fixed /api/chat endpoint."""
         self.assertEqual(

@@ -732,6 +732,9 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                       maxWidth: "100%",
                     }}
                   />
+                  <div className="bonsai-prose" style={{ fontSize: textPx(10), color: "#6b7c90", marginTop: 4, lineHeight: 1.35 }}>
+                    {OLLAMA_ROW_HELP.pcAddress}
+                  </div>
                   {isHttpsOllamaAddress(ollamaIp) ? (
                     <div className="bonsai-prose" style={{ fontSize: textPx(11), color: "tomato", marginTop: 4 }}>
                       {OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE}

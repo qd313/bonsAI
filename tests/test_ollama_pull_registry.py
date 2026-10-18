@@ -7,8 +7,8 @@ import unittest
 import urllib.error
 from unittest.mock import patch
 
-from backend.services.local_ollama_setup_service import _format_ollama_pull_failure
-from backend.services.ollama_catalog_service import (
+from backend.ollama.local_ollama_setup_service import _format_ollama_pull_failure
+from backend.ollama.ollama_catalog_service import (
     fetch_catalog_metadata,
     partition_pull_tags_by_registry,
 )
@@ -86,7 +86,7 @@ class PartitionPullTagsTests(unittest.TestCase):
             },
         }
         with patch(
-            "backend.services.ollama_catalog_service.fetch_catalog_metadata",
+            "backend.ollama.ollama_catalog_service.fetch_catalog_metadata",
             return_value=fake_meta,
         ):
             ok, bad = partition_pull_tags_by_registry(["gemma4:latest", "gemma4:4b"])
@@ -131,7 +131,7 @@ class FetchCatalogMetadataRegistryAnswerTests(unittest.TestCase):
 
     def test_made_up_name_is_reported_missing_and_counts_as_live(self):
         with patch(
-            "backend.services.ollama_catalog_service.urlopen_with_ca_fallback",
+            "backend.ollama.ollama_catalog_service.urlopen_with_ca_fallback",
             side_effect=_missing_404(),
         ):
             meta = fetch_catalog_metadata(["zzz-plan64-missing-model"])
@@ -151,7 +151,7 @@ class FetchCatalogMetadataRegistryAnswerTests(unittest.TestCase):
             raise _missing_404()
 
         with patch(
-            "backend.services.ollama_catalog_service.urlopen_with_ca_fallback",
+            "backend.ollama.ollama_catalog_service.urlopen_with_ca_fallback",
             side_effect=_side_effect,
         ):
             ok, bad = partition_pull_tags_by_registry(["qwen2.5:1.5b", "zzz-plan64-missing-model"])
@@ -160,7 +160,7 @@ class FetchCatalogMetadataRegistryAnswerTests(unittest.TestCase):
 
     def test_unreachable_registry_falls_back_to_offline_and_lets_the_name_through(self):
         with patch(
-            "backend.services.ollama_catalog_service.urlopen_with_ca_fallback",
+            "backend.ollama.ollama_catalog_service.urlopen_with_ca_fallback",
             side_effect=urllib.error.URLError("no route to host"),
         ):
             meta = fetch_catalog_metadata(["zzz-plan64-missing-model"])

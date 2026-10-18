@@ -52,7 +52,7 @@ import urllib.request
 from pathlib import Path
 from typing import Any, Callable, Optional
 
-from backend.ollama_reply_limits import read_json_capped
+from backend.ollama.ollama_reply_limits import read_json_capped
 
 # Same value as ollama_local_autostart_service.UNIT_NAME (a test checks they agree). Kept here
 # rather than imported because that module imports the setup service, which imports this one.

@@ -85,16 +85,16 @@ import urllib.request
 from pathlib import Path
 from typing import Any, Callable, Optional
 
-from backend.ollama_routing import (
+from backend.ollama.ollama_routing import (
     TIER2_MULTIMODAL_PULL_FALLBACK_TAG,
     TIER2_MULTIMODAL_PULL_TAGS,
     setup_recommended_pull_tags,
 )
-from backend.ollama_reply_limits import read_json_capped
-from backend.ollama_urls import normalize_ollama_base
-from backend.services.local_setup_progress_text import progress_text_from_line
-from backend.services.starter_set_extras import apply_starter_outcome, run_starter_downloads
-from backend.services.ollama_server_restart import (
+from backend.ollama.ollama_reply_limits import read_json_capped
+from backend.ollama.ollama_urls import normalize_ollama_base
+from backend.ollama.local_setup_progress_text import progress_text_from_line
+from backend.ollama.starter_set_extras import apply_starter_outcome, run_starter_downloads
+from backend.ollama.ollama_server_restart import (
     ServeControl,
     record_result,
     restart_server_onto_new_binary,
@@ -514,7 +514,7 @@ def list_installed_ollama_tag_sizes(base_http: str, timeout_seconds: float = 5.0
         return {}
 
 
-from backend.ollama_connectivity import is_loopback_ollama_host as _is_loopback_ollama_host
+from backend.ollama.ollama_connectivity import is_loopback_ollama_host as _is_loopback_ollama_host
 
 
 def is_loopback_ollama_host(host: str) -> bool:
@@ -524,7 +524,7 @@ def is_loopback_ollama_host(host: str) -> bool:
 
 def resolve_tier2_multimodal_pull_tags() -> list[str]:
     """Prefer ``gemma4:e2b-it-qat``; fall back to ``gemma4:e2b`` when registry has no QAT manifest."""
-    from backend.services.ollama_catalog_service import partition_pull_tags_by_registry
+    from backend.ollama.ollama_catalog_service import partition_pull_tags_by_registry
 
     primary = list(TIER2_MULTIMODAL_PULL_TAGS)
     ok, _bad = partition_pull_tags_by_registry(primary)
@@ -542,7 +542,7 @@ def tier1_foss_recommended_pull_tags(profile: str) -> list[str]:
 
 # The path to the ``ollama`` program: the PATH, then ~/.local/bin and the other usual folders, then the
 # program a running server started from (ollama_locate.py). Decky's own PATH lacks ~/.local/bin.
-from backend.services.ollama_locate import find_ollama_executable as resolve_ollama_executable  # noqa: E402
+from backend.ollama.ollama_locate import find_ollama_executable as resolve_ollama_executable  # noqa: E402
 
 
 def _prefer_user_prefix_ollama_install_linux() -> bool:

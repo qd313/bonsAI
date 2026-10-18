@@ -21,7 +21,7 @@ from unittest.mock import AsyncMock, patch
 from plugin_settings_file_harness import PluginSettingsFileMixin
 
 import main
-from backend.services import ollama_pull_resume_service as resume
+from backend.ollama import ollama_pull_resume_service as resume
 
 RPC = main.ollama_local_setup_rpc
 TAGS = ["qwen2.5:1.5b"]
@@ -40,7 +40,7 @@ class PullResumeTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioTestCase)
             p.start()
             self.addCleanup(p.stop)
         reg = patch(
-            "backend.services.ollama_catalog_service.partition_pull_tags_by_registry",
+            "backend.ollama.ollama_catalog_service.partition_pull_tags_by_registry",
             side_effect=lambda tags: (list(tags), []),
         )
         reg.start()

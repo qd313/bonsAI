@@ -1,6 +1,6 @@
 import unittest
 
-from backend.ollama_routing import (
+from backend.ollama.ollama_routing import (
     TIER1_ESSENTIALS_PULL_TAGS,
     TIER2_MULTIMODAL_PULL_TAGS,
     build_effective_models_to_try,
@@ -11,7 +11,7 @@ from backend.ollama_routing import (
     select_ollama_models,
     setup_recommended_pull_tags,
 )
-from backend.ollama_urls import build_ollama_chat_url, normalize_ollama_base
+from backend.ollama.ollama_urls import build_ollama_chat_url, normalize_ollama_base
 from backend.power.tdp_intent import is_current_tdp_read_intent, parse_tdp_recommendation
 
 

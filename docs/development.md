@@ -107,7 +107,7 @@ On **Windows** (remote deploy to a Deck on the LAN), use `.\scripts\setup-dev.ps
 ./scripts/setup-ollama.sh
 ```
 
-This installs Ollama and pulls the Tier 1 essentials model (`qwen2.5vl:3b`). For preset tags aligned with bonsAI routing, see `TIER1_ESSENTIALS_PULL_TAGS` in [`py_modules/backend/ollama_routing.py`](../py_modules/backend/ollama_routing.py).
+This installs Ollama and pulls the Tier 1 essentials model (`qwen2.5vl:3b`). For preset tags aligned with bonsAI routing, see `TIER1_ESSENTIALS_PULL_TAGS` in [`py_modules/backend/ollama/ollama_routing.py`](../py_modules/backend/ollama/ollama_routing.py).
 
 Verify:
 
@@ -118,7 +118,7 @@ ollama run qwen2.5:1.5b "Hello from bonsAI"
 
 **In-app model management:** With **Ollama on this Deck** enabled, open **Ollama → Browse models…** (or the AI models hub) to open the Pull Models picker — the bundled catalog. Live registry sizes when online (offline fallback), multi-select pull, and per-row delete. Progress appears in the Local Ollama setup log on the Ollama tab.
 
-**Maintainers — add a recommended model:** it needs a plugin release (the bundled catalog and the Ask routing chains in `backend/ollama_routing.py`). The plugin no longer downloads a model list from GitHub.
+**Maintainers — add a recommended model:** it needs a plugin release (the bundled catalog and the Ask routing chains in `backend/ollama/ollama_routing.py`). The plugin no longer downloads a model list from GitHub.
 
 ## Build and deploy (same Deck)
 
@@ -249,7 +249,7 @@ Build output: [`dist/index.js`](../dist/index.js) (referenced by [`plugin.json`]
 | Module | Role |
 | ------ | ---- |
 | [`main.py`](../main.py) | Decky RPC entrypoint; thin wrappers to services |
-| [`backend/ollama_routing.py`](../py_modules/backend/ollama_routing.py) | Model try-order, mode chains, pull-tag catalogs |
+| [`backend/ollama/ollama_routing.py`](../py_modules/backend/ollama/ollama_routing.py) | Model try-order, mode chains, pull-tag catalogs |
 | `input_sanitizer_service.py` | Ask sanitization lane and magic-phrase commands |
 | `settings_service.py` | Load/save/normalize `settings.json` |
 | `ollama_service.py` + `ollama_prompts.py` | Prompt assembly and Ollama HTTP transport |
@@ -280,7 +280,7 @@ Decky loads `py_modules` on `sys.path`; keep the `backend` package name for impo
 - **Input sanitizer:** [`inputSanitizerCommands.ts`](../src/data/inputSanitizerCommands.ts) (must match Python); `input_sanitizer_user_disabled` in settings.
 - **Input transparency:** RPC `get_input_transparency`; optional Desktop trace via `desktop_note_service.py`.
 - **Ask modes:** `ask_mode` (`speed` \| `strategy` \| `expert`); legacy `"deep"` migrates on load; chains in `backend/ollama_routing.select_ollama_models`.
-- **Model policy tiers:** [`modelPolicy.ts`](../src/data/modelPolicy.ts), [`model_policy.py`](../py_modules/backend/services/model_policy.py).
+- **Model policy tiers:** [`modelPolicy.ts`](../src/data/modelPolicy.ts), [`model_policy.py`](../py_modules/backend/ollama/model_policy.py).
 
 ## Toolchain
 
@@ -366,7 +366,7 @@ Prioritize refactors and reviews by **change risk** — large surfaces, branchin
 | 4 | `backend/services/ollama_service.py` | Prompt and transport changes affect every Ask; HTTP error paths touch disclosure. | **Good** — [`tests/test_ollama_service.py`](../tests/test_ollama_service.py). | Keep behavioral changes paired with test updates; redact user-facing error bodies per security audit. |
 | 5 | `backend/services/settings_service.py` | Schema merge bugs affect entire plugin. | **Good** — [`tests/test_settings_service.py`](../tests/test_settings_service.py). | Add tests for any new keys; avoid silent defaults that bypass capability gating. |
 | 6 | `backend/services/desktop_note_service.py` | Filesystem paths and consent boundaries. | **Good** — [`tests/test_desktop_note_service.py`](../tests/test_desktop_note_service.py). | Keep path logic in service; gate in `main.py` + capabilities. |
-| 7 | `backend/ollama_routing.py` + `backend/power/tdp_intent.py` | Model routing / TDP parse shared across Ask paths. | **Good** — [`tests/test_backend_helpers.py`](../tests/test_backend_helpers.py). | Extend tests when adding branches; avoid duplicating policy in `main.py`. |
+| 7 | `backend/ollama/ollama_routing.py` + `backend/power/tdp_intent.py` | Model routing / TDP parse shared across Ask paths. | **Good** — [`tests/test_backend_helpers.py`](../tests/test_backend_helpers.py). | Extend tests when adding branches; avoid duplicating policy in `main.py`. |
 | 8 | `src/components/CharacterPickerModal.tsx` | Async + catalog + focus; easy Deck regressions. | **Partial** — catalog parity / accent tests in Python; TS [`characterCatalog.test.ts`](../src/data/characterCatalog.test.ts), [`runningGameCharacterSuggestions.test.ts`](../src/utils/runningGameCharacterSuggestions.test.ts). | Extract pure suggestion sorting/filtering only with tests; UI changes need device smoke. |
 | 9 | Other services (`ai_character`, `input_sanitizer`, `capabilities`, `model_policy`, `strategy_guide_parse`, `tdp_service`) | Smaller files but security/behavior sensitive. | **Good** per matching `tests/test_*.py`. | Edit with corresponding test file open. |
 

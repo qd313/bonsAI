@@ -26,7 +26,7 @@ from typing import Any, Optional
 
 import decky
 
-from backend.ollama_urls import HTTPS_NOT_SUPPORTED_MESSAGE, is_https_ollama_address, normalize_ollama_base
+from backend.ollama.ollama_urls import HTTPS_NOT_SUPPORTED_MESSAGE, is_https_ollama_address, normalize_ollama_base
 from backend.services import chat_turn_recorder
 from backend.services.background_request_state import pending_background_state
 from backend.services.chat_slot_service import load_slot as chat_load_slot
@@ -37,7 +37,7 @@ from backend.services.chat_summary_service import (
     write_chat_summary,
 )
 from backend.services.chat_summary_title import title_to_second_guess
-from backend.services.local_ollama_setup_service import (
+from backend.ollama.local_ollama_setup_service import (
     is_loopback_ollama_host,
     list_installed_ollama_tags,
     probe_ollama_http_ok,
@@ -45,8 +45,8 @@ from backend.services.local_ollama_setup_service import (
 )
 from backend.services.ollama_ask_extras import resolve_ask_model_routing
 from backend.prompts.reply_language_service import resolve_effective_reply_language
-from backend.services.ollama_keep_alive_rule import effective_keep_alive
-from backend.services.token_accounting_service import choose_window_tokens, known_window_tokens
+from backend.ollama.ollama_keep_alive_rule import effective_keep_alive
+from backend.ollama.token_accounting_service import choose_window_tokens, known_window_tokens
 
 logger = decky.logger
 

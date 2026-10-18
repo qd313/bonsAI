@@ -528,7 +528,7 @@ Then `sudo systemctl restart avahi-daemon` and ensure `OLLAMA_HOST=0.0.0.0` and 
 
 **Why:** Full boot can leave the **`ollama`** user service idle until first use — nothing is listening on **11434** until the daemon (`ollama serve` / systemd unit) accepts traffic.
 
-**What bonsAI does (v0.3.0+):** With **Test** targeting loopback (**Ollama on this Deck on**, or **`127.0.0.1` / localhost** typed as the host), an initial failed probe triggers a best‑effort **wake** (**`systemctl --user try-restart` / start `ollama`**, then **`ollama serve`** if needed — same primitives as Starter setup under `py_modules/backend/services/local_ollama_setup_service.py`) and **retests once**. Prefer waiting a minute after boot before assuming Ollama is broken.
+**What bonsAI does (v0.3.0+):** With **Test** targeting loopback (**Ollama on this Deck on**, or **`127.0.0.1` / localhost** typed as the host), an initial failed probe triggers a best‑effort **wake** (**`systemctl --user try-restart` / start `ollama`**, then **`ollama serve`** if needed — same primitives as Starter setup under `py_modules/backend/ollama/local_ollama_setup_service.py`) and **retests once**. Prefer waiting a minute after boot before assuming Ollama is broken.
 
 **Keeping Ollama and models current:** With **Ollama on this Deck** enabled, opening the **Ollama** tab quietly probes the local host so **Update AI & models** appears when Ollama is reachable (no need to tap **Test connection** first). **Update AI & models** (or **Install Ollama** when not reachable yet) re-runs the official installer (binary refresh), then **`ollama pull`** each tag already installed locally — downloads only when upstream weights changed. In **Browse models…**, tap **↻** to refresh installed tags and live sizes.
 

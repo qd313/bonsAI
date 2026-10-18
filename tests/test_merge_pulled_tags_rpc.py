@@ -4,7 +4,7 @@ import unittest
 
 from plugin_settings_file_harness import PluginSettingsFileMixin
 
-from backend.services.ollama_local_setup_rpc import merge_pulled_tags_into_routing_orders
+from backend.ollama.ollama_local_setup_rpc import merge_pulled_tags_into_routing_orders
 
 
 class MergePulledTagsRpcTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioTestCase):

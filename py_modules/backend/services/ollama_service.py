@@ -106,7 +106,7 @@ import urllib.request
 from typing import Any, Callable, Optional
 from urllib.parse import urlparse
 
-from backend.ollama_urls import normalize_ollama_base
+from backend.ollama.ollama_urls import normalize_ollama_base
 
 from backend.answer.bonsai_stream_tags import extract_bonsai_status
 from backend.answer.soft_continue_spoiler_join import end_cut_answer_cleanly
@@ -117,12 +117,12 @@ from backend.services.ollama_chat_stream import (
     _is_thinking_unsupported_error,
     _stream_ollama_chat_once,
 )
-from backend.services.ollama_health_probe import (
+from backend.ollama.ollama_health_probe import (
     _loaded_model_snapshots,
     probe_ollama_health,
     vram_weight_share_pct,
 )
-from backend.services.ollama_preload_service import (
+from backend.ollama.ollama_preload_service import (
     PRELOAD_MAX_PARAMETER_BILLIONS,
     _installed_sizes,
     parse_parameter_size_billions,
@@ -165,7 +165,7 @@ from backend.strategy.strategy_guide_parse import (
     hide_incomplete_strategy_checklist_fence,
 )
 from backend.answer.terse_bare_menu import hide_bare_branch_menu, split_trailing_bare_branch_menu
-from backend.services.token_accounting_service import (
+from backend.ollama.token_accounting_service import (
     choose_window_tokens,
     estimate_tokens_from_chars,
     known_window_tokens,

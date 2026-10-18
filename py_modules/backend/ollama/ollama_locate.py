@@ -20,7 +20,7 @@ from __future__ import annotations
 import os
 from typing import Optional
 
-from backend.ollama_connectivity import guess_ollama_cli_paths
+from backend.ollama.ollama_connectivity import guess_ollama_cli_paths
 
 _PROC_ROOT = "/proc"
 

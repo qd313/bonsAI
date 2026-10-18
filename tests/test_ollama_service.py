@@ -1692,7 +1692,7 @@ class OllamaServiceTests(unittest.TestCase):
         Measured 2026-09-20: four times the room costs 0.6 GB of memory, nothing in answer speed
         (21.7 tokens a second at every size, with a game running) and nothing in frame rate.
         """
-        from backend.services.token_accounting_service import (
+        from backend.ollama.token_accounting_service import (
             PREFERRED_WINDOW_TOKENS,
             reset_token_accounting,
         )
@@ -1765,7 +1765,7 @@ class OllamaServiceTests(unittest.TestCase):
         """A DIFFERENT size makes the server reload the model -- measured 5.7 to 8.1 seconds idle
         and 10 to 16 with a game running. A soft continue is a second request inside one answer,
         so if it varied the size the person would wait through a reload mid-reply."""
-        from backend.services.token_accounting_service import reset_token_accounting
+        from backend.ollama.token_accounting_service import reset_token_accounting
 
         reset_token_accounting()
         self.addCleanup(reset_token_accounting)

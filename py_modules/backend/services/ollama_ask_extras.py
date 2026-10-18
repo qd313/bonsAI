@@ -32,12 +32,12 @@ from backend.characters.ai_character_service import (
     PYRO_PRESET_ID,
     pyro_manager_carousel_tip_addon,
 )
-from backend.ollama_routing import (
+from backend.ollama.ollama_routing import (
     build_effective_models_to_try,
     filter_models_to_installed,
     resolve_routing_order,
 )
-from backend.services.model_policy import filter_model_list
+from backend.ollama.model_policy import filter_model_list
 
 
 def build_ollama_request_extras(

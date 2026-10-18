@@ -18,7 +18,7 @@
  * the full browsable list, of which this tag is just the recommended first
  * pick (since 2026-10-13 it is Gemma 4, not qwen2.5vl:3b, whose own licence is research-only). It also does not keep itself in sync automatically with the
  * matching tag on the computer or Deck side
- * (`py_modules/backend/ollama_routing.py`): that file has its own copy of
+ * (`py_modules/backend/ollama/ollama_routing.py`): that file has its own copy of
  * the same tag, kept aligned by a comment telling a person to update both,
  * not by either file importing the other (tests/test_starter_tag_parity.py fails if they drift). The bigger Gemma 4 model is no
  * longer a one-tap download (plan 79); it is reached through Browse models.

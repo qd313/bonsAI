@@ -42,7 +42,7 @@ from backend.core.async_background_job import (
     make_local_ollama_setup_hooks,
     new_asyncio_cancel_event,
 )
-from backend.services.local_ollama_setup_service import (
+from backend.ollama.local_ollama_setup_service import (
     DEFAULT_BASE,
     list_installed_ollama_tag_sizes,
     list_installed_ollama_tags,
@@ -50,23 +50,23 @@ from backend.services.local_ollama_setup_service import (
     run_local_setup,
     run_ollama_rm_async,
 )
-from backend.services.ollama_catalog_service import (
+from backend.ollama.ollama_catalog_service import (
     fetch_catalog_metadata,
     is_valid_ollama_pull_tag,
     normalize_ollama_pull_tags,
 )
-from backend.ollama_routing import (
+from backend.ollama.ollama_routing import (
     is_embedding_only_tag,
     is_valid_setup_pull_profile,
     is_vision_capable_tag,
     merge_pulled_tag,
     remove_tag_from_routing_orders,
 )
-from backend.services.ollama_pc_models import ask_known_pcs
-from backend.services.ollama_try_order_prune import prune_saved_orders_to_installed
-from backend.services import ollama_pull_resume_service as pull_resume
+from backend.ollama.ollama_pc_models import ask_known_pcs
+from backend.ollama.ollama_try_order_prune import prune_saved_orders_to_installed
+from backend.ollama import ollama_pull_resume_service as pull_resume
 from backend.services.ollama_embed_service import forget_embed_availability_after_pull
-from backend.services.starter_speech_models import download_speech_models
+from backend.ollama.starter_speech_models import download_speech_models
 from backend.core.capabilities import capability_enabled, downloads_off_refusal
 
 import decky
@@ -247,7 +247,7 @@ async def _start_custom_ollama_pull(self, pull_tags: list[str]) -> dict[str, Any
     if not tags:
         return {"accepted": False, "reason": "No valid model tags to pull."}
 
-    from backend.services.ollama_catalog_service import partition_pull_tags_by_registry
+    from backend.ollama.ollama_catalog_service import partition_pull_tags_by_registry
 
     registry_ok, registry_bad = await asyncio.to_thread(partition_pull_tags_by_registry, tags)
     if registry_bad and not registry_ok:

@@ -22,7 +22,7 @@ does the arithmetic once a window size is known.
 
 from typing import Optional
 
-from backend.services.token_accounting_service import (
+from backend.ollama.token_accounting_service import (
     FALLBACK_WINDOW_TOKENS,
     estimate_tokens_from_chars,
     tokens_that_survive_overflow,
@@ -41,7 +41,7 @@ from backend.services.token_accounting_service import (
 #
 # So the window is no longer assumed here. ``resolve_window_tokens`` asks the server what the
 # model is really loaded with; this name is kept only as the fallback for a server that cannot
-# be asked. See backend/services/token_accounting_service.py.
+# be asked. See backend/ollama/token_accounting_service.py.
 ASSUMED_CONTEXT_WINDOW_TOKENS = FALLBACK_WINDOW_TOKENS
 
 

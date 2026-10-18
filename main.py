@@ -31,7 +31,7 @@ the voice-input buttons are in `backend/services/voice_rpc.py`;
 screenshots, the Desktop debug/chat/app logs, clipboard and the small
 transparency/feedback/language reads are in `backend/services/media_desktop_rpc.py`;
 installing Ollama on the Deck and pulling/deleting/pricing its models are in
-`backend/services/ollama_local_setup_rpc.py`.
+`backend/ollama/ollama_local_setup_rpc.py`.
 
 How it works:
 
@@ -129,7 +129,7 @@ from backend.strategy.strategy_checklist_session_service import (
     session_path,
 )
 from backend.strategy import strategy_checklist_rpc
-from backend.services.local_ollama_teardown_service import (
+from backend.ollama.local_ollama_teardown_service import (
     should_teardown_local_ollama_on_clear,
     teardown_local_ollama_for_plugin_reset,
 )
@@ -180,14 +180,14 @@ from backend.services.screenshot_media import (
     lookup_steam_app_name,
 )
 from backend.services.game_ai_request import run_game_ai_request
-from backend.services.network_service import get_deck_ip_async
+from backend.ollama.network_service import get_deck_ip_async
 from backend.services.ollama_ask_service import run_ask_ollama
 from backend.answer.transparency_service import (
     build_immediate_command_snapshot,
     build_sanitizer_block_snapshot,
     transparency_snapshot_for_chat_slot,
 )
-from backend.services.ollama_connection_test import (
+from backend.ollama.ollama_connection_test import (
     run_ollama_connection_test,
     summarize_for_log,
 )
@@ -199,17 +199,17 @@ from backend.services.ask_payload import (
     sanitize_attachments,
 )
 from backend.power.tdp_service import clean_env
-from backend.services.local_ollama_setup_service import new_local_ollama_setup_state
-from backend.services.ollama_local_autostart_service import (
+from backend.ollama.local_ollama_setup_service import new_local_ollama_setup_state
+from backend.ollama.ollama_local_autostart_service import (
     apply_ollama_local_autostart as apply_ollama_local_autostart_entry,
     get_ollama_local_autostart_status as get_ollama_local_autostart_status_report,
 )
-from backend.services.ollama_mdns_discovery_service import (
+from backend.ollama.ollama_mdns_discovery_service import (
     discover_mdns_ollama_hosts as run_mdns_ollama_discovery,
 )
-from backend.services import ollama_local_setup_rpc
-from backend.services.ollama_pc_models import prune_after_connection_test
-from backend.services import ollama_pull_resume_service
+from backend.ollama import ollama_local_setup_rpc
+from backend.ollama.ollama_pc_models import prune_after_connection_test
+from backend.ollama import ollama_pull_resume_service
 from backend.services.voice_transcription_service import (
     VoiceTranscriptionSession,
     new_voice_install_state,
@@ -218,7 +218,7 @@ from backend.services import voice_rpc
 from backend.services.rag_corpus_download_service import new_rag_corpus_download_state
 from backend.services import rag_corpus_rpc
 from backend.core.constants import DEFAULT_OLLAMA_PCIP
-from backend.ollama_urls import (
+from backend.ollama.ollama_urls import (
     HTTPS_NOT_SUPPORTED_MESSAGE,
     build_ollama_chat_url,
     is_https_ollama_address,

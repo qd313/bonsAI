@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import unittest
 
-from backend.services.model_policy import classify_ollama_model_name
+from backend.ollama.model_policy import classify_ollama_model_name
 
 # Keep in sync with src/data/pullModelCatalog.ts PULL_MODEL_CATALOG tags + licenseClass.
 CATALOG_POLICY_PARITY: dict[str, str] = {

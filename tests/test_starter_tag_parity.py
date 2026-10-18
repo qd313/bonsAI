@@ -16,7 +16,7 @@ import re
 import unittest
 from pathlib import Path
 
-from backend.ollama_routing import (
+from backend.ollama.ollama_routing import (
     TIER1_ESSENTIALS_PULL_TAGS,
     default_text_routing_seed,
     default_vision_routing_seed,

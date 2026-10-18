@@ -106,7 +106,8 @@ from backend.services import chat_turn_recorder
 from backend.services.chat_own_game_title import chat_own_game_title, text_resolved_title_for_turn
 from backend.services.user_note_offer import note_offer_for_question
 from backend.services.user_notes_for_ask import notes_for_ask
-from backend.services import kb_followup_memory, ollama_keep_alive_rule
+from backend.services import kb_followup_memory
+from backend.ollama import ollama_keep_alive_rule
 from backend.services.input_sanitizer_service import apply_input_sanitizer_lane
 from backend.services.kb_notes_footers import append_kb_notes_footers
 from backend.prompts.ollama_prompts import (

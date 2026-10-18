@@ -16,14 +16,14 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
-from backend.ollama_urls import (  # noqa: E402
+from backend.ollama.ollama_urls import (  # noqa: E402
     HTTPS_NOT_SUPPORTED_MESSAGE,
     OllamaAddressRefused,
     build_ollama_chat_url,
     is_https_ollama_address,
     normalize_ollama_base,
 )
-from backend.services.ollama_connection_test import (  # noqa: E402
+from backend.ollama.ollama_connection_test import (  # noqa: E402
     ConnectionTestTools,
     run_ollama_connection_test,
 )

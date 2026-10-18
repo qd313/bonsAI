@@ -37,7 +37,7 @@ import time
 import urllib.request
 from typing import Any, Callable, Optional
 
-from backend.services.local_ollama_setup_service import _env_for_host_system_tools
+from backend.ollama.local_ollama_setup_service import _env_for_host_system_tools
 from backend.core.tls_ca_fallback import urlopen_with_ca_fallback
 
 VALID_VOICE_STT_MODELS = frozenset({"tiny.en", "base.en"})

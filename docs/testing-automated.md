@@ -31,7 +31,7 @@ Extend gates when these paths change; prefer the narrowest tests first.
 | `main.py` background Ask / abort / settings save locks | `test_background_abort_busy`, `test_settings_save_lock`, store lock tests | Tier 1 SMOKE-H |
 | `intent_pack_service.py` | `tests/test_intent_pack_service.py` | Settings → intent packs (until obsolete) |
 | `voice_transcription_service.py` | `tests/test_voice_transcription_service.py` | Tier 2 voice |
-| `ollama_service.py`, `backend/ollama_routing.py` | `test_ollama_service`, `test_backend_helpers` | Tier 1 one Ask per changed mode |
+| `ollama_service.py`, `backend/ollama/ollama_routing.py` | `test_ollama_service`, `test_backend_helpers` | Tier 1 one Ask per changed mode |
 | `desktop_note_service.py` | `tests/test_desktop_note_service.py` | Tier 2 desktop notes |
 | `ai_character_service.py`, character UI | character + pyro tests under `tests/` / `src/data/` | Tier 2 character |
 | `capabilities.py`, Permissions UI | `tests/test_capabilities.py` | Tier 0 SMOKE-C |

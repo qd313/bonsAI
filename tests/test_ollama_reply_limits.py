@@ -12,14 +12,16 @@ import unittest
 import urllib.error
 from unittest.mock import MagicMock, patch
 
-from backend import ollama_reply_limits as limits
-from backend.ollama_reply_limits import OllamaReplyTooLarge
+from backend.ollama import ollama_reply_limits as limits
+from backend.ollama.ollama_reply_limits import OllamaReplyTooLarge
 from backend.services import (
-    local_ollama_setup_service,
     ollama_embed_service,
+    ollama_stop_service,
+)
+from backend.ollama import (
+    local_ollama_setup_service,
     ollama_health_probe,
     ollama_preload_service,
-    ollama_stop_service,
     token_accounting_service,
 )
 from backend.answer import (
@@ -120,7 +122,7 @@ class EveryBareReadIsCappedTests(unittest.TestCase):
 
     def test_health_probe_stops_on_an_endless_version_reply(self) -> None:
         body = _EndlessBody()
-        with patch("backend.services.ollama_health_probe.urllib.request.urlopen", return_value=body):
+        with patch("backend.ollama.ollama_health_probe.urllib.request.urlopen", return_value=body):
             with self.assertRaises(OllamaReplyTooLarge):
                 ollama_health_probe.probe_ollama_health("http://x:1", time.time() + 5)
         self.assertTrue(body.closed)
@@ -135,7 +137,7 @@ class EveryBareReadIsCappedTests(unittest.TestCase):
                 return io.BytesIO(b'{"models":[{"name":"a"},{"name":"b"}]}')
             return io.BytesIO(b'{"models":[]}')
 
-        with patch("backend.services.ollama_health_probe.urllib.request.urlopen", side_effect=fake):
+        with patch("backend.ollama.ollama_health_probe.urllib.request.urlopen", side_effect=fake):
             out = ollama_health_probe.probe_ollama_health("http://x:1", time.time() + 5)
         self.assertEqual(out["models"], ["a", "b"])
 
@@ -147,7 +149,7 @@ class EveryBareReadIsCappedTests(unittest.TestCase):
                 return io.BytesIO(b'{"version":"1"}')
             return io.BytesIO(b'{"models":[]}')
 
-        with patch("backend.services.ollama_health_probe.urllib.request.urlopen", side_effect=fake):
+        with patch("backend.ollama.ollama_health_probe.urllib.request.urlopen", side_effect=fake):
             out = ollama_health_probe.probe_ollama_health("http://x:1", time.time() + 5)
         self.assertEqual(out["ps_loaded"], [])
 
@@ -158,14 +160,14 @@ class EveryBareReadIsCappedTests(unittest.TestCase):
         ):
             body = _EndlessBody()
             with patch(
-                "backend.services.local_ollama_setup_service.urllib.request.urlopen", return_value=body
+                "backend.ollama.local_ollama_setup_service.urllib.request.urlopen", return_value=body
             ):
                 self.assertEqual(fn("http://x:1"), empty)
             self.assertTrue(body.closed)
 
     def test_installed_tag_list_still_reads_a_normal_reply(self) -> None:
         raw = io.BytesIO(b'{"models":[{"name":"a:1","size":5}]}')
-        with patch("backend.services.local_ollama_setup_service.urllib.request.urlopen", return_value=raw):
+        with patch("backend.ollama.local_ollama_setup_service.urllib.request.urlopen", return_value=raw):
             self.assertEqual(local_ollama_setup_service.list_installed_ollama_tags("http://x:1"), ["a:1"])
 
     def test_token_accounting_reads_give_empty_on_an_endless_reply(self) -> None:
@@ -174,7 +176,7 @@ class EveryBareReadIsCappedTests(unittest.TestCase):
             token_accounting_service._read_model_limits,
         ):
             body = _EndlessBody()
-            with patch("backend.services.token_accounting_service.urllib.request.urlopen", return_value=body):
+            with patch("backend.ollama.token_accounting_service.urllib.request.urlopen", return_value=body):
                 self.assertEqual(fn("http://x:1"), {})
             self.assertTrue(body.closed)
 
@@ -204,7 +206,7 @@ class EveryBareReadIsCappedTests(unittest.TestCase):
     def test_preload_model_list_read_is_capped(self) -> None:
         body = _EndlessBody()
         lg = MagicMock()
-        with patch("backend.services.ollama_preload_service.urllib.request.urlopen", return_value=body):
+        with patch("backend.ollama.ollama_preload_service.urllib.request.urlopen", return_value=body):
             ollama_preload_service.preload_ask_model_sync("http://x:1", lg)
         self.assertTrue(body.closed)
         self.assertLessEqual(body.served, limits.MAX_REPLY_BODY_BYTES + 1)
@@ -212,8 +214,8 @@ class EveryBareReadIsCappedTests(unittest.TestCase):
     def test_preload_warm_up_reply_is_capped(self) -> None:
         tags = json.dumps({"models": [{"name": "q:1b", "details": {"parameter_size": "1B"}}]}).encode("utf-8")
         gen = _EndlessBody()
-        with patch("backend.services.ollama_preload_service.choose_window_tokens", return_value=0), patch(
-            "backend.services.ollama_preload_service.urllib.request.urlopen",
+        with patch("backend.ollama.ollama_preload_service.choose_window_tokens", return_value=0), patch(
+            "backend.ollama.ollama_preload_service.urllib.request.urlopen",
             side_effect=[io.BytesIO(tags), gen],
         ):
             ollama_preload_service.preload_ask_model_sync("http://x:1", MagicMock())

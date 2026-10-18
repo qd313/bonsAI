@@ -6,7 +6,7 @@ import socket
 import unittest
 from unittest.mock import patch
 
-from backend.services.ollama_mdns_discovery_service import (
+from backend.ollama.ollama_mdns_discovery_service import (
     OLLAMA_MDNS_SERVICE,
     _build_ptr_query,
     _decode_dns_name,
@@ -27,7 +27,7 @@ class TestOllamaMdnsDiscoveryService(unittest.TestCase):
         pkt = _build_ptr_query(OLLAMA_MDNS_SERVICE)
         self.assertGreater(len(pkt), 12)
 
-    @patch("backend.services.ollama_mdns_discovery_service.socket.socket")
+    @patch("backend.ollama.ollama_mdns_discovery_service.socket.socket")
     def test_socket_failure_returns_curated_error(self, mock_socket_cls) -> None:
         mock_socket_cls.side_effect = OSError("no multicast")
         out = discover_mdns_ollama_hosts(timeout_seconds=3.0)
@@ -35,7 +35,7 @@ class TestOllamaMdnsDiscoveryService(unittest.TestCase):
         self.assertEqual(out.get("hosts"), [])
         self.assertIn("mDNS", str(out.get("error", "")))
 
-    @patch("backend.services.ollama_mdns_discovery_service.socket.socket")
+    @patch("backend.ollama.ollama_mdns_discovery_service.socket.socket")
     def test_empty_mdns_returns_hint_not_scan(self, mock_socket_cls) -> None:
         sock = mock_socket_cls.return_value
         sock.recvfrom.side_effect = socket.timeout()
@@ -46,7 +46,7 @@ class TestOllamaMdnsDiscoveryService(unittest.TestCase):
 
     def test_timeout_clamped(self) -> None:
         with patch(
-            "backend.services.ollama_mdns_discovery_service.socket.socket",
+            "backend.ollama.ollama_mdns_discovery_service.socket.socket",
             side_effect=OSError("nope"),
         ):
             out = discover_mdns_ollama_hosts(timeout_seconds=999.0)

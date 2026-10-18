@@ -12,7 +12,7 @@ Does not: Test the network probe itself. The probe is handed in, so what is chec
 import asyncio
 import unittest
 
-from backend.services.ollama_connection_test import (
+from backend.ollama.ollama_connection_test import (
     COULD_NOT_START_ERROR,
     NOT_INSTALLED_ERROR,
     NO_IP_ERROR,

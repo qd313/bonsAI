@@ -16,7 +16,7 @@ describe("isHttpsOllamaAddress", () => {
   });
 
   it("uses the same words as the back end", () => {
-    // py_modules/backend/ollama_urls.py HTTPS_NOT_SUPPORTED_MESSAGE
+    // py_modules/backend/ollama/ollama_urls.py HTTPS_NOT_SUPPORTED_MESSAGE
     expect(OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE).toBe(
       "bonsAI can only talk to Ollama over http for now. Use an http:// address.",
     );

@@ -26,8 +26,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from backend.ollama_connectivity import is_loopback_ollama_host
-from backend.ollama_urls import OllamaAddressRefused, normalize_ollama_base
+from backend.ollama.ollama_connectivity import is_loopback_ollama_host
+from backend.ollama.ollama_urls import OllamaAddressRefused, normalize_ollama_base
 from backend.services.settings_service import sanitize_ollama_keep_alive
 
 try:  # the Decky host provides its own log; a plain test run falls back to the standard one

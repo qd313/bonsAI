@@ -40,9 +40,9 @@ import asyncio
 import logging
 from typing import Any, Iterable
 
-from backend.ollama_routing import prune_routing_orders_to_installed, tag_in_names
-from backend.ollama_urls import is_https_ollama_address, normalize_ollama_base
-from backend.services.local_ollama_setup_service import (
+from backend.ollama.ollama_routing import prune_routing_orders_to_installed, tag_in_names
+from backend.ollama.ollama_urls import is_https_ollama_address, normalize_ollama_base
+from backend.ollama.local_ollama_setup_service import (
     DEFAULT_BASE,
     is_loopback_ollama_host,
     list_installed_ollama_tags,

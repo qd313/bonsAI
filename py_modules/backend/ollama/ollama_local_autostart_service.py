@@ -36,7 +36,7 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
-from backend.services.local_ollama_setup_service import (
+from backend.ollama.local_ollama_setup_service import (
     DEFAULT_BASE,
     OLLAMA_MAX_LOADED_MODELS_DEFAULT,
     _env_for_host_system_tools,

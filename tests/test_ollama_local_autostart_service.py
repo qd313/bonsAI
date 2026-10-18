@@ -14,14 +14,14 @@ import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from backend.services.ollama_local_autostart_service import (
+from backend.ollama.ollama_local_autostart_service import (
     UNIT_NAME,
     _path_within_home,
     apply_ollama_local_autostart,
     get_ollama_local_autostart_status,
 )
 
-_MODULE = "backend.services.ollama_local_autostart_service"
+_MODULE = "backend.ollama.ollama_local_autostart_service"
 
 
 def _fake_home(tmp: str) -> Path:

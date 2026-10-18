@@ -29,7 +29,7 @@ from backend.services.chat_summary_service import (
     reset_last_memory_allowance,
     write_chat_summary,
 )
-from backend.services.token_accounting_service import reset_token_accounting
+from backend.ollama.token_accounting_service import reset_token_accounting
 from fake_ollama_stream import FakePlugin, one_line_reply
 
 FIXTURE_PATH = os.path.join(

@@ -24,7 +24,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from backend.services.local_ollama_setup_service import (
+from backend.ollama.local_ollama_setup_service import (
     DEFAULT_BASE,
     _env_for_host_system_tools,
     _stop_local_ollama_listener,

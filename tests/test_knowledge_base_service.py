@@ -1265,7 +1265,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     """Both tests below ask retrieve_knowledge_context the same Glyphid Dreadnought question
     against the same mocked section vectors; only the settings passed in and what each one
     asserts afterward differ."""
-    from backend.services import ollama_keep_alive_rule
+    from backend.ollama import ollama_keep_alive_rule
 
     ollama_keep_alive_rule.note_game_running(game_running)  # never leave it to another test's Ask
     settings = {
@@ -1319,7 +1319,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
   def test_note_search_model_follows_the_short_hold_while_a_game_runs_on_the_deck(self):
     """Plan 89 S4: Ollama keeps a model for the LAST request that touched it, so the note-search
     lookup must not re-arm the long Unload delay right after a shortened answer."""
-    from backend.services import ollama_keep_alive_rule as rule
+    from backend.ollama import ollama_keep_alive_rule as rule
 
     self.addCleanup(rule.note_game_running, False)
     _result, embed = self._retrieve_dreadnought_weakpoint({"ollama_keep_alive": "240m"}, game_running=True)

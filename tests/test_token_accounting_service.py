@@ -2,7 +2,7 @@ import json
 import unittest
 from unittest.mock import MagicMock, patch
 
-from backend.services.token_accounting_service import (
+from backend.ollama.token_accounting_service import (
     ESTIMATE_SAFETY_MARGIN,
     FALLBACK_CHARS_PER_TOKEN,
     FALLBACK_WINDOW_TOKENS,
@@ -43,7 +43,7 @@ class WindowLookupTests(unittest.TestCase):
 
     def test_nothing_known_means_the_old_assumption_and_no_network_call(self):
         """The ordinary path must never wait on a round trip to be better informed."""
-        with patch("backend.services.token_accounting_service.urllib.request.urlopen") as op:
+        with patch("backend.ollama.token_accounting_service.urllib.request.urlopen") as op:
             self.assertEqual(known_window_tokens(BASE, MODEL), FALLBACK_WINDOW_TOKENS)
             op.assert_not_called()
 
@@ -52,13 +52,13 @@ class WindowLookupTests(unittest.TestCase):
         which is the truth about right now. The model's own advertised 131,072 is not."""
         payload = {"models": [{"name": MODEL, "context_length": 16384}]}
         with patch(
-            "backend.services.token_accounting_service.urllib.request.urlopen",
+            "backend.ollama.token_accounting_service.urllib.request.urlopen",
             return_value=_ps_response(payload),
         ) as op:
             self.assertEqual(resolve_window_tokens(BASE, MODEL), 16384)
             self.assertEqual(op.call_count, 1)
         # Remembered, so a second ask costs nothing, and the cheap reader now knows it too.
-        with patch("backend.services.token_accounting_service.urllib.request.urlopen") as op:
+        with patch("backend.ollama.token_accounting_service.urllib.request.urlopen") as op:
             self.assertEqual(resolve_window_tokens(BASE, MODEL), 16384)
             self.assertEqual(known_window_tokens(BASE, MODEL), 16384)
             op.assert_not_called()
@@ -69,7 +69,7 @@ class WindowLookupTests(unittest.TestCase):
         silently put every reply back on the 4,096 assumption."""
         payload = {"models": [{"name": "llama3:latest", "context_length": 8192}]}
         with patch(
-            "backend.services.token_accounting_service.urllib.request.urlopen",
+            "backend.ollama.token_accounting_service.urllib.request.urlopen",
             return_value=_ps_response(payload),
         ):
             self.assertEqual(resolve_window_tokens(BASE, "llama3"), 8192)
@@ -78,7 +78,7 @@ class WindowLookupTests(unittest.TestCase):
         """A question must still go out when this cannot be answered. Being wrong low costs
         reply length; raising here would cost the whole Ask."""
         with patch(
-            "backend.services.token_accounting_service.urllib.request.urlopen",
+            "backend.ollama.token_accounting_service.urllib.request.urlopen",
             side_effect=OSError("no route to host"),
         ):
             self.assertEqual(resolve_window_tokens(BASE, MODEL), FALLBACK_WINDOW_TOKENS)
@@ -86,7 +86,7 @@ class WindowLookupTests(unittest.TestCase):
     def test_a_model_not_in_memory_yet_leaves_the_fallback_standing(self):
         payload = {"models": [{"name": "something-else", "context_length": 32768}]}
         with patch(
-            "backend.services.token_accounting_service.urllib.request.urlopen",
+            "backend.ollama.token_accounting_service.urllib.request.urlopen",
             return_value=_ps_response(payload),
         ):
             self.assertEqual(resolve_window_tokens(BASE, MODEL), FALLBACK_WINDOW_TOKENS)
@@ -96,7 +96,7 @@ class WindowLookupTests(unittest.TestCase):
     def test_an_older_server_that_reports_no_window_is_not_believed(self):
         payload = {"models": [{"name": MODEL}]}
         with patch(
-            "backend.services.token_accounting_service.urllib.request.urlopen",
+            "backend.ollama.token_accounting_service.urllib.request.urlopen",
             return_value=_ps_response(payload),
         ):
             self.assertEqual(resolve_window_tokens(BASE, MODEL), FALLBACK_WINDOW_TOKENS)
@@ -210,7 +210,7 @@ class ChoosingTheWindowTests(unittest.TestCase):
         server's default. Measured 2026-09-20: asking for four times that costs 0.6 GB of memory,
         nothing in answer speed, and nothing in frame rate."""
         with patch(
-            "backend.services.token_accounting_service.urllib.request.urlopen",
+            "backend.ollama.token_accounting_service.urllib.request.urlopen",
             new=_routed_response(
                 {"models": [{"name": MODEL, "context_length": 4096}]},
                 {"models": [{"name": MODEL, "details": {"context_length": 131072}}]},
@@ -221,7 +221,7 @@ class ChoosingTheWindowTests(unittest.TestCase):
     def test_it_never_asks_for_more_than_the_model_can_hold(self):
         """Asking a 8,192-token model for 16,384 is at best wasted memory."""
         with patch(
-            "backend.services.token_accounting_service.urllib.request.urlopen",
+            "backend.ollama.token_accounting_service.urllib.request.urlopen",
             new=_routed_response(
                 {"models": [{"name": MODEL, "context_length": 4096}]},
                 {"models": [{"name": MODEL, "details": {"context_length": 8192}}]},
@@ -233,7 +233,7 @@ class ChoosingTheWindowTests(unittest.TestCase):
         """Someone who set their own machine up to hold more than the Deck needs must not be cut
         down to suit the Deck. This plugin only ever raises."""
         with patch(
-            "backend.services.token_accounting_service.urllib.request.urlopen",
+            "backend.ollama.token_accounting_service.urllib.request.urlopen",
             new=_routed_response(
                 {"models": [{"name": MODEL, "context_length": 32768}]},
                 {"models": [{"name": MODEL, "details": {"context_length": 131072}}]},
@@ -246,14 +246,14 @@ class ChoosingTheWindowTests(unittest.TestCase):
         Deck, 10 to 16 with a game running. Asking for the same size again costs nothing. So this
         is decided once per model per session and every later question gets the same answer."""
         with patch(
-            "backend.services.token_accounting_service.urllib.request.urlopen",
+            "backend.ollama.token_accounting_service.urllib.request.urlopen",
             new=_routed_response(
                 {"models": [{"name": MODEL, "context_length": 4096}]},
                 {"models": [{"name": MODEL, "details": {"context_length": 131072}}]},
             ),
         ):
             first = choose_window_tokens(BASE, MODEL)
-        with patch("backend.services.token_accounting_service.urllib.request.urlopen") as op:
+        with patch("backend.ollama.token_accounting_service.urllib.request.urlopen") as op:
             for _ in range(5):
                 self.assertEqual(choose_window_tokens(BASE, MODEL), first)
             op.assert_not_called()
@@ -262,7 +262,7 @@ class ChoosingTheWindowTests(unittest.TestCase):
         """Zero means "do not send a size at all", so the server does what it would have done
         anyway. Guessing a size at a server we cannot see could reload its model for nothing."""
         with patch(
-            "backend.services.token_accounting_service.urllib.request.urlopen",
+            "backend.ollama.token_accounting_service.urllib.request.urlopen",
             side_effect=OSError("no route to host"),
         ):
             self.assertEqual(choose_window_tokens(BASE, MODEL), PREFERRED_WINDOW_TOKENS)

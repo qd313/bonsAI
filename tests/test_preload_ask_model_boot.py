@@ -36,7 +36,7 @@ if "decky" not in sys.modules:
     sys.modules["decky"] = _decky
 
 from backend.core.constants import DEFAULT_OLLAMA_PCIP  # noqa: E402
-from backend.ollama_urls import normalize_ollama_base  # noqa: E402
+from backend.ollama.ollama_urls import normalize_ollama_base  # noqa: E402
 from main import Plugin  # noqa: E402
 
 

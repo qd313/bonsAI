@@ -27,7 +27,7 @@ from backend.core.constants import (
     DEFAULT_OLLAMA_PCIP,
     LOOPBACK_HOSTNAMES,
 )
-from backend.ollama_urls import normalize_ollama_base
+from backend.ollama.ollama_urls import normalize_ollama_base
 
 
 def is_loopback_ollama_host(host: str) -> bool:

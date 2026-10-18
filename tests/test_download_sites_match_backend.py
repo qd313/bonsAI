@@ -21,8 +21,8 @@ install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
 from backend.services import knowledge_base_schema as kb  # noqa: E402
-from backend.services import local_ollama_setup_service as setup  # noqa: E402
-from backend.services import ollama_catalog_service as catalog  # noqa: E402
+from backend.ollama import local_ollama_setup_service as setup  # noqa: E402
+from backend.ollama import ollama_catalog_service as catalog  # noqa: E402
 from backend.services import voice_engine_build_service as voice_build  # noqa: E402
 from backend.services import voice_model_download_service as voice_models  # noqa: E402
 

@@ -81,7 +81,7 @@ from backend.characters.ai_character_service import (
     sanitize_ai_character_random,
 )
 from backend.core.capabilities import legacy_grandfather_capabilities, sanitize_capabilities
-from backend.services.model_policy import reconcile_model_policy_tier
+from backend.ollama.model_policy import reconcile_model_policy_tier
 from backend.prompts.reply_language_service import sanitize_reply_language
 from backend.services.voice_transcription_service import sanitize_voice_stt_model
 
@@ -265,8 +265,8 @@ def sanitize_show_developer_tab(value: Any, legacy_show_debug_tab: Any = None) -
 
 def sanitize_model_routing_order(value: Any) -> list[str]:
     """Dedupe Ollama tags for text/vision try-order lists (max 16)."""
-    from backend.ollama_routing import MAX_MODEL_ROUTING_ORDER_LEN
-    from backend.services.ollama_catalog_service import normalize_ollama_pull_tags
+    from backend.ollama.ollama_routing import MAX_MODEL_ROUTING_ORDER_LEN
+    from backend.ollama.ollama_catalog_service import normalize_ollama_pull_tags
 
     return normalize_ollama_pull_tags(value)[:MAX_MODEL_ROUTING_ORDER_LEN]
 

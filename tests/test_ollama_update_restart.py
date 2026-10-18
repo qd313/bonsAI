@@ -14,11 +14,11 @@ import signal
 import unittest
 from unittest.mock import patch
 
-from backend.services import local_ollama_setup_service as setup
-from backend.services import ollama_server_restart as restart
+from backend.ollama import local_ollama_setup_service as setup
+from backend.ollama import ollama_server_restart as restart
 
-R = "backend.services.ollama_server_restart"
-S = "backend.services.local_ollama_setup_service"
+R = "backend.ollama.ollama_server_restart"
+S = "backend.ollama.local_ollama_setup_service"
 
 
 class FakeDeck:
@@ -101,7 +101,7 @@ class RestartOntoNewBinaryTests(unittest.TestCase):
         self.assertNotIn(("systemctl", "restart", "ollama"), deck.calls)
 
     def test_the_unit_name_here_matches_the_one_the_plugin_writes(self):
-        from backend.services.ollama_local_autostart_service import UNIT_NAME
+        from backend.ollama.ollama_local_autostart_service import UNIT_NAME
 
         self.assertEqual(restart.AUTOSTART_UNIT_NAME, UNIT_NAME)
 
@@ -168,7 +168,7 @@ class UnitSettingsTests(unittest.TestCase):
         import tempfile
         from pathlib import Path
 
-        from backend.services.ollama_local_autostart_service import _unit_file_contents
+        from backend.ollama.ollama_local_autostart_service import _unit_file_contents
 
         with tempfile.TemporaryDirectory() as td:
             unit_dir = Path(td) / ".config" / "systemd" / "user"

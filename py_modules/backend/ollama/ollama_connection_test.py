@@ -20,8 +20,8 @@ import time
 from dataclasses import dataclass
 from typing import Any, Callable, Optional
 
-from backend.ollama_urls import HTTPS_NOT_SUPPORTED_MESSAGE, is_https_ollama_address, normalize_ollama_base
-from backend.services.local_ollama_setup_service import (
+from backend.ollama.ollama_urls import HTTPS_NOT_SUPPORTED_MESSAGE, is_https_ollama_address, normalize_ollama_base
+from backend.ollama.local_ollama_setup_service import (
     is_loopback_ollama_host,
     local_ollama_cli_home_ready,
     recover_loopback_ollama_listening,

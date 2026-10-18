@@ -23,7 +23,7 @@ from __future__ import annotations
 import asyncio
 from typing import Any, Callable, Optional
 
-from backend.ollama_routing import tag_in_names
+from backend.ollama.ollama_routing import tag_in_names
 
 STARTER_SPEECH_MODELS: tuple[str, ...] = ("tiny.en", "base.en")
 

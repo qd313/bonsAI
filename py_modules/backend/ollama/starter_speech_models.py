@@ -20,7 +20,7 @@ import threading
 from typing import Any, Callable
 
 from backend.services import voice_model_download_service as voice_models
-from backend.services.starter_set_extras import STARTER_SPEECH_MODELS, short_reason
+from backend.ollama.starter_set_extras import STARTER_SPEECH_MODELS, short_reason
 
 
 def download_speech_models(

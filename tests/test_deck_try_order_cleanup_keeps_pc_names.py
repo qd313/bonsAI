@@ -26,7 +26,7 @@ from plugin_settings_file_harness import PluginSettingsFileMixin  # noqa: E402
 
 import main  # noqa: E402
 from backend.services import ollama_embed_service as embed  # noqa: E402
-from backend.services import ollama_pc_models  # noqa: E402
+from backend.ollama import ollama_pc_models  # noqa: E402
 
 RPC = main.ollama_local_setup_rpc
 PC_BASE = "http://192.168.1.20:11434"
@@ -396,7 +396,7 @@ class PcRemovalLeavesTheOrderTests(PluginSettingsFileMixin, unittest.IsolatedAsy
     # --- The wire: the connection test the box and the Ollama tab run ---
 
     async def _connection_test(self, address: str, result: dict) -> dict:
-        from backend.services.ollama_connection_test import ConnectionTestOutcome
+        from backend.ollama.ollama_connection_test import ConnectionTestOutcome
 
         outcome = ConnectionTestOutcome(result=result, host=address, timeout_seconds=10)
         with patch.object(main, "run_ollama_connection_test", AsyncMock(return_value=outcome)):

@@ -28,14 +28,14 @@ install_pwd_stub()
 from plugin_settings_file_harness import PluginSettingsFileMixin  # noqa: E402
 from src_paths import find_src_file  # noqa: E402
 
-from backend.ollama_routing import TIER1_ESSENTIALS_PULL_TAGS, setup_recommended_pull_tags  # noqa: E402
-from backend.services import local_ollama_setup_service as setup  # noqa: E402
-from backend.services import ollama_local_setup_rpc as setup_rpc  # noqa: E402
-from backend.services import starter_set_extras as extras  # noqa: E402
-from backend.services import starter_speech_models as speech_models  # noqa: E402
+from backend.ollama.ollama_routing import TIER1_ESSENTIALS_PULL_TAGS, setup_recommended_pull_tags  # noqa: E402
+from backend.ollama import local_ollama_setup_service as setup  # noqa: E402
+from backend.ollama import ollama_local_setup_rpc as setup_rpc  # noqa: E402
+from backend.ollama import starter_set_extras as extras  # noqa: E402
+from backend.ollama import starter_speech_models as speech_models  # noqa: E402
 from backend.services import voice_model_download_service as voice_models  # noqa: E402
 
-S = "backend.services.local_ollama_setup_service"
+S = "backend.ollama.local_ollama_setup_service"
 LOGGER = type("L", (), {"info": lambda *a, **k: None, "exception": lambda *a, **k: None})()
 
 

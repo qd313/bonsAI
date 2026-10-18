@@ -10,8 +10,8 @@ from __future__ import annotations
 import unittest
 from pathlib import Path
 
-from backend.ollama_routing import no_installed_routing_models_message
-from backend.services.model_policy import classify_ollama_model_name
+from backend.ollama.ollama_routing import no_installed_routing_models_message
+from backend.ollama.model_policy import classify_ollama_model_name
 
 ROOT = Path(__file__).resolve().parent.parent
 

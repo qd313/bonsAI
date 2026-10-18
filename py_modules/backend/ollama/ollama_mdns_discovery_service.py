@@ -13,7 +13,7 @@ import struct
 import time
 from typing import Any
 
-from backend.services.local_ollama_setup_service import probe_ollama_http_ok
+from backend.ollama.local_ollama_setup_service import probe_ollama_http_ok
 
 OLLAMA_MDNS_SERVICE = "_ollama._tcp.local."
 MDNS_ADDR = ("224.0.0.251", 5353)

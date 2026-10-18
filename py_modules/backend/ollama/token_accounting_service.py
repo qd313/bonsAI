@@ -42,7 +42,7 @@ import math
 import statistics
 import urllib.request
 
-from backend.ollama_reply_limits import read_json_capped
+from backend.ollama.ollama_reply_limits import read_json_capped
 from typing import Any, Optional
 
 # What the Deck loads with when nothing asks for anything different. Measured on the Deck

@@ -63,7 +63,7 @@ class OllamaAskBudgetsTests(unittest.TestCase):
         quietly -- that is exactly how Expert ran on Speed's 800-token cap for seven weeks
         in 2026. Nothing checks this at import time, so it is checked here.
         """
-        from backend.ollama_routing import TEXT_MODELS_BY_MODE
+        from backend.ollama.ollama_routing import TEXT_MODELS_BY_MODE
         from backend.services.ask_payload import DEFAULT_ASK_MODE, VALID_ASK_MODES
 
         self.assertEqual(

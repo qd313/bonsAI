@@ -2,7 +2,7 @@
 
 import unittest
 
-from backend.services.ollama_catalog_service import (
+from backend.ollama.ollama_catalog_service import (
     is_valid_ollama_pull_tag,
     normalize_ollama_pull_tags,
     split_ollama_tag,

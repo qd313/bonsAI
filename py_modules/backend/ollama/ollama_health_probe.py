@@ -20,7 +20,7 @@ import time
 import urllib.request
 from typing import Any, Optional
 
-from backend.ollama_reply_limits import read_json_capped
+from backend.ollama.ollama_reply_limits import read_json_capped
 
 
 def vram_weight_share_pct(size_bytes: Any, size_vram_bytes: Any) -> Optional[float]:

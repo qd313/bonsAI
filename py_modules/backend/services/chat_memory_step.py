@@ -18,7 +18,7 @@ import decky
 
 from backend.services.chat_memory_service import apply_chat_memory_to_prompt
 from backend.services.chat_summary_service import decide_and_write_chat_summary
-from backend.services.token_accounting_service import choose_window_tokens, known_window_tokens
+from backend.ollama.token_accounting_service import choose_window_tokens, known_window_tokens
 
 logger = decky.logger
 

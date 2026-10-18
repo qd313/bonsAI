@@ -62,13 +62,13 @@ from backend.characters.ai_character_service import (
     build_roleplay_system_suffix_meta,
     pyro_asshole_mode_active,
 )
-from backend.services.local_ollama_setup_service import (
+from backend.ollama.local_ollama_setup_service import (
     is_loopback_ollama_host,
     list_installed_ollama_tags,
     probe_ollama_http_ok,
     recover_loopback_ollama_listening,
 )
-from backend.services.model_policy import disclosure_for_model, empty_filter_user_message
+from backend.ollama.model_policy import disclosure_for_model, empty_filter_user_message
 from backend.services.ask_payload import screen_ask_attachments
 from backend.services.knowledge_base_glossary import glossary_for_prompt
 from backend.services.chat_memory_step import add_chat_memory_to_prompt
@@ -79,14 +79,14 @@ from backend.services.ollama_ask_extras import (
 )
 from backend.services.ollama_service import post_ollama_chat
 from backend.answer.response_verify import build_live_spoiler_cover
-from backend.services.ollama_keep_alive_rule import effective_keep_alive
+from backend.ollama.ollama_keep_alive_rule import effective_keep_alive
 from backend.services.settings_service import sanitize_reply_verbosity
 from backend.prompts.reply_language_service import resolve_effective_reply_language
-from backend.ollama_routing import (
+from backend.ollama.ollama_routing import (
     is_ollama_model_missing_error,
     no_installed_routing_models_message,
 )
-from backend.ollama_urls import normalize_ollama_base
+from backend.ollama.ollama_urls import normalize_ollama_base
 
 logger = decky.logger
 

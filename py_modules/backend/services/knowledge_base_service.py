@@ -131,7 +131,7 @@ from backend.services.compat_topic_router import (
     question_targets_compat_corpus,
 )
 from backend.prompts.ollama_prompts import question_matches_troubleshooting_log_context
-from backend.services.ollama_keep_alive_rule import effective_keep_alive
+from backend.ollama.ollama_keep_alive_rule import effective_keep_alive
 
 from backend.services.knowledge_base_cards import (
     KnowledgeCard,

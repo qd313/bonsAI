@@ -24,9 +24,9 @@ import asyncio
 import logging
 from typing import Any, Callable
 
-from backend.ollama_routing import prune_routing_orders_to_installed
-from backend.services.local_ollama_setup_service import DEFAULT_BASE
-from backend.services.ollama_pc_models import ask_known_pcs
+from backend.ollama.ollama_routing import prune_routing_orders_to_installed
+from backend.ollama.local_ollama_setup_service import DEFAULT_BASE
+from backend.ollama.ollama_pc_models import ask_known_pcs
 
 logger = logging.getLogger("bonsai")
 

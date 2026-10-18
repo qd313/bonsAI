@@ -35,12 +35,12 @@ import urllib.error
 import urllib.request
 from typing import Any, Callable, Optional
 
-from backend.ollama_connectivity import (
+from backend.ollama.ollama_connectivity import (
     guess_ollama_cli_paths,
     is_loopback_ollama_base,
     ollama_http_base_from_pc_ip_field,
 )
-from backend.ollama_reply_limits import read_error_body
+from backend.ollama.ollama_reply_limits import read_error_body
 
 
 def _ollama_http_base_from_pc_ip_field(pc_ip: str) -> str:
@@ -211,7 +211,7 @@ def try_ollama_cli_stop_model(model_name: str, logger: Any, *, timeout_seconds: 
         logger.info("try_ollama_cli_stop_model: no ollama binary found — skip CLI stop")
         return False
     try:
-        from backend.services.local_ollama_setup_service import _env_for_ollama_cli as _cli_env_for  # noqa: PLC0415
+        from backend.ollama.local_ollama_setup_service import _env_for_ollama_cli as _cli_env_for  # noqa: PLC0415
     except Exception as exc:
         logger.warning("try_ollama_cli_stop_model: import env helper failed err=%s", exc)
         return False

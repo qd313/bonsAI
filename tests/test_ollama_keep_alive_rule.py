@@ -21,7 +21,7 @@ from fake_ollama_stream import ndjson_response  # noqa: E402
 from test_ollama_ask_service import _FakePlugin  # noqa: E402
 from test_chat_sum_up_job import ChatSlotJobTestCase, _seed_chat  # noqa: E402
 
-from backend.services import ollama_keep_alive_rule as rule  # noqa: E402
+from backend.ollama import ollama_keep_alive_rule as rule  # noqa: E402
 from backend.services.ollama_ask_service import run_ask_ollama  # noqa: E402
 from main import Plugin  # noqa: E402
 

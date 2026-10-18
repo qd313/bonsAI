@@ -820,7 +820,7 @@ class ChatMemoryReachesTheModelTests(unittest.IsolatedAsyncioTestCase):
     """
 
     async def _ask_with_chat(self, chat_turns):
-        from backend.services.token_accounting_service import reset_token_accounting
+        from backend.ollama.token_accounting_service import reset_token_accounting
 
         reset_token_accounting()
         self.addCleanup(reset_token_accounting)
@@ -926,7 +926,7 @@ class ChatSummaryWiringTests(unittest.IsolatedAsyncioTestCase):
         import tempfile
 
         from backend.services.chat_slot_service import append_turn, create_slot, load_slot
-        from backend.services.token_accounting_service import reset_token_accounting
+        from backend.ollama.token_accounting_service import reset_token_accounting
 
         reset_token_accounting()
         self.addCleanup(reset_token_accounting)

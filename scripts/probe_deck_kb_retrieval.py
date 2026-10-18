@@ -45,8 +45,8 @@ sys.path.insert(0, os.path.join(PLUGIN_DIR, "py_modules"))
 from backend.services import knowledge_base_service as kb  # noqa: E402
 # Both already load transitively through knowledge_base_service -> ollama_embed_service, so
 # importing them here adds no new dependency the Deck does not already have on this path.
-from backend.ollama_connectivity import ollama_http_base_from_pc_ip_field  # noqa: E402
-from backend.ollama_urls import build_ollama_chat_url  # noqa: E402
+from backend.ollama.ollama_connectivity import ollama_http_base_from_pc_ip_field  # noqa: E402
+from backend.ollama.ollama_urls import build_ollama_chat_url  # noqa: E402
 
 # Card headers rendered by `_card_lines`: "[Game / type: Name] (trust: tier)".
 CARD_HEADER_RE = re.compile(r"^\[.*\(trust: [^)]+\)\s*$", re.M)
@@ -128,7 +128,7 @@ def real_ask_search_verdict(embed_ms: float, mode: str, *, chat_ran_first: bool)
     return verdict
 
 
-# The standard Tier-2 ask model (py_modules/backend/ollama_routing.py:96) — used only when
+# The standard Tier-2 ask model (py_modules/backend/ollama/ollama_routing.py:96) — used only when
 # settings.json has no saved try order to read a model from, which a fresh install would not.
 DEFAULT_ASK_MODEL_FALLBACK = "gemma4:e2b-it-qat"
 

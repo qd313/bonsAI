@@ -32,7 +32,7 @@ import urllib.error
 import urllib.request
 from typing import Any, Callable, NamedTuple, Optional, Sequence
 
-from backend.ollama_reply_limits import read_json_capped
+from backend.ollama.ollama_reply_limits import read_json_capped
 # Moved to its own file to keep this one a manageable size; imported back so callers and tests
 # that reach it through this module keep working unchanged.
 from backend.strategy.branch_menu_example_guard import (  # noqa: F401

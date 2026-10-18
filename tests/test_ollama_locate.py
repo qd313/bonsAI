@@ -24,10 +24,10 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
-from backend.services import local_ollama_setup_service as setup  # noqa: E402
-from backend.services import ollama_locate as locate  # noqa: E402
+from backend.ollama import local_ollama_setup_service as setup  # noqa: E402
+from backend.ollama import ollama_locate as locate  # noqa: E402
 
-S = "backend.services.local_ollama_setup_service"
+S = "backend.ollama.local_ollama_setup_service"
 
 
 def _fake_home_with_ollama(tmp: str) -> str:
@@ -45,7 +45,7 @@ class FindsOllamaOffThePath(unittest.TestCase):
             exe = _fake_home_with_ollama(tmp)
             with (
                 patch.dict(os.environ, {"HOME": tmp, "USERPROFILE": tmp}),
-                patch("backend.ollama_connectivity.shutil.which", return_value=None),
+                patch("backend.ollama.ollama_connectivity.shutil.which", return_value=None),
             ):
                 self.assertEqual(os.path.normcase(locate.find_ollama_executable()), os.path.normcase(exe))
                 self.assertEqual(os.path.normcase(setup.resolve_ollama_executable()), os.path.normcase(exe))
@@ -57,7 +57,7 @@ class FindsOllamaOffThePath(unittest.TestCase):
             exe = _fake_home_with_ollama(tmp)
             with (
                 patch.dict(os.environ, {"HOME": tmp, "USERPROFILE": tmp}),
-                patch("backend.ollama_connectivity.shutil.which", return_value=None),
+                patch("backend.ollama.ollama_connectivity.shutil.which", return_value=None),
                 patch(f"{S}.run_official_linux_install", side_effect=lambda *_a: ran.append(1) or (True, "")),
             ):
                 got = asyncio.run(
@@ -99,7 +99,7 @@ class FindsTheRunningServersProgram(unittest.TestCase):
             (proc / "77").mkdir()
             (proc / "77" / "comm").write_text("bash\n")
             (proc / "self").mkdir()
-            with patch("backend.services.ollama_locate.os.readlink", return_value=exe):
+            with patch("backend.ollama.ollama_locate.os.readlink", return_value=exe):
                 self.assertEqual(locate.running_ollama_executable(str(proc)), exe)
 
     def test_no_process_named_ollama_gives_none(self):

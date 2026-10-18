@@ -8,12 +8,12 @@
  *
  * Used for: the Ollama tab's "PC address" field and its Test connection button.
  *
- * Solves: One place holds the words, and they match py_modules/backend/ollama_urls.py.
+ * Solves: One place holds the words, and they match py_modules/backend/ollama/ollama_urls.py.
  *
  * Does not: Decide whether an address works. Only the back end tries it.
  */
 
-/** Same words as HTTPS_NOT_SUPPORTED_MESSAGE in py_modules/backend/ollama_urls.py. */
+/** Same words as HTTPS_NOT_SUPPORTED_MESSAGE in py_modules/backend/ollama/ollama_urls.py. */
 export const OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE =
   "bonsAI can only talk to Ollama over http for now. Use an http:// address.";
 

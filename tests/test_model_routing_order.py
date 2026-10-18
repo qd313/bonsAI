@@ -1,6 +1,6 @@
 import unittest
 
-from backend.ollama_routing import (
+from backend.ollama.ollama_routing import (
     build_host_fallback_tail,
     build_initial_routing_order,
     default_text_routing_seed,

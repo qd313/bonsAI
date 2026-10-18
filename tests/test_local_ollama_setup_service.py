@@ -18,7 +18,7 @@ for _path in (str(REPO_ROOT), str(REPO_ROOT / "py_modules")):
     if _path not in sys.path:
         sys.path.insert(0, _path)
 
-from backend.services.local_ollama_setup_service import (  # noqa: E402
+from backend.ollama.local_ollama_setup_service import (  # noqa: E402
     _bash_exe,
     _env_for_host_system_tools,
     _env_for_ollama_cli,
@@ -122,18 +122,18 @@ class LocalOllamaSetupServiceTests(unittest.TestCase):
                 return True
 
             with (
-                patch("backend.services.local_ollama_setup_service.Path.home", return_value=home),
+                patch("backend.ollama.local_ollama_setup_service.Path.home", return_value=home),
                 patch(
-                    "backend.services.local_ollama_setup_service.probe_ollama_http_ok",
+                    "backend.ollama.local_ollama_setup_service.probe_ollama_http_ok",
                     return_value=True,
                 ),
                 patch(
-                    "backend.services.local_ollama_setup_service.ensure_ollama_server_listening_before_pull",
+                    "backend.ollama.local_ollama_setup_service.ensure_ollama_server_listening_before_pull",
                     side_effect=listen_side_effect,
                 ) as mock_listen,
-                patch("backend.services.local_ollama_setup_service._stop_local_ollama_listener"),
-                patch("backend.services.local_ollama_setup_service.terminate_setup_started_ollama_serve"),
-                patch("backend.services.local_ollama_setup_service.time.sleep", side_effect=lambda _s: poll.__setitem__("n", poll["n"] + 1)),
+                patch("backend.ollama.local_ollama_setup_service._stop_local_ollama_listener"),
+                patch("backend.ollama.local_ollama_setup_service.terminate_setup_started_ollama_serve"),
+                patch("backend.ollama.local_ollama_setup_service.time.sleep", side_effect=lambda _s: poll.__setitem__("n", poll["n"] + 1)),
             ):
                 ok = ensure_ollama_cli_home_ready(log, str(ollama_bin), lambda: False)
 
@@ -146,8 +146,8 @@ class LocalOllamaSetupServiceTests(unittest.TestCase):
         """The plugin starting Ollama itself used to allow 1 loaded model while the
         start-with-the-Deck service allowed 2, so the same Deck swapped models on every
         question or not depending on how Ollama had been started. Both now come from one value."""
-        from backend.services import local_ollama_setup_service as setup
-        from backend.services.ollama_local_autostart_service import _AUTOSTART_ENV
+        from backend.ollama import local_ollama_setup_service as setup
+        from backend.ollama.ollama_local_autostart_service import _AUTOSTART_ENV
 
         with patch.dict("os.environ", {}, clear=True), patch.object(setup.sys, "platform", "linux"):
             direct = setup._linux_ollama_gpu_env_defaults()
@@ -155,7 +155,7 @@ class LocalOllamaSetupServiceTests(unittest.TestCase):
         self.assertEqual(direct["OLLAMA_MAX_LOADED_MODELS"], _AUTOSTART_ENV["OLLAMA_MAX_LOADED_MODELS"])
 
     def test_a_models_limit_the_user_set_is_left_alone(self):
-        from backend.services import local_ollama_setup_service as setup
+        from backend.ollama import local_ollama_setup_service as setup
 
         with patch.dict("os.environ", {"OLLAMA_MAX_LOADED_MODELS": "3"}, clear=True), patch.object(
             setup.sys, "platform", "linux"

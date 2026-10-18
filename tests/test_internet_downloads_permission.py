@@ -26,7 +26,7 @@ from plugin_settings_file_harness import PluginSettingsFileMixin  # noqa: E402
 
 import main  # noqa: E402
 from backend.core import capabilities  # noqa: E402
-from backend.services import ollama_local_setup_rpc as setup_rpc  # noqa: E402
+from backend.ollama import ollama_local_setup_rpc as setup_rpc  # noqa: E402
 from backend.services import rag_corpus_rpc  # noqa: E402
 
 OFF = {"ollama_local_on_deck": True, "capabilities": {"microphone_access": True}}
@@ -74,7 +74,7 @@ class DownloadsRefusedWhileOff(PluginSettingsFileMixin, unittest.IsolatedAsyncio
 
     async def test_model_pull(self) -> None:
         with mock.patch(
-            "backend.services.ollama_catalog_service.partition_pull_tags_by_registry",
+            "backend.ollama.ollama_catalog_service.partition_pull_tags_by_registry",
             side_effect=_must_not_run,
         ), mock.patch.object(setup_rpc, "run_local_setup", side_effect=_must_not_run):
             self.assertRefused(await self.plugin.pull_ollama_models(["nomic-embed-text"]))
@@ -110,7 +110,7 @@ class DownloadsAllowedWhileOn(PluginSettingsFileMixin, unittest.IsolatedAsyncioT
             return None
 
         with mock.patch(
-            "backend.services.ollama_catalog_service.partition_pull_tags_by_registry",
+            "backend.ollama.ollama_catalog_service.partition_pull_tags_by_registry",
             return_value=(["mistral:7b"], []),
         ), mock.patch.object(setup_rpc, "run_local_setup", side_effect=fake_setup):
             out = await self.plugin.pull_ollama_models(["mistral:7b"])

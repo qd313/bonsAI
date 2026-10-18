@@ -11,7 +11,7 @@ from backend.services.chat_memory_service import (
     strip_fenced_blocks,
     turns_not_yet_summarized,
 )
-from backend.services.token_accounting_service import (
+from backend.ollama.token_accounting_service import (
     estimate_tokens_from_chars,
     reset_token_accounting,
 )

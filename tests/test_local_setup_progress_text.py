@@ -10,10 +10,10 @@ import asyncio
 import unittest
 from unittest.mock import patch
 
-from backend.services import local_ollama_setup_service as setup
-from backend.services.local_setup_progress_text import progress_text_from_line
+from backend.ollama import local_ollama_setup_service as setup
+from backend.ollama.local_setup_progress_text import progress_text_from_line
 
-S = "backend.services.local_ollama_setup_service"
+S = "backend.ollama.local_ollama_setup_service"
 RAW = "\x1b[2K\x1b[1Gpulling 6e4c38e1172f:  43% \u2595\u2588\u2588\u2588        \u258f 1.3 GB/3.2 GB  25 MB/s   1m10s"
 
 

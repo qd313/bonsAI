@@ -114,7 +114,7 @@ import time
 from collections import deque
 from typing import Any, Callable, Optional
 
-from backend.services.local_ollama_setup_service import _env_for_host_system_tools
+from backend.ollama.local_ollama_setup_service import _env_for_host_system_tools
 from backend.services.voice_engine_build_service import (
     VOICE_BIN_CPU_SAFE_MARKER,
     WHISPER_CPP_IMAGE,

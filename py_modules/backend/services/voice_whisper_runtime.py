@@ -40,7 +40,7 @@ import subprocess
 import wave
 from typing import Optional
 
-from backend.services.local_ollama_setup_service import _env_for_host_system_tools
+from backend.ollama.local_ollama_setup_service import _env_for_host_system_tools
 
 
 SAMPLE_RATE = 16000

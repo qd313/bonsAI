@@ -19,7 +19,7 @@ install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
 from plugin_settings_file_harness import PluginSettingsFileMixin  # noqa: E402
-from backend.services import ollama_local_setup_rpc as setup_rpc  # noqa: E402
+from backend.ollama import ollama_local_setup_rpc as setup_rpc  # noqa: E402
 
 
 class PulledModelJoinsTryOrderTests(PluginSettingsFileMixin, unittest.IsolatedAsyncioTestCase):
@@ -33,7 +33,7 @@ class PulledModelJoinsTryOrderTests(PluginSettingsFileMixin, unittest.IsolatedAs
 
         with mock.patch.object(setup_rpc, "_require_local_ollama_on_deck", mock.AsyncMock(return_value=(True, None))), \
                 mock.patch(
-                    "backend.services.ollama_catalog_service.partition_pull_tags_by_registry",
+                    "backend.ollama.ollama_catalog_service.partition_pull_tags_by_registry",
                     return_value=([tag], []),
                 ), \
                 mock.patch.object(setup_rpc, "_internet_downloads_allowed", mock.AsyncMock(return_value=True)),                 mock.patch.object(setup_rpc, "run_local_setup", side_effect=fake_setup):

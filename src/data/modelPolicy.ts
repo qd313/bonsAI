@@ -19,7 +19,7 @@
  * Does not: decide which license class a given Ollama tag actually belongs
  * to. That classification (foss / open_weight / non_foss / unknown) is
  * worked out on the computer or Deck running the AI, in
- * `py_modules/backend/services/model_policy.py`; this file only turns
+ * `py_modules/backend/ollama/model_policy.py`; this file only turns
  * whichever class comes back into words for the screen.
  */
 const GITHUB_REPO_BASE = "https://github.com/qd313/bonsAI";

@@ -23,7 +23,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
-from backend.services import kb_followup_memory  # noqa: E402
+from backend.knowledge import kb_followup_memory  # noqa: E402
 from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.prompts.ollama_prompts import (  # noqa: E402
     build_system_prompt,

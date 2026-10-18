@@ -21,9 +21,9 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
-from backend.services import kb_followup_memory  # noqa: E402
+from backend.knowledge import kb_followup_memory  # noqa: E402
 from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
-from backend.services.knowledge_base_service import KnowledgeRetrievalResult  # noqa: E402
+from backend.knowledge.knowledge_base_service import KnowledgeRetrievalResult  # noqa: E402
 from backend.prompts.ollama_prompts import kb_card_names  # noqa: E402
 
 _CORPUS_PATH = os.path.join(

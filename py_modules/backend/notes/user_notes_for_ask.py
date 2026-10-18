@@ -22,7 +22,7 @@ from typing import Any
 
 import decky
 
-from backend.services.user_notes_service import (
+from backend.notes.user_notes_service import (
     AskNotes,
     load_notes,
     pick_notes_for_turn,

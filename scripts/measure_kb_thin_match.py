@@ -42,7 +42,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.join(ROOT, "py_modules"))
 
-from backend.services import knowledge_base_service as kb  # noqa: E402
+from backend.knowledge import knowledge_base_service as kb  # noqa: E402
 
 FIXTURE = os.path.join(ROOT, "tests", "fixtures", "kb_eval_v2.json")
 CARD_HEADER_RE = re.compile(r"^\[.*\(trust: [^)]+\)\s*$", re.M)

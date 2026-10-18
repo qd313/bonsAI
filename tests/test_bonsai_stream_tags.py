@@ -18,7 +18,7 @@ from backend.answer.bonsai_stream_tags import (
     sanitize_thinking_summary,
     summing_up_line,
 )
-from backend.services.kb_followup_memory import build_previous_turn_context_block
+from backend.knowledge.kb_followup_memory import build_previous_turn_context_block
 
 _BANNED_PREFIXES = ("yeah", "fine.", "sure.", "oh joy", "right.")
 _EMOJI_ONLY_LINES = ("🙄", "😮‍💨", "🫠", "🌳")

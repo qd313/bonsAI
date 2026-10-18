@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from backend.services.desktop_note_service import (
+from backend.notes.desktop_note_service import (
     DESKTOP_NOTE_WRITE_OS_ERROR_MESSAGE,
     append_app_log_sync,
     append_desktop_ask_transparency_sync,
@@ -86,7 +86,7 @@ class DesktopNoteServiceTests(unittest.TestCase):
             home = tmp
             notes_dir = os.path.join(home, "Desktop", "bonsAI_logs")
             os.makedirs(notes_dir, exist_ok=True)
-            with patch("backend.services.desktop_note_service.open", side_effect=open_append_raises):
+            with patch("backend.notes.desktop_note_service.open", side_effect=open_append_raises):
                 r = append_desktop_debug_note_sync(home, "my_note", "Q?", "R.")
             self.assertFalse(r.get("ok"))
             self.assertEqual(r.get("error"), DESKTOP_NOTE_WRITE_OS_ERROR_MESSAGE)
@@ -104,7 +104,7 @@ class DesktopNoteServiceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             home = tmp
             os.makedirs(os.path.join(home, "Desktop", "bonsAI_logs"), exist_ok=True)
-            with patch("backend.services.desktop_note_service.open", side_effect=open_append_raises):
+            with patch("backend.notes.desktop_note_service.open", side_effect=open_append_raises):
                 r = append_desktop_chat_event_sync(home, "ask", question="Hi?", response_text="")
             self.assertFalse(r.get("ok"))
             self.assertEqual(r.get("error"), DESKTOP_NOTE_WRITE_OS_ERROR_MESSAGE)

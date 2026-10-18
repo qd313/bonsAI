@@ -12,7 +12,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 install_fcntl_and_decky_stubs()
 
 import main  # noqa: E402
-from backend.services.knowledge_base_service import (  # noqa: E402
+from backend.knowledge.knowledge_base_service import (  # noqa: E402
     SessionRagChipCandidate,
     SessionRagChipCandidatesResult,
 )

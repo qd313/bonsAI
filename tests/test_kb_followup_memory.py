@@ -5,7 +5,7 @@ search-words helpers built on top of it).
 import os
 import unittest
 
-from backend.services import kb_followup_memory
+from backend.knowledge import kb_followup_memory
 
 
 class KbFollowupMemoryTests(unittest.TestCase):

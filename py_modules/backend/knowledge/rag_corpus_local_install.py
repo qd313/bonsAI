@@ -30,14 +30,14 @@ import threading
 from dataclasses import dataclass
 from typing import Any, Callable, Optional
 
-from backend.services.knowledge_base_schema import (
+from backend.knowledge.knowledge_base_schema import (
     CORPUS_MANIFEST_FILENAME,
     default_corpus_dir_internal,
     default_seed_corpus_source_dir,
     load_manifest_from_path,
     sanitize_corpus_install_dir,
 )
-from backend.services.rag_corpus_download_service import install_corpus_from_manifest
+from backend.knowledge.rag_corpus_download_service import install_corpus_from_manifest
 
 DEVELOPER_TAB_OFF_ERROR = "Developer tab must be enabled for local corpus install."
 

@@ -24,7 +24,7 @@ from __future__ import annotations
 import re
 from typing import Any, Optional
 
-from backend.services.knowledge_base_service import (
+from backend.knowledge.knowledge_base_service import (
     # Plan 58 phase 1: the end-of-block marker `_parse_kb_attached_notes` (below) uses to trim a
     # card's own text apart from the block's own trailer. Reused rather than duplicated as a
     # literal string, on purpose -- an ImportError if this is ever renamed is a louder, safer
@@ -38,7 +38,7 @@ from backend.services.knowledge_base_service import (
     # from the parsed block and has to know the fixed value the sources side used instead.
     _COMPAT_GAME_TITLE,
 )
-from backend.services.knowledge_base_cards import _omitted_note
+from backend.knowledge.knowledge_base_cards import _omitted_note
 
 # Matches one card's own header line the way knowledge_base_service.py's `_card_lines` writes it:
 # either "\n[Tip: Name] (trust: tier)\n" for a troubleshooting tip, or

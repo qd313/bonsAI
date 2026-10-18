@@ -21,12 +21,12 @@ reads and writes them through the settings service.
 
 Where the RPC bodies moved to (plan 65 split; the class still keeps every
 method, just as a one-line hand-off): the settings-search-pack buttons are in
-`backend/services/intent_pack_rpc.py`; the Strategy checklist's read/save/
+`backend/search/intent_pack_rpc.py`; the Strategy checklist's read/save/
 clear are in `backend/strategy/strategy_checklist_rpc.py`; the saved-chat
 list/open/create/delete/rename buttons are in
 `backend/chats/chat_slot_rpc.py`; the notes the person asked bonsAI to remember
-(list/save/delete) are in `backend/services/user_notes_rpc.py`; the knowledge base's download/update/
-remove/chip-candidate/tap-to-define-words buttons are in `backend/services/rag_corpus_rpc.py`;
+(list/save/delete) are in `backend/notes/user_notes_rpc.py`; the knowledge base's download/update/
+remove/chip-candidate/tap-to-define-words buttons are in `backend/knowledge/rag_corpus_rpc.py`;
 the voice-input buttons are in `backend/voice/voice_rpc.py`;
 screenshots, the Desktop debug/chat/app logs, clipboard and the small
 transparency/feedback/language reads are in `backend/media/media_desktop_rpc.py`;
@@ -133,19 +133,19 @@ from backend.ollama.local_ollama_teardown_service import (
     should_teardown_local_ollama_on_clear,
     teardown_local_ollama_for_plugin_reset,
 )
-from backend.services.intent_pack_service import (
+from backend.search.intent_pack_service import (
     intent_packs_path,
     load_intent_packs,
     reset_intent_packs_file,
     save_intent_packs,
 )
-from backend.services import intent_pack_rpc
+from backend.search import intent_pack_rpc
 from backend.chats.chat_slot_service import (
     load_slot as chat_load_slot,
     wipe_all_slots,
 )
 from backend.chats import chat_slot_rpc
-from backend.services import user_notes_rpc
+from backend.notes import user_notes_rpc
 from backend.chats import chat_sum_up_job
 from backend.chats import chat_turn_recorder
 from backend.settings.settings_service import (
@@ -161,7 +161,7 @@ from backend.core.capabilities import (
     kids_lock_active,
     set_kids_lock_active,
 )
-from backend.services.desktop_note_service import (
+from backend.notes.desktop_note_service import (
     append_app_log_sync,
     append_desktop_ask_transparency_sync,
 )
@@ -192,7 +192,7 @@ from backend.ollama.ollama_connection_test import (
     summarize_for_log,
 )
 from backend.ask import ask_payload
-from backend.services import kb_followup_memory
+from backend.knowledge import kb_followup_memory
 from backend.ask.ask_payload import (
     coerce_payload_bool,
     parse_ask_payload,
@@ -215,8 +215,8 @@ from backend.voice.voice_transcription_service import (
     new_voice_install_state,
 )
 from backend.voice import voice_rpc
-from backend.services.rag_corpus_download_service import new_rag_corpus_download_state
-from backend.services import rag_corpus_rpc
+from backend.knowledge.rag_corpus_download_service import new_rag_corpus_download_state
+from backend.knowledge import rag_corpus_rpc
 from backend.core.constants import DEFAULT_OLLAMA_PCIP
 from backend.ollama.ollama_urls import (
     HTTPS_NOT_SUPPORTED_MESSAGE,

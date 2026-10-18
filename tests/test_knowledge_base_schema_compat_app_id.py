@@ -13,7 +13,7 @@ silently missing again -- see docs/lessons-learned.md, "prove a guard by breakin
 import sqlite3
 import unittest
 
-from backend.services.knowledge_base_schema import CORPUS_SCHEMA_VERSION, apply_schema
+from backend.knowledge.knowledge_base_schema import CORPUS_SCHEMA_VERSION, apply_schema
 
 
 class CompatPatternsAppIdColumnTests(unittest.TestCase):

@@ -82,7 +82,7 @@ if _WORKSHOP_LIB not in sys.path:
     sys.path.insert(0, _WORKSHOP_LIB)
 import workshop  # noqa: E402
 
-from backend.services.knowledge_base_service import (  # noqa: E402
+from backend.knowledge.knowledge_base_service import (  # noqa: E402
     HYBRID_FTS_SHORTLIST_K,
     KnowledgeCard,
     _budget_for_mode,
@@ -96,7 +96,7 @@ from backend.services.knowledge_base_service import (  # noqa: E402
     VECTOR_RECALL_FLOOR,
     VECTOR_RECALL_K,
 )
-from backend.services.knowledge_base_service import (  # noqa: E402
+from backend.knowledge.knowledge_base_service import (  # noqa: E402
     should_retrieve_knowledge,
 )
 from backend.knowledge.ollama_embed_service import (  # noqa: E402
@@ -108,7 +108,7 @@ from backend.knowledge.ollama_embed_service import (  # noqa: E402
 # RRF_W_FTS / RRF_W_VEC on the *module* between runs. `_fuse_cards_by_rrf` reads those two
 # names as globals at call time from this same module object, so writing through this
 # reference changes the blend `_hybrid_retrieve` uses without editing the service file.
-from backend.services import knowledge_base_service as kb_service  # noqa: E402
+from backend.knowledge import knowledge_base_service as kb_service  # noqa: E402
 
 PromptMode = Literal["bare", "prompted"]
 RetrievalArm = Literal["keyword", "vector_only", "rrf_rerank_only", "rrf"]

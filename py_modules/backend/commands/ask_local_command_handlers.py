@@ -29,9 +29,9 @@ from backend.commands.shortcut_setup_commands import (
     classify_shortcut_setup_command,
     response_message_for_shortcut,
 )
-from backend.services.knowledge_base_game_match import resolve_title_from_question
-from backend.services.user_note_commands import parse_note_command
-from backend.services.user_note_offer import note_offer_for_note_words
+from backend.knowledge.knowledge_base_game_match import resolve_title_from_question
+from backend.notes.user_note_commands import parse_note_command
+from backend.notes.user_note_offer import note_offer_for_note_words
 
 NOTE_OFFER_REPLY = "Keep this as a note?"
 NOTE_EMPTY_REPLY = "Say what to remember after the word, like: remember no spoilers past the City of Tears."

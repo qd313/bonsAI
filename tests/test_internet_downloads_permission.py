@@ -27,7 +27,7 @@ from plugin_settings_file_harness import PluginSettingsFileMixin  # noqa: E402
 import main  # noqa: E402
 from backend.core import capabilities  # noqa: E402
 from backend.ollama import ollama_local_setup_rpc as setup_rpc  # noqa: E402
-from backend.services import rag_corpus_rpc  # noqa: E402
+from backend.knowledge import rag_corpus_rpc  # noqa: E402
 
 OFF = {"ollama_local_on_deck": True, "capabilities": {"microphone_access": True}}
 ON = {

@@ -21,7 +21,7 @@ calls that service.
 import asyncio
 from typing import Any
 
-from backend.services.intent_pack_service import (
+from backend.search.intent_pack_service import (
     export_pack,
     merge_import_pack,
     pack_summaries,

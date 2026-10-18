@@ -19,7 +19,7 @@ from typing import Any
 from backend.ollama.ollama_connectivity import ollama_http_base_from_pc_ip_field
 from backend.ollama.ollama_reply_limits import read_error_body, read_json_capped
 from backend.ollama.ollama_urls import OllamaAddressRefused, build_ollama_embed_url
-from backend.services.knowledge_base_schema import DEFAULT_EMBEDDING_MODEL
+from backend.knowledge.knowledge_base_schema import DEFAULT_EMBEDDING_MODEL
 from backend.ollama.local_ollama_setup_service import list_installed_ollama_tags
 
 

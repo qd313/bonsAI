@@ -14,8 +14,8 @@ import os
 import tempfile
 import unittest
 
-from backend.services.knowledge_base_schema import CORPUS_MANIFEST_FILENAME
-from backend.services.rag_corpus_local_install import (
+from backend.knowledge.knowledge_base_schema import CORPUS_MANIFEST_FILENAME
+from backend.knowledge.rag_corpus_local_install import (
     DEVELOPER_TAB_OFF_ERROR,
     install_rag_corpus_from_local_dir,
     plan_local_install,

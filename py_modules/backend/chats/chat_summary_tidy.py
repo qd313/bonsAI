@@ -38,8 +38,8 @@ import re
 from collections import Counter
 from typing import Callable, Optional
 
-from backend.services.kb_other_game_named import other_game_named_in
-from backend.services.knowledge_base_schema import normalize_alias
+from backend.knowledge.kb_other_game_named import other_game_named_in
+from backend.knowledge.knowledge_base_schema import normalize_alias
 
 MAX_GAMES_SHOWN = 5
 

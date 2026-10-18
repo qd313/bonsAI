@@ -18,10 +18,10 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from backend.services.knowledge_base_schema import is_allowed_corpus_install_path
-from backend.services.rag_corpus_download_service import remove_corpus_at_path
+from backend.knowledge.knowledge_base_schema import is_allowed_corpus_install_path
+from backend.knowledge.rag_corpus_download_service import remove_corpus_at_path
 
-MODULE = "backend.services.rag_corpus_download_service"
+MODULE = "backend.knowledge.rag_corpus_download_service"
 
 
 class _Logger:

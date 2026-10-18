@@ -38,7 +38,7 @@ import re
 import sqlite3
 from typing import Optional
 
-from backend.services.knowledge_base_cards import (
+from backend.knowledge.knowledge_base_cards import (
     KnowledgeCard,
     _compat_row_to_card,
     _row_relevance,

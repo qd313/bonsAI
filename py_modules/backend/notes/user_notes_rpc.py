@@ -18,7 +18,7 @@ Does not: Own the file's shape or the rules for what a note may be -- that is
 import asyncio
 from typing import Any
 
-from backend.services.user_notes_service import (
+from backend.notes.user_notes_service import (
     UserNoteError,
     delete_note,
     load_notes,

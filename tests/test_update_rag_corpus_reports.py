@@ -19,7 +19,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
-from backend.services import rag_corpus_rpc  # noqa: E402
+from backend.knowledge import rag_corpus_rpc  # noqa: E402
 
 
 class _FakePlugin:

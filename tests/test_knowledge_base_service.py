@@ -7,7 +7,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from unittest import mock
 
-from backend.services.knowledge_base_schema import (
+from backend.knowledge.knowledge_base_schema import (
     TRUST_TIER_FALLBACK,
     TRUST_TIER_WIKI_NO_PATCH,
     TRUST_TIER_WIKI_VERIFIED,
@@ -16,7 +16,7 @@ from backend.services.knowledge_base_schema import (
     pack_embedding_vector,
     unpack_embedding_vector,
 )
-from backend.services.knowledge_base_service import (
+from backend.knowledge.knowledge_base_service import (
     _trust_tier_for_row,
     EmbeddingDimensionMismatch,
     KnowledgeCard,
@@ -53,8 +53,8 @@ from backend.services.knowledge_base_service import (
     VECTOR_RECALL_MARGIN_MIN_POOL,
     VECTOR_RECALL_POOL_MARGIN,
 )
-from backend.services.compat_topic_router import match_compat_corpus_topics
-from backend.services.kb_not_in_notes_notice import should_show_no_close_match_notice
+from backend.knowledge.compat_topic_router import match_compat_corpus_topics
+from backend.knowledge.kb_not_in_notes_notice import should_show_no_close_match_notice
 from backend.knowledge.ollama_embed_service import OllamaEmbedError
 from corpus_build_support import run_seed_build_or_skip
 
@@ -75,16 +75,16 @@ def _hybrid_hooked(embed_texts_kwargs, section_vectors):
     a fixed vector pool -- shared by the two best-meaning-without-game-name tests below (each
     only varies how embed_texts responds and what the vector pool looks like)."""
     with mock.patch(
-        "backend.services.knowledge_base_service.nomic_embed_available",
+        "backend.knowledge.knowledge_base_service.nomic_embed_available",
         return_value=True,
     ), mock.patch(
-        "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+        "backend.knowledge.knowledge_base_service.corpus_has_usable_section_vectors",
         return_value=True,
     ), mock.patch(
-        "backend.services.knowledge_base_service.embed_texts",
+        "backend.knowledge.knowledge_base_service.embed_texts",
         **embed_texts_kwargs,
     ), mock.patch(
-        "backend.services.knowledge_base_service._load_section_vectors",
+        "backend.knowledge.knowledge_base_service._load_section_vectors",
         return_value=section_vectors,
     ):
         yield
@@ -1095,16 +1095,16 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     }
     v2_manifest = {"version": "1", "embedding_model": "nomic-embed-text"}  # no embedding_variant
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service._load_corpus_manifest",
+      "backend.knowledge.knowledge_base_service._load_corpus_manifest",
       return_value=v2_manifest,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_section_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       side_effect=AssertionError("must not embed against an incompatible corpus"),
     ):
       result = retrieve_knowledge_context(
@@ -1130,13 +1130,13 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "embedding_model": "bge-m3",
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service._load_corpus_manifest",
+      "backend.knowledge.knowledge_base_service._load_corpus_manifest",
       return_value=other_model,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_section_vectors",
       return_value=True,
     ):
       result = retrieve_knowledge_context(
@@ -1157,13 +1157,13 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_section_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       return_value=[[1.0, 0.0] + [0.0] * 766],
     ) as embed:
       retrieve_knowledge_context(
@@ -1190,7 +1190,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=False,
     ):
       result = retrieve_knowledge_context(
@@ -1243,10 +1243,10 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=False,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_section_vectors",
       return_value=True,
     ):
       result = retrieve_knowledge_context(
@@ -1275,16 +1275,16 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     if settings_extra:
       settings.update(settings_extra)
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_section_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       return_value=[[1.0, 0.0] + [0.0] * 766],
     ) as embed, mock.patch(
-      "backend.services.knowledge_base_service._load_section_vectors",
+      "backend.knowledge.knowledge_base_service._load_section_vectors",
       return_value={
         3: [1.0, 0.0] + [0.0] * 766,
         4: [0.0, 1.0] + [0.0] * 766,
@@ -1341,13 +1341,13 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_section_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       return_value=[[1.0, 0.0] + [0.0] * 766],
     ) as embed:
       result = retrieve_knowledge_context(
@@ -1371,13 +1371,13 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_section_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       side_effect=OllamaEmbedError("timeout"),
     ):
       result = retrieve_knowledge_context(
@@ -1404,16 +1404,16 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_section_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       return_value=[[1.0, 0.0] + [0.0] * 766],
     ), mock.patch(
-      "backend.services.knowledge_base_service._load_section_vectors",
+      "backend.knowledge.knowledge_base_service._load_section_vectors",
       return_value={
         3: [1.0, 0.0] + [0.0] * 766,
         4: [0.0, 1.0] + [0.0] * 766,
@@ -1441,16 +1441,16 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     }
     under_floor = VECTOR_RECALL_FLOOR - 0.05
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_section_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       return_value=[[1.0, 0.0] + [0.0] * 766],
     ), mock.patch(
-      "backend.services.knowledge_base_service._load_section_vectors",
+      "backend.knowledge.knowledge_base_service._load_section_vectors",
       return_value={118: [under_floor, 0.0] + [0.0] * 766},
     ):
       result = retrieve_knowledge_context(
@@ -1476,13 +1476,13 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_section_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       return_value=[[1.0, 0.0] + [0.0] * 766],
     ) as embed:
       result = retrieve_knowledge_context(
@@ -1549,7 +1549,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     self.assertGreaterEqual(len(ids), VECTOR_RECALL_MARGIN_MIN_POOL)
     flat = VECTOR_RECALL_FLOOR + 0.01  # above the floor, identical for every card
     with mock.patch(
-      "backend.services.knowledge_base_service._load_section_vectors",
+      "backend.knowledge.knowledge_base_service._load_section_vectors",
       return_value={sid: [flat, 0.0] + [0.0] * 766 for sid in ids},
     ):
       cards, vectors = _vector_recall_sections(
@@ -1574,7 +1574,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     vectors = {sid: [0.40, 0.0] + [0.0] * 766 for sid in ids}
     vectors[standout] = [VECTOR_RECALL_FLOOR + 0.01, 0.0] + [0.0] * 766
     with mock.patch(
-      "backend.services.knowledge_base_service._load_section_vectors",
+      "backend.knowledge.knowledge_base_service._load_section_vectors",
       return_value=vectors,
     ):
       cards, _ = _vector_recall_sections(
@@ -1602,7 +1602,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     ]
     strong = VECTOR_RECALL_FLOOR + VECTOR_RECALL_POOL_MARGIN + 0.01
     with mock.patch(
-      "backend.services.knowledge_base_service._load_section_vectors",
+      "backend.knowledge.knowledge_base_service._load_section_vectors",
       return_value={sid: [strong, 0.0] + [0.0] * 766 for sid in ids},
     ):
       cards, _ = _vector_recall_sections(
@@ -1629,7 +1629,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     ][: VECTOR_RECALL_MARGIN_MIN_POOL - 1]
     flat = VECTOR_RECALL_FLOOR + 0.01
     with mock.patch(
-      "backend.services.knowledge_base_service._load_section_vectors",
+      "backend.knowledge.knowledge_base_service._load_section_vectors",
       return_value={sid: [flat, 0.0] + [0.0] * 766 for sid in ids},
     ):
       cards, _ = _vector_recall_sections(
@@ -1661,16 +1661,16 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     ]
     flat = VECTOR_RECALL_FLOOR + 0.01
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_section_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       return_value=[[1.0, 0.0] + [0.0] * 766],
     ), mock.patch(
-      "backend.services.knowledge_base_service._load_section_vectors",
+      "backend.knowledge.knowledge_base_service._load_section_vectors",
       return_value={sid: [flat, 0.0] + [0.0] * 766 for sid in ids},
     ):
       result = retrieve_knowledge_context(
@@ -1714,16 +1714,16 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       for r in conn.execute("SELECT section_id FROM sections WHERE game_id = 2")
     ]
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_section_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       return_value=[[1.0, 0.0] + [0.0] * 766],
     ), mock.patch(
-      "backend.services.knowledge_base_service._load_section_vectors",
+      "backend.knowledge.knowledge_base_service._load_section_vectors",
       return_value={sid: [0.3, 0.0] + [0.0] * 766 for sid in ids},
     ):
       result = retrieve_knowledge_context(
@@ -1754,16 +1754,16 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     vectors = {sid: [0.3, 0.0] + [0.0] * 766 for sid in ids}
     vectors[3] = [0.9, 0.0] + [0.0] * 766  # Glyphid Dreadnought -- clearly above the floor
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_section_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       return_value=[[1.0, 0.0] + [0.0] * 766],
     ), mock.patch(
-      "backend.services.knowledge_base_service._load_section_vectors",
+      "backend.knowledge.knowledge_base_service._load_section_vectors",
       return_value=vectors,
     ):
       result = retrieve_knowledge_context(
@@ -1836,13 +1836,13 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_compat_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_compat_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       return_value=[[1.0, 0.0] + [0.0] * 766],
     ) as embed:
       result = retrieve_knowledge_context(
@@ -1940,7 +1940,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=False,
     ):
       result = retrieve_knowledge_context(
@@ -1962,10 +1962,10 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=False,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_compat_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_compat_vectors",
       return_value=True,
     ):
       result = retrieve_knowledge_context(
@@ -1986,13 +1986,13 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_compat_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_compat_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       side_effect=OllamaEmbedError("timeout"),
     ):
       # Expert, not Speed: since D62 #2, Speed never attempts the embed at all (its own
@@ -2125,16 +2125,16 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_compat_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_compat_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       return_value=[[1.0, 0.0] + [0.0] * 766],
     ), mock.patch(
-      "backend.services.knowledge_base_service._load_compat_vectors",
+      "backend.knowledge.knowledge_base_service._load_compat_vectors",
       return_value=compat_vectors,
     ):
       return retrieve_knowledge_context(
@@ -2214,10 +2214,10 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=False,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_compat_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_compat_vectors",
       return_value=True,
     ):
       result = retrieve_knowledge_context(
@@ -2287,7 +2287,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     }
     counts = {}
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=False,
     ):
       for mode in ("speed", "strategy", "expert"):
@@ -2315,16 +2315,16 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_section_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       return_value=[[1.0, 0.0] + [0.0] * 766],
     ), mock.patch(
-      "backend.services.knowledge_base_service._load_section_vectors",
+      "backend.knowledge.knowledge_base_service._load_section_vectors",
       return_value={3: [1.0, 0.0] + [0.0] * 766},
     ):
       result = retrieve_knowledge_context(
@@ -2588,7 +2588,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=False,
     ):
       result = retrieve_knowledge_context(
@@ -2928,13 +2928,13 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_hybrid_retrieval_enabled": False,
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_compat_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_compat_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       side_effect=AssertionError("query must not be embedded while hybrid is off"),
     ):
       result = retrieve_knowledge_context(
@@ -2956,16 +2956,16 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "rag_corpus_path": str(SEED_DB.parent),
     }
     with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
+      "backend.knowledge.knowledge_base_service.nomic_embed_available",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_compat_vectors",
+      "backend.knowledge.knowledge_base_service.corpus_has_usable_compat_vectors",
       return_value=True,
     ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
+      "backend.knowledge.knowledge_base_service.embed_texts",
       return_value=[[1.0, 0.0] + [0.0] * 766],
     ), mock.patch(
-      "backend.services.knowledge_base_service._load_compat_vectors",
+      "backend.knowledge.knowledge_base_service._load_compat_vectors",
       return_value={1: [1.0, 0.0] + [0.0] * 766},
     ):
       result = retrieve_knowledge_context(

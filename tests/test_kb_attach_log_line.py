@@ -18,8 +18,8 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
-from backend.services import kb_notes_footers  # noqa: E402
-from backend.services.kb_not_in_notes_notice import kb_attach_log_line  # noqa: E402
+from backend.knowledge import kb_notes_footers  # noqa: E402
+from backend.knowledge.kb_not_in_notes_notice import kb_attach_log_line  # noqa: E402
 
 # The shape run_game_ai_request builds: kb_transparency from build_knowledge_base_transparency,
 # kb_attached_notes from _parse_kb_attached_notes (name, kind, card, domain, ...).

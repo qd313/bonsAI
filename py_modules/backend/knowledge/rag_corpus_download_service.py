@@ -47,7 +47,7 @@ import zlib
 from pathlib import Path
 from typing import Any, Awaitable, Callable, Optional
 
-from backend.services.knowledge_base_schema import (
+from backend.knowledge.knowledge_base_schema import (
     CORPUS_ATTRIBUTIONS_FILENAME,
     CORPUS_DB_FILENAME,
     CORPUS_MANIFEST_FILENAME,
@@ -61,7 +61,7 @@ from backend.services.knowledge_base_schema import (
     sanitize_corpus_install_dir,
     write_manifest,
 )
-from backend.services.knowledge_base_service import close_connection
+from backend.knowledge.knowledge_base_service import close_connection
 from backend.core.tls_ca_fallback import urlopen_with_ca_fallback
 
 MAX_LOG_TAIL_LINES = 80

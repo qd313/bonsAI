@@ -882,7 +882,7 @@ class EvalKbAnswersFollowupPairTests(unittest.TestCase):
 
     def test_run_followup_pair_clears_memory_before_the_first_turn(self):
         mod = self.mod
-        from backend.services import kb_followup_memory
+        from backend.knowledge import kb_followup_memory
 
         pair = self._two_turn_pair()
         retrieval_log: list = []
@@ -911,7 +911,7 @@ class EvalKbAnswersFollowupPairTests(unittest.TestCase):
         replaced) so this proves the reset-per-turn behaviour against shipped logic: turn 1's
         plain question does not look like a follow-up, turn 2's "what about ..." does."""
         mod = self.mod
-        from backend.services import kb_followup_memory
+        from backend.knowledge import kb_followup_memory
 
         real_augment = kb_followup_memory.augment_search_words
         pair = self._two_turn_pair()
@@ -970,7 +970,7 @@ class ApplyFollowupShapeEnvTests(unittest.TestCase):
         sys.modules.pop("eval_kb_answers", None)
 
     def setUp(self):
-        from backend.services import kb_followup_memory
+        from backend.knowledge import kb_followup_memory
 
         self.kb_followup_memory = kb_followup_memory
         os.environ.pop(kb_followup_memory.DROP_RUNNERUP_ENV, None)

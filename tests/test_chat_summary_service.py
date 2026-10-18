@@ -77,7 +77,7 @@ _STUB_LIBRARY = {
 
 async def _stub_library_lookup(_plugin):
     """Stands in for the notes library's own title match (no corpus is built in the unit tests)."""
-    from backend.services.kb_other_game_named import normalize_alias
+    from backend.knowledge.kb_other_game_named import normalize_alias
 
     def _lookup(text: str) -> str:
         norm = normalize_alias(text)

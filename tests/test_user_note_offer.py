@@ -6,7 +6,7 @@ each case is checked by asking what the person meant.
 
 import unittest
 
-from backend.services.user_note_offer import (
+from backend.notes.user_note_offer import (
     NOTE_TEXT_LIMIT,
     note_offer_for_note_words,
     note_offer_for_question,

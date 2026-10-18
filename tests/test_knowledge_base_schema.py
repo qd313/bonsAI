@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from backend.services.knowledge_base_schema import (
+from backend.knowledge.knowledge_base_schema import (
     apply_schema,
     corpus_compat_vectors_fully_indexed,
     corpus_has_usable_compat_vectors,

@@ -209,7 +209,7 @@ async def _library_title_lookup(plugin: Any):
         return None
 
     def _lookup(text: str) -> str:
-        from backend.services.knowledge_base_game_match import resolve_title_from_question
+        from backend.knowledge.knowledge_base_game_match import resolve_title_from_question
 
         return resolve_title_from_question(settings, text)
 

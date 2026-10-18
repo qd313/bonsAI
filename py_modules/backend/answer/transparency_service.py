@@ -50,7 +50,7 @@ from __future__ import annotations
 import re
 from typing import Any, Optional
 
-from backend.services.knowledge_base_cards import _COMPAT_GAME_TITLE
+from backend.knowledge.knowledge_base_cards import _COMPAT_GAME_TITLE
 from backend.spoilers.spoiler_risk_service import (
     compute_spoiler_risk_band,
     parse_bonsai_spoiler_risk_tag,

@@ -25,7 +25,7 @@ import os
 from typing import Any
 
 from backend.core.capabilities import capability_enabled
-from backend.services.desktop_note_service import (
+from backend.notes.desktop_note_service import (
     append_app_log_sync,
     append_desktop_chat_event_sync,
     append_desktop_debug_note_sync,

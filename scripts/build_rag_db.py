@@ -35,7 +35,7 @@ KB_DATA_DIR = REPO_ROOT / "data" / "kb"
 if str(PY_MODULES) not in sys.path:
     sys.path.insert(0, str(PY_MODULES))
 
-from backend.services.knowledge_base_schema import (  # noqa: E402
+from backend.knowledge.knowledge_base_schema import (  # noqa: E402
     CORPUS_ATTRIBUTIONS_FILENAME,
     CORPUS_DB_FILENAME,
     CORPUS_GITHUB_RELEASE_TAG,

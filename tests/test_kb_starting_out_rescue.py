@@ -12,7 +12,7 @@ is a shared file another lane is also changing.
 
 import unittest
 
-from backend.services.knowledge_base_search import _section_types_named
+from backend.knowledge.knowledge_base_search import _section_types_named
 
 
 class StartingOutRescuePhraseListTests(unittest.TestCase):

@@ -24,7 +24,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, Optional
 
 from backend.core.constants import DEFAULT_OLLAMA_PCIP
-from backend.services.knowledge_base_schema import (
+from backend.knowledge.knowledge_base_schema import (
     corpus_manifest_path,
     default_corpus_dir_internal,
     list_rag_storage_options,

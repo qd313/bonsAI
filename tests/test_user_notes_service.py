@@ -10,8 +10,8 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
-from backend.services import user_notes_service as notes  # noqa: E402
-from backend.services.user_notes_service import UserNoteError  # noqa: E402
+from backend.notes import user_notes_service as notes  # noqa: E402
+from backend.notes.user_notes_service import UserNoteError  # noqa: E402
 
 
 class _Base(unittest.TestCase):
@@ -65,7 +65,7 @@ class FileShapeTests(_Base):
     def test_a_failed_replace_keeps_the_old_file_whole(self):
         self._add("first")
         good = self._file_bytes()
-        with mock.patch("backend.services.user_notes_service.os.replace", side_effect=OSError("disk")):
+        with mock.patch("backend.notes.user_notes_service.os.replace", side_effect=OSError("disk")):
             with self.assertRaises(UserNoteError) as ctx:
                 self._add("second", at=1_760_000_050.0)
         self.assertEqual(ctx.exception.code, "invalid")

@@ -30,8 +30,8 @@ import sqlite3
 import time
 from typing import Callable, Optional
 
-from backend.services.knowledge_base_cards import KnowledgeCard, _compat_row_to_card
-from backend.services.knowledge_base_search import (
+from backend.knowledge.knowledge_base_cards import KnowledgeCard, _compat_row_to_card
+from backend.knowledge.knowledge_base_search import (
     COMPAT_TOPIC_RECALL_K,
     _COMPAT_BM25,
     _FTS_MAX_TOKENS,

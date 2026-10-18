@@ -109,7 +109,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Literal, Optional
 
-from backend.services.knowledge_base_schema import (
+from backend.knowledge.knowledge_base_schema import (
     CORPUS_MANIFEST_FILENAME,
     DEFAULT_EMBEDDING_MODEL,
     TRUST_TIER_FALLBACK,
@@ -126,14 +126,14 @@ from backend.knowledge.ollama_embed_service import (
     format_embed_query,
     nomic_embed_available,
 )
-from backend.services.compat_topic_router import (
+from backend.knowledge.compat_topic_router import (
     match_compat_corpus_topics,
     question_targets_compat_corpus,
 )
 from backend.prompts.ollama_prompts import question_matches_troubleshooting_log_context
 from backend.ollama.ollama_keep_alive_rule import effective_keep_alive
 
-from backend.services.knowledge_base_cards import (
+from backend.knowledge.knowledge_base_cards import (
     KnowledgeCard,
     _BLOCK_SENTINEL,
     _COMPAT_GAME_TITLE,
@@ -145,13 +145,13 @@ from backend.services.knowledge_base_cards import (
     close_connection,
     lookup_game_genres,
 )
-from backend.services.knowledge_base_game_match import (
+from backend.knowledge.knowledge_base_game_match import (
     _expand_query,
     _question_without_game_name,
     _resolve_game_id,
     resolve_title_from_question,
 )
-from backend.services.knowledge_base_game_tip import (
+from backend.knowledge.knowledge_base_game_tip import (
     GAME_TIP_REROUTE_FLOOR,
     SharedQueryEmbedding,
     _compat_app_keys_for_game,
@@ -161,7 +161,7 @@ from backend.services.knowledge_base_game_tip import (
     _reroute_to_game_tip_if_it_fits,
     pick_game_tip_by_meaning,
 )
-from backend.services.knowledge_base_search import (
+from backend.knowledge.knowledge_base_search import (
     BM25_RELEVANCE_FLOOR,
     COMPAT_TOPIC_RECALL_K,
     RRF_W_TOPIC,
@@ -182,7 +182,7 @@ from backend.services.knowledge_base_search import (
     _section_types_named,
     _sections_of_type,
 )
-from backend.services.knowledge_base_chips import (
+from backend.knowledge.knowledge_base_chips import (
     KbCoverageSummary,
     SessionRagChipCandidate,
     SessionRagChipCandidatesResult,

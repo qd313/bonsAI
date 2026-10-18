@@ -23,7 +23,7 @@ from __future__ import annotations
 
 import re
 
-from backend.services.knowledge_base_schema import normalize_alias
+from backend.knowledge.knowledge_base_schema import normalize_alias
 
 # Titles are written the way a person types them; both "baldur's gate" and "baldurs gate" are
 # listed because normalising drops the apostrophe into a space ("baldur s gate").

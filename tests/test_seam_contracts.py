@@ -25,7 +25,7 @@ import unittest
 # module -> name -> the call shape it had when frozen (None for a class or a value)
 FROZEN: dict[str, dict[str, str | None]] = {
     # the knowledge base
-    "backend.services.knowledge_base_service": {
+    "backend.knowledge.knowledge_base_service": {
         "HYBRID_FTS_SHORTLIST_K": None,  # value
         "KnowledgeCard": None,  # class
         "VECTOR_RECALL_FLOOR": None,  # value

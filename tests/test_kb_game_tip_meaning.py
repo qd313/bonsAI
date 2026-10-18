@@ -21,12 +21,12 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
-from backend.services.knowledge_base_game_tip import (  # noqa: E402
+from backend.knowledge.knowledge_base_game_tip import (  # noqa: E402
     GAME_TIP_MEANING_FLOOR,
     SharedQueryEmbedding,
     pick_game_tip_by_meaning,
 )
-from backend.services.knowledge_base_service import (  # noqa: E402
+from backend.knowledge.knowledge_base_service import (  # noqa: E402
     _get_connection,
     _load_compat_vectors,
     _load_section_vectors,
@@ -48,7 +48,7 @@ DRG = {"app_id": "2321470", "app_name": "Deep Rock Galactic: Survivor"}
 # game's name is not typed. A long tail or the game's name lowers the meaning score (measured:
 # 0.6772 bare, 0.6013 with "on my deck", 0.5654 with the name too) -- see the floor's comment.
 REWORDED = "the words on screen look blurry"
-SERVICE = "backend.services.knowledge_base_service"
+SERVICE = "backend.knowledge.knowledge_base_service"
 
 
 def _settings():

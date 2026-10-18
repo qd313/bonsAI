@@ -104,12 +104,12 @@ from backend.answer.destructive_advice_guard import (
 )
 from backend.chats import chat_turn_recorder
 from backend.chats.chat_own_game_title import chat_own_game_title, text_resolved_title_for_turn
-from backend.services.user_note_offer import note_offer_for_question
-from backend.services.user_notes_for_ask import notes_for_ask
-from backend.services import kb_followup_memory
+from backend.notes.user_note_offer import note_offer_for_question
+from backend.notes.user_notes_for_ask import notes_for_ask
+from backend.knowledge import kb_followup_memory
 from backend.ollama import ollama_keep_alive_rule
 from backend.commands.input_sanitizer_service import apply_input_sanitizer_lane
-from backend.services.kb_notes_footers import append_kb_notes_footers
+from backend.knowledge.kb_notes_footers import append_kb_notes_footers
 from backend.prompts.ollama_prompts import (
     build_reply_followup_context_block,
     extract_strategy_asked_entity,
@@ -135,7 +135,7 @@ from backend.spoilers.strategy_spoiler_policy import (
     neutralize_protected_names_in_branch_menu,
     resolve_turn_spoiler_protected_names,
 )
-from backend.services.knowledge_base_service import (
+from backend.knowledge.knowledge_base_service import (
     kb_coverage_to_transparency,
     lookup_game_genres,
     resolve_title_from_question,
@@ -148,7 +148,7 @@ from backend.services.knowledge_base_service import (
 # fields for a knowledge-base search, and the live-snapshot publish -- moved to their own file
 # (plan 65). Imported here, not just called qualified, so every name below stays reachable at
 # `game_ai_request.<name>` for the tests and callers that already reach it that way.
-from backend.services.kb_attached_notes import (
+from backend.knowledge.kb_attached_notes import (
     _KB_NOTE_HEADER_RE,
     _KB_NOTE_OMITTED_TAIL_RE,
     _kb_note_source_host,

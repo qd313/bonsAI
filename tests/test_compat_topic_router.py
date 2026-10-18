@@ -1,7 +1,7 @@
 """
 Title: Compat topic router tests
 Purpose: Pin what routes an Ask to the shared troubleshooting corpus, and what must not.
-Used for: py_modules/backend/services/compat_topic_router.py, decision D16.
+Used for: py_modules/backend/knowledge/compat_topic_router.py, decision D16.
 Solves: The router trades precision for reach on purpose. That trade is only safe while the
         strategy side stays clean, so the false-positive direction needs a test, not a hope.
 Does not: Test ranking or retrieval quality — only the routing decision.
@@ -16,12 +16,12 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT / "py_modules") not in sys.path:
     sys.path.insert(0, str(REPO_ROOT / "py_modules"))
 
-from backend.services.compat_topic_router import (  # noqa: E402
+from backend.knowledge.compat_topic_router import (  # noqa: E402
     known_compat_topics,
     match_compat_corpus_topics,
     question_targets_compat_corpus,
 )
-from backend.services.knowledge_base_service import should_retrieve_knowledge  # noqa: E402
+from backend.knowledge.knowledge_base_service import should_retrieve_knowledge  # noqa: E402
 
 
 class CompatTopicRouterTests(unittest.TestCase):

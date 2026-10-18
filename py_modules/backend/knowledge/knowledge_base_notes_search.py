@@ -30,10 +30,10 @@ import re
 import sqlite3
 from typing import Any
 
-from backend.services.knowledge_base_cards import _get_connection, close_connection
-from backend.services.knowledge_base_game_match import _resolve_game_id
-from backend.services.knowledge_base_schema import resolve_corpus_db_path
-from backend.services.knowledge_base_search import _fts_match_query, _search_sections
+from backend.knowledge.knowledge_base_cards import _get_connection, close_connection
+from backend.knowledge.knowledge_base_game_match import _resolve_game_id
+from backend.knowledge.knowledge_base_schema import resolve_corpus_db_path
+from backend.knowledge.knowledge_base_search import _fts_match_query, _search_sections
 
 import decky
 

@@ -25,7 +25,7 @@ install_fcntl_and_decky_stubs()
 install_pwd_stub()  # so this file also runs on its own on Windows, not only after another installs it
 
 from backend.ask.game_ai_request import _parse_kb_attached_notes, run_game_ai_request  # noqa: E402
-from backend.services.knowledge_base_service import (
+from backend.knowledge.knowledge_base_service import (
     _COMPAT_GAME_TITLE,
     KnowledgeCard,
     KnowledgeRetrievalResult,
@@ -502,7 +502,7 @@ class NoCloseMatchReadsNoteTextThroughTheRealPathTests(unittest.TestCase):
     def test_a_hollow_knight_shaped_note_no_longer_shows_the_notice(
         self, mock_should, mock_retrieve, mock_resolve_title, mock_coverage
     ):
-        from backend.services.knowledge_base_chips import KbCoverageSummary
+        from backend.knowledge.knowledge_base_chips import KbCoverageSummary
 
         mock_should.return_value = (True, "strategy")
         mock_resolve_title.return_value = "Hollow Knight"
@@ -544,7 +544,7 @@ class NoCloseMatchReadsNoteTextThroughTheRealPathTests(unittest.TestCase):
         """Same turn, but the note's own text is rewritten so nothing in it -- title or body --
         shares a real word with the question. Guards against a test that would pass no matter
         what `close_match_source_texts` actually carries."""
-        from backend.services.knowledge_base_chips import KbCoverageSummary
+        from backend.knowledge.knowledge_base_chips import KbCoverageSummary
 
         mock_should.return_value = (True, "strategy")
         mock_resolve_title.return_value = "Hollow Knight"

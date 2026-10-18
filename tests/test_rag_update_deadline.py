@@ -15,7 +15,7 @@ from __future__ import annotations
 import re
 import unittest
 
-from backend.services import rag_corpus_download_service as svc
+from backend.knowledge import rag_corpus_download_service as svc
 from src_paths import find_src_file
 
 

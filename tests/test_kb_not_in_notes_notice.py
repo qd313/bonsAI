@@ -2,7 +2,7 @@
 
 import unittest
 
-from backend.services.kb_not_in_notes_notice import (
+from backend.knowledge.kb_not_in_notes_notice import (
     _NOT_IN_NOTES_LINE,
     _NO_CLOSE_MATCH_LINE,
     _THIN_MATCH_MEANING_CEILING,
@@ -12,7 +12,7 @@ from backend.services.kb_not_in_notes_notice import (
     should_show_not_in_notes_notice,
     tip_sheet_turn_came_back_empty,
 )
-import backend.services.kb_not_in_notes_notice as notice_module
+import backend.knowledge.kb_not_in_notes_notice as notice_module
 
 
 class NotInNotesDecisionTests(unittest.TestCase):

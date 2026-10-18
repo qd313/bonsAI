@@ -10,7 +10,7 @@ name-guessing this wave measures with).
 
 import unittest
 
-from backend.services.knowledge_base_service import (
+from backend.knowledge.knowledge_base_service import (
     DEMOTE_STARTING_OUT_NOTES,
     KnowledgeCard,
     _fuse_cards_by_rrf,
@@ -94,7 +94,7 @@ class DemotionOrderingTests(unittest.TestCase):
         # cure that evidenced case. See the report for this finding in full.
         cards = self._cards()
         try:
-            import backend.services.knowledge_base_service as kb_service
+            import backend.knowledge.knowledge_base_service as kb_service
 
             kb_service.DEMOTE_STARTING_OUT_NOTES = True
             fused = _fuse_cards_by_rrf(
@@ -118,7 +118,7 @@ class DemotionOrderingTests(unittest.TestCase):
     def test_switch_on_but_the_question_asks_how_to_start_changes_nothing(self):
         cards = self._cards()
         try:
-            import backend.services.knowledge_base_service as kb_service
+            import backend.knowledge.knowledge_base_service as kb_service
 
             kb_service.DEMOTE_STARTING_OUT_NOTES = True
             fused = _fuse_cards_by_rrf(
@@ -131,7 +131,7 @@ class DemotionOrderingTests(unittest.TestCase):
     def test_a_pool_with_no_generic_note_is_unaffected_by_the_switch(self):
         cards = [_card(3, "Crossing the electrified waste pools"), _card(4, "Houndeye")]
         try:
-            import backend.services.knowledge_base_service as kb_service
+            import backend.knowledge.knowledge_base_service as kb_service
 
             kb_service.DEMOTE_STARTING_OUT_NOTES = True
             fused = _fuse_cards_by_rrf(cards, [1.0, 0.0], {}, top_k=5, question="")

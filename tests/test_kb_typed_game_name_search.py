@@ -17,7 +17,7 @@ import sqlite3
 import tempfile
 import unittest
 
-from backend.services.knowledge_base_service import (
+from backend.knowledge.knowledge_base_service import (
     close_connection,
     resolve_corpus_db_path,
     resolve_title_from_question,
@@ -89,7 +89,7 @@ class HorseQuestionTests(_CorpusCase):
 
 class NameStrippingTests(_CorpusCase):
     def strip(self, game_id: int, question: str) -> str:
-        from backend.services.knowledge_base_search import _question_without_typed_game_name
+        from backend.knowledge.knowledge_base_search import _question_without_typed_game_name
 
         return _question_without_typed_game_name(self.conn, game_id, question)
 

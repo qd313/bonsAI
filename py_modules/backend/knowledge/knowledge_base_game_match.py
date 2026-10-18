@@ -34,9 +34,9 @@ import re
 import sqlite3
 from typing import Optional
 
-from backend.services.kb_not_in_notes_notice import _content_words
-from backend.services.knowledge_base_cards import _get_connection
-from backend.services.knowledge_base_schema import normalize_alias, resolve_corpus_db_path
+from backend.knowledge.kb_not_in_notes_notice import _content_words
+from backend.knowledge.knowledge_base_cards import _get_connection
+from backend.knowledge.knowledge_base_schema import normalize_alias, resolve_corpus_db_path
 
 # D19: a title named in the question is worth as much as a title Steam happens to be running.
 # 3 characters minimum, locked -- excluding 3-char aliases would fail `hl2 ravenholm`, which is

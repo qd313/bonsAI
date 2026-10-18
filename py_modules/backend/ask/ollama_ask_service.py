@@ -70,7 +70,7 @@ from backend.ollama.local_ollama_setup_service import (
 )
 from backend.ollama.model_policy import disclosure_for_model, empty_filter_user_message
 from backend.ask.ask_payload import screen_ask_attachments
-from backend.services.knowledge_base_glossary import glossary_for_prompt
+from backend.knowledge.knowledge_base_glossary import glossary_for_prompt
 from backend.chats.chat_memory_step import add_chat_memory_to_prompt
 from backend.ask.ollama_ask_extras import (
     build_ollama_request_extras,

@@ -23,7 +23,7 @@ install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
 from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
-from backend.services.knowledge_base_service import (  # noqa: E402
+from backend.knowledge.knowledge_base_service import (  # noqa: E402
     KnowledgeCard,
     KnowledgeRetrievalResult,
     _format_block,

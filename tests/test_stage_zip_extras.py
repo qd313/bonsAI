@@ -19,7 +19,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from backend.services import intent_pack_service as svc
+from backend.search import intent_pack_service as svc
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

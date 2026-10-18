@@ -194,7 +194,7 @@ class TheStepHandsOverTheLibraryTests(unittest.TestCase):
 
         lookup = asyncio.run(_library_title_lookup(Plugin()))
         with patch(
-            "backend.services.knowledge_base_game_match.resolve_title_from_question",
+            "backend.knowledge.knowledge_base_game_match.resolve_title_from_question",
             return_value="Hades",
         ) as resolve:
             self.assertEqual(lookup("anything"), "Hades")

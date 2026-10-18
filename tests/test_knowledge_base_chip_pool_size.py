@@ -14,8 +14,8 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
-from backend.services import knowledge_base_chips as chips  # noqa: E402
-from backend.services.knowledge_base_cards import close_connection  # noqa: E402
+from backend.knowledge import knowledge_base_chips as chips  # noqa: E402
+from backend.knowledge.knowledge_base_cards import close_connection  # noqa: E402
 
 
 def _build_db(path: str, cards: list[tuple[str, str]]) -> None:

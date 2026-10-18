@@ -2,7 +2,7 @@ import json
 import unittest
 from unittest import mock
 
-from backend.services.knowledge_base_schema import DEFAULT_EMBEDDING_MODEL
+from backend.knowledge.knowledge_base_schema import DEFAULT_EMBEDDING_MODEL
 from backend.knowledge.ollama_embed_service import (
     OllamaEmbedError,
     embed_texts,

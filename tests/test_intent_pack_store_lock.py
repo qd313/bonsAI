@@ -11,7 +11,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
-from backend.services import intent_pack_service as svc  # noqa: E402
+from backend.search import intent_pack_service as svc  # noqa: E402
 from main import Plugin  # noqa: E402
 
 

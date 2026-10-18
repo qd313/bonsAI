@@ -32,7 +32,7 @@ import threading
 from dataclasses import dataclass, replace
 from typing import Optional
 
-from backend.services.knowledge_base_schema import (
+from backend.knowledge.knowledge_base_schema import (
     TRUST_TIER_FALLBACK,
     TRUST_TIER_WIKI_NO_PATCH,
     TRUST_TIER_WIKI_VERIFIED,

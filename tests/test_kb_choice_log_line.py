@@ -15,12 +15,12 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()
 
-from backend.services import kb_followup_memory  # noqa: E402
+from backend.knowledge import kb_followup_memory  # noqa: E402
 from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
-from backend.services.kb_attached_notes import kb_choice_log_line  # noqa: E402
-from backend.services.knowledge_base_cards import _omitted_note  # noqa: E402
-from backend.services.knowledge_base_chips import StackedContext  # noqa: E402
-from backend.services.knowledge_base_service import (  # noqa: E402
+from backend.knowledge.kb_attached_notes import kb_choice_log_line  # noqa: E402
+from backend.knowledge.knowledge_base_cards import _omitted_note  # noqa: E402
+from backend.knowledge.knowledge_base_chips import StackedContext  # noqa: E402
+from backend.knowledge.knowledge_base_service import (  # noqa: E402
     KbCoverageSummary,
     KnowledgeRetrievalResult,
 )

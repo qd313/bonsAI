@@ -15,7 +15,7 @@ install_pwd_stub()
 
 from backend.settings.plugin_data_reset import reset_plugin_disk_and_defaults  # noqa: E402
 from backend.settings.settings_service import load_settings, save_settings  # noqa: E402
-from backend.services.user_notes_service import load_notes, notes_path, save_note  # noqa: E402
+from backend.notes.user_notes_service import load_notes, notes_path, save_note  # noqa: E402
 from main import Plugin  # noqa: E402
 from test_plugin_data_reset import _Logger, _sanitize  # noqa: E402
 

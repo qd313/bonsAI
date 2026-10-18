@@ -1174,7 +1174,7 @@ async def run_followup_pair(
     ``followup_subject``, both default off) so a report can tell "the memory fired on this turn"
     apart from "it did not" without re-deriving it from the reply.
     """
-    from backend.services import kb_followup_memory
+    from backend.knowledge import kb_followup_memory
 
     kb_followup_memory.forget()
     results: list[SampleResult] = []
@@ -1657,7 +1657,7 @@ def main() -> int:
     # Diagnostic only, every --followup-shape including "shipped": records whether a turn's own
     # search words actually got the remembered subject appended, without ever changing them. See
     # _wrap_augment_search_words_for_capture.
-    from backend.services import kb_followup_memory  # noqa: E402
+    from backend.knowledge import kb_followup_memory  # noqa: E402
 
     kb_followup_memory.augment_search_words = _wrap_augment_search_words_for_capture(
         kb_followup_memory.augment_search_words

@@ -15,7 +15,7 @@ import json
 import unittest
 from pathlib import Path
 
-from backend.services.kb_not_in_notes_notice import should_show_no_close_match_notice_for_turn
+from backend.knowledge.kb_not_in_notes_notice import should_show_no_close_match_notice_for_turn
 
 SEED = json.loads(
     (Path(__file__).resolve().parent.parent / "data" / "kb" / "strategy_seed.json").read_text(encoding="utf-8")

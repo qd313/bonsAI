@@ -42,7 +42,7 @@ SETTINGS_PATH = "/home/deck/homebrew/settings/bonsAI/settings.json"
 sys.path.insert(0, PLUGIN_DIR)
 sys.path.insert(0, os.path.join(PLUGIN_DIR, "py_modules"))
 
-from backend.services import knowledge_base_service as kb  # noqa: E402
+from backend.knowledge import knowledge_base_service as kb  # noqa: E402
 # Both already load transitively through knowledge_base_service -> ollama_embed_service, so
 # importing them here adds no new dependency the Deck does not already have on this path.
 from backend.ollama.ollama_connectivity import ollama_http_base_from_pc_ip_field  # noqa: E402

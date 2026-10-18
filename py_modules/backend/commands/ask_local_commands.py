@@ -14,7 +14,7 @@ from dataclasses import dataclass
 
 from backend.commands.input_sanitizer_service import classify_sanitizer_command
 from backend.commands.shortcut_setup_commands import classify_shortcut_setup_command
-from backend.services.user_note_commands import parse_note_command
+from backend.notes.user_note_commands import parse_note_command
 
 
 @dataclass(frozen=True)

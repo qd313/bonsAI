@@ -16,10 +16,10 @@ install_fcntl_and_decky_stubs()
 
 from backend.chats import chat_slot_service  # noqa: E402
 from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
-from backend.services.knowledge_base_service import KnowledgeRetrievalResult  # noqa: E402
+from backend.knowledge.knowledge_base_service import KnowledgeRetrievalResult  # noqa: E402
 from backend.prompts.ollama_prompts import build_system_prompt  # noqa: E402
 from backend.answer.transparency_service import build_context_chips_manifest  # noqa: E402
-from backend.services.user_notes_service import (  # noqa: E402
+from backend.notes.user_notes_service import (  # noqa: E402
     MAX_NOTES_CHARS_PER_ASK,
     MAX_NOTES_PER_ASK,
     NOTES_BLOCK_HEADING,
@@ -335,7 +335,7 @@ class WholeQuestionTests(unittest.TestCase):
         self.assertLess(sheet.index(HEADING), sheet.index("Mantis Lords: dodge"))
 
     def test_the_log_lines_say_how_many_notes_went_in(self):
-        with patch("backend.services.user_notes_for_ask.logger") as log:
+        with patch("backend.notes.user_notes_for_ask.logger") as log:
             _ask(self.plugin, app_id=HOLLOW_KNIGHT, app_name="Hollow Knight")
         line = log.info.call_args.args[0] % log.info.call_args.args[1:]
         self.assertIn("user_notes=1", line)
@@ -343,7 +343,7 @@ class WholeQuestionTests(unittest.TestCase):
         self.assertEqual(self.plugin.app_logs[0][1]["user_notes"], 1)
 
     def test_a_notes_file_that_cannot_be_read_never_costs_the_answer(self):
-        with patch("backend.services.user_notes_for_ask.load_notes", side_effect=OSError("disk gone")):
+        with patch("backend.notes.user_notes_for_ask.load_notes", side_effect=OSError("disk gone")):
             result = _ask(self.plugin, app_id=HOLLOW_KNIGHT, app_name="Hollow Knight")
         self.assertTrue(result["success"])
         self.assertEqual(result["transparency"]["user_notes_attached"], [])

@@ -10,7 +10,7 @@ network -- the detector is a fixed list of well-known titles.
 
 import unittest
 
-from backend.services.kb_other_game_named import other_game_besides, other_game_named_in
+from backend.knowledge.kb_other_game_named import other_game_besides, other_game_named_in
 
 
 class OtherGameNamedTests(unittest.TestCase):

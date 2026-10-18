@@ -21,15 +21,15 @@ import zlib
 from pathlib import Path
 from unittest import mock
 
-from backend.services.knowledge_base_schema import CORPUS_SCHEMA_VERSION
-from backend.services.rag_corpus_download_service import (
+from backend.knowledge.knowledge_base_schema import CORPUS_SCHEMA_VERSION
+from backend.knowledge.rag_corpus_download_service import (
     fetch_remote_manifest,
     install_corpus_from_manifest,
 )
 from corpus_build_support import build_corpus_or_skip
 from script_loader import load_script
 
-MODULE_PATH = "backend.services.rag_corpus_download_service"
+MODULE_PATH = "backend.knowledge.rag_corpus_download_service"
 
 
 def _load_build_rag_db():

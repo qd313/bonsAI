@@ -17,7 +17,7 @@ import asyncio
 import unittest
 from unittest import mock
 
-from backend.services import rag_corpus_download_service as svc
+from backend.knowledge import rag_corpus_download_service as svc
 
 
 class _Logger:

@@ -27,29 +27,29 @@ from typing import Any
 
 from backend.core.async_background_job import new_asyncio_cancel_event
 from backend.core.capabilities import capability_enabled, downloads_off_refusal
-from backend.services.knowledge_base_schema import (
+from backend.knowledge.knowledge_base_schema import (
     default_corpus_dir_internal,
     resolve_corpus_db_path,
     sanitize_corpus_install_dir,
 )
-from backend.services.knowledge_base_glossary import (  # noqa: F401 -- main.py reaches it here
+from backend.knowledge.knowledge_base_glossary import (  # noqa: F401 -- main.py reaches it here
     get_rag_corpus_glossary,
 )
-from backend.services.knowledge_base_notes_search import (  # noqa: F401 -- main.py reaches it here
+from backend.knowledge.knowledge_base_notes_search import (  # noqa: F401 -- main.py reaches it here
     search_rag_corpus_notes,
 )
-from backend.services.knowledge_base_service import (
+from backend.knowledge.knowledge_base_service import (
     session_rag_chip_candidates_to_rpc,
     suggest_chip_candidates,
 )
-from backend.services.rag_corpus_download_service import (
+from backend.knowledge.rag_corpus_download_service import (
     fetch_remote_manifest,
     new_rag_corpus_download_state,
     remove_corpus_at_path,
     run_rag_corpus_download,
 )
-from backend.services.rag_corpus_local_install import install_rag_corpus_from_local_dir
-from backend.services.rag_corpus_status import build_rag_corpus_status
+from backend.knowledge.rag_corpus_local_install import install_rag_corpus_from_local_dir
+from backend.knowledge.rag_corpus_status import build_rag_corpus_status
 
 import decky
 

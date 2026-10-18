@@ -21,7 +21,7 @@ from typing import Any
 
 import decky
 
-from backend.services.kb_not_in_notes_notice import (
+from backend.knowledge.kb_not_in_notes_notice import (
     append_no_close_match_notice,
     append_not_in_notes_notice,
     kb_attach_log_line,

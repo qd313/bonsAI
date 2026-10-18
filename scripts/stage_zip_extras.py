@@ -27,7 +27,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 # Everything the back end reads from `<plugin root>/data/` at run time
-# (py_modules/backend/services/intent_pack_service.py). Add a path here when the
+# (py_modules/backend/search/intent_pack_service.py). Add a path here when the
 # back end starts reading a new one; tests/test_stage_zip_extras.py checks the
 # staged tree actually satisfies the loaders.
 RUNTIME_DATA = (

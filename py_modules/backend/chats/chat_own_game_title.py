@@ -17,7 +17,7 @@ without a real knowledge base on disk.
 
 from typing import Any, Callable
 
-from backend.services.kb_other_game_named import other_game_besides
+from backend.knowledge.kb_other_game_named import other_game_besides
 
 CHAT_OWN_GAME_LOOKBACK_TURNS = 12
 

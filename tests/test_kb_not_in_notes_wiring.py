@@ -12,10 +12,10 @@ from backend_module_stubs import install_fcntl_and_decky_stubs, install_pwd_stub
 install_fcntl_and_decky_stubs()
 install_pwd_stub()  # so this file also runs on its own on Windows, not only after another installs it
 
-from backend.services import kb_followup_memory  # noqa: E402
+from backend.knowledge import kb_followup_memory  # noqa: E402
 from backend.ask.game_ai_request import run_game_ai_request  # noqa: E402
-from backend.services.knowledge_base_chips import StackedContext  # noqa: E402
-from backend.services.knowledge_base_service import KbCoverageSummary, KnowledgeRetrievalResult  # noqa: E402
+from backend.knowledge.knowledge_base_chips import StackedContext  # noqa: E402
+from backend.knowledge.knowledge_base_service import KbCoverageSummary, KnowledgeRetrievalResult  # noqa: E402
 
 _NOT_IN_NOTES_TEXT = "Not in my notes — this answer is from the model's own knowledge."
 # Retired by the maintainer on 2026-09-27; kept here only so the tests can prove it never shows.

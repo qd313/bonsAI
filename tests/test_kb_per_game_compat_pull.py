@@ -13,8 +13,8 @@ built corpus) so it runs even while the shared PC model is busy with someone els
 import sqlite3
 import unittest
 
-from backend.services.knowledge_base_schema import apply_schema
-from backend.services.knowledge_base_service import (
+from backend.knowledge.knowledge_base_schema import apply_schema
+from backend.knowledge.knowledge_base_service import (
     _compat_app_keys_for_game,
     _compat_tips_for_app_keys,
 )

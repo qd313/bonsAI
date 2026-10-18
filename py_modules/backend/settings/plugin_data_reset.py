@@ -102,7 +102,7 @@ def wipe_proton_experiment_journal(logger: Any, home: str | None = None) -> bool
 
 def wipe_rag_corpus_dir(corpus_path: str, logger: Any) -> bool:
     """Remove installed knowledge base directory when under user home."""
-    from backend.services.rag_corpus_download_service import remove_corpus_at_path
+    from backend.knowledge.rag_corpus_download_service import remove_corpus_at_path
 
     path = str(corpus_path or "").strip()
     if not path:

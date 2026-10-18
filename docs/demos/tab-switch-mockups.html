@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tab switch motion</title>
+<style>
+:root{--bg:#0e141b;--card:#161e28;--ink:#e8eaed;--ink2:#9aa7b4;--green:#52d88a;--grey:#6f7a86;--line:#26313d}
+@media (prefers-color-scheme:light){:root{--bg:#f2f4f7;--card:#fff;--ink:#1c232b;--ink2:#56626f;--line:#d7dde4}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif;padding:20px 16px 60px}
+h1{font-size:22px;margin:0 0 4px}.sub{color:var(--ink2);max-width:62ch;margin:0 0 16px}
+.bar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:20px}
+button.ctl{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font:inherit;cursor:pointer}
+button.ctl.on{border-color:var(--green);color:var(--green)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:18px}
+.opt{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.opt h2{font-size:16px;margin:0 0 2px}.opt p{margin:0 0 10px;color:var(--ink2);font-size:13.5px}
+.keys{display:flex;gap:8px;margin-top:10px}
+.keys button{flex:1;background:#32373d;color:#fff;border:0;border-radius:6px;padding:9px;font-weight:700;cursor:pointer}
+/* the panel, true width 300 */
+.panel{width:300px;height:230px;margin:0 auto;background:#0f1319;border-radius:6px;overflow:hidden;position:relative;color:#dfe3e8;font-family:"Motiva Sans",system-ui,sans-serif}
+.tb{height:24px;display:flex;align-items:center;justify-content:space-between;padding:0 14px 0 14px;position:relative}
+.sh{font-size:9px;font-weight:800;color:#3b444f}
+.t{display:inline-flex;align-items:center;gap:4px;color:var(--grey);height:20px;position:relative;z-index:1;transition:color var(--d) ease}
+.t i{width:12px;height:12px;border-radius:3px;border:2px solid currentColor;display:block}
+.t b{font-size:11px;font-weight:800;letter-spacing:.16em;max-width:0;overflow:hidden;opacity:0;white-space:nowrap;transition:max-width var(--d) ease,opacity var(--d) ease}
+.t.on{color:var(--green)}.t.on b{max-width:90px;opacity:1}
+/* markers */
+.mark{position:absolute;bottom:0;height:2px;background:var(--green);border-radius:2px;transition:left var(--d) cubic-bezier(.3,.7,.2,1),width var(--d) cubic-bezier(.3,.7,.2,1);display:none}
+.o-slide .mark,.o-both .mark{display:block}
+.glow{position:absolute;top:2px;height:20px;border-radius:10px;background:rgba(82,216,138,.14);transition:left var(--d) cubic-bezier(.3,.7,.2,1),width var(--d) cubic-bezier(.3,.7,.2,1);display:none}
+.o-pill .glow{display:block}
+.body{position:absolute;top:24px;left:0;right:0;bottom:0}
+.pg{position:absolute;inset:0;padding:12px 16px;transition:transform var(--d) cubic-bezier(.3,.7,.2,1),opacity var(--d) ease}
+.pg h3{margin:0 0 8px;font-size:14px;color:#eef1f4}
+.pg .ln{height:9px;border-radius:5px;background:#252d38;margin-bottom:8px}
+.pg .ln.s{width:60%}.pg .ln.m{width:80%}
+.pg .row{height:30px;border-radius:5px;background:#1b222c;margin-bottom:7px}
+.pg.out{opacity:0}
+/* no content motion */
+.o-slide .pg,.o-pill .pg{transition:none}
+.o-slide .pg.out,.o-pill .pg.out{opacity:0}
+.note{font-size:12.5px;color:var(--ink2);margin-top:8px}
+.rm .panel *{--d:0ms!important}
+</style></head><body>
+<h1>Switching tabs with LB and RB</h1>
+<p class="sub">Four ways to make the change easy to follow. Each panel is the real width (300 px). Press the LB and RB buttons under a panel, or the [ and ] keys. Tap <b>Slow motion</b> to see the movement clearly; the real speed is the short one.</p>
+<div class="bar">
+  <button class="ctl" id="slow">Slow motion: off</button>
+  <button class="ctl" id="rm">Reduced motion: off</button>
+</div>
+<div class="grid" id="grid"></div>
+<script>
+const TABS=["bonsAI","Ollama","Settings","Permissions","Developer","About"];
+const OPTS=[
+ {k:"none",c:"o-none",t:"Today: no motion",d:"The next tab just appears. For comparison.",n:"Hard to tell by eye that anything moved."},
+ {k:"slide",c:"o-slide",t:"A. A green line slides along the bar",d:"The tab name opens up and a green line glides to the new tab. The page below changes at once.",n:"Smallest change. Shows where you went, not what changed below."},
+ {k:"pill",c:"o-pill",t:"B. A soft green pill glides, page fades",d:"A faint green pill slides behind the current tab while the old page fades out and the new one fades in.",n:"Gentle. No sideways movement, so nothing can look jumpy."},
+ {k:"both",c:"o-both",t:"C. Line slides, page eases in from the side (recommended)",d:"The green line glides and the page eases in a short way from the direction you are heading: RB brings it from the right, LB from the left.",n:"Direction is clear. It also tells you which way the next press goes."}
+];
+let dur=160, reduced=false;
+const grid=document.getElementById("grid");
+const state=[];
+function icon(){return '<i></i>'}
+OPTS.forEach((o,idx)=>{
+ const el=document.createElement("div");el.className="opt";
+ el.innerHTML=`<h2>${o.t}</h2><p>${o.d}</p>
+ <div class="panel ${o.c}" style="--d:${dur}ms">
+  <div class="tb"><span class="sh">LB</span>${TABS.map((t,i)=>`<span class="t" data-i="${i}">${icon()}<b>${t.toUpperCase()}</b></span>`).join("")}<span class="sh">RB</span><span class="glow"></span><span class="mark"></span></div>
+  <div class="body"></div></div>
+ <div class="keys"><button data-d="-1">LB  ◀</button><button data-d="1">RB  ▶</button></div>
+ <div class="note">${o.n}</div>`;
+ grid.appendChild(el);
+ const s={o,el,cur:0,panel:el.querySelector(".panel"),body:el.querySelector(".body")};
+ state.push(s);
+ el.querySelectorAll("button[data-d]").forEach(b=>b.onclick=()=>go(s,+b.dataset.d));
+ render(s,0,true);
+});
+function page(i){
+ const p=document.createElement("div");p.className="pg";
+ p.innerHTML=`<h3>${TABS[i]}</h3><div class="ln m"></div><div class="ln"></div><div class="ln s"></div><div class="row"></div><div class="row"></div>`;
+ return p;
+}
+function place(s){
+ const tabs=[...s.panel.querySelectorAll(".t")];
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  const cur=tabs[s.cur],pr=s.panel.getBoundingClientRect(),r=cur.getBoundingClientRect();
+  const m=s.panel.querySelector(".mark"),g=s.panel.querySelector(".glow");
+  m.style.left=(r.left-pr.left)+"px";m.style.width=r.width+"px";
+  g.style.left=(r.left-pr.left-6)+"px";g.style.width=(r.width+12)+"px";
+ }));
+}
+function render(s,dir,first){
+ s.panel.querySelectorAll(".t").forEach((t,i)=>t.classList.toggle("on",i===s.cur));
+ const old=s.body.querySelector(".pg"),n=page(s.cur),k=s.o.k;
+ const D=reduced?0:dur;
+ if(first||k==="none"||D===0){s.body.innerHTML="";s.body.appendChild(n);place(s);return}
+ if(k==="slide"){s.body.innerHTML="";s.body.appendChild(n);place(s);return}
+ if(k==="pill"){
+  n.classList.add("out");s.body.appendChild(n);
+  n.style.transition=`opacity ${D}ms ease`;old.style.transition=`opacity ${D}ms ease`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{n.classList.remove("out");old.classList.add("out")}));
+  setTimeout(()=>old.remove(),D+30);place(s);return;
+ }
+ /* both: eases in from heading side */
+ n.style.transform=`translateX(${dir*28}px)`;n.style.opacity=0;s.body.appendChild(n);
+ old.style.transition=`transform ${D}ms cubic-bezier(.3,.7,.2,1),opacity ${D}ms ease`;
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  n.style.transform="";n.style.opacity=1;old.style.transform=`translateX(${-dir*28}px)`;old.style.opacity=0;
+ }));
+ setTimeout(()=>old.remove(),D+30);place(s);
+}
+function go(s,d){s.cur=(s.cur+d+TABS.length)%TABS.length;render(s,d,false)}
+addEventListener("keydown",e=>{if(e.key==="["||e.key==="]")state.forEach(s=>go(s,e.key==="]"?1:-1))});
+function setDur(){state.forEach(s=>{s.panel.style.setProperty("--d",(reduced?0:dur)+"ms");place(s)})}
+document.getElementById("slow").onclick=e=>{dur=dur===160?700:160;e.target.textContent="Slow motion: "+(dur===700?"on":"off");e.target.classList.toggle("on",dur===700);setDur()};
+document.getElementById("rm").onclick=e=>{reduced=!reduced;e.target.textContent="Reduced motion: "+(reduced?"on (everything just appears)":"off");e.target.classList.toggle("on",reduced);setDur()};
+</script></body></html>

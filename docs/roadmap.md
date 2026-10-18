@@ -96,6 +96,9 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
   **Call 2026-10-16:** a helper changes how the letter scramble draws a paragraph gap; the Deck then measures that the 6 to 27 px shrinks are gone.
 - ★ `[reply]` **Maintainer's call: the glossary words are not underlined when the game is named but not running** — **OPEN, found 2026-10-17 (plan 94 block 7, build `e9b50cc8`).**
   With no game running, a question that names Deep Rock Galactic: Survivor got no underlined words (the glossary follows the running game only). Evidence `workshop:test-evidence/plan94-P94-GLOSSARY-NOGAME.json`.
+- ★ `[tabs]` **Switching tabs with LB/RB should glide, not jump** — **OPEN, asked 2026-10-17. Mock-ups must be done and one picked before any building.**
+  Today the next tab simply appears. The maintainer wants a subtle animation that makes the change easy to follow by eye (for example, the active marker sliding to the next tab while the page eases across). It must respect reduced motion and never delay the next press.
+  Mock-ups are owed later, drawn from the real tab bar's icons and sizes. A rough first sketch exists ([sketch](demos/tab-switch-mockups.html): plain squares for icons, never checked by pressing the buttons), and no video of today's tab switching exists yet to compare against.
 - ★ `[ui]` **Maintainer's ask: sweep every tab for buttons that are lopsided, pressed against an edge or too small for their words** — **OPEN, asked 2026-10-17 (plan 95 filming).**
   Seen: "Test connection" and the PC address box sit flush right while the box's left gap is 16 px; on the About tab the three links hug the left with the QR code on the right, and "Bugs & Feature Requests" needs 172 px in a 158 px button. Run the new look check (row QA-LOOK-01) on every tab and both screens, fix each finding.
 - ★ `[ollama]` **Maintainer's call: the PC address should not need the port** — **OPEN, asked 2026-10-17 (plan 95 filming).**

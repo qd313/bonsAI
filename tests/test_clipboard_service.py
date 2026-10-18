@@ -1,4 +1,4 @@
-"""Tests for backend.services.clipboard_service.write_host_clipboard_text.
+"""Tests for backend.media.clipboard_service.write_host_clipboard_text.
 
 No real wl-copy/xclip on this desk (Windows dev host, no Wayland session) — subprocess is mocked
 throughout. See docs/audit/clipboard-spike-2026-08-28.md for what selection-ownership behavior is
@@ -11,7 +11,7 @@ import subprocess
 import unittest
 from unittest.mock import MagicMock, patch
 
-from backend.services.clipboard_service import write_host_clipboard_text
+from backend.media.clipboard_service import write_host_clipboard_text
 
 
 def _fake_logger() -> MagicMock:
@@ -20,7 +20,7 @@ def _fake_logger() -> MagicMock:
 
 class WriteHostClipboardTextTests(unittest.TestCase):
     def test_rejects_empty_text_without_touching_subprocess(self):
-        with patch("backend.services.clipboard_service.subprocess.Popen") as popen:
+        with patch("backend.media.clipboard_service.subprocess.Popen") as popen:
             result = write_host_clipboard_text("   ", _fake_logger())
         self.assertFalse(result.get("success"))
         self.assertEqual(result.get("error"), "Nothing to copy.")
@@ -31,7 +31,7 @@ class WriteHostClipboardTextTests(unittest.TestCase):
         self.assertFalse(result.get("success"))
 
     def test_missing_helper_script_reports_error(self):
-        with patch("backend.services.clipboard_service.os.path.isfile", return_value=False):
+        with patch("backend.media.clipboard_service.os.path.isfile", return_value=False):
             result = write_host_clipboard_text("hello", _fake_logger())
         self.assertFalse(result.get("success"))
         self.assertIn("missing", result.get("error", ""))
@@ -40,8 +40,8 @@ class WriteHostClipboardTextTests(unittest.TestCase):
         fake_proc = MagicMock()
         fake_proc.communicate.return_value = ("", "")
         fake_proc.returncode = 0
-        with patch("backend.services.clipboard_service.os.path.isfile", return_value=True), patch(
-            "backend.services.clipboard_service.subprocess.Popen", return_value=fake_proc
+        with patch("backend.media.clipboard_service.os.path.isfile", return_value=True), patch(
+            "backend.media.clipboard_service.subprocess.Popen", return_value=fake_proc
         ) as popen:
             result = write_host_clipboard_text("copy me", _fake_logger())
 
@@ -57,8 +57,8 @@ class WriteHostClipboardTextTests(unittest.TestCase):
         fake_proc = MagicMock()
         fake_proc.communicate.return_value = ("", "wl-copy and xclip unavailable")
         fake_proc.returncode = 1
-        with patch("backend.services.clipboard_service.os.path.isfile", return_value=True), patch(
-            "backend.services.clipboard_service.subprocess.Popen", return_value=fake_proc
+        with patch("backend.media.clipboard_service.os.path.isfile", return_value=True), patch(
+            "backend.media.clipboard_service.subprocess.Popen", return_value=fake_proc
         ):
             result = write_host_clipboard_text("copy me", _fake_logger())
 
@@ -73,8 +73,8 @@ class WriteHostClipboardTextTests(unittest.TestCase):
             subprocess.TimeoutExpired(cmd="write_host_clipboard.sh", timeout=6),
             ("", ""),
         ]
-        with patch("backend.services.clipboard_service.os.path.isfile", return_value=True), patch(
-            "backend.services.clipboard_service.subprocess.Popen", return_value=fake_proc
+        with patch("backend.media.clipboard_service.os.path.isfile", return_value=True), patch(
+            "backend.media.clipboard_service.subprocess.Popen", return_value=fake_proc
         ):
             result = write_host_clipboard_text("copy me", _fake_logger())
 
@@ -83,8 +83,8 @@ class WriteHostClipboardTextTests(unittest.TestCase):
         fake_proc.kill.assert_called_once()
 
     def test_popen_start_failure_reports_error_without_raising(self):
-        with patch("backend.services.clipboard_service.os.path.isfile", return_value=True), patch(
-            "backend.services.clipboard_service.subprocess.Popen", side_effect=OSError("no bash")
+        with patch("backend.media.clipboard_service.os.path.isfile", return_value=True), patch(
+            "backend.media.clipboard_service.subprocess.Popen", side_effect=OSError("no bash")
         ):
             result = write_host_clipboard_text("copy me", _fake_logger())
 
@@ -96,8 +96,8 @@ class WriteHostClipboardTextTests(unittest.TestCase):
         fake_proc.communicate.return_value = ("", "")
         fake_proc.returncode = 0
         long_text = "x" * 100000
-        with patch("backend.services.clipboard_service.os.path.isfile", return_value=True), patch(
-            "backend.services.clipboard_service.subprocess.Popen", return_value=fake_proc
+        with patch("backend.media.clipboard_service.os.path.isfile", return_value=True), patch(
+            "backend.media.clipboard_service.subprocess.Popen", return_value=fake_proc
         ):
             write_host_clipboard_text(long_text, _fake_logger())
 

@@ -31,7 +31,7 @@ from backend.services.desktop_note_service import (
     append_desktop_debug_note_sync,
 )
 from backend.prompts.reply_language_service import reply_language_snapshot
-from backend.services.screenshot_media import (
+from backend.media.screenshot_media import (
     build_screenshot_preview_data_uri,
     extract_app_id_from_screenshot_path,
     merge_recent_screenshot_paths,
@@ -222,7 +222,7 @@ async def save_ask_feedback(
 
 async def read_host_clipboard_text(self):
     """Read clipboard via host script when the WebView cannot use ``navigator.clipboard``."""
-    from backend.services.clipboard_service import read_host_clipboard_text
+    from backend.media.clipboard_service import read_host_clipboard_text
 
     return read_host_clipboard_text(logger)
 
@@ -230,7 +230,7 @@ async def read_host_clipboard_text(self):
 async def write_host_clipboard_text(self, text: str = ""):
     """Write clipboard via host script (wl-copy/xclip); last-resort fallback behind the
     frontend's own navigator.clipboard.writeText and execCommand('copy') attempts."""
-    from backend.services.clipboard_service import write_host_clipboard_text
+    from backend.media.clipboard_service import write_host_clipboard_text
 
     return write_host_clipboard_text(text, logger)
 

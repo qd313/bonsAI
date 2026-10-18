@@ -281,7 +281,7 @@ class TheRealAskPath(unittest.IsolatedAsyncioTestCase):
             patch.object(Plugin, "load_settings", return_value=settings),
             patch("backend.services.ollama_ask_service.list_installed_ollama_tags", return_value=["qwen3:4b"]),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
-            patch("backend.services.screenshot_media.prepare_attachment_images", return_value=([], [], [])),
+            patch("backend.media.screenshot_media.prepare_attachment_images", return_value=([], [], [])),
             patch("backend.services.ollama_ask_service.post_ollama_chat", side_effect=self._fake_post(reply)),
         ):
             return await self.plugin.ask_ollama(question, "127.0.0.1:11434", "", "", ask_mode=ask_mode)

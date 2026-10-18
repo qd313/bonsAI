@@ -158,7 +158,7 @@ from backend.services.kb_attached_notes import (
     kb_choice_log_line,
     mark_spoiler_protected_notes,
 )
-from backend.services.screenshot_media import lookup_screenshot_vdf_metadata
+from backend.media.screenshot_media import lookup_screenshot_vdf_metadata
 from backend.spoilers.spoiler_risk_service import build_spoiler_risk_signals
 from backend.spoilers.spoiler_title_profiles import (
     questions_the_answer_above_answered,

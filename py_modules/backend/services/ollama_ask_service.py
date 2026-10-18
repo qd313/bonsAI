@@ -171,7 +171,7 @@ async def run_ask_ollama(
     terse = reply_verbosity == "terse"
     apreset = str(settings.get("screenshot_attachment_preset") or "low")
     apreset = apreset if apreset in ("low", "mid", "max") else "low"
-    from backend.services.screenshot_media import prepare_attachment_images
+    from backend.media.screenshot_media import prepare_attachment_images
 
     prepared_images, attachment_warnings, attachment_errors = prepare_attachment_images(
         normalized_attachments,

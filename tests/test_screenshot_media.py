@@ -8,7 +8,7 @@ import tempfile
 import unittest
 from unittest import mock
 
-from backend.services.screenshot_media import (
+from backend.media.screenshot_media import (
     FFMPEG_ATTACHMENT_PRESETS,
     FFMPEG_PASSTHROUGH_BYTES,
     encode_image_with_ffmpeg,
@@ -87,7 +87,7 @@ class ScreenshotMediaTests(unittest.TestCase):
         makedirs_calls: list[str] = []
 
         with mock.patch(
-            "backend.services.screenshot_media._list_steam_userdata_dirs",
+            "backend.media.screenshot_media._list_steam_userdata_dirs",
             return_value=[fake_root],
         ):
             with mock.patch("os.path.isdir", side_effect=isdir):
@@ -97,30 +97,30 @@ class ScreenshotMediaTests(unittest.TestCase):
         self.assertEqual(makedirs_calls, [expected])
 
     def test_merge_recent_screenshot_paths_sorts_by_mtime(self) -> None:
-        from backend.services.screenshot_media import merge_recent_screenshot_paths
+        from backend.media.screenshot_media import merge_recent_screenshot_paths
 
         with mock.patch(
-            "backend.services.screenshot_media.os.path.getmtime",
+            "backend.media.screenshot_media.os.path.getmtime",
             side_effect=lambda p: {"a.png": 3.0, "b.png": 9.0, "c.png": 6.0}[os.path.basename(p)],
         ):
             with mock.patch(
-                "backend.services.screenshot_media.os.path.realpath",
+                "backend.media.screenshot_media.os.path.realpath",
                 side_effect=lambda p: p,
             ):
                 merged = merge_recent_screenshot_paths(["a.png"], ["b.png", "c.png"], limit=3)
         self.assertEqual(merged, ["b.png", "c.png", "a.png"])
 
     def test_merge_recent_screenshot_paths_skips_plugin_mirror_of_steam_shot(self) -> None:
-        from backend.services.screenshot_media import merge_recent_screenshot_paths
+        from backend.media.screenshot_media import merge_recent_screenshot_paths
 
         steam = ["/u/760/remote/1/screenshots/20260627-172051.png"]
         plugin = ["/data/bonsAI/captures/bonsai-game-20260627-172051.png"]
         with mock.patch(
-            "backend.services.screenshot_media.os.path.getmtime",
+            "backend.media.screenshot_media.os.path.getmtime",
             side_effect=lambda p: 100.0 if "172051" in p else 50.0,
         ):
             with mock.patch(
-                "backend.services.screenshot_media.os.path.realpath",
+                "backend.media.screenshot_media.os.path.realpath",
                 side_effect=lambda p: p,
             ):
                 merged = merge_recent_screenshot_paths(steam, plugin, limit=5)
@@ -131,19 +131,19 @@ class ScreenshotMediaTests(unittest.TestCase):
         # cannot work on comes back untouched rather than being handed to the JPEG encoder.
         with mock.patch("os.path.isfile", return_value=False):
             with mock.patch(
-                "backend.services.screenshot_media._compress_capture_to_jpeg",
+                "backend.media.screenshot_media._compress_capture_to_jpeg",
             ) as compress_mock:
                 out = _finalize_steam_capture_file("/tmp/gone.png")
         compress_mock.assert_not_called()
         self.assertEqual(out, "/tmp/gone.png")
 
     def test_finalize_steam_capture_file_compresses_large_rgba(self) -> None:
-        from backend.services.screenshot_media import _finalize_steam_capture_file
+        from backend.media.screenshot_media import _finalize_steam_capture_file
 
         with mock.patch("os.path.getsize", return_value=2_300_000):
             with mock.patch("os.path.isfile", return_value=True):
                 with mock.patch(
-                    "backend.services.screenshot_media._compress_capture_to_jpeg",
+                    "backend.media.screenshot_media._compress_capture_to_jpeg",
                     return_value="/tmp/cap.jpg",
                 ) as compress_mock:
                     out = _finalize_steam_capture_file("/tmp/cap.png")
@@ -152,34 +152,34 @@ class ScreenshotMediaTests(unittest.TestCase):
 
     def test_try_gamescope_atom_screenshot_copies_gamescope_png(self) -> None:
         with mock.patch(
-            "backend.services.screenshot_media.shutil.which",
+            "backend.media.screenshot_media.shutil.which",
             return_value="/usr/bin/xprop",
         ):
             with mock.patch(
-                "backend.services.screenshot_media._discover_x11_sessions",
+                "backend.media.screenshot_media._discover_x11_sessions",
                 return_value=[(":1", "")],
             ):
                 with mock.patch(
-                    "backend.services.screenshot_media.subprocess.run",
+                    "backend.media.screenshot_media.subprocess.run",
                     return_value=mock.Mock(returncode=0, stderr=b""),
                 ):
                     with mock.patch(
-                        "backend.services.screenshot_media.os.path.isfile",
+                        "backend.media.screenshot_media.os.path.isfile",
                         side_effect=lambda path: path in {"/tmp/gamescope.png", "/tmp/out.png"},
                     ):
                         with mock.patch(
-                            "backend.services.screenshot_media.os.path.getsize",
+                            "backend.media.screenshot_media.os.path.getsize",
                             return_value=60_000,
                         ):
                             with mock.patch(
-                                "backend.services.screenshot_media.shutil.copy2"
+                                "backend.media.screenshot_media.shutil.copy2"
                             ) as copy_mock:
                                 with mock.patch(
-                                    "backend.services.screenshot_media.time.time",
+                                    "backend.media.screenshot_media.time.time",
                                     return_value=100.0,
                                 ):
                                     with mock.patch(
-                                        "backend.services.screenshot_media.os.path.getmtime",
+                                        "backend.media.screenshot_media.os.path.getmtime",
                                         return_value=100.0,
                                     ):
                                         out = try_gamescope_atom_screenshot(
@@ -220,11 +220,11 @@ class EncodeImageWithFfmpegTests(unittest.TestCase):
                 return mock.Mock(returncode=0, stderr=b"")
 
             with mock.patch(
-                "backend.services.screenshot_media.shutil.which",
+                "backend.media.screenshot_media.shutil.which",
                 return_value="/usr/bin/ffmpeg",
             ):
                 with mock.patch(
-                    "backend.services.screenshot_media.subprocess.run",
+                    "backend.media.screenshot_media.subprocess.run",
                     side_effect=fake_ffmpeg_run,
                 ):
                     encoded, mime_type, warnings = encode_image_with_ffmpeg(src, "low")
@@ -254,11 +254,11 @@ class EncodeImageWithFfmpegTests(unittest.TestCase):
                 )
 
             with mock.patch(
-                "backend.services.screenshot_media.shutil.which",
+                "backend.media.screenshot_media.shutil.which",
                 return_value="/usr/bin/ffmpeg",
             ):
                 with mock.patch(
-                    "backend.services.screenshot_media.subprocess.run",
+                    "backend.media.screenshot_media.subprocess.run",
                     side_effect=fake_ffmpeg_run,
                 ):
                     encoded, mime_type, warnings = encode_image_with_ffmpeg(src, "low")
@@ -276,11 +276,11 @@ class EncodeImageWithFfmpegTests(unittest.TestCase):
                 raise subprocess.TimeoutExpired(cmd=cmd, timeout=20)
 
             with mock.patch(
-                "backend.services.screenshot_media.shutil.which",
+                "backend.media.screenshot_media.shutil.which",
                 return_value="/usr/bin/ffmpeg",
             ):
                 with mock.patch(
-                    "backend.services.screenshot_media.subprocess.run",
+                    "backend.media.screenshot_media.subprocess.run",
                     side_effect=fake_ffmpeg_run,
                 ):
                     encoded, mime_type, warnings = encode_image_with_ffmpeg(src, "low")
@@ -294,10 +294,10 @@ class EncodeImageWithFfmpegTests(unittest.TestCase):
             src = self._write_big_file(tmp)
 
             with mock.patch(
-                "backend.services.screenshot_media.shutil.which", return_value=None
+                "backend.media.screenshot_media.shutil.which", return_value=None
             ):
                 with mock.patch(
-                    "backend.services.screenshot_media.subprocess.run"
+                    "backend.media.screenshot_media.subprocess.run"
                 ) as run_mock:
                     encoded, mime_type, warnings = encode_image_with_ffmpeg(src, "low")
 
@@ -314,7 +314,7 @@ class EncodeImageWithFfmpegTests(unittest.TestCase):
                 f.write(payload)
 
             with mock.patch(
-                "backend.services.screenshot_media.subprocess.run"
+                "backend.media.screenshot_media.subprocess.run"
             ) as run_mock:
                 encoded, mime_type, warnings = encode_image_with_ffmpeg(src, "low")
 
@@ -337,14 +337,14 @@ class PrepareImageAttachmentShrinkChoiceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             src = self._write_small_file(tmp)
             with mock.patch(
-                "backend.services.screenshot_media._pillow_installed", return_value=True
+                "backend.media.screenshot_media._pillow_installed", return_value=True
             ):
                 with mock.patch(
-                    "backend.services.screenshot_media.encode_image_with_pillow",
+                    "backend.media.screenshot_media.encode_image_with_pillow",
                     return_value=("pillow-bytes", "image/jpeg", []),
                 ) as pillow_mock:
                     with mock.patch(
-                        "backend.services.screenshot_media.encode_image_with_ffmpeg"
+                        "backend.media.screenshot_media.encode_image_with_ffmpeg"
                     ) as ffmpeg_mock:
                         result = prepare_image_attachment({"path": src}, "low")
 
@@ -357,10 +357,10 @@ class PrepareImageAttachmentShrinkChoiceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             src = self._write_small_file(tmp)
             with mock.patch(
-                "backend.services.screenshot_media._pillow_installed", return_value=False
+                "backend.media.screenshot_media._pillow_installed", return_value=False
             ):
                 with mock.patch(
-                    "backend.services.screenshot_media.encode_image_with_ffmpeg",
+                    "backend.media.screenshot_media.encode_image_with_ffmpeg",
                     return_value=("ffmpeg-bytes", "image/jpeg", []),
                 ) as ffmpeg_mock:
                     result = prepare_image_attachment({"path": src}, "low")
@@ -373,10 +373,10 @@ class PrepareImageAttachmentShrinkChoiceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             src = self._write_small_file(tmp)
             with mock.patch(
-                "backend.services.screenshot_media._pillow_installed", return_value=False
+                "backend.media.screenshot_media._pillow_installed", return_value=False
             ):
                 with mock.patch(
-                    "backend.services.screenshot_media.encode_image_with_ffmpeg",
+                    "backend.media.screenshot_media.encode_image_with_ffmpeg",
                     return_value=(
                         None,
                         None,

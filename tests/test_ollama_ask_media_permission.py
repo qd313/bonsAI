@@ -24,7 +24,7 @@ SHOT = [{"path": "/home/deck/shot.png", "name": "shot.png"}]
 class MediaPermissionTests(unittest.IsolatedAsyncioTestCase):
     async def _ask(self, plugin: _FakePlugin):
         with (
-            patch("backend.services.screenshot_media.prepare_attachment_images") as prep,
+            patch("backend.media.screenshot_media.prepare_attachment_images") as prep,
             patch("backend.services.ollama_ask_service.post_ollama_chat") as post,
             patch("backend.services.ollama_ask_service.list_installed_ollama_tags", return_value=["qwen3:4b"]),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),

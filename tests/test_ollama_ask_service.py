@@ -152,7 +152,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
                 return_value=True,
             ),
             patch(
-                "backend.services.screenshot_media.prepare_attachment_images",
+                "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(
@@ -202,7 +202,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
-                "backend.services.screenshot_media.prepare_attachment_images",
+                "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(
@@ -242,7 +242,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
-                "backend.services.screenshot_media.prepare_attachment_images",
+                "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(
@@ -291,7 +291,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
-                "backend.services.screenshot_media.prepare_attachment_images",
+                "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([{"image_b64": "abc"}], [], ["one image too large"]),
             ),
             patch(
@@ -340,7 +340,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
-                "backend.services.screenshot_media.prepare_attachment_images",
+                "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(
@@ -385,7 +385,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
-                "backend.services.screenshot_media.prepare_attachment_images",
+                "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(
@@ -430,7 +430,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
-                "backend.services.screenshot_media.prepare_attachment_images",
+                "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(
@@ -478,7 +478,7 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
-                "backend.services.screenshot_media.prepare_attachment_images",
+                "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(
@@ -510,7 +510,7 @@ class SpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
         )
         stack.enter_context(
             patch(
-                "backend.services.screenshot_media.prepare_attachment_images",
+                "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             )
         )
@@ -718,7 +718,7 @@ class ThinkingSpoilerCoverStreamingTests(unittest.IsolatedAsyncioTestCase):
         )
         stack.enter_context(
             patch(
-                "backend.services.screenshot_media.prepare_attachment_images",
+                "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             )
         )
@@ -837,7 +837,7 @@ class ChatMemoryReachesTheModelTests(unittest.IsolatedAsyncioTestCase):
             patch("backend.services.ollama_ask_service.list_installed_ollama_tags",
                   return_value=["qwen3:4b"]),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
-            patch("backend.services.screenshot_media.prepare_attachment_images",
+            patch("backend.media.screenshot_media.prepare_attachment_images",
                   return_value=([], [], [])),
             patch("backend.services.ollama_ask_service.post_ollama_chat", side_effect=_fake_post),
         ):
@@ -972,7 +972,7 @@ class ChatSummaryWiringTests(unittest.IsolatedAsyncioTestCase):
             patch("backend.services.ollama_ask_service.list_installed_ollama_tags",
                   return_value=["qwen3:4b"]),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
-            patch("backend.services.screenshot_media.prepare_attachment_images",
+            patch("backend.media.screenshot_media.prepare_attachment_images",
                   return_value=([], [], [])),
             patch("backend.services.ollama_ask_service.post_ollama_chat", side_effect=_fake_post),
             patch("backend.services.chat_summary_service._stream_ollama_chat_once",
@@ -1077,7 +1077,7 @@ class QuestionForDisplayNeverLeaksTheModelBoundTextTests(unittest.IsolatedAsynci
             ),
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch(
-                "backend.services.screenshot_media.prepare_attachment_images",
+                "backend.media.screenshot_media.prepare_attachment_images",
                 return_value=([], [], []),
             ),
             patch(

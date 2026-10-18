@@ -29,7 +29,7 @@ list/open/create/delete/rename buttons are in
 remove/chip-candidate/tap-to-define-words buttons are in `backend/services/rag_corpus_rpc.py`;
 the voice-input buttons are in `backend/voice/voice_rpc.py`;
 screenshots, the Desktop debug/chat/app logs, clipboard and the small
-transparency/feedback/language reads are in `backend/services/media_desktop_rpc.py`;
+transparency/feedback/language reads are in `backend/media/media_desktop_rpc.py`;
 installing Ollama on the Deck and pulling/deleting/pricing its models are in
 `backend/ollama/ollama_local_setup_rpc.py`.
 
@@ -165,14 +165,14 @@ from backend.services.desktop_note_service import (
     append_app_log_sync,
     append_desktop_ask_transparency_sync,
 )
-from backend.services import media_desktop_rpc
+from backend.media import media_desktop_rpc
 from backend.services.input_sanitizer_service import (
     apply_input_sanitizer_lane,
     classify_sanitizer_command,
 )
 from backend.services.ask_local_commands import detect_local_ask_commands
 from backend.services import ask_local_command_handlers
-from backend.services.screenshot_media import (
+from backend.media.screenshot_media import (
     MAX_ATTACHMENT_FILE_BYTES,
     MAX_ATTACHMENT_INLINE_BYTES,
     SUPPORTED_IMAGE_EXTENSIONS,

@@ -260,8 +260,8 @@ def discover_mdns_ollama_hosts(timeout_seconds: float = 8.0) -> dict[str, Any]:
             "hosts": [],
             "error": "",
             "hint": (
-                "No _ollama._tcp services found. Advertise Ollama with Avahi or Bonjour "
-                "(see docs/troubleshooting.md). Manual PC address still works."
+                "No Ollama was found on your network. Make sure the PC is on and Ollama is running 
+                "there, then try again. Typing the PC's address still works."
             ),
         }
 

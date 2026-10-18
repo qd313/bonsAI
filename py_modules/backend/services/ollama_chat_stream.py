@@ -51,7 +51,7 @@ from backend.ollama_reply_limits import (
     read_error_body,
 )
 
-from backend.services.bonsai_stream_tags import extract_bonsai_status
+from backend.answer.bonsai_stream_tags import extract_bonsai_status
 from backend.services.ollama_stream_failures import (
     cancelled_reply,
     http_error_reply,
@@ -59,7 +59,7 @@ from backend.services.ollama_stream_failures import (
     timed_out_reply,
     url_error_reply,
 )
-from backend.services.soft_continue_repeat_trim import join_continued_piece
+from backend.answer.soft_continue_repeat_trim import join_continued_piece
 from backend.strategy.strategy_guide_parse import hide_incomplete_strategy_branch_fence
 from backend.services.token_accounting_service import known_window_tokens, resolve_window_tokens
 from backend.services.ollama_window_fit import (

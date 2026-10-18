@@ -26,7 +26,7 @@ from __future__ import annotations
 
 import re
 
-from backend.services.response_verify import (
+from backend.answer.response_verify import (
     _fence_chunk_is_closed,
     _fence_opener_is_spoiler,
     _split_fenced_segments,

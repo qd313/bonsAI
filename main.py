@@ -182,7 +182,7 @@ from backend.services.screenshot_media import (
 from backend.services.game_ai_request import run_game_ai_request
 from backend.services.network_service import get_deck_ip_async
 from backend.services.ollama_ask_service import run_ask_ollama
-from backend.services.transparency_service import (
+from backend.answer.transparency_service import (
     build_immediate_command_snapshot,
     build_sanitizer_block_snapshot,
     transparency_snapshot_for_chat_slot,
@@ -445,8 +445,8 @@ class Plugin:
         Not just "non-empty": Stop can land on the first frame, when all that has arrived is markup
         debris (``<`` from a status tag, ``` from a fence) — see ``partial_stream_has_content``.
         """
-        from backend.services.bonsai_stream_tags import partial_stream_has_content
-        from backend.services.soft_continue_spoiler_join import end_cut_answer_cleanly
+        from backend.answer.bonsai_stream_tags import partial_stream_has_content
+        from backend.answer.soft_continue_spoiler_join import end_cut_answer_cleanly
 
         with self._partial_response_lock:
             snap = self._partial_stream_snapshot
@@ -534,7 +534,7 @@ class Plugin:
 
     def _publish_thinking_phase(self, request_id: int, summary: str) -> None:
         """Publish a deterministic prep-phase label without partial reply text."""
-        from backend.services.bonsai_stream_tags import sanitize_thinking_summary
+        from backend.answer.bonsai_stream_tags import sanitize_thinking_summary
 
         text = sanitize_thinking_summary(summary or "")
         if not text:
@@ -564,7 +564,7 @@ class Plugin:
             build_roleplay_system_suffix_meta,
             thinking_status_tone_for_preset,
         )
-        from backend.services.bonsai_stream_tags import compose_thinking_blurb
+        from backend.answer.bonsai_stream_tags import compose_thinking_blurb
 
         cfg = settings if isinstance(settings, dict) else {}
         meta = build_roleplay_system_suffix_meta(cfg, ask_mode)
@@ -623,7 +623,7 @@ class Plugin:
         character_enabled: bool = False,
         character_preset_id: Optional[str] = None,
     ) -> None:
-        from backend.services.bonsai_stream_tags import format_thinking_phase
+        from backend.answer.bonsai_stream_tags import format_thinking_phase
 
         self._publish_thinking_phase(
             request_id,
@@ -659,7 +659,7 @@ class Plugin:
         never escalated), the model's own live status line (escalated once it has gone stale),
         and a deterministic fallback once no live line has arrived yet at all.
         """
-        from backend.services.bonsai_stream_tags import (
+        from backend.answer.bonsai_stream_tags import (
             deterministic_thinking_phase_fallback,
             escalate_static_thinking_line,
             summing_up_line,

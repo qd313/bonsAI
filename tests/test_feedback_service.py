@@ -2,7 +2,7 @@ import os
 import tempfile
 import unittest
 
-from backend.services.feedback_service import append_ask_feedback, feedback_log_path
+from backend.answer.feedback_service import append_ask_feedback, feedback_log_path
 
 
 class FeedbackServiceTests(unittest.TestCase):

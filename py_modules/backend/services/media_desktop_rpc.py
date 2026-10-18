@@ -183,7 +183,7 @@ async def append_app_log(self, payload: Any = None):
 
 async def get_input_transparency(self):
     """Return the last Ask transparency snapshot (full prompts; fetch after terminal completion)."""
-    from backend.services.transparency_service import ensure_context_chips_on_snapshot
+    from backend.answer.transparency_service import ensure_context_chips_on_snapshot
 
     snap = self._last_input_transparency
     if not isinstance(snap, dict) or not snap:
@@ -207,7 +207,7 @@ async def save_ask_feedback(
     chip_id: str = "",
 ):
     """Persist thumbs up/down locally (JSONL under plugin settings); no network."""
-    from backend.services.feedback_service import append_ask_feedback
+    from backend.answer.feedback_service import append_ask_feedback
 
     rid = int(request_id) if request_id else None
     return append_ask_feedback(

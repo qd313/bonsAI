@@ -78,7 +78,7 @@ from backend.services.ollama_ask_extras import (
     with_pyro_carousel_tip,
 )
 from backend.services.ollama_service import post_ollama_chat
-from backend.services.response_verify import build_live_spoiler_cover
+from backend.answer.response_verify import build_live_spoiler_cover
 from backend.services.ollama_keep_alive_rule import effective_keep_alive
 from backend.services.settings_service import sanitize_reply_verbosity
 from backend.prompts.reply_language_service import resolve_effective_reply_language

@@ -24,7 +24,7 @@ from fake_ollama_stream import ndjson_response
 from backend.services import chat_slot_service
 from backend.services.ollama_ask_budgets import reset_thinking_support_cache
 from backend.services.ollama_service import post_ollama_chat
-from backend.services.response_verify import cover_named_spoilers
+from backend.answer.response_verify import cover_named_spoilers
 
 F = "`" * 3
 OPEN = f"{F}bonsai-spoiler"

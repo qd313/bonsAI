@@ -10,7 +10,7 @@ from backend.spoilers.spoiler_risk_service import (
     spoiler_risk_chip_label,
     spoiler_risk_signals_from_snapshot,
 )
-from backend.services.transparency_service import build_context_chips_manifest
+from backend.answer.transparency_service import build_context_chips_manifest
 
 
 class SpoilerRiskServiceTests(unittest.TestCase):

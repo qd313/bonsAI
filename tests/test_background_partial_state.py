@@ -193,7 +193,7 @@ class BackgroundPartialStateTests(unittest.TestCase):
         here would mean the opener returned by start_background_game_ai differs from the one any
         later "starting" publish would produce for the same Ask.
         """
-        from backend.services.bonsai_stream_tags import format_thinking_phase
+        from backend.answer.bonsai_stream_tags import format_thinking_phase
 
         for rid in (1, 2, 7, 40):
             blurb, _meta = self.plugin._compose_opening_thinking_blurb(

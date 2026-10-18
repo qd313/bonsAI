@@ -20,8 +20,10 @@ from backend.services import (
     ollama_health_probe,
     ollama_preload_service,
     ollama_stop_service,
-    response_verify,
     token_accounting_service,
+)
+from backend.answer import (
+    response_verify,
 )
 from backend.services.ollama_service import post_ollama_chat
 from fake_ollama_stream import ndjson_response
@@ -220,7 +222,7 @@ class EveryBareReadIsCappedTests(unittest.TestCase):
 
     def test_second_pass_check_passes_quietly_on_an_endless_reply(self) -> None:
         body = _EndlessBody()
-        with patch("backend.services.response_verify.urllib.request.urlopen", return_value=body):
+        with patch("backend.answer.response_verify.urllib.request.urlopen", return_value=body):
             out = response_verify.run_verifier_second_pass(
                 chat_url="http://x:1/api/chat", model_name="m", response_text="an answer", has_game=True
             )

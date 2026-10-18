@@ -108,8 +108,8 @@ from urllib.parse import urlparse
 
 from backend.ollama_urls import normalize_ollama_base
 
-from backend.services.bonsai_stream_tags import extract_bonsai_status
-from backend.services.soft_continue_spoiler_join import end_cut_answer_cleanly
+from backend.answer.bonsai_stream_tags import extract_bonsai_status
+from backend.answer.soft_continue_spoiler_join import end_cut_answer_cleanly
 from backend.services.ollama_chat_stream import (
     OLLAMA_CHAT_READ_CHUNK,
     OLLAMA_DELTA_PARSE_INTERVAL_S,
@@ -164,7 +164,7 @@ from backend.strategy.strategy_guide_parse import (
     hide_incomplete_strategy_branch_fence,
     hide_incomplete_strategy_checklist_fence,
 )
-from backend.services.terse_bare_menu import hide_bare_branch_menu, split_trailing_bare_branch_menu
+from backend.answer.terse_bare_menu import hide_bare_branch_menu, split_trailing_bare_branch_menu
 from backend.services.token_accounting_service import (
     choose_window_tokens,
     estimate_tokens_from_chars,

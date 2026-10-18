@@ -98,7 +98,7 @@ from backend.characters.ai_character_service import (
     build_roleplay_system_suffix_meta,
     spy_lying_mode_active,
 )
-from backend.services.destructive_advice_guard import (
+from backend.answer.destructive_advice_guard import (
     append_destructive_advice_notice,
     check_destructive_advice,
 )
@@ -122,7 +122,7 @@ from backend.services.ollama_service import (
     user_asks_ollama_bonsai_host_or_latency,
 )
 from backend.services.proton_troubleshooting_logs import collect_proton_troubleshooting_logs
-from backend.services.response_verify import (
+from backend.answer.response_verify import (
     cover_named_spoilers,
     cover_thinking_text,
     drop_branch_menu_copying_the_worked_example,
@@ -164,7 +164,7 @@ from backend.spoilers.spoiler_title_profiles import (
     resolve_turn_title_spoiler_profile,
     set_aside_running_game_for_named_story_game,
 )
-from backend.services.transparency_service import (
+from backend.answer.transparency_service import (
     build_capability_denied_snapshot,
     build_error_route_snapshot,
     build_knowledge_base_transparency,

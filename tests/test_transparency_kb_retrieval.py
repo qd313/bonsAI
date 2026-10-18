@@ -1,6 +1,6 @@
 import unittest
 
-from backend.services.transparency_service import (
+from backend.answer.transparency_service import (
     build_context_chips_manifest,
     build_knowledge_base_transparency,
     build_ollama_route_snapshot,
@@ -71,7 +71,7 @@ class TransparencyKbRetrievalTests(unittest.TestCase):
         self.assertIn("Keyword + meaning", kb_chip["body"]["bullets"][0])
 
     def test_ollama_route_snapshot_propagates_kb_domain_for_compat_bullet(self):
-        from backend.services.transparency_service import build_ollama_route_snapshot
+        from backend.answer.transparency_service import build_ollama_route_snapshot
 
         snapshot = build_ollama_route_snapshot(
             raw_question="proton crash",
@@ -128,7 +128,7 @@ class TransparencyKbCoverageTests(unittest.TestCase):
         bullet -- the app_unresolved sentence says a game could not be matched, which is false
         when no game was running to match in the first place.
         """
-        from backend.services.transparency_service import kb_coverage_detail_bullets
+        from backend.answer.transparency_service import kb_coverage_detail_bullets
 
         no_app_bullets = kb_coverage_detail_bullets(status="no_app")
         unresolved_bullets = kb_coverage_detail_bullets(status="app_unresolved")
@@ -184,7 +184,7 @@ class TransparencySnapshotForChatSlotTests(unittest.TestCase):
     """
 
     def test_keeps_only_the_session_strip_fields(self):
-        from backend.services.transparency_service import transparency_snapshot_for_chat_slot
+        from backend.answer.transparency_service import transparency_snapshot_for_chat_slot
 
         full_snapshot = build_ollama_route_snapshot(
             raw_question="how do I beat this boss",
@@ -224,7 +224,7 @@ class TransparencySnapshotForChatSlotTests(unittest.TestCase):
         RPC-read time) -- the chat-slot trim must run that step itself so a persisted turn is not
         silently chip-less.
         """
-        from backend.services.transparency_service import (
+        from backend.answer.transparency_service import (
             build_sanitizer_block_snapshot,
             transparency_snapshot_for_chat_slot,
         )

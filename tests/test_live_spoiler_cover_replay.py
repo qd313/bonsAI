@@ -12,8 +12,8 @@ other ways a model opens a cover.
 import re
 import unittest
 
-from backend.services.bonsai_stream_tags import extract_bonsai_status
-from backend.services.response_verify import build_live_spoiler_cover
+from backend.answer.bonsai_stream_tags import extract_bonsai_status
+from backend.answer.response_verify import build_live_spoiler_cover
 from backend.strategy.strategy_guide_parse import hide_incomplete_strategy_branch_fence
 
 _NAMES = ("Soul Master", "Soul Tyrant")

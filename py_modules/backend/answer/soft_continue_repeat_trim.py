@@ -45,12 +45,12 @@ import re
 from functools import lru_cache
 from typing import NamedTuple
 
-from backend.services.response_verify import (
+from backend.answer.response_verify import (
     _fence_chunk_is_closed,
     _fence_opener_is_spoiler,
     _split_fenced_segments,
 )
-from backend.services.soft_continue_spoiler_join import drop_repeated_spoiler_opener
+from backend.answer.soft_continue_spoiler_join import drop_repeated_spoiler_opener
 from backend.spoilers.strategy_spoiler_policy import move_midline_fence_openers_to_line_start
 
 MIN_REPEAT_CHARS = 40

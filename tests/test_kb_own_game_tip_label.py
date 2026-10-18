@@ -24,7 +24,7 @@ from backend.services.knowledge_base_service import (  # noqa: E402
     close_connection,
     retrieve_knowledge_context,
 )
-from backend.services.transparency_service import (  # noqa: E402
+from backend.answer.transparency_service import (  # noqa: E402
     build_context_chips_manifest,
     build_knowledge_base_transparency,
 )

@@ -18,7 +18,7 @@ import re
 import unittest
 from pathlib import Path
 
-from backend.services.transparency_service import (
+from backend.answer.transparency_service import (
     build_attribution_entries,
     build_context_chips_manifest,
     build_knowledge_base_transparency,

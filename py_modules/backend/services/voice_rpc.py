@@ -28,7 +28,7 @@ from backend.core.async_background_job import (
     new_threading_cancel_event,
 )
 from backend.core.capabilities import capability_enabled, downloads_off_refusal
-from backend.services.transparency_service import build_voice_transcribe_snapshot
+from backend.answer.transparency_service import build_voice_transcribe_snapshot
 from backend.services.voice_model_download_service import (
     VALID_VOICE_STT_MODELS,
     install_in_progress_refusal,

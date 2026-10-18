@@ -19,7 +19,7 @@ install_pwd_stub()
 if "decky" not in sys.modules:  # pragma: no cover - the stub installer above normally owns this
     sys.modules["decky"] = types.ModuleType("decky")
 
-from backend.services.terse_bare_menu import (  # noqa: E402
+from backend.answer.terse_bare_menu import (  # noqa: E402
     hide_bare_branch_menu,
     split_trailing_bare_branch_menu,
 )

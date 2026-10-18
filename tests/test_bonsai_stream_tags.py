@@ -3,7 +3,7 @@
 import re
 import unittest
 
-from backend.services.bonsai_stream_tags import (
+from backend.answer.bonsai_stream_tags import (
     _STATIC_LINE_FIRST_WINDOW_SECONDS,
     _STATIC_LINE_STEP_WINDOW_SECONDS,
     SUMMING_UP_LINE,

@@ -4,7 +4,7 @@ shows, what it says, and whether it survives being trimmed down for a saved chat
 
 import unittest
 
-from backend.services.transparency_service import (
+from backend.answer.transparency_service import (
     build_context_chips_manifest,
     build_ollama_route_snapshot,
     reasoning_chip_label,

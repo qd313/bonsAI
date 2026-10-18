@@ -15,7 +15,7 @@ import unittest
 from pathlib import Path
 from urllib.parse import urlparse
 
-from backend.services.transparency_service import source_display_name
+from backend.answer.transparency_service import source_display_name
 from build_rag_db_loader import load_build_rag_db
 from corpus_build_support import build_corpus_or_skip
 

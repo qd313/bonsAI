@@ -27,7 +27,7 @@ install_fcntl_and_decky_stubs()
 import main  # noqa: E402  (import side effects set up sys.path like the loader does)
 from main import Plugin  # noqa: E402
 
-from backend.services.feedback_service import feedback_log_path  # noqa: E402
+from backend.answer.feedback_service import feedback_log_path  # noqa: E402
 
 
 class SaveAskFeedbackRpcTests(unittest.IsolatedAsyncioTestCase):

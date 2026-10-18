@@ -2,7 +2,7 @@
 
 import unittest
 
-from backend.services.response_verify import (
+from backend.answer.response_verify import (
     _parse_yes_no_verdict,
     cover_named_spoilers,
     cover_thinking_text,

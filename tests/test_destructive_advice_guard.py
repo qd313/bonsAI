@@ -2,7 +2,7 @@
 
 import unittest
 
-from backend.services.destructive_advice_guard import (
+from backend.answer.destructive_advice_guard import (
     append_destructive_advice_notice,
     check_destructive_advice,
 )

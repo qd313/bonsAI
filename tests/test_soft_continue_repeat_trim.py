@@ -24,7 +24,7 @@ from unittest.mock import patch
 import test_soft_continue_spoiler_join as hidden_block_join_tests
 
 from backend.services.ollama_ask_budgets import reset_thinking_support_cache
-from backend.services.soft_continue_repeat_trim import (
+from backend.answer.soft_continue_repeat_trim import (
     MIN_REPEAT_CHARS,
     join_continued_piece,
     trim_repeated_start,

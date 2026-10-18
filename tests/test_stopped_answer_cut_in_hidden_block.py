@@ -21,8 +21,8 @@ install_fcntl_and_decky_stubs()
 
 from backend.services import chat_slot_service, chat_turn_recorder  # noqa: E402
 from backend.services.background_request_state import new_background_state  # noqa: E402
-from backend.services.response_verify import cover_named_spoilers  # noqa: E402
-from backend.services.soft_continue_spoiler_join import end_cut_answer_cleanly  # noqa: E402
+from backend.answer.response_verify import cover_named_spoilers  # noqa: E402
+from backend.answer.soft_continue_spoiler_join import end_cut_answer_cleanly  # noqa: E402
 from main import Plugin  # noqa: E402
 
 F = "`" * 3

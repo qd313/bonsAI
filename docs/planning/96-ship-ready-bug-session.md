@@ -5,7 +5,7 @@ separate plan, along with other bugs that should be sorted out in order for us t
 another chat." Everything here comes from [plan 94](94-fresh-install-walk-and-ship-readiness.md) (its § 7a, § 8 and § 9) and
 the roadmap as filed that night.
 
-**Status:** RUNNING since 2026-10-18 02:30 UTC (see § 8). The maintainer's calls are in § 2. The first-run popup waits for the maintainer's tweaks
+**Status:** RAN 2026-10-18 02:30 to 06:30 UTC; the code and the Deck part are done, NOT PUSHED. Owed: the push, the eight hand checks, F8's second try, F9/F10/F13 on release day's clean install, the calls in § 9e. The maintainer's calls are in § 2. The first-run popup waits for the maintainer's tweaks
 on the mock-up page (§ 4, N1). The hand checks (§ 5) can run any time the Deck is free, before or during this session.
 
 **Who runs it:** an Opus xhigh chat orchestrates and lands (AGENTS.md, "Which model does which work"); Sonnet 5.5 high
@@ -226,6 +226,16 @@ at landing; `verify.py --full` gated on its exit code before the final push.
 - **05:40 UTC:** the second round landed clean (`68f9c1a9` to `331d4b56`), build `f7413dbc` deployed (the popup and the second
   round together); block E started with a fresh driver: the popup's first run (the settings file removed, not Clear all data) and
   the re-checks of F1, F4, F6, F11 and the Main look check.
+- **06:20 UTC, Deck block E done** (build `f7413dbc`, handover [assets/96-handover-E.md](assets/96-handover-E.md)). **PASS:** the
+  first-run popup (the Beta Notice, the popup with the ring on Not now, the walks, a switch saved at once, the download box over
+  the popup with the ring back on the action button, Not now, nothing returns), F1 (the row and the jump), F4 (both halves: steps
+  reachable, ticked, kept across a reopen), F11 (Down holds, Dismiss hands the ring on), F14 (greyed in a new chat, the toast), F6's
+  new shape (the hint line, A again sends "Explain: kiting (Deep Rock Galactic: Survivor)", B closes with the ring on the word), the
+  Ask pill. **Two findings:** the "Open the Ollama tab" button drew light (fixed, `bba825e5`, deployed 06:25; one Main look check
+  owed), and the ring stall hit again before the glossary test: a game up about five minutes, the help chip showing, Down from the
+  question box dead with the page out of focus, cleared only by a plugin reload (the tenth sighting; a running game right after
+  launch is now the strongest suspect, for the R1 entry). After A sends the Explain further question the ring is on nothing (a new
+  ★ entry). The full check passed on the tip (exit code 0). **Not pushed.**
 
 ## 9. Report (2026-10-18, written by the session that ran it)
 
@@ -335,6 +345,9 @@ words really spill.
 - **Expert mode measured shorter than Speed** on the Deck (median 511 against 551 characters) with the same prompt in both modes;
   the depth rule landed and owes its second try.
 - **Asking about an attached picture answered "incomplete stream" twice** with the Deck's AI: a new finding for the roadmap.
+- **The ring stall showed itself once more, in block E,** with the clearest state yet: a game up about five minutes, the help chip
+  showing, Down from the question box dead, the page out of focus; only a plugin reload cleared it. Nine tries without a game had
+  not reproduced it an hour earlier, so a running game right after launch is now the strongest suspect for R1.
 
 ### 9e. Your calls
 

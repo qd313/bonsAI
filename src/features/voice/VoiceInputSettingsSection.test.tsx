@@ -7,6 +7,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { VoiceInputSettingsSection } from "./VoiceInputSettingsSection";
+import { resetVoiceInstallMarkerForTests } from "./voiceInstallBusyStore";
 import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
 
 function renderSection(microphoneAccessEnabled = true) {
@@ -22,6 +23,7 @@ function renderSection(microphoneAccessEnabled = true) {
 describe("VoiceInputSettingsSection engine action", () => {
   beforeEach(() => {
     resetFakeDeckyRpc();
+  resetVoiceInstallMarkerForTests();
   });
 
   it("on screen, base.en reads as the recommended model and tiny.en as the lighter one, in that order", () => {

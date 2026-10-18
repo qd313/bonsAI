@@ -43,6 +43,12 @@ import { confirmDownload } from "../downloads/downloadNotice";
 import { voiceEngineNotices } from "../downloads/downloadSites";
 import { FOCUS_RING_BTN_CLASS, FOCUS_RING_INSET_CLASS, FOCUS_RING_WRAP_CLASS } from "../../styles/settingsGlassButton";
 import { textPx } from "../../styles/textPx";
+import {
+  markVoiceInstallStarted,
+  takeVoiceInstallMarker,
+  voiceInstallInStartGrace,
+  voiceInstallMarkerActive,
+} from "./voiceInstallBusyStore";
 
 type VoiceEngineStatus = {
   model_id?: string;
@@ -79,16 +85,22 @@ type Props = {
  * Out: the panel section — a permission prompt if needed, the model list,
  * a status line, and the install button.
  *
- * What can go wrong: a failed status or install poll just stops the
+ * What can go wrong: a failed install poll reads the status one last time and stops the
  * install spinner rather than throwing, since a flaky network hiccup
  * should not be read as "the install failed."
  *
  * 1. refreshStatus() asks the backend for the engine's current status
  *    (binary/model readiness) on mount and whenever the chosen model
- *    changes.
+ *    changes. If that status says an install is running, the section
+ *    takes it as busy and starts the poll below, so a copy of the
+ *    section built after the download box closed still follows the install.
  * 2. While installBusy is true, a repeating timer polls install progress
  *    every 1.2 seconds — polled rather than pushed from the backend — and
  *    stops itself once the backend reports the install is done or failed.
+ *    On done it shows one "Voice engine ready" toast. The busy flag starts
+ *    from a small module-level marker (voiceInstallBusyStore.ts), because
+ *    Steam's download box closing rebuilds the tab and throws away
+ *    anything kept in component state.
  * 3. onDownloadModel() first checks the microphone permission — if it is
  *    off, it either jumps to the Permissions tab or shows a toast, and
  *    never starts an install without it. Otherwise it starts the install
@@ -107,9 +119,10 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
   onMoveDownFromLast,
 }) => {
   const [engineStatus, setEngineStatus] = useState<VoiceEngineStatus | null>(null);
-  const [installBusy, setInstallBusy] = useState(false);
+  const [installBusy, setInstallBusy] = useState(() => voiceInstallMarkerActive());
 
-  const refreshStatus = useCallback(async () => {
+  // resume: false for the read that ends a poll, so a running install seen there does not restart it.
+  const refreshStatus = useCallback(async (resume = true) => {
     try {
       const st = await callDeckyWithTimeout<[], VoiceEngineStatus>(
         "get_voice_engine_status",
@@ -117,6 +130,10 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
         DECKY_RPC_TIMEOUT_MS,
       );
       setEngineStatus(st);
+      if (resume && st?.install?.phase === "running" && !st.install.done) {
+        markVoiceInstallStarted();
+        setInstallBusy(true);
+      }
       return st;
     } catch {
       setEngineStatus(null);
@@ -130,7 +147,10 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
 
   useEffect(() => {
     if (!installBusy) return;
+    // Set when this poll has ended, so a tick that fires before React clears the timer does nothing.
+    let ended = false;
     const id = window.setInterval(() => {
+      if (ended) return;
       void callDeckyWithTimeout<[], VoiceEngineStatus["install"]>(
         "get_voice_install_status",
         [],
@@ -138,14 +158,34 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
       )
         .then((install) => {
           setEngineStatus((prev) => (prev ? { ...prev, install: install ?? undefined } : prev));
-          if (install?.done || install?.phase === "failed" || install?.phase === "done") {
+          // A just-started install may still read idle for a moment; that is not the end of it.
+          const notYetSeen = install?.phase === "idle" && voiceInstallInStartGrace();
+          if (!notYetSeen && (install?.done || install?.phase === "failed" || install?.phase === "done")) {
+            ended = true;
+            const wasOurs = takeVoiceInstallMarker();
             setInstallBusy(false);
-            void refreshStatus();
+            void refreshStatus(false);
+            if (wasOurs && install?.phase === "done") {
+              toaster.toast({
+                title: "Voice engine ready",
+                body: "Voice input is set up and ready to use.",
+                duration: 4000,
+              });
+            }
           }
         })
-        .catch(() => setInstallBusy(false));
+        .catch(() => {
+          if (ended) return;
+          ended = true;
+          takeVoiceInstallMarker();
+          setInstallBusy(false);
+          void refreshStatus(false);
+        });
     }, 1200);
-    return () => window.clearInterval(id);
+    return () => {
+      ended = true;
+      window.clearInterval(id);
+    };
   }, [installBusy, refreshStatus]);
 
   const onDownloadModel = async () => {
@@ -170,6 +210,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
     const notices = voiceEngineNotices(missing);
     const toFetch = notices.length ? notices : voiceEngineNotices({ ...missing, engineReady: false, modelReady: false });
     if (!(await confirmDownload(toFetch))) return;
+    markVoiceInstallStarted();
     setInstallBusy(true);
     try {
       const out = await callDeckyWithTimeout<[string], { accepted?: boolean; reason?: string }>(
@@ -178,6 +219,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
         DECKY_RPC_TIMEOUT_MS,
       );
       if (!out?.accepted) {
+        takeVoiceInstallMarker();
         setInstallBusy(false);
         toaster.toast({
           title: "Install not started",
@@ -192,6 +234,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
         duration: 3000,
       });
     } catch (e: unknown) {
+      takeVoiceInstallMarker();
       setInstallBusy(false);
       toaster.toast({
         title: "Download failed",

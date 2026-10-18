@@ -17,6 +17,7 @@ vi.mock("../downloads/downloadNotice", () => ({
 }));
 
 import { VoiceInputSettingsSection } from "./VoiceInputSettingsSection";
+import { resetVoiceInstallMarkerForTests } from "./voiceInstallBusyStore";
 import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
 
 function renderWith(binaryReady: boolean, modelReady: boolean) {
@@ -35,6 +36,7 @@ const settle = () => new Promise((r) => setTimeout(r, 0));
 
 beforeEach(() => {
   resetFakeDeckyRpc();
+  resetVoiceInstallMarkerForTests();
   hoisted.answer = false;
   hoisted.notices = [];
 });

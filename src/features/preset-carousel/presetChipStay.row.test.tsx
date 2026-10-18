@@ -13,14 +13,15 @@
  * Used for: presetChipStay.ts, the fade / plain / decode rows (MainTabPresetAnimatedChips.tsx,
  *           presetDecodeSlots.tsx), PresetChipScrollText in presetChipButton.tsx.
  * Does not: Prove it on the Deck. The check this owes: with a game running, over 200 s, every long
- *           chip leaves 1.2 to 1.9 s after its words stop; a chip under the ring never changes; a
+ *           chip leaves 0.7 to 1.4 s after its words reach their end the second time (plan 96 F22: each long chip
+ *           shows its words twice); a chip under the ring never changes; a
  *           short chip's words are centred within 2 px.
  */
 import { act, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MainTabPresetAnimatedChips } from "./MainTabPresetAnimatedChips";
 import { setFrozenTestChips, type PresetPrompt } from "./presets";
-import { PRESET_CHIP_END_PAUSE_MS, presetHoldMs } from "./presetRowLayout";
+import { PRESET_CHIP_READ_PAUSE_MS, presetHoldMs, presetScrollPlan } from "./presetRowLayout";
 import { presetPace } from "./presetPace";
 import { slotStaggerMs } from "./presetChipShared";
 
@@ -82,7 +83,8 @@ function playRow(style: Style, single: boolean, forMs: number): number[] {
         was.text = text;
         was.endedAt = null;
       }
-      if (was.endedAt === null && run?.dataset.scrollPhase === "end") was.endedAt = t;
+      // the SECOND end: the chip reads its words twice and only then may leave
+      if (was.endedAt === null && run?.dataset.scrollPhase === "end" && run.dataset.scrollPass === "2") was.endedAt = t;
       was.opacity = opacity;
     });
   }
@@ -104,24 +106,24 @@ describe("a long chip leaves one pause after its words stop", () => {
 
   const styles: Style[] = ["fade", "static", "decode"];
   for (const style of styles) {
-    it(`${style}, one chip: every long chip leaves 1.2 to 1.9 s after its words stop`, () => {
+    it(`${style}, one chip: every long chip leaves 0.7 to 1.4 s after its words stop for the second time`, () => {
       restore = standInForLayout(284);
-      const gaps = playRow(style, true, 150_000);
+      const gaps = playRow(style, true, 400_000);
       expect(gaps.length).toBeGreaterThanOrEqual(4);
       for (const gap of gaps) {
-        expect(gap).toBeGreaterThanOrEqual(PRESET_CHIP_END_PAUSE_MS - 300);
-        expect(gap).toBeLessThanOrEqual(PRESET_CHIP_END_PAUSE_MS + 400);
+        expect(gap).toBeGreaterThanOrEqual(PRESET_CHIP_READ_PAUSE_MS - 300);
+        expect(gap).toBeLessThanOrEqual(PRESET_CHIP_READ_PAUSE_MS + 400);
       }
     });
 
     it(`${style}, two chips of different lengths: each leaves after its own words stop`, () => {
       restore = standInForLayout(131);
-      const gaps = playRow(style, false, 150_000);
+      const gaps = playRow(style, false, 400_000);
       expect(gaps.length).toBeGreaterThanOrEqual(8);
       for (const gap of gaps) {
-        expect(gap).toBeGreaterThanOrEqual(PRESET_CHIP_END_PAUSE_MS - 300);
+        expect(gap).toBeGreaterThanOrEqual(PRESET_CHIP_READ_PAUSE_MS - 300);
         // A neighbour's change just then holds the later one back by under half a second at most.
-        expect(gap).toBeLessThanOrEqual(PRESET_CHIP_END_PAUSE_MS + 450);
+        expect(gap).toBeLessThanOrEqual(PRESET_CHIP_READ_PAUSE_MS + 450);
       }
     });
   }
@@ -142,7 +144,7 @@ describe("a long chip leaves one pause after its words stop", () => {
       Array.from(view.container.querySelectorAll<HTMLElement>(".bonsai-preset-chip-text-run")).map((r) => r.textContent);
     const changes: number[] = [];
     let before = words();
-    for (let t = 0; t < 120_000; t += 50) {
+    for (let t = 0; t < 400_000; t += 50) {
       act(() => vi.advanceTimersByTime(50));
       const now = words();
       if (now.some((w, i) => w !== before[i])) changes.push(t);
@@ -183,11 +185,11 @@ describe("a long chip leaves one pause after its words stop", () => {
   /*
    * Plan 96 F22 (the maintainer: chips change too fast): a long chip is never replaced before its
    * whole scroll has played, whatever the row's pace says. Measured from the moment the chip first
-   * shows its words (delay + crawl + end pause), and with a scroll far longer than the most the
+   * shows its words (the whole read-twice time line), and with a scroll far longer than the most the
    * pace gives (18 s with two chips, 12 s with one).
    */
   const overflowScrollMs = (chars: number, roomPx: number) =>
-    1500 + (((chars * REAL_PX_PER_CHAR - roomPx) / 20) * 1000) + PRESET_CHIP_END_PAUSE_MS;
+    presetScrollPlan(Math.ceil(chars * REAL_PX_PER_CHAR - roomPx))!.stayMs;
 
   for (const [label, single, room] of [["one chip", true, 284], ["two chips", false, 131]] as const) {
     it(`${label}: a chip whose scroll is longer than the pace's longest hold stays through all of it`, () => {

@@ -1,16 +1,17 @@
 /**
- * Title: A long chip scrolls to its end, stands still, then may leave
+ * Title: A long chip reads its words twice, stands still, then may leave
  *
  * Purpose: Pin plan 79 helper I, part one. A suggestion chip whose words are too long for it scrolls
- *          its words sideways; when they reach the end they stand still for the pause
- *          (PRESET_CHIP_END_PAUSE_MS) before the chip may leave, and a chip whose words fit never
- *          moves. Read the way the screen shows it: the text block's transform and its phase mark.
+ *          its words sideways; when they reach the end they stand still a second
+ *          (PRESET_CHIP_READ_PAUSE_MS), jump back, scroll to the end again and stand a second time
+ *          (plan 96 F22) before the chip may leave, and a chip whose words fit never moves. Read the way the screen shows it: the text block's transform and its phase mark.
  *          jsdom lays nothing out, so the two widths the scroller measures on the live element
  *          (words and room) are given by a stand-in, as the other layout tests do.
  * Used for: PresetChipText and PresetChipScrollText in presetChipButton.tsx; the stay time in
  *           presetRowLayout.ts; the chip row in MainTabPresetAnimatedChips.tsx.
  * Does not: Prove the scroll on the Deck. The check this owes: a long chip scrolls to its end, stands
- *           still for about a second and a half, then leaves; a short chip never moves.
+ *           about a second, jumps back, scrolls to the end again, stands, then leaves; a short chip
+ *           never moves.
  */
 import { act, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -18,7 +19,7 @@ import { MainTabPresetAnimatedChips } from "./MainTabPresetAnimatedChips";
 import { setFrozenTestChips, type PresetPrompt } from "./presets";
 import { PresetChipText } from "./presetChipButton";
 import {
-  PRESET_CHIP_END_PAUSE_MS,
+  PRESET_CHIP_READ_PAUSE_MS,
   PRESET_MARQUEE_SPEED,
   presetScrollPlan,
   presetTurnMs,
@@ -60,32 +61,59 @@ describe("a long chip's words reach the end, stand still, and only then may the 
 
   const run = (c: HTMLElement) => c.querySelector<HTMLElement>(".bonsai-preset-chip-text-run")!;
 
-  it("waits at the start, scrolls to the end, then stands still for the whole pause", () => {
+  it("reads the words twice: waits, scrolls to the end, stands, snaps back, scrolls again, stands", () => {
     const { container } = render(<PresetChipText text={LONG} scroll />);
     const plan = presetScrollPlan(OVERFLOW_PX)!;
-    expect(plan.pauseMs).toBe(PRESET_CHIP_END_PAUSE_MS);
+    expect(plan.readPauseMs).toBe(PRESET_CHIP_READ_PAUSE_MS);
+    const at = () => run(container);
+    const step = (ms: number) => act(() => vi.advanceTimersByTime(ms));
     // Before the wait is over the words have not moved.
-    expect(run(container).dataset.scrollPhase).toBe("waiting");
-    expect(run(container).style.transform).toBe("translateX(0px)");
-    act(() => vi.advanceTimersByTime(plan.delayMs - 1));
-    expect(run(container).dataset.scrollPhase).toBe("waiting");
+    expect(at().dataset.scrollPhase).toBe("waiting");
+    expect(at().style.transform).toBe("translateX(0px)");
+    step(plan.delayMs - 1);
+    expect(at().dataset.scrollPhase).toBe("waiting");
     // Then they scroll, over the time the speed sets, as far as the words overflow.
-    act(() => vi.advanceTimersByTime(1));
-    expect(run(container).dataset.scrollPhase).toBe("scrolling");
-    expect(run(container).style.transform).toBe(`translateX(-${OVERFLOW_PX}px)`);
-    expect(run(container).style.transition).toBe(`transform ${plan.crawlMs}ms linear`);
+    step(1);
+    expect(at().dataset.scrollPhase).toBe("scrolling");
+    expect(at().style.transform).toBe(`translateX(-${OVERFLOW_PX}px)`);
+    expect(at().style.transition).toBe(`transform ${plan.crawlMs}ms linear`);
     expect(plan.crawlMs).toBe((OVERFLOW_PX / PRESET_MARQUEE_SPEED) * 1000);
-    act(() => vi.advanceTimersByTime(plan.crawlMs - 1));
-    expect(run(container).dataset.scrollPhase).toBe("scrolling");
-    // They reach the end, and nothing moves for the whole pause (and for as long as the chip stays).
-    act(() => vi.advanceTimersByTime(1));
-    expect(run(container).dataset.scrollPhase).toBe("end");
-    const atEnd = run(container).style.transform;
+    step(plan.crawlMs - 1);
+    expect(at().dataset.scrollPhase).toBe("scrolling");
+    // They reach the end and stand still for a second.
+    step(1);
+    expect(at().dataset.scrollPhase).toBe("end");
+    expect(at().dataset.scrollPass).toBe("1");
+    expect(at().style.transform).toBe(`translateX(-${OVERFLOW_PX}px)`);
+    step(plan.readPauseMs - 1);
+    expect(at().dataset.scrollPhase).toBe("end");
+    expect(at().style.transform).toBe(`translateX(-${OVERFLOW_PX}px)`);
+    // Then they jump back to the start, quickly.
+    step(1);
+    expect(at().dataset.scrollPhase).toBe("back");
+    expect(at().style.transform).toBe("translateX(0px)");
+    expect(at().style.transition).toBe(`transform ${plan.snapBackMs}ms ease-out`);
+    expect(plan.snapBackMs).toBeLessThan(plan.crawlMs);
+    step(plan.snapBackMs - 1);
+    expect(at().dataset.scrollPhase).toBe("back");
+    // And scroll to the end a second time, at the same speed.
+    step(1);
+    expect(at().dataset.scrollPhase).toBe("scrolling");
+    expect(at().dataset.scrollPass).toBe("2");
+    expect(at().style.transform).toBe(`translateX(-${OVERFLOW_PX}px)`);
+    expect(at().style.transition).toBe(`transform ${plan.crawlMs}ms linear`);
+    step(plan.crawlMs - 1);
+    expect(at().dataset.scrollPhase).toBe("scrolling");
+    // The second end: nothing moves again for the whole second stand (and for as long as the chip stays).
+    step(1);
+    expect(at().dataset.scrollPhase).toBe("end");
+    expect(at().dataset.scrollPass).toBe("2");
+    const atEnd = at().style.transform;
     expect(atEnd).toBe(`translateX(-${OVERFLOW_PX}px)`);
-    for (let waited = 0; waited < plan.pauseMs + 20_000; waited += 250) {
-      act(() => vi.advanceTimersByTime(250));
-      expect(run(container).dataset.scrollPhase).toBe("end");
-      expect(run(container).style.transform).toBe(atEnd);
+    for (let waited = 0; waited < plan.readPauseMs + 20_000; waited += 250) {
+      step(250);
+      expect(at().dataset.scrollPhase).toBe("end");
+      expect(at().style.transform).toBe(atEnd);
     }
   });
 
@@ -153,21 +181,26 @@ describe("a chip in the row does not leave in the middle of a scroll or of the p
     expect(first).toBeTruthy();
     const plan = presetScrollPlan(80 * PX_PER_CHAR - ROOM_PX)!;
 
-    // The words reach the end, and stand still for the whole pause, with the same question showing.
+    // The first end: the words stand a second, jump back, and scroll again, with the same question showing.
     act(() => vi.advanceTimersByTime(plan.endMs));
     expect(label()?.dataset.scrollPhase).toBe("end");
-    const atEnd = label()?.style.transform;
-    for (let waited = 0; waited + 100 < plan.pauseMs; waited += 100) {
+    let elapsed = plan.endMs;
+    while (elapsed + 100 <= plan.secondEndMs) {
       act(() => vi.advanceTimersByTime(100));
+      elapsed += 100;
       expect(label()?.textContent).toBe(first);
-      expect(label()?.style.transform).toBe(atEnd);
     }
-    // The chip is still the same one right up to scroll plus pause, and leaves exactly when the
-    // pause is over (plan 81: the row used to wait on its own, much longer, beat).
-    act(() => vi.advanceTimersByTime(99)); // 1.4 s of the pause is over, and 99 ms of the last 100
+    act(() => vi.advanceTimersByTime(plan.secondEndMs - elapsed));
+    expect(label()?.dataset.scrollPhase).toBe("end");
+    expect(label()?.dataset.scrollPass).toBe("2");
+    // The second end: the chip is still the same one for the whole stand, and leaves exactly when it
+    // is over (plan 81: the row used to wait on its own, much longer, beat).
+    const secondEndAt = plan.secondEndMs;
+    act(() => vi.advanceTimersByTime(plan.readPauseMs - 1));
     expect(label()?.textContent).toBe(first);
     act(() => vi.advanceTimersByTime(1));
     expect(label()?.textContent).not.toBe(first);
+    expect(secondEndAt + plan.readPauseMs).toBe(plan.stayMs);
     expect(presetTurnMs(longA, 1)).toBeGreaterThan(plan.stayMs);
   });
 });

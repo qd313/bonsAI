@@ -61,39 +61,76 @@ export const PRESET_MARQUEE_SPEED = 20;
 export const PRESET_MARQUEE_DELAY_S = 1.5;
 export const PRESET_MARQUEE_FADE_LENGTH = 8;
 /**
- * How long a long label stands still once its words have scrolled to the end, before the chip may
- * leave. 1.5 s on purpose: it is the same wait the words make at the start (PRESET_MARQUEE_DELAY_S),
- * so the beginning and the end of a scroll feel alike, and it is long enough to read the last three
- * or four words after the movement stops, yet short enough that a chip does not seem stuck. The
- * maintainer asked for a pause here on 2026-10-02 (roadmap, "Long suggestion chips").
+ * How long the chat name's slide stands still at the end of its words (ChatNameWords.tsx reads it
+ * through `plan.pauseMs`). 1.5 s on purpose: it is the same wait the words make at the start
+ * (PRESET_MARQUEE_DELAY_S), so the beginning and the end of a slide feel alike. The suggestion chips
+ * stand for PRESET_CHIP_READ_PAUSE_MS instead, since they read their words twice.
  */
 export const PRESET_CHIP_END_PAUSE_MS = 1500;
+/**
+ * How long a long suggestion chip stands still each time its words reach their end (plan 96 F22, the
+ * maintainer, 2026-10-18: "stop for a second"). It happens twice, once after each pass, and the chip
+ * may leave only after the second one.
+ */
+export const PRESET_CHIP_READ_PAUSE_MS = 1000;
+/** How long the words take to jump back to their start between the two passes: quick, but eased. */
+export const PRESET_CHIP_SNAP_BACK_MS = 400;
 
-/** The time line of one long label: wait, scroll to the end, stand still. All in milliseconds. */
+/**
+ * The time line of one long chip: wait, scroll to the end, stand, snap back, scroll to the end again,
+ * stand. All in milliseconds, each moment counted from mounting.
+ */
 export interface PresetScrollPlan {
   /** Standing at the start before the words begin to move. */
   delayMs: number;
-  /** The scroll itself, from the first word at the left edge to the last word at the right edge. */
+  /** One scroll, from the first word at the left edge to the last word at the right edge (both passes). */
   crawlMs: number;
-  /** Standing still at the end. */
+  /** The chat name's stand at the end (PRESET_CHIP_END_PAUSE_MS); the chip stands `readPauseMs`. */
   pauseMs: number;
-  /** From mounting to the moment the words reach the end (delay plus scroll). */
+  /** The first time the words reach the end (delay plus scroll). */
   endMs: number;
-  /** From mounting to the moment the chip may leave (delay, scroll and pause). */
+  /** Standing still at the end, after each of the two passes. */
+  readPauseMs: number;
+  /** The jump back to the start. */
+  snapBackMs: number;
+  /** The moment the words begin to jump back (the first end plus a stand). */
+  backAtMs: number;
+  /** The moment the second pass begins (the jump back is over). */
+  secondStartMs: number;
+  /** The second time the words reach the end. */
+  secondEndMs: number;
+  /** The moment the chip may leave: the second end plus a stand. The whole "read twice" time. */
   stayMs: number;
 }
 
 /**
  * The time line for a label that overflows its room by `overflowPx`, or null when it fits. The
  * chip's scroller (PresetChipScrollText in presetChipButton.tsx) and the stay time below both read
- * this one function, so what is on screen and how long the chip stays cannot drift apart.
+ * this one function, so what is on screen and how long the chip stays cannot drift apart. The chat
+ * name (ChatNameWords.tsx) reads only its first pass: delay, crawl, pause.
  */
 export function presetScrollPlan(overflowPx: number): PresetScrollPlan | null {
   if (!(overflowPx > 0)) return null;
   const delayMs = PRESET_MARQUEE_DELAY_S * 1000;
   const crawlMs = (overflowPx / PRESET_MARQUEE_SPEED) * 1000;
-  const pauseMs = PRESET_CHIP_END_PAUSE_MS;
-  return { delayMs, crawlMs, pauseMs, endMs: delayMs + crawlMs, stayMs: delayMs + crawlMs + pauseMs };
+  const endMs = delayMs + crawlMs;
+  const readPauseMs = PRESET_CHIP_READ_PAUSE_MS;
+  const snapBackMs = PRESET_CHIP_SNAP_BACK_MS;
+  const backAtMs = endMs + readPauseMs;
+  const secondStartMs = backAtMs + snapBackMs;
+  const secondEndMs = secondStartMs + crawlMs;
+  return {
+    delayMs,
+    crawlMs,
+    pauseMs: PRESET_CHIP_END_PAUSE_MS,
+    endMs,
+    readPauseMs,
+    snapBackMs,
+    backAtMs,
+    secondStartMs,
+    secondEndMs,
+    stayMs: secondEndMs + readPauseMs,
+  };
 }
 
 /**
@@ -115,7 +152,7 @@ function labelRoomPx(chipCount: number): number {
   return (PRESET_COLUMN_PX - PRESET_CHIP_GAP_PX * (n - 1)) / n - 2 * PRESET_CHIP_SIDE_PADDING_PX;
 }
 
-/** How long a scrolling label needs to be read through once: delay, one crawl, a pause. */
+/** How long a scrolling label needs to be read through twice: delay, two crawls, a snap back, two stands. */
 function marqueeHoldFloorMs(text: string, chipCount: number): number {
   const overflowPx = text.length * PRESET_LABEL_PX_PER_CHAR - labelRoomPx(chipCount);
   return presetScrollPlan(overflowPx)?.stayMs ?? 0;

@@ -1,8 +1,10 @@
 /**
  * Title: How long a long chip stays, read off the chip itself
- * Purpose: A long chip scrolls its words to the end and stands still (PresetChipScrollText). This
- *          module carries that chip's real time line up to the row, so the row can replace the chip
- *          one pause after its words stop, instead of on the row's own beat.
+ * Purpose: A long chip scrolls its words to the end, stands, jumps back and scrolls to the end a
+ *          second time, then stands still (PresetChipScrollText; plan 96 F22). This module carries that
+ *          chip's real time line up to the row (its `stayMs` is the whole read-twice time), so the row
+ *          replaces the chip one stand after the second pass, never earlier, instead of on the row's
+ *          own beat.
  * Used for: The fade, plain and decode chip styles (MainTabPresetAnimatedChips.tsx,
  *           presetDecodeSlots.tsx); the chip reports through PresetChipButton's onScrollPlan.
  * Solves: The row timed a chip from a character count (presetHoldMs) and only used the scroll as a

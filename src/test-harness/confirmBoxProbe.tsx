@@ -1,7 +1,7 @@
 /**
  * Title: Test helper: draw a two-button confirm box and press its buttons
  *
- * Purpose: The plugin's "are you sure?" boxes are the shared CancelFirstConfirmModal (Cancel first, the
+ * Purpose: The plugin's "are you sure?" boxes are the shared TwoButtonConfirmModal (Cancel first, the
  * action beside it). A test about one of them opens it the way the plugin does, catches the element the
  * plugin hands to showModal, and gives it to this helper, which draws it and reads the buttons off the
  * page, so a test checks what a person sees (which buttons, in which order) rather than what props were

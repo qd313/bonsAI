@@ -27,7 +27,7 @@
  * the Deck (plan72-F-DL) "Update AI & models" opened its older box with the ring on "Start update"
  * and no site or size.
  *
- * Focus: the box is the shared two-button box (CancelFirstConfirmModal, the Delete chat box's shape):
+ * Focus: the box is the shared two-button box (TwoButtonConfirmModal, the Delete chat box's shape):
  * Cancel first, where Steam puts the ring, and the download beside it, so an A pressed by habit
  * downloads nothing and B is Cancel too. It used to be Steam's own ConfirmModal with "Not now" as
  * OK and the download in the middle, and Steam's added Cancel made it three buttons (plan 93). No
@@ -41,7 +41,7 @@
 import { useEffect, type ReactNode } from "react";
 import { showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
-import { CancelFirstConfirmModal } from "../../shared/CancelFirstConfirmModal";
+import { TwoButtonConfirmModal } from "../../shared/TwoButtonConfirmModal";
 import { DEFAULT_CAPABILITIES, type BonsaiCapabilities } from "../settings/bonsaiSettingsSchema";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../shared/deckyCall";
 import { patchPendingSessionSettingsSnapshot } from "../plugin-shell/bonsaiSessionSurvival";
@@ -207,7 +207,7 @@ export function confirmDownload(notices: DownloadNotice[], opts: DownloadBoxOpti
     };
     b.onBeforeDeckyModal();
     const handle = showModal(
-      <CancelFirstConfirmModal
+      <TwoButtonConfirmModal
         title={asking ? "Turn on internet downloads?" : (opts.title ?? "Download from the internet?")}
         body={
           <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>

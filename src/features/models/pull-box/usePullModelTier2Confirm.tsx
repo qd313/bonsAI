@@ -23,7 +23,7 @@ import { useCallback, type RefObject } from "react";
 import { showModal } from "@decky/ui";
 import type { ModelPolicyTierId } from "../modelPolicy";
 import type { PullModelEntry } from "../pullModelCatalog";
-import { CancelFirstConfirmModal } from "../../../shared/CancelFirstConfirmModal";
+import { TwoButtonConfirmModal } from "../../../shared/TwoButtonConfirmModal";
 import { textPx } from "../../../styles/textPx";
 
 export type UsePullModelTier2ConfirmArgs = {
@@ -80,7 +80,7 @@ export function usePullModelTier2Confirm(a: UsePullModelTier2ConfirmArgs): PullM
       }
       onBeforeNestedDeckyModal?.();
       const handle = showModal(
-        <CancelFirstConfirmModal
+        <TwoButtonConfirmModal
           title="Enable Tier 2 for this model?"
           body={
             <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>

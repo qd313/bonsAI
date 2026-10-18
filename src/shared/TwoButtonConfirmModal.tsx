@@ -36,7 +36,7 @@ import { Button, Focusable, ModalRoot } from "@decky/ui";
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../styles/settingsGlassButton";
 import { textPx } from "../styles/textPx";
 
-export type CancelFirstConfirmModalProps = {
+export type TwoButtonConfirmModalProps = {
   title: string;
   /** The words under the title. Passed through as given; the caller keeps its own text and colours. */
   body: ReactNode;
@@ -68,14 +68,14 @@ const Choice: React.FC<{ onChoose: () => void; danger?: boolean; children: React
   </div>
 );
 
-export function CancelFirstConfirmModal({
+export function TwoButtonConfirmModal({
   title,
   body,
   actionLabel,
   danger = false,
   onCancel,
   onAction,
-}: CancelFirstConfirmModalProps) {
+}: TwoButtonConfirmModalProps) {
   const done = useRef(false);
   const once = (act: () => void) => () => {
     if (done.current) return;

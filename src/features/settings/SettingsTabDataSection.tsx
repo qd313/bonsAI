@@ -10,7 +10,7 @@
  * Solves: Moving the two Clear buttons out of SettingsTab.tsx unchanged in behaviour. Both remember which
  * button to return the ring to once the box closes (modalReturnFocusRegistry) and both tell the plugin
  * shell which tab to come back to (`onBeforeDeckyModal`). The confirm boxes are the shared two-button box
- * (CancelFirstConfirmModal): Cancel first, where Steam puts the ring, and the clearing beside it, so an A
+ * (TwoButtonConfirmModal): Cancel first, where Steam puts the ring, and the clearing beside it, so an A
  * pressed by habit clears nothing.
  *
  * Does not: Clear anything itself: the caller's `onResetSession` and `onClearAllPluginData` do.
@@ -23,7 +23,7 @@
 import React from "react";
 import { Button, Focusable, PanelSection, PanelSectionRow, showModal } from "@decky/ui";
 
-import { CancelFirstConfirmModal } from "../../shared/CancelFirstConfirmModal";
+import { TwoButtonConfirmModal } from "../../shared/TwoButtonConfirmModal";
 import { DenseSwitchRow } from "../folded-tabs/DenseRow";
 import { bonsaiSettingRowNav } from "../search-tab/bonsaiSettingRowNav";
 import { SETTINGS_ROW_HELP } from "./settingsTabFolds";
@@ -113,7 +113,7 @@ export const SettingsTabDataSection: React.FC<SettingsTabDataSectionProps> = ({
             rememberModalReturnFocus("settings-clear-cache");
             onBeforeDeckyModal();
             const handle = showModal(
-              <CancelFirstConfirmModal
+              <TwoButtonConfirmModal
                 title="Clear session cache?"
                 body="Clears this session from RAM: input, reply, thread, transparency, branches, attachments, timers. Does not change settings.json, Ollama, or image files on disk."
                 /*
@@ -146,7 +146,7 @@ export const SettingsTabDataSection: React.FC<SettingsTabDataSectionProps> = ({
             */
             onBeforeDeckyModal();
             const handle = showModal(
-              <CancelFirstConfirmModal
+              <TwoButtonConfirmModal
                 title="Clear all plugin data?"
                 body={
                   "This resets bonsAI like a fresh install: settings, permissions, chats, notes, cache and logs are deleted. " +

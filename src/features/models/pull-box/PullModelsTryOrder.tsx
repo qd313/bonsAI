@@ -37,7 +37,7 @@ import { useCallback, useRef, type ReactNode, type RefCallback } from "react";
 import { Button, Focusable, showModal } from "@decky/ui";
 import type { TableSection } from "./PullModelsModal.types";
 import type { NavRefHolder } from "../../../shared/dpad/navFocusRegistry";
-import { CancelFirstConfirmModal } from "../../../shared/CancelFirstConfirmModal";
+import { TwoButtonConfirmModal } from "../../../shared/TwoButtonConfirmModal";
 import { handRingTo } from "./pullModelsBoxMemory";
 import { PullModelsPcRow } from "./PullModelsPcRow";
 import type { PullModelEntry, PullModelModeFilterId } from "../pullModelCatalog";
@@ -239,7 +239,7 @@ export function usePullModelTryNav(a: {
     const word = places.kind === "vision" ? "pictures" : "text";
     nested.before?.();
     const handle = showModal(
-      <CancelFirstConfirmModal
+      <TwoButtonConfirmModal
         title={`Put the ${word} try order back to automatic?`}
         body={
           <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>

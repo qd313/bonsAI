@@ -27,7 +27,7 @@
 import { useCallback, type Dispatch, type SetStateAction } from "react";
 import { showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
-import { CancelFirstConfirmModal } from "../../../shared/CancelFirstConfirmModal";
+import { TwoButtonConfirmModal } from "../../../shared/TwoButtonConfirmModal";
 import { formatSizeGb } from "../pullModelCatalog";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../../shared/deckyCall";
 import { clearRemoveReturn, rememberRemoveReturn, restoreRemoveReturn } from "./pullModelsRemoveReturn";
@@ -77,7 +77,7 @@ export function usePullModelDeleteConfirm(a: UsePullModelDeleteConfirmArgs): Pul
       rememberRemoveReturn(tag);
       onBeforeNestedDeckyModal?.();
       const handle = showModal(
-        <CancelFirstConfirmModal
+        <TwoButtonConfirmModal
           title={`Remove ${tag} from the Deck?`}
           body={
             <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>

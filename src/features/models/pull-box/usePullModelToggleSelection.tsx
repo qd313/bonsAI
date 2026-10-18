@@ -23,7 +23,7 @@
 import { useCallback, type Dispatch, type RefObject, type SetStateAction } from "react";
 import { showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
-import { CancelFirstConfirmModal } from "../../../shared/CancelFirstConfirmModal";
+import { TwoButtonConfirmModal } from "../../../shared/TwoButtonConfirmModal";
 import { formatSizeGb, type PullModelEntry } from "../pullModelCatalog";
 import { isTagInstalled, resolveRowSizeGb } from "./pullModelFilters";
 import { textPx } from "../../../styles/textPx";
@@ -102,7 +102,7 @@ export function usePullModelToggleSelection(a: UsePullModelToggleSelectionArgs):
       if (entry.group === "stretch" && !stretchConfirmedRef.current.has(entry.tag)) {
         onBeforeNestedDeckyModal?.();
         const handle = showModal(
-          <CancelFirstConfirmModal
+          <TwoButtonConfirmModal
             title="Large model — continue?"
             body={
               <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>

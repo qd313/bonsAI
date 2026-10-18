@@ -31,7 +31,7 @@ vi.mock("@decky/ui", async () => {
   return { ...fake, ModalRoot };
 });
 
-import { CancelFirstConfirmModal } from "./CancelFirstConfirmModal";
+import { TwoButtonConfirmModal } from "./TwoButtonConfirmModal";
 import { TEXT_SCALE, TEXT_SCALE_VAR } from "./text-size/chatTextSize";
 import { usePublishTextScale } from "./text-size/usePublishTextScale";
 import { makeFontSizeReader } from "../test-harness/settledFontSize";
@@ -52,11 +52,11 @@ afterEach(() => {
   document.documentElement.style.removeProperty(TEXT_SCALE_VAR);
 });
 
-function drawBox(over: Partial<React.ComponentProps<typeof CancelFirstConfirmModal>> = {}) {
+function drawBox(over: Partial<React.ComponentProps<typeof TwoButtonConfirmModal>> = {}) {
   const onCancel = vi.fn();
   const onAction = vi.fn();
   const view = render(
-    <CancelFirstConfirmModal
+    <TwoButtonConfirmModal
       title="Clear session cache?"
       body="Clears this session from RAM."
       actionLabel="Clear"

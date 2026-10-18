@@ -93,7 +93,7 @@ import {
 import { confirmDownload } from "../downloads/downloadNotice";
 import { KNOWLEDGE_LIBRARY_NOTICES, MEANING_SEARCH_MODEL_NOTICE } from "../downloads/downloadSites";
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../../styles/settingsGlassButton";
-import { CancelFirstConfirmModal } from "../../shared/CancelFirstConfirmModal";
+import { TwoButtonConfirmModal } from "../../shared/TwoButtonConfirmModal";
 import { KnowledgeBaseButtonLabel } from "./KnowledgeBaseButtonLabel";
 import { RagCorpusStoragePickerModal, type RagStorageOption } from "./RagCorpusStoragePickerModal";
 import { DownloadArrowIcon, RefreshArrowIcon, TrashBinIcon } from "../../shared/icons/icons";
@@ -736,7 +736,7 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
     rememberModalReturnFocus("kb-remove");
     onBeforeDeckyModal();
     const handle = showModal(
-      <CancelFirstConfirmModal
+      <TwoButtonConfirmModal
         title="Remove knowledge base?"
         body={
           <div className="bonsai-prose" style={{ fontSize: textPx(12), lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>

@@ -23,7 +23,7 @@
 import { useCallback, type Dispatch, type RefObject, type SetStateAction } from "react";
 import { showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
-import { CancelFirstConfirmModal } from "../../../shared/CancelFirstConfirmModal";
+import { TwoButtonConfirmModal } from "../../../shared/TwoButtonConfirmModal";
 import { formatSizeGb, type PullModelEntry } from "../pullModelCatalog";
 import type { ModelPolicyTierId } from "../modelPolicy";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../../shared/deckyCall";
@@ -154,7 +154,7 @@ export function usePullModelSubmitSelected(a: UsePullModelSubmitSelectedArgs): P
         const tagList = openWeightTags.join(", ");
         onBeforeNestedDeckyModal?.();
         const handle = showModal(
-          <CancelFirstConfirmModal
+          <TwoButtonConfirmModal
             title="Enable Tier 2 before pulling?"
             body={
               <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45 }}>

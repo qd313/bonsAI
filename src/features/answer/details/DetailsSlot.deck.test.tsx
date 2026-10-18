@@ -31,6 +31,7 @@ import { buildBonsaiScopeStylesheet } from "../../../styles/bonsaiScopeStyleshee
 import { buildDetailsSlotSection } from "./detailsSlotStyles";
 import { PANE_TOP } from "../../../test-harness/deckAnswerWalk";
 import { resetDetailsSlotStore } from "./detailsSlotStore";
+import { PRESET_CHIP_HEIGHT_PX } from "../../preset-carousel/presetRowLayout";
 
 type Handlers = Partial<Record<"onMoveUp" | "onMoveDown" | "onMoveLeft" | "onMoveRight" | "onOKButton" | "onCancelButton", (e?: unknown) => unknown>>;
 type NavEl = HTMLElement & { __nav?: Handlers };
@@ -83,8 +84,9 @@ const RATING: Box = [704, 736];
 const LINE: Box = [744, 759];
 const TABS: Box = [767, 800];
 const LADDER: Box = [808, 1100];
-const SLOT_FACE: Box = [DOCK_TOP, DOCK_TOP + 30];
-const ASK_BAR: Box = [DOCK_TOP + 32, PANE_BOTTOM];
+/** The slot's two faces share the chip's height (read from the chip, never typed here as a number). */
+const SLOT_FACE: Box = [DOCK_TOP, DOCK_TOP + PRESET_CHIP_HEIGHT_PX];
+const ASK_BAR: Box = [DOCK_TOP + PRESET_CHIP_HEIGHT_PX + 2, PANE_BOTTOM];
 
 let pane: HTMLDivElement;
 /** "nearest" is the Deck's own landing in plan81-QA-FREE-PLAY-01-NOGAME.json: scrolled just enough, the line 2 px above the dock. */
@@ -371,11 +373,11 @@ describe("what the slot above the question box holds as the chat scrolls (the dr
     ]);
   });
 
-  it("keeps the dock the same height: both faces sit in one 30 px cell", () => {
+  it("keeps the dock the same height: both faces sit in one cell as tall as a suggestion chip", () => {
     renderChat();
     const css = buildDetailsSlotSection();
     expect(css).toMatch(/\.bonsai-details-slot > \*\s*\{[^}]*grid-area: 1 \/ 1/);
-    expect(css).toMatch(/\.bonsai-details-slot__line\s*\{[^}]*height: 30px/);
+    expect(css).toMatch(new RegExp(`\\.bonsai-details-slot__line\\s*\\{[^}]*height: ${PRESET_CHIP_HEIGHT_PX}px`));
   });
 
   it("never swaps while a question is being answered (the real line is greyed then)", () => {

@@ -6,8 +6,8 @@
  * person reads it). The swap is the tab bar's own 120 ms fade (tabIndicatorBarStyles.ts): the face going
  * away fades out and is then hidden, the face coming in is visible at once and fades in.
  *
- *     [ How can I optimise for battery life? ]     <- the chip, 30 px
- *     [ ──────── Show details ↓ ──────────── ]     <- or the line, in the same 30 px
+ *     [ How can I optimise for battery life? ]     <- the chip, as tall as a suggestion chip
+ *     [ ──────── Show details ↓ ──────────── ]     <- or the line, in the same height
  *
  * Used for: buildBonsaiScopeStylesheet, after section 4 (the chip row) so these rules sit on top.
  *

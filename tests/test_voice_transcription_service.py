@@ -29,7 +29,7 @@ from backend.voice.voice_whisper_runtime import (
 class VoiceTranscriptionServiceTests(unittest.TestCase):
     def test_fresh_settings_choose_base_en_for_voice_input(self):
         # 2026-10-10: tiny.en repeats words and stops early with a real voice; base.en does not.
-        from backend.services.settings_service import sanitize_settings
+        from backend.settings.settings_service import sanitize_settings
         from test_settings_contract import PLUGIN_SANITIZE_ARGS
 
         self.assertEqual(DEFAULT_VOICE_STT_MODEL, "base.en")

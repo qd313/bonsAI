@@ -95,7 +95,7 @@ const MODULE_ROLES = {
   "main.py": "Decky RPC entrypoints and orchestration",
   "refactor_helpers.py": "Model selection, TDP parse helpers, URLs",
   "py_modules/backend/services/ollama_service.py": "Prompt build, Ollama HTTP, streaming",
-  "py_modules/backend/services/settings_service.py": "Load/save/merge settings.json",
+  "py_modules/backend/settings/settings_service.py": "Load/save/merge settings.json",
 };
 
 // Size ranking of the largest files. Not a dependency graph -- see

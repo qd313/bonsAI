@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from backend.services.settings_service import (
+from backend.settings.settings_service import (
     _clamped_whole_number,
     load_settings,
     sanitize_preset_chip_animation,

@@ -14,7 +14,7 @@ import json
 import unittest
 from pathlib import Path
 
-from backend.services.settings_service import sanitize_settings
+from backend.settings.settings_service import sanitize_settings
 
 CONTRACT_PATH = Path(__file__).parent / "contracts" / "settings-hostile-inputs.json"
 

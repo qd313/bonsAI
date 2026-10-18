@@ -5,12 +5,12 @@ from contextlib import contextmanager
 from pathlib import Path
 from unittest.mock import patch
 
-from backend.services.plugin_data_reset import (
+from backend.settings.plugin_data_reset import (
     PROTON_JOURNAL_FILENAME,
     reset_plugin_disk_and_defaults,
     wipe_proton_experiment_journal,
 )
-from backend.services.settings_service import load_settings, save_settings, sanitize_settings
+from backend.settings.settings_service import load_settings, save_settings, sanitize_settings
 
 
 class _Logger:

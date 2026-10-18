@@ -56,7 +56,7 @@ need_file data/intent-packs/deck-basics.json
 
 for spot in \
     py_modules/backend/services/ollama_service.py \
-    py_modules/backend/services/settings_service.py \
+    py_modules/backend/settings/settings_service.py \
     py_modules/backend/__init__.py; do
     need_file "$spot"
 done

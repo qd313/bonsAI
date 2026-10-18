@@ -214,7 +214,7 @@ function normalizeScreenshotAttachmentPreset(
 }
 
 // --- field kinds -------------------------------------------------------------
-// Mirrors the `_SIMPLE_FIELDS` table in py_modules/backend/services/settings_service.py.
+// Mirrors the `_SIMPLE_FIELDS` table in py_modules/backend/settings/settings_service.py.
 // Most settings are one of a handful of plain shapes; declaring them keeps "add a setting" to
 // one row per language instead of a hand-written function each. Settings needing a legacy key,
 // another field's value, or a nested structure stay as functions below, on purpose.

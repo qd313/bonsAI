@@ -119,7 +119,7 @@ from backend.services.background_request_state import (
     new_partial_stream_snapshot,
     pending_background_state,
 )
-from backend.services.plugin_data_reset import reset_plugin_disk_and_defaults
+from backend.settings.plugin_data_reset import reset_plugin_disk_and_defaults
 from backend.strategy.strategy_checklist_session_service import (
     clear_session_entry,
     load_session_store,
@@ -148,7 +148,7 @@ from backend.services import chat_slot_rpc
 from backend.services import user_notes_rpc
 from backend.services import chat_sum_up_job
 from backend.services import chat_turn_recorder
-from backend.services.settings_service import (
+from backend.settings.settings_service import (
     clamp_int,
     load_settings as load_settings_from_disk,
     sanitize_ask_mode,
@@ -911,7 +911,7 @@ class Plugin:
                 },
             )
 
-        from backend.services.plugin_data_reset import wipe_bonsai_cache_dir, wipe_proton_experiment_journal
+        from backend.settings.plugin_data_reset import wipe_bonsai_cache_dir, wipe_proton_experiment_journal
 
         cache_cleared = await asyncio.to_thread(wipe_bonsai_cache_dir, logger)
         journal_cleared = await asyncio.to_thread(wipe_proton_experiment_journal, logger)

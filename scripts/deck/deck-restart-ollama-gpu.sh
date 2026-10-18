@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Restart local Ollama with Steam Deck GPU-friendly env (Vulkan + Van Gogh ROCm override).
-# Run on the Deck in Desktop Mode → Konsole: bash scripts/deck-restart-ollama-gpu.sh
+# Run on the Deck in Desktop Mode → Konsole: bash scripts/deck/deck-restart-ollama-gpu.sh
 set -euo pipefail
 
 OLLAMA_BIN="${OLLAMA_BIN:-$HOME/.local/bin/ollama}"

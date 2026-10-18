@@ -34,9 +34,22 @@ plugin, open: no notice; read `ollama_local_on_deck` (true) and two other keys y
 Verdict: PASS only if steps 1 to 7 all pass; otherwise FAIL with the step and what was seen. One extra try if a step
 looks like a timing slip (a read taken too early).
 
-## E2: whatever block D's handover lists as not run or UNCLEAR
+## E2: the second round of fixes, and what block D left
 
-Run those rows from `96-runbook-block-D.md` as written, one evidence file each (`-try2` names).
+Run these rows from `96-runbook-block-D.md` again as written, one evidence file each (`-try2` names); the build you are
+on carries a second fix for each after block D's FAIL:
+
+| Row | What changed since block D | Pass when |
+|---|---|---|
+| P96-F11-HINT-RING | Each hint button now sits in its own focus box. | Down from Open Permissions holds still (the ring stays on Open Permissions); Right reaches Dismiss; Up goes to the question box; Dismiss hands the ring to the question box. |
+| P96-F6-EXPLAIN | The separate Explain further stop is gone; A on the open word asks, and the full box shows a hint line "A again: ask the AI to explain further. B: close." | With the game running: A on "kiting" opens the full box with the hint line; A again sends a question whose row reads "Explain: kiting (Deep Rock Galactic: Survivor)"; the box closes; B on an open box closes it with the ring on the word; no reload needed anywhere. |
+| P96-F1-NO-AI | The "Open the Ollama tab" row now follows the no-AI answer once it is the newest saved turn. | After the "not set up" answer, Down from the answer's Retry/Copy row reaches "Open the Ollama tab" (read focus); A lands on the Ollama tab. |
+| P96-F4-TICK | The checklist steps carry their own focus nodes. | With the game running and a Strategy checklist drawn: Down from the last answer paragraph lands on the first step (read focus); Down/Up walk the steps; A ticks step 2 (tick shown, words struck); close and reopen Quick Access: still ticked; Up from Helpful lands on the last step. Then the no-game half as block D's row says. |
+| QA-LOOK-01 (Main) | The look check now asks whether words really spill. | No "text-does-not-fit" finding for Ask on Main; record every finding left (`plan96-QA-LOOK3-main.json`). |
+
+Then any row block D's handover lists as UNCLEAR that a fresh chat can settle: P96-F14-SUM-UP needs a short chat (New chat
+only if fewer than ten chats exist; otherwise skip and say so), where "Sum up this chat" in the chats menu is greyed and A
+shows the toast.
 
 ## E3: the end
 

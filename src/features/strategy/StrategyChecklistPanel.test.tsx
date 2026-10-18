@@ -89,3 +89,22 @@ describe("the Strategy checklist draws checkboxes (plan 96, F19)", () => {
     expect(down).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("the note under the checklist title names only real actions (plan 96, F20)", () => {
+  it("lists the four things that clear the ticks, by the names on screen", () => {
+    const { container } = draw();
+    const note = container.querySelector(".bonsai-strategy-checklist-note")?.textContent ?? "";
+    expect(note).toContain("new Strategy question");
+    expect(note).toContain("leave Strategy mode");
+    expect(note).toContain("Clear cache");
+    expect(note).toContain("Clear all data");
+  });
+
+  it("no longer names a button that does not exist", () => {
+    const { container } = draw();
+    const note = container.querySelector(".bonsai-strategy-checklist-note")?.textContent ?? "";
+    expect(note.length).toBeGreaterThan(0);
+    expect(note).not.toMatch(/session cache/i);
+    expect(note).not.toMatch(/thread/i);
+  });
+});

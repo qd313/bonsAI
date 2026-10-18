@@ -11,7 +11,8 @@
  * produced: the answer lands first, the saved ticks a moment later.
  *
  * Also checked here: leaving Strategy mode with no game running clears only the no-game list,
- * never the lists kept for games.
+ * never the lists kept for games; and the first-question rule the checklist note on screen names
+ * (plan 96, F20): a new Strategy question clears the ticks, pressing a choice button does not.
  */
 import { renderHook, act } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -21,7 +22,7 @@ import {
   type UseBonsaiAskOrchestrationArgs,
 } from "../ask/flow/useBonsaiAskOrchestration";
 import { useStrategyChecklistSession } from "./useStrategyChecklistSession";
-import { resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
+import { getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
 import { idleBackgroundStatusFixture } from "../../test-harness/rpcFixtures";
 import type { BackgroundRequestStatus } from "../../types/backgroundAsk";
 
@@ -195,5 +196,35 @@ describe("leaving Strategy mode with no game running (plan 96, F4)", () => {
 
     expect(clears).toEqual([""]);
     expect(file["570"]?.checked_ids).toEqual(["2"]);
+  });
+});
+
+describe("what clears the ticks when a question is asked (plan 96, F20)", () => {
+  beforeEach(() => {
+    resetFakeDeckyRpc();
+    setRpcHandler("start_background_game_ai", () => ({ accepted: true, status: "pending", request_id: 70 }));
+    setRpcHandler("get_background_game_ai_status", () => ({ ...idleBackgroundStatusFixture(), status: "pending" }));
+  });
+
+  async function ask(question: string) {
+    const { result, unmount } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+    await wait(20);
+    await act(async () => {
+      void result.current.onAskOllama(question);
+    });
+    // Wait until the question has gone out: the clear, when there is one, comes before it.
+    for (let i = 0; i < 40 && !getRpcCallLog().some((c) => c.method === "start_background_game_ai"); i += 1) {
+      await wait(25);
+    }
+    unmount();
+    return getRpcCallLog().filter((c) => c.method === "clear_strategy_checklist_session");
+  }
+
+  it("a new Strategy question clears the saved list", async () => {
+    expect(await ask("How do I get past the first boss in Hades")).toHaveLength(1);
+  });
+
+  it("a press on a choice button does not", async () => {
+    expect(await ask("[Strategy follow-up] I'm at: Dealing with the first boss's mechanics.")).toHaveLength(0);
   });
 });

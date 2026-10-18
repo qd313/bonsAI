@@ -60,8 +60,12 @@ export function StrategyChecklistPanel({
       }}
     >
       <div style={{ fontSize: textPx(12), color: "#dce8f4", fontWeight: 600, marginBottom: 4 }}>{checklist.title}</div>
-      <div style={{ fontSize: textPx(11), color: "#a8b8c8", lineHeight: 1.35, marginBottom: 6 }}>
-        Progress is saved for this game until you reset session cache or start a new Strategy thread.
+      <div
+        className="bonsai-strategy-checklist-note"
+        style={{ fontSize: textPx(11), color: "#a8b8c8", lineHeight: 1.35, marginBottom: 6 }}
+      >
+        Your ticks are saved until you ask a new Strategy question, leave Strategy mode, or use Clear cache or
+        Clear all data in Settings.
       </div>
       {checklist.items.map((item, idx) => {
         const checked = checklist.checkedIds.includes(item.id);

@@ -1,9 +1,9 @@
 /**
- * Title: Licence pill text for a model row
+ * Title: License pill text for a model row
  *
  * Purpose: Each row in the "Add models" list can carry a small pill after the model name that
- * tells the person what kind of licence the model has. This file works out the words on that
- * pill from one catalog entry, or says there should be no pill at all.
+ * tells the person what kind of license the model has. This file works out the words on that
+ * pill from one catalog entry.
  *
  * Used for: PullModelLicenceSlot.tsx, which draws the pill.
  *
@@ -16,17 +16,32 @@
 import type { PullModelEntry } from "./pullModelCatalog";
 
 /**
- * What the small licence pill on a model row says, or null when the row shows no pill.
+ * What the small licence pill on a model row says. Every row has one (plan 96 F18), so a person can
+ * see at a glance why a row is not plain open source.
  *
- * The pill sits on every open-source-class row. It says "FOSS" only when the row's own licence
- * label is Apache or MIT (or there is no label to contradict). A row kept in the open-source
- * class for another reason -- today the two Qwen 3B sizes, whose card says Qwen Research -- shows
- * the licence's name instead, so the screen never calls it FOSS. The size note in brackets is
- * left off; the pill is narrow.
+ * - Open-source class: "FOSS" when the row's own licence label is Apache or MIT (or there is no
+ *   label to contradict). Any other label shows the licence's own name, so the screen never calls
+ *   it FOSS; the size note in brackets is left off, as the pill is narrow. No catalog row is in this
+ *   situation today (the two Qwen 3B sizes left the class in plan 93), but the rule stays honest.
+ * - Open-weight class: "Research only" when the label says Research (the Qwen 3B sizes), otherwise
+ *   "Open weight" (the maker's own terms; the same words as the "Also try open-weight models" filter).
+ * - "non_foss" class: "Not open".
+ * - Unknown class: "Unknown".
+ *
+ * Each pill is at most two words of eight letters, so it wraps onto two lines inside the row's
+ * 48 px slot and pushes nothing else out of place.
  */
-export function pullModelLicencePillText(entry: Pick<PullModelEntry, "license" | "licenseClass">): string | null {
-  if (entry.licenseClass !== "foss") return null;
+export function pullModelLicencePillText(entry: Pick<PullModelEntry, "license" | "licenseClass">): string {
   const label = (entry.license ?? "").trim();
-  if (!label || /^(Apache|MIT)\b/i.test(label)) return "FOSS";
-  return label.replace(/\s*\(.*\)\s*$/, "").trim() || "FOSS";
+  switch (entry.licenseClass) {
+    case "foss":
+      if (!label || /^(Apache|MIT)\b/i.test(label)) return "FOSS";
+      return label.replace(/\s*\(.*\)\s*$/, "").trim() || "FOSS";
+    case "open_weight":
+      return /research/i.test(label) ? "Research only" : "Open weight";
+    case "non_foss":
+      return "Not open";
+    default:
+      return "Unknown";
+  }
 }

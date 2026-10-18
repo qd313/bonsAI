@@ -717,8 +717,8 @@ export function buildPullModelsStylesheet(): string {
           flex-shrink: 0;
           margin-right: 1px;
         }
-        /* A row kept in the open-source class whose own licence is not Apache or MIT (the Qwen 3B
-           sizes): the pill names the licence, in amber, on two lines so it fits the 48px slot. */
+        /* Every row that is not plain open source (Research only, Open weight, Not open, Unknown):
+           the pill is amber, against the green FOSS one, on two lines so it fits the 48px slot. */
         .bonsai-scope .bonsai-pullmodels-chip--licence-name {
           border-color: rgba(251, 191, 36, 0.55) !important;
           color: #fde68a !important;

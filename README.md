@@ -64,7 +64,7 @@ Every clip is filmed on a Steam Deck in real time. Most use an AI running on a P
 the home network; the wiki-notes clip uses the AI on the Deck itself.
 
 <details open>
-<summary><b>Ask about the game you're playing</b>: bonsAI knows which game is running. Ask about a boss, a level or a puzzle.</summary>
+<summary><h3>Ask about the game you're playing</h3><br>bonsAI knows which game is running. Ask about a boss, a level or a puzzle.</summary>
 <br>
 
 Open the menu mid-game and type, or pick a suggestion chip; the game's name goes in with your
@@ -82,7 +82,7 @@ network.*
 </details>
 
 <details>
-<summary><b>Notes from the game's wiki</b>: answers can use notes from community wikis, 38 games so far, and it works offline.</summary>
+<summary><h3>Notes from the game's wiki</h3><br>Answers can use notes from community wikis, 38 games so far, and it works offline.</summary>
 <br>
 
 <table>
@@ -102,7 +102,7 @@ came from, and you can open the note under the answer.
 </details>
 
 <details>
-<summary><b>Your own notes</b>: tell bonsAI what matters to you and it remembers.</summary>
+<summary><h3>Your own notes</h3><br>Tell bonsAI what matters to you and it remembers.</summary>
 <br>
 
 Say something worth keeping, like "I do not want spoilers for later biomes", and a small card under
@@ -117,7 +117,7 @@ notes**; press that line to see your notes, switch one off or remove it.
 </details>
 
 <details>
-<summary><b>Spoilers stay hidden until you ask</b>: in Strategy mode, anything that looks like a spoiler is covered.</summary>
+<summary><h3>Spoilers stay hidden until you ask</h3><br>In Strategy mode, anything that looks like a spoiler is covered.</summary>
 <br>
 
 <table>
@@ -136,7 +136,7 @@ Press **A** on a cover to open it. This works on a best-effort basis and can mis
 </details>
 
 <details>
-<summary><b>"Where are you at?"</b>: Strategy can ask where you are in the game, then gives you a checklist of steps.</summary>
+<summary><h3>"Where are you at?"</h3><br>Strategy can ask where you are in the game, then gives you a checklist of steps.</summary>
 <br>
 
 <table>
@@ -155,7 +155,7 @@ Tick off steps as you go. Your progress is saved on the Deck, for each game.
 </details>
 
 <details>
-<summary><b>Ask about a screenshot</b>: take a screenshot and ask what's on screen, like a puzzle, a menu or an error message.</summary>
+<summary><h3>Ask about a screenshot</h3><br>Take a screenshot and ask what's on screen, like a puzzle, a menu or an error message.</summary>
 <br>
 
 Press the paperclip on the question box and pick **Close menu & take screenshot**. Open the menu
@@ -170,7 +170,7 @@ needs a model that can see pictures; the starter model can.
 </details>
 
 <details>
-<summary><b>Search your chats, settings and notes</b>: a Search tab to the left of Main finds things without any AI.</summary>
+<summary><h3>Search your chats, settings and notes</h3><br>A Search tab to the left of Main finds things without any AI.</summary>
 <br>
 
 One find box looks through your chats, the game notes, your own notes and even Steam's own settings. Type
@@ -184,7 +184,7 @@ One find box looks through your chats, the game notes, your own notes and even S
 </details>
 
 <details>
-<summary><b>Close the menu, keep playing</b>: close the menu while an answer is being written, and a popup tells you when it's ready.</summary>
+<summary><h3>Close the menu, keep playing</h3><br>Close the menu while an answer is being written, and a popup tells you when it's ready.</summary>
 <br>
 
 The answer keeps going in the background. The **Reply ready** popup shows its first lines, and the
@@ -198,7 +198,7 @@ full answer waits in the chat.
 </details>
 
 <details>
-<summary><b>Saved chats</b>: keep up to ten chats and flip between them with the triggers.</summary>
+<summary><h3>Saved chats</h3><br>Keep up to ten chats and flip between them with the triggers.</summary>
 <br>
 
 At ten, **New chat** asks which chat to delete first, and nothing is deleted without the **Delete
@@ -213,7 +213,7 @@ ask it to sum up at any time.
 </details>
 
 <details>
-<summary><b>Talk instead of typing</b>: press the mic button and talk. Your speech becomes text on the Deck itself.</summary>
+<summary><h3>Talk instead of typing</h3><br>Press the mic button and talk. Your speech becomes text on the Deck itself.</summary>
 <br>
 
 <table>
@@ -233,7 +233,7 @@ text, which takes a couple of seconds. The recording is deleted as soon as that'
 </details>
 
 <details>
-<summary><b>See how it answered</b>: Show details under any answer shows which model wrote it and which notes it used.</summary>
+<summary><h3>See how it answered</h3><br>Show details under any answer shows which model wrote it and which notes it used.</summary>
 <br>
 
 <table>

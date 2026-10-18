@@ -18,7 +18,14 @@
  * Does not: Take the screenshot, or turn on the media-library permission —
  * both happen elsewhere. This file is only told whether they are allowed.
  */
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
+import { pressThenHandRingOn } from "../../shared/dpad/handRingOnWhenGone";
+import {
+  registerNavFocus,
+  takeNavFocus,
+  unregisterNavFocus,
+  type NavRefHolder,
+} from "../../shared/dpad/navFocusRegistry";
 import { toaster } from "@decky/api";
 import { Button, Focusable } from "@decky/ui";
 import type { ScreenshotItem } from "../../types/bonsaiUi";
@@ -61,7 +68,12 @@ export type MainTabScreenshotBrowserProps = {
  * 1. onPasteClipboardStash() reads the clipboard, cleans up what it finds,
  *    warns if it was empty, otherwise adds it to the question box and closes
  *    this panel.
- * 2. The panel itself: Escape or Backspace closes it.
+ * 2. The panel itself: B (Steam's cancel button) closes it and hands the
+ *    ring to the question box; Escape or Backspace do the same from a
+ *    keyboard. When it opens, the ring is handed into the grid (its first
+ *    stop is the newest picture) once pictures are listed, else to the Back
+ *    button, through Steam's own transfer (plan 96 F5: before this nothing in
+ *    the picker could hold the ring, plan94-P94-SCREENSHOT-try2.json).
  * 3. A small toolbar: Back, Paste clipboard, and Refresh (the last one
  *    disabled while already loading or while media-library access is off).
  * 4. An error, if there is one — as a permission prompt when the caller can
@@ -105,14 +117,67 @@ export function MainTabScreenshotBrowser({
     }
   }, [setUnifiedInput, onCloseScreenshotBrowser]);
 
+  /* Steam fills these in: the box and the grid as places the ring can be sent to. */
+  const browserNav = useRef<NavRefHolder["current"]>(null);
+  const gridNav = useRef<NavRefHolder["current"]>(null);
+  useEffect(() => {
+    registerNavFocus("screenshot-browser", browserNav);
+    registerNavFocus("screenshot-grid", gridNav);
+    return () => {
+      unregisterNavFocus("screenshot-browser", browserNav);
+      unregisterNavFocus("screenshot-grid", gridNav);
+    };
+  }, []);
+
+  /*
+   * Hand the ring into the picker when it opens: the paperclip menu's A unmounted the row that
+   * held the ring, so nothing owned it (plan 94). The grid once pictures are listed (Steam's
+   * transfer onto a container lands on its first stop, the newest picture), else the Back button.
+   * Once only per open, and the grid is tried once more when its pictures arrive after the box.
+   */
+  const hasPictures = recentScreenshots.length > 0;
+  const ringTakenRef = useRef<"none" | "browser" | "grid">("none");
+  useEffect(() => {
+    if (ringTakenRef.current === "grid") return;
+    const take = () => {
+      if (hasPictures && takeNavFocus("screenshot-grid")) {
+        ringTakenRef.current = "grid";
+        return;
+      }
+      if (ringTakenRef.current === "none" && takeNavFocus("screenshot-browser")) ringTakenRef.current = "browser";
+    };
+    // After the paint, so Steam has filled the nav refs in.
+    const t = window.setTimeout(take, 0);
+    return () => window.clearTimeout(t);
+  }, [hasPictures, isLoadingRecentScreenshots]);
+
+  /** Close the picker and put the ring on the question box: the control it was on is gone with the box. */
+  const closeAndHandRingOn = useCallback(() => {
+    onCloseScreenshotBrowser();
+    window.setTimeout(() => {
+      void takeNavFocus("unified-input");
+    }, 0);
+  }, [onCloseScreenshotBrowser]);
+
   return (
     <Focusable
       className="bonsai-full-bleed-row"
       flow-children="vertical"
       ref={screenshotBrowserHostRef}
+      {...({
+        navRef: browserNav,
+        /*
+         * B closes the picker only. `onCancelButton` is the one handler that consumes Steam's B (measured
+         * for the glossary chip, 2026-08-28); without it B went to the page and backed out of the plugin.
+         */
+        onCancelButton: (e: unknown) => {
+          (e as { preventDefault?: () => void })?.preventDefault?.();
+          closeAndHandRingOn();
+        },
+      } as Record<string, unknown>)}
       onKeyDown={(ev: React.KeyboardEvent<HTMLDivElement>) => {
         if (ev.key === "Escape" || ev.key === "Backspace") {
-          onCloseScreenshotBrowser();
+          closeAndHandRingOn();
           ev.preventDefault();
         }
       }}
@@ -130,7 +195,7 @@ export function MainTabScreenshotBrowser({
     >
       <Focusable flow-children="horizontal" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         <Button
-          onClick={onCloseScreenshotBrowser}
+          onClick={closeAndHandRingOn}
           aria-label="Back"
           style={{ minWidth: 52, width: 52, minHeight: 34, padding: 0, ...presetButtonSurface }}
         >
@@ -184,7 +249,8 @@ export function MainTabScreenshotBrowser({
         </div>
         )
       ) : (
-        <div
+        <Focusable
+          {...({ navRef: gridNav } as Record<string, unknown>)}
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
@@ -198,7 +264,12 @@ export function MainTabScreenshotBrowser({
           {recentScreenshots.map((item) => (
             <Button
               key={item.path}
-              onClick={() => onSelectRecentScreenshot(item)}
+              onClick={(e: MouseEvent) =>
+                // The picker closes with the picture chosen, taking the pressed button with it: hand the ring on.
+                pressThenHandRingOn(e.currentTarget as HTMLElement | null, () => onSelectRecentScreenshot(item), () => {
+                  void takeNavFocus("unified-input");
+                })
+              }
               style={{
                 minHeight: 144,
                 ...presetButtonSurface,
@@ -233,7 +304,7 @@ export function MainTabScreenshotBrowser({
               </span>
             </Button>
           ))}
-        </div>
+        </Focusable>
       )}
     </Focusable>
   );

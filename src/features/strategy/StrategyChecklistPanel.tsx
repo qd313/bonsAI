@@ -13,6 +13,7 @@ import { Button } from "@decky/ui";
 
 import type { StrategyChecklistState } from "../../types/bonsaiUi";
 import { deckNavHandlers } from "../../shared/dpad/liveTurnFocusGraph";
+import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
 import { textPx } from "../../styles/textPx";
 
 type Props = {
@@ -89,7 +90,7 @@ export function StrategyChecklistPanel({
           <Button
             key={`sg-check-${item.id}`}
             focusable
-            className="bonsai-strategy-checklist-step"
+            className={`${FOCUS_RING_BTN_CLASS} bonsai-strategy-checklist-step`}
             aria-checked={checked}
             aria-pressed={checked}
             onClick={() => onToggle(item.id, !checked)}

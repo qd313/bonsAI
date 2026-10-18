@@ -50,6 +50,10 @@ Building the plugin's own line, when the model has not said anything yet:
  4. Without a question to weave in, `format_thinking_phase()` falls back to
     a short, plain phrase per phase instead of trying to compose one.
 
+When a first word is more than about 10 s away, the Ask path publishes the phase "loading_model",
+whose one fixed line (`LOADING_MODEL_LINE`) says the AI is loading and the first time takes a
+minute or two; `escalate_static_thinking_line()` leaves that line alone.
+
 Once the wait runs long, `escalate_static_thinking_line()` notices when a
 line has not changed in a while -- the model went quiet with no new status
 tag -- and rotates in a "still working" line instead, one that gets more
@@ -96,6 +100,7 @@ AskThinkingPhase = Literal[
     "searching_kb",
     "building_context",
     "connecting_model",
+    "loading_model",
     "model_retry",
     "generating",
     "summing_up",
@@ -108,6 +113,14 @@ AskThinkingPhase = Literal[
 # question into it would read oddly ("Summing up the chat about is it worth it to buy the season
 # pass so far"). The maintainer picked this exact wording.
 SUMMING_UP_LINE = "Summing up the chat so far"
+
+# Plan 96 F2: shown once a question has waited more than about 10 s for its first word. After a
+# fresh install the model loads cold on the first question and the first word took 95 to 120 s
+# (Deck, plan 94 block 4) with only "Still going..." lines and no reason. One fixed sentence for
+# every tone and character, like the summing-up line: it is a fact about the AI, not about the
+# question, and it is never rotated away by `escalate_static_thinking_line()`. The maintainer
+# picked this exact wording. It goes when the first word, or the model's own status line, arrives.
+LOADING_MODEL_LINE = "Loading the AI. The first time takes a minute or two."
 
 
 def summing_up_line(seconds: float) -> str:
@@ -785,6 +798,8 @@ def format_thinking_phase(
     """Build a deterministic, context-aware status line for pending Ask phases."""
     if phase == "summing_up":
         return SUMMING_UP_LINE[:_PHASE_MAX_LEN]
+    if phase == "loading_model":
+        return LOADING_MODEL_LINE
     woven_q = (question or "").strip()
     if woven_q:
         if phase == "starting":
@@ -968,6 +983,9 @@ def escalate_static_thinking_line(
     itself back to back, which looks like a stall -- the exact impression this exists to avoid.
     """
     text = (base or "").strip()
+    if text == LOADING_MODEL_LINE:
+        # Already the honest explanation for a long wait; "Still going" would only replace it.
+        return text
     step = _static_step_for(request_id, static_seconds)
     if step < 0:
         return text

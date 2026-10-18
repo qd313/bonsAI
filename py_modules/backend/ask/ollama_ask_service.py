@@ -91,6 +91,10 @@ from backend.ollama.ollama_urls import normalize_ollama_base
 
 logger = decky.logger
 
+# Plan 96 F2: how long a model call may stay silent before the line says the AI is loading. After
+# a fresh install the model loads cold and the first word took 95 to 120 s (Deck, plan 94).
+LOADING_LINE_AFTER_SECONDS = 10.0
+
 
 async def run_ask_ollama(
     plugin: Any,
@@ -339,6 +343,9 @@ async def run_ask_ollama(
         len(question),
     )
 
+    # Set by the first sign of life from the model (an answer word, a thinking word or its own
+    # status line). The "loading the AI" line only goes up while this is still unset.
+    first_signal = threading.Event()
     on_delta_cb = None
     if isinstance(token_stream_request_id, int):
         stream_rid = token_stream_request_id
@@ -356,6 +363,8 @@ async def run_ask_ollama(
             reasoning_seconds: Optional[int] = None,
         ) -> None:
             nonlocal announced_generating
+            if (text or "").strip() or (reasoning_partial or "").strip() or thinking_summary:
+                first_signal.set()
             # First real token: the model is writing, not connecting. Publishing here is what
             # retires the "waking the model up" line, which otherwise stayed on screen for the
             # whole generation and stopped being true the moment tokens started.
@@ -412,19 +421,20 @@ async def run_ask_ollama(
         last_failure = {"success": False, "response": "No model attempts executed.", **ollama_extras}
 
         for model_idx, model_name in enumerate(models_to_try):
+            loading_timer = None
             if isinstance(active_request_id, int):
+                phase_args = dict(app_name=app_name, ask_mode=ask_mode, question=display_question,
+                                  character_enabled=bool(settings.get("ai_character_enabled")),
+                                  character_preset_id=rp_meta.resolved_preset_id)
                 # The first attempt is the longest silent stretch of an Ask: a cold model can sit
                 # in load for tens of seconds before the first token. Publishing here is the
                 # difference between "nothing is happening" and "the model is waking up".
                 plugin_inst._publish_thinking_phase_key(
-                    active_request_id,
-                    "model_retry" if model_idx > 0 else "connecting_model",
-                    app_name=app_name,
-                    ask_mode=ask_mode,
-                    question=display_question,
-                    character_enabled=bool(settings.get("ai_character_enabled")),
-                    character_preset_id=rp_meta.resolved_preset_id,
-                )
+                    active_request_id, "model_retry" if model_idx > 0 else "connecting_model", **phase_args)
+                # Still silent after LOADING_LINE_AFTER_SECONDS: the model is most likely loading
+                # from disk. Say so, instead of rotating "still going" lines with no reason.
+                loading_timer = loop.call_later(LOADING_LINE_AFTER_SECONDS, lambda rid=active_request_id: (
+                    first_signal.is_set() or plugin_inst._publish_thinking_phase_key(rid, "loading_model", **phase_args)))
             ask_diagnostics["models_attempted"].append(model_name)
             plugin_inst._chat_resp_ready_evt = threading.Event()
             plugin_inst._active_ollama_chat_pc_ip = str(pc_ip or "").strip()
@@ -460,6 +470,7 @@ async def run_ask_ollama(
                     ),
                 )
             finally:
+                loading_timer and loading_timer.cancel()
                 plugin_inst._active_ollama_chat_pc_ip = None
                 plugin_inst._active_ollama_chat_model = None
             merged = {**ollama_extras, **result}

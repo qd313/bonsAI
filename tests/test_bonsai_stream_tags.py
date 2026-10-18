@@ -6,6 +6,7 @@ import unittest
 from backend.answer.bonsai_stream_tags import (
     _STATIC_LINE_FIRST_WINDOW_SECONDS,
     _STATIC_LINE_STEP_WINDOW_SECONDS,
+    LOADING_MODEL_LINE,
     SUMMING_UP_LINE,
     _static_window_seconds,
     compose_thinking_blurb,
@@ -712,6 +713,35 @@ class BonsaiStreamTagsTests(unittest.TestCase):
             or any(out in _EMOJI_ONLY_LINES for out in samples),
             msg=samples,
         )
+
+
+class LoadingModelLineTests(unittest.TestCase):
+    """Plan 96 F2: the one sentence shown when the first word is slow to come."""
+
+    def test_the_words_are_exactly_the_ones_the_maintainer_picked(self):
+        self.assertEqual(
+            LOADING_MODEL_LINE, "Loading the AI. The first time takes a minute or two."
+        )
+
+    def test_the_phase_writes_that_sentence_for_every_tone_and_question(self):
+        for question in ("", "how do I beat the first boss"):
+            for character in (False, True):
+                out = format_thinking_phase(
+                    "loading_model", question=question, request_id=3, character_enabled=character
+                )
+                self.assertEqual(out, LOADING_MODEL_LINE)
+
+    def test_the_sentence_is_never_swapped_for_a_still_going_line_however_long_it_sits(self):
+        """Before this, a line static for 7 to 13 s became "Still on it..." and then "Still going."
+        (Deck, plan 94: 100 s of those and no reason given)."""
+        for static in (0.0, 8.0, 14.0, 41.0, 55.0, 300.0):
+            for tone in ("witty", "deadpan"):
+                self.assertEqual(
+                    escalate_static_thinking_line(
+                        LOADING_MODEL_LINE, static_seconds=static, request_id=4, tone=tone
+                    ),
+                    LOADING_MODEL_LINE,
+                )
 
 
 if __name__ == "__main__":

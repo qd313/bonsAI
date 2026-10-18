@@ -78,6 +78,7 @@ from backend.ask.ollama_ask_extras import (
     with_pyro_carousel_tip,
 )
 from backend.ask.ollama_service import post_ollama_chat
+from backend.ask.ollama_loading_line import arm_loading_line, thinking_phase_args
 from backend.answer.response_verify import build_live_spoiler_cover
 from backend.ollama.ollama_keep_alive_rule import effective_keep_alive
 from backend.settings.settings_service import sanitize_reply_verbosity
@@ -423,9 +424,7 @@ async def run_ask_ollama(
         for model_idx, model_name in enumerate(models_to_try):
             loading_timer = None
             if isinstance(active_request_id, int):
-                phase_args = dict(app_name=app_name, ask_mode=ask_mode, question=display_question,
-                                  character_enabled=bool(settings.get("ai_character_enabled")),
-                                  character_preset_id=rp_meta.resolved_preset_id)
+                phase_args = thinking_phase_args(settings, app_name, ask_mode, display_question, rp_meta.resolved_preset_id)
                 # The first attempt is the longest silent stretch of an Ask: a cold model can sit
                 # in load for tens of seconds before the first token. Publishing here is the
                 # difference between "nothing is happening" and "the model is waking up".
@@ -433,8 +432,8 @@ async def run_ask_ollama(
                     active_request_id, "model_retry" if model_idx > 0 else "connecting_model", **phase_args)
                 # Still silent after LOADING_LINE_AFTER_SECONDS: the model is most likely loading
                 # from disk. Say so, instead of rotating "still going" lines with no reason.
-                loading_timer = loop.call_later(LOADING_LINE_AFTER_SECONDS, lambda rid=active_request_id: (
-                    first_signal.is_set() or plugin_inst._publish_thinking_phase_key(rid, "loading_model", **phase_args)))
+                loading_timer = arm_loading_line(loop, LOADING_LINE_AFTER_SECONDS, plugin_inst._publish_thinking_phase_key,
+                                                 active_request_id, first_signal, phase_args)
             ask_diagnostics["models_attempted"].append(model_name)
             plugin_inst._chat_resp_ready_evt = threading.Event()
             plugin_inst._active_ollama_chat_pc_ip = str(pc_ip or "").strip()

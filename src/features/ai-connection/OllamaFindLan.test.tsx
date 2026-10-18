@@ -8,6 +8,7 @@
  * Does not: Prove the ring on the device. Find LAN is the last button in the connection row with no move
  *           handlers of its own, and nothing aims at it; the Deck row P96-FINDLAN looks at that.
  */
+import type React from "react";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -50,8 +51,11 @@ function renderSection(onDeck = false, onOllamaIpChange: (v: string) => void = (
 async function pressFindLanAndSearch() {
   fireEvent.click(screen.getByLabelText("Find Ollama on LAN via mDNS"));
   await waitFor(() => expect(hoisted.boxes).toHaveLength(1));
-  const box = hoisted.boxes[0] as { props: { onOK: () => void } };
-  act(() => box.props.onOK());
+  // The ask-first box is the shared two-button box: Search on the left, Cancel on the right. Press Search.
+  const { container } = render(hoisted.boxes[0] as React.ReactElement);
+  const buttons = Array.from(container.querySelectorAll("button"));
+  expect(buttons.map((b) => b.textContent)).toEqual(["Search", "Cancel"]);
+  fireEvent.click(buttons[0]);
 }
 
 describe("OllamaWhereAiRunsSection Find LAN", () => {

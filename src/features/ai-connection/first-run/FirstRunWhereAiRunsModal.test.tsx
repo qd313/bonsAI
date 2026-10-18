@@ -36,6 +36,14 @@ function open(host = popupHost(), onClose = vi.fn()) {
 const addressBox = () => document.querySelector('input[data-decky-ui="TextField"]') as HTMLInputElement;
 const pressButton = (name: string) => fireEvent.click(screen.getByLabelText(name));
 
+/** The ask-first box is the shared two-button box: Search on the left, Cancel on the right. Press Search. */
+function pressSearchInAskFirstBox() {
+  const { container } = render(boxes[0]);
+  const buttons = Array.from(container.querySelectorAll("button"));
+  expect(buttons.map((b) => b.textContent)).toEqual(["Search", "Cancel"]);
+  fireEvent.click(buttons[0]);
+}
+
 beforeEach(() => {
   resetFakeDeckyRpc();
   resetBoxes();
@@ -127,7 +135,7 @@ describe("what the popup says", () => {
     pressButton("Find Ollama on LAN via mDNS");
     await waitFor(() => expect(boxes).toHaveLength(1));
     expect(getRpcCallLog().some((c) => c.method === "discover_mdns_ollama_hosts")).toBe(false);
-    act(() => (boxes[0].props as { onOK: () => void }).onOK());
+    pressSearchInAskFirstBox();
     await waitFor(() => expect(addressBox().value).toBe("192.168.1.77:11434"));
   });
 
@@ -136,7 +144,7 @@ describe("what the popup says", () => {
     open(popupHost({ ollamaLocalOnDeck: false }));
     pressButton("Find Ollama on LAN via mDNS");
     await waitFor(() => expect(boxes).toHaveLength(1));
-    act(() => (boxes[0].props as { onOK: () => void }).onOK());
+    pressSearchInAskFirstBox();
     await waitFor(() => expect(text()).toContain("No Ollama services found here."));
   });
 });

@@ -28,6 +28,7 @@ import {
   troubleshootHintRowNavHandlers,
 } from "../../../shared/dpad/chatTranscriptNavHelpers";
 import type { PermHintNavTargets } from "./usePermHintNavTargets";
+import { FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN } from "../../../styles/settingsGlassButton";
 import { textPx } from "../../../styles/textPx";
 
 export type ChatTranscriptHintRowsProps = {
@@ -88,8 +89,10 @@ export function ChatTranscriptHintRows(props: ChatTranscriptHintRowsProps) {
         <Button
           focusable
           ref={troubleshootHintButtonRefs[0]}
+          // The frosted look the plugin's other buttons wear: Decky's default drew it light (plan96-QA-LOOK3-main.json).
+          className={FOCUS_RING_BTN_CLASS}
           onClick={props.onNavigateToOllama}
-          style={{ fontSize: textPx(11), padding: "4px 10px", minHeight: 34 }}
+          style={{ ...SETTINGS_GLASS_BTN, fontSize: textPx(11), padding: "4px 10px", minHeight: 34 }}
         >
           Open the Ollama tab
         </Button>

@@ -693,3 +693,18 @@ def save_settings(
     except Exception as exc:
         logger.exception("save_settings: failed to write %s", path)
         raise RuntimeError(f"Failed to save settings: {exc}") from exc
+
+
+def settings_file_missing(path: str) -> bool:
+    """True when there is no settings.json on disk right now."""
+    return not os.path.exists(path)
+
+
+def settings_first_run_answer(pending_at_start: bool, path: str) -> bool:
+    """Whether the screen should treat this load as a first run.
+
+    ``pending_at_start`` is True when the plugin started with no settings file and nobody has asked
+    yet. It is still re-checked against the disk, so the first save (which writes the file) turns it
+    off even if the screen never asked before then.
+    """
+    return bool(pending_at_start) and settings_file_missing(path)

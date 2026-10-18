@@ -155,6 +155,8 @@ from backend.settings.settings_service import (
     sanitize_settings,
     sanitize_unified_input_persistence_mode,
     save_settings as save_settings_to_disk,
+    settings_file_missing,
+    settings_first_run_answer,
 )
 from backend.core.capabilities import (
     capability_enabled,
@@ -347,6 +349,8 @@ class Plugin:
         """Run plugin startup hooks and ensure background state exists before serving RPCs."""
         # Kids lock is session-only; never leave a stale deny across backend restarts.
         set_kids_lock_active(False)
+        # A start with no settings file is a first run (a wiped Deck); the screen asks once.
+        self._settings_first_run_pending = settings_file_missing(Plugin._settings_path())
         logger.info("bonsAI plugin loaded!")
         await self._maybe_app_log("plugin.lifecycle", "plugin loaded")
         self._schedule_preload_ask_model()
@@ -821,6 +825,12 @@ class Plugin:
         """Load persisted plugin settings from Decky's settings directory."""
         path = Plugin._settings_path()
         return load_settings_from_disk(path, Plugin._sanitize_settings, logger)
+
+    async def get_settings_first_run(self):
+        """Say once per start whether there was no settings file, so the screen can clear stale flags."""
+        pending = getattr(self, "_settings_first_run_pending", False)
+        self._settings_first_run_pending = False
+        return {"first_run": settings_first_run_answer(pending, Plugin._settings_path())}
 
     async def save_settings(self, data: Any = None):
         """Persist plugin settings to Decky's settings directory."""

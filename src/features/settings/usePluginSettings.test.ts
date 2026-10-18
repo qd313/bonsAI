@@ -28,6 +28,46 @@ describe("usePluginSettings", () => {
     expect(peekDeveloperTabShown()).toBe(false);
   });
 
+  describe("first run (a start with no settings file)", () => {
+    it("says nothing is known until the back end has answered, then passes on a true", async () => {
+      setRpcHandler("get_settings_first_run", () => ({ first_run: true }));
+      const { result } = renderHook(() => usePluginSettings());
+      expect(result.current.settingsFirstRun).toBeNull();
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      expect(result.current.settingsFirstRun).toBe(true);
+    });
+
+    it("passes on false when the back end says a settings file was there", async () => {
+      setRpcHandler("get_settings_first_run", () => ({ first_run: false }));
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      expect(result.current.settingsFirstRun).toBe(false);
+    });
+
+    it("counts a failed or odd answer as not a first run, so a broken call never wipes anyone's flags", async () => {
+      setRpcHandler("get_settings_first_run", () => {
+        throw new Error("backend unavailable");
+      });
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      expect(result.current.settingsFirstRun).toBe(false);
+    });
+
+    it("never turns the screen's settings loaded before the first-run answer is in", async () => {
+      let answer: (v: { first_run: boolean }) => void = () => {};
+      setRpcHandler("get_settings_first_run", () => new Promise((resolve) => (answer = resolve)));
+      const { result } = renderHook(() => usePluginSettings());
+      await waitFor(() => expect(getRpcCallLog().some((c) => c.method === "load_settings")).toBe(true));
+      await act(async () => {
+        await Promise.resolve();
+      });
+      expect(result.current.settingsLoaded).toBe(false);
+      await act(async () => answer({ first_run: true }));
+      await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+      expect(result.current.settingsFirstRun).toBe(true);
+    });
+  });
+
   it("a fresh install, with nothing saved, opens with Run AI on this Deck switched on", async () => {
     setRpcHandler("load_settings", () => normalizeSettings({}));
     const { result } = renderHook(() => usePluginSettings());

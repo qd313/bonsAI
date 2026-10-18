@@ -251,6 +251,12 @@ function capitalize(key: string): string {
 export function usePluginSettings() {
   const [settings, setSettings] = useState<BonsaiSettingsSnapshotInput>(defaultSettingsSnapshot);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
+  /**
+   * Whether the back end started with no settings file (a wiped or brand-new Deck): null until it
+   * has answered, then true or false. It is set in the same step that sets `settingsLoaded`, so
+   * nothing that waits for loaded settings can run before this is known.
+   */
+  const [settingsFirstRun, setSettingsFirstRun] = useState<boolean | null>(null);
   /** When false, debounced ``save_settings`` is skipped so a failed initial load cannot wipe disk with UI defaults. */
   const [settingsPersistEnabled, setSettingsPersistEnabled] = useState(false);
 
@@ -465,6 +471,11 @@ export function usePluginSettings() {
 
   useEffect(() => {
     let cancelled = false;
+    // Asked at the same time as the load. A failed or odd answer counts as "not a first run", so a
+    // broken call can never make the screen wipe a person's remembered flags.
+    const firstRunAnswer = callDeckyWithTimeout<[], { first_run?: unknown }>("get_settings_first_run", [])
+      .then((answer) => answer?.first_run === true)
+      .catch(() => false);
     callDeckyWithTimeout<[], BonsaiSettings>("load_settings", [])
       .then((saved) => {
         if (cancelled) return;
@@ -504,8 +515,13 @@ export function usePluginSettings() {
         setSettings(defaultSettingsSnapshot());
       })
       .finally(() => {
-        if (!cancelled) setSettingsLoaded(true);
-        markSettingsLoaded();
+        void firstRunAnswer.then((firstRun) => {
+          if (!cancelled) {
+            setSettingsFirstRun(firstRun);
+            setSettingsLoaded(true);
+          }
+          markSettingsLoaded();
+        });
       });
     return () => {
       cancelled = true;
@@ -554,5 +570,7 @@ export function usePluginSettings() {
      * session-survival snapshot) can take it directly instead of rebuilding it field by field.
      */
     settingsSnapshot: settings,
+    /** null until the back end answers, then whether it found no settings file (see the state above). */
+    settingsFirstRun,
   };
 }

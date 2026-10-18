@@ -36,7 +36,8 @@ How it works:
    a different module is NOT blanked and shows up as a difference.
 4. In Markdown, relative links get the same test. In Python, the import statements of the old
    and new file are read with `ast` and compared as sets of full module names, with the old
-   names run through the move table; passing import statements are blanked.
+   names run through the move table (a name spelled with the `py_modules.` prefix, as tests write
+   it, is mapped the same as one without); passing import statements are blanked.
 5. Everywhere, an old or new repo path of a moved file, an old or new Python dotted module name
    of a moved file, the two shorter back-end forms of those repo paths (`backend/...`, and
    `services/...` relative to `py_modules/backend/`), and (for a rename) the old or new base
@@ -300,6 +301,8 @@ class MoveTable:
         return self.files.get(path, path)
 
     def map_dotted(self, name: str) -> str:
+        if name.startswith("py_modules."):  # dotted_name() drops this prefix; tests spell it out
+            return "py_modules." + self.map_dotted(name[len("py_modules."):])
         for old in self.dotted_sorted:
             if name == old or name.startswith(old + "."):
                 return self.dotted[old] + name[len(old) :]

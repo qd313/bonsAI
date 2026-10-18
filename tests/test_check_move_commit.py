@@ -138,6 +138,25 @@ class PythonMoveTests(unittest.TestCase):
         code, out = self.box.check()
         self.assertEqual(code, 0, out)
 
+    def test_a_from_package_import_of_a_moved_module_follows_the_move(self):
+        self.box.write("tests/test_foo2.py", "from py_modules.backend.services import foo\n")
+        self.box.commit("add importer")
+        do_python_move(self.box)
+        self.box.edit("tests/test_foo2.py", "py_modules.backend.services import", "py_modules.backend.services.sub import")
+        self.box.commit("move foo")
+        code, out = self.box.check()
+        self.assertEqual(code, 0, out)
+
+    def test_a_from_package_import_rewritten_to_the_wrong_folder_fails(self):
+        self.box.write("tests/test_foo2.py", "from py_modules.backend.services import foo\n")
+        self.box.commit("add importer")
+        do_python_move(self.box)
+        self.box.edit("tests/test_foo2.py", "py_modules.backend.services import", "py_modules.backend.other import")
+        self.box.commit("move foo")
+        code, out = self.box.check()
+        self.assertEqual(code, 1, out)
+        self.assertIn("test_foo2.py", out)
+
     def test_a_comment_in_the_short_backend_form_may_follow_the_move(self):
         self.box.write("py_modules/backend/services/note.py", "# see backend/services/foo.py and services/foo.py\n")
         self.box.commit("add note")

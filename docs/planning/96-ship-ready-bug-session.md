@@ -5,7 +5,7 @@ separate plan, along with other bugs that should be sorted out in order for us t
 another chat." Everything here comes from [plan 94](94-fresh-install-walk-and-ship-readiness.md) (its § 7a, § 8 and § 9) and
 the roadmap as filed that night.
 
-**Status:** RAN 2026-10-18 02:30 to 06:30 UTC; the code and the Deck part are done, NOT PUSHED. Owed: the push, the eight hand checks, F8's second try, F9/F10/F13 on release day's clean install, the calls in § 9e. The maintainer's calls are in § 2. The first-run popup waits for the maintainer's tweaks
+**Status:** RAN 2026-10-18 02:30 to 06:30 UTC, then the maintainer's afternoon to about 20:00 UTC (the hand checks, four more changes, three scopes). Everything landed; the night's commits were pushed by the README chat, the afternoon's are NOT PUSHED yet. Owed: the push, F8's second try, F9/F10/F13 on release day's clean install, the parental lock and the first-run wording from the hand checks, the three scoped bugs (fix later), R3's presses. The maintainer's calls are in § 2. The first-run popup waits for the maintainer's tweaks
 on the mock-up page (§ 4, N1). The hand checks (§ 5) can run any time the Deck is free, before or during this session.
 
 **Who runs it:** an Opus xhigh chat orchestrates and lands (AGENTS.md, "Which model does which work"); Sonnet 5.5 high

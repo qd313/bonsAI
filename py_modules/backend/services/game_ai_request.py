@@ -130,7 +130,7 @@ from backend.services.response_verify import (
 )
 from backend.characters.spy_confession_service import parse_spy_lies_tag
 from backend.strategy.strategy_guide_parse import is_strategy_followup_question
-from backend.services.strategy_spoiler_policy import (
+from backend.spoilers.strategy_spoiler_policy import (
     neutralize_protected_names_in_branch_menu,
     resolve_turn_spoiler_protected_names,
 )
@@ -158,8 +158,8 @@ from backend.services.kb_attached_notes import (
     mark_spoiler_protected_notes,
 )
 from backend.services.screenshot_media import lookup_screenshot_vdf_metadata
-from backend.services.spoiler_risk_service import build_spoiler_risk_signals
-from backend.services.spoiler_title_profiles import (
+from backend.spoilers.spoiler_risk_service import build_spoiler_risk_signals
+from backend.spoilers.spoiler_title_profiles import (
     questions_the_answer_above_answered,
     resolve_turn_title_spoiler_profile,
     set_aside_running_game_for_named_story_game,

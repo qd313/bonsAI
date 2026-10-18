@@ -95,12 +95,12 @@ from backend.strategy.strategy_guide_parse import (
     format_strategy_checklist_state_block,
     is_strategy_followup_question,
 )
-from backend.services.strategy_entity_extraction import (
+from backend.spoilers.strategy_entity_extraction import (
     kb_card_names,
     extract_strategy_asked_entity,
     kb_text_covers_asked_entity,
 )
-from backend.services.strategy_spoiler_policy import (
+from backend.spoilers.strategy_spoiler_policy import (
     user_consents_strategy_spoilers,
     _strategy_kb_spoiler_clause_suppressed,
     _strategy_spoiler_policy_block,

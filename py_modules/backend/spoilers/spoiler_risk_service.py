@@ -29,7 +29,7 @@ from __future__ import annotations
 import re
 from typing import Any, Literal, Optional
 
-from backend.services.spoiler_title_profiles import resolve_title_spoiler_profile
+from backend.spoilers.spoiler_title_profiles import resolve_title_spoiler_profile
 from backend.prompts.ollama_prompts import (
     extract_strategy_asked_entity,
     kb_text_covers_asked_entity,

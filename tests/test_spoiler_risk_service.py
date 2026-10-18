@@ -1,7 +1,7 @@
 import unittest
 
 from backend.prompts.ask_topic_instructions import question_matches_troubleshooting_log_context
-from backend.services.spoiler_risk_service import (
+from backend.spoilers.spoiler_risk_service import (
     build_spoiler_risk_signals,
     compute_heuristic_spoiler_risk_score,
     compute_spoiler_risk_band,

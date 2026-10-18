@@ -31,7 +31,7 @@ from backend.services.response_verify import (
     _fence_opener_is_spoiler,
     _split_fenced_segments,
 )
-from backend.services.strategy_spoiler_policy import move_midline_fence_openers_to_line_start
+from backend.spoilers.strategy_spoiler_policy import move_midline_fence_openers_to_line_start
 
 # The piece's first words: optional blank space and status lines, then a hidden block's opening
 # marker alone on its line, or with the block's text after it on the same line. The status line

@@ -38,7 +38,7 @@ from backend.ollama_reply_limits import read_json_capped
 from backend.strategy.branch_menu_example_guard import (  # noqa: F401
     drop_branch_menu_copying_the_worked_example,
 )
-from backend.services.strategy_spoiler_policy import (
+from backend.spoilers.strategy_spoiler_policy import (
     boss_like_card_names,
     move_midline_fence_openers_to_line_start,
     partial_fence_tail_match,

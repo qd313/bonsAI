@@ -25,7 +25,7 @@
  * Does not: decide anything about the AI's own answer, or about what counts
  * as a spoiler in the first place — the AI is told to wrap possible spoilers
  * as it writes, on the computer or Deck side
- * (`py_modules/backend/services/spoiler_title_profiles.py`, which keeps its
+ * (`py_modules/backend/spoilers/spoiler_title_profiles.py`, which keeps its
  * own copy of this same list). This file only decides, after the answer
  * already has its fences, whether one of them should start open or closed.
  *

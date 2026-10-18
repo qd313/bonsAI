@@ -2,7 +2,7 @@ import json
 import unittest
 from pathlib import Path
 
-from backend.services.spoiler_title_profiles import (
+from backend.spoilers.spoiler_title_profiles import (
     LOW_NARRATIVE_APP_IDS,
     PROTECT_PROGRESSION_APP_IDS,
     protected_title_named_in_question,

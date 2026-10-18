@@ -8,7 +8,7 @@ existed and is covered by its own tests.
 
 import unittest
 
-from backend.services.strategy_spoiler_policy import (
+from backend.spoilers.strategy_spoiler_policy import (
     _strategy_spoiler_policy_block,
     fence_opener_is_spoiler,
     fence_segment_is_closed,

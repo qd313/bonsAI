@@ -51,7 +51,7 @@ from backend.services.response_verify import (
     _split_fenced_segments,
 )
 from backend.services.soft_continue_spoiler_join import drop_repeated_spoiler_opener
-from backend.services.strategy_spoiler_policy import move_midline_fence_openers_to_line_start
+from backend.spoilers.strategy_spoiler_policy import move_midline_fence_openers_to_line_start
 
 MIN_REPEAT_CHARS = 40
 MIN_REPEAT_WORDS = 5

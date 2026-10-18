@@ -17,7 +17,7 @@ import re
 import unittest
 
 from backend.prompts.ollama_prompts import build_system_prompt
-from backend.services.strategy_spoiler_policy import _strategy_spoiler_policy_block
+from backend.spoilers.strategy_spoiler_policy import _strategy_spoiler_policy_block
 
 # The odd shape: the label immediately followed by a backtick run (allowing spaces), anywhere.
 ODD_SHAPE_RE = re.compile(r"bonsai-spoiler[ \t]*`{3}")

@@ -167,3 +167,9 @@ at landing; `verify.py --full` gated on its exit code before the final push.
   and the reasons' second column reached by Right, the Steam Sale link beside the column reached by Right (plan 92), and the
   Update button's Failed line after Cancel (the 2026-10-10 call; only Install's path was wrong). Landings run one by one with the
   gates: F9 (`4fb2f8ec`), the install words and Cancel (`091b1b6f`), the chip pace (`345c8cc7`), then the rest in order.
+- **03:30 UTC:** landed so far: F9, F10+F13, F22 pace, F14+F15, F23+F26, F3, F1, F2 (nine lane commits). F2's landing tripped the
+  size guard (the Ask service went to 401 lines of code); the loading-line timer moved to its own small file (`75db8faf`), and
+  the quick check runs again before the strategy, N3, models and N2 lanes and the session's five focus fixes land. The maintainer
+  freed the Deck at 03:24; another chat's rig lease ran until 03:31, then block M (setup, Expert against Speed, the chip row and
+  the Ask pill measured, the stopped answer with no notes card) started with a fresh driver (runbook
+  [assets/96-runbook-block-M.md](assets/96-runbook-block-M.md); block V, the mic and the ring stall, is written and waits).

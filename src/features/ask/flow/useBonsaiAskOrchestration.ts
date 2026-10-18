@@ -96,15 +96,12 @@ import { buildResponseText } from "../../power/appliedTuningText";
 import { detectPromptCategory } from "../../preset-carousel/presets";
 import { STRATEGY_FOLLOWUP_PREFIX } from "../../strategy/strategyGuideFollowup";
 import { normalizeStrategyGuideBranches } from "../../strategy/strategyGuideBranches";
+import { paintAnswerChecklist } from "../../strategy/strategyChecklistAnswer";
 import {
-  mergeStrategyChecklistState,
   normalizeStrategyChecklist,
   strategyChecklistToAskPayload,
 } from "../../strategy/strategyChecklist";
-import {
-  clearStrategyChecklistSession,
-  scheduleStrategyChecklistSessionSave,
-} from "../../strategy/strategyChecklistPersistence";
+import { clearStrategyChecklistSession } from "../../strategy/strategyChecklistPersistence";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../../shared/deckyCall";
 import { stripSoftContinueCue } from "./stripSoftContinueCue";
 import { uiActiveElement } from "../../../shared/dpad/uiDocument";
@@ -827,18 +824,16 @@ export function useBonsaiAskOrchestration(
                * carried ticks across. The list is still saved, under the game it was for, from
                * nothing but the answer's own items and that game's name.
                */
-              const appId = status.app_id ?? "";
-              const stillRunning = appId === (Router.MainRunningApp?.appid?.toString() ?? "");
-              const merged = mergeStrategyChecklistState(
-                stillRunning ? strategyChecklistRef.current : null,
-                checklistPayload,
-                {
-                  appId,
-                  appName: stillRunning ? Router.MainRunningApp?.display_name ?? "" : status.app_name ?? "",
-                },
-              );
-              if (stillRunning) setStrategyChecklist(merged);
-              scheduleStrategyChecklistSessionSave(merged);
+              paintAnswerChecklist({
+                payload: checklistPayload,
+                appId: status.app_id ?? "",
+                statusAppName: status.app_name ?? "",
+                runningAppId: Router.MainRunningApp?.appid?.toString() ?? "",
+                runningAppName: Router.MainRunningApp?.display_name ?? "",
+                readCurrent: () => strategyChecklistRef.current,
+                fromMountRead,
+                draw: setStrategyChecklist,
+              });
             }
 
             const { autoSave, fsWrite, settingsLoaded } = desktopAutoSavePrefsRef.current;

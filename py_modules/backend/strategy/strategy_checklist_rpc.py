@@ -81,15 +81,16 @@ async def save_strategy_checklist_session(self, payload: Any = None):
 
 
 async def clear_strategy_checklist_session(self, app_id: str = ""):
-    """Remove persisted checklist for one game or entire file when app_id omitted."""
+    """Remove the persisted checklist for one game; a blank id means "no game" and clears only that list.
+
+    A blank id used to empty the whole file, every game's list included, so leaving Strategy mode
+    with no game running threw away the ticks kept for other games (plan 96, F4).
+    """
     if not hasattr(self, "_strategy_checklist_store_lock"):
         self._strategy_checklist_store_lock = asyncio.Lock()
     async with self._strategy_checklist_store_lock:
         path = self._strategy_checklist_session_path()
         store = self._load_strategy_checklist_store()
-        if str(app_id or "").strip():
-            merged = clear_session_entry(store, app_id)
-        else:
-            merged = clear_session_entry(store, None)
+        merged = clear_session_entry(store, str(app_id or "").strip())
         save_session_store(path, merged, settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR, logger=logger)
         return {"ok": True}

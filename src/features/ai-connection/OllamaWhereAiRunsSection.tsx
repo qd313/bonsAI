@@ -105,6 +105,7 @@ import { OllamaSavedHostsRows } from "./OllamaSavedHostsRows";
 import { OllamaSetupStatusLine } from "./OllamaSetupStatusLine";
 import { useOllamaLocalAutostart } from "./useOllamaLocalAutostart";
 import { useMdnsOllamaDiscovery } from "./useMdnsOllamaDiscovery";
+import { tabMdnsDiscovery } from "./mdnsDiscoveryStore";
 import { useLocalOllamaSetupFlow } from "./useLocalOllamaSetupFlow";
 import { useSettingsLoadedFlag } from "../settings/useSettingsLoadedFlag";
 import { isHttpsOllamaAddress, OLLAMA_HTTPS_NOT_SUPPORTED_MESSAGE } from "./ollamaAddress";
@@ -429,6 +430,8 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     localSetupBusy,
     onBeforeDeckyModal,
     onCompleteDeckyModalClose,
+    // A search outlives this copy of the tab: the box closing rebuilds it (plan 96, Deck 2026-10-18).
+    store: tabMdnsDiscovery,
   });
 
   const { formatLocalSetupStageLine, cancelLocalSetup, runLocalSetupInPlace } = useLocalOllamaSetupFlow({

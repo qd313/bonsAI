@@ -14,9 +14,11 @@
  * Does not: Own the mdnsDiscovering/mdnsHosts/mdnsDiscoveryMessage state
  * itself. That state stays in the panel (its own JSX renders the results
  * list and the "no hosts found" message directly) and is handed in here as
- * setters, so this hook's own hook calls stay exactly the two the panel
- * used to make at this spot — nothing about where the panel's own useState
- * calls run moves.
+ * setters. The search itself is recorded in a store (mdnsDiscoveryStore.ts)
+ * that outlives the panel: the search's promise writes there, and every
+ * mounted copy of the panel is told through its setters, so a copy built
+ * after the box closed (Steam rebuilds the tab) still shows "…" while the
+ * search runs and what it found once it ends (plan 96).
  *
  * Caution: Lifted out of OllamaWhereAiRunsSection on 2026-09-24, from the
  * spot right after the panel's connection-test auto-probe effect and right
@@ -24,7 +26,7 @@
  * so this hook is called between them, in the same slot in the hook call
  * order.
  */
-import { useCallback } from "react";
+import { useCallback, useLayoutEffect, useRef } from "react";
 import { showModal } from "@decky/ui";
 import { TwoButtonConfirmModal } from "../../shared/TwoButtonConfirmModal";
 import { callDeckyWithTimeout, formatDeckyRpcError } from "../../shared/deckyCall";
@@ -34,6 +36,7 @@ import {
   MDNS_DISCOVERY_RPC_MS,
 } from "./OllamaWhereAiRunsSection.constants";
 import { textPx } from "../../styles/textPx";
+import { createMdnsDiscoveryStore, type MdnsDiscoveryStore } from "./mdnsDiscoveryStore";
 
 /**
  * Search, and the confirm dialog that starts it. Every hook below must keep its position —
@@ -48,6 +51,7 @@ export function useMdnsOllamaDiscovery({
   localSetupBusy,
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
+  store,
 }: {
   mdnsDiscovering: boolean;
   setMdnsDiscovering: (v: boolean) => void;
@@ -57,11 +61,28 @@ export function useMdnsOllamaDiscovery({
   localSetupBusy: boolean;
   onBeforeDeckyModal: () => void;
   onCompleteDeckyModalClose: (close: () => void) => void;
+  /** Where the search is recorded; the panel passes the shared one, anything else gets a private one. */
+  store?: MdnsDiscoveryStore;
 }) {
+  const ownStore = useRef<MdnsDiscoveryStore | null>(null);
+  const searchStore = store ?? (ownStore.current ??= createMdnsDiscoveryStore());
+
+  // Show what the store holds as soon as this copy is built, and follow it while this copy is on screen.
+  useLayoutEffect(() => {
+    const show = () => {
+      const held = searchStore.read();
+      if (!held) return;
+      setMdnsDiscovering(held.discovering);
+      setMdnsHosts(held.hosts);
+      setMdnsDiscoveryMessage(held.message);
+    };
+    show();
+    return searchStore.subscribe(show);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- the setters are state setters; subscribe once
+  }, [searchStore]);
+
   const runMdnsDiscovery = useCallback(async () => {
-    setMdnsDiscovering(true);
-    setMdnsDiscoveryMessage(null);
-    setMdnsHosts([]);
+    if (!searchStore.start()) return;
     try {
       const result = await callDeckyWithTimeout<[number], MdnsDiscoveryResult>(
         "discover_mdns_ollama_hosts",
@@ -70,21 +91,17 @@ export function useMdnsOllamaDiscovery({
       );
       const hosts = Array.isArray(result.hosts) ? result.hosts : [];
       if (hosts.length > 0) {
-        setMdnsHosts(hosts);
-        setMdnsDiscoveryMessage(null);
+        searchStore.finish(hosts, null);
       } else {
-        setMdnsHosts([]);
-        setMdnsDiscoveryMessage(
+        searchStore.finish(
+          [],
           (result.hint || result.error || "No Ollama services found via mDNS on this network.").trim()
         );
       }
     } catch (e: unknown) {
-      setMdnsHosts([]);
-      setMdnsDiscoveryMessage(formatDeckyRpcError(e));
-    } finally {
-      setMdnsDiscovering(false);
+      searchStore.finish([], formatDeckyRpcError(e));
     }
-  }, []);
+  }, [searchStore]);
 
   const openMdnsDiscoveryConfirm = useCallback(() => {
     if (ollamaLocalOnDeck || mdnsDiscovering || localSetupBusy) return;

@@ -28,6 +28,7 @@ import { OllamaWhereAiRunsSection } from "./OllamaWhereAiRunsSection";
 import { resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
 import { markSettingsLoaded, resetSettingsLoadedSignalForTests } from "../settings/settingsLoadedSignal";
 import { publishDeveloperTabShown, resetDeveloperTabSignalForTests } from "../settings/developerTabSignal";
+import { tabMdnsDiscovery } from "./mdnsDiscoveryStore";
 
 function renderSection(onDeck = false, onOllamaIpChange: (v: string) => void = () => {}) {
   return render(
@@ -64,6 +65,7 @@ describe("OllamaWhereAiRunsSection Find LAN", () => {
     resetSettingsLoadedSignalForTests();
     markSettingsLoaded();
     resetDeveloperTabSignalForTests();
+    tabMdnsDiscovery.reset();
     hoisted.boxes.length = 0;
   });
 
@@ -108,5 +110,55 @@ describe("OllamaWhereAiRunsSection Find LAN", () => {
     renderSection(false);
     await pressFindLanAndSearch();
     await waitFor(() => expect(screen.getByText("No Ollama services found here.")).toBeTruthy());
+  });
+
+  /*
+   * The Deck 2026-10-18 (plan96-P96-FINDLAN.json): A on Search closed the box, Steam rebuilt the Ollama tab,
+   * and the new copy showed neither "…" nor the result. Each test below throws the first copy away and
+   * draws a second one, the way the rebuild does, then reads what is on screen.
+   */
+  it("shows the search running on the rebuilt tab, then what it found", async () => {
+    let finish: (v: unknown) => void = () => {};
+    setRpcHandler("discover_mdns_ollama_hosts", () => new Promise((resolve) => (finish = resolve)));
+    const first = renderSection(false);
+    await pressFindLanAndSearch();
+    await waitFor(() => expect(screen.getByLabelText("Searching LAN for Ollama")).toBeTruthy());
+    first.unmount();
+
+    renderSection(false);
+    expect(screen.getByLabelText("Searching LAN for Ollama").textContent).toBe("…");
+
+    await act(async () => {
+      finish({ ok: true, hosts: [{ label: "gaming-pc", host: "192.168.1.77:11434", port: 11434, verified: true }] });
+    });
+    await waitFor(() => expect(screen.getByText("Found on LAN (mDNS)")).toBeTruthy());
+    expect(screen.getByText(/Use gaming-pc/)).toBeTruthy();
+    expect(screen.getByLabelText("Find Ollama on LAN via mDNS").textContent).toBe("Find LAN");
+  });
+
+  it("shows the 'none found' message on a tab rebuilt before the search ended", async () => {
+    let finish: (v: unknown) => void = () => {};
+    setRpcHandler("discover_mdns_ollama_hosts", () => new Promise((resolve) => (finish = resolve)));
+    const first = renderSection(false);
+    await pressFindLanAndSearch();
+    first.unmount();
+    renderSection(false);
+    await act(async () => {
+      finish({ ok: true, hosts: [], hint: "No Ollama services found here." });
+    });
+    await waitFor(() => expect(screen.getByText("No Ollama services found here.")).toBeTruthy());
+  });
+
+  it("shows a result that ended while no copy of the tab was on screen", async () => {
+    let finish: (v: unknown) => void = () => {};
+    setRpcHandler("discover_mdns_ollama_hosts", () => new Promise((resolve) => (finish = resolve)));
+    const first = renderSection(false);
+    await pressFindLanAndSearch();
+    first.unmount();
+    await act(async () => {
+      finish({ ok: true, hosts: [], hint: "No Ollama services found here." });
+    });
+    renderSection(false);
+    expect(screen.getByText("No Ollama services found here.")).toBeTruthy();
   });
 });

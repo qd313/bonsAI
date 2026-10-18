@@ -111,6 +111,7 @@ Fixes from the fresh-install walk of 2026-10-17 and the maintainer's asks that e
 - **Changed: the PC address box says a bare address is enough** (the port is added). Owes its Deck check (row P96-F26-BARE-ADDRESS).
 - **Added: the Search tab finds bonsAI's own settings** (Text size, Voice input, Clear cache, Clear all data, the four Permissions switches, Story spoilers and more) in a "bonsAI settings" group above Steam's. A opens the tab and section and lands the ring on the row; B returns to Search. Owes its Deck check (row P96-N2-SEARCH-OWN).
 - **Fixed: a Decky wipe now counts as a fresh start.** When the back end starts with no settings file, the screen clears its own stale "already seen" flags once, so the beta notice and the help chip show again. Owes its Deck check (row P96-N3-FRESH-START).
+- **Added: a new player is asked where the AI should run, right after the Beta Notice.** The popup "Where should the AI run?" shows the Ollama tab's "Where the AI runs" section: Run AI on this Deck (on by default, with the warning that the game slows while the AI answers), Start the AI with the Deck, the install status, and the PC address with Test connection when the switch is off. Not now comes first. **The old Local runtime (beta) notice is removed;** its warning is the help line under the first switch. Owes its Deck check (row P96-N1-FIRST-RUN-POPUP).
 
 ### Plan 86 step 4 (2026-10-17)
 

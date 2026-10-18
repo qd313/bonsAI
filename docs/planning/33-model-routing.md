@@ -315,6 +315,8 @@ verdict does not change.
 | 2026-10-18 | Plan 96 the ratchet clean-up (bookkeeper stand-in) | stand-in 3 | Sonnet 5.5 medium (stand-in for the `bookkeeper`) | Not recorded | Not recorded | 1 | not recorded | n/a | not recorded | not recorded | not recorded | not recorded | not recorded |
 | 2026-10-18 | Plan 96 Deck block M: Expert against Speed, chip row and Ask pill measured, look check, stopped answer with no notes card | deck-driver M | Sonnet 5.5 medium (`deck-driver`) | n/a | Not recorded | 1 | not recorded | Block finished; its findings drove F8, F22 and F25 (plan 96 § 8) | not recorded | not recorded | not recorded | not recorded | not recorded |
 | 2026-10-18 | Plan 96 Deck block V: Ask while listening, the ring stall trigger | deck-driver V | Sonnet 5.5 medium (`deck-driver`) | n/a | Not recorded | 1 | not recorded | Block finished; F7 closed as designed, the ring stall not reproduced (plan 96 § 8) | not recorded | not recorded | not recorded | not recorded | not recorded |
+| 2026-10-18 | Plan 96 lane N1: the first-run popup "Where should the AI run?" (★★★) | lane N1 | Sonnet 5.5 high (`feature-lane`) | Yes, first try, after the advisor's one note | Not recorded | 1 | not recorded | Owed: row P96-N1-FIRST-RUN-POPUP | not recorded | not recorded | not recorded | not recorded | not recorded |
+| 2026-10-18 | Plan 96 advisor consult on lane N1 before landing | advisor | Fable 5.1 high (`advisor`, read-only) | n/a | Answer "land it, one optional change"; taken | n/a | n/a | n/a | not recorded | not recorded | not recorded | not recorded | not recorded |
 
 ### 4c. The Sonnet 5.5 trial (2026-09-28, the maintainer's idea)
 

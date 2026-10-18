@@ -3686,7 +3686,7 @@ _Moved out of [roadmap.md](../roadmap.md) and [roadmap-shelved.md](../roadmap-sh
 
 - ★ `[ollama]` **Maintainer's call: should "Run AI on this Deck" start off on a fresh install?** — **OPEN, found 2026-10-17 (plan 94 block 1, build `e9b50cc8`).**
   It is ON with nothing installed, so the Ollama tab opens on a red "Unreachable" line. The README tells a new player to switch it on. Evidence `workshop:test-evidence/plan94-P94-SETTINGS-DEFAULTS.json`, `workshop:test-evidence/plan94-P94-KB-CANCEL-BOX.json`.
-  **Closed 2026-10-17 by the maintainer's call (plan 96 § 2 call 1):** "Run AI on this Deck" starts ON, and a new first-run popup asks where the AI should run, right after the beta notice. The popup is lane N1 of plan 96 and is not landed yet.
+  **Closed 2026-10-17 by the maintainer's call (plan 96 § 2 call 1):** "Run AI on this Deck" starts ON, and a new first-run popup asks where the AI should run, right after the beta notice. The popup was lane N1 of plan 96 and landed 2026-10-18 (`6ac70ced`, `2b0f1436`, `5da13f81`); it now waits in Verify for row P96-N1-FIRST-RUN-POPUP.
 
 - ★ `[ui]` **The AI models window says "LICENCE" (British spelling)** — **OPEN, found 2026-10-17 (plan 95 filming, build `e9b50cc8`).**
   The README is now in US spelling ("License"), at the maintainer's call; the window's filter heading still reads LICENCE, and the guide says "licence labels". Maintainer's call whether the plugin's own words follow.

@@ -366,7 +366,7 @@ Each model was checked on 2026-09-29 against its Ollama page (`ollama.com/librar
 - Removes `~/.bonsai/cache/` (left over from older versions)
 - Removes `~/.bonsai/proton_experiment_journal.json` (legacy Proton experiment timeline)
 - When **Ollama on this Deck** was enabled: also removes local model blobs (`~/.ollama`), user-prefix Ollama under `~/.local`
-- Shows beta disclaimer and permission prompts again
+- Shows the beta disclaimer, the "Where should the AI run?" popup and permission prompts again
 
 It does **not** delete markdown or log files under `~/Desktop/bonsAI_logs/`.
 

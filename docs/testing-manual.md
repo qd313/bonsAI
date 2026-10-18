@@ -778,6 +778,7 @@ Rows 01, 02, 03, 05, 06 and TEN-GAMES-01 passed on the Deck and moved to
 1. Clean install: Ollama not yet installed → README path → one text Ask succeeds
 2. Record Decky / SteamOS / Ollama host in a short note under [testing.md](testing.md) or release PR
 3. Tier 0–2 Pass or explicit Waive with reason
+4. The first-run wording, from the pictures (the maintainer's check 6, plan 73 check 4's eye half): it now includes the wording of the first-run popup "Where should the AI run?" (plan 96 N1, row P96-N1-FIRST-RUN-POPUP in [testing.md](testing.md)), which replaced the old Local runtime notice.
 
 | Date | Git SHA / tag | Result | SteamOS / Decky | Ollama host | Notes |
 |------|---------------|--------|----------------|-------------|-------|

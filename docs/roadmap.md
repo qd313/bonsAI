@@ -432,6 +432,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   When Steam says parental controls are locked, bonsAI turns the high-impact permissions off and greys their switches. Passed on the Deck 2026-09-17: with no lock set, no banner and all four switches on and reachable (**KIDS-REGRESS-01**, `workshop:test-evidence/plan57-QA-KIDS-REGRESS-01.json`).
   Still owed, needs a locked account: **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-LOCK-02** (child account), and the live Steam check.
 
+- ★★★ `[ui]` `[focus]` **A new player is asked where the AI should run, right after the Beta Notice (plan 96 N1)** — **VERIFY, built 2026-10-18 (plan 96 N1, `6ac70ced`, `2b0f1436`, `5da13f81`); the maintainer chose option A on the mock-up, 2026-10-17.**
+  Right after the Beta Notice closes, a popup asks "Where should the AI run?": the Ollama tab's "Where the AI runs" section as a popup. "Run AI on this Deck" is on, with a help line that the game slows while the AI answers, then "Start the AI with the Deck", the install status and the 4.6 GB note. With the switch off, the PC address box and Test connection show. Switches save the moment they are touched.
+  "Not now" comes first with the ring on it, and B is Not now; the other foot button is Install Ollama, Update AI & models or Test connection. A player upgrading who had already seen the old notice sees the popup once. Find LAN shows only with the Developer tab on, as on the tab.
+  **The old "Local runtime (beta)" notice was removed:** its warning is now the help line under the first switch.
+  Owes Deck row **P96-N1-FIRST-RUN-POPUP**, run as a true first run after Clear all data.
 ---
 
 ## Knowledge base and RAG
@@ -465,6 +470,6 @@ The Closed blocks from 2026-10-02 to 2026-10-07 (plans 79 to 82) were moved to [
 
 - ★ `[ollama]` **Maintainer's call: "Update AI & models" downloads the Ollama program again on every press** — **CLOSED 2026-10-17 by the maintainer's call (plan 96 § 2 call 2): by design while Internet downloads is on.** With downloads off the permission line and box already passed (row P89-UPDATE-DOWNLOADS-OFF, `workshop:test-evidence/plan89-F2-UPDATE-DOWNLOADS-OFF.json`), so no new row. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-96-the-ship-ready-bug-session-closed-2026-10-18).
 
-- ★ `[ollama]` **Maintainer's call: should "Run AI on this Deck" start off on a fresh install?** — **CLOSED 2026-10-17 by the maintainer's call (plan 96 § 2 call 1): it starts ON, and a first-run popup asks where the AI runs** (the popup is not landed yet). Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-96-the-ship-ready-bug-session-closed-2026-10-18).
+- ★ `[ollama]` **Maintainer's call: should "Run AI on this Deck" start off on a fresh install?** — **CLOSED 2026-10-17 by the maintainer's call (plan 96 § 2 call 1): it starts ON, and a first-run popup asks where the AI runs** (the popup landed 2026-10-18, plan 96 N1: it is in Verify, row P96-N1-FIRST-RUN-POPUP). Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-96-the-ship-ready-bug-session-closed-2026-10-18).
 
 - ★ `[ui]` **The AI models window says "LICENCE" (British spelling)** — **DONE 2026-10-18, fixed (plan 96 F21, `de071362`); no Deck row.** The heading reads LICENSE. The guide and troubleshooting docs still say "licence" (a list for the README chat). Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-96-the-ship-ready-bug-session-closed-2026-10-18).

@@ -1615,7 +1615,13 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   troubleshootingPermHintDismissed={troubleshootingPermHintDismissed}
   unifiedInput={unifiedInput}
   onNavigateToPermissions={onNavigateToPermissions}
-  showNoAiRow={expandedTurnKey === "live" && showLiveResponse && isNoAiSetUpAnswer(liveResponseBody)}
+  showNoAiRow={isNoAiSetUpAnswer(
+    expandedTurnKey === "live" && showLiveResponse
+      ? liveResponseBody
+      : // The failed turn is saved and reloaded like any other, so by the time a person reads it, it is the
+        // newest archived turn, not the live one (Deck, plan96-P96-F1-NO-AI.json: the row never drew).
+        askThreadCollapsed[askThreadCollapsed.length - 1]?.answer,
+  )}
   onNavigateToOllama={onNavigateToOllama}
   dismissTroubleshootingPermHint={dismissTroubleshootingPermHint}
   navTargets={permHintNavTargets}

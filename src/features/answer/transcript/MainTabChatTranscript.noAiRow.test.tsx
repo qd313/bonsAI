@@ -112,6 +112,35 @@ describe("the Open the Ollama tab row under the AI-is-not-set-up answer", () => 
     expect(openOllamaButton(noJump.container)).toBeNull();
   });
 
+  it("is drawn when the failed turn has been reloaded as the newest archived turn and is the one on screen", () => {
+    // plan96-P96-F1-NO-AI.json: "the row never drew on the Deck because the failed turn is reloaded as the
+    // newest archived turn". The live answer is empty by then; the words are on the archived turn.
+    const onNavigateToOllama = vi.fn();
+    const { container } = renderTranscript({
+      ollamaResponse: "",
+      askThreadCollapsed: [{ id: "turn-1", question: "What is a good first weapon", answer: NO_AI_ANSWER }],
+      expandedTurnKey: "turn-1",
+      onNavigateToOllama,
+    });
+    const button = openOllamaButton(container);
+    expect(button).not.toBeNull();
+    fireEvent.click(button!);
+    expect(onNavigateToOllama).toHaveBeenCalledTimes(1);
+  });
+
+  it("is not drawn when an OLDER archived turn has the no-AI words but the newest archived turn does not", () => {
+    const { container } = renderTranscript({
+      ollamaResponse: "",
+      askThreadCollapsed: [
+        { id: "turn-1", question: "What is a good first weapon", answer: NO_AI_ANSWER },
+        { id: "turn-2", question: "And a second one", answer: "Use the nail first." },
+      ],
+      expandedTurnKey: "turn-2",
+      onNavigateToOllama: () => {},
+    });
+    expect(openOllamaButton(container)).toBeNull();
+  });
+
   it("goes away while the next question is being answered", () => {
     const { container } = renderTranscript({ isAsking: true, onNavigateToOllama: () => {} });
     expect(openOllamaButton(container)).toBeNull();

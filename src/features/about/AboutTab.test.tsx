@@ -254,6 +254,16 @@ describe("About tab: the QR code is smaller", () => {
     expect(3 * height + 2 * gap).toBeLessThanOrEqual(88 + 3 + 33);
   });
 
+  it("lets a long link label wrap instead of being cut with an ellipsis", () => {
+    // Plan 96 F16: "Bugs & Feature Requests" needs 172 px on one line in a 158 px button and was cut. The
+    // buttons keep a 28 px minimum but grow to fit two lines.
+    const rule = declarations(".bonsai-scope .bonsai-about-links .bonsai-about-link").replace(/\s+/g, " ");
+    expect(rule).toContain("white-space: normal");
+    expect(rule).toMatch(/(^|[^-])height: auto/);
+    expect(rule).toMatch(/min-height:\s*28px/);
+    expect(rule).not.toContain("text-overflow: ellipsis");
+  });
+
   it("sets no size of its own on the picture, so the stylesheet's is the one that counts", () => {
     const { container } = renderAbout();
     const img = container.querySelector<HTMLImageElement>("img.bonsai-about-qr-img")!;

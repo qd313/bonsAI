@@ -110,19 +110,23 @@ export function buildAboutTabSection(): string {
           gap: 6px;
           width: 100% !important;
           min-width: 0 !important;
-          height: ${ABOUT_LINK_HEIGHT_PX}px !important;
+          /* A minimum, not a fixed height: "Bugs & Feature Requests" needs 172 px of one line in a 158 px
+             column (plan 94, P94-TABS-WALK; plan 86 step 4 look check), so a long label wraps to two lines
+             instead of being cut with an ellipsis (plan 96 F16). */
+          height: auto !important;
           min-height: ${ABOUT_LINK_HEIGHT_PX}px !important;
           box-sizing: border-box !important;
-          padding: 0 8px !important;
+          padding: 4px 8px !important;
+          line-height: 1.2 !important;
+          text-align: left !important;
           border-radius: 2px !important;
           /* Steam's own button grey with light text: the same three values the floating Open all button uses. */
           background: ${SETTINGS_GLASS_BTN_BACKGROUND} !important;
           border: ${SETTINGS_GLASS_BTN_BORDER} !important;
           color: ${SETTINGS_GLASS_BTN_COLOR} !important;
           font-size: ${textPx(11.5)} !important;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          white-space: normal;
+          overflow: visible;
         }
         .bonsai-scope .bonsai-about-link-wrap {
           width: 100%;

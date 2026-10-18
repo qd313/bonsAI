@@ -129,7 +129,12 @@ export function FirstRunWhereAiRunsModal({ host, onClose }: FirstRunWhereAiRunsM
   const probeSeq = useRef(0);
   const setupAutoTestRanRef = useRef(false);
   const onTestRef = useRef<(opts?: { quiet?: boolean }) => Promise<void>>(async () => {});
-  const setReturnOwner = useCallback((el: HTMLElement | null) => registerModalReturnFocusOwner("ollama-local-setup", el), []);
+  // After the download box over the popup closes, the ring comes back to the action button through the
+  // popup's own Steam transfer, not a plain focus (the advisor's one note before landing, plan 96 N1).
+  const setReturnOwner = useCallback(
+    (el: HTMLElement | null) => registerModalReturnFocusOwner("ollama-local-setup", el, () => nav.focusStop("foot", 1)),
+    [nav],
+  );
 
   /** The test, for whichever place the AI is set to run. A newer test's answer is the only one kept. */
   const runTest = async (opts?: { quiet?: boolean }) => {

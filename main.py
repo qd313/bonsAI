@@ -560,7 +560,7 @@ class Plugin:
         meta is handed to the request task so ``ai_character_random`` picks a character exactly
         once per Ask, rather than once for the blurb's tone and again for the reply's voice.
         """
-        from backend.services.ai_character_service import (
+        from backend.characters.ai_character_service import (
             build_roleplay_system_suffix_meta,
             thinking_status_tone_for_preset,
         )

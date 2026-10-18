@@ -55,7 +55,7 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
-from backend.services.spy_confession_service import SPY_LIES_TAG_CLOSE, SPY_LIES_TAG_OPEN
+from backend.characters.spy_confession_service import SPY_LIES_TAG_CLOSE, SPY_LIES_TAG_OPEN
 
 # Easter egg: Pyro uses a talent-manager parody voice; optional per-reply hidden carousel tip.
 PYRO_PRESET_ID = "tf2_pyro"

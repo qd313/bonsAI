@@ -88,7 +88,7 @@ sys.path.insert(0, str(ROOT / "py_modules"))
 # same way) rather than only from inside main(), because the module-level `_variant_no_subject_note`
 # below needs FOLLOWUP_SUBJECT_NOTE_TEMPLATE at call time and this file's tests call it directly,
 # without ever running main() or install_fake_decky() first.
-from backend.services.ai_character_service import VALID_PRESET_IDS  # noqa: E402
+from backend.characters.ai_character_service import VALID_PRESET_IDS  # noqa: E402
 from backend.services.ollama_prompts import FOLLOWUP_SUBJECT_NOTE_TEMPLATE  # noqa: E402
 from backend.services.ollama_service import estimate_prompt_tokens  # noqa: E402
 

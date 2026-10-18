@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from backend.services.ai_character_service import (
+from backend.characters.ai_character_service import (
     PYRO_PRESET_ID,
     SPY_PRESET_ID,
     RoleplayBuildResult,
@@ -14,7 +14,7 @@ from backend.services.ai_character_service import (
     pyro_manager_carousel_tip_addon,
     spy_lying_mode_active,
 )
-from backend.services.spy_confession_service import SPY_LIES_TAG_CLOSE, SPY_LIES_TAG_OPEN
+from backend.characters.spy_confession_service import SPY_LIES_TAG_CLOSE, SPY_LIES_TAG_OPEN
 
 
 class AiCharacterServiceTests(unittest.TestCase):
@@ -152,7 +152,7 @@ class AiCharacterServiceTests(unittest.TestCase):
         )
         self.assertIn("keep explanations clear", out)
 
-    @patch("backend.services.ai_character_service.random.choice")
+    @patch("backend.characters.ai_character_service.random.choice")
     def test_random_mode_uses_catalog_choice(self, mock_choice):
         mock_choice.return_value = ("id", "My Game", "My Char", "hint style")
         out = build_roleplay_system_suffix(
@@ -223,7 +223,7 @@ class AiCharacterServiceTests(unittest.TestCase):
             )
         )
 
-    @patch("backend.services.ai_character_service.random.choice")
+    @patch("backend.characters.ai_character_service.random.choice")
     def test_pyro_random_resolves_tf2_pyro_id(self, mock_choice):
         mock_choice.return_value = (
             PYRO_PRESET_ID,
@@ -316,7 +316,7 @@ class SpyLyingModeTests(unittest.TestCase):
         meta = build_roleplay_system_suffix_meta(self._spy_settings("heavy"))
         self.assertEqual(meta.resolved_preset_id, SPY_PRESET_ID)
 
-    @patch("backend.services.ai_character_service.random.choice")
+    @patch("backend.characters.ai_character_service.random.choice")
     def test_spy_random_resolves_tf2_spy_id_and_lies_at_heavy(self, mock_choice):
         mock_choice.return_value = (SPY_PRESET_ID, "Team Fortress 2", "Spy", "smooth understated menace")
         meta = build_roleplay_system_suffix_meta(

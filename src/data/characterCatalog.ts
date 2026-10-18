@@ -4,7 +4,7 @@
  * Used for: Character picker columns, Settings summary line, avatar badge letter.
  * Solves: One place for display labels and ids the UI shows; ids must match the Python allow-list.
  * Does not: Generate prompts, enforce roleplay tone, or talk to Ollama — that lives in ai_character_service.
- * Sync: preset `id` values must match `backend/services/ai_character_service.py` (`VALID_PRESET_IDS`).
+ * Sync: preset `id` values must match `backend/characters/ai_character_service.py` (`VALID_PRESET_IDS`).
  */
 export type CharacterCatalogEntry = {
   id: string;

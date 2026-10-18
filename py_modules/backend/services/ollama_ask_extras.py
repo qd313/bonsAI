@@ -25,7 +25,7 @@ from __future__ import annotations
 import random
 from typing import Any, Optional
 
-from backend.services.ai_character_service import (
+from backend.characters.ai_character_service import (
     PYRO_ASSHOLE_TIP_LINES,
     PYRO_MANAGER_TIP_LINES,
     PYRO_MANAGER_TIP_PROBABILITY,

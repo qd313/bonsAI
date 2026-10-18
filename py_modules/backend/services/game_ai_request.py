@@ -94,7 +94,7 @@ from typing import Any, Optional
 import decky
 
 from backend.core.capabilities import capability_enabled
-from backend.services.ai_character_service import (
+from backend.characters.ai_character_service import (
     build_roleplay_system_suffix_meta,
     spy_lying_mode_active,
 )
@@ -128,7 +128,7 @@ from backend.services.response_verify import (
     drop_branch_menu_copying_the_worked_example,
     verify_ollama_response,
 )
-from backend.services.spy_confession_service import parse_spy_lies_tag
+from backend.characters.spy_confession_service import parse_spy_lies_tag
 from backend.services.strategy_guide_parse import is_strategy_followup_question
 from backend.services.strategy_spoiler_policy import (
     neutralize_protected_names_in_branch_menu,

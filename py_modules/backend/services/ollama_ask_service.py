@@ -57,7 +57,7 @@ from typing import Any, Optional
 
 import decky
 
-from backend.services.ai_character_service import (
+from backend.characters.ai_character_service import (
     apply_roleplay_to_system_content,
     build_roleplay_system_suffix_meta,
     pyro_asshole_mode_active,

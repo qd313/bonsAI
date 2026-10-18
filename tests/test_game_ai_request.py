@@ -28,7 +28,7 @@ if "decky" not in sys.modules:
 
 from backend.services.game_ai_request import run_game_ai_request
 from backend.services.ollama_prompts import extract_strategy_asked_entity
-from backend.services.spy_confession_service import SPY_LIES_TAG_CLOSE, SPY_LIES_TAG_OPEN
+from backend.characters.spy_confession_service import SPY_LIES_TAG_CLOSE, SPY_LIES_TAG_OPEN
 
 
 class StripTdpRecommendationBlockTests(unittest.TestCase):

@@ -276,7 +276,7 @@ Decky loads `py_modules` on `sys.path`; keep the `backend` package name for impo
 ### Deep-dive pointers (preserved for agents and contributors)
 
 - **Unified input refactor (complete):** [archive/refactor/refactor-specialist-sweep.md § Unified input refactor](../../bonsAI-workshop/archive/refactor/refactor-specialist-sweep.md#unified-input-refactor-completed) — [`useUnifiedInputSurface.ts`](../src/features/unified-input/useUnifiedInputSurface.ts), [`MainTab.tsx`](../src/components/MainTab.tsx).
-- **AI character roleplay:** [`characterCatalog.ts`](../src/data/characterCatalog.ts), [`CharacterPickerModal.tsx`](../src/components/CharacterPickerModal.tsx), [`ai_character_service.py`](../py_modules/backend/services/ai_character_service.py).
+- **AI character roleplay:** [`characterCatalog.ts`](../src/data/characterCatalog.ts), [`CharacterPickerModal.tsx`](../src/components/CharacterPickerModal.tsx), [`ai_character_service.py`](../py_modules/backend/characters/ai_character_service.py).
 - **Input sanitizer:** [`inputSanitizerCommands.ts`](../src/data/inputSanitizerCommands.ts) (must match Python); `input_sanitizer_user_disabled` in settings.
 - **Input transparency:** RPC `get_input_transparency`; optional Desktop trace via `desktop_note_service.py`.
 - **Ask modes:** `ask_mode` (`speed` \| `strategy` \| `expert`); legacy `"deep"` migrates on load; chains in `backend/ollama_routing.select_ollama_models`.

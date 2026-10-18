@@ -25,7 +25,7 @@ from backend_module_stubs import install_pwd_stub
 
 install_pwd_stub()
 
-from backend.services.ai_character_service import build_roleplay_system_suffix_meta  # noqa: E402
+from backend.characters.ai_character_service import build_roleplay_system_suffix_meta  # noqa: E402
 from backend.services.ollama_ask_service import run_ask_ollama  # noqa: E402
 
 

@@ -294,7 +294,7 @@ def _resolve_thinking_tone(
     """Default witty sarcasm; deadpan when a deadpan character preset is active."""
     if not character_enabled:
         return "witty"
-    from backend.services.ai_character_service import thinking_status_tone_for_preset
+    from backend.characters.ai_character_service import thinking_status_tone_for_preset
 
     tone = thinking_status_tone_for_preset(character_preset_id)
     return tone if tone in ("witty", "deadpan") else "witty"

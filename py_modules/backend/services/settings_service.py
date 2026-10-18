@@ -73,7 +73,7 @@ import os
 import re
 from typing import Any, Callable
 
-from backend.services.ai_character_service import (
+from backend.characters.ai_character_service import (
     sanitize_ai_character_accent_intensity,
     sanitize_ai_character_custom_text,
     sanitize_ai_character_enabled,

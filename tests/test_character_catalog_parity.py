@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 import unittest
 
-from backend.services.ai_character_service import VALID_PRESET_IDS
+from backend.characters.ai_character_service import VALID_PRESET_IDS
 from src_paths import find_src_file
 
 
@@ -18,7 +18,7 @@ class TestCharacterCatalogParity(unittest.TestCase):
         self.assertEqual(
             ts_ids,
             set(VALID_PRESET_IDS),
-            "src/data/characterCatalog.ts ids must match backend/services/ai_character_service.py "
+            "src/data/characterCatalog.ts ids must match backend/characters/ai_character_service.py "
             "VALID_PRESET_IDS (add rows to _CHARACTER_ROWS in the same change set).",
         )
 

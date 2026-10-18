@@ -2,7 +2,7 @@
 
 import unittest
 
-from backend.services.spy_confession_service import (
+from backend.characters.spy_confession_service import (
     SPY_LIES_TAG_CLOSE,
     SPY_LIES_TAG_OPEN,
     parse_spy_lies_tag,

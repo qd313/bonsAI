@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 import unittest
 
-from backend.services.ai_character_service import VALID_ACCENT_INTENSITY_IDS
+from backend.characters.ai_character_service import VALID_ACCENT_INTENSITY_IDS
 from src_paths import find_src_file
 
 

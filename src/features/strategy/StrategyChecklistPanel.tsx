@@ -1,11 +1,15 @@
 /**
  * Title: Strategy checklist panel
- * Purpose: Toggle list for per-game strategy guide checklist items during a live turn.
+ * Purpose: The tick-off list for a Strategy answer's checklist, one checkbox row per step.
  * Used for: MainTabChatTranscript strategy mode replies with collapsible checklist state.
- * Solves: Deck-navigable ToggleField rows wired into the live-turn focus graph.
+ * Solves: Deck-navigable checkbox rows wired into the live-turn focus graph. A step is a Decky
+ * Button (the same stop the answer's choice buttons are) drawn with a tick box and its words; a
+ * ticked step shows a tick and its words go dim and struck through. They were on/off switches,
+ * which read as settings rather than a list you tick off (plan 96, F19).
  * Does not: Parse strategy branches from model output — see strategyChecklist utils and backend parser.
  */
-import { ToggleField } from "@decky/ui";
+import type { CSSProperties } from "react";
+import { Button } from "@decky/ui";
 
 import type { StrategyChecklistState } from "../../types/bonsaiUi";
 import { deckNavHandlers } from "../../shared/dpad/liveTurnFocusGraph";
@@ -18,11 +22,21 @@ type Props = {
   onMoveDownFromLast?: () => boolean;
 };
 
-function readToggleOn(raw: unknown): boolean {
-  if (raw === true || raw === 1) return true;
-  return false;
-}
+const TICK_BOX_BASE: CSSProperties = {
+  flexShrink: 0,
+  width: 16,
+  height: 16,
+  boxSizing: "border-box",
+  borderRadius: 3,
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  fontSize: textPx(11),
+  fontWeight: 700,
+  lineHeight: 1,
+};
 
+/** The panel: the checklist's title, a one-line note, then one checkbox row per step. */
 export function StrategyChecklistPanel({
   checklist,
   onToggle,
@@ -53,6 +67,13 @@ export function StrategyChecklistPanel({
         const checked = checklist.checkedIds.includes(item.id);
         const isFirst = idx === 0;
         const isLast = idx === checklist.items.length - 1;
+        /*
+         * Up from the first step and Down from the last: the same handlers the switches carried. The
+         * caller hands back `false` (let Steam's own move carry on to the next stop), so the ring path
+         * is the same whether or not Decky's Button forwards them, which it does not (the focus check
+         * rule "move-props-on-button"). The spread below keeps them next to the step for the day a
+         * caller returns `true`.
+         */
         const nav =
           (isFirst && onMoveUpFromFirst) || (isLast && onMoveDownFromLast)
             ? deckNavHandlers({
@@ -61,14 +82,49 @@ export function StrategyChecklistPanel({
               })
             : undefined;
         return (
-          <ToggleField
+          <Button
             key={`sg-check-${item.id}`}
-            label={item.label}
-            description=""
-            checked={checked}
-            onChange={(v) => onToggle(item.id, readToggleOn(v))}
-            {...nav}
-          />
+            focusable
+            className="bonsai-strategy-checklist-step"
+            aria-checked={checked}
+            aria-pressed={checked}
+            onClick={() => onToggle(item.id, !checked)}
+            style={{
+              width: "100%",
+              minWidth: 0,
+              minHeight: 32,
+              padding: "4px 8px",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              gap: 8,
+              textAlign: "left",
+              borderRadius: 4,
+              border: "1px solid rgba(150, 187, 223, 0.25)",
+              background: checked ? "rgba(36, 52, 70, 0.45)" : "rgba(36, 52, 70, 0.75)",
+              fontSize: textPx(12),
+              lineHeight: 1.3,
+              color: checked ? "#8fa3b8" : "#e8eef4",
+            }}
+            {...({ role: "checkbox", ...nav } as Record<string, unknown>)}
+          >
+            <span
+              aria-hidden="true"
+              className="bonsai-strategy-checklist-box"
+              style={{
+                ...TICK_BOX_BASE,
+                border: `1px solid ${checked ? "rgba(56, 189, 248, 0.9)" : "rgba(150, 187, 223, 0.7)"}`,
+                background: checked ? "rgba(56, 189, 248, 0.9)" : "transparent",
+                color: "#0b1722",
+              }}
+            >
+              {checked ? "✔" : ""}
+            </span>
+            <span style={{ flex: "1 1 auto", minWidth: 0, textDecoration: checked ? "line-through" : "none" }}>
+              {item.label}
+            </span>
+          </Button>
         );
       })}
     </div>

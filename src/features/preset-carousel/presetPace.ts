@@ -9,7 +9,7 @@
  *         two chips side by side, which are busier and more to read. Before plan 78 the hold was
  *         300 ms a letter, 8 to 32 s, with a 2 s fade out, whatever the chip count (about 15 s a turn
  *         for a typical label: two chips a minute with one chip showing, "useless to show off the
- *         features"). Now a typical label turns over in about 7 s with one chip, 11 s with two.
+ *         features"). Plan 78 made that about 7 s with one chip, 11 s with two; plan 96 (maintainer: "change too fast") slowed it to a 6 to 12 s hold with one chip and 9 to 18 s with two.
  * Does not: Decide which chip comes next (nextChipRule) or how long a long label needs to scroll
  *           (presetRowLayout, which makes the hold at least one full scroll).
  */
@@ -21,34 +21,34 @@ export type PresetPace = {
   minHoldMs: number;
   /** The most the length-scaled hold gives (a long label's scroll can still hold it longer). */
   maxHoldMs: number;
-  /** Fade in. Kept at 1 s for both: it is what draws the eye. */
+  /** Fade in. Kept at 1.2 s for both: it is what draws the eye. */
   fadeInMs: number;
   fadeOutMs: number;
 };
 
 /** One chip across the whole column. */
 const ONE_CHIP_PACE: PresetPace = {
-  msPerChar: 120,
-  minHoldMs: 4_000,
-  maxHoldMs: 9_000,
-  fadeInMs: 1_000,
-  fadeOutMs: 1_000,
+  msPerChar: 160,
+  minHoldMs: 6_000,
+  maxHoldMs: 12_000,
+  fadeInMs: 1_200,
+  fadeOutMs: 1_200,
 };
 
 /** Two chips side by side. */
 const TWO_CHIP_PACE: PresetPace = {
-  msPerChar: 200,
-  minHoldMs: 6_000,
-  maxHoldMs: 14_000,
-  fadeInMs: 1_000,
+  msPerChar: 240,
+  minHoldMs: 9_000,
+  maxHoldMs: 18_000,
+  fadeInMs: 1_200,
   fadeOutMs: 1_500,
 };
 
 /**
  * With two chips, two spots never change within this long of each other: a swap and its fades finish
- * (1.5 s out and 1 s in) before the other spot's begins.
+ * (1.5 s out and 1.2 s in, 2.7 s) before the other spot's begins.
  */
-export const TWO_SPOT_MIN_GAP_MS = 2_500;
+export const TWO_SPOT_MIN_GAP_MS = 3_000;
 
 /**
  * Two long chips whose scrolls end close together: each leaves one pause after its own words stop, so

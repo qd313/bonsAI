@@ -50,25 +50,25 @@ describe("PRESET_CHIP_GAP_PX", () => {
  * side. Numbers are the maintainer's to tune, all in presetPace.ts.
  */
 describe("the pace of a chip", () => {
-  it("has the starting numbers: one chip 120 ms a letter, 4 to 9 s, fade 1 s in and 1 s out", () => {
-    expect(presetPace(1)).toEqual({ msPerChar: 120, minHoldMs: 4000, maxHoldMs: 9000, fadeInMs: 1000, fadeOutMs: 1000 });
+  it("has the starting numbers: one chip 160 ms a letter, 6 to 12 s, fade 1.2 s in and 1.2 s out", () => {
+    expect(presetPace(1)).toEqual({ msPerChar: 160, minHoldMs: 6000, maxHoldMs: 12000, fadeInMs: 1200, fadeOutMs: 1200 });
   });
 
-  it("has the starting numbers: two chips 200 ms a letter, 6 to 14 s, fade 1 s in and 1.5 s out", () => {
-    expect(presetPace(2)).toEqual({ msPerChar: 200, minHoldMs: 6000, maxHoldMs: 14000, fadeInMs: 1000, fadeOutMs: 1500 });
+  it("has the starting numbers: two chips 240 ms a letter, 9 to 18 s, fade 1.2 s in and 1.5 s out", () => {
+    expect(presetPace(2)).toEqual({ msPerChar: 240, minHoldMs: 9000, maxHoldMs: 18000, fadeInMs: 1200, fadeOutMs: 1500 });
   });
 
   it("holds a short label for the least time, a medium one by its length, a very long one at the most", () => {
-    expect(presetHoldMs("Hi", 1)).toBe(4000);
-    expect(presetHoldMs("x".repeat(40), 1)).toBe(40 * 120); // fits its wide chip: no scroll wait
-    expect(presetHoldMs("Hi", 2)).toBe(6000);
+    expect(presetHoldMs("Hi", 1)).toBe(6000);
+    expect(presetHoldMs("x".repeat(40), 1)).toBe(40 * 160); // fits its wide chip: no scroll wait
+    expect(presetHoldMs("Hi", 2)).toBe(9000);
   });
 
-  it("a turn is fade in, hold and fade out, so a typical 35-letter label turns over in about 6 s with one chip", () => {
+  it("a turn is fade in, hold and fade out, so a typical 35-letter label turns over in about 8.4 s with one chip", () => {
     const text = "x".repeat(35);
-    expect(presetTurnMs(text, 1)).toBe(1000 + 35 * 120 + 1000);
-    expect(presetTurnMs(text, 1)).toBeGreaterThan(5500);
-    expect(presetTurnMs(text, 1)).toBeLessThan(7500);
+    expect(presetTurnMs(text, 1)).toBe(1200 + 6000 + 1200) // 35 letters is 5.6 s: the 6 s least hold decides;
+    expect(presetTurnMs(text, 1)).toBeGreaterThan(8000);
+    expect(presetTurnMs(text, 1)).toBeLessThan(9000);
   });
 
   /* The wait for one full scroll was worked out for the narrow two-chip width even with one wide
@@ -76,17 +76,17 @@ describe("the pace of a chip", () => {
      overflows the ~131 px two-chip room, and needs no scroll at all in the ~284 px one-chip room. */
   it("works the one-full-scroll wait out for the room the chip really has", () => {
     const text = "x".repeat(44); // ~284 px: just fits one wide chip
-    expect(presetHoldMs(text, 1)).toBe(44 * 120);
+    expect(presetHoldMs(text, 1)).toBe(44 * 160);
     const longer = "x".repeat(60); // ~387 px: overflows even the wide chip by ~103 px
     const scroll = 1500 + ((60 * 6.45 - 284) / 20) * 1000 + 1500;
-    expect(presetHoldMs(longer, 1)).toBeCloseTo(Math.max(60 * 120, scroll), 0); // the scroll decides: ~8.2 s
-    // And a 40-letter label scrolls with two chips but not with one.
-    expect(presetHoldMs("x".repeat(40), 2)).toBeGreaterThan(40 * 200);
-    expect(presetHoldMs("x".repeat(40), 1)).toBe(40 * 120);
+    expect(presetHoldMs(longer, 1)).toBeCloseTo(Math.max(60 * 160, scroll), 0); // the length decides here: 9.6 s (the scroll needs ~8.2 s)
+    // And a 50-letter label scrolls with two chips but not with one.
+    expect(presetHoldMs("x".repeat(50), 2)).toBeGreaterThan(50 * 240);
+    expect(presetHoldMs("x".repeat(40), 1)).toBe(40 * 160);
   });
 
-  it("two spots never change within 2.5 s of each other", () => {
-    expect(TWO_SPOT_MIN_GAP_MS).toBe(2500);
+  it("two spots never change within 3 s of each other", () => {
+    expect(TWO_SPOT_MIN_GAP_MS).toBe(3000);
   });
 });
 

@@ -59,32 +59,32 @@ describe.each(STYLES)("%s style with a game that has its own chips", (style) => 
 
 /*
  * How long a chip stays (commit 2). With a real-looking label length (about 35 letters) one chip
- * turns over in about 6.5 s, so 8 to 10 chips a minute where it was 2 to 4; two chips turn over at
- * about 11 s each, about 11 a minute across the two. The same pace in every style.
+ * turns over in about 8.4 s (plan 96 slowed it from 6.5 s), so 5 to 8 chips a minute; two chips turn
+ * over at about 12 s each, 6 to 10 a minute across the two. The same pace in every style.
  */
 describe.each(STYLES)("%s style pace", (style) => {
   const minutes = minutesFor(style);
   /** Chips that appeared after the opening ones, per minute. */
   const perMinute = (events: ChipEvent[]) => events.filter((e) => e.t > 0).length / minutes;
 
-  it("one chip: 8 to 10.5 chips a minute", () => {
+  it("one chip: 5 to 8 chips a minute", () => {
     for (const seed of SEEDS) {
       const { events } = simulateChipRow({ style, single: true, minutes, seed });
-      expect(perMinute(events), `${style} seed ${seed}`).toBeGreaterThanOrEqual(8);
-      expect(perMinute(events), `${style} seed ${seed}`).toBeLessThanOrEqual(10.5);
+      expect(perMinute(events), `${style} seed ${seed}`).toBeGreaterThanOrEqual(5);
+      expect(perMinute(events), `${style} seed ${seed}`).toBeLessThanOrEqual(8);
     }
   }, 240_000);
 
-  it("two chips: 9 to 14 chips a minute across the two, and the spots never change together", () => {
+  it("two chips: 6 to 10 chips a minute across the two, and the spots never change together", () => {
     for (const seed of SEEDS) {
       const { events } = simulateChipRow({ style, single: false, minutes, seed });
-      expect(perMinute(events), `${style} seed ${seed}`).toBeGreaterThanOrEqual(9);
-      expect(perMinute(events), `${style} seed ${seed}`).toBeLessThanOrEqual(14);
+      expect(perMinute(events), `${style} seed ${seed}`).toBeGreaterThanOrEqual(6);
+      expect(perMinute(events), `${style} seed ${seed}`).toBeLessThanOrEqual(10);
       // The sliding style has one window and one change at a time; the others have two spots.
       const times = events.filter((e) => e.t > 0).map((e) => e.t).sort((a, b) => a - b);
       for (let i = 1; i < times.length; i++) {
         // One sample (100 ms) of reading error on each side.
-        expect(times[i]! - times[i - 1]!, `${style} seed ${seed}: changes at ${times[i - 1]} and ${times[i]} ms`).toBeGreaterThanOrEqual(2300);
+        expect(times[i]! - times[i - 1]!, `${style} seed ${seed}: changes at ${times[i - 1]} and ${times[i]} ms`).toBeGreaterThanOrEqual(2800);
       }
     }
   }, 240_000);

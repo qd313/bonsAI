@@ -191,8 +191,8 @@ describe("a long chip leaves one pause after its words stop", () => {
       />,
     );
     const opacity = () => view.container.querySelector<HTMLElement>(".bonsai-preset-carousel-slot button")!.style.opacity;
-    // Fade-in starts after the first spot's stagger and takes 1 s; the hold follows; then the fade-out.
-    const fadeOutAt = slotStaggerMs(0) + 1000 + presetHoldMs("Short one", 1);
+    // Fade-in starts after the first spot's stagger and takes 1.2 s; the hold follows; then the fade-out.
+    const fadeOutAt = slotStaggerMs(0) + 1200 + presetHoldMs("Short one", 1);
     act(() => vi.advanceTimersByTime(fadeOutAt - 100));
     expect(opacity()).toBe("1");
     act(() => vi.advanceTimersByTime(200));

@@ -22,7 +22,7 @@
  * for those.
  */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { PanelSection, PanelSectionRow, Button } from "@decky/ui";
+import { PanelSection, PanelSectionRow } from "@decky/ui";
 import type { PresetPrompt } from "../preset-carousel/presets";
 import type {
   AppliedResult,
@@ -43,7 +43,7 @@ import { MainTabPresetRow } from "../preset-carousel/MainTabPresetRow";
 import { MainTabUnifiedAskBar } from "../ask/bar/MainTabUnifiedAskBar";
 import { MainTabScreenshotBrowser } from "../media/MainTabScreenshotBrowser";
 import { MainTabChatTranscript } from "../answer/transcript/MainTabChatTranscript";
-import { PermissionDenyAction } from "../permissions/PermissionDenyAction";
+import { MainTabMicPermissionHintRow } from "./MainTabMicPermissionHintRow";
 import { useMainTabColumnFill } from "./useMainTabColumnFill";
 import { useDockClearanceOnFocus } from "../../shared/dpad/useDockClearanceOnFocus";
 import { useChatTitlePublisher } from "../chats/title/useChatTitlePublisher";
@@ -414,21 +414,11 @@ export function MainTab(props: MainTabProps) {
 
         {props.micPermissionDenied && props.onNavigateToPermissions ? (
           <PanelSectionRow>
-            <div className="bonsai-full-bleed-row" style={props.fullBleedRowStyle}>
-              <PermissionDenyAction
-                capability="microphone_access"
-                onJump={props.onNavigateToPermissions}
-                compact
-              />
-              {props.onDismissMicPermissionDeny ? (
-                <Button
-                  onClick={props.onDismissMicPermissionDeny}
-                  style={{ marginTop: 6, fontSize: textPx(11), padding: "4px 10px", minHeight: 34 }}
-                >
-                  Dismiss
-                </Button>
-              ) : null}
-            </div>
+            <MainTabMicPermissionHintRow
+              fullBleedRowStyle={props.fullBleedRowStyle}
+              onNavigateToPermissions={props.onNavigateToPermissions}
+              onDismiss={props.onDismissMicPermissionDeny}
+            />
           </PanelSectionRow>
         ) : null}
 

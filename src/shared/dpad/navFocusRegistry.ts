@@ -63,6 +63,13 @@ export type NavFocusId = "session-context-strip" | "preset-carousel" | "unified-
   /** The troubleshooting Ask hint row below the transcript — see
    *  MainTabChatTranscript.tsx's `focusChatPermissionHintRow`. */
   | "chat-perm-hint-troubleshoot"
+  /** The mic hint row under the question box (MainTabMicPermissionHintRow.tsx): Open Permissions and
+   *  Dismiss side by side; Up and Dismiss hand the ring to the question box (plan 96 F11). */
+  | "chat-perm-hint-mic"
+  /** The recent-screenshots picker (MainTabScreenshotBrowser.tsx): the whole box, whose first stop is its Back
+   *  button, and the grid of pictures, whose first stop is the newest one. Opening the picker hands the ring to
+   *  the grid once pictures are listed, else to the box (plan 96 F5). */
+  | "screenshot-browser" | "screenshot-grid"
   /** One per Permissions-tab capability row — see permissionJumpRegistry.ts's `focusOwnerById`.
    *  Recurred 2026-09-05 (build 4/517804a, PERM-JUMP-01 step 3): the jump landed on "Back to Main"
    *  instead of the armed toggle, because `focusOwnerById` climbed to a registered element and

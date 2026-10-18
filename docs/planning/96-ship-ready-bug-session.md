@@ -226,3 +226,142 @@ at landing; `verify.py --full` gated on its exit code before the final push.
 - **05:40 UTC:** the second round landed clean (`68f9c1a9` to `331d4b56`), build `f7413dbc` deployed (the popup and the second
   round together); block E started with a fresh driver: the popup's first run (the settings file removed, not Clear all data) and
   the re-checks of F1, F4, F6, F11 and the Main look check.
+
+## 9. Report (2026-10-18, written by the session that ran it)
+
+### 9a. What you must do next
+
+1. **Say "push".** Nothing has left this PC. The branch `experimental` holds 67 commits since `613cc60c`; the full check passes on
+   the tip (exit code 0, about four minutes). The hook refuses a push until you say so.
+2. **The eight hand checks** on https://claude.ai/artifact/FTe9Lr1sS2Kfrj8nBTVrhi are all still unanswered. Check 4 (the real
+   microphone) now also settles F7, which the rig calls "works as designed": Ask sends what has been said so far.
+3. **Four calls** are waiting on you (§ 9e): the still spinner with a game running, the two-chip row's pace, Expert mode's
+   second try, and whether the built-in notes should attach with the knowledge library switched off.
+4. **Release day** (§ 6) is unchanged: the version to 0.6.0, the merge, the CI zip, and the clean-install row, which is also
+   where F9, F10 and F13 get their Deck checks (they need a Deck without the voice engine or Ollama).
+
+### 9b. What a player notices now (the plain list)
+
+- Asking before the AI is set up gets "The AI is not set up on this Deck yet" and a button to the Ollama tab.
+- A slow first answer says "Loading the AI. The first time takes a minute or two." after about 10 s, and the model is
+  warmed in the background once an install finishes.
+- A new player is asked where the AI should run, right after the Beta Notice; the old "Local runtime" notice is gone.
+- A wiped Deck (settings file gone) shows the first-run screens again, even though Steam's browser kept the old flags.
+- The first Thinking pick sticks. A ticked Strategy step survives closing the panel, the steps are checkboxes, and the note
+  under them names only real actions.
+- The screenshot picker takes the ring (newest picture first) and B closes only the picker.
+- The mic hint's two buttons sit side by side and hand the ring on; the glossary box tells you "A again" explains further
+  and its question row names the game.
+- The Search tab finds bonsAI's own settings ("mic", "spoiler", "text size") above Steam's.
+- Cancel on the Install box with downloads off installs nothing and leaves the line alone; the box names ollama.com; the
+  "isn't installed" line goes when the install finishes.
+- The greyed "Sum up" entry says why on A; the library line shows "38 games"; the Qwen 2.5 rows wear a "Research only" pill;
+  the models window says LICENSE.
+- The chips change more slowly (one chip 6 to 12 s, two chips 9 to 18 s), with smaller words and shorter chips. The two
+  white host buttons match the others; the PC address box says a bare address is enough; the Developer tab's rows keep a side
+  gap; the long About link wraps; the look check no longer cries wolf on the chat's own rows or the Ask pill.
+- Expert mode has its own depth rule and every mode answers each part of a two-part question (Deck second try owed).
+
+### 9c. The code work, by area (the summary you asked for)
+
+**Ask and the answer (back end).** `py_modules/backend/ask/ollama_ask_service.py` now answers "The AI is not set up on this Deck
+yet" whenever no model is installed or reachable (`py_modules/backend/ollama/ollama_routing.py`, `ai_not_set_up_message`), and
+arms a 10 s timer that publishes the `loading_model` phase (`py_modules/backend/ask/ollama_loading_line.py`, new; the line's words
+and its exemption from the "still going" rotation in `py_modules/backend/answer/bonsai_stream_tags.py`). After a finished install
+or starter set, `py_modules/backend/ollama/ollama_local_setup_rpc.py` calls `warm_after_setup` in
+`py_modules/backend/ollama/ollama_preload_service.py`, which loads the model Ask will pick with the same context size Ask uses
+and no 3B size cap. Expert mode and two-part questions: `py_modules/backend/prompts/answer_depth_blocks.py` (new) and
+`ollama_prompts.py`; the dead Speed-only accuracy block was removed. The knowledge library's status carries `game_count`
+(`py_modules/backend/knowledge/rag_corpus_status.py`, counted from the installed database, cached by file size and time).
+
+**The screen, Main tab.** `src/features/answer/transcript/ChatTranscriptHintRows.tsx` draws the "Open the Ollama tab" row (reusing
+the troubleshooting hint's nav node and moves; `noAiSetUpNotice.ts` recognises the answer by its first sentence, and a Python test
+pins the two sides to the same words); `MainTabChatTranscript.tsx` shows it for the live answer or the newest saved turn. The mic
+hint is its own component, `src/features/main-tab/MainTabMicPermissionHintRow.tsx` (each button in a Focusable with all four moves;
+Dismiss hands the ring on through `handRingOnWhenGone.ts`). The screenshot picker
+(`src/features/media/MainTabScreenshotBrowser.tsx`) registers two nav nodes (`screenshot-browser`, `screenshot-grid`), takes the
+grid when pictures are listed, consumes B with `onCancelButton`, and hands the ring to the question box on close or pick. The
+glossary chip (`src/features/glossary/GlossaryTermChip.tsx`) keeps A-on-word as the way to Explain further, with a hint line and a
+one-shot guard; the label gains the game (`glossaryAsk.ts`). The Strategy checklist (`src/features/strategy/StrategyChecklistPanel.tsx`)
+draws checkbox buttons, each in a Focusable with its own nav node (`src/shared/dpad/strategyChecklistNav.ts`, new) that the
+answer's chains in `src/shared/dpad/liveTurnFocusGraph.ts` take through Steam's transfer; the ticks survive a reopen because the
+mount restore merges into the saved list first (`src/features/strategy/strategyChecklistAnswer.ts`, new) and a blank game id no
+longer wipes every game's list (`py_modules/backend/strategy/strategy_checklist_rpc.py`). Chips: `src/features/preset-carousel/presetPace.ts`
+(the holds), `presetRowLayout.ts` (26 px), the three chip files (11 px words). The Ask pill: `src/styles/sections/section-8.ts`.
+
+**Ollama tab and settings.** `src/features/ai-connection/useThinkingNoticeGate.tsx` saves the Thinking pick straight to the back end
+before the notice closes (the box closing rebuilds the screen, so the delayed save never ran). `useLocalOllamaSetupFlow.tsx` stops
+when the downloads-off box is cancelled on the Install path and refreshes the autostart line on done; `src/features/models/localOllamaStarterSet.tsx`
+names ollama.com and tells the truth about Cancel. `OllamaSavedHostsRows.tsx` and `OllamaWhereAiRunsSection.tsx` use the shared glass
+button style and the bare-address hint (`ollamaTabFolds.ts`). `src/features/voice/VoiceInputSettingsSection.tsx` keeps the install's
+busy state in a module-level marker (`voiceInstallBusyStore.ts`) so the box closing cannot lose it, and polls to "ready" with one
+toast. `src/features/models/pullModelLicencePill.ts` gives every non-open-source row a pill; `pull-box/pullModelFilters.ts` and the
+tier boxes say "License".
+
+**Search and first run.** `src/features/search-tab/bonsaiSettingsIndex.ts` (29 entries), the "bonsAI settings" group in `SearchTab.tsx`,
+and the jump in `bonsaiSettingJump.ts` with per-row nav holders in `bonsaiSettingRowNav.ts` (Text size, Voice input, Clear cache
+and Clear all data take the ring; the others land on their section line); B is listened for at the panel and returns to the
+Search tab. `main.py` gains `get_settings_first_run` (true once per start when the settings file was missing;
+`py_modules/backend/settings/settings_service.py`), and `src/features/plugin-shell/useDisclaimerAndLocalRuntimeGates.tsx` clears the
+plugin's browser flags once before deciding what to show. The first-run popup lives in
+`src/features/ai-connection/first-run/` (`FirstRunWhereAiRunsModal.tsx`, its parts, `useFirstRunPopupNav.ts` on the Search tab's nav
+mechanism, `ollamaConnectionProbe.ts`), replaces the old Local runtime notice in the gates hook, and is written up in
+`docs/focus-graph.md`. The look check (`scripts/probe_deck_ui_look.py`) skips full-bleed rows and the chat's own rows and asks whether
+words really spill.
+
+### 9d. What popped up, and how it was handled
+
+- **Three landings tripped guards** that every lane's own gates had passed: the Ask service crossed 400 lines of code (one helper
+  moved out), a new button painted a fill without the ring class (one class added), and a new test copied blocks from an older one
+  (the helpers imported instead). Each cost one small commit; the guards did their job.
+- **Two landings ran at once** for a few minutes because my chain script took the inner script's "all landed" line as its own. Both
+  sets of gates ran on the combined tree and nothing was lost, but it is the kind of slip the runbook warns about; the chain scripts
+  now wait on the outer result.
+- **The PC ran out of memory** at 03:50 UTC (a browser process at 16 GB, memory 96 percent committed): a commit and the quick check
+  failed with "not enough memory". You closed it within ten minutes.
+- **Another chat held the Deck** until 03:31 even after you freed it; the rig's lease showed it, the driver stopped as told, and the
+  block started once the lease ran out.
+- **A D-pad stop inside a portal takes the ring but hears no buttons.** The glossary's Explain further stop (first round) sat in a
+  portal to the page body; the ring moved there and then nothing worked until a reload. Lesson for `docs/lessons-learned.md`: never
+  put a Focusable stop in a portal outside the plugin's tree.
+- **A move between two stops inside one container is Steam's own**, so handlers on the row never run: the mic hint needed each
+  button in its own Focusable (the About links' shape), as the Deck showed on the first try.
+- **A plain focus onto a step inside an answer moves the page's focus, not the ring.** The checklist's chain needed nav nodes once
+  the steps became buttons; the switches had been reachable only because Steam found them itself.
+- **F7 is not a bug.** Ask pressed 2 s into a 5 s sentence sends the 2 s that were spoken; at 5 s and 8 s the whole sentence goes.
+- **R2 did not reproduce on two builds; R1 did not reproduce in nine tries** with both suspected triggers. Both stay as the plan
+  says: R2 closed, R1 open with "reload the plugin" in the README.
+- **The still spinner is by design** with a game running (plan 70's frame-rate measure): your call.
+- **Expert mode measured shorter than Speed** on the Deck (median 511 against 551 characters) with the same prompt in both modes;
+  the depth rule landed and owes its second try.
+- **Asking about an attached picture answered "incomplete stream" twice** with the Deck's AI: a new finding for the roadmap.
+
+### 9e. Your calls
+
+1. **The spinner with a game running:** keep it still (plan 70's frame-rate measure) or let it turn? Nothing changed tonight.
+2. **The two-chip row's pace:** each chip now holds 9 to 18 s, but the two spots alternate, so the row changes every 4 to 9 s. Say if
+   the row should change at most every 6 s or so (one more number in `presetPace.ts`).
+3. **The built-in notes with the library off:** a notes card ("From bonsAI's own note") was drawn under an answer with "Use local
+   knowledge base" OFF. By design or not?
+4. **The popup's Find LAN** shows with the Developer tab only, as on the tab; and a player upgrading who had seen the old notice
+   sees the popup once. Both are the lane's reading of your spec; say if either should change.
+5. **R3** still needs your exact presses, or it goes into the README's known problems with "reload the plugin".
+
+### 9f. What you could have done differently (the trial note)
+
+- **A free Deck at the start.** The Deck did not answer for the first 35 minutes and another chat held it for another 20; the
+  measurement block that fixes depended on started at 03:32 instead of 02:30. Handing the Deck over at the start of a plan session,
+  with the other chats told, would have put the Deck checks an hour earlier.
+- **The hand checks before the session.** None of the eight were answered during the night; two rows (the mic, the touch picker)
+  and the F7 call depended on them.
+- **A guard switch for the session.** The test-file guard sent every test to a helper: five helper runs and about forty minutes
+  for tests I could have typed in two. If a Fable session is going to do focus fixes itself, set `BONSAI_BOOKKEEPER_GUARD=off` for
+  it, or route the focus fixes to an Opus session as the plan says.
+- **Firefox.** The 16 GB tab stopped the PC for ten minutes mid-landing.
+
+### 9g. How the session ran (numbers)
+
+Fourteen Sonnet lanes (nine high, five medium), one advisor consult, four bookkeeper stand-ins, five Deck blocks (M, V, D, E
+and the stopped first try), 67 commits, every one green on the five gates and the quick check at landing, the full check green at
+the end. Sixteen lane copies are left under `.claude/worktrees/` (`python scripts/worktree.py prune` after 24 hours; never
+`git worktree remove`).

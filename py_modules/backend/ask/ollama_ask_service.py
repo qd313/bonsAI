@@ -68,7 +68,7 @@ from backend.ollama.local_ollama_setup_service import (
     probe_ollama_http_ok,
     recover_loopback_ollama_listening,
 )
-from backend.ollama.model_policy import disclosure_for_model, empty_filter_user_message
+from backend.ollama.model_policy import disclosure_for_model
 from backend.ask.ask_payload import screen_ask_attachments
 from backend.knowledge.knowledge_base_glossary import glossary_for_prompt
 from backend.chats.chat_memory_step import add_chat_memory_to_prompt
@@ -83,6 +83,7 @@ from backend.ollama.ollama_keep_alive_rule import effective_keep_alive
 from backend.settings.settings_service import sanitize_reply_verbosity
 from backend.prompts.reply_language_service import resolve_effective_reply_language
 from backend.ollama.ollama_routing import (
+    ai_not_set_up_message,
     is_ollama_model_missing_error,
     no_installed_routing_models_message,
 )
@@ -252,8 +253,8 @@ async def run_ask_ollama(
         models_to_try,
         models_after_policy,
         routing_strategy,
-        policy_tier,
-        non_foss_unlocked,
+        _policy_tier,
+        _non_foss_unlocked,
         ask_diagnostics,
     ) = resolve_ask_model_routing(
         requires_vision=requires_vision,
@@ -282,10 +283,15 @@ async def run_ask_ollama(
         reply_language=reply_language,
     )
     ollama_extras["ask_diagnostics"] = ask_diagnostics
-    if not models_after_policy and not installed_tags:
+    if not installed_tags:
+        # Ollama is not installed or cannot be reached: whatever the try order or the policy tier
+        # says, there is no model to try. Say the AI is not set up (the screen offers a button to
+        # the Ollama tab on this opening); the tier message belonged to a case that cannot occur
+        # here, since models installed on the host are always tried (P96-F1).
+        ask_diagnostics["elapsed_seconds"] = round(time.time() - ask_started, 2)
         return {
             "success": False,
-            "response": empty_filter_user_message(policy_tier, non_foss_unlocked, requires_vision),
+            "response": ai_not_set_up_message(),
             "model_policy_disclosure": None,
             **ollama_extras,
         }

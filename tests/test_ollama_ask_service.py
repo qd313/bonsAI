@@ -178,6 +178,39 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(diag.get("model_succeeded"), "gemma4:e2b")
         self.assertEqual(diag.get("routing_strategy"), "installed_in_policy_chain")
 
+    async def _ask_with_installed(self, installed: list[str], **settings: Any) -> dict[str, Any]:
+        plugin = _FakePlugin()
+        plugin._settings.update(settings)
+        with (
+            patch("backend.ask.ollama_ask_service.list_installed_ollama_tags", return_value=installed),
+            patch("backend.ask.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.media.screenshot_media.prepare_attachment_images", return_value=([], [], [])),
+        ):
+            return await run_ask_ollama(
+                plugin, "hello", "127.0.0.1:11434", "", "", request_timeout_seconds=30,
+            )
+
+    async def test_no_ollama_and_an_empty_try_order_says_the_ai_is_not_set_up(self) -> None:
+        """P96-F1: a Deck with no Ollama used to be told to change its Model policy tier."""
+        out = await self._ask_with_installed([], text_model_routing_order=[])
+        self.assertFalse(out.get("success"))
+        text = str(out.get("response"))
+        self.assertTrue(text.startswith("The AI is not set up on this Deck yet."), text)
+        self.assertIn("Ollama tab", text)
+        self.assertNotIn("policy tier", text.lower())
+        self.assertNotIn("Tier 1", text)
+
+    async def test_no_ollama_with_a_saved_try_order_says_the_same(self) -> None:
+        """A saved order names a permitted model, but nothing is installed: still "not set up"."""
+        out = await self._ask_with_installed([], text_model_routing_order=["gemma4:e2b"])
+        self.assertFalse(out.get("success"))
+        self.assertTrue(str(out.get("response")).startswith("The AI is not set up on this Deck yet."))
+
+    async def test_models_installed_but_none_in_the_list_keeps_its_own_message(self) -> None:
+        out = await self._ask_with_installed(["nomic-embed-text"], text_model_routing_order=["gemma4:e2b"])
+        self.assertFalse(out.get("success"))
+        self.assertNotIn("not set up on this Deck", str(out.get("response")))
+
     async def test_connecting_model_publishes_before_the_first_attempt(self) -> None:
         """The cold-model wait is the longest silent stretch of an Ask; it must say something.
 

@@ -524,6 +524,25 @@ def build_effective_models_to_try(
     return build_host_fallback_tail(chain_for_tail, installed), "installed_host_fallback"
 
 
+# The screen's "Open the Ollama tab" row looks for this exact opening, so the two sit in step: the
+# same words are kept in src/features/answer/transcript/noAiSetUpNotice.ts, and a Python test
+# (tests/test_ollama_ask_service.py) reads that file to prove they match.
+AI_NOT_SET_UP_MESSAGE_START = "The AI is not set up on this Deck yet."
+
+
+def ai_not_set_up_message() -> str:
+    """The answer when Ollama is not installed or cannot be reached, so no model can be named at all.
+
+    A Deck with no Ollama has an empty installed list and no saved try order, so there is nothing
+    for a policy tier to filter. Naming the tier there blamed the wrong thing (plan 94,
+    P94-ASK-NO-AI); the real cause is that the AI itself is not set up.
+    """
+    return (
+        f"{AI_NOT_SET_UP_MESSAGE_START} Open the Ollama tab and use Install Ollama, "
+        "or point bonsAI at a PC running Ollama."
+    )
+
+
 def no_installed_routing_models_message(installed: list[str], requires_vision: bool) -> str:
     """Actionable error when the host has models but none match the Ask routing chain."""
     kind = "vision " if requires_vision else ""

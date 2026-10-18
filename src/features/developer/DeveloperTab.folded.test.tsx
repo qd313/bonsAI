@@ -6,7 +6,8 @@
  *          with its longer words on the row for the strip (word for word against the density board's data file);
  *          the strip's words follow the pick on an option row; the captured errors stay inside Diagnostics; the
  *          buttons that run something still run it; and nothing in the tab scrolls the pane or moves the ring
- *          when it appears (the Deck showed the tab opening scrolled 1,800 px down on 2026-10-12).
+ *          when it appears (the Deck showed the tab opening scrolled 1,800 px down on 2026-10-12); and every open
+ *          section's rows sit inside a PanelSection, which gives them their side gap (plan 96 F25).
  * Used for: DeveloperTab.tsx and the Developer row files.
  * Does not: Walk the D-pad (DeveloperTab.foldedWalk.test.tsx) or see pixels.
  */
@@ -129,6 +130,20 @@ describe("the folded Developer tab, every section open: one line per setting, th
       checked += 1;
     }
     expect(checked).toBe(11);
+  });
+
+  it("every open section's rows sit inside a PanelSection, which is what gives them their side gap", () => {
+    // Plan 96 F25: the rows ran flush against both panel edges because the tab lacked the PanelSection the
+    // Settings tab wraps its sections in (the stand-in draws it as an element named PanelSection).
+    const { container } = render(<DeveloperTab {...props()} />);
+    const bodies = Array.from(container.querySelectorAll<HTMLElement>(".bonsai-fold-body"));
+    expect(bodies).toHaveLength(SECTION_IDS.length);
+    for (const body of bodies) {
+      const section = body.querySelector<HTMLElement>('[data-decky-ui="PanelSection"]');
+      expect(section, "an open section draws a PanelSection").not.toBeNull();
+      expect(section!.querySelector(".bonsai-dense-row"), "its rows are inside it").not.toBeNull();
+      expect(body.querySelectorAll(".bonsai-dense-row").length).toBe(section!.querySelectorAll(".bonsai-dense-row").length);
+    }
   });
 
   it("the Force switch keeps its own words; the frozen test chips row carries the board's block", () => {

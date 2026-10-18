@@ -56,6 +56,7 @@
  */
 import React from "react";
 import { toaster } from "@decky/api";
+import { PanelSection } from "@decky/ui";
 import type { DesktopAppLogLevel, PresetChipAnimation, TabResumeMode } from "../settings/bonsaiSettingsSchema";
 import { formatDeckyRpcError } from "../../shared/deckyCall";
 import type { BonsaiCapabilityKey } from "../permissions/permissionDeepLink";
@@ -228,14 +229,19 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = (props) => {
             title={developerSectionTitle(section.id)}
             summary={summaries[section.id]}
           >
-            <SectionRows
-              rows={rowsFor(section.id)}
-              wiring={{
-                up: () => takeFoldLine(DEVELOPER_FOLD_TAB, section.id),
-                down: () => foldLineBelow(DEVELOPER_FOLD_TAB, chain, section.id),
-                hosts: hostsFor(section.id),
-              }}
-            />
+            {/* The same PanelSection the Settings tab wraps each section in: it is what gives the rows their
+                16 px side gap. Without it the Developer rows ran flush against both panel edges (plan 86
+                step 4 look check, plan 96 F25). */}
+            <PanelSection>
+              <SectionRows
+                rows={rowsFor(section.id)}
+                wiring={{
+                  up: () => takeFoldLine(DEVELOPER_FOLD_TAB, section.id),
+                  down: () => foldLineBelow(DEVELOPER_FOLD_TAB, chain, section.id),
+                  hosts: hostsFor(section.id),
+                }}
+              />
+            </PanelSection>
           </FoldedSection>
         ))}
       </FoldedColumn>

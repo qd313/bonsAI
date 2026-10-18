@@ -126,8 +126,11 @@ LOOK_JS = r"""JSON.stringify((() => {
     // 2. a light button among dark ones
     const bg = lum(getComputedStyle(b).backgroundColor);
     if (bg !== null && bg > 0.75) out.push({rule: 'light-button', control: name(b), brightness: Math.round(bg * 100) / 100});
-    // 3. pressed against the panel edge (under 6 px) when it is not a full-width row
-    if (r.width < P.width - 4 && (L < 6 || R < 6)) out.push({rule: 'touches-panel-edge', control: name(b), left: L, right: R});
+    // 3. pressed against the panel edge (under 6 px) when it is not a full-width row, nor inside a full-bleed row
+    // A control inside a row that asked for edge to edge (.bonsai-full-bleed-row: the suggestion chips) is meant to
+    // touch the panel's edge (docs/design-language.md, rule 1), so it is not a finding (plan 96 F25).
+    if (r.width < P.width - 4 && (L < 6 || R < 6) && !b.closest('.bonsai-full-bleed-row'))
+      out.push({rule: 'touches-panel-edge', control: name(b), left: L, right: R});
     if (r.width < P.width - 4) gaps.push({b, L, R, r});
   }
   // 4. lopsided: a lone button in its row, wide (over 60 % of the panel), with left and right gaps over 6 px apart

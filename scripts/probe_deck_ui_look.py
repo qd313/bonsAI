@@ -121,7 +121,15 @@ LOOK_JS = r"""JSON.stringify((() => {
     const r = b.getBoundingClientRect();
     const L = Math.round(r.left - P.left), R = Math.round(P.right - r.right);
     // 1. words that do not fit (cut off or spilling out); answer text and chips that scroll are skipped
-    if (b.scrollWidth > b.clientWidth + 1 && !b.closest('.bonsai-preset-chip-label, .bonsai-chat-ai-bubble') && getComputedStyle(b).overflowX !== 'auto')
+    // scrollWidth counts the letter-spacing after the last letter, so the Ask pill read 56 in 51 while its word and
+    // arrow sat whole inside the box (plan96-P96-F25-ASK-PILL.json): the words count as not fitting only when a
+    // child or the text itself reaches past the control's own box.
+    const spills = (() => {
+      const past = (q) => q.width > 0 && (q.right > r.right + 1 || q.left < r.left - 1);
+      if ([...b.children].some((k) => past(k.getBoundingClientRect()))) return true;
+      const rng = document.createRange(); rng.selectNodeContents(b); return past(rng.getBoundingClientRect());
+    })();
+    if (b.scrollWidth > b.clientWidth + 1 && spills && !b.closest('.bonsai-preset-chip-label, .bonsai-chat-ai-bubble') && getComputedStyle(b).overflowX !== 'auto')
       out.push({rule: 'text-does-not-fit', control: name(b), need: b.scrollWidth, have: b.clientWidth});
     // 2. a light button among dark ones
     const bg = lum(getComputedStyle(b).backgroundColor);

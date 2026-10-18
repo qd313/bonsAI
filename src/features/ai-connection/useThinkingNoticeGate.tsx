@@ -45,6 +45,11 @@
  *     and fixed it by patching the pending snapshot right after applying the change, with
  *     `patchPendingSessionSettingsSnapshot`; this file does the same thing for the level chosen
  *     here.
+ * (c) The patched snapshot made the rebuilt screen READ the choice, but the settings file never got
+ *     it: the waiting 400 ms save is cancelled by the rebuild, and the rebuilt screen treats what
+ *     it restored as already saved (Deck 2026-10-17, workshop:test-evidence/
+ *     plan94-P94-REPLY-STYLE.json). "Show thinking" now also sends the level straight to
+ *     `save_settings` (one field) before the box closes. "Keep it off" sends nothing.
  */
 import { useCallback, useEffect, useRef } from "react";
 import { showModal, ConfirmModal } from "@decky/ui";
@@ -53,6 +58,7 @@ import type { AskThinkEffortId } from "../settings/askThinkEffort";
 import { THINKING_NOTICE_STORAGE_KEY, type DeckyModalSurvivalHooks } from "../plugin-shell/useDisclaimerAndLocalRuntimeGates";
 import { rememberModalReturnFocus } from "../../shared/dpad/modalReturnFocusRegistry";
 import { patchPendingSessionSettingsSnapshot } from "../plugin-shell/bonsaiSessionSurvival";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../shared/deckyCall";
 
 const THINKING_NOTICE_DESCRIPTION =
   "Thinking shows on screen as it happens and is not checked for spoilers. Show it?";
@@ -70,6 +76,25 @@ function markThinkingNoticeAccepted(): void {
     window.localStorage.setItem(THINKING_NOTICE_STORAGE_KEY, "1");
   } catch {
     /* ignore */
+  }
+}
+
+/**
+ * Sends just the chosen level to the settings file, right now. The settings hook's own save waits
+ * 400 ms and the box closing rebuilds the screen first, so the waiting save never runs (Deck
+ * 2026-10-17: screen Brief, file off). The rebuilt screen then restores Brief from the patched
+ * session copy and counts it as already saved. Same direct-save shape as `turnOnDownloads` in
+ * downloadNotice.tsx. A failed send is only logged: the hook's own save still diffs against disk.
+ */
+async function saveThinkingEffortNow(next: AskThinkEffortId): Promise<void> {
+  try {
+    await callDeckyWithTimeout<[{ ask_think_effort: AskThinkEffortId }], unknown>(
+      "save_settings",
+      [{ ask_think_effort: next }],
+      DECKY_RPC_TIMEOUT_MS
+    );
+  } catch (err) {
+    console.error("save_settings failed (thinking level)", err);
   }
 }
 
@@ -129,6 +154,9 @@ export function useThinkingNoticeGate(
             // popup closes. Same defect and same fix `useRoutingOrderModal.ts` uses for the
             // model try-order pickers.
             patchPendingSessionSettingsSnapshot({ askThinkEffort: next });
+            // Written to the settings file before the box closes and the screen is rebuilt, so
+            // the pick is on disk even though the waiting 400 ms save never gets to run.
+            void saveThinkingEffortNow(next);
             modalHooksRef.current?.onCompleteDeckyModalClose(() => handle.Close());
           }}
           onCancel={() => {

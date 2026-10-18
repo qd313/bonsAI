@@ -24,7 +24,7 @@ import {
   DEFAULT_CAPABILITIES,
   DEFAULT_DESKTOP_APP_LOG_LEVEL,
   DEFAULT_MODEL_POLICY_TIER,
-} from "../data/bonsaiSettingsSchema";
+} from "../features/settings/bonsaiSettingsSchema";
 
 function minimalSurvivalSnapshot(
   overrides: Partial<BonsaiSessionSurvivalSnapshot> = {},

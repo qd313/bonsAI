@@ -20,8 +20,8 @@
  */
 import React, { useState } from "react";
 import { ConfirmModal, TextField } from "@decky/ui";
-import { BonsaiModalScope } from "../../components/BonsaiModalScope";
-import { textPx } from "../../styles/sections/textPx";
+import { BonsaiModalScope } from "../../shared/BonsaiModalScope";
+import { textPx } from "../../styles/textPx";
 
 export type DesktopNoteSaveModalProps = {
   /** Shown above the name field (path + append behavior). */

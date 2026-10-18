@@ -24,7 +24,7 @@ const SRC = join(repoRoot(), "src");
  */
 const PLAIN_ON_PURPOSE: Array<{ files: string[]; line: RegExp; why: string }> = [
   { files: ["CharacterRoleplayEmoticon.tsx"], line: /fontSize/, why: "the roleplay character's emoticon is drawn art sized to its own box, like an icon" },
-  { files: ["tabIndicatorBarStyles.ts", "tabIndicatorBar.ts"], line: /TAB_BAR_SHOULDER_MARK_PX/, why: "LB and RB: button marks in a fixed-width box, like icons" },
+  { files: ["tabIndicatorBarStyles.ts", "tabIndicatorBarStyles.ts"], line: /TAB_BAR_SHOULDER_MARK_PX/, why: "LB and RB: button marks in a fixed-width box, like icons" },
 ];
 
 function sourceFiles(dir: string, out: string[] = []): string[] {

@@ -30,7 +30,7 @@ import {
   ASK_READY_STATE_TRANSITION_MS,
   UNIFIED_INPUT_CORNER_RING_ROOM_PX,
 } from "../../features/unified-input/constants";
-import { textPx } from "./textPx";
+import { textPx } from "../textPx";
 
 /**
  * In: nothing.

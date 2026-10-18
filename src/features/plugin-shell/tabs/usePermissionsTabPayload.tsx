@@ -14,7 +14,7 @@
  */
 import React, { useMemo } from "react";
 
-import { PermissionsTab } from "../../../components/PermissionsTab";
+import { PermissionsTab } from "../../permissions/PermissionsTab";
 
 export type UsePermissionsTabPayloadArgs = React.ComponentProps<typeof PermissionsTab>;
 

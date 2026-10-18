@@ -48,7 +48,7 @@ written at every build and ships in the plugin download.
 The bonsAI logo
 
 The bonsAI logo (src/assets/icons/bonsai-logo.svg, whose outline is also copied into
-src/components/bonsaiLogoPath.ts, and shipped in the download as
+src/shared/icons/bonsaiLogoPath.ts, and shipped in the download as
 dist/assets/bonsai-logo-*.svg) is the maintainer's own work.
 
 ---------------------------------------------------------------------------

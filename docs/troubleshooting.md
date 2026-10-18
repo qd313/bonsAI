@@ -724,7 +724,7 @@ Phase 1 is the **completed** scope for this feature; full search + catalog (Phas
 
 1. **MainRunningApp:** The jump uses `Router.MainRunningApp` from Decky. A title should be running or focused in a way Steam reports to the client. If you are only on the Steam shell with no game, start or focus a game and retry.
 2. **steam:// behavior:** Phase 1 uses `steam://controllerconfig/<appId>` via `SteamClient.URL.ExecuteSteamURL` (same family as Settings search `steam://open/settings/...`). If nothing happens, confirm Steam handled other `steam://` links from bonsAI recently; restart Steam if the client URL dispatcher is stuck.
-3. **After a Steam update:** Big Picture routes and `steam://` targets can change. Follow the smoke-test and changelog discipline in [archive/research/steam-input-research.md](../../bonsAI-workshop/archive/research/steam-input-research.md) and update `src/data/steam-input-lexicon.ts` if needed.
+3. **After a Steam update:** Big Picture routes and `steam://` targets can change. Follow the smoke-test and changelog discipline in [archive/research/steam-input-research.md](../../bonsAI-workshop/archive/research/steam-input-research.md) and update `src/features/developer/steam-input-lexicon.ts` if needed.
 4. **Wrong tab inside controller UI:** Sub-tabs may be local React state without distinct URLs. Use breadcrumb hints in the lexicon entry and optional `primaryPathTemplate` once you have verified paths from CEF sniffing.
 
 ---
@@ -760,7 +760,7 @@ Phase 1 is the **completed** scope for this feature; full search + catalog (Phas
 }
 ```
 
-- **`target`** must exactly match a path from the shipped settings catalog (`src/data/settingsDatabase.ts` / `data/settings-search-targets.json`).
+- **`target`** must exactly match a path from the shipped settings catalog (`src/features/search-tab/settingsDatabase.ts` / `data/settings-search-targets.json`).
 - **`aliases` / `synonyms`:** direct match when the search text contains the term (min 2 characters).
 - **`expansions`:** weaker match tier (surfaced after native and alias/synonym hits).
 

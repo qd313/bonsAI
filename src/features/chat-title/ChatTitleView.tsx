@@ -47,7 +47,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
 
-import { TEXT_SCALE_VAR } from "../../data/chatTextSize";
+import { TEXT_SCALE_VAR } from "../../shared/text-size/chatTextSize";
 import type { NavRefHolder } from "../../utils/navFocusRegistry";
 import { ChatNameWords } from "./ChatNameWords";
 import { ChatRowIcon } from "./ChatRowIcons";
@@ -206,14 +206,14 @@ export function ChatTitleView(): React.ReactElement {
   if (chat && s.menuOpen) classes.push("bonsai-chat-title--menu-open");
   if (strip) classes.push("bonsai-chat-title--strip");
   /* The character's lit colour, for the menu arrow and for the tab bar in the strip, which reads the same
-     variable bonsAI's box sets for it there (tabIndicatorBar.ts). */
+     variable bonsAI's box sets for it there (tabIndicatorBarStyles.ts). */
   const style: React.CSSProperties = {};
   if (s.litColor) {
     (style as Record<string, string>)["--bonsai-chat-title-lit"] = s.litColor;
     (style as Record<string, string>)["--bonsai-ui-tab-lit"] = s.litColor;
   }
   /* The Text size step, for the name, the small line and the tab bar here: bonsAI's box sets it for its own
-     words, and this view is outside the box (src/data/chatTextSize.ts). */
+     words, and this view is outside the box (src/shared/text-size/chatTextSize.ts). */
   if (s.textScale) (style as Record<string, string>)[TEXT_SCALE_VAR] = s.textScale;
   const wordmark = !chat && !(strip && s.tab !== null && s.tab !== "main");
   return (

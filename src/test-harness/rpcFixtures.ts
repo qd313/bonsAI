@@ -1,6 +1,6 @@
 import type { BackgroundRequestStatus } from "../types/backgroundAsk";
-import { type BonsaiSettings } from "../data/bonsaiSettingsSchema";
-import { normalizeSettings } from "../data/bonsaiSettingsNormalizers";
+import { type BonsaiSettings } from "../features/settings/bonsaiSettingsSchema";
+import { normalizeSettings } from "../features/settings/bonsaiSettingsNormalizers";
 /** Default settings payload aligned with backend `load_settings` / `normalize_settings`. */
 export function defaultSettingsFixture(): BonsaiSettings {
   // "Run AI on this Deck" starts on in a fresh install (plan 93). The many screen tests built on this

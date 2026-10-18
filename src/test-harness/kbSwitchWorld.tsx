@@ -18,7 +18,7 @@ import React from "react";
 import { act, render } from "@testing-library/react";
 
 import { KnowledgeBaseSection } from "../features/knowledge-library/KnowledgeBaseSection";
-import { usePluginSettings } from "../hooks/usePluginSettings";
+import { usePluginSettings } from "../features/settings/usePluginSettings";
 import { buildInitialSessionSnapshot } from "../features/plugin-shell/initialSessionSnapshot";
 import {
   captureBonsaiSessionForModal,

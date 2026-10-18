@@ -27,7 +27,7 @@
  * width resets for the scroll area underneath (section-3.ts).
  */
 import { BONSAI_PLUGIN_SIDE_PAD_PX } from "../../features/unified-input/constants";
-import { TEXT_SCALE_ROOT_CSS, textPx } from "./textPx";
+import { TEXT_SCALE_ROOT_CSS, textPx } from "../textPx";
 
 /**
  * In: nothing — every value here is a fixed string or read from a CSS

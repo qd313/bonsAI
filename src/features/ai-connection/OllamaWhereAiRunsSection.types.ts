@@ -1,0 +1,88 @@
+/**
+ * Title: Where-AI-runs section — shared types
+ *
+ * Purpose: The result shapes for the backend calls the "Where AI runs" panel
+ * makes (mDNS discovery, the local setup poll, the startup-entry poll), and
+ * the props the panel component itself takes.
+ *
+ * Used for: OllamaWhereAiRunsSection.tsx only.
+ *
+ * Solves: Keeps the panel's own file shorter by moving type declarations
+ * that carry no behavior — nothing here runs when the module loads.
+ *
+ * Does not: Declare any constant or function. See
+ * OllamaWhereAiRunsSection.constants.tsx for the numbers and copy this panel
+ * uses.
+ */
+import type React from "react";
+import type { NamedOllamaHost } from "../settings/bonsaiSettingsSchema";
+import type { DeveloperConnectionStatus } from "../developer/DeveloperTab";
+
+export type MdnsOllamaHost = {
+  label: string;
+  host: string;
+  port: number;
+  verified?: boolean;
+};
+
+export type MdnsDiscoveryResult = {
+  ok?: boolean;
+  hosts?: MdnsOllamaHost[];
+  error?: string;
+  hint?: string;
+};
+
+export type LocalOllamaSetupStatus = {
+  phase: string;
+  stage: string;
+  profile: string;
+  pull_tags?: string[];
+  pull_step?: number;
+  total_pull_steps?: number;
+  current_tag?: string;
+  log_tail?: string[];
+  error?: string;
+  done?: boolean;
+  /** The newest download progress as plain words ("Downloading 6e4c: 43% 1.3 GB/3.2 GB"), while a pull runs. */
+  progress_text?: string;
+  /** The one sentence a finished run ends with, version included ("Updated to Ollama 0.40.2 and restarted it."). */
+  result_line?: string;
+  ollama_version?: string;
+  /** True when a newer program is installed but the running server could not be replaced. */
+  needs_device_restart?: boolean;
+};
+
+/** Mirrors `get_ollama_local_autostart_status` (main.py) — the Deck startup entry's real state. */
+export type OllamaLocalAutostartStatus = {
+  installed?: boolean;
+  enabled?: boolean;
+  running?: boolean;
+  reason?: string;
+};
+
+export type OllamaWhereAiRunsSectionProps = {
+  ollamaIp: string;
+  onOllamaIpChange: (ip: string) => void;
+  onPersistOllamaIp: (ip: string) => void;
+  ollamaLocalOnDeck: boolean;
+  setOllamaLocalOnDeck: (v: boolean) => void;
+  /** "Start the AI with the Deck" — a per-user Deck startup entry for local Ollama, off by default (2026-09-12). */
+  ollamaLocalAutostart: boolean;
+  setOllamaLocalAutostart: (v: boolean) => void;
+  onLastConnectionStatus?: (status: DeveloperConnectionStatus | null) => void;
+  namedOllamaHosts: NamedOllamaHost[];
+  setNamedOllamaHosts: React.Dispatch<React.SetStateAction<NamedOllamaHost[]>>;
+  onBeforeDeckyModal: () => void;
+  onCompleteDeckyModalClose: (close: () => void) => void;
+  onOpenOllamaModelsHub: (opts?: { initialSection?: "policy" | "browse" | "advanced" }) => void;
+  /** No longer used here (the Tier 2 install button is gone, plan 79); OllamaTab still passes it, so it stays optional until that file drops it. */
+  onApplyTier2MultimodalPolicy?: () => void | Promise<void>;
+  /** Focus graph: Up from the first switch, onto the section's own line in the folded tab (plan 91). */
+  onMoveUpFromFirst?: () => boolean;
+  /** Focus graph: move from connection row into Knowledge base section. */
+  onMoveDownFromConnectionRow?: () => void;
+  /** Focus graph: ref for Test connection button (KB toggle onMoveUp target). */
+  connectionTestBtnRef?: React.RefObject<HTMLButtonElement | null>;
+};
+
+export type ConnectionStatus = DeveloperConnectionStatus;

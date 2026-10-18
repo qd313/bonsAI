@@ -60,7 +60,7 @@ import { focusDeckOwner } from "../utils/liveTurnFocusGraph";
 import { getUiDocument } from "../utils/uiDocument";
 import { SessionSumUpSection, focusLastSumUpStop } from "../features/chat-sum-up/SessionSumUpSection";
 import type { ChatSumUpState } from "../features/chat-sum-up/chatSumUpModel";
-import { textPx } from "../styles/sections/textPx";
+import { textPx } from "../styles/textPx";
 
 export type SessionContextTurn = {
   id: string;

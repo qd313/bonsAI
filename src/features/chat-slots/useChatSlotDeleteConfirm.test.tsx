@@ -39,7 +39,7 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { useChatSlotDeleteConfirm } from "./useChatSlotDeleteConfirm";
-import { peekModalReturnFocus, clearModalReturnFocus } from "../plugin-shell/modalReturnFocusRegistry";
+import { peekModalReturnFocus, clearModalReturnFocus } from "../../shared/dpad/modalReturnFocusRegistry";
 
 beforeEach(() => {
   shown = [];

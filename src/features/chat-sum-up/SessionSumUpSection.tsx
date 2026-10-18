@@ -36,7 +36,7 @@
 import React, { useEffect, useRef } from "react";
 import { Focusable } from "@decky/ui";
 
-import { ThinkingSpinnerIcon } from "../../components/icons";
+import { ThinkingSpinnerIcon } from "../../shared/icons/icons";
 import { elementHasGamepadFocus, uiGamepadFocusElement } from "../../utils/uiDocument";
 import { revealBelowKeepingAsItSettles, revealOnceWhenMounted } from "../../utils/chatPanelScroll";
 import { focusRowElement } from "../../utils/focusPerTurnRow";

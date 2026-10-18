@@ -108,8 +108,8 @@ import {
   AttachMediaIcon,
   ClearIcon,
   ImageAttachmentIcon,
-} from "./icons";
-import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
+} from "../shared/icons/icons";
+import { CharacterRoleplayEmoticon } from "../features/characters/CharacterRoleplayEmoticon";
 import { AskStripGameTag } from "./AskStripGameTag";
 import { AskStripSendButtons, focusOwnRef } from "./AskStripSendButtons";
 import {
@@ -123,7 +123,7 @@ import {
 } from "../data/askMode";
 import { MainTabAskModeMenuPopover } from "./MainTabAskModeMenuPopover";
 import { MainTabAttachMenuPopover } from "./MainTabAttachMenuPopover";
-import { PermissionDenyAction } from "./PermissionDenyAction";
+import { PermissionDenyAction } from "../features/permissions/PermissionDenyAction";
 import { useMainTabAskBarFocus } from "../hooks/useMainTabAskBarFocus";
 import { useAskBarMenuToggles } from "../hooks/useAskBarMenuToggles";
 import { useAskBarInitialRingClaim } from "../hooks/useAskBarInitialRingClaim";
@@ -134,7 +134,7 @@ import {
   unregisterNavFocus,
   type NavRefHolder,
 } from "../utils/navFocusRegistry";
-import { textPx } from "../styles/sections/textPx";
+import { textPx } from "../styles/textPx";
 import { ASK_MODE_HINTS } from "../data/askModeHints";
 
 // The prop type lives in MainTabUnifiedAskBar.types.ts now; re-exported here so nothing

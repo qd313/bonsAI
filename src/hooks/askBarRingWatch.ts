@@ -31,7 +31,7 @@
  * Does not: Decide when a window starts. It moves the ring only through the nav registry
  * (`takeNavFocus`), never a plain `focus()`.
  */
-import { peekModalReturnFocus } from "../features/plugin-shell/modalReturnFocusRegistry";
+import { peekModalReturnFocus } from "../shared/dpad/modalReturnFocusRegistry";
 import { takeNavFocus } from "../utils/navFocusRegistry";
 import { uiGamepadFocusElement } from "../utils/uiDocument";
 

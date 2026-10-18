@@ -65,7 +65,7 @@ def _dedupe_preserve_order(tags: list[str]) -> list[str]:
 # 2026-10-13, for text and for pictures: it reads both), then older picks and the open-weight fallbacks.
 # Ask mode (speed/strategy/expert) differs by prompt and token budget only — not separate tag lists.
 # These seeds only order models that are already installed, and only when the person has not saved an
-# order by hand ("Automatic", a fresh install). The same order is copied in src/utils/modelRoutingOrder.ts;
+# order by hand ("Automatic", a fresh install). The same order is copied in src/features/models/modelRoutingOrder.ts;
 # tests/test_starter_tag_parity.py fails if the two drift or stop starting with the starter.
 _TEXT_FOSS_ESSENTIALS = [
     "gemma4:e2b-it-qat",

@@ -1,0 +1,392 @@
+/**
+ * Title: The AI models screen
+ *
+ * Purpose: The full-screen popup for everything about which AI models this
+ * plugin can use: browsing and downloading models (with the model licence
+ * choice folded in as one of the Browse screen's own filters, and each
+ * installed model's place in the try order, saved as soon as it is changed),
+ * plus a set of advanced routing switches reached from a small "Advanced"
+ * link. It
+ * keeps a change to either as a draft until the person presses Done, at
+ * which point every pending change is saved together.
+ *
+ * Used for: The Ollama tab's "Manage models" entry.
+ *
+ * Solves: Puts the licence choice, the download catalog, and the advanced
+ * switches behind one Done button instead of separate popups each with
+ * their own save step, so opening Advanced does not lose an unsaved pick.
+ *
+ * Only one can be open: the opener asks `claimModelsHubOpen` first, and a second request while one is
+ * open (or on its way) does nothing.
+ *
+ * Does not: Install Ollama itself, or actually download a model — the
+ * browse-and-pull screen is a separate component (PullModelsModal) that
+ * this file only hosts and asks to save on Done.
+ *
+ * Gotchas:
+ * - While the Browse screen is open with nothing queued to pull, Done
+ *   means "save the licence pick and close", not "pull" — see handleDone.
+ *   PullModelsModal reports back through onFooterStateChange whether
+ *   something is actually queued (hasQueuedPull), and this file only lets
+ *   Done act as "Pull selected" once it is.
+ * - Until 2026-09-20 this screen had a third, separate "Policy" section
+ *   for the same three-tier choice the Browse screen's Licence filter
+ *   makes now (plan 62, § 3d) — that section and its own chip are gone;
+ *   the licence pick is one of the filters column's rows inside
+ *   PullModelsModal (a column beside the list since plan 91), wired here
+ *   exactly the same draft-until-Done way.
+ * - The Browse/Advanced section-button row is gone too (plan 62, § 3e #3): with only two
+ *   sections left, and Policy no longer one of them, a whole row of buttons cost back the same
+ *   height dropping Policy alone would have saved (two buttons stretch to fill the row exactly
+ *   like three did). Advanced is now a small link at the top of the screen instead. It sits in a
+ *   Focusable of its own (plan 91) so Up from the top of Browse (the
+ *   try-order switch, the first row) can hand the ring to it by Steam's own transfer, never a plain
+ *   focus() across containers. Its one move of its own is Down, into Browse's Clear, so Down
+ *   and Up mirror each other (plan 92's second round); the header line's Refresh button that used to
+ *   sit between them was removed (plan 93). On the Advanced screen Down is Steam's own.
+ */
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Button, ConfirmModal, Focusable } from "@decky/ui";
+import type { ModelPolicyTierId } from "./modelPolicy";
+import { useModelPolicyTierDraft } from "./ModelPolicyTierPanel";
+import {
+  ModelRoutingAdvancedPanel,
+  useModelRoutingAdvancedDraft,
+} from "./ModelRoutingAdvancedPanel";
+import { PullModelsModal, type PullModelsFooterState } from "./pull-box/PullModelsModal";
+import { BonsaiModalScope } from "../../shared/BonsaiModalScope";
+import { peekModalReturnFocus, rememberModalReturnFocus } from "../../shared/dpad/modalReturnFocusRegistry";
+import type { TryOrderHost } from "./useTryOrderPlaces";
+import type { NavRefHolder } from "../../utils/navFocusRegistry";
+import { handRingTo } from "./pull-box/pullModelsBoxMemory";
+
+export type OllamaModelsHubSection = "policy" | "browse" | "advanced";
+
+export type OllamaModelsHubModalProps = {
+  initialSection?: OllamaModelsHubSection;
+  activeRoutingTag: string | null;
+  modelPolicyTier: ModelPolicyTierId;
+  modelPolicyNonFossUnlocked: boolean;
+  modelAllowHighVramFallbacks: boolean;
+  onCommitOllamaModelsHub: (patch: {
+    modelPolicyTier: ModelPolicyTierId;
+    modelPolicyNonFossUnlocked: boolean;
+    modelAllowHighVramFallbacks: boolean;
+  }) => void | Promise<void>;
+  onReadModelPolicy: () => void;
+  onApplyTier2MultimodalPolicy?: () => void | Promise<void>;
+  onBeforeNestedDeckyModal?: () => void;
+  onCompleteNestedDeckyModalClose?: (close: () => void) => void;
+  onClose: () => void;
+  /** Which computer answers and the saved try orders: with it, Browse shows the Text / Pictures switch and each model's place. */
+  tryOrderHost?: TryOrderHost;
+};
+
+/**
+ * The tallest the scrolling body may be and still leave the dialog's own title, Done and Cancel
+ * on screen. Measured on the Deck's own screen 2026-09-23
+ * (workshop:test-evidence/plan64-MODELS-LIST-CAP-01-try2.json): the page is 534px tall, Steam's top
+ * and bottom bars take 40 and 42, the dialog sits 24 below the top bar, and its own padding,
+ * title, gaps and 56px footer take 156 -- 262 in all, which leaves 272 for this box. The old cap,
+ * 72vh (384px there), pushed Done 46px below the visible edge whenever the long list showed.
+ * Fixed pixels rather than vh because every part of those 262 is a fixed size; 270 leaves 8px of
+ * slack, and 520 still caps it on a tall monitor.
+ */
+const HUB_BODY_MAX_HEIGHT = "min(calc(100vh - 270px), 520px)";
+
+/*
+ * One box at a time (plan 92's second night: the Deck showed two AI models boxes stacked, the second
+ * opened from "Browse models..." under the one "AI models" opened, plan92-P92-M-MODELS-MAP.json). A box
+ * counts itself while it is on the page, by its own mount and unmount, so every way it closes (Done,
+ * Cancel, a pull, Steam taking its popups down) frees the next open. Between the open request and the
+ * box's first draw the request itself holds the place, for a moment only, so a box that never draws
+ * cannot lock the opener for good.
+ */
+let hubsOnPage = 0;
+let askedAt: number | null = null;
+const ASK_HOLDS_MS = 1500;
+
+/** The opener asks this first: true (and the place is held) when no AI models box is open or on its way. */
+export function claimModelsHubOpen(now: number = Date.now()): boolean {
+  if (hubsOnPage > 0) return false;
+  if (askedAt !== null && now - askedAt < ASK_HOLDS_MS) return false;
+  askedAt = now;
+  return true;
+}
+
+/**
+ * Unified fullscreen hub: the browse/pull table (licence choice included, as a filter) and
+ * advanced routing.
+ */
+export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
+  const {
+    initialSection = "browse",
+    activeRoutingTag,
+    modelPolicyTier,
+    modelPolicyNonFossUnlocked,
+    modelAllowHighVramFallbacks,
+    onCommitOllamaModelsHub,
+    onReadModelPolicy,
+    onApplyTier2MultimodalPolicy,
+    onBeforeNestedDeckyModal,
+    onCompleteNestedDeckyModalClose,
+    onClose,
+    tryOrderHost,
+  } = props;
+
+  // "policy" used to be its own section; it is now the filters column's Licence group, inside
+  // Browse. A caller still asking for it lands on plain Browse now -- this used to also force
+  // the old Filters panel open with the ring on the first licence row (a "jump straight to the
+  // licence pick" shortcut), but measured on the Deck that left the ring one press away from
+  // changing the licence filter with nothing pressed to put it there, reproducing 3 of 3 tries
+  // through "Manage AI models..." and never through "Browse models..." even though both open the
+  // same screen (workshop:test-evidence/plan70-RING-ON-FILTER-2c1.json). Both routes now open the
+  // same way, ring on "Advanced ›". Since plan 91 there is no panel: the filters are a column
+  // that is always on screen, so nothing is left to open.
+  useEffect(() => {
+    hubsOnPage += 1;
+    askedAt = null;
+    return () => {
+      hubsOnPage -= 1;
+    };
+  }, []);
+
+  const [section, setSection] = useState<Exclude<OllamaModelsHubSection, "policy">>(
+    initialSection === "policy" ? "browse" : initialSection
+  );
+  const { draftTier, draftTierRef, setDraft } = useModelPolicyTierDraft(modelPolicyTier);
+  const {
+    draftNonFossUnlocked,
+    setDraftNonFossUnlocked,
+    draftHighVram,
+    setDraftHighVram,
+  } = useModelRoutingAdvancedDraft(modelPolicyNonFossUnlocked, modelAllowHighVramFallbacks);
+
+  // The Advanced switch is a draft until Done, so the box marks "Skipped: too big" from the draft, not the saved value.
+  const hostWithDraft = useMemo(
+    () => (tryOrderHost ? { ...tryOrderHost, modelAllowHighVramFallbacks: draftHighVram } : undefined),
+    [tryOrderHost, draftHighVram],
+  );
+  const [browseFooter, setBrowseFooter] = useState<PullModelsFooterState>({
+    okText: "Pull selected",
+    onOk: () => {},
+    okDisabled: true,
+    hasQueuedPull: false,
+  });
+
+  const draftNonFossRef = useRef(modelPolicyNonFossUnlocked);
+  const draftHighVramRef = useRef(modelAllowHighVramFallbacks);
+  draftNonFossRef.current = draftNonFossUnlocked;
+  draftHighVramRef.current = draftHighVram;
+
+  useEffect(() => {
+    setDraftNonFossUnlocked(modelPolicyNonFossUnlocked);
+    setDraftHighVram(modelAllowHighVramFallbacks);
+  }, [modelPolicyNonFossUnlocked, modelAllowHighVramFallbacks, setDraftNonFossUnlocked, setDraftHighVram]);
+
+  const handleBrowseFooterChange = useCallback((state: PullModelsFooterState) => {
+    setBrowseFooter(state);
+  }, []);
+
+  const draftPatch = useCallback(
+    () => ({
+      modelPolicyTier: draftTierRef.current,
+      modelPolicyNonFossUnlocked: draftNonFossRef.current,
+      modelAllowHighVramFallbacks: draftHighVramRef.current,
+    }),
+    [draftTierRef]
+  );
+  /** The draft as last saved (or as it stood when the screen opened), to tell whether one is pending. */
+  const lastSavedDraftRef = useRef(
+    JSON.stringify({ modelPolicyTier, modelPolicyNonFossUnlocked, modelAllowHighVramFallbacks })
+  );
+  /** What was saved when the screen opened: where Cancel puts things back to (see handleHubClose). */
+  const openedPatchRef = useRef({ modelPolicyTier, modelPolicyNonFossUnlocked, modelAllowHighVramFallbacks });
+  const openedJsonRef = useRef(lastSavedDraftRef.current);
+
+  const commitPolicyAndAdvanced = useCallback(async () => {
+    const patch = draftPatch();
+    await onCommitOllamaModelsHub(patch);
+    lastSavedDraftRef.current = JSON.stringify(patch);
+  }, [draftPatch, onCommitOllamaModelsHub]);
+
+  /*
+   * A typed-name pull closes this screen by itself (PullModelsModal's onPullAccepted), without
+   * Done. That close used to drop the licence + Advanced draft: measured on the Deck
+   * (workshop:test-evidence/plan64-ROUTING-MERGE-01-top.json), "Allow high-VRAM models in routing"
+   * was turned on, the typed Pull closed the screen, and the switch read off again on reopening --
+   * the one pull the switch was meant for merged into the try order without it. A pending draft
+   * is now saved before that close, the same save Done makes.
+   */
+  /*
+   * Which button opened this screen, read once as it opens (the button remembers itself in
+   * modalReturnFocusRegistry.ts as it is pressed). A box raised from inside this screen -- the
+   * "Enable Tier 2 before pulling?" box a queued model can open -- closes through the same shell
+   * close, which uses the remembered button up. By the time Cancel or Done closed this screen
+   * nothing was left to return to and the ring went to the tab rail (Deck:
+   * t75-3-Q2-SAFE-FIRST-TIER2.json; Done only worked when no such box had opened). So the id is put
+   * back just before this screen's own close whenever a box has used it up.
+   */
+  const openerRef = useRef(peekModalReturnFocus());
+  const closeHub = useCallback(() => {
+    if (openerRef.current && peekModalReturnFocus() === null) rememberModalReturnFocus(openerRef.current);
+    onClose();
+  }, [onClose]);
+
+  const handleHubClose = useCallback(
+    (reason: string) => {
+      if (reason === "pullAccepted" && JSON.stringify(draftPatch()) !== lastSavedDraftRef.current) {
+        void commitPolicyAndAdvanced()
+          .catch((err) => console.error("save_settings failed (AI models hub, pull close)", err))
+          .finally(() => closeHub());
+        return;
+      }
+      /*
+       * Cancel means "as it was when I opened this". Licence and Advanced picks are a draft until
+       * Done, which Cancel drops -- but "Pull selected" saves the draft first (the pull needs it),
+       * so a pull declined at its own box and then Cancel left the new licence in the saved file
+       * while the reopened screen showed the old one (plan76-P76-TIER2-MODEL-SAFE-FIRST.json). If
+       * anything was saved during this visit, put the opening values back before closing.
+       */
+      if ((reason === "cancel" || reason === "browseCancel") && lastSavedDraftRef.current !== openedJsonRef.current) {
+        void Promise.resolve(onCommitOllamaModelsHub(openedPatchRef.current))
+          .then(() => {
+            lastSavedDraftRef.current = openedJsonRef.current;
+          })
+          .catch((err) => console.error("save_settings failed (AI models hub, Cancel restore)", err))
+          .finally(() => closeHub());
+        return;
+      }
+      closeHub();
+    },
+    [commitPolicyAndAdvanced, draftPatch, closeHub, onCommitOllamaModelsHub]
+  );
+
+  /**
+   * Done always saves the licence + advanced draft first, then either closes (nothing queued to
+   * pull, or the Advanced screen) or hands off to PullModelsModal's own pull. Before the Filters
+   * panel folded Policy in, saving that draft only ever happened from the Policy or Advanced
+   * section's own Done press -- pressing Done while Browse had nothing queued left the tier
+   * change unsaved. Committing unconditionally here closes that gap along with the move.
+   */
+  const handleDone = useCallback(() => {
+    void commitPolicyAndAdvanced()
+      .then(() => {
+        if (section === "browse" && browseFooter.hasQueuedPull) {
+          browseFooter.onOk();
+          return;
+        }
+        handleHubClose("done");
+      })
+      .catch((err) => {
+        console.error("save_settings failed (AI models hub Done)", err);
+      });
+  }, [section, browseFooter, commitPolicyAndAdvanced, handleHubClose]);
+
+  /*
+   * The three functions Browse is handed stay the same from one draw to the next. Browse rebuilds its
+   * queued-pull handler whenever one of them changes and reports its footer up whenever that handler
+   * changes, and the report draws this screen again: written inline, a new function each draw kept the
+   * screen drawing itself for as long as it was open (OllamaModelsHubModal.renderLoop.test.tsx).
+   */
+  const applyTier2FromBrowse = useCallback(async () => {
+    setDraft("open_weight");
+    await onApplyTier2MultimodalPolicy?.();
+  }, [setDraft, onApplyTier2MultimodalPolicy]);
+  const browseCancel = useCallback(() => handleHubClose("browseCancel"), [handleHubClose]);
+  const browsePullAccepted = useCallback(() => handleHubClose("pullAccepted"), [handleHubClose]);
+  /** The Advanced link's nav node: Up from the top of Browse hands the ring here by Steam's transfer. */
+  const advancedNavRef = useRef<NavRefHolder["current"]>(null);
+  const upToAdvanced = useCallback(() => handRingTo(advancedNavRef), []);
+  /** Down from Advanced: Browse's Clear (Browse fills this while drawn). */
+  const browseDownFromAboveRef = useRef<(() => boolean) | null>(null);
+
+  const toggleAdvanced = useCallback(() => {
+    setSection((current) => (current === "advanced" ? "browse" : "advanced"));
+  }, []);
+
+  const okButtonText = section === "browse" && browseFooter.hasQueuedPull ? browseFooter.okText : "Done";
+  const okDisabled = section === "browse" && browseFooter.hasQueuedPull ? browseFooter.okDisabled : false;
+
+  return (
+    <ConfirmModal
+      strTitle="AI models"
+      strDescription={
+        <BonsaiModalScope className="bonsai-models-hub-shell bonsai-prose">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+            textAlign: "left",
+            maxWidth: "100%",
+            maxHeight: HUB_BODY_MAX_HEIGHT,
+            overflowY: "auto",
+            paddingRight: 4,
+          }}
+        >
+          <Focusable
+            style={{ display: "flex", justifyContent: "flex-end" }}
+            {...({ navRef: advancedNavRef } as Record<string, unknown>)}
+          >
+            <Button
+              className="bonsai-models-hub-advanced-link"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleAdvanced();
+              }}
+              {...({
+                onMoveDown: () => browseDownFromAboveRef.current?.() ?? false,
+                onOKButton: (evt: { stopPropagation: () => void }) => {
+                  evt.stopPropagation();
+                  toggleAdvanced();
+                },
+              } as Record<string, unknown>)}
+              aria-pressed={section === "advanced"}
+            >
+              {section === "advanced" ? "‹ Browse & pull" : "Advanced ›"}
+            </Button>
+          </Focusable>
+          {section === "browse" ? (
+            <PullModelsModal
+              embedded
+              activeRoutingTag={activeRoutingTag}
+              modelPolicyTier={draftTier}
+              modelPolicyNonFossUnlocked={draftNonFossUnlocked}
+              onSelectModelPolicyTier={setDraft}
+              onApplyTier2Policy={applyTier2FromBrowse}
+              onBeforeNestedDeckyModal={onBeforeNestedDeckyModal}
+              onCompleteNestedDeckyModalClose={onCompleteNestedDeckyModalClose}
+              onCancel={browseCancel}
+              onPullAccepted={browsePullAccepted}
+              onFooterStateChange={handleBrowseFooterChange}
+              onMoveUpFromTop={upToAdvanced}
+              downFromAboveRef={browseDownFromAboveRef}
+              tryOrderHost={hostWithDraft}
+            />
+          ) : null}
+          {section === "advanced" ? (
+            <ModelRoutingAdvancedPanel
+              modelPolicyTier={draftTier}
+              modelPolicyNonFossUnlocked={draftNonFossUnlocked}
+              modelAllowHighVramFallbacks={draftHighVram}
+              onModelPolicyNonFossUnlockedChange={setDraftNonFossUnlocked}
+              onModelAllowHighVramFallbacksChange={setDraftHighVram}
+              onSelectModelPolicyTier={setDraft}
+              onReadModelPolicy={onReadModelPolicy}
+            />
+          ) : null}
+        </div>
+        </BonsaiModalScope>
+      }
+      strOKButtonText={okButtonText}
+      strCancelButtonText="Cancel"
+      onOK={() => {
+        if (okDisabled) return;
+        handleDone();
+      }}
+      onCancel={() => handleHubClose("cancel")}
+    />
+  );
+}

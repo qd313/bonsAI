@@ -15,7 +15,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, render } from "@testing-library/react";
 import { TabBodyFocusRoot } from "./TabBodyFocusRoot";
-import { focusInTabBody } from "./useTabBodyFocusScroll";
+import { focusInTabBody } from "../../shared/dpad/useTabBodyFocusScroll";
 
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../../test-harness/fakeDeckyUi");

@@ -91,7 +91,7 @@ class RoleplayBuildResult:
     suffix: str
     resolved_preset_id: str | None
 
-# Keep in sync with src/data/characterCatalog.ts (ids and work titles).
+# Keep in sync with src/features/characters/characterCatalog.ts (ids and work titles).
 _CHARACTER_ROWS: list[tuple[str, str, str, str]] = [
     # id, work_title, character_label, style_hint (optional short phrase for the model)
     ("cp2077_jackie", "Cyberpunk 2077", "Jackie Welles", "warm Night City fixer cadence"),
@@ -139,7 +139,7 @@ _ID_TO_ROW: dict[str, tuple[str, str, str, str]] = {row[0]: row for row in _CHAR
 
 _MAX_CUSTOM_LEN = 400
 
-# Keep in sync with src/data/aiCharacterAccentIntensity.ts (AI_CHARACTER_ACCENT_INTENSITY_IDS).
+# Keep in sync with src/features/characters/aiCharacterAccentIntensity.ts (AI_CHARACTER_ACCENT_INTENSITY_IDS).
 VALID_ACCENT_INTENSITY_IDS: frozenset[str] = frozenset(("subtle", "balanced", "heavy", "unleashed"))
 DEFAULT_ACCENT_INTENSITY = "balanced"
 

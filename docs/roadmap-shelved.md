@@ -116,7 +116,7 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
 - ★ `[platform]` `[watching]` **A plugin reload while a game is running can put Steam's Home screen in front of the game** — **shelved as watched 2026-10-16 (D131 call 4).** [Full notes](archive/roadmap-trimmed-2026-10-roadmap.md#plan-93-note-shelved-reload-puts-home-in-front).
   Unshelves when: a new sighting.
 
-- ★ `[QA]` `[watching]` **The Ollama tab's "Install Ollama" box test failed once during a full run under load** — seen once, 2026-10-16 (plan 86 step 3, at the UI scale landing), and it passed on the retry. 20 reruns (8 alone, 12 at once) all passed. Test: `src/components/OllamaWhereAiRunsSection.starterOffer.test.tsx`.
+- ★ `[QA]` `[watching]` **The Ollama tab's "Install Ollama" box test failed once during a full run under load** — seen once, 2026-10-16 (plan 86 step 3, at the UI scale landing), and it passed on the retry. 20 reruns (8 alone, 12 at once) all passed. Test: `src/features/ai-connection/OllamaWhereAiRunsSection.starterOffer.test.tsx`.
   Unshelves when: a new failure.
 
 - ★ `[reply]` `[watching]` **Strategy choice labels stayed English with the reply language set to Japanese** — seen on both

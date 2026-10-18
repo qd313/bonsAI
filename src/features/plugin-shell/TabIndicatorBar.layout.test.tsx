@@ -27,7 +27,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TabIndicatorBar } from "./TabIndicatorBar";
 import { ALL_BONSAI_TAB_IDS, type BonsaiTabId } from "./tabTitles";
 import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
-import { TEXT_SCALE } from "../../data/chatTextSize";
+import { TEXT_SCALE } from "../../shared/text-size/chatTextSize";
 
 /** Seven tabs with the Developer tab on, six without (Search joined as the first tab in plan 92). */
 const SEVEN = ALL_BONSAI_TAB_IDS;

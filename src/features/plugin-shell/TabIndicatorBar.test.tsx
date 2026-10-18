@@ -22,10 +22,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import React from "react";
 
 import { TabIndicatorBar } from "./TabIndicatorBar";
-import { shoulderSwitchFromPress } from "../folded-tabs/shoulderSwitch";
+import { shoulderSwitchFromPress } from "../../shared/dpad/shoulderSwitch";
 import { ALL_BONSAI_TAB_IDS, BONSAI_TAB_SHORT_NAMES, type BonsaiTabId } from "./tabTitles";
 import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
-import { buildTabBarRules } from "../../styles/sections/tabIndicatorBar";
+import { buildTabBarRules } from "./tabIndicatorBarStyles";
 
 const hoisted = vi.hoisted(() => ({
   focusableProps: [] as Array<Record<string, unknown>>,

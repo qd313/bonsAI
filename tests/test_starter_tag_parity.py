@@ -4,7 +4,7 @@ Purpose: The first model a new Deck downloads is named in several places that no
 the screen's `TIER1_ESSENTIALS_TAG` (src/data/deckEssentialsTags.ts, which the starter-set box and the
 "Install the starter set" button read), the back end's `TIER1_ESSENTIALS_PULL_TAGS` (what the setup run
 really pulls), the two shipped try-order seeds (the TypeScript copy in
-src/utils/modelRoutingOrder.ts and the Python one in ollama_routing.py, which must agree and list it), and the model list in
+src/features/models/modelRoutingOrder.ts and the Python one in ollama_routing.py, which must agree and list it), and the model list in
 scripts/setup-ollama.sh. This fails if any of them is changed alone.
 Used for: keeping the starter model one choice (the maintainer's call 2026-10-13: gemma4:e2b-it-qat).
 Does not: Check the speech models or the note-search model; test_starter_set_extras.py does.

@@ -21,7 +21,7 @@
  * keeps everything else about that button as it already was.
  */
 import type React from "react";
-import { textPx } from "./sections/textPx";
+import { textPx } from "./textPx";
 
 /**
  * The class that draws the plugin's white focus ring on a button while Steam
@@ -58,7 +58,7 @@ export const FOCUS_RING_ITEM_HOST_CLASS = "bonsai-settings-item-ring-host";
 /**
  * The glass button's three colours, named once so every button that wears the look reads the same value:
  * the floating Open all button (SETTINGS_GLASS_BTN, below) and the About tab's link buttons (styles/sections/
- * aboutTab.ts, as CSS). Over the panel's dark ground the fill comes out as Steam's own button grey.
+ * aboutTabStyles.ts, as CSS). Over the panel's dark ground the fill comes out as Steam's own button grey.
  */
 export const SETTINGS_GLASS_BTN_BACKGROUND =
   "linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 100%)";

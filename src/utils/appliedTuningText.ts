@@ -19,7 +19,7 @@
  * about what was changed, and if one ever does, this is what displays it. The graphics clock number
  * was never applied by this plugin and still is not — it has only ever been a suggestion.
  */
-import { type AppliedResultLike } from "../data/bonsaiSettingsSchema";
+import { type AppliedResultLike } from "../features/settings/bonsaiSettingsSchema";
 
 /** QAM Performance verification line — sysfs is source of truth; QAM can lag. */
 const QAM_VERIFY_SLIDER_LINE =

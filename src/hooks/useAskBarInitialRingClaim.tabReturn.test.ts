@@ -19,7 +19,7 @@ import { useAskBarInitialRingClaim } from "./useAskBarInitialRingClaim";
 import {
   clearModalReturnFocus,
   rememberModalReturnFocus,
-} from "../features/plugin-shell/modalReturnFocusRegistry";
+} from "../shared/dpad/modalReturnFocusRegistry";
 import { registerNavFocus, resetNavFocusRegistry } from "../utils/navFocusRegistry";
 import { rememberUiDocument, resetUiDocument } from "../utils/uiDocument";
 

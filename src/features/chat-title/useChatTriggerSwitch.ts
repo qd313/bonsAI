@@ -32,7 +32,7 @@
  */
 import { useEffect } from "react";
 
-import { peekModalReturnFocus } from "../plugin-shell/modalReturnFocusRegistry";
+import { peekModalReturnFocus } from "../../shared/dpad/modalReturnFocusRegistry";
 import { isTriggerLeftDeckEvent, isTriggerRightDeckEvent } from "../../utils/focusNavigation";
 import { takeNavFocus } from "../../utils/navFocusRegistry";
 import { getUiDocument, uiGamepadFocusElement } from "../../utils/uiDocument";

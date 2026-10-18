@@ -22,10 +22,10 @@ Policy (always applied): `bonsai://policy/decky-ui-focus` — especially **New c
 
 | Reference | What it demonstrates |
 |-----------|----------------------|
-| `src/components/SettingsTab.tsx` | The folded Settings tab: section lines, `takeFoldLine`, `foldLineBelow` |
-| `src/components/OllamaTab.tsx` | `focusOllamaKeepAliveThumb`, `focusLatencyWarningThumb`, `onMoveDownFromThumb` |
-| `src/components/PullModelsModal.tsx` | Horizontal chip row + vertical exits via `Button` `onMove*` spreads |
-| `src/components/CharacterPickerModal.tsx` | `ToggleField` `onMoveDown` / `onMoveRight` to list and footer |
+| `src/features/settings/SettingsTab.tsx` | The folded Settings tab: section lines, `takeFoldLine`, `foldLineBelow` |
+| `src/features/ai-connection/OllamaTab.tsx` | `focusOllamaKeepAliveThumb`, `focusLatencyWarningThumb`, `onMoveDownFromThumb` |
+| `src/features/models/pull-box/PullModelsModal.tsx` | Horizontal chip row + vertical exits via `Button` `onMove*` spreads |
+| `src/features/characters/CharacterPickerModal.tsx` | `ToggleField` `onMoveDown` / `onMoveRight` to list and footer |
 
 **Helpers:** `focusInHost(host)` — query `[tabindex], button` inside a wrapper ref; `getFocusableWithin` in `src/utils/focusNavigation.ts`.
 

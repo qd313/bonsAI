@@ -90,7 +90,7 @@ import { Router } from "@decky/ui";
 import type { AskAttachment } from "../types/bonsaiUi";
 import type { BonsaiAskOrchestration } from "../types/askOrchestration";
 import type { UseBonsaiAskOrchestrationArgs } from "../types/askOrchestrationArgs";
-import { type AskModeId } from "../data/bonsaiSettingsSchema";
+import { type AskModeId } from "../features/settings/bonsaiSettingsSchema";
 import { ASK_MODE_IDS } from "../data/askMode";
 import { buildResponseText } from "../utils/appliedTuningText";
 import { detectPromptCategory } from "../data/presets";
@@ -121,7 +121,7 @@ import type {
   PresetCarouselInjectPayload,
   ReplyFollowUpPending,
 } from "../types/backgroundAsk";
-import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
+import type { ModelPolicyDisclosurePayload } from "../features/models/modelPolicy";
 import type {
   OllamaContextUi,
   StrategyGuideBranchesPayload,
@@ -150,7 +150,7 @@ import { gameIsRunning, smoothRevealFor, streamPollMsFor } from "../utils/lighte
 import { useStrategyChecklistSession } from "./useStrategyChecklistSession";
 import { useSuggestedPromptChips } from "./useSuggestedPromptChips";
 import { useReplyFeedbackChips } from "./useReplyFeedbackChips";
-import { useOllamaGameContextSync } from "./useOllamaGameContextSync";
+import { useOllamaGameContextSync } from "../features/ask/flow/useOllamaGameContextSync";
 import { useInputTransparencyRefresh } from "./useInputTransparencyRefresh";
 import { useAskMountRestore } from "./useAskMountRestore";
 import { useStrategyBranchActions } from "./useStrategyBranchActions";

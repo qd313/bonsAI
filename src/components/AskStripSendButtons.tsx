@@ -32,7 +32,7 @@
 import React from "react";
 import { Button } from "@decky/ui";
 
-import { ClearIcon } from "./icons";
+import { ClearIcon } from "../shared/icons/icons";
 
 /** A ref this file can focus through: a button's own element, filled in by Decky's Button. */
 type ElementRef = React.RefObject<HTMLElement | null>;

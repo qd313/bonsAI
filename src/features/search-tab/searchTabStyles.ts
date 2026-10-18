@@ -16,7 +16,7 @@
  *
  * Does not: Place the tab; the tab body root and the scroll pane do.
  */
-import { textPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/textPx";
 
 const T = ".bonsai-scope .bonsai-search";
 const INK = "#e8eef5";

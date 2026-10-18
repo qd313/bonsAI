@@ -22,7 +22,7 @@
  */
 
 import { BONSAI_FOREST_GREEN } from "../unified-input/constants";
-import { textPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/textPx";
 
 /** Decky's own back arrow, measured on the Deck 2026-10-08: the empty space on the right mirrors it. */
 export const DECKY_BACK_ARROW_W_PX = 40;
@@ -37,7 +37,7 @@ const SUB_FONT_PX = 8;
 const KEY_FONT_PX = 7;
 /** LT and RT at rest, dimmed while the ring is elsewhere (the drawing's `.deck.dimkeys`). */
 export const KEY_DIM_OPACITY = 0.32;
-/** The accent the tab bar uses when no character colour has been handed over yet (tabIndicatorBar.ts). */
+/** The accent the tab bar uses when no character colour has been handed over yet (tabIndicatorBarStyles.ts). */
 const LIT_FALLBACK = "#52d88a";
 
 /**

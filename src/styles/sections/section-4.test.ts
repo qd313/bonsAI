@@ -14,8 +14,8 @@
  */
 import { describe, expect, it } from "vitest";
 import { buildSection4Section } from "./section-4";
-import { buildAnswerBubbleSection } from "./answerBubble";
-import { buildBonsaiScopeAccentInlineStyle } from "../../data/characterUiAccent";
+import { buildAnswerBubbleSection } from "../../features/answer/bubble/answerBubble";
+import { buildBonsaiScopeAccentInlineStyle } from "../../features/characters/characterUiAccent";
 import {
   PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
   PRESET_VISIBLE_SLOTS,

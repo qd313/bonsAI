@@ -17,7 +17,7 @@
  */
 import React, { useState } from "react";
 import { ConfirmModal, TextField } from "@decky/ui";
-import { BonsaiModalScope } from "../../components/BonsaiModalScope";
+import { BonsaiModalScope } from "../../shared/BonsaiModalScope";
 
 export type ChatSlotRenameModalProps = {
   initialLabel: string;

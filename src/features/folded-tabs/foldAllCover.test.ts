@@ -14,7 +14,7 @@
 import { describe, expect, it } from "vitest";
 
 import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
-import { FOLD_ALL_HEIGHT_PX, stripHeightFor } from "../../styles/sections/foldedTabs";
+import { FOLD_ALL_HEIGHT_PX, stripHeightFor } from "./foldedTabs";
 import { coveredOnView, foldAllButtonBox, foldDockPaint, lineWordBoxes, paintedFrom } from "../../test-harness/foldAllCover";
 
 /** The Deck's own screen (plan93-P93-M2-OPEN-ALL.json). */

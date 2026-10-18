@@ -79,7 +79,7 @@ type SlotFace = { showLine: boolean; open: boolean };
 
 /**
  * The attribute the answer's own line carries while the slot holds its copy: the stylesheet fades it
- * out (detailsSlot.ts), so a person never sees both. A plain attribute, not a class, because the reply
+ * out (detailsSlotStyles.ts), so a person never sees both. A plain attribute, not a class, because the reply
  * builder owns the line's className and rewrites it on every render.
  */
 const HELD_ATTR = "data-slot-holds-line";

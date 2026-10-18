@@ -25,10 +25,10 @@ import type { ScreenshotItem } from "../types/bonsaiUi";
 import { formatBytes, formatScreenshotTimestamp, toFileUri } from "../utils/mediaFormat";
 import { readClipboardText, sanitizeClipboardStashText } from "../utils/clipboardStash";
 import { formatDeckyRpcError } from "../utils/deckyCall";
-import { BackChevronIcon, RefreshArrowIcon } from "./icons";
-import { PermissionDenyAction } from "./PermissionDenyAction";
-import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
-import { textPx } from "../styles/sections/textPx";
+import { BackChevronIcon, RefreshArrowIcon } from "../shared/icons/icons";
+import { PermissionDenyAction } from "../features/permissions/PermissionDenyAction";
+import type { BonsaiCapabilityKey } from "../features/permissions/permissionDeepLink";
+import { textPx } from "../styles/textPx";
 
 export type MainTabScreenshotBrowserProps = {
   fullBleedRowStyle: React.CSSProperties;

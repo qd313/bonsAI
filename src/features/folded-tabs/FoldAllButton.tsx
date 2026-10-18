@@ -30,8 +30,8 @@ import { Button, Focusable } from "@decky/ui";
 
 import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
 import { FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN } from "../../styles/settingsGlassButton";
-import { textPx } from "../../styles/sections/textPx";
-import { FOLD_ALL_HEIGHT_PX } from "../../styles/sections/foldedTabs";
+import { textPx } from "../../styles/textPx";
+import { FOLD_ALL_HEIGHT_PX } from "./foldedTabs";
 import {
   allSectionsOpen,
   foldSectionToReturnTo,
@@ -40,7 +40,7 @@ import {
   subscribeFoldedTabs,
 } from "./foldedTabsStore";
 import { foldAllNavId, takeFoldLine } from "./FoldedSection";
-import { shoulderSwitchFromPress } from "./shoulderSwitch";
+import { shoulderSwitchFromPress } from "../../shared/dpad/shoulderSwitch";
 
 const FOLD_ALL_OPEN_LABEL = "Open all";
 const FOLD_ALL_CLOSE_LABEL = "Close all";

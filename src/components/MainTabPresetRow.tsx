@@ -34,8 +34,8 @@ import { joinPresetWithRunningGame } from "../utils/joinPresetWithRunningGame";
 import {
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
-} from "../features/plugin-shell/modalReturnFocusRegistry";
-import { textPx } from "../styles/sections/textPx";
+} from "../shared/dpad/modalReturnFocusRegistry";
+import { textPx } from "../styles/textPx";
 
 /**
  * The help chip's own focus container. The chip sits alone in the row, so it needs the same two things the

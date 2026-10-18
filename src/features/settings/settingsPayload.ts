@@ -1,0 +1,123 @@
+/**
+ * Title: Turning the settings on screen into the message that saves them
+ *
+ * Purpose: The Settings tab holds every setting under a screen-side name, spelled
+ * the way screen code spells things. The back end that writes them to disk knows
+ * the same settings under different names, spelled its own way. This file is the
+ * translation between the two, and it is the only place that translation is
+ * written down. Hand it everything the screen currently has and it hands back the
+ * one object the back end is expecting, with all fifty-odd settings renamed.
+ *
+ * Used for: every save. That is the Save the user presses in Settings, and also
+ * the saves that happen on their own the moment something is picked -- choosing an
+ * AI character, or granting a permission. Those pass a second argument holding
+ * just the setting that changed, which is laid over the top of the rest, so the
+ * save carries the new value without waiting for the screen to catch up.
+ *
+ * Solves: without this, every place that saves would spell all fifty names out
+ * for itself. Adding a setting would mean remembering every one of those places,
+ * and forgetting one does not break anything visibly -- that setting just quietly
+ * stops being saved from one screen while working fine from another.
+ *
+ * Does not: check anything. Whatever the screen hands over is what gets sent. Reading
+ * settings back the other way, and filling in anything an older saved file is missing, is a
+ * different file (bonsaiSettingsNormalizers).
+ *
+ * Gotchas:
+ *   - Adding a setting cannot be forgotten *here*, and that is worth knowing
+ *     because it is unusual in this area: every field is required, so leaving a
+ *     line out fails the type check immediately. The places a new setting does
+ *     get quietly forgotten are the several hand-written lists in the settings
+ *     hook, not this file.
+ *   - The second argument wins outright. A value passed in it overrides the
+ *     screen's own value for that setting, which is the point -- the screen has
+ *     not been told about the change yet -- but it means passing a stale one here
+ *     saves the stale one.
+ */
+import type { BonsaiSettings, BonsaiSettingsSnapshotInput } from "./bonsaiSettingsSchema";
+
+/** Build the object the back end expects. The second argument, when given, is laid over the top -- that is how picking a character or granting a permission saves straight away. */
+export function toBonsaiSettingsPayload(
+  input: BonsaiSettingsSnapshotInput,
+  patch?: Partial<BonsaiSettings>,
+): BonsaiSettings {
+  const base: BonsaiSettings = {
+    latency_warning_seconds: input.latencyWarningSeconds,
+    request_timeout_seconds: input.requestTimeoutSeconds,
+    latency_timeouts_custom_enabled: input.latencyTimeoutsCustomEnabled,
+    unified_input_persistence_mode: input.unifiedInputPersistenceMode,
+    chat_text_size: input.chatTextSize,
+    screenshot_attachment_preset: input.screenshotAttachmentPreset,
+    desktop_debug_note_auto_save: input.desktopDebugNoteAutoSave,
+    desktop_ask_verbose_logging: input.desktopAskVerboseLogging,
+    desktop_app_log_level: input.desktopAppLogLevel,
+    preset_chip_fade_animation_enabled: input.presetChipAnimation === "fade",
+    preset_chip_animation: input.presetChipAnimation,
+    preset_single_chip: input.presetSingleChip,
+    input_sanitizer_user_disabled: input.inputSanitizerUserDisabled,
+    capabilities: input.capabilities,
+    ai_character_enabled: input.aiCharacterEnabled,
+    ai_character_random: input.aiCharacterRandom,
+    ai_character_preset_id: input.aiCharacterPresetId,
+    ai_character_custom_text: input.aiCharacterCustomText,
+    ai_character_accent_intensity: input.aiCharacterAccentIntensity,
+    ask_mode: input.askMode,
+    ollama_keep_alive: input.ollamaKeepAlive,
+    reply_verbosity: input.replyVerbosity,
+    ask_think_effort: input.askThinkEffort,
+    reply_language: input.replyLanguage,
+    show_developer_tab: input.showDeveloperTab,
+    model_policy_tier: input.modelPolicyTier,
+    model_policy_non_foss_unlocked: input.modelPolicyNonFossUnlocked,
+    model_allow_high_vram_fallbacks: input.modelAllowHighVramFallbacks,
+    text_model_routing_order: input.textModelRoutingOrder,
+    vision_model_routing_order: input.visionModelRoutingOrder,
+    ollama_local_on_deck: input.ollamaLocalOnDeck,
+    ollama_local_autostart: input.ollamaLocalAutostart,
+    strategy_spoiler_masking_enabled: input.strategySpoilerMaskingEnabled,
+    strategy_spoiler_auto_reveal_after_consent: input.strategySpoilerAutoRevealAfterConsent,
+    show_onscreen_debug_hud: input.showOnscreenDebugHud,
+    dev_force_session_rag_chips: input.devForceSessionRagChips,
+    dev_preload_ask_model: input.devPreloadAskModel,
+    tab_resume_mode: input.tabResumeMode,
+    named_ollama_hosts: input.namedOllamaHosts,
+    dev_frozen_test_chips: input.devFrozenTestChips,
+    voice_stt_model: input.voiceSttModel,
+    use_local_knowledge_base: input.useLocalKnowledgeBase,
+    rag_hybrid_retrieval_enabled: input.ragHybridRetrievalEnabled,
+    rag_corpus_path: input.ragCorpusPath,
+    rag_corpus_version: input.ragCorpusVersion,
+    stream_scramble_enabled: input.streamScrambleEnabled,
+    stream_scramble_style: input.streamScrambleStyle,
+    stream_scramble_color: input.streamScrambleColor,
+    stream_scramble_settle_ms: input.streamScrambleSettleMs,
+  };
+  return patch ? { ...base, ...patch } : base;
+}
+
+/**
+ * The fields in `next` that differ from `baseline`, keyed the way the backend expects.
+ *
+ * Used by the automatic background save in `usePluginSettings.ts`. Sending only what actually
+ * changed -- instead of a full copy of every setting on every save -- means a field this tab
+ * never touched (a QA batch written straight to settings.json, a knowledge-base download
+ * finishing in the background, a sanitizer command another Ask handled) survives the next
+ * autosave instead of being silently reverted by a stale belief about it. The backend's own
+ * `save_settings` already merges an incoming payload over a fresh read of disk, so leaving a
+ * field out of the payload is what tells it "leave this one alone."
+ *
+ * Iterates `Object.keys(next)` rather than a hand-written field list, so it cannot drift from
+ * `BonsaiSettings` the way the settings hook's own several hand-written lists can.
+ */
+export function diffBonsaiSettingsPayload(
+  baseline: BonsaiSettings,
+  next: BonsaiSettings,
+): Partial<BonsaiSettings> {
+  const patch: Record<string, unknown> = {};
+  (Object.keys(next) as (keyof BonsaiSettings)[]).forEach((key) => {
+    if (JSON.stringify(next[key]) !== JSON.stringify(baseline[key])) {
+      patch[key] = next[key];
+    }
+  });
+  return patch as Partial<BonsaiSettings>;
+}

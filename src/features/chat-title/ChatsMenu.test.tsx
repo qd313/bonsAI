@@ -57,7 +57,7 @@ import type { MainTabProps } from "../../components/MainTab";
 import type { ChatSumUpState } from "../chat-sum-up/chatSumUpModel";
 import { ChatSlotDeleteModal } from "../chat-slots/ChatSlotDeleteModal";
 import { ChatSlotRenameModal } from "../chat-slots/ChatSlotRenameModal";
-import { clearModalReturnFocus, peekModalReturnFocus } from "../plugin-shell/modalReturnFocusRegistry";
+import { clearModalReturnFocus, peekModalReturnFocus } from "../../shared/dpad/modalReturnFocusRegistry";
 import { desktopNoteExchangeFor } from "../user-notes/useDesktopNoteSaveModal";
 
 let calls: MainTabCalls;

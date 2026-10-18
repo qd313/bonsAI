@@ -76,7 +76,7 @@
  */
 import { useEffect } from "react";
 
-import { bonsaiDebugLog } from "../../utils/bonsaiDebugIngest";
+import { bonsaiDebugLog } from "../developer/bonsaiDebugIngest";
 import { takeNavFocus } from "../../utils/navFocusRegistry";
 import { getUiDocument } from "../../utils/uiDocument";
 

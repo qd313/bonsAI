@@ -32,7 +32,7 @@ vi.mock("../../utils/bonsaiSessionSurvival", () => ({
   patchPendingSessionActiveSlot: vi.fn(),
 }));
 vi.mock("../../utils/bonsaiReplySurface", () => ({ consumePendingFocusMainTab: vi.fn(() => false) }));
-vi.mock("../../utils/bonsaiDebugIngest", () => ({ bonsaiDebugLog: vi.fn() }));
+vi.mock("../developer/bonsaiDebugIngest", () => ({ bonsaiDebugLog: vi.fn() }));
 
 import * as chatSlotsApi from "../../utils/chatSlotsApi";
 

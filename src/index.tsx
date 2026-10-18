@@ -105,12 +105,12 @@ import { definePlugin, useQuickAccessVisible } from "@decky/api";
 import { Tabs } from "@decky/ui";
 
 import { buildInitialSessionSnapshot } from "./features/plugin-shell/initialSessionSnapshot";
-import { DEFAULT_LATENCY_WARNING_SECONDS } from "./data/bonsaiSettingsSchema";
+import { DEFAULT_LATENCY_WARNING_SECONDS } from "./features/settings/bonsaiSettingsSchema";
 import { setFrozenTestChips } from "./data/presets";
-import { BonsaiPluginShell } from "./components/BonsaiPluginShell";
-import { BonsaiDebugOverlay } from "./components/BonsaiDebugOverlay";
-import { activeOllamaRoutingTag } from "./utils/activeOllamaRoutingTag";
-import { appendAppDesktopLogWithPrefs } from "./utils/appDesktopLog";
+import { BonsaiPluginShell } from "./features/plugin-shell/BonsaiPluginShell";
+import { BonsaiDebugOverlay } from "./features/developer/BonsaiDebugOverlay";
+import { activeOllamaRoutingTag } from "./features/models/activeOllamaRoutingTag";
+import { appendAppDesktopLogWithPrefs } from "./features/developer/appDesktopLog";
 import {
   getPluginDataClearedGeneration,
   peekBonsaiSessionPendingRestore,
@@ -119,7 +119,7 @@ import {
 import { consumePendingFocusMainTab, useReplySurfaceVisibility } from "./utils/bonsaiReplySurface";
 import {
   BonsaiSvgIcon,
-} from "./components/icons";
+} from "./shared/icons/icons";
 import { useUnifiedInputSurface } from "./features/unified-input/useUnifiedInputSurface";
 import { PluginErrorBoundary } from "./features/plugin-shell/PluginErrorBoundary";
 import { DECKY_TAB_TITLES, type BonsaiTabId } from "./features/plugin-shell/tabTitles";
@@ -128,7 +128,7 @@ import { HiddenTabHeaderTrap } from "./features/plugin-shell/useHiddenTabHeaderT
 import { TabBodyFocusRoot } from "./features/plugin-shell/TabBodyFocusRoot";
 import { takeNavFocus } from "./utils/navFocusRegistry";
 import { loadSavedSearchQuery, persistSearchQuery } from "./features/plugin-shell/pluginStorage";
-import { useOllamaConnectionState } from "./features/plugin-shell/useOllamaConnectionState";
+import { useOllamaConnectionState } from "./features/ai-connection/useOllamaConnectionState";
 import { useDeveloperTabPayload } from "./features/plugin-shell/tabs/useDeveloperTabPayload";
 import { useAboutTabPayload } from "./features/plugin-shell/tabs/useAboutTabPayload";
 import { useSearchTabPayload } from "./features/plugin-shell/tabs/useSearchTabPayload";
@@ -136,37 +136,37 @@ import { usePermissionsTabPayload } from "./features/plugin-shell/tabs/usePermis
 import { useSettingsTabPayload } from "./features/plugin-shell/tabs/useSettingsTabPayload";
 import { useOllamaTabPayload } from "./features/plugin-shell/tabs/useOllamaTabPayload";
 import { useMainTabPayload } from "./features/plugin-shell/tabs/useMainTabPayload";
-import { useQamPanelHeightGuard } from "./hooks/useQamPanelHeightGuard";
-import { useQamPanelSideBleed } from "./hooks/useQamPanelSideBleed";
-import { useTabStripBodyOffset } from "./hooks/useTabStripBodyOffset";
-import { usePluginSettings } from "./hooks/usePluginSettings";
+import { useQamPanelHeightGuard } from "./features/plugin-shell/useQamPanelHeightGuard";
+import { useQamPanelSideBleed } from "./features/plugin-shell/useQamPanelSideBleed";
+import { useTabStripBodyOffset } from "./features/plugin-shell/useTabStripBodyOffset";
+import { usePluginSettings } from "./features/settings/usePluginSettings";
 import type { StreamScrambleSettings } from "./features/stream-scramble/streamScrambleContext";
-import { useReplyLanguage } from "./hooks/useReplyLanguage";
+import { useReplyLanguage } from "./shared/i18n/useReplyLanguage";
 import { useIntentPacks } from "./features/search-tab/useIntentPacks";
 import { useScreenshotBrowser } from "./hooks/useScreenshotBrowser";
-import { useSteamSettingsSearch } from "./hooks/useSteamSettingsSearch";
-import { useBonsaiPluginShell } from "./hooks/useBonsaiPluginShell";
-import { usePermissionJump } from "./hooks/usePermissionJump";
-import { effectiveCapabilities, useKidsLock } from "./hooks/useKidsLock";
+import { useSteamSettingsSearch } from "./features/search-tab/useSteamSettingsSearch";
+import { useBonsaiPluginShell } from "./features/plugin-shell/useBonsaiPluginShell";
+import { usePermissionJump } from "./features/permissions/usePermissionJump";
+import { effectiveCapabilities, useKidsLock } from "./features/permissions/useKidsLock";
 import { useDownloadPermissionBridge } from "./features/downloads/downloadNotice";
 import { useVoiceAskWithReadAloud } from "./features/voice/useVoiceAskWithReadAloud";
-import { useDeveloperToolActions } from "./features/plugin-shell/useDeveloperToolActions";
-import { useSlowResponseWarningTimer, useUnifiedInputPersistence } from "./features/plugin-shell/useUnifiedInputBehaviors";
-import { useOllamaModelsHubModal } from "./features/plugin-shell/useOllamaModelsHubModal";
-import { useCharacterPickerModal } from "./features/plugin-shell/useCharacterPickerModal";
+import { useDeveloperToolActions } from "./features/developer/useDeveloperToolActions";
+import { useSlowResponseWarningTimer, useUnifiedInputPersistence } from "./features/ask/bar/useUnifiedInputBehaviors";
+import { useOllamaModelsHubModal } from "./features/models/useOllamaModelsHubModal";
+import { useCharacterPickerModal } from "./features/characters/useCharacterPickerModal";
 import { desktopNoteExchangeFor, useDesktopNoteSaveModal } from "./features/user-notes/useDesktopNoteSaveModal";
-import { usePluginHelpModal } from "./features/plugin-shell/usePluginHelpModal";
+import { usePluginHelpModal } from "./features/about/usePluginHelpModal";
 import { useBonsaiAskOrchestration } from "./hooks/useBonsaiAskOrchestration";
 import { useChatSlots } from "./hooks/useChatSlots";
-import { useDisclaimerAndLocalRuntimeGates } from "./hooks/useDisclaimerAndLocalRuntimeGates";
-import { useSessionResetActions } from "./features/plugin-shell/useSessionResetActions";
+import { useDisclaimerAndLocalRuntimeGates } from "./features/plugin-shell/useDisclaimerAndLocalRuntimeGates";
+import { useSessionResetActions } from "./features/settings/useSessionResetActions";
 import { useSessionRestoreAfterRemount } from "./features/plugin-shell/useSessionRestoreAfterRemount";
-import { useChatSlotActivityState } from "./features/plugin-shell/useChatSlotActivityState";
+import { useChatSlotActivityState } from "./features/chats/slots/useChatSlotActivityState";
 import { useBonsaiScopeStyle } from "./features/plugin-shell/useBonsaiScopeStyle";
-import { withTextScale } from "./data/chatTextSize";
-import { usePublishTextScale } from "./features/plugin-shell/usePublishTextScale";
+import { withTextScale } from "./shared/text-size/chatTextSize";
+import { usePublishTextScale } from "./shared/text-size/usePublishTextScale";
 import { useExternalNavigationActions } from "./features/plugin-shell/useExternalNavigationActions";
-import { useAppLogPrefsAndCapturedErrors } from "./features/plugin-shell/useAppLogPrefsAndCapturedErrors";
+import { useAppLogPrefsAndCapturedErrors } from "./features/developer/useAppLogPrefsAndCapturedErrors";
 import { useTabAndModeGuardEffects } from "./features/plugin-shell/useTabAndModeGuardEffects";
 import { ChatTitleView } from "./features/chat-title/ChatTitleView";
 import { setChatTitleLitColor } from "./features/chat-title/chatTitleStore";

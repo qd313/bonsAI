@@ -81,7 +81,7 @@ import {
   PRESET_CHIP_GAP_PX,
   PRESET_VISIBLE_SLOTS,
 } from "../../features/preset-carousel/presetRowLayout";
-import { buildPresetChipLabelCss } from "./presetChipLabel";
+import { buildPresetChipLabelCss } from "../../features/preset-carousel/presetChipLabel";
 
 /**
  * In: nothing.

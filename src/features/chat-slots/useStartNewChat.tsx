@@ -30,7 +30,7 @@ import {
   rememberModalReturnFocus,
   registerModalReturnFocusOwner,
   type ModalReturnTransfer,
-} from "../plugin-shell/modalReturnFocusRegistry";
+} from "../../shared/dpad/modalReturnFocusRegistry";
 
 export type UseStartNewChatArgs = {
   /** Every saved chat, newest first (the Main tab's list; the chat title store's `chats`). */

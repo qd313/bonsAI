@@ -22,7 +22,7 @@
 import { useCallback, useEffect, useRef, useState, type SetStateAction } from "react";
 import { Router } from "@decky/ui";
 
-import type { AskModeId } from "../data/bonsaiSettingsSchema";
+import type { AskModeId } from "../features/settings/bonsaiSettingsSchema";
 import type { StrategyChecklistState } from "../types/bonsaiUi";
 import {
   clearStrategyChecklistSession,

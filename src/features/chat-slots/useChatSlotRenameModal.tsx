@@ -21,7 +21,7 @@ import {
   rememberModalReturnFocus,
   registerModalReturnFocusOwner,
   type ModalReturnTransfer,
-} from "../plugin-shell/modalReturnFocusRegistry";
+} from "../../shared/dpad/modalReturnFocusRegistry";
 
 export type UseChatSlotRenameModalArgs = {
   onBeforeNestedDeckyModal?: () => void;

@@ -35,7 +35,7 @@ import {
   DEFAULT_STREAM_SCRAMBLE_STYLE,
   type StreamScrambleColor,
   type StreamScrambleStyle,
-} from "../../data/bonsaiSettingsSchema";
+} from "../settings/bonsaiSettingsSchema";
 
 export type StreamScrambleSettings = {
   enabled: boolean;

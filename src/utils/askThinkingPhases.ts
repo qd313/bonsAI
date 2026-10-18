@@ -18,7 +18,7 @@
  * text and a couple of pattern checks.
  */
 /** Display-only thinking phase copy; backend remains source of truth after first poll. */
-import { englishUiString } from "../i18n/catalog";
+import { englishUiString } from "../shared/i18n/catalog";
 export const ASK_THINKING_STARTING_DISPLAY = englishUiString("ask.starting");
 const PENDING_PLACEHOLDER_RE = /^thinking\.{0,3}$/i;
 

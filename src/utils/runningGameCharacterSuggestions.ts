@@ -24,7 +24,7 @@ import {
   CHARACTER_CATALOG_SECTIONS,
   findCatalogEntry,
   type CharacterCatalogEntry,
-} from "../data/characterCatalog";
+} from "../features/characters/characterCatalog";
 
 const MAX_SUGGESTIONS = 3;
 

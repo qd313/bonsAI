@@ -37,7 +37,7 @@ import { TabIndicatorBar } from "../plugin-shell/TabIndicatorBar";
 import { TabBodyFocusRoot } from "../plugin-shell/TabBodyFocusRoot";
 import type { BonsaiTabId } from "../plugin-shell/tabTitles";
 import { TAB_BAR_HEIGHT_PX } from "../unified-input/constants";
-import { useTabStripBodyOffset } from "../../hooks/useTabStripBodyOffset";
+import { useTabStripBodyOffset } from "../plugin-shell/useTabStripBodyOffset";
 import { takeAboveTheChat } from "../../utils/chatTranscriptNavHelpers";
 import { resetNavFocusRegistry } from "../../utils/navFocusRegistry";
 import { rememberUiDocument, resetUiDocument } from "../../utils/uiDocument";

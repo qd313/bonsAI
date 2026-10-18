@@ -19,7 +19,7 @@ vi.mock("@decky/ui", async () => await import("../../test-harness/fakeDeckyUi"))
 
 import { KnowledgeBaseSection, resetKbDownloadInFlightForTests } from "./KnowledgeBaseSection";
 import { ragCorpusStatusFixture, resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
-import { withTextScale } from "../../data/chatTextSize";
+import { withTextScale } from "../../shared/text-size/chatTextSize";
 import { makeFontSizeReader } from "../../test-harness/settledFontSize";
 
 beforeEach(() => {

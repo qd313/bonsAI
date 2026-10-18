@@ -23,7 +23,7 @@
 import React, { useCallback } from "react";
 
 import { TabIndicatorBar } from "../plugin-shell/TabIndicatorBar";
-import { buildTabBarRules } from "../../styles/sections/tabIndicatorBar";
+import { buildTabBarRules } from "../plugin-shell/tabIndicatorBarStyles";
 import { takeChatNameFocus } from "./chatNameNav";
 import type { ChatTitleTabBar } from "./chatTitleStore";
 

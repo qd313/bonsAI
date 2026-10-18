@@ -24,7 +24,7 @@
  */
 import { useCallback, useEffect, useRef } from "react";
 
-import { registerModalReturnFocusOwner } from "../plugin-shell/modalReturnFocusRegistry";
+import { registerModalReturnFocusOwner } from "../../shared/dpad/modalReturnFocusRegistry";
 import { useChatSlotDeleteConfirm } from "../chat-slots/useChatSlotDeleteConfirm";
 import { useStartNewChat } from "../chat-slots/useStartNewChat";
 import { chatNameElement, returnRingToChatName } from "./chatNameNav";

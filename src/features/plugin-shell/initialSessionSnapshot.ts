@@ -16,7 +16,7 @@
  * starting value, and the first render replaces it with one that reads the live state, so this
  * only ever runs if a snapshot is asked for before that first render.
  */
-import { IP_DEFAULT } from "../../data/storageKeys";
+import { IP_DEFAULT } from "../../shared/storageKeys";
 import type { BonsaiSessionSurvivalSnapshot } from "../../utils/bonsaiSessionSurvival";
 
 /*

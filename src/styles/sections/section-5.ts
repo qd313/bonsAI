@@ -40,7 +40,7 @@ import {
   UNIFIED_TEXT_OVERLAY_FALLBACK_OVERFLOW_WRAP,
   UNIFIED_TEXT_OVERLAY_FALLBACK_WHITE_SPACE,
 } from "../../features/unified-input/constants";
-import { textPx } from "./textPx";
+import { textPx } from "../textPx";
 
 /**
  * In: nothing.

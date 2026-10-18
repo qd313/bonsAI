@@ -17,8 +17,8 @@ import { useCallback } from "react";
 import { toaster } from "@decky/api";
 import { Navigation } from "@decky/ui";
 
-import { MODEL_POLICY_README_URL } from "../../data/modelPolicy";
-import { openSteamSettingsPage } from "../../data/steamSettingsNavigation";
+import { MODEL_POLICY_README_URL } from "../models/modelPolicy";
+import { openSteamSettingsPage } from "../../shared/steamSettingsNavigation";
 
 export type ExternalNavigationActions = {
   openModelPolicyReadme: () => void;

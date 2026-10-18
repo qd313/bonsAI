@@ -23,10 +23,10 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Focusable, ModalRoot, showModal } from "@decky/ui";
 
-import { BonsaiModalScope } from "../../components/BonsaiModalScope";
-import { TrashBinIcon } from "../../components/icons";
+import { BonsaiModalScope } from "../../shared/BonsaiModalScope";
+import { TrashBinIcon } from "../../shared/icons/icons";
 import { FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN } from "../../styles/settingsGlassButton";
-import { textPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/textPx";
 import type { UserNote } from "../search-tab/searchTypes";
 import { NotePinIcon } from "./NotePinIcon";
 import { listUserNotes, removeNote, switchNote } from "./useUserNotes";

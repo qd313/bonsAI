@@ -22,7 +22,7 @@
  * developer-only details), and `InputTransparencyRpcResult` is the "is there anything to show at all"
  * shape the back-end call itself returns.
  */
-import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
+import type { ModelPolicyDisclosurePayload } from "../features/models/modelPolicy";
 
 /**
  * One note the search actually attached to a turn, in its own words (plan 58 phase 1's "From the

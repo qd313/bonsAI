@@ -43,8 +43,8 @@ import {
   formatAiCharacterSelectionLine,
   resolveMainTabAvatarBadgeLetter,
   resolveMainTabAvatarPresetId,
-} from "../../../data/characterCatalog";
-import type { AiCharacterAccentIntensityId } from "../../../data/aiCharacterAccentIntensity";
+} from "../../characters/characterCatalog";
+import type { AiCharacterAccentIntensityId } from "../../characters/aiCharacterAccentIntensity";
 
 const FULL_BLEED_ROW_STYLE: React.CSSProperties = {
   width: "100%",

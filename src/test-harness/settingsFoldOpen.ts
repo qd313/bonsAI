@@ -7,7 +7,7 @@
  * Does not: Render anything or assert anything.
  */
 import { resetFoldedTabsForTests, setAllSections } from "../features/folded-tabs/foldedTabsStore";
-import { SETTINGS_FOLD_TAB, SETTINGS_SECTIONS } from "../features/folded-tabs/settingsTabFolds";
+import { SETTINGS_FOLD_TAB, SETTINGS_SECTIONS } from "../features/settings/settingsTabFolds";
 
 const ALL_IDS = SETTINGS_SECTIONS.map((s) => s.id);
 

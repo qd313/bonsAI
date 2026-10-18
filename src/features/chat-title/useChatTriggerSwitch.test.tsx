@@ -31,7 +31,7 @@ import { MainTabHarness, newMainTabCalls, type MainTabCalls } from "./chatTitleT
 import {
   clearModalReturnFocus,
   rememberModalReturnFocus,
-} from "../plugin-shell/modalReturnFocusRegistry";
+} from "../../shared/dpad/modalReturnFocusRegistry";
 
 const LT = 7;
 const RT = 8;

@@ -90,7 +90,7 @@ def intent_packs_path(settings_dir: str) -> str:
 
 
 def load_valid_search_targets() -> frozenset[str]:
-    """Load allowlisted navigation targets; keep in sync with src/data/settingsDatabase.ts."""
+    """Load allowlisted navigation targets; keep in sync with src/features/search-tab/settingsDatabase.ts."""
     global _valid_targets_cache
     if _valid_targets_cache is not None:
         return _valid_targets_cache

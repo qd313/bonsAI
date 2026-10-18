@@ -368,7 +368,7 @@ Only one note from this heading is still open. The rest is in [archive/roadmap-t
     which reads as a smudge at tab size. Expect to simplify it — flatter, more silhouette than
     illustration — because it is rendered at **14px** on a 300px column.
   - **It has to be an inline SVG path, not the PNG.** `BonsaiTreeTabIcon`
-    ([icons.tsx:61](../src/components/icons.tsx#L61)) draws inline so the glyph inherits `currentColor`
+    ([icons.tsx:61](../src/shared/icons/icons.tsx#L61)) draws inline so the glyph inherits `currentColor`
     and the active-tab fill treatment; `assets/logo.png` cannot do either. Budget for a trace, not a
     file swap. Geometry is pinned by `icons.bonsaiGeometry.test.tsx`, so update that in the same change.
 
@@ -471,9 +471,9 @@ Only one note from this heading is still open. The rest is in [archive/roadmap-t
   press Done; they think they tapped outside the screen, and afterwards the models started downloading and
   the D-pad could not move in the Ollama tab, as if the screen were still open. Two things read in the code,
   neither proven on the device: (a) a tap outside closes the popup through Steam's own path, which never runs
-  the plugin's own close (`onClose` in `src/features/plugin-shell/useOllamaModelsHubModal.tsx` runs only from
+  the plugin's own close (`onClose` in `src/features/models/useOllamaModelsHubModal.tsx` runs only from
   the screen's own Done and Cancel), so the tab restore and the return of the ring to the opener in
-  `finalizeShowModalAndRestoreActiveTab` (`src/hooks/useBonsaiPluginShell.ts`) are skipped and nothing owns
+  `finalizeShowModalAndRestoreActiveTab` (`src/features/plugin-shell/useBonsaiPluginShell.ts`) are skipped and nothing owns
   the ring afterwards; the "Manage AI models…" button also never registers itself as the return-focus owner
   the way the two try-order buttons beside it do (`rememberModalReturnFocus`), so even a clean close returns
   the ring to whichever opener was remembered last; (b) the last frame of the maintainer's recording shows the
@@ -739,7 +739,7 @@ Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep t
 
 Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
 
-  Real, and there for weeks (the capture-then-mark order came in with `e7728fa9` on 3 August; the snapshot's help flag goes back to May); it only became plain once one chip fills the whole row. Cause: opening the quick start first saves a note of the session that still says "help not seen", and when the popup closes Decky builds a fresh panel that trusts that note over the stored flag. Fix: right after the note is taken, the popup marks the note itself as seen (`src/features/plugin-shell/usePluginHelpModal.tsx`, `src/utils/bonsaiSessionSurvival.ts`); "Clear all plugin data" still brings the chip back. Tests: `src/index.helpChip.test.tsx`, 4 tests, 2 fail without the fix.
+  Real, and there for weeks (the capture-then-mark order came in with `e7728fa9` on 3 August; the snapshot's help flag goes back to May); it only became plain once one chip fills the whole row. Cause: opening the quick start first saves a note of the session that still says "help not seen", and when the popup closes Decky builds a fresh panel that trusts that note over the stored flag. Fix: right after the note is taken, the popup marks the note itself as seen (`src/features/about/usePluginHelpModal.tsx`, `src/utils/bonsaiSessionSurvival.ts`); "Clear all plugin data" still brings the chip back. Tests: `src/index.helpChip.test.tsx`, 4 tests, 2 fail without the fix.
 
 Moved here from the roadmap entry on 2026-10-10 (docs sweep, plan 87 batch 2), to keep the entry to five lines. Nothing was removed.
 

@@ -9,7 +9,7 @@ import { ToggleField } from "@decky/ui";
 
 import type { StrategyChecklistState } from "../types/bonsaiUi";
 import { deckNavHandlers } from "../utils/liveTurnFocusGraph";
-import { textPx } from "../styles/sections/textPx";
+import { textPx } from "../styles/textPx";
 
 type Props = {
   checklist: StrategyChecklistState;

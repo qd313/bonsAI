@@ -11,7 +11,7 @@
  */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { DEFAULT_CAPABILITIES } from "../../data/bonsaiSettingsSchema";
+import { DEFAULT_CAPABILITIES } from "../settings/bonsaiSettingsSchema";
 import { drawConfirmBox, type DrawnConfirmBox } from "../../test-harness/confirmBoxProbe";
 
 const hoisted = vi.hoisted(() => ({

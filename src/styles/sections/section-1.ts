@@ -4,7 +4,7 @@
  * Purpose: Styles the box that holds the whole tab area — everything
  * below the top of the plugin's window: the strip that used to show
  * Steam's own tab icons (now hidden; the plugin draws its own bar
- * instead, see tabIndicatorBar.ts) and the scrollable body underneath it.
+ * instead, see tabIndicatorBarStyles.ts) and the scrollable body underneath it.
  * Also fixes a flicker seen when switching tabs with the shoulder
  * buttons, where the tab strip visibly dragged sideways for a moment.
  *
@@ -19,7 +19,7 @@
  * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
  *
  * Does not: Draw the plugin's own tab bar that replaced Steam's — see
- * tabIndicatorBar.ts for that.
+ * tabIndicatorBarStyles.ts for that.
  */
 
 /**

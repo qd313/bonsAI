@@ -32,7 +32,7 @@ import React, { useLayoutEffect, useRef, useState } from "react";
 import { Button } from "@decky/ui";
 import { ASK_LABEL_COLOR, DECK_MENU_FONT_PX, DECK_MENU_GAP_PX, DECK_MENU_PANEL_BG, DECK_MENU_PANEL_MIN_WIDTH_PX, DECK_MENU_ROW_PAD_X_PX, DECK_MENU_ROW_PAD_Y_PX, DECK_MENU_ROW_SELECTED_BG } from "../features/unified-input/constants";
 import { ASK_MODE_IDS, ASK_MODE_LABELS, type AskModeId } from "../data/askMode";
-import { textPx } from "../styles/sections/textPx";
+import { textPx } from "../styles/textPx";
 
 export type MainTabAskModeMenuPopoverProps = {
   open: boolean;

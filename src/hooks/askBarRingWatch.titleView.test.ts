@@ -13,7 +13,7 @@ import { act } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createRingWatch } from "./askBarRingWatch";
-import { clearModalReturnFocus } from "../features/plugin-shell/modalReturnFocusRegistry";
+import { clearModalReturnFocus } from "../shared/dpad/modalReturnFocusRegistry";
 import { registerNavFocus, resetNavFocusRegistry } from "../utils/navFocusRegistry";
 import { rememberUiDocument, resetUiDocument } from "../utils/uiDocument";
 

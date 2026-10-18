@@ -52,7 +52,7 @@ import {
   placeGlossaryTooltip,
   type GlossaryTooltipPlacement,
 } from "./glossaryTooltipPlacement";
-import { textPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/textPx";
 
 /** Per-mount counter for chip ids; only needs to be unique among mounted chips. */
 let termChipSeq = 0;

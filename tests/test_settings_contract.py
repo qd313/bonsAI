@@ -2,7 +2,7 @@
 
 `tests/contracts/settings-defaults.json` is the payload a fresh install gets before the user
 saves anything. This asserts the Python sanitizer produces it exactly; the TypeScript half
-(`src/data/bonsaiSettingsContract.test.ts`) asserts the same of `normalizeSettings({})`.
+(`src/features/settings/bonsaiSettingsContract.test.ts`) asserts the same of `normalizeSettings({})`.
 
 Between them, a setting added to one language and forgotten in the other fails a test
 instead of shipping a frontend and backend that disagree about a default.

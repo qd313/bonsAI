@@ -11,7 +11,7 @@
  */
 import React from "react";
 
-import { TrashBinSlotsIcon } from "../../components/icons";
+import { TrashBinSlotsIcon } from "../../shared/icons/icons";
 import type { ChatsMenuAction } from "./chatsMenuModel";
 
 const PATHS: Record<Exclude<ChatsMenuAction, "delete">, string[]> = {

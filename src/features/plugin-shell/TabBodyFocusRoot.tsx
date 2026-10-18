@@ -19,7 +19,7 @@ import { Focusable } from "@decky/ui";
 
 import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
 import type { BonsaiTabId } from "./tabTitles";
-import { useTabBodyFocusScroll } from "./useTabBodyFocusScroll";
+import { useTabBodyFocusScroll } from "../../shared/dpad/useTabBodyFocusScroll";
 
 /**
  * Clear space above the first thing in a tab, in px. The top of the pane fades over about 20 px (read off

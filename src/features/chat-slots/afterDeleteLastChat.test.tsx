@@ -20,8 +20,8 @@ vi.mock("@decky/ui", async () => {
   const { SteamRingFocusable } = await import("../../test-harness/steamRing");
   return { ...stubs, Focusable: SteamRingFocusable, showModal: (el: React.ReactElement) => hoisted.world!.showBox(el) };
 });
-vi.mock("../../utils/settingsPayload", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("../../utils/settingsPayload")>()),
+vi.mock("../settings/settingsPayload", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../settings/settingsPayload")>()),
   toBonsaiSettingsPayload: () => ({}),
 }));
 vi.mock("../../utils/chatSlotsApi", async () => (await import("./fakeChatSlotsStore")).fakeChatSlotsApi);
@@ -39,7 +39,7 @@ import { resetChatRowActions } from "../chat-title/chatRowActions";
 import { resetDeckyTitleParts } from "../chat-title/deckyTitleParts";
 import { resetNavFocusRegistry } from "../../utils/navFocusRegistry";
 import { clearBonsaiSessionSurvival } from "../../utils/bonsaiSessionSurvival";
-import { clearModalReturnFocus, resetModalReturnFocusRegistry } from "../plugin-shell/modalReturnFocusRegistry";
+import { clearModalReturnFocus, resetModalReturnFocusRegistry } from "../../shared/dpad/modalReturnFocusRegistry";
 import { saveActiveChatSlotId } from "../plugin-shell/pluginStorage";
 import { putSteamRingOn, type SteamEl } from "../../test-harness/steamRing";
 

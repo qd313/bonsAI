@@ -19,7 +19,7 @@
  */
 import { useSyncExternalStore } from "react";
 
-import { NOTE_OFFERS_HANDLED_STORAGE_KEY } from "../../data/storageKeys";
+import { NOTE_OFFERS_HANDLED_STORAGE_KEY } from "../../shared/storageKeys";
 import type { BackgroundRequestStatus, NoteOffer } from "../../types/backgroundAsk";
 import { getUiDocument } from "../../utils/uiDocument";
 

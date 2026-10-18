@@ -23,7 +23,7 @@
  *    italics, and lets the name shrink to an ellipsis when the strip runs out of room.
  */
 import type { OllamaContextUi } from "../types/bonsaiUi";
-import { textPx } from "../styles/sections/textPx";
+import { textPx } from "../styles/textPx";
 
 /** The context line's own colour (MainTab.tsx before plan 84), kept so the tag reads as the same fact. */
 const GAME_TAG_COLOR = "#8fa8c4";

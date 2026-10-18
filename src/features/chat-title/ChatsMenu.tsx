@@ -46,7 +46,7 @@ import { sumUpButtonView, type ChatSumUpState } from "../chat-sum-up/chatSumUpMo
 import {
   rememberModalReturnFocus,
   registerModalReturnFocusOwner,
-} from "../plugin-shell/modalReturnFocusRegistry";
+} from "../../shared/dpad/modalReturnFocusRegistry";
 import { chatNameElement, returnRingToChatName, takeChatNameFocus } from "./chatNameNav";
 import { CHATS_MENU_ACTIONS, chatsMenuMove, chatWhenLabel, type ChatsMenuAction, type MenuDirection } from "./chatsMenuModel";
 import { ChatsMenuIcon } from "./chatsMenuIcons";

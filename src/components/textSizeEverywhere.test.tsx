@@ -19,11 +19,11 @@ import type { LastExchangeSnapshot } from "../types/backgroundAsk";
 import type { ContextChip, TransparencySnapshot } from "../utils/inputTransparency";
 import { buildBonsaiScopeStylesheet } from "../styles/bonsaiScopeStylesheet";
 import { CHAT_TITLE_CSS } from "../features/chat-title/chatTitleStyles";
-import { TEXT_SCALE, textScaleValue, withTextScale } from "../data/chatTextSize";
+import { TEXT_SCALE, textScaleValue, withTextScale } from "../shared/text-size/chatTextSize";
 import { ChatTitleView } from "../features/chat-title/ChatTitleView";
 import { publishChatTitle, resetChatTitleStore, setChatTitleTab, setChatTitleTextScale } from "../features/chat-title/chatTitleStore";
 import { makeFontSizeReader } from "../test-harness/settledFontSize";
-import type { ChatTextSize } from "../data/bonsaiSettingsSchema";
+import type { ChatTextSize } from "../features/settings/bonsaiSettingsSchema";
 
 vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
 

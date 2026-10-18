@@ -37,9 +37,9 @@ import { resetChatNameNav } from "./chatNameNav";
 import { resetDeckyTitleParts } from "./deckyTitleParts";
 import { MainTabHarness, newMainTabCalls, type MainTabCalls } from "./chatTitleTestFixtures";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
-import { useBonsaiPluginShell } from "../../hooks/useBonsaiPluginShell";
+import { useBonsaiPluginShell } from "../plugin-shell/useBonsaiPluginShell";
 import { buildInitialSessionSnapshot } from "../plugin-shell/initialSessionSnapshot";
-import { clearModalReturnFocus, resetModalReturnFocusRegistry } from "../plugin-shell/modalReturnFocusRegistry";
+import { clearModalReturnFocus, resetModalReturnFocusRegistry } from "../../shared/dpad/modalReturnFocusRegistry";
 import { ChatSlotRenameModal } from "../chat-slots/ChatSlotRenameModal";
 import { ChatSlotDeleteModal } from "../chat-slots/ChatSlotDeleteModal";
 

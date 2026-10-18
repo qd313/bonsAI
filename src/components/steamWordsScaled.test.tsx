@@ -32,13 +32,13 @@ vi.mock("@decky/ui", async () => {
   return { ...stubs, ToggleField, PanelSection, Dropdown };
 });
 
-import { AboutTab } from "./AboutTab";
-import { PermissionsTab } from "./PermissionsTab";
-import { diagnosticsRows, kbRows } from "./developerRowsDiagnostics";
+import { AboutTab } from "../features/about/AboutTab";
+import { PermissionsTab } from "../features/permissions/PermissionsTab";
+import { diagnosticsRows, kbRows } from "../features/developer/developerRowsDiagnostics";
 import { DenseSwitchRow } from "../features/folded-tabs/DenseRow";
-import { TEXT_SCALE, withTextScale } from "../data/chatTextSize";
-import type { ChatTextSize } from "../data/bonsaiSettingsSchema";
-import type { BonsaiCapabilities } from "../data/bonsaiSettingsSchema";
+import { TEXT_SCALE, withTextScale } from "../shared/text-size/chatTextSize";
+import type { ChatTextSize } from "../features/settings/bonsaiSettingsSchema";
+import type { BonsaiCapabilities } from "../features/settings/bonsaiSettingsSchema";
 import { makeFontSizeReader } from "../test-harness/settledFontSize";
 
 const SIZES: ChatTextSize[] = ["small", "normal", "large"];

@@ -33,13 +33,13 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { MainTabUnifiedAskBar, type MainTabUnifiedAskBarProps } from "./MainTabUnifiedAskBar";
-import { SettingsTabChatTextSizeRow } from "./SettingsTabChatTextSizeRow";
+import { SettingsTabChatTextSizeRow } from "../features/settings/SettingsTabChatTextSizeRow";
 import { PresetChipButton } from "../features/preset-carousel/presetChipButton";
 import { TabIndicatorBar } from "../features/plugin-shell/TabIndicatorBar";
 import { ALL_BONSAI_TAB_IDS } from "../features/plugin-shell/tabTitles";
 import { buildBonsaiScopeStylesheet } from "../styles/bonsaiScopeStylesheet";
-import { TEXT_SCALE, withTextScale } from "../data/chatTextSize";
-import type { ChatTextSize } from "../data/bonsaiSettingsSchema";
+import { TEXT_SCALE, withTextScale } from "../shared/text-size/chatTextSize";
+import type { ChatTextSize } from "../features/settings/bonsaiSettingsSchema";
 import { makeFontSizeReader } from "../test-harness/settledFontSize";
 
 function askBarProps(): MainTabUnifiedAskBarProps {

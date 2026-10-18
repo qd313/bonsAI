@@ -25,7 +25,7 @@ import {
   rememberModalReturnFocus,
   registerModalReturnFocusOwner,
   type ModalReturnTransfer,
-} from "../plugin-shell/modalReturnFocusRegistry";
+} from "../../shared/dpad/modalReturnFocusRegistry";
 
 /** What the picker adds to the plain box. */
 export type DeleteConfirmOptions = {

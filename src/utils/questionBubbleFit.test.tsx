@@ -14,7 +14,7 @@ import { render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { buildTurnHeaderElement } from "./buildTurnHeaderElement";
-import { buildQuestionBubbleSection } from "../styles/sections/questionBubble";
+import { buildQuestionBubbleSection } from "../features/answer/transcript/questionBubble";
 
 vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
 

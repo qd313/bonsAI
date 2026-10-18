@@ -23,7 +23,7 @@ class TestAccentIntensityParity(unittest.TestCase):
         self.assertEqual(
             ts_ids,
             set(VALID_ACCENT_INTENSITY_IDS),
-            "src/data/aiCharacterAccentIntensity.ts ids must match backend VALID_ACCENT_INTENSITY_IDS.",
+            "src/features/characters/aiCharacterAccentIntensity.ts ids must match backend VALID_ACCENT_INTENSITY_IDS.",
         )
 
 

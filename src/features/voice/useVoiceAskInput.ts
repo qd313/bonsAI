@@ -25,8 +25,8 @@ import { call, toaster } from "@decky/api";
 
 import { formatDeckyRpcError } from "../../utils/deckyCall";
 import { useVoiceTranscription, type VoiceStopOutcome } from "../../hooks/useVoiceTranscription";
-import type { UiStringVars } from "../../i18n/catalog";
-import type { UiStringKey } from "../../i18n/keys";
+import type { UiStringVars } from "../../shared/i18n/catalog";
+import type { UiStringKey } from "../../shared/i18n/keys";
 
 export type UseVoiceAskInputArgs = {
   /** Transcribed text is written straight into the unified Ask field. */

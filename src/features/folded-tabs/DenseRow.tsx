@@ -21,7 +21,7 @@
 import React from "react";
 import { ToggleField } from "@decky/ui";
 
-import { scaledSteamWords } from "../../components/scaledSteamWords";
+import { scaledSteamWords } from "../../shared/text-size/scaledSteamWords";
 import { helpAttributes } from "./useHelpStrip";
 
 export type DenseRowKind = "switch" | "choice" | "slider" | "button";

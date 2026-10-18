@@ -15,13 +15,13 @@ import {
   PLUGIN_HELP_DISMISSED_STORAGE_KEY,
   TAB_RESUME_MODE_STORAGE_KEY,
   UNIFIED_INPUT_STORAGE_KEY,
-} from "../../data/storageKeys";
+} from "../../shared/storageKeys";
 import {
   DEFAULT_TAB_RESUME_MODE,
   TAB_RESUME_MODE_OPTIONS,
   TAB_RESUME_RECENT_WINDOW_MS,
   type TabResumeMode,
-} from "../../data/bonsaiSettingsSchema";
+} from "../settings/bonsaiSettingsSchema";
 
 /** Load persisted unified input text based on the selected persistence mode. */
 export function loadSavedSearchQuery(): string {

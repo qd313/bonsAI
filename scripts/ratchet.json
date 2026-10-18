@@ -133,7 +133,7 @@
     "target": 1,
     "start_2026_09_09": 7,
     "direction": "lower_is_better",
-    "measured_by": "scripts/ratchet.py, a line-run rule over src/hooks/usePluginSettings.ts (see the comment above metric_settings_field_list_repeats)"
+    "measured_by": "scripts/ratchet.py, a line-run rule over src/features/settings/usePluginSettings.ts (see the comment above metric_settings_field_list_repeats)"
   },
   "doc_size_kb_roadmap": {
     "label": "Living doc size: roadmap",

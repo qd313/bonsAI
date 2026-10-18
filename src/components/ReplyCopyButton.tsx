@@ -20,7 +20,7 @@
  */
 import React, { useEffect, useRef, useState } from "react";
 import { BonsaiChatSecondaryButton } from "./BonsaiChatSecondaryButton";
-import { CopyDoneIcon, CopyFailedIcon, CopyGlyphIcon } from "./icons";
+import { CopyDoneIcon, CopyFailedIcon, CopyGlyphIcon } from "../shared/icons/icons";
 import { writeClipboardText } from "../utils/clipboardWrite";
 
 export type ReplyCopyButtonProps = {

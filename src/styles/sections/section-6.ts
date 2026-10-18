@@ -22,7 +22,7 @@
  * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
  *
  * Does not: Style the tab strip above the chat (section-1.ts)
- * or the plugin's own tab bar (tabIndicatorBar.ts).
+ * or the plugin's own tab bar (tabIndicatorBarStyles.ts).
  *
  * Split note (plan 65): answer text formatting (paragraphs, lists, code
  * blocks) now lives in answerMarkdownFormatting.ts, the question bubble
@@ -54,12 +54,12 @@
  *    creates a new one.
  */
 import { BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX, BONSAI_CHAT_TRANSCRIPT_TO_SAVE_GAP_PX, UNIFIED_TEXT_FONT_PX } from "../../features/unified-input/constants";
-import { buildAnswerMarkdownFormattingSection } from "./answerMarkdownFormatting";
-import { buildQuestionBubbleSection } from "./questionBubble";
-import { buildAnswerBubbleSection } from "./answerBubble";
-import { buildChatDetailsTextSection } from "./chatDetailsText";
-import { buildReplyRatingChoicesSection } from "./replyRatingChoices";
-import { textPx } from "./textPx";
+import { buildAnswerMarkdownFormattingSection } from "../../features/answer/markdown/answerMarkdownFormatting";
+import { buildQuestionBubbleSection } from "../../features/answer/transcript/questionBubble";
+import { buildAnswerBubbleSection } from "../../features/answer/bubble/answerBubble";
+import { buildChatDetailsTextSection } from "../../features/answer/details/chatDetailsText";
+import { buildReplyRatingChoicesSection } from "../../features/answer/reply-actions/replyRatingChoices";
+import { textPx } from "../textPx";
 
 /**
  * In: nothing — every value here is a fixed string or read from a CSS

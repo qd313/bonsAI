@@ -29,8 +29,8 @@
  */
 import { useEffect, type RefObject } from "react";
 
-import { watchTabBodyLandings } from "../plugin-shell/useTabBodyFocusScroll";
-import { FOLDED_TAB_SCROLL_STEP_FRACTION } from "../../utils/tabBodyScrollPlan";
+import { watchTabBodyLandings } from "../../shared/dpad/useTabBodyFocusScroll";
+import { FOLDED_TAB_SCROLL_STEP_FRACTION } from "../../shared/dpad/tabBodyScrollPlan";
 import { rememberFoldSection } from "./foldedTabsStore";
 
 /** The row's longer text, shown in the strip while the ring is on the row or on a control inside it. */

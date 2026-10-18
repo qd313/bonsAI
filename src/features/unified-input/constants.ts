@@ -174,7 +174,7 @@ export const TAB_BAR_SIDE_ICON_GAP_PX = 7;
 /** The bug's artwork carries inner padding; drawn this much larger it matches the others (plan 59's 26 in 22). */
 export const TAB_BAR_BUG_ICON_SCALE = 26 / 22;
 /**
- * The fade on Show details' swap with the chip in the chip's slot (detailsSlot.ts). Born as plan 59's
+ * The fade on Show details' swap with the chip in the chip's slot (detailsSlotStyles.ts). Born as plan 59's
  * tab-switch fade on the drop-down strip, which is gone; the tab bar itself fades nothing now.
  */
 export const TAB_BAR_SWITCH_FADE_MS = 120;

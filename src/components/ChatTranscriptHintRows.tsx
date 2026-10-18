@@ -17,14 +17,14 @@
  */
 import type React from "react";
 import { PanelSectionRow, Button, Focusable } from "@decky/ui";
-import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
+import type { BonsaiCapabilityKey } from "../features/permissions/permissionDeepLink";
 import { questionLooksLikeTroubleshootingAsk } from "../utils/troubleshootingAskHeuristic";
 import {
   dismissHintKeepingRing,
   troubleshootHintRowNavHandlers,
 } from "../utils/chatTranscriptNavHelpers";
-import type { PermHintNavTargets } from "../hooks/usePermHintNavTargets";
-import { textPx } from "../styles/sections/textPx";
+import type { PermHintNavTargets } from "../features/answer/transcript/usePermHintNavTargets";
+import { textPx } from "../styles/textPx";
 
 export type ChatTranscriptHintRowsProps = {
   fullBleedRowStyle: React.CSSProperties;

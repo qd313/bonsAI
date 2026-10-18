@@ -740,10 +740,10 @@ def _count_field_list_runs(text: str) -> int:
 
 
 def metric_settings_field_list_repeats():
-    path = ROOT / "src/hooks/usePluginSettings.ts"
+    path = ROOT / "src/features/settings/usePluginSettings.ts"
     text = _read_text(path)
     if text is None:
-        return None, "src/hooks/usePluginSettings.ts not found"
+        return None, "src/features/settings/usePluginSettings.ts not found"
     return _count_field_list_runs(text), None
 
 

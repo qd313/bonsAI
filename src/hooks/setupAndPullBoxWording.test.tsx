@@ -11,8 +11,8 @@ import { act, render, renderHook } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { PullModelEntry } from "../data/pullModelCatalog";
-import { starterSetBoxBody } from "./localOllamaStarterSet";
+import type { PullModelEntry } from "../features/models/pullModelCatalog";
+import { starterSetBoxBody } from "../features/models/localOllamaStarterSet";
 
 const hoisted = vi.hoisted(() => ({
   opts: null as Record<string, unknown> | null,
@@ -42,9 +42,9 @@ vi.mock("../utils/deckyCall", () => ({
 }));
 vi.mock("@decky/api", () => ({ toaster: { toast: () => {} } }));
 
-import { usePullModelSubmitSelected } from "./usePullModelSubmitSelected";
-import { localRuntimeBetaNoticeDescription } from "./useDisclaimerAndLocalRuntimeGates";
-import { MODEL_POLICY_SETTINGS_INTRO } from "../data/modelPolicy";
+import { usePullModelSubmitSelected } from "../features/models/pull-box/usePullModelSubmitSelected";
+import { localRuntimeBetaNoticeDescription } from "../features/plugin-shell/useDisclaimerAndLocalRuntimeGates";
+import { MODEL_POLICY_SETTINGS_INTRO } from "../features/models/modelPolicy";
 import { resetFakeDeckyRpc } from "../test-harness/fakeDeckyRpc";
 
 beforeEach(() => {

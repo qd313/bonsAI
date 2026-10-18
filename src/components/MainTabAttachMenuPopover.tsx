@@ -29,7 +29,7 @@ import {
   DECK_MENU_ROW_PAD_X_PX,
   DECK_MENU_ROW_PAD_Y_PX,
 } from "../features/unified-input/constants";
-import { textPx } from "../styles/sections/textPx";
+import { textPx } from "../styles/textPx";
 
 export type AttachMenuActionId = "take_screenshot" | "browse_recent";
 

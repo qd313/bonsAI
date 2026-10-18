@@ -25,7 +25,7 @@ import {
   LockIcon,
   OllamaTabIcon,
   SearchTabIcon,
-} from "../../components/icons";
+} from "../../shared/icons/icons";
 import {
   TAB_BAR_BUG_ICON_SCALE,
   TAB_TITLE_DEBUG_TAB_ICON_PX,
@@ -82,7 +82,7 @@ export const BONSAI_TAB_ACCESSIBLE_NAMES: Readonly<Record<BonsaiTabId, string>> 
  */
 export const BONSAI_TAB_SHORT_NAMES: Readonly<Record<BonsaiTabId, string>> = {
   search: "Search",
-  // Drawn in small caps on the bar (tabIndicatorBar.ts), not upper-cased like the other names (plan 87 F1).
+  // Drawn in small caps on the bar (tabIndicatorBarStyles.ts), not upper-cased like the other names (plan 87 F1).
   main: "bonsAI",
   ollama: "Ollama",
   settings: "Settings",

@@ -18,8 +18,8 @@ import { useEffect, useMemo } from "react";
 import {
   buildBonsaiScopeAccentInlineStyle,
   resolveUiAccentFromCharacterSettings,
-} from "../../data/characterUiAccent";
-import { publishUiScaleScopeStyle } from "../../utils/uiScaleScopeBridge";
+} from "../characters/characterUiAccent";
+import { publishUiScaleScopeStyle } from "../../shared/text-size/uiScaleScopeBridge";
 
 export type UseBonsaiScopeStyleArgs = {
   aiCharacterEnabled: boolean;

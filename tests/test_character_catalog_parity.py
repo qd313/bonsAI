@@ -18,7 +18,7 @@ class TestCharacterCatalogParity(unittest.TestCase):
         self.assertEqual(
             ts_ids,
             set(VALID_PRESET_IDS),
-            "src/data/characterCatalog.ts ids must match backend/characters/ai_character_service.py "
+            "src/features/characters/characterCatalog.ts ids must match backend/characters/ai_character_service.py "
             "VALID_PRESET_IDS (add rows to _CHARACTER_ROWS in the same change set).",
         )
 

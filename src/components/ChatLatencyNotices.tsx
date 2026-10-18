@@ -14,7 +14,7 @@
  * text (formatAppliedTuningBannerText does).
  */
 import { PanelSectionRow } from "@decky/ui";
-import { textPx } from "../styles/sections/textPx";
+import { textPx } from "../styles/textPx";
 
 export type ChatLatencyNoticesProps = {
   isAsking: boolean;

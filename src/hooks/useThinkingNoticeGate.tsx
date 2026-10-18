@@ -50,8 +50,8 @@ import { useCallback, useEffect, useRef } from "react";
 import { showModal, ConfirmModal } from "@decky/ui";
 
 import type { AskThinkEffortId } from "../data/askThinkEffort";
-import { THINKING_NOTICE_STORAGE_KEY, type DeckyModalSurvivalHooks } from "./useDisclaimerAndLocalRuntimeGates";
-import { rememberModalReturnFocus } from "../features/plugin-shell/modalReturnFocusRegistry";
+import { THINKING_NOTICE_STORAGE_KEY, type DeckyModalSurvivalHooks } from "../features/plugin-shell/useDisclaimerAndLocalRuntimeGates";
+import { rememberModalReturnFocus } from "../shared/dpad/modalReturnFocusRegistry";
 import { patchPendingSessionSettingsSnapshot } from "../utils/bonsaiSessionSurvival";
 
 const THINKING_NOTICE_DESCRIPTION =

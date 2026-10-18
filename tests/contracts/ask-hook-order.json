@@ -12,7 +12,7 @@
     },
     {
       "name": "useOllamaGameContextSync",
-      "file": "src/hooks/useOllamaGameContextSync.ts"
+      "file": "src/features/ask/flow/useOllamaGameContextSync.ts"
     },
     {
       "name": "useInputTransparencyRefresh",

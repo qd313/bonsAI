@@ -282,7 +282,7 @@ When fixed, close with a **2-line summary**: root cause + fix surface (e.g. "Ref
 ## Reference implementations in this repo
 
 - **Decky horizontal navigation via move callbacks**: `src/components/ConnectionTimeoutSlider.tsx` (`onMoveLeft` / `onMoveRight` / `onButtonDown`).
-- **Character picker**: `src/components/CharacterPickerModal.tsx` — cross-column routing, `onOKButton` vs modal OK, `inert` when Random locks the grid, footer discovery via `findFooterButton`.
+- **Character picker**: `src/features/characters/CharacterPickerModal.tsx` — cross-column routing, `onOKButton` vs modal OK, `inert` when Random locks the grid, footer discovery via `findFooterButton`.
 - **Tab / modal lifecycle**: `src/index.tsx` — `__bonsaiTabRestoreAfterCharacterPicker`, `postPickerTabLockRef`, `onTabsShowTab`.
 - **Durable dynamic geometry (canonical pattern)**: `src/features/unified-input/useUnifiedInputSurface.ts` + `.bonsai-askbar-row-host` / `.bonsai-ask-bleed-wrap .bonsai-askbar-merged` CSS block in `src/index.tsx` — `--bonsai-search-host-width`, `--bonsai-askbar-outer-width`, and `--bonsai-ask-margin-left` are set on `bonsaiScopeRef` and consumed by `!important` CSS rules. This beats React re-renders wiping ref-set inline styles.
 - **Reverse tunnel scripts**: `scripts/reverse-tunnel-deck-ingest.ps1` / `.sh`.

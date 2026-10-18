@@ -16,7 +16,7 @@
  * Does not: Fetch anything, hold any state, or draw. The settings list and the intent-pack lookup are the
  * Main tab's old ones (utils/intentPackSearch.ts), only called from here now.
  */
-import { SETTINGS_DATABASE } from "../../data/settingsDatabase";
+import { SETTINGS_DATABASE } from "./settingsDatabase";
 import { searchSettingsWithIntentPacks, type IntentPackSearchIndex } from "./intentPackSearch";
 import type { GameNote, GameNoteLabel, SearchChat, SearchQuestion, SearchWord, SettingMatch, UserNote } from "./searchTypes";
 

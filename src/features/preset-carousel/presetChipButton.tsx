@@ -29,7 +29,7 @@ import {
 import type { ChipScrollListener } from "./presetChipStay";
 import type { SlotFade } from "./presetChipShared";
 import { joinPresetWithRunningGame } from "../../utils/joinPresetWithRunningGame";
-import { textPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/textPx";
 
 type ScrollPhase = "waiting" | "scrolling" | "end";
 

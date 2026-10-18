@@ -37,7 +37,7 @@
  *     `expandedTurnKey` field is missing from what is being restored, which happens for a note that
  *     was written before `expandedTurnKey` existed.
  */
-import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
+import type { ModelPolicyDisclosurePayload } from "../features/models/modelPolicy";
 import type { PresetPrompt } from "../data/presets";
 import type { PresetCarouselInjectPayload } from "../types/backgroundAsk";
 import type {
@@ -49,11 +49,11 @@ import type {
   StrategyGuideBranchesPayload,
   StrategyChecklistState,
 } from "../types/bonsaiUi";
-import type { BonsaiSettingsSnapshotInput } from "../data/bonsaiSettingsSchema";
+import type { BonsaiSettingsSnapshotInput } from "../features/settings/bonsaiSettingsSchema";
 import type { TransparencySnapshot } from "./inputTransparency";
 import type { LastExchangeSnapshot, LiveReasoningSnapshot } from "../types/backgroundAsk";
 import type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
-import { createTabLocalSurvival } from "./createTabLocalSurvival";
+import { createTabLocalSurvival } from "../shared/createTabLocalSurvival";
 
 export type BonsaiSessionSurvivalSnapshot = {
   currentTab: string;

@@ -17,7 +17,7 @@ import { useCallback, useRef } from "react";
 
 import { useVoiceAskInput } from "./useVoiceAskInput";
 import type { useBonsaiAskOrchestration } from "../../hooks/useBonsaiAskOrchestration";
-import type { useReplyLanguage } from "../../hooks/useReplyLanguage";
+import type { useReplyLanguage } from "../../shared/i18n/useReplyLanguage";
 
 type AskOrchestration = ReturnType<typeof useBonsaiAskOrchestration>;
 type ReplyLanguage = ReturnType<typeof useReplyLanguage>;

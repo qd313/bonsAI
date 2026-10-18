@@ -276,11 +276,11 @@ Decky loads `py_modules` on `sys.path`; keep the `backend` package name for impo
 ### Deep-dive pointers (preserved for agents and contributors)
 
 - **Unified input refactor (complete):** [archive/refactor/refactor-specialist-sweep.md § Unified input refactor](../../bonsAI-workshop/archive/refactor/refactor-specialist-sweep.md#unified-input-refactor-completed) — [`useUnifiedInputSurface.ts`](../src/features/unified-input/useUnifiedInputSurface.ts), [`MainTab.tsx`](../src/components/MainTab.tsx).
-- **AI character roleplay:** [`characterCatalog.ts`](../src/data/characterCatalog.ts), [`CharacterPickerModal.tsx`](../src/components/CharacterPickerModal.tsx), [`ai_character_service.py`](../py_modules/backend/characters/ai_character_service.py).
+- **AI character roleplay:** [`characterCatalog.ts`](../src/features/characters/characterCatalog.ts), [`CharacterPickerModal.tsx`](../src/features/characters/CharacterPickerModal.tsx), [`ai_character_service.py`](../py_modules/backend/characters/ai_character_service.py).
 - **Input sanitizer:** [`inputSanitizerCommands.ts`](../src/data/inputSanitizerCommands.ts) (must match Python); `input_sanitizer_user_disabled` in settings.
 - **Input transparency:** RPC `get_input_transparency`; optional Desktop trace via `desktop_note_service.py`.
 - **Ask modes:** `ask_mode` (`speed` \| `strategy` \| `expert`); legacy `"deep"` migrates on load; chains in `backend/ollama_routing.select_ollama_models`.
-- **Model policy tiers:** [`modelPolicy.ts`](../src/data/modelPolicy.ts), [`model_policy.py`](../py_modules/backend/ollama/model_policy.py).
+- **Model policy tiers:** [`modelPolicy.ts`](../src/features/models/modelPolicy.ts), [`model_policy.py`](../py_modules/backend/ollama/model_policy.py).
 
 ## Toolchain
 
@@ -351,7 +351,7 @@ Prioritize refactors and reviews by **change risk** — large surfaces, branchin
 | ~1800 | [`src/index.tsx`](../src/index.tsx) | Plugin root: tabs, hooks, modal/survival wiring |
 | ~170 | [`src/components/MainTab.tsx`](../src/components/MainTab.tsx) | Main tab orchestrator (regions in `MainTab*.tsx`) |
 | ~35 | [`src/styles/bonsaiScopeStylesheet.ts`](../src/styles/bonsaiScopeStylesheet.ts) | Composes section CSS from `styles/sections/` |
-| ~450 | [`src/components/SettingsTabConnectionTimeoutSlider.tsx`](../src/components/SettingsTabConnectionTimeoutSlider.tsx) | Connection timeout / warning slider (Ollama tab) |
+| ~450 | [`src/features/ai-connection/SettingsTabConnectionTimeoutSlider.tsx`](../src/features/ai-connection/SettingsTabConnectionTimeoutSlider.tsx) | Connection timeout / warning slider (Ollama tab) |
 | ~360 | [`py_modules/backend/ask/ollama_ask_service.py`](../py_modules/backend/ask/ollama_ask_service.py) | Ask model routing + streaming |
 | ~576 | [`py_modules/backend/ask/ollama_service.py`](../py_modules/backend/ask/ollama_service.py) | Ollama HTTP transport |
 | ~406 | [`backend/settings/settings_service.py`](../py_modules/backend/settings/settings_service.py) | Load/save/merge `settings.json` |
@@ -367,7 +367,7 @@ Prioritize refactors and reviews by **change risk** — large surfaces, branchin
 | 5 | `backend/settings/settings_service.py` | Schema merge bugs affect entire plugin. | **Good** — [`tests/test_settings_service.py`](../tests/test_settings_service.py). | Add tests for any new keys; avoid silent defaults that bypass capability gating. |
 | 6 | `backend/notes/desktop_note_service.py` | Filesystem paths and consent boundaries. | **Good** — [`tests/test_desktop_note_service.py`](../tests/test_desktop_note_service.py). | Keep path logic in service; gate in `main.py` + capabilities. |
 | 7 | `backend/ollama/ollama_routing.py` + `backend/power/tdp_intent.py` | Model routing / TDP parse shared across Ask paths. | **Good** — [`tests/test_backend_helpers.py`](../tests/test_backend_helpers.py). | Extend tests when adding branches; avoid duplicating policy in `main.py`. |
-| 8 | `src/components/CharacterPickerModal.tsx` | Async + catalog + focus; easy Deck regressions. | **Partial** — catalog parity / accent tests in Python; TS [`characterCatalog.test.ts`](../src/data/characterCatalog.test.ts), [`runningGameCharacterSuggestions.test.ts`](../src/utils/runningGameCharacterSuggestions.test.ts). | Extract pure suggestion sorting/filtering only with tests; UI changes need device smoke. |
+| 8 | `src/features/characters/CharacterPickerModal.tsx` | Async + catalog + focus; easy Deck regressions. | **Partial** — catalog parity / accent tests in Python; TS [`characterCatalog.test.ts`](../src/features/characters/characterCatalog.test.ts), [`runningGameCharacterSuggestions.test.ts`](../src/utils/runningGameCharacterSuggestions.test.ts). | Extract pure suggestion sorting/filtering only with tests; UI changes need device smoke. |
 | 9 | Other services (`ai_character`, `input_sanitizer`, `capabilities`, `model_policy`, `strategy_guide_parse`, `tdp_service`) | Smaller files but security/behavior sensitive. | **Good** per matching `tests/test_*.py`. | Edit with corresponding test file open. |
 
 ### Ordered refactor queue (after Settings is calm)

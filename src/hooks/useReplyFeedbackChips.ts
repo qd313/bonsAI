@@ -21,7 +21,7 @@
 import { useCallback, useEffect, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
 import { toaster } from "@decky/api";
 
-import type { AskModeId } from "../data/bonsaiSettingsSchema";
+import type { AskModeId } from "../features/settings/bonsaiSettingsSchema";
 import {
   composeChipAutofillPrefix,
   replyMicroActionById,

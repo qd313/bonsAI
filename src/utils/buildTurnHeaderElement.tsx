@@ -14,7 +14,7 @@
 import React from "react";
 import { Focusable } from "@decky/ui";
 import { BonsaiChatSecondaryButton } from "../components/BonsaiChatSecondaryButton";
-import { RefreshArrowIcon } from "../components/icons";
+import { RefreshArrowIcon } from "../shared/icons/icons";
 import { focusFirstAnswerChunk } from "./answerBubbleNavigation";
 import {
   isDeckDirectionLeftEvent,

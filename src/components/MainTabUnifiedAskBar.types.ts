@@ -19,7 +19,7 @@ import React from "react";
 
 import type { AskAttachment, OllamaContextUi } from "../types/bonsaiUi";
 import type { AskModeId } from "../data/askMode";
-import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
+import type { BonsaiCapabilityKey } from "../features/permissions/permissionDeepLink";
 
 export type MainTabUnifiedAskBarProps = {
   fullBleedRowStyle: React.CSSProperties;

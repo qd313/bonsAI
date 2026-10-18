@@ -29,7 +29,7 @@ import { resetDeckyHeaderShape, topStripActive } from "./deckyHeaderShape";
 import { tabBarExitDownFor, useTopStripTabBar } from "./useTopStripTabBar";
 import { TabIndicatorBar } from "../plugin-shell/TabIndicatorBar";
 import type { BonsaiTabId } from "../plugin-shell/tabTitles";
-import { useQamPanelHeightGuard } from "../../hooks/useQamPanelHeightGuard";
+import { useQamPanelHeightGuard } from "../plugin-shell/useQamPanelHeightGuard";
 import { resetNavFocusRegistry } from "../../utils/navFocusRegistry";
 import { resetUiDocument } from "../../utils/uiDocument";
 import { DeckyQuickAccessPage, installQuickAccessLayout } from "../../test-harness/deckyQuickAccessLayout";

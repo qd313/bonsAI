@@ -23,15 +23,15 @@ import {
   shouldIgnoreRestoredSettingsSnapshot,
 } from "../../utils/bonsaiSessionSurvival";
 import { consumePendingFocusMainTab } from "../../utils/bonsaiReplySurface";
-import { bonsaiDebugLog } from "../../utils/bonsaiDebugIngest";
-import { toBonsaiSettingsPayload } from "../../utils/settingsPayload";
+import { bonsaiDebugLog } from "../developer/bonsaiDebugIngest";
+import { toBonsaiSettingsPayload } from "../settings/settingsPayload";
 import { loadActiveChatSlotId } from "./pluginStorage";
-import type { useBonsaiPluginShell } from "../../hooks/useBonsaiPluginShell";
+import type { useBonsaiPluginShell } from "./useBonsaiPluginShell";
 import type { useChatSlots } from "../../hooks/useChatSlots";
 import type { useScreenshotBrowser } from "../../hooks/useScreenshotBrowser";
-import type { usePluginHelpModal } from "./usePluginHelpModal";
-import type { OllamaConnectionState } from "./useOllamaConnectionState";
-import type { usePluginSettings } from "../../hooks/usePluginSettings";
+import type { usePluginHelpModal } from "../about/usePluginHelpModal";
+import type { OllamaConnectionState } from "../ai-connection/useOllamaConnectionState";
+import type { usePluginSettings } from "../settings/usePluginSettings";
 import type { useBonsaiAskOrchestration } from "../../hooks/useBonsaiAskOrchestration";
 
 type PluginShell = ReturnType<typeof useBonsaiPluginShell>;

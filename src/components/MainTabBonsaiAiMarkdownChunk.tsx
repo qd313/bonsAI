@@ -63,7 +63,7 @@ import { splitTextForDrgGlossaryTerms } from "../features/glossary/glossaryTermM
 import { DrgGlossaryTermChip } from "../features/glossary/GlossaryTermChip";
 import { useGlossaryTerms, type DrgGlossaryTerm } from "../features/glossary/glossaryStore";
 import { SCRAMBLE_SLOT_MARK } from "../features/stream-scramble/streamScrambleMath";
-import { textPx } from "../styles/sections/textPx";
+import { textPx } from "../styles/textPx";
 
 /** Per-mount counter for spoiler fence ids; only needs to be unique among mounted fences. */
 let spoilerFenceSeq = 0;

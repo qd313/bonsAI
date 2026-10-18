@@ -32,9 +32,9 @@ import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useThinkingNoticeGate } from "./useThinkingNoticeGate";
-import { THINKING_NOTICE_STORAGE_KEY } from "./useDisclaimerAndLocalRuntimeGates";
+import { THINKING_NOTICE_STORAGE_KEY } from "../features/plugin-shell/useDisclaimerAndLocalRuntimeGates";
 import type { AskThinkEffortId } from "../data/askThinkEffort";
-import type { BonsaiSettingsSnapshotInput } from "../data/bonsaiSettingsSchema";
+import type { BonsaiSettingsSnapshotInput } from "../features/settings/bonsaiSettingsSchema";
 import {
   captureBonsaiSessionForModal,
   clearBonsaiSessionSurvival,
@@ -46,7 +46,7 @@ import {
   registerModalReturnFocusOwner,
   resetModalReturnFocusRegistry,
   restoreModalReturnFocus,
-} from "../features/plugin-shell/modalReturnFocusRegistry";
+} from "../shared/dpad/modalReturnFocusRegistry";
 
 const hoisted = vi.hoisted(() => ({
   modal: null as { props: Record<string, unknown> } | null,

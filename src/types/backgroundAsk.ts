@@ -24,7 +24,7 @@
  * shapes; the hooks and call utilities elsewhere do the actual asking and
  * checking.
  */
-import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
+import type { ModelPolicyDisclosurePayload } from "../features/models/modelPolicy";
 import type {
   AppliedResult,
   StrategyGuideBranchesPayload,

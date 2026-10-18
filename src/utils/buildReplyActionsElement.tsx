@@ -70,7 +70,7 @@
 import React from "react";
 import { Focusable } from "@decky/ui";
 import { BonsaiChatSecondaryButton } from "../components/BonsaiChatSecondaryButton";
-import { ThumbDownOutlineIcon, ThumbUpOutlineIcon } from "../components/icons";
+import { ThumbDownOutlineIcon, ThumbUpOutlineIcon } from "../shared/icons/icons";
 import type { ReplyMicroActionId } from "../data/replyMicroActions";
 import { replyMicroActionById } from "../data/replyMicroActions";
 import {
@@ -109,7 +109,7 @@ import {
 import { findScrollablePanel, revealBelowKeepingAsItSettles } from "./chatPanelScroll";
 import { syncDetailsLine } from "../features/details-slot/detailsSlotStore";
 import { NoteOfferCard } from "../features/user-notes/NoteOfferCard";
-import { textPx } from "../styles/sections/textPx";
+import { textPx } from "../styles/textPx";
 
 /* Option E, the maintainer's pick (plan 72): two short-worded chips on top, three below. */
 const CHIP_ROW_REFINE: ReplyMicroActionId[] = ["bad_information", "misidentified_game"];

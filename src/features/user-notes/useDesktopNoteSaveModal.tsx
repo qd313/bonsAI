@@ -20,9 +20,9 @@ import { showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
 
 import { DesktopNoteSaveModal } from "./DesktopNoteSaveModal";
-import { PermissionDenyAction } from "../../components/PermissionDenyAction";
+import { PermissionDenyAction } from "../permissions/PermissionDenyAction";
 import { callDeckyWithTimeout, formatDeckyRpcError } from "../../utils/deckyCall";
-import type { BonsaiCapabilityKey } from "../../utils/permissionDeepLink";
+import type { BonsaiCapabilityKey } from "../permissions/permissionDeepLink";
 
 type AppendDesktopNoteResult = {
   success: boolean;

@@ -17,7 +17,7 @@
  */
 import React, { useMemo } from "react";
 
-import { OllamaTab } from "../../../components/OllamaTab";
+import { OllamaTab } from "../../ai-connection/OllamaTab";
 import { saveIp } from "../pluginStorage";
 
 type OllamaTabProps = React.ComponentProps<typeof OllamaTab>;

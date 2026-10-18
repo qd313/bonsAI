@@ -41,9 +41,9 @@ import { Focusable } from "@decky/ui";
 
 import { TAB_BAR_CURRENT_ICON_PX, TAB_BAR_SIDE_ICON_PX } from "../unified-input/constants";
 import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../../utils/navFocusRegistry";
-import { registerModalReturnFocusOwner } from "./modalReturnFocusRegistry";
+import { registerModalReturnFocusOwner } from "../../shared/dpad/modalReturnFocusRegistry";
 import { buildTabBarNavHandlers, neighbourTab, tabBarSides } from "./tabBarNav";
-import { registerShoulderSwitch } from "../folded-tabs/shoulderSwitch";
+import { registerShoulderSwitch } from "../../shared/dpad/shoulderSwitch";
 import { BONSAI_TAB_SHORT_NAMES, bonsaiTabBarIcon, type BonsaiTabId } from "./tabTitles";
 
 export type TabIndicatorBarProps = {
@@ -166,7 +166,7 @@ export function TabIndicatorBar({
     >
       {/*
         The marks are the one on-screen reminder that the shoulder buttons switch tabs. They dim
-        unless the ring is on the bar (tabIndicatorBar.ts).
+        unless the ring is on the bar (tabIndicatorBarStyles.ts).
       */}
       <span
         className="bonsai-tab-bar__shoulder bonsai-tab-bar__shoulder--l"

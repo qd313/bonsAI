@@ -6,7 +6,7 @@ import unittest
 
 from backend.ollama.model_policy import classify_ollama_model_name
 
-# Keep in sync with src/data/pullModelCatalog.ts PULL_MODEL_CATALOG tags + licenseClass.
+# Keep in sync with src/features/models/pullModelCatalog.ts PULL_MODEL_CATALOG tags + licenseClass.
 CATALOG_POLICY_PARITY: dict[str, str] = {
     "qwen2.5vl:3b": "open_weight",
     "qwen3.5:4b": "foss",

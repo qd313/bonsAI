@@ -68,12 +68,12 @@
  *   showing before falling through to the action row — otherwise the
  *   D-pad would skip straight over that button to Download/Update.
  */
-import { isHttpsOllamaAddress } from "../../utils/ollamaAddress";
+import { isHttpsOllamaAddress } from "../ai-connection/ollamaAddress";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Focusable, PanelSection, PanelSectionRow, showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../utils/deckyCall";
-import { tryMoveUpWithPanelScroll } from "../../utils/settingsPanelScroll";
+import { tryMoveUpWithPanelScroll } from "../../shared/dpad/settingsPanelScroll";
 import { elementHasGamepadFocus } from "../../utils/uiDocument";
 import { useHandRingOnGone } from "../../hooks/useHandRingOnGone";
 import { rememberReturnWhileBoxOpens } from "../../utils/rememberReturnWhileBoxOpens";
@@ -93,19 +93,19 @@ import {
 import { confirmDownload } from "../downloads/downloadNotice";
 import { KNOWLEDGE_LIBRARY_NOTICES, MEANING_SEARCH_MODEL_NOTICE } from "../downloads/downloadSites";
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../../styles/settingsGlassButton";
-import { CancelFirstConfirmModal } from "../../components/CancelFirstConfirmModal";
+import { CancelFirstConfirmModal } from "../../shared/CancelFirstConfirmModal";
 import { KnowledgeBaseButtonLabel } from "./KnowledgeBaseButtonLabel";
 import { RagCorpusStoragePickerModal, type RagStorageOption } from "./RagCorpusStoragePickerModal";
-import { DownloadArrowIcon, RefreshArrowIcon, TrashBinIcon } from "../../components/icons";
+import { DownloadArrowIcon, RefreshArrowIcon, TrashBinIcon } from "../../shared/icons/icons";
 import {
   clearModalReturnFocus,
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
-} from "../plugin-shell/modalReturnFocusRegistry";
-import { focusInTabBody } from "../plugin-shell/useTabBodyFocusScroll";
-import { textPx } from "../../styles/sections/textPx";
+} from "../../shared/dpad/modalReturnFocusRegistry";
+import { focusInTabBody } from "../../shared/dpad/useTabBodyFocusScroll";
+import { textPx } from "../../styles/textPx";
 import { DenseSwitchRow } from "../folded-tabs/DenseRow";
-import { OLLAMA_ROW_HELP } from "../folded-tabs/ollamaTabFolds";
+import { OLLAMA_ROW_HELP } from "../ai-connection/ollamaTabFolds";
 
 type RagCorpusStatus = {
   phase?: string;

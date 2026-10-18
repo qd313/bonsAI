@@ -15,7 +15,7 @@ import { act, render, renderHook, screen, waitFor } from "@testing-library/react
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ReactElement } from "react";
 
-import { PLUGIN_HELP_DISMISSED_STORAGE_KEY } from "./data/storageKeys";
+import { PLUGIN_HELP_DISMISSED_STORAGE_KEY } from "./shared/storageKeys";
 import { getRpcCallLog, resetFakeDeckyRpc } from "./test-harness/fakeDeckyRpc";
 
 const hoisted = vi.hoisted(() => ({ modal: null as { props: Record<string, unknown> } | null }));
@@ -95,7 +95,7 @@ describe("Clear all plugin data brings the help chip back", () => {
   it("turns an already-seen chip back on, and a panel built afterwards shows it", async () => {
     window.localStorage.clear();
     vi.resetModules();
-    const { usePluginHelpModal } = await import("./features/plugin-shell/usePluginHelpModal");
+    const { usePluginHelpModal } = await import("./features/about/usePluginHelpModal");
     const survival = await import("./utils/bonsaiSessionSurvival");
     const { buildInitialSessionSnapshot } = await import("./features/plugin-shell/initialSessionSnapshot");
     const args = {
@@ -113,7 +113,7 @@ describe("Clear all plugin data brings the help chip back", () => {
 
     // What onClearAllPluginData does, in the same order: drop the note, wipe storage, reset the flag.
     survival.markPluginDataCleared();
-    const { clearBonsaiBrowserStorage } = await import("./utils/clearBonsaiBrowserStorage");
+    const { clearBonsaiBrowserStorage } = await import("./features/settings/clearBonsaiBrowserStorage");
     clearBonsaiBrowserStorage();
     act(() => first.result.current.resetPluginHelpDismissed());
     expect(first.result.current.pluginHelpDismissed).toBe(false);

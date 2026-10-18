@@ -29,7 +29,7 @@ HTTPS_NOT_SUPPORTED_MESSAGE = (
     "bonsAI can only talk to Ollama over http for now. Use an http:// address."
 )
 """What a person is told when they type an https:// Ollama address. The screen shows the same
-words (src/utils/ollamaAddress.ts), so the field and the back end never disagree."""
+words (src/features/ai-connection/ollamaAddress.ts), so the field and the back end never disagree."""
 
 
 class OllamaAddressRefused(ValueError):

@@ -15,7 +15,7 @@
  */
 import React, { useMemo } from "react";
 
-import { SettingsTab } from "../../../components/SettingsTab";
+import { SettingsTab } from "../../settings/SettingsTab";
 
 export type UseSettingsTabPayloadArgs = React.ComponentProps<typeof SettingsTab>;
 

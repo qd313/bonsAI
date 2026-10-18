@@ -35,7 +35,7 @@ import type {
 } from "../types/bonsaiUi";
 import type { TransparencySnapshot } from "../utils/inputTransparency";
 import type { AskModeId } from "../data/askMode";
-import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
+import type { ModelPolicyDisclosurePayload } from "../features/models/modelPolicy";
 import type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
 import type { LastExchangeSnapshot, LiveThinkingSnapshot } from "../types/backgroundAsk";
 import type { ReplyMicroActionId } from "../data/replyMicroActions";
@@ -43,7 +43,7 @@ import { MainTabPresetRow } from "./MainTabPresetRow";
 import { MainTabUnifiedAskBar } from "./MainTabUnifiedAskBar";
 import { MainTabScreenshotBrowser } from "./MainTabScreenshotBrowser";
 import { MainTabChatTranscript } from "./MainTabChatTranscript";
-import { PermissionDenyAction } from "./PermissionDenyAction";
+import { PermissionDenyAction } from "../features/permissions/PermissionDenyAction";
 import { useMainTabColumnFill } from "../hooks/useMainTabColumnFill";
 import { useDockClearanceOnFocus } from "../hooks/useDockClearanceOnFocus";
 import { useChatTitlePublisher } from "../features/chat-title/useChatTitlePublisher";
@@ -54,7 +54,7 @@ import { takeFirstChatStop } from "../features/chat-title/takeFirstChatStop";
 import { ChatsMenu } from "../features/chat-title/ChatsMenu";
 import { useChatTitleValue } from "../features/chat-title/chatTitleStore";
 import type { ChatListRow } from "../features/chat-sum-up/chatSumUpModel";
-import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
+import type { BonsaiCapabilityKey } from "../features/permissions/permissionDeepLink";
 import {
   STREAM_SCRAMBLE_OFF,
   StreamScrambleContext,
@@ -62,7 +62,7 @@ import {
   type StreamScrambleSettings,
 } from "../features/stream-scramble/streamScrambleContext";
 import { gameIsRunning, lighterWhileGameRuns } from "../utils/lighterWhileGameRuns";
-import { textPx } from "../styles/sections/textPx";
+import { textPx } from "../styles/textPx";
 import { useUserNotesBridge } from "../features/user-notes/useUserNotesBridge";
 
 export type MainTabProps = {

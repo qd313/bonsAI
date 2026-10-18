@@ -16,8 +16,8 @@
  */
 import React, { useMemo } from "react";
 
-import { AboutTab } from "../../../components/AboutTab";
-import { GITHUB_ISSUES_URL, OLLAMA_UPSTREAM_REPO_URL } from "../../../data/storageKeys";
+import { AboutTab } from "../../about/AboutTab";
+import { GITHUB_ISSUES_URL, OLLAMA_UPSTREAM_REPO_URL } from "../../../shared/storageKeys";
 
 const GITHUB_REPO_URL = GITHUB_ISSUES_URL.replace(/\/issues$/, "");
 

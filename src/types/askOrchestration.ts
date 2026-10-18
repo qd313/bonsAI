@@ -31,7 +31,7 @@
 import type { Dispatch, SetStateAction } from "react";
 
 import type { PresetPrompt } from "../data/presets";
-import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
+import type { ModelPolicyDisclosurePayload } from "../features/models/modelPolicy";
 import type { ReplyMicroActionId } from "../data/replyMicroActions";
 import type {
   LastExchangeSnapshot,

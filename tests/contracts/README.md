@@ -8,8 +8,8 @@ cross-runtime plumbing: neither test shells out to the other toolchain.
 
 | Fixture | Python assertion | TypeScript assertion |
 |---|---|---|
-| `settings-defaults.json` | `tests/test_settings_contract.py` | `src/data/bonsaiSettingsContract.test.ts` |
-| `settings-hostile-inputs.json` | `tests/test_settings_hostile_contract.py` | `src/data/bonsaiSettingsHostileContract.test.ts` |
+| `settings-defaults.json` | `tests/test_settings_contract.py` | `src/features/settings/bonsaiSettingsContract.test.ts` |
+| `settings-hostile-inputs.json` | `tests/test_settings_hostile_contract.py` | `src/features/settings/bonsaiSettingsHostileContract.test.ts` |
 | `spoiler-title-profiles.json` | `tests/test_spoiler_title_profiles_contract.py` | `src/data/spoilerTitleProfilesContract.test.ts` |
 
 ## `settings-defaults.json`

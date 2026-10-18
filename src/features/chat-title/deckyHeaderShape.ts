@@ -35,7 +35,7 @@
  */
 import { useSyncExternalStore } from "react";
 
-import { bonsaiDebugLog } from "../../utils/bonsaiDebugIngest";
+import { bonsaiDebugLog } from "../developer/bonsaiDebugIngest";
 import { takeNavFocus } from "../../utils/navFocusRegistry";
 
 import { deckyHeaderParts, type DeckyHeaderParts } from "./deckyTitleParts";

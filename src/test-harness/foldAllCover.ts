@@ -14,7 +14,7 @@
  *           Deck's measure of its wider label, Close all.
  */
 import { buildBonsaiScopeStylesheet } from "../styles/bonsaiScopeStylesheet";
-import { FOLD_ALL_HEIGHT_PX } from "../styles/sections/foldedTabs";
+import { FOLD_ALL_HEIGHT_PX } from "../features/folded-tabs/foldedTabs";
 
 export interface PageBox {
   left: number;

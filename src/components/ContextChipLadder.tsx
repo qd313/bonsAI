@@ -62,7 +62,7 @@ import { CHIP_GAP_PX, gridMove, rowsFromBoxes, type GridDirection } from "./chip
 import { elementHasFocus } from "../utils/uiDocument";
 import { focusRowElement } from "../utils/focusPerTurnRow";
 import { DECK_HIGHLIGHT_CYAN } from "../features/unified-input/constants";
-import { textPx } from "../styles/sections/textPx";
+import { textPx } from "../styles/textPx";
 
 const deckNav = (handlers: Record<string, () => boolean | void>) =>
   handlers as unknown as Record<string, unknown>;

@@ -73,7 +73,7 @@ _NO_SEARCH_RAN = 0.0
 # reading in evidence (69 s, runs/plan46-R2-strategy-half.json) was taken during a prompt-overflow
 # bug since fixed, so it is not a fair number to hold today's answers to. This budget borrows the
 # app's own existing slow-reply warning as a stand-in (`DEFAULT_LATENCY_WARNING_SECONDS` in
-# src/data/bonsaiSettingsSchema.ts) until a real first-word reading replaces it.
+# src/features/settings/bonsaiSettingsSchema.ts) until a real first-word reading replaces it.
 FIRST_WORD_BUDGET_MS = 60_000.0
 
 

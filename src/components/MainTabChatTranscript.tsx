@@ -161,9 +161,9 @@ import {
 import { formatAppliedTuningBannerText } from "../utils/appliedTuningText";
 import { ChatLatencyNotices } from "./ChatLatencyNotices";
 import { ChatTranscriptHintRows } from "./ChatTranscriptHintRows";
-import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
+import type { ModelPolicyDisclosurePayload } from "../features/models/modelPolicy";
 import { StrategyChecklistPanel } from "./StrategyChecklistPanel";
-import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
+import type { BonsaiCapabilityKey } from "../features/permissions/permissionDeepLink";
 import { isPendingPlaceholderResponse, isStopNoticeResponse } from "../utils/askThinkingPhases";
 import { BonsaiChatSecondaryButton } from "./BonsaiChatSecondaryButton";
 import { buildReplyActionsElement } from "../utils/buildReplyActionsElement";
@@ -186,7 +186,7 @@ import type {
   StrategyGuideBranchesPayload,
   StrategyChecklistState,
 } from "../types/bonsaiUi";
-import { ThinkingSpinnerIcon } from "./icons";
+import { ThinkingSpinnerIcon } from "../shared/icons/icons";
 import type { KbAttachedNote, TransparencySnapshot } from "../utils/inputTransparency";
 import { useStreamScrollPin } from "../hooks/useStreamScrollPin";
 import { turnPiece, useLiveTurnTwin } from "../hooks/useLiveTurnTwin";
@@ -210,7 +210,7 @@ import { focusAnswerChunkAtIndex, focusFirstAnswerChunk, focusLastAnswerChunk } 
 import { getRegisteredAnswerBubble } from "../utils/answerBubbleElRegistry";
 import { focusedAnswerStopIndex, orderedAnswerStops } from "../utils/answerStopRegistry";
 import { focusRegisteredReplyStop } from "../utils/replyStopRegistry";
-import { dismissTroubleshootHint, isTroubleshootHintDismissed } from "../utils/troubleshootHintDismissals";
+import { dismissTroubleshootHint, isTroubleshootHintDismissed } from "../features/answer/transcript/troubleshootHintDismissals";
 import { ensureGlossaryLoaded, type DrgGlossaryTerm } from "../features/glossary/glossaryStore";
 import {
   composeDrgGlossaryExplainFurtherQuestion,
@@ -222,7 +222,7 @@ import { buildEarlierList } from "./buildEarlierList";
 import { useTitleOverflow } from "../hooks/useTitleOverflow";
 import { useKbNotesFold } from "../features/knowledge-library/useKbNotesFold";
 import { useReasoningFoldState } from "../hooks/useReasoningFoldState";
-import { usePermHintNavTargets } from "../hooks/usePermHintNavTargets";
+import { usePermHintNavTargets } from "../features/answer/transcript/usePermHintNavTargets";
 import { useSpoilerFenceRecheck } from "../hooks/useSpoilerFenceRecheck";
 import {
   buildChatSummaryNoteElement,
@@ -230,7 +230,7 @@ import {
   focusSumUpButtonWhenMounted,
 } from "../features/chat-sum-up/buildChatSummaryNoteElement";
 import type { ChatSumUpState } from "../features/chat-sum-up/chatSumUpModel";
-import { textPx } from "../styles/sections/textPx";
+import { textPx } from "../styles/textPx";
 
 /* Re-exported so tests that import these focus helpers from this file (their home before this
  * split) need no edit — the block itself now lives in buildKbNotesBlockElement.tsx. */

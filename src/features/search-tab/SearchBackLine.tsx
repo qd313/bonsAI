@@ -21,7 +21,7 @@ import { Focusable } from "@decky/ui";
 
 import { isDeckDirectionLeftEvent, isDeckDirectionRightEvent, isDownDeckButtonEvent, isUpDeckButtonEvent } from "../../utils/focusNavigation";
 import { takeAboveTheChat } from "../../utils/chatTranscriptNavHelpers";
-import { textPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/textPx";
 import { registerBackLineEl, searchBackNav } from "./searchJumpStore";
 
 const BACK_LINE_CSS = `

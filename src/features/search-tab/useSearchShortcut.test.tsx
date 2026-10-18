@@ -12,7 +12,7 @@ import { act, cleanup, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { getChatTitleState, publishChatTitle, resetChatTitleStore, setChatTitleTab, setChatsMenuOpen } from "../chat-title/chatTitleStore";
-import { clearModalReturnFocus, rememberModalReturnFocus } from "../plugin-shell/modalReturnFocusRegistry";
+import { clearModalReturnFocus, rememberModalReturnFocus } from "../../shared/dpad/modalReturnFocusRegistry";
 import { peekSearchArrival, registerSearchTabSwitch, resetSearchJump } from "./searchJumpStore";
 import { useSearchShortcut } from "./useSearchShortcut";
 

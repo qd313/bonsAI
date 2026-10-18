@@ -13,7 +13,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 
 import { MainTabChatTranscript } from "./MainTabChatTranscript";
 import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
-import { resetTroubleshootHintDismissalsForTests } from "../utils/troubleshootHintDismissals";
+import { resetTroubleshootHintDismissalsForTests } from "../features/answer/transcript/troubleshootHintDismissals";
 
 vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
 

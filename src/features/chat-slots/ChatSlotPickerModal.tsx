@@ -27,7 +27,7 @@ import { Button, Focusable, ModalRoot } from "@decky/ui";
 import { SETTINGS_GLASS_BTN } from "../../styles/settingsGlassButton";
 import { chatWhenLabel } from "../chat-title/chatsMenuModel";
 import { MAX_CHAT_SLOTS } from "./chatSlotLimit";
-import { textPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/textPx";
 
 export type ChatPickRow = { id: string; label: string; updatedAt: number };
 

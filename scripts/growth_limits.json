@@ -13,15 +13,15 @@
       "reason": "plan 74 lane 3: Up from Ask goes to the question box instead of whichever icon was used last (the mic one time, the paperclip another). Three lines here (a class name, the row's handler, one name from the hook); the handler and its explanation live in useMainTabAskBarFocus.ts with the box's own Down.",
       "date": "2026-09-28"
     },
-    "src/components/OllamaWhereAiRunsSection.tsx": {
+    "src/features/ai-connection/OllamaWhereAiRunsSection.tsx": {
       "limit": 884,
       "reason": "plan 74 lane 3: Update AI & models signs up for the ring's return after its box closes (the Deck found the ring on the Ollama tab bar, plan72-F3-DL.json). Two lines on the button, the same wiring Browse models already has right below it; a new file would split one button's own props.",
       "date": "2026-09-28"
     },
-    "src/components/PullModelsModal.tsx": {
+    "src/features/models/pull-box/PullModelsModal.tsx": {
       "limit": 935
     },
-    "src/data/characterPlaceholderEmoticonGrids.ts": {
+    "src/features/characters/characterPlaceholderEmoticonGrids.ts": {
       "limit": 993
     },
     "src/hooks/useBonsaiAskOrchestration.ts": {

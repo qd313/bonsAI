@@ -39,7 +39,7 @@ import {
   UNIFIED_TEXT_OVERLAY_FALLBACK_OVERFLOW_WRAP,
   UNIFIED_TEXT_OVERLAY_FALLBACK_WHITE_SPACE,
 } from "./constants";
-import { TEXT_SCALE_VAR } from "../../data/chatTextSize";
+import { TEXT_SCALE_VAR } from "../../shared/text-size/chatTextSize";
 
 /** The Text size step written on the plugin's root (1 when none is set). */
 function readTextScaleFromElement(el: HTMLElement | null | undefined): number {

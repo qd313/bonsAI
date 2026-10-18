@@ -58,7 +58,7 @@ import { resetChatNameNav } from "./chatNameNav";
 import { chatRow, MainTabHarness, newMainTabCalls, type MainTabCalls } from "./chatTitleTestFixtures";
 import { ChatSlotDeleteModal } from "../chat-slots/ChatSlotDeleteModal";
 import { ChatSlotPickerModal } from "../chat-slots/ChatSlotPickerModal";
-import { clearModalReturnFocus, peekModalReturnFocus } from "../plugin-shell/modalReturnFocusRegistry";
+import { clearModalReturnFocus, peekModalReturnFocus } from "../../shared/dpad/modalReturnFocusRegistry";
 
 let calls: MainTabCalls;
 /** Every delete and create call, in the order the Main tab made them. */

@@ -17,7 +17,7 @@ import { render } from "@testing-library/react";
 
 import { MainTabUnifiedAskBar, type MainTabUnifiedAskBarProps } from "./MainTabUnifiedAskBar";
 import { resetNavFocusRegistry } from "../utils/navFocusRegistry";
-import { buildGamepadFocusRingStylesheet } from "../styles/sections/gamepadAndPullModels";
+import { buildGamepadFocusRingStylesheet } from "../features/models/pull-box/gamepadAndPullModels";
 import { buildSection8Section } from "../styles/sections/section-8";
 import {
   UNIFIED_INPUT_CORNER_RING_ROOM_PX,

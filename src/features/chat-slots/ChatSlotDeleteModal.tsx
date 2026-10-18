@@ -30,7 +30,7 @@ import React, { useRef } from "react";
 import { Button, Focusable, ModalRoot } from "@decky/ui";
 
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../../styles/settingsGlassButton";
-import { textPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/textPx";
 
 export type ChatSlotDeleteModalProps = {
   label: string;

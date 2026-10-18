@@ -14,7 +14,7 @@ never reading more of the catalog's reply than a small fixed amount -- and falli
 "assume it is fine" only when the catalog cannot be reached at all, rather than blocking a
 download just because the network is briefly down.
 Does not: Actually download or install a model, or manage the models already installed --
-see src/data/pullModelCatalog.ts for the list the Pull Models screen shows by default.
+see src/features/models/pullModelCatalog.ts for the list the Pull Models screen shows by default.
 """
 
 from __future__ import annotations

@@ -36,7 +36,7 @@ class ModelPolicyDocsTests(unittest.TestCase):
 
         The README rewrite for 0.6.0 moved the model policy table from the README to the user guide.
         """
-        self.assertIn("docs/guide.md#ai-models-and-licences", _read("src/data/modelPolicy.ts"))
+        self.assertIn("docs/guide.md#ai-models-and-licences", _read("src/features/models/modelPolicy.ts"))
         self.assertIn("\n## AI models and licences\n", _read("docs/guide.md"))
 
     def test_guide_names_the_qwen_3b_licence(self):

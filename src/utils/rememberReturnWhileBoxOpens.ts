@@ -19,7 +19,7 @@ import {
   peekModalReturnFocus,
   rememberModalReturnFocus,
   type ModalReturnFocusId,
-} from "../features/plugin-shell/modalReturnFocusRegistry";
+} from "../shared/dpad/modalReturnFocusRegistry";
 
 /** A box a person answers takes far longer than this; an answer sooner means no box was shown. */
 const NO_BOX_ANSWER_MS = 50;

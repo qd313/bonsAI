@@ -23,7 +23,7 @@
 import { useEffect, useRef } from "react";
 
 import { getChatTitleState } from "../chat-title/chatTitleStore";
-import { peekModalReturnFocus } from "../plugin-shell/modalReturnFocusRegistry";
+import { peekModalReturnFocus } from "../../shared/dpad/modalReturnFocusRegistry";
 import { isOptionsDeckButtonEvent } from "../../utils/focusNavigation";
 import { getUiDocument } from "../../utils/uiDocument";
 import { openSearchTab } from "./searchJumpStore";

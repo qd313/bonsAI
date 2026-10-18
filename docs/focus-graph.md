@@ -287,7 +287,7 @@ that empties the box (only while the box has words), the small ASK. The game tag
 
 Plan 84 step 4 redraws the tab bar as design "T3" and deletes the drop-down strip of tab icons that used to
 open under it (drawing frame "Z", `docs/planning/assets/84-vertical-room.html`). Code: `TabIndicatorBar.tsx`,
-`tabBarNav.ts`, `useHiddenTabHeaderTrap.ts`; styles in `src/styles/sections/tabIndicatorBar.ts`.
+`tabBarNav.ts`, `useHiddenTabHeaderTrap.ts`; styles in `src/features/plugin-shell/tabIndicatorBarStyles.ts`.
 
 ```
 LB  [Main] [icon] [icon] [icon] [icon] [About]  RB   <- one stop: the whole bar
@@ -1256,7 +1256,7 @@ tab bar
 The Settings tab reuses the folded-tab pieces of the Ollama tab (the section above): one line per section, the
 rows of an open section one line each, the longer words in the strip at the bottom, the floating Open all
 button. Every section starts closed and closes again on a tab switch (the maintainer's call, 2026-10-12). Its
-sections are listed once in `src/features/folded-tabs/settingsTabFolds.ts` (`SETTINGS_SECTIONS`); the chain of
+sections are listed once in `src/features/settings/settingsTabFolds.ts` (`SETTINGS_SECTIONS`); the chain of
 first and last controls is `useSettingsTabFocus.ts`.
 
 ```

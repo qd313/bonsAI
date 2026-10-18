@@ -21,7 +21,7 @@ import { PRESET_CHIP_HEIGHT_PX } from "./presetRowLayout";
 import type { DecodeTextParts } from "./presetChipDecodeText";
 import type { ChipScrollListener } from "./presetChipStay";
 import { joinPresetWithRunningGame } from "../../utils/joinPresetWithRunningGame";
-import { textPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/textPx";
 
 /**
  * A churning label's three spans, one per part of `composeDecodeParts`: the locked letters, the

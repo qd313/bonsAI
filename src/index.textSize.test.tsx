@@ -29,7 +29,7 @@ const SCALE_VAR = "--bonsai-text-scale";
 async function mountWith(size: "small" | "normal" | "large") {
   setRpcHandler("load_settings", () => ({ ...defaultSettingsFixture(), chat_text_size: size }));
   const plugin = await freshPlugin();
-  const bridge = await import("./utils/uiScaleScopeBridge");
+  const bridge = await import("./shared/text-size/uiScaleScopeBridge");
   const view = render(plugin.content as ReactElement);
   const title = render(plugin.titleView as ReactElement);
   return { view, title, bridge };

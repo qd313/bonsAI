@@ -28,7 +28,7 @@ import type { TransparencySnapshot } from "../../utils/inputTransparency";
 import { resetUiDocument } from "../../utils/uiDocument";
 import { resetNavFocusRegistry } from "../../utils/navFocusRegistry";
 import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
-import { buildDetailsSlotSection } from "../../styles/sections/detailsSlot";
+import { buildDetailsSlotSection } from "../answer/details/detailsSlotStyles";
 import { PANE_TOP } from "../../test-harness/deckAnswerWalk";
 import { resetDetailsSlotStore } from "./detailsSlotStore";
 

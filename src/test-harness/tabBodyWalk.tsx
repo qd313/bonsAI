@@ -22,7 +22,7 @@ import React from "react";
 import { act, render } from "@testing-library/react";
 
 import { TabBodyFocusRoot } from "../features/plugin-shell/TabBodyFocusRoot";
-import { focusInTabBody } from "../features/plugin-shell/useTabBodyFocusScroll";
+import { focusInTabBody } from "../shared/dpad/useTabBodyFocusScroll";
 import { TAB_GEOMETRY } from "./tabBodyDeckGeometry";
 
 export type TabName = keyof typeof TAB_GEOMETRY;

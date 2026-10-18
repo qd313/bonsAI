@@ -48,7 +48,7 @@ string, assembled at runtime and injected into one `<style>` tag.
 - Everything is scoped under `.bonsai-scope`. Rules are `!important`-heavy on purpose:
   they are overriding Steam's own CSS inside its UI, not authoring in a clean document.
 - Content rendered through Decky `showModal()` escapes `.bonsai-scope`, so it must be
-  wrapped in [BonsaiModalScope](../src/components/BonsaiModalScope.tsx), which re-injects
+  wrapped in [BonsaiModalScope](../src/shared/BonsaiModalScope.tsx), which re-injects
   a portal stylesheet.
 
 Consequence for anyone adding UI: **a new class needs a rule added to a section file**,
@@ -73,12 +73,12 @@ Declared as TypeScript constants in
 | `DECK_MENU_PANEL_BG` | `rgb(28,36,44)` | Inline popover surface |
 | `DECK_MENU_ROW_SELECTED_BG` | `rgb(40,50,62)` | Selected popover row |
 | `DECK_HIGHLIGHT_CYAN` | `#9ce7ff` | Sliders, links, active controls, section labels |
-| `#f16a5a` | `#f16a5a` | Delete chat in the chats menu ([chatsMenuStyles.ts](../src/features/chat-title/chatsMenuStyles.ts) `__action--danger`), and the Copy icon's error state ([answerBubble.ts](../src/styles/sections/answerBubble.ts)) |
+| `#f16a5a` | `#f16a5a` | Delete chat in the chats menu ([chatsMenuStyles.ts](../src/features/chat-title/chatsMenuStyles.ts) `__action--danger`), and the Copy icon's error state ([answerBubble.ts](../src/features/answer/bubble/answerBubble.ts)) |
 | `#f28b7d` | `#f28b7d` | **Reserved, no consumer** — mock 5c's hover shade for the delete control; 5c's custom modal footer was dropped by board 8d |
 
 ### Character accent scope variables (chips)
 
-Set on the scope in [characterUiAccent.ts](../src/data/characterUiAccent.ts), always — the default
+Set on the scope in [characterUiAccent.ts](../src/features/characters/characterUiAccent.ts), always — the default
 green applies even when no character is chosen, so nothing is ever unset. **Added 2026-09-17 (plan
 60, D110):**
 
@@ -141,7 +141,7 @@ color:         var(--bonsai-chat-ai-bubble-text, #d4dde6)
 
 `--bonsai-chat-ai-bubble-wash` is a constant flat layer over the gradient, not part of it:
 the accent lifted 40% toward white at 11% alpha. The lift is `v + (255 - v) * 0.4` per
-channel ([characterUiAccent.ts](../src/data/characterUiAccent.ts) `liftRgb`), applied at
+channel ([characterUiAccent.ts](../src/features/characters/characterUiAccent.ts) `liftRgb`), applied at
 **every** accent rather than only dark ones, so the card reads the same way across the
 catalog. The fallback is forest green `#2e8753` lifted the same way, `rgb(130,183,152)`.
 
@@ -183,7 +183,7 @@ weight `700` when selected and `500` otherwise, colour `ASK_LABEL_COLOR`.
 ## Focus rings
 
 White, always — not the character accent. Two variants, both in
-[gamepadAndPullModels.ts:16-26](../src/styles/sections/gamepadAndPullModels.ts):
+[gamepadAndPullModels.ts:16-26](../src/features/models/pull-box/gamepadAndPullModels.ts):
 
 **Chips are now the exception: since 2026-09-17 (plan 60) the outer ring rule no longer targets them, because the row was clipping it invisible anyway, and a pale blue fill on the chip is its focus cue instead (a light bar along the bottom edge until 2026-10-02).**
 
@@ -207,7 +207,7 @@ hugs the button rather than the wrapper.
 
 **The question box's ring** (since 2026-10-02, measured on the Deck the same day): `outline: 2px solid rgba(255,255,255,0.88); outline-offset: -2px;`, drawn **inside** the field's edge so the Ask row, the dock and the glass card cannot cut it off. It follows only Steam's `gpfocus` class on the input or textarea, never plain focus, so an open on-screen keyboard adds no second ring ([section-5.ts](../src/styles/sections/section-5.ts)).
 
-**The Show details line in the chip's slot** uses the inset ring above: `outline: 2px solid rgba(255,255,255,0.85); outline-offset: -2px;` with `box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55)`, because the chip row clips anything drawn outside its box. The line's label brightens to `#e8eef5` and its rule to `rgba(255,255,255,0.28)` while it has the ring; the swap with the chip is a 120 ms fade, instant with reduced motion ([detailsSlot.ts](../src/styles/sections/detailsSlot.ts)).
+**The Show details line in the chip's slot** uses the inset ring above: `outline: 2px solid rgba(255,255,255,0.85); outline-offset: -2px;` with `box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55)`, because the chip row clips anything drawn outside its box. The line's label brightens to `#e8eef5` and its rule to `rgba(255,255,255,0.28)` while it has the ring; the swap with the chip is a 120 ms fade, instant with reduced motion ([detailsSlotStyles.ts](../src/features/answer/details/detailsSlotStyles.ts)).
 
 Two standing prohibitions, both recorded as reverts in the source:
 
@@ -238,7 +238,7 @@ Two standing prohibitions, both recorded as reverts in the source:
 
 **Every size in this table is a Normal size.** Settings > Text size (Small 0.9, Normal 1, Large 1.15) multiplies
 every font size in the plugin, on every tab and in every popup: a size is written
-`textPx(n)` ([textPx.ts](../src/styles/sections/textPx.ts), `calc(${n}px * var(--bonsai-text-scale, 1))`),
+`textPx(n)` ([textPx.ts](../src/styles/textPx.ts), `calc(${n}px * var(--bonsai-text-scale, 1))`),
 inline `fontSize` values go through `textPx` the same way.
 The step is a variable of its own, written on the plugin's box, in the style popups read, and on the chat's
 name and tab bar in Decky's bar (they sit outside the box). Rows keep their heights: only the letters grow, so
@@ -247,7 +247,7 @@ bar (button marks in a fixed-width box, like an icon), icon glyphs, and Steam's 
 which take their size from Steam's own stylesheet (a `1em` rule on the box lets those that inherit follow).
 
 The section-label row is the `.bonsai-pullmodels-recommend-title` treatment
-([gamepadAndPullModels.ts:123-127](../src/styles/sections/gamepadAndPullModels.ts)) — the
+([gamepadAndPullModels.ts:123-127](../src/features/models/pull-box/gamepadAndPullModels.ts)) — the
 clearest instance of the pattern, not a shared class. New section labels should match it
 by hand.
 
@@ -284,7 +284,7 @@ only `showModal()` content escapes the column.
 
 ### The tab bar
 
-Plan 84 step 4 ("T3"); step 6 put it in the strip at the very top of the menu. One row, 20 points tall in every state, five columns: LB, the tabs before, the current tab (icon and name), the tabs after, RB. Nothing opens from it and nothing is drawn outside it. Constants in `unified-input/constants.ts`, drawn by [tabIndicatorBar.ts](../src/styles/sections/tabIndicatorBar.ts).
+Plan 84 step 4 ("T3"); step 6 put it in the strip at the very top of the menu. One row, 20 points tall in every state, five columns: LB, the tabs before, the current tab (icon and name), the tabs after, RB. Nothing opens from it and nothing is drawn outside it. Constants in `unified-input/constants.ts`, drawn by [tabIndicatorBarStyles.ts](../src/features/plugin-shell/tabIndicatorBarStyles.ts).
 
 | Constant | Value | Meaning |
 |---|---|---|
@@ -298,7 +298,7 @@ Plan 84 step 4 ("T3"); step 6 put it in the strip at the very top of the menu. O
 | `TAB_BAR_SHOULDER_DIM_OPACITY` | 0.32 | LB and RB while the ring is elsewhere; full strength (`#eef3f8`) only while the ring is on the bar |
 | `TAB_BAR_BUG_ICON_SCALE` | 26 / 22 | The Developer tab's bug artwork is drawn this much larger so it matches the others |
 | `TAB_BAR_STRIP_BG_HEX` | `#141c24` | Only a contrast reference now: `--bonsai-ui-tab-lit` is checked against it. The solid strip it was the colour of is gone; whether the real background is darker has not been measured |
-| `TAB_BAR_SWITCH_FADE_MS` | 120 | Used only by the Show details swap with the chip (`detailsSlot.ts`); the tab bar fades nothing |
+| `TAB_BAR_SWITCH_FADE_MS` | 120 | Used only by the Show details swap with the chip (`detailsSlotStyles.ts`); the tab bar fades nothing |
 | `--bonsai-ui-tab-lit` (CSS var, computed in `characterUiAccent.ts`, `liftForBar()`) | computed | The current tab's icon and name colour, and the lit left edge of the open chat in the chats menu. The character's main colour lifted toward white only as far as needed to read at **6:1** contrast against `TAB_BAR_STRIP_BG_HEX` (`TAB_BAR_LIT_MIN_CONTRAST`); a colour already at 6:1 is left alone. Astarion's grey is hand-picked (`#c3d0d1`), by the maintainer's choice from a side-by-side mockup on 2026-09-17 |
 
 The ring on the bar: the whole bar wears an inset `2px rgba(255,255,255,0.85)` ring and a `rgba(255,255,255,0.06)` fill, keyed on Steam's `gpfocus` / `gpfocuswithin` only; plain browser focus draws nothing.
@@ -344,7 +344,7 @@ Plan 84 step 2. Left to right: paperclip, game tag, mode, mic (Stop while an ans
 
 ### The answer's corner icon
 
-Plan 84 step 3. Copy sits in the lower-right of the answer's bubble, in its bottom band ([answerBubbleCorners.ts](../src/styles/sections/answerBubbleCorners.ts) and [answerBubble.ts](../src/styles/sections/answerBubble.ts)).
+Plan 84 step 3. Copy sits in the lower-right of the answer's bubble, in its bottom band ([answerBubbleCorners.ts](../src/styles/sections/answerBubbleCorners.ts) and [answerBubble.ts](../src/features/answer/bubble/answerBubble.ts)).
 
 | What | Value |
 |---|---|

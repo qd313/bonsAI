@@ -34,7 +34,7 @@ import { focusRowElement } from "../../utils/focusPerTurnRow";
 import { revealBelowKeepingAsItSettles } from "../../utils/chatPanelScroll";
 import { TITLE_OFFER_KEEP, TITLE_OFFER_YES } from "./chatSumUpModel";
 import { directionHandlers } from "./sumUpDirectionHandlers";
-import { textPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/textPx";
 
 let renameEl: HTMLElement | null = null;
 let keepEl: HTMLElement | null = null;

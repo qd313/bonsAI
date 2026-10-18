@@ -17,7 +17,7 @@
  * Does not: Place the menu on the screen; ChatsMenu.tsx does (over the answer, its foot on the dock's
  * top edge, its height measured from the room above the dock).
  */
-import { textPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/textPx";
 
 const M = ".bonsai-scope .bonsai-chats-menu";
 const LIT = "var(--bonsai-ui-tab-lit, #52d88a)";

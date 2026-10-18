@@ -28,7 +28,7 @@ import {
   SPOILER_HIDDEN_CREDITS_TEXT,
 } from "../utils/contextChipsFromSnapshot";
 import type { AskDiagnosticsSnapshot, ContextChip } from "../utils/inputTransparency";
-import { textPx } from "../styles/sections/textPx";
+import { textPx } from "../styles/textPx";
 
 /**
  * The panel below the chip row: title, credit/attribution block, file

@@ -41,11 +41,11 @@
 import { useEffect, type ReactNode } from "react";
 import { showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
-import { CancelFirstConfirmModal } from "../../components/CancelFirstConfirmModal";
-import { DEFAULT_CAPABILITIES, type BonsaiCapabilities } from "../../data/bonsaiSettingsSchema";
+import { CancelFirstConfirmModal } from "../../shared/CancelFirstConfirmModal";
+import { DEFAULT_CAPABILITIES, type BonsaiCapabilities } from "../settings/bonsaiSettingsSchema";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "../../utils/deckyCall";
 import { patchPendingSessionSettingsSnapshot } from "../../utils/bonsaiSessionSurvival";
-import { textPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/textPx";
 
 /** One site a download connects to. `size` is null when the code does not know it ahead of time. */
 export type DownloadNotice = {

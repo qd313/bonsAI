@@ -46,9 +46,9 @@ import { chatRow, MainTabHarness, newMainTabCalls, type MainTabCalls } from "./c
 import type { MainTabProps } from "../../components/MainTab";
 import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harness/steamRing";
 import { resetNavFocusRegistry } from "../../utils/navFocusRegistry";
-import { useBonsaiPluginShell } from "../../hooks/useBonsaiPluginShell";
+import { useBonsaiPluginShell } from "../plugin-shell/useBonsaiPluginShell";
 import { buildInitialSessionSnapshot } from "../plugin-shell/initialSessionSnapshot";
-import { clearModalReturnFocus, resetModalReturnFocusRegistry } from "../plugin-shell/modalReturnFocusRegistry";
+import { clearModalReturnFocus, resetModalReturnFocusRegistry } from "../../shared/dpad/modalReturnFocusRegistry";
 import { ChatSlotDeleteModal } from "../chat-slots/ChatSlotDeleteModal";
 import { ChatSlotPickerModal } from "../chat-slots/ChatSlotPickerModal";
 

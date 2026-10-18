@@ -8,7 +8,7 @@
  */
 import { describe, expect, it, vi } from "vitest";
 import { render } from "@testing-library/react";
-import { buildAnswerBubbleSection } from "../styles/sections/answerBubble";
+import { buildAnswerBubbleSection } from "../features/answer/bubble/answerBubble";
 import { MainTabChatTranscript } from "./MainTabChatTranscript";
 import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";

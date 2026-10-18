@@ -17,7 +17,7 @@
 import type { Dispatch, RefObject, SetStateAction } from "react";
 
 import type { AskAttachment } from "./bonsaiUi";
-import { type AskModeId, type UnifiedInputPersistenceMode } from "../data/bonsaiSettingsSchema";
+import { type AskModeId, type UnifiedInputPersistenceMode } from "../features/settings/bonsaiSettingsSchema";
 
 /** Maps RPC poll payloads into Main-tab AI presentation state (pending vs terminal branches differ sharply). */
 export type UseBonsaiAskOrchestrationArgs = {

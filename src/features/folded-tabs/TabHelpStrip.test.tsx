@@ -17,7 +17,7 @@ import { TabHelpStrip } from "./TabHelpStrip";
 import { FOLD_SECTION_ATTR, HELP_TEXT_ATTR, helpAttributes } from "./useHelpStrip";
 import { foldSectionToReturnTo, resetFoldedTabsForTests } from "./foldedTabsStore";
 import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
-import { stripHeightFor } from "../../styles/sections/foldedTabs";
+import { stripHeightFor } from "./foldedTabs";
 
 const TAB = "ollama";
 const PANE_TOP = 24;

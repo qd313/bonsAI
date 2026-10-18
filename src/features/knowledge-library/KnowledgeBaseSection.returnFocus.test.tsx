@@ -39,7 +39,7 @@ import {
   peekModalReturnFocus,
   resetModalReturnFocusRegistry,
   restoreModalReturnFocus,
-} from "../plugin-shell/modalReturnFocusRegistry";
+} from "../../shared/dpad/modalReturnFocusRegistry";
 
 async function draw(installed: boolean) {
   setRpcHandler("get_rag_corpus_status", () =>

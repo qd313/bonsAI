@@ -5,7 +5,7 @@ https:// must not be turned into a plain http address. The person is told, in pl
 every path that would have used it (Test connection, Ask, the background Ask, the chat summary,
 meaning-search checks), while host:port and http:// addresses behave exactly as before.
 Used for: the plan 77 release fixes.
-Does not: draw the screen message -- that is src/utils/ollamaAddress.test.ts.
+Does not: draw the screen message -- that is src/features/ai-connection/ollamaAddress.test.ts.
 """
 
 import asyncio

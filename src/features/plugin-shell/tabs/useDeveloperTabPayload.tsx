@@ -17,7 +17,7 @@
 import React, { useMemo } from "react";
 import type { Dispatch, SetStateAction } from "react";
 
-import { DeveloperTab } from "../../../components/DeveloperTab";
+import { DeveloperTab } from "../../developer/DeveloperTab";
 
 type DeveloperTabProps = React.ComponentProps<typeof DeveloperTab>;
 

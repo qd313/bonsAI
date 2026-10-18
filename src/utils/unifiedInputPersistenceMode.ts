@@ -18,7 +18,7 @@
  * setting's own save path, not to this file, which only answers the single "should I clear it
  * right now" question.
  */
-import type { UnifiedInputPersistenceMode } from "../data/bonsaiSettingsSchema";
+import type { UnifiedInputPersistenceMode } from "../features/settings/bonsaiSettingsSchema";
 /**
  * Clear the Ask field only when the user switches *into* no_persist — not on every mount while
  * already in no_persist (Decky remounts Content after showModal and session survival restores input).

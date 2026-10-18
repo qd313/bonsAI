@@ -27,7 +27,7 @@ import { anySpoilerFenceOpen } from "../../components/MainTabBonsaiAiMarkdownChu
 import { kbNotesUsedByAnswer } from "./kbNoteUsedByAnswer";
 import { BONSAI_CHAT_AI_MAX_WIDTH_CSS } from "../unified-input/constants";
 import { CREDITS_SHOWN, type CreditsView } from "../../utils/contextChipsFromSnapshot";
-import { textPx } from "../../styles/sections/textPx";
+import { textPx } from "../../styles/textPx";
 
 /**
  * Everyday name for a host the library has already cleared a note from — the header's job is to

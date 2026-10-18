@@ -331,7 +331,9 @@ export function buildSection8Section(): string {
           position: relative !important;
           height: 22px !important;
           min-height: 22px !important;
-          min-width: 0 !important;
+          /* Never narrower than its own word and arrow: the Deck measured the content 5 px wider than the
+             pill (56 in 51; letter-spacing after the last letter), plan 96 F25 (plan96-P96-F25-ASK-PILL.json). */
+          min-width: max-content !important;
           padding: 0 8px !important;
           margin: 0 0 0 3px !important;
           border: 1px solid rgba(255, 255, 255, 0.18) !important;

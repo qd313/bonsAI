@@ -1,9 +1,9 @@
 /**
  * Title: Find Ollama on the LAN over mDNS
  *
- * Purpose: The "Find LAN" button on the where-AI-runs panel — asks first,
- * then searches the local network for other Ollama services advertised
- * over mDNS/Bonjour, and records what it finds (or why it found nothing).
+ * Purpose: The "Find LAN" button on the where-AI-runs panel — asks first (the shared two-button box: Search
+ * on the left, Cancel on the right, the ring on Cancel), then searches the local network for other Ollama
+ * services advertised over mDNS/Bonjour, and records what it finds (or why it found nothing).
  *
  * Used for: OllamaWhereAiRunsSection, only when Ask is not already pointed
  * at this Deck (searching makes no sense once the AI already runs here).
@@ -25,7 +25,8 @@
  * order.
  */
 import { useCallback } from "react";
-import { showModal, ConfirmModal } from "@decky/ui";
+import { showModal } from "@decky/ui";
+import { TwoButtonConfirmModal } from "../../shared/TwoButtonConfirmModal";
 import { callDeckyWithTimeout, formatDeckyRpcError } from "../../shared/deckyCall";
 import type { MdnsOllamaHost, MdnsDiscoveryResult } from "./OllamaWhereAiRunsSection.types";
 import {
@@ -89,17 +90,16 @@ export function useMdnsOllamaDiscovery({
     if (ollamaLocalOnDeck || mdnsDiscovering || localSetupBusy) return;
     onBeforeDeckyModal();
     const handle = showModal(
-      <ConfirmModal
-        strTitle="Find Ollama on LAN (mDNS)"
-        strDescription={
+      <TwoButtonConfirmModal
+        title="Find Ollama on LAN (mDNS)"
+        body={
           <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
             This looks on your home network for an Ollama PC. It does not scan addresses or ports. If nothing shows,
             type the PC&apos;s address yourself.
           </div>
         }
-        strOKButtonText="Search"
-        strCancelButtonText="Cancel"
-        onOK={() => {
+        actionLabel="Search"
+        onAction={() => {
           onCompleteDeckyModalClose(() => handle.Close());
           void runMdnsDiscovery();
         }}

@@ -52,7 +52,8 @@
  *     `save_settings` (one field) before the box closes. "Keep it off" sends nothing.
  */
 import { useCallback, useEffect, useRef } from "react";
-import { showModal, ConfirmModal } from "@decky/ui";
+import { showModal } from "@decky/ui";
+import { TwoButtonConfirmModal } from "../../shared/TwoButtonConfirmModal";
 
 import type { AskThinkEffortId } from "../settings/askThinkEffort";
 import { THINKING_NOTICE_STORAGE_KEY, type DeckyModalSurvivalHooks } from "../plugin-shell/useDisclaimerAndLocalRuntimeGates";
@@ -139,12 +140,12 @@ export function useThinkingNoticeGate(
       // the remount has happened and the row exists again.
       rememberModalReturnFocus("ollama-thinking-effort");
       const handle = showModal(
-        <ConfirmModal
-          strTitle="bonsAI - Thinking"
-          strDescription={THINKING_NOTICE_DESCRIPTION}
-          strOKButtonText="Show thinking"
-          strCancelButtonText="Keep it off"
-          onOK={() => {
+        <TwoButtonConfirmModal
+          title="bonsAI - Thinking"
+          body={THINKING_NOTICE_DESCRIPTION}
+          actionLabel="Show thinking"
+          cancelLabel="Keep it off"
+          onAction={() => {
             markThinkingNoticeAccepted();
             setAskThinkEffort(next);
             // `onBeforeDeckyModal` already snapshotted the whole session -- including Thinking

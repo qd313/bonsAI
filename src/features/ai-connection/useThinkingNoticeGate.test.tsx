@@ -19,7 +19,7 @@
  *         -- the actual shape of the bug, not just whether the setter was called.
  * Does not: Render a live Decky modal -- the test harness's `showModal` stub discards its
  *           argument (src/test-harness/fakeDeckyUi.tsx), so this file locally overrides
- *           `showModal` to capture the element and calls its `onOK`/`onCancel` props directly,
+ *           `showModal` to capture the element and calls its `onAction`/`onCancel` props directly,
  *           the same technique `SessionContextStrip.test.tsx` uses. Does not exercise
  *           Steam's own gamepad ring -- jsdom has none, so the return-focus tests only prove
  *           `focus()` was called on the registered owner, the same limit every other
@@ -28,7 +28,8 @@
  *           `captureBonsaiSessionForModal`, the same function the shell calls, rather than a
  *           mock that skips the snapshot machinery the bug actually lives in.
  */
-import { act, renderHook } from "@testing-library/react";
+import type React from "react";
+import { act, render, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useThinkingNoticeGate } from "./useThinkingNoticeGate";
@@ -57,7 +58,7 @@ vi.mock("@decky/ui", async () => {
   return {
     ...stubs,
     // The real `showModal` opens a portal; the global stub discards its argument entirely.
-    // Neither lets a test reach the confirm box's own onOK/onCancel -- capture the element
+    // Neither lets a test reach the confirm box's own onAction/onCancel -- capture the element
     // instead, same technique SessionContextStrip.test.tsx uses.
     showModal: (content: unknown) => {
       hoisted.modal = content as { props: Record<string, unknown> };
@@ -114,19 +115,27 @@ describe("useThinkingNoticeGate -- Off -> anything, no flag stored", () => {
 
     expect(onBeforeDeckyModal).toHaveBeenCalledTimes(1);
     expect(hoisted.modal).not.toBeNull();
-    expect(hoisted.modal?.props.strDescription).toBe(
+    expect(hoisted.modal?.props.body).toBe(
       "Thinking shows on screen as it happens and is not checked for spoilers. Show it?"
     );
-    expect(hoisted.modal?.props.strOKButtonText).toBe("Show thinking");
-    expect(hoisted.modal?.props.strCancelButtonText).toBe("Keep it off");
+    expect(hoisted.modal?.props.actionLabel).toBe("Show thinking");
+    expect(hoisted.modal?.props.cancelLabel).toBe("Keep it off");
     expect(setAskThinkEffort).not.toHaveBeenCalled();
+  });
+
+  it("draws the notice as two buttons left to right: Show thinking, then Keep it off (the safe one, on the right, where the ring starts)", () => {
+    const { result } = setupGate("off");
+    act(() => result.current.requestThinkingEffortChange("medium"));
+    const { container } = render(hoisted.modal as unknown as React.ReactElement);
+    const labels = Array.from(container.querySelectorAll("button")).map((b) => b.textContent);
+    expect(labels).toEqual(["Show thinking", "Keep it off"]);
   });
 
   it("Show thinking applies the level and stores the flag", () => {
     const { result, setAskThinkEffort, onCompleteDeckyModalClose } = setupGate("off");
 
     act(() => result.current.requestThinkingEffortChange("medium"));
-    const onOK = hoisted.modal?.props.onOK as () => void;
+    const onOK = hoisted.modal?.props.onAction as () => void;
     act(() => onOK());
 
     expect(setAskThinkEffort).toHaveBeenCalledWith("medium");
@@ -211,7 +220,7 @@ describe("useThinkingNoticeGate -- return focus goes through the real registry (
 
     const { result } = setupGate("off");
     act(() => result.current.requestThinkingEffortChange("medium"));
-    const onOK = hoisted.modal?.props.onOK as () => void;
+    const onOK = hoisted.modal?.props.onAction as () => void;
     act(() => onOK());
 
     // The real path restores through the shell's finalizeShowModalAndRestoreActiveTab, which this
@@ -245,7 +254,7 @@ describe("useThinkingNoticeGate -- the accepted level survives Decky's remount (
     const { result } = setupGate("off");
 
     act(() => result.current.requestThinkingEffortChange("medium"));
-    const onOK = hoisted.modal?.props.onOK as () => void;
+    const onOK = hoisted.modal?.props.onAction as () => void;
     act(() => onOK());
 
     // `consumeBonsaiSessionAfterRemount` is exactly what a freshly-mounted usePluginSettings reads

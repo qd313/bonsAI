@@ -47,7 +47,9 @@ describe("Find Ollama on LAN (mDNS) box words", () => {
     result.current.openMdnsDiscoveryConfirm();
     expect(hoisted.box).not.toBeNull();
     const { container } = render(hoisted.box!);
-    const text = container.querySelector('[data-decky-ui="ConfirmModalDescription"]')?.textContent ?? "";
+    // The box is title, the words (the inner prose block), then the two buttons: Search on the left, Cancel on the right.
+    const text = container.querySelectorAll(".bonsai-prose")[1]?.textContent ?? "";
+    expect(Array.from(container.querySelectorAll("button")).map((b) => b.textContent)).toEqual(["Search", "Cancel"]);
     expect(text.split(/\s+/).filter(Boolean).length).toBeLessThanOrEqual(40);
     expect(text).toMatch(/looks on your home network for an Ollama PC/);
     expect(text).toMatch(/does not scan addresses or ports/);

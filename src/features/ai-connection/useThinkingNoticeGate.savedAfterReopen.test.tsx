@@ -94,7 +94,7 @@ describe("first Thinking pick, notice never accepted", () => {
     expect(window.localStorage.getItem(THINKING_NOTICE_STORAGE_KEY)).toBeNull();
 
     act(() => first.result.current.gate.requestThinkingEffortChange("low"));
-    const onOK = hoisted.modal?.props.onOK as () => void;
+    const onOK = hoisted.modal?.props.onAction as () => void;
     // Closing the box rebuilds the screen at once, before the 400 ms automatic save can run.
     await act(async () => {
       onOK();
@@ -118,7 +118,7 @@ describe("first Thinking pick, notice never accepted", () => {
     await waitFor(() => expect(first.result.current.settings.settingsLoaded).toBe(true));
 
     act(() => first.result.current.gate.requestThinkingEffortChange("medium"));
-    const onOK = hoisted.modal?.props.onOK as () => void;
+    const onOK = hoisted.modal?.props.onAction as () => void;
     await act(async () => {
       onOK();
       first.unmount();

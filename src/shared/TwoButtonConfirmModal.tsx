@@ -5,13 +5,14 @@
  * internet downloads, remove the knowledge base, remove a model, the AI models screen's Tier 2 and
  * large-model questions, the try-order reset) shows the same thing: a title, a line or two of words, and
  * exactly two buttons side by side. The action is on the left in the look of the Beta Notice's "Got it"
- * (Steam's own primary button); Cancel is on the right, in Steam's plain button, and the ring starts on
- * Cancel, so an A pressed by habit changes nothing. B is Cancel. Left and Right step between the two and
- * hold still at the ends. The maintainer's rule of 2026-10-18: Cancel on the right in every box.
+ * (Steam's own primary button); Cancel (or the safe button's own words) is on the right, in Steam's plain
+ * button, and the ring starts on it, so an A pressed by habit changes nothing. B is Cancel. Left and Right
+ * step between the two and hold still at the ends. The maintainer's rule of 2026-10-18: Cancel on the right in every box.
  *
  * Used for: SettingsTabDataSection.tsx, downloadNotice.tsx, KnowledgeBaseSection.tsx, PullModelsTryOrder.tsx,
  * usePullModelDeleteConfirm.tsx, usePullModelSubmitSelected.tsx, usePullModelTier2Confirm.tsx,
- * usePullModelToggleSelection.tsx and useChatSlotDeleteConfirm.tsx, each through showModal.
+ * usePullModelToggleSelection.tsx, useChatSlotDeleteConfirm.tsx, useMdnsOllamaDiscovery.tsx (Find LAN) and
+ * useThinkingNoticeGate.tsx (Show thinking / Keep it off), each through showModal.
  *
  * Solves: Steam's own ConfirmModal always draws a Cancel button beside its OK button, so a box built as
  * "safe choice first" ended with three buttons (Keep cache / Clear / Cancel; plan 93 bug, measured on the
@@ -51,6 +52,8 @@ export type TwoButtonConfirmModalProps = {
   body: ReactNode;
   /** The action button's label, e.g. "Clear" or "Download". */
   actionLabel: string;
+  /** The safe button's label when "Cancel" is not the word (the Thinking notice's "Keep it off"). */
+  cancelLabel?: string;
   /** Cancel and B. */
   onCancel: () => void;
   /** The action button. */
@@ -90,7 +93,14 @@ const Choice: React.FC<{
   );
 };
 
-export function TwoButtonConfirmModal({ title, body, actionLabel, onCancel, onAction }: TwoButtonConfirmModalProps) {
+export function TwoButtonConfirmModal({
+  title,
+  body,
+  actionLabel,
+  cancelLabel = "Cancel",
+  onCancel,
+  onAction,
+}: TwoButtonConfirmModalProps) {
   const done = useRef(false);
   const once = (act: () => void) => () => {
     if (done.current) return;
@@ -136,7 +146,7 @@ export function TwoButtonConfirmModal({ title, body, actionLabel, onCancel, onAc
             navRef={cancelNav}
             hands={{ onMoveLeft: () => takeHolderFocus(actionNav) || true, onMoveRight: () => true }}
           >
-            Cancel
+            {cancelLabel}
           </Choice>
         </Focusable>
       </div>

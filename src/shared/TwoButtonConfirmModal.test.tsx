@@ -156,6 +156,22 @@ describe("the shared two-button confirm box", () => {
     expect(steamRingHolder()).toBe(action);
   });
 
+  it("takes the safe button's own words when the caller has them (Keep it off), still on the right with the ring on it", async () => {
+    const view = render(
+      <TwoButtonConfirmModal
+        title="bonsAI - Thinking"
+        body="Show it?"
+        actionLabel="Show thinking"
+        cancelLabel="Keep it off"
+        onCancel={vi.fn()}
+        onAction={vi.fn()}
+      />,
+    );
+    const buttons = Array.from(view.container.querySelectorAll("button"));
+    expect(buttons.map((b) => b.textContent)).toEqual(["Show thinking", "Keep it off"]);
+    await waitFor(() => expect(steamRingHolder()).toBe(buttons[1]));
+  });
+
   it("A on Cancel (where the ring opens) does the action's opposite: onCancel only, once", async () => {
     const { cancel, onCancel, onAction } = await drawSettledBox();
     pressA(cancel);

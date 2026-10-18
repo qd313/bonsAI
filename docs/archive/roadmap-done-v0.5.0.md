@@ -2088,3 +2088,21 @@ The Done blocks of 2026-10-17 (plan 95 and plan 94), copied line for line, to ke
 **Closed 2026-10-17 (plan 94, the fresh-install walk on the Deck, build `e9b50cc8`, the Deck's own screen):**
 
 - ★★ `[chips]` **After the quick start is opened and closed, the help chip stayed and the suggestion chips never took the row** — **DONE 2026-10-17, passed on the Deck (row P78-HELP-CHIP-DISMISS, plan 94 block 1b).** On a real first run, A on "How to use bonsAI" opened "Using bonsAI" (163 words), B closed it, two ordinary chips took the row and stayed after close and reopen. Closing with "Got it" was not run, since the quick start cannot be reopened once the chip is gone; the maintainer's call whether that is intended. Evidence `workshop:test-evidence/plan94-P94-HELP-CHIP-try2.json`. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-94-the-fresh-install-walk-closed-2026-10-17).
+
+## Moved from roadmap.md 2026-10-18 (plan 96 docs sweep 2)
+
+The Done block of the plan 96 ship-ready bug session (2026-10-18), copied line for line, to keep the roadmap under its size limit.
+
+**Closed 2026-10-18 (plan 96, the ship-ready bug session):**
+
+- ★★ `[voice]` **Ask pressed about 2 s into a recording sent only the first half of the sentence** — **DONE 2026-10-18, works as designed (plan 96).** Ask stops the recording and sends what has been said so far: 36 characters at 2 s, the whole 82 at 5 s and 8 s (`workshop:test-evidence/plan96-P96-F7-ASK-WHILE-1.json` to `-3.json`). The maintainer's real-microphone check passed by hand 2026-10-18 ([checks page](https://claude.ai/artifact/FTe9Lr1sS2Kfrj8nBTVrhi), check 4; `workshop:test-evidence/plan96-HAND-real-mic.png`). Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-96-the-ship-ready-bug-session-closed-2026-10-18).
+
+- ★★★ `[focus]` **After a stopped answer, Down goes round a three-stop loop and never reaches the Ask box** — **CLOSED 2026-10-18, not reproduced on two builds (plan 94, plan 96); not a fix.** With the library off and no notes card, Down reached the question box in 3 and 4 presses with no stop twice (`workshop:test-evidence/plan96-P96-R2-STOP-NOCARD-1.json`, `-2.json`, `plan94-P94-STOP-RETRY.json`). Full entry, with the reading of the code: [archive](archive/roadmap-bugs-fixed.md#plan-96-the-ship-ready-bug-session-closed-2026-10-18).
+
+- ★ `[focus]` **Under "Not really", Down skips "Too long" and "Too short", and the rating row under a stopped answer is skipped by the D-pad** — **DONE 2026-10-18, works as designed (plan 96 F12).** The greyed rating buttons under a stopped answer are stepped over on purpose (plan 56), and Right reaches the reasons' second column, as in the chats menu (plan 93). The maintainer was told 2026-10-18 and did not object. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-96-the-ship-ready-bug-session-closed-2026-10-18).
+
+- ★ `[ollama]` **Maintainer's call: "Update AI & models" downloads the Ollama program again on every press** — **CLOSED 2026-10-17 by the maintainer's call (plan 96 § 2 call 2): by design while Internet downloads is on.** With downloads off the permission line and box already passed (row P89-UPDATE-DOWNLOADS-OFF, `workshop:test-evidence/plan89-F2-UPDATE-DOWNLOADS-OFF.json`), so no new row. Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-96-the-ship-ready-bug-session-closed-2026-10-18).
+
+- ★ `[ollama]` **Maintainer's call: should "Run AI on this Deck" start off on a fresh install?** — **CLOSED 2026-10-17 by the maintainer's call (plan 96 § 2 call 1): it starts ON, and a first-run popup asks where the AI runs** (the popup landed 2026-10-18, plan 96 N1: it is in Verify, row P96-N1-FIRST-RUN-POPUP). Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-96-the-ship-ready-bug-session-closed-2026-10-18).
+
+- ★ `[ui]` **The AI models window says "LICENCE" (British spelling)** — **DONE 2026-10-18, fixed (plan 96 F21, `de071362`); no Deck row.** The heading reads LICENSE. The guide and troubleshooting docs still say "licence" (a list for the README chat). Full entry: [archive](archive/roadmap-bugs-fixed.md#plan-96-the-ship-ready-bug-session-closed-2026-10-18).

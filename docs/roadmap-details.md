@@ -722,6 +722,10 @@ Older dated notes moved here from the roadmap entry on 2026-10-01 (docs sweep 14
 
   **2026-09-28 (plan 76, build `39c17312`):** not reproduced with the D-pad. 66 samples over 15 s after Show details → Session and one D-pad press, exactly one tab bar drawn each time. The touch half still needs a person. Evidence `workshop:test-evidence/plan76-P76-M-TABBAR-GHOST.json`.
 
+Moved here from the roadmap entry on 2026-10-18 (plan 96 docs sweep, to keep the entry at five lines). Nothing was removed.
+
+  **2026-10-03 (plan 81):** one pretend touch showed no ghost ([note](archive/roadmap-trimmed-2026-10-roadmap.md#plan-81-note-one-pretend-touch-showed-no-ghost)). **2026-10-09 (plan 84):** the drop-down strip is gone from the code ([note](archive/roadmap-trimmed-2026-10-roadmap.md#plan-84-note-the-drop-down-strip-is-gone)).
+
 ## The chat summary reads oddly in places
 
 Older dated note moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the entry at five lines. Nothing was removed.

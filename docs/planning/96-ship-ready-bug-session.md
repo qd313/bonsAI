@@ -363,13 +363,20 @@ words really spill.
 ### 9e. Your calls
 
 1. **The spinner with a game running:** keep it still (plan 70's frame-rate measure) or let it turn? Nothing changed tonight.
+   **Answer 2026-10-18:** turn it. Let the spinner turn even with a game running ("I'm ok with less FPS; it looks broken and cheap").
 2. **The two-chip row's pace:** each chip now holds 9 to 18 s, but the two spots alternate, so the row changes every 4 to 9 s. Say if
    the row should change at most every 6 s or so (one more number in `presetPace.ts`).
+   **Answer 2026-10-18:** show the text twice. Each chip shows its whole text twice before it changes (scroll to the end, stop a second, jump back, scroll to the end again, stop, then change).
 3. **The built-in notes with the library off:** a notes card ("From bonsAI's own note") was drawn under an answer with "Use local
    knowledge base" OFF. By design or not?
+   **Answer 2026-10-18:** fine. By design; the card may show whatever the switch says.
 4. **The popup's Find LAN** shows with the Developer tab only, as on the tab; and a player upgrading who had seen the old notice
    sees the popup once. Both are the lane's reading of your spec; say if either should change.
+   **Answer 2026-10-18:** the Find LAN question goes back to the session: should it sit beside the PC address field for everyone, on the Ollama tab and in the popup? The popup's show rules are kept (new users, or after Clear all data).
 5. **R3** still needs your exact presses, or it goes into the README's known problems with "reload the plugin".
+   **Answer 2026-10-18:** the presses are asked for again. The maintainer confirms scrolling is by the D-pad (the right stick does not scroll), so the rig can reproduce it once the presses are known.
+
+**Also answered 2026-10-18 (not one of the five calls):** the screenshot answer that fails with "incomplete stream", the reply-language pick that flips back, and the ghost tab bar: scope now, fix later (scoping notes in `docs/audit/plan96-scope-*.md`; the ghost tab bar is now three stars, a root-cause dive). The Steam keyboard with an external controller for Rename chat: a bug to fix, no longer a known-problems line. Every confirm box: the action on the left, Cancel on the right, the ring on Cancel (a new rule, in the roadmap Bugs).
 
 ### 9f. What you could have done differently (the trial note)
 

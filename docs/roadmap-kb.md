@@ -33,16 +33,14 @@ check stays unbuilt: [detail](roadmap-details.md#cost-to-a-running-game-second-s
 - **A card named after a category outranks the cards inside it** — **OPEN, raised 2026-08-31 (D41).** Kept open on
   purpose; the first step is to measure the shipping search question by question, so it is not yet a call to answer.
   [D41](audit/maintainer-decisions-locked.md#d41--open-raised-2026-08-31--a-card-named-after-a-category-outranks-the-cards-inside-it)
-- **Should the built-in note set attach to an answer when "Use local knowledge base" is off?** — **OPEN, raised 2026-10-18 (plan 96).**
-  One try drew a "From bonsAI's own note" card with the switch off. See the first entry under Bugs below.
 
 A new call lands here, one line, with what it decides. Every call already made is
 written up in full in [the locked decisions file](audit/maintainer-decisions-locked.md).
 
 ## Bugs
 
-- ★ `[KB]` **A notes card ("From bonsAI's own note") was drawn under an answer with the knowledge library switch OFF** — **OPEN, a question for the maintainer, found 2026-10-18 (plan 96 block M, Deck).**
-  A stopped answer with "Use local knowledge base" off (the settings file read false) still had a card reading "Weapon choice, From bonsAI's own note" under it; another try with the same switch off drew no card. Is the built-in note set meant to attach whatever the switch says? Maintainer's call. Evidence `workshop:test-evidence/plan96-P96-R2-STOP-NOCARD-2.json` (the try with no card: `workshop:test-evidence/plan96-P96-R2-STOP-NOCARD-1.json`).
+- ★ `[KB]` **A notes card ("From bonsAI's own note") was drawn under an answer with the knowledge library switch OFF** — **ACCEPTED, by design: the maintainer's call 2026-10-18 ("That's fine"); found 2026-10-18 (plan 96 block M, Deck).**
+  A stopped answer with "Use local knowledge base" off (the settings file read false) still had a card reading "Weapon choice, From bonsAI's own note" under it; another try with the same switch off drew no card. Is that meant? The maintainer's call: that is fine (by design). Evidence `workshop:test-evidence/plan96-P96-R2-STOP-NOCARD-2.json` (the try with no card: `workshop:test-evidence/plan96-P96-R2-STOP-NOCARD-1.json`).
 - ★ `[KB]` **In Speed mode, the meaning check on troubleshooting tips never runs** — **ACCEPTED, 2026-09-28.** The
   maintainer chose this on 2026-09-05 to save about a second per Speed question
   ([D62](audit/maintainer-decisions-archive.md#d62--locked-2026-09-05-raised-2026-09-05--the-second-bug-fixing-session-four-calls-before-go)

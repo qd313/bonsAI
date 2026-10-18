@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   focusAnyContextChipLadder,
@@ -17,6 +17,11 @@ import {
   queryLiveTurnSlot,
 } from "./liveTurnFocusGraph";
 import { REPLY_STOP_ORDER, registerReplyStop } from "./replyStopRegistry";
+import {
+  resetStrategyChecklistNavForTests,
+  setStrategyChecklistStepCount,
+  strategyChecklistStepNav,
+} from "./strategyChecklistNav";
 
 function mountLiveTurn(html: string): HTMLElement {
   document.body.innerHTML = html;
@@ -485,5 +490,57 @@ describe("liveTurnFocusGraph", () => {
       expect(focusBottomOfNewestReply()).toBe(true);
       expect(document.activeElement?.id).toBe("newest");
     });
+  });
+});
+
+/*
+ * Plan 96 F4 (workshop:test-evidence/plan96-P96-F4-TICK.json): once the checklist steps became buttons, the
+ * chain's plain focus() onto the first one moved the page's focus while Steam's ring stayed on the answer, so
+ * on the Deck no step could be reached or ticked. The chain now takes the step's own nav node first.
+ */
+describe("the strategy checklist is reached through the step's own nav node first (plan 96 F4)", () => {
+  afterEach(() => {
+    resetStrategyChecklistNavForTests();
+  });
+
+  const SLOT = `
+    <div class="bonsai-chat-turn-slot">
+      <div class="bonsai-chat-turn-row-header bonsai-chat-turn-row-header--live"></div>
+      <div class="bonsai-chat-ai-bubble Panel Focusable" tabindex="-1">Answer</div>
+      <div class="bonsai-strategy-checklist-panel">
+        <div class="Panel Focusable" tabindex="-1"><button type="button">Step one</button></div>
+        <div class="Panel Focusable" tabindex="-1"><button type="button">Step two</button></div>
+      </div>
+    </div>
+  `;
+
+  it("Down from the answer takes the first step through Steam's transfer, not a plain focus", () => {
+    mountLiveTurn(SLOT);
+    const first = vi.fn(() => true);
+    strategyChecklistStepNav(0).current = { TakeFocus: first } as never;
+    setStrategyChecklistStepCount(1);
+    expect(focusDownFromLiveAnswerBubble(queryLiveTurnSlot(document.body))).toBe(true);
+    expect(first).toHaveBeenCalledWith(true);
+    // The plain focus() fallback was never needed, so the page's focus stayed where it was.
+    expect(document.activeElement).toBe(document.body);
+  });
+
+  it("Up from the reply actions takes the last drawn step the same way", () => {
+    mountLiveTurn(SLOT);
+    const first = vi.fn(() => true);
+    const last = vi.fn(() => true);
+    strategyChecklistStepNav(0).current = { TakeFocus: first } as never;
+    strategyChecklistStepNav(1).current = { TakeFocus: last } as never;
+    setStrategyChecklistStepCount(2);
+    expect(focusUpFromReplyActions(queryLiveTurnSlot(document.body))).toBe(true);
+    expect(last).toHaveBeenCalledWith(true);
+    expect(first).not.toHaveBeenCalled();
+  });
+
+  it("falls back to the page's own focus when no step node is filled in", () => {
+    mountLiveTurn(SLOT);
+    setStrategyChecklistStepCount(2);
+    expect(focusDownFromLiveAnswerBubble(queryLiveTurnSlot(document.body))).toBe(true);
+    expect(document.activeElement?.textContent).toContain("Step one");
   });
 });

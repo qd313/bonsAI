@@ -7,6 +7,7 @@
  */
 
 import { focusRegisteredReplyStop, type ReplyStopId } from "./replyStopRegistry";
+import { takeStrategyChecklistStep } from "./strategyChecklistNav";
 import { elementHasFocus, elementHasGamepadFocus, getUiDocument } from "./uiDocument";
 import { focusRowElement } from "./focusPerTurnRow";
 import { takeNavFocus } from "./navFocusRegistry";
@@ -139,6 +140,9 @@ function focusStrategyBranchButton(
 }
 
 function focusStrategyChecklistToggle(liveSlot: HTMLElement | null, which: "first" | "last"): boolean {
+  // The steps' own nav nodes first (plan 96 F4): a transfer carries Steam's ring where the plain focus below
+  // moved only the page's focus once the steps became buttons (plan96-P96-F4-TICK.json).
+  if (takeStrategyChecklistStep(which)) return true;
   const panel = liveSlot?.querySelector(".bonsai-strategy-checklist-panel");
   if (!panel) return false;
   const toggles = focusablesIn(panel);

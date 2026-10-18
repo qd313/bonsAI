@@ -8,11 +8,12 @@
  * which read as settings rather than a list you tick off (plan 96, F19).
  * Does not: Parse strategy branches from model output — see strategyChecklist utils and backend parser.
  */
-import type { CSSProperties } from "react";
-import { Button } from "@decky/ui";
+import { useEffect, type CSSProperties } from "react";
+import { Button, Focusable } from "@decky/ui";
 
 import type { StrategyChecklistState } from "../../types/bonsaiUi";
 import { deckNavHandlers } from "../../shared/dpad/liveTurnFocusGraph";
+import { setStrategyChecklistStepCount, strategyChecklistStepNav } from "../../shared/dpad/strategyChecklistNav";
 import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
 import { textPx } from "../../styles/textPx";
 
@@ -44,6 +45,12 @@ export function StrategyChecklistPanel({
   onMoveUpFromFirst,
   onMoveDownFromLast,
 }: Props) {
+  // How many steps are drawn, so the answer's chains can take the first or the last (strategyChecklistNav.ts).
+  const stepCount = checklist.items.length;
+  useEffect(() => {
+    setStrategyChecklistStepCount(stepCount);
+    return () => setStrategyChecklistStepCount(0);
+  }, [stepCount]);
   return (
     <div
       className="bonsai-glass-panel bonsai-strategy-checklist-panel"
@@ -73,11 +80,10 @@ export function StrategyChecklistPanel({
         const isFirst = idx === 0;
         const isLast = idx === checklist.items.length - 1;
         /*
-         * Up from the first step and Down from the last: the same handlers the switches carried. The
-         * caller hands back `false` (let Steam's own move carry on to the next stop), so the ring path
-         * is the same whether or not Decky's Button forwards them, which it does not (the focus check
-         * rule "move-props-on-button"). The spread below keeps them next to the step for the day a
-         * caller returns `true`.
+         * Up from the first step and Down from the last: the same handlers the switches carried. They sit
+         * on a Focusable around the button (a Decky Button does not forward them), together with the step's
+         * own nav node, which is what lets the answer's Down chain and the rating row's Up chain hand Steam's
+         * ring to a step through Steam's transfer (plan 96 F4: a plain focus left the ring on the answer).
          */
         const nav =
           (isFirst && onMoveUpFromFirst) || (isLast && onMoveDownFromLast)
@@ -87,8 +93,13 @@ export function StrategyChecklistPanel({
               })
             : undefined;
         return (
-          <Button
+          <Focusable
             key={`sg-check-${item.id}`}
+            className="bonsai-strategy-checklist-step-wrap"
+            style={{ width: "100%" }}
+            {...({ navRef: strategyChecklistStepNav(idx), ...(nav ?? {}) } as Record<string, unknown>)}
+          >
+          <Button
             focusable
             className={`${FOCUS_RING_BTN_CLASS} bonsai-strategy-checklist-step`}
             aria-checked={checked}
@@ -112,7 +123,7 @@ export function StrategyChecklistPanel({
               lineHeight: 1.3,
               color: checked ? "#8fa3b8" : "#e8eef4",
             }}
-            {...({ role: "checkbox", ...nav } as Record<string, unknown>)}
+            {...({ role: "checkbox" } as Record<string, unknown>)}
           >
             <span
               aria-hidden="true"
@@ -130,6 +141,7 @@ export function StrategyChecklistPanel({
               {item.label}
             </span>
           </Button>
+          </Focusable>
         );
       })}
     </div>

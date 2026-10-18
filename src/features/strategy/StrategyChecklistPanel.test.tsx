@@ -6,12 +6,18 @@
  * checkbox row with a tick box and its words, a ticked step shows a tick and its words go struck
  * through, A (a press on the row) ticks and unticks, and the first and last step still carry the Up and
  * Down handlers the live-turn ring path hangs on. No step is drawn as Steam's on/off switch any more.
+ *
+ * Plan 96 F4 (workshop:test-evidence/plan96-P96-F4-TICK.json): on the Deck no step could be reached or ticked,
+ * because the answer's chain moved the page's focus while Steam's ring stayed on the answer. Each step now sits
+ * in a Focusable wrapper that carries the Up/Down handlers and the step's own nav node, so the chain can hand
+ * Steam's ring over. The stand-in strips those props from the page, so the wrapper mock below records them first.
  */
 import { fireEvent, render } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import type React from "react";
 
 const handed: Record<string, unknown>[] = [];
+const wrapped: Record<string, unknown>[] = [];
 
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../../test-harness/fakeDeckyUi");
@@ -21,10 +27,20 @@ vi.mock("@decky/ui", async () => {
     handed.push(props);
     return R.createElement(stubs.Button as React.ElementType, { ...props, ref });
   });
-  return { ...stubs, Button };
+  // Same for the wrapper around each step: it carries Steam's nav props, which the stand-in drops from the page.
+  const Focusable = R.forwardRef<HTMLDivElement, Record<string, unknown>>(function RecordingWrap(props, ref) {
+    if (props["className"] === "bonsai-strategy-checklist-step-wrap") wrapped.push(props);
+    return R.createElement(stubs.Focusable as React.ElementType, { ...props, ref });
+  });
+  return { ...stubs, Button, Focusable };
 });
 
 import { StrategyChecklistPanel } from "./StrategyChecklistPanel";
+import {
+  resetStrategyChecklistNavForTests,
+  strategyChecklistStepNav,
+  takeStrategyChecklistStep,
+} from "../../shared/dpad/strategyChecklistNav";
 import type { StrategyChecklistState } from "../../types/bonsaiUi";
 
 const CHECKLIST: StrategyChecklistState = {
@@ -39,11 +55,14 @@ const CHECKLIST: StrategyChecklistState = {
 
 function draw(onToggle = vi.fn(), extra: Partial<React.ComponentProps<typeof StrategyChecklistPanel>> = {}) {
   handed.length = 0;
+  wrapped.length = 0;
   const view = render(<StrategyChecklistPanel checklist={CHECKLIST} onToggle={onToggle} {...extra} />);
   return { ...view, onToggle };
 }
 
 describe("the Strategy checklist draws checkboxes (plan 96, F19)", () => {
+  afterEach(() => resetStrategyChecklistNavForTests());
+
   it("draws every step as a checkbox and none as an on/off switch", () => {
     const { container } = draw();
     const boxes = container.querySelectorAll('[role="checkbox"]');
@@ -72,21 +91,67 @@ describe("the Strategy checklist draws checkboxes (plan 96, F19)", () => {
     expect(onToggle).toHaveBeenLastCalledWith("2", false);
   });
 
-  it("keeps the ring path: the first step takes Up, the last takes Down, the middle takes neither", () => {
+  it("draws each step button inside its own wrapper, one wrapper per step (plan 96 F4)", () => {
+    // plan96-P96-F4-TICK.json: the steps had no node of their own for Steam to send the ring to.
+    const { container } = draw();
+    const wraps = container.querySelectorAll<HTMLElement>(".bonsai-strategy-checklist-step-wrap");
+    expect(wraps).toHaveLength(3);
+    wraps.forEach((wrap, i) => {
+      const buttons = wrap.querySelectorAll("button");
+      expect(buttons).toHaveLength(1);
+      expect(buttons[0].getAttribute("role")).toBe("checkbox");
+      expect(buttons[0].textContent).toContain(CHECKLIST.items[i].label);
+    });
+    expect(container.querySelectorAll('[role="checkbox"]')).toHaveLength(3);
+  });
+
+  it("hands each wrapper its own step's nav node, so the answer's chain can send Steam's ring there", () => {
+    draw();
+    expect(wrapped).toHaveLength(3);
+    wrapped.forEach((props, i) => {
+      expect(props["navRef"]).toBe(strategyChecklistStepNav(i));
+    });
+  });
+
+  it("keeps the ring path: the first step's wrapper takes Up, the last takes Down, the middle takes neither", () => {
     const up = vi.fn(() => false);
     const down = vi.fn(() => false);
     draw(vi.fn(), { onMoveUpFromFirst: up, onMoveDownFromLast: down });
-    const byLabel = (n: number) => handed.filter((p) => p["role"] === "checkbox")[n];
-    expect(typeof byLabel(0).onMoveUp).toBe("function");
-    expect(byLabel(0).onMoveDown).toBeUndefined();
-    expect(byLabel(1).onMoveUp).toBeUndefined();
-    expect(byLabel(1).onMoveDown).toBeUndefined();
-    expect(byLabel(2).onMoveUp).toBeUndefined();
-    expect(typeof byLabel(2).onMoveDown).toBe("function");
-    (byLabel(0).onMoveUp as () => boolean)();
-    (byLabel(2).onMoveDown as () => boolean)();
+    expect(wrapped).toHaveLength(3);
+    expect(typeof wrapped[0].onMoveUp).toBe("function");
+    expect(wrapped[0].onMoveDown).toBeUndefined();
+    expect(wrapped[1].onMoveUp).toBeUndefined();
+    expect(wrapped[1].onMoveDown).toBeUndefined();
+    expect(wrapped[2].onMoveUp).toBeUndefined();
+    expect(typeof wrapped[2].onMoveDown).toBe("function");
+    (wrapped[0].onMoveUp as () => boolean)();
+    (wrapped[2].onMoveDown as () => boolean)();
     expect(up).toHaveBeenCalledTimes(1);
     expect(down).toHaveBeenCalledTimes(1);
+  });
+
+  it("no longer puts the move handlers on the step button itself", () => {
+    draw(vi.fn(), { onMoveUpFromFirst: () => false, onMoveDownFromLast: () => false });
+    const buttons = handed.filter((p) => p["role"] === "checkbox");
+    expect(buttons).toHaveLength(3);
+    buttons.forEach((p) => {
+      expect(p.onMoveUp).toBeUndefined();
+      expect(p.onMoveDown).toBeUndefined();
+    });
+  });
+
+  it("tells the nav module how many steps are drawn, and clears it when the panel goes", () => {
+    // takeStrategyChecklistStep("last") needs the count; a leftover count would aim at a step that is gone.
+    const takeFocus = vi.fn(() => true);
+    const lastStep = strategyChecklistStepNav(2);
+    lastStep.current = { TakeFocus: takeFocus } as never;
+    const { unmount } = draw();
+    expect(takeStrategyChecklistStep("last")).toBe(true);
+    expect(takeFocus).toHaveBeenCalledWith(true);
+    unmount();
+    takeFocus.mockClear();
+    expect(takeStrategyChecklistStep("last")).toBe(false);
+    expect(takeFocus).not.toHaveBeenCalled();
   });
 });
 

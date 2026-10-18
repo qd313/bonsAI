@@ -106,6 +106,8 @@ screenshotted many times.
 
 **2026-10-18 (plan 96, block M, the Deck's own screen, build `a1b00906`, before the fixes of that night):** Settings, Permissions, Search, Developer (every section closed) and Ollama found nothing. About found one thing: Steam's own language dropdown reads as a light button (Steam's control, not the plugin's). Main found 14 things, all the transcript's own rows, the chips and the Ask pill (the Ask pill is fixed; the chips and the transcript's own rows are now exempt). Evidence `workshop:test-evidence/plan96-QA-LOOK-Main.json`, `plan96-QA-LOOK-Settings.json`, `plan96-QA-LOOK-Permissions.json`, `plan96-QA-LOOK-Search.json`, `plan96-QA-LOOK-Developer.json`, `plan96-QA-LOOK-Ollama.json`, `plan96-QA-LOOK-About.json`. **Still owed:** the run on every tab on the new build (plan 96 block D), with the Developer tab's sections open.
 
+**2026-10-18 (plan 96 blocks D and E, the Deck's own screen):** on build `a29f9eb0` Settings, Permissions, Search, Developer, Ollama and About found nothing, and Main found one thing, the Ask pill (56 in 51). Evidence `workshop:test-evidence/plan96-QA-LOOK2-Settings.json`, `plan96-QA-LOOK2-Permissions.json`, `plan96-QA-LOOK2-Search.json`, `plan96-QA-LOOK2-Developer.json`, `plan96-QA-LOOK2-Ollama.json`, `plan96-QA-LOOK2-About.json`, `plan96-QA-LOOK2-Main.json`. After the check learned that words count as not fitting only when they really spill (`331d4b56`), block E's Main run (build `f7413dbc`) had no Ask finding and one other: the new "Open the Ollama tab" button read as a light button, fixed in `bba825e5` (`workshop:test-evidence/plan96-QA-LOOK3-main.json`). The evidence files do not say whether the Developer tab's sections were open, so that part stays owed. **Still owed:** one Main run on the build with `bba825e5`.
+
 ---
 
 ## Standing row: the free-play sweep
@@ -156,6 +158,8 @@ Saved walk `workshop:checks/plan70-L4-QA-FREE-PLAY-01.json`. Evidence
 every stop was visible or one of the two known corner-icon alarms, except one: after a Down press that scrolls past a spoiler cover, the ring sits
 on the section's box with 67% of it, cover included, under the tab header. Filed as a small bug on the roadmap. Not done: a second carousel
 position, the whole-chat walk, the touch half (needs a person). The row stays open. Evidence `workshop:test-evidence/plan76-QA-FREE-PLAY-01-try2.json`.
+
+**2026-10-18 (plan 96 blocks D and E, builds `a29f9eb0` and `f7413dbc`, the Deck's own screen, no game): the sweep on Main PASSED for dead presses and the dock, twice.** Block D: 24 presses down and back, no dead press, nothing behind the dock. Block E: 29 presses in two legs, 26 stops (14 distinct), no cycle, no dead press, nothing behind the dock. In both the chat name row read 83 % visible (the known roadmap entry). Evidence `workshop:test-evidence/plan96-P96-D3-FREEPLAY.json`, `plan96-P96-E3-FREEPLAY-MAIN.json`.
 
 **2026-10-17 (plan 94 block 7, build `e9b50cc8`, the Deck's own screen, Deep Rock Galactic: Survivor running): the sweep with the game PASSED.** Two walks, each after a fresh answer (23 and 25 presses, down to the end and back): no dead press, nothing behind the dock, every stop 100 % visible except the chat name row at 83 %. Down from Copy landed on Helpful (no Tip chip was under those answers). Evidence `workshop:test-evidence/plan94-P94-FREE-PLAY-GAME.json`.
 

@@ -116,6 +116,8 @@ on a red baseline without either helper knowing it. Their own work then looked b
 the real fault was already there before they began. Read the tests at the commit a copy is about to be
 cut from, not just at "the latest commit on the branch", before handing it to a helper.
 
+**A landing chain that waits for an inner script's "ALL LANDED" line starts the next landing while the outer script is still in its gates.** The inner script prints that line before the outer one has finished its own checks, so the chain began the next landing early, and two landings ran at once in the shared checkout (plan 96, 04:10 UTC: the focus branch and lane F8). Nothing was lost, only because both landings' gates ran on the same combined tree; the copy-paste guard failed there and was fixed in its own commit. Start the next landing only after the outer script has exited, and read its exit code, not a line it printed. Record: `docs/planning/96-ship-ready-bug-session.md`, the 04:30 UTC entry.
+
 ---
 
 ## 2. Proving a change is really a change
@@ -474,6 +476,12 @@ asked the button whether it was disabled and the greyed licence row became a sto
 **`deck_deploy` builds the shared checkout as it stands.** A driver deployed in the middle of a landing's checks
 (plan 92 block 4a); it worked by luck. Give the driver the exact commit, and have it check that the tip matches and
 the tree is clean before it deploys; land nothing until it reports the deploy done.
+
+**A stop placed in a pop-up drawn outside the plugin's tree takes Steam's ring, but hears no A or B, and the ring stays stuck until the plugin is reloaded.** Plan 96's first fix for "Explain further" gave the button its own D-pad stop inside the glossary box, which is drawn at the page's body, outside the plugin's panel. Down moved the ring onto it (the transfer worked), and then A, B, Up, Down, RB and the menu chord all did nothing; only a plugin reload freed it (block D, `3e29bb92`). The second fix took the stop away: A on the open word asks again, and the box says so in a hint line (`749897c5`); B then closed the box with the ring on the word. Keep every stop inside the plugin's own tree, and judge a new stop by whether A and B reach it, not by whether the ring lands. Evidence `workshop:test-evidence/plan96-P96-F6-EXPLAIN.json`, then `plan96-P96-F6-EXPLAIN-try2.json`.
+
+**A move between two stops inside one container is Steam's own, so move handlers on the container never run for it.** The mic hint put Open Permissions and Dismiss in one container, with a handler meant to hold Down still; on the Deck Down from Open Permissions still reached Dismiss (plan 96, block D, `257ed37f`). Give each button its own Focusable with all four moves, the shape the About links use. Then Down holds, Left and Right go between the two, and Up leaves for the question box (`3eed8d1d`). Evidence `workshop:test-evidence/plan96-P96-F11-HINT-RING.json`, then `plan96-P96-F11-HINT-RING-try2.json`.
+
+**A plain focus call onto a step inside an answer moves the page's focus but not Steam's ring, so anything an answer's focus chains land on needs a nav node.** The Strategy checklist's steps were reached by the chain's plain focus call; on the Deck no press ever put the ring on a step, so nothing could be ticked (plan 96, block D, `59731088`). With a nav node on each step, Down from the last paragraph landed on step 1, A ticked step 2, and the tick held after close and reopen (`68f9c1a9`). Read what Steam reports as focused, not only the page's active element. Evidence `workshop:test-evidence/plan96-P96-F4-TICK.json`, then `plan96-P96-F4-TICK-try2.json`.
 
 ---
 

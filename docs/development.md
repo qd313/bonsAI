@@ -22,7 +22,7 @@ This guide is for contributors building and deploying bonsAI from source. **Prim
 - [First Ask](#first-ask)
 - [Architecture at a glance](#architecture-at-a-glance)
   - [Frontend (`src/`)](#frontend-src)
-  - [Backend (`main.py` + `py_modules/backend/services/`)](#backend-mainpy--py_modulesbackendservices)
+  - [Backend (`main.py` + `py_modules/backend//`)](#backend-mainpy--py_modulesbackend)
   - [Deep-dive pointers (preserved for agents and contributors)](#deep-dive-pointers-preserved-for-agents-and-contributors)
 - [Toolchain](#toolchain)
 - [Other-machine LAN workflow](#other-machine-lan-workflow)
@@ -235,16 +235,19 @@ flowchart LR
 | Path | Role |
 | ---- | ---- |
 | [`index.tsx`](../src/index.tsx) | Decky plugin shell, tab routing, `.bonsai-scope` glass styles |
-| [`components/`](../src/components/) | Tabs: `MainTab`, `OllamaTab`, `SettingsTab`, `PermissionsTab`, `DeveloperTab`, `AboutTab`, modals; region components (`MainTabUnifiedAskBar`, etc.) |
-| [`hooks/`](../src/hooks/) | `usePluginSettings`, `useBonsaiAskOrchestration`, `useScreenshotBrowser`, `useBonsaiPluginShell`, disclaimer/runtime gates |
-| [`data/`](../src/data/) | Presets, character catalog, model policy, settings schema/normalizers, intent packs, storage keys |
-| [`utils/`](../src/utils/) | `deckyCall`, settings payload, focus navigation, chunk splitting |
-| [`features/unified-input/`](../src/features/unified-input/) | Ask bar measurement and layout constants |
+| [`features/<feature>/`](../src/features/) | One folder per feature, tests beside the code (since plan 86 step 4, 2026-10-17): `answer/` (transcript, bubble, markdown, stream, reasoning, reply-actions, details, notices), `ask/` (`bar/`, `flow/`), `chats/` (`slots/`, `title/`, `sum-up/`), `models/`, `ai-connection/`, `settings/`, `search-tab/`, `knowledge-library/`, `developer/`, `user-notes/`, `characters/`, `permissions/`, `spoilers/`, `about/`, `voice/`, `glossary/`, `strategy/`, `main-tab/`, `preset-carousel/`, `plugin-shell/`, `folded-tabs/`, `media/`, `downloads/`, `power/` |
+| [`shared/`](../src/shared/) | Used by several features: the D-pad helpers (`dpad/`), the Decky call wrapper, icons, small utilities |
+| [`test-harness/`](../src/test-harness/) | Test setup, the Decky stand-in, and `repoPaths.ts`, which finds a source file by name |
 | [`styles/bonsaiScopeStylesheet.ts`](../src/styles/bonsaiScopeStylesheet.ts) | Composes scoped CSS from `styles/sections/*.ts` |
 
 Build output: [`dist/index.js`](../dist/index.js) (referenced by [`plugin.json`](../plugin.json)).
 
-### Backend (`main.py` + `py_modules/backend/services/`)
+### Backend (`main.py` + `py_modules/backend/<package>/`)
+
+Since plan 86 step 4 (2026-10-17) the back end is one package per area under `py_modules/backend/`: `ask`, `answer`,
+`chats`, `ollama`, `knowledge`, `search`, `notes`, `voice`, `media`, `settings`, `commands`, `prompts`, `spoilers`,
+`strategy`, `characters`, `power` and `core` (constants, capabilities, shared helpers). Imports read
+`from backend.<package>.<module> import ...`.
 
 | Module | Role |
 | ------ | ---- |
@@ -373,7 +376,7 @@ Prioritize refactors and reviews by **change risk** — large surfaces, branchin
 ### Ordered refactor queue (after Settings is calm)
 
 1. **Settings** — UX trim in place, then **`SettingsTabPanel` (or equivalent)** extracted from [`src/index.tsx`](../src/index.tsx); add Vitest only for new pure helpers.
-2. **`main.py`** — Move new/changed RPC logic into `backend/services/` with tests; reduce duplicate error formatting.
+2. **`main.py`** — Move new/changed RPC logic into the matching `backend/<package>/` with tests; reduce duplicate error formatting.
 3. **MainTab** — Only targeted extractions with device proof (focus, overlay, scroll).
 4. **CharacterPickerModal** — Pure TS helpers first; UI second.
 

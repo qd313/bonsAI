@@ -62,14 +62,14 @@ Decky Loader imports directly.
 | Path | What is in it |
 |---|---|
 | `src/` | The screen side, TypeScript and React. Bundled to `dist/index.js` |
-| `src/features/` | Whole features kept together (preset carousel, the Ask bar, voice) |
-| `src/hooks/`, `src/components/`, `src/utils/`, `src/data/` | Most of the screen code, grouped by kind |
-| `src/test-harness/` | Test setup and a stand-in for the Decky bridge |
+| `src/features/<feature>/` | One folder per feature, tests beside the code; docs/development.md lists the 25 |
+| `src/shared/` | Used by several features: the D-pad helpers, the Decky call wrapper, icons |
+| `src/test-harness/` | Test setup and the Decky stand-in |
 | `main.py` | The class Decky loads. Every method the screen can call lives here |
-| `py_modules/backend/services/` | The bulk of the back-end logic |
+| `py_modules/backend/<package>/` | The back end, one package per area; docs/development.md lists the 17 |
 | `tests/` | Python tests |
 | `packages/bonsai-mcp/` | An in-repo tool server; it builds the architecture maps when it starts |
-| `scripts/` | Build, deploy, device capture, knowledge-base tooling |
+| `scripts/` | Build, deploy, the checks; `deck/` the device scripts; `kb/` the knowledge-library tooling |
 | `docs/code-map.md` | Not saved; `python scripts/code_map.py` writes it. Every file's title and purpose in one place |
 | `docs/audit/` | The maintainer's decisions and open audits |
 | `../bonsAI-workshop/` | The private workshop repo: test evidence, saved Deck walks, finished plans and audits. `workshop:x` names its file `x` |
@@ -78,7 +78,7 @@ Decky Loader imports directly.
 styles and the calls to the back end; it is a composition root, not a god file. The back end starts
 at `main.py`, named in `plugin.json`, with `class Plugin` and its `_main` and `_unload` lifecycle
 hooks. `main.py` puts the plugin root on the import path itself, which is why back-end imports read
-`from backend.services.X import ...`; `scripts/run_python_tests.py` reproduces that setup so tests
+`from backend.<package>.X import ...`; `scripts/run_python_tests.py` reproduces that setup so tests
 match what the loader does.
 
 ## How the two sides talk

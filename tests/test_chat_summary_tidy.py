@@ -14,7 +14,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
-from backend.services.chat_summary_tidy import (
+from backend.chats.chat_summary_tidy import (
     known_games_of_chat,
     tidy_summary_text,
 )

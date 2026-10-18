@@ -120,7 +120,7 @@ class AskRefusesHttpsTests(unittest.IsolatedAsyncioTestCase):
 
 class ChatSummaryRefusesHttpsTests(unittest.IsolatedAsyncioTestCase):
     async def test_the_chat_summary_gives_the_message_and_touches_nothing(self):
-        from backend.services import chat_sum_up_job
+        from backend.chats import chat_sum_up_job
 
         result = await chat_sum_up_job.sum_up_chat_slot(object(), "slot-1", "https://192.168.1.50:11434")
         self.assertFalse(result["accepted"])

@@ -3,7 +3,7 @@
 import tempfile
 import unittest
 
-from backend.services.chat_slot_service import (
+from backend.chats.chat_slot_service import (
     MAX_CHAT_SLOTS,
     ChatLimitReached,
     append_turn,
@@ -424,7 +424,7 @@ class ChatSlotServiceTests(unittest.TestCase):
         proven here by sanitizing a raw turn dict that never had the key, the same shape a file
         from before this feature landed would hand back.
         """
-        from backend.services.chat_slot_service import sanitize_slot
+        from backend.chats.chat_slot_service import sanitize_slot
 
         raw_slot = {
             "id": "old-slot",
@@ -490,7 +490,7 @@ class ChatSlotServiceTests(unittest.TestCase):
         file before it ever reached the index, and said the chat was not found."""
         import os
 
-        from backend.services.chat_slot_service import slot_path
+        from backend.chats.chat_slot_service import slot_path
 
         slot = create_slot(self.settings_dir, label="file-already-gone")
         sid = slot["id"]

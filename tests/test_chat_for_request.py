@@ -24,7 +24,7 @@ if "pwd" not in sys.modules:
     _pwd.getpwuid = lambda _uid: types.SimpleNamespace(pw_dir="/tmp")
     sys.modules["pwd"] = _pwd
 
-from backend.services.chat_slot_service import (  # noqa: E402
+from backend.chats.chat_slot_service import (  # noqa: E402
     append_turn,
     create_slot,
     load_slot,

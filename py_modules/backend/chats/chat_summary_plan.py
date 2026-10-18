@@ -24,7 +24,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
 
-from backend.services.chat_memory_service import (
+from backend.chats.chat_memory_service import (
     build_chat_memory,
     build_memory_lines,
     turns_not_yet_summarized,

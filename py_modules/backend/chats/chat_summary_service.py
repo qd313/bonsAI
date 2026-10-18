@@ -54,20 +54,20 @@ from typing import Any, Optional
 
 import decky
 
-from backend.services import chat_turn_recorder
-from backend.services.chat_memory_service import (
+from backend.chats import chat_turn_recorder
+from backend.chats.chat_memory_service import (
     build_memory_lines,
     plan_and_build_chat_memory,
 )
-from backend.services.chat_slot_service import MAX_SUMMARY_TEXT_LEN, load_slot as chat_load_slot
-from backend.services.chat_summary_plan import (  # noqa: F401 -- re-exported for the callers and tests
+from backend.chats.chat_slot_service import MAX_SUMMARY_TEXT_LEN, load_slot as chat_load_slot
+from backend.chats.chat_summary_plan import (  # noqa: F401 -- re-exported for the callers and tests
     MIN_KEPT_TURNS,
     SUMMARY_INPUT_CAP_TOKENS,
     SummaryPlan,
     plan_summary,
 )
-from backend.services.chat_summary_tidy import known_games_of_chat, tidy_summary_text
-from backend.services.chat_summary_title import (
+from backend.chats.chat_summary_tidy import known_games_of_chat, tidy_summary_text
+from backend.chats.chat_summary_title import (
     clean_suggested_title,
     newest_questions_block,
     split_title_line,

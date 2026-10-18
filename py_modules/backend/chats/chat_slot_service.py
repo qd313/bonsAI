@@ -61,7 +61,7 @@ import time
 import uuid
 from typing import Any
 
-from backend.services.chat_summary_title import MAX_SUGGESTED_TITLE_CHARS
+from backend.chats.chat_summary_title import MAX_SUGGESTED_TITLE_CHARS
 from backend.services.ollama_service import REASONING_CUT_NOTE, REASONING_TEXT_CAP_CHARS
 
 SCHEMA_VERSION = 1

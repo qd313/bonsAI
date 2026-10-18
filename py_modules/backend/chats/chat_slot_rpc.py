@@ -24,7 +24,7 @@ import asyncio
 from typing import Any
 
 from backend.core.async_task_lifecycle import cancel_and_await
-from backend.services.chat_slot_service import (
+from backend.chats.chat_slot_service import (
     MAX_CHAT_SLOTS,
     ChatLimitReached,
     create_slot as chat_create_slot,
@@ -35,7 +35,7 @@ from backend.services.chat_slot_service import (
     slot_to_rpc_payload,
     update_slot_label as chat_update_slot_label,
 )
-from backend.services.chat_sum_up_job import chat_can_sum_up
+from backend.chats.chat_sum_up_job import chat_can_sum_up
 
 import decky
 

@@ -27,16 +27,16 @@ from typing import Any, Optional
 import decky
 
 from backend.ollama.ollama_urls import HTTPS_NOT_SUPPORTED_MESSAGE, is_https_ollama_address, normalize_ollama_base
-from backend.services import chat_turn_recorder
+from backend.chats import chat_turn_recorder
 from backend.services.background_request_state import pending_background_state
-from backend.services.chat_slot_service import load_slot as chat_load_slot
-from backend.services.chat_summary_service import (
+from backend.chats.chat_slot_service import load_slot as chat_load_slot
+from backend.chats.chat_summary_service import (
     SummaryPlan,
     last_memory_allowance_tokens,
     plan_summary,
     write_chat_summary,
 )
-from backend.services.chat_summary_title import title_to_second_guess
+from backend.chats.chat_summary_title import title_to_second_guess
 from backend.ollama.local_ollama_setup_service import (
     is_loopback_ollama_host,
     list_installed_ollama_tags,

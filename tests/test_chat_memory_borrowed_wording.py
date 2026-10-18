@@ -15,7 +15,7 @@ import unittest
 
 from test_game_ai_request import _FakePlugin  # noqa: F401  (also installs the decky stand-in)
 
-from backend.services.chat_memory_service import (
+from backend.chats.chat_memory_service import (
     MEMORY_HEADER,
     MEMORY_QUESTIONS_ONLY_HEADER,
     apply_chat_memory_to_prompt,
@@ -172,7 +172,7 @@ class TheStepHandsOverTheLibraryTests(unittest.TestCase):
     def test_no_settings_means_no_lookup_and_so_the_answers_are_kept(self):
         import asyncio
 
-        from backend.services.chat_memory_step import _library_title_lookup
+        from backend.chats.chat_memory_step import _library_title_lookup
 
         self.assertIsNone(asyncio.run(_library_title_lookup(object())))
 
@@ -186,7 +186,7 @@ class TheStepHandsOverTheLibraryTests(unittest.TestCase):
         import asyncio
         from unittest.mock import patch
 
-        from backend.services.chat_memory_step import _library_title_lookup
+        from backend.chats.chat_memory_step import _library_title_lookup
 
         class Plugin:
             async def load_settings(self):

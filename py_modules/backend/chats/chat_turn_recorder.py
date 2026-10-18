@@ -25,7 +25,7 @@ question belongs to a chat; the caller has already resolved that before calling 
 import asyncio
 from typing import Any, Optional
 
-from backend.services.chat_slot_service import (
+from backend.chats.chat_slot_service import (
     append_turn as chat_append_turn,
     ensure_slot as chat_ensure_slot,
     save_slot_subject as chat_save_slot_subject,

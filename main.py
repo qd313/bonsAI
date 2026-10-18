@@ -24,7 +24,7 @@ method, just as a one-line hand-off): the settings-search-pack buttons are in
 `backend/services/intent_pack_rpc.py`; the Strategy checklist's read/save/
 clear are in `backend/strategy/strategy_checklist_rpc.py`; the saved-chat
 list/open/create/delete/rename buttons are in
-`backend/services/chat_slot_rpc.py`; the notes the person asked bonsAI to remember
+`backend/chats/chat_slot_rpc.py`; the notes the person asked bonsAI to remember
 (list/save/delete) are in `backend/services/user_notes_rpc.py`; the knowledge base's download/update/
 remove/chip-candidate/tap-to-define-words buttons are in `backend/services/rag_corpus_rpc.py`;
 the voice-input buttons are in `backend/voice/voice_rpc.py`;
@@ -140,14 +140,14 @@ from backend.services.intent_pack_service import (
     save_intent_packs,
 )
 from backend.services import intent_pack_rpc
-from backend.services.chat_slot_service import (
+from backend.chats.chat_slot_service import (
     load_slot as chat_load_slot,
     wipe_all_slots,
 )
-from backend.services import chat_slot_rpc
+from backend.chats import chat_slot_rpc
 from backend.services import user_notes_rpc
-from backend.services import chat_sum_up_job
-from backend.services import chat_turn_recorder
+from backend.chats import chat_sum_up_job
+from backend.chats import chat_turn_recorder
 from backend.settings.settings_service import (
     clamp_int,
     load_settings as load_settings_from_disk,

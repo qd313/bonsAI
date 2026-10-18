@@ -26,7 +26,7 @@ if "decky" not in sys.modules:
     )
     sys.modules["decky"] = _decky
 
-from backend.services.chat_slot_service import create_slot, load_slot, wipe_all_slots  # noqa: E402
+from backend.chats.chat_slot_service import create_slot, load_slot, wipe_all_slots  # noqa: E402
 from main import Plugin  # noqa: E402
 
 

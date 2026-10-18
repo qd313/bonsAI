@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 from user_notes_plugin_harness import PluginOnATempFolder
 
-from backend.services import chat_slot_service  # noqa: E402
+from backend.chats import chat_slot_service  # noqa: E402
 from backend.commands.ask_local_commands import detect_local_ask_commands  # noqa: E402
 from backend.answer.transparency_service import build_immediate_command_snapshot  # noqa: E402
 from backend.services.user_note_commands import parse_note_command  # noqa: E402

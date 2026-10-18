@@ -102,8 +102,8 @@ from backend.answer.destructive_advice_guard import (
     append_destructive_advice_notice,
     check_destructive_advice,
 )
-from backend.services import chat_turn_recorder
-from backend.services.chat_own_game_title import chat_own_game_title, text_resolved_title_for_turn
+from backend.chats import chat_turn_recorder
+from backend.chats.chat_own_game_title import chat_own_game_title, text_resolved_title_for_turn
 from backend.services.user_note_offer import note_offer_for_question
 from backend.services.user_notes_for_ask import notes_for_ask
 from backend.services import kb_followup_memory

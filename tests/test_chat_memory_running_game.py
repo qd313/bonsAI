@@ -14,7 +14,7 @@ import unittest
 
 from test_chat_memory_borrowed_wording import _Log, _library_title as _base_title
 
-from backend.services.chat_memory_service import (
+from backend.chats.chat_memory_service import (
     MEMORY_HEADER,
     MEMORY_QUESTIONS_ONLY_HEADER,
     apply_chat_memory_to_prompt,

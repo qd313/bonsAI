@@ -1,6 +1,6 @@
 import unittest
 
-from backend.services.chat_memory_service import (
+from backend.chats.chat_memory_service import (
     CANCELLED_ANSWER_TEXT,
     HIDDEN_NOTE_PLACEHOLDER,
     MAX_REMEMBERED_ANSWER_CHARS,

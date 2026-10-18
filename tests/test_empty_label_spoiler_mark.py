@@ -5,7 +5,7 @@ chat's memory and its summary, and the live coverer that fences named spoilers."
 
 import unittest
 
-from backend.services.chat_memory_service import HIDDEN_NOTE_PLACEHOLDER, strip_fenced_blocks
+from backend.chats.chat_memory_service import HIDDEN_NOTE_PLACEHOLDER, strip_fenced_blocks
 from backend.answer.response_verify import cover_named_spoilers
 from backend.spoilers.strategy_spoiler_policy import move_midline_fence_openers_to_line_start
 

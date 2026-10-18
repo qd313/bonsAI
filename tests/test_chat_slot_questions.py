@@ -15,8 +15,8 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
-from backend.services import chat_slot_rpc  # noqa: E402
-from backend.services.chat_slot_service import append_turn, create_slot, slot_path  # noqa: E402
+from backend.chats import chat_slot_rpc  # noqa: E402
+from backend.chats.chat_slot_service import append_turn, create_slot, slot_path  # noqa: E402
 
 _OWN_GAME = "backend.services.game_ai_request._chat_own_game_title"
 
@@ -108,7 +108,7 @@ class ListChatSlotQuestionsTests(unittest.TestCase):
 
     def test_chats_follow_the_index_order_and_questions_run_oldest_first(self):
         clock = iter(range(1_000, 2_000))
-        with patch("backend.services.chat_slot_service.time.time", side_effect=lambda: next(clock)):
+        with patch("backend.chats.chat_slot_service.time.time", side_effect=lambda: next(clock)):
             first = create_slot(self.tmp, label="older chat")["id"]
             append_turn(self.tmp, first, role="user", text="first question")
             second = create_slot(self.tmp, label="newer chat")["id"]

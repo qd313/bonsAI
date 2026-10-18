@@ -19,8 +19,8 @@ from typing import Optional
 
 import decky
 
-from backend.services.chat_own_game_title import text_resolved_title_for_turn
-from backend.services.chat_slot_service import load_slot as chat_load_slot
+from backend.chats.chat_own_game_title import text_resolved_title_for_turn
+from backend.chats.chat_slot_service import load_slot as chat_load_slot
 from backend.commands.input_sanitizer_service import (
     classify_sanitizer_command,
     confirmation_message_for_command,

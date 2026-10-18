@@ -17,8 +17,8 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
-from backend.services.chat_memory_service import build_memory_lines
-from backend.services.chat_summary_service import (
+from backend.chats.chat_memory_service import build_memory_lines
+from backend.chats.chat_summary_service import (
     MIN_KEPT_TURNS,
     SUMMARY_INPUT_CAP_TOKENS,
     SummaryOutcome,
@@ -224,7 +224,7 @@ class LastMemoryAllowanceTests(unittest.TestCase):
         reset_last_memory_allowance()
 
     def test_an_unseen_model_falls_back_to_the_default(self):
-        from backend.services.chat_summary_service import DEFAULT_MEMORY_ALLOWANCE_TOKENS
+        from backend.chats.chat_summary_service import DEFAULT_MEMORY_ALLOWANCE_TOKENS
 
         self.assertEqual(last_memory_allowance_tokens("nobody:asked"), DEFAULT_MEMORY_ALLOWANCE_TOKENS)
 
@@ -263,7 +263,7 @@ class WriteChatSummaryTests(unittest.TestCase):
             previous=previous,
         )
 
-    @patch("backend.services.chat_summary_service._library_title_lookup", _stub_library_lookup)
+    @patch("backend.chats.chat_summary_service._library_title_lookup", _stub_library_lookup)
     @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
     def test_a_written_summary_keeps_the_real_captured_text(self, mock_urlopen):
         fixture = next(r for r in _load_real_summaries() if r["lang"] == "english")
@@ -342,7 +342,7 @@ class WriteChatSummaryTests(unittest.TestCase):
         self.assertEqual(outcome.status, "failed")
         self.assertIsNone(outcome.summary)
 
-    @patch("backend.services.chat_summary_service.SUMMARY_TIME_LIMIT_SECONDS", 0.1)
+    @patch("backend.chats.chat_summary_service.SUMMARY_TIME_LIMIT_SECONDS", 0.1)
     @patch("backend.services.ollama_chat_stream.urllib.request.urlopen")
     def test_a_stall_past_the_deadline_is_reported_as_timed_out_not_stopped(self, mock_urlopen):
         mock_urlopen.return_value = _SlowResponse(

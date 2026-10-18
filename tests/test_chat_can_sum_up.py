@@ -8,8 +8,8 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
-from backend.services.chat_summary_service import reset_last_memory_allowance  # noqa: E402
-from backend.services.chat_sum_up_job import chat_can_sum_up  # noqa: E402
+from backend.chats.chat_summary_service import reset_last_memory_allowance  # noqa: E402
+from backend.chats.chat_sum_up_job import chat_can_sum_up  # noqa: E402
 from test_chat_sum_up_job import ChatSlotJobTestCase, _seed_chat  # noqa: E402
 
 

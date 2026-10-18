@@ -28,7 +28,7 @@ sys.modules.setdefault(
 )
 
 from backend.services import kb_followup_memory  # noqa: E402
-from backend.services.chat_slot_service import (  # noqa: E402
+from backend.chats.chat_slot_service import (  # noqa: E402
     create_slot,
     load_slot,
     save_slot_subject,

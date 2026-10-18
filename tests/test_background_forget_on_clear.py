@@ -146,7 +146,7 @@ class ClearWhileAnsweringKeepsTheChatWholeTests(unittest.IsolatedAsyncioTestCase
     async def asyncSetUp(self) -> None:
         import tempfile
 
-        from backend.services.chat_slot_service import create_slot
+        from backend.chats.chat_slot_service import create_slot
 
         self.tmp = tempfile.mkdtemp()
         self.settings_patcher = patch.object(Plugin, "_chat_slots_settings_dir", return_value=self.tmp)
@@ -183,7 +183,7 @@ class ClearWhileAnsweringKeepsTheChatWholeTests(unittest.IsolatedAsyncioTestCase
         return int(ack["request_id"])
 
     def _turns(self) -> list:
-        from backend.services.chat_slot_service import load_slot
+        from backend.chats.chat_slot_service import load_slot
 
         loaded = load_slot(self.tmp, self.slot_id)
         assert loaded is not None
@@ -207,7 +207,7 @@ class ClearWhileAnsweringKeepsTheChatWholeTests(unittest.IsolatedAsyncioTestCase
 
     async def test_the_saved_stopped_answer_is_marked_stopped(self) -> None:
         await self._ask_then_clear_mid_answer("Hold L1 and tap")
-        from backend.services.chat_slot_service import load_slot
+        from backend.chats.chat_slot_service import load_slot
 
         loaded = load_slot(self.tmp, self.slot_id)
         assert loaded is not None

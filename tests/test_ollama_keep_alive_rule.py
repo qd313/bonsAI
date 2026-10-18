@@ -107,7 +107,7 @@ class AskRequestBodyTests(unittest.IsolatedAsyncioTestCase):
             patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
             patch("backend.media.screenshot_media.prepare_attachment_images", return_value=([], [], [])),
             patch("backend.services.ollama_service.choose_window_tokens", return_value=0),
-            patch("backend.services.chat_memory_step.choose_window_tokens", return_value=0),
+            patch("backend.chats.chat_memory_step.choose_window_tokens", return_value=0),
             patch(_URLOPEN, side_effect=seen),
         ):
             out = await run_ask_ollama(plugin, "hello", address, "730" if game else "", "", request_timeout_seconds=30)
@@ -141,7 +141,7 @@ class SumUpJobRequestBodyTests(ChatSlotJobTestCase):
         with (
             patch.object(Plugin, "load_settings", return_value={"ollama_keep_alive": "5m"}),
             patch(
-                "backend.services.chat_sum_up_job._pick_model_and_window",
+                "backend.chats.chat_sum_up_job._pick_model_and_window",
                 return_value=("test-model", 16384, f"http://{address}/api/chat"),
             ),
             patch(_URLOPEN, side_effect=seen),

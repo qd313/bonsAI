@@ -16,12 +16,12 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
-from backend.services.chat_slot_service import (  # noqa: E402
+from backend.chats.chat_slot_service import (  # noqa: E402
     append_turn,
     create_slot,
     load_slot,
 )
-from backend.services.chat_summary_service import (  # noqa: E402
+from backend.chats.chat_summary_service import (  # noqa: E402
     SummaryOutcome,
     reset_last_memory_allowance,
 )
@@ -79,13 +79,13 @@ class ChatSumUpJobTests(ChatSlotJobTestCase):
         patches = [
             patch.object(Plugin, "load_settings", return_value={}),
             patch(
-                "backend.services.chat_sum_up_job._pick_model_and_window",
+                "backend.chats.chat_sum_up_job._pick_model_and_window",
                 return_value=_FIXED_MODEL_AND_WINDOW,
             ),
         ]
         if write_chat_summary is not None:
             patches.append(
-                patch("backend.services.chat_sum_up_job.write_chat_summary", write_chat_summary)
+                patch("backend.chats.chat_sum_up_job.write_chat_summary", write_chat_summary)
             )
         for p in patches:
             p.start()
@@ -101,7 +101,7 @@ class ChatSumUpJobTests(ChatSlotJobTestCase):
             seen.append(pc_ip)
             return _FIXED_MODEL_AND_WINDOW
 
-        with patch("backend.services.chat_sum_up_job._pick_model_and_window", side_effect=_pick):
+        with patch("backend.chats.chat_sum_up_job._pick_model_and_window", side_effect=_pick):
             await self.plugin.sum_up_chat_slot("missing-chat", "192.168.1.20")
             self.assertEqual(seen, [])  # an unknown chat is refused before any server is asked
             chat_id = _seed_chat(self.tmp, turns=60)

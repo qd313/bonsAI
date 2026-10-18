@@ -925,7 +925,7 @@ class ChatSummaryWiringTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
         import tempfile
 
-        from backend.services.chat_slot_service import append_turn, create_slot, load_slot
+        from backend.chats.chat_slot_service import append_turn, create_slot, load_slot
         from backend.ollama.token_accounting_service import reset_token_accounting
 
         reset_token_accounting()
@@ -975,7 +975,7 @@ class ChatSummaryWiringTests(unittest.IsolatedAsyncioTestCase):
             patch("backend.media.screenshot_media.prepare_attachment_images",
                   return_value=([], [], [])),
             patch("backend.services.ollama_ask_service.post_ollama_chat", side_effect=_fake_post),
-            patch("backend.services.chat_summary_service._stream_ollama_chat_once",
+            patch("backend.chats.chat_summary_service._stream_ollama_chat_once",
                   return_value=summary_stream_result) as summary_mock,
         ):
             out = await run_ask_ollama(

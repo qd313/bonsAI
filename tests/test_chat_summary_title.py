@@ -17,7 +17,7 @@ from backend_module_stubs import install_fcntl_and_decky_stubs
 
 install_fcntl_and_decky_stubs()
 
-from backend.services.chat_slot_service import (  # noqa: E402
+from backend.chats.chat_slot_service import (  # noqa: E402
     create_slot,
     decline_title_offer,
     load_slot,
@@ -26,13 +26,13 @@ from backend.services.chat_slot_service import (  # noqa: E402
     slot_to_rpc_payload,
     update_slot_label,
 )
-from backend.services.chat_summary_service import (  # noqa: E402
+from backend.chats.chat_summary_service import (  # noqa: E402
     SummaryPlan,
     _summary_request_messages,
     decide_and_write_chat_summary,
     write_chat_summary,
 )
-from backend.services.chat_summary_title import (  # noqa: E402
+from backend.chats.chat_summary_title import (  # noqa: E402
     clean_suggested_title,
     split_title_line,
     title_instruction,
@@ -287,9 +287,9 @@ class RenameRpcAndSummaryJobTests(ChatSlotJobTestCase):
             raise asyncio.CancelledError
 
         with patch.object(type(self.plugin), "load_settings", return_value={}), patch(
-            "backend.services.chat_sum_up_job._pick_model_and_window",
+            "backend.chats.chat_sum_up_job._pick_model_and_window",
             return_value=("test-model", 16384, "http://127.0.0.1:11434/api/chat"),
-        ), patch("backend.services.chat_sum_up_job.write_chat_summary", _write):
+        ), patch("backend.chats.chat_sum_up_job.write_chat_summary", _write):
             result = await self.plugin.sum_up_chat_slot(sid)
             self.assertTrue(result["accepted"])
             await self.plugin._background_task
@@ -301,12 +301,12 @@ class RenameRpcAndSummaryJobTests(ChatSlotJobTestCase):
 
         async def _write(*_a, **kwargs):
             saved.append(kwargs["title_offer_for"])
-            from backend.services.chat_summary_service import SummaryOutcome
+            from backend.chats.chat_summary_service import SummaryOutcome
 
             return SummaryOutcome(status="written", summary={"text": "notes", "covers_through_turn_id": "x", "suggested_title": "Half-Life 2 weapons"}, seconds=1.0, error="")
 
         chat = load_slot(self.tmp, sid)
-        with patch("backend.services.chat_summary_service.write_chat_summary", _write):
+        with patch("backend.chats.chat_summary_service.write_chat_summary", _write):
             _turns_out, summary, mark, stopped = await decide_and_write_chat_summary(
                 self.plugin, chat={"id": sid, "turns": chat["turns"], "summary": None}, chat_turns=None,
                 system_content="system", question="and the crossbow?", ask_mode="speed", think_effort="off",

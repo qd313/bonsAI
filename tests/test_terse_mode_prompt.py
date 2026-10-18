@@ -21,8 +21,8 @@ install_pwd_stub()
 if "decky" not in sys.modules:  # pragma: no cover - the stub installer above normally owns this
     sys.modules["decky"] = types.ModuleType("decky")
 
-from backend.services.ollama_prompts import build_system_prompt  # noqa: E402
-from backend.services.reply_style_blocks import (  # noqa: E402
+from backend.prompts.ollama_prompts import build_system_prompt  # noqa: E402
+from backend.prompts.reply_style_blocks import (  # noqa: E402
     DEPTH_PHRASES,
     build_reply_verbosity_block,
     terse_reply_applies,

@@ -77,7 +77,7 @@ from backend.services.chat_summary_title import (
 from backend.services.ollama_chat_stream import _stream_ollama_chat_once
 from backend.services.ollama_stop_service import close_ollama_chat_response
 from backend.services.ollama_window_fit import ollama_base_from_chat_url
-from backend.services.reply_style_blocks import build_reply_language_block
+from backend.prompts.reply_style_blocks import build_reply_language_block
 from backend.services.token_accounting_service import estimate_tokens_from_chars
 
 logger = decky.logger

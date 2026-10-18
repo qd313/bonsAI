@@ -25,7 +25,7 @@ install_pwd_stub()
 
 from backend.services import kb_followup_memory  # noqa: E402
 from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
-from backend.services.ollama_prompts import (  # noqa: E402
+from backend.prompts.ollama_prompts import (  # noqa: E402
     build_system_prompt,
     extract_question_snippet_for_prompt,
 )

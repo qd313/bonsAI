@@ -122,7 +122,7 @@ def parse_ask_payload(
     ask_mode = sanitize_ask_mode(ask_mode_raw, VALID_ASK_MODES, DEFAULT_ASK_MODE)
     spoiler_consent = coerce_payload_bool(spoiler_consent_raw)
     strategy_checklist_state = normalize_ask_checklist_state(checklist_state_raw)
-    from backend.services.ollama_prompts import sanitize_reply_followup
+    from backend.prompts.ollama_prompts import sanitize_reply_followup
 
     reply_followup = sanitize_reply_followup(reply_followup_raw)
     return (

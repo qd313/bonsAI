@@ -57,7 +57,7 @@ FROZEN: dict[str, dict[str, str | None]] = {
         "summarize_kb_coverage": "(settings: 'dict', *, app_id: 'str', app_name: 'str', shortcut_name: 'str' = '', text_resolved_title: 'str' = '') -> 'KbCoverageSummary'",
     },
     # prompt building
-    "backend.services.ollama_prompts": {
+    "backend.prompts.ollama_prompts": {
         "FOLLOWUP_SUBJECT_NOTE_TEMPLATE": None,  # value
         "_user_asks_resolution_relevant_performance": "(question: str) -> bool",
         "append_deck_tdp_sysfs_grounding": "(system_text: str, *, read_tdp: bool = False, cap_w: Optional[int] = None, grounding_requested: bool = False) -> str",

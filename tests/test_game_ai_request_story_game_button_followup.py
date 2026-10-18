@@ -31,7 +31,7 @@ from backend.services import kb_followup_memory  # noqa: E402
 from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_cards import close_connection  # noqa: E402
 from backend.services.knowledge_base_schema import CORPUS_DB_FILENAME  # noqa: E402
-from backend.services.ollama_prompts import kb_card_names  # noqa: E402
+from backend.prompts.ollama_prompts import kb_card_names  # noqa: E402
 from test_game_ai_request_story_game_named import (  # noqa: E402
     _DRG_APP_ID,
     _DRG_APP_NAME,

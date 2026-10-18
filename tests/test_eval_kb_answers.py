@@ -539,7 +539,7 @@ class EvalKbAnswersOrientationFirstVariantTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.mod = _load_eval_module()
-        from backend.services.ollama_prompts import build_system_prompt
+        from backend.prompts.ollama_prompts import build_system_prompt
 
         cls.build_system_prompt = staticmethod(build_system_prompt)
 

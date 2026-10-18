@@ -79,7 +79,7 @@ from __future__ import annotations
 import re
 from typing import Literal, Optional, Tuple
 
-from backend.services.ollama_prompts import (
+from backend.prompts.ollama_prompts import (
     _user_asks_resolution_relevant_performance,
     question_matches_troubleshooting_log_context,
     user_asks_ollama_bonsai_host_or_latency,

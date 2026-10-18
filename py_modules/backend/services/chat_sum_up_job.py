@@ -44,7 +44,7 @@ from backend.services.local_ollama_setup_service import (
     recover_loopback_ollama_listening,
 )
 from backend.services.ollama_ask_extras import resolve_ask_model_routing
-from backend.services.reply_language_service import resolve_effective_reply_language
+from backend.prompts.reply_language_service import resolve_effective_reply_language
 from backend.services.ollama_keep_alive_rule import effective_keep_alive
 from backend.services.token_accounting_service import choose_window_tokens, known_window_tokens
 

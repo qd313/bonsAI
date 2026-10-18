@@ -36,7 +36,7 @@ from backend.services.ollama_service import (
     user_consents_strategy_spoilers,
     user_wants_power_or_performance_topic,
 )
-from backend.services.ollama_prompts import (
+from backend.prompts.ollama_prompts import (
     _strategy_spoiler_policy_block,
     build_reply_language_block,
     build_reply_verbosity_block,

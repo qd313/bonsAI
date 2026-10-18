@@ -1,6 +1,6 @@
 import unittest
 
-from backend.services.ollama_prompts import (
+from backend.prompts.ollama_prompts import (
     build_reply_followup_context_block,
     sanitize_reply_followup,
 )
@@ -39,7 +39,7 @@ class ReplyFollowupTests(unittest.TestCase):
     def test_long_parent_answer_is_trimmed_to_fit_the_window(self):
         """D46: a 1,600-token Strategy reply pasted whole into the follow-up did not fit the
         Deck's 4,096-token window; the paste is capped at REPLY_FOLLOWUP_PARENT_ANSWER_MAX_CHARS."""
-        from backend.services.ollama_prompts import REPLY_FOLLOWUP_PARENT_ANSWER_MAX_CHARS
+        from backend.prompts.ollama_prompts import REPLY_FOLLOWUP_PARENT_ANSWER_MAX_CHARS
 
         long_answer = "Kite the boss between waves. " * 400  # ~11,600 characters
         block = build_reply_followup_context_block("too_long", "How do I beat the boss?", long_answer)

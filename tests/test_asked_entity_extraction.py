@@ -17,7 +17,7 @@ import re
 import unittest
 from pathlib import Path
 
-from backend.services.ollama_prompts import (
+from backend.prompts.ollama_prompts import (
     extract_strategy_asked_entity,
     kb_card_names,
 )

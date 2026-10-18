@@ -81,7 +81,7 @@ from backend.services.ollama_service import post_ollama_chat
 from backend.services.response_verify import build_live_spoiler_cover
 from backend.services.ollama_keep_alive_rule import effective_keep_alive
 from backend.services.settings_service import sanitize_reply_verbosity
-from backend.services.reply_language_service import resolve_effective_reply_language
+from backend.prompts.reply_language_service import resolve_effective_reply_language
 from backend.ollama_routing import (
     is_ollama_model_missing_error,
     no_installed_routing_models_message,

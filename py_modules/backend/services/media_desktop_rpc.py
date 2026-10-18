@@ -30,7 +30,7 @@ from backend.services.desktop_note_service import (
     append_desktop_chat_event_sync,
     append_desktop_debug_note_sync,
 )
-from backend.services.reply_language_service import reply_language_snapshot
+from backend.prompts.reply_language_service import reply_language_snapshot
 from backend.services.screenshot_media import (
     build_screenshot_preview_data_uri,
     extract_app_id_from_screenshot_path,

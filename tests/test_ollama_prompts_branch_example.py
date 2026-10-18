@@ -8,7 +8,7 @@ copied the placeholder instead of filling in a real game title. Roadmap:
 
 import unittest
 
-from backend.services.ollama_prompts import build_system_prompt
+from backend.prompts.ollama_prompts import build_system_prompt
 
 
 def _lookup_app_name(_app_id: str) -> str:

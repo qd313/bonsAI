@@ -106,7 +106,7 @@ from backend.services.strategy_spoiler_policy import (
     _strategy_spoiler_policy_block,
     _strategy_spoiler_constitution_compact_block,
 )
-from backend.services.ask_topic_instructions import (
+from backend.prompts.ask_topic_instructions import (
     user_wants_power_or_performance_topic,
     _user_asks_sweet_spot_tuning,
     SWEET_SPOT_QAM_LINE,
@@ -127,14 +127,14 @@ from backend.services.ask_topic_instructions import (
     DECK_TROUBLESHOOT_GAME_SETTINGS_LINE,
     DECK_ITSELF_NO_GAME_MENU_LINE,
 )
-from backend.services.reply_style_blocks import (
+from backend.prompts.reply_style_blocks import (
     user_asks_for_detail_depth,
     build_reply_language_block,
     build_reply_verbosity_block,
     build_terse_reply_block,
     terse_reply_applies,
 )
-from backend.services.reply_followup_blocks import (
+from backend.prompts.reply_followup_blocks import (
     sanitize_reply_followup,
     build_reply_followup_context_block,
     REPLY_FOLLOWUP_PARENT_ANSWER_MAX_CHARS,

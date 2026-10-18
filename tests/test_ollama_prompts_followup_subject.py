@@ -14,7 +14,7 @@ and never lets it reach the spoiler-consent path.
 
 import unittest
 
-from backend.services.ollama_prompts import (
+from backend.prompts.ollama_prompts import (
     FOLLOWUP_SUBJECT_NOTE_TEMPLATE,
     _KB_BLOCK_HEADER,
     build_system_prompt,

@@ -73,7 +73,7 @@ flowchart TD
 | Schema + manifest helpers | `py_modules/backend/services/knowledge_base_schema.py` | SQLite DDL, FTS triggers, `resolve_corpus_db_path`, trust tiers |
 | Downloader | `py_modules/backend/services/rag_corpus_download_service.py` | Manifest fetch, curl download, zlib decompress, SHA-256 verify |
 | Ask splice | `py_modules/backend/services/game_ai_request.py` | `searching_kb` thinking phase; stack KB + Proton into `early_context_suffix` |
-| System prompt | `py_modules/backend/services/ollama_prompts.py` | `bonsai-cite` + spoiler instructions when KB block present |
+| System prompt | `py_modules/backend/prompts/ollama_prompts.py` | `bonsai-cite` + spoiler instructions when KB block present |
 | Transparency | `py_modules/backend/services/transparency_service.py` | KB slice (sources, bytes, tier) on last Ask |
 | UI | `src/components/KnowledgeBaseSection.tsx`, `OllamaTab.tsx` | Download/update/**cancel**/remove, toggle, availability indicator. Cancel shares the action row's second slot with Remove and only exists while a download runs — see **KB-CANCEL-01** in [testing.md](testing.md) |
 
@@ -438,7 +438,7 @@ they are deliberately not the same function.
 
 | Gate | Lives in | Also drives | Reach |
 |---|---|---|---|
-| Phrase gate | `question_matches_troubleshooting_log_context` ([ollama_prompts.py:386](../py_modules/backend/services/ollama_prompts.py)) | Proton log attachment, system-prompt framing, stream tags, the client permission hint | Needs the literal word `deck` or `proton`, or one of ~6 preset phrases |
+| Phrase gate | `question_matches_troubleshooting_log_context` ([ollama_prompts.py:386](../py_modules/backend/prompts/ollama_prompts.py)) | Proton log attachment, system-prompt framing, stream tags, the client permission hint | Needs the literal word `deck` or `proton`, or one of ~6 preset phrases |
 | Topic router | [compat_topic_router.py](../py_modules/backend/services/compat_topic_router.py) | **Knowledge base routing only** | Any Ask naming a topic the corpus covers |
 
 `should_retrieve_knowledge` runs the compat path when **either** matches.

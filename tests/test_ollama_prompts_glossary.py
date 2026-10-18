@@ -3,7 +3,7 @@ single-title tests: the words now come from the knowledge library, handed in by 
 
 import unittest
 
-from backend.services.ollama_prompts import build_system_prompt
+from backend.prompts.ollama_prompts import build_system_prompt
 
 DRG_TITLE = "Deep Rock Galactic: Survivor"
 DRG_WORDS = ["kiting", "overclock"]

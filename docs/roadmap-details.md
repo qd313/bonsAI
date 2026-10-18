@@ -187,7 +187,7 @@ because *shorter* reads as *dumber* otherwise.
 | Strategy and Expert ask modes | **Does not apply**, and the toggle says so in plain words |
 
 The character override is a deliberate reversal of Caveman, which steps aside entirely when a
-character is on ([ollama_prompts.py:967](../py_modules/backend/services/ollama_prompts.py#L967)).
+character is on ([ollama_prompts.py:967](../py_modules/backend/prompts/ollama_prompts.py#L967)).
 
 **Two of Caveman's three escape hatches survive.**
 
@@ -196,7 +196,7 @@ character is on ([ollama_prompts.py:967](../py_modules/backend/services/ollama_p
 - **The ten depth phrases** still loosen the cap: `step by step`, `step-by-step`, `walkthrough`,
   `explain why`, `in detail`, `full guide`, `detailed guide`, `break it down`, `tutorial`,
   `comprehensive` (`user_asks_for_detail_depth`,
-  [ollama_prompts.py:908](../py_modules/backend/services/ollama_prompts.py#L908)).
+  [ollama_prompts.py:908](../py_modules/backend/prompts/ollama_prompts.py#L908)).
 - **The character step-aside does not** — see the table above.
 
 **Free alongside the three lines:** the existing fenced panels (`bonsai-strategy-branches`,
@@ -212,7 +212,7 @@ full-width label can be a real phrase and the D-pad walk is then a straight line
 separate *explain further* chip, and no exit control — the Ask field stays live throughout, so the
 menu is an offer rather than a trap. Today that fence is mandatory-once, Strategy-only, and
 explicitly banned on follow-ups
-([ollama_prompts.py:1317](../py_modules/backend/services/ollama_prompts.py#L1317)); all three have
+([ollama_prompts.py:1317](../py_modules/backend/prompts/ollama_prompts.py#L1317)); all three have
 to change. Locked as **[D40](audit/maintainer-decisions-locked.md)**.
 
 **Enforcement is wording only** — nothing counts, nothing trims, nothing retries. Chosen with eyes

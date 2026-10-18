@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from unittest import mock
 
-from backend.services.reply_language_service import (
+from backend.prompts.reply_language_service import (
     DEFAULT_EFFECTIVE_REPLY_LANGUAGE,
     DEFAULT_REPLY_LANGUAGE_OVERRIDE,
     detect_steam_client_language,
@@ -68,7 +68,7 @@ class ReplyLanguageServiceTests(unittest.TestCase):
 
     def test_unknown_vdf_language_falls_back_english(self) -> None:
         with mock.patch(
-            "backend.services.reply_language_service.detect_steam_client_language",
+            "backend.prompts.reply_language_service.detect_steam_client_language",
             return_value="english",
         ):
             self.assertEqual(resolve_effective_reply_language("follow_system"), "english")

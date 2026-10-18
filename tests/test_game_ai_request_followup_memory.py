@@ -24,7 +24,7 @@ install_fcntl_and_decky_stubs()
 from backend.services import kb_followup_memory  # noqa: E402
 from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_service import KnowledgeRetrievalResult  # noqa: E402
-from backend.services.ollama_prompts import kb_card_names  # noqa: E402
+from backend.prompts.ollama_prompts import kb_card_names  # noqa: E402
 
 _CORPUS_PATH = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "build", "knowledge-base"

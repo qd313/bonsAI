@@ -2,7 +2,7 @@
 
 import unittest
 
-from backend.services.ollama_prompts import build_bonsai_status_stream_instruction
+from backend.prompts.ollama_prompts import build_bonsai_status_stream_instruction
 
 
 # The exact tone adjective gets rewritten whenever the blurb copy is refreshed

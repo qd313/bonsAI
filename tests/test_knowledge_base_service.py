@@ -1213,7 +1213,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     follow-up Ask in the product searched the same boilerplate. This pins the mechanism; that
     the two call sites now pass lane.text is covered on device (testing.md KB rows).
     """
-    from backend.services.ollama_prompts import build_reply_followup_context_block
+    from backend.prompts.ollama_prompts import build_reply_followup_context_block
 
     question = "what about the second phase"
     header = build_reply_followup_context_block("shorter", "How do I beat King Dodongo?", "Roll.")

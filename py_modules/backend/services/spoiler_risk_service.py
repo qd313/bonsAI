@@ -30,11 +30,11 @@ import re
 from typing import Any, Literal, Optional
 
 from backend.services.spoiler_title_profiles import resolve_title_spoiler_profile
-from backend.services.ollama_prompts import (
+from backend.prompts.ollama_prompts import (
     extract_strategy_asked_entity,
     kb_text_covers_asked_entity,
 )
-from backend.services.ask_topic_instructions import question_matches_troubleshooting_log_context
+from backend.prompts.ask_topic_instructions import question_matches_troubleshooting_log_context
 
 SpoilerRiskBand = Literal["low", "med", "high"]
 

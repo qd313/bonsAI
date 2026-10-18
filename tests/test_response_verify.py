@@ -88,7 +88,7 @@ class DropBranchMenuCopyingTheWorkedExampleTests(unittest.TestCase):
         """Roadmap: "The no-game branch menu leaks its template" (found 2026-09-18).
 
         With no game known, the reply's menu came back reading exactly the prompt's
-        own placeholder text (py_modules/backend/services/ollama_prompts.py lines
+        own placeholder text (py_modules/backend/prompts/ollama_prompts.py lines
         1513-1515: '"question":"Where are you at in <THIS GAME>?"', options
         '"<a place early in THIS game>"' / '"<a place later in THIS game>"') --
         the same real text captured in

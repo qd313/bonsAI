@@ -53,7 +53,7 @@ def terse_reply_applies(reply_verbosity: object) -> bool:
     return reply_verbosity == "terse"
 
 
-from backend.services.reply_language_service import language_display_name
+from backend.prompts.reply_language_service import language_display_name
 from backend.strategy.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
 
 

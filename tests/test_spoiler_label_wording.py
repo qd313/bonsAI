@@ -16,7 +16,7 @@ follow-up turn).
 import re
 import unittest
 
-from backend.services.ollama_prompts import build_system_prompt
+from backend.prompts.ollama_prompts import build_system_prompt
 from backend.services.strategy_spoiler_policy import _strategy_spoiler_policy_block
 
 # The odd shape: the label immediately followed by a backtick run (allowing spaces), anywhere.

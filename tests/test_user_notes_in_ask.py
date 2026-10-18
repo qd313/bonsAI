@@ -17,7 +17,7 @@ install_fcntl_and_decky_stubs()
 from backend.services import chat_slot_service  # noqa: E402
 from backend.services.game_ai_request import run_game_ai_request  # noqa: E402
 from backend.services.knowledge_base_service import KnowledgeRetrievalResult  # noqa: E402
-from backend.services.ollama_prompts import build_system_prompt  # noqa: E402
+from backend.prompts.ollama_prompts import build_system_prompt  # noqa: E402
 from backend.services.transparency_service import build_context_chips_manifest  # noqa: E402
 from backend.services.user_notes_service import (  # noqa: E402
     MAX_NOTES_CHARS_PER_ASK,

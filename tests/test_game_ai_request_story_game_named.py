@@ -34,7 +34,7 @@ from backend.services.knowledge_base_schema import (  # noqa: E402
     CREATE_SCHEMA_SQL,
     FTS_SYNC_TRIGGERS_SQL,
 )
-from backend.services.ollama_prompts import kb_card_names  # noqa: E402
+from backend.prompts.ollama_prompts import kb_card_names  # noqa: E402
 
 _DRG_APP_ID = "2321470"
 _DRG_APP_NAME = "Deep Rock Galactic: Survivor"

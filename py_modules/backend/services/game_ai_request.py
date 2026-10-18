@@ -109,7 +109,7 @@ from backend.services.user_notes_for_ask import notes_for_ask
 from backend.services import kb_followup_memory, ollama_keep_alive_rule
 from backend.services.input_sanitizer_service import apply_input_sanitizer_lane
 from backend.services.kb_notes_footers import append_kb_notes_footers
-from backend.services.ollama_prompts import (
+from backend.prompts.ollama_prompts import (
     build_reply_followup_context_block,
     extract_strategy_asked_entity,
     kb_card_names,

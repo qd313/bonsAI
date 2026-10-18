@@ -9,11 +9,11 @@ questions about the Deck itself, like the one for model-policy questions.
 
 import unittest
 
-from backend.services.ask_topic_instructions import (
+from backend.prompts.ask_topic_instructions import (
     DECK_ITSELF_NO_GAME_MENU_LINE,
     _user_asks_about_deck_itself,
 )
-from backend.services.ollama_prompts import build_system_prompt
+from backend.prompts.ollama_prompts import build_system_prompt
 
 # The exact old wording every Strategy first turn carries. It must survive untouched.
 _MANDATORY_MENU_TEXT = (

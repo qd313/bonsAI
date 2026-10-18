@@ -172,7 +172,7 @@ from backend.services.token_accounting_service import (
     note_real_counts,
     note_window_granted,
 )
-from backend.services.ollama_prompts import (
+from backend.prompts.ollama_prompts import (
     append_deck_tdp_sysfs_grounding,
     build_system_prompt,
     format_ai_response,

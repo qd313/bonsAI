@@ -9,8 +9,8 @@ The before-and-after run with the real model is in the plan 79 log.
 
 import unittest
 
-from backend.services.ask_topic_instructions import _user_asks_sweet_spot_tuning
-from backend.services.ollama_prompts import build_system_prompt
+from backend.prompts.ask_topic_instructions import _user_asks_sweet_spot_tuning
+from backend.prompts.ollama_prompts import build_system_prompt
 
 # The line the model is told to copy the shape of: a short "name: value unit" line.
 NUMBER_ASK_MARKERS = ("TDP limit: 6 W", "Framerate limit: 40 FPS", "from 3 to 15", "Refresh rate")

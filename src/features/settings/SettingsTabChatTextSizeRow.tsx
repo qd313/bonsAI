@@ -24,6 +24,7 @@ import React from "react";
 
 import { CHAT_TEXT_SIZE_OPTIONS, type ChatTextSize } from "./bonsaiSettingsSchema";
 import { CHAT_TEXT_SIZE_LABEL, SETTINGS_ROW_HELP } from "./settingsTabFolds";
+import { bonsaiSettingRowNav } from "../search-tab/bonsaiSettingRowNav";
 import { SettingsTabChoiceRow } from "./SettingsTabChoiceRow";
 
 /**
@@ -56,7 +57,7 @@ export const SettingsTabChatTextSizeRow: React.FC<SettingsTabChatTextSizeRowProp
     }))}
     value={chatTextSize}
     onPick={setChatTextSize}
-    nav={nav}
+    nav={{ ...nav, navRef: bonsaiSettingRowNav("text-size") }}
     rowProps={{ "data-bonsai-chat-text-size-row": "true" }}
   />
 );

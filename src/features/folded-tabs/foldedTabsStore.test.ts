@@ -13,6 +13,7 @@ import {
   foldSectionToReturnTo,
   foldedTabsVersion,
   isSectionOpen,
+  openSection,
   rememberFoldSection,
   resetFoldedTabsForTests,
   setAllSections,
@@ -28,6 +29,18 @@ describe("the folded tabs' store", () => {
   it("a first visit has no section open", () => {
     expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([false, false, false]);
     expect(allSectionsOpen("ollama", IDS)).toBe(false);
+  });
+
+  it("opening a section opens it once, leaves the others as they are, and tells the listeners only when something changed", () => {
+    const heard = vi.fn();
+    subscribeFoldedTabs(heard);
+    openSection("ollama", IDS, "kb");
+    expect(IDS.map((id) => isSectionOpen("ollama", IDS, id))).toEqual([false, true, false]);
+    expect(heard).toHaveBeenCalledTimes(1);
+    openSection("ollama", IDS, "kb");
+    expect(isSectionOpen("ollama", IDS, "kb")).toBe(true);
+    expect(heard).toHaveBeenCalledTimes(1);
+    expect(isSectionOpen("settings", IDS, "kb")).toBe(false);
   });
 
   it("toggling one section leaves the others as they are; several can be open", () => {

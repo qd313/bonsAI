@@ -38,6 +38,7 @@ import {
 } from "../settings/settingsTabFolds";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../shared/deckyCall";
 import { PermissionDenyAction } from "../permissions/PermissionDenyAction";
+import { bonsaiSettingRowNav } from "../search-tab/bonsaiSettingRowNav";
 import type { BonsaiCapabilityKey } from "../permissions/permissionDeepLink";
 import { confirmDownload } from "../downloads/downloadNotice";
 import { voiceEngineNotices } from "../downloads/downloadSites";
@@ -272,6 +273,7 @@ export const VoiceInputSettingsSection: React.FC<Props> = ({
               flow-children="horizontal"
               style={{ display: "flex", gap: 6, width: "100%", minWidth: 0 }}
               {...(permissionRowShown ? {} : ({ onMoveUp: onMoveUpFromFirst } as Record<string, unknown>))}
+              {...({ navRef: bonsaiSettingRowNav("stt-model") } as Record<string, unknown>)}
             >
               {VOICE_STT_MODEL_OPTIONS.map((id) => (
                 <Focusable

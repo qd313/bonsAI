@@ -25,6 +25,7 @@ import { Button, Focusable, PanelSection, PanelSectionRow, showModal } from "@de
 
 import { CancelFirstConfirmModal } from "../../shared/CancelFirstConfirmModal";
 import { DenseSwitchRow } from "../folded-tabs/DenseRow";
+import { bonsaiSettingRowNav } from "../search-tab/bonsaiSettingRowNav";
 import { SETTINGS_ROW_HELP } from "./settingsTabFolds";
 import { registerModalReturnFocusOwner, rememberModalReturnFocus } from "../../shared/dpad/modalReturnFocusRegistry";
 import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
@@ -93,7 +94,7 @@ export const SettingsTabDataSection: React.FC<SettingsTabDataSectionProps> = ({
       <Focusable
         className="bonsai-settings-cache-row"
         flow-children="horizontal"
-        {...({ onMoveDown: onMoveDownFromLast } as Record<string, unknown>)}
+        {...({ onMoveDown: onMoveDownFromLast, navRef: bonsaiSettingRowNav("clear-data") } as Record<string, unknown>)}
         style={{
           width: "100%",
           minWidth: 0,

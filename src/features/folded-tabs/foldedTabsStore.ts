@@ -8,7 +8,7 @@
  *
  * Used for: FoldedSection (open or closed), FoldAllButton (open all, close all, the way back),
  * useHelpStrip (which section the ring last landed in), on the Ollama tab now and the Settings and
- * Developer tabs next.
+ * Developer tabs next, and bonsaiSettingJump.ts (opening the section a Search result points into).
  *
  * Solves: Closing a Decky popup rebuilds the whole tab behind it (docs/lessons-learned.md § 3). A flag
  * kept inside a component would fold every section shut each time the AI models box, the thinking
@@ -57,6 +57,14 @@ export function toggleSection(tab: string, sections: readonly string[], section:
   const { open } = tabFold(tab, sections);
   if (open.has(section)) open.delete(section);
   else open.add(section);
+  changed();
+}
+
+/** Open a section and leave it open if it already is; the others stay as they are (the Search tab's jump to a setting). */
+export function openSection(tab: string, sections: readonly string[], section: string): void {
+  const { open } = tabFold(tab, sections);
+  if (open.has(section)) return;
+  open.add(section);
   changed();
 }
 

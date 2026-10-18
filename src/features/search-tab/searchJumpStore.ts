@@ -9,7 +9,8 @@
  * (Search, then Main) that are never on screen together (lessons-learned.md, § 3: a come-back-here flag kept
  * inside a component does not survive that), so none of this can live in component state.
  *
- * Used for: SearchTab.tsx and useSearchJump.ts (start, return, B), useEarlierTurnsPill.ts (puts the chat on the
+ * Used for: SearchTab.tsx and useSearchJump.ts (start, return, B), bonsaiSettingJump.ts (the tab switch and the
+ * way back from one of bonsAI's own settings), useEarlierTurnsPill.ts (puts the chat on the
  * question), buildEarlierList.tsx and SearchBackLine.tsx (the Back line), useSearchTabPayload.tsx (hands in the
  * tab switch) and useSearchShortcut.ts (Y).
  *
@@ -85,6 +86,11 @@ export function registerSearchTabSwitch(fn: (tabId: string) => void): () => void
   };
 }
 
+/** Whether the plugin root has handed in its tab switch yet. */
+export function hasTabSwitch(): boolean {
+  return switchTab !== null;
+}
+
 /** Switch to a tab by the shell's own switch (the one a press on the tab bar makes). False when none is registered. */
 export function switchToTab(tabId: string): boolean {
   if (!switchTab) return false;
@@ -124,6 +130,19 @@ export function backToSearch(): boolean {
   if (!j || !switchTab) return false;
   writeSearchSaved({ typed: j.word, game: j.game, openNote: null, returnKey: null });
   set({ jump: null, arrival: { key: j.matchKey } });
+  switchTab("search");
+  return true;
+}
+
+/**
+ * B from one of bonsAI's own settings the Search tab jumped to (bonsaiSettingJump.ts): remember the word and the
+ * game, ask for the ring on the match that was pressed, and switch to the Search tab. False when no tab switch is
+ * registered.
+ */
+export function returnToSearchTab(args: { word: string; game: string | null; matchKey: string }): boolean {
+  if (!switchTab) return false;
+  writeSearchSaved({ typed: args.word, game: args.game, openNote: null, returnKey: null });
+  set({ arrival: { key: args.matchKey } });
   switchTab("search");
   return true;
 }

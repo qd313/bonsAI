@@ -7,7 +7,7 @@
  *     chat-slots), so below ten chats it makes a chat at once and at ten it opens the same picker ("which chat
  *     to drop"). It also closes the chats menu if it is open. The picker's boxes give the ring back to the
  *     chat's name, as the menu's New chat does.
- *   - Delete chat (the delete icon): the usual "Delete chat?" box for the open chat, Cancel first
+ *   - Delete chat (the delete icon): the usual "Delete chat?" box for the open chat, Cancel on the right
  *     (useChatSlotDeleteConfirm.tsx, called, not changed). The ring comes back to the delete icon when the
  *     box closes on Cancel or B, and to the chat's name after Delete, by Steam's transfer (chatRowIconNav.ts).
  *

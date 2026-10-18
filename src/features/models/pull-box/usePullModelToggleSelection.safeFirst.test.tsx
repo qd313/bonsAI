@@ -56,7 +56,7 @@ describe('"Large model -- continue?"', () => {
   it("shows Cancel and Pull anyway only, Cancel first where the ring lands", () => {
     const { box } = openBox();
     expect(box.title).toBe("Large model — continue?");
-    expect(box.labels).toEqual(["Cancel", "Pull anyway"]);
+    expect(box.labels).toEqual(["Pull anyway", "Cancel"]);
   });
 
   it("Cancel and B queue nothing and do not mark the model as accepted", () => {

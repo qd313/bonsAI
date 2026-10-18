@@ -148,6 +148,8 @@ export const ToggleField = React.forwardRef<HTMLDivElement, StubProps>(function 
   return <ToggleFieldBase ref={ref} {...out} />;
 });
 export const Button = focusableButtonStub("Button");
+/** Steam's blue primary button (the look of the Beta Notice's "Got it"), drawn as a real button like Button. */
+export const DialogButtonPrimary = focusableButtonStub("DialogButtonPrimary");
 export const ButtonItem = focusableButtonStub("ButtonItem");
 export const Focusable = stub("Focusable");
 export const Navigation = {

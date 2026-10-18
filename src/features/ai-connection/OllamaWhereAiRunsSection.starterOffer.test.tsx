@@ -92,7 +92,7 @@ describe("Install Ollama with no models installed", () => {
     const box = hoisted.modals[0];
     const drawn = drawConfirmBox(box);
     expect(drawn.title).toBe("Also install the starter models?");
-    expect(drawn.labels).toEqual(["Cancel", "Install Ollama and the starter models"]);
+    expect(drawn.labels).toEqual(["Install Ollama and the starter models", "Cancel"]);
     drawn.unmount();
     const text = textOf(box);
     expect(text).toContain("gemma4:e2b-it-qat");

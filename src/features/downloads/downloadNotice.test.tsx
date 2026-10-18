@@ -103,7 +103,7 @@ describe("confirmDownload", () => {
     const answer = confirmDownload([OLLAMA, REGISTRY]);
     const box = draw();
     expect(box.title).toBe("Turn on internet downloads?");
-    expect(box.labels).toEqual(["Cancel", "Turn on and download"]);
+    expect(box.labels).toEqual(["Turn on and download", "Cancel"]);
     box.pressCancel();
     await expect(answer).resolves.toBe(false);
     expect(hoisted.calls).toHaveLength(0);
@@ -148,7 +148,7 @@ describe("confirmDownload", () => {
     const first = confirmDownload([REGISTRY]);
     const notice = draw();
     expect(notice.title).toBe("Download from the internet?");
-    expect(notice.labels).toEqual(["Cancel", "Download"]);
+    expect(notice.labels).toEqual(["Download", "Cancel"]);
     expect(notice.text).toContain("Shown once per site. After that, the size shows on the button.");
     notice.pressAction();
     await expect(first).resolves.toBe(true);
@@ -186,7 +186,7 @@ describe("confirmDownload as a button's own box (always)", () => {
     const answer = confirmDownload([OLLAMA], opts);
     const box = draw();
     expect(box.title).toBe("Update Ollama and models?");
-    expect(box.labels).toEqual(["Cancel", "Start update"]);
+    expect(box.labels).toEqual(["Start update", "Cancel"]);
     box.pressCancel();
     await expect(answer).resolves.toBe(false);
   });
@@ -196,7 +196,7 @@ describe("confirmDownload as a button's own box (always)", () => {
     const answer = confirmDownload([OLLAMA], opts);
     const box = draw();
     expect(box.title).toBe("Turn on internet downloads?");
-    expect(box.labels).toEqual(["Cancel", "Turn on and download"]);
+    expect(box.labels).toEqual(["Turn on and download", "Cancel"]);
     box.pressAction();
     await expect(answer).resolves.toBe(true);
     expect(setCaps).toHaveBeenCalled();

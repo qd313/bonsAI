@@ -1,7 +1,7 @@
 /**
  * Title: The "Delete chat?" box, opened
  *
- * Purpose: Opens the delete box (ChatSlotDeleteModal.tsx: Cancel first, so an A pressed by habit keeps
+ * Purpose: Opens the delete box (ChatSlotDeleteModal.tsx: Delete on the left and Cancel on the right, the ring on Cancel, so an A pressed by habit keeps
  * the chat, and B keeps it too) for one chat, deletes the chat only on Delete, and closes the box through
  * the plugin's own close path so the tab comes back and the ring returns to whatever control registered
  * itself to receive it.
@@ -63,7 +63,7 @@ export function useChatSlotDeleteConfirm({
       rememberModalReturnFocus("chat-slot-rename");
       if (returnFocusEl) registerModalReturnFocusOwner("chat-slot-rename", returnFocusEl, returnTransfer);
       /*
-        Two buttons, Cancel first: Steam puts the ring on the first button of a box, so an A pressed
+        Two buttons, Delete on the left and Cancel on the right: the box starts the ring on Cancel, so an A pressed
         by habit keeps the chat, and B keeps it too (maintainer's call, 2026-10-06; it was three
         buttons since plan 79). See ChatSlotDeleteModal.
       */

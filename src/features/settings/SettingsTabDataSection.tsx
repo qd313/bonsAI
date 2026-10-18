@@ -10,7 +10,7 @@
  * Solves: Moving the two Clear buttons out of SettingsTab.tsx unchanged in behaviour. Both remember which
  * button to return the ring to once the box closes (modalReturnFocusRegistry) and both tell the plugin
  * shell which tab to come back to (`onBeforeDeckyModal`). The confirm boxes are the shared two-button box
- * (TwoButtonConfirmModal): Cancel first, where Steam puts the ring, and the clearing beside it, so an A
+ * (TwoButtonConfirmModal): the clearing on the left and Cancel on the right, where the ring starts, so an A
  * pressed by habit clears nothing.
  *
  * Does not: Clear anything itself: the caller's `onResetSession` and `onClearAllPluginData` do.
@@ -117,11 +117,10 @@ export const SettingsTabDataSection: React.FC<SettingsTabDataSectionProps> = ({
                 title="Clear session cache?"
                 body="Clears this session from RAM: input, reply, thread, transparency, branches, attachments, timers. Does not change settings.json, Ollama, or image files on disk."
                 /*
-                  Two buttons, Cancel first where Steam puts the ring (the Delete chat box's shape): an A
+                  Two buttons, the action on the left and Cancel on the right where the ring starts (the Delete chat box's shape): an A
                   pressed by habit clears nothing, and B is Cancel too.
                 */
                 actionLabel="Clear"
-                danger
                 onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
                 onAction={() => {
                   onResetSession();
@@ -152,9 +151,8 @@ export const SettingsTabDataSection: React.FC<SettingsTabDataSectionProps> = ({
                   "This resets bonsAI like a fresh install: settings, permissions, chats, notes, cache and logs are deleted. " +
                   "If AI ran on this Deck, its downloaded models and the Ollama install bonsAI set up go too. Desktop logs stay."
                 }
-                /* Cancel first and the wipe beside it; see the cache box above. */
+                /* The wipe on the left and Cancel on the right; see the cache box above. */
                 actionLabel="Clear all data"
-                danger
                 onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
                 onAction={() => {
                   void Promise.resolve(onClearAllPluginData()).finally(() => {

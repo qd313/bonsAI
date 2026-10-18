@@ -51,7 +51,7 @@
  *    targets this Deck.
  * 6. A fresh install (never an Update) that lands with the embed model
  *    still missing on this Deck's own Ollama is asked about once, with a
- *    confirm box (Cancel / Download) — never a silent gap, and
+ *    confirm box (Download / Cancel) — never a silent gap, and
  *    never on its own. Skipped the same way the standing hint is when Ask
  *    is routed elsewhere.
  *
@@ -745,13 +745,12 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
           </div>
         }
         /*
-         * Two buttons, Cancel first where Steam puts the ring, Remove beside it. On the Deck this box
+         * Two buttons, Remove on the left and Cancel on the right where the ring starts. On the Deck this box
          * once opened with the ring on "Remove" and one A deleted the whole library (six runs,
          * plan74-P74-SAFE-FIRST-PICKER.json, t75-*-Q6); then it was Not now / Remove / Cancel
-         * (Steam adds a Cancel to its own box), now just Cancel / Remove (plan 93). B is Cancel.
+         * (Steam adds a Cancel to its own box), now just Remove / Cancel (plan 93, order swapped plan 96). B is Cancel.
          */
         actionLabel="Remove"
-        danger
         onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
         onAction={() => {
           // The Remove button is about to go; the ring goes to the button that stays in its row.

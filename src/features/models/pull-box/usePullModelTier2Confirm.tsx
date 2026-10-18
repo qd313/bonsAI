@@ -93,7 +93,7 @@ export function usePullModelTier2Confirm(a: UsePullModelTier2ConfirmArgs): PullM
             </div>
           }
           /*
-           * Two buttons, Cancel first where Steam puts the ring, so an A pressed by habit changes
+           * Two buttons, the action on the left and Cancel on the right where the ring starts, so an A pressed by habit changes
            * nothing, the sister box in usePullModelSubmitSelected.tsx (this box once opened with the ring
            * on the action, found in the code, plan 76 lane 2; then it had Not now / Enable Tier 2 and
            * queue / Cancel). B is Cancel.

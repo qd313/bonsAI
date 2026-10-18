@@ -28,7 +28,7 @@
  * and no site or size.
  *
  * Focus: the box is the shared two-button box (TwoButtonConfirmModal, the Delete chat box's shape):
- * Cancel first, where Steam puts the ring, and the download beside it, so an A pressed by habit
+ * the download on the left and Cancel on the right, where the ring starts, so an A pressed by habit
  * downloads nothing and B is Cancel too. It used to be Steam's own ConfirmModal with "Not now" as
  * OK and the download in the middle, and Steam's added Cancel made it three buttons (plan 93). No
  * DOM focus() or keydown is involved.

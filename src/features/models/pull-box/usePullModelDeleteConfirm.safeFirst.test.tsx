@@ -70,7 +70,7 @@ beforeEach(() => {
 describe('"Remove nomic-embed-text:latest from the Deck?"', () => {
   it("shows Cancel and Remove model only, Cancel first where the ring lands", () => {
     const box = openBox();
-    expect(box.labels).toEqual(["Cancel", "Remove model"]);
+    expect(box.labels).toEqual(["Remove model", "Cancel"]);
   });
 
   it("Cancel (the ring's first stop) closes the box and removes nothing", async () => {

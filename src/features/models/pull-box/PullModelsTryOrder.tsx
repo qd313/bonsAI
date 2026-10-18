@@ -234,7 +234,7 @@ export function usePullModelTryNav(a: {
       </div>
     );
 
-  /** The box that asks before the order goes back to automatic: Cancel first, so the ring lands on the choice that changes nothing. */
+  /** The box that asks before the order goes back to automatic: the action on the left and Cancel on the right, where the ring starts, the choice that changes nothing. */
   const askReset = (nested: NestedModalHooks) => {
     const word = places.kind === "vision" ? "pictures" : "text";
     nested.before?.();

@@ -105,7 +105,7 @@ describe("Update AI & models with Internet downloads off", () => {
     expect(hoisted.modals).toHaveLength(1);
     const box = drawConfirmBox(hoisted.modals[0]);
     expect(box.title).toBe("Turn on internet downloads?");
-    expect(box.labels).toEqual(["Cancel", "Turn on and download"]);
+    expect(box.labels).toEqual(["Turn on and download", "Cancel"]);
     box.unmount();
     // nothing started yet: the person has not answered
     expect(calls("start_local_ollama_setup")).toHaveLength(0);

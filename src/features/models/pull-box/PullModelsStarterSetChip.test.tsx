@@ -209,7 +209,7 @@ describe("Browse models: Install the starter set", () => {
     const drawn = drawConfirmBox(hoisted.modal);
     expect(drawn.title).toBe("Install the starter set?");
     // Two buttons, Cancel first (where the ring opens, the choice that downloads nothing).
-    expect(drawn.labels).toEqual(["Cancel", LABEL]);
+    expect(drawn.labels).toEqual([LABEL, "Cancel"]);
     drawn.unmount();
     const text = boxText();
     expect(text).toContain("gemma4:e2b-it-qat");

@@ -111,7 +111,7 @@ export function usePullModelToggleSelection(a: UsePullModelToggleSelectionArgs):
               </div>
             }
             /*
-              Two buttons, Cancel first where Steam puts the ring (it was Not now / Pull anyway /
+              Two buttons, the action on the left and Cancel on the right where the ring starts (it was Not now / Pull anyway /
               Cancel): an A pressed by habit does not queue a big download. B is Cancel.
             */
             actionLabel="Pull anyway"

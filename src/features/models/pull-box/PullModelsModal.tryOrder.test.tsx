@@ -301,7 +301,7 @@ describe("pressing a place button", () => {
     expect(box.title).toBe("Put the text try order back to automatic?");
     // Two buttons, Cancel first where Steam puts the ring (the harmless one), Reset order beside it.
     const drawn = drawConfirmBox(hoisted.shown[hoisted.shown.length - 1]);
-    expect(drawn.labels).toEqual(["Cancel", "Reset order"]);
+    expect(drawn.labels).toEqual(["Reset order", "Cancel"]);
     drawn.pressCancel();
     drawn.pressB();
     await new Promise((r) => setTimeout(r, 30));

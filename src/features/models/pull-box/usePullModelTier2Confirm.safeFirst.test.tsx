@@ -57,7 +57,7 @@ beforeEach(() => {
 describe('"Enable Tier 2 for this model?"', () => {
   it("shows Cancel and the action only, Cancel first where the ring lands", () => {
     const { box } = openBox();
-    expect(box.labels).toEqual(["Cancel", "Enable Tier 2 and queue"]);
+    expect(box.labels).toEqual(["Enable Tier 2 and queue", "Cancel"]);
   });
 
   it("points to where the licence can be changed today: the AI models button and its Licence list, not the removed Manage AI models and Policy", () => {

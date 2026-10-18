@@ -93,15 +93,15 @@ describe.each([
   ["Clear cache...", "Clear", "onResetSession"],
   ["Clear all data...", "Clear all data", "onClearAllPluginData"],
 ] as const)("the %s box", (button, clearLabel, prop) => {
-  it("shows the action and Cancel only: two buttons, Cancel first where the ring opens", () => {
+  it("shows the action and Cancel only: two buttons, the action on the left and Cancel on the right", () => {
     const { labels } = openBox(button, { [prop]: vi.fn() });
-    expect(labels).toEqual(["Cancel", clearLabel]);
+    expect(labels).toEqual([clearLabel, "Cancel"]);
   });
 
-  it("opens on a button that clears nothing: A on the first button and B change nothing", () => {
+  it("opens on a button that clears nothing: A on Cancel (the right-hand button) and B change nothing", () => {
     const clear = vi.fn();
     const { buttons } = openBox(button, { [prop]: clear });
-    fireEvent.click(buttons[0]!);
+    fireEvent.click(buttons.find((b) => b.textContent === "Cancel")!);
     expect(clear).not.toHaveBeenCalled();
     expect(close).toHaveBeenCalledTimes(1);
   });
@@ -118,7 +118,7 @@ describe.each([
   it("still clears, on its own labelled action button, once", async () => {
     const clear = vi.fn();
     const { buttons } = openBox(button, { [prop]: clear });
-    fireEvent.click(buttons[1]!);
+    fireEvent.click(buttons.find((b) => b.textContent === clearLabel)!);
     await Promise.resolve();
     expect(clear).toHaveBeenCalledTimes(1);
   });

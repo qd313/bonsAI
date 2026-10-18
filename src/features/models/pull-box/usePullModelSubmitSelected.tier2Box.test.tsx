@@ -75,7 +75,7 @@ beforeEach(() => {
 describe('"Enable Tier 2 before pulling?"', () => {
   it("shows Cancel and the action only, Cancel first where the ring lands", async () => {
     const box = await openBox();
-    expect(box.labels).toEqual(["Cancel", "Enable Tier 2 and pull"]);
+    expect(box.labels).toEqual(["Enable Tier 2 and pull", "Cancel"]);
   });
 
   it("Cancel (the ring's first stop) closes the box and changes nothing", async () => {

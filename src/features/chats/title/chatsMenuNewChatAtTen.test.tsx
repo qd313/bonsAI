@@ -156,13 +156,13 @@ describe("New chat in the chats menu, at ten chats", () => {
     expect(peekModalReturnFocus()).toBe("chat-slot-rename");
   });
 
-  it("a pick opens the Delete chat? box for that chat, Cancel first, and deletes nothing yet", async () => {
+  it("a pick opens the Delete chat? box for that chat, Delete on the left and Cancel on the right, and deletes nothing yet", async () => {
     await pressNewChat(10);
     fireEvent.click(buttonsOf(lastModal())[3]!);
     expect(hoisted.modals).toHaveLength(2);
     expect(lastModal().type).toBe(ChatSlotDeleteModal);
     expect((lastModal().props as { label: string }).label).toBe("Chat number 3");
-    expect(buttonsOf(lastModal()).map((b) => b.textContent)).toEqual(["Cancel", "Delete"]);
+    expect(buttonsOf(lastModal()).map((b) => b.textContent)).toEqual(["Delete", "Cancel"]);
     expect(order).toEqual([]);
   });
 
@@ -171,7 +171,7 @@ describe("New chat in the chats menu, at ten chats", () => {
     fireEvent.click(buttonsOf(lastModal())[3]!);
     const box = buttonsOf(lastModal());
     await act(async () => {
-      fireEvent.click(box[1]!);
+      fireEvent.click(box[0]!);
       await new Promise((r) => setTimeout(r, 200));
     });
     expect(order).toEqual(["delete c3", "create"]);
@@ -183,7 +183,7 @@ describe("New chat in the chats menu, at ten chats", () => {
     fireEvent.click(buttonsOf(lastModal())[3]!);
     const box = buttonsOf(lastModal());
     await act(async () => {
-      fireEvent.click(box[0]!);
+      fireEvent.click(box[1]!);
     });
     await settle(150);
     expect(order).toEqual([]);
@@ -224,7 +224,7 @@ describe("New chat in the chats menu, at ten chats", () => {
     fireEvent.click(buttonsOf(lastModal())[3]!);
     const box = buttonsOf(lastModal());
     await act(async () => {
-      fireEvent.click(box[1]!);
+      fireEvent.click(box[0]!);
       await new Promise((r) => setTimeout(r, 200));
     });
     expect(order).toEqual(["delete c3"]);

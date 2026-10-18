@@ -3,7 +3,7 @@
  *
  * Purpose: At ten chats, New chat opens this list instead of making a chat. It lists the chats newest
  * first, with the same names the chats menu shows, and a Cancel button last. Pressing a chat does not
- * delete it: it opens the usual Delete chat? box for that chat (Cancel first), so two presses are
+ * delete it: it opens the usual Delete chat? box for that chat (Delete on the left, Cancel on the right), so two presses are
  * needed and the second one is a Delete. B and Cancel leave everything as it was.
  *
  * Used for: Opened by useStartNewChat.tsx through showModal.

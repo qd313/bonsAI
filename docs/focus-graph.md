@@ -105,6 +105,34 @@ Remember what I typed (toggle)
   on): none twice, the three in order between Screenshot quality and Remember what I typed, only Up and Down on
   the row. jsdom has no spatial walk, so the Deck walk (Down through the whole tab, then Up) is the real check.
 
+### The two-button confirm box (plan 96, 2026-10-18)
+
+Every "are you sure?" box (Clear cache, Clear all data, Delete chat, the download notice, Remove knowledge base,
+and the AI models screen's try-order, delete-a-model, install, Tier 2 and tick-a-model questions) is
+`src/shared/TwoButtonConfirmModal.tsx` on Steam's `ModalRoot`. The maintainer's rule: **Cancel on the right, the
+ring always starting on it, the action on the left.**
+
+```
+Clear all plugin data?
+words ...
+[ Clear all data ]   [ Cancel ]      <- the ring opens on Cancel; the left one is Steam's blue primary button
+```
+
+- **Order.** The action is first in the page and Cancel second, in one `Focusable` row with
+  `flow-children="horizontal"`; the order in the page is the order on screen (no row-reverse).
+- **The ring starts on Cancel.** Steam's own first focus lands on the first button (the action), so the box hands
+  the ring to Cancel's nav node two frames after it mounts, waiting a few more frames if Steam has not filled the
+  node (`takeHolderFocus`, the first-run popup's mechanism). Closing the box before then cancels the wait.
+- **Left and Right** are handlers on each button's `Focusable` (Steam calls them): Left from Cancel hands the ring to
+  the action's nav node, Right from the action hands it back, and Right from Cancel and Left from the action hold
+  still. **Up and Down hold still** on both (one row, nothing to reach).
+- **A** is `onOKButton`, a tap is `onClick`, one press acts once. **B** is Cancel (`ModalRoot`'s `onCancel`).
+- **Look.** The action is `DialogButtonPrimary`, the same blue button as the Beta Notice's "Got it"; Cancel is
+  Steam's plain `Button`. No custom fill, no red: a removing action is told apart by its words.
+- **Test:** `TwoButtonConfirmModal.test.tsx` (Steam's ring modelled in `steamRing.tsx`): left-to-right order, the ring
+  found on Cancel, Right holds, Left reaches the action, Up and Down hold, A and B. jsdom cannot show where Steam's
+  own first focus lands or what the blue looks like, so the Deck row (P96-CANCEL-RIGHT) is the real check.
+
 ### The first-run popup (plan 96 N1)
 
 The popup "Where should the AI run?" (`FirstRunWhereAiRunsModal.tsx`, opened once by
@@ -478,7 +506,7 @@ Your chats
   or Steam's own rail.
 - **A on a chat** opens it (the Main tab's `onChatSlotSelect`); on the open chat it only closes the menu.
 - **The actions do what the saved-chats row did.** New chat is the row's create (`onChatSlotCreate`); at ten chats it opens the picker described after this section. Rename chat
-  opens the rename box and Delete chat the two-button delete box (Cancel first). Save to Desktop note opens the save
+  opens the rename box and Delete chat the two-button delete box (the action on the left, Cancel on the right, the ring on Cancel). Save to Desktop note opens the save
   window. Sum up this chat starts the Session tab's own Sum up job, a second way in to that button: the Session tab
   keeps its button. A greyed action is still a stop and A on it does nothing: Rename, Delete and Save at the
   new-chat spot, Save while the chat has no answer, Sum up whenever the Session tab's button is greyed. Save without
@@ -517,12 +545,11 @@ You have 10 chats                      <- the picker box (ModalRoot)
    | A on a chat: the Delete chat? box opens over the picker
    v
 Delete chat slot?                      <- the usual box (ModalRoot), two buttons
-  [ Cancel ]   <- the ring opens here (first in the box)
-  [ Delete ]
+  [ Delete ]   [ Cancel ]   <- side by side; the ring opens on Cancel (plan 96)
 ```
 
 - **Stops.** The picker: the ten chats (newest first, the names the chats menu shows, and when each last changed),
-  then Cancel. The box: Cancel, then Delete. Every stop is a sibling in its box, so Steam's own Up and Down walk
+  then Cancel. The box: Delete, then Cancel (side by side; see "The two-button confirm box"). The picker's stops are siblings in its box, so Steam's own Up and Down walk
   them; the picker has **no move handlers of its own**, and Left and Right are Steam's. The rows sit in a list that
   scrolls (tall as 46% of the screen) and Steam scrolls the focused row into view.
 - **A** (`onOKButton` on the row's `Focusable`) or a tap (`onClick`) acts once. A on a chat opens the Delete box for
@@ -575,7 +602,7 @@ another React tree), `chatRowMoves.ts` (Up, Down and LB/RB, shared with the name
 - **A.** On the +: a new chat, through `useStartNewChat` (F2's one rule), so below ten chats it makes the chat at
   once (the ring stays on the +), and at ten it opens the picker (see "New chat at ten chats" above; its boxes give
   the ring back to the name). On the delete icon: the Delete chat? box for the open chat (`useChatSlotDeleteConfirm`,
-  Cancel first, opening on Cancel), exactly the menu's Delete chat. The delete icon is **greyed at the new-chat
+  the action on the left, opening on Cancel on the right), exactly the menu's Delete chat. The delete icon is **greyed at the new-chat
   spot** (nothing saved to delete), as the menu's Delete chat is: still a stop, A does nothing.
 - **B on either icon** returns the ring to the name (`takeChatNameFocus`) and is claimed with `preventDefault`, or
   Decky's own B would leave bonsAI. B on the name is unchanged.

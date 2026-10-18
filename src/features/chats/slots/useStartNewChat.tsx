@@ -3,7 +3,7 @@
  *
  * Purpose: The one rule for "start a new chat". Below ten chats it makes one at once. At ten it opens
  * the "You have 10 chats" picker (ChatSlotPickerModal.tsx); picking a chat opens the usual Delete chat?
- * box for it (Cancel first); Delete removes that chat and then makes the new chat, which becomes the
+ * box for it (Delete on the left, Cancel on the right); Delete removes that chat and then makes the new chat, which becomes the
  * open one; Cancel and B, in the picker or the box, change nothing. Nothing is ever deleted without the
  * box.
  *

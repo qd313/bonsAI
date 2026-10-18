@@ -86,12 +86,11 @@ export function usePullModelDeleteConfirm(a: UsePullModelDeleteConfirmArgs): Pul
             </div>
           }
           /*
-           * Two buttons, Cancel first where Steam puts the ring, so an A pressed by habit removes
+           * Two buttons, the action on the left and Cancel on the right where the ring starts, so an A pressed by habit removes
            * nothing (this box once opened with the ring on "Remove model",
            * plan76-P76-NOMIC-REMOVE-HINT.json; then it had Not now / Remove model / Cancel). B is Cancel.
            */
           actionLabel="Remove model"
-          danger
           onCancel={() => {
             completeNestedModalClose(() => handle.Close());
             if (focusRemoveControl) restoreRemoveReturn(focusRemoveControl, enterList);

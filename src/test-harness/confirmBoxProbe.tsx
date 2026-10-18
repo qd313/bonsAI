@@ -1,10 +1,10 @@
 /**
  * Title: Test helper: draw a two-button confirm box and press its buttons
  *
- * Purpose: The plugin's "are you sure?" boxes are the shared TwoButtonConfirmModal (Cancel first, the
- * action beside it). A test about one of them opens it the way the plugin does, catches the element the
+ * Purpose: The plugin's "are you sure?" boxes are the shared TwoButtonConfirmModal (the action on the
+ * left, Cancel on the right). A test about one of them opens it the way the plugin does, catches the element the
  * plugin hands to showModal, and gives it to this helper, which draws it and reads the buttons off the
- * page, so a test checks what a person sees (which buttons, in which order) rather than what props were
+ * page, so a test checks what a person sees (which buttons, left to right) rather than what props were
  * passed. The test must have @decky/ui replaced by the fake in fakeDeckyUi.tsx so the box's Button,
  * Focusable and ModalRoot are drawn.
  *
@@ -18,15 +18,15 @@ import type { ReactElement } from "react";
 import { fireEvent, render } from "@testing-library/react";
 
 export type DrawnConfirmBox = {
-  /** The button labels in the order Steam would walk them; Steam puts the ring on the first. */
+  /** The button labels left to right: the action, then Cancel (the ring starts on Cancel). */
   labels: string[];
   /** The title the box was given. */
   title: string;
   /** Everything the box shows as text (title, words, buttons). */
   text: string;
-  /** A on the first button (Cancel). */
+  /** A on Cancel, the right-hand button. */
   pressCancel: () => void;
-  /** A on the second button (the action). */
+  /** A on the action, the left-hand button. */
   pressAction: () => void;
   /** B. */
   pressB: () => void;
@@ -42,8 +42,8 @@ export function drawConfirmBox(element: unknown): DrawnConfirmBox {
     labels: buttons.map((b) => b.textContent ?? ""),
     title: el.props.title,
     text: view.container.textContent ?? "",
-    pressCancel: () => void fireEvent.click(buttons[0]!),
-    pressAction: () => void fireEvent.click(buttons[1]!),
+    pressCancel: () => void fireEvent.click(buttons.find((b) => b.textContent === "Cancel")!),
+    pressAction: () => void fireEvent.click(buttons.find((b) => b.textContent !== "Cancel")!),
     pressB: () => el.props.onCancel(),
     unmount: view.unmount,
   };

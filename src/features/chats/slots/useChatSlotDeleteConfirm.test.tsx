@@ -4,7 +4,7 @@
  * Purpose: Steam opens a box with the ring on its first button. The old chat row's Delete box once had
  * "Delete" there, so an A pressed by habit deleted the chat (plan 79); it then had three buttons
  * ("Keep chat", Delete, Cancel) to keep that first A harmless. The maintainer's call on 2026-10-06
- * is two buttons only: Cancel first, where the ring opens, and Delete second. B keeps the chat.
+ * is two buttons only: Delete on the left and Cancel on the right, where the ring opens (plan 96, 2026-10-18). B keeps the chat.
  * The chats menu's Delete chat opens the same box (plan 84 step 5); these cases moved here from the
  * old row's own test when the row went. The box is drawn as Steam is handed it, its buttons read off
  * the page in the order Steam would walk them, and each one pressed.
@@ -61,9 +61,9 @@ function openDeleteBox(onDeleteSlot: (id: string) => Promise<boolean>) {
 }
 
 describe("the Delete chat box", () => {
-  it("has exactly two buttons, Cancel first (where the ring opens) and Delete second", () => {
+  it("has exactly two buttons, Delete on the left and Cancel on the right (where the ring opens)", () => {
     const { labels } = openDeleteBox(vi.fn(async () => true));
-    expect(labels).toEqual(["Cancel", "Delete"]);
+    expect(labels).toEqual(["Delete", "Cancel"]);
   });
 
   it("shows the title Delete chat? and not the old Delete chat slot?", () => {
@@ -73,32 +73,32 @@ describe("the Delete chat box", () => {
     expect(text).not.toContain("slot?");
   });
 
-  it("puts Cancel and Delete side by side in one row, Cancel first, so Right from Cancel lands on Delete", () => {
+  it("puts Delete and Cancel side by side in one row, Delete first, so Left from Cancel lands on Delete", () => {
     const { buttons } = openDeleteBox(vi.fn(async () => true));
-    const cancelCell = buttons[0]!.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
-    const deleteCell = buttons[1]!.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
+    const deleteCell = buttons[0]!.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
+    const cancelCell = buttons[1]!.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
     const row = cancelCell.parentElement as HTMLElement;
     expect(deleteCell.parentElement).toBe(row);
     expect(row.style.display).toBe("flex");
     expect(row.style.flexDirection).toBe("row");
-    expect(Array.from(row.children)).toEqual([cancelCell, deleteCell]);
+    expect(Array.from(row.children)).toEqual([deleteCell, cancelCell]);
   });
 
   it("holds both buttons in one Focusable that tells Steam its children flow horizontally, so Right and Left step between them", () => {
     const { buttons } = openDeleteBox(vi.fn(async () => true));
-    const cancelCell = buttons[0]!.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
-    const deleteCell = buttons[1]!.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
+    const deleteCell = buttons[0]!.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
+    const cancelCell = buttons[1]!.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
     const row = cancelCell.parentElement as HTMLElement;
     expect(deleteCell.parentElement).toBe(row);
     expect(row.getAttribute("data-decky-ui")).toBe("Focusable");
     expect(row.getAttribute("flow-children")).toBe("horizontal");
-    expect(Array.from(row.children)).toEqual([cancelCell, deleteCell]);
+    expect(Array.from(row.children)).toEqual([deleteCell, cancelCell]);
   });
 
-  it("the opening button keeps the chat: A on it deletes nothing and closes the box", () => {
+  it("Cancel keeps the chat: A on it deletes nothing and closes the box", () => {
     const onDeleteSlot = vi.fn(async () => true);
     const { buttons } = openDeleteBox(onDeleteSlot);
-    fireEvent.click(buttons[0]!);
+    fireEvent.click(buttons[1]!);
     expect(onDeleteSlot).not.toHaveBeenCalled();
     expect(close).toHaveBeenCalledTimes(1);
   });
@@ -115,7 +115,7 @@ describe("the Delete chat box", () => {
   it("Delete deletes the right chat once and closes the box", async () => {
     const onDeleteSlot = vi.fn(async () => true);
     const { buttons } = openDeleteBox(onDeleteSlot);
-    fireEvent.click(buttons[1]!);
+    fireEvent.click(buttons[0]!);
     expect(onDeleteSlot).toHaveBeenCalledTimes(1);
     expect(onDeleteSlot).toHaveBeenCalledWith("b");
     await waitFor(() => expect(close).toHaveBeenCalledTimes(1));
@@ -125,7 +125,7 @@ describe("the Delete chat box", () => {
     let finishDelete: (ok: boolean) => void = () => undefined;
     const onDeleteSlot = vi.fn(() => new Promise<boolean>((resolve) => (finishDelete = resolve)));
     const { buttons } = openDeleteBox(onDeleteSlot);
-    fireEvent.click(buttons[1]!);
+    fireEvent.click(buttons[0]!);
     await Promise.resolve();
     expect(close).not.toHaveBeenCalled();
     await act(async () => finishDelete(true));

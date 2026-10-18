@@ -166,7 +166,7 @@ export function usePullModelSubmitSelected(a: UsePullModelSubmitSelectedArgs): P
               </div>
             }
             /*
-             * Two buttons, Cancel first where Steam puts the ring, so an A pressed by habit changes
+             * Two buttons, the action on the left and Cancel on the right where the ring starts, so an A pressed by habit changes
              * nothing (on the Deck, plan 72, this box once opened with the ring on the action; then it
              * had Not now / Enable Tier 2 and pull / Cancel). B is Cancel.
              */

@@ -84,7 +84,7 @@ async function openRemoveBox(container: HTMLElement, tag: string) {
   fireEvent.click(removeControl(row));
   expect(hoisted.shown).toHaveLength(1);
   const box = drawConfirmBox(hoisted.shown[0]);
-  expect(box.labels).toEqual(["Cancel", "Remove model"]);
+  expect(box.labels).toEqual(["Remove model", "Cancel"]);
   return { row, box };
 }
 

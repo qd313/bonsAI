@@ -65,7 +65,7 @@ describe('"Remove knowledge base?"', () => {
   it("shows Cancel and Remove only, Cancel first where the ring lands", async () => {
     const box = await openBox();
     expect(box.title).toBe("Remove knowledge base?");
-    expect(box.labels).toEqual(["Cancel", "Remove"]);
+    expect(box.labels).toEqual(["Remove", "Cancel"]);
   });
 
   it("says it deletes the library and no longer claims to turn the switch off (the Deck kept it on)", async () => {

@@ -98,7 +98,7 @@ describe("KnowledgeBaseSection meaning-search offer after a fresh install", () =
     });
     // The offer is the download notice (plan72-F-DL): two buttons only, Cancel first (where the ring
     // opens, the choice that downloads nothing) and Download beside it (plan 93).
-    expect(drawConfirmBox(hoisted.modal).labels).toEqual(["Cancel", "Download"]);
+    expect(drawConfirmBox(hoisted.modal).labels).toEqual(["Download", "Cancel"]);
   });
 
   it("does not ask when the model is already present", async () => {

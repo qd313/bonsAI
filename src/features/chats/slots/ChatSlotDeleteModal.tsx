@@ -2,35 +2,22 @@
  * Title: The "Delete chat?" box
  *
  * Purpose: The box the chats menu's Delete chat opens (the old chat row's bin opened it until plan 84
- * step 5). It has exactly two buttons, Cancel and Delete, side by side on one row, and
- * Steam puts the ring on Cancel when it opens, so an A pressed by habit keeps the chat. B keeps
- * the chat too. Only A on Delete removes it.
+ * step 5). It is the shared two-button box (TwoButtonConfirmModal.tsx) with this box's words: Delete on
+ * the left, Cancel on the right, and the ring starting on Cancel, so an A pressed by habit keeps the chat.
+ * B keeps the chat too. Only A on Delete removes it.
  *
- * Used for: Opened by useChatSlotDeleteConfirm.tsx through showModal, for the chats menu.
+ * Used for: Opened by useChatSlotDeleteConfirm.tsx through showModal, for the chats menu and for the "Chats
+ * are full" picker's second step.
  *
- * Solves: Steam opens a ConfirmModal with the ring on its OK button and always draws a Cancel
- * button next to it, so the old box needed three buttons ("Keep chat", Delete, Cancel) to keep the
- * first A harmless (plan 79, 2026-10-02). On ModalRoot, the base a ConfirmModal is built on, the
- * buttons are our own: Steam starts the ring on the first one, so Cancel goes first. The same shape
- * as the knowledge-base "Choose download location" box, which was proven on the Deck.
+ * Solves: This box used to be its own copy of the layout; the maintainer's rule of 2026-10-18 (Cancel on the
+ * right in every box, the ring on it, the action in the Got it look) is now written once, in the shared
+ * box, and this file only hands it the title, the words and the two actions. How the ring walks between the
+ * two buttons, and why, is in the shared box's header.
  *
- * Does not: delete anything itself, or close itself. The caller passes onKeep (Cancel, B) and
- * onDelete (Delete) and closes the box from both.
- *
- * Gotchas:
- * - Cancel must stay first in the DOM order; that is what puts the ring on it.
- * - The two buttons sit in one Focusable with flow-children="horizontal". Without it Steam's own
- *   focus graph read them as a column: Right from Cancel did nothing and only Down reached Delete
- *   (Deck, 2026-10-11, build 9b4d0503). Up and Down also still step between them, as Steam does
- *   for any row; no handler of ours is involved.
- * - Each button is wired for A (onOKButton on its Focusable) and for a finger (onClick), the way
- *   the download-location box wires its choices, so a guard makes sure one press acts once.
+ * Does not: delete anything itself, or close itself. The caller passes onKeep (Cancel, B) and onDelete
+ * (Delete) and closes the box from both.
  */
-import React, { useRef } from "react";
-import { Button, Focusable, ModalRoot } from "@decky/ui";
-
-import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../../../styles/settingsGlassButton";
-import { textPx } from "../../../styles/textPx";
+import { TwoButtonConfirmModal } from "../../../shared/TwoButtonConfirmModal";
 
 export type ChatSlotDeleteModalProps = {
   label: string;
@@ -38,43 +25,14 @@ export type ChatSlotDeleteModalProps = {
   onDelete: () => void;
 };
 
-const Choice: React.FC<{ onChoose: () => void; danger?: boolean; children: React.ReactNode }> = ({
-  onChoose,
-  danger = false,
-  children,
-}) => (
-  <div className="bonsai-settings-focus-btn-host" style={{ flex: 1, minWidth: 0 }}>
-    <Focusable onOKButton={onChoose}>
-      <Button
-        className="bonsai-settings-focus-btn"
-        onClick={onChoose}
-        style={{ ...(danger ? SETTINGS_GLASS_BTN_DANGER : SETTINGS_GLASS_BTN), width: "100%" }}
-      >
-        {children}
-      </Button>
-    </Focusable>
-  </div>
-);
-
 export function ChatSlotDeleteModal({ label, onKeep, onDelete }: ChatSlotDeleteModalProps) {
-  const done = useRef(false);
-  const once = (act: () => void) => () => {
-    if (done.current) return;
-    done.current = true;
-    act();
-  };
   return (
-    <ModalRoot onCancel={once(onKeep)}>
-      <div className="bonsai-prose" style={{ fontSize: textPx(12), lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
-        <div style={{ fontSize: textPx(16), fontWeight: 700, color: "#ffffff", marginBottom: 10 }}>Delete chat?</div>
-        <div style={{ marginBottom: 10 }}>{`Delete "${label}" and its transcript? This cannot be undone.`}</div>
-        <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", gap: 8 }}>
-          <Choice onChoose={once(onKeep)}>Cancel</Choice>
-          <Choice danger onChoose={once(onDelete)}>
-            Delete
-          </Choice>
-        </Focusable>
-      </div>
-    </ModalRoot>
+    <TwoButtonConfirmModal
+      title="Delete chat?"
+      body={`Delete "${label}" and its transcript? This cannot be undone.`}
+      actionLabel="Delete"
+      onCancel={onKeep}
+      onAction={onDelete}
+    />
   );
 }

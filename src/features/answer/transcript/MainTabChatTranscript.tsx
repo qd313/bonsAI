@@ -161,6 +161,7 @@ import {
 import { formatAppliedTuningBannerText } from "../../power/appliedTuningText";
 import { ChatLatencyNotices } from "../notices/ChatLatencyNotices";
 import { ChatTranscriptHintRows } from "./ChatTranscriptHintRows";
+import { isNoAiSetUpAnswer } from "./noAiSetUpNotice";
 import type { ModelPolicyDisclosurePayload } from "../../models/modelPolicy";
 import { StrategyChecklistPanel } from "../../strategy/StrategyChecklistPanel";
 import type { BonsaiCapabilityKey } from "../../permissions/permissionDeepLink";
@@ -304,6 +305,8 @@ export type MainTabChatTranscriptProps = {
   /** The open chat, from MainTabProps via the spread: the troubleshooting hint's Dismiss is kept per chat. */
   activeChatSlotId?: string | null;
   onNavigateToPermissions?: (capability: BonsaiCapabilityKey) => void;
+  /** Jumps to the Ollama tab: the "Open the Ollama tab" row under the "AI is not set up" answer. */
+  onNavigateToOllama?: () => void;
   /**
    * Starts a new Ask turn programmatically — same function preset chips and strategy branches
    * already use (useBonsaiAskOrchestration). Backs the DRG Survivor glossary "explain further" chip;
@@ -405,6 +408,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     gameContextReadEnabled = false,
     activeChatSlotId = null,
     onNavigateToPermissions,
+    onNavigateToOllama,
     onAskOllama,
     chatSumUp = null,
   } = props;
@@ -1611,6 +1615,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   troubleshootingPermHintDismissed={troubleshootingPermHintDismissed}
   unifiedInput={unifiedInput}
   onNavigateToPermissions={onNavigateToPermissions}
+  showNoAiRow={expandedTurnKey === "live" && showLiveResponse && isNoAiSetUpAnswer(liveResponseBody)}
+  onNavigateToOllama={onNavigateToOllama}
   dismissTroubleshootingPermHint={dismissTroubleshootingPermHint}
   navTargets={permHintNavTargets}
 />

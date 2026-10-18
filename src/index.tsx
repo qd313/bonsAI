@@ -860,6 +860,7 @@ const Content: React.FC = () => {
     mediaLibraryEnabled: gatedCapabilities.media_library_access,
     gameContextReadEnabled: gatedCapabilities.media_library_access && gatedCapabilities.steam_logs_read,
     onNavigateToPermissions: jumpToPermission,
+    onNavigateToOllama: goToOllamaTab,
     micPermissionDenied,
     onDismissMicPermissionDeny: dismissMicPermissionDeny,
     desktopNoteSaveEnabled: gatedCapabilities.filesystem_write,

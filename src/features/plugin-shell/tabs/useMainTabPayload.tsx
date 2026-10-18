@@ -207,6 +207,7 @@ export function useMainTabPayload({
     mediaLibraryEnabled,
     gameContextReadEnabled,
     onNavigateToPermissions,
+    onNavigateToOllama,
     micPermissionDenied,
     onDismissMicPermissionDeny,
     desktopNoteSaveEnabled,
@@ -319,6 +320,7 @@ export function useMainTabPayload({
         mediaLibraryEnabled={mediaLibraryEnabled}
         gameContextReadEnabled={gameContextReadEnabled}
         onNavigateToPermissions={onNavigateToPermissions}
+        onNavigateToOllama={onNavigateToOllama}
         micPermissionDenied={micPermissionDenied}
         onDismissMicPermissionDeny={onDismissMicPermissionDeny}
         desktopNoteSaveEnabled={desktopNoteSaveEnabled}
@@ -405,6 +407,7 @@ export function useMainTabPayload({
       mediaLibraryEnabled,
       gameContextReadEnabled,
       onNavigateToPermissions,
+      onNavigateToOllama,
       micPermissionDenied,
       onDismissMicPermissionDeny,
       aiCharacterEnabled,

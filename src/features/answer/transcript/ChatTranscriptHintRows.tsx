@@ -1,16 +1,20 @@
 /**
  * Title: The chat's situational hint rows
  *
- * Purpose: The two rows that can sit under the chat's turns: "No game detected" and the
+ * Purpose: The rows that can sit under the chat's turns: "No game detected", the
  * troubleshooting hint that points at the game-reading permission (with Open Permissions and
- * Dismiss). Moved out of MainTabChatTranscript.tsx unchanged, so that file has room under its
+ * Dismiss), and the "Open the Ollama tab" row under the "AI is not set up" answer. Moved out of MainTabChatTranscript.tsx unchanged, so that file has room under its
  * size limit for the answer's sections (plan 93, lane O3).
  *
  * Used for: MainTabChatTranscript.tsx, in the same place the rows always sat.
  *
- * Solves: Nothing new. The troubleshooting row keeps its own Steam nav node and move handlers
- * exactly as before; the node itself is still made by usePermHintNavTargets in the
- * transcript, whose hook order is recorded (tests/test_ask_hook_order.py).
+ * Solves: The "Open the Ollama tab" row (P96-F1): a Deck with no Ollama answers "The AI is not set
+ * up on this Deck yet" and this row is the way to the Ollama tab. It borrows the troubleshooting
+ * row's Steam nav node and move handlers (the two never show together), so Down from the answer's
+ * Retry / Copy row lands on it with the same transfer the permission hint uses and no new hook.
+ * The troubleshooting row keeps its own wiring exactly as before; the node itself is still made by
+ * usePermHintNavTargets in the transcript, whose hook order is recorded
+ * (tests/test_ask_hook_order.py).
  *
  * Does not: Decide what a troubleshooting question looks like (troubleshootingAskHeuristic); it
  * only asks it.
@@ -35,6 +39,9 @@ export type ChatTranscriptHintRowsProps = {
   troubleshootingPermHintDismissed: boolean;
   unifiedInput: string;
   onNavigateToPermissions?: (capability: BonsaiCapabilityKey) => void;
+  /** The newest answer is "The AI is not set up on this Deck yet" and there is a way to the Ollama tab. */
+  showNoAiRow: boolean;
+  onNavigateToOllama?: () => void;
   dismissTroubleshootingPermHint: () => void;
   navTargets: PermHintNavTargets;
 };
@@ -66,7 +73,32 @@ export function ChatTranscriptHintRows(props: ChatTranscriptHintRowsProps) {
     </div>
   </PanelSectionRow>
 ) : null}
+{!isAsking && props.showNoAiRow && props.onNavigateToOllama ? (
+  <PanelSectionRow>
+    {/* Same Steam nav node and moves as the troubleshooting row below: the two never show together. */}
+    <Focusable
+      className="bonsai-chat-no-ai-row"
+      flow-children="horizontal"
+      {...({
+        navRef: troubleshootHintNavRef,
+        ...troubleshootHintRowNavHandlers(troubleshootHintButtonEls),
+      } as Record<string, unknown>)}
+    >
+      <div className="bonsai-full-bleed-row" style={{ ...fullBleedRowStyle, display: "flex", gap: 8 }}>
+        <Button
+          focusable
+          ref={troubleshootHintButtonRefs[0]}
+          onClick={props.onNavigateToOllama}
+          style={{ fontSize: textPx(11), padding: "4px 10px", minHeight: 34 }}
+        >
+          Open the Ollama tab
+        </Button>
+      </div>
+    </Focusable>
+  </PanelSectionRow>
+) : null}
 {!isAsking &&
+!props.showNoAiRow &&
 !props.gameContextReadEnabled &&
 !props.troubleshootingPermHintDismissed &&
 questionLooksLikeTroubleshootingAsk(unifiedInput) ? (

@@ -164,6 +164,8 @@ export type MainTabProps = {
   lastExchange?: LastExchangeSnapshot | null;
   gameContextReadEnabled?: boolean;
   onNavigateToPermissions?: (capability: BonsaiCapabilityKey) => void;
+  /** Jumps to the Ollama tab (the "Open the Ollama tab" row under the "AI is not set up" answer). */
+  onNavigateToOllama?: () => void;
   micPermissionDenied?: boolean;
   onDismissMicPermissionDeny?: () => void;
   /** The chat list; the open chat's row also carries its summary and the Sum up job (plan 68). */

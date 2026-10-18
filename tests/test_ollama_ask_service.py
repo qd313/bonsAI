@@ -211,6 +211,17 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(out.get("success"))
         self.assertNotIn("not set up on this Deck", str(out.get("response")))
 
+    def test_the_screens_prefix_matches_the_message_the_back_end_sends(self) -> None:
+        """The "Open the Ollama tab" row finds the answer by this opening; the two must not drift."""
+        import re
+        from pathlib import Path
+        from backend.ollama.ollama_routing import AI_NOT_SET_UP_MESSAGE_START
+        ts = (Path(__file__).resolve().parent.parent / "src" / "features" / "answer" / "transcript"
+              / "noAiSetUpNotice.ts").read_text(encoding="utf-8")
+        found = re.search(r'NO_AI_SET_UP_MESSAGE_START\s*=\s*"([^"]+)"', ts)
+        self.assertIsNotNone(found)
+        self.assertEqual(found.group(1), AI_NOT_SET_UP_MESSAGE_START)
+
     async def test_connecting_model_publishes_before_the_first_attempt(self) -> None:
         """The cold-model wait is the longest silent stretch of an Ask; it must say something.
 

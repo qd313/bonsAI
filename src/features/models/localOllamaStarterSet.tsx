@@ -21,7 +21,7 @@ import { toaster } from "@decky/api";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../shared/deckyCall";
 import { STARTER_NOTE_SEARCH_TAG, STARTER_SPEECH_MODELS, TIER1_ESSENTIALS_TAG } from "./deckEssentialsTags";
 import { confirmDownload, DOWNLOADS_OFF_FAILED_LINE, type DownloadNotice } from "../downloads/downloadNotice";
-import { modelPullNotice, SPEECH_MODELS_NOTICE } from "../downloads/downloadSites";
+import { modelPullNotice, OLLAMA_PROGRAM_NOTICE, SPEECH_MODELS_NOTICE } from "../downloads/downloadSites";
 import type { LocalOllamaSetupStatus } from "../ai-connection/OllamaWhereAiRunsSection.types";
 import {
   LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS,
@@ -34,13 +34,14 @@ import { textPx } from "../../styles/textPx";
 /** The words on the box's download button, and on the Browse models button that opens the same box. */
 export const STARTER_SET_BUTTON_LABEL = "Install the starter set";
 
-/** The model site and the size, in the shape the download notice takes. */
-export function starterSetNotices(): DownloadNotice[] {
-  return [modelPullNotice([TIER1_ESSENTIALS_TAG, STARTER_NOTE_SEARCH_TAG], "about 4.6 GB"), SPEECH_MODELS_NOTICE];
+/** The Ollama program's site is listed first only when this box also installs Ollama itself. */
+export function starterSetNotices(opts: { withOllama?: boolean } = {}): DownloadNotice[] {
+  const program = opts.withOllama ? [OLLAMA_PROGRAM_NOTICE] : [];
+  return [...program, modelPullNotice([TIER1_ESSENTIALS_TAG, STARTER_NOTE_SEARCH_TAG], "about 4.6 GB"), SPEECH_MODELS_NOTICE];
 }
 
-/** What the box says under the site line; `engineAlreadyAsked` is true for the follow-up box of Install Ollama. */
-export function starterSetBoxBody(engineAlreadyAsked: boolean) {
+/** What the box says under the site line; `engineAlreadyAsked` is true for the follow-up box of Install Ollama; `downloadsOff` makes its Cancel sentence say nothing is installed. */
+export function starterSetBoxBody(engineAlreadyAsked: boolean, downloadsOff = false) {
   return (
     <div className="bonsai-prose" style={{ fontSize: textPx(12), color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
       <div style={{ marginBottom: 8 }}>
@@ -57,7 +58,9 @@ export function starterSetBoxBody(engineAlreadyAsked: boolean) {
       </div>
       {engineAlreadyAsked ? (
         <div style={{ marginBottom: 8, color: "#c5d4e3" }}>
-          Cancel or B installs Ollama only, with no models. You can pull models later from Browse models.
+          {downloadsOff
+            ? "Cancel or B installs nothing. You can install Ollama and pull models later."
+            : "Cancel or B installs Ollama only, with no models. You can pull models later from Browse models."}
         </div>
       ) : null}
       <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>

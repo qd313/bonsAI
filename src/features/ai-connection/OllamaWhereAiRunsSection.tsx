@@ -192,6 +192,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   const localSetupBusy = localSetupStatus?.phase === "running";
   const setupAutoTestRanRef = useRef(false);
   const onTestConnectionRef = useRef<(opts?: { quiet?: boolean }) => Promise<void>>(async () => {});
+  const onSetupDoneRef = useRef<() => void>(() => {});
   /*
    * Which mode -- Ollama on this Deck (true) or on the network (false) -- the automatic probe last
    * ran for; null before the first. Keyed on the mode rather than "ran once" because after a plugin
@@ -439,13 +440,15 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     onBeforeDeckyModal,
     onCompleteDeckyModalClose,
     onTestConnectionRef,
+    onSetupDoneRef,
   });
 
-  const { handleToggleAutostart } = useOllamaLocalAutostart({
+  const { handleToggleAutostart, refreshAutostartStatus } = useOllamaLocalAutostart({
     setAutostartStatus,
     setAutostartBusy,
     setOllamaLocalAutostart,
   });
+  onSetupDoneRef.current = refreshAutostartStatus;
 
   return (
       <PanelSection>

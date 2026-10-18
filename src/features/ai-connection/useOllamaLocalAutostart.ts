@@ -95,5 +95,5 @@ export function useOllamaLocalAutostart({
     [refreshAutostartStatus, setOllamaLocalAutostart]
   );
 
-  return { handleToggleAutostart };
+  return { handleToggleAutostart, refreshAutostartStatus };
 }

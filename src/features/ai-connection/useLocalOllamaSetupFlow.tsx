@@ -70,6 +70,7 @@ export function useLocalOllamaSetupFlow({
   localSetupBusy,
   setupAutoTestRanRef,
   onTestConnectionRef,
+  onSetupDoneRef,
 }: {
   ollamaLocalOnDeck: boolean;
   localSetupStatus: LocalOllamaSetupStatus | null;
@@ -81,6 +82,8 @@ export function useLocalOllamaSetupFlow({
   /** No longer used here, as above. */
   onCompleteDeckyModalClose: (close: () => void) => void;
   onTestConnectionRef: RefObject<(opts?: { quiet?: boolean }) => Promise<void>>;
+  /** Called once when a setup finishes cleanly, so the tab re-reads the autostart line (F13). */
+  onSetupDoneRef?: RefObject<() => void>;
 }) {
   const formatLocalSetupStageLine = useCallback((st: LocalOllamaSetupStatus | null) => {
     if (!st || st.phase !== "running") return "";
@@ -142,14 +145,18 @@ export function useLocalOllamaSetupFlow({
           if (!turnedOn) return;
         }
         if (opts?.offerStarterModels) {
+          // With downloads off this box reads "Turn on internet downloads?" and Cancel installs nothing:
+          // nothing starts and the status line stays as it was (plan 96 F10).
+          const askedToTurnOn = internetDownloadsAreOff();
           const wantsStarter = await rememberReturnWhileBoxOpens(returnId, () =>
-            confirmDownload(starterSetNotices(), {
+            confirmDownload(starterSetNotices({ withOllama: true }), {
               always: true,
               title: "Also install the starter models?",
-              body: starterSetBoxBody(true),
+              body: starterSetBoxBody(true, askedToTurnOn),
               actionLabel: "Install Ollama and the starter models",
             })
           );
+          if (!wantsStarter && askedToTurnOn) return;
           if (wantsStarter) chosen = LOCAL_OLLAMA_SETUP_PROFILE_TIER1_ESSENTIALS;
         }
         setRefusal("");
@@ -205,6 +212,7 @@ export function useLocalOllamaSetupFlow({
         body: "Running connection test.",
         duration: 4000,
       });
+      onSetupDoneRef?.current?.();
       void onTestConnectionRef.current();
     }
   }, [ollamaLocalOnDeck, localSetupStatus]);

@@ -37,7 +37,6 @@ describe("animations held still while a game runs and a question is in flight", 
     ["the question box's breathing", ".bonsai-unified-input-host.bonsai-unified-input--asking.bonsai-glass-panel"],
     ["the question box's cursor", ".bonsai-unified-input-fake-caret"],
     ["the answer's blinking end cursor", '[data-bonsai-stream-preview="true"] .bonsai-ai-response-chunk::after'],
-    ["the waiting spinner", ".bonsai-thinking-spinner"],
     ["the code-box wait chip's pulse", ".bonsai-stream-fence-wait--code"],
     ["the code-box wait chip's spinner", ".bonsai-stream-fence-wait-spin"],
   ])("%s has no animation under the mark, after the rule that runs it", (_label, target) => {
@@ -48,6 +47,22 @@ describe("animations held still while a game runs and a question is in flight", 
     expect(held, "the held-still rule exists").toBeTruthy();
     expect(held!.body).toMatch(/animation:\s*none\s*!important/);
     expect(held!.at).toBeGreaterThan(original!.at);
+  });
+
+  it("the thinking line's spinner is NOT held still: it keeps turning with a game running", () => {
+    expect(ruleBody(css, `${MARK} .bonsai-thinking-spinner`), "no held-still rule for the spinner").toBeNull();
+    expect(css).not.toMatch(/game-steady[^{]*bonsai-thinking-spinner/);
+    const spin = ruleBody(css, ".bonsai-scope .bonsai-thinking-spinner");
+    expect(spin!.body).toMatch(/animation:\s*bonsai-thinking-spin\s+0\.9s\s+linear\s+infinite/);
+  });
+
+  it("the spin keyframe still exists, and the lighter rules come after it with nothing to override it", () => {
+    const keyframe = css.indexOf("@keyframes bonsai-thinking-spin");
+    const lighter = css.indexOf(`${MARK} .bonsai-unified-input-fake-caret`);
+    expect(keyframe).toBeGreaterThan(-1);
+    expect(lighter).toBeGreaterThan(keyframe);
+    const afterLighter = css.slice(lighter);
+    expect(afterLighter).not.toMatch(/bonsai-thinking-spinner/);
   });
 
   it("the question box keeps its full glow, steady, rather than losing it", () => {

@@ -6,15 +6,18 @@
  * lighterWhileGameRuns.ts). Under that mark every small looping animation holds still in its
  * visible state: the question box's breathing glow (steady at full glow, the look reduced motion
  * already gets), the question box's blinking cursor and the answer's blinking end cursor (shown,
- * not blinking), the waiting spinner, and the code-box wait chip's pulse and spinner.
+ * not blinking), and the code-box wait chip's pulse and spinner. One exception: the thinking
+ * line's spinner (`.bonsai-thinking-spinner`) keeps turning with a game running. The maintainer's
+ * call (2026-10-18): a spinner that stands still looks broken and cheap, and a 16 px arc turning
+ * costs little next to the answer's own redraws (docs/lessons-learned.md, frame-rate paragraphs).
  *
  * Used for: Folded into the plugin's one combined stylesheet by bonsaiScopeStylesheet.ts, last,
  * so each rule here comes after the rule it holds still.
  *
  * Solves: The panel's frame rate while an answer arrives with a game running: 10 to 20 frames a
  * second on the Deck (plan 70), against about 57 with nothing running. Each of these animations
- * is a change on screen the Deck has to redraw for -- a blink twice a second, a spinner on every
- * frame -- while the game and the model already share the chip. Plan 69 measured the two glows
+ * is a change on screen the Deck has to redraw for -- a blink twice a second, a wait chip's spinner on
+ * every frame -- while the game and the model already share the chip. Plan 69 measured the two glows
  * alone at about 5 frames a second with nothing running.
  *
  * Does not: Change anything with nothing running, or with a game running and nothing asked.
@@ -39,9 +42,6 @@ export function buildGameRunningLighterSection(): string {
           animation: none !important;
         }
         ${MARK} [data-bonsai-stream-preview="true"] .bonsai-ai-response-chunk::after {
-          animation: none !important;
-        }
-        ${MARK} .bonsai-thinking-spinner {
           animation: none !important;
         }
         ${MARK} .bonsai-stream-fence-wait--code {

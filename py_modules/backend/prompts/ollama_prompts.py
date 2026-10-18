@@ -134,6 +134,7 @@ from backend.prompts.reply_style_blocks import (
     build_terse_reply_block,
     terse_reply_applies,
 )
+from backend.prompts.answer_depth_blocks import build_answer_depth_blocks
 from backend.prompts.reply_followup_blocks import (
     sanitize_reply_followup,
     build_reply_followup_context_block,
@@ -598,6 +599,7 @@ def build_system_prompt(
                 title_profile=strategy_title_profile,
                 terse_branch_menu=terse,
             )
+        middle += build_answer_depth_blocks(question, ask_mode=ask_mode, reply_verbosity=reply_verbosity)
         return _assemble(
             dynamic_block + general_block + glossary_block,
             middle + language_block + verbosity_block,
@@ -730,12 +732,7 @@ def build_system_prompt(
         and _user_asks_about_deck_itself(question)
     ):
         middle += DECK_ITSELF_NO_GAME_MENU_LINE
-    if ask_mode == "speed":
-        middle += (
-            "\n\nACCURACY (Speed mode): Prefer verifiable, conservative claims. "
-            "If you are unsure about a fact, version number, store policy, or game-specific detail, say so briefly "
-            "instead of inventing specifics. For hardware or OS claims, stick to what the system message already states.\n"
-        )
+    middle += build_answer_depth_blocks(question, ask_mode=ask_mode, reply_verbosity=reply_verbosity)
 
     tail = ""
     if followup and power_topic:

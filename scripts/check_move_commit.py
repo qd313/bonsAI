@@ -37,7 +37,9 @@ How it works:
 4. In Markdown, relative links get the same test. In Python, the import statements of the old
    and new file are read with `ast` and compared as sets of full module names, with the old
    names run through the move table (a name spelled with the `py_modules.` prefix, as tests write
-   it, is mapped the same as one without); passing import statements are blanked.
+   it, is mapped the same as one without); passing import statements are blanked. Each name keeps
+   its alias in the comparison, and import statements with only white space between them blank as
+   one block, so one `from P import a, b` that the move split into two lines still pairs.
 5. Everywhere, an old or new repo path of a moved file, an old or new Python dotted module name
    of a moved file, the two shorter back-end forms of those repo paths (`backend/...`, and
    `services/...` relative to `py_modules/backend/`), and (for a rename) the old or new base
@@ -238,8 +240,24 @@ def dotted_name(path: str) -> str | None:
     return rel.replace("/", ".")
 
 
+def join_neighbours(text: str, spans: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    """Make one span of import statements with nothing but white space between them.
+
+    A move may turn one `from P import a, b` into two lines (one name left, one went to a new
+    package), so the number of statements differs while the names do not. The names are compared
+    one by one, so a run of statements counts as a single blanked block on both sides.
+    """
+    out: list[list[int]] = []
+    for start, end in sorted(spans):
+        if out and not text[out[-1][1] : start].strip():
+            out[-1][1] = max(out[-1][1], end)
+        else:
+            out.append([start, end])
+    return [(a, b) for a, b in out]
+
+
 def python_imports(text: str, path: str) -> tuple[list[tuple[int, int]], Counter] | None:
-    """Spans of every import statement, plus the set of full module names they import."""
+    """Spans of every import statement (runs joined), plus the module names they import."""
     try:
         tree = ast.parse(text)
     except (SyntaxError, ValueError):
@@ -269,7 +287,7 @@ def python_imports(text: str, path: str) -> tuple[list[tuple[int, int]], Counter
                 base = ".".join(head + ([node.module] if node.module else []))
                 for alias in node.names:
                     flat[("from", f"{base}.{alias.name}" if base else alias.name, alias.asname)] += 1
-    return spans, flat
+    return join_neighbours(text, spans), flat
 
 
 # ---------------------------------------------------------------------------------------------

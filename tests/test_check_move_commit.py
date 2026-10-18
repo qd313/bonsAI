@@ -234,6 +234,53 @@ class PythonMoveTests(unittest.TestCase):
         self.assertEqual(code, 1, out)
         self.assertIn("baz", out)
 
+    def test_one_from_import_split_into_two_lines_by_the_move_passes(self):
+        # `from P import foo, util` becomes one line for the moved module and one for the rest
+        self.box.write("tests/test_split.py", "from backend.services import foo as f, util\n")
+        self.box.commit("add importer")
+        do_python_move(self.box)
+        self.box.edit(
+            "tests/test_split.py",
+            "from backend.services import foo as f, util\n",
+            "from backend.services.sub import foo as f\nfrom backend.services import util\n",
+        )
+        self.box.commit("move foo")
+        code, out = self.box.check()
+        self.assertEqual(code, 0, out)
+
+    def test_a_split_from_import_whose_new_line_names_the_wrong_folder_fails(self):
+        self.box.write("tests/test_split.py", "from backend.services import foo as f, util\n")
+        self.box.commit("add importer")
+        do_python_move(self.box)
+        self.box.edit(
+            "tests/test_split.py",
+            "from backend.services import foo as f, util\n",
+            "from backend.other import foo as f\nfrom backend.services import util\n",
+        )
+        self.box.commit("move foo")
+        code, out = self.box.check()
+        self.assertEqual(code, 1, out)
+        self.assertIn("test_split.py", out)
+
+    def test_an_aliased_from_import_that_changed_its_alias_fails(self):
+        self.box.write("tests/test_alias.py", "from backend.services import foo as f\n")
+        self.box.commit("add importer")
+        do_python_move(self.box)
+        self.box.edit("tests/test_alias.py", "backend.services import foo as f", "backend.services.sub import foo as g")
+        self.box.commit("move foo")
+        code, out = self.box.check()
+        self.assertEqual(code, 1, out)
+        self.assertIn("test_alias.py", out)
+
+    def test_an_aliased_from_import_that_follows_the_move_keeps_its_alias_and_passes(self):
+        self.box.write("tests/test_alias.py", "from backend.services import foo as f\n")
+        self.box.commit("add importer")
+        do_python_move(self.box)
+        self.box.edit("tests/test_alias.py", "backend.services import foo as f", "backend.services.sub import foo as f")
+        self.box.commit("move foo")
+        code, out = self.box.check()
+        self.assertEqual(code, 0, out)
+
     def test_an_unrelated_comment_edit_in_a_touched_file_fails(self):
         do_python_move(self.box)
         self.box.edit("py_modules/backend/services/consumer.py", "def run():", "# tidy\ndef run():")

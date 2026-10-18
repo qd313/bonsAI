@@ -24,7 +24,7 @@ different job even though they also gate what build_system_prompt adds.
 import re
 from typing import Optional
 
-from backend.tdp_intent import is_current_tdp_read_intent
+from backend.power.tdp_intent import is_current_tdp_read_intent
 from backend.core.constants import (
     DEFAULT_OLLAMA_BASE_URL,
     OLLAMA_TAB_WHERE_AI_RUNS,

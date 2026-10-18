@@ -174,14 +174,14 @@ from backend.services.transparency_service import (
     build_sanitizer_command_snapshot,
     transparency_snapshot_for_chat_slot,
 )
-from backend.services.tdp_service import (
+from backend.power.tdp_service import (
     GPU_CLK_MAX_MHZ,
     GPU_CLK_MIN_MHZ,
     TDP_MAX_W,
     TDP_MIN_W,
     read_current_tdp_watts,
 )
-from backend.tdp_intent import (
+from backend.power.tdp_intent import (
     is_current_tdp_read_intent,
     parse_tdp_recommendation,
     strip_tdp_recommendation_block,

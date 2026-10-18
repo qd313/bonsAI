@@ -10,7 +10,7 @@ about power, once those words are long enough to be real advice rather than a on
 
 import unittest
 
-from backend.tdp_intent import parse_tdp_recommendation
+from backend.power.tdp_intent import parse_tdp_recommendation
 from test_game_ai_request import _FakePlugin, _run  # also installs the decky stand-in
 
 # The shape the Deck's answer had: four paragraphs of boss advice in a chatty voice, then the

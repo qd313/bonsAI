@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from unittest.mock import MagicMock
 
-from py_modules.backend.services import tdp_service
+from py_modules.backend.power import tdp_service
 
 
 class TdpSandboxTests(unittest.TestCase):

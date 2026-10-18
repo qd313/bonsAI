@@ -12,7 +12,7 @@ from backend.ollama_routing import (
     setup_recommended_pull_tags,
 )
 from backend.ollama_urls import build_ollama_chat_url, normalize_ollama_base
-from backend.tdp_intent import is_current_tdp_read_intent, parse_tdp_recommendation
+from backend.power.tdp_intent import is_current_tdp_read_intent, parse_tdp_recommendation
 
 
 class BackendHelperTests(unittest.TestCase):

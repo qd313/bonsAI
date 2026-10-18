@@ -198,7 +198,7 @@ from backend.services.ask_payload import (
     parse_ask_payload,
     sanitize_attachments,
 )
-from backend.services.tdp_service import clean_env
+from backend.power.tdp_service import clean_env
 from backend.services.local_ollama_setup_service import new_local_ollama_setup_state
 from backend.services.ollama_local_autostart_service import (
     apply_ollama_local_autostart as apply_ollama_local_autostart_entry,

@@ -13,7 +13,7 @@ import types
 import unittest
 from unittest.mock import patch
 
-from backend.tdp_intent import strip_tdp_recommendation_block
+from backend.power.tdp_intent import strip_tdp_recommendation_block
 
 if "decky" not in sys.modules:
     _decky = types.ModuleType("decky")

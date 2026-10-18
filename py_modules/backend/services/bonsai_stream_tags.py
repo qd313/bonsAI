@@ -86,7 +86,7 @@ from backend.services.ollama_prompts import (
     user_wants_power_or_performance_topic,
 )
 from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
-from backend.tdp_intent import is_current_tdp_read_intent
+from backend.power.tdp_intent import is_current_tdp_read_intent
 
 AskThinkingPhase = Literal[
     "starting",

@@ -22,7 +22,7 @@ import os
 import subprocess
 from typing import Any
 
-from backend.services.tdp_service import clean_env
+from backend.power.tdp_service import clean_env
 
 _SCRIPT_DIR = os.path.join(os.path.dirname(__file__), "..", "scripts")
 _READ_HOST_CLIPBOARD_SH = os.path.normpath(os.path.join(_SCRIPT_DIR, "read_host_clipboard.sh"))

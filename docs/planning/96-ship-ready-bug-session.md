@@ -223,3 +223,6 @@ at landing; `verify.py --full` gated on its exit code before the final push.
   F9, F10, F13 need a Deck without the engine or Ollama (release day's clean install). **New finding:** asking about an attached
   picture answered "incomplete stream" twice with the Deck's AI (`plan96-P96-F5-PICKER.json`), for the roadmap. The two-chip row
   changes every 4 to 9 s (each chip holds 9 s or more, the two spots alternate): the maintainer's eye decides.
+- **05:40 UTC:** the second round landed clean (`68f9c1a9` to `331d4b56`), build `f7413dbc` deployed (the popup and the second
+  round together); block E started with a fresh driver: the popup's first run (the settings file removed, not Clear all data) and
+  the re-checks of F1, F4, F6, F11 and the Main look check.

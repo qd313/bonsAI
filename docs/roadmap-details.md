@@ -933,3 +933,7 @@ Older dated notes moved here, word for word, to keep the roadmap under its size 
 **After pressing Stop on the mic, the next mic press does not work (older note):**
 
   **2026-10-10 evening (build `532761e2`, a recorded voice, no game):** not reproduced. On base.en, Stop then the mic about 18 s later started a new recording and added words (`workshop:test-evidence/v1010-VOICE-BASE-NOGAME.json`); on tiny.en, about 3 s later, the same (`workshop:test-evidence/v1010-VOICE-TINY-NOGAME.json`).
+
+**Maintainer's ask: sweep every tab for buttons that are lopsided, pressed against an edge or too small for their words (older note):**
+
+  **Look check run on the Deck 2026-10-18 (plan 96 block M, build `a1b00906`, before these fixes):** Settings, Permissions, Search, Developer (sections closed) and Ollama clean; About's Steam-drawn language dropdown reads as a light button (Steam's own control); Main's findings were the transcript's own rows and the chips (now exempt). Evidence `workshop:test-evidence/plan96-QA-LOOK-Main.json`, and the same name ending `-Settings`, `-Permissions`, `-Search`, `-Developer`, `-Ollama` and `-About`.

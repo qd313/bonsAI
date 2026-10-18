@@ -105,6 +105,49 @@ Remember what I typed (toggle)
   on): none twice, the three in order between Screenshot quality and Remember what I typed, only Up and Down on
   the row. jsdom has no spatial walk, so the Deck walk (Down through the whole tab, then Up) is the real check.
 
+### The first-run popup (plan 96 N1)
+
+The popup "Where should the AI run?" (`FirstRunWhereAiRunsModal.tsx`, opened once by
+`useDisclaimerAndLocalRuntimeGates.tsx` after the Beta Notice) is one column of stops in Steam's own box
+(`ModalRoot`). It reuses the Search tab's mechanism (`useSearchNav.ts` and the pure `searchNav.ts`, through
+`useFirstRunPopupNav.ts`): every stop is a `Focusable` with its own nav node and all four move handlers, and
+every hop is Steam's transfer onto that nav node, never a plain `focus()`, because a text field and a switch
+are containers of their own for Steam. The one rule that differs from the Search tab: Up from the top stop
+holds still (a popup has no tab bar above it).
+
+```
+switch on                                   switch off
+[Run AI on this Deck]                       [Run AI on this Deck]
+        |                                           |
+[Start the AI with the Deck]                [PC address field] -- Right -> [Find LAN]   (Find LAN: Developer tab on only)
+        |                                           |
+[Not now] -- Right -> [Install Ollama |     [Not now] -- Right -> [Test connection]
+                       Update AI & models]
+```
+
+- **The ring starts on Not now.** Steam's own first focus would pick the first switch, so the popup hands the
+  ring to Not now's nav node two frames after it mounts (the character picker's two-frame rule), once.
+- **Stops:** the two switches (Steam's `ToggleField` inside a `Focusable` that carries the stop), the address
+  field (the stop is the `input`, found through the wrapper the way the Search tab's find box does it), Find
+  LAN, and the two foot buttons. Titles, help lines and the status lines are text, not stops.
+- **Up and Down walk the column.** Down from the switches goes to the next row; Down from the address row goes
+  to Not now, and Up from the foot goes to the address field (or the Start switch): a row is entered on its first
+  stop, never on whichever stop is nearest in x, so a Down from the field can never land on Test connection
+  and an A pressed by habit does the safe thing. Down from the foot holds still.
+- **Left and Right** move along a row (Not now and the action beside it; the address field and Find LAN) and hold
+  still at both ends; on a switch they hold still. A press that goes nowhere still returns true, so Steam never
+  steps on by itself.
+- **A** on a switch is Steam's own; A on a button is `onOKButton` on its `Focusable` and a tap is `onClick`, with
+  the Search tab's press guard (a click within 400 ms of an A is the same press). A greyed action (a test or setup
+  already running) stays a stop and does nothing.
+- **B** is Not now: `ModalRoot`'s `onCancel`. Not now, B and Close (the label Not now takes once an install has
+  run) all call the same close, once.
+- **After the download notice closes over the popup** the shell hands the ring back to the action button, which
+  registers itself as the `"ollama-local-setup"` return target while the popup is open.
+- **Test:** `FirstRunWhereAiRunsModal.walk.test.tsx` starts on Not now, walks Up and back Down in both modes (no
+  stop twice, Up from the top holds), presses all four directions on every stop, and checks Find LAN's row. jsdom has
+  no spatial walk and no real Steam ring, so the Deck row (P96-N1-FIRST-RUN-POPUP) is the real check.
+
 ### Where the ring starts when the plugin opens
 
 _Moved here from AGENTS.md on 2026-09-27, word for word, to keep that file under its size limit._

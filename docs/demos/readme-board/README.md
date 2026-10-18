@@ -16,7 +16,7 @@ the stand-in pictures; those stills are not stored in git either.
 
 ## The tabs
 
-Every tab is decided as of 2026-10-17 evening. The plan ([docs/planning/95-readme-refresh.md](../../planning/95-readme-refresh.md)) § 11 lists what the README becomes. Next is the "go" and then the build.
+Every tab was decided on 2026-10-17 and the README was built the same day from the plan ([docs/planning/95-readme-refresh.md](../../planning/95-readme-refresh.md)). One pick changed at the build: the clips sit under the words in every fold, not beside them, by the maintainer's call on 2026-10-18. This board is finished.
 
 | Tab | What it decides | Status |
 |---|---|---|

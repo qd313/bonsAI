@@ -159,6 +159,8 @@ export type SumUpButtonView = {
 
 export const REASON_ANSWER_IN_FLIGHT = "Wait for the answer to finish, then sum up.";
 export const REASON_NOTHING_TO_SUM = "The whole chat still fits, so there's nothing to sum up yet.";
+/** The chats menu has no room for a line under its entries, so a press on the greyed entry pops this up. */
+export const MENU_REASON_NOTHING_TO_SUM = "Available once the chat is longer than the AI's memory.";
 /**
  * The pop-up for a Sum up press the back end turned away as "nothing to do". Only seen in a race
  * (the button was greyed out a moment before), and it cannot tell a chat that never got long from

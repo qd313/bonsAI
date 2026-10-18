@@ -55,6 +55,7 @@ import { chatsMenuMove, chatWhenLabel, CHATS_MENU_ACTIONS } from "./chatsMenuMod
 import { chatRow, FIVE_CHATS, MainTabHarness, newMainTabCalls, type MainTabCalls } from "../../../test-harness/chatTitleTestFixtures";
 import type { MainTabProps } from "../../main-tab/MainTab";
 import type { ChatSumUpState } from "../sum-up/chatSumUpModel";
+import { toaster } from "@decky/api";
 import { ChatSlotDeleteModal } from "../slots/ChatSlotDeleteModal";
 import { ChatSlotRenameModal } from "../slots/ChatSlotRenameModal";
 import { clearModalReturnFocus, peekModalReturnFocus } from "../../../shared/dpad/modalReturnFocusRegistry";
@@ -367,6 +368,29 @@ describe("every action does what the saved-chats row did", () => {
     expect(action(main, "sumup").classList.contains("bonsai-chats-menu__action--off")).toBe(true);
     await pressA(action(main, "sumup"));
     expect(state.startSumUp).not.toHaveBeenCalled();
+  });
+
+  it("A on the greyed Sum up entry says why on screen; the allowed one shows no toast (P96-F14)", async () => {
+    vi.mocked(toaster.toast).mockClear();
+    const blocked = sumUp({ canSumUp: false });
+    const { title, main } = mount({
+      chatSlotSummaries: FIVE_CHATS.map((c) => (c.id === "b" ? { ...c, sumUp: blocked } : c)),
+    });
+    await openMenu(title);
+    await pressA(action(main, "sumup"));
+    expect(toaster.toast).toHaveBeenCalledWith(
+      expect.objectContaining({ body: "Available once the chat is longer than the AI's memory." }),
+    );
+    expect(menu(main)).not.toBeNull();
+    cleanup();
+    vi.mocked(toaster.toast).mockClear();
+    const ok = sumUp();
+    const again = mount({
+      chatSlotSummaries: FIVE_CHATS.map((c) => (c.id === "b" ? { ...c, sumUp: ok } : c)),
+    });
+    await openMenu(again.title);
+    await pressA(action(again.main, "sumup"));
+    expect(toaster.toast).not.toHaveBeenCalled();
   });
 
   it("at the new-chat spot there is nothing to rename, delete or save", async () => {

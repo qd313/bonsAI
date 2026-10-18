@@ -8,7 +8,7 @@
  * on one still being written, and when each last changed. Under them, five actions: New chat, Rename
  * chat, Sum up this chat, Save to Desktop note and Delete chat (in red). It does everything the
  * saved-chats row at the top of the chat did, and adds Sum up as a second way in to the Session tab's
- * own button.
+ * own button. A press on its greyed Sum up entry pops up why (the grid has no room for a line).
  *
  * Used for: MainTab.tsx draws it inside the dock while the chat title store says it is open. It is drawn
  * in bonsAI's own box, so it gets bonsAI's styling and focus graph; only the name that opens it sits in
@@ -33,6 +33,7 @@
  *     too (`returnRingToChatName`; a plain focus() left it on Decky's back arrow on the Deck).
  */
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { toaster } from "@decky/api";
 import { Focusable } from "@decky/ui";
 
 import { findTabContentsScroll } from "../../../shared/dpad/chatPanelScroll";
@@ -42,7 +43,7 @@ import { elementHasGamepadFocus } from "../../../shared/dpad/uiDocument";
 import { useChatSlotDeleteConfirm } from "../slots/useChatSlotDeleteConfirm";
 import { useStartNewChat } from "../slots/useStartNewChat";
 import { useChatSlotRenameModal } from "../slots/useChatSlotRenameModal";
-import { sumUpButtonView, type ChatSumUpState } from "../sum-up/chatSumUpModel";
+import { MENU_REASON_NOTHING_TO_SUM, REASON_NOTHING_TO_SUM, sumUpButtonView, type ChatSumUpState } from "../sum-up/chatSumUpModel";
 import {
   rememberModalReturnFocus,
   registerModalReturnFocusOwner,
@@ -173,6 +174,12 @@ export function ChatsMenu(props: ChatsMenuProps): React.ReactElement {
     id === "save" ? atCreate || !props.canSaveChat || !props.onSaveChat : actionOff(id);
 
   const runAction = (id: ChatsMenuAction) => {
+    if (id === "sumup" && actionInert(id)) {
+      /* No room for a line under the entry in this grid, so A on the greyed entry says why. */
+      const reason = !sumUpView.reason || sumUpView.reason === REASON_NOTHING_TO_SUM ? MENU_REASON_NOTHING_TO_SUM : sumUpView.reason;
+      if (!sumUpView.busy) toaster.toast({ title: "Sum up this chat", body: reason, duration: 3500 });
+      return;
+    }
     if (actionInert(id)) return;
     const slotId = activeSlotId!;
     leaveToName();

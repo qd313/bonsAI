@@ -185,3 +185,12 @@ at landing; `verify.py --full` gated on its exit code before the final push.
   chips (to be exempted). **R2:** the stopped answer's Down reached the question box in 3 and 4 presses with no stop twice, with
   the library off; one try still drew a notes card with the switch off ("From bonsAI's own note": the built-in notes?), a question
   for the bookkeeper's roadmap note. Block V (the mic, the ring stall's trigger) started with a fresh driver.
+- **04:10 UTC, Deck block V done** (evidence `plan96-P96-F7-ASK-WHILE-1..3`, `plan96-P96-R1-*`). **F7:** Ask pressed 2 s into a
+  5 s sentence sent only the 36 characters spoken by then; at 5 s and at 8 s the whole 82-character sentence went. Ask stops the
+  recording and sends what has been said so far, so this is how it is meant to work, not a bug; the maintainer's real-mic hand
+  check stays owed. **R1:** the ring stall did not reproduce in nine tries (the About language pop-up route three times, the
+  plugin's own screenshot-and-reopen three times, three controls): the page had focus and Down moved every time. Root cause still
+  unknown; the README's known-problems line keeps "reload the plugin". Also seen: after each plugin reload the Decky tab was
+  missing from the rail and opening failed twice (the known rig entry); seven screenshots appeared in Steam's folder around the
+  menu chords (unexplained). Landed meanwhile: strategy (with a ring-class fix, `4a22a85e`), N3, models, N2; the session's five
+  focus fixes and F8 land next, then the chip size and Ask pill. The first-run popup lane (N1) starts now.

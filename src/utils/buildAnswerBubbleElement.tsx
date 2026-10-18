@@ -61,7 +61,7 @@
  */
 import React from "react";
 import { Focusable } from "@decky/ui";
-import type { DrgGlossaryTerm } from "./glossaryStore";
+import type { DrgGlossaryTerm } from "../features/glossary/glossaryStore";
 import { buildAnswerCorners } from "./buildAnswerCornerSlots";
 import {
   getRegisteredAnswerBubble,

@@ -115,7 +115,7 @@
  *   B, only while the block is open: closes it and leaves the ring on the row,
  *     pressed on the row or on the block.
  *     Attached as onCancelButton and only while open — measured on device
- *     2026-08-28 (DrgGlossaryTermChip.tsx): onButtonDown receives B but
+ *     2026-08-28 (GlossaryTermChip.tsx): onButtonDown receives B but
  *     returning true does not stop Steam backing the ring out of the panel,
  *     and the handler's mere presence eats B even when it does nothing, so an
  *     always-on handler would leave B dead on a closed row.
@@ -133,7 +133,7 @@ import {
 } from "../features/unified-input/constants";
 import { buildLiveReasoningSteps, buildReasoningFold } from "../utils/buildReasoningFoldElement";
 import { getUiDocument, uiGamepadFocusElement } from "../utils/uiDocument";
-import { answerWithoutContradictedCloseMatchLine as closeMatchAgrees } from "../utils/kbCloseMatchLineAgrees";
+import { answerWithoutContradictedCloseMatchLine as closeMatchAgrees } from "../features/knowledge-library/kbCloseMatchLineAgrees";
 import {
   buildKbNotesBlockElement,
   kbAttachedNotesFrom,
@@ -142,7 +142,7 @@ import {
   focusKbNotesBlock,
   focusUpPastLiveKbNotesBlock,
   focusUpPastSessionContextStripKbNotesBlock,
-} from "../utils/buildKbNotesBlockElement";
+} from "../features/knowledge-library/buildKbNotesBlockElement";
 import {
   buildDetailsPanelElement,
   closeDetailsPanel,
@@ -211,16 +211,16 @@ import { getRegisteredAnswerBubble } from "../utils/answerBubbleElRegistry";
 import { focusedAnswerStopIndex, orderedAnswerStops } from "../utils/answerStopRegistry";
 import { focusRegisteredReplyStop } from "../utils/replyStopRegistry";
 import { dismissTroubleshootHint, isTroubleshootHintDismissed } from "../utils/troubleshootHintDismissals";
-import { ensureGlossaryLoaded, type DrgGlossaryTerm } from "../utils/glossaryStore";
+import { ensureGlossaryLoaded, type DrgGlossaryTerm } from "../features/glossary/glossaryStore";
 import {
   composeDrgGlossaryExplainFurtherQuestion,
   drgGlossaryExplainFurtherThreadDisplay,
-} from "../utils/drgGlossaryAsk";
+} from "../features/glossary/glossaryAsk";
 import { protectedNamesFromNotes, type TurnSpoilerFacts } from "../utils/unwrapAskedEntitySpoilerFences";
 import { useEarlierTurnsPill } from "../hooks/useEarlierTurnsPill";
 import { buildEarlierList } from "./buildEarlierList";
 import { useTitleOverflow } from "../hooks/useTitleOverflow";
-import { useKbNotesFold } from "../hooks/useKbNotesFold";
+import { useKbNotesFold } from "../features/knowledge-library/useKbNotesFold";
 import { useReasoningFoldState } from "../hooks/useReasoningFoldState";
 import { usePermHintNavTargets } from "../hooks/usePermHintNavTargets";
 import { useSpoilerFenceRecheck } from "../hooks/useSpoilerFenceRecheck";

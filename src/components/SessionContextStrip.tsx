@@ -234,7 +234,7 @@ export function SessionContextTabBody({
       /*
        * B closes the whole panel via `onRequestClose`, not a local collapse — `onCancelButton` +
        * `preventDefault`, not `onButtonDown` checking the button code: measured on device
-       * 2026-08-28 (DrgGlossaryTermChip.tsx, buildReasoningFoldElement.tsx) that `onButtonDown`
+       * 2026-08-28 (GlossaryTermChip.tsx, buildReasoningFoldElement.tsx) that `onButtonDown`
        * does receive B, but returning `true` does NOT stop Steam also backing the ring out of the
        * panel — only `onCancelButton` genuinely consumes the press. Safe to attach
        * unconditionally: this body only exists while the Session tab is showing, so there is no

@@ -156,7 +156,7 @@ import {
 import {
   findNextDrgGlossaryTermChipInView,
   focusDrgGlossaryTermChip,
-} from "./drgGlossaryTermRegistry";
+} from "../shared/dpad/glossaryTermRegistry";
 
 import {
   focusAnswerStop,
@@ -703,7 +703,7 @@ function moveDownInAnswer(
    * same reply (spoilers are Strategy-mode only, the glossary is DRG Survivor only).
    *
    * Like the fence, eligibility is geometric (chips *after* the ring) rather than visited-once,
-   * so every pass down the reply can land on the chip again — see drgGlossaryTermRegistry.ts. When
+   * so every pass down the reply can land on the chip again — see glossaryTermRegistry.ts. When
    * the ring was moved up to a section from a small stop in it (`keepRingOnScreen`), "the ring" for
    * this purpose is that stop (`walkAnchor`), so it and the ones before it are not offered again.
    * Only words of the ring's own section: a word in the next section comes after that section's box,

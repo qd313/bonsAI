@@ -142,7 +142,7 @@ import { useTabStripBodyOffset } from "./hooks/useTabStripBodyOffset";
 import { usePluginSettings } from "./hooks/usePluginSettings";
 import type { StreamScrambleSettings } from "./features/stream-scramble/streamScrambleContext";
 import { useReplyLanguage } from "./hooks/useReplyLanguage";
-import { useIntentPacks } from "./hooks/useIntentPacks";
+import { useIntentPacks } from "./features/search-tab/useIntentPacks";
 import { useScreenshotBrowser } from "./hooks/useScreenshotBrowser";
 import { useSteamSettingsSearch } from "./hooks/useSteamSettingsSearch";
 import { useBonsaiPluginShell } from "./hooks/useBonsaiPluginShell";
@@ -154,7 +154,7 @@ import { useDeveloperToolActions } from "./features/plugin-shell/useDeveloperToo
 import { useSlowResponseWarningTimer, useUnifiedInputPersistence } from "./features/plugin-shell/useUnifiedInputBehaviors";
 import { useOllamaModelsHubModal } from "./features/plugin-shell/useOllamaModelsHubModal";
 import { useCharacterPickerModal } from "./features/plugin-shell/useCharacterPickerModal";
-import { desktopNoteExchangeFor, useDesktopNoteSaveModal } from "./features/plugin-shell/useDesktopNoteSaveModal";
+import { desktopNoteExchangeFor, useDesktopNoteSaveModal } from "./features/user-notes/useDesktopNoteSaveModal";
 import { usePluginHelpModal } from "./features/plugin-shell/usePluginHelpModal";
 import { useBonsaiAskOrchestration } from "./hooks/useBonsaiAskOrchestration";
 import { useChatSlots } from "./hooks/useChatSlots";

@@ -317,7 +317,7 @@ export function ContextChipLadder({
   /*
    * B collapses the ladder back to its own hint link. `onCancelButton` + `preventDefault`, not
    * `onButtonDown` checking the button code: measured on device 2026-08-28
-   * (DrgGlossaryTermChip.tsx, buildReasoningFoldElement.tsx) that `onButtonDown` does receive B,
+   * (GlossaryTermChip.tsx, buildReasoningFoldElement.tsx) that `onButtonDown` does receive B,
    * but returning `true` from it does NOT stop Steam also backing the ring out of the panel —
    * only `onCancelButton` genuinely consumes the press. It sits on each chip, the element holding
    * the ring. Safe unconditionally: the chips only exist while the ladder is expanded.

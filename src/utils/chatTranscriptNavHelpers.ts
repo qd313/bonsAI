@@ -18,7 +18,7 @@ import {
 import { isDeckDirectionLeftEvent, isDownDeckButtonEvent, isUpDeckButtonEvent } from "./focusNavigation";
 import { takeOpenQuestionText } from "./buildTurnHeaderElement";
 import { elementHasGamepadFocus } from "./uiDocument";
-import { focusUpPastLiveKbNotesBlock } from "./buildKbNotesBlockElement";
+import { focusUpPastLiveKbNotesBlock } from "../features/knowledge-library/buildKbNotesBlockElement";
 import { pressThenHandRingOn } from "./handRingOnWhenGone";
 import { takeChipSlotFocus } from "../features/details-slot/detailsSlotStore";
 import { topStripActive } from "../features/chat-title/deckyHeaderShape";

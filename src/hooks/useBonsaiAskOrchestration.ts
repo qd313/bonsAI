@@ -129,7 +129,7 @@ import type {
   AskThreadExpandedTurnKey,
 } from "../types/bonsaiUi";
 import { hasResponseAutosaved } from "../utils/desktopChatAutosave";
-import { saveReplyToDesktopNote } from "./saveReplyToDesktopNote";
+import { saveReplyToDesktopNote } from "../features/developer/saveReplyToDesktopNote";
 import { questionBypassesOllamaPcIpRequirement } from "../utils/localOnlyAskCommands";
 import { normalizePresetCarouselInject } from "../utils/presetCarouselInject";
 import type { KbAttachedNote, TransparencySnapshot } from "../utils/inputTransparency";

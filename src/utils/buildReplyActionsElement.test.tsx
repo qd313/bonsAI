@@ -18,7 +18,7 @@ import { registerAnswerStop, resetAnswerStopRegistry } from "./answerStopRegistr
 import {
   registerDrgGlossaryTermChip,
   resetDrgGlossaryTermRegistry,
-} from "./drgGlossaryTermRegistry";
+} from "../shared/dpad/glossaryTermRegistry";
 import { registerReplyStop, setReplyStopUnavailable } from "./replyStopRegistry";
 import { resetUiDocument } from "./uiDocument";
 

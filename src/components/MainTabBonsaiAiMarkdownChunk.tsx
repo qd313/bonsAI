@@ -59,9 +59,9 @@ import { Focusable } from "@decky/ui";
 
 import { focusSpoilerFence, registerSpoilerFence } from "../utils/spoilerFenceRegistry";
 import { isOkDeckButtonEvent } from "../utils/focusNavigation";
-import { splitTextForDrgGlossaryTerms } from "../utils/drgGlossaryTermMatch";
-import { DrgGlossaryTermChip } from "./DrgGlossaryTermChip";
-import { useGlossaryTerms, type DrgGlossaryTerm } from "../utils/glossaryStore";
+import { splitTextForDrgGlossaryTerms } from "../features/glossary/glossaryTermMatch";
+import { DrgGlossaryTermChip } from "../features/glossary/GlossaryTermChip";
+import { useGlossaryTerms, type DrgGlossaryTerm } from "../features/glossary/glossaryStore";
 import { SCRAMBLE_SLOT_MARK } from "../features/stream-scramble/streamScrambleMath";
 import { textPx } from "../styles/sections/textPx";
 
@@ -589,7 +589,7 @@ function BonsaiSpoilerFence(props: {
         /*
          * B re-hides the spoiler instead of backing out of the pane — and only `onCancelButton`
          * can deliver that, per the glossary chip's on-device instrumentation (2026-08-28,
-         * DrgGlossaryTermChip.tsx): `onButtonDown` receives B but returning true does not stop
+         * GlossaryTermChip.tsx): `onButtonDown` receives B but returning true does not stop
          * Steam's back-out, while `onCancelButton` + preventDefault consumes it; the handler's
          * mere presence also eats B even when it does nothing. Attaching it here is safe without
          * the chip's conditional-spread dance because this Focusable only exists while the

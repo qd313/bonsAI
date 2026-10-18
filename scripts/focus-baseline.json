@@ -60,7 +60,7 @@
     "src/utils/answerStopRegistry.ts": {
       "tabindex-removal": 1
     },
-    "src/utils/drgGlossaryTermRegistry.ts": {
+    "src/shared/dpad/glossaryTermRegistry.ts": {
       "tabindex-removal": 1
     },
     "src/utils/focusNavigation.ts": {

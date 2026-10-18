@@ -19,8 +19,8 @@ import { fireEvent, render } from "@testing-library/react";
    note counts as used so the block's presence depends only on what this file is about -- except
    in the describe that turns the real rule back on for a note the answer never used. */
 const usedRule = vi.hoisted(() => ({ countEveryNote: true }));
-vi.mock("../utils/kbNoteUsedByAnswer", async (importOriginal) => {
-  const real = await importOriginal<typeof import("../utils/kbNoteUsedByAnswer")>();
+vi.mock("../features/knowledge-library/kbNoteUsedByAnswer", async (importOriginal) => {
+  const real = await importOriginal<typeof import("../features/knowledge-library/kbNoteUsedByAnswer")>();
   return {
     ...real,
     kbNotesUsedByAnswer: (...args: Parameters<typeof real.kbNotesUsedByAnswer>) =>

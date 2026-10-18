@@ -7,7 +7,7 @@
  * brings its own copy (same text as data/kb/glossary_terms.json) and fills the store with it.
  * Does not: Call the back end, or check the library's real file (a Python test pins that).
  */
-import { resetGlossaryStore, setGlossaryTermsForTests, type DrgGlossaryTerm } from "../utils/glossaryStore";
+import { resetGlossaryStore, setGlossaryTermsForTests, type DrgGlossaryTerm } from "../features/glossary/glossaryStore";
 
 export const TEST_GLOSSARY_APP_ID = "2321470";
 const TEST_GLOSSARY_GAME_TITLE = "Deep Rock Galactic: Survivor";

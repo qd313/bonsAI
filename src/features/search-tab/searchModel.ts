@@ -17,7 +17,7 @@
  * Main tab's old ones (utils/intentPackSearch.ts), only called from here now.
  */
 import { SETTINGS_DATABASE } from "../../data/settingsDatabase";
-import { searchSettingsWithIntentPacks, type IntentPackSearchIndex } from "../../utils/intentPackSearch";
+import { searchSettingsWithIntentPacks, type IntentPackSearchIndex } from "./intentPackSearch";
 import type { GameNote, GameNoteLabel, SearchChat, SearchQuestion, SearchWord, SettingMatch, UserNote } from "./searchTypes";
 
 /** How many word buttons the tab draws: two rows of four. */

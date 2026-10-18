@@ -105,7 +105,7 @@ import { elementIsWithinViewportOf, focusLastAnswerChunk } from "./answerBubbleN
 import {
   findNextDrgGlossaryTermChipInView,
   focusDrgGlossaryTermChip,
-} from "./drgGlossaryTermRegistry";
+} from "../shared/dpad/glossaryTermRegistry";
 import { findScrollablePanel, revealBelowKeepingAsItSettles } from "./chatPanelScroll";
 import { syncDetailsLine } from "../features/details-slot/detailsSlotStore";
 import { NoteOfferCard } from "../features/user-notes/NoteOfferCard";

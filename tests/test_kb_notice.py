@@ -54,7 +54,7 @@ class KbNoticeTests(unittest.TestCase):
             )
 
     def test_names_the_test_fixture_copies(self) -> None:
-        self.assertIn("src/utils/kbNoteUsedByAnswer.fixtures.json", self.text)
+        self.assertIn("src/features/knowledge-library/kbNoteUsedByAnswer.fixtures.json", self.text)
 
     def test_every_licence_named_links_its_deed(self) -> None:
         deeds = {

@@ -33,7 +33,7 @@
  *     Knight Soul Sanctum: workshop:test-evidence/plan76-P76-M-COVER-ONLY.json and
  *     plan74-REPLY-STOPS-MIRROR-01-r2.json — every run began with an Up walk). Which cover Down
  *     offers is worked out fresh on every press from where the ring is, the way glossary chips
- *     are (drgGlossaryTermRegistry.ts): the cover the ring is on is never offered again, and one
+ *     are (glossaryTermRegistry.ts): the cover the ring is on is never offered again, and one
  *     the ring has moved past is not either, so nothing can trap the walk.
  */
 

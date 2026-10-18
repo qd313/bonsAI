@@ -41,7 +41,7 @@ import { DEFAULT_LATENCY_WARNING_SECONDS, DEFAULT_REQUEST_TIMEOUT_SECONDS, type 
 import { MODEL_POLICY_TIER_LABELS_PLAIN, type ModelPolicyTierId } from "../data/modelPolicy";
 import type { DeveloperConnectionStatus } from "./DeveloperTab";
 import { OllamaWhereAiRunsSection } from "./OllamaWhereAiRunsSection";
-import { KnowledgeBaseSection } from "./KnowledgeBaseSection";
+import { KnowledgeBaseSection } from "../features/knowledge-library/KnowledgeBaseSection";
 import { SettingsTabConnectionTimeoutSlider } from "./SettingsTabConnectionTimeoutSlider";
 import { SettingsTabOllamaKeepAliveSlider } from "./SettingsTabOllamaKeepAliveSlider";
 import { OllamaReplyVerbositySlider } from "./OllamaReplyVerbositySlider";

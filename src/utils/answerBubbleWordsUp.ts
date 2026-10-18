@@ -43,7 +43,7 @@ import {
 } from "./answerBubbleBandGeometry";
 import {
   findNextDrgGlossaryTermChipInView, focusDrgGlossaryTermChip, isDrgGlossaryTermChip,
-} from "./drgGlossaryTermRegistry";
+} from "../shared/dpad/glossaryTermRegistry";
 import { focusAnswerStop } from "./answerStopRegistry";
 import { uiGamepadFocusElement } from "./uiDocument";
 

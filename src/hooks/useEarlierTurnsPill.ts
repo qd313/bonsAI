@@ -26,7 +26,7 @@ import { takeHolderFocus } from "../utils/chatTranscriptNavHelpers";
 import { locateEarlierTurn } from "../utils/earlierTurnsByDay";
 import type { NavRefHolder } from "../utils/navFocusRegistry";
 import { getUiDocument, uiGamepadFocusElement } from "../utils/uiDocument";
-import { settleRing } from "../features/search-tab/settleRing";
+import { settleRing } from "../shared/dpad/settleRing";
 import { getSearchJump, markJumpRevealed, pendingJumpReveal, subscribeSearchJump } from "../features/search-tab/searchJumpStore";
 
 export type UseEarlierTurnsPillArgs = {

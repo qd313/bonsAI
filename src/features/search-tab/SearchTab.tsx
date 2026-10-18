@@ -23,7 +23,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
 
-import type { IntentPackSearchIndex } from "../../utils/intentPackSearch";
+import type { IntentPackSearchIndex } from "./intentPackSearch";
 import { uiGamepadFocusElement } from "../../utils/uiDocument";
 import { GameNoteSheet } from "./GameNoteSheet";
 import { SearchFindBox } from "./SearchFindBox";

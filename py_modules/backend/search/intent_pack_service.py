@@ -12,7 +12,7 @@ against.
 Used for: The settings-search feature. main.py calls the load, save, import
 and export functions here for the Settings screen's manage-packs panel; the
 screen itself does the actual word matching against these lists at search
-time (src/utils/intentPackSearch.ts).
+time (src/features/search-tab/intentPackSearch.ts).
 
 Solves: Keeping these lists safe to load even if hand-edited or imported from
 somewhere untrusted: a bad or oversized file cannot crash the plugin, an

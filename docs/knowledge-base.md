@@ -75,7 +75,7 @@ flowchart TD
 | Ask splice | `py_modules/backend/ask/game_ai_request.py` | `searching_kb` thinking phase; stack KB + Proton into `early_context_suffix` |
 | System prompt | `py_modules/backend/prompts/ollama_prompts.py` | `bonsai-cite` + spoiler instructions when KB block present |
 | Transparency | `py_modules/backend/answer/transparency_service.py` | KB slice (sources, bytes, tier) on last Ask |
-| UI | `src/components/KnowledgeBaseSection.tsx`, `OllamaTab.tsx` | Download/update/**cancel**/remove, toggle, availability indicator. Cancel shares the action row's second slot with Remove and only exists while a download runs — see **KB-CANCEL-01** in [testing.md](testing.md) |
+| UI | `src/features/knowledge-library/KnowledgeBaseSection.tsx`, `OllamaTab.tsx` | Download/update/**cancel**/remove, toggle, availability indicator. Cancel shares the action row's second slot with Remove and only exists while a download runs — see **KB-CANCEL-01** in [testing.md](testing.md) |
 
 > **Two names, one feature — grepping either one finds only half of it.** Everything
 > user-facing says **knowledge base**: the strings, this file, `KnowledgeBaseSection.tsx`,

@@ -31,7 +31,7 @@
  *     classes on purpose (D76 made that the shape a single reply-level control takes here). It is
  *     not the small-button component.
  *   - B is handled with `onCancelButton`, and attached only while the block is open. Measured on
- *     device 2026-08-28 (DrgGlossaryTermChip.tsx): `onButtonDown` does receive B, but returning
+ *     device 2026-08-28 (GlossaryTermChip.tsx): `onButtonDown` does receive B, but returning
  *     true from it does NOT stop Steam also backing the ring out of the panel, while
  *     `onCancelButton` plus `preventDefault` genuinely consumes the press. The same measurement
  *     found that merely having the handler attached eats B even when it does nothing, which is why

@@ -162,7 +162,7 @@ describe("ContextChipLadder active chip", () => {
 
 /*
  * Plan 62 3c pulled this collapse off `onButtonDown` and onto `onCancelButton`: measured on device
- * 2026-08-28 elsewhere in this codebase (DrgGlossaryTermChip.tsx, buildReasoningFoldElement.tsx)
+ * 2026-08-28 elsewhere in this codebase (GlossaryTermChip.tsx, buildReasoningFoldElement.tsx)
  * that `onButtonDown` receives B but returning `true` from it does not stop Steam also backing the
  * ring out of the panel, while `onCancelButton` + `preventDefault` genuinely consumes the press.
  * This pins the wiring the same way those two files' own suites do: it cannot prove Steam's ring on

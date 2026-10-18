@@ -25,7 +25,7 @@ import {
 import { registerAnswerStop, resetAnswerStopRegistry } from "../utils/answerStopRegistry";
 import { registerAnswerBubbleEl } from "../utils/answerBubbleElRegistry";
 import { registerSpoilerFence, resetSpoilerFenceRegistry } from "../utils/spoilerFenceRegistry";
-import { registerDrgGlossaryTermChip, resetDrgGlossaryTermRegistry } from "../utils/drgGlossaryTermRegistry";
+import { registerDrgGlossaryTermChip, resetDrgGlossaryTermRegistry } from "../shared/dpad/glossaryTermRegistry";
 import { resetUiDocument } from "../utils/uiDocument";
 import { liftForFocus } from "../hooks/useDockClearanceOnFocus";
 

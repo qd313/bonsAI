@@ -4,7 +4,7 @@ Purpose: Pin what remove_rag_corpus writes: the library's folder is deleted, and
 with the library's path and version empty and ``use_local_knowledge_base`` false. The Remove box promises
 the switch goes off; plan 93 block C part 2 (workshop:test-evidence/plan93-P90-SEARCH-KB.json) saw the switch
 read "on" on the Deck, and this test shows the back end was never the part that failed (the screen was:
-src/components/KnowledgeBaseSection.removeSwitch.test.tsx).
+src/features/knowledge-library/KnowledgeBaseSection.removeSwitch.test.tsx).
 Used for: backend/services/rag_corpus_rpc.remove_rag_corpus.
 Solves: A later change to the remove method quietly dropping the setting.
 Does not: Touch the disk; the folder removal and the settings file are faked.

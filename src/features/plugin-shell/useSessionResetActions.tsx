@@ -36,7 +36,7 @@ import { IP_DEFAULT } from "../../data/storageKeys";
 import { persistSearchQuery } from "./pluginStorage";
 import type { useBonsaiAskOrchestration } from "../../hooks/useBonsaiAskOrchestration";
 import type { useChatSlots } from "../../hooks/useChatSlots";
-import type { useIntentPacks } from "../../hooks/useIntentPacks";
+import type { useIntentPacks } from "../search-tab/useIntentPacks";
 import type { useReplyLanguage } from "../../hooks/useReplyLanguage";
 import type { useScreenshotBrowser } from "../../hooks/useScreenshotBrowser";
 import type { useDisclaimerAndLocalRuntimeGates } from "../../hooks/useDisclaimerAndLocalRuntimeGates";

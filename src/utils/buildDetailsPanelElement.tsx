@@ -22,7 +22,7 @@ import { Focusable } from "@decky/ui";
 import { revealBelowKeeping } from "./chatPanelScroll";
 import { uiGamepadFocusElement } from "./uiDocument";
 import { focusPerTurnRow } from "./focusPerTurnRow";
-import { focusKbNotesBlock } from "./buildKbNotesBlockElement";
+import { focusKbNotesBlock } from "../features/knowledge-library/buildKbNotesBlockElement";
 import { focusChatPermissionHintRow } from "./chatTranscriptNavHelpers";
 import { takeNavFocus } from "./navFocusRegistry";
 import { takeChipSlotFocus } from "../features/details-slot/detailsSlotStore";
@@ -297,7 +297,7 @@ export function buildDetailsPanelElement(args: {
           },
           /*
            * B closes the whole panel. `onCancelButton` + `preventDefault`, not `onButtonDown`
-           * checking the button code: measured on device 2026-08-28 (DrgGlossaryTermChip.tsx,
+           * checking the button code: measured on device 2026-08-28 (GlossaryTermChip.tsx,
            * buildReasoningFoldElement.tsx) that `onButtonDown` does receive B, but returning
            * `true` from it does NOT stop Steam also backing the ring out of the panel — only
            * `onCancelButton` genuinely consumes the press. Safe to attach unconditionally: this

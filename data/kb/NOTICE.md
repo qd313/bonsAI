@@ -62,7 +62,7 @@ library's `glossary_terms` table, not into the notes.
 
 ## Copies of the notes elsewhere in the repository
 
-`src/utils/kbNoteUsedByAnswer.fixtures.json` holds copies of 13 of the wiki-adapted notes above
+`src/features/knowledge-library/kbNoteUsedByAnswer.fixtures.json` holds copies of 13 of the wiki-adapted notes above
 (from the Combine OverWiki and the Hollow Knight Wiki), plus a few written for bonsAI, so a test
 can check real answers against them. The same terms apply to those copies.
 

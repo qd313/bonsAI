@@ -15,7 +15,7 @@ import {
   findNextDrgGlossaryTermChipInView,
   registerDrgGlossaryTermChip,
   resetDrgGlossaryTermRegistry,
-} from "./drgGlossaryTermRegistry";
+} from "../shared/dpad/glossaryTermRegistry";
 import { resetUiDocument } from "./uiDocument";
 
 /*
@@ -240,7 +240,7 @@ describe("walking answer sections with the D-pad", () => {
    * prose rather than a stop of its own — but geometric rather than visited-once: only chips after
    * the ring (Down) or before it (Up) are offered, so every pass can land on the chip and no pass
    * can be trapped by it ("consistently dpad focusable", maintainer 2026-08-28). See
-   * drgGlossaryTermRegistry.ts.
+   * glossaryTermRegistry.ts.
    */
   it("parks on a glossary term chip before continuing the walk", () => {
     const { bubble, stops } = threeSections();

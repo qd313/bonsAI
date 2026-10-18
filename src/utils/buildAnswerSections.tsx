@@ -21,7 +21,7 @@
 import React, { memo, useCallback } from "react";
 import { Focusable } from "@decky/ui";
 import { ScrambledAnswerText } from "../features/stream-scramble/ScrambledAnswerText";
-import type { DrgGlossaryTerm } from "./glossaryStore";
+import type { DrgGlossaryTerm } from "../features/glossary/glossaryStore";
 import { StreamFenceWaitChip } from "../components/StreamFenceWaitChip";
 import { registerAnswerStop } from "./answerStopRegistry";
 import { prepareStreamMarkdown } from "./streamMarkdownPrepare";

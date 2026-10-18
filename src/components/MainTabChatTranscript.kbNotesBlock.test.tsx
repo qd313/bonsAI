@@ -23,8 +23,8 @@ import { vi } from "vitest";
  * prove the transcript really applies it.
  */
 const usedRule = vi.hoisted(() => ({ countEveryNote: true }));
-vi.mock("../utils/kbNoteUsedByAnswer", async (importOriginal) => {
-  const real = await importOriginal<typeof import("../utils/kbNoteUsedByAnswer")>();
+vi.mock("../features/knowledge-library/kbNoteUsedByAnswer", async (importOriginal) => {
+  const real = await importOriginal<typeof import("../features/knowledge-library/kbNoteUsedByAnswer")>();
   return {
     ...real,
     kbNotesUsedByAnswer: (...args: Parameters<typeof real.kbNotesUsedByAnswer>) =>

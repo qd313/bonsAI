@@ -5,7 +5,7 @@ screen's deadline for that call is shorter than the worst case, the screen gives
 the back end is still working -- on the Deck plan it said "Update failed" after 15 s while
 the check could run for two minutes. This reads the screen's number out of the source and
 compares it with the back end's own constants, so the two cannot drift apart unnoticed.
-Used for: RAG_UPDATE_RPC_TIMEOUT_MS in src/components/KnowledgeBaseSection.tsx and
+Used for: RAG_UPDATE_RPC_TIMEOUT_MS in src/features/knowledge-library/KnowledgeBaseSection.tsx and
 MANIFEST_FETCH_TIMEOUT_S / MANIFEST_MIRROR_COUNT in rag_corpus_download_service.py.
 Does not: Run the screen or touch the network.
 """

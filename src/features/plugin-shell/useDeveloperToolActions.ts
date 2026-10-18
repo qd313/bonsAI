@@ -19,7 +19,7 @@ import { call, toaster } from "@decky/api";
 
 import { getSteamInputLexiconEntry } from "../../data/steam-input-lexicon";
 import { jumpToSteamInputEntry } from "../../utils/steamInputJump";
-import { SEED_KB_SOURCE_DIR } from "../../data/knowledgeBaseDev";
+import { SEED_KB_SOURCE_DIR } from "../developer/knowledgeBaseDev";
 import type { usePluginSettings } from "../../hooks/usePluginSettings";
 
 type PluginSettings = ReturnType<typeof usePluginSettings>;

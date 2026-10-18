@@ -17,7 +17,7 @@
 import React from "react";
 import { act, render } from "@testing-library/react";
 
-import { KnowledgeBaseSection } from "../components/KnowledgeBaseSection";
+import { KnowledgeBaseSection } from "../features/knowledge-library/KnowledgeBaseSection";
 import { usePluginSettings } from "../hooks/usePluginSettings";
 import { buildInitialSessionSnapshot } from "../features/plugin-shell/initialSessionSnapshot";
 import {

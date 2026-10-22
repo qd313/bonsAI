@@ -32,7 +32,7 @@
  *   - The count below is written as a comment rather than as a value anything can
  *     read. Nothing would use it, and an unused value fails one of the checks.
  *
- * 66 names at the time this was written.
+ * 67 names at the time this was written.
  */
 export type BonsaiRpcMethod =
   | "abort_background_game_ai"
@@ -56,6 +56,7 @@ export type BonsaiRpcMethod =
   | "fetch_ollama_catalog_metadata"
   | "forget_background_game_ai"
   | "get_background_game_ai_status"
+  | "get_build_info"
   | "get_chat_slot"
   | "get_deck_ip"
   | "get_input_transparency"

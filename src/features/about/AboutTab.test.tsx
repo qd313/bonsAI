@@ -22,7 +22,7 @@ import { act, render, screen } from "@testing-library/react";
 import { toaster } from "@decky/api";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@decky/ui", async () => {
   const stubs = await import("../../test-harness/fakeDeckyUi");
@@ -44,6 +44,7 @@ import { callNav } from "../../test-harness/aboutDeckyUi";
 import { findFirstSrcFile, repoRoot } from "../../test-harness/repoPaths";
 import { AboutTab } from "./AboutTab";
 import { PLUGIN_VERSION } from "../../pluginVersion";
+import { resetFakeDeckyRpc, setRpcHandler } from "../../test-harness/fakeDeckyRpc";
 import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
 import { SETTINGS_GLASS_BTN } from "../../styles/settingsGlassButton";
 
@@ -284,5 +285,36 @@ describe("About tab: A on the QR opens the support page", () => {
     expect(toaster.toast).toHaveBeenCalledWith(
       expect.objectContaining({ body: "https://paypal.me/quentind313" }),
     );
+  });
+});
+
+describe("About tab: the build on the title line (P97-L6-ABOUT-BUILD)", () => {
+  afterEach(() => resetFakeDeckyRpc());
+
+  it("reads 'Version <v> \u00b7 build <12 characters>' once the back end answers", async () => {
+    setRpcHandler("get_build_info", () => ({ build: "8bdfff8b7f5e", modified: 1 }));
+    const { container } = renderAbout();
+    await act(async () => {});
+    const version = container.querySelector<HTMLElement>("[data-bonsai-about-version]")!;
+    expect(version.textContent).toBe(`Version ${PLUGIN_VERSION} \u00b7 build 8bdfff8b7f5e`);
+    expect(container.querySelectorAll("[data-bonsai-about-version]")).toHaveLength(1);
+  });
+
+  it("says 'build unknown' when the back end could not read the bundle", async () => {
+    setRpcHandler("get_build_info", () => ({ build: "unknown", modified: null }));
+    const { container } = renderAbout();
+    await act(async () => {});
+    expect(container.querySelector("[data-bonsai-about-version]")!.textContent).toBe(
+      `Version ${PLUGIN_VERSION} \u00b7 build unknown`,
+    );
+  });
+
+  it("keeps the plain version line when the call fails", async () => {
+    setRpcHandler("get_build_info", () => {
+      throw new Error("no such method");
+    });
+    const { container } = renderAbout();
+    await act(async () => {});
+    expect(container.querySelector("[data-bonsai-about-version]")!.textContent).toBe(`Version ${PLUGIN_VERSION}`);
   });
 });

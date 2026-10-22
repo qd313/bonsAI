@@ -29,6 +29,7 @@ import type { ReplyLanguageId } from "../../shared/i18n/replyLanguage";
 import type { UiStringKey } from "../../shared/i18n/keys";
 import { PLUGIN_VERSION } from "../../pluginVersion";
 import { takeNavFocus } from "../../shared/dpad/navFocusRegistry";
+import { useBuildInfoLabel } from "./useBuildInfo";
 
 type Props = {
   githubRepoUrl: string;
@@ -50,11 +51,12 @@ type Props = {
  * (aboutTabStyles.ts, `.bonsai-about-title-version`). If a Steam build ever refuses a node, the Deck check shows the
  * title missing and the fallback is to draw this line ourselves.
  */
-const ABOUT_TITLE_LINE = (
+const aboutTitleLine = (buildLabel: string) => (
   <>
     {scaledSteamWords("About bonsAI", 16)}
     <span className="bonsai-about-title-version" data-bonsai-about-version="">
       Version {PLUGIN_VERSION}
+      {buildLabel ? ` \u00b7 ${buildLabel}` : ""}
     </span>
   </>
 );
@@ -83,9 +85,10 @@ export const AboutTab: React.FC<Props> = ({
   steamClientLanguageLabel,
   t: _t,
 }) => {
+  const buildLabel = useBuildInfoLabel();
   return (
     <div className="bonsai-about-tab">
-      <PanelSection title={ABOUT_TITLE_LINE as unknown as string}>
+      <PanelSection title={aboutTitleLine(buildLabel) as unknown as string}>
         <PanelSectionRow>
           <div className="bonsai-about-block">
             <div className="bonsai-about-blurb" data-bonsai-about-blurb="">

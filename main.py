@@ -183,6 +183,7 @@ from backend.media.screenshot_media import (
 )
 from backend.ask.game_ai_request import run_game_ai_request
 from backend.ollama.network_service import get_deck_ip_async
+from backend.core.build_info import get_build_info_cached
 from backend.ask.ollama_ask_service import run_ask_ollama
 from backend.answer.transparency_service import (
     build_immediate_command_snapshot,
@@ -1053,6 +1054,10 @@ class Plugin:
     def _clean_env() -> dict:
         """Proxy sanitized subprocess environment generation through the service layer."""
         return clean_env()
+
+    async def get_build_info(self):
+        """Return which build is installed: first 12 characters of dist/index.js's sha256 and its modified time."""
+        return get_build_info_cached(PLUGIN_ROOT)
 
     async def get_deck_ip(self):
         """Return the Steam Deck's LAN IP address."""

@@ -393,6 +393,8 @@ because this chat lost the test rig's tools after block A. This section is finis
 
 ### What the maintainer must do next
 
+All of it, with answer buttons: [Plan 97 Morning Checks](https://claude.ai/artifact/4PKcUtbTyvKrsA2zkiihi6).
+
 1. Say whether a separate chat may drive the Deck (it loads the rig's tools fresh). Without it, nothing landed tonight
    is proven on the Deck.
 2. Answer the open questions in § 13: the tab icons (thicker, brighter, both, or as they are) and the starter set's two

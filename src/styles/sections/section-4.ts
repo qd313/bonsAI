@@ -265,12 +265,16 @@ export function buildSection4Section(): string {
           the bar gave way to a pale blue tint laid over the chip's own gradient (the maintainer's
           pick, "highlight 1"); the hairline and drop shadow stay in the list because box-shadow
           replaces rather than adds. \`outline: none\` stops Steam's plain focus outline showing up clipped in its place.
+          The two help-chip arms out-rank section-6.ts's green help chip rule, which is as specific as
+          the plain \`.gpfocus\` arm and comes later, so it used to win (Deck, 2026-10-22: no change at all).
         */
         .bonsai-scope .bonsai-preset-carousel-focus-root.gpfocuswithin .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
         .bonsai-scope .bonsai-preset-carousel-focus-root:has(.gpfocus) .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
         :root:not(:has(.gpfocus)) .bonsai-scope .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
         .bonsai-scope button.bonsai-preset-glass.gpfocus,
-        :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass:focus-visible {
+        :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass:focus-visible,
+        .bonsai-scope button.bonsai-preset-help-chip.bonsai-preset-glass.gpfocus,
+        :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-help-chip.bonsai-preset-glass:focus-visible {
           outline: none !important;
           background: linear-gradient(rgba(56, 189, 248, 0.20), rgba(56, 189, 248, 0.20)), linear-gradient(180deg, rgba(56, 70, 84, 0.5) 0%, rgba(16, 22, 30, 0.55) 100%) !important;
           box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 2px 3px rgba(0, 0, 0, 0.4) !important;

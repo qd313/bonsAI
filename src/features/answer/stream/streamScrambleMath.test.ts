@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import {
   SCRAMBLE_FINISH_MS,
   SCRAMBLE_SLOT_MARK,
@@ -13,6 +13,7 @@ import {
   settlePointFixedTail,
   withoutInlineMarks,
 } from "./streamScrambleMath";
+import { setAiRunsOnPc } from "./streamPace";
 
 describe("churnCellKind and churnSymbol", () => {
   it("keeps spaces and line breaks as they are, drops bold and code marks, and scrambles the rest", () => {
@@ -133,5 +134,44 @@ describe("finishProbeAt and locateSettlePoint", () => {
     const probe = finishProbeAt(streamed, streamed.length)!;
     const finished = `${streamed}.\n—\nFrom your notes`;
     expect(locateSettlePoint(finished, probe)).toBe(streamed.length);
+  });
+});
+
+/* The PC pace (streamPace.ts): the same functions, tighter, only when the AI is on a PC. */
+describe("with the AI on a PC", () => {
+  afterEach(() => setAiRunsOnPc(false));
+
+  it("keeps 5 letters scrambled at the end instead of 10", () => {
+    const text = "one two three four";
+    setAiRunsOnPc(true);
+    expect(text.slice(settlePointFixedTail(text)).replace(/\s/g, "")).toHaveLength(5);
+    expect(text.slice(settlePointFixedTail(text))).toBe("e four");
+  });
+
+  it("settles a letter every 28 ms instead of every 42 ms, and hands back unused credit in chip time", () => {
+    setAiRunsOnPc(true);
+    expect(settlePointChipPace("abcdef", 0, 2)).toEqual({ point: 3, credit: 0 });
+    // 1 chip-letter of credit is 1.5 letters: one settles and half a letter's worth stays banked.
+    expect(settlePointChipPace("abcdef", 0, 1)).toEqual({ point: 1, credit: 0.5 / 1.5 });
+  });
+
+  it("settles on arrival time a third sooner: 400 ms becomes about 267 ms", () => {
+    const arrivals = [0, 0];
+    expect(settlePointAfterMoment(arrivals, 0, 266, 400)).toBe(0);
+    setAiRunsOnPc(true);
+    expect(settlePointAfterMoment(arrivals, 0, 266, 400)).toBe(0);
+    expect(settlePointAfterMoment(arrivals, 0, 267, 400)).toBe(2);
+  });
+
+  it("finishes a short stretch at the quicker letter pace", () => {
+    expect(lettersSettledInFinish(4, 28)).toBe(0);
+    setAiRunsOnPc(true);
+    expect(lettersSettledInFinish(4, 28)).toBe(1);
+    expect(lettersSettledInFinish(4, 112)).toBe(4);
+  });
+
+  it("still makes every letter real within 0.6 s", () => {
+    setAiRunsOnPc(true);
+    expect(lettersSettledInFinish(500, SCRAMBLE_FINISH_MS)).toBe(500);
   });
 });

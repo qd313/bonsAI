@@ -11,6 +11,7 @@
 import { useEffect, useRef, useState } from "react";
 import { didNonSpoilerFenceJustClose, settleRevealCut } from "./streamMarkdownPrepare";
 import { STREAM_BEAT_MS } from "./streamBeat";
+import { streamPace } from "./streamPace";
 
 type UseSmoothStreamRevealArgs = {
   targetText: string;
@@ -28,9 +29,9 @@ const PROSE_RATE_MIN = 40;
  * from the backlog instead makes it self-scaling — a fast host drains a big backlog quickly, a slow
  * one trickles — and pacing it *just over* `BACKGROUND_STREAM_POLL_MS` (150ms) keeps the reveal from
  * sprinting to the end of a partial and then idling until the next poll, which is the startup hitch
- * STREAM-REVEAL-01 saw on Deck after the first ~6-7 words.
+ * STREAM-REVEAL-01 saw on Deck after the first ~6-7 words. The number is 0.18 s for the AI on the Deck
+ * and 0.12 s with the AI on a PC, where text arrives faster (streamPace.ts).
  */
-const TARGET_DRAIN_SECONDS = 0.18;
 /**
  * Beats to keep the loop alive after catching up — about one poll interval, so a partial that
  * drains early is still being revealed when the next one lands. Bounded on purpose: an
@@ -43,7 +44,7 @@ const FENCE_BURST_RATE_MULTIPLIER = 3;
 const FENCE_BURST_BEATS = Math.round(750 / STREAM_BEAT_MS);
 
 function proseRevealRate(backlog: number): number {
-  return Math.max(PROSE_RATE_MIN, backlog / TARGET_DRAIN_SECONDS);
+  return Math.max(PROSE_RATE_MIN, backlog / streamPace().drainSeconds);
 }
 
 function sharedStartLength(a: string, b: string): number {

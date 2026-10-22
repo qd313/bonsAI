@@ -3,6 +3,7 @@ import { renderHook, act } from "@testing-library/react";
 import { useSmoothStreamReveal, FENCE_BURST_RATE_MULTIPLIER } from "./useSmoothStreamReveal";
 import { STREAM_BEAT_MS } from "./streamBeat";
 import { prepareStreamMarkdown } from "./streamMarkdownPrepare";
+import { setAiRunsOnPc } from "./streamPace";
 
 /** Beats of the reveal, each its own act() so React renders between them the way the page does. */
 function beats(count: number) {
@@ -207,6 +208,26 @@ describe("useSmoothStreamReveal", () => {
     expect(result.current).toBe("Keep moving.\n\nThe Soul");
     rerender({ target: "Keep moving.\n\n" });
     expect(result.current).toBe("Keep moving.\n\n");
+  });
+
+  /*
+   * The drain time is how long a backlog takes to show: 0.18 s with the AI on the Deck, 0.12 s on a
+   * PC (streamPace.ts). One beat is 0.11 s, so a 300-letter backlog shows about 183 or 275 of it.
+   */
+  it("drains a backlog in 0.18 s on the Deck and 0.12 s with the AI on a PC", () => {
+    const firstBeat = () => {
+      const { result, unmount } = renderHook(() =>
+        useSmoothStreamReveal({ targetText: "x".repeat(300), enabled: true, done: false })
+      );
+      beats(1);
+      const shown = result.current.length;
+      unmount();
+      return shown;
+    };
+    expect(firstBeat()).toBe(Math.floor((300 / 0.18) * (STREAM_BEAT_MS / 1000)));
+    setAiRunsOnPc(true);
+    expect(firstBeat()).toBe(Math.floor((300 / 0.12) * (STREAM_BEAT_MS / 1000)));
+    setAiRunsOnPc(false);
   });
 
   it("exports fence burst multiplier at 3×", () => {

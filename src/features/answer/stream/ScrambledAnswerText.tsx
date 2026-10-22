@@ -51,8 +51,6 @@ import { StreamScrambleContext } from "./streamScrambleContext";
 import {
   SCRAMBLE_CHAR_MS,
   SCRAMBLE_CHURN_MS,
-  churnCellKind,
-  churnSymbol,
   finishProbeAt,
   lettersSettledInFinish,
   locateSettlePoint,
@@ -62,6 +60,7 @@ import {
   settlePointFixedTail,
   withoutInlineMarks,
 } from "./streamScrambleMath";
+import { freshCells, syncChurnCells, type ChurnCells } from "./churnCells";
 import { beginFinish, continuesShownAnswer, pendingFinish, rememberLiveText } from "./liveScrambleMemo";
 
 export type ScrambledAnswerTextProps = Omit<MainTabBonsaiAiMarkdownChunkProps, "source" | "scrambleSlotRef"> & {
@@ -87,69 +86,6 @@ function commonPrefixLength(a: string, b: string): number {
   let i = 0;
   while (i < n && a.charCodeAt(i) === b.charCodeAt(i)) i += 1;
   return i;
-}
-
-/**
- * What the churn span holds: one node per unsettled character from `start` to `end` of `basis`
- * (a letter is a span, a space or line break a text node, a bold or code mark nothing). `basis`
- * null means the nodes no longer match anything and must be built again.
- */
-type ChurnCells = { basis: string | null; start: number; end: number; list: Array<{ index: number; node: Node }> };
-
-function freshCells(): ChurnCells {
-  return { basis: null, start: 0, end: 0, list: [] };
-}
-
-/**
- * Brings the churn span in line with `text` settled up to `from`, touching only what changed:
- * settled letters leave from the front, arriving ones join at the back. Each letter stays in the
- * line as itself -- invisible, with its symbol drawn over it (answerBubble.ts) -- so the line is
- * laid out exactly as it will be once the letter is real, and a reshuffle only swaps the symbols
- * (`reshuffle`), which moves nothing. A symbol wider or narrower than its letter used to re-wrap
- * the last line on every reshuffle, and every re-wrap set the chat's size watchers measuring the
- * whole panel again (Deck profile, 2026-09-24: the page never went idle while an answer arrived).
- */
-function syncChurnCells(churn: HTMLSpanElement, cells: ChurnCells, text: string, from: number, reshuffle: boolean) {
-  if (cells.basis === null || !text.startsWith(cells.basis) || from < cells.start) {
-    churn.replaceChildren();
-    cells.list = [];
-    cells.start = from;
-    cells.end = from;
-  }
-  let settled = 0;
-  while (settled < cells.list.length && cells.list[settled]!.index < from) {
-    churn.removeChild(cells.list[settled]!.node);
-    settled += 1;
-  }
-  if (settled > 0) cells.list.splice(0, settled);
-  cells.start = from;
-  const doc = churn.ownerDocument;
-  const arriving = doc.createDocumentFragment();
-  for (let i = Math.max(cells.end, from); i < text.length; i += 1) {
-    const ch = text[i]!;
-    const kind = churnCellKind(ch);
-    if (kind === "mark") continue;
-    let node: Node;
-    if (kind === "blank") {
-      node = doc.createTextNode(ch);
-    } else {
-      const letter = doc.createElement("span");
-      letter.className = "bonsai-stream-scramble-char";
-      letter.textContent = ch;
-      letter.setAttribute("data-s", churnSymbol());
-      node = letter;
-    }
-    arriving.appendChild(node);
-    cells.list.push({ index: i, node });
-  }
-  if (arriving.firstChild) churn.appendChild(arriving);
-  cells.end = text.length;
-  cells.basis = text;
-  if (reshuffle) {
-    for (const cell of cells.list) {
-      if (cell.node.nodeType === 1) (cell.node as Element).setAttribute("data-s", churnSymbol());
-    }
-  }
 }
 
 /*

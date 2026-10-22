@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 **Contents**
 
 - [\[Unreleased\]](#unreleased)
+  - [Plan 97 (2026-10-22)](#plan-97-2026-10-22)
   - [Plan 96 (2026-10-18)](#plan-96-2026-10-18)
   - [Plan 86 step 4 (2026-10-17)](#plan-86-step-4-2026-10-17)
   - [Plan 86 step 3 (2026-10-16)](#plan-86-step-3-2026-10-16)
@@ -82,6 +83,21 @@ All notable changes to this project are documented in this file.
 <!-- /toc -->
 
 ## [Unreleased]
+
+### Plan 97 (2026-10-22)
+
+Fixes from the bug and Verify lists, landed on `experimental`. Each line below passed on the Deck on 2026-10-22 (plan 97's Deck blocks D, E and F); the rows and evidence are in the testing documents.
+
+- **Fixed: the About tab names the build.** The title line reads "Version 0.5.0 · build" and the first 12 characters of the installed bundle's hash. Passed on the Deck (row P97-L6-ABOUT-BUILD).
+- **Fixed: the reply language you pick on the About tab stays.** It used to flip back to Follow system when Steam's list closed; the pick is now saved the moment it is made. Passed on the Deck (row P97-L2-LANGUAGE-PICK).
+- **Fixed: Up from Find LAN on the Ollama tab goes to the PC address box,** then the Save row, instead of skipping to the second switch. Passed on the Deck (row P97-L16-FINDLAN-UP).
+- **Fixed: after A on "Explain further" the ring lands on the question box** instead of on nothing. Passed on the Deck (row P97-L12-EXPLAIN-RING).
+- **Fixed: a question that names a game gets that game's glossary words underlined even when the game is not running.** A running game still wins. Passed on the Deck (row P97-L5-GLOSSARY-NAMED).
+- **Fixed: the "How to use bonsAI" chip shows the soft blue fill when the D-pad is on it,** like the other chips. Passed on the Deck (row P97-HR-HELP-CHIP-RING).
+- **Fixed: at the Large text size a section's summary no longer shows as a sliver, and its arrow keeps its place.** Passed on the Deck, by eye (row P97-L13-LARGE-TEXT).
+- **Fixed: asking about an attached screenshot works.** Every picture is shrunk first, and the shrink step now runs ffmpeg without the plugin loader's library path (the first version could not start it on the Deck). The picture reached the AI all three times and the answers named the screen; the largest picture took 63 s on a cold start. Passed on the Deck on the second try (row P97-L1-PICTURE-ANSWER).
+- **Changed: with the AI on a PC on your network, answers stream a little quicker.** The tail of scrambled letters is shorter and letters settle faster; the Deck's own pace is untouched. Frame rate matched the Deck's pace (57.1 against 56.1). Passed on the Deck (row P97-L11-PC-PACE); the look is the maintainer's eye.
+- **Changed: the look check no longer reports Steam's own language dropdown on the About tab.** Nothing was reported on About on the Deck (look check QA-LOOK-01).
 
 ### Plan 96 (2026-10-18)
 

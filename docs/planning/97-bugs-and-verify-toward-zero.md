@@ -341,7 +341,7 @@ Questions for the maintainer raised during the run (the safest choice taken mean
 
 | Time | Question | Choice taken | Answer |
 |---|---|---|---|
-| | | | |
+| 01:00 | The starter set's size reads "about 4.6 GB" on the notice and "about 4.5 GiB" in the box. They are two different sets (the notice: the answer model and note search; the box: those plus the two speech models, about 4.8 GB). Make the box say "about 4.8 GB" so both use the same unit, or leave both? | Leave both as they are (they are not wrong, only in two units) | |
 
 ## 14. Report
 

@@ -51,13 +51,14 @@ maintainer's own hands, with the roadmap current at every step.
    line goes in meanwhile. It is never called resolved without them.
 5. **The maintainer's own checks:** about ten minutes of eye checks before leaving (§ 4), the touch and the
    game-start checks when back, the child account another day.
-6. **Budget:** 0 percent on the week and on the five-hour window at planning time.
+6. **Budget:** 0 percent on the week and on the five-hour window at go. The five-hour window resets about three and a
+   half hours after go; the week resets next Wednesday at 9 in the morning.
 7. **The second opinion:** at most five Fable consults, each logged in § 8.
 8. **The knowledge-base file:** the library update's version compare is in; the wrong-subject notes bug stays out.
 9. **Standing rules while away:** a fix that fails on the Deck twice moves up one model tier without asking; a new
    one- or two-star bug gets one helper round of about an hour; anything blocked gets the safest choice at once
-   **and a phone notification at that moment**, so the maintainer can approve the best fix rather than the cautious
-   one.
+   **and is raised in the chat and the plan at that moment** (the maintainer checks in remotely and is not relying on
+   phone notifications), so they can approve the best fix rather than the cautious one.
 10. **The one running the session is Opus 5.5 at high** (the table says extra-high for whoever lands; the maintainer
     chose high for this session).
 
@@ -82,22 +83,23 @@ maintainer's own hands, with the roadmap current at every step.
 
 **The maintainer, about fifteen minutes, in this order:**
 
-1. **The rig repo (five minutes, before the Opus chat is opened).** In the rig's own checkout on this PC
-   (`C:\Users\still\decky-plugin-studio`): find the branch from 2026-10-14 that holds plan 93 lane R's two fixes (opening
-   the plugin after a reload; the settings snapshot), merge it into `main`, run its tests, rebuild the server
-   (`mcp-server/dist`). The desktop app loads the rig's tools once, when a chat starts, so this must be done **before**
-   the implementation chat opens, or the night cannot prove those two fixes.
-2. **Phone notifications on** in the app (they were off on 2026-10-10). Item 9 of § 2 depends on them.
-3. **The Deck free:** no other chat driving it; the rig's stop switch re-armed; the Deck on its own screen; Deep Rock
-   Galactic: Survivor on the Recent Games row; the Deck's own AI installed; the PC's Ollama running (one check needs it).
-4. **Ten minutes of eye checks, answered on the checks page** (the session adds a "Wednesday 22 October" group to
-   [Checks Only You Can Do](https://claude.ai/code/artifact/3e5ec678-b219-439d-b952-139d75ff2db4) before go; until then,
-   answer in chat): the tab bar's thicker icons (P92-ICONS-AFTER); the chips' look, the help and agent chips, a short
-   chip's centring and the chip pace (CHIP-BUTTON-01, -05, -06); the rating row's look (P79-M7-RATING-ROW); the scramble's
-   look and the frame-rate verdict (SCR-01, SCR-03, SCR-09). If the Deck can sit docked for the first fifteen minutes and
-   be undocked before leaving, the monitor half of the look check (QA-LOOK-01) runs first; otherwise it waits until the
-   maintainer is back.
-5. **Read the usage screen** and say the two numbers in the first message to the session.
+1. **The rig repo: done 2026-10-22, before go.** The maintainer merged the 2026-10-14 branch (plan 93 lane R's two
+   fixes: opening the plugin after a reload; the settings snapshot) into the rig's `main` and rebuilt the server, so
+   block A's check A1 runs tonight. (The desktop app loads the rig's tools once, when a chat starts.)
+2. **Phone notifications:** the maintainer is not relying on them (2026-10-22). A blocked question is raised in the
+   chat and the plan's questions list; they check in remotely.
+3. **The Deck free and online: done 2026-10-22.** Still to confirm at go: the rig's stop switch re-armed; the Deck on
+   its own screen; Deep Rock Galactic: Survivor on the Recent Games row; the Deck's own AI installed; the PC's Ollama
+   running (one check needs it).
+4. **Ten minutes of eye checks, answered on the checks page.** The "Wednesday 22 October" group is on
+   [Checks Only You Can Do](https://claude.ai/code/artifact/3e5ec678-b219-439d-b952-139d75ff2db4) (added by the planning
+   chat 2026-10-22; the session reads the answers at go): the tab bar's thicker icons (P92-ICONS-AFTER); the chips' look,
+   the help and agent chips, a short chip's centring and the chip pace (CHIP-BUTTON-01, -05, -06); the rating row's look
+   (P79-M7-RATING-ROW); the scramble's look and the frame-rate verdict (SCR-01, SCR-03, SCR-09); the chips-near-the-end
+   presses (call 4). If the Deck can sit docked for the first fifteen minutes and be undocked before leaving, the monitor
+   half of the look check (QA-LOOK-01) runs first; otherwise it waits until the maintainer is back.
+5. **The usage screen:** 0 percent on both counters at go (the maintainer, 2026-10-22); the five-hour window resets
+   about three and a half hours in, the week next Wednesday at 9 in the morning.
 6. **Open the Opus 5.5 high chat in the desktop app, in the repo folder, on `experimental`,** and say: "Run plan 97."
 
 **The session's first acts (the first thirty minutes), in this order:**
@@ -107,7 +109,8 @@ maintainer's own hands, with the roadmap current at every step.
    `python scripts/keep_awake.py --hours 10` in the background (the desktop app keeps the PC awake too; two holds are
    cheaper than one freeze). Set the 20-minute wake check and, before any pause, a background job that ends when the
    pause should.
-2. Add the maintainer's eye checks to the checks page as a new group (§ 4 item 4) and read any answers already there.
+2. Read the maintainer's answers on the checks page (§ 4 item 4: the group is already there) and carry them into the
+   first sweep.
 3. The baseline: `python scripts/verify.py --full` on the tip, once, in the shared checkout. Every copy is cut from
    that tip.
 4. Cut the wave 1 copies (`python scripts/worktree.py create p97-<lane> --base experimental`), confirm each sits at the
@@ -177,7 +180,7 @@ one minute.
 
 | # | What | When | Who |
 |---|---|---|---|
-| X1 | Merge the 2026-10-14 branch (plan 93 lane R: opening after a reload, the settings snapshot) into the rig's main and rebuild | **Before go**, by the maintainer (§ 4) | the maintainer |
+| X1 | Merge the 2026-10-14 branch (plan 93 lane R: opening after a reload, the settings snapshot) into the rig's main and rebuild | **Done 2026-10-22, before go** (§ 4) | the maintainer |
 | X1-check | Prove both on the Deck: open the plugin after a reload, first try, three rounds (**P89-RIG-OPEN-AFTER-RELOAD**); three settings snapshots that restore byte for byte (**P89-RIG-SNAPSHOT**) | Block A | the driver |
 | X2 | The 92-percent sampler and the rail wait (§ 5a) | Wave 1 | Sonnet high |
 | X2-merge | The session merges `bonsai-p97` into the rig's main after its tests pass, writes the findings-log lines in docs/mcp-setup.md (the bookkeeper), and notes that the next chat proves them | The end | the session |
@@ -264,11 +267,13 @@ changed, the cost.
 | The paperwork | `bookkeeper` (Sonnet 5.5 medium), never during a landing | one |
 | The second opinion | `advisor` at max effort (Fable 5.1), § 8 | one at a time, five in all |
 
-**Budget.** Both counters at 0 percent at planning time. Rules: start no new helper past 75 percent of the five-hour
-window or 80 percent of the week; read the figure before every wave; stagger starts; helpers run only their own tests
-at two workers (the rules file); the full sets run once per landing; end leftover test runs when a helper finishes.
-Plan 92's lesson: more than ten helpers can reach the weekly line in one night when the week starts above half; this
-week starts at zero, so wave 1 may run full, and the figure is read again before wave 2.
+**Budget.** Both counters at 0 percent at go; the five-hour window resets about three and a half hours in, the week
+next Wednesday at 9 in the morning. Rules: start no new helper past 75 percent of the five-hour window or 80 percent of
+the week; read the figure before every wave; stagger starts; helpers run only their own tests at two workers (the rules
+file); the full sets run once per landing; end leftover test runs when a helper finishes. Plan 92's lesson: more than
+ten helpers can reach the weekly line in one night when the week starts above half; this week starts at zero, so wave 1
+may run full. Wave 2 (the fixes that wait on the Deck's readings) falls naturally after the five-hour reset, so time it
+there rather than squeezing it in before; the figure is read again before it starts.
 
 ## 10. Standing rules while nobody is watching
 
@@ -276,9 +281,9 @@ week starts at zero, so wave 1 may run full, and the figure is read again before
   the measurement in hand, without asking.
 - **A new one- or two-star bug found tonight** is filed in the roadmap at the next sweep, written into the report, and
   gets one helper round of about an hour if its cause is known; anything bigger is measured and listed, not guessed at.
-- **A blocked question** gets the safest choice at once and a phone notification at that moment, in one line, with the
-  choice taken; when the maintainer answers, the session switches to the best fix. The question and the answer go into
-  the plan's questions list (§ 13), not only into chat.
+- **A blocked question** gets the safest choice at once and is raised in the chat at that moment, in one line, with the
+  choice taken (the maintainer checks in remotely); when they answer, the session switches to the best fix. The question
+  and the answer go into the plan's questions list (§ 13), not only into chat.
 - **A new maintainer-only check** goes onto the checks page, never left in chat.
 - Never: push (the hook refuses it; the maintainer says "push"), merge to main in this repo, switch branches in the
   shared folder, stage everything, type a PIN or password, press anything on the Deck outside a written check, reload
@@ -318,8 +323,11 @@ week starts at zero, so wave 1 may run full, and the figure is read again before
 
 - **2026-10-22:** written in the cloud. The maintainer's ten calls taken (§ 2). Briefs, rules and three runbooks
   written. Nothing started; nothing on the Deck touched.
+- **2026-10-22, later:** the maintainer's go answers: the rig branch merged and rebuilt; the Deck free and online; both
+  usage counters at 0 percent, the five-hour reset about three and a half hours in, the week's next Wednesday at 9 in
+  the morning; phone notifications not relied on; the eye-checks group put on the checks page by the planning chat.
 
-Questions for the maintainer raised during the run (the safest choice taken meanwhile, a notification sent):
+Questions for the maintainer raised during the run (the safest choice taken meanwhile, the question raised in the chat):
 
 | Time | Question | Choice taken | Answer |
 |---|---|---|---|

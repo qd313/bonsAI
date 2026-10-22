@@ -26,6 +26,7 @@ import { StreamFenceWaitChip } from "../stream/StreamFenceWaitChip";
 import { registerAnswerStop } from "../../../shared/dpad/answerStopRegistry";
 import { registerRowNav } from "../../../shared/dpad/focusPerTurnRow";
 import { prepareStreamMarkdown } from "../stream/streamMarkdownPrepare";
+import { withoutUndecidedFenceOpener } from "../stream/undecidedFenceOpener";
 import { cutAnswerSections } from "../markdown/splitResponseIntoChunks";
 
 const STOP_CLASS = "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble bonsai-answer-stop";
@@ -140,7 +141,10 @@ export function answerSectionBodies(
   streaming: boolean,
   unwrapOpenSpoilerFence?: (openFenceText: string) => boolean
 ): SectionBody[] {
-  const sections = cutAnswerSections(text, !streaming);
+  /* A fence opener still being written is left off until it says what it is: the back end hides
+     the Strategy choice menu only once its opener names it, and the box drawn for it before then
+     made the answer jump 48.6 px taller near the end (plan 97, L4; undecidedFenceOpener.ts). */
+  const sections = cutAnswerSections(streaming ? withoutUndecidedFenceOpener(text) : text, !streaming);
   const bodies: SectionBody[] = sections.map((s) => ({ kind: "text", text: s, live: false }));
   if (!streaming || sections.length === 0) return bodies;
   /* The last section is still filling: a half-written block waits behind its chip, and open bold or

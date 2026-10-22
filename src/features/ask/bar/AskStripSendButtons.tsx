@@ -26,29 +26,61 @@
  * 2. ASK: Left goes to the X when it shows, else to the mic or Stop; Right holds still, it is the strip's
  *    right end. A or a tap asks. While an answer is being written it is disabled and dimmed, and A on it
  *    does nothing.
- * 3. focusOwnRef is the in-row hop both use: a plain focus() on a button's own element, safe because every
- *    stop in this group is a sibling in one Steam row; never a class lookup.
+ * 3. focusOwnRef is the in-row hop onto the X: Steam's transfer onto the X's own nav node first, then a plain
+ *    focus() on its own element (never a class lookup). A plain focus() between siblings of one Steam row is
+ *    safe only while the panel's page has the browser's focus; without it (plan 97 block B,
+ *    workshop:test-evidence/plan97-P97-B-FREEZE-2.json) the ring stays put, so the plain hop then declines
+ *    the press and Steam walks the row itself (lostFocusHop.ts).
+ * 4. ASK and the X each sit in a Focusable of their own whose nav node is registered ("ask-primary",
+ *    "ask-strip-clear"), the way Helpful has one (replyStopNavRef): Down from the box and the hops onto them
+ *    go through Steam's transfer. Without that node, Steam's own Down from the box, the move it makes when a
+ *    hop declines, would pick the paperclip at the strip's other end.
  */
-import React from "react";
-import { Button } from "@decky/ui";
+import React, { useEffect, useRef } from "react";
+import { Button, Focusable } from "@decky/ui";
 
 import { ClearIcon } from "../../../shared/icons/icons";
-import { plainHop } from "../../../shared/dpad/lostFocusHop";
+import { plainHop, transferHop } from "../../../shared/dpad/lostFocusHop";
+import {
+  registerNavFocus,
+  unregisterNavFocus,
+  type NavFocusId,
+  type NavRefHolder,
+} from "../../../shared/dpad/navFocusRegistry";
 
 /** A ref this file can focus through: a button's own element, filled in by Decky's Button. */
 type ElementRef = React.RefObject<HTMLElement | null>;
 
+/** The nav node each strip ref's button sits in, filled in as AskStripSendButtons draws them. */
+const stripNavIds = new WeakMap<object, NavFocusId>();
+
 /**
  * In: a button's own ref.
- * Out: true when the button was there and took focus.
- * Can go wrong: nothing; a button that is not drawn (the X with an empty box) is simply reported missing,
- *     and the caller falls through to its next stop.
+ * Out: true when the ring reached the button; false when it is not drawn (the X with an empty box), or when
+ *     the panel's page has lost focus and the plain hop could not move the ring (the press is then Steam's).
+ * Can go wrong: a caller that turns the false into true makes the press dead while the page lacks focus.
  */
 export function focusOwnRef(ref: ElementRef): boolean {
   const el = ref.current;
   if (!el) return false;
+  const id = stripNavIds.get(ref);
+  if (id && transferHop(id, "strip-own-ref", () => ref.current)) return true;
   return plainHop(el, "strip-own-ref");
 }
+
+/** A nav node registered under `id` for as long as `on` holds: the holder Steam fills through `navRef`. */
+function useStripNavNode(id: NavFocusId, on: boolean): NavRefHolder {
+  const holder = useRef<NavRefHolder["current"]>(null);
+  useEffect(() => {
+    if (!on) return undefined;
+    registerNavFocus(id, holder);
+    return () => unregisterNavFocus(id, holder);
+  }, [id, on]);
+  return holder;
+}
+
+/** The wrapper that carries a strip button's own nav node; laid out as the button alone would be. */
+const NAV_WRAP_STYLE: React.CSSProperties = { display: "flex", flexShrink: 0 };
 
 export type AskStripSendButtonsProps = {
   /** True while an answer is being written (or Sum up runs): ASK rests. */
@@ -97,16 +129,21 @@ function SendArrow() {
  */
 export function AskStripSendButtons(props: AskStripSendButtonsProps) {
   const { isAsking, askLooksReady, showClear, onAskPress, onClearPress, askRef, clearRef, focusMicOrStop, focusAskPrimary } = props;
+  const askNav = useStripNavNode("ask-primary", true);
+  const clearNav = useStripNavNode("ask-strip-clear", showClear);
+  stripNavIds.set(clearRef, "ask-strip-clear");
   return (
     <>
       {showClear ? (
+        <Focusable style={NAV_WRAP_STYLE} {...({ navRef: clearNav } as Record<string, unknown>)}>
         <Button
           ref={clearRef}
           className="bonsai-askbar-target bonsai-ask-strip-clear"
           {...({
             onMoveLeft: () => focusMicOrStop(),
-            /* ASK, or hold still while it rests: past the X there is nothing a press could do. */
-            onMoveRight: () => focusAskPrimary() || true,
+            /* ASK, or hold still while it rests: past the X there is nothing a press could do. A hop that
+               declined (the page lost focus, lostFocusHop.ts) stays declined, so Steam moves the ring. */
+            onMoveRight: () => focusAskPrimary() || isAsking,
           } as Record<string, unknown>)}
           onClick={onClearPress}
           aria-label="Clear"
@@ -128,7 +165,9 @@ export function AskStripSendButtons(props: AskStripSendButtonsProps) {
             <ClearIcon size={16} />
           </span>
         </Button>
+        </Focusable>
       ) : null}
+      <Focusable style={NAV_WRAP_STYLE} {...({ navRef: askNav } as Record<string, unknown>)}>
       <Button
         ref={askRef}
         className={
@@ -154,6 +193,7 @@ export function AskStripSendButtons(props: AskStripSendButtonsProps) {
         <span className="bonsai-ask-pill__label">Ask</span>
         <SendArrow />
       </Button>
+      </Focusable>
     </>
   );
 }

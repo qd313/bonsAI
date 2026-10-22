@@ -60,6 +60,10 @@ import { uiWindowMissingFocus } from "./uiDocument";
 
 export type NavFocusId = "session-context-strip" | "preset-carousel" | "unified-input"
   | "tab-bar"
+  /** The small Ask button and the X beside it, at the question box strip's right end (AskStripSendButtons.tsx).
+   *  Down from the box and the strip's own hops onto them are Steam's transfer, which still moves the ring
+   *  while the panel's page has lost the browser's focus; a plain focus() then does not (plan 97, L14). */
+  | "ask-primary" | "ask-strip-clear"
   /** The troubleshooting Ask hint row below the transcript — see
    *  MainTabChatTranscript.tsx's `focusChatPermissionHintRow`. */
   | "chat-perm-hint-troubleshoot"

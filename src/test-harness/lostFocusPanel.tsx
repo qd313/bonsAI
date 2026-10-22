@@ -62,6 +62,8 @@ export function mountPanelPage(): PanelPage {
   const frame = document.createElement("iframe");
   document.body.appendChild(frame);
   const doc = frame.contentDocument!;
+  /* The window asked for the focus back refuses, as on the Deck (jsdom does not implement it at all). */
+  Object.defineProperty(frame.contentWindow!, "focus", { value: () => {}, configurable: true });
   const state = { focused: true };
   doc.hasFocus = () => state.focused;
   Object.defineProperty(doc, "visibilityState", { get: () => "visible", configurable: true });

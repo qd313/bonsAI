@@ -32,6 +32,7 @@ import React, { useEffect, useRef, useSyncExternalStore } from "react";
 import { Focusable } from "@decky/ui";
 
 import { registerNavFocus, takeNavFocus, unregisterNavFocus, type NavRefHolder } from "../../shared/dpad/navFocusRegistry";
+import { panelLacksFocus } from "../../shared/dpad/lostFocusHop";
 import {
   foldedTabsVersion,
   isSectionOpen,
@@ -132,16 +133,29 @@ export function FoldedSection({ tab, chain, id, title, summary, children }: Fold
   }, [tab, id]);
 
   const at = ids.indexOf(id);
+  /*
+   * Into an open section the entry is a plain focus() on its control (the tab's own focus callbacks). While
+   * the panel's page has lost the browser's focus that does not move Steam's ring (plan 97, lostFocusHop.ts),
+   * so the entry reports false; the press is then declined rather than carried past the open section, and
+   * Steam's own step along the column, whose next child is that same control, moves the ring and the page's
+   * focus together.
+   */
   const moveDown = (): boolean => {
     notePersonPress();
-    if (open && chain[at]?.enterFromTop?.()) return true;
+    if (open && chain[at]?.enterFromTop) {
+      if (chain[at]!.enterFromTop!()) return true;
+      if (panelLacksFocus()) return false;
+    }
     return foldLineBelow(tab, chain, id);
   };
   const moveUp = (): boolean => {
     notePersonPress();
     const prev = chain[at - 1];
     if (!prev) return takeNavFocus("tab-bar");
-    if (isSectionOpen(tab, ids, prev.id) && prev.enterFromBottom?.()) return true;
+    if (isSectionOpen(tab, ids, prev.id) && prev.enterFromBottom) {
+      if (prev.enterFromBottom()) return true;
+      if (panelLacksFocus()) return false;
+    }
     return takeFoldLine(tab, prev.id);
   };
   const toggle = () => {

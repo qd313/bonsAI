@@ -40,7 +40,7 @@ import { takeNavFocus } from "../../../shared/dpad/navFocusRegistry";
 import { takeDetailsSlotLineFocus } from "../../answer/details/detailsSlotStore";
 import { takeInjectChipFocus } from "../../preset-carousel/injectChipNav";
 import { elementHasGamepadFocus } from "../../../shared/dpad/uiDocument";
-import { plainHop } from "../../../shared/dpad/lostFocusHop";
+import { panelLacksFocus, plainHop, transferHop } from "../../../shared/dpad/lostFocusHop";
 
 export type MainTabAskBarFocusRefs = {
   unifiedInputFieldLayerRef: React.Ref<HTMLDivElement>;
@@ -71,8 +71,15 @@ export type MainTabAskBarFocusRefs = {
  * 4. focusFirstPresetChip() — up into the suggestion row above the Ask bar:
  *    the still-open help chip if there is one, otherwise the first suggestion
  *    chip, with the same take-Steam's-transfer-first approach as step 1.
- * 5. focusAskPrimary() — the small Ask button itself, through its own element
- *    (askBarHostRef holds the button since plan 84), never while it rests.
+ * 5. focusAskPrimary() — the small Ask button itself, by Steam's transfer onto its
+ *    own nav node ("ask-primary", AskStripSendButtons.tsx), else through its own
+ *    element (askBarHostRef holds the button since plan 84); never while it rests.
+ *
+ * Every plain focus() here goes through lostFocusHop.ts's plainHop: while the
+ * panel's page has lost the browser's focus a plain focus() does not move Steam's
+ * ring (plan 97 block B, workshop:test-evidence/plan97-P97-B-FREEZE-2.json), so
+ * the hop reports false and the press is declined, and Steam moves the ring
+ * itself instead of the press dying.
  * 6. focusMicOrStop() — the mic / stop button in the input's other corner.
  * 7. focusAskModeButton() — the button that opens the Ask-mode picker.
  * 8. Bundle the question box's four directions and the avatar's two
@@ -183,10 +190,10 @@ export function useMainTabAskBarFocus(
   }, [refs.presetCarouselHostRef]);
 
   /*
-   * The small Ask button in the box's own strip (plan 84). askBarHostRef is filled by the button itself
-   * now, not a row around it, so this focuses that element directly instead of searching under a host.
-   * A plain focus(): from the box this is the same hop the mode button took and the Deck showed working
-   * (P82-BOX-DOWN-MODE-BUTTON), and inside the strip the stops are siblings of one row.
+   * The small Ask button in the box's own strip (plan 84). Steam's transfer onto its own nav node first:
+   * the plain focus() this used to be moved the page's focus while the ring stayed on the box whenever the
+   * panel's page had lost the browser's focus, the Down that died on the Deck in plan 97 block B. The plain
+   * focus() on askBarHostRef (filled by the button itself) stays for the frames before Steam fills the node.
    */
   const focusAskPrimary = useCallback((): boolean => {
     // Resting while a question is in flight -- see the isAskInFlight doc comment above.
@@ -198,6 +205,7 @@ export function useMainTabAskBarFocus(
         ? (refs.askBarHostRef as React.RefObject<HTMLElement | null>).current
         : null;
     if (!btn) return false;
+    if (transferHop("ask-primary", "to-ask", () => btn)) return true;
     return plainHop(btn, "to-ask");
   }, [refs.askBarHostRef, isAskInFlight]);
 
@@ -256,7 +264,8 @@ export function useMainTabAskBarFocus(
            * actually wants then -- the same reasoning that keeps Retry live on a stopped answer.
            * So hand the ring to Stop, and only hold it still if even that is missing.
            */
-          if (isAskInFlight) return focusMicOrStop() || true;
+          /* Hold still only while the page has its focus: without it a declined hop must reach Steam (plan 97). */
+          if (isAskInFlight) return focusMicOrStop() || !panelLacksFocus();
           return focusAskPrimary();
         },
         onMoveRight: () => focusAskModeButton(),

@@ -7,7 +7,7 @@
  *          press after press. This mounts the real ask bar inside a page in that state (lostFocusPanel.tsx) and
  *          presses the D-pad the way Steam does.
  * Used for: useMainTabAskBarFocus.ts (Down, Left and Right from the box), AskStripSendButtons.tsx (Ask and the X,
- *           with their own nav nodes), lostFocusHop.ts (the plugin-log line).
+ *           with their own nav nodes), lostFocusHop.ts (the declined hop and the plugin-log line).
  * Solves: In the model, as on the Deck, a plain `focus()` on a page without focus leaves the ring where it was;
  *         Steam's own move and its transfer move it. So every press below must either reach its stop by Steam's
  *         transfer or decline, letting Steam's own step move the ring; and the page's focus and the ring must
@@ -70,6 +70,13 @@ function buildProps(overrides: Partial<MainTabUnifiedAskBarProps> = {}): MainTab
   };
 }
 
+const PAPERCLIP = "Attach screenshot to Ask";
+const MODE = "Inference mode: Strategy. Open to change.";
+const MIC = "Voice input";
+const STOP = "Stop generation";
+const CLEAR = "Clear";
+const ASK = "Ask";
+
 let page: PanelPage;
 
 function mount(overrides: Partial<MainTabUnifiedAskBarProps> = {}) {
@@ -83,10 +90,37 @@ function mount(overrides: Partial<MainTabUnifiedAskBarProps> = {}) {
 function box(): HTMLElement {
   return page.host.querySelector<HTMLElement>('[data-decky-ui="TextField"]')!;
 }
-function press(key: MoveKey) {
+function byLabel(label: string): HTMLElement {
+  const el = page.host.querySelector<HTMLElement>(`.bonsai-unified-input-actions-row button[aria-label="${label}"]`);
+  expect(el, `no "${label}" in the strip`).toBeTruthy();
+  return el!;
+}
+function nameOf(el: Element | null): string {
+  if (!el) return "nothing";
+  if (el === box()) return "question box";
+  return el.getAttribute("aria-label") ?? el.className;
+}
+/** The strip's stops, left to right: what Steam walks along its row. */
+function stripStops(): HTMLElement[] {
+  return Array.from(
+    page.host.querySelectorAll<HTMLElement>('.bonsai-unified-input-actions-row button:not([aria-disabled="true"])'),
+  );
+}
+/** Steam's own step along the strip's row: the stop beside the ring that way, none past an end. */
+function steamRowStep(key: MoveKey) {
+  return (from: HTMLElement): HTMLElement | null => {
+    const stops = stripStops();
+    const at = stops.indexOf(from);
+    if (at < 0) return null;
+    if (key === "onMoveLeft") return stops[at - 1] ?? null;
+    if (key === "onMoveRight") return stops[at + 1] ?? null;
+    return null;
+  };
+}
+function press(key: MoveKey, steamStep?: (from: HTMLElement) => HTMLElement | null) {
   let out: "claimed" | "declined" = "declined";
   act(() => {
-    out = page.press(key);
+    out = page.press(key, steamStep);
   });
   return out;
 }
@@ -133,5 +167,129 @@ describe("the plugin log records every hop made while the page lacks focus (plan
     press("onMoveLeft");
 
     expect(hopLogLines()).toEqual([]);
+  });
+});
+
+/** The ring and the page's own focus on the same element: what the Deck check reads after every press. */
+function expectTogether(label: string) {
+  expect(page.ring(), `${label}: no ring`).toBeTruthy();
+  expect(nameOf(page.active()), `${label}: the page's focus left the ring`).toBe(nameOf(page.ring()));
+}
+
+/**
+ * A bounded walk: press `key` until the ring stops moving, Steam's own step along the strip's row taking every
+ * press the plugin declines. Fails on a stop seen twice, and on any press after which the ring and the page's
+ * focus disagree.
+ */
+function walk(key: MoveKey, limit = 8): string[] {
+  const seen = [nameOf(page.ring())];
+  for (let i = 0; i < limit; i++) {
+    const before = page.ring();
+    press(key, steamRowStep(key));
+    expectTogether(`${key} from ${seen[seen.length - 1]}`);
+    if (page.ring() === before) return seen;
+    const name = nameOf(page.ring());
+    expect(seen, `"${name}" visited twice walking ${key}`).not.toContain(name);
+    seen.push(name);
+  }
+  throw new Error(`walk ${key} did not stop within ${limit} presses: ${seen.join(" -> ")}`);
+}
+
+describe("P97-L14-FREEZE: Down from the question box moves the ring with the page's focus gone", () => {
+  it("lands on Ask by Steam's transfer, every time, ring and page's focus together", () => {
+    mount();
+    for (let round = 0; round < 3; round++) {
+      act(() => page.steamMove(box()));
+      page.setFocused(false);
+      page.transfers.length = 0;
+
+      expect(press("onMoveDown", () => byLabel(PAPERCLIP))).toBe("claimed");
+
+      expect(nameOf(page.ring()), `round ${round + 1}`).toBe(ASK);
+      expectTogether(`round ${round + 1}`);
+      expect(page.transfers.map(nameOf)).toEqual([ASK]);
+    }
+    /* The log says it: the hop went by transfer and the ring followed. */
+    const last = hopLogLines().pop()!;
+    expect(last).toMatchObject({ hop: "to-ask", via: "transfer", followed: true });
+  });
+
+  it("Left and Right from the box decline rather than split the ring from the page's focus", () => {
+    mount();
+    for (const key of ["onMoveLeft", "onMoveRight"] as const) {
+      act(() => page.steamMove(box()));
+      page.setFocused(false);
+
+      expect(press(key), key).toBe("declined");
+
+      expect(nameOf(page.ring()), key).toBe("question box");
+      expectTogether(key);
+      const last = hopLogLines().pop()!;
+      expect(last, key).toMatchObject({ via: "plain", followed: false });
+    }
+  });
+
+  it("while an answer is arriving, Down from the box declines instead of holding still on a dead press", () => {
+    mount({ isAsking: true });
+    act(() => page.steamMove(box()));
+    page.setFocused(false);
+
+    expect(press("onMoveDown", () => byLabel(STOP))).toBe("declined");
+
+    expect(nameOf(page.ring())).toBe(STOP);
+    expectTogether("Down while asking");
+  });
+
+  it("walks the strip one stop at a time both ways, no stop twice, and Up comes back to the box", () => {
+    mount();
+    act(() => page.steamMove(box()));
+    page.setFocused(false);
+    press("onMoveDown");
+
+    expect(walk("onMoveLeft")).toEqual([ASK, MIC, MODE, PAPERCLIP]);
+    expect(walk("onMoveRight")).toEqual([PAPERCLIP, MODE, MIC, ASK]);
+
+    expect(press("onMoveUp")).toBe("claimed");
+    expect(nameOf(page.ring())).toBe("question box");
+    expectTogether("Up from Ask");
+  });
+
+  it("with words in the box the walk takes in the X, reached by its own transfer", () => {
+    mount({ unifiedInput: "how do I parry", showSearchClearButton: true });
+    act(() => page.steamMove(box()));
+    page.setFocused(false);
+    press("onMoveDown");
+
+    expect(walk("onMoveLeft")).toEqual([ASK, CLEAR, MIC, MODE, PAPERCLIP]);
+    expect(walk("onMoveRight")).toEqual([PAPERCLIP, MODE, MIC, CLEAR, ASK]);
+  });
+});
+
+describe("with the page's focus present, the routes are unchanged", () => {
+  it("Down lands on Ask, Left on the paperclip, Right on the mode button, every press claimed", () => {
+    mount();
+    for (const [key, target] of [
+      ["onMoveDown", ASK],
+      ["onMoveLeft", PAPERCLIP],
+      ["onMoveRight", MODE],
+    ] as const) {
+      act(() => page.steamMove(box()));
+      expect(press(key), key).toBe("claimed");
+      expect(nameOf(page.ring()), key).toBe(target);
+      expectTogether(key);
+    }
+  });
+
+  it("walks the strip on the plugin's own hops: no press is left to Steam", () => {
+    mount({ unifiedInput: "how do I parry", showSearchClearButton: true });
+    act(() => page.steamMove(box()));
+    press("onMoveDown");
+    const noSteam = () => null;
+    const seen = [nameOf(page.ring())];
+    for (let i = 0; i < 4; i++) {
+      expect(press("onMoveLeft", noSteam)).toBe("claimed");
+      seen.push(nameOf(page.ring()));
+    }
+    expect(seen).toEqual([ASK, CLEAR, MIC, MODE, PAPERCLIP]);
   });
 });

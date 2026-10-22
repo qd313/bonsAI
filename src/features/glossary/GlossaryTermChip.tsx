@@ -47,6 +47,7 @@ import {
   isOkDeckButtonEvent,
 } from "../../shared/dpad/focusNavigation";
 import { registerDrgGlossaryTermChip } from "../../shared/dpad/glossaryTermRegistry";
+import { takeNavFocus } from "../../shared/dpad/navFocusRegistry";
 import { findTabContentsScroll, readableBottomOf } from "../../shared/dpad/chatPanelScroll";
 import {
   placeGlossaryTooltip,
@@ -106,7 +107,8 @@ function isAnyDirectionEvent(evt: unknown): boolean {
  * 2. Register this chip's DOM node under a per-mount id, so other code
  *    (the reply stack) can find and clear it without a page-wide search.
  * 3. On the D-pad: A calls activate(), which opens straight to full and,
- *    from full, calls onExplainFurther and closes; the full box says so in a
+ *    from full, calls onExplainFurther, closes and hands the ring to the
+ *    question box (handRingOnAfterSend); the full box says so in a
  *    hint line (plan 96 F6: a separate D-pad stop inside the box, a portal to
  *    the page body, took Steam's ring but no A or B reached it on the Deck,
  *    plan96-P96-F6-EXPLAIN.json). B or any direction press closes the popup.
@@ -225,7 +227,10 @@ export function DrgGlossaryTermChip(props: DrgGlossaryTermChipProps) {
    */
   const activate = () => {
     if (state === "full") {
+      // Steam can call both onButtonDown and onActivate for one A: only the call that sent hands the ring on.
+      const sends = !explainFiredRef.current && Boolean(onExplainFurther);
       explainFurther();
+      if (sends) handRingOnAfterSend();
     } else {
       explainFiredRef.current = false;
       setChipState("full");
@@ -239,6 +244,16 @@ export function DrgGlossaryTermChip(props: DrgGlossaryTermChipProps) {
     setChipState("idle");
   };
 
+  /*
+   * After A sends the question, the ring goes to the question box, the way the Ask button's own send does
+   * (useAskBarPressHandlers). The send moves this answer into the earlier turns, which draws it again, so this
+   * word leaves the page with the ring on it and nothing held the ring until the next press (Deck 2026-10-18,
+   * plan96-P96-F6-EXPLAIN-try2.json). The box is another container, so only Steam's transfer can reach it; if
+   * that is refused the word keeps the ring (focusing itself, never crossing a container).
+   */
+  const handRingOnAfterSend = () => {
+    if (!takeNavFocus("unified-input")) chipElRef.current?.focus();
+  };
 
   /*
    * The touch path, distinct from `activate` on purpose. A tap wants the short plain-language

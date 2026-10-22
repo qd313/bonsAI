@@ -98,6 +98,7 @@ Fixes from the bug and Verify lists, landed on `experimental`. Each line below p
 - **Fixed: asking about an attached screenshot works.** Every picture is shrunk first, and the shrink step now runs ffmpeg without the plugin loader's library path (the first version could not start it on the Deck). The picture reached the AI all three times and the answers named the screen; the largest picture took 63 s on a cold start. Passed on the Deck on the second try (row P97-L1-PICTURE-ANSWER).
 - **Changed: with the AI on a PC on your network, answers stream a little quicker.** The tail of scrambled letters is shorter and letters settle faster; the Deck's own pace is untouched. Frame rate matched the Deck's pace (57.1 against 56.1). Passed on the Deck (row P97-L11-PC-PACE); the look is the maintainer's eye.
 - **Changed: the look check no longer reports Steam's own language dropdown on the About tab.** Nothing was reported on About on the Deck (look check QA-LOOK-01).
+- **Fixed: a Strategy answer no longer jumps taller near its end and falls back.** A "Code block incoming..." box flashed under the answer while the hidden choice menu's opening line was still being written; that opener is now kept off the live answer. Passed on the Deck 2026-10-22, on the third try (row P97-L4-ANSWER-DIPS-try3).
 
 ### Plan 96 (2026-10-18)
 

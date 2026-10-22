@@ -52,6 +52,7 @@ The knowledge base long notes live in [roadmap-kb-details.md](roadmap-kb-details
 - [Plan 96 notes moved from the roadmap (2026-10-18)](#plan-96-notes-moved-from-the-roadmap-2026-10-18)
 - [Plan 97 second sweep notes moved from the roadmap (2026-10-22)](#plan-97-second-sweep-notes-moved-from-the-roadmap-2026-10-22)
 - [Plan 97 third sweep notes moved from the roadmap (2026-10-22)](#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22)
+- [Plan 97 fourth sweep notes moved from the roadmap (2026-10-22)](#plan-97-fourth-sweep-notes-moved-from-the-roadmap-2026-10-22)
 <!-- /toc -->
 
 ## The panel stops half way down and the Ask button is out of reach
@@ -731,20 +732,6 @@ Older dated notes moved here, word for word, to keep the roadmap under its size 
 
 Older entries and dated notes moved here, word for word, when the entries were rewritten for Verify or took a new note (plan 97 second sweep).
 
-**Asking about an attached screenshot answered "incomplete stream" and no answer, twice, with the Deck's own AI (gemma4:e2b-it-qat) (older entry, word for word):**
-
-- ★★ `[ask]` **Asking about an attached screenshot answered "incomplete stream" and no answer, twice, with the Deck's own AI (gemma4:e2b-it-qat)** — **OPEN, found 2026-10-18 (plan 96 block D, build `a29f9eb0`).**
-  With a picture attached from the picker, two differently worded questions each came back after about 20 s with "incomplete stream" (no completion marker and no assistant text). The request went out with the picture (about 570 KB) and Ollama gave back nothing, with the model loaded and just warmed. The answer half of row P96-F5-PICKER failed on this. Evidence `workshop:test-evidence/plan96-P96-F5-PICKER.json`.
-  **Confirmed by hand 2026-10-18 (plan 96 hand check 3, by touch; the picture's box reads "No game"):** the attach by touch works and the question "tell me about this game in the screenshot" was sent with the picture, but the answer was again "Ollama returned an incomplete stream for model 'gemma4:e2b-it-qat' (no completion marker and no assistant text)". So the attach itself, by touch and by controller, is fine; the model's answer is what fails. Evidence `workshop:test-evidence/plan96-HAND-screenshot-by-touch.png`, [checks page](https://claude.ai/artifact/FTe9Lr1sS2Kfrj8nBTVrhi), check 3.
-  **Maintainer's call 2026-10-18:** scope now, fix later; scoping note [plan96-scope-screenshot-answer.md](audit/plan96-scope-screenshot-answer.md).
-
-**The About reply-language pick does not apply (older entry, word for word):**
-
-- ★★ `[ui]` **The About reply-language pick does not apply** — **OPEN, found 2026-10-17 (plan 94 block 6, build `e9b50cc8`); confirmed by hand 2026-10-18.**
-  Three picks in the Steam pop-up (Czech twice, Always English) closed with no change; the file stayed follow_system. Evidence `workshop:test-evidence/plan94-P94-ABOUT.json`.
-  **2026-10-18 (plan 96 hand check 1, the maintainer, the Deck's own screen): FAIL.** The pick "just flips back to Follow system" ([checks page](https://claude.ai/artifact/FTe9Lr1sS2Kfrj8nBTVrhi), check 1). A real bug, not the test rig; the rig's half is settled.
-  **Maintainer's call 2026-10-18:** scope now, fix later; scoping note [plan96-scope-reply-language.md](audit/plan96-scope-reply-language.md).
-
 **A spoiler line inside a bold heading shows raw ** marks (older entry, word for word):**
 
 - ★ `[reply]` **A spoiler line inside a bold heading shows raw ** marks** — **OPEN, found 2026-10-14 (plan 93 Deck block D1).**
@@ -755,44 +742,6 @@ Older entries and dated notes moved here, word for word, when the entries were r
 - ★ `[reply]` **While an answer writes, it briefly shrinks by a line now and then (6 to 27 px)** — **OPEN, found 2026-10-14 (plan 93 Deck block D1); the maintainer said fix it 2026-10-16 (call 1 of [D131](audit/maintainer-decisions-locked.md#d131--partly-locked-2026-10-16-raised-2026-10-14--plan-93-report-the-nine-questions-on-the-report-page)).**
   The Deck measured 6 to 27 px dips, seven times in one answer, none at the finish; last night's measurement shows the same. Likely the letter scramble's paragraph gap settling (lane O3's reading, not proven). Seen again in block D3 (two dips of 8 px, `plan93-P93-M4-ANSWER-FINISH-after-chip-D3.json`). Evidence `workshop:test-evidence/plan93-P93-M4-ANSWER-FINISH-after-try2.json`.
   **Call 2026-10-16:** a helper changes how the letter scramble draws a paragraph gap; the Deck then measures that the 6 to 27 px shrinks are gone.
-
-**Maintainer's call: the glossary words are not underlined when the game is named but not running (older entry, word for word):**
-
-- ★ `[reply]` **Maintainer's call: the glossary words are not underlined when the game is named but not running** — **OPEN, found 2026-10-17 (plan 94 block 7, build `e9b50cc8`).**
-  With no game running, a question that names Deep Rock Galactic: Survivor got no underlined words (the glossary follows the running game only). Evidence `workshop:test-evidence/plan94-P94-GLOSSARY-NOGAME.json`.
-
-**Maintainer's ask: with the AI on a PC on the home network, the answer should stream in a little bit quicker (older entry, word for word):**
-
-- ★ `[reply]` **Maintainer's ask: with the AI on a PC on the home network, the answer should stream in a little bit quicker** — **OPEN, asked 2026-10-17.**
-  The decode (letter scramble) look stays, but tighter on this setup: a shorter tail of scrambled letters behind the writing, a faster scramble, and text that grows faster. The AI on the Deck itself keeps today's feel. Needs a Deck run against a PC to measure how it looks and that the frame rate holds (see plan 69's frame-rate numbers).
-
-**The About tab shows "Version 0.5.0" and no build id (older entry, word for word):**
-
-- ★ `[ui]` **The About tab shows "Version 0.5.0" and no build id** — **OPEN, found 2026-10-17 (plan 94 block 6, build `e9b50cc8`).**
-  A tester cannot tell which build is on the Deck from the screen. Evidence `workshop:test-evidence/plan94-P94-ABOUT.json`.
-
-**At the Large text size, the Remove button splits its word and a few rows are cut or touch the panel's edge (older entry, word for word):**
-
-- ★ `[ui]` **At the Large text size, the Remove button splits its word and a few rows are cut or touch the panel's edge** — **OPEN, found 2026-10-14 (plan 93 Deck block D4, build `5537e84c`). A lane started 2026-10-14.**
-  On the Deck's own screen at Large: the knowledge base "Remove" button shows "Remov" with the "e" on the next line; the Story spoilers section line loses its summary and its row loses the last word ("on"); Developer rows, toggles and the "Jump to Steam Input" button run to the panel's edge with no right margin; some section lines read 78 to 92 percent visible at the strip's edge (92 percent also showed at Small on the Ollama tab, so that part is not new). The "Update knowledge base" button itself is fixed (it wraps to two lines). The evidence file calls the by-eye walk UNCLEAR and leaves which of these count to the owner. Evidence `workshop:test-evidence/plan93-P93-M10-TEXT-SIZE-after-try2.json`, pictures `plan93-P93-M10-TEXT-SIZE-after-large-*.png`.
-  **2026-10-17 (plan 94 block 5, Deck's own screen, build `e9b50cc8`):** the "Remov" + "e" split was NOT seen at Large. Section summaries are cut already at Normal ("Hide spoilers until I tap on" shows 25 of 134 px); at Large the Story spoilers summary is 0 px wide with its arrow 3 px from the edge. Nothing runs past the right edge at any size. Evidence `workshop:test-evidence/plan94-P94-TEXT-SIZE.json`.
-  **Plan 97 (call 3, [D134](audit/maintainer-decisions-locked.md#d134--locked-2026-10-22-raised-2026-10-22--plan-97-the-bug-list-and-the-verify-list-toward-zero-the-second-sweep-the-ten-calls)):** a section summary with no room is hidden whole, never shown as a sliver.
-
-**On the About tab the Steam-drawn "Follow system" language dropdown reads as a light button to the look check (older entry, word for word):**
-
-- ★ `[ui]` **On the About tab the Steam-drawn "Follow system" language dropdown reads as a light button to the look check** — **OPEN, found 2026-10-18 (plan 96 block M, build `a1b00906`).**
-  It is Steam's own control, so it is the maintainer's call whether to restyle it or exempt it from the look check. It shows when the ring is not on a link; in block D's run (ring on a link) it did not show. Evidence `workshop:test-evidence/plan96-QA-LOOK-About.json`, `plan96-QA-LOOK2-About.json`.
-  **Plan 97 (call 3, [D134](audit/maintainer-decisions-locked.md#d134--locked-2026-10-22-raised-2026-10-22--plan-97-the-bug-list-and-the-verify-list-toward-zero-the-second-sweep-the-ten-calls)):** exempted from the look check; Steam's own control is not restyled (lane L8, check **QA-LOOK-01** on About).
-
-**After A on an open glossary word sends the Explain further question, the ring is on nothing until the next press (older entry, word for word):**
-
-- ★ `[focus]` **After A on an open glossary word sends the Explain further question, the ring is on nothing until the next press** — **OPEN, found 2026-10-18 (plan 96 block E, build `f7413dbc`); also seen in plan 94.**
-  The question goes out and the box closes, then no control holds the ring until the next press. Evidence `workshop:test-evidence/plan96-P96-F6-EXPLAIN-try2.json`; plan 94 saw the same after its glossary press (`plan94-P94-GLOSSARY.json`).
-
-**On the Ollama tab, Up from Find LAN can skip the PC address box and the Save row and land on the second switch (older entry, word for word):**
-
-- ★ `[focus]` **On the Ollama tab, Up from Find LAN can skip the PC address box and the Save row and land on the second switch** — **OPEN, found 2026-10-18 (plan 96 block G, build `73738058`).**
-  Seen once in the Find LAN second try: Up from the Find LAN button went past the address box and the "Save current PC address" row to the second switch. The route up from this section is not the same twice (block F saw the same). Down, Right and Left in the row are fine. Evidence `workshop:test-evidence/plan96-P96-FINDLAN-try2.json`.
 
 **With an external controller, Steam's on-screen keyboard does not appear for Rename chat (nor with Steam + X); it works on the Deck itself (older entry, word for word):**
 
@@ -855,3 +804,35 @@ Older entries and dated notes moved here, word for word, when the entries were r
 **The streamed answer's own redraws were costing most of the panel's frame rate (the 2026-10-11 note, word for word):**
 
   **2026-10-11 (plan 89 block 5, build `9b4d0503`, Deep Rock Galactic: Survivor, answer from this PC's AI):** the panel drew a median of about 60 frames a second while the answer wrote (lowest slice 54.9). Not a full fight: the game paused itself on a level-up screen about 40 s into the run. Row SCR-10 stays owed for a real fight; the look is the maintainer's. Evidence `workshop:test-evidence/plan89-SCR-10-FIGHT.json`.
+
+## Plan 97 fourth sweep notes moved from the roadmap (2026-10-22)
+
+Older entries and notes moved here, word for word, when the entries took a new note (plan 97 fourth sweep).
+
+**A faded ghost of the tab bar (plan 97 L15), the "never reproduced" line, word for word:**
+
+  Never reproduced in plan 97: with no game, 155 samples (`workshop:test-evidence/plan97-A-GHOST-NOGAME.json`); with a game, three pop-up rounds (the help chip once, "Delete chat?" twice) read Steam's row hidden at every read and showed no second strip in any screenshot (`plan97-P97-B-GHOST-1.json`, `-2.json`, `-3.json`). The second opinion: every earlier sighting had a finger on the screen.
+
+**Switching tabs with LB/RB should glide (plan 97 G1-build), the known gaps, word for word:**
+
+  Known gaps: Main gets only the line (its content has no box of its own to slide); the old page does not slide out (Steam removes it at once); with a game running only the line moves and the page holds still. The page slide sits inside the pane whose motion an older rule switched off to stop a flash on shoulder switches, so the Deck check watches for a flash.
+
+**While an answer writes it briefly shrinks (plan 97 L4), the entry before the fourth sweep, word for word:**
+
+- ★ `[reply]` **While an answer writes, it briefly shrinks by a line now and then (6 to 27 px)** — **VERIFY, fixed in part 2026-10-22 (plan 97 L4, `e4da5763`, `209f16ff`, `a19f5b8f`; the letter cells moved unchanged in `9b983587`). Was OPEN, found 2026-10-14 (plan 93 Deck block D1); the maintainer said fix it 2026-10-16 (call 1 of D131).**
+  Three causes were measured in a browser with the plugin's stylesheet and fixed: a paragraph break (9 px), a single line break inside a paragraph (about 13 px on the Deck, the larger share) and the end of a list followed by a paragraph (6 px). A dip of about 2.6 px after a heading line remains (and in the two non-default scramble styles), recorded for block E.
+  Owes Deck row **P97-L4-ANSWER-DIPS** (block E3): no drop over 2 px while writing; a heading-line dip of about 3 px is recorded, not failed. Evidence of the failure `workshop:test-evidence/plan93-P93-M4-ANSWER-FINISH-after-try2.json`. Older notes: [roadmap-details.md](roadmap-details.md#plan-97-second-sweep-notes-moved-from-the-roadmap-2026-10-22).
+
+**After a Steam box Down stops moving the ring (plan 97 L14), the entry before the fourth sweep, word for word:**
+
+- ★★★ `[focus]` **After a Steam box, or the menu closing, Down stops moving the ring until the plugin is reloaded** — **VERIFY, fixed 2026-10-22 (plan 97 L14: `2b924080`, `6da3e2d7`, `2263aa83`). Was OPEN, seen ten times by 2026-10-18 and twice more in plan 97 block B.**
+  Cause, from block B's readings: after a Steam box or the menu closing, the panel's page comes back without the browser's focus (`document.hasFocus()` false); the plugin's own plain focus moves then do nothing while Steam's own transfers still work. Now the moves from the question box, the Ask strip's buttons and the Show reasoning line, and Down from a Settings section line, go through Steam's transfer when the page has lost focus, and each one is logged (`dpad.lostFocusHop`). Left and Right from the question box with focus lost may still leave the panel (known).
+  **Deck 2026-10-22 (plan 97 block B, build `73738058`, before the fix):** stuck reproduced after the plugin's "Close menu & take screenshot" and the chord reopen (FREEZE-2: Down dead from the question box; Left, Right, LB/RB, three menu close-and-reopens and a reopen from the Decky list did not clear it, only a plugin reload did) and again after Steam's "Delete chat?" box and B (game up about 6 minutes); FREEZE-1 and FREEZE-3 moved on every Down. Evidence `workshop:test-evidence/plan97-P97-B-FREEZE-1.json`, `-2.json`, `-3.json`, `plan97-P97-B-AFTER-POPUP-FOCUS.json`.
+  Owes Deck rows **P97-L14-FREEZE** and **P97-L14-SECTIONS** (block E11); they count only when the page reads no focus, and are UNCLEAR if that state is not reached in six tries. Every reading: [plan 95 § 13](planning/95-readme-refresh.md#13-appendix-the-d-pad-freeze-readings-from-filming-2026-10-17); older entry: [roadmap-details.md](roadmap-details.md#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22).
+
+**Opening the plugin with the test rig failed twice after a plugin reload (plan 97), the entry before the fourth sweep, word for word:**
+
+- ★ `[QA]` **Opening the plugin with the test rig failed twice after a plugin reload** — **OPEN, failed again 2026-10-22 (plan 97 block A, build `73738058`); fixed again that night, proof owed. Still failing 2026-10-12 (plan 92, Deck block 2, build `d553a5b4`). The rig fix of 2026-10-11 (rig commits `59d1698`, `28e7325`) was loaded and did not cure it. Was seen 2026-10-11 (plan 88, build `68317980`).**
+  After a plugin reload with no game running, the first try to open the plugin failed in 3 of 3 rounds (round 1 on the connection to Steam's debugger, rounds 2 and 3 because the Quick Access pane did not appear); the next try always worked (round 1 needed a third). Row **P89-RIG-OPEN-AFTER-RELOAD** failed. Evidence `workshop:test-evidence/plan92-P89-RIG-OPEN-AFTER-RELOAD.json`; the first sighting `workshop:test-evidence/p88-DECK-RESTORED.json`.
+  **2026-10-14 (plan 93 lane R):** fixed on a branch in the rig's own repo. **2026-10-22 (plan 97, call 1, [D134](audit/maintainer-decisions-locked.md#d134--locked-2026-10-22-raised-2026-10-22--plan-97-the-bug-list-and-the-verify-list-toward-zero-the-second-sweep-the-ten-calls)):** that branch was merged into the rig's main and the server rebuilt before go; fixed in the rig's repo, and the Deck proof is owed (block A, row **P89-RIG-OPEN-AFTER-RELOAD**).
+  **2026-10-22 (plan 97 block A, Deck, build `73738058`):** the fix merged before go FAILED: the first try failed in 2 of the 2 counted rounds (round 1 not counted, the tool's connection closed). The tool waited for the Quick Access page, not for the plugin's own tab; waiting 90 s with the menu open did not bring the tab back, closing and reopening the menu did. Fixed again that night in the rig's repo (the open call now closes and reopens the menu when the plugin's tab is missing) and merged into its main (`43afc0b`). It loads only in a new chat; proof owed in block D1 (row **P89-RIG-OPEN-AFTER-RELOAD**, second try). Evidence `workshop:test-evidence/plan97-P89-RIG-OPEN-AFTER-RELOAD.json`.

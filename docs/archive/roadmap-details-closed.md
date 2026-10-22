@@ -1681,3 +1681,58 @@ Both open entries, word for word (moved here 2026-10-14, plan 93 docs sweep, whe
 - ★ `[ui]` **Text size does not reach Steam's own controls** — **OPEN, found 2026-10-11 (plan 89 Deck block 3c); the maintainer's call whether that is acceptable.**
   The toggle labels (for example "Remember what I typed") stay 16 px, and Steam's own confirm popups (for example "Clear session cache?") stay 22 and 16 px, at Small, Normal and Large. The plugin never targets Steam's own classes by name, so the words the plugin draws follow the setting and these do not. Evidence `workshop:test-evidence/plan89-P89-TEXT-SIZE-EVERYWHERE.json`.
 
+## Plan 97 second sweep notes for entries closed in the fourth sweep (moved from roadmap-details.md 2026-10-22)
+
+Nine blocks of the section "Plan 97 second sweep notes moved from the roadmap" whose entries passed on the Deck 2026-10-22 and went to Done (plan 97 fourth sweep). Moved word for word.
+
+**Asking about an attached screenshot answered "incomplete stream" and no answer, twice, with the Deck's own AI (gemma4:e2b-it-qat) (older entry, word for word):**
+
+- ★★ `[ask]` **Asking about an attached screenshot answered "incomplete stream" and no answer, twice, with the Deck's own AI (gemma4:e2b-it-qat)** — **OPEN, found 2026-10-18 (plan 96 block D, build `a29f9eb0`).**
+  With a picture attached from the picker, two differently worded questions each came back after about 20 s with "incomplete stream" (no completion marker and no assistant text). The request went out with the picture (about 570 KB) and Ollama gave back nothing, with the model loaded and just warmed. The answer half of row P96-F5-PICKER failed on this. Evidence `workshop:test-evidence/plan96-P96-F5-PICKER.json`.
+  **Confirmed by hand 2026-10-18 (plan 96 hand check 3, by touch; the picture's box reads "No game"):** the attach by touch works and the question "tell me about this game in the screenshot" was sent with the picture, but the answer was again "Ollama returned an incomplete stream for model 'gemma4:e2b-it-qat' (no completion marker and no assistant text)". So the attach itself, by touch and by controller, is fine; the model's answer is what fails. Evidence `workshop:test-evidence/plan96-HAND-screenshot-by-touch.png`, [checks page](https://claude.ai/artifact/FTe9Lr1sS2Kfrj8nBTVrhi), check 3.
+  **Maintainer's call 2026-10-18:** scope now, fix later; scoping note [plan96-scope-screenshot-answer.md](audit/plan96-scope-screenshot-answer.md).
+
+**The About reply-language pick does not apply (older entry, word for word):**
+
+- ★★ `[ui]` **The About reply-language pick does not apply** — **OPEN, found 2026-10-17 (plan 94 block 6, build `e9b50cc8`); confirmed by hand 2026-10-18.**
+  Three picks in the Steam pop-up (Czech twice, Always English) closed with no change; the file stayed follow_system. Evidence `workshop:test-evidence/plan94-P94-ABOUT.json`.
+  **2026-10-18 (plan 96 hand check 1, the maintainer, the Deck's own screen): FAIL.** The pick "just flips back to Follow system" ([checks page](https://claude.ai/artifact/FTe9Lr1sS2Kfrj8nBTVrhi), check 1). A real bug, not the test rig; the rig's half is settled.
+  **Maintainer's call 2026-10-18:** scope now, fix later; scoping note [plan96-scope-reply-language.md](audit/plan96-scope-reply-language.md).
+
+**Maintainer's call: the glossary words are not underlined when the game is named but not running (older entry, word for word):**
+
+- ★ `[reply]` **Maintainer's call: the glossary words are not underlined when the game is named but not running** — **OPEN, found 2026-10-17 (plan 94 block 7, build `e9b50cc8`).**
+  With no game running, a question that names Deep Rock Galactic: Survivor got no underlined words (the glossary follows the running game only). Evidence `workshop:test-evidence/plan94-P94-GLOSSARY-NOGAME.json`.
+
+**Maintainer's ask: with the AI on a PC on the home network, the answer should stream in a little bit quicker (older entry, word for word):**
+
+- ★ `[reply]` **Maintainer's ask: with the AI on a PC on the home network, the answer should stream in a little bit quicker** — **OPEN, asked 2026-10-17.**
+  The decode (letter scramble) look stays, but tighter on this setup: a shorter tail of scrambled letters behind the writing, a faster scramble, and text that grows faster. The AI on the Deck itself keeps today's feel. Needs a Deck run against a PC to measure how it looks and that the frame rate holds (see plan 69's frame-rate numbers).
+
+**The About tab shows "Version 0.5.0" and no build id (older entry, word for word):**
+
+- ★ `[ui]` **The About tab shows "Version 0.5.0" and no build id** — **OPEN, found 2026-10-17 (plan 94 block 6, build `e9b50cc8`).**
+  A tester cannot tell which build is on the Deck from the screen. Evidence `workshop:test-evidence/plan94-P94-ABOUT.json`.
+
+**At the Large text size, the Remove button splits its word and a few rows are cut or touch the panel's edge (older entry, word for word):**
+
+- ★ `[ui]` **At the Large text size, the Remove button splits its word and a few rows are cut or touch the panel's edge** — **OPEN, found 2026-10-14 (plan 93 Deck block D4, build `5537e84c`). A lane started 2026-10-14.**
+  On the Deck's own screen at Large: the knowledge base "Remove" button shows "Remov" with the "e" on the next line; the Story spoilers section line loses its summary and its row loses the last word ("on"); Developer rows, toggles and the "Jump to Steam Input" button run to the panel's edge with no right margin; some section lines read 78 to 92 percent visible at the strip's edge (92 percent also showed at Small on the Ollama tab, so that part is not new). The "Update knowledge base" button itself is fixed (it wraps to two lines). The evidence file calls the by-eye walk UNCLEAR and leaves which of these count to the owner. Evidence `workshop:test-evidence/plan93-P93-M10-TEXT-SIZE-after-try2.json`, pictures `plan93-P93-M10-TEXT-SIZE-after-large-*.png`.
+  **2026-10-17 (plan 94 block 5, Deck's own screen, build `e9b50cc8`):** the "Remov" + "e" split was NOT seen at Large. Section summaries are cut already at Normal ("Hide spoilers until I tap on" shows 25 of 134 px); at Large the Story spoilers summary is 0 px wide with its arrow 3 px from the edge. Nothing runs past the right edge at any size. Evidence `workshop:test-evidence/plan94-P94-TEXT-SIZE.json`.
+  **Plan 97 (call 3, [D134](audit/maintainer-decisions-locked.md#d134--locked-2026-10-22-raised-2026-10-22--plan-97-the-bug-list-and-the-verify-list-toward-zero-the-second-sweep-the-ten-calls)):** a section summary with no room is hidden whole, never shown as a sliver.
+
+**On the About tab the Steam-drawn "Follow system" language dropdown reads as a light button to the look check (older entry, word for word):**
+
+- ★ `[ui]` **On the About tab the Steam-drawn "Follow system" language dropdown reads as a light button to the look check** — **OPEN, found 2026-10-18 (plan 96 block M, build `a1b00906`).**
+  It is Steam's own control, so it is the maintainer's call whether to restyle it or exempt it from the look check. It shows when the ring is not on a link; in block D's run (ring on a link) it did not show. Evidence `workshop:test-evidence/plan96-QA-LOOK-About.json`, `plan96-QA-LOOK2-About.json`.
+  **Plan 97 (call 3, [D134](audit/maintainer-decisions-locked.md#d134--locked-2026-10-22-raised-2026-10-22--plan-97-the-bug-list-and-the-verify-list-toward-zero-the-second-sweep-the-ten-calls)):** exempted from the look check; Steam's own control is not restyled (lane L8, check **QA-LOOK-01** on About).
+
+**After A on an open glossary word sends the Explain further question, the ring is on nothing until the next press (older entry, word for word):**
+
+- ★ `[focus]` **After A on an open glossary word sends the Explain further question, the ring is on nothing until the next press** — **OPEN, found 2026-10-18 (plan 96 block E, build `f7413dbc`); also seen in plan 94.**
+  The question goes out and the box closes, then no control holds the ring until the next press. Evidence `workshop:test-evidence/plan96-P96-F6-EXPLAIN-try2.json`; plan 94 saw the same after its glossary press (`plan94-P94-GLOSSARY.json`).
+
+**On the Ollama tab, Up from Find LAN can skip the PC address box and the Save row and land on the second switch (older entry, word for word):**
+
+- ★ `[focus]` **On the Ollama tab, Up from Find LAN can skip the PC address box and the Save row and land on the second switch** — **OPEN, found 2026-10-18 (plan 96 block G, build `73738058`).**
+  Seen once in the Find LAN second try: Up from the Find LAN button went past the address box and the "Save current PC address" row to the second switch. The route up from this section is not the same twice (block F saw the same). Down, Right and Left in the row are fine. Evidence `workshop:test-evidence/plan96-P96-FINDLAN-try2.json`.

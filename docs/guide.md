@@ -289,7 +289,8 @@ data...** first. [More on this](troubleshooting.md#1b-uninstall-vs-clear-all-dat
 - Rarely, a chat opened with **R1** while a game runs is missing the buttons under its newest answer,
   and Down stops on the question. Closing and reopening the Quick Access Menu fixes it.
 - With a game running, the panel can update more slowly while an answer arrives, and very long
-  answers can dip further.
+  answers can dip further. With the AI on the Deck itself, the panel draws about 39 frames a second
+  while an answer writes (about 91 when idle). With the AI on a PC, it stays near 60 in our tests.
 - Answers come from a small AI model on your Deck or PC. They can be wrong, can repeat wording from an
   earlier answer, and questions that aren't about a game can pick up game notes.
 - Once, with a game running and the AI on the Deck itself, Steam's screen stopped responding a few

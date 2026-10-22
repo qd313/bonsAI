@@ -10,8 +10,8 @@
  * that a pick gets to the file or survives a rebuilt screen. Here the real settings hook runs against a
  * stand-in back end that keeps a "disk", the list is opened and picked from, and the screen is torn down in
  * the same breath as the pick (which is what closing Steam's list does on the device).
- * Does not: Draw Steam's real list or the ring, or prove Steam calls `onMenuOpened` (the log line the fix adds
- * to the plugin log answers that on the first Deck pick). Same shape as
+ * Does not: Draw Steam's real list or the ring, or prove Steam calls `onMenuOpened` (the Deck pick of
+ * 2026-10-22, plan97-P97-L2-LANGUAGE-PICK.json, showed it does). Same shape as
  * `ai-connection/useThinkingNoticeGate.savedAfterReopen.test.tsx`.
  */
 import { readFileSync } from "node:fs";
@@ -171,24 +171,5 @@ describe("About reply-language pick, list closes and the screen is rebuilt", () 
 
     await waitFor(() => expect(saveCalls().length).toBeGreaterThan(0));
     expect(saveCalls()[0].args).toEqual([{ reply_language: "english" }]);
-  });
-
-  it("writes one line to the plugin log for the pick, so a Deck pick shows whether it arrived", async () => {
-    installDisk();
-    const first: { current: Settings | null } = { current: null };
-    const view = render(<Screen out={first} />);
-    await waitFor(() => expect(first.current?.settingsLoaded).toBe(true));
-
-    openDropdownMenu(dropdownOf(view.container));
-    await act(async () => {
-      dropdownPickLater(dropdownOf(view.container), "czech")();
-    });
-
-    const logged = getRpcCallLog().filter((c) => c.method === "dbg_fe_log");
-    const tags = logged.map((c) => String(c.args[0]));
-    expect(tags).toContain("about.replyLanguage.menuOpened");
-    expect(tags).toContain("about.replyLanguage.pick");
-    const pickLine = logged.find((c) => c.args[0] === "about.replyLanguage.pick");
-    expect(pickLine?.args[1]).toMatchObject({ picked: "czech" });
   });
 });

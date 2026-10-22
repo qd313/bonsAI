@@ -19,8 +19,6 @@
  *      (`patchPendingSessionSettingsSnapshot`), and that one field goes straight to `save_settings`,
  *      because the settings hook's own 400 ms save is cancelled by the rebuild and a rebuilt screen counts
  *      what it restored as already saved.
- * Both ends write one line to the plugin log (`dbg_fe_log`, tag `about.replyLanguage.*`), so one pick on the
- * Deck shows whether Steam told us the list opened and whether the pick arrived.
  *
  * Solves: Keeps the three fixed project links defined in one place
  * instead of scattered through the main plugin screen's own code.
@@ -44,15 +42,6 @@ export type UseAboutTabPayloadArgs = Omit<
   AboutTabProps,
   "githubRepoUrl" | "ollamaRepoUrl" | "githubIssuesUrl"
 >;
-
-/** One line into the Deck's plugin log. Never throws: a log that fails must not cost the pick. */
-function logLanguageStep(tag: string, data: Record<string, unknown>): void {
-  void callDeckyWithTimeout<[string, Record<string, unknown>], unknown>(
-    "dbg_fe_log",
-    [tag, data],
-    DECKY_RPC_TIMEOUT_MS
-  ).catch(() => {});
-}
 
 /**
  * Sends just the picked language to the settings file, right now. Same direct-save shape as
@@ -91,12 +80,10 @@ export function useAboutTabPayload({
   const menuOpenedRef = useRef(onReplyLanguageMenuOpened);
   menuOpenedRef.current = onReplyLanguageMenuOpened;
   const handleMenuOpened = useCallback(() => {
-    logLanguageStep("about.replyLanguage.menuOpened", { hasNote: !!menuOpenedRef.current });
     menuOpenedRef.current?.();
   }, []);
   const handlePick = useCallback(
     (next: ReplyLanguageId) => {
-      logLanguageStep("about.replyLanguage.pick", { picked: next, was: replyLanguage });
       onReplyLanguageChange(next);
       patchPendingSessionSettingsSnapshot({ replyLanguage: next });
       void saveReplyLanguageNow(next);

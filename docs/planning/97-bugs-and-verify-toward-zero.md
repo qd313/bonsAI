@@ -384,7 +384,7 @@ Questions for the maintainer raised during the run (the safest choice taken mean
 | 01:00 | The starter set's size reads "about 4.6 GB" on the notice and "about 4.5 GiB" in the box. They are two different sets (the notice: the answer model and note search; the box: those plus the two speech models, about 4.8 GB). Make the box say "about 4.8 GB" so both use the same unit, or leave both? | Leave both as they are (they are not wrong, only in two units) | |
 | 01:35 | The tab icons: the Deck already has the thicker ones, but they draw about 1.1 px wide at their 10 px size. Thicker still, brighter, both, or as they are? (Drawn for the maintainer in the chat.) | As they are | |
 | 01:35 | The rename keyboard with the maintainer's controller: which controller and how it connects, and does A on the name field bring the keyboard up? | Asked; then built only the safe step (Steam is handed the name field when the box opens) | "Just a controller; A on a text box should bring up the keyboard" (~02:00). The maintainer's own try after the deploy is the proof |
-| 02:45 | A separate chat that only drives the Deck (this chat lost the rig's tools): start it? | Blocks B to E wait | |
+| 02:45 | A separate chat that only drives the Deck (this chat lost the rig's tools): start it? | Blocks B to E wait | Yes, "start it automatically" (~07:35). A new chat cannot be started over Remote Control, so the Deck now runs from this chat through a local link to the rig's tool server; block B started ~07:45 |
 
 ## 14. Report
 

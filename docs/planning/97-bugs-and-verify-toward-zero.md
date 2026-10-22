@@ -369,6 +369,13 @@ there rather than squeezing it in before; the figure is read again before it sta
 - **The maintainer, ~02:00:** asked to see the tab icons (shown: the Deck's real bar, and today's lines beside thicker
   and brighter ones); on the keyboard: "I'm just using a controller. Yes pressing A on a text input box should bring up
   the keyboard."
+- **~02:40:** the full check PASSED on `a75a7d19` (237 s), after the bookkeeper's landing sweep (`3f89a238`). The
+  maintainer picked **option A** on the mock-up page (saved 00:49). G1-build (Sonnet high, reviewed here) landed as
+  `f16ae5d2` and `a4cda575`: the green line glides under the new tab and the new page slides in 48 points over 180 ms;
+  the page's slide holds still while a game runs; reduced motion stops both. Known gaps: the Main tab gets only the
+  line (its content has no box of its own to slide), and the old page does not slide out (Steam removes it at once).
+  The page slide sits inside the content pane whose motion an older rule switched off to stop a flash on shoulder
+  switches; block D's glide check watches for a flash.
 
 Questions for the maintainer raised during the run (the safest choice taken meanwhile, the question raised in the chat):
 

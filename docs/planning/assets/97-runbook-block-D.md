@@ -136,3 +136,12 @@ boxes of the controls to its left. **Verdict MEASURED.** The session reads it.
 ## E7: the handover
 
 `97-handover-E.md`; the test chat left as "test", the mode chip at Speed, every setting as found.
+
+## E8: the tab glide (row P97-G1-TAB-GLIDE), no game, then with the game if block B left it running
+
+`deck_record` five LB and five RB switches with one second between. Then ten fast presses (RB ten times, about 150 ms
+apart) and read which tab is current after each (the bar's current tab): every press lands on the next tab, none lost.
+Sample the panel's frame rate while switching (plan 69's script shape): at least 45. Watch the recording for a flash
+of the content pane on a switch (an older rule turned that pane's motion off because of a flash). Turn on the system's
+reduced motion only if the rig can (else skip that part and say so). With a game running: the line still glides, the
+page does not slide. **Pass:** all of the above; the recording goes to the maintainer's eye.

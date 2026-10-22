@@ -28,9 +28,9 @@
  * How it works:
  * 1. While streaming, every letter's arrival is timed when a render first shows it. The settle
  *    point moves forward per the chosen style (streamScrambleMath.ts); letters before it are real.
- * 2. The span holds, in order: letters settled since the markdown last caught up (as plain text),
- *    then the unsettled letters, each invisible with a symbol drawn over it, so the line never
- *    re-wraps as symbols change. The symbols reshuffle once per beat.
+ * 2. The span holds the letters the markdown has not been handed yet, each invisible with a symbol
+ *    drawn over it, so the line never re-wraps as symbols change. The symbols reshuffle once per
+ *    beat. A letter that settles stays there until the markdown draws it, in the same frame.
  * 3. A remount in the middle of an answer (the Quick Access Menu closed and reopened) shows what
  *    was already on screen as plain text; only letters that arrive after it scramble.
  * 4. When the stream ends -- this section stops streaming, or is thrown away while it still was --
@@ -58,7 +58,6 @@ import {
   settlePointAfterMoment,
   settlePointChipPace,
   settlePointFixedTail,
-  withoutInlineMarks,
 } from "./streamScrambleMath";
 import { freshCells, syncChurnCells, type ChurnCells } from "./churnCells";
 import { beginFinish, continuesShownAnswer, pendingFinish, rememberLiveText } from "./liveScrambleMemo";
@@ -72,8 +71,11 @@ export type ScrambledAnswerTextProps = Omit<MainTabBonsaiAiMarkdownChunkProps, "
   streaming: boolean;
 };
 
-/** A finished section settling from `start` to its end, on the clock the stream's end started. */
-type Finish = { start: number; startedAt: number };
+/**
+ * A finished section settling from `start` to its end, on the clock the stream's end started.
+ * `handed` is how far the markdown has been handed the settled text (null: only up to `start`).
+ */
+type Finish = { start: number; startedAt: number; handed?: number };
 
 /**
  * How late the reveal's next beat may be before the timer takes that beat itself. Loose enough that
@@ -120,7 +122,6 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
   const timerRef = useRef<number | null>(null);
   const timerBeatRef = useRef<() => void>(() => {});
   const reshufflePendingRef = useRef(false);
-  const realNodeRef = useRef<Text | null>(null);
   const churnNodeRef = useRef<HTMLSpanElement | null>(null);
   const cellsRef = useRef<ChurnCells>(freshCells());
   const settingsRef = useRef(scramble);
@@ -133,23 +134,20 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
   finishRef.current = finish;
 
   /**
-   * Writes the span: the letters settled since the markdown last caught up, then the unsettled
-   * ones under their symbols (syncChurnCells). `reshuffle` draws new symbols (the timer's tick);
-   * a render, which can come every frame, only adds and removes letters. The settled text is
-   * written only when it changed: every write makes the page lay the line out again.
+   * Writes the span: every letter the markdown has not been handed yet, each under its symbol
+   * (syncChurnCells). `reshuffle` draws new symbols (the timer's tick); a render, which can come
+   * every frame, only adds and removes letters. A letter that is due to settle stays in the span,
+   * laid out as the markdown will lay it out, until the markdown draws it: settled text written
+   * into the span as bare text was laid out as raw lines (an empty line for a paragraph break, no
+   * bullet or margin for a list item) and the answer grew, then fell back when the markdown
+   * caught up (Deck, 2026-10-22: +48 px, then back over half a second).
    */
   const paint = useCallback((reshuffle: boolean) => {
-    const real = realNodeRef.current;
     const churn = churnNodeRef.current;
-    if (!real || !churn) return;
+    if (!churn) return;
     const text = rawRef.current;
     const f = finishRef.current;
-    const shownFrom = f ? f.start : markdownSettledRef.current ?? text.length;
-    const from = f
-      ? f.start + lettersSettledInFinish(text.length - f.start, performance.now() - f.startedAt)
-      : settledRef.current;
-    const nextReal = withoutInlineMarks(text.slice(shownFrom, from));
-    if (real.data !== nextReal) real.data = nextReal;
+    const from = f ? f.handed ?? f.start : markdownSettledRef.current ?? text.length;
     syncChurnCells(churn, cellsRef.current, text, from, reshuffle);
     const className = `bonsai-stream-scramble-churn bonsai-stream-scramble-churn--${settingsRef.current.color}`;
     if (churn.className !== className) churn.className = className;
@@ -159,14 +157,11 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
   const slotRefCallback = useCallback(
     (el: HTMLSpanElement | null) => {
       if (!el) {
-        realNodeRef.current = null;
         churnNodeRef.current = null;
         return;
       }
-      const real = el.ownerDocument.createTextNode("");
       const churn = el.ownerDocument.createElement("span");
-      el.replaceChildren(real, churn);
-      realNodeRef.current = real;
+      el.replaceChildren(churn);
       churnNodeRef.current = churn;
       cellsRef.current = freshCells();
       paint(false);
@@ -204,7 +199,14 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
         setFinish(null);
         return false;
       }
-      paint(true);
+      /* Settle what is due by handing it to the markdown; the reshuffle waits for that render. */
+      const due = f.start + lettersSettledInFinish(total, now - f.startedAt);
+      if (due !== (f.handed ?? f.start)) {
+        reshufflePendingRef.current = true;
+        setFinish({ ...f, handed: due });
+      } else {
+        paint(true);
+      }
       return true;
     }
     const text = rawRef.current;
@@ -340,7 +342,7 @@ export const ScrambledAnswerText = memo(function ScrambledAnswerText(props: Scra
     return (
       <MainTabBonsaiAiMarkdownChunk
         {...markdownProps}
-        source={settledMarkdownWithSlot(raw, finish.start)}
+        source={settledMarkdownWithSlot(raw, finish.handed ?? finish.start)}
         scrambleSlotRef={slotRefCallback}
       />
     );

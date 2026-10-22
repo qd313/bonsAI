@@ -2,7 +2,7 @@ import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { addKbLibraryListener, announceKbLibraryChange, resetKbLibrarySignalForTests } from "../knowledge-library/kbLibrarySignal";
-import { ensureGlossaryLoaded, resetGlossaryStore, useGlossaryTerms } from "./glossaryStore";
+import { ensureGlossaryLoaded, glossaryKeyForTurn, resetGlossaryStore, useGlossaryTerms } from "./glossaryStore";
 import { callDeckyWithTimeout } from "../../shared/deckyCall";
 
 vi.mock("../../shared/deckyCall", () => ({ callDeckyWithTimeout: vi.fn() }));
@@ -160,5 +160,33 @@ describe("glossaryStore", () => {
     const heard: unknown[] = [];
     addKbLibraryListener((change) => heard.push(change))();
     expect(heard).toEqual([{ installed: false }]);
+  });
+
+  it("keys a turn by its running game when there is one, else by its question and the chat so far (plan 97 L5)", () => {
+    expect(glossaryKeyForTurn({ appId: " 2321470 ", question: "kiting in Hades" })).toBe("2321470");
+    expect(glossaryKeyForTurn({ question: "   " })).toBe("");
+    const key = glossaryKeyForTurn({ question: "what is kiting in Deep Rock?" });
+    expect(key).toMatch(/^ask:/);
+    expect(glossaryKeyForTurn({ question: " what is kiting in Deep Rock? " })).toBe(key);
+    expect(glossaryKeyForTurn({ question: "what is kiting in Deep Rock?", earlier: [{ question: "Deep Rock tips" }] })).not.toBe(key);
+  });
+
+  it("asks for a named game's words with the question and the last six earlier questions, and again after a library change", async () => {
+    rpc.mockResolvedValue(WORDS_ANSWER);
+    const earlier = Array.from({ length: 8 }, (_v, i) => ({ question: `q${i}`, appName: i === 7 ? "Hades" : "" }));
+    const key = glossaryKeyForTurn({ question: "and the overclock?", earlier });
+    const { result } = renderHook(() => useGlossaryTerms(key));
+    ensureGlossaryLoaded(key);
+    await settle();
+    const sent = rpc.mock.calls[0]![1] as [string, string, { text: string; app_name: string }[]];
+    expect(sent[0]).toBe("");
+    expect(sent[1]).toBe("and the overclock?");
+    expect(sent[2].map((e) => e.text)).toEqual(["q2", "q3", "q4", "q5", "q6", "q7"]);
+    expect(sent[2][5]!.app_name).toBe("Hades");
+    expect(result.current).toHaveLength(1);
+    rpc.mockClear();
+    act(() => announceKbLibraryChange({ installed: true, path: "/x", version: "2" }));
+    await settle();
+    expect(rpc).toHaveBeenCalledWith("get_rag_corpus_glossary", sent);
   });
 });

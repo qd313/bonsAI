@@ -1,9 +1,10 @@
-"""Title: The running game's tap-to-define words, read from the knowledge library
+"""Title: A turn's tap-to-define words, read from the knowledge library
 
 Purpose: Some games have jargon the AI uses without explaining ("kiting" and "overclock" in
 Deep Rock Galactic: Survivor). The knowledge library keeps a short peek and a full definition for
 each such word, filed under its game. This file reads them back: `glossary_for_game()` is the one
-reader, and `get_rag_corpus_glossary()` is the screen's call that wraps it.
+reader, `glossary_for_turn()` picks the game (the running one, else the one the question names, else
+the chat's own, the same pick the notes make), and `get_rag_corpus_glossary()` is the screen's call.
 
 Used for: `get_rag_corpus_glossary()`, the plugin method of the same name in main.py (through
 rag_corpus_rpc.py), which the answer screen asks once per game; and the ask path in
@@ -25,13 +26,19 @@ import json
 import sqlite3
 from typing import Any
 
+from backend.chats.chat_own_game_title import text_resolved_title_for_turn
 from backend.knowledge.knowledge_base_cards import _get_connection, close_connection
-from backend.knowledge.knowledge_base_game_match import _resolve_game_id
+from backend.knowledge.knowledge_base_game_match import _resolve_game_id, resolve_title_from_question
 from backend.knowledge.knowledge_base_schema import resolve_corpus_db_path
 
 import decky
 
 logger = decky.logger
+
+# Earlier questions of the chat the screen may hand over, newest last: the chat-own-game lookback
+# (chat_own_game_title.py) reads twelve turns, which is six questions and their answers.
+MAX_EARLIER_QUESTIONS = 6
+MAX_EARLIER_QUESTION_CHARS = 300
 
 NOT_INSTALLED_REASON = "The knowledge library is not installed."
 FAILED_REASON = "The knowledge library's glossary could not be read."
@@ -112,6 +119,47 @@ def glossary_for_game(settings: dict, app_id: str = "", app_name: str = "") -> d
     return _answer(game_title=str(title_row["canonical_title"] if title_row else ""), terms=terms)
 
 
+class _QuietLog:
+    """The title lookup logs one line per question for the notes; asking for words is not worth one."""
+
+    def info(self, *_args: Any, **_kwargs: Any) -> None:
+        return None
+
+
+def _earlier_chat(earlier: Any) -> dict[str, Any]:
+    """The screen's earlier questions (newest last) as the chat dict the notes' game rule reads."""
+    turns: list[dict[str, str]] = []
+    for item in (earlier if isinstance(earlier, list) else [])[-MAX_EARLIER_QUESTIONS:]:
+        if not isinstance(item, dict) or not isinstance(item.get("text"), str):
+            continue
+        turns.append(
+            {
+                "role": "user",
+                "text": item["text"][:MAX_EARLIER_QUESTION_CHARS],
+                "app_name": str(item["app_name"])[:120] if isinstance(item.get("app_name"), str) else "",
+            }
+        )
+    return {"turns": turns}
+
+
+def glossary_for_turn(
+    settings: dict, app_id: str = "", question: str = "", earlier: Any = None
+) -> dict[str, Any]:
+    """The words for one turn's game: the running game when there is one, else the game the question
+    names, else the game the chat has been about -- the same pick the notes make (plan 97 L5)."""
+    if str(app_id or "").strip():
+        return glossary_for_game(settings, app_id)
+    db_path = resolve_corpus_db_path(settings)
+    if not db_path or settings.get("use_local_knowledge_base") is not True:
+        return _answer(installed=False, reason=NOT_INSTALLED_REASON)
+    title = text_resolved_title_for_turn(
+        settings, str(question or ""), _earlier_chat(earlier), resolve_title_from_question, _QuietLog()
+    )
+    if not title:
+        return _answer()
+    return glossary_for_game(settings, "", title)
+
+
 def glossary_for_prompt(settings: dict, app_id: str = "", app_name: str = "") -> tuple[str, list[str]]:
     """The game's title and word spellings for the AI's instructions; ("", []) on any trouble.
 
@@ -130,12 +178,16 @@ def glossary_for_prompt(settings: dict, app_id: str = "", app_name: str = "") ->
     return str(out.get("game_title") or ""), [str(t["term"]) for t in out["terms"]]
 
 
-async def get_rag_corpus_glossary(self, app_id: str = ""):
-    """The tap-to-define words the knowledge library holds for this game (answer screen)."""
+async def get_rag_corpus_glossary(self, app_id: str = "", question: str = "", earlier: Any = None):
+    """The tap-to-define words the knowledge library holds for this turn's game (answer screen).
+
+    With a game running the screen gives its id and that is all. With nothing running it gives the
+    turn's question and the chat's earlier questions, and the game is picked from those.
+    """
     global _last_fault
     try:
         settings = await self.load_settings()
-        out = await asyncio.to_thread(glossary_for_game, settings, app_id)
+        out = await asyncio.to_thread(glossary_for_turn, settings, app_id, question, earlier)
     except Exception as exc:
         # Once per distinct fault: the screen asks again after a failure.
         fault = f"{type(exc).__name__}: {exc}"

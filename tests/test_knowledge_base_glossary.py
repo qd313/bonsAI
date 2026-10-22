@@ -167,5 +167,68 @@ class GlossaryForGameTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(log.warning.call_count, 1)
 
 
+class GlossaryForANamedGameTests(unittest.IsolatedAsyncioTestCase):
+    """Plan 97 L5: with no game running, the words follow the game the question names (or, for a bare
+    follow-up, the game the chat has been about) -- the same game the notes follow."""
+
+    def _library(self) -> dict:
+        folder = tempfile.mkdtemp(prefix="glossary-test-")
+        self.addCleanup(shutil.rmtree, folder, ignore_errors=True)
+        _build_library(os.path.join(folder, "corpus.db"))
+        self.addCleanup(close_connection, os.path.join(folder, "corpus.db"))
+        return {"use_local_knowledge_base": True, "rag_corpus_path": folder}
+
+    async def _ask(self, settings: dict, app_id: str = "", question: str = "", earlier=None) -> dict:
+        with patch.object(Plugin, "load_settings", AsyncMock(return_value=settings)):
+            return await Plugin().get_rag_corpus_glossary(app_id, question, earlier)
+
+    async def test_nothing_running_and_a_game_named_gives_that_games_words(self) -> None:
+        out = await self._ask(
+            self._library(),
+            question="What does kiting mean in Deep Rock Galactic: Survivor and when should I overclock?",
+        )
+        self.assertTrue(out["ok"])
+        self.assertEqual(out["game_title"], DRG_TITLE)
+        self.assertEqual([t["id"] for t in out["terms"]], ["kiting", "overclock"])
+
+    async def test_a_bare_follow_up_follows_the_game_the_chat_was_about(self) -> None:
+        out = await self._ask(
+            self._library(),
+            question="and what is an overclock?",
+            earlier=[{"text": "Tell me about kiting in Deep Rock Galactic Survivor", "app_name": ""}],
+        )
+        self.assertEqual(out["game_title"], DRG_TITLE)
+        self.assertEqual([t["id"] for t in out["terms"]], ["kiting", "overclock"])
+
+    async def test_a_question_naming_no_game_in_a_chat_about_none_gets_no_words(self) -> None:
+        out = await self._ask(self._library(), question="how do I make my battery last longer?")
+        self.assertTrue(out["ok"])
+        self.assertEqual(out["terms"], [])
+
+    async def test_a_running_game_still_wins_over_a_game_named_in_the_question(self) -> None:
+        out = await self._ask(
+            self._library(),
+            app_id="999",
+            question="What does kiting mean in Deep Rock Galactic: Survivor?",
+        )
+        self.assertEqual(out["terms"], [])
+
+    async def test_a_game_with_no_words_named_gives_none(self) -> None:
+        out = await self._ask(self._library(), question="tips for Other Game please")
+        self.assertTrue(out["ok"])
+        self.assertEqual(out["terms"], [])
+
+    async def test_the_library_switch_off_gives_no_words_for_a_named_game(self) -> None:
+        settings = {**self._library(), "use_local_knowledge_base": False}
+        out = await self._ask(settings, question="kiting in Deep Rock Galactic Survivor")
+        self.assertFalse(out["installed"])
+        self.assertEqual(out["terms"], [])
+
+    async def test_junk_in_the_earlier_list_is_ignored(self) -> None:
+        out = await self._ask(self._library(), question="overclock?", earlier=["x", None, {"text": 5}, 7])
+        self.assertTrue(out["ok"])
+        self.assertEqual(out["terms"], [])
+
+
 if __name__ == "__main__":
     unittest.main()

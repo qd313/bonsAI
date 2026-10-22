@@ -3,8 +3,11 @@
  *
  * Purpose: A game's jargon (a short peek and a full definition for each word) now lives in the
  * downloaded knowledge library, not in the plugin. This file asks the back end for a game's words
- * once, keeps the answer, and lets the reply renderer read it. `ensureGlossaryLoaded(appId)` starts
- * the one call; `useGlossaryTerms(appId)` reads what has arrived.
+ * once, keeps the answer, and lets the reply renderer read it. `ensureGlossaryLoaded(key)` starts
+ * the one call; `useGlossaryTerms(key)` reads what has arrived. The key is the running game's id, or,
+ * with nothing running, a key made from the turn's question and the chat's earlier questions
+ * (`glossaryKeyForTurn`): the back end then picks the game the question names, the same as it does
+ * for the notes.
  *
  * Used for: MainTabChatTranscript (starts the call when a question appears, before its answer
  * streams in) and MainTabBonsaiAiMarkdownChunk (reads the words to underline); the type is shared
@@ -51,6 +54,8 @@ type GlossaryRpc = { ok?: boolean; game_title?: string; terms?: GlossaryRpcTerm[
 
 const NO_TERMS: readonly DrgGlossaryTerm[] = Object.freeze([]);
 
+/** What the back end is asked for a key that is not a plain app id (plan 97 L5). */
+const argsByKey = new Map<string, unknown[]>();
 const termsByApp = new Map<string, readonly DrgGlossaryTerm[]>();
 const askedNow = new Set<string>();
 /** Games whose kept words may be out of date: nothing on screen was listening for a library change. */
@@ -107,13 +112,50 @@ function sameTerms(a: readonly DrgGlossaryTerm[], b: readonly DrgGlossaryTerm[])
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
+/** The last few earlier questions the back end reads to find the chat's own game (it reads six). */
+const EARLIER_QUESTIONS_SENT = 6;
+
+export type GlossaryTurn = {
+  /** The turn's running game; when it has one, the key is just that id. */
+  appId?: string | null;
+  question?: string | null;
+  /** The chat's questions before this turn, oldest first. */
+  earlier?: readonly { question?: string | null; appName?: string | null }[];
+};
+
+function shortHash(text: string): string {
+  let h = 5381;
+  for (let i = 0; i < text.length; i += 1) h = ((h * 33) ^ text.charCodeAt(i)) >>> 0;
+  return h.toString(36);
+}
+
+/**
+ * The key one turn's words are kept under: its running game's id, else (nothing running) a key made
+ * from its question and the chat's earlier questions, which also remembers what to ask the back end.
+ * "" when the turn has neither, so nothing is asked.
+ */
+export function glossaryKeyForTurn(turn: GlossaryTurn): string {
+  const id = appKey(turn.appId);
+  if (id) return id;
+  const question = (turn.question ?? "").trim();
+  if (!question) return "";
+  const earlier = (turn.earlier ?? [])
+    .filter((e) => (e.question ?? "").trim())
+    .slice(-EARLIER_QUESTIONS_SENT)
+    .map((e) => ({ text: (e.question ?? "").trim(), app_name: (e.appName ?? "").trim() }));
+  const key = `ask:${shortHash(JSON.stringify([question, earlier]))}`;
+  if (!argsByKey.has(key)) argsByKey.set(key, ["", question, earlier]);
+  return key;
+}
+
 /** Start the one call for this game's words, unless they are already here (and fresh) or on their way. */
 export function ensureGlossaryLoaded(appId?: string | null): void {
+  /* `appId` is a running game's id or a key from glossaryKeyForTurn. */
   const key = appKey(appId);
   if (!key || askedNow.has(key) || (termsByApp.has(key) && !maybeOld.has(key))) return;
   askedNow.add(key);
   const startedIn = generation;
-  void callDeckyWithTimeout<[string], GlossaryRpc>("get_rag_corpus_glossary", [key])
+  void callDeckyWithTimeout<unknown[], GlossaryRpc>("get_rag_corpus_glossary", argsByKey.get(key) ?? [key])
     .then((res) => {
       if (startedIn !== generation) return;
       askedNow.delete(key);
@@ -158,6 +200,7 @@ export function resetGlossaryStore(): void {
   emptyStore();
   stopListeningToLibrary?.();
   stopListeningToLibrary = null;
+  argsByKey.clear();
 }
 
 /** Test seam: put a game's words straight in, as if the call had answered. */

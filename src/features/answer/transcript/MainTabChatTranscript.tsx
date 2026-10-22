@@ -125,7 +125,7 @@
  *     that on the built-in screen on 2026-09-17 — the Show details row landed
  *     at 279-294 with the dock starting at 297.
  */
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { PanelSectionRow, Button, Focusable } from "@decky/ui";
 import bonsaiLogo from "../../../assets/icons/bonsai-logo.svg";
 import {
@@ -212,7 +212,7 @@ import { getRegisteredAnswerBubble } from "../../../shared/dpad/answerBubbleElRe
 import { focusedAnswerStopIndex, orderedAnswerStops } from "../../../shared/dpad/answerStopRegistry";
 import { focusRegisteredReplyStop } from "../../../shared/dpad/replyStopRegistry";
 import { dismissTroubleshootHint, isTroubleshootHintDismissed } from "./troubleshootHintDismissals";
-import { ensureGlossaryLoaded, type DrgGlossaryTerm } from "../../glossary/glossaryStore";
+import { ensureGlossaryLoaded, glossaryKeyForTurn, type DrgGlossaryTerm } from "../../glossary/glossaryStore";
 import {
   composeDrgGlossaryExplainFurtherQuestion,
   drgGlossaryExplainFurtherThreadDisplay,
@@ -520,8 +520,16 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   /* The knowledge library's glossary words for each game drawn here, asked for as soon as the game is
      known (the live question, or an earlier turn) so they are already in when an answer streams in: the
      first words to arrive redraw the answer's paragraphs, and that must not happen mid-reveal. */
-  const glossaryAppIdsKey = [liveSpoilerFacts.appId, ...askThreadCollapsed.map((t) => t.appId)]
-    .map((id) => (id ?? "").trim())
+  /* With nothing running, a turn's words follow the game its question names (plan 97 L5): its key is made
+     from its question and the questions before it, so the back end can pick the game as it does for the notes. */
+  const turnGlossaryKeys = useMemo(
+    () => askThreadCollapsed.map((t, i) => glossaryKeyForTurn({ ...t, earlier: askThreadCollapsed.slice(0, i) })),
+    [askThreadCollapsed]
+  );
+  const liveGlossaryKey = glossaryKeyForTurn({
+    appId: liveSpoilerFacts.appId, question: liveSpoilerFacts.askQuestion, earlier: askThreadCollapsed,
+  });
+  const glossaryAppIdsKey = [liveGlossaryKey, ...turnGlossaryKeys]
     .filter((id, i, all) => id && all.indexOf(id) === i)
     .join("|");
   useEffect(() => {
@@ -851,7 +859,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     answerKey: string,
     facts: TurnSpoilerFacts,
     /* The turn's attached notes: the "No close match" line comes off an answer that used one. */
-    notes: KbAttachedNote[] = []) =>
+    notes: KbAttachedNote[] = [],
+    /* Where this turn's tap-to-define words are kept; its game's id when one ran (see glossaryKeyForTurn). */
+    glossaryKey = "") =>
     buildAnswerBubbleElement({
       body: streaming ? body : closeMatchAgrees(body, facts.askQuestion, notes),
       streaming,
@@ -863,6 +873,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       maxWidthCss: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
       answerKey,
       ...facts,
+      /* The bubble hands this id on to the glossary only; a key for a game that was named, not running, matches no spoiler profile. */
+      appId: glossaryKey || facts.appId,
       onDrgGlossaryExplainFurther: onAskOllama ? onDrgGlossaryExplainFurther : undefined,
       /*
        * Copy moved into this bubble's corner (D77). Everything buildAnswerCopyText needs is already
@@ -1223,7 +1235,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 turnPiece("summary-warning", buildChatSummaryWarningElement(turn.chatSummary)),
                 turnPiece("notes-read", buildNotesReadLine(turn.id, archivedTransparencyFor(turn, turnIndex))),
                 turnPiece("fold", renderReasoningFold(turn.id, turn.reasoning)),
-                turnPiece("bubble", renderAnswerBubble(turn.answer, false, turn.id, archivedSpoilerFacts(turn, turnIndex), kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex)))),
+                turnPiece("bubble", renderAnswerBubble(turn.answer, false, turn.id, archivedSpoilerFacts(turn, turnIndex), kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex)), turnGlossaryKeys[turnIndex])),
                 turnPiece("summary-note", buildChatSummaryNoteElement({
                   turnKey: turn.id,
                   chatSummary: turn.chatSummary,
@@ -1474,7 +1486,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   isStreamingPreview,
                   "live",
                   liveSpoilerFacts,
-                  liveKbNotes
+                  liveKbNotes,
+                  liveGlossaryKey
                 )
               : null),
             turnPiece("branches", expandedTurnKey === "live" ? renderStrategyBranchPicker("live") : null),

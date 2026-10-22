@@ -1195,9 +1195,9 @@ class Plugin:
         """Notes in the installed knowledge library that mention a word (Search tab)."""
         return await rag_corpus_rpc.search_rag_corpus_notes(self, word, game_title)
 
-    async def get_rag_corpus_glossary(self, app_id: str = ""):
-        """Tap-to-define words the knowledge library holds for a game (answer screen)."""
-        return await rag_corpus_rpc.get_rag_corpus_glossary(self, app_id)
+    async def get_rag_corpus_glossary(self, app_id: str = "", question: str = "", earlier: Any = None):
+        """Tap-to-define words the knowledge library holds for a turn's game (answer screen)."""
+        return await rag_corpus_rpc.get_rag_corpus_glossary(self, app_id, question, earlier)
 
     # --- Ollama model pull and catalog RPC ---
 

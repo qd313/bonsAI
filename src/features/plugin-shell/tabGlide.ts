@@ -16,10 +16,15 @@
  * stylesheet rule reacting to it, so the next press is handled the instant it comes.
  *
  * Does not: Animate anything, keep a timer, or hold the next press back. It also stays quiet when the
- * same tab is rebuilt in place (a popup closing, the session restoring) and under reduced motion.
+ * same tab is rebuilt in place (a popup closing, the session restoring), under reduced motion, and while
+ * a game runs (the page's slide is one more small animation the Deck redraws for; the line under the tab
+ * still glides, it is a transform alone).
  */
+import { Router } from "@decky/ui";
+
 import { ALL_BONSAI_TAB_IDS } from "./tabTitles";
 import { prefersReducedMotion } from "../preset-carousel/presetChipShared";
+import { gameIsRunning, lighterWhileGameRuns } from "../answer/stream/lighterWhileGameRuns";
 
 /** How long the glide takes: the picked mock-up's 180 ms. */
 export const TAB_GLIDE_MS = 180;
@@ -46,6 +51,24 @@ export function tabGlideDirection(from: string, to: string): TabGlideDirection {
   return diff > 0 ? 1 : -1;
 }
 
+/**
+ * Whether the plugin is in its "lighter while a game runs" mode right now, decided by the same function
+ * the rest of the plugin uses (lighterWhileGameRuns.ts, the part that holds small animations still, with
+ * the Deck's own switch honoured). The running game is read from Steam's own running app, the very
+ * source the Ask hook's game tag reads (useOllamaGameContextSync), at the moment the body is built:
+ * the tab body has no props from the Ask hook to read it from.
+ */
+function pageGlideHeldForGame(): boolean {
+  let appId = "";
+  try {
+    appId = (Router.MainRunningApp?.appid?.toString() ?? "").trim();
+  } catch {
+    /* No running app to read: treated as no game. */
+  }
+  const running = gameIsRunning(appId ? { app_context: "active", app_id: appId, app_name: "" } : null);
+  return lighterWhileGameRuns(running).steady;
+}
+
 /** A switch is only a switch for this long; a body built later than that was not made by one. */
 const SWITCH_WINDOW_MS = 1000;
 /** Two builds of the same body this close are one render run twice, not two switches. */
@@ -67,14 +90,15 @@ export function noteTabShown(tab: string, now: number = Date.now()): void {
  */
 export function takeTabGlide(tab: string, now: number = Date.now()): TabGlideDirection | null {
   noteTabShown(tab, now);
+  const still = () => prefersReducedMotion() || pageGlideHeldForGame();
   if (lastTaken && lastTaken.tab === tab && now - lastTaken.at < REPEAT_WINDOW_MS) {
-    return prefersReducedMotion() ? null : lastTaken.direction;
+    return still() ? null : lastTaken.direction;
   }
   if (!shown.pending || shown.cur !== tab || shown.prev === null || now - shown.at > SWITCH_WINDOW_MS) return null;
   shown = { ...shown, pending: false };
   const direction = tabGlideDirection(shown.prev as string, tab);
   lastTaken = { tab, at: now, direction };
-  return prefersReducedMotion() ? null : direction;
+  return still() ? null : direction;
 }
 
 /** Test seam: forget which tab was showing. */

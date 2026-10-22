@@ -14,6 +14,7 @@
  *           Deck check, and this file reads the stylesheet's numbers instead.
  */
 import { act, fireEvent, render } from "@testing-library/react";
+import { Router } from "@decky/ui";
 import { useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -94,11 +95,20 @@ function layOut(xByTab: Record<string, [number, number]>) {
   });
 }
 
+/** What Steam says is running: nothing, or a game (the Deck's fake starts with a game up). */
+const setRunningApp = (app: unknown) => {
+  (Router as { MainRunningApp: unknown }).MainRunningApp = app;
+};
+const originalRunningApp = Router.MainRunningApp;
+
 beforeEach(() => {
+  setRunningApp(null);
   resetTabGlideForTests();
   Reflect.deleteProperty(window, "matchMedia");
 });
 afterEach(() => {
+  setRunningApp(originalRunningApp);
+  delete (window as { __bonsaiGameLoad?: unknown }).__bonsaiGameLoad;
   vi.restoreAllMocks();
   vi.useRealTimers();
   Reflect.deleteProperty(window, "matchMedia");
@@ -177,6 +187,35 @@ describe("the page sliding in", () => {
     expect(body(container)!.className).toBe("bonsai-tab-body-root");
   });
 
+  it("is switched off while a game runs: no class on the arriving page, from either side", () => {
+    setRunningApp({ appid: 1145350, display_name: "Hades II" });
+    const { container } = render(<Shell start="settings" />);
+    rb(container);
+    expect(body(container)!.getAttribute("data-bonsai-tab-body")).toBe("permissions");
+    expect(body(container)!.className).toBe("bonsai-tab-body-root");
+    lb(container);
+    expect(body(container)!.getAttribute("data-bonsai-tab-body")).toBe("settings");
+    expect(body(container)!.className).toBe("bonsai-tab-body-root");
+  });
+
+  it("glides again once the game has closed", () => {
+    setRunningApp({ appid: 1145350, display_name: "Hades II" });
+    const { container } = render(<Shell start="settings" />);
+    rb(container);
+    expect(body(container)!.className).toBe("bonsai-tab-body-root");
+    setRunningApp(null);
+    rb(container);
+    expect(body(container)!.classList.contains(FROM_RIGHT)).toBe(true);
+  });
+
+  it("follows the Deck's own switch for the lighter mode (never lighter: glides even with a game)", () => {
+    setRunningApp({ appid: 1145350, display_name: "Hades II" });
+    (window as { __bonsaiGameLoad?: unknown }).__bonsaiGameLoad = { off: true };
+    const { container } = render(<Shell start="settings" />);
+    rb(container);
+    expect(body(container)!.classList.contains(FROM_RIGHT)).toBe(true);
+  });
+
   it("is not held up: ten presses with no timer ever running land on ten tabs, one each, none lost", () => {
     vi.useFakeTimers(); // nothing advances the clock: if any press waited for the motion, this would stall
     const picked: string[] = [];
@@ -211,6 +250,16 @@ describe("the green line under the current tab", () => {
     layOut({ settings: [100, 80], permissions: [180, 110], about: [210, 60] });
     rb(container);
     expect(marker(container).style.transform).toBe("translateX(216px) scaleX(48)");
+  });
+
+  it("still glides while a game runs: only the page's slide is dropped", () => {
+    setRunningApp({ appid: 1145350, display_name: "Hades II" });
+    layOut({ settings: [100, 80], permissions: [180, 110] });
+    const { container } = render(<Shell start="settings" />);
+    rb(container);
+    expect(body(container)!.className).toBe("bonsai-tab-body-root");
+    expect(marker(container).style.transform).toBe("translateX(186px) scaleX(98)");
+    expect(marker(container).style.getPropertyValue("--bonsai-tab-marker-ms")).toBe("180ms");
   });
 
   it("jumps instead of gliding under reduced motion", () => {

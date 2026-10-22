@@ -1640,3 +1640,44 @@ limit (word for word):**
   the same path. Evidence `workshop:test-evidence/plan57-QA-CHAT-SLOTS-V2-01.json`.
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
+
+## Moved from roadmap-details.md 2026-10-22 (plan 97 third sweep, size trim)
+
+Four sections no roadmap list links to any more (their entries are finished), moved out word for word to keep the long-notes file under its 100 KB ceiling.
+
+## The open reasoning block does not scroll in steps like the answer; one Down jumps past the whole of it
+
+Moved here from the roadmap entry on 2026-10-07 (plan 82 paperwork 6), when the entry went back to Bugs after its Deck check failed. Nothing was removed. The Deck check named in the old text below FAILED on 2026-10-07 (build `efd4258b`); the roadmap entry has the result.
+
+What the fix was built to do (it was in Verify as "fixed 2026-10-07, `8e15cca2`, Opus helper"): With Show reasoning open, Down now pages through the reasoning about a screen at a time with the ring on the block, instead of jumping straight to the answer; once the block's end is on screen the next Down goes into the answer; Up does the same in reverse and lands on the line; B on the block closes it with the ring back on the line; a short block is one stop each way. The first commit (`28e23f90`) only draws the line and the block from one builder (no change a player sees); the third (`1323f7a3`) stops a quick second press inside the dock lift's 0.9 s window from throwing a long block to its end.
+
+Before the fix (Deck 2026-10-07, plan 82, Deck block 1): Before the fix (Deck 2026-10-07, plan 82, Deck block 1): the open block is 818 px tall and one Down from the line moved the pane 555 px, almost the whole block. Evidence `workshop:test-evidence/plan82-M5-REASONING-SCROLL.json` and `.png`; the maintainer's recording `workshop:test-evidence/maintainer-2026-10-06-reasoning-scroll-recording.png`. **Unproven on the Deck:** the ring on the block is Steam's own default ring (no plugin style yet); if it is hard to see, a style rule is owed.
+
+Owed on the Deck: row **P82-REASONING-BLOCK-PAGES** in [testing.md](testing.md); skipped in Deck block 3b because its commits were not on the branch yet (`workshop:test-evidence/plan82-BLOCK3B-HANDOVER.json`). Tests: `src/features/answer/reasoning/buildReasoningFoldElement.walk.test.tsx` (37 of 39 cases fail without the fix), `src/features/answer/transcript/MainTabChatTranscript.reasoningBlockStop.test.tsx`.
+
+**Closed 2026-10-07 (plan 82 paperwork 7):** the Deck check above is done. The first round failed in block 4 (build `efd4258b`); the second round (`ce8ace71`, landed `6b5d5f49`) passed in block 5. Done line in the roadmap; full entry in [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md). Evidence `workshop:test-evidence/plan82-P82-REASONING-BLOCK-PAGES-try2.json`.
+
+## Walking Settings and Developer with the D-pad: the page moves at every press, then jumps at the end
+
+Older notes, word for word, from the entry's open form (moved here 2026-10-11, plan 89 docs sweep pass 3).
+
+  After the plan 87 fix (the entry "Walking some of the other tabs with the D-pad scrolls the tab a long way at each step", now in Done) the maintainer finds it better but not right. Wanted: the page does not scroll at every press; it moves only when the ring nears the edge, by a moderate amount, never a sudden page-sized jump because the end of the page was reached.
+  The maintainer also wants a smooth glide instead of the current judder. Checked on the Deck's own screen; the monitor runs passed (`workshop:test-evidence/plan87-P87-B10-TAB-SCROLL-try3.json`).
+  **2026-10-11 (plan 89 Deck block 1, a measurement, build `f561c0e5`):** Settings Down moved the page on 12 of 16 presses and Up on 13 of 14; Developer Down on 15 of 18 and Up on 13 of 16. Evidence `workshop:test-evidence/plan89-M1-TAB-WALK.json`.
+
+## On the Settings tab, Left or Right on the Text size choices scrolls the page down
+
+Older notes, word for word, from the entry's open form (moved here 2026-10-11, plan 89 docs sweep pass 3).
+
+  With the ring on Text size, pressing Left or Right to change the choice also scrolls the tab down. The maintainer called it "very strange behavior". Cause not known. Related: the Text size row (Done, row P87-F6-TEXT-SIZE) and the entry below about the page moving at every press.
+  **2026-10-11 (plan 89 Deck block 1, a measurement, build `f561c0e5`):** Left or Right moved the page 100.8, 81.2 and 64.1 px on three presses, while the row stayed on its line. Evidence `workshop:test-evidence/plan89-M1-TAB-WALK.json`.
+
+## Some settings text ignores the Text size choice (Permissions tab and others)
+
+Both open entries, word for word (moved here 2026-10-14, plan 93 docs sweep, when they went to Verify as one entry).
+
+- ★★ `[ui]` **Some settings text ignores the Text size choice (Permissions tab and others)** — **OPEN, reported 2026-10-13 by the maintainer.**
+  The Permissions tab's text, and text in other tabs, does not follow the Text size setting. Needs a sweep of every tab. Related: "Text size does not reach Steam's own controls" above.
+- ★ `[ui]` **Text size does not reach Steam's own controls** — **OPEN, found 2026-10-11 (plan 89 Deck block 3c); the maintainer's call whether that is acceptable.**
+  The toggle labels (for example "Remember what I typed") stay 16 px, and Steam's own confirm popups (for example "Clear session cache?") stay 22 and 16 px, at Small, Normal and Large. The plugin never targets Steam's own classes by name, so the words the plugin draws follow the setting and these do not. Evidence `workshop:test-evidence/plan89-P89-TEXT-SIZE-EVERYWHERE.json`.
+

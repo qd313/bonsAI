@@ -478,6 +478,12 @@ Older notes, word for word (moved here 2026-10-14, plan 93 docs sweep).
   listening to confirm the block is never read aloud) and NOTES-BLOCK-LADDER (no block has had a chip ladder to test;
   retiring that half is the maintainer's call). Rows in [testing-manual.md](testing-manual.md). **2026-10-10 (plan 87 K1):** a fix for the "No close match" line appearing beside a notes block landed; 04's covered-game-running half and new row P87-K1-LINE-AND-BLOCK stay owed on the Deck. **2026-10-10 (plan 87 Deck blocks 5 and 5b):** row P87-K1-LINE-AND-BLOCK passed for 2 of its 3 asks (the notes block with no "No close match" line; `workshop:test-evidence/plan87-P87-K1-LINE-AND-BLOCK.json`, `plan87-P87-K1-LINE-AND-BLOCK-try2.json`); NOTES-BLOCK-04's own covered-game-running half is not marked closed by that result and stays owed.
 
+**Moved from the roadmap 2026-10-22 (plan 97 docs sweep 3), word for word:**
+
+  **2026-10-14 (plan 93 Deck block D3, Strategy mode, game running, two questions):** the line half is UNCLEAR. A made-up boss ("Who is the final boss called Zorblax") showed the "No close match" line and no notes block: PASS. "How do I buy a house in this game" drew a "From the notes" block and no line: FAIL, the known wrong-subject-notes entry above. Evidence `workshop:test-evidence/plan93-NOTES-BLOCK-04-game-strategy-D3.json`.
+  **2026-10-14 (plan 93 Deck block C part 2, Deep Rock Galactic: Survivor running, Speed mode, two questions):** no notes block under either answer (the block half passes). The "Not in my notes" line did not show under either; the back end logged "no footer line added". That line shows only in Strategy and Expert by design (`py_modules/backend/knowledge/kb_not_in_notes_notice.py`), so the line half is still owed in Strategy or Expert. The evidence file marks the line half FAIL and only names Speed as a possible cause. Evidence `workshop:test-evidence/plan93-NOTES-BLOCK-04-game.json`.
+
+
 ## Plan 97 notes moved from the knowledge base roadmap (2026-10-22)
 
 **The knowledge library update treats any different version as newer (older entry, word for word):**

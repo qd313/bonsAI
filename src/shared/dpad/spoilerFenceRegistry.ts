@@ -37,7 +37,8 @@
  *     the ring has moved past is not either, so nothing can trap the walk.
  */
 
-import { elementHasFocus, rememberUiDocument } from "./uiDocument";
+import { rememberUiDocument } from "./uiDocument";
+import { focusStopHonestly } from "./focusPerTurnRow";
 
 type FenceEntry = {
   el: HTMLElement;
@@ -155,18 +156,8 @@ export function revealSpoilerFence(el: HTMLElement): boolean {
  *    false even when the focus move had succeeded.
  */
 export function focusSpoilerFence(el: HTMLElement | null): boolean {
-  if (!el) return false;
-  try {
-    if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
-    el.focus({ preventScroll: true });
-  } catch {
-    try {
-      el.focus();
-    } catch {
-      /* ignore — a detached fence simply fails to claim focus */
-    }
-  }
-  return elementHasFocus(el);
+  /* Plan 97: honest while the page lacks the browser's focus (focusPerTurnRow.ts's focusStopHonestly). */
+  return el ? focusStopHonestly(el, "answer-cover") : false;
 }
 
 /** Test-only reset. */

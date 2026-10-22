@@ -18,12 +18,13 @@
  * Does not: Decide what Down, Up or A do on a section (stopNavProps in buildAnswerBubbleElement.tsx,
  * the answer walk's own rules). It only hands each section a stable stand-in for those handlers.
  */
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useRef } from "react";
 import { Focusable } from "@decky/ui";
 import { ScrambledAnswerText } from "../stream/ScrambledAnswerText";
 import type { DrgGlossaryTerm } from "../../glossary/glossaryStore";
 import { StreamFenceWaitChip } from "../stream/StreamFenceWaitChip";
 import { registerAnswerStop } from "../../../shared/dpad/answerStopRegistry";
+import { registerRowNav } from "../../../shared/dpad/focusPerTurnRow";
 import { prepareStreamMarkdown } from "../stream/streamMarkdownPrepare";
 import { cutAnswerSections } from "../markdown/splitResponseIntoChunks";
 
@@ -85,7 +86,15 @@ function sameBody(a: SectionBody, b: SectionBody): boolean {
 const AnswerSection = memo(
   function AnswerSection(p: AnswerSectionProps) {
     const { answerKey, index, body } = p;
-    const register = useCallback((el: HTMLElement | null) => registerAnswerStop(answerKey, index, el), [answerKey, index]);
+    /* The section's own Steam nav node: the walk's way onto it while the panel's page lacks focus (plan 97). */
+    const navRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
+    const register = useCallback(
+      (el: HTMLElement | null) => {
+        registerAnswerStop(answerKey, index, el);
+        registerRowNav(el, navRef);
+      },
+      [answerKey, index],
+    );
     const live = body.kind === "text" && body.live;
     return (
       <Focusable
@@ -93,6 +102,7 @@ const AnswerSection = memo(
         ref={register}
         {...({
           ...p.nav,
+          navRef,
           "data-bonsai-chunk-index": String(index),
           ...(live ? { "data-bonsai-stream-preview": "true" } : {}),
         } as Record<string, unknown>)}

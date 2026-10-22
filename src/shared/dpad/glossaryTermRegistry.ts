@@ -40,7 +40,8 @@
  *     `tabindex` already on the chip, and it checks whether the move actually worked by asking the
  *     chip's own page for its focused element, not the browser's ordinary global one.
  */
-import { elementHasFocus, rememberUiDocument, uiGamepadFocusElement } from "./uiDocument";
+import { rememberUiDocument, uiGamepadFocusElement } from "./uiDocument";
+import { focusStopHonestly } from "./focusPerTurnRow";
 
 const chips = new Map<string, HTMLElement>();
 
@@ -128,18 +129,8 @@ export function findNextDrgGlossaryTermChipInView(
  * document rather than SharedJSContext's shell (`AGENTS.md (Decky focus graph)`).
  */
 export function focusDrgGlossaryTermChip(el: HTMLElement | null): boolean {
-  if (!el) return false;
-  try {
-    if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
-    el.focus({ preventScroll: true });
-  } catch {
-    try {
-      el.focus();
-    } catch {
-      /* ignore — a detached chip simply fails to claim focus */
-    }
-  }
-  return elementHasFocus(el);
+  /* Plan 97: honest while the page lacks the browser's focus (focusPerTurnRow.ts's focusStopHonestly). */
+  return el ? focusStopHonestly(el, "answer-word") : false;
 }
 
 /** True when `el` is a registered term chip (an underlined game word). */

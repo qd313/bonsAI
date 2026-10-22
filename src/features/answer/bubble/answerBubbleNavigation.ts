@@ -119,6 +119,7 @@
  *   handleAnswerBubbleMoveDown() for the on-device bugs each of those rules
  *   was added to fix.
  */
+import { focusStopHonestly } from "../../../shared/dpad/focusPerTurnRow";
 import {
   chunkHasContentAboveViewport,
   chunkHasContentBelowViewport,
@@ -268,10 +269,8 @@ function focusPanelEl(el: HTMLElement): boolean {
   ) as HTMLElement | null;
   const target = panel ?? el;
   if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
-  target.focus({ preventScroll: true });
-  if (elementHasFocus(target)) return true;
-  el.focus({ preventScroll: true });
-  return elementHasFocus(el);
+  /* Plan 97: honest while the panel's page lacks the browser's focus (focusPerTurnRow.ts). */
+  return focusStopHonestly(target, "answer-bubble") || focusStopHonestly(el, "answer-bubble");
 }
 
 /**

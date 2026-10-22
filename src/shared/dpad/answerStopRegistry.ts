@@ -49,7 +49,8 @@
  *     `focusSpoilerFence` relies on, for the same reason.
  */
 
-import { elementHasFocus, rememberUiDocument, uiGamepadFocusElement } from "./uiDocument";
+import { rememberUiDocument, uiGamepadFocusElement } from "./uiDocument";
+import { focusStopHonestly } from "./focusPerTurnRow";
 
 /**
  * One map per answer, keyed by the section's position in the rendered stack.
@@ -131,18 +132,8 @@ export function focusedAnswerStopIndex(stops: HTMLElement[]): number {
  * rule that requires `navRef.current.TakeFocus(true)` applies to *leaving* a container.
  */
 export function focusAnswerStop(el: HTMLElement | null): boolean {
-  if (!el) return false;
-  try {
-    if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
-    el.focus({ preventScroll: true });
-  } catch {
-    try {
-      el.focus();
-    } catch {
-      /* ignore — a detached stop simply fails to claim focus */
-    }
-  }
-  return elementHasFocus(el);
+  /* Plan 97: with the page's focus lost, the section's own nav node by Steam's transfer (focusPerTurnRow.ts). */
+  return el ? focusStopHonestly(el, "answer-section") : false;
 }
 
 /** Test-only reset. */

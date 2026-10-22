@@ -24,9 +24,9 @@ import {
 } from "../../../shared/dpad/focusNavigation";
 import { focusRegisteredReplyStop, getReplyStop } from "../../../shared/dpad/replyStopRegistry";
 import { noteLostFocusHop, panelLacksFocus } from "../../../shared/dpad/lostFocusHop";
+import { focusStopHonestly, registerRowNav } from "../../../shared/dpad/focusPerTurnRow";
 import { focusReplyNotesLine, focusReplyShowReasoning } from "../../../shared/dpad/liveTurnFocusGraph";
 import { fitOpenQuestionBubble } from "./questionBubbleFit";
-import { elementHasFocus } from "../../../shared/dpad/uiDocument";
 
 export type BuildTurnHeaderElementArgs = {
   turnId: string;
@@ -128,17 +128,14 @@ function questionTextNav(turnId: string): SteamNavHolder {
 /**
  * Put the ring on this turn's question text. Plain `focus()`: the Show reasoning line and the
  * question are both in the turn's own column, the same hop the line already makes onto Retry,
- * which the Deck measured landing (workshop:test-evidence/plan72-A4-UP-FAMILY-a.json).
+ * which the Deck measured landing (workshop:test-evidence/plan72-A4-UP-FAMILY-a.json). While the
+ * panel's page lacks the browser's focus that plain focus() leaves Steam's ring behind (plan 97), so
+ * then the text's own nav node takes Steam's transfer first (focusPerTurnRow.ts's focusStopHonestly).
  */
 export function focusOpenQuestionText(turnId: string): boolean {
   const el = questionTextByTurn.get(turnId);
   if (!el?.isConnected) return false;
-  try {
-    el.focus({ preventScroll: true });
-  } catch {
-    return false;
-  }
-  return elementHasFocus(el);
+  return focusStopHonestly(el, "question-text");
 }
 
 /**
@@ -346,6 +343,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
         ref={(el: HTMLElement | null) => {
           const prev = bodyEl.current;
           bodyEl.current = el;
+          registerRowNav(el, questionTextNav(turnId));
           if (el) questionTextByTurn.set(turnId, el);
           else if (prev && questionTextByTurn.get(turnId) === prev) questionTextByTurn.delete(turnId);
           bodyRef?.(el);

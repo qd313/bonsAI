@@ -42,6 +42,46 @@ function takeRowNav(el: HTMLElement): boolean {
 }
 
 /**
+ * Focus a stop without scrolling, the shape every stop inside the answer has always used: give it
+ * `tabindex="-1"` only when it has none (never overwrite Decky's), and fall back to a plain `focus()`.
+ */
+function focusNoScroll(el: HTMLElement): void {
+  try {
+    // focus-patterns-allow: only gives a stop with no tabindex one; moved here from the answer's three stop registries (plan 97).
+    if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
+    el.focus({ preventScroll: true });
+  } catch {
+    try {
+      el.focus();
+    } catch {
+      /* a detached stop simply fails to claim focus; the check below says so */
+    }
+  }
+}
+
+/**
+ * In: a stop inside the answer (a section, a hidden cover, an underlined word) and a short name for the
+ *     log line.
+ * Out: true only when focus landed. With the panel's page holding the browser's focus this is exactly the
+ *     plain focus and check these stops always had: nothing changes. While the page lacks focus (plan 97,
+ *     lostFocusHop.ts) a plain focus() leaves Steam's ring behind, so the stop's own nav node
+ *     (`registerRowNav`) takes Steam's transfer first; a stop with no node is a plain hop that reports false
+ *     unless the ring followed, and the walk goes on to its next choice or yields the press to Steam.
+ */
+export function focusStopHonestly(el: HTMLElement, hop: string): boolean {
+  if (!panelLacksFocus()) {
+    focusNoScroll(el);
+    return elementHasFocus(el);
+  }
+  if (takeRowNav(el)) {
+    noteLostFocusHop(hop, "transfer", el);
+    focusNoScroll(el);
+    return elementHasFocus(el);
+  }
+  return plainHop(el, hop, () => focusNoScroll(el)) && elementHasFocus(el);
+}
+
+/**
  * In: one per-turn registry (a plain `Map` from turn key to that turn's own row element) and the
  * turn key to look up.
  * Out: true only when Steam's ring actually landed on the row.

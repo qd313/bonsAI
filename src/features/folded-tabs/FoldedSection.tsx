@@ -178,7 +178,9 @@ export function FoldedSection({ tab, chain, id, title, summary, children }: Fold
         } as Record<string, unknown>)}
       >
         <span className="bonsai-fold-line__name">{title}</span>
-        <span className="bonsai-fold-line__summary">{summary}</span>
+        <span className="bonsai-fold-line__summary">
+          <span className="bonsai-fold-line__summary-text">{summary}</span>
+        </span>
         <span className="bonsai-fold-line__chevron" aria-hidden="true">
           {open ? "▾" : "▸"}
         </span>

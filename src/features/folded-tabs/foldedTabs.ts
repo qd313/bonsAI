@@ -28,6 +28,21 @@ const FOLDED_TAB_IDS = ["ollama", "settings", "developer"] as const;
 const FOLD_LINE_MIN_HEIGHT_PX = 34;
 const FOLD_ROW_SIDE_PAD_PX = 12;
 
+/**
+ * A section line's sums (plan 97 L13; the Deck, plan 94: at Large the Story spoilers name pushed its arrow to 3 px
+ * from the edge, and at Normal its summary showed as a 25 px "Hi..."). With W the line's width (300 on the Deck),
+ * P the side padding, G the gap, C the arrow's box, S the summary's least width and n the name's width:
+ *   the arrow's right edge is always W - P (12 px from the edge): the name may take W - 2P - G - C (260) at most,
+ *     and a longer name wraps onto a second line instead of pushing the arrow;
+ *   the summary is drawn only when W - 2P - n - G - C >= G + S, so for n <= 198 here; below that it is not drawn
+ *     at all (its words drop to a second row of its one-line box, which clips them); above it, it ends in an
+ *     ellipsis when it is longer than its room.
+ * Widths in pixels, not measured on the page: foldLineFit.test.ts reads each one back out of these rules.
+ */
+const FOLD_LINE_GAP_PX = 6;
+const FOLD_CHEVRON_W_PX = 10;
+const FOLD_SUMMARY_LEAST_PX = 56;
+
 /** The strip: its padding, its top border, and its two line heights (label, text). */
 const STRIP_PAD_TOP_PX = 6;
 const STRIP_PAD_BOTTOM_PX = 8;
@@ -74,7 +89,6 @@ export function buildFoldedTabsSection(): string {
         .bonsai-scope .bonsai-fold-line {
           display: flex;
           align-items: center;
-          gap: 6px;
           width: 100%;
           min-height: ${FOLD_LINE_MIN_HEIGHT_PX}px;
           padding: 4px ${FOLD_ROW_SIDE_PAD_PX}px;
@@ -87,19 +101,41 @@ export function buildFoldedTabsSection(): string {
           color: #ffffff;
         }
         .bonsai-scope .bonsai-fold-line__name {
-          /* The name never shrinks and has no cap; the summary beside it gives way first (the drawing's .k-ft). */
-          flex: 0 0 auto;
+          /* Whole, never an ellipsis: a name too long for the line wraps, so the arrow never moves (the drawing's .k-ft). */
+          flex: 0 1 auto;
           font-size: ${textPx(12)};
           font-weight: 700;
           letter-spacing: 0.05em;
           text-transform: uppercase;
-          white-space: nowrap;
+          white-space: normal;
         }
         .bonsai-scope .bonsai-fold-line__summary {
-          flex: 1 1 auto;
+          /* What the name leaves; one line tall, so words that drop to its second row are never drawn. */
+          flex: 1 1 0;
           min-width: 0;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-end;
           font-size: ${textPx(11)};
+          height: 1.3em;
+          line-height: 1.3em;
+          overflow: hidden;
           color: #8b929a;
+        }
+        /*
+         * An empty first item, the box's full height: the words go to the second row, below the clip, when they cannot
+         * have their least width beside it. Without the height the first row is 0 tall and the second is drawn.
+         */
+        .bonsai-scope .bonsai-fold-line__summary::before {
+          content: "";
+          flex: 0 0 0;
+          height: 100%;
+        }
+        .bonsai-scope .bonsai-fold-line__summary-text {
+          flex: 1 1 ${FOLD_SUMMARY_LEAST_PX}px;
+          max-width: max-content;
+          min-width: 0;
+          margin-left: ${FOLD_LINE_GAP_PX}px;
           text-align: right;
           white-space: nowrap;
           overflow: hidden;
@@ -107,7 +143,8 @@ export function buildFoldedTabsSection(): string {
         }
         .bonsai-scope .bonsai-fold-line__chevron {
           flex: none;
-          width: 10px;
+          width: ${FOLD_CHEVRON_W_PX}px;
+          margin-left: ${FOLD_LINE_GAP_PX}px;
           font-size: ${textPx(11)};
           color: #9ce7ff;
         }

@@ -48,7 +48,9 @@ Run, in your copy, in this order; every one green:
 
 - `npx tsc --noEmit`
 - your own test files, by name, at two workers: `npx vitest run <file> <file> --maxWorkers=2`
-  (Python: `python scripts/run_python_tests.py <tests/test_x.py>` only if you changed a `.py` file)
+  (Python, only if you changed a `.py` file: run your own test files with `python -m unittest` and `PYTHONPATH` set to
+  your copy, its `py_modules` and its `tests` folders. Never `scripts/run_python_tests.py`: it ignores the file you
+  name and runs the whole Python suite; four helpers found that out on 2026-10-22.)
 - `npm run build`
 - `node scripts/check-focus-patterns.mjs`
 - `python scripts/check_headers.py --level full`

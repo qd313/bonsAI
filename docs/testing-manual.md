@@ -647,16 +647,15 @@ decode-label colour is quieter, and the chip the D-pad is on shows a light bar a
 instead of the old blue outline. Evidence `workshop:test-evidence/plan60-QA-chip-button.json` and
 `workshop:test-evidence/plan60-measure-before.json` (the before-the-build measurement).
 
-Rows 02, 03, 04, 07, 08 and 09 passed on the Deck and moved to
+Rows 01, 02, 03, 04, 07, 08 and 09 passed (01 on the maintainer's eye 2026-10-22) and moved to
 [testing-manual-closed-2026.md](archive/testing-manual-closed-2026.md).
 
 | Row | Scenario | Pass | Status |
 |---|---|---|---|
-| **CHIP-BUTTON-01** | Open the main screen with chips showing, default character, then the gold character. Screenshot the dock. | By eye: the chips read as raised buttons, the two are visibly apart, the Tip dot and the tag colour are quieter than before; nothing else in the dock moved | ⏳ **owed — screenshots taken, the maintainer's own eye still needed** (`screenshots/DeckCapture_20260917_150755_auto.png`, `…_150413_auto.png`, `…_150921_auto.png`) |
 | **CHIP-BUTTON-05** | Read the rectangles of the chip, its container and the question box; screenshot | The shadow's bottom is not cut off; the gap from chip to question box is 8px in decode/static/carousel (12 total in fade); by eye the row no longer touches the box | ⏳ **owed — measurement PASS, the maintainer's own eye on the screenshots still needed.** Gap measured 8px (was 0) in decode/static/carousel, 12 total (unchanged) in fade; question box did not move |
-| **CHIP-BUTTON-06** | Turn on the one-chip setting; show the help chip; get an agent suggestion chip | The full-width chip has the same raised look; the help and agent chips keep their colours and carry the hairline and shadow | ⏳ **PARTIAL — one-chip setting PASS on the Deck 2026-09-17** (same raised look, 300×30); the help chip and the agent chip were not on screen during the run, so they are covered only by the stylesheet tests, not seen by eye |
+| **CHIP-BUTTON-06** | Turn on the one-chip setting; show the help chip; get an agent suggestion chip | The full-width chip has the same raised look; the help and agent chips keep their colours and carry the hairline and shadow | ⏳ **PARTIAL — one-chip setting PASS on the Deck 2026-09-17** (same raised look, 300×30); the help chip and the agent chip were not on screen during the run, so they are covered only by the stylesheet tests, not seen by eye. **The maintainer's eye 2026-10-22 (the checks page): the help and agent chips FAILED** ("make sure the focus ring works on the How to use bonsAI chip"); stays open, plan 97 block A measures it (P97-A-HELP-CHIP-RING) |
 
-Rows 01 and 05 are judged by eye from a screenshot and a rectangle read; the rest are read from the
+Row 05 is judged by eye from a screenshot and a rectangle read; the rest are read from the
 page by the bridge. **Seen along the way, not part of this plan:** in fade mode the D-pad skipped the
 chip row in both directions on three tries — worth a look next to the open "chip row cannot be
 reached" entry.

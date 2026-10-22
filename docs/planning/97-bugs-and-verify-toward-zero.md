@@ -252,6 +252,7 @@ changed, the cost.
 | Time | Question | Answer | What changed | Cost |
 |---|---|---|---|---|
 | ~08:35 | 1: the freeze's cause and which fix shape first, from block B's two stuck readings | The page comes back without the browser's focus after a Steam box or the menu; plain focus hops then move nothing while Steam's transfers still work. Build the log line, then route every plain hop from the question box and strip through Steam's transfer or decline the press; drop "re-take then hop" and the re-take on return | L14's brief narrowed to that; Ask gets a registered node; the Deck proof is gated on reaching the no-focus state | one consult (Fable max, ~100k tokens) |
+| ~08:45 | 2: the ghost strip, never reproduced tonight (no game: 155 samples; game: three pop-up rounds) | The pop-up-alone route is cleared; every sighting had a finger on the screen. Build the watcher alone, its log line carrying the whole page read; hold the rule change until the log names the failing condition; the finder acts only on a direct child of Steam's tab panel | L15 narrowed to the watcher; the maintainer's touch check settles which candidate | one consult (Fable max, ~100k tokens) |
 
 ## 9. Who does what
 

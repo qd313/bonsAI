@@ -7,10 +7,39 @@
  * its last step, `focusRowElement`, is shared with liveTurnFocusGraph.ts's `focusOwnBonsaiRow`.
  * Solves: Written once so it is not copied per registry — a second copy for the details-tabs row
  * is what pushed this repo's copy-pasted-lines count up by eleven on 2026-09-20.
- * Does not: Register anything itself — each caller keeps its own `Map<string, HTMLElement>` and
- * only hands this function the map and the key to look up.
+ * Does not: Keep the rows themselves — each caller keeps its own `Map<string, HTMLElement>` and
+ * only hands this function the map and the key to look up. The one thing registered here is a row's
+ * own Steam nav node, by element (`registerRowNav`), so the shared last step can use Steam's transfer.
+ *
+ * Plan 97 (workshop:test-evidence/plan97-P97-L14-FREEZE.json): with the panel's page out of the
+ * browser's focus, Up from a suggestion chip moved the page's focus onto the notes block by the plain
+ * focus() below while Steam's ring stayed on the chip, every press. A row with its own nav node now takes
+ * Steam's transfer first; a row without one is a plain hop that reports honestly (lostFocusHop.ts) and
+ * says false when the ring did not follow, so the caller goes on or declines instead of claiming a dead press.
  */
 import { elementHasFocus } from "./uiDocument";
+import { noteLostFocusHop, panelLacksFocus, plainHop } from "./lostFocusHop";
+
+type SteamNavHolder = { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null | undefined };
+
+/** A row's own Steam nav node, by the row's element: filled in by the row's ref, read by `focusRowElement`. */
+const rowNavs = new WeakMap<HTMLElement, SteamNavHolder>();
+
+/** Remember `holder` (the row's `navRef`) as the nav node of row `el`; a null element is ignored. */
+export function registerRowNav(el: HTMLElement | null, holder: SteamNavHolder): void {
+  if (el) rowNavs.set(el, holder);
+}
+
+/** Steam's transfer onto the row's own nav node; false when it has none or Steam refused. */
+function takeRowNav(el: HTMLElement): boolean {
+  const node = rowNavs.get(el)?.current;
+  if (!node || typeof node.TakeFocus !== "function") return false;
+  try {
+    return node.TakeFocus(true) !== false;
+  } catch {
+    return false;
+  }
+}
 
 /**
  * In: one per-turn registry (a plain `Map` from turn key to that turn's own row element) and the
@@ -42,6 +71,21 @@ export function focusPerTurnRow(registry: Map<string, HTMLElement>, turnKey: str
 export function focusRowElement(el: HTMLElement): boolean {
   if (!el.hasAttribute("tabindex") && !el.matches?.("button, a, input, select, textarea")) {
     el.setAttribute("tabindex", "-1");
+  }
+  const lost = panelLacksFocus();
+  if (takeRowNav(el)) {
+    if (lost) noteLostFocusHop("row", "transfer", el);
+  } else {
+    let threw = false;
+    const landed = plainHop(el, "row", () => {
+      try {
+        el.focus({ preventScroll: true });
+      } catch {
+        threw = true;
+      }
+    });
+    if (threw || !landed) return false;
+    return elementHasFocus(el);
   }
   try {
     el.focus({ preventScroll: true });

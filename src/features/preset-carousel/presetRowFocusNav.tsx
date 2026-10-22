@@ -25,6 +25,7 @@ import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder }
 import { focusBottomOfNewestReply } from "../../shared/dpad/liveTurnFocusGraph";
 import { takeAboveTheChat } from "../../shared/dpad/chatTranscriptNavHelpers";
 import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
+import { panelLacksFocus, plainHop } from "../../shared/dpad/lostFocusHop";
 
 /**
  * The row's focus container, shared by every mode. Steam treats it as one navigation container;
@@ -122,8 +123,8 @@ export function usePresetRowNav(
       if (isFocusable && !isFocusable(i)) return requestFocus ? requestFocus(i) : false;
       const el = buttonRefs.current[i];
       if (!el) return false;
-      el.focus();
-      return true;
+      /* Siblings of one container; still a plain focus() Steam does not see while the page lacks focus (plan 97). */
+      return plainHop(el, "chip");
     },
     [isFocusable, requestFocus],
   );
@@ -180,6 +181,7 @@ export function usePresetRowNav(
         exitUp: chipRowExitUp,
         advanceAtEnd,
         onBlockedEdge: () => flagBlockedEdge(index),
+        lostFocus: panelLacksFocus,
       }) as unknown as Record<string, unknown>,
     [focusChip, exitDown, advanceAtEnd, flagBlockedEdge],
   );

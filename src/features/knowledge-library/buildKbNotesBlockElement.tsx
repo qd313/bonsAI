@@ -19,7 +19,7 @@
 import React from "react";
 import { Focusable } from "@decky/ui";
 import { elementHasGamepadFocus } from "../../shared/dpad/uiDocument";
-import { focusPerTurnRow } from "../../shared/dpad/focusPerTurnRow";
+import { focusPerTurnRow, registerRowNav } from "../../shared/dpad/focusPerTurnRow";
 import { isDeckDirectionDownEvent, isDeckDirectionUpEvent } from "../../shared/dpad/focusNavigation";
 import { focusUpFromBelowContextChipLadder, queryLiveTurnSlot } from "../../shared/dpad/liveTurnFocusGraph";
 import type { ChatSlotTurnTransparency, KbAttachedNote, TransparencySnapshot } from "../../types/inputTransparency";
@@ -214,9 +214,28 @@ export function kbCreditsView(
  */
 const kbNotesBlockEls = new Map<string, HTMLElement>();
 
+type SteamNavHolder = { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null | undefined };
+/**
+ * The block's own Steam nav node, by turn key. Plan 97 (workshop:test-evidence/plan97-P97-L14-FREEZE.json):
+ * with the panel's page out of the browser's focus, the plain focus() above never moved Steam's ring here
+ * from the suggestion chips, press after press. With its node registered (focusPerTurnRow.ts's
+ * `registerRowNav`), every way onto the block takes Steam's transfer first.
+ */
+const kbNotesBlockNavs = new Map<string, SteamNavHolder>();
+
+function kbNotesBlockNav(turnKey: string): SteamNavHolder {
+  let holder = kbNotesBlockNavs.get(turnKey);
+  if (!holder) {
+    holder = { current: null };
+    kbNotesBlockNavs.set(turnKey, holder);
+  }
+  return holder;
+}
+
 function registerKbNotesBlockEl(turnKey: string, el: HTMLElement | null): void {
   if (el) kbNotesBlockEls.set(turnKey, el);
   else kbNotesBlockEls.delete(turnKey);
+  registerRowNav(el, kbNotesBlockNav(turnKey));
 }
 
 export function focusKbNotesBlock(turnKey: string): boolean {
@@ -299,6 +318,7 @@ export function buildKbNotesBlockElement(args: {
       aria-expanded={open}
       aria-label={open ? `${headerLabel}, hide` : `${headerLabel}, show`}
       {...({
+        navRef: kbNotesBlockNav(turnKey),
         onMoveUp: () => onMoveUp(),
         onMoveDown: () => onMoveDown(),
         /* Left and Right are held (plan 87): with no handler Steam's own Left carries the ring out of the plugin. */

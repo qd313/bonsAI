@@ -45,6 +45,13 @@ export type BuildChipNavHandlersArgs = {
    * optional callback rather than folded into the return value.
    */
   onBlockedEdge?: (direction: "left" | "right") => void;
+  /**
+   * True while the panel's page has lost the browser's focus (lostFocusHop.ts's `panelLacksFocus`). A
+   * Left or Right whose chip hop could not move Steam's ring is then declined rather than claimed, so Steam
+   * walks the row itself (plan 97, workshop:test-evidence/plan97-P97-L14-FREEZE.json: claimed, the press was
+   * dead and only the page's focus moved). With the page's focus present a press is claimed as before.
+   */
+  lostFocus?: () => boolean;
 };
 
 /**
@@ -54,19 +61,18 @@ export type BuildChipNavHandlersArgs = {
  * accident. `advanceAtEnd`, when supplied, gets first refusal at the last chip.
  */
 export function buildChipNavHandlers(args: BuildChipNavHandlersArgs): ChipNavHandlers {
-  const { index, count, focusChip, exitDown, exitUp, advanceAtEnd, onBlockedEdge } = args;
+  const { index, count, focusChip, exitDown, exitUp, advanceAtEnd, onBlockedEdge, lostFocus } = args;
+  /* A chip hop that did not land claims the press only while the page has its focus (see `lostFocus`). */
+  const hop = (to: number): boolean => focusChip(to) || !(lostFocus?.() ?? false);
   return {
     onMoveLeft: () => {
-      if (index > 0) {
-        focusChip(index - 1);
-      } else {
-        onBlockedEdge?.("left");
-      }
+      if (index > 0) return hop(index - 1);
+      onBlockedEdge?.("left");
       return true;
     },
     onMoveRight: () => {
       if (index < count - 1) {
-        focusChip(index + 1);
+        return hop(index + 1);
       } else {
         const pulledInNext = advanceAtEnd?.() ?? false;
         if (!pulledInNext) onBlockedEdge?.("right");

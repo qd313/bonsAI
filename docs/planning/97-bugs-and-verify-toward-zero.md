@@ -402,7 +402,7 @@ Questions for the maintainer raised during the run (the safest choice taken mean
 
 ## 14. Report
 
-**Written about 12:30 on 2026-10-22, after Deck blocks A to H; block I (the freeze, a fifth try) is the last open row.**
+**Written about 13:00 on 2026-10-22, after Deck blocks A to I. Every row the rig can run is done.**
 All answers and checks for the maintainer, with buttons: [Plan 97 Morning Checks](https://claude.ai/artifact/4PKcUtbTyvKrsA2zkiihi6).
 
 ### What the maintainer must do next
@@ -432,7 +432,8 @@ All answers and checks for the maintainer, with buttons: [Plan 97 Morning Checks
 - The "How to use bonsAI" chip lights up blue when the ring is on it.
 - LB and RB switches glide: a green line under the tab and the page sliding in (Main gets only the line for now; only
   the line with a game running).
-- After a Steam box or the menu closes with a game up, the D-pad no longer freezes in most places (see below).
+- After a Steam box or the menu closes with a game up, the D-pad no longer freezes (27 of 27 presses moved in the
+  state that used to freeze it).
 
 ### The code work by area
 
@@ -494,12 +495,12 @@ written one per fix with numbers for a pass; the freeze's check counts only in t
 
 - The rig's open-after-reload still fails 2 of 3 on a stricter test (a debugger connection reset): the rig's own, left.
 - One "Not in my notes" line failed: the notes search attached a weak note and skipped the line (filed as a bug).
-- The freeze stayed open after its fourth Deck try: Down onto a Strategy answer's choices was still a plain move;
-  fixed in the fourth round, whose Deck try is block I.
+- The freeze needed four rounds and five Deck tries; each try found a move the last round had not reached. The fifth
+  passed.
 
 ### What is left, and why
 
-- The freeze's last Deck try (block I).
+- One small follow-up: Left and Right on the game's suggestion chips with focus lost (they pass with focus present).
 - The ghost strip: the maintainer's touch with a game running.
 - The rename keyboard: the maintainer's own controller.
 - The tab glide: the flash and reduced motion by eye; Main's page slide (its content has no box of its own yet).
@@ -513,5 +514,5 @@ written one per fix with numbers for a pass; the freeze's check counts only in t
 71 commits on `experimental` since go (101 code and test files, about 5,800 lines added); 23 fixes landed (14 in wave 1,
 then the tab glide, the help chip, the ghost watcher, the screenshot tool's start, two more swell rounds and three more
 freeze rounds); the full check passed three times (the start, after the first landings, and the tip `334dcb91` at about 12:30).
-Nine Deck blocks (A to I), about 70 checks; two second opinions used of five. Usage at about 12:00: 33 percent of the
+Nine Deck blocks (A to I), about 70 checks, the freeze proven on the fifth try; two second opinions used of five. Usage at about 12:00: 33 percent of the
 five-hour window, 11 percent of the week.

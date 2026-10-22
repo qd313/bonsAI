@@ -22,6 +22,11 @@
  * mark is never text: outside a hidden block it opens one, inside it closes it. It is turned into
  * the usual opener or closer on its own line, before the rules above see the text.
  *
+ * A fifth shape (plan 97): the hidden block sits inside bold marks on one line ("**7. ```bonsai-spoiler
+ * Name```**"). The marker gets its own lines, which cut the bold pair in two, and Markdown then
+ * drew both pairs of stars as plain text. The bold is closed just before the block and, if the line
+ * closed it again after the block, reopened there (or dropped when nothing else follows).
+ *
  * Does not: touch a block already written the usual way (the opening marker alone on its line, or
  * after only indent, quote marks or list markers), or any other kind of fenced block.
  */
@@ -83,9 +88,40 @@ function repairEmptyLabelMarks(text: string): string {
     .join("\n");
 }
 
+/** A whole one-line block at the very start of the text. */
+const ONE_LINE_BLOCK_AT_START_RE = /^```bonsai-spoiler[ \t]+[^\n`][^\n]*?```/;
+const BOLD_MARK = "**";
+const boldMarkCount = (s: string): number => s.split(BOLD_MARK).length - 1;
+
+/** The text before the block with its bold shut: an opening pair with nothing inside is dropped. */
+function shutBoldBefore(before: string): string {
+  return before.endsWith(BOLD_MARK) ? before.slice(0, -2).trimEnd() : before + BOLD_MARK;
+}
+
+/** On a line whose bold opens before a hidden block, close it before the block, so the block's own
+ *  lines cannot cut the pair in two; what follows the block gets the bold back, or loses a lone
+ *  closing pair. A line whose bold is balanced before the block is left alone. */
+function closeBoldBeforeBlock(line: string): string {
+  const at = line.indexOf("```bonsai-spoiler");
+  if (at <= 0 || boldMarkCount(line.slice(0, at)) % 2 === 0) return line;
+  const before = shutBoldBefore(line.slice(0, at).trimEnd());
+  const rest = line.slice(at);
+  const closer = ONE_LINE_BLOCK_AT_START_RE.exec(rest);
+  if (!closer) {
+    // The closing marker has not arrived (mid-stream), or this is an empty-label mark.
+    const bare = rest.trimEnd();
+    return `${before}\n${bare.endsWith(BOLD_MARK) ? bare.slice(0, -2) : rest}`;
+  }
+  let after = rest.slice(closer[0].length);
+  if (after.trim() === BOLD_MARK) after = "";
+  else if (boldMarkCount(after) % 2 === 1) after = BOLD_MARK + after.trimStart();
+  return `${before}\n${closer[0]}${after}`;
+}
+
 export function expandOneLineSpoilerFences(text: string): string {
   if (!text.includes("```bonsai-spoiler")) return text;
-  return repairEmptyLabelMarks(text)
+  const closed = text.includes(BOLD_MARK) ? text.split("\n").map(closeBoldBeforeBlock).join("\n") : text;
+  return repairEmptyLabelMarks(closed)
     .replace(ONE_LINE_BLOCK_RE, (_m, body: string) => `\n\`\`\`bonsai-spoiler\n${body}\n\`\`\`\n`)
     .replace(OPENER_WITH_TEXT_RE, "\n```bonsai-spoiler\n")
     .replace(OPENER_ANYWHERE_RE, (whole, before: string) =>

@@ -114,8 +114,11 @@ LOOK_JS = r"""JSON.stringify((() => {
   const shown = (r) => r.width > 8 && r.height > 8 && r.bottom > 0 && r.top < innerHeight;
   const lum = (c) => { const m = (c || '').match(/\d+(\.\d+)?/g); if (!m || m.length < 3) return null;
     if (m.length > 3 && parseFloat(m[3]) < 0.5) return null; return (0.299 * m[0] + 0.587 * m[1] + 0.114 * m[2]) / 255; };
+  // Steam's own language dropdown (plan 97 L8, the maintainer's call on 2026-10-22): the control is Steam's, not ours to
+  // restyle, so no rule judges a control or a spinner inside its row. The row is AboutReplyLanguageSection.tsx's wrapper.
+  const steamOwned = (el) => Boolean(el.closest('[data-bonsai-about-language-dropdown]'));
   const buttons = [...scope.querySelectorAll('button, [role=button], a, .DialogButton')]
-    .filter((b) => shown(b.getBoundingClientRect()) && !b.closest('[aria-hidden=true]'));
+    .filter((b) => shown(b.getBoundingClientRect()) && !b.closest('[aria-hidden=true]') && !steamOwned(b));
   const gaps = [];
   for (const b of buttons) {
     const r = b.getBoundingClientRect();
@@ -153,7 +156,7 @@ LOOK_JS = r"""JSON.stringify((() => {
   }
   // 5. a spinner drawn but not turning
   for (const sp of scope.querySelectorAll('[class*=spinner], [class*=Spinner], [class*=throbber], [role=progressbar]')) {
-    if (!shown(sp.getBoundingClientRect())) continue;
+    if (!shown(sp.getBoundingClientRect()) || steamOwned(sp)) continue;
     const cs = getComputedStyle(sp);
     const kids = [...sp.querySelectorAll('*')].map((k) => getComputedStyle(k).animationName);
     if ((cs.animationName === 'none' || cs.animationPlayState === 'paused') && kids.every((a) => a === 'none'))

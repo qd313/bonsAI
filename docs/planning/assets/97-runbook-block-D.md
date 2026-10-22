@@ -161,3 +161,16 @@ help chip once, if it shows). Read Steam's row at 0.3, 1, 3 and 10 s (display no
 over SSH grep the plugin log for `tabBar.steamRowShown` and copy every line. **Pass:** the row hidden at every read, no
 second strip in any screenshot; the log count recorded (zero is expected; any line is evidence for the report). Then
 LB and RB switch tabs both ways with the game (the watcher must not stop the shoulder buttons).
+
+## E11: the D-pad freeze, gated (rows P97-L14-FREEZE, P97-L14-SECTIONS)
+
+A pass counts only in the lost-focus state; three ungated tries can pass with nothing proven. With the game running
+(launched after the deploy; never reload with it up): repeat the paperclip route (Main → paperclip → "Close menu & take
+screenshot" → wait 3 s → reopen by chord) until the Quick Access page reads `document.hasFocus()` false (fallback: the
+"Delete chat?" box → B). Then, in that one spell, without closing the menu, read focus and `hasFocus` after each press:
+ten Downs from the question box (each lands on Ask; press Up back to the box between); Left from Ask and Right back;
+Down from the question row to Show reasoning (ask one short question first if there is none); then Settings → the Data
+line → Down (lands on the first control in Data), three times. Grep the plugin log for `dpad.lostFocusHop` and copy the
+lines. **Pass:** every press moved the ring as written while `hasFocus` read false, and the log shows the hops (to-ask
+via transfer). Record where Left from the question box itself goes (it may leave the panel; known). Control: the same
+presses with focus present and no game, once. If the lost-focus state cannot be reached in six tries: UNCLEAR, say so.

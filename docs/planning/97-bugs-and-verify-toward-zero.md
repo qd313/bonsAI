@@ -326,6 +326,16 @@ there rather than squeezing it in before; the figure is read again before it sta
 - **2026-10-22, later:** the maintainer's go answers: the rig branch merged and rebuilt; the Deck free and online; both
   usage counters at 0 percent, the five-hour reset about three and a half hours in, the week's next Wednesday at 9 in
   the morning; phone notifications not relied on; the eye-checks group put on the checks page by the planning chat.
+- **2026-10-22 ~00:40 (go):** the session (Opus 5.5) started on tip `588664cd`, keep-awake and the 20-minute wake
+  check on, the baseline full check running. Usage 1 percent of the five-hour window, 0 of the week. Block A started
+  first (the Deck docked for its first fifteen minutes, so the monitor look check goes first). Wave 1 started: L1-L9,
+  L11, L12, L13, G1 (mock-ups), X2; L10's research waits for block A's keyboard readings.
+- **The maintainer's eye checks, read at go:** chips raised and the blue fill PASS; the rating row PASS; the scramble's
+  look and the frame-rate verdict PASS. The help chip FAILS (the ring does not show properly on "How to use bonsAI"):
+  a new bug, block A measures it (A12). The tab icons: thicker on the PC stand-in, not seen on the Deck: block A
+  measures the Deck's icons (A11). The chip pace: no verdict; the note asks for the decode to run in step with the
+  scroll, filed as a feature idea. The chips near the end of an answer: "you can close it, but if needed we will
+  reopen it", so that entry closes (this replaces call 4). Smoothness with the scramble off (SCR-09): not marked, stays.
 
 Questions for the maintainer raised during the run (the safest choice taken meanwhile, the question raised in the chat):
 

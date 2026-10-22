@@ -37,6 +37,11 @@ type OllamaSavedHostsRowsProps = {
   onMoveDownFromSave?: () => boolean;
 };
 
+/**
+ * The "Save current PC address" row and one row per saved PC. The Save row sits in its own Focusable so
+ * Up from the PC address box can be handed to it through Steam, and Down from it goes back to the box
+ * (plan 97: Steam's own move skipped the box). Each saved PC's row puts that address in the box.
+ */
 export const OllamaSavedHostsRows: React.FC<OllamaSavedHostsRowsProps> = ({
   namedOllamaHosts,
   setNamedOllamaHosts,

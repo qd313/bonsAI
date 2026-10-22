@@ -45,7 +45,7 @@ import React from "react";
 import { Focusable } from "@decky/ui";
 
 import { reasoningFoldLabel, tidyReasoningText, type LiveStepLine } from "./reasoningDisplay";
-import { registerReplyStop } from "../../../shared/dpad/replyStopRegistry";
+import { registerReplyStop, replyStopNavRef } from "../../../shared/dpad/replyStopRegistry";
 import { elementHasGamepadFocus } from "../../../shared/dpad/uiDocument";
 import {
   isDeckDirectionDownEvent,
@@ -150,6 +150,13 @@ export function buildReasoningFoldRow({
       aria-expanded={open}
       aria-label={label}
       {...({
+        /*
+         * Its own nav node, so Down from the question reaches the line by Steam's transfer
+         * (focusRegisteredReplyStop takes it first). The plain focus() it used to get moved the page's focus
+         * while the ring stayed on the question whenever the panel's page had lost the browser's focus
+         * (plan 97 block B, workshop:test-evidence/plan97-P97-B-FREEZE-2.json).
+         */
+        navRef: replyStopNavRef("show-reasoning"),
         onMoveUp: () => onMoveUp(),
         onMoveDown: () => moveDown(),
         onButtonDown: pressHandler,

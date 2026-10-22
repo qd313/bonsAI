@@ -221,8 +221,9 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
     if (focusReplyNotesLine(null)) return true;
     const lost = panelLacksFocus();
     if (focusReplyShowReasoning(null)) {
-      /* Plan 97: the hop the Deck saw dead while the page lacked focus (plan97-P97-B-FREEZE-2.json); logged. */
-      if (lost) noteLostFocusHop("question-to-reasoning", "plain", getReplyStop("show-reasoning"));
+      /* Plan 97: the hop the Deck saw dead while the page lacked focus (plan97-P97-B-FREEZE-2.json). The line has
+         its own nav node now, so this is Steam's transfer; logged while the page lacks focus. */
+      if (lost) noteLostFocusHop("question-to-reasoning", "transfer", getReplyStop("show-reasoning"));
       return true;
     }
     return focusFirstAnswerChunk(turnId);

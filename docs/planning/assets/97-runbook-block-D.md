@@ -153,3 +153,11 @@ On the Quick Access page record then run `localStorage.removeItem("bonsai:plugin
 the chip holds focus (read focus). Screenshot, and the chip's computed background. **Pass:** the background includes
 the blue `rgba(56, 189, 248, 0.2)` layer and the screenshot shows a blue-tinted chip with its green border; with focus
 elsewhere it is the plain green bar. Then `localStorage.setItem("bonsai:plugin-help-dismissed","1")`.
+
+## E10: the tab row watcher (row P97-L15-GHOST)
+
+With the game running (never reload with it up), the pop-up route three times: the "Delete chat?" box → B (or the
+help chip once, if it shows). Read Steam's row at 0.3, 1, 3 and 10 s (display none) and take a screenshot at 1 s. Then
+over SSH grep the plugin log for `tabBar.steamRowShown` and copy every line. **Pass:** the row hidden at every read, no
+second strip in any screenshot; the log count recorded (zero is expected; any line is evidence for the report). Then
+LB and RB switch tabs both ways with the game (the watcher must not stop the shoulder buttons).

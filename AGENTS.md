@@ -160,8 +160,8 @@ Full patterns:
   never happened. Inside one container a plain `focus()` is fine. To leave a container, use the
   register, unregister and take functions in
   [navFocusRegistry.ts](src/shared/dpad/navFocusRegistry.ts), which add a null check and a real
-  did-it-work check around the underlying Steam call. The only direct call left in the whole front
-  end is inside the registry itself.
+  did-it-work check around the underlying Steam call. Six other files call Steam's transfer directly;
+  new code uses takeNavFocus.
 - **Know which handler actually fires before wiring one.** The move-up and move-down handlers are
   props on Steam's focusable wrapper: they do nothing on a Decky button, which does not forward
   them. The button-down handler fires on both, for **every** button, so read which button it was

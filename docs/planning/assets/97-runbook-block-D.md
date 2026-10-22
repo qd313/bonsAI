@@ -145,3 +145,11 @@ Sample the panel's frame rate while switching (plan 69's script shape): at least
 of the content pane on a switch (an older rule turned that pane's motion off because of a flash). Turn on the system's
 reduced motion only if the rig can (else skip that part and say so). With a game running: the line still glides, the
 page does not slide. **Pass:** all of the above; the recording goes to the maintainer's eye.
+
+## E9: the help chip's focused look (row P97-HR-HELP-CHIP-RING)
+
+On the Quick Access page record then run `localStorage.removeItem("bonsai:plugin-help-dismissed")`, reload the plugin
+(no game), open it on Main in the test chat: the "How to use bonsAI" chip shows. Press Up from the question box until
+the chip holds focus (read focus). Screenshot, and the chip's computed background. **Pass:** the background includes
+the blue `rgba(56, 189, 248, 0.2)` layer and the screenshot shows a blue-tinted chip with its green border; with focus
+elsewhere it is the plain green bar. Then `localStorage.setItem("bonsai:plugin-help-dismissed","1")`.

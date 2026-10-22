@@ -413,6 +413,13 @@ def _stream_ollama_chat_once(
                             f"Ollama stream ended before completion for model '{model_name}'. "
                             "Partial output was not used as the final answer."
                         )
+                    elif any(isinstance(m, dict) and m.get("images") for m in messages):
+                        # A picture in the request and nothing back: the AI's picture reader
+                        # gave up (the Deck's graphics chip ran out of memory). Say what to try.
+                        msg = (
+                            "The picture was too big for the AI to read. Try the Low screenshot "
+                            "quality in Settings, or a smaller screenshot."
+                        )
                     else:
                         msg = (
                             f"Ollama returned an incomplete stream for model '{model_name}' "

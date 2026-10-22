@@ -570,6 +570,7 @@ Then `sudo systemctl restart avahi-daemon` and ensure `OLLAMA_HOST=0.0.0.0` and 
 
 ### Common failures and fixes
 - **Attachment too large:** lower attachment quality to **Low** in Settings (or install Pillow for resize/compression).
+- **"The picture was too big for the AI to read":** the AI closed its answer with nothing while reading your picture. Set **Attachment quality (vision)** to **Low** in Settings, or attach a smaller screenshot.
 - **Image preprocessing fallback warning:** install Pillow in plugin runtime if you need guaranteed resize/compression behavior on very large captures.
 - **Model rejects image input:** switch to an Ollama vision-capable model.
 

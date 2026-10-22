@@ -324,6 +324,16 @@ export function buildAnswerBubbleSection(): string {
           display: block;
           height: 0.5em;
         }
+        /* A gap inside a list stands for the margin between the list and the paragraph after it.
+           The list's own bottom margin (and its last item's) would count a second time at the end
+           of the answer until the text left the list, and the answer would shrink by that much. */
+        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-ul:has(.bonsai-stream-scramble-gap),
+        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-ol:has(.bonsai-stream-scramble-gap) {
+          margin-bottom: 0;
+        }
+        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-li:last-child:has(.bonsai-stream-scramble-gap) {
+          margin-bottom: 0;
+        }
         /* Each unsettled letter is itself, invisible, with its symbol drawn over it: the line is
            laid out exactly as it will read once the letter is real, so a reshuffle moves nothing
            and a word never hops to the next line as it settles. The symbol takes the letter's

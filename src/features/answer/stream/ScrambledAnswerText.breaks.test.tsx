@@ -153,3 +153,17 @@ describe("the gap's size", () => {
     expect(gap?.[1]).toBe(paragraph?.[1]);
   });
 });
+
+describe("a list that holds a paragraph gap", () => {
+  const css = buildAnswerBubbleSection();
+
+  it("gives up its trailing margin, because the text after the gap belongs to the next paragraph", () => {
+    /* The gap stands for the margin between the list and the next paragraph. The list's own bottom
+       margin would be counted a second time at the end of the answer until the text left the list. */
+    for (const list of ["bonsai-md-ul", "bonsai-md-ol"]) {
+      const rule = new RegExp(String.raw`\.${list}:has\(\.bonsai-stream-scramble-gap\)[^{]*\{[^}]*margin-bottom:\s*0`);
+      expect(css).toMatch(rule);
+    }
+    expect(css).toMatch(/\.bonsai-md-li:last-child:has\(\.bonsai-stream-scramble-gap\)[^{]*\{[^}]*margin-bottom:\s*0/);
+  });
+});

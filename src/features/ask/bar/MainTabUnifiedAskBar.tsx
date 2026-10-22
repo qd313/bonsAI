@@ -111,7 +111,7 @@ import {
 } from "../../../shared/icons/icons";
 import { CharacterRoleplayEmoticon } from "../../characters/CharacterRoleplayEmoticon";
 import { AskStripGameTag } from "./AskStripGameTag";
-import { AskStripSendButtons, focusOwnRef } from "./AskStripSendButtons";
+import { AskStripSendButtons, focusOwnRef, StripNavStop } from "./AskStripSendButtons";
 import {
   ASK_MODE_ACCENT,
   ASK_MODE_ACCENT_BREATHE_HIGH,
@@ -565,6 +565,8 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             padding: 0,
           }}
         >
+          {/* Its own nav node (plan 97): the box's Left reaches it by Steam's transfer, focus or no focus. */}
+          <StripNavStop id="ask-paperclip">
           <Button
             ref={attachMenuAnchorRef}
             className="bonsai-askbar-target bonsai-unified-input-corner-left"
@@ -652,6 +654,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
               )}
             </span>
           </Button>
+          </StripNavStop>
           {/* The game tag (plan 84): what the "Context: …" line under the ask area used to say. A label, not a stop. */}
           <AskStripGameTag context={ollamaContext} />
           {/*
@@ -678,6 +681,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             }}
           >
             <div ref={askModeMenuAnchorRef} style={{ display: "inline-flex", flexShrink: 0, position: "relative" }}>
+            <StripNavStop id="ask-mode">
             <Button
               className="bonsai-askbar-target bonsai-ask-mode-trigger"
               {...({
@@ -724,6 +728,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             >
               {ASK_MODE_LABELS[askMode]}
             </Button>
+            </StripNavStop>
             </div>
             {isAsking ? (
               <Button

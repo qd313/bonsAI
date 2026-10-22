@@ -320,7 +320,8 @@ describe("the game tag in the box's strip carries what the context line said", (
     renderMain(NO_GAME);
     const row = stripRow();
     const kids = Array.from(row.children) as HTMLElement[];
-    expect(kids[0]?.getAttribute("aria-label")).toBe(PAPERCLIP);
+    /* The paperclip sits in a node of its own (plan 97 round two: Steam's transfer from the box's Left). */
+    expect(kids[0]?.querySelector("button")?.getAttribute("aria-label")).toBe(PAPERCLIP);
     expect(kids[1]).toBe(gameTag());
     expect(gameTag()?.textContent).toBe("No game");
   });

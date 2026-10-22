@@ -214,18 +214,26 @@ describe("P97-L14-FREEZE: Down from the question box moves the ring with the pag
     expect(last).toMatchObject({ hop: "to-ask", via: "transfer", followed: true });
   });
 
-  it("Left and Right from the box decline rather than split the ring from the page's focus", () => {
+  /* Round two (plan97-P97-L14-FREEZE.json): the declined Left took Steam's own way out to the side column. */
+  it("Left and Right from the box land on the paperclip and the mode button by Steam's transfer, never out of the panel", () => {
     mount();
-    for (const key of ["onMoveLeft", "onMoveRight"] as const) {
-      act(() => page.steamMove(box()));
-      page.setFocused(false);
+    for (const [key, target] of [
+      ["onMoveLeft", PAPERCLIP],
+      ["onMoveRight", MODE],
+    ] as const) {
+      for (let round = 1; round <= 3; round++) {
+        act(() => page.steamMove(box()));
+        page.setFocused(false);
+        page.transfers.length = 0;
 
-      expect(press(key), key).toBe("declined");
+        /* Steam's own Left from the box, were the press declined, leaves the panel: modelled as "nothing". */
+        expect(press(key, () => null), `${key} round ${round}`).toBe("claimed");
 
-      expect(nameOf(page.ring()), key).toBe("question box");
-      expectTogether(key);
-      const last = hopLogLines().pop()!;
-      expect(last, key).toMatchObject({ via: "plain", followed: false });
+        expect(nameOf(page.ring()), `${key} round ${round}`).toBe(target);
+        expectTogether(key);
+        expect(page.transfers.map(nameOf)).toEqual([target]);
+      }
+      expect(hopLogLines().pop(), key).toMatchObject({ via: "transfer" });
     }
   });
 

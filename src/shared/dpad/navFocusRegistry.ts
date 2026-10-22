@@ -64,6 +64,8 @@ export type NavFocusId = "session-context-strip" | "preset-carousel" | "unified-
    *  Down from the box and the strip's own hops onto them are Steam's transfer, which still moves the ring
    *  while the panel's page has lost the browser's focus; a plain focus() then does not (plan 97, L14). */
   | "ask-primary" | "ask-strip-clear"
+  /** The paperclip and the mode button in the same strip: Left and Right from the question box (plan 97 round two). */
+  | "ask-paperclip" | "ask-mode"
   /** The troubleshooting Ask hint row below the transcript — see
    *  MainTabChatTranscript.tsx's `focusChatPermissionHintRow`. */
   | "chat-perm-hint-troubleshoot"

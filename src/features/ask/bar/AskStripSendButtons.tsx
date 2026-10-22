@@ -31,8 +31,9 @@
  *    safe only while the panel's page has the browser's focus; without it (plan 97 block B,
  *    workshop:test-evidence/plan97-P97-B-FREEZE-2.json) the ring stays put, so the plain hop then declines
  *    the press and Steam walks the row itself (lostFocusHop.ts).
- * 4. ASK and the X each sit in a Focusable of their own whose nav node is registered ("ask-primary",
- *    "ask-strip-clear"), the way Helpful has one (replyStopNavRef): Down from the box and the hops onto them
+ * 4. ASK and the X each sit in a Focusable of their own whose nav node is registered (`StripNavStop`, ids
+ *    "ask-primary" and "ask-strip-clear"; the strip's paperclip and mode button use it too), the way Helpful
+ *    has one (replyStopNavRef): Down from the box and the hops onto them
  *    go through Steam's transfer. Without that node, Steam's own Down from the box, the move it makes when a
  *    hop declines, would pick the paperclip at the strip's other end.
  */
@@ -68,19 +69,35 @@ export function focusOwnRef(ref: ElementRef): boolean {
   return plainHop(el, "strip-own-ref");
 }
 
-/** A nav node registered under `id` for as long as `on` holds: the holder Steam fills through `navRef`. */
-function useStripNavNode(id: NavFocusId, on: boolean): NavRefHolder {
+/** A nav node registered under `id` while the caller is drawn: the holder Steam fills through `navRef`. */
+function useStripNavNode(id: NavFocusId): NavRefHolder {
   const holder = useRef<NavRefHolder["current"]>(null);
   useEffect(() => {
-    if (!on) return undefined;
     registerNavFocus(id, holder);
     return () => unregisterNavFocus(id, holder);
-  }, [id, on]);
+  }, [id]);
   return holder;
 }
 
 /** The wrapper that carries a strip button's own nav node; laid out as the button alone would be. */
 const NAV_WRAP_STYLE: React.CSSProperties = { display: "flex", flexShrink: 0 };
+
+/**
+ * One strip button inside a Focusable of its own whose nav node is registered under `id` while it is drawn,
+ * so a hop onto the button can be Steam's transfer (`transferHop(id, ...)`). Used for ASK and the X here, and
+ * for the paperclip and the mode button in MainTabUnifiedAskBar.tsx: Left and Right from the question box
+ * cross out of the box's own container onto them, and with the panel's page out of the browser's focus a
+ * plain focus() there left the ring behind; the declined Left then took Steam's own way out to the side
+ * column (plan 97, workshop:test-evidence/plan97-P97-L14-FREEZE.json).
+ */
+export function StripNavStop(props: { id: NavFocusId; children: React.ReactNode }): React.ReactElement {
+  const nav = useStripNavNode(props.id);
+  return (
+    <Focusable style={NAV_WRAP_STYLE} {...({ navRef: nav } as Record<string, unknown>)}>
+      {props.children}
+    </Focusable>
+  );
+}
 
 export type AskStripSendButtonsProps = {
   /** True while an answer is being written (or Sum up runs): ASK rests. */
@@ -129,13 +146,11 @@ function SendArrow() {
  */
 export function AskStripSendButtons(props: AskStripSendButtonsProps) {
   const { isAsking, askLooksReady, showClear, onAskPress, onClearPress, askRef, clearRef, focusMicOrStop, focusAskPrimary } = props;
-  const askNav = useStripNavNode("ask-primary", true);
-  const clearNav = useStripNavNode("ask-strip-clear", showClear);
   stripNavIds.set(clearRef, "ask-strip-clear");
   return (
     <>
       {showClear ? (
-        <Focusable style={NAV_WRAP_STYLE} {...({ navRef: clearNav } as Record<string, unknown>)}>
+        <StripNavStop id="ask-strip-clear">
         <Button
           ref={clearRef}
           className="bonsai-askbar-target bonsai-ask-strip-clear"
@@ -165,9 +180,9 @@ export function AskStripSendButtons(props: AskStripSendButtonsProps) {
             <ClearIcon size={16} />
           </span>
         </Button>
-        </Focusable>
+        </StripNavStop>
       ) : null}
-      <Focusable style={NAV_WRAP_STYLE} {...({ navRef: askNav } as Record<string, unknown>)}>
+      <StripNavStop id="ask-primary">
       <Button
         ref={askRef}
         className={
@@ -193,7 +208,7 @@ export function AskStripSendButtons(props: AskStripSendButtonsProps) {
         <span className="bonsai-ask-pill__label">Ask</span>
         <SendArrow />
       </Button>
-      </Focusable>
+      </StripNavStop>
     </>
   );
 }

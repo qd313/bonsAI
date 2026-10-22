@@ -132,6 +132,8 @@ export function useMainTabAskBarFocus(
         : null;
     const btn = host?.querySelector<HTMLElement>("button.bonsai-unified-input-corner-left");
     if (!btn) return false;
+    /* Steam's transfer onto its own node first (StripNavStop): the box's Left crosses containers (plan 97). */
+    if (transferHop("ask-paperclip", "to-paperclip", () => btn)) return true;
     return plainHop(btn, "to-paperclip");
   }, [refs.attachActionHostRef]);
 
@@ -230,6 +232,7 @@ export function useMainTabAskBarFocus(
         : null;
     const btn = host?.querySelector<HTMLElement>("button.bonsai-ask-mode-trigger");
     if (!btn) return false;
+    if (transferHop("ask-mode", "to-mode", () => btn)) return true;
     return plainHop(btn, "to-mode");
   }, [refs.attachActionHostRef]);
 

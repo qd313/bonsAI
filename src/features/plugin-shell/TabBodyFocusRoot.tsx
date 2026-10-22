@@ -11,15 +11,18 @@
  *         It also keeps a few lines of clear space above the first heading, so it is not left under the
  *         pane's top fade (plan 87, B9), and turns the page by a step, before Steam's own scroll, when the
  *         ring walks near the pane's edge (plan 87 B10, plan 89; useTabBodyFocusScroll).
+ *         On a real tab switch it also wears a class saying which side the page comes in from, and the
+ *         stylesheet glides it in (plan 97 G1, tabGlide.ts); the class is fixed when the body is built.
  * Does not: Style anything or claim any press but Up at the top; every other move stays with the
- *           controls inside.
+ *           controls inside. Never waits for the glide: the next press is handled at once.
  */
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
 
 import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../../shared/dpad/navFocusRegistry";
 import type { BonsaiTabId } from "./tabTitles";
 import { useTabBodyFocusScroll } from "../../shared/dpad/useTabBodyFocusScroll";
+import { tabGlideClass, takeTabGlide } from "./tabGlide";
 
 /**
  * Clear space above the first thing in a tab, in px. The top of the pane fades over about 20 px (read off
@@ -46,6 +49,8 @@ export function TabBodyFocusRoot({ id, children }: TabBodyFocusRootProps): React
     rootEl.current = el;
   }, []);
   useTabBodyFocusScroll(rootEl, id);
+  /* Asked once, as the body is built: a switch gives a direction, a rebuild in place or reduced motion gives none. */
+  const [glide] = useState(() => takeTabGlide(id));
   useEffect(() => {
     const key = tabBodyNavFocusId(id);
     registerNavFocus(key, navRef);
@@ -54,7 +59,7 @@ export function TabBodyFocusRoot({ id, children }: TabBodyFocusRootProps): React
 
   return (
     <Focusable
-      className="bonsai-tab-body-root"
+      className={glide ? `bonsai-tab-body-root ${tabGlideClass(glide)}` : "bonsai-tab-body-root"}
       data-bonsai-tab-body={id}
       {...({
         navRef,

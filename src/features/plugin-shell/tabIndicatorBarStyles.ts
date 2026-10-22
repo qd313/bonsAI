@@ -21,8 +21,9 @@
  * outside bonsAI's box, so the box's stylesheet does not reach it.
  *
  * Does not: Hide Steam's own original tab header — that is section-1.ts.
- * Draws nothing outside the bar's own 20 points and fades nothing: the drop-down strip that used to float
- * over the chip row, and its fade, were deleted in plan 84 step 4.
+ * Draws nothing outside the bar's own 20 points: the drop-down strip that used to float over the chip row,
+ * and its fade, were deleted in plan 84 step 4. The one motion in the bar is the 2-point line gliding under
+ * the current tab (plan 97 G1), and the page's glide in is the last rules of the section.
  */
 import {
   TAB_BAR_COLUMN_GAP_PX,
@@ -41,6 +42,7 @@ import {
   TAB_STRIP_BODY_GAP_PX,
 } from "../../shared/constants";
 import { textPx } from "../../styles/textPx";
+import { TAB_GLIDE_EASE, TAB_GLIDE_MS, TAB_GLIDE_SHIFT_PX } from "./tabGlide";
 
 /** The dim colour of the LB and RB marks, the same grey-blue family as the other hint pills. */
 const MARK_COLOR = "rgba(168, 182, 198, 0.62)";
@@ -101,7 +103,42 @@ export function buildTabIndicatorBarSection(): string {
         .bonsai-scope:has(.bonsai-tab-bar) .bonsai-decky-tabs-root {
           --bonsai-tab-strip-reserve: ${TAB_STRIP_BODY_GAP_PX}px;
         }
-${buildTabBarRules(".bonsai-scope")}`;
+${buildTabBarRules(".bonsai-scope")}${buildTabGlideRules()}`;
+}
+
+/**
+ * The page's side of the tab glide (plan 97 G1, option A): the tab body's root wears a class saying
+ * which side it comes in from (TabBodyFocusRoot) and slides 48 points in while it
+ * fades up, 180 ms (tabGlide.ts holds the numbers), with transform and opacity only. Nothing is held at the end (no fill
+ * forwards), so a settled page has no transform on it. Reduced motion switches it off. The `!important`
+ * and the extra class are against section 3's `animation: none !important` on Steam's content pane,
+ * which can reach the body's root when that is the pane's own child.
+ */
+function buildTabGlideRules(): string {
+  const root = ".bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-body-root";
+  return `
+        /* The page gliding in (plan 97 G1). */
+        @keyframes bonsai-tab-glide-from-right {
+          from { transform: translateX(${TAB_GLIDE_SHIFT_PX}px); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes bonsai-tab-glide-from-left {
+          from { transform: translateX(${-TAB_GLIDE_SHIFT_PX}px); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        ${root}.bonsai-tab-body-root--glide-from-right {
+          animation: bonsai-tab-glide-from-right ${TAB_GLIDE_MS}ms ${TAB_GLIDE_EASE} backwards !important;
+        }
+        ${root}.bonsai-tab-body-root--glide-from-left {
+          animation: bonsai-tab-glide-from-left ${TAB_GLIDE_MS}ms ${TAB_GLIDE_EASE} backwards !important;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          ${root}.bonsai-tab-body-root--glide-from-right,
+          ${root}.bonsai-tab-body-root--glide-from-left {
+            animation: none !important;
+          }
+        }
+`;
 }
 
 /**
@@ -254,6 +291,27 @@ export function buildTabBarRules(root: string): string {
           box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.85) !important;
           background: rgba(255, 255, 255, 0.06);
           border-radius: 3px;
+        }
+        /* The line under the current tab (plan 97 G1): 2 points, inside the bar's own 20, placed and
+           moved by transform alone (useTabMarker sets the transform and the glide time). It glides by
+           this transition, so no state waits for it; the time is 0 on the first drawing and under
+           reduced motion, where the second rule turns the transition off altogether. */
+        ${root} .bonsai-tab-bar__marker {
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 1px;
+          height: 2px;
+          transform-origin: 0 0;
+          background: ${ACCENT};
+          pointer-events: none;
+          opacity: 0;
+          transition: transform var(--bonsai-tab-marker-ms, 0ms) ${TAB_GLIDE_EASE};
+        }
+        @media (prefers-reduced-motion: reduce) {
+          ${root} .bonsai-tab-bar__marker {
+            transition: none;
+          }
         }
         /* LB and RB light up only while the ring is on the bar (the drawing's .deck.dimkeys.ring-tabs;
            D126: a row's hints dim unless the ring is on that row). No fade: a state change, so

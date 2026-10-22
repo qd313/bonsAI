@@ -126,7 +126,10 @@ describe("the tab bar as T3 (plan 84 step 4)", () => {
   it("is one row of three columns in order: LB, the tabs in their fixed order, RB", () => {
     const { container } = render(bar({ currentTab: "settings" }), { container: host() });
     const root = container.querySelector(".bonsai-tab-bar") as HTMLElement;
-    const columns = Array.from(root.children).map((el) => el.className);
+    // The 2-point line under the current tab (plan 97 G1) is positioned by hand and takes no column.
+    const columns = Array.from(root.children)
+      .filter((el) => el.className !== "bonsai-tab-bar__marker")
+      .map((el) => el.className);
     expect(columns).toEqual([
       "bonsai-tab-bar__shoulder bonsai-tab-bar__shoulder--l",
       "bonsai-tab-bar__tabs",
@@ -468,18 +471,23 @@ describe("nothing of the tab bar can be left drawn over the chip row (plan 84 st
       run(root, step);
       expect(getComputedStyle(root).overflow).toBe("hidden");
       for (const el of Array.from(root.querySelectorAll<HTMLElement>("*"))) {
+        // The one exception is the line under the current tab (plan 97 G1): absolute inside this clipped bar, 2 points high.
+        if (el.classList.contains("bonsai-tab-bar__marker")) continue;
         expect(["absolute", "fixed", "sticky"]).not.toContain(getComputedStyle(el).position);
       }
     }
   });
 
-  it("fades nothing: no part of the bar has a transition or an animation that could freeze part-way", () => {
+  it("fades nothing: no part of the bar has a transition or an animation that could freeze part-way, bar the line's glide", () => {
     const { container } = render(bar(), { container: scope });
     const root = container.querySelector(".bonsai-tab-bar") as HTMLElement;
     run(root, "ring-on");
     for (const el of [root, ...Array.from(root.querySelectorAll<HTMLElement>("*"))]) {
       const cs = getComputedStyle(el);
-      expect(cs.transition === "" || /^none\b/.test(cs.transition)).toBe(true);
+      // The line under the current tab glides by a transform transition (plan 97 G1); the bar clips it, it moves
+      // nothing else and fades nothing, so it cannot leave a ghost over the row below.
+      const isMarker = el.classList.contains("bonsai-tab-bar__marker");
+      expect(cs.transition === "" || /^none\b/.test(cs.transition) || (isMarker && /^transform\b/.test(cs.transition))).toBe(true);
       expect(cs.animation === "" || /^none\b/.test(cs.animation)).toBe(true);
     }
   });

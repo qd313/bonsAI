@@ -36,7 +36,7 @@
  * open was deleted in plan 84 step 4, because its fade could freeze part
  * way and leave a ghost of it over the chip row.
  */
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { Focusable } from "@decky/ui";
 
 import { TAB_BAR_CURRENT_ICON_PX, TAB_BAR_SIDE_ICON_PX } from "../../shared/constants";
@@ -45,6 +45,8 @@ import { registerModalReturnFocusOwner } from "../../shared/dpad/modalReturnFocu
 import { buildTabBarNavHandlers, neighbourTab, tabBarSides } from "./tabBarNav";
 import { registerShoulderSwitch } from "../../shared/dpad/shoulderSwitch";
 import { BONSAI_TAB_SHORT_NAMES, bonsaiTabBarIcon, type BonsaiTabId } from "./tabTitles";
+import { noteTabShown } from "./tabGlide";
+import { useTabMarker } from "./useTabMarker";
 
 export type TabIndicatorBarProps = {
   /** The mounted tabs in strip order — six without Developer, seven with. */
@@ -88,6 +90,10 @@ export type TabIndicatorBarProps = {
  *    tab's icon and name, the right side's icons), RB. Each mark and side icon
  *    is a tap target. What it draws depends only on its props, never on
  *    the ring or a tap, so there is nothing that could be left half drawn.
+ * 6. Tells the tab glide which tab is showing (so the page arriving knows its
+ *    side) and keeps a 2-point green line under the current tab, which glides
+ *    to the next tab by a stylesheet transition (plan 97 G1; useTabMarker.ts).
+ *    Neither waits for anything: a press is handled the moment it comes.
  */
 export function TabIndicatorBar({
   tabIds,
@@ -116,6 +122,12 @@ export function TabIndicatorBar({
       }),
     [tabIds, currentTab, selectTab],
   );
+
+  /* The glide's memory of which tab is showing; a layout effect, so it is set before any paint. */
+  useLayoutEffect(() => {
+    if (current) noteTabShown(current);
+  }, [current]);
+  const markerRef = useTabMarker(current ?? "");
 
   const handlers = buildTabBarNavHandlers({ tabIds, currentTab, selectTab, exitDown, upHolds });
 
@@ -196,6 +208,11 @@ export function TabIndicatorBar({
       >
         RB
       </span>
+      <i
+        ref={markerRef as React.RefObject<HTMLElement>}
+        className="bonsai-tab-bar__marker"
+        aria-hidden="true"
+      />
     </Focusable>
   );
 }

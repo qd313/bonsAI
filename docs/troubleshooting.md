@@ -560,6 +560,7 @@ Then `sudo systemctl restart avahi-daemon` and ensure `OLLAMA_HOST=0.0.0.0` and 
 - Open bonsAI `Settings` tab.
 - Set **Attachment quality (vision)** to **Low**, **Mid**, or **Max** (JPEG resize/compression before send; **Low** is smallest payload, **Max** is highest quality).
 - Legacy `settings.json` values that used numeric max dimensions are migrated on load.
+- Every attached picture is shrunk before it is sent, even a small file: a Deck screenshot is 1920 by 1080 pixels whatever its size in kilobytes, and sending it untouched can crash the AI's picture reader.
 
 ### Screenshot sources in V1
 - `Attach` opens a fullscreen screenshot browser with thumbnail previews.

@@ -65,8 +65,11 @@ calling `prepare_image_attachment()` for each file:
     particular file), `encode_image_with_ffmpeg()` does the same job with
     `ffmpeg`, which is already on the Deck: it scales the picture down to
     the same Low/Mid/Max longest-side limit and re-encodes it as a compact
-    JPEG. A picture already under a small size does not even need that --
-    it is sent as it is.
+    JPEG. Every picture goes through
+    this shrink, even a small file: a Deck screenshot is 1920 by 1080
+    pixels whatever its size in kilobytes, and the AI's picture reader
+    runs the graphics chip out of memory on that many pixels. The shrink
+    never enlarges a picture already inside the longest-side limit.
  4. If neither can shrink the picture (`ffmpeg` missing, or the shrink
     itself fails or times out), the picture is refused with a message a
     person understands, instead of sending the full-size file and risking
@@ -106,11 +109,6 @@ except ImportError:  # pragma: no cover
 SUPPORTED_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp"}
 MAX_ATTACHMENT_FILE_BYTES = 40 * 1024 * 1024
 MAX_ATTACHMENT_INLINE_BYTES = 15 * 1024 * 1024
-
-# A picture already at or under this size is sent as it is -- shrinking it further is not
-# worth the extra ffmpeg call. Matches the same "is this already small" cutoff already used
-# for finalizing a fresh capture (see _finalize_steam_capture_file).
-FFMPEG_PASSTHROUGH_BYTES = 500_000
 
 # Longest-side pixel limit and ffmpeg JPEG quality (mjpeg's own scale: 2 is best, 31 is worst)
 # for each attachment preset, kept close to what encode_image_with_pillow() targets for the
@@ -853,26 +851,14 @@ def encode_image_with_ffmpeg(
     """Resize and encode an image with ffmpeg -- already on the Deck -- when Pillow cannot.
 
     Scales to the same Low / Mid / Max longest-side limit encode_image_with_pillow() uses, so
-    the presets mean the same thing whether or not Pillow is installed. A picture already at or
-    under FFMPEG_PASSTHROUGH_BYTES is sent as it is; shrinking it further is not worth the call.
+    the presets mean the same thing whether or not Pillow is installed. Every picture is
+    shrunk, whatever its size in bytes: file size says nothing about pixel count (a flat 1920 by
+    1080 screenshot is a few hundred KB and still crashed the AI's picture reader). The scale
+    filter never enlarges, so a picture already inside the limit keeps its own size.
     """
     warnings: list = []
     if attachment_preset not in FFMPEG_ATTACHMENT_PRESETS:
         attachment_preset = "low"
-
-    try:
-        file_size = os.path.getsize(path)
-    except OSError as exc:
-        return None, None, [f"Could not read the image file: {exc}"]
-
-    if file_size <= FFMPEG_PASSTHROUGH_BYTES:
-        try:
-            with open(path, "rb") as f:
-                raw = f.read()
-        except OSError as exc:
-            return None, None, [f"Could not read the image file: {exc}"]
-        mime_type = mimetypes.guess_type(path)[0] or "image/jpeg"
-        return base64.b64encode(raw).decode("ascii"), mime_type, warnings
 
     ffmpeg = shutil.which("ffmpeg")
     if not ffmpeg:

@@ -3,14 +3,16 @@ to a question (including the no-Pillow ffmpeg shrink path -- see FFMPEG_ATTACHME
 
 import base64
 import os
+import shutil
+import struct
 import subprocess
 import tempfile
 import unittest
+import zlib
 from unittest import mock
 
 from backend.media.screenshot_media import (
     FFMPEG_ATTACHMENT_PRESETS,
-    FFMPEG_PASSTHROUGH_BYTES,
     encode_image_with_ffmpeg,
     extract_app_id_from_screenshot_path,
     gamescope_atom_screenshot_value,
@@ -202,7 +204,7 @@ class EncodeImageWithFfmpegTests(unittest.TestCase):
     def _write_big_file(self, tmp_dir: str, name: str = "shot.png") -> str:
         path = os.path.join(tmp_dir, name)
         with open(path, "wb") as f:
-            f.write(b"\xff" * (FFMPEG_PASSTHROUGH_BYTES + 1000))
+            f.write(b"\xff" * (501_000))
         return path
 
     def test_success_shrinks_and_returns_the_smaller_bytes(self) -> None:
@@ -306,21 +308,84 @@ class EncodeImageWithFfmpegTests(unittest.TestCase):
             self.assertTrue(warnings)
             self.assertIn("ffmpeg is not installed", warnings[0])
 
-    def test_small_picture_is_passed_through_without_calling_ffmpeg(self) -> None:
+    def test_a_1920x1080_picture_under_500kb_is_shrunk_not_sent_as_it_is(self) -> None:
+        # The Deck's own screenshot: 1920x1080 but only a few hundred KB, so it used to slip
+        # under a file-size line and reach the AI at full pixel size (the graphics chip crash).
         with tempfile.TemporaryDirectory() as tmp:
-            src = os.path.join(tmp, "shot.jpg")
-            payload = b"already-small-picture-bytes"
-            with open(src, "wb") as f:
-                f.write(payload)
+            src = os.path.join(tmp, "shot.png")
+            _write_solid_png(src, 1920, 1080)
+            self.assertLess(os.path.getsize(src), 500_000)
+
+            def fake_ffmpeg_run(cmd, **kwargs):
+                with open(cmd[-1], "wb") as out:
+                    out.write(b"shrunk-jpeg-bytes")
+                return mock.Mock(returncode=0, stderr=b"")
 
             with mock.patch(
-                "backend.media.screenshot_media.subprocess.run"
-            ) as run_mock:
-                encoded, mime_type, warnings = encode_image_with_ffmpeg(src, "low")
+                "backend.media.screenshot_media.shutil.which",
+                return_value="/usr/bin/ffmpeg",
+            ):
+                with mock.patch(
+                    "backend.media.screenshot_media.subprocess.run",
+                    side_effect=fake_ffmpeg_run,
+                ) as run_mock:
+                    encoded, mime_type, _warnings = encode_image_with_ffmpeg(src, "low")
 
-            run_mock.assert_not_called()
-            self.assertEqual(base64.b64decode(encoded), payload)
-            self.assertEqual(warnings, [])
+            run_mock.assert_called_once()
+            self.assertEqual(base64.b64decode(encoded), b"shrunk-jpeg-bytes")
+            self.assertEqual(mime_type, "image/jpeg")
+
+    @unittest.skipUnless(shutil.which("ffmpeg"), "needs a real ffmpeg")
+    def test_real_ffmpeg_shrinks_1920x1080_and_never_enlarges_a_small_picture(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            big = os.path.join(tmp, "big.png")
+            small = os.path.join(tmp, "small.png")
+            _write_solid_png(big, 1920, 1080)
+            _write_solid_png(small, 640, 400)
+            self.assertLess(os.path.getsize(big), 500_000)
+
+            big_b64, _, _ = encode_image_with_ffmpeg(big, "low")
+            small_b64, _, _ = encode_image_with_ffmpeg(small, "low")
+
+        low_side = FFMPEG_ATTACHMENT_PRESETS["low"][0]
+        big_w, big_h = _jpeg_size(base64.b64decode(big_b64))
+        self.assertLessEqual(max(big_w, big_h), low_side)
+        self.assertEqual((big_w, big_h), (800, 450))
+        # Already inside the preset's longest side: the picture keeps its own size.
+        self.assertEqual(_jpeg_size(base64.b64decode(small_b64)), (640, 400))
+
+
+def _write_solid_png(path: str, width: int, height: int) -> None:
+    """A real, valid PNG of one flat colour: small on disk, big in pixels (stdlib only)."""
+
+    def chunk(kind: bytes, data: bytes) -> bytes:
+        body = kind + data
+        return struct.pack(">I", len(data)) + body + struct.pack(">I", zlib.crc32(body) & 0xFFFFFFFF)
+
+    row = bytes([0]) + bytes([0x20, 0x60, 0xA0]) * width
+    raw = zlib.compress(row * height, 9)
+    with open(path, "wb") as f:
+        f.write(
+            bytes([0x89]) + b"PNG" + bytes([0x0D, 0x0A, 0x1A, 0x0A])
+            + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0))
+            + chunk(b"IDAT", raw)
+            + chunk(b"IEND", b"")
+        )
+
+
+def _jpeg_size(data: bytes) -> tuple[int, int]:
+    """Read width and height from a JPEG's start-of-frame marker."""
+    i = 2
+    while i < len(data):
+        if data[i] != 0xFF:
+            i += 1
+            continue
+        marker = data[i + 1]
+        if marker in (0xC0, 0xC1, 0xC2):
+            height, width = struct.unpack(">HH", data[i + 5 : i + 9])
+            return width, height
+        i += 2 + struct.unpack(">H", data[i + 2 : i + 4])[0]
+    raise AssertionError("no JPEG frame header found")
 
 
 class PrepareImageAttachmentShrinkChoiceTests(unittest.TestCase):

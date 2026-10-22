@@ -335,6 +335,33 @@ class EncodeImageWithFfmpegTests(unittest.TestCase):
             self.assertEqual(base64.b64decode(encoded), b"shrunk-jpeg-bytes")
             self.assertEqual(mime_type, "image/jpeg")
 
+    def test_ffmpeg_runs_without_the_plugin_loaders_library_path(self) -> None:
+        # Deck 2026-10-22 (plan97-P97-L1-PICTURE-ANSWER.json): inside the plugin, ffmpeg picked up
+        # the plugin loader's own older libstdc++ through LD_LIBRARY_PATH and failed to start, so
+        # every picture, even a 39 KB one, came back "too big to send".
+        with tempfile.TemporaryDirectory() as tmp:
+            src = os.path.join(tmp, "shot.png")
+            _write_solid_png(src, 64, 64)
+
+            def fake_ffmpeg_run(cmd, **kwargs):
+                with open(cmd[-1], "wb") as out:
+                    out.write(b"shrunk-jpeg-bytes")
+                return mock.Mock(returncode=0, stderr=b"")
+
+            loader_env = {"LD_LIBRARY_PATH": "/tmp/_MEI0000ab", "LD_PRELOAD": "x.so", "ORIG_LD_LIBRARY_PATH": "/a"}
+            with mock.patch.dict(os.environ, loader_env), mock.patch(
+                "backend.media.screenshot_media.shutil.which", return_value="/usr/bin/ffmpeg"
+            ), mock.patch(
+                "backend.media.screenshot_media.subprocess.run", side_effect=fake_ffmpeg_run
+            ) as run_mock:
+                encode_image_with_ffmpeg(src, "low")
+
+            env = run_mock.call_args.kwargs.get("env")
+            self.assertIsNotNone(env, "ffmpeg must get an environment of its own")
+            for key in loader_env:
+                self.assertNotIn(key, env)
+            self.assertIn("PATH", env)
+
     @unittest.skipUnless(shutil.which("ffmpeg"), "needs a real ffmpeg")
     def test_real_ffmpeg_shrinks_1920x1080_and_never_enlarges_a_small_picture(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

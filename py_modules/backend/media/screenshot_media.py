@@ -845,6 +845,16 @@ def encode_image_with_pillow(
         return None, None, [f"Pillow could not process image: {exc}"]
 
 
+def _env_without_loader_libraries() -> dict:
+    """This process's environment minus the library overrides the plugin loader sets, the same
+    rule the Ollama and power helpers apply to the programs they start."""
+    return {
+        k: v
+        for k, v in os.environ.items()
+        if k not in ("LD_LIBRARY_PATH", "LD_PRELOAD", "ORIG_LD_LIBRARY_PATH")
+    }
+
+
 def encode_image_with_ffmpeg(
     path: str, attachment_preset: str
 ) -> tuple[Optional[str], Optional[str], list]:
@@ -884,6 +894,9 @@ def encode_image_with_ffmpeg(
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             timeout=20,
+            # Without the plugin loader's library path: through it ffmpeg loaded the loader's older
+            # libstdc++ and failed to start on the Deck (2026-10-22), so no picture could be shrunk.
+            env=_env_without_loader_libraries(),
         )
         if result.returncode != 0 or not os.path.isfile(out_path) or os.path.getsize(out_path) == 0:
             stderr = result.stderr.decode("utf-8", errors="replace").strip()

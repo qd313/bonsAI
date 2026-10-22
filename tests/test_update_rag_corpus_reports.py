@@ -90,6 +90,28 @@ class UpdateRagCorpusReportsTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn("outcome=download_not_started", line)
         self.assertIn("already running", line)
 
+    async def test_installed_newer_than_published_downloads_nothing(self) -> None:
+        # plan86-B6-RESTORE.json: 2026.10.17 installed, 2026.09.26 published.
+        plugin = _FakePlugin(local_version="2026.10.17")
+        out, line = await self._update(plugin, remote="2026.09.26")
+        self.assertTrue(out["ok"])
+        self.assertFalse(out["updated"])
+        self.assertEqual(out["outcome"], "installed_newer")
+        self.assertEqual(out["version"], "2026.10.17")
+        self.assertEqual(out["remote_version"], "2026.09.26")
+        self.assertEqual(plugin.download_calls, [])
+        self.assertIn("installed=2026.10.17", line)
+        self.assertIn("newest=2026.09.26", line)
+        self.assertIn("outcome=installed_newer", line)
+
+    async def test_unreadable_version_keeps_old_behaviour(self) -> None:
+        plugin = _FakePlugin(local_version="dev-build")
+        out, _ = await self._update(plugin, remote="2026.09.26")
+        self.assertEqual(out["outcome"], "download_started")
+        plugin = _FakePlugin(local_version="2026.10.17")
+        out, _ = await self._update(plugin, remote="latest")
+        self.assertEqual(out["outcome"], "download_started")
+
     async def test_check_failed(self) -> None:
         plugin = _FakePlugin(local_version="2026.09.26")
         out, line = await self._update(plugin, fetch_error=RuntimeError("Could not fetch the knowledge base manifest"))

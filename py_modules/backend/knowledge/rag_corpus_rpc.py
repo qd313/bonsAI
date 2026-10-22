@@ -23,6 +23,7 @@ what goes back to the screen.
 
 import asyncio
 import os
+import re
 from typing import Any
 
 from backend.core.async_background_job import new_asyncio_cancel_event
@@ -146,11 +147,23 @@ async def cancel_rag_corpus_download(self):
     return {"cancel_requested": True}
 
 
+def _version_date(version: str) -> tuple[int, int, int] | None:
+    """Read a YYYY.MM.DD library version; None when it is not exactly that shape."""
+    m = re.fullmatch(r"(\d{4})\.(\d{1,2})\.(\d{1,2})", version.strip())
+    return (int(m[1]), int(m[2]), int(m[3])) if m else None
+
+
+def _published_is_older(remote_ver: str, local_ver: str) -> bool:
+    remote, local = _version_date(remote_ver), _version_date(local_ver)
+    return remote is not None and local is not None and remote < local
+
+
 async def update_rag_corpus(self):
     """Check remote manifest and re-download when version differs.
 
-    Every call ends in one of four ``outcome`` values the screen shows in the row's
-    status line -- up_to_date, download_started, download_not_started, check_failed --
+    Every call ends in one of five ``outcome`` values the screen shows in the row's
+    status line -- up_to_date, installed_newer, download_started, download_not_started,
+    check_failed --
     and writes exactly one plugin-log line saying which. On the Deck an Update that
     found nothing new used to leave no trace at all (plan70-R5.json).
     """
@@ -180,6 +193,16 @@ async def update_rag_corpus(self):
     if remote_ver and remote_ver == local_ver and resolve_corpus_db_path(settings):
         log_update("up_to_date", remote_ver)
         return {"ok": True, "updated": False, "outcome": "up_to_date", "version": local_ver}
+    if _published_is_older(remote_ver, local_ver) and resolve_corpus_db_path(settings):
+        # Both read as dates and the published one is older: replacing would go backwards.
+        log_update("installed_newer", remote_ver)
+        return {
+            "ok": True,
+            "updated": False,
+            "outcome": "installed_newer",
+            "version": local_ver,
+            "remote_version": remote_ver,
+        }
     out = await self.start_rag_corpus_download(
         {"install_path": settings.get("rag_corpus_path") or default_corpus_dir_internal()}
     )

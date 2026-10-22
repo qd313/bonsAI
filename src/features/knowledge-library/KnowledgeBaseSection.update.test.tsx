@@ -108,6 +108,23 @@ describe("KnowledgeBaseSection Update reports its outcome", () => {
     expect(await screen.findByText("Already up to date (version 2026.09.26).")).toBeTruthy();
   });
 
+  it("says the installed library is newer than the published one and downloads nothing", async () => {
+    setRpcHandler("update_rag_corpus", () => ({
+      ok: true,
+      updated: false,
+      outcome: "installed_newer",
+      version: "2026.10.17",
+      remote_version: "2026.09.26",
+    }));
+    renderInstalled();
+    await pressUpdate();
+    expect(
+      await screen.findByText("You have 2026.10.17; the published library is 2026.09.26. Nothing to do."),
+    ).toBeTruthy();
+    expect(screen.queryByText(/Already up to date/)).toBeNull();
+    expect(screen.queryByText("Downloading…")).toBeNull();
+  });
+
   it("says a newer version was found and shows the download running", async () => {
     setRpcHandler("update_rag_corpus", () => ({
       ok: true,

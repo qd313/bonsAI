@@ -136,6 +136,7 @@ type RagUpdateResult = {
   updated?: boolean;
   outcome?: string;
   version?: string;
+  remote_version?: string;
   error?: string;
   reason?: string;
 };
@@ -698,6 +699,13 @@ export const KnowledgeBaseSection: React.FC<Props> = ({
             out?.outcome === "check_failed" ? `Could not check for updates: ${err}` : `Update failed: ${err}`;
           setUpdateNote({ kind: "error", text });
           toaster.toast({ title: "Update failed", body: err, duration: 8000 });
+          return;
+        }
+        if (out.outcome === "installed_newer" && out.version && out.remote_version) {
+          setUpdateNote({
+            kind: "current",
+            text: `You have ${out.version}; the published library is ${out.remote_version}. Nothing to do.`,
+          });
           return;
         }
         if (out.updated === false) {

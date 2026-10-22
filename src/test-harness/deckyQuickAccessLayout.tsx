@@ -8,7 +8,8 @@
  *          rules do), so whatever the plugin writes inline wins and whatever it puts back shows. Each part's
  *          box is read back through `getBoundingClientRect` and `clientHeight`, as the plugin and the Deck
  *          probe read them.
- * Used for: the step 6 tests (topStrip*.test.tsx).
+ * Used for: the step 6 tests (topStrip*.test.tsx); `SteamTabsPanel` (Steam's own tab panel with its tab
+ *           row, plan 97 L15) for the Steam tab row guard's tests.
  * Does not: Lay out anything inside bonsAI's tabs: the tabs root starts under the bar (or at the box's top)
  *           plus its reserve, and that is where the tab's content starts. Does not scroll.
  */
@@ -169,6 +170,61 @@ export function DeckyQuickAccessPage({
           <div data-decky="gap">{children}</div>
         </div>
       </div>
+    </div>
+  );
+}
+
+/** The tab icons Steam's row carries, as the plugin hands them over (tabTitles.tsx's leaf class). */
+const STAND_IN_TABS = ["Search", "Main", "Ollama", "Settings"];
+
+/**
+ * What Steam's `Tabs` draws inside bonsAI's tabs root, in the shape the plan 30 probe read on the Deck
+ * (workshop:archive/30-collapsing-tab-bar.md § 8): the Tabs panel with two children, the 300-point
+ * header wrapper and the body; inside the wrapper the 252-point row of three (LB badge, the icon
+ * carousel, RB badge); the tab buttons hold the plugin's title leaves two wrappers down. Steam's own
+ * classes are hashed, so only the parts the plugin's rule and guard read are named. `badges`: "images"
+ * is the measured shape (labelled glyph images); "text" is the shape the scoping note suspects after a
+ * rebuild. `body: false` is Steam mid-rebuild, the row there and the body not yet.
+ */
+export function SteamTabsPanel({
+  badges = "images",
+  body = true,
+  children,
+}: {
+  badges?: "images" | "text";
+  body?: boolean;
+  children?: React.ReactNode;
+}): React.ReactElement {
+  const badge = (side: "Left" | "Right") =>
+    badges === "images" ? (
+      <img aria-label={`${side} Shoulder`} src="data:," alt="" />
+    ) : (
+      <span>{side === "Left" ? "L1" : "R1"}</span>
+    );
+  return (
+    <div className="Panel Focusable">
+      <div className="TabHeaderRowWrapper_x1" data-steam="tab-row">
+        <div className="TabHeaderRow_x2" data-steam="tab-row-inner">
+          <div className="Glyph_x3">{badge("Left")}</div>
+          <div className="TabRowTabs_x4">
+            <div>
+              <div>
+                {STAND_IN_TABS.map((name) => (
+                  <div key={name} className="Panel Focusable Tab_x5">
+                    <div className="bonsai-tab-title-leaf" aria-label={name} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="Glyph_x3">{badge("Right")}</div>
+        </div>
+      </div>
+      {body ? (
+        <div className="TabContentsScroll_x6" data-steam="tab-body">
+          {children}
+        </div>
+      ) : null}
     </div>
   );
 }

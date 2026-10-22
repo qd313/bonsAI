@@ -125,6 +125,7 @@ import { PluginErrorBoundary } from "./features/plugin-shell/PluginErrorBoundary
 import { DECKY_TAB_TITLES, type BonsaiTabId } from "./features/plugin-shell/tabTitles";
 import { TabIndicatorBar } from "./features/plugin-shell/TabIndicatorBar";
 import { HiddenTabHeaderTrap } from "./features/plugin-shell/useHiddenTabHeaderTrap";
+import { SteamTabRowGuard } from "./features/plugin-shell/useSteamTabRowGuard";
 import { TabBodyFocusRoot } from "./features/plugin-shell/TabBodyFocusRoot";
 import { takeNavFocus } from "./shared/dpad/navFocusRegistry";
 import { loadSavedSearchQuery, persistSearchQuery, saveIp } from "./features/plugin-shell/pluginStorage";
@@ -1209,6 +1210,7 @@ const Content: React.FC = () => {
           />
         )}
         <HiddenTabHeaderTrap />
+        <SteamTabRowGuard />
         <div className="bonsai-decky-tabs-root" data-bonsai-active-tab={currentTab}>
           <Tabs
             activeTab={currentTab}

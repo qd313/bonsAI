@@ -204,6 +204,7 @@ import {
   registerStrategyBranchPickerNav,
   ringIsOnFirstStrategyBranch,
   ringIsOnLastStrategyBranch,
+  strategyFirstBranchNavRef,
   strategyLastBranchNavRef,
   queryTurnSlot,
 } from "../../../shared/dpad/liveTurnFocusGraph";
@@ -998,12 +999,11 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               {`${String.fromCharCode(65 + idx)}. ${opt.label}`}
             </BonsaiChatSecondaryButton>
           );
-          /* The last button's own nav node, so Up from the reply row lands on it, not on A. */
-          return idx === lastIdx ? (
-            <Focusable
-              key={`sg-branch-last-${opt.id}-${idx}`}
-              {...({ navRef: strategyLastBranchNavRef } as Record<string, unknown>)}
-            >
+          /* The last button's own nav node, so Up from the reply row lands on it, not on A; the first's, so
+             Down from the answer lands on A with the panel's page out of focus (plan 97). */
+          const own = idx === lastIdx ? strategyLastBranchNavRef : idx === 0 ? strategyFirstBranchNavRef : null;
+          return own ? (
+            <Focusable key={`sg-branch-own-${opt.id}-${idx}`} {...({ navRef: own } as Record<string, unknown>)}>
               {button}
             </Focusable>
           ) : (

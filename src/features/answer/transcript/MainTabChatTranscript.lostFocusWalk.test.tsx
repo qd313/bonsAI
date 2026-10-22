@@ -123,7 +123,7 @@ const PANE_PX = 4000;
 /** Each element's own box: stacked top to bottom in the order they are drawn, a few px apart, all inside the pane. */
 const ROW_PX = 4;
 
-function mount() {
+function mount(over: Partial<MainTabChatTranscriptProps> = {}) {
   const pane = page.doc.createElement("div");
   pane.className = "TabContentsScroll";
   Object.defineProperty(pane, "clientHeight", { value: PANE_PX, configurable: true });
@@ -136,7 +136,7 @@ function mount() {
     const at = all.indexOf(this);
     return at < 0 ? box(0, 0) : box(at * ROW_PX, at * ROW_PX + ROW_PX);
   };
-  render(<MainTabChatTranscript {...props()} />, { container: pane });
+  render(<MainTabChatTranscript {...props()} {...over} />, { container: pane });
   /* Decky stamps tabindex on the nodes Steam navigates; the stub does not. */
   page.host
     .querySelectorAll<HTMLElement>(".bonsai-answer-stop, .bonsai-chat-turn-row-body, .bonsai-chat-reasoning-fold, .bonsai-chat-details-divider")
@@ -184,6 +184,52 @@ describe("P97-L14-FREEZE (round three): up through the answer to the question an
 
     expect(withFocus.slice(0, 5)).toEqual(["question", "Show reasoning · 12 s", "section 0", "section 1", "section 2"]);
     expect(withFocus[withFocus.length - 1]).toBe("Show details");
+    expect(withoutFocus).toEqual(withFocus);
+  });
+});
+
+/** A Strategy answer's choice menu ("A. ...", "B. ...", "C. ..."), drawn between the answer and the reply row. */
+const CHOICES: Partial<MainTabChatTranscriptProps> = {
+  askMode: "strategy",
+  strategyGuideBranches: {
+    question: "What do you want to work on?",
+    options: [
+      { id: "move", label: "Movement and dodging" },
+      { id: "gear", label: "Choosing upgrades" },
+      { id: "boss", label: "Boss attack patterns" },
+    ],
+  },
+  onStrategyBranchPick: () => {},
+};
+const A = "A. Movement and dodging";
+const B = "B. Choosing upgrades";
+const C = "C. Boss attack patterns";
+
+describe("P97-L14-FREEZE (round four): from the answer's last section onto its choices and back, the page's focus gone", () => {
+  /* plan97-P97-L14-FREEZE-try4.json: Down from the last section moved only the page's focus to "A.", ten presses of ten. */
+  it("walks Down from the last section through A, B and C to Show details, as it does with focus", () => {
+    mount(CHOICES);
+    act(() => page.steamMove(byName("section 2")));
+    const withFocus = walk("onMoveDown", "Show details");
+
+    act(() => page.steamMove(byName("section 2")));
+    page.setFocused(false);
+    const withoutFocus = walk("onMoveDown", "Show details");
+
+    expect(withFocus.slice(0, 4)).toEqual(["section 2", A, B, C]);
+    expect(withoutFocus).toEqual(withFocus);
+  });
+
+  it("walks Up from Show details through C, B and A back to the last section, as it does with focus", () => {
+    mount(CHOICES);
+    act(() => page.steamMove(byName("Show details")));
+    const withFocus = walk("onMoveUp", "section 2");
+
+    act(() => page.steamMove(byName("Show details")));
+    page.setFocused(false);
+    const withoutFocus = walk("onMoveUp", "section 2");
+
+    expect(withFocus.slice(-4)).toEqual([C, B, A, "section 2"]);
     expect(withoutFocus).toEqual(withFocus);
   });
 });

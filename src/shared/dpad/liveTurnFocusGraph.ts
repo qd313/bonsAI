@@ -11,6 +11,7 @@ import { takeStrategyChecklistStep } from "./strategyChecklistNav";
 import { elementHasFocus, elementHasGamepadFocus, getUiDocument } from "./uiDocument";
 import { focusRowElement } from "./focusPerTurnRow";
 import { takeNavFocus } from "./navFocusRegistry";
+import { noteLostFocusHop, panelLacksFocus, plainHop } from "./lostFocusHop";
 import { getRegisteredAnswerBubble } from "./answerBubbleElRegistry";
 import { focusLastAnswerChunk } from "../../features/answer/bubble/answerBubbleNavigation";
 
@@ -136,7 +137,34 @@ function focusStrategyBranchButton(
       : which === "first"
         ? buttons[0]
         : buttons[buttons.length - 1];
+  if (target && panelLacksFocus()) return choiceHopWithoutPageFocus(target, ownChoiceNav(which, buttons.length));
   return focusDeckOwner(target);
+}
+
+/** The first or last choice button's own nav node (one choice: it is both, and carries the last one's). */
+function ownChoiceNav(which: "first" | "last" | number, count: number): SteamNavHolder | null {
+  if (which === "last" || (which === "first" && count === 1)) return strategyLastBranchNavRef;
+  return which === "first" ? strategyFirstBranchNavRef : null;
+}
+
+/**
+ * Onto a choice button while the panel's page has lost the browser's focus (plan 97,
+ * workshop:test-evidence/plan97-P97-L14-FREEZE-try4.json: Down from the answer's last section onto "A."
+ * moved only the page's focus, ten presses of ten). Steam's transfer onto the button's own node first;
+ * without one, a plain hop that reports false unless the ring followed, so the press goes to Steam.
+ */
+function choiceHopWithoutPageFocus(target: HTMLElement, own: SteamNavHolder | null): boolean {
+  let took = false;
+  try {
+    took = typeof own?.current?.TakeFocus === "function" && own.current.TakeFocus(true) !== false;
+  } catch {
+    took = false;
+  }
+  if (took) {
+    noteLostFocusHop("strategy-choice", "transfer", target);
+    return focusDeckOwner(target);
+  }
+  return plainHop(target, "strategy-choice", () => void focusDeckOwner(target));
 }
 
 function focusStrategyChecklistToggle(liveSlot: HTMLElement | null, which: "first" | "last"): boolean {
@@ -341,6 +369,12 @@ export function registerStrategyBranchPickerNav(holder: SteamNavHolder | null): 
  * since only the newest answer draws choices.
  */
 export const strategyLastBranchNavRef: SteamNavHolder = { current: null };
+
+/**
+ * The FIRST choice button's own nav node, the mirror of the last one's: Down from the answer's last
+ * section lands on "A." through it while the panel's page lacks the browser's focus (plan 97).
+ */
+export const strategyFirstBranchNavRef: SteamNavHolder = { current: null };
 
 /**
  * Up onto the LAST choice button, from the row below (plan 72 A-4). The buttons are their own

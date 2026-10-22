@@ -20,6 +20,7 @@ import { useMemo, useRef } from "react";
 import type { MutableRefObject } from "react";
 
 import { focusInTabBody } from "../../shared/dpad/useTabBodyFocusScroll";
+import { plainHop } from "../../shared/dpad/lostFocusHop";
 import type { FoldChainSection } from "../folded-tabs/FoldedSection";
 
 type Hosts = MutableRefObject<(HTMLElement | null)[]>;
@@ -39,8 +40,8 @@ function focusStopIn(host: HTMLElement | null | undefined): boolean {
   const all = Array.from(host.querySelectorAll<HTMLElement>(STOP_SELECTOR));
   const target = all.find((el) => !all.some((other) => other !== el && el.contains(other)));
   if (!target) return false;
-  focusInTabBody(target);
-  return true;
+  /* False only while the page lacks the browser's focus and the ring did not follow (plan 97, lostFocusHop.ts). */
+  return plainHop(target, "developer-tab", () => focusInTabBody(target));
 }
 
 function firstStop(hosts: Hosts): boolean {

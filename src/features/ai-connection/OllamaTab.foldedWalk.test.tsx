@@ -30,6 +30,7 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { OllamaTab, type OllamaTabProps } from "./OllamaTab";
+import { ollamaProps } from "../../test-harness/ringTestProps";
 import { resetFoldedTabsForTests, setAllSections, toggleSection } from "../folded-tabs/foldedTabsStore";
 import { OLLAMA_FOLD_TAB, OLLAMA_SECTIONS } from "./ollamaTabFolds";
 import { resetNavFocusRegistry } from "../../shared/dpad/navFocusRegistry";
@@ -40,7 +41,6 @@ import { putSteamRingOn, steamRingHolder, type SteamEl } from "../../test-harnes
 import type { SteamFocusScroll } from "../../test-harness/tabBodyWalk";
 import type { ReplyVerbosityId } from "../settings/replyVerbosity";
 
-const noop = () => {};
 const DECK_PANE = 430;
 const MONITOR_PANE = 741;
 const RULES: SteamFocusScroll[] = ["nearest", "centerIfHidden", "center"];
@@ -50,39 +50,7 @@ const TAIL = 120;
 /** The plugin's ring on a plain button reaches 4 px outside it (2 px outline, 2 px offset: scopeBase.ts). */
 const RING_REACH = 4;
 
-function props(): OllamaTabProps {
-  return {
-    ollamaIp: "",
-    effectiveOllamaPcIp: "127.0.0.1",
-    onOllamaIpChange: noop,
-    onPersistOllamaIp: noop,
-    ollamaLocalOnDeck: true,
-    setOllamaLocalOnDeck: noop,
-    ollamaLocalAutostart: true,
-    setOllamaLocalAutostart: noop,
-    namedOllamaHosts: [],
-    setNamedOllamaHosts: noop,
-    onBeforeDeckyModal: noop,
-    onCompleteDeckyModalClose: (close) => close(),
-    onOpenOllamaModelsHub: noop,
-    latencyWarningSeconds: 60,
-    requestTimeoutSeconds: 180,
-    latencyTimeoutsCustomEnabled: false,
-    setLatencyTimeoutsCustomEnabled: noop,
-    setLatencyWarningSeconds: noop,
-    setRequestTimeoutSeconds: noop,
-    ollamaKeepAlive: "5m",
-    setOllamaKeepAlive: noop,
-    modelPolicyTier: "open_source_only",
-    useLocalKnowledgeBase: true,
-    setUseLocalKnowledgeBase: noop,
-    ragCorpusVersion: "",
-    replyVerbosity: "balanced",
-    setReplyVerbosity: noop,
-    askThinkEffort: "off",
-    setAskThinkEffort: noop,
-  };
-}
+const props = ollamaProps;
 
 function walk(viewport: number, steam: SteamFocusScroll, over: Partial<OllamaTabProps> = {}) {
   return walkFoldedTab({

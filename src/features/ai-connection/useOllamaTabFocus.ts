@@ -26,6 +26,16 @@ import { useCallback, useMemo, useRef } from "react";
 
 import { registerModalReturnFocusOwner } from "../../shared/dpad/modalReturnFocusRegistry";
 import { focusInTabBody } from "../../shared/dpad/useTabBodyFocusScroll";
+import { plainHop } from "../../shared/dpad/lostFocusHop";
+
+/**
+ * Focus `el` the way this tab always has (`focusInTabBody`). False only while the panel's page has lost the
+ * browser's focus and Steam's ring did not follow: the section line or control then declines the press and
+ * Steam's own step down the column moves the ring (plan 97, lostFocusHop.ts; FoldedSection.tsx).
+ */
+function hopInTabBody(el: HTMLElement): boolean {
+  return plainHop(el, "ollama-tab", () => focusInTabBody(el));
+}
 import type { FoldChainSection } from "../folded-tabs/FoldedSection";
 
 /**
@@ -39,8 +49,7 @@ function focusFirstStopIn(host: HTMLElement | null, selector: string): boolean {
   // focus-patterns-allow: element-scoped query on the row's own ref, the sanctioned pattern (it moved here from OllamaTab.tsx unchanged).
   const target = host.querySelector<HTMLElement>(selector);
   if (!target) return false;
-  focusInTabBody(target);
-  return true;
+  return hopInTabBody(target);
 }
 
 /** The tab's row refs and its hop helpers, as OllamaTab.tsx used to declare them itself. */
@@ -95,18 +104,9 @@ export function useOllamaTabFocus() {
   const focusKbUpFromReplyVerbosity = useCallback((): boolean => {
     // Cancel is checked first because it only exists while a download runs, and during
     // one both of the buttons below it are disabled — focusing either would be a no-op.
-    if (kbCancelBtnRef.current) {
-      focusInTabBody(kbCancelBtnRef.current);
-      return true;
-    }
-    if (kbDownloadBtnRef.current) {
-      focusInTabBody(kbDownloadBtnRef.current);
-      return true;
-    }
-    if (kbRemoveBtnRef.current) {
-      focusInTabBody(kbRemoveBtnRef.current);
-      return true;
-    }
+    if (kbCancelBtnRef.current) return hopInTabBody(kbCancelBtnRef.current);
+    if (kbDownloadBtnRef.current) return hopInTabBody(kbDownloadBtnRef.current);
+    if (kbRemoveBtnRef.current) return hopInTabBody(kbRemoveBtnRef.current);
     return focusKbToggle();
   }, [focusKbToggle]);
 
@@ -119,8 +119,7 @@ export function useOllamaTabFocus() {
   const focusConnectionTestBtn = useCallback((): boolean => {
     const el = connectionTestBtnRef.current;
     if (!el) return false;
-    focusInTabBody(el);
-    return true;
+    return hopInTabBody(el);
   }, []);
 
   /* Where AI runs' first control (Run AI on this Deck), for Down from its line. */
@@ -135,8 +134,7 @@ export function useOllamaTabFocus() {
   );
 
   const focusModelsBtn = useCallback((): boolean => {
-    if (modelsBtnRef.current) focusInTabBody(modelsBtnRef.current);
-    return Boolean(modelsBtnRef.current);
+    return modelsBtnRef.current ? hopInTabBody(modelsBtnRef.current) : false;
   }, []);
 
   /* The five sections in order, with each one's first and last control: the folded tab's D-pad chain. */

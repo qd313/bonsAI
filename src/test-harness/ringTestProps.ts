@@ -5,12 +5,14 @@
  *          render the real Settings and Developer tabs and read back a computed outline. This holds
  *          the props those tabs need and the one function that puts Steam's focus class on a single
  *          element, so the two tests do not each carry a copy.
- * Used for: Only the focus-ring tests under src/components.
+ * Used for: The focus-ring tests under src/components, and the folded tabs' D-pad tests (the Ollama tab's walk
+ *           and its lost-focus test, plan 97).
  * Does not: Render anything or assert anything itself.
  */
 import { STREAM_SCRAMBLE_OFF } from "../features/answer/stream/streamScrambleContext";
 import type { DeveloperTabProps } from "../features/developer/DeveloperTab";
 import type { SettingsTabProps } from "../features/settings/SettingsTab";
+import type { OllamaTabProps } from "../features/ai-connection/OllamaTab";
 
 export function settingsProps(): SettingsTabProps {
   return {
@@ -70,6 +72,41 @@ export function developerProps(): DeveloperTabProps {
     setTabResumeMode: () => {},
     streamScramble: STREAM_SCRAMBLE_OFF,
     onStreamScrambleChange: () => {},
+  };
+}
+
+/** The Ollama tab's props for the D-pad tests: AI on this Deck, the knowledge base on, nothing running. */
+export function ollamaProps(): OllamaTabProps {
+  return {
+    ollamaIp: "",
+    effectiveOllamaPcIp: "127.0.0.1",
+    onOllamaIpChange: (() => {}),
+    onPersistOllamaIp: (() => {}),
+    ollamaLocalOnDeck: true,
+    setOllamaLocalOnDeck: (() => {}),
+    ollamaLocalAutostart: true,
+    setOllamaLocalAutostart: (() => {}),
+    namedOllamaHosts: [],
+    setNamedOllamaHosts: (() => {}),
+    onBeforeDeckyModal: (() => {}),
+    onCompleteDeckyModalClose: (close) => close(),
+    onOpenOllamaModelsHub: (() => {}),
+    latencyWarningSeconds: 60,
+    requestTimeoutSeconds: 180,
+    latencyTimeoutsCustomEnabled: false,
+    setLatencyTimeoutsCustomEnabled: (() => {}),
+    setLatencyWarningSeconds: (() => {}),
+    setRequestTimeoutSeconds: (() => {}),
+    ollamaKeepAlive: "5m",
+    setOllamaKeepAlive: (() => {}),
+    modelPolicyTier: "open_source_only",
+    useLocalKnowledgeBase: true,
+    setUseLocalKnowledgeBase: (() => {}),
+    ragCorpusVersion: "",
+    replyVerbosity: "balanced",
+    setReplyVerbosity: (() => {}),
+    askThinkEffort: "off",
+    setAskThinkEffort: (() => {}),
   };
 }
 

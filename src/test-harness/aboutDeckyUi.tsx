@@ -92,11 +92,44 @@ export const KeepNavButton = React.forwardRef<HTMLButtonElement, Record<string, 
 
 /** The dropdown: one stop; its options and labels are not drawn (the About tests do not look at the menu). */
 export const StopDropdown = React.forwardRef<HTMLDivElement, Record<string, unknown>>(function StopDropdown(
-  _props,
+  props,
   ref,
 ) {
-  return <div ref={ref} tabIndex={0} data-decky-ui="Dropdown" data-steam-stop="true" />;
+  const setRef = (el: HTMLDivElement | null) => {
+    // The props are kept on the element (`__dropdown`) so a test can open the list and pick a line the way Steam does.
+    if (el) (el as DropdownEl).__dropdown = props;
+    if (typeof ref === "function") ref(el);
+    else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
+  };
+  return <div ref={setRef} tabIndex={0} data-decky-ui="Dropdown" data-steam-stop="true" />;
 });
+
+type DropdownEl = HTMLElement & { __dropdown?: Record<string, unknown> };
+
+/**
+ * Open the list the way Steam does (it tells the dropdown through `onMenuOpened`), then pick one line
+ * (`onChange` with that line's option). `pickFromDropdown` alone is a pick after a list that was opened
+ * earlier. Both run inside `act`.
+ */
+export function openDropdownMenu(el: HTMLElement): void {
+  const props = (el as DropdownEl).__dropdown;
+  act(() => {
+    (props?.onMenuOpened as (() => void) | undefined)?.();
+  });
+}
+
+export function pickFromDropdown(el: HTMLElement, data: string): void {
+  const props = (el as DropdownEl).__dropdown;
+  act(() => {
+    (props?.onChange as ((opt: { data: string; label: string }) => void) | undefined)?.({ data, label: data });
+  });
+}
+
+/** The same pick, but handed back as a function to call later (after the screen was thrown away). */
+export function dropdownPickLater(el: HTMLElement, data: string): () => void {
+  const props = (el as DropdownEl).__dropdown;
+  return () => (props?.onChange as ((opt: { data: string; label: string }) => void) | undefined)?.({ data, label: data });
+}
 
 /**
  * Press one of Steam's handlers on `el`, inside `act`, and say whether it claimed the press (returned true).

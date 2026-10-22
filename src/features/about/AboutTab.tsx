@@ -37,6 +37,7 @@ type Props = {
   githubIssuesUrl: string;
   replyLanguage: ReplyLanguageId;
   onReplyLanguageChange: (next: ReplyLanguageId) => void;
+  onReplyLanguageMenuOpened?: () => void;
   effectiveLang: string;
   steamClientLanguageLabel: string;
   t: (key: UiStringKey) => string;
@@ -81,6 +82,7 @@ export const AboutTab: React.FC<Props> = ({
   githubIssuesUrl,
   replyLanguage,
   onReplyLanguageChange,
+  onReplyLanguageMenuOpened,
   effectiveLang,
   steamClientLanguageLabel,
   t: _t,
@@ -108,6 +110,7 @@ export const AboutTab: React.FC<Props> = ({
       <AboutReplyLanguageSection
         replyLanguage={replyLanguage}
         onReplyLanguageChange={onReplyLanguageChange}
+        onReplyLanguageMenuOpened={onReplyLanguageMenuOpened}
         effectiveLang={effectiveLang}
         steamClientLanguageLabel={steamClientLanguageLabel}
         onMoveDown={() => takeNavFocus("about-links")}

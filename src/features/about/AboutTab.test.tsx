@@ -40,7 +40,7 @@ vi.mock("@decky/ui", async () => {
   return { ...stubs, PanelSection, Focusable: kit.KeepNavFocusable, Button: kit.KeepNavButton, Dropdown: kit.StopDropdown };
 });
 
-import { callNav } from "../../test-harness/aboutDeckyUi";
+import { callNav, openDropdownMenu, pickFromDropdown } from "../../test-harness/aboutDeckyUi";
 import { findFirstSrcFile, repoRoot } from "../../test-harness/repoPaths";
 import { AboutTab } from "./AboutTab";
 import { PLUGIN_VERSION } from "../../pluginVersion";
@@ -80,6 +80,32 @@ function declarations(selector: string): string {
   return css.slice(at, css.indexOf("}", at));
 }
 const revealOf = (root: HTMLElement, id: string) => root.querySelector<HTMLElement>(`[data-bonsai-about-reveal="${id}"]`);
+
+describe("About tab: the reply-language list", () => {
+  it("tells the caller when Steam opens the list, and hands back the picked line's id", () => {
+    const onPick = vi.fn();
+    const onOpened = vi.fn();
+    const { container } = render(
+      <AboutTab
+        githubRepoUrl="https://example.invalid/github"
+        ollamaRepoUrl="https://example.invalid/ollama"
+        githubIssuesUrl="https://example.invalid/issues"
+        replyLanguage="follow_system"
+        onReplyLanguageChange={onPick}
+        onReplyLanguageMenuOpened={onOpened}
+        effectiveLang="en"
+        steamClientLanguageLabel="English"
+        t={(key) => key}
+      />,
+    );
+    const list = container.querySelector<HTMLElement>('[data-decky-ui="Dropdown"]')!;
+    openDropdownMenu(list);
+    expect(onOpened).toHaveBeenCalledTimes(1);
+    expect(onPick).not.toHaveBeenCalled();
+    pickFromDropdown(list, "czech");
+    expect(onPick).toHaveBeenCalledWith("czech");
+  });
+});
 
 describe("About tab: the rows, in the drawing's order and words", () => {
   it("draws the three section headings the drawing has", () => {

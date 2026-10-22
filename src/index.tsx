@@ -1049,6 +1049,7 @@ const Content: React.FC = () => {
   const aboutTab = useAboutTabPayload({
     replyLanguage,
     onReplyLanguageChange: setReplyLanguage,
+    onReplyLanguageMenuOpened: captureSessionBeforeModal,
     effectiveLang,
     steamClientLanguageLabel,
     t: uiT,

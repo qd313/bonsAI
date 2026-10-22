@@ -40,6 +40,8 @@ const deckNav = (handlers: Record<string, () => boolean | void>) =>
 type Props = {
   replyLanguage: ReplyLanguageId;
   onReplyLanguageChange: (next: ReplyLanguageId) => void;
+  /** Steam has just opened its list: the moment to take the note of the screen (see the header). */
+  onReplyLanguageMenuOpened?: () => void;
   effectiveLang: string;
   steamClientLanguageLabel: string;
   onMoveUp?: () => boolean;
@@ -64,6 +66,7 @@ type Props = {
 export const AboutReplyLanguageSection: React.FC<Props> = ({
   replyLanguage,
   onReplyLanguageChange,
+  onReplyLanguageMenuOpened,
   effectiveLang,
   steamClientLanguageLabel,
   onMoveUp,
@@ -105,6 +108,7 @@ export const AboutReplyLanguageSection: React.FC<Props> = ({
             <Dropdown
               rgOptions={options}
               selectedOption={selectedOption}
+              onMenuOpened={() => onReplyLanguageMenuOpened?.()}
               onChange={(opt) => onReplyLanguageChange((opt.data as ReplyLanguageId) ?? REPLY_LANGUAGE_FOLLOW_SYSTEM)}
               strDefaultLabel={replyLanguageLabel(replyLanguage)}
               renderButtonValue={() => scaledSteamWords(replyLanguageLabel(replyLanguage), 16)}

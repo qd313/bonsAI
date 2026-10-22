@@ -388,4 +388,102 @@ Questions for the maintainer raised during the run (the safest choice taken mean
 
 ## 14. Report
 
-Written by the session that runs it, at the end (§ 12 names the headings).
+**Interim, written about 03:30 while the Deck waits.** The code half is done; the Deck half (blocks B to E) has not run,
+because this chat lost the test rig's tools after block A. This section is finished when the Deck results are in.
+
+### What the maintainer must do next
+
+1. Say whether a separate chat may drive the Deck (it loads the rig's tools fresh). Without it, nothing landed tonight
+   is proven on the Deck.
+2. Answer the open questions in § 13: the tab icons (thicker, brighter, both, or as they are) and the starter set's two
+   size wordings.
+3. When back: try Rename chat with your own controller (A on the name field should bring up Steam's keyboard), and the
+   checks already on the checks page.
+4. Say "push" when the Deck results are in (the full check passed on the tip; nothing is pushed).
+
+### What a player notices (once proven on the Deck)
+
+- Asking about an attached screenshot gets an answer; if a picture still cannot be read, the box says what to try.
+- The reply-language pick on About sticks.
+- No stray stars in a bold line holding a hidden block.
+- The answer no longer jumps by a line at paragraph breaks and loose line breaks while it writes.
+- Glossary words are underlined when a question names the game but nothing is running.
+- About shows which build is installed.
+- "Update knowledge base" no longer offers an older library as an update.
+- With the AI on a PC, answers stream in a little quicker; the Deck's own pace is unchanged.
+- After "Explain further", the ring is on the question box.
+- At Large text, a section summary is readable or absent, never a sliver; the arrow keeps its gap.
+- Up from Find LAN reaches the PC address box, then the Save row.
+- In Rename chat, Steam is handed the name field when the box opens (aimed at the outside-controller keyboard).
+- LB and RB switches glide: a green line under the tab and the page sliding in (not on Main yet; only the line with a
+  game running).
+
+### The code work by area
+
+- **Screenshots** (the picture shrink step and the Ollama stream reader): every picture now goes through the shrink;
+  the old rule sent anything under 500 KB untouched, and every Deck screenshot is 1920 by 1080, which ran the graphics
+  chip out of memory. A picture request that comes back empty now says the picture was too big.
+- **About** (the reply-language section and the About payload; a new build reader in the back end): the language list
+  now takes the screen's note before it opens and saves the pick straight away, the same shape as the Thinking pick; the
+  title line reads the bundle's hash once at start.
+- **Answer drawing** (the one-line spoiler expander; the scramble's text span): the bold marks around a one-line hidden
+  block are closed and reopened around it; the not-yet-settled letters now lay out paragraph and line breaks the way the
+  finished text does, so the height no longer drops and grows back.
+- **Glossary** (the glossary store and the transcript; the back-end glossary picker): with nothing running, a turn's
+  words are asked for by its question and the chat's earlier questions, and the back end picks the game the same way it
+  does for the notes. Built differently from the brief, which wanted the game sent back in the turn's result; that route
+  would have lost the underline in a saved chat.
+- **Knowledge base** (the Update call): versions are read as dates; an older published library is now its own outcome.
+- **Stream pace** (a new pace file; the scramble maths and the reveal): two number sets, chosen by where the AI runs,
+  with a switch the driver can flip to compare both inside one answer.
+- **D-pad** (the glossary chip; the Ollama "Where AI runs" section and its Save row; the rename box): all three hand the
+  ring through Steam's own transfer.
+- **Section lines** (the folded section and its styles): the name takes at most what leaves the arrow its gap and wraps
+  beyond it; the summary is drawn only when at least 56 px are left. The rule is arithmetic read back out of the
+  stylesheet by the tests.
+- **Tab bar** (the bar, a new glide file and marker hook, the tab body's root): option A of the mock-ups.
+- **Tooling:** the look check skips Steam's own language dropdown, and its node tests now run with the Python suite; the
+  D-pad rules' baseline lowered to 78; the helper rules corrected on running one Python test file.
+- **The rig's repo:** open-after-reload closes and reopens the menu when the plugin's tab is missing; a snapshot sets
+  aside a damaged or over-six-hours-old earlier copy instead of putting it back; folded lines read whole. Merged and
+  rebuilt.
+
+**What popped up and how it was handled:** the rig's tools dropped from this chat (the Deck work stopped; the code went
+on); the bookkeeper helper type was missing (a general helper ran with the bookkeeper's rules file); a Python test
+failed once at a landing and passed on the re-run; one landing tripped the long-function tidiness check (a comment
+fixed it); a `cd` in this chat's own commands moved its working folder twice (absolute paths from then on); the two rig fixes
+merged before go both failed on the Deck, and the snapshot one turned out to be a damaged ten-day-old copy the tool
+kept trying to put back on the Deck.
+
+**What the maintainer could have done differently:** nothing that would have saved the night; the rig's tools dropping
+is not something a setting prevents. If a Deck chat could have been started without a word from you, blocks B to E
+would have run; a standing "yes" to that in the plan would have covered it.
+
+### A plain developer guide
+
+Each fix came from one brief, was built in its own copy of the repo by one helper, read here, then landed one at a time
+by the landing script (gates, the wider quick check, the generated method list rebuilt). The bookkeeper moved each one
+from Bugs to Verify with the Deck check it owes; those checks are in the block D runbook, one per fix, with the numbers
+that count as a pass.
+
+### What failed and why
+
+- The two rig fixes merged before go (see above): fixed again tonight.
+- Nothing landed tonight has failed; nothing landed tonight has been proven on the Deck either.
+
+### What is left, and why
+
+- Blocks B (the freeze tries, the ghost strip with a game, the Tip chip, the notes lines, a fight frame rate), C (the
+  owed checks with Ollama or the voice engine aside) and D/E (one check per landed fix): need the Deck.
+- The freeze (L14) and the ghost strip (L15): their fixes wait on block B's readings and the second opinion.
+- The Tip chip (L18) and the library switch (L20): wait on blocks B and C.
+- The Decky-button question (L17): needs one Deck read where the handler's target and Steam's neighbour differ.
+- The help chip's ring: a normal chip shows only the blue fill; the help chip itself is read in block B.
+- The starter set's wording and the tab icons: the maintainer's answers.
+- The chip decode in step with the scroll: filed as a feature.
+
+### The numbers
+
+34 commits on `experimental` since go (62 code and test files, about 3,200 lines added); 15 fixes landed; the full
+check passed twice (the start, and after the landings). Wave 1 had 14 helpers plus 4 follow-ups; one Deck block ran
+(15 checks, 2 of them the rig's own, both failed); 0 of 5 second-opinion consults used (both hang on block B).

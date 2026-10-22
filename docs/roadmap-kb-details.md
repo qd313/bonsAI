@@ -28,6 +28,7 @@
 - [KB transparency matches what the model got](#kb-transparency-matches-what-the-model-got)
 - [Flow L7 findings](#flow-l7-findings)
 - [The note's own words under the reply](#the-notes-own-words-under-the-reply)
+- [Plan 97 notes moved from the knowledge base roadmap (2026-10-22)](#plan-97-notes-moved-from-the-knowledge-base-roadmap-2026-10-22)
 <!-- /toc -->
 
 ## Ordinary phrases attach game cards
@@ -476,3 +477,11 @@ Older notes, word for word (moved here 2026-10-14, plan 93 docs sweep).
   (`workshop:test-evidence/plan81-NOTES-BLOCK-04.json`). **Still owed:** 04's covered-game-running half (2026-10-03: the Black Mesa horse question showed the "No close match" line with no notes listed, `workshop:test-evidence/plan81-P81-KB-NOTES-FIRST.json`, but with no game running; 2026-10-08, game running: UNCLEAR, both tries attached notes (1042 and 1242 characters), so a reply with nothing attached never came up, `workshop:test-evidence/plan83-NOTES-BLOCK-04-game.json`), NOTES-BLOCK-07 (needs a person
   listening to confirm the block is never read aloud) and NOTES-BLOCK-LADDER (no block has had a chip ladder to test;
   retiring that half is the maintainer's call). Rows in [testing-manual.md](testing-manual.md). **2026-10-10 (plan 87 K1):** a fix for the "No close match" line appearing beside a notes block landed; 04's covered-game-running half and new row P87-K1-LINE-AND-BLOCK stay owed on the Deck. **2026-10-10 (plan 87 Deck blocks 5 and 5b):** row P87-K1-LINE-AND-BLOCK passed for 2 of its 3 asks (the notes block with no "No close match" line; `workshop:test-evidence/plan87-P87-K1-LINE-AND-BLOCK.json`, `plan87-P87-K1-LINE-AND-BLOCK-try2.json`); NOTES-BLOCK-04's own covered-game-running half is not marked closed by that result and stays owed.
+
+## Plan 97 notes moved from the knowledge base roadmap (2026-10-22)
+
+**The knowledge library update treats any different version as newer (older entry, word for word):**
+
+- ★★ `[KB]` **The knowledge library update treats any different version as newer, and installs onto the Deck's own drive without asking where** — **OPEN, found 2026-10-16 (plan 86 step 3 Deck block).**
+  It offered 2026.09.26 as an update over the seed's 2026.10.16. The library had been on the SD card; the update put the same files, byte for byte, on the Deck's own drive. The maintainer said to leave it there tonight. Evidence `workshop:test-evidence/plan86-B6-RESTORE.json`.
+  **2026-10-17 (plan 94 block 3, Deck, build `e9b50cc8`):** the first download now asks where to put the library (Not now / Internal storage / SD card) before the download box. The "different version offered as newer" half was not tested (a fresh install has no older version). Evidence `workshop:test-evidence/plan94-P94-KB-DOWNLOAD.json`.

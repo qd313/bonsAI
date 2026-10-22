@@ -1467,3 +1467,176 @@ Older open-form text, word for word (moved here 2026-10-14, plan 93 docs sweep, 
   - d8671410 Revert "Reword the AI's instructions so none of them shows the hidden-block label in the odd one-word shape"
 
 **Closed 2026-10-16 (plan 86 step 0):** nothing needed landing; see the Done list in [roadmap.md](../roadmap.md).
+
+## Moved from roadmap-details.md 2026-10-22 (plan 97 second sweep, size trim)
+
+Four sections no roadmap list links to any more (their entries are finished), moved out word for word to keep the long-notes file under its 100 KB ceiling.
+
+## Terse mode (Speed answers in three lines)
+
+**Update 2026-10-08 (plan 83):** the switch and the three-line wording are built (`9f007be6`, `d25df219`, `87a4dd78`, `2e8aa942`, `e082e7a8`). The switch passed on the Deck (row P83-J4-TERSE-TOGGLE). The ten-question test below, the stacked buttons and two follow-up faults are still owed; they are listed in the roadmap entry. Below is the shape as settled on 2026-08-29.
+
+**Earlier roadmap entry (2026-08-29), moved here 2026-10-08 when the entry was rewritten:** A toggle beside the reply-style slider, off by default, capping a Speed answer at three lines. It overrides the slider and the character; destructive warnings and the depth phrases escape it. The real work is widening the branch picker ([D40](audit/maintainer-decisions-archive.md#d40--locked-2026-08-29--terse-modes-branch-menu-appears-on-every-reply-and-never-stops-the-branch-fence-is-mandatory-once-and-banned-on-follow-ups-which-rule-wins)). The future test TERSE-01 must pass at 8 of 10 questions; it has not been run.
+
+Discovery ran with the maintainer on 2026-08-29. **Nothing is built** (the 2026-08-29 state, kept as written; see the update above). This is the settled shape,
+written down so the build does not have to re-ask any of it.
+
+**What it is.** A toggle on the Ollama tab beside the reply-style slider, off out of the box, that
+caps a **Speed**-mode answer at **three lines**. A line is a sentence or a bullet — one number
+covering both shapes, because the promise is about what you can take in at a glance rather than
+about grammar.
+
+**It is an output rule, not an effort rule**, and this is the thing most likely to be got wrong by
+whoever builds it. The model may think as long as it likes and read a screenshot as closely as it
+likes; only what lands on screen is capped. The thinking-effort control is untouched, and a
+screenshot question still comes back at three lines. The toggle's own help line has to say so,
+because *shorter* reads as *dumber* otherwise.
+
+**Speed mode only, and inside Speed it wins:**
+
+| Against | Terse |
+|---|---|
+| Reply-style slider (Caveman / Balanced / Detailed) | **Ignored while in Speed** |
+| AI character roleplay | **Overridden** — the character still picks the words, in three lines |
+| Strategy and Expert ask modes | **Does not apply**, and the toggle says so in plain words |
+
+The character override is a deliberate reversal of Caveman, which steps aside entirely when a
+character is on ([ollama_prompts.py:967](../py_modules/backend/prompts/ollama_prompts.py#L967)).
+
+**Two of Caveman's three escape hatches survive.**
+
+- **Destructive warnings** drop out of terse and are written in normal prose — the same auto-clarity
+  clause Caveman carries. A squeezed data-loss warning is the one failure worth spending lines on.
+- **The ten depth phrases** still loosen the cap: `step by step`, `step-by-step`, `walkthrough`,
+  `explain why`, `in detail`, `full guide`, `detailed guide`, `break it down`, `tutorial`,
+  `comprehensive` (`user_asks_for_detail_depth`,
+  [ollama_prompts.py:908](../py_modules/backend/prompts/ollama_prompts.py#L908)).
+- **The character step-aside does not** — see the table above.
+
+**Free alongside the three lines:** the existing fenced panels (`bonsai-strategy-branches`,
+`bonsai-strategy-checklist`, the TDP `json` block, `bonsai-cite`), code blocks and file paths, and
+pictures once anything can draw one. The `<bonsai-status>` line never counted — it is stripped
+before display ([stripAssistantDisplayTags.ts](../src/features/answer/markdown/stripAssistantDisplayTags.ts)) and shown
+as a streaming blurb, so it is not in the reply body at all.
+
+**Getting more is the branch picker, and that is the real work.** Every terse reply ends with the
+strategy branch fence; pressing an option gives three more lines and a fresh set of options, forever.
+Buttons are **stacked full-width** in the 300px column rather than squeezed into one row, because a
+full-width label can be a real phrase and the D-pad walk is then a straight line down. There is no
+separate *explain further* chip, and no exit control — the Ask field stays live throughout, so the
+menu is an offer rather than a trap. Today that fence is mandatory-once, Strategy-only, and
+explicitly banned on follow-ups
+([ollama_prompts.py:1317](../py_modules/backend/prompts/ollama_prompts.py#L1317)); all three have
+to change. Locked as **[D40](audit/maintainer-decisions-locked.md)**.
+
+**Enforcement is wording only** — nothing counts, nothing trims, nothing retries. Chosen with eyes
+open: a trim can chop a reply mid-thought, and a retry costs a second round trip on a device where
+that is slow. The cost is that the cap is a tendency rather than a guarantee, so it gets measured
+instead of asserted.
+
+**TERSE-01** counts lines across these ten questions — Speed mode, terse on — and passes at **8 of
+10**. Approved by the maintainer 2026-08-29. They get pinned as a frozen chip batch when the work
+starts, so each case is one press of A rather than a sentence thumb-typed on an on-screen keyboard.
+
+| # | Question | Why it is in the set |
+|---|---|---|
+| 1 | how do i beat the dreadnought | KB boss card |
+| 2 | what is the max tdp on a steam deck | short fact — should be one line |
+| 3 | my game stutters when i turn | troubleshooting, invites rambling |
+| 4 | should i cap fps at 30 or 40 | a choice — tempts pros and cons |
+| 5 | what does proton do | a definition — tempts a paragraph |
+| 6 | how do i deal with exploders | KB enemy card, and the known fence repro |
+| 7 | is 8 watts enough for this game | a judgement — tempts hedging |
+| 8 | what should i upgrade first | wide open; expected to fail first |
+| 9 | why did my save not carry over | a cause question |
+| 10 | how do i get more battery life | classic long-answer question |
+
+**None of the ten contains a depth phrase, and that is not incidental.** Any of the ten words listed
+above would loosen the cap on the very row written to measure it — the same reason `KB-ROUTER-01`'s
+four sentences contain neither *deck* nor *proton*. Keep that property if a question is ever swapped.
+
+**Known gap in the set:** none of the ten attaches a screenshot, so the *screenshots still get three
+lines* rule is asserted and unmeasured. Worth an eleventh row if it ever misbehaves; the maintainer
+chose the ten as they stand.
+
+**Not decided:** the on-screen wording of the toggle and its help line.
+
+**Pictures are exempt from the count, but nothing draws one.** The dungeon map and the boss outline
+the maintainer described belong to **KB visual maps** in the backlog, which stays parked on purpose.
+Terse ships without them.
+
+---
+
+## A Strategy checklist that arrives while the panel is closed never shows, and after any reopen a refine chip sends its follow-up in Speed mode
+
+Older dated note moved here from the roadmap entry on 2026-10-01 (docs sweep 9, plan 78), to bring the roadmap under its size limit. Nothing was removed.
+
+  **2026-10-01 (plan 78, Deck block 1, build `57586da0`, row P78-REOPEN-CHECKLIST), UNCLEAR:** neither question produced a checklist, because the AI is only asked for a checklist on the follow-up turn after a choice button is pressed, so the row's route could not show the case. The route is corrected in the row (ask, press the first choice button, close Quick Access at once, reopen); the re-run is owed. Evidence `workshop:test-evidence/plan78-P78-REOPEN-CHECKLIST-try2.json`.
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  **2026-10-01 (plan 78, Deck block 2, build `1fe0787a`, row P78-REOPEN-CHECKLIST), partly passed:** on two tries by the corrected route the AI wrote no checklist at all (the saved turns hold none), so the reopen proved nothing; the checklist half could not be produced in four tries over two blocks and rests on its unit tests. The follow-up's mode passed: the "Not really" then "Too long" follow-up went out in Strategy mode (log line "ask_strategy: branch fence requested in prompt=True (mode=strategy, app_id=2321470)"). On the maintainer's list (plan 78 question 9). Evidence `workshop:test-evidence/plan78-P78-REOPEN-CHECKLIST-try3.json`. Older note: [roadmap-details.md](roadmap-details.md#a-strategy-checklist-that-arrives-while-the-panel-is-closed-never-shows-and-after-any-reopen-a-refine-chip-sends-its-follow-up-in-speed-mode).
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  The back end's status now says which mode the question was asked in, and a reopened panel reads it from there instead of assuming Speed; with no mode known, the mode and the attachments are left unset, never made up. A second cause is fixed in the same commit: a saved checklist that began loading when the panel opened could finish after the new checklist was drawn and wipe it. Limit: after a reopen a refine chip still does not re-send the original screenshot (nothing saved holds it).
+
+Moved here from the roadmap entry on 2026-10-03 (plan 81 paperwork 8), to keep the entry short. Nothing was removed.
+
+**Deck row P78-REOPEN-CHECKLIST, 2026-10-01, partly passed:** the follow-up's mode passed; the checklist half could not be produced in four tries. Full note: [roadmap-details.md](roadmap-details.md#a-strategy-checklist-that-arrives-while-the-panel-is-closed-never-shows-and-after-any-reopen-a-refine-chip-sends-its-follow-up-in-speed-mode).
+
+**2026-10-03 (plan 81, build `afd2f444`), passed on a PREPARED answer from a stand-in AI:** the reopened panel drew the checklist and the refine follow-up went out in Strategy mode. The checklist is stored in its own session file, not in the turn's text (the row's wording assumed the turn). The four failed tries likely came from the choice-button bug, fixed in `83bec1ad` and now passed on the Deck (Done); one more try with the real AI is still owed. Evidence `workshop:test-evidence/plan81-P78-REOPEN-CHECKLIST.json`.
+
+## After the quick start is opened and closed, the help chip stayed and the suggestion chips never took the row
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  **2026-10-01 (build `f0a4f2c4`), UNCLEAR:** not run. The only reset for the help flag, "Clear all plugin data", is not allowed in a test, so the fix rests on its unit tests and on the maintainer's first-install check (after opening the quick start and closing it, the help chip is gone and the suggestion chips are back). Evidence `workshop:test-evidence/plan78-P78-HELP-CHIP-DISMISS.json`.
+
+Moved here from the roadmap entry on 2026-10-02 (docs sweep 3, plan 79), to keep the roadmap under its size limit. Nothing was removed.
+
+  Real, and there for weeks (the capture-then-mark order came in with `e7728fa9` on 3 August; the snapshot's help flag goes back to May); it only became plain once one chip fills the whole row. Cause: opening the quick start first saves a note of the session that still says "help not seen", and when the popup closes Decky builds a fresh panel that trusts that note over the stored flag. Fix: right after the note is taken, the popup marks the note itself as seen (`src/features/about/usePluginHelpModal.tsx`, `src/features/plugin-shell/bonsaiSessionSurvival.ts`); "Clear all plugin data" still brings the chip back. Tests: `src/index.helpChip.test.tsx`, 4 tests, 2 fail without the fix.
+
+Moved here from the roadmap entry on 2026-10-10 (docs sweep, plan 87 batch 2), to keep the entry to five lines. Nothing was removed.
+
+  **2026-10-01, UNCLEAR:** not run on the Deck; owed on a fresh install or "Clear all plugin data". Deck row **P78-HELP-CHIP-DISMISS**; evidence `workshop:test-evidence/plan78-P78-HELP-CHIP-DISMISS.json`, finding `workshop:test-evidence/plan78-PRESET-ONE-LINE-02.json`.
+  **2026-10-03 (plan 81, build `afd2f444`), COULD NOT RUN again:** the stored flag came back to "1" by itself after Steam's web helper was restarted, so no help chip showed. It stays with the maintainer's first-install check (`workshop:test-evidence/plan81-P78-HELP-CHIP-DISMISS.json`).
+  **2026-10-09 (plan 87 stand-in S1, this PC, not the Deck), UNCLEAR:** after "Clear all plugin data" the Main tab showed exactly one chip, "How to use bonsAI", and a "bonsAI - Beta Notice" box took the ring first (Got it closed it); but the D-pad could not reach the help chip at all on the stand-in (Up from the question box went to the tab bar), so the quick-start half could not run. The unreachable chip is being looked at in a separate fix (it may be Windows-only). Evidence `workshop:test-evidence/plan87-S-S1-HELP-CHIP.json` (setup `plan87-S-S0-SETUP.json` passed). Still owed.
+
+## Named chat slots
+
+**Deck runs of 2026-09-18 to 2026-09-23, moved here from the roadmap 2026-09-25 to keep it under its size
+limit (word for word):**
+
+- ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row,
+  transcript, presets, Ask bar. Most rows pass on device. **As of 2026-09-18:** 05b passed (returning to a
+  still-writing chat shows the question and partial text together); 05a's busy-indicator half, 06a and 06b
+  failed (filed as its own bug above). **15d passed on the Deck 2026-09-23:** a fresh chat's title changed
+  from "New chat" to the question 35 seconds after Ask, with the panel staying open and no reload — though the
+  chat row was scrolled out of view at that exact moment, so nobody would actually have seen it change.
+  **06c FAILED on the Deck 2026-09-23:** closing the Quick Access Menu (by the rig's GUIDE+A chord) while the
+  answer was still arriving, then watching Steam's own toast window every 200 milliseconds for 150 seconds
+  after the reply finished — no "Reply ready" notice ever showed, and reopening the panel showed none either.
+  The rig has not yet proven its own toast-reading can see a toast at all, so the next run adds a control
+  question before re-testing this row. **06c tried again 2026-09-23 with the control run first: still FAIL,
+  cause found and fixed in `73be15f`.** The control confirmed the toast reader works (it caught an unrelated
+  notice on its first read). Closing the menu properly took four B presses this time — the plugin's own
+  panel was already closed after the second — and the reply finished 20 seconds later with the notice
+  window read every 200 ms for 90 seconds; "Reply ready" never showed. Cause: the flag saying "a reply is on
+  screen" was only written while the panel was open and was never cleared once it closed, so a reply that
+  finished in the background read as already seen. **06c tried a fourth time on the Deck 2026-09-23 (flow
+  E), PASS:** with the menu closed by four B presses, "Reply ready — Tap to open" appeared within 1 second
+  of the answer finishing. Evidence `workshop:test-evidence/plan64-CHAT-SLOTS-V3-06c-try4.json` (+ two
+  screenshots). [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02) · [More](roadmap-details.md#named-chat-slots).
+
+- ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row, transcript, presets,
+  Ask bar. Most rows pass on device. **05b passed on the Deck 2026-09-18:** returning to the chat still writing
+  showed the question and the partial text at once, nothing missing. Evidence
+  `workshop:test-evidence/plan61-CHAT-SLOTS-V3-05b.json`. **05a's ask-bar-reads-busy half, 06a and 06b failed on the
+  Deck 2026-09-18** — see the new "chat that is still writing does not look busy" bug above. Owed: **06c** (not
+  attempted 2026-09-18) and **15d** (a recording made 2026-09-18 for the maintainer's own glance).
+  [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
+  **CHAT-SLOTS-V2-01 passed on the Deck 2026-09-17:** Down twice from the tab strip reaches the chat text, and Up retraces
+  the same path. Evidence `workshop:test-evidence/plan57-QA-CHAT-SLOTS-V2-01.json`.
+
+*Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*

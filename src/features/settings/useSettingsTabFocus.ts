@@ -25,6 +25,7 @@
 import { useCallback, useMemo, useRef } from "react";
 
 import { focusInTabBody } from "../../shared/dpad/useTabBodyFocusScroll";
+import { plainHop } from "../../shared/dpad/lostFocusHop";
 import type { FoldChainSection } from "../folded-tabs/FoldedSection";
 import { settingsSectionIds, type SettingsSectionId } from "./settingsTabFolds";
 
@@ -47,8 +48,7 @@ function focusStop(host: HTMLElement | null | undefined, last: boolean): boolean
   const stops = stopsIn(host);
   const target = last ? stops[stops.length - 1] : stops[0];
   if (!target) return false;
-  focusInTabBody(target);
-  return true;
+  return plainHop(target, last ? "settings-line-up-into-section" : "settings-line-down", () => focusInTabBody(target));
 }
 
 /** The tab's section chain, and the ref each section body registers itself with. */

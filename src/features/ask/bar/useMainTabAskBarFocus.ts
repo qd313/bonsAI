@@ -40,6 +40,7 @@ import { takeNavFocus } from "../../../shared/dpad/navFocusRegistry";
 import { takeDetailsSlotLineFocus } from "../../answer/details/detailsSlotStore";
 import { takeInjectChipFocus } from "../../preset-carousel/injectChipNav";
 import { elementHasGamepadFocus } from "../../../shared/dpad/uiDocument";
+import { plainHop } from "../../../shared/dpad/lostFocusHop";
 
 export type MainTabAskBarFocusRefs = {
   unifiedInputFieldLayerRef: React.Ref<HTMLDivElement>;
@@ -124,8 +125,7 @@ export function useMainTabAskBarFocus(
         : null;
     const btn = host?.querySelector<HTMLElement>("button.bonsai-unified-input-corner-left");
     if (!btn) return false;
-    btn.focus();
-    return true;
+    return plainHop(btn, "to-paperclip");
   }, [refs.attachActionHostRef]);
 
   const focusAiCharacterAvatar = useCallback((): boolean => {
@@ -198,8 +198,7 @@ export function useMainTabAskBarFocus(
         ? (refs.askBarHostRef as React.RefObject<HTMLElement | null>).current
         : null;
     if (!btn) return false;
-    btn.focus();
-    return true;
+    return plainHop(btn, "to-ask");
   }, [refs.askBarHostRef, isAskInFlight]);
 
   const focusMicOrStop = useCallback((): boolean => {
@@ -211,8 +210,7 @@ export function useMainTabAskBarFocus(
         : null;
     const btn = host?.querySelector<HTMLElement>("button.bonsai-unified-input-corner-right");
     if (!btn) return false;
-    btn.focus();
-    return true;
+    return plainHop(btn, "to-mic-or-stop");
   }, [refs.attachActionHostRef]);
 
   const focusAskModeButton = useCallback((): boolean => {
@@ -224,8 +222,7 @@ export function useMainTabAskBarFocus(
         : null;
     const btn = host?.querySelector<HTMLElement>("button.bonsai-ask-mode-trigger");
     if (!btn) return false;
-    btn.focus();
-    return true;
+    return plainHop(btn, "to-mode");
   }, [refs.attachActionHostRef]);
 
   const unifiedInputDeckNavHandlers = useMemo(

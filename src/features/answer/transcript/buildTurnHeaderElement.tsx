@@ -22,7 +22,8 @@ import {
   isDownDeckButtonEvent,
   isUpDeckButtonEvent,
 } from "../../../shared/dpad/focusNavigation";
-import { focusRegisteredReplyStop } from "../../../shared/dpad/replyStopRegistry";
+import { focusRegisteredReplyStop, getReplyStop } from "../../../shared/dpad/replyStopRegistry";
+import { noteLostFocusHop, panelLacksFocus } from "../../../shared/dpad/lostFocusHop";
 import { focusReplyNotesLine, focusReplyShowReasoning } from "../../../shared/dpad/liveTurnFocusGraph";
 import { fitOpenQuestionBubble } from "./questionBubbleFit";
 import { elementHasFocus } from "../../../shared/dpad/uiDocument";
@@ -218,7 +219,12 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
     if (!expanded) return false;
     /* Plan 92: "Read N of your notes" sits right under the question, above the Show reasoning line. */
     if (focusReplyNotesLine(null)) return true;
-    if (focusReplyShowReasoning(null)) return true;
+    const lost = panelLacksFocus();
+    if (focusReplyShowReasoning(null)) {
+      /* Plan 97: the hop the Deck saw dead while the page lacked focus (plan97-P97-B-FREEZE-2.json); logged. */
+      if (lost) noteLostFocusHop("question-to-reasoning", "plain", getReplyStop("show-reasoning"));
+      return true;
+    }
     return focusFirstAnswerChunk(turnId);
   };
 

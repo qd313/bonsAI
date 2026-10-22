@@ -33,6 +33,7 @@ import React from "react";
 import { Button } from "@decky/ui";
 
 import { ClearIcon } from "../../../shared/icons/icons";
+import { plainHop } from "../../../shared/dpad/lostFocusHop";
 
 /** A ref this file can focus through: a button's own element, filled in by Decky's Button. */
 type ElementRef = React.RefObject<HTMLElement | null>;
@@ -46,8 +47,7 @@ type ElementRef = React.RefObject<HTMLElement | null>;
 export function focusOwnRef(ref: ElementRef): boolean {
   const el = ref.current;
   if (!el) return false;
-  el.focus();
-  return true;
+  return plainHop(el, "strip-own-ref");
 }
 
 export type AskStripSendButtonsProps = {

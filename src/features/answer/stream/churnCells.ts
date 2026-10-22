@@ -62,7 +62,17 @@ export function syncChurnCells(churn: HTMLSpanElement, cells: ChurnCells, text: 
     if (kind === "mark") continue;
     let node: Node;
     if (kind === "blank") {
-      node = doc.createTextNode(ch);
+      if (ch === "\n" && text[i - 1] === "\n") {
+        /* The second line break of a paragraph break. Two line breaks in this span would draw a
+           whole empty line, but the markdown puts only a small margin there once the text settles,
+           so the answer shrank as the break settled (plan 97, L4). A block as tall as that margin
+           keeps the heights equal; a third line break adds nothing, as in markdown. */
+        if (text[i - 2] === "\n") continue;
+        node = doc.createElement("span");
+        (node as HTMLElement).className = "bonsai-stream-scramble-gap";
+      } else {
+        node = doc.createTextNode(ch);
+      }
     } else {
       const letter = doc.createElement("span");
       letter.className = "bonsai-stream-scramble-char";

@@ -317,6 +317,13 @@ export function buildAnswerBubbleSection(): string {
         .bonsai-scope .bonsai-stream-scramble {
           white-space: pre-wrap;
         }
+        /* A paragraph break inside the unsettled stretch: as tall as the margin the markdown puts
+           between two paragraphs (.bonsai-md-p, answerMarkdownFormatting.ts), not a whole empty
+           line, so the answer does not shrink when the break settles (plan 97, L4). */
+        .bonsai-scope .bonsai-stream-scramble-gap {
+          display: block;
+          height: 0.5em;
+        }
         /* Each unsettled letter is itself, invisible, with its symbol drawn over it: the line is
            laid out exactly as it will read once the letter is real, so a reshuffle moves nothing
            and a word never hops to the next line as it settles. The symbol takes the letter's

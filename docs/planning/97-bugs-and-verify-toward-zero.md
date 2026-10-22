@@ -378,6 +378,19 @@ there rather than squeezing it in before; the figure is read again before it sta
   The page slide sits inside the content pane whose motion an older rule switched off to stop a flash on shoulder
   switches; block D's glide check watches for a flash.
 
+- **~07:45 to ~10:30, the Deck again** (through a local link to the rig's tool server, since a new chat cannot be
+  started over Remote Control). Block B: the freeze reproduced twice (the screenshot route, and a Steam box closing),
+  both with the page's browser focus lost; the ghost strip never showed with the game; the Tip chip passed; one notes
+  line failed on a weak note. Consults 1 and 2 (§ 8) shaped L14 (the freeze: transfers or decline) and L15 (a watcher
+  and its log only); both landed, with the help chip's focused look. Block C: five owed checks passed, the install
+  box's words passed by the row's own sentence. Block D deployed `15565346` (bundle `f28c5fc4676d`): the About build,
+  the look check, the language pick, the knowledge base Update (no download; the published library now equals the
+  installed one, so the "newer" wording could not show), Find LAN, Explain further, Rename, the rig's sampler and
+  snapshot all PASS; the rig's open-after-reload still fails 2 of 3 on a debugger reset (the rig's own). Large text read
+  FAIL at Normal (a 25 px summary), but the screenshot shows no summary at all: the measurement counted words wrapped
+  out of sight; the second-try helper changed nothing, and this session confirmed it by eye
+  (`plan97-P97-L13-LARGE-TEXT-settings-normal.png`): PASS. Block E running.
+
 Questions for the maintainer raised during the run (the safest choice taken meanwhile, the question raised in the chat):
 
 | Time | Question | Choice taken | Answer |

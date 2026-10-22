@@ -52,6 +52,13 @@ function emptyLinesDrawn(container: HTMLElement): number {
   return empty;
 }
 
+/** Line breaks the page would draw in the unsettled stretch: text nodes that are a bare newline. */
+function lineBreaksDrawn(container: HTMLElement): number {
+  const churn = container.querySelector(".bonsai-stream-scramble-churn");
+  if (!churn) return 0;
+  return Array.from(churn.childNodes).filter((n) => n.nodeType === 3 && n.textContent === "\n").length;
+}
+
 function gapsDrawn(container: HTMLElement): number {
   return container.querySelectorAll(".bonsai-stream-scramble-gap").length;
 }
@@ -91,10 +98,50 @@ describe("a paragraph break in the unsettled stretch", () => {
     expect(gapsDrawn(container)).toBe(1);
   });
 
-  it("leaves a single line break alone: it is still a line break", () => {
+  it("leaves a single line break before a list item alone: it is still a line break", () => {
     const { container } = render(view(`- one\n- two`));
     expect(gapsDrawn(container)).toBe(0);
-    expect(container.querySelector(".bonsai-stream-scramble-churn")?.textContent).toContain("\n");
+    expect(lineBreaksDrawn(container)).toBe(1);
+  });
+});
+
+describe("a single line break in the unsettled stretch", () => {
+  it("inside a paragraph is drawn as a space, because the markdown joins those lines", () => {
+    const { container } = render(view("Note this down.\nSecond"));
+    expect(lineBreaksDrawn(container)).toBe(0);
+  });
+
+  it("is a space at every beat while the next line is still arriving", () => {
+    const full = "Note this down.\nSecond";
+    const { container, rerender } = render(view(full.slice(0, 10)));
+    for (let n = 11; n <= full.length; n += 1) {
+      act(() => {
+        rerender(view(full.slice(0, n)));
+        vi.advanceTimersByTime(SCRAMBLE_CHURN_MS);
+      });
+      expect(lineBreaksDrawn(container)).toBe(0);
+    }
+  });
+
+  it.each([
+    ["a list item follows", "Items:\n- one"],
+    ["a numbered item follows", "Items:\n1. one"],
+    ["a heading follows", "Items:\n## One"],
+    ["the line before is a heading", "## Items\nOne two"],
+    ["a quote follows", "Items:\n> one"],
+  ])("stays a line break when %s", (_name, text) => {
+    const { container } = render(view(text));
+    expect(lineBreaksDrawn(container)).toBe(1);
+  });
+
+  it("turns into a line break once the next line turns out to be a list item", () => {
+    const { container, rerender } = render(view("Items:\n"));
+    expect(lineBreaksDrawn(container)).toBe(0);
+    act(() => {
+      rerender(view("Items:\n- o"));
+      vi.advanceTimersByTime(SCRAMBLE_CHURN_MS);
+    });
+    expect(lineBreaksDrawn(container)).toBe(1);
   });
 });
 

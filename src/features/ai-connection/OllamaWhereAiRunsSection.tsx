@@ -284,6 +284,38 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     if (!elementHasGamepadFocus(el)) focusInTabBody(el);
     return true;
   }, []);
+  /*
+   * Up from the connection row (Find LAN, Test connection) with the AI on a PC: the PC address box, else the Save
+   * row, never past them. Steam's own move skipped both and the old fall-back went to the second switch 5 of 5
+   * times (Deck 2026-10-22, plan97-A-FINDLAN-UP.json); with the tab scrolled, the panel scroll took the press and
+   * the ring stayed put. Both moves go through the stop's own Steam node (the box's `navRef`, the shape the
+   * Search tab's find box uses). The address box is a sibling of the buttons inside the row, so a plain focus is
+   * a safe second try there; the Save row is another row, so only Steam's transfer moves the ring onto it.
+   */
+  const addressNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
+  /* The input inside Steam's text field: a `ref` on the field itself would hold Steam's component, not an element. */
+  const addressInputRef = useRef<HTMLInputElement | null>(null);
+  const saveRowNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
+  const takeAddress = useCallback((): boolean => {
+    const el = addressInputRef.current;
+    if (!el) return false;
+    try {
+      addressNavRef.current?.TakeFocus?.(true);
+    } catch {
+      /* the check below decides */
+    }
+    if (!elementHasGamepadFocus(el)) focusInTabBody(el);
+    return true;
+  }, []);
+  const takeSaveRow = useCallback((): boolean => {
+    const node = saveRowNavRef.current;
+    if (!node || typeof node.TakeFocus !== "function") return false;
+    try {
+      return node.TakeFocus(true) !== false;
+    } catch {
+      return false;
+    }
+  }, []);
   /* The connection row's Steam nodes, so a move onto Test connection (Down from the address, Left from Find LAN) is a transfer. */
   const testRowNavRef = useRef<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>(null);
   const takeTestConnection = useCallback((): boolean => {
@@ -342,8 +374,9 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
    */
   const handleMoveUpFromConnection = useCallback((): boolean => {
     if (ollamaLocalOnDeck && (focusBrowseModelsBtn() || focusCancelSetupBtn())) return true;
+    if (!ollamaLocalOnDeck && (takeAddress() || takeSaveRow())) return true;
     return tryMoveUpWithPanelScroll(ollamaIpConnectionNavRef.current, focusAutostartToggle);
-  }, [focusAutostartToggle, focusBrowseModelsBtn, focusCancelSetupBtn, ollamaLocalOnDeck]);
+  }, [focusAutostartToggle, focusBrowseModelsBtn, focusCancelSetupBtn, ollamaLocalOnDeck, takeAddress, takeSaveRow]);
 
   /* Folded (plan 91): Up from the first switch goes to the section's own line, which the tab hands in. */
   const handleMoveUpFromLocalToggle = useCallback((): boolean => {
@@ -721,6 +754,8 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
             ollamaIp={ollamaIp}
             onOllamaIpChange={onOllamaIpChange}
             onPersistOllamaIp={onPersistOllamaIp}
+            saveRowNavRef={saveRowNavRef}
+            onMoveDownFromSave={takeAddress}
           />
         ) : null}
         <PanelSectionRow>
@@ -753,6 +788,10 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
             >
               {!ollamaLocalOnDeck ? (
                 <div
+                  ref={(box) => {
+                    // focus-patterns-allow: element-scoped query on this component's own wrapper, for the input Steam's text field draws (the Search find box does the same).
+                    addressInputRef.current = box?.querySelector("input") ?? null;
+                  }}
                   style={{
                     flex: "1 1 auto",
                     minWidth: 0,
@@ -775,7 +814,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                     label=""
                     value={ollamaIp}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => onOllamaIpChange(e.target.value)}
-                    {...({ onMoveDown: handleMoveDownFromAddress } as Record<string, unknown>)}
+                    {...({ onMoveDown: handleMoveDownFromAddress, onMoveUp: takeSaveRow, navRef: addressNavRef } as Record<string, unknown>)}
                     style={{
                       width: "100%",
                       minWidth: 0,

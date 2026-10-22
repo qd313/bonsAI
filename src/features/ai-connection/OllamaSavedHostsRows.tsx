@@ -31,6 +31,10 @@ type OllamaSavedHostsRowsProps = {
   ollamaIp: string;
   onOllamaIpChange: (ip: string) => void;
   onPersistOllamaIp: (ip: string) => void;
+  /** Steam fills this with the Save row's node, so Up from the PC address row can hand the ring to it. */
+  saveRowNavRef?: React.MutableRefObject<{ TakeFocus?: (gamepad?: boolean) => unknown } | null>;
+  /** Down from the Save row: the PC address box under it (Steam's own move skipped it, plan 97). */
+  onMoveDownFromSave?: () => boolean;
 };
 
 export const OllamaSavedHostsRows: React.FC<OllamaSavedHostsRowsProps> = ({
@@ -39,6 +43,8 @@ export const OllamaSavedHostsRows: React.FC<OllamaSavedHostsRowsProps> = ({
   ollamaIp,
   onOllamaIpChange,
   onPersistOllamaIp,
+  saveRowNavRef,
+  onMoveDownFromSave,
 }) => (
   <>
     {namedOllamaHosts.length > 0 ? (
@@ -62,6 +68,11 @@ export const OllamaSavedHostsRows: React.FC<OllamaSavedHostsRowsProps> = ({
       </PanelSectionRow>
     ) : null}
     <PanelSectionRow>
+      {/* Its own Focusable: a Decky Button passes no move handlers on, and the row needs a Steam node to be handed the ring. */}
+      <Focusable
+        style={{ width: "100%" }}
+        {...({ navRef: saveRowNavRef, onMoveDown: onMoveDownFromSave } as Record<string, unknown>)}
+      >
       <Button
         className={FOCUS_RING_BTN_CLASS}
         disabled={
@@ -84,6 +95,7 @@ export const OllamaSavedHostsRows: React.FC<OllamaSavedHostsRowsProps> = ({
       >
         Save current PC address as quick host
       </Button>
+      </Focusable>
     </PanelSectionRow>
   </>
 );

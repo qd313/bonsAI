@@ -336,12 +336,48 @@ there rather than squeezing it in before; the figure is read again before it sta
   measures the Deck's icons (A11). The chip pace: no verdict; the note asks for the decode to run in step with the
   scroll, filed as a feature idea. The chips near the end of an answer: "you can close it, but if needed we will
   reopen it", so that entry closes (this replaces call 4). Smoothness with the scramble off (SCR-09): not marked, stays.
+- **~01:00:** the baseline full check PASSED on `588664cd` (400 s). The bookkeeper's first sweep landed (D134, the
+  calls, the eye checks; `abadb19c`, `e6f61cc7`). The tab-switch mock-up page published for the pick:
+  <https://claude.ai/artifact/DdRGuwdixAkPxx3YWZkSr6>.
+- **~01:25, block A done** (handover `97-handover-A.md`, the Deck on the monitor throughout). The monitor look check
+  clean on all seven tabs. Clear cache: Right to Clear all data, Down to Open all: by design, closes. Find LAN: Up
+  landed on the second switch 5 of 5, so L16 started (Opus medium). The Decky-button read could not decide (the
+  handler's target and Steam's neighbour are the same control); L17 then found the library's source cannot decide it
+  either (the button is Steam's own, found at run time), so nothing changed and a decisive read is in block E. The
+  rename box with the rig: the keyboard shows after one A on the field, so L10's research reads it as the maintainer's
+  controller. The 92 percent lines are the rig counting text past the edge; the lines are whole by eye (L19 closes as
+  the rig's own, X2 fixes the sampler); 83 percent not seen. Large text: Story spoilers' arrow 2.6 px from the edge at
+  Large (L13 covers it). The ghost strip with no game: never shown in 155 samples; the pop-up half could not run (the
+  help chip shows only on a first run). The tab icons: the Deck already runs the thicker icons, about 1.1 px lines at
+  their 10 px size. A normal chip with the ring shows only the blue fill, no ring.
+- **The rig's two fixes merged before go both FAILED on the Deck:** open after a reload (waiting does not bring the
+  tab back; closing and reopening the menu does) and the settings snapshot (a damaged ten-day-old earlier copy was put
+  back first, every time). X2 rounds two and three fixed both and added a 6-hour age limit on putting an earlier copy
+  back; 493 rig tests pass; merged into the rig's main (`43afc0b`) and rebuilt about 02:30. Proven in the next chat.
+- **~01:30, blocked:** this chat lost the rig's tools (the rig's server dropped mid-call in block A); a block B driver
+  could press nothing. Safest choice taken: landings go on, blocks B to E wait. Raised in the chat: a separate chat
+  that drives the Deck needs the maintainer's word (the card could not show over Remote Control).
+- **Landings, 00:59 to ~02:45:** L1, L9, L6, L5, L8, L7, L2, L3, L11, L12, L13, L4, L16, L10-fix, G1, each through the
+  landing script's gates; tip `65ef9074`. Two stops: a Python test that failed once during L8's landing and passed on
+  the re-run (3,023 tests, nothing changed); L16 made one screen function longer than the tidiness check allows without
+  a comment, fixed by a comment (`04704581`). L4 fixed the paragraph, line-break and list dips; a dip of about 2.6 px
+  after a heading line remains (and in the two non-default scramble styles), recorded for block E. L5 took a different
+  route from its brief (the screen sends the question; the back end picks the game the notes would), checked: the stand-in
+  key matches no spoiler profile. L7's starter-set wording stopped on purpose (two different sets), raised below. L10-fix
+  built only the "hand the ring to the name field through Steam" step; the suggested-name button waits for the
+  maintainer.
+- **The maintainer, ~02:00:** asked to see the tab icons (shown: the Deck's real bar, and today's lines beside thicker
+  and brighter ones); on the keyboard: "I'm just using a controller. Yes pressing A on a text input box should bring up
+  the keyboard."
 
 Questions for the maintainer raised during the run (the safest choice taken meanwhile, the question raised in the chat):
 
 | Time | Question | Choice taken | Answer |
 |---|---|---|---|
 | 01:00 | The starter set's size reads "about 4.6 GB" on the notice and "about 4.5 GiB" in the box. They are two different sets (the notice: the answer model and note search; the box: those plus the two speech models, about 4.8 GB). Make the box say "about 4.8 GB" so both use the same unit, or leave both? | Leave both as they are (they are not wrong, only in two units) | |
+| 01:35 | The tab icons: the Deck already has the thicker ones, but they draw about 1.1 px wide at their 10 px size. Thicker still, brighter, both, or as they are? (Drawn for the maintainer in the chat.) | As they are | |
+| 01:35 | The rename keyboard with the maintainer's controller: which controller and how it connects, and does A on the name field bring the keyboard up? | Asked; then built only the safe step (Steam is handed the name field when the box opens) | "Just a controller; A on a text box should bring up the keyboard" (~02:00). The maintainer's own try after the deploy is the proof |
+| 02:45 | A separate chat that only drives the Deck (this chat lost the rig's tools): start it? | Blocks B to E wait | |
 
 ## 14. Report
 

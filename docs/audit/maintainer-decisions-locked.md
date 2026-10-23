@@ -2408,3 +2408,21 @@ Asked by the planning chat for [plan 97](../planning/97-bugs-and-verify-toward-z
 8. **The knowledge-base file:** the library update's version compare is in; the wrong-subject notes bug stays out.
 9. **Standing rules while away:** a fix that fails on the Deck twice moves up one model tier without asking; a new one- or two-star bug gets one helper round of about an hour; anything blocked gets the safest choice at once and is raised in the chat and the plan at that moment (the maintainer checks in remotely and is not relying on phone notifications), so they can approve the best fix rather than the cautious one.
 10. **The one running the session is Opus 5.5 at high** (the routing table says extra-high for whoever lands; the maintainer chose high for this session).
+
+### D136 — LOCKED 2026-10-22 (raised 2026-10-22) — Plan 99, the 0.6.0 release: the thirteen calls
+
+Asked by the planning chat for [plan 99](../planning/99-merge-to-main-and-the-0-6-0-release.md) (its section 2), answered the same day: the maintainer took every lean. Number 136 because the plan 98 chat reserved 135.
+
+1. **Release notes.** The 0.6.0 section becomes a short page; the full list goes to its own file, `docs/changelog-0.6.0-full.md`, linked.
+2. **Tier 4 item 3.** Tiers 0 to 2 are waived for 0.6.0, on the strength of the Deck walks of plans 94 to 97 (a dated line in the table).
+3. **The push.** The maintainer says "push" early for the tip; the push lock is lifted for that one command.
+4. **Clips.** Whole-screen clips as 60 fps video files (hand upload); panel-only clips as animated WebP at 30 fps, quality 90; recorder on full quality.
+5. **The monitor set.** Film the Deck's own screen only; the old monitor set stays as a spare.
+6. **The parental lock.** Ship with a known-problems line saying the lock has not been checked on a child account.
+7. **The Settings-tab ring (three stars, parts b and c).** Ships as a known problem.
+8. **The guide's D-pad line.** Keep it, softened, for one release.
+9. **Merge style.** One merge commit, as agreed on 2026-09-26.
+10. **Last call.** When the clean install passes on the zip; after that only a bug that crosses the line.
+11. **Plan 71 leftovers.** The bug-report form and how-to-help page after the release; the Reddit posts after the page is live; the author field stays "qwert".
+12. **Small looks.** The tab icons, the "4.6 GB" against "4.5 GiB" wording, the chip decode pace, the tab glide and reduced motion: "as they are", all closed.
+13. **Where this runs.** The lean was to run it in the planning chat (faster to start); the maintainer took the lean.

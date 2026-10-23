@@ -789,7 +789,7 @@ Rows 01, 02, 03, 05, 06 and TEN-GAMES-01 passed on the Deck and moved to
 
 1. Clean install: Ollama not yet installed → README path → one text Ask succeeds
 2. Record Decky / SteamOS / Ollama host in a short note under [testing.md](testing.md) or release PR
-3. Tier 0–2 Pass or explicit Waive with reason
+3. Tier 0–2 Pass or explicit Waive with reason — **Waived for 0.6.0 by the maintainer on 2026-10-22** (plan 99 § 2 call 2, their call of that date), on the strength of the Deck walks of plans 94 to 97 (seven blocks since 2026-10-17). The release-zip re-run (item 1, second row) stays owed.
 4. The first-run wording, from the pictures (the maintainer's check 6, plan 73 check 4's eye half): it now includes the wording of the first-run popup "Where should the AI run?" (plan 96 N1, row P96-N1-FIRST-RUN-POPUP in [testing.md](testing.md)), which replaced the old Local runtime notice. **Still owed, no verdict yet (2026-10-18):** the maintainer could not find the pictures, and they have been sent. Pictures: `workshop:test-evidence/plan94-P94-FIRST-RUN-try2-1.png` (the Beta Notice), `workshop:test-evidence/plan96-P96-N1-FIRST-RUN-POPUP.png` (the popup), `workshop:test-evidence/plan94-P94-HELP-CHIP-try2-open.png` (the Using bonsAI box), `workshop:test-evidence/plan94-P94-CLEAR-ALL-RUN-box.png`.
 
 | Date | Git SHA / tag | Result | SteamOS / Decky | Ollama host | Notes |

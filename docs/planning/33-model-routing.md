@@ -179,7 +179,10 @@ Verdict after ten rows: keep it if two or fewer misses; drop it and strike this 
 
 | Date | Session | What it looked up | Confirmed correct? | Sonnet or Opus had to step in? |
 |---|---|---|---|---|
-| | | | | |
+| 2026-10-22 | Plan 99 planning (Haiku 5.5 high) | Open roadmap and manual rows | Yes, checked against the files by the owner | No |
+| 2026-10-22 | Plan 99 planning (Haiku 5.5 high) | Lessons and the filming recipe | Yes; one stale conflict flagged, correctly | No |
+| 2026-10-22 | Plan 99 planning (Sonnet 5.5 medium) | Release mechanics and the version bump | Yes; found the two release-robot traps | No |
+| 2026-10-22 | Plan 99 planning (Sonnet 5.5 medium) | Owed items across plans 73, 94, 96, 97 | Yes | No |
 
 ### 4b. The lane model trial: Sonnet high, Opus low, Opus medium (proposed 2026-09-26, the maintainer's idea)
 
@@ -197,6 +200,10 @@ work (`[focus]`, `[layout]`, `[ui]`) stays out of the paired runs.
 | 2026-09-26 | Stop keeps the model loaded (★★) | C | Sonnet 5 high | Yes (full Python suite 1,974 green); quick check red only on the roadmap size limit, already red at the base | Blind score 18/25. Should fix: no check at all on the old "work keeps running" worry, and a docstring claim that is false for a Stop before the first word; a background thread whose only job is one log line; three functions kept that nothing calls. Its tests only intercept the named steps. Plus: the only one that fixed the second file's stale diagram | Not landed | Yes — 2 of 12 fail on behaviour | Not run | 134 / 37,193 / 6,923,533 (147,377 cache write) | 67 | 66 | 14.9 (PC to itself) | $2.13 |
 | 2026-09-26 | same | A | Opus 5.5 low | Yes (1,978 green); same roadmap-size note, which it disclosed | Blind score 15/25. **Should fix, and fails the goal:** one 2-second reading 4 s after Stop, so a Stop while the model still "thinks" usually unloads anyway — the commonest Stop. Also: no owner check on the processes it measures; stale diagram left in the second file; the new-question check in the main file untested | Not landed | Its own check: 3 failed with the old unload back. Mine: the new tests cannot load without the fix | Not run | 32 / 16,125 / 928,769 (52,450 cache write) | 16 | 16 | 7.6 (shared the PC) | $0.77 |
 | 2026-09-26 | same | B | Opus 5.5 medium | Yes (1,989 green); same roadmap-size note, disclosed; skipped the build step, said so | **Blind score 21/25, the reviewer's pick.** Should fix: the same stale diagram in the second file. Minor: a new question is only seen once its model call begins; a long unrelated job busy for 90 s straight would still be stopped; a test that only checks a number. Strengths: watches the worker over time, clear outcome on every path including "can't measure", keeps the owner check, fake clock with no real sleeps, tests the real Stop wiring | Not landed yet | Its own check: 9 failed with the old unload back. Mine: the new tests cannot load without the fix | Not run | 68 / 43,353 / 2,775,055 (93,658 cache write) | 34 | 40 | 16.4 (shared the PC) | $1.89 |
+| 2026-10-22 (evening) | Plan 99: the changelog section (bookkeeper) | — | Sonnet 5.5 medium | running | — | — | — | — | — | — | — | — | — |
+| 2026-10-22 (evening) | Plan 99: roadmap and testing sync (bookkeeper) | — | Sonnet 5.5 medium | running | — | — | — | — | — | — | — | — | — |
+| 2026-10-22 (evening) | Plan 99: the guide and the README (documents helper) | — | Sonnet 5.5 high | running | — | — | — | — | — | — | — | — | — |
+| 2026-10-22 (evening) | Plan 99: the cut script's new shapes (script helper) | — | Sonnet 5.5 high | running | — | — | — | — | — | — | — | — | — |
 
 Priced at list: Opus 5.5 $4 in, $20 out; Sonnet 5 $2 in, $10 out; cache reads $0.20 per million on both (the
 figures below use that; corrected wording 2026-09-28), cache writes 1.25 times the input price. The blind review itself (Opus 5.5 at the session's high effort) cost $0.82 and 2.6 minutes.

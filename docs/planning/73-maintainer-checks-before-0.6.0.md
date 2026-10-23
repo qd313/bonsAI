@@ -4,7 +4,7 @@ Written 2026-09-27, at the end of the release bug session ([plan 72](../../../bo
 maintainer asked: "Write this to a separate plan for me the maintainer to do before we ship 0.6". This is
 that plan. It is part of the re-launch, [plan 71](../../../bonsAI-workshop/planning/71-merge-experimental-into-main.md).
 
-**Status: waiting on the maintainer. None of the four checks has been done yet.**
+**Status (updated 2026-10-22): checks 1 and 2 are done** (check 1 passed on 2026-10-02; check 2, the real microphone, passed in full on 2026-10-18, plan 96 § 5 hand check 4, `workshop:test-evidence/plan96-HAND-real-mic.png`). **Check 3 (the parental lock) ships as a known problem for 0.6.0**: the maintainer's call of 2026-10-22, plan 99 § 2 call 6. **Check 4 (the first install from the zip) runs under plan 99** (Track B).
 
 These are the four checks the test robot could not do. Each one says why it is yours, how long it takes,
 the steps, what a pass looks like, and what to do if it fails. If a check fails, tell any session "check N

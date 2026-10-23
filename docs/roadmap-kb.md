@@ -131,8 +131,8 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 - ★★★★ `[KB]` **RAG Phase 4: extended retrieval** — **PARTIAL.** Chips that show the library exists and the labelled enemy
   and item cards shipped ([D67](audit/maintainer-decisions-archive.md#d67--locked-2026-09-05--structured-cards-accept-prose)).
   A running game's own tip passed on the Deck 2026-09-26. The chip promise passed on the Deck 2026-10-01 (P78-TIP-CHIP,
-  P78-CHIP-PACE). Still owed: the look at the widest chip labels (PHASE4-CHIPS-01) and the maintainer's own look at the
-  pace. [Detail](roadmap-kb-details.md#rag-phase-4-extended-retrieval)
+  P78-CHIP-PACE). Still owed: the look at the widest chip labels (PHASE4-CHIPS-01). The maintainer's own look at the
+  pace is closed: "as they are", 2026-10-22 (plan 99 § 2 call 12). [Detail](roadmap-kb-details.md#rag-phase-4-extended-retrieval)
 - ★★★★ `[KB]` **RAG Phase 5: depth on the thirteen titles** — **PARTIAL.** The thirteen original titles went from 133 to
   164 notes. Four still have no enemy or item notes: Baldur's Gate 3, GTA San Andreas, The Sims 4 and Portal 2 (counted
   2026-10-03). Next: 40 to 60 enemy and item notes in batches, with a quality read from you after the first.

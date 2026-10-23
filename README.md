@@ -88,7 +88,7 @@ network.*
 The knowledge library is a one-time download. When an answer uses a note, it says where the note
 came from, and you can open the note under the answer.
 
-<img src="assets/readme/wiki-notes.gif" alt="A Speed answer from the AI on the Deck that uses a wiki note, then the note opening under the answer" width="360">
+<img src="assets/readme/wiki-notes.webp" alt="A Speed answer from the AI on the Deck that uses a wiki note, then the note opening under the answer" width="360">
 
 *Filmed in real time, with the AI running on the Deck itself.*
 
@@ -115,7 +115,7 @@ notes**; press that line to see your notes, switch one off or remove it.
 
 Press **A** on a cover to open it. This works on a best-effort basis and can miss things.
 
-<img src="assets/readme/spoiler.gif" alt="A spoiler in a Strategy answer, covered until it is opened" width="360">
+<img src="assets/readme/spoiler.webp" alt="A spoiler in a Strategy answer, covered until it is opened" width="360">
 
 *Filmed in real time, with the AI on a PC on the home network.*
 
@@ -127,7 +127,7 @@ Press **A** on a cover to open it. This works on a best-effort basis and can mis
 
 Tick off steps as you go. Your progress is saved on the Deck, for each game.
 
-<img src="assets/readme/strategy-checklist.gif" alt="Picking where you are in the game, then ticking off a step in the checklist" width="360">
+<img src="assets/readme/strategy-checklist.webp" alt="Picking where you are in the game, then the checklist of steps arriving" width="360">
 
 *Filmed in real time, with the AI on a PC on the home network.*
 
@@ -156,7 +156,7 @@ One find box looks through your chats, the game notes, your own notes and even S
 "brightness" and jump straight to that Steam setting.
 
 <!-- VIDEO: upload recordings/readme-cuts/search-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
-<img src="assets/readme/search.png" alt="The Search tab: dreadnought finds chats and notes, brightness finds Steam settings and opens one" width="560">
+<img src="assets/readme/search.png" alt="The Search tab: brightness finds a chat and the Steam settings, and opens one" width="560">
 
 *Filmed in real time.*
 
@@ -185,7 +185,7 @@ chat** box. When a chat gets long, bonsAI sums up the older part so it isn't for
 ask it to sum up at any time.
 
 <!-- VIDEO: upload recordings/readme-cuts/saved-chats-deck-full.mp4. Replace the next line with the link github.com gives when the file is dropped into the editor. -->
-<img src="assets/readme/saved-chats.png" alt="Flipping between saved chats, Sum up this chat, and New chat asking which chat to delete" width="560">
+<img src="assets/readme/saved-chats.png" alt="Flipping between saved chats, then New chat asking which chat to delete" width="560">
 
 *Filmed in real time, with the AI on a PC on the home network.*
 
@@ -198,7 +198,7 @@ ask it to sum up at any time.
 Words appear as you talk. When you stop, bonsAI reads the whole recording once more and tidies the
 text, which takes a couple of seconds. The recording is deleted as soon as that's done.
 
-<img src="assets/readme/talk.gif" alt="Pressing the mic button, the first word appearing, then the tidied text after Stop" width="360">
+<img src="assets/readme/talk.webp" alt="Pressing the mic button, the first word appearing, then the tidied text after Stop" width="360">
 
 *Filmed in real time, with a computer voice played into the Deck.*
 
@@ -210,7 +210,7 @@ text, which takes a couple of seconds. The recording is deleted as soon as that'
 
 The **Session** tab inside it holds the chat's history and the **Sum up this chat** button.
 
-<img src="assets/readme/show-details.gif" alt="Opening Show details under an answer, then the Session tab" width="360">
+<img src="assets/readme/show-details.webp" alt="Opening Show details under an answer, then the Session tab" width="360">
 
 *Filmed in real time, with the AI on a PC on the home network.*
 

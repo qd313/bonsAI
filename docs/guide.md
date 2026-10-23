@@ -185,13 +185,17 @@ details** says when that's switched on.
 bonsAI doesn't contain an AI itself. It talks to **Ollama**, a free program that runs AI models.
 Ollama can run on the Deck or on a PC.
 
+The first time you open bonsAI, right after the beta notice, a popup titled **Where should the AI
+run?** asks which one you want. It offers the same choices as the **Ollama** tab, and **Not now**
+leaves everything as it is. You can change your mind later on the **Ollama** tab.
+
 | Where | Good for |
 |---|---|
 | **On the Deck** | Works anywhere, no PC needed. But the AI and your game share the same chip, so both slow down while it answers |
 | **On a PC on your home network** | Much faster, especially with a graphics card. The PC has to be on |
 
-**On the Deck:** on the **Ollama** tab, switch on **Run AI on this Deck** and press **Install
-Ollama**. Say yes when it offers the starter set. **Start the AI with the Deck** starts it each
+**On the Deck:** on the **Ollama** tab, make sure **Run AI on this Deck** is on (it starts on) and
+press **Install Ollama**. Say yes when it offers the starter set. **Start the AI with the Deck** starts it each
 time the Deck turns on, so the first answer comes sooner. Later, the same button reads **Update AI &
 models**.
 
@@ -223,7 +227,7 @@ the same network and point it at the PC that streams your Frame games.
 
 ## AI models and licences
 
-![The AI models window: filters, licence labels, sizes and how well each model fits the Deck](../assets/readme/ai-models.png)
+![The AI models window: filters, license labels, sizes and how well each model fits the Deck](../assets/readme/ai-models.png)
 
 **Ollama → Browse models…** shows models you can download. Filter by what they're good at, whether
 they can see pictures, or what's already installed. Models too big for the Deck are marked. **Install
@@ -231,17 +235,17 @@ the starter set** gets the recommended set in one press: the answer model gemma4
 
 **Ollama → AI models…** decides which of your installed models bonsAI may use, and in which order.
 
-The model policy decides which licences are allowed:
+The model policy decides which licenses are allowed:
 
 | Policy | What it allows |
 |---|---|
-| **Open source only** | Models under open source licences (Apache 2.0 or MIT), such as Qwen 3, Gemma 4, Granite and gpt-oss. The default, and the recommended one |
-| **Also try open-weight models** | Also models whose weights are public but whose licence is the maker's own, such as Llama, Gemma 3 and older |
+| **Open source only** | Models under open source licenses (Apache 2.0 or MIT), such as Qwen 3, Gemma 4, Granite and gpt-oss. The default, and the recommended one |
+| **Also try open-weight models** | Also models whose weights are public but whose license is the maker's own, such as Llama, Gemma 3 and older |
 | **Any installed model** | Anything you've installed, once you unlock it |
 
-The starter model, Gemma 4 (gemma4:e2b-it-qat), is open source (Apache 2.0). Two small Qwen models are not: Qwen 2.5 VL 3B and Qwen 2.5 3B carry the Qwen Research licence (research use only), so neither is open source and **Open source only** neither lists nor tries them; they show up once you allow open-weight models. These labels were checked on
+The starter model, Gemma 4 (gemma4:e2b-it-qat), is open source (Apache 2.0). Two small Qwen models are not: Qwen 2.5 VL 3B and Qwen 2.5 3B carry the Qwen Research license (research use only), so neither is open source and **Open source only** neither lists nor tries them; they show up once you allow open-weight models. These labels were checked on
 2026-09-29; they're a guide, not legal advice. The full list is in
-[troubleshooting](troubleshooting.md#model-licences-and-the-tiers).
+[troubleshooting](troubleshooting.md#model-licenses-and-the-tiers).
 
 ## Permissions
 
@@ -260,7 +264,7 @@ permission that's off, bonsAI says so and offers a button that jumps here.
 ## The parental lock
 
 When Steam reports that parental controls are on, bonsAI switches off its higher-impact permissions —
-saving files, screenshots and game logs, the microphone and downloads — and greys them out.
+saving files, screenshots and game logs, the microphone and downloads — and grays them out.
 
 Be clear about what that doesn't do:
 
@@ -279,18 +283,24 @@ models or files.
 settings and permissions. **If the AI runs on the Deck, it also deletes the models you downloaded and
 Ollama itself**, which can be several GB. Both ask first.
 
-Removing bonsAI from Decky doesn't erase its saved data. To start completely fresh, use **Clear all
-data...** first. [More on this](troubleshooting.md#1b-uninstall-vs-clear-all-data-settings).
+Removing bonsAI from Decky doesn't erase its saved data, and that includes the notes it remembers
+about what you have already seen, such as the first-run popups. To start completely fresh, use
+**Clear all data...** first, then remove bonsAI from Decky. [More on this](troubleshooting.md#1b-uninstall-vs-clear-all-data-settings).
 
 ## Known problems
 
-- Rarely, the D-pad may stop moving in the panel. Closing and reopening the Quick Access Menu should
-  clear it; restarting the Deck always does.
-- Rarely, a chat opened with **R1** while a game runs is missing the buttons under its newest answer,
-  and Down stops on the question. Closing and reopening the Quick Access Menu fixes it.
-- With a game running, the panel can update more slowly while an answer arrives, and very long
-  answers can dip further. With the AI on the Deck itself, the panel draws about 39 frames a second
-  while an answer writes (about 91 when idle). With the AI on a PC, it stays near 60 in our tests.
+- Rarely, the D-pad may stop moving in the panel. Close and reopen the Quick Access Menu. If that does
+  not help, reload the plugin from Decky's settings. Restarting the Deck always clears it.
+- On the Settings tab, after opening several sections and walking with the D-pad, the ring can skip a
+  control (for example Terse mode). Closing and reopening the menu puts it right.
+- Rarely, after you touch the screen, a faded second copy of the tab bar shows over the suggestion
+  chips for a moment. The plugin hides it again by itself.
+- The kids lock (Steam's parental controls turning bonsAI's high-impact permissions off) has not yet
+  been checked on a child account.
+- The first answer after installing the AI on the Deck takes a minute or two while the model loads. The
+  panel says so.
+- With a game running, the panel can update more slowly while an answer arrives, and very long answers
+  can dip further. With the AI on a PC it stays smooth in our tests.
 - Answers come from a small AI model on your Deck or PC. They can be wrong, can repeat wording from an
   earlier answer, and questions that aren't about a game can pick up game notes.
 - Once, with a game running and the AI on the Deck itself, Steam's screen stopped responding a few

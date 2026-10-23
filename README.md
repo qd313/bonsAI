@@ -262,7 +262,10 @@ install, so nothing downloads without your say-so.
 
 <img src="assets/readme/where-ai-runs.png" alt="The Where AI runs section of the Ollama tab" width="300">
 
-Open the **Ollama** tab. Pick one:
+The first time bonsAI opens, right after the beta notice, a popup titled **Where should the AI
+run?** asks this for you. **Run AI on this Deck** starts switched on. Pick **Install Ollama** to set
+it up on the Deck, or switch it off and type your PC's address instead. **Not now** closes the popup
+and changes nothing. You can do the same later on the **Ollama** tab:
 
 - **On the Deck** (works anywhere, slower in games): make sure **Run AI on this Deck** is on, then
   press **Install Ollama**. When it asks whether to add the starter set too, say yes. It brings the

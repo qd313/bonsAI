@@ -17,11 +17,11 @@ This file tracks resolved issues, hardware-specific overrides, and architectural
 - [1. Core Hardware & Performance](#1-core-hardware--performance)
   - [ISSUE: AI Responses are Slow (CPU Inference)](#issue-ai-responses-are-slow-cpu-inference)
 - [1a. Permissions tab (blocked actions)](#1a-permissions-tab-blocked-actions)
-  - [Permissions greyed out (Kids master lock)](#permissions-greyed-out-kids-master-lock)
+  - [Permissions grayed out (Kids master lock)](#permissions-grayed-out-kids-master-lock)
   - [Knowledge base (offline strategy cards)](#knowledge-base-offline-strategy-cards)
   - [Voice input (speech-to-text)](#voice-input-speech-to-text)
   - [Deck essentials models (Tier 1 / Tier 2)](#deck-essentials-models-tier-1--tier-2)
-  - [Model licences and the tiers](#model-licences-and-the-tiers)
+  - [Model licenses and the tiers](#model-licenses-and-the-tiers)
   - [Model try order (text + vision)](#model-try-order-text--vision)
   - [Ollama HTTP 404 with Gemma / open-weight models (Tier 2)](#ollama-http-404-with-gemma--open-weight-models-tier-2)
   - [AI voice & personality (character tone)](#ai-voice--personality-character-tone)
@@ -135,9 +135,9 @@ If Windows still falls back to CPU after FIX A:
 
 **Note:** If you upgraded from an older `settings.json` that had no `capabilities` block, the plugin enables most scopes until you save settings from the Permissions tab (grandfather behavior). **Voice input (microphone)** stays **off** until you enable them explicitly. Legacy **Open web links** / **Adjust power limits** toggles are ignored (removed).
 
-### Permissions greyed out (Kids master lock)
+### Permissions grayed out (Kids master lock)
 
-**Symptom:** Every Permissions switch is off and greyed out; a yellow **Parental controls active** banner explains why.
+**Symptom:** Every Permissions switch is off and grayed out; a yellow **Parental controls active** banner explains why.
 
 **Cause:** Steam reports that parental controls are **locked** on the signed-in account (Family View or Steam Families). bonsAI forces high-impact permissions off for that session — file writes, screenshots/game logs, microphone. Ask with local/LAN Ollama and the offline knowledge base still work.
 
@@ -265,7 +265,7 @@ component ("SD card", "controller layout", "remote play") rather than only the s
 
 ### Deck essentials models (Tier 1 / Tier 2)
 
-**Default starter set:** `gemma4:e2b-it-qat` (text and pictures, Apache 2.0, Tier 1), the note-search model `nomic-embed-text`, and the speech models `tiny.en` and `base.en`, about 4.5 GB in all. In bonsAI → **Ollama** → **Install the starter set** (or `ollama pull gemma4:e2b-it-qat`). What is already installed is skipped. `qwen2.5vl:3b` and `qwen2.5:3b` are not open source (Qwen's research-only licence); see [Model licences and the tiers](#model-licences-and-the-tiers).
+**Default starter set:** `gemma4:e2b-it-qat` (text and pictures, Apache 2.0, Tier 1), the note-search model `nomic-embed-text`, and the speech models `tiny.en` and `base.en`, about 4.5 GB in all. In bonsAI → **Ollama** → **Install the starter set** (or `ollama pull gemma4:e2b-it-qat`). What is already installed is skipped. `qwen2.5vl:3b` and `qwen2.5:3b` are not open source (Qwen's research-only license); see [Model licenses and the tiers](#model-licenses-and-the-tiers).
 
 **Optional Gemma 4 install (all-in-one model):** `gemma4:e2b-it-qat` (falls back to `gemma4:e2b` if the QAT tag is unavailable on the registry). Gemma 4 is Apache 2.0, so the model itself counts as Tier 1; only Gemma 3 and older are Tier 2. The button also switches Model policy to Tier 2. Use **Install Gemma 4 (all-in-one model)** under **Ollama → Where AI runs**; bonsAI switches Model policy to Tier 2 (open-weight) and shows license disclosure before pull.
 
@@ -273,36 +273,36 @@ component ("SD card", "controller layout", "remote play") rather than only the s
 
 **Clear all data:** **Settings → Advanced → Clear all data** wipes settings (including permissions), voice STT assets, feedback log, runtime cache, all `bonsai:*` browser keys, `~/.bonsai/cache`, and **`~/.bonsai/proton_experiment_journal.json`**. When **Ollama on this Deck** was enabled **or** a local Ollama home (`~/.ollama`) / user-prefix install exists, it also removes local model blobs and the user-prefix Ollama binary under `~/.local`. LAN-hosted Ollama on another PC is not touched.
 
-### Model licences and the tiers
+### Model licenses and the tiers
 
-Each model was checked on 2026-09-29 against its Ollama page (`ollama.com/library/<name>`) and its maker's model card on Hugging Face. bonsAI sorts models by family name and, where the licence depends on size, by the size in the tag. This is a guide, not legal advice.
+Each model was checked on 2026-09-29 against its Ollama page (`ollama.com/library/<name>`) and its maker's model card on Hugging Face. bonsAI sorts models by family name and, where the license depends on size, by the size in the tag. This is a guide, not legal advice.
 
-| Model | Licence | Tier |
+| Model | License | Tier |
 |---|---|---|
 | Qwen 3, Qwen 3.5, Qwen 3-VL, Qwen 2.5 (0.5b, 1.5b, 7b, 14b, 32b), Qwen 2.5 coder (all but 3b), Qwen 2.5 VL 7b and 32b, Qwen 2 (all but 72b) | Apache 2.0 | 1 |
 | Qwen 2.5 VL 3b, Qwen 2.5 3b | Qwen Research on Qwen's cards (Ollama's qwen2.5vl page lists Apache 2.0) | 2 (not open source; since 2026-10-14) |
-| Qwen 2.5 72b, Qwen 2.5 VL 72b, Qwen 2.5 coder 3b, Qwen 2 72b | Qwen's own licences | 2 |
-| Qwen 1.5 (`qwen`) | Tongyi Qianwen licences | 2 |
+| Qwen 2.5 72b, Qwen 2.5 VL 72b, Qwen 2.5 coder 3b, Qwen 2 72b | Qwen's own licenses | 2 |
+| Qwen 1.5 (`qwen`) | Tongyi Qianwen licenses | 2 |
 | Gemma 4 | Apache 2.0 | 1 |
 | Gemma, Gemma 2, Gemma 3 | Gemma Terms of Use | 2 |
 | Granite | Apache 2.0 | 1 |
 | gpt-oss | Apache 2.0 | 1 |
 | Phi, Phi 3, TinyLlama, OpenChat | MIT or Apache 2.0 | 1 |
 | llava 7b, 34b | Apache 2.0 (Mistral or Yi based) | 1 |
-| llava 13b, llava-llama3 | Llama 2 / Llama 3 licence | 2 |
-| llava-phi3 | No licence stated on Ollama or the maker's card; its base, Phi 3, is MIT | 1, unconfirmed |
-| Vicuna, orca-mini | Llama 1 / Llama 2 licence, or CC BY-NC-SA | 2 |
-| Llama 2, 3, 3.2 (and vision) | Meta's Llama licences | 2 |
-| Mistral, Mixtral, Yi, InternVL, InternLM | Apache 2.0 for the versions checked, but these families have other licences at other sizes | 2 (kept cautious) |
-| DeepSeek R1 | MIT (DeepSeek Coder has its own DeepSeek licence) | 2 (kept cautious) |
+| llava 13b, llava-llama3 | Llama 2 / Llama 3 license | 2 |
+| llava-phi3 | No license stated on Ollama or the maker's card; its base, Phi 3, is MIT | 1, unconfirmed |
+| Vicuna, orca-mini | Llama 1 / Llama 2 license, or CC BY-NC-SA | 2 |
+| Llama 2, 3, 3.2 (and vision) | Meta's Llama licenses | 2 |
+| Mistral, Mixtral, Yi, InternVL, InternLM | Apache 2.0 for the versions checked, but these families have other licenses at other sizes | 2 (kept cautious) |
+| DeepSeek R1 | MIT (DeepSeek Coder has its own DeepSeek license) | 2 (kept cautious) |
 | LFM (Liquid) | LFM Open License v1.0 | 2 |
-| Nous Hermes, Dolphin | Follow the base model: Apache 2.0 or a Llama licence | 2 |
+| Nous Hermes, Dolphin | Follow the base model: Apache 2.0 or a Llama license | 2 |
 | SOLAR | CC BY-NC 4.0 (non-commercial) | 2 |
-| Moondream, MiniCPM | Apache 2.0 / MiniCPM licence | 3 (not in the family table) |
+| Moondream, MiniCPM | Apache 2.0 / MiniCPM license | 3 (not in the family table) |
 
 ### Model try order (text + vision)
 
-**Feature:** **Ollama** tab → **AI models…** opens the AI models box. Its **Text / Pictures** switch picks which order you are looking at, and each installed model's row shows its place with small up and down buttons. A change is saved at once (Cancel does not undo it); **Reset order** goes back to automatic. Order is user-owned (max 16 tags); empty saved lists fall back to shipped essentials ∩ installed. A model hidden by a Filters choice keeps its place; one quiet line says how many. With the AI on a PC the places belong to the PC's installed models: they are listed in an **On the PC** group below the Deck's rows (Pull and Remove still act on this Deck only), and the licence and Ask-mode filters apply to that group too. **Reset order** asks first. With **Allow high-VRAM models in routing** off, a big model keeps its place but is marked **Skipped: too big**, because Ask passes over it.
+**Feature:** **Ollama** tab → **AI models…** opens the AI models box. Its **Text / Pictures** switch picks which order you are looking at, and each installed model's row shows its place with small up and down buttons. A change is saved at once (Cancel does not undo it); **Reset order** goes back to automatic. Order is user-owned (max 16 tags); empty saved lists fall back to shipped essentials ∩ installed. A model hidden by a Filters choice keeps its place; one quiet line says how many. With the AI on a PC the places belong to the PC's installed models: they are listed in an **On the PC** group below the Deck's rows (Pull and Remove still act on this Deck only), and the license and Ask-mode filters apply to that group too. **Reset order** asks first. With **Allow high-VRAM models in routing** off, a big model keeps its place but is marked **Skipped: too big**, because Ask passes over it.
 
 **High-VRAM:** **Allow high-VRAM models in routing** (AI models hub → **Advanced**) controls whether large tags are *tried* at Ask time. When off, heavy models keep their place in the order but are skipped at Ask time. When on, newly pulled large models are inserted at the **top**; already-installed heavy models keep their saved position.
 
@@ -351,7 +351,7 @@ Each model was checked on 2026-09-29 against its Ollama page (`ollama.com/librar
 | `~/homebrew/settings/bonsAI/` | `settings.json` (permissions, Ollama routing, keys), intent packs, voice STT assets, feedback log |
 | `~/homebrew/data/bonsAI/` | Runtime cache (e.g. screenshot captures) |
 | `~/homebrew/logs/bonsAI/` | Plugin log files |
-| Browser `bonsai:*` keys | Ollama host draft, disclaimer dismissals, unified-input persistence (CEF localStorage) |
+| Browser `bonsai:*` keys | Ollama host draft, disclaimer and first-run popup dismissals, unified-input persistence (CEF localStorage) |
 | `~/Desktop/bonsAI_logs/` | Optional Desktop notes, app activity, verbose Ask traces (not removed by Clear all data) |
 | `~/.bonsai/cache/` | Left over from older versions (a downloaded model list); safe to delete |
 | `~/.bonsai/proton_experiment_journal.json` | Leftover Proton experiment journal (obsolete UI; safe to delete; Clear all removes it) |
@@ -423,7 +423,7 @@ It does **not** delete markdown or log files under `~/Desktop/bonsAI_logs/`.
 
 ## 1c. Latency warning vs backend timeout (Settings)
 
-**Defaults (when “Custom timeouts” is off):** slow-reply warning at **30s**, hard abort at **45s** (2026-05-19; previously 360s). Enable **Developer → Custom timeouts** for your own warning/timeout pair.
+**Defaults (when “Custom timeouts” is off):** slow-reply warning at **60 seconds**, hard abort at **3 minutes** (checked against the code on 2026-10-22). Enable **Developer → Custom timeouts** for your own warning/timeout pair.
 
 **Where:** **Ollama** tab, under **Where AI runs**, **Latency warning and backend timeout**.
 

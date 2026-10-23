@@ -80,6 +80,11 @@ each kind of work) is in [AGENTS.md § 3](../AGENTS.md); the evidence is in [pla
   **Older note (2026-10-13, plan 93):** moved to [roadmap-details.md](roadmap-details.md#plan-94-notes-moved-from-the-roadmap-2026-10-17).
   **2026-10-17 (plan 94 block 6) and 2026-10-22 (plan 97 L14, `6da3e2d7`):** the Settings case (Down from an open section line stopped moving after a Steam pop-up) is covered by the freeze fix, now Done; row **P97-L14-SECTIONS** passed on the Deck 2026-10-22: Down from an open section line moved the ring 3 of 3 with the page without focus, on the Ollama, Settings (Data) and Developer tabs (`workshop:test-evidence/plan97-P97-L14-SECTIONS-try3.json`, control `-try2.json`). That row never owed parts (b) and (c), so they stay open and untouched. The 2026-10-17 note, word for word: [roadmap-details.md](roadmap-details.md#plan-97-third-sweep-notes-moved-from-the-roadmap-2026-10-22).
 
+- ★★ `[focus]` `[chat]` **Show details: on some chats the D-pad cannot reach the "This answer / Session" tab strip, so "Sum up this chat" cannot be pressed** — **OPEN, found 2026-10-22 (plan 99 filming, build `8c23813e`, the Deck's own screen, a game running).**
+  On the clip-2 chat (a Strategy chat with a tick list) the strip was reachable, and the Session tab showed "Sum up this chat" greyed with "the whole chat still fits". On the 4-turn and 8-turn chats the driver tried, Down from "Hide details" jumped into the chip ladder, and three tries never reached the strip, which was visible on screen.
+  Root cause not known. Whether it depends on the chat's shape is the first thing to measure. Against plan 71's line it is not a trap: 0.6.0 ships with it, and it is a known problem for 0.6.1.
+  Evidence `workshop:test-evidence/plan99-FILMING-SIGHTINGS.md` (section 1). These are sightings by the deck-driver while filming, not a verification row.
+
 ---
 
 ## Features

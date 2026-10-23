@@ -186,6 +186,15 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
 - ★ `[focus]` `[watching]` **A fresh answer shows two "Show details" stops, the answer's own and the slot's** — seen once, 2026-10-10 (plan 87 Deck block 6b). Evidence `workshop:test-evidence/plan87-P87-SAVED-WALKS.json`.
   Unshelves when: a new sighting.
 
+- ★ `[focus]` `[watching]` **The Ask mode menu opens with the ring on "speed" and Down does not move it** — seen twice, 2026-10-22 (plan 99 filming, build `8c23813e`). Opened by A on the mode chip, the page's focus moves to "strategy" but the ring stays, and A then picks speed. Right, then Down reaches Expert; on camera the chip went Strategy, Expert, Strategy that way. Evidence `workshop:test-evidence/plan99-FILMING-SIGHTINGS.md` (section 2).
+  Unshelves when: a new sighting.
+
+- ★ `[platform]` `[watching]` **Rig and Steam quirks seen while filming** — 2026-10-22 (plan 99, build `8c23813e`), evidence `workshop:test-evidence/plan99-FILMING-SIGHTINGS.md` (section 3):
+  Closing the menu with B presses while a game runs stopped the GUIDE+A chord from opening it again until the game was relaunched (twice).
+  The highlight can stall after a Steam box (the notes view, the AI models list); not measured further.
+  The GUIDE+A chord sometimes makes Steam show a "Screenshot Taken" toast (rig only; a player presses the menu button).
+  Unshelves when: a new sighting.
+
 - ★ `[platform]` `[watching]` **After a deploy, opening the plugin with the rig's own call failed three times before it
   worked** — seen once, 2026-10-01 (plan 78, block 3b). A tool note, also in [mcp-setup.md](mcp-setup.md).
   Evidence `workshop:test-evidence/plan78-P78-TALL-SECTION-LOOP-AFTER.json`.

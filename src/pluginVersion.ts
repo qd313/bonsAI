@@ -14,4 +14,4 @@
  * plugin.json instead, then run `npm run build`, which brings this back into
  * step. To change these words, change the generator that writes them.
  */
-export const PLUGIN_VERSION = "0.5.0" as const;
+export const PLUGIN_VERSION = "0.6.0" as const;

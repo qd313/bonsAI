@@ -6,6 +6,7 @@ All notable changes to this project are documented in this file.
 **Contents**
 
 - [\[Unreleased\]](#unreleased)
+- [\[0.6.0\] - 2026-10-23](#060---2026-10-23)
   - [What it does](#what-it-does)
   - [What is different from 0.4.9](#what-is-different-from-049)
   - [Known problems](#known-problems)
@@ -62,6 +63,8 @@ All notable changes to this project are documented in this file.
 <!-- /toc -->
 
 ## [Unreleased]
+
+## [0.6.0] - 2026-10-23
 
 bonsAI is an AI chat that lives in the Steam Deck's Quick Access Menu. It talks to Ollama, running on the Deck itself or on a PC on the same network, so you can ask about the game you are playing without leaving it. bonsAI is free and open source. It runs on your own hardware, your privacy stays yours. No paid API, no data centers.
 

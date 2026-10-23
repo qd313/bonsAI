@@ -189,6 +189,12 @@ Sorted by star, then tag, then title. The last item is a tool note, kept at the 
 - ★ `[focus]` `[watching]` **The Ask mode menu opens with the ring on "speed" and Down does not move it** — seen twice, 2026-10-22 (plan 99 filming, build `8c23813e`). Opened by A on the mode chip, the page's focus moves to "strategy" but the ring stays, and A then picks speed. Right, then Down reaches Expert; on camera the chip went Strategy, Expert, Strategy that way. Evidence `workshop:test-evidence/plan99-FILMING-SIGHTINGS.md` (section 2).
   Unshelves when: a new sighting.
 
+- ★ `[KB]` `[watching]` **On a fresh Deck with the library off, the first answer said it did not know the game** — seen once, 2026-10-23 (plan 99 clean install, "How do I unlock the Engineer in Deep Rock Galactic Survivor?"). The library is the fix, and the README now says so. Evidence `workshop:test-evidence/plan99-P99-TIER4-FIRST-ANSWER.json`.
+  Unshelves when: a new sighting.
+
+- ★ `[platform]` `[watching]` **An old `bonsai-ollama-autostart.service` file survived the wipe (disabled) and the plugin started Ollama through it** — seen 2026-10-23 (plan 99 clean install). Whether a brand-new Deck gets that file from the install is untested. Evidence `workshop:test-evidence/plan99-P99-TIER4-HOST.json` and `workshop:test-evidence/plan99-P99-TIER4-INSTALL-OLLAMA.json`.
+  Unshelves when: a brand-new Deck is installed, or a new sighting.
+
 - ★ `[platform]` `[watching]` **Rig and Steam quirks seen while filming** — 2026-10-22 (plan 99, build `8c23813e`), evidence `workshop:test-evidence/plan99-FILMING-SIGHTINGS.md` (section 3):
   Closing the menu with B presses while a game runs stopped the GUIDE+A chord from opening it again until the game was relaunched (twice).
   The highlight can stall after a Steam box (the notes view, the AI models list); not measured further.

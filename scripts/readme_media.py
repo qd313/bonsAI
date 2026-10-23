@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 """Title: README clip cutter
 
-Purpose: Cut one README master recording into the four shapes the README uses (plan 95).
+Purpose: Cut one README master recording into the six shapes the README uses (plans 95 and 99).
 Used for: `python scripts/readme_media.py <master> --clip <name> --screen deck|monitor`.
 Solves: Every clip comes in two screens and two shapes; one script with the crop and avatar boxes
     measured once per screen keeps them all alike, and a clip can be re-cut without re-filming.
-Does not: Record anything, speed anything up, or copy files into `assets/readme/`.
+Does not: Record anything, speed anything up, or copy files into `assets/readme/`. It also never
+    checks the 10 MB limit GitHub puts on a hand-uploaded video; look at the size it prints.
 
 A master is one real-time screen recording from the Deck (`deck_record`, saved under
 `recordings/` as `<clip>-<deck|monitor>.mkv`). It is never edited; this script only cuts from it:
 
-  <clip>-<screen>-full.mp4   whole screen, H.264, 1280 wide, ~600 kbit/s, no sound (hand upload)
-  <clip>-<screen>-full.gif   whole screen, 560 wide, 10 fps, two-pass 128-color palette
-  <clip>-<screen>-panel.gif  the plugin column alone, 360 wide, 10 fps
+  <clip>-<screen>-full.mp4   whole screen, H.264, 1280 wide, source frame rate up to 60, no sound (hand upload)
+  <clip>-<screen>-full.webp  whole screen as a self-playing animated WebP, 560 wide, 30 fps, quality 90
+  <clip>-<screen>-panel.webp the plugin column alone as an animated WebP, 360 wide, 30 fps, quality 90
+  <clip>-<screen>-full.gif   whole screen, 560 wide, 10 fps, two-pass 128-color palette (older shape)
+  <clip>-<screen>-panel.gif  the plugin column alone, 360 wide, 10 fps (older shape)
   <clip>-<screen>-panel.mp4  the plugin column alone as a video
 
 Nothing is sped up or cut from the middle: --start and --end only trim the ends. The Steam avatar
@@ -21,13 +24,14 @@ black box over it; the panel crop starts below that bar and never shows it.
 
 Usage:
   python scripts/readme_media.py recordings/ask-deck.mkv --clip ask --screen deck [--start 1.5] [--end 80]
-  python scripts/readme_media.py ... --only panel.gif     # one shape
+  python scripts/readme_media.py ... --only panel.webp    # one shape
   python scripts/readme_media.py ... --still 12.0         # one PNG frame of each shape instead
 """
 
 from __future__ import annotations
 
 import argparse
+import re
 import shutil
 import subprocess
 import sys
@@ -54,10 +58,33 @@ SCREENS = {
     },
 }
 
-SHAPES = ("full.mp4", "full.gif", "panel.gif", "panel.mp4")
+SHAPES = ("full.mp4", "full.webp", "panel.webp", "full.gif", "panel.gif", "panel.mp4")
+
+# GitHub refuses a hand-uploaded video over 10 MB; raise this for a long clip that does not fit.
+FULL_MP4_CRF = 23
+MAX_FPS = 60
 
 
-def _filters(screen: dict, shape: str, cards: list[tuple[float, float]] = ()) -> str:
+def _source_fps(master: Path) -> float:
+    """The master's nominal frame rate (a variable-rate master reports its top rate)."""
+    probe = subprocess.run(
+        ["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=r_frame_rate",
+         "-of", "default=nw=1:nk=1", str(master)], capture_output=True, text=True, check=True)
+    num, _, den = probe.stdout.strip().partition("/")
+    return float(num) / float(den or 1)
+
+
+def _out_fps(shape: str, source_fps: float) -> str:
+    """Frame rate for a shape: GIFs 10, WebP 30, the whole-screen video the source's up to 60."""
+    if shape.endswith(".gif"):
+        return "10"
+    if shape.endswith(".webp") or shape == "panel.mp4":
+        return "30"
+    return f"{min(source_fps, MAX_FPS):g}"
+
+
+def _filters(screen: dict, shape: str, cards: list[tuple[float, float]] = (),
+             source_fps: float = 30) -> str:
     """The ffmpeg filter chain for one shape, before any GIF palette step."""
     steps = []
     if shape.startswith("full"):
@@ -69,12 +96,13 @@ def _filters(screen: dict, shape: str, cards: list[tuple[float, float]] = ()) ->
     else:
         x, y, w, h = screen["panel"]
         steps.append(f"crop={w}:{h}:{x}:{y}")
-    width = {"full.mp4": 1280, "full.gif": 560, "panel.gif": 360, "panel.mp4": 0}[shape]
+    width = {"full.mp4": 1280, "full.webp": 560, "panel.webp": 360, "full.gif": 560,
+             "panel.gif": 360, "panel.mp4": 0}[shape]
     if width:
         steps.append(f"scale={width}:-2:flags=lanczos")
     # Masters are variable frame rate (the Deck sends no frame when nothing moves); a fixed rate
     # repeats the last frame instead, so the clip keeps its real-time length.
-    steps.append("fps=10" if shape.endswith(".gif") else "fps=30")
+    steps.append(f"fps={_out_fps(shape, source_fps)}")
     return ",".join(steps)
 
 
@@ -94,19 +122,27 @@ def cut(master: Path, clip: str, screen_name: str, shape: str, start: float | No
         trim += ["-ss", str(start)]
     if end is not None:
         trim += ["-to", str(end)]
-    chain = _filters(screen, shape, cards)
+    chain = _filters(screen, shape, cards, _source_fps(master))
     base = ["ffmpeg", "-v", "error", "-y"]
     if still is not None:
         out = OUT_DIR / f"{clip}-{screen_name}-{shape.split('.')[0]}.png"
         _run(base + ["-ss", str(still), "-i", str(master), "-frames:v", "1",
-                     "-vf", chain.replace("fps=10", "null").replace("fps=30", "null"), str(out)])
+                     "-vf", re.sub(r"fps=[0-9.]+", "null", chain), str(out)])
         return out
     out = OUT_DIR / f"{clip}-{screen_name}-{shape}"
-    if shape.endswith(".mp4"):
+    if shape == "full.mp4":
+        _run(base + trim + ["-i", str(master), "-an", "-vf", chain, "-c:v", "libx264",
+                            "-crf", str(FULL_MP4_CRF), "-preset", "slow", "-pix_fmt", "yuv420p",
+                            "-movflags", "+faststart", str(out)])
+    elif shape.endswith(".mp4"):
         _run(base + trim + ["-i", str(master), "-an", "-vf", chain, "-c:v", "libx264",
                             "-preset", "slow", "-b:v", "600k", "-maxrate", "900k",
                             "-bufsize", "1800k", "-pix_fmt", "yuv420p",
                             "-movflags", "+faststart", str(out)])
+    elif shape.endswith(".webp"):
+        _run(base + trim + ["-i", str(master), "-an", "-vf", chain, "-c:v", "libwebp_anim",
+                            "-quality", "90", "-loop", "0", "-compression_level", "6",
+                            "-pix_fmt", "yuv420p", str(out)])
     else:
         gif = (f"{chain},split[a][b];[a]palettegen=max_colors=128:stats_mode=diff[p];"
                f"[b][p]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle")
@@ -136,7 +172,7 @@ def main() -> int:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     shapes = opts.only or list(SHAPES)
     if opts.still is not None:
-        shapes = [s for s in shapes if s.endswith(".gif")]
+        shapes = [s for s in shapes if s.endswith((".gif", ".webp"))]
     for shape in shapes:
         cards = [tuple(float(v) for v in c.split("-")) for c in opts.card]
         out = cut(opts.master, opts.clip, opts.screen, shape, opts.start, opts.end, opts.still, cards)

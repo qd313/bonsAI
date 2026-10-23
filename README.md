@@ -261,6 +261,7 @@ install, so nothing downloads without your say-so.
 ### 3. Choose where the AI runs
 
 <img src="assets/readme/where-ai-runs.png" alt="The Where AI runs section of the Ollama tab" width="300">
+<img src="assets/readme/where-ai-runs-popup.png" alt="The first-run popup: Where should the AI run? with the Run AI on this Deck switch, Install Ollama and Not now" width="560">
 
 The first time bonsAI opens, right after the beta notice, a popup titled **Where should the AI
 run?** asks this for you. **Run AI on this Deck** starts switched on. Pick **Install Ollama** to set
@@ -280,8 +281,9 @@ and changes nothing. You can do the same later on the **Ollama** tab:
 
 Open the **Main** tab, pick a suggestion chip or type a question and press **Ask**.
 
-**Optional:** for notes from game wikis, open **Ollama → Knowledge base (offline)**, switch on
-**Use local knowledge base** and press **Download knowledge base**.
+**Then get the game notes.** On its own, the AI on the Deck knows little about any one game. Open
+**Ollama → Knowledge base (offline)** and press **Download knowledge base**; it switches itself on. Answers
+about a game it has notes for then use them, offline.
 
 ## Getting help
 

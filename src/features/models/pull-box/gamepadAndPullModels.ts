@@ -155,6 +155,18 @@ export function buildGamepadFocusRingStylesheet(): string {
           outline-offset: 2px !important;
           box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45) !important;
         }
+        /* The Cancel of a box Steam draws for the plugin (rename a chat, the note boxes, the models
+           screen, the help box, the character picker): Steam's own footer, outside the plugin's scope,
+           whose plain button turns solid white with dark words under the ring. The box is found by the
+           plugin's scope inside it (:has), and only the plain button changes: it keeps the plugin's
+           glass fill and wears the inset ring; Steam's blue stays on the action. The maintainer's call,
+           2026-10-22: no box shows a white block. */
+        .GenericConfirmDialog:has(.bonsai-scope) .DialogFooter button.DialogButton.gpfocus:not(.Primary),
+        .DialogContent:has(.bonsai-scope) .DialogFooter button.DialogButton.gpfocus:not(.Primary) {
+          background: linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 100%) !important;
+          color: #e8eef5 !important;
+          ${ringInset}
+        }
   `;
 }
 

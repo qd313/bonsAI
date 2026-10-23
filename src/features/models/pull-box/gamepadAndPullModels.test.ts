@@ -23,7 +23,7 @@
  * on the other.
  */
 import { describe, expect, it } from "vitest";
-import { buildPullModelsStylesheet } from "./gamepadAndPullModels";
+import { buildGamepadFocusRingStylesheet, buildPullModelsStylesheet } from "./gamepadAndPullModels";
 import { buildBonsaiScopeStylesheet } from "../../../styles/bonsaiScopeStylesheet";
 
 /** Drop CSS comments, so a rule that explains the old mistake is not read as still making it. */
@@ -107,5 +107,54 @@ describe("no scrolling area in the plugin sizes itself against the screen", () =
     // If this fails on something genuinely pinned to the screen, add it to ALLOWED above with the
     // reason. If it fails on anything inside a popup, the fix is to fill the parent instead.
     expect(offenders).toEqual([]);
+  });
+});
+
+describe("buttons in a popup keep their plugin look under the focus ring", () => {
+  const css = withoutComments(buildGamepadFocusRingStylesheet());
+
+  /** Every rule as its list of selectors plus its declarations, so grouped selectors are read one by one. */
+  function rules(): { selectors: string[]; body: string }[] {
+    return [...css.matchAll(/([^{}]+)\{([^}]*)\}/g)].map((m) => ({
+      selectors: m[1]!.split(",").map((x) => x.trim()),
+      body: m[2]!,
+    }));
+  }
+  const footerRule = () =>
+    rules().find((r) => r.selectors.some((x) => x.includes(".DialogFooter button.DialogButton.gpfocus")));
+
+  it("gives the plugin's glass button in a popup a white ring set slightly outside it", () => {
+    const rule = rules().find((r) =>
+      r.selectors.includes(".bonsai-scope button.bonsai-settings-focus-btn.gpfocus"),
+    );
+    expect(rule, "expected a ring rule for the glass button in a popup").toBeTruthy();
+    expect(rule!.selectors).toContain(".bonsai-scope button.bonsai-settings-focus-btn:focus-visible");
+    expect(rule!.body).toMatch(/outline-offset:\s*2px/);
+  });
+
+  it("keeps the plugin's grey on the Cancel of a box Steam draws for the plugin, instead of turning it white", () => {
+    const rule = footerRule();
+    expect(rule, "expected a rule for Steam's confirm-box footer").toBeTruthy();
+    expect(rule!.selectors).toHaveLength(2);
+    for (const selector of rule!.selectors) {
+      // Only boxes that hold the plugin are touched, and only the plain button, not the blue one.
+      expect(selector).toContain(":has(.bonsai-scope)");
+      expect(selector).toContain(":not(.Primary)");
+    }
+    expect(rule!.selectors.some((x) => x.startsWith(".GenericConfirmDialog"))).toBe(true);
+    expect(rule!.selectors.some((x) => x.startsWith(".DialogContent"))).toBe(true);
+    expect(rule!.body).toContain("linear-gradient");
+    expect(rule!.body).toContain("#e8eef5");
+    expect(rule!.body).toMatch(/outline-offset:\s*-2px/);
+  });
+
+  it("leaves Steam's blue main button alone, so its colour never changes", () => {
+    const rule = footerRule();
+    expect(rule).toBeTruthy();
+    for (const selector of rule!.selectors) {
+      expect(selector).not.toMatch(/button\.DialogButton\.Primary/);
+      // Every mention of Primary must sit inside the :not(...)
+      expect(selector.replace(/:not\(\.Primary\)/g, "")).not.toContain(".Primary");
+    }
   });
 });

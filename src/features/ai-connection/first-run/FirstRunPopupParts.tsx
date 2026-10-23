@@ -6,7 +6,9 @@
  * move handlers, with the switch's help line under it; the button is a Decky Button inside such a
  * Focusable, pressed by A or by a finger, never twice for one press. A button has one of three looks: the
  * frosted glass of the plugin's other small buttons (Find LAN), Steam's blue primary button (the look of the
- * Beta Notice's "Got it", the foot's action) or Steam's plain button (the foot's Not now).
+ * Beta Notice's "Got it", the foot's action) or the same glass in the foot's shape (the foot's Not now; since
+ * 2026-10-22, in place of Steam's plain button, which turned solid white with the ring on it). The foot's two
+ * looks are the ones every two-button box shares (styles/confirmBoxButtons.ts).
  *
  * Used for: FirstRunWhereAiRunsModal.tsx.
  *
@@ -20,6 +22,11 @@
 import React, { useRef, type CSSProperties, type ReactNode } from "react";
 import { Button, DialogButtonPrimary, Focusable, ToggleField } from "@decky/ui";
 
+import {
+  CONFIRM_ACTION_BUTTON_STYLE,
+  CONFIRM_FOOT_BUTTON_H_PX,
+  CONFIRM_SAFE_BUTTON_STYLE,
+} from "../../../styles/confirmBoxButtons";
 import { FOCUS_RING_BTN_CLASS, SETTINGS_GLASS_BTN } from "../../../styles/settingsGlassButton";
 import { scaledSteamWords } from "../../../shared/text-size/scaledSteamWords";
 import { textPx } from "../../../styles/textPx";
@@ -65,16 +72,20 @@ export function PopupSwitch({
   );
 }
 
-const BUTTON_BASE: CSSProperties = { ...SETTINGS_GLASS_BTN, minHeight: 32, height: 32, padding: "0 10px", textAlign: "center", justifyContent: "center", width: "100%" };
-/** The foot's two looks are Steam's own, so only the size and the Text size step are ours. */
-const BUTTON_STEAM: CSSProperties = {
-  minHeight: 32,
-  height: 32,
+const BUTTON_BASE: CSSProperties = {
+  ...SETTINGS_GLASS_BTN,
+  boxSizing: "border-box",
+  minHeight: CONFIRM_FOOT_BUTTON_H_PX,
+  height: CONFIRM_FOOT_BUTTON_H_PX,
   padding: "0 10px",
   textAlign: "center",
   justifyContent: "center",
   width: "100%",
-  fontSize: textPx(13),
+};
+/** The foot's two looks are the ones every two-button box shares (confirmBoxButtons.ts). */
+const FOOT_LOOKS: Record<"primary" | "plain", CSSProperties> = {
+  primary: CONFIRM_ACTION_BUTTON_STYLE,
+  plain: CONFIRM_SAFE_BUTTON_STYLE,
 };
 const BUTTON_GREYED: CSSProperties = { opacity: 0.55 };
 
@@ -127,7 +138,7 @@ export function PopupButton({
         onClick={() => press(false)}
         aria-label={ariaLabel}
         style={{
-          ...(look === "glass" ? BUTTON_BASE : BUTTON_STEAM),
+          ...(look === "glass" ? BUTTON_BASE : FOOT_LOOKS[look]),
           ...(fill ? null : { width: "auto" }),
           ...(greyed ? BUTTON_GREYED : null),
         }}

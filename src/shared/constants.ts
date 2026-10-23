@@ -163,6 +163,12 @@ export const TAB_BAR_CURRENT_ICON_PX = 12;
 export const TAB_BAR_CURRENT_ICON_GAP_PX = 4;
 /** The middle column's own left and right padding (the drawing's `.bal-t3 .mid`). */
 export const TAB_BAR_CURRENT_PAD_X_PX = 6;
+/**
+ * The width the line under the current tab is drawn at before it is scaled to the tab (plan 97 G1).
+ * About a long name's width, so the scale stays near 1: a 1-point line scaled 80 times came out a fifth
+ * short on the Deck, where the screen rounds the point to one whole pixel first (measured 2026-10-22).
+ */
+export const TAB_BAR_MARKER_BASE_PX = 100;
 /** The other tabs' small dimmed icons. */
 export const TAB_BAR_SIDE_ICON_PX = 10;
 /**

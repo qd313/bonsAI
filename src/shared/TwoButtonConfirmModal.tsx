@@ -5,9 +5,13 @@
  * internet downloads, remove the knowledge base, remove a model, the AI models screen's Tier 2 and
  * large-model questions, the try-order reset) shows the same thing: a title, a line or two of words, and
  * exactly two buttons side by side. The action is on the left in the look of the Beta Notice's "Got it"
- * (Steam's own primary button); Cancel (or the safe button's own words) is on the right, in Steam's plain
- * button, and the ring starts on it, so an A pressed by habit changes nothing. B is Cancel. Left and Right
- * step between the two and hold still at the ends. The maintainer's rule of 2026-10-18: Cancel on the right in every box.
+ * (Steam's own primary button: grey at rest, blue with the ring on it); Cancel (or the safe button's own
+ * words) is on the right in the plugin's frosted glass, the same height (styles/confirmBoxButtons.ts), and
+ * the ring starts on it, so an A pressed by habit changes nothing. B is Cancel. Left and Right step between
+ * the two and hold still at the ends. The maintainer's rule of 2026-10-18: Cancel on the right in every box.
+ * Since 2026-10-22 Cancel is glass, not Steam's plain button: that one turns solid white the moment the ring
+ * lands on it, and the ring starts there, so every box opened with a white block beside a grey one, and the
+ * two buttons were different heights (the maintainer's screenshot of the Delete chat? box).
  *
  * Used for: SettingsTabDataSection.tsx, downloadNotice.tsx, KnowledgeBaseSection.tsx, PullModelsTryOrder.tsx,
  * usePullModelDeleteConfirm.tsx, usePullModelSubmitSelected.tsx, usePullModelTier2Confirm.tsx,
@@ -41,8 +45,10 @@
 import React, { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { Button, DialogButtonPrimary, Focusable, ModalRoot } from "@decky/ui";
 
+import { BonsaiModalScope } from "./BonsaiModalScope";
 import { takeHolderFocus } from "./dpad/chatTranscriptNavHelpers";
 import type { NavRefHolder } from "./dpad/navFocusRegistry";
+import { CONFIRM_ACTION_BUTTON_STYLE, CONFIRM_SAFE_BUTTON_STYLE } from "../styles/confirmBoxButtons";
 import { FOCUS_RING_BTN_CLASS } from "../styles/settingsGlassButton";
 import { textPx } from "../styles/textPx";
 
@@ -63,8 +69,8 @@ export type TwoButtonConfirmModalProps = {
 /** How many frames the box waits, after its first two, for Cancel's nav node before it gives the ring up. */
 const RING_WAIT_FRAMES = 8;
 
-/** The words on both buttons. Layout only: the colours and the fill are Steam's own. */
-const BUTTON_STYLE: CSSProperties = { width: "100%", fontSize: textPx(13) };
+/** Each button fills half the row; the Focusable is the stop, the button inside it the look. */
+const CHOICE_CELL_STYLE: CSSProperties = { flex: "1 1 0", minWidth: 0 };
 
 type Hands = {
   onMoveLeft: () => boolean;
@@ -80,19 +86,30 @@ const Choice: React.FC<{
 }> = ({ primary = false, onChoose, navRef, hands, children }) => {
   const Look = primary ? DialogButtonPrimary : Button;
   return (
-    <div className="bonsai-settings-focus-btn-host" style={{ flex: 1, minWidth: 0 }}>
-      <Focusable
-        onOKButton={onChoose}
-        {...({ navRef, ...hands, onMoveUp: () => true, onMoveDown: () => true } as Record<string, unknown>)}
+    <Focusable
+      style={CHOICE_CELL_STYLE}
+      onOKButton={onChoose}
+      {...({ navRef, ...hands, onMoveUp: () => true, onMoveDown: () => true } as Record<string, unknown>)}
+    >
+      <Look
+        className={FOCUS_RING_BTN_CLASS}
+        onClick={onChoose}
+        style={primary ? CONFIRM_ACTION_BUTTON_STYLE : CONFIRM_SAFE_BUTTON_STYLE}
       >
-        <Look className={FOCUS_RING_BTN_CLASS} onClick={onChoose} style={BUTTON_STYLE}>
-          {children}
-        </Look>
-      </Focusable>
-    </div>
+        {children}
+      </Look>
+    </Focusable>
   );
 };
 
+/**
+ * In: the title, the words under it, the action's label, the safe button's label when it is not "Cancel",
+ * and what each button does (onCancel is also B).
+ * Out: the box, built on ModalRoot inside the plugin's popup scope, with the ring handed to the safe
+ * button a moment after it opens.
+ * Can go wrong: if Steam never fills the safe button's nav node, the ring stays where Steam put it (the
+ * action) after RING_WAIT_FRAMES; both buttons still work.
+ */
 export function TwoButtonConfirmModal({
   title,
   body,
@@ -129,27 +146,31 @@ export function TwoButtonConfirmModal({
 
   return (
     <ModalRoot onCancel={once(onCancel)}>
-      <div className="bonsai-prose" style={{ fontSize: textPx(12), lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
-        <div style={{ fontSize: textPx(16), fontWeight: 700, color: "#ffffff", marginBottom: 10 }}>{title}</div>
-        <div style={{ marginBottom: 10 }}>{body}</div>
-        <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", gap: 8 }}>
-          <Choice
-            primary
-            onChoose={once(onAction)}
-            navRef={actionNav}
-            hands={{ onMoveLeft: () => true, onMoveRight: () => takeHolderFocus(cancelNav) || true }}
-          >
-            {actionLabel}
-          </Choice>
-          <Choice
-            onChoose={once(onCancel)}
-            navRef={cancelNav}
-            hands={{ onMoveLeft: () => takeHolderFocus(actionNav) || true, onMoveRight: () => true }}
-          >
-            {cancelLabel}
-          </Choice>
-        </Focusable>
-      </div>
+      {/* The plugin's stylesheet and Text size reach the box only through this wrapper: a Steam popup is
+          drawn outside the plugin's own box, so without it Cancel's ring rule never applied. */}
+      <BonsaiModalScope>
+        <div className="bonsai-prose" style={{ fontSize: textPx(12), lineHeight: 1.45, color: "#cdd9e6", textAlign: "left" }}>
+          <div style={{ fontSize: textPx(16), fontWeight: 700, color: "#ffffff", marginBottom: 10 }}>{title}</div>
+          <div style={{ marginBottom: 10 }}>{body}</div>
+          <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", gap: 8 }}>
+            <Choice
+              primary
+              onChoose={once(onAction)}
+              navRef={actionNav}
+              hands={{ onMoveLeft: () => true, onMoveRight: () => takeHolderFocus(cancelNav) || true }}
+            >
+              {actionLabel}
+            </Choice>
+            <Choice
+              onChoose={once(onCancel)}
+              navRef={cancelNav}
+              hands={{ onMoveLeft: () => takeHolderFocus(actionNav) || true, onMoveRight: () => true }}
+            >
+              {cancelLabel}
+            </Choice>
+          </Focusable>
+        </div>
+      </BonsaiModalScope>
     </ModalRoot>
   );
 }

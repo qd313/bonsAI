@@ -75,8 +75,8 @@ describe("the Delete chat box", () => {
 
   it("puts Delete and Cancel side by side in one row, Delete first, so Left from Cancel lands on Delete", () => {
     const { buttons } = openDeleteBox(vi.fn(async () => true));
-    const deleteCell = buttons[0]!.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
-    const cancelCell = buttons[1]!.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
+    const deleteCell = buttons[0]!.closest('[data-decky-ui="Focusable"]') as HTMLElement;
+    const cancelCell = buttons[1]!.closest('[data-decky-ui="Focusable"]') as HTMLElement;
     const row = cancelCell.parentElement as HTMLElement;
     expect(deleteCell.parentElement).toBe(row);
     expect(row.style.display).toBe("flex");
@@ -86,8 +86,8 @@ describe("the Delete chat box", () => {
 
   it("holds both buttons in one Focusable that tells Steam its children flow horizontally, so Right and Left step between them", () => {
     const { buttons } = openDeleteBox(vi.fn(async () => true));
-    const deleteCell = buttons[0]!.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
-    const cancelCell = buttons[1]!.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
+    const deleteCell = buttons[0]!.closest('[data-decky-ui="Focusable"]') as HTMLElement;
+    const cancelCell = buttons[1]!.closest('[data-decky-ui="Focusable"]') as HTMLElement;
     const row = cancelCell.parentElement as HTMLElement;
     expect(deleteCell.parentElement).toBe(row);
     expect(row.getAttribute("data-decky-ui")).toBe("Focusable");

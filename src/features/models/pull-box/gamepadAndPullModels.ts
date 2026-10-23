@@ -144,6 +144,17 @@ export function buildGamepadFocusRingStylesheet(): string {
         .bonsai-scope button.bonsai-pullmodels-filtercol-clear:focus-visible {
           ${ring}
         }
+        /* A glass button inside a popup (the two-button confirm box's Cancel, the first-run popup's Not
+           now and Find LAN): the same ring the Settings tab's glass buttons wear (sections/scopeBase.ts
+           has the rule for the plugin's own box; a popup is drawn outside it and carries this sheet
+           instead). Needed since 2026-10-22: with its own fill a button never shows Steam's white focus
+           fill, so without this rule the ring on Cancel would be invisible. */
+        .bonsai-scope button.bonsai-settings-focus-btn.gpfocus,
+        .bonsai-scope button.bonsai-settings-focus-btn:focus-visible {
+          outline: 2px solid rgba(255, 255, 255, 0.88) !important;
+          outline-offset: 2px !important;
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45) !important;
+        }
   `;
 }
 

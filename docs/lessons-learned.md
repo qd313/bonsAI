@@ -694,6 +694,18 @@ up (2026-10-08). The fix stated the rule as arithmetic (band at least box + inse
 test read every number back out of the stylesheet. jsdom has no layout, so the arithmetic is the closest a test
 gets; the Deck measures the rest.
 
+**Never stretch a 1-pixel element to draw a line.** The green line under the current tab was a 1-point element
+scaled 80 times by `scaleX`. Its box in the page measured the right width, but the screen rounds the 1 point to one
+whole pixel before scaling it, and on the Deck a point is 1.28 pixels, so the painted line stopped a fifth short of
+the name (2026-10-22). The DOM cannot see this: only a screenshot can. Draw the element at about its final size and
+scale it a little, or set its width.
+
+**Steam's plain button turns solid white under the ring.** `Button` (Steam's `DialogButton`) has no fill of its own,
+so Steam's focus rule paints it white with dark words. A box whose ring starts on Cancel therefore opens with a white
+block beside a grey one. Any button that should keep the plugin's colours needs its own fill (the glass look) and the
+ring class, and a popup needs the ring rule in the popup stylesheet, since the plugin's own box's stylesheet does not
+reach it.
+
 ---
 
 ## 6. Tooling traps on this machine

@@ -16,7 +16,7 @@
  */
 import { useLayoutEffect, useRef } from "react";
 
-import { TAB_BAR_CURRENT_PAD_X_PX } from "../../shared/constants";
+import { TAB_BAR_CURRENT_PAD_X_PX, TAB_BAR_MARKER_BASE_PX } from "../../shared/constants";
 import { prefersReducedMotion } from "../preset-carousel/presetChipShared";
 import { TAB_GLIDE_MS } from "./tabGlide";
 
@@ -26,7 +26,7 @@ const MARKER_MS_VAR = "--bonsai-tab-marker-ms";
 /**
  * In: the id of the tab showing (the line re-aims when it changes).
  * Out: a ref for the line's element, which must be a child of the bar.
- * Can go wrong: with no layout (a test with no sizes) it places the line at 0, width 1.
+ * Can go wrong: with no layout (a test with no sizes) it places the line at 0, 1 point wide.
  */
 export function useTabMarker(currentTab: string): React.RefObject<HTMLElement | null> {
   const markerRef = useRef<HTMLElement | null>(null);
@@ -51,7 +51,13 @@ export function useTabMarker(currentTab: string): React.RefObject<HTMLElement | 
       lastPlace.current = `${x}:${w}`;
       marker.style.setProperty(MARKER_MS_VAR, glide && !prefersReducedMotion() ? `${TAB_GLIDE_MS}ms` : "0ms");
       marker.style.opacity = "1";
-      marker.style.transform = `translateX(${x}px) scaleX(${w})`;
+      /*
+        The line is TAB_BAR_MARKER_BASE_PX wide in the stylesheet and scaled to the tab's width from
+        there, not a 1-point line scaled up: the screen draws a 1-point line as one whole screen pixel
+        before scaling it, and on the Deck a point is 1.28 pixels, so the stretched line came out about
+        a fifth short of the name's end (the maintainer's screenshots, 2026-10-22).
+      */
+      marker.style.transform = `translateX(${x}px) scaleX(${w / TAB_BAR_MARKER_BASE_PX})`;
     };
     place(placedOnce.current);
     placedOnce.current = true;

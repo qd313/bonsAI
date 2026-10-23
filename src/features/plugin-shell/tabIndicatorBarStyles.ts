@@ -32,6 +32,7 @@ import {
   TAB_BAR_CURRENT_PAD_X_PX,
   TAB_BAR_EDGE_PAD_PX,
   TAB_BAR_HEIGHT_PX,
+  TAB_BAR_MARKER_BASE_PX,
   TAB_BAR_NAME_PX,
   TAB_BAR_SHOULDER_DIM_OPACITY,
   TAB_BAR_SHOULDER_MARK_PX,
@@ -295,12 +296,15 @@ export function buildTabBarRules(root: string): string {
         /* The line under the current tab (plan 97 G1): 2 points, inside the bar's own 20, placed and
            moved by transform alone (useTabMarker sets the transform and the glide time). It glides by
            this transition, so no state waits for it; the time is 0 on the first drawing and under
-           reduced motion, where the second rule turns the transition off altogether. */
+           reduced motion, where the second rule turns the transition off altogether. Its width here is
+           a base the hook scales from (about the width of a long name, so the scale stays near 1): a
+           1-point line scaled 80 times was drawn a fifth short on the Deck, where the screen rounds the
+           1 point to one whole pixel before scaling it (measured 2026-10-22). */
         ${root} .bonsai-tab-bar__marker {
           position: absolute;
           left: 0;
           bottom: 0;
-          width: 1px;
+          width: ${TAB_BAR_MARKER_BASE_PX}px;
           height: 2px;
           transform-origin: 0 0;
           background: ${ACCENT};

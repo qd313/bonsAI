@@ -128,7 +128,8 @@ words ...
   still. **Up and Down hold still** on both (one row, nothing to reach).
 - **A** is `onOKButton`, a tap is `onClick`, one press acts once. **B** is Cancel (`ModalRoot`'s `onCancel`).
 - **Look.** The action is `DialogButtonPrimary`, the same blue button as the Beta Notice's "Got it"; Cancel is
-  Steam's plain `Button`. No custom fill, no red: a removing action is told apart by its words.
+  the plugin's frosted glass in the same 32-point shape (`confirmBoxButtons.ts`, since 2026-10-22; before that
+  Steam's plain `Button`, which turned solid white under the ring). No red: a removing action is told apart by its words.
 - **Test:** `TwoButtonConfirmModal.test.tsx` (Steam's ring modelled in `steamRing.tsx`): left-to-right order, the ring
   found on Cancel, Right holds, Left reaches the action, Up and Down hold, A and B. jsdom cannot show where Steam's
   own first focus lands or what the blue looks like, so the Deck row (P96-CANCEL-RIGHT) is the real check.
@@ -155,7 +156,8 @@ switch on                                   switch off
 
 Plan 96 (2026-10-18, the maintainer's rule "Cancel on the right in every box") swapped the foot row: the action
 is on the left, in Steam's blue primary button (the look of the Beta Notice's "Got it"), and Not now is on the
-right, in Steam's plain button.
+right, in the plugin's frosted glass at the same height (since 2026-10-22; Steam's plain button before, which
+turned solid white under the ring).
 
 - **The ring starts on Not now,** the foot's second stop (index 1). Steam's own first focus would pick the first
   switch, so the popup hands the ring to Not now's nav node two frames after it mounts (the character picker's

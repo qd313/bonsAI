@@ -76,15 +76,20 @@ describe("what the popup says", () => {
     expect(foot[0].compareDocumentPosition(foot[1]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
-  it("draws the action in Steam's blue primary button (the look of Got it) and Not now in the plain one", async () => {
+  it("draws the action in Steam's blue primary button (the look of Got it) and Not now in the plugin's glass look, both 32 high", async () => {
     open();
     const action = screen.getByLabelText("Install Ollama on this Deck");
     const notNow = screen.getByLabelText("Not now: set up the AI later on the Ollama tab");
     expect(action.getAttribute("data-decky-ui")).toBe("DialogButtonPrimary");
     expect(notNow.getAttribute("data-decky-ui")).toBe("Button");
-    for (const b of [action, notNow]) {
-      expect(b.getAttribute("style") ?? "").not.toMatch(/background|border|color|rgba?\(|#[0-9a-f]{3}/i);
-    }
+    // The action's colours are Steam's: no fill, border or words colour of its own.
+    expect(action.style.background).toBe("");
+    expect(action.style.border).toBe("");
+    expect(action.style.color).toBe("");
+    // Not now wears the plugin's frosted glass.
+    expect(notNow.style.background).toContain("linear-gradient");
+    expect(action.style.height).toBe("32px");
+    expect(notNow.style.height).toBe("32px");
   });
 
   it("with the switch off the foot reads Test connection on the left and Not now on the right", async () => {

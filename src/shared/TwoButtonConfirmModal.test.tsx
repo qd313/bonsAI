@@ -6,10 +6,11 @@
  * Steam's ring modelled (steamRing.tsx: the transfer onto a nav node moves it, a plain focus() does not): the
  * buttons read off left to right, the ring found on Cancel once the box has settled, Left from Cancel
  * reaching the action, Right from Cancel holding still, A on each button, B, the ring going back to the control
- * that opened the box after the screen behind it was rebuilt, and the Text size setting moving the words.
+ * that opened the box after the screen behind it was rebuilt, and the Text size setting moving the words, and the look of the two buttons (same height, Cancel in the plugin's glass,
+ * the action with no fill of its own).
  *
  * Does not: open a real Steam box, so where Steam's own first focus lands before the box hands the ring to
- * Cancel, and what the blue button looks like, are the device row's job (P96-CANCEL-RIGHT).
+ * Cancel, and what the blue button and the glass Cancel look like, are the device row's job (P96-CANCEL-RIGHT).
  */
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -35,6 +36,12 @@ import { TEXT_SCALE, TEXT_SCALE_VAR } from "./text-size/chatTextSize";
 import { usePublishTextScale } from "./text-size/usePublishTextScale";
 import { makeFontSizeReader } from "../test-harness/settledFontSize";
 import { steamRingHolder, type SteamEl } from "../test-harness/steamRing";
+import {
+  FOCUS_RING_BTN_CLASS,
+  SETTINGS_GLASS_BTN_BACKGROUND,
+  SETTINGS_GLASS_BTN_BORDER,
+  SETTINGS_GLASS_BTN_COLOR,
+} from "../styles/settingsGlassButton";
 import {
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
@@ -112,8 +119,11 @@ describe("the shared two-button confirm box", () => {
 
   it("puts the two buttons in one horizontal row, the action first and Cancel last, left to right on screen", () => {
     const { action, cancel } = drawBox();
-    const actionCell = action.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
-    const cancelCell = cancel.closest(".bonsai-settings-focus-btn-host") as HTMLElement;
+    // Each button sits straight inside its own Focusable (the stop); the two stops are the row's children.
+    const actionCell = action.closest('[data-decky-ui="Focusable"]') as HTMLElement;
+    const cancelCell = cancel.closest('[data-decky-ui="Focusable"]') as HTMLElement;
+    expect(action.parentElement).toBe(actionCell);
+    expect(cancel.parentElement).toBe(cancelCell);
     const row = actionCell.parentElement as HTMLElement;
     expect(cancelCell.parentElement).toBe(row);
     expect(row.getAttribute("flow-children")).toBe("horizontal");
@@ -196,14 +206,42 @@ describe("the shared two-button confirm box", () => {
     expect(onAction).not.toHaveBeenCalled();
   });
 
-  it("draws the action in Steam's blue primary button (the Beta Notice's Got it) and Cancel in the plain one, with no red and no custom fill", () => {
+  it("draws the action in Steam's blue primary button with no fill of its own, and Cancel in the plugin's glass look, no red, both the same size", () => {
     const { action, cancel } = drawBox({ actionLabel: "Remove" });
     expect(action.getAttribute("data-decky-ui")).toBe("DialogButtonPrimary");
     expect(cancel.getAttribute("data-decky-ui")).toBe("Button");
+    // The action's colours are Steam's: nothing of its own for the fill, the border or the words.
+    expect(action.style.background).toBe("");
+    expect(action.style.border).toBe("");
+    expect(action.style.color).toBe("");
+    // Cancel wears the frosted glass, and the ring class so the white ring shows on it.
+    expect(cancel.classList.contains(FOCUS_RING_BTN_CLASS)).toBe(true);
+    expect(cancel.style.background).toContain("linear-gradient");
+    // jsdom may rewrite spaces in colours, so compare with the spaces taken out.
+    const bare = (v: string) => v.replace(/\s+/g, "");
+    expect(bare(cancel.style.background)).toBe(bare(SETTINGS_GLASS_BTN_BACKGROUND));
+    expect(bare(cancel.style.border)).toContain(bare(SETTINGS_GLASS_BTN_BORDER).replace("1px", ""));
+    expect(cancel.style.color).toMatch(/#e8eef5|rgb\(232,\s*238,\s*245\)/i);
+    expect(SETTINGS_GLASS_BTN_COLOR).toBe("#e8eef5");
+    // No red on either button.
     for (const b of [action, cancel]) {
-      const style = b.getAttribute("style") ?? "";
-      expect(style).not.toMatch(/background|border|color|rgba?\(|#[0-9a-f]{3}/i);
+      expect(b.getAttribute("style") ?? "").not.toMatch(/248,\s*113,\s*113|fecaca/i);
     }
+    // Same shape: 32 high, full width of its cell, border-box so Cancel's border adds nothing.
+    for (const b of [action, cancel]) {
+      expect(b.style.height).toBe("32px");
+      expect(b.style.minHeight).toBe("32px");
+      expect(b.style.boxSizing).toBe("border-box");
+      expect(b.style.width).toBe("100%");
+    }
+  });
+
+  it("draws the box's content inside the plugin's scope, so the ring rule can reach Cancel", () => {
+    const { cancel, action } = drawBox();
+    const scope = cancel.closest(".bonsai-scope");
+    expect(scope).not.toBeNull();
+    expect(scope!.contains(action)).toBe(true);
+    expect(scope!.textContent).toContain("Clear session cache?");
   });
 
   it("follows the Text size setting: the title, the words and the button words are bigger on Large and smaller on Small", () => {

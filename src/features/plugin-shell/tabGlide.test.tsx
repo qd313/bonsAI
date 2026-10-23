@@ -23,6 +23,7 @@ import { TabIndicatorBar } from "./TabIndicatorBar";
 import { resetTabGlideForTests, tabGlideDirection } from "./tabGlide";
 import { ALL_BONSAI_TAB_IDS, type BonsaiTabId } from "./tabTitles";
 import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
+import { TAB_BAR_MARKER_BASE_PX } from "../../shared/constants";
 
 const SIX: readonly BonsaiTabId[] = ALL_BONSAI_TAB_IDS.filter((id) => id !== "developer");
 const FROM_RIGHT = "bonsai-tab-body-root--glide-from-right";
@@ -240,16 +241,18 @@ describe("the green line under the current tab", () => {
   it("is placed on the first drawing with no glide, then moves to the new tab on a press with the glide time set", () => {
     layOut({ settings: [100, 80], permissions: [180, 110] });
     const { container } = render(<Shell start="settings" />);
-    // 6 points of padding each side of the name: translateX(left + 6) scaleX(width - 12).
-    expect(marker(container).style.transform).toBe("translateX(106px) scaleX(68)");
+    // 6 points of padding each side of the name: translateX(left + 6) scaleX((width - 12) / TAB_BAR_MARKER_BASE_PX).
+    // The line is drawn 100 points wide and scaled down: a 1-point line scaled 80 times was painted a fifth short on the Deck,
+    // where the screen rounds the point to one pixel before scaling.
+    expect(marker(container).style.transform).toBe("translateX(106px) scaleX(0.68)");
     expect(marker(container).style.getPropertyValue("--bonsai-tab-marker-ms")).toBe("0ms");
     rb(container);
-    expect(marker(container).style.transform).toBe("translateX(186px) scaleX(98)");
+    expect(marker(container).style.transform).toBe("translateX(186px) scaleX(0.98)");
     expect(marker(container).style.getPropertyValue("--bonsai-tab-marker-ms")).toBe("180ms");
     // Pressing again at once re-aims it, with no wait.
     layOut({ settings: [100, 80], permissions: [180, 110], about: [210, 60] });
     rb(container);
-    expect(marker(container).style.transform).toBe("translateX(216px) scaleX(48)");
+    expect(marker(container).style.transform).toBe("translateX(216px) scaleX(0.48)");
   });
 
   it("still glides while a game runs: only the page's slide is dropped", () => {
@@ -258,7 +261,7 @@ describe("the green line under the current tab", () => {
     const { container } = render(<Shell start="settings" />);
     rb(container);
     expect(body(container)!.className).toBe("bonsai-tab-body-root");
-    expect(marker(container).style.transform).toBe("translateX(186px) scaleX(98)");
+    expect(marker(container).style.transform).toBe("translateX(186px) scaleX(0.98)");
     expect(marker(container).style.getPropertyValue("--bonsai-tab-marker-ms")).toBe("180ms");
   });
 
@@ -267,7 +270,7 @@ describe("the green line under the current tab", () => {
     layOut({ settings: [100, 80], permissions: [180, 110] });
     const { container } = render(<Shell start="settings" />);
     rb(container);
-    expect(marker(container).style.transform).toBe("translateX(186px) scaleX(98)");
+    expect(marker(container).style.transform).toBe("translateX(186px) scaleX(0.98)");
     expect(marker(container).style.getPropertyValue("--bonsai-tab-marker-ms")).toBe("0ms");
   });
 
@@ -280,6 +283,7 @@ describe("the green line under the current tab", () => {
     const rule = css.slice(css.indexOf(".bonsai-scope .bonsai-tab-bar__marker {"));
     const decls = rule.slice(0, rule.indexOf("}"));
     expect(decls).toMatch(/height: 2px/);
+    expect(decls).toContain(`width: ${TAB_BAR_MARKER_BASE_PX}px`);
     expect(decls).toMatch(/pointer-events: none/);
   });
 });

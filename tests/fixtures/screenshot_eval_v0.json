@@ -1,0 +1,45 @@
+{
+ "about": "Labelled pictures for the screenshot reading measurement (plan 98, lane I, step 1). One entry per picture. 'file' is a name inside the workshop's screenshots/plan98 folder (or inside any folder given to the script with --root); an entry may also carry 'path', an absolute path, which wins over 'file'. 'game' is the full name, 'game_aliases' other ways a reply may fairly name the same game. 'scene' is one of title, menu, play, pause, loading, other. 'boss' is the boss or enemy that is on screen, or empty when there is none; 'boss_aliases' are fair alternative names. 'running_game_known' is true when the picture was taken with the game running, so its app id ('app_id', 'app_name') can be handed to the ask; the script then asks twice, once with the game known and once with nothing known. When it is false the script asks only once, with nothing known. 'scene_words' (optional) replaces the script's own list of words that count as naming the scene. The first three entries are the proof set, taken from Deck captures already on this PC and labelled by looking at them; block K2's pictures are added by the session.",
+ "version": 0,
+ "pictures": [
+  {
+   "id": "drg-survivor-title-1",
+   "file": "DeckCapture_20261022_233503_game.png",
+   "game": "Deep Rock Galactic: Survivor",
+   "game_aliases": ["Deep Rock Galactic Survivor", "DRG Survivor", "DRG: Survivor"],
+   "scene": "title",
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "note": "Title screen, 'press any key to continue'; the player's camera picture sits top right."
+  },
+  {
+   "id": "drg-survivor-title-2",
+   "file": "DeckCapture_20261016_193020_game.png",
+   "game": "Deep Rock Galactic: Survivor",
+   "game_aliases": ["Deep Rock Galactic Survivor", "DRG Survivor", "DRG: Survivor"],
+   "scene": "title",
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "note": "The same title screen with the Deck's performance numbers drawn over the top left."
+  },
+  {
+   "id": "drg-survivor-menu-1",
+   "file": "DeckCapture_20261022_233752_game.png",
+   "game": "Deep Rock Galactic: Survivor",
+   "game_aliases": ["Deep Rock Galactic Survivor", "DRG Survivor", "DRG: Survivor"],
+   "scene": "menu",
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "note": "Main menu: Play, Upgrades, Gear, Milestones, Skins, Settings, Quit; the Heavy Duty expansion banner on the right."
+  }
+ ]
+}

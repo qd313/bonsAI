@@ -79,7 +79,7 @@ const TAB_DATA = {
 
   Developer: { icon: 4, measured: 2820, items: [
     sec("Knowledge base"),
-    sbtn("Install seed knowledge base", { desc: "Public HF/GitHub download is not live yet. <b>build.ps1</b> copies a seed corpus (DRG Survivor + OoT alias sample) to the Deck. Install it into <code>~/.bonsai/rag</code> for Phase 1 testing. Hybrid retrieval also needs vectorized seed + <b>nomic-embed-text</b> on your Ask Ollama host.", how: "above" }),
+    sbtn("Install seed knowledge base", { desc: "Installs the library built with this plugin, for testing. Players download the library from the Ollama tab.", how: "above" }),
     tog("Hybrid retrieval (meaning search)", "On, the knowledge base ranks cards by keyword match and meaning together. Off, it uses keyword match only — cards still attach, and Show details says Keyword search (hybrid disabled). Turn it off to tell a retrieval problem apart from an embedding one.", true),
     sec("Diagnostics"),
     tog("On-screen debug HUD", "Shows a small translucent log at the bottom of the plugin (focus, tab changes, ingest). Off by default so Settings and connection UI stay readable.", false),

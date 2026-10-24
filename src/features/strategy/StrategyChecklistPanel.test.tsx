@@ -12,7 +12,7 @@
  * in a Focusable wrapper that carries the Up/Down handlers and the step's own nav node, so the chain can hand
  * Steam's ring over. The stand-in strips those props from the page, so the wrapper mock below records them first.
  */
-import { fireEvent, render } from "@testing-library/react";
+import { act, fireEvent, render } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type React from "react";
 
@@ -171,5 +171,151 @@ describe("the note under the checklist title names only real actions (plan 96, F
     expect(note.length).toBeGreaterThan(0);
     expect(note).not.toMatch(/session cache/i);
     expect(note).not.toMatch(/thread/i);
+  });
+});
+
+/*
+ * Plan 98, H: the route look (the mock-up board's tab 5, option C). A five-step list draws step 1 open and
+ * steps 2 to 5 covered the way a spoiler is; A on a covered step shows it without ticking it; the shown step
+ * stays shown when the panel is drawn again; ticking a step opens the next. Every covered step is still the
+ * same Decky Button in its own wrapper with its own nav node, so the D-pad walk is the walk it was.
+ */
+describe("the checklist drawn as a route (plan 98, H)", () => {
+  const ROUTE: StrategyChecklistState = {
+    title: "To the False Knight",
+    appId: "367520",
+    items: [
+      { id: "1", label: "Drop down the well in Dirtmouth" },
+      { id: "2", label: "Go right past the stag station" },
+      { id: "3", label: "Follow the path down to the arena" },
+      { id: "4", label: "Hit him while he swings, then back off" },
+      { id: "5", label: "Take the City Crest he drops" },
+    ],
+    checkedIds: [],
+  };
+  const COVER_WORDS = "Hidden until you get there — A to show";
+
+  function drawRoute(checklist: StrategyChecklistState = ROUTE, onToggle = vi.fn()) {
+    handed.length = 0;
+    wrapped.length = 0;
+    const view = render(<StrategyChecklistPanel checklist={checklist} onToggle={onToggle} />);
+    const stops = () => Array.from(view.container.querySelectorAll<HTMLElement>(".bonsai-strategy-checklist-step"));
+    const kinds = () => stops().map((s) => s.getAttribute("data-route-stop"));
+    return { ...view, onToggle, stops, kinds };
+  }
+
+  afterEach(() => {
+    resetStrategyChecklistNavForTests();
+    window.localStorage.clear();
+  });
+
+  it("draws step 1 open and steps 2 to 5 covered, each covered step showing only its number and the cover words", () => {
+    const { stops, kinds } = drawRoute();
+    expect(kinds()).toEqual(["open", "covered", "covered", "covered", "covered"]);
+    expect(stops()[0].textContent).toContain("Drop down the well in Dirtmouth");
+    stops().slice(1).forEach((stop, i) => {
+      expect(stop.querySelector(".bonsai-strategy-checklist-box")?.textContent).toBe(String(i + 2));
+      expect(stop.textContent).toContain(COVER_WORDS);
+      expect(stop.textContent).not.toContain(ROUTE.items[i + 1].label);
+    });
+  });
+
+  it("draws a covered step the way a spoiler cover is: its dark fill, grey border and grey words", () => {
+    const { stops } = drawRoute();
+    const cover = stops()[1];
+    expect(cover.style.background).toBe("rgb(10, 10, 10)");
+    expect(cover.style.border).toBe("1px solid rgba(80, 80, 80, 0.55)");
+    expect(cover.style.borderRadius).toBe("8px");
+    expect(cover.style.color).toBe("rgba(160, 160, 160, 0.85)");
+  });
+
+  it("A on a covered step shows it and does not tick it in the same press", () => {
+    const { stops, kinds, onToggle } = drawRoute();
+    const second = stops()[1];
+    act(() => void fireEvent.click(second));
+    expect(onToggle).not.toHaveBeenCalled();
+    expect(kinds()).toEqual(["open", "open", "covered", "covered", "covered"]);
+    // The same button stays under Steam's ring: the step was redrawn in place, not replaced.
+    expect(stops()[1]).toBe(second);
+    expect(second.textContent).toContain("Go right past the stag station");
+    expect(second.getAttribute("role")).toBe("checkbox");
+    // The next A on the now-open step ticks it, as any open step does.
+    act(() => void fireEvent.click(second));
+    expect(onToggle).toHaveBeenCalledWith("2", true);
+  });
+
+  it("a shown step stays shown when the panel is drawn again (close and reopen)", () => {
+    const first = drawRoute();
+    act(() => void fireEvent.click(first.stops()[3]));
+    expect(first.kinds()).toEqual(["open", "covered", "covered", "open", "covered"]);
+    first.unmount();
+    const again = drawRoute();
+    expect(again.kinds()).toEqual(["open", "covered", "covered", "open", "covered"]);
+  });
+
+  it("a new list starts covered again, and the old list keeps what was shown on it", () => {
+    const { rerender, stops, kinds, onToggle } = drawRoute();
+    act(() => void fireEvent.click(stops()[1]));
+    const next = { ...ROUTE, title: "To Greenpath" };
+    rerender(<StrategyChecklistPanel checklist={next} onToggle={onToggle} />);
+    expect(kinds()).toEqual(["open", "covered", "covered", "covered", "covered"]);
+    rerender(<StrategyChecklistPanel checklist={ROUTE} onToggle={onToggle} />);
+    expect(kinds()).toEqual(["open", "open", "covered", "covered", "covered"]);
+  });
+
+  it("ticking step 1 opens step 2 and leaves 3 to 5 covered", () => {
+    const { rerender, kinds, onToggle } = drawRoute();
+    rerender(<StrategyChecklistPanel checklist={{ ...ROUTE, checkedIds: ["1"] }} onToggle={onToggle} />);
+    expect(kinds()).toEqual(["open", "open", "covered", "covered", "covered"]);
+  });
+
+  it("a two-step list has no covers", () => {
+    const { kinds } = drawRoute({ ...ROUTE, items: ROUTE.items.slice(0, 2) });
+    expect(kinds()).toEqual(["open", "open"]);
+  });
+
+  it("keeps every covered step a focusable Decky Button in its own wrapper with its own nav node", () => {
+    const { stops } = drawRoute();
+    expect(wrapped).toHaveLength(5);
+    wrapped.forEach((props, i) => expect(props["navRef"]).toBe(strategyChecklistStepNav(i)));
+    const buttons = handed.filter((p) => String(p["className"] ?? "").includes("bonsai-strategy-checklist-step"));
+    expect(buttons).toHaveLength(5);
+    buttons.forEach((p) => {
+      expect(p["focusable"]).toBe(true);
+      expect(p["disabled"]).toBeUndefined();
+    });
+    stops().forEach((s) => expect((s as HTMLButtonElement).disabled).toBe(false));
+  });
+
+  it("Down walks steps 1 to 5, covered ones too, each once, then leaves the list", () => {
+    /*
+     * The walk the Deck makes. A move between two steps is Steam's own (the steps are sibling Focusables in
+     * one panel), modelled as the next wrapper in the panel; Down from the last step is the plugin's handler,
+     * which hands the ring on to the rating row. The walk is bounded and no step may be visited twice.
+     * Steam's scroll is not modelled here: every step has the same 32 px floor whether covered or open, so
+     * the covers do not change where Steam scrolls the panel. The ring itself is the Deck row's job.
+     */
+    const leave = vi.fn(() => true);
+    handed.length = 0;
+    wrapped.length = 0;
+    const { container } = render(
+      <StrategyChecklistPanel checklist={ROUTE} onToggle={vi.fn()} onMoveDownFromLast={leave} />,
+    );
+    const wraps = Array.from(container.querySelectorAll<HTMLElement>(".bonsai-strategy-checklist-step-wrap"));
+    const visited: string[] = [];
+    let at = 0;
+    for (let press = 0; press < 12 && at < wraps.length; press++) {
+      const stop = wraps[at].querySelector<HTMLElement>(".bonsai-strategy-checklist-step")!;
+      visited.push(stop.querySelector(".bonsai-strategy-checklist-box")?.textContent || "1");
+      const handler = wrapped[at]?.onMoveDown as (() => boolean) | undefined;
+      if (handler) {
+        expect(handler()).toBe(true);
+        break;
+      }
+      at += 1; // Steam's own move to the next sibling stop
+    }
+    expect(visited).toEqual(["1", "2", "3", "4", "5"]);
+    expect(new Set(visited).size).toBe(visited.length);
+    expect(leave).toHaveBeenCalledTimes(1);
   });
 });

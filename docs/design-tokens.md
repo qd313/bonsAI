@@ -26,6 +26,7 @@ adding a surface; read this one while building it.
 - [Surfaces](#surfaces)
   - [AI reply bubble](#ai-reply-bubble)
   - [User bubble](#user-bubble)
+  - [The spoiler cover](#the-spoiler-cover)
 - [The inline popover idiom](#the-inline-popover-idiom)
 - [Focus rings](#focus-rings)
 - [Type scale](#type-scale)
@@ -154,6 +155,25 @@ Right-aligned via `.bonsai-chat-turn-row-header`
 ([section-6.ts:190-199](../src/styles/sections/section-6.ts)): `width: fit-content`,
 `max-width: min(88%, 280px)`, `margin-left: auto`, `align-self: flex-end`,
 `text-align: right`.
+
+### The spoiler cover
+
+A hidden spoiler in an answer, and since plan 98 a covered step on the Strategy checklist's route.
+The fill, border and words come from `.bonsai-spoiler-reveal-target`
+([answerBubble.ts](../src/features/answer/bubble/answerBubble.ts)), which overrides the inline
+values of [MainTabBonsaiAiMarkdownChunk.tsx](../src/features/answer/markdown/MainTabBonsaiAiMarkdownChunk.tsx);
+the radius is the inline one:
+
+```
+background:    #0a0a0a
+border:        1px solid rgba(80,80,80,0.55)
+border-radius: 8px
+words:         rgba(160,160,160,0.85), weight 600
+```
+
+A covered checklist step keeps the step's own 32 px floor and padding, shows its number where the
+tick box was, and reads "Hidden until you get there — A to show"
+([StrategyChecklistPanel.tsx](../src/features/strategy/StrategyChecklistPanel.tsx)).
 
 ---
 

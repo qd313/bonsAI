@@ -202,14 +202,19 @@ def write_harness_settings(
     model: str,
     voice_preset_id: str = "",
     think_effort: str = "off",
+    spoiler_tier: str = "default",
 ) -> Path:
     """The settings.json the plugin will load. Everything else takes the fresh-install default.
 
     ``think_effort`` matches the fresh-install default ("off") unless a device-shaped run asks
     for more — the maintainer's own Deck runs "medium". ``voice_preset_id`` turns on the
     character voice for a device-shaped run; an id outside ``VALID_PRESET_IDS`` is a typo, not a
-    run worth measuring, so it raises rather than silently running voice-off.
+    run worth measuring, so it raises rather than silently running voice-off. ``spoiler_tier`` (plan 98)
+    is the real ``spoiler_tier`` setting: the default writes nothing, so a run without the switch is
+    byte-for-byte the settings it always had.
     """
+    if spoiler_tier not in ("strict", "default", "open"):
+        raise ValueError(f"unknown --spoiler-tier {spoiler_tier!r}; use strict, default or open")
     if voice_preset_id and voice_preset_id not in VALID_PRESET_IDS:
         raise ValueError(
             f"unknown --voice preset id {voice_preset_id!r}; valid ids: {', '.join(sorted(VALID_PRESET_IDS))}"
@@ -230,6 +235,8 @@ def write_harness_settings(
     }
     if voice_preset_id:
         payload["ai_character_preset_id"] = voice_preset_id
+    if spoiler_tier != "default":
+        payload["spoiler_tier"] = spoiler_tier
     path = settings_dir / "settings.json"
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     return path
@@ -1389,7 +1396,7 @@ def write_report(
     lines.append("|---|---|")
     for k in (
         "model", "ollama", "corpus_version", "corpus_sections", "prompt_variant",
-        "kb_placement", "voice_preset", "think_effort", "judge_model",
+        "kb_placement", "voice_preset", "think_effort", "spoiler_tier", "judge_model",
         "samples_per_case", "cases", "run_minutes",
     ):
         lines.append(f"| {k} | `{meta.get(k)}` |")
@@ -1543,6 +1550,13 @@ def main() -> int:
         help="Ollama model tag for a second, report-only opinion (contradiction + facts stated). "
         "Off by default; never affects any score, only adds a column and a summary line.",
     )
+    parser.add_argument(
+        "--spoiler-tier",
+        default="default",
+        choices=("strict", "default", "open"),
+        help="the spoiler tiers setting for this run (plan 98): strict is Hide more, open is Hide less. "
+        "The default writes nothing, so a run without this switch is exactly what it always was.",
+    )
     parser.add_argument("--label", default="", help="suffix for the report filename, e.g. after-w4")
     parser.add_argument("--write-report", action="store_true", default=True)
     parser.add_argument("--no-write-report", action="store_false", dest="write_report")
@@ -1617,6 +1631,7 @@ def main() -> int:
         model=args.model,
         voice_preset_id=args.voice,
         think_effort=args.think,
+        spoiler_tier=args.spoiler_tier,
     )
 
     # Imported only now: main.py reads `decky` at import time.
@@ -1760,7 +1775,7 @@ def main() -> int:
     print(
         f"corpus {corpus_version} ({corpus_sections} sections) · model {args.model} · variant {args.variant} · "
         f"kb-placement {args.kb_placement} · voice {args.voice or 'off'} · think {args.think} · "
-        f"judge {args.judge or 'off'} · {len(cases)} cases × {args.samples}"
+        f"spoiler-tier {args.spoiler_tier} · judge {args.judge or 'off'} · {len(cases)} cases × {args.samples}"
     )
     t_run = time.perf_counter()
     samples: list[SampleResult] = []
@@ -1823,6 +1838,7 @@ def main() -> int:
             "kb_placement": args.kb_placement,
             "voice_preset": args.voice,
             "think_effort": args.think,
+            "spoiler_tier": args.spoiler_tier,
             "judge_model": args.judge,
             "samples_per_case": args.samples,
             "cases": len(cases),

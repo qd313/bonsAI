@@ -155,6 +155,28 @@ class EvalKbAnswersHarnessTests(unittest.TestCase):
             payload = json.loads(path.read_text(encoding="utf-8"))
         self.assertEqual(payload["ask_think_effort"], "medium")
 
+    # --- plan 98 lane B: --spoiler-tier writes the real setting, nothing else changes ----------
+
+    def _settings_with_tier(self, **tier_kwargs) -> dict:
+        """The settings file a run would write, read back, with only the tier switch varied."""
+        with tempfile.TemporaryDirectory() as tmp:
+            written = self.mod.write_harness_settings(
+                Path(tmp), corpus_dir=Path(tmp), corpus_version="1", model="m", **tier_kwargs
+            )
+            return json.loads(written.read_text(encoding="utf-8"))
+
+    def test_a_run_without_the_tier_switch_writes_no_spoiler_tier(self):
+        self.assertNotIn("spoiler_tier", self._settings_with_tier())
+
+    def test_the_tier_switch_writes_the_setting_the_plugin_reads(self):
+        for tier in ("strict", "open"):
+            with self.subTest(tier=tier):
+                self.assertEqual(self._settings_with_tier(spoiler_tier=tier)["spoiler_tier"], tier)
+
+    def test_the_tier_switch_rejects_a_tier_that_does_not_exist(self):
+        with self.assertRaises(ValueError):
+            self._settings_with_tier(spoiler_tier="paranoid")
+
     # --- commit 4: kb-placement wrapper (same monkeypatch shape as the variant hook) -----------
 
     def test_build_prompt_wrapper_forwards_kb_placement_kwarg(self):

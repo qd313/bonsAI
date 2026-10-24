@@ -1,7 +1,7 @@
 # Plan 98, Deck block K0: the knowledge-base smoke pass, the readings the second opinion needs, and the owed rows
 
 For a fresh deck-driver helper, at minute zero of the session, on the build already on the Deck (no deploy). Read
-`docs/planning/assets/97-handover-I.md` first (the last known state of the Deck: the test chat "test", the settings
+`workshop:planning/assets/97-handover-I.md` first (the last known state of the Deck: the test chat "test", the settings
 backup at `/home/deck/p97-settings-backup.tgz`). The rules of your helper file apply in full. Evidence files go to
 `C:\Users\still\Documents\bonsAI-workshop\test-evidence\plan98-<ROW>.json` (never overwrite; `-try2` if the name
 exists), screenshots beside them with the same stem. Every Deck command is exactly `ssh deck@192.168.86.52 '<command>'`.

@@ -18,7 +18,7 @@ Never alongside another Deck chat: the "Tab underlines and popup button styling"
 on 2026-10-22 and is done for the day.
 
 **Read first:** [AGENTS.md](../../AGENTS.md) (Commands; Which model does which work); [lessons-learned.md](../lessons-learned.md)
-§ 1 and § 3; [plan 95](95-readme-refresh.md) §§ 5, 12 and 13 (how the clips were filmed); the Tier 4 release gate in
+§ 1 and § 3; [plan 95](../../../bonsAI-workshop/planning/95-readme-refresh.md) §§ 5, 12 and 13 (how the clips were filmed); the Tier 4 release gate in
 [testing-manual.md](../testing-manual.md); [plan 73](73-maintainer-checks-before-0.6.0.md).
 
 ---

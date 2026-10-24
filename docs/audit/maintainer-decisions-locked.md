@@ -2396,7 +2396,7 @@ Asked by plan 86 step 2 ([the lists](clean-up-round-three/README.md#step-2-every
 
 ### D134 — LOCKED 2026-10-22 (raised 2026-10-22) — Plan 97, the bug list and the Verify list toward zero, the second sweep: the ten calls
 
-Asked by the planning chat for [plan 97](../planning/97-bugs-and-verify-toward-zero.md) (its section 2), answered the same day. Number 134 was free when this was written (D133 was the last).
+Asked by the planning chat for [plan 97](../../../bonsAI-workshop/planning/97-bugs-and-verify-toward-zero.md) (its section 2), answered the same day. Number 134 was free when this was written (D133 was the last).
 
 1. **Scope.** Everything in Bugs is in, except the README refilm: that is a filming job for the maintainer's PC and camera settings, not a helper's. The tab glide stays in, but mock-ups are drawn first, the maintainer picks one, and only then is it built. The "39 frames a second" entry closes with a known-problems line in the guide. The two test-rig bugs are fixed in the rig's own repo during the session, on a branch there, then merged into that repo's main.
 2. **The driver may move the Deck's Ollama and voice engine aside,** run the three checks that need a Deck without them, and put them back, with a model count before and after.

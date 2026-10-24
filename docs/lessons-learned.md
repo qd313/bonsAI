@@ -116,7 +116,7 @@ on a red baseline without either helper knowing it. Their own work then looked b
 the real fault was already there before they began. Read the tests at the commit a copy is about to be
 cut from, not just at "the latest commit on the branch", before handing it to a helper.
 
-**A landing chain that waits for an inner script's "ALL LANDED" line starts the next landing while the outer script is still in its gates.** The inner script prints that line before the outer one has finished its own checks, so the chain began the next landing early, and two landings ran at once in the shared checkout (plan 96, 04:10 UTC: the focus branch and lane F8). Nothing was lost, only because both landings' gates ran on the same combined tree; the copy-paste guard failed there and was fixed in its own commit. Start the next landing only after the outer script has exited, and read its exit code, not a line it printed. Record: `docs/planning/96-ship-ready-bug-session.md`, the 04:30 UTC entry.
+**A landing chain that waits for an inner script's "ALL LANDED" line starts the next landing while the outer script is still in its gates.** The inner script prints that line before the outer one has finished its own checks, so the chain began the next landing early, and two landings ran at once in the shared checkout (plan 96, 04:10 UTC: the focus branch and lane F8). Nothing was lost, only because both landings' gates ran on the same combined tree; the copy-paste guard failed there and was fixed in its own commit. Start the next landing only after the outer script has exited, and read its exit code, not a line it printed. Record: `workshop:planning/96-ship-ready-bug-session.md`, the 04:30 UTC entry.
 
 ---
 

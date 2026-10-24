@@ -148,7 +148,7 @@ Absorbed into the tiered setting: see [Spoiler coverage should be a setting with
 
 - ★★ **Eval fixture cannot see a recall failure** (paraphrase rows)
   - **Goal:** `kb_eval_v2` has **1** labeled case out of 138 where keyword search returns nothing, so the slice that proves the vector half adds recall is a sample of one. Measured 2026-08-18 by the re-aligned harness. Add paraphrase rows — questions that ask for a card without using its words — until that slice can gate a regression.
-  - **Largely overtaken by the blind holdout rows, pending one measurement.** The 15 paraphrase rows joined v2 as `V2-PARA-*` under **D23** (all `tune`), and 56 blind rows joined as `V2-BLIND-*` under **D37** (all `holdout`) — 20 on 2026-08-28 and 36 later the same day, 18 of the second batch written as pure paraphrases sharing no vocabulary with their card. The keyword-blind slice was **3** labeled rows when last measured on 2026-08-28, up from 1. **It has not been re-counted since the second batch**, deliberately — no measurement was run while those rows were written. Re-count it on the next arms run before deciding whether this item is closed.
+  - **Largely overtaken by the blind holdout rows, pending one measurement.** The 15 paraphrase rows joined v2 as `V2-PARA-*` under **D23** (all `tune`), and 56 blind rows joined as `V2-BLIND-*` under **D37** (all `holdout`) — 20 on 2026-08-28 and 36 later the same day, 18 of the second batch written as pure paraphrases sharing no vocabulary with their card. The keyword-blind slice was **3** labeled rows when last measured on 2026-08-28, up from 1. **It has not been re-counted since the second batch**, deliberately — no measurement was run while those rows were written. Re-count it on the next arms run before deciding whether this item is closed. **Counted 2026-10-24 (plan 98 lane F, `workshop:archive/research/kb-embed-bakeoff-2026-10-24-arms.md`):** 4 labelled questions get nothing from the word search (3 tuning rows and 1 held-back row); the combined search still finds the right note in its first three for 3 of those 4 (missed: V2-PARA-S04). The 36 newer blind rows did not grow the slice (1 of 214 blind rows).
 
 ## KB visual maps
 
@@ -249,7 +249,7 @@ option C. Not built (D112 #8); the maintainer picks.
   ordinary problem sentences reach nothing at all** — *"my game keeps crashing"*, *"my game won't launch"*, *"black
   screen when I start the game"*. The word "crash" is deliberately classed as too weak to route a question on its own;
 that holds with a game running and not with nothing running. The tip cut-off and a false word match were fixed
-2026-09-26, and the "no tip for this" line was retired 2026-09-27 (`db4b3b4a`). Not remeasured since. (D81, D85) Planned as wave three ([48](../../bonsAI-workshop/archive/48-kb-wave-three-session.md)).
+2026-09-26, and the "no tip for this" line was retired 2026-09-27 (`db4b3b4a`). Remeasured 2026-10-24 (plan 98 lane F): 8 of 24 plain sentences reach a tip (6 right, 1 half, 1 wrong); the held meaning-search branch reaches all 24 but only 13 are right, 3 half and 8 wrong. (D81, D85) Planned as wave three ([48](../../bonsAI-workshop/archive/48-kb-wave-three-session.md)).
 
 **Related work landed 2026-09-26 (plan 70, helper C):** the tip cut-off and a false-positive word
 match are now fixed (see [Tip cut-off fix](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#tip-cut-off-fix), [Lan word-boundary fix](archive/roadmap-trimmed-2026-10-roadmap-kb-details.md#lan-word-boundary-fix)).

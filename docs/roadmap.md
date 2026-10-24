@@ -324,8 +324,12 @@ Parked work and watched sightings: [roadmap-shelved.md](roadmap-shelved.md).
 
 ## Done after v0.6.0
 
-Everything closed since v0.6.0 shipped (2026-10-24), one line each, newest first. Nothing yet. When this section grows past the
+Everything closed since v0.6.0 shipped (2026-10-24), one line each, newest first. When this section grows past the
 size limit, its older blocks move to an archive file the way the v0.6.0 ones did.
+
+**Closed 2026-10-24 (plan 98 docs sweep 2):**
+
+- ★ `[KB]` **Measure answers with the character voice on** — **DONE 2026-10-24 (plan 98 lane F; evidence `workshop:archive/research/kb-answer-eval-2026-10-24-p98f-voice-off.md` and `workshop:archive/research/kb-answer-eval-2026-10-24-p98f-voice-alig.md`).** 63 questions, 3 tries each, the Deck's model name (gemma4:e2b-it-qat), the Ali G voice against no voice, the same evening. With the voice on, answers kept the note's facts 67.8 times in a hundred (74.6 with no voice) and never contradicted a note (96.3 with no voice). The follow-up menu showed when due 91.7 times in a hundred (94.4), spoiler warnings behaved the same (77.0 against 77.6), and answers clean on all three tries were 42.9 in a hundred (52.4). Full entry: [archive](archive/roadmap-completed.md#closed-2026-10-24-plan-98-docs-sweep-2-moved-from-next).
 
 ---
 

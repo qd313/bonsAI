@@ -19,7 +19,7 @@ three: both checks had faults. [Wave three's report](../../bonsAI-workshop/archi
 [blind questions](roadmap-kb-details.md#blind-questions-done), [the three new games](roadmap-kb-details.md#three-new-games-and-their-notes).
 
 **Still short:** getting to the troubleshooting tips. Of 24 fresh plain sentences, 6 reached a tip before the tip rewrite
-and 8 after.
+and 8 after (still 8 when measured again 2026-10-24).
 
 **The one-second wait on every question is explained.** The Deck holds one model in memory at a time, so the answering
 model and the note-search model push each other out. With the limit raised to two, a search after an answer dropped from
@@ -32,6 +32,7 @@ check stays unbuilt: [detail](roadmap-details.md#cost-to-a-running-game-second-s
 
 - **A card named after a category outranks the cards inside it** — **OPEN, raised 2026-08-31 (D41).** Kept open on
   purpose; the first step is to measure the shipping search question by question, so it is not yet a call to answer.
+  **Measured 2026-10-24 (plan 98 lane F, `workshop:archive/research/kb-embed-bakeoff-2026-10-24-arms.md`):** on 279 strategy questions with a recorded right note, a category note came first in 3 (about 1 in 100). Only one of them (V2-S-RDR2-06, "how to get a better horse early": Horse breeds first, Horse bonding second) fits this entry; the other two name the category themselves. D41 stays your call, with this figure for it.
   [D41](audit/maintainer-decisions-locked.md#d41--open-raised-2026-08-31--a-card-named-after-a-category-outranks-the-cards-inside-it)
 
 A new call lands here, one line, with what it decides. Every call already made is
@@ -49,7 +50,7 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 - ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held back
   2026-09-06 (D81).** "The game drops me back to the library" reaches no crash tip, because the tip search needs a topic
   word. The held fix (a meaning search) attached wrong tips, six measured. The tips were rewritten and a "none of these
-  fit" floor now exists, but the held fix has not been re-measured with it. Overlaps the entry of the same subject in
+  fit" floor now exists, and the held fix was re-measured with it on 2026-10-24 (plan 98 lane F, `workshop:archive/research/kb-embed-bakeoff-2026-10-24-arms.md`): today 8 of 24 plain problem sentences reach a tip (6 right, 1 half, 1 wrong). With the held meaning-search branch (hand-ported, it no longer applies to today's files) all 24 reach a tip, but only 13 are right, 3 half and 8 wrong. So it stays held: it would trade "no tip" for a wrong tip on a third of the questions. Overlaps the entry of the same subject in
   Next. [Detail](roadmap-kb-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips)
 - ★★ `[KB]` **Questions with no real answer in the notes can still get notes about the wrong subject (Portal 2 house buying, a Hades boss that does not exist)** — **OPEN, found 2026-09-07, seen again 2026-09-26, 2026-10-14 and 2026-10-24; fix being built (plan 98 lanes L and D).**
   The Black Mesa horse question is fixed: it shows the "No close match" line since `2abaa0ae` (passed on the Deck 2026-10-03, `workshop:test-evidence/plan81-P81-KB-NOTES-FIRST.json`). A Portal 2 house-buying question and a Hades boss that does not exist can still bring up notes about something else, and the reply follows them. Catching these in general still costs twenty or more right answers elsewhere.
@@ -87,17 +88,12 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 
 ## Next
 
-- ★ `[KB]` **Measure answers with the character voice on** — **OPEN, switch built.** The answer test can run with the
-  character voice on (since 2026-09-06). No run with it on has been saved. One run is owed. Plan 48 planned it but its
-  report ([48](../../bonsAI-workshop/archive/48-kb-wave-three-session.md) § 7) has no voice results.
 - ★ `[KB]` **Retire the Developer tab's "Install seed knowledge base" button** — **OPEN, an idea from the maintainer
   2026-10-02.** It was a stand-in from before the library was published, and its text still says the public download "is
   not live yet". Several Deck focus walks use it as the first stop on the tab, so check those first.
 - ★★ `[KB]` **Glossary words for every game** — **OPEN, filed 2026-10-16 (plan 86 step 3).**
   The underlined words ("kiting", "overclock" for Deep Rock Galactic: Survivor) now come from the knowledge library's new `glossary_terms` table (`447fc2af`, `cf724c9f`). Words for other games need only new rows in `data/kb/glossary_terms.json` and a library rebuild, no code. The builder refuses a row for a game the library does not hold. [Design](audit/clean-up-round-three/glossary-move.md)
-- ★★ `[KB]` **The eval cannot yet prove the meaning search rescues many questions** — **OPEN, one measurement owed.** The
-  questions the word search cannot answer at all numbered 3 when last counted, before 36 more blind rows landed. Re-count
-  on the next search run. No code needed.
+- ★★ `[KB]` **The eval cannot yet prove the meaning search rescues many questions** — **OPEN, counted 2026-10-24 (plan 98 lane F, `workshop:archive/research/kb-embed-bakeoff-2026-10-24-arms.md`).** Of the labelled questions, 4 (3 tuning rows and 1 held-back row) get nothing from the word search. The combined search still finds the right note in its first three for 3 of those 4 (missed: V2-PARA-S04). The 36 newer blind rows did not grow the slice (1 of 214 blind rows). Four questions is still too few to gate a regression; whether to write more is the owner's call. No code needed.
   [Detail](roadmap-kb-details.md#eval-fixture-cannot-see-a-recall-failure)
 - ★★★ `[KB]` **Card style pass** — **OPEN, measure first, added 2026-09-05.** Rewrite the prose cards as labelled short
   lines, the shape the labelled cards already use (how many cards are labelled needs a recount). Facts kept was 92% when
@@ -120,7 +116,7 @@ written up in full in [the locked decisions file](audit/maintainer-decisions-loc
 - ★★★ `[KB]` **A troubleshooting question mostly never reaches the tips** — **OPEN, widened 2026-09-07.** Nine of ten
   ordinary problem sentences ("my game keeps crashing") reached nothing when measured 2026-09-07, because the word "crash"
   alone is too weak to route a question. The tip cut-off and a false word match were fixed 2026-09-26, and the "no tip for
-  this" line was retired 2026-09-27. Not remeasured since. (D81, D85)
+  this" line was retired 2026-09-27. Remeasured 2026-10-24 (plan 98 lane F): 8 of 24 plain sentences reach a tip, 6 of them right; the held meaning-search branch reaches all 24 but gets only 13 right (see the symptom entry in Bugs). (D81, D85)
   [Detail](roadmap-kb-details.md#a-troubleshooting-question-mostly-never-reaches-the-tips)
 - ★★★★ `[KB]` **KB online / versus strategy content** — **OPEN, discovery locked 2026-08-09.** Multiplayer questions
   (roles, callouts, co-op) get nothing specific today. Plan: new card kinds, Left 4 Dead 2 first, then Counter-Strike 2,

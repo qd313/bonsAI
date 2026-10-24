@@ -142,6 +142,8 @@ are *instances* of that category? Options:
 **Recommended first step is (1)** — the finding rests entirely on the keyword arm, which is not what
 ships, and the tooling does not currently write per-case results for the fusion arms.
 
+**Measured 2026-10-24 (plan 98 lane F, `workshop:archive/research/kb-embed-bakeoff-2026-10-24-arms.md`):** on 279 strategy questions with a recorded right note, a category note came first in 3 (about 1 in 100). Only one of them (V2-S-RDR2-06, "how to get a better horse early": Horse breeds first, Horse bonding second) fits this entry; the other two name the category themselves. D41 stays open and the maintainer's call.
+
 ### D74 — PARTLY LOCKED 2026-09-05 (raised the same day) — Reading answers aloud: five calls locked, one open
 
 Raised by the feasibility memo [planning/42-read-aloud-feasibility.md](../../../bonsAI-workshop/planning/42-read-aloud-feasibility.md),

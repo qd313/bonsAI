@@ -1803,3 +1803,10 @@ _Copied line for line from the roadmap's Verify entries, nothing reworded, with 
 - ★★ `[chips]` **Maintainer's ask: each chip shows its whole text twice before changing** — **OWED, asked 2026-10-18 (follows the size half, in Done).**
   A long chip scrolls to its end, stops about a second, jumps back, scrolls to the end again, stops, then the chip changes; a short chip holds as before. A lane named chip-twice (plan 96) has the change; nothing had landed when this was written. Owes Deck row **P96-F22-CHIP-TWICE** in [testing.md](../testing.md).
   **Closed 2026-10-18 (plan 96 Deck block F, build `24f5c300`, the Deck's own screen, no game):** **DONE 2026-10-18, passed on the Deck (row P96-F22-CHIP-TWICE; the change is `57829f6c`).** Seven overflowing chips each scrolled to the end, stood 0.9 to 1.0 s, jumped back in 0.4 to 0.5 s, scrolled again, stood 0.9 to 1.0 s, then changed; a chip whose words fit stayed 10.7 s without scrolling. With one chip showing, all seven chips fit, so no scrolling could be read; each stayed 7.0 to 7.7 s. The setting is back off. Evidence `workshop:test-evidence/plan96-P96-F22-CHIP-TWICE.json`.
+
+## Closed 2026-10-24 (plan 98 docs sweep 2, moved from Next)
+
+- ★ `[KB]` **Measure answers with the character voice on** — **OPEN, switch built.** The answer test can run with the
+  character voice on (since 2026-09-06). No run with it on has been saved. One run is owed. Plan 48 planned it but its
+  report ([48](../../bonsAI-workshop/archive/48-kb-wave-three-session.md) § 7) has no voice results.
+  **Closed 2026-10-24:** the run was done on the PC (plan 98 lane F). Numbers are in the Done line in [roadmap.md](../roadmap.md#done-after-v060); reports `workshop:archive/research/kb-answer-eval-2026-10-24-p98f-voice-off.md` and `workshop:archive/research/kb-answer-eval-2026-10-24-p98f-voice-alig.md`.

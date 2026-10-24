@@ -47,6 +47,7 @@ export function toBonsaiSettingsPayload(
     latency_timeouts_custom_enabled: input.latencyTimeoutsCustomEnabled,
     unified_input_persistence_mode: input.unifiedInputPersistenceMode,
     chat_text_size: input.chatTextSize,
+    spoiler_tier: input.spoilerTier,
     screenshot_attachment_preset: input.screenshotAttachmentPreset,
     desktop_debug_note_auto_save: input.desktopDebugNoteAutoSave,
     desktop_ask_verbose_logging: input.desktopAskVerboseLogging,

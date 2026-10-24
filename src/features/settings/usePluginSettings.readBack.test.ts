@@ -81,6 +81,7 @@ const NON_DEFAULT: Record<string, unknown> = {
   screenshot_attachment_preset: "max",
   show_developer_tab: true,
   show_onscreen_debug_hud: true,
+  spoiler_tier: "open",
   strategy_spoiler_auto_reveal_after_consent: true,
   strategy_spoiler_masking_enabled: false,
   stream_scramble_color: "cyan",

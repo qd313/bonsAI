@@ -136,6 +136,7 @@ describe("settings contracts", () => {
     expect(settings.ollama_local_on_deck).toBe(true);
     expect(settings.ollama_local_autostart).toBe(false);
     expect(settings.chat_text_size).toBe("normal");
+    expect(settings.spoiler_tier).toBe("default");
   });
 
   it("normalizes model_allow_high_vram_fallbacks: only explicit true enables", () => {
@@ -174,6 +175,16 @@ describe("settings contracts", () => {
     expect(normalizeSettings({ chat_text_size: " large " }).chat_text_size).toBe("large");
     for (const garbled of ["huge", "LARGE", "", 2, null, [], {}]) {
       expect(normalizeSettings({ chat_text_size: garbled as unknown as "small" }).chat_text_size).toBe("normal");
+    }
+  });
+
+  it("normalizes spoiler_tier: missing key reads as default; only strict, default, open are kept", () => {
+    expect(normalizeSettings({}).spoiler_tier).toBe("default");
+    expect(normalizeSettings({ spoiler_tier: "strict" }).spoiler_tier).toBe("strict");
+    expect(normalizeSettings({ spoiler_tier: "open" }).spoiler_tier).toBe("open");
+    expect(normalizeSettings({ spoiler_tier: " strict " }).spoiler_tier).toBe("strict");
+    for (const garbled of ["paranoid", "OPEN", "", 2, null, [], {}]) {
+      expect(normalizeSettings({ spoiler_tier: garbled as unknown as "open" }).spoiler_tier).toBe("default");
     }
   });
 
@@ -343,6 +354,7 @@ describe("settings contracts", () => {
       ollamaKeepAlive: "30s",
       replyVerbosity: "detailed",
       chatTextSize: "large",
+      spoilerTier: "strict",
       askThinkEffort: "high",
       replyLanguage: "japanese",
       showDeveloperTab: true,
@@ -378,6 +390,7 @@ describe("settings contracts", () => {
     expect(p.reply_verbosity).toBe("detailed");
     expect("terse_mode" in p).toBe(false);
     expect(p.chat_text_size).toBe("large");
+    expect(p.spoiler_tier).toBe("strict");
     expect(p.reply_language).toBe("japanese");
     expect(p.model_allow_high_vram_fallbacks).toBe(true);
     expect(p.ollama_local_on_deck).toBe(true);
@@ -410,6 +423,7 @@ describe("settings contracts", () => {
       ollamaKeepAlive: DEFAULT_OLLAMA_KEEP_ALIVE,
       replyVerbosity: DEFAULT_REPLY_VERBOSITY,
       chatTextSize: "normal" as const,
+      spoilerTier: "default" as const,
       askThinkEffort: "off" as const,
       replyLanguage: REPLY_LANGUAGE_FOLLOW_SYSTEM,
       showDeveloperTab: false,
@@ -556,6 +570,7 @@ describe("settings contracts", () => {
       ollamaKeepAlive: normalized.ollama_keep_alive,
       replyVerbosity: normalized.reply_verbosity,
       chatTextSize: normalized.chat_text_size,
+      spoilerTier: normalized.spoiler_tier,
       askThinkEffort: normalized.ask_think_effort,
       replyLanguage: normalized.reply_language,
       showDeveloperTab: normalized.show_developer_tab,

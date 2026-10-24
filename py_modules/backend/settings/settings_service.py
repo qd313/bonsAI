@@ -485,6 +485,10 @@ _SIMPLE_FIELDS: dict[str, Any] = {
     # How big the chat's own words are drawn. Normal unless the person picks another; an old
     # settings file with no value, or an unrecognised one, reads as Normal.
     "chat_text_size": _enum(frozenset({"small", "normal", "large"}), "normal", strip=True),
+    # How much a Strategy answer hides: ``strict`` also covers bosses, endings and chapters,
+    # ``default`` is the long-standing rule, ``open`` covers nothing (plan 98, D50). A missing or
+    # unrecognised value reads as ``default``, so an old file keeps today's behaviour.
+    "spoiler_tier": _enum(frozenset({"strict", "default", "open"}), "default", strip=True),
     # Developer-tab switch: a streaming answer's newest text scrambles for a moment before
     # settling, the way a decode chip does. Off by default (plan 69).
     "stream_scramble_enabled": _bool_default_false,

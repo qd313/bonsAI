@@ -517,6 +517,40 @@
     }
   },
   {
+    "name": "an unknown spoiler tier falls back to default, never to a tier nobody picked",
+    "input": {
+      "spoiler_tier": "paranoid"
+    },
+    "expected": {
+      "spoiler_tier": "default"
+    }
+  },
+  {
+    "name": "a spoiler tier is trimmed before matching",
+    "input": {
+      "spoiler_tier": " strict "
+    },
+    "expected": {
+      "spoiler_tier": "strict"
+    }
+  },
+  {
+    "name": "the open spoiler tier is kept",
+    "input": {
+      "spoiler_tier": "open"
+    },
+    "expected": {
+      "spoiler_tier": "open"
+    }
+  },
+  {
+    "name": "an old settings file with no spoiler tier reads as default",
+    "input": {},
+    "expected": {
+      "spoiler_tier": "default"
+    }
+  },
+  {
     "name": "scramble style is trimmed before matching",
     "input": {
       "stream_scramble_style": " chip "

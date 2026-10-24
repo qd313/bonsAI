@@ -79,6 +79,8 @@ import {
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
   DEFAULT_CHAT_TEXT_SIZE,
   CHAT_TEXT_SIZE_OPTIONS,
+  DEFAULT_SPOILER_TIER,
+  SPOILER_TIER_OPTIONS,
   DEFAULT_VOICE_STT_MODEL,
   LATENCY_WARNING_STEP_SECONDS,
   MAX_LATENCY_WARNING_SECONDS,
@@ -108,6 +110,7 @@ import {
   type TabResumeMode,
   type UnifiedInputPersistenceMode,
   type ChatTextSize,
+  type SpoilerTier,
   type VoiceSttModelId,
 } from "./bonsaiSettingsSchema";
 
@@ -470,6 +473,8 @@ const SIMPLE_FIELDS = {
   unified_input_persistence_mode: normalizeUnifiedInputPersistenceMode,
   // Normal unless the person picks another; an old settings file with no value reads as Normal.
   chat_text_size: enumOf<ChatTextSize>(CHAT_TEXT_SIZE_OPTIONS, DEFAULT_CHAT_TEXT_SIZE, { trim: true }),
+  // Default unless the person picks another; an old settings file with no value, or an unknown one, reads as Default.
+  spoiler_tier: enumOf<SpoilerTier>(SPOILER_TIER_OPTIONS, DEFAULT_SPOILER_TIER, { trim: true }),
   // Trimmed before matching, case-sensitive, and an unknown value falls back to `off` —
   // an unrecognised effort must not silently turn thinking on.
   ask_think_effort: enumOf<AskThinkEffortId>(

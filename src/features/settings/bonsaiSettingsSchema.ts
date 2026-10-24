@@ -64,6 +64,11 @@ export type UnifiedInputPersistenceMode = "persist_all" | "no_persist";
  * side of Normal; the rows keep their heights.
  */
 export type ChatTextSize = "small" | "normal" | "large";
+/**
+ * How much a Strategy answer hides (plan 98, D50): `strict` also covers bosses, endings and chapters,
+ * `default` is the long-standing rule, `open` covers nothing. The row's buttons read Hide more, Default, Hide less.
+ */
+export type SpoilerTier = "strict" | "default" | "open";
 export type DesktopAppLogLevel = "off" | "default" | "verbose";
 /**
  * Which tab a reopen lands on. One stop per option in roadmap **D15**, so the three can be
@@ -108,6 +113,8 @@ export type BonsaiSettings = {
   unified_input_persistence_mode: UnifiedInputPersistenceMode;
   /** How big the words are drawn, everywhere: small, normal (the default) or large. */
   chat_text_size: ChatTextSize;
+  /** How much a Strategy answer hides: strict, default (today's rule) or open. */
+  spoiler_tier: SpoilerTier;
   /** Vision attachment downscale and JPEG quality preset. */
   screenshot_attachment_preset: ScreenshotAttachmentPreset;
   /** When true, append Ask and AI response lines to daily chat files under Desktop/bonsAI_logs (requires filesystem_write). */
@@ -222,6 +229,7 @@ export type BonsaiSettingsSnapshotInput = {
   latencyTimeoutsCustomEnabled: boolean;
   unifiedInputPersistenceMode: UnifiedInputPersistenceMode;
   chatTextSize: ChatTextSize;
+  spoilerTier: SpoilerTier;
   screenshotAttachmentPreset: ScreenshotAttachmentPreset;
   desktopDebugNoteAutoSave: boolean;
   desktopAskVerboseLogging: boolean;
@@ -289,6 +297,9 @@ export const REQUEST_TIMEOUT_STEP_SECONDS = 10;
 export const DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE: UnifiedInputPersistenceMode = "no_persist";
 export const DEFAULT_CHAT_TEXT_SIZE: ChatTextSize = "normal";
 export const CHAT_TEXT_SIZE_OPTIONS: ChatTextSize[] = ["small", "normal", "large"];
+export const DEFAULT_SPOILER_TIER: SpoilerTier = "default";
+/** In the order the row draws them: Hide more, Default, Hide less. */
+export const SPOILER_TIER_OPTIONS: SpoilerTier[] = ["strict", "default", "open"];
 export const SCREENSHOT_ATTACHMENT_PRESET_OPTIONS: ScreenshotAttachmentPreset[] = ["low", "mid", "max"];
 export const DEFAULT_SCREENSHOT_ATTACHMENT_PRESET: ScreenshotAttachmentPreset = "low";
 /** D15 option B, the locked decision — a fresh install resumes the tab you left. */

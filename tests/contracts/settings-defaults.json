@@ -42,6 +42,7 @@
   "screenshot_attachment_preset": "low",
   "show_developer_tab": false,
   "show_onscreen_debug_hud": false,
+  "spoiler_tier": "default",
   "strategy_spoiler_auto_reveal_after_consent": false,
   "strategy_spoiler_masking_enabled": true,
   "stream_scramble_color": "green",

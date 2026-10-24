@@ -115,5 +115,68 @@ class GlossaryFolderTests(_FolderBase):
         self.assertEqual([r["term_id"] for r in build_rag_db.load_glossary_rows()], [1, 2])
 
 
+class GlossaryGameIdTests(_FolderBase):
+    def _build_one(self, row: dict) -> sqlite3.Connection:
+        self._write("glossary/a.json", [row])
+        return self._seed()
+
+    def _refused(self, *rows: dict) -> str:
+        self._write("glossary/a.json", list(rows))
+        with self.assertRaises(SystemExit) as ctx:
+            self._seed()
+        return str(ctx.exception)
+
+    def test_a_game_id_row_is_filed_under_that_game(self):
+        row = _word(1)
+        del row["app_id"]
+        conn = self._build_one({**row, "game_id": 7})
+        self.assertEqual(conn.execute("SELECT game_id FROM glossary_terms").fetchall(), [(7,)])
+
+    def test_an_app_id_row_still_works(self):
+        conn = self._build_one(_word(1))
+        self.assertEqual(conn.execute("SELECT game_id FROM glossary_terms").fetchall(), [(1,)])
+
+    def test_both_ids_that_agree_are_accepted(self):
+        conn = self._build_one(_word(1, game_id=1))
+        self.assertEqual(conn.execute("SELECT game_id FROM glossary_terms").fetchall(), [(1,)])
+
+    def test_both_ids_that_disagree_stop_the_build(self):
+        self.assertIn("name different games", self._refused(_word(1, game_id=7)))
+
+    def test_an_unknown_game_id_stops_the_build_naming_file_and_row(self):
+        row = _word(1, game_id=99)
+        del row["app_id"]
+        message = self._refused(row)
+        self.assertIn("no game has game_id 99", message)
+        self.assertIn("glossary/a.json row 1", message)
+
+    def test_a_row_with_neither_id_stops_the_build(self):
+        row = _word(1)
+        del row["app_id"]
+        self.assertIn("needs an app_id or a game_id", self._refused(row))
+
+    def test_a_game_id_that_is_not_a_number_stops_the_build(self):
+        row = _word(1, game_id="seven")
+        del row["app_id"]
+        self.assertIn("is not a number", self._refused(row))
+
+    def test_an_app_id_row_and_a_game_id_row_for_one_game_collide_on_a_term_key(self):
+        by_game = _word(2, game_id=1)
+        del by_game["app_id"]
+        by_game.update(term_key="word1", term="other")
+        self.assertIn("term_key repeats", self._refused(_word(1), by_game))
+
+    def test_an_app_id_row_and_a_game_id_row_for_one_game_collide_on_a_spelling(self):
+        by_game = _word(2, game_id=1, term="Word1", term_key="other")
+        del by_game["app_id"]
+        self.assertIn("used twice", self._refused(_word(1), by_game))
+
+    def test_the_same_key_for_two_different_games_is_fine(self):
+        other = _word(2, game_id=7)
+        del other["app_id"]
+        self._write("glossary/a.json", [_word(1, term_key="x", term="x"), {**other, "term_key": "x", "term": "x"}])
+        self.assertEqual(len(self._seed().execute("SELECT * FROM glossary_terms").fetchall()), 2)
+
+
 if __name__ == "__main__":
     unittest.main()

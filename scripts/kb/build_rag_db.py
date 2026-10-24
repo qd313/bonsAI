@@ -447,18 +447,51 @@ def load_glossary_rows() -> list[Any]:
     return [row for _, row in _glossary_rows_with_origin()]
 
 
+def _resolve_glossary_game(
+    row: dict, app_ids: dict[str, int], library_ids: set[int]
+) -> tuple[int | None, str | None]:
+    """The library game a word belongs to, or the reason it names none.
+
+    A word names its game by ``app_id`` (a Steam id) or by ``game_id`` (the library's own id, for
+    the games with no Steam id). One of the two is required; if both are given they must agree.
+    """
+    app_id = str(row.get("app_id") or "").strip()
+    raw_game_id = row.get("game_id")
+    by_app = app_ids.get(app_id) if app_id else None
+    if app_id and by_app is None:
+        return None, f"no game has app_id {app_id!r}"
+    by_id = None
+    if raw_game_id is not None and str(raw_game_id).strip() != "":
+        try:
+            by_id = int(str(raw_game_id).strip())
+        except ValueError:
+            return None, f"game_id {raw_game_id!r} is not a number"
+        if by_id not in library_ids:
+            return None, f"no game has game_id {by_id}"
+    if by_app is None and by_id is None:
+        return None, "needs an app_id or a game_id"
+    if by_app is not None and by_id is not None and by_app != by_id:
+        return None, f"app_id {app_id!r} and game_id {by_id} name different games"
+    return (by_app if by_app is not None else by_id), None
+
+
 def _glossary_row_problems(
-    rows: list[Any], game_ids: dict[str, int], origins: list[str] | None = None
+    rows: list[Any],
+    game_ids: dict[str, int],
+    origins: list[str] | None = None,
+    library_ids: set[int] | None = None,
 ) -> list[str]:
     """Reasons the glossary file cannot be built; empty when every row is fine.
 
     The matcher on the screen keeps the first of two words with one spelling and silently
     skips the second, so a repeat is refused here rather than lost there.
     """
+    if library_ids is None:
+        library_ids = set(game_ids.values())
     problems: list[str] = []
     seen_ids: set[int] = set()
-    seen_keys: set[tuple[str, str]] = set()
-    seen_spellings: set[tuple[str, str]] = set()
+    seen_keys: set[tuple[int | None, str]] = set()
+    seen_spellings: set[tuple[int | None, str]] = set()
     for index, row in enumerate(rows):
         label = f"row {index + 1}"
         if origins:
@@ -467,9 +500,11 @@ def _glossary_row_problems(
             problems.append(f"{label} is not an object")
             continue
         label = f"{label} ({row.get('term_key') or row.get('term') or '?'})"
-        app_id = str(row.get("app_id") or "").strip()
-        if app_id not in game_ids:
-            problems.append(f"{label}: no game has app_id {app_id!r}")
+        # Repeat checks key on the resolved library game, so an app_id row and a game_id row
+        # for one game still collide.
+        game, game_problem = _resolve_glossary_game(row, game_ids, library_ids)
+        if game_problem:
+            problems.append(f"{label}: {game_problem}")
         for field in ("term_key", "term", "peek", "full_text"):
             if not str(row.get(field) or "").strip():
                 problems.append(f"{label}: {field} is empty")
@@ -485,12 +520,12 @@ def _glossary_row_problems(
             if term_id in seen_ids:
                 problems.append(f"{label}: term_id {term_id} repeats")
             seen_ids.add(term_id)
-        key = (app_id, str(row.get("term_key") or "").strip())
+        key = (game, str(row.get("term_key") or "").strip())
         if key in seen_keys:
             problems.append(f"{label}: term_key repeats for this game")
         seen_keys.add(key)
         for spelling in [str(row.get("term") or ""), *alt_forms]:
-            spelling_key = (app_id, spelling.strip().lower())
+            spelling_key = (game, spelling.strip().lower())
             if spelling.strip() and spelling_key in seen_spellings:
                 problems.append(f"{label}: the spelling {spelling!r} is used twice for this game")
             seen_spellings.add(spelling_key)
@@ -513,7 +548,8 @@ def _seed_glossary_terms(conn: sqlite3.Connection) -> int:
         str(app_id): int(game_id)
         for game_id, app_id in conn.execute("SELECT game_id, app_id FROM games WHERE app_id IS NOT NULL")
     }
-    problems = _glossary_row_problems(rows, game_ids, origins)
+    library_ids = {int(g) for (g,) in conn.execute("SELECT game_id FROM games")}
+    problems = _glossary_row_problems(rows, game_ids, origins, library_ids)
     if problems:
         raise SystemExit("glossary: " + "; ".join(problems))
     conn.executemany(
@@ -522,7 +558,7 @@ def _seed_glossary_terms(conn: sqlite3.Connection) -> int:
         [
             (
                 int(r["term_id"]),
-                game_ids[str(r["app_id"]).strip()],
+                _resolve_glossary_game(r, game_ids, library_ids)[0],
                 str(r["term_key"]).strip(),
                 str(r["term"]).strip(),
                 json.dumps(r.get("alt_forms") or [], ensure_ascii=False),

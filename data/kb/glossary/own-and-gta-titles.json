@@ -70,5 +70,95 @@
     "alt_forms": ["Wallmasters"],
     "peek": "A giant hand that drops from the ceiling and carries you back to the dungeon entrance.",
     "full_text": "The Wallmaster is slow and fragile once landed, so it only threatens you while you are standing still. Watch for the shadow spreading on the floor around you, step out of it, then kill it before it climbs back up."
+  },
+  {
+    "term_id": 2100,
+    "app_id": "1145360",
+    "term_key": "boons",
+    "term": "Boons",
+    "alt_forms": ["Boon"],
+    "peek": "Powers given by the gods that last for one run.",
+    "full_text": "Boons come from gods and last one run. Taking one boon from every god who offers is how runs end up with nothing that stacks."
+  },
+  {
+    "term_id": 2101,
+    "app_id": "1145360",
+    "term_key": "duo-boons",
+    "term": "Duo boons",
+    "alt_forms": ["Duo boon"],
+    "peek": "A combined boon that needs two specific gods' boons in the right slots.",
+    "full_text": "A duo boon needs two specific gods' boons already in the right slots, so you cannot aim at one directly. You pick a god early, keep taking their boons, and the duo becomes possible."
+  },
+  {
+    "term_id": 2102,
+    "app_id": "1145360",
+    "term_key": "mirror-of-night",
+    "term": "Mirror of Night",
+    "alt_forms": [],
+    "peek": "The permanent upgrades, bought with Darkness in your room.",
+    "full_text": "The Mirror of Night holds the permanent upgrades, bought with Darkness in your room. Each row has two alternatives and you can switch between them for a small cost at any time, so nothing is locked in."
+  },
+  {
+    "term_id": 2103,
+    "app_id": "1145360",
+    "term_key": "death-defiance",
+    "term": "Death Defiance",
+    "alt_forms": [],
+    "peek": "A Mirror upgrade that gives free revives during a run.",
+    "full_text": "Death Defiance is the Mirror of Night upgrade that changes early runs most. Each rank is another free revive mid-run."
+  },
+  {
+    "term_id": 2104,
+    "app_id": "1145360",
+    "term_key": "darkness",
+    "term": "Darkness",
+    "alt_forms": [],
+    "peek": "The currency that pays for Mirror of Night upgrades.",
+    "full_text": "Darkness feeds the Mirror, and it is a different currency from keys and gems. Early on, keys and Darkness are both bottlenecks."
+  },
+  {
+    "term_id": 2105,
+    "app_id": "1145360",
+    "term_key": "chthonic-keys",
+    "term": "Chthonic Keys",
+    "alt_forms": ["Chthonic Key"],
+    "peek": "A currency that unlocks new weapons and new Mirror rows.",
+    "full_text": "Chthonic Keys unlock new weapons and new Mirror rows. They are a different currency from Darkness, which feeds the Mirror, and from gems, which pay for the house contractor."
+  },
+  {
+    "term_id": 2106,
+    "app_id": "1145360",
+    "term_key": "gems",
+    "term": "Gems",
+    "alt_forms": [],
+    "peek": "A currency that pays for the house contractor.",
+    "full_text": "Gems pay for the house contractor. Stop taking gems once the contractor jobs you want are bought."
+  },
+  {
+    "term_id": 2107,
+    "app_id": "1145360",
+    "term_key": "weapon-aspects",
+    "term": "Weapon aspects",
+    "alt_forms": ["Weapon aspect"],
+    "peek": "Alternate forms of each weapon, bought with Titan Blood.",
+    "full_text": "Each weapon has alternate aspects, bought with Titan Blood, that change how it plays rather than just its numbers. The last aspect for each weapon unlocks later in the story."
+  },
+  {
+    "term_id": 2108,
+    "app_id": "1145360",
+    "term_key": "heat",
+    "term": "Heat",
+    "alt_forms": [],
+    "peek": "Optional difficulty you add yourself, for rewards that only come from raising it.",
+    "full_text": "Heat is optional difficulty you add yourself, in exchange for rewards that only come from raising it. It comes with the Pact of Punishment, which unlocks once you have beaten the game once."
+  },
+  {
+    "term_id": 2109,
+    "app_id": "1145360",
+    "term_key": "pact-of-punishment",
+    "term": "Pact of Punishment",
+    "alt_forms": [],
+    "peek": "The menu that unlocks optional extra difficulty, called Heat.",
+    "full_text": "The Pact of Punishment unlocks once you have beaten the game once. Heat, the optional difficulty you add yourself, comes with it."
   }
 ]

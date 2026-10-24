@@ -278,6 +278,8 @@ class ChatSlotServiceTests(unittest.TestCase):
             "source_license": "CC-BY-SA-4.0",
             "domain": "strategy",
             "game_title": "Pikmin 2",
+            "section_id": 0,
+            "demoted": False,
         }
         snapshot = {
             "route": "ollama",
@@ -300,6 +302,36 @@ class ChatSlotServiceTests(unittest.TestCase):
         reloaded = load_slot(self.settings_dir, sid)
         assert reloaded is not None
         self.assertEqual(reloaded["turns"][-1]["transparency"]["kb_attached_notes"], [note])
+
+    def test_a_note_keeps_its_library_id_and_its_lowered_mark_through_a_save(self):
+        """Plan 98 lane C: reopening a saved chat must still know which note or tip each entry
+        is, or a thumbs-down on the reopened answer could not reach the right one. A damaged
+        id reads as 0 ("unknown"), never as some other note's number."""
+        slot = create_slot(self.settings_dir, first_question="the spell casting boss")
+        sid = slot["id"]
+        base = {
+            "name": "Soul Master", "kind": "boss", "card": "Hit him from below.",
+            "trust_tier": "wiki_verified", "source_host": "", "source_license": "",
+            "domain": "strategy", "game_title": "Hollow Knight",
+        }
+        snapshot = {
+            "route": "ollama", "success": True, "overflow_skips": [],
+            "context_chips": [{"id": "kb", "rank": 1, "label": "KB", "attached": True}],
+            "kb_attached_notes": [
+                {**base, "section_id": 123, "demoted": True},
+                {**base, "name": "Old shape"},
+                {**base, "name": "Hostile", "section_id": "123", "demoted": "yes"},
+                {**base, "name": "Negative", "section_id": -4, "demoted": 1},
+            ],
+        }
+        append_turn(self.settings_dir, sid, role="assistant", text="ok", request_id=1,
+                    transparency=snapshot)
+        reloaded = load_slot(self.settings_dir, sid)
+        assert reloaded is not None
+        got = [(n["name"], n["section_id"], n["demoted"])
+               for n in reloaded["turns"][-1]["transparency"]["kb_attached_notes"]]
+        self.assertEqual(got, [("Soul Master", 123, True), ("Old shape", 0, False),
+                               ("Hostile", 0, False), ("Negative", 0, False)])
 
     def test_a_spoiler_protected_note_keeps_its_mark_through_a_save(self):
         """Plan 70 (D112 #7): a boss note the question never named is marked protected, and the

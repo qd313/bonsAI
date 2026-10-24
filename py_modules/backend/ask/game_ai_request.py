@@ -704,7 +704,12 @@ async def run_game_ai_request(
         # marks are in, still before ask_ollama is called, so a caller reading it can open the
         # block before the model's first word, as `strategy_spoiler_asked_entity` already does.
         kb_attached_notes: list[dict[str, Any]] = (
-            _parse_kb_attached_notes(kb_text, kb_domain=kb_domain, sources=kb_result.sources)
+            _parse_kb_attached_notes(
+                kb_text,
+                kb_domain=kb_domain,
+                sources=kb_result.sources,
+                attached_ids=kb_result.attached_ids,
+            )
             if kb_result is not None and kb_survived
             else []
         )

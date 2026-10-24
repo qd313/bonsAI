@@ -468,6 +468,26 @@ class KnowledgeRetrievalResult:
     # check whenever it is present, because a game's own name repeated in every one of its own
     # cards can inflate the raw score but not this one.
     best_meaning_without_game_name: Optional[float] = None
+    # Plan 98 lane C: the library's own id of every card that survived the byte budget, in block
+    # order -- {"section_id", "name", "kind"} with kind "tip" or "note". `sources` cannot carry
+    # this (it is built for crediting wikis and has no id), and a note's id and a tip's id are
+    # separate number lines that overlap, so the kind travels with each id. Read by
+    # kb_attached_notes.py to tell the screen which note a thumbs-down is about.
+    attached_ids: list[dict[str, Any]] = field(default_factory=list)
+
+
+def _attached_ids_for(cards: list[KnowledgeCard], sources: list[dict[str, str]]) -> list[dict[str, Any]]:
+    """The id, name and kind of each card that reached the block. `_format_block` keeps a prefix
+    of ``cards`` (it stops at the first card that does not fit), so the kept cards are the first
+    ``len(sources)``."""
+    return [
+        {
+            "section_id": int(card.section_id),
+            "name": card.name,
+            "kind": "tip" if card.section_type == "tip" else "note",
+        }
+        for card in cards[: len(sources)]
+    ]
 
 
 def _budget_for_mode(ask_mode: str) -> tuple[int, int]:
@@ -1232,6 +1252,7 @@ def retrieve_knowledge_context(
             text_block=text_block,
             trust_tier=trust,
             sources=sources,
+            attached_ids=_attached_ids_for(cards, sources),
             notes=resolution,
             retrieval_method=retrieval_method,
             best_meaning=best_meaning,

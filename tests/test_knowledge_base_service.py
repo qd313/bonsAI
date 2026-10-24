@@ -281,6 +281,62 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     self.assertIn("Dreadnought", result.text_block)
     self.assertNotIn("Render Scale", result.text_block)
 
+  def test_every_attached_card_is_listed_with_its_library_id_and_kind(self):
+    """Plan 98 lane C: the ids ride beside the formatted block, one per card that fit the
+    budget, in block order -- the screen needs them to send a thumbs-down to the right note.
+    Read back from the library itself, so a wrong column would show here."""
+    import sqlite3
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    result = retrieve_knowledge_context(
+      settings,
+      ask_mode="strategy",
+      question="how do i beat the dreadnought",
+      app_id="2321470",
+      app_name="Deep Rock Galactic: Survivor",
+      domain="strategy",
+      pc_ip="",
+    )
+    self.assertTrue(result.attached)
+    self.assertEqual(len(result.attached_ids), len(result.sources))
+    conn = sqlite3.connect(str(SEED_DB))
+    try:
+      for entry in result.attached_ids:
+        self.assertEqual(entry["kind"], "note")
+        row = conn.execute(
+          "SELECT name FROM sections WHERE section_id = ?", (entry["section_id"],)
+        ).fetchone()
+        self.assertIsNotNone(row)
+        self.assertEqual(row[0], entry["name"])
+    finally:
+      conn.close()
+
+  def test_a_tip_turn_lists_its_tips_by_pattern_id(self):
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    result = retrieve_knowledge_context(
+      settings,
+      ask_mode="strategy",
+      question="proton crash on launch after update",
+      app_id="",
+      app_name="",
+      domain="compat",
+      pc_ip="",
+    )
+    self.assertTrue(result.attached)
+    self.assertTrue(result.attached_ids)
+    self.assertEqual({e["kind"] for e in result.attached_ids}, {"tip"})
+    conn = _get_connection(str(SEED_DB))
+    for entry in result.attached_ids:
+      row = conn.execute(
+        "SELECT topic FROM compat_patterns WHERE pattern_id = ?", (entry["section_id"],)
+      ).fetchone()
+      self.assertEqual(row["topic"], entry["name"])
+
   def test_a_different_games_own_tip_no_longer_attaches_to_this_game(self):
     """Plan 70 helper P. Measured on the release library, 2026-09-26: a Strategy question
     resolved to Fallout 4 also attached Deep Rock Galactic: Survivor's own Render Scale tip

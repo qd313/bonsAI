@@ -42,6 +42,18 @@ export type KbAttachedNote = {
   domain: string;
   game_title: string;
   /**
+   * Plan 98 lane C: the knowledge library's own id of this note (or, when `kind` is "tip", of
+   * this shared tip). 0 when the back end could not tell. A note's id and a tip's id are two
+   * separate number lines that overlap, so an id means nothing without `kind === "tip"`.
+   * Always sent by this back end; optional only so a build or a saved chat from before it reads.
+   */
+  section_id?: number;
+  /**
+   * Plan 98 lane C: true when the person has ranked this note or tip lower (the demote store
+   * holds one or more thumbs-down for it). Absent on a build before this field existed.
+   */
+  demoted?: boolean;
+  /**
    * D112 #7 (plan 70): a boss or enemy note this turn's question never named, on a turn whose
    * spoilers are covered. The notes block shows a neutral title for it until opened. Absent
    * (never false) on every other note.

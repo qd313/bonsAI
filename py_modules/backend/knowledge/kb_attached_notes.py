@@ -71,8 +71,31 @@ def _kb_note_source_host(url: str) -> str:
     return host.rsplit("@", 1)[-1].split(":", 1)[0]
 
 
+def _match_attached_id(
+    ids: list[dict[str, Any]], used: set[int], position: int, name: str, kind: str
+) -> int:
+    """The library id of the parsed note at ``position``, or 0 when none can be told apart.
+
+    Matched by name and by tip-or-note, with the position only breaking a tie, because a
+    follow-up turn can drop a runner-up note from the text and slide everything after it up.
+    A note's id and a tip's id overlap, so the kind is part of the match, never the number alone.
+    """
+    wanted = "tip" if kind == "tip" else "note"
+    order = ([position] if 0 <= position < len(ids) else []) + [
+        i for i in range(len(ids)) if i != position
+    ]
+    for i in order:
+        if i in used:
+            continue
+        entry = ids[i]
+        if entry.get("name") == name and entry.get("kind") == wanted:
+            used.add(i)
+            return int(entry.get("section_id") or 0)
+    return 0
+
+
 def _parse_kb_attached_notes(
-    text_block: str, *, kb_domain: str, sources: list
+    text_block: str, *, kb_domain: str, sources: list, attached_ids: Optional[list] = None
 ) -> list[dict[str, Any]]:
     """Recover one entry per attached note from the formatted text the model was actually sent.
 
@@ -86,6 +109,10 @@ def _parse_kb_attached_notes(
     the per-card name and text this needs only survive in the formatted string every attached
     card was written into. This lane's file list marks knowledge_base_service.py read-only, so
     that string is read back apart rather than asking that file to expose the list directly.
+
+    ``attached_ids`` (retrieval's `KnowledgeRetrievalResult.attached_ids`) gives each entry its
+    `section_id`; with none given an entry reads 0, "unknown". Every entry also carries
+    `demoted`, False until the demote store says otherwise (kb_demote_store.py).
 
     ``sources`` is still used, just for what it is good for: matching a parsed card back to its
     credited URL and licence when it has one, by the same title string `_format_block` builds
@@ -107,6 +134,8 @@ def _parse_kb_attached_notes(
         if title:
             by_title[title] = entry
     domain = "compat" if kb_domain == "compat" else "strategy"
+    ids = [e for e in (attached_ids or []) if isinstance(e, dict)]
+    used_ids: set[int] = set()
     notes: list[dict[str, Any]] = []
     for i, m in enumerate(matches):
         start = m.end()
@@ -152,6 +181,8 @@ def _parse_kb_attached_notes(
                 "source_license": str(src.get("license") or ""),
                 "domain": domain,
                 "game_title": game_title,
+                "section_id": _match_attached_id(ids, used_ids, len(notes), name, kind),
+                "demoted": False,
             }
         )
     return notes

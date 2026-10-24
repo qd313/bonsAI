@@ -27,6 +27,7 @@ install_pwd_stub()  # so this file also runs on its own on Windows, not only aft
 from backend.ask.game_ai_request import _parse_kb_attached_notes, run_game_ai_request  # noqa: E402
 from backend.knowledge.knowledge_base_service import (
     _COMPAT_GAME_TITLE,
+    _attached_ids_for,
     KnowledgeCard,
     KnowledgeRetrievalResult,
     _format_block,
@@ -789,6 +790,82 @@ class SpoilerBandReadsKbDomainWiringTests(unittest.TestCase):
         chips = result["transparency"]["context_chips"]
         spoiler_chip = next(c for c in chips if c["id"] == "spoiler_risk")
         self.assertEqual(spoiler_chip["label"], "Spoiler risk: low")
+
+
+class AttachedIdsReachTheEntriesTests(unittest.TestCase):
+    """Plan 98 lane C: each attached entry carries the library's own id of its note or tip
+    (`section_id`) and whether the person has ranked it lower (`demoted`), so the screen can
+    send a thumbs-down to the right one. Note ids and tip ids overlap in the real library, so
+    the same number on a note and a tip must stay two separate entries."""
+
+    def test_a_note_and_a_tip_sharing_a_number_each_keep_their_own_id(self):
+        note = _card(section_id=7, name="Broken Vessel")
+        tip = _tip_card(section_id=7, name="Proton log tip")
+        text_block, _trust, sources = _format_block(
+            [note, tip], fallback_text=None, domain="strategy", max_bytes=6_144
+        )
+        ids = _attached_ids_for([note, tip], sources)
+        notes = _parse_kb_attached_notes(
+            text_block, kb_domain="strategy", sources=sources, attached_ids=ids
+        )
+        self.assertEqual([(n["name"], n["section_id"]) for n in notes],
+                         [("Broken Vessel", 7), ("Proton log tip", 7)])
+        self.assertEqual([n["kind"] for n in notes], ["boss", "tip"])
+        self.assertEqual([n["demoted"] for n in notes], [False, False])
+
+    def test_the_ids_follow_the_notes_by_name_when_the_block_lost_one(self):
+        """A follow-up turn can drop a runner-up from the text; the id must not slide onto the
+        note that stayed."""
+        first = _card(section_id=11, name="Broken Vessel")
+        second = _card(section_id=12, name="Ancient Basin", section_type="area")
+        ids = _attached_ids_for([first, second], [{}, {}])
+        text_block, _trust, sources = _format_block(
+            [second], fallback_text=None, domain="strategy", max_bytes=6_144
+        )
+        notes = _parse_kb_attached_notes(
+            text_block, kb_domain="strategy", sources=sources, attached_ids=ids
+        )
+        self.assertEqual([(n["name"], n["section_id"]) for n in notes], [("Ancient Basin", 12)])
+
+    def test_with_no_ids_given_every_entry_reads_unknown_and_not_demoted(self):
+        notes, _sources = _round_trip([_card(section_id=5)])
+        self.assertEqual(notes[0]["section_id"], 0)
+        self.assertEqual(notes[0]["demoted"], False)
+
+    def test_only_cards_that_fit_the_budget_get_an_id(self):
+        cards = [_card(section_id=i, name=f"Boss {i}", card="x" * 400) for i in (1, 2, 3)]
+        _text, _trust, sources = _format_block(
+            cards, fallback_text=None, domain="strategy", max_bytes=900
+        )
+        self.assertLess(len(sources), 3)
+        ids = _attached_ids_for(cards, sources)
+        self.assertEqual([i["section_id"] for i in ids], [1, 2][: len(sources)])
+        self.assertEqual({i["kind"] for i in ids}, {"note"})
+
+    def test_a_tip_card_is_listed_as_a_tip(self):
+        tip = _tip_card(section_id=3)
+        _text, _trust, sources = _format_block(
+            [tip], fallback_text=None, domain="compat", max_bytes=6_144
+        )
+        self.assertEqual(_attached_ids_for([tip], sources),
+                         [{"section_id": 3, "name": "Proton log tip", "kind": "tip"}])
+
+    @patch("backend.ask.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.ask.game_ai_request.should_retrieve_knowledge")
+    def test_the_finished_result_and_the_live_snapshot_carry_the_id(self, mock_should, mock_retrieve):
+        card = _card(section_id=42)
+        result_in = _attached_result(card)
+        result_in.attached_ids = _attached_ids_for([card], result_in.sources)
+        mock_should.return_value = (True, "strategy")
+        mock_retrieve.return_value = result_in
+        plugin = _FakePlugin(_settings())
+        plugin._ollama_result = _ok_result()
+
+        result = _run(plugin, ask_mode="strategy")
+
+        self.assertEqual(result["kb_attached_notes"][0]["section_id"], 42)
+        self.assertEqual(result["transparency"]["kb_attached_notes"][0]["section_id"], 42)
+        self.assertEqual(plugin._partial_stream_snapshot["kb_attached_notes"][0]["section_id"], 42)
 
 
 if __name__ == "__main__":

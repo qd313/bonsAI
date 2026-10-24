@@ -148,6 +148,13 @@ def _normalize_attachment_refs(raw: Any) -> list[dict[str, str]]:
     return out
 
 
+def _normalize_note_section_id(raw: Any) -> int:
+    """A note or tip id off disk: a whole number from 1 up, anything else 0 ("unknown")."""
+    if isinstance(raw, bool) or not isinstance(raw, int):
+        return 0
+    return raw if 0 < raw < 10_000_000 else 0
+
+
 def _normalize_kb_attached_note(raw: Any) -> dict[str, Any] | None:
     """One note for the "From the notes" block, sanitized. ``name`` and non-empty ``card`` are
     both required -- a note with either missing is not something the block could ever show, so
@@ -167,6 +174,10 @@ def _normalize_kb_attached_note(raw: Any) -> dict[str, Any] | None:
         "source_license": str(raw.get("source_license") or "")[:MAX_KB_NOTE_SOURCE_LICENSE_LEN],
         "domain": str(raw.get("domain") or "")[:20],
         "game_title": str(raw.get("game_title") or "")[:MAX_KB_NOTE_GAME_TITLE_LEN],
+        # Plan 98 lane C: the library's id of the note or tip (0 when unknown) and whether the
+        # person has ranked it lower, so a reopened chat can still send a thumbs-down to it.
+        "section_id": _normalize_note_section_id(raw.get("section_id")),
+        "demoted": raw.get("demoted") is True,
         # D112 #7 (plan 70): a protected boss note's name stays hidden on reopening a saved chat.
         # Kept only when truly true, so every other note keeps the shape it was saved in.
         **({"spoiler_protected": True} if raw.get("spoiler_protected") is True else {}),

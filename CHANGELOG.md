@@ -68,6 +68,11 @@ All notable changes to this project are documented in this file.
 ### Added
 
 - **Tap-to-define words for every game in the library.** Underlined words in answers now exist for all of the library's games, not just a few. They arrive with the next library update.
+- **A "How much to hide" setting for story spoilers.** Settings now has a row under Story spoilers: Hide more, Default or Hide less. Hide more also covers bosses, endings and chapters in every game; Hide less covers nothing; Default is the rule as it was. Naming a boss still unlocks it.
+- **A thumbs-down that stops a wrong note coming back.** "Not really" now offers Wrong tip, Outdated and Wrong edition when the answer used a note, and asks which note it was when there were two or three. That note ranks last next time, and after three marks it stops coming back. Undo takes the mark back. Show details tags a lowered note "ranked lower by you".
+- **A route look for the strategy checklist.** A checklist of three or more steps is drawn as a line of dots: the next step open, later steps covered, and A shows the next one.
+- **A warning when the notes are about something else.** The "No close match" line now shows whenever the thing a question names is in none of the attached notes, even with a game running, and it no longer vanishes when the answer echoes a note.
+- **The test-library button's hint is right.** It now says it installs the library built with this plugin, for testing, and that players download the library from the Ollama tab.
 
 ## [0.6.0] - 2026-10-23
 

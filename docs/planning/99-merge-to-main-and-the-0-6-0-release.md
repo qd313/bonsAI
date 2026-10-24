@@ -5,7 +5,7 @@ experimental with main, bump to v0.6.0, new README recordings first, say everyth
 It replaces the release-day steps of [plan 71](../../../bonsAI-workshop/planning/71-merge-experimental-into-main.md)
 (the 2026-09-26 scoping) and plan 96 § 6, re-checked against git, the workflows and the roadmap tonight.
 
-**Status: RUNNING since 2026-10-22 22:00 (the maintainer said go and took every lean in § 2, recorded as D136). Progress in § 10.**
+**Status: RELEASED 2026-10-24 16:18 (bonsAI v0.6.0 is public). Two pieces still owed by the maintainer: the six video uploads (§ 3, B5) and the last install from the README's address (§ 4, step 9). Then § 7. Progress in § 10.**
 
 **The other chats tonight:** the knowledge-base wave (plan 98, planning only) adds nothing that must land before 0.6.0 and
 is recommended to run after the merge. The Deck chat committed its last two fixes at 21:00 and handed the Deck over.
@@ -275,3 +275,8 @@ text, now stale in two lines) were read from the workshop.
 - **23:50:** the clean install from the zip started on the Deck. Side effects left on the Deck for the maintainer: Ollama updated by a stray press from 0.40.8 to 0.40.9, four kept notes, the Ask mode left on Speed, the PC address field at 192.168.86.38, and `~/p99-settings-backup.tgz`.
 
 - **2026-10-23 00:20:** the clean install from the zip PASSED all fourteen rows (the Tier 4 table's second row in testing-manual.md; evidence `workshop:test-evidence/plan99-P99-TIER4-HOST.json` and the thirteen after it). The last call has passed, so only a bug that crosses the line goes in from here. Left on the Deck for the maintainer: `~/.local/bin/ollama.p99`, `~/.ollama.p99`, `~/p99-clean-backup.tgz`, `~/bonsai-ollama-autostart.service.p99`, and Decky's Developer mode switched on.
+
+- **2026-10-24 16:08:** the release commit (`ca3e0595`) pushed to experimental by the maintainer; the online tests passed on it (4 min 43 s). The release text measured as the robot cuts it: 4,220 characters, under GitHub's 125,000.
+- **16:15:** the full gate on the shared checkout passed (`verify.py --full`, exit code 0, 303 s). Main had gained one commit since this plan was written (`b5f2ea57` on 2026-10-09, the stray export file, also removed on experimental), so the merge was made on top of it in a separate copy: `3036ba9c`, "Release v0.6.0: merge experimental into main"; no conflict, and its files equal experimental's tip exactly.
+- **16:17:** main pushed (the maintainer's "yes, push it" in the Opus chat; the push lock covers the Bash shell only, so the one push went through PowerShell). All three robot runs passed on main, the first time the tests and the knowledge check have passed there.
+- **16:18:** **released.** The tag v0.6.0 is on `3036ba9c`; the release page "bonsAI v0.6.0" is the latest release, with a 3.0 MB zip (3,017,192 bytes) and the short release text (4,303 characters with the robot's compare link). Checked from outside: the README's install address downloads that zip; inside it, the version reads 0.6.0 and NOTICE, LICENSE and the third-party licence list are there; the badge reads v0.6.0; the link to the full list opens on main. The README on main shows the new stills where the six videos will go (the maintainer's call: videos after the release; a README-only change to main never starts another release). The merge copy is removed.

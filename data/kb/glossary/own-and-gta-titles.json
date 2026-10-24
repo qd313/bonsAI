@@ -160,5 +160,95 @@
     "alt_forms": [],
     "peek": "The menu that unlocks optional extra difficulty, called Heat.",
     "full_text": "The Pact of Punishment unlocks once you have beaten the game once. Heat, the optional difficulty you add yourself, comes with it."
+  },
+  {
+    "term_id": 2200,
+    "app_id": "1174180",
+    "term_key": "honor",
+    "term": "Honor",
+    "alt_forms": ["Honour"],
+    "peek": "A slider that moves with how you treat people and animals.",
+    "full_text": "Honor moves on small things done often, like greeting people, helping strangers on the road, paying bounties instead of running, and donating to camp. It falls for robbery, killing civilians and animals you do not use, but it is a slider, not a switch, so one bad day does not undo a good chapter."
+  },
+  {
+    "term_id": 2201,
+    "app_id": "1174180",
+    "term_key": "dead-eye",
+    "term": "Dead Eye",
+    "alt_forms": ["Deadeye"],
+    "peek": "A time-slowing skill that runs on a meter you refill.",
+    "full_text": "Dead Eye slows time and refills from tonics, food and clean kills. Early on it auto-marks, while later story upgrades let you paint targets yourself and eventually see weak points. Use it for the shot you cannot line up rather than for every fight, because the meter is a resource and not a mode."
+  },
+  {
+    "term_id": 2202,
+    "app_id": "1174180",
+    "term_key": "cores",
+    "term": "Cores",
+    "alt_forms": ["Core"],
+    "peek": "The reserve behind each of health, stamina and Dead Eye.",
+    "full_text": "Each of health, stamina and Dead Eye has an inner core and a ring around it. The ring is the meter you spend and the core is the reserve that refills it, and the core drains from hunger, cold and injury. Eat and sleep to keep cores up, because a dead core means everything drains faster."
+  },
+  {
+    "term_id": 2203,
+    "app_id": "1174180",
+    "term_key": "horse-bonding",
+    "term": "Horse bonding",
+    "alt_forms": ["Bond level", "Horse bond"],
+    "peek": "A per-horse level that adds stamina, handling and new moves.",
+    "full_text": "Bond level is what makes a horse feel different, and riding, feeding, brushing, patting and calming it during danger all raise it. Each level adds stamina, better handling, and eventually manoeuvres like the rear and the drift. Bond is per horse, so switching mounts starts again."
+  },
+  {
+    "term_id": 2204,
+    "app_id": "1174180",
+    "term_key": "perfect-pelts",
+    "term": "Perfect pelts",
+    "alt_forms": ["Perfect pelt"],
+    "peek": "A top-quality skin that needs a three-star animal and a clean kill.",
+    "full_text": "A perfect pelt needs a three-star animal and a clean kill with the right weapon for its size. Small animals want the varmint rifle, medium ones want a bow with improved arrows, and big ones want a rifle to the head or heart."
+  },
+  {
+    "term_id": 2205,
+    "app_id": "1174180",
+    "term_key": "bounty",
+    "term": "Bounty",
+    "alt_forms": ["Bounties"],
+    "peek": "A price on your head that stays in the region where you earned it.",
+    "full_text": "A bounty stays on the region it was earned in and grows with witnesses. Leave it and lawmen and bounty hunters keep coming, so pay it at any post office, and wearing a mask during a crime keeps the bounty smaller."
+  },
+  {
+    "term_id": 2206,
+    "app_id": "1174180",
+    "term_key": "camp-donations",
+    "term": "Camp donations",
+    "alt_forms": ["Camp donation"],
+    "peek": "Money put in the camp ledger that pays for camp upgrades.",
+    "full_text": "The camp ledger is where camp upgrades come from: better provisions, more ammo and food to take for free, and faster fast travel from camp once bought. Contributing also keeps morale up."
+  },
+  {
+    "term_id": 2207,
+    "app_id": "1174180",
+    "term_key": "legendary-animals",
+    "term": "Legendary animals",
+    "alt_forms": ["Legendary animal"],
+    "peek": "One rare animal per species, each in a fixed place, with its own pelt.",
+    "full_text": "There is one legendary animal per species, each in a fixed place on the map, and each drops a pelt no ordinary animal gives. The Trapper is the only person who turns those pelts into clothing, and legendary animals absorb far more punishment than a normal animal of the same size."
+  },
+  {
+    "term_id": 2208,
+    "app_id": "1174180",
+    "term_key": "satchel-upgrades",
+    "term": "Satchel upgrades",
+    "alt_forms": ["Satchel upgrade"],
+    "peek": "Camp-crafted upgrades that raise how much of everything you can carry.",
+    "full_text": "Satchel upgrades are crafted at camp once you bring the pelts and the camp can afford it, and each tier raises how much of everything you can carry. The last one, the Legend of the East satchel, wants perfect pelts from a long list of animals."
+  },
+  {
+    "term_id": 2209,
+    "app_id": "1174180",
+    "term_key": "tonics",
+    "term": "Tonics",
+    "alt_forms": ["Tonic"],
+    "peek": "Items that refill a bar, and the gold-labelled ones also fortify the core.",
+    "full_text": "Tonics refill the bar of health, stamina or Dead Eye, and the gold-labelled ones also fortify the core so it drains more slowly for a while. Carry a few tonics and a few provisions before a long ride or a fight."
   }
 ]

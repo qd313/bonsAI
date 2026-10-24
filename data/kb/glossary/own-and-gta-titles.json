@@ -1,0 +1,74 @@
+[
+  {
+    "term_id": 2000,
+    "game_id": 1,
+    "term_key": "gold-skulltulas",
+    "term": "Gold Skulltulas",
+    "alt_forms": ["Gold Skulltula", "Skulltula", "Skulltulas", "Skulltula tokens"],
+    "peek": "Hidden tokens, a hundred in the game, that a cursed family in Kakariko pays out for.",
+    "full_text": "There are a hundred Gold Skulltula tokens across the game, and the cursed family in Kakariko pays out every ten. Ten and twenty are quick and worth doing on the way past, while the full hundred is a completionist job and not something to detour for mid-playthrough."
+  },
+  {
+    "term_id": 2001,
+    "game_id": 1,
+    "term_key": "lens-of-truth",
+    "term": "Lens of Truth",
+    "alt_forms": [],
+    "peek": "An item that shows invisible floors, walls and chests, at the cost of magic.",
+    "full_text": "Equip the Lens of Truth and the invisible floors, walls and chests in the Shadow Temple all appear. It drains magic while held, so use it in bursts rather than leaving it on, and green potions and the fairies in the temple keep it running."
+  },
+  {
+    "term_id": 2002,
+    "game_id": 1,
+    "term_key": "bottles",
+    "term": "Bottles",
+    "alt_forms": ["Bottle"],
+    "peek": "Four bottles exist, and what you keep in them matters more than most items.",
+    "full_text": "A caught fairy in a bottle revives you the moment you die, Blue Fire from the Ice Cavern melts red ice, and bugs dig up the soil patches hiding Gold Skulltulas. Never enter a dungeon with all four empty, since a fairy is the cheapest extra life in the game."
+  },
+  {
+    "term_id": 2003,
+    "game_id": 1,
+    "term_key": "iron-boots",
+    "term": "Iron Boots",
+    "alt_forms": [],
+    "peek": "Boots that sink you to the bottom of any water and hold you against wind.",
+    "full_text": "The Iron Boots from the Ice Cavern sink you to the bottom of any water and hold you against wind. They are needed to reach and move around the Water Temple and to push through the gusts in the Shadow Temple, and the Zora Tunic is what lets you breathe down there."
+  },
+  {
+    "term_id": 2004,
+    "game_id": 1,
+    "term_key": "hookshot",
+    "term": "Hookshot",
+    "alt_forms": ["Longshot", "Hookshot and Longshot"],
+    "peek": "A grappling item that pulls you to wood, ladders and marked targets.",
+    "full_text": "The Forest Temple gives the Hookshot, and the Water Temple upgrades it to the Longshot, which reaches twice as far. It pulls you to wood, ladders and marked targets, and drags distant chests, items and Skulltula tokens to you. When a ledge looks impossible, look for wood or a target rather than a jump."
+  },
+  {
+    "term_id": 2005,
+    "game_id": 1,
+    "term_key": "suns-song",
+    "term": "Sun's Song",
+    "alt_forms": ["Suns Song"],
+    "peek": "A song that stops ReDeads and Gibdos where they stand.",
+    "full_text": "The Sun's Song stops a ReDead or Gibdo where it stands, leaving free hits or a clear walk past. Play it as one turns toward you, not after the scream lands."
+  },
+  {
+    "term_id": 2006,
+    "game_id": 1,
+    "term_key": "redead",
+    "term": "ReDead",
+    "alt_forms": ["ReDeads", "Gibdo", "Gibdos", "ReDead and Gibdo"],
+    "peek": "Corpses whose scream freezes you in place before they grab on.",
+    "full_text": "A ReDead is a corpse whose scream freezes you in place before it grabs on and drains hearts, and the bandaged Gibdos hit hardest. Mash buttons to shake off a grab."
+  },
+  {
+    "term_id": 2007,
+    "game_id": 1,
+    "term_key": "wallmaster",
+    "term": "Wallmaster",
+    "alt_forms": ["Wallmasters"],
+    "peek": "A giant hand that drops from the ceiling and carries you back to the dungeon entrance.",
+    "full_text": "The Wallmaster is slow and fragile once landed, so it only threatens you while you are standing still. Watch for the shadow spreading on the floor around you, step out of it, then kill it before it climbs back up."
+  }
+]

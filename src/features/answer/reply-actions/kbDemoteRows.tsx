@@ -49,7 +49,8 @@
  *
  * The ring is handed on after a press removes the stop that held it (handRingOnWhenGone.ts): onto the
  * column's first note or onto Undo after a reason, onto Undo after a note, back onto the reason after B or
- * Undo.
+ * Undo. When the call fails or times out, the marked line goes and the reasons come back with the problem in
+ * words; Undo held the ring, so the ring goes back onto the reason that was picked.
  */
 import React from "react";
 import { Focusable } from "@decky/ui";
@@ -61,7 +62,7 @@ import {
   isDeckDirectionRightEvent,
   isDeckDirectionUpEvent,
 } from "../../../shared/dpad/focusNavigation";
-import { elementHasFocus, elementHasGamepadFocus } from "../../../shared/dpad/uiDocument";
+import { elementHasFocus, elementHasGamepadFocus, getUiDocument, uiGamepadFocusElement } from "../../../shared/dpad/uiDocument";
 import { pressThenHandRingOn } from "../../../shared/dpad/handRingOnWhenGone";
 import { registerReplyStop, replyStopNavRef } from "../../../shared/dpad/replyStopRegistry";
 import { formatDeckyRpcError } from "../../../shared/deckyCall";
@@ -194,6 +195,18 @@ function focusReason(replyKey: string, index: number): boolean {
   const parts = partsFor(replyKey);
   const i = Math.min(Math.max(index, 0), DEMOTE_REASONS.length - 1);
   return landOn(parts.reasonNavs[i], parts.reasons[i]);
+}
+
+/**
+ * Undo went away while it held the ring (a call that failed or timed out puts the reasons back): once the
+ * redraw is in, and only if nothing else picked the ring up, put it on the reason Undo was for.
+ */
+function ringBackToReasonIfLost(replyKey: string, index: number): void {
+  window.setTimeout(() => {
+    const owner = uiGamepadFocusElement();
+    if (owner && owner.isConnected && owner !== getUiDocument().body) return;
+    focusReason(replyKey, index);
+  }, 0);
 }
 
 function focusUndo(replyKey: string): boolean {
@@ -358,7 +371,9 @@ export function renderDemoteRows(a: DemoteRowsArgs): React.ReactElement {
             onPress: undo,
             disabled,
             elRef: (el) => {
+              const was = parts.undo;
               parts.undo = el;
+              if (!el && was && elementHasGamepadFocus(was)) ringBackToReasonIfLost(replyKey, reasonIndex(state.reason));
               /* While it shows, Undo is the stop a Down from the answer's end lands on (the reasons are gone). */
               registerReplyStop("reason-chips", el);
             },
@@ -398,7 +413,13 @@ export function renderDemoteRows(a: DemoteRowsArgs): React.ReactElement {
                 left: hold,
                 right: hold,
               },
-              onPress: () => pressThenHandRingOn(parts.which[i], () => view.pick(p.picked), () => void focusUndo(replyKey)),
+              onPress: () =>
+                pressThenHandRingOn(
+                  parts.which[i],
+                  () => view.pick(p.picked),
+                  /* A call that failed at once never drew Undo: the reasons are back, so the reason picked. */
+                  () => void (focusUndo(replyKey) || focusReason(replyKey, reasonIndex(state.reason))),
+                ),
               onBack: () => back(parts.which[i] ?? null),
               disabled,
               elRef: (el) => {
@@ -420,7 +441,7 @@ export function renderDemoteRows(a: DemoteRowsArgs): React.ReactElement {
     pressThenHandRingOn(
       parts.reasons[index],
       () => view.choose(reason, notes),
-      () => void (notes.length > 1 ? focusWhich(replyKey, 0) : focusUndo(replyKey)),
+      () => void (notes.length > 1 ? focusWhich(replyKey, 0) : focusUndo(replyKey) || focusReason(replyKey, index)),
     );
   return (
     <>

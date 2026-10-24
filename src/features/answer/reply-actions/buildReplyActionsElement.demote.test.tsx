@@ -8,7 +8,9 @@
  *          puts the reasons back with the ring on Wrong tip. The three reasons are absent on an answer that used
  *          no note. On an answer that used two notes, Wrong tip opens "Which note was it?" with the ring on the
  *          first note; Down walks the names and "Both of them"; B goes back to the reasons with the ring on Wrong
- *          tip; A on a name marks that note alone and lands on Undo; no stop is visited twice on the way.
+ *          tip; A on a name marks that note alone and lands on Undo; no stop is visited twice on the way. When the
+ *          call fails or times out, the reasons come back with the problem in words and the ring on the reason
+ *          that was picked.
  * Used for: buildReplyActionsElement.tsx, kbDemoteRows.tsx, useReplyDemote.ts, useReplyFeedbackChips.ts.
  * Does not: Prove any of it on the Deck, or call the real plugin method (a stand-in records each call). Steam's
  *           own step for a press no handler claims is modelled here as the stop drawn next in that direction
@@ -108,10 +110,18 @@ const ROWS: Array<[string, Box]> = [
   ["details", [716, 732]],
 ];
 
-function mount(rule: SteamScrollRule | undefined, steamTopMargin: boolean, notes: KbAttachedNote[]) {
+/** How the stand-in plugin call answers: kept, refused after a wait (a timeout's answer), or thrown at once. */
+type Answer = "ok" | "refused-later" | "thrown";
+
+function mount(rule: SteamScrollRule | undefined, steamTopMargin: boolean, notes: KbAttachedNote[], answer: Answer = "ok") {
   const calls: Array<[number, string, string, boolean]> = [];
   const demoteNote: DemoteNoteFn = async (id, kind, reason, undo) => {
     calls.push([id, kind, reason, undo]);
+    if (answer === "thrown") throw new Error("timed out");
+    if (answer === "refused-later") {
+      await new Promise((r) => setTimeout(r, 60));
+      return { ok: false };
+    }
     return { ok: true, downs: undo ? 0 : 1, excluded: false };
   };
   const a = deckAnswer([[100, 150], [158, 200]], 0, rule, { steamTopMargin });
@@ -227,7 +237,12 @@ function mount(rule: SteamScrollRule | undefined, steamTopMargin: boolean, notes
     a.settle();
     return heard;
   };
-  return { a, holder, calls, press, pressA, pressB, nameOf, visible, ring: () => nameOf(document.activeElement) };
+  /** The rows were redrawn without a press (a slow answer arrived): draw the boxes again and let Steam's glide run. */
+  const redraw = () => {
+    layout();
+    a.settle();
+  };
+  return { a, holder, calls, press, pressA, pressB, redraw, nameOf, visible, ring: () => nameOf(document.activeElement) };
 }
 
 describe("Not really, then Wrong tip, on an answer that used one note", () => {
@@ -463,5 +478,35 @@ describe("on an answer that used two or three notes, Which note was it?", () => 
       expect(nav.onMoveLeft!()).toBe(true);
       expect(nav.onMoveRight!()).toBe(true);
     }
+  });
+});
+
+describe("when the call fails or times out, the ring goes back onto the reason that was picked", () => {
+  it.each([
+    ["one note, refused after a wait (Undo had the ring)", 1, "refused-later"],
+    ["one note, thrown at once", 1, "thrown"],
+    ["two notes, a name picked, refused after a wait", 2, "refused-later"],
+    ["two notes, a name picked, thrown at once", 2, "thrown"],
+  ] as Array<[string, number, Answer]>)("%s", async (_name, count, answer) => {
+    const notes = [NOTE(), NOTE({ name: "Lootbug", kind: "enemy", section_id: 77 })].slice(0, count);
+    const m = mount("padded", true, notes, answer);
+    act(() => putSteamRingOn(m.holder.querySelector<HTMLElement>("[aria-label='Mark reply not helpful']")!));
+    await m.pressA();
+    act(() => putSteamRingOn(m.holder.querySelector<HTMLElement>(".bonsai-kb-demote-chip[aria-label='Outdated']")!));
+    await m.pressA();
+    if (count === 2) {
+      expect(m.ring()).toBe("Glyphid Dreadnought");
+      await m.pressA();
+    }
+    /* Let the slow answer arrive and the ring settle. */
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 120));
+    });
+    expect(m.calls).toHaveLength(1);
+    m.redraw();
+    expect(m.holder.querySelector(".bonsai-kb-demote-undo")).toBeNull();
+    expect(m.holder.querySelector(".bonsai-kb-demote-error")?.textContent).toMatch(/^Could not mark the note: /);
+    expect(m.ring()).toBe("Outdated");
+    expect(m.visible(document.activeElement)).toBe(true);
   });
 });

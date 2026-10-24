@@ -594,6 +594,8 @@ any measured time is over budget, because it means the plain word search let the
 search run when it should not have (the same evening's reading caught this happening on two of
 three Speed questions, at 1140.40 and 943.70 milliseconds).
 
+**Measured again 2026-10-24 (plan 98 block K0, release build `f0b72dae7b65`, the Deck's own screen and AI, Deep Rock Galactic: Survivor running):** three Strategy questions took 839 milliseconds (the first, cold), 52 and 47, all inside the 1.0 second budget (`workshop:test-evidence/plan98-P98-KB-TIME-BUDGET.json`). Speed mode ran no meaning search on any of the three.
+
 **A one-off warm-up does not explain the slow readings away.** On the maintainer's PC, the first
 search after a quiet spell is slow and every one after it is fast: 1.47 seconds, then 0.05 seconds.
 Neither Deck reading looks like that. In the first, all three questions came back within 16

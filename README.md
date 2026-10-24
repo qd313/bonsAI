@@ -295,7 +295,8 @@ about a game it has notes for then use them, offline.
 
 ## Help build it
 
-Want to help, or build it yourself? Start with the [development guide](docs/development.md).
+Want to help? [How to help](docs/how-to-help.md) covers reporting a bug and suggesting a game for
+the knowledge library. To build it yourself, start with the [development guide](docs/development.md).
 
 ## License
 

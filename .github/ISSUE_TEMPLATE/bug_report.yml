@@ -1,0 +1,75 @@
+name: Bug report
+description: Something in bonsAI did not work the way you expected
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for telling us. A few plain answers are enough. Please look at the
+        [known problems](https://github.com/qd313/bonsAI/blob/main/docs/guide.md#known-problems)
+        first, in case yours is already listed.
+  - type: textarea
+    id: what-you-did
+    attributes:
+      label: What did you do?
+      description: The steps, in order, before it went wrong. Say which game was running, if any.
+      placeholder: "1. Opened bonsAI in the Quick Access Menu. 2. Typed a question about ... 3. Pressed Ask."
+    validations:
+      required: true
+  - type: textarea
+    id: what-you-saw
+    attributes:
+      label: What did you see?
+      description: What happened on the screen, or what the answer said. A screenshot helps if you can add one.
+    validations:
+      required: true
+  - type: textarea
+    id: what-you-expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: bonsAI version
+      description: Open the About tab. The version is on the title line, after "About bonsAI".
+      placeholder: "0.6.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: channel
+    attributes:
+      label: SteamOS channel
+      description: In Steam, open Settings, then System, to see the update channel.
+      options:
+        - Stable
+        - Beta
+        - Preview
+        - I don't know
+    validations:
+      required: true
+  - type: dropdown
+    id: where-ai-runs
+    attributes:
+      label: Where does the AI run?
+      description: On the Ollama tab, "Run AI on this Deck" is on if it runs on the Deck.
+      options:
+        - On the Steam Deck itself
+        - On a PC on my home network
+        - I don't know
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Plugin log (only if you can get it)
+      description: |
+        bonsAI has no button for this. The plugin's log files are on the Deck in `~/homebrew/logs/bonsAI/`
+        (open them from Desktop Mode's file manager, or from a terminal). If that is too much, leave this
+        empty. We would rather have your report without it than not have it. Look through the log first:
+        it can hold your game and model names, so remove anything you don't want to share.
+      render: text
+    validations:
+      required: false

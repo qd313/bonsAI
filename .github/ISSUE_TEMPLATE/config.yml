@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Known problems
+    url: https://github.com/qd313/bonsAI/blob/main/docs/guide.md#known-problems
+    about: Check whether the thing you found is already listed.

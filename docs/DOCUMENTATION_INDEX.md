@@ -6,6 +6,7 @@ Short guide to markdown under `docs/`. Repo root **[README.md](../README.md)** s
 |-----|----------|------------|
 | [mcp-setup.md](mcp-setup.md) | Contributors / agents | MCP servers — bonsai knowledge + Decky Plugin Studio |
 | [development.md](development.md) | Contributors | Deck-first setup, build/deploy, architecture, hotspots |
+| [how-to-help.md](how-to-help.md) | Players | How to report a bug, suggest a game for the knowledge library, and the licence |
 | [troubleshooting.md](troubleshooting.md) | Power users | GPU, network, vision, permissions, QAM, deploy edge cases |
 | [roadmap.md](roadmap.md) | Planning | Active index — Bugs, Features, Verify and Done for v0.6.0. Entries are kept short on purpose |
 | [roadmap-kb.md](roadmap-kb.md) | Planning | The knowledge-base part of the roadmap — bugs, Deck checks owed, plans (long notes: [roadmap-kb-details.md](roadmap-kb-details.md)) |

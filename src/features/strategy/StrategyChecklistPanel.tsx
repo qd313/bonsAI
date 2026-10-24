@@ -11,7 +11,8 @@
  * A to show". A on a covered step shows it and does nothing else; A on an open step ticks it as before.
  * A covered step is the same Button in the same wrapper with the same nav node, redrawn in place when
  * shown, so the D-pad walk and Steam's ring are what they were. Which steps are covered:
- * strategyChecklist.ts; the steps shown by hand are kept by strategyChecklistPersistence.ts.
+ * strategyChecklist.ts; the steps shown by hand are kept by strategyChecklistPersistence.ts. An open step
+ * whose own words carry "Needs: ..." draws that as a small line under its words; no other step does.
  * Does not: Parse strategy branches from model output — see strategyChecklist utils and backend parser.
  */
 import { useCallback, useEffect, useState, type CSSProperties } from "react";
@@ -22,7 +23,7 @@ import { deckNavHandlers } from "../../shared/dpad/liveTurnFocusGraph";
 import { setStrategyChecklistStepCount, strategyChecklistStepNav } from "../../shared/dpad/strategyChecklistNav";
 import { FOCUS_RING_BTN_CLASS } from "../../styles/settingsGlassButton";
 import { textPx } from "../../styles/textPx";
-import { strategyRouteCoveredIds, strategyRouteRevealKey } from "./strategyChecklist";
+import { splitStrategyStepNeeds, strategyRouteCoveredIds, strategyRouteRevealKey } from "./strategyChecklist";
 import { loadStrategyRouteRevealed, saveStrategyRouteRevealed } from "./strategyChecklistPersistence";
 
 type Props = {
@@ -119,6 +120,7 @@ export function StrategyChecklistPanel({
       {checklist.items.map((item, idx) => {
         const checked = checklist.checkedIds.includes(item.id);
         const isCovered = covered.has(item.id);
+        const words = splitStrategyStepNeeds(item.label);
         const isFirst = idx === 0;
         const isLast = idx === checklist.items.length - 1;
         /*
@@ -189,7 +191,15 @@ export function StrategyChecklistPanel({
                 fontWeight: isCovered ? 600 : undefined,
               }}
             >
-              {isCovered ? COVER_WORDS : item.label}
+              {isCovered ? COVER_WORDS : words.text}
+              {!isCovered && words.needs ? (
+                <span
+                  className="bonsai-strategy-checklist-needs"
+                  style={{ display: "block", fontSize: textPx(11), color: checked ? "#7f93a8" : "#a8b8c8", lineHeight: 1.3 }}
+                >
+                  {`Needs: ${words.needs}`}
+                </span>
+              ) : null}
             </span>
           </Button>
           </Focusable>

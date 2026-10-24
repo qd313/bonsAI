@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   mergeStrategyChecklistState,
   normalizeStrategyChecklist,
+  splitStrategyStepNeeds,
   strategyRouteCoveredIds,
   strategyRouteRevealKey,
 } from "./strategyChecklist";
@@ -70,5 +71,33 @@ describe("which route steps are covered", () => {
     expect(strategyRouteRevealKey({ title: "To the second boss", items: FIVE, appId: "367520" })).not.toBe(a);
     expect(strategyRouteRevealKey({ title: "To the first boss", items: FIVE.slice(1), appId: "367520" })).not.toBe(a);
     expect(strategyRouteRevealKey({ title: "To the first boss", items: FIVE, appId: "1" })).not.toBe(a);
+  });
+});
+
+/** Plan 98, H: the "what you need" line is drawn only when a step's own words carry one. */
+describe("a step's own 'Needs:' words", () => {
+  it("splits the step's words from what it needs", () => {
+    expect(splitStrategyStepNeeds("Beat the False Knight. Needs: the City Crest")).toEqual({
+      text: "Beat the False Knight.",
+      needs: "the City Crest",
+    });
+    expect(splitStrategyStepNeeds("Open the gate (needs: City Crest)")).toEqual({
+      text: "Open the gate",
+      needs: "City Crest",
+    });
+    expect(splitStrategyStepNeeds("Cross the acid — Needs: Isma's Tear.")).toEqual({
+      text: "Cross the acid",
+      needs: "Isma's Tear",
+    });
+  });
+
+  it("leaves a step without one alone", () => {
+    expect(splitStrategyStepNeeds("Drop down the well")).toEqual({ text: "Drop down the well", needs: null });
+    expect(splitStrategyStepNeeds("This needs patience")).toEqual({ text: "This needs patience", needs: null });
+  });
+
+  it("leaves the words whole when nothing comes before or after 'Needs:'", () => {
+    expect(splitStrategyStepNeeds("Needs: a key")).toEqual({ text: "Needs: a key", needs: null });
+    expect(splitStrategyStepNeeds("Get there. Needs:")).toEqual({ text: "Get there. Needs:", needs: null });
   });
 });

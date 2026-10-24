@@ -158,3 +158,19 @@ export function strategyRouteCoveredIds(
 export function strategyRouteRevealKey(checklist: Pick<StrategyChecklistState, "title" | "items" | "appId">): string {
   return JSON.stringify([checklist.appId ?? "", checklist.title, checklist.items.map((it) => `${it.id}=${it.label}`)]);
 }
+
+/** "Needs:" with the separators the model writes before it ("Step. Needs: x", "Step (needs: x)", "Step — Needs: x"). */
+const STEP_NEEDS_RE = /^(.*?)[\s(\u2013\u2014;,-]*\bneeds:\s*(.*?)[\s).]*$/i;
+
+/**
+ * A step's own "what you need" words, split from the step: "Beat him. Needs: the Crest" gives the step
+ * "Beat him." and the need "the Crest". A step with no "Needs:", or nothing on either side of it, is
+ * left whole with no need. The model is not asked for this line yet; it is drawn only when it writes one.
+ */
+export function splitStrategyStepNeeds(label: string): { text: string; needs: string | null } {
+  const m = STEP_NEEDS_RE.exec(label.trim());
+  const text = m?.[1]?.trim() ?? "";
+  const needs = m?.[2]?.trim() ?? "";
+  if (!m || !text || !needs) return { text: label.trim(), needs: null };
+  return { text, needs };
+}

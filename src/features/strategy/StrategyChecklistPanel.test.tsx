@@ -319,3 +319,42 @@ describe("the checklist drawn as a route (plan 98, H)", () => {
     expect(leave).toHaveBeenCalledTimes(1);
   });
 });
+
+/*
+ * Plan 98, H: a "what you need" line under an open step, drawn only when the step's own words carry one
+ * ("Needs: ..."). The model is not asked for it yet; a step without one draws no extra line.
+ */
+describe("the 'what you need' line under a route step (plan 98, H)", () => {
+  afterEach(() => {
+    resetStrategyChecklistNavForTests();
+    window.localStorage.clear();
+  });
+
+  const NEEDS: StrategyChecklistState = {
+    title: "Into the City of Tears",
+    items: [
+      { id: "1", label: "Beat the False Knight. Needs: a few masks of health" },
+      { id: "2", label: "Drop into the Fungal Wastes" },
+      { id: "3", label: "Open the city gate. Needs: the City Crest" },
+    ],
+    checkedIds: [],
+  };
+
+  it("draws the line under an open step that names what it needs, and none under a step that does not", () => {
+    const { container } = render(<StrategyChecklistPanel checklist={{ ...NEEDS, checkedIds: ["1"] }} onToggle={vi.fn()} />);
+    const stops = Array.from(container.querySelectorAll<HTMLElement>(".bonsai-strategy-checklist-step"));
+    const needsOf = (el: HTMLElement) => el.querySelector(".bonsai-strategy-checklist-needs")?.textContent ?? null;
+    expect(needsOf(stops[0])).toBe("Needs: a few masks of health");
+    expect(stops[0].textContent).toContain("Beat the False Knight.");
+    expect(needsOf(stops[1])).toBeNull();
+    expect(stops[1].textContent).toBe("Drop into the Fungal Wastes");
+  });
+
+  it("does not draw the line on a covered step", () => {
+    const { container } = render(<StrategyChecklistPanel checklist={NEEDS} onToggle={vi.fn()} />);
+    const third = container.querySelectorAll<HTMLElement>(".bonsai-strategy-checklist-step")[2];
+    expect(third.getAttribute("data-route-stop")).toBe("covered");
+    expect(third.querySelector(".bonsai-strategy-checklist-needs")).toBeNull();
+    expect(third.textContent).not.toContain("City Crest");
+  });
+});

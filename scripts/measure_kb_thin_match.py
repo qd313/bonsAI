@@ -182,6 +182,12 @@ TONIGHT = [
 ]
 ANSWER_FIXTURE = os.path.join(ROOT, "tests", "fixtures", "kb_answer_eval.json")
 
+# Endings players put after the thing they name (session note, plan 98 lane L round two). Each is
+# added to the four device sentences and the four 2026-10-24 Deck questions as its own "tail"
+# group; every one of those should still show the line.
+TAILS = (" in this run", " here", " right now", " in this level", " in this mission", " please",
+         " at the start", "?", " in this run please", " here?")
+
 
 def _game_titles(settings: dict) -> dict[str, str]:
     import sqlite3
@@ -274,6 +280,12 @@ def _gate_asks(titles: dict[str, str]) -> list[dict]:
     for q, app_id, group in TONIGHT:
         asks.append({"id": group + "/" + q[:24], "group": group, "query": q, "app_id": app_id,
                      "want": ""})
+    named = [(q, a) for q, a, _ in DEVICE_SENTENCES]
+    named += [(q, a) for q, a, g in TONIGHT if g == "tonight"]
+    for q, app_id in named:
+        for tail in TAILS:
+            asks.append({"id": "tail/" + q + tail, "group": "tail", "query": q + tail,
+                         "app_id": app_id, "want": ""})
     return asks
 
 
@@ -306,7 +318,7 @@ def run_line_gate(settings: dict, args: argparse.Namespace) -> int:
     print()
     print("%-20s %5s %12s %12s %8s %8s" % ("group", "asks", "line before", "line after",
                                            "gained", "lost"))
-    for g in ("fixture right-note", "fixture other", "device", "tonight", "junk",
+    for g in ("fixture right-note", "fixture other", "device", "tonight", "tail", "junk",
               "old-false-line"):
         rows = [a for a in out if group_of(a) == g]
         was = [before.get(a["id"], {}).get("line") for a in rows]

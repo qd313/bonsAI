@@ -450,6 +450,186 @@
     "full_text": "Story Mode is a single-player campaign that alternates between normal board games and duels on the way to a set of seven Star Stamps. The duels are played on the Duel Boards."
   },
   {
+    "term_id": 3300,
+    "game_id": 29,
+    "term_key": "orb",
+    "term": "Orb",
+    "alt_forms": ["orbs"],
+    "peek": "The one-use items that replaced carried items; worth saving coins for.",
+    "full_text": "Orbs replace the carried items of the first three games, and they are what a new player should save coins for. Green Self Orbs affect only the user, while red Orbs are set as traps on a space and trigger only when someone else passes or lands there."
+  },
+  {
+    "term_id": 3301,
+    "game_id": 29,
+    "term_key": "orb-hut",
+    "term": "Orb Hut",
+    "alt_forms": ["orb huts"],
+    "peek": "Where you buy Orbs; you can also find them on Orb Spaces.",
+    "full_text": "Orbs are bought from Orb Huts in Mario Party 6. They can also be picked up on Orb Spaces or won from \"?\" Spaces."
+  },
+  {
+    "term_id": 3302,
+    "game_id": 29,
+    "term_key": "self-orb",
+    "term": "Self Orb",
+    "alt_forms": ["self orbs"],
+    "peek": "A green Orb that affects only the player who uses it.",
+    "full_text": "Green Self Orbs affect only the player who uses them. The Mushroom (move with two Dice Blocks, 5 coins) and the Metal Mushroom (immune to rivals' traps) are examples."
+  },
+  {
+    "term_id": 3303,
+    "game_id": 29,
+    "term_key": "flutter-orb",
+    "term": "Flutter Orb",
+    "alt_forms": ["flutter orbs"],
+    "peek": "An Orb that flies you straight to the Star Space.",
+    "full_text": "The Flutter Orb flies you straight to the Star Space. It is only sold on Towering Treetop and E. Gadd's Garage."
+  },
+  {
+    "term_id": 3304,
+    "game_id": 29,
+    "term_key": "bullet-bill-orb",
+    "term": "Bullet Bill Orb",
+    "alt_forms": ["bullet bill orbs"],
+    "peek": "A board-specific Orb that lets you overtake an opponent and steal 20 coins.",
+    "full_text": "The Bullet Bill Orb is a board-specific Orb that lets you overtake an opponent and steal 20 coins. It is one to buy on E. Gadd's Garage, where the Star Space moves and the paths shift between day and night."
+  },
+  {
+    "term_id": 3305,
+    "game_id": 29,
+    "term_key": "warp-pipe-orb",
+    "term": "Warp Pipe Orb",
+    "alt_forms": ["warp pipe orbs"],
+    "peek": "A board-specific Orb that only appears on three of the six boards.",
+    "full_text": "The Warp Pipe Orb is a board-specific Orb that only appears on three of the six boards. What is worth saving coins for changes depending on which board you are playing."
+  },
+  {
+    "term_id": 3306,
+    "game_id": 29,
+    "term_key": "mic-minigame",
+    "term": "Mic minigame",
+    "alt_forms": ["mic minigames", "mic mini-games", "mic mode"],
+    "peek": "Voice-command minigames that use the GameCube microphone.",
+    "full_text": "Mario Party 6 adds Mic minigames that use the packaged GameCube microphone for voice commands. They are playable if the Mic setting is turned on."
+  },
+  {
+    "term_id": 3307,
+    "game_id": 29,
+    "term_key": "duel-space",
+    "term": "Duel Space",
+    "alt_forms": ["duel spaces"],
+    "peek": "A space that starts a Duel Mini-Game with a bet on the result.",
+    "full_text": "Landing on a Duel Space triggers a Duel Mini-Game with a bet of coins, a Star, or both riding on the result. That is a bigger risk than the coin-only duels of earlier games."
+  },
+  {
+    "term_id": 3308,
+    "game_id": 29,
+    "term_key": "star-bank",
+    "term": "Star Bank",
+    "alt_forms": [],
+    "peek": "Where you buy the final board, Clockwork Castle, for 100 Stars.",
+    "full_text": "Clockwork Castle, Mario Party 6's final board, is bought with 100 Stars from the Star Bank rather than unlocked through normal play. By day players chase Donkey Kong around the board for a Star, and by night the goal flips to avoiding Bowser."
+  },
+  {
+    "term_id": 3309,
+    "game_id": 29,
+    "term_key": "day-and-night-cycle",
+    "term": "day-and-night cycle",
+    "alt_forms": ["day and night cycle"],
+    "peek": "A cycle that runs the whole game, switching every three turns.",
+    "full_text": "A day-and-night cycle runs the whole game, switching every three turns and changing which characters host events. Donkey Kong Spaces during the day become Bowser Spaces at night, each running its own set of minigames and rewards."
+  },
+  {
+    "term_id": 3350,
+    "game_id": 30,
+    "term_key": "bowser-time",
+    "term": "Bowser Time",
+    "alt_forms": [],
+    "peek": "A gauge that fills each turn and then triggers board-specific trouble from Bowser.",
+    "full_text": "The Bowser Time gauge fills a little every turn and triggers a board-specific bit of trouble from Bowser once it is full, roughly every five turns. It is separate from the Last Four Turns Event that overhauls the board's rules near the very end of a game."
+  },
+  {
+    "term_id": 3351,
+    "game_id": 30,
+    "term_key": "orb",
+    "term": "Orb",
+    "alt_forms": ["orbs"],
+    "peek": "The Orb system returns from Mario Party 6 with mostly the same roles.",
+    "full_text": "Orbs return from Mario Party 6 with mostly the same roles, bought at Orb Shops or won from Green Spaces. Several are tied to specific boards rather than sold everywhere, so scouting what is on sale for the board you are playing matters."
+  },
+  {
+    "term_id": 3352,
+    "game_id": 30,
+    "term_key": "orb-shop",
+    "term": "Orb Shop",
+    "alt_forms": ["orb shops"],
+    "peek": "Where you buy Orbs; the stock depends on the board you are on.",
+    "full_text": "Orbs are bought at Orb Shops or won from Green Spaces. Which Orbs are on sale depends on the board you are playing, since several are tied to specific boards."
+  },
+  {
+    "term_id": 3353,
+    "game_id": 30,
+    "term_key": "tag-battle",
+    "term": "Tag Battle",
+    "alt_forms": ["4-team battle"],
+    "peek": "A team mode for up to eight players where teams move together.",
+    "full_text": "Mario Party 7 supports up to eight players through a Tag Battle or 4-Team Battle mode. Teamed players move together on a single pair of Dice Blocks, with the team's leader alternating each round to decide when to use Orbs or make event choices."
+  },
+  {
+    "term_id": 3354,
+    "game_id": 30,
+    "term_key": "cannon-orb",
+    "term": "Cannon Orb",
+    "alt_forms": ["cannon orbs"],
+    "peek": "An Orb unique to Pagoda Peak that launches you to the upper part of the board.",
+    "full_text": "The Cannon Orb is unique to Pagoda Peak and launches you straight to the upper part of the board. It is one of the few reliable ways to beat a rival to the peak when the price is still low."
+  },
+  {
+    "term_id": 3355,
+    "game_id": 30,
+    "term_key": "snack-orb",
+    "term": "Snack Orb",
+    "alt_forms": ["snack orbs"],
+    "peek": "A Pyramid Park Orb that blocks a Chain Chomp theft for three turns.",
+    "full_text": "The board-specific Snack Orb blocks a Chain Chomp theft for three turns. It is worth buying the moment you are ahead rather than waiting until a Chain Chomp is already bearing down on you."
+  },
+  {
+    "term_id": 3356,
+    "game_id": 30,
+    "term_key": "lakitu-orb",
+    "term": "Lakitu Orb",
+    "alt_forms": ["lakitu orbs"],
+    "peek": "An Orb that delivers a treasure chest, only found on Neon Heights.",
+    "full_text": "The Lakitu Orb delivers a treasure chest. It is tied to a specific board rather than sold everywhere, and only appears on Neon Heights."
+  },
+  {
+    "term_id": 3357,
+    "game_id": 30,
+    "term_key": "thrown-orb",
+    "term": "Thrown Orb",
+    "alt_forms": ["thrown orbs"],
+    "peek": "A yellow Orb set as a trap that rewards or hurts whoever lands on it.",
+    "full_text": "Yellow Thrown Orbs are set as traps. They reward the owner if they land on their own trap, or hurt whoever else does."
+  },
+  {
+    "term_id": 3358,
+    "game_id": 30,
+    "term_key": "self-orb",
+    "term": "Self Orb",
+    "alt_forms": ["self orbs"],
+    "peek": "A green Orb that affects only the user.",
+    "full_text": "Green Self Orbs like the Mushroom (move with two Dice Blocks) affect only the user. They are one of several categories of Orb in Mario Party 7."
+  },
+  {
+    "term_id": 3359,
+    "game_id": 30,
+    "term_key": "last-four-turns-event",
+    "term": "Last Four Turns Event",
+    "alt_forms": [],
+    "peek": "A board event that overhauls the rules near the very end of a game.",
+    "full_text": "The Last Four Turns Event overhauls the board's rules near the very end of a game. It is separate from the board-specific event of the Bowser Time gauge, so a new player should expect two distinct everything-changes moments rather than just one."
+  },
+  {
     "term_id": 3400,
     "game_id": 22,
     "term_key": "rocket-start",
@@ -610,6 +790,96 @@
     "alt_forms": [],
     "peek": "An Ultra Boots field move that grabs onto pipes and bars.",
     "full_text": "The Ultra Boots add a Spring Jump that grabs onto pipes and bars out of normal jumping range. It lets you back into areas that looked finished the first time through."
+  },
+  {
+    "term_id": 3500,
+    "game_id": 31,
+    "term_key": "golden-banana",
+    "term": "Golden Banana",
+    "alt_forms": ["golden bananas"],
+    "peek": "The main collectible: every level asks for enough of them to enter.",
+    "full_text": "The main goal in every level is collecting Golden Bananas. Inside a level's lobby, a gate called B. Locker still blocks entry unless you are carrying enough Golden Bananas for that level."
+  },
+  {
+    "term_id": 3501,
+    "game_id": 31,
+    "term_key": "boss-key",
+    "term": "Boss Key",
+    "alt_forms": ["boss keys"],
+    "peek": "A key that opens the padlock in front of a level's lobby.",
+    "full_text": "A level's lobby sits behind a padlock that a Boss Key opens. The final Boss Key, in Hideout Helm, needs both the Nintendo Coin and the Rareware Coin to reach."
+  },
+  {
+    "term_id": 3502,
+    "game_id": 31,
+    "term_key": "b-locker",
+    "term": "B. Locker",
+    "alt_forms": ["b locker"],
+    "peek": "A gate inside each level's lobby that wants enough Golden Bananas.",
+    "full_text": "B. Locker is a gate inside a level's lobby that blocks entry unless you are carrying enough Golden Bananas for that level. Later levels ask for more."
+  },
+  {
+    "term_id": 3503,
+    "game_id": 31,
+    "term_key": "troff-n-scoff",
+    "term": "Troff 'n' Scoff",
+    "alt_forms": ["troff n scoff", "troff and scoff"],
+    "peek": "A trough you feed bananas to raise a platform to the boss door.",
+    "full_text": "Each level hides its own boss, reached only after feeding a trough called Troff 'n' Scoff enough bananas. That raises a platform to the door."
+  },
+  {
+    "term_id": 3504,
+    "game_id": 31,
+    "term_key": "tag-barrel",
+    "term": "Tag Barrel",
+    "alt_forms": ["tag barrels"],
+    "peek": "A barrel where you switch to a different Kong and fully heal.",
+    "full_text": "The switch between Kongs happens at Tag Barrels, found scattered through every level and the hub. Jumping into one opens a character-select screen, and using it also fully heals whoever you were playing."
+  },
+  {
+    "term_id": 3505,
+    "game_id": 31,
+    "term_key": "banana-bunch-coin",
+    "term": "Banana Bunch Coin",
+    "alt_forms": ["banana bunch coins"],
+    "peek": "The currency each Kong earns and spends on their own upgrades.",
+    "full_text": "Banana Bunch Coins are the currency each Kong earns and spends on their own upgrades: potions from Cranky's Lab, weapons from Funky's Store and instruments from Candy's Music Shop. Every Kong needs 21 of their own coloured coins to buy everything on offer."
+  },
+  {
+    "term_id": 3506,
+    "game_id": 31,
+    "term_key": "banana-medal",
+    "term": "Banana Medal",
+    "alt_forms": ["banana medals"],
+    "peek": "A medal that comes in five Kong colours; fifteen unlock Jetpac.",
+    "full_text": "Banana Medals come in five colours, one per Kong, and a Kong can only pick up items in their own colour. Bringing at least fifteen of them to Cranky's Lab unlocks a playable copy of Jetpac."
+  },
+  {
+    "term_id": 3507,
+    "game_id": 31,
+    "term_key": "jetpac",
+    "term": "Jetpac",
+    "alt_forms": [],
+    "peek": "A playable arcade game unlocked at Cranky's Lab with fifteen medals.",
+    "full_text": "Bringing at least fifteen Banana Medals to Cranky's Lab unlocks a playable copy of Rare's own Jetpac. Scoring 5,000 points drops the Rareware Coin."
+  },
+  {
+    "term_id": 3508,
+    "game_id": 31,
+    "term_key": "nintendo-coin",
+    "term": "Nintendo Coin",
+    "alt_forms": [],
+    "peek": "A coin won by beating the arcade cabinet in Frantic Factory a second time.",
+    "full_text": "In Frantic Factory, a working Donkey Kong arcade cabinet needs to be beaten once for a Golden Banana, then beaten a second time, at higher difficulty, for the Nintendo Coin. It is needed together with the Rareware Coin to reach the final Boss Key in Hideout Helm."
+  },
+  {
+    "term_id": 3509,
+    "game_id": 31,
+    "term_key": "rareware-coin",
+    "term": "Rareware Coin",
+    "alt_forms": [],
+    "peek": "A coin dropped by scoring 5,000 points in Jetpac.",
+    "full_text": "Scoring 5,000 points in Jetpac drops the Rareware Coin. It is needed together with the Nintendo Coin to reach the final Boss Key in Hideout Helm."
   },
   {
     "term_id": 3550,

@@ -104,7 +104,9 @@ export function useReplyDemote(a: UseReplyDemoteArgs): ReplyDemote {
   }, []);
 
   /* Mark the picked notes. Drawn as marked at once, so the ring can move onto Undo; a refusal puts the
-     reasons back with its words. The feedback log gets the reason as it gets the other five. */
+     reasons back with its words. When only some were kept ("All of them" with one call failing), the
+     marked line stays for the ones that were, with the words, so Undo takes back exactly those. The
+     feedback log gets the reason as it gets the other five. */
   const confirm = useCallback(
     async (reason: DemoteReasonId, picked: KbAttachedNote[]) => {
       const key = replyKey;
@@ -116,8 +118,10 @@ export function useReplyDemote(a: UseReplyDemoteArgs): ReplyDemote {
       ).catch(() => {
         /* The mark is what the person asked for; a lost log line is not worth a message. */
       });
-      const problem = await sendDemotes(demoteNote, picked, reason, false);
-      if (problem) show(key, { phase: "reasons", reason, error: `Could not mark the note: ${problem}` });
+      const { problem, took } = await sendDemotes(demoteNote, picked, reason, false);
+      if (!problem) return;
+      if (took.length) show(key, { phase: "done", reason, picked: took, error: `Could not mark every note: ${problem}` });
+      else show(key, { phase: "reasons", reason, error: `Could not mark the note: ${problem}` });
     },
     [demoteNote, lastExchange?.question, lastRequestId, replyKey, show]
   );
@@ -142,8 +146,9 @@ export function useReplyDemote(a: UseReplyDemoteArgs): ReplyDemote {
       if (was.phase !== "done") return;
       const key = replyKey;
       show(key, { phase: "reasons", reason: was.reason });
-      void sendDemotes(demoteNote, was.picked, was.reason, true).then((problem) => {
-        if (problem) show(key, { ...was, error: `Could not undo: ${problem}` });
+      /* A failed undo keeps the marked line for the notes still marked, so a second Undo takes back only those. */
+      void sendDemotes(demoteNote, was.picked, was.reason, true).then(({ problem, failed }) => {
+        if (problem) show(key, { phase: "done", reason: was.reason, picked: failed, error: `Could not undo: ${problem}` });
       });
     },
   };

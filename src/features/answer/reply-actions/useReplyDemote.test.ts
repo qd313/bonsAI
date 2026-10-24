@@ -129,4 +129,43 @@ describe("the note marks", () => {
     expect(calls).toEqual([[77, "note", "wrong_tip", false]]);
     expect(h.state()).toMatchObject({ phase: "done", reason: "wrong_tip", picked: [lootbug] });
   });
+
+  it("All of them with one call failing keeps the marks that took, with words, and Undo takes back only those", async () => {
+    const calls: unknown[][] = [];
+    const h = setup(async (...args) => {
+      calls.push(args);
+      if (args[0] === 77 && args[3] === false) return { ok: false };
+      return { ok: true, downs: 1 };
+    });
+    const lootbug = { ...NOTE, name: "Lootbug", kind: "enemy", section_id: 77 };
+    const proton = { ...NOTE, name: "proton", kind: "tip", section_id: 5 };
+    act(() => h.view.result.current.actions.choose("outdated", [NOTE, lootbug, proton]));
+    act(() => h.view.result.current.actions.pick([NOTE, lootbug, proton]));
+    await h.settle();
+    expect(h.state()).toEqual({
+      phase: "done",
+      reason: "outdated",
+      picked: [NOTE, proton],
+      error: "Could not mark every note: the library did not keep it",
+    });
+    act(() => h.view.result.current.actions.undo());
+    await h.settle();
+    expect(calls.filter((c) => c[3] === true)).toEqual([
+      [41, "note", "outdated", true],
+      [5, "tip", "outdated", true],
+    ]);
+    expect(h.state()).toEqual({ phase: "reasons", reason: "outdated" });
+  });
+
+  it("an Undo that fails for one note keeps the marked line for that note alone", async () => {
+    const h = setup(async (id, _kind, _reason, undo) => (undo && id === 41 ? { ok: false } : { ok: true }));
+    const lootbug = { ...NOTE, name: "Lootbug", kind: "enemy", section_id: 77 };
+    act(() => h.view.result.current.actions.choose("outdated", [NOTE, lootbug]));
+    act(() => h.view.result.current.actions.pick([NOTE, lootbug]));
+    await h.settle();
+    act(() => h.view.result.current.actions.undo());
+    await h.settle();
+    expect(h.state()).toMatchObject({ phase: "done", picked: [NOTE] });
+    expect(h.state().error).toMatch(/^Could not undo: /);
+  });
 });

@@ -124,17 +124,20 @@ function demoteConfirmation(picked: readonly KbAttachedNote[]): string {
   return `Noted — ${what} will rank lower for questions like this.`;
 }
 
+/** How a round of calls went: the first problem in plain words (null when none), and which notes took it. */
+export type DemoteOutcome = { problem: string | null; took: KbAttachedNote[]; failed: KbAttachedNote[] };
+
 /**
- * Make (or undo) the mark on every picked note. Returns null when all were kept, else the first problem in
- * plain words. Never throws.
+ * Make (or undo) the mark on every picked note, and say which took it: with "All of them" one call can fail
+ * while the others are kept, and the rows must know which marks are real. Never throws.
  */
 export async function sendDemotes(
   demoteNote: DemoteNoteFn | undefined,
   picked: readonly KbAttachedNote[],
   reason: DemoteReasonId,
   undo: boolean,
-): Promise<string | null> {
-  if (!demoteNote) return "this build cannot mark notes yet";
+): Promise<DemoteOutcome> {
+  if (!demoteNote) return { problem: "this build cannot mark notes yet", took: [], failed: [...picked] };
   const problems = await Promise.all(
     picked.map(async (note) => {
       try {
@@ -145,7 +148,11 @@ export async function sendDemotes(
       }
     }),
   );
-  return problems.find((p): p is string => Boolean(p)) ?? null;
+  return {
+    problem: problems.find((p): p is string => Boolean(p)) ?? null,
+    took: picked.filter((_, i) => !problems[i]),
+    failed: picked.filter((_, i) => Boolean(problems[i])),
+  };
 }
 
 type NavHolder = { current: { TakeFocus?: (gamepad?: boolean) => unknown } | null | undefined };

@@ -113,13 +113,14 @@ const ROWS: Array<[string, Box]> = [
 ];
 
 /** How the stand-in plugin call answers: kept, refused after a wait (a timeout's answer), or thrown at once. */
-type Answer = "ok" | "refused-later" | "thrown";
+type Answer = "ok" | "refused-later" | "thrown" | "second-refused";
 
 function mount(rule: SteamScrollRule | undefined, steamTopMargin: boolean, notes: KbAttachedNote[], answer: Answer = "ok") {
   const calls: Array<[number, string, string, boolean]> = [];
   const demoteNote: DemoteNoteFn = async (id, kind, reason, undo) => {
     calls.push([id, kind, reason, undo]);
     if (answer === "thrown") throw new Error("timed out");
+    if (answer === "second-refused" && id === 77 && !undo) return { ok: false };
     if (answer === "refused-later") {
       await new Promise((r) => setTimeout(r, 60));
       return { ok: false };
@@ -537,5 +538,32 @@ describe("Down from the answer's end reaches the three new reasons after one of 
     m.a.land(m.a.stops[1]!);
     act(() => void focusDownFromLiveAnswerBubble(queryTurnSlot(TURN)));
     expect(m.ring()).not.toBe("Wrong tip");
+  });
+});
+
+describe("All of them with one call failing", () => {
+  it("stays marked for the notes that took it, says what failed, and the ring stays on Undo", async () => {
+    const three = [NOTE(), NOTE({ name: "Lootbug", kind: "enemy", section_id: 77 }), NOTE({ name: "proton", kind: "tip", section_id: 5 })];
+    const m = mount("padded", true, three, "second-refused");
+    act(() => putSteamRingOn(m.holder.querySelector<HTMLElement>("[aria-label='Mark reply not helpful']")!));
+    await m.pressA();
+    act(() => putSteamRingOn(m.holder.querySelector<HTMLElement>(".bonsai-kb-demote-chip[aria-label='Outdated']")!));
+    await m.pressA();
+    act(() => putSteamRingOn([...m.holder.querySelectorAll<HTMLElement>(".bonsai-kb-demote-pick")][3]!));
+    await m.pressA();
+    expect(m.holder.querySelector(".bonsai-kb-demote-undo")).not.toBeNull();
+    expect(m.holder.querySelector(".bonsai-kb-demote-noted")?.textContent).toBe(
+      "Noted — these notes will rank lower for questions like this.",
+    );
+    expect(m.holder.querySelector(".bonsai-kb-demote-error")?.textContent).toBe(
+      "Could not mark every note: the library did not keep it",
+    );
+    expect(m.ring()).toBe("Undo");
+    await m.pressA();
+    expect(m.calls.filter((c) => c[3])).toEqual([
+      [41, "note", "outdated", true],
+      [5, "tip", "outdated", true],
+    ]);
+    expect(m.ring()).toBe("Outdated");
   });
 });

@@ -1,5 +1,185 @@
 [
   {
+    "term_id": 3000,
+    "game_id": 24,
+    "term_key": "pokos",
+    "term": "Pokos",
+    "alt_forms": ["poko"],
+    "peek": "The treasure money: ten thousand Pokos clears the company's debt.",
+    "full_text": "There is no day limit in Pikmin 2: the goal is ten thousand Pokos of treasure to clear the company's debt. Treasures and enemy bodies both pay."
+  },
+  {
+    "term_id": 3001,
+    "game_id": 24,
+    "term_key": "onion",
+    "term": "Onion",
+    "alt_forms": [],
+    "peek": "The hovering hive that matches a Pikmin colour and grows your squad.",
+    "full_text": "Pikmin multiply through their Onion, the hovering hive that matches their colour. Carrying a pellet or a defeated enemy's corpse back to the matching-colour Onion produces new seeds, usually in far larger numbers from a corpse."
+  },
+  {
+    "term_id": 3002,
+    "game_id": 24,
+    "term_key": "bulbmin",
+    "term": "Bulbmin",
+    "alt_forms": [],
+    "peek": "Found only in certain caves, they shrug off every hazard.",
+    "full_text": "Bulbmin are found only in certain caves, and they shrug off every hazard. They cannot leave with you."
+  },
+  {
+    "term_id": 3003,
+    "game_id": 24,
+    "term_key": "purple-pikmin",
+    "term": "Purple Pikmin",
+    "alt_forms": ["purples"],
+    "peek": "Heavy, strong Pikmin that weigh as much as ten.",
+    "full_text": "Purples weigh as much as ten Pikmin, so one lifts what ten would, and some treasures are impossible without them. Their landing on an enemy stuns it and they hit hard, but they are slow and fly low when thrown."
+  },
+  {
+    "term_id": 3004,
+    "game_id": 24,
+    "term_key": "white-pikmin",
+    "term": "White Pikmin",
+    "alt_forms": [],
+    "peek": "The fastest Pikmin, poison-proof and able to dig up buried treasure.",
+    "full_text": "White Pikmin are the fastest, are immune to poison, and can dig up treasure that is completely buried, which no other colour can find. Anything that eats one is poisoned."
+  },
+  {
+    "term_id": 3005,
+    "game_id": 24,
+    "term_key": "candypop-bud",
+    "term": "candypop bud",
+    "alt_forms": ["candypop buds"],
+    "peek": "Where Purple and White Pikmin come from, only in caves.",
+    "full_text": "Purple and White Pikmin come only from candypop buds in caves, in limited numbers. Treat them as tools rather than an army and keep them out of the front line."
+  },
+  {
+    "term_id": 3006,
+    "game_id": 24,
+    "term_key": "ultra-bitter-spray",
+    "term": "ultra-bitter spray",
+    "alt_forms": ["ultra bitter spray"],
+    "peek": "A spray that turns every enemy near you to stone for about nine seconds.",
+    "full_text": "The purple ultra-bitter spray, made from ten purple berries from a Burgeoning Spiderwort or a found dose, turns every enemy near you to stone for about nine seconds, bomb rocks included. It is the answer to anything you cannot outfight, and the purple-berry plants are rarer than the red ones, so hoard it."
+  },
+  {
+    "term_id": 3007,
+    "game_id": 24,
+    "term_key": "ultra-spicy-spray",
+    "term": "ultra-spicy spray",
+    "alt_forms": ["ultra spicy spray"],
+    "peek": "A spray made from ten red berries that sends your Pikmin into a frenzy.",
+    "full_text": "The red ultra-spicy spray, made from ten red berries, sends your Pikmin into a frenzy, faster and stronger, and flowers them. Nectar also flowers Pikmin, on its own."
+  },
+  {
+    "term_id": 3008,
+    "game_id": 24,
+    "term_key": "nectar",
+    "term": "nectar",
+    "alt_forms": [],
+    "peek": "A drink that flowers a Pikmin so it runs and carries faster.",
+    "full_text": "Nectar drops from eggs, rubble, nectar weed and some insects, and it flowers a Pikmin on its own. A flowered Pikmin runs and carries noticeably faster than a leaf, so let a new batch drink before a long carry."
+  },
+  {
+    "term_id": 3009,
+    "game_id": 24,
+    "term_key": "gatling-groink",
+    "term": "Gatling Groink",
+    "alt_forms": ["gatling groinks"],
+    "peek": "An enemy that fires mortars from range, some from towers.",
+    "full_text": "Gatling Groinks fire mortars from range, some from towers you cannot reach. A dead one left lying gets back up."
+  },
+  {
+    "term_id": 3050,
+    "game_id": 25,
+    "term_key": "l-cancelling",
+    "term": "L-cancelling",
+    "alt_forms": ["l-cancel", "l-cancels", "l-canceling", "l cancel"],
+    "peek": "Pressing a shoulder button or Z just before landing halves your landing lag.",
+    "full_text": "L-cancelling means pressing a shoulder button or Z within seven frames of landing during an air attack. The landing animation then plays twice as fast, halving your lag."
+  },
+  {
+    "term_id": 3051,
+    "game_id": 25,
+    "term_key": "wavedash",
+    "term": "wavedash",
+    "alt_forms": ["wavedashing", "wavedashes", "wave dash"],
+    "peek": "Air-dodging diagonally into the ground to slide a short way.",
+    "full_text": "To wavedash, air-dodge diagonally into the ground and you slide a short way while able to do any grounded action. It is how spacing and shield pressure work at a high level, and Luigi slides furthest, then the Ice Climbers and Mewtwo."
+  },
+  {
+    "term_id": 3052,
+    "game_id": 25,
+    "term_key": "short-hop",
+    "term": "short hop",
+    "alt_forms": ["short hops", "short-hop"],
+    "peek": "A low jump made by releasing jump during the crouch before it.",
+    "full_text": "A short hop is done by releasing jump during the crouch before it. It keeps aerials low and fast."
+  },
+  {
+    "term_id": 3053,
+    "game_id": 25,
+    "term_key": "fast-falling",
+    "term": "fast falling",
+    "alt_forms": ["fast fall", "fast-fall", "fast-falling"],
+    "peek": "Tapping down while falling to end a jump early.",
+    "full_text": "Fast falling is a tap down while falling. It ends a jump early and beats an opponent's timing."
+  },
+  {
+    "term_id": 3054,
+    "game_id": 25,
+    "term_key": "sdi",
+    "term": "SDI",
+    "alt_forms": [],
+    "peek": "Tapping the stick during the freeze to slide a small distance.",
+    "full_text": "Tap the stick during the freeze itself and you slide a small distance each tap, which is how you escape multi-hit moves. It is a separate trick from DI, where you hold the stick during the freeze frames before you are launched to shift your angle."
+  },
+  {
+    "term_id": 3055,
+    "game_id": 25,
+    "term_key": "teching",
+    "term": "teching",
+    "alt_forms": ["teched"],
+    "peek": "A shoulder-button press just before hitting a surface while tumbling.",
+    "full_text": "When you are about to hit the ground, a wall, or a ceiling while tumbling, press a shoulder button within twenty frames to tech. You bounce up briefly untouchable instead of lying there, and a tech left or right rolls you away."
+  },
+  {
+    "term_id": 3056,
+    "game_id": 25,
+    "term_key": "ledge-dash",
+    "term": "ledge dash",
+    "alt_forms": ["ledgedash", "ledge-dash"],
+    "peek": "Dropping off the ledge, then jumping and air-dodging back on.",
+    "full_text": "Grabbing the ledge gives you invincible frames, and the ledge dash keeps some of them while skipping the slow climb animation. You drop off, then jump and air-dodge back on at the right moment."
+  },
+  {
+    "term_id": 3057,
+    "game_id": 25,
+    "term_key": "meteor-smash",
+    "term": "meteor smash",
+    "alt_forms": ["meteor smashes"],
+    "peek": "A hit straight down, the cleanest kill off stage.",
+    "full_text": "Meteor smashes hit straight down and are the cleanest kills off stage. You can cancel one by jumping or using your up special eight frames after the hit stops, which is your escape when it happens to you."
+  },
+  {
+    "term_id": 3058,
+    "game_id": 25,
+    "term_key": "edgeguarding",
+    "term": "edgeguarding",
+    "alt_forms": ["edgeguard", "edgeguards", "edgeguarded", "edge guard"],
+    "peek": "Going after or waiting for someone who has been knocked off the stage.",
+    "full_text": "Most stocks are taken off the stage, not on it. When someone is knocked off, hit them again, or take the ledge yourself so they cannot grab it, which forces them onto the stage where you are waiting."
+  },
+  {
+    "term_id": 3059,
+    "game_id": 25,
+    "term_key": "shield-grab",
+    "term": "shield grab",
+    "alt_forms": ["shield grabs"],
+    "peek": "Pressing attack while shielding to grab an opponent.",
+    "full_text": "The shield grab is the standard punish: press attack while shielding. It skips the delay of dropping the shield and catches an opponent stuck in the end of their move."
+  },
+  {
     "term_id": 3400,
     "game_id": 22,
     "term_key": "rocket-start",
@@ -70,6 +250,96 @@
     "alt_forms": ["staff ghosts"],
     "peek": "A pre-made time set by the developers on three of the courses.",
     "full_text": "Three of the eight courses carry a staff ghost set by the developers, each raced by the character the course is themed around. They are the only pre-made times in the game; the other five courses have no staff record to chase."
+  },
+  {
+    "term_id": 3450,
+    "game_id": 23,
+    "term_key": "action-command",
+    "term": "action command",
+    "alt_forms": ["action commands"],
+    "peek": "A button press at the right moment for extra damage.",
+    "full_text": "Every attack has an action command, a button press at the right moment for extra damage. Landing it also earns Star Power faster."
+  },
+  {
+    "term_id": 3451,
+    "game_id": 23,
+    "term_key": "superguard",
+    "term": "superguard",
+    "alt_forms": ["superguards", "superguarded", "superguarding", "super guard"],
+    "peek": "A tight-window B press that blocks a hit completely.",
+    "full_text": "Press B in a tiny window as an enemy attack lands to superguard it for no damage and a point back. It is the harder version of a regular guard, so it is worth drilling on a weak, predictable enemy before relying on it in a fight that matters."
+  },
+  {
+    "term_id": 3452,
+    "game_id": 23,
+    "term_key": "star-power",
+    "term": "Star Power",
+    "alt_forms": [],
+    "peek": "The audience-fed resource spent on Crystal Star moves.",
+    "full_text": "Every jump, hammer and partner attack earns Star Power for the Crystal Star moves, and it comes faster when you land the action command or add a Stylish move. You can also Appeal to gain Star Power directly while anyone is awake in the seats."
+  },
+  {
+    "term_id": 3453,
+    "game_id": 23,
+    "term_key": "stylish-move",
+    "term": "Stylish move",
+    "alt_forms": ["stylish moves"],
+    "peek": "An extra press at the right beat of an attack that makes the crowd cheer.",
+    "full_text": "A Stylish move is an extra press at the right beat of the attack animation that makes the crowd cheer. It works only on normal and badge attacks, not items or counters."
+  },
+  {
+    "term_id": 3454,
+    "game_id": 23,
+    "term_key": "badge-points",
+    "term": "badge points",
+    "alt_forms": ["badge point"],
+    "peek": "What each badge costs to wear; level-ups can give you more.",
+    "full_text": "Each badge costs badge points to wear, so BP at level-up is often the best pick. Levelling up every hundred star points gives a choice of five HP, five FP or three badge points."
+  },
+  {
+    "term_id": 3455,
+    "game_id": 23,
+    "term_key": "power-rush",
+    "term": "Power Rush",
+    "alt_forms": [],
+    "peek": "A badge that only works while you are in Danger at five HP or less.",
+    "full_text": "Power Rush, Close Call and Last Stand are badges people build around, and they only work while you are in Danger at five HP or less. Mega Rush works at exactly one HP, which is why some players have Chet Rippo lower their maximum HP on purpose."
+  },
+  {
+    "term_id": 3456,
+    "game_id": 23,
+    "term_key": "shine-sprites",
+    "term": "Shine Sprites",
+    "alt_forms": ["shine sprite"],
+    "peek": "Forty-two sprites hidden in blocks; three buy a partner rank.",
+    "full_text": "Forty-two Shine Sprites are hidden in blocks across the world. Merlon next to Professor Frankly trades three of them for a partner rank, each of the seven partners can go up twice, and Merluvlee the fortune teller will point you at the ones you missed."
+  },
+  {
+    "term_id": 3457,
+    "game_id": 23,
+    "term_key": "trouble-center",
+    "term": "Trouble Center",
+    "alt_forms": [],
+    "peek": "A bulletin board of odd jobs on the east side of Rogueport.",
+    "full_text": "The Trouble Center on the east side of Rogueport is a bulletin board of odd jobs that pay coins, items and badges. It is part of Rogueport's side content, along with the Shine Sprites and the Pit of a Hundred Trials."
+  },
+  {
+    "term_id": 3458,
+    "game_id": 23,
+    "term_key": "pit-of-a-hundred-trials",
+    "term": "Pit of a Hundred Trials",
+    "alt_forms": ["pit of 100 trials"],
+    "peek": "A hundred floors of fights under Rogueport.",
+    "full_text": "Under Rogueport lies the Pit of a Hundred Trials: a hundred floors of fights with Charlieton selling supplies part-way down. The enemy at the bottom coughs up the Return Postage badge."
+  },
+  {
+    "term_id": 3459,
+    "game_id": 23,
+    "term_key": "spring-jump",
+    "term": "Spring Jump",
+    "alt_forms": [],
+    "peek": "An Ultra Boots field move that grabs onto pipes and bars.",
+    "full_text": "The Ultra Boots add a Spring Jump that grabs onto pipes and bars out of normal jumping range. It lets you back into areas that looked finished the first time through."
   },
   {
     "term_id": 3550,

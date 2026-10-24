@@ -18,7 +18,7 @@
 | [archive/testing-closed-2026.md](archive/testing-closed-2026.md) | Everyone | Closed rows moved out of the coverage table below |
 | [archive/testing-row-history-2026.md](archive/testing-row-history-2026.md) | Everyone | Older, superseded history moved out of still-open rows below |
 
-Related: [roadmap.md](roadmap.md) ([Bugs](roadmap.md#bugs), [Verify](roadmap.md#verify), [Features](roadmap.md#features), [Done](roadmap.md#done-for-v060)), [development.md](development.md) (build/deploy), [troubleshooting.md](troubleshooting.md).
+Related: [roadmap.md](roadmap.md) ([Bugs](roadmap.md#bugs), [Verify](roadmap.md#verify), [Features](roadmap.md#features), [Done](roadmap.md#done-after-v060)), [development.md](development.md) (build/deploy), [troubleshooting.md](troubleshooting.md).
 
 ### QA-EVIDENCE-GAP-01 — twelve checks whose evidence was never saved
 

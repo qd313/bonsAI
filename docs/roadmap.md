@@ -6,7 +6,7 @@ sorted from one star to six.
 - **Knowledge base and RAG:** [roadmap-kb.md](roadmap-kb.md), long notes in [roadmap-kb-details.md](roadmap-kb-details.md).
 - **Parked work and watched sightings:** [roadmap-shelved.md](roadmap-shelved.md).
 - **Long notes for the items below:** [roadmap-details.md](roadmap-details.md).
-- **Closed since v0.5.0:** [Done for v0.6.0](#done-for-v060), full record in [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
+- **Closed since v0.6.0:** [Done after v0.6.0](#done-after-v060). **Closed since v0.5.0:** [Done for v0.6.0](#done-for-v060), full record in [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
 - **Full detail of finished work:** [shipped features](archive/roadmap-completed.md) · [fixed bugs](archive/roadmap-bugs-fixed.md)
 - **Maintainer decisions:** [audit/maintainer-decisions-locked.md](audit/maintainer-decisions-locked.md) · **QA rows:**
   [testing.md](testing.md), [testing-manual.md](testing-manual.md) · **Release notes:** [CHANGELOG.md](../CHANGELOG.md)
@@ -24,6 +24,7 @@ sorted from one star to six.
   - [Features that need verification](#features-that-need-verification)
 - [Knowledge base and RAG](#knowledge-base-and-rag)
 - [Shelved](#shelved)
+- [Done after v0.6.0](#done-after-v060)
 - [Done for v0.6.0](#done-for-v060)
 <!-- /toc -->
 
@@ -37,7 +38,7 @@ sorted from one star to six.
 3. **Status words in Bugs and Features:** **OPEN** (nothing built) · **PARTIAL** (some built) · **ACCEPTED** (the
    maintainer chose to live with it). Once fixed and unit-tested, an entry moves to **Verify**.
 4. **When a Deck check is owed,** the entry moves to Verify in the same commit as the code (name the QA row). **When the
-   check passes,** it moves to [Done](#done-for-v060) as one line and the full entry goes to the matching archive file.
+   check passes,** it moves to [Done](#done-after-v060) as one line and the full entry goes to the matching archive file.
    Never leave a finished item in Bugs or Features; never use a strike-through.
 5. **Stars** are effort and risk: `★` easiest … `★★★★★` very high; `★★★★★★` extreme scope.
 6. **Tags:** `[ask]` Ask bar · `[chat]` chat slots · `[chips]` preset chips · `[docs]` the documents · `[focus]` D-pad and
@@ -255,7 +256,7 @@ replace it with a specific issue when one exists.
 
 Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row named in each entry; full evidence in
 [testing.md](testing.md) / [testing-manual.md](testing-manual.md). Once a Deck run confirms one, move it in the same commit: a line into
-[Done](#done-for-v060), the full entry into the matching archive file, drop it from here.
+[Done](#done-after-v060), the full entry into the matching archive file, drop it from here.
 
 ### Bugs that need verification
 - ★ `[ask]` **If only the screen side reloads, the last answer's note offer can show again** — **VERIFY, fixed 2026-10-14 (plan 93, `0e619d7c`). Was OPEN, reported 2026-10-12 by plan 92 lane N2; not seen on the Deck.**
@@ -319,11 +320,20 @@ Parked work and watched sightings: [roadmap-shelved.md](roadmap-shelved.md).
 
 ---
 
+<a id="done-after-v060"></a>
+
+## Done after v0.6.0
+
+Everything closed since v0.6.0 shipped (2026-10-24), one line each, newest first. Nothing yet. When this section grows past the
+size limit, its older blocks move to an archive file the way the v0.6.0 ones did.
+
+---
+
 <a id="done-for-v060"></a>
 
 ## Done for v0.6.0
 
-Everything closed since v0.5.0 (2026-07-15), one line each. Full record: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
+Shipped as v0.6.0 on 2026-10-24; this section is now the record of that release. Everything closed since v0.5.0 (2026-07-15), one line each. Full record: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
 
 The Closed blocks from 2026-10-02 to 2026-10-07 (plans 79 to 82) were moved to [the archive](archive/roadmap-done-v0.5.0.md#done-for-v060) on 2026-10-07, and those from 2026-10-08 to plan 87's Deck blocks 4 and 5 (2026-10-10) on 2026-10-11, to keep this file under its size limit, newest first, copied line for line. Every entry in them is closed, so none stays here. The plan 88 and plan 87 blocks (2026-10-10 and 2026-10-11) were moved to the same archive on 2026-10-12 (plan 92 docs sweep), copied line for line. The block of 2026-10-11 for the maintainer's calls 5, 6 and 7 of D128 and the install link was moved there on 2026-10-14 (plan 93 docs sweep), copied line for line. The three blocks of plan 89's Deck blocks (2026-10-11) were moved there on 2026-10-14 (plan 93 docs sweep 2), copied line for line. The five blocks of plan 92 (2026-10-12) were moved there on 2026-10-14 (plan 93 docs sweep 3), copied line for line. Every block from 2026-10-13 to 2026-10-16 (plan 93, plan 86 steps 0 and 3, the plan 93 report answers) was moved there on 2026-10-17 (plan 94 docs sweep), copied line for line. The plan 95 and plan 94 blocks (2026-10-17) were moved there on 2026-10-18 (plan 96 docs sweep), copied line for line. The plan 96 session block (2026-10-18) was moved there the same day (plan 96 docs sweep 2), copied line for line. The plan 96 Deck blocks D and E block (2026-10-18) was moved there on 2026-10-22 (plan 97 second sweep, size trim), copied line for line.
 

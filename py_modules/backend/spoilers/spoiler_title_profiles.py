@@ -42,7 +42,14 @@ from typing import Any, Literal
 
 from backend.strategy.strategy_guide_parse import is_strategy_followup_question
 
-SpoilerTitleProfile = Literal["low_narrative", "protect_progression", "unknown"]
+SpoilerTitleProfile = Literal["low_narrative", "protect_progression", "unknown", "strict_tier", "open_tier"]
+
+# The spoiler tiers setting (plan 98, D50) rides on the turn's profile: it is the one value that
+# already reaches the prompt, the safety net that covers a protected boss, and the Show details
+# chip, so the setting needs no new argument through the ask path. "Hide more" and "Hide less"
+# replace whatever the game's own list says; "Default" leaves the profile exactly as it was.
+TIER_PROFILE_STRICT = "strict_tier"
+TIER_PROFILE_OPEN = "open_tier"
 
 # Low narrative: routine boss/tactics rarely spoil progressive story secrets.
 LOW_NARRATIVE_APP_IDS = frozenset(
@@ -258,6 +265,21 @@ def resolve_turn_title_spoiler_profile(
     profile = resolve_title_spoiler_profile(app_id, app_name)
     if profile == "low_narrative" and question_names_protected_title(question):
         return "protect_progression"
+    return profile
+
+
+def apply_spoiler_tier(profile: str, tier: Any) -> str:
+    """The profile one turn is finally judged by, once the person's spoiler tier is applied.
+
+    ``"strict"`` (Hide more) and ``"open"`` (Hide less) replace the game's own profile, so a
+    no-story game is no longer relaxed under Hide more and a story game is no longer covered
+    under Hide less. Anything else -- ``"default"``, a missing value, an unrecognised one -- leaves
+    ``profile`` untouched, so a settings file from before the setting existed behaves as it did.
+    """
+    if tier == "strict":
+        return TIER_PROFILE_STRICT
+    if tier == "open":
+        return TIER_PROFILE_OPEN
     return profile
 
 

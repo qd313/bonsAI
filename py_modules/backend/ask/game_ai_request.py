@@ -161,6 +161,7 @@ from backend.knowledge.kb_attached_notes import (
 from backend.media.screenshot_media import lookup_screenshot_vdf_metadata
 from backend.spoilers.spoiler_risk_service import build_spoiler_risk_signals
 from backend.spoilers.spoiler_title_profiles import (
+    apply_spoiler_tier,
     questions_the_answer_above_answered,
     resolve_turn_title_spoiler_profile,
     set_aside_running_game_for_named_story_game,
@@ -801,8 +802,13 @@ async def run_game_ai_request(
         # Plan 78 helper A: when the named story game picked the notes (see named_story_game
         # above) it is the game this turn is about even if the library has no title for it, so it
         # is judged as itself -- "unknown" there would be a weaker fence than a story game gets.
-        strategy_title_profile = resolve_turn_title_spoiler_profile(
-            app_id, app_name or text_resolved_title or named_story_game, question_for_retrieval
+        # The spoiler tiers setting (plan 98): Hide more and Hide less replace this profile for
+        # the turn, so the prompt, the cover check and the chip below all follow the person's pick.
+        strategy_title_profile = apply_spoiler_tier(
+            resolve_turn_title_spoiler_profile(
+                app_id, app_name or text_resolved_title or named_story_game, question_for_retrieval
+            ),
+            settings.get("spoiler_tier"),
         )
         # D112 #7: this turn's protected names, decided once, here, before the model is called --
         # the attached notes are marked with them before they are published live, so the "From

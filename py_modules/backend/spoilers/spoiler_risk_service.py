@@ -29,7 +29,11 @@ from __future__ import annotations
 import re
 from typing import Any, Literal, Optional
 
-from backend.spoilers.spoiler_title_profiles import resolve_title_spoiler_profile
+from backend.spoilers.spoiler_title_profiles import (
+    TIER_PROFILE_OPEN,
+    TIER_PROFILE_STRICT,
+    resolve_title_spoiler_profile,
+)
 from backend.prompts.ollama_prompts import (
     extract_strategy_asked_entity,
     kb_text_covers_asked_entity,
@@ -186,9 +190,13 @@ def compute_heuristic_spoiler_risk_score(signals: dict[str, Any]) -> float:
     # One source of truth: an explicitly supplied title_profile wins, and only when the caller
     # supplies none does the AppID table decide. Re-checking the table here as well made an
     # explicit profile unoverridable.
+    if profile == TIER_PROFILE_OPEN:
+        # Hide less (plan 98): the person asked for nothing to be covered, so nothing here is a risk.
+        return 0.0
     if profile == "low_narrative":
         score -= 28.0
-    elif profile == "protect_progression":
+    elif profile in ("protect_progression", TIER_PROFILE_STRICT):
+        # Hide more is never relaxed by the game's own list: it scores like a story game.
         score += 10.0
     elif str(signals.get("game_genres") or "").strip():
         score += 10.0
@@ -215,6 +223,8 @@ def compute_spoiler_risk_band(
     assistant_text: str = "",
 ) -> SpoilerRiskBand:
     """Blend heuristic score with an optional closed model tag (~60% tag weight)."""
+    if str(signals.get("title_profile") or "").strip() == TIER_PROFILE_OPEN:
+        return "low"
     heuristic = compute_heuristic_spoiler_risk_score(signals)
     model_band = parse_bonsai_spoiler_risk_tag(assistant_text)
     if model_band is None:
@@ -238,7 +248,11 @@ def spoiler_risk_detail_bullets(
     if genres:
         bullets.append(f"Genres: {genres}")
     profile = str(signals.get("title_profile") or "").strip()
-    if profile:
+    if profile == TIER_PROFILE_STRICT:
+        bullets.append("Spoiler setting: Hide more")
+    elif profile == TIER_PROFILE_OPEN:
+        bullets.append("Spoiler setting: Hide less")
+    elif profile:
         bullets.append(f"Title profile: {profile}")
     section_types = signals.get("kb_section_types") or []
     if section_types:

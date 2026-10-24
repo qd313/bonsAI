@@ -28,7 +28,8 @@ import re
 from typing import Any, Iterable, Optional, Sequence
 
 from backend.spoilers.spoiler_empty_label_marks import repair_empty_label_marks
-from backend.spoilers.spoiler_title_profiles import title_profile_is_low_narrative
+from backend.spoilers.spoiler_tier_wording import open_tier_policy_block, strict_tier_wording
+from backend.spoilers.spoiler_title_profiles import TIER_PROFILE_OPEN, TIER_PROFILE_STRICT, title_profile_is_low_narrative
 from backend.strategy.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
 
 # Plan 70 helper A (D112 #7, the spoiler safety net): a name is "named" in the question the
@@ -112,7 +113,9 @@ def _strategy_kb_spoiler_clause_suppressed(
         if title_profile
         else title_profile_is_low_narrative(app_id, app_name=app_name)
     )
-    return low_risk or bool((asked_entity or "").strip())
+    # Hide less (the "open" tier): the person asked for no cover at all, so the knowledge-base
+    # line that tells the model to hide spoilery detail goes too.
+    return low_risk or title_profile == TIER_PROFILE_OPEN or bool((asked_entity or "").strip())
 
 
 def _strategy_spoiler_low_risk_addendum(
@@ -124,6 +127,9 @@ def _strategy_spoiler_low_risk_addendum(
     title_profile: str = "",
 ) -> str:
     """Extra policy when boss/enemy tactics are routine gameplay, not narrative spoilers."""
+    if title_profile == TIER_PROFILE_OPEN:
+        # Nothing is covered at all, so there is no carve-out to write; the open paragraph says so.
+        return ""
     title_low_risk = _strategy_title_is_low_spoiler_risk(
         app_id=app_id, app_name=app_name, title_profile=title_profile
     )
@@ -179,7 +185,15 @@ def _strategy_spoiler_policy_block(
     title_profile: str = "",
     include_strategy_ui_fences: bool = True,
 ) -> str:
-    """Injected after STRATEGY GUIDE MODE header; defines ```bonsai-spoiler fences and ordering."""
+    """Injected after STRATEGY GUIDE MODE header; defines ```bonsai-spoiler fences and ordering.
+
+    ``title_profile`` also carries the person's spoiler tier (``spoiler_title_profiles.apply_spoiler_tier``):
+    ``"open_tier"`` (Hide less) writes the open paragraph and nothing else, ``"strict_tier"`` (Hide more)
+    rewrites the avoid lines and fence rules below to cover bosses, endings and chapters in every game.
+    Every other value is the long-standing wording, byte for byte.
+    """
+    if title_profile == TIER_PROFILE_OPEN:
+        return open_tier_policy_block(followup=followup, include_strategy_ui_fences=include_strategy_ui_fences)
     low_risk = _strategy_spoiler_low_risk_addendum(
         asked_entity=asked_entity,
         kb_entity_match=kb_entity_match,
@@ -192,7 +206,7 @@ def _strategy_spoiler_policy_block(
     # resolves a contradiction toward the prohibitive reading — fencing satisfies both
     # instructions at once, so it is the cheaper error for the model to make.
     #
-    # Three states, not two. Named-entity consent on a *story* title must carve out only the
+    # Three states, not two (a fourth when Hide more is on, after them). Named-entity consent on a *story* title must carve out only the
     # entity the user named; dropping the boss clause wholesale there would relax every other
     # boss in the game, which is the over-relax failure the Hades row guards against.
     title_low_risk = _strategy_title_is_low_spoiler_risk(
@@ -223,6 +237,11 @@ def _strategy_spoiler_policy_block(
             "Avoid story endings, major twists, late-game boss names, and exact puzzle solutions in "
             "plain text unless essential for branching; prefer vague labels until the player picks a "
             "branch.\n"
+        )
+    strict_fence_rules = None
+    if title_profile == TIER_PROFILE_STRICT:
+        followup_avoid, first_turn_avoid, strict_fence_rules = strict_tier_wording(
+            entity, include_strategy_ui_fences
         )
     if consent:
         lines = (
@@ -260,7 +279,9 @@ def _strategy_spoiler_policy_block(
     # plain "do not fence" line on those turns cut misfires to 3 of 96 while the ending questions
     # kept their fences (8 of 9). Story titles with no named entity are unchanged.
     # workshop:archive/research/kb-answer-eval-2026-09-02-fence-subtractive.md
-    if title_low_risk:
+    if strict_fence_rules is not None:
+        fence_rules = strict_fence_rules
+    elif title_low_risk:
         fence_rules = (
             "Do not use ```bonsai-spoiler fences in this reply: nothing about this title's bosses, "
             "enemies or waves is a story spoiler.\n"
@@ -361,7 +382,8 @@ def spoiler_cover_required(
     with the prompt about whether hiding was asked for.
 
     False on every turn the prompt never asked for a cover: the player opted in
-    (``consent``), the title reads as routine gameplay rather than story
+    (``consent``), the player set Hide less (``title_profile == "open_tier"``), the title reads
+    as routine gameplay rather than story
     (``_strategy_title_is_low_spoiler_risk``), or this is not a Strategy/Expert-with-KB-cards
     turn at all (``strategy_domain`` -- the same test ``ollama_prompts.build_system_prompt``
     uses to decide whether to inject any spoiler policy in the first place).
@@ -369,6 +391,8 @@ def spoiler_cover_required(
     if not strategy_domain:
         return False
     if consent:
+        return False
+    if title_profile == TIER_PROFILE_OPEN:
         return False
     return not _strategy_title_is_low_spoiler_risk(
         app_id=app_id, app_name=app_name, title_profile=title_profile

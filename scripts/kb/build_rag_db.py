@@ -412,7 +412,44 @@ def mistyped_starting_out_rows(sections: list[dict]) -> list[str]:
     )
 
 
-def _glossary_row_problems(rows: list[Any], game_ids: dict[str, int]) -> list[str]:
+SOURCES_SUFFIX = ".sources.json"
+
+
+def _folder_json_files(folder: Path) -> list[Path]:
+    """The ``*.json`` files in a content folder, sorted by name; none when the folder is missing.
+
+    A ``<batch>.sources.json`` file is a content lane's note of where each row came from, not
+    content, so it is skipped.
+    """
+    if not folder.is_dir():
+        return []
+    return sorted(
+        p for p in folder.glob("*.json") if p.is_file() and not p.name.endswith(SOURCES_SUFFIX)
+    )
+
+
+def _glossary_rows_with_origin() -> list[tuple[str, Any]]:
+    """Every glossary row as ``(file label, row)``: the main file, then data/kb/glossary/*.json."""
+    out: list[tuple[str, Any]] = []
+    main = KB_DATA_DIR / "glossary_terms.json"
+    sources = [(main.name, main)] if main.is_file() else []
+    sources += [(f"glossary/{p.name}", p) for p in _folder_json_files(KB_DATA_DIR / "glossary")]
+    for label, path in sources:
+        rows = _load_json(path)
+        if not isinstance(rows, list):
+            raise SystemExit(f"{label}: the file must hold a list of words")
+        out.extend((label, row) for row in rows)
+    return out
+
+
+def load_glossary_rows() -> list[Any]:
+    """The merged glossary word list (main file, then the folder), the way the build reads it."""
+    return [row for _, row in _glossary_rows_with_origin()]
+
+
+def _glossary_row_problems(
+    rows: list[Any], game_ids: dict[str, int], origins: list[str] | None = None
+) -> list[str]:
     """Reasons the glossary file cannot be built; empty when every row is fine.
 
     The matcher on the screen keeps the first of two words with one spelling and silently
@@ -424,6 +461,8 @@ def _glossary_row_problems(rows: list[Any], game_ids: dict[str, int]) -> list[st
     seen_spellings: set[tuple[str, str]] = set()
     for index, row in enumerate(rows):
         label = f"row {index + 1}"
+        if origins:
+            label = f"{origins[index]} {label}"
         if not isinstance(row, dict):
             problems.append(f"{label} is not an object")
             continue
@@ -459,23 +498,24 @@ def _glossary_row_problems(rows: list[Any], game_ids: dict[str, int]) -> list[st
 
 
 def _seed_glossary_terms(conn: sqlite3.Connection) -> int:
-    """Write data/kb/glossary_terms.json into the glossary_terms table; returns the row count.
+    """Write the glossary words into the glossary_terms table; returns the row count.
 
-    A missing file gives 0 rows, the way the tips file does. A bad row stops the build.
+    Reads data/kb/glossary_terms.json, then every file in data/kb/glossary/ (so several content
+    lanes can add words without sharing one file). A missing file or folder gives no rows, the
+    way the tips file does. A bad row stops the build, naming the file it came from.
     """
-    path = KB_DATA_DIR / "glossary_terms.json"
-    if not path.is_file():
+    pairs = _glossary_rows_with_origin()
+    if not pairs:
         return 0
-    rows = _load_json(path)
-    if not isinstance(rows, list):
-        raise SystemExit("glossary_terms.json: the file must hold a list of words")
+    rows = [row for _, row in pairs]
+    origins = [label for label, _ in pairs]
     game_ids = {
         str(app_id): int(game_id)
         for game_id, app_id in conn.execute("SELECT game_id, app_id FROM games WHERE app_id IS NOT NULL")
     }
-    problems = _glossary_row_problems(rows, game_ids)
+    problems = _glossary_row_problems(rows, game_ids, origins)
     if problems:
-        raise SystemExit("glossary_terms.json: " + "; ".join(problems))
+        raise SystemExit("glossary: " + "; ".join(problems))
     conn.executemany(
         "INSERT INTO glossary_terms(term_id, game_id, term_key, term, alt_forms, peek, full_text) "
         "VALUES (?, ?, ?, ?, ?, ?, ?)",

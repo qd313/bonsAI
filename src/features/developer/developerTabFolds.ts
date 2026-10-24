@@ -121,7 +121,7 @@ export const DEVELOPER_ROW_LABELS = {
 /** The rows' longer text (the strip shows it while the ring is on the row), as the tab printed it before it folded. */
 export const DEVELOPER_ROW_HELP = {
   installSeedKb:
-    "Public HF/GitHub download is not live yet. build.ps1 copies a seed corpus (DRG Survivor + OoT alias sample) to the Deck. Install it into ~/.bonsai/rag for Phase 1 testing. Hybrid retrieval also needs vectorized seed + nomic-embed-text on your Ask Ollama host.",
+    "Installs the library built with this plugin, for testing. Players download the library from the Ollama tab.",
   hybrid:
     "On, the knowledge base ranks cards by keyword match and meaning together. Off, it uses keyword match only — cards still attach, and Show details says Keyword search (hybrid disabled). Turn it off to tell a retrieval problem apart from an embedding one.",
   hud: "Shows a small translucent log at the bottom of the plugin (focus, tab changes, ingest). Off by default so Settings and connection UI stay readable.",

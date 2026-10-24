@@ -269,7 +269,7 @@ describe("the folded Developer tab, every section open", () => {
     const seen = new Map<string, string>();
     for (const l of [w.enter(), ...w.walk("down", 80)]) seen.set(l.name, l.stripText);
     expect(seen.get("Warm the Ask model at boot")).toMatch(/^Warm the Ask model at bootLoads the default Ask model into memory/);
-    expect(seen.get("Install seed knowledge base")).toMatch(/Public HF\/GitHub download is not live yet\./);
+    expect(seen.get("Install seed knowledge base")).toMatch(/Installs the library built with this plugin, for testing\. Players download the library from the Ollama tab\./);
     expect(seen.get("Frozen test chips")).toMatch(/^Frozen test chips2 pinned\. The carousel is showing these/);
     /* No words on a captured error or a Clear button: the strip hides. */
     expect(seen.get("first boom")).toBe("");

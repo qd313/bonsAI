@@ -168,6 +168,7 @@ import type { BonsaiCapabilityKey } from "../../permissions/permissionDeepLink";
 import { isPendingPlaceholderResponse, isStopNoticeResponse } from "../../ask/flow/askThinkingPhases";
 import { BonsaiChatSecondaryButton } from "../reply-actions/BonsaiChatSecondaryButton";
 import { buildReplyActionsElement } from "../reply-actions/buildReplyActionsElement";
+import { useReplyDemote } from "../reply-actions/useReplyDemote";
 import { archivedTurnTransparency } from "../details/archivedTurnTransparency";
 import { buildAnswerBubbleElement } from "../bubble/buildAnswerBubbleElement";
 import { buildNotesReadLine } from "../../user-notes/NotesReadLine";
@@ -414,6 +415,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     chatSumUp = null,
   } = props;
 
+  /* Plan 98: the newest answer's "the note was wrong" rows (Wrong tip, Outdated, Wrong edition), handed to its reply row. */
+  const replyDemote = useReplyDemote({ lastExchange, lastRequestId: props.lastRequestId ?? null });
   const [sessionHighlightTurnId, setSessionHighlightTurnId] = useState<string | null>(null);
   const [transparencyDetailsOpen, setTransparencyDetailsOpen] = useState(false);
   /**
@@ -518,6 +521,13 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       : lastExchange?.spoilerConsentEffective === true,
     protectedNames: protectedNamesFromNotes(liveKbNotes),
   };
+  /* The live turn's notes as its block shows them: the ones the answer used, judged on what has arrived (see the
+     block below). The reply row's "the note was wrong" reasons offer the same notes (plan 98). */
+  const liveKbNotesShown = kbNotesToShow(
+    { question: liveQuestion, answer: isAsking ? liveResponseBody : lastExchange?.answer ?? "" },
+    strategySpoilerMaskingEnabled,
+    liveKbNotes
+  );
   /* The knowledge library's glossary words for each game drawn here, asked for as soon as the game is
      known (the live question, or an earlier turn) so they are already in when an answer streams in: the
      first words to arrive redraw the answer's paragraphs, and that must not happen mid-reveal. */
@@ -1306,6 +1316,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     chipError: showFeedbackHere ? liveReplyChipError : null,
                     onChip: showFeedbackHere ? onReplyMicroAction : undefined,
                     askInFlight: isAsking,
+                    demote: showFeedbackHere
+                      ? { ...replyDemote.actions, state: replyDemote.state, notes: kbNotesHere }
+                      : undefined,
                     /* Down must reach this turn's own ladder, then the "From the notes" block when
                        one is attached, then the details panel's own tabs row when the panel is open,
                        then whatever came after this row before any of them existed. */
@@ -1510,6 +1523,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   chipError: liveReplyChipError,
                   onChip: onReplyMicroAction,
                   askInFlight: isAsking,
+                  demote: { ...replyDemote.actions, state: replyDemote.state, notes: liveKbNotesShown },
                   onMoveDownFromUtility: () =>
                     focusKbNotesBlock("live") ||
                     focusDetailsTabsRow("live") ||
@@ -1533,18 +1547,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                    * snapshot once it exists (an empty list counts as landed, so a genuinely
                    * note-free turn still clears).
                    */
-                  const notes = liveKbNotes;
-                  const answerTextForFenceCheck = isAsking
-                    ? liveResponseBody
-                    : lastExchange?.answer ?? "";
-                  const kbNotesHere = kbNotesToShow(
-                    { question: liveQuestion, answer: answerTextForFenceCheck },
-                    strategySpoilerMaskingEnabled,
-                    notes
-                  );
                   return buildKbNotesBlockElement({
                     turnKey: "live",
-                    notes: kbNotesHere,
+                    notes: liveKbNotesShown,
                     open: isKbNotesOpen("live"),
                     onToggle: () => toggleKbNotesOpen("live"),
                     /* While the answer writes there is no Show details yet: its last section is next (plan 93). */

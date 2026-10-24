@@ -9,7 +9,7 @@
  *          no note. On an answer that used two notes, Wrong tip opens "Which note was it?" with the ring on the
  *          first note; Down walks the names and "Both of them"; B goes back to the reasons with the ring on Wrong
  *          tip; A on a name marks that note alone and lands on Undo; no stop is visited twice on the way.
- * Used for: buildReplyActionsElement.tsx, kbDemoteRows.tsx, useReplyFeedbackChips.ts.
+ * Used for: buildReplyActionsElement.tsx, kbDemoteRows.tsx, useReplyDemote.ts, useReplyFeedbackChips.ts.
  * Does not: Prove any of it on the Deck, or call the real plugin method (a stand-in records each call). Steam's
  *           own step for a press no handler claims is modelled here as the stop drawn next in that direction
  *           (the five older reasons leave Left, Right and some Downs to Steam).
@@ -29,7 +29,9 @@ import { putSteamRingOn, type SteamEl } from "../../../test-harness/steamRing";
 import { getRpcCallLog } from "../../../test-harness/fakeDeckyRpc";
 import { buildReplyActionsElement } from "./buildReplyActionsElement";
 import { resetRememberedReplyFeedbackForTests, useReplyFeedbackChips } from "./useReplyFeedbackChips";
-import type { DemotableNote, DemoteNoteFn } from "./kbDemoteRows";
+import type { DemoteNoteFn } from "./kbDemoteRows";
+import { resetRememberedReplyDemoteForTests, useReplyDemote } from "./useReplyDemote";
+import type { KbAttachedNote } from "../../../types/inputTransparency";
 import { REPLY_STOP_ORDER, registerReplyStop, setReplyStopUnavailable } from "../../../shared/dpad/replyStopRegistry";
 import type { LastExchangeSnapshot } from "../../../types/backgroundAsk";
 
@@ -47,7 +49,7 @@ const REPLY: LastExchangeSnapshot = {
   askMode: "strategy",
 };
 
-const NOTE = (over: Partial<DemotableNote> = {}): DemotableNote => ({
+const NOTE = (over: Partial<KbAttachedNote> = {}): KbAttachedNote => ({
   name: "Glyphid Dreadnought",
   kind: "boss",
   card: "Summary: a boss.",
@@ -63,6 +65,7 @@ const NOTE = (over: Partial<DemotableNote> = {}): DemotableNote => ({
 beforeEach(() => {
   resetDeckAnswerWalk();
   resetRememberedReplyFeedbackForTests();
+  resetRememberedReplyDemoteForTests();
   for (const id of REPLY_STOP_ORDER) {
     registerReplyStop(id, null);
     setReplyStopUnavailable(id, false);
@@ -70,15 +73,15 @@ beforeEach(() => {
 });
 afterEach(() => cleanup());
 
-function Row(props: { notes: DemotableNote[]; demoteNote: DemoteNoteFn }): React.ReactElement | null {
+function Row(props: { notes: KbAttachedNote[]; demoteNote: DemoteNoteFn }): React.ReactElement | null {
   const fb = useReplyFeedbackChips({
     lastExchange: REPLY,
     lastRequestId: 7,
     setUnifiedInput: () => {},
     askMode: "strategy",
     pendingReplyFollowUpRef: { current: null },
-    demoteNote: props.demoteNote,
   });
+  const demote = useReplyDemote({ lastExchange: REPLY, lastRequestId: 7, demoteNote: props.demoteNote });
   return buildReplyActionsElement({
     replyKey: TURN,
     rating: fb.liveReplyFeedbackRating,
@@ -87,7 +90,7 @@ function Row(props: { notes: DemotableNote[]; demoteNote: DemoteNoteFn }): React
     onToggleTransparency: () => {},
     onChip: (id) => void fb.onReplyMicroAction(id),
     onMoveDownFromUtility: () => false,
-    demote: { ...fb.replyDemoteActions, state: fb.liveReplyDemote, notes: props.notes },
+    demote: { ...demote.actions, state: demote.state, notes: props.notes },
   });
 }
 
@@ -105,7 +108,7 @@ const ROWS: Array<[string, Box]> = [
   ["details", [716, 732]],
 ];
 
-function mount(rule: SteamScrollRule | undefined, steamTopMargin: boolean, notes: DemotableNote[]) {
+function mount(rule: SteamScrollRule | undefined, steamTopMargin: boolean, notes: KbAttachedNote[]) {
   const calls: Array<[number, string, string, boolean]> = [];
   const demoteNote: DemoteNoteFn = async (id, kind, reason, undo) => {
     calls.push([id, kind, reason, undo]);
@@ -324,7 +327,7 @@ describe("Not really, then Wrong tip, on an answer that used one note", () => {
 
 describe("when the answer used no note the reasons are the five they were", () => {
   it.each([
-    ["no note at all", [] as DemotableNote[]],
+    ["no note at all", [] as KbAttachedNote[]],
     ["a note with no id (an older saved chat)", [NOTE({ section_id: undefined })]],
   ])("%s: no Wrong tip, Outdated or Wrong edition, and Down from the last reason leaves to Show details", async (_n, notes) => {
     const m = mount(undefined, false, notes);

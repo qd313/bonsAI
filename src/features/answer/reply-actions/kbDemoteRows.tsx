@@ -75,15 +75,9 @@ const DEMOTE_REASONS: ReadonlyArray<{ id: DemoteReasonId; label: string }> = [
   { id: "wrong_edition", label: "Wrong edition" },
 ];
 
-/**
- * An attached note with the two fields the back end adds for this (plan 98 lane C): the library's own id of
- * the note or tip (0 when unknown) and whether it is already marked. Read here until the shared type has them.
- */
-export type DemotableNote = KbAttachedNote & { section_id?: number; demoted?: boolean };
-
 /** What the back end answers: whether it was kept, the note's count now, and whether it is now left out. */
 export type DemoteNoteResult = { ok?: boolean; downs?: number; excluded?: boolean };
-/** The plugin call, handed in so the screen can be tested (and built) before the back end has it. */
+/** The plugin call (demoteNoteApi.ts), handed in so a test can stand in for it. */
 export type DemoteNoteFn = (
   sectionId: number,
   kind: "tip" | "note",
@@ -95,36 +89,36 @@ export type DemoteNoteFn = (
 export type ReplyDemoteState =
   | { phase: "reasons"; reason: DemoteReasonId | null; error?: string }
   | { phase: "which"; reason: DemoteReasonId; error?: string }
-  | { phase: "done"; reason: DemoteReasonId; picked: DemotableNote[]; error?: string };
+  | { phase: "done"; reason: DemoteReasonId; picked: KbAttachedNote[]; error?: string };
 
 export const DEMOTE_START: ReplyDemoteState = { phase: "reasons", reason: null };
 
 /** What a press here asks the hook to do. */
 export type ReplyDemoteActions = {
   /** A reason was picked on an answer that used these notes: one is marked at once, more ask which. */
-  choose: (reason: DemoteReasonId, notes: readonly DemotableNote[]) => void;
+  choose: (reason: DemoteReasonId, notes: readonly KbAttachedNote[]) => void;
   /** A note (or every note) was picked in the "Which note was it?" column. */
-  pick: (notes: readonly DemotableNote[]) => void;
+  pick: (notes: readonly KbAttachedNote[]) => void;
   /** B in the column: back to the reasons, the reason remembered. */
   back: () => void;
   undo: () => void;
 };
 
 /** Everything the reply row needs to draw these rows for one answer. */
-export type ReplyDemoteView = ReplyDemoteActions & { state: ReplyDemoteState; notes: readonly DemotableNote[] };
+export type ReplyDemoteView = ReplyDemoteActions & { state: ReplyDemoteState; notes: readonly KbAttachedNote[] };
 
 /** The notes that can be marked: only those the back end gave an id (an older saved chat has none). */
-export function demotableNotes(notes: readonly DemotableNote[] | null | undefined): DemotableNote[] {
+export function demotableNotes(notes: readonly KbAttachedNote[] | null | undefined): KbAttachedNote[] {
   return (notes ?? []).filter((n) => typeof n.section_id === "number" && n.section_id > 0);
 }
 
 /** Tip ids and note ids overlap, so the call says which. */
-function demoteKind(note: DemotableNote): "tip" | "note" {
+function demoteKind(note: KbAttachedNote): "tip" | "note" {
   return note.kind === "tip" ? "tip" : "note";
 }
 
 /** The gold line after a reason. A protected boss note keeps its neutral title here too. */
-function demoteConfirmation(picked: readonly DemotableNote[]): string {
+function demoteConfirmation(picked: readonly KbAttachedNote[]): string {
   const what = picked.length === 1 ? `"${kbNoteDisplayName(picked[0]!)}"` : "these notes";
   return `Noted — ${what} will rank lower for questions like this.`;
 }
@@ -135,7 +129,7 @@ function demoteConfirmation(picked: readonly DemotableNote[]): string {
  */
 export async function sendDemotes(
   demoteNote: DemoteNoteFn | undefined,
-  picked: readonly DemotableNote[],
+  picked: readonly KbAttachedNote[],
   reason: DemoteReasonId,
   undo: boolean,
 ): Promise<string | null> {
@@ -316,7 +310,7 @@ export type DemoteRowsArgs = {
   replyKey: string;
   view: ReplyDemoteView;
   /** The notes that can be marked (demotableNotes), at least one. */
-  notes: DemotableNote[];
+  notes: KbAttachedNote[];
   /** An ask is running: the stops still take the ring, A does nothing. */
   disabled: boolean;
   /** Up from the reason in this column: the five reasons' second row. */
@@ -382,7 +376,7 @@ export function renderDemoteRows(a: DemoteRowsArgs): React.ReactElement {
   if (state.phase === "which") {
     const back = (el: HTMLElement | null) =>
       pressThenHandRingOn(el, view.back, () => void focusReason(replyKey, reasonIndex(state.reason)));
-    const picks: Array<{ label: string; picked: DemotableNote[]; all: boolean }> = [
+    const picks: Array<{ label: string; picked: KbAttachedNote[]; all: boolean }> = [
       ...notes.map((note) => ({ label: kbNoteDisplayName(note), picked: [note], all: false })),
       { label: notes.length === 2 ? "Both of them" : "All of them", picked: notes, all: true },
     ];

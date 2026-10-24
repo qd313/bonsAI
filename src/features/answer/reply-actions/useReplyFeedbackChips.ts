@@ -18,7 +18,7 @@
  *          rememberedFeedback below): the panel remounts every time Steam's side panel closes and
  *          opens again, and a rating kept only in hook state came back as "not rated".
  */
-import { useCallback, useEffect, useRef, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
+import { useCallback, useEffect, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
 import { toaster } from "@decky/api";
 
 import type { AskModeId } from "../../settings/bonsaiSettingsSchema";
@@ -29,16 +29,6 @@ import {
 } from "./replyMicroActions";
 import type { LastExchangeSnapshot, ReplyFollowUpPending } from "../../../types/backgroundAsk";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../../../shared/deckyCall";
-import {
-  DEMOTE_START,
-  demotableNotes,
-  sendDemotes,
-  type DemotableNote,
-  type DemoteNoteFn,
-  type DemoteReasonId,
-  type ReplyDemoteActions,
-  type ReplyDemoteState,
-} from "./kbDemoteRows";
 
 export type UseReplyFeedbackChipsArgs = {
   /** The reply on screen. Everything here reacts to it, and a new one clears the rating. */
@@ -54,11 +44,6 @@ export type UseReplyFeedbackChipsArgs = {
    * path reads and clears it. It stays out there because submitting clears it in three places.
    */
   pendingReplyFollowUpRef: RefObject<ReplyFollowUpPending | null>;
-  /**
-   * Plan 98: the plugin call that marks a note the answer used as wrong (or undoes the mark). Handed in so
-   * the rows can be tested with a stand-in; with none, picking a reason says it cannot be done yet.
-   */
-  demoteNote?: DemoteNoteFn;
 };
 
 export interface ReplyFeedbackChips {
@@ -70,12 +55,9 @@ export interface ReplyFeedbackChips {
   setLiveReplyChipError: Dispatch<SetStateAction<string | null>>;
   /** Clear all three at once, for the Ask-bar clear button and the session reset. */
   resetReplyFeedback: () => void;
-  /** Plan 98: where the "the note was wrong" rows are for this reply (kbDemoteRows.tsx), and their presses. */
-  liveReplyDemote: ReplyDemoteState;
-  replyDemoteActions: ReplyDemoteActions;
 }
 
-type RememberedFeedback = { rating: "up" | "down" | null; chipUsed: boolean; demote: ReplyDemoteState };
+type RememberedFeedback = { rating: "up" | "down" | null; chipUsed: boolean };
 
 /*
  * The rating given to each recent reply, kept for as long as the plugin's screen code is loaded.
@@ -103,7 +85,7 @@ function feedbackKey(exchange: LastExchangeSnapshot | null, requestId: number | 
 }
 
 function recall(key: string | null): RememberedFeedback {
-  return (key && rememberedFeedback.get(key)) || { rating: null, chipUsed: false, demote: DEMOTE_START };
+  return (key && rememberedFeedback.get(key)) || { rating: null, chipUsed: false };
 }
 
 /*
@@ -150,7 +132,7 @@ export function resetRememberedReplyFeedbackForTests(): void {
  * Every hook below must keep its position. React matches hooks by the order they run in.
  */
 export function useReplyFeedbackChips(a: UseReplyFeedbackChipsArgs): ReplyFeedbackChips {
-  const { lastExchange, lastRequestId, setUnifiedInput, askMode, pendingReplyFollowUpRef, demoteNote } = a;
+  const { lastExchange, lastRequestId, setUnifiedInput, askMode, pendingReplyFollowUpRef } = a;
 
   const replyKey = feedbackKey(lastExchange, lastRequestId);
   /* Started from what this reply was already given, so a remount draws the row as it was left. */
@@ -159,11 +141,6 @@ export function useReplyFeedbackChips(a: UseReplyFeedbackChipsArgs): ReplyFeedba
   );
   const [liveReplyChipUsed, setLiveReplyChipUsed] = useState(() => recall(replyKey).chipUsed);
   const [liveReplyChipError, setLiveReplyChipError] = useState<string | null>(null);
-  const [liveReplyDemote, setLiveReplyDemote] = useState<ReplyDemoteState>(() => recall(replyKey).demote);
-  /* The reply on screen and its rows, for a call that answers after the person has moved on. */
-  const replyKeyNow = useRef(replyKey);
-  replyKeyNow.current = replyKey;
-  const demoteNow = useRef(liveReplyDemote);
 
   /* Clears what is drawn, not what is remembered: a chat switch runs this, and switching back to
      the same reply should find its rating again. */
@@ -171,8 +148,6 @@ export function useReplyFeedbackChips(a: UseReplyFeedbackChipsArgs): ReplyFeedba
     setLiveReplyFeedbackRating(null);
     setLiveReplyChipUsed(false);
     setLiveReplyChipError(null);
-    demoteNow.current = DEMOTE_START;
-    setLiveReplyDemote(DEMOTE_START);
   }, []);
 
   useEffect(() => {
@@ -180,62 +155,7 @@ export function useReplyFeedbackChips(a: UseReplyFeedbackChipsArgs): ReplyFeedba
     setLiveReplyFeedbackRating(kept.rating);
     setLiveReplyChipUsed(kept.chipUsed);
     setLiveReplyChipError(null);
-    demoteNow.current = kept.demote;
-    setLiveReplyDemote(kept.demote);
   }, [replyKey]);
-
-  /* Remembered for the reply it belongs to; drawn only while that reply is still the one on screen. */
-  const showDemote = useCallback((key: string | null, next: ReplyDemoteState) => {
-    remember(key, { demote: next });
-    if (key !== replyKeyNow.current) return;
-    demoteNow.current = next;
-    setLiveReplyDemote(next);
-  }, []);
-
-  /* Mark the picked notes. Drawn as marked at once, so the ring can move onto Undo; a refusal puts the
-     reasons back with its words. The feedback log gets the reason as it gets the other five. */
-  const confirmDemote = useCallback(
-    async (reason: DemoteReasonId, picked: DemotableNote[]) => {
-      const key = replyKey;
-      showDemote(key, { phase: "done", reason, picked });
-      void callDeckyWithTimeout<[string, number, number, boolean, string], { ok?: boolean }>(
-        "save_ask_feedback",
-        ["down", lastRequestId ?? 0, lastExchange?.question?.length ?? 0, true, reason],
-        DECKY_RPC_TIMEOUT_MS
-      ).catch(() => {
-        /* The mark below is what the person asked for; a lost log line is not worth a message. */
-      });
-      const problem = await sendDemotes(demoteNote, picked, reason, false);
-      if (problem) showDemote(key, { phase: "reasons", reason, error: `Could not mark the note: ${problem}` });
-    },
-    [demoteNote, lastExchange?.question, lastRequestId, replyKey, showDemote]
-  );
-
-  const replyDemoteActions: ReplyDemoteActions = {
-    choose: (reason, notes) => {
-      const usable = demotableNotes(notes);
-      if (usable.length === 1) void confirmDemote(reason, usable);
-      else if (usable.length > 1) showDemote(replyKey, { phase: "which", reason });
-    },
-    pick: (notes) => {
-      const was = demoteNow.current;
-      const usable = demotableNotes(notes);
-      if (was.phase === "which" && usable.length) void confirmDemote(was.reason, usable);
-    },
-    back: () => {
-      const was = demoteNow.current;
-      if (was.phase === "which") showDemote(replyKey, { phase: "reasons", reason: was.reason });
-    },
-    undo: () => {
-      const was = demoteNow.current;
-      if (was.phase !== "done") return;
-      const key = replyKey;
-      showDemote(key, { phase: "reasons", reason: was.reason });
-      void sendDemotes(demoteNote, was.picked, was.reason, true).then((problem) => {
-        if (problem) showDemote(key, { ...was, error: `Could not undo: ${problem}` });
-      });
-    },
-  };
 
   const onReplyFeedback = useCallback(
     async (rating: "up" | "down") => {
@@ -310,7 +230,5 @@ export function useReplyFeedbackChips(a: UseReplyFeedbackChipsArgs): ReplyFeedba
     liveReplyChipError,
     setLiveReplyChipError,
     resetReplyFeedback,
-    liveReplyDemote,
-    replyDemoteActions,
   };
 }

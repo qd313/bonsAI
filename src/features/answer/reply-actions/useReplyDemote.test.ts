@@ -1,18 +1,20 @@
 /**
- * Title: The rating hook's "the note was wrong" state (plan 98)
+ * Title: The "the note was wrong" rows' state (plan 98)
  * Purpose: Pin what the hook holds for the rows kbDemoteRows.tsx draws: a reason marks the note at once and calls
  *          the plugin with the note's id and kind, a refusal puts the reasons back with words a person can read,
- *          Undo calls again with undo set, a failed Undo keeps the mark showing, the state outlives the panel
+ *          Undo calls again with undo set, a failed Undo keeps the mark showing, the real call is the default, the state outlives the panel
  *          closing and opening (a remount), and a new reply starts over.
- * Used for: useReplyFeedbackChips.ts, kbDemoteRows.ts's sendDemotes.
+ * Used for: useReplyDemote.ts, kbDemoteRows.tsx's sendDemotes.
  * Does not: Draw anything or walk the D-pad (buildReplyActionsElement.demote.test.tsx does).
  */
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { resetRememberedReplyFeedbackForTests, useReplyFeedbackChips } from "./useReplyFeedbackChips";
-import type { DemotableNote, DemoteNoteFn } from "./kbDemoteRows";
+import { resetRememberedReplyDemoteForTests, useReplyDemote } from "./useReplyDemote";
+import type { DemoteNoteFn } from "./kbDemoteRows";
+import type { KbAttachedNote } from "../../../types/inputTransparency";
 import type { LastExchangeSnapshot } from "../../../types/backgroundAsk";
+import { getRpcCallLog } from "../../../test-harness/fakeDeckyRpc";
 
 const REPLY: LastExchangeSnapshot = {
   question: "how do i beat the glyphid dreadnought",
@@ -20,7 +22,7 @@ const REPLY: LastExchangeSnapshot = {
 };
 const OTHER: LastExchangeSnapshot = { question: "what is a lootbug", answer: "A harmless bug full of gold." };
 
-const NOTE: DemotableNote = {
+const NOTE: KbAttachedNote = {
   name: "Glyphid Dreadnought",
   kind: "boss",
   card: "",
@@ -34,28 +36,20 @@ const NOTE: DemotableNote = {
 
 function setup(demoteNote: DemoteNoteFn | undefined) {
   const view = renderHook(
-    (p: { exchange: LastExchangeSnapshot }) =>
-      useReplyFeedbackChips({
-        lastExchange: p.exchange,
-        lastRequestId: 3,
-        setUnifiedInput: () => {},
-        askMode: "speed",
-        pendingReplyFollowUpRef: { current: null },
-        demoteNote,
-      }),
+    (p: { exchange: LastExchangeSnapshot }) => useReplyDemote({ lastExchange: p.exchange, lastRequestId: 3, demoteNote }),
     { initialProps: { exchange: REPLY } },
   );
   const settle = () => act(async () => void (await new Promise((r) => setTimeout(r, 0))));
-  return { view, state: () => view.result.current.liveReplyDemote, settle };
+  return { view, state: () => view.result.current.state, settle };
 }
 
-describe("the rating hook's note marks", () => {
-  beforeEach(() => resetRememberedReplyFeedbackForTests());
+describe("the note marks", () => {
+  beforeEach(() => resetRememberedReplyDemoteForTests());
 
   it("a reason marks the note at once and calls with its id, kind and reason", async () => {
     const calls: unknown[][] = [];
     const h = setup(async (...args) => (calls.push(args), { ok: true, downs: 1 }));
-    act(() => h.view.result.current.replyDemoteActions.choose("outdated", [NOTE]));
+    act(() => h.view.result.current.actions.choose("outdated", [NOTE]));
     expect(h.state()).toMatchObject({ phase: "done", reason: "outdated" });
     await h.settle();
     expect(calls).toEqual([[41, "note", "outdated", false]]);
@@ -64,16 +58,18 @@ describe("the rating hook's note marks", () => {
 
   it("a refusal puts the reasons back, with the reason kept and the problem in words", async () => {
     const h = setup(async () => ({ ok: false }));
-    act(() => h.view.result.current.replyDemoteActions.choose("wrong_tip", [NOTE]));
+    act(() => h.view.result.current.actions.choose("wrong_tip", [NOTE]));
     await h.settle();
     expect(h.state()).toEqual({ phase: "reasons", reason: "wrong_tip", error: "Could not mark the note: the library did not keep it" });
   });
 
-  it("with no plugin call handed in, it says so rather than pretending", async () => {
+  it("with no stand-in it makes the real plugin call, section id, kind, reason, undo in that order", async () => {
     const h = setup(undefined);
-    act(() => h.view.result.current.replyDemoteActions.choose("wrong_tip", [NOTE]));
+    act(() => h.view.result.current.actions.choose("wrong_tip", [{ ...NOTE, kind: "tip", section_id: 9 }]));
     await h.settle();
-    expect(h.state()).toMatchObject({ phase: "reasons", error: "Could not mark the note: this build cannot mark notes yet" });
+    const sent = getRpcCallLog().filter((c) => c.method === "demote_rag_corpus_note").map((c) => c.args);
+    expect(sent).toEqual([[9, "tip", "wrong_tip", false]]);
+    expect(h.state()).toMatchObject({ phase: "done", reason: "wrong_tip" });
   });
 
   it("Undo calls again with undo set; a failed Undo keeps the mark showing with its words", async () => {
@@ -84,16 +80,16 @@ describe("the rating hook's note marks", () => {
       if (fail) throw new Error("timed out");
       return { ok: true };
     });
-    act(() => h.view.result.current.replyDemoteActions.choose("wrong_edition", [NOTE]));
+    act(() => h.view.result.current.actions.choose("wrong_edition", [NOTE]));
     await h.settle();
-    act(() => h.view.result.current.replyDemoteActions.undo());
+    act(() => h.view.result.current.actions.undo());
     expect(h.state()).toEqual({ phase: "reasons", reason: "wrong_edition" });
     await h.settle();
     expect(calls[1]).toEqual([41, "note", "wrong_edition", true]);
-    act(() => h.view.result.current.replyDemoteActions.choose("wrong_edition", [NOTE]));
+    act(() => h.view.result.current.actions.choose("wrong_edition", [NOTE]));
     await h.settle();
     fail = true;
-    act(() => h.view.result.current.replyDemoteActions.undo());
+    act(() => h.view.result.current.actions.undo());
     await h.settle();
     expect(h.state()).toMatchObject({ phase: "done", reason: "wrong_edition" });
     expect(h.state().error).toMatch(/^Could not undo: /);
@@ -101,7 +97,7 @@ describe("the rating hook's note marks", () => {
 
   it("the mark outlives the panel closing and opening, and a new reply starts over", async () => {
     const h = setup(async () => ({ ok: true }));
-    act(() => h.view.result.current.replyDemoteActions.choose("outdated", [NOTE]));
+    act(() => h.view.result.current.actions.choose("outdated", [NOTE]));
     await h.settle();
     h.view.unmount();
     const again = setup(async () => ({ ok: true }));
@@ -113,7 +109,7 @@ describe("the rating hook's note marks", () => {
   it("a note with no id is never sent (an older saved chat)", async () => {
     const calls: unknown[][] = [];
     const h = setup(async (...args) => (calls.push(args), { ok: true }));
-    act(() => h.view.result.current.replyDemoteActions.choose("outdated", [{ ...NOTE, section_id: 0 }]));
+    act(() => h.view.result.current.actions.choose("outdated", [{ ...NOTE, section_id: 0 }]));
     await h.settle();
     expect(calls).toEqual([]);
     expect(h.state()).toEqual({ phase: "reasons", reason: null });
@@ -123,12 +119,12 @@ describe("the rating hook's note marks", () => {
     const calls: unknown[][] = [];
     const h = setup(async (...args) => (calls.push(args), { ok: true }));
     const lootbug = { ...NOTE, name: "Lootbug", kind: "enemy", section_id: 77 };
-    act(() => h.view.result.current.replyDemoteActions.choose("wrong_tip", [NOTE, lootbug]));
+    act(() => h.view.result.current.actions.choose("wrong_tip", [NOTE, lootbug]));
     expect(h.state()).toEqual({ phase: "which", reason: "wrong_tip" });
-    act(() => h.view.result.current.replyDemoteActions.back());
+    act(() => h.view.result.current.actions.back());
     expect(h.state()).toEqual({ phase: "reasons", reason: "wrong_tip" });
-    act(() => h.view.result.current.replyDemoteActions.choose("wrong_tip", [NOTE, lootbug]));
-    act(() => h.view.result.current.replyDemoteActions.pick([lootbug]));
+    act(() => h.view.result.current.actions.choose("wrong_tip", [NOTE, lootbug]));
+    act(() => h.view.result.current.actions.pick([lootbug]));
     await h.settle();
     expect(calls).toEqual([[77, "note", "wrong_tip", false]]);
     expect(h.state()).toMatchObject({ phase: "done", reason: "wrong_tip", picked: [lootbug] });

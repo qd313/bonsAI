@@ -62,6 +62,7 @@ export const FRONTEND_RPC_METHODS = [
   "update_rag_corpus",
   "remove_rag_corpus",
   "get_rag_corpus_glossary",
+  "demote_rag_corpus_note",
   "list_chat_slots",
   "get_chat_slot",
   "create_chat_slot",
@@ -228,6 +229,8 @@ function defaultHandlers(): Record<string, RpcHandler> {
     remove_rag_corpus: () => ({ ok: true }),
     // The running game's tap-to-define words: none, as with no library installed.
     get_rag_corpus_glossary: () => ({ ok: true, installed: false, game_title: "", terms: [], reason: "" }),
+    // Plan 98: a note ranked lower from under an answer: kept, one mark, not yet left out.
+    demote_rag_corpus_note: () => ({ ok: true, downs: 1, excluded: false }),
     list_chat_slots: () => ({ slots: [] }),
     get_chat_slot: () => ({ ok: false, error: "Slot not found" }),
     create_chat_slot: () => ({

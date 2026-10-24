@@ -139,14 +139,11 @@ function renderKbNoteCardLine(line: string, key: React.Key): React.ReactElement 
   );
 }
 
-/** The back end's flag for a note the person marked as wrong (plan 98 lane C); read here until the shared type has it. */
-type KbNoteMaybeDemoted = KbAttachedNote & { demoted?: boolean };
-
 /**
  * "↓ ranked lower by you", the drawing's gold tag (plan 98, option C frame 4), after a marked note's name in
  * the open block. Plain words, not a stop: the block's header is the one stop.
  */
-function kbNoteDemotedTag(note: KbNoteMaybeDemoted): React.ReactElement | null {
+function kbNoteDemotedTag(note: KbAttachedNote): React.ReactElement | null {
   if (note.demoted !== true) return null;
   return (
     <span

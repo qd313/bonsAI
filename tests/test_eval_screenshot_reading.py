@@ -226,6 +226,23 @@ class ScreenshotLabelsTests(_ScriptCase):
             if p.running_game_known:
                 self.assertTrue(p.app_id, p.id)
 
+    def test_every_picture_carries_the_librarys_own_app_id_unless_marked_as_not_in_the_library(self):
+        seed = json.loads((REPO_ROOT / "data" / "kb" / "strategy_seed.json").read_text(encoding="utf-8"))
+        ids = {g["canonical_title"]: str(g["app_id"] or "") for g in seed["games"]}
+        rows = json.loads(LABELS.read_text(encoding="utf-8"))["pictures"]
+        by_id = {p.id: p for p in self.mod.load_pictures(LABELS, None)}
+        for row in rows:
+            pic = by_id[row["id"]]
+            if row.get("in_library") is False:
+                self.assertNotIn(pic.game, ids, pic.id)  # marked as not held, so it must really be absent
+                self.assertTrue(pic.app_id, pic.id)  # and still carry its Steam id
+            else:
+                self.assertEqual(pic.app_id, ids.get(pic.game), pic.id)
+
+    def test_no_two_pictures_share_a_file(self):
+        files = [p.file for p in self.mod.load_pictures(LABELS, None)]
+        self.assertEqual(len(files), len(set(files)))
+
     def test_only_picks_pictures_by_id_and_an_unknown_id_stops_the_run(self):
         first = self.mod.load_pictures(LABELS, None)[0]
         self.assertEqual([p.id for p in self.mod.load_pictures(LABELS, {first.id})], [first.id])

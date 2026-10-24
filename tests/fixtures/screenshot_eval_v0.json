@@ -1,12 +1,16 @@
 {
- "about": "Labelled pictures for the screenshot reading measurement (plan 98, lane I, step 1). One entry per picture. 'file' is a name inside the workshop's screenshots/plan98 folder (or inside any folder given to the script with --root); an entry may also carry 'path', an absolute path, which wins over 'file'. 'game' is the full name, 'game_aliases' other ways a reply may fairly name the same game. 'scene' is one of title, menu, play, pause, loading, other. 'boss' is the boss or enemy that is on screen, or empty when there is none; 'boss_aliases' are fair alternative names. 'running_game_known' is true when the picture was taken with the game running, so its app id ('app_id', 'app_name') can be handed to the ask; the script then asks twice, once with the game known and once with nothing known. When it is false the script asks only once, with nothing known. 'scene_words' (optional) replaces the script's own list of words that count as naming the scene. The first three entries are the proof set, taken from Deck captures already on this PC and labelled by looking at them; block K2's pictures are added by the session.",
+ "about": "Labelled pictures for the screenshot reading measurement (plan 98, lane I, step 1). One entry per picture. 'file' is a name inside the workshop's screenshots/plan98 folder (or inside any folder given to the script with --root); an entry may also carry 'path', an absolute path, which wins over 'file'. 'game' is the full name, 'game_aliases' other ways a reply may fairly name the same game. 'scene' is one of title, menu, play, pause, loading, other. 'boss' is the boss or enemy that is on screen, or empty when there is none; 'boss_aliases' are fair alternative names. 'running_game_known' is true when the picture was taken with the game running, so its app id ('app_id', 'app_name') can be handed to the ask; the script then asks twice, once with the game known and once with nothing known. When it is false the script asks only once, with nothing known. 'scene_words' (optional) replaces the script's own list of words that count as naming the scene. The first three entries are Deck captures that were already on this PC, labelled by looking at them. The rest are block K2's pictures (workshop screenshots/plan98), one entry per distinct picture: where K2 saved one capture under two scene names (Brotato, Hades, Half-Life 2, God of War title and menu) only the best-fitting scene is kept. Every picture carries Steam's performance overlay (GPU/CPU/FPS numbers, top left); it is left in on purpose. 'in_library' false marks a game the library holds no notes for; its app id is then the Steam id, and the script ignores the field.",
  "version": 0,
  "pictures": [
   {
    "id": "drg-survivor-title-1",
    "file": "DeckCapture_20261022_233503_game.png",
    "game": "Deep Rock Galactic: Survivor",
-   "game_aliases": ["Deep Rock Galactic Survivor", "DRG Survivor", "DRG: Survivor"],
+   "game_aliases": [
+    "Deep Rock Galactic Survivor",
+    "DRG Survivor",
+    "DRG: Survivor"
+   ],
    "scene": "title",
    "boss": "",
    "boss_aliases": [],
@@ -19,7 +23,11 @@
    "id": "drg-survivor-title-2",
    "file": "DeckCapture_20261016_193020_game.png",
    "game": "Deep Rock Galactic: Survivor",
-   "game_aliases": ["Deep Rock Galactic Survivor", "DRG Survivor", "DRG: Survivor"],
+   "game_aliases": [
+    "Deep Rock Galactic Survivor",
+    "DRG Survivor",
+    "DRG: Survivor"
+   ],
    "scene": "title",
    "boss": "",
    "boss_aliases": [],
@@ -32,7 +40,11 @@
    "id": "drg-survivor-menu-1",
    "file": "DeckCapture_20261022_233752_game.png",
    "game": "Deep Rock Galactic: Survivor",
-   "game_aliases": ["Deep Rock Galactic Survivor", "DRG Survivor", "DRG: Survivor"],
+   "game_aliases": [
+    "Deep Rock Galactic Survivor",
+    "DRG Survivor",
+    "DRG: Survivor"
+   ],
    "scene": "menu",
    "boss": "",
    "boss_aliases": [],
@@ -40,6 +52,126 @@
    "app_id": "2321470",
    "app_name": "Deep Rock Galactic: Survivor",
    "note": "Main menu: Play, Upgrades, Gear, Milestones, Skins, Settings, Quit; the Heavy Duty expansion banner on the right."
+  },
+  {
+   "id": "k2-drg-survivor-title",
+   "file": "deep-rock-galactic-survivor-title.png",
+   "game": "Deep Rock Galactic: Survivor",
+   "game_aliases": [
+    "Deep Rock Galactic Survivor",
+    "DRG Survivor",
+    "DRG: Survivor"
+   ],
+   "scene": "title",
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "note": "K2 capture of the title screen with a Steam friend popup at the top right."
+  },
+  {
+   "id": "k2-brotato-menu",
+   "file": "brotato-menu.png",
+   "game": "Brotato",
+   "game_aliases": [],
+   "scene": "menu",
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "1942280",
+   "app_name": "Brotato",
+   "note": "Main menu (Start, Profile, Codex, Options, Quit; DLC and Mods on the right). K2's brotato-title.png is the same capture and is dropped."
+  },
+  {
+   "id": "k2-hades-menu",
+   "file": "hades-menu.png",
+   "game": "Hades",
+   "game_aliases": [],
+   "scene": "menu",
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "1145360",
+   "app_name": "Hades",
+   "note": "Main menu (Play, Options, Quit) over the title art. K2's hades-title.png is the same capture and is dropped."
+  },
+  {
+   "id": "k2-half-life-2-menu",
+   "file": "half-life-2-menu.png",
+   "game": "Half-Life 2",
+   "game_aliases": [
+    "Half Life 2",
+    "HL2"
+   ],
+   "scene": "menu",
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "220",
+   "app_name": "Half-Life 2",
+   "note": "Main menu list (Half-Life 2, Episode One, Episode Two, Extras, Options, Quit) over the riverside. K2's half-life-2-title.png is the same capture and is dropped."
+  },
+  {
+   "id": "k2-black-mesa-menu",
+   "file": "black-mesa-menu.png",
+   "game": "Black Mesa",
+   "game_aliases": [],
+   "scene": "menu",
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "362890",
+   "app_name": "Black Mesa",
+   "note": "Main menu with a quicksave card and the Campaign / Multiplayer / Achievements tabs."
+  },
+  {
+   "id": "k2-god-of-war-menu",
+   "file": "god-of-war-menu.png",
+   "game": "God of War",
+   "game_aliases": [
+    "God of War (2018)"
+   ],
+   "scene": "menu",
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "1593500",
+   "app_name": "God of War",
+   "in_library": false,
+   "note": "Main menu (Continue, Load Game, New Game, Settings, Quit Game) over a misty forest. K2's god-of-war-title.png is the same capture and is dropped. Not in the library, so the id is the Steam id."
+  },
+  {
+   "id": "k2-god-of-war-play",
+   "file": "god-of-war-play.png",
+   "game": "God of War",
+   "game_aliases": [
+    "God of War (2018)"
+   ],
+   "scene": "play",
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "1593500",
+   "app_name": "God of War",
+   "in_library": false,
+   "note": "Kratos and Atreus in front of a large carved stone shrine; no enemy or boss on screen. Not in the library."
+  },
+  {
+   "id": "k2-god-of-war-pause",
+   "file": "god-of-war-pause.png",
+   "game": "God of War",
+   "game_aliases": [
+    "God of War (2018)"
+   ],
+   "scene": "pause",
+   "boss": "",
+   "boss_aliases": [],
+   "running_game_known": true,
+   "app_id": "1593500",
+   "app_name": "God of War",
+   "in_library": false,
+   "note": "Pause menu: Weapons, Armor, Skills, Map, Goals, Codex, Resources tabs and the Leviathan Axe. Not in the library."
   }
  ]
 }

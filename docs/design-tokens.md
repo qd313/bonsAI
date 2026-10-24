@@ -26,7 +26,7 @@ adding a surface; read this one while building it.
 - [Surfaces](#surfaces)
   - [AI reply bubble](#ai-reply-bubble)
   - [User bubble](#user-bubble)
-  - [The spoiler cover](#the-spoiler-cover)
+  - [The Strategy checklist's route](#the-strategy-checklists-route)
 - [The inline popover idiom](#the-inline-popover-idiom)
 - [Focus rings](#focus-rings)
 - [Type scale](#type-scale)
@@ -156,24 +156,25 @@ Right-aligned via `.bonsai-chat-turn-row-header`
 `max-width: min(88%, 280px)`, `margin-left: auto`, `align-self: flex-end`,
 `text-align: right`.
 
-### The spoiler cover
+### The Strategy checklist's route
 
-A hidden spoiler in an answer, and since plan 98 a covered step on the Strategy checklist's route.
-The fill, border and words come from `.bonsai-spoiler-reveal-target`
-([answerBubble.ts](../src/features/answer/bubble/answerBubble.ts)), which overrides the inline
-values of [MainTabBonsaiAiMarkdownChunk.tsx](../src/features/answer/markdown/MainTabBonsaiAiMarkdownChunk.tsx);
-the radius is the inline one:
+Since plan 98, the Strategy checklist is drawn as a route, from the maintainer's pick on the mock-up board
+(tab 5, option C: `docs/demos/mockup-board/src/45b-maps-r2.js`, "route", and `48b-round2.css`, `.m5-*`)
+([StrategyChecklistPanel.tsx](../src/features/strategy/StrategyChecklistPanel.tsx)). Text sizes are the
+checklist's own, which follow the Text size setting, not the board's 11 and 10 px:
 
 ```
-background:    #0a0a0a
-border:        1px solid rgba(80,80,80,0.55)
-border-radius: 8px
-words:         rgba(160,160,160,0.85), weight 600
+line between dots:  2px, #6f8296, from under one dot to the top of the next; none after the last
+dot:                12px round, 2px border
+  open:             border #9ce7ff, fill #0c1218
+  ticked:           border and fill #9ce7ff, a dark check (#0c1218)
+  goal (last, open): border and fill #facc15
+  covered:          border #3a4654, fill repeating-linear-gradient(45deg, #151b23 0 3px, #1b232d 3px 6px)
+words:              main line weight 600, #fff6d2; small line #d8d2b8
+  ticked:           #8fa3b8, struck through
+  covered:          #8a8a74, "Step N", then "A shows this step" (first covered) or "Covered"
+step:               transparent, 1px transparent border, radius 4, padding 4px 8px, 32px minimum height
 ```
-
-A covered checklist step keeps the step's own 32 px floor and padding, shows its number where the
-tick box was, and reads "Hidden until you get there — A to show"
-([StrategyChecklistPanel.tsx](../src/features/strategy/StrategyChecklistPanel.tsx)).
 
 ---
 

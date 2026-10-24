@@ -25,8 +25,8 @@
  *     unticked step — there is no way to tell at that point that it is meant to be the same step.
  *   - A checklist with fewer than two usable steps, or no usable title, is rejected outright
  *     (`normalizeStrategyChecklist` returns `null`) rather than shown half-built.
- *   - The route look (plan 98, H): a step further on than the person has got is drawn covered, the
- *     way a spoiler is, until they tick the step before it or press A on it. Which steps are covered
+ *   - The route look (plan 98, H): a step further on than the person has got is drawn covered (a
+ *     hatched dot and "Step N") until they tick the step before it or show it with A. Which steps are covered
  *     is worked out here (`strategyRouteCoveredIds`); the steps a person uncovered by hand are kept
  *     by `strategyChecklistPersistence.ts`, in the plugin's browser storage, not in the back end's
  *     saved list (the saved list holds only the ticks).

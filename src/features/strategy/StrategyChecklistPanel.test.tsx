@@ -175,10 +175,12 @@ describe("the note under the checklist title names only real actions (plan 96, F
 });
 
 /*
- * Plan 98, H: the route look (the mock-up board's tab 5, option C). A five-step list draws step 1 open and
- * steps 2 to 5 covered the way a spoiler is; A on a covered step shows it without ticking it; the shown step
- * stays shown when the panel is drawn again; ticking a step opens the next. Every covered step is still the
- * same Decky Button in its own wrapper with its own nav node, so the D-pad walk is the walk it was.
+ * Plan 98, H: the route look, as the maintainer's pick draws it (the mock-up board's tab 5, option C:
+ * 45b-maps-r2.js "route", 48b-round2.css .m5-*). A five-step list draws step 1 open and steps 2 to 5 covered
+ * on one line of dots; the first covered step reads "A shows this step", the later ones "Covered". A on the
+ * first covered step shows it without ticking it, A on a later one does nothing; the shown step stays shown
+ * when the panel is drawn again; ticking a step opens the next. Every covered step is still the same Decky
+ * Button in its own wrapper with its own nav node, so the D-pad walk is the walk it was.
  */
 describe("the checklist drawn as a route (plan 98, H)", () => {
   const ROUTE: StrategyChecklistState = {
@@ -193,7 +195,6 @@ describe("the checklist drawn as a route (plan 98, H)", () => {
     ],
     checkedIds: [],
   };
-  const COVER_WORDS = "Hidden until you get there — A to show";
 
   function drawRoute(checklist: StrategyChecklistState = ROUTE, onToggle = vi.fn()) {
     handed.length = 0;
@@ -209,24 +210,60 @@ describe("the checklist drawn as a route (plan 98, H)", () => {
     window.localStorage.clear();
   });
 
-  it("draws step 1 open and steps 2 to 5 covered, each covered step showing only its number and the cover words", () => {
+  it("draws step 1 open and steps 2 to 5 covered: a bold Step N, 'A shows this step' on the first, 'Covered' after", () => {
     const { stops, kinds } = drawRoute();
     expect(kinds()).toEqual(["open", "covered", "covered", "covered", "covered"]);
-    expect(stops()[0].textContent).toContain("Drop down the well in Dirtmouth");
+    expect(stops()[0].textContent).toBe("Drop down the well in Dirtmouth");
+    expect(stops().slice(1).map((s) => s.textContent)).toEqual([
+      "Step 2A shows this step",
+      "Step 3Covered",
+      "Step 4Covered",
+      "Step 5Covered",
+    ]);
     stops().slice(1).forEach((stop, i) => {
-      expect(stop.querySelector(".bonsai-strategy-checklist-box")?.textContent).toBe(String(i + 2));
-      expect(stop.textContent).toContain(COVER_WORDS);
       expect(stop.textContent).not.toContain(ROUTE.items[i + 1].label);
+      expect(stop.style.color).toBe("rgb(138, 138, 116)");
     });
   });
 
-  it("draws a covered step the way a spoiler cover is: its dark fill, grey border and grey words", () => {
-    const { stops } = drawRoute();
-    const cover = stops()[1];
-    expect(cover.style.background).toBe("rgb(10, 10, 10)");
-    expect(cover.style.border).toBe("1px solid rgba(80, 80, 80, 0.55)");
-    expect(cover.style.borderRadius).toBe("8px");
-    expect(cover.style.color).toBe("rgba(160, 160, 160, 0.85)");
+  it("draws the drawing's dots: hollow cyan when open, hatched when covered, filled with a check when ticked, gold for the goal", () => {
+    const dot = (stop: HTMLElement) => stop.querySelector<HTMLElement>(".bonsai-strategy-checklist-box")!;
+    const fresh = drawRoute();
+    const open = dot(fresh.stops()[0]);
+    expect(open.style.width).toBe("12px");
+    expect(open.style.borderRadius).toBe("50%");
+    expect(open.style.borderColor).toBe("rgb(156, 231, 255)");
+    expect(open.style.background).toBe("rgb(12, 18, 24)");
+    expect(open.textContent).toBe("");
+    const hatched = dot(fresh.stops()[1]);
+    expect(hatched.style.borderColor).toBe("rgb(58, 70, 84)");
+    expect(hatched.getAttribute("style")).toContain("repeating-linear-gradient");
+    fresh.unmount();
+    // Ticked step 1 and 4 shown by ticking 3: the goal (step 5) opens and wears the gold dot.
+    const ticked = drawRoute({ ...ROUTE, checkedIds: ["1", "4"] });
+    expect(dot(ticked.stops()[0]).style.background).toBe("rgb(156, 231, 255)");
+    expect(dot(ticked.stops()[0]).textContent).toBe("✔");
+    expect(ticked.kinds()[4]).toBe("open");
+    expect(dot(ticked.stops()[4]).style.borderColor).toBe("rgb(250, 204, 21)");
+    expect(dot(ticked.stops()[4]).style.background).toBe("rgb(250, 204, 21)");
+  });
+
+  it("joins the dots with one 2 px line per step, none after the last", () => {
+    const { container } = drawRoute();
+    const wraps = Array.from(container.querySelectorAll<HTMLElement>(".bonsai-strategy-checklist-step-wrap"));
+    const lines = wraps.map((w) => w.querySelector<HTMLElement>(".bonsai-strategy-checklist-line"));
+    expect(lines.slice(0, 4).every((l) => l !== null)).toBe(true);
+    expect(lines[4]).toBeNull();
+    expect(lines[0]!.style.width).toBe("2px");
+    expect(lines[0]!.style.background).toBe("rgb(111, 130, 150)");
+  });
+
+  it("A on a later covered step does nothing: it reads Covered", () => {
+    const { stops, kinds, onToggle } = drawRoute();
+    act(() => void fireEvent.click(stops()[3]));
+    expect(onToggle).not.toHaveBeenCalled();
+    expect(kinds()).toEqual(["open", "covered", "covered", "covered", "covered"]);
+    expect(stops()[3].textContent).toBe("Step 4Covered");
   });
 
   it("A on a covered step shows it and does not tick it in the same press", () => {
@@ -246,11 +283,13 @@ describe("the checklist drawn as a route (plan 98, H)", () => {
 
   it("a shown step stays shown when the panel is drawn again (close and reopen)", () => {
     const first = drawRoute();
-    act(() => void fireEvent.click(first.stops()[3]));
-    expect(first.kinds()).toEqual(["open", "covered", "covered", "open", "covered"]);
+    act(() => void fireEvent.click(first.stops()[1]));
+    expect(first.kinds()).toEqual(["open", "open", "covered", "covered", "covered"]);
     first.unmount();
     const again = drawRoute();
-    expect(again.kinds()).toEqual(["open", "covered", "covered", "open", "covered"]);
+    expect(again.kinds()).toEqual(["open", "open", "covered", "covered", "covered"]);
+    // The next covered step is now the one A shows.
+    expect(again.stops()[2].textContent).toBe("Step 3A shows this step");
   });
 
   it("a new list starts covered again, and the old list keeps what was shown on it", () => {
@@ -306,7 +345,7 @@ describe("the checklist drawn as a route (plan 98, H)", () => {
     let at = 0;
     for (let press = 0; press < 12 && at < wraps.length; press++) {
       const stop = wraps[at].querySelector<HTMLElement>(".bonsai-strategy-checklist-step")!;
-      visited.push(stop.querySelector(".bonsai-strategy-checklist-box")?.textContent || "1");
+      visited.push(stop.getAttribute("data-route-step") ?? "?");
       const handler = wrapped[at]?.onMoveDown as (() => boolean) | undefined;
       if (handler) {
         expect(handler()).toBe(true);

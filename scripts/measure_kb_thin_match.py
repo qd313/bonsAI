@@ -62,6 +62,13 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--corpus", default=os.path.join(ROOT, "build", "knowledge-base"))
     p.add_argument("--pc-ip", default="127.0.0.1")
     p.add_argument("--json", default="", help="Write the per-row detail to this path.")
+    p.add_argument(
+        "--line-gate", default="",
+        help="Instead of the sweep: ask the line gate's set (see LINE GATE below) and write every "
+             "ask to this path.")
+    p.add_argument(
+        "--compare", default="",
+        help="With --line-gate: an earlier --line-gate file; print line before / after per group.")
     return p.parse_args()
 
 
@@ -152,6 +159,179 @@ def sweep(rows: list[dict]) -> None:
             ", ".join(r["attached"])[:52]))
 
 
+# --- LINE GATE (plan 98 lane L) ------------------------------------------------------------------
+#
+# Does the "No close match" line show on each ask, and why? The set is the one the 2026-10-03
+# measurement used (287 questions with a recorded right note): every Strategy row of kb_eval_v2.json
+# with an expected note and a Steam app id (243), plus every Strategy case of kb_answer_eval.json
+# with an expected card (44). Each is asked twice: with its game running (the app id), and with
+# nothing running and the game's name typed at the end ("... in Hades"). A "right-note ask" is one
+# whose expected note really attached on that ask. Then the questions the line exists for: the
+# four device sentences above, the 2026-10-24 Deck readings, two junk phrases, and the two Deck
+# answers the screen's line-removal was built for.
+TONIGHT = [
+    ("Who is the final boss called Zorblax in this game", "2321470", "tonight"),
+    ("How do I defeat the boss named Grimthak in this game", "2321470", "tonight"),
+    ("How do I buy a house in this game", "2321470", "tonight"),
+    ("In Hades, how do I beat the boss called the Bone Hydra", "", "tonight"),
+    ("thank you very much", "2321470", "junk"),
+    ("what time is it", "2321470", "junk"),
+    ("what does the shotgun do in half life 2", "", "old-false-line"),
+    ("what should i know about the boss past the crystal spike area in hollow knight, "
+     "the one that looks just like me", "", "old-false-line"),
+]
+ANSWER_FIXTURE = os.path.join(ROOT, "tests", "fixtures", "kb_answer_eval.json")
+
+
+def _game_titles(settings: dict) -> dict[str, str]:
+    import sqlite3
+
+    with sqlite3.connect(kb.resolve_corpus_db_path(settings)) as db:
+        return {str(a): str(t) for a, t in db.execute(
+            "select app_id, canonical_title from games where app_id is not null")}
+
+
+def line_probe(settings: dict, question: str, *, app_id: str, pc_ip: str) -> dict:
+    """One ask through the real path, then the real footer decision on what it attached."""
+    from backend.answer.transparency_service import build_knowledge_base_transparency
+    from backend.knowledge import kb_not_in_notes_notice as notice
+    from backend.knowledge.kb_attached_notes import _parse_kb_attached_notes
+
+    text_title = "" if app_id.strip() else kb.resolve_title_from_question(settings, question)
+    gate, domain = kb.should_retrieve_knowledge(
+        use_local_knowledge_base=True, ask_mode="strategy", question=question, app_id=app_id,
+        app_name="", text_resolved_title=text_title)
+    if not gate:
+        return {"routed": False, "attached": [], "line": False, "method": "-"}
+    res = kb.retrieve_knowledge_context(
+        settings, ask_mode="strategy", question=question, app_id=app_id, app_name="",
+        shortcut_name="", text_resolved_title=text_title, domain=domain, pc_ip=pc_ip)
+    tr = build_knowledge_base_transparency(
+        attached=res.attached, trust_tier=res.trust_tier, sources=res.sources, notes=res.notes,
+        timing_ms=res.timing_ms, unavailable_reason=res.unavailable_reason,
+        retrieval_method=res.retrieval_method, kb_domain=domain, best_meaning=res.best_meaning,
+        top_card_keyword_score=res.top_card_keyword_score,
+        best_meaning_without_game_name=res.best_meaning_without_game_name)
+    notes = _parse_kb_attached_notes(
+        res.text_block or "", kb_domain=domain, sources=res.sources,
+        attached_ids=getattr(res, "attached_ids", None)) if res.attached else []
+    line = notice.should_show_no_close_match_notice_for_turn(
+        ask_mode="strategy", kb_transparency=tr,
+        kb_coverage_transparency={"kb_coverage_status": "sections"},
+        text_resolved_title=text_title, question_for_kb_search=question, kb_attached_notes=notes)
+    game = text_title or next((n.get("game_title") for n in notes if n.get("game_title")), "")
+    generic = getattr(notice, "_GENERIC_ADVICE_WORDS", frozenset())
+    subject = sorted(w for w in notice._content_words(question) - notice._content_words(game)
+                     if w not in generic)
+    in_notes: set[str] = set()
+    for n in notes:
+        in_notes |= notice._content_words(str(n.get("name") or ""))
+        in_notes |= notice._content_words(str(n.get("card") or ""))
+    return {
+        "routed": True, "method": res.retrieval_method, "domain": domain, "route": res.notes,
+        "attached": [str(n.get("name") or "") for n in notes], "game": game,
+        "keyword_score": round(float(res.top_card_keyword_score or 0.0), 4),
+        "best_meaning": res.best_meaning,
+        "meaning_without_game": res.best_meaning_without_game_name,
+        "subject_words": subject, "subject_in_notes": sorted(set(subject) & in_notes),
+        "line": bool(line),
+    }
+
+
+def _gate_asks(titles: dict[str, str]) -> list[dict]:
+    """The asks the line gate runs, each with its group and (for a right-note row) its note."""
+    with open(FIXTURE, encoding="utf-8") as fh:
+        rows = [q for q in json.load(fh)["queries"]
+                if q.get("domain") == "strategy" and q.get("expect_section")
+                and str(q.get("app_id") or "").strip()]
+    with open(ANSWER_FIXTURE, encoding="utf-8") as fh:
+        cases = [c for c in json.load(fh)["cases"]
+                 if c.get("ask_mode") == "strategy" and c.get("expect_card")]
+    base = [(r["id"], r["query"], str(r["app_id"]), r["expect_section"]) for r in rows]
+    base += [(c["id"], c["question"], str(c.get("app_id") or ""), c["expect_card"]) for c in cases]
+    asks: list[dict] = []
+    for rid, q, app_id, want in base:
+        if app_id:
+            asks.append({"id": rid + "/running", "group": "fixture", "query": q, "app_id": app_id,
+                         "want": want})
+            title = titles.get(app_id, "")
+            if title:
+                typed = "%s in %s" % (q.rstrip(" ?.!"), title)
+                asks.append({"id": rid + "/typed", "group": "fixture", "query": typed, "app_id": "",
+                             "want": want})
+        else:
+            asks.append({"id": rid + "/typed", "group": "fixture", "query": q, "app_id": "",
+                         "want": want})
+    for q, app_id, game in DEVICE_SENTENCES:
+        asks.append({"id": "device/" + q[:24], "group": "device", "query": q, "app_id": app_id,
+                     "want": ""})
+    for q, app_id, group in TONIGHT:
+        asks.append({"id": group + "/" + q[:24], "group": group, "query": q, "app_id": app_id,
+                     "want": ""})
+    return asks
+
+
+def run_line_gate(settings: dict, args: argparse.Namespace) -> int:
+    asks = _gate_asks(_game_titles(settings))
+    out: list[dict] = []
+    for i, ask in enumerate(asks):
+        r = line_probe(settings, ask["query"], app_id=ask["app_id"], pc_ip=args.pc_ip)
+        r.update(ask)
+        r["right_note"] = bool(ask["want"]) and any(
+            ask["want"].lower() == n.lower() for n in r["attached"])
+        out.append(r)
+        if (i + 1) % 100 == 0:
+            print("  %d of %d asked" % (i + 1, len(asks)), file=sys.stderr)
+    with open(args.line_gate, "w", encoding="utf-8") as fh:
+        json.dump({"asks": out}, fh, indent=1)
+    before = {}
+    if args.compare:
+        with open(args.compare, encoding="utf-8") as fh:
+            before = {a["id"]: a for a in json.load(fh)["asks"]}
+
+    def group_of(a: dict) -> str:
+        if a["group"] == "fixture":
+            return "fixture right-note" if a["right_note"] else "fixture other"
+        return a["group"]
+
+    print("retrieval method counts: %s" % dict(
+        sorted({m: sum(1 for a in out if a["method"] == m) for m in {a["method"] for a in out}}
+               .items())))
+    print()
+    print("%-20s %5s %12s %12s %8s %8s" % ("group", "asks", "line before", "line after",
+                                           "gained", "lost"))
+    for g in ("fixture right-note", "fixture other", "device", "tonight", "junk",
+              "old-false-line"):
+        rows = [a for a in out if group_of(a) == g]
+        was = [before.get(a["id"], {}).get("line") for a in rows]
+        print("%-20s %5d %12s %12d %8s %8s" % (
+            g, len(rows), sum(1 for w in was if w) if before else "-",
+            sum(1 for a in rows if a["line"]),
+            sum(1 for a, w in zip(rows, was) if a["line"] and not w) if before else "-",
+            sum(1 for a, w in zip(rows, was) if w and not a["line"]) if before else "-"))
+    print()
+    print("--- every ask outside the fixture, and every right-note ask whose line changed ---")
+    for a in out:
+        changed = before and before.get(a["id"], {}).get("line") != a["line"]
+        if a["group"] == "fixture" and not changed:
+            continue
+        print("%s | %s" % (a["id"], a["query"][:70]))
+        print("    method=%s keyword=%s meaning=%s attached=[%s]" % (
+            a["method"], a.get("keyword_score"), a.get("best_meaning"),
+            "; ".join(a["attached"])))
+        print("    subject=%s in_notes=%s line %s -> %s" % (
+            a.get("subject_words"), a.get("subject_in_notes"),
+            before.get(a["id"], {}).get("line", "?"), a["line"]))
+    lone = [a for a in out if a["right_note"] and a.get("subject_words")
+            and not a.get("subject_in_notes")]
+    print()
+    print("--- right-note asks with no subject word in any attached note: %d ---" % len(lone))
+    for a in lone:
+        print("    %s | %s | subject=%s" % (a["id"], a["query"][:60], a["subject_words"]))
+    print("\nwrote %s" % args.line_gate)
+    return 0
+
+
 def main() -> int:
     args = parse_args()
     settings = {
@@ -162,6 +342,8 @@ def main() -> int:
     if not kb.resolve_corpus_db_path(settings):
         print("no corpus at %s -- build one first" % args.corpus)
         return 2
+    if args.line_gate:
+        return run_line_gate(settings, args)
 
     with open(FIXTURE, encoding="utf-8") as fh:
         fx = json.load(fh)

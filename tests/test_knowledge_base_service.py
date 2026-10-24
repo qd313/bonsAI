@@ -260,15 +260,14 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     self.assertTrue(result.attached)
     self.assertIn('F4SE', result.text_block)
 
-  def test_strategy_question_about_the_game_does_not_get_a_deck_tip(self):
-    """The brief's own guard rail: a real strategy question about the same game that ships a
-    per-game tip must stay clean. Deep Rock Galactic: Survivor's boss card attaches as usual;
-    its unrelated Render Scale tip does not ride along."""
+  def _dreadnought_result(self):
+    """The "how do i beat the dreadnought" question for Deep Rock Galactic: Survivor, asked in
+    Strategy mode against the seed corpus -- shared by the tests that read what it attaches."""
     settings = {
       "use_local_knowledge_base": True,
       "rag_corpus_path": str(SEED_DB.parent),
     }
-    result = retrieve_knowledge_context(
+    return retrieve_knowledge_context(
       settings,
       ask_mode="strategy",
       question="how do i beat the dreadnought",
@@ -277,6 +276,12 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       domain="strategy",
       pc_ip="",
     )
+
+  def test_strategy_question_about_the_game_does_not_get_a_deck_tip(self):
+    """The brief's own guard rail: a real strategy question about the same game that ships a
+    per-game tip must stay clean. Deep Rock Galactic: Survivor's boss card attaches as usual;
+    its unrelated Render Scale tip does not ride along."""
+    result = self._dreadnought_result()
     self.assertTrue(result.attached)
     self.assertIn("Dreadnought", result.text_block)
     self.assertNotIn("Render Scale", result.text_block)
@@ -286,19 +291,7 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     budget, in block order -- the screen needs them to send a thumbs-down to the right note.
     Read back from the library itself, so a wrong column would show here."""
     import sqlite3
-    settings = {
-      "use_local_knowledge_base": True,
-      "rag_corpus_path": str(SEED_DB.parent),
-    }
-    result = retrieve_knowledge_context(
-      settings,
-      ask_mode="strategy",
-      question="how do i beat the dreadnought",
-      app_id="2321470",
-      app_name="Deep Rock Galactic: Survivor",
-      domain="strategy",
-      pc_ip="",
-    )
+    result = self._dreadnought_result()
     self.assertTrue(result.attached)
     self.assertEqual(len(result.attached_ids), len(result.sources))
     conn = sqlite3.connect(str(SEED_DB))

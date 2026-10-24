@@ -5,7 +5,9 @@
  * reasons appear after the usual five: Wrong tip, Outdated, Wrong edition (plan 98, the maintainer's pick
  * "option C"). Picking one marks the note so it ranks lower for questions like this one, and the reasons
  * are replaced by one line: "Marked not helpful" with an Undo beside it, and under it, in gold,
- * Noted — "<note>" will rank lower for questions like this.
+ * Noted — "<note>" will rank lower for questions like this. When the answer used two or three notes, the
+ * reason first opens one more row, "Which note was it?": a column with each note's name, then "Both of
+ * them" or "All of them" (the gold line then says "these notes"); B goes back to the reasons.
  *
  * Used for: buildReplyActionsElement.tsx draws these rows; useReplyFeedbackChips.ts holds what was picked
  * and makes the call through the function it is handed.
@@ -27,15 +29,27 @@
  *      | Down                          ^ Up (from Show details or the note card: the first chip)
  *   the note card's Keep, else Show details
  *
- *   after A on a reason:
+ *   after A on a reason, on an answer that used two or three notes:
+ *   Not really (greyed)
+ *      | Down                          ^ Up
+ *   [ Glyphid Dreadnought        ]       A marks this note; B goes back to the reasons, the ring on the
+ *      | Down                          ^ Up      reason picked; Left and Right hold
+ *   [ Lootbug                    ]
+ *      | Down                          ^ Up
+ *   [ Both of them               ]       A marks every note
+ *      | Down                          ^ Up
+ *   the note card's Keep, else Show details
+ *
+ *   after A on a reason (one note), or on a note in the column:
  *   Not really (greyed)
  *      | Down                          ^ Up
  *   Marked not helpful          [Undo]     A undoes; Left and Right hold
  *      | Down                          ^ Up
  *   the note card's Keep, else Show details
  *
- * The ring is handed on after a press removes the stop that held it (handRingOnWhenGone.ts): onto Undo
- * after a reason, back onto the reason after Undo.
+ * The ring is handed on after a press removes the stop that held it (handRingOnWhenGone.ts): onto the
+ * column's first note or onto Undo after a reason, onto Undo after a note, back onto the reason after B or
+ * Undo.
  */
 import React from "react";
 import { Focusable } from "@decky/ui";
@@ -77,17 +91,22 @@ export type DemoteNoteFn = (
   undo: boolean,
 ) => Promise<DemoteNoteResult>;
 
-/** Where the rows are: the reasons (with the one last picked, for the ring's way back), or marked. */
+/** Where the rows are: the reasons (with the one last picked, for the ring's way back), "which note", or marked. */
 export type ReplyDemoteState =
   | { phase: "reasons"; reason: DemoteReasonId | null; error?: string }
+  | { phase: "which"; reason: DemoteReasonId; error?: string }
   | { phase: "done"; reason: DemoteReasonId; picked: DemotableNote[]; error?: string };
 
 export const DEMOTE_START: ReplyDemoteState = { phase: "reasons", reason: null };
 
 /** What a press here asks the hook to do. */
 export type ReplyDemoteActions = {
-  /** A reason was picked on an answer that used these notes. */
+  /** A reason was picked on an answer that used these notes: one is marked at once, more ask which. */
   choose: (reason: DemoteReasonId, notes: readonly DemotableNote[]) => void;
+  /** A note (or every note) was picked in the "Which note was it?" column. */
+  pick: (notes: readonly DemotableNote[]) => void;
+  /** B in the column: back to the reasons, the reason remembered. */
+  back: () => void;
   undo: () => void;
 };
 
@@ -142,13 +161,20 @@ type Moves = { up: () => boolean; down: () => boolean; left: () => boolean; righ
  * the latest one (the same reason buildReplyActionsElement keeps its thumbs row's node by key). Undo uses
  * the "reason-chips" stop's own node: while it shows, it is that stop.
  */
-type DemoteParts = { reasons: (HTMLElement | null)[]; reasonNavs: NavHolder[]; undo: HTMLElement | null };
+type DemoteParts = {
+  reasons: (HTMLElement | null)[];
+  reasonNavs: NavHolder[];
+  /** The "Which note was it?" column, top to bottom; its first stop uses the "reason-chips" node like Undo. */
+  which: (HTMLElement | null)[];
+  whichNavs: NavHolder[];
+  undo: HTMLElement | null;
+};
 const partsByKey = new Map<string, DemoteParts>();
 
 function partsFor(replyKey: string): DemoteParts {
   let parts = partsByKey.get(replyKey);
   if (!parts) {
-    parts = { reasons: [], reasonNavs: DEMOTE_REASONS.map(() => ({ current: null })), undo: null };
+    parts = { reasons: [], reasonNavs: DEMOTE_REASONS.map(() => ({ current: null })), which: [], whichNavs: [], undo: null };
     partsByKey.set(replyKey, parts);
   }
   return parts;
@@ -180,17 +206,36 @@ function focusUndo(replyKey: string): boolean {
   return landOn(replyStopNavRef("reason-chips"), partsFor(replyKey).undo);
 }
 
-/**
- * The ring arriving from above (the reasons' second row, `column` its chip; or the thumbs while the reasons
- * are hidden): Undo when it shows, else the reason in that column.
- */
-export function focusDemoteFromAbove(replyKey: string, column = 0): boolean {
-  return focusUndo(replyKey) || focusReason(replyKey, column);
+/** The column's stop `index` has this nav node: the first is the "reason-chips" stop's own. */
+function whichNav(parts: DemoteParts, index: number): NavHolder {
+  if (index === 0) return replyStopNavRef("reason-chips");
+  while (parts.whichNavs.length <= index) parts.whichNavs.push({ current: null });
+  return parts.whichNavs[index]!;
 }
 
-/** The ring arriving from below (the note card or Show details): Undo when it shows, else the first reason. */
+/** The ring onto the column's stop `index` (counted from the end when negative). */
+function focusWhich(replyKey: string, index: number): boolean {
+  const parts = partsFor(replyKey);
+  const shown = parts.which.filter((el) => el?.isConnected).length;
+  if (!shown) return false;
+  const i = index < 0 ? Math.max(shown + index, 0) : Math.min(index, shown - 1);
+  return landOn(whichNav(parts, i), parts.which[i]);
+}
+
+/**
+ * The ring arriving from above (the reasons' second row, `column` its chip; or the thumbs while the reasons
+ * are hidden): Undo when it shows, else the column's first note, else the reason in that column.
+ */
+export function focusDemoteFromAbove(replyKey: string, column = 0): boolean {
+  return focusUndo(replyKey) || focusWhich(replyKey, 0) || focusReason(replyKey, column);
+}
+
+/**
+ * The ring arriving from below (the note card or Show details): Undo when it shows, else the column's last
+ * stop, else the first reason.
+ */
 export function focusDemoteFromBelow(replyKey: string): boolean {
-  return focusUndo(replyKey) || focusReason(replyKey, 0);
+  return focusUndo(replyKey) || focusWhich(replyKey, -1) || focusReason(replyKey, 0);
 }
 
 /** A press that arrives as both A and a click within this long counts once. */
@@ -215,6 +260,8 @@ function demoteStop(o: {
   nav: NavHolder;
   moves: Moves;
   onPress: () => void;
+  /** B on this stop; without one, B is left to Steam. */
+  onBack?: () => void;
   elRef: (el: HTMLElement | null) => void;
   disabled?: boolean;
   children: React.ReactNode;
@@ -249,6 +296,15 @@ function demoteStop(o: {
           if (isDeckDirectionRightEvent(evt)) return o.moves.right();
           return false;
         },
+        ...(o.onBack
+          ? {
+              onCancelButton: (evt: unknown) => {
+                o.onBack!();
+                (evt as { preventDefault?: () => void } | undefined)?.preventDefault?.();
+                return true;
+              },
+            }
+          : {}),
       } as Record<string, unknown>)}
     >
       {o.children}
@@ -265,7 +321,7 @@ export type DemoteRowsArgs = {
   disabled: boolean;
   /** Up from the reason in this column: the five reasons' second row. */
   upFromReason: (column: number) => boolean;
-  /** Up from Undo: the thumbs, or whatever sits above the reply row. */
+  /** Up from Undo or the column's first note: the thumbs, or whatever sits above the reply row. */
   upOut: () => boolean;
   /** Down out of these rows: the note card, else Show details and what follows. */
   downOut: () => boolean;
@@ -275,7 +331,8 @@ export type DemoteRowsArgs = {
 
 /**
  * In: the reply, what the hook holds for it, the notes, and where the ring goes when it leaves these rows.
- * Out: the three reasons as a row, or the "Marked not helpful / Undo" line and the gold line under it.
+ * Out: the three reasons as a row, the "Which note was it?" column, or the "Marked not helpful / Undo" line
+ * and the gold line under it.
  * Can go wrong: nothing throws; a call that fails shows its words under the rows (the hook sets them).
  */
 export function renderDemoteRows(a: DemoteRowsArgs): React.ReactElement {
@@ -289,11 +346,11 @@ export function renderDemoteRows(a: DemoteRowsArgs): React.ReactElement {
     </div>
   ) : null;
 
+  const reasonIndex = (reason: DemoteReasonId | null) => DEMOTE_REASONS.findIndex((r) => r.id === reason);
+
   if (state.phase === "done") {
-    const undo = () => {
-      const back = DEMOTE_REASONS.findIndex((r) => r.id === state.reason);
-      pressThenHandRingOn(parts.undo, view.undo, () => void focusReason(replyKey, back));
-    };
+    const undo = () =>
+      pressThenHandRingOn(parts.undo, view.undo, () => void focusReason(replyKey, reasonIndex(state.reason)));
     return (
       <>
         <div className="bonsai-kb-demote-done">
@@ -322,8 +379,55 @@ export function renderDemoteRows(a: DemoteRowsArgs): React.ReactElement {
     );
   }
 
+  if (state.phase === "which") {
+    const back = (el: HTMLElement | null) =>
+      pressThenHandRingOn(el, view.back, () => void focusReason(replyKey, reasonIndex(state.reason)));
+    const picks: Array<{ label: string; picked: DemotableNote[]; all: boolean }> = [
+      ...notes.map((note) => ({ label: kbNoteDisplayName(note), picked: [note], all: false })),
+      { label: notes.length === 2 ? "Both of them" : "All of them", picked: notes, all: true },
+    ];
+    parts.which.length = picks.length;
+    const last = picks.length - 1;
+    return (
+      <>
+        <span className="bonsai-chat-feedback-row__label">Which note was it?</span>
+        <div className="bonsai-kb-demote-which">
+          {picks.map((p, i) =>
+            demoteStop({
+              key: `which-${i}`,
+              className: `bonsai-kb-demote-chip bonsai-kb-demote-pick${p.all ? " bonsai-kb-demote-pick--all" : ""}`,
+              label: p.all ? `${p.label}, mark every note` : p.label,
+              nav: whichNav(parts, i),
+              moves: {
+                up: i === 0 ? a.upOut : () => focusWhich(replyKey, i - 1),
+                down: i === last ? a.downOut : () => focusWhich(replyKey, i + 1),
+                left: hold,
+                right: hold,
+              },
+              onPress: () => pressThenHandRingOn(parts.which[i], () => view.pick(p.picked), () => void focusUndo(replyKey)),
+              onBack: () => back(parts.which[i] ?? null),
+              disabled,
+              elRef: (el) => {
+                parts.which[i] = el;
+                /* The column's first note is the stop a Down from the answer's end lands on while it shows. */
+                if (i === 0) registerReplyStop("reason-chips", el);
+              },
+              children: p.label,
+            }),
+          )}
+        </div>
+        {error}
+      </>
+    );
+  }
+
+  /* One note: marked at once, the ring to Undo. More: the column, the ring to its first note. */
   const choose = (reason: DemoteReasonId, index: number) =>
-    pressThenHandRingOn(parts.reasons[index], () => view.choose(reason, notes), () => void focusUndo(replyKey));
+    pressThenHandRingOn(
+      parts.reasons[index],
+      () => view.choose(reason, notes),
+      () => void (notes.length > 1 ? focusWhich(replyKey, 0) : focusUndo(replyKey)),
+    );
   return (
     <>
       <div

@@ -6,7 +6,9 @@
  *          Not really, then the eight reasons each once, then A on Wrong tip: the row reads "Marked not helpful"
  *          with Undo, the gold line names the note, the ring is on Undo, and Down leaves to Show details. Undo
  *          puts the reasons back with the ring on Wrong tip. The three reasons are absent on an answer that used
- *          no note.
+ *          no note. On an answer that used two notes, Wrong tip opens "Which note was it?" with the ring on the
+ *          first note; Down walks the names and "Both of them"; B goes back to the reasons with the ring on Wrong
+ *          tip; A on a name marks that note alone and lands on Undo; no stop is visited twice on the way.
  * Used for: buildReplyActionsElement.tsx, kbDemoteRows.tsx, useReplyFeedbackChips.ts.
  * Does not: Prove any of it on the Deck, or call the real plugin method (a stand-in records each call). Steam's
  *           own step for a press no handler claims is modelled here as the stop drawn next in that direction
@@ -95,8 +97,12 @@ const ROWS: Array<[string, Box]> = [
   ["reasons-1", [590, 614]],
   ["reasons-2", [620, 644]],
   ["reasons-3", [650, 674]],
+  ["which-1", [590, 614]],
+  ["which-2", [619, 643]],
+  ["which-3", [648, 672]],
+  ["which-4", [677, 701]],
   ["undo", [590, 606]],
-  ["details", [690, 706]],
+  ["details", [716, 732]],
 ];
 
 function mount(rule: SteamScrollRule | undefined, steamTopMargin: boolean, notes: DemotableNote[]) {
@@ -133,6 +139,7 @@ function mount(rule: SteamScrollRule | undefined, steamTopMargin: boolean, notes
     chipRows.forEach((r, i) =>
       [...r.querySelectorAll("button, .bonsai-kb-demote-chip")].forEach((c) => put(c, c.getAttribute("aria-label") ?? "?", `reasons-${i + 1}`)),
     );
+    holder.querySelectorAll(".bonsai-kb-demote-pick").forEach((c, i) => put(c, c.textContent ?? "?", `which-${i + 1}`));
     put(holder.querySelector(".bonsai-kb-demote-undo"), "Undo", "undo");
     put(holder.querySelector("[aria-label='Show details']"), "Show details", "details");
   };
@@ -202,7 +209,22 @@ function mount(rule: SteamScrollRule | undefined, steamTopMargin: boolean, notes
     const e = stopOf(el);
     return Boolean(e && a.bottom(e) > a.paneTop && a.top(e) < a.dockTop);
   };
-  return { a, holder, calls, press, pressA, nameOf, visible, ring: () => nameOf(document.activeElement) };
+  /** B on the stop holding the ring, then the redraw and the hand-over settle, as after A. */
+  const pressB = async () => {
+    const ring = stopOf(document.activeElement) as SteamEl | null;
+    let heard = false;
+    act(() => {
+      const cancel = ring?.__nav?.onCancelButton;
+      if (cancel) heard = cancel({ preventDefault: () => {} }) === true;
+    });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 120));
+    });
+    layout();
+    a.settle();
+    return heard;
+  };
+  return { a, holder, calls, press, pressA, pressB, nameOf, visible, ring: () => nameOf(document.activeElement) };
 }
 
 describe("Not really, then Wrong tip, on an answer that used one note", () => {
@@ -333,5 +355,110 @@ describe("every new stop is the plugin's own and hears A", () => {
     act(() => putSteamRingOn(chips[0] as HTMLElement));
     await m.pressA();
     check(m.holder.querySelector(".bonsai-kb-demote-undo"));
+  });
+});
+
+describe("on an answer that used two or three notes, Which note was it?", () => {
+  const TWO = [NOTE(), NOTE({ name: "Lootbug", kind: "enemy", section_id: 77 })];
+
+  it.each(RULES)(
+    "Wrong tip opens the column; Down walks it; B goes back; A on a name marks that note and lands on Undo (Steam rule %s, top margin %s)",
+    async (rule, margin) => {
+      const m = mount(rule, margin, TWO);
+      act(() => putSteamRingOn(m.holder.querySelector<HTMLElement>("[aria-label='Mark reply not helpful']")!));
+      m.a.settle();
+      await m.pressA();
+      const seen = [m.ring()];
+      const problems: string[] = [];
+      const note = (what: string) => {
+        seen.push(m.ring());
+        if (!m.visible(document.activeElement)) problems.push(`${what}: ${m.ring()} is off the screen`);
+      };
+      for (const dir of ["onMoveDown", "onMoveDown", "onMoveDown"] as Dir[]) {
+        m.press(dir);
+        note(dir);
+      }
+      expect(seen).toEqual(["Not really", "Wrong game or topic", "Spoiled it", "Wrong tip"]);
+
+      await m.pressA();
+      note("A on Wrong tip");
+      expect(m.calls).toEqual([]);
+      expect(m.holder.textContent).toContain("Which note was it?");
+      expect([...m.holder.querySelectorAll(".bonsai-kb-demote-pick")].map((c) => c.textContent)).toEqual([
+        "Glyphid Dreadnought", "Lootbug", "Both of them",
+      ]);
+      expect(m.ring()).toBe("Glyphid Dreadnought");
+      m.press("onMoveDown");
+      note("Down");
+      m.press("onMoveDown");
+      note("Down");
+      expect(m.ring()).toBe("Both of them");
+      expect(new Set(seen).size).toBe(seen.length);
+      m.press("onMoveDown");
+      expect(m.ring()).toBe("Show details");
+      m.press("onMoveUp");
+      expect(m.ring()).toBe("Both of them");
+
+      expect(await m.pressB()).toBe(true);
+      expect(m.holder.querySelector(".bonsai-kb-demote-pick")).toBeNull();
+      expect(m.holder.textContent).toContain("What went wrong?");
+      expect(m.ring()).toBe("Wrong tip");
+
+      await m.pressA();
+      expect(m.ring()).toBe("Glyphid Dreadnought");
+      m.press("onMoveUp");
+      expect(m.ring()).toBe("Not really");
+      m.press("onMoveDown");
+      expect(m.ring()).toBe("Glyphid Dreadnought");
+      await m.pressA();
+      expect(m.calls).toEqual([[41, "note", "wrong_tip", false]]);
+      expect(m.holder.querySelector(".bonsai-kb-demote-noted")?.textContent).toBe(
+        'Noted — "Glyphid Dreadnought" will rank lower for questions like this.',
+      );
+      expect(m.ring()).toBe("Undo");
+      m.press("onMoveDown");
+      expect(m.ring()).toBe("Show details");
+      expect(problems).toEqual([]);
+    },
+  );
+
+  it("All of them marks every note, and the gold line says these notes", async () => {
+    const three = [...TWO, NOTE({ name: "proton", kind: "tip", section_id: 41 })];
+    const m = mount(undefined, false, three);
+    act(() => putSteamRingOn(m.holder.querySelector<HTMLElement>("[aria-label='Mark reply not helpful']")!));
+    await m.pressA();
+    act(() => putSteamRingOn(m.holder.querySelector<HTMLElement>(".bonsai-kb-demote-chip[aria-label='Outdated']")!));
+    await m.pressA();
+    const picks = [...m.holder.querySelectorAll<HTMLElement>(".bonsai-kb-demote-pick")];
+    expect(picks.map((c) => c.textContent)).toEqual(["Glyphid Dreadnought", "Lootbug", "Proton", "All of them"]);
+    act(() => putSteamRingOn(picks[3]!));
+    await m.pressA();
+    expect(m.calls).toEqual([
+      [41, "note", "outdated", false],
+      [77, "note", "outdated", false],
+      [41, "tip", "outdated", false],
+    ]);
+    expect(m.holder.querySelector(".bonsai-kb-demote-noted")?.textContent).toBe(
+      "Noted — these notes will rank lower for questions like this.",
+    );
+    expect(m.ring()).toBe("Undo");
+  });
+
+  it("each stop in the column is the plugin's own, with all four moves, A and B; Left and Right hold", async () => {
+    const m = mount(undefined, false, TWO);
+    act(() => putSteamRingOn(m.holder.querySelector<HTMLElement>("[aria-label='Mark reply not helpful']")!));
+    await m.pressA();
+    act(() => putSteamRingOn(m.holder.querySelector<HTMLElement>(".bonsai-kb-demote-chip[aria-label='Wrong edition']")!));
+    await m.pressA();
+    for (const el of m.holder.querySelectorAll(".bonsai-kb-demote-pick")) {
+      const nav = (el as SteamEl).__nav!;
+      expect(el.closest(".bonsai-chat-reply-actions")).not.toBeNull();
+      expect(el.getAttribute("data-steam-stop")).toBe("true");
+      for (const k of ["onMoveUp", "onMoveDown", "onMoveLeft", "onMoveRight", "onOKButton", "onCancelButton"]) {
+        expect(typeof nav[k]).toBe("function");
+      }
+      expect(nav.onMoveLeft!()).toBe(true);
+      expect(nav.onMoveRight!()).toBe(true);
+    }
   });
 });

@@ -214,7 +214,17 @@ export function useReplyFeedbackChips(a: UseReplyFeedbackChipsArgs): ReplyFeedba
   const replyDemoteActions: ReplyDemoteActions = {
     choose: (reason, notes) => {
       const usable = demotableNotes(notes);
-      if (usable.length) void confirmDemote(reason, usable);
+      if (usable.length === 1) void confirmDemote(reason, usable);
+      else if (usable.length > 1) showDemote(replyKey, { phase: "which", reason });
+    },
+    pick: (notes) => {
+      const was = demoteNow.current;
+      const usable = demotableNotes(notes);
+      if (was.phase === "which" && usable.length) void confirmDemote(was.reason, usable);
+    },
+    back: () => {
+      const was = demoteNow.current;
+      if (was.phase === "which") showDemote(replyKey, { phase: "reasons", reason: was.reason });
     },
     undo: () => {
       const was = demoteNow.current;

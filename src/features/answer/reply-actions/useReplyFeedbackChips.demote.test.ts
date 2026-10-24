@@ -118,4 +118,19 @@ describe("the rating hook's note marks", () => {
     expect(calls).toEqual([]);
     expect(h.state()).toEqual({ phase: "reasons", reason: null });
   });
+
+  it("two notes ask which first; pick marks only the one picked, back keeps the reason", async () => {
+    const calls: unknown[][] = [];
+    const h = setup(async (...args) => (calls.push(args), { ok: true }));
+    const lootbug = { ...NOTE, name: "Lootbug", kind: "enemy", section_id: 77 };
+    act(() => h.view.result.current.replyDemoteActions.choose("wrong_tip", [NOTE, lootbug]));
+    expect(h.state()).toEqual({ phase: "which", reason: "wrong_tip" });
+    act(() => h.view.result.current.replyDemoteActions.back());
+    expect(h.state()).toEqual({ phase: "reasons", reason: "wrong_tip" });
+    act(() => h.view.result.current.replyDemoteActions.choose("wrong_tip", [NOTE, lootbug]));
+    act(() => h.view.result.current.replyDemoteActions.pick([lootbug]));
+    await h.settle();
+    expect(calls).toEqual([[77, "note", "wrong_tip", false]]);
+    expect(h.state()).toMatchObject({ phase: "done", reason: "wrong_tip", picked: [lootbug] });
+  });
 });

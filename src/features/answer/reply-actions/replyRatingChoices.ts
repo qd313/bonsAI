@@ -88,6 +88,20 @@ export function buildReplyRatingChoicesSection(): string {
           opacity: 0.45;
           cursor: default;
         }
+        /* "Which note was it?": a column of the same chips, each the box's full width, words to the left. */
+        .bonsai-scope .bonsai-chat-reply-actions .bonsai-kb-demote-which {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+        .bonsai-scope .bonsai-chat-reply-actions .bonsai-kb-demote-pick {
+          width: 100%;
+          justify-content: flex-start;
+          text-align: left;
+        }
+        .bonsai-scope .bonsai-chat-reply-actions .bonsai-kb-demote-pick--all {
+          color: #9fb7d5;
+        }
         /* "Marked not helpful" on the left, Undo on the right (the drawing's frame 3). */
         .bonsai-scope .bonsai-chat-reply-actions .bonsai-kb-demote-done {
           display: flex;

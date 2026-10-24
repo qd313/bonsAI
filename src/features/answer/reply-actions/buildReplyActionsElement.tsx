@@ -350,11 +350,12 @@ export function buildReplyActionsElement(
 
   const showChipRows = Boolean(onChip) && rating === "down";
   /*
-   * Plan 98: the three "the note was wrong" reasons, on an answer that used one note the back end gave an
-   * id. Once one is picked, the reasons give way to "Marked not helpful" and Undo (kbDemoteRows.tsx).
+   * Plan 98: the three "the note was wrong" reasons, on an answer that used a note the back end gave an
+   * id. Once one is picked, the reasons give way to "Which note was it?" (two or three notes) or to
+   * "Marked not helpful" and Undo (kbDemoteRows.tsx).
    */
   const demoteNotes = showChipRows && demote ? demotableNotes(demote.notes) : [];
-  const demoteOn = demoteNotes.length === 1;
+  const demoteOn = demoteNotes.length > 0;
   const showReasonRows = showChipRows && (!demoteOn || demote!.state.phase === "reasons");
   /* Helpful / Not really render only pre-rating or once rated down (a "rated up" reply shows the
      "Saved on this Deck" label instead) — same condition the row has always used. */
@@ -464,7 +465,7 @@ export function buildReplyActionsElement(
    */
   const downFromThumbsRow = () => {
     if (!showChipRows) return downFromThumbs();
-    /* The reasons gave way to the marked line: its Undo is the next stop down. */
+    /* The reasons gave way to "Which note was it?" or the marked line: its first stop is next down. */
     if (!showReasonRows) return focusDemoteFromAbove(replyKey);
     if (elementHasGamepadFocus(getReplyStop("helpful"))) return focusChipInRow(refineRow, 0);
     if (elementHasGamepadFocus(getReplyStop("not-really"))) return focusChipInRow(refineRow, 1);
@@ -664,7 +665,8 @@ export function buildReplyActionsElement(
   /* Down from the second row: the "the note was wrong" reason in the same column, when they show (plan 98). */
   const downFromLengthRow = () =>
     (demoteOn && focusDemoteFromAbove(replyKey, ringChipIndex(lengthRow))) || focusRegisteredReplyStop("note-keep");
-  /* Out of the plan 98 rows: Up from Undo meets Not really (greyed) above it; Down is the note card, else Show details. */
+  /* Out of the plan 98 rows: Up from Undo or the column's first note meets Not really (greyed) above it;
+     Down is the note card, else Show details. */
   const upFromDemoteRows = () =>
     (showThumbs && focusThumbEvenIfGreyed("not-really", thumbsRowNav)) || focusReplyHelpful(turnSlot()) || moveUpFromReply();
   const downFromDemoteRows = () => focusRegisteredReplyStop("note-keep") || downPastNoteCard();

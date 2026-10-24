@@ -23,6 +23,7 @@ line per case. See destructive_advice_guard.py for the sibling check/append pair
 from __future__ import annotations
 
 import re
+import sqlite3
 
 # Wording decided 1 September, locked 2026-09-07 -- do not reword without the same process.
 _NOT_IN_NOTES_LINE = "Not in my notes — this answer is from the model's own knowledge."
@@ -212,12 +213,11 @@ _NO_KEYWORD_SUPPORT = 0.0
 # shares that exact word with a card titled "Gonarch". Only the first case may now turn a nonzero
 # score back into "no real support" and let the line through.
 #
-# ``kb_source_titles`` and ``kb_game_name`` both default to empty, and an empty
-# ``kb_source_titles`` always trusts the score outright (see `_keyword_score_reflects_the_question`
-# below) -- every call site and every test that predates this fix keeps its old behaviour
-# unchanged. The call site in game_ai_request.py only fills them in for the one case this was
-# ever about: the game was resolved from the question text because nothing was running, so the
-# game's own name really did just get typed as part of the question.
+# ``kb_source_titles`` and ``kb_game_name`` both default to empty, and with neither titles nor
+# texts the score is trusted outright (see `_none_in_attached_notes` below). This every-word
+# check still runs only when the game's name was typed into the question
+# (``check_every_word``); since plan 98 lane L the turn wrapper always passes the words, for the
+# named-thing check that applies to a running game too (see `_NAMED_THING_RES`).
 #
 # --- Read the note's own text too, not only its title (bug found on the Deck 2026-09-23) -----
 #
@@ -252,6 +252,31 @@ _QUESTION_FILLER_WORDS = frozenset(
     }
 )
 
+# --- Generic advice words (plan 98 lane L, 2026-10-24) ------------------------------------------
+#
+# Words that say what KIND of help is wanted, not what it is about. "How do I buy a house in
+# this game" attached Gold and Nitra on the Deck, whose cards say "Buys player stat upgrades":
+# "buy" is shared, "house" is not, and the house is the subject. These words are left out of the
+# thing a question names before it is looked for in the attached notes, so "beat the boss" or
+# "get the third one" names nothing and is left to the scores. Each word can only make the line
+# rarer. Seeded from GAME_ADVICE_WORDS in src/features/knowledge-library/kbNoteUsedByAnswer.ts
+# (the screen's own list of words too general to show a note was used), the asking verbs, and the
+# positions (the same reason "first"/"last"/"next" are filler above). Measured 2026-10-24 with
+# scripts/measure_kb_thin_match.py --line-gate: once the check reads only the named thing, no
+# measured row turns on this list (the one generic word inside a named thing was "early", and it
+# was in the notes each time); it is kept as a margin, not tuned.
+_GENERIC_ADVICE_WORDS = frozenset(
+    """
+    come early path piece real step answer area attack attacks away back boss bosses break chance
+    close damage distance easy end enemies enemy fast fight fights fighting fire focus free full
+    game games hard health help hit hits hold kill learn level levels lose main mode move moves
+    moving nothing open play player point points power quick quickly room run runs safe side slow
+    space spot start started starting stay time times turn work world
+    buy get find unlock called named
+    second third fourth fifth final
+    """.split()
+)
+
 
 def _singular_form(word: str) -> str:
     """Strip one trailing "s" from a plural, so "chapters" in a question can match a note that
@@ -280,34 +305,85 @@ def _content_words(text: str) -> set[str]:
     return words | {_singular_form(word) for word in words}
 
 
-def _keyword_score_reflects_the_question(
-    *,
-    question: str,
-    kb_game_name: str,
-    kb_source_titles: tuple[str, ...] = (),
-    kb_source_texts: tuple[str, ...] = (),
-) -> bool:
-    """False only when a nonzero keyword score can be explained by the game's name alone.
-
-    True -- trust the score, the behaviour before this fix -- whenever there is nothing to check
-    it against (neither titles nor texts were passed) or nothing is left of the question once the
-    game's name and the filler words are stripped from it, and whenever what is left DOES turn up
-    in one of the titles or in one of the notes' own texts (``kb_source_texts`` -- see the module
-    comment above this function for why titles alone under-count). False only when the question
-    has real content and none of it appears anywhere in what actually attached -- the shape of the
-    Black Mesa horse question above.
+def _word_stems(words: set[str]) -> set[str]:
+    """Each word folded the way the keyword search folds it (FTS5's porter stemmer), so "armored"
+    asked and "armor" written, or "drowning" and "drown", count as the same word -- the keyword
+    search already matched them, and a check cruder than the search would call its real match a
+    miss. The stemmer is SQLite's own, the one the library's index is built with; where it cannot
+    be loaded the words come back as they are (the one-letter plural fold already applied).
     """
-    if not kb_source_titles and not kb_source_texts:
-        return True
-    real_words = _content_words(question) - _content_words(kb_game_name)
-    if not real_words:
-        return True
+    if not words:
+        return set()
+    try:
+        con = sqlite3.connect(":memory:")
+        try:
+            con.execute("CREATE VIRTUAL TABLE t USING fts5(x, tokenize='porter unicode61')")
+            con.execute("CREATE VIRTUAL TABLE v USING fts5vocab(t, 'row')")
+            con.execute("INSERT INTO t(x) VALUES (?)", (" ".join(sorted(words)),))
+            terms = [str(row[0]) for row in con.execute("SELECT term FROM v")]
+        finally:
+            con.close()
+    except sqlite3.Error:
+        return set(words)
+    # One-letter terms are what is left of a split "there's"; they would match any "it's".
+    return {term for term in terms if len(term) > 1} | set(words)
+
+
+# The questions this check is for NAME the thing they ask about: "buy a house", "tame a horse",
+# "the boss called Zorblax", "beat the bone hydra". A question that describes instead ("there's a
+# fight with a guy on a chariot and a huge minotaur") is left to the scores, because its right
+# note often shares none of its words -- measured, the plain "no word of the question in any
+# note" rule warned on 19 right-note asks of that shape. A named thing is the object of an asking
+# verb, or what follows "called"/"named", one to three words long, at the end of the question
+# once a trailing "in this game" / "in <game>" is cut.
+_ASKING_VERBS = (
+    "beat|defeat|kill|buy|tame|find|unlock|get|catch|craft|build|ride|recruit|romance|marry"
+)
+_NAMED_THING_RES = (
+    re.compile(r"\b(?:called|named)\s+(?:the\s+|a\s+|an\s+)?((?:[a-z0-9'-]+\s*){1,3})$"),
+    re.compile(
+        rf"\b(?:{_ASKING_VERBS})\s+(?:the|a|an)\s+((?:[a-z0-9'-]+\s*){{1,3}})$"
+    ),
+)
+
+
+def _question_subject_words(question: str, kb_game_name: str) -> set[str]:
+    """The words of the thing the question names (see `_NAMED_THING_RES`), minus filler, the
+    game's own name and the generic advice words; empty when it names nothing."""
+    text = re.sub(r"[^a-z0-9' -]+", " ", (question or "").lower()).strip()
+    game = " ".join(re.findall(r"[a-z0-9']+", (kb_game_name or "").lower()))
+    for tail in ("in this game", f"in {game}" if game else ""):
+        if tail and text.endswith(" " + tail):
+            text = text[: -len(tail)].strip()
+    thing = ""
+    for pattern in _NAMED_THING_RES:
+        match = pattern.search(text)
+        if match:
+            thing = match.group(1)
+            break
+    return {
+        word
+        for word in _content_words(thing) - _content_words(kb_game_name)
+        if word not in _GENERIC_ADVICE_WORDS
+        and _singular_form(word) not in _GENERIC_ADVICE_WORDS
+    }
+
+
+def _none_in_attached_notes(
+    words: set[str], kb_source_titles: tuple[str, ...], kb_source_texts: tuple[str, ...]
+) -> bool:
+    """True when there are words to look for, notes to look in, and none of the words (folded
+    by `_word_stems`) is in any attached note's title or own text.
+
+    False when there is nothing to check against (no titles or texts were passed) or no word to
+    look for -- "how do I get started" names no subject, so nothing can be missing from a note.
+    """
+    if not words or (not kb_source_titles and not kb_source_texts):
+        return False
     attached_words: set[str] = set()
-    for title in kb_source_titles:
-        attached_words |= _content_words(title)
-    for text in kb_source_texts:
+    for text in (*kb_source_titles, *kb_source_texts):
         attached_words |= _content_words(text)
-    return bool(real_words & attached_words)
+    return not (_word_stems(words) & _word_stems(attached_words))
 
 
 def should_show_no_close_match_notice(
@@ -324,6 +400,7 @@ def should_show_no_close_match_notice(
     kb_source_texts: tuple[str, ...] = (),
     kb_best_meaning_without_game_name: float | None = None,
     kb_notes: str = "",
+    check_every_word: bool = True,
 ) -> bool:
     """True when a note reached the model but nothing in the notes matched the question closely.
 
@@ -344,16 +421,20 @@ def should_show_no_close_match_notice(
     the same fix `transparency_service.py` already applies to its own domain-keyed label.
     Blank by default, so a caller that predates this keeps its old behaviour unchanged.
 
-    ``question``, ``kb_game_name``, ``kb_source_titles`` and ``kb_source_texts`` are optional, and
-    only matter when ``kb_top_card_keyword_score`` is nonzero: see
-    `_keyword_score_reflects_the_question` just above for why a nonzero score is not always proof
-    of a real match, and what these four do about it. Leave them blank to trust the score
-    outright, same as before this parameter existed.
+    ``question``, ``kb_game_name``, ``kb_source_titles`` and ``kb_source_texts`` are optional.
+    With them, a question whose subject (see `_question_subject_words`) is in none of
+    the attached notes gets the line whatever the two scores say (plan 98 lane L): a keyword hit
+    on a generic word ("buy" in "Buys") or a meaning score a game's look-alike note earned is not
+    a match on what was asked. Leave them blank to decide on the scores alone, as before.
+    ``check_every_word`` keeps the older every-word check (below) to the turns it was built and
+    measured for, a game typed into the question; on a running game's turn it warned on three
+    right-note asks of the descriptive kind (measured 2026-10-24), so the wrapper turns it off
+    there.
 
     ``kb_source_texts`` (the bug found on the Deck 2026-09-23) is each attached note's own card
     text, alongside its title in ``kb_source_titles`` -- a question that describes a boss instead
     of naming it shares nothing with a short title but often shares a word with the note's own
-    description of it. See the module comment above `_keyword_score_reflects_the_question` for
+    description of it. See the module comment above `_QUESTION_FILLER_WORDS` for
     the Hollow Knight and Half-Life 2 replies this was found from.
 
     **``kb_best_meaning`` of None means "nothing was measured", not "a weak match".** Speed mode,
@@ -386,12 +467,21 @@ def should_show_no_close_match_notice(
         return False
     if (kb_notes or "").strip() == _COMPAT_TIPS_RESOLUTION:
         return False
+    # Decisive on its own (plan 98 lane L, 2026-10-24): the thing the question names is in none
+    # of the attached notes. Before the meaning-score checks below, so a Deck whose meaning half
+    # did not run still warns. It never changes what attaches. Measured with
+    # scripts/measure_kb_thin_match.py --line-gate: see that commit's message for the table.
+    if _none_in_attached_notes(
+        _question_subject_words(question, kb_game_name), kb_source_titles, kb_source_texts
+    ):
+        return True
+    # The older check (HONESTY-TEXT-GAME-01): every content word of the question, generic ones
+    # included, missing from the notes. A keyword hit is not trusted then, and a note only the
+    # meaning half supported gets the line ("How do I beat the boss at the end of the first area
+    # in Hades?" names nothing past generic words, so only this check still catches it).
     has_keyword_support = kb_top_card_keyword_score != _NO_KEYWORD_SUPPORT
-    reflects_the_question = _keyword_score_reflects_the_question(
-        question=question,
-        kb_game_name=kb_game_name,
-        kb_source_titles=kb_source_titles,
-        kb_source_texts=kb_source_texts,
+    reflects_the_question = not check_every_word or not _none_in_attached_notes(
+        _content_words(question) - _content_words(kb_game_name), kb_source_titles, kb_source_texts
     )
     if has_keyword_support and reflects_the_question:
         return False
@@ -402,17 +492,9 @@ def should_show_no_close_match_notice(
     )
     if effective_meaning is None:
         return False
-    # Second signal, in words: no word of the question is in any attached title or any attached
-    # note's own text, and the keyword half never ranked these notes either. The meaning score is
-    # then the only thing that ever supported them, and it is not trusted past its ceiling. It
-    # was 0.6508 against 0.65 for "in black mesa how do I tame a horse": three Black Mesa notes
-    # about nothing the question asked, no line on the Deck (workshop:test-evidence/
-    # plan70-NO-CLOSE-MATCH-HK-02.json). The 0.65 ceiling itself is not moved.
-    #
-    # Measured 2026-10-03 on the PC: 287 fixture questions that have a recorded right note
-    # (tests/fixtures/kb_eval_v2.json and kb_answer_eval.json), each asked twice, once with the
-    # game running and once with its name in the words. This rule changes the line on none of
-    # those 574 asks; the one ask it changes is the horse question.
+    # No keyword support and no word of the question in any attached note: the meaning score
+    # alone supported them, and it is not trusted past its ceiling (0.6508 against 0.65 for "in
+    # black mesa how do I tame a horse", workshop:test-evidence/plan70-NO-CLOSE-MATCH-HK-02.json).
     if not has_keyword_support and not reflects_the_question:
         return True
     return effective_meaning < _THIN_MATCH_MEANING_CEILING
@@ -431,13 +513,12 @@ def should_show_no_close_match_notice_for_turn(
     (question, game name, source titles, source texts) from a turn's already-computed state
     instead of asking every caller to assemble them by hand.
 
-    HONESTY-TEXT-GAME-01 (plan 56 lane J, part two lane K): those four arguments let the check
-    catch a keyword score, and separately a meaning score, that only look like a real match
-    because the game's own name was typed as part of the question -- see the module comment
-    above `_keyword_score_reflects_the_question`. They are filled in only when
-    `text_resolved_title` is the reason a game is in play at all, i.e. nothing was running and
-    the question named it (D19) -- a running game's name is not the failure this guards, so
-    every other turn leaves them blank and gets the old behaviour unchanged.
+    Since plan 98 lane L the question, the attached titles and texts, and the game's name (the
+    typed one, else the attached notes' own game title, so a running game's name is never part
+    of what was asked about) are passed on every turn: "How do I buy a house in this game", with
+    the game running, attached notes that never mention a house and showed no line, because the
+    check that would have caught it ran only when the game was typed (2026-10-24 Deck reading).
+    The older every-word check keeps to typed-name turns (``check_every_word``), as measured.
 
     `kb_source_texts` (the bug found on the Deck 2026-09-23) is each attached note's own card
     text, alongside its title in `kb_source_titles` -- a question that describes a boss instead
@@ -451,20 +532,16 @@ def should_show_no_close_match_notice_for_turn(
     `should_show_no_close_match_notice`'s own docstring for why a rerouted tip-sheet turn needs
     it alongside `kb_domain`.
     """
-    close_match_question = ""
-    close_match_game_name = ""
-    close_match_source_titles: tuple[str, ...] = ()
-    close_match_source_texts: tuple[str, ...] = ()
-    if text_resolved_title:
-        close_match_question = question_for_kb_search
-        close_match_game_name = text_resolved_title
-        close_match_source_titles = tuple(
-            str(source.get("title") or "")
-            for source in (kb_transparency.get("kb_sources") or [])
-        )
-        close_match_source_texts = tuple(
-            str(note.get("card") or "") for note in kb_attached_notes
-        )
+    # Always filled in since plan 98 lane L: a running game's turn needs the subject check as
+    # much as a typed-name one ("How do I buy a house in this game", 2026-10-24). The game's name
+    # is the typed one, else the attached notes' own game title, so it is never a subject word.
+    notes = [n for n in kb_attached_notes if isinstance(n, dict)]
+    game_names = [text_resolved_title] if text_resolved_title else sorted(
+        {str(n.get("game_title") or "") for n in notes} - {""}
+    )
+    close_match_source_titles = tuple(
+        str(source.get("title") or "") for source in (kb_transparency.get("kb_sources") or [])
+    )
     return should_show_no_close_match_notice(
         ask_mode=ask_mode,
         kb_attached=bool(kb_transparency.get("kb_attached")),
@@ -474,14 +551,15 @@ def should_show_no_close_match_notice_for_turn(
         kb_top_card_keyword_score=float(
             kb_transparency.get("kb_top_card_keyword_score") or 0.0
         ),
-        question=close_match_question,
-        kb_game_name=close_match_game_name,
+        question=question_for_kb_search,
+        kb_game_name=" ".join(game_names),
         kb_source_titles=close_match_source_titles,
-        kb_source_texts=close_match_source_texts,
+        kb_source_texts=tuple(str(n.get("card") or "") for n in notes),
         kb_best_meaning_without_game_name=kb_transparency.get(
             "kb_best_meaning_without_game_name"
         ),
         kb_notes=str(kb_transparency.get("kb_notes") or ""),
+        check_every_word=bool(text_resolved_title),
     )
 
 

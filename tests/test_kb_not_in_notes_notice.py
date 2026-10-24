@@ -327,9 +327,8 @@ class GameNamedOnlyInTheQuestionTests(unittest.TestCase):
         )
 
     def test_a_zero_keyword_score_is_unaffected_by_the_new_arguments(self):
-        # The new arguments only ever act on a nonzero score -- see
-        # `_keyword_score_reflects_the_question`'s early return. A zero score keeps deciding this
-        # purely on the meaning score, exactly as it did before this fix.
+        # The question shares a word with the notes, so the every-word check finds support and a
+        # zero keyword score keeps deciding this purely on the meaning score, as before this fix.
         self.assertTrue(
             _thin(
                 kb_top_card_keyword_score=0.0,

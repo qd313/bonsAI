@@ -220,13 +220,18 @@ def line_probe(settings: dict, question: str, *, app_id: str, pc_ip: str) -> dic
         kb_coverage_transparency={"kb_coverage_status": "sections"},
         text_resolved_title=text_title, question_for_kb_search=question, kb_attached_notes=notes)
     game = text_title or next((n.get("game_title") for n in notes if n.get("game_title")), "")
-    generic = getattr(notice, "_GENERIC_ADVICE_WORDS", frozenset())
-    subject = sorted(w for w in notice._content_words(question) - notice._content_words(game)
-                     if w not in generic)
+    # The rule's own helpers when it has them (generic words left out, endings folded the way
+    # the keyword search folds them); the plain word split before it did.
+    words = notice._content_words(question) - notice._content_words(game)
+    subject_of = getattr(notice, "_question_subject_words", None)
+    stems = getattr(notice, "_word_stems", lambda ws: set(ws))
+    subject = sorted(subject_of(question, game) if subject_of else words)
     in_notes: set[str] = set()
     for n in notes:
         in_notes |= notice._content_words(str(n.get("name") or ""))
         in_notes |= notice._content_words(str(n.get("card") or ""))
+    note_stems = stems(in_notes)
+    in_notes = {w for w in words if stems({w}) & note_stems}
     return {
         "routed": True, "method": res.retrieval_method, "domain": domain, "route": res.notes,
         "attached": [str(n.get("name") or "") for n in notes], "game": game,
@@ -234,6 +239,7 @@ def line_probe(settings: dict, question: str, *, app_id: str, pc_ip: str) -> dic
         "best_meaning": res.best_meaning,
         "meaning_without_game": res.best_meaning_without_game_name,
         "subject_words": subject, "subject_in_notes": sorted(set(subject) & in_notes),
+        "all_words_in_notes": sorted(in_notes),
         "line": bool(line),
     }
 

@@ -655,6 +655,8 @@ Read the brief's rule against its own check before sending it.
 
 ---
 
+**A helper's own copy cannot see the copy-paste count.** The copy-paste check reads zero in a helper's copy, so three plan 98 landings went red on it (+4 and +7 lines, each a test setup copied from a neighbouring test). Measure it in the shared checkout with the ratchet's own jscpd call and hand the helper the exact line ranges. Tell test-writing helpers to reuse a neighbouring test's setup rather than copy it.
+
 ## 5. Design and screen work
 
 **The drawing is the design.** [major-redesign.md](archive/major-redesign.md) is the agreed look. Work built
